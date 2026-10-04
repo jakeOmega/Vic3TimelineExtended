@@ -383,6 +383,10 @@
   "en": "Colt Hartford Armory",
   "de": "Colt-Arsenal Hartford"
  },
+ "building_company_one_site_tt": {
+  "en": "No other state of ours has this building, standing or [concept_under_construction]",
+  "de": "Kein anderer unserer Staaten besitzt dieses Gebäude, weder bestehend noch [concept_under_construction|l]"
+ },
  "building_consciousness_network": {
   "en": "Consciousness Network",
   "de": "Bewusstseinsnetzwerk"
@@ -2129,7 +2133,11 @@
  },
  "building_synthetics_plant_coal": {
   "en": "Carbon Conversion Works",
-  "de": "Kohleverflüssigungswerk"
+  "de": "Kohlenstoffumwandlungswerk"
+ },
+ "building_synthetics_plant_coal_throughput_add_desc": {
+  "en": "Increases the throughput of Carbon Conversion Works, including atmospheric removal and their goods inputs.",
+  "de": "Erhöht den Durchsatz von Kohlenstoffumwandlungswerken, einschließlich der Entnahme aus der Atmosphäre und ihres Wareneinsatzes."
  },
  "building_synthetics_plant_drinks": {
   "en": "Beverage Concentrates Plant",

@@ -63,6 +63,22 @@
   "en": "An increase or decrease to the [concept_bubble_pressure] of the [concept_banking_cycle], affecting the likelihood of a financial bubble causing a [concept_banking_crash].",
   "de": "Erhöht oder verringert den [concept_bubble_pressure] des [concept_banking_cycle] und beeinflusst so die Wahrscheinlichkeit, dass eine Finanzblase einen [concept_banking_crash] auslöst."
  },
+ "country_coal_export_tariffs_rate_add": {
+  "en": "Maximum $coal$ Export Tariff Rate",
+  "de": "Maximale Exportzollhöhe für $coal$"
+ },
+ "country_coal_export_tariffs_rate_add_desc": {
+  "en": "Additional maximum export tariff rate for $coal$. The collected rate scales with the selected tariff level.",
+  "de": "Zusätzliche maximale Exportzollhöhe für $coal$. Die erhobene Höhe skaliert mit der gewählten Zollstufe."
+ },
+ "country_coal_import_tariffs_rate_add": {
+  "en": "Maximum $coal$ Import Tariff Rate",
+  "de": "Maximale Importzollhöhe für $coal$"
+ },
+ "country_coal_import_tariffs_rate_add_desc": {
+  "en": "Additional maximum import tariff rate for $coal$. The collected rate scales with the selected tariff level.",
+  "de": "Zusätzliche maximale Importzollhöhe für $coal$. Die erhobene Höhe skaliert mit der gewählten Zollstufe."
+ },
  "country_colonial_assim_effectiveness_add": {
   "en": "Colonial [concept_assimilation] Effectiveness",
   "de": "Wirksamkeit der kolonialen [concept_assimilation]"
@@ -311,9 +327,65 @@
   "en": "A direct monthly change to the current [concept_banking_cycle] value.",
   "de": "Eine direkte monatliche Änderung des aktuellen Werts des [concept_banking_cycle]."
  },
+ "country_grain_export_tariffs_rate_add": {
+  "en": "@grain! $grain$ Export Tariff Rate",
+  "de": "@grain! Exportzollhöhe für $grain$"
+ },
+ "country_grain_export_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on exports of $grain$. Tax code customs probe only.",
+  "de": "Eine Erhöhung oder Senkung der Zollhöhe auf Exporte von $grain$. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_grain_import_tariffs_rate_add": {
+  "en": "@grain! $grain$ Import Tariff Rate",
+  "de": "@grain! Importzollhöhe für $grain$"
+ },
+ "country_grain_import_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on imports of $grain$. Tax code customs probe only.",
+  "de": "Eine Erhöhung oder Senkung der Zollhöhe auf Importe von $grain$. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_grain_max_export_tariffs_level_add": {
+  "en": "@grain! $grain$ Maximum Export Tariff Level",
+  "de": "@grain! Maximale Exportzollstufe für $grain$"
+ },
+ "country_grain_max_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest export tariff level that can be set for $grain$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die höchste Exportzollstufe, die für $grain$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_grain_max_import_tariffs_level_add": {
+  "en": "@grain! $grain$ Maximum Import Tariff Level",
+  "de": "@grain! Maximale Importzollstufe für $grain$"
+ },
+ "country_grain_max_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest import tariff level that can be set for $grain$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die höchste Importzollstufe, die für $grain$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_grain_min_export_tariffs_level_add": {
+  "en": "@grain! $grain$ Minimum Export Tariff Level",
+  "de": "@grain! Minimale Exportzollstufe für $grain$"
+ },
+ "country_grain_min_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest export tariff level that can be set for $grain$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die niedrigste Exportzollstufe, die für $grain$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_grain_min_import_tariffs_level_add": {
+  "en": "@grain! $grain$ Minimum Import Tariff Level",
+  "de": "@grain! Minimale Importzollstufe für $grain$"
+ },
+ "country_grain_min_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest import tariff level that can be set for $grain$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die niedrigste Importzollstufe, die für $grain$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
  "country_greenhouse_gas_emissions_mult_desc": {
   "en": "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions].",
   "de": "Verändert die Rate, mit der dieses Land zu den globalen [concept_greenhouse_gas_emissions] beiträgt."
+ },
+ "country_household_greenhouse_gas_emissions_mult": {
+  "en": "Household Greenhouse Gas Emissions",
+  "de": "Treibhausgasemissionen der Haushalte"
+ },
+ "country_household_greenhouse_gas_emissions_mult_desc": {
+  "en": "Changes the household fossil-heating contribution to climate emissions. Reductions stack and are capped at complete elimination.",
+  "de": "Verändert den Beitrag des fossilen Heizens der Haushalte zu den Klimaemissionen. Senkungen addieren sich und sind auf vollständige Beseitigung begrenzt."
  },
  "country_ideology_resistance_mult": {
   "en": "Ideology Resistance",
@@ -675,6 +747,54 @@
   "en": "A percentage bonus or penalty to the nation's [concept_intelligence_capacity] score.",
   "de": "Ein prozentualer Bonus oder Malus auf den [concept_intelligence_capacity]-Wert der Nation."
  },
+ "country_iron_export_tariffs_rate_add": {
+  "en": "@iron! $iron$ Export Tariff Rate",
+  "de": "@iron! Exportzollhöhe für $iron$"
+ },
+ "country_iron_export_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on exports of $iron$. Tax code customs probe only.",
+  "de": "Eine Erhöhung oder Senkung der Zollhöhe auf Exporte von $iron$. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_iron_import_tariffs_rate_add": {
+  "en": "@iron! $iron$ Import Tariff Rate",
+  "de": "@iron! Importzollhöhe für $iron$"
+ },
+ "country_iron_import_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on imports of $iron$. Tax code customs probe only.",
+  "de": "Eine Erhöhung oder Senkung der Zollhöhe auf Importe von $iron$. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_iron_max_export_tariffs_level_add": {
+  "en": "@iron! $iron$ Maximum Export Tariff Level",
+  "de": "@iron! Maximale Exportzollstufe für $iron$"
+ },
+ "country_iron_max_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest export tariff level that can be set for $iron$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die höchste Exportzollstufe, die für $iron$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_iron_max_import_tariffs_level_add": {
+  "en": "@iron! $iron$ Maximum Import Tariff Level",
+  "de": "@iron! Maximale Importzollstufe für $iron$"
+ },
+ "country_iron_max_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest import tariff level that can be set for $iron$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die höchste Importzollstufe, die für $iron$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_iron_min_export_tariffs_level_add": {
+  "en": "@iron! $iron$ Minimum Export Tariff Level",
+  "de": "@iron! Minimale Exportzollstufe für $iron$"
+ },
+ "country_iron_min_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest export tariff level that can be set for $iron$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die niedrigste Exportzollstufe, die für $iron$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
+ "country_iron_min_import_tariffs_level_add": {
+  "en": "@iron! $iron$ Minimum Import Tariff Level",
+  "de": "@iron! Minimale Importzollstufe für $iron$"
+ },
+ "country_iron_min_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest import tariff level that can be set for $iron$. Tax code customs probe only.",
+  "de": "Erhöht oder senkt die niedrigste Importzollstufe, die für $iron$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
+ },
  "country_legislative_override_capacity_add_desc": {
   "en": "How easily this regime can bypass the normal legislative process. At 2 or more, the regime can decisively push laws through despite [Concept('concept_interest_group','Interest Group')] opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so capacity above a threshold acts as a buffer that lets the regime act again sooner and at higher tiers. Authoritarian governance, suppressive policies, centralized state structures, surveillance technology, state institutions (policing, thought control, propaganda), and certain power bloc principles raise capacity; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.",
   "de": "Wie leicht dieses Regime den normalen Gesetzgebungsprozess umgehen kann. Bei 2 oder mehr kann das Regime Gesetze trotz des Widerstands von [Concept('concept_interest_group','Interessengruppen')] entschlossen durchsetzen; bei 4 oder mehr kann es sie regelrecht erzwingen. Jeder Punkt senkt zudem die [concept_authority]-Kosten — moderat unterhalb von +5 (etwa -3% bei +2, -9% bei +4) und deutlich darüber hinaus (etwa -20% bei +5, -50% bei +8, -75% bei +16). Das Erzwingen eines Gesetzes erschöpft die Kapazität vorübergehend; sie erholt sich über etwa fünf Jahre, sodass Kapazität oberhalb einer Schwelle als Puffer wirkt, der es dem Regime erlaubt, früher und auf höheren Stufen erneut zu handeln. Autoritäre Regierungsführung, unterdrückerische Politik, zentralisierte Staatsstrukturen, Überwachungstechnologie, staatliche Institutionen (Polizei, Gedankenkontrolle, Propaganda) und bestimmte Machtblockprinzipien erhöhen die Kapazität; demokratisches Wahlrecht, Dezentralisierung, feudale Verhältnisse und geschützte Freiheiten senken sie."
@@ -702,6 +822,22 @@
  "country_nuclear_weapon_attack_success_add_desc": {
   "en": "The chance that our [concept_nuclear_stockpile] will successfully deliver a [concept_nuclear_strike] on their target.",
   "de": "Die Chance, dass unser [concept_nuclear_stockpile] einen [concept_nuclear_strike] erfolgreich auf sein Ziel bringt."
+ },
+ "country_oil_export_tariffs_rate_add": {
+  "en": "Maximum $oil$ Export Tariff Rate",
+  "de": "Maximale Exportzollhöhe für $oil$"
+ },
+ "country_oil_export_tariffs_rate_add_desc": {
+  "en": "Additional maximum export tariff rate for $oil$. The collected rate scales with the selected tariff level.",
+  "de": "Zusätzliche maximale Exportzollhöhe für $oil$. Die erhobene Höhe skaliert mit der gewählten Zollstufe."
+ },
+ "country_oil_import_tariffs_rate_add": {
+  "en": "Maximum $oil$ Import Tariff Rate",
+  "de": "Maximale Importzollhöhe für $oil$"
+ },
+ "country_oil_import_tariffs_rate_add_desc": {
+  "en": "Additional maximum import tariff rate for $oil$. The collected rate scales with the selected tariff level.",
+  "de": "Zusätzliche maximale Importzollhöhe für $oil$. Die erhobene Höhe skaliert mit der gewählten Zollstufe."
  },
  "country_participant_diplomatic_play_escalation_weekly_add": {
   "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined",
@@ -1447,6 +1583,14 @@
   "en": "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @explosives! $explosives$ von Gebäuden produziert wird"
  },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
+ },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
+ },
  "goods_output_fine_art_mult": {
   "en": "Building @fine_art! $fine_art$ output",
   "de": "Gebäude-Ausstoß: @fine_art! $fine_art$"
@@ -1762,6 +1906,14 @@
  "state_arable_land_mult_desc": {
   "en": "A multiplier for the amount of [concept_arable_land] in this [concept_state].",
   "de": "Ein Multiplikator für die Menge an [concept_arable_land] in diesem [concept_state]."
+ },
+ "state_atmospheric_carbon_capture_add": {
+  "en": "Atmospheric Carbon Removal",
+  "de": "CO2-Entnahme aus der Atmosphäre"
+ },
+ "state_atmospheric_carbon_capture_add_desc": {
+  "en": "Carbon taken out of the atmosphere at this location by removal-only methods. Subtracted from the market total after policy reductions.",
+  "de": "Kohlenstoff, der an diesem Standort durch reine Entnahmemethoden der Atmosphäre entzogen wird. Wird nach den Senkungen durch die Politik von der Marktsumme abgezogen."
  },
  "state_building_afghan_nassaji_kabul_mills_max_level_add": {
   "en": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level",
@@ -4454,6 +4606,14 @@
  "state_fortification_level_add_desc": {
   "en": "The [concept_fortification_level] of this state, determined by the [concept_fortification_system]. Higher values unlock stronger defensive [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
   "de": "[concept_fortification_level] dieses Staates, bestimmt durch [concept_fortification_system]. Höhere Werte schalten stärkere defensive [concept_fortification_system]-[Concept('concept_battle_condition', 'Kampfbedingungen')] frei."
+ },
+ "state_greenhouse_gas_emissions_add": {
+  "en": "Greenhouse Gas Emissions",
+  "de": "Treibhausgasemissionen"
+ },
+ "state_greenhouse_gas_emissions_add_desc": {
+  "en": "Greenhouse gas emissions from the fuel this location's buildings burn, less carbon capture and synthetic-fuel credits. National and market totals also count household heating, apply each state owner's policy reductions and subtract atmospheric carbon removal.",
+  "de": "Treibhausgasemissionen aus dem Brennstoff, den die Gebäude dieses Standorts verbrennen, abzüglich CO2-Abscheidung und Gutschriften für synthetische Kraftstoffe. Die nationalen Summen und die Marktsummen zählen außerdem die Haushaltsheizung, wenden die Senkungen durch die Politik des jeweiligen Staatsbesitzers an und ziehen die CO2-Entnahme aus der Atmosphäre ab."
  },
  "state_harvest_condition_financial_panic_duration_mult": {
   "en": "[GetHarvestConditionType('financial_panic').GetName] [concept_harvest_condition] Duration",

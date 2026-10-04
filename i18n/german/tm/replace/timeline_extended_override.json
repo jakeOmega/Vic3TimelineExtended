@@ -195,14 +195,6 @@
   "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
   "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
  },
- "goods_output_fertilizer_mult": {
-  "en": "Building @fertilizer! $fertilizer$ output",
-  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
- },
- "goods_output_fertilizer_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
-  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
- },
  "goods_output_fine_art_add": {
   "en": "@fine_art! $fine_art$ output",
   "de": "@fine_art! $fine_art$-Ausstoß"

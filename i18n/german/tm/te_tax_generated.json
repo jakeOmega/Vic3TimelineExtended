@@ -1,0 +1,1386 @@
+{
+ "amendment_te_tax_cons_1": {
+  "en": "Consumption Tax Rate 5%",
+  "de": "Verbrauchssteuersatz 5%"
+ },
+ "amendment_te_tax_cons_10": {
+  "en": "Consumption Tax Rate 50%",
+  "de": "Verbrauchssteuersatz 50%"
+ },
+ "amendment_te_tax_cons_10_desc": {
+  "en": "Taxes goods on the taxed-goods list at 50% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 50%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_11": {
+  "en": "Consumption Tax Rate 55%",
+  "de": "Verbrauchssteuersatz 55%"
+ },
+ "amendment_te_tax_cons_11_desc": {
+  "en": "Taxes goods on the taxed-goods list at 55% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 55%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_12": {
+  "en": "Consumption Tax Rate 60%",
+  "de": "Verbrauchssteuersatz 60%"
+ },
+ "amendment_te_tax_cons_12_desc": {
+  "en": "Taxes goods on the taxed-goods list at 60% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 60%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_1_desc": {
+  "en": "Taxes goods on the taxed-goods list at 5% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 5%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_2": {
+  "en": "Consumption Tax Rate 10%",
+  "de": "Verbrauchssteuersatz 10%"
+ },
+ "amendment_te_tax_cons_2_desc": {
+  "en": "Taxes goods on the taxed-goods list at 10% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 10%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_3": {
+  "en": "Consumption Tax Rate 15%",
+  "de": "Verbrauchssteuersatz 15%"
+ },
+ "amendment_te_tax_cons_3_desc": {
+  "en": "Taxes goods on the taxed-goods list at 15% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 15%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_4": {
+  "en": "Consumption Tax Rate 20%",
+  "de": "Verbrauchssteuersatz 20%"
+ },
+ "amendment_te_tax_cons_4_desc": {
+  "en": "Taxes goods on the taxed-goods list at 20% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 20%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_5": {
+  "en": "Consumption Tax Rate 25%",
+  "de": "Verbrauchssteuersatz 25%"
+ },
+ "amendment_te_tax_cons_5_desc": {
+  "en": "Taxes goods on the taxed-goods list at 25% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 25%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_6": {
+  "en": "Consumption Tax Rate 30%",
+  "de": "Verbrauchssteuersatz 30%"
+ },
+ "amendment_te_tax_cons_6_desc": {
+  "en": "Taxes goods on the taxed-goods list at 30% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 30%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_7": {
+  "en": "Consumption Tax Rate 35%",
+  "de": "Verbrauchssteuersatz 35%"
+ },
+ "amendment_te_tax_cons_7_desc": {
+  "en": "Taxes goods on the taxed-goods list at 35% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 35%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_8": {
+  "en": "Consumption Tax Rate 40%",
+  "de": "Verbrauchssteuersatz 40%"
+ },
+ "amendment_te_tax_cons_8_desc": {
+  "en": "Taxes goods on the taxed-goods list at 40% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 40%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_cons_9": {
+  "en": "Consumption Tax Rate 45%",
+  "de": "Verbrauchssteuersatz 45%"
+ },
+ "amendment_te_tax_cons_9_desc": {
+  "en": "Taxes goods on the taxed-goods list at 45% when pops buy them.",
+  "de": "Besteuert Waren auf der Liste der besteuerten Waren mit 45%, wenn Pops sie kaufen."
+ },
+ "amendment_te_tax_div_1": {
+  "en": "Dividend Tax 2.5%",
+  "de": "Dividendensteuer 2,5%"
+ },
+ "amendment_te_tax_div_10": {
+  "en": "Dividend Tax 25%",
+  "de": "Dividendensteuer 25%"
+ },
+ "amendment_te_tax_div_10_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 25%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 25%."
+ },
+ "amendment_te_tax_div_11": {
+  "en": "Dividend Tax 27.5%",
+  "de": "Dividendensteuer 27,5%"
+ },
+ "amendment_te_tax_div_11_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 27.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 27,5%."
+ },
+ "amendment_te_tax_div_12": {
+  "en": "Dividend Tax 30%",
+  "de": "Dividendensteuer 30%"
+ },
+ "amendment_te_tax_div_12_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 30%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 30%."
+ },
+ "amendment_te_tax_div_13": {
+  "en": "Dividend Tax 32.5%",
+  "de": "Dividendensteuer 32,5%"
+ },
+ "amendment_te_tax_div_13_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 32.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 32,5%."
+ },
+ "amendment_te_tax_div_14": {
+  "en": "Dividend Tax 35%",
+  "de": "Dividendensteuer 35%"
+ },
+ "amendment_te_tax_div_14_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 35%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 35%."
+ },
+ "amendment_te_tax_div_15": {
+  "en": "Dividend Tax 37.5%",
+  "de": "Dividendensteuer 37,5%"
+ },
+ "amendment_te_tax_div_15_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 37.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 37,5%."
+ },
+ "amendment_te_tax_div_16": {
+  "en": "Dividend Tax 40%",
+  "de": "Dividendensteuer 40%"
+ },
+ "amendment_te_tax_div_16_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 40%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 40%."
+ },
+ "amendment_te_tax_div_17": {
+  "en": "Dividend Tax 42.5%",
+  "de": "Dividendensteuer 42,5%"
+ },
+ "amendment_te_tax_div_17_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 42.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 42,5%."
+ },
+ "amendment_te_tax_div_18": {
+  "en": "Dividend Tax 45%",
+  "de": "Dividendensteuer 45%"
+ },
+ "amendment_te_tax_div_18_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 45%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 45%."
+ },
+ "amendment_te_tax_div_19": {
+  "en": "Dividend Tax 47.5%",
+  "de": "Dividendensteuer 47,5%"
+ },
+ "amendment_te_tax_div_19_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 47.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 47,5%."
+ },
+ "amendment_te_tax_div_1_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 2.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 2,5%."
+ },
+ "amendment_te_tax_div_2": {
+  "en": "Dividend Tax 5%",
+  "de": "Dividendensteuer 5%"
+ },
+ "amendment_te_tax_div_20": {
+  "en": "Dividend Tax 50%",
+  "de": "Dividendensteuer 50%"
+ },
+ "amendment_te_tax_div_20_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 50%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 50%."
+ },
+ "amendment_te_tax_div_2_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 5%."
+ },
+ "amendment_te_tax_div_3": {
+  "en": "Dividend Tax 7.5%",
+  "de": "Dividendensteuer 7,5%"
+ },
+ "amendment_te_tax_div_3_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 7.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 7,5%."
+ },
+ "amendment_te_tax_div_4": {
+  "en": "Dividend Tax 10%",
+  "de": "Dividendensteuer 10%"
+ },
+ "amendment_te_tax_div_4_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 10%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 10%."
+ },
+ "amendment_te_tax_div_5": {
+  "en": "Dividend Tax 12.5%",
+  "de": "Dividendensteuer 12,5%"
+ },
+ "amendment_te_tax_div_5_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 12.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 12,5%."
+ },
+ "amendment_te_tax_div_6": {
+  "en": "Dividend Tax 15%",
+  "de": "Dividendensteuer 15%"
+ },
+ "amendment_te_tax_div_6_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 15%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 15%."
+ },
+ "amendment_te_tax_div_7": {
+  "en": "Dividend Tax 17.5%",
+  "de": "Dividendensteuer 17,5%"
+ },
+ "amendment_te_tax_div_7_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 17.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 17,5%."
+ },
+ "amendment_te_tax_div_8": {
+  "en": "Dividend Tax 20%",
+  "de": "Dividendensteuer 20%"
+ },
+ "amendment_te_tax_div_8_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 20%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 20%."
+ },
+ "amendment_te_tax_div_9": {
+  "en": "Dividend Tax 22.5%",
+  "de": "Dividendensteuer 22,5%"
+ },
+ "amendment_te_tax_div_9_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 22.5%.",
+  "de": "Besteuert Dividenden, die an Pops mit Besitz an privaten Gebäuden gezahlt werden, mit 22,5%."
+ },
+ "amendment_te_tax_head_1": {
+  "en": "Head Tax 0.05",
+  "de": "Kopfsteuer 0,05"
+ },
+ "amendment_te_tax_head_10": {
+  "en": "Head Tax 0.5",
+  "de": "Kopfsteuer 0,5"
+ },
+ "amendment_te_tax_head_10_desc": {
+  "en": "Levies 0.5 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,5 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_11": {
+  "en": "Head Tax 0.55",
+  "de": "Kopfsteuer 0,55"
+ },
+ "amendment_te_tax_head_11_desc": {
+  "en": "Levies 0.55 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,55 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_12": {
+  "en": "Head Tax 0.6",
+  "de": "Kopfsteuer 0,6"
+ },
+ "amendment_te_tax_head_12_desc": {
+  "en": "Levies 0.6 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,6 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_13": {
+  "en": "Head Tax 0.65",
+  "de": "Kopfsteuer 0,65"
+ },
+ "amendment_te_tax_head_13_desc": {
+  "en": "Levies 0.65 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,65 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_14": {
+  "en": "Head Tax 0.7",
+  "de": "Kopfsteuer 0,7"
+ },
+ "amendment_te_tax_head_14_desc": {
+  "en": "Levies 0.7 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,7 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_15": {
+  "en": "Head Tax 0.75",
+  "de": "Kopfsteuer 0,75"
+ },
+ "amendment_te_tax_head_15_desc": {
+  "en": "Levies 0.75 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,75 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_16": {
+  "en": "Head Tax 0.8",
+  "de": "Kopfsteuer 0,8"
+ },
+ "amendment_te_tax_head_16_desc": {
+  "en": "Levies 0.8 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,8 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_17": {
+  "en": "Head Tax 0.85",
+  "de": "Kopfsteuer 0,85"
+ },
+ "amendment_te_tax_head_17_desc": {
+  "en": "Levies 0.85 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,85 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_18": {
+  "en": "Head Tax 0.9",
+  "de": "Kopfsteuer 0,9"
+ },
+ "amendment_te_tax_head_18_desc": {
+  "en": "Levies 0.9 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,9 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_19": {
+  "en": "Head Tax 0.95",
+  "de": "Kopfsteuer 0,95"
+ },
+ "amendment_te_tax_head_19_desc": {
+  "en": "Levies 0.95 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,95 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_1_desc": {
+  "en": "Levies 0.05 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,05 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_2": {
+  "en": "Head Tax 0.1",
+  "de": "Kopfsteuer 0,1"
+ },
+ "amendment_te_tax_head_20": {
+  "en": "Head Tax 1",
+  "de": "Kopfsteuer 1"
+ },
+ "amendment_te_tax_head_20_desc": {
+  "en": "Levies 1 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_21": {
+  "en": "Head Tax 1.05",
+  "de": "Kopfsteuer 1,05"
+ },
+ "amendment_te_tax_head_21_desc": {
+  "en": "Levies 1.05 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,05 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_22": {
+  "en": "Head Tax 1.1",
+  "de": "Kopfsteuer 1,1"
+ },
+ "amendment_te_tax_head_22_desc": {
+  "en": "Levies 1.1 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,1 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_23": {
+  "en": "Head Tax 1.15",
+  "de": "Kopfsteuer 1,15"
+ },
+ "amendment_te_tax_head_23_desc": {
+  "en": "Levies 1.15 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,15 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_24": {
+  "en": "Head Tax 1.2",
+  "de": "Kopfsteuer 1,2"
+ },
+ "amendment_te_tax_head_24_desc": {
+  "en": "Levies 1.2 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,2 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_25": {
+  "en": "Head Tax 1.25",
+  "de": "Kopfsteuer 1,25"
+ },
+ "amendment_te_tax_head_25_desc": {
+  "en": "Levies 1.25 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,25 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_26": {
+  "en": "Head Tax 1.3",
+  "de": "Kopfsteuer 1,3"
+ },
+ "amendment_te_tax_head_26_desc": {
+  "en": "Levies 1.3 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,3 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_27": {
+  "en": "Head Tax 1.35",
+  "de": "Kopfsteuer 1,35"
+ },
+ "amendment_te_tax_head_27_desc": {
+  "en": "Levies 1.35 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,35 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_28": {
+  "en": "Head Tax 1.4",
+  "de": "Kopfsteuer 1,4"
+ },
+ "amendment_te_tax_head_28_desc": {
+  "en": "Levies 1.4 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,4 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_29": {
+  "en": "Head Tax 1.45",
+  "de": "Kopfsteuer 1,45"
+ },
+ "amendment_te_tax_head_29_desc": {
+  "en": "Levies 1.45 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,45 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_2_desc": {
+  "en": "Levies 0.1 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,1 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_3": {
+  "en": "Head Tax 0.15",
+  "de": "Kopfsteuer 0,15"
+ },
+ "amendment_te_tax_head_30": {
+  "en": "Head Tax 1.5",
+  "de": "Kopfsteuer 1,5"
+ },
+ "amendment_te_tax_head_30_desc": {
+  "en": "Levies 1.5 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 1,5 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_3_desc": {
+  "en": "Levies 0.15 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,15 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_4": {
+  "en": "Head Tax 0.2",
+  "de": "Kopfsteuer 0,2"
+ },
+ "amendment_te_tax_head_4_desc": {
+  "en": "Levies 0.2 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,2 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_5": {
+  "en": "Head Tax 0.25",
+  "de": "Kopfsteuer 0,25"
+ },
+ "amendment_te_tax_head_5_desc": {
+  "en": "Levies 0.25 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,25 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_6": {
+  "en": "Head Tax 0.3",
+  "de": "Kopfsteuer 0,3"
+ },
+ "amendment_te_tax_head_6_desc": {
+  "en": "Levies 0.3 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,3 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_7": {
+  "en": "Head Tax 0.35",
+  "de": "Kopfsteuer 0,35"
+ },
+ "amendment_te_tax_head_7_desc": {
+  "en": "Levies 0.35 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,35 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_8": {
+  "en": "Head Tax 0.4",
+  "de": "Kopfsteuer 0,4"
+ },
+ "amendment_te_tax_head_8_desc": {
+  "en": "Levies 0.4 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,4 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_head_9": {
+  "en": "Head Tax 0.45",
+  "de": "Kopfsteuer 0,45"
+ },
+ "amendment_te_tax_head_9_desc": {
+  "en": "Levies 0.45 on each working adult who pays no rural assessment.",
+  "de": "Erhebt 0,45 je Angehörigem der Erwachsenen Arbeiterschaft, der keine Ländliche Abgabe zahlt."
+ },
+ "amendment_te_tax_land_1": {
+  "en": "Rural Assessment 0.025",
+  "de": "Ländliche Abgabe 0,025"
+ },
+ "amendment_te_tax_land_10": {
+  "en": "Rural Assessment 0.25",
+  "de": "Ländliche Abgabe 0,25"
+ },
+ "amendment_te_tax_land_10_desc": {
+  "en": "Assesses 0.25 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,25; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_11": {
+  "en": "Rural Assessment 0.275",
+  "de": "Ländliche Abgabe 0,275"
+ },
+ "amendment_te_tax_land_11_desc": {
+  "en": "Assesses 0.275 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,275; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_12": {
+  "en": "Rural Assessment 0.3",
+  "de": "Ländliche Abgabe 0,3"
+ },
+ "amendment_te_tax_land_12_desc": {
+  "en": "Assesses 0.3 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,3; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_13": {
+  "en": "Rural Assessment 0.325",
+  "de": "Ländliche Abgabe 0,325"
+ },
+ "amendment_te_tax_land_13_desc": {
+  "en": "Assesses 0.325 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,325; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_14": {
+  "en": "Rural Assessment 0.35",
+  "de": "Ländliche Abgabe 0,35"
+ },
+ "amendment_te_tax_land_14_desc": {
+  "en": "Assesses 0.35 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,35; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_15": {
+  "en": "Rural Assessment 0.375",
+  "de": "Ländliche Abgabe 0,375"
+ },
+ "amendment_te_tax_land_15_desc": {
+  "en": "Assesses 0.375 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,375; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_16": {
+  "en": "Rural Assessment 0.4",
+  "de": "Ländliche Abgabe 0,4"
+ },
+ "amendment_te_tax_land_16_desc": {
+  "en": "Assesses 0.4 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,4; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_17": {
+  "en": "Rural Assessment 0.425",
+  "de": "Ländliche Abgabe 0,425"
+ },
+ "amendment_te_tax_land_17_desc": {
+  "en": "Assesses 0.425 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,425; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_18": {
+  "en": "Rural Assessment 0.45",
+  "de": "Ländliche Abgabe 0,45"
+ },
+ "amendment_te_tax_land_18_desc": {
+  "en": "Assesses 0.45 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,45; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_19": {
+  "en": "Rural Assessment 0.475",
+  "de": "Ländliche Abgabe 0,475"
+ },
+ "amendment_te_tax_land_19_desc": {
+  "en": "Assesses 0.475 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,475; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_1_desc": {
+  "en": "Assesses 0.025 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,025; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_2": {
+  "en": "Rural Assessment 0.05",
+  "de": "Ländliche Abgabe 0,05"
+ },
+ "amendment_te_tax_land_20": {
+  "en": "Rural Assessment 0.5",
+  "de": "Ländliche Abgabe 0,5"
+ },
+ "amendment_te_tax_land_20_desc": {
+  "en": "Assesses 0.5 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,5; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_21": {
+  "en": "Rural Assessment 0.525",
+  "de": "Ländliche Abgabe 0,525"
+ },
+ "amendment_te_tax_land_21_desc": {
+  "en": "Assesses 0.525 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,525; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_22": {
+  "en": "Rural Assessment 0.55",
+  "de": "Ländliche Abgabe 0,55"
+ },
+ "amendment_te_tax_land_22_desc": {
+  "en": "Assesses 0.55 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,55; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_23": {
+  "en": "Rural Assessment 0.575",
+  "de": "Ländliche Abgabe 0,575"
+ },
+ "amendment_te_tax_land_23_desc": {
+  "en": "Assesses 0.575 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,575; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_24": {
+  "en": "Rural Assessment 0.6",
+  "de": "Ländliche Abgabe 0,6"
+ },
+ "amendment_te_tax_land_24_desc": {
+  "en": "Assesses 0.6 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,6; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_25": {
+  "en": "Rural Assessment 0.625",
+  "de": "Ländliche Abgabe 0,625"
+ },
+ "amendment_te_tax_land_25_desc": {
+  "en": "Assesses 0.625 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,625; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_26": {
+  "en": "Rural Assessment 0.65",
+  "de": "Ländliche Abgabe 0,65"
+ },
+ "amendment_te_tax_land_26_desc": {
+  "en": "Assesses 0.65 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,65; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_27": {
+  "en": "Rural Assessment 0.675",
+  "de": "Ländliche Abgabe 0,675"
+ },
+ "amendment_te_tax_land_27_desc": {
+  "en": "Assesses 0.675 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,675; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_28": {
+  "en": "Rural Assessment 0.7",
+  "de": "Ländliche Abgabe 0,7"
+ },
+ "amendment_te_tax_land_28_desc": {
+  "en": "Assesses 0.7 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,7; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_29": {
+  "en": "Rural Assessment 0.725",
+  "de": "Ländliche Abgabe 0,725"
+ },
+ "amendment_te_tax_land_29_desc": {
+  "en": "Assesses 0.725 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,725; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_2_desc": {
+  "en": "Assesses 0.05 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,05; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_3": {
+  "en": "Rural Assessment 0.075",
+  "de": "Ländliche Abgabe 0,075"
+ },
+ "amendment_te_tax_land_30": {
+  "en": "Rural Assessment 0.75",
+  "de": "Ländliche Abgabe 0,75"
+ },
+ "amendment_te_tax_land_30_desc": {
+  "en": "Assesses 0.75 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,75; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_31": {
+  "en": "Rural Assessment 0.775",
+  "de": "Ländliche Abgabe 0,775"
+ },
+ "amendment_te_tax_land_31_desc": {
+  "en": "Assesses 0.775 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,775; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_32": {
+  "en": "Rural Assessment 0.8",
+  "de": "Ländliche Abgabe 0,8"
+ },
+ "amendment_te_tax_land_32_desc": {
+  "en": "Assesses 0.8 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,8; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_33": {
+  "en": "Rural Assessment 0.825",
+  "de": "Ländliche Abgabe 0,825"
+ },
+ "amendment_te_tax_land_33_desc": {
+  "en": "Assesses 0.825 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,825; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_34": {
+  "en": "Rural Assessment 0.85",
+  "de": "Ländliche Abgabe 0,85"
+ },
+ "amendment_te_tax_land_34_desc": {
+  "en": "Assesses 0.85 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,85; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_35": {
+  "en": "Rural Assessment 0.875",
+  "de": "Ländliche Abgabe 0,875"
+ },
+ "amendment_te_tax_land_35_desc": {
+  "en": "Assesses 0.875 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,875; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_36": {
+  "en": "Rural Assessment 0.9",
+  "de": "Ländliche Abgabe 0,9"
+ },
+ "amendment_te_tax_land_36_desc": {
+  "en": "Assesses 0.9 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,9; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_37": {
+  "en": "Rural Assessment 0.925",
+  "de": "Ländliche Abgabe 0,925"
+ },
+ "amendment_te_tax_land_37_desc": {
+  "en": "Assesses 0.925 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,925; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_38": {
+  "en": "Rural Assessment 0.95",
+  "de": "Ländliche Abgabe 0,95"
+ },
+ "amendment_te_tax_land_38_desc": {
+  "en": "Assesses 0.95 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,95; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_39": {
+  "en": "Rural Assessment 0.975",
+  "de": "Ländliche Abgabe 0,975"
+ },
+ "amendment_te_tax_land_39_desc": {
+  "en": "Assesses 0.975 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,975; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_3_desc": {
+  "en": "Assesses 0.075 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,075; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_4": {
+  "en": "Rural Assessment 0.1",
+  "de": "Ländliche Abgabe 0,1"
+ },
+ "amendment_te_tax_land_40": {
+  "en": "Rural Assessment 1",
+  "de": "Ländliche Abgabe 1"
+ },
+ "amendment_te_tax_land_40_desc": {
+  "en": "Assesses 1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_41": {
+  "en": "Rural Assessment 1.025",
+  "de": "Ländliche Abgabe 1,025"
+ },
+ "amendment_te_tax_land_41_desc": {
+  "en": "Assesses 1.025 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,025; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_42": {
+  "en": "Rural Assessment 1.05",
+  "de": "Ländliche Abgabe 1,05"
+ },
+ "amendment_te_tax_land_42_desc": {
+  "en": "Assesses 1.05 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,05; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_43": {
+  "en": "Rural Assessment 1.075",
+  "de": "Ländliche Abgabe 1,075"
+ },
+ "amendment_te_tax_land_43_desc": {
+  "en": "Assesses 1.075 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,075; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_44": {
+  "en": "Rural Assessment 1.1",
+  "de": "Ländliche Abgabe 1,1"
+ },
+ "amendment_te_tax_land_44_desc": {
+  "en": "Assesses 1.1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,1; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_45": {
+  "en": "Rural Assessment 1.125",
+  "de": "Ländliche Abgabe 1,125"
+ },
+ "amendment_te_tax_land_45_desc": {
+  "en": "Assesses 1.125 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,125; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_46": {
+  "en": "Rural Assessment 1.15",
+  "de": "Ländliche Abgabe 1,15"
+ },
+ "amendment_te_tax_land_46_desc": {
+  "en": "Assesses 1.15 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,15; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_47": {
+  "en": "Rural Assessment 1.175",
+  "de": "Ländliche Abgabe 1,175"
+ },
+ "amendment_te_tax_land_47_desc": {
+  "en": "Assesses 1.175 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,175; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_48": {
+  "en": "Rural Assessment 1.2",
+  "de": "Ländliche Abgabe 1,2"
+ },
+ "amendment_te_tax_land_48_desc": {
+  "en": "Assesses 1.2 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 1,2; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_4_desc": {
+  "en": "Assesses 0.1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,1; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_5": {
+  "en": "Rural Assessment 0.125",
+  "de": "Ländliche Abgabe 0,125"
+ },
+ "amendment_te_tax_land_5_desc": {
+  "en": "Assesses 0.125 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,125; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_6": {
+  "en": "Rural Assessment 0.15",
+  "de": "Ländliche Abgabe 0,15"
+ },
+ "amendment_te_tax_land_6_desc": {
+  "en": "Assesses 0.15 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,15; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_7": {
+  "en": "Rural Assessment 0.175",
+  "de": "Ländliche Abgabe 0,175"
+ },
+ "amendment_te_tax_land_7_desc": {
+  "en": "Assesses 0.175 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,175; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_8": {
+  "en": "Rural Assessment 0.2",
+  "de": "Ländliche Abgabe 0,2"
+ },
+ "amendment_te_tax_land_8_desc": {
+  "en": "Assesses 0.2 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,2; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_land_9": {
+  "en": "Rural Assessment 0.225",
+  "de": "Ländliche Abgabe 0,225"
+ },
+ "amendment_te_tax_land_9_desc": {
+  "en": "Assesses 0.225 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "de": "Veranlagt Bauern und Landwirte in landwirtschaftlichen Gebäuden mit 0,225; sie zahlen dann keine Kopfsteuer."
+ },
+ "amendment_te_tax_wage_1": {
+  "en": "Wage Tax 2.5%",
+  "de": "Lohnsteuer 2,5%"
+ },
+ "amendment_te_tax_wage_10": {
+  "en": "Wage Tax 25%",
+  "de": "Lohnsteuer 25%"
+ },
+ "amendment_te_tax_wage_10_desc": {
+  "en": "Taxes the wages of employed pops at 25%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 25%."
+ },
+ "amendment_te_tax_wage_11": {
+  "en": "Wage Tax 27.5%",
+  "de": "Lohnsteuer 27,5%"
+ },
+ "amendment_te_tax_wage_11_desc": {
+  "en": "Taxes the wages of employed pops at 27.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 27,5%."
+ },
+ "amendment_te_tax_wage_12": {
+  "en": "Wage Tax 30%",
+  "de": "Lohnsteuer 30%"
+ },
+ "amendment_te_tax_wage_12_desc": {
+  "en": "Taxes the wages of employed pops at 30%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 30%."
+ },
+ "amendment_te_tax_wage_13": {
+  "en": "Wage Tax 32.5%",
+  "de": "Lohnsteuer 32,5%"
+ },
+ "amendment_te_tax_wage_13_desc": {
+  "en": "Taxes the wages of employed pops at 32.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 32,5%."
+ },
+ "amendment_te_tax_wage_14": {
+  "en": "Wage Tax 35%",
+  "de": "Lohnsteuer 35%"
+ },
+ "amendment_te_tax_wage_14_desc": {
+  "en": "Taxes the wages of employed pops at 35%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 35%."
+ },
+ "amendment_te_tax_wage_15": {
+  "en": "Wage Tax 37.5%",
+  "de": "Lohnsteuer 37,5%"
+ },
+ "amendment_te_tax_wage_15_desc": {
+  "en": "Taxes the wages of employed pops at 37.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 37,5%."
+ },
+ "amendment_te_tax_wage_16": {
+  "en": "Wage Tax 40%",
+  "de": "Lohnsteuer 40%"
+ },
+ "amendment_te_tax_wage_16_desc": {
+  "en": "Taxes the wages of employed pops at 40%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 40%."
+ },
+ "amendment_te_tax_wage_17": {
+  "en": "Wage Tax 42.5%",
+  "de": "Lohnsteuer 42,5%"
+ },
+ "amendment_te_tax_wage_17_desc": {
+  "en": "Taxes the wages of employed pops at 42.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 42,5%."
+ },
+ "amendment_te_tax_wage_18": {
+  "en": "Wage Tax 45%",
+  "de": "Lohnsteuer 45%"
+ },
+ "amendment_te_tax_wage_18_desc": {
+  "en": "Taxes the wages of employed pops at 45%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 45%."
+ },
+ "amendment_te_tax_wage_19": {
+  "en": "Wage Tax 47.5%",
+  "de": "Lohnsteuer 47,5%"
+ },
+ "amendment_te_tax_wage_19_desc": {
+  "en": "Taxes the wages of employed pops at 47.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 47,5%."
+ },
+ "amendment_te_tax_wage_1_desc": {
+  "en": "Taxes the wages of employed pops at 2.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 2,5%."
+ },
+ "amendment_te_tax_wage_2": {
+  "en": "Wage Tax 5%",
+  "de": "Lohnsteuer 5%"
+ },
+ "amendment_te_tax_wage_20": {
+  "en": "Wage Tax 50%",
+  "de": "Lohnsteuer 50%"
+ },
+ "amendment_te_tax_wage_20_desc": {
+  "en": "Taxes the wages of employed pops at 50%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 50%."
+ },
+ "amendment_te_tax_wage_2_desc": {
+  "en": "Taxes the wages of employed pops at 5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 5%."
+ },
+ "amendment_te_tax_wage_3": {
+  "en": "Wage Tax 7.5%",
+  "de": "Lohnsteuer 7,5%"
+ },
+ "amendment_te_tax_wage_3_desc": {
+  "en": "Taxes the wages of employed pops at 7.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 7,5%."
+ },
+ "amendment_te_tax_wage_4": {
+  "en": "Wage Tax 10%",
+  "de": "Lohnsteuer 10%"
+ },
+ "amendment_te_tax_wage_4_desc": {
+  "en": "Taxes the wages of employed pops at 10%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 10%."
+ },
+ "amendment_te_tax_wage_5": {
+  "en": "Wage Tax 12.5%",
+  "de": "Lohnsteuer 12,5%"
+ },
+ "amendment_te_tax_wage_5_desc": {
+  "en": "Taxes the wages of employed pops at 12.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 12,5%."
+ },
+ "amendment_te_tax_wage_6": {
+  "en": "Wage Tax 15%",
+  "de": "Lohnsteuer 15%"
+ },
+ "amendment_te_tax_wage_6_desc": {
+  "en": "Taxes the wages of employed pops at 15%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 15%."
+ },
+ "amendment_te_tax_wage_7": {
+  "en": "Wage Tax 17.5%",
+  "de": "Lohnsteuer 17,5%"
+ },
+ "amendment_te_tax_wage_7_desc": {
+  "en": "Taxes the wages of employed pops at 17.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 17,5%."
+ },
+ "amendment_te_tax_wage_8": {
+  "en": "Wage Tax 20%",
+  "de": "Lohnsteuer 20%"
+ },
+ "amendment_te_tax_wage_8_desc": {
+  "en": "Taxes the wages of employed pops at 20%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 20%."
+ },
+ "amendment_te_tax_wage_9": {
+  "en": "Wage Tax 22.5%",
+  "de": "Lohnsteuer 22,5%"
+ },
+ "amendment_te_tax_wage_9_desc": {
+  "en": "Taxes the wages of employed pops at 22.5%.",
+  "de": "Besteuert die Löhne beschäftigter Pops mit 22,5%."
+ },
+ "te_tax_ig_view_armed_forces_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_armed_forces_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_armed_forces_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_armed_forces_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_armed_forces_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_armed_forces_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_armed_forces_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_armed_forces_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_devout_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_devout_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_devout_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_devout_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_devout_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_devout_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_devout_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_devout_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_industrialists_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_industrialists_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_industrialists_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_industrialists_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_industrialists_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_industrialists_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_industrialists_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_industrialists_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_intelligentsia_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_intelligentsia_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_intelligentsia_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_intelligentsia_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_intelligentsia_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_intelligentsia_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_intelligentsia_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_intelligentsia_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_landowners_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_landowners_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_landowners_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_landowners_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_landowners_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_landowners_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_landowners_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_landowners_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_rural_folk_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_rural_folk_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_rural_folk_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_rural_folk_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_rural_folk_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_rural_folk_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_rural_folk_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_rural_folk_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_trade_unions_m1": {
+  "en": "Opposes the Tax Code",
+  "de": "Ist gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_trade_unions_m1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_trade_unions_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "de": "Ist deutlich gegen die Steuerordnung"
+ },
+ "te_tax_ig_view_trade_unions_m2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_trade_unions_p1": {
+  "en": "Endorses the Tax Code",
+  "de": "Ist für die Steuerordnung"
+ },
+ "te_tax_ig_view_trade_unions_p1_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_ig_view_trade_unions_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "de": "Ist deutlich für die Steuerordnung"
+ },
+ "te_tax_ig_view_trade_unions_p2_desc": {
+  "en": "This group's stance on the taxation law the enacted tax code comes closest to, counted as it would be for that law.",
+  "de": "Die Haltung dieser Gruppe zu dem Steuergesetz, dem die geltende Steuerordnung am nächsten kommt, gewertet, als ginge es um dieses Gesetz."
+ },
+ "te_tax_offer_untax_clothes": {
+  "en": "Leave $clothes$ untaxed.",
+  "de": "$clothes$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_electricity": {
+  "en": "Leave $electricity$ untaxed.",
+  "de": "$electricity$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_fabric": {
+  "en": "Leave $fabric$ untaxed.",
+  "de": "$fabric$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_fish": {
+  "en": "Leave $fish$ untaxed.",
+  "de": "$fish$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_furniture": {
+  "en": "Leave $furniture$ untaxed.",
+  "de": "$furniture$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_grain": {
+  "en": "Leave $grain$ untaxed.",
+  "de": "$grain$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_groceries": {
+  "en": "Leave $groceries$ untaxed.",
+  "de": "$groceries$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_paper": {
+  "en": "Leave $paper$ untaxed.",
+  "de": "$paper$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_services": {
+  "en": "Leave $services$ untaxed.",
+  "de": "$services$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_transportation": {
+  "en": "Leave $transportation$ untaxed.",
+  "de": "$transportation$ von der Steuer ausnehmen."
+ },
+ "te_tax_offer_untax_wood": {
+  "en": "Leave $wood$ untaxed.",
+  "de": "$wood$ von der Steuer ausnehmen."
+ },
+ "te_tax_tt_offer_untax_clothes": {
+  "en": "The bill and the draft no longer tax $clothes$.",
+  "de": "Die Vorlage und der Entwurf besteuern $clothes$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_electricity": {
+  "en": "The bill and the draft no longer tax $electricity$.",
+  "de": "Die Vorlage und der Entwurf besteuern $electricity$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_fabric": {
+  "en": "The bill and the draft no longer tax $fabric$.",
+  "de": "Die Vorlage und der Entwurf besteuern $fabric$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_fish": {
+  "en": "The bill and the draft no longer tax $fish$.",
+  "de": "Die Vorlage und der Entwurf besteuern $fish$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_furniture": {
+  "en": "The bill and the draft no longer tax $furniture$.",
+  "de": "Die Vorlage und der Entwurf besteuern $furniture$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_grain": {
+  "en": "The bill and the draft no longer tax $grain$.",
+  "de": "Die Vorlage und der Entwurf besteuern $grain$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_groceries": {
+  "en": "The bill and the draft no longer tax $groceries$.",
+  "de": "Die Vorlage und der Entwurf besteuern $groceries$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_paper": {
+  "en": "The bill and the draft no longer tax $paper$.",
+  "de": "Die Vorlage und der Entwurf besteuern $paper$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_services": {
+  "en": "The bill and the draft no longer tax $services$.",
+  "de": "Die Vorlage und der Entwurf besteuern $services$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_transportation": {
+  "en": "The bill and the draft no longer tax $transportation$.",
+  "de": "Die Vorlage und der Entwurf besteuern $transportation$ nicht mehr."
+ },
+ "te_tax_tt_offer_untax_wood": {
+  "en": "The bill and the draft no longer tax $wood$.",
+  "de": "Die Vorlage und der Entwurf besteuern $wood$ nicht mehr."
+ }
+}

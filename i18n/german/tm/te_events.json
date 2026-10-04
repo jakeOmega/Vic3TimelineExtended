@@ -16051,6 +16051,406 @@
   "en": "Colony: 2 Pallas",
   "de": "Kolonie: 2 Pallas"
  },
+ "space_race_discovery_events.1.a": {
+  "en": "Protect the ocean and establish a permanent biology institute.",
+  "de": "Den Ozean schützen und ein dauerhaftes Biologieinstitut einrichten."
+ },
+ "space_race_discovery_events.1.b": {
+  "en": "Share the discovery through an international research consortium.",
+  "de": "Die Entdeckung über ein internationales Forschungskonsortium teilen."
+ },
+ "space_race_discovery_events.1.d": {
+  "en": "The ocean laboratories of our Europa colony have confirmed an indigenous microbial ecosystem beneath the ice. Repeated samples grow, divide, and consume chemical fuel in sealed culture chambers, while sterile controls remain empty. Their biochemistry distinguishes them from every organism carried by the colonists. Seafloor surveys have traced their energy supply to reactions between rock and water. Our scientists are studying a second living world.",
+  "de": "Die Ozeanlabore unserer Europa-Kolonie haben ein einheimisches mikrobielles Ökosystem unter dem Eis bestätigt. Wiederholte Proben wachsen, teilen sich und verbrauchen chemischen Brennstoff in versiegelten Kulturkammern, während sterile Kontrollproben leer bleiben. Ihre Biochemie unterscheidet sie von jedem Organismus, den die Kolonisten mitgebracht haben. Meeresbodenerkundungen haben ihre Energieversorgung auf Reaktionen zwischen Gestein und Wasser zurückgeführt. Unsere Wissenschaftler erforschen eine zweite lebendige Welt."
+ },
+ "space_race_discovery_events.1.f": {
+  "en": "The control chamber stayed dark. The ocean sample kept growing.",
+  "de": "Die Kontrollkammer blieb dunkel. Die Ozeanprobe wuchs weiter."
+ },
+ "space_race_discovery_events.1.t": {
+  "en": "A Second Living World",
+  "de": "Eine zweite lebendige Welt"
+ },
+ "space_race_discovery_events.10.a": {
+  "en": "Keep the impactor fragments together as a scientific collection.",
+  "de": "Die Bruchstücke des Impaktors als wissenschaftliche Sammlung zusammenhalten."
+ },
+ "space_race_discovery_events.10.b": {
+  "en": "Use the contrast between deposits to improve mineral sorting.",
+  "de": "Den Kontrast zwischen den Lagerstätten nutzen, um die Mineraltrennung zu verbessern."
+ },
+ "space_race_discovery_events.10.d": {
+  "en": "Excavation at our Vesta colony has exposed fragments of a carbon-rich impactor sealed within an ancient crater deposit. Sheltered portions preserve hydrated minerals and organic compounds unlike the surrounding basalt. Laboratory analysis has established the fragments' origin and traced the alteration of their minerals before they reached Vesta. The colony has recovered a preserved piece of another early solar-system body, together with the geological record of its arrival.",
+  "de": "Grabungen in unserer Vesta-Kolonie haben Bruchstücke eines kohlenstoffreichen Impaktors freigelegt, die in einer uralten Kraterablagerung eingeschlossen sind. Geschützte Bereiche bewahren hydratisierte Minerale und organische Verbindungen, die sich vom umgebenden Basalt unterscheiden. Laboranalysen haben die Herkunft der Bruchstücke bestimmt und die Umwandlung ihrer Minerale nachvollzogen, bevor sie Vesta erreichten. Die Kolonie hat ein erhaltenes Stück eines anderen frühen Körpers des Sonnensystems geborgen, samt dem geologischen Zeugnis seiner Ankunft."
+ },
+ "space_race_discovery_events.10.f": {
+  "en": "The most interesting stone in the trench came from another world.",
+  "de": "Der interessanteste Stein im Graben stammte von einer anderen Welt."
+ },
+ "space_race_discovery_events.10.t": {
+  "en": "A Visitor Preserved in Vesta",
+  "de": "Ein Besucher, bewahrt in Vesta"
+ },
+ "space_race_discovery_events.11.a": {
+  "en": "Study the seam before altering its geological context.",
+  "de": "Die Ader untersuchen, bevor ihr geologischer Zusammenhang verändert wird."
+ },
+ "space_race_discovery_events.11.b": {
+  "en": "Develop the deposit with selective mining.",
+  "de": "Die Lagerstätte mit selektivem Abbau erschließen."
+ },
+ "space_race_discovery_events.11.d": {
+  "en": "Mining surveys at our Psyche colony have mapped a continuous seam of nickel-iron metal through the surrounding mixed rock. Repeated core assays establish its composition and grade, and structural mapping has traced the seam beyond the original workings. The deposit is a substantial extraction target and a preserved record of the processes that concentrated metal within the asteroid. Excavating it will open new reserves while altering that geological record.",
+  "de": "Bergbauerkundungen in unserer Psyche-Kolonie haben eine durchgehende Ader aus Nickel-Eisen-Metall im umgebenden Mischgestein kartiert. Wiederholte Kernanalysen bestimmen ihre Zusammensetzung und ihren Gehalt, und strukturelle Kartierung hat die Ader über die ursprünglichen Abbaue hinaus verfolgt. Die Lagerstätte ist ein bedeutendes Abbauziel und ein erhaltenes Zeugnis der Prozesse, die Metall im Asteroiden angereichert haben. Ihr Abbau wird neue Reserven erschließen und dabei dieses geologische Zeugnis verändern."
+ },
+ "space_race_discovery_events.11.f": {
+  "en": "The second assay matched the first. The seam continued beyond both.",
+  "de": "Die zweite Analyse stimmte mit der ersten überein. Die Ader reichte über beide hinaus."
+ },
+ "space_race_discovery_events.11.t": {
+  "en": "A Rich Seam in Psyche",
+  "de": "Eine reiche Ader in Psyche"
+ },
+ "space_race_discovery_events.12.a": {
+  "en": "Preserve the seam as a record of early water chemistry.",
+  "de": "Die Ader als Zeugnis der frühen Wasserchemie bewahren."
+ },
+ "space_race_discovery_events.12.b": {
+  "en": "Build thermal extraction equipment for local water supplies.",
+  "de": "Thermische Gewinnungsanlagen für die lokale Wasserversorgung bauen."
+ },
+ "space_race_discovery_events.12.d": {
+  "en": "Our Pallas colony has mapped a thick seam of hydrated minerals formed by water-driven alteration early in the asteroid's history. Core samples establish the mineral sequence and the quantity of water bound within it. The colony's pilot plant has recovered that water by heating the rock, and engineers have completed the energy budget for a larger installation. The seam holds both a usable local reserve and a record of the asteroid's early chemistry.",
+  "de": "Unsere Pallas-Kolonie hat eine mächtige Ader hydratisierter Minerale kartiert, die durch wassergetriebene Umwandlung früh in der Geschichte des Asteroiden entstanden ist. Kernproben bestimmen die Mineralabfolge und die darin gebundene Wassermenge. Die Pilotanlage der Kolonie hat dieses Wasser durch Erhitzen des Gesteins gewonnen, und Ingenieure haben die Energiebilanz für eine größere Anlage fertiggestellt. Die Ader birgt sowohl eine nutzbare lokale Reserve als auch ein Zeugnis der frühen Chemie des Asteroiden."
+ },
+ "space_race_discovery_events.12.f": {
+  "en": "The rock looked dry until the furnace filled the condenser.",
+  "de": "Das Gestein sah trocken aus, bis der Ofen den Kondensator füllte."
+ },
+ "space_race_discovery_events.12.t": {
+  "en": "Water Bound in Stone",
+  "de": "Wasser, im Stein gebunden"
+ },
+ "space_race_discovery_events.13.a": {
+  "en": "Build a long-term atmospheric observatory.",
+  "de": "Ein langfristiges atmosphärisches Observatorium errichten."
+ },
+ "space_race_discovery_events.13.b": {
+  "en": "Use the wave forecasts to improve aerostat navigation.",
+  "de": "Die Wellenvorhersagen nutzen, um die Aerostat-Navigation zu verbessern."
+ },
+ "space_race_discovery_events.13.d": {
+  "en": "An extended weather survey by our Venus cloud habitat has established a persistent atmospheric wave anchored above a highland region. The air flows through the pattern while its position remains tied to the terrain below. Distributed instruments have measured its daily changes and the energy it carries upward from the lower atmosphere. The colony's meteorologists have produced reliable forecasts of the strongest oscillations, giving aerostat crews a new basis for flight planning.",
+  "de": "Eine ausgedehnte Wettererhebung unseres Venus-Wolkenhabitats hat eine beständige atmosphärische Welle bestätigt, die über einer Hochlandregion verankert ist. Die Luft strömt durch das Muster, während seine Position an das Gelände darunter gebunden bleibt. Verteilte Instrumente haben ihre täglichen Veränderungen und die Energie gemessen, die sie aus der unteren Atmosphäre nach oben trägt. Die Meteorologen der Kolonie haben verlässliche Vorhersagen der stärksten Schwingungen erstellt und den Aerostat-Besatzungen damit eine neue Grundlage für die Flugplanung gegeben."
+ },
+ "space_race_discovery_events.13.f": {
+  "en": "The clouds moved. The curve on the weather map did not.",
+  "de": "Die Wolken zogen weiter. Die Kurve auf der Wetterkarte nicht."
+ },
+ "space_race_discovery_events.13.t": {
+  "en": "A Wave That Holds Its Ground",
+  "de": "Eine Welle, die ihre Stellung hält"
+ },
+ "space_race_discovery_events.14.a": {
+  "en": "Protect representative layers for volatile and organic chemistry research.",
+  "de": "Repräsentative Schichten für die Forschung an flüchtigen und organischen Stoffen schützen."
+ },
+ "space_race_discovery_events.14.b": {
+  "en": "Develop the deposit as a local water and propellant source.",
+  "de": "Die Lagerstätte als lokale Wasser- und Treibstoffquelle erschließen."
+ },
+ "space_race_discovery_events.14.d": {
+  "en": "Polar excavations by our Mercury colony have reached an exceptionally thick ice deposit beneath a dark covering in a permanently shadowed crater. Chemical and isotopic analysis has identified carbon-rich material delivered with ancient impactors. The protected layers preserve successive episodes of volatile delivery near the Sun, while extraction trials confirm a substantial supply of usable water. Developing the deposit will consume part of this frozen archive.",
+  "de": "Polare Grabungen unserer Merkur-Kolonie haben eine außergewöhnlich mächtige Eisablagerung unter einer dunklen Deckschicht in einem dauerhaft beschatteten Krater erreicht. Chemische und Isotopenanalysen haben kohlenstoffreiches Material identifiziert, das mit uralten Impaktoren eingetragen wurde. Die geschützten Schichten bewahren aufeinanderfolgende Phasen des Eintrags flüchtiger Stoffe in Sonnennähe, während Förderversuche einen erheblichen Vorrat an nutzbarem Wasser bestätigen. Die Erschließung der Lagerstätte wird einen Teil dieses gefrorenen Archivs aufzehren."
+ },
+ "space_race_discovery_events.14.f": {
+  "en": "A world baked by sunlight kept its history in a place the Sun never reached.",
+  "de": "Eine von der Sonne gebackene Welt bewahrte ihre Geschichte an einem Ort, den die Sonne nie erreichte."
+ },
+ "space_race_discovery_events.14.t": {
+  "en": "An Archive in Permanent Shadow",
+  "de": "Ein Archiv im ewigen Schatten"
+ },
+ "space_race_discovery_events.15.a": {
+  "en": "Move the installations and monitor the channel from a safe distance.",
+  "de": "Die Anlagen verlegen und den Kanal aus sicherer Entfernung überwachen."
+ },
+ "space_race_discovery_events.15.b": {
+  "en": "Develop mobile foundations and continuous subsurface warning systems.",
+  "de": "Mobile Fundamente und ein durchgehendes unterirdisches Warnsystem entwickeln."
+ },
+ "space_race_discovery_events.15.d": {
+  "en": "Sensors beneath an industrial site at our Io colony have mapped an active lava channel extending under a thinning crust. Repeated inspections confirm that its roof is weakening and that the channel is changing shape faster than the original survey predicted. The colony's engineers have identified the installations exposed to collapse and drawn up two responses: relocate the workings, or equip them with mobile foundations and continuous subsurface monitoring.",
+  "de": "Sensoren unter einer Industrieanlage unserer Io-Kolonie haben einen aktiven Lavakanal kartiert, der sich unter einer dünner werdenden Kruste erstreckt. Wiederholte Inspektionen bestätigen, dass sein Dach schwächer wird und der Kanal seine Form schneller verändert, als die ursprüngliche Erkundung vorhergesagt hatte. Die Ingenieure der Kolonie haben die einsturzgefährdeten Anlagen bestimmt und zwei Antworten entworfen: die Abbaustätten zu verlegen oder sie mit mobilen Fundamenten und ständiger unterirdischer Überwachung auszustatten."
+ },
+ "space_race_discovery_events.15.f": {
+  "en": "Yesterday's bedrock is today's engineering question.",
+  "de": "Das Grundgestein von gestern ist die Ingenieursfrage von heute."
+ },
+ "space_race_discovery_events.15.t": {
+  "en": "The Moving Floor of Io",
+  "de": "Der bewegte Boden von Io"
+ },
+ "space_race_discovery_events.16.a": {
+  "en": "Publish the mapped ocean structure and chemical profiles.",
+  "de": "Die kartierte Ozeanstruktur und die chemischen Profile veröffentlichen."
+ },
+ "space_race_discovery_events.16.b": {
+  "en": "Develop instruments and pressure vessels for deep-ice operations.",
+  "de": "Instrumente und Druckbehälter für Einsätze im Tiefeneis entwickeln."
+ },
+ "space_race_discovery_events.16.d": {
+  "en": "The deep observatories of our Ganymede colony have mapped separate liquid-water layers within the moon's ice mantle. Seismic profiles establish their depths, and borehole samples reveal distinct salinities. High-pressure ice divides the layers and separates the surveyed upper ocean from the rock below, restricting the exchange of chemicals between them. The colony has established the structure of this layered interior and the conditions its deep-ice equipment must withstand.",
+  "de": "Die Tiefenobservatorien unserer Ganymed-Kolonie haben getrennte Flüssigwasserschichten im Eismantel des Mondes kartiert. Seismische Profile bestimmen ihre Tiefen, und Bohrlochproben zeigen unterschiedliche Salzgehalte. Hochdruckeis trennt die Schichten und scheidet den erkundeten oberen Ozean vom Gestein darunter, wodurch der Austausch von Chemikalien zwischen ihnen eingeschränkt wird. Die Kolonie hat den Aufbau dieses geschichteten Inneren und die Bedingungen festgestellt, denen ihre Tiefeneis-Ausrüstung standhalten muss."
+ },
+ "space_race_discovery_events.16.f": {
+  "en": "There is water below us, and another kind of ice below the water.",
+  "de": "Unter uns ist Wasser, und unter dem Wasser eine andere Art von Eis."
+ },
+ "space_race_discovery_events.16.t": {
+  "en": "Oceans Between Layers",
+  "de": "Ozeane zwischen Schichten"
+ },
+ "space_race_discovery_events.17.a": {
+  "en": "Keep the layered section intact as an impact chronology.",
+  "de": "Den Schichtaufbau als Einschlagchronologie unversehrt erhalten."
+ },
+ "space_race_discovery_events.17.b": {
+  "en": "Use mapped deposits to improve shielding and construction.",
+  "de": "Die kartierten Ablagerungen nutzen, um Abschirmung und Bau zu verbessern."
+ },
+ "space_race_discovery_events.17.d": {
+  "en": "Our Callisto colony has drilled into an ancient impact basin where later debris sealed successive ejecta layers. Laboratory dating and mineral analysis have identified impacts from several distinct populations of small bodies and established their sequence. The cores preserve a detailed chronology of bombardment in the outer solar system. Engineers have also tested the compact deposits and certified them as suitable shielding material for local installations.",
+  "de": "Unsere Kallisto-Kolonie hat in ein uraltes Einschlagbecken gebohrt, in dem später abgelagerte Trümmer aufeinanderfolgende Auswurfschichten versiegelt haben. Labordatierung und Mineralanalyse haben Einschläge mehrerer unterschiedlicher Populationen kleiner Körper identifiziert und ihre Abfolge bestimmt. Die Kerne bewahren eine detaillierte Chronologie des Bombardements im äußeren Sonnensystem. Ingenieure haben außerdem die kompakten Ablagerungen getestet und als geeignetes Abschirmmaterial für lokale Anlagen zertifiziert."
+ },
+ "space_race_discovery_events.17.f": {
+  "en": "Each layer arrived violently. Together they make a quiet clock.",
+  "de": "Jede Schicht kam gewaltsam an. Zusammen ergeben sie eine stille Uhr."
+ },
+ "space_race_discovery_events.17.t": {
+  "en": "The Crater Under the Crater",
+  "de": "Der Krater unter dem Krater"
+ },
+ "space_race_discovery_events.18.a": {
+  "en": "Keep a permanent observatory above the liquid layer.",
+  "de": "Ein dauerhaftes Observatorium über der flüssigen Schicht unterhalten."
+ },
+ "space_race_discovery_events.18.b": {
+  "en": "Apply the deep-ice survey methods to colony engineering.",
+  "de": "Die Methoden der Tiefeneis-Erkundung auf die Kolonietechnik anwenden."
+ },
+ "space_race_discovery_events.18.d": {
+  "en": "The deep survey station at our Titania colony has confirmed a liquid-water ocean beneath the ice. Repeated seismic profiles establish its depth and extent, while recovered fluid samples contain dissolved salts and ammonia that lower its freezing point. Heat measurements show that the moon's slowly cooling interior supplies the warmth needed to sustain it. The colony now operates above a mapped ocean, with direct access to samples from this distant water world.",
+  "de": "Die Tiefenerkundungsstation unserer Titania-Kolonie hat einen Ozean aus flüssigem Wasser unter dem Eis bestätigt. Wiederholte seismische Profile bestimmen seine Tiefe und Ausdehnung, während geborgene Flüssigkeitsproben gelöste Salze und Ammoniak enthalten, die seinen Gefrierpunkt senken. Wärmemessungen zeigen, dass das langsam abkühlende Innere des Mondes die Wärme liefert, die zu seiner Erhaltung nötig ist. Die Kolonie arbeitet nun über einem kartierten Ozean, mit direktem Zugang zu Proben dieser fernen Wasserwelt."
+ },
+ "space_race_discovery_events.18.f": {
+  "en": "The surface is colder than our instruments were built to expect. The interior is not.",
+  "de": "Die Oberfläche ist kälter, als unsere Instrumente zu erwarten ausgelegt waren. Das Innere ist es nicht."
+ },
+ "space_race_discovery_events.18.t": {
+  "en": "Warmth Beneath Titania",
+  "de": "Wärme unter Titania"
+ },
+ "space_race_discovery_events.19.a": {
+  "en": "Close the field and establish a remote geyser observatory.",
+  "de": "Das Feld sperren und ein Geysir-Fernobservatorium einrichten."
+ },
+ "space_race_discovery_events.19.b": {
+  "en": "Relocate the field and develop pressure monitoring equipment.",
+  "de": "Das Feld verlegen und Druckmessgeräte entwickeln."
+ },
+ "space_race_discovery_events.19.d": {
+  "en": "A nitrogen eruption beside our Triton colony has carried gas and dark dust across its landing field. Subsurface pressure sensors and thermal measurements have established the cause: seasonal sunlight warms material beneath translucent nitrogen ice until trapped gas breaks through the surface. The monitoring network has mapped the pressurized deposit and identified the next threatened sections. The colony must now dedicate the field to geyser research or move flight operations to a safer site.",
+  "de": "Ein Stickstoffausbruch neben unserer Triton-Kolonie hat Gas und dunklen Staub über ihr Landefeld getragen. Unterirdische Drucksensoren und Wärmemessungen haben die Ursache bestimmt: Saisonales Sonnenlicht erwärmt Material unter durchscheinendem Stickstoffeis, bis eingeschlossenes Gas die Oberfläche durchbricht. Das Messnetz hat die unter Druck stehende Ablagerung kartiert und die nächsten gefährdeten Abschnitte identifiziert. Die Kolonie muss das Feld nun entweder der Geysirforschung widmen oder den Flugbetrieb an einen sichereren Standort verlegen."
+ },
+ "space_race_discovery_events.19.f": {
+  "en": "Even here, faint sunlight can move a landscape.",
+  "de": "Selbst hier kann schwaches Sonnenlicht eine Landschaft bewegen."
+ },
+ "space_race_discovery_events.19.t": {
+  "en": "A Jet Beneath the Landing Field",
+  "de": "Ein Strahl unter dem Landefeld"
+ },
+ "space_race_discovery_events.2.a": {
+  "en": "Keep the vent field undisturbed for chemical research.",
+  "de": "Das Quellfeld für die chemische Forschung ungestört lassen."
+ },
+ "space_race_discovery_events.2.b": {
+  "en": "Develop instruments for operations in hot, pressurized water.",
+  "de": "Instrumente für den Einsatz in heißem Wasser unter Druck entwickeln."
+ },
+ "space_race_discovery_events.2.d": {
+  "en": "An ocean survey operated by our Europa colony has mapped an extensive hydrothermal vent field on the seafloor. Warm, hydrogen-rich water rises through fractures and builds mineral chimneys around the outlets. Repeated sampling has measured the chemical gradients and traced their source to reactions within the underlying rock. The colony now has direct access to a working natural laboratory for ocean chemistry.",
+  "de": "Eine von unserer Europa-Kolonie betriebene Ozeanerkundung hat ein ausgedehntes hydrothermales Quellfeld auf dem Meeresboden kartiert. Warmes, wasserstoffreiches Wasser steigt durch Spalten auf und baut Mineralschlote um die Austrittsöffnungen. Wiederholte Probenahmen haben die chemischen Gradienten gemessen und ihre Quelle auf Reaktionen im darunterliegenden Gestein zurückgeführt. Die Kolonie hat nun direkten Zugang zu einem funktionierenden natürlichen Labor für Ozeanchemie."
+ },
+ "space_race_discovery_events.2.f": {
+  "en": "The thermometer rose long before the camera found the chimney.",
+  "de": "Das Thermometer stieg lange, bevor die Kamera den Schlot fand."
+ },
+ "space_race_discovery_events.2.t": {
+  "en": "Chimneys Beneath the Ice",
+  "de": "Schlote unter dem Eis"
+ },
+ "space_race_discovery_events.20.a": {
+  "en": "Map the buried ocean and preserve the fracture samples.",
+  "de": "Den verborgenen Ozean kartieren und die Bruchproben bewahren."
+ },
+ "space_race_discovery_events.20.b": {
+  "en": "Use the low-temperature chemistry to improve cryogenic systems.",
+  "de": "Die Tieftemperaturchemie nutzen, um kryogene Systeme zu verbessern."
+ },
+ "space_race_discovery_events.20.d": {
+  "en": "Our Pluto colony has confirmed a buried liquid-water ocean through repeated deep sounding and fluid samples recovered from an active fracture system. Chemical analysis has measured the dissolved ammonia, and laboratory tests establish how far it lowers the water's freezing point. Heat-flow measurements complete the explanation: retained internal warmth and antifreeze chemistry sustain the ocean beneath the frozen crust. The colony now has a mapped reservoir and a detailed record of its low-temperature chemistry.",
+  "de": "Unsere Pluto-Kolonie hat durch wiederholte Tiefenlotungen und Flüssigkeitsproben aus einem aktiven Bruchsystem einen verborgenen Ozean aus flüssigem Wasser bestätigt. Chemische Analysen haben das gelöste Ammoniak gemessen, und Labortests bestimmen, wie stark es den Gefrierpunkt des Wassers senkt. Wärmeflussmessungen vervollständigen die Erklärung: Zurückgehaltene Eigenwärme und Frostschutzchemie halten den Ozean unter der gefrorenen Kruste aufrecht. Die Kolonie verfügt nun über ein kartiertes Reservoir und eine detaillierte Aufzeichnung seiner Tieftemperaturchemie."
+ },
+ "space_race_discovery_events.20.f": {
+  "en": "The sample froze in the laboratory at a temperature plain water could not withstand.",
+  "de": "Die Probe gefror im Labor bei einer Temperatur, die reines Wasser nicht überstanden hätte."
+ },
+ "space_race_discovery_events.20.t": {
+  "en": "Antifreeze at the Edge of the System",
+  "de": "Frostschutz am Rand des Systems"
+ },
+ "space_race_discovery_events.3.a": {
+  "en": "Designate the plume catchment as a protected biological reserve.",
+  "de": "Das Auffanggebiet der Fontäne zum geschützten biologischen Reservat erklären."
+ },
+ "space_race_discovery_events.3.b": {
+  "en": "Share sealed samples and methods with international laboratories.",
+  "de": "Versiegelte Proben und Methoden mit internationalen Laboren teilen."
+ },
+ "space_race_discovery_events.3.d": {
+  "en": "Our Enceladus colony has confirmed living microbes in material carried from the buried ocean into its plumes. Independent laboratories have cultivated them from repeated samples under strict contamination controls. The organisms consume hydrogen and carbon dioxide, release methane, and reproduce; their cellular chemistry distinguishes them from terrestrial contaminants. The colony's plume collectors now supply a continuing record of this alien ecosystem.",
+  "de": "Unsere Enceladus-Kolonie hat lebende Mikroben in Material bestätigt, das aus dem verborgenen Ozean in seine Fontänen getragen wird. Unabhängige Labore haben sie aus wiederholten Proben unter strengen Kontaminationskontrollen kultiviert. Die Organismen verbrauchen Wasserstoff und Kohlendioxid, setzen Methan frei und vermehren sich; ihre Zellchemie unterscheidet sie von irdischen Verunreinigungen. Die Fontänensammler der Kolonie liefern nun eine fortlaufende Aufzeichnung dieses außerirdischen Ökosystems."
+ },
+ "space_race_discovery_events.3.f": {
+  "en": "A plume that once told us about water now carries a living sample.",
+  "de": "Eine Fontäne, die uns einst vom Wasser erzählte, trägt nun eine lebende Probe."
+ },
+ "space_race_discovery_events.3.t": {
+  "en": "Life in the Ice Grains",
+  "de": "Leben in den Eiskörnern"
+ },
+ "space_race_discovery_events.4.a": {
+  "en": "Preserve the deposit and reconstruct its chemical history.",
+  "de": "Die Ablagerung bewahren und ihre chemische Geschichte rekonstruieren."
+ },
+ "space_race_discovery_events.4.b": {
+  "en": "Use the reaction pathways to improve industrial synthesis.",
+  "de": "Die Reaktionswege nutzen, um die industrielle Synthese zu verbessern."
+ },
+ "space_race_discovery_events.4.d": {
+  "en": "Excavators working beyond our Titan colony have opened a buried impact deposit where melted water ice once mixed with atmospheric organic compounds. Frozen pockets preserve amino acids and a rich sequence of related reaction products. The colony's laboratories have reproduced the chemistry and established how the impact's heat drove those reactions before the meltwater froze. The deposit records an extensive natural synthesis of the chemical building blocks of life.",
+  "de": "Bagger jenseits unserer Titan-Kolonie haben eine verschüttete Einschlagablagerung geöffnet, in der geschmolzenes Wassereis sich einst mit organischen Verbindungen der Atmosphäre vermischte. Gefrorene Einschlüsse bewahren Aminosäuren und eine reiche Abfolge verwandter Reaktionsprodukte. Die Labore der Kolonie haben die Chemie nachgestellt und bestimmt, wie die Hitze des Einschlags diese Reaktionen antrieb, bevor das Schmelzwasser gefror. Die Ablagerung hält eine umfassende natürliche Synthese der chemischen Bausteine des Lebens fest."
+ },
+ "space_race_discovery_events.4.f": {
+  "en": "For a brief interval after the impact, this frozen world had a warm laboratory.",
+  "de": "Für kurze Zeit nach dem Einschlag besaß diese gefrorene Welt ein warmes Labor."
+ },
+ "space_race_discovery_events.4.t": {
+  "en": "An Impact-Born Chemical Laboratory",
+  "de": "Ein im Einschlag geborenes Chemielabor"
+ },
+ "space_race_discovery_events.5.a": {
+  "en": "Protect the fossil beds and establish a paleontology institute.",
+  "de": "Die Fossillagerstätten schützen und ein Paläontologieinstitut einrichten."
+ },
+ "space_race_discovery_events.5.b": {
+  "en": "Open the fossil archive to international research teams.",
+  "de": "Das Fossilarchiv für internationale Forschungsteams öffnen."
+ },
+ "space_race_discovery_events.5.d": {
+  "en": "Paleontologists at our Hellas Planitia colony have confirmed fossilized microbial communities in ancient lake sediments. Cores preserve mineralized cells, successive growth layers, and the chemical record of their metabolism. Independent laboratories have established the biological origin of the structures and dated the ecosystem to the era when liquid water filled the basin. Mars supported life billions of years before our settlers arrived. The exposed beds now hold a record of its history.",
+  "de": "Paläontologen unserer Kolonie Hellas Planitia haben fossilisierte mikrobielle Gemeinschaften in uralten Seesedimenten bestätigt. Bohrkerne bewahren mineralisierte Zellen, aufeinanderfolgende Wachstumsschichten und die chemische Aufzeichnung ihres Stoffwechsels. Unabhängige Labore haben den biologischen Ursprung der Strukturen festgestellt und das Ökosystem auf die Zeit datiert, als flüssiges Wasser das Becken füllte. Der Mars trug Leben, Milliarden Jahre bevor unsere Siedler eintrafen. Die freigelegten Schichten halten nun eine Aufzeichnung seiner Geschichte fest."
+ },
+ "space_race_discovery_events.5.f": {
+  "en": "Each layer was once a living surface. Now we can read their succession in stone.",
+  "de": "Jede Schicht war einst eine lebende Oberfläche. Nun können wir ihre Abfolge im Stein lesen."
+ },
+ "space_race_discovery_events.5.t": {
+  "en": "The Fossils of Hellas",
+  "de": "Die Fossilien von Hellas"
+ },
+ "space_race_discovery_events.6.a": {
+  "en": "Survey the tubes as an archive of Martian volcanism.",
+  "de": "Die Röhren als Archiv des marsianischen Vulkanismus erkunden."
+ },
+ "space_race_discovery_events.6.b": {
+  "en": "Fit inspected chambers with sealed habitat modules.",
+  "de": "Untersuchte Kammern mit versiegelten Habitatmodulen ausstatten."
+ },
+ "space_race_discovery_events.6.d": {
+  "en": "The subsurface mapping network at our Olympus Mons colony has located an extensive system of buried lava tubes. Robotic inspections and structural tests have identified intact chambers beneath thick basalt roofs, isolated from active lava channels. The surveyed rock provides substantial radiation shielding, and engineers have certified several chambers for sealed habitat construction. The same walls preserve a detailed record of the volcano's ancient eruptions.",
+  "de": "Das unterirdische Kartierungsnetz unserer Olympus-Mons-Kolonie hat ein ausgedehntes System verschütteter Lavaröhren aufgespürt. Roboterinspektionen und Strukturtests haben intakte Kammern unter dicken Basaltdächern identifiziert, isoliert von aktiven Lavakanälen. Das erkundete Gestein bietet erhebliche Strahlenabschirmung, und Ingenieure haben mehrere Kammern für den Bau versiegelter Habitate zertifiziert. Dieselben Wände bewahren eine detaillierte Aufzeichnung der uralten Ausbrüche des Vulkans."
+ },
+ "space_race_discovery_events.6.f": {
+  "en": "The first map showed empty space where we had expected solid rock.",
+  "de": "Die erste Karte zeigte leeren Raum, wo wir massives Gestein erwartet hatten."
+ },
+ "space_race_discovery_events.6.t": {
+  "en": "Rooms Inside the Volcano",
+  "de": "Räume im Inneren des Vulkans"
+ },
+ "space_race_discovery_events.7.a": {
+  "en": "Preserve a continuous core for climate research.",
+  "de": "Einen durchgehenden Bohrkern für die Klimaforschung bewahren."
+ },
+ "space_race_discovery_events.7.b": {
+  "en": "Develop the cleanest ice layers as a water and propellant source.",
+  "de": "Die reinsten Eisschichten als Wasser- und Treibstoffquelle erschließen."
+ },
+ "space_race_discovery_events.7.d": {
+  "en": "Drilling beyond our Utopia Planitia colony has reached a thick buried glacier beneath a protective blanket of debris. Its layers preserve a long climate record, and repeated assays have identified sections with exceptionally little dust or salt. The colony's processing plant has produced clean water and propellant from trial excavations. This deposit supplies a substantial local reserve, while its undisturbed layers hold a history of Martian climate.",
+  "de": "Bohrungen jenseits unserer Utopia-Planitia-Kolonie haben einen mächtigen verschütteten Gletscher unter einer schützenden Trümmerdecke erreicht. Seine Schichten bewahren eine lange Klimaaufzeichnung, und wiederholte Analysen haben Abschnitte mit außergewöhnlich wenig Staub oder Salz identifiziert. Die Aufbereitungsanlage der Kolonie hat aus Probeabbauten sauberes Wasser und Treibstoff gewonnen. Diese Lagerstätte liefert eine erhebliche lokale Reserve, während ihre unberührten Schichten eine Geschichte des marsianischen Klimas bergen."
+ },
+ "space_race_discovery_events.7.f": {
+  "en": "Every pale band is another winter on a different Mars.",
+  "de": "Jedes helle Band ist ein weiterer Winter auf einem anderen Mars."
+ },
+ "space_race_discovery_events.7.t": {
+  "en": "The Buried Glacier",
+  "de": "Der verschüttete Gletscher"
+ },
+ "space_race_discovery_events.8.a": {
+  "en": "Isolate the boreholes and study the salt chemistry.",
+  "de": "Die Bohrlöcher abriegeln und die Salzchemie untersuchen."
+ },
+ "space_race_discovery_events.8.b": {
+  "en": "Build purification systems and corrosion-resistant equipment.",
+  "de": "Reinigungsanlagen und korrosionsbeständige Ausrüstung bauen."
+ },
+ "space_race_discovery_events.8.d": {
+  "en": "A deep drilling campaign near our Arcadia Planitia colony has exposed an extensive deposit of perchlorate-rich ground ice. Heat from the equipment turns it into concentrated brine that corrodes drill assemblies and contaminates the water circuit. Laboratory tests have established the chemistry, and sensors show the liquid freezing again as the boreholes cool. The colony must now decide how to isolate the deposit or process it safely.",
+  "de": "Eine Tiefbohrkampagne nahe unserer Arcadia-Planitia-Kolonie hat eine ausgedehnte Ablagerung perchloratreichen Bodeneises freigelegt. Die Wärme der Ausrüstung verwandelt es in konzentrierte Sole, die Bohrgestänge angreift und den Wasserkreislauf verunreinigt. Labortests haben die Chemie bestimmt, und Sensoren zeigen, wie die Flüssigkeit wieder gefriert, wenn die Bohrlöcher abkühlen. Die Kolonie muss nun entscheiden, wie sie die Ablagerung abriegelt oder sicher verarbeitet."
+ },
+ "space_race_discovery_events.8.f": {
+  "en": "A liquid reading was good news until the chemistry report arrived.",
+  "de": "Eine flüssige Messung war eine gute Nachricht, bis der Chemiebericht eintraf."
+ },
+ "space_race_discovery_events.8.t": {
+  "en": "Salt Water in the Drill",
+  "de": "Salzwasser im Bohrer"
+ },
+ "space_race_discovery_events.9.a": {
+  "en": "Keep the fracture network available for geochemical research.",
+  "de": "Das Bruchnetz für geochemische Forschung verfügbar halten."
+ },
+ "space_race_discovery_events.9.b": {
+  "en": "Extract and purify brine under controlled conditions.",
+  "de": "Sole unter kontrollierten Bedingungen fördern und reinigen."
+ },
+ "space_race_discovery_events.9.d": {
+  "en": "Deep sounding and borehole measurements by our Ceres colony have mapped an unusually accessible branch of a buried brine reservoir. Samples establish its salt composition and freezing point, while mineral deposits record repeated flows through the surrounding fractures. Trial extraction has delivered a steady supply to the colony's purification plant. The reservoir preserves a long history of water-rock chemistry and supplies a new local source of water.",
+  "de": "Tiefenlotungen und Bohrlochmessungen unserer Ceres-Kolonie haben einen ungewöhnlich gut zugänglichen Ast eines verschütteten Solereservoirs kartiert. Proben bestimmen seine Salzzusammensetzung und seinen Gefrierpunkt, während Mineralablagerungen wiederholte Strömungen durch die umgebenden Brüche festhalten. Probeförderung hat die Reinigungsanlage der Kolonie stetig versorgt. Das Reservoir bewahrt eine lange Geschichte der Wasser-Gestein-Chemie und liefert eine neue lokale Wasserquelle."
+ },
+ "space_race_discovery_events.9.f": {
+  "en": "The bright salt crust was the edge of a much larger story.",
+  "de": "Die helle Salzkruste war der Rand einer viel größeren Geschichte."
+ },
+ "space_race_discovery_events.9.t": {
+  "en": "A Reservoir Below Ceres",
+  "de": "Ein Reservoir unter Ceres"
+ },
  "space_race_events.1.a": {
   "en": "A triumph for [ROOT.GetCountry.GetName]!",
   "de": "Ein Triumph für [ROOT.GetCountry.GetAltName('AKK')|U]!"
@@ -18480,12 +18880,12 @@
   "de": "Die Jahreszahlen jetzt neu berechnen"
  },
  "te_debug_gw.1.j": {
-  "en": "Adopt all eight mitigation policies",
-  "de": "Alle acht Minderungspolitiken einführen"
+  "en": "Adopt all nine mitigation policies",
+  "de": "Alle neun Minderungspolitiken einführen"
  },
  "te_debug_gw.1.k": {
-  "en": "Repeal all eight mitigation policies",
-  "de": "Alle acht Minderungspolitiken aufheben"
+  "en": "Repeal all nine mitigation policies",
+  "de": "Alle neun Minderungspolitiken aufheben"
  },
  "te_debug_gw.1.l": {
   "en": "Log every country's AI climate will to debug.log (search GW_AI_WILL)",
@@ -19118,6 +19518,10 @@
  "te_debug_un.1.w": {
   "en": "Wipe my UN journal entry as a won revolution does (modifiers gone, record kept); the next month rebuilds it",
   "de": "Meinen UN-Journaleintrag löschen, wie es eine gewonnene Revolution tut (Modifikatoren weg, Aufzeichnung bleibt); der nächste Monat baut ihn wieder auf"
+ },
+ "te_debug_un.1.x": {
+  "en": "Log every country's UN AI scores to debug.log (UN_AI_SCORES lines)",
+  "de": "Die UN-KI-Werte jedes Landes in die debug.log schreiben (UN_AI_SCORES-Zeilen)"
  },
  "te_debug_un.1.z": {
   "en": "Close",
