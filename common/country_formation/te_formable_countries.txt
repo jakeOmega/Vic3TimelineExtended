@@ -339,7 +339,7 @@ BHA = {
 	is_major_formation = yes
 
 	unification_play = dp_unify_india
-	leadership_play = dp_leadership_india
+	leadership_play = dp_leadership_bharat
 
 	required_states_fraction = 0.65
 
