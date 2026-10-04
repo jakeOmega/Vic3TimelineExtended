@@ -1,12 +1,14 @@
 # Budget Breakdown
 
 The Budget panel's sixth tab, **Breakdown**, is available under every rule
-setting. It reads the same weekly income forecast and expense total as Overview.
-Each side has a pie, a horizontal stacked bar and a matching list with currency
-amounts and percentages. Zero rows are hidden; negative adjustments remain in
+setting. It reads the weekly income forecast and expense total from Overview,
+then subtracts Investment Pool Transfer from both totals and from Construction
+Goods. These are public-budget totals: private construction funding is excluded
+from income, expenses, residuals and chart denominators. Each side has a pie and
+a list with currency amounts and percentages, sorted largest amount first. Zero rows are hidden; negative adjustments remain in
 the list and are excluded from the positive chart denominator. The headers are
-the signed budget totals. Other Income/Expenses reconcile uncategorized and
-temporary flows to those totals.
+the signed public-budget totals. Other Income/Expenses reconcile uncategorized and
+temporary flows to those public totals.
 
 ## Journal systems and source amounts
 
@@ -76,6 +78,18 @@ building sum, total institution levels, allocated pool and positive chart total
 are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
+
+The list binds each signed category amount once as a value scope. Each row
+counts the nonzero categories with larger amounts to determine its vertical
+position; catalogue order breaks ties. Zero rows consume no space, and signed
+negative amounts follow positive amounts. Rows reserve two lines for labels.
+The palette stays in catalogue order so sorting never changes category colors.
+
+Historical stacked bars are deferred: script pulses expose aggregate budget
+values but not the GUI getters needed for exact monthly category snapshots.
+Recording only when Breakdown is open would leave gaps and miss closed-tab
+months. The horizontal current-week bar has been removed.
+
 The palette reuses Cultural Hegemony's existing pie textures and colors; it
 repeats with many institutions, so category names and percentages remain visible.
 
@@ -84,8 +98,8 @@ repeats with many institutions, so category names and percentages remain visible
 `test_budget_breakdown.py` executes the actual script values in a strict offline
 harness: the requested example, shortages, zero production, absent and zero-level
 institutions, current-level changes, reduced civil wages, negative adjustments,
-category reconciliation and matching cumulative chart layers. GUI lint and
-reference audits cover local names, localization, braces and textures.
+tied row amounts, zero rows, category reconciliation, cumulative pie layers and
+private-spending exclusion. GUI lint and reference audits cover local names, localization, braces and textures.
 Source tests also verify separate simultaneous JE charges, signed banking
 offsets, exact mirror coefficients, complete attribution of the mod's recurring
 monetary sources, and unchanged economic fields.
@@ -94,13 +108,16 @@ Engine rendering and accounting still require an in-game check:
 
 1. Open Breakdown with banking/tax rules both disabled, then enabled. Check all
    six tabs fit, zero rows disappear, long institution names wrap and tooltips
-   retain the parent `TopScope` context.
+   retain the parent `TopScope` context. Check dynamic row positions and list
+   height after a tax change: rows must move without overlap or gaps, with equal
+   amounts in catalogue order and negative adjustments below positive amounts.
 2. Compare administration's `weekly_profit` against the sum of those buildings'
    wages and goods, including a construction-good input under FMC. Confirm that
    treasury funding does not turn that profit into zero.
-3. Compare all list amounts with Overview after a weekly tick, a wage change,
+3. Compare all list amounts and public totals with Overview minus Investment Pool
+   Transfer after a weekly tick, a wage change,
    institution investment completing and an administration building changing PM.
-4. Check pie and stack colors/shares match the list; no-production and zero-
+4. Check pie colors/shares match the sorted list; no-production and zero-
    budget countries have empty charts. Test a bureaucracy shortage and a country
    with an institution-specific bureaucracy discount.
 5. Open the panel in a large country and check frame time. All intermediate
