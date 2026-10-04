@@ -1603,6 +1603,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
 		pmg_carbon_capture_mining_equipment_building_coal_mine
+		pmg_carbon_capture_steam_automation_building_coal_mine
 	}
 
 	required_construction = construction_cost_high

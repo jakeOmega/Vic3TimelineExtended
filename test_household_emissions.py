@@ -189,13 +189,14 @@ class HouseholdEmissionsTest(unittest.TestCase):
         methods = self.graph.mod_parsers["PMs"].data
         checked = 0
         for name, pm in methods.items():
-            gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")})
+            gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")},
+                                               netted=emissions.netted_fuel(name, pm))
             if not gross:
                 continue
             checked += 1
             mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
             self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), scalar(workforce(pm), emissions.MODIFIER), name)
-        self.assertEqual(checked, 245)
+        self.assertEqual(checked, 248)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
                 mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")

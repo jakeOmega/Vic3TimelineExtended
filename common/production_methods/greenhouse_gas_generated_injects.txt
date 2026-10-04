@@ -93,6 +93,20 @@ INJECT:pm_assembly_lines_building_tooling_workshop = {
 	}
 }
 
+# 10 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_atmospheric_engine_pump_building_coal_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00
+		}
+	}
+}
+
 INJECT:pm_atmospheric_engine_pump_building_gold_mine = {
 	state_modifiers = {
 		workforce_scaled = {
@@ -232,6 +246,20 @@ INJECT:pm_compression_ignition_tractors = {
 	building_modifiers = {
 		workforce_scaled = {
 			building_greenhouse_gas_emissions_add = 0.35
+		}
+	}
+}
+
+# 15 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_condensing_engine_pump_building_coal_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.00
 		}
 	}
 }
@@ -596,6 +624,20 @@ INJECT:pm_steam_derricks = {
 	building_modifiers = {
 		workforce_scaled = {
 			building_greenhouse_gas_emissions_add = 2.00
+		}
+	}
+}
+
+# 3 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_steam_donkey_building_coal_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.60
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.60
 		}
 	}
 }
