@@ -22,7 +22,8 @@
 #               oppose it react.
 #    option b   (default) declines: the sponsor is displeased, its
 #               opponents relieved.
-#  Pool: common/on_actions/amendment_petition_on_actions.txt (yearly).
+#  Pools: common/on_actions/amendment_petition_on_actions.txt, one per
+#  event, each a yearly roll of 2.5–25% while the country qualifies.
 #  Triggers: common/scripted_triggers/amendment_petition_triggers.txt.
 #  Docs: docs/systems/mod_systems.md § Amendment Petitions.
 # ======================================================================
