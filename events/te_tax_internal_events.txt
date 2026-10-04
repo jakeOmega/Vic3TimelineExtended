@@ -144,8 +144,9 @@ te_tax.7 = {
 }
 
 # The AI step (plan 2026-10-03 Task 18; te_tax_ai_effects.txt): raised by the
-# processor's dispatch (te_tax_ai_dispatch) on the country's bucket day, by the
-# step's own offer chain and from the console. The trigger re-checks the rule,
+# processor's dispatch (te_tax_ai_dispatch) on the country's bucket day and by
+# the step's own offer chain; never from the console, which runs the managers
+# itself (Ruling 6). The trigger re-checks the rule,
 # the code and that the engine still runs the country, so a country a player
 # took over since the dispatch does nothing. ROOT = THIS = the country, which
 # force-through's multiplier needs.

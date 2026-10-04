@@ -337,6 +337,13 @@ class AiTokenTest(unittest.TestCase):
         release = block(text, "te_tax_init_released_country")
         self.assertIn(call, release[:release.index("else_if")])
 
+
+    def test_a_release_also_zeroes_the_fiscal_streaks(self):
+        # Final review A-M4: a revived tag must not keep an earlier life's deficit or surplus
+        # streak; the outbreak and the repair keep the country's own (the reset does not touch them).
+        release = block(read(CIVIL_WAR), "te_tax_init_released_country")
+        for name in ("te_tax_ai_def_streak", "te_tax_ai_sur_streak"):
+            self.assertIn(f"set_variable = {{ name = {name} value = 0 }}", release)
     def test_the_reset_zeroes_the_bill_state_and_keeps_streaks(self):
         reset = block(read(AI_EFFECTS), "te_tax_ai_reset_bill_state")
         self.assertIn("te_tax_code_on = yes", limit_of(reset[reset.index("if = {") + len("if = {"):]))
@@ -413,7 +420,8 @@ class AiTriggerTest(unittest.TestCase):
     def test_raise_need_is_a_recorded_deficit_in_the_dead_band_or_a_promised_surplus(self):
         self.assertEqual(self.body("te_tax_ai_raise_need"),
                          "OR = { AND = { te_tax_fisc_rec_deficit = yes te_tax_ai_ratio <= te_tax_ai_raise_ratio_now "
-                         "te_tax_ai_reserves < te_tax_ai_reserves_full } te_tax_ai_kind4_in_force = yes }")
+                         "te_tax_ai_reserves < te_tax_ai_reserves_full } "
+                         "AND = { te_tax_ai_kind4_in_force = yes NOT = { te_tax_fisc_rec_surplus = yes } } }")
 
     def test_cut_need_is_a_recorded_surplus_at_the_cut_ratio_and_no_promised_surplus(self):
         # Task 21 (Task 18's hand-off): a fiscal-balance promise in force counts as revenue need
@@ -542,6 +550,17 @@ class AiDispatchTest(unittest.TestCase):
         self.assertLessEqual(mentions, {"te_tax_ai_effects.txt", "te_tax_internal_events.txt",
                                         "te_tax_debug_events.txt"})
         self.assertLessEqual({"te_tax_ai_effects.txt", "te_tax_internal_events.txt"}, mentions)
+        # Final review A-M3: count the raise sites, not mentions. The dispatch raises it five
+        # times (the retry and four buckets), the offer chain once, nothing else does.
+        raises = {}
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                n = len(re.findall(r"trigger_event = \{ id = te_tax\.8\b", read(path.relative_to(ROOT).as_posix())))
+                if n:
+                    raises[path.name] = n
+        self.assertEqual(raises, {"te_tax_ai_effects.txt": 6})
+        self.assertEqual(len(re.findall(r"trigger_event = \{ id = te_tax\.8\b",
+                                        block(read(AI_EFFECTS), "te_tax_ai_dispatch"))), 5)
 
     def test_the_step_is_called_only_by_te_tax_8(self):
         callers = []
@@ -1236,10 +1255,13 @@ class AiBillTest(unittest.TestCase):
             with self.subTest(transient=transient):
                 self.assertNotIn(transient, body)
 
-    def test_hopeless_is_short_with_no_offer_and_no_force_path(self):
+    def test_hopeless_is_short_with_no_offer_and_no_force_path_or_below_the_legitimacy_line(self):
+        # Final review A-M1: below the passage legitimacy at a medium native level, nothing
+        # but time lifts it, so the bill is withdrawn at once rather than after its patience.
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_bill_hopeless")),
-                         "te_tax_bill_active = yes te_tax_view_open_share <= te_tax_passage_share "
-                         "NOT = { te_tax_ai_offer_available = yes } NOT = { te_tax_ai_force_path = yes }")
+                         "te_tax_bill_active = yes OR = { AND = { te_tax_view_open_share <= te_tax_passage_share "
+                         "NOT = { te_tax_ai_offer_available = yes } NOT = { te_tax_ai_force_path = yes } } "
+                         "AND = { legitimacy < te_tax_passage_legitimacy tax_level = medium } }")
 
     def test_an_offer_is_available_within_the_budget_while_the_bill_is_short(self):
         groups = " ".join(f"te_tax_ai_offer_acceptable = {{ IG = {ig} }}" for ig in gen.IGS)

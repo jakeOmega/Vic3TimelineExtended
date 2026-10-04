@@ -277,8 +277,11 @@ te_tax_init_released_country = {
 		if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 		# No promise and no record of kept or broken ones: those are the parent's.
 		te_tax_gen_clear_obligations = yes
-		# Nor the AI's bill state (a revived tag may hold one from an earlier life).
+		# Nor the AI's bill state or fiscal streaks (a revived tag may hold them
+		# from an earlier life; final review A-M4).
 		te_tax_ai_reset_bill_state = yes
+		set_variable = { name = te_tax_ai_def_streak value = 0 }
+		set_variable = { name = te_tax_ai_sur_streak value = 0 }
 		# Customs (plan Task 15): not the parent's. The released country takes
 		# up the customs of its own market, if it owns one, at its first
 		# revalidation (te_tax_customs_revalidate: the next 1st, or a day after

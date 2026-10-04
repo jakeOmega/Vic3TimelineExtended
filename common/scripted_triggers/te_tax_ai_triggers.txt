@@ -44,7 +44,12 @@ te_tax_ai_raise_need = {
 			te_tax_ai_ratio <= te_tax_ai_raise_ratio_now
 			te_tax_ai_reserves < te_tax_ai_reserves_full
 		}
-		te_tax_ai_kind4_in_force = yes
+		# A promised surplus not yet recorded on the 1st (final review A-I1): the
+		# AI raises toward it, never into a surplus it already has.
+		AND = {
+			te_tax_ai_kind4_in_force = yes
+			NOT = { te_tax_fisc_rec_surplus = yes }
+		}
 	}
 }
 
@@ -363,12 +368,22 @@ te_tax_ai_force_path = {
 
 # The bill cannot pass: the committed and persuadable groups together are at
 # or below the passage share, no offer could still be accepted this month,
-# and no force path exists.
+# and no force path exists; or legitimacy is below the passage line while the
+# native tax level is medium, so nothing but time would lift it (final review
+# A-M1; a level off medium is the next-day retry instead, Ruling 5).
 te_tax_ai_bill_hopeless = {
 	te_tax_bill_active = yes
-	te_tax_view_open_share <= te_tax_passage_share
-	NOT = { te_tax_ai_offer_available = yes }
-	NOT = { te_tax_ai_force_path = yes }
+	OR = {
+		AND = {
+			te_tax_view_open_share <= te_tax_passage_share
+			NOT = { te_tax_ai_offer_available = yes }
+			NOT = { te_tax_ai_force_path = yes }
+		}
+		AND = {
+			legitimacy < te_tax_passage_legitimacy
+			tax_level = medium
+		}
+	}
 }
 
 # In an emergency, the bill has the committed share force-through needs, is
