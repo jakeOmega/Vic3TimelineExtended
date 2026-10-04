@@ -4,6 +4,18 @@
 # matching scripted_button's `effect` block. Both the journal-entry button and the
 # dashboard scripted GUI call these, so the cost and the applied modifier cannot
 # drift apart between the two surfaces.
+#
+# NOT-A-MODIFIER LINES. Some tools do work the modifier does not carry: the
+# monetary pulse reads whether the tool is on and moves the exchange rate, gold
+# flows, inflation pressure, the treasury or a stock of its own. The engine draws
+# none of that, so each such effect names it in a `custom_tooltip` keyed
+# banking_nonmod_*_tt, whose text opens with one of the shared labels
+# (banking_nonmod_monthly_label / _lifted_label / _war_end_label, "... (not a
+# modifier):"). The dashboard row tooltip (banking_dash_tt_cb_*) splices the
+# same keys under its modifier list. A new tool whose pulse does more than its
+# modifier adds a key here and there too;
+# test_banking_external_tools.NonModifierTooltipTest pins the figures in the
+# text to the script values.
 
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
@@ -13,6 +25,11 @@ banking_effect_cb_open_market_ops = {
 	te_history_record_banking_marker = { MARK = on_cb_open_market_ops }
 	je:je_banking_cycle = { add_modifier = { name = banking_open_market_ops } }
 	add_treasury = banking_omo_activation_cost
+	# te_mon_pressure_qe. No inflation under the simplified game rule.
+	if = {
+		limit = { te_mon_full_system = yes }
+		custom_tooltip = banking_nonmod_open_market_ops_tt
+	}
 }
 
 banking_effect_cb_disable_open_market_ops = {
@@ -113,11 +130,37 @@ banking_effect_cb_capital_controls_outflow = {
 			}
 		}
 	}
+	# te_mon_controls_damp and the fatigue counter (te_monetary_update_fx):
+	# both belong to the monetary layer, which the simplified rule switches off.
+	if = {
+		limit = { te_mon_full_system = yes }
+		custom_tooltip = banking_nonmod_capital_controls_tt
+		custom_tooltip = banking_nonmod_capital_controls_fatigue_tt
+	}
+	banking_nonmod_war_end_lift_tooltip = yes
 }
 
 banking_effect_cb_disable_capital_controls_outflow = {
 	te_history_record_banking_marker = { MARK = off_cb_capital_controls_outflow }
 	je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+	if = {
+		limit = { te_mon_full_system = yes }
+		custom_tooltip = banking_nonmod_capital_controls_off_tt
+	}
+}
+
+# Only at war under a banking law that locks capital controls: peace lifts the
+# tool the next month (banking_cycle_cleanup_capital_controls for Outflow
+# Controls; banking_external_cleanup for the two exchange controls, whose
+# eligibility carries the same lock). Not a modifier, so it is named here.
+banking_nonmod_war_end_lift_tooltip = {
+	if = {
+		limit = {
+			is_at_war = yes
+			modifier:country_banking_lock_capital_controls_bool = yes
+		}
+		custom_tooltip = banking_nonmod_war_end_lift_tt
+	}
 }
 
 banking_effect_cb_emergency_liquidity_program = {
@@ -232,7 +275,10 @@ banking_effect_cb_disable_reserve_requirements = {
 banking_effect_cb_bank_holiday = {
 	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
 	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
-	set_variable = { name = banking_bank_holiday_cooldown days = 1825 }
+	custom_tooltip = {
+		text = banking_bank_holiday_cooldown_set_tt
+		set_variable = { name = banking_bank_holiday_cooldown days = 1825 }
+	}
 	custom_tooltip = {
 		text = banking_bank_holiday_momentum_tt
 		if = {
@@ -454,6 +500,8 @@ banking_effect_cw_disable_worker_buyout = {
 banking_effect_cb_restrict_inflows = {
 	te_history_record_banking_marker = { MARK = on_cb_restrict_inflows }
 	je:je_banking_cycle = { add_modifier = { name = banking_restrict_inflows } }
+	custom_tooltip = banking_nonmod_restrict_inflows_tt
+	banking_nonmod_war_end_lift_tooltip = yes
 }
 banking_effect_cb_disable_restrict_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_restrict_inflows }
@@ -465,6 +513,7 @@ banking_effect_cb_sterilize_inflows = {
 	je:je_banking_cycle = { add_modifier = { name = banking_sterilize_inflows } }
 	add_treasury = banking_external_sterilization_payment
 	set_variable = { name = banking_external_sterilization_funded value = 1 }
+	custom_tooltip = banking_nonmod_sterilize_inflows_tt
 }
 banking_effect_cb_disable_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
@@ -475,15 +524,19 @@ banking_effect_cb_disable_sterilize_inflows = {
 banking_effect_cb_foreign_borrowing_limits = {
 	te_history_record_banking_marker = { MARK = on_cb_foreign_borrowing_limits }
 	je:je_banking_cycle = { add_modifier = { name = banking_foreign_borrowing_limits } }
+	custom_tooltip = banking_nonmod_foreign_borrowing_limits_tt
 }
 banking_effect_cb_disable_foreign_borrowing_limits = {
 	te_history_record_banking_marker = { MARK = off_cb_foreign_borrowing_limits }
 	je:je_banking_cycle = { remove_modifier = banking_foreign_borrowing_limits }
+	custom_tooltip = banking_nonmod_foreign_borrowing_limits_off_tt
 }
 
 banking_effect_cb_fx_surrender = {
 	te_history_record_banking_marker = { MARK = on_cb_fx_surrender }
 	je:je_banking_cycle = { add_modifier = { name = banking_fx_surrender } }
+	custom_tooltip = banking_nonmod_fx_surrender_tt
+	banking_nonmod_war_end_lift_tooltip = yes
 }
 banking_effect_cb_disable_fx_surrender = {
 	te_history_record_banking_marker = { MARK = off_cb_fx_surrender }
@@ -494,8 +547,10 @@ banking_effect_cb_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_import_financing }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_import_financing } }
 	add_treasury = banking_external_import_payment
+	custom_tooltip = banking_nonmod_emergency_import_financing_tt
 }
 banking_effect_cb_disable_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = off_cb_emergency_import_financing }
 	je:je_banking_cycle = { remove_modifier = banking_emergency_import_financing }
+	custom_tooltip = banking_nonmod_emergency_import_financing_off_tt
 }

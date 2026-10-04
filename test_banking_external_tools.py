@@ -4,10 +4,13 @@ This is deliberately a small interpreter, not an engine emulator: unknown syntax
 fails. Treasury/modifier writes can be deferred to test same-block visibility;
 variable writes are immediate, as required by the monetary system's accounting.
 """
+import math
 import operator
+import re
 import unittest
 from pathlib import Path
 
+from mod_state import split_loc_line
 from paradox_file_parser import ParadoxFileParser
 
 ROOT = Path(__file__).resolve().parent
@@ -52,6 +55,7 @@ class Script:
         self.deferred = deferred
         self.cash_delta = 0
         self.pending_removals = set()
+        self.shown = []
 
     def number(self, value):
         if isinstance(value, list):
@@ -186,6 +190,13 @@ class Script:
                 self.tools.add(self.field(val, 'name').removeprefix('banking_'))
             elif key == 'te_history_record_banking_marker':
                 continue
+            elif key == 'custom_tooltip':
+                # Records the line the tooltip would draw; a block still runs.
+                if isinstance(val, list):
+                    self.shown.append(self.field(val, 'text'))
+                    self.execute([x for x in val if x[0] != 'text'])
+                else:
+                    self.shown.append(val)
             elif key in self.effects:
                 self.execute(self.effects[key])
             else:
@@ -317,6 +328,171 @@ class ExternalPolicyScenarios(unittest.TestCase):
             self.assertIn("banking_dash_enable_cb_"+tool, external)
         self.assertNotIn('banking_dash_enable_cb_export_credit_facility',
                          gui.split('### Directed Credit', 1)[1].split('### External & Currency', 1)[0])
+
+
+def english_loc():
+    loc = {}
+    for path in sorted((ROOT/'localization/english').glob('*.yml')):
+        for line in path.read_text(encoding='utf-8-sig').splitlines():
+            parsed = split_loc_line(line)
+            if parsed:
+                loc[parsed[0]] = parsed[1]
+    return loc
+
+
+def tooltip_keys(effects, body):
+    """Every custom_tooltip key an effect body can draw, in any branch, through helpers."""
+    keys = []
+    for key, _, val in body:
+        if key == 'custom_tooltip':
+            keys.append(next(v for k, _, v in val if k == 'text') if isinstance(val, list) else val)
+        elif isinstance(val, list):
+            keys += tooltip_keys(effects, val)
+        elif key in effects and val == 'yes':
+            keys += tooltip_keys(effects, effects[key])
+    return keys
+
+
+# The tools whose monthly pulse does work their modifier does not carry, and the
+# not-a-modifier lines each effect draws (see the header of
+# common/scripted_effects/banking_policy_effects.txt).
+NONMOD_LINES = {
+    'banking_effect_cb_open_market_ops': ('banking_nonmod_open_market_ops_tt',),
+    'banking_effect_cb_capital_controls_outflow': ('banking_nonmod_capital_controls_tt',
+                                                   'banking_nonmod_capital_controls_fatigue_tt',
+                                                   'banking_nonmod_war_end_lift_tt'),
+    'banking_effect_cb_disable_capital_controls_outflow': ('banking_nonmod_capital_controls_off_tt',),
+    'banking_effect_cb_restrict_inflows': ('banking_nonmod_restrict_inflows_tt',
+                                           'banking_nonmod_war_end_lift_tt'),
+    'banking_effect_cb_sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt',),
+    'banking_effect_cb_foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_tt',),
+    'banking_effect_cb_disable_foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_off_tt',),
+    'banking_effect_cb_fx_surrender': ('banking_nonmod_fx_surrender_tt', 'banking_nonmod_war_end_lift_tt'),
+    'banking_effect_cb_emergency_import_financing': ('banking_nonmod_emergency_import_financing_tt',),
+    'banking_effect_cb_disable_emergency_import_financing': ('banking_nonmod_emergency_import_financing_off_tt',),
+}
+# The dashboard row tooltip splices the same lines under its modifier list.
+# Capital controls' fatigue lines stay out: the row's own lore line says it,
+# with the live count.
+ROW_LINES = {
+    'open_market_ops': ('banking_nonmod_open_market_ops_tt',),
+    'capital_controls_outflow': ('banking_nonmod_capital_controls_tt',),
+    'restrict_inflows': ('banking_nonmod_restrict_inflows_tt',),
+    'sterilize_inflows': ('banking_nonmod_sterilize_inflows_tt',),
+    'foreign_borrowing_limits': ('banking_nonmod_foreign_borrowing_limits_tt',
+                                 'banking_nonmod_foreign_borrowing_limits_off_tt'),
+    'fx_surrender': ('banking_nonmod_fx_surrender_tt',),
+    'emergency_import_financing': ('banking_nonmod_emergency_import_financing_tt',
+                                   'banking_nonmod_emergency_import_financing_off_tt'),
+}
+LABELS = ('banking_nonmod_monthly_label', 'banking_nonmod_lifted_label', 'banking_nonmod_war_end_label')
+
+
+class NonModifierTooltipTest(unittest.TestCase):
+    """The work a tool does outside its modifier is named, marked, and true to the script."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.script = Script()
+        cls.loc = english_loc()
+
+    def text(self, key):
+        return re.sub(r'\$(\w+)\$', lambda m: self.text(m.group(1)) if m.group(1) in self.loc else m.group(0),
+                      self.loc[key])
+
+    def test_each_effect_draws_its_lines(self):
+        for effect, keys in NONMOD_LINES.items():
+            drawn = tooltip_keys(self.script.effects, self.script.effects[effect])
+            for key in keys:
+                with self.subTest(effect=effect, key=key):
+                    self.assertIn(key, drawn)
+
+    def test_every_line_opens_with_a_not_a_modifier_label(self):
+        for label in LABELS:
+            self.assertIn('(not a modifier)', self.loc[label])
+        for key in {k for keys in NONMOD_LINES.values() for k in keys}:
+            with self.subTest(key=key):
+                self.assertRegex(self.loc[key], r'^\$(%s)\$ ' % '|'.join(LABELS))
+
+    def test_dashboard_rows_splice_the_lines_under_the_modifier(self):
+        for tool, keys in ROW_LINES.items():
+            row = self.loc['banking_dash_tt_cb_' + tool]
+            for key in keys:
+                with self.subTest(tool=tool, key=key):
+                    self.assertIn('$%s$' % key, row)
+                    self.assertGreater(row.index('$%s$' % key), row.index('.GetDesc]'))
+
+    def test_war_end_line_shows_exactly_when_peace_would_lift_the_tool(self):
+        for tool in ('restrict_inflows', 'fx_surrender'):
+            for at_war, locked in ((True, True), (True, False), (False, False)):
+                with self.subTest(tool=tool, at_war=at_war, locked=locked):
+                    s = Script(at_war=at_war, controls_locked=locked)
+                    s.effect('banking_effect_cb_' + tool)
+                    self.assertEqual('banking_nonmod_war_end_lift_tt' in s.shown, at_war and locked)
+            s = Script(at_war=True, controls_locked=True)
+            s.effect('banking_effect_cb_' + tool)
+            s.effect('banking_external_monthly_update')
+            self.assertIn(tool, s.tools)
+            s.inputs['at_war'] = False
+            s.effect('banking_external_monthly_update')
+            self.assertNotIn(tool, s.tools)
+
+    def test_capital_controls_cleanup_spares_exactly_the_unlocked_laws(self):
+        # Outflow Controls' peace-time lift names laws rather than reading the
+        # lock, so the war-end line is right only while the two lists agree.
+        laws = (ROOT/'common/laws/extra_laws.txt').read_text(encoding='utf-8-sig')
+        unlocked = {name for name, body in re.findall(r'(?ms)^(law_\w+) = \{\n(.*?)^\}', laws)
+                    if 'group = lawgroup_financial_regulation' in body
+                    and 'country_banking_lock_capital_controls_bool = yes' not in body}
+        cleanup = (ROOT/'common/scripted_effects/banking_cycle_effects.txt').read_text(encoding='utf-8-sig')
+        block = cleanup.split('banking_cycle_cleanup_capital_controls = {', 1)[1].split('\n}', 1)[0]
+        self.assertEqual(set(re.findall(r'has_law = law_type:(law_\w+)', block)), unlocked)
+
+    def test_figures_match_the_script_values(self):
+        v, t, s = self.script.number, self.text, self.script
+
+        self.assertEqual(v('te_mon_qe_pressure'), 1)
+        self.assertIn('#v 1#! percentage point', t('banking_nonmod_open_market_ops_tt'))
+
+        self.assertEqual(v('te_mon_controls_damp_value'), .25)
+        self.assertIn('#b quarter#!', t('banking_nonmod_capital_controls_tt'))
+        per_step, steps = v('te_mon_controls_months_per_step'), v('te_mon_controls_months_max') / v('te_mon_controls_months_per_step')
+        self.assertIn('every #v %d#! months, up to #v %d#!' % (per_step, steps), t('banking_nonmod_capital_controls_fatigue_tt'))
+        self.assertEqual(v('te_mon_controls_decay'), 3)
+        self.assertIn('#v 3#! months a month, three times', t('banking_nonmod_capital_controls_off_tt'))
+
+        self.assertEqual(v('banking_external_inflow_factor'), .5)
+        self.assertIn('#b halved#!', t('banking_nonmod_restrict_inflows_tt'))
+
+        self.assertEqual(1 - v('banking_external_sterilized_factor'), .75)
+        self.assertIn('#b three quarters#!', t('banking_nonmod_sterilize_inflows_tt'))
+        self.assertIn('#v %.2f%%#!' % (100 * v('banking_external_sterilization_share')),
+                      t('banking_nonmod_sterilize_inflows_tt'))
+
+        step, cap = v('banking_external_fx_protection_step'), v('banking_external_fx_protection_cap')
+        months = math.ceil(cap / step - 1e-9)
+        for key in ('banking_nonmod_foreign_borrowing_limits_tt', 'banking_nonmod_foreign_borrowing_limits_off_tt'):
+            self.assertIn('about #v %d%%#!' % round(100 * step), t(key))
+        self.assertIn('up to #v %g%%#! after #v %d#! months' % (100 * cap, months),
+                      t('banking_nonmod_foreign_borrowing_limits_tt'))
+
+        self.assertIn('up to #v %.2f%%#! of annual GDP' % (100 * v('banking_external_surrender_share')),
+                      t('banking_nonmod_fx_surrender_tt'))
+
+        gdp, fatigue_cap = s.inputs['gdp'], v('banking_external_import_fatigue_cap')
+        costs = []
+        for months_funded in (0, fatigue_cap):
+            s.vars['banking_external_import_months'] = months_funded
+            costs.append(100 * v('banking_external_import_cost') / gdp)
+        del s.vars['banking_external_import_months']
+        self.assertIn('costs #v %.2f%%#! of annual GDP from the treasury, rising to #v %.2f%%#! after #v %d#! funded months'
+                      % (*costs, fatigue_cap), t('banking_nonmod_emergency_import_financing_tt'))
+
+        holiday = s.effects['banking_effect_cb_bank_holiday']
+        cooldown = next(val for key, _, val in holiday
+                        if key == 'custom_tooltip' and ('text', '=', 'banking_bank_holiday_cooldown_set_tt') in val)
+        days = s.field(s.field(cooldown, 'set_variable'), 'days')
+        self.assertIn('#v %d#! years' % (int(days) // 365), t('banking_bank_holiday_cooldown_set_tt'))
 
 
 if __name__ == '__main__':

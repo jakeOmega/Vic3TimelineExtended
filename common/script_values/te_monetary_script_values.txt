@@ -1420,9 +1420,11 @@ te_mon_monetisation_bankruptcy_weeks = {
 # Quantitative easing, in pp of pressure while open-market operations are
 # active (§11). Flat, not scaled: the tool is already gated to the rate floor.
 #
-# RETUNING THIS ALSO MEANS EDITING ONE LOC STRING. banking_omo_inflation_cost_tt
-# states the figure in words rather than reading it back, because that tooltip
-# is also rendered as a script `custom_tooltip` from the history chart
+# RETUNING THIS ALSO MEANS EDITING TWO LOC STRINGS. banking_omo_inflation_cost_tt
+# and banking_nonmod_open_market_ops_tt (the tool's not-a-modifier line, pinned
+# by test_banking_external_tools) state the figure in words rather than reading
+# it back, because those tooltips are also rendered as a script `custom_tooltip`
+# from the history chart
 # (common/scripted_guis/te_history_scripted_gui.txt), where a GUI ScriptValue
 # accessor would not resolve and would log a data-system error every render.
 te_mon_qe_pressure = {

@@ -3657,10 +3657,9 @@ banking_cycle_events.39 = {
 			# dashboard, in the meantime.
 			if = {
 				limit = { banking_qe_debate_possible = yes }
+				# Names the tool's inflation pressure (+1pp while it runs) too:
+				# the monetary update reads it, the modifier does not carry it.
 				banking_effect_cb_open_market_ops = yes
-				# The tool's inflation pressure (+1pp while it runs) is read by
-				# the monetary update, not carried by the modifier, so name it.
-				custom_tooltip = banking_omo_inflation_cost_tt
 			}
 		}
 		else = {
