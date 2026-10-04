@@ -36,7 +36,7 @@
   modifier and hides the state credit. Production capture tiers remain pending.
 - **Phase 2:** source-capture tiers are generated from every building's PM groups.
   The owner's successful probe checks cleared A′. Coverage expands to 74 building
-  types, 70 source groups and 342 tier variants, with explicit feedstock/mobile/
+  types, 71 source groups and 351 tier variants, with explicit feedstock/mobile/
   synthetic-credit exceptions. Process and automation get separate controls,
   avoiding combinatorial gates and covering steel boilers too. See the generated
   `carbon_capture_coverage.md` for the full inventory and exceptions.
@@ -45,6 +45,26 @@
   technology and disallows no capture/Tier I; the existing law-consistency walk
   repairs a held phaseout law without its required technology. Three existing
   shield icons distinguish tiers. Generated production regression remains pending.
+- **Fuel netted out of output (2026-10-04):** a recipe-derived figure misses fuel
+  that the recipe never lists. Vanilla's Coal Mine takes the coal its machinery
+  burns off its *output* instead of listing it as an input, so its Atmospheric
+  Engine Pump, Condensing Engine Pump and Steam Donkey showed no emissions while
+  the same methods in iron, lead, sulfur and gold mines (10, 15 and 4 coal) did.
+  The evidence is in the numbers: the Coal Mine's gross output is 1.25× the Iron
+  Mine's (picks and shovels 25/20; every explosive 15/12 to 250/200), its pumps
+  come out exactly net of that coal (40 = 1.25×40 − 10; 60 = 1.25×60 − 15), and
+  its Steam Donkey outputs −3 coal. `pm_emissions.NETTED_FUEL` names the three
+  methods and their burn (10, 15 and 3, the Steam Donkey's being vanilla's own
+  −3 rather than the iron mine's 4). Both `recipe_emissions` and the capture
+  catalog (`pm_carbon_capture.fuel_recipe`) add it, so the three methods now carry
+  the state emissions line the market sum reads and gain capture controls like
+  the other mines'. Graphite
+  Mines reuse the same groups. A vanilla change that adds an explicit coal input
+  to one of them fails the generator instead of counting the coal twice. **A new
+  fuel-producing building should list its own fuel burn as an input** (whaling
+  stations do, taking oil to make oil); the generator can't see fuel it isn't
+  told about. Oil rigs' combustion derricks have no oil input and no sibling to
+  show a netted amount, so they are unchanged.
 - **Atmospheric removal:** Carbon Conversion Works now unlock with the new
   era-10 Carbon Capture and Storage technology, after Clean Energy Technologies.
   Direct Air Capture is their default PM; Synthetic Coal keeps an era-11

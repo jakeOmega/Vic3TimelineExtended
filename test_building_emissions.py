@@ -7,6 +7,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
+from unittest import mock
 
 import gen_carbon_capture_pms as gen
 import pm_emissions as emissions
@@ -71,6 +72,7 @@ class SyntheticCreditsTest(unittest.TestCase):
         ms = SimpleNamespace(
             mod_parsers={"PMs": SimpleNamespace(data={
                              **self.methods,
+                             **{name: self.state.mod_parsers["PMs"].data[name] for name in emissions.NETTED_FUEL},
                              "pm_direct_air_capture": parsed("common/production_methods/direct_air_capture.txt")["pm_direct_air_capture"]}),
                          "PM Groups": SimpleNamespace(data={}),
                          "Buildings": SimpleNamespace(data={
@@ -145,7 +147,7 @@ class BuildingEmissionsTest(unittest.TestCase):
 
     def test_covered_fuel_methods_use_merged_inputs(self):
         outputs, count = emissions.plan_outputs(self.state, ROOT)
-        self.assertEqual(count, 245)
+        self.assertEqual(count, 248)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
         for name, expected in (("pm_modern_coal-fired_plant", "5.00"),
@@ -166,13 +168,51 @@ class BuildingEmissionsTest(unittest.TestCase):
                 with self.subTest(path=path.name, retired=retired):
                     self.assertNotIn(retired, text)
 
+    def test_coal_mine_counts_the_coal_vanilla_nets_out_of_its_output(self):
+        pms = self.state.mod_parsers["PMs"].data
+        stale = "vanilla changed the Coal Mine or Iron Mine pump recipes; re-derive NETTED_FUEL (pm_emissions.py)"
+        for coal_pm, iron_pm in (("pm_atmospheric_engine_pump_building_coal_mine", "pm_atmospheric_engine_pump_building_iron_mine"),
+                                 ("pm_condensing_engine_pump_building_coal_mine", "pm_condensing_engine_pump_building_iron_mine")):
+            with self.subTest(method=coal_pm):
+                coal, iron = workforce(pms[coal_pm]), workforce(pms[iron_pm])
+                # The Coal Mine lists no coal input, so the recipe alone shows no fuel...
+                self.assertNotIn("goods_input_coal_add", coal)
+                # ...but its output is the iron mine's, scaled up and net of the iron mine's coal.
+                burn = scalar(iron, "goods_input_coal_add")
+                self.assertEqual(emissions.NETTED_FUEL[coal_pm], {"coal": burn}, stale)
+                self.assertEqual(scalar(coal, "goods_output_coal_add"),
+                                 Decimal("1.25") * scalar(iron, "goods_output_iron_add") - burn, stale)
+                # Same machinery, same burn, so the two mines show the same emissions.
+                self.assertEqual(scalar(state_scaled(pms[coal_pm]), emissions.STATE_MODIFIER),
+                                 scalar(state_scaled(pms[iron_pm]), emissions.STATE_MODIFIER))
+        donkey = workforce(pms["pm_steam_donkey_building_coal_mine"])
+        self.assertNotIn("goods_input_coal_add", donkey)
+        self.assertEqual(emissions.NETTED_FUEL["pm_steam_donkey_building_coal_mine"],
+                         {"coal": -scalar(donkey, "goods_output_coal_add")}, stale)
+        self.assertEqual(scalar(state_scaled(pms["pm_steam_donkey_building_coal_mine"]), emissions.STATE_MODIFIER),
+                         Decimal("0.60"))
+
+    def test_netted_fuel_rejects_a_double_count_and_unknown_methods(self):
+        state = copy.copy(self.state)
+        state.mod_parsers = dict(self.state.mod_parsers)
+        state.mod_parsers["PMs"] = copy.copy(self.state.mod_parsers["PMs"])
+        state.mod_parsers["PMs"].data = copy.deepcopy(self.state.mod_parsers["PMs"].data)
+        pump = state.mod_parsers["PMs"].data["pm_atmospheric_engine_pump_building_coal_mine"]
+        workforce(pump)["goods_input_coal_add"] = ("=", "10")
+        with self.assertRaisesRegex(ValueError, "lists a coal input"):
+            emissions.plan_outputs(state, ROOT)
+        with mock.patch.dict(emissions.NETTED_FUEL, {"pm_no_such_method": {"coal": Decimal(1)}}):
+            with self.assertRaisesRegex(ValueError, "not defined"):
+                emissions.plan_outputs(self.state, ROOT)
+
     def test_every_reachable_fuel_recipe_has_a_visible_contribution(self):
         methods = self.state.mod_parsers["PMs"].data
         groups = self.state.mod_parsers["PM Groups"].data
         for building in self.state.mod_parsers["Buildings"].data.values():
             for group in body(gen.unwrap(building), "production_method_groups"):
                 for name in body(gen.unwrap(groups[group]), "production_methods"):
-                    amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")})
+                    amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")},
+                                                        netted=emissions.netted_fuel(name, methods[name]))
                     if amount and name not in emissions.REMOVALS and name not in emissions.SYNTHETIC_CREDITS:
                         with self.subTest(method=name):
                             self.assertEqual(scalar(state_scaled(methods[name]), emissions.STATE_MODIFIER), amount)
@@ -248,7 +288,7 @@ class BuildingEmissionsTest(unittest.TestCase):
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 245)
+            self.assertEqual(count, 248)
             rewritten = output[Path("common/production_methods/extra_pms.txt")]
             parser = ParadoxFileParser()
             parsed_path = root / "result.txt"
@@ -257,7 +297,7 @@ class BuildingEmissionsTest(unittest.TestCase):
             self.assertEqual(scalar(state_scaled(parser.data["pm_modern_coal-fired_plant"]), emissions.STATE_MODIFIER), 6)
             method["goods_input_coal_add"] = ("=", "0")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 244)
+            self.assertEqual(count, 247)
             parser = ParadoxFileParser()
             parsed_path.write_text(output[Path("common/production_methods/extra_pms.txt")], encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
@@ -359,7 +399,7 @@ class DirectAirCaptureTest(unittest.TestCase):
                 "gw_direct_air_capture_coal_equivalent = 210", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
-            self.assertEqual(count, 245)
+            self.assertEqual(count, 248)
             text = outputs[Path("common/production_methods/direct_air_capture.txt")]
             self.assertIn(f"{emissions.ATMOSPHERIC_MODIFIER} = 84.00", text)
             self.assertNotIn("goods_output_coal_add", text)

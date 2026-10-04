@@ -36,6 +36,14 @@ Process fuel and automation both contribute. The figure grows with staffing and
 throughput and feeds the climate calculation. The market leader's industrial
 policy cut applies afterward.
 
+Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
+Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off
+the mine's output instead of listing it as an input, so the methods show no coal
+cost but still show the emissions: 2.00 and 3.00 a level for the two pumps and
+0.60 for the Steam Donkey, at full staffing and base throughput. These are the
+same figures an Iron Mine shows for the same pumps. Oil-fired methods in every
+mine list their oil as an input and show it as usual.
+
 Household heating demand follows the buy packages at your states' average
 wealth, with fossil heating weighted by the coal, oil, wood, fabric and
 electricity available in the market. Peasants contribute only 5% of the
@@ -368,9 +376,10 @@ what could take their place:
 
 None of this is a requirement: you can retire capacity you can't yet replace and
 import the difference, burn less, or accept shortages. The transition earns no
-emission cut of its own. Your market's emissions come from the coal and oil it
-burns wherever they were mined, so closing your mines lowers them only if the
-market burns less. Power plants are safest to retire once clean generation is
+emission cut of its own. Your market's emissions come from the coal and oil its
+buildings and households burn, wherever it was mined. Closing a mine cuts only
+the fuel that mine burned itself, plus whatever the market then burns less.
+Power plants are safest to retire once clean generation is
 most of your fleet, and mines and rigs once your market makes more of the fuel
 than it burns.
 
