@@ -1295,9 +1295,17 @@
   "en": "Reset our colonial policy stance to neutral.",
   "de": "Setzt unsere koloniale Haltung auf neutral zurück."
  },
+ "GW_CARBON_REMOVAL_DESC": {
+  "en": "Requires subsidies for $building_synthetics_plant_coal$ and gives them +5% throughput. Costs 100 Authority while active. Reduces Environmental Movement radicalism by 5 percentage points. Carbon dioxide removal comes from staffed buildings; electricity generation still adds emissions.",
+  "de": "Erfordert Subventionen für $building_synthetics_plant_coal$ und gewährt +5% Durchsatz. Kostet 100 Autorität, solange die Maßnahme aktiv ist. Senkt den Radikalismus der Umweltbewegung um 5 Prozentpunkte. Die Kohlendioxid-Entnahme stammt aus Gebäuden mit Belegschaft; die Stromerzeugung verursacht weiterhin Emissionen."
+ },
+ "GW_CARBON_REMOVAL_ROW": {
+  "en": "Carbon Removal Support",
+  "de": "Förderung der CO2-Entnahme"
+ },
  "GW_CARBON_TAX_DESC": {
-  "en": "Levy a carbon tax on coal and oil industries across your market.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
-  "de": "Erhebt eine CO2-Steuer auf die Kohle- und Ölindustrie in Ihrem gesamten Markt.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+  "en": "Levy a carbon tax on domestic coal and oil industries.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nApplies to your own country. Available at 0.5 °C of global warming.",
+  "de": "Erhebt eine CO2-Steuer auf die inländische Kohle- und Ölindustrie.\\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\\nGilt für Ihr eigenes Land. Verfügbar bei 0,5 °C globaler Erwärmung."
  },
  "GW_CARBON_TAX_ROW": {
   "en": "Carbon Tax",
@@ -1312,8 +1320,8 @@
   "de": "Klimaanpassung"
  },
  "GW_EMISSION_STANDARDS_DESC": {
-  "en": "Impose binding industrial emission standards across your entire market.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
-  "de": "Erlässt verbindliche Emissionsstandards für die Industrie in Ihrem gesamten Markt.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+  "en": "Impose binding emission standards on domestic industry.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nApplies to your own country. Available at 0.5 °C of global warming.",
+  "de": "Erlässt verbindliche Emissionsstandards für die inländische Industrie.\\n[GetStaticModifier('emission_standards_modifier').GetDesc]\\nGilt für Ihr eigenes Land. Verfügbar bei 0,5 °C globaler Erwärmung."
  },
  "GW_EMISSION_STANDARDS_ROW": {
   "en": "Emission Standards",
@@ -1330,6 +1338,18 @@
  "GW_FOSSIL_FUEL_DIVESTMENT_ROW": {
   "en": "Fossil-Fuel Divestment",
   "de": "Rückzug aus fossilen Brennstoffen"
+ },
+ "GW_FOSSIL_FUEL_TARIFFS": {
+  "en": "Raise Fossil-Fuel Tariffs",
+  "de": "Zölle auf fossile Brennstoffe erhöhen"
+ },
+ "GW_FOSSIL_FUEL_TARIFFS_DESC": {
+  "en": "Raise coal and oil import and export tariffs in your market: +2.5 percentage points at Low, +5 at High and +10 at Maximum. Only the market leader can adopt or repeal this policy. Native tariff levels stay as chosen, including under legislated customs; None still collects no tariffs. The surcharge also applies to traded synthetic coal and oil. It grants no automatic emissions reduction.\\n[GetStaticModifier('fossil_fuel_tariffs_modifier').GetDesc]",
+  "de": "Erhöht die Ein- und Ausfuhrzölle auf Kohle und Öl in Ihrem Markt: +2,5 Prozentpunkte bei Niedrig, +5 bei Hoch und +10 bei Maximal. Nur der Marktführer kann diese Maßnahme beschließen oder aufheben. Die eigentlichen Zollstufen bleiben wie gewählt, auch bei gesetzlich geregeltem Zoll; Zollfreiheit erhebt weiterhin keine Zölle. Der Aufschlag gilt auch für gehandelte synthetische Kohle und synthetisches Öl. Er bewirkt keine automatische Emissionssenkung.\\n[GetStaticModifier('fossil_fuel_tariffs_modifier').GetDesc]"
+ },
+ "GW_FOSSIL_FUEL_TARIFFS_ROW": {
+  "en": "Fossil-Fuel Tariffs",
+  "de": "Zölle auf fossile Brennstoffe"
  },
  "GW_GREEN_BUILDING_CODES": {
   "en": "Enact Green Building Codes",
@@ -1351,13 +1371,21 @@
   "en": "Public Transit",
   "de": "Öffentliche Transportmittel"
  },
+ "GW_REMOVE_CARBON_REMOVAL": {
+  "en": "End Atmospheric Carbon Removal Support",
+  "de": "Förderung der CO2-Entnahme aus der Atmosphäre beenden"
+ },
+ "GW_REMOVE_CARBON_REMOVAL_DESC": {
+  "en": "Ends required subsidies and the +5% throughput bonus for $building_synthetics_plant_coal$, releases 100 Authority, and removes the Environmental Movement satisfaction bonus.",
+  "de": "Beendet die erforderlichen Subventionen und den Durchsatzbonus von +5% für $building_synthetics_plant_coal$, gibt 100 Autorität frei und entfernt den Zufriedenheitsbonus der Umweltbewegung."
+ },
  "GW_REMOVE_CARBON_TAX": {
   "en": "Repeal Carbon Tax",
   "de": "CO2-Steuer aufheben"
  },
  "GW_REMOVE_CARBON_TAX_DESC": {
-  "en": "Repeal the carbon tax for all countries in your market, except any bound by an emissions reduction treaty, ending the reduction to coal and oil output, the associated tax revenue, and the emissions reduction.",
-  "de": "Hebt die CO2-Steuer für alle Länder in Ihrem Markt auf, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, und beendet damit die Senkung der Kohle- und Ölproduktion, die zugehörigen Steuereinnahmen und die Emissionsminderung."
+  "en": "Repeal the domestic carbon tax, ending its output penalties, tax increases and industrial emissions reduction.",
+  "de": "Hebt die inländische CO2-Steuer auf und beendet damit ihre Produktionseinbußen, Steuererhöhungen und die industrielle Emissionssenkung."
  },
  "GW_REMOVE_CLIMATE_ADAPTATION": {
   "en": "Cut Adaptation Funding",
@@ -1372,8 +1400,8 @@
   "de": "Emissionsstandards aufheben"
  },
  "GW_REMOVE_EMISSION_STANDARDS_DESC": {
-  "en": "Repeal the emission standards mandate for all countries in your market, except any bound by an emissions reduction treaty, ending the compliance overhead and the associated emissions reduction.",
-  "de": "Hebt die Vorgabe der Emissionsstandards für alle Länder in Ihrem Markt auf, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, und beendet damit den Verwaltungsaufwand für die Einhaltung sowie die zugehörige Emissionsminderung."
+  "en": "Repeal domestic emission standards, ending the compliance overhead, pollution reduction and industrial emissions reduction.",
+  "de": "Hebt die inländischen Emissionsstandards auf und beendet damit den Verwaltungsaufwand für die Einhaltung, die Verschmutzungsminderung und die industrielle Emissionssenkung."
  },
  "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT": {
   "en": "End Fossil Fuel Divestment",
@@ -1382,6 +1410,14 @@
  "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC": {
   "en": "Lift the divestment mandate, restoring coal and oil output and losing the associated emissions benefits.",
   "de": "Hebt die Rückzugspflicht auf, stellt die Kohle- und Ölproduktion wieder her und verliert die zugehörigen Emissionsvorteile."
+ },
+ "GW_REMOVE_FOSSIL_FUEL_TARIFFS": {
+  "en": "Repeal Fossil-Fuel Tariffs",
+  "de": "Zölle auf fossile Brennstoffe aufheben"
+ },
+ "GW_REMOVE_FOSSIL_FUEL_TARIFFS_DESC": {
+  "en": "Remove the coal and oil tariff-rate surcharge and release 100 Authority. Native tariff levels stay as chosen.",
+  "de": "Entfernt den Aufschlag auf die Zollhöhe für Kohle und Öl und gibt 100 Autorität frei. Die eigentlichen Zollstufen bleiben wie gewählt."
  },
  "GW_REMOVE_GREEN_BUILDING_CODES": {
   "en": "Repeal Green Building Codes",
@@ -1408,12 +1444,12 @@
   "de": "Investitionen in erneuerbare Energien beenden"
  },
  "GW_REMOVE_RENEWABLE_INVESTMENT_DESC": {
-  "en": "End the renewable energy program for all countries in your market, except any bound by an emissions reduction treaty, restoring conventional power plant output and ending the emissions reduction.",
-  "de": "Beendet das Programm für erneuerbare Energien für alle Länder in Ihrem Markt, außer für solche, die durch einen Vertrag zur Emissionsminderung gebunden sind, stellt die Leistung konventioneller Kraftwerke wieder her und beendet die Emissionsminderung."
+  "en": "End the domestic renewable energy programme and its industrial and household emissions reductions.",
+  "de": "Beendet das inländische Programm für erneuerbare Energien und seine industriellen und häuslichen Emissionssenkungen."
  },
  "GW_RENEWABLE_INVESTMENT_DESC": {
-  "en": "Redirect spending toward renewable energy across your market.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!.",
-  "de": "Lenkt Ausgaben in Ihrem gesamten Markt in erneuerbare Energien um.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nGilt für jedes Land in Ihrem Markt. Verfügbar, sobald die globale Erwärmung ein mildes Niveau erreicht. #bold Nur für Marktführer#!."
+  "en": "Redirect domestic spending toward renewable energy.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nApplies to your own country. Available at 0.5 °C of global warming.",
+  "de": "Lenkt inländische Ausgaben in erneuerbare Energien um.\\n[GetStaticModifier('renewable_investment_modifier').GetDesc]\\nGilt für Ihr eigenes Land. Verfügbar bei 0,5 °C globaler Erwärmung."
  },
  "GW_RENEWABLE_INVESTMENT_ROW": {
   "en": "Renewable Investment",
@@ -1790,6 +1826,10 @@
  "PLANNING_POINTS_4": {
   "en": "At least #bold 4#! free planning budget points",
   "de": "Mindestens #bold 4#! freie Planungsbudgetpunkte"
+ },
+ "POLICY_ACTIVE_CARBON_REMOVAL": {
+  "en": "Atmospheric Carbon Removal Supported",
+  "de": "CO2-Entnahme aus der Atmosphäre gefördert"
  },
  "POLICY_ACTIVE_CARBON_TAX": {
   "en": "Carbon Tax enacted",
@@ -6683,6 +6723,10 @@
   "en": "Forced Subsidies for Renewable Energy Plants",
   "de": "Zwangssubventionen für Anlagen erneuerbarer Energien"
  },
+ "country_building_synthetics_plant_coal_require_subsidies_bool": {
+  "en": "$building_synthetics_plant_coal$ Requires Subsidies",
+  "de": "$building_synthetics_plant_coal$ erfordert Subventionen"
+ },
  "country_can_create_unbacked_money_bool": {
   "en": "Enables #bold Open-Market Operations#!",
   "de": "Schaltet #bold Offenmarktgeschäfte#! frei"
@@ -7690,6 +7734,10 @@
  "fossil_fuel_divestment_modifier": {
   "en": "Fossil Fuel Divestment",
   "de": "Kapitalabzug aus fossilen Brennstoffen"
+ },
+ "fossil_fuel_tariffs_modifier": {
+  "en": "Fossil-Fuel Tariffs",
+  "de": "Zölle auf fossile Brennstoffe"
  },
  "fossil_lobby_concessions_modifier": {
   "en": "Fossil Fuel Lobby Concessions",
@@ -8740,12 +8788,12 @@
   "de": "Der jährliche Treibhausgasausstoß des gesamten Marktes, dem dieses Land angehört, aus seinem Öl- und Kohleverbrauch, abzüglich dessen, was seine Anlagen für synthetische Kraftstoffe auffangen.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
  },
  "gw_cond_emis_tt_ours": {
-  "en": "Annual [concept_greenhouse_gas_emissions] of the whole market this country belongs to, from its oil and coal consumption, less what its Synthetic Fuel Works and Carbon Conversion Works capture.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
-  "de": "Jährliche [concept_greenhouse_gas_emissions] des gesamten Marktes, zu dem dieses Land gehört, aus seinem Öl- und Kohleverbrauch, abzüglich dessen, was seine Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke abscheiden.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
+  "en": "Annual [concept_greenhouse_gas_emissions] of the whole market this country belongs to, from building greenhouse gases after source capture and industrial policy cuts, plus households, less atmospheric removal.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
+  "de": "Jährliche [concept_greenhouse_gas_emissions] des gesamten Marktes, zu dem dieses Land gehört, aus den Treibhausgasen der Gebäude nach Abscheidung an der Quelle und Senkungen durch die Industriepolitik, zuzüglich der Haushalte, abzüglich der Entnahme aus der Atmosphäre.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
  },
  "gw_cond_emis_tt_theirs": {
-  "en": "Annual [concept_greenhouse_gas_emissions] of this market, from its oil and coal consumption, less what its Synthetic Fuel Works and Carbon Conversion Works capture.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
-  "de": "Jährliche [concept_greenhouse_gas_emissions] dieses Marktes, aus seinem Öl- und Kohleverbrauch, abzüglich dessen, was seine Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke abscheiden.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
+  "en": "Annual [concept_greenhouse_gas_emissions] of this market, from building greenhouse gases after source capture and industrial policy cuts, plus households, less atmospheric removal.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
+  "de": "Jährliche [concept_greenhouse_gas_emissions] dieses Marktes, aus den Treibhausgasen der Gebäude nach Abscheidung an der Quelle und Senkungen durch die Industriepolitik, zuzüglich der Haushalte, abzüglich der Entnahme aus der Atmosphäre.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
  },
  "gw_cond_in_force": {
   "en": "The policy is currently in force",
@@ -8772,12 +8820,12 @@
   "de": "Nur der Anführer eines Marktes kann die drei marktweiten Politiken – eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards – beschließen oder aufheben, und sie binden dann jedes Mitglied dieses Marktes.\\n\\n#lore Die anderen fünf Politiken gehören uns allein, ganz gleich, wer den Markt anführt.#!"
  },
  "gw_cond_role_tt_ours": {
-  "en": "Only the leader of a market can adopt or repeal the three market-wide policies - a carbon tax, renewable investment and emission standards - and they then bind every member of that market.\\n\\n#lore The other five policies are ours alone, whoever leads the market.#!",
-  "de": "Nur der Marktführer kann die drei marktweiten Maßnahmen – eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards – annehmen oder aufheben, und sie binden dann jedes Mitglied dieses Marktes.\\n\\n#lore Die anderen fünf Maßnahmen gehören allein uns, wer auch immer den Markt führt.#!"
+  "en": "The market leader controls fossil-fuel tariffs. Every country controls its own nine national climate policies and industrial emissions reductions.",
+  "de": "Der Marktführer bestimmt die Zölle auf fossile Brennstoffe. Jedes Land bestimmt seine eigenen neun nationalen Klimapolitiken und industriellen Emissionssenkungen."
  },
  "gw_cond_role_tt_theirs": {
-  "en": "[Country.GetName] leads this market. Only the leader of a market can adopt or repeal the three market-wide policies - a carbon tax, renewable investment and emission standards - and they then bind every member of that market.\\n\\n#lore The other five policies are each country's own, whoever leads the market.#!",
-  "de": "[Country.GetAltName('NOM')|U] führt diesen Markt an. Nur der Marktführer kann die drei marktweiten Maßnahmen – eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards – annehmen oder aufheben, und sie binden dann jedes Mitglied dieses Marktes.\\n\\n#lore Die anderen fünf Maßnahmen sind Sache des jeweiligen Landes, wer auch immer den Markt führt.#!"
+  "en": "The market leader controls fossil-fuel tariffs. Every country controls its own nine national climate policies and industrial emissions reductions.",
+  "de": "Der Marktführer bestimmt die Zölle auf fossile Brennstoffe. Jedes Land bestimmt seine eigenen neun nationalen Klimapolitiken und industriellen Emissionssenkungen."
  },
  "gw_cond_share_tt": {
   "en": "This market's share of world annual emissions - the honest measure of how much of the warming is ours to fix.\\n\\n#lore A market that captures more carbon than it emits reads 0% here and shows its negative figure in the emissions row. Updated each January.#!",
@@ -8808,16 +8856,16 @@
   "de": "Abgeschiedener Kohlenstoff"
  },
  "gw_emis_capture_tt_ours": {
-  "en": "Carbon taken out of the air each year by this market's Synthetic Fuel Works and Carbon Conversion Works. It is already subtracted from our market's figure, and it is the only way a market's emissions go below zero.\\n\\n#lore Updated each January.#!",
-  "de": "Kohlenstoff, den die Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke dieses Marktes jedes Jahr der Luft entziehen. Er ist bereits vom Wert unseres Marktes abgezogen und der einzige Weg, wie die Emissionen eines Marktes unter null fallen.\\n\\n#lore Wird jeden Januar aktualisiert.#!"
+  "en": "Carbon taken out of the air each year by this market's Carbon Conversion Works using Direct Air Capture. Source capture and synthetic-fuel credits are already included in the industrial emissions figure. It is already subtracted from our market's figure, and represents atmospheric removal. Exporting synthetic fuels can also make a producing market's accounting negative: the production credit is counted here and combustion in the destination market.\\n\\n#lore Updated each January.#!",
+  "de": "Kohlenstoff, den die Kohlenstoffumwandlungswerke dieses Marktes mit Direktabscheidung aus der Luft jedes Jahr der Luft entziehen. Abscheidung an der Quelle und Gutschriften für synthetische Kraftstoffe sind im Wert der industriellen Emissionen bereits enthalten. Er ist bereits vom Wert unseres Marktes abgezogen und stellt die Entnahme aus der Atmosphäre dar. Der Export synthetischer Kraftstoffe kann die Bilanz eines produzierenden Marktes ebenfalls ins Negative drehen: Die Produktionsgutschrift wird hier angerechnet, die Verbrennung im Zielmarkt.\\n\\n#lore Wird jeden Januar aktualisiert.#!"
  },
  "gw_emis_capture_tt_theirs": {
-  "en": "Carbon taken out of the air each year by this market's Synthetic Fuel Works and Carbon Conversion Works. It is already subtracted from the market's figure above, and it is the only way a market's emissions go below zero.\\n\\n#lore Updated each January.#!",
-  "de": "Kohlenstoff, den die Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke dieses Marktes jedes Jahr der Luft entziehen. Er ist bereits vom Wert des Marktes oben abgezogen und der einzige Weg, wie die Emissionen eines Marktes unter null fallen.\\n\\n#lore Wird jeden Januar aktualisiert.#!"
+  "en": "Carbon taken out of the air each year by this market's Carbon Conversion Works using Direct Air Capture. Source capture and synthetic-fuel credits are already included in the industrial emissions figure. It is already subtracted from the market's figure above, and represents atmospheric removal. Exporting synthetic fuels can also make a producing market's accounting negative: the production credit is counted here and combustion in the destination market.\\n\\n#lore Updated each January.#!",
+  "de": "Kohlenstoff, den die Kohlenstoffumwandlungswerke dieses Marktes mit Direktabscheidung aus der Luft jedes Jahr der Luft entziehen. Abscheidung an der Quelle und Gutschriften für synthetische Kraftstoffe sind im Wert der industriellen Emissionen bereits enthalten. Er ist bereits vom Wert des Marktes oben abgezogen und stellt die Entnahme aus der Atmosphäre dar. Der Export synthetischer Kraftstoffe kann die Bilanz eines produzierenden Marktes ebenfalls ins Negative drehen: Die Produktionsgutschrift wird hier angerechnet, die Verbrennung im Zielmarkt.\\n\\n#lore Wird jeden Januar aktualisiert.#!"
  },
  "gw_emis_capture_value": {
-  "en": "[Country.MakeScope.ScriptValue('gw_disp_captured')|1]/yr",
-  "de": "[Country.MakeScope.ScriptValue('gw_disp_captured')|1]/Jahr"
+  "en": "[Country.MakeScope.ScriptValue('gw_disp_captured')|K]/yr",
+  "de": "[Country.MakeScope.ScriptValue('gw_disp_captured')|K]/Jahr"
  },
  "gw_emis_market_label_ours": {
   "en": "Our Market's Emissions",
@@ -8828,8 +8876,8 @@
   "de": "Emissionen dieses Marktes"
  },
  "gw_emis_market_value": {
-  "en": "[Country.MakeScope.ScriptValue('gw_market_emis_display')|1]/yr",
-  "de": "[Country.MakeScope.ScriptValue('gw_market_emis_display')|1]/Jahr"
+  "en": "[Country.MakeScope.ScriptValue('gw_market_emis_display')|K]/yr",
+  "de": "[Country.MakeScope.ScriptValue('gw_market_emis_display')|K]/Jahr"
  },
  "gw_emis_warming_label": {
   "en": "Warming Last Year",
@@ -8840,12 +8888,12 @@
   "de": "Weltemissionen"
  },
  "gw_emis_world_tt": {
-  "en": "Every market's [concept_greenhouse_gas_emissions] over the last calendar year, added together. Every 1,000 a year warms the world by #v 0.1 °C#! a year.\\n\\n#lore Measured as the change in the world's cumulative total. Updated each January.#!",
-  "de": "Die [concept_greenhouse_gas_emissions] aller Märkte im letzten Kalenderjahr, zusammengezählt. Je 1.000 pro Jahr erwärmen die Welt um #v 0,1 °C#! pro Jahr.\\n\\n#lore Gemessen als Veränderung der kumulierten Gesamtsumme der Welt. Wird jeden Januar aktualisiert.#!"
+  "en": "Every market's [concept_greenhouse_gas_emissions] over the last calendar year, added together. Every million a year warms the world by #v 0.1 °C#! a year.\\n\\n#lore Measured as the change in the world's cumulative total. Updated each January.#!",
+  "de": "Die [concept_greenhouse_gas_emissions] aller Märkte im letzten Kalenderjahr, zusammengezählt. Jede Million pro Jahr erwärmt die Welt um #v 0,1 °C#! pro Jahr.\\n\\n#lore Gemessen als Veränderung der kumulierten Gesamtsumme der Welt. Wird jeden Januar aktualisiert.#!"
  },
  "gw_emis_world_value": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_global_emis_display')|0]/yr",
-  "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_global_emis_display')|0]/Jahr"
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_global_emis_display')|K]/yr",
+  "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_global_emis_display')|K]/Jahr"
  },
  "gw_entry_unlock_tt": {
   "en": "The world has warmed by 0.1 °C, or we hold [GetLawType('law_fossil_expansion_moratorium').GetName] or [GetLawType('law_managed_fossil_phaseout').GetName]",
@@ -8868,24 +8916,24 @@
   "de": "Globale Temperatur"
  },
  "gw_how_emissions_1": {
-  "en": "Emissions belong to a market, not to a country: the market's oil and coal consumption, cut by its leader's reductions, less what its Synthetic Fuel Works and Carbon Conversion Works capture. The figure is stored on the [Concept('concept_market_owner','market leader')], and every member reads the same number.",
-  "de": "Emissionen gehören einem Markt, nicht einem Land: der Öl- und Kohleverbrauch des Marktes, gesenkt durch die Verringerungen seines Marktführers, abzüglich dessen, was seine Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke abscheiden. Der Wert wird beim [Concept('concept_market_owner','Marktführer')] gespeichert, und jedes Mitglied liest dieselbe Zahl."
+  "en": "Each country counts the buildings and households in its own states, subtracting source capture, synthetic-fuel credits and atmospheric removal. Its own industrial policy reductions apply to its remaining industrial emissions. Markets sum their members; the Top Emitters list ranks countries individually.",
+  "de": "Jedes Land zählt die Gebäude und Haushalte in seinen eigenen Staaten und zieht Abscheidung an der Quelle, Gutschriften für synthetische Kraftstoffe und die Entnahme aus der Atmosphäre ab. Die Senkungen durch die eigene Industriepolitik wirken auf die verbleibenden industriellen Emissionen. Märkte summieren ihre Mitglieder; die Liste der größten Emittenten ordnet Länder einzeln ein."
  },
  "gw_how_emissions_2": {
   "en": "The emissions figures, our share and last year's warming are measured once a year, in January, which is why the charts step once a year. The emissions cut in force is live.",
   "de": "Die Emissionswerte, unser Anteil und die Erwärmung des letzten Jahres werden einmal im Jahr gemessen, im Januar, weshalb die Diagramme nur einmal im Jahr einen Sprung machen. Die geltende Emissionssenkung ist dagegen live."
  },
  "gw_how_policies_1": {
-  "en": "Three [Concept('concept_climate_policy','climate policies')] are market-wide: only the market leader can adopt or repeal the Carbon Tax, Renewable Investment and Emission Standards, and they then bind every member of the market. The other five are national. Only the market-wide three cut the market's emissions; the national ones trim fuel use at the margin, protect against the damage and calm the Environmental Movement.",
-  "de": "Drei [Concept('concept_climate_policy','Klimapolitiken')] gelten marktweit: Nur der Marktführer kann die CO2-Steuer, die Investition in erneuerbare Energien und die Emissionsstandards annehmen oder aufheben, und sie binden dann jedes Mitglied des Marktes. Die anderen fünf sind national. Nur die drei marktweiten senken die Emissionen des Marktes; die nationalen drosseln den Brennstoffverbrauch am Rand, schützen vor dem Schaden und beruhigen die Umweltbewegung."
+  "en": "Nine [Concept('concept_climate_policy','climate policies')] are national, including Carbon Tax, Renewable Investment and Emission Standards. Only Fossil-Fuel Tariffs belongs to the market leader: it increases coal and oil import and export tariffs by 2.5, 5 or 10 percentage points at Low, High or Maximum; None stays tariff-free. Household policies and carbon removal affect your own country.",
+  "de": "Neun [Concept('concept_climate_policy','Klimapolitiken')] sind national, darunter CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards. Nur die Zölle auf fossile Brennstoffe gehören dem Marktführer: Sie erhöhen die Ein- und Ausfuhrzölle auf Kohle und Öl bei Niedrig, Hoch bzw. Maximal um 2,5, 5 bzw. 10 Prozentpunkte; bei Zollfreiheit bleibt es zollfrei. Haushaltspolitiken und CO2-Entnahme wirken sich auf Ihr eigenes Land aus."
  },
  "gw_how_policies_2": {
   "en": "Every policy needs 0.5 °C of warming, Fossil-Fuel Divestment 1.0 °C, and most cost [concept_authority] for as long as they are in force. A greyed control's tooltip lists each condition with a tick or a cross, then what the control would do.",
   "de": "Jede Maßnahme braucht 0,5 °C Erwärmung, das Divestment fossiler Brennstoffe 1,0 °C, und die meisten kosten [concept_authority], solange sie in Kraft sind. Der Tooltip eines ausgegrauten Bedienelements listet jede Bedingung mit einem Haken oder einem Kreuz auf, dann, was das Bedienelement bewirken würde."
  },
  "gw_how_policies_3": {
-  "en": "A country bound by an Enforce Emissions Reduction treaty cannot repeal any policy but Climate Adaptation, and keeps its policies when it joins another market or when its leader repeals them.",
-  "de": "Ein Land, das durch einen Vertrag „Emissionsminderung durchsetzen“ gebunden ist, kann keine Maßnahme außer der Klimaanpassung aufheben und behält seine Maßnahmen, wenn es einem anderen Markt beitritt oder wenn sein Marktführer sie aufhebt."
+  "en": "An Enforce Emissions Reduction treaty binds its source country, including a market member. Its national mitigation policies cannot be repealed; Climate Adaptation and Fossil-Fuel Tariffs remain voluntary.",
+  "de": "Ein Vertrag „Emissionsreduktion erzwingen“ bindet das verpflichtete Land, auch ein Marktmitglied. Die nationalen Minderungspolitiken können nicht aufgehoben werden; Klimaanpassung und Zölle auf fossile Brennstoffe bleiben freiwillig."
  },
  "gw_how_sub_emissions": {
   "en": "Emissions",
@@ -8936,8 +8984,8 @@
   "de": "Emissionssenkung #v [Country.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!"
  },
  "gw_ov_pie_cut_tt": {
-  "en": "How far this market's [concept_greenhouse_gas_emissions] are held below what its oil and coal consumption would otherwise produce: the market leader's market-wide policies, Ministry of the Environment and other reductions, together.\\n#b [SelectLocalization( Country.IsLocalPlayer, 'gw_ov_cut_policies_ours', 'gw_ov_cut_policies_theirs' )]#! #v [Country.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! of 8\\n\\n#lore A live reading: it moves the moment a policy is adopted or repealed, not at the next tick. Only the three market-wide policies cut emissions; the national ones mostly protect against the damage.#!",
-  "de": "Wie weit die [concept_greenhouse_gas_emissions] dieses Marktes unter dem gehalten werden, was sein Öl- und Kohleverbrauch sonst erzeugen würde: die marktweiten Maßnahmen des Marktführers, das Umweltministerium und andere Verringerungen zusammen.\\n#b [SelectLocalization( Country.IsLocalPlayer, 'gw_ov_cut_policies_ours', 'gw_ov_cut_policies_theirs' )]#! #v [Country.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! von 8\\n\\n#lore Eine Live-Anzeige: Sie bewegt sich in dem Moment, in dem eine Maßnahme angenommen oder aufgehoben wird, nicht erst beim nächsten Tick. Nur die drei marktweiten Maßnahmen senken die Emissionen; die nationalen schützen überwiegend vor dem Schaden.#!"
+  "en": "The reduction to this country's remaining industrial [concept_greenhouse_gas_emissions]: its own climate policies, Ministry of the Environment and other reductions together.\\n#b [SelectLocalization( Country.IsLocalPlayer, 'gw_ov_cut_policies_ours', 'gw_ov_cut_policies_theirs' )]#! #v [Country.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! of 10\\n\\n#lore A live reading. Source capture, atmospheric removal and household reductions contribute separately to annual emissions. Tariffs grant no automatic emissions cut.#!",
+  "de": "Die Senkung der verbleibenden industriellen [concept_greenhouse_gas_emissions] dieses Landes: seine eigenen Klimapolitiken, das Umweltministerium und andere Senkungen zusammen.\\n#b [SelectLocalization( Country.IsLocalPlayer, 'gw_ov_cut_policies_ours', 'gw_ov_cut_policies_theirs' )]#! #v [Country.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! von 10\\n\\n#lore Eine Live-Anzeige. Abscheidung an der Quelle, Entnahme aus der Atmosphäre und Senkungen bei den Haushalten tragen gesondert zu den jährlichen Emissionen bei. Zölle bewirken keine automatische Emissionssenkung.#!"
  },
  "gw_ov_share_ours": {
   "en": "Our Share",
@@ -8996,16 +9044,16 @@
   "de": "Vertragsgebunden"
  },
  "gw_ov_treaty_tt_ours": {
-  "en": "We are bound by an Enforce Emissions Reduction treaty. While it holds we cannot repeal any policy but Climate Adaptation, and we carry its penalties to power plant, coal mining and oil extraction throughput and its authority cost.\\n\\n#lore Losing one of the policies anyway freezes the treaty.#!",
-  "de": "Wir sind durch einen Vertrag „Emissionsminderung durchsetzen“ gebunden. Solange er gilt, können wir keine Maßnahme außer der Klimaanpassung aufheben, und wir tragen seine Strafen für den Durchsatz von Kraftwerken, Kohlebergbau und Ölförderung sowie seine Autoritätskosten.\\n\\n#lore Verlieren wir trotzdem eine der Maßnahmen, friert der Vertrag ein.#!"
+  "en": "We are bound by an Enforce Emissions Reduction treaty. While it holds we cannot repeal national mitigation policies; Climate Adaptation and Fossil-Fuel Tariffs remain voluntary, and we carry its penalties to power plant, coal mine and oil extraction throughput and to Industrialists approval. In return it waives the authority cost of the policies it forces.\\n\\n#lore Losing one of the policies anyway freezes the treaty.#!",
+  "de": "Wir sind durch einen Vertrag „Emissionsreduktion erzwingen“ gebunden. Solange er gilt, können wir keine nationalen Minderungspolitiken aufheben; Klimaanpassung und Zölle auf fossile Brennstoffe bleiben freiwillig, und wir tragen seine Strafen für den Durchsatz von Kraftwerken, Kohleminen und Ölgewinnung sowie für die Zustimmung der Industriellen. Im Gegenzug erlässt er die Autoritätskosten der Maßnahmen, die er erzwingt.\\n\\n#lore Verlieren wir trotzdem eine der Maßnahmen, friert der Vertrag ein.#!"
  },
  "gw_ov_treaty_tt_theirs": {
-  "en": "[Country.GetName] is bound by an Enforce Emissions Reduction treaty. While it holds it cannot repeal any policy but Climate Adaptation, and it carries the treaty's penalties to power plant, coal mining and oil extraction throughput and its authority cost.\\n\\n#lore Losing one of the policies anyway freezes the treaty.#!",
-  "de": "[Country.GetAltName('NOM')|U] ist durch einen Vertrag „Emissionsminderung durchsetzen“ gebunden. Solange er gilt, kann das Land keine Maßnahme außer der Klimaanpassung aufheben, und es trägt die Strafen des Vertrags für den Durchsatz von Kraftwerken, Kohlebergbau und Ölförderung sowie seine Autoritätskosten.\\n\\n#lore Verliert es trotzdem eine der Maßnahmen, friert der Vertrag ein.#!"
+  "en": "[Country.GetName] is bound by an Enforce Emissions Reduction treaty. While it holds it cannot repeal national mitigation policies; Climate Adaptation and Fossil-Fuel Tariffs remain voluntary, and it carries the treaty's penalties to power plant, coal mine and oil extraction throughput and to Industrialists approval. In return the treaty waives the authority cost of the policies it forces.\\n\\n#lore Losing one of the policies anyway freezes the treaty.#!",
+  "de": "[Country.GetAltName('NOM')|U] ist durch einen Vertrag „Emissionsreduktion erzwingen“ gebunden. Solange er gilt, kann das Land keine nationalen Minderungspolitiken aufheben; Klimaanpassung und Zölle auf fossile Brennstoffe bleiben freiwillig, und es trägt die Strafen des Vertrags für den Durchsatz von Kraftwerken, Kohleminen und Ölgewinnung sowie für die Zustimmung der Industriellen. Im Gegenzug erlässt der Vertrag die Autoritätskosten der Maßnahmen, die er erzwingt.\\n\\n#lore Verliert es trotzdem eine der Maßnahmen, friert der Vertrag ein.#!"
  },
  "gw_pol_set_by_leader": {
-  "en": "Set by our market leader for the whole market.",
-  "de": "Vom Marktführer unseres Marktes für den ganzen Markt festgelegt."
+  "en": "Fossil-fuel tariffs are set by the market leader.",
+  "de": "Die Zölle auf fossile Brennstoffe werden vom Marktführer festgelegt."
  },
  "gw_pol_sub_market": {
   "en": "Market-Wide",
@@ -9024,64 +9072,64 @@
   "de": "#grey Inaktiv#!"
  },
  "gw_te_all_entry": {
-  "en": "[THIS.GetCountry.GetName]: #v [THIS.ScriptValue('gw_disp_own_emis')|1]/yr#!",
-  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: #v [THIS.ScriptValue('gw_disp_own_emis')|1]/Jahr#!"
+  "en": "[THIS.GetCountry.GetName]: #v [THIS.ScriptValue('gw_disp_own_emis')|K]/yr#!",
+  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: #v [THIS.ScriptValue('gw_disp_own_emis')|K]/Jahr#!"
  },
  "gw_te_all_intro": {
-  "en": "#b Every market that emits, largest first, named by its leader:#!",
-  "de": "#b Jeder Markt, der Emissionen verursacht, der größte zuerst, benannt nach seinem Marktführer:#!"
+  "en": "#b Every country that emits, largest first:#!",
+  "de": "#b Jedes Land, das Emissionen verursacht, das größte zuerst:#!"
  },
  "gw_te_head_annual": {
   "en": "Annual",
   "de": "Jährlich"
  },
  "gw_te_head_annual_tt": {
-  "en": "The market's [concept_greenhouse_gas_emissions] last year: its oil and coal consumption, less what its Synthetic Fuel Works and Carbon Conversion Works capture. The same figure every member sees as Our Market's Emissions.\\n\\n#lore Updated each January. The list is ranked by this figure.#!",
-  "de": "Die [concept_greenhouse_gas_emissions] des Marktes im letzten Jahr: sein Öl- und Kohleverbrauch, abzüglich dessen, was seine Synthetischen Kraftstoffwerke und Kohleverflüssigungswerke abscheiden. Dieselbe Zahl, die jedes Mitglied als „Emissionen unseres Marktes“ sieht.\\n\\n#lore Wird jeden Januar aktualisiert. Die Liste ist nach diesem Wert geordnet.#!"
+  "en": "The country's [concept_greenhouse_gas_emissions] last year: its states' building emissions after source capture and national industrial policy cuts, plus households, less atmospheric removal.\\n\\n#lore Updated each January. The list is ranked by this figure.#!",
+  "de": "Die [concept_greenhouse_gas_emissions] des Landes im letzten Jahr: die Gebäudeemissionen seiner Staaten nach Abscheidung an der Quelle und Senkungen durch die nationale Industriepolitik, zuzüglich der Haushalte, abzüglich der Entnahme aus der Atmosphäre.\\n\\n#lore Wird jeden Januar aktualisiert. Die Liste ist nach diesem Wert geordnet.#!"
  },
  "gw_te_head_cum": {
   "en": "Cumulative",
   "de": "Kumuliert"
  },
  "gw_te_head_cum_tt": {
-  "en": "Every year's [concept_greenhouse_gas_emissions] the market has added to the world's total while the country named led it.\\n\\nThe total belongs to the leader, not the market. A country that stops leading keeps its total but adds nothing until it leads a market again. A new leader starts from its own total, which is zero if it never led a market. When markets merge, the merged market's leader goes on adding to its own total.\\n\\n#lore In a save from before this list existed, counting starts at the next January.#!",
-  "de": "Die [concept_greenhouse_gas_emissions] jedes Jahres, die der Markt zur Weltgesamtsumme beigetragen hat, solange das genannte Land ihn führte.\\n\\nDie Gesamtsumme gehört dem Marktführer, nicht dem Markt. Ein Land, das nicht mehr führt, behält seine Gesamtsumme, fügt aber nichts hinzu, bis es wieder einen Markt führt. Ein neuer Marktführer beginnt bei seiner eigenen Gesamtsumme, die null ist, wenn er nie einen Markt geführt hat. Wenn Märkte verschmelzen, addiert der Marktführer des verschmolzenen Marktes weiter zu seiner eigenen Gesamtsumme.\\n\\n#lore In einem Spielstand aus der Zeit vor dieser Liste beginnt die Zählung im nächsten Januar.#!"
+  "en": "Every year's net [concept_greenhouse_gas_emissions] this country has added to the world's total since country accounting began. Negative years subtract from the total. Market joins, departures and changes of leader do not move it.\\n\\n#lore Existing saves start counting at the next January; previous market totals cannot be divided retrospectively. Revolutions inherit the country's total.#!",
+  "de": "Die netto gerechneten [concept_greenhouse_gas_emissions] jedes Jahres, die dieses Land seit Beginn der Länderbilanzierung zur Weltgesamtsumme beigetragen hat. Negative Jahre werden von der Gesamtsumme abgezogen. Marktbeitritte, -austritte und Führungswechsel verändern sie nicht.\\n\\n#lore Bestehende Spielstände beginnen die Zählung im nächsten Januar; frühere Marktsummen lassen sich nachträglich nicht aufteilen. Revolutionen erben die Gesamtsumme des Landes.#!"
  },
  "gw_te_head_share": {
   "en": "Share",
   "de": "Anteil"
  },
  "gw_te_head_share_tt": {
-  "en": "The market's part of the world's [concept_greenhouse_gas_emissions] last year, counted as the overview's Our Share.",
-  "de": "Der Anteil des Marktes an den [concept_greenhouse_gas_emissions] der Welt im letzten Jahr, so gezählt wie „Unser Anteil“ in der Übersicht."
+  "en": "The country's share of world annual [concept_greenhouse_gas_emissions].",
+  "de": "Der Anteil des Landes an den jährlichen [concept_greenhouse_gas_emissions] der Welt."
  },
  "gw_te_list_pending": {
   "en": "The first list is drawn up within the month.",
   "de": "Die erste Liste wird innerhalb des Monats erstellt."
  },
  "gw_te_members_intro": {
-  "en": "#b Members:#!",
-  "de": "#b Mitglieder:#!"
+  "en": "#b Countries sharing this market:#!",
+  "de": "#b Länder, die sich diesen Markt teilen:#!"
  },
  "gw_te_own_none": {
-  "en": "Our market captures at least as much as it emits, so it is not on the list.",
-  "de": "Unser Markt scheidet mindestens so viel ab, wie er ausstößt, und steht deshalb nicht auf der Liste."
+  "en": "Our country captures at least as much as it emits, so it is not on the list.",
+  "de": "Unser Land scheidet mindestens so viel ab, wie es ausstößt, und steht deshalb nicht auf der Liste."
  },
  "gw_te_own_rank": {
-  "en": "Our market ranks #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank')|0]#! of the #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_total')|0]#! markets that emit.",
-  "de": "Unser Markt liegt auf Rang #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank')|0]#! von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_total')|0]#! Märkten, die Emissionen verursachen."
+  "en": "Our country ranks #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank')|0]#! of the #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_total')|0]#! countries that emit.",
+  "de": "Unser Land liegt auf Rang #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank')|0]#! von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_total')|0]#! Ländern, die Emissionen verursachen."
  },
  "gw_te_row_annual": {
-  "en": "[State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|1]/yr",
-  "de": "[State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|1]/Jahr"
+  "en": "[State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/yr",
+  "de": "[State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/Jahr"
  },
  "gw_te_row_tt": {
-  "en": "#b The market led by [State.GetCountry.GetNameNoFormatting]#!\\nEmissions last year: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|1]/yr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! of the world's\\nCumulative, while this country led it: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|0]#!\\nEmissions cut: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore The leader adopts the market-wide policies that cut these emissions, so it is the country a climate agreement has to bind. The figures are last January's; the list is re-ranked each month.#!",
-  "de": "#b Der Markt unter Führung [State.GetCountry.GetAltNameNoFormatting('GEN')]#!\\nEmissionen im letzten Jahr: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|1]/Jahr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! der weltweiten Emissionen\\nKumuliert, solange dieses Land ihn führte: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|0]#!\\nEmissionssenkung: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore Der Marktführer nimmt die marktweiten Maßnahmen an, die diese Emissionen senken, deshalb ist er das Land, das ein Klimaabkommen binden muss. Die Zahlen stammen vom letzten Januar; die Liste wird jeden Monat neu geordnet.#!"
+  "en": "#b [State.GetCountry.GetNameNoFormatting]#!\\nNational emissions last year: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/yr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! of the world's\\nNational cumulative emissions: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nIndustrial emissions cut: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore Bind this country to reduce its own emissions, whether it leads its market or belongs to another country's market. Figures update each January; ranking updates monthly.#!",
+  "de": "#b [State.GetCountry.GetAltNameNoFormatting('NOM')|U]#!\\nNationale Emissionen im letzten Jahr: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/Jahr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! der weltweiten Emissionen\\nNationale kumulierte Emissionen: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nSenkung der industriellen Emissionen: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore Verpflichten Sie dieses Land, seine eigenen Emissionen zu senken, ob es seinen Markt führt oder zum Markt eines anderen Landes gehört. Die Zahlen werden jeden Januar aktualisiert, die Rangfolge monatlich.#!"
  },
  "gw_te_treaty_tt": {
-  "en": "[State.GetCountry.GetName] is bound by an Enforce Emissions Reduction treaty. It cannot repeal any policy but Climate Adaptation, so the market-wide policies it has adopted stay in force across its market.",
-  "de": "[State.GetCountry.GetAltName('NOM')|U] ist durch einen Vertrag „Emissionsminderung durchsetzen“ gebunden. Das Land kann keine Maßnahme außer der Klimaanpassung aufheben, sodass die von ihm angenommenen marktweiten Maßnahmen in seinem ganzen Markt in Kraft bleiben."
+  "en": "[State.GetCountry.GetName] is bound by an Enforce Emissions Reduction treaty. Its national mitigation policies stay in force; adaptation and tariffs remain voluntary.",
+  "de": "[State.GetCountry.GetAltName('NOM')|U] ist durch einen Vertrag „Emissionsreduktion erzwingen“ gebunden. Die nationalen Minderungspolitiken bleiben in Kraft; Anpassung und Zölle bleiben freiwillig."
  },
  "gw_tier_short_apocalyptic": {
   "en": "#R Apocalyptic#!",
@@ -9111,6 +9159,10 @@
   "en": "#Y Slight#!",
   "de": "#Y Gering#!"
  },
+ "gw_world_n_carbon_removal": {
+  "en": "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_removal_display')|0]#! nations",
+  "de": "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_removal_display')|0]#! Nationen"
+ },
  "gw_world_n_carbon_tax": {
   "en": "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_tax_display')|0]#! nations",
   "de": "#v [Country.MakeScope.ScriptValue('gw_world_n_carbon_tax_display')|0]#! Nationen"
@@ -9126,6 +9178,10 @@
  "gw_world_n_fossil_fuel_divestment": {
   "en": "#v [Country.MakeScope.ScriptValue('gw_world_n_fossil_fuel_divestment_display')|0]#! nations",
   "de": "#v [Country.MakeScope.ScriptValue('gw_world_n_fossil_fuel_divestment_display')|0]#! Nationen"
+ },
+ "gw_world_n_fossil_fuel_tariffs": {
+  "en": "#v [Country.MakeScope.ScriptValue('gw_world_n_fossil_fuel_tariffs_display')|0]#! market leaders",
+  "de": "#v [Country.MakeScope.ScriptValue('gw_world_n_fossil_fuel_tariffs_display')|0]#! Marktführer"
  },
  "gw_world_n_green_building_codes": {
   "en": "#v [Country.MakeScope.ScriptValue('gw_world_n_green_building_codes_display')|0]#! nations",
@@ -13755,6 +13811,10 @@
   "en": "Retirement Programmes",
   "de": "Stilllegungsprogramme"
  },
+ "rt_law_capture_tt": {
+  "en": "Stationary sources with carbon capture controls must use at least #v 50%#! capture. Production methods with no eligible fuel emissions are exempt",
+  "de": "Ortsfeste Quellen mit Kontrollen zur CO2-Abscheidung müssen mindestens #v 50%#! Abscheidung nutzen. Produktionsmethoden ohne geeignete Brennstoffemissionen sind ausgenommen"
+ },
  "rt_law_emissions_tt": {
   "en": "Closing supply cuts the market's [concept_greenhouse_gas_emissions] only if the market then burns less coal and oil, not if it imports them",
   "de": "Die Schließung des Angebots senkt die [concept_greenhouse_gas_emissions] des Marktes nur, wenn der Markt danach weniger Kohle und Öl verbrennt, nicht, wenn er sie importiert"
@@ -13968,8 +14028,8 @@
   "de": "@check! Öl aus Getreide und Strom: [GetTechnology('synthetic_biology').GetName] erforscht"
  },
  "rt_synth_tt": {
-  "en": "Our $building_synthetics_plant_oil$ and $building_synthetics_plant_coal$ buildings have #v [Country.MakeScope.ScriptValue('rt_disp_levels_synthetics')|0]#! levels. They make oil and coal without a mine or a rig, and what they make draws carbon back out.\\n[SelectLocalization( GetScriptedGui('rt_synth_oil_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_oil_ready', 'rt_synth_oil_not_ready' )]\\n[SelectLocalization( GetScriptedGui('rt_synth_coal_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_coal_ready', 'rt_synth_coal_not_ready' )]",
-  "de": "Unsere Gebäude $building_synthetics_plant_oil$ und $building_synthetics_plant_coal$ haben zusammen #v [Country.MakeScope.ScriptValue('rt_disp_levels_synthetics')|0]#! Stufen. Sie erzeugen Öl und Kohle ohne Mine oder Bohranlage, und was sie erzeugen, entzieht der Luft wieder Kohlenstoff.\\n[SelectLocalization( GetScriptedGui('rt_synth_oil_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_oil_ready', 'rt_synth_oil_not_ready' )]\\n[SelectLocalization( GetScriptedGui('rt_synth_coal_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_coal_ready', 'rt_synth_coal_not_ready' )]"
+  "en": "Our $building_synthetics_plant_oil$ and $building_synthetics_plant_coal$ buildings have #v [Country.MakeScope.ScriptValue('rt_disp_levels_synthetics')|0]#! levels. They can make oil and coal without a mine or a rig, drawing carbon back out. $building_synthetics_plant_coal$ also offers removal without fuel output with [GetTechnology('carbon_capture_and_storage').GetName]; this method needs subsidies.\\n[SelectLocalization( GetScriptedGui('rt_synth_oil_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_oil_ready', 'rt_synth_oil_not_ready' )]\\n[SelectLocalization( GetScriptedGui('rt_synth_coal_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_coal_ready', 'rt_synth_coal_not_ready' )]",
+  "de": "Unsere Gebäude $building_synthetics_plant_oil$ und $building_synthetics_plant_coal$ haben zusammen #v [Country.MakeScope.ScriptValue('rt_disp_levels_synthetics')|0]#! Stufen. Sie können Öl und Kohle ohne Mine oder Bohranlage erzeugen und entziehen dabei der Luft wieder Kohlenstoff. $building_synthetics_plant_coal$ bietet mit [GetTechnology('carbon_capture_and_storage').GetName] außerdem eine Entnahme ohne Brennstoffertrag; diese Methode erfordert Subventionen.\\n[SelectLocalization( GetScriptedGui('rt_synth_oil_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_oil_ready', 'rt_synth_oil_not_ready' )]\\n[SelectLocalization( GetScriptedGui('rt_synth_coal_tech_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_synth_coal_ready', 'rt_synth_coal_not_ready' )]"
  },
  "rt_synth_value": {
   "en": "[Country.MakeScope.ScriptValue('rt_disp_levels_synthetics')|0] levels",
@@ -14430,6 +14490,166 @@
  "sr_commercial_space_dividend": {
   "en": "Commercial Space Industry",
   "de": "Kommerzielle Raumfahrtindustrie"
+ },
+ "sr_discovery_arcadia_brines_a": {
+  "en": "Salt Water in the Drill: Research",
+  "de": "Salzwasser im Bohrer: Forschung"
+ },
+ "sr_discovery_arcadia_brines_b": {
+  "en": "Salt Water in the Drill: Engineering",
+  "de": "Salzwasser im Bohrer: Technik"
+ },
+ "sr_discovery_callisto_archive_a": {
+  "en": "The Crater Under the Crater: Research",
+  "de": "Der Krater unter dem Krater: Forschung"
+ },
+ "sr_discovery_callisto_archive_b": {
+  "en": "The Crater Under the Crater: Colony Infrastructure",
+  "de": "Der Krater unter dem Krater: Kolonieinfrastruktur"
+ },
+ "sr_discovery_ceres_reservoir_a": {
+  "en": "A Reservoir Below Ceres: Research",
+  "de": "Ein Reservoir unter Ceres: Forschung"
+ },
+ "sr_discovery_ceres_reservoir_b": {
+  "en": "A Reservoir Below Ceres: Resource Development",
+  "de": "Ein Reservoir unter Ceres: Ressourcenerschließung"
+ },
+ "sr_discovery_enceladus_life_a": {
+  "en": "Life in the Ice Grains: Research",
+  "de": "Leben in den Eiskörnern: Forschung"
+ },
+ "sr_discovery_enceladus_life_b": {
+  "en": "Life in the Ice Grains: International Cooperation",
+  "de": "Leben in den Eiskörnern: Internationale Zusammenarbeit"
+ },
+ "sr_discovery_europa_life_a": {
+  "en": "A Second Living World: Research",
+  "de": "Eine zweite lebendige Welt: Forschung"
+ },
+ "sr_discovery_europa_life_b": {
+  "en": "A Second Living World: International Cooperation",
+  "de": "Eine zweite lebendige Welt: Internationale Zusammenarbeit"
+ },
+ "sr_discovery_europa_vents_a": {
+  "en": "Chimneys Beneath the Ice: Research",
+  "de": "Schlote unter dem Eis: Forschung"
+ },
+ "sr_discovery_europa_vents_b": {
+  "en": "Chimneys Beneath the Ice: Engineering",
+  "de": "Schlote unter dem Eis: Technik"
+ },
+ "sr_discovery_ganymede_layers_a": {
+  "en": "Oceans Between Layers: Research",
+  "de": "Ozeane zwischen Schichten: Forschung"
+ },
+ "sr_discovery_ganymede_layers_b": {
+  "en": "Oceans Between Layers: Engineering",
+  "de": "Ozeane zwischen Schichten: Technik"
+ },
+ "sr_discovery_hellas_fossils_a": {
+  "en": "The Fossils of Hellas: Research",
+  "de": "Die Fossilien von Hellas: Forschung"
+ },
+ "sr_discovery_hellas_fossils_b": {
+  "en": "The Fossils of Hellas: International Cooperation",
+  "de": "Die Fossilien von Hellas: Internationale Zusammenarbeit"
+ },
+ "sr_discovery_io_roof_a": {
+  "en": "The Moving Floor of Io: Research",
+  "de": "Der bewegte Boden von Io: Forschung"
+ },
+ "sr_discovery_io_roof_b": {
+  "en": "The Moving Floor of Io: Engineering",
+  "de": "Der bewegte Boden von Io: Technik"
+ },
+ "sr_discovery_mercury_archive_a": {
+  "en": "An Archive in Permanent Shadow: Research",
+  "de": "Ein Archiv im ewigen Schatten: Forschung"
+ },
+ "sr_discovery_mercury_archive_b": {
+  "en": "An Archive in Permanent Shadow: Resource Development",
+  "de": "Ein Archiv im ewigen Schatten: Ressourcenerschließung"
+ },
+ "sr_discovery_olympus_tubes_a": {
+  "en": "Rooms Inside the Volcano: Research",
+  "de": "Räume im Inneren des Vulkans: Forschung"
+ },
+ "sr_discovery_olympus_tubes_b": {
+  "en": "Rooms Inside the Volcano: Colony Infrastructure",
+  "de": "Räume im Inneren des Vulkans: Kolonieinfrastruktur"
+ },
+ "sr_discovery_pallas_water_a": {
+  "en": "Water Bound in Stone: Research",
+  "de": "Wasser, im Stein gebunden: Forschung"
+ },
+ "sr_discovery_pallas_water_b": {
+  "en": "Water Bound in Stone: Resource Development",
+  "de": "Wasser, im Stein gebunden: Ressourcenerschließung"
+ },
+ "sr_discovery_pluto_antifreeze_a": {
+  "en": "Antifreeze at the Edge of the System: Research",
+  "de": "Frostschutz am Rand des Systems: Forschung"
+ },
+ "sr_discovery_pluto_antifreeze_b": {
+  "en": "Antifreeze at the Edge of the System: Engineering",
+  "de": "Frostschutz am Rand des Systems: Technik"
+ },
+ "sr_discovery_psyche_metal_a": {
+  "en": "A Rich Seam in Psyche: Research",
+  "de": "Eine reiche Ader in Psyche: Forschung"
+ },
+ "sr_discovery_psyche_metal_b": {
+  "en": "A Rich Seam in Psyche: Materials Processing",
+  "de": "Eine reiche Ader in Psyche: Materialverarbeitung"
+ },
+ "sr_discovery_titan_chemistry_a": {
+  "en": "An Impact-Born Chemical Laboratory: Research",
+  "de": "Ein im Einschlag geborenes Chemielabor: Forschung"
+ },
+ "sr_discovery_titan_chemistry_b": {
+  "en": "An Impact-Born Chemical Laboratory: Materials Processing",
+  "de": "Ein im Einschlag geborenes Chemielabor: Materialverarbeitung"
+ },
+ "sr_discovery_titania_ocean_a": {
+  "en": "Warmth Beneath Titania: Research",
+  "de": "Wärme unter Titania: Forschung"
+ },
+ "sr_discovery_titania_ocean_b": {
+  "en": "Warmth Beneath Titania: Engineering",
+  "de": "Wärme unter Titania: Technik"
+ },
+ "sr_discovery_triton_jet_a": {
+  "en": "A Jet Beneath the Landing Field: Research",
+  "de": "Ein Strahl unter dem Landefeld: Forschung"
+ },
+ "sr_discovery_triton_jet_b": {
+  "en": "A Jet Beneath the Landing Field: Engineering",
+  "de": "Ein Strahl unter dem Landefeld: Technik"
+ },
+ "sr_discovery_utopia_glacier_a": {
+  "en": "The Buried Glacier: Research",
+  "de": "Der verschüttete Gletscher: Forschung"
+ },
+ "sr_discovery_utopia_glacier_b": {
+  "en": "The Buried Glacier: Resource Development",
+  "de": "Der verschüttete Gletscher: Ressourcenerschließung"
+ },
+ "sr_discovery_venus_waves_a": {
+  "en": "A Wave That Holds Its Ground: Research",
+  "de": "Eine Welle, die ihre Stellung hält: Forschung"
+ },
+ "sr_discovery_venus_waves_b": {
+  "en": "A Wave That Holds Its Ground: Engineering",
+  "de": "Eine Welle, die ihre Stellung hält: Technik"
+ },
+ "sr_discovery_vesta_impactor_a": {
+  "en": "A Visitor Preserved in Vesta: Research",
+  "de": "Ein Besucher, bewahrt in Vesta: Forschung"
+ },
+ "sr_discovery_vesta_impactor_b": {
+  "en": "A Visitor Preserved in Vesta: Materials Processing",
+  "de": "Ein Besucher, bewahrt in Vesta: Materialverarbeitung"
  },
  "sr_facility_fire_damage": {
   "en": "Facility Fire Damage",
@@ -17723,6 +17943,10 @@
   "en": "Peacekeeping Force Deployed",
   "de": "Friedenstruppe stationiert"
  },
+ "un_peacekeeping_deployment_cost": {
+  "en": "Peacekeeping Deployment Expenses",
+  "de": "Ausgaben für den Friedenssicherungseinsatz"
+ },
  "un_peacekeeping_received_modifier": {
   "en": "[concept_un_peacekeeping] Deployed",
   "de": "[concept_un_peacekeeping] stationiert"
@@ -18414,6 +18638,14 @@
  "un_withdrawal_penalty_modifier": {
   "en": "UN Withdrawal Consequences",
   "de": "Folgen des UN-Austritts"
+ },
+ "une_formation_bloc_unanimity_tt": {
+  "en": "Every other [concept_great_power] is in our [concept_power_bloc]",
+  "de": "Jede andere [concept_great_power] ist in unserem [concept_power_bloc]"
+ },
+ "une_formation_un_supranational_tt": {
+  "en": "[concept_un_authority] stands at the [concept_un_tier_supranational] tier",
+  "de": "[concept_un_authority] steht auf der Stufe [concept_un_tier_supranational]"
  },
  "veteran_mental_health_modifier": {
   "en": "Veteran Mental Health Services",
