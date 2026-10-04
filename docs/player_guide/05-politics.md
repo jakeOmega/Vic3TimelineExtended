@@ -331,7 +331,9 @@ bureaucracy, and countries that start with the law begin at level 6.
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and every one of them also comes with an event or another way into the
-game: most are offered by enactment events as the price of passage. Three
+game: most are offered by enactment events as the price of passage, and most can
+also be asked for later, on a law already in force (see [Amendment
+petitions](#amendment-petitions)). Three
 amendments attach to base-game laws: the Spoils System, Corporate Security
 Powers and Civilian Oversight. Under the Legislated Tax Code rule the tax rates are
 amendments to the Legislated Tax Code law, and only tax bills change them (see
@@ -356,6 +358,54 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
+
+### Amendment petitions
+
+Once a law has passed, an interest group can still ask you to amend it, when
+your situation gives it a case. Each year there is a one-in-four chance of a
+petition if you qualify for one of those below. After any petition, whatever you
+answer, there is no other for five years, and the same petition does not return
+for 20 years. A group petitions only if it isn't marginal; where the table names
+a second group, that group asks when the first is marginal or absent. Every
+petition also needs a law the amendment attaches to (see the table above), and
+none comes while you are enacting another law in that law's group.
+
+You can attach the amendment or refuse it. Attaching it gives the group that
+asked +3 approval and usually the group that opposes it −3, both fading over
+five years, and some pops grow loyal or radical as the amendment helps or hurts
+them. The amendment is permanent, and you can't repeal it for five years.
+Refusing costs the petitioners 3 approval, fading over five years, and usually
+radicalizes some of their supporters or the pops the amendment would have
+helped.
+
+| Petition | Amendment | Comes when | Asked by |
+|---|---|---|---|
+| The Old Letters | Minority Script Preservation | A separatist movement is growing, or a cultural minority movement has 5% support | Intelligentsia |
+| Spoken Like a Citizen | Language Requirement for Naturalization | A cultural majority movement has 5% support, or under 70% of your population belongs to your primary cultures | Petite Bourgeoisie, or Rural Folk |
+| A Second Official Tongue | Official Bilingualism | Under 80% of your population belongs to your primary cultures, and the minority stirs as for The Old Letters | Intelligentsia, or Trade Unions |
+| Too Large to Break | National Champion Exemption | You have a company, and a banking-cycle panic or downturn, a fall in power rank or a default | Industrialists |
+| The Workers' Own Firms | Worker Cooperative Preference | A labor movement has 5% support, and the Trade Unions are powerful or in government | Trade Unions |
+| Order in the Courts | Mandatory Minimum Sentences | Country-wide turmoil above 20%, or more than 15% of your population radical | Petite Bourgeoisie, or Armed Forces |
+| The Cost of Cells | Community Service Alternative | Debt at a quarter of your debt ceiling or more, or a default | Intelligentsia, or Trade Unions |
+| The Data Lobby | Corporate Data Access Exemption | Hard times as for Too Large to Break, and the Industrialists powerful or in government | Industrialists |
+| Those Who Speak Up | Whistleblower Protection Act | Legitimacy below 40 | Intelligentsia |
+| Never the First | No-First-Strike Pledge | Nuclear Weapons researched and at peace, with a nuclear-armed rival or an anti-war movement at 5% support, and either no arsenal yet or a doctrine already at No First Use | Intelligentsia, or Trade Unions |
+| Necessity Knows No Law | Military Necessity Clause | At war, with the Armed Forces powerful or in government | Armed Forces |
+| Pennies Against Millions | Small Donor Matching | An election campaign, with the Industrialists or the Landowners powerful | Trade Unions, or Intelligentsia |
+| The Pulpit's Exception | Religious Exemption Clause | The Devout are powerful or in government, and their approval is below zero | Devout |
+| Rotation in Office | Spoils System | One group holds at least half of your government's political strength | That group |
+| Company Men | Corporate Security Powers | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | Industrialists |
+| Complaints Against the Force | Civilian Oversight | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | Intelligentsia |
+
+Refusing Order in the Courts or Those Who Speak Up also costs up to 2
+legitimacy, fading over two and a half and five years respectively. Refusing The
+Pulpit's Exception costs the Devout 5 approval instead of 3. Because the No-First-Strike
+Pledge holds your nuclear doctrine at No First Use, its petition comes only when
+that changes nothing today.
+
+A petition is a cheap way into an amendment you want: accepting costs only the
+opposing group's goodwill. AI countries receive the same petitions and lean
+toward accepting when the petitioning group is in government.
 
 ### Sunset clauses
 

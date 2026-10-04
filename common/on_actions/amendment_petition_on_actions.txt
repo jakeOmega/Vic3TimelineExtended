@@ -1,0 +1,41 @@
+﻿# ======================================================================
+#  AMENDMENT PETITIONS – ON ACTIONS
+#
+#  Once a year, a one-in-four chance that an interest group petitions for
+#  one of the mod's amendments on a law already in force
+#  (events/amendment_petition_events.txt). Each event's trigger carries
+#  the law, the situation and te_ap_window_open, which holds back every
+#  petition for five years after the last one; each event also has a
+#  twenty-year cooldown of its own. A country that qualifies for none
+#  sees nothing.
+#  Docs: docs/systems/mod_systems.md § Amendment Petitions.
+# ======================================================================
+
+# Root = Country
+on_yearly_pulse_country = {
+	on_actions = {
+		te_amendment_petition_yearly_events
+	}
+}
+
+te_amendment_petition_yearly_events = {
+	random_events = {
+		chance_to_happen = 25
+		10 = amendment_petition_events.1	# The Old Letters (Minority Script Preservation)
+		10 = amendment_petition_events.2	# Spoken Like a Citizen (Language Requirement for Naturalization)
+		10 = amendment_petition_events.3	# A Second Official Tongue (Official Bilingualism)
+		10 = amendment_petition_events.4	# Too Large to Break (National Champion Exemption)
+		10 = amendment_petition_events.5	# The Workers' Own Firms (Worker Cooperative Preference)
+		10 = amendment_petition_events.6	# Order in the Courts (Mandatory Minimum Sentences)
+		10 = amendment_petition_events.7	# The Cost of Cells (Community Service Alternative)
+		10 = amendment_petition_events.8	# The Data Lobby (Corporate Data Access Exemption)
+		10 = amendment_petition_events.9	# Those Who Speak Up (Whistleblower Protection Act)
+		10 = amendment_petition_events.10	# Never the First (No-First-Strike Pledge)
+		10 = amendment_petition_events.11	# Necessity Knows No Law (Military Necessity Clause)
+		10 = amendment_petition_events.12	# Pennies Against Millions (Small Donor Matching)
+		10 = amendment_petition_events.13	# The Pulpit's Exception (Religious Exemption Clause)
+		10 = amendment_petition_events.14	# Rotation in Office (Spoils System)
+		10 = amendment_petition_events.15	# Company Men (Corporate Security Powers)
+		10 = amendment_petition_events.16	# Complaints Against the Force (Civilian Oversight)
+	}
+}

@@ -1,0 +1,1647 @@
+﻿namespace = amendment_petition_events
+
+# ======================================================================
+#  AMENDMENT PETITIONS
+#
+#  Rare events in which an interest group asks for one of the mod's
+#  amendments on a law that is already in force, because the country's
+#  situation gives it a case. The enactment events (extra_law_events.28–34,
+#  .87–.90) offer amendments while a law is debated; these reach a law
+#  years after it passed.
+#
+#  Shape of every event:
+#    trigger    te_ap_window_open (one petition per five years), the law in
+#               force qualifies (te_ap_law_ok_<amendment>, which restates
+#               the amendment's allowed_laws), the amendment's `possible`
+#               restated (add_amendment silently fails otherwise), a sponsor
+#               that is not marginal, and the situation that justifies it.
+#    immediate  sets te_ap_recent_petition, saves petition_law (the law in
+#               force) and petition_sponsor_ig.
+#    option a   attaches the amendment (cooldown 60 months before it can be
+#               repealed) and pleases the sponsor; the groups and pops that
+#               oppose it react.
+#    option b   (default) declines: the sponsor is displeased, its
+#               opponents relieved.
+#  Pool: common/on_actions/amendment_petition_on_actions.txt (yearly).
+#  Triggers: common/scripted_triggers/amendment_petition_triggers.txt.
+#  Docs: docs/systems/mod_systems.md § Amendment Petitions.
+# ======================================================================
+
+# ======================================================================
+#  1 – The Old Letters  (Minority Script Preservation)
+#  A restive cultural minority; the Intelligentsia ask that its script be
+#  kept beside the national one.
+# ======================================================================
+amendment_petition_events.1 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.1.t
+	desc = amendment_petition_events.1.d
+	flavor = amendment_petition_events.1.f
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_minority_script_preservation = yes
+		# amendment_minority_script_preservation's `possible`
+		any_scope_state = {
+			any_scope_culture = {
+				NOT = { is_primary_culture_of = root }
+			}
+		}
+		te_ap_minority_restive = yes
+		ig:ig_intelligentsia ?= { is_marginal = no }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_language_policy ?= { save_scope_as = petition_law }
+		ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_minority_script_preservation = yes }
+	}
+
+	option = { # Keep the minority scripts
+		name = amendment_petition_events.1.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_minority_script_preservation
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { has_any_secessionists_growing = yes }
+				add = 2
+			}
+		}
+	}
+
+	option = { # One script for the whole nation
+		name = amendment_petition_events.1.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_armed_forces ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  2 – Spoken Like a Citizen  (Language Requirement for Naturalization)
+#  Nativist pressure under an official-language law; the Petite
+#  Bourgeoisie (or the Rural Folk) ask for a language test for citizenship.
+# ======================================================================
+amendment_petition_events.2 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.2.t
+	desc = amendment_petition_events.2.d
+	flavor = amendment_petition_events.2.f
+
+	event_image = { video = "unspecific_steam_ship" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_language_naturalization_requirement = yes
+		# amendment_language_naturalization_requirement's `possible`
+		OR = {
+			has_law = law_type:law_civic_monolingualism
+			has_law = law_type:law_state_led_language_reform
+			has_law = law_type:law_linguistic_purity
+		}
+		te_ap_nativist_pressure = yes
+		OR = {
+			ig:ig_petty_bourgeoisie ?= { is_marginal = no }
+			ig:ig_rural_folk ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_citizenship ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_petty_bourgeoisie ?= { is_marginal = no } }
+			ig:ig_petty_bourgeoisie = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_rural_folk ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_language_naturalization_requirement = yes }
+	}
+
+	option = { # Require the language for citizenship
+		name = amendment_petition_events.2.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_language_naturalization_requirement
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # No grammar test for citizenship
+		name = amendment_petition_events.2.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = scope:petition_sponsor_ig
+		}
+		discriminated_pops_loyalty_effect = { VALUE = very_small_radicals }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  3 – A Second Official Tongue  (Official Bilingualism)
+#  A large and restive minority; the Intelligentsia (or the Trade Unions)
+#  ask that its language become co-official.
+# ======================================================================
+amendment_petition_events.3 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.3.t
+	desc = amendment_petition_events.3.d
+	flavor = amendment_petition_events.3.f
+
+	event_image = { texture = "gfx/event_pictures/cultural_debate_panel.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_official_bilingualism = yes
+		te_ap_minority_large_and_restive = yes
+		OR = {
+			ig:ig_intelligentsia ?= { is_marginal = no }
+			ig:ig_trade_unions ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_language_policy ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_trade_unions ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_official_bilingualism = yes }
+	}
+
+	option = { # Make the minority language co-official
+		name = amendment_petition_events.3.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_official_bilingualism
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+		add_radicals = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { has_any_secessionists_growing = yes }
+				add = 2
+			}
+		}
+	}
+
+	option = { # The state speaks one language
+		name = amendment_petition_events.3.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  4 – Too Large to Break  (National Champion Exemption)
+#  Hard times under an antitrust law; the Industrialists ask that the
+#  nation's companies be spared.
+# ======================================================================
+amendment_petition_events.4 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.4.t
+	desc = amendment_petition_events.4.d
+	flavor = amendment_petition_events.4.f
+
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_national_champion_exemption = yes
+		num_companies >= 1
+		te_ap_economy_faltering = yes
+		ig:ig_industrialists ?= { is_marginal = no }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_antitrust ?= { save_scope_as = petition_law }
+		ig:ig_industrialists ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_national_champion_exemption = yes }
+	}
+
+	option = { # Spare the national champions
+		name = amendment_petition_events.4.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_national_champion_exemption
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_petty_bourgeoisie ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = shopkeepers
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # The law applies to the largest firms too
+		name = amendment_petition_events.4.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = shopkeepers
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_petty_bourgeoisie ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  5 – The Workers' Own Firms  (Worker Cooperative Preference)
+#  A strong labor movement under an antitrust law; the Trade Unions ask
+#  that enforcement go easy on worker-owned cooperatives.
+# ======================================================================
+amendment_petition_events.5 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.5.t
+	desc = amendment_petition_events.5.d
+	flavor = amendment_petition_events.5.f
+
+	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_cooperative_preference = yes
+		te_ap_labor_agitation = yes
+		ig:ig_trade_unions ?= { te_ap_ig_strong = yes }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_antitrust ?= { save_scope_as = petition_law }
+		ig:ig_trade_unions ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_cooperative_preference = yes }
+	}
+
+	option = { # Favour the cooperatives
+		name = amendment_petition_events.5.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_cooperative_preference
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = machinists
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Every firm answers to the same law
+		name = amendment_petition_events.5.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = scope:petition_sponsor_ig
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  6 – Order in the Courts  (Mandatory Minimum Sentences)
+#  Unrest under a reformist criminal-justice law; the Petite Bourgeoisie
+#  (or the Armed Forces) ask for fixed minimum sentences.
+# ======================================================================
+amendment_petition_events.6 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.6.t
+	desc = amendment_petition_events.6.d
+	flavor = amendment_petition_events.6.f
+
+	event_image = { video = "unspecific_vandalized_storefront" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_mandatory_minimums = yes
+		te_ap_unrest = yes
+		OR = {
+			ig:ig_petty_bourgeoisie ?= { is_marginal = no }
+			ig:ig_armed_forces ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_criminal_justice ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_petty_bourgeoisie ?= { is_marginal = no } }
+			ig:ig_petty_bourgeoisie = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_armed_forces ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_mandatory_minimums = yes }
+	}
+
+	option = { # Fix minimum sentences in law
+		name = amendment_petition_events.6.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_mandatory_minimums
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { country_turmoil > 0.3 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Judges will judge each case
+		name = amendment_petition_events.6.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_modifier = { name = te_legitimacy_drain days = short_modifier_time is_decaying = yes }
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  7 – The Cost of Cells  (Community Service Alternative)
+#  A strained treasury under punishment-focused justice; the
+#  Intelligentsia (or the Trade Unions) ask that minor offenders work off
+#  their sentences instead.
+# ======================================================================
+amendment_petition_events.7 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.7.t
+	desc = amendment_petition_events.7.d
+	flavor = amendment_petition_events.7.f
+
+	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_community_service = yes
+		OR = {
+			scaled_debt >= 0.25
+			in_default = yes
+		}
+		OR = {
+			ig:ig_intelligentsia ?= { is_marginal = no }
+			ig:ig_trade_unions ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_criminal_justice ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_trade_unions ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_community_service = yes }
+	}
+
+	option = { # Let minor offenders work off their sentences
+		name = amendment_petition_events.7.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_community_service
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_petty_bourgeoisie ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = shopkeepers
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { in_default = yes }
+				add = 1
+			}
+		}
+	}
+
+	option = { # A sentence is served behind bars
+		name = amendment_petition_events.7.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = scope:petition_sponsor_ig
+		}
+		ig:ig_petty_bourgeoisie ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_petty_bourgeoisie ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  8 – The Data Lobby  (Corporate Data Access Exemption)
+#  Hard times under a privacy law; the Industrialists ask that business
+#  may keep and use personal records.
+# ======================================================================
+amendment_petition_events.8 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.8.t
+	desc = amendment_petition_events.8.d
+	flavor = amendment_petition_events.8.f
+
+	event_image = { texture = "gfx/event_pictures/corporate_lobbying_legislature.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_corporate_data_exemption = yes
+		te_ap_economy_faltering = yes
+		ig:ig_industrialists ?= { te_ap_ig_strong = yes }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_privacy_rights ?= { save_scope_as = petition_law }
+		ig:ig_industrialists ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_corporate_data_exemption = yes }
+	}
+
+	option = { # Exempt commercial data
+		name = amendment_petition_events.8.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_corporate_data_exemption
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Privacy is not for sale
+		name = amendment_petition_events.8.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  9 – Those Who Speak Up  (Whistleblower Protection Act)
+#  A government short of legitimacy under a privacy law; the
+#  Intelligentsia ask that officials who expose wrongdoing be protected.
+#  The strongest governing group other than the sponsor, if any, is the
+#  one that has most to fear from it.
+# ======================================================================
+amendment_petition_events.9 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.9.t
+	desc = amendment_petition_events.9.d
+	flavor = amendment_petition_events.9.f
+
+	event_image = { texture = "gfx/event_pictures/institutional_abuse_exposed.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_whistleblower_shield = yes
+		government_legitimacy < 40
+		ig:ig_intelligentsia ?= { is_marginal = no }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_privacy_rights ?= { save_scope_as = petition_law }
+		ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+		ordered_interest_group = {
+			limit = {
+				is_in_government = yes
+				NOT = { is_interest_group_type = ig_intelligentsia }
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_government_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_whistleblower_shield = yes }
+	}
+
+	option = { # Protect those who expose wrongdoing
+		name = amendment_petition_events.9.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_whistleblower_shield
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		scope:petition_government_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { government_legitimacy < 25 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Official secrets stay secret
+		name = amendment_petition_events.9.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		scope:petition_government_ig ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_modifier = { name = te_legitimacy_drain days = normal_modifier_time is_decaying = yes }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { exists = scope:petition_government_ig }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  10 – Never the First  (No-First-Strike Pledge)
+#  A nuclear-armed rival or a strong anti-war movement in peacetime; the
+#  Intelligentsia (or the Trade Unions) ask that the country renounce the
+#  first use of nuclear weapons in law. The pledge binds the deterrence
+#  doctrine to No First Use (nd_weekly_update), so it is offered only
+#  where the doctrine already sits there or no arsenal posture exists yet
+#  (te_ap_no_first_strike_doctrine_fits).
+# ======================================================================
+amendment_petition_events.10 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.10.t
+	desc = amendment_petition_events.10.d
+	flavor = amendment_petition_events.10.f
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_no_first_strike = yes
+		# amendment_no_first_strike's `possible`
+		has_game_rule = nuclear_weapons_enabled
+		has_technology_researched = nuclear_weapons
+		te_ap_no_first_strike_doctrine_fits = yes
+		is_at_war = no
+		OR = {
+			te_ap_rival_is_armed = yes
+			any_political_movement = {
+				is_political_movement_type = movement_anti_war
+				political_movement_support >= 0.05
+			}
+		}
+		OR = {
+			ig:ig_intelligentsia ?= { is_marginal = no }
+			ig:ig_trade_unions ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_rules_of_war ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_trade_unions ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		OR = {
+			NOT = { te_ap_law_ok_no_first_strike = yes }
+			NOT = { te_ap_no_first_strike_doctrine_fits = yes }
+			is_at_war = yes
+		}
+	}
+
+	option = { # Renounce the first strike in law
+		name = amendment_petition_events.10.a
+		custom_tooltip = amendment_petition_events.10.a.tt
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_no_first_strike
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = officers
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { NOT = { has_variable = nd_doctrine } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Keep every option open
+		name = amendment_petition_events.10.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { te_ap_rival_is_armed = yes }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  11 – Necessity Knows No Law  (Military Necessity Clause)
+#  At war under a humanitarian rules-of-war law, with the Armed Forces
+#  strong; the generals ask for an exception for military necessity.
+# ======================================================================
+amendment_petition_events.11 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.11.t
+	desc = amendment_petition_events.11.d
+	flavor = amendment_petition_events.11.f
+
+	event_image = { video = "europenorthamerica_before_the_battle" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_military_necessity_clause = yes
+		is_at_war = yes
+		ig:ig_armed_forces ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_rules_of_war ?= { save_scope_as = petition_law }
+		ig:ig_armed_forces ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_military_necessity_clause = yes }
+	}
+
+	option = { # Allow for military necessity
+		name = amendment_petition_events.11.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_military_necessity_clause
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # The law holds in war as in peace
+		name = amendment_petition_events.11.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = officers
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  12 – Pennies Against Millions  (Small Donor Matching)
+#  An election campaign in which big money is strong; the Trade Unions (or
+#  the Intelligentsia) ask that public funds match small donations.
+# ======================================================================
+amendment_petition_events.12 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.12.t
+	desc = amendment_petition_events.12.d
+	flavor = amendment_petition_events.12.f
+
+	event_image = { texture = "gfx/event_pictures/grassroots_canvassing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_small_donor_matching = yes
+		in_election_campaign = yes
+		OR = {
+			ig:ig_industrialists ?= { is_powerful = yes }
+			ig:ig_landowners ?= { is_powerful = yes }
+		}
+		OR = {
+			ig:ig_trade_unions ?= { is_marginal = no }
+			ig:ig_intelligentsia ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_electoral_finance ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_trade_unions ?= { is_marginal = no } }
+			ig:ig_trade_unions = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_small_donor_matching = yes }
+	}
+
+	option = { # Match the small donations
+		name = amendment_petition_events.12.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_small_donor_matching
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Campaigns can fund themselves
+		name = amendment_petition_events.12.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  13 – The Pulpit's Exception  (Religious Exemption Clause)
+#  A strong and discontented Devout under an LGBTQ+ protection law; the
+#  clergy ask that religious institutions be exempted.
+# ======================================================================
+amendment_petition_events.13 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.13.t
+	desc = amendment_petition_events.13.d
+	flavor = amendment_petition_events.13.f
+
+	event_image = { texture = "gfx/event_pictures/lgbtq_religious_backlash.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_religious_exemption = yes
+		ig:ig_devout ?= {
+			te_ap_ig_strong = yes
+			ig_approval < 0
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_LGBTQ_rights ?= { save_scope_as = petition_law }
+		ig:ig_devout ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_religious_exemption = yes }
+	}
+
+	option = { # Exempt the churches
+		name = amendment_petition_events.13.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_religious_exemption
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # The law applies to everyone
+		name = amendment_petition_events.13.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_very_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			interest_group = scope:petition_sponsor_ig
+		}
+		add_loyalists = {
+			value = small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  14 – Rotation in Office  (Spoils System)
+#  One group dominates the government; it asks to fill ordinary
+#  administrative posts with its own supporters.
+# ======================================================================
+amendment_petition_events.14 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.14.t
+	desc = amendment_petition_events.14.d
+	flavor = amendment_petition_events.14.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_spoils_system = yes
+		any_interest_group = {
+			is_in_government = yes
+			ig_government_power_share >= 0.5
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_bureaucracy ?= { save_scope_as = petition_law }
+		ordered_interest_group = {
+			limit = { is_in_government = yes }
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = petition_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_spoils_system = yes }
+	}
+
+	option = { # Reward the loyal
+		name = amendment_petition_events.14.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_spoils_system
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_powerful = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Posts go to the competent
+		name = amendment_petition_events.14.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			interest_group = scope:petition_sponsor_ig
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+}
+
+# ======================================================================
+#  15 – Company Men  (Corporate Security Powers)
+#  Labour unrest under a public police force; the Industrialists ask that
+#  companies may commission their own guards.
+# ======================================================================
+amendment_petition_events.15 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.15.t
+	desc = amendment_petition_events.15.d
+	flavor = amendment_petition_events.15.f
+
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_corporate_security_powers = yes
+		# amendment_corporate_security_powers's `possible`
+		has_technology_researched = corporate_charters
+		NOR = {
+			has_law = law_type:law_command_economy
+			has_law = law_type:law_cooperative_ownership
+			has_law = law_type:law_industry_banned
+		}
+		OR = {
+			te_ap_labor_agitation = yes
+			te_ap_unrest = yes
+		}
+		ig:ig_industrialists ?= { is_marginal = no }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_policing ?= { save_scope_as = petition_law }
+		ig:ig_industrialists ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_corporate_security_powers = yes }
+	}
+
+	option = { # Let the companies post guards
+		name = amendment_petition_events.15.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_corporate_security_powers
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Only the state polices
+		name = amendment_petition_events.15.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_trade_unions ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  16 – Complaints Against the Force  (Civilian Oversight)
+#  A civil rights movement or unrest under a local, dedicated or private
+#  police force; the Intelligentsia ask for civilian review boards.
+# ======================================================================
+amendment_petition_events.16 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.16.t
+	desc = amendment_petition_events.16.d
+	flavor = amendment_petition_events.16.f
+
+	event_image = { texture = "gfx/event_pictures/police_brutality_protest.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_civilian_police_oversight = yes
+		# amendment_civilian_police_oversight's `possible`
+		has_technology_researched = civil_rights_movement
+		OR = {
+			te_ap_civil_rights_agitation = yes
+			te_ap_unrest = yes
+		}
+		ig:ig_intelligentsia ?= { is_marginal = no }
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_policing ?= { save_scope_as = petition_law }
+		ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_civilian_police_oversight = yes }
+	}
+
+	option = { # Set up civilian review boards
+		name = amendment_petition_events.16.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_civilian_police_oversight
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = bureaucrats
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { te_ap_civil_rights_agitation = yes }
+				add = 1
+			}
+		}
+	}
+
+	option = { # The force disciplines its own
+		name = amendment_petition_events.16.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_armed_forces ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+}

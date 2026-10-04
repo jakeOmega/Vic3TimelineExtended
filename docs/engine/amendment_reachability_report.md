@@ -32,10 +32,10 @@ _None._
 
 ## Coverage
 
-- mod amendments checked: 182
-- attached by a live `add_amendment`: 182
+- mod amendments checked: 184
+- attached by a live `add_amendment`: 184
 - `REPLACE:`/`INJECT:` of vanilla amendments, not judged: 0
-- `add_amendment` sites scanned: 185
+- `add_amendment` sites scanned: 203
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

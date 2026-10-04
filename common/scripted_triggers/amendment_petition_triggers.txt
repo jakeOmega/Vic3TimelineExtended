@@ -1,0 +1,436 @@
+﻿# ======================================================================
+#  AMENDMENT PETITIONS — scripted triggers
+#
+#  Rare yearly events (events/amendment_petition_events.txt) in which an
+#  interest group asks for one of the mod's amendments on a law that is
+#  already in force. Pool: common/on_actions/amendment_petition_on_actions.txt.
+#  Design notes: docs/systems/mod_systems.md § Amendment Petitions.
+#
+#  Country scope throughout.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+#  Frequency
+# ----------------------------------------------------------------------
+
+# One petition at a time: every petition sets te_ap_recent_petition for
+# five years in its `immediate` (te_ap_start_petition), whatever the answer.
+te_ap_window_open = {
+	NOT = { has_variable = te_ap_recent_petition }
+}
+
+# ----------------------------------------------------------------------
+#  A replacement law is being enacted in the group
+#
+#  A petition amends the law in force. While another law of the same group
+#  is being enacted, the amendment would leave with the outgoing law, and
+#  the enactment events (extra_law_events.28–34, .87–.90) already offer
+#  amendments to the incoming one. Each list names every law in the group,
+#  variants included (law_crownland_diets); a law added to a group later
+#  belongs here too.
+# ----------------------------------------------------------------------
+
+te_ap_enacting_in_language_policy = {
+	OR = {
+		is_enacting_law = law_type:law_local_vernacular
+		is_enacting_law = law_type:law_civic_monolingualism
+		is_enacting_law = law_type:law_multilingual_federalism
+		is_enacting_law = law_type:law_linguistic_purity
+		is_enacting_law = law_type:law_state_led_language_reform
+		is_enacting_law = law_type:law_ubiquitous_translation
+	}
+}
+
+te_ap_enacting_in_citizenship = {
+	OR = {
+		is_enacting_law = law_type:law_subjecthood
+		is_enacting_law = law_type:law_ethnostate
+		is_enacting_law = law_type:law_national_supremacy
+		is_enacting_law = law_type:law_racial_segregation
+		is_enacting_law = law_type:law_cultural_exclusion
+		is_enacting_law = law_type:law_multicultural
+	}
+}
+
+te_ap_enacting_in_antitrust = {
+	OR = {
+		is_enacting_law = law_type:law_guilds_chartered_monopolies
+		is_enacting_law = law_type:law_freedom_of_contract
+		is_enacting_law = law_type:law_trust_busting
+		is_enacting_law = law_type:law_regulated_utilities
+		is_enacting_law = law_type:law_dirigisme
+		is_enacting_law = law_type:law_command_cooperative_economy
+	}
+}
+
+te_ap_enacting_in_criminal_justice = {
+	OR = {
+		is_enacting_law = law_type:law_penal_labor_camps
+		is_enacting_law = law_type:law_punishment_focused_criminal_justice
+		is_enacting_law = law_type:law_restorative_justice
+		is_enacting_law = law_type:law_rehabilitation_focused_criminal_justice
+	}
+}
+
+te_ap_enacting_in_privacy_rights = {
+	OR = {
+		is_enacting_law = law_type:law_intrusive_surveillance
+		is_enacting_law = law_type:law_minimal_privacy_protection
+		is_enacting_law = law_type:law_moderate_data_privacy
+		is_enacting_law = law_type:law_strong_privacy_rights
+	}
+}
+
+te_ap_enacting_in_rules_of_war = {
+	OR = {
+		is_enacting_law = law_type:law_total_war
+		is_enacting_law = law_type:law_traditional_rules_of_war
+		is_enacting_law = law_type:law_war_crimes_forbidden
+		is_enacting_law = law_type:law_humanitarian_regulations
+		is_enacting_law = law_type:law_limited_war
+	}
+}
+
+te_ap_enacting_in_electoral_finance = {
+	OR = {
+		is_enacting_law = law_type:law_no_campaign_finance_laws
+		is_enacting_law = law_type:law_unregulated_donations
+		is_enacting_law = law_type:law_donation_limits
+		is_enacting_law = law_type:law_publicly_funded_elections
+	}
+}
+
+te_ap_enacting_in_lgbtq_rights = {
+	OR = {
+		is_enacting_law = law_type:law_active_persecution
+		is_enacting_law = law_type:law_legal_limbo
+		is_enacting_law = law_type:law_basic_protections
+		is_enacting_law = law_type:law_comprehensive_rights
+		is_enacting_law = law_type:law_full_equality_and_protection
+	}
+}
+
+te_ap_enacting_in_bureaucracy = {
+	OR = {
+		is_enacting_law = law_type:law_hereditary_bureaucrats
+		is_enacting_law = law_type:law_crownland_diets
+		is_enacting_law = law_type:law_appointed_bureaucrats
+		is_enacting_law = law_type:law_elected_bureaucrats
+		is_enacting_law = law_type:law_contracted_administration
+		is_enacting_law = law_type:law_communal_administration
+		is_enacting_law = law_type:law_automated_bureaucracy
+	}
+}
+
+te_ap_enacting_in_policing = {
+	OR = {
+		is_enacting_law = law_type:law_no_police
+		is_enacting_law = law_type:law_local_police
+		is_enacting_law = law_type:law_dedicated_police
+		is_enacting_law = law_type:law_militarized_police
+		is_enacting_law = law_type:law_private_policing
+	}
+}
+
+# ----------------------------------------------------------------------
+#  The law in force qualifies
+#
+#  One per amendment: a law the amendment allows is in force, it doesn't
+#  carry the amendment yet, and no law of its group is being enacted. The
+#  host laws are the amendment's `allowed_laws`
+#  (common/amendments/extra_amendments.txt); keep the two in step. Also the
+#  events' cancellation_trigger, so a petition still open when the law
+#  changes or the amendment arrives some other way closes.
+# ----------------------------------------------------------------------
+
+te_ap_law_ok_minority_script_preservation = {
+	OR = {
+		has_law = law_type:law_state_led_language_reform
+		has_law = law_type:law_civic_monolingualism
+	}
+	active_law:lawgroup_language_policy ?= {
+		NOT = { has_amendment = amendment_type:amendment_minority_script_preservation }
+	}
+	NOT = { te_ap_enacting_in_language_policy = yes }
+}
+
+te_ap_law_ok_language_naturalization_requirement = {
+	OR = {
+		has_law = law_type:law_national_supremacy
+		has_law = law_type:law_cultural_exclusion
+		has_law = law_type:law_multicultural
+	}
+	active_law:lawgroup_citizenship ?= {
+		NOT = { has_amendment = amendment_type:amendment_language_naturalization_requirement }
+	}
+	NOT = { te_ap_enacting_in_citizenship = yes }
+}
+
+te_ap_law_ok_official_bilingualism = {
+	OR = {
+		has_law = law_type:law_multilingual_federalism
+		has_law = law_type:law_state_led_language_reform
+	}
+	active_law:lawgroup_language_policy ?= {
+		NOT = { has_amendment = amendment_type:amendment_official_bilingualism }
+	}
+	NOT = { te_ap_enacting_in_language_policy = yes }
+}
+
+te_ap_law_ok_national_champion_exemption = {
+	OR = {
+		has_law = law_type:law_trust_busting
+		has_law = law_type:law_regulated_utilities
+	}
+	active_law:lawgroup_antitrust ?= {
+		NOT = { has_amendment = amendment_type:amendment_national_champion_exemption }
+	}
+	NOT = { te_ap_enacting_in_antitrust = yes }
+}
+
+te_ap_law_ok_cooperative_preference = {
+	OR = {
+		has_law = law_type:law_trust_busting
+		has_law = law_type:law_regulated_utilities
+	}
+	active_law:lawgroup_antitrust ?= {
+		NOT = { has_amendment = amendment_type:amendment_cooperative_preference }
+	}
+	NOT = { te_ap_enacting_in_antitrust = yes }
+}
+
+te_ap_law_ok_mandatory_minimums = {
+	OR = {
+		has_law = law_type:law_restorative_justice
+		has_law = law_type:law_rehabilitation_focused_criminal_justice
+	}
+	active_law:lawgroup_criminal_justice ?= {
+		NOT = { has_amendment = amendment_type:amendment_mandatory_minimums }
+	}
+	NOT = { te_ap_enacting_in_criminal_justice = yes }
+}
+
+te_ap_law_ok_community_service = {
+	has_law = law_type:law_punishment_focused_criminal_justice
+	active_law:lawgroup_criminal_justice ?= {
+		NOT = { has_amendment = amendment_type:amendment_community_service }
+	}
+	NOT = { te_ap_enacting_in_criminal_justice = yes }
+}
+
+te_ap_law_ok_corporate_data_exemption = {
+	OR = {
+		has_law = law_type:law_moderate_data_privacy
+		has_law = law_type:law_strong_privacy_rights
+	}
+	active_law:lawgroup_privacy_rights ?= {
+		NOT = { has_amendment = amendment_type:amendment_corporate_data_exemption }
+	}
+	NOT = { te_ap_enacting_in_privacy_rights = yes }
+}
+
+te_ap_law_ok_whistleblower_shield = {
+	OR = {
+		has_law = law_type:law_moderate_data_privacy
+		has_law = law_type:law_strong_privacy_rights
+	}
+	active_law:lawgroup_privacy_rights ?= {
+		NOT = { has_amendment = amendment_type:amendment_whistleblower_shield }
+	}
+	NOT = { te_ap_enacting_in_privacy_rights = yes }
+}
+
+te_ap_law_ok_no_first_strike = {
+	OR = {
+		has_law = law_type:law_humanitarian_regulations
+		has_law = law_type:law_limited_war
+	}
+	active_law:lawgroup_rules_of_war ?= {
+		NOT = { has_amendment = amendment_type:amendment_no_first_strike }
+	}
+	NOT = { te_ap_enacting_in_rules_of_war = yes }
+}
+
+te_ap_law_ok_military_necessity_clause = {
+	OR = {
+		has_law = law_type:law_war_crimes_forbidden
+		has_law = law_type:law_humanitarian_regulations
+	}
+	active_law:lawgroup_rules_of_war ?= {
+		NOT = { has_amendment = amendment_type:amendment_military_necessity_clause }
+	}
+	NOT = { te_ap_enacting_in_rules_of_war = yes }
+}
+
+te_ap_law_ok_small_donor_matching = {
+	OR = {
+		has_law = law_type:law_donation_limits
+		has_law = law_type:law_publicly_funded_elections
+	}
+	active_law:lawgroup_electoral_finance ?= {
+		NOT = { has_amendment = amendment_type:amendment_small_donor_matching }
+	}
+	NOT = { te_ap_enacting_in_electoral_finance = yes }
+}
+
+te_ap_law_ok_religious_exemption = {
+	OR = {
+		has_law = law_type:law_basic_protections
+		has_law = law_type:law_comprehensive_rights
+		has_law = law_type:law_full_equality_and_protection
+	}
+	active_law:lawgroup_LGBTQ_rights ?= {
+		NOT = { has_amendment = amendment_type:amendment_religious_exemption }
+	}
+	NOT = { te_ap_enacting_in_lgbtq_rights = yes }
+}
+
+te_ap_law_ok_spoils_system = {
+	OR = {
+		has_law = law_type:law_appointed_bureaucrats
+		has_law = law_type:law_elected_bureaucrats
+	}
+	active_law:lawgroup_bureaucracy ?= {
+		NOT = { has_amendment = amendment_type:amendment_spoils_system }
+	}
+	NOT = { te_ap_enacting_in_bureaucracy = yes }
+}
+
+te_ap_law_ok_corporate_security_powers = {
+	OR = {
+		has_law = law_type:law_local_police
+		has_law = law_type:law_dedicated_police
+		has_law = law_type:law_militarized_police
+	}
+	active_law:lawgroup_policing ?= {
+		NOT = { has_amendment = amendment_type:amendment_corporate_security_powers }
+	}
+	NOT = { te_ap_enacting_in_policing = yes }
+}
+
+te_ap_law_ok_civilian_police_oversight = {
+	OR = {
+		has_law = law_type:law_local_police
+		has_law = law_type:law_dedicated_police
+		has_law = law_type:law_private_policing
+	}
+	active_law:lawgroup_policing ?= {
+		NOT = { has_amendment = amendment_type:amendment_civilian_police_oversight }
+	}
+	NOT = { te_ap_enacting_in_policing = yes }
+}
+
+# ----------------------------------------------------------------------
+#  Situations
+#
+#  Shared reasons a petition is made now rather than at any time. Each
+#  event adds its own (an election campaign, a war, low legitimacy).
+# ----------------------------------------------------------------------
+
+# Hard times: the banking cycle in panic or downturn (only while its journal
+# entry runs; banking_cycle_is_recession reads its variables), a slide down
+# the power rankings, or a default.
+te_ap_economy_faltering = {
+	OR = {
+		AND = {
+			has_journal_entry = je_banking_cycle
+			has_variable = finance_cycle_value
+			banking_cycle_is_recession = yes
+		}
+		is_losing_power_rank = yes
+		in_default = yes
+	}
+}
+
+# Disorder in the streets: turmoil across the country or a large radical
+# population.
+te_ap_unrest = {
+	OR = {
+		country_turmoil > 0.2
+		radical_population_fraction > 0.15
+	}
+}
+
+# A cultural minority is pressing its case: a separatist movement is
+# growing, or a cultural minority movement draws real support.
+te_ap_minority_restive = {
+	OR = {
+		has_any_secessionists_growing = yes
+		any_political_movement = {
+			is_political_movement_type = movement_cultural_minority
+			political_movement_support >= 0.05
+		}
+	}
+}
+
+# A large minority whose loyalty is in question: at least a fifth of the
+# population outside the primary cultures, and the minority restive.
+te_ap_minority_large_and_restive = {
+	primary_cultures_percent_country = {
+		target_country = ROOT
+		value < 0.8
+	}
+	te_ap_minority_restive = yes
+}
+
+# Nativist pressure: a cultural majority movement draws real support, or
+# under seven in ten people belong to the primary cultures.
+te_ap_nativist_pressure = {
+	OR = {
+		any_political_movement = {
+			is_political_movement_type = movement_cultural_majority
+			political_movement_support >= 0.05
+		}
+		primary_cultures_percent_country = {
+			target_country = ROOT
+			value < 0.7
+		}
+	}
+}
+
+# Organised labour on the march: a labor movement draws real support.
+te_ap_labor_agitation = {
+	any_political_movement = {
+		is_political_movement_type = movement_labor
+		political_movement_support >= 0.05
+	}
+}
+
+# A civil rights movement draws real support.
+te_ap_civil_rights_agitation = {
+	any_political_movement = {
+		is_political_movement_type = movement_civil_rights
+		political_movement_support >= 0.05
+	}
+}
+
+# Interest group scope: carries enough weight to force the issue.
+te_ap_ig_strong = {
+	OR = {
+		is_powerful = yes
+		is_in_government = yes
+	}
+}
+
+# The No-First-Strike Pledge binds the deterrence doctrine to No First Use
+# while it is in force (nd_weekly_update, nuclear_deterrence_effects.txt). A
+# petition offers it only where that binding changes nothing: no arsenal
+# posture yet (an arsenal built later starts under the pledge) or a doctrine
+# already at No First Use.
+te_ap_no_first_strike_doctrine_fits = {
+	OR = {
+		NOT = { has_variable = nd_doctrine }
+		AND = {
+			has_variable = nd_doctrine
+			var:nd_doctrine = 1
+		}
+	}
+}
+
+# A rival on either side of a rivalry holds nuclear weapons.
+te_ap_rival_is_armed = {
+	OR = {
+		any_rival_country = { nd_is_armed = yes }
+		any_rivaling_country = { nd_is_armed = yes }
+	}
+}
