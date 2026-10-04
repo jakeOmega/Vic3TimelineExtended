@@ -33,6 +33,14 @@ articles to the same partner only once at a time, across all their treaties, so
 a second demilitarized zone against the same country waits until the first
 ends. The company articles can be repeated for different companies.
 
+The four state articles act on the state itself, and only while the conceding
+country owns it under a treaty in force. They end with the treaty, and they
+leave the state at once if it passes to another country, which includes the
+conceding country being annexed. If the other party is annexed instead, they
+end within a month. A state taken by rebels in a civil war keeps them, and one
+that returns to the conceding country while the treaty still stands gets them
+back.
+
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
 ### Treaty articles by purpose
