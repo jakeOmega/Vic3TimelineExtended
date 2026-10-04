@@ -772,22 +772,14 @@ on_merge_markets = {
 # Root = the dissolving (joining) market, scope:market = the absorbing market.
 # owner = the country whose market is dissolving (new market member).
 # scope:market.owner = the country that owns the absorbing market (the market leader).
+# National climate policies remain with the joining country. A former leader's
+# tariff programme ends; its settings must never write into the new market.
 gw_market_join_on_action = {
 	effect = {
-		if = {
-			limit = {
-				exists = owner
-				exists = scope:market.owner
-			}
-			scope:market.owner = { save_scope_as = gw_policy_leader }
-			owner = {
-				# The joiner's market-wide policies become the absorbing leader's.
-				# Its market's other members follow at the monthly reconciliation
-				# (gw_reconcile_market_policies_effect).
-				if = {
-					limit = { has_journal_entry = je_global_warming }
-					gw_sync_market_policy_modifiers = yes
-				}
+		owner ?= {
+			if = {
+				limit = { has_journal_entry = je_global_warming }
+				gw_drop_fossil_fuel_tariffs_effect = yes
 			}
 		}
 	}
@@ -919,38 +911,29 @@ pollution_on_action = {
 global_warming_update_on_action = {
 	effect = {
 		if = {
+			limit = { NOT = { has_global_variable = greenhouse_gas_emissions } }
+			set_global_variable = { name = greenhouse_gas_emissions value = 0 }
+		}
+		if = {
 			limit = {
-				NOT = { has_global_variable = greenhouse_gas_emissions }
+				has_game_rule = global_warming_enabled
+				owner.capital = THIS
 			}
-			set_global_variable = {
-				name = greenhouse_gas_emissions
-				value = 0
+			owner = {
+				gw_snapshot_country_emissions_effect = yes
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = var:gw_disp_country_emis
+				}
+				gw_accumulate_country_emissions_effect = yes
 			}
 		}
-		# With the rule disabled there is no climate change: emissions never
-		# accumulate, so temperature_anomaly_display stays 0 for every reader
-		# (UN docket, election events, movements, treaty article 109).
 		if = {
 			limit = {
 				has_game_rule = global_warming_enabled
 				owner.market_capital = THIS
 			}
-			owner = {
-				# Snapshot first, accumulate from the snapshot. The market-wide
-				# emissions sweep is evaluated exactly once, as before, and the
-				# journal-entry widget then reads the stored figure instead of
-				# recomputing it in loc every frame. Variable writes are visible
-				# later in the same effect block, so the number added to the
-				# global total is identical to what this on_action added before.
-				gw_snapshot_market_emissions_effect = yes
-				change_global_variable = {
-					name = greenhouse_gas_emissions
-					add = var:gw_disp_market_emis
-				}
-				# The same figure into this leader's cumulative total, for the
-				# panel's Top Emitters list (display only).
-				gw_accumulate_market_emissions_effect = yes
-			}
+			owner = { gw_snapshot_market_emissions_effect = yes }
 		}
 	}
 }
@@ -961,15 +944,14 @@ global_warming_events_on_action = {
 		# this on_action is the one global-scope monthly pulse, so each runs
 		# exactly once for the whole world rather than once per country.
 		# gw_refresh_global_counts_effect is a single country sweep that fills
-		# all nine adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# all ten adoption counters; gw_rebase_annual_emissions_effect is O(1)
 		# and only does work in January. Neither has a gameplay effect.
-		# Everything climate-specific in this pulse is gated on the rule: with it
-		# disabled there are no greenhouse figures to show and no threshold events.
+		# Tariff maintenance also runs with the rule off to restore prior settings.
+		# Emissions and threshold events remain gated on the climate rule.
+		gw_refresh_tariff_policies_effect = yes
 		if = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
-			# Before the counters, so they count the reconciled policies.
-			gw_reconcile_market_policies_effect = yes
 			gw_refresh_global_counts_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when

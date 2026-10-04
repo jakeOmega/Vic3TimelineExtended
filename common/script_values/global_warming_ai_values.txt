@@ -35,6 +35,7 @@
 #   public_transit                     -10               0        10       5      -5
 #   green_building_codes               -20              -5        10      10       0
 #   emission_standards                 -20             -12        10      10      -5
+#   fossil_fuel_tariffs                -20              -8        10       5     -20
 #   carbon_tax                         -25             -12        10      10     -20
 #   fossil_fuel_divestment             -25              -8        10      10     -25
 #
@@ -399,5 +400,25 @@ gw_ai_adopt_margin_carbon_removal = {
 gw_ai_repeal_margin_carbon_removal = {
 	value = 0
 	subtract = gw_ai_adopt_margin_carbon_removal
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_will_fossil_fuel_tariffs = {
+	value = gw_ai_will_shared
+	add = { value = gw_ai_sig_laissez_faire multiply = -20 }
+	add = { value = gw_ai_sig_industrialists multiply = -8 }
+	add = { value = gw_ai_sig_movement multiply = 10 }
+	add = { value = gw_ai_sig_wealth multiply = 5 }
+	add = { value = gw_ai_sig_fossil multiply = -20 }
+}
+
+gw_ai_adopt_margin_fossil_fuel_tariffs = {
+	value = gw_ai_will_fossil_fuel_tariffs
+	subtract = 55
+}
+
+gw_ai_repeal_margin_fossil_fuel_tariffs = {
+	value = 0
+	subtract = gw_ai_adopt_margin_fossil_fuel_tariffs
 	subtract = gw_ai_repeal_band
 }

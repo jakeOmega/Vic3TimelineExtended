@@ -762,7 +762,7 @@ migration_attraction_script_value = {
 }
 
 # State scope. Fuel emissions and source capture mirror the building modifiers.
-# Market policy cuts apply to remaining industrial emissions. Atmospheric
+# National policy cuts apply to remaining industrial emissions. Atmospheric
 # removal is separate and retains its full credit after policy reductions.
 gw_state_greenhouse_gas_emissions = {
 	value = modifier:state_greenhouse_gas_emissions_add
@@ -870,21 +870,12 @@ temperature_anomaly_display = {
 }
 
 gw_emission_multiplier_script_value = {
-	# Evaluated in country scope
-	# Returns the net emission multiplier for this market's leader (1.0 = full, 0.8 = 20% reduction, etc.).
-	# Uses market_capital.owner to reach the market leader country where the modifier lives.
+	# Country scope: industrial reductions belong to the state owner's country.
+	# Each market sums its members after their own reductions have applied.
 	value = 1
-	market_capital = {
-		owner = {
-			add = modifier:country_greenhouse_gas_emissions_mult
-		}
-	}
-	# Floor at 0: the cuts stack additively (the three market-wide policies,
-	# the environment ministry per investment level, the sustainability
-	# principle, conventions, summits) and can pass -100%, which would make
-	# burning coal and oil remove carbon. Capture is modelled separately
-	# (market_carbon_capture_script_value), and a market goes net negative only
-	# through it. Must stay after the add above.
+	add = modifier:country_greenhouse_gas_emissions_mult
+	# Reductions cannot turn fuel burning into removal. Atmospheric capture
+	# keeps its full credit in gw_state_greenhouse_gas_emissions.
 	min = 0
 }
 
@@ -2896,3 +2887,10 @@ banking_display_points_free = {
 # empire disable buttons; the global warming repeals carry their own table
 # (gw_ai_authority_deficit_repeal_weight in global_warming_ai_values.txt).
 te_ai_authority_deficit_repeal_weight = 30
+
+# Country scope. Location assigns buildings, including foreign-owned sites,
+# to the country governing the state. Households and removal follow it too.
+country_greenhouse_gas_emissions_script_value = {
+	value = 0
+	every_scope_state = { add = gw_state_greenhouse_gas_emissions }
+}
