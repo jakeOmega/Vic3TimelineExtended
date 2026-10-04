@@ -61,8 +61,8 @@ for each further multiple.
 The Migration Crowding Tolerance modifier multiplies the threshold, Urban
 Engineering's share included: +50% tolerance lets a state hold half as many
 people again before the penalty starts. The tile's tooltip breaks the threshold
-into arable land, Urban Engineering and tolerance; hover each figure for its
-sources.
+into arable land, Urban Engineering and tolerance; hover the Urban Engineering
+and tolerance figures for their sources.
 
 | Source | Tolerance |
 |---|---|
