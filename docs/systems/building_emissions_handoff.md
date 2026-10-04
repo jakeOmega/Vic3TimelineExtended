@@ -472,3 +472,25 @@ style for Chemicals. 69 focused tests pass, including map/treaty snapshot
 regressions, population partitions and synthetic export neutrality. Broader
 validation/deployment follows this checkpoint. The six in-game checks above
 remain pending; review automation stays active and PR #681 stays draft.
+
+
+## Follow-up validation/deployment checkpoint
+
+Implementation commit `8f0cdb6c` is pushed. Full suite: 3,651 tests pass,
+58 skips. All 23 CI audits, Ruff, generator freshness, localization organization
+and sanity, GUI lint, rosters, modified Paradox tabs, guide style and rebuilt
+PDF freshness pass. Snapshot structure covers 558 files with zero flags and
+parse failures; localization coverage has zero unreviewed flags. Employment
+audit covers 545 buildings, enumerates 87, skips zero and has zero unreviewed
+mod findings. The display-values header now documents annual household sweeps
+and snapshot-only UI readers.
+
+Deployment dry run had no deletions; apply completed. All 41 feature game
+files and 310 staged language files match by SHA-256. Historical probe and
+obsolete synthetic values remain absent. Latest main `c59e8a36` is included.
+No newer feedback arrived during this run. GitHub CI is monitored after each
+checkpoint; use the PR checks for its current result. Restart Victoria 3 for
+testing. All six Next work checks remain pending, including foreign ownership
+and the new annual household/model totals. PR stays draft/unmerged; review
+monitor stays active. Reviews 5403821644/5403833930 and their three inline
+comments are handled and recorded above.

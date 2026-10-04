@@ -7,12 +7,10 @@
 #
 # WHY THIS FILE EXISTS: every value below is O(1). The figures the journal entry
 # used to show were computed live, in loc, every frame the panel was open --
-# `global_greenhouse_gas_emissions_script_value_display` iterates every state in
-# the world, `market_greenhouse_gas_emissions_script_value` runs three
-# `every_scope_building` sweeps across a whole market, and the eight
-# `gw_countries_with_*` values were an `every_country` sweep each. The heavy
-# work now happens once a year (per market leader, at the site that was already
-# computing it) and once a month (one country sweep for all eight counts); these
+# live market/world values now include state and household pop sweeps. All UI
+# readers, including the emissions map and treaty text, use stored snapshots.
+# The heavy work happens once a year per market leader and once a month for
+# the policy adoption counts; these
 # readers only fetch what was stored.
 #
 # EVERY READER IS GUARDED. The journal entry has `is_shown_when_inactive`, so
