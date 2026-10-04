@@ -37,9 +37,11 @@ building_strategic_reserve_hub = {
 	icon = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 
-	# Cheap to set up (it was construction_cost_very_high): the hub is the
-	# reserve's front door, and capacity is what costs, through the silos.
-	required_construction = construction_cost_low
+	# Nearly free to set up: construction_cost_very_low is 100 points (it was
+	# construction_cost_very_high, 800, until 2026-09-26, then construction_cost_low,
+	# 200, until 2026-10-04). The hub is the reserve's front door, and capacity is
+	# what costs, through the silos.
+	required_construction = construction_cost_very_low
 
 	possible = {
 		is_capital = yes
@@ -72,6 +74,14 @@ building_strategic_reserve_hub = {
 	# (naval administration). A depot is built for the next war, so peacetime
 	# counts double: one begun during a war finishes too late to fill before
 	# the peace, when barracks already take every round the market makes.
+	#
+	# On top of that, any country whose GDP is above st_res_ai_hub_min_gdp
+	# (a great power or not) gets +10000, the value vanilla gives a monument:
+	# an economy that size can afford the reserve many times over, and at 100
+	# points the hub is done within a build cycle, so war does not discount it.
+	# No "does not have one yet" test is needed: possible allows one hub per
+	# country, so the building is only ever evaluated for a country without one.
+	# Evaluated in STATE scope: ROOT is the capital, owner reaches the country.
 	ai_value = {
 		value = 0
 		if = {
@@ -87,6 +97,12 @@ building_strategic_reserve_hub = {
 				}
 				add = 1000
 			}
+		}
+		if = {
+			limit = {
+				owner = { gdp > st_res_ai_hub_min_gdp }
+			}
+			add = 10000
 		}
 	}
 }
