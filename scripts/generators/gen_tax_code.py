@@ -60,7 +60,8 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_bump_pver, te_tax_gen_reset_commitments,
       te_tax_gen_refresh_support, te_tax_gen_oppose_approval) and the policy
       obligations' per-group consequences (te_tax_gen_obl_approval,
-      te_tax_gen_obl_trust). The only generated file that removes variables:
+      te_tax_gen_obl_trust, te_tax_gen_trust_recover). The only generated
+      file that removes variables:
       a closed record's payload.
   common/script_values/te_tax_generated_support_values.txt
       The draft, bill and support-model values: the baselines at the due
@@ -71,7 +72,7 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
   common/customizable_localization/te_tax_generated_custom_loc.txt
       te_tax_hist_event_<i>: the line each history row prints (newest first),
       chosen by the entry's kind and, for a sunset, its instrument; and the
-      promise rows' parts, te_tax_obl_ig_/what_/inst_/state_<n>.
+      promise rows' parts, te_tax_obl_ig_/what_/inst_/state_/mode_<n>.
 
 The customs schedule (plan Task 15, the experimental customs option) adds, from
 CUSTOMS_LEVELS, CUSTOMS_POINTS, CUSTOMS_OPS and customs_catalog(): the support

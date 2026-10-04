@@ -91,17 +91,20 @@ class RuleLocTest(unittest.TestCase):
                 self.assertNotIn("[b]", text)
 
     def test_the_enabled_options_say_experimental_and_what_the_ai_does(self):
-        # Final review B-I4: a player enabling the rule must know AI countries do not
-        # legislate yet, and the customs option that tariffs become legislated.
+        # Final review B-I4, updated for package 6: a player enabling the rule must know
+        # AI countries legislate through the same bills, and the customs option that
+        # tariffs become legislated (an AI's still follow the base game's trade decisions).
         for option in ("te_tax_code_enabled", "te_tax_code_enabled_customs"):
             text = self.loc[f"setting_{option}_desc"]
             with self.subTest(option=option):
                 self.assertTrue(text.startswith("Experimental. "), text)
-                self.assertIn("AI countries do not legislate yet", text)
+                self.assertIn("AI countries legislate", text)
         self.assertIn("tariffs and subsidies are set by legislation", self.loc["setting_te_tax_code_enabled_customs_desc"])
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         row = next(line for line in readme.splitlines() if line.startswith(f"| `{RULE}` |"))
-        for phrase in ("**Experimental.**", "AI countries do not legislate yet", "tariffs and subsidies"):
+        self.assertIn("their tariffs still follow the base game's trade decisions",
+                      self.loc["setting_te_tax_code_enabled_customs_desc"])
+        for phrase in ("**Experimental.**", "AI countries legislate", "tariffs and subsidies"):
             self.assertIn(phrase, row)
 
 

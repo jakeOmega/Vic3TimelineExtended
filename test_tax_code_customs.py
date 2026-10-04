@@ -1121,7 +1121,7 @@ class MarketLostTest(unittest.TestCase):
         text = re.search(r'(?m)^ te_tax_hist_kind_customs_dropped_withdrawn:0 "(.*)"$',
                          read(TAX_LOC, strip_comments=False)).group(1)
         self.assertIn("withdrawn", text)
-        self.assertIn("market is no longer ours", text)
+        self.assertIn("no longer owns its market", text)
 
     def test_the_drafts_dropped_mark_is_payload_and_cleared_on_a_gain(self):
         init = squash(block(self.generated, "te_tax_gen_draft_init"))

@@ -1699,7 +1699,7 @@ Currently 32 GUI files at the top of `gui/`: 26 full-file replacements of vanill
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
 | `add_consumption_tax_menu.gui` | Budget's add-consumption-tax menu | The legislated tax code: one `### MOD: Tax Code` block ANDs `te_tax_native_controls_sgui` into the item's `enabled`, so the menu cannot tax a good while the code sets the taxed goods. Otherwise vanilla 1.14.5; its copy is `test_fixtures/vanilla_gui/add_consumption_tax_menu.gui`, and `test_tax_code_bypass.py` fails on any other change |
-| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md`. A fifth tab, Tax Code (`te_tax_code`, the legislated tax code rule only): the `je_tax_code` entry's panel types, which read the player's country (`GetPlayer`), under the same gate and datacontext, greyed until the entry runs; while a draft is open, the draft summary in a `fixed_bottom` footer (Budget had none; `te_tax_status_sections` there empties its `draft_summary` block) |
+| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md`. A fifth tab, Tax Code (`te_tax_code`, the legislated tax code rule only): the `je_tax_code` entry's panel types, which read the player's country (`GetPlayer`), under the same gate and datacontext, greyed until the entry runs; while a draft is open, the draft summary in a `fixed_bottom` footer (Budget had none; `te_tax_status_sections` there empties its `draft_summary` block). Under the tax code rule, `### MOD: Tax Code` blocks AND a read-only scripted GUI into vanilla's own `enabled`: `te_tax_native_controls_sgui` on the five tax-level buttons and the consumption-tax "+", `te_tax_native_tariff_controls_sgui` on the 14 tariff and subvention buttons of the two `set_level_bar` types (customs option only); with the rule off both pass, so the controls are vanilla's |
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
@@ -1717,7 +1717,7 @@ Currently 32 GUI files at the top of `gui/`: 26 full-file replacements of vanill
 | `power_bloc_panel.gui` | Power bloc details | Enhanced bloc info |
 | `principle_selection_window.gui` | Principle selection | Modified selection |
 | `production_methods.gui` | PM display | Enhanced PM display |
-| `right_click_menu.gui` | Right-click menu | Additional menu options |
+| `right_click_menu.gui` | Right-click menu | Additional menu options; under the tax code rule, `te_tax_native_controls_sgui` ANDed into the `enabled` of the four goods Tax/Untax items (`### MOD: Tax Code` blocks), so the right-click menus cannot change the taxed goods the code holds |
 | `states_panel.gui` | States list | Modified state display; instances the state-view types below |
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
 | `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |

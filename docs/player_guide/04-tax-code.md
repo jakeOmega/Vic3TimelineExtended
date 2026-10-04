@@ -335,7 +335,7 @@ code or the bill it describes is marked out of date.
 Under *Tax Code and Customs Enabled* the code also holds an import and an
 export level for every tradeable good, from Max subsidy through None to Max
 tariff, and a bill changes them like any tax. The workbench's Customs section
-lists the goods as Staples, Industrial goods, Luxuries and Military goods;
+lists the goods as Staples, Industrial Goods, Luxuries and Military Goods;
 click a step, or right-click to take a level out of the draft. A customs change
 always makes a bill major.
 

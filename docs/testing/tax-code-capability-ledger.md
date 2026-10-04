@@ -72,7 +72,7 @@ What the first playable may offer, with the row that limits each item.
 
 ## Vanilla content under the rule
 
-What the rule does to vanilla content that names a taxation law or the native tax level (research B, sections 6 and 8), and what is left as it is.
+What the rule does to vanilla content that names a taxation law or the native tax level, and what is left as it is. The rows below carry their own file and line evidence.
 
 | Content | Under the rule | Decision |
 |---|---|---|
@@ -195,13 +195,15 @@ GUI and wording minors from review B, for a later GUI pass:
 - The greyed native controls (tax level, consumption "+", tariff steppers, goods toggle,
   right-click Tax/Untax) keep vanilla's tooltips, which do not say the tax code holds them; the
   tariff tooltips are built from data functions, so a fix needs a per-site
-  `SelectLocalization`/`Concatenate`. Fix before release; play-test step 5 asks whether it confuses.
+  `SelectLocalization`/`Concatenate`. Deferred to a GUI follow-up if the play-test finds it
+  confusing (`docs/testing/tax-code-playtest.md` PT-05; package 7 Ruling 15).
 - Explanations in live sections: `te_tax_pol_groups_note` repeats How's passage text, and
   `te_tax_wb_intro` and the customs intro repeat the click hints the row tooltips give.
 - The Customs accordion shows under the plain option too, with only the Market-panel note (by
   design: it tells the player where tariffs are set).
-- Wording: "Customs levels" beside title-case headings, "Industrial goods" beside "Goods
-  Catalog", and "the market is no longer ours" where the panels otherwise say "this country".
+- Wording (fixed in package 7, plan Task 26): "Customs Levels", "Industrial Goods" and "Military
+  Goods" are title case like the other headings, and the customs-loss lines say "the country no
+  longer owns its market".
 - A rebased draft is flagged only on Introduce's hover and inside the collapsed Review; the
   summary could carry a line gated by `te_tax_show_draft_rebase_sgui`.
 - The Enacted Code table does not list the customs schedule; a member's "Set by" shows only in the

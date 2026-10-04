@@ -1020,7 +1020,7 @@ class PromiseDocTest(unittest.TestCase):
 
     def test_the_debug_lines_say_command_lines_are_player_only(self):
         doc = read(SCHEMA_DOC, strip_comments=False)
-        para = [line for line in doc.splitlines() if line.startswith("**Debug lines.**")]
+        para = [line for line in doc.splitlines() if line.startswith("**Debug lines**")]
         self.assertEqual(len(para), 1)
         self.assertIn("The commands' own lines (`introduced`, `passed`, `withdrawn`, `offer_accepted`, `forced_through`, "
                       "`obl_bound`, …) are written for player countries only; the AI writes one summary line per action "

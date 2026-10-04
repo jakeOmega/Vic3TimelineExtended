@@ -635,7 +635,7 @@ te_tax_cmd_package_release_sgui = {
 	}
 }
 
-# Renegotiates a binding promise (plan Task 12). op: the obligation slot, 1 to 4.
+# Renegotiates a promise in force, delivering or maintaining (plan Task 12). op: the obligation slot, 1 to 4.
 te_tax_cmd_obl_renegotiate_sgui = {
 	scope = country
 	saved_scopes = { op }
