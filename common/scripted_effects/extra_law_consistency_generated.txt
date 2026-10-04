@@ -3634,22 +3634,6 @@ te_fix_inconsistent_lawgroup_slavery = {
 		}
 	}
 
-	# Active: law_legacy_slavery  ->  detect violation, cascade replacements
-	if = {
-		limit = {
-			has_law = law_type:law_legacy_slavery
-			OR = {
-				NOR = {
-					has_law = law_type:law_slave_trade
-				}
-			}
-		}
-		if = {
-			limit = { always = yes }
-			activate_law = law_type:law_colonial_slavery
-		}
-	}
-
 }
 
 te_fix_inconsistent_lawgroup_caste_hegemony = {

@@ -118,5 +118,60 @@ class CarrierLawDenylistTest(unittest.TestCase):
             self.assertNotIn(carrier, text)
 
 
+def _slavery_table():
+    """The slavery group's shape: Legacy Slavery is unlocked by Slave Trade, a
+    law of its own group, and Slave Trade has a cross-group disallow."""
+    def law(order, progressiveness, **fields):
+        return _law(order, progressiveness, group="lawgroup_slavery", **fields)
+    return {
+        "law_slavery_banned": law(0, 100),
+        "law_colonial_slavery": law(1, 50),
+        "law_debt_slavery": law(2, 0, disallowing_laws=["law_multicultural"]),
+        "law_slave_trade": law(3, -50, disallowing_laws=["law_multicultural"]),
+        "law_legacy_slavery": law(4, 0, unlocking_laws=["law_slave_trade"]),
+    }
+
+
+class SameGroupUnlockingTest(unittest.TestCase):
+    """A same-group unlocking_laws entry gates enactment only.
+
+    Checked as a standing requirement it can never hold (two laws of one group
+    can't both be active), so every Legacy Slavery country was moved to
+    Colonial Slavery before day one, and the USA lost its slave states.
+    """
+
+    def test_held_unlocking_laws_drops_own_group(self):
+        laws = _slavery_table()
+        self.assertEqual(gen.held_unlocking_laws(laws["law_legacy_slavery"], laws), [])
+        self.assertFalse(gen.has_constraints(laws["law_legacy_slavery"], laws))
+
+    def test_other_group_unlocking_still_checked(self):
+        laws = _slavery_table()
+        laws["law_legacy_slavery"]["unlocking_laws"].append("law_laissez_faire")
+        laws["law_laissez_faire"] = _law(5, group="lawgroup_economic_system")
+        self.assertEqual(
+            gen.held_unlocking_laws(laws["law_legacy_slavery"], laws), ["law_laissez_faire"]
+        )
+        clause = gen._violation_clause(laws["law_legacy_slavery"], "", "law_legacy_slavery", laws)
+        self.assertIn("has_law = law_type:law_laissez_faire", clause)
+        self.assertNotIn("law_slave_trade", clause)
+
+    def test_no_cascade_for_held_legacy_slavery(self):
+        laws = _slavery_table()
+        block = gen.emit_lawgroup_helper("lawgroup_slavery", list(laws), laws, {})
+        self.assertNotIn("# Active: law_legacy_slavery", block)
+        # As a replacement candidate it stays gated on coming from Slave Trade.
+        self.assertIn("# Active: law_slave_trade", block)
+        self.assertIn("activate_law = law_type:law_legacy_slavery", block)
+
+    def test_committed_output_keeps_legacy_slavery(self):
+        with open(GENERATED, encoding="utf-8-sig") as fh:
+            text = fh.read()
+        self.assertFalse(
+            "# Active: law_legacy_slavery" in text,
+            "the generated file still moves held Legacy Slavery to another law; regenerate it",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
