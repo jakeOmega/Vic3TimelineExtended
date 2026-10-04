@@ -76,7 +76,7 @@ class CaptureGeneratorTest(unittest.TestCase):
         self.assertIn("pm_houseware_plastics", self.catalog["pmg_base_building_glassworks"][1] if
                       "pmg_base_building_glassworks" in self.catalog else capture.EXCLUDED_METHODS)
 
-    def test_reductions_and_state_credits_agree_without_overcapture(self):
+    def test_capture_cuts_never_exceed_gross(self):
         generated = parsed(capture.METHODS)
         tiers = 0
         for name, value in generated.items():
@@ -88,7 +88,7 @@ class CaptureGeneratorTest(unittest.TestCase):
             self.assertNotIn("state_carbon_capture_add", mirror)
             credit = -scalar(mirror, emissions.STATE_MODIFIER)
             self.assertGreater(credit, 0)
-            self.assertEqual(scalar(workforce(method), emissions.MODIFIER), -credit)
+            self.assertNotIn("building_greenhouse_gas_emissions_add", workforce(method))
             self.assertNotIn("goods_input_coal_add", workforce(method))
             self.assertNotIn("goods_input_oil_add", workforce(method))
             for pm in body(method, "unlocking_production_methods"):
@@ -102,7 +102,9 @@ class CaptureGeneratorTest(unittest.TestCase):
 
     def test_modern_coal_tier_two_costs_follow_design_anchors(self):
         pm = self.methods["pm_carbon_capture_2_base_building_power_plant_coal25_oil0"]
-        expected = {emissions.MODIFIER: "-2.50", "goods_output_electricity_add": "-12",
+        mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
+        self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), Decimal("-2.50"))
+        expected = {"goods_output_electricity_add": "-12",
                     "goods_input_engines_add": "5", "goods_input_steel_add": "6", "goods_input_fertilizer_add": "7"}
         for key, value in expected.items():
             self.assertEqual(scalar(workforce(pm), key), Decimal(value))

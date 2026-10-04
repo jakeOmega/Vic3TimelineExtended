@@ -88,10 +88,28 @@ but do not automatically scale custom recipe emissions; standalone military and
 ship fuel remains outside the mirror. These limitations are player-facing.
 
 Expanded in-game checks remain required: foreign-owned buildings under phaseout
-when the owner lacks CCS, visibility of localized state-accounting lines,
-technology tooltip/tree rendering of 114 variants per tier, mandate electricity
-prices and repeal/re-enactment churn, and household/removal January totals.
-The game rule off still leaves building tooltips and costly capture mandates.
+when the owner lacks CCS, technology tooltip/tree rendering of 114 variants per
+tier, mandate electricity prices and repeal/re-enactment churn, and
+household/removal January totals. The game rule off still leaves the method
+tooltips' emissions lines and costly capture mandates.
+
+### One emissions line (2026-10-04)
+
+The owner's play-test settled the state-line visibility check: a screenshot
+listed Greenhouse Gas Emissions (`building_greenhouse_gas_emissions_add`) and
+Industrial Greenhouse Gas Emissions (`state_greenhouse_gas_emissions_add`)
+together at the same +6.25. The game lists a method's state modifiers alongside
+its building ones, and `script_only = yes` hides neither. Vanilla's
+modifier types use no field that would hide one (they use only `color`,
+`decimals`, `percent`, `boolean`, `script_only`, `prefix`, `suffix`,
+`difference_sign` and `game_data`). The building-scoped copy is retired: the
+generator strips it (`OBSOLETE_MODIFIERS` in `pm_emissions.py`), its type and
+loc are gone, and the state line, renamed Greenhouse Gas Emissions, is the only
+display. Direct Air Capture now shows only Atmospheric Carbon Removal. The
+accounting reads the same state lines as before. The figure no longer appears
+in a building's own modifier list. Whether the state's modifier breakdown lists
+it building by building has not been checked in game. Sections 5–9 still
+describe the building-scoped display; §0 supersedes them.
 
 ## 1. How emissions work today
 
