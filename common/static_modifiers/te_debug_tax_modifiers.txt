@@ -75,3 +75,29 @@ te_tp_bureaucracy = {
 	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
 	country_bureaucracy_add = -10000
 }
+
+# P09b (the lock, docs/testing/tax-code-probes.md): pins grain's import tariff
+# level by its bounds instead of setting it. Assumes the bounds run from -3
+# (maximum subventions) to 3 (maximum tariffs) before this modifier, so
+# max 3 - 2 = 1 and min -3 + 4 = 1: only "low tariffs" stays selectable. The
+# Budget's grain buttons show the bounds the engine actually applies; record
+# them if they differ. Needs te_tax_probe_modifier_types.txt.
+te_tp_lock_grain_low = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_grain_max_import_tariffs_level_add = -2
+	country_grain_min_import_tariffs_level_add = 4
+}
+
+# P09c (the carrier): cancels the trade law's maximum tariffs and subventions,
+# Free Trade's effect for tariffs, so a native level collects nothing. Sized
+# for Protectionism (all four maxima 0.50, common/laws/01_trade_policy.txt);
+# under another trade law some maxima go negative, so run P09c on a
+# Protectionism country. Applied with te_tp_grain_import (+0.10 grain import
+# rate) to see whether a per-good rate collects with the maximum at zero.
+te_tp_cancel_max = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tariff_import_add = -0.50
+	state_tariff_export_add = -0.50
+	state_subvention_import_add = -0.50
+	state_subvention_export_add = -0.50
+}

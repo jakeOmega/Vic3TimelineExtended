@@ -1,0 +1,931 @@
+﻿### Legislated Tax Code — the review (plan Task 8; docs/systems/tax_code_schema.md,
+### "Panels"). The open draft read as law: one entry per provision it changes,
+### each with the existing law's timeline (the enacted rate, its scheduled
+### expiry, the passed bills that change it) above what the bill would make of
+### it (its rate from the commencement month, its expiry and the rate it then
+### reverts to). Changes to the baseline since the draft was written come
+### first, each with its Accept button. Collapsed until opened: the summary's
+### Review button opens it.
+###
+### "Then reverts to" is te_tax_succ_dr_<key>, the scheduler's rule at the
+### draft's commencement month: the pending successor if the tax has an
+### expiry pending then, else the rate in force; commencement decides it again
+### (rule 3), so the line is a preview. A passed bill the scheduler holds
+### (state 2 conflict, 3 missed) says so on its line, as it will not commence
+### as shown. Rows read only guarded views of the player's draft and passed
+### bills (te_tax_view_dr_*, te_tax_view_p<s>_*); a package's pending relief
+### marks are never shown. Relief entries also say who benefits and what
+### revenue the relief forgoes, in the words the capability ledger verified
+### (agricultural relief: the wage tax of agricultural workers; regional
+### relief: every tax collected from the named states' pops).
+###
+### Customs levels (plan Task 15) come after the goods: each changed level
+### and each good a treaty or the tariff cooldown blocked. They have no
+### revenue estimate (tariff receipts depend on trade volumes).
+###
+### The revenue estimate (plan Task 14) closes the review: per Budget line the
+### draft changes, today's receipts scaled by the draft's and existing law's
+### rates against the economy snapshot's (te_tax_take_snapshot, never run from
+### a panel), labelled a static estimate and marked once out of date.
+
+types te_tax_review_widget_types
+{
+	### A line of an entry: a label, then its text, which may wrap.
+	### 4 + 160 + 312 + 4 = 480. The label holds the longest catalog good name
+	### at 7 px a character ("Electronic Components", 147; final review B-I2,
+	### test_tax_code_layout.py); an instance whose label has a hover sets
+	### default_format = "#tooltippable" itself, so a label without one is
+	### never drawn as hoverable.
+	type te_tax_review_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+		block "line_visible" {}
+
+		textbox = {
+			minimumsize = { 160 -1 }
+			maximumsize = { 160 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "line_label" {}
+		}
+		textbox = {
+			minimumsize = { 312 -1 }
+			maximumsize = { 312 -1 }
+			autoresize = yes
+			multiline = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			block "line_value" {}
+		}
+	}
+
+	### A good the draft changes (the generated te_tax_rv_goods_rows).
+	type te_tax_review_good_line = te_tax_review_line {}
+
+	### A customs level the draft changes (the generated te_tax_rv_customs_rows,
+	### plan Task 15): the good, imports or exports, existing law's level in the
+	### commencement month, and the bill's. Each level cell holds seven
+	### te_tax_cu_level_text, one shown. 4 + 160 + 4 + 70 + 4 + 88 + 4 + 18 + 4 + 88 + 4 = 448;
+	### the name cell holds the longest customs good at 7 px a character and the
+	### level cells the longest level name (final review B-I2).
+	type te_tax_review_customs_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 160 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 160
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				block "good_name" {}
+			}
+		}
+		widget = {
+			size = { 70 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 70
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				block "direction" {}
+			}
+		}
+		widget = {
+			size = { 88 24 }
+			block "law_level" {}
+		}
+		widget = {
+			size = { 18 24 }
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				align = center|nobaseline
+				using = fontsize_medium
+				text = "te_tax_wb_arrow"
+			}
+		}
+		widget = {
+			size = { 88 24 }
+			block "bill_level" {}
+		}
+	}
+
+	### One provision: its name, then the existing law's timeline and the
+	### bill's. The instance fills the blocks and gates the optional lines
+	### (each line's "line_visible" block, overridden here by a block of the
+	### provision's own, so the instance reaches it).
+	type te_tax_review_provision = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin_top = 6
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "provision_name" {}
+		}
+		te_tax_review_line = {
+			blockoverride "line_label" {
+				default_format = "#tooltippable"
+				text = "te_tax_rv_law"
+				tooltip = "te_tax_rv_law_tt"
+			}
+			blockoverride "line_value" {
+				block "law_now" {}
+			}
+		}
+		te_tax_review_line = {
+			blockoverride "line_visible" {
+				block "law_sunset_visible" {}
+			}
+			blockoverride "line_value" {
+				block "law_sunset" {}
+			}
+		}
+		te_tax_review_line = {
+			blockoverride "line_visible" {
+				block "law_pa_visible" {}
+			}
+			blockoverride "line_label" {
+				default_format = "#tooltippable"
+				text = "te_tax_rv_passed"
+				tooltip = "te_tax_rv_passed_tt"
+			}
+			blockoverride "line_value" {
+				block "law_pa" {}
+			}
+		}
+		te_tax_review_line = {
+			blockoverride "line_visible" {
+				block "law_pb_visible" {}
+			}
+			blockoverride "line_label" {
+				default_format = "#tooltippable"
+				text = "te_tax_rv_passed"
+				tooltip = "te_tax_rv_passed_tt"
+			}
+			blockoverride "line_value" {
+				block "law_pb" {}
+			}
+		}
+		te_tax_review_line = {
+			blockoverride "line_label" {
+				default_format = "#tooltippable"
+				text = "te_tax_rv_bill"
+				tooltip = "te_tax_rv_bill_tt"
+			}
+			blockoverride "line_value" {
+				block "bill_value" {}
+			}
+		}
+		te_tax_review_line = {
+			blockoverride "line_visible" {
+				block "bill_sunset_visible" {}
+			}
+			blockoverride "line_value" {
+				block "bill_sunset" {}
+			}
+		}
+	}
+
+	### A moved baseline: what changed, and Accept (te_tax_cmd_draft_rebase_sgui,
+	### whose op the instance's button names). 4 + 372 + 4 + 96 + 4 = 480.
+	type te_tax_rebase_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			minimumsize = { 372 -1 }
+			maximumsize = { 372 -1 }
+			autoresize = yes
+			multiline = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			block "rebase_text" {}
+		}
+		block "rebase_button" {}
+	}
+
+	### ======================================================================
+	### REVIEW (collapsed until opened; the summary's Review button opens it)
+	### ======================================================================
+	type te_tax_review_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_rv_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_review_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_review_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_tax_review_open')]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[GetVariableSystem.Exists('te_tax_review_open')]"
+
+			te_tax_text = {
+				text = "te_tax_rv_unchanged"
+			}
+
+			# The baseline moved under the draft: accept each change before
+			# introducing it. Op = the instrument's code (1 wage ... 5 cons),
+			# 6 the goods, 7 relief.
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_tax_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_tax_rv_rebase_header"
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_wage"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_div"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_land"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_head"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_cons"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_goods"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_relief"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+						}
+					}
+				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_customs"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+						}
+					}
+				}
+			}
+
+			# Nothing changed yet.
+			te_tax_text = {
+				visible = "[And( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' ) )]"
+				text = "te_tax_rv_nothing"
+			}
+
+			# One entry per tax the draft changes.
+			te_tax_review_provision = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_on'), '(CFixedPoint)0' )]"
+				blockoverride "provision_name" {
+					text = "te_tax_inst_wage"
+				}
+				blockoverride "law_now" {
+					text = "te_tax_rv_now_wage"
+				}
+				blockoverride "law_sunset_visible" {
+					visible = "[GetScriptedGui('te_tax_show_sunset_wage_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "law_sunset" {
+					text = "te_tax_en_sunset_wage"
+				}
+				blockoverride "law_pa_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pa" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_wage_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_wage_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_wage', 'te_tax_pk_a_wage_sun' ) ) )]"
+				}
+				blockoverride "law_pb_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pb" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_wage_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_wage_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_wage', 'te_tax_pk_b_wage_sun' ) ) )]"
+				}
+				blockoverride "bill_value" {
+					text = "te_tax_rv_bill_wage"
+				}
+				blockoverride "bill_sunset_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_sun'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "bill_sunset" {
+					text = "te_tax_rv_bill_sun_wage"
+				}
+			}
+			te_tax_review_provision = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_on'), '(CFixedPoint)0' )]"
+				blockoverride "provision_name" {
+					text = "te_tax_inst_div"
+				}
+				blockoverride "law_now" {
+					text = "te_tax_rv_now_div"
+				}
+				blockoverride "law_sunset_visible" {
+					visible = "[GetScriptedGui('te_tax_show_sunset_div_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "law_sunset" {
+					text = "te_tax_en_sunset_div"
+				}
+				blockoverride "law_pa_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pa" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_div_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_div_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_div', 'te_tax_pk_a_div_sun' ) ) )]"
+				}
+				blockoverride "law_pb_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pb" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_div_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_div_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_div', 'te_tax_pk_b_div_sun' ) ) )]"
+				}
+				blockoverride "bill_value" {
+					text = "te_tax_rv_bill_div"
+				}
+				blockoverride "bill_sunset_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_sun'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "bill_sunset" {
+					text = "te_tax_rv_bill_sun_div"
+				}
+			}
+			te_tax_review_provision = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_on'), '(CFixedPoint)0' )]"
+				blockoverride "provision_name" {
+					text = "te_tax_inst_land"
+				}
+				blockoverride "law_now" {
+					text = "te_tax_rv_now_land"
+				}
+				blockoverride "law_sunset_visible" {
+					visible = "[GetScriptedGui('te_tax_show_sunset_land_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "law_sunset" {
+					text = "te_tax_en_sunset_land"
+				}
+				blockoverride "law_pa_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pa" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_land_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_land_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_land', 'te_tax_pk_a_land_sun' ) ) )]"
+				}
+				blockoverride "law_pb_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pb" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_land_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_land_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_land', 'te_tax_pk_b_land_sun' ) ) )]"
+				}
+				blockoverride "bill_value" {
+					text = "te_tax_rv_bill_land"
+				}
+				blockoverride "bill_sunset_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_sun'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "bill_sunset" {
+					text = "te_tax_rv_bill_sun_land"
+				}
+			}
+			te_tax_review_provision = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_on'), '(CFixedPoint)0' )]"
+				blockoverride "provision_name" {
+					text = "te_tax_inst_head"
+				}
+				blockoverride "law_now" {
+					text = "te_tax_rv_now_head"
+				}
+				blockoverride "law_sunset_visible" {
+					visible = "[GetScriptedGui('te_tax_show_sunset_head_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "law_sunset" {
+					text = "te_tax_en_sunset_head"
+				}
+				blockoverride "law_pa_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pa" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_head_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_head_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_head', 'te_tax_pk_a_head_sun' ) ) )]"
+				}
+				blockoverride "law_pb_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pb" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_head_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_head_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_head', 'te_tax_pk_b_head_sun' ) ) )]"
+				}
+				blockoverride "bill_value" {
+					text = "te_tax_rv_bill_head"
+				}
+				blockoverride "bill_sunset_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_sun'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "bill_sunset" {
+					text = "te_tax_rv_bill_sun_head"
+				}
+			}
+			te_tax_review_provision = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_on'), '(CFixedPoint)0' )]"
+				blockoverride "provision_name" {
+					text = "te_tax_inst_cons"
+				}
+				blockoverride "law_now" {
+					text = "te_tax_rv_now_cons"
+				}
+				blockoverride "law_sunset_visible" {
+					visible = "[GetScriptedGui('te_tax_show_sunset_cons_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "law_sunset" {
+					text = "te_tax_en_sunset_cons"
+				}
+				blockoverride "law_pa_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pa" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_cons_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_cons_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_cons', 'te_tax_pk_a_cons_sun' ) ) )]"
+				}
+				blockoverride "law_pb_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_on'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "law_pb" {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_cons_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_cons_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_cons', 'te_tax_pk_b_cons_sun' ) ) )]"
+				}
+				blockoverride "bill_value" {
+					text = "te_tax_rv_bill_cons"
+				}
+				blockoverride "bill_sunset_visible" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_sun'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "bill_sunset" {
+					text = "te_tax_rv_bill_sun_cons"
+				}
+			}
+
+			# The taxed goods, if the draft changes any: the count under
+			# existing law and with the bill, then each good it changes.
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				margin_top = 6
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#title"
+					text = "te_tax_en_goods"
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_law"
+						tooltip = "te_tax_rv_law_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_goods_law"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_bill"
+						tooltip = "te_tax_rv_bill_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_goods_bill"
+					}
+				}
+				te_tax_rv_goods_rows = {}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_benefit"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_goods_benefit"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_forgoes"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_goods_forgoes"
+					}
+				}
+			}
+
+			# The draft's customs changes were dropped when the market was lost
+			# (plan Task 15, controller ruling).
+			te_tax_text = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_dropped'), '(CFixedPoint)0' )]"
+				text = "te_tax_rv_customs_dropped"
+			}
+
+			# Customs levels the draft changes (plan Task 15): each level, existing
+			# law's in the commencement month and the bill's, and each good whose
+			# level a treaty or the tariff cooldown kept (adopted into the code).
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				margin_top = 6
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#title"
+					text = "te_tax_rv_customs_header"
+				}
+				te_tax_text = {
+					text = "te_tax_rv_customs_intro"
+				}
+				te_tax_rv_customs_rows = {}
+			}
+
+			# Relief the draft changes: existing law in the commencement month,
+			# the bill, who benefits and what the relief forgoes.
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				margin_top = 6
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#title"
+					text = "te_tax_en_agrel"
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_law"
+						tooltip = "te_tax_rv_law_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_agrel_law"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_bill"
+						tooltip = "te_tax_rv_bill_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_agrel"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_benefit"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_agrel_benefit"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_forgoes"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_agrel_forgoes"
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				margin_top = 6
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#title"
+					text = "te_tax_en_regrel"
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_law"
+						tooltip = "te_tax_rv_law_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_regrel_law"
+					}
+				}
+				# The states existing law names in the commencement month.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					datamodel = "[AccessPlayer.AccessStates]"
+
+					item = {
+						textbox = {
+							visible = "[NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' )]"
+							autoresize = yes
+							minimumsize = { 480 -1 }
+							maximumsize = { 480 -1 }
+							margin_left = 24
+							align = left|nobaseline
+							using = fontsize_medium
+							multiline = yes
+							# A state the draft drops pays its taxes again: its estimate
+							# (plan Task 14), wrapped rather than cut off. One the draft
+							# keeps shows it in the bill's list.
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_rv_regrel_state_est', 'te_tax_rv_regrel_state' )]"
+						}
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_rv_bill"
+						tooltip = "te_tax_rv_bill_tt"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_regrel"
+					}
+				}
+				# The states the bill names, with what each collects now and the
+				# change the bill makes to it (plan Task 14).
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					datamodel = "[GetPlayer.MakeScope.GetList('te_tax_dr_relief_states')]"
+
+					item = {
+						textbox = {
+							datacontext = "[Scope.GetState]"
+							autoresize = yes
+							minimumsize = { 480 -1 }
+							maximumsize = { 480 -1 }
+							margin_left = 24
+							align = left|nobaseline
+							using = fontsize_medium
+							multiline = yes
+							text = "te_tax_rv_regrel_state_est"
+						}
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_benefit"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_regrel_benefit"
+					}
+				}
+				te_tax_review_line = {
+					blockoverride "line_label" {
+						text = "te_tax_rv_relief_forgoes"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_rv_regrel_forgoes"
+					}
+				}
+			}
+
+			# The revenue estimate (plan Task 14; tax_code_schema.md, "Economy
+			# snapshot and estimates"): each Budget line the draft changes, as
+			# today's receipts (the Budget's own getter) scaled by existing law's
+			# and the draft's rates in its month against the rates at the economy
+			# snapshot (te_tax_view_est_<line>_*), dated, and marked out of date once
+			# the snapshot is (te_tax_view_snap_current). A tax not collected at the
+			# snapshot has no base and no figure. Goods and relief are labelled;
+			# regional relief's figures are on its state lines above.
+			flowcontainer = {
+				visible = "[Not( And( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' ) ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+
+				te_tax_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_tax_est_header"
+						tooltip = "te_tax_est_header_tt"
+					}
+				}
+				te_tax_text = {
+					# Before the first snapshot (a new country's first month) there is
+					# no date to print and no base to scale.
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' ) )]"
+					tooltip = "te_tax_est_header_tt"
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_ch_income"
+						tooltip = "te_tax_est_ch_income_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_income' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_ch_dividends"
+						tooltip = "te_tax_est_ch_dividends_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_dividends' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_ch_poll"
+						tooltip = "te_tax_est_ch_poll_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_range', 'te_tax_est_poll' ) )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						default_format = "#tooltippable"
+						text = "te_tax_est_ch_consumption"
+						tooltip = "te_tax_est_ch_consumption_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_consumption' )]"
+					}
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_goods"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_customs"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_agrel"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_regrel"
+				}
+			}
+		}
+	}
+}

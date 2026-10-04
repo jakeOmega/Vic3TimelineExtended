@@ -129,6 +129,7 @@ policy](04-banking.md).
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
+| Legislated Tax Code | Taxation | The Legislated Tax Code game rule (off by default) | Replaces the five taxation laws: every rate is set by a tax bill. See [Taxation (experimental)](04-tax-code.md). |
 
 ### Who staffs the administration
 
@@ -282,7 +283,9 @@ bureaucracy, and countries that start with the law begin at level 6.
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and several law events attach them. One amendment, the Spoils System,
-attaches to base-game laws.
+attaches to base-game laws. Under the Legislated Tax Code rule the tax rates are
+amendments to the Legislated Tax Code law, and only tax bills change them (see
+[Taxation (experimental)](04-tax-code.md)).
 
 | Amendment | Attaches to | Effect |
 |---|---|---|
@@ -591,8 +594,9 @@ adds 1 war support a month. Issue it in your most populous state.
 When a revolution wins, the winner carries on as the same nation and keeps what
 the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
-space-race rewards and milestone progress, and the arable-land bonuses from
-farming breakthroughs all carry over. A Civil Rights Movement, Human
+space-race rewards and milestone progress, the arable-land bonuses from
+farming breakthroughs, and under the Legislated Tax Code rule the tax code with
+its passed bills and promises, all carry over. A Civil Rights Movement, Human
 Augmentation Debate or Mental Health Crisis journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
 journal-entry buttons, such as banking tools and climate policies, have to be

@@ -36,14 +36,28 @@
 		institution_workplace_safety = {
 			value = 10
 		}
+		# Legislated tax code (spec 2026-10-03 §2.8): an AI country that promised an
+		# interest group a level of this institution weights it higher while the
+		# promise binds it, so the native AI invests in it at native speed and cost.
+		# te_tax_ai_owes_institution is false with the rule off, so rule-off scores
+		# are unchanged. The political agenda strategies are not touched.
 		institution_schools = {
 			value = 10
+			if = {
+				limit = { te_tax_ai_owes_institution = { ARG = 1 } }
+				add = te_tax_ai_promise_institution_score
+			}
 		}
 		institution_police = {
 			value = 10
 		}
 		institution_health_system = {
 			value = 10
+			# Legislated tax code: a binding Health System promise (see schools).
+			if = {
+				limit = { te_tax_ai_owes_institution = { ARG = 2 } }
+				add = te_tax_ai_promise_institution_score
+			}
 		}
 		institution_home_affairs = {
 			value = 10

@@ -71,9 +71,24 @@ def find_saves():
     return sorted(folder.glob("*.v3"), key=lambda p: p.stat().st_mtime, reverse=True)
 
 
+class PlainTextSave(ValueError):
+    """The save is plain text (debug mode writes these), not the zipped binary this tool decodes."""
+
+
 def read_gamestate(save_path):
-    """Return the decompressed `gamestate` blob of a non-ironman .v3 save."""
-    raw = Path(save_path).read_bytes()
+    """Return the decompressed `gamestate` blob of a non-ironman .v3 save.
+
+    A plain-text save (`SAV0100...` then `meta_data={`, written when the game runs in debug mode) is not a zip and
+    says so, instead of the "ironman or corrupt" of a file that is neither.
+    """
+    with open(save_path, "rb") as handle:
+        head = handle.read(256)
+        if b"meta_data={" in head:
+            raise PlainTextSave(
+                f"{save_path}: a plain-text save (debug mode writes these), not a zipped binary one; this tool "
+                "reads only binary saves. The tax code's report, scripts/analysis/tax_code_save_report.py, reads both."
+            )
+        raw = head + handle.read()
     start = raw.find(b"PK\x03\x04")
     if start == -1:
         raise ValueError(f"{save_path}: no zip payload (ironman or corrupt save?)")
@@ -187,7 +202,11 @@ def main(argv):
 
     broken = 0
     for save in saves:
-        broken += check_save(save)
+        try:
+            broken += check_save(save)
+        except PlainTextSave as exc:    # debug mode writes plain text: say so, not a traceback
+            print(exc)
+            return 1
         print()
     if broken:
         print(f"{broken} live history store(s) out of chronological order")

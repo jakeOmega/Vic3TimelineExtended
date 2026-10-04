@@ -1,0 +1,262 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — offers, commitments and political consequences
+# ============================================================================
+# docs/systems/tax_code_schema.md, "Offers", "Force through" and "Interest-group
+# views of the code"; spec §7.2-7.4 and §8 steps 1-4; plan Task 13.
+#
+# OFFERS. At each support refresh (te_tax_gen_refresh_support, never a GUI) a
+# group that has not committed to the bill's revision and is not marginal may
+# make one offer for that revision (te_tax_gen_offer_select): a clause that
+# softens what the bill changes (lower by one step the raise that weighs most
+# on it, never below existing law; stop taxing a staple the bill adds) or adds
+# a band of agricultural relief, or a promise that records a policy obligation
+# (te_tax_obl_propose: schools or health system one level up, no bureaucracy
+# deficit, a fixed-budget surplus). A grievance the bill did not raise gets a
+# promise or nothing. Accepting any
+# offer (te_tax_cmd_accept_offer) makes a new revision of the bill (spec §8
+# step 3): the revision number moves on, debate starts again, every commitment
+# is released and every pending promise with it, every promise accepted under
+# this bill is proposed again (te_tax_gen_offer_repropose), the accepting group
+# commits to the new revision if it was persuadable when it accepted (a score
+# of 0 or more; spec §7.3, an offer is its condition for commitment), and
+# support is refreshed, so the others reconfirm or not. An opposed or
+# red-lined group takes the concession and opposes the bill less: it commits
+# only if its refreshed score reaches the threshold.
+#
+# ANTI-FARMING. One offer per group per revision (te_tax_off_<ig>_rev); a clause
+# a group gained in this bill is never offered to it again
+# (te_tax_bl_got_<ig>_<code>); one promise per group per bill
+# (te_tax_bl_prom_<ig>_*); a promise identical to a pending or binding
+# obligation is neither offered nor accepted (te_tax_can_obl_propose), and the
+# promises reason counts a promise only while its pending obligation is live
+# (te_tax_offer_prom_live), recomputed at every refresh (te_tax_prom_<ig>).
+# A revision from the draft (te_tax_cmd_revise) drops the records: the player
+# rewrote the bill.
+#
+# FORCE THROUGH (spec §7.4: bypass options integrate legislative override
+# capacity and expose authority costs and political consequences). A bill short
+# of a majority passes with at least te_tax_force_share of the clout committed
+# and an override capacity of 2, at the costs of the forced-law event's medium
+# option (minor_events_timelineextended.2): its Authority cost
+# (forced_law_through_event, scaled by
+# forced_law_through_event_authority_multiplier_medium) and its consequences
+# (forced_law_through_event_consequences_medium: opposition approval,
+# legitimacy, movement radicalism and override capacity, decaying over five
+# years). No new number: the event's own modifiers and script values. Its
+# multiplier resolves against ROOT, the country, which the Force Through
+# button's scripted GUI sets; any other caller must run with the country as
+# ROOT.
+#
+# VIEWS OF THE CODE. Each month the processor (te_tax.1), and the day after a
+# migration, a re-assert or a copied code (te_tax.4), keeps at most one band
+# modifier per group on the country, te_tax_ig_view_<ig>_<band>, from the
+# group's own stance toward the vanilla taxation law the enacted code is
+# equivalent to (te_tax_refresh_ig_views): the carrier law has no vanilla
+# stances, so these give back the approval a group took from its stance on the
+# taxation law, at vanilla's magnitudes, and the migration changes none.
+#
+# Country scope throughout; every entry point checks the rule (written
+# positively). Nothing here reads ROOT.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Accepting an offer (te_tax_cmd_accept_offer_sgui, from a group's card). IG: an
+# interest group key without its ig_ prefix (te_tax_off_<IG>_*).
+# ----------------------------------------------------------------------------
+te_tax_cmd_accept_offer = {
+	if = {
+		limit = { te_tax_can_accept_offer = { IG = $IG$ } }
+		custom_tooltip = te_tax_tt_cmd_accept_offer
+		# Whether accepting commits the group: only if it is persuadable now (its
+		# score, 0 or more), read before the new revision resets the snapshot.
+		set_local_variable = { name = te_tax_acc_commit value = 0 }
+		if = {
+			limit = {
+				has_variable = te_tax_sup_$IG$
+				var:te_tax_sup_$IG$ >= 0
+			}
+			custom_tooltip = te_tax_tt_offer_commits
+			set_local_variable = { name = te_tax_acc_commit value = 1 }
+		}
+		else = {
+			custom_tooltip = te_tax_tt_offer_no_commit
+		}
+		te_tax_gen_offer_apply = { IG = $IG$ }
+		change_variable = { name = te_tax_bl_rev add = 1 }
+		te_tax_bill_open_revision = yes
+		te_tax_gen_offer_repropose = yes
+		if = {
+			limit = { local_var:te_tax_acc_commit = 1 }
+			set_variable = { name = te_tax_com_$IG$ value = 1 }
+			set_variable = { name = te_tax_com_$IG$_rev value = var:te_tax_bl_rev }
+		}
+		te_tax_refresh_support = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX offer_accepted a new revision of the bill opened; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Softens the bill's raise of instrument KEY by one index step, never below
+# existing law in its month (te_tax_base_bl_<key>): the offer is made and
+# accepted only while the bill raises it (te_tax_bl_dstep_<key> above 0), so the
+# bill holds its own value. The draft takes the same value, so a later revision
+# from the draft keeps the concession. A cut back to existing law leaves the
+# provision alone. Records that group IG gained the cut.
+te_tax_offer_cut = {
+	custom_tooltip = te_tax_tt_offer_cut_$KEY$
+	change_variable = { name = te_tax_bl_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_bl_$KEY$ min = te_tax_base_bl_$KEY$ max = te_tax_max_$KEY$ }
+	if = {
+		limit = { var:te_tax_bl_$KEY$ = te_tax_base_bl_$KEY$ }
+		set_variable = { name = te_tax_bl_$KEY$ value = -1 }
+		set_variable = { name = te_tax_bl_$KEY$_sun value = 0 }
+		set_variable = { name = te_tax_bl_$KEY$_pver value = -1 }
+	}
+	set_variable = { name = te_tax_bl_got_$IG$_1 value = 1 }
+	if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
+		te_tax_dr_touch = { KEY = $KEY$ }
+		set_variable = { name = te_tax_dr_$KEY$ value = var:te_tax_bl_$KEY$ }
+		set_variable = { name = te_tax_dr_$KEY$_sun value = var:te_tax_bl_$KEY$_sun }
+		if = {
+			limit = { var:te_tax_dr_$KEY$ < 0 }
+			set_variable = { name = te_tax_dr_$KEY$_pver value = -1 }
+		}
+	}
+}
+
+# Adds a band of agricultural wage relief to the bill (from existing law's band
+# when the bill leaves relief alone) and gives the draft the same band. Bill
+# relief taken up here records the relief group's planned and external
+# versions. Records that group IG gained it.
+te_tax_offer_agrel = {
+	custom_tooltip = te_tax_tt_offer_agrel
+	if = {
+		limit = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }
+		set_variable = { name = te_tax_bl_relief_pver value = var:te_tax_pver_relief }
+		set_variable = { name = te_tax_bl_xver_relief value = var:te_tax_xver_relief }
+	}
+	set_variable = { name = te_tax_bl_agrel value = te_tax_bl_eff_agrel }
+	change_variable = { name = te_tax_bl_agrel add = 1 }
+	clamp_variable = { name = te_tax_bl_agrel min = 0 max = te_tax_max_agrel }
+	set_variable = { name = te_tax_bl_got_$IG$_2 value = 1 }
+	if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
+		te_tax_dr_relief_touch = { KEY = agrel }
+		set_variable = { name = te_tax_dr_agrel value = var:te_tax_bl_agrel }
+		te_tax_dr_relief_settle = yes
+	}
+}
+
+# Takes back a staple GOOD the bill adds to the taxed list: the offer is made
+# and accepted only while the bill taxes it and existing law in its month does
+# not (te_tax_dl_g_<good> above 0), so the bill leaves it alone again (-1). In
+# the draft it stops being taxed: 0 where existing law in the draft's month
+# taxes it, untouched (-1) where it does not, and the goods group's planned
+# version is recorded and cleared as the draft's toggle does
+# (te_tax_cmd_draft_good). The bill's goods planned version is cleared if it
+# touches no good any more. Records that group IG gained it.
+te_tax_offer_untax = {
+	custom_tooltip = te_tax_tt_offer_untax_$GOOD$
+	set_variable = { name = te_tax_bl_g_$GOOD$ value = -1 }
+	if = {
+		limit = { NOT = { te_tax_gen_bill_touches_goods = yes } }
+		set_variable = { name = te_tax_bl_goods_pver value = -1 }
+	}
+	set_variable = { name = te_tax_bl_got_$IG$_3 value = 1 }
+	if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
+		if = {
+			limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+			set_variable = { name = te_tax_dr_goods_pver value = var:te_tax_pver_goods }
+		}
+		if = {
+			limit = { te_tax_base_dr_g_$GOOD$ > 0 }
+			set_variable = { name = te_tax_dr_g_$GOOD$ value = 0 }
+		}
+		else = {
+			set_variable = { name = te_tax_dr_g_$GOOD$ value = -1 }
+		}
+		if = {
+			limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+			set_variable = { name = te_tax_dr_goods_pver value = -1 }
+		}
+	}
+}
+
+# Records group IG's promise on the bill (te_tax_bl_prom_<IG>_*: the obligation
+# kind, its arg and target). te_tax_gen_offer_repropose turns it into a pending
+# obligation on the new revision, and on every later one of this bill.
+te_tax_offer_record_promise = {
+	custom_tooltip = te_tax_tt_offer_promise
+	set_variable = { name = te_tax_bl_prom_$IG$_kind value = var:te_tax_off_$IG$_kind }
+	change_variable = { name = te_tax_bl_prom_$IG$_kind subtract = te_tax_offer_promise_base }
+	set_variable = { name = te_tax_bl_prom_$IG$_arg value = var:te_tax_off_$IG$_arg }
+	set_variable = { name = te_tax_bl_prom_$IG$_target value = var:te_tax_off_$IG$_target }
+}
+
+# ----------------------------------------------------------------------------
+# Force through (te_tax_cmd_force_through_sgui, the passage panel)
+# ----------------------------------------------------------------------------
+te_tax_cmd_force_through = {
+	if = {
+		limit = { te_tax_can_force_through = yes }
+		custom_tooltip = te_tax_tt_cmd_force_through
+		if = {
+			limit = { var:te_tax_pa_on = 0 }
+			te_tax_force_into = { SLOT = a OTHER = b }
+		}
+		else = {
+			te_tax_force_into = { SLOT = b OTHER = a }
+		}
+	}
+}
+
+# The override's costs, then the ordinary passage into slot SLOT
+# (te_tax_pass_into), only when the scheduler will store the bill, as the pass
+# checks: a refused store must not leave the costs paid for nothing.
+te_tax_force_into = {
+	if = {
+		limit = { te_tax_can_store_package = { SLOT = $SLOT$ } }
+		add_modifier = {
+			name = forced_law_through_event
+			years = 5
+			multiplier = forced_law_through_event_authority_multiplier_medium
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = forced_law_through_event_consequences_medium
+			years = 5
+			is_decaying = yes
+		}
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX forced_through legislative override used to pass the bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		te_tax_pass_into = { SLOT = $SLOT$ OTHER = $OTHER$ }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Interest-group views of the code (te_tax_process_month, after the obligations
+# and before the sync, and te_tax.4 after its sync; nothing else calls it; once
+# per execution)
+# ----------------------------------------------------------------------------
+# A country without the carrier law (a vanilla taxation law activated by script,
+# until te_tax.5 puts the carrier back) has no equivalent law: every band is 0
+# and every view modifier goes, since vanilla counts its stance on the active
+# law itself.
+te_tax_refresh_ig_views = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		te_tax_gen_ig_views = yes
+	}
+}

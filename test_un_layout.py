@@ -556,6 +556,7 @@ UNLOCK_TRIGGERS = {   # the tab gates' is_valid (te_system_tab_sguis.txt), and t
     "sr_entry_unlocked": "space_race_triggers.txt",
     "ce_entry_unlocked": "colonial_empire_triggers.txt",
     "gm_entry_unlocked": "monument_triggers.txt",
+    "te_tax_entry_unlocked": "te_tax_triggers.txt",
 }
 
 
@@ -585,7 +586,7 @@ class TabUnlockTooltipTest(unittest.TestCase):
                         self.assertIn("GetScriptedGui('%s').IsValid(" % sgui, line)
                         self.assertIn("'te_system_tab_met_tt'", line)
                         self.assertLess(line.index("'te_system_tab_met_tt'"), line.index(".IsValidTooltip("))
-        self.assertEqual(found, 5)
+        self.assertEqual(found, 6)   # Banking, Tax Code, Hegemony, UN, Nuclear, Covert
 
     def test_no_bare_or(self):
         for name in UNLOCK_TRIGGERS:

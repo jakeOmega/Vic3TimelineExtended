@@ -1,0 +1,270 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE TEST CONSOLE — fired only from the console:
+#   event te_tax_debug.1 … te_tax_debug.8
+# The play-test runbook (docs/testing/tax-code-playtest.md) says when to use
+# each; .2-.4 drive the AI step (plan Task 22), .5-.8 set up the scenarios that
+# would otherwise take months of play (plan Task 25).
+# ============================================================================
+# Vic3's console has no `effect` command; `event <id>` is the way to run script
+# by hand. Nothing in the mod fires this event.
+#
+# te_tax_debug.1 activates Per-Capita Taxation over the tax code's carrier law,
+# as a vanilla event or button would (activate_law ignores can_enact), to test
+# the re-assert (docs/systems/tax_code_schema.md, "Native controls and drift").
+# Expected in debug.log, the same day: "TE_TAX reasserted" (te_tax.5, from
+# on_law_activated) with the carrier back in the law panel; the next day the
+# sync (te_tax.4) and a "TE_TAX drift ... amend=" line for each tax the code
+# collects, whose amendment the swap dropped; collection back as before.
+# ============================================================================
+namespace = te_tax_debug
+
+te_tax_debug.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_tax_debug.1`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		debug_log = "TE_TAX debug: activating Per-Capita Taxation over the tax code law; country=[THIS.GetCountry.GetNameNoFormatting]"
+		activate_law = law_type:law_per_capita_based_taxation
+	}
+}
+
+# te_tax_debug.2: runs the AI step's managers on the console's own country now,
+# as te_tax.8 would for an AI country (runbook PT-16 to PT-22): held packages,
+# promises (an institution promise about to be missed is enacted, a budget or
+# bureaucracy one renegotiated), then the open bill (pass, offers, force,
+# withdraw) or, with no bill, the initiative, skipping the quarterly cadence
+# and the cooldowns so one session can watch a whole AI bill. On a player
+# country these act on the player's own code: test saves only. It never runs
+# te_tax_ai_step, which only te_tax.8 runs (its trigger needs an AI country),
+# and the offer chain's next-day te_tax.8 stops on a player country, so accept
+# further offers by firing this event again.
+te_tax_debug.2 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.2`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = {
+				te_tax_code_in_force = yes
+				NOT = { is_country_type = decentralized }
+			}
+			te_tax_ai_log_step = yes
+			if = {
+				limit = { te_tax_ai_need_ended = yes }
+				set_variable = { name = te_tax_ai_noviable value = 0 }
+			}
+			te_tax_ai_manage_packages = yes
+			te_tax_ai_manage_promises = yes
+			if = {
+				limit = { te_tax_bill_active = yes }
+				te_tax_ai_manage_bill = yes
+			}
+			else = {
+				te_tax_ai_initiative = yes
+			}
+		}
+		else = {
+			debug_log = "TE_TAX debug: the AI step needs the code in force on a country that isn't decentralized; nothing done; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.3: logs the AI's signals (ratio, debt, reserves, streaks,
+# template) and the clout-weighted cost of raising each tax one step (the
+# initiative's pre-score: the lowest is raised, the highest cut), plus the
+# cooldown months, without acting.
+te_tax_debug.3 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.3`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = { te_tax_code_in_force = yes }
+			te_tax_ai_log_step = yes
+			debug_log = "TE_TAX debug: AI pre-score wage=[SCOPE.ScriptValue('te_tax_ai_cost_wage')|2] div=[SCOPE.ScriptValue('te_tax_ai_cost_div')|2] land=[SCOPE.ScriptValue('te_tax_ai_cost_land')|2] head=[SCOPE.ScriptValue('te_tax_ai_cost_head')|2] cons=[SCOPE.ScriptValue('te_tax_ai_cost_cons')|2]; next initiative month=[SCOPE.ScriptValue('te_tax_ai_view_next_month')|0] emergency gate=[SCOPE.ScriptValue('te_tax_ai_emergency_gate_month')|0]; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.4: as if the budget had been in deficit for te_tax_ai_need_months
+# 1sts in a row, with no cooldown and no failure this episode, so the next
+# te_tax_debug.2 (or an AI country's next step) raises a tax if the rest of the
+# need holds (ratio, reserves).
+te_tax_debug.4 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.4`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = { te_tax_code_in_force = yes }
+			set_variable = { name = te_tax_ai_def_streak value = te_tax_ai_need_months }
+			set_variable = { name = te_tax_ai_next_month value = -1 }
+			set_variable = { name = te_tax_ai_noviable value = 0 }
+			debug_log = "TE_TAX debug: deficit streak set to the need threshold, AI cooldown cleared; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.5: a passed bill raising the wage tax one step from next month,
+# with a 1-month expiry, so one session sees a commencement on the 1st and the
+# expiry on the 1st after (runbook PT-31, the scheduler retest). Drafted and
+# introduced through the commands; the bill's expiry offset is then set to 1,
+# which no workbench control offers (6 is the shortest), and the bill is passed
+# without debate or committed clout, the store's own checks still applying
+# (te_tax_pass_into). Opposed groups react as to any passed bill. Needs no bill
+# under debate and a free passed-bill slot.
+te_tax_debug.5 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.5`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = {
+				te_tax_code_in_force = yes
+				NOT = { te_tax_bill_active = yes }
+				OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 }
+			}
+			if = {
+				limit = { te_tax_can_draft_discard = yes }
+				te_tax_cmd_draft_discard = yes
+			}
+			if = {
+				limit = { te_tax_can_draft_new = yes }
+				te_tax_cmd_draft_new = yes
+			}
+			if = {
+				limit = { te_tax_can_draft_step = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_step = { KEY = wage DIR = 1 }
+			}
+			# Due now + 3 by default; two steps earlier is next month.
+			if = {
+				limit = { te_tax_can_draft_due = { DIR = 0 } }
+				te_tax_cmd_draft_due = { DIR = 0 }
+			}
+			if = {
+				limit = { te_tax_can_draft_due = { DIR = 0 } }
+				te_tax_cmd_draft_due = { DIR = 0 }
+			}
+			if = {
+				limit = { te_tax_can_introduce = yes }
+				te_tax_cmd_introduce = yes
+			}
+			if = {
+				limit = { te_tax_bill_active = yes }
+				set_variable = { name = te_tax_bl_wage_sun value = 1 }
+				if = {
+					limit = { var:te_tax_pa_on = 0 }
+					te_tax_pass_into = { SLOT = a OTHER = b }
+				}
+				else = {
+					te_tax_pass_into = { SLOT = b OTHER = a }
+				}
+				debug_log = "TE_TAX debug: stored a wage rise from next month with a 1-month expiry; month=[SCOPE.ScriptValue('te_history_month_index')|0] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+			else = {
+				debug_log = "TE_TAX debug: the test bill could not be introduced (wage tax at its maximum?); nothing stored; country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+		}
+		else = {
+			debug_log = "TE_TAX debug: needs the code in force, no bill under debate and a free passed-bill slot; nothing done; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.6: the next 1st's processor skips this country, as if its
+# dispatch had not run, so a package due next month is held as missed the
+# month after (runbook PT-09, PT-20). It claims next month in advance:
+# te_tax_last_month = this month + 1, the processor's own once-a-month guard
+# (docs/systems/tax_code_schema.md, "Processor rules", rule 1). The watchdog
+# stays quiet, since it runs only for a month not yet claimed.
+te_tax_debug.6 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.6`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = { te_tax_code_in_force = yes }
+			set_variable = { name = te_tax_last_month value = te_tax_due_earliest }
+			debug_log = "TE_TAX debug: next month's processor will skip this country; month=[SCOPE.ScriptValue('te_history_month_index')|0] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.7: an outside change to the wage tax, the kind a migration or a
+# civil-war repair records (te_tax_xver_wage + 1, the rate unchanged), so a
+# passed bill waiting to change the wage tax is held as conflicting at its
+# commencement and a bill under debate shows Outside Changes (runbook PT-09,
+# PT-20).
+te_tax_debug.7 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.7`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = { te_tax_code_in_force = yes }
+			change_variable = { name = te_tax_xver_wage add = 1 }
+			debug_log = "TE_TAX debug: recorded an outside change to the wage tax; month=[SCOPE.ScriptValue('te_history_month_index')|0] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# te_tax_debug.8: names the capital's state for regional relief in the enacted
+# code, at the 25% band if the code grants none, as an outside change
+# (te_tax_xver_relief + 1), and syncs the next day (te_tax.4), so the relief
+# modifier and the state rows can be checked without a bill (runbook PT-24).
+# The state list holds at most three; a fourth is refused.
+te_tax_debug.8 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.8`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		if = {
+			limit = {
+				te_tax_code_in_force = yes
+				exists = capital
+				NAND = {
+					has_variable_list = te_tax_en_relief_states
+					any_in_list = { variable = te_tax_en_relief_states count >= 3 exists = this }
+				}
+			}
+			capital = { save_scope_as = te_tax_debug_state }
+			if = {
+				limit = {
+					NAND = {
+						has_variable_list = te_tax_en_relief_states
+						is_target_in_variable_list = { name = te_tax_en_relief_states target = scope:te_tax_debug_state }
+					}
+				}
+				add_to_variable_list = { name = te_tax_en_relief_states target = scope:te_tax_debug_state }
+			}
+			if = {
+				limit = { var:te_tax_en_regrel = 0 }
+				set_variable = { name = te_tax_en_regrel value = 1 }
+			}
+			change_variable = { name = te_tax_xver_relief add = 1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			trigger_event = { id = te_tax.4 days = 1 }
+			debug_log = "TE_TAX debug: named the capital's state for regional relief; it syncs tomorrow; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX debug: needs the code in force, a capital and fewer than three named states; nothing done; country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+

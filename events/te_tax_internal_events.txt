@@ -1,0 +1,162 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — internal country events
+# ============================================================================
+# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt (te_tax.7
+# by its market and subject hooks), except
+# te_tax.4 (raised by the migration, by the re-assert te_tax.5 and by te_tax.6)
+# and te_tax.6 (raised by common/scripted_effects/te_tax_civil_war_effects.txt,
+# which also raises te_tax.3 for an uprising or a released country whose parent
+# has no code) and te_tax.8 (the AI step, raised by
+# common/scripted_effects/te_tax_ai_effects.txt). ROOT is always the country the
+# event fires on.
+# Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots and
+# history"; migration: the same file, "Migration".
+#
+# No `is_triggered_only`: that is a CK3 keyword; vanilla Victoria 3 uses it
+# nowhere, and an event with neither mean_time_to_happen nor a random_events
+# registration is reached only by trigger_event anyway (see
+# events/te_inflation_events.txt).
+# ============================================================================
+namespace = te_tax
+
+# The monthly processor: sunsets, commencements, one collection sync. Raised
+# for every migrated country by the global pulse on the 1st. Firing it again in
+# the same month (console: event te_tax.1) does nothing.
+te_tax.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_process_month = yes
+	}
+}
+
+# The watchdog: raised from the country pulse when this month has not been
+# processed and a transition is due. Sunsets and missed holds only; it never
+# commences.
+te_tax.2 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_watchdog_month = yes
+	}
+}
+
+# Migration: this country's vanilla taxation law, native tax level and taxed
+# goods become an enacted code with the same rates, and the carrier law is
+# installed. Raised for every country after the lobby, for each new country and
+# by the monthly dispatch for any country still unmigrated. Firing it again
+# (console: event te_tax.3) does nothing once the country is migrated.
+te_tax.3 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_migrate_country = yes
+	}
+}
+
+# Post-migration sync: raised by the migration a day after it, when the carrier
+# law it activated is in place, by the re-assert (te_tax.5) and by te_tax.6 the
+# same way. One collection write; the writer does nothing for a country not on
+# the carrier. Then the interest groups' views of the code, so they hold their
+# taxation-law approval from the day the carrier is in place (the processor,
+# te_tax.1, refreshes them monthly; these are the two call sites).
+te_tax.4 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		debug_log = "TE_TAX post-migration sync month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		te_tax_sync_collection = yes
+		# The groups' views of the code (te_tax_offer_effects.txt), now that the
+		# carrier is in place, rather than at the next 1st of the month: the
+		# approval each took from its stance on the old taxation law carries over
+		# from the start.
+		te_tax_refresh_ig_views = yes
+		# The economy snapshot the estimates are dated by
+		# (te_tax_snapshot_effects.txt), of the code just written, so a new
+		# country's panels need not wait for the 1st.
+		te_tax_take_snapshot = yes
+	}
+}
+
+# Re-assert: another taxation law was activated in this migrated country (from
+# te_tax_on_law_activated, on_law_activated). The carrier comes back the way the
+# migration installed it; the amendments did not survive the swap, so te_tax.4
+# writes collection a day later. Firing it again (console: event te_tax.5) on a
+# country holding the carrier does nothing.
+te_tax.5 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_reassert_carrier = yes
+	}
+}
+
+# Adopt a copied code: raised on an uprising at the outbreak, on a released
+# country that took its parent's code and on a civil war's winner after the
+# repair (te_tax_civil_war_effects.txt). Installs the carrier law if the country
+# does not hold it and raises te_tax.4 for the next day's sync. Firing it again
+# (console: event te_tax.6) only schedules another sync.
+te_tax.6 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_adopt_copied_code = yes
+	}
+}
+
+# Customs revalidation (plan Task 15; customs option only): raised a day after a
+# market merge, a new market or a change of subject status
+# (te_tax_on_actions.txt). Whether the code holds this country's customs follows
+# whether it owns its market (te_tax_customs_revalidate): a country that gained
+# its market migrates its native levels into the code, one that lost it keeps
+# its records frozen, and then drops the open draft's and bill's customs levels
+# (te_tax_customs_drop_records). Nothing is synced here: the code then equals
+# the market, or the market's owner sets the levels. Firing it again (console:
+# event te_tax.7) changes nothing unless the market changed.
+te_tax.7 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_customs_revalidate = yes
+		te_tax_customs_drop_records = yes
+	}
+}
+
+# The AI step (plan 2026-10-03 Task 18; te_tax_ai_effects.txt): raised by the
+# processor's dispatch (te_tax_ai_dispatch) on the country's bucket day and by
+# the step's own offer chain; never from the console, which runs the managers
+# itself (Ruling 6). The trigger re-checks the rule,
+# the code and that the engine still runs the country, so a country a player
+# took over since the dispatch does nothing. ROOT = THIS = the country, which
+# force-through's multiplier needs.
+te_tax.8 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_ai_can_act = yes }
+
+	immediate = {
+		te_tax_ai_step = yes
+	}
+}

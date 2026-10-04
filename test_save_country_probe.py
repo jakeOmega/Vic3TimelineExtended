@@ -66,15 +66,31 @@ def variable(name, value):
     )
 
 
-def country(cid, tag, flags=(), variables=None, modifiers=()):
+def variable_list(name, kind, ids):
+    """One entry of a country's variable-list block: `{ 0x001b = "name" (0x0352 = { kind id })... 0x006d = { n } }`.
+
+    kind: 'container', 'state' or 'country' (the item type tokens read off a real 1.14 save).
+    """
+    token = {v: k for k, v in scp.LIST_KINDS.items()}[kind]
+    items = b''.join(
+        tok(scp.KEY_LIST_ITEM) + EQ + OPEN + tok(scp.KEY_KIND) + EQ + tok(token)
+        + tok(scp.KEY_VAL) + EQ + I64 + struct.pack('<q', i) + CLOSE
+        for i in ids
+    )
+    return OPEN + tok(scp.KEY_LIST_NAME) + EQ + string(name) + items + tok(0x006D) + EQ + OPEN + I32 + struct.pack('<i', 1) + CLOSE + CLOSE
+
+
+def country(cid, tag, flags=(), variables=None, modifiers=(), lists=None):
+    """lists: {name: (kind, [ids])}; they sit in the variable block beside the data, as in real saves."""
     body = b''.join(tok(f) + EQ + BOOL + bytes([1]) for f in flags)
     body += tok(scp.KEY_DEF) + EQ + string(tag)
-    if variables:
-        body += (
-            tok(scp.KEY_VARS) + EQ + OPEN + tok(scp.KEY_DATA) + EQ + OPEN
-            + b''.join(variable(k, v) for k, v in variables.items())
-            + CLOSE + CLOSE
-        )
+    if variables or lists:
+        body += tok(scp.KEY_VARS) + EQ + OPEN
+        if variables:
+            body += tok(scp.KEY_DATA) + EQ + OPEN + b''.join(variable(k, v) for k, v in variables.items()) + CLOSE
+        if lists:
+            body += tok(scp.KEY_LIST) + EQ + OPEN + b''.join(variable_list(k, *v) for k, v in lists.items()) + CLOSE
+        body += CLOSE
     if modifiers:
         body += modifier_block(modifiers)
     return U32 + struct.pack('<I', cid) + EQ + OPEN + body + CLOSE
@@ -208,6 +224,61 @@ class DecodingTests(unittest.TestCase):
 
     def test_save_date(self):
         self.assertEqual(scp.save_date(self.path), '2003.11.18')
+
+
+class VariableListTests(unittest.TestCase):
+    """Variable lists sit in the variable block under 0x0351, beside the data (0x00f0): worked out 2026-10-03 on a
+    1.14.5 save. An item is `0x0352 = { 0x00e1 = <kind> 0x00db = <id> }`; the kind tokens are the variables' own."""
+
+    def setUp(self):
+        lists = {
+            'te_tax_en_relief_states': ('state', [5, 456]),
+            'te_tp_records': ('container', [2, 3]),
+            'nd_pledgers': ('country', [11]),
+        }
+        self.path = write_save([
+            country(ORIGINAL, 'GER', variables={'a_variable': 4}, lists=lists),
+            country(SPAIN, 'SPA', variables={'a_variable': 1}),
+            country(9, 'ITA', lists={'only_a_list': ('state', [7])}),
+        ])
+        self.addCleanup(Path(self.path).unlink)
+
+    def test_lists_decode_with_their_item_kinds(self):
+        recs = scp.Save(self.path, scp.Filters()).select()
+        self.assertEqual(recs[ORIGINAL]['lists'], {
+            'te_tax_en_relief_states': ['state#5', 'state#456'],
+            'te_tp_records': ['container#2', 'container#3'],
+            'nd_pledgers': ['country#11'],
+        })
+        self.assertEqual(recs[SPAIN]['lists'], {})
+        self.assertEqual(recs[ORIGINAL]['vars'], {'a_variable': 4.0}, 'a list is not a variable')
+
+    def test_a_country_with_only_a_list_still_decodes(self):
+        self.assertEqual(scp.Save(self.path, scp.Filters(tags=['ITA'])).select()[9]['lists'], {'only_a_list': ['state#7']})
+
+    def test_an_unknown_item_kind_prints_its_token(self):
+        items = [(None, [(('tok', scp.KEY_LIST_NAME), ('str', 'x')),
+                         (('tok', scp.KEY_LIST_ITEM), [(('tok', scp.KEY_KIND), ('tok', 0x1234)), (('tok', scp.KEY_VAL), ('int', 9))])])]
+        block = [(('tok', scp.KEY_VARS), [(('tok', scp.KEY_LIST), items)])]
+        self.assertEqual(scp.read_lists(block), {'x': ['0x1234#9']})
+
+    def test_var_filter_trims_lists_by_name(self):
+        rec = scp.Save(self.path, scp.Filters(var='^te_tax_')).select()[ORIGINAL]
+        self.assertEqual(list(rec['lists']), ['te_tax_en_relief_states'])
+
+    def test_describe_prints_the_lists(self):
+        save = scp.Save(self.path, scp.Filters(var='^te_tax_'))
+        text = scp.describe(save.select()[ORIGINAL], save.tags, save.filters)
+        self.assertIn('te_tax_en_relief_states = state#5 state#456', text)
+
+    def test_diff_reports_a_list_that_changed(self):
+        other = write_save([country(ORIGINAL, 'GER', variables={'a_variable': 4},
+                                    lists={'te_tax_en_relief_states': ('state', [5])})])
+        self.addCleanup(Path(other).unlink)
+        out = io.StringIO()
+        with redirect_stdout(out):
+            scp.diff(self.path, other, scp.Filters(tags=['GER']))
+        self.assertIn('te_tax_en_relief_states', out.getvalue())
 
 
 class JournalNameTests(unittest.TestCase):

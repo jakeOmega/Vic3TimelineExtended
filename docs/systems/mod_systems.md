@@ -1148,6 +1148,15 @@ Three amendments can be attached **temporarily** (`add_amendment = { … timeout
 
 The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
 
+## Legislated Tax Code (`je_tax_code`, `te_tax_code_rule`)
+
+**Experimental, default off.** Under the rule the five vanilla taxation laws cannot be enacted; every country holds the carrier `law_te_tax_code`, whose generated amendments set each rate, and taxes change only through a bill that interest groups must commit to, taking effect on the 1st of its month. The customs option legislates a market owner's tariffs too. AI countries legislate through the same commands (package 6, the schema's "AI legislation"): a staggered monthly step raises taxes on a fiscal-deficit streak, cuts them on a surplus streak, passes emergency bills, bargains with the same offers and keeps or renegotiates its promises; their tariffs stay native until the customs probe (P09b/P09c) decides the mechanism. The UI is the journal entry and the Budget panel's Tax Code tab.
+
+- **Design of record**: [`tax_code_schema.md`](tax_code_schema.md): tokens and sentinels, the one collection writer, the scheduler, migration, civil wars, drift, the bill lifecycle and support model, offers, obligations, the economy snapshot and fiscal record, the panels and customs. Read it before touching any `te_tax_*` variable.
+- **Engine capabilities and play-tests**: [`../testing/tax-code-capability-ledger.md`](../testing/tax-code-capability-ledger.md): what is verified in game and what is only read statically (row 29 lists the unproven engine forms the panels rely on), the items recorded for later, the evidence matrix and the known limitations. The play-test runbook is [`../testing/tax-code-playtest.md`](../testing/tax-code-playtest.md).
+- **Spec and plan**: [`../superpowers/specs/2026-09-29-legislated-tax-code-design.md`](../superpowers/specs/2026-09-29-legislated-tax-code-design.md) and, for the AI and the release, [`../superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md`](../superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md); plans [`../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md`](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md) and [`../superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md`](../superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md).
+- **Generated files** come only from `scripts/generators/gen_tax_code.py` (`--check` in the tests; [`../auto_generated_files.md`](../auto_generated_files.md)). Tests: `test_tax_code_*.py`.
+
 ## Collective Governance (`law_direct_democracy`)
 
 The governance principle `law_direct_democracy` is displayed as **Collective Governance**: no individual holds supreme executive power. The key is historical (the law was Direct Democracy) and kept because renaming a law breaks saves. Spec: `docs/superpowers/specs/2026-09-26-collective-governance-design.md`.
@@ -1190,7 +1199,7 @@ The authoritarian end of `lawgroup_criminal_justice` (`common/laws/extra_laws.tx
 
 ## On-Actions Reference
 
-The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
+The mod uses 41 on-action files under `common/on_actions/`; the index below lists the main ones. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
 
 ### File Index
 
@@ -1211,6 +1220,8 @@ The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic
 | `te_region_area_on_actions.txt` | Writes each state region's land area once per save (`te_region_area_generated.txt`) | Mixed |
 | `un_on_actions.txt` | UN formation and recurring member events | Pulse (monthly) |
 | `wonder_events_on_actions.txt` | Wonder building narrative events | Pulse (monthly) |
+| `te_tax_on_actions.txt` | Legislated tax code (rule-gated): the global monthly dispatch of the processor `te_tax.1` on the 1st, the country-pulse watchdog, migration at game start and for formed and released countries, the carrier re-assert on `on_law_activated`, relief marks on state transfers | Mixed |
+| `te_civil_war_on_actions.txt` | The shared civil-war layer: outbreak, win and resolve hooks, which call each system's copy and repair (the tax code's `te_tax_on_uprising` and `te_tax_repair_after_civil_war` among them) | Immediate |
 
 ### Pulse Wiring (`extra_on_actions.txt`)
 
@@ -1917,7 +1928,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Game Rules
 
-Sixteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
+Seventeen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -1937,6 +1948,7 @@ Sixteen mod systems can be toggled on/off at game setup via `common/game_rules/e
 | `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); `_no_retooling` = the market without the retooling surcharge, `_no_maintenance` = the market without construction maintenance (§ Market settings without retooling or maintenance); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market, and `te_pm_retooling_waived` |
 | `internal_resettlement_rule` | `internal_resettlement_enabled` | enabled | Settlement Authority and resettlement programs; `_ai_voluntary` = AI countries run only voluntary programs |
 | `grand_monuments_rule` | `grand_monuments_enabled` | enabled | Grand Monument building, dedication ceremony, contests, Monuments JE; checked as `NOT = { has_game_rule = grand_monuments_disabled }` |
+| `te_tax_code_rule` | `te_tax_code_enabled`, `te_tax_code_enabled_customs` | **disabled** | The legislated tax code: vanilla taxation laws gated off, `law_te_tax_code` carrier with generated rate amendments (`gen_tax_code.py`); `_enabled_customs` also legislates customs. Checked **positively**, as `te_tax_code_on` / `te_tax_customs_on` (`common/scripted_triggers/te_tax_triggers.txt`), never `NOT = { ...disabled }` |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,

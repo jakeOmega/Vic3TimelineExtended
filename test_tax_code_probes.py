@@ -112,15 +112,25 @@ class TaxProbeSafetyTest(unittest.TestCase):
             self.assertFalse(stack, "unclosed GUI blocks")
 
     def test_known_native_controls_keep_original_validity_and_add_gate(self):
+        # The probe's lock now rides on the tax code's production gates (plan Task 9;
+        # every native site is listed in test_tax_code_bypass.py): six tax-level and
+        # consumption controls on te_tax_native_controls_sgui, the 14 tariff and
+        # subvention buttons on te_tax_native_tariff_controls_sgui.
         gui = read("gui/budget_panel.gui")
         matches = [line for line in gui.splitlines() if 'enabled = "[' in line and any(
             x in line for x in ("GetPlayer.SetExport", "GetPlayer.SetImport", "GetPlayer.HasAnyTaxes", "BudgetPanel.CanTaxGoods"))]
         self.assertEqual(len(matches), 20)
+        tariff = [line for line in matches if "GetPlayer.SetExport" in line or "GetPlayer.SetImport" in line]
+        self.assertEqual(len(tariff), 14)
         for line in matches:
-            self.assertIn("te_tp_native_controls_sgui", line)
-        gate = _txt_block(read("common/scripted_guis/te_debug_tax_sguis.txt"), "te_tp_native_controls_sgui")
-        self.assertIn("NOT = { has_variable = te_tp_lock }", gate)
-        self.assertNotIn("set_tax_level", gate)
+            gate = "te_tax_native_tariff_controls_sgui" if line in tariff else "te_tax_native_controls_sgui"
+            self.assertIn(f"GetScriptedGui('{gate}').IsValid(", line)
+        self.assertNotIn("te_tp_native_controls_sgui", gui)
+        sguis = read("common/scripted_guis/te_tax_native_sguis.txt")
+        for name in ("te_tax_native_controls_sgui", "te_tax_native_tariff_controls_sgui"):
+            gate = _txt_block(sguis, name)
+            self.assertIn("NOT = { has_variable = te_tp_lock }", gate)
+            self.assertNotIn("set_tax_level", gate)
 
     def test_probe_files_parse_and_domestic_rates_use_tax_namespace(self):
         paths = list((ROOT / "common").rglob("*te_debug_tax*.txt"))
@@ -156,6 +166,20 @@ class TaxProbeSafetyTest(unittest.TestCase):
         # The AI must still never pick the carrier by weight.
         self.assertIn("ai_enact_weight_modifier = { value = -100000 }", text)
 
+    def test_arm_event_refuses_under_the_tax_code_rule(self):
+        # The harness's carrier and amendments must not run beside the production
+        # system. Written inline: the te_tax_code_on trigger is defined later.
+        body = _txt_block(read("events/te_debug_tax_events.txt"), "te_debug_tax.1")
+        immediate = re.search(r"immediate = \{(.*)\}\s*$", body, re.S).group(1)
+        guard = re.search(r"if = \{\s*limit = \{(.*?)\}\s*te_tp_arm = yes\s*\}", immediate, re.S)
+        self.assertIsNotNone(guard, "te_tp_arm must sit inside the guarded if")
+        self.assertIn("NOT = { has_game_rule = te_tax_code_enabled }", guard.group(1))
+        self.assertIn("NOT = { has_game_rule = te_tax_code_enabled_customs }", guard.group(1))
+        refusal = re.search(r"else = \{(.*)\}", immediate, re.S)
+        self.assertIsNotNone(refusal, "a refused arm must say so")
+        self.assertIn("debug_log", refusal.group(1))
+        self.assertNotIn("te_tp_arm", refusal.group(1))
+
     def test_normal_entry_points_never_arm_a_country(self):
         hooks = read("common/on_actions/te_debug_tax_on_actions.txt")
         self.assertNotIn("id = te_debug_tax.1 ", hooks)
@@ -165,6 +189,57 @@ class TaxProbeSafetyTest(unittest.TestCase):
             body = _txt_block(effects, name)
             for mutation in ("add_modifier", "add_amendment", "set_import_tariff_level", "add_taxed_goods", "add_treasury"):
                 self.assertNotIn(mutation, body, name)
+
+
+PROBE_TYPES = "common/modifier_type_definitions/te_tax_probe_modifier_types.txt"
+PROBE_GOODS = ("grain", "iron")
+PROBE_FAMILIES = ("import_tariffs_rate_add", "export_tariffs_rate_add",
+                  "max_import_tariffs_level_add", "min_import_tariffs_level_add",
+                  "max_export_tariffs_level_add", "min_export_tariffs_level_add")
+# Where a per-good tariff modifier may be named: the registration, the harness
+# that applies it, and its loc. Anything else would apply it in a real game.
+PROBE_HOMES = {"te_tax_probe_modifier_types.txt", "te_debug_tax_modifiers.txt"}
+
+
+class CustomsProbeTest(unittest.TestCase):
+    """Plan Task 23 (spec 2026-10-03 §2.9): the customs probe registers the
+    per-good tariff families for two goods only, and nothing outside the
+    harness applies them, so the registration changes no rule-off game."""
+
+    def test_registration_names_exactly_the_probe_families(self):
+        names = set(re.findall(r"(?m)^(country_\w+) = \{", read(PROBE_TYPES)))
+        expected = {f"country_{g}_{f}" for g in PROBE_GOODS for f in PROBE_FAMILIES}
+        self.assertEqual(names, expected)
+
+    def test_no_production_file_names_a_per_good_tariff_modifier(self):
+        pattern = re.compile(r"\bcountry_\w+?_(?:import|export)_tariffs_\w+")
+        offenders = []
+        for folder in ("common", "events", "gui"):
+            for path in sorted((ROOT / folder).rglob("*")):
+                if path.suffix not in {".txt", ".gui"} or path.name in PROBE_HOMES:
+                    continue
+                if pattern.search(path.read_text(encoding="utf-8-sig")):
+                    offenders.append(str(path.relative_to(ROOT)))
+        self.assertEqual(offenders, [])
+
+    def test_lock_and_carrier_modifiers_are_applied_only_by_armed_probe_events(self):
+        events = read("events/te_debug_tax_events.txt")
+        for name in ("te_tp_lock_grain_low", "te_tp_cancel_max"):
+            appliers = [m.start() for m in re.finditer(rf"add_modifier = \{{ name = {name} \}}", events)]
+            self.assertTrue(appliers, name)
+            for event_id in ("te_debug_tax.80", "te_debug_tax.81", "te_debug_tax.82"):
+                body = _txt_block(events, event_id)
+                self.assertIn("has_variable = te_tp_armed", body, event_id)
+            for folder in ("common", "events"):
+                for path in sorted((ROOT / folder).rglob("*.txt")):
+                    if path.name in {"te_debug_tax_events.txt", "te_debug_tax_modifiers.txt", "te_debug_tax_effects.txt"}:
+                        continue
+                    self.assertNotIn(name, path.read_text(encoding="utf-8-sig"), str(path))
+
+    def test_clear_removes_the_new_probe_modifiers(self):
+        clear = _txt_block(read("common/scripted_effects/te_debug_tax_effects.txt"), "te_tp_clear")
+        for name in ("te_tp_lock_grain_low", "te_tp_cancel_max"):
+            self.assertIn(f"remove_modifier = {name}", clear)
 
 
 if __name__ == "__main__":
