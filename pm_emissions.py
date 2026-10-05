@@ -41,6 +41,13 @@ NETTED_FUEL = {
     "pm_condensing_engine_pump_building_coal_mine": {"coal": Decimal(15)},
     "pm_steam_donkey_building_coal_mine": {"coal": Decimal(3)},
 }
+# Methods whose coal/oil goods flow is not fuel, so they carry no emissions line
+# and offer no capture. The Strategic Reserve hub's recipe is a 1-unit base per
+# reserve good that runtime flow modifiers scale; it stores and releases oil and
+# burns none, so reading the base as fuel would charge every hub a fixed figure.
+EXEMPT_METHODS = {
+    "pm_st_res_hub_reserve": "Goods flow is a reserve stockpile, not burnt fuel.",
+}
 _DEFINITION = re.compile(r"(?m)^((?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?[\w-]+)\s*=\s*\{")
 
 
@@ -160,7 +167,10 @@ def plan_outputs(state, root):
             covered.update(unwrap(unwrap(groups[group])["production_methods"]))
     if unknown := NETTED_FUEL.keys() - methods.keys():
         raise ValueError(f"Netted-fuel methods are not defined: {sorted(unknown)}")
-    amounts = {name: recipe_emissions(methods[name], factors, display_scale, netted_fuel(name, methods[name]))
+    if unknown := EXEMPT_METHODS.keys() - methods.keys():
+        raise ValueError(f"Emissions-exempt methods are not defined: {sorted(unknown)}")
+    amounts = {name: Decimal(0) if name in EXEMPT_METHODS else
+               recipe_emissions(methods[name], factors, display_scale, netted_fuel(name, methods[name]))
                for name in covered}
     fuel_methods = sum(bool(amount) for amount in amounts.values())
     credits = {}

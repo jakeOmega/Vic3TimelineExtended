@@ -13,17 +13,16 @@
 # runtime flow modifiers (st_res_<good>_store_flow / _withdraw_flow) must be
 # `_mult`, and they need a non-zero base here to scale. Don't drop these.
 # See docs/guides/scripting_best_practices.md § "Goods I/O modifiers".
+#
+# The hub is exempt from greenhouse gas accounting (EXEMPT_METHODS in
+# pm_emissions.py): the oil in that base recipe is stockpiled, not burnt, so the
+# PM carries no state_greenhouse_gas_emissions_add line and offers no capture.
+# Don't add one by hand; gen_carbon_capture_pms.py would delete it again.
 # PMG definitions live in common/production_method_groups/strategic_reserve_pmgs.txt.
 # ============================================================================
 
 # ---------------- GRAIN ----------------
 pm_st_res_hub_reserve = {
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
-		}
-	}
-
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
