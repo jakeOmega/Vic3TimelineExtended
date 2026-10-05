@@ -63,6 +63,20 @@ religious_mission_rights = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = religious_mission_rights }
 		}
+		# The missionary power (the target: on_entry_into_force stores it on
+		# the state, and religious_mission_conversion_on_action converts
+		# toward its religion) must belong to a Religious power bloc (owner
+		# ruling 2026-10-05). Missions already in force stay: this is not in
+		# requirement_to_maintain.
+		custom_tooltip = {
+			text = religious_mission_rights_missionary_bloc_tt
+			scope:target_country = {
+				is_in_power_bloc = yes
+				power_bloc ?= {
+					has_identity = identity:identity_religious
+				}
+			}
+		}
 	}
 
 	state_valid_trigger = {

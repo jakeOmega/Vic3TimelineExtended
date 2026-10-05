@@ -187,6 +187,43 @@ ch_has_regressive_laws = {
 	}
 }
 
+# ---- Who leads the government ----
+# Scope: country
+# True when the interest group with the most clout in government holds a
+# communist ideology (an interest group counts its leader's ideology among its
+# own). The laws alone can't tell a communist one-party planned economy from a
+# nationalist, technocratic or military one, so the Communist model's one-party
+# branch asks who runs the party.
+ch_government_led_by_communists = {
+	any_interest_group = {
+		is_in_government = yes
+		is_strongest_ig_in_government = yes
+		OR = {
+			has_ideology = ideology:ideology_communist
+			has_ideology = ideology:ideology_vanguardist
+		}
+	}
+}
+
+# Scope: country
+# True when that interest group holds any left-wing ideology: the communist
+# pair, vanilla's Socialist (the Trade Unions gain it as the game goes on), the
+# Trade Unions' baseline Proletarian, or a Social Democrat leader. A Command
+# Economy run by the left counts as Socialist.
+ch_government_led_by_the_left = {
+	any_interest_group = {
+		is_in_government = yes
+		is_strongest_ig_in_government = yes
+		OR = {
+			has_ideology = ideology:ideology_communist
+			has_ideology = ideology:ideology_vanguardist
+			has_ideology = ideology:ideology_socialist
+			has_ideology = ideology:ideology_proletarian
+			has_ideology = ideology:ideology_social_democrat
+		}
+	}
+}
+
 # ---- Switched to the hegemon's model ----
 # Scope: country
 # True when this rebuild's census moved the country onto the model the world's
