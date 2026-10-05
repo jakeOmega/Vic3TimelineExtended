@@ -1224,9 +1224,9 @@ tech_marker_grants_on_action = {
 		# (a few hundred) rather than every state in the world. It runs every
 		# month, not once: a claim that reaches us after the first sweep is dropped
 		# within the month too. The stake action itself (da_stake_colonial_claim) is
-		# closed to us by te_stake_colonial_claim_injection.txt, so this is the
-		# backstop for claims that arrive another way. number_of_claims > 0 keeps a
-		# country with none off the scan.
+		# closed to us by te_stake_colonial_claim.txt, so this is the backstop for
+		# claims that arrive another way. number_of_claims > 0 keeps a country with
+		# none off the scan.
 		if = {
 			limit = {
 				modifier:country_remove_decentralized_claims_bool = yes

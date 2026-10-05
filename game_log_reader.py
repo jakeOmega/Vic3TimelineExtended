@@ -55,6 +55,26 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
     # (workshop id 3190466673). Each entry references a single GDPPP `.gui` file.
     "00_GDPPP_graph_tooltips.gui",
     "00_GDPPP_politics_panel_types.gui",
+    # Skyscrapers Galore (workshop id 3741386673) — its city types under
+    # gfx/map/city_data/city_types/ predate 1.14 and fail to parse ("Unexpected
+    # token: building_land_logistics_center", 2026-10-05). Only the names vanilla
+    # has no file of: its default_city.txt and default_port.txt override vanilla's.
+    "african_modern_city.txt",
+    "african_modern_port.txt",
+    "american_city_modern.txt",
+    "american_port_modern.txt",
+    "arabic_modern_city.txt",
+    "arabic_modern_port.txt",
+    "asian_modern_city.txt",
+    "asian_modern_port.txt",
+    "default_modern_city.txt",
+    "default_modern_port.txt",
+    "japan_modern_city.txt",
+    "japan_modern_port.txt",
+    "latin_modern_city.txt",
+    "latin_modern_port.txt",
+    "southasian_modern_city.txt",
+    "southasian_modern_port.txt",
 })
 
 
@@ -755,6 +775,79 @@ def tag_vanilla_bugs(
                     break
         if matched:
             e.vanilla_bug_ref = matched.to_dict()
+
+
+# ---------------------------------------------------------------------------
+# GUI-injected scopes (docs/audits/open_issues.md L14)
+# ---------------------------------------------------------------------------
+# The load-time validator (jomini_effect.cpp:1139) reports every event target
+# that script reads and no script sets. A .gui (or a loc string) that sets one
+# with AddScope('name', ...) for a script value to read as scope:name sets it
+# where the validator does not look, so the name is reported at every launch:
+# the market charts' base_market, the Strategic Reserve's sr_rival, the budget
+# panel's ~420 rows (2026-10-05). Tagging from the files that set them keeps
+# the match exact: a name nothing sets still surfaces.
+_GUI_ADDSCOPE_RE = re.compile(r"AddScope\(\s*'([A-Za-z0-9_]+)'")
+_NEVER_SET_EVENT_TARGET_RE = re.compile(r"^Event target '([A-Za-z0-9_]+)' is used but is never set")
+
+GUI_INJECTED_SCOPE_REF = VanillaBugRef(
+    title="GUI-injected scope flagged never-set (a mod .gui or loc string sets it with AddScope)",
+    file_basenames=[],
+    source_anchors=["jomini_effect.cpp:1139"],
+    signatures=[],
+    anchor="docs/audits/mod_known_noise.md#jomini_effectcpp1139--gui-injected-scopes-flagged-never-set",
+    kind="mod_low_priority",
+    tracked_issue="docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set",
+)
+
+_gui_scope_cache: dict[tuple[str, ...], tuple[tuple, frozenset[str]]] = {}
+
+
+def gui_injected_scope_names(roots: list[str]) -> frozenset[str]:
+    """Every name passed to `AddScope('<name>', ...)` in `.gui` / `.yml` files under `roots`.
+
+    Memoized on the roots and the files' mtimes, so a /logs request after an edit
+    sees the new names without a server restart.
+    """
+    files: list[tuple[str, float]] = []
+    for root in roots:
+        for dirpath, _dirs, names in os.walk(root):
+            for name in names:
+                if name.endswith((".gui", ".yml")):
+                    path = os.path.join(dirpath, name)
+                    try:
+                        files.append((path, os.path.getmtime(path)))
+                    except OSError:
+                        continue
+    stamp = tuple(sorted(files))
+    key = tuple(roots)
+    cached = _gui_scope_cache.get(key)
+    if cached and cached[0] == stamp:
+        return cached[1]
+    found: set[str] = set()
+    for path, _ in files:
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as f:
+                found.update(_GUI_ADDSCOPE_RE.findall(f.read()))
+        except OSError:
+            continue
+    result = frozenset(found)
+    _gui_scope_cache[key] = (stamp, result)
+    return result
+
+
+def tag_gui_injected_scopes(entries: list[LogEntry], names: frozenset[str]) -> None:
+    """Tag `Event target 'X' is used but is never set` as L14 noise when a mod file sets X with AddScope.
+
+    Skips entries an earlier registry pass already tagged, like tag_vanilla_bugs.
+    """
+    ref = GUI_INJECTED_SCOPE_REF.to_dict()
+    for e in entries:
+        if e.vanilla_bug_ref is not None:
+            continue
+        m = _NEVER_SET_EVENT_TARGET_RE.match(e.message)
+        if m and m.group(1) in names:
+            e.vanilla_bug_ref = dict(ref)
 
 
 def filter_entries(

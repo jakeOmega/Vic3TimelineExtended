@@ -204,11 +204,11 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 **Fix:** None needed while the override is intentional; delete this entry if `te_formation_overrides.txt` is ever retired.
 
 ### L14. GUI-injected event targets flagged never-set
-**Files:** `common/script_values/gui_chart_script_values.txt`, `gui/market_panel.gui`
+**Files:** `common/script_values/gui_chart_script_values.txt` + `gui/market_panel.gui` (`base_market`), `common/script_values/te_budget_generated_values.txt` + `gui/te_budget_generated_charts.gui` (the budget rows), the Strategic Reserve panel (`sr_rival`)
 
-**Problem:** The market-panel trade charts inject `base_market` via `GuiScope…AddScope('base_market', …)` and read it as `scope:base_market` inside script values. The parse-time validator can't see GUI `AddScope` calls, so it logs `Event target 'base_market' is used but is never set` once per launch. The chart works (documented at `gui_chart_script_values.txt:60-62`).
+**Problem:** A script value reads `scope:<name>` that a `.gui` sets with `GuiScope…AddScope('<name>', …)`. The parse-time validator can't see GUI `AddScope` calls, so it logs `Event target '<name>' is used but is never set` once per name per launch: about 420 lines since the budget panel's groups (2026-10-05). The charts work (documented at `gui_chart_script_values.txt:60-62`).
 
-**Fix:** None possible script-side — the scope genuinely is set only from GUI data context.
+**Fix:** None possible script-side — the scope genuinely is set only from GUI data context. Triage hides them with `tag_gui_injected_scopes` (`game_log_reader.py`), which tags only names some mod `.gui` or loc string passes to `AddScope`.
 
 ### L15. Vanilla principles orphaned by REPLACE:principle_group overrides
 **Files:** `common/power_bloc_principle_groups/extra_power_bloc_principle_groups.txt:173`
@@ -242,9 +242,9 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 **Fix:** None needed while the consoles exist. A new `te_debug_*` console needs no registry change. Delete this entry if the consoles are ever removed.
 
 ### L24. Old-save migration cleanup reads variables nothing sets
-**Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep)
+**Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep), `common/scripted_effects/trade_partner_effects.txt` (the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`, registered 2026-10-05)
 
-**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`) and its retired `sr_active_milestone` (#483, 2026-09-26), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of the fifteen. Harmless: each read is a `has_variable` guard in front of a `remove_variable`. Filtered from log triage via `docs/audits/mod_known_noise.md`, which names the fifteen, so a new never-set variable still shows up.
+**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`) and its retired `sr_active_milestone` (#483, 2026-09-26), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of them. The trading-partners refresh does the same for the ten old `tp_<n>_imp_rel` / `tp_<n>_exp_rel` (registered 2026-10-05). Harmless: each read is a `has_variable` guard in front of a `remove_variable`. Filtered from log triage via `docs/audits/mod_known_noise.md`, which names all twenty-five, so a new never-set variable still shows up.
 
 **Fix:** Delete the migration blocks, and this entry, once saves from before 2026-09-26 are no longer in play (a release or two after that date).
 

@@ -23,11 +23,11 @@
 #    the widget and the AI's buttons run the same script.
 #
 # 2. DISPLAY-ONLY HANDLERS — ch_show_sgui, ch_board_row_sgui,
-#    ch_board_detail_sgui, ch_history_marker_sgui (and the scope-free yes/no
-#    handlers at the foot of the file). All of them carry
+#    ch_board_detail_sgui (and the scope-free yes/no handlers at the foot of the
+#    file). All of them carry
 #    `is_valid = { always = no }` and `ai_is_valid = { always = no }`, so neither
 #    a player nor the AI can execute them. Two are pure questions with an empty
-#    effect (the banking dashboard's `banking_dash_phase_*` shape); two emit
+#    effect (the banking dashboard's `banking_dash_phase_*` shape); one emits
 #    nothing but `custom_tooltip` lines for `ExecuteTooltip` to render — vanilla's
 #    documented "using SGUIs to build lists in loc" pattern, see
 #    game/common/scripted_guis/scripted_guis.md.
@@ -554,73 +554,6 @@ ch_board_detail_sgui = {
 		else_if = {
 			limit = { scope:op = 10 }
 			global_var:ch_rank_10 ?= { custom_tooltip_no_bullet = ch_board_detail_10 }
-		}
-	}
-}
-
-# ---------------------------------------------------------------------------
-# HISTORY CHART — marker tooltips for the cultural-hegemony series
-# ---------------------------------------------------------------------------
-# Same shape as the shared te_history_marker_tooltip, but carrying only this
-# system's markers. te_history_chart takes the bar tooltip as a per-instance
-# blockoverride, so te_hist_tt_ch_share chains here instead of into the shared
-# handler and no shared file has to grow a cultural-hegemony branch.
-#
-# Each branch quotes the programme's own button name and static modifier
-# description, so a rebalance updates the marker text with no edit here.
-ch_history_marker_sgui = {
-	scope = country
-	saved_scopes = { te_hist_sample }
-
-	is_shown = {
-		always = yes
-	}
-
-	is_valid = {
-		always = no
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	effect = {
-		if = {
-			limit = { exists = scope:te_hist_sample }
-			scope:te_hist_sample = {
-				if = {
-					limit = { has_variable = te_hist_mk_ch_on_outreach }
-					custom_tooltip = ch_hist_mk_ch_on_outreach_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_off_outreach }
-					custom_tooltip = ch_hist_mk_ch_off_outreach_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_on_institutes }
-					custom_tooltip = ch_hist_mk_ch_on_institutes_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_off_institutes }
-					custom_tooltip = ch_hist_mk_ch_off_institutes_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_on_media }
-					custom_tooltip = ch_hist_mk_ch_on_media_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_off_media }
-					custom_tooltip = ch_hist_mk_ch_off_media_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_on_protectionism }
-					custom_tooltip = ch_hist_mk_ch_on_protectionism_tt
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_ch_off_protectionism }
-					custom_tooltip = ch_hist_mk_ch_off_protectionism_tt
-				}
-			}
 		}
 	}
 }

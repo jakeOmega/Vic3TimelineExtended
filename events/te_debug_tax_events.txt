@@ -717,9 +717,10 @@ te_debug_tax.69 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; h
 		has_variable = te_tp_armed
 	}
 	immediate = {
+		# The modifier half (te_tp_authority for days = var:te_tp_timer_days) was
+		# rejected at load, "Named value not found" (capability ledger row 20),
+		# and logged at every launch; removed 2026-10-05.
 		set_variable = { name = te_tp_timer value = 1 days = 7 }
-		set_variable = { name = te_tp_timer_days value = 7 }
-		add_modifier = { name = te_tp_authority days = var:te_tp_timer_days }
 	}
 }
 

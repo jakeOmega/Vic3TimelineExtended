@@ -125,7 +125,10 @@ imperial_federation_act_iron_fist = {
 	possible = {
 		# Sustained Solidified band (colonial_empire_values.txt; the Colonial
 		# Empire overview shows the same clock)
-		var:colonial_solidified_months >= colonial_empire_federation_months
+		custom_tooltip = {
+			text = imperial_federation_act_solidified_tt
+			colonial_solidified_months_value >= colonial_empire_federation_months
+		}
 		# Power and scale
 		country_rank >= rank_value:great_power
 		colonial_state_count >= 4
@@ -189,7 +192,10 @@ imperial_federation_act_civilizing_mission = {
 	}
 
 	possible = {
-		var:colonial_solidified_months >= colonial_empire_federation_months
+		custom_tooltip = {
+			text = imperial_federation_act_solidified_tt
+			colonial_solidified_months_value >= colonial_empire_federation_months
+		}
 		country_rank >= rank_value:great_power
 		colonial_state_count >= 4
 		OR = {

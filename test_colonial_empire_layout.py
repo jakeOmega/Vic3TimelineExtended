@@ -670,8 +670,13 @@ class CompletionClocksTest(unittest.TestCase):
         for d in ("imperial_federation_act_iron_fist", "imperial_federation_act_civilizing_mission"):
             with self.subTest(decision=d):
                 body = _block(decisions, d)
-                self.assertIn("var:colonial_solidified_months >= colonial_empire_federation_months", body)
-                self.assertNotRegex(body, r"colonial_solidified_months >= 36")
+                # The guarded value: the decision panel evaluates `possible` for a
+                # country whose entry has not pulsed yet (a bare var: read logged).
+                self.assertIn("colonial_solidified_months_value >= colonial_empire_federation_months", body)
+                self.assertNotIn("var:colonial_solidified_months", body)
+                self.assertNotRegex(body, r"colonial_solidified_months(_value)? >= 36")
+        self.assertRegex(self.values, r"(?s)colonial_solidified_months_value = \{\s*value = 0\s*if = \{\s*"
+                                      r"limit = \{ has_variable = colonial_solidified_months \}")
         tt = _loc()["je_colonial_empire_complete_tt"]
         for sv in ("colonial_empire_completion_months", "colonial_empire_federation_months"):
             self.assertIn(f"ScriptValue('{sv}')", tt, sv)

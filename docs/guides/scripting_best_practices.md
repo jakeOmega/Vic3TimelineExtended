@@ -1610,6 +1610,10 @@ Save-migration cleanup blocks that `remove_variable = X` for a variable the live
 ### A Widget That Prints an Optional Variable Needs That Variable Always Set
 A journal-entry widget re-evaluates its localization **every frame it is on screen**, so a loc value that prints a variable which is only *sometimes* written turns one missing write into a per-frame `failed to fetch variable` in `debug.log`. The fix is not a guard in the loc — there is no conditional numeric read — but to give the variable a neutral value in the same effect that may or may not compute it. The cultural-hegemony leaderboard hit this with the year-over-year deltas: `ch_yearly_global_update` only set `ch_rank_N_delta` when the previous year's score existed, so the board rows would have read ten unset globals for the whole of the first year. It now zeroes all ten before the conditional block, which is also the honest answer for a rank whose occupant is new. The same reasoning applies to a variable a country only gets once it qualifies for something: either initialise it, or clear it when it stops being meaningful (`ch_rank_self` is removed by the monthly pulse once a country drops out of the ranked set) and gate the whole row on a `has_variable` question answered in script.
 
+### A `country_event` Triggered From a State Scope Runs With the State as ROOT
+
+`scope:target_state = { trigger_event = { id = my.1 } }` fires `my.1` with ROOT = the state, even when it is a `type = country_event` written for a country. Nothing logs at the call. Country-only effects then fail inside the event: a `post_notification` of a `type = country` message logs `post_notification effect [ Type mismatch, notification is incompatible with scope ]`, and country triggers in its options read the wrong scope. Five nuclear-strike events for the struck country (`nuclear_weapon_events.1`, `.3`, `.5`, `.11`, `.13`) were fired this way until 2026-10-05. Fire it on the country instead (`owner = { trigger_event = … }` inside the state scope). Saved scopes still reach the event, so loc such as `[SCOPE.sState('target_state').GetName]` keeps working.
+
 ### `trigger_event = { id = <missing_namespace>.X }` Silently No-Ops
 The engine emits no log warning when a `trigger_event` references a missing event ID — the call simply does nothing and the AI-weight slot is wasted on a dead branch. Particularly insidious inside `random_list` weighted blocks that retire a JE: deleting the events without removing the dispatcher leaves a no-op slot that's invisible to log triage. Verify after any "absorb events into another file" refactor: `grep -rn "^namespace = <name>" events/` for every dispatcher target. See also `feedback_commit_claim_vs_reality.md` — commit bodies that claim absorption may not match the diff.
 
@@ -2847,7 +2851,9 @@ Merge semantics are documented to vary by entity type, so a **new** entity type 
 
 **READ IN GAME (owner, 2026-10-04): an `INJECT` that names a block vanilla's ideology already has adds a second block, it doesn't merge.** `INJECT:ideology_hierarchic = { lawgroup_army_model = { law_private_military_contractors = strongly_approve } }` left vanilla's Army Model stances in place and added the new one, but the Hierarchic tooltip listed "Stance on Army Model" twice: vanilla's four laws, then the injected one in a section of its own at the end. Both apply. That fits INJECT appending a key vanilla already declares rather than merging into it, which is also what makes the modifier blocks above sum. `apply_ideologies.py` therefore REPLACEs any ideology whose modifications touch a vanilla block. `paradox_file_parser` deep-merges such an INJECT instead, which gives the same stances when the two blocks name different laws.
 
-**Pending read (2026-10-03, stake colonial claim):** `common/diplomatic_actions/te_stake_colonial_claim_injection.txt` INJECTs a second `possible` block into vanilla `da_stake_colonial_claim` to close the action to a country with `country_remove_decentralized_claims_bool` (Decolonization's marker). Vanilla declares all four trigger blocks of that action (`selectable`, `potential`, `possible`, `second_state_trigger`), so there is no empty field to use, and whether the engine ANDs the two `possible` blocks, keeps the last or keeps the first has not been read. The tell is the action's tooltip on a decentralized state in a strategic region the actor has interest in: vanilla's cooldown and interest-tier lines plus the new "Has not renounced claims ... through Decolonization" line means it merged; only the new line means last-wins (vanilla's gates are gone for every country: delete the file and `REPLACE:` the action from the installed game's copy, as `te_force_become_subject.txt` does; the parsed `vanilla_parsed/` copy loses statement order in effects, so it is not a safe source); only vanilla's lines means first-wins and the injection is ignored. `tech_marker_grants_on_action`'s monthly sweep enforces the rule either way. Record the result here.
+### A second trigger block is rejected at load: `INJECT` can't add to `possible`
+
+**READ IN LOG (2026-10-05).** `te_stake_colonial_claim_injection.txt` INJECTed a second `possible` block into vanilla `da_stake_colonial_claim` to close the action to a country with `country_remove_decentralized_claims_bool`. Every load logged `Error: "Trigger section already read earlier: possible, near line: 29"` against the INJECT's block, and the action kept vanilla's gates alone. A diplomatic action reads each trigger block (`selectable`, `potential`, `possible`, `second_state_trigger`) once and refuses a second. So unlike modifier blocks and ideology lawgroup blocks, which the engine keeps twice (above), a trigger block vanilla declares can't be extended with `INJECT`. To add a condition to one, `REPLACE:` the whole entity, re-copied from the installed game (`te_force_become_subject.txt` is the pattern; `vanilla_parsed/` loses statement order). The injection is now `te_stake_colonial_claim.txt`, a `REPLACE:` of the whole action copied from the installed 1.14.5 game with the condition added to `possible`.
 
 ### `INJECT:` silently fails on mod-only or REPLACEd entities
 
@@ -3007,28 +3013,33 @@ Vanilla precedent: `00_ip4_victoria_scripted_triggers.txt` uses `scope:law.type 
 
 **A law's own `on_activate` is ambiguous about timing.** Vanilla is mixed on whether the new law already counts as active there: the church-and-state laws test for the same-group law being replaced, while `law_council_republic` tests for itself. Anything that must read the *new* law state (`active_law:lawgroup_X`, `has_law`) should also run from `on_law_activated`, as `te_refresh_collective_governance_amendment` does.
 
-## `create_dynamic_country.on_created`: Save Parent Scope BEFORE the Call
+## `create_dynamic_country.on_created` Can't See Saved Scopes: Do the Cross-Country Work After the Call
 
-Inside `on_created`, the scope is the new country and **the original creator country is not directly accessible** — `owner` of any state passed in is now the new country (the cede happened as part of the create). To reference the parent (e.g. to apply path-dependent legacy modifiers, set initial diplomatic relations, or read parent variables), `save_scope_as = X` on the parent **before** the create_dynamic_country block:
+Inside `on_created` the scope is the new country, and **a scope saved before the call is unset there**. The original creator isn't reachable either: `owner` of any state passed in is now the new country, because the cede happens inside the create. This section used to recommend `save_scope_as` on the parent before the call and reading `scope:parent` inside `on_created`, with decolonization as its example. The 2026-10-05 logs and save disproved it. Every country `form_decolonized_country` created logged `Invalid right side during comparison 'scope'` from `apply_decolonization_path`, an unguarded `this = scope:decolonizing_parent`. In the save, none of the five countries formed that night held `former_overlord`, `recently_decolonized` or a legacy modifier, so every `exists = scope:decolonizing_parent` guard had been false and the whole legacy silently skipped.
+
+Do what vanilla's colonial-administration buttons do (`00_colonial_administration_buttons.txt`): keep `on_created` to the new country's own state (country type, marker cleanup, its own events), and do everything that needs the parent **after** the `create_dynamic_country` block, where the saved scopes are still set. Reach the new country through the capital you passed in, which it now owns:
 
 ```
 form_decolonized_country = {
     save_scope_as = new_country_capital
-    owner = { save_scope_as = decolonizing_parent }   # save BEFORE create
+    owner = { save_scope_as = decolonizing_parent }
 
     create_dynamic_country = {
         ...
         on_created = {
-            ...
-            scope:decolonizing_parent = {
-                change_relations = { country = ROOT value = -50 }
-            }
+            set_country_type = recognized   # the new country only
+        }
+    }
+    scope:new_country_capital.owner ?= {
+        if = {
+            limit = { NOT = { this = scope:decolonizing_parent } }   # the create failed: no free tag
+            apply_decolonization_path = yes   # ROOT is the caller's; save THIS for the relations calls
         }
     }
 }
 ```
 
-**Repo example:** `apply_decolonization_path` + `form_decolonized_country` in `common/scripted_effects/decolonization.txt` — reads `scope:decolonizing_parent.var:colonial_garrison_months` etc. inside the new country's `on_created` to apply the right legacy modifier.
+ROOT after the call is the caller's root, not the new country. A helper moved out of `on_created` that used `ROOT` for the new country must save `THIS` at its top and use that instead (`apply_decolonization_path` saves `scope:decolonized_new_country`).
 
 ## `create_dynamic_country` Runs in `scope = none`
 
@@ -3107,6 +3118,12 @@ random_list = {
 The engine reports no error; the malformed color expression triggers the documented "will try to inherit map color from origin if not specified" fallback, so every dynamic country comes out the metropole's color and the bug looks like "random_list isn't actually random."
 
 **Fix**: inline the variants with literal values. For the 12-color decolonization picker, that's 12 inline `create_dynamic_country` branches — verbose but engine-correct. Other patterns (modifier names, variable names, scope refs) substitute fine; the gotcha is specific to types parsed before scripted-effect expansion (`color`, `hsv`, `hsv360`, named-color references, etc.).
+
+## Every Argument a Call Passes Must Appear in the Callee's Body
+
+The engine compiles a parameterized scripted effect or trigger once per call, from the `$X$` names in its body. A call that passes an argument the body never names fails that compile, and the call cannot be trusted to run: `Compiling source for <callee> failed for unknown arguments: SETTING. At <file>:<line>`. A callee with no `$X$` at all, called with a block, also logs `Scripted trigger should have no arguments` and `PostValidate of trigger '<callee>' returned false`. The lines appear at every load, and the dedupe folds a family of them into one entry, so count them in the raw logs.
+
+Two mod sites shipped this way, one of them cited in the other's comments as proof that unused arguments were fine. `st_res_policy_set_by_hand_base` took `SETTING` from both Strategic Reserve steppers and named only `GOOD` (64 lines a launch in each of debug.log and error.log). The tax code's `te_tax_obl_is_maintenance` dispatcher passes `ARG` and `TARGET` to every kind, and kinds 2 and 4 named neither. The fixes: drop the argument at the call, or, where a uniform dispatcher must pass it, name it in the callee where it never runs (`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`, 2026-10-05).
 
 ## `ordered_scope_state` `position = N` + `check_range_bounds = no` Clamps Out-of-Range
 
@@ -3608,6 +3625,8 @@ The full forensic record of one domestic-lobby crash, including ruled-out hypoth
 
 Each lobby type lists, per direction, which factors may move its appeasement: `appeasement_factors_pro` for a positive `amount`, and `appeasement_factors_anti` for a negative one (`00_political_lobbies.txt`). `appeasement_special_events_positive` / `_negative` describe how the event treats the lobby's target country. So `lobby_pro_country` gains on `_positive`, and `lobby_anti_country` gains on `_negative` and loses on `_positive`. Vanilla's `add_lobby_appeasement_from_diplomacy_unidirectional` passes one `FACTOR` with `PRO_AMOUNT = 1` / `ANTI_AMOUNT = -1`. Any other pairing is rejected and skipped, and error.log shows `Appeasement change failed, check that '<factor>' is a valid appeasement reason for political lobby '<type>'`. The nuclear-crisis helper `nd_lobby_react` picked the factor from the sign of the amount, so all five of its anti-lobby calls failed until 2026-09-25. Its parameter is now `EVENT`, and a pro/anti pair reacting to one event passes the same value. The same holds for the named factors: `appeasement_relations_decreased` is a loss for the pro lobby and a gain for the anti lobby, so vanilla pairs it with `PRO_AMOUNT = -1` / `ANTI_AMOUNT = 1`. Five mod event options had those signs reversed until 2026-10-04, and one that improved relations named the decrease. `test_lobby_appeasement_factors.py` checks every call of the country-lobby wrappers against the lobby types' lists.
 
+**Don't pass `THIS` to vanilla's lobby-appeasement wrappers.** `add_lobby_appeasement_from_diplomacy_unidirectional` (`00_lobby_effects.txt`) tests `target = $SECOND$` inside `$FIRST$`'s `every_political_lobby`, where `THIS` is the lobby. `SECOND = THIS` from inside an `every_country` therefore compares a country with a lobby (`Left side and right side during comparison were of different types (left was 'country', right was 'political_lobby')`) and moves no appeasement. Save the country first (`save_temporary_scope_as = summit_great_power`) and pass the scope. The international-summit options did this until 2026-10-05.
+
 ## Engine Vocabulary That Doesn't Exist — Verify Before Designing
 
 Several plausible-sounding names turn up empty when you go to use them. Discovered the hard way during the colonial-empire redesign; recording so the next pass doesn't re-walk the same diff.
@@ -3615,6 +3634,8 @@ Several plausible-sounding names turn up empty when you go to use them. Discover
 **No `complete_journal_entry` effect.** The vanilla way to programmatically end a JE is the `complete` block + variable pattern: a decision sets `set_variable = my_je_done`, and the JE's `complete` block reads `OR = { <existing condition> ; has_variable = my_je_done }`. The `on_complete` block can branch on the variable to fire a path-specific event. Used in `je_colonial_empire` for the Imperial Federation Act capstone (decision sets `imperial_federation_taken` + `imperial_federation_iron_fist|civilizing` variables; JE routes to events 300/301 by variable).
 
 **No `friendly` / `hostile` attitudes.** The `has_attitude` key set is closed and engine-side: `conciliatory`/`cooperative`/`genial`/`protective` (positive), `wary`/`antagonistic`/`belligerent`/`domineering` (negative), `cautious`/`disinterested`/`human` (neutral), `loyal`/`aloof`/`defiant`/`rebellious` (subject-only). `attitude = friendly` / `attitude = hostile` silently never match — no parse error, no log line (2026-06-11 audit, 42 sites across treaty articles; see issue #211). Want "friendly" → `genial`; want "hostile" → `domineering` (or the antagonistic/belligerent/domineering OR-set).
+
+**`relations_threshold:` takes seven names.** Six come from `RELATIONS_THRESHOLD_*` in `00_defines.txt`: `friendly` (80), `amicable` (50), `cordial` (20), `poor` (−20), `cold` (−50) and `hostile` (−80). The seventh is `neutral`, which vanilla also uses. Any other name, such as `disloyal`, parses but fails at runtime with `Invalid right side during comparison 'relations_threshold'`; the decolonization AI weight that used it never applied (2026-10-05).
 
 **Vic3 has no EU4/CK3-style flags.** `set_country_flag` / `has_country_flag` / `clr_country_flag` / `set_global_flag` / `has_global_flag` do not exist in Vic3 — they parse-error silently into "Unknown effect" / "Unknown trigger" cascades, and downstream effects in the same block get mis-attributed as unknown. Use `set_variable = NAME` (bare form sets to "yes") and `has_variable = NAME` (or `var:NAME`) instead. Vanilla pattern: `set_variable = brazil_spurned_heir` / `has_variable = brazil_spurned_heir`. Globals: `set_global_variable` / `has_global_variable` / `global_var:NAME`.
 
@@ -4512,6 +4533,8 @@ Vanilla names the target `scope:target_country` in every AI block (600+ uses in 
 ## Every New Diplomatic Action Needs a Lens-Toolbar Icon
 
 The engine loads `gfx/interface/icons/lens_toolbar_icons/<action_key>.dds` for every diplomatic action without `show_in_lens = no`, whatever `texture =` says. A missing file does not hide the action. It shows up as `VFSOpen Error: gfx/interface/icons/lens_toolbar_icons/<action_key>.dds not found` in `debug.log` every session, and the button draws with no icon. Ship a DDS with the action: a copy of the nearest existing icon is enough. The covert operations do this (`test_covert_op_registry.py` checks it), as do the three nuclear-crisis actions (`test_nuclear_deterrence.py`), whose 100×100 icons are downscaled from the 1024×1024 `nuke_diplo_action.dds` so the repository does not carry two more 4 MB copies. For an action whose icon comes from the FLUX pipeline (`scripts/image_pipeline/generate_icons.py`), `--stage write` keeps the lens copy byte-identical to the action icon, which is what vanilla ships. It skips actions with `show_in_lens = no`. Wiring a new `texture =` without it leaves the old lens file showing: #535 did exactly that, and every covert operation kept its thumbs-down placeholder in the lens bar while the country menu showed the new art.
+
+`show_in_lens = no` keeps an action off the lens bar but does not stop every lookup: `voluntary_union`, which has it, still logged `VFSOpen Error: …/lens_toolbar_icons/voluntary_union.dds not found` once in a session (2026-10-05) while `voluntary_union_decentralized` did not. When one shows up, give the action the byte copy anyway.
 
 ## An Approach-to-Target Model Never Reaches an Absorbing Boundary — Give the Step a Floor There
 

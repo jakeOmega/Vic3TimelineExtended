@@ -587,6 +587,52 @@ retire_character effect [ Wrong scope for effect: none, expected character ]
 
 `c:BRZ = this` (line 98) fails when Brazil no longer exists. `scope:general_2 = { retire_character = yes }` (lines 209–210) fails when the event found only one general to save. One line each per firing, 2026-09-26.
 
+### `events/fascism_events.txt:168, 308` — `scope:general_2` and `scope:fascist_leader_2` read when only one was saved
+
+```
+kill_character effect [ Wrong scope for effect: none, expected character ]
+Undefined event target 'fascist_leader_2'
+Event target link 'scope' returned an unset scope
+```
+
+Two more reads of the event's second saved character with no existence check: `scope:general_2 = { kill_character = yes }` (line 168) and `scope:fascist_leader_2 = { has_role_of_type = politician }` (line 308). They fail when the event found only one. Sibling of the entry above; one or two lines a firing, 2026-10-05.
+
+### `events/train_events.txt:28` and `events/agitators_events/revolution_events_02.txt:1777` — an interest group's `leader` read without `?=`
+
+```
+Could not get leader of interest group
+Event target link 'leader' returned an unset scope
+```
+
+The railway event's `any_interest_group = { … leader = { is_busy = no … } }` and the revolution event's `ig:ig_trade_unions ?= { leader = { has_socialist_ideology = yes } }` guard the group but not its leader. Same pattern as the religious-movement and lobby entry above (2026-10-05: the Red Army in Satara, the Trade Unions in Tawantinsuyu, nine lines).
+
+### `common/journal_entries/04_princely_states.txt:40, 41` — `scope:overlord_scope` used after a search that saved nothing
+
+```
+Undefined event target 'overlord_scope'
+Event target link 'scope' returned an unset scope
+post_notification effect [ Type mismatch, notification is incompatible with scope ]
+```
+
+The entry saves `overlord_scope` inside a search and then posts `struggle_for_sovereignty_message` to it unconditionally. When the search finds no overlord, both lines fail. Once in a session, 2026-10-05.
+
+### `common/scripted_triggers/00_diplomacy_triggers.txt:188` (from `common/script_values/00_infamy_values.txt:185`) — `scope:infamy_target_state.owner` passed as the target
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+The infamy value calls `is_scripted_unification_conquest = { TARGET = scope:infamy_target_state.owner }`, and the trigger reads `$TARGET$` with no existence check, so it fails when that state's owner is invalid. Once in a session, 2026-10-05.
+
+### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
+
+```
+Event target link 'c' returned an unset scope
+Invalid left side during comparison 'c'
+```
+
+Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries.
+
 ### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
 
 ```
@@ -1164,7 +1210,7 @@ Now and then the engine fires `on_start_expanding_building` (vanilla documents `
 Invalid promote 'NAVAL_BATTLE'
 ```
 
-Vanilla naval-battle UI loc accessors (`NAVAL_BATTLE.GetAttackerNumWantedShipsDesc`, `GetDefenderNumWantedShipsDesc`, `CalcCurrentAttackerPowerProjection`, `CalcCurrentDefenderPowerProjection`) are tagged const but the engine demands a non-const promote for the path it takes through them. Vanilla bug — fires once per UI render of the battle-ships breakdown panel. Cosmetic; the loc still resolves to fallback text.
+Vanilla naval-battle UI loc accessors (`NAVAL_BATTLE.GetAttackerNumWantedShipsDesc`, `GetDefenderNumWantedShipsDesc`, `CalcCurrentAttackerCombatPower`, `CalcCurrentDefenderCombatPower`; before 1.14.4 `CalcCurrentAttackerPowerProjection` / `CalcCurrentDefenderPowerProjection`) are tagged const but the engine demands a non-const promote for the path it takes through them. Vanilla bug — fires once per UI render of the battle-ships breakdown panel. Cosmetic; the loc still resolves to fallback text.
 
 ### `pdx_data_callstack.cpp:16` — vanilla data context not supplied for chained loc accessors
 - source: `pdx_data_callstack.cpp:16`
@@ -1472,6 +1518,15 @@ No player found for set playable command
 ```
 
 One line a few seconds after loading a save (2026-09-27, 14:58), with no script frame. The engine's console/control layer logs it when a set-playable command has no player to assign; nothing in script issues that command. Not actionable from script.
+
+### `pdx_assert.cpp:641` — `Goods transfer shipping lane with invalid treaty`
+- source: `pdx_assert.cpp:641`
+
+```
+Goods transfer shipping lane with invalid treaty
+```
+
+An engine assertion with no script frame, about once a session shortly after load. It first appeared with 1.14.4 (issue #389) and is still there in 1.14.5 (2026-10-05, eleven seconds after loading a save). Not actionable from script.
 
 ## How to triage a new error-log entry
 

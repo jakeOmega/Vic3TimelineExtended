@@ -94,7 +94,7 @@ Duplicated event ID 'formation.17' found
 
 `events/te_formation_overrides.txt` deliberately redefines vanilla `formation.17`. The engine keeps `Previous` (the mod file) and rejects `New` (vanilla), so the override works; the notice is by-design. Signature pinned to the specific event ID so a *different* duplicated-ID collision still surfaces in triage. Tracked at `docs/audits/open_issues.md#l13-mod-event-override-duplicate-event-id-notices`.
 
-### `jomini_effect.cpp:1139` — GUI-injected `base_market` scope flagged never-set
+### `jomini_effect.cpp:1139` — GUI-injected scopes flagged never-set
 - source: `jomini_effect.cpp:1139`
 - tracked: `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`
 
@@ -102,7 +102,7 @@ Duplicated event ID 'formation.17' found
 Event target 'base_market' is used but is never set
 ```
 
-The market-panel trade charts inject `base_market` from GUI via `AddScope('base_market', …)` (`gui/market_panel.gui`) and read it in `common/script_values/gui_chart_script_values.txt`. The parse-time validator cannot see GUI AddScope calls. Works in-game; documented in the script-value file's header. Tracked at `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`.
+A `.gui` (or a loc string) that sets a scope with `AddScope('<name>', …)` for a script value to read as `scope:<name>` sets it where the parse-time validator cannot look, so the validator reports `Event target '<name>' is used but is never set` once per launch. The market-panel trade charts' `base_market` (`gui/market_panel.gui`, read in `common/script_values/gui_chart_script_values.txt`) was the first; the Strategic Reserve's `sr_rival` and the budget panel's rows (`gui/te_budget_generated_charts.gui`, read in `common/script_values/te_budget_generated_values.txt`, about 420 names) followed. They all work in game. The signature above is only the first name. The rest are tagged by `tag_gui_injected_scopes` in `game_log_reader.py`, which collects every `AddScope('<name>'` in the mod's `gui/` and English loc and tags exactly those names, so a never-set name that nothing sets still surfaces. Tracked at `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`.
 
 ### `power_bloc_principle.cpp:139` — vanilla principles orphaned by REPLACE:principle_group
 - source: `power_bloc_principle.cpp:139`
@@ -152,9 +152,10 @@ One line per launch; the queried-but-missing texture slot hasn't been identified
 
 ```
 Event te_debug_
+Event te_tax_debug.
 ```
 
-The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fired by hand with `event te_debug_<x>.1`. Nothing in script fires them, so each is logged as orphaned at load (ch, colonial_empire, covert, gw, nuclear, space_race, un as of 2026-09-19). By design. The signature is the `te_debug_` prefix only, not `is orphaned`, because signatures match if ANY line matches: an `is orphaned` line would also hide a real mod event that lost its trigger. A new console needs no change here. Tracked at `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`.
+The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fired by hand with `event te_debug_<x>.1`. Nothing in script fires them, so each is logged as orphaned at load (ch, colonial_empire, covert, gw, nuclear, space_race, un as of 2026-09-19). The tax code's console (`te_tax_debug.1`–`.8`, `events/te_tax_debug_events.txt`) takes the other word order, so it has a signature of its own. By design. The signature is the `te_debug_` prefix only, not `is orphaned`, because signatures match if ANY line matches: an `is orphaned` line would also hide a real mod event that lost its trigger. A new console needs no change here. Tracked at `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`.
 
 ### `jomini_effect.cpp:1139` — old-save migration cleanup reads variables nothing sets
 - source: `jomini_effect.cpp:1139`
@@ -176,9 +177,19 @@ Variable 'nd_stance_dove' is used but is never set
 Variable 'nd_stance_business' is used but is never set
 Variable 'un_founding_window_active' is used but is never set
 Variable 'sr_active_milestone' is used but is never set
+Variable 'tp_1_imp_rel' is used but is never set
+Variable 'tp_1_exp_rel' is used but is never set
+Variable 'tp_2_imp_rel' is used but is never set
+Variable 'tp_2_exp_rel' is used but is never set
+Variable 'tp_3_imp_rel' is used but is never set
+Variable 'tp_3_exp_rel' is used but is never set
+Variable 'tp_4_imp_rel' is used but is never set
+Variable 'tp_4_exp_rel' is used but is never set
+Variable 'tp_5_imp_rel' is used but is never set
+Variable 'tp_5_exp_rel' is used but is never set
 ```
 
-`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`) and the UN dissolution sweep (`un_ladder_effects.txt`) remove variables an older save may still hold and nothing sets any more, each behind a `has_variable` guard. The validator reports each read once per launch. The signatures name all fifteen variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
+`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) remove variables an older save may still hold and nothing sets any more. The validator reports each read once per launch. The signatures name all twenty-five variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
 
 ### `jomini_eventmanager.cpp:376` — `un_vote.5` kept for events queued in older saves
 - source: `jomini_eventmanager.cpp:376`

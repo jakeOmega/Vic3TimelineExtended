@@ -1649,7 +1649,7 @@ decolonization_events.14 = {
 						NOT = { this = root }
 						country_rank >= rank_value:great_power
 						any_scope_state = { is_overseas_colonial_state = yes }
-						relations:root <= relations_threshold:disloyal
+						relations:root <= relations_threshold:poor
 					}
 				}
 				add = 5
@@ -4371,8 +4371,18 @@ decolonization_events.401 = {
 			text = decolonization_confirm_planned_tt_header
 			every_scope_state = {
 				limit = { has_variable = decolonization_marker }
-				form_decolonized_country = yes
-				remove_variable = decolonization_marker
+				# Checked again as each state comes up: an earlier state's new
+				# country may already have taken this one with its region (its
+				# on_created clears the marker), and forming again from it would
+				# make that new country the "parent" of another.
+				if = {
+					limit = {
+						has_variable = decolonization_marker
+						owner = ROOT
+					}
+					form_decolonized_country = yes
+					remove_variable = decolonization_marker
+				}
 			}
 		}
 		decol_record_chosen_release = yes

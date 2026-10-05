@@ -305,9 +305,13 @@ international_relations_events.3 = {
 					country = ROOT
 					value = 10
 				}
+				# Vanilla's wrapper compares SECOND inside ROOT's
+				# every_political_lobby, where THIS is the lobby, so the great
+				# power goes in as a saved scope.
+				save_temporary_scope_as = summit_great_power
 				add_lobby_appeasement_from_diplomacy_unidirectional = {
 					FIRST = ROOT
-					SECOND = THIS
+					SECOND = scope:summit_great_power
 					PRO_AMOUNT = 1
 					ANTI_AMOUNT = -1
 					FACTOR = appeasement_relations_increased
@@ -336,9 +340,13 @@ international_relations_events.3 = {
 					country = ROOT
 					value = 5
 				}
+				# Vanilla's wrapper compares SECOND inside ROOT's
+				# every_political_lobby, where THIS is the lobby, so the great
+				# power goes in as a saved scope.
+				save_temporary_scope_as = summit_great_power
 				add_lobby_appeasement_from_diplomacy_unidirectional = {
 					FIRST = ROOT
-					SECOND = THIS
+					SECOND = scope:summit_great_power
 					PRO_AMOUNT = 1
 					ANTI_AMOUNT = -1
 					FACTOR = appeasement_relations_increased
@@ -374,9 +382,13 @@ international_relations_events.3 = {
 					country = ROOT
 					value = -5
 				}
+				# Vanilla's wrapper compares SECOND inside ROOT's
+				# every_political_lobby, where THIS is the lobby, so the great
+				# power goes in as a saved scope.
+				save_temporary_scope_as = summit_great_power
 				add_lobby_appeasement_from_diplomacy_unidirectional = {
 					FIRST = ROOT
-					SECOND = THIS
+					SECOND = scope:summit_great_power
 					PRO_AMOUNT = -1
 					ANTI_AMOUNT = 1
 					FACTOR = appeasement_relations_decreased

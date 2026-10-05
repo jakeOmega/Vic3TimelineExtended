@@ -89,7 +89,6 @@ te_tp_clear = {
 	if = { limit = { has_variable = te_tp_ai_step } remove_variable = te_tp_ai_step }
 	if = { limit = { has_variable = te_tp_lock } remove_variable = te_tp_lock }
 	if = { limit = { has_variable = te_tp_timer } remove_variable = te_tp_timer }
-	if = { limit = { has_variable = te_tp_timer_days } remove_variable = te_tp_timer_days }
 	if = { limit = { has_variable = te_tp_last_month } remove_variable = te_tp_last_month }
 	if = { limit = { has_variable = te_tp_expiry_version } remove_variable = te_tp_expiry_version }
 	if = { limit = { has_variable = te_tp_customs_clause } remove_variable = te_tp_customs_clause }
