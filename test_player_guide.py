@@ -59,9 +59,9 @@ class CrossLinkTests(unittest.TestCase):
         self.assertEqual(guide.rewrite_cross_links(text, {}), "See [the rate](#the-policy-rate).")
 
     def test_bare_chapter_link_targets_its_first_heading(self):
-        text = "See [banking](04-banking.md) and [space](15-space.md)."
+        text = "See [banking](04-banking.md) and [space](16-space.md)."
         out = guide.rewrite_cross_links(text, {"04-banking.md": "banking-and-monetary-policy"})
-        self.assertEqual(out, "See [banking](#banking-and-monetary-policy) and [space](15-space.md).")
+        self.assertEqual(out, "See [banking](#banking-and-monetary-policy) and [space](16-space.md).")
 
     def test_external_and_local_links_untouched(self):
         text = "[a](https://example.com/x.md#y) [b](#local) [c](images/pic.png)"

@@ -28,7 +28,7 @@ The entry appears once you have researched Stock Exchange and own an Urban
 Center of level 5 or higher. It starts at Stable with no momentum or bubble, and
 stays for the rest of the game. If a revolution succeeds, the new government
 carries on the cycle and the central bank where the old one left them (see
-[After a revolution](05-politics.md#after-a-revolution)), but policies you had
+[After a revolution](06-politics.md#after-a-revolution)), but policies you had
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
@@ -256,7 +256,7 @@ under Simplified. The leaning tools drain bubble pressure and cool a boom, the
 credit tools feed growth, the crisis tools shorten a slump, and the foreign
 capital tools manage gold and the exchange rate. The sections below say what
 each group buys, what it needs and when it is worth its points. [Banking tool
-list](19-appendix-reference-lists.md#banking-tool-list) gives every tool with its
+list](20-appendix-reference-lists.md#banking-tool-list) gives every tool with its
 category, points and requirements in one table.
 
 Because momentum loses a tenth of itself each month, a steady push settles at
@@ -487,7 +487,7 @@ effects outside the cycle, listed in their tooltips, and these apply under every
 Disabled included: Urban Center throughput, the investment pool, innovation and
 government dividends. Central Bank Independence, for one, strengthens your
 economic defense against covert operations (see [Covert
-defense](10-influence.md#covert-defense)).
+defense](11-influence.md#covert-defense)).
 
 The National Bank law group decides whether you have a central bank. National
 Bank Established (Central Banking) adds an intervention point and the National
@@ -782,7 +782,7 @@ When inflation reaches 50%, Not Worth the Paper offers three answers:
 ### Monetary treaty articles
 
 Five treaty articles tie money or debts across borders; all need the full
-Banking System (treaties in general: [Diplomacy](08-diplomacy.md)).
+Banking System (treaties in general: [Diplomacy](09-diplomacy.md)).
 
 A pegged country is anchored. It has no dial and prints no money: its policy
 rate is the anchor's plus a spread, its exchange rate is the anchor's, and it
@@ -804,7 +804,7 @@ The last two are hostile: a larger power can demand them only of a country in
 default. If the stronger party leads a power bloc, each article also gives it
 leverage generation over the weaker, from 150 to 500 by article, which builds
 the Leverage Advantage it needs to invite that country into its bloc (see [Other
-power bloc changes](08-diplomacy.md#other-power-bloc-changes)). A country may
+power bloc changes](09-diplomacy.md#other-power-bloc-changes)). A country may
 receive only one swap line at a time. A treaty pegger at Peg Confidence 20 gets
 The Peg Under Siege: impose capital controls for a year (+40 confidence), break
 the peg by leaving the treaty, or re-peg lower. AI countries look for a swap line when
@@ -842,7 +842,7 @@ bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 of the Common Currency to each holdout; one that refuses costs the bloc cohesion
 and gains Monetary Independence. Power blocs in general are covered in [Power
 bloc principles and
-identities](08-diplomacy.md#power-bloc-principles-and-identities).
+identities](09-diplomacy.md#power-bloc-principles-and-identities).
 
 ### Currency boards for subjects
 
@@ -920,7 +920,7 @@ most once per game.
 
 A United Nations member with the banking journal entry that is in a Panic or in
 default can be offered An Emergency Lending Facility through the UN's docket
-(see [The UN docket](09-united-nations.md#the-un-docket)), once a crisis wave
+(see [The UN docket](10-united-nations.md#the-un-docket)), once a crisis wave
 has reached it or while any country suffers the Great Depression. The offer
 comes at most once in ten years, and never while you are still repaying a UN
 loan or your representation is suspended.

@@ -56,7 +56,7 @@ These are existing repository references, not a claim that the proposed system i
 - [Legislative override capacity](../../../common/laws/legislative_override_capacity.txt):
   government-dependent ability to bypass normal procedure.
 - [Banking](../../player_guide/04-banking.md): fiscal balances already feed the cycle.
-- [Climate](../../player_guide/14-climate.md): an existing carbon-tax policy must be reconciled,
+- [Climate](../../player_guide/15-climate.md): an existing carbon-tax policy must be reconciled,
   not stacked with a second independent fiscal control.
 - [Economy reference](../../vanilla/vanilla_economy_reference.md#12-taxes-and-government-revenue):
   existing income, dividend, consumption, land, and per-capita channels.
@@ -366,7 +366,7 @@ create service benefits, pass another law, or guarantee an economic outcome.
 | Policy restraint | Keep specified capital-control measures inactive for a defined period | Record exactly which controls are covered, existing measures to repeal, permitted exceptions, and consequences of an emergency departure |
 
 Use existing [banking and monetary-policy](../../player_guide/04-banking.md) and
-[colonial-system](../../player_guide/11-decolonization.md) controls and authoritative state.
+[colonial-system](../../player_guide/12-decolonization.md) controls and authoritative state.
 Do not duplicate their costs, benefits, or execution logic. A system adapter must establish
 availability under the selected game rule, legal authority, target observability, action path,
 and lifecycle notifications before its promises enter the playable catalog. A country without

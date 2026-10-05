@@ -12,7 +12,7 @@
 # business up twice as often while a great power stands well
 # (un_docket_agenda_months).
 #
-# Restated in words in docs/player_guide/09-united-nations.md ("Tabling UN
+# Restated in words in docs/player_guide/10-united-nations.md ("Tabling UN
 # business", "International standing"), je_un_standing_help_* and
 # je_un_chamber_raised_agenda (te_journal_entries_l_english.yml), and
 # docs/systems/journal_entry_systems.md. Edit them with these figures.

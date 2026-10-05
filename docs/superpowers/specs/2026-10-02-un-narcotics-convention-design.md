@@ -10,7 +10,7 @@ own plantations by ratifying it.
 
 Read first: the convention survey below, `docs/systems/journal_entry_systems.md` §
 "Adding a convention" (CRLF file), `test_un_convention_registry.py` (the executable
-checklist) and `docs/player_guide/09-united-nations.md` § "UN conventions and agencies".
+checklist) and `docs/player_guide/10-united-nations.md` § "UN conventions and agencies".
 
 ## Convention architecture (updated for implementation)
 
@@ -108,7 +108,7 @@ when its Landowners are powerful.
   - Pass loc keys literally, not built from `$PARAM$`, or `organize_loc` files them as unused.
   - Use month counters, not timed variables, on resolution containers (#457).
   - The proposer event needs an `event_image`.
-- **Player guide:** a row in `09-united-nations.md`'s conventions table, the agency
+- **Player guide:** a row in `10-united-nations.md`'s conventions table, the agency
   counts, a line in `02-timeline.md`'s Pharmaceutical Industries section, and a PDF rebuild.
 
 ## Owner decisions (2026-10-04)

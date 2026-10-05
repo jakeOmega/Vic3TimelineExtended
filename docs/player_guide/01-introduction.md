@@ -82,21 +82,21 @@ turn a default system off.
 |---|---|---|---|
 | Banking System | Enabled | *Enabled*: the banking cycle with the full monetary-policy layer (policy rate, inflation, exchange rate, currency pegs and shared currencies). *Simplified*: the banking cycle only; you still borrow at your own interest rate but can't set it. *Disabled*: no banking cycle. | [Banking and monetary policy](04-banking.md) |
 | Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
-| Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](14-climate.md) |
-| United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](09-united-nations.md) |
-| Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](13-nuclear.md) |
-| Space Race | Enabled | The space race milestones and their events. | [The space race](15-space.md) |
-| Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](11-decolonization.md) |
-| Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](10-influence.md) |
-| Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](10-influence.md) |
-| Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](06-social-movements.md) |
-| Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](07-states.md) |
+| Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](15-climate.md) |
+| United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](10-united-nations.md) |
+| Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](14-nuclear.md) |
+| Space Race | Enabled | The space race milestones and their events. | [The space race](16-space.md) |
+| Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](12-decolonization.md) |
+| Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](11-influence.md) |
+| Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](11-influence.md) |
+| Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
+| Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
-| World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](12-military.md) |
-| Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](05-politics.md) |
-| Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](05-politics.md) |
-| Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](04-tax-code.md) |
-| Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](05-politics.md) |
+| World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
+| Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
+| Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
+| Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](05-tax-code.md) |
+| Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](06-politics.md) |
 
 ## Reading the Budget breakdown
 
@@ -144,22 +144,22 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [The extended timeline](02-timeline.md) | The seven new eras, their technologies, new goods and buildings, company buildings, wonders and megaprojects. |
 | [Economy and construction](03-economy.md) | The construction market, construction costs, living-standard expectations, Bulk Transportation, the Strategic Reserve and wartime demand for munitions. |
 | [Banking and monetary policy](04-banking.md) | The banking cycle, crashes and contagion, the policy rate, inflation, exchange rates and international monetary arrangements. |
-| [Taxation (experimental)](04-tax-code.md) | The Legislated Tax Code rule: drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
-| [Government, laws and characters](05-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
-| [Social movements](06-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
-| [States and population](07-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |
-| [Diplomacy](08-diplomacy.md) | New treaty articles, diplomatic play escalation, irredentism and reunification, power blocs and formable countries. |
-| [The United Nations](09-united-nations.md) | Founding the UN, its authority, the Security Council, votes, resolutions, conventions and missions. |
-| [Cultural hegemony and covert warfare](10-influence.md) | Soft power and intelligence operations. |
-| [Colonial empires and decolonization](11-decolonization.md) | Colonial stability, independence and what follows it. |
-| [Military and war](12-military.md) | Combined arms, new units and ships, military bases and the World War journal entry. |
-| [Nuclear weapons](13-nuclear.md) | Building a bomb, doctrine and posture, crises, strikes, the nuclear taboo and disarmament. |
-| [Climate and pollution](14-climate.md) | Emissions, warming, climate policy and state pollution. |
-| [The space race](15-space.md) | The milestones from suborbital flight to colonizing the solar system. |
-| [Quick reference](16-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
-| [Appendix: social movement details](17-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
-| [Appendix: events](18-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
-| [Appendix: reference lists](19-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, combat units, ships, ship modifications, mobilization options and military base production methods. |
+| [Taxation (experimental)](05-tax-code.md) | The Legislated Tax Code rule: drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
+| [Government, laws and characters](06-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
+| [Social movements](07-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
+| [States and population](08-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |
+| [Diplomacy](09-diplomacy.md) | New treaty articles, diplomatic play escalation, irredentism and reunification, power blocs and formable countries. |
+| [The United Nations](10-united-nations.md) | Founding the UN, its authority, the Security Council, votes, resolutions, conventions and missions. |
+| [Cultural hegemony and covert warfare](11-influence.md) | Soft power and intelligence operations. |
+| [Colonial empires and decolonization](12-decolonization.md) | Colonial stability, independence and what follows it. |
+| [Military and war](13-military.md) | Combined arms, new units and ships, military bases and the World War journal entry. |
+| [Nuclear weapons](14-nuclear.md) | Building a bomb, doctrine and posture, crises, strikes, the nuclear taboo and disarmament. |
+| [Climate and pollution](15-climate.md) | Emissions, warming, climate policy and state pollution. |
+| [The space race](16-space.md) | The milestones from suborbital flight to colonizing the solar system. |
+| [Quick reference](17-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
+| [Appendix: social movement details](18-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
+| [Appendix: events](19-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
+| [Appendix: reference lists](20-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, combat units, ships, ship modifications, mobilization options and military base production methods. |
 
 ## Reporting problems
 

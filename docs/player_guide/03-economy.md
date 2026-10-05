@@ -330,7 +330,7 @@ of spending around wealth 30 and then fade.
 
 ![How a pop's spending divides between needs as its wealth rises, at base prices. Left: wealth 5 to 60, where most pops spend most of a campaign. Right: the full range to 200.](images/pop_spending_by_wealth.png)
 
-Tourism as an industry is covered in [State tourism](07-states.md#state-tourism), and the new goods in
+Tourism as an industry is covered in [State tourism](08-states.md#state-tourism), and the new goods in
 [The extended timeline](02-timeline.md), which also lists the base-game goods
 the mod renames. In the table above, Personal Transportation is the base game's
 Transportation and Art and Entertainment its Fine Art. Chemicals, in the
@@ -561,7 +561,7 @@ the Reserve takes up to a quarter of your grain, at most 2,500 units, if you
 hold at least 500. The
 grain leaves your reserve through its own bookkeeping, and you gain standing for
 each draw. Withdraw Our Grain Pledge stops it at any time (see [The World Food
-Reserve and hunger](09-united-nations.md#the-world-food-reserve-and-hunger)).
+Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 
 ### How the AI uses the reserve
 
@@ -583,7 +583,7 @@ removes the extra ammunition that Extra Supplies and Luxurious Supplies add in
 the base game, so the supplies you choose no longer change how much ammunition
 an army uses. The Basic Supplies tooltip shows the ammunition figure. A few of
 the mod's own mobilization options add more on top; see [Mobilization
-options](12-military.md#mobilization-options).
+options](13-military.md#mobilization-options).
 
 The demand follows mobilization rather than war: an army mobilized for a
 diplomatic play spikes it even if no war follows, and the demand falls away as

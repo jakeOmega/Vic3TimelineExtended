@@ -77,7 +77,7 @@ Intoxicants already has the owner's shape: it reaches 216 by wealth 30 and stays
 These cut only the enacting country's own plantations. India, Persia and the other exporters rarely enact them and keep exporting until Pharmaceutical Industries undercut them on price. That is intended.
 
 **Optional; ask the owner and keep each in its own PR:**
-- **A UN convention** modelled on the 1961 Single Convention on Narcotic Drugs. It is the only hook that reaches exporting countries. See `docs/player_guide/09-united-nations.md` § "UN conventions and agencies" and `test_un_convention_registry.py`.
+- **A UN convention** modelled on the 1961 Single Convention on Narcotic Drugs. It is the only hook that reaches exporting countries. See `docs/player_guide/10-united-nations.md` § "UN conventions and agencies" and `test_un_convention_registry.py`.
 - **A shortage modifier:** a state pulse reads `market.mg:opium.market_goods_shortage_ratio` and scales a mortality modifier. It must run from a state pulse with one refresh site, per CLAUDE.md's dynamic-modifier rules.
 
 ## 4. Validate
@@ -91,7 +91,7 @@ These cut only the enacting country's own plantations. India, Persia and the oth
 - **Player guide.**
   - `03-economy.md` § "Pop consumption at high wealth": the new need and when it starts.
   - `02-timeline.md` § "Pharmaceutical Industries and Drugs": the plantation penalties.
-  - Wherever the health-system laws' effects are listed (check `05-politics.md` and `16-reference.md`).
+  - Wherever the health-system laws' effects are listed (check `06-politics.md` and `17-reference.md`).
   - Rebuild the PDF and commit it with the chapters.
 - **PR body:** include the "Player guide" line, and the measurement table or a link to it.
 

@@ -126,7 +126,7 @@ campaign has moved it.
 
 ## Player guide
 
-The UN chapter (`09-united-nations.md`) changes: when members vote, reading leans, campaigns, pledges in both directions, the "Decide later" option, and the AI's lobbying. Update it in the implementation PR (see CLAUDE.md, "Keep the player guide current").
+The UN chapter (`10-united-nations.md`) changes: when members vote, reading leans, campaigns, pledges in both directions, the "Decide later" option, and the AI's lobbying. Update it in the implementation PR (see CLAUDE.md, "Keep the player guide current").
 
 ## Out of scope
 
