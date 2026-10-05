@@ -23,9 +23,10 @@
 #   pm_principle_engineering_and_logistics  pm_principle_engineering_and_logistics
 #     (+ its no-effect fallback)              _direct: points instead of the good
 #
-# The two other market settings take the left column, except that
+# The three other market settings take the left column, except that
 # no_maintenance takes pm_no_maintenance (forced) from the right one;
-# no_retooling differs from enabled only in script (te_pm_retooling_waived).
+# no_retooling and no_ai_retooling differ from enabled only in script
+# (te_building_retooling_waived).
 #
 # Every method that a setting disables is hidden when unavailable, so each game
 # shows only its own family.

@@ -1444,7 +1444,8 @@ population_transfer_effect = {
 #   intended to matter once a real level exists, but the engine can leave it on
 #   fresh construction sites;
 # - every building in games whose free_market_construction_rule setting waives
-#   retooling (te_pm_retooling_waived), and a railway whose train method only
+#   retooling globally (te_pm_retooling_waived), AI-owned buildings under
+#   no_ai_retooling, and a railway whose train method only
 #   swapped into or out of its Transport principle tier 3 variant
 #   (te_building_retooling_waived, te_railway_note_train_method).
 # Called from on_production_method_changed and on_start_expanding_building
