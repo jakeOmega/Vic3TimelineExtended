@@ -195,20 +195,24 @@ Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartb
 
 ### Market settings without retooling or maintenance
 
-`free_market_construction_rule` has four settings. Three run the market (`te_free_market_construction_on` is true for all three, so nothing else in the system tells them apart):
+`free_market_construction_rule` has five settings. Four run the market (`te_free_market_construction_on` is true for all four, so the market itself works the same):
 
 | Setting | Maintenance (`pmg_maintenance*`) | Retooling (`pm_retooling`) |
 |---|---|---|
 | `free_market_construction_enabled` (default) | `pm_maintenance` tiers | applies |
+| `free_market_construction_no_ai_retooling` | `pm_maintenance` tiers | removed by script only for AI-owned buildings |
 | `free_market_construction_no_retooling` | `pm_maintenance` tiers | removed by script |
 | `free_market_construction_no_maintenance` | `pm_no_maintenance`, forced (the direct setting's flags for that group) | removed by script (it would multiply nothing) |
 | `free_market_construction_disabled` | `pm_no_maintenance`, forced | applies, multiplies nothing (§ Free Market Construction off) |
 
-Everything else in both new settings is the enabled setting's: the Construction Site's market method, and the company buildings (`pm_disney_world`, `pm_generic_industrial_city`, `pm_generic_monument_to_industry`) and Engineering & Logistics barracks keep their construction-good recipes, which are production, not upkeep.
+Everything else in the three alternative market settings is the enabled setting's: the Construction Site's market method, and the company buildings (`pm_disney_world`, `pm_generic_industrial_city`, `pm_generic_monument_to_industry`) and Engineering & Logistics barracks keep their construction-good recipes, which are production, not upkeep.
 
-**No retooling cannot be a PM flag.** `pm_retooling` is a static modifier the engine applies for `RETOOLING_WEEKS`; neither a static modifier nor a define has a rule gate, and a cancelling modifier would have to be put on each retooling building by the same script that can simply remove the penalty (`scripting_best_practices.md`, "Gating a Mechanic on a Game Rule When It Lives in a Define, PM or Building Group"). So `te_pm_retooling_waived` (`te_construction_market_triggers.txt`; names the two settings, so a pre-rule save keeps paying) gates `te_remove_waived_pm_retooling` (`extra_effects.txt`, building scope), which removes the modifier:
+**No retooling cannot be a PM flag.** `pm_retooling` is a static modifier the engine applies for `RETOOLING_WEEKS`; neither a static modifier nor a define has a rule gate, and a cancelling modifier would have to be put on each retooling building by the same script that can simply remove the penalty (`scripting_best_practices.md`, "Gating a Mechanic on a Game Rule When It Lives in a Define, PM or Building Group"). So `te_building_retooling_waived` (`te_construction_market_triggers.txt`) gates `te_remove_waived_pm_retooling` (`extra_effects.txt`, building scope). It combines `te_pm_retooling_waived` (the two global settings), the AI-only setting with `owner = { is_ai = yes }`, and the railway exception below. All rule checks name their settings positively, so a pre-rule save keeps paying. The effect removes the modifier:
+
 - from `on_production_method_changed` (`te_on_production_method_changed_retooling`, `te_construction_market_on_actions.txt`; root = the building), at once and again a day later through `te_construction_market_building_events.3`, since whether the engine applies the modifier before or after the hook fires is unverified;
 - from the weekly sweep `minor_events_timelineextended.100` (every building of every state), which catches any PM change the hook misses, such as one the engine makes itself.
+
+The AI-only check reads the building's current owner each time, including the delayed event and weekly sweep. Human-controlled subjects still pay; AI subjects of a player are exempt. Taking control of an AI country does not restore a penalty already removed, but subsequent PM changes pay normally. No persistent country waiver or extra pulse is needed.
 
 The same effect keeps its older job in every setting: removing the modifier from level-0 buildings (also from `on_start_expanding_building`).
 
@@ -225,6 +229,7 @@ The sweep is a fallback only for a swap the hook missed. If the hook fired and t
 1. *No retooling, switch a PM* on a factory with maintenance: the Retooling modifier does not appear on the building (or is gone the next day), and its construction input stays at 0.1 per level (times cost scaling). An AI country's buildings show no Retooling modifier after a few weeks.
 2. *No maintenance, day 1*: `pmg_maintenance` shows No Maintenance only; the construction market read-out's demand is the government and private purchases plus the company buildings. Construction Sites, sectors and the panel work as in the default game.
 3. *Default game*: switching a PM still applies Retooling (+1000% construction input).
+4. *No AI retooling*: switch a PM on completed factories in a player country and an AI country, including subjects. Only the AI factory loses Retooling (at once or the next day), while both retain normal maintenance. Let the weekly sweep clear an existing AI penalty. Take control of the AI country and switch again: the new penalty stays. Repeat with two human players in multiplayer; both pay.
 
 ### Free Market Construction off (direct construction)
 

@@ -353,8 +353,9 @@ on_start_expanding_building = {
 	}
 }
 
-# free_market_construction_rule no_retooling / no_maintenance: the engine puts
-# pm_retooling on a building that switches production methods; take it off
+# free_market_construction_rule no_retooling / no_maintenance, or
+# no_ai_retooling for an AI-owned building: the engine puts pm_retooling on a
+# building that switches production methods; take it off
 # again (root = the building). Whether the engine applies the modifier before
 # or after this hook fires is unverified, so the building also re-checks a day
 # later (te_construction_market_building_events.3); the weekly sweep

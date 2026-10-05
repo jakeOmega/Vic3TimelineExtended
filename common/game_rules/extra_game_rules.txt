@@ -176,7 +176,7 @@ universal_aptitude_traits_rule = {
 }
 
 # Free Market Construction (docs/systems/mod_systems.md, "Construction as a
-# Market Good"). Four settings, three of them market games:
+# Market Good"). Five settings, four of them market games:
 #   enabled         construction is a market good; Construction Sectors sell
 #                   it, the government and investors buy it, Construction
 #                   Sites turn it into points, buildings pay construction as
@@ -184,6 +184,8 @@ universal_aptitude_traits_rule = {
 #                   production-method switch, pm_retooling in
 #                   extra_modifiers.txt), and the private share follows the
 #                   two purchases.
+#   no_ai_retooling the market with maintenance and player retooling costs;
+#                   script removes pm_retooling only from AI-owned buildings.
 #   no_retooling    the market with maintenance, without the retooling
 #                   surcharge: script removes pm_retooling as the engine
 #                   applies it (te_pm_retooling_waived).
@@ -211,7 +213,7 @@ universal_aptitude_traits_rule = {
 # Construction Sites can still build them.
 #
 # Script reads the rule through te_free_market_construction_on / _off and
-# te_pm_retooling_waived (common/scripted_triggers/
+# te_building_retooling_waived (common/scripted_triggers/
 # te_construction_market_triggers.txt), never directly (has_game_rule tests
 # the setting name; the flag named after each setting follows this file's
 # convention).
@@ -220,6 +222,30 @@ free_market_construction_rule = {
 
 	free_market_construction_enabled = {
 		flag = free_market_construction_enabled
+
+		# Construction Site: market method only
+		flag = disable_pm_te_direct_construction_wooden
+		flag = disable_pm_te_direct_construction_iron_frame
+		flag = disable_pm_te_direct_construction_steel_frame
+		flag = disable_pm_te_direct_construction_arc_welded
+		flag = disable_pm_te_direct_construction_reinforced_concrete
+		flag = disable_pm_te_direct_construction_advanced
+		flag = disable_pm_te_direct_construction_nanomaterial
+
+		# Maintenance, company and Engineering & Logistics methods keep the
+		# construction good
+		flag = disable_pm_no_maintenance
+		flag = disable_pm_disney_world_direct
+		flag = disable_pm_generic_industrial_city_direct
+		flag = disable_pm_generic_monument_to_industry_direct
+		flag = disable_pm_principle_engineering_and_logistics_direct
+		flag = disable_pm_engineering_and_logistics_no_effect_direct
+	}
+
+	# The enabled setting's methods; script waives retooling only for buildings
+	# whose owner is currently AI (te_building_retooling_waived).
+	free_market_construction_no_ai_retooling = {
+		flag = free_market_construction_no_ai_retooling
 
 		# Construction Site: market method only
 		flag = disable_pm_te_direct_construction_wooden

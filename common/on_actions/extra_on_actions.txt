@@ -361,7 +361,8 @@ te_fix_inconsistent_laws_country_pulse = {
 # PM RETOOLING - schedule country events at day 0/7/14/21 from the monthly
 # country pulse. Each event iterates all states and removes pm_retooling where
 # it is waived: level-0 building sites, every building in games whose
-# free_market_construction_rule setting waives retooling, and a railway just
+# free_market_construction_rule setting waives retooling globally, AI-owned
+# buildings under no_ai_retooling, and a railway just
 # through the Transport principle swap (te_remove_waived_pm_retooling). It
 # first records each state's railway train method
 # (te_state_note_railway_train_method), which catches a swap the

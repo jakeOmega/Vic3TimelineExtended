@@ -4,8 +4,8 @@ This chapter covers how the mod changes the way your economy builds, consumes
 and stores. The largest change is the construction market: construction is a
 good that Construction Sectors sell and that your government and investors buy,
 and most industry uses a little of it as upkeep. It runs from the first day of
-the game under the Free Market Construction game rule, which also offers three
-reduced settings. The rest of the chapter covers what construction costs in rich
+the game under the Free Market Construction game rule, which also offers four
+alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
 Bulk Transportation good, the Strategic Reserve journal entry, wartime demand
 for ammunition and the mod's new mineral deposits.
@@ -152,14 +152,22 @@ bought, so with a short queue a Fixed Budget spends less than you set.
 
 ### Free Market Construction settings
 
-The game rule has four settings, fixed when you start the campaign.
+The game rule has five settings, fixed when you start the campaign.
 
 | Setting | Construction good | Maintenance | Retooling | Private share of construction |
 |---|---|---|---|---|
-| Enabled (default) | Traded on the market | 0.1 per level | +1,000%, fading over five years | Follows the two purchases |
-| Without Retooling Costs | Traded on the market | 0.1 per level | None | Follows the two purchases |
+| Enabled (default) | Traded on the market | By building type | +1,000%, fading over five years | Follows the two purchases |
+| Without AI Retooling Costs | Traded on the market | By building type | None for AI countries; normal costs for players | Follows the two purchases |
+| Without Retooling Costs | Traded on the market | By building type | None | Follows the two purchases |
 | Without Maintenance | Traded on the market; a few company buildings still use it in production | None | None | Follows the two purchases |
 | Disabled | None | None | None | Set by your economic-system law |
+
+Without AI Retooling Costs keeps normal maintenance for every country, but
+removes the retooling surcharge from AI countries after a production-method
+change, with a weekly cleanup for any lingering penalty. Every human player
+still pays it, including in multiplayer. AI subjects are exempt even when their
+overlord is a player. If you take control of an AI country, future changes pay
+normal retooling costs; penalties already removed stay removed.
 
 With the rule disabled, construction works as in the base game, but the
 Construction Site takes the Construction Sector's place. The government builds,

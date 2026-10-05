@@ -401,7 +401,8 @@ overinvestment_modifier = {
 # but not crippling switching tax. INJECT would be cleaner but the rebalance
 # work is the same either way if vanilla ever sets this field. Keep as REPLACE.
 # free_market_construction_rule's no_retooling and no_maintenance settings
-# waive it: script removes the modifier as the engine applies it
+# waive it globally; no_ai_retooling waives it only for AI-owned buildings.
+# Script removes the modifier as the engine applies it
 # (te_remove_waived_pm_retooling, extra_effects.txt).
 REPLACE:pm_retooling = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds

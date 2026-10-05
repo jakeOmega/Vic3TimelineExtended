@@ -134,7 +134,8 @@ class MaintenanceTiers(unittest.TestCase):
                 self.assertIn("force_pm_no_maintenance", settings[setting])
                 for pm in pm_keys:
                     self.assertIn(f"disable_{pm}", settings[setting])
-        for setting in ("free_market_construction_enabled", "free_market_construction_no_retooling"):
+        for setting in ("free_market_construction_enabled", "free_market_construction_no_ai_retooling",
+                        "free_market_construction_no_retooling"):
             with self.subTest(setting=setting):
                 self.assertIn("disable_pm_no_maintenance", settings[setting])
                 for pm in pm_keys:
