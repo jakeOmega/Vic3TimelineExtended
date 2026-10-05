@@ -58,6 +58,23 @@ minority_protection = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = minority_protection }
 		}
+		# The protector (the target: it pays the upkeep, gains the prestige,
+		# and the AI block weighs its own culture and religion in the state)
+		# must belong to a Cultural or Religious power bloc (owner ruling
+		# 2026-10-05). Both, because the AI asks on behalf of a faith as well
+		# as a people. Protection already in force stays: this is not in
+		# requirement_to_maintain.
+		custom_tooltip = {
+			text = minority_protection_protector_bloc_tt
+			scope:target_country = {
+				power_bloc ?= {
+					OR = {
+						has_identity = identity:identity_cultural
+						has_identity = identity:identity_religious
+					}
+				}
+			}
+		}
 	}
 
 	state_valid_trigger = {

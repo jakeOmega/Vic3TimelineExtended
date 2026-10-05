@@ -59,8 +59,8 @@ The humanitarian and cultural articles move people, faiths and cultures.
 
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
-| Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. |
-| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
+| Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. The protecting side must be in a Cultural Commonwealth or Religious Convocation bloc. |
+| Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. The side sending the missionaries must be in a Religious Convocation bloc. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
 | Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 
@@ -72,7 +72,7 @@ armed forces.
 | Demilitarized Zone | International Relations | Yes | No conscription, Barracks, Naval Fortifications or Military Bases in the chosen state; an existing Military Base is dismantled. While it stands the conceding country uses 25 authority and loses 5 prestige. |
 | Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, military industry throughput −25% and −10 prestige. Every Arms Industry, Artillery Foundry, Munition Plant, Naval Administration, Naval Fortification, Naval Logistics Center and Military Base in the conceding country is dismantled; Shipyards and Military Shipyards are spared. |
 | Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
-| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, slightly dearer military goods. |
+| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, military goods 5% dearer for each treaty that carries it. Needs an alliance or defensive pact, already in force or in the same treaty, or a shared Military Treaty bloc. Each country can hold it in at most three treaties. |
 
 Arms control between nuclear powers belongs to the nuclear system: Nuclear Arms
 Limitation holds two countries to the same ceiling on warheads, and leaving it

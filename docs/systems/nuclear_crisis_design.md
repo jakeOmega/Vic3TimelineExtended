@@ -223,7 +223,7 @@ Recessed halves Routine's odds. Routine readiness under central control almost n
 
 ### 0.5 Guarantees (phase 4, partial)
 
-`nuclear_guarantee` is a directed treaty article. The source is the guarantor, who must be armed and pays the maintenance, and the target is the beneficiary. It is modelled on vanilla `guarantee_independence`: `country_treaty_leverage_generation_add` sits on the beneficiary's `target_modifier`. While it is in force:
+`nuclear_guarantee` is a directed treaty article. The source is the guarantor, who must be armed and pays the maintenance, and the target is the beneficiary. It is modelled on vanilla `guarantee_independence`: `country_treaty_leverage_generation_add` sits on the beneficiary's `target_modifier`. Since 2026-10-05 a new guarantee also needs, in `can_ratify`, (a) the guarantor to hold more warheads than the world believes the beneficiary has (`nd_believed_stockpile`: the public estimate once it has tested, 0 before, so a refused article never reveals a secret arsenal) and (b) military ties: an alliance or defensive pact in force or in the same draft (`te_treaty_parties_have_military_ties`), or any shared power bloc. Neither is in `requirement_to_maintain`, so guarantees already in force stay. Both let the Budapest offer's guarantees through (a guarantor on the new state's `nd_bp_guarantors` list), since whether `create_treaty` runs `can_ratify` is untested. While it is in force:
 - the beneficiary is spared the nuclear-shadow war-support drain (`zz_te_war_support_injections.txt`);
 - AI strike decisions treat the beneficiary as covered by the guarantor's arsenal;
 - the guarantor may open a dispute-3 crisis against the beneficiary's attacker;

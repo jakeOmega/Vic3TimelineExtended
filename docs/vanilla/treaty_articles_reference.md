@@ -52,6 +52,9 @@ Russia's claims to protect Orthodox Christians in the Ottoman Empire; Austria's 
 ### Non-Fulfillment
 No non-fulfillment conditions - the treaty is enforced via the state modifier.
 
+### Can Ratify
+Besides the duplicate check (`no_duplicate_treaty_article`), the protector — the **target**, which pays the upkeep, gains the prestige and whose culture and religion the AI block weighs — must belong to a power bloc with the `identity_cultural` or `identity_religious` identity (since 2026-10-05). Religious counts too because the AI asks on behalf of a faith as well as a people. The gate is not in `requirement_to_maintain`, so protection already in force stays when the protector leaves its bloc.
+
 ### AI Design
 - `article_ai_usage = { request }` — AI demands this from others
 - AI Great Powers with `protective` or `domineering` attitude request this from countries that discriminate against shared heritage cultures
@@ -515,6 +518,9 @@ non_fulfillment = {
     }
 }
 ```
+
+### Can Ratify
+Besides the duplicate check (`no_duplicate_treaty_article`), the missionary power — the **target**, which `on_entry_into_force` stores on the state and toward whose religion `religious_mission_conversion_on_action` converts — must belong to a power bloc with the `identity_religious` identity (since 2026-10-05). The gate is not in `requirement_to_maintain`, so missions already in force stay.
 
 ### AI Design
 - `article_ai_usage = { request }` — Religious powers demand mission rights

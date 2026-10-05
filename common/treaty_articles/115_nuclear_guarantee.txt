@@ -110,6 +110,49 @@ nuclear_guarantee = {
 			text = nd_tt_guarantor_armed
 			scope:source_country = { nd_is_armed = yes }
 		}
+		# Two gates on a new guarantee (owner ruling 2026-10-05); a guarantee
+		# in force stays, since neither is in requirement_to_maintain. Both
+		# let the Budapest offer through: nuclear_custody.11 creates
+		# guarantees from the powers that pressed a seceded state
+		# (nd_bp_guarantors, cleared only after its treaties are made), and
+		# those powers have no ties with the new state by construction.
+		# Whether create_treaty runs can_ratify is untested.
+		#
+		# The guarantor outguns the beneficiary as the world sees it: its
+		# real stockpile against the beneficiary's believed one, so a
+		# greyed-out article never gives away a secret arsenal.
+		custom_tooltip = {
+			text = nuclear_guarantee_outguns_tt
+			OR = {
+				scope:target_country = {
+					is_target_in_variable_list = { name = nd_bp_guarantors target = scope:source_country }
+				}
+				AND = {
+					scope:source_country = { has_variable = nuclear_weapon_stockpile }
+					scope:target_country = {
+						nd_believed_stockpile < scope:source_country.var:nuclear_weapon_stockpile
+					}
+				}
+			}
+		}
+		# Military ties: an alliance or defensive pact, in force or in this
+		# draft, or any shared power bloc.
+		custom_tooltip = {
+			text = nuclear_guarantee_ties_tt
+			OR = {
+				scope:target_country = {
+					is_target_in_variable_list = { name = nd_bp_guarantors target = scope:source_country }
+				}
+				scope:source_country = {
+					te_treaty_parties_have_military_ties = { OTHER = scope:target_country }
+				}
+				scope:source_country = {
+					# Two countries outside any bloc must not count as sharing one.
+					is_in_power_bloc = yes
+					is_in_same_power_bloc = scope:target_country
+				}
+			}
+		}
 	}
 
 	# These ongoing benefits are implemented by the nuclear system, not modifiers.

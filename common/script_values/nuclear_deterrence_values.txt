@@ -1131,6 +1131,19 @@ nd_display_public_estimate = {
 	}
 }
 
+# What the rest of the world believes this country holds: its public estimate
+# once it has tested (nd_believed_armed), nothing before. A secret arsenal is
+# observed yearly too, so the estimate alone would give it away. Read by
+# nuclear_guarantee's can_ratify, where a greyed-out article must not reveal
+# what the beneficiary has.
+nd_believed_stockpile = {
+	value = 0
+	if = {
+		limit = { nd_believed_armed = yes }
+		value = nd_display_public_estimate
+	}
+}
+
 nd_display_estimate_year = {
 	value = 0
 	if = {
