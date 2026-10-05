@@ -3038,7 +3038,7 @@ form_decolonized_country = {
 }
 ```
 
-ROOT after the call is the caller's root, not the new country, so a helper that used `ROOT` for the new country inside `on_created` must save `THIS` first (`apply_decolonization_path` saves `scope:decolonized_new_country`).
+ROOT after the call is the caller's root, not the new country. A helper moved out of `on_created` that used `ROOT` for the new country must save `THIS` at its top and use that instead (`apply_decolonization_path` saves `scope:decolonized_new_country`).
 
 ## `create_dynamic_country` Runs in `scope = none`
 

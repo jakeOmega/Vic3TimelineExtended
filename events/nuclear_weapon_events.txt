@@ -52,9 +52,10 @@ nuclear_weapon_events.1 = {
 	# and the use recorded once per salvo with nd_record_nuclear_use. The
 	# strike stays nuclear_response_strike: nd_dispatch_strategic_strike would
 	# book a retaliation as a first strike (+25 infamy, the first-strike UN
-	# dossier and ICC entries). This event is triggered in the struck state's
-	# scope, so every gate names the retaliator explicitly: scope:target_country
-	# (the struck country), answering scope:attacking_country. The AI retaliates
+	# dossier and ICC entries). This event fires on the struck state's owner
+	# (until 2026-10-05 it fired with the state as ROOT), and every gate still
+	# names the retaliator explicitly: scope:target_country (the struck
+	# country), answering scope:attacking_country. The AI retaliates
 	# only when nd_ai_nuclear_use_justified agrees, like the strike actions.
 	option = {
 		name = nuclear_weapon_events.1.b
