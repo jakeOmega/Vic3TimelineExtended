@@ -114,3 +114,69 @@ gm_hard_times_sgui = {
 		always = no
 	}
 }
+
+# PROTOTYPE (v2 spec §3.4): a typed name for a monument. The row's editbox
+# text arrives as the saved scope gm_name, a flag made by MakeScopeFlag (two
+# routes in the .gui, one per Rename button). If that conversion fails no
+# scope arrives, is_valid fails and the button stays grey, so a grey button
+# means the GUI half broke and a live one that changes nothing means
+# set_variable or GetFlagName did. The row reads the name back with
+# Var('gm_name').GetFlagName (gm_row_title_named).
+gm_rename_sgui = {
+	scope = country
+	saved_scopes = { gm_state gm_name }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		exists = scope:gm_name
+		scope:gm_state = {
+			owner = root
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			set_variable = {
+				name = gm_name
+				value = scope:gm_name
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# PROTOTYPE: drop the typed name; the row's title returns to skin and
+# dedication.
+gm_clear_name_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			has_variable = gm_name
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			remove_variable = gm_name
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

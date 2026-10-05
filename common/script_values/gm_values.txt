@@ -143,6 +143,18 @@ gm_status_code = {
 	}
 }
 
+# PROTOTYPE (v2 spec §3.4, typed names): 1 while the state holds a typed
+# name (gm_name, a flag made from the editbox's text), else 0. The row swaps
+# its title on this rather than on Var('gm_name').IsSet, which no mod .gui
+# has used yet.
+gm_has_custom_name = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_name }
+		value = 1
+	}
+}
+
 # ---- National sums (§2.3, §2.4), country scope ---------------------------------
 # Standing grandeur: every monument that is not contested (prestige, cultural pull).
 gm_sum_standing = {

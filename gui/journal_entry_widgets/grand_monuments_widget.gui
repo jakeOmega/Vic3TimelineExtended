@@ -267,6 +267,112 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### PROTOTYPE (v2 spec §3.4, gui_modding_guide.md § "Typed text into a
+	### saved variable"): type a name, then Rename. The buttons find the box
+	### with PdxGuiWidget.AccessParent.FindChild, so the box and the buttons
+	### must stay siblings in one container (whether FindChild searches
+	### deeper is unknown). Two routes from the box to MakeScopeFlag, one per
+	### button, so one session tests both:
+	###   Rename        the box's CUTF8String straight into MakeScopeFlag
+	###   Rename (alt)  through GetVariableSystem.Set / .Get (CString) first
+	### The direct button's `enabled` asks gm_rename_sgui whether the flag
+	### arrived, so grey means the GUI half failed. The placeholder's
+	### `visible` tries StringIsEmpty on the box's text, where a failure
+	### blocks nothing. 190 + 3 * 90 + 3 * 4 = 472.
+	type gm_rename_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		parentanchor = hcenter
+
+		editbox = {
+			name = "gm_name_edit"
+			size = { 190 26 }
+			maxcharacters = 30
+			margin_left = 8
+			alwaystransparent = no
+			focuspolicy = click
+			focus_on_visible = no
+			align = left|nobaseline
+			using = fontsize_small
+
+			background = {
+				using = text_edit_bg
+			}
+
+			textbox = {
+				visible = "[StringIsEmpty( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent ) )]"
+				parentanchor = vcenter
+				position = { 8 0 }
+				autoresize = yes
+				max_width = 176
+				elide = right
+				align = left|nobaseline
+				using = fontsize_small
+				alwaystransparent = yes
+				alpha = 0.5
+				text = "gm_name_placeholder"
+			}
+		}
+
+		button = {
+			using = default_button_action
+			size = { 90 26 }
+			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
+			tooltip = "gm_button_rename_tooltip"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) ) ).End )]"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 84
+				elide = right
+				using = fontsize_small
+				text = "gm_button_rename"
+			}
+		}
+
+		button = {
+			using = default_button_action
+			size = { 90 26 }
+			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
+			tooltip = "gm_button_rename_alt_tooltip"
+			onclick = "[GetVariableSystem.Set( 'gm_name_text', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( GetVariableSystem.Get('gm_name_text') ) ).End )]"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 84
+				elide = right
+				using = fontsize_small
+				text = "gm_button_rename_alt"
+			}
+		}
+
+		button = {
+			using = default_button_action
+			size = { 90 26 }
+			datacontext = "[GetScriptedGui('gm_clear_name_sgui')]"
+			tooltip = "gm_button_clear_name_tooltip"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 84
+				elide = right
+				using = fontsize_small
+				text = "gm_button_clear_name"
+			}
+		}
+	}
+
 	### One monument: its status as an icon with the word beneath; its form
 	### and dedication; where it stands and its grandeur; while contested, who
 	### wants it kept and who resents it, and the three choices centred under
@@ -316,6 +422,7 @@ types grand_monuments_widget_types
 				spacing = 2
 
 				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_has_custom_name'), '(CFixedPoint)0' )]"
 					autoresize = yes
 					multiline = yes
 					minimumsize = { 376 -1 }
@@ -323,6 +430,19 @@ types grand_monuments_widget_types
 					align = left|nobaseline
 					using = fontsize_large
 					text = "gm_row_title"
+				}
+				### PROTOTYPE (v2 spec §3.4): a typed name replaces the skin's
+				### title. Shown only once gm_name exists, so the .gui never
+				### reads a missing variable (gotcha #23).
+				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_has_custom_name'), '(CFixedPoint)1' )]"
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 376 -1 }
+					maximumsize = { 376 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					text = "gm_row_title_named"
 				}
 				gm_row_line = {
 					text = "gm_row_detail"
@@ -361,6 +481,8 @@ types grand_monuments_widget_types
 				blockoverride "choice_text" { text = "gm_button_preserve" }
 			}
 		}
+
+		gm_rename_line = {}
 	}
 
 	### ======================================================================
