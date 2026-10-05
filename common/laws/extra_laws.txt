@@ -900,8 +900,24 @@ law_gold_standard = {
 		country_credit_standing_add = -0.01
 	}
 
+	# Gold weighs nothing once Fiat Money is on offer (2026-10-05). An AI that
+	# has Keynesian Economics and a national bank, or already runs a paper
+	# currency, gets no push back onto the metal from here: a flat 100 had
+	# 124 of 175 countries on gold in a 2015 observer game, with fiat (200)
+	# open to most of them. What is left is the interest groups' own stances
+	# (§13), which still favour gold under a centre-right government.
 	ai_enact_weight_modifier = {
 		value = 100
+		if = {
+			limit = {
+				OR = {
+					te_mon_fiat_available = yes
+					has_law = law_type:law_fiat_currency
+					has_law = law_type:law_digital_currency
+				}
+			}
+			value = 0
+		}
 	}
 }
 
@@ -938,8 +954,40 @@ law_fiat_currency = {
 		country_can_create_unbacked_money_bool = yes
 	}
 
+	# What moves an AI off gold onto paper (2026-10-05), on top of a flat 200
+	# (vanilla's law readme: +100 is "fairly significant", +1000 "very"):
+	#   +300 while convertibility is suspended — it is a paper currency already,
+	#        and the law only says so;
+	#   +200 in the Deflation band — falling prices are what made a gold
+	#        standard unbearable in the 1930s;
+	#   +100 for each era past Fiat Money's own (7, 8, 9: te_mon_reached_era_*),
+	#        as the world's money goes paper — +300 by the turn of the century.
+	# All three together are 1000. Shared by player and AI: only the AI reads it.
 	ai_enact_weight_modifier = {
 		value = 200
+		if = {
+			limit = { te_mon_peg_is_suspended = yes }
+			add = 300
+		}
+		if = {
+			limit = {
+				has_variable = te_inflation_band
+				var:te_inflation_band <= 1
+			}
+			add = 200
+		}
+		if = {
+			limit = { te_mon_reached_era_7 = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_mon_reached_era_8 = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_mon_reached_era_9 = yes }
+			add = 100
+		}
 	}
 }
 
@@ -3203,15 +3251,19 @@ law_national_bank = {
 		# law_national_bank in their own unlocking_laws, so a country that could
 		# still enact this one can never be on either, and the branch would be
 		# dead weight. The tell that a state is ready for a central bank is the
-		# economy it already runs — the three modern economic systems all
+		# economy it already runs — the four modern economic systems all
 		# presuppose someone managing credit (law_traditionalism is excluded
 		# outright by disallowing_laws above, so it needs no branch here).
+		# Cooperative ownership joined them 2026-10-05: it runs the full
+		# monetary system (monetary_policy_design.md §5.3), and 29 of 77
+		# bankless countries in a 2015 observer game were cooperatives.
 		if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_interventionism
 					has_law = law_type:law_laissez_faire
 					has_law = law_type:law_command_economy
+					has_law = law_type:law_cooperative_ownership
 				}
 			}
 			add = 400

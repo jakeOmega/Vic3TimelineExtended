@@ -550,6 +550,67 @@ te_mon_peg_under_pressure = {
 	te_mon_bank_gold_scaled < te_mon_peg_reserve_floor
 }
 
+# Is the peg holding this country in a DEEP SLUMP? (2026-10-05, the 1931
+# analogue.) The financial cycle in a Downturn or a Panic while the stance the
+# bank reads (te_mon_stance_band, the dashboard's Policy Stance) is Tight or Very
+# Tight: money kept dear in a slump. Under peg defence that is the standing case
+# — the target follows the world rate while the slump drags the neutral rate a
+# point and a half under it — and nothing else ends it, because the vault stays
+# full and only an empty vault used to move confidence. Step 10 drains
+# te_peg_confidence by te_mon_peg_slump_drain a month while this holds, and
+# holds the recovery, so te_peg.1 is reached in about two years from a trusted
+# peg.
+#
+# THE TIGHT STANCE IS THE LOAD-BEARING HALF. The Deflation band alone is not
+# enough: metallic prices rest within a point of it and an ordinary downturn
+# pushes them in, so "slump and deflation" would drain every gold country
+# through every downturn of the cycle, not the ones the peg is prolonging
+# (docs/audits/banking_cycle_simulation.md §24 measures both). Every input is a
+# displayed figure — the cycle phase and the stance band — never the hidden gap.
+#
+# Guarded: a country without the banking journal entry has no cycle, and one
+# that has never pulsed has no band; both read "no".
+te_mon_peg_in_deep_slump = {
+	has_variable = finance_cycle_value
+	banking_cycle_is_recession = yes
+	has_variable = te_mon_stance_band
+	var:te_mon_stance_band >= 4
+}
+
+# --- The road to fiat money (2026-10-05) -------------------------------------
+#
+# Could this country enact Fiat Money today? law_fiat_currency's own gates,
+# restated: keynesian_economics and a national bank. Read by law_gold_standard's
+# AI weight (gold weighs nothing once fiat is on offer). te_peg.3's fiat option
+# spells the same two conditions out in its own `trigger` instead, so each shows
+# its own tick or cross on the greyed option.
+te_mon_fiat_available = {
+	has_technology_researched = keynesian_economics
+	has_law = law_type:law_national_bank
+}
+
+# How far past era 6 — Fiat Money's own era — this country's research has gone.
+# There is no era trigger (scripting_best_practices.md, "There Is No Current
+# Era Trigger"), so each era is a signature society technology of the COUNTRY,
+# not of a great power: these weigh one country's own choices, and an
+# any_country scan per law evaluation would be the O(N^2) cost te_mon_era_base
+# avoids. Era 7 is television_broadcasting, which modern_election_events.11
+# already uses to end the radio era; era 9 is globalization, te_mon_era_base's
+# own marker; era 8 is containerization, the trade revolution of the floating
+# era. They need not be researched in order, which only matters for a weight.
+# Read by law_fiat_currency's AI weight and te_peg.3's AI chance.
+te_mon_reached_era_7 = {
+	has_technology_researched = television_broadcasting
+}
+
+te_mon_reached_era_8 = {
+	has_technology_researched = containerization
+}
+
+te_mon_reached_era_9 = {
+	has_technology_researched = globalization
+}
+
 # May the treasury put gold into the bank right now? Gold flows, a counted
 # vault with room in it, and the step's worth of cash actually in hand — a
 # recapitalisation on credit would be the government borrowing to lend to

@@ -871,13 +871,18 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 #   3. "AI on peg defence survives a 2pp world-rate rise." Option a, then
 #      observe AI gold countries for two years: their targets step up within a
 #      month or two (to the tenth, ruling Q5), and no te_peg.1 fires for a tag
-#      whose vault was at least half full when it started.
+#      whose vault was at least half full when it started — unless its cycle
+#      sits in a Downturn or Panic for two years, when the stance the higher
+#      rate makes Tight drains confidence with the vault full (2026-10-05).
 #   4. "Holding world + 5 on gold yields no lasting treasury gain." Under the
 #      hybrid model it yields no treasury gain AT ALL: the inflow fills the
 #      bank's vault to its limit and stops, the treasury only ever sees the
 #      carry as a budget expense, and on dropping the target the borrowed part
 #      leaves at twice the speed. Option c parks confidence at 25 so the crisis
 #      can be reached without waiting out a whole vault.
+#   5. (2026-10-05) The slump drain and the suspension's end. Option g then
+#      option a stage a deep slump on a peg defender (see option g); option e
+#      ends a suspension at the next pulse, which sends te_peg.3.
 #
 # COUNTRY MONTHLY PULSES ARE STAGGERED — Britain's fires around the 13th, not
 # on the 1st (first playtest). Watch a figure across a whole month, not across
@@ -926,13 +931,42 @@ te_debug_monetary.8 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		}
 	}
 
-	# Park confidence just over the crisis threshold. The second console-only
-	# writer of te_peg_confidence, beside te_peg.1's options.
+	# Park confidence just over the crisis threshold. The console-only writer
+	# of te_peg_confidence, beside te_peg.1's and te_peg.3's options.
 	option = {
 		name = te_debug_monetary.8.c
 		te_monetary_init_variables = yes
 		set_variable = { name = te_peg_confidence value = 25 } # REVIEWED 2026-09-20: console-only; five over te_mon_peg_crisis_threshold
 		set_variable = { name = te_peg_crisis_cooldown value = 0 }
+	}
+
+	# 2026-10-05: a suspended country's last month, so the next pulse sends
+	# te_peg.3 (resume convertibility or Fiat Money) without waiting out five
+	# years. Suspend through option c and te_peg.1 first.
+	option = {
+		name = te_debug_monetary.8.e
+		if = {
+			limit = { te_mon_peg_is_suspended = yes }
+			set_variable = { name = te_peg_suspended_months value = 1 } # REVIEWED 2026-10-05: console-only; the suspension's last month
+			if = {
+				limit = { has_variable = te_peg_resume_asked }
+				remove_variable = te_peg_resume_asked
+			}
+		}
+	}
+
+	# 2026-10-05: drop the financial cycle into a Downturn (15, momentum -3) —
+	# only ever down, through the crash ceilings. With option a's +2 on the
+	# world rate a peg defender's stance reads Tight or Very Tight, which is a
+	# deep slump (te_mon_peg_in_deep_slump): watch Peg Confidence fall 3 a month
+	# with the vault full, and the word beside it read "Doubted in the slump".
+	option = {
+		name = te_debug_monetary.8.g
+		if = {
+			limit = { has_variable = finance_cycle_value }
+			banking_crash_lower_cycle_to = { VALUE = 15 }
+			banking_crash_lower_momentum_to = { VALUE = -3 }
+		}
 	}
 
 	option = {
