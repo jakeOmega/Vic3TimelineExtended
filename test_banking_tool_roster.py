@@ -41,6 +41,16 @@ def _top_level_block(body, header):
     return block[: block.index("\n}") + 2]
 
 
+def _braced(body, start):
+    """`body` from `start` through the brace that closes the first `{` after it."""
+    depth = 0
+    for i in range(body.index("{", start), len(body)):
+        depth += {"{": 1, "}": -1}.get(body[i], 0)
+        if depth == 0:
+            return body[start: i + 1]
+    raise AssertionError("unbalanced braces after %r" % body[start: start + 40])
+
+
 def _has_top_level(body, name):
     return re.search(r"(?m)^%s = \{" % re.escape(name), body) is not None
 
@@ -53,6 +63,11 @@ def _loc_keys():
             if m:
                 keys.add(m.group(1))
     return keys
+
+
+# Market tools whose disable button has no hold gate: switching them on or off
+# costs nothing, so the AI may lift them whenever a stronger tool wants the point.
+UNGATED_DISABLES = {"cb_moral_suasion"}
 
 
 def _tools():
@@ -232,6 +247,49 @@ class RosterTests(unittest.TestCase):
                     for field in ("name", "desc"):
                         key = re.search(r'%s = "(\w+)"' % field, block).group(1)
                         self.assertTrue(key in keys, "no loc key %s (%s.%s)" % (key, name, field))
+
+    def test_each_disable_waits_until_its_reason_is_gone(self):
+        # The AI lifts a tool only once the conditions it was bought for have
+        # changed: a cycle tool's disable ends its ai_chance by multiplying by 0
+        # while banking_ai_hold_cb_<tool> holds, and an external tool's disable
+        # scores only while banking_ai_core_cb_<tool> is false. A gate placed
+        # before an `add` would let that add through, so it must come last.
+        # Moral suasion is exempt: it costs nothing to switch on or off.
+        buttons, triggers = _text(BUTTONS), _text(POSSIBLE)
+        for tool in _tools():
+            if tool in UNGATED_DISABLES:
+                self.assertFalse(_has_top_level(triggers, "banking_ai_hold_" + tool))
+                continue
+            with self.subTest(tool=tool):
+                disable = _top_level_block(buttons, "cb_disable_%s = {" % _suffix(tool))
+                ai = _braced(disable, disable.index("ai_chance = {"))
+                if re.search(r"limit = \{ banking_ai_core_%s = no \} add = " % tool, ai):
+                    continue
+                hold = "banking_ai_hold_" + tool
+                gate = re.search(r"if = \{ limit = \{ %s = yes[^{}]*\} multiply = 0 \}" % hold, ai)
+                self.assertIsNotNone(gate, "cb_disable_%s has no %s gate" % (_suffix(tool), hold))
+                self.assertNotIn("add =", ai[gate.end():])
+                self.assertTrue(_has_top_level(triggers, hold), "%s is not defined" % hold)
+
+    def test_each_hold_gate_is_in_the_simulator(self):
+        # banking_cycle_sim.ai_holds mirrors the banking_ai_hold_cb_* triggers,
+        # keyed by the simulator's own tool names (TOOL_MODIFIER_NAMES).
+        sim = _text(SIM)
+        roster = sim[sim.index("TOOL_MODIFIER_NAMES = {"):]
+        roster = roster[: roster.index("\n}")]
+        holds = sim[sim.index("def ai_holds("):]
+        holds = holds[: holds.index("\n    return h")]
+        triggers = _text(POSSIBLE)
+        for tool in _tools():
+            if not _has_top_level(triggers, "banking_ai_hold_" + tool):
+                continue
+            with self.subTest(tool=tool):
+                key = re.search(r'"(\w+)": "%s"' % re.escape(_modifier(tool)), roster)
+                self.assertIsNotNone(key, "%s is not in TOOL_MODIFIER_NAMES" % _modifier(tool))
+                name = key.group(1)
+                # the four newer directed-credit sectors are set by one loop
+                in_dc_loop = name in ("dc_heavy", "dc_agri", "dc_arms", "dc_elec")
+                self.assertTrue(in_dc_loop or '"%s":' % name in holds, "ai_holds has no %s" % name)
 
     def test_each_modifier_is_in_the_simulator(self):
         sim = _text(SIM)

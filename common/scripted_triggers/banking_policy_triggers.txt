@@ -465,8 +465,8 @@ banking_possible_cw_worker_buyout = {
 # is flat and the AI holds about half as many tools.
 #
 # Each trigger restates the conditions of its button's core terms; keep the
-# two in step when a core term changes. The disable buttons are not gated:
-# lifting a tool needs no reason beyond the phase it is lifted in.
+# two in step when a core term changes. The disable buttons answer to the
+# banking_ai_hold_cb_* triggers further down instead.
 # ----------------------------------------------------------------------------
 banking_ai_core_cb_open_market_ops = {
 	OR = {
@@ -579,6 +579,159 @@ banking_ai_core_cb_bank_holiday = {
 
 banking_ai_core_cb_bail_in_regime = {
 	banking_ai_core_cb_asset_relief_program = yes
+}
+
+# ----------------------------------------------------------------------------
+# AI: "does the reason this tool was bought still hold?"
+#
+# Every cb_disable_* button multiplies its ai_chance by 0 while its trigger
+# below is true, so the AI lifts a tool only once the conditions it was bought
+# for have changed. Switching a tool on and off costs what a player pays: the
+# activation cost (asset relief 2.5% of GDP; emergency liquidity 1.2%, 1% back
+# on closing; directed credit 0.8%), the toggle radicals, the capital
+# controls' infamy. Before these gates the disable weights started at the edge
+# of the zone a tool was bought in, so a cycle that touched stable on the way
+# out of a slump lost its directed credit, bail-in, asset relief or export
+# credit and bought it back when it dipped again, and capital controls held
+# for a war could be lifted in a boom mid-war and bought straight back. The
+# simulator counted 6.7 re-buys a century within a year of a lift, 3.2 with
+# the gates (docs/audits/banking_cycle_simulation.md §17).
+#
+# A hold covers its enable button's core trigger, less the states that
+# button's own avoid terms rule out (a recession for a leaning tool, a frenzy
+# for a stimulus), and reaches a little past it so that a cycle sitting on a
+# phase edge cannot flip the tool: the leaning tools keep through stable while
+# the cycle still climbs, the slump tools through stable while it still falls,
+# and emergency liquidity through the whole downturn rather than only while
+# momentum is at -4 or below. A deeper slump is a change of conditions only for
+# directed credit, which the AI drops in a panic so that its points go to the
+# lender of last resort instead (banking_dc_ai_weight scores panic -30).
+#
+# Moral suasion has no hold: a speech costs nothing to give or to stop, so
+# lifting it and buying it back wastes nothing, and its disable button frees
+# its point in a boom or frenzy for a stronger lean. The external tools need
+# nothing here either: their disable buttons already score only when
+# banking_ai_core_cb_<tool> is false. Keep each hold in step with its
+# core trigger above; test_banking_tool_roster.py checks that every cb_disable_*
+# button carries its gate.
+# ----------------------------------------------------------------------------
+
+# The leaning tools with a toggle cost (buffer, reserve requirements, margin
+# requirements), bought against heat: expansion and above, or momentum at +3 or
+# more outside a recession. Kept through stable while momentum is positive.
+banking_ai_hold_lean = {
+	banking_cycle_is_recession = no
+	OR = {
+		var:finance_cycle_value >= 60
+		banking_cycle_bubble_risk_rising = yes
+		AND = {
+			banking_cycle_is_stable = yes
+			var:finance_cycle_momentum > 0
+		}
+	}
+}
+
+# The slump tools, bought below 40: kept through stable while momentum is
+# still negative.
+banking_ai_hold_slump = {
+	OR = {
+		var:finance_cycle_value < 40
+		AND = {
+			banking_cycle_is_stable = yes
+			var:finance_cycle_momentum < 0
+		}
+	}
+}
+
+# Bought in a slump, while momentum falls, or in deflation, all at the rate's
+# floor. Inflation at the elevated edge or a bubble at risk ends it, as both
+# score against buying it. cb_disable_open_market_ops also lifts it once the
+# stance turns tight, which is checked there and not here:
+# banking_stance_is_tight reads hidden state and stays in ai_chance.
+banking_ai_hold_cb_open_market_ops = {
+	banking_ai_core_cb_open_market_ops = yes
+	banking_cycle_is_frenzy = no
+	banking_cycle_bubble_risk_high = no
+	OR = {
+		NOT = { has_variable = te_inflation }
+		var:te_inflation < te_mon_band_edge_elevated
+	}
+}
+
+banking_ai_hold_cb_countercyclical_buffer = {
+	banking_ai_hold_lean = yes
+}
+
+banking_ai_hold_cb_reserve_requirements = {
+	banking_ai_hold_lean = yes
+}
+
+banking_ai_hold_cb_raise_margin_requirements = {
+	banking_ai_hold_lean = yes
+}
+
+# Bought in a panic or a downturn. Its disable button scores only from stable
+# up, so stagnation is the gap between the two.
+banking_ai_hold_cb_expand_deposit_guarantee = {
+	banking_cycle_is_recession = yes
+}
+
+# Bought in a panic or a downturn falling at -4 or faster; kept through the
+# whole downturn, so momentum crossing -4 does not open and close it in turn.
+banking_ai_hold_cb_emergency_liquidity_program = {
+	banking_cycle_is_recession = yes
+}
+
+banking_ai_hold_cb_bank_holiday = {
+	banking_ai_hold_cb_emergency_liquidity_program = yes
+}
+
+# Bought in a downturn, in stagnation, or in a stable phase falling at -3 or
+# faster. Not a panic: see the header.
+banking_ai_hold_cb_directed_credit_infrastructure = {
+	banking_cycle_is_panic = no
+	banking_ai_hold_slump = yes
+}
+
+banking_ai_hold_cb_directed_credit_heavy_industry = {
+	banking_ai_hold_cb_directed_credit_infrastructure = yes
+}
+
+banking_ai_hold_cb_directed_credit_agriculture = {
+	banking_ai_hold_cb_directed_credit_infrastructure = yes
+}
+
+banking_ai_hold_cb_directed_credit_armaments = {
+	banking_ai_hold_cb_directed_credit_infrastructure = yes
+}
+
+banking_ai_hold_cb_directed_credit_electrification = {
+	banking_ai_hold_cb_directed_credit_infrastructure = yes
+}
+
+# Bought below 40 or while momentum falls; a frenzy or a bubble at risk ends it.
+banking_ai_hold_cb_export_credit_facility = {
+	banking_cycle_is_frenzy = no
+	banking_cycle_bubble_risk_high = no
+	OR = {
+		banking_ai_core_cb_export_credit_facility = yes
+		banking_ai_hold_slump = yes
+	}
+}
+
+banking_ai_hold_cb_asset_relief_program = {
+	banking_ai_hold_slump = yes
+}
+
+banking_ai_hold_cb_bail_in_regime = {
+	banking_ai_hold_cb_asset_relief_program = yes
+}
+
+# The full system's external crisis, or the simplified rule's slump. While
+# controls are held in a crisis the fatigue counter is frozen, so holding them
+# costs nothing extra.
+banking_ai_hold_cb_capital_controls_outflow = {
+	banking_ai_core_cb_capital_controls_outflow = yes
 }
 
 # ----------------------------------------------------------------------------

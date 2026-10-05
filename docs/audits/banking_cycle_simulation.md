@@ -18,7 +18,8 @@ frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the dele
 standing wage pressure (`--wage-pressure`) and the three changes that answer it; §13 replaces independence's
 crash and momentum bonus with inflation anchoring (`--bank-level`). §14 (2026-09-30) prices and shapes the five
 directed-credit sectors apart (`--tune ai_dc_reserve=off`). §16 (2026-10-02) makes a slump pull inflation down
-harder under an inflation target, and only there (`--tune pre_slump_pressure`). Every table states which script
+harder under an inflation target, and only there (`--tune pre_slump_pressure`). §17 (2026-10-05) stops the AI
+lifting a tool while the reason it bought it still holds (`--tune pre_hold`). Every table states which script
 it measured.
 
 ---
@@ -1599,4 +1600,105 @@ the bank leaves the clamp in month 4 (3 before) and reaches 0% in month 32 (27),
 ```
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --points 0,5 [--wage-pressure 1.0] [--tune pre_slump_pressure]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 0,5 --tune pressure_metal_stagnation=-0.75,pressure_metal_downturn=-2,pressure_metal_panic=-4   # F24's B on metal
+```
+
+---
+
+## 17. Lifting a tool only once its reason has gone (2026-10-05)
+
+**Question (owner).** Switching a tool on or off has a cost. The AI should never lift an intervention until the
+conditions that prompted it have changed: a buffer bought in a boom stays until the boom is over.
+
+**What shipped.** `banking_ai_hold_cb_<tool>` in `banking_policy_triggers.txt`, one per market tool except moral
+suasion. Each `cb_disable_*` ends its `ai_chance` with `multiply = 0` while its hold is true, so a lift can only
+score once the hold has gone. A hold covers the enable button's core trigger, less the states its own avoid terms
+rule out, and reaches past it so that a cycle sitting on a phase edge cannot flip the tool:
+
+| Tools | Held while |
+|---|---|
+| Buffer, reserve requirements, margin requirements | no recession, and cycle 60 or more, momentum +3 or more, or stable with momentum above 0 |
+| Deposit guarantee, emergency liquidity, bank holiday | panic or downturn |
+| Directed credit (all five sectors) | downturn or stagnation, or stable with momentum below 0. Not a panic: the enable side vetoes one and the points go to the lender of last resort |
+| Asset relief, bail-in | below 40, or stable with momentum below 0 |
+| Export credit | its core (panic to stagnation, or momentum −3 or less) or asset relief's hold, with no frenzy and no bubble at risk |
+| Open-market operations | its core (a slump, momentum −3 or less, or deflation), with no frenzy, no bubble at risk and inflation under the elevated edge. A tight stance lifts it whatever the hold |
+| Capital controls | its core: the external crisis (full system), or panic, downturn or momentum −3 or less (simplified rule) |
+| Moral suasion | no hold. Switching it costs nothing, so its disable button still frees the point in a boom or frenzy |
+
+The external tools already lifted only while `banking_ai_core_cb_<tool>` was false. The sim ports the holds as
+`ai_holds`, and counts what the AI lifts, what it buys back within twelve months of lifting it (`flips`), and how
+often it lifts a tool whose own enable button still scores above zero (`wanted`).
+
+### F26 — The simulator never saw the AI's capital controls under the full system
+
+`te_mon_in_external_crisis` is a war or `te_mon_in_financial_crisis`, and the second includes every panic and
+downturn (and a gold peg at confidence 40 or less, and inflation band 6). The port assumed it was never true with
+the currency at par, so in every default-rule run since phase 1 the AI never bought controls. In game the button
+scores 15 plus law and points flavour in every downturn, and 70 when a gold country's vault or peg is at stake.
+Ported (`in_external_crisis`; `--tune cc_crisis=off` restores the old port), the AI buys controls 4 to 8 times a
+century, and under the gold standard they cost crashes. Gold, 200 runs, with and without `--exclude-tool
+capital_controls`:
+
+| cell | with controls | without |
+|---|---|---|
+| `gold/price/2pt` | 10.0 | 7.0 |
+| `gold/price/3pt` | 9.1 | 6.7 |
+| `gold/growth/3pt` | 17.2 | 14.1 |
+| `gold/growth/5pt` | 14.1 | 11.8 |
+| `gold/nothing/3pt`, `gold/peg/3pt` | 8.8, 12.0 | 8.7, 12.3 |
+
+Averaged over 2 to 8 points, the corrected port adds 0.8 crashes a century to gold, 0.2 to commodity and fiat, and
+nothing to digital. This is how the game already plays, so the gold rows of the earlier sections' tables understate
+it. **Not changed here.** The candidate is the "crisis with nothing at stake" 15, which buys controls in every gold
+downturn whether or not the vault is draining.
+
+### F27 — Result: re-buys halve, crashes flat
+
+200 runs × 100 years per cell, every currency and mandate, 2 / 3 / 5 / 8 points. The three columns are the script
+before (`--tune pre_hold`), the corrected capital-controls port with the old lift weights (`--tune ai_hold=off`), and
+shipped. Means over the cells in each row:
+
+| cells | crashes / century | lifts | re-buys within a year | lifts while still wanted | tools held |
+|---|---|---|---|---|---|
+| all | 13.09 → 13.41 → 13.10 | 61.9 → 65.0 → 54.1 | 6.66 → 7.34 → 3.24 | 0.52 → 1.73 → 0.40 | 0.93 → 1.01 → 1.10 |
+| no mandate | 21.40 → 21.45 → 20.83 | 76.4 → 80.1 → 70.3 | 8.29 → 8.54 → 4.92 | 1.48 → 1.85 → 1.22 | 1.01 → 1.05 → 1.15 |
+| price stability | 6.10 → 6.71 → 6.53 | 50.1 → 53.2 → 40.5 | 6.88 → 7.53 → 2.60 | 0.05 → 1.24 → 0.02 | 0.82 → 0.94 → 1.03 |
+| growth | 12.33 → 12.67 → 12.51 | 61.1 → 63.4 → 52.0 | 5.63 → 6.90 → 2.61 | 0.13 → 2.43 → 0.04 | 0.97 → 1.07 → 1.15 |
+| peg defence | 10.92 → 11.03 → 10.79 | 54.2 → 58.0 → 52.2 | 3.36 → 3.59 → 1.54 | 0.12 → 0.43 → 0.07 | 0.91 → 0.95 → 0.99 |
+
+Re-buys within a year, by tool, over the mandate cells:
+
+| tool | before → port → shipped |
+|---|---|
+| bail-in | 1.28 → 1.22 → 0.10 |
+| directed credit (Infrastructure) | 1.15 → 1.14 → 0.11 |
+| export credit | 0.76 → 0.66 → 0.14 |
+| asset relief | 0.58 → 0.51 → 0.03 |
+| capital controls | 0 → 1.12 → 0.22 |
+| buffer | 0.60 → 0.55 → 0.37 |
+| moral suasion (no hold) | 0.90 → 1.02 → 1.07 |
+| restrict inflows (external, unchanged) | 0.32 → 0.30 → 0.29 |
+
+The old re-buys were mostly at an edge, not overlaps: the lifts while still wanted were near zero in the mandate
+cells before. A slump tool's lift weight started at stable, so a recovery that touched 40 and dipped back lost the
+tool and bought it again. The holds through stable on falling momentum remove almost all of it. The exception was
+capital controls under the corrected port, lifted in a boom while still at war (1.21 a century while still wanted,
+0 now). What still counts as wanted is moral suasion, which has no hold by design.
+
+The gates alone (middle column to shipped) lower crashes in 35 cells of 52 and raise them in 13. The largest falls
+are the unsteered 8-point dials, fiat 35.6 → 32.3 and digital 34.3 → 30.7, where the leaning tools now hold through
+a climbing stable phase. The largest rise is `gold/growth/3pt` 16.3 → 17.2 (+0.85), and the other twelve are
++0.62 or less, against the ±0.5 noise §11 saw at 400 runs. Tools are held 18% more of the time (0.93 → 1.10),
+about half of that from the port. Under the simplified rule (fiat only,
+`--simplified`), crashes go 18.42 → 17.88 and re-buys 6.84 → 3.80.
+
+**What remains.** Moral suasion is bought back about once a century, by design. The buffer's 0.37 is mostly a
+crash lifting it and a fast recovery bringing it back, which is two real changes of conditions.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 2,3,5,8 [--tune pre_hold | --tune ai_hold=off]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only fiat --points 2,3,5,8 --simplified [--tune pre_hold]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only gold --points 2,3,5 [--exclude-tool capital_controls]   # F26
 ```

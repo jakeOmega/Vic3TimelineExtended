@@ -556,6 +556,13 @@ PRE_SLUMP_PRESSURE = {
     "pressure_downturn": -0.8,
     "pressure_panic": -1.5,
 }
+# The AI's lift weights before the banking_ai_hold_cb_* gates (2026-10-05, §17),
+# with the capital-controls port that assumed no external crisis at par.
+# `--tune pre_hold`; `--tune ai_hold=off` keeps the corrected port.
+PRE_HOLD = {
+    "ai_hold": "off",
+    "cc_crisis": "off",
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -563,6 +570,7 @@ PRESETS = {
     "pre_anchoring": PRE_ANCHORING,
     "pre_bank_qe": PRE_BANK_QE,
     "pre_slump_pressure": PRE_SLUMP_PRESSURE,
+    "pre_hold": PRE_HOLD,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -717,6 +725,13 @@ class State:
     tool_months: int = 0
     tool_slot_months: float = 0.0
     tool_usage: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    # §17: the AI's lifts, and re-buys of a tool within FLIP_WINDOW_MONTHS of
+    # the AI lifting it (a flip-flop: the toggle cost paid twice for nothing).
+    tool_lifts: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    tool_flips: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    # lifts made while the tool's own enable button still scored above zero
+    tool_wanted_lifts: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    last_lift: dict[str, int] = field(default_factory=dict)
     # What the cycle DOES to the economy: month-by-month sums of the modifier
     # fields the phase / tool / band / intervention modifiers carry, so a cell's
     # crash count can be weighed against what it paid for.
@@ -912,6 +927,24 @@ def is_cbi(cfg: Config) -> bool:
 
 def has_gold_flows(cfg: Config, state: State | None = None) -> bool:
     return is_on_gold(cfg) and has_dial(cfg, state)
+
+
+def in_external_crisis(cfg: Config, state: State) -> bool:
+    """te_mon_in_external_crisis: a war, or te_mon_in_financial_crisis — a panic
+    or downturn, a gold peg's confidence at 40 or below, or inflation band 6.
+
+    Until 2026-10-05 (§17) the capital-controls weights assumed this was never
+    true with FX at par; `--tune cc_crisis=off` restores that.
+    """
+    if TUNE.get("cc_crisis") == "off":
+        return False
+    if state.at_war:
+        return True
+    if phase_of(state.finance_cycle_value) in (PANIC, DOWNTURN):
+        return True
+    if has_gold_flows(cfg, state) and state.peg_confidence <= 40:
+        return True
+    return state.inflation_band >= 6
 
 
 # ── the regime rate band (te_mon_target_min / te_mon_target_max) ──────────────
@@ -1564,7 +1597,7 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
     if cfg.points > 0 and cfg.ai_tools:
-        consider_tools(cfg, state, rng)
+        consider_tools(cfg, state, rng, month)
     prune_overdrawn_tools(cfg, state)
 
     return crashed
@@ -1878,16 +1911,23 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     s["margin"] = v
 
     # cb_capital_controls_outflow. Under the full system (the default game rule)
-    # the core term is the external-crisis rule, which needs a currency in
-    # flight, a draining vault or a peg losing confidence — with FX at par and no
-    # peg crisis modelled that is never true, so the core is 0 and only the
-    # flavour / resource terms are left. `--simplified` runs the game rule's
+    # the core term is the external-crisis rule: 70 when something external is at
+    # stake (a currency in flight, a draining vault, a peg losing confidence), 15
+    # for a crisis with nothing at stake. FX sits at par here, so the 70 needs a
+    # gold-flow country's vault or peg. `--simplified` runs the game rule's
     # fallback branch, the pre-phase-1 cycle rule (panic 60 / downturn 35).
     v = 0.0
     if cfg.simplified:
         v += 60 if p == PANIC else 0
         v += 35 if p == DOWNTURN else 0
         v += 15 if risk_falling else 0
+    elif in_external_crisis(cfg, state):
+        limit = bank_gold_limit(cfg, state)
+        vault = min(1.0, max(0.0, state.bank_gold / limit)) if limit > 0 else 0.0
+        at_stake = has_gold_flows(cfg, state) and (
+            (state.gold_flow < 0 and vault < 0.3) or state.peg_confidence <= 40
+        )
+        v += 70 if at_stake else 15
     v += flavour(v, (15 if cfg.fin_law == "law_prudential_narrow_banking" else 0)
                  + (10 if cfg.fin_law == "law_directed_credit_development_banks" else 0)
                  + (10 if med else 0) + (5 if low else 0))
@@ -2118,10 +2158,11 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
         v += 55 if p == FRENZY else 0
         v += 15 if (state.scaled_debt <= 0.6 and p != PANIC) else 0
     else:
-        # With FX at par nothing is ever in external crisis, so the +40 "no
-        # crisis, take them off" term always fires, plus +10 per peacetime year
-        # held (te_mon_controls_fatigue_steps, capped at 5).
-        v = 40.0 + 10 * min(5, state.capctl_peace_months // 12)
+        # Out of the external crisis: +40, plus +10 per peacetime year held
+        # (te_mon_controls_fatigue_steps, capped at 5).
+        v = 0.0
+        if not in_external_crisis(cfg, state):
+            v += 40.0 + 10 * min(5, state.capctl_peace_months // 12)
         v += 10 if p == BOOM else 0
         v += 20 if p == FRENZY else 0
     s["capital_controls"] = v
@@ -2168,10 +2209,69 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     external_scores = tool_scores(cfg, state)
     for tool in ("restrict_inflows", "sterilize_inflows"):
         s[tool] = 60 if external_scores[tool] == 0 else 0
+
+    # The banking_ai_hold_cb_* gates (2026-10-05, §17): no lift while the reason
+    # the tool was bought still holds. `--tune ai_hold=off` restores the
+    # ungated weights.
+    if TUNE.get("ai_hold") != "off":
+        for tool, held in ai_holds(cfg, state).items():
+            if held:
+                s[tool] = 0.0
     return s
 
 
-def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
+def ai_holds(cfg: Config, state: State) -> dict[str, bool]:
+    """banking_ai_hold_cb_* in banking_policy_triggers.txt: every market tool
+    but moral suasion, which costs nothing to switch on or off."""
+    v = state.finance_cycle_value
+    p = phase_of(v)
+    m = state.finance_cycle_momentum
+    recession = p in (PANIC, DOWNTURN)
+    risk_rising = m >= 3
+    risk_falling = m <= -3
+    bubble_high = v >= 90 or (v >= 75 and m >= 3)
+    lean = not recession and (v >= 60 or risk_rising or (p == STABLE and m > 0))
+    slump = v < 40 or (p == STABLE and m < 0)
+    omo_core = (
+        p in (PANIC, DOWNTURN, STAGNATION) or risk_falling
+        or state.inflation < K.sv("te_mon_band_edge_deflation")
+    )
+    # cb_disable_open_market_ops lifts it on a tight stance whatever the hold
+    omo = (
+        omo_core and p != FRENZY and not bubble_high
+        and state.inflation < K.sv("te_mon_band_edge_elevated")
+        and state.stance_band < 4
+    )
+    ec_core = p in (PANIC, DOWNTURN, STAGNATION) or risk_falling
+    if cfg.simplified:
+        cc = p in (PANIC, DOWNTURN) or risk_falling
+    else:
+        cc = in_external_crisis(cfg, state)
+    dc = p != PANIC and slump
+    h = {
+        "omo": omo,
+        "buffer": lean,
+        "reserve_requirements": lean,
+        "margin": lean,
+        "deposit": recession,
+        "eliq": recession,
+        "bank_holiday": recession,
+        "directed": dc,
+        "export_credit": p != FRENZY and not bubble_high and (ec_core or slump),
+        "asset_relief": slump,
+        "bail_in": slump,
+        "capital_controls": cc,
+    }
+    for t in DC_NEW_SECTORS:
+        h[t] = dc
+    return h
+
+
+# A re-buy this soon after the AI lifted the same tool counts as a flip-flop.
+FLIP_WINDOW_MONTHS = 12
+
+
+def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0) -> None:
     """One button click a month at most, weighted by `ai_chance`.
 
     The engine offers every `visible` + `possible` scripted button on the entry
@@ -2200,9 +2300,15 @@ def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
             if action == "on":
                 state.tools.add(tool)
                 state.tool_usage[tool] += 1
+                if tool in state.last_lift and month - state.last_lift[tool] <= FLIP_WINDOW_MONTHS:
+                    state.tool_flips[tool] += 1
                 on_tool_enabled(state, tool)
             else:
+                if tool_scores(cfg, state).get(tool, 0.0) > 0:
+                    state.tool_wanted_lifts[tool] += 1
                 state.tools.discard(tool)
+                state.tool_lifts[tool] += 1
+                state.last_lift[tool] = month
             return
 
 
@@ -2476,6 +2582,28 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         "dollarised_pct": statistics.mean(s.months_dollarised / months * 100 for s in states),
         "tool_usage": {
             t: statistics.mean(s.tool_usage[t] for s in states) for t in TOOL_MODIFIERS
+        },
+        # §17: per century, all tools and per tool
+        "lifts_per_century": statistics.mean(
+            sum(s.tool_lifts.values()) / cfg.years * 100 for s in states
+        ),
+        "flips_per_century": statistics.mean(
+            sum(s.tool_flips.values()) / cfg.years * 100 for s in states
+        ),
+        "wanted_lifts_per_century": statistics.mean(
+            sum(s.tool_wanted_lifts.values()) / cfg.years * 100 for s in states
+        ),
+        "tool_wanted_lifts": {
+            t: statistics.mean(s.tool_wanted_lifts[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
+        },
+        "tool_lifts": {
+            t: statistics.mean(s.tool_lifts[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
+        },
+        "tool_flips": {
+            t: statistics.mean(s.tool_flips[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
         },
         # Time-weighted means of the economic modifier fields, i.e. what the
         # cycle did to the economy on average over the century.
@@ -2781,7 +2909,8 @@ def main() -> int:
                          "--tune pre_delegation_fix for the delegated bank before §12, or "
                          "--tune pre_anchoring for independence's institution bonus before §13, or "
                          "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
-                         "--tune pre_slump_pressure for the slump phases' inflation pull before §16.")
+                         "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
+                         "--tune pre_hold for the AI's lift weights before the hold gates of §17.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -2899,7 +3028,7 @@ def print_table(rows: list[dict], args) -> None:
         f"{'rate':>6}{'floor%':>8}{'slots':>7}{'cyc':>6}{'reform':>7}{'$ised%':>8}"
         f"{'thru':>7}{'serv':>7}{'pool':>7}{'prem':>6}"
         f"{'peak':>6}{'pk90':>6}{'r>=10%':>7}{'tight%':>7}{'polDn':>6}{'pcGap':>7}"
-        f"{'rcHike':>7}{'rcCore':>7}"
+        f"{'rcHike':>7}{'rcCore':>7}{'lifts':>7}{'flips':>7}{'wanted':>7}"
     )
     print(head)
     print("-" * len(head))
@@ -2933,6 +3062,9 @@ def print_table(rows: list[dict], args) -> None:
             f"{r['post_crash_stance_mean']:>7.2f}"
             f"{r['recession_hike_pct']:>7.1f}"
             f"{r['recession_core_pp_a_year']:>7.2f}"
+            f"{r['lifts_per_century']:>7.1f}"
+            f"{r['flips_per_century']:>7.1f}"
+            f"{r['wanted_lifts_per_century']:>7.1f}"
         )
     print()
     print("crash/100y = mean crashes per century   yrs btwn = median gap between crashes")
@@ -2954,6 +3086,9 @@ def print_table(rows: list[dict], args) -> None:
     print("pcGap = mean clamped stance gap over the 12 months after a crash (+ = tight)")
     print("rcHike = % of panic+downturn months in which the policy rate rose")
     print("rcCore = core inflation's mean change over panic+downturn months, pp a year")
+    print("lifts = tools the AI switched off per century   flips = tools it bought back")
+    print(f"      within {FLIP_WINDOW_MONTHS} months of switching them off (toggle costs paid for nothing)")
+    print("wanted = lifts made while that tool's own enable button still scored above zero")
 
 
 if __name__ == "__main__":

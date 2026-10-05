@@ -280,7 +280,9 @@ early.
 
 The AI uses Moral Suasion in an Expansion, reserve requirements and the buffer
 from Expansion upward, and margin requirements in a Boom or Frenzy. It uses any
-of them while momentum reads Surging, and lifts them once the cycle turns down.
+of them while momentum reads Surging. It keeps the buffer, reserve requirements
+and margin requirements until the cycle is back below Expansion and no longer
+climbing, and drops Moral Suasion more freely, since switching it costs nothing.
 
 ### Directing credit into growth
 
@@ -330,7 +332,7 @@ has momentum Collapsing. They choose the sector by who governs: heavy industry
 for Industrialists, agriculture for Landowners or Rural Folk, armaments for the
 Armed Forces or in war, electrification for the Intelligentsia, infrastructure
 otherwise. They pay the same points as you, so a sector they cannot afford is
-not chosen. They lift it in a Panic or once the cycle climbs past Stable, and
+not chosen. They lift it in a Panic or once a Stable cycle stops falling, and
 run Export Credit Facility from Stagnation down.
 
 ### Pulling out of a slump
@@ -372,8 +374,9 @@ to this tool rather than replacing it.
 The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
 Downturn that is still falling fast. It expands the deposit guarantee in a
 Downturn or Panic, uses Asset Relief or a bail-in from Stagnation down, and
-uses Open-Market Operations at the rate floor in a slump or deflation. It lifts
-them as the cycle climbs back to Stable and beyond.
+uses Open-Market Operations at the rate floor in a slump or deflation. It keeps
+each tool until the slump that prompted it is over, and lifts them as the cycle
+climbs back to Stable and beyond.
 
 ### Managing foreign capital and import credit
 
