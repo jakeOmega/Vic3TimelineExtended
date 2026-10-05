@@ -3134,6 +3134,8 @@ The engine compiles a parameterized scripted effect or trigger once per call, fr
 
 Two mod sites shipped this way, one of them cited in the other's comments as proof that unused arguments were fine. `st_res_policy_set_by_hand_base` took `SETTING` from both Strategic Reserve steppers and named only `GOOD` (64 lines a launch in each of debug.log and error.log). The tax code's `te_tax_obl_is_maintenance` dispatcher passes `ARG` and `TARGET` to every kind, and kinds 2 and 4 named neither. The fixes: drop the argument at the call, or, where a uniform dispatcher must pass it, name it in the callee where it never runs (`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`, 2026-10-05).
 
+`script_argument_audit` catches both shapes and the missing-argument one (`--strict` in CI, for mod callees; a reload on a machine with the game also checks calls to vanilla's), and expands a dispatcher like `te_tax_obl_is_maintenance_$KIND$` against the kinds its callers pass. Before changing a helper's parameters, `GET /script-args/<helper>` lists every call that reaches it and what each passes (#732).
+
 ## `ordered_scope_state` `position = N` + `check_range_bounds = no` Clamps Out-of-Range
 
 For picking distinct top-N elements:

@@ -382,6 +382,11 @@ _TITLE_AFTER_DASH_RE = re.compile(r"\s[—-]\s+(.+)$")
 # cross-reference to docs/audits/open_issues.md (mandatory for mod_low_priority refs).
 _SOURCE_REF_RE = re.compile(r"^\s*-\s*source:\s*`([^`]+)`\s*$")
 _TRACKED_REF_RE = re.compile(r"^\s*-\s*tracked:\s*`([^`]+)`\s*$")
+# `- reviewed: <note>` records a judgement a registry check would otherwise
+# re-raise. Its text never joins the basename index, so a backticked path in
+# the note doesn't add an anchor. `- reviewed: helper anchor, ...` clears
+# helper_anchor_warnings for that entry.
+_REVIEWED_REF_RE = re.compile(r"^\s*-\s*reviewed:\s*(.+?)\s*$")
 
 # Map ## section header substring (case-insensitive) -> kind label. Sections not
 # matched default to "vanilla". A ref's kind drives validation policy and the
@@ -394,11 +399,12 @@ _SECTION_KIND_RULES: tuple[tuple[str, str], ...] = (
 
 
 class VanillaBugRef:
-    __slots__ = ("title", "file_basenames", "source_anchors", "signatures", "anchor", "kind", "tracked_issue")
+    __slots__ = ("title", "file_basenames", "source_anchors", "signatures", "anchor", "kind",
+                 "tracked_issue", "reviewed")
 
     def __init__(self, title: str, file_basenames: list[str], source_anchors: list[str],
                  signatures: list[str], anchor: str, kind: str = "vanilla",
-                 tracked_issue: str | None = None):
+                 tracked_issue: str | None = None, reviewed: list[str] | None = None):
         self.title = title
         self.file_basenames = file_basenames
         # Exact-match against entry.source. Empty for legacy path-anchored entries.
@@ -411,6 +417,8 @@ class VanillaBugRef:
         # "mod_low_priority" (mod-side cosmetic, must cross-link to open_issues.md).
         self.kind = kind
         self.tracked_issue = tracked_issue
+        # `- reviewed:` notes from the entry body (see _REVIEWED_REF_RE).
+        self.reviewed = list(reviewed or [])
 
     def to_dict(self) -> dict:
         d: dict = {
@@ -628,6 +636,7 @@ def load_vanilla_bug_registry(
         body_paths: list[str] = []
         body_sources: list[str] = []
         tracked_issue: str | None = None
+        reviewed: list[str] = []
         captured_block = False
         j = i + 1
         while j < len(lines):
@@ -660,6 +669,11 @@ def load_vanilla_bug_registry(
                 # Multiple `- tracked:` lines: keep first, ignore rest (warn? not yet)
                 j += 1
                 continue
+            rv = _REVIEWED_REF_RE.match(nxt)
+            if rv:
+                reviewed.append(rv.group(1))
+                j += 1
+                continue
             body_paths.extend(_PATH_REF_RE.findall(nxt))
             j += 1
         all_paths = paths + body_paths
@@ -672,6 +686,7 @@ def load_vanilla_bug_registry(
             anchor=anchor,
             kind=current_section_kind,
             tracked_issue=tracked_issue,
+            reviewed=reviewed,
         )
         ref_warnings = _validate_ref(ref, known_anchors)
         if ref_warnings:
@@ -708,6 +723,159 @@ def load_mod_noise_registry(doc_path: str) -> tuple[
     that resolves to a real heading.
     """
     return load_vanilla_bug_registry(doc_path, default_kind="mod_low_priority")
+
+
+# ---------------------------------------------------------------------------
+# Helper-anchored registry entries (#730)
+# ---------------------------------------------------------------------------
+# error.log's `files` is the whole script call stack, so an entry anchored on a
+# vanilla *helper* file (a scripted effect, scripted trigger or script value
+# file) also tags the mod's errors that pass through that helper. The
+# `change_appeasement` entry, anchored on vanilla's 00_lobby_effects.txt,
+# hid five mis-signed mod event options that way (PR #729).
+HELPER_ANCHOR_REVIEWED = "helper anchor"
+HELPER_ANCHOR_ADVICE = (
+    "anchor on the vanilla caller (bottom of the stack) or narrow the signature to "
+    "the vanilla case; if it already cannot match a mod call, add "
+    "`- reviewed: helper anchor, signature cannot match a mod call (<why>)`"
+)
+# Uses listed per helper in a warning; the count covers the rest.
+_HELPER_USES_SHOWN = 5
+_MOD_USE_DIRS = ("common", "events", "gui")
+_IDENT_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+_BRACE_RE = re.compile(r"[{}]")
+
+# {mod_root: (names, stamp, {name: ["rel:line", ...]})}, the latest query only.
+_mod_uses_cache: dict = {}
+
+
+def _mod_script_files(mod_root: str) -> list[tuple[str, str, float]]:
+    out = []
+    for sub in _MOD_USE_DIRS:
+        base = os.path.join(mod_root, sub)
+        for dirpath, dirs, names in os.walk(base):
+            dirs.sort()
+            for name in sorted(names):
+                if name.endswith((".txt", ".gui")):
+                    path = os.path.join(dirpath, name)
+                    try:
+                        out.append((path, os.path.relpath(path, mod_root).replace("\\", "/"),
+                                    os.path.getmtime(path)))
+                    except OSError:
+                        continue
+    return out
+
+
+def mod_uses(mod_root: str, names: frozenset[str]) -> dict[str, list[str]]:
+    """{name: ["<rel>:<line>", ...]} for every word-bounded mention of `names`
+    in the mod's `common/`, `events/` and `gui/`, outside comments.
+
+    A mention inside a string counts (a .gui reads a script value as
+    `ScriptValue('x')`). A depth-0 key is a definition, not a use, so a mod
+    file that redefines the name doesn't count itself. Memoized on the files'
+    mtimes, like gui_injected_scope_names.
+    """
+    from script_helper_index import blank_comments, line_of, line_starts
+
+    files = _mod_script_files(mod_root)
+    stamp = tuple((rel, mtime) for _, rel, mtime in files)
+    cached = _mod_uses_cache.get(mod_root)
+    if cached and cached[0] == names and cached[1] == stamp:
+        return cached[2]
+    found: dict[str, list[str]] = defaultdict(list)
+    for path, rel, _ in files:
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as f:
+                text = f.read()
+        except OSError:
+            continue
+        # Cheap reject on the raw text: comments only add words, never hide one.
+        if names.isdisjoint(_IDENT_RE.findall(text)):
+            continue
+        no_comments, clean = blank_comments(text)
+        starts = line_starts(no_comments)
+        braces = [(m.start(), 1 if m.group() == "{" else -1) for m in _BRACE_RE.finditer(clean)]
+        bi = depth = 0
+        for m in _IDENT_RE.finditer(no_comments):
+            while bi < len(braces) and braces[bi][0] < m.start():
+                depth = max(depth + braces[bi][1], 0)
+                bi += 1
+            name = m.group()
+            if name not in names:
+                continue
+            if depth == 0 and re.match(r"\s*=", no_comments[m.end():m.end() + 8]):
+                continue
+            found[name].append(f"{rel}:{line_of(starts, m.start())}")
+    result = dict(found)
+    _mod_uses_cache[mod_root] = (names, stamp, result)
+    return result
+
+
+def helper_anchor_warnings(
+    refs: list[VanillaBugRef],
+    mod_root: str,
+    vanilla_game: str | None,
+    label: str = "vanilla_bug_registry",
+) -> list[dict]:
+    """Warn for each registry entry anchored on a vanilla helper file the mod
+    calls into (#730).
+
+    Each `file_basenames` entry is resolved to vanilla's `common/scripted_effects/`,
+    `common/scripted_triggers/` and `common/script_values/` under `vanilla_game`
+    (the mod's copy when the mod overrides that path, since vanilla's is then
+    never loaded). When the mod mentions any of that file's top-level
+    definitions, the entry can swallow mod errors and gets a warning:
+
+        {"label", "kind": "helper_anchor_mod_calls", "entry", "anchor",
+         "helper_file", "mod_uses": {definition: ["<rel>:<line>", ...]},
+         "advice", "detail"}
+
+    An entry carrying `- reviewed: helper anchor, ...` is skipped. Returns []
+    without vanilla game files.
+    """
+    if not vanilla_game:
+        return []
+    from script_helper_index import DEFINITION_DIRS, definitions_in_file
+
+    hits: list[tuple[VanillaBugRef, str, str, list[str]]] = []
+    for ref in refs:
+        if any(r.lower().startswith(HELPER_ANCHOR_REVIEWED) for r in ref.reviewed):
+            continue
+        for basename in ref.file_basenames:
+            for kind in DEFINITION_DIRS:
+                rel = f"common/{kind}/{basename}"
+                vanilla_path = os.path.join(vanilla_game, rel)
+                if not os.path.isfile(vanilla_path):
+                    continue
+                mod_copy = os.path.join(mod_root, rel)
+                origin, path = ("mod", mod_copy) if os.path.isfile(mod_copy) else ("vanilla", vanilla_path)
+                defs = definitions_in_file(path, rel, kind, origin)
+                hits.append((ref, basename, rel, sorted({d.name for d in defs})))
+    if not hits:
+        return []
+    uses = mod_uses(mod_root, frozenset(n for _, _, _, names in hits for n in names))
+    warnings: list[dict] = []
+    for ref, basename, rel, names in hits:
+        used = {n: uses[n] for n in names if uses.get(n)}
+        if not used:
+            continue
+        total = sum(len(v) for v in used.values())
+        warnings.append({
+            "label": label,
+            "kind": "helper_anchor_mod_calls",
+            "entry": ref.title,
+            "anchor": basename,
+            "helper_file": rel,
+            "mod_uses": {n: v[:_HELPER_USES_SHOWN] for n, v in sorted(used.items())},
+            "advice": HELPER_ANCHOR_ADVICE,
+            "detail": (
+                f"'{ref.title}' is anchored on vanilla helper file {rel}, and the mod "
+                f"uses {len(used)} of its definitions ({', '.join(sorted(used))}; "
+                f"{total} mention{'s' if total != 1 else ''}), so the entry also tags mod "
+                f"errors whose call stack passes through it. {HELPER_ANCHOR_ADVICE}."
+            ),
+        })
+    return warnings
 
 
 _LINE_NUM_RE = re.compile(r":\d+")

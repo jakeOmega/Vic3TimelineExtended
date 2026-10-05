@@ -105,6 +105,7 @@ FOREIGN_CHECKS = frozenset({
     "empty_block", "no_effect_option",  # empty_effect_audit
     "amendment_reachability",  # amendment_reachability_audit (an add_amendment line in an event)
     "ideology_lawgroup",  # ideology_lawgroup_audit
+    "script_argument",  # script_argument_audit (a call line in an event)
 })
 
 # ---------------------------------------------------------------------------

@@ -62,8 +62,10 @@ import tech_unlocks_lib
 import vanilla_parsed
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
-# /scripted-helpers/unresolved can call it directly (#288).
+# /scripted-helpers/unresolved and /script-args can call them directly
+# (#288, #732).
 import effect_trigger_validity_audit
+import script_argument_audit
 
 PORT = 8950
 PID_FILE = os.path.join(mod_path, "mod_state_server.pid")
@@ -1460,6 +1462,24 @@ def _invalidate_call_index() -> None:
     global _call_index_cache, _call_index_generation
     _call_index_cache = None
     _call_index_generation += 1
+
+
+# /script-args (#732): one script_argument_audit run, reused until the next
+# reload bumps _call_index_generation. (generation, AuditResult) or None.
+_script_args_cache: tuple | None = None
+_script_args_lock = threading.Lock()
+
+
+def _get_script_args_result():
+    global _script_args_cache
+    with _script_args_lock:
+        gen = _call_index_generation
+        cached = _script_args_cache
+        if cached is not None and cached[0] == gen:
+            return cached[1]
+        result = script_argument_audit.audit(mod_path=mod_path)
+        _script_args_cache = (gen, result)
+        return result
 
 
 def _get_call_index() -> dict:
@@ -5363,6 +5383,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     "status": "validated",
                     "warning_count": len(warnings),
                     "warnings": warnings,
+                    "helper_anchor_check": _helper_anchor_check_state(),
                 })
             except Exception as exc:
                 logger.error(f"Error validating registries: {exc}\n{traceback.format_exc()}")
@@ -5421,6 +5442,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "scripted-triggers": lambda: self._scripted_triggers(rest),
             # Inverse of the callers index: call sites whose callee is gone
             "scripted-helpers": lambda: self._scripted_helpers(rest, params),
+            # Calls whose arguments don't match the callee's $X$ names (#732)
+            "script-args": lambda: self._script_args(rest, params),
             "decrees": lambda: self._decrees(rest),
             "principles": lambda: self._principles(rest),
             "amendments": lambda: self._amendments(rest),
@@ -5518,6 +5541,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/diplomatic-actions/<id?>", "desc": "Diplomatic-action catalog with category (subject_relation/power_bloc/general) + pact metadata."},
                 {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
+                {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
                 {"path": "/decrees/<id?>", "desc": "Decree catalog."},
                 {"path": "/on-actions/<id?>", "desc": "On-action wiring (mod-only)."},
                 {"path": "/events/<id?>", "desc": "Events (mod-only)."},
@@ -8143,6 +8167,36 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "unresolved_helper_calls": rows,
         }
 
+    def _script_args(self, parts, params):
+        """GET /script-args[/<helper>] — argument checks for scripted effect
+        and trigger calls (#732), from script_argument_audit's index.
+
+        Bare: every flagged call (`?include_reviewed=true` adds the ones
+        suppressed with `# REVIEWED YYYY-MM-DD (script_argument): ...`).
+        With a helper: its `$X$` names and every call that reaches it,
+        dispatcher calls included, each with the `unknown` arguments it passes
+        and the `missing` ones it doesn't. Vanilla helpers are indexed only
+        when the game files are on disk (`vanilla_indexed`)."""
+        result = _get_script_args_result()
+        if parts:
+            info = script_argument_audit.helper_callers(result, parts[0])
+            if info is None:
+                raise NotFound(parts[0])
+            return info
+        include_reviewed = (
+            (params.get("include_reviewed") or ["false"])[0].lower() == "true"
+        )
+        flags = [f for f in result.flags if include_reviewed or not f.exemption]
+        return {
+            "vanilla_indexed": result.vanilla_indexed,
+            "helpers_indexed": result.helpers_indexed,
+            "calls_checked": result.calls_checked,
+            "include_reviewed": include_reviewed,
+            "count": len(flags),
+            "flags": [script_argument_audit.flag_dict(f) for f in flags],
+            "stale_tags": [{"file": t.file, "line": t.line} for t in result.stale_tags],
+        }
+
     def _scripted_helper(self, etype, parts):
         data = ms.get_data(etype)
         if not data:
@@ -8970,6 +9024,7 @@ POST_LOAD_AUDITS = [
     ("prestige_good_roster_audit",    "prestige_good_roster_audit"),
     ("amendment_reachability_audit",  "amendment_reachability_audit"),
     ("ideology_lawgroup_audit",       "ideology_lawgroup_audit"),
+    ("script_argument_audit",         "script_argument_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
@@ -9137,24 +9192,44 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
 def _collect_registry_warnings() -> list[dict]:
     """Load both known-noise registries and return their validation warnings as
     [{label, detail}]. Shared by POST /reload and POST /validate/registries so
-    the two stay in lockstep. Best-effort: logs and returns [] on failure."""
+    the two stay in lockstep. Best-effort: logs and returns [] on failure.
+
+    Also runs the helper-anchor check (#730): an entry anchored on a vanilla
+    scripted effect, trigger or script value file the mod calls adds a
+    `kind: "helper_anchor_mod_calls"` warning with its `entry`, `anchor`,
+    `helper_file`, `mod_uses` and `advice` beside the `{label, detail}` pair.
+    It needs the vanilla game files and is skipped without them
+    (`_helper_anchor_check_state`)."""
     warnings: list[dict] = []
     try:
         from game_log_reader import (
+            helper_anchor_warnings as _helper_anchor_warnings,
             load_vanilla_bug_registry as _load_vbr,
             load_mod_noise_registry as _load_mnr,
         )
+        from script_helper_index import vanilla_game_dir
         _vbr_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
         _mnr_doc = os.path.join(mod_path, "docs", "audits", "mod_known_noise.md")
-        _, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
-        _, _, _, _mnr_warnings = _load_mnr(_mnr_doc)
+        _vbr_refs, _, _, _vbr_warnings = _load_vbr(_vbr_doc)
+        _mnr_refs, _, _, _mnr_warnings = _load_mnr(_mnr_doc)
         for w in _vbr_warnings:
             warnings.append({"label": "vanilla_bug_registry", "detail": w})
         for w in _mnr_warnings:
             warnings.append({"label": "mod_noise_registry", "detail": w})
+        _vanilla_game = vanilla_game_dir()
+        warnings += _helper_anchor_warnings(_vbr_refs, mod_path, _vanilla_game, "vanilla_bug_registry")
+        warnings += _helper_anchor_warnings(_mnr_refs, mod_path, _vanilla_game, "mod_noise_registry")
     except Exception as _exc:  # noqa: BLE001
         logger.warning(f"known-noise registry warning collection failed: {_exc}")
     return warnings
+
+
+def _helper_anchor_check_state() -> str:
+    """"ran", or why the helper-anchor registry check was skipped."""
+    from script_helper_index import vanilla_game_dir
+    if vanilla_game_dir():
+        return "ran"
+    return f"skipped: no vanilla game files under {base_game_path}/game"
 
 
 def _record_reload_warnings(flags: dict, warnings: list, *,
