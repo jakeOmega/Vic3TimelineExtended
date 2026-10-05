@@ -104,8 +104,8 @@ on_civil_war_won = {
 
 # Every system's repair runs between resolve and clear, and reads what
 # te_civil_war_resolve_sides leaves: var:te_cw_rebels_won (1 when the
-# revolutionaries won), the winner's own var:te_cw_role (1 original, 2 rebel;
-# the merge keeps the winner's value) and scope:te_cw_loser (when it resolves).
+# revolutionaries won), var:te_cw_government_won (1 when the continuing
+# government won), and scope:te_cw_loser (when it resolves).
 # Owner ruling 2026-09-26: a revolution's winner continues the nation, so each
 # repair restores what the loser held (#460-#465). Each is a no-op for a
 # loyalist winner except the tax code's, which runs for either winner of a
@@ -123,6 +123,7 @@ te_civil_war_on_won = {
 		decol_repair_after_civil_war = yes		# PR #508
 		gm_repair_after_civil_war = yes			# Grand Monuments: adopt the loser's monuments
 		te_tax_repair_after_civil_war = yes		# Legislated tax code: the winner's code applies
+		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}
 }

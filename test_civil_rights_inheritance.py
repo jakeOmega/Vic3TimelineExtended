@@ -347,7 +347,7 @@ class HookTests(unittest.TestCase):
             body,
             r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_rebels_won\s+"
             r"var:te_cw_rebels_won\s*=\s*1\s*\}\s*cr_rebuild_after_civil_war\s*=\s*yes\s*\}\s*"
-            r"else_if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_role\s+var:te_cw_role\s*=\s*1\s*\}\s*"
+            r"else_if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_government_won\s+var:te_cw_government_won\s*=\s*1\s*\}\s*"
             r"cr_drop_rebel_run_state\s*=\s*yes\s*\}\s*"
             r"else_if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*has_variable\s*=\s*te_cw_role\s*\}\s*\}\s*"
             r"cr_rebuild_after_civil_war\s*=\s*yes\s*\}",
