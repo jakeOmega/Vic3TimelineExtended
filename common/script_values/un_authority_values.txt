@@ -10,8 +10,10 @@
 #   participation   0 .. +25                    power share of the members
 #   commitment      -25 .. +25                  members' stance x power share
 #   credibility     -25 .. +25                  decaying ledger of the Assembly's record
-#   funding         -10 .. +10                  who pays for the UN's programmes, less
-#                                               the members withholding their dues
+#   funding         -10 .. +10                  who runs the UN's programmes and what
+#                                               the members give the World Development
+#                                               Fund, less the members withholding
+#                                               their dues
 #   order           -20 .. 0                    wars between members, nuclear use
 #   delivery        -10 .. +10                  decaying ledger of aid / peacekeeping delivered
 #                                               (0 .. +10), plus, while the World Food
@@ -63,10 +65,16 @@ un_order_floor = { value = -20 }
 un_order_war_weight = { value = -40 }
 un_order_war_floor = { value = -15 }
 # Funding (phase-1 proxy until assessed dues exist, §7.2): the power-weighted
-# share of major-and-above members running UN programmes, 2 programmes = full.
+# share of major-and-above members running UN programmes, 2 programmes = full,
+# plus what the members give the World Development Fund (owner, 2026-10-05:
+# development aid counts by its money, not by who gives it, since eight
+# members giving 1 a week do what one giving 8 does). Contributions worth
+# this share of the represented members' GDP a year count in full on their
+# own: the UN's own 0.7% aid target.
 un_funding_floor = { value = -5 }
 un_funding_span = { value = 15 }
 un_funding_programmes_for_full = { value = 2 }
+un_funding_dev_money_for_full = { value = 0.007 }
 # The pillar's range once dues exist (phase 5): arrears can take it to -10.
 un_funding_pillar_min = { value = -10 }
 un_funding_pillar_max = { value = 10 }
@@ -269,18 +277,16 @@ un_pillar_commitment_value = {
 	max = 25
 }
 
-# How many of the four UN programmes this country is genuinely running (the
-# same "running" test the standing system uses, so a cost-free marker from an
-# old save does not count).
+# How many of the three UN programmes counted by who runs them this country
+# is genuinely running (the same "running" test the standing system uses, so a
+# cost-free marker from an old save does not count). Development Programs is
+# not among them: the funding pillar counts its money
+# (un_funding_dev_money_ratio_value).
 # Scope: country
 un_programmes_running = {
 	value = 0
 	if = {
 		limit = { un_standing_program_active_peacekeeping = yes }
-		add = 1
-	}
-	if = {
-		limit = { un_standing_program_active_development = yes }
 		add = 1
 	}
 	if = {
@@ -323,7 +329,8 @@ un_funding_denominator_value = {
 	}
 }
 
-un_funding_ratio_value = {
+# The programmes' part, 0..1.
+un_funding_programmes_ratio_value = {
 	value = 0
 	if = {
 		limit = { un_funding_denominator_value > 0 }
@@ -331,6 +338,35 @@ un_funding_ratio_value = {
 		divide = un_funding_denominator_value
 		max = 1
 	}
+}
+
+# The development money's part, 0..1: what the members' Development Programs
+# contributions pay the World Development Fund a year, as a share of the
+# represented members' GDP, against un_funding_dev_money_for_full. Reads last
+# month's snapshot (un_dev_fund_monthly_update runs after the authority
+# update), which counts only money that reaches the Fund (un_dev_fund_contributor).
+# Globals only.
+un_funding_dev_money_ratio_value = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_dev_fund_donations
+			has_global_variable = un_dev_fund_members_gdp
+			global_var:un_dev_fund_members_gdp > 0
+		}
+		add = global_var:un_dev_fund_donations
+		multiply = 52
+		divide = global_var:un_dev_fund_members_gdp
+		divide = un_funding_dev_money_for_full
+		max = 1
+	}
+}
+
+# The two together, at most 1.
+un_funding_ratio_value = {
+	value = un_funding_programmes_ratio_value
+	add = un_funding_dev_money_ratio_value
+	max = 1
 }
 
 # Dues (redesign phase 5, un_dues_values.txt): members withholding their
@@ -581,6 +617,24 @@ un_disp_funding_pct = {
 	if = {
 		limit = { has_global_variable = un_funding_ratio }
 		add = global_var:un_funding_ratio
+		multiply = 100
+	}
+}
+
+un_disp_funding_programmes_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_funding_programmes_ratio }
+		add = global_var:un_funding_programmes_ratio
+		multiply = 100
+	}
+}
+
+un_disp_funding_dev_money_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_funding_dev_money_ratio }
+		add = global_var:un_funding_dev_money_ratio
 		multiply = 100
 	}
 }

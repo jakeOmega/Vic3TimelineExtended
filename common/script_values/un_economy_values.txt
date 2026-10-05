@@ -338,11 +338,150 @@ un_dev_fund_grant_preview_share = {
 # ---- The World Development Fund: the voluntary part --------------------------------
 # The Development Programs programme (un_fund_development_button, un_buttons.txt)
 # is the Fund's voluntary part (owner, 2026-10-02): while the Fund stands,
-# under every charter, each contributor's weekly programme expense pays its
-# grants. The programme is unchanged (its cost is un_program_expense_value,
-# cached on the country as var:un_development_expense_cached by the journal
-# entry's monthly pulse); the Fund only adds it to the pot. Snapshotted monthly
-# whether or not the Fund stands, so the chamber can preview it.
+# under every charter, each contributor's weekly expense pays its grants. The
+# expense is the contribution's size (below), cached on the country as
+# var:un_development_expense_cached by the buttons and the journal entry's
+# monthly pulse; the Fund adds it to the pot. Snapshotted monthly whether or
+# not the Fund stands, so the chamber can preview it.
+
+# ---- The voluntary part: four sizes (owner, 2026-10-05) ---------------------------
+# A contribution starts at Token and moves a size at a time (the Raise and
+# Reduce buttons). Each size doubles the money and adds a quarter of
+# Substantial's benefits, so a nominal gift is the best value and the rest
+# goes to the recipients:
+#   size  name         share of GDP a year   benefit factor
+#   1     Token        0.125%                0.5
+#   2     Modest       0.25%                 0.75
+#   3     Substantial  0.5%                  1
+#   4     Generous     1%                    1.25
+# The factor multiplies un_development_contributor_modifier (infamy decay and
+# prestige), the programme's standing accrual (un_standing_program_accrual_count)
+# and, through the recipients' memory (var:un_dev_fund_patron), the lobbying
+# bonus with them. The UN's funding pillar counts the money instead
+# (un_funding_dev_money_ratio_value, un_authority_values.txt).
+un_dev_fund_size_max = { value = 4 }
+un_dev_fund_rate_token = { value = 0.00125 }
+un_dev_fund_rate_modest = { value = 0.0025 }
+un_dev_fund_rate_substantial = { value = 0.005 }
+un_dev_fund_rate_generous = { value = 0.01 }
+un_dev_fund_benefit_token = { value = 0.5 }
+un_dev_fund_benefit_modest = { value = 0.75 }
+un_dev_fund_benefit_substantial = { value = 1 }
+un_dev_fund_benefit_generous = { value = 1.25 }
+# A contribution from before the sizes has no var:un_dev_fund_size. It paid
+# 0.5% of GDP a year, so it is Substantial (the journal entry's monthly pulse
+# writes the variable).
+un_dev_fund_size_legacy = { value = 3 }
+
+# The size we contribute at, 1..4 as stored (or the legacy size). Read only
+# while we contribute: the variable outlives a contribution that ends.
+# Scope: country
+un_dev_fund_size_stored = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_size }
+		add = var:un_dev_fund_size
+	}
+	else = {
+		add = un_dev_fund_size_legacy
+	}
+}
+
+# The size we contribute at, or 0 when we contribute nothing. Not for a
+# button's own effect block, which cannot see the modifier it adds.
+# Scope: country
+un_dev_fund_size_value = {
+	value = 0
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		add = un_dev_fund_size_stored
+	}
+}
+
+# The stored size's share of GDP a year. Scope: country
+un_dev_fund_rate_value = {
+	value = 0
+	if = {
+		limit = { un_dev_fund_size_stored >= 4 }
+		add = un_dev_fund_rate_generous
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 3 }
+		add = un_dev_fund_rate_substantial
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 2 }
+		add = un_dev_fund_rate_modest
+	}
+	else = {
+		add = un_dev_fund_rate_token
+	}
+}
+
+# The stored size's benefit factor: the multiplier of
+# un_development_contributor_modifier (var:un_dev_fund_benefit). Scope: country
+un_dev_fund_benefit_value = {
+	value = 0
+	if = {
+		limit = { un_dev_fund_size_stored >= 4 }
+		add = un_dev_fund_benefit_generous
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 3 }
+		add = un_dev_fund_benefit_substantial
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 2 }
+		add = un_dev_fund_benefit_modest
+	}
+	else = {
+		add = un_dev_fund_benefit_token
+	}
+}
+
+# The stored size's expense a week: the multiplier of
+# un_development_contributor_cost (var:un_development_expense_cached).
+# Scope: country
+un_dev_fund_expense_value = {
+	value = gdp
+	multiply = un_dev_fund_rate_value
+	divide = 52 # weekly cost
+}
+
+# ---- The voluntary part: what the recipients remember ----------------------------
+# var:un_dev_fund_patron, the multiplier of un_development_patron_modifier,
+# moves this fraction of the way each month toward what we give now: our
+# benefit factor while our money reaches the Fund (un_dev_fund_contributor),
+# 0 otherwise. A year at a size brings it about two thirds of the way there,
+# so a month of Generous before a vote buys little, and the goodwill fades
+# over a few years once the money stops. Below the floor, with nothing
+# given, it is let go.
+un_dev_fund_patron_months = { value = 12 }
+un_dev_fund_patron_floor = { value = 0.02 }
+
+# What the recipients' memory moves toward this month. Scope: country
+un_dev_fund_patron_target = {
+	value = 0
+	if = {
+		limit = { un_dev_fund_contributor = yes }
+		add = un_dev_fund_benefit_value
+	}
+}
+
+# The memory after this month's step. Scope: country
+un_dev_fund_patron_next_value = {
+	value = un_dev_fund_patron_target
+	if = {
+		limit = { has_variable = un_dev_fund_patron }
+		subtract = var:un_dev_fund_patron
+	}
+	divide = un_dev_fund_patron_months
+	if = {
+		limit = { has_variable = un_dev_fund_patron }
+		add = var:un_dev_fund_patron
+	}
+	min = 0
+}
 
 # What the contributors pay a week, together: the represented members that run
 # the programme and pay their dues (un_dev_fund_contributor). Globals only.
@@ -886,11 +1025,52 @@ un_disp_dev_fund_our_contribution = {
 	}
 }
 
-# What a contribution would cost us a week if we started one today: the
-# programme's expense (un_program_expense_value). Scope: country
+# What each size would cost us a week at today's GDP: the start (Token), and
+# the size a Raise or Reduce would move us to (the buttons' tooltips).
+# Scope: country
 un_disp_dev_fund_our_contribution_preview = {
-	value = un_program_expense_value
+	value = un_disp_dev_fund_cost_token
 }
+
+un_disp_dev_fund_cost_token = {
+	value = gdp
+	multiply = un_dev_fund_rate_token
+	divide = 52
+}
+
+un_disp_dev_fund_cost_modest = {
+	value = gdp
+	multiply = un_dev_fund_rate_modest
+	divide = 52
+}
+
+un_disp_dev_fund_cost_substantial = {
+	value = gdp
+	multiply = un_dev_fund_rate_substantial
+	divide = 52
+}
+
+un_disp_dev_fund_cost_generous = {
+	value = gdp
+	multiply = un_dev_fund_rate_generous
+	divide = 52
+}
+
+# What the recipients remember of our money, as the lobbying bonus with them
+# it gives (un_development_patron_modifier at var:un_dev_fund_patron), in
+# percent. Scope: country
+un_disp_dev_fund_patron_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_patron }
+		add = var:un_dev_fund_patron
+		multiply = un_dev_fund_patron_unit_pct
+	}
+}
+
+# country_un_lobbying_fund_recipients_mult in un_development_patron_modifier,
+# in percent (test_un_dev_fund_sizes.py pins the two together).
+un_dev_fund_patron_unit_pct = { value = 20 }
 
 # The hunger term and the share behind it. Globals only.
 un_disp_food_hunger_term = {

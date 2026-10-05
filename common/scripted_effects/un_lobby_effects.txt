@@ -12,8 +12,9 @@
 #                 member's vote is booked (un_lobby_settle_commitment).
 #   a CAMPAIGN    "Lobby For / Against the Resolution", a one-sided pact with
 #                 influence upkeep, on an AI member only: +3 lean a month its
-#                 way, up to 15; campaigns one way stack to 20 (§ CAMPAIGNS
-#                 below).
+#                 way, up to 15, both scaled by the lobbyist's effectiveness
+#                 (un_lobby_campaign_effectiveness); campaigns one way stack
+#                 to 20 (§ CAMPAIGNS below).
 #
 # ---------------------------------------------------------------------------
 # PLEDGE STATE
@@ -318,7 +319,8 @@ un_lobby_settle_pledge = {
 #           un_lc_member     the member lobbied
 #           un_lc_months     full months run (the first pulse only arms it:
 #                            un_lc_armed)
-#           un_lc_shift      its lean shift: 3 a month, up to 15
+#           un_lc_shift      its lean shift: 3 a month, up to 15, times
+#                            the lobbyist's effectiveness with the member
 #                            (un_lobby_campaign_shift_value)
 #   listed  on the resolution's un_res_campaigns
 #

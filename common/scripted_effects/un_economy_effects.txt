@@ -32,11 +32,14 @@
 #   THE VOLUNTARY PART is the Development Programs programme
 #   (un_fund_development_button, un_buttons.txt; owner, 2026-10-02): while the
 #   Fund stands, every represented member that runs it and pays its dues
-#   (un_dev_fund_contributor) pays the Fund's grants with its programme expense
+#   (un_dev_fund_contributor) pays the Fund's grants with its expense
 #   (var:un_development_expense_cached, the multiplier of
-#   un_development_contributor_cost). The programme itself is untouched: its
-#   rank gate, cost, benefits, standing award and funding-pillar credit stay
-#   as they were; the Fund only counts the expense into its pot.
+#   un_development_contributor_cost). Since 2026-10-05 (owner) it has four
+#   sizes, Token to Generous (0.125% to 1% of GDP a year), any member may give
+#   whatever its rank, and its benefits (infamy decay, prestige, standing, a
+#   lobbying bonus with the recipients) grow by a quarter of Substantial's
+#   with each doubling (un_economy_values.txt). The UN's funding pillar counts
+#   the money (un_funding_dev_money_ratio_value, un_authority_values.txt).
 #   global   un_inst_development_fund    in force (un_development_fund_on_carried)
 #            un_dev_fund_members_gdp /   the represented members' GDP and people
 #            un_dev_fund_members_pop
@@ -55,7 +58,16 @@
 #            un_dev_fund_donations       the contributors' programme expense a
 #                                        week, together (the voluntary part)
 #            un_dev_fund_contributors    how many they are
-#   country  un_dev_fund_gdp_ph          GDP per head (represented members only)
+#   country  un_dev_fund_size            our contribution's size, 1..4 (kept after
+#                                        it ends; read through
+#                                        un_dev_fund_size_value)
+#            un_dev_fund_benefit         its benefit factor: the multiplier of
+#                                        un_development_contributor_modifier
+#            un_dev_fund_patron          what the recipients remember of our
+#                                        money: the multiplier of
+#                                        un_development_patron_modifier
+#                                        (un_dev_fund_patron_pulse)
+#            un_dev_fund_gdp_ph          GDP per head (represented members only)
 #            un_dev_fund_grant           this month's weekly grant: the
 #                                        multiplier of the grant modifier. Set
 #                                        to 0 when the grant stops, never removed
@@ -339,6 +351,135 @@ un_dev_fund_lapse_contributions = {
 	}
 }
 
+# ---- The voluntary part: sizes and the recipients' memory ---------------------------
+
+# Raise or Reduce a contribution a size (un_raise_development_button,
+# un_reduce_development_button): the tooltip names the size it moves to and
+# what it costs and does, then un_dev_fund_resize makes the move.
+# Scope: country (the contributor, = ROOT)
+un_dev_fund_raise = {
+	if = {
+		limit = { un_dev_fund_size_stored >= 3 }
+		custom_tooltip = un_dev_fund_to_generous_tt
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 2 }
+		custom_tooltip = un_dev_fund_to_substantial_tt
+	}
+	else = {
+		custom_tooltip = un_dev_fund_to_modest_tt
+	}
+	un_dev_fund_resize = { STEP = 1 }
+}
+
+un_dev_fund_reduce = {
+	if = {
+		limit = { un_dev_fund_size_stored >= 4 }
+		custom_tooltip = un_dev_fund_to_substantial_tt
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 3 }
+		custom_tooltip = un_dev_fund_to_modest_tt
+	}
+	else = {
+		custom_tooltip = un_dev_fund_to_token_tt
+	}
+	un_dev_fund_resize = { STEP = -1 }
+}
+
+# Move the contribution $STEP$ sizes, held to 1..4, and re-add both modifiers
+# at the new size: the benefits at its factor, the cost at its expense. Both
+# multipliers read root.var, so ROOT must be the contributor (a button's
+# effect). un_state_off takes each modifier off with its mirror and the add
+# records it again: the removes read the modifiers the entry held before the
+# click, which a button's own block can see.
+# Parameters: $STEP$ = 1 | -1
+# Scope: country (the contributor, = ROOT)
+un_dev_fund_resize = {
+	hidden_effect = {
+		set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored }
+		change_variable = { name = un_dev_fund_size add = $STEP$ }
+		clamp_variable = { name = un_dev_fund_size min = 1 max = un_dev_fund_size_max }
+		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
+		set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
+		un_state_off = { MODIFIER = un_development_contributor_modifier }
+		un_state_off = { MODIFIER = un_development_contributor_cost }
+		je:je_united_nations ?= { add_modifier = {
+				name = un_development_contributor_modifier
+				multiplier = root.var:un_dev_fund_benefit
+			} }
+		un_state_record = { MODIFIER = un_development_contributor_modifier }
+		je:je_united_nations ?= { add_modifier = {
+				name = un_development_contributor_cost
+				multiplier = root.var:un_development_expense_cached
+			} }
+		un_state_record = { MODIFIER = un_development_contributor_cost }
+	}
+}
+
+# A contribution's month, from je_united_nations' member block (ROOT = the
+# member): a contribution from before the sizes becomes Substantial, the size
+# it paid for; the benefit factor and the expense follow the size and today's
+# GDP. The benefit modifier is re-added only for a contribution that was
+# migrated (a save from before the sizes holds it with no multiplier, which is
+# Substantial already, so nothing changes but the variable it will read).
+# Scope: country (= ROOT)
+un_dev_fund_contribution_monthly = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		if = {
+			limit = { NOT = { has_variable = un_dev_fund_size } }
+			set_variable = { name = un_dev_fund_size value = un_dev_fund_size_legacy }
+		}
+		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
+		set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
+	}
+}
+
+# What the Fund's recipients remember of our money, once a month, from
+# je_united_nations' pulse (ROOT = the country): var:un_dev_fund_patron moves
+# a twelfth of the way toward our benefit factor while our money reaches the
+# Fund, toward 0 when it does not; un_development_patron_modifier is
+# re-applied at it on the journal entry (the single refresh site; derived,
+# so not mirrored: a revolution's winner inherits the variable and gets the
+# modifier back here). Runs for a member and a non-member alike, so the
+# memory fades after a contribution, or a membership, ends.
+# Scope: country (= ROOT)
+un_dev_fund_patron_pulse = {
+	if = {
+		limit = {
+			OR = {
+				un_dev_fund_contributor = yes
+				AND = {
+					has_variable = un_dev_fund_patron
+					var:un_dev_fund_patron > 0
+				}
+			}
+		}
+		set_variable = { name = un_dev_fund_patron value = un_dev_fund_patron_next_value }
+		if = {
+			limit = {
+				NOT = { un_dev_fund_contributor = yes }
+				var:un_dev_fund_patron < un_dev_fund_patron_floor
+			}
+			set_variable = { name = un_dev_fund_patron value = 0 }
+		}
+		je:je_united_nations ?= {
+			if = {
+				limit = { has_modifier = un_development_patron_modifier }
+				remove_modifier = un_development_patron_modifier
+			}
+		}
+		if = {
+			limit = { var:un_dev_fund_patron > 0 }
+			je:je_united_nations ?= { add_modifier = {
+					name = un_development_patron_modifier
+					multiplier = root.var:un_dev_fund_patron
+				} }
+		}
+	}
+}
+
 # One country's grant, from its own hidden event (un_economy.1): the single
 # refresh site for both grant modifiers. Into the investment pool where the
 # pool can take it, into the treasury otherwise.
@@ -615,12 +756,27 @@ un_economy_obligation_lines = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_none
 		}
-		# Our Development Programs contribution: it pays the grants, or it
-		# would if we paid our dues and held our seat, or (a major power that
-		# runs none) it could.
+		# Our Development Programs contribution: its size and what it pays the
+		# grants, or that it would if we paid our dues and held our seat, or
+		# (a member the Fund does not pay, whatever its rank) that it could.
+		# Then what the recipients remember of our money, while they do.
 		if = {
 			limit = { un_dev_fund_contributor = yes }
-			custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor
+			if = {
+				limit = { un_dev_fund_size_value >= 4 }
+				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_generous
+			}
+			else_if = {
+				limit = { un_dev_fund_size_value >= 3 }
+				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_substantial
+			}
+			else_if = {
+				limit = { un_dev_fund_size_value >= 2 }
+				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_modest
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_token
+			}
 		}
 		else_if = {
 			limit = { un_standing_program_active_development = yes }
@@ -629,9 +785,17 @@ un_economy_obligation_lines = {
 		else_if = {
 			limit = {
 				un_member_represented = yes
-				country_rank >= rank_value:major_power
+				NOT = { un_dues_is_withholding = yes }
+				NOT = { un_dev_fund_receiving = yes }
 			}
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_could_contribute
+		}
+		if = {
+			limit = {
+				has_variable = un_dev_fund_patron
+				var:un_dev_fund_patron > 0
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_patron
 		}
 	}
 	if = {

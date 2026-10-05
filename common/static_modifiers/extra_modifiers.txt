@@ -3660,10 +3660,29 @@ un_sanctions_busting_modifier = {
 
 # ---- Development Modifiers ----
 
+# What a Development Programs contribution does for the contributor, at
+# Substantial (0.5% of GDP a year). Added with multiplier =
+# root.var:un_dev_fund_benefit, the size's benefit factor (0.5 / 0.75 / 1 /
+# 1.25 for Token / Modest / Substantial / Generous; un_economy_values.txt):
+# each doubling of the money adds a quarter of these. Its cost is the money
+# itself (un_development_contributor_cost), which pays the World Development
+# Fund's grants. A contribution from before the sizes holds it with no
+# multiplier, which is Substantial, the size it paid for.
 un_development_contributor_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_institution_impact_institution_ministry_of_commerce_mult = 0.05
-	country_bureaucracy_cost_add = 25
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_infamy_decay_mult = 0.08
+	country_prestige_mult = 0.04
+}
+
+# What the World Development Fund's recipients remember of a contributor's
+# money: added with multiplier = root.var:un_dev_fund_patron, which moves a
+# twelfth of the way each month toward the contribution's benefit factor
+# (un_dev_fund_patron_pulse, un_economy_effects.txt), and is derived from that
+# variable every month rather than mirrored. Members the Fund pays are more
+# receptive to the contributor's lobbying.
+un_development_patron_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_un_lobbying_fund_recipients_mult = 0.2
 }
 
 # ---- Arms Control Modifiers ----
@@ -4210,6 +4229,8 @@ un_peacekeeping_contributor_cost = {
 	country_te_budget_expense_un_add = 1
 }
 
+# Multiplied by var:un_development_expense_cached, the size's share of GDP a
+# year over 52 (un_dev_fund_expense_value), not un_program_expense_value.
 un_development_contributor_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

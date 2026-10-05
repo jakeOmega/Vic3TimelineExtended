@@ -326,6 +326,34 @@ un_secure_commitment_action = {
 					value = -15
 				}
 			}
+
+			# The asker's lobbying effectiveness (un_lobbying_values.txt): with
+			# every member, and, while the World Development Fund pays us, what
+			# its contributions to the Fund have bought it here.
+			if = {
+				limit = {
+					OR = {
+						un_lobby_accept_general_value > 0
+						un_lobby_accept_general_value < 0
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_EFFECTIVENESS"
+					value = un_lobby_accept_general_value
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						un_lobby_accept_fund_value > 0
+						un_lobby_accept_fund_value < 0
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_DEV_AID"
+					value = un_lobby_accept_fund_value
+				}
+			}
 		}
 	}
 }
@@ -569,6 +597,34 @@ un_secure_commitment_against_action = {
 					value = -15
 				}
 			}
+
+			# The asker's lobbying effectiveness (un_lobbying_values.txt): with
+			# every member, and, while the World Development Fund pays us, what
+			# its contributions to the Fund have bought it here.
+			if = {
+				limit = {
+					OR = {
+						un_lobby_accept_general_value > 0
+						un_lobby_accept_general_value < 0
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_EFFECTIVENESS"
+					value = un_lobby_accept_general_value
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						un_lobby_accept_fund_value > 0
+						un_lobby_accept_fund_value < 0
+					}
+				}
+				add = {
+					desc = "UN_LOBBY_ACCEPT_DEV_AID"
+					value = un_lobby_accept_fund_value
+				}
+			}
 		}
 	}
 }
@@ -576,8 +632,9 @@ un_secure_commitment_against_action = {
 # ---- Campaign: lobby for (spec §3) -------------------------------------------
 # A one-sided pact, like vanilla's Improve Relations: our delegation works on
 # an AI member for as long as we keep it running. Each full month moves the
-# member's lean 3 points in favour, up to 15; campaigns one way on the same
-# member stack to 20, and opposing ones net out (un_lobby_effects.txt,
+# member's lean 3 points in favour, up to 15, both scaled by our lobbying
+# effectiveness with it (un_lobby_campaign_effectiveness); campaigns one way
+# on the same member stack to 20, and opposing ones net out (un_lobby_effects.txt,
 # § CAMPAIGNS). While it runs we read the member's true position in the
 # chamber. It ends when the member votes, when the resolution closes, or when
 # we cancel it — and a cancelled campaign's gain goes with it.
@@ -692,8 +749,9 @@ un_lobby_for_action = {
 # ---- Campaign: lobby against (spec §3) -------------------------------------------
 # A one-sided pact, like vanilla's Improve Relations: our delegation works on
 # an AI member for as long as we keep it running. Each full month moves the
-# member's lean 3 points against, up to 15; campaigns one way on the same
-# member stack to 20, and opposing ones net out (un_lobby_effects.txt,
+# member's lean 3 points against, up to 15, both scaled by our lobbying
+# effectiveness with it (un_lobby_campaign_effectiveness); campaigns one way
+# on the same member stack to 20, and opposing ones net out (un_lobby_effects.txt,
 # § CAMPAIGNS). While it runs we read the member's true position in the
 # chamber. It ends when the member votes, when the resolution closes, or when
 # we cancel it — and a cancelled campaign's gain goes with it.
