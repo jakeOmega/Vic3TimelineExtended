@@ -240,6 +240,13 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 ideology_lawgroup_audit.py --strict
 
+      # Mod callees only here: vanilla scripted effects and triggers come from
+      # the game files, which CI doesn't have. A reload on a machine with the
+      # game checks calls to vanilla's too.
+      - name: Audit — script calls pass the arguments their callee names
+        if: ${{ !cancelled() }}
+        run: python3 script_argument_audit.py --strict
+
       - name: Audit — loc keys named in script that no loc file defines
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict

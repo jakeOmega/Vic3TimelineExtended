@@ -4,6 +4,12 @@ When triaging mod error-log entries, these vanilla 1.13 bugs surface even with t
 
 Each entry: error text, vanilla file path with line, root cause, frequency observed in our 1.13 testing.
 
+Every backticked `.txt` / `.gui` / `.yml` path in an entry, heading or body, becomes an anchor, and error.log lists the whole call stack. So don't anchor on a vanilla scripted effect, trigger or script value file the mod calls: the entry would also tag the mod's errors through it. Anchor on the vanilla caller at the bottom of the stack, and write any other path in plain text. `POST /validate/registries` warns `helper_anchor_mod_calls` for such an entry (#730). When the signature cannot match a mod call, say why in the entry, right under the heading:
+
+```
+- reviewed: helper anchor, signature cannot match a mod call (<why>)
+```
+
 > **Re-verify pass due (2026-07-03, 1.13.9 migration):** vanilla 1.13.6–1.13.9 modified 24 of the files tracked below (notably `movement_events.txt`, `agitators_events/coup_events.txt`, `treaty_articles/31_ship_transfer.txt`, `journal_entries/07_hokkaido.txt`, `laws/00_distribution_of_power.txt`, `ideologies/01_character_ideologies.txt`, `scripted_effects/00_victoria_ip4_scripted_effects.txt`). Spot-diffs were inconclusive — line numbers have shifted and some flagged regions were rewritten. On the next `log-triage` run against a 1.13.9 session, retire any entry whose error no longer appears rather than trusting the stale line numbers here.
 
 ## Script errors observed
@@ -386,7 +392,7 @@ Event target link 'home_country' returned an invalid object
 
 Vanilla revolution event reads `home_country` on a scope where it isn't always set (typically when the referenced character has no recorded home_country). Engine logs the failure and skips the dependent effect. No mod-side fix.
 
-### `common/scripted_effects/00_government_type_change_effects.txt:19, 20` (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
+### common/scripted_effects/00_government_type_change_effects.txt:19, 20 (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
 
 ```
 00_government_type_change_effects.txt:19
@@ -396,7 +402,7 @@ Event target link 'get_ruler_for' returned an unset scope
 set_character_as_ruler effect [ Wrong scope for effect: none, expected character ]
 ```
 
-Vanilla council-republics government-type transition tries to install a ruler via `scope:country.get_ruler_for = ...` when the country has no eligible ruler character; the second error is the classic cascade from the first (the now-`none` scope passed into `set_character_as_ruler`). One vanilla bug, two log lines.
+Vanilla council-republics government-type transition tries to install a ruler via `scope:country.get_ruler_for = ...` when the country has no eligible ruler character; the second error is the classic cascade from the first (the now-`none` scope passed into `set_character_as_ruler`). One vanilla bug, two log lines. Anchored on the vanilla caller alone, not the helper file: the mod's own government types (timeline_extended_governments.txt) call the same `change_to_*` helpers, so a helper anchor would tag their errors as vanilla (#730).
 
 ### `events/iberia_events/ip4_anarchism_events.txt:610` — `Event target link 'civil_war_origin_country' returned an invalid object`
 
@@ -426,6 +432,7 @@ is_immortal trigger [ Wrong scope for trigger: none, expected character ]
 Iberian regency event references `scope:ig_candidate_1` without ensuring the saved scope was established earlier in the chain. Cascades into multiple wrong-scope effects/triggers downstream — same shape as `movement_events.txt:815` and `agitators_law_events.txt:921`. One root cause, five log lines.
 
 ### `common/scripted_triggers/00_ip4_victoria_scripted_triggers.txt` — `owner` trigger called in `amendment_type` scope
+- reviewed: helper anchor, signature cannot match a mod call (only `amendment_banned_from_enactment` reads `owner` where an amendment type is in scope, and the mod never calls it; it calls this file's `ig_counts_as_marginal`, `country_is_colonial_or_company` and `character_has_*_ideology` triggers from interest group, country and character scopes; #730)
 
 ```
 owner trigger [ Wrong scope for trigger: amendment_type, expected country, building, character, new_combat_unit, company, decree, institution, interest_marker, interest_group, journal_entry, law, market
@@ -439,7 +446,7 @@ Iberia DLC (IP4) scripted trigger calls `owner` while scoped to an `amendment_ty
 any_interest_group trigger [ Wrong scope for trigger: law, expected country ]
 ```
 
-Vanilla IP4 negotiation trigger iterates `any_interest_group` from a `law` scope (expected country). Also surfaces via `common/scripted_effects/04_neg_event_options_scripted_effects.txt` and `events/iberia_events/negotiation_events.txt:267` in the call chain, plus a sibling `owner trigger [ Wrong scope for trigger: amendment_type ]` (same root family as the `00_ip4_victoria_scripted_triggers.txt` entry above). Vanilla bug. Skip.
+Vanilla IP4 negotiation trigger iterates `any_interest_group` from a `law` scope (expected country). Also surfaces via `common/scripted_effects/04_neg_event_options_scripted_effects.txt` and `events/iberia_events/negotiation_events.txt:267` in the call chain, plus a sibling `owner trigger [ Wrong scope for trigger: amendment_type ]` (same root family as the 00_ip4_victoria_scripted_triggers.txt entry above). Vanilla bug. Skip.
 
 ### `common/scripted_effects/00_expedition_effects.txt:3` — `unassign_from_formation` on a commander not in a formation
 
@@ -538,6 +545,7 @@ The same block appears in `common/war_goal_types/03_conquer_state.txt` (`:69`, `
 20 lines in one session (2026-09-20). Not mod-caused: this mod defines only `te_reunify_country` and `te_un_mandate_restore_state` under `common/war_goal_types/`, and references `wg_return_state` / `wg_conquer_state` / `wg_annex_country` nowhere in `common/` or `events/`. Cosmetic — the `multiply` simply fails its limit, so the subject-related infamy discounts don't apply during the preview.
 
 ### `common/scripted_triggers/00_ai_triggers.txt:614, 624, 644` — AI regional-objective iterators meet a null objective (1.14.4)
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `ai_has_enact_weight_modifier_journal_entries` from this file, a law-commitment and journal-entry check with no regional-objective iterator; #730)
 
 ```
 Scoped object of type 'ai_regional_objective' is not valid
@@ -616,13 +624,13 @@ post_notification effect [ Type mismatch, notification is incompatible with scop
 
 The entry saves `overlord_scope` inside a search and then posts `struggle_for_sovereignty_message` to it unconditionally. When the search finds no overlord, both lines fail. Once in a session, 2026-10-05.
 
-### `common/scripted_triggers/00_diplomacy_triggers.txt:188` (from `common/script_values/00_infamy_values.txt:185`) — `scope:infamy_target_state.owner` passed as the target
+### common/scripted_triggers/00_diplomacy_triggers.txt:188 (from `common/script_values/00_infamy_values.txt:185`) — `scope:infamy_target_state.owner` passed as the target
 
 ```
 Event target link 'owner' returned an invalid object
 ```
 
-The infamy value calls `is_scripted_unification_conquest = { TARGET = scope:infamy_target_state.owner }`, and the trigger reads `$TARGET$` with no existence check, so it fails when that state's owner is invalid. Once in a session, 2026-10-05.
+The infamy value calls `is_scripted_unification_conquest = { TARGET = scope:infamy_target_state.owner }`, and the trigger reads `$TARGET$` with no existence check, so it fails when that state's owner is invalid. Once in a session, 2026-10-05. Not anchored on the trigger file: the mod calls `has_treaty_alliance_with` from it nineteen times, and this signature would match any of those calls passing an invalid owner (#730). The mod's reunification war goal (te_reunify_country.txt) also adds `country_infamy_value`, so the helper-anchor check keeps flagging this entry until a triage names the vanilla caller at the bottom of the stack.
 
 ### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
 
@@ -1050,14 +1058,13 @@ already has a journal entry of type
 When a revolt secession spawns a new secondary-formation country (e.g. "Swedish Liberal Revolt", "Indori Peasant Revolt", "Khairpuri Communist Revolt"), the engine seeds it with journal entries inherited from the parent country, then immediately re-runs JE-seeding on-actions that try to add the same entries again. The manager emits one warning per duplicate. Volume scales with how many JEs the parent country has — mod content (`je_banking_cycle`, `je_covert_warfare`, `je_global_warming`, etc.) appears alongside vanilla JEs (`je_sale_of_alaska`, `je_german_unification`, …) in the duplicate list, because both sets are valid on the parent. **The mod does not mass-add JEs via `on_country_creation` or any other revolt-related on-action** — verified by grepping `common/on_actions/`. Vanilla revolt creation is the source. Cosmetic — the engine de-duplicates and keeps the existing JE.
 
 ### `jomini_script_system.cpp:247` — invalid `religion` event-target in cross-religion comparisons
+- reviewed: helper anchor, signature cannot match a mod call (the mod reads this file's mandate-progress and cohesion-cost values, none of which compares religion; `power_bloc_leverage_gain`, the one that does, is overridden in the mod's script_values/modified.txt; #730)
 
 ```
-common/script_values/01_power_bloc_values.txt:56
-common/coat_of_arms/template_lists/coa_templates.txt:141
-common/character_interactions/00_character_interactions.txt:297
+Event target link 'religion' returned an invalid object
 ```
 
-Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. Mod's own treaty article `common/treaty_articles/106_religious_mission_rights.txt` was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), and mod's override `common/script_values/modified.txt:52` was hardened with `exists = scope:target.religion` (2026-05-10), so both are no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
+Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. Mod's own treaty article common/treaty_articles/106_religious_mission_rights.txt was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), and mod's override common/script_values/modified.txt:52 was hardened with `exists = scope:target.religion` (2026-05-10), so both are no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
 
 ### `common/war_goal_types/00_annex_country.txt:93, :114, :148, :155` — invalid country/strategic-region scope
 
@@ -1489,7 +1496,7 @@ The three fire together, on the same second, interleaved into the `28_invite_to_
 Unable to scope to the new ruler for
 ```
 
-The engine's half of the `00_government_type_change_effects.txt` `get_ruler_for` entry above: `get_ruler_for:parliamentary_elective` on a revolutionary country (`Tunisian Uprising`) with no eligible character logs this line before the script error. Once, 2026-09-26.
+The engine's half of the `get_ruler_for` entry above (00_government_type_change_effects.txt): `get_ruler_for:parliamentary_elective` on a revolutionary country (`Tunisian Uprising`) with no eligible character logs this line before the script error. Once, 2026-09-26.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 

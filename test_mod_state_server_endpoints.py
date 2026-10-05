@@ -1039,6 +1039,41 @@ class ScriptedHelperEndpointTests(unittest.TestCase):
         for row in d["unresolved_helper_calls"]:
             self.assertEqual(set(row) >= {"name", "file", "line", "kind"}, True)
 
+    @unittest.skipUnless(_server_has_new_code(), "server lacks #732 endpoint")
+    def test_script_args(self):
+        try:
+            d = _get("/script-args", timeout=60)
+        except HTTPError as exc:
+            if exc.code == 404:
+                self.skipTest("running server predates /script-args (#732)")
+            raise
+        self.assertEqual(d["count"], len(d["flags"]))
+        self.assertFalse(d["include_reviewed"])
+        for row in d["flags"]:
+            self.assertTrue(set(row) >= {"file", "line", "call", "callee", "unknown", "missing"})
+        info = _get("/script-args/te_tax_obl_is_maintenance_2", timeout=60)
+        self.assertEqual(info["params"], ["ARG", "TARGET"])
+        self.assertTrue(any(c["call"] == "te_tax_obl_is_maintenance_$KIND$" for c in info["callers"]))
+
+    def test_script_args_result_is_cached_per_reload(self):
+        calls = []
+
+        def fake_audit(**kwargs):
+            calls.append(kwargs)
+            return object()
+
+        saved = (mss._script_args_cache, mss._call_index_generation)
+        try:
+            mss._script_args_cache = None
+            with mock.patch.object(mss.script_argument_audit, "audit", side_effect=fake_audit):
+                first = mss._get_script_args_result()
+                self.assertIs(mss._get_script_args_result(), first)
+                mss._invalidate_call_index()
+                self.assertIsNot(mss._get_script_args_result(), first)
+            self.assertEqual(len(calls), 2)
+        finally:
+            mss._script_args_cache, mss._call_index_generation = saved
+
     def test_reload_during_index_build_does_not_cache_stale_index(self):
         # A warm thread that started before a reload must not overwrite the
         # freshly-invalidated cache with its pre-reload scan (#293).
@@ -1262,7 +1297,16 @@ class ValidateRegistriesHTTPTests(unittest.TestCase):
         self.assertIn("warning_count", d)
         self.assertIsInstance(d["warnings"], list)
         for w in d["warnings"]:
-            self.assertEqual(set(w.keys()), {"label", "detail"})
+            if w.get("kind") == "helper_anchor_mod_calls":
+                # #730: a registry entry anchored on a vanilla helper file the mod calls.
+                self.assertEqual(set(w.keys()), {
+                    "label", "detail", "kind", "entry", "anchor", "helper_file", "mod_uses", "advice",
+                })
+            else:
+                self.assertEqual(set(w.keys()), {"label", "detail"})
+        if "helper_anchor_check" in d:
+            self.assertTrue(d["helper_anchor_check"] == "ran"
+                            or d["helper_anchor_check"].startswith("skipped"))
 
 
 

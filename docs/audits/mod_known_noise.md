@@ -15,7 +15,7 @@ The query parameter is `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`
 
 ## Format
 
-Same as `vanilla_known_bugs.md` — `### \`anchor\` — title` heading, optional `- source: \`<token>\``, mandatory `- tracked: \`docs/audits/open_issues.md#anchor\``, fenced code block of signature substrings.
+Same as `vanilla_known_bugs.md` — `### \`anchor\` — title` heading, optional `- source: \`<token>\``, mandatory `- tracked: \`docs/audits/open_issues.md#anchor\``, optional `- reviewed: helper anchor, signature cannot match a mod call (<why>)`, fenced code block of signature substrings. The helper-anchor check covers this file too.
 
 The `#anchor` must be the **GitHub** slug of the target `### ` heading in `open_issues.md`: lowercase, delete every character that is not a word char / hyphen / space (so `_` survives but `.`, `:`, backticks and parens vanish outright — they are *not* turned into dashes), then space → `-`; repeated headings get a `-N` suffix. Line-number fragments like `#L8` do **not** resolve on GitHub. `POST /validate/registries` re-checks every anchor in milliseconds.
 

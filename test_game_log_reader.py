@@ -29,6 +29,8 @@ from game_log_reader import (
     GUI_INJECTED_SCOPE_REF,
     gui_injected_scope_names,
     tag_gui_injected_scopes,
+    helper_anchor_warnings,
+    mod_uses,
 )
 
 
@@ -842,6 +844,161 @@ class GuiInjectedScopeTests(unittest.TestCase):
         self.assertIn(slug, slugs)
         issue_doc, _, issue_slug = GUI_INJECTED_SCOPE_REF.tracked_issue.partition("#")
         self.assertIn(issue_slug, _open_issues_anchors(os.path.join(root, issue_doc)))
+
+
+class HelperAnchorTests(unittest.TestCase):
+    """#730: an entry anchored on a vanilla helper file the mod calls into
+    also tags the mod's errors through that helper (error.log lists the whole
+    call stack), so the registry check warns until the entry is re-anchored or
+    carries `- reviewed: helper anchor, ...`."""
+
+    REGISTRY = """
+## Script errors observed
+
+### `common/scripted_effects/00_lobby_effects.txt:12` — appeasement change on a lobby
+
+```
+change_appeasement effect [ Wrong scope
+```
+
+### `common/scripted_triggers/00_diplomacy_triggers.txt` — narrow enough
+- reviewed: helper anchor, signature cannot match a mod call (only `unused_trigger` logs it; see `common/scripted_triggers/not_an_anchor.txt`)
+
+```
+Something vanilla-only
+```
+
+### `events/some_vanilla_events.txt:5` — anchored on a caller, not a helper
+
+```
+Error
+```
+"""
+
+    def _setup(self, tmp: str, mod_files: dict[str, str]) -> tuple[list, str]:
+        docs = os.path.join(tmp, "docs")
+        os.makedirs(os.path.join(docs, "vanilla"))
+        os.makedirs(os.path.join(docs, "audits"))
+        with open(os.path.join(docs, "audits", "open_issues.md"), "w", encoding="utf-8") as f:
+            f.write("")
+        doc = os.path.join(docs, "vanilla", "vanilla_known_bugs.md")
+        with open(doc, "w", encoding="utf-8") as f:
+            f.write(self.REGISTRY)
+        _vanilla_bug_cache.clear()
+        game = os.path.join(tmp, "vanilla", "game")
+        files = {
+            "common/scripted_effects/00_lobby_effects.txt":
+                "add_lobby_appeasement = { change_appeasement = $AMOUNT$ }\nunused_effect = { }\n",
+            "common/scripted_triggers/00_diplomacy_triggers.txt": "has_treaty_alliance_with = { }\n",
+            "events/some_vanilla_events.txt": "",
+        }
+        for rel, text in files.items():
+            path = os.path.join(game, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(text)
+        mod = os.path.join(tmp, "mod")
+        for rel, text in mod_files.items():
+            path = os.path.join(mod, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(text)
+        refs, _, _, warnings = load_vanilla_bug_registry(doc)
+        self.assertEqual(warnings, [])
+        return refs, mod, game
+
+    def test_reviewed_line_is_parsed_and_never_anchors(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, _, _ = self._setup(tmp, {})
+        narrow = refs[1]
+        self.assertEqual(narrow.file_basenames, ["00_diplomacy_triggers.txt"])
+        self.assertTrue(narrow.reviewed[0].startswith("helper anchor, signature cannot match"))
+
+    def test_mod_call_through_the_helper_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {
+                "events/social_tensions_events.txt": (
+                    "namespace = st\n"
+                    "st.1 = {\n"
+                    "\toption = {\n"
+                    "\t\tadd_lobby_appeasement = { AMOUNT = 1 }\n"
+                    "\t\thas_treaty_alliance_with = yes\n"
+                    "\t}\n"
+                    "}\n"
+                ),
+            })
+            out = helper_anchor_warnings(refs, mod, game)
+        self.assertEqual(len(out), 1)
+        w = out[0]
+        self.assertEqual(w["kind"], "helper_anchor_mod_calls")
+        self.assertEqual(w["label"], "vanilla_bug_registry")
+        self.assertEqual(w["anchor"], "00_lobby_effects.txt")
+        self.assertEqual(w["helper_file"], "common/scripted_effects/00_lobby_effects.txt")
+        self.assertEqual(w["mod_uses"], {"add_lobby_appeasement": ["events/social_tensions_events.txt:4"]})
+        self.assertIn("anchor on the vanilla caller", w["advice"])
+        self.assertIn("appeasement change on a lobby", w["detail"])
+
+    def test_comments_and_definitions_are_not_uses(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {
+                "events/a.txt": "a.1 = {\n\t# add_lobby_appeasement = { AMOUNT = 1 }\n}\n",
+                "common/scripted_effects/mod_copy.txt": "add_lobby_appeasement = { }\n",
+            })
+            self.assertEqual(helper_anchor_warnings(refs, mod, game), [])
+
+    def test_gui_string_mention_is_a_use(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {
+                "gui/panel.gui": 'text = "#v [ScriptValue(\'add_lobby_appeasement\')]#!" # unused_effect\n',
+            })
+            out = helper_anchor_warnings(refs, mod, game)
+        self.assertEqual([sorted(w["mod_uses"]) for w in out], [["add_lobby_appeasement"]])
+
+    def test_mod_override_of_the_helper_file_supplies_the_definitions(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {
+                "common/scripted_effects/00_lobby_effects.txt": "mod_only_helper = { }\n",
+                "events/a.txt": "a.1 = { immediate = { add_lobby_appeasement = { AMOUNT = 1 } mod_only_helper = yes } }\n",
+            })
+            out = helper_anchor_warnings(refs, mod, game)
+        self.assertEqual([sorted(w["mod_uses"]) for w in out], [["mod_only_helper"]])
+
+    def test_lists_at_most_five_uses_per_definition(self):
+        calls = "".join(f"\t\tadd_lobby_appeasement = {{ AMOUNT = {i} }}\n" for i in range(8))
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {"events/a.txt": f"a.1 = {{\n\timmediate = {{\n{calls}\t}}\n}}\n"})
+            out = helper_anchor_warnings(refs, mod, game)
+        self.assertEqual(len(out[0]["mod_uses"]["add_lobby_appeasement"]), 5)
+        self.assertIn("8 mentions", out[0]["detail"])
+
+    def test_no_vanilla_files_no_check(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, _ = self._setup(tmp, {"events/a.txt": "a.1 = { immediate = { add_lobby_appeasement = { AMOUNT = 1 } } }\n"})
+            self.assertEqual(helper_anchor_warnings(refs, mod, None), [])
+
+    def test_mod_uses_sees_an_edit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "events", "a.txt")
+            os.makedirs(os.path.dirname(path))
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("a.1 = { immediate = { x = yes } }\n")
+            names = frozenset({"y"})
+            self.assertEqual(mod_uses(tmp, names), {})
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("a.1 = { immediate = { y = yes } }\n")
+            os.utime(path, (time.time() + 10, time.time() + 10))
+            self.assertEqual(mod_uses(tmp, names), {"y": ["events/a.txt:1"]})
+
+    def test_live_registry_reviewed_lines_name_the_helper_anchor(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        refs, _, _, warnings = load_vanilla_bug_registry(os.path.join(root, "docs", "vanilla", "vanilla_known_bugs.md"))
+        self.assertEqual(warnings, [])
+        reviewed = [r for r in refs if r.reviewed]
+        self.assertTrue(reviewed)
+        for r in reviewed:
+            for note in r.reviewed:
+                self.assertTrue(note.startswith("helper anchor, signature cannot match a mod call ("), note)
 
 
 if __name__ == "__main__":
