@@ -1690,18 +1690,23 @@ def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
         value, momentum = 30.0, -2.0
     else:
         value, momentum = 40.0, -1.0
-    state.finance_cycle_value = value
-    state.finance_cycle_momentum = momentum
+    # The tier figures are ceilings (banking_crash_lower_cycle_to /
+    # _lower_momentum_to): a crash never raises either figure, and a response
+    # (banking_crash_hold_to_prior_state) cannot lift them above where they stood.
+    prior_value = state.finance_cycle_value
+    prior_momentum = state.finance_cycle_momentum
+    state.finance_cycle_value = min(prior_value, value)
+    state.finance_cycle_momentum = min(prior_momentum, momentum)
     state.bubble_pressure = 0.0
 
-    state.crashes.append((month, severity, value))
+    state.crashes.append((month, severity, value))  # the tier's figure, for depr%
     state.pending_recovery = month
 
     choice = best_softening(cfg, state, month)
     if choice is not None:
         add_v, add_m, name = choice
-        state.finance_cycle_value += add_v
-        state.finance_cycle_momentum += add_m
+        state.finance_cycle_value = min(prior_value, state.finance_cycle_value + add_v)
+        state.finance_cycle_momentum = min(prior_momentum, state.finance_cycle_momentum + add_m)
         state.timed[name] = 12  # `days = 365` on the option
 
 
