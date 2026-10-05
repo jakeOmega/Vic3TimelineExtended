@@ -41,6 +41,7 @@ Baseline: `main` at `80ad254a` (#479 merged).
 | IG reactions | **One country modifier per programme, scaled by volume**, never per building. Positives small and capped; magnitudes on the scale of vanilla's approval from *changing* a law, since a running programme is an ongoing action, not the status quo (§7.2) |
 | Land pressure on existing frontier inhabitants | **Kept**: a real cost, never a benefit |
 | Violating the UN Declaration | Allowed, with a modifier that scales with intensity, and **communicated clearly** at every step |
+| Law gates (amended 2026-10-05) | Coercive programmes close as a country adopts reform laws (`disallowing_laws`): Penal Transportation also under the two criminal-justice reform laws, Rustication by the same three civil-liberties laws as Special Settlements. The Development Program is closed under Laissez-Faire. Land Grants is never gated: it is the fallback when a law retires the running programme (§3) |
 | Old saves with camps | Assumed to load (the engine drops unknown building types); no dedicated check |
 
 ## Engine facts this rests on
@@ -178,11 +179,11 @@ the state pulse, from any state that no longer has the building.
 |---|---|---|---|---|---|
 | **Land Grants** | Homestead Act 1862, Dominion Lands Act 1872, Argentine colonisation laws | none | Unemployed and peasants, lower strata, `pop_acceptance >= acceptance_status_4`. No peasants under Serfdom | incorporation and colony growth | — |
 | **Military Colonies** | Russian military settlements, Cossack hosts, *tondenhei* 1874–1904, Xinjiang *bingtuan* | `standing_army` | As Land Grants, but `acceptance_status_5` only; staffed by soldiers and officers | turmoil effects reduced (`state_turmoil_effects_mult`, in its destination modifier, scaled by arrivals), faster incorporation | — |
-| **Penal Transportation** | Australia to 1868, French Guiana 1852–1953, New Caledonia, Sakhalin *katorga*, the Andamans | `law_enforcement`; disallowed by Guaranteed Liberties | Lower-strata pops with `pop_radical_fraction` of at least 0.2 | higher mortality (harsh conditions) | low |
+| **Penal Transportation** | Australia to 1868, French Guiana 1852–1953, New Caledonia, Sakhalin *katorga*, the Andamans | `law_enforcement`; disallowed by Guaranteed Liberties, Restorative Justice, Rehabilitation-Focused Criminal Justice | Lower-strata pops with `pop_radical_fraction` of at least 0.2 | higher mortality (harsh conditions) | low |
 | **Organized Colonization** | Stolypin resettlement 1906–14 (~3M to Siberia), Brazilian state colonies | `railways` | Unemployed, peasants and laborers, `acceptance_status_4`+ | incorporation and colony growth | — |
 | **Special Settlements** | Soviet dekulakization 1930–33 (~1.8M deported) | `mass_propaganda` + Collectivized Agriculture; disallowed by Guaranteed Liberties, Protected Speech, Right of Assembly | Farmers | higher mortality | high |
-| **Development Program** | Virgin Lands 1954, FELDA 1956, Transmigrasi, Brasília, British New Towns | `keynesian_economics` | The voluntary pool plus machinists, engineers and clerks, `acceptance_status_4`+ | infrastructure | — |
-| **Rustication** | China's Down to the Countryside 1968–80 (~17M) | `mass_media` (era 6) + Single-Party State | Laborers and clerks not employed in agriculture, plantations, ranching or subsistence (`pop_employment_building_group`) | — | near zero |
+| **Development Program** | Virgin Lands 1954, FELDA 1956, Transmigrasi, Brasília, British New Towns | `keynesian_economics`; disallowed by Laissez-Faire | The voluntary pool plus machinists, engineers and clerks, `acceptance_status_4`+ | infrastructure | — |
+| **Rustication** | China's Down to the Countryside 1968–80 (~17M) | `mass_media` (era 6) + Single-Party State; disallowed by Guaranteed Liberties, Protected Speech, Right of Assembly | Laborers and clerks not employed in agriculture, plantations, ranching or subsistence (`pop_employment_building_group`) | — | near zero |
 | **Managed Retreat** | Chernobyl exclusion zone 1986, Jakarta → Nusantara, Newtok | `environmental_movement` (era 8) | Everyone except slaves, from coastal states of a country carrying `coastal_flooding_modifier` or `coastal_relocation_modifier`, and from states carrying `nuclear_strike_aftermath` or `nd_weapons_accident_contamination` | — | — |
 
 Every programme's PM description states who it recruits and from where, and each coercive PM's description carries the
@@ -302,7 +303,8 @@ with `multiplier = intensity` summed over its coercive programmes (clamped to 1)
 2. **When it starts:** the first month a party runs a coercive programme, or a country running one becomes a party, event
    `resettlement.20` explains the modifier, its scaling and how to end it. Options: *continue*, or *end our coercive
    programmes*, which switches every coercive Programme PM to the best available voluntary one (the Development Program
-   once `keynesian_economics` is known, else Organized Colonization once `railways` is, else Land Grants). The modifier
+   once `keynesian_economics` is known and the country is not under Laissez-Faire, else Organized Colonization once
+   `railways` is, else Land Grants). The modifier
    follows the coercive volume counters (§7.2), so it does not end when the programmes do: it keeps about a third of its
    level a year after they stop and is gone after several years, sooner for a small programme. Both the event and the
    option's tooltip say it fades over the following years.

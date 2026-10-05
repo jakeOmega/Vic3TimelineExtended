@@ -53,15 +53,17 @@ PROGRAMMES = (
               {"interest_group_ig_rural_folk_approval_add": 3, "interest_group_ig_landowners_approval_add": -3}),
     Programme("military_colonies", 1, ("standing_army",), (), (), False, 250, 0,
               {"interest_group_ig_armed_forces_approval_add": 3, "interest_group_ig_rural_folk_approval_add": -3}),
-    Programme("penal_transportation", 2, ("law_enforcement",), (), ("law_guaranteed_liberties",), True, 100, 0.05,
-              {"interest_group_ig_intelligentsia_approval_add": -3}),
+    Programme("penal_transportation", 2, ("law_enforcement",), (),
+              ("law_guaranteed_liberties", "law_restorative_justice", "law_rehabilitation_focused_criminal_justice"),
+              True, 100, 0.05, {"interest_group_ig_intelligentsia_approval_add": -3}),
     Programme("organized_colonization", 3, ("railways",), (), (), False, 500, 0,
               {"interest_group_ig_rural_folk_approval_add": 3}),
     Programme("special_settlements", 4, ("mass_propaganda",), ("law_collectivized_agriculture",),
               ("law_guaranteed_liberties", "law_protected_speech", "law_right_of_assembly"), True, 1000, 0.15,
               {"interest_group_ig_rural_folk_approval_add": -10, "interest_group_ig_intelligentsia_approval_add": -5}),
-    Programme("development_program", 5, ("keynesian_economics",), (), (), False, 800, 0, None),
-    Programme("rustication", 6, ("mass_media",), ("law_single_party_state",), (), True, 800, 0.01,
+    Programme("development_program", 5, ("keynesian_economics",), (), ("law_laissez_faire",), False, 800, 0, None),
+    Programme("rustication", 6, ("mass_media",), ("law_single_party_state",),
+              ("law_guaranteed_liberties", "law_protected_speech", "law_right_of_assembly"), True, 800, 0.01,
               {"interest_group_ig_intelligentsia_approval_add": -10,
                "interest_group_ig_petty_bourgeoisie_approval_add": -5}),
     Programme("managed_retreat", 7, ("environmental_movement",), (), (), False, 600, 0, None),
@@ -846,12 +848,22 @@ class DeclarationTests(unittest.TestCase):
 
     def test_coercive_programmes_switch_to_the_best_voluntary_one(self):
         # §7.4 "best available": the Development Program, then Organized
-        # Colonization, then Land Grants.
+        # Colonization, then Land Grants. Each branch's limit is its PM's own
+        # gates, so the switch never activates a PM the owner cannot run.
         text = read(EFFECTS)
         helper = squash(block(text, "resettlement_switch_to_best_voluntary"))
-        for tech, key in (("keynesian_economics", "development_program"), ("railways", "organized_colonization")):
-            self.assertIn(f"limit = {{ owner = {{ has_technology_researched = {tech} }} }} activate_production_method = "
+        gates = {p.key: p for p in PROGRAMMES}
+        for key in ("development_program", "organized_colonization"):
+            p = gates[key]
+            self.assertEqual(p.laws, (), key)
+            (tech,) = p.techs
+            owner = " ".join([f"has_technology_researched = {tech}"]
+                             + [f"NOT = {{ has_law = law_type:{law} }}" for law in p.disallowed])
+            self.assertIn(f"limit = {{ owner = {{ {owner} }} }} activate_production_method = "
                           f"{{ building_type = building_resettlement_colony production_method = {pm(key)} }}", helper)
+        land_grants = gates["land_grants"]
+        self.assertEqual((land_grants.techs, land_grants.laws, land_grants.disallowed), ((), (), ()),
+                         "Land Grants is the fallback, so nothing may gate it")
         self.assertIn("else = { activate_production_method = { building_type = building_resettlement_colony "
                       "production_method = pm_resettlement_land_grants } }", helper)
         order = [helper.index(pm(k)) for k in ("development_program", "organized_colonization", "land_grants")]
