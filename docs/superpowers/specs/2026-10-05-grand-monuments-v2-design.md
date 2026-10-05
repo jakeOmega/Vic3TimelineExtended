@@ -36,7 +36,7 @@ Baseline: `main` at `c906371` (#743 merged).
 | The events rule | v1's "every option positive" becomes: **owning a monument is never a penalty; not building one can be.** Declining a petition may cost approval. Anniversary events keep all-positive options |
 | Commissions | **One mechanism** for world moments, petitions and AI building; **at most one open at a time** |
 | Journal entry | **Appears for an open commission** as well as for an owned monument |
-| Names | **Typed names are not possible** (engine facts). A monument is named by choice: a **namesake** (city, state, ruler, what it honours, a year, an occasion) and a **form** (column, arch, statue, …) |
+| Names | A monument is named by choice: a **namesake** (city, state, ruler, what it honours, a year, an occasion) and a **form** (column, arch, statue, …). A **typed name** overrides the pair; it is possible but unverified in game (engine facts), so it ships behind its in-game test (§3.4) |
 | History | **Monuments standing in 1836 are placed at the start.** v1's "History places no Grand Monuments" is reversed |
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
@@ -47,12 +47,14 @@ Baseline: `main` at `c906371` (#743 merged).
 v1's engine facts all still hold (buildings hold no variables; no effect removes levels; the dedication ratchet; modifiers
 flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT). New ones:
 
-- **Typed text does not reach script.** Every base-game editbox the mod copies sends its text to an engine popup bound
-  to one object type (`StateNameChangePopup`, `MilitaryFormationChangeNamePopup`, `PowerBlocCustomizationPopup`,
-  `PrestigeGoodChangeNamePopup`, `TreatyDraft`). A mod editbox can write only `GetVariableSystem`, which is client-side,
-  unsaved and invisible to script (`gui_modding_guide.md` § "Typed text does not reach script"). Not yet checked: the
-  engine's full data-type list for a function that turns text into a scope value. If one exists, typed names become an
-  extension of §3, not a redesign.
+- **Typed text can probably reach a saved variable, unverified in game.** The base-game rename boxes are tied to their
+  own engine objects and can't be reused. A mod's own editbox can feed a scripted GUI, though:
+  `PdxGuiEditboxGetText` → `MakeScopeFlag` → `AddScope` → `set_variable`, read back with `Scope.GetFlagName`. Every link
+  is in the 1.13.11 data types and has a shipped precedent elsewhere (EU5, the Community Mod Framework), but the whole
+  chain has not been run. The riskiest link is the `CUTF8String` → `MakeScopeFlag` conversion; the others are an
+  embedded `"`, formatting characters and multiplayer (`gui_modding_guide.md` § "Typed text into a saved variable").
+  Script can't write such a flag (`flag:` takes identifiers only), so typed names override names that script assigns
+  and can't replace them (§3).
 - **A high `ai_value` does not make the AI build a government building**; an event or decision with `ai_chance` does
   (`scripting_best_practices.md` § "AI and Cost-Only Buildings"). `start_building_construction` (state scope) "starts
   constructing a building in a scoped state as a government construction", so an accepted commission costs the AI
@@ -230,9 +232,12 @@ A monument's name is a **namesake** and a **form**: "Nelson's Column", "the Arch
 | Year | "the [form] of [year]" | `gm_name_year` | always |
 | Occasion | "Arch of the [enemy] War", "Centenary [form]", "[achievement] Monument" | `gm_name_year`, `gm_name_country` (or its capital state, see engine facts) | from a commission |
 | Landmark | the landmark's own name ("Arc de Triomphe") | the skin `landmark_<key>` | from history or a historical commission |
+| Custom | the player's own text | `gm_name` (a flag made from the typed text) | players only, from the unveiling or the rename button, once its test passes (§3.4) |
 
 Records: `gm_namesake` (flag) and `gm_form` (flag) on the state, beside v1's `gm_skin`. A customizable localization,
-`gm_monument_name`, switches on the pair. The name replaces the skin's generic title wherever v1 names a monument: the
+`gm_monument_name`, switches on the pair; a state with `gm_name` prints that instead. The typed name sits on top of
+namesake and form, which stay set underneath: clearing it brings them back, and the AI, history and commissions never
+write it. The name replaces the skin's generic title wherever v1 names a monument: the
 JE row, the ceremony and anniversary events, contest notices, trophy rows.
 
 ### 3.2 Forms
@@ -270,14 +275,20 @@ The table is a first draft; the plan fixes it with the loc.
 - **Commissions** arrive with namesake and form filled in. The unveiling shows them first, and the player can change
   them.
 - **The AI** takes the commission's name, else the most specific skin, its first form and the city.
-- **Rename** from the monument's JE row, at any time, at no cost. Rededication asks again. A contested, heritage or
-  trophy monument keeps its name.
+- **Rename** from the monument's JE row, at any time, at no cost: choose namesake and form again, or type a name (a
+  `maxcharacters = 30` editbox and a Confirm button, as the base game's rename boxes have) once that is verified.
+  Rededication asks again. A contested, heritage or trophy monument keeps its name.
 
 ### 3.4 Checks
 
 - A stored ruler still prints its name after death (`gm_name_char`). If not, the ruler namesake prints the year.
 - A stored country prints its name; else the occasion falls back to the year, or uses the capital-state workaround.
 - The city hub's name renders in loc from a state scope, including a custom name.
+- **Typed names**, before the editbox ships. Test one editbox and button writing a variable on the capital state, with
+  a text row that prints it. Reload from a normal save and from a debug-mode text save. Then: an embedded `"`, a `#b`
+  or `[` in the name, and data-binding errors in `debug.log` and `error.log`. If the direct `MakeScopeFlag` call fails,
+  try the `GetVariableSystem.Set` / `.Get` round trip in the same session. If none works, phase 2 ships without the
+  Custom namesake.
 
 ## 4. Monuments standing in 1836 (phase 3)
 
@@ -452,7 +463,8 @@ Checked in observer runs with the debug event (§9).
   3. The AI accepts, queues construction with `start_building_construction`, and the levels are built, not cancelled; the
      government form adds a level to an existing monument.
   4. Progress, extension, fulfilment, a miss and a lapse each do what their tooltips say.
-  5. The unveiling sets skin, form and namesake; the name shows in the JE row, events and notices; renaming works.
+  5. The unveiling sets skin, form and namesake; the name shows in the JE row, events and notices; renaming works; a
+     typed name survives both kinds of save (§3.4).
   6. A ruler's name still prints after the ruler dies; a renamed city renames the monument.
   7. The four 1836 monuments stand at start with their names and dedications; their owners' journal entries are active.
   8. The policy's factors show in the totals; throughput moves the monuments' upkeep.
@@ -475,7 +487,6 @@ Each phase is its own PR.
 
 ## Out of scope (possible extensions)
 
-- **Typed names**, unless the data-type check finds a function that turns text into a scope value (engine facts).
 - **A monument as a gift** between countries (the Luxor Obelisk was Muhammad Ali's gift to France, raised in 1836).
 - From v1's list, still out: a covert defacement operation; prestige lost while a monument's state is occupied;
   superlinear upkeep; a state-panel tile; skins with effects; base-game wonders and the mod's megaprojects in the legacy
