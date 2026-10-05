@@ -277,11 +277,11 @@ table gives each program's settlers a month for every fully staffed level.
 |---|---|---|---|---|
 | Land Grants | nothing | Unemployed and peasants of the lower strata who are at least second-class citizens; no peasants under Serfdom | 300 | none |
 | Military Colonies | Standing Army | As Land Grants, but fully accepted only | 250 | none |
-| Penal Transportation | Law Enforcement; not under Guaranteed Liberties | Lower-strata pops in which at least a fifth are radicals | 100 | 5% |
+| Penal Transportation | Law Enforcement; not under Guaranteed Liberties, Restorative Justice or Rehabilitation-Focused Criminal Justice | Lower-strata pops in which at least a fifth are radicals | 100 | 5% |
 | Organized Colonization | Railways | Unemployed, peasants and laborers of the lower strata who are at least second-class citizens | 500 | none |
 | Special Settlements | Mass Propaganda and Collectivized Agriculture; not under Guaranteed Liberties, Protected Speech or Right of Assembly | Farmers | 1,000 | 15% |
-| Development Program | Keynesian Economics | As Organized Colonization, plus machinists, engineers and clerks, all at least second-class citizens | 800 | none |
-| Rustication | Mass Media and Single-Party State | Laborers and clerks who do not work in farming, plantations, ranching or subsistence | 800 | 1% |
+| Development Program | Keynesian Economics; not under Laissez-Faire | As Organized Colonization, plus machinists, engineers and clerks, all at least second-class citizens | 800 | none |
+| Rustication | Mass Media and Single-Party State; not under Guaranteed Liberties, Protected Speech or Right of Assembly | Laborers and clerks who do not work in farming, plantations, ranching or subsistence | 800 | 1% |
 | Managed Retreat | Environmental Movement | Everyone except slaves, from coastal states while you suffer Coastal Flooding or Coastal Population Relocation, and from states hit by a nuclear strike or a weapons accident | 600 | none |
 
 Programs cost bureaucracy, paper and staff. The voluntary programs and Managed

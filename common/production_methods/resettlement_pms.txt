@@ -100,6 +100,9 @@ pm_resettlement_military_colonies = {
 
 # Convicts and the politically unreliable, sent to a remote frontier:
 # Australia to 1868, French Guiana, New Caledonia, Sakhalin, the Andamans.
+# Penal reform ends it: New South Wales stopped after the Molesworth Committee,
+# France abolished the bagne in 1938. Every country starts on Punishment-Focused
+# criminal justice, so the two reform laws close it only as a country adopts them.
 pm_resettlement_penal_transportation = {
 	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
 
@@ -109,6 +112,8 @@ pm_resettlement_penal_transportation = {
 
 	disallowing_laws = {
 		law_guaranteed_liberties
+		law_restorative_justice
+		law_rehabilitation_focused_criminal_justice
 	}
 
 	state_modifiers = {
@@ -230,11 +235,17 @@ pm_resettlement_special_settlements = {
 
 # State-funded settlement with jobs and housing waiting: Virgin Lands 1954,
 # FELDA 1956, Transmigrasi, Brasília. Adds skilled workers to the voluntary pool.
+# Every anchor was state-led, so a Laissez-Faire government cannot run it;
+# resettlement_switch_to_best_voluntary tests the same law.
 pm_resettlement_development_program = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 
 	unlocking_technologies = {
 		keynesian_economics
+	}
+
+	disallowing_laws = {
+		law_laissez_faire
 	}
 
 	state_modifiers = {
@@ -268,7 +279,8 @@ pm_resettlement_development_program = {
 }
 
 # Urban workers sent down to the countryside: China's Down to the Countryside
-# movement, 1968–1980.
+# movement, 1968–1980. A Single-Party State may still hold the civil-liberties
+# laws, so the same three close it as close Special Settlements.
 pm_resettlement_rustication = {
 	texture = "gfx/interface/icons/production_method_icons/harvesting_tools.dds"
 
@@ -278,6 +290,12 @@ pm_resettlement_rustication = {
 
 	unlocking_laws = {
 		law_single_party_state
+	}
+
+	disallowing_laws = {
+		law_guaranteed_liberties
+		law_protected_speech
+		law_right_of_assembly
 	}
 
 	state_modifiers = {
