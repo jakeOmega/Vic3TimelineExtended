@@ -1305,8 +1305,8 @@ society_technology_events.14 = {
 			add_lobby_appeasement_from_diplomacy_unidirectional = {
 				FIRST = root
 				SECOND = scope:interfering_country
-				PRO_AMOUNT = 1
-				ANTI_AMOUNT = -1
+				PRO_AMOUNT = -1
+				ANTI_AMOUNT = 1
 				FACTOR = appeasement_relations_decreased
 			}
 			# The meddler learns what we found and how we answered (.33).
@@ -1363,8 +1363,8 @@ society_technology_events.14 = {
 			add_lobby_appeasement_from_diplomacy_unidirectional = {
 				FIRST = root
 				SECOND = scope:interfering_country
-				PRO_AMOUNT = 1
-				ANTI_AMOUNT = -1
+				PRO_AMOUNT = -1
+				ANTI_AMOUNT = 1
 				FACTOR = appeasement_relations_decreased
 			}
 			hidden_effect = {

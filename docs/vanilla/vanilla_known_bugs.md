@@ -202,14 +202,15 @@ Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 
 Iberia DLC (IP4) coup-resolution scripted effects call `abandon_revolution` / `remove_ruling_interest_group` on IGs whose state doesn't match the effect's preconditions (no growing revolution to abandon, IG already insurrectionary). Vanilla bug — the effects should be guarded but aren't.
 
-### `common/scripted_effects/00_lobby_effects.txt` — `change_appeasement` rejects `appeasement_relations_decreased`
+### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2334` — a catalyst offers the overlord lobbies an appeasement factor they do not list
 
 ```
-Error: change_appeasement effect [ Appeasement change failed, check that 'appeasement_relations_decreased' is a valid appeasement reason
-Error: change_appeasement effect [ Appeasement change failed, check that 'appeasement_special_events_positive' is a valid appeasement reason
+'appeasement_special_events_positive' is a valid appeasement reason for political lobby 'lobby_pro_overlord'
 ```
 
-Vanilla `00_diplomatic_catalysts.txt` (lines 285, 292) passes `FACTOR = appeasement_relations_decreased` to a scripted effect that maps it onto `change_appeasement = { factor = $FACTOR$ }`. The engine reports `appeasement_relations_decreased` is not a valid appeasement *reason*, suggesting the field name should be `reason` rather than `factor` (or the vanilla token was renamed). Vanilla bug — single-occurrence so far, low priority. 2026-10-04: once with `appeasement_special_events_positive`, for a `lobby_pro_overlord` lobby; the engine message names the lobby, so a factor the lobby type does not list is the likelier reading.
+`change_appeasement` takes only a factor the lobby type lists for the sign of the amount (`appeasement_factors_pro` for a gain, `appeasement_factors_anti` for a loss; `scripting_best_practices.md` § `change_appeasement`'s `appeasement_special_events_*` Factor). The catalyst at line 2334 passes `FACTOR = appeasement_special_events_positive` to both `add_lobby_appeasement_from_diplomacy_unidirectional` and `add_overlord_lobby_appeasement_from_diplomacy`. The country lobbies list it; `lobby_pro_overlord` lists it in neither set, so its half is rejected. Once, 2026-10-04.
+
+This entry used to blame vanilla's lines 285 and 292 for `appeasement_relations_decreased` failures, anchored on the lobby effects file (00_lobby_effects.txt) and read as a `factor`/`reason` field mix-up. Those vanilla calls are signed correctly. The failures were five mod event options that passed the factor with the signs reversed (fixed 2026-10-04), and the anchor hid them, because the mod's calls go through the same scripted effect and error.log lists every file in the call stack. Keep this entry anchored on the catalyst and its signature on the lobby type.
 
 ### `common/ideologies/01_character_ideologies.txt:1781`, `:3365`, `:8438`, `:8671` — wrong-scope triggers in character/IG scope
 
@@ -1153,7 +1154,7 @@ Engine fires this when an untyped trigger reads a country target that has resolv
 untyped effect [ Scoped object is not valid. Type: Building  (4294967295) ]
 ```
 
-Now and then the engine fires `on_start_expanding_building` (vanilla documents `Root = Building`) with a root that is the null building. Every hook on it then fails before its first line, which the engine reports at the hook's opening line: for the mod, `te_on_building_retooling_cleanup`'s `effect` (`common/on_actions/te_construction_market_on_actions.txt`) and `te_construction_market_building_events.1`'s `immediate` (`events/te_construction_market_building_events.txt`), one line each, in the same second. Script cannot guard a root that is invalid before the block runs, and vanilla's own hook is empty. 2026-10-04: twice in about an hour of play. What a miss costs is that one state's construction-market site (`te_construction_market_state_on_start` never runs for it); with no building to name, it can't be traced further from the log.
+Now and then the engine fires `on_start_expanding_building` (vanilla documents `Root = Building`) with a root that is the null building. Every hook on it then fails before its first line, which the engine reports at the hook's opening line: for the mod, `te_on_building_retooling_cleanup`'s `effect` (in te_construction_market_on_actions.txt) and `te_construction_market_building_events.1`'s `immediate` (in te_construction_market_building_events.txt), one line each, in the same second. Script cannot guard a root that is invalid before the block runs, and vanilla's own hook is empty. The mod paths are left unquoted on purpose: a backticked `.txt` path here would put that mod file in the registry's basename index, and a null building in the day-later `te_construction_market_building_events.3` would then be swallowed too. 2026-10-04: twice in about an hour of play. What a miss costs is that one state's construction-market site (`te_construction_market_state_on_start` never runs for it); with no building to name, it can't be traced further from the log.
 
 ### `pdx_data_factory.cpp:1662` — vanilla NAVAL_BATTLE desc accessor requires non-const promote
 - source: `pdx_data_factory.cpp:1662`
