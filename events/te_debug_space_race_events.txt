@@ -84,6 +84,13 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 		te_debug_sr_reset_globals = yes
 	}
 
+	# No programme, to try the Found a Space Program decision.
+	option = {
+		name = te_debug_space_race.1.l
+		trigger = { sr_has_space_program = yes }
+		te_debug_sr_remove_program = yes
+	}
+
 	option = {
 		name = te_debug_space_race.1.z
 	}

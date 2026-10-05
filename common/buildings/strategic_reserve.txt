@@ -81,6 +81,10 @@ building_strategic_reserve_hub = {
 	# points the hub is done within a build cycle, so war does not discount it.
 	# No "does not have one yet" test is needed: possible allows one hub per
 	# country, so the building is only ever evaluated for a country without one.
+	# Not borne out in game: in an observer run to 2015, 1 of 157 countries built
+	# one. The AI founds its reserve through te_decision_establish_strategic_reserve
+	# (extra_decisions.txt), whose ai_chance has this shape
+	# (strategic_reserve_system.md §7).
 	# Evaluated in STATE scope: ROOT is the capital, owner reaches the country.
 	ai_value = {
 		value = 0

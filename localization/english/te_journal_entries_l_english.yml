@@ -1009,7 +1009,7 @@
  je_strategic_reserve_ov_income_tt:0 "#bold Weekly Sales Income:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\nGross revenue this week from the goods the reserve releases, at each good's current market price. It does not subtract what the reserve spends buying goods."
  je_strategic_reserve_ov_income_value:0 "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk"
  je_strategic_reserve_reason:0 "Your Strategic Reserve Hub lets you physically hoard strategic goods. Positive reserve rates make the hub buy from the market and add to the stockpile; negative rates make it release goods from the stockpile back onto the market. Stored goods decay slowly, so a large reserve is not free."
- je_strategic_reserve_status_no_hub:0 "No Strategic Reserve Hub exists. Build one in your capital to begin operations."
+ je_strategic_reserve_status_no_hub:0 "No $building_strategic_reserve_hub$ exists. Build one in your capital, or take the decision #b $te_decision_establish_strategic_reserve$#!, to begin operations."
  je_un_assembly_header:0 "General Assembly"
  je_un_auth_bar_base_tt:0 "$je_un_auth_tbl_base_tt$"
  je_un_auth_bar_commitment_tt:0 "$je_un_auth_tbl_commitment_tt$\n\n#b Now:#! $je_un_auth_tbl_commitment_detail$\n#b Since last month:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_commitment_delta')|+1]"

@@ -254,3 +254,14 @@ te_debug_sr_reset_globals = {
 	te_debug_sr_release_first_base = { MILESTONE = mars_landing       }
 	te_debug_sr_release_first_base = { MILESTONE = interstellar_probe }
 }
+
+# Remove our Space Program, so the Found a Space Program decision
+# (te_decision_found_space_program) can be tried in a save that already has
+# one. Every running milestone fails, as a real loss does (space_race_events.76).
+# Scope: country.
+te_debug_sr_remove_program = {
+	every_scope_state = {
+		limit = { has_building = building_space_program }
+		remove_building = building_space_program
+	}
+}

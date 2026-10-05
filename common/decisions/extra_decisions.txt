@@ -364,3 +364,442 @@ nd_taboo_resume_programme = {
 		}
 	}
 }
+
+# ============================================================================
+# Establish a Strategic Reserve (strategic_reserve_system.md §2, §7)
+# Places the Strategic Reserve Hub in the capital at once, for free; the
+# reserve's expense is what it buys and stores. The building's own
+# construction path is unchanged.
+#
+# Why a decision: in an AI-only observer run to 2015, after the hub's ai_value
+# gained +10000 above st_res_ai_hub_min_gdp (PR #705), 1 of 157 countries built
+# one. The construction AI does not pick it, and je_strategic_reserve cannot
+# host a build button, because its possible and invalid need a hub to exist.
+#
+# The one-per-country rule is the hub's own (is_shown: no hub anywhere).
+# create_building checks the unlocking technology since 1.13.9; whether it
+# checks the building's possible is unverified, so st_res_hub_relocating is
+# raised around the call as st_res_relocate_hub_to_capital_effect does, and
+# the hub's one-per-country guard accepts it.
+#
+# ai_chance mirrors the hub's ai_value shape (common/buildings/strategic_reserve.txt):
+# great and major powers, more at peace, and any country above
+# st_res_ai_hub_min_gdp whether at war or not. A smaller country gets 0, as
+# it gets no ai_value.
+# ============================================================================
+te_decision_establish_strategic_reserve = {
+	is_shown = {
+		has_technology_researched = logistics
+		NOT = { is_country_type = decentralized }
+		# The rebels of a running revolution found no reserve of their own.
+		# The journal entry's activation would give them a reserve's variables
+		# at zero stock, and if they won, those zeros would beat the loser's
+		# stockpile in the variable merge: the winner continues the nation
+		# (#460-#465). Same rule as Suborbital Flight's is_shown_when_inactive
+		# (je_space_race.txt); te_decision_found_space_program has it too.
+		is_revolutionary = no
+		NOT = {
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_decision_tt_has_capital
+			exists = capital
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_create_strategic_reserve_hub
+			set_variable = { name = st_res_hub_relocating value = 1 }
+			capital = {
+				create_building = {
+					building = building_strategic_reserve_hub
+					level = 1
+				}
+			}
+			remove_variable = st_res_hub_relocating
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { is_great_or_major_power = yes }
+			add = 50
+			if = {
+				limit = { is_at_war = no }
+				add = 50
+			}
+		}
+		if = {
+			limit = { gdp > st_res_ai_hub_min_gdp }
+			add = 100
+		}
+	}
+}
+
+# ============================================================================
+# Found a Space Program (mod_systems.md § Space Race)
+# Places the Space Program in the market capital at once, for free, on Earth
+# Orbit. The programme's expense is its weekly Launch Capacity bill, which
+# climbs with every mission (te_decision_space_mission_* below).
+#
+# The building's possible is `owner.market_capital ?= THIS`, so it stands only
+# in the capital of a market we lead: a member of another country's market
+# has a market capital in a foreign state, and the decision must not build
+# there (te_decision_tt_leads_market). create_building checks the unlocking
+# technology, Guided Missiles.
+#
+# ai_chance: only an AI that would race (sr_ai_should_participate, the top
+# three by ranking; any other makes no progress but would pay the bill, as
+# space_race_buttons.txt's header explains) and whose weekly surplus covers
+# the Earth Orbit bill. net_fixed_income is the affordability reader the
+# mod's AI uses (cultural_hegemony_buttons.txt).
+# ============================================================================
+te_decision_found_space_program = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = rocketry
+		is_great_or_major_power = yes
+		is_revolutionary = no
+		NOT = { is_country_type = decentralized }
+		sr_has_space_program = no
+	}
+
+	possible = {
+		has_technology_researched = guided_missiles
+		custom_tooltip = {
+			text = te_decision_tt_leads_market
+			market_capital ?= { owner = ROOT }
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_create_space_program
+			market_capital = {
+				create_building = {
+					building = building_space_program
+					level = 1
+					activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-10-05: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+				}
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_earth_orbit
+			}
+			add = 100
+		}
+	}
+}
+
+# ============================================================================
+# Begin the next space mission (mod_systems.md § Space Race)
+# One decision per mission. Each switches the Space Program to that mission's
+# production method; a player can still switch by hand in the building panel.
+#
+# Why: in a 2073 player game every AI had every technology, yet none got
+# beyond Orbital Flight. Every later milestone needs a costlier mission, and
+# under most_profitable the AI kept the least-loss one, Earth Orbit
+# (pmg_base_building_space_program is now most_productive too).
+#
+# Each mission's production method carries every lower mission's
+# country_sr_*_program_bool, so switching up never stops a running milestone.
+# The mission -> milestone map (je_space_race.txt `possible` blocks):
+#   pm_earth_orbit              Suborbital Flight, Orbital Flight
+#   pm_moon_mission             Moon Landing, Deep-Space Probe
+#   pm_mars_mission             Moon Base, Mars Landing
+#   pm_solar_colonization       Solar System Colonization, stages 1-2 (and
+#                               every stage once a colony is held)
+#   pm_deep_space_exploration   Solar System Colonization, stages 3-5, for a
+#                               country holding no colony
+#   pm_interstellar_mission     Interstellar Probe
+#
+# A mission is offered once its technology is researched, while the programme
+# runs the mission below it (Mars or above for the last three), and becomes
+# possible for a great or major power (every milestone needs the rank) once
+# the milestones the missions below it serve are complete:
+# Moon after Orbital Flight; Mars after the Moon Landing and the Deep-Space
+# Probe; Solar Colonization and Deep Space after the Moon Base and the Mars
+# Landing. The Interstellar Mission waits only for the Interstellar Probe's own
+# prerequisites (Deep-Space Probe, Mars Landing), from Mars, Solar
+# Colonization or Deep Space: colonization never "completes" for one country
+# while worlds are left, and the Interstellar Mission carries its bools.
+# Deep Space Exploration is offered only to a country it would help: inner
+# worlds all claimed (sr_colonization_stage >= 3) and no colony held, since a
+# colony holder keeps colonizing on Solar Colonization.
+#
+# ai_chance: the same gates as founding, against the increase in the weekly
+# bill (sr_mission_bill_increase_<mission>, space_race_values.txt).
+# test_space_program_decisions.py holds the techs, bools and milestones to the
+# production methods and the journal entries.
+# ============================================================================
+te_decision_space_mission_moon = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = space_exploration
+		sr_has_space_program = yes
+		modifier:country_sr_earth_orbit_program_bool = yes
+		NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+	}
+
+	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_orbital
+			has_variable = sr_completed_orbital
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_begin_moon_mission
+			activate_production_method = {
+				building_type = building_space_program
+				production_method = pm_moon_mission
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_increase_moon
+			}
+			add = 100
+		}
+	}
+}
+
+te_decision_space_mission_mars = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = knowledge_economy
+		sr_has_space_program = yes
+		modifier:country_sr_moon_mission_program_bool = yes
+		NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+	}
+
+	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_moon_landing
+			has_variable = sr_completed_moon_landing
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_probe
+			has_variable = sr_completed_probe
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_begin_mars_mission
+			activate_production_method = {
+				building_type = building_space_program
+				production_method = pm_mars_mission
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_increase_mars
+			}
+			add = 100
+		}
+	}
+}
+
+te_decision_space_mission_solar = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = directed_energy_weapons
+		sr_has_space_program = yes
+		modifier:country_sr_mars_mission_program_bool = yes
+		NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
+		NOT = { has_global_variable = sr_all_colonies_complete }
+		# Past stage 2 a country without a colony needs Deep Space Exploration.
+		OR = {
+			sr_has_space_colony = yes
+			NOT = { has_global_variable = sr_colonization_stage }
+			global_var:sr_colonization_stage <= 2
+		}
+	}
+
+	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_moon_base
+			has_variable = sr_completed_moon_base
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_mars_landing
+			has_variable = sr_completed_mars_landing
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_begin_solar_mission
+			activate_production_method = {
+				building_type = building_space_program
+				production_method = pm_solar_colonization
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_increase_solar
+			}
+			add = 100
+		}
+	}
+}
+
+te_decision_space_mission_deep_space = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = space_colonization
+		sr_has_space_program = yes
+		modifier:country_sr_mars_mission_program_bool = yes
+		NOT = { modifier:country_sr_deep_space_exploration_program_bool = yes }
+		NOT = { has_global_variable = sr_all_colonies_complete }
+		# Only where Solar Colonization no longer reaches: the inner worlds are
+		# all claimed and we hold no colony (solar colonization's `possible`).
+		has_global_variable = sr_colonization_stage
+		global_var:sr_colonization_stage >= 3
+		sr_has_space_colony = no
+	}
+
+	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_moon_base
+			has_variable = sr_completed_moon_base
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_mars_landing
+			has_variable = sr_completed_mars_landing
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_begin_deep_space_mission
+			activate_production_method = {
+				building_type = building_space_program
+				production_method = pm_deep_space_exploration
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_increase_deep_space
+			}
+			add = 100
+		}
+	}
+}
+
+te_decision_space_mission_interstellar = {
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_technology_researched = compact_fusion_reactors
+		sr_has_space_program = yes
+		modifier:country_sr_mars_mission_program_bool = yes
+		NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+		NOT = { has_variable = sr_completed_interstellar_probe }
+	}
+
+	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_probe
+			has_variable = sr_completed_probe
+		}
+		custom_tooltip = {
+			text = te_decision_tt_completed_mars_landing
+			has_variable = sr_completed_mars_landing
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_begin_interstellar_mission
+			activate_production_method = {
+				building_type = building_space_program
+				production_method = pm_interstellar_mission
+			}
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				sr_ai_should_participate = yes
+				in_default = no
+				net_fixed_income > sr_mission_bill_increase_interstellar
+			}
+			add = 100
+		}
+	}
+}

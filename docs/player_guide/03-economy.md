@@ -384,8 +384,10 @@ construction, mining and industry at once.
 
 The Strategic Reserve journal entry lets you stockpile strategic goods in your
 capital, buying them when they are cheap and releasing them when prices rise or
-supply fails. It is shown once you research Logistics and becomes active when
-you build a Strategic Reserve Hub. No game rule controls it.
+supply fails. It is shown once you research Logistics and becomes active once
+you have a Strategic Reserve Hub. Build one, or take the decision Establish a
+Strategic Reserve, which places the hub in your capital at once with no
+construction cost. No game rule controls it.
 
 ### Reserve hub and silos
 
@@ -428,8 +430,8 @@ down by source.
 ### The Strategic Reserve panel
 
 The journal entry's panel has an overview, the Reserve Inventory and a
-collapsed How the Strategic Reserve Works. Before you build a hub the entry
-shows only a line telling you to build one. Once the hub stands there is no
+collapsed How the Strategic Reserve Works. Before you have a hub the entry
+shows only a line telling you how to get one. Once the hub stands there is no
 status line, because the overview shows how the hub is doing.
 
 The same panels appear as a Reserve tab in the Market panel, and a change made
@@ -573,10 +575,12 @@ Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 
 ### How the AI uses the reserve
 
-Great and major powers value the hub highly, especially in peacetime, and add
-silos once any good passes 75% of capacity. An AI reserve runs every good on
-Stabilize Prices with the Conservative preset: it buys below −20% and releases
-above +30%, and while prices stay low it fills an empty reserve in about a year.
+The AI founds its reserve through Establish a Strategic Reserve: great and major
+powers take it, more readily in peacetime, and so does any country with a GDP
+above 10 million. AI reserves add silos once any good passes 75% of capacity.
+An AI reserve runs every good on Stabilize Prices with the Conservative preset:
+it buys below −20% and releases above +30%, and while prices stay low it fills
+an empty reserve in about a year.
 It follows the same rules, limits and costs as yours. It doesn't change policy
 for a war, but a war that pushes ammunition past +30% makes AI reserves release
 into the spike.
