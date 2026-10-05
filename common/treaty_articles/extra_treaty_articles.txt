@@ -1852,19 +1852,26 @@ joint_military_exercises = {
 				}
 			}
 		}
-		# New exercises need military ties (owner ruling 2026-10-05): an
-		# alliance or defensive pact, in force or in this draft, or a shared
+		# New exercises need military ties (owner rulings 2026-10-05): an
+		# alliance or defensive pact, in force or in this draft, a subject
+		# relation either way (vanilla forbids an alliance or defensive pact
+		# between overlord and subject, so this is their tie), or a shared
 		# Military Treaty power bloc. An observer run to 2015 had the article
-		# in 162 of 272 treaties, 109 of them between countries with neither.
-		# Exercises already in force stay: none of this is in
-		# requirement_to_maintain.
+		# in 162 of 272 treaties, 109 of them between countries with no
+		# alliance or pact. Exercises already in force stay: none of this is
+		# in requirement_to_maintain. A renegotiated treaty must pass it.
 		custom_tooltip = {
 			text = joint_military_exercises_ties_tt
 			OR = {
 				scope:first_country = {
 					te_treaty_parties_have_military_ties = { OTHER = scope:second_country }
 				}
+				# Symmetric: subject or overlord of the target.
 				scope:first_country = {
+					has_subject_relation_with = scope:second_country
+				}
+				scope:first_country = {
+					is_in_power_bloc = yes
 					is_in_same_power_bloc = scope:second_country
 					power_bloc ?= {
 						has_identity = identity:identity_military_treaty_organization

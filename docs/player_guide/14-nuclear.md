@@ -270,10 +270,11 @@ your doctrine's tenure.
 
 Your direct subjects are under your **nuclear umbrella** while you hold Nuclear
 Power, unless you are at war with them or on opposite sides of a play. Anyone
-else needs a Nuclear Guarantee treaty article. To sign a new one you need an
-alliance or defensive pact with the country, already in force or in the same
-treaty, or a shared power bloc, and more warheads than the world believes it
-has (none, if it has never tested). Either cover spares the country
+else needs a Nuclear Guarantee treaty article. To sign or renegotiate one you
+need an alliance, a defensive pact or a Guarantee Independence of the country,
+already in force or in the same treaty, or a shared power bloc, and more
+warheads than the world believes it has (none, if it has never tested). A
+guarantee already in force stays if these lapse. Either cover spares the country
 the war-support drain of facing a nuclear-armed enemy without the bomb, weighs
 your arsenal in any crisis against it, lets you open a crisis against a country
 in a war or play with it, and lets you retaliate for a strike on it under any
@@ -867,7 +868,7 @@ upkeep while the treaty is in force.
 | Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, Nuclear Power is lost, and no program runs while it lasts |
 | Nuclear Program Freeze | The frozen country concedes; the demander pays 100 | Funding held at zero; warheads and progress kept |
 | Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a program at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
-| Nuclear Guarantee | An armed guarantor pays 100 | Extended deterrence, as for the umbrella; not for your own subjects. The guarantor needs more warheads than the world believes the protected country has, and an alliance, a defensive pact or a shared power bloc with it |
+| Nuclear Guarantee | An armed guarantor pays 100 | Extended deterrence, as for the umbrella; not for your own subjects. The guarantor needs more warheads than the world believes the protected country has, and an alliance, a defensive pact, a Guarantee Independence or a shared power bloc with it |
 | Nuclear Security Assistance | An armed country pays 100 to help one holding or missing warheads | Secured custody and a monthly chance to recover missing warheads |
 | Nuclear Arms Limitation | Mutual, between two countries that each hold warheads or run a program; both pay 50 | Neither holds more warheads than the agreed ceiling; see [The Nuclear Arms Limitation treaty](#the-nuclear-arms-limitation-treaty) |
 

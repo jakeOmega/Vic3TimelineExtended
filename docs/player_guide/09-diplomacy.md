@@ -72,7 +72,12 @@ armed forces.
 | Demilitarized Zone | International Relations | Yes | No conscription, Barracks, Naval Fortifications or Military Bases in the chosen state; an existing Military Base is dismantled. While it stands the conceding country uses 25 authority and loses 5 prestige. |
 | Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, military industry throughput −25% and −10 prestige. Every Arms Industry, Artillery Foundry, Munition Plant, Naval Administration, Naval Fortification, Naval Logistics Center and Military Base in the conceding country is dismantled; Shipyards and Military Shipyards are spared. |
 | Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
-| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, military goods 5% dearer for each treaty that carries it. Needs an alliance or defensive pact, already in force or in the same treaty, or a shared Military Treaty bloc. Each country can hold it in at most three treaties. |
+| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, military goods 5% dearer for each treaty that carries it. Needs an alliance or defensive pact, already in force or in the same treaty, a subject relation between the two, or a shared Military Treaty bloc. Each country can hold it in at most three treaties. |
+
+The requirements on Minority Protection, Religious Mission Rights and Joint
+Military Exercises apply when a treaty is signed or renegotiated. An article
+already in force stays if they stop being met, but renegotiating its treaty
+means meeting them again or dropping it.
 
 Arms control between nuclear powers belongs to the nuclear system: Nuclear Arms
 Limitation holds two countries to the same ceiling on warheads, and leaving it

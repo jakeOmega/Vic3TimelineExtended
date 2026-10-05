@@ -71,6 +71,7 @@ religious_mission_rights = {
 		custom_tooltip = {
 			text = religious_mission_rights_missionary_bloc_tt
 			scope:target_country = {
+				is_in_power_bloc = yes
 				power_bloc ?= {
 					has_identity = identity:identity_religious
 				}
