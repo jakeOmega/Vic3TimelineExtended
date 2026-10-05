@@ -1352,6 +1352,11 @@ Without the `clothes = { usage = game ... }` wrapper, entries will not load.
 - **`ai_value` only accepts flat numbers** (e.g., `ai_value = 100`), NOT script value blocks. Using a block causes parse errors that silently break the PM and others in the same file.
 - Vanilla pattern: `ai_value = -1000` (flat number).
 
+## AI and Cost-Only Buildings
+
+- **A production method group whose methods only cost goods needs `ai_selection = most_productive`.** The default, `most_profitable`, weighs each method's goods margin, so where every method is a pure cost (output only country modifiers) the AI keeps the cheapest one forever. Vanilla sets `most_productive` on every building of that kind: university, government administration, every monument. The Space Program lacked it, and in a 2073 game no AI got past Orbital Flight, the last milestone its cheapest mission allows (set 2026-10-05; not yet watched in game).
+- **A high `ai_value` does not guarantee the construction AI builds a government building.** The Strategic Reserve Hub carried +10 000 (vanilla's monument value) above 10M GDP, and 1 of 157 countries built one in an observer run to 2015. When the AI must have a building, place it with a decision whose `when_taken` runs `create_building` and whose `ai_chance` carries the AI's conditions (`te_decision_establish_strategic_reserve`, `te_decision_found_space_program`). `create_building` takes `activate_production_methods = { <pm> }` to set its starting methods; `effect_trigger_validity_audit` flags that key as unknown, so it carries a `# REVIEWED` comment.
+
 ## V3 Market Pricing Model
 
 - **Price formula:** `price = base_price × [1 + PRICE_RANGE × clamp((BUY - SELL) / min(BUY, SELL) / (F - 1), -1, +1)]`, with `F` = `BUY_SELL_DIFF_AT_MAX_FACTOR`: the price is at its ceiling when BUY = F × SELL and at its floor when SELL = F × BUY.

@@ -20,12 +20,17 @@ ranking, so in practice you race against the AI powers that hold those places.
 
 ### The Space Program building
 
-The Space Program is a monument you build in your market capital, and every
-milestone depends on it. It is a single, government-built building with a very
-high construction cost. It is removed if the state stops being your market
-capital, for example when you lose it in a war. It employs 40,000 engineers,
-academics and clerks and consumes Launch Capacity, the good your Aerospace
-Industry makes.
+The Space Program is a monument in your market capital, and every milestone
+depends on it. It is a single, government-built building with a very high
+construction cost, but you don't have to build it: once you research Guided
+Missiles, the decision Found a Space Program places it in your market capital at
+once, with no construction cost, running Earth Orbit. Either way it can stand
+only in the capital of a market you lead, so a country in another country's
+market can't have one. It is removed if the state stops being your market
+capital, for example when you lose it in a war or join another market. It
+employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
+good your Aerospace Industry makes. That weekly bill is what the program really
+costs.
 
 Its production method decides which milestones you can run. Each method includes
 everything the ones before it allow, so you only ever need the highest one your
@@ -45,6 +50,29 @@ innovation, innovation cap and prestige.
 > milestone the new method no longer supports and wipes its progress. The event
 > Program Discontinued (or The Silent Gantry, if the building is gone) lists what
 > was lost. Solar System Colonization only pauses once you hold a colony.
+
+### Moving to the next mission
+
+You can switch the production method in the building panel at any time, but the
+decisions panel also offers each next mission when you are ready for it. A
+"Begin" decision appears once you research the method's technology, and you can
+take it once the milestones before it are complete. It switches the Space
+Program to that method.
+
+| Decision | Appears while you run | Needs complete |
+|---|---|---|
+| Begin the Moon Mission | Earth Orbit | Orbital Flight |
+| Begin the Mars Mission | Moon Mission | Moon Landing and Deep-Space Probe |
+| Begin Solar Colonization | Mars Mission | Moon Base and Mars Landing |
+| Begin Deep Space Exploration | Mars Mission or Solar Colonization | Moon Base and Mars Landing |
+| Begin the Interstellar Mission | Mars Mission or any later method | Deep-Space Probe and Mars Landing |
+
+Begin Solar Colonization appears only while there are worlds left that Solar
+Colonization can reach: those of stages 1 and 2, or any stage once you hold a
+colony. Begin Deep Space Exploration appears only when you need it: every world
+of stages 1 and 2 is claimed and you hold no colony. You can begin the
+Interstellar Mission without finishing colonization, and colonization goes on
+under it.
 
 ## Space race milestones
 
@@ -423,8 +451,12 @@ list](19-appendix-events.md#space-race-event-list).
 
 ## How the AI races
 
-AI great and major powers use the same entries, approaches and funding, and
-start each milestone on Standard as you do; only you can switch a milestone back
+AI great and major powers found their programs and move them up the missions
+through the same decisions you have. An AI takes them only while it is in the
+top three of the global ranking, out of default, and only if its weekly budget
+surplus covers what the step adds to the Launch Capacity bill. AI powers use
+the same entries, approaches and funding, and start each milestone on Standard
+as you do; only you can switch a milestone back
 to Standard. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
 an entry but its bar doesn't move, and the Rivals list leaves it

@@ -1716,7 +1716,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 | Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
 | Solar System Colonization | directed_energy_weapons | Moon Base + Mars Landing complete |
 
-Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`.
+Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`. A country gets the programme, and moves it up the missions, through the Found a Space Program and Begin the <mission> decisions (`te_decision_found_space_program`, `te_decision_space_mission_*` in `common/decisions/extra_decisions.txt`); a player can also build it and switch its production method by hand. See `mod_systems.md` § Space Race → The Space Program: founding and missions.
 
 ### Buttons (4 per JE × 8 JEs = 32)
 Per milestone `<m>`: `sr_btn_safe_<m>` / `sr_btn_ambitious_<m>` (approach) and `sr_btn_fund_up_<m>` / `sr_btn_fund_down_<m>` (funding level, 0 to `sr_max_funding_level`). `je_space_race_interstellar_results` has none.
