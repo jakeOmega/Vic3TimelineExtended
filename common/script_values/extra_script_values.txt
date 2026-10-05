@@ -177,9 +177,34 @@ starting_investment_pool = {
 	multiply = 2
 }
 
-investment_pool_banking_cycle_add = {
-	value = investment_pool
+# What banking_cycle_weekly_effects adds to the pool each week: a share of the
+# pool's weekly gross income (country_weekly_investment_pool_mult) plus a flat
+# amount (country_weekly_investment_pool_add: the command economy's treasury
+# balance and the UN World Development Fund's grant).
+#
+# The share is of INCOME, not of the balance (2026-10-05,
+# banking_cycle_simulation.md §18). Until then it multiplied investment_pool
+# itself, so the cooperative phases created or destroyed money in proportion
+# to what the pool held: Frenzy compounded it x1.68 a year when the private
+# queue could not spend it, and kept Overinvestment going. Gross income is the
+# pool's income before expenses; the engine leaves this script add out of it
+# (see ce_treasury_pool_balance_multiplier), so the share cannot feed on
+# itself, and Overinvestment cuts every pop's contribution and gross income
+# with it, so the cycle no longer prolongs Overinvestment.
+# Gross income is clamped at 0 so a negative reading cannot flip the share's
+# sign, and the result may not take more than the pool holds.
+investment_pool_banking_cycle_income_add = {
+	value = investment_pool_gross_income
+	min = 0
 	multiply = modifier:country_weekly_investment_pool_mult
+	min = {
+		value = investment_pool
+		multiply = -1
+	}
+}
+
+investment_pool_banking_cycle_add = {
+	value = investment_pool_banking_cycle_income_add
 	add = modifier:country_weekly_investment_pool_add
 }
 

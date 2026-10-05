@@ -1319,6 +1319,9 @@ remove_all_banking_phase_modifiers = {
 	je:je_banking_cycle = { remove_modifier = bubble_inertia_moderate }
 	je:je_banking_cycle = { remove_modifier = bubble_inertia_high }
 	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme }
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_moderate_coop }
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_high_coop }
+	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme_coop }
 }
 
 # A crash only ever lowers the cycle. The tier figures below are ceilings, not
@@ -2314,6 +2317,24 @@ banking_cycle_apply_phase_modifiers = {
 		else_if = {
 			limit = { var:bubble_pressure > 0.5 }
 			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_moderate multiplier = bubble_inertia_multiplier_script_value } }
+		}
+	}
+	# A cooperative economy feels a fifth of it (the _coop variants carry 0.2
+	# momentum, not 1.0): without any, it almost never left Stable
+	# (banking_cycle_simulation.md §18). A command economy feels none.
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		if = {
+			limit = { var:bubble_pressure >= 65 }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_extreme_coop multiplier = bubble_inertia_multiplier_script_value } }
+		}
+		else_if = {
+			limit = { var:bubble_pressure >= 35 }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_high_coop multiplier = bubble_inertia_multiplier_script_value } }
+		}
+		else_if = {
+			limit = { var:bubble_pressure > 0.5 }
+			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_moderate_coop multiplier = bubble_inertia_multiplier_script_value } }
 		}
 	}
 

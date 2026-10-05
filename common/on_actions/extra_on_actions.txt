@@ -1357,10 +1357,10 @@ war_propaganda_on_action = {
 #   When the queue cap limits the drain, the frozen value is the limit (the
 #   PR #514 toy model's 2M/week country runs 13 straight years at 1145).
 # - Episodes can be long, even indefinite, when inflows that aren't pop
-#   contributions outpace a capped drain: the cooperative boom and frenzy
-#   phases (country_weekly_investment_pool_mult in
-#   financial_cycle_phase_boom_coop and _frenzy_coop), government-dividend
-#   reinvestment, or a pool left far above GDP by a GDP collapse.
+#   contributions outpace a capped drain: government-dividend reinvestment,
+#   or a pool left far above GDP by a GDP collapse. (The cooperative boom and
+#   frenzy phases were one until 2026-10-05; their pool term is now a share
+#   of gross income, which Overinvestment cuts.)
 # - One queued private level is enough to keep it.
 # (Before 2026-09-27 the value fell /1.2 in each Overinvestment
 # year, so while the pool stayed above GDP it hovered around 1000, with
