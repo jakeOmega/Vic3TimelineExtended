@@ -208,6 +208,42 @@ no_duplicate_treaty_article = {
 	}
 }
 
+# Country scope, inside a treaty article's can_ratify (it reads scope:treaty,
+# the draft being ratified). True when this country and $OTHER$ have military
+# ties: an alliance or defensive pact already in force between them, or one in
+# the draft itself. The treaty being renegotiated is skipped, as in vanilla
+# 00_alliance.txt, because the draft replaces it: dropping the alliance from a
+# renegotiated treaty drops the ties it gave. has_treaty_alliance_with and
+# has_treaty_defensive_pact_with see only treaties in force, hence the draft
+# branch. Used by joint_military_exercises and nuclear_guarantee.
+te_treaty_parties_have_military_ties = {
+	OR = {
+		any_scope_treaty = {
+			binds = $OTHER$
+			hidden_trigger = {
+				OR = {
+					scope:treaty = { is_renegotiation = no }
+					scope:treaty.amended_treaty != this
+				}
+			}
+			any_scope_article = {
+				OR = {
+					has_type = alliance
+					has_type = defensive_pact
+				}
+			}
+		}
+		scope:treaty ?= {
+			any_scope_article_option = {
+				OR = {
+					has_type = alliance
+					has_type = defensive_pact
+				}
+			}
+		}
+	}
+}
+
 # State scope. True while this state is conceded under an in-force
 # $ARTICLE_TYPE$ article (a state-input article: free_port_concession,
 # minority_protection, religious_mission_rights, demilitarized_zone): its
