@@ -126,9 +126,19 @@ jobs:
       # A key filed where it would not put it (a hand-placed key, a new prefix
       # with no categorize_key rule) moves on the next reload, and committing
       # half of that move drops keys (#613, #617). Fix: run it and commit the result.
-      - name: Localization organised (organize_loc.py --check)
+      # Check the actual writer as well as its read-only output plan. git diff
+      # catches tracked edits/deletions; status also catches newly created files.
+      - name: Localization organised and regeneration leaves it clean
         if: ${{ !cancelled() }}
-        run: python3 organize_loc.py --check
+        run: |
+          python3 organize_loc.py --check
+          python3 organize_loc.py
+          if ! git diff --exit-code -- localization/ || \
+             [ -n "$(git status --porcelain --untracked-files=all -- localization/)" ]; then
+            git status --short --untracked-files=all -- localization/
+            echo '::error::Run `python3 organize_loc.py` and commit everything it rewrote, including new files and deletions.'
+            exit 1
+          fi
 
       - name: Audit — GUI references and widget mounts
         if: ${{ !cancelled() }}

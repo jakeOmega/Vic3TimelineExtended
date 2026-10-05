@@ -3067,3 +3067,52 @@ country_greenhouse_gas_emissions_script_value = {
 	value = 0
 	every_scope_state = { add = gw_state_greenhouse_gas_emissions }
 }
+
+# Economic-law damping, shared by the game and the banking-cycle simulator.
+banking_crash_chance_economy_mult = {
+	value = 1
+	if = {
+		limit = { has_law = law_type:law_command_economy }
+		value = 0.35
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		value = 0.65
+	}
+}
+
+banking_crash_severity_economy_mult = {
+	value = 1
+	if = {
+		limit = { has_law = law_type:law_command_economy }
+		value = 0.6
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		value = 0.8
+	}
+}
+
+banking_contagion_chance_economy_mult = {
+	value = 1
+	if = {
+		limit = { has_law = law_type:law_command_economy }
+		value = 0.2
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		value = 0.55
+	}
+}
+
+banking_contagion_severity_economy_mult = {
+	value = 1
+	if = {
+		limit = { has_law = law_type:law_command_economy }
+		value = 0.45
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		value = 0.75
+	}
+}

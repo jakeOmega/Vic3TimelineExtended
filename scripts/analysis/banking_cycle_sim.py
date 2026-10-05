@@ -77,7 +77,11 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     system's content and most of them move bubble/momentum, but every one is a
     player CHOICE. Excluding them makes this a study of the *mechanical* loop.
     `--event-channel` adds a crude aggregate stand-in for a sensitivity read.
-  * contagion, crisis waves and the Great Depression chain: single-country sim.
+  * crisis waves and the Great Depression chain: single-country sim.
+    --imported-crash-years adds independent foreign arrivals, not cascades.
+    Foreign severity is uniform over the five tier midpoints (10/30/50/70/90).
+    Reach probability and delay are folded into the arrival interval; imported
+    option modifiers (including decaying protectionism) and backstops are omitted.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
     Foreign-borrowing limits, FX surrender and import financing therefore have
     no AI selection here; actual-script scenarios test their accounting. The
@@ -87,8 +91,9 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     deflation with the currency at par misses the loop that kept the §0.12
     playtest on the -10% clamp (banking_cycle_simulation.md F22), so measure
     deflation exits through that script.
-  * `ce_*` / `cw_*` tools: command economy and cooperative ownership are a
-    different economic law, and the question posed was about currency laws.
+  * --economy command|coop selects the alternate phases, laws and tool rules.
+    --hold-tools fixes player tools for the entire run. --pool adds a toy weekly
+    income/spending channel; it does not model the construction market itself.
 
 USAGE
 -----
@@ -108,12 +113,19 @@ import os
 import random
 import re
 import statistics
+import sys
 import zlib
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+# Direct CLI execution starts with scripts/analysis on sys.path.
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+from scripts.analysis.banking_sim_script import Rules, field as script_field  # noqa: E402
+
+RULES = Rules(REPO)
 
 SCRIPT_VALUE_FILES = [
     REPO / "common/script_values/te_monetary_script_values.txt",
@@ -172,6 +184,7 @@ class ModConstants:
         self._sv_src = "\n".join(_read(p) for p in SCRIPT_VALUE_FILES)
         self._mod_src = _read(STATIC_MODIFIER_FILE)
         self._law_src = _read(LAW_FILE)
+        self._law_inject_src = _read(REPO / "common/laws/construction_system_law_injections.txt")
         self._inst_src = _read(INSTITUTION_FILE)
         self._cache: dict[str, float] = {}
         self._blocks: dict[str, dict[str, float]] = {}
@@ -285,11 +298,19 @@ class ModConstants:
             raise KeyError(f"institution {name!r} not found in {INSTITUTION_FILE}")
         return self._numeric_block(body, "modifier")
 
+    def economy_value(self, name: str, economy: str) -> float:
+        """Economic-law script-value branches, evaluated from the actual script."""
+        body = RULES.values[name]  # a renamed value fails at import
+        law = ECONOMY_LAWS.get(economy)
+        return RULES.evaluate(body, lambda key: key == f"has_law:{law}")
+
     def law_modifier(self, law: str) -> dict[str, float]:
         """The numeric fields of a law's `modifier = { }` block."""
         body = _block(self._law_src, law)
         if body is None:
-            raise KeyError(f"law {law!r} not found in {LAW_FILE}")
+            body = _block(self._law_inject_src, "INJECT:" + law)
+        if body is None:
+            raise KeyError(f"law {law!r} not found in law files")
         inner = _block(body + "\n", "\tmodifier") or _block(body, "modifier")
         if inner is None:
             # `modifier = {` is indented inside the law body; find it directly.
@@ -362,7 +383,25 @@ INERTIA_MODIFIERS = {
     "high": K.modifier("bubble_inertia_high"),
     "extreme": K.modifier("bubble_inertia_extreme"),
 }
+ECONOMY_LAWS = {"command": "law_command_economy", "coop": "law_cooperative_ownership"}
+ECONOMY_PHASE_MODIFIERS = {"market": PHASE_MODIFIERS}
+ECONOMY_INERTIA_MODIFIERS = {"market": INERTIA_MODIFIERS, "command": {}}
+for economy, suffix in (("command", "_cmd"), ("coop", "_coop")):
+    ECONOMY_PHASE_MODIFIERS[economy] = {
+        p: K.modifier(f"financial_cycle_phase_{p}{suffix}") if p != STABLE else {}
+        for p in PHASES
+    }
+ECONOMY_INERTIA_MODIFIERS["coop"] = {
+    band: K.modifier(f"bubble_inertia_{band}_coop") for band in INERTIA_MODIFIERS
+}
+ECONOMY_LAW_MODIFIERS = {e: K.law_modifier(law) for e, law in ECONOMY_LAWS.items()}
+ECONOMY_CRASH_MULT = {
+    name: {e: K.economy_value(name, e) for e in ECONOMY_PHASE_MODIFIERS}
+    for name in ("banking_crash_chance_economy_mult", "banking_crash_severity_economy_mult",
+                 "banking_contagion_chance_economy_mult", "banking_contagion_severity_economy_mult")
+}
 FISCAL_MODIFIER = K.modifier("financial_cycle_government_fiscal_policy_effect")
+POOL_BALANCE_MODIFIER = K.modifier("planning_treasury_pool_balance")
 
 # The inflation-band family feeds the cycle too: deflation costs momentum, and
 # the top two bands add bubble pressure.  te_monetary_apply_inflation_band.
@@ -409,6 +448,48 @@ LEANING_TOOLS = ("buffer", "margin", "moral_suasion", "reserve_requirements")
 TOOL_COST = {
     k: -v.get("country_banking_intervention_max_add", 0.0) for k, v in TOOL_MODIFIERS.items()
 }
+# Keys are the player-probe names from #720; full scripted-button names are
+# accepted by --hold-tools as aliases. Market roster stays unchanged.
+ALT_TOOL_BUTTONS = {
+    "ce_plan_revision": "ce_plan_revision",
+    "ce_allocation": "ce_emergency_allocation",
+    "ce_target_cut": "ce_target_reduction",
+    "ce_stockpile": "ce_strategic_stockpile",
+    "ce_distribution": "ce_distribution_upgrade",
+    "ce_admin_campaign": "ce_admin_campaign",
+    "ce_coordination": "ce_coordination_protocol",
+    "ce_consolidation": "ce_consolidation_order",
+    "cw_dividend": "cw_dividend_restraint",
+    "cw_mutual_aid": "cw_mutual_aid_fund",
+    "cw_capital_plan": "cw_capital_plan",
+    "cw_solidarity": "cw_solidarity_campaign",
+    "cw_credit": "cw_credit_expansion",
+    "cw_ceiling": "cw_consumption_ceiling",
+    "cw_directive": "cw_council_directive",
+    "cw_buyout": "cw_worker_buyout",
+}
+ALT_TOOL_MODIFIER_NAMES = {
+    "ce_plan_revision": "planning_plan_revision",
+    "ce_allocation": "planning_emergency_allocation",
+    "ce_target_cut": "planning_target_reduction",
+    "ce_stockpile": "planning_strategic_stockpile",
+    "ce_distribution": "planning_distribution_upgrade",
+    "ce_admin_campaign": "planning_admin_campaign",
+    "ce_coordination": "planning_coordination_protocol",
+    "ce_consolidation": "planning_consolidation_order",
+    "cw_dividend": "cooperative_dividend_restraint",
+    "cw_mutual_aid": "cooperative_mutual_aid",
+    "cw_capital_plan": "cooperative_capital_plan",
+    "cw_solidarity": "cooperative_solidarity_campaign",
+    "cw_credit": "cooperative_credit_expansion",
+    "cw_ceiling": "cooperative_consumption_ceiling",
+    "cw_directive": "cooperative_council_directive",
+    "cw_buyout": "cooperative_worker_buyout",
+}
+ALT_TOOL_MODIFIERS = {k: K.modifier(v) for k, v in ALT_TOOL_MODIFIER_NAMES.items()}
+ALL_TOOL_MODIFIERS = {**TOOL_MODIFIERS, **ALT_TOOL_MODIFIERS}
+TOOL_COST.update({k: -v["country_banking_intervention_max_add"] for k, v in ALT_TOOL_MODIFIERS.items()})
+TRANSFER_BUTTONS = ("ce_invest_pool_inject", "ce_invest_pool_withdraw")
 DEFAULT_TOOL_COST = dict(TOOL_COST)
 # The five directed-credit sectors share one cap (banking_directed_credit_slots_free):
 # one at a time, two under law_directed_credit_development_banks. "directed" is
@@ -642,12 +723,40 @@ class Config:
     # the institution's modifier and the financial law's institution_modifier.
     bank_level: int = 0
 
+    economy: str = "market"
+    imported_crash_years: float = 0.0
+    hold_tools: tuple[str, ...] = ()
+    pool: bool = False
+    pool_spend_cap: float = 1.2  # weekly spending in units of gross income
+    pool_weekly_income: float = 1000.0  # cash scale for treasury-button thresholds
+
+    def __post_init__(self):
+        if self.economy not in ECONOMY_PHASE_MODIFIERS:
+            raise ValueError(f"unknown economy {self.economy!r}")
+        if not math.isfinite(self.imported_crash_years) or (
+            self.imported_crash_years != 0 and self.imported_crash_years < 1 / 12
+        ):
+            raise ValueError("imported crash interval must be 0 or at least one month")
+        if self.years <= 0 or self.points < 0:
+            raise ValueError("years must be positive and points nonnegative")
+        if not math.isfinite(self.pool_spend_cap) or self.pool_spend_cap < 1:
+            raise ValueError("pool spending cap must be finite and at least 1")
+        if not math.isfinite(self.pool_weekly_income) or self.pool_weekly_income <= 0:
+            raise ValueError("pool weekly income must be finite and positive")
+        if any(t not in economy_tools(self.economy) for t in self.hold_tools):
+            raise ValueError("held tools must belong to the selected economy")
+        if len(set(self.hold_tools)) != len(self.hold_tools):
+            raise ValueError("held tools must be unique")
+        if sum(TOOL_COST[t] for t in self.hold_tools) > self.points:
+            raise ValueError("held tools exceed the intervention-point budget")
+
     @property
     def interventions(self) -> bool:
         return self.points > 0
 
     def label(self) -> str:
-        return f"{self.currency}/{self.mode}/{self.points}pt"
+        cell = f"{self.currency}/{self.mode}/{self.points}pt"
+        return cell if self.economy == "market" else f"{self.economy}/{cell}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -656,7 +765,30 @@ class Config:
 
 
 @dataclass
+class ImportedEvent:
+    month: int
+    foreign_severity: float
+    severity: float
+    prior_value: float
+    prior_momentum: float
+    tier_value: float | None
+    value_drop: float
+    momentum_drop: float
+
+
+@dataclass
 class State:
+    economy: str = "market"
+    imported_crashes: list[ImportedEvent] = field(default_factory=list)
+    imported_scares: list[ImportedEvent] = field(default_factory=list)
+    pool_balance: float = 24.0  # units of weekly gross income
+    treasury_balance: float = 0.0  # same units; initialized from gold_reserves
+    pool_balance_add: float = 0.0  # monthly command net-income calibration
+    pool_series: list[float] = field(default_factory=list)
+    pool_peak: float = 24.0
+    pool_trough: float = 24.0
+    pool_months_above_settled: int = 0
+    pool_transfer_counts: dict[str, int] = field(default_factory=lambda: {t: 0 for t in TRANSFER_BUTTONS})
     # cycle (je_banking.txt immediate)
     finance_cycle_value: float = 50.0
     finance_cycle_momentum: float = 0.0
@@ -805,7 +937,7 @@ def modifier_sum(state: State, key: str) -> float:
     """
     total = 0.0
     if state.active_phase is not None:
-        val = PHASE_MODIFIERS[state.active_phase].get(key, 0.0)
+        val = ECONOMY_PHASE_MODIFIERS[state.economy][state.active_phase].get(key, 0.0)
         if key == "country_bubble_pressure_monthly_add" and val > 0:
             val *= tuned("phase_bubble", 1.0)
         if key == "country_bubble_pressure_monthly_add" and state.active_phase == FRENZY:
@@ -823,12 +955,12 @@ def modifier_sum(state: State, key: str) -> float:
             val += tuned("climb", 0.0)
         total += val
     if state.active_inertia_key is not None:
-        total += INERTIA_MODIFIERS[state.active_inertia_key].get(key, 0.0) * state.active_inertia_mult
+        total += ECONOMY_INERTIA_MODIFIERS[state.economy][state.active_inertia_key].get(key, 0.0) * state.active_inertia_mult
     total += FISCAL_MODIFIER.get(key, 0.0) * state.active_fiscal_size
     if state.inflation_band_applied:
         total += INFLATION_BAND_MODIFIERS[state.inflation_band_applied].get(key, 0.0)
     for tool in state.tools:
-        val = TOOL_MODIFIERS[tool].get(key, 0.0)
+        val = ALL_TOOL_MODIFIERS[tool].get(key, 0.0)
         if key == "country_bubble_pressure_monthly_add" and val < 0:
             val *= tuned("tool_bubble", 1.0)
             # The three leaning tools' bubble lines were doubled after the
@@ -856,6 +988,7 @@ def law_modifier_sum(cfg: Config, key: str) -> float:
     Every other line of the financial-regulation law is still not ported (§10).
     """
     total = CURRENCY_LAW_MODIFIERS[cfg.currency].get(key, 0.0)
+    total += ECONOMY_LAW_MODIFIERS.get(cfg.economy, {}).get(key, 0.0)
     if cfg.bank_level and cfg.national_bank:
         per_level = NATIONAL_BANK_INSTITUTION.get(key, 0.0)
         per_level += fin_law_institution_modifier(cfg.fin_law).get(key, 0.0)
@@ -906,7 +1039,7 @@ def intervention_points(cfg: Config, state: State) -> float:
 def has_dial(cfg: Config, state: State | None = None) -> bool:
     if state is not None and state.dollarised:
         return False
-    return cfg.national_bank  # currency law is always one of the four dial regimes
+    return cfg.national_bank and cfg.economy != "command"  # currency law is always one of the four dial regimes
 
 
 def has_narrow_dial(cfg: Config, state: State | None = None) -> bool:
@@ -927,7 +1060,7 @@ def targets_inflation(cfg: Config, state: State) -> bool:
     The simulator has no crypto, anchoring or suspension, so this is fiat or
     digital and not dollarised.
     """
-    return not is_metallic(cfg) and not state.dollarised
+    return cfg.economy != "command" and not is_metallic(cfg) and not state.dollarised
 
 
 def is_cbi(cfg: Config) -> bool:
@@ -986,6 +1119,14 @@ def target_bounds(cfg: Config, state: State, world_rate: float) -> tuple[float, 
 def monetary_update(cfg: Config, state: State, rng: random.Random, year_index: int) -> None:
     world_rate = era_base(year_index)
     state.world_rate = world_rate
+    if cfg.economy == "command":
+        # te_monetary_set_derived_rate / update_inflation: administered prices,
+        # rate fixed at 3, comfort band and no monetary stance or random walks.
+        state.policy_rate = 3.0
+        state.inflation = state.inflation_core = state.inflation_expected = 0.0
+        state.inflation_band = state.inflation_band_applied = 2
+        state.stance_gap, state.stance_band = 0.0, 3
+        return
     if not has_dial(cfg, state):
         state.tools.discard("restrict_inflows")
     if not has_gold_flows(cfg, state):
@@ -1392,7 +1533,7 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     # absorbs up to the anchoring capacity of the net positive sum (§13).
     other = 100 * law_modifier_sum(cfg, "country_inflation_pressure_add")
     for tool in state.tools:
-        other += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
+        other += 100 * ALL_TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
     modifiers = cfg.wage_pressure + other
     capacity = max(0.0, 100 * law_modifier_sum(cfg, "country_inflation_anchoring_add"))
     total += modifiers - min(capacity, max(0.0, modifiers))
@@ -1460,6 +1601,8 @@ def monetary_update_stance(
     state.neutral_walk = max(-1.0, min(1.0, state.neutral_walk))
 
     state.neutral_rate = world_rate + state.growth_term + state.neutral_walk
+    if cfg.economy == "coop":
+        state.neutral_rate -= 0.5  # te_monetary_update_stance, cooperative credit
     state.neutral_rate = max(1.0, min(6.0, state.neutral_rate))
 
     bound = max(0.1, 1.5 + law_grant(cfg, "country_bank_forecast_error_add") * 100)
@@ -1599,6 +1742,10 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
     # 3. crash check
     crashed = check_and_execute_crash(cfg, state, rng, month)
 
+    # Imported arrivals have their own population, without origin softening.
+    if cfg.imported_crash_years and rng.random() < 1 / (12 * cfg.imported_crash_years):
+        imported_crash(cfg, state, rng, month)
+
     # (3b history sampling — not modelled)
 
     # 4. phase + bubble-inertia modifiers, applied for NEXT month
@@ -1618,7 +1765,7 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
         state.holiday_cooldown -= 1
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
-    if cfg.points > 0 and cfg.ai_tools:
+    if cfg.points > 0 and cfg.ai_tools and not cfg.hold_tools:
         consider_tools(cfg, state, rng, month)
     prune_overdrawn_tools(cfg, state)
 
@@ -1711,7 +1858,7 @@ def crash_weight(cfg: Config, state: State) -> float:
     w = max(0.0, w)
     mult = max(0.0, 1.0 + modifier_sum(state, "country_banking_crash_chance_mult")
                + law_modifier_sum(cfg, "country_banking_crash_chance_mult"))
-    return w * mult
+    return w * mult * ECONOMY_CRASH_MULT["banking_crash_chance_economy_mult"][cfg.economy]
 
 
 def check_and_execute_crash(cfg: Config, state: State, rng: random.Random, month: int) -> bool:
@@ -1732,14 +1879,15 @@ def check_and_execute_crash(cfg: Config, state: State, rng: random.Random, month
         severity *= 1.5
     else:
         severity *= 2.0
+    severity *= ECONOMY_CRASH_MULT["banking_crash_severity_economy_mult"][cfg.economy]
     severity = min(100.0, severity)
 
     apply_crash(cfg, state, severity, month)
     return True
 
 
-def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
-    """apply_banking_crash_origin_effects, plus the chosen crash-event option."""
+def crash_tier(severity: float) -> tuple[float, float]:
+    """Shared origin/imported cycle and momentum ceilings."""
     e1 = tuned("tier1", 80)
     e2 = tuned("tier2", 60)
     e3 = tuned("tier3", 40)
@@ -1754,14 +1902,25 @@ def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
         value, momentum = 30.0, -2.0
     else:
         value, momentum = 40.0, -1.0
+    return value, momentum
+
+
+def lower_to_crash_tier(state: State, severity: float) -> float:
+    value, momentum = crash_tier(severity)
+    state.finance_cycle_value = min(state.finance_cycle_value, value)
+    state.finance_cycle_momentum = min(state.finance_cycle_momentum, momentum)
+    state.bubble_pressure = 0.0
+    return value
+
+
+def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
+    """apply_banking_crash_origin_effects, plus the chosen crash-event option."""
     # The tier figures are ceilings (banking_crash_lower_cycle_to /
     # _lower_momentum_to): a crash never raises either figure, and a response
     # (banking_crash_hold_to_prior_state) cannot lift them above where they stood.
     prior_value = state.finance_cycle_value
     prior_momentum = state.finance_cycle_momentum
-    state.finance_cycle_value = min(prior_value, value)
-    state.finance_cycle_momentum = min(prior_momentum, momentum)
-    state.bubble_pressure = 0.0
+    value = lower_to_crash_tier(state, severity)
 
     state.crashes.append((month, severity, value))  # the tier's figure, for depr%
     state.pending_recovery = month
@@ -1772,6 +1931,47 @@ def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
         state.finance_cycle_value = min(prior_value, state.finance_cycle_value + add_v)
         state.finance_cycle_momentum = min(prior_momentum, state.finance_cycle_momentum + add_m)
         state.timed[name] = 12  # `days = 365` on the option
+
+
+def apply_imported_effects(cfg: Config, state: State, severity: float | None) -> float | None:
+    """apply_banking_contagion_effects, without event-option modifiers."""
+    if severity is not None:
+        return lower_to_crash_tier(state, severity)
+    value, momentum = state.finance_cycle_value, state.finance_cycle_momentum
+    drops = {"market": (3.0, 1.0), "command": (1.0, 0.5), "coop": (2.0, 0.5)}
+    dv, dm = drops[cfg.economy]
+    state.finance_cycle_value = min(value, max(5.0, value - dv))
+    state.finance_cycle_momentum = min(momentum, max(-5.0, momentum - dm))
+    return None
+
+
+def imported_crash(cfg: Config, state: State, rng: random.Random, month: int) -> bool:
+    """An arrival has already reached the country; roll crash versus scare.
+
+    Fixed uniform foreign tier mix avoids coupling imports to local tuning.
+    Backstop and decaying contagion event options are deliberately omitted.
+    """
+    foreign = rng.choice((10.0, 30.0, 50.0, 70.0, 90.0))
+    boost, severity_boost = (30, 20) if foreign >= 80 else (20, 15) if foreign >= 60 else (10, 10) if foreign >= 40 else (5, 5)
+    chance_mult = max(0.0, 1.0 + modifier_sum(state, "country_banking_crash_chance_mult")
+                      + law_modifier_sum(cfg, "country_banking_crash_chance_mult"))
+    weight = (state.bubble_pressure + boost) * chance_mult
+    weight *= ECONOMY_CRASH_MULT["banking_contagion_chance_economy_mult"][cfg.economy]
+    crashed = rng.random() < weight / (weight + 100)
+    severity = 0.0
+    if crashed:
+        severity = state.bubble_pressure * tuned("sev_scale", K.sv("banking_crash_severity_scale_value")) + severity_boost
+        roll = rng.random()
+        severity *= 0.5 if roll < .1 else .75 if roll < .3 else 1 if roll < .7 else 1.5 if roll < .9 else 2
+        severity *= ECONOMY_CRASH_MULT["banking_contagion_severity_economy_mult"][cfg.economy]
+        severity = min(100.0, severity)
+    prior_value, prior_momentum = state.finance_cycle_value, state.finance_cycle_momentum
+    tier = apply_imported_effects(cfg, state, severity if crashed else None)
+    event = ImportedEvent(month, foreign, severity, prior_value, prior_momentum, tier,
+                          prior_value - state.finance_cycle_value,
+                          prior_momentum - state.finance_cycle_momentum)
+    (state.imported_crashes if crashed else state.imported_scares).append(event)
+    return crashed
 
 
 def best_softening(cfg: Config, state: State, month: int) -> tuple[float, float, str] | None:
@@ -1798,7 +1998,11 @@ def best_softening(cfg: Config, state: State, month: int) -> tuple[float, float,
 
 
 def apply_phase_modifiers(cfg: Config, state: State) -> None:
+    state.economy = cfg.economy
     state.active_phase = phase_of(state.finance_cycle_value)
+    if cfg.economy == "command":
+        state.active_inertia_key, state.active_inertia_mult = None, 0.0
+        return
     b = state.bubble_pressure
     if b >= 65:
         state.active_inertia_key = "extreme"
@@ -1816,8 +2020,123 @@ def apply_phase_modifiers(cfg: Config, state: State) -> None:
 # ─────────────────────────────────────────────────────────────────────────────
 
 
+def economy_tools(economy: str) -> dict[str, dict[str, float]]:
+    if economy == "market":
+        return TOOL_MODIFIERS
+    prefix = "ce_" if economy == "command" else "cw_"
+    return {t: mod for t, mod in ALT_TOOL_MODIFIERS.items() if t.startswith(prefix)}
+
+
+TOOL_ALIASES = {button: tool for tool, button in ALT_TOOL_BUTTONS.items()}
+
+
+def alternate_read(cfg: Config, state: State):
+    """Country/JE reads used by the actual ce/cw numeric and trigger blocks."""
+    def read(key):
+        if key.startswith("var:"):
+            return getattr(state, key[4:])
+        if key == "modifier:country_banking_intervention_max_add":
+            return intervention_points(cfg, state)
+        if key.startswith("modifier:"):
+            return modifier_sum(state, key[9:]) + law_modifier_sum(cfg, key[9:])
+        if key.startswith("has_modifier:"):
+            name = key[13:]
+            return any(ALT_TOOL_MODIFIER_NAMES[t] == name for t in state.tools)
+        if key.startswith("has_law:"):
+            return key[8:] == ECONOMY_LAWS.get(cfg.economy)
+        if key in ("root.gdp", "gdp"):
+            return state.gdp
+        if key == "investment_pool":
+            return state.pool_balance * cfg.pool_weekly_income
+        if key == "investment_pool_gross_income":
+            return pool_income(cfg, state) * cfg.pool_weekly_income
+        if key == "investment_pool_net_income":
+            income = pool_income(cfg, state)
+            spending = min(state.pool_balance / 24, cfg.pool_spend_cap)
+            return (income - spending) * cfg.pool_weekly_income
+        if key == "gold_reserves":
+            return max(0.0, state.treasury_balance) * cfg.pool_weekly_income
+        if key == "in_default":
+            return state.scaled_debt >= 1.0
+        if key == "always":
+            return True
+        if key == "has_healthy_economy":
+            return state.scaled_debt <= 0.6
+        raise ValueError(f"unsupported alternate-economy read {key!r}")
+    return read
+
+
+def alternate_scores(cfg: Config, state: State, disable: bool = False) -> dict[str, float]:
+    read = alternate_read(cfg, state)
+    scores = {}
+    for tool in economy_tools(cfg.economy):
+        button = ALT_TOOL_BUTTONS[tool]
+        if disable:
+            prefix, suffix = button.split("_", 1)
+            button = f"{prefix}_disable_{suffix}"
+        body = script_field(RULES.buttons[button], "ai_chance")
+        if TUNE.get("ai_hold") == "off":
+            body = [item for item in body if not (
+                item[0] == "if" and any(k.startswith("banking_ai_hold_")
+                                       for k, _, _ in script_field(item[2], "limit")))]
+        scores[tool] = RULES.evaluate(body, read)
+    return scores
+
+
+def pool_income(cfg: Config, state: State) -> float:
+    """Toy inflow: half from capitalists at a 30% base contribution (as #720)."""
+    if cfg.economy == "market":
+        contribution = modifier_sum(state, "state_capitalists_investment_pool_contribution_add")
+        return max(0.0, 1.0 + contribution / 0.30 * 0.5)
+    return 1.0
+
+
+def calibrate_pool_balance(cfg: Config, state: State) -> None:
+    if cfg.economy == "command":
+        state.pool_balance_add = RULES.evaluate(
+            RULES.values["ce_treasury_pool_balance_multiplier"], alternate_read(cfg, state)
+        ) / cfg.pool_weekly_income
+
+
+def transfer_pool(cfg: Config, state: State, button: str) -> None:
+    """One-shot command transfers, in cash, with the script's GDP floor/cap."""
+    value = "ce_pool_transfer_amount" if button == "ce_invest_pool_inject" else "ce_pool_withdraw_amount"
+    amount = RULES.evaluate(RULES.values[value], alternate_read(cfg, state)) / cfg.pool_weekly_income
+    if button == "ce_invest_pool_withdraw":
+        amount = -amount
+    state.pool_balance += amount
+    state.treasury_balance -= amount
+    state.pool_transfer_counts[button] += 1
+    calibrate_pool_balance(cfg, state)
+
+
+def advance_pool(cfg: Config, state: State) -> None:
+    """52 weekly ticks per year; no random draws and no cycle feedback."""
+    calibrate_pool_balance(cfg, state)
+    # Integer weekly schedule: months receive 4 or 5 ticks, 52 each year.
+    month = len(state.pool_series)
+    weeks = (month + 1) * 52 // 12 - month * 52 // 12
+    for _ in range(weeks):
+        income = pool_income(cfg, state)
+        spending = min(state.pool_balance / 24, cfg.pool_spend_cap)
+        gain = RULES.evaluate(RULES.values["investment_pool_banking_cycle_income_add"],
+                              alternate_read(cfg, state)) / cfg.pool_weekly_income
+        flat = modifier_sum(state, "country_weekly_investment_pool_add") / cfg.pool_weekly_income
+        gain += flat + state.pool_balance_add * POOL_BALANCE_MODIFIER["country_weekly_investment_pool_add"]
+        state.pool_balance = max(0.0, state.pool_balance + income - spending + gain)
+        if cfg.economy == "command":
+            state.treasury_balance -= state.pool_balance_add * POOL_BALANCE_MODIFIER["country_expenses_add"]
+        state.treasury_balance -= state.deficit_pct / 100 * state.gdp / 52 / cfg.pool_weekly_income
+        state.pool_peak = max(state.pool_peak, state.pool_balance)
+        state.pool_trough = min(state.pool_trough, state.pool_balance)
+    state.pool_series.append(state.pool_balance / 24)
+    state.pool_months_above_settled += state.pool_balance > 1.5 * 24
+
+
 def tool_scores(cfg: Config, state: State) -> dict[str, float]:
-    """The `ai_chance` blocks from timeline_extended_scripted_buttons.txt."""
+    """The economy's own scripted-button ai_chance blocks."""
+    if cfg.economy != "market":
+        return alternate_scores(cfg, state)
     p = phase_of(state.finance_cycle_value)
     m = state.finance_cycle_momentum
     pts = intervention_points(cfg, state)
@@ -2064,8 +2383,10 @@ def dc_slots_free(cfg: Config, state: State) -> int:
 
 def tool_possible(cfg: Config, state: State, tool: str) -> bool:
     """`banking_possible_cb_*` — point cost plus the regime / law gates."""
-    if tool in state.tools:
+    if tool not in economy_tools(cfg.economy) or tool in state.tools:
         return False
+    if cfg.economy != "market":
+        return intervention_points(cfg, state) >= TOOL_COST[tool]
     if intervention_points(cfg, state) < TOOL_COST[tool]:
         return False
     if cfg.simplified and tool in {"restrict_inflows", "sterilize_inflows"}:
@@ -2117,6 +2438,8 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     These compete in the same pool as the enable buttons, which is what keeps the
     AI from parking a permanent prudential stack on the journal entry.
     """
+    if cfg.economy != "market":
+        return alternate_scores(cfg, state, disable=True)
     p = phase_of(state.finance_cycle_value)
     m = state.finance_cycle_momentum
     risk_rising = m >= 3
@@ -2267,6 +2590,11 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
 def ai_holds(cfg: Config, state: State) -> dict[str, bool]:
     """banking_ai_hold_cb_* in banking_policy_triggers.txt: every market tool
     but moral suasion, which costs nothing to switch on or off."""
+    if cfg.economy != "market":
+        read = alternate_read(cfg, state)
+        return {tool: RULES.check(RULES.triggers["banking_ai_hold_" + button], read)
+                for tool, button in ALT_TOOL_BUTTONS.items()
+                if tool in economy_tools(cfg.economy) and "banking_ai_hold_" + button in RULES.triggers}
     v = state.finance_cycle_value
     p = phase_of(v)
     m = state.finance_cycle_momentum
@@ -2330,6 +2658,15 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
             continue
         if v > 0 and tool_possible(cfg, state, tool):
             pool.append(("on", tool, v))
+    if cfg.economy == "command" and cfg.pool:
+        read = alternate_read(cfg, state)
+        for button in TRANSFER_BUTTONS:
+            if button in cfg.excluded_tools:
+                continue
+            score = RULES.evaluate(script_field(RULES.buttons[button], "ai_chance"), read)
+            possible = RULES.check(RULES.triggers["banking_possible_" + button], read)
+            if score > 0 and possible:
+                pool.append(("transfer", button, score))
     for tool, v in disable_scores(cfg, state).items():
         if v > 0 and tool in state.tools:
             pool.append(("off", tool, v))
@@ -2341,7 +2678,9 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
     for action, tool, v in pool:
         acc += v
         if roll < acc:
-            if action == "on":
+            if action == "transfer":
+                transfer_pool(cfg, state, tool)
+            elif action == "on":
                 state.tools.add(tool)
                 state.tool_usage[tool] += 1
                 if tool in state.last_lift and month - state.last_lift[tool] <= FLIP_WINDOW_MONTHS:
@@ -2381,6 +2720,8 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         "margin",
         "moral_suasion",
     ]
+    if cfg.economy != "market":
+        order = []  # actual overdraw effect has no ce/cw disable branch
     if intervention_points(cfg, state) < 0:
         # Family interventions are shed first (the timed crash modifiers), then
         # the per-law base options — banking_crash_check_overdrawn_interventions.
@@ -2395,7 +2736,7 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
             del state.timed[name]
             return
         for tool in order:
-            if tool in state.tools:
+            if tool in state.tools and tool not in cfg.hold_tools:
                 state.tools.discard(tool)
                 if tool == "bank_holiday":
                     state.holiday_reopening = False
@@ -2451,7 +2792,14 @@ def advance_exogenous(cfg: Config, state: State, rng: random.Random, month: int)
 
 def run_once(cfg: Config, seed: int) -> State:
     rng = random.Random(seed)
-    state = State(gdp=cfg.gdp0, growth=cfg.growth_mean, deficit_pct=cfg.deficit_mean)
+    state = State(economy=cfg.economy, gdp=cfg.gdp0, growth=cfg.growth_mean, deficit_pct=cfg.deficit_mean)
+    if cfg.economy != "market":
+        for attr in ("tool_usage", "tool_lifts", "tool_flips", "tool_wanted_lifts"):
+            setattr(state, attr, {t: 0 for t in economy_tools(cfg.economy)})
+    state.tools = set(cfg.hold_tools)
+    for tool in cfg.hold_tools:
+        on_tool_enabled(state, tool)
+    state.treasury_balance = cfg.gold_reserves * cfg.gdp0 / cfg.pool_weekly_income
     state.policy_rate = era_base(0)
     state.policy_rate_target = round(era_base(0))
     state.commodity_centre = round(era_base(0))
@@ -2462,6 +2810,7 @@ def run_once(cfg: Config, seed: int) -> State:
     for month in range(months):
         year_index = month // 12
         advance_exogenous(cfg, state, rng, month)
+        imports_before = len(state.imported_crashes) + len(state.imported_scares)
         value_before = state.finance_cycle_value
         crashes_before = len(state.crashes)
         rate_before = state.policy_rate
@@ -2477,7 +2826,8 @@ def run_once(cfg: Config, seed: int) -> State:
         crashed = len(state.crashes) > crashes_before
         if crashed:
             last_crash = month
-        elif value_before >= 25 > state.finance_cycle_value and month - last_crash > 12:
+        elif (value_before >= 25 > state.finance_cycle_value and month - last_crash > 12
+              and len(state.imported_crashes) + len(state.imported_scares) == imports_before):
             state.policy_downturns += 1
         gap = clamped_gap(state)
         state.gap_series.append(gap)
@@ -2488,6 +2838,8 @@ def run_once(cfg: Config, seed: int) -> State:
                 state.recession_hike_months += 1
             state.recession_core_change += state.inflation_core - core_before
 
+        if cfg.pool:
+            advance_pool(cfg, state)
         if state.pending_recovery is not None and state.finance_cycle_value >= 40:
             state.recovery_months.append(month - state.pending_recovery)
             state.pending_recovery = None
@@ -2520,6 +2872,65 @@ def run_once(cfg: Config, seed: int) -> State:
         if after:
             state.post_crash_gaps.append(statistics.mean(after))
     return state
+
+
+def extension_summary(cfg: Config, states: list[State]) -> dict:
+    """Opt-in fields only: historical market JSON and printed tables stay identical."""
+    out = {}
+    if cfg.economy != "market" or cfg.pool or cfg.hold_tools or cfg.imported_crash_years:
+        out["economy"] = cfg.economy
+        out["hold_tools"] = list(cfg.hold_tools)
+    if cfg.imported_crash_years:
+        out["imported_crash_years"] = cfg.imported_crash_years
+        for attr in ("imported_crashes", "imported_scares"):
+            events = [event for state in states for event in getattr(state, attr)]
+            out[attr] = {
+                "per_century": len(events) / len(states) / cfg.years * 100,
+                "value_drop_mean": statistics.mean(e.value_drop for e in events) if events else 0.0,
+                "momentum_drop_mean": statistics.mean(e.momentum_drop for e in events) if events else 0.0,
+                "already_below_tier_share": (
+                    sum(e.prior_value < e.tier_value for e in events) / len(events)
+                    if events and attr == "imported_crashes" else None
+                ),
+            }
+    if cfg.pool:
+        out["pool"] = {
+            "spend_cap": cfg.pool_spend_cap,
+            "weekly_income": cfg.pool_weekly_income,
+            "peak_median": statistics.median(s.pool_peak / 24 for s in states),
+            "trough_median": statistics.median(s.pool_trough / 24 for s in states),
+            "months_above_1_5_pct": statistics.mean(
+                s.pool_months_above_settled / (cfg.years * 12) * 100 for s in states),
+            "treasury_final_mean": statistics.mean(s.treasury_balance for s in states),
+            "transfer_counts_mean": {t: statistics.mean(s.pool_transfer_counts[t] for s in states)
+                                     for t in TRANSFER_BUTTONS},
+        }
+    return out
+
+
+def print_extensions(rows: list[dict], args) -> None:
+    if args.economy != "market" or args.hold_tools:
+        print(f"\nEconomy: {args.economy}; held tools: {args.hold_tools or 'none (AI selection)'}")
+    if args.imported_crash_years:
+        print(f"\nImported arrivals: mean {args.imported_crash_years:g} years; origin counts above exclude imports")
+        print(f"{'cell':<32} {'crash/100y':>10} {'scare/100y':>10} {'under%':>7} {'crash dV':>9} {'dM':>7} {'scare dV':>9} {'dM':>7}")
+        for row in rows:
+            crash, scare = row["imported_crashes"], row["imported_scares"]
+            print(f"{row['label']:<32} {crash['per_century']:10.2f} {scare['per_century']:10.2f} "
+                  f"{100 * (crash['already_below_tier_share'] or 0):7.1f} "
+                  f"{crash['value_drop_mean']:9.2f} {crash['momentum_drop_mean']:7.2f} "
+                  f"{scare['value_drop_mean']:9.2f} {scare['momentum_drop_mean']:7.2f}")
+        print("under% = imported crashes arriving below their tier ceiling; dV/dM = mean drops")
+    if args.pool:
+        print("\nToy pool: peak/trough relative to settled balance (24 weeks of baseline income)")
+        print(f"{'cell':<32} {'peak':>7} {'trough':>7} {'>1.5%':>7} {'treasury':>10} {'inject':>7} {'withdraw':>8}")
+        for row in rows:
+            pool = row["pool"]
+            print(f"{row['label']:<32} {pool['peak_median']:7.2f} {pool['trough_median']:7.2f} "
+                  f"{pool['months_above_1_5_pct']:7.2f} {pool['treasury_final_mean']:10.1f} "
+                  f"{pool['transfer_counts_mean']['ce_invest_pool_inject']:7.1f} "
+                  f"{pool['transfer_counts_mean']['ce_invest_pool_withdraw']:8.1f}")
+        print("treasury = final balance in units of baseline weekly income; transfers = clicks per run")
 
 
 def summarise(cfg: Config, states: list[State]) -> dict:
@@ -2555,6 +2966,7 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         worst.append(best)
 
     return {
+        **extension_summary(cfg, states),
         "label": cfg.label(),
         "currency": cfg.currency,
         "mode": cfg.mode,
@@ -2629,7 +3041,7 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         ),
         "dollarised_pct": statistics.mean(s.months_dollarised / months * 100 for s in states),
         "tool_usage": {
-            t: statistics.mean(s.tool_usage[t] for s in states) for t in TOOL_MODIFIERS
+            t: statistics.mean(s.tool_usage[t] for s in states) for t in economy_tools(cfg.economy)
         },
         # §18: per century, all tools and per tool
         "lifts_per_century": statistics.mean(
@@ -2643,15 +3055,15 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         ),
         "tool_wanted_lifts": {
             t: statistics.mean(s.tool_wanted_lifts[t] / cfg.years * 100 for s in states)
-            for t in TOOL_MODIFIERS
+            for t in economy_tools(cfg.economy)
         },
         "tool_lifts": {
             t: statistics.mean(s.tool_lifts[t] / cfg.years * 100 for s in states)
-            for t in TOOL_MODIFIERS
+            for t in economy_tools(cfg.economy)
         },
         "tool_flips": {
             t: statistics.mean(s.tool_flips[t] / cfg.years * 100 for s in states)
-            for t in TOOL_MODIFIERS
+            for t in economy_tools(cfg.economy)
         },
         # Time-weighted means of the economic modifier fields, i.e. what the
         # cycle did to the economy on average over the century.
@@ -3030,6 +3442,16 @@ def main() -> int:
     ap.add_argument("--growth-feedback", action="store_true",
                     help="let the cycle phase move GDP growth (off by default: the "
                          "coefficient is invented, not read from script)")
+    ap.add_argument("--economy", choices=list(ECONOMY_PHASE_MODIFIERS), default="market")
+    ap.add_argument("--imported-crash-years", type=float, default=0.0,
+                    help="mean years between foreign arrivals; 0 disables (default)")
+    ap.add_argument("--hold-tools", default="",
+                    help="comma-separated fixed player tools; disables AI clicks")
+    ap.add_argument("--pool", action="store_true", help="simulate a toy weekly investment pool")
+    ap.add_argument("--pool-spend-cap", type=float, default=1.2,
+                    help="private spending cap in units of weekly gross income (default 1.2)")
+    ap.add_argument("--pool-weekly-income", type=float, default=1000.0,
+                    help="cash scale for pool and treasury-button thresholds (default 1000)")
     ap.add_argument("--event-channel", action="store_true",
                     help="add a crude aggregate stand-in for banking_cycle_events.txt")
     ap.add_argument("--no-click-weight", type=float, default=100.0,
@@ -3038,7 +3460,7 @@ def main() -> int:
                          "is not stated in script)")
     ap.add_argument("--exclude-tool", default="",
                     help="comma-separated dashboard tools the AI never clicks "
-                         "(keys: " + ",".join(TOOL_MODIFIERS) + "; 'all' for none "
+                         "(keys: " + ",".join(ALL_TOOL_MODIFIERS) + "; 'all' for none "
                          "at all while keeping the crash-event options)")
     ap.add_argument("--dc-affinity", default="",
                     help="comma-separated directed-credit sectors whose interest group is "
@@ -3105,6 +3527,17 @@ def main() -> int:
         if part.strip():
             k, _, v = part.partition("=")
             TUNE[k.strip()] = v.strip()
+    if args.runs <= 0 or args.jobs < 0:
+        ap.error("runs must be positive and jobs nonnegative")
+    held = tuple(TOOL_ALIASES.get(t.strip(), t.strip()) for t in args.hold_tools.split(",") if t.strip())
+    try:
+        Config(economy=args.economy, imported_crash_years=args.imported_crash_years,
+               years=args.years, pool_spend_cap=args.pool_spend_cap,
+               pool_weekly_income=args.pool_weekly_income)
+    except ValueError as exc:
+        ap.error(str(exc))
+    if (args.rescue or args.holiday) and (args.economy != "market" or held or args.pool or args.imported_crash_years):
+        ap.error("rescue/holiday forks support the market baseline only; use the century matrix for extensions")
     budgets = [int(x) for x in args.points.split(",") if x.strip() != ""]
     excluded = tuple(t.strip() for t in args.exclude_tool.split(",") if t.strip())
     affinity = tuple(t.strip() for t in args.dc_affinity.split(",") if t.strip())
@@ -3112,10 +3545,10 @@ def main() -> int:
         if t not in DC_NEW_SECTORS:
             ap.error(f"unknown sector {t!r}; keys are {', '.join(DC_NEW_SECTORS)}")
     if "all" in excluded:
-        excluded = tuple(TOOL_MODIFIERS)
+        excluded = tuple(economy_tools(args.economy)) + TRANSFER_BUTTONS
     for t in excluded:
-        if t not in TOOL_MODIFIERS:
-            ap.error(f"unknown tool {t!r}; keys are {', '.join(TOOL_MODIFIERS)}")
+        if t not in ALL_TOOL_MODIFIERS and t not in TRANSFER_BUTTONS:
+            ap.error(f"unknown tool {t!r}; keys are {', '.join(ALL_TOOL_MODIFIERS)}")
     if args.holiday:
         bounces = [float(x) for x in args.holiday_bounces.split(",") if x.strip()]
         hjobs = [
@@ -3159,6 +3592,11 @@ def main() -> int:
         if args.json:
             Path(args.json).write_text(json.dumps(rrows, indent=2), encoding="utf-8")
         return 0
+    for budget in budgets:
+        try:
+            Config(economy=args.economy, points=budget, hold_tools=held)
+        except ValueError as exc:
+            ap.error(str(exc))
     cfgs = []
     for currency, mode in valid_cells(args.only):
         for points in budgets:
@@ -3166,6 +3604,12 @@ def main() -> int:
                 Config(
                     currency=currency,
                     mode=mode,
+                    economy=args.economy,
+                    imported_crash_years=args.imported_crash_years,
+                    hold_tools=held,
+                    pool=args.pool,
+                    pool_spend_cap=args.pool_spend_cap,
+                    pool_weekly_income=args.pool_weekly_income,
                     points=points,
                     fin_law=args.fin_law,
                     national_bank=not args.no_national_bank,
@@ -3191,6 +3635,7 @@ def main() -> int:
         rows = [_run_cell(j) for j in jobs]
 
     print_table(rows, args)
+    print_extensions(rows, args)
     if args.json:
         Path(args.json).write_text(json.dumps(rows, indent=2), encoding="utf-8")
         print(f"\nwrote {args.json}")
