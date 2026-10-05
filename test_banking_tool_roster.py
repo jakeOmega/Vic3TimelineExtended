@@ -315,6 +315,31 @@ class RosterTests(unittest.TestCase):
                 in_dc_loop = name in ("dc_heavy", "dc_agri", "dc_arms", "dc_elec")
                 self.assertTrue(in_dc_loop or '"%s":' % name in holds, "ai_holds has no %s" % name)
 
+    def test_no_toggle_farms_loyalists(self):
+        # A tool that grants loyalists on one switch and costs nothing on the
+        # other could be clicked back and forth for loyalists without limit
+        # (cooperative mutual aid and dividend restraint, until 2026-10-05).
+        # Each grant must be paid for by radicals on the opposite switch, or
+        # sit behind a cooldown: `NOT = { has_variable = X }` around it, with
+        # X set for a number of days in the same block.
+        effects = _text(EFFECTS)
+        blocks = dict(re.findall(r"(?ms)^(banking_effect_\w+) = \{\n(.*?)^\}", effects))
+        granting = [n for n, b in blocks.items() if "add_loyalists" in b]
+        self.assertTrue(granting)
+        for name in granting:
+            with self.subTest(effect=name):
+                m = re.fullmatch(r"banking_effect_(c[bew])_(disable_)?(\w+)", name)
+                self.assertIsNotNone(m, name)
+                eco, off, tool = m.groups()
+                other = "banking_effect_%s_%s%s" % (eco, "" if off else "disable_", tool)
+                if "add_radicals" in blocks.get(other, ""):
+                    continue
+                body = blocks[name]
+                guard = re.search(r"NOT = \{ has_variable = (\w+) \}", body)
+                self.assertIsNotNone(guard, "%s grants loyalists with no cost or cooldown" % name)
+                self.assertRegex(body, r"set_variable = \{ name = %s days = \d+ \}" % guard.group(1))
+                self.assertLess(body.index(guard.group(0)), body.index("add_loyalists"))
+
     def test_each_modifier_is_in_the_simulator(self):
         sim = _text(SIM)
         roster = sim[sim.index("TOOL_MODIFIER_NAMES = {"):]

@@ -433,16 +433,36 @@ banking_effect_cw_dividend_restraint = {
 	je:je_banking_cycle = { add_modifier = { name = cooperative_dividend_restraint } }
 }
 
+# The members' payouts come back, and the middle strata are grateful, but only
+# once in five years: switching the restraint on costs nothing, so without the
+# cooldown lifting it and voting it back in farmed loyalists on every click.
 banking_effect_cw_disable_dividend_restraint = {
 	te_history_record_banking_marker = { MARK = off_cw_dividend_restraint }
 	je:je_banking_cycle = { remove_modifier = cooperative_dividend_restraint }
-	add_loyalists = { value = banking_small_radicals_value strata = middle }
+	custom_tooltip = {
+		text = banking_cw_dividend_loyalists_tt
+		if = {
+			limit = { NOT = { has_variable = banking_cw_dividend_loyalists_cooldown } }
+			add_loyalists = { value = banking_small_radicals_value strata = middle }
+			set_variable = { name = banking_cw_dividend_loyalists_cooldown days = 1825 }
+		}
+	}
 }
 
+# The rescued cooperatives' workers are grateful once in five years: winding the
+# fund down costs nothing, so without the cooldown switching it off and on
+# again farmed loyalists on every click.
 banking_effect_cw_mutual_aid_fund = {
 	te_history_record_banking_marker = { MARK = on_cw_mutual_aid_fund }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_mutual_aid } }
-	add_loyalists = { value = banking_small_radicals_value strata = lower }
+	custom_tooltip = {
+		text = banking_cw_mutual_aid_loyalists_tt
+		if = {
+			limit = { NOT = { has_variable = banking_cw_mutual_aid_loyalists_cooldown } }
+			add_loyalists = { value = banking_small_radicals_value strata = lower }
+			set_variable = { name = banking_cw_mutual_aid_loyalists_cooldown days = 1825 }
+		}
+	}
 }
 
 banking_effect_cw_disable_mutual_aid_fund = {
