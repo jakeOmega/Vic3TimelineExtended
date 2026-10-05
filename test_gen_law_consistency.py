@@ -9,15 +9,22 @@ be moved onto a zero-rate carrier, even with the game rule off, and the engine
 would not say a word.
 
 No game install needed: the tests feed `candidate_order` and `build_output`
-hand-built law tables.
+hand-built law tables, and the vanilla-input tests read the committed
+`vanilla_parsed/` snapshot.
 """
 
 import contextlib
+import copy
 import io
 import os
+import tempfile
+import types
 import unittest
+from unittest import mock
 
 import gen_law_consistency as gen
+import vanilla_parsed
+from paradox_file_parser import ParadoxFileParser
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GENERATED = os.path.join(
@@ -171,6 +178,131 @@ class SameGroupUnlockingTest(unittest.TestCase):
             "# Active: law_legacy_slavery" in text,
             "the generated file still moves held Legacy Slavery to another law; regenerate it",
         )
+
+
+def _quiet(fn, *args, **kwargs):
+    """Call a generator entry point, swallowing its progress and warning prints."""
+    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+        return fn(*args, **kwargs)
+
+
+def _mod_state(laws, ideologies):
+    """A ModState stand-in holding only the vanilla halves the generator reads."""
+    def parser(data):
+        p = ParadoxFileParser()
+        p.data = data
+        return p
+    return types.SimpleNamespace(
+        base_parsers={"Laws": parser(laws), "Ideologies": parser(ideologies)}
+    )
+
+
+class VanillaInputTest(unittest.TestCase):
+    """The generator reads parsed vanilla (a ModState's, or the snapshot), not
+    raw game files, so a game-less session regenerates its output (#624)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.snapshot = vanilla_parsed.load()
+
+    def test_snapshot_reproduces_committed_output(self):
+        # Byte for byte, with no game files on this machine. A failure means
+        # the generator, ideology_modifications.py or vanilla_parsed/ changed
+        # without the output being regenerated.
+        with mock.patch.object(gen, "_vanilla_game_dir", return_value=None):
+            output = _quiet(gen.generate)
+        with open(GENERATED, encoding="utf-8-sig", newline="") as fh:
+            self.assertEqual(output, fh.read())
+
+    def test_mod_state_vanilla_matches_snapshot(self):
+        mod_state = _mod_state(
+            self.snapshot.data["Laws"], self.snapshot.data["Ideologies"]
+        )
+        with mock.patch.object(gen, "_vanilla_game_dir", return_value=None):
+            output = _quiet(gen.generate, mod_state)
+        with open(GENERATED, encoding="utf-8-sig", newline="") as fh:
+            self.assertEqual(output, fh.read())
+
+    def test_mod_state_vanilla_is_what_gets_parsed(self):
+        tiny = {
+            "law_alpha": ("=", {"group": ("=", "lawgroup_taxation"), "progressiveness": ("=", "3")}),
+            "law_beta": ("=", {"group": ("=", "lawgroup_taxation"), "progressiveness": ("=", "5")}),
+        }
+        mod_state = _mod_state(tiny, {})
+        vanilla = gen.load_vanilla(mod_state)
+        self.assertIs(vanilla["laws"], tiny)
+        laws = gen.parse_laws(vanilla["laws"])
+        self.assertEqual(laws["law_alpha"]["progressiveness"], 3)
+        self.assertEqual(laws["law_beta"]["progressiveness"], 5)
+        # Vanilla keeps its key order as the file-order tiebreak, ahead of every mod law.
+        self.assertEqual((laws["law_alpha"]["file_order"], laws["law_beta"]["file_order"]), (0, 1))
+        self.assertGreater(laws["law_te_tax_code"]["file_order"], 1)
+        # Not a stale snapshot's laws.
+        self.assertNotIn("law_peasant_levies", laws)
+
+    def test_parsing_never_mutates_vanilla_data(self):
+        laws = copy.deepcopy(self.snapshot.data["Laws"])
+        ideologies = copy.deepcopy(self.snapshot.data["Ideologies"])
+        gen.parse_laws(laws)
+        gen.parse_ideologies(ideologies)
+        self.assertEqual(laws, self.snapshot.data["Laws"])
+        self.assertEqual(ideologies, self.snapshot.data["Ideologies"])
+
+    def test_vanilla_laws_rank_in_file_order(self):
+        laws = gen.parse_laws(self.snapshot.data["Laws"])
+        vanilla_ids = [k for k in self.snapshot.data["Laws"] if k.startswith("law_")]
+        ranks = [laws[k]["file_order"] for k in vanilla_ids if k in laws]
+        self.assertEqual(ranks, sorted(ranks))
+        self.assertEqual(ranks[0], 0)
+
+    def test_mod_law_files_apply_over_vanilla_data(self):
+        # A mod REPLACE of a vanilla law wins, as it does in a ModState load.
+        vanilla = {
+            "law_alpha": ("=", {"group": ("=", "lawgroup_taxation"), "progressiveness": ("=", "3")}),
+        }
+        with tempfile.TemporaryDirectory() as mod_dir:
+            os.makedirs(os.path.join(mod_dir, "common", "laws"))
+            with open(os.path.join(mod_dir, "common", "laws", "mod.txt"), "w", encoding="utf-8") as fh:
+                fh.write(
+                    "REPLACE:law_alpha = { group = lawgroup_taxation progressiveness = 9 }\n"
+                    "law_gamma = { group = lawgroup_taxation progressiveness = 1 }\n"
+                )
+            with mock.patch.object(gen, "mod_path", mod_dir):
+                laws = gen.parse_laws(vanilla)
+        self.assertEqual(laws["law_alpha"]["progressiveness"], 9)
+        self.assertEqual(laws["law_alpha"]["file_order"], 0)
+        self.assertEqual(laws["law_gamma"]["file_order"], 1)
+
+    def test_parsing_without_vanilla_or_game_files_fails_loudly(self):
+        # Mod-only output would look complete and be wrong.
+        with mock.patch.object(gen, "_vanilla_game_dir", return_value=None):
+            with self.assertRaises(FileNotFoundError):
+                gen.parse_laws()
+            with self.assertRaises(FileNotFoundError):
+                gen.parse_ideologies()
+        with tempfile.TemporaryDirectory() as empty:
+            with mock.patch.object(gen, "_vanilla_game_dir", return_value=empty):
+                with self.assertRaises(FileNotFoundError):
+                    gen.parse_laws()
+
+    def test_standalone_prefers_game_files_else_snapshot(self):
+        with tempfile.TemporaryDirectory() as game:
+            os.makedirs(os.path.join(game, "common", "laws"))
+            with mock.patch.object(gen, "_vanilla_game_dir", return_value=game):
+                self.assertIsNone(gen.load_vanilla())
+        with mock.patch.object(gen, "_vanilla_game_dir", return_value=None):
+            vanilla = gen.load_vanilla()
+        self.assertEqual(set(vanilla["laws"]), set(self.snapshot.data["Laws"]))
+        self.assertEqual(set(vanilla["ideologies"]), set(self.snapshot.data["Ideologies"]))
+
+    def test_mod_state_wins_over_game_files(self):
+        # The server's own vanilla (it may have chosen the snapshot over older
+        # files on disk) is what the generator follows.
+        mod_state = _mod_state({}, {})
+        with tempfile.TemporaryDirectory() as game:
+            os.makedirs(os.path.join(game, "common", "laws"))
+            with mock.patch.object(gen, "_vanilla_game_dir", return_value=game):
+                self.assertEqual(gen.load_vanilla(mod_state), {"laws": {}, "ideologies": {}})
 
 
 if __name__ == "__main__":

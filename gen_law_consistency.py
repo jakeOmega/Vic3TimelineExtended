@@ -48,12 +48,20 @@ never count as a violation of the held law (`held_unlocking_laws`).
 Output: common/scripted_effects/extra_law_consistency_generated.txt
 Auto-runs via mod_state_server `_run_post_load_generators`.
 
+Vanilla input: the laws and ideologies come as parsed data, not raw text, so a
+machine with no Victoria 3 install runs this too. `regenerate(mod_state)` takes
+vanilla from `mod_state.base_parsers` (what the server loaded: the game files, or
+the committed `vanilla_parsed/` snapshot); the CLI parses the game files when
+they are there and loads the snapshot when not. Mod files are always read from
+disk, so an `apply_ideologies` run earlier in the chain is seen.
+
 Usage:
     python gen_law_consistency.py            # write the generated file
     python gen_law_consistency.py --dry-run  # show summary without writing
 """
 
 import argparse
+import copy
 import os
 import re
 import sys
@@ -67,7 +75,7 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _THIS_DIR not in sys.path:
     sys.path.insert(0, _THIS_DIR)
 
-from path_constants import base_game_path, mod_path
+from path_constants import mod_path
 from paradox_file_parser import ParadoxFileParser
 
 # ── Configuration ────────────────────────────────────────────────────────────
@@ -274,22 +282,58 @@ HEADER = (
 # ── Parsing ─────────────────────────────────────────────────────────────────
 
 
-def _law_dirs():
-    return [
-        os.path.join(base_game_path, "game", "common", "laws"),
-        os.path.join(mod_path, "common", "laws"),
-    ]
+def _vanilla_game_dir():
+    """<base_game_path>/game, or None when this machine has no game install
+    configured (path_constants raises RuntimeError for an unresolvable path)."""
+    try:
+        from path_constants import base_game_path
+    except RuntimeError:
+        return None
+    return os.path.join(base_game_path, "game")
 
 
-def _list_law_files():
-    paths = []
-    for root in _law_dirs():
-        if not os.path.isdir(root):
-            continue
-        for name in sorted(os.listdir(root)):
-            if name.endswith(".txt"):
-                paths.append(os.path.join(root, name))
-    return paths
+def _txt_files(root):
+    """Top-level `.txt` files of `root` in sorted order; [] if it isn't a directory."""
+    if not os.path.isdir(root):
+        return []
+    return [os.path.join(root, n) for n in sorted(os.listdir(root)) if n.endswith(".txt")]
+
+
+def _vanilla_files(entity_dir):
+    """Vanilla `common/<entity_dir>` script files, for a parse with no `vanilla`
+    data. Raises when there are none: a parse without vanilla would emit
+    mod-only content that looks complete (the server used to guard this by
+    skipping the generator; `load_vanilla` is the way to get vanilla now)."""
+    game_dir = _vanilla_game_dir()
+    files = _txt_files(os.path.join(game_dir, "common", entity_dir)) if game_dir else []
+    if not files:
+        raise FileNotFoundError(
+            f"no vanilla common/{entity_dir} files to parse (game dir: {game_dir}); "
+            "pass `vanilla=` data from load_vanilla() (the committed vanilla_parsed/ snapshot "
+            "or a ModState)"
+        )
+    return files
+
+
+def _list_law_files(vanilla_files=()):
+    return [*vanilla_files, *_txt_files(os.path.join(mod_path, "common", "laws"))]
+
+
+def load_vanilla(mod_state=None):
+    """The vanilla laws and ideologies as parsed data, `{"laws": ..., "ideologies": ...}`,
+    in the shape `parse_laws` / `parse_ideologies` take as `vanilla`.
+
+    Given a `mod_state`, its own vanilla (the server's choice of game files or
+    snapshot). Without one, None ("parse the game files") when this machine has
+    them, else the committed `vanilla_parsed/` snapshot."""
+    if mod_state is None:
+        game_dir = _vanilla_game_dir()
+        if game_dir and os.path.isdir(os.path.join(game_dir, "common", "laws")):
+            return None
+    import vanilla_parsed
+
+    data = vanilla_parsed.parsed_entities(("Laws", "Ideologies"), mod_state)
+    return {"laws": data["Laws"], "ideologies": data["Ideologies"]}
 
 
 def _string_value(v):
@@ -348,19 +392,30 @@ def _id_list(v):
     return []
 
 
-def parse_laws():
+def parse_laws(vanilla=None):
     """Return dict: law_id -> {group, progressiveness, unlocking_laws,
     disallowing_laws, unlocking_technologies, file_order}.
 
+    `vanilla` is the parsed vanilla laws (`load_vanilla()["laws"]`); None parses
+    the game files instead. Mod files are parsed over it either way.
+
     File order: integer rank in the order laws are first encountered across
     vanilla files (alphabetical) then mod files (alphabetical). Used as the
-    final candidate-sort tiebreak.
+    final candidate-sort tiebreak. Parsed vanilla data keeps its key order in
+    that same file order, so it ranks the vanilla laws without the files.
     """
     parser = ParadoxFileParser()
     file_order = {}
     rank = 0
 
-    files = _list_law_files()
+    if vanilla is not None:
+        parser.data = copy.deepcopy(vanilla)
+        for law_id in vanilla:
+            if isinstance(law_id, str) and law_id.startswith("law_") and law_id not in file_order:
+                file_order[law_id] = rank
+                rank += 1
+
+    files = _list_law_files(_vanilla_files("laws") if vanilla is None else ())
     law_def_re = re.compile(
         r"^(?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?(law_[A-Za-z0-9_]+)\s*=\s*\{",
         re.MULTILINE,
@@ -427,27 +482,26 @@ def parse_laws():
 # ── Ideology attitudes ───────────────────────────────────────────────────────
 
 
-def parse_ideologies():
+def parse_ideologies(vanilla=None):
     """Return dict: ideology_id -> { law_id: attitude_score }.
 
-    Built from vanilla ideology files first (ParadoxFileParser handles
-    INJECT/REPLACE for any mod-side ideology .txt files we also load), then
-    overlaid with mod-only attitudes from `ideology_modifications.modifications`.
+    Built from vanilla ideologies first (`vanilla`, the parsed data from
+    `load_vanilla()["ideologies"]`; None parses the game files), with
+    ParadoxFileParser applying INJECT/REPLACE for any mod-side ideology .txt
+    files we also load, then overlaid with mod-only attitudes from
+    `ideology_modifications.modifications`.
     """
     parser = ParadoxFileParser()
-    for root in [
-        os.path.join(base_game_path, "game", "common", "ideologies"),
-        os.path.join(mod_path, "common", "ideologies"),
-    ]:
-        if not os.path.isdir(root):
-            continue
-        for name in sorted(os.listdir(root)):
-            if not name.endswith(".txt"):
-                continue
-            try:
-                parser.parse_file(os.path.join(root, name))
-            except Exception as e:
-                print(f"WARNING: ideology parse error in {name}: {e}", file=sys.stderr)
+    if vanilla is not None:
+        parser.data = copy.deepcopy(vanilla)
+        files = []
+    else:
+        files = _vanilla_files("ideologies")
+    for path in files + _txt_files(os.path.join(mod_path, "common", "ideologies")):
+        try:
+            parser.parse_file(path)
+        except Exception as e:
+            print(f"WARNING: ideology parse error in {os.path.basename(path)}: {e}", file=sys.stderr)
 
     attitudes = {}
     for ideology_id, value in parser.data.items():
@@ -797,26 +851,29 @@ def write_output(content, dry_run=False):
 # ── Entry points ────────────────────────────────────────────────────────────
 
 
+def generate(mod_state=None):
+    """The output text, from `mod_state`'s vanilla when given (see `load_vanilla`)."""
+    vanilla = load_vanilla(mod_state) or {}
+    laws = parse_laws(vanilla.get("laws"))
+    attitudes = parse_ideologies(vanilla.get("ideologies"))
+    return build_output(laws, attitudes)
+
+
 def regenerate(mod_state=None):
     """Auto-run entrypoint invoked by mod_state_server post-load.
 
-    `mod_state` is accepted for protocol compatibility but unused — the
-    generator parses files directly so it works in standalone CLI mode too.
+    Vanilla comes from `mod_state.base_parsers`, so this runs with or without
+    the game files. Without `mod_state` (standalone) it reads the game files,
+    else the `vanilla_parsed/` snapshot.
     """
-    laws = parse_laws()
-    attitudes = parse_ideologies()
-    content = build_output(laws, attitudes)
-    write_output(content, dry_run=False)
+    write_output(generate(mod_state), dry_run=False)
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     p.add_argument("--dry-run", action="store_true", help="Print summary without writing.")
     args = p.parse_args()
-    laws = parse_laws()
-    attitudes = parse_ideologies()
-    content = build_output(laws, attitudes)
-    write_output(content, dry_run=args.dry_run)
+    write_output(generate(), dry_run=args.dry_run)
 
 
 if __name__ == "__main__":

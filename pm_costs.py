@@ -3,6 +3,14 @@
 Parses goods prices, then calculates and injects cost summaries into
 workforce_scaled blocks of PM files. Also handles military unit upkeep costs.
 
+Goods prices come from parsed vanilla data (`regenerate(mod_state)` takes
+`mod_state.base_parsers`; standalone, the game's `00_goods.txt` when it's there,
+else the committed `vanilla_parsed/` snapshot), so everything that annotates the
+MOD's files runs with no Victoria 3 install. The two `docs/engine/commented_vanilla_*`
+reference files are the exception: they re-emit vanilla's raw PM and combat-unit
+text with cost comments, so they are written only from the game files
+(`vanilla_files=False`, or no game files, leaves them as committed).
+
 Usage:
     python pm_costs.py             # Annotate mod PMs + generate commented vanilla files
     python pm_costs.py --dry-run   # Show what would be written without writing
@@ -30,6 +38,58 @@ def parse_goods(file_paths):
             for match in re.finditer(goods_pattern, goods_data):
                 good, cost = match.groups()
                 goods_dict[good] = int(cost)
+    return goods_dict
+
+
+def _unwrap(value):
+    """Strip the (operator, value) tuples ParadoxFileParser wraps values in."""
+    while isinstance(value, tuple) and len(value) >= 2:
+        value = value[1]
+    return value
+
+
+def goods_from_parsed(goods_data):
+    """{good: cost} from parsed Goods data (ModState.base_parsers["Goods"].data
+    or the vanilla_parsed snapshot), the same prices `parse_goods` reads from
+    a goods file. A good with no numeric `cost` is left out."""
+    goods_dict = {}
+    for good, body in goods_data.items():
+        body = _unwrap(body)
+        cost = _unwrap(body.get("cost")) if isinstance(body, dict) else None
+        try:
+            goods_dict[good] = int(float(cost))
+        except (TypeError, ValueError):
+            continue
+    return goods_dict
+
+
+def _vanilla_game_dir():
+    """<base_game_path>/game, or None when this machine has no game install
+    configured (path_constants raises RuntimeError for an unresolvable path)."""
+    try:
+        from path_constants import base_game_path
+    except RuntimeError:
+        return None
+    return os.path.join(base_game_path, "game")
+
+
+def load_goods(mod_state=None):
+    """{good: cost}: vanilla's prices, then the mod's goods file over them.
+
+    Vanilla from `mod_state` when given, else the game's `00_goods.txt` when
+    this machine has it, else the committed `vanilla_parsed/` snapshot."""
+    from path_constants import mod_path
+
+    mod_goods = os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt")
+    game_dir = _vanilla_game_dir()
+    vanilla_goods = os.path.join(game_dir, "common", "goods", "00_goods.txt") if game_dir else None
+    if mod_state is None and vanilla_goods and os.path.isfile(vanilla_goods):
+        return parse_goods([vanilla_goods, mod_goods])
+
+    import vanilla_parsed
+
+    goods_dict = goods_from_parsed(vanilla_parsed.parsed_entities(("Goods",), mod_state)["Goods"])
+    goods_dict.update(parse_goods([mod_goods]))
     return goods_dict
 
 
@@ -447,53 +507,66 @@ def emit_combat_unit_market_cost_svs(out_path, breakdown):
         f.write(content)
 
 
-def _run(dry_run: bool, verbose: bool):
+def _run(dry_run: bool, verbose: bool, mod_state=None, vanilla_files: bool = True):
+    """Annotate the mod's PM and military files and regenerate what derives
+    from them. `vanilla_files=False` forbids reading the game files, which
+    leaves the two commented-vanilla reference files alone; so does a machine
+    with no game files."""
     # Imported here rather than at module scope so the helpers above stay
     # importable (and unit-testable) without a Victoria 3 install configured.
-    from path_constants import base_game_path, mod_path
+    from path_constants import mod_path
 
-    goods_file_paths = [
-        os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
-        os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
-    ]
+    game_dir = _vanilla_game_dir() if vanilla_files else None
+    vanilla_pms_file_loc = os.path.join(game_dir, "common", "production_methods") if game_dir else None
+    vanilla_units_loc = os.path.join(game_dir, "common", "combat_unit_types") if game_dir else None
+    vanilla_pm_file_paths = (
+        [os.path.join(vanilla_pms_file_loc, f)
+         for f in sorted(os.listdir(vanilla_pms_file_loc)) if f.endswith(".txt")]
+        if vanilla_pms_file_loc and os.path.isdir(vanilla_pms_file_loc) else []
+    )
+    vanilla_military_unit_file_path = [
+        os.path.join(vanilla_units_loc, name)
+        for name in ("00_land_combat_unit_types.txt", "01_navy_combat_unit_types.txt")
+    ] if vanilla_units_loc else []
+    vanilla_docs = bool(vanilla_pm_file_paths) and all(
+        os.path.isfile(path) for path in vanilla_military_unit_file_path
+    )
+    if verbose and not vanilla_docs:
+        print(
+            "No vanilla game files: leaving docs/engine/commented_vanilla_pms.txt and "
+            "commented_vanilla_military_units.txt as they are."
+        )
+
     pms_file_paths = [
         os.path.join(mod_path, "common", "production_methods", "extra_pms.txt"),
         os.path.join(mod_path, "common", "production_methods", "unique_pms.txt"),
     ]
-    vanilla_pms_file_loc = os.path.join(base_game_path, "game", "common", "production_methods")
-    vanilla_pm_file_paths = [
-        os.path.join(vanilla_pms_file_loc, f)
-        for f in os.listdir(vanilla_pms_file_loc)
-        if f.endswith(".txt")
-    ]
     output_file_path = os.path.join(mod_path, "docs", "engine", "commented_vanilla_pms.txt")
-    goods_dict = parse_goods(goods_file_paths)
+    goods_dict = load_goods(mod_state)
 
     if dry_run:
         if verbose:
             print("[dry-run] Would annotate mod PM files:")
             for fp in pms_file_paths:
                 print(f"  {fp}")
-            print(f"[dry-run] Would write commented vanilla PMs to: {output_file_path}")
+            if vanilla_docs:
+                print(f"[dry-run] Would write commented vanilla PMs to: {output_file_path}")
     else:
         for file_path in pms_file_paths:
             process_and_update_production_methods_grouped(
                 file_path, goods_dict, calculate_costs, calculate_employment
             )
-        process_and_update_production_methods_grouped(
-            vanilla_pm_file_paths,
-            goods_dict,
-            calculate_costs,
-            calculate_employment,
-            output_file_path,
-        )
+        if vanilla_docs:
+            process_and_update_production_methods_grouped(
+                vanilla_pm_file_paths,
+                goods_dict,
+                calculate_costs,
+                calculate_employment,
+                output_file_path,
+            )
         if verbose:
             print("Production methods file updated successfully.")
 
-    vanilla_military_unit_file_path = [
-        os.path.join(base_game_path, "game", "common", "combat_unit_types", "00_land_combat_unit_types.txt"),
-        os.path.join(base_game_path, "game", "common", "combat_unit_types", "01_navy_combat_unit_types.txt"),
-    ]
     military_unit_file_path = os.path.join(mod_path, "common", "combat_unit_types", "extra_combat_units.txt")
     mobilization_file_path = os.path.join(mod_path, "common", "mobilization_options", "extra_mobilization_options.txt")
     mil_output_path = os.path.join(mod_path, "docs", "engine", "commented_vanilla_military_units.txt")
@@ -510,7 +583,8 @@ def _run(dry_run: bool, verbose: bool):
             print("[dry-run] Would annotate military files:")
             print(f"  {military_unit_file_path}")
             print(f"  {mobilization_file_path}")
-            print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")
+            if vanilla_docs:
+                print(f"[dry-run] Would write commented vanilla military units to: {mil_output_path}")
             breakdown = compute_combat_unit_breakdown(military_unit_file_path, goods_dict)
             print(
                 f"[dry-run] Would emit {len(breakdown)} SVs to: {sv_output_path}"
@@ -524,11 +598,12 @@ def _run(dry_run: bool, verbose: bool):
     else:
         process_and_update_military_costs(military_unit_file_path, goods_dict)
         process_and_update_military_costs(mobilization_file_path, goods_dict)
-        process_and_update_military_costs(
-            vanilla_military_unit_file_path,
-            goods_dict,
-            write_path=mil_output_path,
-        )
+        if vanilla_docs:
+            process_and_update_military_costs(
+                vanilla_military_unit_file_path,
+                goods_dict,
+                write_path=mil_output_path,
+            )
         breakdown = compute_combat_unit_breakdown(military_unit_file_path, goods_dict)
         emit_combat_unit_market_cost_svs(sv_output_path, breakdown)
         warnings = update_combat_unit_loc(loc_output_path, breakdown)
@@ -541,9 +616,15 @@ def _run(dry_run: bool, verbose: bool):
                 print(w)
 
 
-def regenerate(mod_state=None):
-    """Auto-run entrypoint invoked by mod_state_server post-load."""
-    _run(dry_run=False, verbose=False)
+def regenerate(mod_state=None, vanilla_files=True):
+    """Auto-run entrypoint invoked by mod_state_server post-load.
+
+    Prices come from `mod_state`'s vanilla, so the mod's files are annotated
+    with or without the game files. The server passes `vanilla_files=False`
+    when the files on disk are missing or older than the snapshot it loaded;
+    the commented-vanilla reference docs, which are cut from those files, are
+    then left as committed."""
+    _run(dry_run=False, verbose=False, mod_state=mod_state, vanilla_files=vanilla_files)
 
 
 def main():
