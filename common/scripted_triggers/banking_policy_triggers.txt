@@ -595,7 +595,7 @@ banking_ai_core_cb_bail_in_regime = {
 # credit and bought it back when it dipped again, and capital controls held
 # for a war could be lifted in a boom mid-war and bought straight back. The
 # simulator counted 6.7 re-buys a century within a year of a lift, 3.2 with
-# the gates (docs/audits/banking_cycle_simulation.md §17).
+# the gates (docs/audits/banking_cycle_simulation.md §18).
 #
 # A hold covers its enable button's core trigger, less the states that
 # button's own avoid terms rule out (a recession for a leaning tool, a frenzy

@@ -556,7 +556,7 @@ PRE_SLUMP_PRESSURE = {
     "pressure_downturn": -0.8,
     "pressure_panic": -1.5,
 }
-# The AI's lift weights before the banking_ai_hold_cb_* gates (2026-10-05, §17),
+# The AI's lift weights before the banking_ai_hold_cb_* gates (2026-10-05, §18),
 # with the capital-controls port that assumed no external crisis at par.
 # `--tune pre_hold`; `--tune ai_hold=off` keeps the corrected port.
 PRE_HOLD = {
@@ -725,7 +725,7 @@ class State:
     tool_months: int = 0
     tool_slot_months: float = 0.0
     tool_usage: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
-    # §17: the AI's lifts, and re-buys of a tool within FLIP_WINDOW_MONTHS of
+    # §18: the AI's lifts, and re-buys of a tool within FLIP_WINDOW_MONTHS of
     # the AI lifting it (a flip-flop: the toggle cost paid twice for nothing).
     tool_lifts: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
     tool_flips: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
@@ -933,7 +933,7 @@ def in_external_crisis(cfg: Config, state: State) -> bool:
     """te_mon_in_external_crisis: a war, or te_mon_in_financial_crisis — a panic
     or downturn, a gold peg's confidence at 40 or below, or inflation band 6.
 
-    Until 2026-10-05 (§17) the capital-controls weights assumed this was never
+    Until 2026-10-05 (§18) the capital-controls weights assumed this was never
     true with FX at par; `--tune cc_crisis=off` restores that.
     """
     if TUNE.get("cc_crisis") == "off":
@@ -1723,18 +1723,23 @@ def apply_crash(cfg: Config, state: State, severity: float, month: int) -> None:
         value, momentum = 30.0, -2.0
     else:
         value, momentum = 40.0, -1.0
-    state.finance_cycle_value = value
-    state.finance_cycle_momentum = momentum
+    # The tier figures are ceilings (banking_crash_lower_cycle_to /
+    # _lower_momentum_to): a crash never raises either figure, and a response
+    # (banking_crash_hold_to_prior_state) cannot lift them above where they stood.
+    prior_value = state.finance_cycle_value
+    prior_momentum = state.finance_cycle_momentum
+    state.finance_cycle_value = min(prior_value, value)
+    state.finance_cycle_momentum = min(prior_momentum, momentum)
     state.bubble_pressure = 0.0
 
-    state.crashes.append((month, severity, value))
+    state.crashes.append((month, severity, value))  # the tier's figure, for depr%
     state.pending_recovery = month
 
     choice = best_softening(cfg, state, month)
     if choice is not None:
         add_v, add_m, name = choice
-        state.finance_cycle_value += add_v
-        state.finance_cycle_momentum += add_m
+        state.finance_cycle_value = min(prior_value, state.finance_cycle_value + add_v)
+        state.finance_cycle_momentum = min(prior_momentum, state.finance_cycle_momentum + add_m)
         state.timed[name] = 12  # `days = 365` on the option
 
 
@@ -2210,7 +2215,7 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     for tool in ("restrict_inflows", "sterilize_inflows"):
         s[tool] = 60 if external_scores[tool] == 0 else 0
 
-    # The banking_ai_hold_cb_* gates (2026-10-05, §17): no lift while the reason
+    # The banking_ai_hold_cb_* gates (2026-10-05, §18): no lift while the reason
     # the tool was bought still holds. `--tune ai_hold=off` restores the
     # ungated weights.
     if TUNE.get("ai_hold") != "off":
@@ -2583,7 +2588,7 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         "tool_usage": {
             t: statistics.mean(s.tool_usage[t] for s in states) for t in TOOL_MODIFIERS
         },
-        # §17: per century, all tools and per tool
+        # §18: per century, all tools and per tool
         "lifts_per_century": statistics.mean(
             sum(s.tool_lifts.values()) / cfg.years * 100 for s in states
         ),
@@ -2910,7 +2915,7 @@ def main() -> int:
                          "--tune pre_anchoring for independence's institution bonus before §13, or "
                          "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
                          "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
-                         "--tune pre_hold for the AI's lift weights before the hold gates of §17.")
+                         "--tune pre_hold for the AI's lift weights before the hold gates of §18.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

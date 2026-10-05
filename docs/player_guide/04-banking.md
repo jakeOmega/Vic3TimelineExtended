@@ -125,13 +125,17 @@ Severity is about half the bubble pressure at the moment of the crash,
 multiplied by a random factor between a half and two. It decides the event and
 how far the cycle falls, and every crash wipes bubble pressure to 0.
 
-| Severity | Event | Cycle value after | Momentum after |
+| Severity | Event | Cycle value falls to | Momentum falls to |
 |---|---|---|---|
 | 80 and up | Systemic Collapse | 5 | −5 |
 | 60–79 | Banking Panic | 10 | −4 |
 | 40–59 | Financial Crash | 20 | −3 |
 | 20–39 | Market Downturn | 30 | −2 |
 | under 20 | Market Correction | 40 | −1 |
+
+A crash never raises either figure. A country already below the tier's figure,
+such as one in a Downturn that an imported Market Correction reaches, keeps the
+cycle value and momentum it has; only the bubble pressure is wiped.
 
 Climbing back from a Panic-level crash to Stable takes more than a year without
 a crash response. Command economies suffer 40% less severity and cooperative
@@ -146,7 +150,8 @@ emergency discount window (Central Banking), coordinated swap lines (Investment
 Banks; not the treaty article), a fiscal stimulus (Keynesian Economics) and
 emergency capital controls (Corporate Governance).
 
-Each response adds back 3 to 12 cycle value and up to 3 momentum. It costs a
+Each response adds back 3 to 12 cycle value and up to 3 momentum, but never lifts
+either above where it stood before the crash. It costs a
 GDP-scaled treasury expense that fades over six months, holds 1 to 4
 intervention points for a year (see [the intervention
 budget](#the-intervention-budget)), and radicalizes some

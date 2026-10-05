@@ -18,8 +18,9 @@ frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the dele
 standing wage pressure (`--wage-pressure`) and the three changes that answer it; §13 replaces independence's
 crash and momentum bonus with inflation anchoring (`--bank-level`). §14 (2026-09-30) prices and shapes the five
 directed-credit sectors apart (`--tune ai_dc_reserve=off`). §16 (2026-10-02) makes a slump pull inflation down
-harder under an inflation target, and only there (`--tune pre_slump_pressure`). §17 (2026-10-05) stops the AI
-lifting a tool while the reason it bought it still holds (`--tune pre_hold`). Every table states which script
+harder under an inflation target, and only there (`--tune pre_slump_pressure`). §17 (2026-10-05) makes a crash's tier a
+ceiling, so a crash never raises the cycle. §18 (2026-10-05) stops the AI lifting a tool while the reason it bought
+it still holds (`--tune pre_hold`). Every table states which script
 it measured.
 
 ---
@@ -1604,7 +1605,23 @@ the bank leaves the clamp in month 4 (3 before) and reaches 0% in month 32 (27),
 
 ---
 
-## 17. Lifting a tool only once its reason has gone (2026-10-05)
+## 17. Crash ceilings (2026-10-05)
+
+The crash tiers (value 5…40, momentum −5…−1) were absolute resets, so a crash could lift a country that was already below the tier, and a softening response could add on top of that. The script now treats the tier figures as ceilings and holds every option to the pre-crash level (`docs/systems/mod_systems.md`, Monthly Pulse step 3; `test_banking_crash_no_raise.py`). `apply_crash` ports both.
+
+The simulator only models the origin crash, which fires from a high cycle, so it barely sees the bug. Wrapping `apply_crash` to compare each crash's figures before and after (100 runs × 100 years in each of the 26 cells at 0 and 5 points, a one-off, not kept in the repo): before, 17,211 crashes, 0 of which raised cycle value and 3 of which raised momentum (by up to 0.31); after, 17,215 crashes and 0. Trajectories diverge after the first changed crash, so the cells are not comparable beyond noise: the largest difference in any cell was 0.12 crashes a century, 0.4 points of mean severity and about a tenth of a point of months in recession. The 2026-09-22 retune stands.
+
+Contagion crashes reach countries at any cycle value and are where the lift was large (a country at the cycle's floor went to 40), but the simulator does not model contagion. `test_banking_crash_no_raise.py` is the standing guard: it runs the script itself, every option of events .6 and .7, over a grid of cycle states, with a negative control that fails the old reset.
+
+**Reproduce the headline table:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 100 --points 0,5
+```
+
+---
+
+## 18. Lifting a tool only once its reason has gone (2026-10-05)
 
 **Question (owner).** Switching a tool on or off has a cost. The AI should never lift an intervention until the
 conditions that prompted it have changed: a buffer bought in a boom stays until the boom is over.
