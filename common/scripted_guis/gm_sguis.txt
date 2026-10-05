@@ -116,12 +116,11 @@ gm_hard_times_sgui = {
 }
 
 # PROTOTYPE (v2 spec §3.4): a typed name for a monument. The row's editbox
-# text arrives as the saved scope gm_name, a flag made by MakeScopeFlag (two
-# routes in the .gui, one per Rename button). If that conversion fails no
-# scope arrives, is_valid fails and the button stays grey, so a grey button
-# means the GUI half broke and a live one that changes nothing means
-# set_variable or GetFlagName did. The row reads the name back with
-# Var('gm_name').GetFlagName (gm_row_title_named).
+# text arrives as the saved scope gm_name, a flag made by MakeScopeFlag (one
+# route per Rename button, grand_monuments_widget.gui). If no scope arrives,
+# is_valid fails and nothing happens. Launch 1 showed the rest of the chain
+# works: a flag from GetVariableSystem.Get was stored and the row's title
+# printed it (gm_row_title_named, Var('gm_name').GetFlagName).
 gm_rename_sgui = {
 	scope = country
 	saved_scopes = { gm_state gm_name }
