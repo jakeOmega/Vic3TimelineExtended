@@ -23,7 +23,8 @@ ceiling, so a crash never raises the cycle. §18 (2026-10-05) stops the AI lifti
 it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday stop the run and reopen with a
 momentum bounce (`--holiday`, `--tune pre_holiday`). §20 (2026-10-05) traces §18's gold capital-controls
 crashes to cells no AI runs and leaves the AI's weights alone (`--tune cc_cost=0`, `cc_damp=1`, `cc_weak=0`).
-Every table states which script it measured.
+§21 (2026-10-05) measures Cooperative Ownership for the first time, with an interim arm posted on #720, and
+retunes it. Every table states which script it measured.
 
 ---
 
@@ -1946,4 +1947,77 @@ less on average, `gold/price` 7.85 → 6.24 and `gold/growth` 14.47 → 12.26.
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only gold --points 2,3,5,8 {--tune cc_cost=0 | --tune cc_damp=1 | --tune cc_cost=0,cc_damp=1}   # F30's decomposition
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 2,3,5,8 [--exclude-tool capital_controls | --tune cc_weak=0]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only fiat --points 2,3,5,8 --simplified [--exclude-tool capital_controls]
+```
+
+---
+
+## 21. Cooperative Ownership, measured for the first time (2026-10-05)
+
+In play, cooperative economies boomed and crashed a lot. The simulator runs a market economy only (§1 leaves the `cw_*` tools out, and §3 left the `_coop` phases "unmeasured"), so this section uses an **interim cooperative arm**: a monkeypatch of `banking_cycle_sim.py`, posted on [#720](https://github.com/jakeOmega/Vic3TimelineExtended/issues/720), which tracks folding a command and a cooperative arm into the simulator properly. It reads the `_coop` phase modifiers, the `bubble_inertia_*_coop` modifiers and the eight `cooperative_*` tool modifiers from the mod files, and hard-codes what the script keeps as inline literals: crash weight ×0.65 and severity ×0.8 (`banking_cycle_effects.txt`), the law's −0.25 on `country_banking_random_momentum_mult` (`construction_system_law_injections.txt`) and the `cw_*` buttons' `ai_chance` blocks with the `banking_ai_hold_cw_*` gates #716 put on their disables. 300 runs × 100 years a cell, fiat / price stability unless stated.
+
+### What was wrong
+
+1. **The cooperative cycle on its own was too calm.** Untooled it crashed 0.6 times a century, against 10.9 for a market economy, and spent 0.2% of months in Boom or Frenzy. It had no positive feedback: `banking_cycle_apply_phase_modifiers` gave bubble inertia to market economies only, so a cooperative economy almost never left Stable, and the cooperative boom events (`.61`, `.62`, `.64`, `.66`, `.67`) had little to fire from.
+2. **Two council tools did all the booming.** Collective Capital Investment Plan carried +0.30 momentum and Cooperative Credit Union Expansion +0.25. §1's F1 explains why that is huge (a standing momentum add converges on ten times itself in cycle points a month), and §3 cut the market tools to ×0.3 for it; the council tools were never measured and kept the old scale. Together they moved the cycle +5.5 points a month, and switching them off left about 50 points of push. A player who left both on spent 28% of months in Frenzy. Under the AI the crash rate *rose* with the point budget (0.4 at 2 points, 3.6 at 6).
+3. **The pool term compounded.** Each week the cooperative phases added `investment_pool × country_weekly_investment_pool_mult`: a share of the pool's balance, not of its income, so an unspent pool grew ×1.68 a year in Frenzy (+0.01 a week) and halved in a year of Panic. Market phases move the capitalists' contribution instead, a flow. `mod_systems.md` § Overinvestment already named it as one way an Overinvestment episode runs on indefinitely.
+
+Ruled out: the coop-only events (`.60`–`.67`: one-off ±1–2 momentum, ±3–8 bubble) and the cooperative −0.5pp on the neutral rate, which, if anything, tightens the stance.
+
+### What shipped
+
+| change | where |
+|---|---|
+| Capital Plan momentum 0.30 → **0.10**, Credit Union Expansion 0.25 → **0.08** (the market tools' scale: Open Market Operations 0.10, Emergency Liquidity 0.08) | `cooperative_capital_plan`, `cooperative_credit_expansion` |
+| `country_weekly_investment_pool_mult` is a share of the pool's weekly **gross income** (clamped at 0), not of its balance, and may not take more than the pool holds. The six phase values and `neocolonial_dependency_imposed_modifier` ×24: Panic −0.36, Downturn −0.18, Stagnation −0.072, Expansion +0.072, Boom +0.144, Frenzy +0.24 | `investment_pool_banking_cycle_income_add`; the `_coop` phases |
+| **Cooperative bubble inertia** at a fifth of the market's: `bubble_inertia_{moderate,high,extreme}_coop` (0.2 momentum, under the same bands and `bubble_inertia_multiplier_script_value`) | `banking_cycle_apply_phase_modifiers`, `remove_all_banking_phase_modifiers` |
+
+×24 keeps each phase's pool effect the same size at the pool a country settles at when the private queue spends a 24th of it a week (24 weeks of income); above that pool the old term was larger, which was the problem. Gross income leaves this script add out (`ce_treasury_pool_balance_multiplier`'s note), so the term cannot feed on itself, and Overinvestment cuts every pop's contribution and gross income with it, so the cycle no longer prolongs Overinvestment.
+
+The inertia share was chosen to put an untooled cooperative economy at **about 2 crashes a century**, the owner's target ("very slightly higher, but closer to this than 6"). The levers that only scale crashes did not get there (a 300-run sweep on other seeds, 0.8 untooled at baseline with the tool cut in): crash weight ×0.65 → ×1.0 moved untooled crashes 0.8 → 1.0, the law's volatility −0.25 → 0 moved them 0.8 → 0.7, Expansion's bubble add 2.5 → 4 moved them to 1.0, because a cycle that never leaves Stable gives a crash roll nothing to act on. Inertia at ×0.15 / ×0.2 / ×0.25 / ×0.5 gave 1.8 / 2.2 / 2.7 / 5.8 (200–300 runs).
+
+### Results
+
+Measured on `main` after #716.
+
+**AI picks the tools, fiat / price stability** (300 runs × 100 years a cell; crashes a century, with the share of months in Boom or Frenzy):
+
+| points | market | cooperative before | cooperative after |
+|---|---|---|---|
+| 0 | 10.9 (9.0%) | 0.6 (0.2%) | **2.0** (0.8%) |
+| 2 | 8.5 (7.8%) | 0.4 (0.2%) | **1.2** (0.8%) |
+| 4 | 6.4 (6.7%) | 2.0 (6.1%) | **2.3** (2.4%) |
+| 5 | 5.3 (5.6%) | 3.1 (9.9%) | **3.0** (3.6%) |
+| 6 | 4.7 (5.6%) | 3.6 (12.7%) | **3.1** (3.4%) |
+| 8 | 3.8 (5.0%) | 3.0 (15.8%) | **1.8** (3.9%) |
+
+**A player who leaves the tools on all game** (8 points; the pool column is the toy pool's median peak / trough against its settled level, with the private queue's spending capped at 1.2× income):
+
+| tools held | crashes/century | Boom+Frenzy | Frenzy | pool peak / trough |
+|---|---|---|---|---|
+| market: Open Market Ops + Directed Credit | 14.8 | 9.8% | 1.3% | 1.20 / 0.66 |
+| cooperative before: Capital Plan | 20.5 | 29.0% | 5.1% | 1.33 / 0.86 |
+| cooperative before: Capital Plan + Credit Expansion | 39.2 | 42.7% | 27.8% | 1.62 / 0.82 |
+| cooperative after: Capital Plan | 8.1 | 6.1% | 0.2% | 1.14 / 0.87 |
+| cooperative after: Capital Plan + Credit Expansion | 17.4 | 18.4% | 2.4% | 1.21 / 0.74 |
+
+**Other currencies and dials** (200 runs; crashes a century at 0 / 4 / 8 points, AI picks the tools):
+
+| cell | market | cooperative before | cooperative after |
+|---|---|---|---|
+| gold / price stability | 7.8 / 7.7 / 5.2 | 1.4 / 2.9 / 4.8 | 2.9 / 2.7 / 3.2 |
+| commodity / price stability | 9.2 / 5.8 / 3.6 | 1.4 / 2.2 / 4.2 | 3.3 / 2.4 / 2.5 |
+| fiat / growth | 18.3 / 13.0 / 9.5 | 5.1 / 4.6 / 7.3 | 8.6 / 5.4 / 4.9 |
+| gold / dial never touched | 9.7 / 7.7 / 5.4 | 5.9 / 7.7 / 9.6 | 7.4 / 7.0 / 7.3 |
+| fiat / dial never touched | 35.1 / 35.6 / 32.5 | 33.1 / 32.2 / 24.2 | 33.8 / 32.9 / 25.5 |
+
+Digital / price stability, cooperative after (300 runs): 1.5 / 2.1 / 1.3. The fiat "dial never touched" row is the passive-fiat case of §3–§4, set by the monetary dial rather than the economy (players are delegated by default since then); the change leaves it where it was.
+
+**With the aggregate event stand-in** (`--event-channel`, 300 runs, fiat / price, 0 / 4 / 8 points): market 13.3 / 8.0 / 4.5, cooperative after 2.7 / 2.5 / 1.9. The events add 0.1–0.7 crashes a century to a cooperative economy, against 0.7–2.4 to a market one.
+
+### Reproduce
+
+The interim arm posted on #720, run from the repo root (the cross-currency rows use its `cell()` helper with `before=True` / `False`):
+
+```
+python3 path/to/coop_probe.py --runs 300
 ```

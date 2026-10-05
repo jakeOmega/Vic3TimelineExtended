@@ -3863,18 +3863,15 @@ Each article's `usage_limit = once_per_side` means if a treaty already exists wi
 
 Reusability pattern: wrap `create_treaty` in a parameterized scripted_effect (`$FIRST$`, `$SECOND$`, `$YEARS$`, optionally per-article toggles) so future events fall back to the same shape. Repo example: `common/scripted_effects/decolonization.txt` `impose_neocolonial_investment_trade_treaty = { FIRST = ... SECOND = ... YEARS = 25 }` called from `decolonization_events.3` Option C — forges a 25-year binding treaty with `foreign_investment_rights` + `trade_privilege` both directed metropole→ex-colony.
 
-## `country_weekly_investment_pool_mult` Is Per-Week, Not Per-Year
+## `country_weekly_investment_pool_mult` Is a Share of Weekly Pool Income
 
-The mod-defined `country_weekly_investment_pool_mult` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt`) multiplies the **weekly** investment-pool contribution, not the annual. Easy to swing 50× too strong if treated as a yearly rate.
+The mod-defined `country_weekly_investment_pool_mult` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt`) is read only by `banking_cycle_weekly_effects` (the banking journal entry's weekly block, so a country without the entry gets nothing), through `investment_pool_banking_cycle_income_add`: each week it adds that share of `investment_pool_gross_income`, the pool's income before expenses, clamped so it never takes more than the pool holds. It is a flow: +0.24 adds a quarter of a week's income, every week.
 
-Vanilla cycle phases (`financial_cycle_phase_*_coop`) use ±0.015 per week as short-duration shock states. Linear approximation: 0.015 × 52 ≈ 80%/year — enormous, only sustainable for a few weeks at a time.
+**Until 2026-10-05 it multiplied the pool's balance**, which compounds. The cooperative Frenzy phase's +0.01 a week grew an unspent pool ×1.68 a year and kept Overinvestment running (`docs/audits/banking_cycle_simulation.md` §21). A term on a stock that also feeds that stock is a growth rate, so a weekly one is ruinous at any value large enough to read in a tooltip; scale script money by a flow (income, GDP) unless compounding is the point. Old balance-share values convert to income shares ×24, the pool a country spending a 24th of it a week settles at.
 
-Sizing guidance for decaying event modifiers:
-- 3-year decaying ceiling: ±0.005/wk (~25%/yr linear). Visible in tooltip; not unbalancing for a temporary state.
-- Higher (±0.01+) only for brief shock modifiers or one-shot pulses.
-- For long-term structural effects on large economies, the value rounds to 0 in the tooltip at the magnitudes that wouldn't unbalance — prefer a different lever (influence, loan-interest, treaty articles).
+Sizing: the cooperative phases run from −0.36 (Panic) to +0.24 (Frenzy) of the whole pool's income. For comparison, the market phases move only the capitalists' contribution, from its vanilla base of 0.30 by −0.25 to +0.15, so −83% to +50% of that one profession's share. A lasting penalty such as `neocolonial_dependency_imposed_modifier` uses −0.12, about an eighth of the pool's income.
 
-Same trap applies to any other `country_weekly_*_mult` / `country_weekly_*_add` modifier — read the field name and confirm tick interval before sizing.
+The same trap applies to any other `country_weekly_*_mult` / `country_weekly_*_add` modifier: read the script value that consumes it, not just the field name, before sizing.
 
 ## On_actions vs Scripted_effects: Separate Namespaces
 

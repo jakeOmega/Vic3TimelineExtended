@@ -78,8 +78,9 @@ Capitalists put a share of their income into the investment pool, and a Panic
 takes 25 points off that share rather than a quarter of it.
 
 A command economy's phases change construction costs and bureaucracy instead of
-services and investment; a cooperative economy's grow or shrink the investment
-pool. Both are far less exposed to crashes.
+services and investment; a cooperative economy's add to the investment pool's
+weekly income or take from it, from a quarter more in a Frenzy to about a third
+less in a Panic. Both are far less exposed to crashes.
 
 ### What moves the banking cycle
 
@@ -88,7 +89,9 @@ monthly nudge that your laws scale (Banking Cycle Volatility).
 
 Two others can push against that pull. In a market economy, bubble pressure
 feeds momentum, so a boom keeps climbing once a bubble forms; the tooltip shows
-this as the Speculative Inertia, Feedback and Euphoria modifiers. A budget
+this as the Speculative Inertia, Feedback and Euphoria modifiers. A cooperative
+economy feels a fifth of that pull (Reinvestment Drive, Overcommitment and
+Overcommitment Spiral), and a command economy none. A budget
 deficit lifts the cycle by a tenth of a point a month per 1% of GDP, up to one
 point, and a surplus lowers it (the Government Fiscal Policy Effect).
 

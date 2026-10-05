@@ -69,7 +69,7 @@ country_weekly_investment_pool_add = {
 country_weekly_investment_pool_mult = {
 	color = good
 	percent = yes
-	decimals = 2
+	decimals = 1
 	script_only = yes
 }
 

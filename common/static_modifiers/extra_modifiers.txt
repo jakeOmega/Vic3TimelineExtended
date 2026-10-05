@@ -562,9 +562,17 @@ financial_cycle_phase_frenzy_cmd = {
 }
 
 # ----- Cycle phases: Cooperative Ownership variants -----
+#
+# country_weekly_investment_pool_mult is a share of the pool's weekly gross
+# income, added each week (investment_pool_banking_cycle_income_add). Until
+# 2026-10-05 it was a share of the pool's BALANCE (-0.015 / -0.0075 / -0.003 /
+# +0.003 / +0.006 / +0.01 a week), which compounded (banking_cycle_simulation.md
+# §21). The new figures are the old ones x24: the same size at the pool a
+# country spending a 24th of it a week settles at (24 weeks of income), so
+# Frenzy adds a quarter of the pool's income and Panic takes a third of it.
 financial_cycle_phase_panic_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_weekly_investment_pool_mult = -0.015
+	country_weekly_investment_pool_mult = -0.36
 	goods_output_services_mult = -0.35
 	building_group_bg_manufacturing_throughput_add = -0.2
 	country_bubble_pressure_monthly_add = -7
@@ -574,7 +582,7 @@ financial_cycle_phase_panic_coop = {
 
 financial_cycle_phase_downturn_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_weekly_investment_pool_mult = -0.0075
+	country_weekly_investment_pool_mult = -0.18
 	goods_output_services_mult = -0.20
 	building_group_bg_manufacturing_throughput_add = -0.1
 	country_bubble_pressure_monthly_add = -3
@@ -584,7 +592,7 @@ financial_cycle_phase_downturn_coop = {
 
 financial_cycle_phase_stagnation_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_weekly_investment_pool_mult = -0.003
+	country_weekly_investment_pool_mult = -0.072
 	goods_output_services_mult = -0.10
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
@@ -594,7 +602,7 @@ financial_cycle_phase_stagnation_coop = {
 
 financial_cycle_phase_expansion_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_weekly_investment_pool_mult = 0.003
+	country_weekly_investment_pool_mult = 0.072
 	goods_output_services_mult = 0.15
 	building_group_bg_manufacturing_throughput_add = 0.05
 	country_bubble_pressure_monthly_add = 2.5
@@ -603,7 +611,7 @@ financial_cycle_phase_expansion_coop = {
 
 financial_cycle_phase_boom_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_weekly_investment_pool_mult = 0.006
+	country_weekly_investment_pool_mult = 0.144
 	goods_output_services_mult = 0.25
 	building_group_bg_manufacturing_throughput_add = 0.1
 	country_bubble_pressure_monthly_add = 4
@@ -612,7 +620,7 @@ financial_cycle_phase_boom_coop = {
 
 financial_cycle_phase_frenzy_coop = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_weekly_investment_pool_mult = 0.01
+	country_weekly_investment_pool_mult = 0.24
 	goods_output_services_mult = 0.35
 	building_group_bg_manufacturing_throughput_add = 0.15
 	country_bubble_pressure_monthly_add = 6.4
@@ -2369,7 +2377,9 @@ neocolonial_dependency_imposed_modifier = {
 	state_standard_of_living_add = -1
 	country_influence_add = -25
 	country_risk_premium_add = 0.01
-	country_weekly_investment_pool_mult = -0.005
+	# A share of the pool's weekly income since 2026-10-05 (was -0.005 of the
+	# balance; x24 like the cooperative phases).
+	country_weekly_investment_pool_mult = -0.12
 }
 
 anti_colonial_momentum_modifier = {
@@ -5255,8 +5265,13 @@ cooperative_capital_plan = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -4
 	building_group_bg_light_industry_construction_efficiency_add = 0.06
-	# monthly: strong coordination gain; new projects create near-term friction
-	country_finance_momentum_monthly_add = 0.30
+	# monthly: coordination gain; new projects create near-term friction.
+	# MOMENTUM 0.30 -> 0.10 (2026-10-05, banking_cycle_simulation.md §21): a
+	# standing momentum add is worth 10x its face value in cycle points a month,
+	# so 0.30 was +3 a month; held with Credit Union Expansion it put a
+	# cooperative economy in Frenzy 28% of the time. 0.10 is the market tools'
+	# scale (Open Market Operations).
+	country_finance_momentum_monthly_add = 0.10
 	country_bubble_pressure_monthly_add  = 0.40
 }
 
@@ -5274,8 +5289,10 @@ cooperative_credit_expansion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_risk_premium_add = -0.006
 	country_banking_intervention_max_add = -3
-	# monthly: improves liquidity and momentum; also loosens restraint
-	country_finance_momentum_monthly_add = 0.25
+	# monthly: improves liquidity and momentum; also loosens restraint.
+	# MOMENTUM 0.25 -> 0.08 (2026-10-05, banking_cycle_simulation.md §21), to
+	# the scale of the market's Emergency Liquidity Program; see Capital Plan.
+	country_finance_momentum_monthly_add = 0.08
 	country_bubble_pressure_monthly_add  = 0.50
 }
 
@@ -6196,6 +6213,26 @@ bubble_inertia_high = {
 bubble_inertia_extreme = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_finance_momentum_monthly_add = 1.0
+}
+
+# Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §21):
+# a fifth of the market's pull, under the same bands and the same
+# bubble_inertia_multiplier_script_value. With none at all a cooperative economy
+# almost never left Stable (0.6 crashes a century untooled, Boom or Frenzy 0.2%
+# of months); at a fifth it has about 2, the owner's target.
+bubble_inertia_moderate_coop = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_finance_momentum_monthly_add = 0.2
+}
+
+bubble_inertia_high_coop = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_finance_momentum_monthly_add = 0.2
+}
+
+bubble_inertia_extreme_coop = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_finance_momentum_monthly_add = 0.2
 }
 
 #==================================================
