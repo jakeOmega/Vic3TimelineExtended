@@ -3551,11 +3551,20 @@ country_leverage_threshold_change_add = {
 # common/script_values/extra_script_values.txt — overrides vanilla's literal `= 200`
 leverage_threshold_to_invite = {
     value = 200
-    power_bloc_leader = { add = modifier:country_leverage_threshold_change_add }
+    if = {                                   # read in power-bloc scope
+        limit = { exists = this.power_bloc_leader }
+        power_bloc_leader = { add = modifier:country_leverage_threshold_change_add }
+    }
+    else_if = {                              # read in country scope
+        limit = { exists = this.power_bloc.power_bloc_leader }
+        power_bloc.power_bloc_leader = { add = modifier:country_leverage_threshold_change_add }
+    }
 }
 ```
 
 Tech / law / institution `modifier = { country_leverage_threshold_change_add = -100 }` blocks contribute additively, the override sums them via `modifier:X`, the engine reads the result wherever it consumed the original literal. Tooltips on the contributors auto-render the modifier line.
+
+**Write the override for every scope vanilla reads it in.** Vanilla's literal works anywhere, so vanilla is free to read it from a power bloc in one place and from a country in another. A scope hop in the override (`power_bloc_leader = { … }`) holds in only one of them. Elsewhere it reads nothing, and the engine logs `Value of wrong type in '<vanilla file>:<line>'. Got value of type 'none'` at the *outermost* script value, a vanilla line, which makes it look like vanilla noise. `grep -rn <value name> <game>/common <game>/events` before writing the override, and work out the scope at each read. The unguarded hop above logged about 600 lines a minute from `28_invite_to_power_bloc.txt:87` (the AI's `accept_score`, which reads the value in country scope at line 104) and sat in the vanilla registry for almost five months (scope guards added 2026-10-05; the next launch confirms them).
 
 **Failure mode**: the modifier definition + tech contributions are easy to write and look correct, but if the script-value override is missing (or accidentally deleted in a refactor), the contributions are summed into a value that no one reads. No log signal — the modifier appears in tooltips, the techs appear to apply it, but the gameplay number stays at the vanilla literal.
 

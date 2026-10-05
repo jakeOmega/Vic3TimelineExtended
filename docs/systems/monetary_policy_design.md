@@ -822,9 +822,14 @@ still open and are inherited, not repeated.
     means the read failed (or a guard term is wrong) and the copy did not run; a loyalist win
     logs `not a rebel win`, and a second copy from the same loser logs `already taken`. The
     layer's own `TE_CIVIL_WAR` lines, just before, say which side won and whether the loser
-    resolves. Still to do: read `te_debug_monetary.1` on the winner of a rebel win a month
-    later. The vault should hold both banks' gold, the band modifier should match the copied
-    inflation, and there should be exactly one. Remove the `TE_CW_PROBE` lines once read.
+    resolves. **Read on 2026-10-05, and the probe removed.** In the owner's game, 15 rebel
+    wins each logged `1/2` and then `2/2` with equal inflation. One more (Touggourt's
+    Modernist Revolt) logged `still alive`: the loser had not died when the rebels won, so
+    nothing was copied, and nothing runs the copy if it dies later. Whether that case needs
+    a later copy is open. Still to do: read `te_debug_monetary.1` on the winner of a rebel
+    win a month later (the layer's `TE_CIVIL_WAR: <name> won as the uprising` line names
+    it). The vault should hold both banks' gold, the band modifier should match the copied
+    inflation, and there should be exactly one.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
     applied deliberately (step 6c always has exactly one thing to apply, and the modifier
     list always names the band), but an empty `modifier = { }` on ~1,400 countries is a form

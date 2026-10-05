@@ -250,10 +250,9 @@ class WiringTests(unittest.TestCase):
         self.assertEqual(body.count("te_monetary_inherit_central_bank"), 1)
         call = body.index("te_monetary_inherit_central_bank")
         self.assertGreater(call, guard.end())
-        self.assertLess(call, body.index("else_if"))
         # Once per loser: the marker names the object the bank was taken from.
         self.assertRegex(
-            body[call:body.index("else_if")],
+            body[call:],
             r"set_variable\s*=\s*\{\s*name\s*=\s*te_mon_cw_bank_taken\s+value\s*=\s*scope:te_cw_loser\s*\}")
         # Nothing else calls either effect.
         callers = {"te_monetary_inherit_central_bank": [], "te_monetary_repair_after_civil_war": []}
