@@ -11,10 +11,13 @@ small interpreter:
   against the shipped constants, and the simulator's port against the script.
 * THE SUSPENSION ENDS IN A QUESTION. Step 10 stops te_peg_suspended_months at 1
   and sends te_peg.3 once; only its options take the counter to 0 — resume at
-  confidence 50, or Fiat Money where the law's own gates allow it.
-* THE AI'S CURRENCY WEIGHTS. Gold weighs nothing once fiat is on offer; fiat
-  weighs more while suspended, in deflation and in later eras; cooperative
-  ownership joins the national bank's economic-system branch.
+  confidence 50, or Fiat Money where the law's own gates allow it, after
+  cancelling any currency-law enactment under way. The suspension's lost
+  credibility goes on every road off gold.
+* THE AI'S CURRENCY WEIGHTS. Gold gets no bonus once fiat is on offer; fiat
+  weighs more while suspended, in deflation and in later eras, and digital
+  stays 100 ahead of it; cooperative ownership joins the national bank's
+  economic-system branch.
 """
 import math
 import re
@@ -170,6 +173,20 @@ class SlumpDrain(unittest.TestCase):
         self.assertEqual(state.peg_confidence, 81)
 
 
+class LostCredibilityOffGold(unittest.TestCase):
+    def test_step_10_removes_it_whenever_the_gold_law_is_gone(self):
+        found = find(gold_update(), lambda item: item[0] == 'if' and isinstance(item[2], list)
+                     and ('NOT', '=', [('has_law_or_variant', '=', 'law_type:law_gold_standard')])
+                     in Script.field(item[2], 'limit'))
+        self.assertIsNotNone(found)
+        i, body = found
+        removes = [val for key, _, val in body[i][2] if key == 'if'
+                   and ('remove_modifier', '=', 'te_mon_peg_credibility_lost') in val]
+        self.assertEqual(len(removes), 1)
+        self.assertIn(('has_modifier', '=', 'te_mon_peg_credibility_lost'),
+                      Script.field(removes[0], 'limit'))
+
+
 class SuspensionClock(unittest.TestCase):
     """The clock at the foot of step 10: count down to 1, then ask once."""
 
@@ -274,6 +291,24 @@ class SuspensionEndEvent(unittest.TestCase):
                    and ('remove_modifier', '=', 'te_mon_peg_credibility_lost') in val]
         self.assertTrue(removes)
 
+    def test_fiat_cancels_a_running_currency_enactment_first(self):
+        b = self.option('te_peg.3.b')
+        keys = [key for key, _, _ in b]
+        law_at = keys.index('activate_law')
+        cancel = [(i, val) for i, (key, _, val) in enumerate(b) if key == 'if'
+                  and ('cancel_enactment', '=', 'yes') in val]
+        self.assertEqual(len(cancel), 1)
+        at, body = cancel[0]
+        self.assertLess(at, law_at)
+        enacting = {val.removeprefix('law_type:')
+                    for key, _, val in Script.field(Script.field(body, 'limit'), 'OR')
+                    if key == 'is_enacting_law'}
+        text = (ROOT / LAWS).read_text(encoding='utf-8-sig')
+        group = set(re.findall(r'(?m)^(law_\w+) = \{\n(?:\t[^\n]*\n)*?\tgroup = lawgroup_monetary_policy\b',
+                               text))
+        self.assertEqual(len(group), 5, group)
+        self.assertEqual(enacting, group)
+
     def test_every_option_explains_itself(self):
         # silent_variable: the writes are hidden, so each option says what it does.
         for option in self.options:
@@ -335,6 +370,19 @@ class CurrencyWeights(unittest.TestCase):
         s = World(techs=eras)
         s.vars.update(te_peg_suspended_months=12, te_inflation_band=1)
         self.assertEqual(s.weight(self.fiat), 1000)
+
+    def test_digital_stays_ahead_of_fiat_wherever_both_are_open(self):
+        digital = law_weight('law_digital_currency')
+        eras = ('television_broadcasting', 'containerization', 'globalization')
+        for n in range(0, 4):
+            for suspended in (False, True):
+                for band in (1, 2):
+                    s = World(techs=eras[:n])
+                    s.vars['te_inflation_band'] = band
+                    if suspended:
+                        s.vars['te_peg_suspended_months'] = 12
+                    self.assertEqual(s.weight(digital), s.weight(self.fiat) + 100,
+                                     (n, suspended, band))
 
     def test_cooperative_ownership_joins_the_banks_economic_systems(self):
         # A minor, out of debt, in no power bloc: 600 base, +400 for the

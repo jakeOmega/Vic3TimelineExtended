@@ -2939,7 +2939,8 @@ te_monetary_apply_interest_modifiers = {
 # again. Only te_peg.3's options take the counter from 1 to 0.
 #
 # OFF GOLD. Borrowed gold goes home out of the VAULT (never the treasury) and
-# confidence resets; a SUSPENSION freezes vault, balance and confidence alike,
+# confidence resets, and with the LAW gone the suspension's lost-credibility
+# modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
 # because suspending convertibility is refusing to pay gold out. Either way
 # the carry stops: no peg, no foreign balances held against it.
 #
@@ -3159,11 +3160,24 @@ te_monetary_update_gold = {
 		# The LAW itself gone: a suspension or a defence of a peg that no
 		# longer exists is nothing, and the vault is counted afresh if the
 		# country ever enacts the gold standard again.
+		#
+		# So is the suspension's lost credibility (2026-10-05): the modifier is
+		# the exact inverse of the gold law's -1pp credit standing, so with no
+		# gold law it would be a standing +1pp of its own. Removed here, on
+		# every route off gold — the law panel, a regime change, te_peg.3's
+		# Fiat Money option (which also removes it at once) — so the price of
+		# leaving does not depend on the road. The +2pp te_mon_peg_suspension
+		# still runs out its own clock: that is the premium for having
+		# suspended at all, not a gold bonus withheld.
 		if = {
 			limit = { NOT = { has_law_or_variant = law_type:law_gold_standard } }
 			set_variable = { name = te_peg_suspended_months value = 0 }
 			set_variable = { name = te_peg_defend_months value = 0 }
 			set_variable = { name = te_bank_gold_seeded value = 0 }
+			if = {
+				limit = { has_modifier = te_mon_peg_credibility_lost }
+				remove_modifier = te_mon_peg_credibility_lost
+			}
 		}
 	}
 

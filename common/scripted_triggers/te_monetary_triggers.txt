@@ -598,7 +598,8 @@ te_mon_fiat_available = {
 # already uses to end the radio era; era 9 is globalization, te_mon_era_base's
 # own marker; era 8 is containerization, the trade revolution of the floating
 # era. They need not be researched in order, which only matters for a weight.
-# Read by law_fiat_currency's AI weight and te_peg.3's AI chance.
+# Read by law_fiat_currency's and law_digital_currency's AI weights and te_peg.3's
+# AI chance.
 te_mon_reached_era_7 = {
 	has_technology_researched = television_broadcasting
 }

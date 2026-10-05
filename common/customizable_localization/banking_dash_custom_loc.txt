@@ -613,6 +613,27 @@ te_mon_peg_state = {
 	}
 }
 
+# The Peg Confidence tooltip's suspension clock (2026-10-05). Step 10 stops the
+# counter at 1 and asks te_peg.3, and the country stays suspended until it is
+# answered — up to the event's three months — so "1 months left" would sit there
+# that long. With the question out it says the decision is due instead.
+te_mon_peg_suspension_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_peg_is_suspended = yes
+			var:te_peg_suspended_months <= 1
+			has_variable = te_peg_resume_asked
+		}
+		localization_key = banking_dash_mon_peg_suspension_due
+	}
+	text = {
+		localization_key = banking_dash_mon_peg_suspension_left
+	}
+}
+
 
 # ----------------------------------------------------------------------------
 # What kind of range the dial has, and what pays for it (§5.1, §5.4)

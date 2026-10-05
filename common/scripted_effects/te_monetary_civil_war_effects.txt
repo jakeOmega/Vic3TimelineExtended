@@ -380,6 +380,14 @@ te_monetary_inherit_central_bank = {
 	# left, so 30); still there means under 60 — 60 left if the suspension has
 	# just run its course on gold, and anywhere in 60-120 (so 90) if the gold
 	# law went.
+	#
+	# OFF GOLD IT IS SHORT-LIVED (2026-10-05). Step 10 removes this modifier
+	# from any country without the gold law, so a loser off gold carries it
+	# only in the month its law changed, and a winner off gold loses the copy
+	# made here at its next pulse, like anyone else off gold. The off-gold
+	# branches therefore matter only for a winner whose laws are back on gold,
+	# where the copy is right: it is the bonus that winner's gold law would
+	# otherwise pay.
 	if = {
 		limit = {
 			scope:te_cw_loser = { has_modifier = te_mon_peg_credibility_lost }

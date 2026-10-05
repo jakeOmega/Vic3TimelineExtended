@@ -278,6 +278,7 @@
 # §12.3 defines those options AS a jump in confidence and the start of a clock
 # — and its sequel te_peg.3 (2026-10-05) writes te_peg_suspended_months and
 # te_peg_confidence when it ends that clock, resuming at 50 or moving to fiat.
+# te_peg.1 also keeps one flag of its own, te_peg_crisis_slump (below).
 # (te_debug_monetary.8 is the console-only writer, as .5 and .7 are for phase 2.)
 # NONE OF THIS IS HIDDEN STATE: every figure is built from displayed ones — the
 # policy rate, expected inflation, GDP, the treasury — and none carries r*.
@@ -357,6 +358,12 @@
 #                                                   suspension. Timed past the
 #                                                   event's three-month life, so a
 #                                                   lost question is asked again
+#   te_peg_crisis_slump     1, 120 days             written by te_peg.1's own
+#                                                   `immediate`, not step 10: the
+#                                                   crisis came by the slump road
+#                                                   with the vault able to pay, so
+#                                                   its desc and flavour say so
+#                                                   whenever the event is opened
 #
 #   global_var:te_world_rate            the world rate (§12.1), once a month
 #   global_var:te_world_rate_acc_num    its two accumulators, reset every call

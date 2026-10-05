@@ -746,16 +746,17 @@ pay for it in gold. At 20, The Run on the Vault fires:
 | Option | Effect |
 |---|---|
 | Defend the peg: "Raise the rate until the gold comes back." | For a year the rate target stays at least 4 points above the World Rate; Peg Confidence +40 |
-| Suspend convertibility: "Suspend payment in gold. For the duration." | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten; then the choice below |
+| Suspend convertibility: "Suspend payment in gold. For the duration." | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten, or until you leave gold; then the choice below |
 | Devalue: "The peg holds. The price of gold does not." | The vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index drops to 88 and recovers over five years; prices rise; the great powers resent it |
 
-When the five years are up, The Suspension Lapses asks what the currency is now,
-and it stays suspended until you answer:
+When the five years are up, The Suspension Lapses asks what the currency is now.
+The currency stays suspended until you answer; left unanswered for three months,
+the event restores convertibility by itself:
 
 | Option | Effect |
 |---|---|
 | Restore convertibility | Back on gold at the old parity; Peg Confidence starts at 50 |
-| Keep the paper | Fiat Money becomes law at once; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; greyed out otherwise |
+| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; greyed out otherwise |
 
 ### The exchange-rate index and capital controls
 

@@ -429,7 +429,9 @@ te_peg.2 = {
 # both allowed under fiat, and a dollarised country cannot take this option at
 # all — which is why its trigger asks, rather than paying the dollarisation exit's
 # new-currency price from here. The consistency sweep that on_law_activated runs
-# needs only the national bank the trigger already demands.
+# needs only the national bank the trigger already demands. A monetary-policy
+# law the country is part-way through enacting is cancelled first
+# (cancel_enactment); an enactment in any other group carries on.
 #
 # NO `trigger` BLOCK (te_peg.1's rule: the gate is step 10). The
 # cancellation_trigger covers the one way the question can go stale while it
@@ -485,6 +487,7 @@ te_peg.3 = {
 	# the exact inverse of the gold standard's -1pp credit standing
 	# (extra_modifiers.txt), so with no gold law left it would be a standing
 	# +1pp of its own, a penalty for leaving gold that resuming does not pay.
+	# Step 10 removes it on every other road off gold as well.
 	option = {
 		name = te_peg.3.b
 		trigger = {
@@ -505,7 +508,27 @@ te_peg.3 = {
 				remove_variable = te_peg_resume_asked
 			}
 		}
+		# A monetary-policy enactment already under way is cancelled first:
+		# activate_law on top of a running enactment in the same group is
+		# untested, and the question that enactment was answering is the one
+		# this option has just settled. An enactment in any other group (one
+		# runs at a time — law_national_bank, say) is left alone. ADD A LAW
+		# HERE if lawgroup_monetary_policy ever gains a sixth.
+		if = {
+			limit = {
+				OR = {
+					is_enacting_law = law_type:law_commodity_money
+					is_enacting_law = law_type:law_gold_standard
+					is_enacting_law = law_type:law_fiat_currency
+					is_enacting_law = law_type:law_digital_currency
+					is_enacting_law = law_type:law_decentralized_cryptocurrency
+				}
+			}
+			cancel_enactment = yes
+		}
 		activate_law = law_type:law_fiat_currency
+		# Step 10 removes this from any country off the gold law too; doing it
+		# here as well takes it off the same day.
 		if = {
 			limit = { has_modifier = te_mon_peg_credibility_lost }
 			remove_modifier = te_mon_peg_credibility_lost

@@ -900,9 +900,10 @@ law_gold_standard = {
 		country_credit_standing_add = -0.01
 	}
 
-	# Gold weighs nothing once Fiat Money is on offer (2026-10-05). An AI that
+	# No bonus for gold once Fiat Money is on offer (2026-10-05). An AI that
 	# has Keynesian Economics and a national bank, or already runs a paper
-	# currency, gets no push back onto the metal from here: a flat 100 had
+	# currency, gets no push back onto the metal from this additive weight
+	# (movements and interest groups still can): a flat 100 had
 	# 124 of 175 countries on gold in a 2015 observer game, with fiat (200)
 	# open to most of them. What is left is the interest groups' own stances
 	# (§13), which still favour gold under a centre-right government.
@@ -1028,8 +1029,35 @@ law_digital_currency = {
 		country_can_create_unbacked_money_bool = yes
 	}
 
+	# Fiat Money's three terms on top of a flat 300 (2026-10-05), so Digital
+	# Currency stays 100 ahead of fiat wherever both are open: without them
+	# fiat's era bonus outran it from era 9, and an AI with both on offer
+	# enacted fiat first and digital after.
 	ai_enact_weight_modifier = {
 		value = 300
+		if = {
+			limit = { te_mon_peg_is_suspended = yes }
+			add = 300
+		}
+		if = {
+			limit = {
+				has_variable = te_inflation_band
+				var:te_inflation_band <= 1
+			}
+			add = 200
+		}
+		if = {
+			limit = { te_mon_reached_era_7 = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_mon_reached_era_8 = yes }
+			add = 100
+		}
+		if = {
+			limit = { te_mon_reached_era_9 = yes }
+			add = 100
+		}
 	}
 }
 

@@ -931,6 +931,8 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
 - A **confidence bar** widget — §3 asks for a bar; the row prints the figure and a word.
 - Nothing removes an active suspension's modifiers if the gold *law* goes mid-suspension; the
   counter is cleared (step 10), the +2pp / lost-credibility modifiers run out their clocks.
+  **Since 2026-10-05 the lost-credibility one is removed** with the law (§0.13 F6); the +2pp
+  still runs out.
 
 #### Known roughnesses (phase 3)
 
@@ -1884,8 +1886,9 @@ second crisis about seven years later" (§0.5 roughness 7, PR #536) stays accept
   becomes 0 once `te_mon_fiat_available` (Keynesian Economics and a national bank) or the
   country already runs fiat or digital currency. `law_fiat_currency`'s 200 gains +300 while
   convertibility is suspended, +200 in the Deflation band and +100 for each era past 6
-  (`te_mon_reached_era_7/8/9`) — 1000 with all of them. `law_national_bank`'s +400 branch adds
-  `law_cooperative_ownership` (§5.3: full system).
+  (`te_mon_reached_era_7/8/9`) — 1000 with all of them. `law_digital_currency` takes the same three terms on its own 300, so it stays 100 ahead of
+  fiat wherever both are open (from era 9 fiat's era bonus alone would have outrun it).
+  `law_national_bank`'s +400 branch adds `law_cooperative_ownership` (§5.3: full system).
 - **The slump drain.** `te_mon_peg_in_deep_slump`: the financial cycle in a Downturn or Panic
   (`banking_cycle_is_recession`) while `te_mon_stance_band` is 4 or 5 — the Tight and Very Tight
   the dashboard shows. While it holds, step 10 takes `te_mon_peg_slump_drain` (3) off
@@ -1902,7 +1905,9 @@ second crisis about seven years later" (§0.5 roughness 7, PR #536) stays accept
   suspended until an option answers. **Resume** (default) is what the clock used to do: counter
   0, confidence 50. **Fiat Money** sets the counter to 0, `activate_law = law_type:law_fiat_currency`
   (the precedent of `extra_law_events.36` and `cultural_hegemony.16`), and removes
-  `te_mon_peg_credibility_lost`. It needs Keynesian Economics, a national bank and a currency of
+  `te_mon_peg_credibility_lost`. A currency law the country is part-way through enacting is
+  cancelled first (`cancel_enactment`, behind `is_enacting_law` on each of the group's five
+  laws); an enactment in another group is left alone. It needs Keynesian Economics, a national bank and a currency of
   the country's own; without them it is greyed out (`show_as_unavailable`) with each condition
   ticked or crossed. `cancellation_trigger`: the gold law gone, or the counter already 0. AI:
   resume 6; fiat 4, +2 per era past 6, +4 in a Downturn, Panic or the Deflation band.
@@ -1956,24 +1961,27 @@ doubles it (1.24).
 | **F3** | **Deflation alone is not a deep slump**; Tight or Very Tight is required | the simulator read above: a fixed nominal rate in deflation already reads Tight, so the tight leg covers the classical case, and Deflation alone adds downturns the peg is not prolonging |
 | **F4** | The drain is **independent of the vault** and stacks with the under-pressure terms | the 1931 road runs with gold still in the vault; the overvaluation term is the precedent |
 | **F5** | **The suspension holds at its last month until answered**, rather than resuming and then asking | resuming first would put the country back on gold with its frozen confidence — often 20 or under, with the 24-month cooldown long over — for the weeks a player takes to answer, so a fresh `te_peg.1` could arrive before the choice |
-| **F6** | **The Fiat Money option removes `te_mon_peg_credibility_lost`** — *owner to confirm* | the modifier is the exact inverse of the gold law's −1pp credit standing (its own comment); with no gold law it would be a standing +1pp penalty for five more years that the resume path does not pay |
+| **F6** | **`te_mon_peg_credibility_lost` goes on every road off gold** — `te_peg.3`'s Fiat Money option at once, and step 10's "the LAW itself gone" branch for every other (the law panel, commodity money, a regime change) — *decided by the controller after review; the owner can revert* | the modifier is the exact inverse of the gold law's −1pp credit standing (its own comment); with no gold law it would be a standing +1pp penalty for up to five more years that the resume path does not pay. The +2pp `te_mon_peg_suspension` still runs out its clock on every road: it is the premium for having suspended, not a gold bonus withheld |
 | **F7** | **A dollarised country cannot take the Fiat option** (it is greyed with *Uses a currency of its own*) | `activate_law` skips `on_law_enactment_pass`, so the P9 exit would not charge the new-currency price; asking is simpler than repeating it here, and the case (hyperinflation and dollarisation inside a five-year suspension) is rare |
 | **F8** | `te_peg.1`'s desc and flavour gained a **slump variant**, keyed on a flag set at firing | the old text ("the gold is nearly gone") is wrong for a crisis reached with a full vault, and a desc is evaluated when the player opens the event, by which time the slump may be over |
 
-#### Owner decisions to review (§0.13)
+#### Owner decisions (§0.13)
 
-1. **F6** above: drop the lost-credibility modifier on the fiat path, or keep it as a price for
-   leaving gold. **It is path-dependent as shipped:** only `te_peg.3`'s option removes it. A
-   country that enacts Fiat Money through the law panel mid-suspension (which fiat's +300 while
-   suspended now encourages in the AI) keeps both timed modifiers, as §0.5's deferred list already
-   says of any law change mid-suspension, and pays the +1pp for the rest of the ten years. If F6
-   stands, the same `remove_modifier` belongs in step 10's "the LAW itself gone" branch; if not,
-   it comes out of `te_peg.3`.
-2. **Defend in a slump that does not end.** Defend's +40 is gone in about 13 months at −3, so in a
-   slump the peg itself is prolonging the 24-month cooldown sets the cadence: a crisis every two
-   years until the country suspends, devalues or the slump lifts. Defend is unchanged, as ruled;
-   this states a consequence of the drain. The accepted "second crisis about seven years later"
-   was measured on the vault road.
+1. **F6 — decided after review (2026-10-05), the owner can revert:** the lost-credibility modifier now goes on every road off gold, consistently
+   (the law panel, commodity money, a regime change and `te_peg.3`'s option alike). The first
+   version removed it only in `te_peg.3`, so a country that enacted fiat through the law panel
+   mid-suspension (which fiat's +300 while suspended encourages in the AI) paid the +1pp for the
+   rest of the ten years. To keep it as a price for leaving gold instead, take the
+   `remove_modifier` out of both places.
+2. **Defend in a slump that does not end — RULED (owner, 2026-10-05): keep the drain running
+   during Defend; accepted as intended.** Defend's world + 4 floor is Very Tight by construction,
+   so a Defend answered in a Downturn or Panic keeps the drain on, and its +40 is gone in about 13
+   months at −3: the 24-month cooldown sets the cadence, a crisis about every two years until the
+   country suspends, devalues or recovers. That is the 1931 analogue (defending gold through a
+   slump deepened it); the AI mostly suspends in a panic, and a suspension now ends in
+   `te_peg.3`'s fiat choice. Defend and the drain are unchanged. The accepted "second crisis
+   about seven years later" (§0.5 roughness 7) is the vault road's cadence; this is the slump
+   road's. Do not re-flag.
 3. **Found, not changed: a player bank on Price Stability under gold.** In the simulator a gold
    country delegated to Price Stability (the seeded mandate for a player) reaches `te_peg.1`
    about 15 times a century with or without the drain, because the mandate cuts below the world
@@ -1993,6 +2001,10 @@ doubles it (1.24).
 - **The slump drain reads the stance as the bank reads it**, error included, so a true gap near
   0.75 can read Tight in one month and Neutral the next. The simulator found this rarely matters.
 - **`te_mon_reached_era_*` is not monotone** if a country researches the markers out of order.
+- **"Being defended" outranks "Doubted in the slump"** in `te_mon_peg_state`. Defend's world + 4
+  floor is Very Tight, so a Defend answered in a Downturn or Panic runs the drain (owner ruling
+  above) while the word says the peg is being defended; the tooltip's slump section still
+  explains the fall. Left as is.
 - The tooltips and `docs/player_guide/04-banking.md` state the drain (3), the threshold and the
   two-year figure in words. Retuning `te_mon_peg_slump_drain` means editing
   `banking_dash_mon_pegconf_tt`, the chapter and the table above.
@@ -2001,15 +2013,18 @@ doubles it (1.24).
 
 | # | Check |
 |---|---|
-| **F-1** | A gold country with a bank on Peg Defence, vault healthy: `event te_debug_monetary.8`, option *g* then option *a*. Within a month or two the stance reads Tight or Very Tight, the Peg Confidence word reads *Doubted in the slump*, and confidence falls 3 a month with no recovery while Gold Flow stays near zero |
+| **F-1** | A gold country with a bank on Peg Defence, vault healthy: `event te_debug_monetary.8`, option *g* then option *a*. Within a month or two the stance reads Tight or Very Tight, the Peg Confidence word reads *Doubted in the slump*, and confidence falls 3 a month with no banded recovery while Gold Flow stays near zero (a swap line or bloc cooperation still adds its +2 / +1) |
 | **F-2** | Same, until confidence reaches 20: `te_peg.1` fires with the slump desc ("There is gold in the vault yet…"); a vault-road crisis (option *c* on a low vault) still shows the old one |
 | **F-3** | The Peg Confidence tooltip shows the *In a deep slump* section, with the stance words rendered (no raw `$…$` keys) |
 | **F-4** | Choose *Suspend*, then `te_debug_monetary.8` option *e*: next pulse `te_peg.3` fires once. With Keynesian Economics and a national bank both options are open; without Keynesian Economics the fiat option is greyed with that line crossed |
 | **F-5** | *Restore convertibility*: the currency is back on gold, Peg Confidence reads 50, and no second `te_peg.3` follows |
 | **F-6** | *Keep the paper*: the Monetary Policy law reads Fiat Money the same day (not bounced by the consistency sweep), `te_mon_peg_credibility_lost` is gone from the country's modifiers, and the gold rows leave the dashboard next pulse |
 | **F-7** | An AI country that suspends: its `te_peg.3` is answered (watch `debug.log` and its law), and in later eras it keeps the paper more often than not |
+| **F-10** | *Keep the paper* while the country is part-way through enacting another currency law (start Commodity Money or Digital Currency in the law panel, then `te_debug_monetary.8` option *e*): that enactment is cancelled, Fiat Money lands, and nothing is left half-enacted. While enacting a law in another group (National Bank Established, say) the enactment carries on beside the new currency law |
+| **F-11** | Leave gold through the law panel during a suspension (or in the five years after resuming): `te_mon_peg_credibility_lost` is gone the month after the law lands, as on the *Keep the paper* road; `te_mon_peg_suspension` runs out its own clock |
+| **F-12** | While `te_peg.3` waits, the Peg Confidence tooltip's last line reads "Suspension: decision due…" rather than "1 months left" |
 | **F-8** | Next AI-only observer game to 2015: count monetary laws against 124 gold / 18 fiat / 33 commodity, and national banks against 98 / 175 (cooperatives especially), and look for gold countries sitting in a Downturn for years with Peg Confidence at 100 (should be gone) |
-| **F-9** | `debug.log` clean of `te_peg.3`, `te_mon_peg_in_deep_slump`, `te_mon_reached_era_` and `te_mon_fiat_available` errors (`ai_enact_weight_modifier` limits reading the new triggers in law scope) |
+| **F-9** | `debug.log` clean of `te_peg.3`, `te_mon_peg_in_deep_slump`, `te_mon_reached_era_` and `te_mon_fiat_available` errors (`ai_enact_weight_modifier` limits reading the new triggers; the root there is the AI country, with the law as `scope:law`) |
 
 **Not verified in a running game**, like everything else in §0.
 
@@ -2980,8 +2995,8 @@ negative `add_treasury` would only deepen the debt) and move `te_peg_confidence`
 instead: −3 per pp of negative gap per month, −2 in panic/downturn, −2 if `scaled_debt ≥
 0.5`; +2 per month when the gap is ≥ 0 and reserves are rebuilding.
 
-**A deep slump drains it too (2026-10-05, §0.13)**, whatever the vault holds: −3 a month, and no
-recovery, while the cycle is in a Downturn or Panic and the stance reads Tight or Very Tight —
+**A deep slump drains it too (2026-10-05, §0.13)**, whatever the vault holds: −3 a month, with
+the banded recovery held (backstops and the low-vault +2 still count), while the cycle is in a Downturn or Panic and the stance reads Tight or Very Tight —
 the peg holding money dear in a slump, which peg defence does by design. About two years from a
 trusted peg to the crisis.
 
@@ -4823,7 +4838,7 @@ P6-1…13).
 | Defend / Suspend / Devalue | world + 4 for 12 months, +40 · 60 months, +2pp premium 5y, credibility lost 10y · confidence 50, revaluation 15% of the reserve limit, +3pp pressure decaying over 2y | 12.3 |
 | Deep-slump drain (§0.13) | −3 a month, heal held, while a Downturn or Panic meets a Tight or Very Tight stance | 12.3 |
 | Suspension's end (`te_peg.3`, §0.13) | resume at 50, or Fiat Money; asked once per 120 days; AI resume 6 / fiat 4 + 2 per era past 6 + 4 in a slump or deflation | 12.3 |
-| Currency AI weights (§0.13) | gold 100, 0 once fiat is open or held · fiat 200 + 300 suspended + 200 deflation + 100 per era past 6 | 5.1 |
+| Currency AI weights (§0.13) | gold 100, 0 once fiat is open or held · fiat 200 + 300 suspended + 200 deflation + 100 per era past 6 · digital 300 + the same three terms | 5.1 |
 | FX target: per pp real-rate gap (clamp) / per pp inflation gap (clamp) / per pp cyclical premium | 4.0 (±5) / 2.0 (±10) / 1.5 | 15.1 |
 | FX adjustment speed / index clamp / shock clamp + decay / shock capture | 1/12 per month / 50–150 / ±40, ×11/12 / 38% of nominal | 15.1 |
 | Post-devaluation: index / return speed / window (replaces Q12's ±0.15 over 5y, same peak and impulse) | 88 / 1/30 / 60 months | 15.2 |
