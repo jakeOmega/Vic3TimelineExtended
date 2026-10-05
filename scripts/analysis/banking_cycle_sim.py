@@ -82,6 +82,8 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     Foreign severity is uniform over the five tier midpoints (10/30/50/70/90).
     Reach probability and delay are folded into the arrival interval; imported
     option modifiers (including decaying protectionism) and backstops are omitted.
+  * te_peg.1, the convertibility crisis: only with --peg-slump (Config.peg_crisis),
+    and always resolved as Defend. Elsewhere confidence can sit at 0 unanswered.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
     Foreign-borrowing limits, FX surrender and import financing therefore have
     no AI selection here; actual-script scenarios test their accounting. The
@@ -100,6 +102,7 @@ USAGE
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --json out.json
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only fiat
+    .venv/bin/python scripts/analysis/banking_cycle_sim.py --peg-slump --runs 400   # §24
 """
 
 from __future__ import annotations
