@@ -31,11 +31,12 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
+from statistics import median
 from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines
+from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines, iter_script_files
 from paradox_file_parser import ParadoxFileParser
 import path_constants
 from path_constants import (
@@ -192,6 +193,7 @@ ms: ModState = None  # type: ignore[assignment]
 startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
+_company_catalog_cache: tuple[ModState, list[dict]] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -3671,6 +3673,91 @@ def _unwrap_modifiers(block_dict):
     return out
 
 
+def _company_catalog():
+    """Merged company rows; raw files supply declaration locations only.
+
+    A mod INJECT (even a no-op) counts as mod-touched. Snapshot provenance
+    names the JSON backing file rather than guessing a vanilla script path.
+    """
+    global _company_catalog_cache
+    companies = ms.get_data("Company Types") if ms is not None else None
+    if companies is None:
+        raise DataNotLoaded("Company Types")
+    if _company_catalog_cache is not None and _company_catalog_cache[0] is ms:
+        return _company_catalog_cache[1]
+
+    vanilla_parser = ms.base_parsers.get("Company Types")
+    vanilla = vanilla_parser.data if vanilla_parser is not None else {}
+    sources = defaultdict(list)
+    for origin, directories, root in (
+        ("mod", mod_paths, mod_path),
+        ("vanilla", base_game_paths, base_game_path),
+    ):
+        if origin == "vanilla" and _vanilla_source.get("kind") == "vanilla_parsed":
+            for cid in vanilla:
+                sources[cid].append({
+                    "source": "vanilla",
+                    "file": "vanilla_parsed/common/company_types.json",
+                })
+            continue
+        directory = directories.get("Company Types")
+        if not directory or not os.path.isdir(directory):
+            continue
+        for path in iter_script_files(directory):
+            parser = ParadoxFileParser()
+            try:
+                parser.parse_file(path, apply_directives=False)
+            except Exception as exc:
+                logger.warning("Company provenance scan skipped %s: %s", path, exc)
+                continue
+            location = {"source": origin, "file": os.path.relpath(path, root).replace(os.sep, "/")}
+            for key in parser.data:
+                cid = key.split(":", 1)[-1]
+                if location not in sources[cid]:
+                    sources[cid].append(location)
+
+    def attainable_techs(value, is_tech=False):
+        if isinstance(value, tuple) and len(value) >= 2:
+            return attainable_techs(value[1], is_tech)
+        if isinstance(value, str):
+            return {value} if is_tech else set()
+        found = set()
+        if isinstance(value, dict):
+            for key, child in value.items():
+                found.update(attainable_techs(child, key == "has_technology_researched"))
+        elif isinstance(value, list):
+            for child in value:
+                found.update(attainable_techs(child, is_tech))
+        return found
+
+    rows = []
+    for cid, raw in sorted(companies.items()):
+        cd = get_entity_data(raw)
+        modifiers = _unwrap_modifiers(get_entity_data(get_field(cd, "prosperity_modifier", {})))
+        flagship = {k: v for k, v in modifiers.items()
+                    if k.startswith("state_building_") and k.endswith("_max_level_add")}
+        prosperity = {k: v for k, v in modifiers.items() if k not in flagship}
+        locations = sources[cid]
+        touched = any(s["source"] == "mod" for s in locations)
+        # Keep source filtering useful for in-memory states without raw files.
+        source = "mod" if touched or cid not in vanilla or raw != vanilla[cid] else "vanilla"
+        roster = get_field(cd, "building_types", [])
+        extensions = get_field(cd, "extension_building_types", [])
+        rows.append({
+            "type": "Company Types", "id": cid, "name": ms.localize(cid),
+            "flavored": get_field(cd, "flavored_company", "no") == "yes",
+            "source": source, "source_files": locations,
+            "building_types": roster, "extension_building_types": extensions,
+            "roster_size": len(roster), "extension_count": len(extensions),
+            "prosperity_modifier": prosperity, "flagship": flagship,
+            "effect_count": len(prosperity),
+            "possible_prestige_goods": get_field(cd, "possible_prestige_goods", []),
+            "attainable_techs": sorted(attainable_techs(get_field(cd, "attainable", {}))),
+        })
+    _company_catalog_cache = (ms, rows)
+    return rows
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -5300,6 +5387,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "laws": lambda: self._laws(rest),
             "technologies": lambda: self._technologies(rest, params),
             "buildings": lambda: self._buildings(rest, params),
+            "companies": lambda: self._companies(rest, params),
+            "building-companies": lambda: self._building_companies(rest),
             "goods": lambda: self._goods(),
             "combat-units": lambda: self._combat_units(),
             "ideologies": lambda: self._ideologies(rest),
@@ -5418,6 +5507,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/laws/<id?>", "desc": "Laws and law groups; omit id for the index."},
                 {"path": "/technologies/<id?>", "desc": "Tech entries and tree relationships."},
                 {"path": "/buildings/<id?>", "desc": "Building defs incl. PMG list."},
+                {"path": "/companies?flavored=yes|no&source=mod|vanilla|all", "desc": "Merged company rosters, prosperity effects, flagships and per-flavored-bucket statistics."},
+                {"path": "/building-companies/<building_id>", "desc": "Companies listing a building in their roster or extension roster."},
                 {"path": "/goods", "desc": "Goods catalog."},
                 {"path": "/combat-units", "desc": "Combat unit type/group catalog."},
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
@@ -6826,6 +6917,51 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
         info["raw"] = serialize(raw)
         return info
+
+    # ---- structured: companies --------------------------------------------
+    def _companies(self, parts, params):
+        """GET /companies?flavored=yes|no&source=mod|vanilla|all."""
+        if parts:
+            raise NotFound("/companies/" + "/".join(parts))
+        flavored = (params.get("flavored") or [None])[0]
+        source = (params.get("source") or ["all"])[0]
+        if flavored not in (None, "yes", "no"):
+            raise BadRequest("flavored must be yes or no")
+        if source not in ("mod", "vanilla", "all"):
+            raise BadRequest("source must be mod, vanilla or all")
+        companies = [c for c in _company_catalog()
+                     if (flavored is None or c["flavored"] == (flavored == "yes"))
+                     and (source == "all" or c["source"] == source)]
+        stats = {}
+        for label in ("yes", "no"):
+            bucket = [c for c in companies if c["flavored"] == (label == "yes")]
+            stats[label] = {
+                "count": len(bucket),
+                "roster_size_median": median(c["roster_size"] for c in bucket) if bucket else None,
+                "roster_size_max": max((c["roster_size"] for c in bucket), default=None),
+                "effect_count_median": median(c["effect_count"] for c in bucket) if bucket else None,
+            }
+        # Annotation mutates rows, so never expose the cached dictionaries.
+        return {"count": len(companies), "companies": serialize(companies), "stats": stats}
+
+    def _building_companies(self, parts):
+        """GET /building-companies/<building_id> over the merged company data."""
+        if not parts:
+            raise BadRequest("Provide a building ID, e.g. /building-companies/building_synthetics_plant")
+        if len(parts) != 1:
+            raise NotFound("/building-companies/" + "/".join(parts))
+        buildings = ms.get_data("Buildings") if ms is not None else None
+        if buildings is None:
+            raise DataNotLoaded("Buildings")
+        bid = parts[0]
+        if bid not in buildings:
+            raise NotFound(bid)
+        companies = _company_catalog()
+        return {
+            "building": {"type": "Buildings", "id": bid, "name": ms.localize(bid)},
+            "roster": [c["id"] for c in companies if bid in c["building_types"]],
+            "extension": [c["id"] for c in companies if bid in c["extension_building_types"]],
+        }
 
     # ---- structured: goods ------------------------------------------------
     def _goods(self):
@@ -8947,7 +9083,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     generators, so there is no loop. Returns a warning dict on failure, else
     None.
     """
-    global _tech_unlocks_index_cache, _last_validation_report
+    global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -8963,6 +9099,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
             if os.path.isdir(loc_dir):
                 mod_state.add_localization(loc_dir)
         _tech_unlocks_index_cache = None
+        _company_catalog_cache = None
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -9232,6 +9369,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
+    global _company_catalog_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -9278,6 +9416,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     # entries don't leak across reloads.
     _last_validation_report = None
     _tech_unlocks_index_cache = None
+    _company_catalog_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 
