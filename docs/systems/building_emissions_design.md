@@ -131,6 +131,17 @@ in a building's own modifier list. Whether the state's modifier breakdown lists
 it building by building has not been checked in game. Sections 5–9 still
 describe the building-scoped display; §0 supersedes them.
 
+### Reserve hub exemption (2026-10-05)
+
+The Strategic Reserve hub's PM carries a 1-unit goods input and output per reserve
+good as a base that runtime flow modifiers scale. Read as a recipe, its oil input
+gave every hub a fixed +0.17 emissions line, though the hub stores and releases oil
+and burns none. `pm_emissions.EXEMPT_METHODS` now lists `pm_st_res_hub_reserve`:
+`plan_outputs` assigns it no emissions, and `pm_carbon_capture.fuel_recipe` reads it
+as burning nothing, so it has no capture group and no row in the exceptions table
+(it was listed there as "Oil consumed by reserve logistics" while still emitting).
+A new reserve good, coal included, needs no emissions work for the same reason.
+
 ## 1. How emissions work today
 
 > Historical design discussion; accounting and implementation status are superseded by §0.
