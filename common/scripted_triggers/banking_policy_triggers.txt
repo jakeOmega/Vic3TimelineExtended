@@ -740,7 +740,7 @@ banking_ai_hold_cb_capital_controls_outflow = {
 # Their enable buttons have no banking_ai_core_* triggers, so each hold below
 # restates the cycle and bubble terms its enable button scores on, less the
 # phases that button avoids, and reaches past them like the market holds do.
-# The simulator does not model these economies, so these are unmeasured.
+# The simulator reads these gates directly for --economy command|coop.
 #
 # Three are exempt for moral suasion's reason: the coordination protocol, the
 # solidarity campaign and the council directive cost 1 point, cost nothing to
