@@ -288,7 +288,7 @@ types grand_monuments_widget_types
 	### (gm_name_diag_open), since a failing read logs every frame it is drawn.
 	type gm_diag_label = textbox {
 		visible = "[GetVariableSystem.Exists('gm_name_diag_open')]"
-		size = { 150 18 }
+		size = { 170 18 }
 		align = left|nobaseline
 		using = fontsize_small
 		default_format = "#lore"
@@ -296,34 +296,38 @@ types grand_monuments_widget_types
 
 	type gm_diag_value = textbox {
 		visible = "[GetVariableSystem.Exists('gm_name_diag_open')]"
-		size = { 318 18 }
+		size = { 298 18 }
 		align = left|nobaseline
 		using = fontsize_small
 		elide = right
 	}
 
 	### PROTOTYPE (v2 spec §3.4, gui_modding_guide.md § "Typed text into a
-	### saved variable"), test build 2. Launch 1 (2026-10-05) logged, every
-	### frame, PdxGuiEditboxGetText( PdxGuiWidget.AccessParent[.FindChild(..)] )
-	### failing inside StringIsEmpty and MakeScopeFlag ("Promote 'AddScope'
-	### returned nullptr"), while the GetVariableSystem route stored an empty
-	### flag that set_variable kept and GetFlagName printed. So the open link
-	### is reading the box. Vanilla Vic3 passes a widget to a function only as
-	### PdxGuiWidget.Self or .AccessSelf (PdxGetWidgetScreenSize( PdxGuiWidget.Self ));
-	### launch 1 passed the bare FindChild result. This build tries each form:
-	###   Rename A  MakeScopeFlag( PdxGuiEditboxGetText( <box>.Self ) )
-	###   Rename B  the same with <box>.AccessSelf
-	###   Rename C  GetVariableSystem.Set( <.Self text> ), then MakeScopeFlag( .Get )
-	### The readouts (toggled, all rows at once) show what each form reads,
-	### and whether MakeScopeFlag( text ).GetFlagName round-trips in the GUI
-	### alone. Nothing reads the box every frame unless the readouts are on,
-	### so a failing form cannot flood the log. Every reader finds the box
-	### with PdxGuiWidget.AccessParent.FindChild, so the box, the buttons and
-	### the readouts are all direct children of one fixed widget.
+	### saved variable"), test build 3. What launches 1 and 2 (2026-10-05)
+	### showed:
+	###   * Reading the box works: PdxGuiEditboxGetText( <box> ) renders the
+	###     typed text with <box> = PdxGuiWidget.AccessParent.FindChild('x')
+	###     (EU5's form) or that + .AccessSelf. With + .Self it fails.
+	###   * Flag to saved variable to text works: a flag from
+	###     MakeScopeFlag( GetVariableSystem.Get(..) ) reached gm_rename_sgui,
+	###     was stored and printed by GetFlagName.
+	###   * The gap is the type between them. The box returns a CUTF8String;
+	###     MakeScopeFlag( <that> ) binds but yields no scope ("Promote
+	###     'AddScope' returned nullptr"), and every vanilla argument to a
+	###     string function is a CString.
+	###   * A global function can't be chained (MakeScopeFlag(..).GetFlagName:
+	###     "Could not find promote"), so .GetString on the box's text is out.
+	### This build tries each string function that might take the CUTF8String
+	### and hand back a CString. Readouts (toggled) show each; the buttons
+	### rename through three of them. A route whose readout shows the text
+	### finishes the chain, since MakeScopeFlag( <CString> ) is proven.
 	type gm_rename_line = widget {
-		size = { 472 166 }
+		size = { 472 202 }
 		parentanchor = hcenter
 
+		### ontextedited: vanilla binds TreatyDraft.OnEditName with no
+		### argument and the engine supplies the text. Whether Set takes the
+		### text the same way as its missing second argument is the test.
 		editbox = {
 			name = "gm_name_edit"
 			position = { 0 0 }
@@ -335,6 +339,7 @@ types grand_monuments_widget_types
 			focus_on_visible = no
 			align = left|nobaseline
 			using = fontsize_small
+			ontextedited = "[GetVariableSystem.Set('gm_name_typed')]"
 
 			background = {
 				using = text_edit_bg
@@ -352,7 +357,7 @@ types grand_monuments_widget_types
 			position = { 0 30 }
 			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
 			tooltip = "gm_button_rename_a_tooltip"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').Self ) ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( Concatenate( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' ) ) ).End )]"
 			blockoverride "rename_text" { text = "gm_button_rename_a" }
 		}
 
@@ -360,7 +365,7 @@ types grand_monuments_widget_types
 			position = { 118 30 }
 			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
 			tooltip = "gm_button_rename_b_tooltip"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').AccessSelf ) ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( AddTextIf( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) ) ) ).End )]"
 			blockoverride "rename_text" { text = "gm_button_rename_b" }
 		}
 
@@ -371,7 +376,7 @@ types grand_monuments_widget_types
 			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
 			tooltip = "gm_button_rename_c_tooltip"
 			onclick = "[GetVariableSystem.Clear('gm_name_text')]"
-			onclick = "[GetVariableSystem.Set( 'gm_name_text', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').Self ) )]"
+			onclick = "[GetVariableSystem.Set( 'gm_name_text', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( GetVariableSystem.Get('gm_name_text') ) ).End )]"
 			blockoverride "rename_text" { text = "gm_button_rename_c" }
 		}
@@ -387,33 +392,43 @@ types grand_monuments_widget_types
 
 		gm_diag_label = { position = { 0 58 } text = "gm_diag_label_1" }
 		gm_diag_value = {
-			position = { 154 58 }
+			position = { 174 58 }
 			text = "[PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') )]"
 		}
 		gm_diag_label = { position = { 0 76 } text = "gm_diag_label_2" }
 		gm_diag_value = {
-			position = { 154 76 }
-			text = "[PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').Self )]"
+			position = { 174 76 }
+			text = "[Concatenate( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' )]"
 		}
 		gm_diag_label = { position = { 0 94 } text = "gm_diag_label_3" }
 		gm_diag_value = {
-			position = { 154 94 }
-			text = "[PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').AccessSelf )]"
+			position = { 174 94 }
+			text = "[AddTextIf( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
 		}
 		gm_diag_label = { position = { 0 112 } text = "gm_diag_label_4" }
 		gm_diag_value = {
-			position = { 154 112 }
-			text = "[MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').Self ) ).GetFlagName]"
+			position = { 174 112 }
+			text = "[ConcatIfNeitherEmpty( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '.' )]"
 		}
 		gm_diag_label = { position = { 0 130 } text = "gm_diag_label_5" }
 		gm_diag_value = {
-			position = { 154 130 }
-			text = "[MakeScopeFlag( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit').AccessSelf ) ).GetFlagName]"
+			position = { 174 130 }
+			text = "[Select_CString( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' )]"
 		}
 		gm_diag_label = { position = { 0 148 } text = "gm_diag_label_6" }
 		gm_diag_value = {
-			position = { 154 148 }
+			position = { 174 148 }
+			text = "[Localize( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
+		}
+		gm_diag_label = { position = { 0 166 } text = "gm_diag_label_7" }
+		gm_diag_value = {
+			position = { 174 166 }
 			text = "[GetVariableSystem.Get('gm_name_text')]"
+		}
+		gm_diag_label = { position = { 0 184 } text = "gm_diag_label_8" }
+		gm_diag_value = {
+			position = { 174 184 }
+			text = "[GetVariableSystem.Get('gm_name_typed')]"
 		}
 	}
 
