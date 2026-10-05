@@ -191,12 +191,12 @@ class HouseholdEmissionsTest(unittest.TestCase):
         for name, pm in methods.items():
             gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")},
                                                netted=emissions.netted_fuel(name, pm))
-            if not gross:
+            if not gross or name in emissions.EXEMPT_METHODS:
                 continue
             checked += 1
             if name not in emissions.SYNTHETIC_CREDITS:  # net of the output credit; checked below
                 self.assertEqual(scalar(state_scaled(pm), emissions.STATE_MODIFIER), gross, name)
-        self.assertEqual(checked, 248)
+        self.assertEqual(checked, 247)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
                 self.assertLess(scalar(state_scaled(pm), emissions.STATE_MODIFIER), 0, name)

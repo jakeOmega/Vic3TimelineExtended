@@ -89,6 +89,18 @@ class CaptureGeneratorTest(unittest.TestCase):
         self.assertIn("pm_houseware_plastics", self.catalog["pmg_base_building_glassworks"][1] if
                       "pmg_base_building_glassworks" in self.catalog else capture.EXCLUDED_METHODS)
 
+    def test_reserve_hub_is_neither_a_source_nor_a_listed_exception(self):
+        # Its oil is stockpiled: emissions exempt it, so there is no stack to capture
+        # and nothing to explain in the report's exception table.
+        hub = self.methods["pm_st_res_hub_reserve"]
+        self.assertTrue(capture.workforce(hub)["goods_input_oil_add"])
+        self.assertEqual(capture.fuel_recipe(hub, "pm_st_res_hub_reserve"), (Decimal(0), Decimal(0)))
+        self.assertNotIn("building_strategic_reserve_hub", self.attachments)
+        self.assertNotIn("building_strategic_reserve_hub", {b for b, _, _, _ in self.exceptions})
+        self.assertNotIn("pm_st_res_hub_reserve",
+                         {pm for classes, exempt, _, _ in self.catalog.values()
+                          for pm in (*exempt, *(p for names in classes.values() for p in names))})
+
     def test_capture_cuts_never_exceed_gross(self):
         generated = parsed(capture.METHODS)
         tiers = 0
