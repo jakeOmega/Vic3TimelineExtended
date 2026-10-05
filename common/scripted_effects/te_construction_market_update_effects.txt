@@ -21,8 +21,11 @@ te_construction_market_country_update_sites = {
 		}
 		te_construction_market_state_on_end = yes
 	}
+	# A country that has lost every state stays alive while its war goes on,
+	# with no capital to place in.
 	if = {
 		limit = {
+			exists = capital
 			NOT = {
 				any_scope_building = {
 					is_building_type = te_construction_market_site

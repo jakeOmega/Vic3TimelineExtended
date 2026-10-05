@@ -50,6 +50,7 @@ te_construction_market_country_setup = {
 	if = {
 		limit = {
 			te_free_market_construction_on = yes
+			exists = capital
 			NOT = {
 				any_scope_building = {
 					is_building_type = te_construction_market_site
