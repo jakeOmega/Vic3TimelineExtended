@@ -97,7 +97,7 @@ world shows over years. The target is the sum of eight pillars:
 | Participation | 0 to +25 | The share of world prestige held by members. |
 | Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
 | Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions, World Court rulings obeyed or defied, ceasefire orders and referendums defied. |
-| Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
+| Funding | −10 to +10 | The power-weighted share of major and great power members running peacekeeping, human rights and arms control programs, plus the money members give the World Development Fund (0.7% of the members' GDP a year counts in full), minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, nuclear use, and aggressors fighting on under a ceasefire order. |
 | Delivery | −10 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished, ceasefires kept, referendums held and grain the World Food Reserve sends: 0 to +10. While the [World Food Reserve](#the-world-food-reserve-and-hunger) stands, hunger among members adds −10 to +3. |
 | Policy | −25 to +25 | The UN Authority Target modifier carried by laws and institutions, with each country's total scaled by its weight. A member that is not undermining the UN counts for or against; any other country counts only against. A negative total pulls authority down. See [What counts toward Policy](#what-counts-toward-policy). |
@@ -351,7 +351,7 @@ the Recorded Ballot shows every voter's lean and why the members voted as they d
 | The target accepted the verdict | +15 |
 | The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country; −30 for a major power in default or near its debt ceiling, which a carried request would bill |
 | Our interests on this topic | Laws, technologies and what the convention's terms would do to us. On the World Development Fund: +30 below its line and up to +30 more for the grant it would pay us; the richest −5 and laissez-faire governments −5 under the founding charter, when it takes nothing from the budget; once a charter reform gives it a share, the richest −25, those above the average −10, laissez-faire −15 |
-| Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15; at most 20 each way |
+| Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15, more from a lobbyist with UN Lobbying Effectiveness; at most 20 each way |
 
 An AI member votes in favor when its lean, plus a random −20 to +20, is above
 0. An AI permanent member vetoes a binding resolution at a lean of −30 or below
@@ -502,6 +502,12 @@ answers a request from the diplomacy panel. A kept pledge gives the member +1
 standing and +10 relations with you; a broken one costs it 4 standing and 20
 relations and cancels your obligation. A permanent member that pledged against
 and then vetoes has kept its word.
+
+UN Lobbying Effectiveness makes your campaigns move a member further and faster
+(+25% turns 3 a month up to 15 into 3.75 up to 18.75), and a member weighing your
+request for a pledge counts it in your favor, +20 for every 25%. Its acceptance
+tooltip shows the line. The members the World Development Fund pays give it to
+those who [fund it](#development-programs-sizes).
 
 ![The chamber's Delegations section. Each row shows a member's band as the Assembly estimates it and any campaign on it (Batonga is lobbying South Africa to vote for the resolution), with buttons to start a campaign or ask for a pledge.](images/UN_lobbying.png)
 
@@ -676,9 +682,9 @@ the average, the line rises to that member's figure, so the Fund always pays at
 least one member.
 
 A reform strengthens a Fund that already stands; nobody votes on it again.
-The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
-contributions of the major powers, which open only once the Fund stands: a
-contributor's 0.5% of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
+The donations are the [Fund Development Programs](#development-programs-sizes)
+contributions, which open only once the Fund stands, to any member that holds its
+seat, pays its dues and draws no grant. A contributor's money pays the grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
@@ -836,13 +842,15 @@ fails.
 
 ## UN programs and great-power stances
 
-A major power's programs count toward the funding pillar while they run (two
-count in full), and every program earns standing after 24 months.
+A major power's peacekeeping, human rights and arms control programs count
+toward the funding pillar while they run (two count in full); Development
+Programs counts by its money, whoever gives it. Every program earns standing
+after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
-| Fund Development Programs | Major power, and the World Development Fund founded | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the Fund's grants |
+| Fund Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.125% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -850,6 +858,31 @@ Great powers can also Champion International Order or Undermine International
 Order, each costing Authority and influence, which count +1 or −1 in the
 commitment pillar. Undermining also drains standing, and after 24 months it
 suspends your standing benefits until you stop.
+
+### Development Programs sizes
+
+Fund Development Programs starts a Token contribution. Raise Development
+Contribution and Reduce Development Contribution move it one size at a time,
+and changing size doesn't restart the 24 months before it earns standing.
+
+| Size | Cost (share of GDP a year) | Infamy decay | Prestige | Standing a month after 24 months | Lobbying with the Fund's recipients |
+|---|---|---|---|---|---|
+| Token | 0.125% | +4% | +2% | 0.15 | up to +10% |
+| Modest | 0.25% | +6% | +3% | 0.225 | up to +15% |
+| Substantial | 0.5% | +8% | +4% | 0.3 | up to +20% |
+| Generous | 1% | +10% | +5% | 0.375 | up to +25% |
+
+Each size doubles the money but adds only a quarter of Substantial's benefits,
+so Token buys them most cheaply. The larger sizes pay the Fund's recipients more
+and count for more in the funding pillar, which weighs the money, not the
+number of contributors.
+
+The lobbying bonus is Grateful Aid Recipients on the UN journal entry: UN
+Lobbying Effectiveness with the members the Fund pays. It builds toward the
+figure for your size, about two thirds of the way in a year, and fades over a
+few years after you stop or cut back, so raising your contribution just before
+a vote buys little. Our Obligations shows your size, its weekly cost and the
+bonus.
 
 ## UN dues and Article 19
 
@@ -967,12 +1000,15 @@ the order. Debt near the ceiling, isolationism and a high levy count against
 paying and can add up to it. A member the Fund pays more than its dues keeps
 paying even in default, and one that has lost its vote under Article 19 pays
 sooner. A healthy member doesn't withhold to save the levy and then pay again.
-- Major powers fund Development Programs only with a reason: humanitarian law,
-championing the order, or Fund recipients among their subjects, bloc partners
-and allies. They contribute to peacekeeping for the same kinds of reasons, more
-when missions are in the field. They stop either one when their treasury fails
-or their laws turn against it, and stop peacekeeping at war; peacekeeping only
-once its ten years have run.
+- Members whose GDP per head is above the members' average often fund
+Development Programs, usually at Token size. So do members with Humanitarian
+Regulations, champions of the order, members with notorious infamy, and members
+with Fund recipients among their subjects, bloc partners and allies. Only
+Humanitarian Regulations, championing and recipients among their own make them
+give more, a size for each. Major powers contribute to peacekeeping for the
+same kinds of reasons, more when missions are in the field. They stop either
+one when their treasury fails or their laws turn against it, and stop
+peacekeeping at war; peacekeeping only once its ten years have run.
 - Great powers champion or undermine the order for their own reasons:
 Humanitarian Regulations or Limited War, a permanent seat and their bloc's
 Multilateral Institutions principle pull toward championing; isolationism,
