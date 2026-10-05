@@ -1953,7 +1953,7 @@ less on average, `gold/price` 7.85 → 6.24 and `gold/growth` 14.47 → 12.26.
 
 ## 21. Cooperative Ownership, measured for the first time (2026-10-05)
 
-In play, cooperative economies boomed and crashed a lot. The simulator runs a market economy only (§1 leaves the `cw_*` tools out, and §3 left the `_coop` phases "unmeasured"), so this section uses an **interim cooperative arm**: a monkeypatch of `banking_cycle_sim.py`, posted on [#720](https://github.com/jakeOmega/Vic3TimelineExtended/issues/720), which tracks folding a command and a cooperative arm into the simulator properly. It reads the `_coop` phase modifiers, the `bubble_inertia_*_coop` modifiers and the eight `cooperative_*` tool modifiers from the mod files, and hard-codes what the script keeps as inline literals: crash weight ×0.65 and severity ×0.8 (`banking_cycle_effects.txt`), the law's −0.25 on `country_banking_random_momentum_mult` (`construction_system_law_injections.txt`) and the `cw_*` buttons' `ai_chance` blocks. 300 runs × 100 years a cell, fiat / price stability unless stated.
+In play, cooperative economies boomed and crashed a lot. The simulator runs a market economy only (§1 leaves the `cw_*` tools out, and §3 left the `_coop` phases "unmeasured"), so this section uses an **interim cooperative arm**: a monkeypatch of `banking_cycle_sim.py`, posted on [#720](https://github.com/jakeOmega/Vic3TimelineExtended/issues/720), which tracks folding a command and a cooperative arm into the simulator properly. It reads the `_coop` phase modifiers, the `bubble_inertia_*_coop` modifiers and the eight `cooperative_*` tool modifiers from the mod files, and hard-codes what the script keeps as inline literals: crash weight ×0.65 and severity ×0.8 (`banking_cycle_effects.txt`), the law's −0.25 on `country_banking_random_momentum_mult` (`construction_system_law_injections.txt`) and the `cw_*` buttons' `ai_chance` blocks with the `banking_ai_hold_cw_*` gates #716 put on their disables. 300 runs × 100 years a cell, fiat / price stability unless stated.
 
 ### What was wrong
 
@@ -1977,16 +1977,18 @@ The inertia share was chosen to put an untooled cooperative economy at **about 2
 
 ### Results
 
+Measured on `main` after #716.
+
 **AI picks the tools, fiat / price stability** (300 runs × 100 years a cell; crashes a century, with the share of months in Boom or Frenzy):
 
 | points | market | cooperative before | cooperative after |
 |---|---|---|---|
 | 0 | 10.9 (9.0%) | 0.6 (0.2%) | **2.0** (0.8%) |
-| 2 | 8.4 (7.7%) | 0.4 (0.2%) | **1.2** (0.8%) |
-| 4 | 6.5 (6.5%) | 2.0 (6.2%) | **2.3** (2.4%) |
-| 5 | 5.8 (6.4%) | 2.9 (10.0%) | **3.2** (3.7%) |
-| 6 | 4.8 (5.5%) | 3.6 (12.7%) | **3.2** (3.5%) |
-| 8 | 4.2 (5.5%) | 3.1 (16.1%) | **1.8** (3.7%) |
+| 2 | 8.5 (7.8%) | 0.4 (0.2%) | **1.2** (0.8%) |
+| 4 | 6.4 (6.7%) | 2.0 (6.1%) | **2.3** (2.4%) |
+| 5 | 5.3 (5.6%) | 3.1 (9.9%) | **3.0** (3.6%) |
+| 6 | 4.7 (5.6%) | 3.6 (12.7%) | **3.1** (3.4%) |
+| 8 | 3.8 (5.0%) | 3.0 (15.8%) | **1.8** (3.9%) |
 
 **A player who leaves the tools on all game** (8 points; the pool column is the toy pool's median peak / trough against its settled level, with the private queue's spending capped at 1.2× income):
 
@@ -2002,15 +2004,15 @@ The inertia share was chosen to put an untooled cooperative economy at **about 2
 
 | cell | market | cooperative before | cooperative after |
 |---|---|---|---|
-| gold / price stability | 7.8 / 6.0 / 5.2 | 1.4 / 2.8 / 4.8 | 2.9 / 2.8 / 3.1 |
-| commodity / price stability | 9.2 / 5.9 / 4.0 | 1.4 / 2.3 / 4.0 | 3.3 / 2.5 / 2.8 |
-| fiat / growth | 18.3 / 13.8 / 9.8 | 5.1 / 4.7 / 7.3 | 8.6 / 5.5 / 5.0 |
-| gold / dial never touched | 9.7 / 7.7 / 5.9 | 5.9 / 7.7 / 11.1 | 7.4 / 7.2 / 7.9 |
-| fiat / dial never touched | 35.1 / 35.5 / 35.7 | 33.1 / 32.2 / 29.9 | 33.8 / 33.0 / 30.7 |
+| gold / price stability | 7.8 / 7.7 / 5.2 | 1.4 / 2.9 / 4.8 | 2.9 / 2.7 / 3.2 |
+| commodity / price stability | 9.2 / 5.8 / 3.6 | 1.4 / 2.2 / 4.2 | 3.3 / 2.4 / 2.5 |
+| fiat / growth | 18.3 / 13.0 / 9.5 | 5.1 / 4.6 / 7.3 | 8.6 / 5.4 / 4.9 |
+| gold / dial never touched | 9.7 / 7.7 / 5.4 | 5.9 / 7.7 / 9.6 | 7.4 / 7.0 / 7.3 |
+| fiat / dial never touched | 35.1 / 35.6 / 32.5 | 33.1 / 32.2 / 24.2 | 33.8 / 32.9 / 25.5 |
 
-Digital / price stability, cooperative after (300 runs): 1.5 / 2.3 / 1.2. The fiat "dial never touched" row is the passive-fiat case of §3–§4, set by the monetary dial rather than the economy (players are delegated by default since then); the change leaves it where it was.
+Digital / price stability, cooperative after (300 runs): 1.5 / 2.1 / 1.3. The fiat "dial never touched" row is the passive-fiat case of §3–§4, set by the monetary dial rather than the economy (players are delegated by default since then); the change leaves it where it was.
 
-**With the aggregate event stand-in** (`--event-channel`, 300 runs, fiat / price, 0 / 4 / 8 points): market 13.3 / 8.0 / 5.1, cooperative after 2.7 / 2.5 / 2.0. The events add 0.2–0.7 crashes a century to a cooperative economy, against 0.9–2.4 to a market one.
+**With the aggregate event stand-in** (`--event-channel`, 300 runs, fiat / price, 0 / 4 / 8 points): market 13.3 / 8.0 / 4.5, cooperative after 2.7 / 2.5 / 1.9. The events add 0.1–0.7 crashes a century to a cooperative economy, against 0.7–2.4 to a market one.
 
 ### Reproduce
 
