@@ -433,8 +433,11 @@ types cultural_hegemony_widget_types
 	### One "Political models" legend row: the model's pie texture as its swatch
 	### (frame 2 is the coloured disc), its name and its share of world culture.
 	### Whether it shows is ch_show_sgui's decision (ops 31-45). The name is the
-	### model's short name, its full name on hover: "Liberal / Progressive
-	### Democratic" and five others do not fit a line beside the pie.
+	### model's short name: "Liberal / Progressive Democratic" and five others do
+	### not fit a line beside the pie. Its hover (ch_model_<model>_tt) gives the
+	### full name and the laws that put a country in the model, written from
+	### ch_set_political_model (common/scripted_effects/
+	### cultural_hegemony_effects.txt); change one, change the other.
 	type ch_model_legend_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -1943,7 +1946,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_republican"
-							tooltip = "ch_model_republican"
+							tooltip = "ch_model_republican_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_republican" }
@@ -1955,7 +1958,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_corporatist"
-							tooltip = "ch_model_corporatist"
+							tooltip = "ch_model_corporatist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_corporatist" }
@@ -1967,7 +1970,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_anarchist"
-							tooltip = "ch_model_anarchist"
+							tooltip = "ch_model_anarchist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_anarchist" }
@@ -1979,7 +1982,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_other"
-							tooltip = "ch_model_other"
+							tooltip = "ch_model_other_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_other" }
@@ -1991,7 +1994,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_royalist_absolutist"
-							tooltip = "ch_model_royalist_absolutist"
+							tooltip = "ch_model_royalist_absolutist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_absolutist" }
@@ -2003,7 +2006,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_technocratic"
-							tooltip = "ch_model_technocratic"
+							tooltip = "ch_model_technocratic_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_technocratic" }
@@ -2015,7 +2018,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_religious"
-							tooltip = "ch_model_religious"
+							tooltip = "ch_model_religious_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_religious" }
@@ -2027,7 +2030,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_socialist"
-							tooltip = "ch_model_socialist"
+							tooltip = "ch_model_socialist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_socialist" }
@@ -2039,7 +2042,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_military_junta"
-							tooltip = "ch_model_military_junta"
+							tooltip = "ch_model_military_junta_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_military_junta" }
@@ -2051,7 +2054,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_royalist_constitutional"
-							tooltip = "ch_model_royalist_constitutional"
+							tooltip = "ch_model_royalist_constitutional_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_royalist_constitutional" }
@@ -2063,7 +2066,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_communist"
-							tooltip = "ch_model_communist"
+							tooltip = "ch_model_communist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_communist" }
@@ -2075,7 +2078,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_liberal"
-							tooltip = "ch_model_liberal"
+							tooltip = "ch_model_liberal_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_liberal" }
@@ -2087,7 +2090,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_reactionary"
-							tooltip = "ch_model_reactionary"
+							tooltip = "ch_model_reactionary_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_reactionary" }
@@ -2099,7 +2102,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_developmentalist_junta"
-							tooltip = "ch_model_developmentalist_junta"
+							tooltip = "ch_model_developmentalist_junta_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_developmentalist_junta" }
@@ -2111,7 +2114,7 @@ types cultural_hegemony_widget_types
 						blockoverride "legend_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
 						blockoverride "legend_label" {
 							text = "je_ch_ov_model_fascist"
-							tooltip = "ch_model_fascist"
+							tooltip = "ch_model_fascist_tt"
 							default_format = "#tooltippable"
 						}
 						blockoverride "legend_value" { text = "je_ch_widget_models_share_fascist" }
