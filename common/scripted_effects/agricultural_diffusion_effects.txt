@@ -262,14 +262,16 @@ agdiff_copy_diffusion_from_root = {
 # (var:te_cw_rebels_won = 1): the engine hands the winner the loser's
 # is_world_first_<tech> title in the merge, and the reward follows the title.
 # A loyalist winner is left alone even when the rebels won a world-first during
-# the war and it inherits their title, so its repair stays a no-op.
+# the war and it inherits their title. If it lacks the reward, discard the
+# inherited month record so a later revolution cannot restore an unearned reward.
 #
 # Scope: the winner, which must also be ROOT (called bare from
 # te_civil_war_on_won, common/on_actions/te_civil_war_on_actions.txt;
 # on_civil_war_won runs with ROOT = the winner, after the loser's variables
 # have merged in, and te_civil_war_clear removes te_cw_rebels_won right after).
 # A loyalist winner takes none of it: every step is gated on
-# var:te_cw_rebels_won = 1, except dropping the inherited marker.
+# var:te_cw_rebels_won = 1, except dropping inherited markers and an unearned
+# first-mover month on a government winner.
 agdiff_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -295,6 +297,14 @@ agdiff_repair_after_civil_war = {
 		agdiff_repoint_first_country = { TECH = green_revolution }
 		agdiff_repoint_first_country = { TECH = gene_splicing }
 		agdiff_repoint_first_country = { TECH = biotechnology }
+	}
+	if = {
+		limit = {
+			var:te_cw_government_won = 1
+			has_variable = agdiff_first_mover_month
+			NOT = { has_modifier = agdiff_first_mover_prestige }
+		}
+		remove_variable = agdiff_first_mover_month
 	}
 }
 

@@ -356,15 +356,15 @@ cr_sync_policy_mirrors = {
 
 # te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt): ROOT = THIS
 # = the winner, after the merge, between te_civil_war_resolve_sides and
-# te_civil_war_clear (which removes te_cw_rebels_won and te_cw_role in the same
+# te_civil_war_clear (which removes both outcome flags and te_cw_role in the same
 # tick, so nothing here may be left for a later pulse to read them).
 #
 #   te_cw_rebels_won = 1    the revolutionaries won a revolution: they continue
 #                           the nation, so rebuild what the loser held.
-#   te_cw_role = 1          the original government won: it keeps its own
+#   te_cw_government_won = 1 the continuing government won: it keeps its own
 #                           modifiers; drop what it inherited from the rebels.
-#   te_cw_role = 2 (and     a seceder won as a new nation: nothing was merged
-#   te_cw_rebels_won = 0)   into it, so there is nothing to repair.
+#   both flags = 0,        a seceder won as a new nation: nothing was merged
+#   te_cw_role = 2         into it, so there is nothing to repair.
 #   no te_cw_role           a war begun before #467 recorded the sides, or a
 #                           seceder whose role on_secession_end already removed:
 #                           the guarded rebuild. It is a no-op unless foreign
@@ -382,8 +382,8 @@ cr_repair_after_civil_war = {
 	}
 	else_if = {
 		limit = {
-			has_variable = te_cw_role
-			var:te_cw_role = 1
+			has_variable = te_cw_government_won
+			var:te_cw_government_won = 1
 		}
 		cr_drop_rebel_run_state = yes
 	}

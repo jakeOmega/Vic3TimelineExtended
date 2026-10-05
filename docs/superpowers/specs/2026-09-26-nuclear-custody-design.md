@@ -97,9 +97,15 @@ The audit's cross-cutting repair site, built once for every system:
   `te_cw_ending_rebel`, `te_cw_ending_kind` 1 revolution / 2 secession) and log both sides' `exists` /
   `is_country_alive`. A secession also reconciles here, since `on_civil_war_won` may not fire for one.
 - **Won** (`on_civil_war_won`): `te_civil_war_resolve_sides` saves `scope:te_cw_winner` / `scope:te_cw_loser` and sets
-  `te_cw_rebels_won` from the pair. If the pair is missing, it falls back to `te_cw_origin` pointing somewhere other than
+  `te_cw_rebels_won` and `te_cw_government_won` from the pair. The rebel's stored `te_cw_origin` takes precedence
+  over the pair's original for the loser, and identifies a government winner even if the pair reports an annexed
+  original. Without a matching pair, it falls back to the winner's `te_cw_origin` pointing somewhere other than
   ROOT. It logs whether the loser resolves, is alive, and whether its `te_cw_role` reads (**the engine test**). Then
-  `nd_custody_on_civil_war_won`, then clean-up of `te_cw_*` and the globals. The #460–#465 repairs plug in here later.
+  `nd_custody_on_civil_war_won` and the system repairs. Before clean-up, a revolutionary winner re-points every
+  live uprising against the loser to itself: later concurrent wars follow the continuing government (#476).
+  Outcome flags are cleared with `te_cw_*` and the globals; `te_cw_role` is only a readability / legacy marker.
+  Concurrent hook timing and the engine's choice of pair remain unverified in game; the regression tests cover
+  both the old original and its continuation being reported.
 
 ### 3.2 Outbreak: "Who Holds the Button?" (`nuclear_custody.1`)
 

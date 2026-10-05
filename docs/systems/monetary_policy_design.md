@@ -801,20 +801,14 @@ still open and are inherited, not repeated.
     civil war that names the same dead loser (below) cannot add its gold again. The marker
     goes at a monthly pulse once that loser no longer resolves. A loyalist win and a
     secession need nothing.
-    **Concurrent wars — a known limitation.** With two revolutions at once, the first win
-    annexes the original; the second uprising fights on against the first winner. The
-    shared layer names that war's loser from the end-hook pair `on_revolution_end` reports,
-    and falls back to the rebel's `te_cw_origin`, which still names the dead original. If
-    the engine reports the second war against the first winner, both outcomes are right. If
-    it reports it against the dead original: a second uprising that wins is matched with the
-    dead original — it takes nothing (the original is gone, or its bank is refused by the
-    marker it inherits) and keeps its own fresh bank, so the nation's bank is lost as it was
-    before #462; and the first winner beating it is read as a rebel win against the dead
-    original, which the marker makes a no-op here but other repairs may not. The branch's
-    own pointer used to re-point the other uprisings at the winner; the shared layer should
-    grow that (re-point every live `te_cw_origin` naming the loser at the winner when the
-    rebels win, and take a rebel win's loser from the winner's own `te_cw_origin` before the
-    pair), rather than each system working around it.
+    **Concurrent wars — shared bookkeeping repaired (#476), pending in-game verification.**
+    After a revolutionary win, the shared layer re-points all live uprisings against the
+    defeated government at the winner. A later rebel winner reads its loser from its own
+    `te_cw_origin` before the end-hook pair, so it inherits the continuing government's
+    bank even if the engine names the dead original. A government winner is identified
+    from the pair or the reported rebel's updated pointer, avoiding a false new-regime
+    repair after its own role was cleared. Scenario tests cover either second-war winner
+    and both possible engine pairs; overlapping hook timing still needs an in-game check.
     **The read is settled; the copy is still to watch.** Everything above assumes the dead but
     not yet deleted loser can be read at `on_civil_war_won`. On 2026-09-26 three rebel wins in
     one test game each logged `TE_CW_PROBE monetary 1/2`, which fires only when the canary's
