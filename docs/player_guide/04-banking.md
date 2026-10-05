@@ -285,7 +285,9 @@ early.
 
 The AI uses Moral Suasion in an Expansion, reserve requirements and the buffer
 from Expansion upward, and margin requirements in a Boom or Frenzy. It uses any
-of them while momentum reads Surging, and lifts them once the cycle turns down.
+of them while momentum reads Surging. It keeps the buffer, reserve requirements
+and margin requirements until the cycle is back below Expansion and no longer
+climbing, and drops Moral Suasion more freely, since switching it costs nothing.
 
 ### Directing credit into growth
 
@@ -335,7 +337,7 @@ has momentum Collapsing. They choose the sector by who governs: heavy industry
 for Industrialists, agriculture for Landowners or Rural Folk, armaments for the
 Armed Forces or in war, electrification for the Intelligentsia, infrastructure
 otherwise. They pay the same points as you, so a sector they cannot afford is
-not chosen. They lift it in a Panic or once the cycle climbs past Stable, and
+not chosen. They lift it in a Panic or once a Stable cycle stops falling, and
 run Export Credit Facility from Stagnation down.
 
 ### Pulling out of a slump
@@ -350,16 +352,18 @@ Globalization and the deposit guarantee Consumer Credit.
 
 | Tool | What you gain | What you pay or give up |
 |---|---|---|
-| Declare a Bank Holiday | Falling momentum halves at once. For 90 days, crash likelihood −90%, which also keeps contagion out. | 2 points; −20% services output and −5% tax collection while it lasts. Radicals: 5% of middle-strata pops, 3% of upper and 2% of lower, about 2.5 to 3% of your population. Only in a Downturn or Panic, and once in five years. |
+| Declare a Bank Holiday | Falling momentum stops at once and cannot drop below 0 for 90 days. Crash likelihood −90% for those days, which keeps contagion out. If the banks stay shut the full 90 days, +1 momentum when they reopen. | 2 points; −20% services output and −5% tax collection while it lasts. Radicals: 5% of middle-strata pops, 3% of upper and 2% of lower, about 2.5 to 3% of your population. Only in a Downturn or Panic, and once in five years. Ending it early gives up the +1. |
 | Emergency Liquidity Program | +12 cycle value at once, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once and +0.8 a month. |
 | Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
 | Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
 | Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
 | Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, about a point of inflation pressure. |
 
-A Bank Holiday is the first answer to a Panic: it halves the fall at once and
-keeps a trading partner's crash out while you recover, but you get one every
-five years. It ends by itself after 90 days, and you can end it sooner. Emergency
+A Bank Holiday is the first answer to a Panic: it stops the fall at once, holds
+it while the banks are shut and keeps a trading partner's crash out, but you get
+one every five years. It ends by itself after 90 days and the banks reopen with
++1 momentum. You can end it sooner to stop paying for it, but then the banks
+reopen without the bounce. Emergency
 Liquidity lifts the cycle most at once, and closing it hands most of its cost
 back, so close it once you are out of the slump, before its bubble pressure
 feeds the next boom. A deposit guarantee is cheap to open and costly to
@@ -377,8 +381,9 @@ to this tool rather than replacing it.
 The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
 Downturn that is still falling fast. It expands the deposit guarantee in a
 Downturn or Panic, uses Asset Relief or a bail-in from Stagnation down, and
-uses Open-Market Operations at the rate floor in a slump or deflation. It lifts
-them as the cycle climbs back to Stable and beyond.
+uses Open-Market Operations at the rate floor in a slump or deflation. It keeps
+each tool until the slump that prompted it is over, and lifts them as the cycle
+climbs back to Stable and beyond.
 
 ### Managing foreign capital and import credit
 

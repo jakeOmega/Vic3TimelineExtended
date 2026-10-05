@@ -1157,7 +1157,11 @@ banking_reserve_requirements = {
 
 # Timed: banking_effect_cb_bank_holiday adds it for 90 days. Both the origin
 # and the contagion crash checks multiply by banking_crash_chance_multiplier_value,
-# so the crash line shields against imported crashes too.
+# but the holiday is only declared below cycle 25, where a country's own crash
+# weight is (bubble - 90) x 0.01 and a slump drains bubble 3-7 a month, so the
+# crash line is in practice a shield against crashes spreading in from trading
+# partners. Since #715 those can only deepen a slump, so the shield is worth
+# having. The run itself is stopped in banking_cycle_advance_variables.
 banking_bank_holiday = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_banking_crash_chance_mult = -0.9

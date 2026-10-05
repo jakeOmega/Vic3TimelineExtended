@@ -190,6 +190,18 @@
 		# next month's banking_cycle_apply_stance_band puts the band back on.
 		set_variable = { name = te_mon_stance_band_applied value = 0 } # REVIEWED 2026-09-26: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
 
+		# An inherited copy can carry banking_bank_holiday_reopening without the
+		# holiday it belongs to, which did not survive the revolution. The
+		# holiday ended early, so there is no reopening bounce to pay
+		# (banking_effect_cb_bank_holiday).
+		if = {
+			limit = {
+				has_variable = banking_bank_holiday_reopening
+				banking_tool_bank_holiday_active = no
+			}
+			remove_variable = banking_bank_holiday_reopening # REVIEWED 2026-10-05: cleared on purpose; the holiday this marker belongs to did not survive the revolution, so no reopening bounce is owed
+		}
+
 		# The four bars, drawn from the variables above by the monthly pulse's
 		# own effect (its momentum clamp, and its has_variable test on the
 		# monetary system's te_mon_stance_bar_pos). On an inherited copy the
@@ -264,6 +276,7 @@
 			}
 
 			banking_cycle_update_fiscal_policy = yes
+			banking_cycle_bank_holiday_reopen = yes
 			banking_cycle_advance_variables = yes
 			banking_cycle_check_and_execute_crash = yes
 

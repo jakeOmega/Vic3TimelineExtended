@@ -17,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 JE = ROOT / "common/journal_entries/je_banking.txt"
 BUTTONS = ROOT / "common/scripted_buttons/timeline_extended_scripted_buttons.txt"
+ALT_BUTTONS = ROOT / "common/scripted_buttons/banking_alt_economy_buttons.txt"
 POSSIBLE = ROOT / "common/scripted_triggers/banking_policy_triggers.txt"
 EFFECTS = ROOT / "common/scripted_effects/banking_policy_effects.txt"
 MARKET_TRIGGERS = ROOT / "common/scripted_triggers/market_triggers.txt"
@@ -41,6 +42,16 @@ def _top_level_block(body, header):
     return block[: block.index("\n}") + 2]
 
 
+def _braced(body, start):
+    """`body` from `start` through the brace that closes the first `{` after it."""
+    depth = 0
+    for i in range(body.index("{", start), len(body)):
+        depth += {"{": 1, "}": -1}.get(body[i], 0)
+        if depth == 0:
+            return body[start: i + 1]
+    raise AssertionError("unbalanced braces after %r" % body[start: start + 40])
+
+
 def _has_top_level(body, name):
     return re.search(r"(?m)^%s = \{" % re.escape(name), body) is not None
 
@@ -53,6 +64,14 @@ def _loc_keys():
             if m:
                 keys.add(m.group(1))
     return keys
+
+
+# Market tools whose disable button has no hold gate: switching them on or off
+# costs nothing, so the AI may lift them whenever a stronger tool wants the point.
+UNGATED_DISABLES = {"cb_moral_suasion"}
+# The same for the command and cooperative economies' tools: the three 1-point
+# tools whose lift frees their point.
+UNGATED_ALT_DISABLES = {"ce_coordination_protocol", "cw_solidarity_campaign", "cw_council_directive"}
 
 
 def _tools():
@@ -232,6 +251,94 @@ class RosterTests(unittest.TestCase):
                     for field in ("name", "desc"):
                         key = re.search(r'%s = "(\w+)"' % field, block).group(1)
                         self.assertTrue(key in keys, "no loc key %s (%s.%s)" % (key, name, field))
+
+    def test_each_disable_waits_until_its_reason_is_gone(self):
+        # The AI lifts a tool only once the conditions it was bought for have
+        # changed: a cycle tool's disable ends its ai_chance by multiplying by 0
+        # while banking_ai_hold_cb_<tool> holds, and an external tool's disable
+        # scores only while banking_ai_core_cb_<tool> is false. A gate placed
+        # before an `add` would let that add through, so it must come last.
+        # Moral suasion is exempt: it costs nothing to switch on or off.
+        buttons, triggers = _text(BUTTONS), _text(POSSIBLE)
+        for tool in _tools():
+            if tool in UNGATED_DISABLES:
+                self.assertFalse(_has_top_level(triggers, "banking_ai_hold_" + tool))
+                continue
+            with self.subTest(tool=tool):
+                disable = _top_level_block(buttons, "cb_disable_%s = {" % _suffix(tool))
+                ai = _braced(disable, disable.index("ai_chance = {"))
+                if re.search(r"limit = \{ banking_ai_core_%s = no \} add = " % tool, ai):
+                    continue
+                self._assert_gate_last(ai, "banking_ai_hold_" + tool, triggers)
+
+    def test_each_alt_economy_disable_waits_until_its_reason_is_gone(self):
+        # The command (ce_*) and cooperative (cw_*) tools follow the market
+        # tools' rule, with their own exemptions.
+        buttons, triggers = _text(ALT_BUTTONS), _text(POSSIBLE)
+        disables = re.findall(r"(?m)^(c[ew])_disable_(\w+) = \{", buttons)
+        self.assertGreaterEqual(len(disables), 16)
+        for eco, name in disables:
+            tool = "%s_%s" % (eco, name)
+            with self.subTest(tool=tool):
+                block = _top_level_block(buttons, "%s_disable_%s = {" % (eco, name))
+                ai = _braced(block, block.index("ai_chance = {"))
+                hold = "banking_ai_hold_" + tool
+                if tool in UNGATED_ALT_DISABLES:
+                    self.assertNotIn(hold, ai)
+                    self.assertFalse(_has_top_level(triggers, hold))
+                    continue
+                self._assert_gate_last(ai, hold, triggers)
+
+    def _assert_gate_last(self, ai, hold, triggers):
+        gate = re.search(r"if = \{ limit = \{ %s = yes[^{}]*\} multiply = 0 \}" % hold, ai)
+        self.assertIsNotNone(gate, "no %s gate" % hold)
+        self.assertNotIn("add =", ai[gate.end():])
+        self.assertTrue(_has_top_level(triggers, hold), "%s is not defined" % hold)
+
+    def test_each_hold_gate_is_in_the_simulator(self):
+        # banking_cycle_sim.ai_holds mirrors the banking_ai_hold_cb_* triggers,
+        # keyed by the simulator's own tool names (TOOL_MODIFIER_NAMES).
+        sim = _text(SIM)
+        roster = sim[sim.index("TOOL_MODIFIER_NAMES = {"):]
+        roster = roster[: roster.index("\n}")]
+        holds = sim[sim.index("def ai_holds("):]
+        holds = holds[: holds.index("\n    return h")]
+        triggers = _text(POSSIBLE)
+        for tool in _tools():
+            if not _has_top_level(triggers, "banking_ai_hold_" + tool):
+                continue
+            with self.subTest(tool=tool):
+                key = re.search(r'"(\w+)": "%s"' % re.escape(_modifier(tool)), roster)
+                self.assertIsNotNone(key, "%s is not in TOOL_MODIFIER_NAMES" % _modifier(tool))
+                name = key.group(1)
+                # the four newer directed-credit sectors are set by one loop
+                in_dc_loop = name in ("dc_heavy", "dc_agri", "dc_arms", "dc_elec")
+                self.assertTrue(in_dc_loop or '"%s":' % name in holds, "ai_holds has no %s" % name)
+
+    def test_no_toggle_farms_loyalists(self):
+        # A tool that grants loyalists on one switch and costs nothing on the
+        # other could be clicked back and forth for loyalists without limit
+        # (cooperative mutual aid and dividend restraint, until 2026-10-05).
+        # Each grant must be paid for by radicals on the opposite switch, or
+        # sit behind a cooldown: `NOT = { has_variable = X }` around it, with
+        # X set for a number of days in the same block.
+        effects = _text(EFFECTS)
+        blocks = dict(re.findall(r"(?ms)^(banking_effect_\w+) = \{\n(.*?)^\}", effects))
+        granting = [n for n, b in blocks.items() if "add_loyalists" in b]
+        self.assertTrue(granting)
+        for name in granting:
+            with self.subTest(effect=name):
+                m = re.fullmatch(r"banking_effect_(c[bew])_(disable_)?(\w+)", name)
+                self.assertIsNotNone(m, name)
+                eco, off, tool = m.groups()
+                other = "banking_effect_%s_%s%s" % (eco, "" if off else "disable_", tool)
+                if "add_radicals" in blocks.get(other, ""):
+                    continue
+                body = blocks[name]
+                guard = re.search(r"NOT = \{ has_variable = (\w+) \}", body)
+                self.assertIsNotNone(guard, "%s grants loyalists with no cost or cooldown" % name)
+                self.assertRegex(body, r"set_variable = \{ name = %s days = \d+ \}" % guard.group(1))
+                self.assertLess(body.index(guard.group(0)), body.index("add_loyalists"))
 
     def test_each_modifier_is_in_the_simulator(self):
         sim = _text(SIM)

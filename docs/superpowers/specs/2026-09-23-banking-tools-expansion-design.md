@@ -134,6 +134,10 @@ The 1933 holiday and the nineteenth century's suspensions of payment: shut the b
   lower — see `mod_systems.md` § "Policy tools added 2026-09-23".)*
 - AI: ELIQ's core (panic; downturn at momentum ≤ −4), +20 while ELIQ is still locked; lifted early only
   once the cycle is back at stable.
+- *(Amended 2026-10-05: the one-shot halving is now a run freeze — a negative momentum goes to 0 and
+  stays at 0 or above while the banks are shut — and a holiday that runs its full 90 days reopens
+  with +1 momentum; ending it early gives that up. The crash-chance line stays, as a contagion
+  shield. `banking_cycle_simulation.md` §19.)*
 
 ## B4 — Bail-in Regime (Crisis)
 
