@@ -800,8 +800,9 @@ te_monetary_init_variables = {
 	# to the country's current market owner, and to nothing at all for a
 	# country with no market — the one phase-2 variable that can legitimately
 	# be absent after init. Read it with `var:te_basket_market_owner = { ... }`
-	# behind a has_variable guard, never as a number and never through a
-	# GetValue loc accessor.
+	# behind has_variable and `exists = var:te_basket_market_owner` (the owner
+	# can be annexed while the variable still names it), never as a number and
+	# never through a GetValue loc accessor.
 	if = {
 		limit = { NOT = { has_variable = te_inflation } }
 		set_variable = { name = te_inflation value = 0 }
@@ -1887,9 +1888,16 @@ te_monetary_update_inflation = {
 					# the clause above it: an OR is not guaranteed to
 					# short-circuit, and an unguarded var: read of a missing
 					# variable logs every month it is evaluated.
+					# A stored owner that has since died (its country annexed)
+					# counts as a change of market. has_variable alone passes
+					# for it, and the comparison then logs `Event target link
+					# 'var' returned an invalid object`, once per member.
 					AND = {
 						has_variable = te_basket_market_owner
-						NOT = { var:te_basket_market_owner = scope:te_mon_basket_owner }
+						NAND = {
+							exists = var:te_basket_market_owner
+							var:te_basket_market_owner = scope:te_mon_basket_owner
+						}
 					}
 				}
 			}

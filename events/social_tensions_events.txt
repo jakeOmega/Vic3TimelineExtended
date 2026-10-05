@@ -155,8 +155,8 @@ social_tensions_events.2 = {
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:terror_linked_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
 			FACTOR = appeasement_relations_decreased
 		}
 		add_loyalists = { value = small_radicals pop_type = officers }

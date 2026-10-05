@@ -378,8 +378,8 @@ movement_events_te.4 = {
 		add_lobby_appeasement_from_diplomacy_unidirectional = {
 			FIRST = root
 			SECOND = scope:criticizing_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
 			FACTOR = appeasement_relations_decreased
 		}
 		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
@@ -429,7 +429,7 @@ movement_events_te.4 = {
 			SECOND = scope:criticizing_country
 			PRO_AMOUNT = 2
 			ANTI_AMOUNT = -2
-			FACTOR = appeasement_relations_decreased
+			FACTOR = appeasement_relations_increased
 		}
 	}
 

@@ -37,10 +37,12 @@ te_construction_market_place_site = {
 # in the capital. It runs after the pulse has sized the sites: a site placed
 # before sizing would be sized unstaffed, at 10x
 # (te_construction_market_employment_adjusted_per_site). The replacement hires
-# at a rate of 1.0 and is sized at the next pulse.
+# at a rate of 1.0 and is sized at the next pulse. A country that has lost
+# every state stays alive while its war goes on, with no capital to place in.
 te_construction_market_ensure_site = {
 	if = {
 		limit = {
+			exists = capital
 			NOT = {
 				any_scope_building = {
 					is_building_type = te_construction_market_site
