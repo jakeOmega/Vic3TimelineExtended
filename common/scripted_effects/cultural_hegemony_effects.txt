@@ -297,6 +297,9 @@ ch_effect_disable_cultural_protectionism = {
 # is has_law_or_variant, so Bakufu and Neo-Absolutism count as Autocracy.
 # Neocameralism is deliberately absent: it is not corporatism in Victoria 3's
 # sense, and it resolves on the country's other laws.
+# The journal entry's legend hovers restate these tests in words
+# (ch_model_<model>_tt and ch_model_order_tt in te_miscellaneous_l_english.yml);
+# a change here needs the matching change there.
 # Scope: country. Writes var:ch_model.
 ch_set_political_model = {
 	# Communist / Vanguardist
