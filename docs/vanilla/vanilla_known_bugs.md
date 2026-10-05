@@ -202,13 +202,14 @@ Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 
 Iberia DLC (IP4) coup-resolution scripted effects call `abandon_revolution` / `remove_ruling_interest_group` on IGs whose state doesn't match the effect's preconditions (no growing revolution to abandon, IG already insurrectionary). Vanilla bug — the effects should be guarded but aren't.
 
-### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2334` — a catalyst offers the overlord lobbies an appeasement factor they do not list
+### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2334, 2414` — the event catalysts offer the overlord lobbies an appeasement factor they do not list
 
 ```
-'appeasement_special_events_positive' is a valid appeasement reason for political lobby 'lobby_pro_overlord'
+is a valid appeasement reason for political lobby 'lobby_pro_overlord'
+is a valid appeasement reason for political lobby 'lobby_anti_overlord'
 ```
 
-`change_appeasement` takes only a factor the lobby type lists for the sign of the amount (`appeasement_factors_pro` for a gain, `appeasement_factors_anti` for a loss; `scripting_best_practices.md` § `change_appeasement`'s `appeasement_special_events_*` Factor). The catalyst at line 2334 passes `FACTOR = appeasement_special_events_positive` to both `add_lobby_appeasement_from_diplomacy_unidirectional` and `add_overlord_lobby_appeasement_from_diplomacy`. The country lobbies list it; `lobby_pro_overlord` lists it in neither set, so its half is rejected. Once, 2026-10-04.
+`change_appeasement` takes only a factor the lobby type lists for the sign of the amount (`appeasement_factors_pro` for a gain, `appeasement_factors_anti` for a loss; `scripting_best_practices.md` § `change_appeasement`'s `appeasement_special_events_*` Factor). `catalyst_event_positive` (line 2334) and `catalyst_event_negative` (line 2414) pass `appeasement_special_events_positive` / `_negative` to both `add_lobby_appeasement_from_diplomacy_unidirectional` and `add_overlord_lobby_appeasement_from_diplomacy`. The country lobbies list both factors. Neither overlord lobby lists either one, on either side, so the overlord half of every event catalyst is rejected. That includes catalysts the mod creates from its own events (28 `create_diplomatic_catalyst` calls in nine files), and it's still the catalyst's defect. Once, 2026-10-04, for `lobby_pro_overlord`.
 
 This entry used to blame vanilla's lines 285 and 292 for `appeasement_relations_decreased` failures, anchored on the lobby effects file (00_lobby_effects.txt) and read as a `factor`/`reason` field mix-up. Those vanilla calls are signed correctly. The failures were five mod event options that passed the factor with the signs reversed (fixed 2026-10-04), and the anchor hid them, because the mod's calls go through the same scripted effect and error.log lists every file in the call stack. Keep this entry anchored on the catalyst and its signature on the lobby type.
 

@@ -62,6 +62,10 @@ COUNTRY_LOBBY_FACTORS = {
 WRAPPER_RE = re.compile(
     r"add_lobby_appeasement_from_diplomacy_(?:unidirectional|bidirectional)\s*=\s*\{([^{}]*)\}"
 )
+# Every call, whatever its block holds. A block with a nested brace doesn't
+# match WRAPPER_RE, so the test compares the two counts instead of skipping it.
+CALL_RE = re.compile(r"add_lobby_appeasement_from_diplomacy_(?:unidirectional|bidirectional)\s*=")
+COMMENT_RE = re.compile(r"#[^\n]*")
 
 
 def _arg(block, name):
@@ -69,10 +73,19 @@ def _arg(block, name):
     return m.group(1) if m else None
 
 
+def script_files():
+    return sorted(list(ROOT.glob("events/**/*.txt")) + list(ROOT.glob("common/**/*.txt")))
+
+
+def script_text(path):
+    """The file with comments blanked, so a commented-out call or argument is not read."""
+    return COMMENT_RE.sub("", path.read_text(encoding="utf-8-sig", errors="replace"))
+
+
 def wrapper_calls():
     """(path, line, factor, pro_amount, anti_amount) for every mod call of the country wrappers."""
-    for path in sorted(list(ROOT.glob("events/**/*.txt")) + list(ROOT.glob("common/**/*.txt"))):
-        text = path.read_text(encoding="utf-8-sig", errors="replace")
+    for path in script_files():
+        text = script_text(path)
         for m in WRAPPER_RE.finditer(text):
             block = m.group(1)
             yield (
@@ -92,6 +105,8 @@ class LobbyAppeasementFactorTests(unittest.TestCase):
     def test_wrapper_calls_use_an_accepted_factor(self):
         calls = list(wrapper_calls())
         self.assertGreater(len(calls), 20, "the scan found too few calls; did the wrapper get renamed?")
+        raw = sum(len(CALL_RE.findall(script_text(path))) for path in script_files())
+        self.assertEqual(len(calls), raw, "a call's block has a nested brace the scan can't read; check it by hand")
         problems = []
         for path, line, factor, pro, anti in calls:
             for lobby, amount in (("lobby_pro_country", pro), ("lobby_anti_country", anti)):
