@@ -1321,68 +1321,125 @@ remove_all_banking_phase_modifiers = {
 	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme }
 }
 
+# A crash only ever lowers the cycle. The tier figures below are ceilings, not
+# resets: a country already under one keeps what it has. A plain set_variable
+# to the tier figure lifted a country in a Downturn (cycle 12, momentum -3.5)
+# up to 40 and -1 when a "Market Correction" reached it, and the contagion roll
+# reaches countries at any cycle value, so this was not rare.
+# $VALUE$ — the tier's ceiling.
+banking_crash_lower_cycle_to = {
+	if = {
+		limit = { var:finance_cycle_value > $VALUE$ }
+		set_variable = { name = finance_cycle_value value = $VALUE$ }
+	}
+}
+banking_crash_lower_momentum_to = {
+	if = {
+		limit = { var:finance_cycle_momentum > $VALUE$ }
+		set_variable = { name = finance_cycle_momentum value = $VALUE$ }
+	}
+}
+
+# Bracket for any crash option that ADDS to cycle value or momentum after the
+# tier ceilings (the softening responses) or clamps them (the contagion scare).
+# `note` runs first and records where the country stands; `hold` runs last and
+# puts either figure back to that level if the option left it higher, so no
+# response can turn a crash into a net gain. Both are hidden: the tooltip line
+# CRASH_NO_RAISE_DESC (in apply_banking_crash_origin_effects) tells the player,
+# and set_variable prints nothing anyway. `hold` checks has_variable, because
+# an unrecorded var: reads as 0 and would otherwise drag the cycle to 0.
+banking_crash_note_prior_state = {
+	hidden_effect = {
+		set_variable = { name = banking_crash_prior_value value = var:finance_cycle_value }
+		set_variable = { name = banking_crash_prior_momentum value = var:finance_cycle_momentum }
+	}
+}
+banking_crash_hold_to_prior_state = {
+	hidden_effect = {
+		if = {
+			limit = {
+				has_variable = banking_crash_prior_value
+				var:finance_cycle_value > var:banking_crash_prior_value
+			}
+			set_variable = { name = finance_cycle_value value = var:banking_crash_prior_value }
+		}
+		if = {
+			limit = {
+				has_variable = banking_crash_prior_momentum
+				var:finance_cycle_momentum > var:banking_crash_prior_momentum
+			}
+			set_variable = { name = finance_cycle_momentum value = var:banking_crash_prior_momentum }
+		}
+		if = { limit = { has_variable = banking_crash_prior_value }    remove_variable = banking_crash_prior_value }
+		if = { limit = { has_variable = banking_crash_prior_momentum } remove_variable = banking_crash_prior_momentum }
+	}
+}
+
 # Apply crash effects to the origin country (event .6).
 # Tiered by crash_severity: correction (<20), downturn (20-39), crash (40-59), panic (60-79), systemic (≥80).
+# Cycle value and momentum fall to the tier's figure at most (see
+# banking_crash_lower_cycle_to); a country already below it is not moved.
 # Uses custom_tooltip so effects are visible in event option tooltips.
 apply_banking_crash_origin_effects = {
 	if = {
 		limit = { var:crash_severity >= 80 }
 		custom_tooltip = {
 			text = CRASH_CYCLE_VALUE_5_DESC
-			set_variable = { name = finance_cycle_value value = 5 }
+			banking_crash_lower_cycle_to = { VALUE = 5 }
 		}
 		custom_tooltip = {
 			text = CRASH_MOMENTUM_MINUS_5_DESC
-			set_variable = { name = finance_cycle_momentum value = -5 }
+			banking_crash_lower_momentum_to = { VALUE = -5 }
 		}
 	}
 	else_if = {
 		limit = { var:crash_severity >= 60 }
 		custom_tooltip = {
 			text = CRASH_CYCLE_VALUE_10_DESC
-			set_variable = { name = finance_cycle_value value = 10 }
+			banking_crash_lower_cycle_to = { VALUE = 10 }
 		}
 		custom_tooltip = {
 			text = CRASH_MOMENTUM_MINUS_4_DESC
-			set_variable = { name = finance_cycle_momentum value = -4 }
+			banking_crash_lower_momentum_to = { VALUE = -4 }
 		}
 	}
 	else_if = {
 		limit = { var:crash_severity >= 40 }
 		custom_tooltip = {
 			text = CRASH_CYCLE_VALUE_20_DESC
-			set_variable = { name = finance_cycle_value value = 20 }
+			banking_crash_lower_cycle_to = { VALUE = 20 }
 		}
 		custom_tooltip = {
 			text = CRASH_MOMENTUM_MINUS_3_DESC
-			set_variable = { name = finance_cycle_momentum value = -3 }
+			banking_crash_lower_momentum_to = { VALUE = -3 }
 		}
 	}
 	else_if = {
 		limit = { var:crash_severity >= 20 }
 		custom_tooltip = {
 			text = CRASH_CYCLE_VALUE_30_DESC
-			set_variable = { name = finance_cycle_value value = 30 }
+			banking_crash_lower_cycle_to = { VALUE = 30 }
 		}
 		custom_tooltip = {
 			text = CRASH_MOMENTUM_MINUS_2_DESC
-			set_variable = { name = finance_cycle_momentum value = -2 }
+			banking_crash_lower_momentum_to = { VALUE = -2 }
 		}
 	}
 	else = {
 		custom_tooltip = {
 			text = CRASH_CYCLE_VALUE_40_DESC
-			set_variable = { name = finance_cycle_value value = 40 }
+			banking_crash_lower_cycle_to = { VALUE = 40 }
 		}
 		custom_tooltip = {
 			text = CRASH_MOMENTUM_MINUS_1_DESC
-			set_variable = { name = finance_cycle_momentum value = -1 }
+			banking_crash_lower_momentum_to = { VALUE = -1 }
 		}
 	}
 	custom_tooltip = {
 		text = CRASH_BUBBLE_CLEAR_DESC
 		set_variable = { name = bubble_pressure value = 0 }
 	}
+	custom_tooltip = { text = CRASH_NO_RAISE_DESC }
 }
 
 # Composite helper for the conforming softening options of
@@ -1410,12 +1467,16 @@ apply_banking_crash_origin_effects = {
 #   $RADICALS$     — radicals size (very_small|small|medium); resolves to
 #                    <RADICALS>_radicals script value at the call site.
 apply_banking_crash_softening_option_effect = {
+	# A response softens the crash; it cannot lift the country above where it
+	# stood before it, so the bracket holds both figures at that level.
+	banking_crash_note_prior_state = yes
 	apply_banking_crash_origin_effects = yes
 	custom_tooltip = {
 		text = $TT_KEY$
 		change_variable = { name = finance_cycle_value    add = $CYCLE_ADD$    }
 		change_variable = { name = finance_cycle_momentum add = $MOMENTUM_ADD$ }
 	}
+	banking_crash_hold_to_prior_state = yes
 	add_modifier = {
 		name = banking_crash_response_cost
 		multiplier = $COST_SCALE$
@@ -1639,9 +1700,13 @@ banking_contagion_crash_check = {
 # If crash: applies full crash effects (same as origin crash).
 # If scare: applies minor cycle/momentum reduction (markets wobble but hold).
 apply_banking_contagion_effects = {
+	# The scare's floor clamps below pull a figure UP when the country is already
+	# under them (cycle 2 -> 5, momentum -7 -> -5), so the whole effect is
+	# bracketed: neither figure may end above where it stood.
+	banking_crash_note_prior_state = yes
 	if = {
 		limit = { var:contagion_crash > 0 }
-		# Full crash — reuse origin crash effects (cycle reset, bubble clear)
+		# Full crash — reuse origin crash effects (cycle ceiling, bubble clear)
 		apply_banking_crash_origin_effects = yes
 	}
 	else = {
@@ -1694,6 +1759,7 @@ apply_banking_contagion_effects = {
 			}
 		}
 	}
+	banking_crash_hold_to_prior_state = yes
 }
 
 # ============================================================================

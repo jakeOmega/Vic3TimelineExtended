@@ -1600,3 +1600,17 @@ the bank leaves the clamp in month 4 (3 before) and reaches 0% in month 32 (27),
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --points 0,5 [--wage-pressure 1.0] [--tune pre_slump_pressure]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 0,5 --tune pressure_metal_stagnation=-0.75,pressure_metal_downturn=-2,pressure_metal_panic=-4   # F24's B on metal
 ```
+\n
+## 17. Crash ceilings (2026-10-05)
+
+The crash tiers (value 5…40, momentum −5…−1) were absolute resets, so a crash could lift a country that was already below the tier, and a softening response could add on top of that. The script now treats the tier figures as ceilings and holds every option to the pre-crash level (`docs/systems/mod_systems.md`, Monthly Pulse step 3; `test_banking_crash_no_raise.py`). `apply_crash` ports both.
+
+The simulator only models the origin crash, which fires from a high cycle, so it barely sees the bug. Wrapping `apply_crash` to compare each crash's figures before and after (100 runs × 100 years in each of the 26 cells at 0 and 5 points, a one-off, not kept in the repo): before, 17,211 crashes, 0 of which raised cycle value and 3 of which raised momentum (by up to 0.31); after, 17,215 crashes and 0. Trajectories diverge after the first changed crash, so the cells are not comparable beyond noise: the largest difference in any cell was 0.12 crashes a century, 0.4 points of mean severity and about a tenth of a point of months in recession. The 2026-09-22 retune stands.
+
+Contagion crashes reach countries at any cycle value and are where the lift was large (a country at the cycle's floor went to 40), but the simulator does not model contagion. `test_banking_crash_no_raise.py` is the standing guard: it runs the script itself, every option of events .6 and .7, over a grid of cycle states, with a negative control that fails the old reset.
+
+**Reproduce the headline table:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 100 --points 0,5
+```
