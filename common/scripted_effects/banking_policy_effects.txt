@@ -269,9 +269,16 @@ banking_effect_cb_disable_reserve_requirements = {
 
 # Ninety days, then the banks reopen on their own: the modifier is TIMED, so
 # the Disable action only ever ends a holiday early, and the history chart gets
-# no "withdrawn" marker when one simply expires. The one-shot halving of a
-# negative momentum is the run stopping; the cooldown is on the country, not the
-# modifier, so ending the holiday early does not reset it.
+# no "withdrawn" marker when one simply expires. The run stops: a falling
+# momentum goes to 0 at once, and banking_cycle_advance_variables keeps it at 0
+# or above while the modifier is on. A holiday that runs its full term reopens
+# to returning depositors: banking_cycle_bank_holiday_reopen adds
+# banking_bank_holiday_reopen_momentum once the modifier has expired, as long as
+# banking_bank_holiday_reopening is still set. Every early ending clears it
+# first: the Disable action below, a change of economic system
+# (remove_banking_market_modifiers_effect) and a revolution (je_banking.txt's
+# immediate). The cooldown is on the country, not the modifier, so ending the
+# holiday early does not reset it.
 banking_effect_cb_bank_holiday = {
 	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
 	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
@@ -283,8 +290,12 @@ banking_effect_cb_bank_holiday = {
 		text = banking_bank_holiday_momentum_tt
 		if = {
 			limit = { var:finance_cycle_momentum < 0 }
-			change_variable = { name = finance_cycle_momentum multiply = 0.5 }
+			set_variable = { name = finance_cycle_momentum value = 0 }
 		}
+	}
+	custom_tooltip = {
+		text = banking_bank_holiday_reopen_tt
+		set_variable = { name = banking_bank_holiday_reopening value = 1 }
 	}
 	# Depositors who cannot reach their money for up to ninety days, hit in
 	# proportion to what they keep in the banks: the middle strata's savings
@@ -300,6 +311,10 @@ banking_effect_cb_bank_holiday = {
 
 banking_effect_cb_disable_bank_holiday = {
 	te_history_record_banking_marker = { MARK = off_cb_bank_holiday }
+	custom_tooltip = {
+		text = banking_bank_holiday_forfeit_tt
+		remove_variable = banking_bank_holiday_reopening
+	}
 	je:je_banking_cycle = { remove_modifier = banking_bank_holiday }
 }
 

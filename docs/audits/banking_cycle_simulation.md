@@ -20,7 +20,8 @@ crash and momentum bonus with inflation anchoring (`--bank-level`). §14 (2026-0
 directed-credit sectors apart (`--tune ai_dc_reserve=off`). §16 (2026-10-02) makes a slump pull inflation down
 harder under an inflation target, and only there (`--tune pre_slump_pressure`). §17 (2026-10-05) makes a crash's tier a
 ceiling, so a crash never raises the cycle. §18 (2026-10-05) stops the AI lifting a tool while the reason it bought
-it still holds (`--tune pre_hold`). Every table states which script
+it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday stop the run and reopen with a
+momentum bounce (`--holiday`, `--tune pre_holiday`). Every table states which script
 it measured.
 
 ---
@@ -1718,4 +1719,98 @@ crash lifting it and a fast recovery bringing it back, which is two real changes
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 2,3,5,8 [--tune pre_hold | --tune ai_hold=off]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only fiat --points 2,3,5,8 --simplified [--tune pre_hold]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only gold --points 2,3,5 [--exclude-tool capital_controls]   # F26
+```
+
+---
+
+## 19. The Bank Holiday: stop the run, then reopen (2026-10-05)
+
+**Question (owner).** The Bank Holiday is declared in a downturn or panic, but its main line, crash chance
+−90%, mostly matters in a bubble. Make it do its work in the slump it is declared in.
+
+**Why the crash line did little.** Below cycle 40 a country's own crash weight is `(bubble − 90) × 0.01`, and
+the holiday is only declared below 25, where a panic drains 7 bubble a month and a downturn 3. So the domestic
+half of −90% is 90% of almost nothing. Its other half shields against crashes spreading in from trading
+partners (`banking_contagion_crash_check` multiplies by the same `banking_crash_chance_multiplier_value`).
+Before §17, a contagion crash in a slump *set* the cycle to its tier, 30–40 for a country with no bubble, so
+the shield mostly blocked a lift. Since §17 it can only deepen a slump, so the shield stays. The simulator has
+no contagion, so this half is not measured here.
+
+**What shipped.**
+
+- **The run stops.** Declaring the holiday sets a negative momentum to 0 (it used to halve it), and while the
+  modifier is on `banking_cycle_advance_variables` keeps momentum at 0 or above, after every other push.
+- **A full term reopens with a bounce.** `banking_cycle_bank_holiday_reopen`, in the monthly pulse just before the cycle advances, adds
+  `banking_bank_holiday_reopen_momentum` (+1) once the 90-day modifier has expired, if
+  `banking_bank_holiday_reopening` is still set. Disable, a change of economic system and a revolution all
+  clear it, so ending a holiday early gives the bounce up.
+- The crash line, the points, the cooldown and the radicals are unchanged.
+
+The sim ports all of it (`--tune pre_holiday` for the old halving) and adds `--holiday`: at every entry below
+cycle 25 (at most one per five years, the cooldown) it forks the run and follows each arm for 36 months on the
+same random draws, with no AI tools, so nothing leans against the recovery it causes.
+
+### F28 — The size of the bounce
+
+At every entry below cycle 25, 200 runs × 100 years per cell. *@18* is the median cycle value 18 months after
+the declaration, *60+* the share at 60 or more then, *boom* the share that reached 75 within 24 months, *crash*
+the share that crashed within 36 months, and *to 40* the median months to reach stable. *Old* is the halving
+alone; *freeze* is the §19 holiday with no bounce.
+
+| cell (entries) | arm | @18 | 60+ | boom | crash | to 40 |
+|---|---|---:|---:|---:|---:|---:|
+| `fiat/price` (853) | none | 50.9 | 9% | 3% | 13.8% | 13 |
+| | old | 52.3 | 12% | 4% | 9.5% | 12 |
+| | freeze | 54.0 | 21% | 6% | 9.5% | 11 |
+| | **+1** | **57.7** | **38%** | **10%** | **13.4%** | **9** |
+| | +2 | 62.0 | 61% | 19% | 18.2% | 8 |
+| `fiat/growth` (1348) | none | 51.5 | 15% | 9% | 22.6% | 13 |
+| | old | 53.8 | 22% | 11% | 24.3% | 11 |
+| | freeze | 56.5 | 33% | 15% | 24.9% | 10 |
+| | **+1** | **60.5** | **53%** | **27%** | **32.9%** | **8** |
+| | +2 | 65.1 | 74% | 40% | 43.5% | 7 |
+| `gold/peg` (1294) | none | 44.1 | 4% | 3% | 7.9% | 16 |
+| | old | 48.3 | 9% | 5% | 11.5% | 13 |
+| | freeze | 52.2 | 19% | 9% | 14.7% | 11 |
+| | **+1** | **56.6** | **34%** | **14%** | **20.7%** | **9** |
+| | +2 | 61.3 | 55% | 24% | 30.5% | 8 |
+| `commodity/nothing` (1081) | none | 41.5 | 3% | 1% | 5.9% | 18 |
+| | old | 45.6 | 8% | 4% | 9.0% | 14 |
+| | freeze | 48.8 | 15% | 6% | 11.5% | 11 |
+| | **+1** | **52.6** | **26%** | **11%** | **16.2%** | **10** |
+| | +2 | 57.0 | 39% | 17% | 22.0% | 8 |
+
+**The freeze is the cheap half.** It brings stable two to seven months sooner than no holiday, and one to three
+sooner than the old halving. The chance of another crash within three years moves less than with any bounce:
+down under fiat price stability (13.8% → 9.5%), up 2 points under a growth target and 6–7 under the gold peg and
+unsteered commodity money.
+
+**The bounce buys speed with that risk.** Each point of it is worth about 4 cycle points at eighteen months and
+one to two months off the climb to stable. Under fiat price stability, where the bank leans against the rebound, +1 costs
+nothing (13.8% → 13.4% within three years) and +2 costs 4 points. Under a growth target or a gold peg the bank
+leans less, so +1 costs 10–13 points against no holiday and +2 about 21. The owner proposed about +2; at +2 more than half
+of the slumps under fiat or the gold peg stand at 60 or above at eighteen months, and a sixth to two fifths reach a
+boom within two years. **+1 shipped:** the median slump stands between 52 and 61 at eighteen months, and stable
+comes four to eight months sooner than with no holiday. `--holiday-bounces` and `banking_bank_holiday_reopen_momentum`
+change it.
+
+The unsteered fiat and digital dials (`*/nothing`) crash within three years after 85% or more of their slumps
+whatever the holiday does, so they say nothing about the bounce. Pooled over all 13 cells, which they dominate,
+the shares are much higher (no holiday 30.8%, +1 41.1%, +2 46.9%).
+
+No arm has any other tool: in play, a player or the AI leaning against the rebound with the buffer, margin
+requirements or the policy rate would take some of the bounce's risk back.
+
+### AI centuries
+
+The AI declares 0.9 holidays a century, the same as before, since its weights did not change. 200 runs × 100
+years, every currency and mandate, 2 / 3 / 5 / 8 points, `--tune pre_holiday` → shipped: crashes 13.10 → 13.14
+a century, months in recession 6.83% → 6.68%, longest slump 27.0 → 26.8 months. No cell moved by more than 0.7
+crashes a century, within the noise of 200-run cells.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --holiday --runs 200 --holiday-bounces 0,1,1.5,2
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 2,3,5,8 [--tune pre_holiday]
 ```

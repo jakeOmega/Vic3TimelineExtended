@@ -479,6 +479,12 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_directed_credit_electrification  MARK = off_cb_directed_credit_electrification }
 	banking_strip_tool = { MODIFIER = banking_reserve_requirements             MARK = off_cb_reserve_requirements }
 	banking_strip_tool = { MODIFIER = banking_bank_holiday                     MARK = off_cb_bank_holiday }
+	# A holiday a change of economic system ends reopens with no bounce
+	# (banking_cycle_bank_holiday_reopen).
+	if = {
+		limit = { has_variable = banking_bank_holiday_reopening }
+		remove_variable = banking_bank_holiday_reopening
+	}
 	banking_strip_tool = { MODIFIER = banking_bail_in_regime                   MARK = off_cb_bail_in_regime }
 }
 

@@ -2192,6 +2192,17 @@ banking_bank_holiday_middle_radicals = 0.05
 banking_bank_holiday_upper_radicals = 0.03
 banking_bank_holiday_lower_radicals = 0.02
 
+# Momentum a bank holiday adds when it reopens after its full ninety days
+# (banking_cycle_bank_holiday_reopen), worth about 7.7 cycle points over the
+# next eighteen months (0.9^18 = 15% of it is left by then). +1 puts the median
+# slump at 52-61 eighteen months on; +2 roughly doubled the chance of another
+# crash within three years under a growth target, and more under the gold peg
+# (banking_cycle_simulation.md §19). banking_bank_holiday_reopen_tt
+# and banking_bank_holiday_forfeit_tt quote it literally: change them together.
+banking_bank_holiday_reopen_momentum = {
+	value = 1
+}
+
 # Transfer amount for command economy treasury <-> investment pool buttons (0.2% GDP)
 ce_pool_transfer_amount = {
 	value = root.gdp

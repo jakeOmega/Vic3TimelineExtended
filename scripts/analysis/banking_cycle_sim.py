@@ -563,6 +563,11 @@ PRE_HOLD = {
     "ai_hold": "off",
     "cc_crisis": "off",
 }
+# The Bank Holiday before §19: a one-shot halving of a falling momentum, no
+# floor while the banks are shut and no bounce when they reopen.
+PRE_HOLIDAY = {
+    "holiday": "old",
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -571,6 +576,7 @@ PRESETS = {
     "pre_bank_qe": PRE_BANK_QE,
     "pre_slump_pressure": PRE_SLUMP_PRESSURE,
     "pre_hold": PRE_HOLD,
+    "pre_holiday": PRE_HOLIDAY,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -699,6 +705,9 @@ class State:
     timed: dict[str, int] = field(default_factory=dict)  # name -> months remaining
     tool_timers: dict[str, int] = field(default_factory=dict)  # timed TOOLS (bank holiday)
     holiday_cooldown: int = 0  # months until another bank holiday may be declared
+    # banking_bank_holiday_reopening: a holiday is running that has not been ended
+    # early, so it reopens with a momentum bounce when its timer runs out (§19)
+    holiday_reopening: bool = False
 
     # exogenous
     gdp: float = 1.0e7
@@ -1571,6 +1580,14 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
     #    advance first and stage the new size for next month.
     next_fiscal = fiscal_effect_size(cfg, state)
 
+    # 1b. banking_cycle_bank_holiday_reopen: a holiday that ran its full term
+    #     (its timer ran out at the end of last month) reopens with a bounce
+    if state.holiday_reopening and "bank_holiday" not in state.tools:
+        state.holiday_reopening = False
+        state.finance_cycle_momentum += tuned(
+            "holiday_bounce", K.sv("banking_bank_holiday_reopen_momentum")
+        )
+
     # 2. advance the variables
     advance_variables(cfg, state, rng)
 
@@ -1654,6 +1671,15 @@ def advance_variables(cfg: Config, state: State, rng: random.Random) -> None:
         pass
     else:
         state.finance_cycle_momentum += 1.0 * nudge_mult
+
+    # a bank holiday stops the run: no negative momentum while the banks are
+    # shut (§19; `--tune pre_holiday` for the old one-shot halving alone)
+    if (
+        TUNE.get("holiday") != "old"
+        and "bank_holiday" in state.tools
+        and state.finance_cycle_momentum < 0
+    ):
+        state.finance_cycle_momentum = 0.0
 
     state.finance_cycle_value += state.finance_cycle_momentum
     state.finance_cycle_value = max(0.0, min(100.0, state.finance_cycle_value))
@@ -2068,8 +2094,12 @@ def on_tool_enabled(state: State, tool: str) -> None:
     if tool == "bank_holiday":
         state.tool_timers[tool] = BANK_HOLIDAY_MONTHS
         state.holiday_cooldown = BANK_HOLIDAY_COOLDOWN_MONTHS
-        if state.finance_cycle_momentum < 0:
-            state.finance_cycle_momentum *= 0.5
+        if TUNE.get("holiday") == "old":
+            if state.finance_cycle_momentum < 0:
+                state.finance_cycle_momentum *= 0.5
+        else:
+            state.finance_cycle_momentum = max(0.0, state.finance_cycle_momentum)
+            state.holiday_reopening = True
 
 
 def disable_scores(cfg: Config, state: State) -> dict[str, float]:
@@ -2311,6 +2341,8 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
             else:
                 if tool_scores(cfg, state).get(tool, 0.0) > 0:
                     state.tool_wanted_lifts[tool] += 1
+                if tool == "bank_holiday":
+                    state.holiday_reopening = False  # reopened early: no bounce
                 state.tools.discard(tool)
                 state.tool_lifts[tool] += 1
                 state.last_lift[tool] = month
@@ -2356,6 +2388,8 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         for tool in order:
             if tool in state.tools:
                 state.tools.discard(tool)
+                if tool == "bank_holiday":
+                    state.holiday_reopening = False
                 break
 
 
@@ -2845,6 +2879,112 @@ def print_rescue(rows: list[dict], args, tools: tuple[str, ...]) -> None:
         print(line)
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# --holiday: what a Bank Holiday does to the recovery (§19)
+# ─────────────────────────────────────────────────────────────────────────────
+
+HOLIDAY_HORIZON = 36  # months followed after each declaration
+
+
+def holiday_fork_run(cfg: Config, seed: int, arms: list[tuple[str, dict | None]]) -> list[dict]:
+    """Fork at every entry below cycle 25 (at most once in the holiday's
+    five-year cooldown) and follow each arm for HOLIDAY_HORIZON months on the
+    same random draws. An arm's tune is None for no holiday; otherwise the
+    holiday is declared the month after the entry, with that tune in force.
+    The AI clicks nothing, so no arm leans on the recovery it causes."""
+    rng = random.Random(seed)
+    base_tune = dict(TUNE)
+    cfg = dataclasses.replace(cfg, points=int(TOOL_COST["bank_holiday"]), ai_tools=False)
+    state = State(gdp=cfg.gdp0, growth=cfg.growth_mean, deficit_pct=cfg.deficit_mean)
+    state.policy_rate = era_base(0)
+    state.policy_rate_target = round(era_base(0))
+    state.commodity_centre = round(era_base(0))
+    state.inflation_expected = 0.0 if is_metallic(cfg) else 2.0
+    out: list[dict] = []
+    prev, cooldown = state.finance_cycle_value, 0
+    for month in range(cfg.years * 12 - HOLIDAY_HORIZON):
+        _rescue_step(cfg, state, rng, month)
+        v = state.finance_cycle_value
+        cooldown = max(0, cooldown - 1)
+        if prev >= 25 > v and cooldown == 0:
+            entry: dict = {}
+            for name, tune in arms:
+                arm_state = copy.deepcopy(state)
+                arm_rng = random.Random(seed * 7919 + month)
+                TUNE.clear()
+                TUNE.update(base_tune)
+                if tune is not None:
+                    TUNE.update(tune)
+                    arm_state.tools.add("bank_holiday")
+                    on_tool_enabled(arm_state, "bank_holiday")
+                path, crash = [], None
+                for k in range(HOLIDAY_HORIZON):
+                    if _rescue_step(cfg, arm_state, arm_rng, month + 1 + k) and crash is None:
+                        crash = k
+                    path.append(arm_state.finance_cycle_value)
+                entry[name] = (path, crash)
+            TUNE.clear()
+            TUNE.update(base_tune)
+            out.append(entry)
+            cooldown = BANK_HOLIDAY_COOLDOWN_MONTHS
+        prev = v
+    return out
+
+
+def holiday_arms(bounces: list[float]) -> list[tuple[str, dict | None]]:
+    return [("none", None), ("old", {"holiday": "old"})] + [
+        (f"bounce {b:g}", {"holiday_bounce": b}) for b in bounces
+    ]
+
+
+def _run_holiday_cell(job: tuple[Config, int, int, dict, list[float]]) -> dict:
+    cfg, seed, runs, tune, bounces = job
+    TUNE.clear()
+    TUNE.update(tune)
+    base = seed + zlib.crc32(f"holiday/{cfg.currency}/{cfg.mode}".encode()) % 10_000
+    arms = holiday_arms(bounces)
+    entries = [e for i in range(runs) for e in holiday_fork_run(cfg, base + i, arms)]
+    return {"cell": f"{cfg.currency}/{cfg.mode}", "entries": entries, "arms": [a for a, _ in arms]}
+
+
+def print_holiday(rows: list[dict], args) -> None:
+    print(f"Bank Holiday — {args.runs} runs x {args.years} years per cell; at each entry below "
+          f"cycle 25, a holiday declared the next month, followed {HOLIDAY_HORIZON} months, no AI tools")
+    print("cycle value is the median over entries; @18 = 18 months after declaring\n")
+    pooled = {"cell": "all cells", "entries": [e for r in rows for e in r["entries"]],
+              "arms": rows[0]["arms"] if rows else []}
+    for r in rows + ([pooled] if len(rows) > 1 else []):
+        entries = r["entries"]
+        if not entries:
+            continue
+        print(f"{r['cell']}: {len(entries)} entries")
+        print(f"  {'arm':10s} {'@12':>5s} {'@18':>5s} {'@24':>5s} {'<25':>5s} {'25-40':>6s} {'40-60':>6s}"
+              f" {'60-75':>6s} {'75+':>5s} {'boom24':>7s} {'crash36':>8s} {'to40':>5s}")
+        for arm in r["arms"]:
+            paths = [e[arm][0] for e in entries]
+            n = len(paths)
+            at18 = [p[17] for p in paths]
+
+            def med(k: int, paths: list = paths) -> float:
+                return statistics.median(p[k - 1] for p in paths)
+
+            def share(lo: float, hi: float, at18: list = at18, n: int = n) -> float:
+                return 100.0 * sum(lo <= x < hi for x in at18) / n
+
+            to40 = statistics.median(
+                next((i + 1 for i, x in enumerate(p) if x >= 40), HOLIDAY_HORIZON + 1) for p in paths
+            )
+            boom = 100.0 * sum(max(p[:24]) >= 75 for p in paths) / n
+            crash = 100.0 * sum(e[arm][1] is not None for e in entries) / n
+            print(f"  {arm:10s} {med(12):5.1f} {med(18):5.1f} {med(24):5.1f} {share(0, 25):4.0f}%"
+                  f" {share(25, 40):5.0f}% {share(40, 60):5.0f}% {share(60, 75):5.0f}% {share(75, 101):4.0f}%"
+                  f" {boom:6.0f}% {crash:7.1f}% {to40:5.0f}")
+        print()
+    print("<25 ... 75+ = where the cycle stands 18 months after declaring")
+    print("boom24 = reached 75 within 24 months   crash36 = crashed within 36 months")
+    print("to40 = median months to reach Stable (37 = not within the horizon)")
+
+
 def _run_cell(job: tuple[Config, int, int, dict]) -> dict:
     cfg, seed, runs, tune = job
     TUNE.clear()
@@ -2931,6 +3071,13 @@ def main() -> int:
     ap.add_argument("--rescue-entry", type=float, default=75.0,
                     help="the cycle value whose upward crossing --rescue forks at "
                          "(75 = boom, the default; 88 = frenzy)")
+    ap.add_argument("--holiday", action="store_true",
+                    help="instead of the century matrix: fork at every entry below cycle 25 "
+                         "and compare no Bank Holiday, the pre-§19 holiday and the §19 one "
+                         "at each --holiday-bounces size")
+    ap.add_argument("--holiday-bounces", default="0,1,2",
+                    help="reopening bounces --holiday compares (default 0,1,2; the shipped "
+                         "one is banking_bank_holiday_reopen_momentum)")
     ap.add_argument("--jobs", type=int, default=0, help="worker processes (0 = all cores)")
     ap.add_argument("--json", help="write the full result table here")
     args = ap.parse_args()
@@ -2956,6 +3103,26 @@ def main() -> int:
     for t in excluded:
         if t not in TOOL_MODIFIERS:
             ap.error(f"unknown tool {t!r}; keys are {', '.join(TOOL_MODIFIERS)}")
+    if args.holiday:
+        bounces = [float(x) for x in args.holiday_bounces.split(",") if x.strip()]
+        hjobs = [
+            (Config(currency=c, mode=m, fin_law=args.fin_law,
+                    national_bank=not args.no_national_bank, years=args.years,
+                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level),
+             args.seed, args.runs, dict(TUNE), bounces)
+            for c, m in valid_cells(args.only)
+        ]
+        workers = args.jobs or min(len(hjobs), os.cpu_count() or 1)
+        if workers > 1:
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                hrows = list(pool.map(_run_holiday_cell, hjobs))
+        else:
+            hrows = [_run_holiday_cell(j) for j in hjobs]
+        print_holiday(hrows, args)
+        if args.json:
+            Path(args.json).write_text(json.dumps(hrows), encoding="utf-8")
+        return 0
     if args.rescue:
         tools = tuple(x.strip() for x in args.rescue_tools.split(",") if x.strip())
         for x in tools:
