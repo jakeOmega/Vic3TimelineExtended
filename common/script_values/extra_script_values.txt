@@ -305,16 +305,31 @@ accepted_culture_state_count = {
 }
 
 # Override of vanilla leverage_threshold_to_invite (defined as 200 in
-# game/common/script_values/00_diplomacy_values.txt). All three consumers —
-# 28_invite_to_power_bloc, 26_join_power_bloc, and treaty article 09_join_power_bloc
-# — read this from inside `power_bloc = { leverage_advantage = { ... } }`, so the
-# scope when this value is computed is the power_bloc. Hop to power_bloc_leader
-# (country scope) to read the modifier sum contributed by techs / laws.
+# game/common/script_values/00_diplomacy_values.txt). Vanilla reads it in two
+# scopes. Three gates read it inside `power_bloc = { leverage_advantage = { ... } }`
+# (28_invite_to_power_bloc's `possible`, 26_join_power_bloc, treaty article
+# 09_join_power_bloc), so the scope is the power bloc. Invite's AI `accept_score`
+# (28_invite_to_power_bloc.txt:104) reads it in country scope, the invited
+# country, which is already in the inviting bloc there. `power_bloc_leader` takes
+# only a power bloc, so the unguarded hop read nothing from a country and logged
+# `Value of wrong type in '...28_invite_to_power_bloc.txt:87'. Got value of type
+# 'none'` at every evaluation: about 600 lines a minute in each of debug.log and
+# error.log (2026-10-05). Each branch below reads the bloc
+# leader's modifier sum from the scope it is valid in.
 # Contributors: intergovernmental_organizations (-100), globalization (-50).
 leverage_threshold_to_invite = {
 	value = 200
-	power_bloc_leader = {
-		add = modifier:country_leverage_threshold_change_add
+	if = {
+		limit = { exists = this.power_bloc_leader }
+		power_bloc_leader = {
+			add = modifier:country_leverage_threshold_change_add
+		}
+	}
+	else_if = {
+		limit = { exists = this.power_bloc.power_bloc_leader }
+		power_bloc.power_bloc_leader = {
+			add = modifier:country_leverage_threshold_change_add
+		}
 	}
 }
 

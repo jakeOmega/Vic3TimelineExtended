@@ -355,7 +355,7 @@ pedro_brazil_events.txt:1042
 Event target link 'ruler' returned an invalid object
 ```
 
-Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence. 2026-10-04: also the council-republic checks in `common/parties/anarchist_party.txt:156` and `common/parties/communist_party.txt:440` (`owner = { ruler = { has_ideology = … } }`), two lines each.
+Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence. 2026-10-04: also the council-republic checks in `common/parties/anarchist_party.txt:156` and `common/parties/communist_party.txt:440` (`owner = { ruler = { has_ideology = … } }`), two lines each. 2026-10-05: also the Caudillo event's trigger in `events/brazil/caudillo.txt:201` (`ruler = { interest_group ?= { … } }`), two lines.
 
 ### `common/scripted_effects/00_victoria_ep2_scripted_effects.txt:1177` (called from `common/journal_entries/07_iwakura_mission.txt`) — `var:current_expedition_location_var` unset
 
@@ -658,7 +658,7 @@ Event target link 'market' returned an invalid object
 has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
 ```
 
-A country that loses every state while it is still at war stays alive until that war ends, with no `capital` and no `market_capital` (the `market` lines are those links' follow-on). Vanilla evaluates journal entries, buttons and events against it with no `exists` guard: the Corn Laws `possible` (`market_capital.market`), the Canada/Australia and Iberian Union `capital = { is_in_geographic_region … }` checks, Struggle for the Highveld's `any_country = { capital = { … } }`, the metro event's `ROOT.market_capital`, the trade-route event's `capital.market`, and Foreign Investment Rights' `scope:source_country.capital.region`. 2026-10-04: Khiva, 22:24:15 to 22:31:11 (about 70 game weeks, ~380 lines from these files). They stopped when that war ended. The mod's own sites of this shape are guarded with `exists = capital` / `exists = market_capital.owner`, so a mod file in one of these lines is a mod bug.
+A country that loses every state while it is still at war stays alive until that war ends, with no `capital` and no `market_capital` (the `market` lines are those links' follow-on). Vanilla evaluates journal entries, buttons and events against it with no `exists` guard: the Corn Laws `possible` (`market_capital.market`), the Canada/Australia and Iberian Union `capital = { is_in_geographic_region … }` checks, Struggle for the Highveld's `any_country = { capital = { … } }`, the metro event's `ROOT.market_capital`, the trade-route event's `capital.market`, and Foreign Investment Rights' `scope:source_country.capital.region`. 2026-10-04: Khiva, 22:24:15 to 22:31:11 (about 70 game weeks, ~380 lines from these files). They stopped when that war ended. The mod's own sites of this shape are guarded with `exists = capital` / `exists = market_capital.owner`, so a mod file in one of these lines is a mod bug. 2026-10-05: four more vanilla sites in one 25-second burst, while the AI weighed treaties: the `goods_valid_trigger` of No Tariffs (`common/treaty_articles/21_no_tariffs.txt:117`, 130 lines) and No Subventions (`common/treaty_articles/26_no_subventions.txt:90`, 65 lines), both `root.market = { … }`; the Indochina intervention event's `capital = { region = … }` (`events/indochina.txt:29`); and the lobby event's `ROOT.market_capital = { owner = ROOT }` (`events/soi_events/00_lobbies_events_04.txt:3758`).
 
 ### `events/brazil/culture_south_america.txt:386` — the old South American culture is compared before it is saved
 
@@ -675,11 +675,12 @@ Undefined event target 'agitator_scope_2'
 Undefined event target 'agitator_party_scope'
 Undefined event target 'govnas'
 Undefined event target 'ongoing_revolution_movement'
+Undefined event target 'da_boss'
 Event target link 'scope' returned an unset scope
 Wrong scope for effect: none
 ```
 
-`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope.
+`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope. 2026-10-05: `scope:da_boss` in option b of the scandal event at `agitator_law_events_2.txt:1325`, saved in `immediate` by a `random_interest_group` that can match no group, one line.
 
 ### `common/political_lobbies/00_political_lobbies.txt:26` — a lobby's upkeep check names a target country that has since died
 
@@ -1283,7 +1284,7 @@ Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the G
 common/diplomatic_actions/28_invite_to_power_bloc.txt:87
 ```
 
-Vanilla diplomatic action's `accept_score` block evaluates against an unset target during AI consideration and the engine emits "Value of wrong type … Got value of type 'none'". Fires hundreds of times per session as the AI evaluates power-bloc invites. Cosmetic — diplomatic AI behavior is unaffected.
+**Probably the mod's, not vanilla's. Delete this entry once a launch with the fix logs none of it.** `accept_score` (line 87) adds `leverage_threshold_to_invite` at line 104 in country scope, and the mod overrides that value (in its extra_script_values file) with a `power_bloc_leader = { … }` hop, a link that takes only a power bloc. Of vanilla's four reads of the value, this is the only one in country scope and the only one that logs. The engine reports such a wrong-scope read as `'none'` at the outermost script value, here line 87 (`scripting_best_practices.md` § Vanilla Script-Value Overrides). The entry was written on 2026-05-15, twelve days after the override was restored. On 2026-10-05 it was 16,770 debug.log and 16,198 error.log lines in 27 minutes, enough to rotate debug.log every five minutes and lose the startup log. The 2026-10-05 log-triage PR guards the hop by scope. If the line persists after that, it is vanilla after all: rewrite this paragraph and keep the entry.
 
 ### `navy_ai.cpp:3585` — no naval mission type possible for a country
 - source: `navy_ai.cpp:3585`
@@ -1527,6 +1528,15 @@ Goods transfer shipping lane with invalid treaty
 ```
 
 An engine assertion with no script frame, about once a session shortly after load. It first appeared with 1.14.4 (issue #389) and is still there in 1.14.5 (2026-10-05, eleven seconds after loading a save). Not actionable from script.
+
+### `pdx_assert.cpp:641` — `SecondBest.Lookup().IsValid()`
+- source: `pdx_assert.cpp:641`
+
+```
+SecondBest.Lookup().IsValid()
+```
+
+An engine assertion with no script frame, once in a 27-minute session (2026-10-05). The same second error.log logged the registered `<unknown>:0` null-country line (`Country  (4294967295)`), so the engine was ranking against a country that no longer existed. Not actionable from script.
 
 ## How to triage a new error-log entry
 
