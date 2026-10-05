@@ -39,6 +39,13 @@ most-negative contributing PM (in `common/production_methods`):
 Note this is broad — a REVIEWED on a PM suppresses every building where that PM
 is the worst contributor. The primary remedy is rebalancing the values so no
 valid combo goes negative; suppression is the escape hatch for deliberate cases.
+
+`python3 pm_employment_audit.py --strict` is the CI mode (the committed
+`vanilla_parsed/` snapshot stands in for the game). It exits 1 when a
+mod-relevant flag has no `# REVIEWED` exemption (vanilla-only flags never
+count), and also when any building was skipped for exceeding the combo-count
+cap: a skipped building is unaudited, so a rise from 0 would otherwise pass in
+silence (#681 took it from 0 to 13, every mine type).
 """
 import itertools
 import os
@@ -528,6 +535,15 @@ def render_report(result: AuditResult) -> str:
     return "\n".join(out) + "\n"
 
 
+def strict_exit_code(result: AuditResult) -> int:
+    """Exit status for `--strict` (CI mode): 1 if a mod-relevant flag lacks a
+    `# REVIEWED` exemption, or if any building was skipped as too large to
+    enumerate (it then went unaudited)."""
+    if result.coverage.get("buildings_skipped_large", 0) > 0:
+        return 1
+    return 1 if any(f.mod_relevant and not f.exemption for f in result.flags) else 0
+
+
 def regenerate(mod_state) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
@@ -558,3 +574,6 @@ if __name__ == "__main__":
     ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))
+    # --strict: CI mode. See strict_exit_code.
+    if "--strict" in sys.argv:
+        raise SystemExit(strict_exit_code(result))

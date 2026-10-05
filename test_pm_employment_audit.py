@@ -11,6 +11,7 @@ from pm_employment_audit import (
     render_report,
     _parse_reviewed,
     _pm_employment,
+    strict_exit_code,
     AuditResult,
 )
 
@@ -269,6 +270,46 @@ class RenderTests(unittest.TestCase):
         for gone in ("buildings audited", "buildings enumerated", "522", "86"):
             self.assertNotIn(gone, out)
         self.assertIn("- buildings skipped (combo count > ", out)
+
+
+class StrictExitCodeTests(unittest.TestCase):
+    """`--strict` is the CI mode: fail on an unreviewed mod-relevant flag, or on
+    any building skipped as too large to enumerate."""
+
+    def _flag(self, *, mod_relevant=True, exemption=None):
+        from pm_employment_audit import EmploymentFlag
+        return EmploymentFlag(
+            building="building_x", profession="laborers", scaling="level_scaled",
+            total=-2500.0, combo=[], mod_relevant=mod_relevant,
+            file="common/buildings/x.txt", line=1, exemption=exemption,
+        )
+
+    def _result(self, *flags, skipped=0):
+        return AuditResult(flags=list(flags),
+                           coverage={"buildings_skipped_large": skipped})
+
+    def test_clean_run_passes(self):
+        self.assertEqual(strict_exit_code(self._result()), 0)
+
+    def test_unreviewed_mod_flag_fails(self):
+        self.assertEqual(strict_exit_code(self._result(self._flag())), 1)
+
+    def test_reviewed_mod_flag_passes(self):
+        reviewed = {"date": "2026-10-04", "rationale": "shared cutter"}
+        self.assertEqual(
+            strict_exit_code(self._result(self._flag(exemption=reviewed))), 0)
+
+    def test_vanilla_only_flag_never_fails(self):
+        self.assertEqual(
+            strict_exit_code(self._result(self._flag(mod_relevant=False))), 0)
+
+    def test_skipped_building_fails_even_with_no_flags(self):
+        """A building over the combo cap is never enumerated, so a clean flag
+        list proves nothing about it."""
+        self.assertEqual(strict_exit_code(self._result(skipped=1)), 1)
+
+    def test_missing_coverage_key_passes(self):
+        self.assertEqual(strict_exit_code(AuditResult(flags=[], coverage={})), 0)
 
 
 if __name__ == "__main__":
