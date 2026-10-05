@@ -59,7 +59,11 @@ gw_policy_green_building_codes_active = {
 }
 
 # Does this country lead its own market? Used for the role icon and tariffs.
+# A country that has lost every state stays alive while its war goes on, with
+# no market capital; unguarded, the panel's market-leader checks logged an
+# error every time they rendered for one.
 gw_is_market_leader = {
+	exists = market_capital.owner
 	market_capital.owner = THIS
 }
 

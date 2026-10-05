@@ -165,7 +165,10 @@
 #                                                   one phase-2 variable that can be
 #                                                   absent after init — a country with
 #                                                   no market never gets one — so
-#                                                   guard on has_variable
+#                                                   guard on has_variable, and on
+#                                                   exists = var:... too, since
+#                                                   the owner can be annexed
+#                                                   while the variable names it
 #   te_inflation_band       1 to 6      displayed   1 deflation, 2 comfort, 3 elevated,
 #                                                   4 high, 5 very high, 6 hyperinflation
 #                                                   (edges in te_mon_band_edge_* below).
