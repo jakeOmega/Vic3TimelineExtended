@@ -140,6 +140,10 @@ check_save_history_order.py).
 
   meta      0x3245 = i32 game date in hours: days = v // 24,
             year = days // 365 - 5000, day of year = days % 365.
+
+  More databases (treaty articles, treaties, technology, buildings), the
+  gamestate's own date (autosaves have no meta) and the text-save names of
+  their tokens: the BINARY LAYOUT of save_world_report.py.
 """
 
 import functools
@@ -419,29 +423,49 @@ def law_records(b):
     return [], "no law database (0x5705 = { 0x05ab = { ... } }) in the gamestate; laws not decoded"
 
 
-def law_groups_from_text(text):
-    """{law: group} for each top-level block in a law file that states `group = ...` at its own depth.
+def top_level_fields(text, field):
+    """{entity: value} for each top-level block of a script file that states `field = ...` at its own depth.
 
-    Brace depth is tracked, and `group` must be a whole token: a naive regex
+    Brace depth is tracked, and `field` must be a whole token: a naive regex
     also picks up nested trigger blocks and keys like has_ruling_interest_group.
-    INJECT:/REPLACE: (any UPPER_CASE: prefix) is stripped from the law name.
+    INJECT:/REPLACE: (any UPPER_CASE: prefix) is stripped from the entity name.
+    A scalar value comes back as a string, quotes stripped; a `{ a b c }` value
+    as the list of its bare words (anything nested inside it is skipped).
+    Shared with save_world_report.py (technology eras, production method groups).
     """
     toks = [t for t in SCRIPT_TOKEN_RE.findall(text) if not t.startswith("#")]
-    out, depth, law = {}, 0, None
+    out, depth, entity = {}, 0, None
     for i, t in enumerate(toks):
         if t == "{":
             if depth == 0:
-                law = DIRECTIVE_RE.sub("", toks[i - 2]) if i >= 2 and toks[i - 1] == "=" else None
+                entity = DIRECTIVE_RE.sub("", toks[i - 2]) if i >= 2 and toks[i - 1] == "=" else None
             depth += 1
         elif t == "}":
             depth = max(depth - 1, 0)
             if depth == 0:
-                law = None
-        elif depth == 1 and law and t == "group" and toks[i + 1 : i + 2] == ["="]:
-            value = toks[i + 2] if i + 2 < len(toks) else "{"
-            if value not in ("{", "}", "="):
-                out[law] = value.strip('"')
+                entity = None
+        elif depth == 1 and entity and t == field and toks[i + 1 : i + 2] == ["="]:
+            value = toks[i + 2] if i + 2 < len(toks) else "}"
+            if value == "{":
+                words, inner = [], 0
+                for w in toks[i + 3 :]:
+                    if w == "{":
+                        inner += 1
+                    elif w == "}":
+                        if inner == 0:
+                            break
+                        inner -= 1
+                    elif inner == 0 and w != "=":
+                        words.append(w.strip('"'))
+                out[entity] = words
+            elif value not in ("}", "="):
+                out[entity] = value.strip('"')
     return out
+
+
+def law_groups_from_text(text):
+    """{law: group} for each top-level block in a law file that states `group = <name>` at its own depth."""
+    return {law: group for law, group in top_level_fields(text, "group").items() if isinstance(group, str)}
 
 
 def law_groups(vanilla_dir=None, snapshot=None, mod_dir=None):

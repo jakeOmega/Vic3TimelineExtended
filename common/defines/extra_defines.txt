@@ -16,6 +16,22 @@
 	MONOPOLY_PRICE_IMPACT = 0.9
 }
 
+# AI production-method hysteresis. Vanilla tunes these for free switching
+# (RETOOLING_WEEKS = 0, empty pm_retooling). Here a switch costs five years of
+# retooling, +1,000% construction input falling to nothing: 1,300 construction
+# for each 1 construction a week of maintenance, £195,000 per level of a port,
+# railway or power plant at base price. Spread over five years (a downgrade,
+# usually a price swing) that is a 23-150% better AI score per level for those
+# buildings; over twenty years (an upgrade), 6-38%. 0.6 and 0.9 ask for 67% and
+# 11%. Arithmetic and observer-game evidence: docs/systems/mod_systems.md
+# § Construction as a Market Good, "AI production-method switching".
+# Only AI choices read these; players are untouched.
+NAI = {
+	PRODUCTION_METHOD_STICKINESS_UPGRADE = 0.9		# vanilla 0.95. Score of non-current method is multiplied by this when it produces more goods base value in total
+	PRODUCTION_METHOD_STICKINESS_DOWNGRADE = 0.6	# vanilla 0.75. Score of non-current method is multiplied by this when it produces less (or equal) goods base value in total
+	PRODUCTION_METHOD_CHANCE_TO_CHANGE = 0.05		# vanilla 0.1. Chance that the AI will consider changing a production method when evaluating methods
+}
+
 NPolitics = {
 	INCOHERENCE_FACTOR = 2								# The amount to multiply the approval value with to get an incoherence score for legitimacy
 	MAX_INSTITUTION_INVESTMENT = 9

@@ -572,7 +572,10 @@ te_mon_monetise_condition = {
 #
 # Suspension is tested first: confidence is frozen while convertibility is
 # suspended, so its figure says nothing and the word says why. Defending comes
-# next because the +40 it bought would otherwise read as calm.
+# next because the +40 it bought would otherwise read as calm. A deep slump
+# (2026-10-05) comes after Breaking: it is WHY a healthy vault's confidence is
+# falling, which none of the band words says, and it holds the recovery the
+# bands are keyed on, so for as long as it lasts the band is not the news.
 te_mon_peg_state = {
 	type = country
 	random_valid = no
@@ -594,6 +597,10 @@ te_mon_peg_state = {
 		localization_key = banking_dash_mon_peg_state_breaking
 	}
 	text = {
+		trigger = { te_mon_peg_in_deep_slump = yes }
+		localization_key = banking_dash_mon_peg_state_slump
+	}
+	text = {
 		trigger = { var:te_peg_confidence < te_mon_peg_doubted_below }
 		localization_key = banking_dash_mon_peg_state_doubted
 	}
@@ -603,6 +610,27 @@ te_mon_peg_state = {
 	}
 	text = {
 		localization_key = banking_dash_mon_peg_state_trusted
+	}
+}
+
+# The Peg Confidence tooltip's suspension clock (2026-10-05). Step 10 stops the
+# counter at 1 and asks te_peg.3, and the country stays suspended until it is
+# answered — up to the event's three months — so "1 months left" would sit there
+# that long. With the question out it says the decision is due instead.
+te_mon_peg_suspension_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_peg_is_suspended = yes
+			var:te_peg_suspended_months <= 1
+			has_variable = te_peg_resume_asked
+		}
+		localization_key = banking_dash_mon_peg_suspension_due
+	}
+	text = {
+		localization_key = banking_dash_mon_peg_suspension_left
 	}
 }
 

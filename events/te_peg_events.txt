@@ -14,6 +14,14 @@
 # There is deliberately no `trigger` block: the gate lives in exactly one place
 # (the same rule, for the same reason, as te_inflation.1).
 #
+# TWO ROADS IN (2026-10-05). The old one is a vault nearly empty. The new one is
+# a deep slump the peg is holding up (te_mon_peg_in_deep_slump), which drains
+# confidence with the vault still full — the 1931 road, so the desc and flavour
+# say which. `immediate` records the cause at the moment it fires
+# (te_peg_crisis_slump, 120 days, longer than the event lives), because a desc
+# is evaluated whenever the player opens the event and the slump may have
+# ended by then.
+#
 # IT ABSORBED banking_cycle_events.12, "Gold Standard Pressure" — a random draw
 # that told a gold country its reserves were leaving whether or not they were.
 # Now they are, and this event is the end of that road rather than a bolt from
@@ -41,7 +49,8 @@
 #   * SUSPEND is 1931. Five years with a free dial and no gold leaving, bought
 #     with +2pp on every loan for as long as it lasts and the gold bonus gone
 #     for ten. Right for a country at war, or already in a panic, that cannot
-#     survive Defend's year.
+#     survive Defend's year. At the end te_peg.3 asks whether the currency goes
+#     back on gold or stays paper for good.
 #   * DEVALUE keeps convertibility at a worse price: the vault is revalued,
 #     exporters get five good years, and the neighbours — who have just been
 #     undercut — remember. Confidence comes back to 50, not to 100; a peg that
@@ -54,14 +63,53 @@ te_peg.1 = {
 	placement = ROOT
 
 	title = te_peg.1.t
-	desc = te_peg.1.d
-	flavor = te_peg.1.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = te_peg_crisis_slump }
+				desc = te_peg.1.d_slump
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_peg.1.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = te_peg_crisis_slump }
+				desc = te_peg.1.f_slump
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_peg.1.f
+			}
+		}
+	}
 
 	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
+
+	# Which road it came by, read once, when it fires (see the header): the
+	# slump road only while the vault can still pay, since an empty vault is
+	# the older and more pressing story.
+	immediate = {
+		if = {
+			limit = {
+				te_mon_peg_in_deep_slump = yes
+				te_mon_peg_under_pressure = no
+			}
+			set_variable = { name = te_peg_crisis_slump value = 1 days = 120 }
+		}
+		else_if = {
+			limit = { has_variable = te_peg_crisis_slump }
+			remove_variable = te_peg_crisis_slump
+		}
+	}
 
 	# --- defend -------------------------------------------------------------
 	# The default: a government that does nothing is a government whose central
@@ -109,8 +157,8 @@ te_peg.1 = {
 	# The counter is the regime switch (te_mon_is_on_gold); the two timed
 	# modifiers are the price. Hot money is FROZEN for the duration, not paid
 	# out (step 10, ruling Q9): refusing to pay gold out is what a suspension
-	# is. When the counter reaches 0 step 10 resumes convertibility at
-	# te_mon_peg_devalue_confidence.
+	# is. When the counter reaches its last month step 10 holds it there and
+	# sends te_peg.3: resume at te_mon_peg_devalue_confidence, or Fiat Money.
 	option = {
 		name = te_peg.1.b
 		custom_tooltip = te_peg.1.b.tt
@@ -118,6 +166,12 @@ te_peg.1 = {
 		hidden_effect = {
 			set_variable = { name = te_peg_suspended_months value = te_mon_peg_suspension_months }
 			set_variable = { name = te_peg_defend_months value = 0 }
+			# A question left over from an earlier suspension must not stop
+			# this one's from being asked.
+			if = {
+				limit = { has_variable = te_peg_resume_asked }
+				remove_variable = te_peg_resume_asked
+			}
 		}
 
 		add_modifier = {
@@ -344,6 +398,173 @@ te_peg.2 = {
 					banking_cycle_is_recession = yes
 				}
 				add = 2
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# te_peg.3 — the suspension runs out (2026-10-05)
+# ============================================================================
+# te_peg.1's Suspend gives five years with no gold paid out "for the duration".
+# This is the end of the duration, and it is a choice, not a clock: until
+# 2026-10-05 step 10 simply put the currency back on gold at confidence 50 when
+# te_peg_suspended_months reached 0. Now step 10 stops the counter at 1 and
+# sends this, and only the two options below take it to 0:
+#
+#   * RESUME — exactly what the clock used to do: convertibility back, Peg
+#     Confidence 50, and the peg's discipline with it. The default, since a
+#     government that says nothing has a statute that still says gold.
+#   * FIAT MONEY — the paper the currency has been for five years becomes the
+#     law: activate_law, the precedent of extra_law_events.36 and
+#     cultural_hegemony.16. Only with law_fiat_currency's own gates
+#     (keynesian_economics, a national bank) and a currency of the country's
+#     own, so the option is greyed out with the missing pieces ticked or
+#     crossed rather than hidden: a player should see that the road exists.
+#
+# activate_law SKIPS on_law_enactment_pass (scripting_best_practices.md, "activate_law
+# From Script Fires on_law_activated"), so te_banking_law_change_cleanup does not
+# run. Nothing in it applies here: open-market operations and monetisation are
+# both allowed under fiat, and a dollarised country cannot take this option at
+# all — which is why its trigger asks, rather than paying the dollarisation exit's
+# new-currency price from here. The consistency sweep that on_law_activated runs
+# needs only the national bank the trigger already demands. A monetary-policy
+# law the country is part-way through enacting is cancelled first
+# (cancel_enactment); an enactment in any other group carries on.
+#
+# NO `trigger` BLOCK (te_peg.1's rule: the gate is step 10). The
+# cancellation_trigger covers the one way the question can go stale while it
+# waits: the gold law itself gone (an enactment of another monetary law that
+# landed meanwhile; step 10 zeroes the counter then).
+#
+# EVERY OPTION WRITES INPUTS, NEVER THE RATE, and never calls the monthly
+# update; the second documented outside writer of te_peg_suspended_months and
+# te_peg_confidence, beside te_peg.1.
+te_peg.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_peg.3.t
+	desc = te_peg.3.d
+	flavor = te_peg.3.f
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cancellation_trigger = {
+		OR = {
+			NOT = { has_law_or_variant = law_type:law_gold_standard }
+			te_mon_peg_is_suspended = no
+		}
+	}
+
+	# --- resume convertibility ----------------------------------------------
+	option = {
+		name = te_peg.3.a
+		default_option = yes
+		custom_tooltip = te_peg.3.a.tt
+
+		hidden_effect = {
+			set_variable = { name = te_peg_suspended_months value = 0 }
+			set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
+			if = {
+				limit = { has_variable = te_peg_resume_asked }
+				remove_variable = te_peg_resume_asked
+			}
+		}
+
+		ai_chance = {
+			base = 6
+		}
+	}
+
+	# --- make the paper permanent: Fiat Money --------------------------------
+	# The suspension's lost-credibility modifier goes with the gold law: it is
+	# the exact inverse of the gold standard's -1pp credit standing
+	# (extra_modifiers.txt), so with no gold law left it would be a standing
+	# +1pp of its own, a penalty for leaving gold that resuming does not pay.
+	# Step 10 removes it on every other road off gold as well.
+	option = {
+		name = te_peg.3.b
+		trigger = {
+			has_technology_researched = keynesian_economics
+			has_law = law_type:law_national_bank
+			custom_tooltip = {
+				text = te_peg.3.b.own_currency_tt
+				NOT = { te_mon_is_dollarised = yes }
+			}
+		}
+		show_as_unavailable = { always = yes }
+		custom_tooltip = te_peg.3.b.tt
+
+		hidden_effect = {
+			set_variable = { name = te_peg_suspended_months value = 0 }
+			if = {
+				limit = { has_variable = te_peg_resume_asked }
+				remove_variable = te_peg_resume_asked
+			}
+		}
+		# A monetary-policy enactment already under way is cancelled first:
+		# activate_law on top of a running enactment in the same group is
+		# untested, and the question that enactment was answering is the one
+		# this option has just settled. An enactment in any other group (one
+		# runs at a time — law_national_bank, say) is left alone. ADD A LAW
+		# HERE if lawgroup_monetary_policy ever gains a sixth.
+		if = {
+			limit = {
+				OR = {
+					is_enacting_law = law_type:law_commodity_money
+					is_enacting_law = law_type:law_gold_standard
+					is_enacting_law = law_type:law_fiat_currency
+					is_enacting_law = law_type:law_digital_currency
+					is_enacting_law = law_type:law_decentralized_cryptocurrency
+				}
+			}
+			cancel_enactment = yes
+		}
+		activate_law = law_type:law_fiat_currency
+		# Step 10 removes this from any country off the gold law too; doing it
+		# here as well takes it off the same day.
+		if = {
+			limit = { has_modifier = te_mon_peg_credibility_lost }
+			remove_modifier = te_mon_peg_credibility_lost
+		}
+
+		# Moderate on its own; the later the era and the deeper the slump the
+		# country is still in, the likelier it keeps the paper (owner's design,
+		# 2026-10-05). The era markers are law_fiat_currency's AI weight's.
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { te_mon_reached_era_7 = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { te_mon_reached_era_8 = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { te_mon_reached_era_9 = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						AND = {
+							has_variable = finance_cycle_value
+							banking_cycle_is_recession = yes
+						}
+						AND = {
+							has_variable = te_inflation_band
+							var:te_inflation_band <= 1
+						}
+					}
+				}
+				add = 4
 			}
 		}
 	}

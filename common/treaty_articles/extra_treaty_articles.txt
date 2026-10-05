@@ -1852,12 +1852,78 @@ joint_military_exercises = {
 				}
 			}
 		}
+		# New exercises need military ties (owner rulings 2026-10-05): an
+		# alliance or defensive pact, in force or in this draft, a subject
+		# relation either way (vanilla forbids an alliance or defensive pact
+		# between overlord and subject, so this is their tie), or a shared
+		# Military Treaty power bloc. An observer run to 2015 had the article
+		# in 162 of 272 treaties, 109 of them between countries with no
+		# alliance or pact. Exercises already in force stay: none of this is
+		# in requirement_to_maintain. A renegotiated treaty must pass it.
+		custom_tooltip = {
+			text = joint_military_exercises_ties_tt
+			OR = {
+				scope:first_country = {
+					te_treaty_parties_have_military_ties = { OTHER = scope:second_country }
+				}
+				# Symmetric: subject or overlord of the target.
+				scope:first_country = {
+					has_subject_relation_with = scope:second_country
+				}
+				scope:first_country = {
+					is_in_power_bloc = yes
+					is_in_same_power_bloc = scope:second_country
+					power_bloc ?= {
+						has_identity = identity:identity_military_treaty_organization
+					}
+				}
+			}
+		}
+		# At most three at a time for each signatory. The goods-cost
+		# mutual_modifier stacks once per treaty, and the same run had
+		# Germany and Britain in twelve each.
+		custom_tooltip = {
+			text = joint_military_exercises_limit_first_country_tt
+			scope:first_country = {
+				any_scope_treaty = {
+					count < 3
+					hidden_trigger = {
+						OR = {
+							scope:treaty = { is_renegotiation = no }
+							scope:treaty.amended_treaty != this
+						}
+					}
+					any_scope_article = {
+						has_type = joint_military_exercises
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = joint_military_exercises_limit_second_country_tt
+			scope:second_country = {
+				any_scope_treaty = {
+					count < 3
+					hidden_trigger = {
+						OR = {
+							scope:treaty = { is_renegotiation = no }
+							scope:treaty.amended_treaty != this
+						}
+					}
+					any_scope_article = {
+						has_type = joint_military_exercises
+					}
+				}
+			}
+		}
 	}
 
 	ai = {
 		treaty_categories = { military }
 		article_ai_usage = { offer request }
-		evaluation_chance = { value = 0.2 } # AI should propose this fairly often to allies.
+		# Below vanilla alliance's 0.1 base: at 0.2 the article sat in 162 of
+		# the 272 treaties of a 2015 observer run.
+		evaluation_chance = { value = 0.05 }
 
 		inherent_accept_score = {
 			value = 0

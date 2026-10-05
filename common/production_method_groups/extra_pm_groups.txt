@@ -1341,8 +1341,17 @@ REPLACE_OR_CREATE:pmg_construction_automation = {
 	}
 }
 
+# most_productive, like vanilla's pmg_passenger_trains (none first, then tiers
+# that turn ships and fuel into transportation, no workers). Under the default
+# most_profitable the AI switched these ports between a ferry tier and "none"
+# whenever the transportation price crossed break-even: 174 switches on 443 AI
+# ports in four months of a 2016 observer game, each one five years of
+# pm_retooling. most_productive takes the highest unlocked tier and stays on
+# it; an input shortage still steers it off (NAI output-penalty factor).
 REPLACE_OR_CREATE:pmg_water_personal_transport = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
 	production_methods = {
 		pm_no_water_personal_transport
 		pm_sailing_ships

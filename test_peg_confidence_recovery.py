@@ -10,7 +10,9 @@ interpreter in test_banking_external_tools:
   (ruling Q5), so while any hot money at all blocked it, every AI on gold and
   every delegated player bank stayed frozen wherever the last crisis left it;
 * an almost-empty vault's +2 is capped at the healthy heal, so it never
-  recovers faster than a healthy vault (+1 from 70).
+  recovers faster than a healthy vault (+1 from 70);
+* a deep slump holds the recovery, as overvaluation does (2026-10-05; the
+  drain itself is pinned in test_monetary_fiat_path).
 
 The simulator's port (scripts/analysis/banking_cycle_sim.py) is checked against
 the same cases.
@@ -36,7 +38,8 @@ def find_heal_branch(body):
 
 def peg_script(**inputs):
     defaults = dict(te_mon_fx_is_overvalued=False, te_mon_is_swap_recipient=False,
-                    te_mon_union_gets_cooperation=False, te_mon_capital_controls_in_force=False)
+                    te_mon_union_gets_cooperation=False, te_mon_capital_controls_in_force=False,
+                    te_mon_peg_in_deep_slump=False)
     s = Script(**{**defaults, **inputs})
     s.values.update(definitions('common/script_values/te_monetary_union_script_values.txt'))
     s.effects.update(definitions('common/scripted_effects/te_monetary_arrangement_effects.txt'))
@@ -75,8 +78,8 @@ class GoldPegHealCondition(unittest.TestCase):
         self.branch = find_heal_branch(body)
         self.assertIsNotNone(self.branch)
 
-    def heals(self, gap, hot, overvalued=False):
-        s = peg_script(te_mon_fx_is_overvalued=overvalued)
+    def heals(self, gap, hot, overvalued=False, slump=False):
+        s = peg_script(te_mon_fx_is_overvalued=overvalued, te_mon_peg_in_deep_slump=slump)
         s.vars.update(te_gold_flow_gap=gap, te_gold_hot_money=hot)
         return s.check(Script.field(self.branch, 'limit'))
 
@@ -95,6 +98,12 @@ class GoldPegHealCondition(unittest.TestCase):
 
     def test_overvaluation_holds_it(self):
         self.assertFalse(self.heals(gap=0.3, hot=0, overvalued=True))
+
+    def test_a_deep_slump_holds_it(self):
+        # Peg defence parked a little over the world rate, vault healthy: it
+        # would heal, but not while the slump it is prolonging lasts.
+        self.assertTrue(self.heals(gap=0.3, hot=0))
+        self.assertFalse(self.heals(gap=0.3, hot=0, slump=True))
 
     def test_the_branch_adds_the_banded_heal(self):
         adds = [val for key, _, val in self.branch if key == 'change_variable']

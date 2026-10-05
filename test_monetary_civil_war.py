@@ -104,6 +104,10 @@ NOT_COPIED = {
     "te_mon_recap_work",
     # Event temporaries (120-day display flags on the ward).
     "te_lolr_answer", "te_lolr_paid",
+    # te_peg.1's slump-road desc flag, and te_peg.3's asked flag: 120 days
+    # each. The winner holds the suspension counter, not the loser's event, so
+    # it must be asked afresh rather than inherit "already asked".
+    "te_peg_crisis_slump", "te_peg_resume_asked",
 }
 
 # Written by the effect other than through a copy, each for a stated reason:

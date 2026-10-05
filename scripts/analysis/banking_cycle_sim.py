@@ -82,6 +82,8 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     Foreign severity is uniform over the five tier midpoints (10/30/50/70/90).
     Reach probability and delay are folded into the arrival interval; imported
     option modifiers (including decaying protectionism) and backstops are omitted.
+  * te_peg.1, the convertibility crisis: only with --peg-slump (Config.peg_crisis),
+    and always resolved as Defend. Elsewhere confidence can sit at 0 unanswered.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
     Foreign-borrowing limits, FX surrender and import financing therefore have
     no AI selection here; actual-script scenarios test their accounting. The
@@ -100,6 +102,7 @@ USAGE
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --json out.json
     .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --only fiat
+    .venv/bin/python scripts/analysis/banking_cycle_sim.py --peg-slump --runs 400   # §24
 """
 
 from __future__ import annotations
@@ -725,6 +728,10 @@ class Config:
 
     economy: str = "market"
     imported_crash_years: float = 0.0
+    # §24: port te_peg.1 — at confidence <= te_mon_peg_crisis_threshold, behind
+    # its 24-month cooldown, resolved as Defend (its default option). Off by
+    # default so the century matrix's gold cells read as they always have.
+    peg_crisis: bool = False
     hold_tools: tuple[str, ...] = ()
     pool: bool = False
     pool_spend_cap: float = 1.2  # weekly spending in units of gross income
@@ -802,6 +809,7 @@ class State:
     neutral_error: float = 0.0
     stance_gap: float = 0.0
     stance_band: int = 3
+    stance_months: int = 0
     inflation: float = 0.0
     inflation_core: float = 0.0
     inflation_expected: float = 2.0
@@ -827,6 +835,17 @@ class State:
     gold_flow_pct: float = 0.0
     peg_confidence: float = 100.0
     peg_defend_months: int = 0
+    peg_crisis_cooldown: int = 0
+    # §24: months of each candidate deep-slump definition (SLUMP_DEFINITIONS),
+    # the months the shipped one drained confidence, and te_peg.1's months.
+    slump_def_months: dict[str, int] = field(default_factory=dict)
+    deep_slump_months: int = 0
+    peg_crises: list[int] = field(default_factory=list)
+    # months from the last month confidence stood at 95 or more to the first
+    # crisis after it (a repeat 24 months on is not a fresh fall from trust)
+    peg_high_month: int = 0
+    peg_fell_since_high: bool = False
+    peg_crisis_lead: list[int] = field(default_factory=list)
 
     # modifiers currently ON the journal entry (applied at the END of last month)
     active_phase: str | None = None
@@ -1626,6 +1645,22 @@ def monetary_update_stance(
         state.stance_gap = 0.0
         state.stance_band = 3
 
+    # Step 8b's counter (te_monetary_apply_stance_politics): months of the same
+    # stance side, capped, fading a month per month in the middle band. Ported
+    # for §24's "sustained" slump definition; the politics modifiers it drives
+    # touch interest groups only and are not simulated.
+    cap = K.sv("te_mon_stance_months_cap")
+    if not has_dial(cfg, state):
+        state.stance_months = 0
+    elif state.stance_band >= 4:
+        state.stance_months = min(cap, max(0, state.stance_months) + 1)
+    elif state.stance_band <= 2:
+        state.stance_months = max(-cap, min(0, state.stance_months) - 1)
+    elif state.stance_months > 0:
+        state.stance_months -= 1
+    elif state.stance_months < 0:
+        state.stance_months += 1
+
 
 def law_grant(cfg: Config, key: str) -> float:
     """A regime-rule modifier granted by the currency law or the financial law."""
@@ -1646,6 +1681,35 @@ def peg_confidence_heal(confidence: float) -> float:
     if confidence < K.sv("te_mon_peg_watched_below"):
         return K.sv("te_mon_peg_heal_watched")
     return K.sv("te_mon_peg_heal_trusted")
+
+
+# §24 (2026-10-05): te_mon_peg_in_deep_slump. The shipped definition is "tight":
+# the cycle in a Downturn or Panic while the stance band the bank reads is Tight
+# or Very Tight. `--tune slump_def=<key>` makes another the active one, to compare.
+SLUMP_DEFINITIONS = ("tight", "very_tight", "sustained", "deflation", "either")
+
+
+def slump_condition(state: State, definition: str) -> bool:
+    if phase_of(state.finance_cycle_value) not in (PANIC, DOWNTURN):
+        return False
+    tight = state.stance_band >= 4
+    deflation = state.inflation_band <= 1
+    return {
+        "tight": tight,
+        "very_tight": state.stance_band >= 5,
+        # tight, and tight for the six months §13's Dear Money Politics needs
+        "sustained": tight and state.stance_months >= K.sv("te_mon_stance_politics_months"),
+        "deflation": deflation,
+        "either": tight or deflation,
+    }[definition]
+
+
+def in_deep_slump(state: State) -> bool:
+    """te_mon_peg_in_deep_slump, under `--tune slump_def` (default "tight")."""
+    definition = str(TUNE.get("slump_def", "tight"))
+    if definition not in SLUMP_DEFINITIONS:
+        raise ValueError(f"slump_def must be one of {SLUMP_DEFINITIONS}")
+    return slump_condition(state, definition)
 
 
 def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
@@ -1690,6 +1754,8 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
     state.gold_flow_pct = flow / max(1.0, state.gdp) * 1200
 
     # peg confidence
+    slump_drain = tuned("slump_drain", K.sv("te_mon_peg_slump_drain"))
+    deep_slump = slump_drain > 0 and in_deep_slump(state)
     per_pp = K.sv("te_mon_peg_confidence_per_pp")
     if under_pressure:
         if state.gold_hot_money > 0 and gap <= 0:
@@ -1708,13 +1774,38 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
         if state.scaled_debt >= 0.5:
             move -= 2
         state.peg_confidence += move
-    elif gap >= 0 and (gap > 0 or state.gold_hot_money <= 0):
-        # Hot money blocks the heal only while it is leaving (gap <= 0).
+    elif gap >= 0 and (gap > 0 or state.gold_hot_money <= 0) and not deep_slump:
+        # Hot money blocks the heal only while it is leaving (gap <= 0); a deep
+        # slump holds it for as long as it lasts (§24).
         state.peg_confidence += peg_confidence_heal(state.peg_confidence)
+    # §24: the slump drain, whatever the vault holds. `--tune slump_drain=0` is
+    # the script before it (and lifts the hold on the heal with it).
+    if deep_slump:
+        state.peg_confidence -= slump_drain
+        state.deep_slump_months += 1
     state.peg_confidence = max(0.0, min(100.0, state.peg_confidence))
 
+    if state.peg_confidence >= 95:
+        state.peg_high_month = len(state.value_series)
+        state.peg_fell_since_high = False
+
+    # the three clocks tick before any option of te_peg.1 is taken
+    if state.peg_crisis_cooldown > 0:
+        state.peg_crisis_cooldown -= 1
     if state.peg_defend_months > 0:
         state.peg_defend_months -= 1
+
+    # te_peg.1, resolved as Defend (§24, `--peg-crisis`): the floor at the world
+    # rate + 4 for a year (target_bounds reads it) and confidence +40.
+    if (cfg.peg_crisis and state.peg_crisis_cooldown == 0
+            and state.peg_confidence <= K.sv("te_mon_peg_crisis_threshold")):
+        state.peg_crisis_cooldown = int(K.sv("te_mon_peg_crisis_cooldown_months"))
+        state.peg_crises.append(len(state.value_series))
+        if not state.peg_fell_since_high:
+            state.peg_crisis_lead.append(len(state.value_series) - state.peg_high_month)
+            state.peg_fell_since_high = True
+        state.peg_defend_months = int(K.sv("te_mon_peg_defend_months"))
+        state.peg_confidence = min(100.0, state.peg_confidence + K.sv("te_mon_peg_defend_confidence"))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -2770,7 +2861,9 @@ def advance_exogenous(cfg: Config, state: State, rng: random.Random, month: int)
     if month % 12 == 0:
         drift = 0.0
         if cfg.growth_feedback:
-            drift = (state.finance_cycle_value - 50) / 50.0 * 1.5
+            # `--tune growth_fb_scale=N` (§24): the invented coefficient, as a
+            # sensitivity arm for an economy whose slumps cut growth harder.
+            drift = (state.finance_cycle_value - 50) / 50.0 * tuned("growth_fb_scale", 1.5)
         state.growth += (cfg.growth_mean + drift - state.growth) * 0.4
         state.growth += rng.gauss(0, cfg.growth_sd)
         state.growth_term = max(-1.5, min(1.5, 0.25 * (state.growth - 2.0)))
@@ -2829,6 +2922,10 @@ def run_once(cfg: Config, seed: int) -> State:
         elif (value_before >= 25 > state.finance_cycle_value and month - last_crash > 12
               and len(state.imported_crashes) + len(state.imported_scares) == imports_before):
             state.policy_downturns += 1
+        if has_gold_flows(cfg, state):
+            for definition in SLUMP_DEFINITIONS:
+                if slump_condition(state, definition):
+                    state.slump_def_months[definition] = state.slump_def_months.get(definition, 0) + 1
         gap = clamped_gap(state)
         state.gap_series.append(gap)
         if gap >= 3 and state.finance_cycle_value < 40:
@@ -3358,6 +3455,92 @@ def holiday_arms(bounces: list[float]) -> list[tuple[str, dict | None]]:
     ]
 
 
+# §24: the slump drain on a gold peg. Each arm is a growth coupling crossed with
+# a drain setting; every run ports te_peg.1 (resolved as Defend) so a crisis is
+# counted once per 24-month cooldown rather than every month at zero.
+PEG_SLUMP_GROWTH_ARMS = (
+    ("exogenous", False, None),     # the matrix's default: growth ignores the cycle
+    ("fb 1.5", True, 1.5),          # --growth-feedback as shipped
+    ("fb 6", True, 6.0),            # a slump that cuts growth hard enough to pin r* low
+)
+PEG_SLUMP_DRAIN_ARMS = (
+    ("off", {"slump_drain": "0"}),
+    ("tight (shipped)", {}),
+    ("very tight", {"slump_def": "very_tight"}),
+    ("sustained tight", {"slump_def": "sustained"}),
+    ("tight or deflation", {"slump_def": "either"}),
+    ("deflation", {"slump_def": "deflation"}),
+)
+
+
+def _run_peg_slump_arm(job: tuple[Config, int, int, dict, str, str]) -> dict:
+    cfg, seed, runs, tune, growth_arm, drain_arm = job
+    TUNE.clear()
+    TUNE.update(tune)
+    base = seed + zlib.crc32(f"{cfg.currency}/{cfg.mode}/{cfg.points}".encode()) % 10_000
+    states = [run_once(cfg, base + i) for i in range(runs)]
+    months = cfg.years * 12
+    crises = [len(st.peg_crises) / cfg.years * 100 for st in states]
+    worst = []
+    for st in states:
+        run = best = 0
+        for v in st.value_series:
+            run = run + 1 if v < 40 else 0
+            best = max(best, run)
+        worst.append(best)
+    return {
+        "cell": cfg.label(),
+        "growth": growth_arm,
+        "drain": drain_arm,
+        "definition_pct": {
+            d: statistics.mean(st.slump_def_months.get(d, 0) / months * 100 for st in states)
+            for d in SLUMP_DEFINITIONS
+        },
+        "drain_pct": statistics.mean(st.deep_slump_months / months * 100 for st in states),
+        "crises_per_century": statistics.mean(crises),
+        "runs_with_crisis_pct": sum(1 for st in states if st.peg_crises) / len(states) * 100,
+        # Only crises reached from a trusted peg: the first after a stretch at 95+,
+        # not the 24-month repeats of a slump Defend did not end.
+        "lead_from_trusted_median": (
+            statistics.median(x for st in states for x in st.peg_crisis_lead)
+            if any(st.peg_crisis_lead for st in states) else float("nan")),
+        "first_crises_per_century": statistics.mean(
+            len(st.peg_crisis_lead) / cfg.years * 100 for st in states),
+        "recession_pct": statistics.mean(
+            (st.phase_months[PANIC] + st.phase_months[DOWNTURN]) / months * 100 for st in states),
+        "longest_slump_median": statistics.median(worst),
+        "crashes_per_century": statistics.mean(len(st.crashes) / cfg.years * 100 for st in states),
+    }
+
+
+def print_peg_slump(rows: list[dict], args) -> None:
+    print(f"Peg slump study (§24) — {args.runs} runs x {args.years} years per arm; "
+          "te_peg.1 ported, resolved as Defend\n")
+    print("How often each candidate definition holds, in % of months (read on the drain-off arm):")
+    print(f"{'cell':<18} {'growth':<10} " + " ".join(f"{d:>11}" for d in SLUMP_DEFINITIONS)
+          + f" {'recess%':>8}")
+    for row in rows:
+        if row["drain"] != "off":
+            continue
+        print(f"{row['cell']:<18} {row['growth']:<10} "
+              + " ".join(f"{row['definition_pct'][d]:11.2f}" for d in SLUMP_DEFINITIONS)
+              + f" {row['recession_pct']:8.1f}")
+    print()
+    print(f"{'cell':<18} {'growth':<10} {'drain':<20} {'drain%':>7} {'crises/100y':>11} "
+          f"{'first/100y':>10} {'runs w/ crisis':>14} {'lead':>5} {'slump':>6} {'crash/100y':>10}")
+    for row in rows:
+        print(f"{row['cell']:<18} {row['growth']:<10} {row['drain']:<20} {row['drain_pct']:7.2f} "
+              f"{row['crises_per_century']:11.2f} {row['first_crises_per_century']:10.2f} "
+              f"{row['runs_with_crisis_pct']:13.0f}% "
+              f"{row['lead_from_trusted_median']:5.0f} "
+              f"{row['longest_slump_median']:6.0f} {row['crashes_per_century']:10.1f}")
+    print()
+    print("drain% = months the active definition drained confidence   crises/100y = te_peg.1 per century")
+    print("first/100y = crises reached from a trusted peg (95+), not a repeat 24 months after Defend")
+    print("lead = median months from confidence last at 95+ to that first crisis")
+    print("slump = median longest unbroken run below cycle 40 (months)")
+
+
 def _run_holiday_cell(job: tuple[Config, int, int, dict, list[float]]) -> dict:
     cfg, seed, runs, tune, bounces = job
     TUNE.clear()
@@ -3513,6 +3696,12 @@ def main() -> int:
     ap.add_argument("--holiday-bounces", default="0,1,2",
                     help="reopening bounces --holiday compares (default 0,1,2; the shipped "
                          "one is banking_bank_holiday_reopen_momentum)")
+    ap.add_argument("--peg-slump", action="store_true",
+                    help="instead of the century matrix: the gold peg's slump drain (§24) — "
+                         "each candidate deep-slump definition, the drain on and off, under "
+                         "three growth couplings, with te_peg.1 ported as Defend")
+    ap.add_argument("--peg-slump-cells", default="peg:2,price:2",
+                    help="mode:points gold cells --peg-slump runs (default peg:2,price:2)")
     ap.add_argument("--jobs", type=int, default=0, help="worker processes (0 = all cores)")
     ap.add_argument("--json", help="write the full result table here")
     args = ap.parse_args()
@@ -3549,6 +3738,33 @@ def main() -> int:
     for t in excluded:
         if t not in ALL_TOOL_MODIFIERS and t not in TRANSFER_BUTTONS:
             ap.error(f"unknown tool {t!r}; keys are {', '.join(ALL_TOOL_MODIFIERS)}")
+    if args.peg_slump:
+        pjobs = []
+        for cell in args.peg_slump_cells.split(","):
+            mode, _, pts = cell.strip().partition(":")
+            for growth_arm, feedback, scale in PEG_SLUMP_GROWTH_ARMS:
+                for drain_arm, drain_tune in PEG_SLUMP_DRAIN_ARMS:
+                    tune = dict(TUNE)
+                    tune.update(drain_tune)
+                    if scale is not None:
+                        tune["growth_fb_scale"] = str(scale)
+                    pjobs.append((
+                        Config(currency="gold", mode=mode, points=int(pts or 2),
+                               fin_law=args.fin_law, years=args.years,
+                               growth_feedback=feedback, peg_crisis=True,
+                               wage_pressure=args.wage_pressure,
+                               deficit_mean=args.deficit_mean, bank_level=args.bank_level),
+                        args.seed, args.runs, tune, growth_arm, drain_arm))
+        workers = args.jobs or min(len(pjobs), os.cpu_count() or 1)
+        if workers > 1:
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                prows = list(pool.map(_run_peg_slump_arm, pjobs))
+        else:
+            prows = [_run_peg_slump_arm(j) for j in pjobs]
+        print_peg_slump(prows, args)
+        if args.json:
+            Path(args.json).write_text(json.dumps(prows), encoding="utf-8")
+        return 0
     if args.holiday:
         bounces = [float(x) for x in args.holiday_bounces.split(",") if x.strip()]
         hjobs = [
