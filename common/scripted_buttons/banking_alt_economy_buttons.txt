@@ -49,6 +49,8 @@ ce_disable_plan_revision = {
 		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 25 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_plan_revision = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_plan_revision_active = yes }
 	effect = { banking_effect_ce_disable_plan_revision = yes }
@@ -88,6 +90,8 @@ ce_disable_emergency_allocation = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
 		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_emergency_allocation = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_allocation_active = yes }
 	effect = { banking_effect_ce_disable_emergency_allocation = yes }
@@ -126,6 +130,8 @@ ce_disable_target_reduction = {
 		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
 		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_target_reduction = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_target_cut_active = yes }
 	effect = { banking_effect_ce_disable_target_reduction = yes }
@@ -162,6 +168,8 @@ ce_disable_strategic_stockpile = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 20 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_strategic_stockpile = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_stockpile_active = yes }
 	effect = { banking_effect_ce_disable_strategic_stockpile = yes }
@@ -200,6 +208,8 @@ ce_disable_distribution_upgrade = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 30 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_distribution_upgrade = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_distribution_active = yes }
 	effect = { banking_effect_ce_disable_distribution_upgrade = yes }
@@ -235,6 +245,8 @@ ce_disable_admin_campaign = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
 		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
 		if = { limit = { var:bubble_pressure < 40 banking_cycle_is_panic = no } add = 25 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_admin_campaign = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_admin_campaign_active = yes }
 	effect = { banking_effect_ce_disable_admin_campaign = yes }
@@ -265,6 +277,8 @@ ce_disable_coordination_protocol = {
 	name = "CE_DISABLE_COORDINATION_PROTOCOL"
 	desc = "CE_DISABLE_COORDINATION_PROTOCOL_DESC"
 	visible = { is_ai = yes banking_tool_ce_coordination_active = yes }
+	# No hold gate (banking_policy_triggers.txt): 1 point, nothing to pay to
+	# switch it, and lifting it frees that point.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
@@ -306,6 +320,8 @@ ce_disable_consolidation_order = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 20 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 30 }
 		if = { limit = { banking_tool_ce_allocation_active = yes } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_ce_consolidation_order = yes } multiply = 0 }
 	}
 	possible = { banking_tool_ce_consolidation_active = yes }
 	effect = { banking_effect_ce_disable_consolidation_order = yes }
@@ -397,6 +413,8 @@ cw_disable_dividend_restraint = {
 		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
 		if = { limit = { var:bubble_pressure < 25 banking_cycle_is_panic = no } add = 20 }
 		if = { limit = { banking_tool_cw_ceiling_active = yes } add = 25 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_dividend_restraint = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_dividend_active = yes }
 	effect = { banking_effect_cw_disable_dividend_restraint = yes }
@@ -433,6 +451,8 @@ cw_disable_mutual_aid_fund = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 40 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 50 }
 		if = { limit = { var:finance_cycle_momentum > -2 banking_cycle_is_panic = no } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_mutual_aid_fund = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_mutual_aid_active = yes }
 	effect = { banking_effect_cw_disable_mutual_aid_fund = yes }
@@ -470,6 +490,8 @@ cw_disable_capital_plan = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 50 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 25 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_capital_plan = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_capital_plan_active = yes }
 	effect = { banking_effect_cw_disable_capital_plan = yes }
@@ -501,6 +523,8 @@ cw_disable_solidarity_campaign = {
 	name = "CW_DISABLE_SOLIDARITY_CAMPAIGN"
 	desc = "CW_DISABLE_SOLIDARITY_CAMPAIGN_DESC"
 	visible = { is_ai = yes banking_tool_cw_solidarity_active = yes }
+	# No hold gate (banking_policy_triggers.txt): 1 point, nothing to pay to
+	# switch it, and lifting it frees that point.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
@@ -546,6 +570,8 @@ cw_disable_credit_expansion = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 40 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_credit_expansion = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_credit_active = yes }
 	effect = { banking_effect_cw_disable_credit_expansion = yes }
@@ -581,6 +607,8 @@ cw_disable_consumption_ceiling = {
 		if = { limit = { banking_cycle_is_downturn = yes } add = 30 }
 		if = { limit = { var:bubble_pressure < 35 banking_cycle_is_panic = no } add = 25 }
 		if = { limit = { banking_tool_cw_dividend_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_consumption_ceiling = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_ceiling_active = yes }
 	effect = { banking_effect_cw_disable_consumption_ceiling = yes }
@@ -612,6 +640,8 @@ cw_disable_council_directive = {
 	name = "CW_DISABLE_COUNCIL_DIRECTIVE"
 	desc = "CW_DISABLE_COUNCIL_DIRECTIVE_DESC"
 	visible = { is_ai = yes banking_tool_cw_directive_active = yes }
+	# No hold gate (banking_policy_triggers.txt): 1 point, nothing to pay to
+	# switch it, and lifting it frees that point.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 30 }
@@ -654,6 +684,8 @@ cw_disable_worker_buyout = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
 		if = { limit = { var:finance_cycle_momentum > -1 banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cw_worker_buyout = yes } multiply = 0 }
 	}
 	possible = { banking_tool_cw_buyout_active = yes }
 	effect = { banking_effect_cw_disable_worker_buyout = yes }

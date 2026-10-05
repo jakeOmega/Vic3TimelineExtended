@@ -735,6 +735,129 @@ banking_ai_hold_cb_capital_controls_outflow = {
 }
 
 # ----------------------------------------------------------------------------
+# The same rule for the command economy's planning tools (ce_*) and the
+# cooperative economy's council tools (cw_*), banking_alt_economy_buttons.txt.
+# Their enable buttons have no banking_ai_core_* triggers, so each hold below
+# restates the cycle and bubble terms its enable button scores on, less the
+# phases that button avoids, and reaches past them like the market holds do.
+# The simulator does not model these economies, so these are unmeasured.
+#
+# Three are exempt for moral suasion's reason: the coordination protocol, the
+# solidarity campaign and the council directive cost 1 point, cost nothing to
+# switch, and their disable buttons exist to free that point. Most of the rest
+# are free to switch as well; the gate still keeps the AI from dropping a tool
+# it would buy straight back. Mutual aid (on) and dividend restraint (off)
+# grant loyalists when switched, so for those two the gate also stops the AI
+# farming them.
+# ----------------------------------------------------------------------------
+
+# Bought against bubble pressure of 50 or more, or in a boom or frenzy.
+banking_ai_hold_ce_plan_revision = {
+	banking_cycle_is_panic = no
+	OR = {
+		var:bubble_pressure >= 40
+		var:finance_cycle_value >= 75
+	}
+}
+
+# Bought below 40, panic included.
+banking_ai_hold_ce_emergency_allocation = {
+	banking_ai_hold_slump = yes
+}
+
+# Bought in a boom or frenzy, or against bubble pressure of 60 or more.
+banking_ai_hold_ce_target_reduction = {
+	banking_cycle_is_recession = no
+	OR = {
+		var:finance_cycle_value >= 60
+		var:bubble_pressure >= 50
+	}
+}
+
+# Bought in stable or expansion, or against bubble pressure of 35 to 70.
+banking_ai_hold_ce_strategic_stockpile = {
+	banking_cycle_is_panic = no
+	OR = {
+		AND = {
+			var:finance_cycle_value >= 40
+			var:finance_cycle_value < 75
+		}
+		AND = {
+			var:bubble_pressure >= 30
+			var:bubble_pressure < 75
+		}
+	}
+}
+
+# Bought in a downturn, in stagnation, or in a stable phase falling at -3 or
+# faster; never in a panic.
+banking_ai_hold_ce_distribution_upgrade = {
+	banking_cycle_is_panic = no
+	banking_ai_hold_slump = yes
+}
+
+# Bought against bubble pressure of 70 or more, or in a frenzy; never in a
+# recession. Its disable button lifts it below 40 bubble pressure.
+banking_ai_hold_ce_admin_campaign = {
+	banking_cycle_is_recession = no
+	OR = {
+		var:bubble_pressure >= 40
+		var:finance_cycle_value >= 88
+	}
+}
+
+# Bought from a downturn to stable; never in a panic.
+banking_ai_hold_ce_consolidation_order = {
+	banking_cycle_is_panic = no
+	var:finance_cycle_value < 60
+}
+
+# Bought against bubble pressure of 40 or more, or in a boom or frenzy; never
+# in a recession. Its disable button lifts it below 25 bubble pressure.
+banking_ai_hold_cw_dividend_restraint = {
+	banking_cycle_is_recession = no
+	OR = {
+		var:bubble_pressure >= 25
+		var:finance_cycle_value >= 75
+	}
+}
+
+# Bought in a panic, a downturn, or a stagnation falling at -3 or faster;
+# kept through stagnation while momentum is negative.
+banking_ai_hold_cw_mutual_aid_fund = {
+	OR = {
+		banking_cycle_is_recession = yes
+		AND = {
+			banking_cycle_is_stagnation = yes
+			var:finance_cycle_momentum < 0
+		}
+	}
+}
+
+banking_ai_hold_cw_capital_plan = {
+	banking_ai_hold_ce_distribution_upgrade = yes
+}
+
+# Bought below 40, panic included.
+banking_ai_hold_cw_credit_expansion = {
+	banking_ai_hold_slump = yes
+}
+
+# Bought against bubble pressure of 70 or more, or in a frenzy; never in a
+# recession. Its disable button lifts it below 35 bubble pressure.
+banking_ai_hold_cw_consumption_ceiling = {
+	banking_cycle_is_recession = no
+	OR = {
+		var:bubble_pressure >= 35
+		var:finance_cycle_value >= 88
+	}
+}
+
+banking_ai_hold_cw_worker_buyout = {
+	banking_ai_hold_cw_mutual_aid_fund = yes
+}
+
+# ----------------------------------------------------------------------------
 # AI: which directed-credit sector?
 #
 # Every directed-credit enable button scores the same weight,

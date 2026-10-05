@@ -17,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 JE = ROOT / "common/journal_entries/je_banking.txt"
 BUTTONS = ROOT / "common/scripted_buttons/timeline_extended_scripted_buttons.txt"
+ALT_BUTTONS = ROOT / "common/scripted_buttons/banking_alt_economy_buttons.txt"
 POSSIBLE = ROOT / "common/scripted_triggers/banking_policy_triggers.txt"
 EFFECTS = ROOT / "common/scripted_effects/banking_policy_effects.txt"
 MARKET_TRIGGERS = ROOT / "common/scripted_triggers/market_triggers.txt"
@@ -68,6 +69,9 @@ def _loc_keys():
 # Market tools whose disable button has no hold gate: switching them on or off
 # costs nothing, so the AI may lift them whenever a stronger tool wants the point.
 UNGATED_DISABLES = {"cb_moral_suasion"}
+# The same for the command and cooperative economies' tools: the three 1-point
+# tools whose lift frees their point.
+UNGATED_ALT_DISABLES = {"ce_coordination_protocol", "cw_solidarity_campaign", "cw_council_directive"}
 
 
 def _tools():
@@ -265,11 +269,31 @@ class RosterTests(unittest.TestCase):
                 ai = _braced(disable, disable.index("ai_chance = {"))
                 if re.search(r"limit = \{ banking_ai_core_%s = no \} add = " % tool, ai):
                     continue
+                self._assert_gate_last(ai, "banking_ai_hold_" + tool, triggers)
+
+    def test_each_alt_economy_disable_waits_until_its_reason_is_gone(self):
+        # The command (ce_*) and cooperative (cw_*) tools follow the market
+        # tools' rule, with their own exemptions.
+        buttons, triggers = _text(ALT_BUTTONS), _text(POSSIBLE)
+        disables = re.findall(r"(?m)^(c[ew])_disable_(\w+) = \{", buttons)
+        self.assertGreaterEqual(len(disables), 16)
+        for eco, name in disables:
+            tool = "%s_%s" % (eco, name)
+            with self.subTest(tool=tool):
+                block = _top_level_block(buttons, "%s_disable_%s = {" % (eco, name))
+                ai = _braced(block, block.index("ai_chance = {"))
                 hold = "banking_ai_hold_" + tool
-                gate = re.search(r"if = \{ limit = \{ %s = yes[^{}]*\} multiply = 0 \}" % hold, ai)
-                self.assertIsNotNone(gate, "cb_disable_%s has no %s gate" % (_suffix(tool), hold))
-                self.assertNotIn("add =", ai[gate.end():])
-                self.assertTrue(_has_top_level(triggers, hold), "%s is not defined" % hold)
+                if tool in UNGATED_ALT_DISABLES:
+                    self.assertNotIn(hold, ai)
+                    self.assertFalse(_has_top_level(triggers, hold))
+                    continue
+                self._assert_gate_last(ai, hold, triggers)
+
+    def _assert_gate_last(self, ai, hold, triggers):
+        gate = re.search(r"if = \{ limit = \{ %s = yes[^{}]*\} multiply = 0 \}" % hold, ai)
+        self.assertIsNotNone(gate, "no %s gate" % hold)
+        self.assertNotIn("add =", ai[gate.end():])
+        self.assertTrue(_has_top_level(triggers, hold), "%s is not defined" % hold)
 
     def test_each_hold_gate_is_in_the_simulator(self):
         # banking_cycle_sim.ai_holds mirrors the banking_ai_hold_cb_* triggers,
