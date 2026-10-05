@@ -255,6 +255,7 @@
  CRASH_MOMENTUM_MINUS_3_DESC:0 "[concept_banking_momentum] crashes to #N -3#!"
  CRASH_MOMENTUM_MINUS_4_DESC:0 "[concept_banking_momentum] crashes to #N -4#!"
  CRASH_MOMENTUM_MINUS_5_DESC:0 "[concept_banking_momentum] crashes to #N -5#!"
+ CRASH_NO_RAISE_DESC:0 "A crash never raises [concept_banking_cycle] Value or [concept_banking_momentum]: a figure already below those above stays where it is, and a response cannot lift either above its level before the crash"
  CRASH_SOFTEN_CAPITAL_CONTROLS_DESC:0 "Emergency capital controls pin asset prices: [concept_banking_cycle] Value softens by #G +5#!"
  CRASH_SOFTEN_CORRESPONDENT_LIQUIDITY_DESC:0 "Correspondent banks pool liquidity to steady the interbank market: [concept_banking_cycle] Value softens by #G +6#!, [concept_banking_momentum] softens by #G +1#!"
  CRASH_SOFTEN_DEPOSIT_GUARANTEE_DESC:0 "The deposit guarantee scheme calms savers and stops the run: [concept_banking_cycle] Value softens by #G +10#!, [concept_banking_momentum] softens by #G +2#!"
