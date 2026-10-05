@@ -905,7 +905,10 @@ voluntary_union = {
 	requires_approval = yes
 	show_confirmation_box = yes
 	is_hostile = no
-	show_in_lens = no   # avoid auto-lookup of gfx/interface/icons/lens_toolbar_icons/voluntary_union.dds
+	# Off the lens bar. The engine still looked up
+	# gfx/interface/icons/lens_toolbar_icons/voluntary_union.dds once a session
+	# (2026-10-05), so a byte copy of the action icon sits there too.
+	show_in_lens = no
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/voluntary_union.dds"
 

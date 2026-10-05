@@ -580,7 +580,7 @@ nuclear_first_strike = { # Scope is target state
 					}
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
 					}
 					scope:target_country = {
 						change_relations = {
@@ -611,7 +611,7 @@ nuclear_first_strike = { # Scope is target state
 					text = industrial_nuke_fails_desc
 					change_infamy = 5
 					scope:target_state = {
-						trigger_event = { id = nuclear_weapon_events.3 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.3 popup = yes } }
 					}
 					scope:target_country = {
 						change_relations = {
@@ -651,7 +651,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						trigger_event = { id = nuclear_weapon_events.11 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.11 popup = yes } }
 					}
 					trigger_event = { id = nuclear_weapon_events.12 popup = yes }
 					every_country = {
@@ -668,7 +668,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 				custom_tooltip = {
 					text = industrial_nuke_fails_desc
 					scope:target_state = {
-						trigger_event = { id = nuclear_weapon_events.13 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.13 popup = yes } }
 					}
 					trigger_event = { id = nuclear_weapon_events.14 popup = yes }
 				}
@@ -701,7 +701,7 @@ nuclear_response_response_strike = {  # Scope is target state
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.1 popup = yes } }
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
 					every_country = {
@@ -718,7 +718,7 @@ nuclear_response_response_strike = {  # Scope is target state
 				custom_tooltip = {
 					text = industrial_nuke_fails_desc
 					scope:target_state = {
-						trigger_event = { id = nuclear_weapon_events.3 popup = yes }
+						owner = { trigger_event = { id = nuclear_weapon_events.3 popup = yes } }
 					}
 					trigger_event = { id = nuclear_weapon_events.4 popup = yes }
 					# No world notice: nuclear_weapon_events.15 reports a city
@@ -784,7 +784,7 @@ nuclear_tactical_strike = {
 		}
 	}
 
-	trigger_event = { id = nuclear_weapon_events.5 popup = yes }
+	owner = { trigger_event = { id = nuclear_weapon_events.5 popup = yes } }
 	owner = { save_scope_as = un_dkt_struck_country }
 	# The UN's record names the state struck.
 	save_scope_as = un_tactical_struck_state

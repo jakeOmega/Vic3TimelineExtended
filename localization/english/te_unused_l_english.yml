@@ -679,7 +679,6 @@
  state_devastation_monthly_add:0 "Monthly [concept_devastation]"
  state_harvest_condition_cold_snap_impact_mult:0 "Cold Snap Severity"
  supporting_environmental_policy:0 "Supporting environmental policy"
- te_hist_chart_ch_share_legend:0 "#lore one bar per month; the world total is recomputed about twice a year and after every war, so a sudden step is a re-basing, not a change in our own output#!"
  telecommunications:0 "Telecommunications"
  traditional_energy_interest:0 "Traditional energy dependence"
  un_authority_change_minus_10:0 "#R [concept_un_authority]: −10#!"

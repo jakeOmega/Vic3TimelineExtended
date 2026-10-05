@@ -240,7 +240,9 @@ that country. This tests a bounded representation, not arbitrary objects or inhe
 
 Start **7-day timer**, save at day 3, inspect days 6/7/8 before/after reload. `te_tp_timer` and the
 Authority modifier should expire after seven days; the modifier uses a computed duration variable.
-A difference distinguishes timed-variable support from computed-modifier-duration support. This
+A difference distinguishes timed-variable support from computed-modifier-duration support. (The
+computed duration was rejected at load, [ledger](tax-code-capability-ledger.md) row 20, and the
+modifier half was removed from `te_debug_tax.69` on 2026-10-05; only the timed variable remains.) This
 test temporarily removes consumption authority costs and must use its own baseline. The lifecycle
 queue below deliberately uses absolute calendar-month indices (`year * 12 + month`, January zero)
 so failure of this duration candidate does not invalidate unrelated experiments.

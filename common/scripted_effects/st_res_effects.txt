@@ -1118,18 +1118,21 @@ st_res_policy_select_base = {
 st_res_policy_step_up_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ add = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
-	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ }
 }
 
 st_res_policy_step_down_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ subtract = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
-	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ }
 }
 
 # Any stepper click sets a value by hand, so the good's settings are no longer
 # the preset's and its preset marker goes (st_res_<good>_preset, see the
-# preset effects above), re-enabling that preset's button.
+# preset effects above), re-enabling that preset's button. Parameter: GOOD
+# only. The steppers used to pass SETTING too, and the engine refuses to compile
+# a call that passes an argument the body never names ("failed for unknown
+# arguments: SETTING", 64 lines a launch until 2026-10-05).
 st_res_policy_set_by_hand_base = {
 	if = {
 		limit = { has_variable = st_res_$GOOD$_preset }

@@ -1649,7 +1649,7 @@ decolonization_events.14 = {
 						NOT = { this = root }
 						country_rank >= rank_value:great_power
 						any_scope_state = { is_overseas_colonial_state = yes }
-						relations:root <= relations_threshold:disloyal
+						relations:root <= relations_threshold:poor
 					}
 				}
 				add = 5

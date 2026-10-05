@@ -1,5 +1,11 @@
 ﻿# Path-dependent legacy applied to a newly decolonized country.
-# Scope: the new country (called from create_dynamic_country.on_created).
+# Scope: the new country. form_decolonized_country calls it after
+# create_dynamic_country returns, not from on_created: a scope saved before the
+# create (scope:decolonizing_parent) is unset inside on_created, so every
+# `exists` guard below failed and the whole legacy was skipped (2026-10-05 log
+# and save: no country it formed held former_overlord or a legacy modifier).
+# ROOT is the caller's root here, so the new country is
+# scope:decolonized_new_country.
 # Reads the decolonizing parent's policy-time variables to decide which
 # legacy modifier, starting laws/IG clout, and diplomatic relations to apply.
 #
@@ -18,6 +24,7 @@
 # the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
 # Last, it sends the new country the Nationalization Question (.15).
 apply_decolonization_path = {
+	save_scope_as = decolonized_new_country
 	# The parent is our former overlord, as for a country released by the
 	# vanilla release actions; without this the former-colony events never
 	# reach a country formed here (decol_mark_former_colony, below).
@@ -50,7 +57,7 @@ apply_decolonization_path = {
 				is_decaying = yes
 			}
 			scope:decolonizing_parent = {
-				change_relations = { country = ROOT value = -50 }
+				change_relations = { country = scope:decolonized_new_country value = -50 }
 			}
 			# Successor seeded as junta state — parent's brutal exit reproduces itself
 			activate_law = law_type:law_autocracy
@@ -72,7 +79,7 @@ apply_decolonization_path = {
 				is_decaying = yes
 			}
 			scope:decolonizing_parent = {
-				change_relations = { country = ROOT value = 30 }
+				change_relations = { country = scope:decolonized_new_country value = 30 }
 			}
 			# Successor inherits parent's developmentalist institutions
 			activate_law = law_type:law_parliamentary_republic
@@ -94,7 +101,7 @@ apply_decolonization_path = {
 				is_decaying = yes
 			}
 			scope:decolonizing_parent = {
-				change_relations = { country = ROOT value = 15 }
+				change_relations = { country = scope:decolonized_new_country value = 15 }
 			}
 			# Successor seeded with cultural-exclusion citizenship — parent's
 			# civilizing mission left a thin elite that runs the new state
@@ -113,7 +120,7 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = { has_variable = decolonization_path_round_table }
 		}
 		scope:decolonizing_parent = {
-			change_relations = { country = ROOT value = 25 }
+			change_relations = { country = scope:decolonized_new_country value = 25 }
 		}
 	}
 	else_if = {
@@ -122,7 +129,7 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = { has_variable = decolonization_path_release_single }
 		}
 		scope:decolonizing_parent = {
-			change_relations = { country = ROOT value = -10 }
+			change_relations = { country = scope:decolonized_new_country value = -10 }
 		}
 	}
 	else_if = {
@@ -131,7 +138,7 @@ apply_decolonization_path = {
 			scope:decolonizing_parent = { has_variable = decolonization_path_planned }
 		}
 		scope:decolonizing_parent = {
-			change_relations = { country = ROOT value = -25 }
+			change_relations = { country = scope:decolonized_new_country value = -25 }
 		}
 	}
 
@@ -142,7 +149,7 @@ apply_decolonization_path = {
 		limit = {
 			has_journal_entry = je_colonial_empire
 			NOT = { this = scope:decolonizing_parent }
-			NOT = { this = ROOT }
+			NOT = { this = scope:decolonized_new_country }
 		}
 		add_modifier = {
 			name = colonial_stability_negative_event
@@ -373,6 +380,8 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 	# cede_state_trigger only accepts `has_variable` / `state_region` checks,
 	# not scope identity. Vic3 vanilla caps the dynamic-tag pool at 100 (D00–D99);
 	# `common/country_definitions/zz_te_extended_dynamic.txt` extends it to 1000.
+	# on_created does not see the scopes saved before the call either, so it only
+	# touches the new country itself; the legacy runs after the random_list.
 	custom_tooltip = {
 		text = decolonization_form_country_tt
 		random_list = {
@@ -396,7 +405,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -421,7 +429,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -446,7 +453,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -471,7 +477,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -496,7 +501,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -521,7 +525,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -546,7 +549,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -571,7 +573,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -596,7 +597,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -621,7 +621,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -646,7 +645,6 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
@@ -671,10 +669,20 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 							remove_variable = decolonization_region_2_marker
 							remove_variable = decolonization_region_3_marker
 						}
-						apply_decolonization_path = yes
 						trigger_event = { id = minor_events_timelineextended.3 }
 					}
 				}
+			}
+		}
+		# The legacy runs here, where scope:decolonizing_parent is still set; it
+		# is unset inside on_created. The capital now belongs to the new country,
+		# which is how vanilla's colonial-administration buttons reach theirs. If
+		# the create failed (no free dynamic tag) the capital is still the
+		# parent's, and nothing runs.
+		scope:new_country_capital.owner ?= {
+			if = {
+				limit = { NOT = { this = scope:decolonizing_parent } }
+				apply_decolonization_path = yes
 			}
 		}
 	}

@@ -1130,9 +1130,14 @@ te_tax_obl_feasible_4 = {
 # The two budget kinds read the fiscal record of the 1st, not the live budget
 # (final review A-I2): a deficit has to last over a 1st to make a promise to
 # end it a new one, worth more and earning trust.
-# KIND and ARG literal, TARGET any value (as for the feasibility triggers).
-# The kind helpers take both parameters and use what their kind needs (an
-# unused parameter is passed elsewhere in the mod: st_res_policy_set_by_hand_base).
+# KIND and ARG literal, TARGET a var: read (every caller passes the offer's or
+# the bill's target variable). The dispatcher passes ARG and TARGET to every
+# kind, so every kind's helper must name both: the engine refuses a call that
+# passes an argument the callee never names ("Scripted trigger should have no
+# arguments" for a callee with none, "failed for unknown arguments" for one
+# that names some; until 2026-10-05 kinds 2 and 4 logged both at every launch,
+# and the call's result is not to be trusted). A kind that needs neither names
+# them in a trigger_if whose limit is never true, so it never evaluates them.
 te_tax_obl_is_maintenance = {
 	te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }
 }
@@ -1143,14 +1148,17 @@ te_tax_obl_is_maintenance_1 = {
 
 te_tax_obl_is_maintenance_2 = {
 	te_tax_fisc_rec_bur_ok = yes
+	trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }
 }
 
 te_tax_obl_is_maintenance_3 = {
 	NOT = { te_tax_obl_wages_above_$ARG$ = yes }
+	trigger_if = { limit = { always = no } $TARGET$ >= 0 }
 }
 
 te_tax_obl_is_maintenance_4 = {
 	te_tax_fisc_rec_surplus = yes
+	trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }
 }
 
 # ---------------------------------------------------------------------------

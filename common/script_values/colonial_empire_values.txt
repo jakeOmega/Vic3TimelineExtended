@@ -836,6 +836,18 @@ colonial_assimilate_months_value = {
 	}
 }
 
+# The Solidified clock, for the two Imperial Federation decisions' `possible`.
+# The decision panel evaluates it for every country that shows them, including
+# one whose entry has not pulsed yet (a bare var: read logged "Failed to fetch
+# variable", 2026-10-05).
+colonial_solidified_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_solidified_months }
+		value = var:colonial_solidified_months
+	}
+}
+
 # ============================================================================
 # COMPLETION CLOCKS
 #

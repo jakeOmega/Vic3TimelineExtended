@@ -616,6 +616,54 @@ goods_trade_advantage_fine_art_mult = {
 	decimals = 0
 }
 
+# The seven military goods, for the UN arms embargo
+# (common/static_modifiers/un_justice_modifiers.txt). Vanilla's modifiers.log
+# lists goods_trade_advantage_<good>_mult for every vanilla good, but the
+# parser rejected these in a static modifier ("Unknown modifier type",
+# 2026-10-05 launch), as it did fine_art's above. Whether a country-level
+# trade-advantage modifier moves trade has not been read in game.
+goods_trade_advantage_small_arms_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_ammunition_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_artillery_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_tanks_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_aeroplanes_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_manowars_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+goods_trade_advantage_ironclads_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 # Modded goods motor_ships and magnetic_drive_ships need explicit goods_input/output_*_add registrations.
 goods_input_motor_ships_add = {
 	decimals = 1
