@@ -567,7 +567,7 @@ financial_cycle_phase_frenzy_cmd = {
 # income, added each week (investment_pool_banking_cycle_income_add). Until
 # 2026-10-05 it was a share of the pool's BALANCE (-0.015 / -0.0075 / -0.003 /
 # +0.003 / +0.006 / +0.01 a week), which compounded (banking_cycle_simulation.md
-# §18). The new figures are the old ones x24: the same size at the pool a
+# §21). The new figures are the old ones x24: the same size at the pool a
 # country spending a 24th of it a week settles at (24 weeks of income), so
 # Frenzy adds a quarter of the pool's income and Panic takes a third of it.
 financial_cycle_phase_panic_coop = {
@@ -1165,7 +1165,11 @@ banking_reserve_requirements = {
 
 # Timed: banking_effect_cb_bank_holiday adds it for 90 days. Both the origin
 # and the contagion crash checks multiply by banking_crash_chance_multiplier_value,
-# so the crash line shields against imported crashes too.
+# but the holiday is only declared below cycle 25, where a country's own crash
+# weight is (bubble - 90) x 0.01 and a slump drains bubble 3-7 a month, so the
+# crash line is in practice a shield against crashes spreading in from trading
+# partners. Since #715 those can only deepen a slump, so the shield is worth
+# having. The run itself is stopped in banking_cycle_advance_variables.
 banking_bank_holiday = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_banking_crash_chance_mult = -0.9
@@ -5262,7 +5266,7 @@ cooperative_capital_plan = {
 	country_banking_intervention_max_add = -4
 	building_group_bg_light_industry_construction_efficiency_add = 0.06
 	# monthly: coordination gain; new projects create near-term friction.
-	# MOMENTUM 0.30 -> 0.10 (2026-10-05, banking_cycle_simulation.md §18): a
+	# MOMENTUM 0.30 -> 0.10 (2026-10-05, banking_cycle_simulation.md §21): a
 	# standing momentum add is worth 10x its face value in cycle points a month,
 	# so 0.30 was +3 a month; held with Credit Union Expansion it put a
 	# cooperative economy in Frenzy 28% of the time. 0.10 is the market tools'
@@ -5286,7 +5290,7 @@ cooperative_credit_expansion = {
 	country_risk_premium_add = -0.006
 	country_banking_intervention_max_add = -3
 	# monthly: improves liquidity and momentum; also loosens restraint.
-	# MOMENTUM 0.25 -> 0.08 (2026-10-05, banking_cycle_simulation.md §18), to
+	# MOMENTUM 0.25 -> 0.08 (2026-10-05, banking_cycle_simulation.md §21), to
 	# the scale of the market's Emergency Liquidity Program; see Capital Plan.
 	country_finance_momentum_monthly_add = 0.08
 	country_bubble_pressure_monthly_add  = 0.50
@@ -6211,7 +6215,7 @@ bubble_inertia_extreme = {
 	country_finance_momentum_monthly_add = 1.0
 }
 
-# Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §18):
+# Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §21):
 # a fifth of the market's pull, under the same bands and the same
 # bubble_inertia_multiplier_script_value. With none at all a cooperative economy
 # almost never left Stable (0.6 crashes a century untooled, Boom or Frenzy 0.2%

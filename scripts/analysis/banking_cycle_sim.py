@@ -556,6 +556,18 @@ PRE_SLUMP_PRESSURE = {
     "pressure_downturn": -0.8,
     "pressure_panic": -1.5,
 }
+# The AI's lift weights before the banking_ai_hold_cb_* gates (2026-10-05, §18),
+# with the capital-controls port that assumed no external crisis at par.
+# `--tune pre_hold`; `--tune ai_hold=off` keeps the corrected port.
+PRE_HOLD = {
+    "ai_hold": "off",
+    "cc_crisis": "off",
+}
+# The Bank Holiday before §19: a one-shot halving of a falling momentum, no
+# floor while the banks are shut and no bounce when they reopen.
+PRE_HOLIDAY = {
+    "holiday": "old",
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -563,6 +575,8 @@ PRESETS = {
     "pre_anchoring": PRE_ANCHORING,
     "pre_bank_qe": PRE_BANK_QE,
     "pre_slump_pressure": PRE_SLUMP_PRESSURE,
+    "pre_hold": PRE_HOLD,
+    "pre_holiday": PRE_HOLIDAY,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -691,6 +705,9 @@ class State:
     timed: dict[str, int] = field(default_factory=dict)  # name -> months remaining
     tool_timers: dict[str, int] = field(default_factory=dict)  # timed TOOLS (bank holiday)
     holiday_cooldown: int = 0  # months until another bank holiday may be declared
+    # banking_bank_holiday_reopening: a holiday is running that has not been ended
+    # early, so it reopens with a momentum bounce when its timer runs out (§19)
+    holiday_reopening: bool = False
 
     # exogenous
     gdp: float = 1.0e7
@@ -717,6 +734,13 @@ class State:
     tool_months: int = 0
     tool_slot_months: float = 0.0
     tool_usage: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    # §18: the AI's lifts, and re-buys of a tool within FLIP_WINDOW_MONTHS of
+    # the AI lifting it (a flip-flop: the toggle cost paid twice for nothing).
+    tool_lifts: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    tool_flips: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    # lifts made while the tool's own enable button still scored above zero
+    tool_wanted_lifts: dict[str, int] = field(default_factory=lambda: {k: 0 for k in TOOL_MODIFIERS})
+    last_lift: dict[str, int] = field(default_factory=dict)
     # What the cycle DOES to the economy: month-by-month sums of the modifier
     # fields the phase / tool / band / intervention modifiers carry, so a cell's
     # crash count can be weighed against what it paid for.
@@ -912,6 +936,24 @@ def is_cbi(cfg: Config) -> bool:
 
 def has_gold_flows(cfg: Config, state: State | None = None) -> bool:
     return is_on_gold(cfg) and has_dial(cfg, state)
+
+
+def in_external_crisis(cfg: Config, state: State) -> bool:
+    """te_mon_in_external_crisis: a war, or te_mon_in_financial_crisis — a panic
+    or downturn, a gold peg's confidence at 40 or below, or inflation band 6.
+
+    Until 2026-10-05 (§18) the capital-controls weights assumed this was never
+    true with FX at par; `--tune cc_crisis=off` restores that.
+    """
+    if TUNE.get("cc_crisis") == "off":
+        return False
+    if state.at_war:
+        return True
+    if phase_of(state.finance_cycle_value) in (PANIC, DOWNTURN):
+        return True
+    if has_gold_flows(cfg, state) and state.peg_confidence <= 40:
+        return True
+    return state.inflation_band >= 6
 
 
 # ── the regime rate band (te_mon_target_min / te_mon_target_max) ──────────────
@@ -1469,7 +1511,12 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
         state.bank_gold = min(1.0, max(0.5, cfg.gold_reserves)) * limit
         state.bank_gold_seeded = True
 
-    damp = K.sv("te_mon_controls_damp_value") if "capital_controls" in state.tools else 1.0
+    # `cc_damp=X` overrides te_mon_controls_damp_value (§20's A/B: 1 = controls
+    # leave gold flows alone).
+    damp = (
+        tuned("cc_damp", K.sv("te_mon_controls_damp_value"))
+        if "capital_controls" in state.tools else 1.0
+    )
     clamp = K.sv("te_mon_gold_gap_clamp")
     gap = max(-clamp, min(clamp, state.policy_rate - world_rate)) * damp
     flow_unit = state.gdp * K.sv("te_mon_gold_flow_per_pp")
@@ -1538,6 +1585,14 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
     #    advance first and stage the new size for next month.
     next_fiscal = fiscal_effect_size(cfg, state)
 
+    # 1b. banking_cycle_bank_holiday_reopen: a holiday that ran its full term
+    #     (its timer ran out at the end of last month) reopens with a bounce
+    if state.holiday_reopening and "bank_holiday" not in state.tools:
+        state.holiday_reopening = False
+        state.finance_cycle_momentum += tuned(
+            "holiday_bounce", K.sv("banking_bank_holiday_reopen_momentum")
+        )
+
     # 2. advance the variables
     advance_variables(cfg, state, rng)
 
@@ -1564,7 +1619,7 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
     if cfg.points > 0 and cfg.ai_tools:
-        consider_tools(cfg, state, rng)
+        consider_tools(cfg, state, rng, month)
     prune_overdrawn_tools(cfg, state)
 
     return crashed
@@ -1621,6 +1676,15 @@ def advance_variables(cfg: Config, state: State, rng: random.Random) -> None:
         pass
     else:
         state.finance_cycle_momentum += 1.0 * nudge_mult
+
+    # a bank holiday stops the run: no negative momentum while the banks are
+    # shut (§19; `--tune pre_holiday` for the old one-shot halving alone)
+    if (
+        TUNE.get("holiday") != "old"
+        and "bank_holiday" in state.tools
+        and state.finance_cycle_momentum < 0
+    ):
+        state.finance_cycle_momentum = 0.0
 
     state.finance_cycle_value += state.finance_cycle_momentum
     state.finance_cycle_value = max(0.0, min(100.0, state.finance_cycle_value))
@@ -1883,16 +1947,27 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     s["margin"] = v
 
     # cb_capital_controls_outflow. Under the full system (the default game rule)
-    # the core term is the external-crisis rule, which needs a currency in
-    # flight, a draining vault or a peg losing confidence — with FX at par and no
-    # peg crisis modelled that is never true, so the core is 0 and only the
-    # flavour / resource terms are left. `--simplified` runs the game rule's
+    # the core term is the external-crisis rule: 70 when something external is at
+    # stake (a currency in flight, a draining vault, a peg losing confidence), 15
+    # for a crisis with nothing at stake. FX sits at par here, so the 70 needs a
+    # gold-flow country's vault or peg. `--simplified` runs the game rule's
     # fallback branch, the pre-phase-1 cycle rule (panic 60 / downturn 35).
+    # The button is AI-only and every AI on gold runs peg defence, so of the gold
+    # cells only gold/peg is an AI's; the 70 fires in the price and growth cells
+    # alone (banking_cycle_simulation.md §20).
     v = 0.0
     if cfg.simplified:
         v += 60 if p == PANIC else 0
         v += 35 if p == DOWNTURN else 0
         v += 15 if risk_falling else 0
+    elif in_external_crisis(cfg, state):
+        limit = bank_gold_limit(cfg, state)
+        vault = min(1.0, max(0.0, state.bank_gold / limit)) if limit > 0 else 0.0
+        at_stake = has_gold_flows(cfg, state) and (
+            (state.gold_flow < 0 and vault < 0.3) or state.peg_confidence <= 40
+        )
+        # `cc_weak=X` scores the "nothing at stake" case X instead (§20's A/B).
+        v += 70 if at_stake else tuned("cc_weak", 15.0)
     v += flavour(v, (15 if cfg.fin_law == "law_prudential_narrow_banking" else 0)
                  + (10 if cfg.fin_law == "law_directed_credit_development_banks" else 0)
                  + (10 if med else 0) + (5 if low else 0))
@@ -2028,8 +2103,12 @@ def on_tool_enabled(state: State, tool: str) -> None:
     if tool == "bank_holiday":
         state.tool_timers[tool] = BANK_HOLIDAY_MONTHS
         state.holiday_cooldown = BANK_HOLIDAY_COOLDOWN_MONTHS
-        if state.finance_cycle_momentum < 0:
-            state.finance_cycle_momentum *= 0.5
+        if TUNE.get("holiday") == "old":
+            if state.finance_cycle_momentum < 0:
+                state.finance_cycle_momentum *= 0.5
+        else:
+            state.finance_cycle_momentum = max(0.0, state.finance_cycle_momentum)
+            state.holiday_reopening = True
 
 
 def disable_scores(cfg: Config, state: State) -> dict[str, float]:
@@ -2123,10 +2202,11 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
         v += 55 if p == FRENZY else 0
         v += 15 if (state.scaled_debt <= 0.6 and p != PANIC) else 0
     else:
-        # With FX at par nothing is ever in external crisis, so the +40 "no
-        # crisis, take them off" term always fires, plus +10 per peacetime year
-        # held (te_mon_controls_fatigue_steps, capped at 5).
-        v = 40.0 + 10 * min(5, state.capctl_peace_months // 12)
+        # Out of the external crisis: +40, plus +10 per peacetime year held
+        # (te_mon_controls_fatigue_steps, capped at 5).
+        v = 0.0
+        if not in_external_crisis(cfg, state):
+            v += 40.0 + 10 * min(5, state.capctl_peace_months // 12)
         v += 10 if p == BOOM else 0
         v += 20 if p == FRENZY else 0
     s["capital_controls"] = v
@@ -2173,10 +2253,69 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     external_scores = tool_scores(cfg, state)
     for tool in ("restrict_inflows", "sterilize_inflows"):
         s[tool] = 60 if external_scores[tool] == 0 else 0
+
+    # The banking_ai_hold_cb_* gates (2026-10-05, §18): no lift while the reason
+    # the tool was bought still holds. `--tune ai_hold=off` restores the
+    # ungated weights.
+    if TUNE.get("ai_hold") != "off":
+        for tool, held in ai_holds(cfg, state).items():
+            if held:
+                s[tool] = 0.0
     return s
 
 
-def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
+def ai_holds(cfg: Config, state: State) -> dict[str, bool]:
+    """banking_ai_hold_cb_* in banking_policy_triggers.txt: every market tool
+    but moral suasion, which costs nothing to switch on or off."""
+    v = state.finance_cycle_value
+    p = phase_of(v)
+    m = state.finance_cycle_momentum
+    recession = p in (PANIC, DOWNTURN)
+    risk_rising = m >= 3
+    risk_falling = m <= -3
+    bubble_high = v >= 90 or (v >= 75 and m >= 3)
+    lean = not recession and (v >= 60 or risk_rising or (p == STABLE and m > 0))
+    slump = v < 40 or (p == STABLE and m < 0)
+    omo_core = (
+        p in (PANIC, DOWNTURN, STAGNATION) or risk_falling
+        or state.inflation < K.sv("te_mon_band_edge_deflation")
+    )
+    # cb_disable_open_market_ops lifts it on a tight stance whatever the hold
+    omo = (
+        omo_core and p != FRENZY and not bubble_high
+        and state.inflation < K.sv("te_mon_band_edge_elevated")
+        and state.stance_band < 4
+    )
+    ec_core = p in (PANIC, DOWNTURN, STAGNATION) or risk_falling
+    if cfg.simplified:
+        cc = p in (PANIC, DOWNTURN) or risk_falling
+    else:
+        cc = in_external_crisis(cfg, state)
+    dc = p != PANIC and slump
+    h = {
+        "omo": omo,
+        "buffer": lean,
+        "reserve_requirements": lean,
+        "margin": lean,
+        "deposit": recession,
+        "eliq": recession,
+        "bank_holiday": recession,
+        "directed": dc,
+        "export_credit": p != FRENZY and not bubble_high and (ec_core or slump),
+        "asset_relief": slump,
+        "bail_in": slump,
+        "capital_controls": cc,
+    }
+    for t in DC_NEW_SECTORS:
+        h[t] = dc
+    return h
+
+
+# A re-buy this soon after the AI lifted the same tool counts as a flip-flop.
+FLIP_WINDOW_MONTHS = 12
+
+
+def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0) -> None:
     """One button click a month at most, weighted by `ai_chance`.
 
     The engine offers every `visible` + `possible` scripted button on the entry
@@ -2205,9 +2344,17 @@ def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
             if action == "on":
                 state.tools.add(tool)
                 state.tool_usage[tool] += 1
+                if tool in state.last_lift and month - state.last_lift[tool] <= FLIP_WINDOW_MONTHS:
+                    state.tool_flips[tool] += 1
                 on_tool_enabled(state, tool)
             else:
+                if tool_scores(cfg, state).get(tool, 0.0) > 0:
+                    state.tool_wanted_lifts[tool] += 1
+                if tool == "bank_holiday":
+                    state.holiday_reopening = False  # reopened early: no bounce
                 state.tools.discard(tool)
+                state.tool_lifts[tool] += 1
+                state.last_lift[tool] = month
             return
 
 
@@ -2250,6 +2397,8 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         for tool in order:
             if tool in state.tools:
                 state.tools.discard(tool)
+                if tool == "bank_holiday":
+                    state.holiday_reopening = False
                 break
 
 
@@ -2481,6 +2630,28 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         "dollarised_pct": statistics.mean(s.months_dollarised / months * 100 for s in states),
         "tool_usage": {
             t: statistics.mean(s.tool_usage[t] for s in states) for t in TOOL_MODIFIERS
+        },
+        # §18: per century, all tools and per tool
+        "lifts_per_century": statistics.mean(
+            sum(s.tool_lifts.values()) / cfg.years * 100 for s in states
+        ),
+        "flips_per_century": statistics.mean(
+            sum(s.tool_flips.values()) / cfg.years * 100 for s in states
+        ),
+        "wanted_lifts_per_century": statistics.mean(
+            sum(s.tool_wanted_lifts.values()) / cfg.years * 100 for s in states
+        ),
+        "tool_wanted_lifts": {
+            t: statistics.mean(s.tool_wanted_lifts[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
+        },
+        "tool_lifts": {
+            t: statistics.mean(s.tool_lifts[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
+        },
+        "tool_flips": {
+            t: statistics.mean(s.tool_flips[t] / cfg.years * 100 for s in states)
+            for t in TOOL_MODIFIERS
         },
         # Time-weighted means of the economic modifier fields, i.e. what the
         # cycle did to the economy on average over the century.
@@ -2717,12 +2888,122 @@ def print_rescue(rows: list[dict], args, tools: tuple[str, ...]) -> None:
         print(line)
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# --holiday: what a Bank Holiday does to the recovery (§19)
+# ─────────────────────────────────────────────────────────────────────────────
+
+HOLIDAY_HORIZON = 36  # months followed after each declaration
+
+
+def holiday_fork_run(cfg: Config, seed: int, arms: list[tuple[str, dict | None]]) -> list[dict]:
+    """Fork at every entry below cycle 25 (at most once in the holiday's
+    five-year cooldown) and follow each arm for HOLIDAY_HORIZON months on the
+    same random draws. An arm's tune is None for no holiday; otherwise the
+    holiday is declared the month after the entry, with that tune in force.
+    The AI clicks nothing, so no arm leans on the recovery it causes."""
+    rng = random.Random(seed)
+    base_tune = dict(TUNE)
+    cfg = dataclasses.replace(cfg, points=int(TOOL_COST["bank_holiday"]), ai_tools=False)
+    state = State(gdp=cfg.gdp0, growth=cfg.growth_mean, deficit_pct=cfg.deficit_mean)
+    state.policy_rate = era_base(0)
+    state.policy_rate_target = round(era_base(0))
+    state.commodity_centre = round(era_base(0))
+    state.inflation_expected = 0.0 if is_metallic(cfg) else 2.0
+    out: list[dict] = []
+    prev, cooldown = state.finance_cycle_value, 0
+    for month in range(cfg.years * 12 - HOLIDAY_HORIZON):
+        _rescue_step(cfg, state, rng, month)
+        v = state.finance_cycle_value
+        cooldown = max(0, cooldown - 1)
+        if prev >= 25 > v and cooldown == 0:
+            entry: dict = {}
+            for name, tune in arms:
+                arm_state = copy.deepcopy(state)
+                arm_rng = random.Random(seed * 7919 + month)
+                TUNE.clear()
+                TUNE.update(base_tune)
+                if tune is not None:
+                    TUNE.update(tune)
+                    arm_state.tools.add("bank_holiday")
+                    on_tool_enabled(arm_state, "bank_holiday")
+                path, crash = [], None
+                for k in range(HOLIDAY_HORIZON):
+                    if _rescue_step(cfg, arm_state, arm_rng, month + 1 + k) and crash is None:
+                        crash = k
+                    path.append(arm_state.finance_cycle_value)
+                entry[name] = (path, crash)
+            TUNE.clear()
+            TUNE.update(base_tune)
+            out.append(entry)
+            cooldown = BANK_HOLIDAY_COOLDOWN_MONTHS
+        prev = v
+    return out
+
+
+def holiday_arms(bounces: list[float]) -> list[tuple[str, dict | None]]:
+    return [("none", None), ("old", {"holiday": "old"})] + [
+        (f"bounce {b:g}", {"holiday_bounce": b}) for b in bounces
+    ]
+
+
+def _run_holiday_cell(job: tuple[Config, int, int, dict, list[float]]) -> dict:
+    cfg, seed, runs, tune, bounces = job
+    TUNE.clear()
+    TUNE.update(tune)
+    base = seed + zlib.crc32(f"holiday/{cfg.currency}/{cfg.mode}".encode()) % 10_000
+    arms = holiday_arms(bounces)
+    entries = [e for i in range(runs) for e in holiday_fork_run(cfg, base + i, arms)]
+    return {"cell": f"{cfg.currency}/{cfg.mode}", "entries": entries, "arms": [a for a, _ in arms]}
+
+
+def print_holiday(rows: list[dict], args) -> None:
+    print(f"Bank Holiday — {args.runs} runs x {args.years} years per cell; at each entry below "
+          f"cycle 25, a holiday declared the next month, followed {HOLIDAY_HORIZON} months, no AI tools")
+    print("cycle value is the median over entries; @18 = 18 months after declaring\n")
+    pooled = {"cell": "all cells", "entries": [e for r in rows for e in r["entries"]],
+              "arms": rows[0]["arms"] if rows else []}
+    for r in rows + ([pooled] if len(rows) > 1 else []):
+        entries = r["entries"]
+        if not entries:
+            continue
+        print(f"{r['cell']}: {len(entries)} entries")
+        print(f"  {'arm':10s} {'@12':>5s} {'@18':>5s} {'@24':>5s} {'<25':>5s} {'25-40':>6s} {'40-60':>6s}"
+              f" {'60-75':>6s} {'75+':>5s} {'boom24':>7s} {'crash36':>8s} {'to40':>5s}")
+        for arm in r["arms"]:
+            paths = [e[arm][0] for e in entries]
+            n = len(paths)
+            at18 = [p[17] for p in paths]
+
+            def med(k: int, paths: list = paths) -> float:
+                return statistics.median(p[k - 1] for p in paths)
+
+            def share(lo: float, hi: float, at18: list = at18, n: int = n) -> float:
+                return 100.0 * sum(lo <= x < hi for x in at18) / n
+
+            to40 = statistics.median(
+                next((i + 1 for i, x in enumerate(p) if x >= 40), HOLIDAY_HORIZON + 1) for p in paths
+            )
+            boom = 100.0 * sum(max(p[:24]) >= 75 for p in paths) / n
+            crash = 100.0 * sum(e[arm][1] is not None for e in entries) / n
+            print(f"  {arm:10s} {med(12):5.1f} {med(18):5.1f} {med(24):5.1f} {share(0, 25):4.0f}%"
+                  f" {share(25, 40):5.0f}% {share(40, 60):5.0f}% {share(60, 75):5.0f}% {share(75, 101):4.0f}%"
+                  f" {boom:6.0f}% {crash:7.1f}% {to40:5.0f}")
+        print()
+    print("<25 ... 75+ = where the cycle stands 18 months after declaring")
+    print("boom24 = reached 75 within 24 months   crash36 = crashed within 36 months")
+    print("to40 = median months to reach Stable (37 = not within the horizon)")
+
+
 def _run_cell(job: tuple[Config, int, int, dict]) -> dict:
     cfg, seed, runs, tune = job
     TUNE.clear()
     TUNE.update(tune)
     # `eliq_cost=N` overrides the lender of last resort's point cost (F12).
     TOOL_COST["eliq"] = float(TUNE.get("eliq_cost", DEFAULT_TOOL_COST["eliq"]))
+    # `cc_cost=N` overrides capital controls' point cost (§20's crowd-out A/B).
+    TOOL_COST["capital_controls"] = float(
+        TUNE.get("cc_cost", DEFAULT_TOOL_COST["capital_controls"])
+    )
     # crc32, not hash(): Python salts hash(str) per interpreter, so --seed would
     # not actually reproduce a run.
     base = seed + zlib.crc32(f"{cfg.currency}/{cfg.mode}/{cfg.points}".encode()) % 10_000
@@ -2786,7 +3067,8 @@ def main() -> int:
                          "--tune pre_delegation_fix for the delegated bank before §12, or "
                          "--tune pre_anchoring for independence's institution bonus before §13, or "
                          "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
-                         "--tune pre_slump_pressure for the slump phases' inflation pull before §16.")
+                         "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
+                         "--tune pre_hold for the AI's lift weights before the hold gates of §18.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -2802,6 +3084,13 @@ def main() -> int:
     ap.add_argument("--rescue-entry", type=float, default=75.0,
                     help="the cycle value whose upward crossing --rescue forks at "
                          "(75 = boom, the default; 88 = frenzy)")
+    ap.add_argument("--holiday", action="store_true",
+                    help="instead of the century matrix: fork at every entry below cycle 25 "
+                         "and compare no Bank Holiday, the pre-§19 holiday and the §19 one "
+                         "at each --holiday-bounces size")
+    ap.add_argument("--holiday-bounces", default="0,1,2",
+                    help="reopening bounces --holiday compares (default 0,1,2; the shipped "
+                         "one is banking_bank_holiday_reopen_momentum)")
     ap.add_argument("--jobs", type=int, default=0, help="worker processes (0 = all cores)")
     ap.add_argument("--json", help="write the full result table here")
     args = ap.parse_args()
@@ -2827,6 +3116,26 @@ def main() -> int:
     for t in excluded:
         if t not in TOOL_MODIFIERS:
             ap.error(f"unknown tool {t!r}; keys are {', '.join(TOOL_MODIFIERS)}")
+    if args.holiday:
+        bounces = [float(x) for x in args.holiday_bounces.split(",") if x.strip()]
+        hjobs = [
+            (Config(currency=c, mode=m, fin_law=args.fin_law,
+                    national_bank=not args.no_national_bank, years=args.years,
+                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level),
+             args.seed, args.runs, dict(TUNE), bounces)
+            for c, m in valid_cells(args.only)
+        ]
+        workers = args.jobs or min(len(hjobs), os.cpu_count() or 1)
+        if workers > 1:
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                hrows = list(pool.map(_run_holiday_cell, hjobs))
+        else:
+            hrows = [_run_holiday_cell(j) for j in hjobs]
+        print_holiday(hrows, args)
+        if args.json:
+            Path(args.json).write_text(json.dumps(hrows), encoding="utf-8")
+        return 0
     if args.rescue:
         tools = tuple(x.strip() for x in args.rescue_tools.split(",") if x.strip())
         for x in tools:
@@ -2904,7 +3213,7 @@ def print_table(rows: list[dict], args) -> None:
         f"{'rate':>6}{'floor%':>8}{'slots':>7}{'cyc':>6}{'reform':>7}{'$ised%':>8}"
         f"{'thru':>7}{'serv':>7}{'pool':>7}{'prem':>6}"
         f"{'peak':>6}{'pk90':>6}{'r>=10%':>7}{'tight%':>7}{'polDn':>6}{'pcGap':>7}"
-        f"{'rcHike':>7}{'rcCore':>7}"
+        f"{'rcHike':>7}{'rcCore':>7}{'lifts':>7}{'flips':>7}{'wanted':>7}"
     )
     print(head)
     print("-" * len(head))
@@ -2938,6 +3247,9 @@ def print_table(rows: list[dict], args) -> None:
             f"{r['post_crash_stance_mean']:>7.2f}"
             f"{r['recession_hike_pct']:>7.1f}"
             f"{r['recession_core_pp_a_year']:>7.2f}"
+            f"{r['lifts_per_century']:>7.1f}"
+            f"{r['flips_per_century']:>7.1f}"
+            f"{r['wanted_lifts_per_century']:>7.1f}"
         )
     print()
     print("crash/100y = mean crashes per century   yrs btwn = median gap between crashes")
@@ -2959,6 +3271,9 @@ def print_table(rows: list[dict], args) -> None:
     print("pcGap = mean clamped stance gap over the 12 months after a crash (+ = tight)")
     print("rcHike = % of panic+downturn months in which the policy rate rose")
     print("rcCore = core inflation's mean change over panic+downturn months, pp a year")
+    print("lifts = tools the AI switched off per century   flips = tools it bought back")
+    print(f"      within {FLIP_WINDOW_MONTHS} months of switching them off (toggle costs paid for nothing)")
+    print("wanted = lifts made while that tool's own enable button still scored above zero")
 
 
 if __name__ == "__main__":

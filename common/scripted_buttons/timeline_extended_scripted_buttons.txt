@@ -124,6 +124,9 @@ cb_disable_open_market_ops = {
 			}
 			add = 40
 		}
+		# Never while the slump or deflation it was bought for holds, unless the
+		# stance has turned tight (banking_ai_hold_cb_open_market_ops).
+		if = { limit = { banking_ai_hold_cb_open_market_ops = yes banking_stance_is_tight = no } multiply = 0 }
 	}
 	possible = { banking_tool_omo_active = yes }
 	effect = { banking_effect_cb_disable_open_market_ops = yes }
@@ -171,6 +174,8 @@ cb_disable_countercyclical_buffer = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 35 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_countercyclical_buffer = yes } multiply = 0 }
 	}
 	possible = { banking_tool_buffer_active = yes }
 	effect = { banking_effect_cb_disable_countercyclical_buffer = yes }
@@ -219,6 +224,8 @@ cb_disable_expand_deposit_guarantee = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes banking_cycle_is_panic = no } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_expand_deposit_guarantee = yes } multiply = 0 }
 	}
 	possible = { banking_tool_deposit_active = yes }
 	effect = { banking_effect_cb_disable_expand_deposit_guarantee = yes }
@@ -266,6 +273,8 @@ cb_disable_directed_credit_infrastructure = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_directed_credit_infrastructure = yes } multiply = 0 }
 	}
 	possible = { banking_tool_directed_active = yes }
 	effect = { banking_effect_cb_disable_directed_credit_infrastructure = yes }
@@ -313,6 +322,8 @@ cb_disable_emergency_liquidity_program = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 60 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 70 }
 		if = { limit = { var:finance_cycle_momentum > -4 banking_cycle_is_panic = no } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_emergency_liquidity_program = yes } multiply = 0 }
 	}
 	possible = { banking_tool_eliq_active = yes }
 	effect = { banking_effect_cb_disable_emergency_liquidity_program = yes }
@@ -349,6 +360,10 @@ cb_disable_moral_suasion = {
 	name = "CB_DISABLE_MORAL_SUASION"
 	desc = "CB_DISABLE_MORAL_SUASION_DESC"
 	visible = { is_ai = yes banking_tool_moral_suasion_active = yes }
+	# The one market tool with no hold gate (banking_policy_triggers.txt): a
+	# speech costs nothing to give or to stop, so lifting it and buying it back
+	# wastes nothing, and in a boom or frenzy its point is better spent on a
+	# stronger lean.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 35 }
@@ -402,6 +417,8 @@ cb_disable_raise_margin_requirements = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_raise_margin_requirements = yes } multiply = 0 }
 	}
 	possible = { banking_tool_margin_req_active = yes }
 	effect = { banking_effect_cb_disable_raise_margin_requirements = yes }
@@ -520,6 +537,8 @@ cb_disable_capital_controls_outflow = {
 			if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 			if = { limit = { banking_fiscal_stress_high = no banking_cycle_is_panic = no } add = 15 }
 		}
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_capital_controls_outflow = yes } multiply = 0 }
 	}
 	possible = { banking_tool_capital_controls_active = yes }
 	effect = { banking_effect_cb_disable_capital_controls_outflow = yes }
@@ -571,6 +590,8 @@ cb_disable_export_credit_facility = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_export_credit_facility = yes } multiply = 0 }
 	}
 	possible = { banking_tool_export_credit_active = yes }
 	effect = { banking_effect_cb_disable_export_credit_facility = yes }
@@ -616,6 +637,8 @@ cb_disable_asset_relief_program = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
 		if = { limit = { banking_fiscal_stress_low = yes } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_asset_relief_program = yes } multiply = 0 }
 	}
 	possible = { banking_tool_asset_relief_active = yes }
 	effect = { banking_effect_cb_disable_asset_relief_program = yes }
@@ -660,6 +683,8 @@ cb_disable_directed_credit_heavy_industry = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_directed_credit_heavy_industry = yes } multiply = 0 }
 	}
 	possible = { banking_tool_directed_credit_heavy_industry_active = yes }
 	effect = { banking_effect_cb_disable_directed_credit_heavy_industry = yes }
@@ -697,6 +722,8 @@ cb_disable_directed_credit_agriculture = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_directed_credit_agriculture = yes } multiply = 0 }
 	}
 	possible = { banking_tool_directed_credit_agriculture_active = yes }
 	effect = { banking_effect_cb_disable_directed_credit_agriculture = yes }
@@ -734,6 +761,8 @@ cb_disable_directed_credit_armaments = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_directed_credit_armaments = yes } multiply = 0 }
 	}
 	possible = { banking_tool_directed_credit_armaments_active = yes }
 	effect = { banking_effect_cb_disable_directed_credit_armaments = yes }
@@ -771,6 +800,8 @@ cb_disable_directed_credit_electrification = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_directed_credit_electrification = yes } multiply = 0 }
 	}
 	possible = { banking_tool_directed_credit_electrification_active = yes }
 	effect = { banking_effect_cb_disable_directed_credit_electrification = yes }
@@ -834,6 +865,8 @@ cb_disable_reserve_requirements = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 35 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_reserve_requirements = yes } multiply = 0 }
 	}
 	possible = { banking_tool_reserve_requirements_active = yes }
 	effect = { banking_effect_cb_disable_reserve_requirements = yes }
@@ -874,6 +907,8 @@ cb_disable_bank_holiday = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 60 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_bank_holiday = yes } multiply = 0 }
 	}
 	possible = { banking_tool_bank_holiday_active = yes }
 	effect = { banking_effect_cb_disable_bank_holiday = yes }
@@ -917,6 +952,8 @@ cb_disable_bail_in_regime = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+		# Never while the reason it was bought holds (banking_policy_triggers.txt).
+		if = { limit = { banking_ai_hold_cb_bail_in_regime = yes } multiply = 0 }
 	}
 	possible = { banking_tool_bail_in_regime_active = yes }
 	effect = { banking_effect_cb_disable_bail_in_regime = yes }

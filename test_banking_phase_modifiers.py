@@ -9,7 +9,7 @@ variants added on 2026-10-05 were the latest names that had to go in both.
 
 The cooperative phases' `country_weekly_investment_pool_mult` is a share of
 the pool's weekly gross income. Until 2026-10-05 it multiplied the pool's
-balance, which compounded (docs/audits/banking_cycle_simulation.md §18); the
+balance, which compounded (docs/audits/banking_cycle_simulation.md §21); the
 last test keeps it on income.
 """
 

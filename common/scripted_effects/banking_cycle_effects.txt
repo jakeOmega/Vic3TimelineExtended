@@ -2010,6 +2010,17 @@ banking_cycle_advance_variables = {
 		}
 	}
 
+	# A bank holiday stops the run: while the banks are shut, momentum cannot
+	# fall below 0 (banking_effect_cb_bank_holiday). After every other push, so
+	# nothing this month takes it back under.
+	if = {
+		limit = {
+			banking_tool_bank_holiday_active = yes
+			var:finance_cycle_momentum < 0
+		}
+		set_variable = { name = finance_cycle_momentum value = 0 }
+	}
+
 	# Apply momentum to cycle value
 	change_variable = {
 		name = finance_cycle_value
@@ -2023,6 +2034,27 @@ banking_cycle_advance_variables = {
 	# Clamp bubble pressure 0–100
 	if = { limit = { var:bubble_pressure < 0 }   set_variable = { name = bubble_pressure value = 0 } }
 	if = { limit = { var:bubble_pressure > 100 } set_variable = { name = bubble_pressure value = 100 } }
+}
+
+# 2b. The banks reopen after a bank holiday that ran its full ninety days: the
+#     timed modifier has expired, and banking_bank_holiday_reopening is still
+#     set because nothing ended the holiday early (each early ending clears it;
+#     see banking_effect_cb_bank_holiday). Depositors come back to banks that
+#     were examined while the doors were shut. Run from the monthly pulse
+#     before banking_cycle_advance_variables, which then decays and applies the
+#     bounce like any other momentum.
+banking_cycle_bank_holiday_reopen = {
+	if = {
+		limit = {
+			has_variable = banking_bank_holiday_reopening
+			banking_tool_bank_holiday_active = no
+		}
+		remove_variable = banking_bank_holiday_reopening
+		change_variable = {
+			name = finance_cycle_momentum
+			add = banking_bank_holiday_reopen_momentum
+		}
+	}
 }
 
 # 3. Check for a sudden crash (asymmetric probability).
@@ -2321,7 +2353,7 @@ banking_cycle_apply_phase_modifiers = {
 	}
 	# A cooperative economy feels a fifth of it (the _coop variants carry 0.2
 	# momentum, not 1.0): without any, it almost never left Stable
-	# (banking_cycle_simulation.md §18). A command economy feels none.
+	# (banking_cycle_simulation.md §21). A command economy feels none.
 	else_if = {
 		limit = { has_law = law_type:law_cooperative_ownership }
 		if = {
