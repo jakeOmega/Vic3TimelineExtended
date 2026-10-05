@@ -1,10 +1,12 @@
 """Regenerate the two ideology-derived files without a Victoria 3 install.
 
-`apply_ideologies.py` (common/ideologies/modified.txt) and
-`gen_law_consistency.py` (common/scripted_effects/extra_law_consistency_generated.txt)
-read raw vanilla files, so the server skips them in a game-less cloud session
-and their outputs go stale after an edit to `ideology_modifications.py`. This
-runs both generators' own code on stand-ins:
+`apply_ideologies.py` (common/ideologies/modified.txt) copies raw vanilla text,
+so the server skips it in a game-less cloud session and its output goes stale
+after an edit to `ideology_modifications.py`. This runs its own code on
+stand-ins. (`gen_law_consistency.py`, which writes
+common/scripted_effects/extra_law_consistency_generated.txt from the same
+ideology stances, reads only parsed vanilla and runs from `vanilla_parsed/` on
+its own, #624; this tool just calls it so one run refreshes both files.)
 
 - modified.txt: vanilla ideologies are serialized from the committed
   `vanilla_parsed/` snapshot (their lawgroup blocks, which is all an INJECT
@@ -17,8 +19,8 @@ runs both generators' own code on stand-ins:
   first stance on a vanilla ideology the mod hasn't touched, can't be
   produced here; the run stops and says which, and only a machine with the
   game can write it.
-- extra_law_consistency_generated.txt: gen_law_consistency runs against a
-  synthetic `<tmp>/game/common/{laws,ideologies}` serialized from the snapshot.
+- extra_law_consistency_generated.txt: gen_law_consistency runs on the
+  snapshot's laws and ideologies, with no stand-in.
 
 Run once on an unchanged tree first: both outputs should come out byte for
 byte as committed (`--check` exits 1 otherwise). On a machine with the game,
@@ -32,7 +34,6 @@ import argparse
 import json
 import os
 import re
-import subprocess
 import sys
 import tempfile
 
@@ -43,33 +44,12 @@ import vanilla_parsed  # noqa: E402
 
 MODIFIED = os.path.join(REPO, "common", "ideologies", "modified.txt")
 CONSISTENCY = os.path.join(REPO, "common", "scripted_effects", "extra_law_consistency_generated.txt")
-_DUMMY_ENV = ("VIC3_MOD_DEPLOY_TARGET", "VIC3_VANILLA_REPO", "VIC3_VANILLA_DOCS_RUNTIME", "VIC3_GAME_LOGS")
 
 
 def _unwrap(v):
     while isinstance(v, tuple) and len(v) >= 2 and v[0] in ("=", "?="):
         v = v[1]
     return v
-
-
-def _ids(v):
-    v = _unwrap(v)
-    if v is None:
-        return []
-    if isinstance(v, str):
-        return [v]
-    if isinstance(v, list):
-        out = []
-        for x in v:
-            x = _unwrap(x)
-            if isinstance(x, str):
-                out.append(x)
-            elif isinstance(x, dict):
-                out.extend(x)
-        return out
-    if isinstance(v, dict):
-        return list(v)
-    return []
 
 
 def _snapshot(entity_type):
@@ -152,41 +132,25 @@ def regen_modified(out_path):
     return unmatched
 
 
-def _synthetic_root(root):
-    laws = []
-    for name, raw in _snapshot("Laws").items():
-        body = _unwrap(raw)
-        lines = [f"{name} = {{"]
-        for key in ("group", "progressiveness", "parent"):
-            if key in body:
-                lines.append(f"\t{key} = {_unwrap(body[key])}")
-        for key in ("unlocking_laws", "requires_law_or", "disallowing_laws", "unlocking_technologies"):
-            if key in body:
-                lines.append(f"\t{key} = {{ {' '.join(_ids(body[key]))} }}")
-        lines.append("}")
-        laws.append("\n".join(lines))
-    ideologies = [_ideology_text(name, _unwrap(raw)) for name, raw in _snapshot("Ideologies").items()]
-    for sub, text in (("laws", "\n".join(laws) + "\n"), ("ideologies", "".join(ideologies))):
-        d = os.path.join(root, "game", "common", sub)
-        os.makedirs(d, exist_ok=True)
-        with open(os.path.join(d, "00_synthetic.txt"), "w", encoding="utf-8") as fh:
-            fh.write(text)
-
-
 def regen_consistency(check):
-    with tempfile.TemporaryDirectory() as root:
-        _synthetic_root(root)
-        env = dict(os.environ, VIC3_BASE_GAME=root)
-        for k in _DUMMY_ENV:
-            env.setdefault(k, "/nonexistent")
-        before = _read(CONSISTENCY)
-        subprocess.run([sys.executable, os.path.join(REPO, "gen_law_consistency.py")], env=env, check=True,
-                       cwd=REPO, stdout=subprocess.DEVNULL)
-        after = _read(CONSISTENCY)
-        if check and after != before:
-            with open(CONSISTENCY, "w", encoding="utf-8", newline="") as fh:
-                fh.write(before)
-        return after == before
+    """Regenerate extra_law_consistency_generated.txt from the snapshot's laws
+    and ideologies, whether or not this machine has the game. True if unchanged."""
+    import contextlib
+    import io
+
+    import gen_law_consistency as gen
+
+    vanilla = vanilla_parsed.parsed_entities(("Laws", "Ideologies"))
+    # build_output prints its fallback warnings; this tool's report is its own.
+    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+        content = gen.build_output(
+            gen.parse_laws(vanilla["Laws"]), gen.parse_ideologies(vanilla["Ideologies"])
+        )
+    same = "\ufeff" + content == _read(CONSISTENCY)
+    if not same and not check:
+        with open(CONSISTENCY, "w", encoding="utf-8-sig", newline="") as fh:
+            fh.write(content)
+    return same
 
 
 def _read(path):

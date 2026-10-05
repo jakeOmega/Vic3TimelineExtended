@@ -11,7 +11,9 @@ Run: python3 -m unittest test_vanilla_parsed
 import json
 import os
 import shutil
+import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -140,6 +142,23 @@ class BuildLoadTests(unittest.TestCase):
             json.dump(manifest, f)
         with self.assertRaises(ValueError):
             vp.load(self.out)
+
+    def test_parsed_entities_from_mod_state_or_snapshot(self):
+        vp.build(self.game, self.out)
+        dirs = vp._entity_dirs(self.game)
+        live = ModState(dirs, {})
+        real_load = vp.load
+        with mock.patch.object(vp, "load", side_effect=lambda: real_load(self.out)) as load:
+            # A ModState that holds every type is the source; nothing is loaded.
+            got = vp.parsed_entities(("Laws", "Modifiers"), live)
+            self.assertIs(got["Laws"], live.base_parsers["Laws"].data)
+            self.assertEqual(set(got), {"Laws", "Modifiers"})
+            load.assert_not_called()
+            # No ModState, or one missing a type (a stub), reads the snapshot.
+            for mod_state in (None, object(), type("S", (), {"base_parsers": {"Other": 1}})()):
+                got = vp.parsed_entities(("Laws",), mod_state)
+                self.assertTrue(vp._strict_equal(got["Laws"], live.base_parsers["Laws"].data))
+            self.assertEqual(load.call_count, 3)
 
 
 class FreshnessTests(unittest.TestCase):
@@ -310,7 +329,8 @@ class VanillaFileRegeneratorTests(unittest.TestCase):
     def _run(self, **kwargs):
         ran = []
         with mock.patch.object(mss, "_run_generator_chain",
-                               side_effect=lambda _ms, chain: ran.append([lbl for lbl, _ in chain])), \
+                               side_effect=lambda _ms, chain, **kw: ran.append(
+                                   ([lbl for lbl, _ in chain], kw))), \
                 mock.patch.object(mss, "_snapshot_mod_text_files", return_value={}), \
                 mock.patch.dict(os.environ, {"VIC3_SKIP_POST_LOAD_GENERATORS": ""}):
             mss._run_post_load_generators(object(), **kwargs)
@@ -318,7 +338,7 @@ class VanillaFileRegeneratorTests(unittest.TestCase):
 
     def test_skipped_without_vanilla_files(self):
         ran, warnings = self._run(vanilla_files=False)
-        regenerators = ran[0]
+        regenerators = ran[0][0]
         for label in mss.VANILLA_FILE_REGENERATORS:
             self.assertNotIn(label, regenerators)
         self.assertIn("organize_loc", regenerators)
@@ -328,19 +348,62 @@ class VanillaFileRegeneratorTests(unittest.TestCase):
             set(mss.VANILLA_FILE_REGENERATORS) | {"generate_docs"},
         )
 
+    def test_parsed_vanilla_regenerators_run_without_vanilla_files(self):
+        # They read parsed vanilla only (#624): gen_law_consistency's laws and
+        # ideologies, pm_costs' goods prices.
+        ran, _warnings = self._run(vanilla_files=False)
+        for label in ("gen_law_consistency", "pm_costs"):
+            self.assertIn(label, ran[0][0])
+            self.assertNotIn(label, mss.VANILLA_FILE_REGENERATORS)
+            self.assertNotIn(label, _warnings[0]["skipped"])
+
+    def test_partial_regenerators_are_named_in_the_warning(self):
+        ran, warnings = self._run(vanilla_files=False)
+        self.assertEqual(ran[0][1], {"vanilla_files": False})
+        partial = warnings[0]["partially_skipped"]
+        self.assertEqual(
+            partial,
+            {label: list(outs) for label, outs in mss.PARTIAL_VANILLA_FILE_REGENERATORS.items()},
+        )
+        self.assertIn("docs/engine/commented_vanilla_pms.txt", warnings[0]["detail"])
+
     def test_run_with_vanilla_files(self):
         ran, warnings = self._run()
-        self.assertEqual(ran[0], [lbl for lbl, _ in mss.POST_LOAD_REGENERATORS])
+        self.assertEqual(ran[0][0], [lbl for lbl, _ in mss.POST_LOAD_REGENERATORS])
+        self.assertEqual(ran[0][1], {"vanilla_files": True})
         self.assertEqual(warnings, [])
 
     def test_audits_only_names_only_generate_docs(self):
         ran, warnings = self._run(audits_only=True, vanilla_files=False)
-        self.assertEqual(ran, [[lbl for lbl, _ in mss.POST_LOAD_AUDITS]])
+        self.assertEqual(ran[0][0], [lbl for lbl, _ in mss.POST_LOAD_AUDITS])
         self.assertEqual(warnings[0]["skipped"], ["generate_docs"])
+        self.assertEqual(warnings[0]["partially_skipped"], {})
 
     def test_roster_names_are_real_regenerators(self):
         labels = {lbl for lbl, _ in mss.POST_LOAD_REGENERATORS}
         self.assertLessEqual(set(mss.VANILLA_FILE_REGENERATORS), labels)
+        self.assertLessEqual(set(mss.PARTIAL_VANILLA_FILE_REGENERATORS), labels)
+        self.assertFalse(
+            set(mss.VANILLA_FILE_REGENERATORS) & set(mss.PARTIAL_VANILLA_FILE_REGENERATORS)
+        )
+
+    def test_chain_tells_only_partial_regenerators_there_are_no_vanilla_files(self):
+        calls = {}
+
+        def make(name):
+            module = types.ModuleType(name)
+            module.regenerate = lambda ms, **kw: calls.setdefault(name, kw)
+            return module
+
+        partial_label = next(iter(mss.PARTIAL_VANILLA_FILE_REGENERATORS))
+        chain = [(partial_label, "fake_partial"), ("plain", "fake_plain")]
+        fakes = {"fake_partial": make("fake_partial"), "fake_plain": make("fake_plain")}
+        with mock.patch.dict(sys.modules, fakes):
+            mss._run_generator_chain(object(), chain, vanilla_files=False)
+            self.assertEqual(calls, {"fake_partial": {"vanilla_files": False}, "fake_plain": {}})
+            calls.clear()
+            mss._run_generator_chain(object(), chain)
+            self.assertEqual(calls, {"fake_partial": {}, "fake_plain": {}})
 
 
 class ModStateSortedLoadTests(unittest.TestCase):

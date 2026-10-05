@@ -403,6 +403,23 @@ def load(snapshot_dir: str = DEFAULT_DIR) -> Snapshot:
     return Snapshot(manifest=manifest, data=data, localization=localization)
 
 
+def parsed_entities(entity_types, mod_state=None) -> dict:
+    """{entity_type: parsed vanilla data} for a generator that reads vanilla
+    entities but not raw vanilla text (so needs no game install).
+
+    From `mod_state.base_parsers` when it holds every type (the server's own
+    vanilla, whether it came from the game files or this snapshot), else from
+    the committed snapshot. Callers that prefer the game files when there are
+    some (a standalone CLI run) decide that before asking. The returned data
+    is shared, not copied: deep-copy before merging mod files into it."""
+    if mod_state is not None:
+        parsers = getattr(mod_state, "base_parsers", None) or {}
+        if all(et in parsers for et in entity_types):
+            return {et: parsers[et].data for et in entity_types}
+    data = load().data
+    return {et: data[et] for et in entity_types}
+
+
 # ---------------------------------------------------------------------------
 # Freshness
 # ---------------------------------------------------------------------------

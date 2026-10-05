@@ -8971,16 +8971,28 @@ POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
 # than ModState's parsed vanilla, so vanilla_parsed/ cannot stand in for them.
 # With no game files on disk (a cloud session running from vanilla_parsed/)
 # they are skipped, and the reload says so: run blind, apply_ideologies would
-# rewrite common/ideologies/modified.txt as a bare header, gen_law_consistency
-# would regenerate without the vanilla laws, and the rest would crash.
+# rewrite common/ideologies/modified.txt as a bare header and the rest would
+# crash. gen_law_consistency and pm_costs are not here: they read only parsed
+# vanilla (law and ideology structure, goods prices), taken from
+# `mod_state.base_parsers`, so they run either way and reproduce their
+# committed outputs from the snapshot byte for byte (#624).
 VANILLA_FILE_REGENERATORS = frozenset({
     "pop_needs_curves",
     "apply_ideologies",
     "ig_feminism",
-    "pm_costs",
     "resources",
-    "gen_law_consistency",
 })
+
+# Regenerators that run without vanilla files but also write outputs cut from
+# raw vanilla text. Without usable files the chain calls
+# `regenerate(mod_state, vanilla_files=False)`, which leaves those outputs as
+# committed; the reload warning names them. {label: those outputs}.
+PARTIAL_VANILLA_FILE_REGENERATORS = {
+    "pm_costs": (
+        "docs/engine/commented_vanilla_pms.txt",
+        "docs/engine/commented_vanilla_military_units.txt",
+    ),
+}
 
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
@@ -9154,10 +9166,11 @@ def _record_reload_warnings(flags: dict, warnings: list, *,
         _last_reload_warnings["reparsed_after_generators"] = reparsed
 
 
-def _run_generator_chain(mod_state, generators) -> None:
+def _run_generator_chain(mod_state, generators, *, vanilla_files=True) -> None:
     """Import and run each (label, module) in order, appending both actionable
     findings and hard failures to _post_load_warnings. One bad generator never
-    stops the chain."""
+    stops the chain. With `vanilla_files=False` a PARTIAL_VANILLA_FILE_REGENERATORS
+    member is told so (`regenerate(mod_state, vanilla_files=False)`)."""
     for label, module_name in generators:
         t0 = time.monotonic()
         try:
@@ -9168,7 +9181,8 @@ def _run_generator_chain(mod_state, generators) -> None:
                     f"module {module_name!r} has no callable `regenerate` "
                     f"(POST_LOAD_GENERATORS contract)"
                 )
-            summary = regenerate(mod_state)
+            partial = not vanilla_files and label in PARTIAL_VANILLA_FILE_REGENERATORS
+            summary = regenerate(mod_state, vanilla_files=False) if partial else regenerate(mod_state)
             elapsed = time.monotonic() - t0
             warn_counts = {}
             if isinstance(summary, dict):
@@ -9213,10 +9227,10 @@ def _run_generator_chain(mod_state, generators) -> None:
 
 def _run_post_load_generators(mod_state, *, audits_only=False, vanilla_files=True):
     """Run the post-load chain. `vanilla_files=False` (no usable vanilla game
-    files; see _vanilla_files_unusable_reason) drops VANILLA_FILE_REGENERATORS
-    and records one
-    `vanilla_files_missing` warning naming everything skipped — including
-    generate_docs, which _load_mod_state skips for the same reason."""
+    files; see _vanilla_files_unusable_reason) drops VANILLA_FILE_REGENERATORS,
+    keeps PARTIAL_VANILLA_FILE_REGENERATORS off their raw-vanilla outputs, and
+    records one `vanilla_files_missing` warning naming everything skipped —
+    including generate_docs, which _load_mod_state skips for the same reason."""
     global _post_load_warnings, _post_load_wrote_files, _post_load_reparsed
     _post_load_warnings = []
     _post_load_wrote_files = []
@@ -9231,15 +9245,28 @@ def _run_post_load_generators(mod_state, *, audits_only=False, vanilla_files=Tru
             [] if audits_only else
             [label for label, _ in POST_LOAD_REGENERATORS if label in VANILLA_FILE_REGENERATORS]
         )
+        partial = {} if audits_only else {
+            label: list(outputs)
+            for label, outputs in PARTIAL_VANILLA_FILE_REGENERATORS.items()
+        }
+        detail = (
+            f"{_vanilla_files_unusable_reason() or 'vanilla game files unusable'}, "
+            f"so skipped {', '.join(skipped)}: they read those files "
+            "directly, and vanilla_parsed/ holds only the parsed data. "
+            "Their outputs on disk were left as they were, not regenerated."
+        )
+        if partial:
+            detail += (
+                " Also left as committed (cut from raw vanilla text; the rest of "
+                "the generator ran from parsed vanilla): "
+                + "; ".join(f"{label}: {', '.join(outs)}" for label, outs in partial.items())
+                + "."
+            )
         _post_load_warnings.append({
             "label": "vanilla_files_missing",
-            "detail": (
-                f"{_vanilla_files_unusable_reason() or 'vanilla game files unusable'}, "
-                f"so skipped {', '.join(skipped)}: they read those files "
-                "directly, and vanilla_parsed/ holds only the parsed data. "
-                "Their outputs on disk were left as they were, not regenerated."
-            ),
+            "detail": detail,
             "skipped": skipped,
+            "partially_skipped": partial,
         })
         logger.warning(f"[post-load WARN] {_post_load_warnings[-1]['detail']}")
     if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
@@ -9250,7 +9277,7 @@ def _run_post_load_generators(mod_state, *, audits_only=False, vanilla_files=Tru
         _run_generator_chain(mod_state, POST_LOAD_AUDITS)
     else:
         before = _snapshot_mod_text_files()
-        _run_generator_chain(mod_state, regenerators)
+        _run_generator_chain(mod_state, regenerators, vanilla_files=vanilla_files)
         _post_load_wrote_files = _changed_files(before, _snapshot_mod_text_files())
         if _post_load_wrote_files:
             logger.info(
