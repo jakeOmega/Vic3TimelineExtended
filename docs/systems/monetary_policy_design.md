@@ -1963,7 +1963,12 @@ doubles it (1.24).
 #### Owner decisions to review (§0.13)
 
 1. **F6** above: drop the lost-credibility modifier on the fiat path, or keep it as a price for
-   leaving gold.
+   leaving gold. **It is path-dependent as shipped:** only `te_peg.3`'s option removes it. A
+   country that enacts Fiat Money through the law panel mid-suspension (which fiat's +300 while
+   suspended now encourages in the AI) keeps both timed modifiers, as §0.5's deferred list already
+   says of any law change mid-suspension, and pays the +1pp for the rest of the ten years. If F6
+   stands, the same `remove_modifier` belongs in step 10's "the LAW itself gone" branch; if not,
+   it comes out of `te_peg.3`.
 2. **Defend in a slump that does not end.** Defend's +40 is gone in about 13 months at −3, so in a
    slump the peg itself is prolonging the 24-month cooldown sets the cadence: a crisis every two
    years until the country suspends, devalues or the slump lifts. Defend is unchanged, as ruled;
