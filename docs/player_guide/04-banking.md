@@ -713,8 +713,8 @@ beneath), and it leaves first, at double speed, once your rate is no longer
 above the world's. Recapitalise the Bank moves a tenth of the reserve's limit
 from treasury to vault, in cash, for good.
 
-Peg Confidence (0 to 100) reacts to your rate only while the vault is under a
-tenth of its limit:
+Peg Confidence (0 to 100) reacts to your rate while the vault is under a tenth
+of its limit:
 
 | While the vault is low | Peg Confidence a month |
 |---|---|
@@ -735,14 +735,28 @@ faster it comes back:
 | 40 to 69 (Watched) | +2 |
 | 70 or more (Trusted) | +1 |
 
-An overvalued currency drains it at any time and stops the recovery. At 20, The
-Run on the Vault fires:
+An overvalued currency drains it at any time and stops the recovery. So does a
+deep slump: a Downturn or Panic while your Policy Stance reads Tight or Very
+Tight costs 3 a month however full the vault is, because the peg is holding your
+rate up while the economy sinks. From full confidence that reaches 20 in a little
+over two years. Peg Defence holds the World Rate whatever the cycle does, so a
+bank left on it rides a long slump down to the run unless you cut the rate and
+pay for it in gold. At 20, The Run on the Vault fires:
 
 | Option | Effect |
 |---|---|
 | Defend the peg: "Raise the rate until the gold comes back." | For a year the rate target stays at least 4 points above the World Rate; Peg Confidence +40 |
-| Suspend convertibility: "Suspend payment in gold. For the duration." | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten |
+| Suspend convertibility: "Suspend payment in gold. For the duration." | Five years as a paper currency with a free rate; +2 points of risk premium for five years; gold's credit-standing bonus lost for ten, or until you leave gold; then the choice below |
 | Devalue: "The peg holds. The price of gold does not." | The vault gains 15% of its limit, Peg Confidence resets to 50, the exchange-rate index drops to 88 and recovers over five years; prices rise; the great powers resent it |
+
+When the five years are up, The Suspension Lapses asks what the currency is now.
+The currency stays suspended until you answer; left unanswered for three months,
+the event restores convertibility by itself:
+
+| Option | Effect |
+|---|---|
+| Restore convertibility | Back on gold at the old parity; Peg Confidence starts at 50 |
+| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; greyed out otherwise |
 
 ### The exchange-rate index and capital controls
 
@@ -856,7 +870,10 @@ board.
 
 AI countries always delegate. They run Peg Defence on a convertible gold
 standard, Growth at war or with debt at half their credit limit, and Price
-Stability otherwise. They print money only at war with heavy debt and stop
+Stability otherwise. Once Fiat Money is open to them they stop favoring gold and
+lean toward fiat, more so in later eras, in deflation and while convertibility
+is suspended; at the end of a suspension they keep the paper more often the
+later the era and the deeper the slump. They print money only at war with heavy debt and stop
 gradually afterwards, and a gold-standard AI tops up its vault when it is under
 a quarter full and the treasury is flush.
 

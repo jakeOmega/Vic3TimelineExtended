@@ -2904,6 +2904,17 @@ te_monetary_apply_interest_modifiers = {
 # gap is >= 0 and no borrowed gold is waiting to leave, and otherwise holds
 # (ruling Q10).
 #
+# A DEEP SLUMP DRAINS IT WHATEVER THE VAULT HOLDS (2026-10-05, the 1931
+# analogue). Peg defence follows the world rate and ignores the domestic cycle
+# by design (§6), so in a long slump the neutral rate falls under the rate the
+# peg needs and the stance stays tight for as long as the slump lasts — while
+# the vault, and so confidence, stay healthy, and te_peg.1 never comes. While
+# te_mon_peg_in_deep_slump holds (a Downturn or a Panic with the stance Tight or
+# Very Tight), confidence loses te_mon_peg_slump_drain (3) a month and the heal
+# holds, as it does for overvaluation: about two years from a trusted peg to
+# the crisis. For player and AI alike — the trigger reads only the cycle and the
+# displayed stance.
+#
 # THE FISCAL LINK IS RECAPITALISATION, and it runs one way. The dashboard's
 # button (op 13, te_mon_effect_recapitalise_bank) moves te_mon_bank_recap_amount
 # from the treasury into the vault; the AI does the same here, a step a month,
@@ -2917,11 +2928,19 @@ te_monetary_apply_interest_modifiers = {
 #
 # THE THREE CLOCKS tick here, once a pulse, AFTER everything that reads them:
 # te_peg_crisis_cooldown, te_peg_defend_months (te_mon_target_min reads it) and
-# te_peg_suspended_months (te_mon_is_on_gold reads it). When the suspension
-# runs out convertibility resumes at te_mon_peg_devalue_confidence (50).
+# te_peg_suspended_months (te_mon_is_on_gold reads it). THE SUSPENSION'S LAST
+# MONTH IS A QUESTION, NOT A TICK (2026-10-05): the counter stops at 1 and
+# te_peg.3 asks whether to resume convertibility (at
+# te_mon_peg_devalue_confidence, 50 — what used to happen here by itself) or to
+# make the paper currency permanent with Fiat Money. The country stays suspended
+# until an option answers; te_peg_resume_asked (120 days, beyond the event's
+# three-month life) keeps it from being asked twice and lets a question that was
+# lost — a revolution's winner holds the counter but not the event — be asked
+# again. Only te_peg.3's options take the counter from 1 to 0.
 #
 # OFF GOLD. Borrowed gold goes home out of the VAULT (never the treasury) and
-# confidence resets; a SUSPENSION freezes vault, balance and confidence alike,
+# confidence resets, and with the LAW gone the suspension's lost-credibility
+# modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
 # because suspending convertibility is refusing to pay gold out. Either way
 # the carry stops: no peg, no foreign balances held against it.
 #
@@ -3059,6 +3078,9 @@ te_monetary_update_gold = {
 				# [P4] An overvalued peg counts as under pressure for ruling
 				# Q10: the heal holds, instead of netting the drain below away.
 				te_mon_fx_is_overvalued = no
+				# ...and so does a deep slump (2026-10-05), for the same reason:
+				# +1 a month against its 3 would stretch two years into three.
+				te_mon_peg_in_deep_slump = no
 			}
 			change_variable = { name = te_peg_confidence add = te_mon_peg_confidence_heal }
 		}
@@ -3072,6 +3094,15 @@ te_monetary_update_gold = {
 		if = {
 			limit = { te_mon_fx_is_overvalued = yes }
 			change_variable = { name = te_peg_confidence subtract = te_mon_fx_overvaluation_drain }
+		}
+		# The SIXTH term (2026-10-05): a deep slump the peg is holding up,
+		# beside the two above and adding to them — independent of the vault,
+		# like overvaluation. The banking dashboard's Peg Confidence tooltip
+		# states it (banking_dash_mon_pegconf_tt), since a change_variable draws
+		# nothing of its own.
+		if = {
+			limit = { te_mon_peg_in_deep_slump = yes }
+			change_variable = { name = te_peg_confidence subtract = te_mon_peg_slump_drain }
 		}
 		# [P5] A swap line lends peg confidence (§15A.2 — §15's old open question,
 		# answered yes): under gold it IS reserve lending.
@@ -3129,11 +3160,24 @@ te_monetary_update_gold = {
 		# The LAW itself gone: a suspension or a defence of a peg that no
 		# longer exists is nothing, and the vault is counted afresh if the
 		# country ever enacts the gold standard again.
+		#
+		# So is the suspension's lost credibility (2026-10-05): the modifier is
+		# the exact inverse of the gold law's -1pp credit standing, so with no
+		# gold law it would be a standing +1pp of its own. Removed here, on
+		# every route off gold — the law panel, a regime change, te_peg.3's
+		# Fiat Money option (which also removes it at once) — so the price of
+		# leaving does not depend on the road. The +2pp te_mon_peg_suspension
+		# still runs out its own clock: that is the premium for having
+		# suspended at all, not a gold bonus withheld.
 		if = {
 			limit = { NOT = { has_law_or_variant = law_type:law_gold_standard } }
 			set_variable = { name = te_peg_suspended_months value = 0 }
 			set_variable = { name = te_peg_defend_months value = 0 }
 			set_variable = { name = te_bank_gold_seeded value = 0 }
+			if = {
+				limit = { has_modifier = te_mon_peg_credibility_lost }
+				remove_modifier = te_mon_peg_credibility_lost
+			}
 		}
 	}
 
@@ -3177,14 +3221,22 @@ te_monetary_update_gold = {
 		limit = { var:te_peg_defend_months > 0 }
 		change_variable = { name = te_peg_defend_months subtract = 1 }
 	}
+	# The suspension counts down to 1 and stops there: its last month belongs to
+	# te_peg.3, whose options are the only writers that take it to 0 (resume
+	# convertibility, or enact Fiat Money). Off gold altogether the `else` above
+	# has already zeroed it, so a lapsed law never asks.
 	if = {
-		limit = { var:te_peg_suspended_months > 0 }
+		limit = { var:te_peg_suspended_months > 1 }
 		change_variable = { name = te_peg_suspended_months subtract = 1 }
-		if = {
-			limit = { var:te_peg_suspended_months <= 0 }
-			set_variable = { name = te_peg_suspended_months value = 0 }
-			set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
+	}
+	else_if = {
+		limit = {
+			var:te_peg_suspended_months > 0
+			NOT = { has_variable = te_peg_resume_asked }
 		}
+		set_variable = { name = te_peg_suspended_months value = 1 }
+		set_variable = { name = te_peg_resume_asked value = 1 days = 120 }
+		trigger_event = { id = te_peg.3 }
 	}
 }
 

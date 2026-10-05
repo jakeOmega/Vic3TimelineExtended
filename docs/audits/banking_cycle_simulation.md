@@ -24,7 +24,7 @@ it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday sto
 momentum bounce (`--holiday`, `--tune pre_holiday`). §20 (2026-10-05) traces §18's gold capital-controls
 crashes to cells no AI runs and leaves the AI's weights alone (`--tune cc_cost=0`, `cc_damp=1`, `cc_weak=0`).
 §21 (2026-10-05) measures Cooperative Ownership for the first time, with an interim arm posted on #720, and
-retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). Every table states which script it measured.
+retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). §24 (2026-10-05) measures the gold peg's deep-slump drain and ports `te_peg.1` (`--peg-slump`). Every table states which script it measured.
 
 ---
 
@@ -2189,3 +2189,88 @@ PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --year
 PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
   --seed 20260922 --only fiat --points 8 --economy coop --hold-tools cw_capital_plan,cw_credit --pool --jobs 4
 ```
+
+---
+
+## 24. The gold peg's deep-slump drain (2026-10-05)
+
+**The question.** An AI-only observer game to 2015 left 124 of 175 countries on gold, some of them
+in slumps that lasted years with Peg Confidence at 100. Peg defence follows the world rate and
+ignores the domestic cycle (design §6); when a slump drags the neutral rate under the world rate the
+stance stays Tight, momentum stays negative, and nothing ends it, because confidence fell only when
+the vault was nearly empty and peg defence keeps the vault full. The fix (design §0.13) drains
+`te_peg_confidence` by `te_mon_peg_slump_drain` (3) a month, and holds the recovery, while
+`te_mon_peg_in_deep_slump` holds: a Downturn or Panic with `te_mon_stance_band` 4 or 5. This section
+picks the definition and the size, and asks how often it fires in an ordinary century.
+
+**What was ported.** `monetary_update_gold` gains the drain and the hold on the heal
+(`--tune slump_drain=0` is the script before it), and `te_peg.1` behind its 24-month cooldown,
+resolved as *Defend* (its default option: the world + 4 floor for a year, confidence +40), but only
+with `Config.peg_crisis`, so the century matrix's gold cells read as before. `--tune slump_def=`
+`tight` (shipped), `very_tight`, `sustained` (Tight, with step 8b's stance counter — ported for
+this — at 6 or more, as §13's Dear Money Politics needs), `deflation` or `either` makes another
+candidate the active one.
+`--tune growth_fb_scale=N` sets `--growth-feedback`'s invented coefficient (1.5).
+
+**The fidelity limit.** In game the standing tight gap comes from the growth term: a slump cuts
+trailing GDP growth, the term reaches −1.5, and the neutral rate falls under the peg. This simulator's
+growth is an AR(1) that ignores the cycle unless `--growth-feedback` is on, and its coefficient is
+invented, so it cannot reproduce that case; the three arms below bracket it and the strong one (6) is
+a sensitivity read, not a measurement. What it does measure well is the false-positive rate: how
+often an ordinary century's downturns trip the condition.
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --peg-slump --runs 400
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --peg-slump --runs 200 --peg-slump-cells peg:2 --tune slump_drain=2   # and =4
+```
+
+**How often each candidate holds** (% of months, gold with a bank on peg defence, 2 points, drain off,
+400 centuries an arm):
+
+| growth coupling | Tight (shipped) | Very Tight | sustained Tight | Deflation | Tight or Deflation | Downturn + Panic |
+|---|---:|---:|---:|---:|---:|---:|
+| none (default) | 3.16 | 0.91 | 2.38 | 1.45 | 3.38 | 9.9 |
+| 1.5 | 3.61 | 1.27 | 2.86 | 2.03 | 3.87 | 10.1 |
+| 6 | 5.94 | 3.50 | 5.19 | 4.11 | 6.10 | 12.1 |
+
+**What the drain does** (same cells; `te_peg.1` a century, of which first falls from a peg at 95 or
+more, and the median months from that 95 to the crisis):
+
+| growth coupling | drain | crises / century | first falls / century | runs with one | months from 95+ | crashes / century |
+|---|---|---:|---:|---:|---:|---:|
+| none | off | 0 | 0 | 0% | — | 12.8 |
+| none | **Tight, 3** | **0.61** | **0.21** | 19% | 26 | 12.7 |
+| none | Very Tight, 3 | 0.31 | 0.10 | 10% | 26 | 12.8 |
+| none | sustained Tight, 3 | 0.58 | 0.20 | 18% | 26 | 12.7 |
+| none | Deflation, 3 | 0.52 | 0.21 | 20% | 26 | 12.8 |
+| 1.5 | off | 0 | 0 | 0% | — | 12.4 |
+| 1.5 | **Tight, 3** | **1.27** | **0.28** | 26% | 26 | 12.3 |
+| 6 | off | 0 | 0 | 0% | — | 11.9 |
+| 6 | **Tight, 3** | **4.24** | **0.47** | 43% | 26 | 11.3 |
+
+Drain 2 and 4 on the shipped condition (200 centuries an arm): 0.28 / 0.91 / 3.21 and 1.24 / 1.95 /
+6.04 crises a century for the three couplings.
+
+**Reading it.**
+
+- **A crisis from a trusted peg comes only after two unbroken years of deep slump**: 26 months in
+  every arm, which is ⌈(95 − 20) / 3⌉. The condition rarely flickers once it starts, so the drain
+  behaves like the design table (27 months from 100) rather than a slow leak through ordinary
+  downturns.
+- **In an ordinary century it fires about once in five centuries from trust** (0.21) and in 19% of
+  runs at all. The repeats, which take the total to 0.61, are the port always choosing *Defend* in a
+  slump Defend cannot end: its +40 lasts about 13 months against −3, and the cooldown sets the next
+  one at 24. In game an AI also suspends or devalues, so these are an upper bound.
+- **Tight is the leg that matters.** A fixed nominal rate in deflation reads Tight already, so the
+  Deflation band adds 0.2 points of months to it and, alone, catches downturns the peg is not
+  prolonging. Very Tight alone halves the rate but would let a gap that reads 1.9 one month and 2.1
+  the next drain every other month. Requiring six months of Tight first changed almost nothing.
+- **Crash rates do not move** (within 0.1 to 0.6 a century, inside noise at this sample).
+
+**Found on the way, not changed.** The port also makes the vault road visible. A gold country whose
+bank runs **Price Stability** — the mandate a player's bank is seeded with — reaches `te_peg.1`
+about 15 times a century (4.6 of them from a trusted peg, six months after it starts falling),
+with or without the drain: its mandate cuts below the world rate in every slump and empties the
+vault. Its stance in a slump is loose, so the drain never applies to it. The AI always runs peg
+defence and is unaffected. Reported to the owner with the drain (design §0.13); nothing here
+changes it.

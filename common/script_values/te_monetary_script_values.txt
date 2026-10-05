@@ -275,7 +275,10 @@
 # every variable below, with ONE documented exception: the convertibility
 # crisis te_peg.1 (events/te_peg_events.txt) writes te_peg_confidence,
 # te_peg_defend_months and te_peg_suspended_months in its options, because
-# §12.3 defines those options AS a jump in confidence and the start of a clock.
+# §12.3 defines those options AS a jump in confidence and the start of a clock
+# — and its sequel te_peg.3 (2026-10-05) writes te_peg_suspended_months and
+# te_peg_confidence when it ends that clock, resuming at 50 or moving to fiat.
+# te_peg.1 also keeps one flag of its own, te_peg_crisis_slump (below).
 # (te_debug_monetary.8 is the console-only writer, as .5 and .7 are for phase 2.)
 # NONE OF THIS IS HIDDEN STATE: every figure is built from displayed ones — the
 # policy rate, expected inflation, GDP, the treasury — and none carries r*.
@@ -347,7 +350,20 @@
 #   te_peg_suspended_months 0 to 60                 months left of a suspension of
 #                                                   convertibility; > 0 makes
 #                                                   te_mon_is_on_gold false, which
-#                                                   is the whole regime switch
+#                                                   is the whole regime switch.
+#                                                   Step 10 stops it at 1 and asks
+#                                                   te_peg.3; only that event's
+#                                                   options take it to 0
+#   te_peg_resume_asked     1, 120 days             te_peg.3 has been sent for this
+#                                                   suspension. Timed past the
+#                                                   event's three-month life, so a
+#                                                   lost question is asked again
+#   te_peg_crisis_slump     1, 120 days             written by te_peg.1's own
+#                                                   `immediate`, not step 10: the
+#                                                   crisis came by the slump road
+#                                                   with the vault able to pay, so
+#                                                   its desc and flavour say so
+#                                                   whenever the event is opened
 #
 #   global_var:te_world_rate            the world rate (§12.1), once a month
 #   global_var:te_world_rate_acc_num    its two accumulators, reset every call
@@ -3301,6 +3317,19 @@ te_mon_peg_heal_trusted = {
 # the dashboard as "let the vault run dry to regain trust faster".
 te_mon_peg_pressure_heal = {
 	value = 2
+}
+
+# A DEEP SLUMP DRAINS CONFIDENCE, whatever the vault holds (2026-10-05, the 1931
+# analogue). te_mon_peg_in_deep_slump (te_monetary_triggers.txt) says when; this
+# is how much a month. Step 10 holds the recovery for as long as the slump lasts,
+# so the drain is the whole monthly move for a healthy vault, and a peg reaches
+# the crisis threshold (20) in (C - 20) / 3 months: 27 from Trusted at 100, 17
+# from 70, 10 from a fresh resumption or devaluation at 50. A swap line's +2
+# still applies (net -1 a month, 80 months from 100), and overvaluation's drain
+# stacks on top. Tuning table and the simulator read: monetary_policy_design.md
+# §12.3, "The slump drain".
+te_mon_peg_slump_drain = {
+	value = 3
 }
 
 # This month's recovery, for whichever band confidence is in. Read by step 10

@@ -65,7 +65,12 @@
 #       trackers are the winner's own and describe the winner's own modifiers,
 #       so leaving them alone is what lets the next pulse swap every modifier
 #       from the copied state correctly; copying the loser's tracker without the
-#       loser's modifier is exactly audit F7's bug.
+#       loser's modifier is exactly audit F7's bug. Nor the events' 120-day
+#       flags (te_lolr_answer / _paid, te_peg_crisis_slump,
+#       te_peg_resume_asked): they describe an event the loser holds. A winner
+#       still suspended in the last month is asked te_peg.3 afresh at its next
+#       pulse — or, if the engine's own inheritance carried the flag across,
+#       once it lapses.
 #   (e) ARRANGEMENTS, TAKEN FROM THE LOSER AND RE-VALIDATED: the anchor and its
 #       kind, the swap line, the guarantee and the receivership, then
 #       te_mon_arr_scan = 1 so step 1c's discovery re-derives them next pulse
@@ -340,12 +345,15 @@ te_monetary_inherit_central_bank = {
 	# Skipped if the winner somehow already carries its own.
 	#
 	# SUSPENSION (1825 days = 60 months, set beside te_peg_suspended_months = 60):
-	# the counter IS its remaining time. A counter at 0 beside a live modifier
-	# means one of two things, told apart by the loser's law. Still on gold: the
-	# suspension ran its course at the last pulse and the modifier has days
-	# left, so it is not re-added. Off gold: step 10 zeroed the counter because
-	# the gold LAW went, the modifier runs on, and its remaining time lies
-	# anywhere in the 60 months — 30 is the middle.
+	# the counter IS its remaining time. It stops at 1 while te_peg.3 is asked
+	# (2026-10-05), so a 1 is the last month or a little past it, and the
+	# winner, which inherits the counter but not the loser's event, is asked
+	# again once te_peg_resume_asked lapses. A counter at 0 beside a live
+	# modifier means one of two things, told apart by the loser's law. Still on
+	# gold: te_peg.3 resumed convertibility and the modifier has days left, so
+	# it is not re-added. Off gold: step 10 zeroed the counter because the gold
+	# LAW went (or te_peg.3 enacted Fiat Money), the modifier runs on, and its
+	# remaining time lies anywhere in the 60 months — 30 is the middle.
 	if = {
 		limit = {
 			scope:te_cw_loser = { has_modifier = te_mon_peg_suspension }
@@ -372,6 +380,14 @@ te_monetary_inherit_central_bank = {
 	# left, so 30); still there means under 60 — 60 left if the suspension has
 	# just run its course on gold, and anywhere in 60-120 (so 90) if the gold
 	# law went.
+	#
+	# OFF GOLD IT IS SHORT-LIVED (2026-10-05). Step 10 removes this modifier
+	# from any country without the gold law, so a loser off gold carries it
+	# only in the month its law changed, and a winner off gold loses the copy
+	# made here at its next pulse, like anyone else off gold. The off-gold
+	# branches therefore matter only for a winner whose laws are back on gold,
+	# where the copy is right: it is the bonus that winner's gold law would
+	# otherwise pay.
 	if = {
 		limit = {
 			scope:te_cw_loser = { has_modifier = te_mon_peg_credibility_lost }
