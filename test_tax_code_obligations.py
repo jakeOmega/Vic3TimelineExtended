@@ -298,10 +298,20 @@ class FeasibilityTest(unittest.TestCase):
         self.assertEqual(norm(block(self.triggers, "te_tax_obl_is_maintenance")),
                          "te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }")
         # The two budget kinds read the fiscal record of the 1st (final review A-I2).
-        for kind, body in ((1, "te_tax_obl_inst_level_$ARG$ >= $TARGET$"), (2, "te_tax_fisc_rec_bur_ok = yes"),
-                           (3, "NOT = { te_tax_obl_wages_above_$ARG$ = yes }"), (4, "te_tax_fisc_rec_surplus = yes")):
+        # Kinds that need neither argument name them where they never run: the
+        # dispatcher passes both to every kind, and the engine refuses a call
+        # that passes an argument the body never names (2026-10-05 log).
+        unused = "trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }"
+        for kind, body in ((1, "te_tax_obl_inst_level_$ARG$ >= $TARGET$"),
+                           (2, f"te_tax_fisc_rec_bur_ok = yes {unused}"),
+                           (3, "NOT = { te_tax_obl_wages_above_$ARG$ = yes } "
+                               "trigger_if = { limit = { always = no } $TARGET$ >= 0 }"),
+                           (4, f"te_tax_fisc_rec_surplus = yes {unused}")):
             with self.subTest(kind=kind):
-                self.assertEqual(norm(block(self.triggers, f"te_tax_obl_is_maintenance_{kind}")), body)
+                helper = norm(block(self.triggers, f"te_tax_obl_is_maintenance_{kind}"))
+                self.assertEqual(helper, body)
+                self.assertIn("$ARG$", helper)
+                self.assertIn("$TARGET$", helper)
 
     def test_kind_3_is_a_cut_not_a_restraint(self):
         body = norm(block(self.triggers, "te_tax_obl_feasible_3"))
