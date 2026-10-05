@@ -1051,6 +1051,13 @@ REPLACE_OR_CREATE:pmg_principle_advanced_research_3 = {
 
 REPLACE_OR_CREATE:pmg_base_building_space_program = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	# Every mission's goods are a cost and its output is country modifiers
+	# only, so under the default most_profitable the AI kept the least-loss
+	# mission, Earth Orbit, and no AI got past Orbital Flight. Vanilla gives
+	# most_productive to every building of that kind (university, government
+	# administration, every monument). The te_decision_space_mission_*
+	# decisions also advance the mission (extra_decisions.txt).
+	ai_selection = most_productive
 	production_methods = {
 		pm_earth_orbit
 		pm_moon_mission

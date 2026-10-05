@@ -5016,6 +5016,7 @@
  te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
  te_debug_space_race.1.j:0 "Fire a real setback event on my most advanced running milestone"
  te_debug_space_race.1.k:0 "Have the two most prestigious other powers both report Suborbital Flight (popups arrive in 14 days)"
+ te_debug_space_race.1.l:0 "Remove my $building_space_program$ (to try the decision that founds one; every running milestone fails)"
  te_debug_space_race.1.t:0 "Space Race Test Console"
  te_debug_space_race.1.z:0 "Close"
 

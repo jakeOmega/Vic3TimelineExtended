@@ -786,3 +786,106 @@ sr_rival_est_open_solar_colonization = {
 	min = 0
 	max = 1
 }
+
+# ======= Space Program mission bills (AI decisions) =======
+# The weekly Launch Capacity bill of each mission at full staffing, for the AI
+# weights of te_decision_found_space_program and te_decision_space_mission_*
+# (common/decisions/extra_decisions.txt). An estimate: an understaffed
+# programme buys less.
+#
+# Units: goods_input_launch_capacity_add of each production method
+# (extra_pms.txt); test_space_program_decisions.py holds them equal.
+sr_mission_units_earth_orbit = 500
+sr_mission_units_moon = 1500
+sr_mission_units_mars = 5000
+sr_mission_units_solar = 25000
+sr_mission_units_deep_space = 50000
+sr_mission_units_interstellar = 100000
+
+# Our market's Launch Capacity price, never below the base price: the AI
+# should not plan on a glut lasting (st_res_grain_price_up's shape).
+sr_launch_capacity_price_up = {
+	value = 0
+	market = {
+		mg:launch_capacity = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+}
+
+sr_launch_capacity_unit_price = {
+	value = 1
+	g:launch_capacity = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = sr_launch_capacity_price_up
+	}
+}
+
+# The mission the programme runs now, as its weekly units (0 without one).
+# Each mission carries every lower mission's bool, so the highest bool held
+# names it.
+sr_mission_units_current = {
+	value = 0
+	if = {
+		limit = { modifier:country_sr_interstellar_mission_program_bool = yes }
+		add = sr_mission_units_interstellar
+	}
+	else_if = {
+		limit = { modifier:country_sr_deep_space_exploration_program_bool = yes }
+		add = sr_mission_units_deep_space
+	}
+	else_if = {
+		limit = { modifier:country_sr_solar_colonization_program_bool = yes }
+		add = sr_mission_units_solar
+	}
+	else_if = {
+		limit = { modifier:country_sr_mars_mission_program_bool = yes }
+		add = sr_mission_units_mars
+	}
+	else_if = {
+		limit = { modifier:country_sr_moon_mission_program_bool = yes }
+		add = sr_mission_units_moon
+	}
+	else_if = {
+		limit = { modifier:country_sr_earth_orbit_program_bool = yes }
+		add = sr_mission_units_earth_orbit
+	}
+}
+
+# Founding: the whole Earth Orbit bill.
+sr_mission_bill_earth_orbit = {
+	value = sr_mission_units_earth_orbit
+	multiply = sr_launch_capacity_unit_price
+}
+
+# Switching up: only the increase, since net_fixed_income already pays the
+# mission the programme runs now.
+sr_mission_bill_increase_moon = {
+	value = sr_mission_units_moon
+	subtract = sr_mission_units_current
+	multiply = sr_launch_capacity_unit_price
+}
+sr_mission_bill_increase_mars = {
+	value = sr_mission_units_mars
+	subtract = sr_mission_units_current
+	multiply = sr_launch_capacity_unit_price
+}
+sr_mission_bill_increase_solar = {
+	value = sr_mission_units_solar
+	subtract = sr_mission_units_current
+	multiply = sr_launch_capacity_unit_price
+}
+sr_mission_bill_increase_deep_space = {
+	value = sr_mission_units_deep_space
+	subtract = sr_mission_units_current
+	multiply = sr_launch_capacity_unit_price
+}
+sr_mission_bill_increase_interstellar = {
+	value = sr_mission_units_interstellar
+	subtract = sr_mission_units_current
+	multiply = sr_launch_capacity_unit_price
+}

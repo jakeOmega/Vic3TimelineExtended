@@ -725,6 +725,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # in MISCELLANEOUS while their `_desc` fell to CONCEPTS.
     if key.startswith("nd_taboo_"):
         return "MISCELLANEOUS"
+    # The mod's decisions that place or advance a system's building
+    # (Establish a Strategic Reserve, Found a Space Program, the space
+    # missions): names, `_desc` halves and their tooltips. Four-token names
+    # would land in MISCELLANEOUS and their `_desc` halves in CONCEPTS.
+    if key.startswith("te_decision_"):
+        return "MISCELLANEOUS"
     # Internal resettlement (the Settlement Authority): static modifiers,
     # tooltips and the Declaration splice line. Four-token names would land in
     # MISCELLANEOUS and their `_desc` halves in CONCEPTS; two- and three-token
