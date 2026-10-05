@@ -432,6 +432,7 @@ te_debug_un_wipe_entry = {
 	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_cost }
 	te_debug_un_drop = { MODIFIER = un_development_contributor_modifier }
 	te_debug_un_drop = { MODIFIER = un_development_contributor_cost }
+	te_debug_un_drop = { MODIFIER = un_development_patron_modifier }
 	te_debug_un_drop = { MODIFIER = un_human_rights_champion_modifier }
 	te_debug_un_drop = { MODIFIER = un_arms_control_participant_modifier }
 	te_debug_un_drop = { MODIFIER = un_champion_order_cost }
@@ -492,6 +493,7 @@ te_debug_un_drop = {
 
 # Every country's UN AI scores to debug.log (common/script_values/un_ai_values.txt):
 # the membership, dues, Development Programs and peacekeeping wills, the
+# Development Programs generosity and the size given, the
 # order stance (champion at +20, undermine at -20), the
 # Fund prospect as a share of GDP and the money term, and whether it is a
 # member. Read the lines with the log-triage skill's /logs request. The lines
@@ -509,6 +511,8 @@ te_debug_un_log_ai_scores = {
 		set_variable = { name = te_dbg_un_m value = un_ai_membership_will }
 		set_variable = { name = te_dbg_un_d value = un_ai_dues_will }
 		set_variable = { name = te_dbg_un_dev value = un_ai_development_will }
+		set_variable = { name = te_dbg_un_dev_gen value = un_ai_development_generosity }
+		set_variable = { name = te_dbg_un_dev_size value = un_dev_fund_size_value }
 		set_variable = { name = te_dbg_un_pk value = un_ai_peacekeeping_will }
 		set_variable = { name = te_dbg_un_order value = un_ai_order_will }
 		set_variable = { name = te_dbg_un_conv value = un_ai_convention_terms }
@@ -520,11 +524,13 @@ te_debug_un_log_ai_scores = {
 				multiply = 100
 			}
 		}
-		debug_log = "UN_AI_SCORES: [SCOPE.sCountry('te_debug_un_c').GetName] member=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_member').GetValue] membership=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_m').GetValue] dues=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_d').GetValue] development=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev').GetValue] peacekeeping=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_pk').GetValue] order_stance=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_order').GetValue] conventions=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_conv').GetValue] money=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_money').GetValue] fund_prospect_pct_gdp=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_prospect').GetValue]"
+		debug_log = "UN_AI_SCORES: [SCOPE.sCountry('te_debug_un_c').GetName] member=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_member').GetValue] membership=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_m').GetValue] dues=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_d').GetValue] development=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev').GetValue] dev_generosity=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev_gen').GetValue] dev_size=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev_size').GetValue] peacekeeping=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_pk').GetValue] order_stance=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_order').GetValue] conventions=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_conv').GetValue] money=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_money').GetValue] fund_prospect_pct_gdp=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_prospect').GetValue]"
 		remove_variable = te_dbg_un_member
 		remove_variable = te_dbg_un_m
 		remove_variable = te_dbg_un_d
 		remove_variable = te_dbg_un_dev
+		remove_variable = te_dbg_un_dev_gen
+		remove_variable = te_dbg_un_dev_size
 		remove_variable = te_dbg_un_pk
 		remove_variable = te_dbg_un_order
 		remove_variable = te_dbg_un_conv

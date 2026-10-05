@@ -55,3 +55,35 @@ country_un_authority_target_add = {
 	decimals = 2
 	script_only = yes
 }
+
+# How well this country lobbies the General Assembly: its campaigns move a
+# member's vote this much faster and further, and a member weighing a vote
+# commitment it asks for counts the same share in its favour
+# (un_lobby_accept_points_per_effectiveness a whole 100%). Negative values
+# make it a worse lobbyist. Kept free of any one source so that laws,
+# institutions, rank or infamy can carry it later.
+# Granted by: nothing yet.
+# Read by:
+#   - un_lobbying_values.txt (un_lobby_campaign_effectiveness: a campaign's
+#     monthly step and cap; un_lobby_accept_general_value: the pledge
+#     actions' acceptance line in common/diplomatic_actions/un_lobbying.txt).
+country_un_lobbying_mult = {
+	color = good
+	percent = yes
+	script_only = yes
+}
+
+# The same, but only with members the World Development Fund pays a grant
+# (un_dev_fund_receiving): added to country_un_lobbying_mult when the member
+# lobbied draws one.
+# Granted by:
+#   - un_development_patron_modifier (extra_modifiers.txt), on a
+#     contributor's journal entry, scaled by var:un_dev_fund_patron: what the
+#     recipients remember of its Development Programs contributions
+#     (un_dev_fund_patron_pulse, un_economy_effects.txt).
+# Read by: the same two values, when the member lobbied draws a grant.
+country_un_lobbying_fund_recipients_mult = {
+	color = good
+	percent = yes
+	script_only = yes
+}

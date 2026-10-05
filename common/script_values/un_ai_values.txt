@@ -1,10 +1,11 @@
 ﻿# ============================================================================
 # THE UNITED NATIONS — HOW THE AI DECIDES TO JOIN, PAY AND CONTRIBUTE
 # ============================================================================
-# Read ONLY by the `ai_chance` blocks of twelve buttons in
+# Read ONLY by the `ai_chance` blocks of fourteen buttons in
 # common/scripted_buttons/un_buttons.txt: Join / Leave, Withhold / Pay dues,
-# Fund / Stop funding Development Programs, Contribute to / End peacekeeping,
-# Champion / Stop championing and Undermine / Stop undermining the order.
+# Fund / Stop funding Development Programs and Raise / Reduce its size,
+# Contribute to / End peacekeeping, Champion / Stop championing and
+# Undermine / Stop undermining the order.
 # Nothing here gates a player control. docs/systems/un_redesign_design.md §0.13
 # has the review behind it, with every other AI decision point and its verdict.
 #
@@ -61,6 +62,10 @@
 #   peacekeeping       un_ai_peacekeeping_will      20          -5   will - 10 (50)  -5 - will (50)
 #   champion           un_ai_order_will             20          -5   will - 10 (50)  -5 - will (50)
 #   undermine          un_ai_dissent_will           20          -5   will - 10 (50)  -5 - will (50)
+#
+# The size of a Development Programs contribution is a seventh pair on its own
+# score, un_ai_development_generosity, with a line per size held (§ Development
+# Programs below).
 #
 # The order and dissent scores are one stance, signed: un_ai_dissent_will is
 # minus un_ai_order_will. A power champions at +20 or more, undermines at -20
@@ -477,15 +482,34 @@ un_withhold_dues_ai_chance = {
 }
 
 # ---- Development Programs (the Fund's voluntary part) ------------------------------------
-# A contribution costs 0.5% of GDP a year and pays the Fund's grants
-# (un_dev_fund_contributor). It opens only while the Fund stands, to a major
-# power (un_fund_development_button). The owner (2026-10-03): most of the time
-# the AI should not give money without hope of larger gains, with humanitarian
-# leaders the exception. So a power gives for a humanitarian law, for
-# championing the order, or for recipients among its subjects, bloc partners
-# and allies, whose goodwill the grants buy; rank, a state-led economy and a
-# working UN only add to one of those, and fall short of the line alone
-# (5 + 5 + 5 = 15).
+# A contribution pays the Fund's grants (un_dev_fund_contributor). It opens
+# only while the Fund stands, to any member the Fund does not pay that pays its
+# dues (un_fund_development_button), and starts at Token, 0.125% of GDP a year.
+# The owner (2026-10-03): most of the time the AI should not give money
+# without hope of larger gains, with humanitarian leaders the exception. And
+# (2026-10-05): a contribution now buys infamy decay, prestige, standing and
+# goodwill with the recipients, so rich members are much more likely to give,
+# but typically only a token. So two scores:
+#   - WHETHER to give (un_ai_development_will, the usual pair): a humanitarian
+#     law, championing the order, recipients among our subjects, bloc
+#     partners and allies, wealth (GDP per head at or above the members'
+#     average, more at twice it) and a record to launder (infamy) start a
+#     Token contribution; rank, a state-led economy and a working UN only add
+#     to one of those. Laissez-faire weighs less than it did (-10, was -25):
+#     a token now pays its way.
+#   - HOW MUCH (un_ai_development_generosity): only the reasons to give beyond
+#     a token, the humanitarian law, championing and recipients among our own,
+#     less the treasury penalty. A contributor raises a size at
+#     un_ai_development_size_step per size it already gives (20 for Modest,
+#     40 for Substantial, 60 for Generous) and cuts back a band below the line
+#     of the size it holds, so a rich power with none of them stays at Token.
+#
+#   size pair (un_raise / un_reduce_development_button), by the size we hold:
+#   size held     raise at   reduce below
+#   Token (1)     20         -
+#   Modest (2)    40         -5
+#   Substantial   60         15
+#   Generous (4)  -          35
 
 un_ai_development_line = { value = 20 }
 un_ai_development_band = { value = 25 }
@@ -500,20 +524,25 @@ un_ai_development_will = {
 		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
 		add = 20
 	}
-	# PREV, not ROOT: the country whose will this is, also when the debug
-	# dump reads it from inside every_country (te_debug_un_log_ai_scores).
+	# un_economy_triggers.txt
 	if = {
-		limit = {
-			any_country = {
-				un_dev_fund_receiving = yes
-				OR = {
-					is_subject_of = PREV # REVIEWED 2026-10-03: PREV is the country whose will this is (the script value's scope before any_country)
-					is_in_same_power_bloc = PREV # REVIEWED 2026-10-03: as above
-					has_treaty_alliance_with = { TARGET = PREV } # REVIEWED 2026-10-03: as above
-				}
-			}
-		}
+		limit = { un_ai_development_recipients_among_ours = yes }
 		add = 15
+	}
+	# Wealth: each step flips on its own as GDP per head moves around the
+	# average, by 15 and then 10, inside the band.
+	if = {
+		limit = { un_dev_fund_rich = yes }
+		add = 25
+	}
+	else_if = {
+		limit = { un_dev_fund_above_average = yes }
+		add = 15
+	}
+	# A record to launder: a contribution speeds infamy's decay.
+	if = {
+		limit = { infamy >= infamy_threshold:notorious }
+		add = 10
 	}
 	if = {
 		limit = { country_rank >= rank_value:great_power }
@@ -534,7 +563,7 @@ un_ai_development_will = {
 	}
 	if = {
 		limit = { has_law_or_variant = law_type:law_laissez_faire }
-		add = -25
+		add = -10
 	}
 	if = {
 		limit = { has_law_or_variant = law_type:law_isolationism }
@@ -574,6 +603,70 @@ un_defund_development_ai_chance = {
 		limit = { un_ai_development_will < un_ai_development_stop_line }
 		add = un_ai_development_stop_line
 		subtract = un_ai_development_will
+		max = 50
+	}
+}
+
+# How much beyond a token: only the reasons to give generously.
+un_ai_development_size_step = { value = 20 }
+
+un_ai_development_generosity = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 20
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 20
+	}
+	if = {
+		limit = { un_ai_development_recipients_among_ours = yes }
+		add = 20
+	}
+	add = un_ai_treasury_penalty
+}
+
+# The generosity a contributor needs to raise from the size it holds: the
+# step per size held.
+un_ai_development_raise_line = {
+	value = un_dev_fund_size_value
+	multiply = un_ai_development_size_step
+}
+
+# Below this it cuts back: the band under the line it raised to the size it
+# holds at.
+un_ai_development_reduce_line = {
+	value = un_dev_fund_size_value
+	subtract = 1
+	multiply = un_ai_development_size_step
+	subtract = un_ai_development_band
+}
+
+un_raise_development_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			un_dev_fund_size_value >= 1
+			un_dev_fund_size_value < un_dev_fund_size_max
+			un_ai_development_generosity >= un_ai_development_raise_line
+		}
+		add = un_ai_development_generosity
+		subtract = un_ai_development_raise_line
+		add = 10
+		max = 50
+	}
+}
+
+un_reduce_development_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			un_dev_fund_size_value > 1
+			un_ai_development_generosity < un_ai_development_reduce_line
+		}
+		add = un_ai_development_reduce_line
+		subtract = un_ai_development_generosity
 		max = 50
 	}
 }

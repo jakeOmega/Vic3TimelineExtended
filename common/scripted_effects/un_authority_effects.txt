@@ -117,6 +117,8 @@ un_authority_monthly_update = {
 
 	# 3. Snapshot the pillars (and the shares the display explains them with).
 	set_global_variable = { name = un_member_power_share value = un_member_power_share_value }
+	set_global_variable = { name = un_funding_programmes_ratio value = un_funding_programmes_ratio_value }
+	set_global_variable = { name = un_funding_dev_money_ratio value = un_funding_dev_money_ratio_value }
 	set_global_variable = { name = un_funding_ratio value = un_funding_ratio_value }
 	# Dues (phase 5, un_dues_values.txt): who is withholding, and what the
 	# paying members pay a week together.

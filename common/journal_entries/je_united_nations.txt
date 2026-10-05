@@ -86,6 +86,8 @@
 	scripted_button = un_peacekeeping_mission_button
 	scripted_button = un_end_peacekeeping_button
 	scripted_button = un_fund_development_button
+	scripted_button = un_raise_development_button
+	scripted_button = un_reduce_development_button
 	scripted_button = un_defund_development_button
 	scripted_button = un_human_rights_resolution_button
 	scripted_button = un_withdraw_human_rights_button
@@ -282,6 +284,11 @@
 				# privileges below see the same month.
 				un_representation_monthly_update = yes
 
+				# ---- What the World Development Fund's recipients remember ----
+				# Of our Development Programs money, member or not, so the
+				# goodwill fades once it stops (un_economy_effects.txt).
+				un_dev_fund_patron_pulse = yes
+
 				# ---- Member-only logic ----
 				if = {
 					limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
@@ -298,10 +305,10 @@
 						limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 						set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
 					}
-					if = {
-						limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
-						set_variable = { name = un_development_expense_cached value = un_program_expense_value }
-					}
+					# Development Programs: the size's expense and benefit factor
+					# (un_economy_effects.txt; a contribution from before the
+					# sizes becomes Substantial).
+					un_dev_fund_contribution_monthly = yes
 
 					# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
 					# This month's assessment, or a month in arrears for a member

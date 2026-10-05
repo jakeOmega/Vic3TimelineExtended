@@ -14,7 +14,8 @@
 # from it. Every write goes through a helper here, or writes the modifier and
 # calls un_state_record / un_state_forget beside it in the same block (the
 # scripted buttons, whose add_modifier lines gen_un_button_descs.py reads, and
-# the two programme costs, whose multiplier reads the caller's root).
+# the three modifiers whose multiplier reads the caller's root: the two
+# programme costs and the Development Programs benefits).
 # test_un_state_mirror.py holds every write site to that.
 #
 #   journal entry          un_member_modifier, un_founding_member_modifier,
@@ -34,7 +35,8 @@
 # Not mirrored, because the monthly pulse derives them from the above:
 # un_member_privileges_modifier, un_membership_benefits_modifier,
 # un_npt_disarmament_modifier, both pariah modifiers, the un_standing_* tier,
-# un_dues_modifier and every un_regime_* modifier.
+# un_dues_modifier, every un_regime_* modifier and
+# un_development_patron_modifier (un_dev_fund_patron_pulse).
 #
 # WHEN THE ENTRY IS REBUILT. var:un_state_rebuild_pending marks an entry whose
 # modifiers may have been wiped. It is set by the entry's `immediate`, which
@@ -170,9 +172,11 @@ un_convention_country_restore = {
 #   - Championing and undermining exclude each other (their buttons say so).
 #     A merge can deliver both mirrors, the rebels' and the nation's; the
 #     nation's championing is restored and the undermining is not.
-#   - The programme costs are re-added as their buttons add them. The expense
-#     figure their multiplier reads is inherited with the other variables; it
-#     is created only if missing, and the member block re-prices it monthly.
+#   - The programme costs, and the Development Programs benefits, are
+#     re-added as their buttons add them. The figure each multiplier reads
+#     (the expense; the size's benefit factor) is inherited with the other
+#     variables; it is created only if missing, and the member block re-prices
+#     it monthly.
 #   - The regime stamp goes, so our next ordinary pulse re-reads our terms
 #     under the conventions (the un_regime_* modifiers are country modifiers,
 #     and the merge dropped them too) instead of waiting for the next epoch.
@@ -232,7 +236,6 @@ un_state_restore_all = {
 				un_state_restore = { MODIFIER = un_permanent_member_modifier }
 			}
 			un_state_restore = { MODIFIER = un_peacekeeping_contributor_modifier }
-			un_state_restore = { MODIFIER = un_development_contributor_modifier }
 			un_state_restore = { MODIFIER = un_human_rights_champion_modifier }
 			un_state_restore = { MODIFIER = un_arms_control_participant_modifier }
 			un_state_restore = { MODIFIER = un_champion_order_cost }
@@ -254,10 +257,23 @@ un_state_restore_all = {
 				}
 			}
 			if = {
+				limit = { un_state_missing = { MODIFIER = un_development_contributor_modifier } }
+				if = {
+					limit = { NOT = { has_variable = un_dev_fund_benefit } }
+					set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
+				}
+				je:je_united_nations ?= {
+					add_modifier = {
+						name = un_development_contributor_modifier
+						multiplier = root.var:un_dev_fund_benefit
+					}
+				}
+			}
+			if = {
 				limit = { un_state_missing = { MODIFIER = un_development_contributor_cost } }
 				if = {
 					limit = { NOT = { has_variable = un_development_expense_cached } }
-					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
+					set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
 				}
 				je:je_united_nations ?= {
 					add_modifier = {

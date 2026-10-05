@@ -444,6 +444,8 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_world_prestige }
 	un_dissolve_remove_global = { NAME = un_member_power_share }
 	un_dissolve_remove_global = { NAME = un_funding_ratio }
+	un_dissolve_remove_global = { NAME = un_funding_programmes_ratio }
+	un_dissolve_remove_global = { NAME = un_funding_dev_money_ratio }
 	un_dissolve_remove_global = { NAME = un_funding_arrears_share }
 	un_dissolve_remove_global = { NAME = un_budget_weekly }
 	# The convention regimes (redesign phase 5).

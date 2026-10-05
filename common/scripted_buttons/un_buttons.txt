@@ -651,11 +651,19 @@ un_end_peacekeeping_button = {
 # ---- 4. DEVELOPMENT PROGRAMS ----
 # This programme is the World Development Fund's voluntary part (redesign
 # phase 7, owner 2026-10-02): a represented contributor that pays its dues pays
-# the Fund's grants with its programme expense (un_dev_fund_donations_value,
+# the Fund's grants with its expense (un_dev_fund_donations_value,
 # un_economy_values.txt). It opens only once the Assembly has founded the Fund
 # (owner, 2026-10-03): before that its money would reach nobody. A contribution
 # running with no Fund lapses at the next monthly update
 # (un_dev_fund_lapse_contributions, un_economy_effects.txt).
+#
+# Four sizes (owner, 2026-10-05): a contribution starts at Token and Raise /
+# Reduce move it a size at a time (un_dev_fund_raise / _reduce). Any member
+# may give, whatever its rank, unless the Fund pays it or it withholds its
+# dues. Both modifiers are added with a multiplier read from the country, so
+# each write site records its own mirror (un_state_effects.txt): the benefits
+# at the size's factor (var:un_dev_fund_benefit), the cost at its expense
+# (var:un_development_expense_cached).
 
 un_fund_development_button = {
 	name = "UN_FUND_DEVELOPMENT"
@@ -674,10 +682,20 @@ un_fund_development_button = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
 		}
-		country_rank >= rank_value:major_power
 		custom_tooltip = {
 			text = un_fund_development_needs_fund_tt
 			has_global_variable = un_inst_development_fund
+		}
+		# Money from a member withholding its dues would not reach the Fund
+		# (un_dev_fund_contributor), and paying into a Fund that pays us is
+		# half a circle.
+		custom_tooltip = {
+			text = un_fund_development_pays_dues_tt
+			NOT = { un_dues_is_withholding = yes }
+		}
+		custom_tooltip = {
+			text = un_fund_development_not_recipient_tt
+			NOT = { un_dev_fund_receiving = yes }
 		}
 		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
@@ -688,18 +706,77 @@ un_fund_development_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_FUND_DEVELOPMENT_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
+		custom_tooltip = un_fund_development_effect_tt
+		hidden_effect = {
+			set_variable = { name = un_dev_fund_size value = 1 }
+			set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
+			je:je_united_nations ?= { add_modifier = {
+					name = un_development_contributor_modifier
+					multiplier = root.var:un_dev_fund_benefit
+				} }
 			un_state_record = { MODIFIER = un_development_contributor_modifier }
+			# Cache expense in country scope; see un_peacekeeping_mission_button.
+			set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
+			je:je_united_nations ?= { add_modifier = {
+					name = un_development_contributor_cost
+					multiplier = root.var:un_development_expense_cached
+				} }
+			un_state_record = { MODIFIER = un_development_contributor_cost }
 		}
-		# Cache expense in country scope; see un_peacekeeping_mission_button.
-		set_variable = { name = un_development_expense_cached value = un_program_expense_value }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_development_contributor_cost
-				multiplier = root.var:un_development_expense_cached
-			} }
-		un_state_record = { MODIFIER = un_development_contributor_cost }
+	}
+}
+
+un_raise_development_button = {
+	name = "UN_RAISE_DEVELOPMENT"
+	desc = "UN_RAISE_DEVELOPMENT_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored < un_dev_fund_size_max
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		un_dev_fund_size_stored < un_dev_fund_size_max
+	}
+
+	ai_chance = {
+		# common/script_values/un_ai_values.txt
+		value = un_raise_development_ai_chance
+	}
+
+	effect = {
+		# un_economy_effects.txt
+		un_dev_fund_raise = yes
+	}
+}
+
+un_reduce_development_button = {
+	name = "UN_REDUCE_DEVELOPMENT"
+	desc = "UN_REDUCE_DEVELOPMENT_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored > 1
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored > 1
+	}
+
+	ai_chance = {
+		# common/script_values/un_ai_values.txt
+		value = un_reduce_development_ai_chance
+	}
+
+	effect = {
+		# un_economy_effects.txt
+		un_dev_fund_reduce = yes
 	}
 }
 
@@ -722,7 +799,7 @@ un_defund_development_button = {
 
 	effect = {
 		custom_tooltip = {
-			text = "UN_DEFUND_DEVELOPMENT_DESC"
+			text = "un_defund_development_effect_tt"
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
 			un_state_forget = { MODIFIER = un_development_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }

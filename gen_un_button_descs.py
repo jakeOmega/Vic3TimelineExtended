@@ -46,13 +46,14 @@ OUTPUT_FILE = os.path.join(LOC_DIR, "te_un_button_effects_l_english.yml")
 # Buttons whose effect block is dominated by add/remove_modifier + un_authority
 # changes (vs vote-trigger / multi-country / event-firing). These get
 # auto-generated effect summaries; other buttons keep fully hand-written descs.
+# The Development Programs buttons are hand-written: their benefits modifier is
+# added with the contribution size's factor as multiplier, so its unit values
+# (Substantial's) are not what a Token or Generous contribution gets.
 IN_SCOPE_BUTTONS = {
     "un_arms_control_button",
     "un_withdraw_arms_control_button",
     "un_human_rights_resolution_button",
     "un_withdraw_human_rights_button",
-    "un_fund_development_button",
-    "un_defund_development_button",
     "un_peacekeeping_mission_button",
     "un_end_peacekeeping_button",
     "un_lift_sanctions_button",

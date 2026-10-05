@@ -154,6 +154,23 @@ un_dev_fund_pays_into_pool = {
 	NOT = { modifier:country_disable_investment_pool_bool = yes }
 }
 
+# Recipients of the Fund among our subjects, bloc partners and allies, whose
+# goodwill the grants buy (and whose votes our lobbying moves the more for
+# it). Read by the AI's Development Programs scores (un_ai_values.txt). PREV,
+# not ROOT: the country asked, also when the debug dump reads the scores from
+# inside every_country (te_debug_un_log_ai_scores).
+# Scope: country
+un_ai_development_recipients_among_ours = {
+	any_country = {
+		un_dev_fund_receiving = yes
+		OR = {
+			is_subject_of = PREV # REVIEWED 2026-10-05: PREV is the country the trigger asks about (its scope before any_country)
+			is_in_same_power_bloc = PREV # REVIEWED 2026-10-05: as above
+			has_treaty_alliance_with = { TARGET = PREV } # REVIEWED 2026-10-05: as above
+		}
+	}
+}
+
 # ---- The World Food Reserve -------------------------------------------------------
 
 # Our Strategic Reserve can store grain: a hub stands (the reserve's own

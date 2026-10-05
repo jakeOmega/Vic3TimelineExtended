@@ -57,7 +57,9 @@ un_lean_veto_basis_value = {
 
 # Each full month a campaign runs moves its member's lean this far its way, up
 # to the cap; campaigns one way on the same member stack to the stack cap, and
-# the two ways net out (un_lobby_campaigns_aggregate).
+# the two ways net out (un_lobby_campaigns_aggregate). A lobbyist's
+# effectiveness (below) scales the step and the cap of its own campaigns, not
+# the stack cap.
 un_lobby_campaign_step = { value = 3 }
 un_lobby_campaign_cap = { value = 15 }
 un_lobby_campaign_stack_cap = { value = 20 }
@@ -66,7 +68,59 @@ un_lobby_campaign_stack_cap = { value = 20 }
 un_lobby_campaign_shift_value = {
 	value = var:un_lc_months
 	multiply = un_lobby_campaign_step
+	min = 0
 	max = un_lobby_campaign_cap
+	multiply = un_lobby_campaign_effectiveness
+}
+
+# ---- Lobbying effectiveness (owner, 2026-10-05) ------------------------------------------
+# Two modifier types (common/modifier_type_definitions/un_membership_modifier_types.txt)
+# make a member a better or worse lobbyist: country_un_lobbying_mult with
+# every member, and country_un_lobbying_fund_recipients_mult on top of it with
+# a member the World Development Fund pays (un_dev_fund_receiving). Their sum
+# scales its campaigns' monthly step and cap (never below nothing), and counts
+# in a member's answer to its vote-commitment requests at this many points per
+# whole 100% (+25% is +20, against the obligation's +40).
+un_lobby_accept_points_per_effectiveness = { value = 80 }
+
+# 1 + the lobbyist's effectiveness with the campaign's member, at least 0.
+# Scope: campaign container
+un_lobby_campaign_effectiveness = {
+	value = 1
+	if = {
+		limit = { exists = var:un_lc_lobbyist }
+		var:un_lc_lobbyist = {
+			add = modifier:country_un_lobbying_mult
+		}
+		if = {
+			limit = {
+				exists = var:un_lc_member
+				var:un_lc_member = { un_dev_fund_receiving = yes }
+			}
+			var:un_lc_lobbyist = {
+				add = modifier:country_un_lobbying_fund_recipients_mult
+			}
+		}
+	}
+	min = 0
+}
+
+# The two lines a member's answer to a vote-commitment request shows for the
+# asker's effectiveness: with every member, and with a member the Fund pays.
+# Scope: the member asked (ROOT of the pledge action's accept_score), with
+# scope:actor = the asker
+un_lobby_accept_general_value = {
+	value = scope:actor.modifier:country_un_lobbying_mult
+	multiply = un_lobby_accept_points_per_effectiveness
+}
+
+un_lobby_accept_fund_value = {
+	value = 0
+	if = {
+		limit = { un_dev_fund_receiving = yes }
+		add = scope:actor.modifier:country_un_lobbying_fund_recipients_mult
+		multiply = un_lobby_accept_points_per_effectiveness
+	}
 }
 
 # THE LOBBYING term of the lean: the member's net shift from the campaigns on

@@ -53,16 +53,18 @@ JE_PLAIN = [
     "un_security_council_modifier",
     "un_permanent_member_modifier",
     "un_peacekeeping_contributor_modifier",
-    "un_development_contributor_modifier",
     "un_human_rights_champion_modifier",
     "un_arms_control_participant_modifier",
     "un_champion_order_cost",
     "un_undermine_order_cost",
 ]
-# Added with multiplier = root.var:<expense>, so written at the site itself.
+# Added with multiplier = root.var:<figure>, so written at the site itself:
+# the two programme costs (the expense) and the Development Programs benefits
+# (the contribution size's benefit factor).
 JE_COST = [
     "un_peacekeeping_contributor_cost",
     "un_development_contributor_cost",
+    "un_development_contributor_modifier",
 ]
 # The convention member modifiers, on the journal entry and on the country
 # (test_un_convention_registry.CONVENTIONS is the single list).

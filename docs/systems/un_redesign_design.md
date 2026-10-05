@@ -8,6 +8,7 @@
 > autonomy and suspended representation) and §0.9 (what a revolution's winner keeps) are
 > pending in-game verification.
 > Read
+> [§0.14](#014-development-programs-sizes-what-a-contributor-gets-and-lobbying-effectiveness),
 > [§0.13](#013-the-ai-weighs-what-the-un-costs-and-brings),
 > [§0.12](#012-phase-7-the-charters-new-business),
 > [§0.11](#011-the-first-policy-grants),
@@ -32,6 +33,118 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.14 Development Programs: sizes, what a contributor gets, and lobbying effectiveness
+
+Built 2026-10-05 at the owner's request, after a design review with them. Not yet seen in a
+running game. It supersedes the Development Programs parts of §0.13 and §0.12 item 7: the
+programme was one size, open to major powers, and its benefits were an arbitrary +5% commerce
+ministry impact and **+25 bureaucracy cost**, chosen when the money "vanished into the void".
+Now the money pays the World Development Fund's grants, so the contributor's benefits were
+reconsidered.
+
+**Sizes (decided).** A contribution starts at Token and moves a size at a time (Raise / Reduce
+Development Contribution). Each size doubles the money and adds a quarter of Substantial's
+benefits, so a nominal gift is the best value and the extra money goes to the recipients:
+
+| Size | Share of GDP a year | Benefit factor | Infamy decay | Prestige | Standing a month (after 24 months) |
+|---|---|---|---|---|---|
+| Token | 0.125% | 0.5 | +4% | +2% | 0.15 |
+| Modest | 0.25% | 0.75 | +6% | +3% | 0.225 |
+| Substantial | 0.5% (the old programme's cost) | 1 | +8% | +4% | 0.3 |
+| Generous | 1% | 1.25 | +10% | +5% | 0.375 |
+
+`un_development_contributor_modifier` carries Substantial's values and is added with
+`multiplier = root.var:un_dev_fund_benefit` at every site (the button, `un_dev_fund_resize`, the
+§0.9 restore), so it moved from the plain to the multiplied mirror list in
+`test_un_state_mirror.py`. A contribution from before the sizes holds it with no multiplier,
+which is Substantial, the size it paid for; the entry's monthly pulse writes
+`var:un_dev_fund_size` = 3 for it (`un_dev_fund_contribution_monthly`). The ministry bonus and the
+bureaucracy cost are gone **(decided)**: the cost is the money. Changing size does not restart
+the standing clock. The Development Programs buttons left `gen_un_button_descs.py`'s scope: their
+modifier's unit values are not what a Token or Generous contribution gets.
+
+**Who may give (decided).** Any represented member, whatever its rank ("it would not be strange
+for Luxembourg to donate to the third world"), unless it withholds its dues (its money would not
+reach the Fund) or draws a grant itself.
+
+**The funding pillar counts the money (decided).** "It is not a benefit to the donator, and 8
+countries giving 1M/wk and one giving 8M/week is the same as far as how much the UN can do."
+Development left `un_programmes_running`; the pillar's ratio is now the programmes' part (the
+other three, power-weighted as before) plus `un_funding_dev_money_ratio_value`: the
+contributions a year over the represented members' GDP, against 0.7% (the UN's own aid target),
+at most 1 together. It reads last month's `un_dev_fund_donations` snapshot, since the Fund's
+update runs after the authority update.
+
+**Lobbying effectiveness (decided).** The owner's first idea was a vote lean toward a donor's
+proposals; they preferred recipients being more receptive to a donor's lobbying, since a member
+cares about votes it neither proposed nor is the target of. They then asked for it as a reusable
+modifier type, so other sources (the foreign ministry, rank, infamy) can carry it later. Two
+script-only percent types (`un_membership_modifier_types.txt`, chosen by the owner over one
+general type):
+- `country_un_lobbying_mult`: with every member. Granted by nothing yet.
+- `country_un_lobbying_fund_recipients_mult`: added to it with a member the Fund pays
+  (`un_dev_fund_receiving`).
+
+Their sum scales a campaign's monthly step and cap (`un_lobby_campaign_effectiveness`; the
+stack cap of 20 is unchanged) and adds 80 points per 100% to a member's answer to a vote
+commitment request (two itemised lines in both pledge actions' `accept_score`). Donors get the
+recipients' type through `un_development_patron_modifier` (+20% at factor 1), applied at
+`var:un_dev_fund_patron`: what the recipients remember, which moves a twelfth of the way each
+month toward the contributor's benefit factor while its money reaches the Fund and toward 0
+otherwise (`un_dev_fund_patron_pulse`, from the entry's pulse for members and non-members). A
+month of Generous before a vote therefore buys little. The modifier is derived monthly, not
+mirrored.
+
+**The AI (decided: "rich AI countries much more likely to contribute, but typically only at a
+nominal level").** Two scores:
+- `un_ai_development_will` (start and stop, the usual pair): +15 at or above the members'
+  average GDP per head, +25 at twice it (each step inside the band), +10 at notorious infamy,
+  laissez-faire −10 (was −25). The other terms are as in §0.13.
+- `un_ai_development_generosity` (size): only humanitarian regulations +20, championing +20 and
+  recipients among its subjects, bloc partners and allies +20, less the treasury penalty. A
+  contributor raises at 20 per size held and cuts back the band (25) below the line it raised
+  at, so wealth alone stays at Token.
+
+| Member | Will | Generosity | Gives |
+|---|---|---|---|
+| Rich great power, Established, no other reason | 25 + 5 + 5 = 35 | 0 | Token |
+| Same, laissez-faire | 25 | 0 | Token |
+| Above-average great power, laissez-faire | 15 + 5 + 5 − 10 = 15 | 0 | nothing |
+| Humanitarian champion with recipients among its allies | 20 + 20 + 15 + … | 60 | Generous |
+| Humanitarian member, nothing else | 20 + … | 20 | Modest |
+
+### Files
+
+- `common/script_values/un_economy_values.txt` (sizes, rates, factors, the recipients' memory,
+  displays), `common/scripted_effects/un_economy_effects.txt` (`un_dev_fund_raise` / `_reduce` /
+  `_resize`, `un_dev_fund_contribution_monthly`, `un_dev_fund_patron_pulse`, the Our Obligations
+  lines), `common/scripted_buttons/un_buttons.txt`, `common/journal_entries/je_united_nations.txt`.
+- `common/static_modifiers/extra_modifiers.txt` (`un_development_contributor_modifier`,
+  `un_development_patron_modifier`), `common/modifier_type_definitions/un_membership_modifier_types.txt`.
+- `common/script_values/un_authority_values.txt` and `un_authority_effects.txt` (funding pillar),
+  `un_standing_values.txt` (accrual), `un_lobbying_values.txt` and
+  `common/diplomatic_actions/un_lobbying.txt` (lobbying), `un_ai_values.txt` and
+  `un_economy_triggers.txt` (`un_ai_development_recipients_among_ours`), `un_state_effects.txt`.
+- `test_un_dev_fund_sizes.py`.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.14)
+
+1. Fund Development Programs shows for a minor power and starts a Token contribution; the
+   modifier list shows +4% infamy decay and +2% prestige, and the expense is 0.125% of GDP a year.
+2. Raise and Reduce move one size each; the modifier and the expense change at once, and the
+   tooltips name the size and its weekly cost.
+3. An old save's contributor shows Substantial in Our Obligations after a month, at the cost it
+   paid before.
+4. The funding pillar's tooltip shows programmes and development aid separately; development
+   aid moves with the money, not with how many contributors there are.
+5. After a year of contributing, Grateful Aid Recipients appears on the UN entry; a vote
+   commitment request to a recipient shows the "contributions to the Fund" line, and a
+   campaign on a recipient climbs faster than 3 a month.
+6. Rich AI members start Token contributions; few go above Token.
+7. A revolution's winner keeps the contribution at its size (the §0.9 restore).
 
 ---
 
@@ -87,6 +200,7 @@ share); `test_un_ai_values.py` checks the pairing, the bands and the header tabl
 | Join / Leave | `un_ai_membership_will` | 0 | −25 | will + 5, at most 100 | −25 − will, at most 50 |
 | Pay / Withhold dues | `un_ai_dues_will` | 0 | −25 | will + 5, at most 60 | −25 − will, at most 50 |
 | Fund / Stop funding Development Programs | `un_ai_development_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
+| Raise / Reduce its size (§0.14) | `un_ai_development_generosity` | 20 × size held | that − 20 − 25 | generosity − line + 10, at most 50 | line − generosity, at most 50 |
 | Contribute to / End peacekeeping | `un_ai_peacekeeping_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
 | Champion / Stop championing the order | `un_ai_order_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
 | Undermine / Stop undermining the order | `un_ai_dissent_will` (minus the order stance) | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
@@ -153,7 +267,8 @@ Worked examples (no conventions in force, no stance unless named):
 | In default, Supranational, a grant of 3% of GDP | 30 + 0 + 40 = 70 | pays (60): the grant covers the dues, so the default counts 0 |
 | Underminer, healthy, Strong | 30 − 60 − 8 = −38 | withholds (13) |
 
-**Development Programs** gives for a reason (ruling 4: most of the time the AI gives no money
+**Development Programs** (superseded in part by §0.14: wealth and infamy now start a Token
+contribution, and a separate score sets its size) gives for a reason (ruling 4: most of the time the AI gives no money
 without hope of larger gains, humanitarian leaders excepted): humanitarian regulations +20,
 championing +20, recipients among its subjects, bloc partners and allies +15; great power +5,
 interventionism or command economy +5 and Established or above +5 add to one of those but fall
@@ -471,7 +586,8 @@ Assembly founds it, the programme's money would reach nobody. A contribution run
 through `un_state_off`, as leaving the UN does) with a notice to the contributor.
 
 The donations are the existing Fund Development Programs programme
-(`un_fund_development_button`): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
+(`un_fund_development_button`; since §0.14 it has four sizes, any rank may give, and its benefits
+were redone): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
 while the Fund stands each represented, dues-paying contributor's programme expense pays the
 Fund's grants instead of nothing. As first built (below), it needed Reform II and took a quarter
 of the budget:
