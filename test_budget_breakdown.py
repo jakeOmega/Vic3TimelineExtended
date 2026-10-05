@@ -43,7 +43,7 @@ class BudgetHarness:
         self.scopes["institution_levels"] = self("institution_levels")
         self.scopes["institution_pool"] = self("institution_pool")
         for branch in ("army", "navy"):
-            self.scopes[branch + "_operating_actual"] = self(branch + "_operating_actual")
+            self.scopes[branch + "_support_actual"] = self(branch + "_support_actual")
         self.scopes["positive_total"] = self("expense_positive_total")
 
     def __call__(self, name):
@@ -241,6 +241,28 @@ class BudgetAllocationTests(unittest.TestCase):
             self.assertEqual(h("expense_" + key), expected)
         self.assertEqual(h("expense_other"), 0)
 
+    def test_screenshot_barracks_wages_are_not_subtracted_from_logistics_upkeep(self):
+        # Rounded tooltip amounts: barracks wages are a separate country cost,
+        # not part of the Army Logistics Center's weekly operating deficit.
+        h = BudgetHarness(civil=0, administration=0, total=64773,
+                          charges={"military": 23523, "shipping": 1560},
+                          military_fields={"army_total": 18600, "navy_total": 2690},
+                          military_buildings=(("building_barrack", 0),
+                                              ("building_army_logistics_center", 30860),
+                                              ("building_naval_administration", 2690),
+                                              ("building_naval_logistics_center", 3743),
+                                              ("building_naval_fortification", 3130)))
+        h.scopes.update(military_1=Decimal(35500), military_4=Decimal(4190))
+        self.assertEqual(h("expense_army_wages"), 18600)
+        self.assertEqual(h("expense_army_materials"), 30860)
+        self.assertEqual(h("expense_army"), 49460)
+        self.assertEqual(h("expense_navy_materials"), 11063)
+        self.assertEqual(h("expense_navy"), 13753)
+        self.assertEqual(h("expense_military"), 63213)
+        self.assertEqual(h("expense_shipping"), 1560)
+        self.assertEqual(h("expense_military_adjustment"), 0)
+        self.assertEqual(h("expense_other"), 0)
+
     def test_logistics_and_fortifications_belong_to_branch_support_not_other(self):
         # Modern branch goods getters return zero despite £8,470 of goods in
         # the military total. Support also includes £590 of logistics wages.
@@ -253,8 +275,8 @@ class BudgetAllocationTests(unittest.TestCase):
                                               ("building_naval_logistics_center", 2880),
                                               ("building_naval_fortification", 1540)))
         h.scopes.update(military_1=Decimal(8470), military_4=Decimal(2580))
-        self.assertEqual(h("army_operating_actual"), 6680)
-        self.assertEqual(h("navy_operating_actual"), 6130)
+        self.assertEqual(h("army_support_actual"), 4640)
+        self.assertEqual(h("navy_support_actual"), 4420)
         self.assertEqual(h("expense_army_materials"), 4640)
         self.assertEqual(h("expense_army"), 6680)
         self.assertEqual(h("expense_navy_materials"), 7000)
@@ -266,25 +288,42 @@ class BudgetAllocationTests(unittest.TestCase):
         self.assertEqual(h("expense_army_materials_slice"), 4640)
         self.assertAlmostEqual(h("expense_army_materials_share"), Decimal(4640) / 15390)
 
-    def test_already_covered_branch_upkeep_is_not_counted_again(self):
+    def test_already_covered_branch_buildings_are_excluded_from_support(self):
         for actual in (0, 9000, 10000, 12500):
             with self.subTest(actual=actual):
-                h = BudgetHarness(civil=0, administration=0, total=max(actual, 10000),
-                                  charges={"military": max(actual, 10000)},
-                                  military_fields={"army_total": 10000, "army_goods": 4000},
-                                  military_buildings=(("building_barrack", actual),))
+                h = BudgetHarness(civil=0, administration=0, total=16000,
+                                  charges={"military": 16000},
+                                  military_fields={"army_total": 10000, "army_goods": 4000,
+                                                   "navy_total": 6000, "navy_goods": 2000},
+                                  military_buildings=(("building_barrack", actual),
+                                                      ("building_conscription_center", actual),
+                                                      ("building_naval_administration", actual)))
+                self.assertEqual(h("army_support_actual"), 0)
+                self.assertEqual(h("navy_support_actual"), 0)
                 self.assertEqual(h("expense_army_wages"), 6000)
-                self.assertEqual(h("expense_army_materials"), 4000 + max(actual - 10000, 0))
+                self.assertEqual(h("expense_army_materials"), 4000)
+                self.assertEqual(h("expense_navy_materials"), 2000)
                 self.assertEqual(h("expense_military_adjustment"), 0)
                 self.assertEqual(h("expense_other"), 0)
+
+    def test_support_cost_is_independent_of_branch_wage_forecast(self):
+        for wages in (0, 1000, 10000):
+            h = BudgetHarness(civil=0, administration=0, total=wages + 500,
+                              charges={"military": wages + 500},
+                              military_fields={"army_total": wages},
+                              military_buildings=(("building_army_logistics_center", 500),))
+            self.assertEqual(h("expense_army_wages"), wages)
+            self.assertEqual(h("expense_army_materials"), 500)
+            self.assertEqual(h("expense_military_adjustment"), 0)
+            self.assertEqual(h("expense_other"), 0)
 
     def test_only_branch_buildings_with_operating_deficits_are_attributed(self):
         h = BudgetHarness(military_buildings=(("building_army_logistics_center", -500),
                                                ("building_barrack", 5000),
                                                ("building_conscription_center", 3000),
                                                ("building_arms_industry", 10000)))
-        self.assertEqual(h("army_operating_actual"), 8000)
-        self.assertEqual(h("navy_operating_actual"), 0)
+        self.assertEqual(h("army_support_actual"), 0)
+        self.assertEqual(h("navy_support_actual"), 0)
         self.assertEqual(h("administration_actual"), 39000)
 
     def test_group_totals_equal_children_without_double_counting(self):
@@ -457,8 +496,8 @@ class BudgetWiringTests(unittest.TestCase):
         self.assertIn("value = scope:institution_pool", values)
         self.assertIn("value = scope:positive_total", values)
         for branch in ("army", "navy"):
-            self.assertIn(f"AddScope('{branch}_operating_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_operating_actual')))", gen.scope("expense"))
-            self.assertIn(f"value = scope:{branch}_operating_actual", values)
+            self.assertIn(f"AddScope('{branch}_support_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_support_actual')))", gen.scope("expense"))
+            self.assertTrue(f"add = scope:{branch}_support_actual" in values, f"{branch} support must use its cached sum")
 
 
 if __name__ == "__main__":
