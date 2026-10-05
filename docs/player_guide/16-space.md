@@ -56,8 +56,8 @@ innovation, innovation cap and prestige.
 You can switch the production method in the building panel at any time, but the
 decisions panel also offers each next mission when you are ready for it. A
 "Begin" decision appears once you research the method's technology, and you can
-take it once the milestones before it are complete. It switches the Space
-Program to that method.
+take it once the milestones before it are complete, while you are a great or
+major power. It switches the Space Program to that method.
 
 | Decision | Appears while you run | Needs complete |
 |---|---|---|

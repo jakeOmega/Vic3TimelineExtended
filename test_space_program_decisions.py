@@ -14,7 +14,7 @@ import re
 import unittest
 from pathlib import Path
 
-from test_nuclear_deterrence import block, loc_keys, read, strip_comments
+from test_nuclear_deterrence import block, loc_keys, loc_value, read, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 DECISIONS = ROOT / "common/decisions/extra_decisions.txt"
@@ -130,6 +130,12 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
                 self.assertIn(f"modifier:{bool_of(base)} = yes", shown)
                 self.assertRegex(shown, r"NOT\s*=\s*\{\s*modifier:" + bool_of(pm) + r"\s*=\s*yes\s*\}")
 
+    def test_mission_needs_the_rank_every_milestone_needs(self):
+        for name in MISSIONS:
+            with self.subTest(decision=name):
+                possible = block(block(self.decisions, name), "possible")
+                self.assertRegex(possible, r"text\s*=\s*sr_unlock_rank_tt\s*is_great_or_major_power\s*=\s*yes")
+
     def test_decision_waits_for_its_milestones_prerequisites(self):
         # Everything the target's milestones need beyond what the target
         # itself serves must be complete, or the switch buys nothing.
@@ -191,6 +197,9 @@ class StrategicReserveDecisionTest(unittest.TestCase):
         body = block(strip_comments(read(DECISIONS)), "te_decision_establish_strategic_reserve")
         shown = block(body, "is_shown")
         self.assertIn("has_technology_researched = logistics", shown)
+        # Rebels mid-war found no reserve: their zero stock would beat the
+        # loser's in the variable merge if they won.
+        self.assertIn("is_revolutionary = no", shown)
         self.assertRegex(shown, r"NOT\s*=\s*\{\s*any_scope_building\s*=\s*\{\s*is_building_type\s*=\s*building_strategic_reserve_hub")
         self.assertIn("exists = capital", block(body, "possible"))
         when = block(body, "when_taken")
@@ -224,6 +233,29 @@ class LocalizationTest(unittest.TestCase):
         for key in set(re.findall(r"text\s*=\s*(te_decision_tt_\w+)", text)):
             with self.subTest(key=key):
                 self.assertIn(key, keys)
+
+    def test_tooltip_bills_match_the_units(self):
+        # The "When taken" lines print each mission's weekly Launch Capacity;
+        # they are copies of sr_mission_units_*, which the methods pin.
+        values = strip_comments(read(VALUES))
+        tooltips = {
+            "te_decision_tt_create_space_program": "sr_mission_units_earth_orbit",
+            "te_decision_tt_begin_moon_mission": "sr_mission_units_moon",
+            "te_decision_tt_begin_mars_mission": "sr_mission_units_mars",
+            "te_decision_tt_begin_solar_mission": "sr_mission_units_solar",
+            "te_decision_tt_begin_deep_space_mission": "sr_mission_units_deep_space",
+            "te_decision_tt_begin_interstellar_mission": "sr_mission_units_interstellar",
+        }
+        units = {}
+        for key, value in tooltips.items():
+            with self.subTest(key=key):
+                shown = re.search(r"buys ([\d,]+) \$launch_capacity\$ a week", loc_value(key))
+                self.assertIsNotNone(shown, key)
+                units[value] = int(re.search(r"^" + value + r"\s*=\s*(\d+)", values, re.M).group(1))
+                self.assertEqual(int(shown.group(1).replace(",", "")), units[value])
+        # "three times the Launch Capacity" in the Moon Mission's description.
+        self.assertIn("three times the $launch_capacity$", loc_value("te_decision_space_mission_moon_desc"))
+        self.assertEqual(units["sr_mission_units_moon"], 3 * units["sr_mission_units_earth_orbit"])
 
 
 if __name__ == "__main__":

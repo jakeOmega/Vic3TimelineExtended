@@ -391,6 +391,13 @@ te_decision_establish_strategic_reserve = {
 	is_shown = {
 		has_technology_researched = logistics
 		NOT = { is_country_type = decentralized }
+		# The rebels of a running revolution found no reserve of their own.
+		# The journal entry's activation would give them a reserve's variables
+		# at zero stock, and if they won, those zeros would beat the loser's
+		# stockpile in the variable merge: the winner continues the nation
+		# (#460-#465). Same rule as Suborbital Flight's is_shown_when_inactive
+		# (je_space_race.txt); te_decision_found_space_program has it too.
+		is_revolutionary = no
 		NOT = {
 			any_scope_building = { is_building_type = building_strategic_reserve_hub }
 		}
@@ -520,7 +527,8 @@ te_decision_found_space_program = {
 #
 # A mission is offered once its technology is researched, while the programme
 # runs the mission below it (Mars or above for the last three), and becomes
-# possible once the milestones the missions below it serve are complete:
+# possible for a great or major power (every milestone needs the rank) once
+# the milestones the missions below it serve are complete:
 # Moon after Orbital Flight; Mars after the Moon Landing and the Deep-Space
 # Probe; Solar Colonization and Deep Space after the Moon Base and the Mars
 # Landing. The Interstellar Mission waits only for the Interstellar Probe's own
@@ -546,6 +554,13 @@ te_decision_space_mission_moon = {
 	}
 
 	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_orbital
 			has_variable = sr_completed_orbital
@@ -585,6 +600,13 @@ te_decision_space_mission_mars = {
 	}
 
 	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_moon_landing
 			has_variable = sr_completed_moon_landing
@@ -635,6 +657,13 @@ te_decision_space_mission_solar = {
 	}
 
 	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_moon_base
 			has_variable = sr_completed_moon_base
@@ -684,6 +713,13 @@ te_decision_space_mission_deep_space = {
 	}
 
 	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_moon_base
 			has_variable = sr_completed_moon_base
@@ -728,6 +764,13 @@ te_decision_space_mission_interstellar = {
 	}
 
 	possible = {
+		# Every milestone's possible needs the rank (je_space_race.txt; only
+		# a colony holder's Solar System Colonization runs without it), so
+		# below it a mission would be paid for and never used.
+		custom_tooltip = {
+			text = sr_unlock_rank_tt
+			is_great_or_major_power = yes
+		}
 		custom_tooltip = {
 			text = te_decision_tt_completed_probe
 			has_variable = sr_completed_probe
