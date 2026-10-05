@@ -5925,6 +5925,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             filter_debug_log,
             dedupe, summarize, diff_against_backup, cluster_sessions,
             load_vanilla_bug_registry, load_mod_noise_registry, tag_vanilla_bugs,
+            gui_injected_scope_names, tag_gui_injected_scopes,
         )
 
         vanilla_bugs_doc = os.path.join(mod_path, "docs", "vanilla", "vanilla_known_bugs.md")
@@ -5969,11 +5970,17 @@ class ModStateHandler(BaseHTTPRequestHandler):
             """Tag entries against both registries, then apply per-kind modes (show|hide|only).
 
             Two-pass tagging: vanilla registry first, then mod-noise registry on
-            entries that didn't match vanilla. Once tagged, an entry's
-            vanilla_bug_ref.kind tells us which mode applies for filtering.
+            entries that didn't match vanilla, then the GUI-injected scopes
+            (`Event target 'X' is used but is never set` for an X a mod .gui
+            or loc string sets with AddScope; open_issues.md L14). Once tagged,
+            an entry's vanilla_bug_ref.kind tells us which mode applies.
             """
             tag_vanilla_bugs(entries, vb_by_basename, vb_by_source)
             tag_vanilla_bugs(entries, mn_by_basename, mn_by_source)
+            tag_gui_injected_scopes(entries, gui_injected_scope_names([
+                os.path.join(mod_path, "gui"),
+                os.path.join(mod_path, "localization", "english"),
+            ]))
 
             def _matches_vanilla(e):
                 ref = e.vanilla_bug_ref

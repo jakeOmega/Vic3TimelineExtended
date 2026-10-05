@@ -26,6 +26,9 @@ from game_log_reader import (
     _github_slug,
     _open_issues_anchors,
     _vanilla_bug_cache,
+    GUI_INJECTED_SCOPE_REF,
+    gui_injected_scope_names,
+    tag_gui_injected_scopes,
 )
 
 
@@ -775,6 +778,70 @@ signature
             _, _, _, warnings2 = load_vanilla_bug_registry(doc)
             self.assertEqual(warnings2, [], "stale cached warning survived an open_issues.md edit")
             self.assertEqual(os.path.getmtime(doc), doc_mtime_before)
+
+
+class GuiInjectedScopeTests(unittest.TestCase):
+    """tag_gui_injected_scopes: open_issues.md L14, the validator's never-set lines
+    for scopes a .gui or loc string sets with AddScope."""
+
+    NEVER_SET = "Event target '{}' is used but is never set. Setting it in an unused scripted trigger or effect does not count"
+
+    def _entry(self, message):
+        return LogEntry("00:00:00", "jomini_effect.cpp:1139", message)
+
+    def test_tags_only_names_a_mod_file_sets(self):
+        with tempfile.TemporaryDirectory() as d:
+            gui = os.path.join(d, "gui")
+            loc = os.path.join(d, "localization", "english")
+            os.makedirs(gui)
+            os.makedirs(loc)
+            with open(os.path.join(gui, "panel.gui"), "w", encoding="utf-8-sig") as f:
+                f.write("datacontext = \"[TopScope.AddScope('row_army', MakeScopeValue(TopScope.ScriptValue('x')))]\"\n")
+            with open(os.path.join(loc, "x_l_english.yml"), "w", encoding="utf-8-sig") as f:
+                f.write("l_english:\n k:0 \"[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', GetPlayer.MakeScope ).End]\"\n")
+            names = gui_injected_scope_names([gui, loc])
+            self.assertEqual(names, frozenset({"row_army", "sr_rival"}))
+
+            gui_row = self._entry(self.NEVER_SET.format("row_army"))
+            loc_row = self._entry(self.NEVER_SET.format("sr_rival"))
+            unset = self._entry(self.NEVER_SET.format("row_navy"))
+            variable = self._entry("Variable 'row_army' is used but is never set")
+            tag_gui_injected_scopes([gui_row, loc_row, unset, variable], names)
+
+            for e in (gui_row, loc_row):
+                self.assertIsNotNone(e.vanilla_bug_ref)
+                self.assertEqual(e.vanilla_bug_ref["kind"], "mod_low_priority")
+                self.assertEqual(e.vanilla_bug_ref["tracked_issue"], GUI_INJECTED_SCOPE_REF.tracked_issue)
+            # A name nothing sets is a real bug, and a variable is not a scope.
+            self.assertIsNone(unset.vanilla_bug_ref)
+            self.assertIsNone(variable.vanilla_bug_ref)
+
+    def test_keeps_an_earlier_registry_tag(self):
+        e = self._entry(self.NEVER_SET.format("base_market"))
+        e.vanilla_bug_ref = {"title": "registry", "section": "x", "kind": "mod_low_priority"}
+        tag_gui_injected_scopes([e], frozenset({"base_market"}))
+        self.assertEqual(e.vanilla_bug_ref["title"], "registry")
+
+    def test_sees_a_name_added_after_the_first_call(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "panel.gui")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("AddScope('a', x)\n")
+            self.assertEqual(gui_injected_scope_names([d]), frozenset({"a"}))
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("AddScope('a', x) AddScope('b', y)\n")
+            os.utime(path, (time.time() + 10, time.time() + 10))
+            self.assertEqual(gui_injected_scope_names([d]), frozenset({"a", "b"}))
+
+    def test_ref_anchors_resolve_to_real_headings(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        doc, _, slug = GUI_INJECTED_SCOPE_REF.anchor.partition("#")
+        with open(os.path.join(root, doc), encoding="utf-8") as f:
+            seen: dict[str, int] = {}
+            slugs = {_github_slug(line[4:].strip(), seen) for line in f if line.startswith("### ")}
+        self.assertIn(slug, slugs)
+        issue_doc, _, issue_slug = GUI_INJECTED_SCOPE_REF.tracked_issue.partition("#")
+        self.assertIn(issue_slug, _open_issues_anchors(os.path.join(root, issue_doc)))
 
 
 if __name__ == "__main__":
