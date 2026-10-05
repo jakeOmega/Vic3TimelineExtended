@@ -172,20 +172,20 @@ view. Each system also needs its game rule, and some have further conditions.
 
 | Technology | Era | What it opens | Chapter |
 |---|---|---|---|
-| Intergovernmental Organizations | 6 | The United Nations journal entry; the Power Bloc Headquarters and the Peace Palace | [The United Nations](09-united-nations.md) |
-| Decolonization | 6 | The colonial empire journal entry | [Colonial empires and decolonization](11-decolonization.md) |
-| Nuclear Weapons | 6 | The nuclear program | [Nuclear weapons](13-nuclear.md) |
-| Rocketry | 6 | The first space race milestone, for great and major powers | [The space race](15-space.md) |
-| Combined Arms | 6 | The Gathering Storm, the world war journal entry, for great powers | [Military and war](12-military.md) |
-| Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](06-social-movements.md) |
-| Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](06-social-movements.md) |
-| Mental Health Awareness | 10 | The mental health journal entry | [Social movements](06-social-movements.md) |
-| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](06-social-movements.md) |
-| Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](06-social-movements.md) |
+| Intergovernmental Organizations | 6 | The United Nations journal entry; the Power Bloc Headquarters and the Peace Palace | [The United Nations](10-united-nations.md) |
+| Decolonization | 6 | The colonial empire journal entry | [Colonial empires and decolonization](12-decolonization.md) |
+| Nuclear Weapons | 6 | The nuclear program | [Nuclear weapons](14-nuclear.md) |
+| Rocketry | 6 | The first space race milestone, for great and major powers | [The space race](16-space.md) |
+| Combined Arms | 6 | The Gathering Storm, the world war journal entry, for great powers | [Military and war](13-military.md) |
+| Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](07-social-movements.md) |
+| Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](07-social-movements.md) |
+| Mental Health Awareness | 10 | The mental health journal entry | [Social movements](07-social-movements.md) |
+| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
+| Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](07-social-movements.md) |
 
 Some society technologies also start occasional narrative events (Second Wave
 Feminism, Contraceptive Pill, Social Media and others), covered in [Social
-movements](06-social-movements.md).
+movements](07-social-movements.md).
 
 ## New goods
 
@@ -276,8 +276,8 @@ Resort Colony production method, which produces art and tourism instead.
 | High technology | Electronic Components and Semiconductor Industry, Robotics Industry, Software Industry, Network Infrastructure, Advanced Material Fabricator, Aerospace Industry. |
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
-| Leisure | Tourism Industry and National Park ([States and population](07-states.md)). |
-| Government | Space Program ([The space race](15-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](12-military.md)). |
+| Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
+| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
 
 ### Pharmaceutical Industries and Drugs
 
@@ -302,7 +302,7 @@ Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
 Farm and GMO Plantation; and automation groups end in AI-managed methods such as
 AI Managed Fab. A few polluting buildings get pollution-control groups ([State
-pollution](14-climate.md#state-pollution)), and many get a hidden maintenance
+pollution](15-climate.md#state-pollution)), and many get a hidden maintenance
 group used by the construction market ([Construction maintenance and
 retooling](03-economy.md#construction-maintenance-and-retooling)).
 
@@ -348,7 +348,7 @@ need a large enough building of their industry.
 
 Biotechnology companies, the generic one and eight flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
-([Economic law groups](05-politics.md#economic-law-groups)), which
+([Economic law groups](06-politics.md#economic-law-groups)), which
 Biotechnology unlocks.
 
 ## Wonders
@@ -358,12 +358,12 @@ Each costs 5,000 construction, has one level, and exists once in the world.
 Wonders, like the base game's monuments and the Space Program, count as
 monuments: each one raises Tourism Industry throughput in its state by 25% and
 adds 3 cultural pull ([Where cultural pull comes
-from](10-influence.md#where-cultural-pull-comes-from)).
+from](11-influence.md#where-cultural-pull-comes-from)).
 
 Most wonders can only be built in one state, the landmark's real location, so
 only that state's owner can build them: the Golden Gate Bridge in California,
 the Burj Khalifa on the Trucial Coast, the Three Gorges Dam in Western Hubei and
-26 more. [Wonder list](19-appendix-reference-lists.md#wonder-list) gives each
+26 more. [Wonder list](20-appendix-reference-lists.md#wonder-list) gives each
 one's state and the technology that unlocks it.
 
 Each wonder employs 10,000 workers, and its effects scale with how fully it is
@@ -379,7 +379,7 @@ country to meet their conditions and finish one claims it:
 |---|---|---|---|
 | Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige, +0.5 UN Authority Target |
 | Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput, +0.5 UN Authority Target |
-| International Space Station | Satellite Communications | Major power or better, a completed Moon landing ([The space race](15-space.md)) | +200 innovation cap, university throughput, education |
+| International Space Station | Satellite Communications | Major power or better, a completed Moon landing ([The space race](16-space.md)) | +200 innovation cap, university throughput, education |
 | LIGO Observatory | Fiber Optics | Great power | +100 innovation cap, university throughput |
 | Large Hadron Collider | World Wide Web | Ministry of Science at level 3 | +200 innovation cap, +50% university throughput |
 | Svalbard Global Seed Vault | Biotechnology | Ministry of the Environment at level 3 | Agriculture throughput, prestige |
@@ -390,8 +390,8 @@ The Continental Union Headquarters is the exception to "one in the world": each
 continent can have one, built on the builder's home continent. The United
 Nations Headquarters and the Power Bloc Headquarters are government buildings,
 not wonders, and don't count as monuments; see [Founding the United
-Nations](09-united-nations.md#founding-the-united-nations) and [Other power bloc
-changes](08-diplomacy.md#other-power-bloc-changes).
+Nations](10-united-nations.md#founding-the-united-nations) and [Other power bloc
+changes](09-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
@@ -436,11 +436,11 @@ specialists per level, and their effects scale with how fully they are staffed.
 | Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police, Single-Party State, Autocracy, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
 
 Each type of megaproject you complete adds 3 cultural pull ([Where cultural pull
-comes from](10-influence.md#where-cultural-pull-comes-from)). The Space
+comes from](11-influence.md#where-cultural-pull-comes-from)). The Space
 Elevator, Orbital Solar Collector, Orbital Battlestation and Antimatter
 Containment Facility have their own events during construction and after
 completion. The military and nuclear effects are covered in [Military and
-war](12-military.md) and [Nuclear weapons](13-nuclear.md).
+war](13-military.md) and [Nuclear weapons](14-nuclear.md).
 
 ## Grand monuments
 

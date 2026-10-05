@@ -68,7 +68,7 @@
 | `localization/english/*.yml` | new keys; stale "thirty days"/"sponsor" text fixed |
 | `test_un_vote_lobbying.py` | **new**: structural tests |
 | `docs/systems/journal_entry_systems.md` (CRLF) | lifecycle and lobbying sections |
-| `docs/player_guide/09-united-nations.md` + PDF | when members vote, bands, campaigns, pledges, Decide later, AI |
+| `docs/player_guide/10-united-nations.md` + PDF | when members vote, bands, campaigns, pledges, Decide later, AI |
 
 ---
 
@@ -247,7 +247,7 @@
 - [ ] `docs/systems/journal_entry_systems.md` (CRLF — edit with `Edit`, confirm `grep -c $'\r$'`): lean paragraph, lifecycle, chamber, lobbying section.
 - [ ] Headers of `un_lobby_effects.txt`, `un_lobbying.txt`, `un_dossier_effects.txt` rewritten for the new model.
 - [ ] `docs/guides/scripting_best_practices.md`: `would_accept_diplomatic_action` resolves a requires-approval action against an AI from a scripted GUI; a ROOT-dependent value can't be cast from another country's event.
-- [ ] Player guide `09-united-nations.md`: when members vote, reading leans, campaigns, pledges both ways, Decide later, the AI's lobbying, the Delegations section; rebuild with `/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/build_player_guide.py`, then `--check`, and `check_player_guide_style.py --strict`.
+- [ ] Player guide `10-united-nations.md`: when members vote, reading leans, campaigns, pledges both ways, Decide later, the AI's lobbying, the Delegations section; rebuild with `/home/jakef/src/Vic3TimelineExtended/.venv/bin/python scripts/build_player_guide.py`, then `--check`, and `check_player_guide_style.py --strict`.
 - [ ] `organize_loc.py`; nothing lands in `te_unused_l_english.yml`.
 - [ ] Full checks: the unittest suite minus `test_reload_post_load` with the main venv, `ruff check .`, the 17 CI audits in their CI modes, `check_localization_files.py`, `check_post_load_rosters.py`, `format_paradox_tabs.py --check`.
 - [ ] Commit; fresh reviewer agent on the branch; fix; open the PR (`--base main`), body with the "Player guide" line and the in-game checklist.

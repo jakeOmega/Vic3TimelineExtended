@@ -831,12 +831,12 @@ This task touches no Paradox file, so it can run in a separate worktree in paral
 **Goal:** Players can learn the tax code from the guide. The chapter prints as chapter 5, after Banking, and says what the rule does, how to legislate, how interest groups and promises work, what the AI does, and what is experimental.
 
 **Files:**
-- Create: `docs/player_guide/04-tax-code.md`. It sorts after `04-banking.md`; issue #682 renumbers the files later.
+- Create: `docs/player_guide/05-tax-code.md`. It sorts after `04-banking.md`; issue #682 aligns the chapter prefixes with the PDF chapter numbers.
 - Modify:
   - `docs/player_guide/README.md`: the index lists it as 5 and renumbers the later entries in the list only;
   - `01-introduction.md`: the rules row, linking the chapter;
-  - `16-reference.md`: the system and rule rows;
-  - `05-politics.md`: where it describes taxation laws, one sentence each that under the rule the tax code replaces them, linking the chapter;
+  - `17-reference.md`: the system and rule rows;
+  - `06-politics.md`: where it describes taxation laws, one sentence each that under the rule the tax code replaces them, linking the chapter;
   - `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf`, rebuilt.
 
 **Content:**

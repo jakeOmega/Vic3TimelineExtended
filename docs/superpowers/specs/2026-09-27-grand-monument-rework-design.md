@@ -506,8 +506,8 @@ The first-step sizes and per-step values are first estimates, checked in play wi
 - **CI:** the `--strict` audits (`event_image`, `silent_variable`, `event_context`, `modifier_multiplier_var`,
   `loc_render`, `je_immediate_reset`, `empty_effect`) cover the new events, buttons and modifiers.
 - **Docs:** rewrite `mod_systems.md` § "Grand Monuments"; the player guide's `02-timeline.md` § Grand monuments (and
-  line 159, which lists the Grand Monument as a Tourism producer), `10-influence.md` (cultural pull), `07-states.md`
-  (the "+1% per level" throughput line) and `16-reference.md`, then rebuild the PDF. Lessons into
+  line 159, which lists the Grand Monument as a Tourism producer), `11-influence.md` (cultural pull), `08-states.md`
+  (the "+1% per level" throughput line) and `17-reference.md`, then rebuild the PDF. Lessons into
   `scripting_best_practices.md`.
 - **In-game checklist** (the PR body), including the engine questions:
   1. The ratchet holds: a dedicated monument's panel shows one row.

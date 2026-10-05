@@ -8422,7 +8422,7 @@ No new behavior. The system doc and the player guide describe what Tasks 1–11 
 
 **Files:**
 - Modify: `docs/systems/mod_systems.md` (replace § "Grand Monuments (Repeatable Construction Sink)")
-- Modify: `docs/player_guide/02-timeline.md`, `01-introduction.md`, `07-states.md`, `10-influence.md`, `16-reference.md`
+- Modify: `docs/player_guide/02-timeline.md`, `01-introduction.md`, `08-states.md`, `11-influence.md`, `17-reference.md`
 - Rebuild: `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf`
 - Modify (if anything was learned about the engine while building): `docs/guides/scripting_best_practices.md`
 
@@ -8589,11 +8589,11 @@ as heritage, and it rededicates only with money in the treasury.
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 ```
 
-(d) `docs/player_guide/07-states.md` (line 200): replace `a Grand Monument (+1% per level)` with `a Grand Monument (+25% for each step of its grandeur, see [Grand monuments](02-timeline.md#grand-monuments))`.
+(d) `docs/player_guide/08-states.md` (line 200): replace `a Grand Monument (+1% per level)` with `a Grand Monument (+25% for each step of its grandeur, see [Grand monuments](02-timeline.md#grand-monuments))`.
 
-(e) `docs/player_guide/10-influence.md` (the Monuments row): replace `Up to +5 more from grand monuments (+1 per 20 levels).` with `Up to +5 more from grand monuments: +1 for each step of their combined grandeur, in steps of 10, counting only monuments that are not contested.`
+(e) `docs/player_guide/11-influence.md` (the Monuments row): replace `Up to +5 more from grand monuments (+1 per 20 levels).` with `Up to +5 more from grand monuments: +1 for each step of their combined grandeur, in steps of 10, counting only monuments that are not contested.`
 
-(f) `docs/player_guide/16-reference.md`: in the systems table, change the Grand Monument row's rule from `none` to `Grand Monuments`; in the glossary, replace the Grand Monument row with the first line below and add the second after it:
+(f) `docs/player_guide/17-reference.md`: in the systems table, change the Grand Monument row's rule from `none` to `Grand Monuments`; in the glossary, replace the Grand Monument row with the first line below and add the second after it:
 
 ```markdown
 | Grand Monument | A building a government raises to what it stands for. Its effects grow with its grandeur, and it can become contested when what it honours falls. | [The extended timeline](02-timeline.md#grand-monuments) |
@@ -8618,7 +8618,7 @@ If building this taught anything about the engine that isn't in `docs/guides/scr
 
 ```bash
 git add docs/systems/mod_systems.md docs/player_guide/02-timeline.md docs/player_guide/01-introduction.md \
-        docs/player_guide/07-states.md docs/player_guide/10-influence.md docs/player_guide/16-reference.md \
+        docs/player_guide/08-states.md docs/player_guide/11-influence.md docs/player_guide/17-reference.md \
         docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf
 git add docs/guides/scripting_best_practices.md 2>/dev/null || true
 git commit -m "docs(monuments): system doc and player guide for the Grand Monument rework

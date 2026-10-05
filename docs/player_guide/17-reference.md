@@ -1,0 +1,110 @@
+# Quick reference
+
+This chapter collects facts from the rest of the guide for quick lookup: when
+each system first appears, and what the mod's own terms mean. Follow the links
+for the details.
+
+## When each system appears
+
+Some systems run from the first day of an 1836 start; most wait for a
+technology, a law or a rank. The table runs roughly in the order a typical
+campaign meets them. "Rule" names the game rule that can switch the system off;
+"none" means no rule can.
+
+| System | When it appears | Rule | Chapter |
+|---|---|---|---|
+| Construction market | From the start. You set the government's weekly purchase in the construction panel, as a number of points or as a budget. | Free Market Construction | [Economy and construction](03-economy.md#the-construction-market) |
+| Adaptive standard-of-living expectations, Construction Cost Scaling, Bulk Transportation | Always on. | none | [Economy and construction](03-economy.md) |
+| Migration crowding, Homeland Dynamics, tourism, world city rankings | Always on, shown in the state panel. Homeland changes also need an enabling law, principle or the Mass Media technology. | none | [States and population](08-states.md) |
+| Grand Monument, the Monuments journal entry and the Timeline Extended window's Grand Monuments tab | From the start, in any state. The journal entry and the tab open once you own one. | Grand Monuments | [The extended timeline](02-timeline.md#grand-monuments) |
+| Settlement Authority | From the start, in a thinly populated frontier state region. Programs unlock with technologies and laws. | Internal Resettlement | [States and population](08-states.md#internal-resettlement) |
+| Global Warming journal entry, and the Market panel's Climate tab | Listed from the start; becomes active for every country once warming reaches 0.1 °C. The tab is grayed until the entry is active. On another market it shows that market's emissions and its leader's policies, read-only. | Global Warming | [Climate and pollution](15-climate.md#the-global-warming-journal-entry) |
+| Strategic Reserve journal entry, and the Market panel's Reserve tab | Shown once you research Logistics; active once you build a Strategic Reserve Hub. The tab is grayed until the entry is active, and shows only on your own market. | none | [Economy and construction](03-economy.md#the-strategic-reserve) |
+| Banking Cycle journal entry, and the Budget panel's Banking tab | Stock Exchange and an Urban Center of level 5 or more. | Banking System | [Banking and monetary policy](04-banking.md#the-banking-cycle-journal-entry) |
+| Policy rate and monetary policy | The monetary model runs for every country. Your own policy rate needs National Bank Established and Commodity Money, Gold Standard, Fiat Money or Digital Currency; not under Command Economy, dollarized or pegged. | Banking System (Enabled only) | [Banking and monetary policy](04-banking.md#who-sets-the-policy-rate) |
+| Foreign capital and import-credit interventions | Banking Cycle journal entry in a market economy. Requirements vary: your own policy rate, convertible gold, National Bank Established, treasury cash or a financial crisis. | Banking System (Enabled only) | [Foreign capital and import credit](04-banking.md#managing-foreign-capital-and-import-credit) |
+| Collective Governance | The Political Agitation technology and a Distribution of Power law that allows it: any voting franchise, Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or Algorithmic Governance. | none | [Government, laws and characters](06-politics.md#collective-governance) |
+| Military Base | The Trench Works technology; each of its five levels needs a technology of its own. | none | [Military and war](13-military.md#military-bases) |
+| Tax Code journal entry, and the Budget panel's Tax Code tab | From the start, for every country that isn't decentralized. | Legislated Tax Code (off by default) | [Taxation (experimental)](05-tax-code.md#the-tax-code-tab) |
+| Heir Education journal entry | A monarchy with an heir who hasn't been educated. | Heir Education (off by default) | [Government, laws and characters](06-politics.md#heir-education) |
+| Create New Religion journal entry | Players only, while you have no custom religion. | Custom Religion Allowed (off by default) | [Government, laws and characters](06-politics.md#custom-religion-creator) |
+| State Collapse journal entry | Appears when your average standard of living falls below 5; the 52-week count runs while it is below 4. Decentralized countries are exempt. | none | [Government, laws and characters](06-politics.md#state-collapse) |
+| Cultural Hegemony journal entry, and the Society panel's Hegemony tab | Any country has researched Mass Media, and you have Romanticism. | Cultural Hegemony | [Cultural hegemony and covert warfare](11-influence.md#the-cultural-hegemony-journal-entry) |
+| Combined arms bonuses | The Combined Arms technology (era 6). | none | [Military and war](13-military.md#combined-arms-bonuses) |
+| Power bloc principle tiers IV and V | A technology researched by the bloc leader, named in the principle's tooltip: Mass Media opens tier IV of ten groups, Combined Arms of the four military ones, Globalization tier V of six. | none | [Diplomacy](09-diplomacy.md#principle-tiers-iv-and-v) |
+| Colonial Empire journal entry, and the Timeline Extended window's Colonial Empire tab | The Decolonization technology (era 6) and at least one overseas colony or colonial subject. The tab is grayed until the entry is active. | Decolonization | [Colonial empires and decolonization](12-decolonization.md#the-colonial-empire-journal-entry) |
+| Colonial collapse | Once any country has researched Decolonization (era 6); tiny, poor AI countries only, checked yearly. | Decolonization | [Colonial empires and decolonization](12-decolonization.md#colonial-collapse-of-tiny-countries) |
+| Irredentism and reunification | The Decolonization technology (era 6), a country that shares one of your primary cultures and holds a homeland state of yours, and a government that gives the cause a voice. | none | [Diplomacy](09-diplomacy.md#irredentism-and-reunification) |
+| Ten formable countries | The Decolonization technology (era 6). Each candidate needs major power rank and, except for United Earth, a capital in the region. | none | [Diplomacy](09-diplomacy.md#formable-countries) |
+| United Nations journal entry, and the Diplomacy panel's UN tab | Shown at Intergovernmental Organizations (era 6); active for everyone once a great power founds the UN. The tab is greyed until the entry is active. | United Nations | [The United Nations](10-united-nations.md) |
+| Nuclear Weapons journal entry, and the Military panel's Nuclear tab | The Nuclear Weapons technology and Great Power rank (or Major Power with Intercontinental Ballistic Missiles, or program aid by treaty). Once the world's first warhead exists, it is active for every country except decentralized ones and shows the nuclear taboo. The tab is grayed until the entry is active. | Nuclear Weapons | [Nuclear weapons](14-nuclear.md#the-nuclear-weapons-journal-entry) |
+| The Gathering Storm (World War journal entry) | Great Power rank and Combined Arms, while a great power of an opposed ideological camp exists. | World War (off by default) | [Military and war](13-military.md#the-world-war-journal-entry) |
+| Space race journal entries, and the Timeline Extended window's Space Race tab | Shown at Rocketry for great and major powers; the first milestone needs a Space Program building (Guided Missiles, era 7). The tab is grayed until a milestone is under way. | Space Race | [The space race](16-space.md#joining-the-space-race) |
+| Covert Warfare journal entry, and the Military panel's Covert tab | One covert operation slot more than your rank grants, from the Ministry of Intelligence and Security Established law or the Mainframe Computers technology (era 7). Once active, it stays open. The tab is grayed until the entry is active. | Covert Warfare | [Cultural hegemony and covert warfare](11-influence.md#the-covert-warfare-journal-entry) |
+| Civil Rights Movement journal entry | The Civil Rights Movement technology (era 7) and a poorly accepted minority in an incorporated state. | Social Movements | [Social movements](07-social-movements.md#when-the-civil-rights-struggle-begins) |
+| Digital Rights & Surveillance journal entry | Automated Surveillance or Cybersecurity (era 9). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
+| Mental Health Crisis and Post-Scarcity Transition journal entries | Mental Health Awareness and Universal Basic Income (both era 10). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
+| Human Augmentation Debate journal entry | Human Augmentation or Brain-Computer Interfaces (era 11). | Social Movements | [Social movements](07-social-movements.md#movement-journal-entries-at-a-glance) |
+| Megaprojects | Each needs its own era 12 technology. | none | [The extended timeline](02-timeline.md#megaprojects) |
+
+## Glossary
+
+Terms the mod introduces, or uses in its own sense.
+
+| Term | Meaning | Chapter |
+|---|---|---|
+| Agent network | Your 0–100 presence inside one target country. It gives operations a head start, cover from detection, and intelligence reports. | [Cultural hegemony and covert warfare](11-influence.md#agent-networks) |
+| Arsenal ceiling | The most warheads you choose to hold, or a Nuclear Arms Limitation treaty or the UN Prohibition Treaty holds you to. Warheads above it are taken apart, and your program builds nothing while you are at or above it. | [Nuclear weapons](14-nuclear.md#reducing-or-giving-up-an-arsenal) |
+| Bubble pressure | Speculation that builds up during a boom. It sets how likely a banking crash is and how hard it hits. | [Banking and monetary policy](04-banking.md#cycle-value-momentum-and-bubble-pressure) |
+| Bulk Transportation | The base game's Merchant Marine good, renamed: freight, produced by transport infrastructure and used by industry. | [Economy and construction](03-economy.md#bulk-transportation-and-freight) |
+| Case strength | A 0–100 score built from a country's record that decides which punitive UN resolutions can be tabled against it. | [The United Nations](10-united-nations.md#grounds-for-un-censure) |
+| Charter reform | One of the two amendments to the UN Charter. Each raises the ceiling on UN Authority and opens new business before the General Assembly. | [The United Nations](10-united-nations.md#un-charter-reforms) |
+| Colonial stability | The 0–100 bar of the Colonial Empire journal entry. Its level and the programs you run decide how the empire ends. | [Colonial empires and decolonization](12-decolonization.md#colonial-stability-bands) |
+| Commencement | The 1st of the month a passed tax bill takes effect, under the Legislated Tax Code rule. Collections change then, not before. | [Taxation (experimental)](05-tax-code.md#commencement-and-temporary-tax-rates) |
+| Construction maintenance | The construction good that industry and infrastructure consume each week under the construction market. | [Economy and construction](03-economy.md#construction-maintenance-and-retooling) |
+| Construction Services | The good that Construction Sectors sell and Construction Sites turn into construction points. | [Economy and construction](03-economy.md#from-construction-sector-to-construction-queue) |
+| Contested monument | A Grand Monument that honors something the government is not, after its crown, republic, revolution, leader or faith falls or its state changes hands. It gives only tourism and its local effect until you pull it down, rededicate it or keep it as heritage. | [The extended timeline](02-timeline.md#contested-monuments) |
+| Covert operation slot | Room for one running covert operation. Rank, the Ministry of Intelligence and Security and technologies add slots. | [Cultural hegemony and covert warfare](11-influence.md#intelligence-capacity-and-operation-slots) |
+| Credibility | Whether your nuclear word holds, from 0 to 100. Crises, pledges, guarantees and halting a dismantling move it. | [Nuclear weapons](14-nuclear.md#credibility-bluffs-and-crisis-outcomes) |
+| Credit standing | The part of your borrowing cost set by what your country is: rank, finance technologies and a stock exchange, institutions and currency credibility. | [Banking and monetary policy](04-banking.md#what-your-government-pays-to-borrow) |
+| Cultural share | Your cultural pull as a share of the world's total. It sets your standing in the cultural hegemony race. | [Cultural hegemony and covert warfare](11-influence.md#cultural-share-and-influence-tiers) |
+| Cycle value | The 0–100 reading that places your economy in one of the seven banking phases, from Panic to Frenzy. | [Banking and monetary policy](04-banking.md#the-seven-banking-cycle-phases) |
+| Detection Risk | The monthly chance that one of your covert operations is caught. Funding, your network in the target and your Efficiency Factor lower it; priority and the target's counterintelligence raise it. | [Cultural hegemony and covert warfare](11-influence.md#detection-and-exposure) |
+| Docket | The UN's monthly scan of world events, which puts real situations before the countries concerned. | [The United Nations](10-united-nations.md#the-un-docket) |
+| Exchange Rate Index | The real value of your currency, where 100 is par. | [Banking and monetary policy](04-banking.md#the-exchange-rate-index-and-capital-controls) |
+| Flagship building | A company's own unique building, built by the government while the company's prosperity bonus is active. | [The extended timeline](02-timeline.md#company-flagship-buildings) |
+| Foreign Cultural Benchmark | The legitimacy penalty on a country whose cultural share trails the hegemon's by more than about three points. It grows with the gap. | [Cultural hegemony and covert warfare](11-influence.md#legitimacy-pressure-on-trailing-countries) |
+| Funding Stealth | The points covert funding from level 2 up takes off every operation's Detection Risk. | [Cultural hegemony and covert warfare](11-influence.md#covert-funding-levels) |
+| Grand Monument | A building a government raises to what it stands for. Its effects grow with its grandeur, and it can become contested when what it honors falls. | [The extended timeline](02-timeline.md#grand-monuments) |
+| Grandeur | A Grand Monument's level. Its effects grow in steps, each taking twice the grandeur of the one before. | [The extended timeline](02-timeline.md#grand-monuments) |
+| Heritage monument | A Grand Monument kept under a government it does not honor. It gives prestige, cultural pull, tourism and its local effect, but no legitimacy and no approval. | [The extended timeline](02-timeline.md#contested-monuments) |
+| Intelligence capacity | The size of your intelligence agency. It sets detection odds in both directions. | [Cultural hegemony and covert warfare](11-influence.md#intelligence-capacity-and-operation-slots) |
+| International standing | Your own record in the UN, from 0 to 100, separate from UN Authority. It starts at 50 when you join, raises or lowers your diplomatic reputation, and sways votes on your resolutions. | [The United Nations](10-united-nations.md#international-standing) |
+| Intervention budget | Points that your active banking tools draw on: 1 to 7 from your financial regulation law, and one more each from National Bank Established and a power bloc's banking union. | [Banking and monetary policy](04-banking.md#the-intervention-budget) |
+| Launch Capacity | The good made by the Aerospace Industry's rocket production methods, the Space Elevator and Antimatter Engines, used by space programs, satellites, orbital production methods and megaprojects. | [The extended timeline](02-timeline.md#goods-the-mod-adds) |
+| Legislative Override Capacity | A score summed from your laws, institutions and a few technologies and power bloc principles. It decides which Forceful Legislation options you can use; below 0 the event never appears. | [Government, laws and characters](06-politics.md#forceful-legislation) |
+| Megaproject | An era 12 structure built one level at a time through construction sites. | [The extended timeline](02-timeline.md#megaprojects) |
+| Migration Crowding Tolerance | The modifier that raises a state's crowding threshold: +50% lets it hold half as many people again before Population Pressure starts. | [States and population](08-states.md#raising-crowding-tolerance) |
+| Momentum | How fast the banking cycle moves: added to the cycle value every month, and losing a tenth of itself each month. | [Banking and monetary policy](04-banking.md#cycle-value-momentum-and-bubble-pressure) |
+| Movement Support | The 0–100 bar of the Civil Rights Movement journal entry. The movement wins at 100 and collapses at 0. | [Social movements](07-social-movements.md#the-movement-support-bar) |
+| Nuclear crisis | A threat by one country against another over one dispute, with a deadline. | [Nuclear weapons](14-nuclear.md#nuclear-crises) |
+| Nuclear doctrine | When your government may order a first strike, from No First Use to Nuclear Warfighting. | [Nuclear weapons](14-nuclear.md#nuclear-doctrine) |
+| Nuclear readiness | How fast your forces can respond: Recessed, Routine, Heightened or High Alert. | [Nuclear weapons](14-nuclear.md#nuclear-readiness-levels) |
+| Nuclear taboo | How unthinkable the world finds nuclear weapons, one score from 0 to 100 born at 20 with the world's first warhead. Use and threats lower it, restraint and the United Nations raise it, and it scales the infamy of nuclear acts and the burden of holding warheads. | [Nuclear weapons](14-nuclear.md#the-nuclear-taboo) |
+| Nuclear umbrella | The cover you give your direct subjects while you hold Nuclear Power. It spares them the war-support drain of facing a nuclear-armed enemy, weighs your arsenal in crises against them and lets you retaliate for a strike on them under any doctrine. Anyone else needs a Nuclear Guarantee. | [Nuclear weapons](14-nuclear.md#the-nuclear-umbrella-and-nuclear-guarantees) |
+| Open frontier | A state region thin enough in population for a Settlement Authority to be founded there. | [States and population](08-states.md#the-settlement-authority) |
+| Peg Confidence | The market's belief, from 0 to 100, that a gold or treaty peg will hold. | [Banking and monetary policy](04-banking.md#gold-reserves-and-the-run-on-the-vault) |
+| Policy rate | The interest rate your central bank sets under the full Banking System. | [Banking and monetary policy](04-banking.md#who-sets-the-policy-rate) |
+| Population Pressure | The state modifier that cuts migration pull once a state is crowded for its arable land. | [States and population](08-states.md#migration-crowding) |
+| Risk premium | The part of your borrowing cost that moves with your circumstances, on top of the world rate and your credit standing. | [Banking and monetary policy](04-banking.md#what-your-government-pays-to-borrow) |
+| Secured custody | Protection that halves the warheads lost when an arsenal changes hands. It comes from a foreign custodian in a civil war, inspections after a stolen warhead, a Nuclear Security Assistance article or the Convention on the Physical Protection of Nuclear Material. | [Nuclear weapons](14-nuclear.md#arsenals-in-civil-wars-and-annexations) |
+| Setback risk | A running space milestone's monthly chance of a setback that costs progress: a base of 5% to 10% by milestone, scaled across your whole program by your approach and mission choices, never below 1% or above 50%. | [The space race](16-space.md#space-race-setbacks) |
+| Strategic Reserve Hub | The capital building that runs your reserve of strategic goods. | [Economy and construction](03-economy.md#reserve-hub-and-silos) |
+| Tax bill | A reform of the tax code under debate. It passes once committed interest groups hold more than half the clout, legitimacy is at least 25 and it has been debated long enough. | [Taxation (experimental)](05-tax-code.md#passing-a-tax-bill) |
+| Tax code | Under the Legislated Tax Code rule, the tax rates, taxed goods and relief a country's laws hold. It changes only through tax bills. | [Taxation (experimental)](05-tax-code.md) |
+| Temperature anomaly | Global warming in °C, driven by the world's cumulative emissions. | [Climate and pollution](15-climate.md#how-emissions-become-warming) |
+| Tradecraft | Your intelligence agency's experience, from 0 to 100, which unlocks higher priorities and harder operations. | [Cultural hegemony and covert warfare](11-influence.md#tradecraft) |
+| UN Authority | How seriously the world takes the UN, from 0 to 100. It sets the tier and the strength of every resolution. | [The United Nations](10-united-nations.md#un-authority) |
+| UN enforcement | The multiplier the UN's tier puts on every penalty the Assembly imposes and on every convention's effects, from ×0 at Moribund to ×2.5 at Supranational. | [The United Nations](10-united-nations.md#un-authority-tiers) |
+| Urban Engineering | Points from five early urban technologies. Each adds 1,000 people to every state's crowding threshold, before Migration Crowding Tolerance multiplies it. | [States and population](08-states.md#migration-crowding) |
+| Weight in world affairs | A country's share of world prestige against a typical great power's 10% (×1), up to ×5. What its acts add to UN Authority's ledgers is multiplied by it. | [The United Nations](10-united-nations.md#un-authority) |

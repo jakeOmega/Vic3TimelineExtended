@@ -115,7 +115,7 @@ render on GitHub. Stick to this subset:
 - **Tables** for data that has rows and columns: buttons and what they do, tiers
   and thresholds, rules and defaults. Not for prose chopped into cells. A table
   that only lists content (every wonder with its state, every unit or ship) goes
-  in [Appendix: reference lists](19-appendix-reference-lists.md), with a sentence
+  in [Appendix: reference lists](20-appendix-reference-lists.md), with a sentence
   or two and a link in the chapter. Keep a table in the chapter when it is short
   or explains a mechanic or a choice.
 - **Lists** for real lists. Write each item as a sentence or a plain phrase. No

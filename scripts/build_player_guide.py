@@ -54,7 +54,7 @@ FINGERPRINT_PREFIX = "source-sha256:"
 CHAPTER_GLOB = "[0-9][0-9]-*.md"
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"}
 
-# [text](07-states.md#anchor) or [text](07-states.md)
+# [text](08-states.md#anchor) or [text](08-states.md)
 _CROSS_LINK = re.compile(r"\]\((\d\d-[A-Za-z0-9_-]+\.md)(#[^)\s]*)?\)")
 _ATX_HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 _FENCE = re.compile(r"^\s*(```|~~~)")

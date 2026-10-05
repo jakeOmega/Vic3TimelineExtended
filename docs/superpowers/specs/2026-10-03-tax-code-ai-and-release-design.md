@@ -12,7 +12,7 @@
 | Merge gate | Packages 6 and 7 finish on the branch. #680 then merges behind the default-off rule, still labelled experimental, and the owner play-tests from `main`. Fixes come as follow-up PRs. Package 7 delivers the evidence *instrument* (runbook, setup events, save report, docs); no runtime gate is marked passed without the owner's result. |
 | AI promises | The owner asked whether this can follow vanilla's law-negotiation journal entries. §2.8 explains how those steer the AI and gives the equivalent built here. Owner follow-up: let the AI try; if it is still short near the deadline, enact the promise for it. Log met or unmet at every deadline (§2.8). |
 | AI customs | The owner first chose "the AI legislates the levels it wants", then asked whether the native tariff controls could be disabled outright: by cancelling the tariff maximum, as Free Trade lacks one, and applying tariffs another way. Decision: **probe first**, bundled with the owner's in-game test. This branch registers the per-good tariff modifier families and extends probe P09 to test both mechanisms. AI customs legislation waits for that result (§2.9). |
-| Guide | The Tax Code chapter is chapter 5, right after Banking. It is filed as `04-tax-code.md` to avoid renaming files while other branches edit the guide; the renumbering is issue #682 (§3.6). |
+| Guide | The Tax Code chapter is chapter 5, right after Banking. It is filed as `05-tax-code.md`; issue #682 aligns the chapter prefixes with the PDF chapter numbers (§3.6). |
 
 ## 2. Package 6: AI legislation
 
@@ -309,15 +309,15 @@ It reads **plain-text** saves with a streaming extractor of `te_tax_*` names and
 
 ### 3.6 Player guide chapter
 
-- **File.** A new chapter `04-tax-code.md`. It sorts after `04-banking.md`, so the PDF, which numbers chapters by position, prints it as chapter 5 with no other file renamed. A full renumber would rewrite about 265 links across the guide and conflict with every open branch that edits it. Issue #682 renumbers the files once the guide is quiet.
+- **File.** The chapter is `05-tax-code.md`, immediately after `04-banking.md`, so the PDF prints it as chapter 5. The initial release used a duplicate prefix to avoid conflicts while other branches edited the guide. Issue #682 aligns the filename prefixes with the PDF chapter numbers once the guide is quiet.
 - **Index.** The README index lists it as 5 and shifts the later numbers. No chapter refers to another by its number in prose; only links by file name are used.
 - **Outline.** Research H §4b gives the outline, filled with what packages 6 and 7 built, and every UI name is single-sourced from loc (§4c table).
 - **Marked experimental.** The chapter opens with the rule, labelled experimental and off by default. It documents customs as the experimental option, and the carbon levy not at all.
 - **AI section.** It says how AI countries legislate, in player terms: when they raise or cut, what they concede, and that they keep their promises or renegotiate them.
 - **Also updated:**
   - `01-introduction.md` (the rule row),
-  - `16-reference.md` (the system and rule rows),
-  - `05-politics.md` (the taxation-law mentions under the rule),
+  - `17-reference.md` (the system and rule rows),
+  - `06-politics.md` (the taxation-law mentions under the rule),
   - the README index.
 - **Then:** rebuild the PDF; run the style lint with `--strict`.
 
