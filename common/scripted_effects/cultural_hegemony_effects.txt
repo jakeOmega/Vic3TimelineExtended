@@ -293,7 +293,8 @@ ch_effect_disable_cultural_protectionism = {
 # several families is the first one it reaches. A Corporate State that is also
 # an Ethnostate is Fascist, and so is a one-party Ethnostate with a Command
 # Economy (Communist splits round Fascist: council republics first, one-party
-# command economies after); a Technocracy under a monarch is Technocratic; a
+# command economies run by communists after; a Command Economy run by the rest
+# of the left is Socialist); a Technocracy under a monarch is Technocratic; a
 # junta with State Religion is Reactionary; a constitutional monarchy with
 # universal suffrage is Constitutional Monarchist, not Liberal. Every law test
 # is has_law_or_variant, so Bakufu and Neo-Absolutism count as Autocracy.
@@ -333,11 +334,14 @@ ch_set_political_model = {
 		}
 		set_variable = { name = ch_model value = 3 }
 	}
-	# Communist / Vanguardist: a one-party command economy that is not Fascist
+	# Communist / Vanguardist: a one-party command economy run by communists
+	# (ch_government_led_by_communists) that is not Fascist. A one-party
+	# planner run by anyone else falls through to its other laws.
 	else_if = {
 		limit = {
 			has_law_or_variant = law_type:law_single_party_state
 			has_law_or_variant = law_type:law_command_economy
+			ch_government_led_by_communists = yes
 		}
 		set_variable = { name = ch_model value = 1 }
 	}
@@ -346,9 +350,19 @@ ch_set_political_model = {
 		limit = { has_law_or_variant = law_type:law_corporate_state }
 		set_variable = { name = ch_model value = 4 }
 	}
-	# Socialist / Cooperative
+	# Socialist / Cooperative: worker ownership, or a Command Economy run by
+	# the left (ch_government_led_by_the_left) that the Communist branches
+	# above did not take
 	else_if = {
-		limit = { has_law_or_variant = law_type:law_cooperative_ownership }
+		limit = {
+			OR = {
+				has_law_or_variant = law_type:law_cooperative_ownership
+				AND = {
+					has_law_or_variant = law_type:law_command_economy
+					ch_government_led_by_the_left = yes
+				}
+			}
+		}
 		set_variable = { name = ch_model value = 5 }
 	}
 	# Technocratic: rule by experts, or by the mod's algorithmic successor
