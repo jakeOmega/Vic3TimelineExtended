@@ -13,6 +13,12 @@ entity's opening line:
 
     prestige_loss_tiny = { # REVIEWED 2026-05-08: backwards-compat alias
 
+`python3 loc_coverage_audit.py --strict` is the CI mode: it exits 1 when any
+flag lacks a `# REVIEWED` exemption. It needs no game install; the CLI takes
+vanilla and its English loc from the committed `vanilla_parsed/` snapshot
+(`mod_state_server.cli_mod_state`), so a stale snapshot (`python3
+vanilla_parsed.py check`) can flag or hide vanilla keys.
+
 Coverage: static modifiers, character traits, journal entries, laws, decrees,
 scripted buttons, buildings, production methods, production method groups,
 goods, government types, game concepts,
@@ -459,6 +465,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
     )
 
 
+def strict_exit_code(result: AuditResult) -> int:
+    """Exit status for `--strict` (CI mode): 1 if any flag lacks a
+    `# REVIEWED` exemption."""
+    return 1 if any(not f.exemption for f in result.flags) else 0
+
+
 def render_report(result: AuditResult) -> str:
     unrev = [f for f in result.flags if not f.exemption]
     exemp = [f for f in result.flags if f.exemption]
@@ -596,3 +608,6 @@ if __name__ == "__main__":
     ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(strict_exit_code(result))

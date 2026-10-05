@@ -12,6 +12,7 @@ from loc_coverage_audit import (
     _event_loc_keys,
     _parse_reviewed,
     _build_entity_locations,
+    strict_exit_code,
 )
 
 
@@ -746,6 +747,51 @@ class RenderTests(unittest.TestCase):
         self.assertNotIn("files audited", report)
         self.assertNotIn("178", report)
         self.assertIn("  - Modifiers: 1", report)
+
+
+class StrictExitCodeTests(unittest.TestCase):
+    """`--strict` is the CI mode: fail on any flag with no REVIEWED exemption."""
+
+    def _result(self, *exemptions):
+        from loc_coverage_audit import AuditResult, LocFlag
+        return AuditResult(
+            flags=[
+                LocFlag(category="Modifiers", entity=f"m{i}", missing_keys=[f"m{i}"],
+                        file="common/static_modifiers/y.txt", line=i + 1, exemption=ex)
+                for i, ex in enumerate(exemptions)
+            ],
+        )
+
+    def test_no_flags_passes(self):
+        self.assertEqual(strict_exit_code(self._result()), 0)
+
+    def test_one_unreviewed_flag_fails(self):
+        self.assertEqual(strict_exit_code(self._result(None)), 1)
+
+    def test_all_reviewed_passes(self):
+        reviewed = {"date": "2026-10-01", "rationale": "hidden"}
+        self.assertEqual(strict_exit_code(self._result(reviewed, reviewed)), 0)
+
+    def test_one_unreviewed_among_reviewed_fails(self):
+        reviewed = {"date": "2026-10-01", "rationale": "hidden"}
+        self.assertEqual(strict_exit_code(self._result(reviewed, None)), 1)
+
+    def test_unlocalized_modifier_fails_and_reviewing_it_passes(self):
+        """End to end through audit(): the #681 shape, a mod-introduced
+        modifier type with no loc key."""
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/static_modifiers/x.txt", "te_new_modifier = {\n}\n")
+        ms = FakeMS(mod_data={"Modifiers": {"te_new_modifier": {}}},
+                    base_data={"Modifiers": {}})
+        self.assertEqual(strict_exit_code(audit(ms, mod_path=tmp)), 1)
+
+        _write(tmp, "common/static_modifiers/x.txt",
+               "te_new_modifier = { # REVIEWED 2026-10-04: hidden probe\n}\n")
+        self.assertEqual(strict_exit_code(audit(ms, mod_path=tmp)), 0)
+
+        ms._loc.add("te_new_modifier")
+        _write(tmp, "common/static_modifiers/x.txt", "te_new_modifier = {\n}\n")
+        self.assertEqual(strict_exit_code(audit(ms, mod_path=tmp)), 0)
 
 
 if __name__ == "__main__":

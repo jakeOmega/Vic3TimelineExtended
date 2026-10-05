@@ -1,9 +1,12 @@
 # Game-independent checks for the mod + its Python tooling (issue #247).
 #
 # Everything here runs without a Victoria 3 install: the dummy VIC3_* paths below
-# satisfy path_constants' lazy resolution, and no step builds a ModState or starts
-# mod_state_server. Audits that need the vanilla game stay out of CI — without the
-# base game they degrade to noise.
+# satisfy path_constants' lazy resolution, and no step starts mod_state_server.
+# Audits that need the vanilla game stay out of CI — without the base game they
+# degrade to noise. A few audits build a ModState anyway, taking vanilla from the
+# committed vanilla_parsed/ snapshot; the loc_coverage_audit step below builds the
+# full one (mod_state_server.cli_mod_state, ~7 s). A stale snapshot (`python3
+# vanilla_parsed.py check`) could make it flag or hide a vanilla key.
 name: CI
 
 on:
@@ -229,6 +232,16 @@ jobs:
       - name: Audit — loc keys named in script that no loc file defines
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
+
+      # Needs no game: the CLI builds a ModState from the committed
+      # vanilla_parsed/ snapshot and its English loc. This is the check that
+      # catches a mod-introduced entity (a modifier type, a PM, a building) with
+      # no loc key, which the engine renders as the raw key without a log line.
+      # A branch never commits the report this audit regenerates, so before this
+      # step the first sign was a reviewer's server (#681, #685).
+      - name: Audit — mod entities with no localization key
+        if: ${{ !cancelled() }}
+        run: python3 loc_coverage_audit.py --strict
 
       # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
       # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md
