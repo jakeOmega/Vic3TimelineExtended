@@ -1511,7 +1511,12 @@ def monetary_update_gold(cfg: Config, state: State, world_rate: float) -> None:
         state.bank_gold = min(1.0, max(0.5, cfg.gold_reserves)) * limit
         state.bank_gold_seeded = True
 
-    damp = K.sv("te_mon_controls_damp_value") if "capital_controls" in state.tools else 1.0
+    # `cc_damp=X` overrides te_mon_controls_damp_value (§20's A/B: 1 = controls
+    # leave gold flows alone).
+    damp = (
+        tuned("cc_damp", K.sv("te_mon_controls_damp_value"))
+        if "capital_controls" in state.tools else 1.0
+    )
     clamp = K.sv("te_mon_gold_gap_clamp")
     gap = max(-clamp, min(clamp, state.policy_rate - world_rate)) * damp
     flow_unit = state.gdp * K.sv("te_mon_gold_flow_per_pp")
@@ -1947,6 +1952,9 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     # for a crisis with nothing at stake. FX sits at par here, so the 70 needs a
     # gold-flow country's vault or peg. `--simplified` runs the game rule's
     # fallback branch, the pre-phase-1 cycle rule (panic 60 / downturn 35).
+    # The button is AI-only and every AI on gold runs peg defence, so of the gold
+    # cells only gold/peg is an AI's; the 70 fires in the price and growth cells
+    # alone (banking_cycle_simulation.md §20).
     v = 0.0
     if cfg.simplified:
         v += 60 if p == PANIC else 0
@@ -1958,7 +1966,8 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
         at_stake = has_gold_flows(cfg, state) and (
             (state.gold_flow < 0 and vault < 0.3) or state.peg_confidence <= 40
         )
-        v += 70 if at_stake else 15
+        # `cc_weak=X` scores the "nothing at stake" case X instead (§20's A/B).
+        v += 70 if at_stake else tuned("cc_weak", 15.0)
     v += flavour(v, (15 if cfg.fin_law == "law_prudential_narrow_banking" else 0)
                  + (10 if cfg.fin_law == "law_directed_credit_development_banks" else 0)
                  + (10 if med else 0) + (5 if low else 0))
@@ -2991,6 +3000,10 @@ def _run_cell(job: tuple[Config, int, int, dict]) -> dict:
     TUNE.update(tune)
     # `eliq_cost=N` overrides the lender of last resort's point cost (F12).
     TOOL_COST["eliq"] = float(TUNE.get("eliq_cost", DEFAULT_TOOL_COST["eliq"]))
+    # `cc_cost=N` overrides capital controls' point cost (§20's crowd-out A/B).
+    TOOL_COST["capital_controls"] = float(
+        TUNE.get("cc_cost", DEFAULT_TOOL_COST["capital_controls"])
+    )
     # crc32, not hash(): Python salts hash(str) per interpreter, so --seed would
     # not actually reproduce a run.
     base = seed + zlib.crc32(f"{cfg.currency}/{cfg.mode}/{cfg.points}".encode()) % 10_000
