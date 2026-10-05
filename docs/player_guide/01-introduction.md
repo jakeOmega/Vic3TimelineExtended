@@ -111,8 +111,9 @@ private spending, so they are excluded from the totals and Construction Goods.
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
 which each expand into Wages plus Materials and Support. Materials and Support
 includes logistics centres and naval fortifications, whose operating costs
-combine wages, goods and any slave upkeep. Existing branch costs are subtracted
-first to avoid double counting. Navy also includes warship construction and
+combine their own wages, goods and any slave upkeep. Barracks, conscription
+and naval administration stay in the native branch entries, while support
+buildings contribute their full upkeep. Navy also includes warship construction and
 maintenance. Shipping and diplomatic flows have their own expandable groups. A collapsed group occupies one pie slice; expanding it
 replaces that slice with its visible components.
 

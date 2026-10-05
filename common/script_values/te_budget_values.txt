@@ -49,32 +49,25 @@ te_budget_institution_pool = {
 	}
 }
 
-# Modern logistics centres and naval fortifications are charged through the
-# military budget, but the branch GUI getters can omit their operating costs.
-# Read full operating deficits for each branch once. The GUI passes these sums
-# into the chart scope; leaf values never repeat building scans. These buildings
-# produce military services, not saleable output, so their deficit is upkeep.
-te_budget_army_operating_actual = {
+# Support-building deficits contain their own wages, goods and slave upkeep.
+# Barracks/conscript costs and naval administration are already supplied by the
+# native branch getters. In particular, barracks unit wages are NOT included in
+# the logistics-centre deficit; subtracting the branch forecast here wrongly
+# moves those wages into Other Military Costs. Select only support buildings and
+# pass each sum once to the GUI, then add it directly to Materials and Support.
+te_budget_army_support_actual = {
 	value = 0
 	every_scope_building = {
-		limit = {
-			OR = {
-				is_building_group = bg_army
-				is_building_group = bg_conscription
-				is_building_group = bg_army_logistics_center
-			}
-		}
+		limit = { is_building_group = bg_army_logistics_center }
 		add = { value = weekly_profit multiply = -1 min = 0 }
 	}
 }
 
-te_budget_navy_operating_actual = {
+te_budget_navy_support_actual = {
 	value = 0
 	every_scope_building = {
 		limit = {
 			OR = {
-				is_building_group = bg_navy
-				is_building_group = bg_naval_administration
 				is_building_group = bg_naval_fortification
 				is_building_group = bg_naval_logistics_center
 			}

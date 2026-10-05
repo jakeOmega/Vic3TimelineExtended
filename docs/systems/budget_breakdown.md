@@ -25,22 +25,33 @@ category occurs exactly once in the tree, except Military and Shipping whose
 existing totals are subdivided into new leaves.
 
 Branch wages are the engine's predicted branch total minus its goods expense.
-The native branch getters can omit logistics centres and naval fortification
-upkeep even though the main military goods total includes them. Read each
-branch's full operating deficit once using `every_scope_building` over its
-building groups, including conscription, logistics, naval administration and
-fortifications. Private arms factories and government civil buildings do not
-enter either sum. Nonnegative profits contribute no operating cost.
+The native branch getters can omit logistics-centre and naval-fortification
+upkeep even though the main military goods total includes it. Read support
+building deficits once using `every_scope_building`, selecting only Army
+Logistics Centers for Army, and Naval Logistics Centers plus Naval Fortifications
+for Navy. Barracks, conscription centers and Naval Administration are excluded:
+the native branch amounts already cover their costs. Private industry and other
+government buildings are also excluded. Nonnegative profits contribute zero.
 
-Materials and Support = native branch goods + max(branch operating deficit −
-native predicted branch total, 0). This retains existing native costs and adds
-only operating costs not already covered by the native branch forecast. Navy
-also adds warship construction and maintenance. Support combines goods, wages
-and any slave upkeep, because scripts cannot read these components separately;
-the label and tooltip deliberately identify the combined amount. A declining
-operating balance never subtracts existing forecast costs. Weekly building
-balances can differ from wage predictions, so Other Military Costs remains a
-signed reconciliation of the original military total against Army plus Navy.
+Materials and Support = native branch goods + full support-building deficit.
+Navy also adds warship construction and maintenance. Support combines its own
+wages, goods and any slave upkeep; scripts cannot read those components
+separately, so the label and tooltip identify the combined amount. Do not
+subtract the native branch forecast from the support deficit: barracks unit
+wages can be charged separately without appearing in building `weekly_profit`.
+An all-branch building sum therefore cannot safely replace the native totals.
+
+For example, £18,600 of barracks wages plus £29,800 of Army logistics goods and
+£1,060 of logistics wages gives Army £49,460: Wages £18,600 and Materials and
+Support £30,860. Subtracting barracks wages from that support balance would show
+only £12,260 of support and leave an artificial £18,600 in Other Military Costs.
+The regression fixture reproduces this case with zero barracks `weekly_profit`,
+matching separate unit-wage accounting rather than assuming a building deficit
+contains the branch's wages.
+
+Weekly support balances can still differ from budget forecasts, so Other Military
+Costs remains a signed reconciliation of the original total against Army plus
+Navy. Supply-ship costs stay in Shipping; military-ship costs go to Navy once.
 The original military total and both public headers retain their prior formulas.
 
 A collapsed group contributes one slice; expanding it replaces that slice with
@@ -116,7 +127,7 @@ rules are in `common/script_values/te_budget_values.txt`; the panel layout is in
 `gui/te_budget_breakdown.gui`.
 
 Each section binds the engine getters into a `TopScope`. The administration
-building sum, military branch operating deficits, total institution levels,
+building sum, military support-building deficits, total institution levels,
 allocated pool and positive chart total are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
@@ -180,8 +191,8 @@ Engine rendering and accounting still require an in-game check:
 7. Compare modern military upkeep against Overview's building-type tooltip.
    Army logistics must appear in Army's Materials and Support; naval logistics
    and fortifications must appear in Navy's. Check an empty branch, conscription,
-   a wage change and slave upkeep. Confirm branch forecasts already covering a
-   building are not added twice, and public totals remain unchanged.
+   a wage change and slave upkeep. Confirm native barracks/conscript/Naval Administration costs are not added
+   twice or deducted from support upkeep, and public totals remain unchanged.
 8. Apply Banking and Covert Actions charges together. Check their rows and source
    tooltips against Additional Expenses, including JE-owned modifiers, decaying
    charges, refunds and removal. On an existing save, verify modifier-definition
