@@ -1369,6 +1369,10 @@ onclick = "[GetVariableSystem.Toggle(Concatenate('expanded_', State.GetIDString)
 visible = "[GetVariableSystem.Exists(Concatenate('expanded_', State.GetIDString))]"
 ```
 
+### Typed text does not reach script
+
+A mod can draw an `editbox`, but the text goes only where its `ontextedited` callback sends it. In every vanilla panel the mod copies (`states_panel.gui`, `military_formation_panel.gui`, the two power bloc panels, `market_panel.gui`, `treaty_draft_panel.gui`, `right_click_menu.gui`), that callback is a method of an engine object of one type: `StateNameChangePopup` (a state and its five hubs), `MilitaryFormationChangeNamePopup`, `PowerBlocCustomizationPopup`, `PrestigeGoodChangeNamePopup`, `TreatyDraft`, `ArticleDraft`. `PopupManager` opens each popup with its object, and the popup's `Confirm` saves the name. Nothing in those files passes text to a scripted GUI: `MakeScopeValue` passes numbers, and no text counterpart appears. The only store a mod's editbox could write to, `GetVariableSystem`, is client-side, unsaved and invisible to script. So a player-chosen name for mod content is a choice among loc-keyed options (Grand Monuments v2 discussion, 2026-10-05). Not yet checked: the engine's full data-type list, from a dump on a machine with the game, for a function that turns text into a scope value.
+
 ---
 
 ## GetDefine (Engine Constants)
