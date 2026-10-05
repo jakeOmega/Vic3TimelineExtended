@@ -24,7 +24,7 @@ it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday sto
 momentum bounce (`--holiday`, `--tune pre_holiday`). §20 (2026-10-05) traces §18's gold capital-controls
 crashes to cells no AI runs and leaves the AI's weights alone (`--tune cc_cost=0`, `cc_damp=1`, `cc_weak=0`).
 §21 (2026-10-05) measures Cooperative Ownership for the first time, with an interim arm posted on #720, and
-retunes it. Every table states which script it measured.
+retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). Every table states which script it measured.
 
 ---
 
@@ -2020,4 +2020,172 @@ The interim arm posted on #720, run from the repo root (the cross-currency rows 
 
 ```
 python3 path/to/coop_probe.py --runs 300
+```
+
+## 22. Imported crashes as an independent channel (#717)
+
+The simulator now accepts `--imported-crash-years N`, default **0 (off)**. Each month an arrival
+is drawn with probability `1 / (12 × N)`; N must be at least one month when enabled. This is a
+geometric monthly waiting time, the discrete Poisson stand-in recommended in #717. It represents
+an overseas crash that already reached this country: the reach roll and seven-day event delay are
+folded into N. Foreign severity is drawn uniformly from the five tier midpoints, 10/30/50/70/90.
+That fixed mix keeps the arrival channel independent of the local bubble tuning.
+
+The arrival then runs the script's crash/scare lottery: `(bubble + boost) × chance multiplier`,
+against weight 100. The foreign-severity boost is 5/10/20/30; a crash's severity seed is
+`bubble × banking_crash_severity_scale_value + 5/10/15/20`, multiplied by the same 0.5–2 lottery
+as an origin crash and by the recipient economy's damping, then capped at 100. Both paths use the
+same tier-ceiling helper and clear the bubble only on a crash. Scares lower cycle/momentum by
+3/1 in a market economy, 1/0.5 under command and 2/0.5 under cooperative ownership; their floor
+clamps cannot lift either figure above its prior value.
+
+`State.imported_crashes` and `imported_scares` record arrival month, foreign severity, local severity,
+prior state, tier and actual drops. They never enter `State.crashes` or start an origin recovery
+clock. The extra summary reports both populations' counts per century and mean drops, plus the
+share of imported crashes whose recipient was already below the tier ceiling. Origin crash count,
+severity, depression share, recovery and post-crash stance still use origin records; imports can,
+of course, change the subsequent path and therefore an origin's eventual recovery time. An imported
+crossing is excluded from the count of downturns attributed to policy alone.
+
+**Measured:** 100 runs × 100 years per cell, fiat / price stability, seed 20260922, 10-year mean
+arrival interval. These are sensitivity samples, not new origin-crash tuning targets.
+
+| economy / points | origin crashes/century | imported crashes/century | scares/century | already below tier | crash value / momentum drop | scare value / momentum drop |
+|---|---:|---:|---:|---:|---:|---:|
+| market / 0 | 9.80 | 2.05 | 8.14 | 7.3% | 31.07 / 2.55 | 2.95 / 1.00 |
+| market / 8 | 3.73 | 2.12 | 7.68 | 0.9% | 27.81 / 2.03 | 3.00 / 1.00 |
+| command / 0 | 0.89 | 1.20 | 8.69 | 1.7% | 22.29 / 1.57 | 1.00 / 0.50 |
+| command / 8 | 1.05 | 0.40 | 9.29 | 5.0% | 32.07 / 0.83 | 1.00 / 0.50 |
+| coop / 0 | 1.68 | 1.91 | 8.29 | 4.7% | 23.21 / 1.90 | 1.99 / 0.50 |
+| coop / 8 | 1.57 | 1.58 | 8.33 | 3.8% | 28.63 / 1.69 | 2.00 / 0.50 |
+
+Even with the fixed 10-year arrival interval, the crash/scare split depends on local bubble pressure
+and protection. At zero points, imports replace some future origin crashes by clearing the bubble
+and lowering the cycle sooner. Adding origin and imported counts would hide that distinction.
+The 1–7% of imported crashes landing below their tier are the population §17 could not measure;
+the ceilings ensure they cannot raise the cycle.
+
+**Deliberate omissions:** crisis-wave cascades, the Great Depression chain, effective-backstop ×0.8,
+and contagion event-option modifiers, including Option A's decaying protectionism. These tables use
+the bare imported effects. `--event-channel` remains a separate optional aggregate event stand-in.
+No new random draw is consumed with imports off. With all extensions off, both the printed market
+table and JSON retain their earlier shape; a fixed-hash-seed regression compares the JSON byte for
+byte against main `028ea9cf`. `test_banking_sim_extensions.py` checks the entire ceiling/scare grid
+against the real script's interpreter and the crash/scare weights and severity lottery against an
+independent interpreter of `banking_contagion_crash_check`.
+
+Reproduce the price-stability rows from these CLI outputs (which also print the other fiat dials):
+
+```bash
+for economy in market command coop; do
+  PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py \
+    --runs 100 --years 100 --seed 20260922 --only fiat --points 0,8 \
+    --economy "$economy" --imported-crash-years 10 --pool --jobs 4
+done
+```
+
+## 23. Permanent command and cooperative arms (#720)
+
+`--economy market|command|coop` now selects the phase modifiers by their suffix, the cooperative
+inertia family (none under command), and the economic-law volatility modifier from the
+`INJECT:law_*` blocks. Market remains the default. Origin and imported chance/severity damping
+now live in four named script values shared by the game and simulator; this refactor retains the
+same game values. Command economies have the script's administered 3% policy rate, zero inflation,
+and no monetary stance; cooperative neutral rates include the script's −0.5pp term.
+
+The eight planning and eight council tools read their modifiers and point costs from the mod. All
+32 enable/disable weights, the 13 hold gates, and the two command transfer buttons are evaluated
+from the actual script blocks through a small reader that rejects unsupported instructions.
+`test_banking_sim_extensions.py` checks all 34 registered buttons against the modeled roster and
+compares their toggle weights and hold gates over a state grid with an independent interpreter.
+`--tune ai_hold=off` applies to these arms too. As with the market study, tech unlocks are assumed
+available and the click cadence is the simulator's `--no-click-weight` assumption; radicals,
+loyalists and political feedback are not modeled.
+
+`--hold-tools cw_capital_plan,cw_credit --points 8` holds those player tools throughout the run and
+disables AI clicks. Full alternate button names are accepted as aliases. The selected tools must
+belong to the economy and fit the point budget; unspent points can still afford an origin crash
+response. This arm keeps the player's selected tools on after a crash. It does not model switching
+costs or treasury exhaustion for market tools. Existing `--rescue` and `--holiday` fork studies
+remain market-only and reject combinations with these extensions.
+
+### The optional pool
+
+`--pool` advances 52 weekly ticks per year, distributing four or five across each month. Units are
+baseline weekly gross income, the initial/settled balance is 24, and private spending is
+`min(pool / 24, cap)` with cap 1.2 by default (`--pool-spend-cap`). The market toy assumes half of
+inflow comes from capitalists at a 30% base contribution and applies the phase/tool contribution
+adds, as the interim probe did. Cooperative and command baseline inflow is one. The cooperative
+income share and its withdrawal floor are evaluated from `investment_pool_banking_cycle_income_add`,
+so losses cannot take more than the balance. These are model assumptions; contribution behavior,
+construction prices, queue capacity and GDP feedback from construction are not simulated.
+
+Command net-income balancing reads `ce_treasury_pool_balance_multiplier` monthly and after a
+transfer, then applies its pool add and paired treasury expense weekly. Treasury starts from the
+simulation's gold-reserve assumption and also pays the exogenous deficit. Transfer buttons use
+their actual cash thresholds, GDP-scaled amount/floor, pool cap and AI weights; balances are scaled
+by `--pool-weekly-income` (default 1000 cash units). The default proxy still uses exogenous debt for
+`in_default`, not a complete government credit model. Changing that cash scale can change transfer
+frequency. Zero points means no AI clicks, including transfers. The summary reports median weekly
+peak/trough relative to the settled balance, months above 1.5×, final treasury and transfer counts.
+Command pool extremes below are sensitive to that toy treasury and transfer channel. The pool adds
+no random draws or feedback to the market/cooperative cycle; command transfers can change AI click
+selection when the pool is enabled.
+
+### Measured arms and targets
+
+**100 runs × 100 years**, fiat / price stability, seed 20260922, imports off, pool on with the default
+cap and cash scale. The cooperative target is approximately **2 untooled crashes per century**,
+per the owner's ruling recorded in #720. The command target is **unset**; these measurements do not
+retune its tools or phases. Small differences from §21's interim monkeypatch reflect sample size,
+seeds, the cooperative neutral-rate term and the permanent pool's 52-week calendar.
+
+| economy / points | origin crashes/century | Boom + Frenzy | Frenzy | pool peak / trough | months above 1.5× |
+|---|---:|---:|---:|---:|---:|
+| market / 0 | 11.81 | 10.2% | 1.0% | 1.21 / 0.65 | 0.0% |
+| market / 4 | 6.58 | 7.2% | 0.2% | 1.15 / 0.73 | 0.0% |
+| market / 8 | 3.80 | 4.9% | 0.1% | 1.15 / 0.89 | 0.0% |
+| command / 0 | 1.50 | 0.0% | 0.0% | 1.00 / 1.00 | 0.0% |
+| command / 4 | 0.40 | 11.0% | 0.4% | 2.68 / 0.00 | 23.1% |
+| command / 8 | 1.07 | 28.9% | 3.9% | 2.69 / 0.00 | 24.3% |
+| coop / 0 | 2.06 | 0.9% | 0.0% | 1.11 / 0.88 | 0.0% |
+| coop / 4 | 2.04 | 2.0% | 0.0% | 1.13 / 0.88 | 0.0% |
+| coop / 8 | 1.68 | 4.0% | 0.0% | 1.14 / 0.93 | 0.0% |
+
+**Player tools held all game, 8-point budget**, same run settings:
+
+| tools | origin crashes/century | Boom + Frenzy | Frenzy | pool peak / trough |
+|---|---:|---:|---:|---:|
+| command: ce_allocation | 31.69 | 46.0% | 30.3% | 1.00 / 1.00 |
+| command: ce_allocation + ce_distribution | 37.68 | 49.5% | 39.9% | 1.00 / 1.00 |
+| coop: cw_capital_plan | 7.98 | 6.1% | 0.3% | 1.14 / 0.86 |
+| coop: cw_capital_plan + cw_credit | 16.92 | 17.6% | 2.2% | 1.21 / 0.72 |
+| market: omo + directed | 13.49 | 8.9% | 1.1% | 1.20 / 0.65 |
+
+The cooperative untooled arm meets the stated target. Its held-tool arms reproduce the distinction
+§21 found between AI selection and a player keeping stimulus on. The command arm confirms #720's
+open concern: Emergency Allocation alone at +0.30 standing momentum produces 31.69 crashes per
+century and 30.3% of months in Frenzy; adding Distribution Upgrade (+0.25) takes those to 37.68 and
+39.9%. The command AI avoids most of those crashes, but spends much more time in Boom/Frenzy as
+points increase. A command-tool retune needs a target for both crash frequency and phase occupancy;
+this implementation makes those quantities measurable without choosing that target.
+
+Reproduce the AI and held rows from the price-stability rows of these outputs:
+
+```bash
+for economy in market command coop; do
+  PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py \
+    --runs 100 --years 100 --seed 20260922 --only fiat --points 0,4,8 \
+    --economy "$economy" --pool --jobs 4
+done
+PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
+  --seed 20260922 --only fiat --points 8 --economy market --hold-tools omo,directed --pool --jobs 4
+PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
+  --seed 20260922 --only fiat --points 8 --economy command --hold-tools ce_allocation --pool --jobs 4
+PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
+  --seed 20260922 --only fiat --points 8 --economy command --hold-tools ce_allocation,ce_distribution --pool --jobs 4
+PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
+  --seed 20260922 --only fiat --points 8 --economy coop --hold-tools cw_capital_plan --pool --jobs 4
+PYTHONHASHSEED=0 python3 scripts/analysis/banking_cycle_sim.py --runs 100 --years 100 \
+  --seed 20260922 --only fiat --points 8 --economy coop --hold-tools cw_capital_plan,cw_credit --pool --jobs 4
 ```

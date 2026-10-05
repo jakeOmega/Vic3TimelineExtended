@@ -1608,14 +1608,7 @@ banking_contagion_crash_check = {
 				else = {
 					add = 5
 				}
-				if = {
-					limit = { has_law = law_type:law_command_economy }
-					multiply = 0.20
-				}
-				else_if = {
-					limit = { has_law = law_type:law_cooperative_ownership }
-					multiply = 0.55
-				}
+				multiply = banking_contagion_chance_economy_mult
 				multiply = banking_crash_chance_multiplier_value
 				min = 0
 			}
@@ -1669,14 +1662,7 @@ banking_contagion_crash_check = {
 			20 = { change_variable = { name = crash_severity multiply = 1.5 } }
 			10 = { change_variable = { name = crash_severity multiply = 2 } }
 		}
-		if = {
-			limit = { has_law = law_type:law_command_economy }
-			change_variable = { name = crash_severity multiply = 0.45 }
-		}
-		else_if = {
-			limit = { has_law = law_type:law_cooperative_ownership }
-			change_variable = { name = crash_severity multiply = 0.75 }
-		}
+		change_variable = { name = crash_severity multiply = banking_contagion_severity_economy_mult }
 		# [Monetary policy 5a, §15A.2] A lender of last resort whose word is still
 		# good: an imported panic starts a fifth less deep, because depositors know
 		# who stands behind the banks. Off while the guarantor's renege clock runs.
@@ -2096,14 +2082,7 @@ banking_cycle_check_and_execute_crash = {
 					subtract = 90
 					multiply = 0.01
 				}
-				if = {
-					limit = { has_law = law_type:law_command_economy }
-					multiply = 0.35
-				}
-				else_if = {
-					limit = { has_law = law_type:law_cooperative_ownership }
-					multiply = 0.65
-				}
+				multiply = banking_crash_chance_economy_mult
 				min = 0
 				# Scale crash probability by the crash chance modifier
 				multiply = banking_crash_chance_multiplier_value
@@ -2142,14 +2121,7 @@ banking_cycle_check_and_execute_crash = {
 			20 = { change_variable = { name = crash_severity multiply = 1.5 } }
 			10 = { change_variable = { name = crash_severity multiply = 2 } }
 		}
-		if = {
-			limit = { has_law = law_type:law_command_economy }
-			change_variable = { name = crash_severity multiply = 0.6 }
-		}
-		else_if = {
-			limit = { has_law = law_type:law_cooperative_ownership }
-			change_variable = { name = crash_severity multiply = 0.8 }
-		}
+		change_variable = { name = crash_severity multiply = banking_crash_severity_economy_mult }
 		if = {
 			limit = { var:crash_severity > 100 }
 			set_variable = { name = crash_severity value = 100 }
