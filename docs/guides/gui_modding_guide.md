@@ -1369,6 +1369,36 @@ onclick = "[GetVariableSystem.Toggle(Concatenate('expanded_', State.GetIDString)
 visible = "[GetVariableSystem.Exists(Concatenate('expanded_', State.GetIDString))]"
 ```
 
+### Typed text into a saved variable (possible, unverified in game)
+
+**The base-game rename boxes can't be reused.** Each one sends its text to an engine object of one type, through a method on that object: `StateNameChangePopup` (a state and its five hubs), `MilitaryFormationChangeNamePopup`, `PowerBlocCustomizationPopup`, `PrestigeGoodChangeNamePopup`, `TreatyDraft`, `ArticleDraft` (`states_panel.gui`, `military_formation_panel.gui`, the power bloc panels, `market_panel.gui`, `treaty_draft_panel.gui`, `right_click_menu.gui`). `PopupManager` opens each popup with its object, and the popup's `Confirm` saves the name.
+
+**A mod's own editbox can feed a saved variable.** Every link in this chain is in the engine's data types (`~/src/Modding-Digests/<version>/docs/data_types_*.txt`, checked in 1.13.11), but the whole chain has never been run in one place:
+
+```
+button = {   # a sibling of editbox = { name = "my_name_edit" maxcharacters = 30 }
+    onclick = "[GetScriptedGui('my_set_name').Execute(GuiScope.SetRoot(State.MakeScope).AddScope('my_name', MakeScopeFlag(PdxGuiEditboxGetText(PdxGuiWidget.AccessParent.FindChild('my_name_edit')))).End)]"
+}
+# my_set_name (scripted GUI): saved_scopes = { my_name }, effect: set_variable = { name = my_name value = scope:my_name }
+# loc: [State.MakeScope.Var('my_name').GetFlagName]
+```
+
+| Link | Function (return type) | Precedent |
+|---|---|---|
+| Read the box | `PdxGuiEditboxGetText( Arg0 )` (`CUTF8String`); `PdxGuiWidget.AccessParent`, `.FindChild( Arg0 )` | EU5's new-playset button |
+| Text to scope | `MakeScopeFlag( Arg0 )` (`Scope`) | Community Mod Framework (workshop 3385002128), with names from `GetFullName` |
+| Scope to variable | `set_variable = { name = x value = scope:x }` | the same mod's scripted GUIs |
+| Variable to text | `Scope.GetFlagName` (`CString`) | the same mod's loc |
+
+What is unproven, riskiest first:
+
+- **The `CUTF8String` → `MakeScopeFlag` conversion.** No known mod passes a `CUTF8String` into `MakeScopeFlag`. The fallbacks are `.GetString` (return type unregistered) and a round trip through `GetVariableSystem.Set` / `.Get` (`CString`). `StringIsEmpty` raises the same question.
+- **A `"` in the name.** Text saves write `flag="…"`. Whether the writer escapes an embedded quote is unknown, and a mod can't filter characters (only `maxcharacters` works). The base game's state rename has the same exposure, so it can be tested without mod code.
+- **Formatting characters.** `#`, `$` or `[` may be read as formatting when `GetFlagName` renders.
+- **Multiplayer.** `Execute` sends a flag built from client-side text.
+
+Script can't write such a flag (`flag:` takes identifiers only). So a typed name can only override names that script assigns; it can't replace them. The test: one editbox and button that write a variable on the capital state, a text row that prints it, then a reload from a normal save and from a debug-mode text save. Then try the quote and the formatting characters, and read `debug.log` and `error.log` for data-binding errors. `GetVariableSystem` alone remains client-side, unsaved and invisible to script.
+
 ---
 
 ## GetDefine (Engine Constants)
