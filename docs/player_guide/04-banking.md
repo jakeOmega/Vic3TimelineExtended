@@ -708,10 +708,11 @@ A gold-standard country with a dial gets a Gold and the Peg group in the
 Monetary Policy section. The Bank's Gold is the central bank's vault, not your
 treasury. Each point your rate sits above the World Rate draws in gold worth
 0.2% of GDP a month, and each point below sends as much out. Gold drawn in is
-Borrowed Gold: your budget pays your policy rate on it (the Interest on It row
-beneath), and it leaves first, at double speed, once your rate is no longer
-above the world's. Recapitalise the Bank moves a tenth of the reserve's limit
-from treasury to vault, in cash, for good.
+Borrowed Gold. It costs your budget nothing, but it leaves first, at double
+speed, once your rate is no longer above the world's. What the high rate costs
+you is a tighter Policy Stance and dearer borrowing for your government.
+Recapitalise the Bank moves a tenth of the reserve's limit from treasury to
+vault, in cash, for good.
 
 Peg Confidence (0 to 100) reacts to your rate while the vault is under a tenth
 of its limit:

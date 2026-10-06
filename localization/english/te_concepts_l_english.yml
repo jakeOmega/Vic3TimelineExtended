@@ -659,7 +659,7 @@
  concept_banking_backstops:0 "Backstops"
  concept_banking_backstops_desc:0 "Swap lines and guarantees in your monetary treaties move [concept_banking_risk_premium]: they take points off the premium of the country they support, and add points to the premium of the one that extends them."
  concept_banking_bank_gold_desc:0 "The gold your central bank holds against its notes. It is the bank's, not the treasury's: the government cannot spend it, and nothing that happens to it shows in your budget. It is what a gold standard rests on."
- concept_banking_borrowed_gold_desc:0 "The part of the [concept_banking_bank_gold] that came in chasing a high rate and is owed, not earned. It grows every month the rate is held high, and it costs interest while it stays."
+ concept_banking_borrowed_gold_desc:0 "The part of the [concept_banking_bank_gold] that came in chasing a high rate and is owed, not earned. It grows every month the rate is held high, and it is the first gold to leave once your rate is no longer above the world's."
  concept_banking_contagion:0 "Banking Contagion"
  concept_banking_contagion_desc:0 "When a major economy experiences a [concept_banking_crash], the financial shock can spread to other countries through trade links and capital flows. Countries with larger trade exposure to the crash source are more vulnerable to contagion effects."
  concept_banking_crash:0 "Banking Crash"

@@ -8,6 +8,8 @@
 
 > **A road off gold (2026-10-05):** a deep slump the peg is prolonging (a Downturn or Panic with the stance Tight or Very Tight) now drains Peg Confidence 3 a month whatever the vault holds, so `te_peg.1` comes about two years into it; a suspension of convertibility ends in a choice (`te_peg.3`: resume at 50, or Fiat Money); and the AI's currency weights favour fiat once it is on offer. See [§0.13](#013-a-road-off-gold--2026-10-05).
 
+> **Borrowed gold costs the treasury nothing (2026-10-06):** owner decision I is reversed. The carry (`te_gold_carry`, the *Interest on Borrowed Gold* budget expense `te_mon_gold_carry_expense` and the dashboard's *Interest on It* row) is gone; hot money still leaves first, at double speed, once the gap is ≤ 0. Under gold the interest on balances a high rate drew in was paid by the private borrowers whose bills they bought, and a high rate already costs the treasury through its own market yield (step 7). If tight credit is too cheap, the fix belongs in the stance terms, not in a budget line. See decision I in [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks).
+
 > **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
 > 6c — the swap line as a repayable capped single-provider loan, the guarantee's call counter,
 > `non_fulfillment` on the friendly three, treaty leverage, and the two hostile articles
@@ -884,7 +886,7 @@ trade good under bimetallism too — so flows arguably belong to commodity-money
 well. That is §5.4's open France question from another side, and would want a dial (or at
 least a flow) for commodity money + national bank.
 
-**I. DECIDED 2026-09-20 — borrowed gold pays the policy rate.** The owner's question was what
+**I. DECIDED 2026-09-20, REVERSED 2026-10-06 — borrowed gold paid the policy rate.** The owner's question was what
 stopped real countries doing this, and the answer is the carry: gold drawn in by Bank Rate
 came as short-term balances *earning* that rate, against a vault that earns nothing. So
 `te_gold_hot_money` now costs `te_policy_rate / 12` percent a month (`te_gold_carry`) — paid by
@@ -895,6 +897,25 @@ costs 1.6% of GDP a year for as long as it is held. It stays what it historicall
 to refill a vault or defend a peg. Ruling Q8's cap is kept as a backstop. The carry is not part
 of `te_gold_flow`, so the price–specie term prices the principal only; a suspension freezes
 the balance **and** the carry.
+
+*Reversed 2026-10-06 (owner, on a realism question).* The carry had the treasury pay interest
+that, under gold, private borrowers paid. Bank Rate drew gold by raising the return on London
+bills and deposits; foreign balances bought those bills, the merchants who drew them paid the
+discount, and the Bank's own notes paid nothing. Much of the pull, for a creditor like Britain,
+was London lending less abroad, which creates no foreign liability at all. An Exchequer paid
+interest for its gold only when it borrowed the gold itself (the US Treasury's bond sales of
+1894–96, Russia's and Austria-Hungary's gold loans), which is recapitalisation, not hot money.
+What did stop real countries pulling gold in by rate alone was the domestic cost of dear money,
+and the model already charges it: the market yield on the government's own debt is
+`max(policy, era_base + expected)` (step 7), the stance gap drags the cycle (step 8), the
+inflow pushes prices up (`te_mon_pressure_gold_flow`), and the balance leaves first at double
+speed when the rate comes down (ruling Q7). The ruling's other job, stopping a player from
+spending borrowed gold, ended with the hybrid model below, since vault gold never reaches the
+treasury. **So hot money now costs the treasury nothing.** The owner's rule for what follows: if
+tight credit is not enough of a drain on the economy, fix it in the stance terms, not here.
+Removed: `te_gold_carry`, `te_gold_carry_applied`, `te_mon_gold_carry_weekly`, the step 10 carry
+block and the dashboard's *Interest on It* row. `te_mon_gold_carry_expense` survives as a stub
+that step 10 strips from old saves, on `legacy_modifier_cleanup.txt`'s dated checklist.
 
 **J. RESOLVED by the hybrid model (below) — was:** An indebted AI on gold sits a point above the world rate, permanently. Ruling Q5's
 shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
@@ -947,7 +968,8 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
    ruling P5 accepts for the stance gap.
 3. **Defend's floor is `ceiling(world + 4)`**, so it can be up to a point more than +4.
 4. **A peg defender's target can sit up to 0.35 above its formula** before it steps down
-   (Q5's hysteresis) — small standing inflows, which become hot money and pay the carry.
+   (Q5's hysteresis) — small standing inflows, which become hot money (they paid the carry
+   until 2026-10-06; now they cost nothing until they leave).
 5. **`te_mon_peg_state` reads "Trusted" for a country that has never been under pressure even
    with an empty vault the month it empties** — confidence is a stock, and says so a month
    or two later.
@@ -980,10 +1002,10 @@ player **spending** borrowed gold. The owner's call was to split the stock:
   a tenth of the limit from treasury to vault, cash in hand only, **one way** — a reserve the
   government could draw on is a second wallet. The AI does the same inside step 10, a step a
   month, when its vault is under a quarter and its treasury over half full.
-- **The carry is the only thing the treasury sees**, as the scaled budget expense
+- ~~**The carry is the only thing the treasury sees**, as the scaled budget expense
   `te_mon_gold_carry_expense` (`country_expenses_add`, weekly) — a fourth scaled-modifier
-  site on step 6d's exact shape. It is ordinary interest, so the deficit readers counting it
-  is correct.
+  site on step 6d's exact shape.~~ **Dropped 2026-10-06** with decision I: the treasury sees
+  recapitalisation and nothing else.
 - **Devalue** revalues the vault (+15% of its limit) instead of paying the treasury.
 
 **The vault's limit is `0.2 × GDP`, not the engine's `gold_reserves_limit`** (one revision used the latter). The engine's figure carries every `country_gold_reserve_limit_mult`, and the largest source of those is `institution_national_bank` itself (+20% a level) — so a country that invested in its central bank watched the limit outrun the gold in the vault and was pushed toward the shortfall by its own spending.
@@ -996,7 +1018,7 @@ rate. `te_mon_peg_under_pressure` is now the vault under a tenth of its limit an
 else; confidence's `−2 at scaled_debt ≥ 0.5` term stays, as a statement about the sovereign.
 **What it costs:** the peg no longer bleeds the budget directly — §12.2's "a 2pp gap costs a
 quarter of revenue" sizing argument is moot — so the peg bites through confidence, the
-crisis, the carry and whatever the player chooses to recapitalise. §12.2's `add_treasury`
+crisis, the carry (until 2026-10-06) and whatever the player chooses to recapitalise. §12.2's `add_treasury`
 paragraph and §17 check 11 are superseded by this section.
 
 #### Balance pass on the structural tier (owner, 2026-09-20)
@@ -1064,9 +1086,11 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
     Confidence* falls ~6 a month until `te_peg.1` fires at 20.
 38. **AI on peg defence survives +2pp.** Same option, observer mode, two years: targets step
     up within a month, and no `te_peg.1` for a tag that was out of debt at the start.
-39a. **The carry is charged, and it capitalises.** With a borrowed balance, the *Gold Flow*
+39a. ~~**The carry is charged, and it capitalises.** With a borrowed balance, the *Gold Flow*
     tooltip's interest line reads balance × policy rate ÷ 1200 and the treasury falls by it each
-    month beyond the flow; in debt, the balance grows by it instead.
+    month beyond the flow; in debt, the balance grows by it instead.~~ **Void since 2026-10-06**
+    (decision I reversed). Instead: in a save made before then with borrowed gold, *Interest on
+    Borrowed Gold* leaves the budget on the country's next monthly pulse and does not return.
 39b. **The hegemon is constrained.** As a player Britain on a manual target in 1836, *World
     Rate* reads 3.0 whatever Britain's own rate is, the gap is non-zero, and gold moves; as
     France, *World Rate* reads Britain's rate.
@@ -1100,17 +1124,17 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
 46a. **The vault (hybrid model).** On load, *Bank's Gold Reserve* reads at least 50% of its limit
     and the treasury does not move with *Gold Flow* any more; the vault does. *Recapitalise the
     Bank* debits the treasury and credits the vault by the same figure, greys out with one cause
-    line when the cash is not there, and is never offered on credit. With borrowed gold in the
+    line when the cash is not there, and is never offered on credit. ~~With borrowed gold in the
     vault, the budget shows an **Interest on Borrowed Gold** expense of about
-    balance × policy rate ÷ 5200 a week. **A save made under the first version carries its old
-    hot-money balance into the new vault** and goes on paying the carry on it until the gap is
-    ≤ 0 — expected, not a bug.
+    balance × policy rate ÷ 5200 a week.~~ (Carry dropped 2026-10-06.) **A save made under the
+    first version carries its old hot-money balance into the new vault** until the gap is ≤ 0
+    — expected, not a bug.
 46c. **Modifiers on the journal entry.** As Britain, the country's modifier list no longer shows the
-    inflation band (or stance politics, wage dividend, monetisation, gold carry); the banking
-    entry's own modifier list does, and their effects still reach the country — the budget still
-    shows *Interest on Borrowed Gold*, the band's IG rows still apply. **The scaled ones are the
+    inflation band (or stance politics, wage dividend, monetisation); the banking
+    entry's own modifier list does, and their effects still reach the country — the band's IG
+    rows still apply. **The scaled ones are the
     risk:** `multiplier = root.var:X` on a JE modifier is the documented form but new to this
-    system — a carry line of £1 a week, or minting worth a pound, means the multiplier fell back
+    system — minting worth a pound means the multiplier fell back
     to 1. A country with no banking entry (any bankless tag) still carries its band on the
     country. Build a first stock exchange as a small country and the modifiers should move to
     the new entry on the next pulse with nothing doubled.
