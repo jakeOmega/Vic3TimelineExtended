@@ -605,7 +605,7 @@ Pre-1.5 manual trade routes are gone. In 1.13, trade between *separate* markets 
 - **Consume Merchant Marine** at a rate that scales with their PM tier.
 - Stack additively per state, gated by trade laws.
 
-Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously.
+Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously. A market with none can neither import nor export, so its prices settle on domestic supply and demand alone. Where they may be built is the state-scope trigger `trade_center_construction_allowed` (the buildings' `can_build_government`/`can_build_private`). Isolationism forbids them (`country_disallow_trade_bool`), and the Canton System and Sakoku confine them to Guangdong and Kyushu (`country_disallow_trade_outside_canton_bool`, `country_disallow_trade_outside_kyushu_bool`). This mod seeds a level-1 Trade Center for AI market leaders that have none (`docs/systems/mod_systems.md` § "Bulk Transportation").
 
 **Tolls and strait access** were reworked in 1.13.7: toll rates were halved, changing a toll/strait-access setting now starts a 6-month cooldown (with a 7-day grace window to revert), and tolls apply per trade center rather than only at the world-market-hub state. Port-connection Merchant Marine costs were also reworked — each country pays a share of shipping-lane costs proportional to what its market areas actually purchase from other market areas, paid to the market owner.
 
