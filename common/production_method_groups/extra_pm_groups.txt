@@ -1747,3 +1747,15 @@ pmg_shipyard_focus = {
 		pm_focus_wartime_mobilization
 	}
 }
+
+# Barracks training methods (common/production_methods/barracks_training_pms.txt).
+# Listed after vanilla's ladder in unlock order, then the two law-gated ones.
+INJECT:pmg_training = {
+	production_methods = {
+		pm_officer_academies
+		pm_expeditionary_logistics
+		pm_neural_grafting
+		pm_reserve_cadre
+		pm_political_commissars
+	}
+}

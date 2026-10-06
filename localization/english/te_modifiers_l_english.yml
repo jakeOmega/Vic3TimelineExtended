@@ -3,6 +3,8 @@
 #
 # MODIFIERS
 #
+ country_academy_trained_battalions_add:0 "Academy-Trained Battalions"
+ country_academy_trained_battalions_add_desc:0 "Battalions whose barracks train under $pm_officer_academies$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_officer_academies_standing$, which strengthens the $ig_armed_forces$."
  country_aggressor_diplomatic_play_escalation_weekly_add:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated"
  country_aggressor_diplomatic_play_escalation_weekly_add_desc:0 "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country initiated, applied while the play is below 100. Floored at 0; combine with the matching #V _mult#! to scale."
  country_aggressor_diplomatic_play_escalation_weekly_mult:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated"
@@ -31,6 +33,8 @@
  country_colonial_invest_effectiveness_add_desc:0 "Per-month colonial-stability bonus contributed by laws while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview."
  country_colonial_stability_drift_add:0 "[concept_colonial_stability] Drift"
  country_colonial_stability_drift_add_desc:0 "Per-month drift on the [concept_colonial_stability] bar contributed by laws and other persistent sources. Always-on (independent of policy buttons). Each contributing law shows its individual contribution in its own tooltip."
+ country_commissar_battalions_add:0 "Battalions with Commissars"
+ country_commissar_battalions_add_desc:0 "Battalions whose barracks train under $pm_political_commissars$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_political_commissars_indoctrination$, which draws pops to the interest groups in government."
  country_covert_defense_economic_add:0 "Economic Covert Defense"
  country_covert_defense_economic_add_desc:0 "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and space programme espionage."
  country_covert_defense_ideological_add:0 "Ideological Covert Defense"
@@ -1299,6 +1303,8 @@
  state_pop_support_movement_civil_rights_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_civil_rights_name$."
  state_pop_support_movement_transhumanist_mult:0 "$movement_transhumanist_name$ [concept_pop] Attraction"
  state_pop_support_movement_transhumanist_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$."
+ state_reserve_battalions_add:0 "Reserve Battalions"
+ state_reserve_battalions_add_desc:0 "[concept_reserve_battalions] trained in this state's barracks. An understaffed barracks counts for less. Each one adds the conscription rate and the [Concept('concept_conscription_center', 'conscription-center')] limit for one more conscript battalion, even past the limit set by your [GetLawGroup('lawgroup_army_model').GetName] law."
  state_resettlement_recruits_add:0 "Recruited for resettlement last month"
  state_resettlement_recruits_add_desc:0 "People Settlement Authorities took from this state last month."
  state_resettlement_transfer_add:0 "Settlers Moved per Month"

@@ -851,6 +851,12 @@ every `POST /reload` and writes `docs/engine/pm_employment_report.md`. **Editing
 refreshes the `# Employment`/cost comments (`extra_pms.txt` is hand-authored except
 those comment headers).
 
+## A Building's Own `_mult` in a PM Belongs in `unscaled`
+
+A PM's `level_scaled` and `workforce_scaled` blocks multiply every value by the building's level (or staffed level). That is right for flat adds, and wrong for a multiplier on the building itself: `level_scaled = { building_mobilization_cost_mult = -0.5 }` on a 20-level barracks would apply −1000%. Put such a modifier in `unscaled`. `building_mobilization_cost_mult` scales vanilla's `mobilized_battalion_consumption` static modifier (`building_goods_input_mult = 1` while a battalion is mobilized), so −0.1 trims a barracks' wartime goods surcharge from +100% to +90%. It doesn't touch mobilization options' own goods (`pm_expeditionary_logistics`).
+
+On a building with no goods output, `ai_selection = most_productive` makes the AI take the method with the highest training rate (the owner's observation on barracks; not traced to engine code). That fits the AI scoring a method by its modifiers' `game_data = { ai_value }`: vanilla gives `building_training_rate_add` 100 and nothing else a barracks method carries has one. So a method can be made attractive to the AI without out-training the ladder by declaring a modifier type with an `ai_value` (`country_commissar_battalions_add`, 5000 a level). Size it against the switch threshold: with no goods every switch counts as a downgrade, so the new method needs 1 / `PRODUCTION_METHOD_STICKINESS_DOWNGRADE` (0.6 in this mod, ×1.67) of the current score (`docs/systems/mod_systems.md` § Barracks training methods).
+
 ## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
 
 For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.

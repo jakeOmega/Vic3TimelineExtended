@@ -41,6 +41,20 @@ Drugs are vanilla's `opium` good under a new name, so anything that adds Drugs s
 
 - **Single Convention on Narcotic Drugs (INCB)**: Assembly business opens after any UN member researches `antibiotic_mass_production`, at authority ≥20. Major powers with `pharmaceuticals` may propose. Country-scoped parties carry `un_narcotics_control_modifier` at ×E: −15% `building_opium_plantation_throughput_add`, +5% `building_synthetics_plant_opium_throughput_add`, +3% prestige. No exporter regime term; see `test_un_convention_registry.py` and the approved narcotics spec.
 
+### Barracks training methods
+
+Five methods `INJECT`ed into vanilla's `pmg_training` (`common/production_methods/barracks_training_pms.txt`). The group has `ai_selection = most_productive`, which on a building with no output means the highest training rate. So `pm_officer_academies` (26/level, `combined_arms`) and `pm_neural_grafting` (120/level, `bioenhanced_soldiers` plus an enhancement-permitting augmentation law; buys `opium` and electronic components, +25% servicemen mortality) extend vanilla's ladder past Mobile Warfare Tactics (24) for the AI. `pm_expeditionary_logistics` (10, `predictive_logistics`, `building_mobilization_cost_mult` −0.1) and `pm_reserve_cadre` (12, National Militia or Mass Conscription) train slower and are player choices. `pm_political_commissars` (20, Single-Party State or Council Republic, hidden otherwise, 5% officers) trains slower too, but its count type carries `game_data = { ai_value = 5000 }`. The AI appears to score a barracks method by its modifiers' ai_values (`building_training_rate_add` is 100 a point), and with no goods every switch is a downgrade needing ×1.67 (`PRODUCTION_METHOD_STICKINESS_DOWNGRADE` 0.6), so a single-party AI moves to Commissars from Officer Academies on barracks of two levels or more, and to Neural Grafting from Commissars only on large ones.
+
+Building-local effects sit in the PM. A national or state effect is a count in a custom modifier type (`barracks_training_modifier_types.txt`), declared `workforce_scaled` in the PM so staffing counts. A monthly pulse turns each count into a static modifier (`barracks_training_modifiers.txt`) through a never-removed variable. Each modifier has one refresh site, in `barracks_training_effects.txt`. A PM-borne country effect would otherwise stack once per barracks:
+
+| Count (type) | Declared by | Pulse | Becomes |
+|---|---|---|---|
+| `country_academy_trained_battalions_add` | Officer Academies, 1 per staffed level | `te_barracks_doctrine_country_pulse` (monthly country) | `te_officer_academies_standing` × (count ÷ `army_size`, max 1): Armed Forces +20% political strength, +10% attraction at 1 |
+| `country_commissar_battalions_add` | Political Commissars, 1 per staffed level | same | `te_political_commissars_indoctrination` × share: +15% in-government attraction at 1 |
+| `state_reserve_battalions_add` | Reserve Cadre, 2 per staffed level | `te_reserve_cadre_state_pulse` (monthly state) | `te_reserve_cadre_conscription` (conscription rate = count × 1000 ÷ state population, max 0.25) and `te_reserve_cadre_capacity` (+1 conscription-center max level per reserve battalion) |
+
+Any other source can declare these types (a law, a decree, a building) and the same pulse converts it; the tooltip breaks the count down by source. The reserve conversion assumes the engine sizes conscription from population (the `CONSCRIPTION_CENTER_LEVEL_POPULATION_DIVISOR` define says civilian population; the modifier text says workforce). If a reserve battalion turns out to buy only about half a conscription center in game, the engine uses workforce and the 1000 needs raising.
+
 ## Global Warming (`je_global_warming`)
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.

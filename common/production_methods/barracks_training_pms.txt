@@ -1,0 +1,191 @@
+﻿# BARRACKS TRAINING METHODS
+# Five methods added to vanilla's pmg_training (the INJECT is in
+# common/production_method_groups/extra_pm_groups.txt). The group has
+# ai_selection = most_productive, which on a building with no output means the
+# AI takes the highest training rate it has unlocked: Officer Academies (26)
+# and Neural Grafting (120) continue vanilla's ladder past Mobile Warfare
+# Tactics (24) for the AI, while Expeditionary Logistics and Reserve Cadre
+# train slower and are player choices. Political Commissars train slower too,
+# but country_commissar_battalions_add carries an ai_value, so a single-party
+# AI prefers them to Officer Academies (barracks_training_modifier_types.txt).
+#
+# Every method keeps vanilla's unscaled base of 50 and the warrior-caste lock.
+# Three of them count what they do in custom modifier types
+# (common/modifier_type_definitions/barracks_training_modifier_types.txt),
+# workforce-scaled so an understaffed barracks counts for less; the monthly
+# pulses in common/on_actions/barracks_training_on_actions.txt turn the counts
+# into the effects. Mechanics: docs/systems/mod_systems.md, "Barracks training
+# methods".
+
+# Ladder step after Mobile Warfare Tactics. More officers, and each staffed
+# level counts as an academy-trained battalion: the country's share of them
+# scales te_officer_academies_standing (Armed Forces strength and attraction).
+pm_officer_academies = {
+	texture = "gfx/interface/icons/production_method_icons/ownership_academics.dds"
+
+	profession_ratio = {
+		soldiers = 70
+		officers = 30
+	}
+	disallowing_laws = {
+		law_warrior_caste
+	}
+	unlocking_technologies = {
+		combined_arms
+	}
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+		}
+
+		level_scaled = {
+			building_training_rate_add = 26
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_academy_trained_battalions_add = 1
+		}
+	}
+}
+
+# A slightly cheaper war for an army that can afford slow reinforcement: worth
+# it in a short war you are winning, not in a long one.
+# building_mobilization_cost_mult scales vanilla's
+# mobilized_battalion_consumption static modifier (+100% goods input while the
+# battalion is mobilized), so -0.1 trims that surcharge to +90%.
+# It is a multiplier on this building, so it must stay unscaled: level_scaled
+# would multiply it by the building's level. Mobilization options' own goods
+# are not affected.
+pm_expeditionary_logistics = {
+	texture = "gfx/interface/icons/production_method_icons/logistics_center.dds"
+
+	profession_ratio = {
+		soldiers = 85
+		officers = 15
+	}
+	disallowing_laws = {
+		law_warrior_caste
+	}
+	unlocking_technologies = {
+		predictive_logistics
+	}
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			building_mobilization_cost_mult = -0.1
+		}
+
+		level_scaled = {
+			building_training_rate_add = 10
+		}
+	}
+}
+
+# The fastest training in the game by far, paid for in goods and in the
+# servicemen's health. Needs one of the augmentation laws that allow enhancement, like the
+# Voluntary and Mandatory Enhancement mobilization options.
+pm_neural_grafting = {
+	texture = "gfx/interface/icons/production_method_icons/pharmacies.dds"
+
+	profession_ratio = {
+		soldiers = 80
+		officers = 20
+	}
+	disallowing_laws = {
+		law_warrior_caste
+	}
+	unlocking_technologies = {
+		bioenhanced_soldiers
+	}
+	unlocking_laws = {
+		law_regulated_augmentation_market
+		law_unrestricted_augmentation
+		law_mandatory_augmentation
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_opium_add = 8
+			goods_input_electronic_components_add = 4
+		}
+
+		unscaled = {
+			building_training_rate_add = 50
+			building_soldiers_mortality_mult = 0.25
+		}
+
+		level_scaled = {
+			building_training_rate_add = 120
+		}
+	}
+}
+
+# A training cadre for the conscripts: the barracks reinforces its own
+# battalion slowly, and each staffed level adds two reserve battalions to the
+# state, which the monthly state pulse turns into conscription rate and
+# conscription-center capacity (te_update_reserve_cadre_modifiers).
+pm_reserve_cadre = {
+	texture = "gfx/interface/icons/production_method_icons/irregular_infantry.dds"
+
+	profession_ratio = {
+		soldiers = 80
+		officers = 20
+	}
+	disallowing_laws = {
+		law_warrior_caste
+	}
+	unlocking_laws = {
+		law_national_militia
+		law_mass_conscription
+	}
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+		}
+
+		level_scaled = {
+			building_training_rate_add = 12
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_reserve_battalions_add = 2
+		}
+	}
+}
+
+# The party, not an officer caste, holds the army. Few officers, so the Armed
+# Forces lose the strength officers would give them, and each staffed level
+# counts as a battalion with commissars: the country's share of them scales
+# te_political_commissars_indoctrination (attraction to the governing groups).
+pm_political_commissars = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+
+	is_hidden_when_unavailable = yes
+
+	profession_ratio = {
+		soldiers = 95
+		officers = 5
+	}
+	disallowing_laws = {
+		law_warrior_caste
+	}
+	unlocking_laws = {
+		law_single_party_state
+		law_council_republic
+	}
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+		}
+
+		level_scaled = {
+			building_training_rate_add = 20
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_commissar_battalions_add = 1
+		}
+	}
+}

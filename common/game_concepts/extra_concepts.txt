@@ -187,6 +187,8 @@ concept_fortified_position = {}
 concept_fortified_stronghold = {}
 concept_fortified_bastion = {}
 concept_impregnable_fortress = {}
+# Barracks training methods: Reserve Cadre's reserve battalions.
+concept_reserve_battalions = {}
 
 # Soft Power & Cyber Power
 concept_cultural_hegemony_system = {}

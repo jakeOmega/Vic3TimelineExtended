@@ -1,0 +1,59 @@
+﻿# Barracks training methods: the one refresh site for each of the four static
+# modifiers in common/static_modifiers/barracks_training_modifiers.txt. Each
+# reads a count the training methods declare in a custom modifier type and
+# re-applies its modifier with a multiplier, through a variable that is
+# overwritten each month and never removed (an active modifier's multiplier
+# reads it on later ticks).
+
+# Scope: country. From te_barracks_doctrine_country_pulse (monthly).
+te_update_barracks_doctrine_modifiers = {
+	remove_modifier = te_officer_academies_standing
+	if = {
+		limit = { modifier:country_academy_trained_battalions_add > 0 }
+		set_variable = {
+			name = te_academy_battalion_share
+			value = te_academy_battalion_share_value
+		}
+		add_modifier = {
+			name = te_officer_academies_standing
+			multiplier = var:te_academy_battalion_share
+		}
+	}
+	remove_modifier = te_political_commissars_indoctrination
+	if = {
+		limit = { modifier:country_commissar_battalions_add > 0 }
+		set_variable = {
+			name = te_commissar_battalion_share
+			value = te_commissar_battalion_share_value
+		}
+		add_modifier = {
+			name = te_political_commissars_indoctrination
+			multiplier = var:te_commissar_battalion_share
+		}
+	}
+}
+
+# Scope: state. From te_reserve_cadre_state_pulse (monthly).
+te_update_reserve_cadre_modifiers = {
+	remove_modifier = te_reserve_cadre_conscription
+	remove_modifier = te_reserve_cadre_capacity
+	if = {
+		limit = { modifier:state_reserve_battalions_add > 0 }
+		set_variable = {
+			name = te_reserve_conscription_rate
+			value = te_reserve_conscription_rate_value
+		}
+		set_variable = {
+			name = te_reserve_battalions
+			value = te_reserve_battalions_value
+		}
+		add_modifier = {
+			name = te_reserve_cadre_conscription
+			multiplier = var:te_reserve_conscription_rate
+		}
+		add_modifier = {
+			name = te_reserve_cadre_capacity
+			multiplier = var:te_reserve_battalions
+		}
+	}
+}
