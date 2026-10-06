@@ -443,6 +443,8 @@ text = "[AddLocalizationIf(condition, 'extra_text_key')]"
 text = "[Concept('game_concept_key')]"            # Hoverable concept
 ```
 
+**A named key keeps `SCOPE` through `SelectLocalization`, not through `AddLocalizationIf`.** In loc that reads `SCOPE` (seen in a `custom_tooltip` in a diplomatic action's `possible`), `[AddLocalizationIf(cond, 'key')]` renders `key` with no `SCOPE`: each `[SCOPE.…]` in it logs `Promote 'SCOPE' returned nullptr` and comes out blank, while the parent's own `SCOPE` reads, the condition included, work. The Subjugate tooltip's identity lines did this (#710; 2,796 lines of each failing read in four seconds, 2026-10-06). Write `[SelectLocalization(cond, 'key', 'te_tt_blank')]` instead, as vanilla's Zanzibar notifications do with `SCOPE`-reading keys. `test_loc_add_localization_if_scope.py` fails on a key named in `AddLocalizationIf` that reads `SCOPE`. A literal string or a `GetName` as the second argument is fine.
+
 ### Conditional Selection
 
 ```
