@@ -25,5 +25,5 @@ un_mission_electoral_state_modifier = {
 un_electoral_observers_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_legitimacy_base_add = 5
-	country_covert_defense_ideological_add = 3
+	country_covert_defense_ideological_add = 15
 }

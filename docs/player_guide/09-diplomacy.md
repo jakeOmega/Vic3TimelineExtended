@@ -61,7 +61,7 @@ The humanitarian and cultural articles move people, faiths and cultures.
 |---|---|---|---|
 | Minority Protection | International Relations | Yes | Halves assimilation and conversion in the chosen state. The conceder loses legitimacy and pays authority; the other side gains prestige. The protecting side must be in a Cultural Commonwealth or Religious Convocation bloc. |
 | Religious Mission Rights | Colonization | Yes | Each year 5% of the chosen state's pops of other faiths convert to the other side's religion. The side sending the missionaries must be in a Religious Convocation bloc. Neither country can have State Atheism, and the treaty freezes if the conceding country adopts it later. |
-| Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −1 ideological covert defense. |
+| Cultural Exchange Program | Pan-nationalism | No | Mutual: +1 yearly cultural acceptance, +2% prestige and +1 cultural pull for both, better relations, −5 ideological covert defense. |
 | Population Transfer | Pan-nationalism | Yes | Moves pops of the receiving country's primary cultures out of the conceding country, once. See [population transfers by treaty](#population-transfers-by-treaty). |
 
 The military and security articles cover disarmament and cooperation between

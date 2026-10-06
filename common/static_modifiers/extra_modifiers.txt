@@ -3924,9 +3924,9 @@ un_regime_heritage_site_modifier = {
 # intelligence_sharing_pact shield's shape).
 un_regime_shared_intelligence_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_covert_defense_economic_add = 1
-	country_covert_defense_ideological_add = 1
-	country_covert_defense_military_add = 1
+	country_covert_defense_economic_add = 5
+	country_covert_defense_ideological_add = 5
+	country_covert_defense_military_add = 5
 }
 # Sovereignty (§7.1), interest-group scope, from the Strong tier: nationalist
 # groups resent the UN's reach, humanitarian and pacifist ones welcome it.
@@ -7195,9 +7195,9 @@ cultural_exchange_retrenchment_modifier = {
 # Intelligence Sharing - covert defense boost from tip-off
 intelligence_tip_off_defense_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_covert_defense_economic_add = 2
-	country_covert_defense_military_add = 2
-	country_covert_defense_ideological_add = 2
+	country_covert_defense_economic_add = 10
+	country_covert_defense_military_add = 10
+	country_covert_defense_ideological_add = 10
 }
 
 # Intelligence Sharing - security exposure from failure
@@ -7205,9 +7205,9 @@ intelligence_tip_off_defense_modifier = {
 # strengthens legitimacy and rallies loyalists around the government.
 intelligence_failure_exposure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_covert_defense_economic_add = -1
-	country_covert_defense_military_add = -1
-	country_covert_defense_ideological_add = -1
+	country_covert_defense_economic_add = -5
+	country_covert_defense_military_add = -5
+	country_covert_defense_ideological_add = -5
 	country_legitimacy_base_add = 5
 	country_loyalists_from_legitimacy_mult = 0.05
 }
@@ -7233,9 +7233,9 @@ nuclear_event_prestige = {
 # Covert warfare: target hardens defenses after detecting an operation
 covert_op_heightened_vigilance_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_covert_defense_ideological_add = 5
-	country_covert_defense_economic_add = 5
-	country_covert_defense_military_add = 5
+	country_covert_defense_ideological_add = 25
+	country_covert_defense_economic_add = 25
+	country_covert_defense_military_add = 25
 }
 
 # Banking contagion: protectionist trade measures to contain financial crisis

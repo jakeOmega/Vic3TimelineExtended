@@ -2065,7 +2065,7 @@ principle_education_4 = {
 		# International soft power: people come for our universities and stay
 		country_acceptance_not_homeland_add = 5
 		country_cultural_pull_add = 0.5
-		country_covert_defense_ideological_add = 1
+		country_covert_defense_ideological_add = 5
 
 		state_assimilation_mult = 0.05
 		# New PM for Universities, producing art and services, unlocked via trigger
@@ -2115,7 +2115,7 @@ principle_education_5 = {
 		# International soft power: bloc projects cultural hegemony globally
 		country_acceptance_not_homeland_add = 10
 		country_cultural_pull_add = 1.0
-		country_covert_defense_ideological_add = 2
+		country_covert_defense_ideological_add = 10
 
 		state_assimilation_mult = 0.05
 		# New PM for Universities, producing art and services, unlocked via trigger
