@@ -2437,7 +2437,10 @@ docket prompts reaching human players, and the aggrieved party going first.
 4. **Three donors.** A famine sends `un_events.7` to three donors and names the worst-hit
    state.
 5. **Embargo.** Embargo a fellow member; within a few months the weaker party gets
-   `un_events.15`.
+   `un_events.15`, and the other side a notice naming it, one per option
+   (`un_trade_arbitration_received`, `un_trade_deal_received`,
+   `un_tariff_retaliation_received`). Option y of `te_debug_un.1` stages the dispute
+   against the player at once, without the embargo.
 6. **Veto and walkout.** A veto brings the proposer `un_events.11` a week later. A great power
    leaving brings the other great-power members `un_events.20`.
 7. **Sanctions.** When sanctions are adopted, the proposer gets `un_events.5` about 90 days

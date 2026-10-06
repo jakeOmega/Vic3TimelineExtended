@@ -2091,8 +2091,15 @@ un_events.15 = {
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1 REASON = 1151 SUBJECT = scope:trade_rival }
+		# The +5 is restated in notification_un_trade_arbitration_received_desc.
 		change_relations = { country = scope:trade_rival value = 5 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# The rival never sees this event: its notice names us and says what
+		# we chose (notification_un_trade_arbitration_received_desc).
+		save_scope_as = un_trade_arbitration_requester
+		scope:trade_rival = {
+			post_notification = un_trade_arbitration_received
+		}
 	}
 
 	# Option B: Negotiate a bilateral deal outside the UN
@@ -2105,6 +2112,7 @@ un_events.15 = {
 		# the deal costs the Assembly's credibility rather than adding to it.
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 1152 SUBJECT = scope:trade_rival }
+		# The +15 is restated in notification_un_trade_deal_received_desc.
 		change_relations = { country = scope:trade_rival value = 15 }
 		# The rival negotiated nothing: its notice says we offered it
 		# concessions (notification_un_trade_deal_received_desc).
@@ -2140,7 +2148,12 @@ un_events.15 = {
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1153 SUBJECT = scope:trade_rival }
+		# The -15 is restated in notification_un_tariff_retaliation_received_desc.
 		change_relations = { country = scope:trade_rival value = -15 }
+		# The rival never sees this event: its notice names us, says we
+		# refused arbitration, and states the modifier's figures
+		# (notification_un_tariff_retaliation_received_desc).
+		save_scope_as = un_tariff_imposer
 		scope:trade_rival = {
 			post_notification = un_tariff_retaliation_received
 			add_modifier = {
