@@ -149,10 +149,7 @@ nuclear_crisis.1 = {
 		ai_chance = {
 			base = 1
 			modifier = {
-				trigger = {
-					has_variable = nd_survivability
-					var:nd_survivability >= 50
-				}
+				trigger = { nd_effective_survivability >= 50 }
 				add = 3
 			}
 			modifier = {
@@ -1065,7 +1062,7 @@ nuclear_crisis.20 = {
 				trigger = {
 					scope:nd_guarantee_attacker = { nd_believed_armed = yes }
 					has_variable = nd_survivability
-					var:nd_survivability < 30
+					nd_effective_survivability < 30
 				}
 				add = 3
 			}
