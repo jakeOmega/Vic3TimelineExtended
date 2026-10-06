@@ -74,6 +74,15 @@ class CompanyAiTests(unittest.TestCase):
         self.assertRegex(hooks, re.compile(r"on_monthly_pulse_country = \{\s*on_actions = \{\s*te_company_monthly_on_action\s*\}", re.S))
         self.assertIn("te_company_failing_monthly_effect = yes", hooks)
 
+    def test_size_test_reads_a_scope_value_the_effect_saves_first(self):
+        # A comparison against an unsaved scope value fails without a log line.
+        triggers = (ROOT / "common/scripted_triggers/te_company_triggers.txt").read_text(encoding="utf-8-sig")
+        effects = (ROOT / "common/scripted_effects/te_company_effects.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("company_owned_levels < scope:te_company_min_levels", triggers)
+        effect = effects[effects.index("te_company_failing_monthly_effect = {"):]
+        self.assertLess(effect.index("name = te_company_min_levels"), effect.index("every_company"))
+        self.assertLess(effect.index("every_company"), effect.index("te_company_fails_this_month = yes"))
+
 
 if __name__ == "__main__":
     unittest.main()

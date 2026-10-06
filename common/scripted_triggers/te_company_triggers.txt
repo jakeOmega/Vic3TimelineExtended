@@ -1,6 +1,14 @@
-﻿# Company scope. True once the company has stayed below
-# te_company_failing_prosperity for te_company_failing_months monthly checks
-# (te_company_effects.txt).
+﻿# Company scope, inside te_company_failing_monthly_effect (which saves
+# scope:te_company_min_levels): this month's check fails on either test.
+te_company_fails_this_month = {
+	OR = {
+		company_prosperity < te_company_failing_prosperity
+		company_owned_levels < scope:te_company_min_levels
+	}
+}
+
+# Company scope. True once te_company_fails_this_month has held at
+# te_company_failing_months consecutive monthly checks (te_company_effects.txt).
 te_company_is_failing = {
 	has_variable = te_company_months_failing
 	var:te_company_months_failing >= te_company_failing_months

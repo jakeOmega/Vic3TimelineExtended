@@ -19,11 +19,19 @@ te_company_ai_weight_generic = 3
 # max level comes from the prosperity bonus), so this only acts there.
 te_company_flagship_ai_value = 50000
 
-# The AI dissolves a company whose prosperity stayed below this for
-# te_company_failing_months consecutive monthly checks (te_company_effects.txt).
+# The AI dissolves a company that failed, by either test below, at
+# te_company_failing_months consecutive monthly checks (te_company_effects.txt):
+# - prosperity below te_company_failing_prosperity: a struggling company;
+# - owned levels below te_company_small_share of the country's building_levels:
+#   a company too small to matter to its economy, however prosperous. The
+#   engine dissolves a company under 5 levels on its own, so at 0.1% this test
+#   only bites in countries above 5,000 levels (20 levels at 20,000).
 # Stand-in for "profit below 0.1% of GDP for five years", which script cannot
-# read: on the 2073 save, 50 of 406 AI companies with five years of history
-# stayed below 10 throughout, and 41 of those also earned less than 0.1% of
-# their country's GDP a year.
+# read. On the 2073 save, of 406 AI companies with five years of history, 102
+# earned less than 0.1% of their country's GDP a year. Prosperity alone flags
+# 50, 41 of them among the 102; with the size test, 83 (20%), 52 of them among
+# the 102, the rest earning a median 0.34% of GDP. At 0.25% it would flag 27%,
+# leaving a new company little room to grow.
 te_company_failing_prosperity = 10
+te_company_small_share = 0.001
 te_company_failing_months = 60

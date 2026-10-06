@@ -7,17 +7,26 @@
 # in for the choice a player makes in the companies panel.
 #
 # Script cannot read a company's profit, so "failing" is prosperity below
-# te_company_failing_prosperity at te_company_failing_months consecutive
-# monthly checks (te_company_ai_values.txt has the evidence for the numbers).
+# te_company_failing_prosperity, or owned levels below te_company_small_share
+# of the country's building levels, at te_company_failing_months consecutive
+# monthly checks; a check that passes both clears the count
+# (te_company_ai_values.txt has the evidence for the numbers).
 # on_monthly_pulse_country is a 30-day timer, so 60 checks are 4.9 years.
 #
 # Country scope. Every country counts, players included, so the count is a fact
 # about the company; only an AI acts on it. A country that changes hands acts
 # on the count it inherits.
 te_company_failing_monthly_effect = {
+	save_temporary_scope_value_as = {
+		name = te_company_min_levels
+		value = {
+			value = building_levels
+			multiply = te_company_small_share
+		}
+	}
 	every_company = {
 		if = {
-			limit = { company_prosperity < te_company_failing_prosperity }
+			limit = { te_company_fails_this_month = yes }
 			if = {
 				limit = { has_variable = te_company_months_failing }
 				change_variable = { name = te_company_months_failing add = 1 }
