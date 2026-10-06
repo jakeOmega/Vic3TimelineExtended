@@ -34,7 +34,7 @@ te_tax_customs_on = {
 # (china_buttons.txt `market.owner = root`, 42_subjects_request_market_control.txt
 # `market.owner = this`); is_junior_in_customs_union is the treaty articles'.
 te_tax_owns_market = {
-	exists = market
+	exists = market.owner
 	market.owner = this
 	is_junior_in_customs_union = no
 }

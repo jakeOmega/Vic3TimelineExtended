@@ -459,9 +459,9 @@ lost on a coin flip, so a level-1 site is destroyed half the time; what survives
 keeps its production methods. Barracks, conscription centers and the other naval
 buildings survive.
 
-Both sides get a notification of the result. Every use speeds up the world's
-funded programs and ends any crisis between the two countries, and one that
-lands knocks the nuclear taboo down. The United
+Both sides get a notification of the result. Every use ends any crisis between
+the two countries. One that lands also speeds up the world's funded programs
+and knocks the nuclear taboo down. The United
 Nations records it against you, and its court may indict your ruler (see
 [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)).
 

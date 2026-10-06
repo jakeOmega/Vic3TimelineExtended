@@ -549,6 +549,8 @@ nuclear_first_strike = { # Scope is target state
 					text = industrial_nuke_succeeds_desc
 					nd_log_context = yes
 					debug_log = "TE_NUCLEAR: type=action; action=strategic_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					# Landed: nd_record_nuclear_use spurs the world's programmes.
+					set_variable = { name = nd_strike_landed value = 1 }
 
 					# UN: a nuclear first strike is a world moment and a lasting
 					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
@@ -654,6 +656,8 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					text = industrial_nuke_succeeds_desc
 					nd_log_context = yes
 					debug_log = "TE_NUCLEAR: type=action; action=strategic_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					# Landed: nd_record_nuclear_use spurs the world's programmes.
+					set_variable = { name = nd_strike_landed value = 1 }
 					# UN: retaliation still erodes the order pillar, less than a
 					# first strike (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
@@ -710,6 +714,8 @@ nuclear_response_response_strike = {  # Scope is target state
 					text = industrial_nuke_succeeds_desc
 					nd_log_context = yes
 					debug_log = "TE_NUCLEAR: type=action; action=strategic_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					# Landed: nd_record_nuclear_use spurs the world's programmes.
+					set_variable = { name = nd_strike_landed value = 1 }
 					# UN: retaliation erodes the order pillar (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
