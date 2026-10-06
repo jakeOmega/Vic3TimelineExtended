@@ -37,13 +37,19 @@ types state_panel_types
 
 		blockoverride "entire_scrollarea"
 		{
+			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 5): while
+			### this state's logging town carries a monument name being typed
+			### (gm_is_name_carrier, gm_sguis.txt), show only the logging-town
+			### field, as "Monument name". ignoreinvisible closes the gaps.
 			flowcontainer = {
 				direction = vertical
+				ignoreinvisible = yes
 
 				# "Choose State Name" section
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
+					visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 
 					textbox = {
 						size = { 420 40 }
@@ -87,7 +93,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[StateNameChangePopup.ShouldHaveCityHub]"
+					visible = "[And( StateNameChangePopup.ShouldHaveCityHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
 						size = { 420 40 }
@@ -131,7 +137,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[StateNameChangePopup.ShouldHavePortHub]"
+					visible = "[And( StateNameChangePopup.ShouldHavePortHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
 						size = { 420 40 }
@@ -175,7 +181,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[StateNameChangePopup.ShouldHaveFarmHub]"
+					visible = "[And( StateNameChangePopup.ShouldHaveFarmHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
 						size = { 420 40 }
@@ -219,7 +225,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[StateNameChangePopup.ShouldHaveMineHub]"
+					visible = "[And( StateNameChangePopup.ShouldHaveMineHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
 						size = { 420 40 }
@@ -266,11 +272,20 @@ types state_panel_types
 					visible = "[StateNameChangePopup.ShouldHaveWoodHub]"
 
 					textbox = {
+						visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 						size = { 420 40 }
 						align = left|nobaseline
 						autoresize = yes
 						using = fontsize_large
 						text = "WOOD_NAME"
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
+						size = { 420 40 }
+						align = left|nobaseline
+						autoresize = yes
+						using = fontsize_large
+						text = "gm_name_popup_label"
 					}
 
 					divider_clean = {}

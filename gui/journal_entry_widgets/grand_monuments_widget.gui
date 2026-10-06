@@ -283,20 +283,19 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### PROTOTYPE (v2 spec §3.4, test build 4): name a monument through the
-	### base game's company-rename popup (gm_sguis.txt has why). Two modes,
-	### on the state value gm_is_being_named:
-	###   0  Name It starts a naming (gm_name_start_sgui); Clear Name drops a
-	###      stored name
-	###   1  the name typed so far, read off the carrier company; the popup
-	###      opens as this mode appears (the _show state), and Rename opens
-	###      it again; Use This Name passes MakeScopeFlag( <company name> ) to
-	###      gm_name_use_sgui; Cancel ends the naming
-	### The popup can't open in Name It's own click: the company doesn't
-	### exist until the scripted GUI's effect has run, and a popup opened on
-	### no company refuses Confirm ("This action is not allowed", launch 4).
-	### Every read of Var('gm_name_carrier') sits in mode 1, where
-	### gm_name_start_sgui has set it, so nothing reads a missing variable.
+	### PROTOTYPE (v2 spec §3.4, test build 5): name a monument through the
+	### base game's state-rename popup, typing into a logging town's name
+	### (gm_sguis.txt has why). Two modes, on the state value gm_is_being_named:
+	###   0  Name It starts a naming with the monument's own state as the
+	###      carrier; Name It (Tonga) with Tonga's state (a test: can we rename
+	###      a state we don't own?); Clear Name drops a stored name
+	###   1  the carrier's logging-town name so far; the popup opens as this
+	###      mode appears (the _show state, proven in launch 4), and Rename
+	###      opens it again; Use This Name passes
+	###      MakeScopeFlag( <logging-town name> ) to gm_name_use_sgui; Cancel
+	###      ends the naming
+	### Every read of Var('gm_name_carrier_state') sits in mode 1, where the
+	### start scripted GUI has set it, so nothing reads a missing variable.
 	type gm_rename_line = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -310,11 +309,19 @@ types grand_monuments_widget_types
 			parentanchor = hcenter
 
 			gm_rename_button = {
-				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
+				datacontext = "[GetScriptedGui('gm_name_start_here_sgui')]"
 				tooltip = "gm_button_name_start_tooltip"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
+			}
+
+			gm_rename_button = {
+				datacontext = "[GetScriptedGui('gm_name_start_tonga_sgui')]"
+				tooltip = "gm_button_name_tonga_tooltip"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				blockoverride "rename_text" { text = "gm_button_name_tonga" }
 			}
 
 			gm_rename_button = {
@@ -332,12 +339,10 @@ types grand_monuments_widget_types
 			spacing = 6
 			parentanchor = hcenter
 
-			### Open the popup once the company exists. Vanilla runs data
-			### functions from _show only on windows (companies_panel.gui);
-			### on an inner container it is untested, and Rename covers it.
+			### Open the popup when the naming starts (worked in launch 4).
 			state = {
 				name = _show
-				on_start = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				on_start = "[PopupManager.ShowStateChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.Self )]"
 			}
 
 			textbox = {
@@ -353,7 +358,7 @@ types grand_monuments_widget_types
 				elide = right
 				align = left|nobaseline
 				using = fontsize_medium
-				text = "[JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting]"
+				text = "[JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetForestryHubName]"
 			}
 		}
 
@@ -365,15 +370,15 @@ types grand_monuments_widget_types
 
 			gm_rename_button = {
 				tooltip = "gm_button_name_popup_tooltip"
-				onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				onclick = "[PopupManager.ShowStateChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.Self )]"
 				blockoverride "rename_text" { text = "gm_button_name_popup" }
 			}
 
 			gm_rename_button = {
 				datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
 				tooltip = "gm_button_name_use_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetForestryHubName ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetForestryHubName ) ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_use" }
 			}
 

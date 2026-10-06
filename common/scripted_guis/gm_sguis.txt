@@ -115,19 +115,23 @@ gm_hard_times_sgui = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 4): name a monument through the base
-# game's company-rename popup. Three launches showed a mod editbox's text
-# can't reach script (gui_modding_guide.md § "Typed text can't reach script"),
-# but a company's name can: the popup stores the typed text on the company,
-# and Company.GetNameNoFormatting returns it as a CString. So:
-#   gm_name_start_sgui  adds company_gm_name_carrier (and a company slot for
-#                       it) and marks the state; the row opens the popup
-#   gm_name_use_sgui    gets the company's name as the saved scope gm_name
-#                       (MakeScopeFlag in the .gui), stores it as the state's
-#                       gm_name, and removes the company
-#   gm_name_cancel_sgui removes the company without storing anything
-# One naming at a time: the carrier is one company type.
-gm_name_start_sgui = {
+# PROTOTYPE (v2 spec §3.4, test build 5): name a monument through the base
+# game's state-rename popup. A mod editbox's text can't reach script
+# (gui_modding_guide.md § "Typed text can't reach script"), but a name the
+# popup saves can: State.GetForestryHubName returns it as a CString. Build 4
+# proved the route with a placeholder company; this one types into a logging
+# town instead, which every state that can hold a monument has.
+#   gm_name_start_here_sgui   carrier = the monument's own state
+#   gm_name_start_tonga_sgui  carrier = Tonga's state (test: can we rename a
+#                             state we don't own?)
+#   gm_name_use_sgui          gets the logging town's name as the saved scope
+#                             gm_name (MakeScopeFlag in the .gui), stores it as
+#                             the monument state's gm_name, closes the naming
+#   gm_name_cancel_sgui       closes it without storing anything
+# The carrier state carries gm_carries_name (value gm_is_name_carrier), which
+# switches the popup (states_panel.gui) to show only its logging-town field.
+# One naming at a time.
+gm_name_start_here_sgui = {
 	scope = country
 	saved_scopes = { gm_state }
 
@@ -142,7 +146,50 @@ gm_name_start_sgui = {
 		}
 		custom_tooltip = {
 			text = gm_name_one_at_a_time_tt
-			NOT = { has_company = company_type:company_gm_name_carrier }
+			NOT = { has_variable = gm_name_carrier_state }
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			set_variable = gm_being_named
+			set_variable = gm_carries_name
+		}
+		set_variable = {
+			name = gm_name_carrier_state
+			value = scope:gm_state
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_name_start_tonga_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+		}
+		custom_tooltip = {
+			text = gm_name_one_at_a_time_tt
+			NOT = { has_variable = gm_name_carrier_state }
+		}
+		custom_tooltip = {
+			text = gm_name_no_tonga_tt
+			s:STATE_TONGA = {
+				any_scope_state = {
+					NOT = { has_variable = gm_carries_name }
+				}
+			}
 		}
 	}
 
@@ -150,23 +197,17 @@ gm_name_start_sgui = {
 		scope:gm_state = {
 			set_variable = gm_being_named
 		}
-		# Before add_company: the company type's potential reads it.
-		set_variable = gm_naming_active
-		add_modifier = {
-			name = gm_name_carrier_slot
-		}
-		add_company = company_type:company_gm_name_carrier
-		capital = {
-			state_region = {
-				save_scope_as = gm_name_carrier_hq
+		s:STATE_TONGA = {
+			random_scope_state = {
+				save_scope_as = gm_name_tonga
 			}
 		}
-		company:company_gm_name_carrier = {
-			set_company_state_region = scope:gm_name_carrier_hq
+		scope:gm_name_tonga = {
+			set_variable = gm_carries_name
 		}
 		set_variable = {
-			name = gm_name_carrier
-			value = company:company_gm_name_carrier
+			name = gm_name_carrier_state
+			value = scope:gm_name_tonga
 		}
 	}
 
@@ -215,7 +256,7 @@ gm_name_cancel_sgui = {
 	}
 
 	is_valid = {
-		has_variable = gm_naming_active
+		has_variable = gm_name_carrier_state
 	}
 
 	effect = {

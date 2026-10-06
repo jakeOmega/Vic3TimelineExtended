@@ -1,18 +1,25 @@
-﻿# PROTOTYPE (v2 spec §3.4, test build 4): end a naming, whether the name was
-# used or the naming cancelled. Country scope. Removes company_gm_name_carrier
-# and its slot, then the flags that showed it (gm_naming_active, the company
-# type's potential) and marked the state being named (gm_being_named).
+﻿# PROTOTYPE (v2 spec §3.4, test build 5): end a naming, whether the name was
+# used or the naming cancelled. Country scope (ROOT = the naming country).
+# The carrier state's logging town holds whatever the player typed; a state
+# we don't own (Tonga) gets its default town names back, our own keeps it
+# (reset_hub_names would also wipe any city or port name we chose there).
 gm_name_carrier_close = {
 	if = {
-		limit = { has_company = company_type:company_gm_name_carrier }
-		remove_company = company_type:company_gm_name_carrier
+		limit = {
+			has_variable = gm_name_carrier_state
+			exists = var:gm_name_carrier_state
+		}
+		var:gm_name_carrier_state = {
+			if = {
+				limit = {
+					NOT = { owner = ROOT }
+				}
+				reset_hub_names = yes
+			}
+			remove_variable = gm_carries_name
+		}
 	}
-	if = {
-		limit = { has_modifier = gm_name_carrier_slot }
-		remove_modifier = gm_name_carrier_slot
-	}
-	remove_variable = gm_name_carrier
-	remove_variable = gm_naming_active
+	remove_variable = gm_name_carrier_state
 	every_scope_state = {
 		limit = { has_variable = gm_being_named }
 		remove_variable = gm_being_named
