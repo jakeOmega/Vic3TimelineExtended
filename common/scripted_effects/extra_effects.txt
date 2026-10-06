@@ -1619,3 +1619,59 @@ te_ai_decentralized_absorption_effect = {
 		}
 	}
 }
+
+# AI-side Trade Center seed. Runs from on_yearly_pulse_country
+# (ROOT = the pulsing country).
+# A market with no Trade Center can neither import nor export, so its prices
+# run to the ends of PRICE_RANGE (0.999 in extra_defines.txt): a good it lacks
+# costs twice base, a good it has in surplus sells for a thousandth of base.
+# A port takes both ends at once: it cannot import its Steamers and Coal, whose
+# shortage cuts its output, or export the Bulk Transportation it makes.
+# AI Jamaica in 1969 paid £22.5K a week in port subsidies on £1.8K of income.
+# The construction AI does not reliably build a market's first Trade Center,
+# so an AI country that leads a market with none gets a government-owned
+# level-1 Trade Center: in its market capital, or else its most populous state
+# that may host one. trade_center_construction_allowed keeps the trade laws in
+# force (Isolationism allows none; the Canton System and Sakoku allow one
+# state). A junior customs-union member trades through its leader's market.
+# Players build their own.
+te_ai_seed_trade_center_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			NOT = { is_country_type = decentralized }
+			is_junior_in_customs_union = no
+			market ?= {
+				NOT = { has_building = building_trade_center }
+			}
+		}
+		if = {
+			limit = {
+				market_capital ?= {
+					owner = ROOT
+					trade_center_construction_allowed = yes
+				}
+			}
+			market_capital = {
+				te_create_seed_trade_center = yes
+			}
+		}
+		else = {
+			ordered_scope_state = {
+				limit = { trade_center_construction_allowed = yes }
+				order_by = state_population
+				max = 1
+				te_create_seed_trade_center = yes
+			}
+		}
+	}
+}
+
+# State scope. Called only for a state whose market has no Trade Center.
+te_create_seed_trade_center = {
+	create_building = {
+		building = building_trade_center
+		add_ownership = { country = { country = owner levels = 1 } }
+		reserves = 1
+	}
+}

@@ -37,6 +37,7 @@ A condensed "must-know" cheat sheet for vanilla Victoria 3, surfacing the **non-
 - **Investment Pool is where Aristocrat/Capitalist dividends go.** Subsistence farms (`ownership_type = self`) don't feed the IP — peasant wealth stays with peasants.
 - **Migration: cultural community gates intra-market migration.** Mass migration creates communities on arrival; intra-market migration requires a pre-existing one.
 - **Naval rework (1.13)**: convoys are gone, replaced by **Merchant Marine** as a market good. Shortages raise its price, which makes Trade Centers downsize routes — supply/demand rebalancing, not a hard cap.
+- **A market with no Trade Center can neither import nor export.** Under this mod's near-total `PRICE_RANGE` its prices go to the extremes, and its subsidized ports drain the treasury. The mod seeds a Trade Center for AI market leaders with none (`vanilla_economy_reference.md` § 14.1).
 
 ---
 
