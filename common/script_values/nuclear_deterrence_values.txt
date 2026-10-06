@@ -21,6 +21,7 @@ nd_crisis_deadline_public_weeks = 8     # a public ultimatum's deadline
 nd_crisis_deadline_extension_weeks = 6
 nd_crisis_max_weeks = 52                # a crisis older than this expires
 nd_crisis_pressure_interval_weeks = 6   # target's pressure event cadence
+nd_crisis_transit_weeks_value = 3       # weeks the clock waits for the threat to reach the target (it arrives after 14-21 days)
 nd_crisis_cooldown_months_value = 24    # no second crisis with the same country
 nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
 nd_pledge_broken_months_value = 120     # a repudiation is remembered this long

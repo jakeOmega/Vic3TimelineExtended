@@ -123,6 +123,23 @@ nd_exchange_war_failed = {
 	color = neutral
 }
 
+# Another country made a nuclear threat; we hear of it before it reaches its
+# target (nd_crisis_notify_nuclear_powers): a public ultimatum, or a private
+# warning our intelligence picked up.
+nd_crisis_ultimatum_issued = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
+nd_crisis_warning_reported = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # Homelands
 homeland_created = {
 	type = state
