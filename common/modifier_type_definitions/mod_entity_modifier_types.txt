@@ -931,6 +931,20 @@ building_farmers_shares_add={
 	}
 }
 
+# Vanilla pattern building_<pop_type>_mortality_mult: the engine lists the
+# soldiers one under "Potential dynamic modifier types" and vanilla ships its
+# loc, but registers only academics, engineers, laborers, machinists and
+# slaves. Used by pm_neural_grafting (barracks_training_pms.txt). Shape and
+# ai_value mirror vanilla's building_laborers_mortality_mult.
+building_soldiers_mortality_mult={
+	decimals=0
+	color=bad
+	percent=yes
+	game_data={
+		ai_value=0
+	}
+}
+
 # Split synthetics plants used by the biotechnology companies
 building_synthetics_plant_opium_throughput_add = {
 	color = good
