@@ -1270,7 +1270,11 @@ types nuclear_deterrence_widget_types
 				ignoreinvisible = yes
 				spacing = 8
 				margin = { 6 1 }
-				tooltip = "[Concatenate( Localize( 'nd_w_survivability_tt' ), Concatenate( Localize( 'te_tt_break' ), Localize( 'nd_w_survivability_bar_tt' ) ) )]"
+				### A plain key, not Concatenate( Localize( ... ) ): Localize renders
+				### outside the journal entry, so nd_w_survivability_tt's
+				### JournalEntry.GetCountry figure came out blank ("wanted context of
+				### type 'JournalEntry' ... got context 'Container'", 2026-10-06).
+				tooltip = "nd_w_survivability_row_tt"
 
 				textbox = {
 					size = { 170 24 }
