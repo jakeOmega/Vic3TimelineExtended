@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Development Programs contribution sizes (owner, 2026-10-05).
+"""Development Programs contribution sizes (owner, 2026-10-05; five since
+2026-10-06).
 
-A contribution to the World Development Fund comes in four sizes, Token to
+A contribution to the World Development Fund comes in five sizes, Token to
 Generous, each doubling the money and adding a quarter of Substantial's
 benefits (common/script_values/un_economy_values.txt). Its benefits scale by
 the size's factor, the UN's funding pillar counts its money rather than who
@@ -72,7 +73,8 @@ MODIFIERS = _path("common", "static_modifiers", "extra_modifiers.txt")
 TYPES = _path("common", "modifier_type_definitions", "un_membership_modifier_types.txt")
 LOC_DIR = _path("localization", "english")
 
-SIZES = ("token", "modest", "substantial", "generous")
+SIZES = ("token", "small", "modest", "substantial", "generous")
+SUBSTANTIAL = SIZES.index("substantial")
 
 
 def _loc():
@@ -96,18 +98,19 @@ class SizeTableTest(unittest.TestCase):
         self.values = _read(ECONOMY)
 
     def test_each_size_doubles_the_money(self):
-        rates = [_constant(self.values, f"un_dev_fund_rate_{s}") for s in SIZES]
+        rates = [_constant(self.values, f"un_dev_fund_pct_{s}") for s in SIZES]
         for low, high in zip(rates, rates[1:]):
             self.assertAlmostEqual(high, 2 * low)
         # Substantial is what the programme cost before the sizes, so a
         # contribution from an older save (the legacy size) pays as it did.
-        self.assertAlmostEqual(rates[2], 0.005)
-        self.assertEqual(_constant(self.values, "un_dev_fund_size_legacy"), 3)
+        self.assertAlmostEqual(rates[SUBSTANTIAL], 0.5)
+        self.assertEqual(_constant(self.values, "un_dev_fund_size_legacy"), SUBSTANTIAL + 1)
         self.assertEqual(_constant(self.values, "un_dev_fund_size_max"), len(SIZES))
 
     def test_each_doubling_adds_a_quarter_of_substantial(self):
         benefits = [_constant(self.values, f"un_dev_fund_benefit_{s}") for s in SIZES]
-        self.assertEqual(benefits[2], 1)
+        self.assertEqual(benefits[SUBSTANTIAL], 1)
+        self.assertGreater(benefits[0], 0)
         for low, high in zip(benefits, benefits[1:]):
             self.assertAlmostEqual(high - low, 0.25)
 
@@ -116,16 +119,20 @@ class SizeTableTest(unittest.TestCase):
         self.assertEqual([r[1].lower() for r in rows], list(SIZES))
         for size, (num, _name, pct, benefit) in zip(SIZES, rows):
             with self.subTest(size=size):
-                self.assertAlmostEqual(float(pct) / 100, _constant(self.values, f"un_dev_fund_rate_{size}"))
+                self.assertAlmostEqual(float(pct), _constant(self.values, f"un_dev_fund_pct_{size}"))
                 self.assertAlmostEqual(float(benefit), _constant(self.values, f"un_dev_fund_benefit_{size}"))
 
     def test_rate_and_benefit_read_the_stored_size(self):
-        for name in ("un_dev_fund_rate_value", "un_dev_fund_benefit_value"):
+        for name in ("un_dev_fund_pct_value", "un_dev_fund_benefit_value"):
             body = _flat(_block(self.values, name))
-            for n in (4, 3, 2):
+            for n in range(len(SIZES), 1, -1):
                 self.assertIn(f"un_dev_fund_size_stored >= {n}", body)
         expense = _flat(_block(self.values, "un_dev_fund_expense_value"))
-        self.assertEqual(expense, "value = gdp multiply = un_dev_fund_rate_value divide = 52")
+        self.assertEqual(expense, "value = gdp multiply = un_dev_fund_pct_value divide = 100 divide = 52")
+        for size in SIZES:
+            with self.subTest(size=size):
+                cost = _flat(_block(self.values, f"un_disp_dev_fund_cost_{size}"))
+                self.assertEqual(cost, f"value = gdp multiply = un_dev_fund_pct_{size} divide = 100 divide = 52")
 
 
 class BenefitModifierTest(unittest.TestCase):
@@ -189,6 +196,54 @@ class ButtonsTest(unittest.TestCase):
         resize = _flat(_block(effects, "un_dev_fund_resize"))
         self.assertIn("clamp_variable = { name = un_dev_fund_size min = 1 max = un_dev_fund_size_max }", resize)
 
+    def test_every_size_has_its_tooltips(self):
+        # Raise names the size it moves to (all but Token), Reduce likewise
+        # (all but Generous), and Our Obligations names every size.
+        effects = _read(ECONOMY_EFFECTS)
+        loc = _loc()
+        raise_, reduce_ = (_flat(_block(effects, e)) for e in ("un_dev_fund_raise", "un_dev_fund_reduce"))
+        obligations = _flat(_block(effects, "un_economy_obligation_lines"))
+        for size in SIZES:
+            with self.subTest(size=size):
+                self.assertEqual(size != "token", f"un_dev_fund_to_{size}_tt" in raise_)
+                self.assertEqual(size != "generous", f"un_dev_fund_to_{size}_tt" in reduce_)
+                self.assertIn(f"je_un_chamber_dev_fund_contributor_{size}", obligations)
+                self.assertRegex(loc, r"(?m)^ un_dev_fund_to_" + size + r"_tt:0 ")
+                self.assertRegex(loc, r"(?m)^ je_un_chamber_dev_fund_contributor_" + size + r":0 ")
+                self.assertIn(f"un_disp_dev_fund_cost_{size} = {{", _read(ECONOMY))
+
+
+class FourSizeSaveTest(unittest.TestCase):
+    """A save from the four sizes (2026-10-05) stored 1 for what is now Small.
+
+    Every write of the size since the five sizes sets var:un_dev_fund_five_sizes
+    with it, so a size without that marker reads a size up and keeps its money
+    and benefit factor.
+    """
+
+    def test_an_unmarked_size_reads_a_size_up(self):
+        stored = _flat(_block(_read(ECONOMY), "un_dev_fund_size_stored"))
+        self.assertIn("add = var:un_dev_fund_size if = { limit = { NOT = { has_variable = un_dev_fund_five_sizes } } "
+                      "add = 1 }", stored)
+
+    def test_every_size_write_marks_it(self):
+        writes = 0
+        for path in _script_files():
+            for line in _read(path).splitlines():
+                if re.search(r"set_variable\s*=\s*\{\s*name\s*=\s*un_dev_fund_size\b", line):
+                    writes += 1
+        self.assertEqual(writes, 3)  # the button, the resize, the monthly pulse
+        button = _flat(_block(_read(BUTTONS), "un_fund_development_button"))
+        self.assertIn("set_variable = { name = un_dev_fund_size value = 1 } set_variable = un_dev_fund_five_sizes", button)
+        effects = _read(ECONOMY_EFFECTS)
+        resize = _flat(_block(effects, "un_dev_fund_resize"))
+        self.assertIn("set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored } "
+                      "set_variable = un_dev_fund_five_sizes", resize)
+        monthly = _flat(_block(effects, "un_dev_fund_contribution_monthly"))
+        self.assertIn("limit = { NOT = { has_variable = un_dev_fund_five_sizes } } "
+                      "set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored } "
+                      "set_variable = un_dev_fund_five_sizes", monthly)
+
     def test_the_patron_pulse_runs_for_members_and_non_members(self):
         # Before the member block, so the goodwill fades once a member leaves.
         raw = _raw(JE)
@@ -215,11 +270,19 @@ class AiSizeTest(unittest.TestCase):
     def test_cutting_back_waits_a_band_below_the_raise(self):
         raise_line = _flat(_block(self.values, "un_ai_development_raise_line"))
         reduce_line = _flat(_block(self.values, "un_ai_development_reduce_line"))
-        self.assertEqual(raise_line, "value = un_dev_fund_size_value multiply = un_ai_development_size_step")
-        self.assertEqual(reduce_line, "value = un_dev_fund_size_value subtract = 1 "
+        self.assertEqual(raise_line, "value = un_dev_fund_size_value subtract = un_ai_development_base_size "
+                                     "add = 1 multiply = un_ai_development_size_step")
+        self.assertEqual(reduce_line, "value = un_dev_fund_size_value subtract = un_ai_development_base_size "
                                       "multiply = un_ai_development_size_step subtract = un_ai_development_band")
         self.assertGreater(_constant(self.values, "un_ai_development_band"),
                            _constant(self.values, "un_ai_self_flipping_terms"))
+
+    def test_a_sound_contributor_settles_at_the_old_token_money(self):
+        # Token and Small (2026-10-06) went in below the old Token; a member
+        # with no reason to give more still settles at its money, Small.
+        base = int(_constant(self.values, "un_ai_development_base_size"))
+        self.assertEqual(SIZES[base - 1], "small")
+        self.assertAlmostEqual(_constant(_read(ECONOMY), "un_dev_fund_pct_small"), 0.125)
 
     def test_wealth_starts_a_gift_but_does_not_enlarge_it(self):
         # Rich members give much more often, but typically only a token
@@ -229,7 +292,50 @@ class AiSizeTest(unittest.TestCase):
         for term in ("un_dev_fund_rich = yes", "un_dev_fund_above_average = yes"):
             self.assertIn(term, will)
             self.assertNotIn(term, generosity)
-        self.assertIn("add = un_ai_treasury_penalty", generosity)
+
+    def test_recipients_among_ours_weigh_half_a_size(self):
+        # A great power almost always has a recipient among its subjects, bloc
+        # partners and allies; at a full size it put nearly every one at Modest
+        # (owner, 2026-10-06).
+        generosity = _flat(_block(self.values, "un_ai_development_generosity"))
+        step = _constant(self.values, "un_ai_development_size_step")
+        terms = dict(re.findall(r"limit = \{ (.+?) \} add = (-?\d+) \}", generosity))
+        self.assertEqual(float(terms["has_law = law_type:law_humanitarian_regulations"]), step)
+        self.assertEqual(float(terms["un_ai_development_recipients_among_ours = yes"]), step / 2)
+        self.assertTrue(generosity.endswith("add = un_ai_development_poverty"))
+
+    def test_poverty_and_debt_hold_a_contribution_back(self):
+        # Being poorer than the great powers, or borrowing, is a strong reason
+        # not to give more (owner, 2026-10-06), in steps that flip inside the
+        # band.
+        poverty = _flat(_block(self.values, "un_ai_development_poverty"))
+        self.assertIn("if = { limit = { un_ai_development_peer_ratio < 0.5 } add = -30 } "
+                      "else_if = { limit = { un_ai_development_peer_ratio < 1 } add = -15 }", poverty)
+        self.assertIn("if = { limit = { scaled_debt >= 0.25 } add = -15 }", poverty)
+        self.assertTrue(poverty.endswith("add = un_ai_treasury_penalty"))
+        # Each step flips on its own as GDP per head or debt moves, so none may
+        # be wider than un_ai_self_flipping_terms (which the band exceeds).
+        flipping = _constant(self.values, "un_ai_self_flipping_terms")
+        deep, below, debt = (int(x) for x in re.findall(r"add = (-\d+)", poverty))
+        for step in (-below, below - deep, -debt):
+            self.assertLessEqual(step, flipping)
+        ratio = _flat(_block(self.values, "un_ai_development_peer_ratio"))
+        self.assertIn("add = var:un_dev_fund_gdp_ph divide = un_ai_development_peer_gdp_ph", ratio)
+        self.assertTrue(ratio.endswith("else = { add = 1 }"))  # no figure, no penalty
+        peer = _flat(_block(self.values, "un_ai_development_peer_gdp_ph"))
+        self.assertLess(peer.index("add = global_var:un_dev_fund_gp_avg"),
+                        peer.index("add = global_var:un_dev_fund_avg"))
+
+    def test_the_great_powers_average_is_snapshotted_and_cleared(self):
+        effects = _read(ECONOMY_EFFECTS)
+        update = _flat(_block(effects, "un_dev_fund_monthly_update"))
+        snapshot = update.index("set_global_variable = { name = un_dev_fund_gp_avg value = un_dev_fund_gp_avg_value }")
+        self.assertLess(update.index("set_variable = { name = un_dev_fund_gdp_ph"), snapshot)
+        self.assertIn("un_dissolve_remove_global = { NAME = un_dev_fund_gp_avg }",
+                      _flat(_block(effects, "un_economy_on_dissolve")))
+        avg = _flat(_block(_read(ECONOMY), "un_dev_fund_gp_avg_value"))
+        self.assertIn("country_rank >= rank_value:great_power has_variable = un_dev_fund_gdp_ph", avg)
+        self.assertTrue(avg.endswith("divide = un_dev_fund_gp_count_value }"))
 
 
 class FundingPillarTest(unittest.TestCase):
