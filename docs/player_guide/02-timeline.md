@@ -464,7 +464,8 @@ effects as one tall one; local effects count each monument on its own.
 
 ### The Monuments journal entry
 
-The Monuments journal entry appears when you own a Grand Monument. After your
+The Monuments journal entry appears when you own a Grand Monument or an interest
+group has asked you for one (a [commission](#monument-commissions)). After your
 last monument is gone, it stays until the fading approval and legitimacy it
 shows have run out.
 
@@ -480,15 +481,18 @@ Upheld (a gold wreath on the stone), Heritage (a railing in front), Undedicated
 contested). An icon is dimmed while no monument holds its status. Hover an icon
 for what the status means; Heritage and Contested are also terms you can hover.
 While a finished level would cause [vanity backlash](#vanity-backlash), a red
-Hard Times appears under the icons; hover it for why.
+Hard Times appears under the icons; hover it for why. The last line names your
+[monument policy](#monument-policy); hover it for what the policy does and when
+it can next change.
 
-Three sections follow:
+These sections follow:
 
 | Section | Starts | Shows |
 |---|---|---|
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). |
-| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its form and dedication, and its state and grandeur. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, and hard times. |
+| Commission | Open | Only while a commission is open: who asked for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, and Ask for More Time. |
+| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship), and what remains from a met commission (A Promise Kept). The four monument policy buttons are at the foot. |
+| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, commissions, names and the monument policy. |
 
 Every monument, whatever it honors, gives:
 
@@ -526,7 +530,50 @@ still fits. Each interest group's approval counts the grandeur of the monuments
 it approves of, minus those it objects to, and moves by 1 per step either way.
 No number of monuments can buy a group outright: each group has one total.
 
-### Monument forms
+### Monument commissions
+
+Interest groups ask for monuments. A **commission** is one such request: 5
+grandeur of one dedication within 60 months. It arrives as an event, A Monument
+Is Asked For, which you accept or turn down, and while it is open it has its own
+section in the Monuments journal entry. Only one commission is open or on offer
+at a time; a moment that comes while one is open passes without one.
+
+| Moment | Who asks | For | Where |
+|---|---|---|---|
+| You end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere |
+| You end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere |
+| The 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital |
+| The death of a ruler who reigned 15 years or more | The late ruler's group | A mausoleum To the Nation, named for them | The capital |
+| A new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere |
+| You are the first into orbit or the first onto the Moon | Intelligentsia | An obelisk To the Nation | The capital |
+| About once a decade: a group in government with under 5 grandeur of a dedication it approves of | That group | That dedication | Anywhere |
+
+A commission for the capital can be met anywhere when the capital already holds
+a monument of another dedication. Countries that won independence before 1836
+count their founding from that year, from the United States (1776) to Belgium
+and Ecuador (1830); a country formed or released in play is founded the year it
+appears. Other countries of 1836 have no founding year and no centenary.
+
+Grandeur you add to fitting monuments of the dedication counts, whether you
+raise an old monument or build a new one, and a commission for the capital
+counts only the capital's monument. A monument that becomes contested stops
+counting. While a commission is open, the dedication ceremony says so.
+
+| Outcome | What follows |
+|---|---|
+| Met | The group that asked approves, about +2 at first and fading over several years, and A Promise Kept gives +5 legitimacy, fading by 3% a month. The monument that completed it takes the commission's name. |
+| Met after Ask for More Time | Ask for More Time adds 36 months, once, and halves the reward: about +1 approval and +2.5 legitimacy. |
+| Turned down | The group resents the refusal: about −1.5 approval, fading. |
+| Missed | Time runs out, and the group resents it: about −1 approval, fading. |
+| Lapsed | No effect. A commission lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
+
+No group petitions for five years after a commission closes; wars, centenaries,
+deaths, new regimes and space firsts still bring theirs. The AI gets the same
+offers. It accepts unless it is at war, in hard times, has more than a year of
+government construction queued or is in debt, and then queues the five levels
+itself.
+
+### Monument names and forms
 
 A monument to the Crown, the Republic, the Revolution, the Leader or the nation,
 or a War Memorial, can take the form of your primary cultures' classical
@@ -539,6 +586,44 @@ one form fits, an event asks which; the AI keeps the most specific form without
 being asked. The form changes the monument's name and look, not what it does.
 If you have revived the matching language under a state-led language reform,
 the monument's row says its dedication is carved in it.
+
+Every dedicated monument has a name, from what it is named for and its form:
+the Lisbon Gate, Victoria's Column, the Arch of 1856. After the style, two events
+ask: The Form It Takes, when the style offers more than one form (a column, an
+arch, a gate, a pagoda), and A Name for the Monument, which names it for its
+city, its state, the ruler, what it honors (the Crown, the Republic, the
+Revolution, the Nation, the Faith or the Fallen), the year, or the occasion a
+commission marks. Each event keeps what was proposed unless you pick another.
+An opera house, gardens, an observatory, an exhibition hall or a stadium takes
+its own building's form, and a Grand Shrine of your faith takes its building's
+name. The AI names its monuments for their city, or as their commission asks.
+
+From an upheld monument's row, Rename asks both again at no cost, and Name It
+opens the game's rename box so you can type a name of your own. Confirming the
+name there names the monument; Clear Name removes it. The box belongs to a
+company that exists only while you name, so if your companies are at their limit
+an alert may flash as it opens and closes. A contested or heritage monument
+keeps its name.
+
+### Monument policy
+
+One policy covers all your monuments. You set it with the four buttons at the
+foot of National Effects, and the overview's last line names the one in force.
+After a change the policy cannot change again for five years, but your first
+choice starts no wait.
+
+| Policy | Gives | Costs | When it is worth it |
+|---|---|---|---|
+| Standard | Nothing changes. | Nothing. | The default. |
+| Open to the Public | The Tourism Industry throughput each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
+| State Ceremonial | Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5. | Tourism from each monument ×0.5. | Low legitimacy with regime monuments standing. |
+| Mothballed | Maintenance ×0.5. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
+
+The national effects change at once, and each monument's own at the start of
+the next month. The AI picks each January: Mothballed in hard times or in debt,
+State Ceremonial with legitimacy under 40 and regime monuments standing, Open to
+the Public with a monument in a state with a Tourism Industry, and otherwise
+Standard.
 
 ### Contested monuments
 
@@ -583,9 +668,11 @@ pause construction first.
 Every dedication has an anniversary event that can fire once a monument of that
 dedication reaches level 3 and still fits. Each offers a choice between two
 benefits, usually for two interest groups, and the only cost is money. A
-contested or heritage monument holds no anniversaries.
+contested or heritage monument holds no anniversaries, and none come while your
+monument policy is Mothballed.
 
-The AI raises monuments mainly as a great or major power, in a state with a
+The AI raises most of its monuments through commissions. Without one, it raises
+them mainly as a great or major power, in a state with a
 Tourism Industry, or when its legitimacy is low, and never while at war or in
 hard times. It decides its contested monuments within a few months: small ones
 and those under a revolutionary government tend to come down, tall ones are kept
