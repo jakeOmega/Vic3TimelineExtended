@@ -1206,3 +1206,48 @@ gm_com_centenary_years = {
 		localization_key = gm_com_years_100
 	}
 }
+
+# ============================================================================
+# The monument policy (v2 §5): country scope, plain-text targets
+# ============================================================================
+gm_policy_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:open }
+		localization_key = gm_policy_open
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:ceremonial }
+		localization_key = gm_policy_ceremonial
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
+		localization_key = gm_policy_mothballed
+	}
+	text = {
+		localization_key = gm_policy_standard
+	}
+}
+
+gm_policy_effects = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:open }
+		localization_key = gm_policy_effects_open
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:ceremonial }
+		localization_key = gm_policy_effects_ceremonial
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
+		localization_key = gm_policy_effects_mothballed
+	}
+	text = {
+		localization_key = gm_policy_effects_standard
+	}
+}

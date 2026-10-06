@@ -597,8 +597,13 @@ class LocalPulseTests(unittest.TestCase):
         body = squash(block(self.e, "gm_state_monthly"))
         self.assertTrue(body.startswith("gm_remove_local_modifiers = yes"))
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
-        self.assertIn("set_variable = { name = gm_local_steps value = gm_curve_steps_f5 }", body)
-        self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_steps }", body)
+        # The monument policy (v2 §5) scales the steps: tourism and the local effect separately.
+        self.assertIn("set_variable = { name = gm_local_steps value = { value = gm_curve_steps_f5 "
+                      "multiply = gm_policy_factor_local } }", body)
+        self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
+                      "multiply = gm_policy_factor_tourism } }", body)
+        self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
+        self.assertIn("add_modifier = { name = gm_policy_upkeep multiplier = var:gm_policy_upkeep_steps }", body)
         for d in DEDICATIONS:
             self.assertIn(f"gm_add_local = {{ KEY = {d.key} }}", body)
         self.assertIn("add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }",
@@ -662,7 +667,13 @@ class NationalTests(unittest.TestCase):
         self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
+        # The monument policy (v2 §5) multiplies standing, regime and Leader grandeur before the curve.
+        for g, factor in (("standing", "standing"), ("regime", "regime"), ("leader", "regime")):
+            self.assertIn(f"set_variable = {{ name = gm_g_{g} value = {{ value = gm_sum_{g} "
+                          f"multiply = gm_policy_factor_{factor} }} }}", body)
         for key in NATIONAL:
+            if key == "leader":
+                continue
             self.assertIn(f"set_variable = {{ name = gm_g_{key} value = gm_sum_{key} }}", body)
             self.assertIn(f"gm_set_steps = {{ IN = gm_g_{key} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
         for ig in IGS:
@@ -1306,7 +1317,8 @@ class LocFixTests(unittest.TestCase):
 class FlavourTests(unittest.TestCase):
     def test_dispatch(self):
         body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
-        self.assertIn("trigger = { gm_system_enabled = yes }", body)
+        self.assertIn("trigger = { gm_system_enabled = yes "
+                      "NOT = { gm_policy_is = { P = mothballed STANDARD = no } } }", body)
         for d in DEDICATIONS:
             self.assertIn(f"gm_state_holds_anniversary = {{ PM = pm_monument_{d.key} }} }} }} "
                           f"trigger_event = {{ id = monument_events.{d.event} }}", body)
@@ -1831,6 +1843,95 @@ class NameTests(unittest.TestCase):
         for n in (12, 13, 14, 15):
             self.assertIn("GetCustom('gm_monument_name_evt')", L[f"monument_events.{n}.d"], n)
             self.assertNotIn("gm_skin_name", L[f"monument_events.{n}.d"], n)
+
+
+
+# ==== v2 phase 3: the monument policy (§5) ============================================
+POLICY_EFFECTS = "common/scripted_effects/gm_policy_effects.txt"
+POLICY_TRIGGERS = "common/scripted_triggers/gm_policy_triggers.txt"
+MODIFIER_TYPES = "common/modifier_type_definitions/mod_entity_modifier_types.txt"
+# policy -> its factor on each per-step value (§5), and gm_policy_upkeep's multiplier.
+POLICIES = {
+    "standard": {"standing": 1, "regime": 1, "tourism": 1, "local": 1, "upkeep": 0},
+    "open": {"standing": 1, "regime": 1, "tourism": 1.5, "local": 1, "upkeep": 1},
+    "ceremonial": {"standing": 1, "regime": 1.5, "tourism": 0.5, "local": 1, "upkeep": 0},
+    "mothballed": {"standing": 0.5, "regime": 1, "tourism": 0.5, "local": 0.5, "upkeep": -1},
+}
+FACTOR_VALUES = {"standing": "gm_policy_factor_standing", "regime": "gm_policy_factor_regime",
+                 "tourism": "gm_policy_factor_tourism", "local": "gm_policy_factor_local",
+                 "upkeep": "gm_policy_upkeep_mult"}
+
+
+def _policy_value(body, policy):
+    """What a factor script value gives under `policy`: its first if/else_if
+    whose limit names the policy, else its base value."""
+    body = squash(body)
+    base = float(re.match(r"value = (-?[\d.]+)", body).group(1))
+    for m in re.finditer(r"(?:if|else_if) = \{ limit = \{(.*?)\} value = (-?[\d.]+) \}", body):
+        if f"P = {policy} " in m.group(1):
+            return float(m.group(2))
+    return base
+
+
+class PolicyTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.values = read(VALUES)
+        cls.e = read(POLICY_EFFECTS)
+
+    def test_factors_match_the_table(self):
+        for policy, factors in POLICIES.items():
+            for what, value_name in FACTOR_VALUES.items():
+                body = block(self.values, value_name)
+                self.assertIsNotNone(body, value_name)
+                self.assertEqual(_policy_value(body, policy), factors[what], f"{policy} {what}")
+
+    def test_upkeep_moves_through_throughput(self):
+        self.assertAlmostEqual(number(block(read(MODIFIERS), "gm_policy_upkeep"),
+                                      "building_grand_monument_throughput_add"), 0.5)
+        self.assertIsNotNone(block(read(MODIFIER_TYPES), "building_grand_monument_throughput_add"),
+                             "the building pattern must be registered, or the engine ignores it")
+        self.assertIn("remove_modifier = gm_policy_upkeep", squash(block(read(EFFECTS), "gm_remove_local_modifiers")))
+        clear = squash(block(read(EFFECTS), "gm_clear_state"))
+        for var in ("gm_local_tourism_steps", "gm_policy_upkeep_steps"):
+            self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", clear, var)
+            self.assertNotRegex(strip_comments(read(EFFECTS)), rf"remove_variable = {var}\b")
+
+    def test_buttons_and_cooldown(self):
+        sguis = read(SGUIS)
+        for policy in POLICIES:
+            body = squash(block(sguis, f"gm_policy_{policy}_sgui"))
+            self.assertIsNotNone(body, policy)
+            self.assertIn(f"NOT = {{ gm_policy_is = {{ P = {policy} STANDARD = "
+                          f"{'yes' if policy == 'standard' else 'no'} }} }}", body)
+            self.assertIn("gm_policy_can_change = yes", body)
+            self.assertIn(f"custom_tooltip = {{ text = gm_policy_{policy}_effect_tt gm_policy_set = {{ P = {policy} }} }}",
+                          body)
+            self.assertIn("ai_is_valid = { always = no }", body)
+            for key in (f"gm_policy_{policy}", f"gm_policy_effects_{policy}", f"gm_button_policy_{policy}",
+                        f"gm_button_policy_{policy}_tooltip", f"gm_policy_{policy}_effect_tt"):
+                self.assertIn(key, loc(), key)
+        setter = squash(block(self.e, "gm_policy_set"))
+        self.assertIn("has_variable = gm_policy_chosen } set_variable = { name = gm_policy_cooldown value = yes "
+                      "months = 60 }", setter)
+        self.assertIn("else = { set_variable = gm_policy_chosen }", setter, "the first choice is free")
+        self.assertEqual(squash(block(read(POLICY_TRIGGERS), "gm_policy_can_change")),
+                         "NOT = { has_variable = gm_policy_cooldown }")
+
+    def test_the_ai(self):
+        ai = squash(block(self.e, "gm_policy_ai_choose"))
+        for s_ in ("is_ai = yes", "month = 0", "gm_policy_can_change = yes"):
+            self.assertIn(s_, ai)
+        self.assertLess(ai.find("flag:mothballed"), ai.find("flag:ceremonial"))
+        self.assertLess(ai.find("flag:ceremonial"), ai.find("flag:open"))
+        for policy in POLICIES:
+            self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} ", ai, policy)
+        self.assertIn("gm_policy_ai_choose = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
+
+    def test_anniversaries(self):
+        body = squash(block(read(ON_ACTIONS), "monument_events_on_action"))
+        self.assertIn("800 = { modifier = { if = { limit = { gm_policy_is = { P = open STANDARD = no } } "
+                      "multiply = 0.5 } } }", body)
 
 
 if __name__ == "__main__":

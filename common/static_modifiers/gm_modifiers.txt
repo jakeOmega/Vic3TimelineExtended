@@ -179,6 +179,16 @@ gm_local_athletic = {
 	state_turmoil_effects_mult = -0.10
 }
 
+# ---- The monument policy (v2 §5): on the monument's state ----------------------
+# Refreshed by gm_state_monthly; multiplier gm_policy_upkeep_mult (+1 Open to
+# the Public, -1 Mothballed). Throughput scales the maintenance input, the only
+# goods a Grand Monument uses (pm_no_maintenance is off under the default
+# construction market rule, so upkeep cannot move by switching methods).
+gm_policy_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_grand_monument_throughput_add = 0.5
+}
+
 # ---- Flavour event rewards (§6.1): timed, normal_modifier_time (5 years) -----
 # Every one is a benefit: the events choose between two benefits, and the
 # only cost an option may carry is money.

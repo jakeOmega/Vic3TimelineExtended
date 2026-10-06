@@ -28,10 +28,21 @@ on_monthly_pulse_country = {
 monument_events_on_action = {
 	trigger = {
 		gm_system_enabled = yes
+		# The monument policy (v2 §5): no anniversaries while Mothballed.
+		NOT = { gm_policy_is = { P = mothballed STANDARD = no } }
 	}
 	effect = {
 		random_list = {
-			800 = { } # overwhelmingly nothing
+			# Overwhelmingly nothing. Open to the Public halves this weight,
+			# which about doubles every anniversary's chance.
+			800 = {
+				modifier = {
+					if = {
+						limit = { gm_policy_is = { P = open STANDARD = no } }
+						multiply = 0.5
+					}
+				}
+			}
 
 			3 = {
 				trigger = {

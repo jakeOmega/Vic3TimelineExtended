@@ -169,6 +169,93 @@ gm_state_can_rename = {
 	}
 }
 
+# ---- The monument policy (v2 §5; gm_policy_effects.txt) -------------------------
+# Factors on the per-step values. Country scope: standing grandeur (prestige
+# and cultural pull) and regime grandeur (legitimacy, the Leader's authority),
+# multiplied before the curve in gm_compute_totals.
+gm_policy_factor_standing = {
+	value = 1
+	if = {
+		limit = { gm_policy_is = { P = mothballed STANDARD = no } }
+		value = 0.5
+	}
+}
+
+gm_policy_factor_regime = {
+	value = 1
+	if = {
+		limit = { gm_policy_is = { P = ceremonial STANDARD = no } }
+		value = 1.5
+	}
+}
+
+# State scope, the owner's policy: the steps of a monument's own Tourism
+# Industry throughput and of its dedication's local effect (gm_state_monthly).
+gm_policy_factor_tourism = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = open STANDARD = no } }
+		}
+		value = 1.5
+	}
+	else_if = {
+		limit = {
+			owner = {
+				OR = {
+					gm_policy_is = { P = ceremonial STANDARD = no }
+					gm_policy_is = { P = mothballed STANDARD = no }
+				}
+			}
+		}
+		value = 0.5
+	}
+}
+
+gm_policy_factor_local = {
+	value = 1
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = 0.5
+	}
+}
+
+# State scope: gm_policy_upkeep's multiplier (+50% throughput a unit, so
+# upkeep x1.5 open, x0.5 mothballed).
+gm_policy_upkeep_mult = {
+	value = 0
+	if = {
+		limit = {
+			owner = { gm_policy_is = { P = open STANDARD = no } }
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		value = -1
+	}
+}
+
+# Country scope, for the overview's policy line: months until the policy may
+# change again (0 when it may).
+gm_disp_policy_months_left = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_policy_cooldown
+			has_variable = gm_policy_changed_month
+		}
+		value = 60
+		add = var:gm_policy_changed_month
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+
 # ---- National sums (§2.3, §2.4), country scope ---------------------------------
 # Standing grandeur: every monument that is not contested (prestige, cultural pull).
 gm_sum_standing = {

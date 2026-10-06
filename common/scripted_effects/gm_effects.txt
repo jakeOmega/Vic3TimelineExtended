@@ -256,6 +256,7 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_scientific
 	remove_modifier = gm_local_industrial
 	remove_modifier = gm_local_athletic
+	remove_modifier = gm_policy_upkeep
 }
 
 gm_remove_state_var = {
@@ -290,6 +291,8 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	set_variable = { name = gm_local_steps value = 0 }
+	set_variable = { name = gm_local_tourism_steps value = 0 }
+	set_variable = { name = gm_policy_upkeep_steps value = 0 }
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -303,8 +306,29 @@ gm_state_monthly = {
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
-		set_variable = { name = gm_local_steps value = gm_curve_steps_f5 }
-		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_steps }
+		# The monument policy (v2 §5) scales tourism and the local effect.
+		set_variable = {
+			name = gm_local_steps
+			value = {
+				value = gm_curve_steps_f5
+				multiply = gm_policy_factor_local
+			}
+		}
+		set_variable = {
+			name = gm_local_tourism_steps
+			value = {
+				value = gm_curve_steps_f5
+				multiply = gm_policy_factor_tourism
+			}
+		}
+		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
+		set_variable = { name = gm_policy_upkeep_steps value = gm_policy_upkeep_mult }
+		if = {
+			limit = {
+				NOT = { var:gm_policy_upkeep_steps = 0 }
+			}
+			add_modifier = { name = gm_policy_upkeep multiplier = var:gm_policy_upkeep_steps }
+		}
 		if = {
 			limit = { gm_state_is_dedicated = yes }
 			gm_add_local = { KEY = crown }
@@ -335,6 +359,14 @@ gm_state_monthly = {
 		if = {
 			limit = { has_variable = gm_local_steps }
 			set_variable = { name = gm_local_steps value = 0 }
+		}
+		if = {
+			limit = { has_variable = gm_local_tourism_steps }
+			set_variable = { name = gm_local_tourism_steps value = 0 }
+		}
+		if = {
+			limit = { has_variable = gm_policy_upkeep_steps }
+			set_variable = { name = gm_policy_upkeep_steps value = 0 }
 		}
 	}
 }
@@ -487,6 +519,7 @@ gm_country_monthly = {
 		change_variable = { name = gm_contested add = 1 }
 	}
 	gm_ai_decide_contests = yes
+	gm_policy_ai_choose = yes
 	if = {
 		limit = {
 			NOT = { any_scope_state = { has_building = building_grand_monument } }
@@ -532,9 +565,29 @@ gm_set_steps = {
 }
 
 gm_compute_totals = {
-	set_variable = { name = gm_g_standing value = gm_sum_standing }
-	set_variable = { name = gm_g_regime value = gm_sum_regime }
-	set_variable = { name = gm_g_leader value = gm_sum_leader }
+	# The monument policy (v2 §5): Mothballed halves standing grandeur, State
+	# Ceremonial counts regime and Leader grandeur half again.
+	set_variable = {
+		name = gm_g_standing
+		value = {
+			value = gm_sum_standing
+			multiply = gm_policy_factor_standing
+		}
+	}
+	set_variable = {
+		name = gm_g_regime
+		value = {
+			value = gm_sum_regime
+			multiply = gm_policy_factor_regime
+		}
+	}
+	set_variable = {
+		name = gm_g_leader
+		value = {
+			value = gm_sum_leader
+			multiply = gm_policy_factor_regime
+		}
+	}
 	set_variable = { name = gm_g_religious value = gm_sum_religious }
 	set_variable = { name = gm_g_war_memorial value = gm_sum_war_memorial }
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }

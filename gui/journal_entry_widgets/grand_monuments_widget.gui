@@ -12,7 +12,9 @@
 ###     monument asked for, a progress bar, the months left and Ask for More
 ###     Time.
 ###     National Effects (open): a bar per stepped total, then interest group
-###     approval and the fading ledgers. Our Monuments (open): one row per
+###     approval, the fading ledgers and the monument policy's four buttons
+###     (v2 §5; the overview's last line names the policy in force). Our
+###     Monuments (open): one row per
 ###     monument, from the country's gm_states list (rebuilt by every
 ###     gm_country_refresh); a contested row carries three buttons.
 ###   widget_je_gm_reference  custom_widget_container_3
@@ -270,6 +272,32 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### One of the four monument policies (v2 §5), in National Effects. Two to a
+	### row (2 x 230 + 8 + 4 margins = 480). The current policy's button is
+	### disabled: its scripted GUI is invalid for the policy already in force.
+	type gm_policy_button = button {
+		using = default_button_action
+		size = { 230 24 }
+		margin_top = 2
+
+		block "policy_context" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+		block "policy_tooltip" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 220
+			elide = right
+			using = fontsize_small
+			block "policy_text" {}
+		}
+	}
+
 	### One monument: its status as an icon with the word beneath; its form
 	### and dedication; where it stands and its grandeur; while contested, who
 	### wants it kept and who resents it, and the three choices centred under
@@ -500,6 +528,20 @@ types grand_monuments_widget_types
 						tooltip = "gm_je_ov_hard_times_tt"
 						text = "gm_je_ov_hard_times"
 					}
+				}
+
+				# The monument policy (v2 §5): its name, what it does on hover and
+				# when it can change. The buttons are in National Effects.
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					margin_top = 4
+					align = hcenter|nobaseline
+					using = fontsize_medium
+					default_format = "#tooltippable"
+					tooltip = "gm_je_ov_policy_tt"
+					text = "gm_je_ov_policy"
 				}
 			}
 		}
@@ -866,6 +908,45 @@ types grand_monuments_widget_types
 					text = "gm_je_val_promise"
 				}
 			}
+
+			# ---- The monument policy (v2 §5): one button each, two to a row ----
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_sub_policy"
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				parentanchor = hcenter
+
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_standard_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_standard_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_standard" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_open_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_open_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_open" }
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				parentanchor = hcenter
+
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_ceremonial_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_ceremonial_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_ceremonial" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_mothballed_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_mothballed_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_mothballed" }
+				}
+			}
 		}
 	}
 
@@ -1000,6 +1081,14 @@ types grand_monuments_widget_types
 			}
 			gm_note = {
 				text = "gm_je_how_names"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_policy"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_policy"
 			}
 		}
 	}

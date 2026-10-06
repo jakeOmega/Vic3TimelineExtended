@@ -181,3 +181,132 @@ gm_rename_sgui = {
 		always = no
 	}
 }
+
+# ---- The monument policy (v2 §5) ------------------------------------------------
+# One button per policy in National Effects. Valid while it is not the current
+# policy and no change has been made in the last 60 months (the first choice
+# starts no wait). The national totals change at once; each monument's tourism,
+# local effect and upkeep at its state's next monthly pulse.
+gm_policy_standard_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = gm_policy_current_tt
+			NOT = { gm_policy_is = { P = standard STANDARD = yes } }
+		}
+		custom_tooltip = {
+			text = gm_policy_wait_tt
+			gm_policy_can_change = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_policy_standard_effect_tt
+			gm_policy_set = { P = standard }
+		}
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_policy_open_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = gm_policy_current_tt
+			NOT = { gm_policy_is = { P = open STANDARD = no } }
+		}
+		custom_tooltip = {
+			text = gm_policy_wait_tt
+			gm_policy_can_change = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_policy_open_effect_tt
+			gm_policy_set = { P = open }
+		}
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_policy_ceremonial_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = gm_policy_current_tt
+			NOT = { gm_policy_is = { P = ceremonial STANDARD = no } }
+		}
+		custom_tooltip = {
+			text = gm_policy_wait_tt
+			gm_policy_can_change = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_policy_ceremonial_effect_tt
+			gm_policy_set = { P = ceremonial }
+		}
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_policy_mothballed_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = gm_policy_current_tt
+			NOT = { gm_policy_is = { P = mothballed STANDARD = no } }
+		}
+		custom_tooltip = {
+			text = gm_policy_wait_tt
+			gm_policy_can_change = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_policy_mothballed_effect_tt
+			gm_policy_set = { P = mothballed }
+		}
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

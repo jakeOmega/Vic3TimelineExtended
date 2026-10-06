@@ -32,7 +32,7 @@ LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_nati
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_national", "gm_je_how_counts",
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
-            "gm_je_how_names"]
+            "gm_je_how_names", "gm_je_how_policy"]
 # The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5; v2 §2.4).
 FADING = ("teardown", "vanity", "promise")
 # Dedications with a national effect of their own: shown only while in force.
@@ -284,6 +284,26 @@ class StateGatedTest(unittest.TestCase):
         how = _squash(_type_body(gui, "te_gm_sec_how").split("gm_panel = {", 1)[1])
         self.assertIn('gm_subheader = { blockoverride "subheader_margin" {} blockoverride "subheader_text" '
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
+
+
+class PolicyLayoutTest(unittest.TestCase):
+    """The monument policy (v2 §5): its name on the overview's last line,
+    the four buttons at the foot of National Effects, two to a row."""
+
+    def test_the_overview_names_the_policy(self):
+        ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
+        self.assertIn('default_format = "#tooltippable" tooltip = "gm_je_ov_policy_tt" text = "gm_je_ov_policy" }', ov)
+
+    def test_four_buttons_two_to_a_row(self):
+        nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
+        tail = nat.split('text = "gm_je_sub_policy"', 1)[1]
+        rows = re.findall(r"flowcontainer = \{ direction = horizontal spacing = 8 parentanchor = hcenter "
+                          r"((?:gm_policy_button = \{.*?\} \} )+)\}", tail)
+        self.assertEqual([r.count("gm_policy_button = {") for r in rows], [2, 2])
+        order = re.findall(r"GetScriptedGui\('gm_policy_(\w+)_sgui'\)", tail)
+        self.assertEqual(order, ["standard", "open", "ceremonial", "mothballed"])
+        button = _squash(_type_body(_gui(), "gm_policy_button"))
+        self.assertIn("size = { 230 24 }", button)
 
 
 class NationalEmptyStateTest(unittest.TestCase):
@@ -600,6 +620,13 @@ class LabelBudgetTest(unittest.TestCase):
         (cell,) = _cells(_type_body(self.gui, "gm_choice_button"))
         keys = re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))
         self.assertEqual(len(keys), 4, "Rename and the three contested choices")
+        for key in keys:
+            self._fits(key, cell)
+
+    def test_policy_buttons(self):
+        (cell,) = _cells(_type_body(self.gui, "gm_policy_button"))
+        keys = re.findall(r'"policy_text" \{ text = "(\w+)" \}', _type_body(self.gui, "te_gm_sec_national"))
+        self.assertEqual(len(keys), 4)
         for key in keys:
             self._fits(key, cell)
 
