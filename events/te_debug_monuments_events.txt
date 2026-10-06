@@ -102,34 +102,26 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 	desc = te_debug_monuments.2.desc
 	flavor = te_debug_monuments.2.flavor
 
-	# Victory over a random rival after a year of war.
+	# Victory over a random rival, as if a war leader's war of a year had been won.
 	option = {
 		name = te_debug_monuments.2.a
 		default_option = yes
 		gm_com_clear = yes
-		set_variable = { name = gm_war_months_at_peace value = 12 days = 30 }
-		set_variable = { name = gm_war_won value = yes days = 30 }
 		random_country = {
 			limit = {
 				NOT = { this = root }
 				exists = capital
 			}
-			capital = { save_scope_as = te_debug_gm_enemy_capital }
+			save_scope_as = enemy_country
 		}
-		if = {
-			limit = { exists = scope:te_debug_gm_enemy_capital }
-			set_variable = { name = gm_war_enemy_cap value = scope:te_debug_gm_enemy_capital days = 30 }
-		}
-		gm_com_war_end = yes
+		gm_com_war_victory = yes
 	}
 
-	# Defeat after a year of war.
+	# Defeat, as if such a war had been lost.
 	option = {
 		name = te_debug_monuments.2.b
 		gm_com_clear = yes
-		set_variable = { name = gm_war_months_at_peace value = 12 days = 30 }
-		set_variable = { name = gm_war_lost value = yes days = 30 }
-		gm_com_war_end = yes
+		gm_com_war_defeat = yes
 	}
 
 	# A centenary this year.

@@ -1509,28 +1509,33 @@ class CommissionSourceTests(unittest.TestCase):
         self.assertIn("gm_com_world_on_action", squash(block(oa, "on_monthly_pulse_country")))
         self.assertIn("gm_com_world_monthly = yes", squash(block(oa, "gm_com_world_on_action")))
         body = squash(block(self.e, "gm_com_world_monthly"))
-        order = ["gm_com_track_war", "gm_com_track_ruler", "gm_com_init_founded", "gm_com_track_regime",
+        order = ["gm_com_track_ruler", "gm_com_init_founded", "gm_com_track_regime",
                  "gm_com_track_space", "gm_com_track_centenary", "gm_com_try_petition"]
         found = [body.find(f"{t} = yes") for t in order]
         self.assertNotIn(-1, found)
         self.assertEqual(found, sorted(found))
 
     def test_war_and_death_hooks(self):
+        """Victory and Defeat come from on_won_war / on_lost_war (1.14.5), which
+        carry the war itself, so a capitulation counts and the year of war is
+        that war's, for its leader only."""
         oa = read(ON_ACTIONS)
-        for hook, name in (("on_wargoal_enforced", "gm_wargoal_enforced_on_action"),
-                           ("on_peace_agreement_signed_war_leader", "gm_peace_war_leader_on_action"),
+        for hook, name in (("on_won_war", "gm_won_war_on_action"),
+                           ("on_lost_war", "gm_lost_war_on_action"),
                            ("on_character_death", "gm_character_death_on_action"),
                            ("on_country_formed", "gm_formed_on_action")):
             self.assertIn(name, squash(block(oa, hook)), hook)
             self.assertNotRegex(squash(block(oa, hook)), r"\beffect =", "vanilla on-actions take lists only")
-        peace = squash(block(oa, "gm_peace_war_leader_on_action"))
-        self.assertIn("trigger_event = { id = monument_events.22 days = 1 }", peace)
-        ev22 = squash(raw_block_at(self.events, r"(?m)^monument_events\.22\s*=\s*\{"))
-        self.assertIn("type = country_event hidden = yes", ev22)
-        self.assertIn("gm_com_war_end = yes", ev22)
-        war = squash(block(self.e, "gm_com_war_end"))
-        self.assertIn("var:gm_war_months_at_peace >= 12", war)
-        self.assertLess(war.find("gm_war_won"), war.find("gm_war_lost"), "a victory wins over a defeat")
+        for name, flag, call in (("gm_won_war_on_action", "benefitted_from_wargoal", "gm_com_war_victory"),
+                                 ("gm_lost_war_on_action", "victim_of_wargoal", "gm_com_war_defeat")):
+            body = squash(block(oa, name))
+            self.assertIn(f"exists = scope:{flag} exists = scope:war scope:war = {{ is_warleader = root "
+                          f"war_duration_months >= 12 }} }} {call} = yes", body, name)
+        self.assertNotIn("monument_events.22", self.events)
+        for gone in ("on_wargoal_enforced", "on_peace_agreement_signed_war_leader"):
+            self.assertIsNone(block(oa, gone), gone)
+        victory = squash(block(self.e, "gm_com_war_victory"))
+        self.assertIn("scope:enemy_country ?= { capital ?= { save_scope_as = gm_com_enemy_capital } }", victory)
         death = squash(block(oa, "gm_character_death_on_action"))
         self.assertIn("is_ruler_of_own_country = yes", death)
         self.assertIn("var:gm_ruler_months >= 180", death)
@@ -1577,7 +1582,14 @@ class CommissionLifeTests(unittest.TestCase):
                           squash(block(self.t, "gm_country_com_gate_holds")))
             self.assertIn(f"owner = {{ var:$VAR$ = flag:{d.key} }} gm_state_has_pm = {{ PM = pm_monument_{d.key} }}",
                           squash(block(self.t, "gm_state_has_dedication_flag")))
-            self.assertIn(f"owner = {{ gm_com_wants = {{ KEY = {d.key} }} }}", squash(ev), d.key)
+            self.assertIn(f"modifier = {{ trigger = {{ gm_state_ceremony_for_commission = {{ KEY = {d.key} }} }} "
+                          f"add = 100 }} modifier = {{ trigger = {{ gm_state_ceremony_not_for_commission = "
+                          f"{{ KEY = {d.key} }} }} factor = 0 }}", squash(ev), d.key)
+        self.assertIn("name = monument_events.2.a default_option = yes ai_chance = { base = 1 modifier = { trigger = "
+                      "{ gm_state_ceremony_answers_commission = yes } factor = 0 } }", squash(ev),
+                      "the AI never leaves a commission's monument undedicated")
+        answers = squash(block(self.t, "gm_state_ceremony_answers_commission"))
+        self.assertIn("this = scope:gm_tmp_com_state", answers, "only the commission's state, if it names one")
 
     def test_ledger_dispatch_covers_every_ig(self):
         body = squash(block(self.e, "gm_country_ledger_ig_by_flag"))
@@ -1683,6 +1695,65 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertIn("owner = { set_variable = { name = gm_com_last_state value = prev } }", ev1)
 
 
+class ReviewFixTests(unittest.TestCase):
+    """Fixes from the phase 2 review (2026-10-05)."""
+
+    def test_a_revolution_does_not_record_its_regime(self):
+        """A winning revolution keeps its own variables: one written through
+        the war would hide the regime change the win brings."""
+        body = squash(block(read(COM_EFFECTS), "gm_com_track_regime"))
+        self.assertIn("if = { limit = { NOT = { has_variable = te_cw_role } is_revolutionary = no } "
+                      "set_variable = { name = gm_regime_last value = var:gm_regime_now } }", body)
+
+    def test_a_lost_monument_lowers_the_baseline(self):
+        body = squash(block(read(COM_EFFECTS), "gm_com_check_progress"))
+        self.assertIn("if = { limit = { var:gm_com_drop > 0 } set_variable = { name = gm_com_baseline "
+                      "value = gm_com_fit_grandeur } }", body)
+        self.assertLess(body.find("gm_com_drop"), body.find("gm_com_left"))
+
+    def test_a_vanished_state_lapses(self):
+        self.assertIn("has_variable = gm_com_state NOT = { exists = var:gm_com_state }",
+                      squash(block(read(COM_TRIGGERS), "gm_com_has_lapsed")))
+        self.assertNotRegex(strip_comments(read(COM_EFFECTS)), r"var:gm_com_state = \{")
+
+    def test_the_unveiling_keeps_a_commissions_name(self):
+        unveil = squash(block(read(NAME_EFFECTS), "gm_state_unveil"))
+        self.assertIn("NOT = { AND = { has_variable = gm_name_from_com gm_state_current_form_fits = yes } } } "
+                      "gm_state_set_default_form = yes", unveil)
+        self.assertIn("else_if = { limit = { NOT = { has_variable = gm_name_from_com } } "
+                      "gm_state_set_namesake = { NAMESAKE = city } }", unveil)
+        fits = squash(block(read(NAME_TRIGGERS), "gm_state_current_form_fits"))
+        for form in list(FORMS) + list(BUILDING_FORMS.values()) + ["faith"]:
+            self.assertIn(f"var:gm_form = flag:{form} gm_state_form_fits_{form} = yes", fits, form)
+
+    def test_a_victory_name_needs_a_foreign_capital(self):
+        custom = read(CUSTOM_LOC)
+        for ctx in ("row", "evt"):
+            family = squash(block(custom, f"gm_monument_name_{ctx}"))
+            self.assertIn("var:gm_name_occasion = flag:victory gm_state_enemy_cap_is_foreign = yes } "
+                          f"localization_key = gm_name_victory_{ctx}", family)
+        foreign = squash(block(read(NAME_TRIGGERS), "gm_state_enemy_cap_is_foreign"))
+        self.assertIn("exists = var:gm_name_enemy_cap", foreign)
+
+    def test_name_events_check_the_owner(self):
+        ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.25\s*=\s*\{"))
+        self.assertIn("save_scope_as = monument_owner", ev)
+        self.assertEqual(ev.count("owner = scope:monument_owner"), 6, "every choice but Keep")
+
+    def test_a_cession_clears_the_commission_mark(self):
+        self.assertIn("gm_remove_state_var = { VAR = gm_unveiled_for_com }",
+                      squash(block(read(EFFECTS), "gm_state_changed_hands")))
+
+    def test_rename_waits_for_an_open_choice(self):
+        self.assertIn("NOT = { has_variable = gm_name_choice_open }", squash(block(read(SGUIS), "gm_rename_sgui")))
+        self.assertIn("set_variable = { name = gm_name_choice_open value = yes days = 90 }",
+                      squash(block(read(NAME_EFFECTS), "gm_state_offer_name_choice")))
+        ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.25\s*=\s*\{"))
+        self.assertIn("gm_remove_state_var = { VAR = gm_name_choice_open }", ev, "Keep clears it too")
+        for name in ("gm_state_choose_namesake", "gm_state_choose_commission_name"):
+            self.assertIn("gm_remove_state_var = { VAR = gm_name_choice_open }", squash(block(read(NAME_EFFECTS), name)))
+
+
 # ==== v2 phase 2: names (§3) =========================================================
 # form -> the skins that offer it ("generic" includes a monument with no skin
 # yet). The five civic-progress forms belong to their dedication; "faith" to
@@ -1774,7 +1845,8 @@ class NameTests(unittest.TestCase):
             self.assertIn(f"var:gm_form = flag:{form} }} localization_key = gm_form_{form}", names, form)
         for form in FORMS:
             self.assertIn(f"name = monument_events.24.{form} trigger = {{ gm_state_form_fits_{form} = yes "
-                          f"NOT = {{ var:gm_form = flag:{form} }} }} gm_state_choose_form = {{ FORM = {form} }}", ev)
+                          f"has_variable = gm_form NOT = {{ var:gm_form = flag:{form} }} owner = scope:monument_owner }} "
+                          f"gm_state_choose_form = {{ FORM = {form} }}", ev)
             self.assertIn(f"monument_events.24.{form}", L, form)
         for faith in FAITHS:
             self.assertIn(f"var:gm_skin = flag:faith_{faith} }} localization_key = gm_skin_faith_{faith}", names)
@@ -1811,8 +1883,13 @@ class NameTests(unittest.TestCase):
 
     def test_the_unveiling_chain(self):
         e = read(EFFECTS)
-        self.assertIn("NOT = { has_variable = gm_skin_axis } } gm_state_unveil = yes",
+        # Deferred to the refresh: the unveiling reads the production method the
+        # dedication has only just activated.
+        self.assertIn("NOT = { has_variable = gm_skin_axis } } set_variable = gm_unveil_pending }",
                       squash(block(e, "gm_state_offer_skins")))
+        self.assertNotIn("gm_state_unveil = yes", squash(block(e, "gm_state_offer_skins")))
+        self.assertIn("if = { limit = { has_variable = gm_unveil_pending } remove_variable = gm_unveil_pending "
+                      "gm_state_unveil = yes } gm_state_name_if_unnamed = yes", squash(block(e, "gm_country_refresh")))
         self.assertIn("hidden_effect = { gm_state_unveil = yes }", squash(block(e, "gm_state_choose_skin")))
         unveil = squash(block(self.e, "gm_state_unveil"))
         self.assertIn("gm_state_set_default_form = yes", unveil)
@@ -1835,7 +1912,10 @@ class NameTests(unittest.TestCase):
             self.assertIn(f"var:{var}", take, var)
         self.assertIn("gm_state_com_form_fits = yes", take, "the commission's form only when it fits the skin")
         fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
-        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } } gm_state_take_commission_name = yes", fulfil)
+        # A petition (the city's name) does not overwrite a name already given (owner call, PR body).
+        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } OR = { NOT = { has_variable = gm_namesake } "
+                      "owner = { NOT = { var:gm_com_namesake = flag:city } } } } gm_state_take_commission_name = yes",
+                      fulfil)
 
     def test_names_print_where_the_skin_did(self):
         L = loc()

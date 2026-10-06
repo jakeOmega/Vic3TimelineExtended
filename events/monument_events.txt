@@ -15,8 +15,7 @@
 #                 event per monument (§4.5).
 # Event 20      - refresh (hidden plumbing).
 # Event 21      - a commission offered (v2 §2.3), from gm_com_send_offer.
-# Event 22      - a war leader's peace, a day on (hidden): Victory or Defeat
-#                 commissions (v2 §2.2).
+# Events 24-25  - the monument's form and namesake (v2 §3.3), players only.
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -127,7 +126,13 @@ monument_events.2 = {
 	option = {
 		name = monument_events.2.a
 		default_option = yes
-		ai_chance = { base = 1 }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { gm_state_ceremony_answers_commission = yes }
+				factor = 0
+			}
+		}
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
@@ -142,12 +147,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = crown } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = crown } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = crown } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -170,12 +179,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = republic } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = republic } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = republic } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -198,12 +211,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = revolution } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = revolution } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = revolution } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -226,12 +243,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 5
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = leader } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = leader } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = leader } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -256,12 +277,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = religious } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = religious } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = religious } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -293,12 +318,16 @@ monument_events.2 = {
 		name = monument_events.2.m
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = civic } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = civic } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = civic } }
+				factor = 0
 			}
 		}
 		custom_tooltip = {
@@ -312,12 +341,16 @@ monument_events.2 = {
 		name = monument_events.2.e
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = war_memorial } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = war_memorial } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = war_memorial } }
+				factor = 0
 			}
 			modifier = {
 				trigger = {
@@ -340,12 +373,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = artistic } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = artistic } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = artistic } }
+				factor = 0
 			}
 		}
 		custom_tooltip = {
@@ -362,12 +399,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = naturalist } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = naturalist } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = naturalist } }
+				factor = 0
 			}
 			# The state itself has industry worth planting over.
 			modifier = {
@@ -391,12 +432,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = scientific } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = scientific } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = scientific } }
+				factor = 0
 			}
 		}
 		custom_tooltip = {
@@ -416,12 +461,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = industrial } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = industrial } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = industrial } }
+				factor = 0
 			}
 		}
 		custom_tooltip = {
@@ -438,12 +487,16 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6).
+			# The open commission's dedication (v2 §2.6): certain for a monument
+			# that can answer it (its state, if it names one), every other
+			# choice nothing.
 			modifier = {
-				trigger = {
-					owner = { gm_com_wants = { KEY = athletic } }
-				}
+				trigger = { gm_state_ceremony_for_commission = { KEY = athletic } }
 				add = 100
+			}
+			modifier = {
+				trigger = { gm_state_ceremony_not_for_commission = { KEY = athletic } }
+				factor = 0
 			}
 		}
 		custom_tooltip = {
@@ -993,12 +1046,21 @@ monument_events.21 = {
 				trigger = {
 					var:gm_com_source = flag:ruler_death
 					has_variable = gm_com_state
+					exists = scope:gm_com_honoree
 				}
 				desc = monument_events.21.d_ruler_death
 			}
 			triggered_desc = {
-				trigger = { var:gm_com_source = flag:ruler_death }
+				trigger = {
+					var:gm_com_source = flag:ruler_death
+					exists = scope:gm_com_honoree
+				}
 				desc = monument_events.21.d_ruler_death_anywhere
+			}
+			# The late ruler no longer resolves: a text without the name.
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:ruler_death }
+				desc = monument_events.21.d_ruler_death_unnamed
 			}
 			triggered_desc = {
 				trigger = { var:gm_com_source = flag:regime }
@@ -1056,24 +1118,6 @@ monument_events.21 = {
 			gm_com_decline = yes
 		}
 		ai_chance = { base = 1 }
-	}
-}
-
-# ============================================================================
-# Event 22: a war leader's peace, a day on (hidden plumbing, v2 §2.2)
-# ============================================================================
-# From gm_peace_war_leader_on_action. A day's delay lets on_wargoal_enforced
-# record the result first, whichever of the two the engine fires first.
-monument_events.22 = {
-	type = country_event
-	hidden = yes
-
-	trigger = {
-		gm_system_enabled = yes
-	}
-
-	immediate = {
-		gm_com_war_end = yes
 	}
 }
 
@@ -1705,8 +1749,11 @@ monument_events.24 = {
 		has_variable = gm_form
 	}
 
+	# The state can change hands, or the monument be pulled down, while the
+	# event is open: every choice but Keep checks it still stands as it was.
 	immediate = {
 		save_scope_as = monument_state
+		owner = { save_scope_as = monument_owner }
 	}
 
 	option = {
@@ -1720,7 +1767,9 @@ monument_events.24 = {
 		name = monument_events.24.column
 		trigger = {
 			gm_state_form_fits_column = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:column }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = column }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1730,7 +1779,9 @@ monument_events.24 = {
 		name = monument_events.24.arch
 		trigger = {
 			gm_state_form_fits_arch = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:arch }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = arch }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1740,7 +1791,9 @@ monument_events.24 = {
 		name = monument_events.24.obelisk
 		trigger = {
 			gm_state_form_fits_obelisk = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:obelisk }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = obelisk }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1750,7 +1803,9 @@ monument_events.24 = {
 		name = monument_events.24.statue
 		trigger = {
 			gm_state_form_fits_statue = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:statue }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = statue }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1760,7 +1815,9 @@ monument_events.24 = {
 		name = monument_events.24.gate
 		trigger = {
 			gm_state_form_fits_gate = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:gate }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = gate }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1770,7 +1827,9 @@ monument_events.24 = {
 		name = monument_events.24.hall
 		trigger = {
 			gm_state_form_fits_hall = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:hall }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hall }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1780,7 +1839,9 @@ monument_events.24 = {
 		name = monument_events.24.tower
 		trigger = {
 			gm_state_form_fits_tower = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:tower }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = tower }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1790,7 +1851,9 @@ monument_events.24 = {
 		name = monument_events.24.memorial
 		trigger = {
 			gm_state_form_fits_memorial = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:memorial }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = memorial }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1800,7 +1863,9 @@ monument_events.24 = {
 		name = monument_events.24.mausoleum
 		trigger = {
 			gm_state_form_fits_mausoleum = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:mausoleum }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = mausoleum }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1810,7 +1875,9 @@ monument_events.24 = {
 		name = monument_events.24.forum
 		trigger = {
 			gm_state_form_fits_forum = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:forum }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = forum }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1820,7 +1887,9 @@ monument_events.24 = {
 		name = monument_events.24.pantheon
 		trigger = {
 			gm_state_form_fits_pantheon = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:pantheon }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pantheon }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1830,7 +1899,9 @@ monument_events.24 = {
 		name = monument_events.24.stoa
 		trigger = {
 			gm_state_form_fits_stoa = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:stoa }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = stoa }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1840,7 +1911,9 @@ monument_events.24 = {
 		name = monument_events.24.court
 		trigger = {
 			gm_state_form_fits_court = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:court }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = court }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1850,7 +1923,9 @@ monument_events.24 = {
 		name = monument_events.24.pillar
 		trigger = {
 			gm_state_form_fits_pillar = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:pillar }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pillar }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1860,7 +1935,9 @@ monument_events.24 = {
 		name = monument_events.24.stele
 		trigger = {
 			gm_state_form_fits_stele = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:stele }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = stele }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1870,7 +1947,9 @@ monument_events.24 = {
 		name = monument_events.24.memorial_church
 		trigger = {
 			gm_state_form_fits_memorial_church = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:memorial_church }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = memorial_church }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1880,7 +1959,9 @@ monument_events.24 = {
 		name = monument_events.24.pagoda
 		trigger = {
 			gm_state_form_fits_pagoda = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:pagoda }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pagoda }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1890,7 +1971,9 @@ monument_events.24 = {
 		name = monument_events.24.round_tower
 		trigger = {
 			gm_state_form_fits_round_tower = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:round_tower }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = round_tower }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1900,7 +1983,9 @@ monument_events.24 = {
 		name = monument_events.24.high_cross
 		trigger = {
 			gm_state_form_fits_high_cross = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:high_cross }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = high_cross }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1910,7 +1995,9 @@ monument_events.24 = {
 		name = monument_events.24.pyramid
 		trigger = {
 			gm_state_form_fits_pyramid = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:pyramid }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = pyramid }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1920,7 +2007,9 @@ monument_events.24 = {
 		name = monument_events.24.rune_stone
 		trigger = {
 			gm_state_form_fits_rune_stone = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:rune_stone }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rune_stone }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1930,7 +2019,9 @@ monument_events.24 = {
 		name = monument_events.24.hall_of_fame
 		trigger = {
 			gm_state_form_fits_hall_of_fame = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:hall_of_fame }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hall_of_fame }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1940,7 +2031,9 @@ monument_events.24 = {
 		name = monument_events.24.hill_shrine
 		trigger = {
 			gm_state_form_fits_hill_shrine = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:hill_shrine }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = hill_shrine }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1950,7 +2043,9 @@ monument_events.24 = {
 		name = monument_events.24.rock_cut
 		trigger = {
 			gm_state_form_fits_rock_cut = yes
+			has_variable = gm_form
 			NOT = { var:gm_form = flag:rock_cut }
+			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rock_cut }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
@@ -1978,6 +2073,7 @@ monument_events.25 = {
 	immediate = {
 		save_scope_as = monument_state
 		owner = {
+			save_scope_as = monument_owner
 			ruler ?= { save_scope_as = gm_name_ruler_now }
 		}
 	}
@@ -1988,12 +2084,16 @@ monument_events.25 = {
 		name = monument_events.25.keep
 		default_option = yes
 		custom_tooltip = gm_namesake_keep_tt
-		hidden_effect = { gm_state_mark_unveiled_for_com = yes }
+		hidden_effect = {
+			gm_state_mark_unveiled_for_com = yes
+			gm_remove_state_var = { VAR = gm_name_choice_open }
+		}
 	}
 
 	option = {
 		name = monument_events.25.commission
 		trigger = {
+			owner = scope:monument_owner
 			gm_state_answers_commission = yes
 			NOT = { has_variable = gm_name_from_com }
 		}
@@ -2003,6 +2103,7 @@ monument_events.25 = {
 	option = {
 		name = monument_events.25.city
 		trigger = {
+			owner = scope:monument_owner
 			NOT = { gm_state_namesake_is = { NAMESAKE = city } }
 		}
 		gm_state_choose_namesake = { NAMESAKE = city }
@@ -2011,6 +2112,7 @@ monument_events.25 = {
 	option = {
 		name = monument_events.25.state
 		trigger = {
+			owner = scope:monument_owner
 			NOT = { gm_state_namesake_is = { NAMESAKE = state } }
 		}
 		gm_state_choose_namesake = { NAMESAKE = state }
@@ -2020,6 +2122,7 @@ monument_events.25 = {
 	option = {
 		name = monument_events.25.ruler
 		trigger = {
+			owner = scope:monument_owner
 			exists = scope:gm_name_ruler_now
 			NOT = {
 				AND = {
@@ -2035,6 +2138,7 @@ monument_events.25 = {
 	option = {
 		name = monument_events.25.honours
 		trigger = {
+			owner = scope:monument_owner
 			gm_state_takes_honours_name = yes
 			NOT = { gm_state_namesake_is = { NAMESAKE = honours } }
 		}
@@ -2044,6 +2148,7 @@ monument_events.25 = {
 	option = {
 		name = monument_events.25.year
 		trigger = {
+			owner = scope:monument_owner
 			NOT = { gm_state_namesake_is = { NAMESAKE = year } }
 		}
 		gm_state_choose_namesake = { NAMESAKE = year }

@@ -323,3 +323,53 @@ gm_state_namesake_is = {
 	has_variable = gm_namesake
 	var:gm_namesake = flag:$NAMESAKE$
 }
+
+# The form the monument has still fits its skin (an unveiling after a skin
+# change keeps it, gm_state_unveil).
+gm_state_current_form_fits = {
+	has_variable = gm_form
+	OR = {
+		AND = { var:gm_form = flag:column gm_state_form_fits_column = yes }
+		AND = { var:gm_form = flag:arch gm_state_form_fits_arch = yes }
+		AND = { var:gm_form = flag:obelisk gm_state_form_fits_obelisk = yes }
+		AND = { var:gm_form = flag:statue gm_state_form_fits_statue = yes }
+		AND = { var:gm_form = flag:gate gm_state_form_fits_gate = yes }
+		AND = { var:gm_form = flag:hall gm_state_form_fits_hall = yes }
+		AND = { var:gm_form = flag:tower gm_state_form_fits_tower = yes }
+		AND = { var:gm_form = flag:memorial gm_state_form_fits_memorial = yes }
+		AND = { var:gm_form = flag:mausoleum gm_state_form_fits_mausoleum = yes }
+		AND = { var:gm_form = flag:forum gm_state_form_fits_forum = yes }
+		AND = { var:gm_form = flag:pantheon gm_state_form_fits_pantheon = yes }
+		AND = { var:gm_form = flag:stoa gm_state_form_fits_stoa = yes }
+		AND = { var:gm_form = flag:court gm_state_form_fits_court = yes }
+		AND = { var:gm_form = flag:pillar gm_state_form_fits_pillar = yes }
+		AND = { var:gm_form = flag:stele gm_state_form_fits_stele = yes }
+		AND = { var:gm_form = flag:memorial_church gm_state_form_fits_memorial_church = yes }
+		AND = { var:gm_form = flag:pagoda gm_state_form_fits_pagoda = yes }
+		AND = { var:gm_form = flag:round_tower gm_state_form_fits_round_tower = yes }
+		AND = { var:gm_form = flag:high_cross gm_state_form_fits_high_cross = yes }
+		AND = { var:gm_form = flag:pyramid gm_state_form_fits_pyramid = yes }
+		AND = { var:gm_form = flag:rune_stone gm_state_form_fits_rune_stone = yes }
+		AND = { var:gm_form = flag:hall_of_fame gm_state_form_fits_hall_of_fame = yes }
+		AND = { var:gm_form = flag:hill_shrine gm_state_form_fits_hill_shrine = yes }
+		AND = { var:gm_form = flag:rock_cut gm_state_form_fits_rock_cut = yes }
+		AND = { var:gm_form = flag:faith gm_state_form_fits_faith = yes }
+		AND = { var:gm_form = flag:opera_house gm_state_form_fits_opera_house = yes }
+		AND = { var:gm_form = flag:gardens gm_state_form_fits_gardens = yes }
+		AND = { var:gm_form = flag:observatory gm_state_form_fits_observatory = yes }
+		AND = { var:gm_form = flag:exhibition_hall gm_state_form_fits_exhibition_hall = yes }
+		AND = { var:gm_form = flag:stadium gm_state_form_fits_stadium = yes }
+	}
+}
+
+# A victory name's enemy capital is still another country's: once we, or the
+# monument's owner, hold it, the name falls back to the year (its pattern reads
+# the capital's owner today).
+gm_state_enemy_cap_is_foreign = {
+	has_variable = gm_name_enemy_cap
+	exists = var:gm_name_enemy_cap
+	owner = { save_temporary_scope_as = gm_tmp_name_holder }
+	var:gm_name_enemy_cap ?= {
+		NOT = { owner = scope:gm_tmp_name_holder }
+	}
+}

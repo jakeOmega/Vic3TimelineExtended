@@ -2623,6 +2623,7 @@
  gm_row_title:0 "#b [State.GetCustom('gm_monument_name_row')]#! — [State.GetCustom('gm_dedication_name')]"
  gm_row_title_named:0 "#b [State.MakeScope.Var('gm_name').GetFlagName]#! — [State.GetCustom('gm_dedication_name')]"
  gm_sgui_contested_tt:0 "The monument is contested"
+ gm_sgui_rename_open_tt:0 "Its name is not already being chosen"
  gm_sgui_rename_upheld_tt:0 "The monument is upheld: a contested or heritage monument keeps its name"
  gm_skin_choice_tt:0 "The monument takes this form. The form changes its name and look, not what it does."
  gm_skin_faith_animist:0 "Sacred Grove"

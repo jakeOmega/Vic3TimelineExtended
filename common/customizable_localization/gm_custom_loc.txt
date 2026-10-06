@@ -861,7 +861,7 @@ gm_monument_name_row = {
 			gm_state_namesake_is = { NAMESAKE = occasion }
 			has_variable = gm_name_occasion
 			var:gm_name_occasion = flag:victory
-			has_variable = gm_name_enemy_cap
+			gm_state_enemy_cap_is_foreign = yes
 		}
 		localization_key = gm_name_victory_row
 	}
@@ -948,7 +948,7 @@ gm_monument_name_evt = {
 			gm_state_namesake_is = { NAMESAKE = occasion }
 			has_variable = gm_name_occasion
 			var:gm_name_occasion = flag:victory
-			has_variable = gm_name_enemy_cap
+			gm_state_enemy_cap_is_foreign = yes
 		}
 		localization_key = gm_name_victory_evt
 	}

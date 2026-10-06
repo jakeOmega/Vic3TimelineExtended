@@ -155,12 +155,38 @@ gm_com_can_offer = {
 	any_scope_state = { is_incorporated = yes }
 }
 
-# Country scope. The open commission asks for a monument of dedication $KEY$
-# (the ceremony's AI weight and hint).
-gm_com_wants = {
-	has_variable = gm_com_open
-	has_variable = gm_com_dedication
-	var:gm_com_dedication = flag:$KEY$
+# State scope, a monument at its dedication ceremony (monument_events.2): it
+# can answer the owner's open commission, being in the commission's state if it
+# names one. The AI's ceremony then takes the commission's dedication for
+# certain (gm_state_ceremony_for_commission +100, every other choice
+# gm_state_ceremony_not_for_commission x0): one monument per state, so another
+# dedication here would leave the commission unmeetable.
+gm_state_ceremony_answers_commission = {
+	owner = {
+		has_variable = gm_com_open
+		has_variable = gm_com_dedication
+	}
+	OR = {
+		owner = {
+			NOT = { has_variable = gm_com_state }
+		}
+		AND = {
+			owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_com_state }
+			this = scope:gm_tmp_com_state
+		}
+	}
+}
+
+gm_state_ceremony_for_commission = {
+	gm_state_ceremony_answers_commission = yes
+	owner = { var:gm_com_dedication = flag:$KEY$ }
+}
+
+gm_state_ceremony_not_for_commission = {
+	gm_state_ceremony_answers_commission = yes
+	owner = {
+		NOT = { var:gm_com_dedication = flag:$KEY$ }
+	}
 }
 
 # ---- The AI (§2.6) --------------------------------------------------------------
@@ -192,6 +218,10 @@ gm_com_has_lapsed = {
 	has_variable = gm_com_open
 	OR = {
 		gm_country_com_gate_holds = no
+		AND = {
+			has_variable = gm_com_state
+			NOT = { exists = var:gm_com_state }
+		}
 		AND = {
 			has_variable = gm_com_state
 			save_temporary_scope_as = gm_tmp_com_holder

@@ -181,6 +181,7 @@ gm_state_choose_namesake = {
 		gm_state_set_namesake = { NAMESAKE = $NAMESAKE$ }
 		gm_state_mark_unveiled_for_com = yes
 	}
+	gm_remove_state_var = { VAR = gm_name_choice_open }
 }
 
 gm_state_choose_commission_name = {
@@ -189,6 +190,7 @@ gm_state_choose_commission_name = {
 		gm_state_take_commission_name = yes
 		gm_state_mark_unveiled_for_com = yes
 	}
+	gm_remove_state_var = { VAR = gm_name_choice_open }
 }
 
 # The player chose this monument's name with the commission's offered first:
@@ -201,18 +203,34 @@ gm_state_mark_unveiled_for_com = {
 }
 
 # ---- The unveiling (§3.3) ----------------------------------------------------------------
-# State scope, after the skin is settled (gm_state_offer_skins for the AI and
-# a skin with no choice; the skin event's options for players): the default
-# form and namesake at once, for every monument; then, for a player, the form
-# (monument_events.24, only when the skin offers more than one) and the
-# namesake (monument_events.25).
+# State scope, after the skin is settled (the refresh after
+# gm_state_offer_skins for the AI and a skin with no choice; the skin event's
+# options for players): the default form and namesake at once, for every
+# monument; then, for a player, the form (monument_events.24, only when the
+# skin offers more than one) and the namesake (monument_events.25). A name a
+# met commission already gave the monument (a commission met by the dedication
+# itself, while the skin event was still open) is kept, and so is its form if
+# the skin chosen still offers it.
 gm_state_unveil = {
-	gm_state_set_default_form = yes
+	if = {
+		limit = {
+			NOT = {
+				AND = {
+					has_variable = gm_name_from_com
+					gm_state_current_form_fits = yes
+				}
+			}
+		}
+		gm_state_set_default_form = yes
+	}
 	if = {
 		limit = { gm_state_answers_commission = yes }
 		gm_state_take_commission_name = yes
 	}
-	else = {
+	else_if = {
+		limit = {
+			NOT = { has_variable = gm_name_from_com }
+		}
 		gm_state_set_namesake = { NAMESAKE = city }
 	}
 	if = {
@@ -227,6 +245,9 @@ gm_state_unveil = {
 # button (gm_rename_sgui), which keeps the current name as each event's
 # default.
 gm_state_offer_name_choice = {
+	# One choice at a time: Rename waits until monument_events.25 is answered
+	# (or 90 days, if it never is).
+	set_variable = { name = gm_name_choice_open value = yes days = 90 }
 	if = {
 		limit = { gm_state_has_form_choice = yes }
 		trigger_event = { id = monument_events.24 }

@@ -289,64 +289,59 @@ gm_com_world_on_action = {
 	}
 }
 
-# ROOT = the country enforcing a war goal, scope:target = the country it was
-# enforced against (00_code_on_actions.txt). Each side remembers the result,
-# and the other side's capital for the name, for a month: the war leader's peace
-# hook below reads them a day later, so the order the two fire in does not
-# matter.
-on_wargoal_enforced = {
+# ROOT = a country on a side that has just won (on_won_war) or lost
+# (on_lost_war) a war, capitulations included; scope:war = the war,
+# scope:enemy_country = the other side's leader, scope:benefitted_from_wargoal /
+# scope:victim_of_wargoal = set if a war goal of this country's was enforced, or
+# one against it (1.14.5 00_code_on_actions.txt; vanilla moved recently_won_war
+# here). Victory and Defeat are for war leaders after a year of war (v2 §2.2).
+on_won_war = {
 	on_actions = {
-		gm_wargoal_enforced_on_action
+		gm_won_war_on_action
 	}
 }
 
-gm_wargoal_enforced_on_action = {
+gm_won_war_on_action = {
 	trigger = {
 		gm_system_enabled = yes
 	}
 	effect = {
-		set_variable = { name = gm_war_won value = yes days = 30 }
-		scope:target ?= {
-			set_variable = { name = gm_war_lost value = yes days = 30 }
-			capital ?= { save_scope_as = gm_war_loser_capital }
-		}
-		capital ?= { save_scope_as = gm_war_winner_capital }
-		if = {
-			limit = { exists = scope:gm_war_loser_capital }
-			set_variable = { name = gm_war_enemy_cap value = scope:gm_war_loser_capital days = 30 }
-		}
 		if = {
 			limit = {
-				exists = scope:gm_war_winner_capital
-				exists = scope:target
+				exists = scope:benefitted_from_wargoal
+				exists = scope:war
+				scope:war = {
+					is_warleader = root
+					war_duration_months >= 12
+				}
 			}
-			scope:target = {
-				set_variable = { name = gm_war_enemy_cap value = scope:gm_war_winner_capital days = 30 }
-			}
+			gm_com_war_victory = yes
 		}
 	}
 }
 
-# ROOT = a war leader that has signed a peace. The months it has been at war,
-# taken now (the world pass drops the count once the country is at peace), and
-# the decision a day later (monument_events.22).
-on_peace_agreement_signed_war_leader = {
+on_lost_war = {
 	on_actions = {
-		gm_peace_war_leader_on_action
+		gm_lost_war_on_action
 	}
 }
 
-gm_peace_war_leader_on_action = {
+gm_lost_war_on_action = {
 	trigger = {
 		gm_system_enabled = yes
 	}
 	effect = {
-		set_variable = { name = gm_war_months_at_peace value = 0 days = 30 }
 		if = {
-			limit = { has_variable = gm_war_months }
-			set_variable = { name = gm_war_months_at_peace value = var:gm_war_months days = 30 }
+			limit = {
+				exists = scope:victim_of_wargoal
+				exists = scope:war
+				scope:war = {
+					is_warleader = root
+					war_duration_months >= 12
+				}
+			}
+			gm_com_war_defeat = yes
 		}
-		trigger_event = { id = monument_events.22 days = 1 }
 	}
 }
 

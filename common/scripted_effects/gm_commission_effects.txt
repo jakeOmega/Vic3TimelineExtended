@@ -23,7 +23,7 @@
 #   gm_com_cooldown       timed, 60 months after any commission closes: no
 #                         petition (world moments ignore it)
 # Kept across commissions: gm_com_last_state (the monument a level or a
-# dedication last touched) and the moment trackers (gm_war_months, gm_ruler,
+# dedication last touched) and the moment trackers (gm_ruler,
 # gm_ruler_months, gm_regime_last, gm_com_seen_space_<m>, gm_com_centenary_<n>,
 # gm_founded_year).
 #
@@ -171,11 +171,11 @@ gm_com_save_scopes = {
 	gm_com_save_ig_scope = { IG = trade_unions }
 	if = {
 		limit = { has_variable = gm_com_state }
-		var:gm_com_state = { save_scope_as = gm_com_where }
+		var:gm_com_state ?= { save_scope_as = gm_com_where }
 	}
 	if = {
 		limit = { has_variable = gm_com_name_enemy_cap }
-		var:gm_com_name_enemy_cap = {
+		var:gm_com_name_enemy_cap ?= {
 			owner ?= { save_scope_as = gm_com_enemy }
 		}
 	}
@@ -230,7 +230,7 @@ gm_com_ai_queue = {
 	clear_saved_scope = gm_com_build_state
 	if = {
 		limit = { has_variable = gm_com_state }
-		var:gm_com_state = { save_scope_as = gm_com_build_state }
+		var:gm_com_state ?= { save_scope_as = gm_com_build_state }
 	}
 	else_if = {
 		limit = {
@@ -306,11 +306,27 @@ gm_com_ai_queue = {
 }
 
 # ---- The open commission (§2.3) -------------------------------------------------------
-# Country scope. From gm_country_refresh, after the totals (a level finished,
-# a dedication, the month): met once the progress reaches the target.
+# Country scope. From gm_country_refresh, before the totals so its rewards
+# count in the same refresh (a level finished, a dedication, the month), and
+# from gm_country_monthly before the clock: met once the progress reaches the
+# target. A counted monument that drops out (ceded, contested, demolished)
+# lowers the baseline with it, so it stops counting instead of cancelling
+# grandeur added since.
 gm_com_check_progress = {
 	if = {
 		limit = { has_variable = gm_com_open }
+		set_variable = {
+			name = gm_com_drop
+			value = {
+				value = var:gm_com_baseline
+				subtract = gm_com_fit_grandeur
+			}
+		}
+		if = {
+			limit = { var:gm_com_drop > 0 }
+			set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }
+		}
+		remove_variable = gm_com_drop
 		set_variable = {
 			name = gm_com_left
 			value = {
@@ -325,9 +341,10 @@ gm_com_check_progress = {
 	}
 }
 
-# Country scope. From gm_country_monthly, after the refresh (so a commission met
-# this month is already closed): the clock, then a lapse before a miss, then
-# the AI's extension.
+# Country scope. From gm_country_monthly, after gm_com_check_progress and
+# before the refresh (so a commission met this month is already closed, and a
+# miss's resentment counts in this month's totals): the clock, then a lapse
+# before a miss, then the AI's extension.
 gm_com_monthly = {
 	if = {
 		limit = { has_variable = gm_com_open }
@@ -374,7 +391,9 @@ gm_com_extend = {
 # (gm_com_last_state, if it still counts), else the tallest counting monument,
 # takes the commission's name -- unless it was unveiled while this commission
 # was open, when the player already chose its name with the commission's offered
-# first (gm_unveiled_for_com).
+# first (gm_unveiled_for_com), or the commission asks only for the city's name
+# (a petition) and the monument already has a name: that would erase a chosen
+# name for everyone's default.
 gm_com_fulfil = {
 	clear_saved_scope = gm_com_named_state
 	if = {
@@ -399,6 +418,12 @@ gm_com_fulfil = {
 			if = {
 				limit = {
 					NOT = { has_variable = gm_unveiled_for_com }
+					OR = {
+						NOT = { has_variable = gm_namesake }
+						owner = {
+							NOT = { var:gm_com_namesake = flag:city }
+						}
+					}
 				}
 				gm_state_take_commission_name = yes
 			}
@@ -459,31 +484,12 @@ gm_com_world_monthly = {
 		}
 		gm_com_clear = yes
 	}
-	gm_com_track_war = yes
 	gm_com_track_ruler = yes
 	gm_com_init_founded = yes
 	gm_com_track_regime = yes
 	gm_com_track_space = yes
 	gm_com_track_centenary = yes
 	gm_com_try_petition = yes
-}
-
-# Months at war, for "after at least a year of war" (Victory and Defeat).
-gm_com_track_war = {
-	if = {
-		limit = { is_at_war = yes }
-		if = {
-			limit = { has_variable = gm_war_months }
-			change_variable = { name = gm_war_months add = 1 }
-		}
-		else = {
-			set_variable = { name = gm_war_months value = 1 }
-		}
-	}
-	else_if = {
-		limit = { has_variable = gm_war_months }
-		remove_variable = gm_war_months
-	}
 }
 
 # The ruler and how many months they have reigned, for a ruler's death (15
@@ -550,7 +556,16 @@ gm_com_track_regime = {
 		gm_com_try_regime = { KEY = republic IG = intelligentsia }
 		gm_com_try_regime = { KEY = revolution IG = trade_unions }
 	}
-	set_variable = { name = gm_regime_last value = var:gm_regime_now }
+	# Not while a side in a civil war: a winning revolution keeps its own
+	# variables over the nation's, and one written all through the war would
+	# already hold the new regime, so the edge it brings would never be seen.
+	if = {
+		limit = {
+			NOT = { has_variable = te_cw_role }
+			is_revolutionary = no
+		}
+		set_variable = { name = gm_regime_last value = var:gm_regime_now }
+	}
 	remove_variable = gm_regime_now
 }
 
@@ -759,50 +774,48 @@ gm_com_forget_fit = {
 }
 
 # ---- War's end (§2.2) --------------------------------------------------------------------
-# Country scope, monument_events.22 (a day after a war leader signs a peace):
-# Victory for a war leader that enforced a war goal, Defeat for one that had a
-# war goal enforced against it, after a year or more of war.
-gm_com_war_end = {
+# Country scope, from on_won_war / on_lost_war (monument_events_on_actions.txt)
+# for a war leader after a year of war, scope:enemy_country = the other side's
+# leader. Victory names the enemy (its capital, a state: a country stored in a
+# variable does not print its name); without one, the year.
+gm_com_war_victory = {
 	if = {
-		limit = {
-			has_variable = gm_war_months_at_peace
-			var:gm_war_months_at_peace >= 12
-			gm_com_can_offer = yes
+		limit = { gm_com_can_offer = yes }
+		gm_com_begin = { SOURCE = victory DEDICATION = war_memorial NAMESAKE = occasion FORM = arch }
+		set_variable = { name = gm_com_occasion value = flag:victory }
+		set_variable = { name = gm_com_ig value = flag:armed_forces }
+		scope:enemy_country ?= {
+			capital ?= { save_scope_as = gm_com_enemy_capital }
 		}
 		if = {
-			limit = { has_variable = gm_war_won }
-			gm_com_begin = { SOURCE = victory DEDICATION = war_memorial NAMESAKE = occasion FORM = arch }
-			set_variable = { name = gm_com_occasion value = flag:victory }
-			set_variable = { name = gm_com_ig value = flag:armed_forces }
-			if = {
-				limit = { has_variable = gm_war_enemy_cap }
-				set_variable = { name = gm_com_name_enemy_cap value = var:gm_war_enemy_cap }
-			}
-			else = {
-				set_variable = { name = gm_com_namesake value = flag:year }
-			}
-			gm_com_send_offer = yes
+			limit = { exists = scope:gm_com_enemy_capital }
+			set_variable = { name = gm_com_name_enemy_cap value = scope:gm_com_enemy_capital }
 		}
-		else_if = {
-			limit = { has_variable = gm_war_lost }
-			gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = memorial }
-			set_variable = { name = gm_com_occasion value = flag:defeat }
-			if = {
-				limit = {
-					ig:ig_armed_forces ?= { is_in_government = yes }
-				}
-				gm_com_ig_by_clout = { IN = no }
-			}
-			else = {
-				set_variable = { name = gm_com_ig value = flag:armed_forces }
-			}
-			gm_com_send_offer = yes
+		else = {
+			set_variable = { name = gm_com_namesake value = flag:year }
 		}
+		gm_com_send_offer = yes
 	}
-	gm_remove_state_var = { VAR = gm_war_won }
-	gm_remove_state_var = { VAR = gm_war_lost }
-	gm_remove_state_var = { VAR = gm_war_enemy_cap }
-	gm_remove_state_var = { VAR = gm_war_months_at_peace }
+}
+
+# The Armed Forces ask for a memorial to the fallen; if they are in the
+# government, the strongest group outside it does.
+gm_com_war_defeat = {
+	if = {
+		limit = { gm_com_can_offer = yes }
+		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = memorial }
+		set_variable = { name = gm_com_occasion value = flag:defeat }
+		if = {
+			limit = {
+				ig:ig_armed_forces ?= { is_in_government = yes }
+			}
+			gm_com_ig_by_clout = { IN = no }
+		}
+		else = {
+			set_variable = { name = gm_com_ig value = flag:armed_forces }
+		}
+		gm_com_send_offer = yes
+	}
 }
 
 # ---- A ruler's death (§2.2) -----------------------------------------------------------------

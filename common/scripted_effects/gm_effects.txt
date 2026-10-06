@@ -290,6 +290,8 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_form }
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unveil_pending }
+	gm_remove_state_var = { VAR = gm_name_choice_open }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
 	set_variable = { name = gm_policy_upkeep_steps value = 0 }
@@ -487,8 +489,14 @@ gm_country_refresh = {
 		limit = { has_building = building_grand_monument }
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
 		gm_state_first_sight = yes
-		# A monument older than names, or one nobody named, takes the
+		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
+		# then a monument older than names, or one nobody named, takes the
 		# default name (v2 §3.3).
+		if = {
+			limit = { has_variable = gm_unveil_pending }
+			remove_variable = gm_unveil_pending
+			gm_state_unveil = yes
+		}
 		gm_state_name_if_unnamed = yes
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
@@ -871,6 +879,8 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
+	# A commission's mark belongs to the old owner's commission (v2 §3.3).
+	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }
@@ -1213,13 +1223,17 @@ gm_state_dedicate_faith = {
 gm_state_offer_skins = {
 	set_variable = { name = gm_skin value = flag:generic }
 	gm_state_offer_skins_$AXIS$ = yes
-	# No skin to choose (the AI, or one skin fits): the unveiling at once.
-	# Otherwise monument_events.11's option unveils (gm_state_choose_skin).
+	# No skin to choose (the AI, or one skin fits): the unveiling at the next
+	# refresh (the monument_events.20 below), not here. The unveiling reads the
+	# dedication's production method, and this effect has only just activated
+	# it: whether that is visible within the same effect is not established
+	# (gm_state_dedicate's note). Otherwise monument_events.11's option unveils
+	# (gm_state_choose_skin), an event later.
 	if = {
 		limit = {
 			NOT = { has_variable = gm_skin_axis }
 		}
-		gm_state_unveil = yes
+		set_variable = gm_unveil_pending
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }
