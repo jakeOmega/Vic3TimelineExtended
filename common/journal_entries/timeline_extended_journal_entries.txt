@@ -57,6 +57,9 @@
 					name = state_collapse_progress
 					value = 0
 				}
+				# A repeat collapse refreshes Failed State to its full ten years
+				# rather than stacking a second copy (owner ruling, 2026-10-06).
+				remove_modifier = failed_state_modifier
 				add_modifier = {
 					name = failed_state_modifier
 					days = long_modifier_time
