@@ -156,6 +156,9 @@ Universal Citizenship. It also needs at least one community of the receiving
 country's primary cultures inside the conceding country with acceptance below
 60. The transfer then moves every such pop, well-accepted communities included.
 
+The AI demands a Population Transfer, in a treaty or as a war goal, only when
+it would move at least 100,000 people. You can still demand smaller ones.
+
 ## Diplomatic play escalation
 
 In the base game a play escalates by one point a day. The mod adds extra

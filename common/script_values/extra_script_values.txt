@@ -2604,6 +2604,16 @@ antimatter_sub_building_slots_remaining = {
 	}
 }
 
+# The fewest people a Population Transfer must move before the AI demands it,
+# in a proposal (proposal_weight) or as an enforce war goal
+# (wargoal_score_multiplier). Compared against population_transfer_number.
+# Players are not bound by it.
+population_transfer_ai_min_pops = 100000
+
+# People a Population Transfer would move: every pop in the source country
+# whose culture is primary for the target and not for the source, the same
+# set population_transfer_effect moves.
+# Evaluated with scope:source_country and scope:target_country available
 population_transfer_number = {
 	value = 0
 	scope:source_country = {

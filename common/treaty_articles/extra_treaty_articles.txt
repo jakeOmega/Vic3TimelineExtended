@@ -2525,6 +2525,16 @@ population_transfer = {
 				add = 0.08
 			}
 		}
+		# Per-partner gate (evaluation_chance has root only): the AI never asks
+		# for a transfer that would move fewer than population_transfer_ai_min_pops
+		# people. Vanilla toll_exemption zeroes its proposal_weight the same way.
+		proposal_weight = {
+			value = 1
+			if = {
+				limit = { population_transfer_number < population_transfer_ai_min_pops }
+				value = 0
+			}
+		}
 		inherent_accept_score = {
 			value = 0
 			if = {
@@ -2705,6 +2715,14 @@ population_transfer = {
 			if = {
 				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = loyal } }
 				add = { desc = "AI_FRIENDLY_ATTITUDE" value = -1000 }
+			}
+		}
+		# The same floor for enforcing the article as a war goal in a play.
+		wargoal_score_multiplier = {
+			value = 1
+			if = {
+				limit = { population_transfer_number < population_transfer_ai_min_pops }
+				value = 0
 			}
 		}
 	}
