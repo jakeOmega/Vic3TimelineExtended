@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Strategic Reserve: the journal entry outlives its hub (#PRNUM).
+"""Strategic Reserve: the journal entry outlives its hub (#753).
 
 A journal entry that goes `invalid` is never activated again, even when its
 `possible` holds once more. je_strategic_reserve used to end when its hub was
