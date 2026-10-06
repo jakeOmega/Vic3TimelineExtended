@@ -189,5 +189,25 @@ class MainTests(unittest.TestCase):
         self.assertEqual(problems, [], "\n".join(problems))
 
 
+
+class SplitValueTests(unittest.TestCase):
+    """A value written with a raw newline (a script's "\\n" instead of the
+    two characters) leaves `key:0 "first part` on one line and the rest on the
+    next. The game reads neither line as the value, and organize_loc keeps the
+    first line as the whole value and drops the rest, after which nothing
+    else flags it."""
+
+    def test_a_value_with_no_closing_quote_is_flagged(self):
+        problems = _check(BOM + 'l_english:\n TE_ALPHA:0 "first part\nsecond part"\n TE_BETA:0 "Beta"\n')
+        self.assertTrue(any(":2:" in p and "no closing quote" in p and "TE_ALPHA" in p for p in problems), problems)
+        self.assertTrue(any(":3:" in p and "not a key line" in p for p in problems), problems)
+
+    def test_a_key_without_a_version_digit_is_a_key_line(self):
+        self.assertEqual(_check(BOM + 'l_english:\n TE_ALPHA:"Alpha"\n'), [])
+
+    def test_blank_and_comment_lines_are_not_stray(self):
+        self.assertEqual(_check(BOM + 'l_english:\n\n # a section\n TE_ALPHA:0 "Alpha"\n'), [])
+
+
 if __name__ == "__main__":
     unittest.main()
