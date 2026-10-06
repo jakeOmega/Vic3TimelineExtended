@@ -30,7 +30,8 @@ market can't have one. It is removed if the state stops being your market
 capital, for example when you lose it in a war or join another market. It
 employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
 good your Aerospace Industry makes. That weekly bill is what the program really
-costs.
+costs; the Budget panel's Breakdown tab lists it under Programme Costs, in the
+Space Race row.
 
 Its production method decides which milestones you can run. Each method includes
 everything the ones before it allow, so you only ever need the highest one your

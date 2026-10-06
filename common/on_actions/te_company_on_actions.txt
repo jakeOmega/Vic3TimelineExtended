@@ -1,0 +1,14 @@
+﻿# Company AI: failing-company count and the AI's dissolution of a company
+# that has failed for five years (common/scripted_effects/te_company_effects.txt).
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_company_monthly_on_action
+	}
+}
+
+te_company_monthly_on_action = {
+	effect = {
+		te_company_failing_monthly_effect = yes
+	}
+}

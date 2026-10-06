@@ -53,6 +53,24 @@ company_volkswagen = {
 	ai_construction_targets = {
 		building_automotive_industry = {
 			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_SAXONY
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_SAXONY
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -108,6 +126,24 @@ company_toyota = {
 	ai_construction_targets = {
 		building_automotive_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_TOKAI
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_TOKAI
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -165,6 +201,24 @@ company_samsung = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_SEOUL
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electrics_industry_appliances }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_SEOUL
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -219,6 +273,24 @@ company_hp = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electrics_industry_appliances }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -273,6 +345,24 @@ company_sony = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANTO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electrics_industry_appliances }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANTO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -324,6 +414,24 @@ company_ikea = {
 	ai_construction_targets = {
 		building_furniture_manufactory = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GOTALAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_furniture_manufactory }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GOTALAND
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -380,6 +488,24 @@ company_intel = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -431,6 +557,24 @@ company_microsoft = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_WASHINGTON
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -487,6 +631,24 @@ company_apple = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electrics_industry_appliances }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -543,6 +705,24 @@ company_tsmc = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_FORMOSA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_FORMOSA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -599,6 +779,24 @@ company_huawei = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GUANGDONG
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GUANGDONG
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -655,6 +853,24 @@ company_amazon = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_WASHINGTON
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -710,6 +926,24 @@ company_nvidia = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -767,6 +1001,24 @@ company_google = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -818,6 +1070,24 @@ company_netflix = {
 	ai_construction_targets = {
 		building_art_academy = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_art_academy }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -876,6 +1146,28 @@ company_spacex = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					state_region = s:STATE_TEXAS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_CALIFORNIA
+						state_region = s:STATE_TEXAS
+					}
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -930,6 +1222,24 @@ company_bytedance = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_BEIJING
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_BEIJING
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -991,6 +1301,24 @@ company_openai = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1047,6 +1375,24 @@ company_catl = {
 	ai_construction_targets = {
 		building_chemical_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_FUJIAN
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_FUJIAN
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1102,6 +1448,24 @@ company_boston_dynamics = {
 	ai_construction_targets = {
 		building_robotics_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MASSACHUSETTS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_robotics_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MASSACHUSETTS
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1162,6 +1526,24 @@ company_asml = {
 	ai_construction_targets = {
 		building_electronic_components_and_semiconductor_industry = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GELRE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GELRE
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1223,6 +1605,24 @@ company_lockheed_martin = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MARYLAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MARYLAND
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1280,6 +1680,24 @@ company_bae_systems = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HOME_COUNTIES
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HOME_COUNTIES
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1334,6 +1752,24 @@ company_roscosmos = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MOSCOW
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MOSCOW
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1399,6 +1835,28 @@ company_airbus = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_LANGUEDOC
+					state_region = s:STATE_BAVARIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_LANGUEDOC
+						state_region = s:STATE_BAVARIA
+					}
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1456,6 +1914,24 @@ company_dassault_aviation = {
 	ai_construction_targets = {
 		building_aerospace_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ILE_DE_FRANCE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ILE_DE_FRANCE
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1512,6 +1988,24 @@ company_hyundai = {
 	ai_construction_targets = {
 		building_automotive_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_SEOUL
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_SEOUL
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1568,6 +2062,24 @@ company_sap = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_BADEN
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_BADEN
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1621,6 +2133,24 @@ company_tencent = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GUANGDONG
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GUANGDONG
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1672,6 +2202,24 @@ company_alibaba = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ZHEJIANG
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ZHEJIANG
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1732,6 +2280,24 @@ company_nintendo = {
 	ai_construction_targets = {
 		building_electrics_industry_appliances = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANSAI
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electrics_industry_appliances }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANSAI
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1781,6 +2347,24 @@ company_gazprom = {
 	ai_construction_targets = {
 		building_oil_rig = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_INGRIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_INGRIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1831,6 +2415,24 @@ company_saudi_aramco = {
 	ai_construction_targets = {
 		building_oil_rig = {
 			level = 20
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_NEJD
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_NEJD
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1882,6 +2484,24 @@ company_petrobras = {
 	ai_construction_targets = {
 		building_oil_rig = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_RIO_DE_JANEIRO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_RIO_DE_JANEIRO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1936,6 +2556,24 @@ company_rosatom = {
 	ai_construction_targets = {
 		building_nuclear_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MOSCOW
+					is_capital = yes
+					any_scope_building = { is_building_type = building_nuclear_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MOSCOW
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -1988,6 +2626,24 @@ company_oracle = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_TEXAS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_TEXAS
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2040,6 +2696,24 @@ company_softbank = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANTO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANTO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2093,6 +2767,24 @@ company_roche = {
 	ai_construction_targets = {
 		building_chemical_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_EAST_SWITZERLAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_EAST_SWITZERLAND
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2143,6 +2835,24 @@ company_pfizer = {
 	ai_construction_targets = {
 		building_chemical_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_NEW_YORK
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_NEW_YORK
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2215,6 +2925,24 @@ company_vale = {
 	ai_construction_targets = {
 		building_iron_mine = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_RIO_DE_JANEIRO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_iron_mine }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_RIO_DE_JANEIRO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2273,6 +3001,24 @@ company_disney = {
 	ai_construction_targets = {
 		building_art_academy = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_art_academy }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2326,6 +3072,28 @@ company_universal = {
 	ai_construction_targets = {
 		building_art_academy = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ILE_DE_FRANCE
+					state_region = s:STATE_HOLLAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_art_academy }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_ILE_DE_FRANCE
+						state_region = s:STATE_HOLLAND
+					}
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2382,6 +3150,24 @@ company_verizon = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_NEW_YORK
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_NEW_YORK
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2437,6 +3223,24 @@ company_reliance = {
 	ai_construction_targets = {
 		building_chemical_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_BOMBAY
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_BOMBAY
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2494,6 +3298,24 @@ company_fanuc = {
 	ai_construction_targets = {
 		building_robotics_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HOKUSHINETSU
+					is_capital = yes
+					any_scope_building = { is_building_type = building_robotics_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HOKUSHINETSU
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2554,6 +3376,24 @@ company_eni = {
 	ai_construction_targets = {
 		building_oil_rig = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_LAZIO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_LAZIO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2608,6 +3448,24 @@ company_ferrari = {
 	ai_construction_targets = {
 		building_automotive_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_EMILIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_EMILIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2666,6 +3524,24 @@ company_blackberry = {
 	ai_construction_targets = {
 		building_network_infrastructure = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ONTARIO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_network_infrastructure }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ONTARIO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2721,6 +3597,24 @@ company_shopify = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ONTARIO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ONTARIO
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2805,6 +3699,24 @@ company_bhp_group = {
 	ai_construction_targets = {
 		building_iron_mine = {
 			level = 20
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_VICTORIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_iron_mine }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_VICTORIA
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2861,6 +3773,24 @@ company_cochlear = {
 	ai_construction_targets = {
 		building_chemical_plant = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_NEW_SOUTH_WALES
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_NEW_SOUTH_WALES
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2914,6 +3844,24 @@ company_infosys = {
 	ai_construction_targets = {
 		building_software_industry = {
 			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MYSORE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MYSORE
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -2966,6 +3914,24 @@ company_jsw_steel = {
 	ai_construction_targets = {
 		building_steel_mill = {
 			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_BOMBAY
+					is_capital = yes
+					any_scope_building = { is_building_type = building_steel_mill }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_BOMBAY
+				}
+			}
+			add = te_company_ai_weight_home
 		}
 	}
 }
@@ -3024,8 +3990,42 @@ company_axiom_space = {
 		has_technology_researched = reusable_rocketry
 	}
 	ai_construction_targets = {
-		building_aerospace_industry = { level = 5 }
-		building_tourism_industry = { level = 5 }
+		building_aerospace_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_TEXAS
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+		building_tourism_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_TEXAS
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_tourism_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_TEXAS
+						state_region = s:STATE_CALIFORNIA
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3085,8 +4085,42 @@ company_neurovault = {
 		has_technology_researched = mind_backups
 	}
 	ai_construction_targets = {
-		building_software_industry = { level = 10 }
-		building_electronic_components_and_semiconductor_industry = { level = 10 }
+		building_software_industry = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+		building_electronic_components_and_semiconductor_industry = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_CALIFORNIA
+						state_region = s:STATE_WASHINGTON
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3146,7 +4180,31 @@ company_tycho_manufacturing = {
 		has_technology_researched = space_elevator
 	}
 	ai_construction_targets = {
-		building_aerospace_industry = { level = 10 }
+		building_aerospace_industry = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_FLORIDA
+					state_region = s:STATE_TEXAS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_FLORIDA
+						state_region = s:STATE_TEXAS
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3200,7 +4258,31 @@ company_tessier_ashpool = {
 		has_technology_researched = mind_backups
 	}
 	ai_construction_targets = {
-		building_software_industry = { level = 15 }
+		building_software_industry = {
+			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ILE_DE_FRANCE
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_ILE_DE_FRANCE
+						state_region = s:STATE_CALIFORNIA
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3257,7 +4339,27 @@ company_hanka_precision = {
 		has_technology_researched = biohacking_and_human_augmentation
 	}
 	ai_construction_targets = {
-		building_electronic_components_and_semiconductor_industry = { level = 15 }
+		building_electronic_components_and_semiconductor_industry = {
+			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANTO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_electronic_components_and_semiconductor_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANTO
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3311,7 +4413,31 @@ company_yoyodyne_propulsion = {
 		has_technology_researched = antimatter_production
 	}
 	ai_construction_targets = {
-		building_aerospace_industry = { level = 10 }
+		building_aerospace_industry = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_NEW_JERSEY
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_NEW_JERSEY
+						state_region = s:STATE_CALIFORNIA
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3368,7 +4494,31 @@ company_rekal = {
 		has_technology_researched = mind_backups
 	}
 	ai_construction_targets = {
-		building_software_industry = { level = 15 }
+		building_software_industry = {
+			level = 15
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					state_region = s:STATE_NEW_YORK
+					is_capital = yes
+					any_scope_building = { is_building_type = building_software_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					OR = {
+						state_region = s:STATE_CALIFORNIA
+						state_region = s:STATE_NEW_YORK
+					}
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3424,7 +4574,27 @@ company_dupont = {
 		has_technology_researched = isoprene
 	}
 	ai_construction_targets = {
-		building_chemical_plant = { level = 10 }
+		building_chemical_plant = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_DELAWARE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_DELAWARE
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3476,7 +4646,27 @@ company_ig_farben = {
 		has_technology_researched = isoprene
 	}
 	ai_construction_targets = {
-		building_chemical_plant = { level = 12 }
+		building_chemical_plant = {
+			level = 12
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HESSE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HESSE
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3526,7 +4716,27 @@ company_shell = {
 		has_technology_researched = isoprene
 	}
 	ai_construction_targets = {
-		building_oil_rig = { level = 10 }
+		building_oil_rig = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HOLLAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HOLLAND
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3574,7 +4784,27 @@ company_jsr = {
 		has_technology_researched = plastic_mass_production
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_rubber = { level = 10 }
+		building_synthetics_plant_rubber = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANTO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_rubber }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANTO
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3622,7 +4852,27 @@ company_sibur = {
 		has_technology_researched = plastic_mass_production
 	}
 	ai_construction_targets = {
-		building_chemical_plant = { level = 12 }
+		building_chemical_plant = {
+			level = 12
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_TOBOLSK
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_TOBOLSK
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3669,7 +4919,27 @@ company_rolls_royce = {
 		has_technology_researched = combustion_engine
 	}
 	ai_construction_targets = {
-		building_automotive_industry = { level = 5 }
+		building_automotive_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MIDLANDS
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MIDLANDS
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3713,7 +4983,27 @@ company_bp = {
 		has_technology_researched = fractional_distillation
 	}
 	ai_construction_targets = {
-		building_oil_rig = { level = 5 }
+		building_oil_rig = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HOME_COUNTIES
+					is_capital = yes
+					any_scope_building = { is_building_type = building_oil_rig }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HOME_COUNTIES
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3760,7 +5050,27 @@ company_bayer = {
 		has_technology_researched = aniline
 	}
 	ai_construction_targets = {
-		building_chemical_plant = { level = 5 }
+		building_chemical_plant = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_RHINELAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_chemical_plant }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_RHINELAND
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3804,7 +5114,27 @@ company_thyssen = {
 		has_technology_researched = steelworking
 	}
 	ai_construction_targets = {
-		building_steel_mill = { level = 5 }
+		building_steel_mill = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_RUHR
+					is_capital = yes
+					any_scope_building = { is_building_type = building_steel_mill }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_RUHR
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3848,7 +5178,27 @@ company_boeing = {
 		has_technology_researched = military_aviation
 	}
 	ai_construction_targets = {
-		building_aerospace_industry = { level = 5 }
+		building_aerospace_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_WASHINGTON
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3892,7 +5242,27 @@ company_renault = {
 		has_technology_researched = combustion_engine
 	}
 	ai_construction_targets = {
-		building_automotive_industry = { level = 5 }
+		building_automotive_industry = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ILE_DE_FRANCE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_automotive_industry }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ILE_DE_FRANCE
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -3935,7 +5305,18 @@ company_michelin = {
 		has_technology_researched = vulcanization
 	}
 	ai_construction_targets = {
-		building_rubber_plantation = { level = 5 }
+		building_rubber_plantation = {
+			level = 5
+			state_trigger = {
+				OR = {
+					is_capital = yes
+					any_scope_building = { is_building_type = building_rubber_plantation }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
 	}
 }
 
@@ -3979,7 +5360,27 @@ company_pirelli = {
 		has_technology_researched = vulcanization
 	}
 	ai_construction_targets = {
-		building_rubber_plantation = { level = 5 }
+		building_rubber_plantation = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_LOMBARDY
+					is_capital = yes
+					any_scope_building = { is_building_type = building_rubber_plantation }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_LOMBARDY
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4023,7 +5424,27 @@ company_jardine_matheson = {
 		has_technology_researched = international_trade
 	}
 	ai_construction_targets = {
-		building_port = { level = 5 }
+		building_port = {
+			level = 5
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GUANGDONG
+					is_capital = yes
+					any_scope_building = { is_building_type = building_port }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GUANGDONG
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4085,7 +5506,27 @@ company_genentech = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_opium = { level = 10 }
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_CALIFORNIA
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_CALIFORNIA
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4140,7 +5581,27 @@ company_monsanto = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_maize_farm = { level = 10 }
+		building_maize_farm = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MISSOURI
+					is_capital = yes
+					any_scope_building = { is_building_type = building_maize_farm }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MISSOURI
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4191,7 +5652,27 @@ company_novo_nordisk = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_opium = { level = 10 }
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_ZEALAND
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_ZEALAND
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4244,7 +5725,27 @@ company_ajinomoto = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_sugar = { level = 10 }
+		building_synthetics_plant_sugar = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_KANTO
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_sugar }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_KANTO
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4295,7 +5796,27 @@ company_biocon = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_opium = { level = 10 }
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_MYSORE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_MYSORE
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4347,7 +5868,27 @@ company_bgi = {
 		has_technology_researched = biotechnology
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_opium = { level = 10 }
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_GUANGDONG
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_GUANGDONG
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4398,7 +5939,27 @@ company_biontech = {
 		has_technology_researched = mrna_therapeutics
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_opium = { level = 10 }
+		building_synthetics_plant_opium = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_HESSE
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_opium }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_HESSE
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }
 
@@ -4453,6 +6014,26 @@ company_rosen_association = {
 		has_technology_researched = genetic_engineering
 	}
 	ai_construction_targets = {
-		building_synthetics_plant_biomass = { level = 10 }
+		building_synthetics_plant_biomass = {
+			level = 10
+			state_trigger = {
+				OR = {
+					state_region = s:STATE_WASHINGTON
+					is_capital = yes
+					any_scope_building = { is_building_type = building_synthetics_plant_biomass }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_flavored
+		if = {
+			limit = {
+				any_scope_state = {
+					state_region = s:STATE_WASHINGTON
+				}
+			}
+			add = te_company_ai_weight_home
+		}
 	}
 }

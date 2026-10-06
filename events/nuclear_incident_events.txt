@@ -151,15 +151,15 @@ nuclear_incident.1 = {
 			has_war_with = scope:nd_warning_suspect
 			custom_tooltip = {
 				text = nd_tt_doctrine_permits_strike
-				nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect }
+				custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_warning_suspect } }
 			}
 			custom_tooltip = {
 				text = nd_tt_pledge_permits_strike
-				nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect }
+				custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_warning_suspect } }
 			}
 			custom_tooltip = {
 				text = nd_tt_war_law_permits_strike
-				nd_war_law_permits_strategic_strike = yes
+				custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 			}
 			custom_tooltip = {
 				text = nd_tt_forces_assembled
@@ -1594,8 +1594,8 @@ nuclear_incident.50 = {
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.50.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		trigger = {
 			exists = scope:nd_mw_enemy
-			nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy }
-			nd_war_law_permits_strategic_strike = yes
+			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy } }
+			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 		}
 		highlighted_option = yes
 		custom_tooltip = nd_tt_monopoly_first_use

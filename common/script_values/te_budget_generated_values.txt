@@ -1738,6 +1738,7 @@ te_budget_expense_civil = {
 	add = scope:civil_1
 	add = scope:civil_2
 	subtract = te_budget_administration_cost
+	subtract = te_budget_space_program_cost
 }
 
 te_budget_expense_construction = {
@@ -1835,6 +1836,7 @@ te_budget_expense_nuclear_taboo = {
 te_budget_expense_space = {
 	value = 0
 	add = scope:space_0
+	add = te_budget_space_program_cost
 }
 
 te_budget_expense_drugs = {
@@ -1852,7 +1854,7 @@ te_budget_expense_additional = {
 	subtract = te_budget_expense_un
 	subtract = te_budget_expense_nuclear
 	subtract = te_budget_expense_nuclear_taboo
-	subtract = te_budget_expense_space
+	subtract = scope:space_0
 	subtract = te_budget_expense_drugs
 }
 

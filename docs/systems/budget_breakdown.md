@@ -84,7 +84,9 @@ No live formula is reevaluated to guess what a timed modifier currently charges.
 Only money in the weekly budget is included. One-time `add_treasury` payments
 and costs in innovation, influence or other resources are excluded. For example,
 Space Race's recurring `sr_space_program_cost` spends innovation, not money;
-its monetary debris-clearance response is attributed to Space Race.
+its monetary debris-clearance response is attributed to Space Race. Space Race
+also carries the Space Program building's own running cost (below), which is
+the only source row that holds money from outside Additional Expenses.
 
 ## Administration allocation
 
@@ -92,7 +94,7 @@ Only `building_government_administration` enters the administration pool.
 Its negative `weekly_profit` supplies its operating cost: its production methods
 produce bureaucracy and tax capacity, not saleable goods. This includes wages,
 goods and any slave upkeep. Other government buildings remain in Other Civil
-Buildings. The actual administration cost is capped at the Overview's civil
+Buildings, except the Space Program (next section). The actual administration cost is capped at the Overview's civil
 wage/goods/slave total because wages there are predicted while the building's
 balance is from the latest week.
 
@@ -114,6 +116,28 @@ With A = £39,000, B = 2,800, U = 1,400, Education level 3 and National Bank
 level 2, the pool is £19,500: Education £11,700, National Bank £7,800 and
 General Administration £19,500.
 
+## Space Program
+
+The Space Program (`building_space_program`, a monument) is paid through the
+same civil getters as Government Administration, but the Breakdown shows its
+cost under Programme Costs, in the Space Race row, beside the system's other
+charges. Its missions output country modifiers only, so its negative
+`weekly_profit` is its wages plus Launch Capacity, as for administration.
+
+With S the summed deficit of the country's Space Program buildings
+(`te_budget_space_program_actual`) and D the Space Race modifier charges:
+
+- Space Program cost = min(S, max(Overview civil expenses − A, 0))
+- Space Race = D + Space Program cost
+- Other Civil Buildings = Overview civil expenses − A − Space Program cost
+- Other Additional Expenses subtracts D only, since the building cost was never
+  in Additional Expenses
+
+The generator's `CARVE_OUTS` table maps a source row to the building cost it
+carries; `te_budget_values.txt` measures and caps it. The cap keeps the two
+moves together inside the civil getters when wages change between the forecast
+and last week's balance.
+
 ## Files and regeneration
 
 `scripts/generators/gen_budget_breakdown.py` contains the income/expense
@@ -127,7 +151,7 @@ rules are in `common/script_values/te_budget_values.txt`; the panel layout is in
 `gui/te_budget_breakdown.gui`.
 
 Each section binds the engine getters into a `TopScope`. The administration
-building sum, military support-building deficits, total institution levels,
+and Space Program building sums, military support-building deficits, total institution levels,
 allocated pool and positive chart total are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
@@ -163,7 +187,10 @@ and modern support buildings, every combination of expansion flags, sorted preor
 cumulative pie layers and private-spending exclusion. GUI lint and reference audits cover local names, localization, braces and textures.
 Source tests also verify separate simultaneous JE charges, signed banking
 offsets, exact mirror coefficients, complete attribution of the mod's recurring
-monetary sources, and unchanged economic fields.
+monetary sources, and unchanged economic fields. The Space Program tests move
+its cost from Other Civil Buildings to Space Race, subtract only the debris
+charges from Additional Expenses, and cap the move at the civil pool left after
+administration.
 
 Engine rendering and accounting still require an in-game check:
 

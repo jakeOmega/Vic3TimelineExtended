@@ -502,8 +502,13 @@ gm_com_track_ruler = {
 		limit = { exists = ruler }
 		ruler = { save_scope_as = gm_com_tracked_ruler }
 		if = {
+			# exists: the stored ruler can have died, and comparing a dead
+			# character logged "Event target link 'var' returned an invalid
+			# object" (2026-10-06 observer run). The else branch then starts
+			# the new ruler's count, as it should.
 			limit = {
 				has_variable = gm_ruler
+				exists = var:gm_ruler
 				var:gm_ruler = scope:gm_com_tracked_ruler
 				has_variable = gm_ruler_months
 			}

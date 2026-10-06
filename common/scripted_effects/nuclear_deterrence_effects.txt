@@ -538,7 +538,8 @@ nd_weekly_update = {
 		nd_roll_incident = yes
 	}
 	nd_exchange_weekly_update = yes
-
+	# The observer's record of when a wartime first strike is open to us.
+	nd_log_strike_eligibility = yes
 }
 
 nd_monthly_update = {
