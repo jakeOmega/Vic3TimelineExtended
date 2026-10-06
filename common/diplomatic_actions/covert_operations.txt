@@ -19,6 +19,14 @@
 # "below". test_covert_launch_preview.py keeps the preview in step with the
 # pulse.
 #
+# TECHNOLOGY GATES: seven operations need a technology before they can be
+# launched, the first custom_tooltip in their possible block. The tech is
+# chosen so the operations that can break a great power (financial
+# subversion, destabilization, regime change) sit deep in the tree, where a
+# small country can't rush them before the great powers have built their own
+# services. Launch only, like the Tradecraft unlocks. test_covert_tech_gates.py
+# holds the table and checks the tooltips and descriptions against it.
+#
 # AI DESIGN:
 # - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
 #   re-evaluated every tick. Prevents spammy on/off toggling.
@@ -70,6 +78,10 @@ covert_election_interference_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_election_interference_tt
+			has_technology_researched = television_broadcasting
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -247,6 +259,10 @@ covert_financial_subversion_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_financial_subversion_tt
+			has_technology_researched = computer_networks
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -562,6 +578,10 @@ covert_comms_disruption_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_comms_disruption_tt
+			has_technology_researched = cryptography
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -1014,6 +1034,10 @@ covert_influence_campaign_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = covert_op_tech_influence_campaign_tt
+			has_technology_researched = mass_media
+		}
+		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -1180,6 +1204,10 @@ covert_ideological_subversion_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_ideological_subversion_tt
+			has_technology_researched = pop_culture
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -1350,6 +1378,10 @@ covert_destabilization_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_destabilization_tt
+			has_technology_researched = social_media
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -1527,6 +1559,10 @@ covert_regime_change_action = {
 	}
 
 	possible = {
+		custom_tooltip = {
+			text = covert_op_tech_regime_change_tt
+			has_technology_researched = satellite_communications
+		}
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
