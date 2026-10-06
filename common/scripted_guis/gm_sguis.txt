@@ -115,25 +115,25 @@ gm_hard_times_sgui = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 5): name a monument through the base
-# game's state-rename popup. A mod editbox's text can't reach script
-# (gui_modding_guide.md § "Typed text can't reach script"), but a name the
-# popup saves can: State.GetForestryHubName returns it as a CString. Build 4
-# proved the route with a placeholder company; this one types into a logging
-# town instead, which every state that can hold a monument has.
-#   gm_name_start_here_sgui   carrier = the monument's own state
-#   gm_name_start_tonga_sgui  carrier = Tonga's state (test: can we rename a
-#                             state we don't own?)
-#   gm_name_use_sgui          gets the logging town's name as the saved scope
-#                             gm_name (MakeScopeFlag in the .gui), stores it as
-#                             the monument state's gm_name, closes the naming
-#   gm_name_cancel_sgui       closes it without storing anything
-# The carrier state carries gm_carries_name (value gm_is_name_carrier), which
-# switches the popup (states_panel.gui) to show only its logging-town field.
+# PROTOTYPE (v2 spec §3.4, test build 6): name a monument by typing over a
+# state's name in the base game's state-rename popup (gm_name_carrier_effects
+# has why a state name). The .gui picks the carrier, because only it can
+# compare names: the capital while it has its map name, else the monument's
+# state, which may have a custom name the reset will lose.
+#   gm_name_start_sgui         carrier on its map name (capital or here)
+#   gm_name_start_renamed_sgui carrier with a custom name (the red tooltip)
+#   gm_name_use_sgui           gets the carrier's name as the saved scope
+#                              gm_name (MakeScopeFlag in the .gui), stores it as
+#                              the monument state's gm_name, resets the carrier
+#   gm_name_cancel_sgui        resets a carrier that had its map name (a renamed
+#                              one is left as it is: the player may not have
+#                              changed it yet)
+# The carrier carries gm_carries_name (value gm_is_name_carrier), which
+# switches the popup (states_panel.gui) to show only its state-name field.
 # One naming at a time.
-gm_name_start_here_sgui = {
+gm_name_start_sgui = {
 	scope = country
-	saved_scopes = { gm_state }
+	saved_scopes = { gm_state gm_carrier }
 
 	is_shown = {
 		always = yes
@@ -141,7 +141,11 @@ gm_name_start_here_sgui = {
 
 	is_valid = {
 		exists = scope:gm_state
+		exists = scope:gm_carrier
 		scope:gm_state = {
+			owner = root
+		}
+		scope:gm_carrier = {
 			owner = root
 		}
 		custom_tooltip = {
@@ -151,14 +155,7 @@ gm_name_start_here_sgui = {
 	}
 
 	effect = {
-		scope:gm_state = {
-			set_variable = gm_being_named
-			set_variable = gm_carries_name
-		}
-		set_variable = {
-			name = gm_name_carrier_state
-			value = scope:gm_state
-		}
+		gm_name_carrier_open = yes
 	}
 
 	ai_is_valid = {
@@ -166,9 +163,9 @@ gm_name_start_here_sgui = {
 	}
 }
 
-gm_name_start_tonga_sgui = {
+gm_name_start_renamed_sgui = {
 	scope = country
-	saved_scopes = { gm_state }
+	saved_scopes = { gm_state gm_carrier }
 
 	is_shown = {
 		always = yes
@@ -176,39 +173,22 @@ gm_name_start_tonga_sgui = {
 
 	is_valid = {
 		exists = scope:gm_state
+		exists = scope:gm_carrier
 		scope:gm_state = {
+			owner = root
+		}
+		scope:gm_carrier = {
 			owner = root
 		}
 		custom_tooltip = {
 			text = gm_name_one_at_a_time_tt
 			NOT = { has_variable = gm_name_carrier_state }
 		}
-		custom_tooltip = {
-			text = gm_name_no_tonga_tt
-			s:STATE_TONGA = {
-				any_scope_state = {
-					NOT = { has_variable = gm_carries_name }
-				}
-			}
-		}
 	}
 
 	effect = {
-		scope:gm_state = {
-			set_variable = gm_being_named
-		}
-		s:STATE_TONGA = {
-			random_scope_state = {
-				save_scope_as = gm_name_tonga
-			}
-		}
-		scope:gm_name_tonga = {
-			set_variable = gm_carries_name
-		}
-		set_variable = {
-			name = gm_name_carrier_state
-			value = scope:gm_name_tonga
-		}
+		gm_name_carrier_open = yes
+		set_variable = gm_carrier_was_renamed
 	}
 
 	ai_is_valid = {
@@ -240,6 +220,12 @@ gm_name_use_sgui = {
 				value = scope:gm_name
 			}
 		}
+		if = {
+			limit = { exists = var:gm_name_carrier_state }
+			var:gm_name_carrier_state = {
+				reset_state_name = yes
+			}
+		}
 		gm_name_carrier_close = yes
 	}
 
@@ -260,6 +246,15 @@ gm_name_cancel_sgui = {
 	}
 
 	effect = {
+		if = {
+			limit = {
+				NOT = { has_variable = gm_carrier_was_renamed }
+				exists = var:gm_name_carrier_state
+			}
+			var:gm_name_carrier_state = {
+				reset_state_name = yes
+			}
+		}
 		gm_name_carrier_close = yes
 	}
 

@@ -155,8 +155,9 @@ gm_has_custom_name = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 5): 1 while this state's monument is
-# being named (gm_name_start_*_sgui), else 0. The row swaps its buttons on it.
+# PROTOTYPE (v2 spec §3.4, test build 6): 1 while this state's monument is
+# being named (gm_name_start_sgui and its renamed variant), else 0. The row
+# swaps its buttons on it.
 gm_is_being_named = {
 	value = 0
 	if = {
@@ -165,9 +166,9 @@ gm_is_being_named = {
 	}
 }
 
-# PROTOTYPE (test build 5): 1 while this state's logging town carries a
-# monument name being typed, else 0. states_panel.gui's rename popup shows
-# only the logging-town field while it holds.
+# PROTOTYPE (test build 6): 1 while this state's name carries a monument name
+# being typed, else 0. states_panel.gui's rename popup shows only the
+# state-name field while it holds.
 gm_is_name_carrier = {
 	value = 0
 	if = {

@@ -37,9 +37,9 @@ types state_panel_types
 
 		blockoverride "entire_scrollarea"
 		{
-			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 5): while
-			### this state's logging town carries a monument name being typed
-			### (gm_is_name_carrier, gm_sguis.txt), show only the logging-town
+			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 6): while
+			### this state's name carries a monument name being typed
+			### (gm_is_name_carrier, gm_sguis.txt), show only the state-name
 			### field, as "Monument name". ignoreinvisible closes the gaps.
 			flowcontainer = {
 				direction = vertical
@@ -49,14 +49,22 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 
 					textbox = {
+						visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 						size = { 420 40 }
 						align = left|nobaseline
 						autoresize = yes
 						using = fontsize_large
 						text = "STATE_NAME"
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
+						size = { 420 40 }
+						align = left|nobaseline
+						autoresize = yes
+						using = fontsize_large
+						text = "gm_name_popup_label"
 					}
 
 					divider_clean = {}
@@ -269,23 +277,14 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[StateNameChangePopup.ShouldHaveWoodHub]"
+					visible = "[And( StateNameChangePopup.ShouldHaveWoodHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
-						visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 						size = { 420 40 }
 						align = left|nobaseline
 						autoresize = yes
 						using = fontsize_large
 						text = "WOOD_NAME"
-					}
-					textbox = {
-						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
-						size = { 420 40 }
-						align = left|nobaseline
-						autoresize = yes
-						using = fontsize_large
-						text = "gm_name_popup_label"
 					}
 
 					divider_clean = {}

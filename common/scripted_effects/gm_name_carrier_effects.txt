@@ -1,8 +1,28 @@
-﻿# PROTOTYPE (v2 spec §3.4, test build 5): end a naming, whether the name was
-# used or the naming cancelled. Country scope (ROOT = the naming country).
-# The carrier state's logging town holds whatever the player typed; a state
-# we don't own (Tonga) gets its default town names back, our own keeps it
-# (reset_hub_names would also wipe any city or port name we chose there).
+﻿# PROTOTYPE (v2 spec §3.4, test build 6): the naming's carrier is a state we
+# own whose name the player types over in the base game's state-rename popup;
+# State.GetNameNoFormatting returns it as a CString (build 5 showed the hub
+# accessors ignore renames). No effect writes a stored name back, so the
+# carrier gets reset_state_name: exact for a state still on its map name,
+# which the .gui prefers (the capital, else the monument's state); a renamed
+# state loses its custom name, and the Name It tooltip says so in red.
+
+# Country scope. scope:gm_state = the monument's state, scope:gm_carrier =
+# the state whose name carries the typing.
+gm_name_carrier_open = {
+	scope:gm_state = {
+		set_variable = gm_being_named
+	}
+	scope:gm_carrier = {
+		set_variable = gm_carries_name
+	}
+	set_variable = {
+		name = gm_name_carrier_state
+		value = scope:gm_carrier
+	}
+}
+
+# Country scope. Ends a naming; the caller resets the carrier's name first
+# when it should.
 gm_name_carrier_close = {
 	if = {
 		limit = {
@@ -10,16 +30,11 @@ gm_name_carrier_close = {
 			exists = var:gm_name_carrier_state
 		}
 		var:gm_name_carrier_state = {
-			if = {
-				limit = {
-					NOT = { owner = ROOT }
-				}
-				reset_hub_names = yes
-			}
 			remove_variable = gm_carries_name
 		}
 	}
 	remove_variable = gm_name_carrier_state
+	remove_variable = gm_carrier_was_renamed
 	every_scope_state = {
 		limit = { has_variable = gm_being_named }
 		remove_variable = gm_being_named
