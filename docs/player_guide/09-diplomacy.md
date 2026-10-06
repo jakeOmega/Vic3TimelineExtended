@@ -290,7 +290,8 @@ A filled slot stays filled if the count drops, when the bloc loses rank or a
 leader without the technologies takes over, but the bloc can't add a principle
 until it is back under its count. Upgrading a principle, or changing a slot to
 another principle, never needs a free slot. The leader can remove a principle
-with the cross on its slot. AI leaders keep to the same count.
+with the cross on its slot; the mandates spent on it are not refunded. AI
+leaders keep to the same count.
 
 ### The Diplomatic Framework identity
 
