@@ -123,7 +123,10 @@ pm_neural_grafting = {
 # A training cadre for the conscripts: the barracks reinforces its own
 # battalion slowly, and each staffed level adds two reserve battalions to the
 # state, which the monthly state pulse turns into conscription rate and
-# conscription-center capacity (te_update_reserve_cadre_modifiers).
+# conscription-center capacity (te_update_reserve_cadre_modifiers). Gated to
+# era 6 (Public Works Programs, which also raises the barracks cap: the state
+# organizing civilian manpower, as the army-run Civilian Conservation Corps
+# did) as well as the conscription laws.
 pm_reserve_cadre = {
 	texture = "gfx/interface/icons/production_method_icons/irregular_infantry.dds"
 
@@ -133,6 +136,9 @@ pm_reserve_cadre = {
 	}
 	disallowing_laws = {
 		law_warrior_caste
+	}
+	unlocking_technologies = {
+		public_works_programs
 	}
 	unlocking_laws = {
 		law_national_militia
@@ -158,6 +164,8 @@ pm_reserve_cadre = {
 # Forces lose the strength officers would give them, and each staffed level
 # counts as a battalion with commissars: the country's share of them scales
 # te_political_commissars_indoctrination (attraction to the governing groups).
+# Gated to era 6 (Mass Media: political messaging to a mass audience) as well
+# as the regime laws.
 pm_political_commissars = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 
@@ -169,6 +177,9 @@ pm_political_commissars = {
 	}
 	disallowing_laws = {
 		law_warrior_caste
+	}
+	unlocking_technologies = {
+		mass_media
 	}
 	unlocking_laws = {
 		law_single_party_state
