@@ -2403,18 +2403,25 @@ types cultural_hegemony_widget_types
 				### te_history_plot layouts below, as in every other history chart. #633
 				### set them in a type derived from te_history_plot instead, and that type
 				### drew nothing, even on its own (gui_modding_guide.md gotcha #37).
+				### 5 / 20 / 100 years at 80 / 20 / 4px are 400px of bars. The
+				### frame is sized to them, not left at the monthly charts' 496px
+				### (which left ~90px empty on the left of a full 100 years):
+				### 48px for the axis labels + 400 + the plots' 8px right margin.
+				### Bars are 168px tall, 6px clear of the frame top and bottom,
+				### level with the two axis labels.
+				blockoverride "plot_size" { size = { 456 180 } }
 				blockoverride "plot_layouts" {
 					te_history_plot = {
 						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
-						blockoverride "bar_size" { size = { 80 84 } }
+						blockoverride "bar_size" { size = { 80 168 } }
 					}
 					te_history_plot = {
 						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '20')]"
-						blockoverride "bar_size" { size = { 20 84 } }
+						blockoverride "bar_size" { size = { 20 168 } }
 					}
 					te_history_plot = {
 						visible = "[Not(Or(GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20')))]"
-						blockoverride "bar_size" { size = { 4 84 } }
+						blockoverride "bar_size" { size = { 4 168 } }
 					}
 					textbox = {
 						parentanchor = left|top

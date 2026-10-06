@@ -273,6 +273,25 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
             self.assertLessEqual(_data_roots(loc[key]), {"ScriptContainer"})
         self.assertEqual(re.findall(r"GetVariableValue\('ch_model_hist_(\w+)'\)", loc["ch_model_hist_tt"]), MODELS)
 
+    def test_full_ranges_fill_the_frame(self):
+        # A full 5 / 20 / 100 years reaches from the axis labels to the frame's
+        # right edge: the bars once filled 400 of the monthly charts' 496px and
+        # left ~90px empty on the left. Integer bar widths must divide evenly
+        # (mod_systems.md, History Store and Charts), and the bars sit 6px clear
+        # of the frame top and bottom, where the axis labels are placed.
+        history = _type_body(read("gui/journal_entry_widgets/cultural_hegemony_widget.gui"), "te_ch_sec_history")
+        chart = history[history.index("te_history_chart = {"):]
+        width, height = map(int, re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart).groups())
+        bars = [tuple(map(int, b)) for b in re.findall(r'blockoverride "bar_size" \{ size = \{ (\d+) (\d+) \} \}', chart)]
+        label_column, right_margin = 48, 8
+        self.assertEqual(len(bars), 3)
+        for years, (bar_width, bar_height) in zip((5, 20, 100), bars):
+            with self.subTest(years=years):
+                self.assertEqual(years * bar_width, width - label_column - right_margin)
+                self.assertEqual(bar_height, height - 12)
+        self.assertIn("margin_right = 8", _type_body(read("gui/journal_entry_widgets/te_history_chart.gui"), "te_history_plot"))
+        self.assertEqual(re.findall(r"position = \{ 8 (-?6) \}", chart), ["6", "-6"])
+
     def test_only_sampler_is_wired_after_global_aggregates(self):
         effects = read("common/scripted_effects/cultural_hegemony_effects.txt")
         call = "te_history_record_cultural_hegemony_models = yes"
