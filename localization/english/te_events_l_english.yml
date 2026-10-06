@@ -5074,6 +5074,24 @@
  te_debug_nuclear.3.tt_step:0 "The world's monthly taboo step runs now"
 
 #
+# TE_DEBUG_PB
+#
+ te_debug_pb.1.a:0 "Form a two-member bloc led by us"
+ te_debug_pb.1.b:0 "Fill the next free slot by script"
+ te_debug_pb.1.c:0 "One more technology slot"
+ te_debug_pb.1.d:0 "Test controls for principle slots 5 to 8. Technology slots: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_tech_principle_slots')|0]#!."
+ te_debug_pb.1.e:0 "One fewer technology slot"
+ te_debug_pb.1.f:0 "Fired from the console only."
+ te_debug_pb.1.g:0 "Open slot 3 regardless of rank"
+ te_debug_pb.1.h:0 "Close slot 3 again"
+ te_debug_pb.1.i:0 "Add Construction I by script"
+ te_debug_pb.1.j:0 "Remove Construction I by key"
+ te_debug_pb.1.k:0 "Remove Construction I through a saved scope"
+ te_debug_pb.1.l:0 "Toggle fast mandates"
+ te_debug_pb.1.m:0 "Close"
+ te_debug_pb.1.t:0 "Power Bloc Slots Test Console"
+
+#
 # TE_DEBUG_RESETTLEMENT
 #
  te_debug_resettlement.1.a:0 "Found a Settlement Authority in our emptiest frontier"

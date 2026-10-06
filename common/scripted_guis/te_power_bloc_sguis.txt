@@ -1,0 +1,26 @@
+﻿# Power bloc principle slots (PROBE, te-pb-principle-slots-probe).
+
+# The remove button on an occupied principle slot (gui/power_bloc_panel.gui,
+# active_principle_slot). The GUI passes the slot's principle as
+# scope:te_principle through PowerBlocPrinciple.MakeScope, which no vanilla GUI
+# calls; the probe checks that, and whether remove_principle takes a scope
+# rather than a principle key.
+te_pb_remove_principle_sgui = {
+	scope = country
+	saved_scopes = { te_principle }
+
+	is_shown = {
+		is_power_bloc_leader = yes
+	}
+
+	is_valid = {
+		is_power_bloc_leader = yes
+		exists = scope:te_principle
+	}
+
+	effect = {
+		power_bloc = {
+			remove_principle = scope:te_principle
+		}
+	}
+}

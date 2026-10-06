@@ -1543,7 +1543,7 @@ types power_bloc_panel_types
 					spacing = 10
 					parentanchor = hcenter
 
-					# PRINCIPLE SLOTS 1 AND 3
+					# PRINCIPLE SLOTS 1, 3, 5 AND 7
 					flowcontainer = {
 						direction = vertical
 						spacing = 10
@@ -1560,6 +1560,26 @@ types power_bloc_panel_types
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)2' )]"
 							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
+
+							blockoverride "tooltip_alignment" {
+								using = tooltip_se
+							}
+						}
+
+						# Slot 5: opened by technology (te_pb_tech_principle_slots > 0); the engine has no unlock rule past slot 4
+						principle_slot = {
+							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)4' )]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)0')))]"
+
+							blockoverride "tooltip_alignment" {
+								using = tooltip_se
+							}
+						}
+
+						# Slot 7: opened by technology (te_pb_tech_principle_slots > 2); the engine has no unlock rule past slot 4
+						principle_slot = {
+							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)6' )]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)2')))]"
 
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
@@ -1595,7 +1615,7 @@ types power_bloc_panel_types
 						}
 					}
 
-					# PRINCIPLE SLOTS 2 AND 4
+					# PRINCIPLE SLOTS 2, 4, 6 AND 8
 					flowcontainer = {
 						direction = vertical
 						spacing = 10
@@ -1609,6 +1629,18 @@ types power_bloc_panel_types
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)3' )]"
 							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
+						}
+
+						# Slot 6: opened by technology (te_pb_tech_principle_slots > 1); the engine has no unlock rule past slot 4
+						principle_slot = {
+							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)5' )]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)1')))]"
+						}
+
+						# Slot 8: opened by technology (te_pb_tech_principle_slots > 3); the engine has no unlock rule past slot 4
+						principle_slot = {
+							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)7' )]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)3')))]"
 						}
 						
 					}
@@ -2984,6 +3016,18 @@ types power_bloc_panel_types
 			visible = "[And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsActive)]"
 			datacontext = "[PowerBlocPrincipleSlot.GetPrinciple]" # needed by principle_icon
 
+			# PROBE (te-pb-principle-slots-probe): remove through a scripted GUI, passing the
+			# principle with PowerBlocPrinciple.MakeScope (unused in vanilla)
+			blockoverride "remove_button_visibility" {
+				visible = yes
+			}
+
+			blockoverride "remove_button_properties" {
+				tooltip = "te_debug_pb_sgui_remove_tt"
+				enabled = "[GetScriptedGui('te_pb_remove_principle_sgui').IsValid(GuiScope.SetRoot(PowerBloc.GetLeader.MakeScope).AddScope('te_principle', PowerBlocPrinciple.MakeScope).End)]"
+				onclick = "[GetScriptedGui('te_pb_remove_principle_sgui').Execute(GuiScope.SetRoot(PowerBloc.GetLeader.MakeScope).AddScope('te_principle', PowerBlocPrinciple.MakeScope).End)]"
+			}
+
 			blockoverride "tooltip" {
 				tooltipwidget = {
 					FancyTooltip_PowerBlocPrincipleSlot = {
@@ -3006,6 +3050,26 @@ types power_bloc_panel_types
 			}
 		}
 		
+		# PROBE (te-pb-principle-slots-probe): vanilla's formation slots remove with
+		# PowerBlocFormationPrincipleSlot.RemovePrinciple; try the same on a bloc slot
+		button_icon_round_action = {
+			visible = "[And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsActive)]"
+			size = { 25 25 }
+			position = { 175 -10 }
+			tooltip = "te_debug_pb_native_remove_tt"
+			using = tooltip_above
+			allow_outside = yes
+			onclick = "[PowerBlocPrincipleSlot.RemovePrinciple]"
+
+			blockoverride "icon" {
+				texture = "gfx/interface/buttons/button_icons/close.dds"
+			}
+
+			blockoverride "icon_size" {
+				size = { 100% 100% }
+			}
+		}
+
 		# ACTIVE PRINCIPLE SLOT - MEMBER OR OUTSIDER - NOT INTERACTABLE
 		locked_active_principle_slot = {
 			visible = "[And(Not(PowerBloc.IsLeader(GetPlayer.Self)), PowerBlocPrincipleSlot.IsActive)]"

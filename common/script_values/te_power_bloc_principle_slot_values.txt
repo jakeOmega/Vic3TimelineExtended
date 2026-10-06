@@ -1,0 +1,10 @@
+﻿# Power bloc principle slots 5-8 (PROBE, te-pb-principle-slots-probe).
+
+# Country scope (the bloc leader): how many of slots 5-8 the leader's
+# technology opens. gui/power_bloc_panel.gui reads it through
+# PowerBloc.GetLeader.MakeScope.ScriptValue to show or hide those slots.
+te_pb_tech_principle_slots = {
+	value = modifier:country_te_pb_principle_slots_add
+	min = 0
+	max = 4
+}

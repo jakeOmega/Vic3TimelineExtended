@@ -70,7 +70,7 @@ NPops = {
 }
 
 NPowerBlocs = {
-	MAX_PRINCIPLES = 4
+	MAX_PRINCIPLES = 8					# PROBE (te-pb-principle-slots-probe): slots 5-8 have no unlock rule the engine reads; gui/power_bloc_panel.gui caps them by technology
 	MAX_MANDATES = 5
 }
 

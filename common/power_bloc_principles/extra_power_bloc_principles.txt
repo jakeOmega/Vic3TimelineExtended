@@ -4404,3 +4404,20 @@ principle_monetary_union_5 = {
 		}
 	}
 }
+
+# PROBE (te-pb-principle-slots-probe): a deliberately strict gate, with no
+# exemption for a bloc that already holds the principle, to see (1) whether a
+# power_bloc read from `possible` logs errors, (2) whether the principle is
+# offered at formation, when ROOT has no bloc yet, and (3) whether the engine
+# removes a held principle once its `possible` turns false (hold it, then
+# fill a third slot).
+INJECT:principle_construction_1 = {
+	possible = {
+		custom_tooltip = {
+			text = te_debug_pb_probe_gate_tt
+			power_bloc ?= {
+				used_principle_slots < 3
+			}
+		}
+	}
+}
