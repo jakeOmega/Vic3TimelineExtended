@@ -2,6 +2,10 @@
 # Unique Buildings for Flavored Companies
 #==================================================
 #
+# Every buildable entry carries ai_value = { value = te_company_flagship_ai_value }
+# (common/script_values/te_company_ai_values.txt), after ai_nationalization_desire;
+# test_company_ai.py fails on one without it.
+#
 # Every buildable entry allows one site per country: the state that already
 # has the building, or any state of a country that has none.
 #
@@ -52,6 +56,7 @@ building_volkswagen_autostadt = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_volkswagen_autostadt
 	}
@@ -109,6 +114,7 @@ building_toyota_kaikan_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_toyota_kaikan_plant
 	}
@@ -166,6 +172,7 @@ building_samsung_digital_city = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_samsung_digital_city
 	}
@@ -223,6 +230,7 @@ building_hp_labs = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hp_labs
 	}
@@ -280,6 +288,7 @@ building_sony_pictures_studios = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sony_pictures_studios
 	}
@@ -337,6 +346,7 @@ building_ikea_almhult_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ikea_almhult_campus
 	}
@@ -394,6 +404,7 @@ building_intel_ronler_acres = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_intel_ronler_acres
 	}
@@ -451,6 +462,7 @@ building_microsoft_redmond_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_microsoft_redmond_campus
 	}
@@ -508,6 +520,7 @@ building_apple_park = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_apple_park
 	}
@@ -565,6 +578,7 @@ building_tsmc_fab_18 = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tsmc_fab_18
 	}
@@ -622,6 +636,7 @@ building_huawei_ox_horn_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_huawei_ox_horn_campus
 	}
@@ -679,6 +694,7 @@ building_amazon_fulfillment_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_amazon_fulfillment_center
 	}
@@ -736,6 +752,7 @@ building_nvidia_endeavor_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nvidia_endeavor_campus
 	}
@@ -793,6 +810,7 @@ building_googleplex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_googleplex
 	}
@@ -850,6 +868,7 @@ building_netflix_animation_studios = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_netflix_animation_studios
 	}
@@ -907,6 +926,7 @@ building_spacex_starbase = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_spacex_starbase
 	}
@@ -964,6 +984,7 @@ building_bytedance_data_fortress = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bytedance_data_fortress
 	}
@@ -1021,6 +1042,7 @@ building_openai_research_lab = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_openai_research_lab
 	}
@@ -1078,6 +1100,7 @@ building_catl_gigafactory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_catl_gigafactory
 	}
@@ -1135,6 +1158,7 @@ building_boston_dynamics_ai_institute = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_boston_dynamics_ai_institute
 	}
@@ -1192,6 +1216,7 @@ building_asml_veldhoven_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_asml_veldhoven_campus
 	}
@@ -1249,6 +1274,7 @@ building_lockheed_skunk_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_lockheed_skunk_works
 	}
@@ -1306,6 +1332,7 @@ building_bae_samlesbury_aerodrome = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bae_samlesbury_aerodrome
 	}
@@ -1363,6 +1390,7 @@ building_roscosmos_vostochny_cosmodrome = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_roscosmos_vostochny_cosmodrome
 	}
@@ -1420,6 +1448,7 @@ building_airbus_lagardere_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_airbus_lagardere_plant
 	}
@@ -1477,6 +1506,7 @@ building_dassault_merignac_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_dassault_merignac_plant
 	}
@@ -1534,6 +1564,7 @@ building_hyundai_ulsan_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hyundai_ulsan_factory
 	}
@@ -1591,6 +1622,7 @@ building_sap_headquarters = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sap_headquarters
 	}
@@ -1648,6 +1680,7 @@ building_tencent_seafront_towers = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tencent_seafront_towers
 	}
@@ -1705,6 +1738,7 @@ building_alibaba_cainiao_park = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_alibaba_cainiao_park
 	}
@@ -1762,6 +1796,7 @@ building_nintendo_development_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nintendo_development_center
 	}
@@ -1819,6 +1854,7 @@ building_gazprom_lakhta_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_gazprom_lakhta_center
 	}
@@ -1876,6 +1912,7 @@ building_saudi_aramco_abqaiq_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_saudi_aramco_abqaiq_plant
 	}
@@ -1933,6 +1970,7 @@ building_petrobras_cenpes_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_petrobras_cenpes_center
 	}
@@ -1990,6 +2028,7 @@ building_rosatom_mayak_association = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rosatom_mayak_association
 	}
@@ -2047,6 +2086,7 @@ building_oracle_cloud_data_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_oracle_cloud_data_center
 	}
@@ -2104,6 +2144,7 @@ building_softbank_vision_fund_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_softbank_vision_fund_hq
 	}
@@ -2161,6 +2202,7 @@ building_roche_tower = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_roche_tower
 	}
@@ -2218,6 +2260,7 @@ building_pfizer_rd_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_pfizer_rd_campus
 	}
@@ -2275,6 +2318,7 @@ building_vale_carajas_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_vale_carajas_mine
 	}
@@ -2332,6 +2376,7 @@ building_disney_world = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_disney_world
 	}
@@ -2389,6 +2434,7 @@ building_universal_studios_hollywood = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_universal_studios_hollywood
 	}
@@ -2446,6 +2492,7 @@ building_verizon_building = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_verizon_building
 	}
@@ -2503,6 +2550,7 @@ building_reliance_jamnagar_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_reliance_jamnagar_refinery
 	}
@@ -2560,6 +2608,7 @@ building_fanuc_forest = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_fanuc_forest
 	}
@@ -2617,6 +2666,7 @@ building_eni_palazzo = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_eni_palazzo
 	}
@@ -2674,6 +2724,7 @@ building_ferrari_maranello_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ferrari_maranello_factory
 	}
@@ -2731,6 +2782,7 @@ building_blackberry_rim_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_blackberry_rim_campus
 	}
@@ -2788,6 +2840,7 @@ building_shopify_fulfillment_hub = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_shopify_fulfillment_hub
 	}
@@ -2848,6 +2901,7 @@ building_bhp_mount_whaleback_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bhp_mount_whaleback_mine
 	}
@@ -2905,6 +2959,7 @@ building_cochlear_global_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cochlear_global_hq
 	}
@@ -2964,6 +3019,7 @@ building_infosys_mysore_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_infosys_mysore_campus
 	}
@@ -3021,6 +3077,7 @@ building_jsw_vijayanagar_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_jsw_vijayanagar_works
 	}
@@ -3082,6 +3139,7 @@ building_generic_rd_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_rd_complex
 	}
@@ -3141,6 +3199,7 @@ building_generic_logistics_hub = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_logistics_hub
 	}
@@ -3227,6 +3286,7 @@ building_generic_industrial_zone = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_industrial_zone
 	}
@@ -3358,6 +3418,7 @@ building_generic_materials_lab = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_materials_lab
 	}
@@ -3417,6 +3478,7 @@ building_generic_robotics_institute = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_robotics_institute
 	}
@@ -3500,6 +3562,7 @@ building_generic_data_fortress = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_data_fortress
 	}
@@ -3583,6 +3646,7 @@ building_generic_media_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_media_hq
 	}
@@ -3642,6 +3706,7 @@ building_generic_power_hub = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_power_hub
 		pmg_carbon_capture_generic_power_hub
@@ -3750,6 +3815,7 @@ building_generic_proving_grounds = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_proving_grounds
 	}
@@ -3809,6 +3875,7 @@ building_generic_resource_depository = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_resource_depository
 	}
@@ -3944,6 +4011,7 @@ building_krupp_essen_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_krupp_essen_works
 	}
@@ -4001,6 +4069,7 @@ building_standard_oil_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_standard_oil_refinery
 	}
@@ -4058,6 +4127,7 @@ building_carnegie_homestead_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_carnegie_homestead_mill
 		pmg_carbon_capture_carnegie_homestead_mill
@@ -4116,6 +4186,7 @@ building_ford_rouge_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ford_rouge_plant
 	}
@@ -4173,6 +4244,7 @@ building_eic_trading_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_eic_trading_house
 	}
@@ -4234,6 +4306,7 @@ building_schneider_le_creusot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_schneider_le_creusot
 		pmg_carbon_capture_schneider_le_creusot
@@ -4292,6 +4365,7 @@ building_putilov_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_putilov_works
 	}
@@ -4349,6 +4423,7 @@ building_mitsubishi_nagasaki_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mitsubishi_nagasaki_shipyard
 	}
@@ -4406,6 +4481,7 @@ building_tata_jamshedpur_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tata_jamshedpur_works
 		pmg_carbon_capture_tata_jamshedpur_works
@@ -4464,6 +4540,7 @@ building_siemens_erlangen_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_siemens_erlangen_campus
 	}
@@ -4525,6 +4602,7 @@ building_de_beers_sorting_office = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_de_beers_sorting_office
 	}
@@ -4582,6 +4660,7 @@ building_nobel_baku_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nobel_baku_refinery
 	}
@@ -4639,6 +4718,7 @@ building_ge_schenectady_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ge_schenectady_works
 	}
@@ -4700,6 +4780,7 @@ building_mitsui_trading_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mitsui_trading_house
 	}
@@ -4757,6 +4838,7 @@ building_fiat_lingotto_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_fiat_lingotto_factory
 	}
@@ -4818,6 +4900,7 @@ building_generic_granary_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_granary_complex
 	}
@@ -4878,6 +4961,7 @@ building_generic_textile_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_textile_depot
 	}
@@ -4938,6 +5022,7 @@ building_generic_cold_storage = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_cold_storage
 	}
@@ -4997,6 +5082,7 @@ building_generic_paper_mill_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_paper_mill_complex
 	}
@@ -5056,6 +5142,7 @@ building_generic_foundry_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_foundry_complex
 		pmg_carbon_capture_generic_foundry_complex
@@ -5116,6 +5203,7 @@ building_generic_machine_shop = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_machine_shop
 	}
@@ -5175,6 +5263,7 @@ building_generic_chem_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_chem_works
 	}
@@ -5234,6 +5323,7 @@ building_generic_tank_farm = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_tank_farm
 	}
@@ -5293,6 +5383,7 @@ building_generic_ordnance_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_ordnance_depot
 	}
@@ -5352,6 +5443,7 @@ building_generic_motor_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_motor_works
 	}
@@ -5411,6 +5503,7 @@ building_generic_dry_dock = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_dry_dock
 	}
@@ -5470,6 +5563,7 @@ building_generic_arsenal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_arsenal
 	}
@@ -5529,6 +5623,7 @@ building_generic_fish_market = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_fish_market
 	}
@@ -5592,6 +5687,7 @@ building_generic_colonial_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_colonial_depot
 	}
@@ -5650,6 +5746,7 @@ building_generic_export_warehouse = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_export_warehouse
 	}
@@ -5708,6 +5805,7 @@ building_generic_electronics_lab = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_electronics_lab
 	}
@@ -5766,6 +5864,7 @@ building_generic_assay_office = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_assay_office
 	}
@@ -5824,6 +5923,7 @@ building_generic_ore_processing = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_ore_processing
 	}
@@ -5882,6 +5982,7 @@ building_generic_mineral_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_mineral_refinery
 		pmg_carbon_capture_generic_mineral_refinery
@@ -5941,6 +6042,7 @@ building_generic_silk_exchange = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_silk_exchange
 	}
@@ -5999,6 +6101,7 @@ building_generic_vintner_hall = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_vintner_hall
 	}
@@ -6058,6 +6161,7 @@ building_generic_furniture_showroom = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_furniture_showroom
 	}
@@ -6117,6 +6221,7 @@ building_generic_lumber_yard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_lumber_yard
 	}
@@ -6176,6 +6281,7 @@ building_generic_dye_fiber_park = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_generic_dye_fiber_park
 	}
@@ -6238,6 +6344,7 @@ building_aker_oslo_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_aker_oslo_shipyard
 	}
@@ -6294,6 +6401,7 @@ building_allatini_thessaloniki_flour_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_allatini_thessaloniki_flour_mill
 	}
@@ -6350,6 +6458,7 @@ building_altos_hornos_baracaldo_furnaces = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_altos_hornos_baracaldo_furnaces
 		pmg_carbon_capture_altos_hornos_baracaldo_furnaces
@@ -6407,6 +6516,7 @@ building_anglo_persian_abadan_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_anglo_persian_abadan_refinery
 	}
@@ -6463,6 +6573,7 @@ building_anglo_sicilian_licata_wharf = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_anglo_sicilian_licata_wharf
 	}
@@ -6519,6 +6630,7 @@ building_ansaldo_sestri_ponente_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ansaldo_sestri_ponente_works
 	}
@@ -6575,6 +6687,7 @@ building_ap_moller_copenhagen_wharf = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ap_moller_copenhagen_wharf
 	}
@@ -6631,6 +6744,7 @@ building_argentinian_wine_mendoza_bodega = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_argentinian_wine_mendoza_bodega
 	}
@@ -6687,6 +6801,7 @@ building_armstrong_elswick_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_armstrong_elswick_works
 	}
@@ -6743,6 +6858,7 @@ building_assam_company_nazira_tea_estate = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_assam_company_nazira_tea_estate
 	}
@@ -6799,6 +6915,7 @@ building_b_grimm_bangkok_warehouse = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_b_grimm_bangkok_warehouse
 	}
@@ -6855,6 +6972,7 @@ building_bacardi_santiago_distillery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bacardi_santiago_distillery
 	}
@@ -6911,6 +7029,7 @@ building_basf_ludwigshafen_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_basf_ludwigshafen_plant
 		pmg_carbon_capture_basf_ludwigshafen_plant
@@ -6968,6 +7087,7 @@ building_basileiades_piraeus_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_basileiades_piraeus_works
 	}
@@ -7024,6 +7144,7 @@ building_bengal_coal_raniganj_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bengal_coal_raniganj_mine
 	}
@@ -7080,6 +7201,7 @@ building_bolckow_eston_ironworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bolckow_eston_ironworks
 		pmg_carbon_capture_bolckow_eston_ironworks
@@ -7137,6 +7259,7 @@ building_bombay_burmah_rangoon_timber_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bombay_burmah_rangoon_timber_depot
 	}
@@ -7193,6 +7316,7 @@ building_bombay_dyeing_spring_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bombay_dyeing_spring_mills
 	}
@@ -7249,6 +7373,7 @@ building_bunge_born_buenos_aires_grain_silo = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bunge_born_buenos_aires_grain_silo
 	}
@@ -7305,6 +7430,7 @@ building_calcutta_electric_victoria_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_calcutta_electric_victoria_house
 		pmg_carbon_capture_calcutta_electric_victoria_house
@@ -7362,6 +7488,7 @@ building_caribbean_petroleum_maracaibo_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_caribbean_petroleum_maracaibo_depot
 	}
@@ -7418,6 +7545,7 @@ building_ccci_leopoldville_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ccci_leopoldville_depot
 	}
@@ -7474,6 +7602,7 @@ building_cfr_bucharest_railway_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cfr_bucharest_railway_works
 	}
@@ -7530,6 +7659,7 @@ building_cgv_haut_brion_estate = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cgv_haut_brion_estate
 	}
@@ -7586,6 +7716,7 @@ building_chr_hansen_copenhagen_laboratory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_chr_hansen_copenhagen_laboratory
 		pmg_carbon_capture_chr_hansen_copenhagen_laboratory
@@ -7643,6 +7774,7 @@ building_colt_hartford_armory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_colt_hartford_armory
 	}
@@ -7699,6 +7831,7 @@ building_sansinena_avellaneda_frigorifico = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sansinena_avellaneda_frigorifico
 	}
@@ -7755,6 +7888,7 @@ building_cordoba_railway_alta_gracia_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cordoba_railway_alta_gracia_works
 	}
@@ -7811,6 +7945,7 @@ building_csfa_sicilian_sulfur_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_csfa_sicilian_sulfur_depot
 	}
@@ -7867,6 +8002,7 @@ building_afghan_nassaji_kabul_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_afghan_nassaji_kabul_mills
 	}
@@ -7923,6 +8059,7 @@ building_sassoon_bombay_docks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sassoon_bombay_docks
 	}
@@ -7979,6 +8116,7 @@ building_dmc_mulhouse_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_dmc_mulhouse_mills
 	}
@@ -8035,6 +8173,7 @@ building_douro_wine_lodge = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_douro_wine_lodge
 	}
@@ -8091,6 +8230,7 @@ building_duro_la_felguera_steelworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_duro_la_felguera_steelworks
 		pmg_carbon_capture_duro_la_felguera_steelworks
@@ -8148,6 +8288,7 @@ building_eea_dock_sud_power_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_eea_dock_sud_power_station
 		pmg_carbon_capture_eea_dock_sud_power_station
@@ -8205,6 +8346,7 @@ building_egyptian_rail_cairo_central = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_egyptian_rail_cairo_central
 	}
@@ -8261,6 +8403,7 @@ building_el_aguila_tampico_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_el_aguila_tampico_refinery
 	}
@@ -8317,6 +8460,7 @@ building_electricidad_caracas_power_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_electricidad_caracas_power_house
 		pmg_carbon_capture_electricidad_caracas_power_house
@@ -8374,6 +8518,7 @@ building_elso_budapesti_steam_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_elso_budapesti_steam_mill
 	}
@@ -8430,6 +8575,7 @@ building_ericsson_telefonplan = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ericsson_telefonplan
 	}
@@ -8486,6 +8632,7 @@ building_erste_brunner_maschinenwerk = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_erste_brunner_maschinenwerk
 	}
@@ -8542,6 +8689,7 @@ building_espana_industrial_sants_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_espana_industrial_sants_mills
 	}
@@ -8598,6 +8746,7 @@ building_estaleiro_maua_niteroi_dockyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_estaleiro_maua_niteroi_dockyard
 	}
@@ -8654,6 +8803,7 @@ building_estanifera_llallagua_tin_concentrator = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_estanifera_llallagua_tin_concentrator
 	}
@@ -8710,6 +8860,7 @@ building_famae_santiago_arsenal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_famae_santiago_arsenal
 	}
@@ -8766,6 +8917,7 @@ building_fcm_la_seyne_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_fcm_la_seyne_shipyard
 	}
@@ -8822,6 +8974,7 @@ building_foochow_mawei_dockyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_foochow_mawei_dockyard
 	}
@@ -8878,6 +9031,7 @@ building_franco_belge_raismes_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_franco_belge_raismes_works
 	}
@@ -8934,6 +9088,7 @@ building_fundicao_ipanema_sorocaba_foundry = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_fundicao_ipanema_sorocaba_foundry
 		pmg_carbon_capture_fundicao_ipanema_sorocaba_foundry
@@ -8991,6 +9146,7 @@ building_fundidora_monterrey_blast_furnace = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_fundidora_monterrey_blast_furnace
 		pmg_carbon_capture_fundidora_monterrey_blast_furnace
@@ -9048,6 +9204,7 @@ building_galician_boryslaw_oil_field = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_galician_boryslaw_oil_field
 	}
@@ -9104,6 +9261,7 @@ building_thonet_bystrice_bentwood_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_thonet_bystrice_bentwood_factory
 	}
@@ -9160,6 +9318,7 @@ building_getzner_bludenz_textile_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_getzner_bludenz_textile_works
 	}
@@ -9216,6 +9375,7 @@ building_gotaverken_gothenburg_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_gotaverken_gothenburg_shipyard
 	}
@@ -9272,6 +9432,7 @@ building_gran_azucarera_aranjuez_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_gran_azucarera_aranjuez_refinery
 	}
@@ -9328,6 +9489,7 @@ building_great_indian_railway_jamalpur_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_great_indian_railway_jamalpur_works
 	}
@@ -9384,6 +9546,7 @@ building_guinness_st_james_gate_brewery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_guinness_st_james_gate_brewery
 	}
@@ -9440,6 +9603,7 @@ building_gwr_swindon_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_gwr_swindon_works
 	}
@@ -9496,6 +9660,7 @@ building_hanseong_jeongi_gwanghwamun_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hanseong_jeongi_gwanghwamun_station
 		pmg_carbon_capture_hanseong_jeongi_gwanghwamun_station
@@ -9553,6 +9718,7 @@ building_hanyang_arsenal_iron_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hanyang_arsenal_iron_works
 	}
@@ -9609,6 +9775,7 @@ building_hbc_york_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hbc_york_factory
 	}
@@ -9665,6 +9832,7 @@ building_hispano_suiza_barcelona_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hispano_suiza_barcelona_factory
 	}
@@ -9721,6 +9889,7 @@ building_ilva_bagnoli_steelworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ilva_bagnoli_steelworks
 		pmg_carbon_capture_ilva_bagnoli_steelworks
@@ -9778,6 +9947,7 @@ building_imperial_arsenal_golden_horn = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_imperial_arsenal_golden_horn
 	}
@@ -9834,6 +10004,7 @@ building_ethiopian_railway_dire_dawa_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ethiopian_railway_dire_dawa_depot
 	}
@@ -9890,6 +10061,7 @@ building_imperial_tobacco_wills_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_imperial_tobacco_wills_factory
 	}
@@ -9946,6 +10118,7 @@ building_ingolstadt_power_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ingolstadt_power_station
 		pmg_carbon_capture_ingolstadt_power_station
@@ -10003,6 +10176,7 @@ building_iranian_state_railway_veresk_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_iranian_state_railway_veresk_station
 	}
@@ -10059,6 +10233,7 @@ building_izhevsk_arms_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_izhevsk_arms_factory
 	}
@@ -10115,6 +10290,7 @@ building_coats_ferguslie_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_coats_ferguslie_mills
 	}
@@ -10171,6 +10347,7 @@ building_klein_galician_paper_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_klein_galician_paper_mill
 	}
@@ -10227,6 +10404,7 @@ building_jiangnan_nanjing_brocade_hall = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_jiangnan_nanjing_brocade_hall
 	}
@@ -10283,6 +10461,7 @@ building_jingdezhen_imperial_kiln = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_jingdezhen_imperial_kiln
 	}
@@ -10339,6 +10518,7 @@ building_john_brown_clydebank_yard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_john_brown_clydebank_yard
 	}
@@ -10395,6 +10575,7 @@ building_cockerill_seraing_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cockerill_seraing_works
 		pmg_carbon_capture_cockerill_seraing_works
@@ -10452,6 +10633,7 @@ building_john_holt_lagos_trading_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_john_holt_lagos_trading_house
 	}
@@ -10508,6 +10690,7 @@ building_hughes_yuzovka_steelworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hughes_yuzovka_steelworks
 		pmg_carbon_capture_hughes_yuzovka_steelworks
@@ -10565,6 +10748,7 @@ building_kablin_zarate_paper_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_kablin_zarate_paper_mill
 	}
@@ -10621,6 +10805,7 @@ building_kaiping_tangshan_colliery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_kaiping_tangshan_colliery
 	}
@@ -10677,6 +10862,7 @@ building_kinkozan_kiyomizu_kiln = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_kinkozan_kiyomizu_kiln
 	}
@@ -10733,6 +10919,7 @@ building_kirgizian_copper_smelter = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_kirgizian_copper_smelter
 	}
@@ -10789,6 +10976,7 @@ building_klanicko_belgrade_slaughterhouse = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_klanicko_belgrade_slaughterhouse
 	}
@@ -10845,6 +11033,7 @@ building_meissen_porcelain_manufactory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_meissen_porcelain_manufactory
 	}
@@ -10901,6 +11090,7 @@ building_kouppas_piraeus_foundry = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_kouppas_piraeus_foundry
 	}
@@ -10957,6 +11147,7 @@ building_la_rosada_buenos_aires_arsenal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_la_rosada_buenos_aires_arsenal
 	}
@@ -11013,6 +11204,7 @@ building_lanfang_pontianak_kongsi_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_lanfang_pontianak_kongsi_house
 	}
@@ -11069,6 +11261,7 @@ building_lee_wilson_plantation_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_lee_wilson_plantation_depot
 	}
@@ -11125,6 +11318,7 @@ building_lilpop_warsaw_metalworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_lilpop_warsaw_metalworks
 		pmg_carbon_capture_lilpop_warsaw_metalworks
@@ -11182,6 +11376,7 @@ building_lkab_kiruna_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_lkab_kiruna_mine
 	}
@@ -11238,6 +11433,7 @@ building_moser_karlsbad_glass_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_moser_karlsbad_glass_works
 	}
@@ -11294,6 +11490,7 @@ building_madura_mills_madurai_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_madura_mills_madurai_complex
 	}
@@ -11350,6 +11547,7 @@ building_worth_rue_de_la_paix_atelier = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_worth_rue_de_la_paix_atelier
 	}
@@ -11406,6 +11604,7 @@ building_manfred_weiss_csepel_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_manfred_weiss_csepel_works
 	}
@@ -11462,6 +11661,7 @@ building_mantero_como_silk_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mantero_como_silk_mill
 	}
@@ -11518,6 +11718,7 @@ building_mantetsu_dalian_railway_hub = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mantetsu_dalian_railway_hub
 	}
@@ -11574,6 +11775,7 @@ building_maple_tottenham_court_showroom = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_maple_tottenham_court_showroom
 	}
@@ -11630,6 +11832,7 @@ building_massey_harris_toronto_implement_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_massey_harris_toronto_implement_works
 	}
@@ -11686,6 +11889,7 @@ building_gavrilovic_petrinja_meatworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_gavrilovic_petrinja_meatworks
 	}
@@ -11742,6 +11946,7 @@ building_mav_budapest_locomotive_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mav_budapest_locomotive_works
 	}
@@ -11798,6 +12003,7 @@ building_anzin_colliery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_anzin_colliery
 	}
@@ -11854,6 +12060,7 @@ building_misr_mahalla_textile_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_misr_mahalla_textile_complex
 	}
@@ -11910,6 +12117,7 @@ building_moscow_irrigation_cotton_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_moscow_irrigation_cotton_depot
 	}
@@ -11966,6 +12174,7 @@ building_mozambique_company_beira_concession = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mozambique_company_beira_concession
 	}
@@ -12022,6 +12231,7 @@ building_nam_dinh_textile_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nam_dinh_textile_plant
 	}
@@ -12078,6 +12288,7 @@ building_nioc_masjed_soleyman_field = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nioc_masjed_soleyman_field
 	}
@@ -12134,6 +12345,7 @@ building_nederlandse_petroleum_pangkalan_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nederlandse_petroleum_pangkalan_depot
 	}
@@ -12190,6 +12402,7 @@ building_portalis_lyon_silk_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_portalis_lyon_silk_house
 	}
@@ -12246,6 +12459,7 @@ building_nokia_cable_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nokia_cable_works
 	}
@@ -12302,6 +12516,7 @@ building_norsk_hydro_rjukan_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_norsk_hydro_rjukan_plant
 		pmg_carbon_capture_norsk_hydro_rjukan_plant
@@ -12359,6 +12574,7 @@ building_alpine_donawitz_steelworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_alpine_donawitz_steelworks
 		pmg_carbon_capture_alpine_donawitz_steelworks
@@ -12416,6 +12632,7 @@ building_oevg_steyr_arms_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_oevg_steyr_arms_works
 	}
@@ -12472,6 +12689,7 @@ building_ocp_khouribga_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ocp_khouribga_mine
 	}
@@ -12528,6 +12746,7 @@ building_ong_lung_sheng_tea_warehouse = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ong_lung_sheng_tea_warehouse
 	}
@@ -12584,6 +12803,7 @@ building_opium_ghazipur_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_opium_ghazipur_factory
 	}
@@ -12640,6 +12860,7 @@ building_orient_express_sirkeci_terminal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_orient_express_sirkeci_terminal
 	}
@@ -12696,6 +12917,7 @@ building_oriental_dev_kunsan_granary = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_oriental_dev_kunsan_granary
 	}
@@ -12752,6 +12974,7 @@ building_tobacco_regie_cibali_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tobacco_regie_cibali_factory
 	}
@@ -12808,6 +13031,7 @@ building_panama_company_culebra_cut = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_panama_company_culebra_cut
 	}
@@ -12864,6 +13088,7 @@ building_paradox_kvarnholmen_studio = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_paradox_kvarnholmen_studio
 	}
@@ -12920,6 +13145,7 @@ building_pedro_domecq_jerez_bodega = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_pedro_domecq_jerez_bodega
 	}
@@ -12976,6 +13202,7 @@ building_pernambuco_recife_cotton_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_pernambuco_recife_cotton_mill
 	}
@@ -13032,6 +13259,7 @@ building_perskhlopok_cotton_combines = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_perskhlopok_cotton_combines
 	}
@@ -13088,6 +13316,7 @@ building_persshelk_silk_reeling_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_persshelk_silk_reeling_house
 	}
@@ -13144,6 +13373,7 @@ building_peruvian_amazon_iquitos_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_peruvian_amazon_iquitos_depot
 	}
@@ -13200,6 +13430,7 @@ building_philips_eindhoven_natlab = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_philips_eindhoven_natlab
 	}
@@ -13256,6 +13487,7 @@ building_prussian_railway_directorate = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_prussian_railway_directorate
 	}
@@ -13312,6 +13544,7 @@ building_ralli_odessa_grain_elevator = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ralli_odessa_grain_elevator
 	}
@@ -13368,6 +13601,7 @@ building_rheinmetall_unterluss_proving_ground = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rheinmetall_unterluss_proving_ground
 	}
@@ -13424,6 +13658,7 @@ building_ricordi_galleria_vittorio_emanuele = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ricordi_galleria_vittorio_emanuele
 	}
@@ -13480,6 +13715,7 @@ building_rodriguez_arguelles_havana_tobacco_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rodriguez_arguelles_havana_tobacco_house
 	}
@@ -13536,6 +13772,7 @@ building_romanian_star_ploiesti_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_romanian_star_ploiesti_refinery
 	}
@@ -13592,6 +13829,7 @@ building_rossi_sao_leopoldo_arms_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rossi_sao_leopoldo_arms_factory
 	}
@@ -13648,6 +13886,7 @@ building_rac_sitka_trading_post = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rac_sitka_trading_post
 	}
@@ -13704,6 +13943,7 @@ building_saint_etienne_arms_manufactory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_saint_etienne_arms_manufactory
 	}
@@ -13760,6 +14000,7 @@ building_san_miguel_manila_brewery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_san_miguel_manila_brewery
 	}
@@ -13816,6 +14057,7 @@ building_sao_paulo_railway_paranapiacaba_workshop = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sao_paulo_railway_paranapiacaba_workshop
 	}
@@ -13872,6 +14114,7 @@ building_morozov_orekhovo_zuevo_mills = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_morozov_orekhovo_zuevo_mills
 	}
@@ -13928,6 +14171,7 @@ building_schichau_elbing_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_schichau_elbing_shipyard
 	}
@@ -13984,6 +14228,7 @@ building_secn_ferrol_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_secn_ferrol_shipyard
 	}
@@ -14040,6 +14285,7 @@ building_sherkat_shemali_cotton_gin = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sherkat_shemali_cotton_gin
 	}
@@ -14096,6 +14342,7 @@ building_sherkate_eslamiya_isfahan_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sherkate_eslamiya_isfahan_mill
 	}
@@ -14152,6 +14399,7 @@ building_skoda_pilsen_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_skoda_pilsen_works
 	}
@@ -14208,6 +14456,7 @@ building_mokta_el_hadid_beni_saf_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mokta_el_hadid_beni_saf_mine
 	}
@@ -14264,6 +14513,7 @@ building_stf_fiume_torpedo_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_stf_fiume_torpedo_works
 	}
@@ -14320,6 +14570,7 @@ building_steel_brothers_syriam_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_steel_brothers_syriam_depot
 	}
@@ -14376,6 +14627,7 @@ building_stt_haskoy_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_stt_haskoy_shipyard
 	}
@@ -14432,6 +14684,7 @@ building_sudamericana_valparaiso_pier = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sudamericana_valparaiso_pier
 	}
@@ -14488,6 +14741,7 @@ building_suez_company_ismailia_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_suez_company_ismailia_hq
 	}
@@ -14544,6 +14798,7 @@ building_sunhwaguk_seoul_tobacco_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sunhwaguk_seoul_tobacco_factory
 	}
@@ -14600,6 +14855,7 @@ building_tashkent_railroad_workshops = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tashkent_railroad_workshops
 	}
@@ -14656,6 +14912,7 @@ building_trubia_cannon_foundry = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_trubia_cannon_foundry
 	}
@@ -14712,6 +14969,7 @@ building_turkish_petroleum_kirkuk_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_turkish_petroleum_kirkuk_depot
 	}
@@ -14768,6 +15026,7 @@ building_uniao_fabril_barreiro_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_uniao_fabril_barreiro_plant
 		pmg_carbon_capture_uniao_fabril_barreiro_plant
@@ -14825,6 +15084,7 @@ building_united_fruit_great_white_fleet_terminal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_united_fruit_great_white_fleet_terminal
 	}
@@ -14881,6 +15141,7 @@ building_united_tobacco_moscow_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_united_tobacco_moscow_plant
 	}
@@ -14937,6 +15198,7 @@ building_ursus_warsaw_tractor_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ursus_warsaw_tractor_plant
 	}
@@ -14993,6 +15255,7 @@ building_vodka_monopoly_warehouse = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_vodka_monopoly_warehouse
 	}
@@ -15049,6 +15312,7 @@ building_wadia_bombay_dockyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_wadia_bombay_dockyard
 	}
@@ -15105,6 +15369,7 @@ building_west_ural_oil_depot = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_west_ural_oil_depot
 	}
@@ -15161,6 +15426,7 @@ building_cramp_philadelphia_shipyard = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_cramp_philadelphia_shipyard
 	}
@@ -15217,6 +15483,7 @@ building_sandford_newcastle_natal_ironworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sandford_newcastle_natal_ironworks
 		pmg_carbon_capture_sandford_newcastle_natal_ironworks
@@ -15274,6 +15541,7 @@ building_witkowitzer_ostrava_ironworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_witkowitzer_ostrava_ironworks
 		pmg_carbon_capture_witkowitzer_ostrava_ironworks
@@ -15331,6 +15599,7 @@ building_ynchausti_manila_trading_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ynchausti_manila_trading_house
 	}
@@ -15387,6 +15656,7 @@ building_zastava_kragujevac_arsenal = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_zastava_kragujevac_arsenal
 	}
@@ -15444,6 +15714,7 @@ building_megastructure_consortium_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_megastructure_consortium_hq
 	}
@@ -15501,6 +15772,7 @@ building_axiom_space_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_axiom_space_hq
 	}
@@ -15558,6 +15830,7 @@ building_neurovault_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_neurovault_hq
 	}
@@ -15615,6 +15888,7 @@ building_tycho_manufacturing_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tycho_manufacturing_hq
 	}
@@ -15672,6 +15946,7 @@ building_tessier_ashpool_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tessier_ashpool_hq
 	}
@@ -15729,6 +16004,7 @@ building_hanka_precision_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_hanka_precision_hq
 	}
@@ -15786,6 +16062,7 @@ building_yoyodyne_propulsion_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_yoyodyne_propulsion_hq
 	}
@@ -15843,6 +16120,7 @@ building_rekal_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rekal_hq
 	}
@@ -15900,6 +16178,7 @@ building_dupont_experimental_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_dupont_experimental_station
 	}
@@ -15957,6 +16236,7 @@ building_ig_farben_buna_werke = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ig_farben_buna_werke
 	}
@@ -16014,6 +16294,7 @@ building_shell_pernis_refinery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_shell_pernis_refinery
 	}
@@ -16071,6 +16352,7 @@ building_jsr_yokkaichi_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_jsr_yokkaichi_complex
 	}
@@ -16128,6 +16410,7 @@ building_sibur_tobolsk_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sibur_tobolsk_complex
 	}
@@ -16184,6 +16467,7 @@ building_rolls_royce_derby_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rolls_royce_derby_works
 	}
@@ -16240,6 +16524,7 @@ building_bp_refinery_complex = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bp_refinery_complex
 	}
@@ -16296,6 +16581,7 @@ building_bayer_leverkusen_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bayer_leverkusen_plant
 	}
@@ -16352,6 +16638,7 @@ building_thyssen_steelworks = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_thyssen_steelworks
 		pmg_carbon_capture_thyssen_steelworks
@@ -16409,6 +16696,7 @@ building_boeing_everett_factory = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_boeing_everett_factory
 	}
@@ -16465,6 +16753,7 @@ building_renault_billancourt_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_renault_billancourt_plant
 	}
@@ -16521,6 +16810,7 @@ building_michelin_clermont_ferrand = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_michelin_clermont_ferrand
 	}
@@ -16577,6 +16867,7 @@ building_pirelli_bicocca_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_pirelli_bicocca_plant
 	}
@@ -16633,6 +16924,7 @@ building_jardine_princeps_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_jardine_princeps_house
 	}
@@ -16689,6 +16981,7 @@ building_sumitomo_besshi_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sumitomo_besshi_mine
 		pmg_carbon_capture_sumitomo_besshi_mine
@@ -16751,6 +17044,7 @@ building_yasuda_atosanupuri_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_yasuda_atosanupuri_mine
 		pmg_carbon_capture_yasuda_atosanupuri_mine
@@ -16808,6 +17102,7 @@ building_tokyo_electric_asakusa_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_tokyo_electric_asakusa_station
 		pmg_carbon_capture_tokyo_electric_asakusa_station
@@ -16865,6 +17160,7 @@ building_guthrie_singapore_agency = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_guthrie_singapore_agency
 	}
@@ -16921,6 +17217,7 @@ building_sfct_hon_gai_collieries = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_sfct_hon_gai_collieries
 	}
@@ -16977,6 +17274,7 @@ building_bhp_broken_hill_mine = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bhp_broken_hill_mine
 		pmg_carbon_capture_bhp_broken_hill_mine
@@ -17034,6 +17332,7 @@ building_ramirez_vila_real_cannery = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ramirez_vila_real_cannery
 	}
@@ -17090,6 +17389,7 @@ building_ocmc_unsan_gold_mines = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ocmc_unsan_gold_mines
 	}
@@ -17146,6 +17446,7 @@ building_siam_electric_wat_liab_station = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_siam_electric_wat_liab_station
 		pmg_carbon_capture_siam_electric_wat_liab_station
@@ -17203,6 +17504,7 @@ building_ferranti_hollinwood_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ferranti_hollinwood_works
 	}
@@ -17259,6 +17561,7 @@ building_van_vlissingen_oostenburg_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_van_vlissingen_oostenburg_works
 		pmg_carbon_capture_van_vlissingen_oostenburg_works
@@ -17316,6 +17619,7 @@ building_mfo_oerlikon_works = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_mfo_oerlikon_works
 		pmg_carbon_capture_mfo_oerlikon_works
@@ -17373,6 +17677,7 @@ building_markwald_bangkok_rice_mill = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_markwald_bangkok_rice_mill
 		pmg_carbon_capture_markwald_bangkok_rice_mill
@@ -17430,6 +17735,7 @@ building_nhm_factorij_batavia = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_nhm_factorij_batavia
 	}
@@ -17486,6 +17792,7 @@ building_white_star_albion_house = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_white_star_albion_house
 	}
@@ -17542,6 +17849,7 @@ building_noda_shoyu_goyogura = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_noda_shoyu_goyogura
 	}
@@ -17599,6 +17907,7 @@ building_genentech_dna_way_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_genentech_dna_way_campus
 	}
@@ -17656,6 +17965,7 @@ building_monsanto_chesterfield_center = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_monsanto_chesterfield_center
 	}
@@ -17713,6 +18023,7 @@ building_novo_nordisk_kalundborg_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_novo_nordisk_kalundborg_plant
 	}
@@ -17770,6 +18081,7 @@ building_ajinomoto_kawasaki_plant = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_ajinomoto_kawasaki_plant
 	}
@@ -17827,6 +18139,7 @@ building_biocon_park = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_biocon_park
 	}
@@ -17884,6 +18197,7 @@ building_bgi_national_genebank = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_bgi_national_genebank
 	}
@@ -17941,6 +18255,7 @@ building_biontech_mainz_campus = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_biontech_mainz_campus
 	}
@@ -17998,6 +18313,7 @@ building_rosen_association_hq = {
 	unique = no
 	city_type = city
 	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
 	production_method_groups = {
 		pmg_rosen_association_hq
 	}

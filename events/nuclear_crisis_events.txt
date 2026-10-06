@@ -562,9 +562,9 @@ nuclear_crisis.4 = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
 			has_war_with = scope:nd_target
-			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
-			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
-			nd_war_law_permits_strategic_strike = yes
+			custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_target } }
+			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
+			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -942,9 +942,9 @@ nuclear_crisis.7 = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
 			has_war_with = scope:nd_target
-			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
-			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
-			nd_war_law_permits_strategic_strike = yes
+			custom_tooltip = { text = nd_tt_doctrine_permits_strike nd_doctrine_permits_strike = { ENEMY = scope:nd_target } }
+			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_target } }
+			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -1082,8 +1082,8 @@ nuclear_crisis.20 = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
-			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
-			nd_war_law_permits_strategic_strike = yes
+			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
+			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes
@@ -1344,8 +1344,8 @@ nuclear_crisis.24 = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
-			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
-			nd_war_law_permits_strategic_strike = yes
+			custom_tooltip = { text = nd_tt_pledge_permits_strike nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker } }
+			custom_tooltip = { text = nd_tt_war_law_permits_strike nd_war_law_permits_strategic_strike = yes }
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

@@ -125,7 +125,8 @@ General Administration covers the remainder, including unused capacity. Other
 civil buildings, the military, construction and welfare have their own rows.
 
 Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
-Nations and other journal systems appear under Programme Costs. Expand it and
+Nations and other journal systems appear under Programme Costs, and so does the
+Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
 such as innovation are outside this weekly money breakdown.
