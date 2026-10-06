@@ -323,7 +323,7 @@ class ModifierTests(unittest.TestCase):
         self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 25)
         self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
         self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
-        self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -0.3)
+        self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -1)
         for key in NATIONAL:
             d = BY_KEY[key]
             self.assert_pair(f"gm_national_{key}", d.national_field, f"gm_step_national_{key}",
@@ -1427,7 +1427,9 @@ COMMISSION_SOURCES = (
 # The regime source's petitioners: each regime dedication's approving IG.
 REGIME_IG = {"crown": "landowners", "republic": "intelligentsia", "revolution": "trade_unions"}
 # Ledger amounts (§2.4): grandeur into the petitioner's IG ledger, legitimacy into the promise ledger.
-REWARDS = {"fulfil": (15, 5), "fulfil_extended": (8, 2.5), "decline": -10, "miss": -5}
+# A miss costs more than a refusal, so refusing is the way out for a country
+# that can't build (owner, 2026-10-05).
+REWARDS = {"fulfil": (15, 5), "fulfil_extended": (8, 2.5), "decline": -5, "miss": -15}
 FOUNDING_YEARS = {"USA": 1776, "HAI": 1804, "CLM": 1810, "PRG": 1811, "VNZ": 1811, "ARG": 1816, "CHL": 1818,
                   "MEX": 1821, "GRE": 1821, "BRZ": 1822, "BOL": 1825, "URU": 1825, "BEL": 1830, "ECU": 1830}
 
@@ -1499,6 +1501,11 @@ class CommissionSourceTests(unittest.TestCase):
         can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
         for s_ in ("NOT = { has_variable = gm_com_offered }", "NOT = { has_variable = gm_com_open }"):
             self.assertIn(s_, can)
+
+    def test_only_great_and_major_powers(self):
+        """Five levels are 5,000 construction, beyond a minor power (owner, 2026-10-05)."""
+        self.assertIn("gm_system_enabled = yes country_rank >= rank_value:major_power",
+                      squash(block(read(COM_TRIGGERS), "gm_com_can_offer")))
 
     def test_civil_war_guards(self):
         """A side in a civil war gets no offer, and a revolutionary country never
@@ -1638,9 +1645,11 @@ class CommissionLifeTests(unittest.TestCase):
         self.assertIn("trigger = { has_variable = gm_com_offered has_variable = gm_com_source }", ev)
         self.assertEqual(ev.count("option = {"), 2)
         self.assertEqual(ev.count("default_option = yes"), 1)
-        self.assertIn("name = monument_events.21.a default_option = yes custom_tooltip = { text = gm_com_accept_tt "
-                      "gm_com_accept = yes }", ev)
-        self.assertIn("custom_tooltip = { text = gm_com_decline_tt gm_com_decline = yes }", ev)
+        self.assertIn("name = monument_events.21.a custom_tooltip = { text = gm_com_accept_tt gm_com_accept = yes }", ev)
+        # An unanswered offer is declined: the miss would cost more.
+        self.assertIn("name = monument_events.21.b default_option = yes custom_tooltip = { text = gm_com_decline_tt "
+                      "gm_com_decline = yes }", ev)
+        self.assertLess(REWARDS["miss"], REWARDS["decline"], "refusing must be cheaper than missing")
         self.assertIn("modifier = { trigger = { gm_com_ai_declines = yes } factor = 0 }", ev)
         self.assertIn("event_image", ev)
         declines = squash(block(self.t, "gm_com_ai_declines"))

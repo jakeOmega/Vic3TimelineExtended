@@ -41,6 +41,9 @@ Baseline: `main` at `c906371` (#743 merged).
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
 | Phasing | Numbers → commissions with names → policy → 1836 monuments → trophies → historical commissions (§10). The owner swapped the policy ahead of the 1836 monuments on 2026-10-05 |
+| Who gets commissions (owner, 2026-10-05, after the build) | **Great and major powers only.** Five levels are 5,000 construction, beyond a minor power's means within five years |
+| Refusing (owner, 2026-10-05, after the build) | **A miss costs more than a refusal** (−15 against −5 on the petitioner's ledger), and an unanswered offer is declined: otherwise accepting dominated refusing |
+| Vanity (owner, 2026-10-05, after the build) | **−1 legitimacy per ledger unit**, not −0.3, which rendered as "−0" |
 
 ## Engine facts this rests on
 
@@ -93,7 +96,7 @@ flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT).
 |---|---|---|---|
 | Construction per level | 10,000 | **1,000** | `construction_cost_grand_monument` (rewrite the construction-sink comment above it) |
 | Vanity: radicals in the state, per level finished in hard times | 5% of pops | **0.5%** | `gm_state_vanity_backlash` (`add_radicals_in_state = { value = 0.005 }`) |
-| Vanity: legitimacy per unit of `gm_vanity_ledger` | −3 | **−0.3** | `gm_step_vanity` and its static modifier (the registry test pins the pair) |
+| Vanity: legitimacy per unit of `gm_vanity_ledger` | −3 | **−1** (first −0.3, which rendered as "−0") | `gm_step_vanity` and its static modifier (the registry test pins the pair) |
 | Rededicate | 5,000 a level | **500 a level** | `gm_state_rededicate_cost` |
 | Curve, step values, ledgers | — | unchanged | |
 
@@ -182,8 +185,8 @@ Every reward and cost goes through ledgers, as v1 §4.3 does, so nothing stacks:
 |---|---|---|
 | Fulfilled | +15 grandeur (about +2 approval) | +5 to the new `gm_promise_ledger`, decays ×0.97 a month, applied **linearly** (`gm_national_promise`, "A Promise Kept") |
 | Fulfilled after an extension | +8 | +2.5 |
-| Declined | −10 (about −1.5 approval) | — |
-| Missed | −5 | — |
+| Declined | −5 (about −1 approval; owner, after the build) | — |
+| Missed | −15 (about −2: a broken promise costs more than a refusal) | — |
 | Lapsed | — | — |
 
 Vanilla's Government Petition pays +10 or +5 decaying legitimacy (`modifier_successfully_met_petition_legitimacy`); a

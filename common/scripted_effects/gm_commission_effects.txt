@@ -67,7 +67,7 @@ gm_com_close = {
 
 # Country scope. Add $AMOUNT$ grandeur to the ledger of the IG whose type the
 # country's variable $VAR$ names (gm_com_ig). Through the per-IG curve,
-# 15 is about +2 approval, 10 about 1.5, 5 about 1 (§2.4).
+# 15 is about 2 approval, 8 about 1.3, 5 about 1 (§2.4).
 gm_country_ledger_ig_by_flag = {
 	gm_init_ledgers = yes
 	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = armed_forces }
@@ -212,7 +212,7 @@ gm_com_accept = {
 }
 
 gm_com_decline = {
-	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -10 }
+	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -5 }
 	set_variable = gm_active
 	gm_com_close = yes
 	trigger_event = { id = monument_events.20 }
@@ -446,9 +446,11 @@ gm_com_fulfil = {
 	gm_com_close = yes
 }
 
-# Country scope. Time ran out: the petitioner resents it.
+# Country scope. Time ran out: a broken promise, resented more than an honest
+# refusal (owner, 2026-10-05), so refusing is the way out for a country that
+# can't build.
 gm_com_miss = {
-	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -5 }
+	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -15 }
 	set_variable = gm_active
 	if = {
 		limit = { is_ai = no }

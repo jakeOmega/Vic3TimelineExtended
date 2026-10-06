@@ -142,11 +142,15 @@ gm_state_can_host_commission = {
 }
 
 # ---- Pacing (§2.5) ------------------------------------------------------------
-# Country scope. Nothing open or on offer, not a side in a civil war (the winner
-# is judged after it; scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"), and a country that can build.
+# Country scope. A great or major power (owner, 2026-10-05: five levels are
+# 5,000 construction, beyond a minor power's means within five years), with
+# nothing open or on offer, not a side in a civil war (the winner is judged
+# after it; scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"), and a country that can build. A rank lost after accepting does
+# not lapse the commission.
 gm_com_can_offer = {
 	gm_system_enabled = yes
+	country_rank >= rank_value:major_power
 	NOT = { has_variable = gm_com_offered }
 	NOT = { has_variable = gm_com_open }
 	NOT = { has_variable = te_cw_role }

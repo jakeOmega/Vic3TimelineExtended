@@ -997,8 +997,9 @@ monument_events.20 = {
 # The same offer for players and the AI: the AI accepts when not at war, not in
 # hard times, with under a year of government construction queued and no debt
 # (gm_com_ai_declines), and then queues the levels itself (gm_com_ai_queue).
-# Accept is the default: an offer left unanswered opens a commission, whose miss
-# costs less than a refusal. Each option's tooltip names its costs and rewards:
+# Decline is the default: a commission missed costs more than one refused (a
+# broken promise against an honest no), so an offer left unanswered is turned
+# down. Each option's tooltip names its costs and rewards:
 # the ledgers render nothing by themselves (silent_variable_audit).
 monument_events.21 = {
 	type = country_event
@@ -1097,7 +1098,6 @@ monument_events.21 = {
 
 	option = {
 		name = monument_events.21.a
-		default_option = yes
 		custom_tooltip = {
 			text = gm_com_accept_tt
 			gm_com_accept = yes
@@ -1113,6 +1113,7 @@ monument_events.21 = {
 
 	option = {
 		name = monument_events.21.b
+		default_option = yes
 		custom_tooltip = {
 			text = gm_com_decline_tt
 			gm_com_decline = yes

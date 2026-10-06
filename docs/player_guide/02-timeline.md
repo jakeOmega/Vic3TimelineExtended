@@ -532,10 +532,11 @@ No number of monuments can buy a group outright: each group has one total.
 
 ### Monument commissions
 
-Interest groups ask for monuments. A **commission** is one such request: 5
-grandeur of one dedication within 60 months. It arrives as an event, A Monument
-Is Asked For, which you accept or turn down, and while it is open it has its own
-section in the Monuments journal entry. Only one commission is open or on offer
+In a great or major power, interest groups ask for monuments. A **commission**
+is one such request: 5 grandeur of one dedication within 60 months. It arrives
+as an event, A Monument Is Asked For, which you accept or turn down (an offer
+left unanswered is turned down), and while it is open it has its own section in
+the Monuments journal entry. Only one commission is open or on offer
 at a time; a moment that comes while one is open passes without one.
 
 | Moment | Who asks | For | Where |
@@ -563,8 +564,8 @@ counting. While a commission is open, the dedication ceremony says so.
 |---|---|
 | Met | The group that asked approves, about +2 at first and fading over several years, and A Promise Kept gives +5 legitimacy, fading by 3% a month. The monument that completed it takes the commission's name. |
 | Met after Ask for More Time | Ask for More Time adds 36 months, once, and halves the reward: about +1 approval and +2.5 legitimacy. |
-| Turned down | The group resents the refusal: about −1.5 approval, fading. |
-| Missed | Time runs out, and the group resents it: about −1 approval, fading. |
+| Turned down | The group resents the refusal: about −1 approval, fading. |
+| Missed | Time runs out, and the group resents the broken promise more than a refusal: about −2 approval, fading. Turn down what you can't build. |
 | Lapsed | No effect. A commission lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
 No group petitions for five years after a commission closes; wars, centenaries,
@@ -659,7 +660,7 @@ building panel counts as pulling it down.
 
 Finishing a monument level while the country is in default, in famine or in
 recession angers people: 0.5% of the state's pops turn radical, and legitimacy
-falls by 0.3 for each such level, fading over about two years. While this would
+falls by 1 for each such level, fading over about two years. While this would
 happen, the journal entry shows a red Hard Times under its overview, so you can
 pause construction first.
 
