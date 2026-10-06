@@ -92,6 +92,22 @@
 #   1. the two blocks in common/static_modifiers/extra_modifiers.txt
 #   2. their names and `_desc` keys in te_concepts_l_english.yml
 #   3. the destabilization strip in legacy_je_modifier_cleanup_effect below
+#
+# ── PENDING REMOVAL: te_mon_gold_carry_expense (added 2026-10-06) ──
+# Borrowed gold no longer pays the policy rate out of the budget
+# (docs/systems/monetary_policy_design.md §0.5, decision I, reversed). The
+# static modifier survives so a save made while it was applied loads clean. It
+# was a managed monetary modifier, so it can sit on je_banking_cycle or on the
+# country; step 10 strips it from both. Remove ALL of the following together,
+# one release after 2026-10-06:
+#   1. the `te_mon_gold_carry_expense` block in
+#      common/static_modifiers/extra_modifiers.txt
+#   2. its loc keys `te_mon_gold_carry_expense` and
+#      `te_mon_gold_carry_expense_desc` in te_miscellaneous_l_english.yml
+#   3. the SAVE MIGRATION strip at the foot of te_monetary_update_gold in
+#      common/scripted_effects/te_monetary_effects.txt
+#   4. its entry in the banking expense row of SOURCES in
+#      scripts/generators/gen_budget_breakdown.py, then re-run that generator
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

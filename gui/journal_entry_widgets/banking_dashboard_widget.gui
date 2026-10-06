@@ -2043,10 +2043,10 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					### Borrowed gold and what it costs — rows of their own since the
-					### first playtest: a balance the player owes, growing every month
-					### the rate is held high, is not tooltip material. Both share the
-					### Gold Flow tooltip, which is where the mechanism is explained.
+					### Borrowed gold — a row of its own since the first playtest: a
+					### balance that grows every month the rate is held high, and
+					### leaves first when it comes down, is not tooltip material. It
+					### shares the Gold Flow tooltip, which explains the mechanism.
 					banking_dash_condition_row = {
 						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_goldflow_tt"
@@ -2056,19 +2056,6 @@ types banking_dashboard_widget_types
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_hotmoney_value"
-							}
-						}
-					}
-
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_goldflow_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_goldcarry_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_goldcarry_value"
 							}
 						}
 					}
