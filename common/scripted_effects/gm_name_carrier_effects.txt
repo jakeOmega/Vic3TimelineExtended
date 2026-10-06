@@ -1,69 +1,58 @@
-﻿# PROTOTYPE (v2 spec §3.4, test build 8): the naming's carrier is a state we
-# own whose name the player types over in the base game's state-rename popup;
-# State.GetNameNoFormatting returns it as a CString (the hub accessors ignore
-# renames, build 5). Script can't undo a player's rename (reset_state_name
-# resets only the script name, localized_name; the typed one is separate), but
-# the popup can: confirming an empty name gives the state its default name
-# back. So after the name is copied the popup clears its own field and
-# confirms again (states_panel.gui), driven by the carrier's gm_name_revert.
-# The carrier keeps gm_carries_name, which holds the popup in naming mode,
-# until that is done.
+﻿# PROTOTYPE (v2 spec §3.4, test build 9): the naming's carrier is an empty
+# army, created for the naming and disbanded after it. The player types the
+# monument's name in the base game's army-rename popup, and
+# MilitaryFormation.GetNameNoFormatting returns it as a CString. Earlier
+# carriers: a company works but trips the company-limit alerts (its slot
+# modifier lands a tick after the company); a state's typed name can't be
+# undone by script (reset_state_name resets only the script name), nor by
+# clearing the popup's field from the GUI.
+#
+# Script can create an army but not remove one; the .gui disbands it with
+# the player's own command (MilitaryFormation.Disband).
 
-# Country scope. scope:gm_state = the monument's state, scope:gm_carrier =
-# the state whose name carries the typing.
+# Country scope. scope:gm_state = the monument's state. Creates the army and
+# finds it: every army we had is tagged first, so the new one is the untagged
+# one.
 gm_name_carrier_open = {
-	scope:gm_state = {
-		set_variable = gm_being_named
+	every_military_formation = {
+		set_variable = gm_formation_seen
 	}
-	scope:gm_carrier = {
-		set_variable = gm_carries_name
+	create_military_formation = {
+		type = army
+		hq_region = capital.region
+		name = gm_name_carrier_army
 	}
-	set_variable = {
-		name = gm_name_carrier_state
-		value = scope:gm_carrier
-	}
-}
-
-# Country scope. The name has been copied: end the journal entry's side of the
-# naming and ask the popup to put the carrier's name back.
-gm_name_carrier_hand_over = {
-	if = {
+	random_military_formation = {
 		limit = {
-			has_variable = gm_name_carrier_state
-			exists = var:gm_name_carrier_state
+			NOT = { has_variable = gm_formation_seen }
 		}
-		var:gm_name_carrier_state = {
-			set_variable = gm_name_revert
-		}
+		save_scope_as = gm_new_army
 	}
-	remove_variable = gm_name_carrier_state
-	every_scope_state = {
-		limit = { has_variable = gm_being_named }
-		remove_variable = gm_being_named
+	every_military_formation = {
+		limit = { has_variable = gm_formation_seen }
+		remove_variable = gm_formation_seen
+	}
+	if = {
+		limit = { exists = scope:gm_new_army }
+		scope:gm_new_army = {
+			set_variable = gm_carries_name
+		}
+		set_variable = {
+			name = gm_name_carrier_army
+			value = scope:gm_new_army
+		}
+		scope:gm_state = {
+			set_variable = gm_being_named
+		}
 	}
 }
 
-# Country scope. Cancels a naming before anything was copied.
+# Country scope. Ends a naming, used or cancelled. The .gui disbands the army
+# in the same click.
 gm_name_carrier_close = {
-	if = {
-		limit = {
-			has_variable = gm_name_carrier_state
-			exists = var:gm_name_carrier_state
-		}
-		var:gm_name_carrier_state = {
-			gm_name_carrier_clear_state = yes
-		}
-	}
-	remove_variable = gm_name_carrier_state
+	remove_variable = gm_name_carrier_army
 	every_scope_state = {
 		limit = { has_variable = gm_being_named }
 		remove_variable = gm_being_named
 	}
-}
-
-# State scope: the carrier. Drops its naming flags.
-gm_name_carrier_clear_state = {
-	remove_variable = gm_carries_name
-	remove_variable = gm_name_old
-	remove_variable = gm_name_revert
 }

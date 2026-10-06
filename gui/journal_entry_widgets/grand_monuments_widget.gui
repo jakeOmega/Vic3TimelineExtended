@@ -283,22 +283,19 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### PROTOTYPE (v2 spec §3.4, test build 8): name a monument by typing over a
-	### state's name in the base game's state-rename popup (gm_sguis.txt and
-	### gm_name_carrier_effects.txt have why). Two modes, on the state value
-	### gm_is_being_named:
-	###   0  Name It, in one of three forms, and Clear Name. The carrier is
-	###      the capital while its name is its map name; else this state, on
-	###      its map name or (red tooltip) not. Only the .gui can compare
-	###      names (EqualTo_string), so it picks the carrier and passes it as
-	###      the saved scope gm_carrier, with its name now as gm_old_name.
-	###   1  the carrier's name so far. The popup opens as this mode appears
-	###      (the _show state); confirming it names the monument (the
-	###      trigger_when watcher), after which the popup puts the carrier's
-	###      name back (states_panel.gui); closing it cancels. Rename, Use
-	###      This Name and Cancel are the same by hand.
-	### Every read of Var('gm_name_carrier_state') sits in mode 1, where the
-	### start scripted GUI has set it, so nothing reads a missing variable.
+	### PROTOTYPE (v2 spec §3.4, test build 9): name a monument through the
+	### base game's army-rename popup, with an empty army as the carrier
+	### (gm_sguis.txt and gm_name_carrier_effects.txt have why). Two modes, on
+	### the state value gm_is_being_named:
+	###   0  Name It (gm_name_start_sgui creates the army) and Clear Name
+	###   1  the army's name so far. As this mode appears (the _show state)
+	###      the row stores the army's starting name (gm_name_mark_old_sgui)
+	###      and opens the popup. Once the name differs from it (the
+	###      trigger_when watcher), the row stores it on the monument
+	###      (gm_name_use_sgui) and disbands the army. Rename, Use This Name
+	###      and Cancel do the same by hand.
+	### Every read of Var('gm_name_carrier_army') sits in mode 1, where the
+	### start scripted GUI has set it.
 	type gm_rename_line = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -311,32 +308,11 @@ types grand_monuments_widget_types
 			spacing = 4
 			parentanchor = hcenter
 
-			### Carrier: the capital on its map name; else this state on its map
-			### name; else this state anyway, with the red warning.
 			gm_rename_button = {
-				visible = "[EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting )]"
 				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
-				tooltip = "gm_button_name_start_capital_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting ) ).End )]"
-				blockoverride "rename_text" { text = "gm_button_name_start" }
-			}
-
-			gm_rename_button = {
-				visible = "[And( Not( EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting ) ), EqualTo_string( State.GetNameNoFormatting, State.GetStateRegion.GetNameNoFormatting ) )]"
-				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
-				tooltip = "gm_button_name_start_here_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
-				blockoverride "rename_text" { text = "gm_button_name_start" }
-			}
-
-			gm_rename_button = {
-				visible = "[And( Not( EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting ) ), Not( EqualTo_string( State.GetNameNoFormatting, State.GetStateRegion.GetNameNoFormatting ) ) )]"
-				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
-				tooltip = "gm_button_name_start_renamed_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
+				tooltip = "gm_button_name_start_tooltip"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
 			}
 
@@ -355,22 +331,22 @@ types grand_monuments_widget_types
 			spacing = 6
 			parentanchor = hcenter
 
-			### Open the popup when the naming starts (worked in launches 4 and 5).
+			### As the naming opens: store the army's starting name, open the
+			### popup.
 			state = {
 				name = _show
-				on_start = "[PopupManager.ShowStateChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.Self )]"
+				on_start = "[GetScriptedGui('gm_name_mark_old_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.GetNameNoFormatting ) ).End )]"
+				on_start = "[PopupManager.ShowMilitaryFormationChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.Self )]"
 			}
 
-			### Use the name as soon as the popup's rename lands: the carrier's
-			### name no longer matches the one stored when the naming started
-			### (gm_name_old). A widget state's trigger_when is the Community
-			### Mod Framework's way to run a scripted GUI from a list row
-			### (com_hidden_trigger.gui). gm_name_use_sgui ignores a repeat.
+			### Once the popup's rename lands, take the name and disband the
+			### army. gm_name_use_sgui ignores a repeat.
 			widget = {
 				size = { 1 1 }
 				state = {
-					trigger_when = "[Not( EqualTo_string( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.MakeScope.Var('gm_name_old').GetFlagName ) )]"
-					on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting ) ).End )]"
+					trigger_when = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.MakeScope.ScriptValue('gm_has_name_old'), '(CFixedPoint)1' ), Not( EqualTo_string( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.MakeScope.Var('gm_name_old').GetFlagName ) ) )]"
+					on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.GetNameNoFormatting ) ).End )]"
+					on_finish = "[Execute( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.Disband )]"
 				}
 			}
 
@@ -387,7 +363,7 @@ types grand_monuments_widget_types
 				elide = right
 				align = left|nobaseline
 				using = fontsize_medium
-				text = "[JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting]"
+				text = "[JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.GetNameNoFormatting]"
 			}
 		}
 
@@ -399,22 +375,21 @@ types grand_monuments_widget_types
 
 			gm_rename_button = {
 				tooltip = "gm_button_name_popup_tooltip"
-				onclick = "[PopupManager.ShowStateChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.Self )]"
+				onclick = "[PopupManager.ShowMilitaryFormationChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.Self )]"
 				blockoverride "rename_text" { text = "gm_button_name_popup" }
 			}
 
 			gm_rename_button = {
-				datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
 				tooltip = "gm_button_name_use_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting ) ).End )]"
+				onclick = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.GetNameNoFormatting ) ).End )]"
+				onclick = "[Execute( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.Disband )]"
 				blockoverride "rename_text" { text = "gm_button_name_use" }
 			}
 
 			gm_rename_button = {
-				datacontext = "[GetScriptedGui('gm_name_cancel_sgui')]"
 				tooltip = "gm_button_name_cancel_tooltip"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('gm_name_cancel_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				onclick = "[Execute( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_army').GetMilitaryFormation.Disband )]"
 				blockoverride "rename_text" { text = "gm_button_name_cancel" }
 			}
 		}

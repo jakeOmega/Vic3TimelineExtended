@@ -155,7 +155,7 @@ gm_has_custom_name = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 8): 1 while this state's monument is
+# PROTOTYPE (v2 spec §3.4, test build 9): 1 while this state's monument is
 # being named (gm_name_start_sgui), else 0. The row swaps its buttons on it.
 gm_is_being_named = {
 	value = 0
@@ -165,10 +165,9 @@ gm_is_being_named = {
 	}
 }
 
-# PROTOTYPE (test build 8): 1 while this state's name carries a monument name
-# being typed, until the popup has put its name back, else 0.
-# states_panel.gui's rename popup shows only the state-name field while it
-# holds.
+# PROTOTYPE (test build 9): 1 for the army that carries a monument name being
+# typed, else 0. military_formation_panel.gui's rename popup shows only the
+# name field for it.
 gm_is_name_carrier = {
 	value = 0
 	if = {
@@ -177,13 +176,12 @@ gm_is_name_carrier = {
 	}
 }
 
-# PROTOTYPE (test build 8): 1 once the name has been copied and the popup
-# should give this state its default name back (gm_name_carrier_hand_over),
-# else 0.
-gm_name_revert_pending = {
+# PROTOTYPE (test build 9): 1 once the carrier army's starting name is stored
+# (gm_name_mark_old_sgui), else 0. The row's watcher waits for it.
+gm_has_name_old = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_name_revert }
+		limit = { has_variable = gm_name_old }
 		value = 1
 	}
 }

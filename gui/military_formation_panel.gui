@@ -29,19 +29,24 @@ types military_formation_change_name
 	{
 		datacontext = "[MilitaryFormationChangeNamePopup.GetFormation]"
 
+		### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 9): an army
+		### carrying a monument name being typed (gm_is_name_carrier,
+		### gm_sguis.txt) gets a naming mode: its own header, only the name
+		### field (empty to start), and Cancel in place of the close button,
+		### since closing must also disband the army.
 		blockoverride "window_header_name"
 		{
-			text = "CUSTOMISE_MILITARY_FORMATION"
+			text = "[SelectLocalization( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ), 'gm_name_popup_header', 'CUSTOMISE_MILITARY_FORMATION' )]"
 		}
 
 		blockoverride "header_close_button_visibility"
 		{
-			visible = yes
+			visible = "[Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 		}
 
 		blockoverride "header_close_button"
 		{
-			visible = yes
+			visible = "[Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 			onclick = "[PopupManager.HideMilitaryFormationChangeName]"
 		}
 
@@ -56,11 +61,20 @@ types military_formation_change_name
 					spacing = 2
 
 					textbox = {
+						visible = "[Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 						size = { 420 40 }
 						align = left|nobaseline
 						autoresize = yes
 						using = fontsize_large
 						text = "FORMATION_NAME"
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
+						size = { 420 40 }
+						align = left|nobaseline
+						autoresize = yes
+						using = fontsize_large
+						text = "gm_name_popup_label"
 					}
 
 					divider_clean = {}
@@ -87,13 +101,25 @@ types military_formation_change_name
 						}
 					}
 
+					### Naming mode opens on an empty field. Clearing doesn't
+					### reach OnEditName (build 8), so this is only what the
+					### player sees; typing sets the name as usual.
+					widget = {
+						visible = "[EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
+						size = { 0 0 }
+						state = {
+							name = _show
+							on_start = "[PdxClearEditBoxText( PdxGuiWidget.AccessParent.FindChild('formation_name_edit') )]"
+						}
+					}
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
 
 				flowcontainer = {
-					visible = "[MilitaryFormation.IsArmy]"
+					visible = "[And( MilitaryFormation.IsArmy, Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 					spacing = 0
 
 					textbox = {
@@ -114,17 +140,18 @@ types military_formation_change_name
 				}
 
 				divider_clean = {
-					visible = "[MilitaryFormation.IsArmy]"
+					visible = "[And( MilitaryFormation.IsArmy, Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 				}
 
 				widget = {
+					visible = "[Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 					size = { 0 8 }
 				}
 
 				flowcontainer = {
 					parentanchor = hcenter
 					spacing = 0
-					visible = "[MilitaryFormation.IsArmy]"
+					visible = "[And( MilitaryFormation.IsArmy, Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
 
 					textbox = {
 						multiline = no
@@ -202,6 +229,7 @@ types military_formation_change_name
 
 			# "Choose Formation Flag" section
 			flowcontainer = {
+				visible = "[Not( EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 				direction = vertical
 				spacing = 1
 
@@ -483,26 +511,51 @@ types military_formation_change_name
 
 		blockoverride "fixed_bottom"
 		{
-			# Formation button
-			button = {
-				using = default_button_action
+			flowcontainer = {
+				direction = vertical
+				spacing = 6
 				parentanchor = hcenter
-				size = { 420 50 }
-				using = fontsize_large
-				enabled = "[IsValid(MilitaryFormationChangeNamePopup.Confirm)]"
-				onclick = "[Execute(MilitaryFormationChangeNamePopup.Confirm)]"
-				tooltip = "[GetDesc(MilitaryFormationChangeNamePopup.Confirm)]"
-				onclick = "[PopupManager.HideMilitaryFormationChangeName]"
-				using = default_content_fade
+				ignoreinvisible = yes
 
-				flowcontainer = {
-					parentanchor = center
+				# Formation button
+				button = {
+					using = default_button_action
+					parentanchor = hcenter
+					size = { 420 50 }
+					using = fontsize_large
+					enabled = "[IsValid(MilitaryFormationChangeNamePopup.Confirm)]"
+					onclick = "[Execute(MilitaryFormationChangeNamePopup.Confirm)]"
+					tooltip = "[GetDesc(MilitaryFormationChangeNamePopup.Confirm)]"
+					onclick = "[PopupManager.HideMilitaryFormationChangeName]"
+					using = default_content_fade
+
+					flowcontainer = {
+						parentanchor = center
+
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							align = center|nobaseline
+							text = "CONFIRM"
+						}
+					}
+				}
+
+				### Naming mode's way out: end the naming and disband the army.
+				button = {
+					visible = "[EqualTo_CFixedPoint( MilitaryFormation.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
+					using = default_button_action
+					parentanchor = hcenter
+					size = { 420 36 }
+					onclick = "[GetScriptedGui('gm_name_cancel_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[Execute( MilitaryFormation.Disband )]"
+					onclick = "[PopupManager.HideMilitaryFormationChangeName]"
 
 					textbox = {
-						parentanchor = vcenter
+						parentanchor = center
 						autoresize = yes
 						align = center|nobaseline
-						text = "CONFIRM"
+						text = "gm_button_name_cancel"
 					}
 				}
 			}

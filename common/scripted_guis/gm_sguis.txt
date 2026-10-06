@@ -115,30 +115,22 @@ gm_hard_times_sgui = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 8): name a monument by typing over a
-# state's name in the base game's state-rename popup (gm_name_carrier_effects
-# has why, and how the name is put back). The .gui picks the carrier, because
-# only it can compare names: the capital while it has its map name, else the
-# monument's state, whose custom name (if any) the revert loses (the red
-# tooltip).
-#   gm_name_start_sgui         marks the naming; stores the carrier's name at
-#                              the start (saved scope gm_old_name) as the flag
-#                              gm_name_old, which the row watches
-#   gm_name_use_sgui           gets the carrier's name as the saved scope
-#                              gm_name (MakeScopeFlag in the .gui), stores it as
-#                              the monument state's gm_name, hands the carrier
-#                              to the popup to revert. The row runs it as soon
-#                              as the carrier's name differs from gm_name_old,
-#                              or by hand.
-#   gm_name_cancel_sgui        ends the naming from the row
-#   gm_name_popup_closed_sgui  the same from the popup's close button, when the
-#                              popup's state is the carrier
-#   gm_name_revert_done_sgui   the popup has confirmed the empty name: drop
-#                              the carrier's flags
-# One naming at a time.
+# PROTOTYPE (v2 spec §3.4, test build 9): name a monument through the base
+# game's army-rename popup, with an empty army as the carrier
+# (gm_name_carrier_effects.txt has why).
+#   gm_name_start_sgui     creates the army (gm_name_carrier_army on the
+#                          country) and marks the monument's state
+#   gm_name_mark_old_sgui  stores the army's starting name (saved scope
+#                          gm_old_name) as its flag gm_name_old; the row sends
+#                          it as the naming opens, then watches for a change
+#   gm_name_use_sgui       gets the army's name as the saved scope gm_name
+#                          (MakeScopeFlag in the .gui) and stores it as the
+#                          monument state's gm_name
+#   gm_name_cancel_sgui    ends the naming without storing anything
+# The .gui disbands the army alongside use and cancel. One naming at a time.
 gm_name_start_sgui = {
 	scope = country
-	saved_scopes = { gm_state gm_carrier gm_old_name }
+	saved_scopes = { gm_state }
 
 	is_shown = {
 		always = yes
@@ -146,27 +138,48 @@ gm_name_start_sgui = {
 
 	is_valid = {
 		exists = scope:gm_state
-		exists = scope:gm_carrier
-		exists = scope:gm_old_name
 		scope:gm_state = {
 			owner = root
 		}
-		scope:gm_carrier = {
-			owner = root
-			NOT = { has_variable = gm_carries_name }
-		}
 		custom_tooltip = {
 			text = gm_name_one_at_a_time_tt
-			NOT = { has_variable = gm_name_carrier_state }
+			NOT = { has_variable = gm_name_carrier_army }
 		}
 	}
 
 	effect = {
 		gm_name_carrier_open = yes
-		scope:gm_carrier = {
-			set_variable = {
-				name = gm_name_old
-				value = scope:gm_old_name
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_name_mark_old_sgui = {
+	scope = country
+	saved_scopes = { gm_old_name }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_old_name
+		exists = var:gm_name_carrier_army
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:gm_old_name
+				exists = var:gm_name_carrier_army
+			}
+			var:gm_name_carrier_army = {
+				set_variable = {
+					name = gm_name_old
+					value = scope:gm_old_name
+				}
 			}
 		}
 	}
@@ -206,7 +219,7 @@ gm_name_use_sgui = {
 					value = scope:gm_name
 				}
 			}
-			gm_name_carrier_hand_over = yes
+			gm_name_carrier_close = yes
 		}
 	}
 
@@ -223,72 +236,11 @@ gm_name_cancel_sgui = {
 	}
 
 	is_valid = {
-		has_variable = gm_name_carrier_state
+		has_variable = gm_name_carrier_army
 	}
 
 	effect = {
 		gm_name_carrier_close = yes
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-}
-
-# Every close of the state-rename popup by its close button sends this
-# (states_panel.gui), so it acts only when the popup's state is a carrier.
-gm_name_popup_closed_sgui = {
-	scope = country
-	saved_scopes = { gm_popup_state }
-
-	is_shown = {
-		always = yes
-	}
-
-	is_valid = {
-		exists = scope:gm_popup_state
-		scope:gm_popup_state = {
-			has_variable = gm_carries_name
-		}
-	}
-
-	effect = {
-		if = {
-			limit = {
-				exists = scope:gm_popup_state
-				scope:gm_popup_state = { has_variable = gm_carries_name }
-			}
-			gm_name_carrier_close = yes
-			scope:gm_popup_state = {
-				gm_name_carrier_clear_state = yes
-			}
-		}
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-}
-
-gm_name_revert_done_sgui = {
-	scope = country
-	saved_scopes = { gm_popup_state }
-
-	is_shown = {
-		always = yes
-	}
-
-	is_valid = {
-		exists = scope:gm_popup_state
-	}
-
-	effect = {
-		if = {
-			limit = { exists = scope:gm_popup_state }
-			scope:gm_popup_state = {
-				gm_name_carrier_clear_state = yes
-			}
-		}
 	}
 
 	ai_is_valid = {

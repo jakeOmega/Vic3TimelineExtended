@@ -33,21 +33,12 @@ types state_panel_types
 		{
 			visible = yes
 			onclick = "[PopupManager.HideStateChangeName]"
-			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 8): closing
-			### the popup without confirming cancels a monument naming that
-			### this state carries; the scripted GUI ignores any other state.
-			onclick = "[GetScriptedGui('gm_name_popup_closed_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_popup_state', State.MakeScope ).End )]"
 		}
 
 		blockoverride "entire_scrollarea"
 		{
-			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 8): while
-			### this state's name carries a monument name being typed
-			### (gm_is_name_carrier, gm_sguis.txt), show only the state-name
-			### field, as "Monument name". ignoreinvisible closes the gaps.
 			flowcontainer = {
 				direction = vertical
-				ignoreinvisible = yes
 
 				# "Choose State Name" section
 				flowcontainer = {
@@ -55,20 +46,11 @@ types state_panel_types
 					spacing = 2
 
 					textbox = {
-						visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 						size = { 420 40 }
 						align = left|nobaseline
 						autoresize = yes
 						using = fontsize_large
 						text = "STATE_NAME"
-					}
-					textbox = {
-						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
-						size = { 420 40 }
-						align = left|nobaseline
-						autoresize = yes
-						using = fontsize_large
-						text = "gm_name_popup_label"
 					}
 
 					divider_clean = {}
@@ -95,38 +77,6 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-
-					### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 8).
-					### Siblings of state_name_edit, so FindChild reaches it.
-					### Naming mode opens on an empty field. Whether clearing
-					### the field reaches StateNameChangePopup.OnEditName (the
-					### popup learns of typing only through it) is what build 8
-					### tests.
-					widget = {
-						visible = "[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_name_revert_pending'), '(CFixedPoint)1' ) ) )]"
-						size = { 0 0 }
-						state = {
-							name = _show
-							on_start = "[PdxClearEditBoxText( PdxGuiWidget.AccessParent.FindChild('state_name_edit') )]"
-						}
-					}
-					### Once the monument has the name (gm_name_use_sgui sets
-					### gm_name_revert), clear the field and confirm again: an
-					### empty name gives the state its default name back, as a
-					### player's empty confirm does. Then drop the flags and
-					### close.
-					widget = {
-						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_name_revert_pending'), '(CFixedPoint)1' )]"
-						size = { 0 0 }
-						state = {
-							name = _show
-							on_start = "[PdxClearEditBoxText( PdxGuiWidget.AccessParent.FindChild('state_name_edit') )]"
-							duration = 0.3
-							on_finish = "[Execute( StateNameChangePopup.Confirm )]"
-							on_finish = "[GetScriptedGui('gm_name_revert_done_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_popup_state', State.MakeScope ).End )]"
-							on_finish = "[PopupManager.HideStateChangeName]"
-						}
-					}
 					
 					widget = {
 						size = { 420 10 }
@@ -137,7 +87,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[And( StateNameChangePopup.ShouldHaveCityHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
+					visible = "[StateNameChangePopup.ShouldHaveCityHub]"
 
 					textbox = {
 						size = { 420 40 }
@@ -181,7 +131,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[And( StateNameChangePopup.ShouldHavePortHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
+					visible = "[StateNameChangePopup.ShouldHavePortHub]"
 
 					textbox = {
 						size = { 420 40 }
@@ -225,7 +175,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[And( StateNameChangePopup.ShouldHaveFarmHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
+					visible = "[StateNameChangePopup.ShouldHaveFarmHub]"
 
 					textbox = {
 						size = { 420 40 }
@@ -269,7 +219,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[And( StateNameChangePopup.ShouldHaveMineHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
+					visible = "[StateNameChangePopup.ShouldHaveMineHub]"
 
 					textbox = {
 						size = { 420 40 }
@@ -313,7 +263,7 @@ types state_panel_types
 				flowcontainer = {
 					direction = vertical	
 					spacing = 2
-					visible = "[And( StateNameChangePopup.ShouldHaveWoodHub, Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) ) )]"
+					visible = "[StateNameChangePopup.ShouldHaveWoodHub]"
 
 					textbox = {
 						size = { 420 40 }
@@ -358,7 +308,6 @@ types state_panel_types
 		blockoverride "fixed_bottom"
 		{
 			button = {
-				visible = "[Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' ) )]"
 				using = default_button_action
 				parentanchor = hcenter
 				size = { 420 50 }
@@ -367,32 +316,6 @@ types state_panel_types
 				onclick = "[Execute(StateNameChangePopup.Confirm)]"
 				tooltip = "[GetDesc(StateNameChangePopup.Confirm)]"
 				onclick = "[PopupManager.HideStateChangeName]"
-				using = default_content_fade
-
-				flowcontainer = {
-					parentanchor = center
-
-					textbox = {
-						parentanchor = vcenter
-						autoresize = yes
-						align = center|nobaseline
-						text = "CONFIRM"
-					}
-				}
-			}
-
-			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 8): in naming
-			### mode Confirm leaves the popup open; the state-name section's
-			### revert helper closes it after putting the state's name back.
-			button = {
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_name_carrier'), '(CFixedPoint)1' )]"
-				using = default_button_action
-				parentanchor = hcenter
-				size = { 420 50 }
-				using = fontsize_large
-				enabled = "[IsValid(StateNameChangePopup.Confirm)]"
-				onclick = "[Execute(StateNameChangePopup.Confirm)]"
-				tooltip = "[GetDesc(StateNameChangePopup.Confirm)]"
 				using = default_content_fade
 
 				flowcontainer = {
