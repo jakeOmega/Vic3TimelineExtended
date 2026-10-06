@@ -323,7 +323,7 @@ class ModifierTests(unittest.TestCase):
         self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 25)
         self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
         self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
-        self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -3)
+        self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -0.3)
         for key in NATIONAL:
             d = BY_KEY[key]
             self.assert_pair(f"gm_national_{key}", d.national_field, f"gm_step_national_{key}",
@@ -861,7 +861,8 @@ class ContestTests(unittest.TestCase):
             self.assertIn(s, rededicate)
         self.assertLess(rededicate.find("gm_clear_state = yes"),
                         rededicate.find("te_construction_market_build_specified_level"))
-        self.assertIn("multiply = 5000", squash(block(read(VALUES), "gm_state_rededicate_cost")))
+        self.assertIn("multiply = 500", squash(block(read(VALUES), "gm_state_rededicate_cost")))
+        self.assertNotIn("multiply = 5000", squash(block(read(VALUES), "gm_state_rededicate_cost")))
         preserve = squash(block(self.e, "gm_state_preserve"))
         self.assertIn("gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = -1 }", preserve)
         self.assertIn("set_variable = gm_heritage", preserve)
@@ -1138,6 +1139,15 @@ class SkinTests(unittest.TestCase):
 
 # ---- Task 8: vanity backlash ---------------------------------------------------------
 
+class PriceTests(unittest.TestCase):
+    """v2 §1: a level costs a tenth of v1's; the doubling curve, not the price, stops spam."""
+
+    def test_a_level_costs_1000(self):
+        values = strip_comments(read("common/script_values/extra_script_values.txt"))
+        self.assertRegex(values, r"(?m)^construction_cost_grand_monument = 1000\s*$")
+        self.assertIn("required_construction = construction_cost_grand_monument", read(BUILDING))
+
+
 class VanityTests(unittest.TestCase):
     def test_level_finished_hook(self):
         ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
@@ -1158,7 +1168,7 @@ class VanityTests(unittest.TestCase):
 
     def test_backlash(self):
         body = squash(block(read(EFFECTS), "gm_state_vanity_backlash"))
-        self.assertIn("add_radicals_in_state = { value = 0.05 }", body)
+        self.assertIn("add_radicals_in_state = { value = 0.005 }", body)
         self.assertIn("change_variable = { name = gm_vanity_ledger add = 1 }", body)
         self.assertIn("post_notification = gm_vanity_backlash_notice", body)
 

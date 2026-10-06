@@ -91,13 +91,13 @@ construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
 construction_cost_space_mine = 20000
 
-# Repeatable Grand Monuments (common/buildings/grand_monuments.txt). Sits between
-# mega_high and extreme. At 1 tourism/level output (100/mo at base price) against
-# 50/mo of construction-goods maintenance, that is roughly a 65-year payback at base
-# tourism price -- shortening as late-game luxury demand lifts it. Intentionally an
-# order of magnitude worse than any real factory: the point is a construction sink
-# that is always available, not a good investment.
-construction_cost_grand_monument = 10000
+# Repeatable Grand Monuments (common/buildings/grand_monuments.txt). A tenth of the
+# old price (v2 §1, docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md):
+# below one base-game monument (2,500), but a Grand Monument's first step is five
+# levels. The doubling curve stops spam -- the fifth step alone takes 80 levels
+# against the first step's five -- so the price no longer has to, and a monument is
+# cheap enough to build often and for the AI to build at all (commissions).
+construction_cost_grand_monument = 1000
 
 war_support_training_decrease = {
 	value = 0

@@ -447,7 +447,7 @@ war](13-military.md) and [Nuclear weapons](14-nuclear.md).
 The Grand Monument is a building you can raise in any state from the start of
 the game. A government raises one to what it stands for: its crown, its
 republic, its revolution, its leader, its faith or the nation. Each level costs
-10,000 construction and needs only maintenance and a small caretaker staff. A
+1,000 construction and needs only maintenance and a small caretaker staff. A
 monument's level is its **grandeur**, and it has no cap. The Grand Monuments
 game rule can switch the system off.
 
@@ -557,7 +557,7 @@ the journal entry.
 | Choice | What happens |
 |---|---|
 | Pull Down | The monument and all its grandeur are gone. The new government gains legitimacy that fades over about five years. The group that objected to the old message approves and the group that raised it resents it, both fading. |
-| Rededicate | Costs 5,000 per level. The monument is rebuilt at half its level, rounded up, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
+| Rededicate | Costs 500 per level. The monument is rebuilt at half its level, rounded up, and the ceremony dedicates it again under your current laws. Its old supporters resent it a little. |
 | Keep as Heritage | The monument stays and its prestige returns, but under this government it lends no legitimacy and gives no approval. The group that objected resents it, less each year. |
 
 Pulling down many monuments at once gives what pulling down one of their
@@ -573,8 +573,8 @@ building panel counts as pulling it down.
 ### Vanity backlash
 
 Finishing a monument level while the country is in default, in famine or in
-recession angers people: 5% of the state's pops turn radical, and legitimacy
-falls by 3 for each such level, fading over about two years. While this would
+recession angers people: 0.5% of the state's pops turn radical, and legitimacy
+falls by 0.3 for each such level, fading over about two years. While this would
 happen, the journal entry shows a red Hard Times under its overview, so you can
 pause construction first.
 

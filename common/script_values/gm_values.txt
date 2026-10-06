@@ -70,7 +70,7 @@ gm_step_prestige = 25
 gm_step_legitimacy = 2
 gm_step_ig = 1
 gm_step_teardown = 3
-gm_step_vanity = -3
+gm_step_vanity = -0.3
 gm_step_tourism = 0.25
 gm_step_culture = 1
 
@@ -270,10 +270,11 @@ gm_display_contested = {
 }
 
 # ---- Contests (§4.3, §4.5) ----------------------------------------------------
-# State scope. What Rededicate costs: 5,000 a level.
+# State scope. What Rededicate costs: 500 a level (v2 §1: v1's 5,000, cut with the
+# construction price).
 gm_state_rededicate_cost = {
 	value = gm_state_grandeur
-	multiply = 5000
+	multiply = 500
 }
 
 # Country scope. How many monuments the open notice (monument_events.16) names.

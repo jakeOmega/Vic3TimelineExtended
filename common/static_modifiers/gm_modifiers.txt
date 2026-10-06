@@ -54,9 +54,13 @@ gm_national_teardown = {
 }
 
 # Vanity backlash (§5): the multiplier is the vanity ledger itself, LINEAR.
+# -0.3 a unit (v2 §1: v1's -3 divided by ten with the construction price).
+# country_legitimacy_base_add has decimals = 0, so while the ledger holds less
+# than two units the legitimacy breakdown rounds this to "-0"; the journal
+# entry's Palaces amid Hardship row (gm_display_vanity) shows one decimal.
 gm_national_vanity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_legitimacy_base_add = -3
+	country_legitimacy_base_add = -0.3
 }
 
 # ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
