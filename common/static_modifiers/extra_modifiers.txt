@@ -7921,14 +7921,15 @@ te_mon_currency_reform_premium = {
 # te_mon_peg_suspension and te_mon_peg_credibility_lost for the time their
 # counter says is left.
 
-# The carry on borrowed gold (owner decision I), as a line in the budget. A
-# UNIT modifier: step 10 of te_monetary_monthly_update applies it with
-# `multiplier = var:te_gold_carry_applied`, the weekly pounds the hot-money
-# balance costs at the policy rate. It is the one thing the gold mechanism ever
-# shows the treasury — the flows themselves move the central bank's vault.
+# RETIRED 2026-10-06 — the carry on borrowed gold (owner decision I, reversed:
+# under gold, private borrowers paid the interest on balances a high rate drew
+# in, never the treasury). Nothing applies it any more. It survives only so a
+# save made while it was applied loads clean; step 10 of
+# te_monetary_monthly_update strips it every pulse. Removal checklist:
+# common/scripted_effects/legacy_modifier_cleanup.txt.
 te_mon_gold_carry_expense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_expenses_add = 1 # REVIEWED 2026-09-20: unit value, multiplied by te_gold_carry_applied (weekly pounds of interest on te_gold_hot_money)
+	country_expenses_add = 1 # REVIEWED 2026-10-06: unit value of a retired stub; nothing applies it, step 10 strips it from old saves
 	country_te_budget_expense_banking_add = 1
 }
 

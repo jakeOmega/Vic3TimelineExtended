@@ -59,7 +59,7 @@
 #       te_mon_mod_home and the other bookkeeping that records which modifier
 #       is PHYSICALLY on which object, plus every value the monthly update
 #       recomputes from scratch (premiums, rate paid, market yield, neutral
-#       rate, stance gap and band, cost-push, flows, carry, the per-pulse
+#       rate, stance gap and band, cost-push, flows, the per-pulse
 #       copies of world and anchor figures, the discovery's points). The
 #       trackers are the winner's own and describe the winner's own modifiers,
 #       so leaving them alone is what lets the next pulse swap every modifier
@@ -162,8 +162,8 @@ te_monetary_inherit_central_bank = {
 	#
 	# The hot money is added for the same reason the vaults are: it is the part
 	# of each vault still owed back to foreign depositors, and the merged bank
-	# owes both — as a liability it can only be added, and step 10 keeps
-	# charging the carry on it and letting it drain home at a higher rate.
+	# owes both — as a liability it can only be added, and step 10 lets it
+	# drain home first, at a higher rate.
 	#
 	# NO CLAMP AT THE LIMIT. The limit is 0.2 x the winner's GDP, which may not
 	# count the annexed states until the engine next recomputes it, so a clamp
