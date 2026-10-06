@@ -36,6 +36,13 @@ MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
 HEADER_TT = "covert_op_preview_header_tt"
 PHASE_TT = "covert_op_phase_warning_tt"
 SELF_NOTE_TT = "covert_op_self_effect_note_tt"
+# Espionage also steals technology (covert_ops_steal_tech_all), which does add
+# up across operations, so its previews carry their own note and a theft line.
+ESPIONAGE_NOTE_TT = "covert_op_self_effect_note_espionage_tt"
+THEFT_TT = {
+    "industrial_espionage": "covert_op_tech_theft_preview_production_tt",
+    "military_espionage": "covert_op_tech_theft_preview_military_tt",
+}
 
 # (loc key, modifier, field, format): a field the pulse applies that the
 # preview's engine lines cannot show, and the line that states it at base
@@ -45,8 +52,6 @@ STATED = (
      "state_infrastructure_mult", "pct"),
     ("covert_infrastructure_sabotage_extra_tt", "covert_infrastructure_sabotage",
      "building_throughput_add", "pct"),
-    ("covert_military_espionage_extra_tt", "covert_military_espionage",
-     "country_military_tech_spread_mult", "pct"),
     ("covert_ideological_subversion_extra_tt", "covert_ideological_subversion",
      "political_movement_radicalism_add", "pct"),
     ("covert_ideological_subversion_extra_tt", "covert_ideological_subversion",
@@ -190,7 +195,14 @@ class LaunchPreviewTests(unittest.TestCase):
                 self.assertEqual("text = %s\n" % PHASE_TT in accept, has_effects)
                 # A self effect comes from the type's strongest operation only
                 # (covert_op_apply_self_effect): a second one adds nothing to us.
-                self.assertEqual("text = %s\n" % SELF_NOTE_TT in accept, bool(pulse[t]["self"]))
+                # Espionage says so with its own note, because its stolen
+                # technology does add up, and states the theft.
+                if t in THEFT_TT:
+                    self.assertIn("text = %s\n" % ESPIONAGE_NOTE_TT, accept)
+                    self.assertIn("text = %s\n" % THEFT_TT[t], accept)
+                    self.assertNotIn("text = %s\n" % SELF_NOTE_TT, accept)
+                else:
+                    self.assertEqual("text = %s\n" % SELF_NOTE_TT in accept, bool(pulse[t]["self"]))
                 if has_effects:
                     self.assertLess(accept.index(HEADER_TT), accept.index("show_as_tooltip"))
                     self.assertLess(accept.index("show_as_tooltip"), accept.index(PHASE_TT))
@@ -207,7 +219,7 @@ class LaunchPreviewTests(unittest.TestCase):
 
     def test_preview_keys_exist(self):
         loc = _loc()
-        for key in {HEADER_TT, PHASE_TT, SELF_NOTE_TT} | {row[0] for row in STATED}:
+        for key in {HEADER_TT, PHASE_TT, SELF_NOTE_TT, ESPIONAGE_NOTE_TT} | set(THEFT_TT.values()) | {row[0] for row in STATED}:
             with self.subTest(key=key):
                 self.assertIn(key, loc)
 
