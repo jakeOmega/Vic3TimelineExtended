@@ -134,7 +134,7 @@ Every decision event is keyed to the crisis it was sent for. The sender writes `
 | 1 | The target yielded |
 | 2 | The issuer backed down |
 | 3 | Reciprocal stand-down |
-| 4 | The target backed down natively: a play back-down, a programme stopped, an alert stood down |
+| 4 | The target backed down natively: a play back-down, a programme stopped for good (`nuclear_program_has_stopped`), an alert target disarmed |
 | 5 | The issuer's side backed down natively |
 | 6 | The war ended |
 | 7 | Nuclear use |
@@ -142,7 +142,7 @@ Every decision event is keyed to the crisis it was sent for. The sender writes `
 | 9 | Invalid: a party vanished. The record is dropped without consequences |
 | 10 | The dispute ended with no clear winner |
 
-Native outcomes come from `on_diplo_play_back_down` (`nd_crisis_on_back_down`), which reports who backed down. The weekly revalidation catches everything else, including a play that ended without the hook firing, a war ending, and a disarmed issuer.
+Native outcomes come from `on_diplo_play_back_down` (`nd_crisis_on_back_down`), which reports who backed down. The weekly revalidation catches everything else, including a play that ended without the hook firing, a war ending, and a disarmed issuer. A native close must observe a state the observed side can't undo at will and at no cost, or the concession it stands for is free: a proliferation dispute ends as outcome 4 on a freeze or disarmament treaty, a dismantling, a treaty's or the UN ban's ceiling, or the loss of the standing to run a programme, but not on funding stepped to 0 or a ceiling the target set itself; an alert dispute ends as outcome 4 only when the target no longer holds warheads, not when it stands down to Routine on its own. Short of that the crisis runs on, and the target concedes (the freeze, or the 24-month lock), refuses, talks, or lets the year run out (2026-10-05: an AI that stepped its funding to 0 had ended a proliferation crisis as the issuer's win with no freeze, and could fund the programme again at once).
 
 Credibility and audience costs:
 - The issuer achieves its objective (1 or 4): +10, plus 5 more if the crisis was public; the target loses 5.

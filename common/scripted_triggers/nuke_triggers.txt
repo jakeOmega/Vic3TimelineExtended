@@ -126,12 +126,37 @@ nuclear_program_is_proliferating = {
 # is deliberately not read: stepping it to 0 for a week costs the target
 # nothing, and would otherwise end a year-old sabotage operation for free. A
 # pause treaty, disarmament or the loss of the standing to run a programme
-# does end it — that programme has really stopped.
+# does end it — that programme has really stopped. So, still, does an arsenal
+# ceiling the target set itself and can lift at will; the nuclear crisis reads
+# nuclear_program_has_stopped below, which does not count that hold.
 nuclear_program_is_standing = {
 	nuclear_program_has_programme = yes
 	has_variable = nuclear_weapon_program_progress
 	NOT = { modifier:country_nuclear_program_pause_bool = yes }
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }
+}
+
+# Country scope: has this country's programme stopped in a way it cannot undo by
+# itself? A nuclear crisis over its programme (dispute 4) ends as a native
+# back-down only then (nd_crisis_revalidate_dispute); short of it, the target
+# has to concede the ten-year freeze. nuclear_program_is_standing's four tests,
+# less the two holds a country takes off again at will and at no cost: its
+# funding (not read at all) and its own arsenal ceiling
+# (nd_taboo_held_by_own_ceiling_only). A freeze or disarmament treaty, the loss
+# of the standing to run a programme, a dismantling, and a treaty's or the UN
+# ban's ceiling all count. Read nuclear_program_is_proliferating here instead
+# and a target that stepped its funding to 0 for one week ended the crisis as a
+# win for the issuer, then funded the programme as before (UNL, 2026-10-05).
+nuclear_program_has_stopped = {
+	OR = {
+		nuclear_program_has_programme = no
+		NOT = { has_variable = nuclear_weapon_program_progress }
+		modifier:country_nuclear_disarmament_bool = yes
+		AND = {
+			modifier:country_nuclear_program_pause_bool = yes
+			nd_taboo_held_by_own_ceiling_only = no
+		}
+	}
 }
 
 # Country scope: can this country be the one a nuclear_disarmament treaty
