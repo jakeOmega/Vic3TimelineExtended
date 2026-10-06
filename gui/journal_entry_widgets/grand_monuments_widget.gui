@@ -272,6 +272,99 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### A button of the naming line, its label set by naming_text.
+	type gm_naming_button = button {
+		using = default_button_action
+		size = { 150 24 }
+		margin_top = 2
+
+		block "naming_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			block "naming_text" {}
+		}
+	}
+
+	### Typed names (v2 §3.5, tested in game 2026-10-05): a monument named in
+	### the base game's company-rename popup, on the placeholder company
+	### company_gm_name_carrier (gm_sguis.txt). Shown only while this
+	### monument is being named (gm_is_being_named, set by Name It). As it
+	### appears, its _show state stores the company's starting name
+	### (gm_name_mark_old_sgui) and opens the popup: the popup can't open in
+	### Name It's own click, before the company exists. The watcher, a 1x1
+	### widget whose state fires when the company's name differs from the
+	### starting one, names the monument without a second click; Rename, Use
+	### This Name and Cancel do the same by hand. Every read of
+	### Var('gm_name_carrier') sits here, where Name It has set it.
+	type gm_naming_line = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+		parentanchor = hcenter
+		visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' )]"
+
+		state = {
+			name = _show
+			on_start = "[GetScriptedGui('gm_name_mark_old_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+			on_start = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+		}
+
+		widget = {
+			size = { 1 1 }
+			state = {
+				trigger_when = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_has_name_old'), '(CFixedPoint)1' ), Not( EqualTo_string( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_old').GetFlagName ) ) )]"
+				on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+			}
+		}
+
+		textbox = {
+			autoresize = yes
+			max_width = 470
+			elide = right
+			parentanchor = hcenter
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			text = "gm_name_pending"
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					tooltip = "gm_button_name_popup_tooltip"
+					onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_popup" }
+			}
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
+					tooltip = "gm_button_name_use_tooltip"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_use" }
+			}
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					datacontext = "[GetScriptedGui('gm_name_cancel_sgui')]"
+					tooltip = "gm_button_name_cancel_tooltip"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_cancel" }
+			}
+		}
+	}
+
 	### One of the four monument policies (v2 §5), in National Effects. Two to a
 	### row (2 x 230 + 8 + 4 margins = 480). The current policy's button is
 	### disabled: its scripted GUI is invalid for the policy already in force.
@@ -347,6 +440,7 @@ types grand_monuments_widget_types
 				spacing = 2
 
 				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' )]"
 					autoresize = yes
 					multiline = yes
 					minimumsize = { 376 -1 }
@@ -354,6 +448,18 @@ types grand_monuments_widget_types
 					align = left|nobaseline
 					using = fontsize_large
 					text = "gm_row_title"
+				}
+				# A typed name (v2 §3.5) prints straight from the state's
+				# gm_name, the form that ran in game, and only once it exists.
+				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' )]"
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 376 -1 }
+					maximumsize = { 376 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					text = "gm_row_title_named"
 				}
 				gm_row_line = {
 					text = "gm_row_detail"
@@ -371,19 +477,33 @@ types grand_monuments_widget_types
 		}
 
 		# Rename (v2 §3.3): an upheld monument's form and namesake again, at
-		# no cost. A contested or heritage monument keeps its name.
+		# no cost; Name It types a name of our own (§3.5), Clear Name drops it.
+		# A contested or heritage monument keeps its name. Hidden while this
+		# monument is being named: the naming line below replaces it.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
 			parentanchor = hcenter
-			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' )]"
+			visible = "[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) )]"
 
 			gm_choice_button = {
 				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
 				blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
 				blockoverride "choice_text" { text = "gm_button_rename" }
 			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_name_start" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_clear_name_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_clear_name_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_clear_name" }
+			}
 		}
+
+		gm_naming_line = {}
 
 		flowcontainer = {
 			direction = horizontal

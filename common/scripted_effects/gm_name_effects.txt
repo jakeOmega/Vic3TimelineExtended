@@ -253,3 +253,40 @@ gm_state_name_if_unnamed = {
 		gm_state_set_namesake = { NAMESAKE = city }
 	}
 }
+
+# ---- Typed names (§3.5): the company carrier ------------------------------------------
+# Country scope. End a naming, the name used or not: the carrier company and
+# its slot (each behind its check), then the flags that showed it, the starting
+# name and every state's gm_being_named.
+gm_name_carrier_close = {
+	if = {
+		limit = { has_company = company_type:company_gm_name_carrier }
+		remove_company = company_type:company_gm_name_carrier
+	}
+	if = {
+		limit = { has_modifier = gm_name_carrier_slot }
+		remove_modifier = gm_name_carrier_slot
+	}
+	gm_remove_state_var = { VAR = gm_name_carrier }
+	gm_remove_state_var = { VAR = gm_naming_active }
+	gm_remove_state_var = { VAR = gm_naming_open }
+	gm_remove_state_var = { VAR = gm_name_old }
+	every_scope_state = {
+		limit = { has_variable = gm_being_named }
+		remove_variable = gm_being_named
+	}
+}
+
+# Country scope, monthly (gm_country_monthly): a naming whose 30 days have run
+# out was abandoned (the popup closed and the row left). Closing the company
+# popup itself can't cancel it: that is vanilla's companies_panel.gui, which
+# the mod does not override.
+gm_name_sweep = {
+	if = {
+		limit = {
+			has_variable = gm_naming_active
+			NOT = { has_variable = gm_naming_open }
+		}
+		gm_name_carrier_close = yes
+	}
+}

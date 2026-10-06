@@ -210,9 +210,12 @@ class StateGatedTest(unittest.TestCase):
         """A contested or heritage monument keeps its name (v2 §3.3): Rename
         shows only while the monument fits, and its scripted GUI says so."""
         row = _squash(_type_body(_gui(), "gm_monument_row"))
-        upheld = "EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' )"
+        upheld = ("And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), "
+                  "EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) )")
         self.assertIn(f'visible = "[{upheld}]" gm_choice_button = {{ blockoverride "choice_context" '
                       f'{{ datacontext = "[GetScriptedGui(\'gm_rename_sgui\')]" }}', row)
+        for sgui in ("gm_name_start_sgui", "gm_clear_name_sgui"):
+            self.assertIn(f"GetScriptedGui('{sgui}')", row.split(upheld, 1)[1].split("gm_naming_line", 1)[0])
         value = _squash(_block(_read(VALUES), "gm_state_can_rename"))
         self.assertEqual(value, "value = 0 if = { limit = { gm_state_status_fits = yes } value = 1 }")
         sgui = _squash(_block(_read(SGUIS), "gm_rename_sgui"))
@@ -284,6 +287,39 @@ class StateGatedTest(unittest.TestCase):
         how = _squash(_type_body(gui, "te_gm_sec_how").split("gm_panel = {", 1)[1])
         self.assertIn('gm_subheader = { blockoverride "subheader_margin" {} blockoverride "subheader_text" '
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
+
+
+class TypedNameLayoutTest(unittest.TestCase):
+    """Typed names (v2 §3.5): the naming line shows only while its monument is
+    being named, holds every read of the carrier company, opens the popup from
+    its _show state and names the monument from a watcher."""
+
+    def test_every_carrier_read_sits_in_the_naming_line(self):
+        gui = _strip_comments(_gui())
+        line = _type_body(gui, "gm_naming_line")
+        self.assertEqual(gui.count("Var('gm_name_carrier')"), line.count("Var('gm_name_carrier')"))
+        self.assertTrue(_squash(line).startswith(
+            "direction = vertical ignoreinvisible = yes spacing = 4 parentanchor = hcenter visible = "
+            "\"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' )]\""))
+        self.assertIn("gm_naming_line = {}", _squash(_type_body(gui, "gm_monument_row")))
+
+    def test_the_show_state_and_the_watcher(self):
+        line = _squash(_type_body(_strip_comments(_gui()), "gm_naming_line"))
+        show = re.search(r"state = \{ name = _show (.*?) \} widget", line)
+        self.assertTrue(show)
+        self.assertLess(show.group(1).find("gm_name_mark_old_sgui"), show.group(1).find("ShowCompanyChangeName"),
+                        "store the starting name before the popup can change it")
+        watcher = re.search(r"widget = \{ size = \{ 1 1 \} state = \{ trigger_when = \"(.*?)\" on_finish = \"(.*?)\" \}", line)
+        self.assertTrue(watcher)
+        self.assertIn("ScriptValue('gm_has_name_old'), '(CFixedPoint)1' )", watcher.group(1))
+        self.assertIn("GetScriptedGui('gm_name_use_sgui').Execute(", watcher.group(2))
+
+    def test_the_title_prints_a_typed_name(self):
+        row = _squash(_type_body(_gui(), "gm_monument_row"))
+        for value, key in (("0", "gm_row_title"), ("1", "gm_row_title_named")):
+            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), "
+                          f"'(CFixedPoint){value}' )]\"", row)
+            self.assertIn(f'text = "{key}"', row)
 
 
 class PolicyLayoutTest(unittest.TestCase):
@@ -619,7 +655,7 @@ class LabelBudgetTest(unittest.TestCase):
     def test_choice_buttons(self):
         (cell,) = _cells(_type_body(self.gui, "gm_choice_button"))
         keys = re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))
-        self.assertEqual(len(keys), 4, "Rename and the three contested choices")
+        self.assertEqual(len(keys), 6, "Rename, Name It, Clear Name and the three contested choices")
         for key in keys:
             self._fits(key, cell)
 
@@ -627,6 +663,13 @@ class LabelBudgetTest(unittest.TestCase):
         (cell,) = _cells(_type_body(self.gui, "gm_policy_button"))
         keys = re.findall(r'"policy_text" \{ text = "(\w+)" \}', _type_body(self.gui, "te_gm_sec_national"))
         self.assertEqual(len(keys), 4)
+        for key in keys:
+            self._fits(key, cell)
+
+    def test_naming_buttons(self):
+        (cell,) = _cells(_type_body(self.gui, "gm_naming_button"))
+        keys = re.findall(r'"naming_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_naming_line"))
+        self.assertEqual(len(keys), 3)
         for key in keys:
             self._fits(key, cell)
 

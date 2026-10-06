@@ -179,6 +179,15 @@ gm_local_athletic = {
 	state_turmoil_effects_mult = -0.10
 }
 
+# ---- Typed names (v2 §3.5): on the country only while a naming is open ----------
+# The company slot company_gm_name_carrier takes, so naming a monument never
+# blocks or uses up a real company. It lands at the next modifier update, so
+# for a moment a country at its limit is over it (owner-accepted, §3.5).
+gm_name_carrier_slot = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_max_companies_add = 1
+}
+
 # ---- The monument policy (v2 §5): on the monument's state ----------------------
 # Refreshed by gm_state_monthly; multiplier gm_policy_upkeep_mult (+1 Open to
 # the Public, -1 Mothballed). Throughput scales the maintenance input, the only

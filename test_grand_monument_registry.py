@@ -1934,5 +1934,63 @@ class PolicyTests(unittest.TestCase):
                       "multiply = 0.5 } } }", body)
 
 
+
+# ==== v2 phase 2: typed names (§3.5) =================================================
+CARRIER_COMPANY = "common/company_types/gm_name_carrier_company.txt"
+CARRIER_BUILDING = "common/buildings/gm_name_carrier.txt"
+NAMING_SGUIS = ("gm_name_start_sgui", "gm_name_mark_old_sgui", "gm_name_use_sgui", "gm_name_cancel_sgui",
+                "gm_clear_name_sgui")
+
+
+class TypedNameTests(unittest.TestCase):
+    def test_the_carrier_company(self):
+        company = squash(block(read(CARRIER_COMPANY), "company_gm_name_carrier"))
+        self.assertIn("potential = { has_variable = gm_naming_active }", company)
+        self.assertIn("ai_will_do = { always = no }", company)
+        self.assertIn("building_types = { building_gm_name_carrier_anchor }", company)
+        building = squash(block(read(CARRIER_BUILDING), "building_gm_name_carrier_anchor"))
+        for s_ in ("buildable = no", "expandable = no", "downsizeable = no"):
+            self.assertIn(s_, building)
+        L = loc()
+        for key in ("company_gm_name_carrier", "building_gm_name_carrier_anchor", "pm_gm_name_carrier_anchor",
+                    "pmg_gm_name_carrier_anchor"):
+            self.assertIn(key, L, key)
+
+    def test_the_start_order(self):
+        start = squash(block(read(SGUIS), "gm_name_start_sgui"))
+        self.assertLess(start.find("set_variable = gm_naming_active"),
+                        start.find("add_company = company_type:company_gm_name_carrier"),
+                        "the company type's potential reads gm_naming_active")
+        self.assertIn("set_variable = { name = gm_naming_open value = yes days = 30 }", start)
+        self.assertIn("NOT = { has_variable = gm_name_carrier }", start, "one naming at a time")
+        self.assertIn("gm_state_status_fits = yes", start, "a contested or heritage monument keeps its name")
+
+    def test_every_naming_sgui_is_for_players(self):
+        sguis = read(SGUIS)
+        for name in NAMING_SGUIS:
+            self.assertIn("ai_is_valid = { always = no }", squash(block(sguis, name)), name)
+
+    def test_use_repeats_its_check(self):
+        use = squash(block(read(SGUIS), "gm_name_use_sgui"))
+        self.assertIn("if = { limit = { scope:gm_state = { has_variable = gm_being_named } } scope:gm_state = "
+                      "{ set_variable = { name = gm_name value = scope:gm_name } } gm_name_carrier_close = yes }", use)
+
+    def test_close_and_the_sweep(self):
+        names = read(NAME_EFFECTS)
+        close = squash(block(names, "gm_name_carrier_close"))
+        for s_ in ("has_company = company_type:company_gm_name_carrier } remove_company",
+                   "has_modifier = gm_name_carrier_slot } remove_modifier = gm_name_carrier_slot"):
+            self.assertIn(s_, close)
+        for var in ("gm_name_carrier", "gm_naming_active", "gm_naming_open", "gm_name_old"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", close, var)
+        self.assertIn("every_scope_state = { limit = { has_variable = gm_being_named } remove_variable = gm_being_named }",
+                      close)
+        sweep = squash(block(names, "gm_name_sweep"))
+        self.assertIn("has_variable = gm_naming_active NOT = { has_variable = gm_naming_open } } "
+                      "gm_name_carrier_close = yes", sweep)
+        self.assertIn("gm_name_sweep = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
+        self.assertAlmostEqual(number(block(read(MODIFIERS), "gm_name_carrier_slot"), "country_max_companies_add"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

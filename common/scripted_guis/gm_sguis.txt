@@ -310,3 +310,180 @@ gm_policy_mothballed_sgui = {
 		always = no
 	}
 }
+
+# ---- Typed names (v2 §3.5): the company carrier ---------------------------------
+# A name typed in the base game's company-rename popup, on a placeholder company
+# that exists only while the player names (company_gm_name_carrier):
+#   gm_name_start_sgui     adds the company (and a slot for it) and marks the
+#                          state; the row's naming line then opens the popup
+#   gm_name_mark_old_sgui  stores the company's starting name, so the row's
+#                          watcher can see when it changes
+#   gm_name_use_sgui       stores the company's name as the state's gm_name
+#                          (MakeScopeFlag in the .gui), then removes it
+#   gm_name_cancel_sgui    removes it without storing anything
+#   gm_clear_name_sgui     drops a typed name; the chosen name shows again
+# One naming at a time: the carrier is one company type. Players only.
+gm_name_start_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_sgui_rename_upheld_tt
+				gm_state_status_fits = yes
+			}
+		}
+		custom_tooltip = {
+			text = gm_name_one_at_a_time_tt
+			NOT = { has_variable = gm_name_carrier }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_name_start_tt
+			scope:gm_state = { set_variable = gm_being_named }
+			# Before add_company: the company type's potential reads it.
+			set_variable = gm_naming_active
+			# The monthly sweep's clock (gm_name_sweep).
+			set_variable = { name = gm_naming_open value = yes days = 30 }
+			add_modifier = { name = gm_name_carrier_slot }
+			add_company = company_type:company_gm_name_carrier
+			capital = {
+				state_region = { save_scope_as = gm_name_carrier_hq }
+			}
+			company:company_gm_name_carrier = {
+				set_company_state_region = scope:gm_name_carrier_hq
+			}
+			set_variable = { name = gm_name_carrier value = company:company_gm_name_carrier }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# The starting name, on the country (whether companies hold variables is
+# untested). Sent by the naming line's _show state.
+gm_name_mark_old_sgui = {
+	scope = country
+	saved_scopes = { gm_old_name }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_old_name
+		has_variable = gm_naming_active
+	}
+
+	effect = {
+		set_variable = { name = gm_name_old value = scope:gm_old_name }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# The watcher can send this twice before the first has landed, so the effect
+# repeats the validity check.
+gm_name_use_sgui = {
+	scope = country
+	saved_scopes = { gm_state gm_name }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		exists = scope:gm_name
+		scope:gm_state = {
+			owner = root
+			has_variable = gm_being_named
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_name_use_tt
+			if = {
+				limit = {
+					scope:gm_state = { has_variable = gm_being_named }
+				}
+				scope:gm_state = {
+					set_variable = { name = gm_name value = scope:gm_name }
+				}
+				gm_name_carrier_close = yes
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_name_cancel_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		has_variable = gm_naming_active
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_name_cancel_tt
+			gm_name_carrier_close = yes
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_clear_name_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_name_has_typed_tt
+				has_variable = gm_name
+			}
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_name_clear_tt
+			scope:gm_state = { remove_variable = gm_name }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

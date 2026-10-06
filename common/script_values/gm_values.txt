@@ -154,6 +154,36 @@ gm_state_name_year = {
 	}
 }
 
+# Typed names (§3.5). State scope: 1 while the state holds a typed name
+# (gm_name), which the row's title shows; 1 while its monument is being named
+# (gm_name_start_sgui), which switches the row to the naming line. Script
+# values, not Var(...).IsSet: the proven idiom for a row's toggle.
+gm_state_has_typed_name = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_name }
+		value = 1
+	}
+}
+
+gm_is_being_named = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_being_named }
+		value = 1
+	}
+}
+
+# Country scope: 1 once the naming's starting name is stored (gm_name_old),
+# which holds the row's watcher until it can compare against it.
+gm_has_name_old = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_name_old }
+		value = 1
+	}
+}
+
 # Any scope: this year, for monument_events.25's "of [year]" preview.
 gm_this_year = {
 	value = year

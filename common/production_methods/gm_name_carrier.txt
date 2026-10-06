@@ -1,0 +1,5 @@
+﻿# Grand Monuments v2 §3.5: an empty method for the never-built
+# building_gm_name_carrier_anchor.
+pm_gm_name_carrier_anchor = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+}

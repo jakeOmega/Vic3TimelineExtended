@@ -520,6 +520,7 @@ gm_country_monthly = {
 	}
 	gm_ai_decide_contests = yes
 	gm_policy_ai_choose = yes
+	gm_name_sweep = yes
 	if = {
 		limit = {
 			NOT = { any_scope_state = { has_building = building_grand_monument } }
