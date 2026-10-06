@@ -16,6 +16,29 @@ New script goes in new files where it is a new subsystem (`gm_commission_effects
 **Spec:** `docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md` (v2) on v1's
 `docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md`.
 
+## Built as, after review (2026-10-05)
+
+Two independent reviews changed five things this plan prescribes. The code and `mod_systems.md` § Grand Monuments are
+the record; read these before reusing a task below.
+
+- **War commissions** come from 1.14.5's `on_won_war` / `on_lost_war` (`scope:war`, `scope:enemy_country`,
+  `scope:benefitted_from_wargoal` / `victim_of_wargoal`), gated on `is_warleader = root` and
+  `war_duration_months >= 12`. The `on_wargoal_enforced` latches, `on_peace_agreement_signed_war_leader`,
+  `monument_events.22` and the monthly war counter of Task 4 were never needed: a capitulation fires no peace agreement.
+- **The unveiling** runs from the next refresh (`gm_unveil_pending`), not inside the ceremony's option: it reads the
+  production method the dedication has just activated, which may not be visible in the same effect.
+- **The policy's factors** scale the step counts after the curve (`gm_policy_scale_steps`), not grandeur before it:
+  halving grandeur takes off about one step, not half the effect.
+- **The policy's upkeep** is `goods_input_construction_mult` ±0.5 on the monument building (`gm_policy_upkeep_open` /
+  `_mothballed`). Throughput does not scale the `level_scaled` maintenance input, so Task 10's throughput modifier did
+  nothing.
+- **The AI's ceremony** at a monument that can answer an open commission gives every other dedication ×0, not just
+  the commission's +100, which lost about one in five.
+
+Smaller fixes from the same reviews: the regime tracker writes nothing on a civil-war side; a counted monument that
+drops out lowers the baseline; a petition doesn't rename a named monument; a naming can't be orphaned; the naming sweep
+waits a year.
+
 ## Phase order (owner, 2026-10-05)
 
 The owner swapped the spec's phases 3 and 4: the policy (§5) is now **phase 3** and the monuments standing in 1836 (§4)

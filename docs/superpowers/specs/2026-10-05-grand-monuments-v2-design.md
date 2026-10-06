@@ -74,11 +74,14 @@ flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT).
 - **Country names from a stored variable:** `Var('x').GetCountry.GetName` failed in this mod's testing; the workaround
   stores a state and reads its owner, or keeps the text generic (`scripting_best_practices.md`, loc accessors).
 - **`pm_no_maintenance` is disabled under the default construction market setting** (`disable_pm_no_maintenance` in
-  `extra_game_rules.txt`), so a policy cannot cut upkeep by switching methods. It uses throughput instead (§5), which
-  assumes throughput scales a level-scaled maintenance input (check).
-- **On-actions for world moments:** `on_war_end` (ROOT = the diplomatic play, `scope:actor` / `scope:target`, no winner),
-  `on_wargoal_enforced`, `on_peace_agreement_signed_war_leader`, `on_character_death`, `on_new_ruler`,
-  `on_law_activated`. Which scopes the war ones carry, and so how a winner is told from a loser, is a plan task.
+  `extra_game_rules.txt`), so a policy cannot cut upkeep by switching methods. Throughput doesn't scale a
+  `level_scaled` input either (`scripting_best_practices.md` § "Production Method Modifier Scaling Blocks"), so the
+  policy puts `goods_input_construction_mult` on the monument building itself, as the engine's `pm_retooling` does
+  (built in phase 3).
+- **On-actions for world moments:** 1.14.5's `on_won_war` / `on_lost_war` (ROOT = a country on the winning or losing
+  side, `scope:war`, `scope:enemy_country` = the other side's leader, `scope:benefitted_from_wargoal` /
+  `scope:victim_of_wargoal`) tell a winner from a loser and fire for capitulations; `scope:war` takes `is_warleader`
+  and `war_duration_months`. Also `on_character_death`, `on_new_ruler`, `on_law_activated` (built in phase 2).
 - **Space race firsts** are recorded on the achiever as `sr_was_first_<milestone>` (`space_race_effects.txt`).
 - **Treaty articles** are the mod's own files (`common/treaty_articles/1xx_*.txt`: `kind`, `flags`, `possible`,
   `can_ratify`). **UN topics** are `un_topic_<key>` with `un_propose_<key>_*` buttons (`un_redesign_design.md` §0.12).
@@ -473,9 +476,9 @@ no effect). A country variable, `gm_policy` (flag), so a civil war's winner keep
 | **Mothballed** | monuments' upkeep ×0.5 | prestige (standing) ×0.5; local effects ×0.5; no anniversaries |
 
 - **How:** the factors multiply the per-step values in `gm_compute_totals` and `gm_state_monthly` through one
-  `gm_policy_factor_*` script value each. Upkeep moves through a state modifier `gm_policy_upkeep` on each monument's
-  state (`building_grand_monument_throughput_add` ±0.5), refreshed by the state pulse. Two checks: the pattern is
-  registered (`/modifier-search`), and throughput scales the maintenance input.
+  `gm_policy_factor_*` script value each. Upkeep moves through `gm_policy_upkeep_open` / `_mothballed`
+  (`goods_input_construction_mult` ±0.5) on each monument building, refreshed by the state pulse; throughput would not
+  have moved it (engine facts).
 - **AI:** Mothballed in hard times or with a negative treasury; State Ceremonial with legitimacy under 40 and regime
   grandeur above 0; Open to the Public when a monument stands in a state with a Tourism Industry; else Standard.
   Re-evaluated yearly; the cooldown applies to the AI as well.
