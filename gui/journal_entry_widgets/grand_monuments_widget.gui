@@ -283,7 +283,7 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### PROTOTYPE (v2 spec §3.4, test build 7): name a monument by typing over a
+	### PROTOTYPE (v2 spec §3.4, test build 8): name a monument by typing over a
 	### state's name in the base game's state-rename popup (gm_sguis.txt and
 	### gm_name_carrier_effects.txt have why). Two modes, on the state value
 	### gm_is_being_named:
@@ -294,8 +294,9 @@ types grand_monuments_widget_types
 	###      the saved scope gm_carrier, with its name now as gm_old_name.
 	###   1  the carrier's name so far. The popup opens as this mode appears
 	###      (the _show state); confirming it names the monument (the
-	###      trigger_when watcher); closing it cancels (states_panel.gui).
-	###      Rename, Use This Name and Cancel are the same by hand.
+	###      trigger_when watcher), after which the popup puts the carrier's
+	###      name back (states_panel.gui); closing it cancels. Rename, Use
+	###      This Name and Cancel are the same by hand.
 	### Every read of Var('gm_name_carrier_state') sits in mode 1, where the
 	### start scripted GUI has set it, so nothing reads a missing variable.
 	type gm_rename_line = flowcontainer {
@@ -332,7 +333,7 @@ types grand_monuments_widget_types
 
 			gm_rename_button = {
 				visible = "[And( Not( EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting ) ), Not( EqualTo_string( State.GetNameNoFormatting, State.GetStateRegion.GetNameNoFormatting ) ) )]"
-				datacontext = "[GetScriptedGui('gm_name_start_renamed_sgui')]"
+				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
 				tooltip = "gm_button_name_start_renamed_tooltip"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"

@@ -155,9 +155,8 @@ gm_has_custom_name = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 6): 1 while this state's monument is
-# being named (gm_name_start_sgui and its renamed variant), else 0. The row
-# swaps its buttons on it.
+# PROTOTYPE (v2 spec §3.4, test build 8): 1 while this state's monument is
+# being named (gm_name_start_sgui), else 0. The row swaps its buttons on it.
 gm_is_being_named = {
 	value = 0
 	if = {
@@ -166,13 +165,25 @@ gm_is_being_named = {
 	}
 }
 
-# PROTOTYPE (test build 6): 1 while this state's name carries a monument name
-# being typed, else 0. states_panel.gui's rename popup shows only the
-# state-name field while it holds.
+# PROTOTYPE (test build 8): 1 while this state's name carries a monument name
+# being typed, until the popup has put its name back, else 0.
+# states_panel.gui's rename popup shows only the state-name field while it
+# holds.
 gm_is_name_carrier = {
 	value = 0
 	if = {
 		limit = { has_variable = gm_carries_name }
+		value = 1
+	}
+}
+
+# PROTOTYPE (test build 8): 1 once the name has been copied and the popup
+# should give this state its default name back (gm_name_carrier_hand_over),
+# else 0.
+gm_name_revert_pending = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_name_revert }
 		value = 1
 	}
 }

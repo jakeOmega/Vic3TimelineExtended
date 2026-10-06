@@ -1,10 +1,13 @@
-﻿# PROTOTYPE (v2 spec §3.4, test build 7): the naming's carrier is a state we
+﻿# PROTOTYPE (v2 spec §3.4, test build 8): the naming's carrier is a state we
 # own whose name the player types over in the base game's state-rename popup;
-# State.GetNameNoFormatting returns it as a CString (build 5 showed the hub
-# accessors ignore renames). No effect writes a stored name back, so the
-# carrier gets reset_state_name: exact for a state still on its map name,
-# which the .gui prefers (the capital, else the monument's state); a renamed
-# state loses its custom name, and the Name It tooltip says so in red.
+# State.GetNameNoFormatting returns it as a CString (the hub accessors ignore
+# renames, build 5). Script can't undo a player's rename (reset_state_name
+# resets only the script name, localized_name; the typed one is separate), but
+# the popup can: confirming an empty name gives the state its default name
+# back. So after the name is copied the popup clears its own field and
+# confirms again (states_panel.gui), driven by the carrier's gm_name_revert.
+# The carrier keeps gm_carries_name, which holds the popup in naming mode,
+# until that is done.
 
 # Country scope. scope:gm_state = the monument's state, scope:gm_carrier =
 # the state whose name carries the typing.
@@ -21,8 +24,26 @@ gm_name_carrier_open = {
 	}
 }
 
-# Country scope. Ends a naming; the caller resets the carrier's name first
-# when it should.
+# Country scope. The name has been copied: end the journal entry's side of the
+# naming and ask the popup to put the carrier's name back.
+gm_name_carrier_hand_over = {
+	if = {
+		limit = {
+			has_variable = gm_name_carrier_state
+			exists = var:gm_name_carrier_state
+		}
+		var:gm_name_carrier_state = {
+			set_variable = gm_name_revert
+		}
+	}
+	remove_variable = gm_name_carrier_state
+	every_scope_state = {
+		limit = { has_variable = gm_being_named }
+		remove_variable = gm_being_named
+	}
+}
+
+# Country scope. Cancels a naming before anything was copied.
 gm_name_carrier_close = {
 	if = {
 		limit = {
@@ -30,29 +51,19 @@ gm_name_carrier_close = {
 			exists = var:gm_name_carrier_state
 		}
 		var:gm_name_carrier_state = {
-			remove_variable = gm_carries_name
-			remove_variable = gm_name_old
+			gm_name_carrier_clear_state = yes
 		}
 	}
 	remove_variable = gm_name_carrier_state
-	remove_variable = gm_carrier_was_renamed
 	every_scope_state = {
 		limit = { has_variable = gm_being_named }
 		remove_variable = gm_being_named
 	}
 }
 
-# Country scope. Cancels a naming: resets a carrier that was on its map name
-# (a renamed one is left as it is; the player may not have changed it yet).
-gm_name_carrier_cancel = {
-	if = {
-		limit = {
-			NOT = { has_variable = gm_carrier_was_renamed }
-			exists = var:gm_name_carrier_state
-		}
-		var:gm_name_carrier_state = {
-			reset_state_name = yes
-		}
-	}
-	gm_name_carrier_close = yes
+# State scope: the carrier. Drops its naming flags.
+gm_name_carrier_clear_state = {
+	remove_variable = gm_carries_name
+	remove_variable = gm_name_old
+	remove_variable = gm_name_revert
 }
