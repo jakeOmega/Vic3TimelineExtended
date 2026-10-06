@@ -660,7 +660,7 @@ un_events.4 = {
 			}
 		}
 		# Booked below, once the mission shows which state the force went to.
-		custom_tooltip = un_ledger_tt_delivery_up_1_5
+		custom_tooltip = un_ledger_tt_delivery_up_0_75
 		# International standing: an actual deployment, not a pledge. Option B
 		# (observers only) is the token gesture and deliberately pays NOTHING —
 		# the whole point of standing is that only delivery counts. One payout
@@ -696,10 +696,10 @@ un_events.4 = {
 			}
 			if = {
 				limit = { exists = scope:un_led_msn_state }
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1041 SUBJECT = scope:un_led_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.75 REASON = 1041 SUBJECT = scope:un_led_msn_state }
 			}
 			else = {
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1044 SUBJECT = scope:peacekeeping_target }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.75 REASON = 1044 SUBJECT = scope:peacekeeping_target }
 			}
 		}
 		# Notify the target country
@@ -733,8 +733,8 @@ un_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_ledger_tt_delivery_up_0_5
-		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.5 REASON = 1042 SUBJECT = scope:peacekeeping_target }
+		custom_tooltip = un_ledger_tt_delivery_up_0_25
+		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.25 REASON = 1042 SUBJECT = scope:peacekeeping_target }
 		change_relations = { country = scope:peacekeeping_target value = 5 }
 	}
 
@@ -1127,7 +1127,7 @@ un_events.7 = {
 			is_decaying = yes
 		}
 		# Booked below, once the mission shows which state the aid went to.
-		custom_tooltip = un_ledger_tt_delivery_up_1_5
+		custom_tooltip = un_ledger_tt_delivery_up_0_75
 		# International standing: aid actually delivered, at a GDP-scaled cost.
 		# Option B (a token contribution) pays NOTHING — token donations must
 		# not generate standing at all, or the cheapest option would be the
@@ -1170,10 +1170,10 @@ un_events.7 = {
 			}
 			if = {
 				limit = { exists = scope:un_led_msn_state }
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1071 SUBJECT = scope:un_led_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.75 REASON = 1071 SUBJECT = scope:un_led_msn_state }
 			}
 			else = {
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1075 SUBJECT = scope:crisis_country }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.75 REASON = 1075 SUBJECT = scope:crisis_country }
 			}
 		}
 		# Notify the crisis country of incoming aid
@@ -1207,8 +1207,8 @@ un_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_ledger_tt_delivery_up_0_5
-		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.5 REASON = 1072 SUBJECT = scope:crisis_country }
+		custom_tooltip = un_ledger_tt_delivery_up_0_25
+		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.25 REASON = 1072 SUBJECT = scope:crisis_country }
 		change_relations = { country = scope:crisis_country value = 10 }
 		# GDP-scaled token benefit to crisis country
 		# A flat token (redesign phase 6): the old multiplier read
@@ -4043,8 +4043,8 @@ un_events.35 = {
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		custom_tooltip = un_ledger_tt_delivery_institutional_1
-		un_ledger_entry_on = { PILLAR = delivery POINTS = 1 REASON = 18 SUBJECT = ROOT }
+		custom_tooltip = un_ledger_tt_delivery_institutional_0_5
+		un_ledger_entry_on = { PILLAR = delivery POINTS = 0.5 REASON = 18 SUBJECT = ROOT }
 	}
 
 	# Option B: weather it alone.

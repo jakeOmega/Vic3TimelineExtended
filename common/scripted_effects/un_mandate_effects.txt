@@ -217,7 +217,7 @@ un_mandate_on_complied = {
 	# the country the mandate was against.
 	var:un_mnd_target ?= { save_scope_as = un_mnd_ledger_target }
 	var:un_mnd_actor ?= {
-		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 2 REASON = 5 SUBJECT = scope:un_mnd_ledger_target }
+		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1 REASON = 5 SUBJECT = scope:un_mnd_ledger_target }
 	}
 	var:un_mnd_actor ?= {
 		if = {

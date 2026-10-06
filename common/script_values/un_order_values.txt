@@ -56,7 +56,7 @@ un_cf_order_debit_accrued = {
 }
 # The war ends inside the order, and the aggressor gained nothing from it:
 # delivery (code 31).
-un_cf_delivery_credit = { value = 1.5 }
+un_cf_delivery_credit = { value = 0.75 }
 # The order runs out with the war still on, or the war ends with the aggressor
 # holding gains from the victim: credibility (code 32).
 un_cf_defied_debit = { value = -1 }
@@ -127,7 +127,7 @@ un_ref_refused_loss = { value = 5 }
 
 # The UN's ledgers, institutional.
 # Held: delivery (code 33).
-un_ref_delivery_credit = { value = 1 }
+un_ref_delivery_credit = { value = 0.5 }
 # Refused: credibility (code 32).
 un_ref_refused_debit = { value = -1 }
 
