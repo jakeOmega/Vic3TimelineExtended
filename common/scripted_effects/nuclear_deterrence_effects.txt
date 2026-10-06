@@ -1258,10 +1258,12 @@ nd_ai_review_posture = {
 			nd_readiness_withdrawn = no
 		}
 		# High Alert in a war with an armed enemy. In an Acute crisis only to
-		# match an opponent at Heightened or higher, or when our own forces
-		# could not ride out a first strike (survivability under 50, the line
-		# nd_yp_answer_value draws): an opponent that stays calm is not met
-		# with the posture most likely to misfire.
+		# match an opponent at Heightened or higher, or when our forces could
+		# not ride out a first strike short of High Alert (survivability
+		# counted at Heightened under 50, the line nd_yp_answer_value draws):
+		# an opponent that stays calm is not met with the posture most likely
+		# to misfire. Read at Heightened, not at our current readiness, so
+		# reaching High Alert does not undo the reason for it.
 		if = {
 			limit = {
 				var:nd_strain < 70
@@ -1272,7 +1274,7 @@ nd_ai_review_posture = {
 							var:nd_crisis_opponent ?= { nd_readiness_heightened_or_higher = yes }
 							AND = {
 								nd_authority_automatic = no
-								var:nd_survivability < 50
+								nd_effective_survivability_at_readiness_2 < 50
 							}
 						}
 					}
@@ -1335,6 +1337,9 @@ nd_ai_review_posture = {
 		}
 	}
 	# ---- launch authority ---------------------------------------------------
+	# Reads the stored survivability, not nd_effective_survivability: a
+	# country that lowers its readiness must not be pushed by it towards Launch
+	# on Warning or Automatic Retaliation.
 	if = {
 		limit = { var:nd_authority_months >= nd_authority_tenure_months }
 		if = {

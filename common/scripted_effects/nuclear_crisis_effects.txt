@@ -140,10 +140,7 @@ nd_crisis_preview = {
 	}
 	else_if = {
 		limit = {
-			$TARGET$ = {
-				has_variable = nd_survivability
-				var:nd_survivability >= 50
-			}
+			$TARGET$ = { nd_effective_survivability >= 50 }
 		}
 		custom_tooltip = nd_tt_open_f_survivable
 	}
