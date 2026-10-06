@@ -87,3 +87,29 @@ prestige_good_generic_lead = {
 	prestige_bonus = 0.1
 	texture = "gfx/interface/icons/goods_icons/prestige_goods/prestige_good_generic_lead.dds"
 }
+
+# The engine allows three prestige goods per base good, and a prestige good on a
+# local good (electricity, services, transportation, digital_access) does nothing.
+# Radios is full in vanilla, so its generic one is vanilla's Radiola Radios
+# renamed Precision Wireless Gear (localization/english/replace/), the way
+# prestige_good_brunn_type_engines became High-Performance Engines: same key and
+# icon, General Electric keeps it, and the mod gives it to Ericsson, Nokia and the
+# generic Telecommunications company.
+
+prestige_good_generic_rubber = {
+	base_good = rubber
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/rubber.dds"
+}
+
+prestige_good_generic_ammunition = {
+	base_good = ammunition
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/ammunition.dds"
+}
+
+prestige_good_generic_tech_metals = {
+	base_good = tech_metals
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/tech_metals.dds"
+}

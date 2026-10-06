@@ -2207,6 +2207,7 @@ company_vale = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_steel
+		prestige_good_generic_tech_metals
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
@@ -2796,6 +2797,7 @@ company_bhp_group = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_lead
+		prestige_good_generic_tech_metals
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
@@ -3468,6 +3470,7 @@ company_ig_farben = {
 	possible_prestige_goods = {
 		prestige_good_german_aniline
 		prestige_good_generic_fertilizer
+		prestige_good_generic_rubber
 	}
 	ai_will_do = {
 		has_technology_researched = isoprene
@@ -3565,6 +3568,7 @@ company_jsr = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_fertilizer
+		prestige_good_generic_rubber
 	}
 	ai_will_do = {
 		has_technology_researched = plastic_mass_production
@@ -3924,6 +3928,9 @@ company_michelin = {
 		building_rubber_plantation_throughput_add = 0.05
 		state_building_michelin_clermont_ferrand_max_level_add = 1
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_rubber
+	}
 	ai_will_do = {
 		has_technology_researched = vulcanization
 	}
@@ -3964,6 +3971,9 @@ company_pirelli = {
 		building_rubber_plantation_throughput_add = 0.10
 		building_electrics_industry_throughput_add = 0.05
 		state_building_pirelli_bicocca_plant_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_rubber
 	}
 	ai_will_do = {
 		has_technology_researched = vulcanization

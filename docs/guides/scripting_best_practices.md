@@ -3943,7 +3943,8 @@ Some engine-level caps are hardcoded and only surface in debug.log via `pdx_asse
   ```bash
   grep -B1 "base_good = engines" "/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/common/prestige_goods/"*.txt | grep "^prestige_good_"
   ```
-  Most base_goods are at ≤2 in vanilla, but engines/automobiles/artillery/porcelain/wine/tobacco/meat/radios/silk/small_arms/merchant_marine are at 3 — adding any 4th will assert.
+  Most base_goods are at ≤2 in vanilla, but engines/artillery/porcelain/wine/tobacco/meat/radios/silk/small_arms are at 3 — adding any 4th will assert. The mod's own fill automobiles and merchant_marine to 3 as well. For a full good, rename a vanilla one instead of adding a fourth: vanilla's `prestige_good_brunn_type_engines` and `prestige_good_radiola_radios` keep their keys and icons but carry generic names from `localization/english/replace/` (High-Performance Engines, Precision Wireless Gear), and mod companies list them like any generic. The vanilla company keeps the good. `prestige_good_roster_audit` can't check these converted goods, because vanilla's named prestige goods aren't in the snapshot (#749). Check by hand that each company listing one has a `building_types` building that makes the base good.
+- **A prestige version of a local good does nothing.** Electricity, services, transportation and the mod's `digital_access` are `local = yes`, and no vanilla prestige good sits on one (owner, 2026-10-05). `prestige_good_roster_audit` flags a mod prestige good whose base good is local (`local_base_good`, `--strict` in CI).
 
 ## JE `add_modifier { multiplier = X }` Re-Evaluates at JE Scope Each Tick
 
