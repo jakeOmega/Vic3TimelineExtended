@@ -613,6 +613,68 @@ class TestActionPreview(unittest.TestCase):
             self.assertIn(n, loc_value("nd_tt_open_stakes_private"))
 
 
+READINESS_FACTOR_WORDS = {"recessed": "half", "routine": "four fifths", "heightened": "nine tenths"}
+
+
+class TestEffectiveSurvivability(unittest.TestCase):
+    """A crisis weighs survivability at the target's readiness
+    (nd_effective_survivability); the AI's launch authority plans around the
+    stored figure, so standing down cannot push it towards Launch on Warning."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.factors = {name: float(n) for name, n in re.findall(
+            r"^nd_survivability_factor_(\w+) = ([\d.]+)", self.values, re.M)}
+
+    def test_factors_rise_with_readiness(self):
+        self.assertEqual(set(self.factors), set(READINESS_FACTOR_WORDS))
+        self.assertLess(self.factors["recessed"], self.factors["routine"])
+        self.assertLess(self.factors["routine"], self.factors["heightened"])
+        self.assertLess(self.factors["heightened"], 1)
+
+    def test_values_at_each_readiness_use_the_same_factors(self):
+        for readiness, factor in enumerate(("recessed", "routine", "heightened")):
+            body = block(self.values, f"nd_effective_survivability_at_readiness_{readiness}")
+            self.assertIn(f"multiply = nd_survivability_factor_{factor}", body)
+            self.assertIn(f"multiply = nd_survivability_factor_{factor}",
+                          block(self.values, "nd_effective_survivability"))
+        self.assertNotIn("multiply", block(self.values, "nd_effective_survivability_at_readiness_3"))
+
+    def test_the_line_of_50_reads_the_effective_figure(self):
+        sites = (block(self.values, "nd_yp_answer_value"),
+                 block(strip_comments(read(CRISIS_EFFECTS)), "nd_crisis_preview"),
+                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.1.c"),
+                 option_body(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.20.c"))
+        for body in sites:
+            self.assertIn("nd_effective_survivability", body)
+            self.assertNotIn("var:nd_survivability", body)
+
+    def test_ai_authority_reads_the_stored_figure(self):
+        review = read(EFFECTS)
+        start = review.index("# ---- launch authority", review.index("nd_ai_review_posture = {"))
+        authority = strip_comments(review[start:review.index("# ---- investment", start)])
+        self.assertIn("var:nd_survivability < 50", authority)
+        self.assertNotIn("nd_effective_survivability", authority)
+
+    def test_ai_alert_reads_survivability_at_heightened(self):
+        # Not at the current readiness: reaching High Alert must not undo the
+        # reason for it, or the review would swing between the two.
+        review = strip_comments(block(read(EFFECTS), "nd_ai_review_posture"))
+        self.assertIn("nd_effective_survivability_at_readiness_2 < 50", review)
+        self.assertNotRegex(review, r"\bnd_effective_survivability\s*<")
+
+    def test_tooltips_show_the_figure(self):
+        for readiness in range(4):
+            self.assertIn(f"ScriptValue('nd_effective_survivability_at_readiness_{readiness}')",
+                          loc_value(f"nd_w_readiness_choice_{readiness}_tt"))
+        survivability_tt = loc_value("nd_w_survivability_tt")
+        self.assertIn("ScriptValue('nd_effective_survivability')", survivability_tt)
+        self.assertIn("50", survivability_tt)
+        for factor, words in READINESS_FACTOR_WORDS.items():
+            self.assertEqual(self.factors[factor], {"half": 0.5, "four fifths": 0.8, "nine tenths": 0.9}[words])
+            self.assertIn(words, survivability_tt)
+
+
 ACT_LINES = {
     "nd_crisis_act_yield": ["nd_crisis_yield_lines = yes", "custom_tooltip = nd_tt_then_yield"],
     "nd_crisis_yield_lines": ["nd_tt_yield_war", "nd_tt_yield_play", "nd_tt_yield_guarantee",

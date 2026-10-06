@@ -25,6 +25,9 @@ nd_crisis_cooldown_months_value = 24    # no second crisis with the same country
 nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
 nd_pledge_broken_months_value = 120     # a repudiation is remembered this long
 nd_monopoly_window_cooldown_months = 12
+nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
+nd_survivability_factor_routine = 0.8
+nd_survivability_factor_heightened = 0.9 # High Alert counts it all
 
 # ----------------------------------------------------------------------------
 # ARSENAL
@@ -524,6 +527,51 @@ nd_survivability_or_zero = {
 	}
 }
 
+# The survivability a crisis counts: the stored figure scaled by readiness.
+# Bombers on strip alert, submarines surged to sea and launchers dispersed
+# ride out a first strike that would catch them on the ground or in port, and
+# warheads in storage are the easiest target of all. Read wherever a threat is
+# weighed against our ability to answer it (nd_yp_answer_value and the readers
+# that share its line of 50). The AI's choice of launch authority reads the
+# stored figure instead (nd_ai_review_posture): standing down must not push it
+# towards Launch on Warning.
+nd_effective_survivability = {
+	value = nd_survivability_or_zero
+	if = {
+		limit = { nd_readiness_recessed = yes }
+		multiply = nd_survivability_factor_recessed
+	}
+	else_if = {
+		limit = { nd_readiness_heightened_or_higher = no }
+		multiply = nd_survivability_factor_routine
+	}
+	else_if = {
+		limit = { nd_readiness_high_alert = no }
+		multiply = nd_survivability_factor_heightened
+	}
+}
+
+# The same at a given readiness, whatever ours is now: the readiness choices'
+# tooltips, and the AI's alert in an Acute crisis.
+nd_effective_survivability_at_readiness_0 = {
+	value = nd_survivability_or_zero
+	multiply = nd_survivability_factor_recessed
+}
+
+nd_effective_survivability_at_readiness_1 = {
+	value = nd_survivability_or_zero
+	multiply = nd_survivability_factor_routine
+}
+
+nd_effective_survivability_at_readiness_2 = {
+	value = nd_survivability_or_zero
+	multiply = nd_survivability_factor_heightened
+}
+
+nd_effective_survivability_at_readiness_3 = {
+	value = nd_survivability_or_zero
+}
+
 # ----------------------------------------------------------------------------
 # CRISIS FIGURES — danger and pressure, as named parts (2026-09-25 spec §1.2).
 # nd_crisis_refresh_figures stores every part on both parties, so the panel's
@@ -673,17 +721,15 @@ nd_yp_answer_value = {
 		limit = { nd_believed_armed = no }
 		add = 20
 	}
-	# Survivable forces answer — and so does an Automatic Retaliation system,
-	# however vulnerable the forces behind it (umbrella/recessed/dead-hand
-	# spec §3.2).
+	# Forces that would survive at our current readiness answer
+	# (nd_effective_survivability) — and so does an Automatic Retaliation
+	# system, however vulnerable the forces behind it (umbrella/recessed/
+	# dead-hand spec §3.2).
 	else_if = {
 		limit = {
 			OR = {
 				nd_authority_automatic = yes
-				AND = {
-					has_variable = nd_survivability
-					var:nd_survivability >= 50
-				}
+				nd_effective_survivability >= 50
 			}
 		}
 		subtract = 25

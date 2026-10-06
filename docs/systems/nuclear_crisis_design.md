@@ -67,6 +67,7 @@ Doctrine changes need 24 months' tenure, and authority changes need 12. Readines
 
 Capabilities run 0–100 and are updated monthly in `nd_monthly_update`:
 - **Survivability** climbs toward a cap set by technology (`nd_survivability_cap`): 25 for bombers, +15 for `radar`, +20 for `ICBMs`, +25 for `advanced_submarine_technology` and +10 for `missile_defense_systems`, to a maximum of 95. Each hardening level closes 2 % of the remaining gap per month. With no hardening, survivability decays 1 % of the excess per month toward 30 % of the cap.
+  A crisis counts survivability at the country's readiness (`nd_effective_survivability`, since 2026-10-06): ×0.5 Recessed, ×0.8 Routine, ×0.9 Heightened, in full at High Alert (`nd_survivability_factor_*`), since bombers on strip alert, submarines surged to sea and dispersed launchers ride out a strike that catches them on the ground or in port. It is read wherever a threat is weighed against the target's ability to answer: `nd_yp_answer_value` (−25 at 50 or more), the crisis-opening preview, the AI's counter-threat weight (`nuclear_crisis.1.c`) and a guarantor's walk-away weight (`.20.c`, under 30). A calm posture therefore lowers the shared danger but makes the country easier to coerce. The AI's launch-authority choice reads the stored figure, so standing down never pushes it towards Launch on Warning or Automatic Retaliation. The readiness choices' tooltips show the figure at each level (`nd_effective_survivability_at_readiness_0`–`_3`).
 - **Reliability** moves a quarter of the way each month toward `55 + 12×safeguards + 5 (satellite_communications) − 0.4×strain`, minus 10 each for a punished sceptic, a concealed incident, and an enemy comms-disruption operation, clamped to 5–98.
 - **Strain** rises 5 a month at high alert. At heightened readiness it rises 1.5, or falls 1 if it is above 40. At routine it falls 6.
 - **Credibility** starts at 50 and drifts 2 % of the gap back toward 50 each month. Crises, pledges and guarantees move it.
@@ -289,7 +290,9 @@ without answering about 53%.
 
 **The AI's readiness in an acute crisis** (`nd_ai_review_posture`) is High Alert
 only when its crisis opponent is at Heightened or higher, or its own forces
-are vulnerable (survivability under 50, without Automatic Retaliation);
+are vulnerable short of High Alert (survivability counted at Heightened,
+`nd_effective_survivability_at_readiness_2`, under 50, without Automatic Retaliation;
+read at Heightened rather than the current level so reaching High Alert does not undo the reason for it);
 otherwise Heightened. A war with an armed enemy still means High Alert. A
 player who stays at Routine is not met with High Alert at the AI's next review.
 
