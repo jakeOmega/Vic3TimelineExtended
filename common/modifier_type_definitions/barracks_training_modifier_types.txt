@@ -26,9 +26,19 @@ country_academy_trained_battalions_add = {
 
 # Battalions trained under Political Commissars. Their share of the country's
 # regular battalions scales te_political_commissars_indoctrination.
+# ai_value steers the AI to Political Commissars. The AI scores a barracks
+# method by its modifiers' ai_values (building_training_rate_add is 100 a
+# point), and barracks make no goods, so every switch counts as a downgrade
+# and the new method must score 1 / PRODUCTION_METHOD_STICKINESS_DOWNGRADE
+# (0.6 in extra_defines.txt), about 1.67 times the current one. At 5000 a
+# level, Commissars (20 training) score about twice Officer Academies (26) on
+# any barracks of three levels or more, and still below Neural Grafting (120).
 country_commissar_battalions_add = {
 	color = neutral
 	percent = no
 	decimals = 1
+	game_data = {
+		ai_value = 5000
+	}
 	script_only = yes
 }

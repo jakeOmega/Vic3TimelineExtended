@@ -74,16 +74,20 @@ method costs little in peacetime. Switch back to a fast one before a long war.
 | Method | Unlocked by | Training per level | What else it does |
 |---|---|---|---|
 | Officer Academies | Combined Arms (era 6) | 26 | 30% of the staff are officers. Academy Officer Corps raises the Armed Forces' political strength by up to 20% and their attraction by up to 10%, in proportion to the share of your regular battalions trained this way |
-| Expeditionary Logistics | Predictive Logistics (era 8) | 18 | Halves the base goods surcharge while the battalion is mobilized. Mobilization options' own goods are unchanged |
-| Neural Grafting | Bioenhanced Soldiers (era 11) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 45 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 50% |
+| Expeditionary Logistics | Predictive Logistics (era 8) | 10 | Cuts the base goods surcharge while the battalion is mobilized by a tenth. Mobilization options' own goods are unchanged |
+| Neural Grafting | Bioenhanced Soldiers (era 11) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 120 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 25% |
 | Reserve Cadre | National Militia or Mass Conscription | 12 | Each staffed level gives the state two reserve battalions. Each one raises the state's conscription rate and its conscription-center limit by enough for one more conscript battalion, so it still counts in a state already at the limit |
 | Political Commissars | Single-Party State or Council Republic | 20 | 5% of the staff are officers. Commissar Indoctrination raises attraction to the interest groups in government by up to 15%, in proportion to the share of your regular battalions trained this way |
 
-The national bonuses and the reserve battalions update once a month. Reserve
-Cadre suits a militia: its conscripts cost nothing until you call them up. Few
-officers under Political Commissars also means a weaker Armed Forces. The AI
-picks the method with the highest training rate it can use, so AI armies move to
-Officer Academies and later Neural Grafting, and never pick the other three.
+The national bonuses and the reserve battalions update once a month.
+Expeditionary Logistics makes a short war you are winning a little cheaper, and
+its slow reinforcement tells in a long one. Reserve Cadre suits a militia: its
+conscripts cost nothing until you call them up. Few officers under Political
+Commissars also means a weaker Armed Forces. The AI mostly picks the method with
+the highest training rate it can use, so AI armies move to Officer Academies and
+later Neural Grafting. A Single-Party State or Council Republic AI prefers
+Political Commissars to Officer Academies. The AI never picks Expeditionary
+Logistics or Reserve Cadre.
 
 ## Ships and ship modifications
 

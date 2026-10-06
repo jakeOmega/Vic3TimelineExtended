@@ -3,9 +3,11 @@
 # common/production_method_groups/extra_pm_groups.txt). The group has
 # ai_selection = most_productive, which on a building with no output means the
 # AI takes the highest training rate it has unlocked: Officer Academies (26)
-# and Neural Grafting (45) continue vanilla's ladder past Mobile Warfare
-# Tactics (24) for the AI, while Expeditionary Logistics, Reserve Cadre and
-# Political Commissars train slower and are player choices.
+# and Neural Grafting (120) continue vanilla's ladder past Mobile Warfare
+# Tactics (24) for the AI, while Expeditionary Logistics and Reserve Cadre
+# train slower and are player choices. Political Commissars train slower too,
+# but country_commissar_battalions_add carries an ai_value, so a single-party
+# AI prefers them to Officer Academies (barracks_training_modifier_types.txt).
 #
 # Every method keeps vanilla's unscaled base of 50 and the warrior-caste lock.
 # Three of them count what they do in custom modifier types
@@ -47,9 +49,11 @@ pm_officer_academies = {
 	}
 }
 
-# Slower reinforcement for a cheaper war. building_mobilization_cost_mult
-# scales vanilla's mobilized_battalion_consumption static modifier (+100%
-# goods input while the battalion is mobilized), so -0.5 halves that surcharge.
+# A slightly cheaper war for an army that can afford slow reinforcement: worth
+# it in a short war you are winning, not in a long one.
+# building_mobilization_cost_mult scales vanilla's
+# mobilized_battalion_consumption static modifier (+100% goods input while the
+# battalion is mobilized), so -0.1 trims that surcharge to +90%.
 # It is a multiplier on this building, so it must stay unscaled: level_scaled
 # would multiply it by the building's level. Mobilization options' own goods
 # are not affected.
@@ -69,17 +73,17 @@ pm_expeditionary_logistics = {
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			building_mobilization_cost_mult = -0.5
+			building_mobilization_cost_mult = -0.1
 		}
 
 		level_scaled = {
-			building_training_rate_add = 18
+			building_training_rate_add = 10
 		}
 	}
 }
 
-# The fastest training in the game, paid for in goods and in the servicemen's
-# health. Needs one of the augmentation laws that allow enhancement, like the
+# The fastest training in the game by far, paid for in goods and in the
+# servicemen's health. Needs one of the augmentation laws that allow enhancement, like the
 # Voluntary and Mandatory Enhancement mobilization options.
 pm_neural_grafting = {
 	texture = "gfx/interface/icons/production_method_icons/pharmacies.dds"
@@ -107,11 +111,11 @@ pm_neural_grafting = {
 
 		unscaled = {
 			building_training_rate_add = 50
-			building_soldiers_mortality_mult = 0.5
+			building_soldiers_mortality_mult = 0.25
 		}
 
 		level_scaled = {
-			building_training_rate_add = 45
+			building_training_rate_add = 120
 		}
 	}
 }
