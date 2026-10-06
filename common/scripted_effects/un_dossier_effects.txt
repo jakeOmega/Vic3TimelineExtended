@@ -55,8 +55,15 @@ un_dossier_record = {
 				set_variable = { name = un_dos_$RECORD$ value = 0 }
 			}
 			change_variable = { name = un_dos_$RECORD$ add = $POINTS$ }
+			# has_variable first: an option's tooltip evaluates this limit
+			# without running the set_variable above, and the bare read logged
+			# three errors per render (un_dos_nuclear from nuclear_crisis.4,
+			# 108 lines in the 2026-10-06 observer run).
 			if = {
-				limit = { var:un_dos_$RECORD$ > un_dossier_record_cap }
+				limit = {
+					has_variable = un_dos_$RECORD$
+					var:un_dos_$RECORD$ > un_dossier_record_cap
+				}
 				set_variable = { name = un_dos_$RECORD$ value = un_dossier_record_cap }
 			}
 		}
