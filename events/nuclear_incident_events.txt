@@ -1764,11 +1764,14 @@ nuclear_incident.70 = {
 				}
 				add = 2
 			}
-			# Every state of ours the exchange has struck, up to five.
-			modifier = {
-				trigger = { nd_exchange_states_struck > 0 }
-				add = nd_exchange_states_struck
-			}
+			# Every state of ours the exchange has struck, up to five: one rung
+			# each, since an ai_chance add takes only a number ("add =
+			# nd_exchange_states_struck" was a Malformed token at load).
+			modifier = { trigger = { nd_exchange_states_struck >= 1 } add = 1 }
+			modifier = { trigger = { nd_exchange_states_struck >= 2 } add = 1 }
+			modifier = { trigger = { nd_exchange_states_struck >= 3 } add = 1 }
+			modifier = { trigger = { nd_exchange_states_struck >= 4 } add = 1 }
+			modifier = { trigger = { nd_exchange_states_struck >= 5 } add = 1 }
 			# A victim that would win the war it starts.
 			modifier = {
 				trigger = {

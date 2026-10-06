@@ -306,6 +306,9 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
 - **`ai_chance` blocks in events use MTTH (Mean Time To Happen) syntax**, NOT script value syntax.
 - **Correct:** `ai_chance = { base = 5 modifier = { trigger = { <condition> } add = 3 } }`
 - **WRONG:** `ai_chance = { base = 5 if = { limit = { <condition> } add = 3 } }` — causes silent failures.
+- **`add` and `factor` take numbers only.** `add = <script value>` is a `Malformed token` at load, so
+  don't count on the term; ladder it with one `modifier = { trigger = { <script value> >= N } add = 1 }` per
+  step (`scripting_best_practices.md` § Event `ai_chance` Uses MTTH Syntax).
 - **Nested conditions:** Use AND inside `trigger = { }`, or `OR = { }` inside `trigger`.
 - **Don't drop the `trigger = { }` wrapper.** Script values accept bare conditions inside a
   `modifier` block; event `ai_chance` blocks are written the other way in vanilla by 501 uses to 9.
