@@ -137,8 +137,9 @@ class WiringTest(unittest.TestCase):
     def test_actions_use_stealable_check(self):
         industrial = _block(self.ACTIONS, "covert_industrial_espionage_action")
         military = _block(self.ACTIONS, "covert_military_espionage_action")
-        self.assertEqual(industrial.count("covert_tech_stealable_production = { TARGET = scope:target_country }"), 2)
-        self.assertEqual(military.count("covert_tech_stealable_military = { TARGET = scope:target_country }"), 1)
+        # possible (industrial only), will_propose, and the AI's will_break
+        self.assertEqual(industrial.count("covert_tech_stealable_production = { TARGET = scope:target_country }"), 3)
+        self.assertEqual(military.count("covert_tech_stealable_military = { TARGET = scope:target_country }"), 2)
         for block in (industrial, military):
             self.assertNotIn("techs_researched > ROOT.techs_researched", block)
 

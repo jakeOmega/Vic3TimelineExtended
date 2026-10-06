@@ -2381,6 +2381,9 @@ evaluation_chance = {
 }
 ```
 
+### Write Out `will_break` on Every Pact the AI Can Propose
+Low `evaluation_chance` slows launching only; when the AI ends a pact is `will_break`'s question. Nothing in the repo or the vanilla snapshot records the engine's default when `will_break` is missing, and vanilla writes one for nearly every pact its AI proposes, so write it out. A missing `will_break` either never breaks the pact or falls back to something like `NOT will_propose`, and `will_propose` usually holds launch-only tests (a free slot, a treasury guard) that turn false for reasons unrelated to the pact. Break on the pact's *purpose* having gone, judged more loosely than the launch test so a target sitting on the threshold does not toggle it. Where the payoff is delayed, add a minimum tenure too. `will_break = { always = no }` is right when `requirement_to_maintain` already ends the pact once its purpose goes. Pattern: the covert actions (2026-10, `covert_ai_op_settled` / `covert_ai_hostility_gone` in `covert_warfare_triggers.txt`), which pay nothing for six months.
+
 ### Financial Health Guards
 AI should never propose expensive diplomatic actions while in financial distress:
 ```
