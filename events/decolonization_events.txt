@@ -834,15 +834,15 @@ decolonization_events.7 = {
 	}
 
 	immediate = {
-		random_country = {
+		# Read the variable directly, and only while that country lives: a
+		# random_country limit comparing every country with a former overlord
+		# that has since died logged "Event target link 'var' returned an
+		# invalid object" once per country (208 lines a firing, 2026-10-06).
+		if = {
 			limit = {
-				NOT = { this = root }
-				root = {
-					has_variable = former_overlord
-					var:former_overlord = prev
-				}
+				var:former_overlord ?= { is_country_alive = yes }
 			}
-			save_scope_as = former_overlord
+			var:former_overlord = { save_scope_as = former_overlord }
 		}
 	}
 
