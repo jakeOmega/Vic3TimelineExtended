@@ -33,7 +33,7 @@ cultural_exchange_program = {
 		# Integration with cultural hegemony system — boosts soft power
 		country_cultural_pull_add = 1
 		# Cultural openness creates ideological vulnerability
-		country_covert_defense_ideological_add = -1
+		country_covert_defense_ideological_add = -5
 	}
 
 	visible = {

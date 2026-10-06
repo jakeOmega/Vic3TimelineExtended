@@ -255,8 +255,8 @@ The sections below are open by default, except the explanations at the foot:
 ### Intelligence capacity and operation slots
 
 Intelligence capacity is your agency's size: a base of 5, plus your rank (great
-power +10, major power +5), your literacy (up to 50 at full literacy), your
-share of world GDP (a point per percent, up to 25), and modifiers from
+power +25, major power +10), your literacy (up to 50 at full literacy), your
+share of world GDP (two points per percent, up to 50), and modifiers from
 technologies, laws such as Secret Police and Censorship, and the Ministry of
 Intelligence and Security (+4 per level). Tradecraft then multiplies the total.
 The overview's first icon rates your capacity against the world's best:
@@ -265,8 +265,12 @@ Exposed from 20% and Vulnerable below that.
 
 Capacity cuts both ways. The stronger a target's capacity is against yours, the
 likelier your operations there are caught; the stronger yours, the likelier you
-catch operations against you. Capacity also gives separatism and coup resistance
-(the Intelligence Capacity modifier), growing up to a capacity of 125.
+catch operations against you. Rank and GDP share give a great power's service an
+edge that a small, literate country can't match: a small country's lightly
+funded operations against a great power are caught noticeably more often,
+though high funding still hides most of them. Capacity also gives separatism
+and coup resistance (the Intelligence Capacity modifier), growing up to a
+capacity of 125.
 
 Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
 Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
@@ -311,18 +315,25 @@ wartime operations can't target a country with amicable relations or better
 toward you, and Destabilization can't target one at cordial or better. The
 others have no relations limit.
 
+Seven operations also need a technology, named first in the table's last
+column: Mass Media and Cryptography (era 6), Television Broadcasting, Pop
+Culture and Satellite Communications (era 7), Computer Networks (era 8) and
+Social Media (era 9). The operations that can bring down a great power come
+late in the tree, so a small country can't rush them before the great powers
+have agencies of their own.
+
 | Operation | What it does at base strength | Also needs |
 |---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Target has an elected legislature |
-| Financial Subversion | Target +2 bubble pressure a month | |
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature |
+| Financial Subversion | Target +2 bubble pressure a month | Computer Networks |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target |
-| Communications Disruption | Target −10% unit offense and defense | War or a diplomatic play against the target |
+| Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target |
 | Industrial Espionage | You: +5 weekly innovation, and [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now |
 | Military Espionage | You: +5% unit offense and defense, and [stolen military technology](#stealing-technology). Target: −3 authority | |
-| Influence Campaign | Target −15% leverage resistance | You lead a power bloc the target is not in |
-| Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Target has a political movement |
-| Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Target has a political movement |
-| Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | A rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) |
+| Influence Campaign | Target −15% leverage resistance | Mass Media; you lead a power bloc the target is not in |
+| Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement |
+| Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement |
+| Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) |
 | Nuclear Programme Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft |
 | Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject |
@@ -443,7 +454,7 @@ A caught operation ends in the Operation Compromised event, which also costs its
 network 25 and costs you Tradecraft. Recalling your operatives and apologizing
 takes the full infamy and half the relations damage. Denying everything takes
 half the infamy and the full relations damage, and the target gains Heightened
-Vigilance (+5 to all three of its covert defenses, decaying over five years). At
+Vigilance (+25 to all three of its covert defenses, decaying over five years). At
 the establishing phase the costs are:
 
 | Exposure tier | Operations | Recall and apologize | Deny everything |
@@ -483,10 +494,11 @@ more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
 IP Protection and Central Bank Independence raise economic defense and Publicly
-Funded Elections ideological defense; No IP Protection, Unregulated Banking and
-No Campaign Finance Laws lower them. The Intelligence Sharing Pact treaty
-article adds intelligence capacity and lends the weaker partner part of the
-stronger one's covert defenses.
+Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
+Banking and No Campaign Finance Laws lower them. Against an agency of about 100
+capacity, 10 points of defense add about 1.5 points to its Detection Risk. The
+Intelligence Sharing Pact treaty article adds intelligence capacity and lends
+the weaker partner part of the stronger one's covert defenses.
 
 ### When operations end
 

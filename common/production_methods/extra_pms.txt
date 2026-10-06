@@ -18961,19 +18961,31 @@ pm_no_emissions_control = {
 		law_no_ministry_of_the_environment
 	}
 
-	# AI ranking of the emissions-control tiers, 1 / 2 / 4. The tiers make no
-	# goods, so the engine treats every switch among them as a downgrade
-	# (PRODUCTION_METHOD_STICKINESS_DOWNGRADE, 0.6). If the weight multiplies
-	# the AI's score, as production_methods.md describes it ("base AI weight,
-	# default 1.0"; no vanilla method sets it), the AI moves up a tier once
-	# the higher tier's score is about 83% of the current one, and back down
-	# only for a score about 3.3 times better. Check in an observer run.
-	# Unweighted, near-equal pure-cost tiers flipped every few months (the
-	# 2015 observer run: 35 port switches between basic and advanced in four
-	# months, each a five-year retool). Owner ruling 2026-10-06: up, never
-	# down. Moderate rather than huge weights: a huge one would ignore cost
-	# entirely, and would also magnify the wrong way if a score went negative.
-	ai_weight = 1
+	# AI ranking of the emissions-control tiers, 1000 / 3000 / 9000. Owner
+	# ruling 2026-10-06: the AI moves up a tier, never down (each switch is a
+	# five-year retool; the 2015 observer run had 35 port switches between
+	# basic and advanced in four months). The group's ai_selection =
+	# most_productive (extra_pm_groups.txt) should give "never down" on its
+	# own, by the NAI defines' arithmetic (not yet observed for cost-only
+	# methods): the tiers make no goods and the AI gives their pollution cut
+	# no value (state_pollution_generation_add has ai_value 0), so they
+	# should score alike and the stickiness keep the current one. ai_value is
+	# meant to add "up".
+	# It is the field the engine reads on a method: production_methods.md
+	# documents ai_weight ("base AI weight, default 1.0"), but the 1.14.5
+	# parser rejects that ("Unexpected token: ai_weight"), and vanilla's only
+	# user is pm_simple_organization's ai_value. What ai_value does is not
+	# documented. Vanilla changed it from -1000 to 10 in 1.13.7, both times
+	# commented "AI should get off this PM as fast as possible", which fits a
+	# value that sets or adds to the method's base score (NAI
+	# PRODUCTION_METHOD_BASE_VALUE, 1000) better than a multiplier with a
+	# default of 1. These values rank the tiers whether it replaces that
+	# 1000, adds to it or multiplies the score: each tier beats the one below
+	# by more than 1 / PRODUCTION_METHOD_STICKINESS_DOWNGRADE (0.6), and by
+	# less than the 10x an input shortage applies, so a shortage still moves
+	# a building down. test_emissions_control_ai_value.py checks both. Not
+	# yet confirmed in game: see the next observer run.
+	ai_value = 1000
 }
 
 # ===== BASIC-TIER POLLUTION MITIGATION METHODS =====
@@ -19359,7 +19371,7 @@ pm_basic_emissions_control = {
 	}
 
 	# See pm_no_emissions_control.
-	ai_weight = 2
+	ai_value = 3000
 }
 
 pm_advanced_emissions_control = {
@@ -19391,7 +19403,7 @@ pm_advanced_emissions_control = {
 	}
 
 	# See pm_no_emissions_control.
-	ai_weight = 4
+	ai_value = 9000
 }
 
 # ===== GLASSWORKS FUME VENTILATION =====

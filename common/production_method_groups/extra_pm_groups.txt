@@ -549,6 +549,14 @@ INJECT:pmg_base_building_power_plant = {
 }
 REPLACE_OR_CREATE:pmg_emissions_control = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	# The tiers only cost (tools and electricity, no goods), so under the
+	# default most_profitable the AI switched them as prices moved: 20 port
+	# switches basic -> advanced and 15 back in four months of the 2015
+	# observer run, each a five-year retool. Under most_productive they should
+	# score alike, so the stickiness holds the current tier (not yet observed
+	# for cost-only methods); the tiers' ai_value is meant to rank them so the
+	# AI moves up (pm_no_emissions_control in extra_pms.txt).
+	ai_selection = most_productive
 	production_methods = {
 		pm_no_emissions_control
 		pm_basic_emissions_control
