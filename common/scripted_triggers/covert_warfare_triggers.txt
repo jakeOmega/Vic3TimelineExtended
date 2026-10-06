@@ -431,3 +431,42 @@ covert_net_weaker_than = {
 		}
 	}
 }
+
+# ============================================================================
+# AI TARGET SELECTION
+# ============================================================================
+
+# True when this country's GDP is at least covert_ai_much_weaker_gdp_factor
+# times $TARGET$'s.
+# Parameters: $TARGET$ = country (a scope: reference)
+# Scope: country (the operator)
+covert_ai_target_much_weaker = {
+	gdp >= {
+		value = $TARGET$.gdp
+		multiply = covert_ai_much_weaker_gdp_factor
+	}
+}
+
+# Gold reserves at least covert_ai_spare_reserves_ratio full and a weekly
+# surplus: the treasury can carry an operation it does not need.
+# Scope: country (the operator)
+covert_ai_has_money_to_burn = {
+	scaled_gold_reserves >= covert_ai_spare_reserves_ratio
+	net_fixed_income > 0
+}
+
+# The AI's launch test (will_propose) for the operations whose payoff scales
+# with the target's size: meddling in its politics, economy or movements,
+# building a network there, and sabotage in a war. Upkeep scales with our GDP,
+# so against a much smaller country an operation costs more than it returns;
+# the AI runs one there only with money to burn. Espionage (the payoff is our
+# research or space progress), nuclear programme sabotage and secure loose
+# material (the payoff is the threat removed) do not take this test.
+# Parameters: $TARGET$ = country (a scope: reference)
+# Scope: country (the operator)
+covert_ai_target_worth_the_upkeep = {
+	OR = {
+		NOT = { covert_ai_target_much_weaker = { TARGET = $TARGET$ } }
+		covert_ai_has_money_to_burn = yes
+	}
+}

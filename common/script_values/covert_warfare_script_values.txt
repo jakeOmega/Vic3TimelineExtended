@@ -224,6 +224,16 @@ covert_secure_material_base_chance = 3
 # from tier 2 drops the network straight back to tier 1.
 covert_net_intel_tier_1_strength = 50
 covert_net_intel_tier_2_strength = 75
+# ---- AI target selection ----
+# An operation's upkeep scales with the operator's GDP (covert_operations_cost_scale),
+# so against a much smaller country it costs more than the target is worth.
+# The AI launches the operations whose payoff scales with the target's size
+# against a country this many times smaller in GDP only with money to burn
+# (covert_ai_target_worth_the_upkeep).
+covert_ai_much_weaker_gdp_factor = 10
+# Money to burn: gold reserves at least this full (the limit is 20 % of annual
+# GDP, so 0.5 holds a tenth of a year's GDP), and a weekly surplus.
+covert_ai_spare_reserves_ratio = 0.5
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
