@@ -342,15 +342,15 @@ race](16-space.md).
 
 From its sixth month, each Industrial Espionage operation steals production
 technology from its target every month, and each Military Espionage operation
-steals military technology. The progress goes to your current research if the
-target has researched it. Otherwise it goes to a random technology in that tree
-that the target has and you could research now. If there is none, nothing is
-stolen that month.
+steals military technology. The progress goes to your current research if it
+is in that tree and the target has researched it. Otherwise it goes to a random
+technology in that tree that the target has and you could research now. If
+there is none, nothing is stolen that month.
 
 Each theft is 5% of the technology's era cost at base strength, 10% once fully
-operational and 16% at priority 3. Progress that reaches a technology's cost
-completes it. Each operation's row shows how much it has stolen and the latest
-technology.
+operational, and 16% fully operational at priority 3. Progress that reaches a
+technology's cost completes it. Each operation's row shows how much it has
+stolen and the latest technology.
 
 Hover over an operation before launching it: the tooltip previews its effects at
 base strength (established, priority 1) and how phase and priority scale them,

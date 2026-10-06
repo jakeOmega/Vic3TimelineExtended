@@ -186,6 +186,14 @@ def render_grant(era: int, values: list[int]) -> str:
     est1, est2, est3, full1, full2, full3 = values
     lines = [
         f"covert_tech_grant_era_{era} = {{",
+        # Vanilla sets a variable before changing it; doing it here, at the
+        # first theft, keeps "nothing yet" on the row until then.
+        "\tscope:iw_op = {",
+        "\t\tif = {",
+        "\t\t\tlimit = { NOT = { has_variable = iw_stolen_total } }",
+        "\t\t\tset_variable = { name = iw_stolen_total value = 0 }",
+        "\t\t}",
+        "\t}",
         "\tif = {",
         "\t\tlimit = { scope:iw_op = { covert_op_is_fully_operational = yes } }",
         *_priority_ladder(full1, full2, full3),

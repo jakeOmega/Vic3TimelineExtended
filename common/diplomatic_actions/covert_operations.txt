@@ -667,7 +667,8 @@ covert_comms_disruption_action = {
 
 # ---- PEACETIME: Industrial Espionage ----
 # Steal production secrets and technology from a target nation
-# Requires target to have more technologies researched than you.
+# Requires the target to have researched a production technology we could
+# research now (covert_tech_stealable_production).
 # Effect phases through preparatory → establishing → fully operational.
 covert_industrial_espionage_action = {
 	texture = "gfx/interface/icons/diplomatic_action_icons/covert_industrial_espionage_action.dds"

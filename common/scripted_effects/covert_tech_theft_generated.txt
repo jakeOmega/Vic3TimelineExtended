@@ -6,6 +6,12 @@
 # operation's phase x priority and records it on the container.
 
 covert_tech_grant_era_1 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -61,6 +67,12 @@ covert_tech_grant_era_1 = {
 }
 
 covert_tech_grant_era_2 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -116,6 +128,12 @@ covert_tech_grant_era_2 = {
 }
 
 covert_tech_grant_era_3 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -171,6 +189,12 @@ covert_tech_grant_era_3 = {
 }
 
 covert_tech_grant_era_4 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -226,6 +250,12 @@ covert_tech_grant_era_4 = {
 }
 
 covert_tech_grant_era_5 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -281,6 +311,12 @@ covert_tech_grant_era_5 = {
 }
 
 covert_tech_grant_era_6 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -336,6 +372,12 @@ covert_tech_grant_era_6 = {
 }
 
 covert_tech_grant_era_7 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -391,6 +433,12 @@ covert_tech_grant_era_7 = {
 }
 
 covert_tech_grant_era_8 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -446,6 +494,12 @@ covert_tech_grant_era_8 = {
 }
 
 covert_tech_grant_era_9 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -501,6 +555,12 @@ covert_tech_grant_era_9 = {
 }
 
 covert_tech_grant_era_10 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -556,6 +616,12 @@ covert_tech_grant_era_10 = {
 }
 
 covert_tech_grant_era_11 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {
@@ -611,6 +677,12 @@ covert_tech_grant_era_11 = {
 }
 
 covert_tech_grant_era_12 = {
+	scope:iw_op = {
+		if = {
+			limit = { NOT = { has_variable = iw_stolen_total } }
+			set_variable = { name = iw_stolen_total value = 0 }
+		}
+	}
 	if = {
 		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
 		if = {

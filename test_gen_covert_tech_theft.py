@@ -143,6 +143,60 @@ class WiringTest(unittest.TestCase):
             self.assertNotIn("techs_researched > ROOT.techs_researched", block)
 
 
+class ReviewFixTest(unittest.TestCase):
+    """Findings from the whole-branch review (2026-10-06)."""
+
+    STALE = r"(?i)spread|more technologies researched|technological advantage"
+
+    def _loc_line(self, key: str) -> str:
+        text = (ROOT / "localization/english/te_concepts_l_english.yml").read_text(encoding="utf-8-sig")
+        return next(line for line in text.split("\n") if line.startswith(f" {key}:"))
+
+    def test_espionage_loc_describes_theft_not_spread(self):
+        for key in (
+            "covert_espionage_base_desc",
+            "covert_industrial_espionage_action_desc",
+            "covert_industrial_espionage_action_effect_desc_global",
+            "covert_military_espionage_action_desc",
+            "covert_military_espionage_action_effect_desc_global",
+            "iw_op_exposed_desc_industrial_espionage",
+            "iw_op_exposed_desc_military_espionage",
+        ):
+            with self.subTest(key=key):
+                self.assertNotRegex(self._loc_line(key), self.STALE)
+        concept = self._loc_line("concept_covert_operations_desc")
+        for bullet in ("Industrial Espionage#!", "Military Espionage#!"):
+            with self.subTest(bullet=bullet):
+                start = concept.index(bullet)
+                self.assertNotRegex(concept[start : concept.index("\\n", start)], self.STALE)
+        actions = (ROOT / "common/diplomatic_actions/covert_operations.txt").read_text(encoding="utf-8-sig")
+        self.assertNotIn("more technologies researched", actions)
+
+    def test_steal_loop_requires_living_target(self):
+        loop = _block("common/scripted_effects/covert_warfare_effects.txt", "covert_ops_steal_tech_all")
+        guard = loop.index("var:iw_target ?= {")
+        alive = loop.index("is_country_alive = yes")
+        self.assertLess(guard, alive)
+        self.assertLess(alive, loop.index("save_scope_as = iw_theft_target"))
+
+    def test_grant_initialises_total_before_adding(self):
+        text = gen.render_grant(7, [3250, 4388, 5200, 6500, 8775, 10400])
+        init = text.index("NOT = { has_variable = iw_stolen_total }")
+        self.assertLess(init, text.index("change_variable = { name = iw_stolen_total"))
+        self.assertIn("set_variable = { name = iw_stolen_total value = 0 }", text)
+
+    def test_system_doc_drops_retired_spread_pick(self):
+        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        self.assertNotIn("covert_op_target_ahead_in_tech", doc)
+        self.assertNotIn("Military espionage's conditional tech spread", doc)
+
+    def test_guide_theft_wording(self):
+        guide = (ROOT / "docs/player_guide/11-influence.md").read_text(encoding="utf-8")
+        section = guide[guide.index("#### Stealing technology") : guide.index("Hover over an operation before launching it")]
+        self.assertIn("if it is in that tree and the target has researched it", " ".join(section.split()))
+        self.assertIn("16% fully operational at priority 3", " ".join(section.split()))
+
+
 class RowTest(unittest.TestCase):
     def test_row_lines_are_complementary(self):
         gui = (ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui").read_text(encoding="utf-8-sig")

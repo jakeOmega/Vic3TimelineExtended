@@ -1139,14 +1139,19 @@ covert_ops_steal_tech_all = {
 		}
 		save_scope_as = iw_op
 		var:iw_target ?= {
-			save_scope_as = iw_theft_target
-			ROOT = {
-				if = {
-					limit = { scope:iw_op = { has_tag = iw_op_industrial_espionage } }
-					covert_tech_steal_production = yes
-				}
-				else = {
-					covert_tech_steal_military = yes
+			# A dead country can still resolve here, with its technologies
+			# frozen; the same guard covert_net_refresh_intel uses.
+			if = {
+				limit = { is_country_alive = yes }
+				save_scope_as = iw_theft_target
+				ROOT = {
+					if = {
+						limit = { scope:iw_op = { has_tag = iw_op_industrial_espionage } }
+						covert_tech_steal_production = yes
+					}
+					else = {
+						covert_tech_steal_military = yes
+					}
 				}
 			}
 		}
