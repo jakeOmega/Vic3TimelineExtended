@@ -41,7 +41,7 @@ Baseline: `main` at `c906371` (#743 merged).
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
 | Phasing | Numbers → commissions with names → policy → 1836 monuments → trophies → historical commissions (§10). The owner swapped the policy ahead of the 1836 monuments on 2026-10-05 |
-| Who gets commissions (owner, 2026-10-05, after the build) | **Great and major powers only.** Five levels are 5,000 construction, beyond a minor power's means within five years |
+| Who gets commissions (owner, 2026-10-05, after the build) | **Great and major powers only.** Five levels are 5,000 construction, beyond a minor power's means within five years. **A major power gets 120 months**, a great power 60 |
 | Refusing (owner, 2026-10-05, after the build) | **A miss costs more than a refusal** (−15 against −5 on the petitioner's ledger), and an unanswered offer is declined: otherwise accepting dominated refusing |
 | Vanity (owner, 2026-10-05, after the build) | **−1 legitimacy per ledger unit**, not −0.3, which rendered as "−0" |
 

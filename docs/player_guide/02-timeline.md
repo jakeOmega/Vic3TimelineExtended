@@ -533,7 +533,8 @@ No number of monuments can buy a group outright: each group has one total.
 ### Monument commissions
 
 In a great or major power, interest groups ask for monuments. A **commission**
-is one such request: 5 grandeur of one dedication within 60 months. It arrives
+is one such request: 5 grandeur of one dedication within 60 months, or 120 in a
+major power. It arrives
 as an event, A Monument Is Asked For, which you accept or turn down (an offer
 left unanswered is turned down), and while it is open it has its own section in
 the Monuments journal entry. Only one commission is open or on offer

@@ -35,7 +35,8 @@ the record; read these before reusing a task below.
 - **The AI's ceremony** at a monument that can answer an open commission gives every other dedication ×0, not just
   the commission's +100, which lost about one in five.
 
-Owner rulings after the build (2026-10-05): commissions only for great and major powers; a miss costs −15 and a
+Owner rulings after the build (2026-10-05): commissions only for great and major powers, 60 months for a great power
+and 120 for a major one; a miss costs −15 and a
 refusal −5, and an unanswered offer is declined (accepting had dominated refusing); vanity −1 a unit, not −0.3.
 
 Smaller fixes from the same reviews: the regime tracker writes nothing on a civil-war side; a counted monument that

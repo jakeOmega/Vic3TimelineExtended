@@ -1251,3 +1251,18 @@ gm_policy_effects = {
 		localization_key = gm_policy_effects_standard
 	}
 }
+
+# The commission's time in words for the offer (gm_com_time_months): five years
+# for a great power, ten for a major power.
+gm_com_time_words = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { country_rank >= rank_value:great_power }
+		localization_key = gm_com_time_5_years
+	}
+	text = {
+		localization_key = gm_com_time_10_years
+	}
+}

@@ -16,7 +16,8 @@
 #   gm_com_state          state, when the commission names one
 #   gm_com_target         grandeur to add (5)
 #   gm_com_baseline       counted grandeur on acceptance (gm_com_fit_grandeur)
-#   gm_com_months_left    counted down by gm_com_monthly
+#   gm_com_months_left    gm_com_time_months on acceptance (60, or 120 for a
+#                         major power), counted down by gm_com_monthly
 #   gm_com_extended       yes once Ask for More Time is used
 #   gm_com_namesake, gm_com_form, gm_com_occasion   flags: the name it asks for
 #   gm_com_name_year, gm_com_name_char, gm_com_name_enemy_cap   its records
@@ -200,7 +201,7 @@ gm_com_save_ig_scope = {
 gm_com_accept = {
 	gm_remove_state_var = { VAR = gm_com_offered }
 	set_variable = gm_com_open
-	set_variable = { name = gm_com_months_left value = 60 }
+	set_variable = { name = gm_com_months_left value = gm_com_time_months }
 	set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }
 	set_variable = gm_active
 	gm_init_ledgers = yes

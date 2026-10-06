@@ -1506,6 +1506,16 @@ class CommissionSourceTests(unittest.TestCase):
         """Five levels are 5,000 construction, beyond a minor power (owner, 2026-10-05)."""
         self.assertIn("gm_system_enabled = yes country_rank >= rank_value:major_power",
                       squash(block(read(COM_TRIGGERS), "gm_com_can_offer")))
+        # A major power gets ten years, a great power five, fixed on acceptance.
+        self.assertEqual(squash(block(read(COM_VALUES), "gm_com_time_months")),
+                         "value = 120 if = { limit = { country_rank >= rank_value:great_power } value = 60 }")
+        self.assertIn("set_variable = { name = gm_com_months_left value = gm_com_time_months }",
+                      squash(block(read(COM_EFFECTS), "gm_com_accept")))
+        L = loc()
+        self.assertIn("ScriptValue('gm_com_time_months')", L["gm_com_accept_tt"])
+        for key, text in L.items():
+            if key.startswith("monument_events.21.d_"):
+                self.assertNotIn("five years", text, key)
 
     def test_civil_war_guards(self):
         """A side in a civil war gets no offer, and a revolutionary country never
@@ -1659,7 +1669,7 @@ class CommissionLifeTests(unittest.TestCase):
 
     def test_accept_and_the_ai_queue(self):
         accept = squash(block(self.e, "gm_com_accept"))
-        for s_ in ("set_variable = gm_com_open", "set_variable = { name = gm_com_months_left value = 60 }",
+        for s_ in ("set_variable = gm_com_open", "set_variable = { name = gm_com_months_left value = gm_com_time_months }",
                    "set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }",
                    "if = { limit = { is_ai = yes } gm_com_ai_queue = yes }"):
             self.assertIn(s_, accept)
