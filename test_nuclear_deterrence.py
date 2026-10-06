@@ -1235,6 +1235,50 @@ class TestLaunchGate(unittest.TestCase):
         self.assertNotIn("nd_can_set_readiness", body)
 
 
+class TestProliferationSpur(unittest.TestCase):
+    """"The Bomb Has Been Used" (nd_proliferation_spur) follows a warhead that
+    went off, not a launch: a miss detonated nothing. Every strike effect's
+    hit branch marks the launcher; nd_record_nuclear_use spurs only on the
+    mark and clears it, so a salvo spurs once."""
+
+    STRIKES = ((EXTRA_EFFECTS, "nuclear_first_strike"),
+               (EXTRA_EFFECTS, "nuclear_response_strike"),
+               (EXTRA_EFFECTS, "nuclear_response_response_strike"),
+               (EFFECTS, "nd_tactical_strike_resolve"))
+
+    @staticmethod
+    def branches(body):
+        """The strike's random_list branches, keyed by their weight."""
+        rl = block(body, "random_list")
+        out = {}
+        for m in re.finditer(r"(?m)^[ \t]*0 = \{", rl):
+            branch = block(rl[m.start():], "0")
+            out[re.search(r"modifier = (nuclear_strike_\w+_chance)", branch).group(1)] = branch
+        return out
+
+    def test_only_a_hit_marks_the_launcher(self):
+        mark = "set_variable = { name = nd_strike_landed value = 1 }"
+        for path, name in self.STRIKES:
+            branches = self.branches(block(strip_comments(read(path)), name))
+            self.assertEqual(set(branches), {"nuclear_strike_success_chance",
+                                             "nuclear_strike_fail_chance"}, name)
+            self.assertIn(mark, branches["nuclear_strike_success_chance"], name)
+            self.assertNotIn("nd_strike_landed", branches["nuclear_strike_fail_chance"], name)
+
+    def test_the_record_spurs_only_after_a_hit(self):
+        record = block(strip_comments(read(EFFECTS)), "nd_record_nuclear_use")
+        self.assertEqual(record.count("name = nd_proliferation_spur"), 1)
+        gate = record[record.index("has_variable = nd_strike_landed"):]
+        self.assertLess(gate.index("name = nd_proliferation_spur"),
+                        gate.index("remove_variable = nd_strike_landed"))
+        # Nothing reads the mark anywhere else, so none can outlive a launch.
+        for path in (ROOT / "common").rglob("*.txt"):
+            text = strip_comments(read(path))
+            if path == EFFECTS:
+                text = text.replace(record, "")
+            self.assertNotRegex(text, r"(?:has_variable = |var:)nd_strike_landed",
+                                path.relative_to(ROOT))
+
 class TestAutomaticRetaliation(unittest.TestCase):
     """Authority 4 (umbrella/recessed/dead-hand spec §3)."""
 
