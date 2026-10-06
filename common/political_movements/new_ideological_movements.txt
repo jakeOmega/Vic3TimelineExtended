@@ -255,7 +255,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 0.5
-					market_capital.owner = THIS
+					gw_is_market_leader = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_CARBON_TAX" }
 			}
@@ -267,7 +267,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 0.5
-					market_capital.owner = THIS
+					gw_is_market_leader = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_RENEWABLE_INVESTMENT" }
 			}
@@ -291,7 +291,7 @@
 			else_if = {
 				limit = {
 					temperature_anomaly_display >= 0.5
-					market_capital.owner = THIS
+					gw_is_market_leader = yes
 					produced_authority > 200
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }

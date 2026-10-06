@@ -1745,6 +1745,8 @@ nd_tactical_strike_resolve = {
 			modifier = nuclear_strike_success_chance
 			nd_log_context = yes
 			debug_log = "TE_NUCLEAR: type=action; action=tactical_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			# Landed: nd_record_nuclear_use spurs the world's programmes.
+			set_variable = { name = nd_strike_landed value = 1 }
 			# The nuclear taboo (nuclear_taboo_effects.txt); this country is
 			# the attacker and at war with the target.
 			if = {
@@ -1827,18 +1829,25 @@ nd_record_nuclear_use = {
 			}
 			nd_crisis_close_from_either = { OUTCOME = 7 }
 		}
-		# Use spurs every working programme in the world (§8.5).
-		every_country = {
-			limit = {
-				nuclear_program_has_programme = yes
-				nuclear_program_is_proliferating = yes
-				NOT = { has_modifier = nd_proliferation_spur }
+		# A use that went off spurs every working programme in the world
+		# (§8.5); a miss detonated nothing. The strike effects' hit branches
+		# set nd_strike_landed on this country, so a salvo spurs once if any
+		# of its warheads landed.
+		if = {
+			limit = { has_variable = nd_strike_landed }
+			every_country = {
+				limit = {
+					nuclear_program_has_programme = yes
+					nuclear_program_is_proliferating = yes
+					NOT = { has_modifier = nd_proliferation_spur }
+				}
+				add_modifier = {
+					name = nd_proliferation_spur
+					years = 5
+					is_decaying = yes
+				}
 			}
-			add_modifier = {
-				name = nd_proliferation_spur
-				years = 5
-				is_decaying = yes
-			}
+			remove_variable = nd_strike_landed
 		}
 		# The victim's guarantors are asked whether they will honour it — or,
 		# if the victim struck first, whether they will answer for it

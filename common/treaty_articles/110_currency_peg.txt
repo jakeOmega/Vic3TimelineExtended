@@ -257,7 +257,7 @@ currency_peg = {
 				# Economic dependence: it already lives in the anchor's market.
 				if = {
 					limit = {
-						exists = market
+						exists = market.owner
 						market.owner = scope:target_country
 						NOT = { this = scope:target_country }
 					}
