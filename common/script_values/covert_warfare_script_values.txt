@@ -15,7 +15,14 @@
 
 # Intelligence Capacity component scaling
 intelligence_capacity_literacy_max = 50
-intelligence_capacity_gdp_max = 25
+# Share of world GDP: this many points per percent, capped at
+# intelligence_capacity_gdp_max (reached at a quarter of the world economy).
+# Together with the rank bonus (extra_country_ranks.txt: great power +25,
+# major power +10) it is what gives a large country's counterintelligence
+# an edge over a small, literate one's; at 1 a point and +10 a great power
+# added only a couple of detection points against such a country.
+intelligence_capacity_gdp_points_per_percent = 2
+intelligence_capacity_gdp_max = 50
 
 # Operation slots: base/rank via INJECT:base_values and INJECT:country_ranks
 covert_ops_max_slot_cap = 10
@@ -262,6 +269,7 @@ intelligence_capacity_from_gdp = {
 		min = 1
 	}
 	multiply = 100
+	multiply = intelligence_capacity_gdp_points_per_percent
 	max = intelligence_capacity_gdp_max
 	min = 0
 }

@@ -255,8 +255,8 @@ The sections below are open by default, except the explanations at the foot:
 ### Intelligence capacity and operation slots
 
 Intelligence capacity is your agency's size: a base of 5, plus your rank (great
-power +10, major power +5), your literacy (up to 50 at full literacy), your
-share of world GDP (a point per percent, up to 25), and modifiers from
+power +25, major power +10), your literacy (up to 50 at full literacy), your
+share of world GDP (two points per percent, up to 50), and modifiers from
 technologies, laws such as Secret Police and Censorship, and the Ministry of
 Intelligence and Security (+4 per level). Tradecraft then multiplies the total.
 The overview's first icon rates your capacity against the world's best:
@@ -265,8 +265,12 @@ Exposed from 20% and Vulnerable below that.
 
 Capacity cuts both ways. The stronger a target's capacity is against yours, the
 likelier your operations there are caught; the stronger yours, the likelier you
-catch operations against you. Capacity also gives separatism and coup resistance
-(the Intelligence Capacity modifier), growing up to a capacity of 125.
+catch operations against you. Rank and GDP share give a great power's service an
+edge that a small, literate country can't match: a small country's lightly
+funded operations against a great power are caught noticeably more often,
+though high funding still hides most of them. Capacity also gives separatism
+and coup resistance (the Intelligence Capacity modifier), growing up to a
+capacity of 125.
 
 Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
 Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
@@ -450,7 +454,7 @@ A caught operation ends in the Operation Compromised event, which also costs its
 network 25 and costs you Tradecraft. Recalling your operatives and apologizing
 takes the full infamy and half the relations damage. Denying everything takes
 half the infamy and the full relations damage, and the target gains Heightened
-Vigilance (+5 to all three of its covert defenses, decaying over five years). At
+Vigilance (+25 to all three of its covert defenses, decaying over five years). At
 the establishing phase the costs are:
 
 | Exposure tier | Operations | Recall and apologize | Deny everything |
@@ -490,10 +494,11 @@ more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
 IP Protection and Central Bank Independence raise economic defense and Publicly
-Funded Elections ideological defense; No IP Protection, Unregulated Banking and
-No Campaign Finance Laws lower them. The Intelligence Sharing Pact treaty
-article adds intelligence capacity and lends the weaker partner part of the
-stronger one's covert defenses.
+Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
+Banking and No Campaign Finance Laws lower them. Against an agency of about 100
+capacity, 10 points of defense add about 1.5 points to its Detection Risk. The
+Intelligence Sharing Pact treaty article adds intelligence capacity and lends
+the weaker partner part of the stronger one's covert defenses.
 
 ### When operations end
 

@@ -27,6 +27,10 @@ country_covert_operation_slot_add = {
 ### Type-specific covert defense modifiers ###
 # These add to the target's defense for specific operation categories.
 # The total defense used in detection is: IC + type_defense.
+# Size values against capacity, which runs ~100-160 from era 7 on: the
+# detection penalty is ((IC + type_defense) / attacker IC - 1) x 15, so 10
+# points of defence is worth about 1.5 detection points. Laws grant +-5 to
+# +-10; temporary modifiers (Heightened Vigilance) up to 25.
 
 country_covert_defense_economic_add = {
 	color = good
