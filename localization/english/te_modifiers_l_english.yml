@@ -1304,7 +1304,7 @@
  state_pop_support_movement_transhumanist_mult:0 "$movement_transhumanist_name$ [concept_pop] Attraction"
  state_pop_support_movement_transhumanist_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$."
  state_reserve_battalions_add:0 "Reserve Battalions"
- state_reserve_battalions_add_desc:0 "[concept_reserve_battalions] trained in this state's barracks. An understaffed barracks counts for less. Each one lets the state raise one more conscript battalion."
+ state_reserve_battalions_add_desc:0 "[concept_reserve_battalions] trained in this state's barracks. An understaffed barracks counts for less. Each one adds the conscription rate and the [Concept('concept_conscription_center', 'conscription-center')] limit for one more conscript battalion, even past the limit set by your [GetLawGroup('lawgroup_army_model').GetName] law."
  state_resettlement_recruits_add:0 "Recruited for resettlement last month"
  state_resettlement_recruits_add_desc:0 "People Settlement Authorities took from this state last month."
  state_resettlement_transfer_add:0 "Settlers Moved per Month"

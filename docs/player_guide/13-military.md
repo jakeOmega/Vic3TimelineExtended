@@ -76,7 +76,7 @@ method costs little in peacetime. Switch back to a fast one before a long war.
 | Officer Academies | Combined Arms (era 6) | 26 | 30% of the staff are officers. Academy Officer Corps raises the Armed Forces' political strength by up to 20% and their attraction by up to 10%, in proportion to the share of your regular battalions trained this way |
 | Expeditionary Logistics | Predictive Logistics (era 8) | 18 | Halves the base goods surcharge while the battalion is mobilized. Mobilization options' own goods are unchanged |
 | Neural Grafting | Bioenhanced Soldiers (era 11) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 45 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 50% |
-| Reserve Cadre | National Militia or Mass Conscription | 12 | Each staffed level gives the state two reserve battalions. Each reserve battalion lets the state raise one more conscript battalion |
+| Reserve Cadre | National Militia or Mass Conscription | 12 | Each staffed level gives the state two reserve battalions. Each one raises the state's conscription rate and its conscription-center limit by enough for one more conscript battalion, so it still counts in a state already at the limit |
 | Political Commissars | Single-Party State or Council Republic | 20 | 5% of the staff are officers. Commissar Indoctrination raises attraction to the interest groups in government by up to 15%, in proportion to the share of your regular battalions trained this way |
 
 The national bonuses and the reserve battalions update once a month. Reserve
