@@ -164,6 +164,17 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_stage_grievance = yes
 	}
 
+	# Stage a trade dispute against us: the strongest other member gets
+	# un_events.15 now, and the notice of its choice reaches us.
+	option = {
+		name = te_debug_un.1.y
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		te_debug_un_stage_trade_dispute = yes
+	}
+
 	# ---- Redesign phase 5 ----
 	# Raise the UN one tier: the charter reform it needs, and authority at the
 	# tier's floor; the tier, E and every country's terms follow at once.
