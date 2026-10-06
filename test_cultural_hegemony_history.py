@@ -281,7 +281,9 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         # of the frame top and bottom, where the axis labels are placed.
         history = _type_body(read("gui/journal_entry_widgets/cultural_hegemony_widget.gui"), "te_ch_sec_history")
         chart = history[history.index("te_history_chart = {"):]
-        width, height = map(int, re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart).groups())
+        frame = re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart)
+        self.assertIsNotNone(frame, "the chart no longer sizes its frame to its 400px of bars")
+        width, height = map(int, frame.groups())
         bars = [tuple(map(int, b)) for b in re.findall(r'blockoverride "bar_size" \{ size = \{ (\d+) (\d+) \} \}', chart)]
         label_column, right_margin = 48, 8
         self.assertEqual(len(bars), 3)
