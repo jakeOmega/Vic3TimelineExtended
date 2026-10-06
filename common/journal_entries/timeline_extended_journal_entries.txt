@@ -3,12 +3,19 @@
 
 	group = je_group_internal_affairs
 
+	# A country with no states (one that lost them all in a war) has no pops
+	# and no living standard to measure, yet the entry stayed active on one and
+	# went on collapsing it: Dharampur, landless in the 2026-10-06 observer
+	# run, carried two Failed State modifiers. can_deactivate returns the entry
+	# to inactive when the country loses its capital.
 	is_shown_when_inactive = {
+		exists = capital
 		average_sol < 5
 		NOT = { is_country_type = decentralized }
 	}
 
 	possible = {
+		exists = capital
 		average_sol < 4
 	}
 
