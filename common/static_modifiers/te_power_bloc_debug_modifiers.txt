@@ -1,0 +1,15 @@
+﻿# Power bloc principle slots TEST CONSOLE ONLY (`event te_debug_pb.1`).
+# Nothing in normal play applies these.
+
+# Applied with multiplier = var:te_debug_pb_tech_slots: stands in for the four
+# technologies that each add a principle slot.
+te_debug_pb_principle_slots = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_te_pb_principle_slots_add = 1
+}
+
+# Applied to the power bloc so mandates arrive in days rather than years.
+te_debug_pb_fast_mandates = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_mandate_progress_mult = 50
+}

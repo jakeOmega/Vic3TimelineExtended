@@ -204,3 +204,15 @@ power_bloc_reserve_currency_bool = {
 	}
 	script_only = yes
 }
+
+# Principle slots from technology: four technologies carry +1 each, and a bloc
+# whose leader has them gets one more principle slot per point
+# (te_pb_principle_slot_cap in te_power_bloc_principle_slot_values.txt).
+country_te_pb_principle_slots_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+}

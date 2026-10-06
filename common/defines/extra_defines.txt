@@ -70,7 +70,7 @@ NPops = {
 }
 
 NPowerBlocs = {
-	MAX_PRINCIPLES = 4
+	MAX_PRINCIPLES = 8					# Slots 5-8 open with slot 4's unlock rule; a bloc gets te_pb_principle_slot_cap of them (rank, members, technology), held by the panel and te_pb_principle_slot_free
 	MAX_MANDATES = 5
 }
 

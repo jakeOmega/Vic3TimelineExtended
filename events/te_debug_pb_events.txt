@@ -1,0 +1,180 @@
+﻿# ============================================================================
+# POWER BLOC PRINCIPLE SLOTS TEST CONSOLE — fired only from the console:
+# `event te_debug_pb.1`
+# ============================================================================
+# Forms a small bloc, fills slots without waiting for mandates, adds or takes
+# away a technology slot (te_debug_pb_principle_slots stands in for the four
+# slot technologies) and speeds up mandates, so the slot count
+# (te_pb_principle_slot_cap) and the panel can be checked in minutes. Nothing in
+# the mod fires this event.
+# ============================================================================
+namespace = te_debug_pb
+
+te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debug_pb.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_pb.1.t
+	desc = te_debug_pb.1.d
+	flavor = te_debug_pb.1.f
+
+	# The option tooltips read var:te_debug_pb_tech_slots every frame; set it
+	# here so they never read a missing variable.
+	immediate = {
+		if = {
+			limit = { NOT = { has_variable = te_debug_pb_tech_slots } }
+			set_variable = {
+				name = te_debug_pb_tech_slots
+				value = 0
+			}
+		}
+	}
+
+	# Form a two-member bloc led by us: below the rank and members slot 3 needs.
+	option = {
+		name = te_debug_pb.1.a
+		default_option = yes
+		trigger = {
+			is_in_power_bloc = no
+		}
+		ordered_country = {
+			limit = {
+				NOT = { this = root }
+				is_in_power_bloc = no
+				is_subject = no
+				exists = capital
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = te_debug_pb_member
+		}
+		create_power_bloc = {
+			name = te_debug_pb_bloc_name
+			map_color = hsv{ 0.55 0.7 0.9 }
+			identity = identity_trade_league
+			principle = principle_transport_1
+			member = scope:te_debug_pb_member
+		}
+	}
+
+	# Fill the next free slot with the first of ten unrestricted groups we lack.
+	option = {
+		name = te_debug_pb.1.b
+		trigger = {
+			is_power_bloc_leader = yes
+		}
+		power_bloc = {
+			if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_transport } }
+				add_principle = principle_transport_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_external_trade } }
+				add_principle = principle_external_trade_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_food_standardization } }
+				add_principle = principle_food_standardization_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_police_coordination } }
+				add_principle = principle_police_coordination_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_military_industry } }
+				add_principle = principle_military_industry_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_companies } }
+				add_principle = principle_companies_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_navy } }
+				add_principle = principle_navy_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_defensive_cooperation } }
+				add_principle = principle_defensive_cooperation_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_freedom_of_movement } }
+				add_principle = principle_freedom_of_movement_1
+			}
+			else_if = {
+				limit = { NOT = { has_principle_group = principle_group:principle_group_creative_legislature } }
+				add_principle = principle_creative_legislature_1
+			}
+		}
+	}
+
+	# One more technology slot (stands in for a slot-granting technology).
+	option = {
+		name = te_debug_pb.1.c
+		trigger = {
+			NOT = { var:te_debug_pb_tech_slots ?= 4 }
+		}
+		change_variable = {
+			name = te_debug_pb_tech_slots
+			add = 1
+		}
+		if = {
+			limit = { has_modifier = te_debug_pb_principle_slots }
+			remove_modifier = te_debug_pb_principle_slots
+		}
+		add_modifier = {
+			name = te_debug_pb_principle_slots
+			multiplier = var:te_debug_pb_tech_slots
+		}
+	}
+
+	# One fewer technology slot.
+	option = {
+		name = te_debug_pb.1.e
+		trigger = {
+			has_variable = te_debug_pb_tech_slots
+			var:te_debug_pb_tech_slots > 0
+		}
+		change_variable = {
+			name = te_debug_pb_tech_slots
+			add = -1
+		}
+		if = {
+			limit = { has_modifier = te_debug_pb_principle_slots }
+			remove_modifier = te_debug_pb_principle_slots
+		}
+		if = {
+			limit = { var:te_debug_pb_tech_slots > 0 }
+			add_modifier = {
+				name = te_debug_pb_principle_slots
+				multiplier = var:te_debug_pb_tech_slots
+			}
+		}
+	}
+
+	# Mandates in days: toggle the fast-mandate modifier on the bloc.
+	option = {
+		name = te_debug_pb.1.l
+		trigger = {
+			is_power_bloc_leader = yes
+		}
+		power_bloc = {
+			if = {
+				limit = { has_modifier = te_debug_pb_fast_mandates }
+				remove_modifier = te_debug_pb_fast_mandates
+			}
+			else = {
+				add_modifier = { name = te_debug_pb_fast_mandates }
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_pb.1.m
+	}
+}

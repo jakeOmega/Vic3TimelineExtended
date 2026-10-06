@@ -1,0 +1,47 @@
+﻿# Power bloc principle slots: how many a bloc has. Slot rules 3 and 4
+# (common/scripted_rules/00_scripted_rules.txt), the power bloc panel and
+# te_pb_principle_slot_free (the AI's limit) all read te_pb_principle_slot_cap.
+
+# Country scope (the bloc leader): slots from the leader's technologies.
+te_pb_tech_principle_slots = {
+	value = modifier:country_te_pb_principle_slots_add
+	min = 0
+	max = 4
+}
+
+# Power bloc scope: how many principle slots the bloc has. Two, one more at
+# rank 5 or better with 5 members, another at rank 3 or better with 10
+# members (vanilla's slot 3 and 4 conditions, now counted), and one per slot
+# technology of the leader. The engine applies slot 4's unlock rule to every
+# slot after it, so slots can't be tied to positions; unlock_power_bloc_
+# principle_slot_3/_4 compare this count instead and the panel hides slots
+# 5-8 above it.
+te_pb_principle_slot_cap = {
+	value = 2
+	if = {
+		limit = {
+			power_bloc_rank <= 5
+			num_power_bloc_members >= 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			power_bloc_rank <= 3
+			num_power_bloc_members >= 10
+		}
+		add = 1
+	}
+	add = power_bloc_leader.te_pb_tech_principle_slots
+	max = 8
+}
+
+# Country scope: the slot count of this country's bloc, 0 outside one.
+# gui/power_bloc_panel.gui reads it on the bloc leader.
+te_pb_bloc_principle_slot_cap = {
+	value = 0
+	if = {
+		limit = { is_in_power_bloc = yes }
+		add = power_bloc.te_pb_principle_slot_cap
+	}
+}

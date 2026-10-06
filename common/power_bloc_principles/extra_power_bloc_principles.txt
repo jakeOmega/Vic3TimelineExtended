@@ -7,6 +7,7 @@ principle_construction_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_construction }
 		modifier:country_modern_tools_pb_principles_bool = yes
 	}
 
@@ -27,6 +28,7 @@ principle_construction_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_construction }
 		modifier:country_robotics_pb_principles_bool = yes
 	}
 
@@ -50,6 +52,7 @@ principle_internal_trade_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_internal_trade }
 		modifier:country_keynesian_pb_principles_bool = yes
 	}
 
@@ -78,6 +81,7 @@ principle_internal_trade_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_internal_trade }
 		modifier:country_containerization_pb_principles_bool = yes
 	}
 
@@ -108,6 +112,7 @@ principle_market_unification_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_market_unification }
 		modifier:country_igo_pb_principles_bool = yes
 	}
 
@@ -143,6 +148,7 @@ principle_market_unification_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_market_unification }
 		modifier:country_satcom_pb_principles_bool = yes
 	}
 
@@ -182,6 +188,7 @@ principle_vassalization_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_vassalization }
 		modifier:country_rocketry_pb_principles_bool = yes
 	}
 
@@ -206,6 +213,7 @@ principle_vassalization_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_vassalization }
 		modifier:country_tactical_nukes_pb_principles_bool = yes
 	}
 
@@ -238,6 +246,10 @@ REPLACE:principle_advanced_research_1 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_advanced_research }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -268,6 +280,10 @@ REPLACE:principle_advanced_research_2 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_advanced_research }
+	}
+
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_weekly_innovation_max_add = 5
@@ -286,6 +302,10 @@ REPLACE:principle_advanced_research_2 = {
 REPLACE:principle_advanced_research_3 = {
 	icon = "gfx/interface/icons/principles_icons/advanced_research.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_advanced_research }
+	}
 
 	member_modifier = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
@@ -309,6 +329,7 @@ principle_advanced_research_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_advanced_research }
 		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
@@ -358,6 +379,7 @@ principle_advanced_research_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_advanced_research }
 		modifier:country_knowledge_economy_pb_principles_bool = yes
 	}
 
@@ -418,6 +440,7 @@ principle_defensive_cooperation_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_defensive_cooperation }
 		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
@@ -449,6 +472,7 @@ principle_defensive_cooperation_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_defensive_cooperation }
 		modifier:country_anti_war_pb_principles_bool = yes
 	}
 
@@ -486,6 +510,7 @@ principle_aggressive_coordination_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_aggressive_coordination }
 		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
@@ -521,6 +546,7 @@ principle_aggressive_coordination_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_aggressive_coordination }
 		modifier:country_ncw_pb_principles_bool = yes
 	}
 
@@ -566,6 +592,7 @@ principle_external_trade_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_external_trade }
 		modifier:country_television_pb_principles_bool = yes
 	}
 
@@ -594,6 +621,7 @@ principle_external_trade_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_external_trade }
 		modifier:country_cellular_pb_principles_bool = yes
 	}
 
@@ -625,6 +653,7 @@ principle_food_standardization_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_food_standardization }
 		modifier:country_modern_vaccines_pb_principles_bool = yes
 	}
 
@@ -653,6 +682,7 @@ principle_food_standardization_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_food_standardization }
 		modifier:country_gene_splicing_pb_principles_bool = yes
 	}
 
@@ -684,6 +714,7 @@ principle_police_coordination_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_police_coordination }
 		modifier:country_mass_surveillance_pb_principles_bool = yes
 	}
 
@@ -720,6 +751,7 @@ principle_police_coordination_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_police_coordination }
 		modifier:country_auto_surveillance_pb_principles_bool = yes
 	}
 
@@ -762,6 +794,7 @@ principle_transport_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_transport }
 		modifier:country_modern_skyscrapers_pb_principles_bool = yes
 	}
 
@@ -784,6 +817,7 @@ principle_transport_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_transport }
 		modifier:country_supply_chain_pb_principles_bool = yes
 	}
 
@@ -812,6 +846,7 @@ principle_military_industry_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_industry }
 		modifier:country_motorized_artillery_pb_principles_bool = yes
 	}
 
@@ -835,6 +870,7 @@ principle_military_industry_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_industry }
 		modifier:country_icbm_pb_principles_bool = yes
 	}
 
@@ -862,6 +898,7 @@ principle_colonial_offices_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_colonial_offices }
 		modifier:country_decolonization_pb_principles_bool = yes
 	}
 
@@ -896,6 +933,7 @@ principle_colonial_offices_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_colonial_offices }
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
@@ -934,6 +972,10 @@ REPLACE:principle_foreign_investment_1 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_foreign_investment }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -966,6 +1008,10 @@ REPLACE:principle_foreign_investment_2 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_foreign_investment }
+	}
+
 	member_modifier = {
 		# Members get reduced nationalization cost for assets of non-members
 		country_nationalization_cost_non_members_mult = -0.5
@@ -981,6 +1027,10 @@ REPLACE:principle_foreign_investment_2 = {
 REPLACE:principle_foreign_investment_3 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_foreign_investment }
+	}
 
 	# Members can always invest in power bloc coutries of lower rank
 	# Does not generate a tooltip, so a dummy modifier is required to show this effect
@@ -1012,6 +1062,7 @@ principle_foreign_investment_4 = {
 	allows_foreign_investment_in_lower_rank = yes
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_foreign_investment }
 		modifier:country_keynesian_pb_principles_bool = yes
 	}
 
@@ -1048,6 +1099,7 @@ principle_foreign_investment_5 = {
 	allows_foreign_investment_in_lower_rank = yes
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_foreign_investment }
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
@@ -1085,6 +1137,7 @@ principle_creative_legislature_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_creative_legislature }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1109,6 +1162,7 @@ principle_creative_legislature_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_creative_legislature }
 		modifier:country_www_pb_principles_bool = yes
 	}
 
@@ -1138,6 +1192,7 @@ principle_freedom_of_movement_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_freedom_of_movement }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1163,6 +1218,7 @@ principle_freedom_of_movement_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_freedom_of_movement }
 		modifier:country_www_pb_principles_bool = yes
 	}
 
@@ -1191,6 +1247,7 @@ principle_divine_economics_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_divine_economics }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1217,6 +1274,7 @@ principle_divine_economics_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_divine_economics }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -1250,6 +1308,7 @@ principle_exploit_members_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_exploit_members }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1290,6 +1349,7 @@ principle_exploit_members_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_exploit_members }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -1361,6 +1421,10 @@ principle_sacred_civics_1_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_sacred_civics }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -1398,6 +1462,10 @@ principle_sacred_civics_2_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_sacred_civics }
+	}
+
 	member_modifier = {
 		# Modifiers from previous level(s)
 		interest_group_ig_devout_approval_add = 5
@@ -1415,6 +1483,10 @@ principle_sacred_civics_2_mod = {
 principle_sacred_civics_3_mod = {
 	icon = "gfx/interface/icons/principles_icons/sacred_civics.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_sacred_civics }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -1439,6 +1511,7 @@ principle_sacred_civics_4_mod = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_sacred_civics }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1476,6 +1549,7 @@ principle_sacred_civics_5_mod = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_sacred_civics }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -1516,6 +1590,7 @@ principle_ideological_truth_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_ideological_truth }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -1545,6 +1620,7 @@ principle_ideological_truth_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_ideological_truth }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -1577,6 +1653,10 @@ principle_ideological_truth_5 = {
 principle_cultural_unity_1 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_unity }
+	}
 
 	visible = {
 		has_dlc_feature = power_bloc_features
@@ -1622,6 +1702,10 @@ principle_cultural_unity_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_unity }
+	}
+
 	member_modifier = {
 		state_assimilation_mult = 0.2
 		country_homelands_can_change_bool = yes
@@ -1651,6 +1735,10 @@ principle_cultural_unity_2 = {
 principle_cultural_unity_3 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_unity }
+	}
 
 	member_modifier = {
 		country_standard_of_living_full_acceptance_add = 1
@@ -1685,6 +1773,7 @@ principle_cultural_unity_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_unity }
 		modifier:country_marketing_research_pb_principles_bool = yes
 	}
 
@@ -1730,6 +1819,7 @@ principle_cultural_unity_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_unity }
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
@@ -1777,6 +1867,10 @@ principle_cultural_plurality_1 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_plurality }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -1820,6 +1914,10 @@ principle_cultural_plurality_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_plurality }
+	}
+
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_mass_migration_attraction_mult = 0.25
@@ -1842,6 +1940,7 @@ principle_cultural_plurality_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_plurality }
 		OR = {
 			has_law = law_type:law_cultural_exclusion
 			has_law = law_type:law_multicultural
@@ -1873,6 +1972,7 @@ principle_cultural_plurality_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_plurality }
 		modifier:country_civil_rights_pb_principles_bool = yes
 	}
 
@@ -1907,6 +2007,7 @@ principle_cultural_plurality_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_cultural_plurality }
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
@@ -1939,6 +2040,10 @@ principle_cultural_plurality_5 = {
 principle_education_1 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_education }
+	}
 
 	visible = {
 		has_dlc_feature = power_bloc_features
@@ -1982,6 +2087,10 @@ principle_education_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_education }
+	}
+
 	member_modifier = {
 		state_education_access_add = 0.05
 		country_institution_size_change_speed_institution_schools_mult = 0.4
@@ -2014,6 +2123,10 @@ principle_education_2 = {
 principle_education_3 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_education }
+	}
 
 	member_modifier = {
 		state_education_access_add = 0.05
@@ -2049,6 +2162,7 @@ principle_education_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_education }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -2100,6 +2214,7 @@ principle_education_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_education }
 		modifier:country_www_pb_principles_bool = yes
 	}
 
@@ -2153,6 +2268,10 @@ principle_diplomacy_1 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_diplomacy }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -2175,6 +2294,10 @@ principle_diplomacy_1 = {
 principle_diplomacy_2 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_diplomacy }
+	}
 
 	leader_modifier = {
 		country_influence_add = 500
@@ -2200,6 +2323,10 @@ principle_diplomacy_2 = {
 principle_diplomacy_3 = {
 	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_diplomacy }
+	}
 
 	leader_modifier = {
 		country_influence_add = 500
@@ -2232,6 +2359,7 @@ principle_diplomacy_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_diplomacy }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -2271,6 +2399,7 @@ principle_diplomacy_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_diplomacy }
 		modifier:country_www_pb_principles_bool = yes
 	}
 
@@ -2314,6 +2443,7 @@ principle_environmental_sustainability_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_environmental_sustainability }
 		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
@@ -2346,6 +2476,7 @@ principle_environmental_sustainability_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_environmental_sustainability }
 		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
@@ -2372,6 +2503,7 @@ principle_environmental_sustainability_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_environmental_sustainability }
 		modifier:country_env_movement_pb_principles_bool = yes
 	}
 
@@ -2400,6 +2532,7 @@ principle_environmental_sustainability_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_environmental_sustainability }
 		modifier:country_clean_energy_pb_principles_bool = yes
 	}
 
@@ -2431,6 +2564,7 @@ principle_environmental_sustainability_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_environmental_sustainability }
 		modifier:country_clean_energy_pb_principles_bool = yes
 	}
 
@@ -2468,6 +2602,7 @@ principle_urban_planning_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_urban_planning }
 		modifier:country_urbanization_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2511,6 +2646,7 @@ principle_urban_planning_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_urban_planning }
 		modifier:country_urbanization_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2553,6 +2689,7 @@ principle_urban_planning_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_urban_planning }
 		modifier:country_modern_urban_planning_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2596,6 +2733,7 @@ principle_urban_planning_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_urban_planning }
 		modifier:country_workflow_opt_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2638,6 +2776,7 @@ principle_urban_planning_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_urban_planning }
 		modifier:country_digital_ed_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2685,6 +2824,7 @@ principle_rural_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_rural }
 		trigger_if = {
 			limit = { exists = power_bloc }
 			NOT = {
@@ -2741,6 +2881,7 @@ principle_rural_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_rural }
 		trigger_if = {
 			limit = { exists = power_bloc }
 			NOT = {
@@ -2774,6 +2915,7 @@ principle_rural_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_rural }
 		trigger_if = {
 			limit = { exists = power_bloc }
 			NOT = {
@@ -2812,6 +2954,7 @@ principle_rural_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_rural }
 		modifier:country_advanced_agri_stats_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2852,6 +2995,7 @@ principle_rural_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_rural }
 		modifier:country_green_revolution_pb_principles_bool = yes
 		trigger_if = {
 			limit = { exists = power_bloc }
@@ -2895,6 +3039,7 @@ principle_global_security_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_global_security }
 		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
@@ -2923,6 +3068,7 @@ principle_global_security_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_global_security }
 		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
@@ -2957,6 +3103,7 @@ principle_global_security_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_global_security }
 		modifier:country_nuclear_weapons_pb_principles_bool = yes
 	}
 
@@ -2996,6 +3143,7 @@ principle_global_security_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_global_security }
 		modifier:country_tactical_nukes_pb_principles_bool = yes
 	}
 
@@ -3038,6 +3186,7 @@ principle_global_security_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_global_security }
 		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
@@ -3086,6 +3235,7 @@ principle_healthcare_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_healthcare }
 		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
@@ -3120,6 +3270,7 @@ principle_healthcare_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_healthcare }
 		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
@@ -3143,6 +3294,7 @@ principle_healthcare_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_healthcare }
 		modifier:country_pharmaceuticals_pb_principles_bool = yes
 	}
 
@@ -3168,6 +3320,7 @@ principle_healthcare_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_healthcare }
 		modifier:country_modern_vaccines_pb_principles_bool = yes
 	}
 
@@ -3198,6 +3351,7 @@ principle_healthcare_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_healthcare }
 		modifier:country_modern_pharma_pb_principles_bool = yes
 	}
 
@@ -3227,6 +3381,10 @@ principle_healthcare_5 = {
 principle_welfare_1 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_welfare }
+	}
 
 	visible = {
 		has_dlc_feature = power_bloc_features
@@ -3270,6 +3428,10 @@ principle_welfare_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_welfare }
+	}
+
 	member_modifier = {
 		# Modifiers from previous level(s)
 		country_institution_cost_institution_social_security_mult = -0.2
@@ -3292,6 +3454,10 @@ principle_welfare_2 = {
 principle_welfare_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_welfare }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -3318,6 +3484,7 @@ principle_welfare_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_welfare }
 		modifier:country_public_works_pb_principles_bool = yes
 	}
 
@@ -3351,6 +3518,7 @@ principle_welfare_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_welfare }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -3384,6 +3552,10 @@ principle_artistic_expression_1 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_artistic_expression }
+	}
+
 	visible = {
 		has_dlc_feature = power_bloc_features
 	}
@@ -3414,6 +3586,10 @@ principle_artistic_expression_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_artistic_expression }
+	}
+
 	member_modifier = {
 		# Modifiers from previous level(s)
 		goods_output_fine_art_mult = 0.05
@@ -3429,6 +3605,10 @@ principle_artistic_expression_2 = {
 principle_artistic_expression_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_artistic_expression }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -3449,6 +3629,7 @@ principle_artistic_expression_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_artistic_expression }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -3478,6 +3659,7 @@ principle_artistic_expression_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_artistic_expression }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -3505,6 +3687,10 @@ principle_artistic_expression_5 = {
 principle_military_training_1 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_training }
+	}
 
 	visible = {
 		has_dlc_feature = power_bloc_features
@@ -3554,6 +3740,10 @@ principle_military_training_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_training }
+	}
+
 	member_modifier = {
 		# Modifiers from previous level(s)
 		unit_army_experience_gain_mult = 0.25
@@ -3571,6 +3761,10 @@ principle_military_training_2 = {
 principle_military_training_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_training }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -3592,6 +3786,7 @@ principle_military_training_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_training }
 		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
@@ -3617,6 +3812,7 @@ principle_military_training_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_military_training }
 		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
@@ -3639,6 +3835,10 @@ principle_military_training_5 = {
 principle_engineering_and_logistics_1 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_engineering_and_logistics }
+	}
 
 	visible = {
 		has_dlc_feature = power_bloc_features
@@ -3688,6 +3888,10 @@ principle_engineering_and_logistics_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_engineering_and_logistics }
+	}
+
 	member_modifier = {
 		character_battle_condition_broken_supply_line_mult = -0.2
 		character_battle_condition_charted_terrain_mult = 0.2
@@ -3702,6 +3906,10 @@ principle_engineering_and_logistics_2 = {
 principle_engineering_and_logistics_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_engineering_and_logistics }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -3722,6 +3930,7 @@ principle_engineering_and_logistics_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_engineering_and_logistics }
 		modifier:country_combined_arms_pb_principles_bool = yes
 	}
 
@@ -3747,6 +3956,7 @@ principle_engineering_and_logistics_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_engineering_and_logistics }
 		modifier:country_rapid_deploy_pb_principles_bool = yes
 	}
 
@@ -3788,6 +3998,7 @@ principle_navy_4 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_navy }
 		modifier:country_sonar_pb_principles_bool = yes
 	}
 
@@ -3833,6 +4044,7 @@ principle_navy_5 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_navy }
 		modifier:country_missile_defense_pb_principles_bool = yes
 	}
 
@@ -3878,6 +4090,7 @@ principle_companies_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_companies }
 		modifier:country_modern_urban_planning_pb_principles_bool = yes
 	}
 
@@ -3903,6 +4116,7 @@ principle_companies_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_companies }
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
@@ -3932,6 +4146,7 @@ principle_shared_canon_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_shared_canon }
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
@@ -3963,6 +4178,7 @@ principle_shared_canon_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_shared_canon }
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
@@ -4009,6 +4225,7 @@ principle_multilateral_institutions_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_multilateral_institutions }
 		modifier:country_igo_pb_principles_bool = yes
 	}
 
@@ -4031,6 +4248,7 @@ principle_multilateral_institutions_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_multilateral_institutions }
 		modifier:country_igo_pb_principles_bool = yes
 	}
 
@@ -4062,6 +4280,7 @@ principle_multilateral_institutions_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_multilateral_institutions }
 		modifier:country_igo_pb_principles_bool = yes
 	}
 
@@ -4089,6 +4308,7 @@ principle_multilateral_institutions_4 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_multilateral_institutions }
 		modifier:country_igo_pb_principles_bool = yes
 		modifier:country_decolonization_pb_principles_bool = yes
 	}
@@ -4125,6 +4345,7 @@ principle_multilateral_institutions_5 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_multilateral_institutions }
 		modifier:country_igo_pb_principles_bool = yes
 		modifier:country_anti_war_pb_principles_bool = yes
 	}
@@ -4223,6 +4444,7 @@ principle_monetary_union_1 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_monetary_union }
 		has_technology_researched = central_banking
 	}
 
@@ -4253,6 +4475,7 @@ principle_monetary_union_2 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_monetary_union }
 		has_technology_researched = central_banking
 	}
 
@@ -4289,6 +4512,7 @@ principle_monetary_union_3 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_monetary_union }
 		has_technology_researched = central_banking
 	}
 
@@ -4328,6 +4552,7 @@ principle_monetary_union_4 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_monetary_union }
 		has_technology_researched = central_banking
 		modifier:country_keynesian_pb_principles_bool = yes
 	}
@@ -4371,6 +4596,7 @@ principle_monetary_union_5 = {
 	}
 
 	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_monetary_union }
 		has_technology_researched = central_banking
 		modifier:country_globalization_pb_principles_bool = yes
 	}
@@ -4400,6 +4626,74 @@ principle_monetary_union_5 = {
 		# debts is for a leader whose own are in order.
 		if = {
 			limit = { scaled_debt >= 0.5 }
+			multiply = 0.25
+		}
+	}
+}
+
+# Vanilla 1.14.5's principle_freedom_of_movement_1, unchanged except for the
+# te_pb_principle_slot_free line. It is the one vanilla principle with its own
+# `possible`, so the generated INJECT (te_principle_slot_gates_generated.txt)
+# can't add the slot limit without a second `possible` block. Re-copy it when a
+# vanilla patch changes it.
+REPLACE:principle_freedom_of_movement_1 = {
+	icon = "gfx/interface/icons/principles_icons/freedom_of_movement.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_freedom_of_movement }
+		NOT = { has_law_or_variant = law_type:law_closed_borders }
+	}
+
+	member_modifier = {
+		# Increased migration
+		state_migration_quota_mult = 0.25
+	}
+
+	ai_weight = {
+		value = 100
+
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= { is_in_government = yes }
+			}
+			add = 100
+		}
+
+		if = {
+			limit = {
+				OR = {
+					is_in_geographic_region = geographic_region_north_america
+					is_in_geographic_region = geographic_region_central_america_old
+					is_in_geographic_region = geographic_region_south_america
+				}
+			}
+			add = 100
+		}
+
+		if = {
+			limit = {
+				has_law_or_variant = law_type:law_migration_controls
+			}
+			multiply = 0.5
+		}
+
+		if = {
+			limit = { has_strategy = ai_strategy_progressive_agenda }
+			multiply = 1.5
+		}
+
+		if = {
+			limit = {
+				OR = {
+					has_strategy = ai_strategy_conservative_agenda
+					has_strategy = ai_strategy_reactionary_agenda
+				}
+			}
 			multiply = 0.25
 		}
 	}

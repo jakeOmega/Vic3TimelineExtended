@@ -4,6 +4,10 @@ REPLACE:principle_food_standardization_2 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_food_standardization }
+	}
+
 	member_modifier = {
 		building_group_bg_agriculture_throughput_add = 0.1
 		building_food_industry_throughput_add = 0.1
@@ -17,6 +21,10 @@ REPLACE:principle_food_standardization_2 = {
 REPLACE:principle_food_standardization_3 = {
 	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_food_standardization }
+	}
 
 	member_modifier = {
 		# Modifiers from previous level(s)
@@ -38,6 +46,10 @@ REPLACE:principle_food_standardization_3 = {
 # Mod-added tiers 4/5 carry the same fields directly in extra_power_bloc_principles.txt so
 # upgrading past tier 3 doesn't drop the bonus.
 INJECT:principle_external_trade_2 = {
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_external_trade }
+	}
+
 	member_modifier = {
 		country_influence_add = 50
 		goods_input_merchant_marine_mult = -0.10
@@ -45,6 +57,10 @@ INJECT:principle_external_trade_2 = {
 }
 
 INJECT:principle_external_trade_3 = {
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_external_trade }
+	}
+
 	member_modifier = {
 		country_influence_add = 100
 		goods_input_merchant_marine_mult = -0.25
@@ -55,12 +71,20 @@ INJECT:principle_external_trade_3 = {
 # bloc-wide legislative override capacity. Tiers restate cumulatively, so the value is the total at
 # that tier (tiers 4/5 carry +3/+4 inline in extra_power_bloc_principles.txt).
 INJECT:principle_creative_legislature_2 = {
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_creative_legislature }
+	}
+
 	member_modifier = {
 		country_legislative_override_capacity_add = 1
 	}
 }
 
 INJECT:principle_creative_legislature_3 = {
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_creative_legislature }
+	}
+
 	member_modifier = {
 		country_legislative_override_capacity_add = 2
 	}
