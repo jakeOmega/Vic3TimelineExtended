@@ -72,6 +72,7 @@
  # Vanilla-key overrides moved here from te_*_l_english.yml files: duplicates of
  # vanilla keys outside replace/ log "Duplicate localization key" every launch.
  prestige_good_brunn_type_engines:1 "High-Performance Engines"
+ prestige_good_radiola_radios:0 "Precision Wireless Gear"
  country_institution_cost_institution_home_affairs_mult:0 "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]"
  country_institution_cost_institution_home_affairs_mult_desc:0 "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]"
  principle_advanced_research_1_desc:0 "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states."
