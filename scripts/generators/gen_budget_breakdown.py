@@ -54,6 +54,15 @@ SOURCES = {
 }
 
 
+# Expense source rows that also carry a government building's weekly operating
+# cost, moved there from Other Civil Buildings. common/script_values/
+# te_budget_values.txt measures it (te_budget_<name>_actual) and caps it at
+# the civil pool left after administration (te_budget_<name>_cost).
+CARVE_OUTS = {
+    "space": ("space_program", "Space Program"),
+}
+
+
 def source_type(side, key):
     return f"country_te_budget_{side}_{key}_add"
 
@@ -109,9 +118,9 @@ LOCALIZATION = {
     "no_income": "No positive income this week.",
     "no_expense": "No positive expenses this week.",
     "pie_tt": "Each color matches a row below. Collapsed groups form one slice; expanded groups use their visible children. Pies show shares of positive component amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
-    "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
+    "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration, and the Space Program, which is under Programme Costs. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
     "how": "How the Breakdown Works",
-    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages plus Materials and Support. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods. Materials and Support includes branch goods plus the full operating deficits of logistics centres and naval fortifications. Their own wages and upkeep are separate from barracks, conscription and naval administration costs covered by the branch forecast. Support upkeep combines wages, goods and slave upkeep. Navy also includes warship construction and maintenance. Other Military Costs reconciles remaining upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
+    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Programme Costs as part of Space Race.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total. The Space Program's cost is capped at what that total holds after administration.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages plus Materials and Support. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods. Materials and Support includes branch goods plus the full operating deficits of logistics centres and naval fortifications. Their own wages and upkeep are separate from barracks, conscription and naval administration costs covered by the branch forecast. Support upkeep combines wages, goods and slave upkeep. Navy also includes warship construction and maintenance. Other Military Costs reconciles remaining upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
 }
 
 LOCALIZATION.update({
@@ -206,6 +215,8 @@ def scope(side):
     else:
         expr += ".AddScope('institution_usage', MakeScopeValue(GetPlayer.GetInstitutionInvestmentBureaucracyCost))"
         expr += ".AddScope('administration_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_administration_actual')))"
+        expr += "".join(f".AddScope('{name}_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{name}_actual')))"
+                        for name, _ in CARVE_OUTS.values())
         expr += ".AddScope('institution_levels', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_institution_levels')))"
         fields = [(f"{key}_{i}", getter) for key, _, getters in EXPENSE for i, getter in enumerate(getters)]
     if side == "expense":
@@ -246,8 +257,14 @@ def generated_values():
                     body += "\n\tsubtract = scope:private_construction"
                 if key == "civil":
                     body += "\n\tsubtract = te_budget_administration_cost"
+                    body += "".join(f"\n\tsubtract = te_budget_{name}_cost" for name, _ in CARVE_OUTS.values())
+                if key in CARVE_OUTS:
+                    body += f"\n\tadd = te_budget_{CARVE_OUTS[key][0]}_cost"
                 if key == "additional":
-                    body += "\n" + "\n".join(f"\tsubtract = te_budget_expense_{source}" for source in SOURCES[side])
+                    # A carve-out row also holds a building cost that Additional
+                    # Expenses never contained; remove only its modifier charges.
+                    body += "\n" + "\n".join(f"\tsubtract = scope:{source}_0" if source in CARVE_OUTS else f"\tsubtract = te_budget_expense_{source}"
+                                              for source in SOURCES[side])
                 out.append(sv(f"te_budget_expense_{key}", body))
         out.append(sv(f"te_budget_{side}_other", "\tvalue = scope:total\n" + "\n".join(f"\tsubtract = te_budget_{side}_{key}" for key, _ in items[:-1])))
         nodes = list(walk(tree(side)))
@@ -444,8 +461,14 @@ def main():
                 if side == "income" else
                 "This amount is already included in Government Expenses. It is not charged again."
             )
+            building = ""
+            if side == "expense" and key in CARVE_OUTS:
+                name, building_label = CARVE_OUTS[key]
+                building = (f"\\n{building_label}: @money![TopScope.ScriptValue('te_budget_{name}_cost')|D]"
+                            f"\\nThe {building_label}'s wages and input goods, moved here from Other Civil Buildings.")
             loc[f"te_budget_chart_source_{side}_{key}_tt"] = (
                 f"#b {label}#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_{side}_{key}')|D]"
+                f"{building}"
                 f"\\n\\n[GetPlayer.GetModifier.GetDescFor('{source_type(side, key)}')]"
                 "\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. "
                 "One-time treasury payments and non-monetary costs are excluded from the weekly budget."

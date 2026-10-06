@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 class BudgetHarness:
-    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None, military_fields=None, military_buildings=()):
+    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None, military_fields=None, military_buildings=(), space_program=0):
         parser = ParadoxFileParser()
         self.values = {}
         for name in ("te_budget_values.txt", "te_budget_generated_values.txt"):
@@ -27,6 +27,8 @@ class BudgetHarness:
         self.levels = levels if levels is not None else {"institution_schools": 3, "institution_national_bank": 2}
         self.production = Decimal(production)
         self.building_definitions = json.loads((ROOT / "vanilla_parsed/common/buildings.json").read_text())
+        # A mod building (common/buildings/extra_buildings.txt), not in vanilla's snapshot.
+        self.building_definitions.setdefault("building_space_program", ["=", {"building_group": ["=", "bg_monuments"]}])
         self.scopes = {"total": Decimal(total), "institution_usage": Decimal(usage), "private_construction": Decimal(private_construction)}
         for key, _, getters in gen.EXPENSE:
             self.scopes.update({f"{key}_{i}": Decimal(0) for i in range(len(getters))})
@@ -39,7 +41,10 @@ class BudgetHarness:
             self.scopes[f"{key}_0"] = Decimal(value)
         self.buildings = [("building_government_administration", -Decimal(administration)), ("building_university", Decimal(-11000)),
                           *((key, -Decimal(cost)) for key, cost in military_buildings)]
+        if space_program:
+            self.buildings.append(("building_space_program", -Decimal(space_program)))
         self.scopes["administration_actual"] = self("administration_actual")
+        self.scopes["space_program_actual"] = self("space_program_actual")
         self.scopes["institution_levels"] = self("institution_levels")
         self.scopes["institution_pool"] = self("institution_pool")
         for branch in ("army", "navy"):
@@ -193,6 +198,31 @@ class BudgetAllocationTests(unittest.TestCase):
             self.assertEqual(h("expense_" + key + "_share"), Decimal(value) / 18000)
         self.assertEqual(h("expense_other"), 0)
         self.assertEqual(sum(h("expense_" + key) for key, _ in gen.categories("expense")), 18000)
+
+    def test_space_program_moves_from_civil_buildings_to_space_race(self):
+        # Civil getters cover administration 39000, a university 11000 and the
+        # Space Program 8000. The debris-clearance charge is 500.
+        h = BudgetHarness(civil=58000, total=58500, space_program=8000, charges={"additional": 500, "space": 500})
+        self.assertEqual(h("space_program_actual"), 8000)
+        self.assertEqual(h("expense_space"), 8500)
+        self.assertEqual(h("expense_civil"), 11000)
+        self.assertEqual(h("expense_additional"), 0)
+        self.assertEqual(h("expense_programmes"), 8500)
+        self.assertEqual(h("expense_other"), 0)
+        self.assertEqual(sum(h("expense_" + key) for key, _ in gen.categories("expense")), 58500)
+
+    def test_space_program_never_takes_more_than_civil_after_administration(self):
+        h = BudgetHarness(civil=41000, total=41000, space_program=8000)
+        self.assertEqual(h("administration_cost"), 39000)
+        self.assertEqual(h("space_program_cost"), 2000)
+        self.assertEqual(h("expense_space"), 2000)
+        self.assertEqual(h("expense_civil"), 0)
+
+    def test_no_space_program_leaves_space_race_to_its_charges(self):
+        h = BudgetHarness(civil=50000, total=50300, charges={"additional": 300, "space": 300})
+        self.assertEqual(h("expense_space"), 300)
+        self.assertEqual(h("expense_civil"), 11000)
+        self.assertEqual(h("expense_additional"), 0)
 
     def test_source_refunds_preserve_signed_amounts_and_do_not_become_other_costs(self):
         h = BudgetHarness(civil=0, administration=0, total=3000,
