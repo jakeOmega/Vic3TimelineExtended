@@ -392,7 +392,11 @@ nd_incident_rate_multiplier = {
 
 nd_incident_base_weekly_permille = {
 	value = nd_incident_base_monthly_permille
-	divide = 4.333333
+	# 12 months to 52 weeks, as two whole numbers: the engine reads at most
+	# five decimals, and 52/12 written out to six was "Badly read" and divided
+	# by zero.
+	multiply = 12
+	divide = 52
 	multiply = nd_incident_rate_multiplier
 }
 
@@ -426,7 +430,8 @@ nd_incident_crisis_share = {
 # exposure equivalent, not a second roll or an exact cumulative probability.
 nd_incident_permille = {
 	value = nd_incident_weekly_permille
-	multiply = 4.333333
+	multiply = 52
+	divide = 12
 }
 
 # All random chances are whole numbers: 1% x tenths-per-mille up to 10 per

@@ -144,7 +144,7 @@ nd_loose_surface = {
 			weight = {
 				base = 1
 				modifier = { nuclear_industrial_strike_target_score >= 0.0001 factor = 3.16 }
-				modifier = { nuclear_industrial_strike_target_score >= 0.000316 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.00032 factor = 3.16 }
 				modifier = { nuclear_industrial_strike_target_score >= 0.001 factor = 3.16 }
 				modifier = { nuclear_industrial_strike_target_score >= 0.00316 factor = 3.16 }
 				modifier = { nuclear_industrial_strike_target_score >= 0.01 factor = 3.16 }

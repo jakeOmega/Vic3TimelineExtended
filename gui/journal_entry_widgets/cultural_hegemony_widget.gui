@@ -481,6 +481,29 @@ types cultural_hegemony_widget_types
 		}
 	}
 
+	### One "Political Models over Time" legend row: the swatch and the model's
+	### full name. Half the chart's 456px: 14 + 6 + 200 = 220 per column, two
+	### columns and 12 between. A name too long for 200 wraps rather than elides.
+	type ch_model_hist_legend_row = flowcontainer {
+		direction = horizontal
+		spacing = 6
+		icon = {
+			size = { 14 14 }
+			parentanchor = vcenter
+			framesize = { 128 128 }
+			frame = 2
+			block "hist_swatch" {}
+		}
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			using = fontsize_small
+			block "hist_label" {}
+		}
+	}
+
 	### A cell of the overview's first row: an icon, its word small beneath
 	### (te_un_ov_icon_label's shape). Fixed width, so the row cannot push the
 	### panel wider.
@@ -2441,280 +2464,79 @@ types cultural_hegemony_widget_types
 				}
 				blockoverride "empty_text" { text = "ch_model_hist_empty" }
 			}
-			### Full-width legend names wrap instead of eliding; all fifteen
-			### models stay visible even if their present-day share is zero.
+			### Two columns of full legend names, read down then across in the
+			### chart's order (republican at the bottom of each bar first). All
+			### fifteen models stay visible even if their present-day share is zero.
 			flowcontainer = {
-				direction = vertical
+				direction = horizontal
 				parentanchor = hcenter
-				spacing = 1
+				spacing = 12
 				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
+					direction = vertical
+					spacing = 1
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+						blockoverride "hist_label" { text = "ch_model_republican" }
 					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_republican"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+						blockoverride "hist_label" { text = "ch_model_corporatist" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+						blockoverride "hist_label" { text = "ch_model_anarchist" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+						blockoverride "hist_label" { text = "ch_model_other" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+						blockoverride "hist_label" { text = "ch_model_royalist_absolutist" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+						blockoverride "hist_label" { text = "ch_model_technocratic" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+						blockoverride "hist_label" { text = "ch_model_religious" }
+					}
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+						blockoverride "hist_label" { text = "ch_model_socialist" }
 					}
 				}
 				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+					direction = vertical
+					spacing = 1
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+						blockoverride "hist_label" { text = "ch_model_military_junta" }
 					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_corporatist"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+						blockoverride "hist_label" { text = "ch_model_royalist_constitutional" }
 					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+						blockoverride "hist_label" { text = "ch_model_communist" }
 					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_anarchist"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+						blockoverride "hist_label" { text = "ch_model_liberal" }
 					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+						blockoverride "hist_label" { text = "ch_model_reactionary" }
 					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_other"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+						blockoverride "hist_label" { text = "ch_model_developmentalist_junta" }
 					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_royalist_absolutist"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_technocratic"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_religious"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_socialist"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_military_junta"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_royalist_constitutional"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_communist"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_liberal"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_reactionary"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_developmentalist_junta"
-					}
-				}
-				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					icon = {
-						size = { 14 14 }
-						parentanchor = vcenter
-						framesize = { 128 128 }
-						frame = 2
-						texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
-					}
-					textbox = {
-						autoresize = yes
-						multiline = yes
-						maximumsize = { 454 -1 }
-						using = fontsize_small
-						text = "ch_model_fascist"
+					ch_model_hist_legend_row = {
+						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+						blockoverride "hist_label" { text = "ch_model_fascist" }
 					}
 				}
 			}

@@ -191,9 +191,11 @@ nd_exchange_request_war = {
 	}
 }
 
-# Native engine docs: create_diplomatic_play supports war=yes and initiator;
-# target is the current country. Reuse a bilateral play when one exists.
-# Actual engine timing still needs a play-test; report failure honestly.
+# The current country starts the play against target_country, as vanilla
+# always calls it. effects.log lists an initiator field, but the game's parser
+# rejects it ("Unexpected token: initiator") and the play is never created.
+# Reuse a bilateral play when one exists. Whether the war is open within the
+# same effect is untested; the exchange stays war-pending until it is.
 nd_exchange_start_war = {
 	if = {
 		limit = { NOT = { has_war_with = scope:nd_exchange_enemy } }
@@ -218,14 +220,12 @@ nd_exchange_start_war = {
 			}
 		}
 		else = {
-			scope:nd_exchange_enemy = {
-				create_diplomatic_play = {
-					name = nd_nuclear_exchange_war
-					type = dp_nuclear_exchange
-					initiator = scope:nd_exchange_war_actor
-					war = yes # REVIEWED 2026-10-05: create_diplomatic_play parameter, effects.log 1.14.5 section create_diplomatic_play
-					escalation = 100
-				}
+			create_diplomatic_play = {
+				name = nd_nuclear_exchange_war
+				type = dp_nuclear_exchange
+				target_country = scope:nd_exchange_enemy
+				war = yes # REVIEWED 2026-10-05: create_diplomatic_play parameter, effects.log 1.14.5 section create_diplomatic_play
+				escalation = 100
 			}
 		}
 		if = {

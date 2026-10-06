@@ -1659,7 +1659,8 @@ te_ai_decentralized_absorption_effect = {
 # that may host one. trade_center_construction_allowed keeps the trade laws in
 # force (Isolationism allows none; the Canton System and Sakoku allow one
 # state). A junior customs-union member trades through its leader's market.
-# Players build their own.
+# Players build their own. That trigger reads scope:investor_country, which
+# only a construction sets, so the country saves itself as the investor first.
 te_ai_seed_trade_center_effect = {
 	if = {
 		limit = {
@@ -1670,6 +1671,7 @@ te_ai_seed_trade_center_effect = {
 				NOT = { has_building = building_trade_center }
 			}
 		}
+		save_scope_as = investor_country
 		if = {
 			limit = {
 				market_capital ?= {
