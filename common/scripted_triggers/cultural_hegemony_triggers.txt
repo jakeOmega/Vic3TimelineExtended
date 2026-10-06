@@ -193,8 +193,7 @@ ch_has_regressive_laws = {
 # communist ideology (an interest group counts its leader's ideology among its
 # own). The laws alone can't tell a communist one-party planned economy from a
 # nationalist, technocratic or military one, so the Communist model's one-party
-# branch asks who runs the party. The Fascist model asks too: Cultural
-# Citizenship in a one-party state run by communists is not Fascist.
+# branch asks who runs the party.
 ch_government_led_by_communists = {
 	any_interest_group = {
 		is_in_government = yes
@@ -227,7 +226,8 @@ ch_government_led_by_fascists = {
 # True when that interest group holds any left-wing ideology: the communist
 # pair, vanilla's Socialist (the Trade Unions gain it as the game goes on), the
 # Trade Unions' baseline Proletarian, or a Social Democrat leader. A Command
-# Economy run by the left counts as Socialist.
+# Economy run by the left counts as Socialist, and Cultural Citizenship in a
+# one-party state run by the left is not Fascist.
 ch_government_led_by_the_left = {
 	any_interest_group = {
 		is_in_government = yes

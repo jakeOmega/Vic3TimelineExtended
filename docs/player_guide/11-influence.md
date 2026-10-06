@@ -136,10 +136,10 @@ Mixed / Other. Some tests also ask who runs the government, meaning the
 strongest interest group in it. A Command Economy under a Single-Party State is
 Communist only when that group is Communist or Vanguardist, and any other
 left-wing lead makes it Socialist. Cultural Citizenship, a common starting
-law, makes a Single-Party State Fascist unless that group is Communist or
-Vanguardist, and makes Autocracy Fascist only when that group is Fascist or
-Ethno-Nationalist. A communist planned economy that keeps the law is still
-Communist, and a monarch who takes absolute power over it is Absolutist
+law, makes a Single-Party State Fascist unless that group is left-wing, and
+makes Autocracy Fascist only when that group is Fascist or Ethno-Nationalist.
+A left-wing planned economy that keeps the law is still Communist or
+Socialist, and a monarch who takes absolute power over it is Absolutist
 Monarchist.
 The pie chart shows each model's share of world culture, weighted
 by the cultural pull of the countries running it rather than by their number.
