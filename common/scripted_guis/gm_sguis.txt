@@ -356,8 +356,9 @@ gm_name_start_sgui = {
 			scope:gm_state = { set_variable = gm_being_named }
 			# Before add_company: the company type's potential reads it.
 			set_variable = gm_naming_active
-			# The monthly sweep's clock (gm_name_sweep).
-			set_variable = { name = gm_naming_open value = yes days = 30 }
+			# The sweep's clock (gm_name_sweep): game time runs while the box
+			# is open, so a year, restarted when the naming line appears.
+			set_variable = { name = gm_naming_open value = yes days = 365 }
 			add_modifier = { name = gm_name_carrier_slot }
 			add_company = company_type:company_gm_name_carrier
 			capital = {
@@ -392,6 +393,7 @@ gm_name_mark_old_sgui = {
 
 	effect = {
 		set_variable = { name = gm_name_old value = scope:gm_old_name }
+		set_variable = { name = gm_naming_open value = yes days = 365 }
 	}
 
 	ai_is_valid = {

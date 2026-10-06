@@ -256,7 +256,10 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_scientific
 	remove_modifier = gm_local_industrial
 	remove_modifier = gm_local_athletic
-	remove_modifier = gm_policy_upkeep
+	b:building_grand_monument ?= {
+		remove_modifier = gm_policy_upkeep_open
+		remove_modifier = gm_policy_upkeep_mothballed
+	}
 }
 
 gm_remove_state_var = {
@@ -292,9 +295,9 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	gm_remove_state_var = { VAR = gm_unveil_pending }
 	gm_remove_state_var = { VAR = gm_name_choice_open }
+	gm_remove_state_var = { VAR = gm_being_named }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
-	set_variable = { name = gm_policy_upkeep_steps value = 0 }
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -324,12 +327,19 @@ gm_state_monthly = {
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		set_variable = { name = gm_policy_upkeep_steps value = gm_policy_upkeep_mult }
+		# Upkeep on the building itself: a fixed modifier per policy, so no
+		# multiplier has to resolve in building scope.
 		if = {
 			limit = {
-				NOT = { var:gm_policy_upkeep_steps = 0 }
+				owner = { gm_policy_is = { P = open STANDARD = no } }
 			}
-			add_modifier = { name = gm_policy_upkeep multiplier = var:gm_policy_upkeep_steps }
+			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_open } }
+		}
+		else_if = {
+			limit = {
+				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+			}
+			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
 		}
 		if = {
 			limit = { gm_state_is_dedicated = yes }
@@ -365,10 +375,6 @@ gm_state_monthly = {
 		if = {
 			limit = { has_variable = gm_local_tourism_steps }
 			set_variable = { name = gm_local_tourism_steps value = 0 }
-		}
-		if = {
-			limit = { has_variable = gm_policy_upkeep_steps }
-			set_variable = { name = gm_policy_upkeep_steps value = 0 }
 		}
 	}
 }
@@ -535,6 +541,7 @@ gm_country_monthly = {
 			gm_ledgers_idle = yes
 			NOT = { has_variable = gm_com_open }
 			NOT = { has_variable = gm_com_offered }
+			NOT = { has_variable = gm_naming_active }
 		}
 		# Ledgers must not freeze un-snapped once the pulse stops running.
 		gm_zero_ledgers = yes
@@ -574,29 +581,9 @@ gm_set_steps = {
 }
 
 gm_compute_totals = {
-	# The monument policy (v2 §5): Mothballed halves standing grandeur, State
-	# Ceremonial counts regime and Leader grandeur half again.
-	set_variable = {
-		name = gm_g_standing
-		value = {
-			value = gm_sum_standing
-			multiply = gm_policy_factor_standing
-		}
-	}
-	set_variable = {
-		name = gm_g_regime
-		value = {
-			value = gm_sum_regime
-			multiply = gm_policy_factor_regime
-		}
-	}
-	set_variable = {
-		name = gm_g_leader
-		value = {
-			value = gm_sum_leader
-			multiply = gm_policy_factor_regime
-		}
-	}
+	set_variable = { name = gm_g_standing value = gm_sum_standing }
+	set_variable = { name = gm_g_regime value = gm_sum_regime }
+	set_variable = { name = gm_g_leader value = gm_sum_leader }
 	set_variable = { name = gm_g_religious value = gm_sum_religious }
 	set_variable = { name = gm_g_war_memorial value = gm_sum_war_memorial }
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
@@ -612,6 +599,13 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_scientific OUT = gm_s_scientific NEXT = gm_n_scientific F = 5 }
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
+	# The monument policy (v2 §5), on the steps so the effect moves by the
+	# factor: Mothballed halves prestige and cultural pull, State Ceremonial
+	# adds half to legitimacy and the Leader's authority.
+	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_standing }
+	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
+	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
+	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
 	gm_compute_ig = { IG = armed_forces }
 	gm_compute_ig = { IG = devout }
 	gm_compute_ig = { IG = industrialists }
@@ -879,8 +873,10 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
-	# A commission's mark belongs to the old owner's commission (v2 §3.3).
+	# A commission's mark and a naming in progress belong to the old owner
+	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_being_named }
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }

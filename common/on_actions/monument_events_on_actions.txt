@@ -203,6 +203,9 @@ gm_country_on_action = {
 					any_scope_state = { has_building = building_grand_monument }
 					has_variable = gm_active
 					has_variable = gm_com_open
+					# A naming outlives its last monument until the sweep
+					# closes it (gm_name_sweep).
+					has_variable = gm_naming_active
 				}
 			}
 			gm_country_monthly = yes

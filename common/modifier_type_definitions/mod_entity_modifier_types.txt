@@ -712,13 +712,6 @@ building_space_program_throughput_add = {
 	percent = yes
 }
 
-# Grand Monuments' policy upkeep (gm_policy_upkeep). Neutral: a monument makes
-# nothing, so throughput only scales its maintenance.
-building_grand_monument_throughput_add = {
-	color = neutral
-	percent = yes
-}
-
 building_electrics_industry_radio_throughput_add = {
 	color = good
 	percent = yes

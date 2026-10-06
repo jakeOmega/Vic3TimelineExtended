@@ -603,7 +603,9 @@ class LocalPulseTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_f5 "
                       "multiply = gm_policy_factor_tourism } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
-        self.assertIn("add_modifier = { name = gm_policy_upkeep multiplier = var:gm_policy_upkeep_steps }", body)
+        for policy in ("open", "mothballed"):
+            self.assertIn(f"b:building_grand_monument ?= {{ add_modifier = {{ name = gm_policy_upkeep_{policy} }} }}",
+                          body)
         for d in DEDICATIONS:
             self.assertIn(f"gm_add_local = {{ KEY = {d.key} }}", body)
         self.assertIn("add_modifier = { name = gm_local_$KEY$ multiplier = var:gm_local_steps }",
@@ -667,13 +669,17 @@ class NationalTests(unittest.TestCase):
         self.assertIn("gm_set_steps = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
-        # The monument policy (v2 §5) multiplies standing, regime and Leader grandeur before the curve.
-        for g, factor in (("standing", "standing"), ("regime", "regime"), ("leader", "regime")):
-            self.assertIn(f"set_variable = {{ name = gm_g_{g} value = {{ value = gm_sum_{g} "
-                          f"multiply = gm_policy_factor_{factor} }} }}", body)
+        # The monument policy (v2 §5) scales the steps after the curve, so the
+        # effect itself moves by the factor (halving grandeur before the curve
+        # would take off about one step, not half).
+        for g in ("standing", "regime", "leader"):
+            self.assertIn(f"set_variable = {{ name = gm_g_{g} value = gm_sum_{g} }}", body)
+        for steps, factor in (("standing", "standing"), ("culture", "standing"), ("regime", "regime"),
+                              ("leader", "regime")):
+            call = f"gm_policy_scale_steps = {{ S = {steps} FACTOR = gm_policy_factor_{factor} }}"
+            self.assertIn(call, body)
+            self.assertGreater(body.find(call), body.find(f"OUT = gm_s_{steps} "), "after the curve")
         for key in NATIONAL:
-            if key == "leader":
-                continue
             self.assertIn(f"set_variable = {{ name = gm_g_{key} value = gm_sum_{key} }}", body)
             self.assertIn(f"gm_set_steps = {{ IN = gm_g_{key} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
         for ig in IGS:
@@ -963,7 +969,8 @@ class ContestTests(unittest.TestCase):
         # find()-based order check.
         # v2 §2: the pulse also keeps running while a commission is open or on offer.
         self.assertIn("gm_ledgers_idle = yes NOT = { has_variable = gm_com_open } "
-                      "NOT = { has_variable = gm_com_offered } } gm_zero_ledgers = yes", monthly)
+                      "NOT = { has_variable = gm_com_offered } NOT = { has_variable = gm_naming_active } } "
+                      "gm_zero_ledgers = yes", monthly)
         self.assertLess(monthly.find("gm_zero_ledgers = yes"), monthly.find("remove_variable = gm_active"))
 
     def test_gm_active_set_on_refresh_when_monument_seen(self):
@@ -1938,8 +1945,7 @@ POLICIES = {
     "mothballed": {"standing": 0.5, "regime": 1, "tourism": 0.5, "local": 0.5, "upkeep": -1},
 }
 FACTOR_VALUES = {"standing": "gm_policy_factor_standing", "regime": "gm_policy_factor_regime",
-                 "tourism": "gm_policy_factor_tourism", "local": "gm_policy_factor_local",
-                 "upkeep": "gm_policy_upkeep_mult"}
+                 "tourism": "gm_policy_factor_tourism", "local": "gm_policy_factor_local"}
 
 
 def _policy_value(body, policy):
@@ -1966,16 +1972,24 @@ class PolicyTests(unittest.TestCase):
                 self.assertIsNotNone(body, value_name)
                 self.assertEqual(_policy_value(body, policy), factors[what], f"{policy} {what}")
 
-    def test_upkeep_moves_through_throughput(self):
-        self.assertAlmostEqual(number(block(read(MODIFIERS), "gm_policy_upkeep"),
-                                      "building_grand_monument_throughput_add"), 0.5)
-        self.assertIsNotNone(block(read(MODIFIER_TYPES), "building_grand_monument_throughput_add"),
-                             "the building pattern must be registered, or the engine ignores it")
-        self.assertIn("remove_modifier = gm_policy_upkeep", squash(block(read(EFFECTS), "gm_remove_local_modifiers")))
+    def test_upkeep_is_on_the_building(self):
+        """The maintenance input is level_scaled, which throughput does not
+        touch, so the policy scales the building's construction input (as the
+        engine's pm_retooling does), on the monument only."""
+        mods = read(MODIFIERS)
+        for policy, factors in POLICIES.items():
+            body = block(mods, f"gm_policy_upkeep_{policy}")
+            if factors["upkeep"] == 0:
+                self.assertIsNone(body, policy)
+                continue
+            self.assertAlmostEqual(number(body, "goods_input_construction_mult"), factors["upkeep"] * 0.5, msg=policy)
+        self.assertNotIn("building_grand_monument_throughput_add", strip_comments(mods))
+        local = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
+        self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_policy_upkeep_open "
+                      "remove_modifier = gm_policy_upkeep_mothballed }", local)
         clear = squash(block(read(EFFECTS), "gm_clear_state"))
-        for var in ("gm_local_tourism_steps", "gm_policy_upkeep_steps"):
-            self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", clear, var)
-            self.assertNotRegex(strip_comments(read(EFFECTS)), rf"remove_variable = {var}\b")
+        self.assertIn("set_variable = { name = gm_local_tourism_steps value = 0 }", clear)
+        self.assertNotRegex(strip_comments(read(EFFECTS)), r"remove_variable = gm_local_tourism_steps\b")
 
     def test_buttons_and_cooldown(self):
         sguis = read(SGUIS)
@@ -2041,7 +2055,10 @@ class TypedNameTests(unittest.TestCase):
         self.assertLess(start.find("set_variable = gm_naming_active"),
                         start.find("add_company = company_type:company_gm_name_carrier"),
                         "the company type's potential reads gm_naming_active")
-        self.assertIn("set_variable = { name = gm_naming_open value = yes days = 30 }", start)
+        # A year, not a month: game time runs while the box is open.
+        self.assertIn("set_variable = { name = gm_naming_open value = yes days = 365 }", start)
+        self.assertIn("set_variable = { name = gm_naming_open value = yes days = 365 }",
+                      squash(block(read(SGUIS), "gm_name_mark_old_sgui")), "the clock restarts as the line appears")
         self.assertIn("NOT = { has_variable = gm_name_carrier }", start, "one naming at a time")
         self.assertIn("gm_state_status_fits = yes", start, "a contested or heritage monument keeps its name")
 
@@ -2054,6 +2071,16 @@ class TypedNameTests(unittest.TestCase):
         use = squash(block(read(SGUIS), "gm_name_use_sgui"))
         self.assertIn("if = { limit = { scope:gm_state = { has_variable = gm_being_named } } scope:gm_state = "
                       "{ set_variable = { name = gm_name value = scope:gm_name } } gm_name_carrier_close = yes }", use)
+
+    def test_a_naming_is_never_orphaned(self):
+        """The pulse that sweeps keeps running with no monument left, and a
+        state that changes hands drops its naming mark, so the next owner's row
+        is not stuck on a naming line."""
+        self.assertIn("has_variable = gm_naming_active", squash(block(read(ON_ACTIONS), "gm_country_on_action")))
+        for name in ("gm_state_changed_hands", "gm_clear_state"):
+            self.assertIn("gm_remove_state_var = { VAR = gm_being_named }", squash(block(read(EFFECTS), name)), name)
+        self.assertIn("has_variable = gm_being_named owner = { has_variable = gm_name_carrier }",
+                      squash(block(read(VALUES), "gm_is_being_named")))
 
     def test_close_and_the_sweep(self):
         names = read(NAME_EFFECTS)

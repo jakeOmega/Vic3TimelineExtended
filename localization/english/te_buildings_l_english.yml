@@ -241,8 +241,6 @@
  building_gran_azucarera_aranjuez_refinery:0 "Gran Azucarera Aranjuez Refinery"
  building_grand_monument:0 "Grand Monument"
  building_grand_monument_desc:0 "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. Its level is its [concept_grandeur]. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Monuments journal entry."
- building_grand_monument_throughput_add:0 "$building_grand_monument$ [concept_throughput]"
- building_grand_monument_throughput_add_desc:0 "A multiplier on the maintenance each $building_grand_monument$ in this state takes, set by the monument policy."
  building_graphite_mine:0 "Graphite Mine"
  building_graphite_mine_throughput_add:0 "$building_graphite_mine$ building [concept_throughput]"
  building_graphite_mine_throughput_add_desc:0 "$building_graphite_mine$ building [concept_throughput]"

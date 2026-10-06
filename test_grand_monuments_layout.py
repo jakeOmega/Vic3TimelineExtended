@@ -289,6 +289,20 @@ class StateGatedTest(unittest.TestCase):
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
 
 
+class RowTooltipTest(unittest.TestCase):
+    def test_row_button_tooltips_read_no_journal_entry(self):
+        """Gotcha #24: a tooltip inside a datamodel row renders without
+        JournalEntry, so the row's buttons root their scripted GUI tooltips at
+        the player."""
+        keys = re.findall(r'tooltip = "(\w+)"', _type_body(_gui(), "gm_monument_row"))
+        loc = _loc()
+        checked = [k for k in keys if "ScriptedGui" in loc.get(k, "")]
+        self.assertEqual(len(checked), 6)
+        for key in checked:
+            self.assertNotIn("JournalEntry", loc[key], key)
+            self.assertIn("GuiScope.SetRoot( GetPlayer.MakeScope )", loc[key], key)
+
+
 class TypedNameLayoutTest(unittest.TestCase):
     """Typed names (v2 §3.5): the naming line shows only while its monument is
     being named, holds every read of the carrier company, opens the popup from

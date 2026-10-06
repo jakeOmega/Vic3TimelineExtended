@@ -298,8 +298,10 @@ gm_name_carrier_close = {
 	}
 }
 
-# Country scope, monthly (gm_country_monthly): a naming whose 30 days have run
-# out was abandoned (the popup closed and the row left). Closing the company
+# Country scope, monthly (gm_country_monthly, which runs while a naming is
+# active even with no monument left): a naming whose year has run out was
+# abandoned (the popup closed and the row left). A year, not a month: game
+# time runs while the box is open, and at top speed a month is seconds. Closing the company
 # popup itself can't cancel it: that is vanilla's companies_panel.gui, which
 # the mod does not override.
 gm_name_sweep = {

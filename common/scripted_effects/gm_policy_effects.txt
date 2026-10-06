@@ -12,8 +12,21 @@
 #   Mothballed           upkeep x0.5; standing grandeur x0.5 (prestige and
 #                        cultural pull), local effects x0.5; no anniversaries
 # The factors are script values (gm_values.txt § "The monument policy") read
-# by gm_compute_totals and gm_state_monthly; upkeep moves through
-# gm_policy_upkeep, a throughput modifier on each monument's state.
+# by gm_compute_totals (on the steps, after the curve) and gm_state_monthly;
+# upkeep moves through gm_policy_upkeep_open / _mothballed, a construction-goods
+# input modifier on each monument building.
+
+# Country scope. Multiply step count gm_s_$S$ by the policy factor $FACTOR$ (a
+# script value): the per-step values move by the factor, as §5 asks.
+gm_policy_scale_steps = {
+	set_variable = {
+		name = gm_s_$S$
+		value = {
+			value = var:gm_s_$S$
+			multiply = $FACTOR$
+		}
+	}
+}
 
 # Country scope. Set policy $P$. Every change after the first starts a
 # 60-month wait; the first choice is free, so a first pick can be corrected.
