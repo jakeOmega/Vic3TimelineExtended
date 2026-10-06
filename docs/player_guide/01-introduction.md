@@ -59,7 +59,7 @@ the mod.
 
 ### Game rules
 
-The mod adds seventeen game rules to the game setup screen. Each one turns a
+The mod adds eighteen game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 

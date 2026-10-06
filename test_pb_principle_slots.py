@@ -1,4 +1,4 @@
-"""Power bloc principle slots: count, AI limit, remove dispatch, panel, technologies.
+"""Power bloc principle slots: count, AI limit, remove dispatch, panel, technologies, game rule.
 
 A bloc has te_pb_principle_slot_cap slots (2, rank and members, one per slot
 technology). Slot rules 3 and 4 compare it, the panel shows slots 3-8 up to it,
@@ -137,6 +137,20 @@ class WiringTest(unittest.TestCase):
         values = read("common/script_values/te_power_bloc_principle_slot_values.txt")
         self.assertIn("max = 4", entity_block(values, "te_pb_tech_principle_slots"))
         self.assertIn("max = 8", entity_block(values, "te_pb_principle_slot_cap"))
+
+    def test_game_rule_four_drops_the_technology_slots(self):
+        rule = entity_block(read("common/game_rules/extra_game_rules.txt"), "te_principle_slots_rule")
+        self.assertIn("default = te_principle_slots_eight", rule)
+        self.assertEqual(
+            sorted(re.findall(r"^\t(te_principle_slots_\w+) = \{", rule, re.M)),
+            ["te_principle_slots_eight", "te_principle_slots_four"],
+        )
+        tech = entity_block(read("common/script_values/te_power_bloc_principle_slot_values.txt"), "te_pb_tech_principle_slots")
+        self.assertRegex(tech, r"(?m)^\tvalue = 0$")
+        self.assertRegex(
+            tech,
+            r"NOT = \{ has_game_rule = te_principle_slots_four \}\s*\}\s*add = modifier:country_te_pb_principle_slots_add",
+        )
 
 
 if __name__ == "__main__":

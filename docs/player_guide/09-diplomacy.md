@@ -285,6 +285,8 @@ Containerization (era 8), Globalization (era 9) and Universal Digital Identity
 (era 11). The slots are counted, not tied to positions, so a small bloc whose
 leader has two of the technologies fills its third and fourth slots with them.
 The panel shows only the slots the bloc has; hover a locked one to see the count.
+The Power Bloc Principle Slots game rule is Up to Eight by default; set to Four,
+the technologies add nothing and a bloc keeps the base game's two to four slots.
 
 A filled slot stays filled if the count drops, when the bloc loses rank or a
 leader without the technologies takes over, but the bloc can't add a principle
