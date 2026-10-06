@@ -3662,8 +3662,9 @@ un_sanctions_busting_modifier = {
 
 # What a Development Programs contribution does for the contributor, at
 # Substantial (0.5% of GDP a year). Added with multiplier =
-# root.var:un_dev_fund_benefit, the size's benefit factor (0.5 / 0.75 / 1 /
-# 1.25 for Token / Modest / Substantial / Generous; un_economy_values.txt):
+# root.var:un_dev_fund_benefit, the size's benefit factor (0.25 / 0.5 / 0.75 /
+# 1 / 1.25 for Token / Small / Modest / Substantial / Generous;
+# un_economy_values.txt):
 # each doubling of the money adds a quarter of these. Its cost is the money
 # itself (un_development_contributor_cost), which pays the World Development
 # Fund's grants. A contribution from before the sizes holds it with no

@@ -657,12 +657,13 @@ un_end_peacekeeping_button = {
 # running with no Fund lapses at the next monthly update
 # (un_dev_fund_lapse_contributions, un_economy_effects.txt).
 #
-# Four sizes (owner, 2026-10-05): a contribution starts at Token and Raise /
-# Reduce move it a size at a time (un_dev_fund_raise / _reduce). Any member
-# may give, whatever its rank, unless the Fund pays it or it withholds its
-# dues. Both modifiers are added with a multiplier read from the country, so
-# each write site records its own mirror (un_state_effects.txt): the benefits
-# at the size's factor (var:un_dev_fund_benefit), the cost at its expense
+# Five sizes (owner, 2026-10-05; Token and Small 2026-10-06): a contribution
+# starts at Token and Raise / Reduce move it a size at a time
+# (un_dev_fund_raise / _reduce). Any member may give, whatever its rank,
+# unless the Fund pays it or it withholds its dues. Both modifiers are added
+# with a multiplier read from the country, so each write site records its own
+# mirror (un_state_effects.txt): the benefits at the size's factor
+# (var:un_dev_fund_benefit), the cost at its expense
 # (var:un_development_expense_cached).
 
 un_fund_development_button = {
@@ -709,6 +710,7 @@ un_fund_development_button = {
 		custom_tooltip = un_fund_development_effect_tt
 		hidden_effect = {
 			set_variable = { name = un_dev_fund_size value = 1 }
+			set_variable = un_dev_fund_five_sizes
 			set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
 			je:je_united_nations ?= { add_modifier = {
 					name = un_development_contributor_modifier

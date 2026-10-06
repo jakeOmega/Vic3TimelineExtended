@@ -344,43 +344,56 @@ un_dev_fund_grant_preview_share = {
 # monthly pulse; the Fund adds it to the pot. Snapshotted monthly whether or
 # not the Fund stands, so the chamber can preview it.
 
-# ---- The voluntary part: four sizes (owner, 2026-10-05) ---------------------------
+# ---- The voluntary part: five sizes (owner, 2026-10-05; Token and Small 2026-10-06)
 # A contribution starts at Token and moves a size at a time (the Raise and
 # Reduce buttons). Each size doubles the money and adds a quarter of
 # Substantial's benefits, so a nominal gift is the best value and the rest
 # goes to the recipients:
 #   size  name         share of GDP a year   benefit factor
-#   1     Token        0.125%                0.5
-#   2     Modest       0.25%                 0.75
-#   3     Substantial  0.5%                  1
-#   4     Generous     1%                    1.25
+#   1     Token        0.0625%               0.25
+#   2     Small        0.125%                0.5
+#   3     Modest       0.25%                 0.75
+#   4     Substantial  0.5%                  1
+#   5     Generous     1%                    1.25
 # The factor multiplies un_development_contributor_modifier (infamy decay and
 # prestige), the programme's standing accrual (un_standing_program_accrual_count)
 # and, through the recipients' memory (var:un_dev_fund_patron), the lobbying
 # bonus with them. The UN's funding pillar counts the money instead
 # (un_funding_dev_money_ratio_value, un_authority_values.txt).
-un_dev_fund_size_max = { value = 4 }
-un_dev_fund_rate_token = { value = 0.00125 }
-un_dev_fund_rate_modest = { value = 0.0025 }
-un_dev_fund_rate_substantial = { value = 0.005 }
-un_dev_fund_rate_generous = { value = 0.01 }
-un_dev_fund_benefit_token = { value = 0.5 }
+# The shares are in percent: a fraction of GDP would put Token at 0.000625,
+# and a script value takes at most five decimals (scripting_best_practices.md).
+un_dev_fund_size_max = { value = 5 }
+un_dev_fund_pct_token = { value = 0.0625 }
+un_dev_fund_pct_small = { value = 0.125 }
+un_dev_fund_pct_modest = { value = 0.25 }
+un_dev_fund_pct_substantial = { value = 0.5 }
+un_dev_fund_pct_generous = { value = 1 }
+un_dev_fund_benefit_token = { value = 0.25 }
+un_dev_fund_benefit_small = { value = 0.5 }
 un_dev_fund_benefit_modest = { value = 0.75 }
 un_dev_fund_benefit_substantial = { value = 1 }
 un_dev_fund_benefit_generous = { value = 1.25 }
 # A contribution from before the sizes has no var:un_dev_fund_size. It paid
 # 0.5% of GDP a year, so it is Substantial (the journal entry's monthly pulse
 # writes the variable).
-un_dev_fund_size_legacy = { value = 3 }
+un_dev_fund_size_legacy = { value = 4 }
 
-# The size we contribute at, 1..4 as stored (or the legacy size). Read only
-# while we contribute: the variable outlives a contribution that ends.
+# The size we contribute at, 1..5 as stored (or the legacy size). Read only
+# while we contribute: the variable outlives a contribution that ends. Every
+# write since the five sizes also sets var:un_dev_fund_five_sizes; a size
+# stored without it is from the four sizes (2026-10-05), where 1 was what is
+# now Small, so it reads a size up: the same money and the same factor. The
+# monthly pulse rewrites it.
 # Scope: country
 un_dev_fund_size_stored = {
 	value = 0
 	if = {
 		limit = { has_variable = un_dev_fund_size }
 		add = var:un_dev_fund_size
+		if = {
+			limit = { NOT = { has_variable = un_dev_fund_five_sizes } }
+			add = 1
+		}
 	}
 	else = {
 		add = un_dev_fund_size_legacy
@@ -398,23 +411,27 @@ un_dev_fund_size_value = {
 	}
 }
 
-# The stored size's share of GDP a year. Scope: country
-un_dev_fund_rate_value = {
+# The stored size's share of GDP a year, in percent. Scope: country
+un_dev_fund_pct_value = {
 	value = 0
 	if = {
+		limit = { un_dev_fund_size_stored >= 5 }
+		add = un_dev_fund_pct_generous
+	}
+	else_if = {
 		limit = { un_dev_fund_size_stored >= 4 }
-		add = un_dev_fund_rate_generous
+		add = un_dev_fund_pct_substantial
 	}
 	else_if = {
 		limit = { un_dev_fund_size_stored >= 3 }
-		add = un_dev_fund_rate_substantial
+		add = un_dev_fund_pct_modest
 	}
 	else_if = {
 		limit = { un_dev_fund_size_stored >= 2 }
-		add = un_dev_fund_rate_modest
+		add = un_dev_fund_pct_small
 	}
 	else = {
-		add = un_dev_fund_rate_token
+		add = un_dev_fund_pct_token
 	}
 }
 
@@ -423,16 +440,20 @@ un_dev_fund_rate_value = {
 un_dev_fund_benefit_value = {
 	value = 0
 	if = {
-		limit = { un_dev_fund_size_stored >= 4 }
+		limit = { un_dev_fund_size_stored >= 5 }
 		add = un_dev_fund_benefit_generous
 	}
 	else_if = {
-		limit = { un_dev_fund_size_stored >= 3 }
+		limit = { un_dev_fund_size_stored >= 4 }
 		add = un_dev_fund_benefit_substantial
 	}
 	else_if = {
-		limit = { un_dev_fund_size_stored >= 2 }
+		limit = { un_dev_fund_size_stored >= 3 }
 		add = un_dev_fund_benefit_modest
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 2 }
+		add = un_dev_fund_benefit_small
 	}
 	else = {
 		add = un_dev_fund_benefit_token
@@ -444,7 +465,8 @@ un_dev_fund_benefit_value = {
 # Scope: country
 un_dev_fund_expense_value = {
 	value = gdp
-	multiply = un_dev_fund_rate_value
+	multiply = un_dev_fund_pct_value
+	divide = 100
 	divide = 52 # weekly cost
 }
 
@@ -1034,25 +1056,36 @@ un_disp_dev_fund_our_contribution_preview = {
 
 un_disp_dev_fund_cost_token = {
 	value = gdp
-	multiply = un_dev_fund_rate_token
+	multiply = un_dev_fund_pct_token
+	divide = 100
+	divide = 52
+}
+
+un_disp_dev_fund_cost_small = {
+	value = gdp
+	multiply = un_dev_fund_pct_small
+	divide = 100
 	divide = 52
 }
 
 un_disp_dev_fund_cost_modest = {
 	value = gdp
-	multiply = un_dev_fund_rate_modest
+	multiply = un_dev_fund_pct_modest
+	divide = 100
 	divide = 52
 }
 
 un_disp_dev_fund_cost_substantial = {
 	value = gdp
-	multiply = un_dev_fund_rate_substantial
+	multiply = un_dev_fund_pct_substantial
+	divide = 100
 	divide = 52
 }
 
 un_disp_dev_fund_cost_generous = {
 	value = gdp
-	multiply = un_dev_fund_rate_generous
+	multiply = un_dev_fund_pct_generous
+	divide = 100
 	divide = 52
 }
 
