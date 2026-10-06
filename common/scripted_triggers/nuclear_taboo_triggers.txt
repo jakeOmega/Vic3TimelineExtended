@@ -68,6 +68,41 @@ nd_taboo_programme_should_be_held = {
 	}
 }
 
+# Is the programme held by our own arsenal ceiling and by nothing else? We lift
+# our own ceiling at will and for free (nd_taboo_ceiling_lift), so of all the
+# holds on a programme it is the one a nuclear crisis does not count as a stop
+# (nuclear_program_has_stopped, nuke_triggers.txt). A treaty's ceiling or the
+# UN ban's at or below our stockpile, a dismantling, a freeze article or a
+# crisis freeze would each hold it without ours.
+nd_taboo_held_by_own_ceiling_only = {
+	has_modifier = nd_taboo_programme_held
+	nd_taboo_is_dismantling = no
+	has_variable = nd_warhead_ceiling
+	var:nd_warhead_ceiling <= nd_stockpile
+	NOT = {
+		AND = {
+			has_variable = nd_treaty_ceiling
+			var:nd_treaty_ceiling <= nd_stockpile
+		}
+	}
+	NOT = {
+		AND = {
+			has_variable = nd_tpnw_ceiling
+			var:nd_tpnw_ceiling <= nd_stockpile
+		}
+	}
+	NOT = { has_modifier = nd_crisis_programme_freeze }
+	save_temporary_scope_as = nd_hoc_self
+	NOT = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_program_pause
+				source_country = scope:nd_hoc_self
+			}
+		}
+	}
+}
+
 nd_taboo_can_dismantle = {
 	custom_tooltip = {
 		text = nd_tt_need_arsenal
