@@ -3789,6 +3789,16 @@ in `docs/data/tech_modifier_polarity.yml`, check vanilla's color annotation
 first; use it as the default and only override when the mod's design
 intent inverts vanilla's frame.
 
+### Adding Technology Progress From Script
+
+Probed in game on 2026-10-06 (`te_debug_covert.6`–`.10` on the throwaway branch `probe/tech-progress`):
+
+- `add_technology_progress = { technology = X progress = N }` adds `N` research points to `X`, whether or not it is the current research. Vanilla sizes event bonuses at about a third of the era's cost (`common/technology/eras/00_eras.txt`).
+- **`progress` takes a literal only.** A script value is `Malformed token` at load and the tooltip reads "gets 0.00 progress". To vary the amount, branch onto literals (covert tech theft's generated `covert_tech_grant_era_N`) or loop a fixed chunk with `while = { count = <script value> }`.
+- `technology =` takes a scope: `technology_being_researched` and a saved scope both work. A country variable can hold a technology scope, and loc names it with `.Var('x').GetTechnology.GetName`.
+- **There is no `technology:<key>` link** (`Failed to find a valid event target link`). The engine drops that one effect line; the event still opens. Nothing else turns a key into a technology scope either: there is no technology iterator, and `technology_being_researched` is the only source. No trigger reads a technology scope's era, cost or category, so a rule per technology has to be generated from the files (`scripts/generators/gen_covert_tech_theft.py`).
+- `[GetTechnology('key').GetName]` renders the name with the technology's full tooltip on hover.
+
 ## System-Scope Cheat Sheet
 
 Where a given modifier or trigger can be used:

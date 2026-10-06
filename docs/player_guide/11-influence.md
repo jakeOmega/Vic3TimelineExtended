@@ -317,8 +317,8 @@ others have no relations limit.
 | Financial Subversion | Target +2 bubble pressure a month | |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target |
 | Communications Disruption | Target −10% unit offense and defense | War or a diplomatic play against the target |
-| Industrial Espionage | You: +5 weekly innovation, +15% production technology spread. Target: −3 authority | Target has researched more technologies than you |
-| Military Espionage | You: +5% unit offense and defense, +15% military technology spread while the target has more technologies. Target: −3 authority | |
+| Industrial Espionage | You: +5 weekly innovation, and [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now |
+| Military Espionage | You: +5% unit offense and defense, and [stolen military technology](#stealing-technology). Target: −3 authority | |
 | Influence Campaign | Target −15% leverage resistance | You lead a power bloc the target is not in |
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Target has a political movement |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Target has a political movement |
@@ -328,14 +328,29 @@ others have no relations limit.
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on |
 
-If you run several espionage operations of one type, your gains come from the
-strongest and don't add up. Election Interference cuts electoral confidence by
+If you run several espionage operations of one type, their bonuses come from the
+strongest and don't add up. Stolen technology does add up: each operation steals
+from its own target. Election Interference cuts electoral confidence by
 5% once establishing and 10% once fully operational, half that against a
 country hosting UN [electoral observers](10-united-nations.md#electoral-observers),
 which also catch it more often. Bubble pressure is
 explained in [Banking and monetary policy](04-banking.md), nuclear programs and
 loose warheads in [Nuclear weapons](14-nuclear.md), and milestones in [The space
 race](16-space.md).
+
+#### Stealing technology
+
+From its sixth month, each Industrial Espionage operation steals production
+technology from its target every month, and each Military Espionage operation
+steals military technology. The progress goes to your current research if the
+target has researched it. Otherwise it goes to a random technology in that tree
+that the target has and you could research now. If there is none, nothing is
+stolen that month.
+
+Each theft is 5% of the technology's era cost at base strength, 10% once fully
+operational and 16% at priority 3. Progress that reaches a technology's cost
+completes it. Each operation's row shows how much it has stolen and the latest
+technology.
 
 Hover over an operation before launching it: the tooltip previews its effects at
 base strength (established, priority 1) and how phase and priority scale them,
@@ -497,8 +512,8 @@ operations alive when bankrupt or without rivals (and for a major power with a
 rival), level 3 for a great power with a rival or a major power at war, and
 level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
-antagonistic or domineering toward; espionage goes to countries ahead in
-technology or in space, and a funded AI at war or in a play uses the wartime
+antagonistic or domineering toward; espionage goes to countries with technology
+to steal or ahead in space, and a funded AI at war or in a play uses the wartime
 operations. The AI raises priority to 2 against rivals and to 3 when a great
 power is at war with the target. It needs Seasoned Tradecraft for the two most
 severe operations, as you do, so it rarely launches them.

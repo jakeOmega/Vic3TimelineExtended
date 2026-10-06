@@ -102,7 +102,8 @@ A new regenerator, `scripts/generators/gen_covert_tech_theft.py`, reads:
   (`covert_op_phase_full_mult`, `covert_op_priority_2_effect_mult`,
   `covert_op_priority_3_effect_mult`), so the amounts follow any retune of the
   shared table;
-- the theft share, 5%, as a constant at the top of the generator.
+- the theft share, `covert_tech_theft_share = 0.05`, in the same script values
+  file, so tooltips can print it (`covert_tech_theft_share_percent_display`).
 
 Technologies whose definition has `can_research = no` are skipped. Each kept
 technology gets a stable number (its position in the key-sorted list, from 1).
