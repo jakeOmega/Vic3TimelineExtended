@@ -377,7 +377,7 @@ te_monetary_monthly_update = {
 #
 # MANAGED: the inflation-band family (six bands + te_mon_dollarised_modifier),
 # the two §13 stance-politics modifiers, te_mon_real_wage_dividend,
-# te_monetisation_minting, te_mon_gold_carry_expense, — since 2026-09-20 —
+# te_monetisation_minting, — since 2026-09-20 —
 # te_monetary_rate_paid, — phase 4 — te_fx_weak, te_fx_strong and
 # te_capital_controls_fatigue (applied from te_monetary_fx_effects.txt, through
 # the same wrappers), and — phase 5 — te_mon_arrangement_recipient, _provider
@@ -411,7 +411,7 @@ te_monetary_monthly_update = {
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
 # every pulse: when the home it recorded (te_mon_mod_home) is not the home the
 # country has now, it strips every managed modifier from BOTH places and zeroes
-# the five `_applied` bookkeeping variables, so each step re-applies into the
+# the four `_applied` bookkeeping variables, so each step re-applies into the
 # new home on this same pulse. A journal entry that vanished took its modifiers
 # with it, which is exactly the case the zeroing covers.
 #
@@ -472,7 +472,6 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_stance_politics_loose }
 		te_mon_mod_strip = { NAME = te_mon_real_wage_dividend }
 		te_mon_mod_strip = { NAME = te_monetisation_minting }
-		te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
 		# [P4] No _applied zeroing for these three: step 9b re-adds on a
 		# missing modifier, exactly as step 9 does for te_monetary_rate_paid.
@@ -492,7 +491,6 @@ te_monetary_settle_modifier_home = {
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
 		set_variable = { name = te_monetisation_minting_applied value = 0 }
-		set_variable = { name = te_gold_carry_applied value = 0 }
 		set_variable = { name = te_mon_mod_home value = var:te_mon_work }
 	}
 }
@@ -915,10 +913,6 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_gold_hot_money } }
 		set_variable = { name = te_gold_hot_money value = 0 }
 	}
-	if = {
-		limit = { NOT = { has_variable = te_gold_carry } }
-		set_variable = { name = te_gold_carry value = 0 }
-	}
 	# The bank's own vault (the hybrid model): 0 and unseeded until the first
 	# pulse the country has gold flows, when step 10 counts it.
 	if = {
@@ -928,10 +922,6 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_bank_gold_seeded } }
 		set_variable = { name = te_bank_gold_seeded value = 0 }
-	}
-	if = {
-		limit = { NOT = { has_variable = te_gold_carry_applied } }
-		set_variable = { name = te_gold_carry_applied value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_recap_work } }
@@ -1304,8 +1294,8 @@ te_monetary_update_target = {
 			# 3.00001 from costing a step), and comes down only once it is
 			# more than 0.35 too high. It was a whole point at first: Britain
 			# in 1836, with a vault a quarter full, asked for 3.46 and got 4 —
-			# a standing point of gap, borrowing gold it then paid the carry
-			# on. The dial has tenths now (the fine step), so the bank uses
+			# a standing point of gap, borrowing gold it had no use for.
+			# The dial has tenths now (the fine step), so the bank uses
 			# them. Then it skips the shared rule by handing it the target it
 			# has just settled.
 			limit = { var:te_mon_mandate = 3 }
@@ -2868,10 +2858,9 @@ te_monetary_apply_interest_modifiers = {
 # is a stock of its own, measured against the engine's reserve limit
 # (te_mon_bank_gold_limit = gold_reserves_limit, so it grows with the economy
 # and a vault that is not topped up thins out by itself). Flows move it and
-# NOTHING ELSE: the treasury is touched only by the carry, which is an ordinary
-# budget expense, and by the player's own recapitalisations. That is what the
-# Bank of England's reserve was — never Exchequer money — and it is what
-# retired the four patch-rulings the first version needed to stop a player
+# NOTHING ELSE: the treasury is touched only by recapitalisations. That is
+# what the Bank of England's reserve was — never Exchequer money — and it is
+# what retired the four patch-rulings the first version needed to stop a player
 # SPENDING borrowed gold (no inflow in debt, the hot-money cap, the payout on
 # leaving gold, the capitalised carry): gold that never reaches the treasury
 # cannot be spent.
@@ -2891,10 +2880,14 @@ te_monetary_apply_interest_modifiers = {
 # te_gold_hot_money. It comes in only while the vault is under its limit; when
 # the gap falls to <= 0 it leaves FIRST, at twice the ordinary speed and never
 # slower than a half-point gap would give (ruling Q7), before any ordinary
-# drain starts; and it PAYS THE POLICY RATE while it is here (owner decision I)
-# — te_gold_carry, applied as the scaled expense te_mon_gold_carry_expense so
-# the budget shows a line for it, which is the one thing about all this the
-# treasury ever sees.
+# drain starts. IT COSTS THE TREASURY NOTHING (2026-10-06, owner decision I
+# reversed). Under gold the balances a high rate drew in earned interest on
+# bills that private borrowers had drawn; the bank's own notes paid none, and
+# no Exchequer paid for gold it did not borrow itself. What a high rate costs is
+# what it costs at home: the government's own debt prices off it (step 7's
+# market yield), the stance gap it opens drags the cycle (step 8), and the
+# gold it draws in pushes prices up (te_mon_pressure_gold_flow). If that is
+# too cheap, tune those, not a budget line standing in for private borrowers.
 #
 # UNDER PRESSURE (te_mon_peg_under_pressure: the VAULT under a tenth of its
 # limit — the treasury's health no longer has anything to do with it) the
@@ -2941,13 +2934,12 @@ te_monetary_apply_interest_modifiers = {
 # OFF GOLD. Borrowed gold goes home out of the VAULT (never the treasury) and
 # confidence resets, and with the LAW gone the suspension's lost-credibility
 # modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
-# because suspending convertibility is refusing to pay gold out. Either way
-# the carry stops: no peg, no foreign balances held against it.
+# because suspending convertibility is refusing to pay gold out.
 #
-# THE CARRY MODIFIER follows step 6d's shape exactly — remove, compare,
-# re-add, behind `root ?= this`, with te_gold_carry_applied as the persistent
-# multiplier variable (never removed). A silent fallback to x1 would be a pound
-# a week, so like 6d it simply skips the re-add when ROOT is wrong.
+# THE RETIRED CARRY. Until 2026-10-06 the hot-money balance paid the policy
+# rate as the scaled budget expense te_mon_gold_carry_expense. A save from
+# before then can still carry it, so the foot of this effect strips it every
+# pulse until legacy_modifier_cleanup.txt's dated checklist says otherwise.
 te_monetary_update_gold = {
 	if = {
 		limit = { te_mon_has_gold_flows = yes }
@@ -3036,20 +3028,6 @@ te_monetary_update_gold = {
 		}
 		set_variable = { name = te_gold_flow_pct value = te_mon_gold_flow_pct_value }
 
-		# --- the carry: borrowed gold is paid for (owner decision I) ---------
-		# te_gold_carry is the MONTHLY figure the dashboard prints; the modifier
-		# below is handed the weekly one, because country_expenses_add is weekly.
-		set_variable = { name = te_gold_carry value = 0 }
-		if = {
-			limit = {
-				var:te_gold_hot_money > 0
-				var:te_policy_rate > 0
-			}
-			set_variable = { name = te_gold_carry value = var:te_gold_hot_money }
-			change_variable = { name = te_gold_carry multiply = var:te_policy_rate }
-			change_variable = { name = te_gold_carry divide = 1200 }
-		}
-
 		# --- peg confidence -------------------------------------------------
 		if = {
 			limit = { te_mon_peg_under_pressure = yes }
@@ -3131,7 +3109,6 @@ te_monetary_update_gold = {
 		set_variable = { name = te_gold_flow_gap value = 0 }
 		set_variable = { name = te_gold_flow value = 0 }
 		set_variable = { name = te_gold_flow_pct value = 0 }
-		set_variable = { name = te_gold_carry value = 0 }
 
 		# Off gold altogether: borrowed gold goes home, out of the vault, and
 		# the next peg this country enters starts trusted. Suspended: frozen.
@@ -3181,36 +3158,14 @@ te_monetary_update_gold = {
 		}
 	}
 
-	# --- the carry, into the budget -----------------------------------------
-	set_variable = { name = te_mon_work value = te_mon_gold_carry_weekly }
-	if = {
-		limit = { var:te_mon_work < 1 }
-		if = {
-			limit = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
-			te_mon_mod_remove = { NAME = te_mon_gold_carry_expense }
-		}
-		set_variable = { name = te_gold_carry_applied value = 0 }
-	}
-	else_if = {
-		limit = { root ?= this }
-		set_variable = { name = te_mon_work2 value = var:te_mon_work }
-		change_variable = { name = te_mon_work2 subtract = var:te_gold_carry_applied }
-		if = {
-			limit = {
-				OR = {
-					var:te_mon_work2 >= 1
-					var:te_mon_work2 <= -1
-					NOT = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
-				}
-			}
-			if = {
-				limit = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
-				te_mon_mod_remove = { NAME = te_mon_gold_carry_expense }
-			}
-			set_variable = { name = te_gold_carry_applied value = var:te_mon_work }
-			te_mon_mod_add_scaled = { NAME = te_mon_gold_carry_expense VAR = te_gold_carry_applied }
-		}
-	}
+	# --- SAVE MIGRATION: the retired carry ---------------------------------
+	# The carry on borrowed gold was dropped on 2026-10-06 (design §0.5,
+	# decision I, reversed). A save made before then can still hold
+	# te_mon_gold_carry_expense, on the entry or on the country; it goes on
+	# this country's first pulse, until legacy_modifier_cleanup.txt's dated
+	# checklist retires the definition. te_gold_carry and te_gold_carry_applied
+	# stay in such a save, inert: nothing reads them.
+	te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 
 	# --- the three clocks ---------------------------------------------------
 	if = {

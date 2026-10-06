@@ -876,9 +876,9 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 #      rate makes Tight drains confidence with the vault full (2026-10-05).
 #   4. "Holding world + 5 on gold yields no lasting treasury gain." Under the
 #      hybrid model it yields no treasury gain AT ALL: the inflow fills the
-#      bank's vault to its limit and stops, the treasury only ever sees the
-#      carry as a budget expense, and on dropping the target the borrowed part
-#      leaves at twice the speed. Option c parks confidence at 25 so the crisis
+#      bank's vault to its limit and stops, the treasury never moves with it,
+#      and on dropping the target the borrowed part leaves at twice the
+#      speed. Option c parks confidence at 25 so the crisis
 #      can be reached without waiting out a whole vault.
 #   5. (2026-10-05) The slump drain and the suspension's end. Option g then
 #      option a stage a deep slump on a peg defender (see option g); option e

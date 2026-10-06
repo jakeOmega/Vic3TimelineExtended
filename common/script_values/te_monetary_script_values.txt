@@ -233,7 +233,7 @@
 #                                                   country (it has no entry).
 #                                                   Written by step 0b; a change
 #                                                   strips them all and zeroes the
-#                                                   five `_applied` variables (see
+#                                                   four `_applied` variables (see
 #                                                   "WHERE THE MODIFIERS LIVE" in
 #                                                   te_monetary_effects.txt)
 #   te_mon_stance_bar_pos   -2 to 2     displayed   3 - te_mon_stance_band: the
@@ -316,18 +316,8 @@
 #                                                   the vault if the country stops
 #                                                   being on gold, frozen while it
 #                                                   is suspended (ruling Q9)
-#   te_gold_carry_applied   >= 0                    the WEEKLY value last written
-#                                                   into te_mon_gold_carry_expense's
-#                                                   multiplier. BACKS A MULTIPLIER
-#                                                   — never remove it
 #   te_mon_recap_work       scratch                 the amount one recapitalisation
 #                                                   moves, so debit = credit
-#   te_gold_carry           >= 0        displayed   this month's interest on that
-#                                                   balance at the policy rate
-#                                                   (owner decision I), as a
-#                                                   MONTHLY figure; charged to the
-#                                                   budget weekly through
-#                                                   te_mon_gold_carry_expense
 #   te_mon_world_own_num    weighted    \           this country's exact share of
 #   te_mon_world_own_den    >= 0        /           the two world-rate accumulators,
 #                                                   written by the GLOBAL refresh
@@ -3176,18 +3166,6 @@ te_mon_bank_recap_payment = {
 		limit = { has_variable = te_mon_recap_work }
 		subtract = var:te_mon_recap_work
 	}
-}
-
-# The carry as the WEEKLY expense the budget modifier is scaled by:
-# te_gold_carry is the monthly figure, country_expenses_add is weekly.
-te_mon_gold_carry_weekly = {
-	value = 0
-	if = {
-		limit = { has_variable = te_gold_carry }
-		add = var:te_gold_carry
-	}
-	multiply = 12
-	divide = te_mon_weeks_per_year
 }
 
 # The signed monthly flow, guarded, for anything outside step 10.

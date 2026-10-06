@@ -527,7 +527,7 @@ class BankingIconsTest(unittest.TestCase):
 MON_LABELS = ["banking_dash_mon_world_label", "banking_dash_mon_worldrate_label", "banking_dash_mon_rate_label",
               "banking_dash_mon_target_label", "banking_dash_mon_delegation_label", "banking_dash_mon_mandate_label",
               "banking_dash_mon_bankgold_label", "banking_dash_mon_goldgap_label", "banking_dash_mon_goldflow_label",
-              "banking_dash_mon_hotmoney_label", "banking_dash_mon_goldcarry_label", "banking_dash_mon_pegconf_label",
+              "banking_dash_mon_hotmoney_label", "banking_dash_mon_pegconf_label",
               "banking_dash_mon_fx_label", "banking_dash_mon_fx_effect_label", "banking_dash_mon_anchor_label",
               "banking_dash_mon_backstops_label", "banking_dash_mon_union_label", "banking_dash_mon_paid_label",
               "banking_dash_mon_standing_label", "banking_dash_mon_premium_label", "banking_dash_mon_inflation_label",
