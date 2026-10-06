@@ -100,5 +100,48 @@ class RenderTest(unittest.TestCase):
             self.assertEqual((ROOT / relative).read_text(encoding="utf-8-sig"), text, str(relative))
 
 
+def _block(path: str, name: str) -> str:
+    """The text of top-level block `name` in a Paradox file, comments stripped."""
+    import re
+
+    text = re.sub(r"#[^\n]*", "", (ROOT / path).read_text(encoding="utf-8-sig"))
+    start = text.index(f"\n{name} = {{") + 1
+    depth = 0
+    for position in range(start, len(text)):
+        if text[position] == "{":
+            depth += 1
+        elif text[position] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start : position + 1]
+    raise AssertionError(f"unclosed block {name}")
+
+
+class WiringTest(unittest.TestCase):
+    EFFECTS = "common/scripted_effects/covert_warfare_effects.txt"
+    ACTIONS = "common/diplomatic_actions/covert_operations.txt"
+
+    def test_steal_loop_sets_target_inside_exists_guard(self):
+        loop = _block(self.EFFECTS, "covert_ops_steal_tech_all")
+        self.assertIn("covert_op_is_established = yes", loop)
+        guard = loop.index("var:iw_target ?= {")
+        self.assertLess(guard, loop.index("save_scope_as = iw_theft_target"))
+        self.assertLess(loop.index("save_scope_as = iw_theft_target"), loop.index("covert_tech_steal_production = yes"))
+
+    def test_monthly_pass_steals_and_drops_spread(self):
+        master = _block(self.EFFECTS, "covert_ops_apply_all_phase_effects")
+        self.assertIn("covert_ops_steal_tech_all = yes", master)
+        self.assertNotIn("MODIFIER = covert_industrial_espionage }", master)
+        self.assertNotIn("covert_military_espionage MONTHS", master)
+
+    def test_actions_use_stealable_check(self):
+        industrial = _block(self.ACTIONS, "covert_industrial_espionage_action")
+        military = _block(self.ACTIONS, "covert_military_espionage_action")
+        self.assertEqual(industrial.count("covert_tech_stealable_production = { TARGET = scope:target_country }"), 2)
+        self.assertEqual(military.count("covert_tech_stealable_military = { TARGET = scope:target_country }"), 1)
+        for block in (industrial, military):
+            self.assertNotIn("techs_researched > ROOT.techs_researched", block)
+
+
 if __name__ == "__main__":
     unittest.main()
