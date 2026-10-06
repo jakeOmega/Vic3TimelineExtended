@@ -206,6 +206,23 @@ ch_government_led_by_communists = {
 }
 
 # Scope: country
+# True when that interest group holds the Fascist or Ethno-Nationalist ideology,
+# the two that back both hard-line citizenship laws. Cultural Citizenship
+# (National Supremacy) is a common starting law, Britain's among them, so under
+# Autocracy it fits an absolute monarch or a caudillo as well as a fascist
+# dictatorship; the Fascist model's Autocracy branch asks who runs the government.
+ch_government_led_by_fascists = {
+	any_interest_group = {
+		is_in_government = yes
+		is_strongest_ig_in_government = yes
+		OR = {
+			has_ideology = ideology:ideology_fascist
+			has_ideology = ideology:ideology_ethno_nationalist
+		}
+	}
+}
+
+# Scope: country
 # True when that interest group holds any left-wing ideology: the communist
 # pair, vanilla's Socialist (the Trade Unions gain it as the game goes on), the
 # Trade Unions' baseline Proletarian, or a Social Democrat leader. A Command

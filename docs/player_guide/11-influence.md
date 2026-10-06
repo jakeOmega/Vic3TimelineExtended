@@ -132,10 +132,13 @@ a red Benchmark icon; hover it for the current strength.
 At each recount the game sorts every country into one of fifteen political
 models by its laws, from Liberal / Progressive Democratic and Constitutional
 Monarchist to Communist / Vanguardist, Technocratic, Developmentalist Junta and
-Mixed / Other. A Command Economy also depends on who runs the government: under
-a Single-Party State it is Communist only when the strongest interest group in
-government is Communist or Vanguardist, and any other left-wing lead makes it
-Socialist. The pie chart shows each model's share of world culture, weighted
+Mixed / Other. Two tests also ask who runs the government, meaning the
+strongest interest group in it. A Command Economy under a Single-Party State is
+Communist only when that group is Communist or Vanguardist, and any other
+left-wing lead makes it Socialist. Cultural Citizenship under Autocracy is
+Fascist only when that group is Fascist or Ethno-Nationalist, so a monarch who
+takes absolute power over the common starting law is Absolutist Monarchist.
+The pie chart shows each model's share of world culture, weighted
 by the cultural pull of the countries running it rather than by their number.
 Hover a model in the legend for what qualifies. The tests run in a fixed
 order and a country counts as the first model it fits, so a monarchy with

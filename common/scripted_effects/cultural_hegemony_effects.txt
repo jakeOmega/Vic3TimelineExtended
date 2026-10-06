@@ -294,7 +294,10 @@ ch_effect_disable_cultural_protectionism = {
 # an Ethnostate is Fascist, and so is a one-party Ethnostate with a Command
 # Economy (Communist splits round Fascist: council republics first, one-party
 # command economies run by communists after; a Command Economy run by the rest
-# of the left is Socialist); a Technocracy under a monarch is Technocratic; a
+# of the left is Socialist). Cultural Citizenship under Autocracy is Fascist
+# only when fascists run the government, so an absolute monarchy that keeps the
+# common starting law is Absolutist Monarchist (Ancestral Citizenship still
+# makes it Fascist); a Technocracy under a monarch is Technocratic; a
 # junta with State Religion is Reactionary; a constitutional monarchy with
 # universal suffrage is Constitutional Monarchist, not Liberal. Every law test
 # is has_law_or_variant, so Bakufu and Neo-Absolutism count as Autocracy.
@@ -318,17 +321,23 @@ ch_set_political_model = {
 		limit = { has_law_or_variant = law_type:law_anarchy }
 		set_variable = { name = ch_model value = 2 }
 	}
-	# Fascist / Ethnonationalist
+	# Fascist / Ethnonationalist: Ancestral Citizenship (Ethnostate), or Cultural
+	# Citizenship (National Supremacy) in a one-party state, or Cultural
+	# Citizenship under Autocracy run by fascists (ch_government_led_by_fascists).
+	# Cultural Citizenship under Autocracy run by anyone else falls through to its
+	# other laws, so an absolute monarchy with it reaches Absolutist Monarchist.
 	else_if = {
 		limit = {
 			OR = {
 				has_law_or_variant = law_type:law_ethnostate
 				AND = {
 					has_law_or_variant = law_type:law_national_supremacy
-					OR = {
-						has_law_or_variant = law_type:law_single_party_state
-						has_law_or_variant = law_type:law_autocracy
-					}
+					has_law_or_variant = law_type:law_single_party_state
+				}
+				AND = {
+					has_law_or_variant = law_type:law_national_supremacy
+					has_law_or_variant = law_type:law_autocracy
+					ch_government_led_by_fascists = yes
 				}
 			}
 		}
@@ -376,7 +385,9 @@ ch_set_political_model = {
 		set_variable = { name = ch_model value = 13 }
 	}
 	# Absolutist monarchist. Social Monarchy (vanilla 1.14) has no parent law,
-	# so has_law_or_variant on Monarchy misses it; it is named here.
+	# so has_law_or_variant on Monarchy misses it; it is named here. Cultural
+	# Citizenship does not take an absolute monarchy to Fascist above unless
+	# fascists run its government; Ancestral Citizenship does.
 	else_if = {
 		limit = {
 			OR = {
