@@ -8979,6 +8979,7 @@ POST_LOAD_REGENERATORS = [
     ("gen_carbon_capture_pms",        "gen_carbon_capture_pms"),
     ("gen_law_consistency",           "gen_law_consistency"),
     ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
+    ("gen_covert_tech_theft",         "scripts.generators.gen_covert_tech_theft"),
     ("organize_loc",                  "organize_loc"),
     ("gen_event_inventory",           "gen_event_inventory"),
     # Keep LAST: prepend UTF-8 BOM to any mod .txt the generators above (or a

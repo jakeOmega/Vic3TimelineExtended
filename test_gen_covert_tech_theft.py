@@ -52,5 +52,53 @@ class CatalogTest(unittest.TestCase):
         self.assertEqual([tech.index for tech in self.catalog], list(range(1, len(self.catalog) + 1)))
 
 
+class RenderTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.state = gen.load_state(ROOT)
+        cls.catalog = gen.tech_catalog(cls.state)
+        cls.production = [tech for tech in cls.catalog if tech.category == "production"]
+        cls.steal = gen.render_steal("production", cls.production)
+        cls.outputs = gen.plan_outputs(cls.state, ROOT)
+
+    def test_grant_branches_in_scaled_modifier_order(self):
+        text = gen.render_grant(7, [3250, 4388, 5200, 6500, 8775, 10400])
+        order = [text.index(f"progress = {amount} ") for amount in (10400, 8775, 6500, 5200, 4388, 3250)]
+        self.assertEqual(order, sorted(order))
+        self.assertLess(text.index("covert_op_is_fully_operational"), text.index("covert_op_is_established"))
+        self.assertEqual(text.count("set_variable = { name = iw_stolen_last value = $IDX$ }"), 6)
+
+    def test_ladder_branch_requires_research_and_target(self):
+        ladder = self.steal[: self.steal.index("random_list = {")]
+        self.assertEqual(ladder.count("is_researching_technology = "), len(self.production))
+        self.assertEqual(
+            ladder.count("scope:iw_theft_target ?= { has_technology_researched = "), len(self.production)
+        )
+
+    def test_random_list_behind_stealable_guard(self):
+        guard = self.steal.index("covert_tech_stealable_production = { TARGET = scope:iw_theft_target }")
+        self.assertLess(guard, self.steal.index("random_list = {"))
+
+    def test_every_random_entry_checks_can_research(self):
+        entries = self.steal[self.steal.index("random_list = {"):]
+        self.assertEqual(entries.count("\t1 = {"), len(self.production))
+        self.assertEqual(entries.count("can_research = "), len(self.production))
+
+    def test_target_reads_are_guarded(self):
+        for text in self.outputs.values():
+            self.assertNotIn("scope:iw_theft_target = {", text)
+            self.assertNotIn("$TARGET$ = {", text)
+
+    def test_custom_loc_maps_every_index_to_its_key(self):
+        text = self.outputs[gen.CUSTOM_LOC_OUT]
+        self.assertIn("type = container", text)
+        for tech in self.catalog:
+            self.assertIn(f"trigger = {{ var:iw_stolen_last = {tech.index} }}\n\t\tlocalization_key = {tech.key}\n", text)
+
+    def test_committed_outputs_are_current(self):
+        for relative, text in self.outputs.items():
+            self.assertEqual((ROOT / relative).read_text(encoding="utf-8-sig"), text, str(relative))
+
+
 if __name__ == "__main__":
     unittest.main()
