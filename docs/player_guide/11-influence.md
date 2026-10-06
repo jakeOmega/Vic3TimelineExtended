@@ -532,5 +532,9 @@ reserves are at least half full and its budget is in surplus. Espionage,
 Nuclear Programme Sabotage and Secure Loose Material ignore the target's size,
 and so does a wartime operation against a country the AI is losing to. The AI
 raises priority to 2 against rivals and to 3 when a great power is at war with
-the target. It needs Seasoned Tradecraft for the two most severe operations, as
+the target. Once launched, an operation stays until it is fully operational,
+unless it is caught or something it needs goes. After that the AI calls it off
+only when its reason has gone: no rivalry either way, no hostile attitude and
+relations above poor, nothing left to steal, or no space milestone of its own
+under way. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
 you do, so it rarely launches them.

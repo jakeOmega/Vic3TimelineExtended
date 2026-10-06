@@ -40,6 +40,16 @@
 #   (covert_warfare_triggers.txt): no much weaker target without money to burn.
 #   Espionage, nuclear programme sabotage and secure loose material don't take
 #   it; test_covert_ai_targets.py holds the two lists.
+# - Breaking: an operation pays nothing for six months, so every action spells
+#   out will_break (none is left to the engine's default). The AI keeps an
+#   operation until it is fully operational (covert_ai_op_settled), then ends
+#   it only once its reason has gone, judged more loosely than at launch:
+#   hostility (covert_ai_hostility_gone), nothing left to steal, no milestone
+#   of our own. Wartime operations, influence campaign and secure loose
+#   material are never called off by choice; their requirement_to_maintain
+#   ends them. Cultivate assets also stops once its network reaches
+#   covert_cultivate_ai_net_done. Launch-only tests (free slot, intelligence
+#   capacity, target size, debt) never break anything.
 # ============================================================================
 
 # ---- PEACETIME: Election Interference ----
@@ -205,6 +215,12 @@ covert_election_interference_action = {
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = election_interference TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
+		}
+
 		propose_score = {
 			value = 5
 			if = {
@@ -361,6 +377,12 @@ covert_financial_subversion_action = {
 			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+		}
+
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = financial_subversion TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -522,6 +544,10 @@ covert_infrastructure_sabotage_action = {
 				covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 			}
 		}
+
+		# Never called off by choice: it ends with the war or play
+		# (requirement_to_maintain)
+		will_break = { always = no }
 
 		propose_score = {
 			value = 15
@@ -685,6 +711,10 @@ covert_comms_disruption_action = {
 			}
 		}
 
+		# Never called off by choice: it ends with the war or play
+		# (requirement_to_maintain)
+		will_break = { always = no }
+
 		propose_score = {
 			value = 15
 			if = {
@@ -843,6 +873,12 @@ covert_industrial_espionage_action = {
 			covert_tech_stealable_production = { TARGET = scope:target_country }
 		}
 
+		# Kept until fully operational, then while there is something to steal
+		will_break = {
+			covert_ai_op_settled = { TYPE = industrial_espionage TARGET = scope:target_country }
+			NOT = { covert_tech_stealable_production = { TARGET = scope:target_country } }
+		}
+
 		propose_score = {
 			value = 10
 			if = {
@@ -983,6 +1019,12 @@ covert_military_espionage_action = {
 			var:iw_funding_level >= 1
 			in_default = no
 			covert_tech_stealable_military = { TARGET = scope:target_country }
+		}
+
+		# Kept until fully operational, then while there is something to steal
+		will_break = {
+			covert_ai_op_settled = { TYPE = military_espionage TARGET = scope:target_country }
+			NOT = { covert_tech_stealable_military = { TARGET = scope:target_country } }
 		}
 
 		propose_score = {
@@ -1147,6 +1189,10 @@ covert_influence_campaign_action = {
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
+
+		# Never called off by choice: it ends when we lose the bloc's lead or the
+		# target joins the bloc (requirement_to_maintain)
+		will_break = { always = no }
 
 		propose_score = {
 			value = 8
@@ -1327,6 +1373,12 @@ covert_ideological_subversion_action = {
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = ideological_subversion TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
+		}
+
 		propose_score = {
 			value = 5
 			if = {
@@ -1501,6 +1553,12 @@ covert_destabilization_action = {
 			}
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+		}
+
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = destabilization TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -1680,6 +1738,12 @@ covert_regime_change_action = {
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = regime_change TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
+		}
+
 		propose_score = {
 			value = 5
 			if = {
@@ -1848,6 +1912,12 @@ covert_nuclear_sabotage_action = {
 			in_default = no
 		}
 
+		# Kept until fully operational, then until the hostility is gone
+		will_break = {
+			covert_ai_op_settled = { TYPE = nuclear_sabotage TARGET = scope:target_country }
+			covert_ai_hostility_gone = { TARGET = scope:target_country }
+		}
+
 		propose_score = {
 			value = 5
 			if = {
@@ -2013,6 +2083,13 @@ covert_space_espionage_action = {
 			sr_has_running_milestone = yes
 		}
 
+		# Kept until fully operational, then while we run a milestone of our
+		# own (the target's lead is a requirement_to_maintain)
+		will_break = {
+			covert_ai_op_settled = { TYPE = space_espionage TARGET = scope:target_country }
+			sr_has_running_milestone = no
+		}
+
 		propose_score = {
 			value = 10
 			if = {
@@ -2150,6 +2227,19 @@ covert_cultivate_assets_action = {
 			in_default = no
 			# Much weaker targets only with money to burn
 			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+		}
+
+		# Called off once the network is strong, whatever its age (the operation
+		# pays from its first month), or once fully operational if the hostility
+		# is gone
+		will_break = {
+			OR = {
+				NOT = { covert_net_weaker_than = { TARGET = scope:target_country STRENGTH = covert_cultivate_ai_net_done } }
+				AND = {
+					covert_ai_op_settled = { TYPE = cultivate_assets TARGET = scope:target_country }
+					covert_ai_hostility_gone = { TARGET = scope:target_country }
+				}
+			}
 		}
 
 		propose_score = {
@@ -2308,6 +2398,10 @@ covert_secure_material_action = {
 			var:iw_funding_level >= 1
 			in_default = no
 		}
+
+		# Never called off by choice: it ends when nothing is left to find
+		# (requirement_to_maintain)
+		will_break = { always = no }
 
 		propose_score = {
 			value = 5
