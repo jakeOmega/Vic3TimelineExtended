@@ -1,0 +1,306 @@
+# Covert tech theft: espionage operations steal technology progress
+
+## Context
+
+Industrial and military espionage currently pay out in technology through two
+self modifiers: `covert_industrial_espionage` (+15% production technology
+spread) and `covert_military_espionage` (+15% military technology spread, from
+the strongest military operation whose target is ahead in technology). Spread is
+a world-wide pool, so the bonus has nothing to do with *what the target knows*,
+and +15% of a small base is hard to notice. The owner wants the operations to
+take technology from the target: each month, progress on a technology the target
+has and the operator lacks.
+
+Decisions from the design conversation (2026-10-06):
+
+- **Amount:** 5% of the technology's era cost at base strength (establishing,
+  priority 1), scaled by the operation's phase × priority like every other covert
+  effect, so 10% fully operational at priority 1 and 16% at the ceiling.
+- **Pick:** the operator's current research if it is in the operation's category
+  and the target has it; otherwise a random technology in the category that the
+  target has, the operator lacks and can research now; otherwise nothing.
+- **Stacking:** every running espionage operation steals on its own, from its own
+  target. (The current "gains come from the strongest" rule still governs the
+  modifiers that remain.)
+- **Spread modifiers:** dropped.
+- **Display:** each operation row shows its own total stolen and the latest
+  technology. The record goes with the operation.
+- **Launch gate:** industrial espionage launches only if the target knows a
+  production technology the operator could research now, replacing the
+  technology-count comparison; the AI picks both espionage types' targets with
+  the same check.
+- Thin spreading over many technologies is acceptable. Progress that reaches a
+  technology's cost completes it (owner's ruling; tech spread works the same way).
+
+### Engine facts this design rests on
+
+From the probe on branch `probe/tech-progress` (`te_debug_covert.6`–`.10`, one
+launch, 2026-10-06):
+
+1. `add_technology_progress = { technology = X progress = N }` adds `N` research
+   points to `X` whether or not `X` is the current research.
+2. **`progress` takes a literal only.** A script value is `Malformed token` at
+   load and the tooltip reads "gets 0.00 progress".
+3. `technology =` accepts a scope: both `technology_being_researched` and a saved
+   scope worked.
+4. A country variable can hold a technology scope; loc renders it with
+   `[ROOT.GetCountry.MakeScope.Var('x').GetTechnology.GetName]`.
+5. **There is no `technology:<key>` link** (`Failed to find a valid event target
+   link 'technology:railways'`). A bad link drops only its own effect line; the
+   event still opens.
+6. From the engine docs: no technology iterator, no trigger or event target that
+   reads a technology scope's era, cost or category, and the only technology
+   scope source is `technology_being_researched`.
+
+Consequences: a random technology can only be chosen from a generated list of
+keys, and its amount must be a literal written per technology. The latest stolen
+technology can't be stored as a scope (a random pick has no scope), so it is
+stored as a number and turned back into a name by generated custom
+localization.
+
+## Design
+
+### 1. Monthly theft
+
+In `covert_ops_apply_all_phase_effects` (`common/scripted_effects/covert_warfare_effects.txt`),
+replacing the two tech-spread blocks:
+
+```paradox
+every_in_list = {
+	variable = iw_ops
+	limit = {
+		OR = { has_tag = iw_op_industrial_espionage has_tag = iw_op_military_espionage }
+		covert_op_is_established = yes
+	}
+	save_scope_as = iw_op
+	ROOT = {
+		if = {
+			limit = { scope:iw_op = { has_tag = iw_op_industrial_espionage } }
+			covert_tech_steal_production = yes
+		}
+		else = {
+			covert_tech_steal_military = yes
+		}
+	}
+}
+```
+
+Scope contract for the generated effects: country scope = the operator (ROOT),
+`scope:iw_op` = the operation's container, `scope:iw_op.var:iw_target` = the
+target country. Preparatory operations (under month 6) steal nothing, like every
+other operation effect.
+
+### 2. Generated script
+
+A new regenerator, `scripts/generators/gen_covert_tech_theft.py`, reads:
+
+- every technology's key, `category` and `era` from `ModState`'s merged
+  technology data (vanilla snapshot plus mod, `REPLACE:` applied);
+- era costs from `common/technology/eras/00_eras.txt` (`technology_cost`);
+- the phase and priority multipliers from
+  `common/script_values/covert_warfare_script_values.txt`
+  (`covert_op_phase_full_mult`, `covert_op_priority_2_effect_mult`,
+  `covert_op_priority_3_effect_mult`), so the amounts follow any retune of the
+  shared table;
+- the theft share, `covert_tech_theft_share = 0.05`, in the same script values
+  file, so tooltips can print it (`covert_tech_theft_share_percent_display`).
+
+Technologies whose definition has `can_research = no` are skipped. Each kept
+technology gets a stable number (its position in the key-sorted list, from 1).
+
+It writes three files, each headed `AUTO-GENERATED by
+scripts/generators/gen_covert_tech_theft.py — do not edit manually`:
+
+**`common/scripted_effects/covert_tech_theft_generated.txt`**
+
+- `covert_tech_grant_era_<N>` (one per era, 12): branches on
+  `scope:iw_op` phase × priority exactly as `covert_op_add_scaled_modifier` does
+  (fully operational first, then established; priority 3, 2, else 1) onto six
+  literal amounts, and in each branch:
+
+  ```paradox
+  add_technology_progress = { technology = $TECH$ progress = <amount> }
+  scope:iw_op = {
+  	change_variable = { name = iw_stolen_total add = <amount> }
+  	set_variable = { name = iw_stolen_last value = $IDX$ }
+  }
+  ```
+
+  Amount = era cost × 0.05 × multiplier, rounded half up. With today's values:
+
+  | Era | Cost | Est. P1 | Est. P2 | Est. P3 | Full P1 | Full P2 | Full P3 |
+  |---|---|---|---|---|---|---|---|
+  | 1 | 7,500 | 375 | 506 | 600 | 750 | 1,013 | 1,200 |
+  | 2 | 10,000 | 500 | 675 | 800 | 1,000 | 1,350 | 1,600 |
+  | 3 | 12,500 | 625 | 844 | 1,000 | 1,250 | 1,688 | 2,000 |
+  | 4 | 15,000 | 750 | 1,013 | 1,200 | 1,500 | 2,025 | 2,400 |
+  | 5 | 17,500 | 875 | 1,181 | 1,400 | 1,750 | 2,363 | 2,800 |
+  | 6 | 20,000 | 1,000 | 1,350 | 1,600 | 2,000 | 2,700 | 3,200 |
+  | 7 | 65,000 | 3,250 | 4,388 | 5,200 | 6,500 | 8,775 | 10,400 |
+  | 8 | 115,000 | 5,750 | 7,763 | 9,200 | 11,500 | 15,525 | 18,400 |
+  | 9 | 210,000 | 10,500 | 14,175 | 16,800 | 21,000 | 28,350 | 33,600 |
+  | 10 | 450,000 | 22,500 | 30,375 | 36,000 | 45,000 | 60,750 | 72,000 |
+  | 11 | 800,000 | 40,000 | 54,000 | 64,000 | 80,000 | 108,000 | 128,000 |
+  | 12 | 2,000,000 | 100,000 | 135,000 | 160,000 | 200,000 | 270,000 | 320,000 |
+
+  The real cost of a technology can be higher than its era cost (vanilla's
+  `TECH_AHEAD_OF_TIME_PENALTY_FACTOR`); the owner accepted that.
+
+- `covert_tech_steal_production` and `covert_tech_steal_military`, each:
+
+  ```paradox
+  covert_tech_steal_production = {
+  	if = {
+  		limit = {
+  			is_researching_technology = <key1>
+  			scope:iw_op.var:iw_target ?= { has_technology_researched = <key1> }
+  		}
+  		covert_tech_grant_era_<e1> = { TECH = <key1> IDX = <n1> }
+  	}
+  	else_if = { … one branch per technology in the category … }
+  	else_if = {
+  		limit = { covert_tech_stealable_production = { TARGET = scope:iw_op.var:iw_target } }
+  		random_list = {
+  			1 = {
+  				trigger = {
+  					NOT = { has_technology_researched = <key1> }
+  					can_research = <key1>
+  					scope:iw_op.var:iw_target ?= { has_technology_researched = <key1> }
+  				}
+  				covert_tech_grant_era_<e1> = { TECH = <key1> IDX = <n1> }
+  			}
+  			… one entry per technology in the category …
+  		}
+  	}
+  }
+  ```
+
+  The `else_if` guard means `random_list` never runs with every entry disabled.
+  The current-research branch needs no `can_research`: a technology being
+  researched is researchable.
+
+**`common/scripted_triggers/covert_tech_theft_generated.txt`**
+
+- `covert_tech_stealable_production` / `covert_tech_stealable_military`
+  (country scope = the would-be operator; `$TARGET$` = the target): an `OR` of
+  the random-list entry conditions for every technology in the category. Read by
+  the steal effect's guard, industrial espionage's `possible` and both espionage
+  `will_propose` blocks.
+
+**`common/customizable_localization/covert_tech_theft_generated.txt`**
+
+- `covert_stolen_tech_name` with `type = container`: one entry per technology,
+  `trigger = { var:iw_stolen_last = <n> }`, `localization_key = <key>`. A
+  technology's name loc key is its own key (vanilla `railways: "Railways"`), so
+  no new loc is needed.
+
+**Unproven, with a named contingency:** the GUI call,
+`ScriptContainer.GetCustom( Arg0 )`, is a documented data function, but no
+vanilla or mod custom localization declares `type = container` (the engine's
+scope-type list does include `container`). If the row prints nothing or `error.log` rejects the type at load,
+switch to the proven `type = country`: also write `iw_stolen_last_production` /
+`iw_stolen_last_military` on the operator country in the grant, and have the row
+call the country-typed lookup for its type. Two operations of the same type then
+show the type's latest, not their own. Don't build this unless the check fails.
+
+**Keeping it current:** the generator runs from `regenerate(mod_state)` in
+`POST_LOAD_REGENERATORS` (before `organize_loc` and `bom_normalizer`), writing
+only when the content changes, and from the command line. It is listed in
+`docs/auto_generated_files.md`, `docs/guides/python_tools.md` and `CLAUDE.md`
+(`check_post_load_rosters.py` enforces all three). `test_gen_covert_tech_theft.py`
+(game-independent, CI) checks the amount table against the formula, that every
+technology appears once with a unique number, that `can_research = no`
+technologies are absent, and that the committed files equal a fresh render
+(fails when a technology is added without re-running the generator).
+
+### 3. Hand-written changes
+
+- **`covert_warfare_effects.txt`:** remove
+  `covert_op_apply_self_effect = { TYPE = industrial_espionage MODIFIER = covert_industrial_espionage }`
+  and the conditional military block (`remove_modifier = covert_military_espionage`
+  through its `covert_op_add_scaled_modifier`); add the loop from §1. The
+  industrial `covert_espionage_base` (+5 weekly innovation), the military unit
+  modifier and both `_detected` target markers stay.
+- **`covert_warfare_triggers.txt`:** delete `covert_op_target_ahead_in_tech`
+  (its only readers were the military block); fix the stale comment at
+  `covert_warfare_script_values.txt:503` that points to it.
+- **`extra_modifiers.txt`:** keep `covert_industrial_espionage` and
+  `covert_military_espionage` defined, commented as retired (2026-10-06): saves
+  carry them as three-month timed modifiers, which run out on their own. Delete
+  them in a later cleanup.
+- **`covert_operations.txt`:**
+  - industrial espionage `accept_effect`: drop
+    `add_modifier = { name = covert_industrial_espionage }` from the preview and
+    add `custom_tooltip = covert_op_tech_theft_preview_production_tt`; military
+    espionage's preview gets the military version.
+  - industrial espionage `possible`: replace the `techs_researched >` check
+    (`iw_target_tech_advantage_tt`) with
+    `covert_tech_stealable_production = { TARGET = scope:target_country }` under
+    a new tooltip key, `iw_target_has_stealable_production_tt`.
+  - `will_propose` for industrial and military espionage: the same replacement,
+    with the matching category.
+  - `iw_target_tech_advantage_tt` becomes unused; delete its loc line.
+- **Operation row** (`gui/journal_entry_widgets/covert_operations_widget.gui`):
+  one `widget_je_covert_operation_detail` after the detection line, visible on
+  industrial and military espionage rows only.
+  - Text: "Technology stolen: #v [total]#! innovation · latest #v [name]#!",
+    or "Technology stolen: nothing yet" while the container has no
+    `iw_stolen_total`. Two loc keys selected by
+    `ScriptContainer.HasVariable('iw_stolen_total')` visibility. The total reads
+    `ScriptContainer.GetVariableValue('iw_stolen_total')`, the name
+    `ScriptContainer.GetCustom('covert_stolen_tech_name')` (a documented data
+    function, `data_types_uncategorized.txt` in the 1.14 digest; not yet used in
+    this mod).
+  - Tooltip: how the technology is chosen (current research first, else a
+    random one the target has and you can research), the amount (5% of the era's
+    cost at base, × phase and priority), and that each operation steals on its
+    own.
+- **Console harness:** `te_debug_covert.6` runs one month of theft now (the §1
+  loop on its own), so a row's total and latest change without waiting a month.
+  It follows the `te_debug_covert.1`–`.5` pattern (`# REVIEWED` opener comment,
+  `event_image`, loc).
+
+### 4. Docs
+
+- `docs/systems/mod_systems.md` § Covert Warfare: the industrial and military
+  espionage entries, the generated files, the monthly loop and the row line.
+- `docs/guides/scripting_best_practices.md`: the six engine facts above, short.
+- `docs/auto_generated_files.md`, `docs/guides/python_tools.md`, `CLAUDE.md`:
+  the new regenerator.
+- Player guide chapter 11 (`11-influence.md`):
+  - the Industrial and Military Espionage table rows (theft in place of spread;
+    the new launch condition);
+  - the sentence "If you run several espionage operations of one type, your
+    gains come from the strongest and don't add up" gets a theft exception;
+  - a short paragraph on how theft picks a technology and what the row shows.
+
+  Then rebuild the PDF.
+
+### 5. Testing
+
+- Offline: the unit test above; the CI audit set (`script_argument`,
+  `loc_coverage`, `gui_reference`, `empty_effect`, `orphaned_event`,
+  `event_image`, …) on the branch; `check_gui_lint.py`; `organize_loc.py
+  --check`; `check_post_load_rosters.py`; the player guide style lint and
+  `--check`.
+- In game, after merge (`te_debug_covert.2` seeds operations, `.6` runs a theft):
+  1. A row's line renders the technology's name (the `type = container`
+     lookup); `error.log` has no customizable-localization line for it.
+  2. With the current research known to the target, that technology gets the
+     progress.
+  3. Researching something the target lacks, a random production technology
+     gets it, never one whose prerequisites are missing.
+  4. Amounts match the table at establishing and fully operational, priority 1
+     and 3.
+  5. Industrial espionage's launch tooltip shows the new condition and blocks a
+     target with nothing to steal.
+  6. Two industrial espionage operations each add to their own row.
+  7. An older save with the spread modifiers running loses them within three
+     months and logs nothing about them.
+
+## Out of scope
+
+- A "nothing left to steal" note on the row (the total stops growing).
+- Notifications or events when a technology is stolen or completed by theft.
+- Society technologies (no operation targets them).
+- Retuning detection, upkeep or the other espionage modifiers.

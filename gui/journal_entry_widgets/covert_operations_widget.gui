@@ -660,6 +660,20 @@ types covert_operations_widget_types
 			tooltip = "je_iw_op_row_detection_tt"
 		}
 
+		# ---- Espionage only: technology stolen so far and the latest
+		#      technology (covert tech theft, 2026-10). "Nothing yet" until the
+		#      first theft writes iw_stolen_total ----
+		widget_je_covert_operation_detail = {
+			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), ScriptContainer.HasVariable('iw_stolen_total') )]"
+			text = "je_iw_op_row_tech_stolen"
+			tooltip = "je_iw_op_row_tech_stolen_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), Not( ScriptContainer.HasVariable('iw_stolen_total') ) )]"
+			text = "je_iw_op_row_tech_stolen_none"
+			tooltip = "je_iw_op_row_tech_stolen_tt"
+		}
+
 		# ---- Controls, centred under the row: the priority stepper, then
 		#      Stand down (one instance per type; only the row's own type is
 		#      ever visible) ----

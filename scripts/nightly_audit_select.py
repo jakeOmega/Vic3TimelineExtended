@@ -61,6 +61,9 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/buildings/carbon_capture_generated_injects.txt",
     "common/scripted_effects/company_building_cleanup_effects.txt",
     "common/scripted_effects/extra_law_consistency_generated.txt",
+    "common/scripted_effects/covert_tech_theft_generated.txt",
+    "common/scripted_triggers/covert_tech_theft_generated.txt",
+    "common/customizable_localization/covert_tech_theft_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "common/amendments/te_tax_amendments_generated.txt",
@@ -124,6 +127,8 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/power_bloc_principles/extra_power_bloc_principles.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored",
     "common/state_traits/te_mining_traits.txt": "trait definitions hand-authored; resources.py only references trait names when injecting state_regions/*.txt",
     "common/scripted_buttons/un_buttons.txt": "input to gen_un_button_descs.py — button bodies hand-authored; generator only reads each button's modifiers to produce te_un_button_effects_l_english.yml",
+    "common/script_values/covert_warfare_script_values.txt": "input to gen_covert_tech_theft.py (theft share, phase/priority multipliers) — hand-authored",
+    "common/technology/eras/00_eras.txt": "input to gen_covert_tech_theft.py (era technology costs) — hand-authored",
     "common/static_modifiers/extra_modifiers.txt": "input to gen_un_button_descs.py — modifier defs hand-authored; generator reads them to produce the UN_*_EFFECTS loc, never writes here",
 }
 

@@ -4855,6 +4855,10 @@
  te_debug_covert.5.d:0 "Console-only shortcuts for the network intelligence reports (slice 7). None of these can happen in normal play. Seed an operation first (te_debug_covert.2) so there is a network.\n\nStrength 50 is the first tier: each network row shows the target's intelligence capacity and technology count beside ours, and says its operations against us need 75. Strength 80 is the second: the row also counts them, usually 0.\n\nThe third option makes every network's target run cultivate assets against us (its funding is raised to 1 if it has none) and refreshes the reports, so a second-tier row's count goes up by one. Force a detection afterwards (te_debug_covert.2) and a row that falls below 75 drops back to the first tier the same day."
  te_debug_covert.5.f:0 "Test harness. Nothing here is real intelligence."
  te_debug_covert.5.t:0 "Covert Test Console: Network Intelligence"
+ te_debug_covert.6.a:0 "Run one month of technology theft now"
+ te_debug_covert.6.d:0 "Console-only shortcut for technology theft. None of this can happen in normal play. Seed operations first (te_debug_covert.2) so an espionage operation is running.\n\nEvery established industrial or military espionage operation steals once, as at the start of a month: its row's total and latest technology change at once, and the technology gains the progress in the tree."
+ te_debug_covert.6.f:0 "Test harness. Hover the technology to see the progress."
+ te_debug_covert.6.t:0 "Covert Test Console: Technology Theft"
 
 #
 # TE_DEBUG_DETERRENCE

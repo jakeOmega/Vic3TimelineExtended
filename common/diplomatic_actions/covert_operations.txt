@@ -686,7 +686,8 @@ covert_comms_disruption_action = {
 
 # ---- PEACETIME: Industrial Espionage ----
 # Steal production secrets and technology from a target nation
-# Requires target to have more technologies researched than you.
+# Requires the target to have researched a production technology we could
+# research now (covert_tech_stealable_production).
 # Effect phases through preparatory → establishing → fully operational.
 covert_industrial_espionage_action = {
 	texture = "gfx/interface/icons/diplomatic_action_icons/covert_industrial_espionage_action.dds"
@@ -705,13 +706,15 @@ covert_industrial_espionage_action = {
 		}
 		show_as_tooltip = {
 			add_modifier = { name = covert_espionage_base }
-			add_modifier = { name = covert_industrial_espionage }
 			scope:target_country = {
 				add_modifier = { name = covert_industrial_espionage_detected }
 			}
 		}
 		custom_tooltip = {
-			text = covert_op_self_effect_note_tt
+			text = covert_op_tech_theft_preview_production_tt
+		}
+		custom_tooltip = {
+			text = covert_op_self_effect_note_espionage_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
@@ -763,10 +766,8 @@ covert_industrial_espionage_action = {
 			}
 		}
 		custom_tooltip = {
-			text = iw_target_tech_advantage_tt
-			scope:target_country = {
-				techs_researched > ROOT.techs_researched
-			}
+			text = iw_target_has_stealable_production_tt
+			covert_tech_stealable_production = { TARGET = scope:target_country }
 		}
 	}
 
@@ -818,10 +819,8 @@ covert_industrial_espionage_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
-			# Only spy on countries with tech advantage
-			scope:target_country = {
-				techs_researched > ROOT.techs_researched
-			}
+			# Only spy on countries with a production technology to steal
+			covert_tech_stealable_production = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -859,10 +858,10 @@ covert_military_espionage_action = {
 			}
 		}
 		custom_tooltip = {
-			text = covert_military_espionage_extra_tt
+			text = covert_op_tech_theft_preview_military_tt
 		}
 		custom_tooltip = {
-			text = covert_op_self_effect_note_tt
+			text = covert_op_self_effect_note_espionage_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
@@ -963,9 +962,7 @@ covert_military_espionage_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
-			scope:target_country = {
-				techs_researched > ROOT.techs_researched
-			}
+			covert_tech_stealable_military = { TARGET = scope:target_country }
 		}
 
 		propose_score = {

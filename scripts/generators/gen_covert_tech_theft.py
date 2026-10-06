@@ -1,0 +1,326 @@
+"""Generate covert technology theft: espionage operations steal technology progress.
+
+Industrial espionage steals production technologies and military espionage
+military ones (docs/superpowers/specs/2026-10-06-covert-tech-theft-design.md).
+add_technology_progress takes a literal amount only, and script can't read a
+technology's era or cost, so this writes one branch per technology with its
+amounts already worked out:
+
+* common/scripted_effects/covert_tech_theft_generated.txt:
+  covert_tech_grant_era_<N> and covert_tech_steal_<category>
+* common/scripted_triggers/covert_tech_theft_generated.txt:
+  covert_tech_stealable_<category>
+* common/customizable_localization/covert_tech_theft_generated.txt:
+  covert_stolen_tech_name
+
+Inputs: technologies (vanilla snapshot + mod), era costs
+(common/technology/eras/00_eras.txt), covert_tech_theft_share and the phase and
+priority multipliers (common/script_values/covert_warfare_script_values.txt).
+
+Run ``python3 scripts/generators/gen_covert_tech_theft.py [--dry-run | --check]``.
+No game install or running server is needed. Full server reloads call
+``regenerate``.
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from dataclasses import dataclass
+from decimal import ROUND_HALF_UP, Decimal
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from paradox_file_parser import ParadoxFileParser  # noqa: E402
+
+CATEGORIES = ("production", "military")
+ERAS_FILE = Path("common/technology/eras/00_eras.txt")
+
+
+@dataclass(frozen=True)
+class Tech:
+    key: str
+    category: str
+    era: int
+    index: int
+
+
+@dataclass(frozen=True)
+class Constants:
+    share: Decimal
+    full: Decimal
+    pri2: Decimal
+    pri3: Decimal
+
+    def multipliers(self) -> tuple[Decimal, ...]:
+        """Establishing priority 1, 2, 3, then fully operational priority 1, 2, 3."""
+        one = Decimal(1)
+        return (one, self.pri2, self.pri3, self.full, self.full * self.pri2, self.full * self.pri3)
+
+
+def unwrap(value):
+    """Strip the parser's ('=', value) wrappers."""
+    while isinstance(value, (tuple, list)) and len(value) == 2 and value[0] == "=":
+        value = value[1]
+    return value
+
+
+def load_state(root: Path = ROOT):
+    """Technologies and script values: vanilla from the committed snapshot, mod from disk."""
+    from mod_state import VANILLA_COMMON_DIRS, ModState
+    from vanilla_parsed import load
+
+    kinds = ("Technologies", "Script Values")
+    snapshot = load(str(root / "vanilla_parsed"))
+    state = ModState(
+        {kind: "/nonexistent" for kind in kinds},
+        {kind: str(root / "common" / VANILLA_COMMON_DIRS[kind]) for kind in kinds},
+        vanilla_data=snapshot.data,
+    )
+    if state.parse_failures:
+        raise ValueError(f"Cannot generate technology theft from an incomplete parse: {state.parse_failures}")
+    return state
+
+
+def tech_catalog(mod_state) -> list[Tech]:
+    """Every stealable technology, sorted by key and numbered from 1.
+
+    Society technologies are left out (no operation steals them), and so is any
+    technology defined with can_research = no (vanilla's sericulture).
+    """
+    techs = mod_state.get_data("Technologies")
+    rows = []
+    for key in sorted(techs):
+        body = unwrap(techs[key])
+        category = unwrap(body.get("category"))
+        if category not in CATEGORIES or unwrap(body.get("can_research")) == "no":
+            continue
+        era = int(str(unwrap(body["era"])).removeprefix("era_"))
+        rows.append((key, category, era))
+    return [Tech(key, category, era, index) for index, (key, category, era) in enumerate(rows, start=1)]
+
+
+def read_constants(mod_state) -> Constants:
+    values = mod_state.get_data("Script Values")
+
+    def number(name: str) -> Decimal:
+        return Decimal(str(unwrap(values[name])))
+
+    return Constants(
+        share=number("covert_tech_theft_share"),
+        full=number("covert_op_phase_full_mult"),
+        pri2=number("covert_op_priority_2_effect_mult"),
+        pri3=number("covert_op_priority_3_effect_mult"),
+    )
+
+
+def read_era_costs(root: Path = ROOT) -> dict[int, int]:
+    parser = ParadoxFileParser()
+    parser.parse_file(str(root / ERAS_FILE), apply_directives=False)
+    return {
+        int(name.removeprefix("era_")): int(unwrap(unwrap(block)["technology_cost"]))
+        for name, block in parser.data.items()
+    }
+
+
+def amounts(era_cost: int, constants: Constants) -> list[int]:
+    """The six monthly amounts for one era, in Constants.multipliers() order."""
+    base = Decimal(era_cost) * constants.share
+    return [int((base * mult).quantize(Decimal(1), rounding=ROUND_HALF_UP)) for mult in constants.multipliers()]
+
+
+EFFECTS_OUT = Path("common/scripted_effects/covert_tech_theft_generated.txt")
+TRIGGERS_OUT = Path("common/scripted_triggers/covert_tech_theft_generated.txt")
+CUSTOM_LOC_OUT = Path("common/customizable_localization/covert_tech_theft_generated.txt")
+HEADER = (
+    "# AUTO-GENERATED by scripts/generators/gen_covert_tech_theft.py - do not edit manually.\n"
+    "# Covert technology theft: docs/superpowers/specs/2026-10-06-covert-tech-theft-design.md\n"
+)
+EFFECTS_PREAMBLE = (
+    "# Scope: country (ROOT = the operator). scope:iw_op is the operation's\n"
+    "# container and scope:iw_theft_target its target (covert_ops_steal_tech_all\n"
+    "# in covert_warfare_effects.txt sets both). Each grant adds the amount for the\n"
+    "# operation's phase x priority and records it on the container.\n"
+)
+TRIGGERS_PREAMBLE = (
+    "# Scope: country (the would-be operator). True when $TARGET$ has researched a\n"
+    "# technology of the category that we have not and could research now.\n"
+)
+CUSTOM_LOC_PREAMBLE = (
+    "# The latest technology an operation stole, from its container's\n"
+    "# iw_stolen_last. A technology's name key is its own key.\n"
+)
+
+
+def _give(amount: int, depth: int) -> list[str]:
+    tab = "\t" * depth
+    return [
+        f"{tab}add_technology_progress = {{ technology = $TECH$ progress = {amount} }}",
+        f"{tab}scope:iw_op = {{",
+        f"{tab}\tchange_variable = {{ name = iw_stolen_total add = {amount} }}",
+        f"{tab}\tset_variable = {{ name = iw_stolen_last value = $IDX$ }}",
+        f"{tab}}}",
+    ]
+
+
+def _priority_ladder(p1: int, p2: int, p3: int) -> list[str]:
+    return [
+        "\t\tif = {",
+        "\t\t\tlimit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }",
+        *_give(p3, 3),
+        "\t\t}",
+        "\t\telse_if = {",
+        "\t\t\tlimit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }",
+        *_give(p2, 3),
+        "\t\t}",
+        "\t\telse = {",
+        *_give(p1, 3),
+        "\t\t}",
+    ]
+
+
+def render_grant(era: int, values: list[int]) -> str:
+    """covert_tech_grant_era_<era> = { TECH = <key> IDX = <index> }."""
+    est1, est2, est3, full1, full2, full3 = values
+    lines = [
+        f"covert_tech_grant_era_{era} = {{",
+        # Vanilla sets a variable before changing it; doing it here, at the
+        # first theft, keeps "nothing yet" on the row until then.
+        "\tscope:iw_op = {",
+        "\t\tif = {",
+        "\t\t\tlimit = { NOT = { has_variable = iw_stolen_total } }",
+        "\t\t\tset_variable = { name = iw_stolen_total value = 0 }",
+        "\t\t}",
+        "\t}",
+        "\tif = {",
+        "\t\tlimit = { scope:iw_op = { covert_op_is_fully_operational = yes } }",
+        *_priority_ladder(full1, full2, full3),
+        "\t}",
+        "\telse_if = {",
+        "\t\tlimit = { scope:iw_op = { covert_op_is_established = yes } }",
+        *_priority_ladder(est1, est2, est3),
+        "\t}",
+        "}",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _candidate(tech: Tech, target: str, depth: int) -> list[str]:
+    tab = "\t" * depth
+    return [
+        f"{tab}NOT = {{ has_technology_researched = {tech.key} }}",
+        f"{tab}can_research = {tech.key}",
+        f"{tab}{target} ?= {{ has_technology_researched = {tech.key} }}",
+    ]
+
+
+def _grant_call(tech: Tech) -> str:
+    return f"covert_tech_grant_era_{tech.era} = {{ TECH = {tech.key} IDX = {tech.index} }}"
+
+
+def render_steal(category: str, techs: list[Tech]) -> str:
+    """Current research first, then a random candidate, else nothing."""
+    lines = [f"covert_tech_steal_{category} = {{"]
+    for position, tech in enumerate(techs):
+        lines += [
+            f"\t{'if' if position == 0 else 'else_if'} = {{",
+            "\t\tlimit = {",
+            f"\t\t\tis_researching_technology = {tech.key}",
+            f"\t\t\tscope:iw_theft_target ?= {{ has_technology_researched = {tech.key} }}",
+            "\t\t}",
+            f"\t\t{_grant_call(tech)}",
+            "\t}",
+        ]
+    lines += [
+        "\telse_if = {",
+        f"\t\tlimit = {{ covert_tech_stealable_{category} = {{ TARGET = scope:iw_theft_target }} }}",
+        "\t\trandom_list = {",
+    ]
+    for tech in techs:
+        lines += [
+            "\t\t\t1 = {",
+            "\t\t\t\ttrigger = {",
+            *_candidate(tech, "scope:iw_theft_target", 5),
+            "\t\t\t\t}",
+            f"\t\t\t\t{_grant_call(tech)}",
+            "\t\t\t}",
+        ]
+    lines += ["\t\t}", "\t}", "}"]
+    return "\n".join(lines) + "\n"
+
+
+def render_stealable(category: str, techs: list[Tech]) -> str:
+    lines = [f"covert_tech_stealable_{category} = {{", "\tOR = {"]
+    for tech in techs:
+        lines += ["\t\tAND = {", *_candidate(tech, "$TARGET$", 3), "\t\t}"]
+    lines += ["\t}", "}"]
+    return "\n".join(lines) + "\n"
+
+
+def render_custom_loc(techs: list[Tech]) -> str:
+    lines = ["covert_stolen_tech_name = {", "\ttype = container", "\trandom_valid = no"]
+    for tech in techs:
+        lines += [
+            "\ttext = {",
+            f"\t\ttrigger = {{ var:iw_stolen_last = {tech.index} }}",
+            f"\t\tlocalization_key = {tech.key}",
+            "\t}",
+        ]
+    lines += ["}"]
+    return "\n".join(lines) + "\n"
+
+
+def plan_outputs(mod_state, root: Path = ROOT) -> dict[Path, str]:
+    catalog = tech_catalog(mod_state)
+    constants = read_constants(mod_state)
+    era_costs = read_era_costs(root)
+    by_category = {category: [t for t in catalog if t.category == category] for category in CATEGORIES}
+    effects = [HEADER + EFFECTS_PREAMBLE]
+    effects += [render_grant(era, amounts(era_costs[era], constants)) for era in sorted({t.era for t in catalog})]
+    effects += [render_steal(category, by_category[category]) for category in CATEGORIES]
+    triggers = [HEADER + TRIGGERS_PREAMBLE]
+    triggers += [render_stealable(category, by_category[category]) for category in CATEGORIES]
+    return {
+        EFFECTS_OUT: "\n".join(effects),
+        TRIGGERS_OUT: "\n".join(triggers),
+        CUSTOM_LOC_OUT: HEADER + CUSTOM_LOC_PREAMBLE + "\n" + render_custom_loc(catalog),
+    }
+
+
+def regenerate(mod_state=None, *, root: Path = ROOT, dry_run: bool = False) -> dict:
+    """Post-load entry point (mod_state_server.POST_LOAD_REGENERATORS) and CLI body.
+
+    Writes a file only when its content changed, with one UTF-8 BOM.
+    """
+    if mod_state is None:
+        mod_state = load_state(root)
+    changed = []
+    for relative, text in plan_outputs(mod_state, root).items():
+        target = root / relative
+        expected = text.encode("utf-8-sig")
+        if not target.exists() or target.read_bytes() != expected:
+            changed.append(str(relative))
+            if not dry_run:
+                target.write_bytes(expected)
+    return {"changed": bool(changed), "changed_files": changed}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true", help="report what would change; write nothing")
+    mode.add_argument("--check", action="store_true", help="exit 1 if any output is stale")
+    args = parser.parse_args()
+    result = regenerate(dry_run=args.dry_run or args.check)
+    verb = "stale" if args.check else "would write" if args.dry_run else "wrote"
+    for path in result["changed_files"]:
+        print(f"{verb}: {path}")
+    if not result["changed"]:
+        print("covert tech theft: current")
+    return int(args.check and result["changed"])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
