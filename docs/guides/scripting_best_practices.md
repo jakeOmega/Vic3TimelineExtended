@@ -3798,6 +3798,7 @@ Probed in game on 2026-10-06 (`te_debug_covert.6`–`.10` on the throwaway branc
 - `technology =` takes a scope: `technology_being_researched` and a saved scope both work. A country variable can hold a technology scope, and loc names it with `.Var('x').GetTechnology.GetName`.
 - **There is no `technology:<key>` link** (`Failed to find a valid event target link`). The engine drops that one effect line; the event still opens. Nothing else turns a key into a technology scope either: there is no technology iterator, and `technology_being_researched` is the only source. No trigger reads a technology scope's era, cost or category, so a rule per technology has to be generated from the files (`scripts/generators/gen_covert_tech_theft.py`).
 - `[GetTechnology('key').GetName]` renders the name with the technology's full tooltip on hover.
+- To show a technology chosen by key (where no scope exists), store a number and turn it back into a name with customizable localization: one `text = { trigger = { var:x = N } localization_key = <tech key> }` per technology, since a technology's name key is its own key. The lookup can live on a script container: `type = container` custom loc, called from a GUI row as `[ScriptContainer.GetCustom('key')]`, rendered correctly in game (covert tech theft's `covert_stolen_tech_name`, confirmed 2026-10-06).
 
 ## System-Scope Cheat Sheet
 
