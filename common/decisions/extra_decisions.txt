@@ -374,7 +374,11 @@ nd_taboo_resume_programme = {
 # Why a decision: in an AI-only observer run to 2015, after the hub's ai_value
 # gained +10000 above st_res_ai_hub_min_gdp (PR #705), 1 of 157 countries built
 # one. The construction AI does not pick it, and je_strategic_reserve cannot
-# host a build button, because its possible and invalid need a hub to exist.
+# host a build button, because its possible needs a hub to exist.
+#
+# It is also how a reserve that lost its hub (to the rebels of a civil war,
+# or to a foreign power) gets one back: the journal entry stays open without
+# a hub and keeps its stock, unless the hub was captured.
 #
 # The one-per-country rule is the hub's own (is_shown: no hub anywhere).
 # create_building checks the unlocking technology since 1.13.9; whether it
@@ -419,6 +423,12 @@ te_decision_establish_strategic_reserve = {
 					building = building_strategic_reserve_hub
 					level = 1
 				}
+				# The holder stamp the weekly pulse would write. Without it,
+				# a hub lost in its first week counts as captured: a civil
+				# war breaking out that week would demolish it. A stamp on a
+				# capital the hub failed to reach is inert, as
+				# st_res_on_state_owner_change acts only where a hub stands.
+				set_variable = { name = st_res_hub_holder value = ROOT }
 			}
 			remove_variable = st_res_hub_relocating
 		}

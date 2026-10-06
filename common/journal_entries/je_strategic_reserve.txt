@@ -1,7 +1,8 @@
 ﻿# ============================================================================
 # Strategic Reserve Journal Entry
 # ============================================================================
-# Activates automatically when a country builds a Strategic Reserve Hub.
+# Activates automatically when a country builds a Strategic Reserve Hub, and
+# stays open from then on, with or without one (see "No invalid" below).
 # All presentation and per-good control lives in the panel
 # (gui/journal_entry_widgets/strategic_reserve_widget.gui): an overview of the
 # hub, its flow cap and the week's sales income; the inventory table, one row
@@ -18,8 +19,20 @@ je_strategic_reserve = {
 	icon = "gfx/interface/icons/event_icons/je_strategic_reserve.dds"
 	group = je_group_internal_affairs
 
+	# The rebels of a running revolution start no reserve of their own when
+	# the hub's state falls to them (the hub is kept for the nation,
+	# st_res_hub_stays_within_nation). Their entry would seed every stock at
+	# zero, and if they won, those zeros would beat the loser's stock in the
+	# variable merge: the winner continues the nation (#460-#465,
+	# civil_war_inheritance_audit.md F11). The same rule as
+	# te_decision_establish_strategic_reserve. A secession's rebels may: if
+	# they win they are a new nation, and if they lose, the original
+	# country's own values win the merge. Not in possible, so it never
+	# touches an active or inherited entry. The Market panel's Reserve tab
+	# repeats this block (te_market_strategic_reserve_tab_unlock_sgui).
 	is_shown_when_inactive = {
 		has_technology_researched = logistics
+		is_revolutionary = no
 	}
 
 	possible = {
@@ -32,17 +45,17 @@ je_strategic_reserve = {
 		st_res_je_immediate_effect = yes
 	}
 
-	invalid = {
-		NOT = {
-			any_scope_building = {
-				is_building_type = building_strategic_reserve_hub
-			}
-		}
-	}
-
-	on_invalid = {
-		st_res_je_invalid_effect = yes
-	}
+	# No invalid. An entry that goes invalid is finished for good: the engine
+	# never activates it again, even once a hub stands again. Losing the hub
+	# used to end it, so a country whose hub state fell to the rebels lost
+	# its stock and kept a dead entry. In the AI-only observer run of
+	# 2026-10-05, 13 of the 53 countries with a hub in 1972 had no entry,
+	# and three of them held two hubs that nothing moved or removed. Without
+	# a hub the entry stays open and waits: the weekly pulse moves nothing
+	# (st_res_weekly_update_effect's no-hub branch), the clamp leaves the
+	# stock alone (st_res_clamp_stockpiles_effect), and the status line and
+	# the decision Establish a Strategic Reserve offer a new hub. A captured
+	# hub still costs the stock (st_res_on_state_owner_change).
 
 	# The panel, in three parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
 	# the overview at the top, the inventory table (with the step size and
@@ -73,10 +86,11 @@ je_strategic_reserve = {
 
 	# Only the no-hub line. The entry is shown from Logistics
 	# (is_shown_when_inactive), before a hub exists, when the panel draws
-	# nothing, so this line is what says to build one. While the entry runs, the overview's hub
-	# cell says whether the hub is operating or understaffed, so the status
-	# text is empty then (owner, 2026-09-29: status text that repeats the
-	# overview is removed).
+	# nothing, so this line is what says to build one. It also shows while
+	# the entry waits for a new hub after losing one. While a hub stands, the
+	# overview's hub cell says whether it is operating or understaffed, so the
+	# status text is empty then (owner, 2026-09-29: status text that repeats
+	# the overview is removed).
 	status_desc = {
 		triggered_desc = {
 			desc = je_strategic_reserve_status_no_hub
