@@ -34,7 +34,7 @@ _None._
 
 - mod-touched companies checked: 314
 - vanilla-only companies not judged: 0
-- prestige goods checked: 214
+- prestige goods checked: 212
 - prestige goods with an unknown base good (vanilla named goods, not in the snapshot), not judged: 55
 - total flags: 0
 - unreviewed: 0
@@ -77,7 +77,7 @@ _None._
 - `prestige_good_pannonian_patent_flour`: `company_elso_budapesti_gozmalom`
 - `prestige_good_philips_chapel_radio`: `company_philips`
 - `prestige_good_port_wine`: `company_douro_wine_company`
-- `prestige_good_radiola_radios`: `company_basic_electrics`, `company_ericsson`, `company_general_electric`, `company_nokia`
+- `prestige_good_radiola_radios`: `company_apple`, `company_basic_electrics`, `company_ericsson`, `company_general_electric`, `company_nokia`, `company_samsung`
 - `prestige_good_river_plate_beef`: `company_compania_sansinena_de_carnes_congeladas`
 - `prestige_good_rosewood`: `company_kablin`
 - `prestige_good_russia_iron`: `company_john_hughes`

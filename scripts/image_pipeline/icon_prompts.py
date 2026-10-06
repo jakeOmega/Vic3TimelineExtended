@@ -1046,7 +1046,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": 2},
         # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
         "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": 2},
-        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Apple, Samsung, Huawei.
+        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Huawei, Verizon, BlackBerry (Apple and Samsung moved to Precision Wireless Gear).
         "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": 3},
         # [tourism] Resort Travel: Disney, Axiom Space.
         "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": 1},

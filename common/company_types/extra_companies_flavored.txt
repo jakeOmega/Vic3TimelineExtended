@@ -122,12 +122,12 @@ company_samsung = {
 	}
 	building_types = {
 		building_electrics_industry_appliances
-		building_electrics_industry
+		building_electrics_industry_radio # Wireless telecom (Samsung Networks' 5G base stations)
 		building_shipyard
 		building_samsung_digital_city
 	}
 	extension_building_types = {
-		building_electrics_industry_radio
+		building_electrics_industry # Wired telecom
 		building_software_industry
 		building_network_infrastructure
 		building_electronic_components_and_semiconductor_industry
@@ -147,7 +147,7 @@ company_samsung = {
 				level >= 5
 			}
 		}
-		"goods_production_rank(g:telephones)" <= 5
+		"goods_production_rank(g:radios)" <= 5
 		gdp_ranking <= 15
 	}
 	prosperity_modifier = {
@@ -157,7 +157,7 @@ company_samsung = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
-		prestige_good_advanced_telecom
+		prestige_good_radiola_radios # Precision Wireless Gear
 	}
 	ai_will_do = {
 		has_technology_researched = transistors
@@ -446,13 +446,13 @@ company_apple = {
 	building_types = {
 		building_electrics_industry_appliances # Consumer Appliances
 		building_software_industry # Digital Assets
-		building_electrics_industry # Wired telecom
+		building_electrics_industry_radio # Wireless telecom (modems, satellite messaging)
 		building_apple_park
 	}
 	extension_building_types = {
 		building_network_infrastructure # Digital Access
 		building_electronic_components_and_semiconductor_industry
-		building_electrics_industry_radio
+		building_electrics_industry # Wired telecom
 		building_glassworks
 	}
 	potential = {
@@ -479,7 +479,7 @@ company_apple = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
-		prestige_good_advanced_telecom
+		prestige_good_radiola_radios # Precision Wireless Gear
 	}
 	ai_will_do = {
 		has_technology_researched = personal_computers

@@ -93,8 +93,8 @@ prestige_good_generic_lead = {
 # Radios is full in vanilla, so its generic one is vanilla's Radiola Radios
 # renamed Precision Wireless Gear (localization/english/replace/), the way
 # prestige_good_brunn_type_engines became High-Performance Engines: same key and
-# icon, General Electric keeps it, and the mod gives it to Ericsson, Nokia and the
-# generic Telecommunications company.
+# icon, General Electric keeps it, and the mod gives it to Apple, Samsung,
+# Ericsson, Nokia and the generic Telecommunications company.
 
 prestige_good_generic_rubber = {
 	base_good = rubber
