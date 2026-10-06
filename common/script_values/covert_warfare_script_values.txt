@@ -215,6 +215,11 @@ covert_regime_change_coup_push = 5
 covert_net_cultivate_mult = 1.5
 # The AI proposes cultivate assets only where its network is weaker than this.
 covert_cultivate_ai_net_ceiling = 50
+# ... and calls it off once the network reaches this (intelligence tier 2),
+# about eleven months past the ceiling. A network left alone decays back to
+# the ceiling in ~17 months (~33 at funding 3), so the AI cultivates in long
+# spells rather than toggling the operation each month around 50.
+covert_cultivate_ai_net_done = 75
 # Secure loose material (nuclear_crisis_design.md §0.10 step 5): the monthly
 # chance, in percent, of finding one of the target line's missing warheads,
 # times covert_op_effect_mult (1 established, 2 fully operational, x1.35 /

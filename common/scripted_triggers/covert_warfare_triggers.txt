@@ -463,3 +463,52 @@ covert_ai_target_worth_the_upkeep = {
 		covert_ai_has_money_to_burn = yes
 	}
 }
+
+# ============================================================================
+# AI: CALLING AN OPERATION OFF
+# ============================================================================
+# An operation does nothing for its first six months and reaches full strength
+# at twelve, while its upkeep runs from the first month, so an AI that ends
+# one early has paid for nothing. Every covert action's will_break is written
+# out (none is left to the engine's default) and, where the AI may call the
+# operation off at all, waits for covert_ai_op_settled first. After that it
+# ends only once the operation's reason has gone, judged more loosely than
+# will_propose judges it at launch (covert_ai_hostility_gone), so a target
+# drifting in and out of the launch test does not make the AI stop and start.
+# The launch-only tests (free slot, intelligence capacity, target size, debt)
+# are never break reasons.
+
+# True when our $TYPE$ operation against $TARGET$ is fully operational
+# (covert_op_is_fully_operational: twelve months, less the network's head
+# start). A pact whose container is missing (made since the last monthly sync)
+# reads as not settled, so it is kept.
+# Parameters: $TYPE$ = short type name (election_interference, ...),
+#             $TARGET$ = country (a scope: reference)
+# Scope: country (the operator)
+covert_ai_op_settled = {
+	has_variable_list = iw_ops
+	any_in_list = {
+		variable = iw_ops
+		has_tag = iw_op_$TYPE$
+		var:iw_target ?= $TARGET$
+		covert_op_is_fully_operational = yes
+	}
+}
+
+# True when nothing hostile is left between us and $TARGET$: no rivalry either
+# way, no antagonistic, belligerent or domineering attitude, and relations
+# above poor. The launch test needs only our rivalry or an antagonistic or
+# domineering attitude, so an operation outlasts the reason it was launched
+# for while any of the rest holds.
+# Parameters: $TARGET$ = country (a scope: reference)
+# Scope: country (the operator, ROOT in a diplomatic action's ai block)
+covert_ai_hostility_gone = {
+	NOR = {
+		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+		$TARGET$ = { has_diplomatic_pact = { who = root type = rivalry } }
+		has_attitude = { who = $TARGET$ attitude = antagonistic }
+		has_attitude = { who = $TARGET$ attitude = belligerent }
+		has_attitude = { who = $TARGET$ attitude = domineering }
+		$TARGET$.relations:root <= relations_threshold:poor
+	}
+}
