@@ -1369,35 +1369,39 @@ onclick = "[GetVariableSystem.Toggle(Concatenate('expanded_', State.GetIDString)
 visible = "[GetVariableSystem.Exists(Concatenate('expanded_', State.GetIDString))]"
 ```
 
-### Typed text into a saved variable (possible, unverified in game)
+### Typed text into script: only through a base-game rename popup (tested in game, 1.14.5)
 
-**The base-game rename boxes can't be reused.** Each one sends its text to an engine object of one type, through a method on that object: `StateNameChangePopup` (a state and its five hubs), `MilitaryFormationChangeNamePopup`, `PowerBlocCustomizationPopup`, `PrestigeGoodChangeNamePopup`, `TreatyDraft`, `ArticleDraft` (`states_panel.gui`, `military_formation_panel.gui`, the power bloc panels, `market_panel.gui`, `treaty_draft_panel.gui`, `right_click_menu.gui`). `PopupManager` opens each popup with its object, and the popup's `Confirm` saves the name.
+**A mod's own editbox can't hand its text to script.** `PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('my_edit') )` reads the box, and a textbox renders the result (`.AccessSelf` after `FindChild` also works; `.Self` does not). But it returns a `CUTF8String`, and in 1.14 nothing turns that into the `CString` that `MakeScopeFlag`, the variable system and the string functions take. A prototype on the Grand Monuments row (2026-10-05, branch `proto/gm-typed-name`) passed the box's text to every candidate; each logged `FetchData failed` every frame and produced nothing:
 
-**A mod's own editbox can feed a saved variable.** Every link in this chain is in the engine's data types (`~/src/Modding-Digests/<version>/docs/data_types_*.txt`, checked in 1.13.11), but the whole chain has never been run in one place:
+| The box's text passed to | Result |
+|---|---|
+| `MakeScopeFlag( … )` inside `AddScope` | `Promote 'AddScope' returned nullptr`; the scripted GUI gets no scope |
+| `StringIsEmpty`, `Concatenate`, `AddTextIf`, `ConcatIfNeitherEmpty`, `Select_CString`, `Localize` | renders blank |
+| `GetVariableSystem.Set( 'x', … )` | stores nothing; a readout of `Get('x')` stays blank |
+| `ontextedited = "[GetVariableSystem.Set('x')]"`, in case the engine supplies the text as it does for `TreatyDraft.OnEditName` | stores nothing |
 
-```
-button = {   # a sibling of editbox = { name = "my_name_edit" maxcharacters = 30 }
-    onclick = "[GetScriptedGui('my_set_name').Execute(GuiScope.SetRoot(State.MakeScope).AddScope('my_name', MakeScopeFlag(PdxGuiEditboxGetText(PdxGuiWidget.AccessParent.FindChild('my_name_edit')))).End)]"
-}
-# my_set_name (scripted GUI): saved_scopes = { my_name }, effect: set_variable = { name = my_name value = scope:my_name }
-# loc: [State.MakeScope.Var('my_name').GetFlagName]
-```
+The box's text doesn't even outlive the panel: it is gone after the journal is closed and reopened, paused or not.
 
-| Link | Function (return type) | Precedent |
+**A base-game rename popup can.** Each one stores the typed name on its own object, and that object's name reads back as a `CString`. A mod GUI can open the popup on any object the player owns: `PopupManager.ShowCompanyChangeName( <company>.Self )` (also `ShowStateChangeName`, `ShowMilitaryFormationChangeName`, `ShowPrestigeGoodChangeName`, `ShowShipChangeName`). The name then goes `MakeScopeFlag( <object>.GetNameNoFormatting )` → `AddScope` → a scripted GUI's `set_variable = { name = x value = scope:x }` → `[….Var('x').GetFlagName]`, all of which works and survives a save and reload. The rename popups take no argument and expose no getter for the text being typed, so the object has to be renamed first and read afterwards. Which object can carry the text, each tried in play:
+
+| Carrier | Reads back | Verdict |
 |---|---|---|
-| Read the box | `PdxGuiEditboxGetText( Arg0 )` (`CUTF8String`); `PdxGuiWidget.AccessParent`, `.FindChild( Arg0 )` | EU5's new-playset button |
-| Text to scope | `MakeScopeFlag( Arg0 )` (`Scope`) | Community Mod Framework (workshop 3385002128), with names from `GetFullName` |
-| Scope to variable | `set_variable = { name = x value = scope:x }` | the same mod's scripted GUIs |
-| Variable to text | `Scope.GetFlagName` (`CString`) | the same mod's loc |
+| A placeholder company (`add_company`, `remove_company`) | `Company.GetNameNoFormatting` | **Works.** Costs a company-limit alert for a moment at each end (`scripting_best_practices.md` § "Player-Typed Names") |
+| A state's name | `State.GetNameNoFormatting` | Reads back, but the rename can't be undone: `reset_state_name` resets only the script name, and clearing the popup's field from the GUI doesn't count as an edit |
+| A state's hubs (city, port, farm, mine, logging town) | `State.Get*HubName` | No: the accessor returns the default hub name, not the player's (seen for the logging town; the others are the same family) |
+| A state the player doesn't own | — | No: the popup's Confirm is refused ("This action is not allowed for …") |
+| An empty army (`create_military_formation`) | `MilitaryFormation.GetNameNoFormatting` | No: formations hold no variables, so the new army can't be told from the old ones, and `Disband` can't be sent through `Var` (below) |
 
-What is unproven, riskiest first:
+The Grand Monuments v2 spec (§3.5) has the company recipe in full.
 
-- **The `CUTF8String` → `MakeScopeFlag` conversion.** No known mod passes a `CUTF8String` into `MakeScopeFlag`. The fallbacks are `.GetString` (return type unregistered) and a round trip through `GetVariableSystem.Set` / `.Get` (`CString`). `StringIsEmpty` raises the same question.
-- **A `"` in the name.** Text saves write `flag="…"`. Whether the writer escapes an embedded quote is unknown, and a mod can't filter characters (only `maxcharacters` works). The base game's state rename has the same exposure, so it can be tested without mod code.
-- **Formatting characters.** `#`, `$` or `[` may be read as formatting when `GetFlagName` renders.
-- **Multiplayer.** `Execute` sends a flag built from client-side text.
+Data-system facts from the same tests:
 
-Script can't write such a flag (`flag:` takes identifiers only). So a typed name can only override names that script assigns; it can't replace them. The test: one editbox and button that write a variable on the capital state, a text row that prints it, then a reload from a normal save and from a debug-mode text save. Then try the quote and the formatting characters, and read `debug.log` and `error.log` for data-binding errors. `GetVariableSystem` alone remains client-side, unsaved and invisible to script.
+- **A global function can't be chained.** `MakeScopeFlag( … ).GetFlagName` fails to load with `Could not find promote for 'MakeScopeFlag'`; only promotes chain. That also rules out `PdxGuiEditboxGetText( … ).GetString`.
+- **A popup opened in the same click as the scripted GUI that creates its object opens on nothing.** The effect lands after the click, so the popup gets no object and its Confirm is refused. Open it from a `state = { name = _show on_start = "[PopupManager.Show…]" }` on a container that becomes visible once the object exists; `_show` fires on an inner container as well as on a window.
+- **A popup's Confirm applies the rename a moment after the click,** so nothing in the same click can read the new name. A watcher reads it: `widget = { size = { 1 1 } state = { trigger_when = "[<the name differs from the one stored at the start>]" on_finish = "[<Execute the scripted GUI>]" } }` (the Community Mod Framework's pattern, `com_hidden_trigger.gui`). It works in a `datamodel` row. A watcher can fire again before its command has landed, so the scripted GUI must ignore a repeat.
+- **`Execute` of a command on an object reached through `Var` doesn't load:** `Invalid promote 'Var'(2) for '….Var('x').GetMilitaryFormation.Disband', requires non const promote`. Opening a popup that way works (`ShowCompanyChangeName( ….Var('x').GetCompany.Self )`).
+- **`PdxClearEditBoxText` doesn't reach the popup:** it doesn't call `ontextedited`, so a Confirm afterwards applies the previous text. (Whether it empties what the box shows was not checked.)
+- **A failing binding on a visible widget logs every frame.** Two of them in one journal-entry row rotated `debug.log` every five seconds, and the startup log went with it. Put diagnostic readouts behind a `GetVariableSystem.Toggle`, keep box reads out of `enabled` and `visible`, and copy the logs right after the test.
 
 ---
 
