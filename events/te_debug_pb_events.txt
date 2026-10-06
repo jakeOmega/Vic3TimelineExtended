@@ -3,9 +3,10 @@
 # `event te_debug_pb.1` (PROBE, te-pb-principle-slots-probe)
 # ============================================================================
 # Answers the engine questions behind principle slots 5-8 before they are
-# built: what the panel does with eight slots, whether a principle is removed
-# when its `possible` or its slot's unlock rule turns false, and which way of
-# removing a principle works. Nothing in the mod fires this event.
+# built: what the panel does with eight slots counted by rank, members and
+# technology, whether a principle is removed when its `possible` turns false,
+# and whether the panel's remove button can remove by key. Nothing in the mod
+# fires this event.
 # ============================================================================
 namespace = te_debug_pb
 
@@ -22,6 +23,18 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 	title = te_debug_pb.1.t
 	desc = te_debug_pb.1.d
 	flavor = te_debug_pb.1.f
+
+	# The option tooltips read var:te_debug_pb_tech_slots every frame; set it
+	# here so they never read a missing variable.
+	immediate = {
+		if = {
+			limit = { NOT = { has_variable = te_debug_pb_tech_slots } }
+			set_variable = {
+				name = te_debug_pb_tech_slots
+				value = 0
+			}
+		}
+	}
 
 	# Form a two-member bloc led by us: below the rank and members slot 3 needs.
 	option = {
@@ -106,18 +119,14 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 		trigger = {
 			NOT = { var:te_debug_pb_tech_slots ?= 4 }
 		}
-		if = {
-			limit = { NOT = { has_variable = te_debug_pb_tech_slots } }
-			set_variable = {
-				name = te_debug_pb_tech_slots
-				value = 0
-			}
-		}
 		change_variable = {
 			name = te_debug_pb_tech_slots
 			add = 1
 		}
-		remove_modifier = te_debug_pb_principle_slots
+		if = {
+			limit = { has_modifier = te_debug_pb_principle_slots }
+			remove_modifier = te_debug_pb_principle_slots
+		}
 		add_modifier = {
 			name = te_debug_pb_principle_slots
 			multiplier = var:te_debug_pb_tech_slots
@@ -135,7 +144,10 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 			name = te_debug_pb_tech_slots
 			add = -1
 		}
-		remove_modifier = te_debug_pb_principle_slots
+		if = {
+			limit = { has_modifier = te_debug_pb_principle_slots }
+			remove_modifier = te_debug_pb_principle_slots
+		}
 		if = {
 			limit = { var:te_debug_pb_tech_slots > 0 }
 			add_modifier = {
@@ -143,24 +155,6 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 				multiplier = var:te_debug_pb_tech_slots
 			}
 		}
-	}
-
-	# Open slot 3 regardless of rank and members.
-	option = {
-		name = te_debug_pb.1.g
-		trigger = {
-			NOT = { has_global_variable = te_debug_pb_slot3_open }
-		}
-		set_global_variable = te_debug_pb_slot3_open
-	}
-
-	# Close slot 3 again (it stays open if rank and members qualify).
-	option = {
-		name = te_debug_pb.1.h
-		trigger = {
-			has_global_variable = te_debug_pb_slot3_open
-		}
-		remove_global_variable = te_debug_pb_slot3_open
 	}
 
 	# Add Construction I (the probe-gated principle) by script.
@@ -188,23 +182,6 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 		}
 		power_bloc = {
 			remove_principle = principle_construction_1
-		}
-	}
-
-	# Remove Construction I through a saved scope, as the panel's button does.
-	option = {
-		name = te_debug_pb.1.k
-		trigger = {
-			is_power_bloc_leader = yes
-			power_bloc = {
-				has_principle = principle:principle_construction_1
-			}
-		}
-		principle:principle_construction_1 = {
-			save_scope_as = te_debug_pb_principle
-		}
-		power_bloc = {
-			remove_principle = scope:te_debug_pb_principle
 		}
 	}
 

@@ -1561,25 +1561,61 @@ types power_bloc_panel_types
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)2' )]"
 							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
 
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)2'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)2'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)2'))))]"
+							}
+
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
 							}
 						}
 
-						# Slot 5: opened by technology (te_pb_tech_principle_slots > 0); the engine has no unlock rule past slot 4
+						# Slot 5: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)4' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)0')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4')))]"
+
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4'))))]"
+							}
 
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
 							}
 						}
 
-						# Slot 7: opened by technology (te_pb_tech_principle_slots > 2); the engine has no unlock rule past slot 4
+						# Slot 7: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)6' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)2')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6')))]"
+
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6'))))]"
+							}
 
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
@@ -1629,18 +1665,54 @@ types power_bloc_panel_types
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)3' )]"
 							visible = "[Or(PowerBlocPrincipleSlot.IsActive, HasDlcFeature('power_bloc_features'))]"
+
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)3'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)3'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)3'))))]"
+							}
 						}
 
-						# Slot 6: opened by technology (te_pb_tech_principle_slots > 1); the engine has no unlock rule past slot 4
+						# Slot 6: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)5' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)1')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5')))]"
+
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5'))))]"
+							}
 						}
 
-						# Slot 8: opened by technology (te_pb_tech_principle_slots > 3); the engine has no unlock rule past slot 4
+						# Slot 8: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)7' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_tech_principle_slots'), '(CFixedPoint)3')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7')))]"
+
+							blockoverride "te_new_slot_visible" {
+								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7'))]"
+							}
+
+							blockoverride "te_unlocked_empty_slot_visible" {
+								visible = "[And(And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive)), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7'))]"
+							}
+
+							blockoverride "te_locked_slot_visible" {
+								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7'))))]"
+							}
 						}
 						
 					}
@@ -3049,26 +3121,6 @@ types power_bloc_panel_types
 			}
 		}
 		
-		# PROBE (te-pb-principle-slots-probe): vanilla's formation slots remove with
-		# PowerBlocFormationPrincipleSlot.RemovePrinciple; try the same on a bloc slot
-		button_icon_round_action = {
-			visible = "[And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsActive)]"
-			size = { 25 25 }
-			position = { 175 -10 }
-			tooltip = "te_debug_pb_native_remove_tt"
-			using = tooltip_above
-			allow_outside = yes
-			onclick = "[PowerBlocPrincipleSlot.RemovePrinciple]"
-
-			blockoverride "icon" {
-				texture = "gfx/interface/buttons/button_icons/close.dds"
-			}
-
-			blockoverride "icon_size" {
-				size = { 100% 100% }
-			}
-		}
-
 		# ACTIVE PRINCIPLE SLOT - MEMBER OR OUTSIDER - NOT INTERACTABLE
 		locked_active_principle_slot = {
 			visible = "[And(Not(PowerBloc.IsLeader(GetPlayer.Self)), PowerBlocPrincipleSlot.IsActive)]"
@@ -3103,18 +3155,27 @@ types power_bloc_panel_types
 		}
 
 		# NEXT PRINCIPLE SLOT
+		# PROBE (te-pb-principle-slots-probe): the three empty-slot visibilities are blocks so
+		# slots 3-8 can add "within the bloc's slot count" (te_pb_bloc_principle_slot_cap):
+		# an occupied slot never locks, so a slot above the count can be open and empty
 		new_principle_slot = {
-			visible = "[And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked)]"
+			block "te_new_slot_visible" {
+				visible = "[And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked)]"
+			}
 		}
 
 		# UNLOCKED EMPTY PRINCIPLE SLOT
 		unlocked_new_principle_slot = {
-			visible = "[And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive))]"
+			block "te_unlocked_empty_slot_visible" {
+				visible = "[And(And(Or(Not(PowerBlocPrincipleSlot.IsNext), Not(PowerBloc.IsLeader(GetPlayer.Self))), PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive))]"
+			}
 		}
 
 		# LOCKED PRINCIPLE SLOT
 		locked_principle_slot = {
-			visible = "[And(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive))]"
+			block "te_locked_slot_visible" {
+				visible = "[And(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive))]"
+			}
 		}
 	}
 
