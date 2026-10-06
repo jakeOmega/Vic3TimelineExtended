@@ -1,14 +1,11 @@
-﻿# Power bloc principle slots (PROBE, te-pb-principle-slots-probe).
+﻿# Power bloc principle slots.
 
-# The remove button on an occupied principle slot (gui/power_bloc_panel.gui,
-# active_principle_slot). The GUI passes the slot's principle as
-# scope:te_principle (PowerBlocPrinciple.MakeScope). remove_principle takes
-# only a literal principle key (round 1: a scope fails PostValidate and logs
-# "Power bloc principle provided is invalid"), so the effect compares the scope
-# with each principle and removes by key. PROBE round 2: only the twelve
-# principles `event te_debug_pb.1` and a new trade league can place; the
-# debug_log lines say whether the scope arrived and whether it matched.
-# is_valid does not test the scope (gui gotcha #22), so a click always runs.
+# The remove button on the leader's occupied principle slots
+# (gui/power_bloc_panel.gui, active_principle_slot). The panel passes the slot's
+# principle as scope:te_principle (PowerBlocPrinciple.MakeScope), and
+# te_pb_remove_principle_in_scope (generated) removes it by key, since
+# remove_principle takes no scope. is_valid does not test the scope (gui gotcha
+# #22): a principle that matches nothing is left alone.
 te_pb_remove_principle_sgui = {
 	scope = country
 	saved_scopes = { te_principle }
@@ -22,77 +19,8 @@ te_pb_remove_principle_sgui = {
 	}
 
 	effect = {
-		if = {
-			limit = { exists = scope:te_principle }
-			debug_log = "TE_PB_PROBE remove: scope:te_principle arrived"
-		}
-		else = {
-			debug_log = "TE_PB_PROBE remove: scope:te_principle missing"
-		}
 		power_bloc = {
-			if = {
-				limit = { scope:te_principle ?= principle:principle_transport_1 }
-				remove_principle = principle_transport_1
-				debug_log = "TE_PB_PROBE remove: matched principle_transport_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_external_trade_1 }
-				remove_principle = principle_external_trade_1
-				debug_log = "TE_PB_PROBE remove: matched principle_external_trade_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_food_standardization_1 }
-				remove_principle = principle_food_standardization_1
-				debug_log = "TE_PB_PROBE remove: matched principle_food_standardization_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_police_coordination_1 }
-				remove_principle = principle_police_coordination_1
-				debug_log = "TE_PB_PROBE remove: matched principle_police_coordination_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_military_industry_1 }
-				remove_principle = principle_military_industry_1
-				debug_log = "TE_PB_PROBE remove: matched principle_military_industry_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_companies_1 }
-				remove_principle = principle_companies_1
-				debug_log = "TE_PB_PROBE remove: matched principle_companies_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_navy_1 }
-				remove_principle = principle_navy_1
-				debug_log = "TE_PB_PROBE remove: matched principle_navy_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_defensive_cooperation_1 }
-				remove_principle = principle_defensive_cooperation_1
-				debug_log = "TE_PB_PROBE remove: matched principle_defensive_cooperation_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_freedom_of_movement_1 }
-				remove_principle = principle_freedom_of_movement_1
-				debug_log = "TE_PB_PROBE remove: matched principle_freedom_of_movement_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_creative_legislature_1 }
-				remove_principle = principle_creative_legislature_1
-				debug_log = "TE_PB_PROBE remove: matched principle_creative_legislature_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_construction_1 }
-				remove_principle = principle_construction_1
-				debug_log = "TE_PB_PROBE remove: matched principle_construction_1"
-			}
-			else_if = {
-				limit = { scope:te_principle ?= principle:principle_internal_trade_1 }
-				remove_principle = principle_internal_trade_1
-				debug_log = "TE_PB_PROBE remove: matched principle_internal_trade_1"
-			}
-			else = {
-				debug_log = "TE_PB_PROBE remove: scope matched none of the twelve principles"
-			}
+			te_pb_remove_principle_in_scope = yes
 		}
 	}
 }

@@ -195,6 +195,12 @@ def scan_text(text: str, rel_path: str, sources: dict | None = None) -> dict:
     return sources
 
 
+# gen_pb_principle_slots.py's INJECTs add only `possible` (the AI's principle slot
+# limit) to vanilla principles, so a principle they cover is still untouched
+# vanilla for this audit; counting them would judge every vanilla tier pair.
+NOT_A_TOUCH = frozenset({"te_principle_slot_gates_generated.txt"})
+
+
 def scan_sources(mod_path: str) -> dict:
     sources: dict = {}
     root_dir = os.path.join(mod_path, PRINCIPLES_DIR)
@@ -202,7 +208,7 @@ def scan_sources(mod_path: str) -> dict:
         return sources
     for root, _dirs, files in os.walk(root_dir):
         for fname in sorted(files):
-            if not fname.endswith(".txt"):
+            if not fname.endswith(".txt") or fname in NOT_A_TOUCH:
                 continue
             abs_p = os.path.join(root, fname)
             rel_p = os.path.relpath(abs_p, mod_path).replace(os.sep, "/")

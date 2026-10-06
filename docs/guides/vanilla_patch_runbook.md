@@ -152,6 +152,7 @@ python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions
 python3 scripts/generators/gen_region_area.py         # common/scripted_effects/te_region_area_generated.txt (bump VERSION if the map changed)
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
 python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
+python3 scripts/generators/gen_pb_principle_slots.py # power bloc principle slot limit INJECTs + the remove dispatch (stops on a vanilla principle that gains its own `possible`)
 ```
 
 **Run `fold_vanilla_loc_accessors.py --dry-run` first, and look each new accessor up in vanilla loc before folding.** The generator folds every flagged accessor as `"value"`, which is right for a terminal atom and wrong for a *type-changing* one — and folding the latter still makes the flag go away, by making the audit stop checking the rest of the chain. That is a silent loss of engine-surface knowledge, not a fix. 1.14.3's `State.GetStateInfamyPerspective` is the worked example: it returns a **country** (`"[State.GetStateInfamyPerspective.GetNameNoFormatting] already owns [State.GetName]"`), so it goes into `_BUILTIN_ACCESSORS_BY_TYPE` by hand *before* the fold. The tell is a flagged chain with another step after the flagged accessor.
@@ -247,6 +248,8 @@ grep -n 'autonomy_level\|^subject_type' "$BG/common/subject_types/"*.txt
 ```
 
 The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). All three cancels rest on INJECT blocks summing with vanilla's, which is confirmed in game for every shape the mod uses (ranks and techs 2026-09-19, laws and flat keys 2026-09-20); see `scripting_best_practices.md` § INJECT.
+
+**Power bloc principle slots copy two vanilla texts whole.** `common/scripted_rules/00_scripted_rules.txt` is a full copy of vanilla's file (`scripted_rules` is not an `INJECT`/`REPLACE` type), with slot rules 3 and 4 rewritten and marked `# TE:`; `REPLACE:principle_freedom_of_movement_1` in `extra_power_bloc_principles.txt` is vanilla's principle plus one line. When a patch touches either (`git diff vanilla_parsed/common/principles.json`, the digest's file list for `00_scripted_rules.txt`), re-copy it and re-apply the mod's lines, then re-run `gen_pb_principle_slots.py`. A new vanilla principle needs nothing by hand: the generator gives it the limit, and `test_pb_principle_slots.py` fails until it has.
 
 ## 7. Special-case: combat units / ship types
 

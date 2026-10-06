@@ -275,6 +275,23 @@ base-game group. A bloc can hold five mandates instead of three.
 Each tier's effects are the complete list for that tier: tier V replaces tier IV
 rather than adding to it. Compare tiers by their tooltips, not by summing them.
 
+### Principle slots
+
+A bloc can hold up to eight principles instead of four. As in the base game it
+starts with two slots, gains a third at rank 5 or better with five members and a
+fourth at rank 3 or better with ten. On top of those, each of four technologies
+the leader has researched adds a slot: Intergovernmental Organizations (era 6),
+Containerization (era 8), Globalization (era 9) and Universal Digital Identity
+(era 11). The slots are counted, not tied to positions, so a small bloc whose
+leader has two of the technologies fills its third and fourth slots with them.
+The panel shows only the slots the bloc has; hover a locked one to see the count.
+
+A filled slot stays filled if the count drops, when the bloc loses rank or a
+leader without the technologies takes over, but the bloc can't add a principle
+until it is back under its count. Upgrading a principle, or changing a slot to
+another principle, never needs a free slot. The leader can remove a principle
+with the cross on its slot. AI leaders keep to the same count.
+
 ### The Diplomatic Framework identity
 
 Diplomatic Framework is a bloc built on collective security rather than control.

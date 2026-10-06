@@ -3088,14 +3088,14 @@ types power_bloc_panel_types
 			visible = "[And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsActive)]"
 			datacontext = "[PowerBlocPrincipleSlot.GetPrinciple]" # needed by principle_icon
 
-			# PROBE (te-pb-principle-slots-probe): remove through a scripted GUI, passing the
-			# principle with PowerBlocPrinciple.MakeScope (unused in vanilla)
+			# Remove button: te_pb_remove_principle_sgui removes the principle by key
+			# (remove_principle takes no scope; PowerBlocPrincipleSlot has no RemovePrinciple)
 			blockoverride "remove_button_visibility" {
 				visible = yes
 			}
 
 			blockoverride "remove_button_properties" {
-				tooltip = "te_debug_pb_sgui_remove_tt"
+				tooltip = "te_pb_remove_principle_tt"
 				onclick = "[GetScriptedGui('te_pb_remove_principle_sgui').Execute(GuiScope.SetRoot(PowerBloc.GetLeader.MakeScope).AddScope('te_principle', PowerBlocPrinciple.MakeScope).End)]"
 			}
 
@@ -3155,9 +3155,9 @@ types power_bloc_panel_types
 		}
 
 		# NEXT PRINCIPLE SLOT
-		# PROBE (te-pb-principle-slots-probe): the three empty-slot visibilities are blocks so
-		# slots 3-8 can add "within the bloc's slot count" (te_pb_bloc_principle_slot_cap):
-		# an occupied slot never locks, so a slot above the count can be open and empty
+		# The three empty-slot visibilities are blocks so slots 3-8 can add "within the
+		# bloc's slot count" (te_pb_bloc_principle_slot_cap): an occupied slot never
+		# locks, so a slot above the count can be open and empty
 		new_principle_slot = {
 			block "te_new_slot_visible" {
 				visible = "[And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked)]"

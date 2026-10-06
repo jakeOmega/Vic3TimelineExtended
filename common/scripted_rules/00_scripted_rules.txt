@@ -1,6 +1,6 @@
 ﻿# Full-file override of vanilla common/scripted_rules/00_scripted_rules.txt (1.14.5).
 # scripted_rules is not an INJECT/REPLACE type, so the mod replaces the whole file;
-# re-copy it on every vanilla patch that touches it and re-apply the edits marked PROBE.
+# re-copy it on every vanilla patch that touches it and re-apply the edits marked TE.
 
 # Root = War
 # scope:target_country = target of violate sovereignty
@@ -169,10 +169,10 @@ unlock_power_bloc_principle_slot_2 = {
 }
 
 # If you ever change these conditions, remember to update the loc-key: TOOLTIP_LOCKED_PRINCIPLE_SLOT_3_DURING_FORMATION
-# PROBE (te-pb-principle-slots-probe): slots 3 and 4 open on the bloc's slot count
-# (te_pb_principle_slot_cap: vanilla's rank and member conditions plus the leader's
-# slot technologies). The engine applies slot 4's rule to slots 5-8 as well. The
-# used_principle_slots clause is vanilla's: an occupied slot never locks.
+# TE: slots 3 and 4 open on the bloc's slot count (te_pb_principle_slot_cap:
+# vanilla's rank and member conditions plus the leader's slot technologies). The
+# engine applies slot 4's rule to slots 5-8 as well. The used_principle_slots
+# clause is vanilla's: an occupied slot never locks.
 unlock_power_bloc_principle_slot_3 = {
 	hidden_trigger = {
 		has_dlc_feature = power_bloc_features
@@ -189,8 +189,8 @@ unlock_power_bloc_principle_slot_3 = {
 }
 
 # If you ever change these conditions, remember to update the loc-key: TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION
-# PROBE (te-pb-principle-slots-probe): as slot 3; also opens slots 5-8 for the engine,
-# and the panel shows those only up to te_pb_principle_slot_cap.
+# TE: as slot 3; also opens slots 5-8 for the engine, and the panel shows those
+# only up to te_pb_principle_slot_cap.
 unlock_power_bloc_principle_slot_4 = {
 	hidden_trigger = {
 		has_dlc_feature = power_bloc_features

@@ -316,7 +316,7 @@
  country_subjugation_trade_strength_add:0 "Subjugation Strength (Trade)"
  country_subjugation_trade_strength_add_desc:0 "Bonus to your [concept_subjugation_strength] when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5)."
  country_te_pb_principle_slots_add:0 "Extra [concept_power_bloc_principle] Slots"
- country_te_pb_principle_slots_add_desc:0 "Opens this many of [concept_power_bloc_principle] slots 5 to 8 while this country leads a [concept_power_bloc]."
+ country_te_pb_principle_slots_add_desc:0 "Adds this many [concept_power_bloc_principle] slots to a [concept_power_bloc] this country leads, up to #v 8#! in all"
  country_un_authority_target_add:0 "UN Authority Target"
  country_un_authority_target_add_desc:0 "Added to the target that [concept_un_authority] moves toward, multiplied by this country's weight in world affairs: its share of world [concept_prestige] against a typical [concept_great_power]'s (×1), up to ×5. A superpower counts several times over and a micro-state hardly at all. It counts in full, for or against, while this country is a UN member that is not undermining the organisation. Outside the UN, or while undermining it, only a negative total counts: good policies then offset this country's bad ones and add nothing more. Summed over every country and held to −25 to +25 from all sources together, as the Policy line of the target. A negative value pulls authority down."
  country_un_lobbying_fund_recipients_mult:0 "UN Lobbying Effectiveness with Aid Recipients"

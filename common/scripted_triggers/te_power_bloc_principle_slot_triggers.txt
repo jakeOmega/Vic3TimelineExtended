@@ -1,0 +1,39 @@
+﻿# Power bloc principle slots 5-8.
+#
+# A bloc has te_pb_principle_slot_cap principle slots (script value, power bloc
+# scope): 2, plus vanilla's rank and member slots, plus one per slot technology
+# of the leader. Slot rules 3 and 4 (common/scripted_rules/00_scripted_rules.txt)
+# compare it, but the engine reads no rule past slot 4 and opens slots 5-8 with
+# slot 4's, so nothing in the engine stops a bloc with a count of 5 filling 8.
+#
+# The player is held to the count by the panel (gui/power_bloc_panel.gui shows
+# the add button only on slots within it), which leaves swapping a principle
+# free at the count. The AI is held by this trigger, which every principle's
+# `possible` calls. The split on is_ai is how the engine forces one shared count
+# on both, not a rule that treats them differently (owner ruling 2026-10-06:
+# the panel limits the player, `possible` the AI, which never swaps).
+#
+# ROOT is the bloc leader choosing a principle. True when:
+# - the leader is a player (the panel limits them), or
+# - there is no bloc yet (formation: INITIAL_PRINCIPLE_LEVELS limits it), or
+# - the bloc already holds a principle of this group (an upgrade or a change
+#   within the group takes no new slot; a tier II can be picked directly), or
+# - the bloc uses fewer slots than its count.
+# A held principle stays when its `possible` turns false (in game 2026-10-06),
+# so a count that drops never takes a principle away.
+#
+# GROUP: the principle's group key, e.g. principle_group_construction.
+te_pb_principle_slot_free = {
+	hidden_trigger = {
+		OR = {
+			is_ai = no
+			is_in_power_bloc = no
+			power_bloc = {
+				OR = {
+					has_principle_group = principle_group:$GROUP$
+					used_principle_slots < te_pb_principle_slot_cap
+				}
+			}
+		}
+	}
+}

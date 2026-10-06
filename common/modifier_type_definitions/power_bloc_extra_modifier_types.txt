@@ -205,10 +205,9 @@ power_bloc_reserve_currency_bool = {
 	script_only = yes
 }
 
-# Power bloc principle slots 5-8 (PROBE, te-pb-principle-slots-probe). A leader's
-# extra principle slots beyond vanilla's four; te_pb_tech_principle_slots reads it
-# and gui/power_bloc_panel.gui shows slots 5-8 up to that count. The engine has no
-# unlock rule for slots past the fourth, so nothing else enforces it.
+# Principle slots from technology: four technologies carry +1 each, and a bloc
+# whose leader has them gets one more principle slot per point
+# (te_pb_principle_slot_cap in te_power_bloc_principle_slot_values.txt).
 country_te_pb_principle_slots_add = {
 	color = good
 	percent = no

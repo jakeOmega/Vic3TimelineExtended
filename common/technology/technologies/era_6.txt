@@ -770,6 +770,7 @@ intergovernmental_organizations = {
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 2
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_igo_pb_principles_bool = yes
+		country_te_pb_principle_slots_add = 1
 		country_can_join_united_nations_bool = yes
 	}
 

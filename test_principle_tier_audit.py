@@ -121,6 +121,22 @@ class PrincipleTierAuditTest(unittest.TestCase):
         self.assertEqual(result.pairs_vanilla_only, 1)
         self.assertEqual(result.pairs_checked, 0)
 
+    def test_slot_limit_inject_does_not_make_a_vanilla_pair_judged(self):
+        tree = _Tree(
+            vanilla_groups=_group("principle_group_v", "pv_1", "pv_2"),
+            vanilla_principles=(
+                _principle("pv_1", "power_bloc_modifier = { power_bloc_trade_advantage_add = 100 }")
+                + _principle("pv_2", "power_bloc_modifier = { power_bloc_customs_union_bool = yes }")
+            ),
+        )
+        self.addCleanup(tree.cleanup)
+        gates = os.path.join(tree.root, "common", "power_bloc_principles", "te_principle_slot_gates_generated.txt")
+        with open(gates, "w", encoding="utf-8") as fh:
+            fh.write("INJECT:pv_2 = {\n    possible = { te_pb_principle_slot_free = { GROUP = principle_group_v } }\n}\n")
+        result = tree.run()
+        self.assertEqual(result.flags, [])
+        self.assertEqual(result.pairs_vanilla_only, 1)
+
     def test_vanilla_tier_to_mod_tier_is_judged(self):
         result = self._run(
             vanilla_groups=_group("principle_group_v", "pv_1", "pv_2"),
