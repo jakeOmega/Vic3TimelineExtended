@@ -124,8 +124,9 @@ st_res_reset_good_vars_effect = {
 }
 
 # --------------------------------------------------------------------------
-# st_res_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
-# a rebuilt hub starts from a clean slate rather than inheriting stale data.
+# st_res_reset_vars_effect — Zero all live SR vars. Called when a foreign power
+# captures the country's last hub (st_res_on_state_owner_change), so the stock
+# is lost with the depot and the next hub starts from a clean slate.
 # --------------------------------------------------------------------------
 st_res_reset_vars_effect = {
 	st_res_reset_good_vars_effect = { GOOD = grain }
@@ -512,9 +513,24 @@ st_res_refresh_hub_flow_effect = {
 # st_res_clamp_stockpiles_effect — Clamp stockpile variables to their legal bounds.
 # Mode text is derived on demand in st_res_custom_loc.txt, so no live mode vars are
 # written here.
+#
+# Only while a hub stands. Without one the journal entry waits with its stock
+# (je_strategic_reserve has no invalid), and the capacity counts only the
+# silos, or nothing: a clamp then would destroy the stock it is keeping. The
+# panel's rate and policy buttons stay clickable with no hub and end here.
 # --------------------------------------------------------------------------
 st_res_clamp_stockpiles_effect = {
 	st_res_init_effect = yes
+	if = {
+		limit = {
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+		st_res_clamp_stockpiles_with_hub_effect = yes
+	}
+}
+
+# The clamp itself; call st_res_clamp_stockpiles_effect, which checks the hub.
+st_res_clamp_stockpiles_with_hub_effect = {
 	clamp_variable = { name = st_res_grain_stored min = 0 max = st_res_grain_capacity }
 	clamp_variable = { name = st_res_ammunition_stored min = 0 max = st_res_ammunition_capacity }
 	clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
@@ -687,10 +703,6 @@ st_res_je_immediate_effect = {
 
 st_res_je_weekly_pulse_effect = {
 	st_res_weekly_update_effect = yes
-}
-
-st_res_je_invalid_effect = {
-	st_res_reset_vars_effect = yes
 }
 
 # --------------------------------------------------------------------------

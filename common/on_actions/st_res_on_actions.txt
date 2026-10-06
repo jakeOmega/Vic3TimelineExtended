@@ -5,15 +5,16 @@
 # (building_strategic_reserve_hub, downsizeable = no). The one way to lose it
 # is to lose its state to another nation: a captured hub is demolished at
 # once, so the conqueror never inherits an empty depot it cannot remove (or a
-# second one beside its own), and the loser's Strategic Reserve journal entry
-# goes invalid (st_res_je_invalid_effect). The same pattern removes
+# second one beside its own), and the loser's stock is lost with it
+# (st_res_reset_vars_effect) unless it holds another hub. Its journal entry
+# stays open and waits for a new hub. The same pattern removes
 # building_space_program (extra_on_actions.txt) and the UN headquarters
 # (un_on_actions.txt) from a state that changes hands.
 #
-# A hand-over between the two sides of a civil war keeps the hub:
-# st_res_hub_stays_within_nation (st_res_triggers.txt) says why and how. A
-# kept hub outside its new owner's capital moves there at the next weekly
-# pulse (st_res_relocate_hub_to_capital_effect, st_res_effects.txt).
+# A hand-over between the two sides of a civil war keeps the hub, and the
+# stock: st_res_hub_stays_within_nation (st_res_triggers.txt) says why and
+# how. A kept hub outside its new owner's capital moves there at the next
+# weekly pulse (st_res_relocate_hub_to_capital_effect, st_res_effects.txt).
 # ============================================================================
 
 on_state_owner_change = {
@@ -40,6 +41,22 @@ st_res_on_state_owner_change = {
 				remove_variable = st_res_hub_holder
 			}
 			debug_log = "TE_ST_RES: a captured Strategic Reserve Hub was demolished"
+			# The stock goes with the depot. The state has already left the
+			# holder, so its own scope buildings no longer include this hub;
+			# one it still holds elsewhere (a hub that has not finished moving
+			# to the capital) keeps the reserve. A hub with no stamp, less
+			# than a week old, has no known holder and costs nothing.
+			scope:st_res_capture_holder ?= {
+				if = {
+					limit = {
+						NOT = {
+							any_scope_building = { is_building_type = building_strategic_reserve_hub }
+						}
+					}
+					st_res_reset_vars_effect = yes
+					debug_log = "TE_ST_RES: the hub's holder lost its stock with it"
+				}
+			}
 		}
 		else = {
 			# The hub stays in the nation; restamp it now rather than wait for
