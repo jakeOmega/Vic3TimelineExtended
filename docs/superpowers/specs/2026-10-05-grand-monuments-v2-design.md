@@ -40,7 +40,7 @@ Baseline: `main` at `c906371` (#743 merged).
 | History | **Monuments standing in 1836 are placed at the start.** v1's "History places no Grand Monuments" is reversed |
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
-| Phasing | Numbers → commissions with names → 1836 monuments → policy → trophies → historical commissions (§10) |
+| Phasing | Numbers → commissions with names → policy → 1836 monuments → trophies → historical commissions (§10). The owner swapped the policy ahead of the 1836 monuments on 2026-10-05 |
 
 ## Engine facts this rests on
 
@@ -439,7 +439,7 @@ group and method, the slot modifier, the row's labels and tooltips, and `gm_name
 - A `"`, `#b` or `[` in a name, through the save and through `GetFlagName`.
 - Multiplayer: the rename and the scripted GUIs are commands; the watcher runs on the naming player's client.
 
-## 4. Monuments standing in 1836 (phase 3)
+## 4. Monuments standing in 1836 (phase 4)
 
 Placed in `common/history/extra_history.txt` (or a new `common/history/grand_monuments_history.txt` if the order
 allows), each with its dedication PM, `gm_raised_by` = its owner, `gm_seen`, a landmark skin and the landmark namesake:
@@ -460,7 +460,7 @@ allows), each with its dedication PM, `gm_raised_by` = its owner, `gm_seen`, a l
 - **One per state:** London and Paris each hold one Grand Monument, so Wellington Arch and the July Column are left
   out (London waits for Nelson's Column, §7).
 
-## 5. Monument policy (phase 4)
+## 5. Monument policy (phase 3)
 
 One national policy, set from the journal entry by three buttons (a fourth state, **Standard**, is the default and has
 no effect). A country variable, `gm_policy` (flag), so a civil war's winner keeps it. After a change, no other change for
@@ -623,16 +623,17 @@ Checked in observer runs with the debug event (§9).
 
 ## 10. Phasing
 
-Each phase is its own PR.
+Each phase is its own PR, except phases 1–3, which the owner asked for as one (2026-10-05; plan
+`docs/superpowers/plans/2026-10-05-grand-monuments-v2-phases-1-3.md`).
 
 | Phase | Content | Needs |
 |---|---|---|
 | 1 | §1 numbers | — |
 | 2 | §2 commissions and §3 names (commissions supply names) | 1 |
-| 3 | §4 monuments standing in 1836 | 2 (their names) |
-| 4 | §5 policy | 1 |
+| 3 | §5 policy | 1 |
+| 4 | §4 monuments standing in 1836 | 2 (their names) |
 | 5 | §6 trophies | 2 (names on trophy rows) |
-| 6 | §7 historical commissions | 2, 3 (`LANDMARKS`) |
+| 6 | §7 historical commissions | 2, 4 (`LANDMARKS`) |
 
 ## Out of scope (possible extensions)
 
