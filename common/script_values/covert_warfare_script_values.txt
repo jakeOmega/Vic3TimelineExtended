@@ -124,6 +124,12 @@ covert_op_priority_detect_add = 2
 # Replaces the literal `multiplier = 2` the apply sites used to carry.
 covert_op_phase_full_mult = 2
 
+# Technology theft (2026-10): an espionage operation's monthly progress at base
+# strength, as a share of the stolen technology's era cost. add_technology_progress
+# takes no script value, so scripts/generators/gen_covert_tech_theft.py reads this
+# and writes the literal amounts: re-run it (or /reload) after changing it.
+covert_tech_theft_share = 0.05
+
 # ---- Per-target networks (slice 4) ----
 # An operator's standing presence inside one target country, 0 to
 # covert_net_max. It grows while operations run against the target and
@@ -500,9 +506,9 @@ covert_op_roll_chance = {
 # SECTION 4: ESPIONAGE TECH GAP CHECK
 # ============================================================================
 
-# Retired: the check is the trigger covert_op_target_ahead_in_tech
-# (covert_warfare_triggers.txt), evaluated per operation. The script value it
-# replaced read one saved target, the last in iw_ops.
+# Retired: espionage steals technology instead of checking a lead in technology
+# count (2026-10). The launch check is covert_tech_stealable_production
+# (covert_tech_theft_generated.txt in common/scripted_triggers).
 
 # ============================================================================
 # SECTION 5: DISPLAY VALUES FOR JE TOOLTIPS
@@ -511,6 +517,12 @@ covert_op_roll_chance = {
 intelligence_capacity_display = {
 	value = intelligence_capacity_total
 	round = yes
+}
+
+# The theft share as a whole percent, for tooltips.
+covert_tech_theft_share_percent_display = {
+	value = covert_tech_theft_share
+	multiply = 100
 }
 
 # Our own technology count, printed beside a network's report on its target's
