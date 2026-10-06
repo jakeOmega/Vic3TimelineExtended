@@ -464,39 +464,61 @@ only mate the warheads and answer when they are ready.
 
 ## Nuclear incidents and accidents
 
-Every armed country rolls once a month for something going wrong. The base
-chance is 0.05% a month at Recessed, 0.1% at Routine, 0.4% at Heightened and 1%
-at High Alert. Strain and a dangerous crisis raise it, command reliability moves
-it up or down, and it never passes 3%. Over ten years without a crisis that is
-roughly a 5–10% chance of any incident at Routine, 35–50% at Heightened and 90%
-at High Alert.
+Every armed country rolls once a week for a meaningful incident. The peacetime
+base rates are equivalent to 0.05% a month at Recessed, 0.1% at Routine, 0.4% at
+Heightened and 1% at High Alert, before command reliability, strain and doctrine.
+Flexible First Use raises exposure by 15%, Compellence by 35% and Warfighting by
+60%. These are chances of an incident, not of nuclear use.
+
+Crisis danger adds a separate weekly exposure to that base. At High Alert it
+adds 0.5% at danger 25–49, 5% at 50–74 and 17.5% at 75–100, before the same
+modifiers. Heightened takes six tenths of that addition, Routine one quarter,
+and Recessed one tenth. Meaningful exposure is capped at 35% per country per
+week. Two High Alert countries at danger 75 or higher, with reliability 60,
+no strain and Existential Deterrence, have about a 50% chance of at least one
+meaningful incident over two weekly checks each.
+
+Routine mishaps have their own monthly roll: 0.5% at Recessed, 1% at Routine,
+2% at Heightened and 4% at High Alert. They do not replace a meaningful incident.
 
 | Incident | Can happen when | What it is |
 |---|---|---|
-| A false warning ("Conflicting Indications") | Radar, Heightened or higher, and an armed enemy, rival, crisis opponent or hostile country | An early warning of attack that no second source confirms. Under Launch on Warning, or delegation in a war with the suspected attacker, the chain halts it ("The Order Nobody Passed") or launches; otherwise the government decides |
+| A false warning ("Conflicting Indications") | Radar, Heightened or higher, and a plausible armed opponent | An early warning that no second source confirms. Launch on Warning, or delegation during a war or an Acute crisis, can execute it without another order |
 | The Exercise They Mistook | A crisis at Confrontation or beyond, Heightened or higher | Your opponent reads your exercise as cover for an attack |
-| Silence from the Capital | Delegation or Launch on Warning, not Recessed, in a war or an Acute crisis | A commander cut off from the capital; an officer refuses, or the unit fires |
-| The Cost of Permanent Alert | High Alert for six months, or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state |
-| A Routine Mishap | Always | False alarms, dropped training weapons, storms |
+| Silence from the Capital | Delegation or Launch on Warning, assembled weapons, and war, an Acute crisis or a heightened force facing a plausible attacker | A commander cut off from the capital; another officer refuses, or the unit fires. War or Acute crisis makes this family six times as likely in the incident draw |
+| A Weapons Accident | Any armed posture; six times more weight after six months at High Alert or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state or failed maintenance |
+| A Routine Mishap | Separate monthly roll | Base alarms, dropped training weapons and storms; cannot launch |
 
-Most incidents cost money, readiness, reliability or reputation. A buried
-incident has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10
-legitimacy, −10% authority, −5% prestige).
+Most incidents cost money, readiness, reliability or reputation. Safeguards and
+professional skepticism make launch sequences easier to halt. A buried incident
+has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10 legitimacy,
+−10% authority, −5% prestige).
 
-When the government decides on a false warning, Give the launch order is a
-deliberate strike and is greyed out unless every test for one passes: a war
-with the suspected attacker, a doctrine that permits the strike, no non-use
-pledge with it, Rules of War that allow it and forces at Routine or higher. A
-warning alone never counts as being struck, so under No First Use the order is
-open only against a country that has already struck you. Launch on warning,
-delegated commanders and a commander cut off from the capital fire without any
-of these tests.
+When the government decides on a false warning, Give the launch order still
+requires an existing war and every test for a deliberate strike. Central
+Authorization cannot launch without this decision. Launch on Warning and
+isolated delegated commanders can fire without it, including at peace.
+Automatic Retaliation can misread a bomber crash or silo explosion as an attack
+during war, an Acute crisis or High Alert against a plausible attacker.
+Nothing launches from Recessed.
 
-Any launch needs a war with the country in question. Outside a war, a launch
-nobody halted is recalled at the last moment: +10 infamy, −50 relations with the
-target, more strain and less reliability, and an armed target may answer by
-opening a crisis. Under No First Use, even an unapproved launch in a war breaks
-your pledge.
+### A nuclear exchange before war
+
+A mistaken launch can strike a country you are at peace with. The victim can
+answer with nuclear weapons under any doctrine, including No First Use, while
+that exchange remains open. This permission belongs to the two countries in
+the exchange; it does not open ordinary peacetime strike actions. The normal
+stockpile, disarmament, pledge and assembled-force requirements still apply to
+an ordered response. An unauthorized first use breaches your pledges and pays
+the usual consequences.
+
+After at least seven days without another launch, the next weekly review offers
+both governments "After the Exchange". If both stand down, the exchange ends
+without starting a conventional war. If either refuses, a conventional war
+starts after both have answered. The refusing country initiates it. Another
+launch cancels earlier votes and starts the quiet period again. An old offer
+cannot settle a renewed exchange. A recalled order is now a fallback for an
+invalid launch context, rather than the automatic result of being at peace.
 
 ### The Monopoly Window
 

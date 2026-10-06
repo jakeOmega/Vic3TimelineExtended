@@ -61,7 +61,7 @@ Retaliation against a country that struck us (`nuked_by_country`) is permitted u
 
 Doctrine changes need 24 months' tenure, and authority changes need 12. Readiness moves one step every two weeks toward its target, so going from routine to high alert takes a month. Strain only recovers month by month. Launch authority 2, conditional delegation, needs `radar`. Authority 3, launch on warning, needs `radar` and `ICBMs`. The tooltip for either one warns that an incident can then end in a launch with no player approval.
 
-**Recessed** (readiness 0, since 2026-09-25): warheads stored apart from their delivery systems (India's and Pakistan's posture after 1998). It sits below Routine on the same two-week steps. Nothing launches from it — no strike action, no retaliation option, no crisis strike, no incident launch (`nd_forces_assembled`, readiness 1 or more, gates every path and both dispatch fences). Custody costs half, the incident base is 0.5 ‰, the crisis danger part for our readiness reads −8, and a recessed issuer's threat carries a −10 pressure part (`nd_yp_recessed`). It carries no static modifier (`nd_readiness_mod_on` uses 0 for "none"). A stand-down or concession sets the target to Routine only from above, and the lock lets Routine through, so it holds readiness *at or below* Routine. Struck while recessed, a country can mate its warheads and wait (`nuclear_weapon_events.1` option g, `nd_assemble_for_retaliation`): the week they reach Routine, if it is still at war with the attacker and still armed, `nuclear_weapon_events.24` "Our Forces Are Ready" offers the answer. The AI goes recessed at peace with nothing to deter and nobody to protect (`nd_protects_anyone`: a subject under its umbrella or a treaty beneficiary) when cautious, under No First Use or in default, and mates its warheads the month a war or crisis starts or it gains someone to protect. A country whose readiness reaches Recessed while it protects anyone gets `nuclear_crisis.23` "Our Allies Are Alarmed", whose option applies the cost (`nd_allies_alarmed`): credibility −5, relations −10 with each country it protects, +5 liberty desire for each subject under its umbrella — every time it goes to Recessed; the Recessed button's tooltip says so first. While Recessed, it protects at half weight in a crisis (below).
+**Recessed** (readiness 0, since 2026-09-25): warheads stored apart from their delivery systems (India's and Pakistan's posture after 1998). It sits below Routine on the same two-week steps. Nothing launches from it — no strike action, no retaliation option, no crisis strike, no incident launch (`nd_forces_assembled`, readiness 1 or more, gates every path and both dispatch fences). Custody costs half, the incident base is 0.5 ‰, the crisis danger part for our readiness reads −8, and a recessed issuer's threat carries a −10 pressure part (`nd_yp_recessed`). It carries no static modifier (`nd_readiness_mod_on` uses 0 for "none"). A stand-down or concession sets the target to Routine only from above, and the lock lets Routine through, so it holds readiness *at or below* Routine. Struck while recessed, a country can mate its warheads and wait (`nuclear_weapon_events.1` option g, `nd_assemble_for_retaliation`): the week they reach Routine, if its war or peacetime exchange with the attacker is still open and it is still armed, `nuclear_weapon_events.24` "Our Forces Are Ready" offers the answer. The AI goes recessed at peace with nothing to deter and nobody to protect (`nd_protects_anyone`: a subject under its umbrella or a treaty beneficiary) when cautious, under No First Use or in default, and mates its warheads the month a war or crisis starts or it gains someone to protect. A country whose readiness reaches Recessed while it protects anyone gets `nuclear_crisis.23` "Our Allies Are Alarmed", whose option applies the cost (`nd_allies_alarmed`): credibility −5, relations −10 with each country it protects, +5 liberty desire for each subject under its umbrella — every time it goes to Recessed; the Recessed button's tooltip says so first. While Recessed, it protects at half weight in a crisis (below).
 
 **Automatic Retaliation** (authority 4, since 2026-09-25; the Soviet Perimeter system): needs `radar`, `ICBMs` and `mainframe_computers`. A strategic first strike on us is answered in full — three warheads, fewer if fewer are left, sized from the stock before any flies — in `nuclear_weapon_events.1`'s only option ("The System Answered"). It fires only from `.1`, never when being answered (`.11`), and not twice against the same country within six months (`nd_auto_answers_strike`, `nd_auto_answered_months`), so two systems cannot empty each other's arsenals. Recessed and automatic, the warheads are mated first and `.24` answers by itself. In return, a threat against us is weighed as if our forces were survivable (`nd_yp_answer` −25), early warnings go to the government as under Central Authorization, and Silence from the Capital does not apply. It costs 3 upkeep units; restraint groups dislike it; and a weapons accident can set it off (§0.4).
 
@@ -171,55 +171,123 @@ A public bluff that ends in a climb-down or lapses costs the issuer 5 credibilit
 
 **The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing — unless the second crisis was with the same country, in which case the stale notice applies that newer record under its own text and the newer notice says it was already settled. Nothing is lost or applied twice either way. If the other party no longer exists when the notice is answered (annexed after conceding a war), the notice still applies its record; the lines about the other party (lobbies, interest-group reactions) are skipped.
 
-### 0.4 Incidents (phase 3)
+### 0.4 Incidents and peacetime exchanges (rebalanced 2026-10-05)
 
-Each armed country gets one roll per month, in `nd_monthly_update`, never one per crisis. The chance is `nd_incident_permille`: 0.5 ‰ at Recessed, 1 ‰ at routine, 4 ‰ at heightened and 10 ‰ at high alert, × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × own crisis danger band), capped at 30 ‰. The roll has two stages so that the inner `chance` is a rounded whole number: 1 % × the chance in tenths of a per mille up to 10 ‰, 10 % × whole per mille above (`nd_incident_tenth_permille`, `nd_incident_permille_whole`). The per-mille value itself is fractional at low readiness, and a `random` that truncated fractions would have stopped those incidents. The family is then drawn by weight from those the country qualifies for:
+The weekly country update now performs one **meaningful** incident roll per
+armed country, after the owner's crisis refresh. The monthly update never
+rolls it. Routine mishaps are an independent monthly roll and are absent from
+the meaningful family draw.
 
-| Family | Weight | Eligible when | Inspiration |
-|---|---|---|---|
-| The Unconfirmed Warning (`.1`–`.5`) | 40, +20 in a stage-2 crisis | `radar`, readiness ≥ 2, and some country believed armed is our crisis opponent, enemy, rival, or antagonistic or belligerent toward us | Petrov 1983; Thule moonrise 1960; NORAD training tape 1979; 46-cent chip 1980; Fylingdales test tape 1965; solar storm 1967; Norwegian rocket 1995; Suez 1956; SAC relay failure 1961 |
-| The Exercise They Mistook (`.10`) | 25 | crisis at stage 2 or higher, readiness ≥ 2 | Able Archer 1983 |
-| Silence from the Capital (`.20`) | 30 | authority 2 or 3 (not Automatic Retaliation), forces assembled (not Recessed), and at war or in a crisis at stage 3 | Arkhipov and B-59 1962; the Okinawa order 1962 |
-| The Cost of Permanent Alert (`.30`) | 35 | high alert held six months or more, or strain ≥ 60 | Goldsboro 1961; Palomares 1966; Thule 1968; Damascus 1980; Minot 2007 |
-| A Routine Mishap (`.40`) | 20 | always | Duluth bear and Volk Field 1962; Kincheloe 1973; Mars Bluff 1958 |
+`nd_incident_weekly_permille` starts with the old monthly readiness bases
+(0.5, 1, 4, 10 per mille) divided by 52/12, then adds crisis exposure:
 
-In The Exercise They Mistook, the other side's alert is its own choice: an AI opponent goes to high alert at once, and a player opponent is asked (`.11`). Telling them in advance opens talks on our own record if we issued the crisis; if they did, the invitation goes to them (`.12`) and they decide whether to open talks.
+| Danger | High-alert weekly addition | Heightened | Routine | Recessed |
+|---|---|---|---|---|
+| 0–24 | 0 | 0 | 0 | 0 |
+| 25–49 | 5 per mille | ×0.6 | ×0.25 | ×0.1 |
+| 50–74 | 50 per mille | ×0.6 | ×0.25 | ×0.1 |
+| 75–100 | 175 per mille | ×0.6 | ×0.25 | ×0.1 |
 
-Which branches can launch depends on launch authority:
-- **Central authority, or Automatic Retaliation:** the Unconfirmed Warning goes to the government (`.1`), and nothing launches unless it is explicitly ordered. (Automatic Retaliation waits for detonations, not warnings.)
-- **Launch on warning, or delegated authority in a war:** the outcome is rolled against `nd_hold_chance`, with no veto: reliability, +5 per safeguards level, −15 after punishing a sceptic, −10 under launch on warning, clamped to 20–97. A held launch leads to `.2`. An unheld one goes through `nd_launch_or_intercept`, then `.4` and the inquiry `.3`.
-- **Automatic Retaliation, and an accident at home:** in The Cost of Permanent Alert (`.30`), a bomber break-up (kind 1) or a silo explosion (kind 2) while at war or in a stage-3 crisis reads to the system as an attack (`nd_system_reads_attack`). The same hold roll decides; an unheld launch goes through `nd_launch_or_intercept` at the crisis opponent if armed, else an armed enemy (kind `system`: `nuclear_weapon_events.2` says the system answered an accident). `.30`'s text says which it was (`nd_system_outcome`), and its "keep it out of the papers" option is not offered once the system has launched: a strike, or an order recalled in full view of its target, cannot be classified.
+Multiply the sum by `(1 + strain/100) × (1.5 − reliability/100)` and the doctrine
+multiplier (1 for NFU/Existential, 1.15 Flexible, 1.35 Compellence, 1.6 Warfighting).
+Cap it at 350 per mille per week. Integer two-stage rolls retain small peacetime
+chances; above 100 per mille the roll uses a rounded whole percent.
+`nd_incident_permille` remains a monthly exposure equivalent for the existing
+UI bands, not another probability roll. Routine mishaps independently occur
+with monthly chances 0.5%, 1%, 2%, 4% by readiness.
 
-Every launch goes through the fenced dispatch helpers, `nd_dispatch_strategic_strike` and `nd_dispatch_tactical_strike`. They revalidate the stockpile and the war, consume the weapon once through the existing strike effects, and record the use once in `nd_record_nuclear_use`. That call handles:
-- a breached pledge (credibility −25, infamy +15);
-- a no-first-use breach;
-- the snapped public estimate;
-- closing the crisis with outcome 7;
-- spurring the programmes of proliferating countries;
-- notifying the victim's guarantors.
+**Balance target, not a historical estimate:** two countries at High Alert,
+danger ≥75, no strain, reliability 60, Existential doctrine, two weekly checks
+each: the implemented roll is 16% per country per week, giving
+`1 − 0.84^4 = 50.2%` for any meaningful incident. At danger 50–74 it is 4.7% per
+country per week, or 17.5% across the same four checks. The weekly cap is 35%.
+The [National Archives account of the Cuban crisis](https://www.archives.gov/publications/prologue/2012/fall/cuban-missiles.html)
+describes multiple dangerous events and the role of independent choices; one
+observed crisis cannot identify an exact accident probability.
 
-**Outside a war, the launch branch becomes an intercepted order** (§8.3's boundary). The launch is recalled at the last moment and the suspect sees the preparations (`.5`). The result is infamy +10 and relations −50. A crisis the two are already in turns acute; otherwise an armed victim that is free to may answer with a private warning from `.5` (a crisis with itself as issuer), which the AI does most of the time. Nothing opens a crisis on the victim's behalf. Nothing is struck, because a peacetime strike has no war context for the existing strike effects.
+| Meaningful family | Relative weight | Eligibility |
+|---|---|---|
+| Weapons accident (`.30`) | 5; 35 after prolonged alert/high strain | Any armed country |
+| Unconfirmed warning (`.1`–`.5`) | 40; 60 at crisis stage ≥2 | Radar, readiness ≥2, plausible armed attacker |
+| Exercise misread (`.10`) | 25 | Crisis stage ≥2, readiness ≥2 |
+| Isolated commander (`.20`) | 5; 30 during war/acute crisis | Authority 2/3, assembled weapons, and war, acute crisis or heightened readiness facing a plausible attacker |
 
-The Monopoly Window (`nuclear_incident.50`) is not an incident. It is a separate monthly 8 % check for a country with a compellence or warfighting doctrine that is at war with an enemy that is not armed and has no armed ally in that war, and whose doctrine and pledges permit a strike. It can fire at most once a year. A concealed incident can come out at 3 % a month (`.60`).
+Central and Automatic Retaliation send early warnings to the government.
+Launch on Warning executes standing orders; delegation does so during war or
+an acute crisis. Isolated commanders have residual peacetime exposure.
+Automatic Retaliation can misread a bomber/silo accident during war, acute
+crisis or High Alert against a plausible attacker. Containment remains
+`nd_hold_chance`: reliability +5 per safeguard −15 for punished skepticism −10
+under Launch on Warning, clamped 20–97%. Government orders retain all ordinary
+deliberate-use gates. Permission for accidental use is not a doctrine exemption
+for ordinary strike actions.
 
-**Expected rates.** `scripts/analysis/nuclear_incident_rates.py` works out the model's expectations for one country over ten years of peace. It assumes no crisis, a plausible attacker, `satellite_communications` researched, and incidents that don't feed back into strain. "Launch orders not held" become intercepted orders in peacetime, and strikes only in a war.
+**Peacetime exchange:** `nd_launch_or_intercept` opens reciprocal country records
+before dispatching a peacetime incident strike. The dispatch exception requires
+that exact exchange and an incident launch scope or actual retaliation. Damage,
+stockpile use, defenses, taboo/UN consequences and strike-response events reuse
+the existing paths. `nd_was_struck_by` recognizes the actual striker within
+this pair until settlement. Strategic response effects now identify their real
+launcher when recording `nuked_by_country`; the first striker's saved scope
+cannot substitute for the retaliator. Monthly cleanup preserves a live
+exchange's response permission, and deferred assembly can answer during it.
 
-| Readiness | Safeguards | Authority | Strain / reliability after 10 y | ‰ per month (end) | P(any incident, 10 y) | Warnings | Launch orders not held |
-|---|---|---|---|---|---|---|---|
-| Recessed | 0 | Central | 0 / 60 | 0.5 | 5% | 0.00 | 0.00 |
-| Recessed | 3 | Central | 0 / 96 | 0.3 | 3% | 0.00 | 0.00 |
-| Routine | 0 | Central | 0 / 60 | 0.9 | 10% | 0.00 | 0.00 |
-| Routine | 3 | Central | 0 / 96 | 0.5 | 6% | 0.00 | 0.00 |
-| Heightened | 0 | Central | 40 / 44 | 5.9 | 50% | 0.45 | 0.00 |
-| Heightened | 0 | Launch on warning | 40 / 44 | 5.9 | 50% | 0.45 | 0.29 |
-| Heightened | 3 | Central | 40 / 80 | 3.9 | 36% | 0.30 | 0.00 |
-| Heightened | 3 | Launch on warning | 40 / 80 | 3.9 | 36% | 0.30 | 0.04 |
-| High alert | 0 | Central | 100 / 20 | 26.0 | 95% | 1.23 | 0.00 |
-| High alert | 0 | Launch on warning | 100 / 20 | 26.0 | 95% | 1.23 | 0.97 |
-| High alert | 3 | Central | 100 / 56 | 18.8 | 88% | 0.89 | 0.00 |
-| High alert | 3 | Launch on warning | 100 / 56 | 18.8 | 88% | 0.89 | 0.33 |
+Every salvo resets both countries' seven-day quiet clocks, clears their votes
+and increments a mirrored revision. After seven quiet days the initial
+launcher's weekly update offers `.70` to both parties, including countries whose
+last warhead was used. Each event carries a saved numerical exchange ID and
+revision; every decision revalidates both and the quiet clock. Both must answer
+before resolution: two acceptances close without conventional war, either
+refusal starts it with the refusing country as initiator. Rule-off/orphan cleanup
+removes the record. Peaceful settlement clears the temporary response licence;
+existing wars keep their ordinary wartime licence.
 
-Recessed halves Routine's odds. Routine readiness under central control almost never produces more than a mishap. A decade at high alert under launch on warning with no safeguards expects about one launch order that no one halts. Safeguards cut that to a third. These figures are for a single country; the world-level simulation §13 asks for (1, 2, 8 and 20 powers, clustered crises) has not been run. Automatic Retaliation adds no peacetime launch risk: its one launch branch needs a war or an acute crisis.
+War creation uses the native, documented `create_diplomatic_play` with `war=yes`
+and `initiator`, or `set_war=yes` on an existing bilateral play. The script-only
+`dp_nuclear_exchange` has the non-territorial Humiliation goal. **This native war
+transition needs in-game verification**, including same-effect timing and
+subject/overlord cases. Debug records distinguish `exchange_war_started` from
+`exchange_war_unconfirmed`; the latter must be investigated, not counted as a
+successful war. Peacetime damage is independent of this engine transition.
+
+`nuclear_incident.50` remains a separate monthly 8% Monopoly Window check with
+its 12-month cooldown. Concealment exposure remains 3% monthly (`.60`).
+
+**Offline balance:** run `python3 scripts/analysis/nuclear_incident_rates.py`.
+It evaluates the actual script-value arithmetic and incident-family weights,
+including integer rounding; tuning is not copied into the model. It reports
+crisis benchmarks, fixed-posture peace decades (including unheld launch orders)
+and worlds with 1, 2, 8 and 20 routine nuclear powers. It excludes incident-choice,
+war and diplomatic feedback. High Alert held permanently remains dangerous:
+with safeguards 3 and Launch on Warning, about 0.44 unheld orders over a decade;
+with safeguards 0, about 1.31. These are dispatched orders, not guaranteed hits
+or conventional wars. Routine/central/safeguards 3 yields about 0.05 meaningful
+incidents per country per decade, or 1.07 across twenty such countries.
+
+**Observer balance:** `TE_NUCLEAR:` debug records include date, country, crisis
+ID, exchange ID, openings, weekly crisis danger/pressure, all crisis actions and
+event choices, weekly posture/risk samples, incident family, containment,
+launch/strike results, crisis outcomes and exchange settlement. Country ID
+wrappers enter a saved logger scope explicitly, so lifecycle hooks with a
+Diplomatic Play ROOT still log the right record. No direct variable localization
+accessors or unverified `THIS.ScriptValue` templates are used.
+
+Run `python3 scripts/analysis/nuclear_observer_report.py /path/to/debug.log`
+(or `--json`). The report separates meaningful incidents from routine mishaps,
+counts containment/use/settlement actions, and sums expected incidents across
+observed country-weeks by danger band. A partial log gives partial observation;
+malformed or unresolved numeric templates are counted and excluded, not read
+as zero. Outcome codes remain those in §0.3. Inspect `choice_*` for actual AI
+choices and `exchange_answer_1`/`_2` for accepted/refused stand-downs.
+
+**Console probes:** `event te_debug_deterrence.2` now offers an unheld peacetime launch against a randomly selected other armed country, and a second choice to age a live exchange seven days and open both stand-down offers. These choices are console-only and can damage the test save.
+
+**In-game checks still required:** force an unheld peace warning, verify damage
+and an available NFU response; repeat with Automatic Retaliation; accept both
+stand-downs and confirm no war; refuse on either side and confirm a native war;
+launch during an open offer and verify neither old vote settles the new revision;
+spend the last warhead and confirm both offers still arrive; test a recessed
+victim's deferred answer; inspect readable log IDs from a play back-down.
 
 ### 0.5 Guarantees (phase 4, partial)
 
@@ -249,7 +317,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - There is one crisis per country, stored in country variables rather than script containers (§11). Different pairs run concurrently, but a guarantor with two threatened clients can defend only one at a time.
 - Crisis offers are fixed menus in events and panel buttons, not a free-form offer builder.
 - Plays are settled with `resolve_play_for = <side>`. The engine documents it, but no vanilla script uses it (**verify in game**). Wars end natively after a war-support shock; there is no forced white peace.
-- A peacetime launch branch never strikes (§8.3's own boundary).
+- Since 2026-10-05, an unheld incident order can cause a peacetime strike and bilateral retaliation (§0.4), followed by a stand-down vote. This supersedes §8.3's original wartime-only boundary.
 - The Unconfirmed Warning is always a false alarm; the genuine-warning variant is not built. Nothing in its text says "false alarm" before the inquiry.
 - Exercises exist as an incident (`.10`) and as a crisis act, not as a standing action.
 - Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
@@ -271,9 +339,9 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 6. `on_diplo_play_back_down` closes a play crisis with the right winner, and a play that turns into a war asks the issuer to honour a public ultimatum (`.7`).
 7. A reciprocal stand-down locks both sides' readiness and records the pledge. A strike on a pledge partner is greyed out until the pledge is repudiated.
 8. Doctrine gates: an existential-deterrence country cannot strike in an ordinary war, but a warfighting monopolist can, human or AI.
-9. With the forced odds from `te_debug_deterrence.2`, an incident fires every month. Without them, it fires within a few years at high alert and rarely at routine.
+9. With the forced odds from `te_debug_deterrence.2`, a meaningful incident fires every week. Without them, acute high-alert crises have much higher weekly risk than ordinary peacetime postures; routine mishaps roll separately each month.
 10. Under launch on warning, the Unconfirmed Warning resolves with no option to cancel. Under central authority it launches only if ordered.
-11. Silence from the Capital strikes only in a war; outside a war it produces an intercepted order. The country it was aimed at gets `nuclear_incident.5`, and a crisis opens only if that country picks "warn them privately" (`.5` option c, offered when it is armed, both sides are free and no pledge binds them). A crisis the two were already in turns acute instead.
+11. An unheld peacetime incident order strikes its selected enemy when both countries can open an exchange. Retaliation remains licensed after the last warhead is spent. After seven quiet days, both receive `.70`: two acceptances keep the peace; either refusal starts conventional war after both have answered. Invalid strike contexts still produce an intercepted order (`.5`). Use the force-launch and age-exchange probes in `te_debug_deterrence.2` to check both outcomes, stale offers after another salvo, and native war creation.
 12. `nuclear_guarantee` can be proposed, removes the war-support shadow from the beneficiary, and gives the guarantor the honour-or-abandon event when the beneficiary is threatened.
 13. The leaderboard shows estimates that differ from the true counts, and they change only once a year.
 14. `error.log` stays quiet while a crisis action's confirmation box is open, even though its tooltip re-walks `accept_effect` every frame.
@@ -679,8 +747,8 @@ Native lobby membership/appeasement hooks require a runtime probe. Fallback: cle
 Separate incident frequency from catastrophic outcome probability. High alert produces more incidents; poor command reliability, ambiguous information, acute crises, and delegated authority make an incident harder to contain.
 
 Prototype model, not final balance:
-- One incident budget per country per month, shared across all crises; a weekly crisis update must not multiply the monthly rate by four.
-- Illustrative incident probabilities: routine 0.1%, heightened 0.4%, high alert 1.0% per month before risk modifiers.
+- One meaningful-incident budget per country per week, shared across all crises; no duplicate monthly roll. Routine mishaps have their own monthly budget (§0.4).
+- Peacetime base probabilities: routine 0.1%, heightened 0.4%, high alert 1.0% monthly equivalents before modifiers. Crisis exposure is the separate weekly addition in §0.4.
 - Strain, capability maturity, institutional disruption, and crisis exposure adjust risk within explicit caps.
 - Most incidents end in expense, temporary readiness loss, injury, diplomatic alarm, or scandal.
 - Unauthorized/mistaken use is a conditional terminal branch, requiring eligible weapons, delivery, targets, and prior authority choices or a documented loss-of-control chain.
@@ -714,7 +782,7 @@ Eligibility: conditional delegation, an eligible deployed force abstraction, and
 
 Local command believes a red line has been crossed. Prior safeguards determine whether orders are held, verification attempted, or weapons used. A launch is possible after the player knowingly delegated authority; attribution and responsibility remain with the owning country. The aftermath includes opponent reassessment, command reform, and domestic blame.
 
-Until peacetime launch/war-transition hooks are proven, restrict launch-capable outcomes of this chain to an existing war. Outside war, use an attempted-launch/intercepted-order outcome with material costs and confrontation. This is an implementation boundary, not a claim that unauthorized use is impossible.
+The original proposal restricted launch-capable outcomes to an existing war. §0.4 supersedes that boundary: a peacetime exchange can inflict damage and permit a nuclear response, then both governments choose whether conventional war follows.
 
 ### 8.4 Event chain: The Cost of Permanent Alert
 
@@ -779,7 +847,7 @@ Phase 0 must prove:
 | Can a play/war be persistently identified, including its target and goals? | Current scripts iterate plays and test roles; direct target hopping has restrictions | Verify container references/lifetime; otherwise use a country-pair crisis with one selected dispute and explicit revalidation |
 | Can script pause/reverse a play or remove a demand? | Existing code only adds escalation | Do not depend on it; native settlement observation and nuclear-only stand-down |
 | Can guarantee/treaty terms and native lobby appeasement be changed safely? | Existing articles and vanilla lobby channels | Probe exact scopes; use bounded agreements/IG effects only where honestly labeled |
-| Can a peacetime mistaken launch create the proper war and response context? | Existing launch actions require wartime targets | Gate launch-capable accident branches to war until proven; retain costly peacetime near misses |
+| Can a peacetime mistaken launch create the proper war and response context? | Existing launch actions require wartime targets | Use the pair-scoped peacetime exchange in §0.4; play-test the native war transition after a refused stand-down |
 | Can incoming attacks support a genuine-warning event variant? | Not established by this design | False-alarm family only, without invented incoming attacks |
 | Can doctrine govern every launch entry point? | Strategic/tactical actions and effect helpers already exist | Enumerate events, UI, AI, retaliation, and incident calls; route through one authorization/dispatch layer |
 | Can covert intelligence hide exact stockpiles consistently? | Existing networks plus public ranking widget | Audit all ordinary UI/loc surfaces; use an explicit public-information first phase if hiding is not yet complete |

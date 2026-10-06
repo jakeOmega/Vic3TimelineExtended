@@ -1,0 +1,56 @@
+﻿# Pair-scoped permission for nuclear responses before a conventional war.
+# Both country records must agree. Permission ends on a mutual stand-down,
+# a conventional war or a dead participant. New launches invalidate offers.
+nd_in_peacetime_exchange_with = {
+	has_variable = nd_exchange_id
+	exists = var:nd_exchange_opponent
+	var:nd_exchange_opponent ?= $ENEMY$
+	nd_exchange_pair_intact = yes
+}
+
+nd_exchange_pair_intact = {
+	has_variable = nd_exchange_id
+	has_variable = nd_exchange_revision
+	save_temporary_scope_as = nd_exchange_self
+	var:nd_exchange_opponent ?= {
+		has_variable = nd_exchange_id
+		has_variable = nd_exchange_revision
+		var:nd_exchange_opponent ?= scope:nd_exchange_self
+		var:nd_exchange_id = scope:nd_exchange_self.var:nd_exchange_id
+		var:nd_exchange_revision = scope:nd_exchange_self.var:nd_exchange_revision
+	}
+}
+
+nd_can_open_peacetime_exchange = {
+	exists = $ENEMY$
+	OR = {
+		nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }
+		AND = {
+			NOT = { has_variable = nd_exchange_id }
+			$ENEMY$ = { NOT = { has_variable = nd_exchange_id } }
+		}
+	}
+}
+
+nd_exchange_offer_valid = {
+	has_game_rule = nuclear_weapons_enabled
+	save_temporary_scope_as = nd_exchange_offer_self
+	var:nd_exchange_opponent ?= { NOT = { has_war_with = scope:nd_exchange_offer_self } }
+	has_variable = nd_exchange_id
+	exists = scope:nd_exchange_offer_id
+	exists = scope:nd_exchange_offer_revision
+	var:nd_exchange_id = scope:nd_exchange_offer_id
+	var:nd_exchange_revision = scope:nd_exchange_offer_revision
+	nd_exchange_pair_intact = yes
+	nd_exchange_quiet_days >= 7
+}
+
+nd_peacetime_incident_dispatch = {
+	nd_in_peacetime_exchange_with = { ENEMY = scope:nd_strike_victim }
+	OR = {
+		scope:nd_incident_launch_warning ?= scope:nd_dispatching
+		scope:nd_incident_launch_commander ?= scope:nd_dispatching
+		scope:nd_incident_launch_system ?= scope:nd_dispatching
+		nd_was_struck_by = { ENEMY = scope:nd_strike_victim }
+	}
+}

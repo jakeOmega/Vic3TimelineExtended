@@ -507,6 +507,10 @@ nuclear_industrial_strike = {
 	# Track who nuked the state's owner (for AI retaliation targeting)
 	owner = {
 		if = {
+			limit = { exists = scope:nd_current_strike_launcher }
+			set_variable = { name = nuked_by_country value = scope:nd_current_strike_launcher }
+		}
+		else_if = {
 			limit = { exists = scope:attacking_country }
 			set_variable = { name = nuked_by_country value = scope:attacking_country }
 		}
@@ -525,6 +529,7 @@ nuclear_industrial_strike = {
 }
 
 nuclear_first_strike = { # Scope is target state
+	scope:attacking_country = { save_scope_as = nd_current_strike_launcher }
 	save_scope_as = target_state
 	scope:attacking_country = {
 		custom_tooltip = {
@@ -542,6 +547,7 @@ nuclear_first_strike = { # Scope is target state
 				modifier = nuclear_strike_success_chance
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
+					nd_log_action = { ACTION = strategic_hit }
 
 					# UN: a nuclear first strike is a world moment and a lasting
 					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
@@ -609,6 +615,7 @@ nuclear_first_strike = { # Scope is target state
 
 				custom_tooltip = {
 					text = industrial_nuke_fails_desc
+					nd_log_action = { ACTION = strategic_miss }
 					change_infamy = 5
 					scope:target_state = {
 						owner = { trigger_event = { id = nuclear_weapon_events.3 popup = yes } }
@@ -627,6 +634,7 @@ nuclear_first_strike = { # Scope is target state
 }
 
 nuclear_response_strike = {  # Scope is target state, target/attacking_country reversed as this is a response to first strike
+	scope:target_country = { save_scope_as = nd_current_strike_launcher }
 	save_scope_as = target_state
 	scope:target_country = {
 		custom_tooltip = {
@@ -642,6 +650,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
+					nd_log_action = { ACTION = strategic_hit }
 					# UN: retaliation still erodes the order pillar, less than a
 					# first strike (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
@@ -667,6 +676,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 				modifier = nuclear_strike_fail_chance
 				custom_tooltip = {
 					text = industrial_nuke_fails_desc
+					nd_log_action = { ACTION = strategic_miss }
 					scope:target_state = {
 						owner = { trigger_event = { id = nuclear_weapon_events.13 popup = yes } }
 					}
@@ -678,6 +688,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 }
 
 nuclear_response_response_strike = {  # Scope is target state
+	scope:attacking_country = { save_scope_as = nd_current_strike_launcher }
 	save_scope_as = target_state
 	scope:attacking_country = {
 		custom_tooltip = {
@@ -693,6 +704,7 @@ nuclear_response_response_strike = {  # Scope is target state
 
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
+					nd_log_action = { ACTION = strategic_hit }
 					# UN: retaliation erodes the order pillar (un_authority_effects.txt).
 					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
@@ -717,6 +729,7 @@ nuclear_response_response_strike = {  # Scope is target state
 				modifier = nuclear_strike_fail_chance
 				custom_tooltip = {
 					text = industrial_nuke_fails_desc
+					nd_log_action = { ACTION = strategic_miss }
 					scope:target_state = {
 						owner = { trigger_event = { id = nuclear_weapon_events.3 popup = yes } }
 					}

@@ -337,75 +337,73 @@ nd_own_danger_band = {
 	max = 3
 }
 
-# Monthly incident probability, per mille. One roll per country per month,
-# shared across any crisis (a weekly crisis tick never rolls).
-#   recessed 0.5, routine 1, heightened 4, high alert 10
-#   × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × danger band)
-#   capped at 30 ‰
-# nd_debug_incident_odds (console harness only) forces 1000.
-nd_incident_permille = {
+# Meaningful incident exposure, per mille PER WEEK. Routine mishaps use their
+# own monthly roll and never dilute this pool. Peacetime bases below are monthly
+# equivalents divided by 52/12; the crisis surcharge is already weekly.
+# Benchmark: two high-alert powers, danger >=75, strain 0, reliability 60,
+# Existential doctrine: ~50% chance of an incident across two weekly pulses each.
+nd_incident_base_monthly_permille = {
 	value = 1
-	if = {
-		limit = {
-			has_variable = nd_readiness
-			var:nd_readiness = 2
-		}
-		value = 4
-	}
-	else_if = {
-		limit = {
-			has_variable = nd_readiness
-			var:nd_readiness = 3
-		}
-		value = 10
-	}
-	else_if = {
-		limit = { nd_readiness_recessed = yes }
-		value = 0.5
-	}
+	if = { limit = { nd_readiness_recessed = yes } value = 0.5 }
+	else_if = { limit = { nd_readiness_high_alert = yes } value = 10 }
+	else_if = { limit = { nd_readiness_heightened_or_higher = yes } value = 4 }
+}
+
+nd_incident_crisis_weekly_permille = {
+	value = 0
+	if = { limit = { nd_own_danger_band >= 3 } value = 175 }
+	else_if = { limit = { nd_own_danger_band >= 2 } value = 50 }
+	else_if = { limit = { nd_own_danger_band >= 1 } value = 5 }
+	# Stored warheads cannot be mistaken for an operational launch posture.
+	if = { limit = { nd_readiness_recessed = yes } multiply = 0.1 }
+	else_if = { limit = { nd_readiness_heightened_or_higher = no } multiply = 0.25 }
+	else_if = { limit = { nd_readiness_high_alert = no } multiply = 0.6 }
+}
+
+nd_incident_doctrine_multiplier = {
+	value = 1
+	if = { limit = { nd_doctrine_warfighting = yes } value = 1.6 }
+	else_if = { limit = { nd_doctrine_compellence = yes } value = 1.35 }
+	else_if = { limit = { nd_doctrine_flexible = yes } value = 1.15 }
+}
+
+nd_incident_weekly_permille = {
+	value = nd_incident_base_monthly_permille
+	divide = 4.333333
+	add = nd_incident_crisis_weekly_permille
 	if = {
 		limit = { has_variable = nd_strain }
-		multiply = {
-			value = var:nd_strain
-			divide = 100
-			add = 1
-		}
+		multiply = { value = var:nd_strain divide = 100 add = 1 }
 	}
 	if = {
 		limit = { has_variable = nd_reliability }
-		multiply = {
-			value = 100
-			subtract = var:nd_reliability
-			divide = 100
-			add = 0.5
-		}
+		multiply = { value = 100 subtract = var:nd_reliability divide = 100 add = 0.5 }
 	}
-	multiply = {
-		value = nd_own_danger_band
-		multiply = 0.5
-		add = 1
-	}
-	max = 30
-	if = {
-		limit = { has_variable = nd_debug_incident_odds }
-		value = 1000
-	}
+	multiply = nd_incident_doctrine_multiplier
+	max = 350
+	if = { limit = { has_variable = nd_debug_incident_odds } value = 1000 }
 }
 
-# nd_incident_permille as whole numbers for nd_roll_incident's inner roll,
-# which must not rely on `random` reading a fraction: in tenths of a per mille
-# (for the 1 % branch, up to 10 per mille) and in whole per mille (the 10 %
-# branch, above 10).
-nd_incident_tenth_permille = {
-	value = nd_incident_permille
-	multiply = 10
-	round = yes
+# Retain the display helper's name for old GUI callers. This is a monthly
+# exposure equivalent, not a second roll or an exact cumulative probability.
+nd_incident_permille = {
+	value = nd_incident_weekly_permille
+	multiply = 4.333333
 }
 
-nd_incident_permille_whole = {
-	value = nd_incident_permille
-	round = yes
+# All random chances are whole numbers: 1% x tenths-per-mille up to 10 per
+# mille, 10% x whole-per-mille to 100, and 100% x rounded percentage above it.
+nd_incident_tenth_permille = { value = nd_incident_weekly_permille multiply = 10 round = yes }
+nd_incident_permille_whole = { value = nd_incident_weekly_permille round = yes }
+nd_incident_weekly_percent = { value = nd_incident_weekly_permille divide = 10 round = yes }
+
+nd_routine_mishap_monthly_percent = {
+	value = 1
+	if = { limit = { nd_readiness_recessed = yes } value = 0.5 }
+	else_if = { limit = { nd_readiness_high_alert = yes } value = 4 }
+	else_if = { limit = { nd_readiness_heightened_or_higher = yes } value = 2 }
 }
+nd_routine_mishap_tenth_percent = { value = nd_routine_mishap_monthly_percent multiply = 10 round = yes }
 
 # Chance (percent) that a launch sequence started under delegated authority or
 # launch on warning is halted by someone in the chain — the Petrov or

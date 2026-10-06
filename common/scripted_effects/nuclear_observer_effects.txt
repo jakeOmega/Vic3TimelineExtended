@@ -1,0 +1,21 @@
+﻿# Stable, semicolon-separated observer records. Only confirmed debug_log
+# accessors: THIS country name, game date, ROOT-scoped ScriptValue wrappers.
+# Risk samples run from country pulses (ROOT = that same country). Action
+# records may run under a diplomatic-play ROOT. ID wrappers enter the saved
+# nd_observer_country explicitly; only pulse samples read ROOT posture values.
+nd_log_action = {
+	save_scope_as = nd_observer_country
+	debug_log = "TE_NUCLEAR: type=action; action=$ACTION$; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+}
+nd_log_incident = {
+	save_scope_as = nd_observer_country
+	debug_log = "TE_NUCLEAR: type=incident; family=$FAMILY$; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+}
+nd_log_risk_sample = {
+	save_scope_as = nd_observer_country
+	debug_log = "TE_NUCLEAR: type=risk; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; readiness=[SCOPE.ScriptValue('nd_readiness_or_routine')|0]; doctrine=[SCOPE.ScriptValue('nd_display_doctrine_code')|0]; authority=[SCOPE.ScriptValue('nd_display_authority_code')|0]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; strain=[SCOPE.ScriptValue('nd_display_strain')|1]; reliability=[SCOPE.ScriptValue('nd_display_reliability')|1]; incident_weekly_permille=[SCOPE.ScriptValue('nd_incident_weekly_permille')|2]; halt_percent=[SCOPE.ScriptValue('nd_hold_chance')|1]"
+}
+nd_log_crisis_sample = {
+	save_scope_as = nd_observer_country
+	debug_log = "TE_NUCLEAR: type=crisis_tick; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; opponent=[SCOPE.sCountry('nd_target').GetNameNoFormatting]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; pressure=[SCOPE.ScriptValue('nd_display_yield_pressure')|0]; stage=[SCOPE.ScriptValue('nd_log_crisis_stage')|0]; weeks=[SCOPE.ScriptValue('nd_log_crisis_weeks')|0]; dispute=[SCOPE.ScriptValue('nd_log_crisis_dispute')|0]"
+}

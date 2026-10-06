@@ -79,6 +79,7 @@ nuclear_crisis.1 = {
 	# Concede.
 	option = {
 		name = nuclear_crisis.1.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.1.a }
 		nd_crisis_option = { ACT = yield }
 		ai_chance = {
 			base = 1
@@ -113,6 +114,7 @@ nuclear_crisis.1 = {
 	# Refuse.
 	option = {
 		name = nuclear_crisis.1.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.1.b }
 		default_option = yes
 		nd_crisis_option = { ACT = reject }
 		ai_chance = {
@@ -138,6 +140,7 @@ nuclear_crisis.1 = {
 	# Answer threat with threat. Armed targets only.
 	option = {
 		name = nuclear_crisis.1.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.1.c }
 		trigger = { nd_is_armed = yes }
 		nd_crisis_option = { ACT = counter_threat }
 		ai_chance = {
@@ -167,6 +170,7 @@ nuclear_crisis.1 = {
 	# Open a line and propose that both sides step back.
 	option = {
 		name = nuclear_crisis.1.e
+		nd_log_action = { ACTION = choice_nuclear_crisis.1.e }
 		nd_crisis_option = { ACT = propose_talks }
 		ai_chance = {
 			base = 2
@@ -231,6 +235,7 @@ nuclear_crisis.2 = {
 	# Go public.
 	option = {
 		name = nuclear_crisis.2.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.2.a }
 		trigger = { nd_crisis_is_public = no }
 		nd_crisis_option = { ACT = go_public }
 		ai_chance = {
@@ -256,6 +261,7 @@ nuclear_crisis.2 = {
 	# Hold firm: raise the alert, let them see it.
 	option = {
 		name = nuclear_crisis.2.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.2.b }
 		nd_crisis_option = { ACT = hold }
 		ai_chance = {
 			base = 3
@@ -277,6 +283,7 @@ nuclear_crisis.2 = {
 	# Talk.
 	option = {
 		name = nuclear_crisis.2.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.2.c }
 		default_option = yes
 		nd_crisis_option = { ACT = propose_talks }
 		ai_chance = {
@@ -302,6 +309,7 @@ nuclear_crisis.2 = {
 	# Let it go.
 	option = {
 		name = nuclear_crisis.2.e
+		nd_log_action = { ACTION = choice_nuclear_crisis.2.e }
 		nd_crisis_option = { ACT = back_down }
 		ai_chance = {
 			base = 1
@@ -361,6 +369,7 @@ nuclear_crisis.3 = {
 
 	option = {
 		name = nuclear_crisis.3.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.3.a }
 		default_option = yes
 		nd_crisis_option = { ACT = accept_standdown }
 		ai_chance = {
@@ -392,6 +401,7 @@ nuclear_crisis.3 = {
 
 	option = {
 		name = nuclear_crisis.3.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.3.b }
 		nd_crisis_option = { ACT = refuse_talks }
 		ai_chance = {
 			base = 2
@@ -456,6 +466,7 @@ nuclear_crisis.4 = {
 	# More time.
 	option = {
 		name = nuclear_crisis.4.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.4.a }
 		nd_crisis_option = { ACT = extend }
 		ai_chance = {
 			base = 2
@@ -465,6 +476,7 @@ nuclear_crisis.4 = {
 	# Hold firm.
 	option = {
 		name = nuclear_crisis.4.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.4.b }
 		nd_crisis_option = { ACT = hold }
 		ai_chance = {
 			base = 2
@@ -486,6 +498,7 @@ nuclear_crisis.4 = {
 	# Talk.
 	option = {
 		name = nuclear_crisis.4.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.4.c }
 		default_option = yes
 		nd_crisis_option = { ACT = propose_talks }
 		ai_chance = {
@@ -511,6 +524,7 @@ nuclear_crisis.4 = {
 	# Let it go.
 	option = {
 		name = nuclear_crisis.4.e
+		nd_log_action = { ACTION = choice_nuclear_crisis.4.e }
 		nd_crisis_option = { ACT = back_down }
 		ai_chance = {
 			base = 1
@@ -531,6 +545,7 @@ nuclear_crisis.4 = {
 	# Carry out the threat. At war with them, and doctrine and pledges allow it.
 	option = {
 		name = nuclear_crisis.4.g
+		nd_log_action = { ACTION = choice_nuclear_crisis.4.g }
 		trigger = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
@@ -591,6 +606,7 @@ nuclear_crisis.5 = {
 
 	option = {
 		name = nuclear_crisis.5.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.5.a }
 		nd_crisis_option = { ACT = yield }
 		ai_chance = {
 			base = 0
@@ -620,6 +636,7 @@ nuclear_crisis.5 = {
 
 	option = {
 		name = nuclear_crisis.5.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.5.b }
 		default_option = yes
 		nd_crisis_option = { ACT = stand_firm }
 		ai_chance = {
@@ -640,6 +657,7 @@ nuclear_crisis.5 = {
 
 	option = {
 		name = nuclear_crisis.5.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.5.c }
 		nd_crisis_option = { ACT = propose_talks }
 		ai_chance = {
 			base = 2
@@ -795,6 +813,7 @@ nuclear_crisis.6 = {
 
 	option = {
 		name = nuclear_crisis.6.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.6.a }
 		default_option = yes
 		# Apply this notice's record: the pending record is this pair's, or
 		# the other party no longer exists (annexed after conceding a war), in
@@ -843,6 +862,7 @@ nuclear_crisis.7 = {
 	# Carry out the threat.
 	option = {
 		name = nuclear_crisis.7.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.7.a }
 		trigger = {
 			nd_is_armed = yes
 			nd_forces_assembled = yes
@@ -877,6 +897,7 @@ nuclear_crisis.7 = {
 	# Fight it with conventional forces.
 	option = {
 		name = nuclear_crisis.7.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.7.b }
 		default_option = yes
 		nd_crisis_option = { ACT = fight_conventional }
 		ai_chance = {
@@ -887,6 +908,7 @@ nuclear_crisis.7 = {
 	# Talk, even now.
 	option = {
 		name = nuclear_crisis.7.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.7.c }
 		nd_crisis_option = { ACT = propose_talks }
 		ai_chance = {
 			base = 2
@@ -951,6 +973,7 @@ nuclear_crisis.20 = {
 	# Stand with them.
 	option = {
 		name = nuclear_crisis.20.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.20.a }
 		default_option = yes
 		nd_guarantee_act_honour = yes
 		ai_chance = {
@@ -974,6 +997,7 @@ nuclear_crisis.20 = {
 	# nd_war_law_exception).
 	option = {
 		name = nuclear_crisis.20.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.20.b }
 		trigger = {
 			var:nd_guarantee_context = 2
 			nd_is_armed = yes
@@ -1000,6 +1024,7 @@ nuclear_crisis.20 = {
 	# Walk away.
 	option = {
 		name = nuclear_crisis.20.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.20.c }
 		nd_guarantee_act_abandon = yes
 		ai_chance = {
 			base = 1
@@ -1090,6 +1115,7 @@ nuclear_crisis.21 = {
 
 	option = {
 		name = nuclear_crisis.21.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.21.a }
 		default_option = yes
 	}
 }
@@ -1162,6 +1188,7 @@ nuclear_crisis.23 = {
 
 	option = {
 		name = nuclear_crisis.23.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.23.a }
 		default_option = yes
 		nd_allies_alarmed = yes
 		ai_chance = {
@@ -1201,6 +1228,7 @@ nuclear_crisis.24 = {
 	# Stand by them anyway.
 	option = {
 		name = nuclear_crisis.24.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.24.a }
 		nd_guarantee_act_honour = yes
 		change_infamy = 5
 		ai_chance = {
@@ -1226,6 +1254,7 @@ nuclear_crisis.24 = {
 	# Answer in kind anyway: as .20.b, and the same one-day strike (.22).
 	option = {
 		name = nuclear_crisis.24.b
+		nd_log_action = { ACTION = choice_nuclear_crisis.24.b }
 		trigger = {
 			var:nd_guarantee_context = 2
 			nd_is_armed = yes
@@ -1260,6 +1289,7 @@ nuclear_crisis.24 = {
 	# They started this: it is not ours to answer for.
 	option = {
 		name = nuclear_crisis.24.c
+		nd_log_action = { ACTION = choice_nuclear_crisis.24.c }
 		default_option = yes
 		nd_guarantee_act_decline = yes
 		ai_chance = {
@@ -1314,6 +1344,7 @@ nuclear_crisis.100 = {
 
 	option = {
 		name = nuclear_crisis.100.a
+		nd_log_action = { ACTION = choice_nuclear_crisis.100.a }
 		default_option = yes
 	}
 }

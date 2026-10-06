@@ -1,0 +1,53 @@
+﻿nd_exchange_quiet_days = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_exchange_last_launch }
+		value = game_date
+		subtract = var:nd_exchange_last_launch
+	}
+}
+nd_log_exchange_id = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_observer_country }
+		scope:nd_observer_country = {
+			if = { limit = { has_variable = nd_exchange_id } add = var:nd_exchange_id }
+		}
+	}
+}
+nd_log_crisis_id = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_observer_country }
+		scope:nd_observer_country = {
+			if = { limit = { has_variable = nd_crisis_id } add = var:nd_crisis_id }
+		}
+	}
+}
+
+nd_log_crisis_stage = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_issuer }
+		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_stage } add = var:nd_crisis_stage } }
+	}
+}
+
+nd_log_crisis_weeks = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_issuer }
+		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_weeks } add = var:nd_crisis_weeks } }
+	}
+}
+
+nd_log_crisis_dispute = {
+	value = 0
+	if = {
+		limit = { exists = scope:nd_issuer }
+		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_dispute } add = var:nd_crisis_dispute } }
+	}
+}
+
+# Console-only helper: put the exchange seven days into its quiet period.
+nd_debug_exchange_aged_date = { value = game_date subtract = 7 }

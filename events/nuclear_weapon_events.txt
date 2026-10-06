@@ -2088,7 +2088,10 @@ nuclear_weapon_events.24 = {
 	trigger = {
 		exists = scope:nd_ready_enemy
 		nd_is_armed = yes
-		has_war_with = scope:nd_ready_enemy
+		OR = {
+			has_war_with = scope:nd_ready_enemy
+			nd_in_peacetime_exchange_with = { ENEMY = scope:nd_ready_enemy }
+		}
 	}
 
 	immediate = {

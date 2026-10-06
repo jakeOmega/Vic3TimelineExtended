@@ -207,22 +207,23 @@ nd_readiness_locked = {
 # country we cover? Retaliation is permitted under every doctrine, including
 # no first use.
 nd_was_struck_by = {
-	has_war_with = $ENEMY$
 	OR = {
+		# Outside war, permission is pair-specific and ends with the exchange.
 		AND = {
+			nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }
 			has_variable = nuked_by_country
 			var:nuked_by_country ?= $ENEMY$
 		}
-		any_scope_state = {
+		AND = {
+			has_war_with = $ENEMY$
 			OR = {
-				has_modifier = nuclear_strike_aftermath
-				has_modifier = tactical_nuke_aftermath
+				AND = { has_variable = nuked_by_country var:nuked_by_country ?= $ENEMY$ }
+				any_scope_state = {
+					OR = { has_modifier = nuclear_strike_aftermath has_modifier = tactical_nuke_aftermath }
+				}
+				nd_covered_country_struck_by = { ENEMY = $ENEMY$ }
 			}
 		}
-		# A treaty beneficiary or a subject under our umbrella
-		# (umbrella/recessed/dead-hand spec §1.5): answering a nuclear strike
-		# on a protected country is not first use, under any doctrine.
-		nd_covered_country_struck_by = { ENEMY = $ENEMY$ }
 	}
 }
 
@@ -335,7 +336,13 @@ nd_was_defied_by = {
 # Does our doctrine permit a strike on $ENEMY$ right now? Law gates
 # (humanitarian regulations, limited war) are separate and stay on the actions.
 nd_doctrine_permits_strike = {
-	has_war_with = $ENEMY$
+	OR = {
+		has_war_with = $ENEMY$
+		AND = {
+			nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ }
+			nd_was_struck_by = { ENEMY = $ENEMY$ }
+		}
+	}
 	OR = {
 		# Retaliation: every doctrine.
 		nd_was_struck_by = { ENEMY = $ENEMY$ }
@@ -570,7 +577,8 @@ nd_auto_answers_strike = {
 # nuke_diplo_action puts on every launch, minus the law gates, which yield to
 # retaliation there too: no disarmament settlement or NPT disarmament on us,
 # the doctrine's permission (retaliation qualifies under every doctrine, but
-# only while the war with $ENEMY$ lasts) and no non-use pledge in the way. The
+# while a war or this pair's unsettled peacetime exchange lasts) and no non-use
+# pledge in the way. The
 # caller checks the warheads, which differ per option. One failure line each.
 nd_retaliation_permitted = {
 	custom_tooltip = {
@@ -1368,11 +1376,11 @@ nd_incident_eligible_exercise = {
 
 nd_incident_eligible_commander = {
 	nd_authority_delegated_or_warning = yes
-	# A cut-off commander has nothing to launch from storage.
 	nd_forces_assembled = yes
 	OR = {
 		is_at_war = yes
 		nd_crisis_stage_at_least = { STAGE = 3 }
+		AND = { nd_readiness_heightened_or_higher = yes nd_has_plausible_attacker = yes }
 	}
 }
 

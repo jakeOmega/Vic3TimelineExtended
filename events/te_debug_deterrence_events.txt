@@ -168,7 +168,7 @@ te_debug_deterrence.2 = { # REVIEWED 2026-09-25: console-only test event (`event
 		trigger_event = { id = nuclear_incident.50 popup = yes }
 	}
 
-	# Forced odds: the next monthly roll always fires (nd_incident_permille
+	# Forced odds: the next weekly roll always fires (nd_incident_weekly_permille
 	# reads 1000 and the roll skips its first stage). Pick again to clear.
 	option = {
 		name = te_debug_deterrence.2.i
@@ -180,6 +180,42 @@ te_debug_deterrence.2 = { # REVIEWED 2026-09-25: console-only test event (`event
 			set_variable = { name = nd_debug_incident_odds value = 1 }
 		}
 	}
+	# Explicit console-only probes; no country receives these through gameplay.
+	option = {
+		name = te_debug_deterrence.2.j
+		trigger = {
+			nd_is_armed = yes
+			nd_forces_assembled = yes
+			NOT = { has_variable = nd_exchange_id }
+		}
+		save_scope_as = nd_debug_exchange_actor
+		random_country = {
+			limit = {
+				nd_believed_armed = yes
+				NOT = { this = scope:nd_debug_exchange_actor }
+				NOT = { has_war_with = scope:nd_debug_exchange_actor }
+				NOT = { has_variable = nd_exchange_id }
+				any_scope_state = { always = yes }
+			}
+			save_scope_as = nd_debug_exchange_enemy
+		}
+		if = {
+			limit = { exists = scope:nd_debug_exchange_enemy }
+			nd_launch_or_intercept = { VICTIM = scope:nd_debug_exchange_enemy NARRATE = yes KIND = warning }
+		}
+	}
+	option = {
+		name = te_debug_deterrence.2.k
+		trigger = { nd_exchange_pair_intact = yes }
+		set_variable = { name = nd_exchange_last_launch value = nd_debug_exchange_aged_date }
+		var:nd_exchange_opponent = {
+			set_variable = { name = nd_exchange_last_launch value = nd_debug_exchange_aged_date }
+			save_scope_as = nd_debug_exchange_other
+		}
+		nd_exchange_weekly_update = yes
+		scope:nd_debug_exchange_other = { nd_exchange_weekly_update = yes }
+	}
+
 }
 
 te_debug_deterrence.3 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.3`); never fired by script on purpose
