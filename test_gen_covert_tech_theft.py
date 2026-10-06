@@ -143,5 +143,13 @@ class WiringTest(unittest.TestCase):
             self.assertNotIn("techs_researched > ROOT.techs_researched", block)
 
 
+class RowTest(unittest.TestCase):
+    def test_row_lines_are_complementary(self):
+        gui = (ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui").read_text(encoding="utf-8-sig")
+        espionage = "Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') )"
+        self.assertIn(f"[And( {espionage}, ScriptContainer.HasVariable('iw_stolen_total') )]", gui)
+        self.assertIn(f"[And( {espionage}, Not( ScriptContainer.HasVariable('iw_stolen_total') ) )]", gui)
+
+
 if __name__ == "__main__":
     unittest.main()
