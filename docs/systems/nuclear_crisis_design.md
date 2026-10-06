@@ -171,29 +171,44 @@ A public bluff that ends in a climb-down or lapses costs the issuer 5 credibilit
 
 **The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing — unless the second crisis was with the same country, in which case the stale notice applies that newer record under its own text and the newer notice says it was already settled. Nothing is lost or applied twice either way. If the other party no longer exists when the notice is answered (annexed after conceding a war), the notice still applies its record; the lines about the other party (lobbies, interest-group reactions) are skipped.
 
-### 0.4 Incidents and peacetime exchanges (rebalanced 2026-10-05)
+### 0.4 Incidents and peacetime exchanges (rebalanced 2026-10-05, review fixes 2026-10-06)
 
 The weekly country update now performs one **meaningful** incident roll per
 armed country, after the owner's crisis refresh. The monthly update never
 rolls it. Routine mishaps are an independent monthly roll and are absent from
 the meaningful family draw.
 
-`nd_incident_weekly_permille` starts with the old monthly readiness bases
-(0.5, 1, 4, 10 per mille) divided by 52/12, then adds crisis exposure:
+`nd_incident_weekly_permille` has two parts. The base part is the old monthly
+readiness base (0.5, 1, 4, 10 per mille) divided by 52/12. The crisis part
+(`nd_incident_crisis_weekly_permille`) is:
 
-| Danger | High-alert weekly addition | Heightened | Routine | Recessed |
-|---|---|---|---|---|
-| 0–24 | 0 | 0 | 0 | 0 |
-| 25–49 | 5 per mille | ×0.6 | ×0.25 | ×0.1 |
-| 50–74 | 50 per mille | ×0.6 | ×0.25 | ×0.1 |
-| 75–100 | 175 per mille | ×0.6 | ×0.25 | ×0.1 |
+| Danger | High-alert weekly addition | Heightened | Routine |
+|---|---|---|---|
+| 0–24 | 0 | 0 | 0 |
+| 25–49 | 5 per mille | ×0.6 | ×0.25 |
+| 50–74 | 50 per mille | ×0.6 | ×0.25 |
+| 75–100 | 175 per mille | ×0.6 | ×0.25 |
 
-Multiply the sum by `(1 + strain/100) × (1.5 − reliability/100)` and the doctrine
-multiplier (1 for NFU/Existential, 1.15 Flexible, 1.35 Compellence, 1.6 Warfighting).
-Cap it at 350 per mille per week. Integer two-stage rolls retain small peacetime
+The crisis part is zero unless a misreading family (warning, exercise,
+isolated commander) is eligible (`nd_incident_misreading_eligible`): crisis
+danger drives misreadings, not handling accidents in a depot. Recessed is
+never eligible, and Routine only through an isolated commander (delegated or
+launch-on-warning authority). Both parts are multiplied by
+`nd_incident_rate_multiplier`: `(1 + strain/100) × (1.5 − reliability/100)` and
+the doctrine multiplier (1 for NFU/Existential, 1.15 Flexible, 1.35
+Compellence, 1.6 Warfighting). The sum is capped at 350 per mille per week and
+rolled once. `nd_fire_incident` then picks the part the incident came from in
+proportion (`nd_incident_base_share`, `nd_incident_crisis_share`): the base
+part draws from every eligible family, the crisis part only from the
+misreadings (`nd_fire_incident_family = { CRISIS = yes }` zeroes the weapons
+accident). Integer two-stage rolls retain small peacetime
 chances; above 100 per mille the roll uses a rounded whole percent.
-`nd_incident_permille` remains a monthly exposure equivalent for the existing
-UI bands, not another probability roll. Routine mishaps independently occur
+`nd_incident_permille` remains a monthly exposure equivalent for the UI
+bands, not another probability roll. `nd_refresh_risk_band` projects it weekly
+(before the roll) and on posture changes: under 2 per mille very low, under 5
+low, under 12 elevated, under 100 high, 100 or more extreme (band 4, added
+2026-10-06 so a dangerous crisis does not read like a strained peacetime High
+Alert). Routine mishaps independently occur
 with monthly chances 0.5%, 1%, 2%, 4% by readiness.
 
 **Balance target, not a historical estimate:** two countries at High Alert,
@@ -212,13 +227,22 @@ observed crisis cannot identify an exact accident probability.
 | Exercise misread (`.10`) | 25 | Crisis stage ≥2, readiness ≥2 |
 | Isolated commander (`.20`) | 5; 30 during war/acute crisis | Authority 2/3, assembled weapons, and war, acute crisis or heightened readiness facing a plausible attacker |
 
-Central and Automatic Retaliation send early warnings to the government.
-Launch on Warning executes standing orders; delegation does so during war or
-an acute crisis. Isolated commanders have residual peacetime exposure.
+The weapons accident is drawn only from the base part.
+
+Central, Delegation and Automatic Retaliation send early warnings to the
+government; Launch on Warning executes standing orders, and Delegation does
+so only in a war with the suspect. Delegation means a commander who loses
+contact may fire (`.20`), not that the warning decides; the PR that
+introduced this section had extended it to acute crises and the 2026-10-06
+review reverted that. Isolated commanders have residual peacetime exposure.
 Automatic Retaliation can misread a bomber/silo accident during war, acute
 crisis or High Alert against a plausible attacker. Containment remains
 `nd_hold_chance`: reliability +5 per safeguard −15 for punished skepticism −10
-under Launch on Warning, clamped 20–97%. Government orders retain all ordinary
+under Launch on Warning, then a context term (the Petrov judgement: a warning
+weighed against the moment): +25 at peace with no crisis, +10 at peace in a
+Warning or Confrontation, nothing in an Acute crisis or a war; clamped
+20–97%. `nd_roll_launch_hold` feeds the warning chain, Silence from the
+Capital and `nd_system_reads_attack`, so the term covers all three. Government orders retain all ordinary
 deliberate-use gates. Permission for accidental use is not a doctrine exemption
 for ordinary strike actions.
 
@@ -233,22 +257,50 @@ cannot substitute for the retaliator. Monthly cleanup preserves a live
 exchange's response permission, and deferred assembly can answer during it.
 
 Every salvo resets both countries' seven-day quiet clocks, clears their votes
-and increments a mirrored revision. After seven quiet days the initial
+and increments a mirrored revision; it also counts the launching side's
+salvos (`nd_exchange_salvos`). After seven quiet days the initial
 launcher's weekly update offers `.70` to both parties, including countries whose
 last warhead was used. Each event carries a saved numerical exchange ID and
 revision; every decision revalidates both and the quiet clock. Both must answer
-before resolution: two acceptances close without conventional war, either
-refusal starts it with the refusing country as initiator. Rule-off/orphan cleanup
+before resolution: two acceptances close without conventional war under a
+60-month bidirectional truce; either refusal asks for war with the refusing
+country as initiator (`nd_exchange_request_war`). Rule-off/orphan cleanup
 removes the record. Peaceful settlement clears the temporary response licence;
 existing wars keep their ordinary wartime licence.
+
+**A war that has not begun keeps the exchange open.** If the war is not under
+way when the refusal resolves, both sides get `nd_exchange_war_pending` (1 the
+refuser, 2 the other) and `nd_exchange_war_requested_on`, and the record, with
+the right to answer the strike, stays. The refuser's weekly update asks again
+(`set_war` on the bilateral play if one exists, else a new play) and closes the
+exchange as `exchange_end_war_started` once `has_war_with` holds; either side's
+update closes it as `exchange_end_existing_war` if the war began elsewhere. After
+14 days without a war it closes as `exchange_end_war_failed` and posts
+`nd_exchange_war_failed` to both. A pending war blocks further offers, and a
+salvo during it does not reopen the vote.
+
+**The AI's stand-down.** Accept: base 8, cautious +8, No First Use +4, the
+launcher +4, an enemy army half again ours +4. Refuse: base 1, aggressive +2,
+Warfighting +2, the victim +1, a victim that has not answered (no salvo of its
+own) +2 more, +1 per own state struck (`nd_exchange_states_struck`, up to 5), a
+victim with an army half again the launcher's +2. A neutral launcher accepts
+about 92% of the time; a neutral victim that absorbed three struck states
+without answering about 53%.
+
+**The AI's readiness in an acute crisis** (`nd_ai_review_posture`) is High Alert
+only when its crisis opponent is at Heightened or higher, or its own forces
+are vulnerable (survivability under 50, without Automatic Retaliation);
+otherwise Heightened. A war with an armed enemy still means High Alert. A
+player who stays at Routine is not met with High Alert at the AI's next review.
 
 War creation uses the native, documented `create_diplomatic_play` with `war=yes`
 and `initiator`, or `set_war=yes` on an existing bilateral play. The script-only
 `dp_nuclear_exchange` has the non-territorial Humiliation goal. **This native war
 transition needs in-game verification**, including same-effect timing and
 subject/overlord cases. Debug records distinguish `exchange_war_started` from
-`exchange_war_unconfirmed`; the latter must be investigated, not counted as a
-successful war. Peacetime damage is independent of this engine transition.
+`exchange_war_unconfirmed` (one per attempt) and `exchange_war_pending`; an
+unconfirmed start keeps the exchange open as above rather than leaving the
+strike unanswered. Peacetime damage is independent of this engine transition.
 
 `nuclear_incident.50` remains a separate monthly 8% Monopoly Window check with
 its 12-month cooldown. Concealment exposure remains 3% monthly (`.60`).
@@ -259,18 +311,32 @@ including integer rounding; tuning is not copied into the model. It reports
 crisis benchmarks, fixed-posture peace decades (including unheld launch orders)
 and worlds with 1, 2, 8 and 20 routine nuclear powers. It excludes incident-choice,
 war and diplomatic feedback. High Alert held permanently remains dangerous:
-with safeguards 3 and Launch on Warning, about 0.44 unheld orders over a decade;
-with safeguards 0, about 1.31. These are dispatched orders, not guaranteed hits
+with safeguards 3 and Launch on Warning, about 0.15 unheld orders over a decade;
+with safeguards 0, about 1.03 (0.44 and 1.31 before the peacetime hold-chance
+term). These are dispatched orders, not guaranteed hits
 or conventional wars. Routine/central/safeguards 3 yields about 0.05 meaningful
 incidents per country per decade, or 1.07 across twenty such countries.
 
 **Observer balance:** `TE_NUCLEAR:` debug records include date, country, crisis
 ID, exchange ID, openings, weekly crisis danger/pressure, all crisis actions and
 event choices, weekly posture/risk samples, incident family, containment,
-launch/strike results, crisis outcomes and exchange settlement. Country ID
-wrappers enter a saved logger scope explicitly, so lifecycle hooks with a
-Diplomatic Play ROOT still log the right record. No direct variable localization
-accessors or unverified `THIS.ScriptValue` templates are used.
+launch/strike results, crisis outcomes and exchange settlement. Every record is
+a literal line at its call site (`nd_log_context = yes`, then `debug_log`): a
+`$PARAM$` inside a `debug_log` string logs garbled, so names that depend on a
+parameter are chosen by branching on the variable just set (`nd_log_doctrine_set`,
+`nd_log_crisis_end`, …) or by dispatch (`nd_log_incident_launch_$KIND$`).
+`test_nuclear_incident_risk.TestObserverRecords` fails on a `$` inside a record.
+Country ID wrappers enter a saved logger scope explicitly, so lifecycle hooks
+with a Diplomatic Play ROOT still log the right record; that saved-scope read is
+what `TE_PROBE_LOC 11` (`te_debug_probe_on_actions.txt`) confirms on the next
+launch. No direct variable localization accessors or unverified
+`THIS.ScriptValue` templates are used.
+
+The weekly `type=risk` and `type=crisis_tick` samples write only while the
+global `nd_observer_logging` is set: `te_debug_deterrence.2`'s last option
+toggles it. One line per armed country per week, always on, would cost about
+200 KB of `debug.log` a year and push engine errors out of the files log triage
+reads. Event-driven records stay on.
 
 Run `python3 scripts/analysis/nuclear_observer_report.py /path/to/debug.log`
 (or `--json`). The report separates meaningful incidents from routine mishaps,
@@ -280,11 +346,14 @@ malformed or unresolved numeric templates are counted and excluded, not read
 as zero. Outcome codes remain those in §0.3. Inspect `choice_*` for actual AI
 choices and `exchange_answer_1`/`_2` for accepted/refused stand-downs.
 
-**Console probes:** `event te_debug_deterrence.2` now offers an unheld peacetime launch against a randomly selected other armed country, and a second choice to age a live exchange seven days and open both stand-down offers. These choices are console-only and can damage the test save.
+**Console probes:** `event te_debug_deterrence.2` now offers an unheld peacetime launch against a randomly selected other armed country, a second choice to age a live exchange seven days and open both stand-down offers, and a third that toggles observer sampling. These choices are console-only and the first two can damage the test save.
 
-**In-game checks still required:** force an unheld peace warning, verify damage
+**In-game checks still required:** read `TE_PROBE_LOC 11` and one `TE_NUCLEAR:
+type=action` line; force an unheld peace warning, verify damage
 and an available NFU response; repeat with Automatic Retaliation; accept both
-stand-downs and confirm no war; refuse on either side and confirm a native war;
+stand-downs and confirm no war and the truce; refuse on either side and confirm a
+native war (or, if it does not start, the `exchange_war_pending` record, the
+weekly retry and the 14-day notice);
 launch during an open offer and verify neither old vote settles the new revision;
 spend the last warhead and confirm both offers still arrive; test a recessed
 victim's deferred answer; inspect readable log IDs from a play back-down.

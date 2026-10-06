@@ -1,21 +1,104 @@
-﻿# Stable, semicolon-separated observer records. Only confirmed debug_log
-# accessors: THIS country name, game date, ROOT-scoped ScriptValue wrappers.
-# Risk samples run from country pulses (ROOT = that same country). Action
-# records may run under a diplomatic-play ROOT. ID wrappers enter the saved
-# nd_observer_country explicitly; only pulse samples read ROOT posture values.
-nd_log_action = {
+﻿# Stable, semicolon-separated observer records (TE_NUCLEAR:), summarised by
+# scripts/analysis/nuclear_observer_report.py.
+#
+# Every record is a literal line. A $PARAM$ inside a debug_log string logs
+# garbled (scripting_best_practices.md § "Runtime Debugging with debug_log":
+# the character before it is dropped and the closing $ stays), so an action or
+# incident name is written out where the caller knows it, and a name that
+# depends on a parameter is chosen by branching on the variable it just set.
+# Only confirmed accessors: THIS country name, the game date, ScriptValue
+# wrappers. The ID wrappers enter the saved nd_observer_country explicitly:
+# an action can run under a diplomatic-play ROOT.
+#
+# Event-driven records (actions, incidents, crisis open/acute/end, exchange
+# lifecycle) are always on: they are rare. The weekly risk sample and the
+# crisis-tick sample are written only while the global nd_observer_logging is
+# set (te_debug_deterrence.2's "Toggle observer sampling"): one line per armed
+# country per week would fill debug.log (scripting_best_practices.md
+# § "Debug instrumentation pattern", item 4).
+
+# Before every record: the country the ID wrappers read.
+nd_log_context = {
 	save_scope_as = nd_observer_country
-	debug_log = "TE_NUCLEAR: type=action; action=$ACTION$; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 }
-nd_log_incident = {
-	save_scope_as = nd_observer_country
-	debug_log = "TE_NUCLEAR: type=incident; family=$FAMILY$; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+
+# After nd_set_doctrine / nd_set_readiness_target / nd_set_authority wrote
+# the new value.
+nd_log_doctrine_set = {
+	nd_log_context = yes
+	if = { limit = { var:nd_doctrine = 1 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_doctrine_1; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_doctrine = 2 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_doctrine_2; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_doctrine = 3 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_doctrine_3; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_doctrine = 4 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_doctrine_4; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_doctrine = 5 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_doctrine_5; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
 }
+
+nd_log_readiness_target_set = {
+	nd_log_context = yes
+	if = { limit = { var:nd_readiness_target = 0 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_readiness_target_0; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_readiness_target = 1 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_readiness_target_1; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_readiness_target = 2 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_readiness_target_2; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_readiness_target = 3 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_readiness_target_3; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+}
+
+nd_log_authority_set = {
+	nd_log_context = yes
+	if = { limit = { var:nd_authority = 1 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_authority_1; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_authority = 2 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_authority_2; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_authority = 3 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_authority_3; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_authority = 4 } debug_log = "TE_NUCLEAR: type=action; action=nd_set_authority_4; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+}
+
+# nd_launch_or_intercept: nd_log_incident_launch_$KIND$ = yes.
+nd_log_incident_launch_warning = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=incident_launch_warning; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+}
+nd_log_incident_launch_commander = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=incident_launch_commander; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+}
+nd_log_incident_launch_system = {
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=incident_launch_system; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+}
+
+# nd_exchange_choose, after it recorded this side's answer.
+nd_log_exchange_answer = {
+	nd_log_context = yes
+	if = { limit = { var:nd_exchange_answer = 1 } debug_log = "TE_NUCLEAR: type=action; action=exchange_answer_1; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+	else_if = { limit = { var:nd_exchange_answer = 2 } debug_log = "TE_NUCLEAR: type=action; action=exchange_answer_2; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
+}
+
+# nd_crisis_close, issuer scope saved, after nd_crisis_outcome_now is written.
+nd_log_crisis_end = {
+	nd_log_context = yes
+	if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 1 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=1; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 2 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=2; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=3; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 4 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=4; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 5 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=5; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 6 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=6; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 7 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=7; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 8 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=8; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 9 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=9; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 10 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=10; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+}
+
+# Weekly, every armed country (nd_weekly_update). Observer runs only.
 nd_log_risk_sample = {
-	save_scope_as = nd_observer_country
-	debug_log = "TE_NUCLEAR: type=risk; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; readiness=[SCOPE.ScriptValue('nd_readiness_or_routine')|0]; doctrine=[SCOPE.ScriptValue('nd_display_doctrine_code')|0]; authority=[SCOPE.ScriptValue('nd_display_authority_code')|0]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; strain=[SCOPE.ScriptValue('nd_display_strain')|1]; reliability=[SCOPE.ScriptValue('nd_display_reliability')|1]; incident_weekly_permille=[SCOPE.ScriptValue('nd_incident_weekly_permille')|2]; halt_percent=[SCOPE.ScriptValue('nd_hold_chance')|1]"
+	if = {
+		limit = { has_global_variable = nd_observer_logging }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=risk; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; readiness=[SCOPE.ScriptValue('nd_readiness_or_routine')|0]; doctrine=[SCOPE.ScriptValue('nd_display_doctrine_code')|0]; authority=[SCOPE.ScriptValue('nd_display_authority_code')|0]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; strain=[SCOPE.ScriptValue('nd_display_strain')|1]; reliability=[SCOPE.ScriptValue('nd_display_reliability')|1]; incident_weekly_permille=[SCOPE.ScriptValue('nd_incident_weekly_permille')|2]; halt_percent=[SCOPE.ScriptValue('nd_hold_chance')|1]"
+	}
 }
+
+# Weekly, the crisis owner (nd_crisis_weekly_tick). Observer runs only.
 nd_log_crisis_sample = {
-	save_scope_as = nd_observer_country
-	debug_log = "TE_NUCLEAR: type=crisis_tick; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; opponent=[SCOPE.sCountry('nd_target').GetNameNoFormatting]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; pressure=[SCOPE.ScriptValue('nd_display_yield_pressure')|0]; stage=[SCOPE.ScriptValue('nd_log_crisis_stage')|0]; weeks=[SCOPE.ScriptValue('nd_log_crisis_weeks')|0]; dispute=[SCOPE.ScriptValue('nd_log_crisis_dispute')|0]"
+	if = {
+		limit = { has_global_variable = nd_observer_logging }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=crisis_tick; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; opponent=[SCOPE.sCountry('nd_target').GetNameNoFormatting]; danger=[SCOPE.ScriptValue('nd_display_crisis_danger')|0]; pressure=[SCOPE.ScriptValue('nd_display_yield_pressure')|0]; stage=[SCOPE.ScriptValue('nd_log_crisis_stage')|0]; weeks=[SCOPE.ScriptValue('nd_log_crisis_weeks')|0]; dispute=[SCOPE.ScriptValue('nd_log_crisis_dispute')|0]"
+	}
 }

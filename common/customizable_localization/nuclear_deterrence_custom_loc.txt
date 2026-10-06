@@ -226,6 +226,13 @@ nd_risk_band_word = {
 		localization_key = nd_risk_band_3
 	}
 	text = {
+		trigger = {
+			has_variable = nd_risk_band
+			var:nd_risk_band = 4
+		}
+		localization_key = nd_risk_band_4
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = nd_risk_band_0
 	}

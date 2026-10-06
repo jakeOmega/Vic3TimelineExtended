@@ -61,7 +61,7 @@ class RiskModel:
         self.values = {k: v for k, _, v in parse_script(root / "common/script_values/nuclear_deterrence_values.txt")}
         self.triggers = {k: v for k, _, v in parse_script(root / "common/scripted_triggers/nuclear_deterrence_triggers.txt")}
         effects = {k: v for k, _, v in parse_script(root / "common/scripted_effects/nuclear_deterrence_effects.txt")}
-        self.families = next(v for k, _, v in effects["nd_fire_incident"] if k == "random_list")
+        self.families = next(v for k, _, v in effects["nd_fire_incident_family"] if k == "random_list")
         events = {k: v for k, _, v in parse_script(root / "events/nuclear_incident_events.txt")}
         accident = next(v for k, _, v in events["nuclear_incident.30"] if k == "immediate")
         self.accident_draw = next(v for k, _, v in accident if k == "random_list")
@@ -77,11 +77,11 @@ class RiskModel:
             return self.number(self.values[value], posture)
         return float(value)
 
-    def condition(self, clauses, p):
+    def condition(self, clauses, p, crisis=False):
         answers = []
         for key, op, value in clauses:
             if key in ("OR", "AND", "NOT"):
-                parts = [self.condition([part], p) for part in value]
+                parts = [self.condition([part], p, crisis) for part in value]
                 answer = any(parts) if key == "OR" else all(parts)
                 if key == "NOT":
                     answer = not all(parts)
@@ -96,10 +96,14 @@ class RiskModel:
                 answer = p.plausible_attacker == (value == "yes")
             elif key == "nd_crisis_stage_at_least":
                 answer = p.stage >= int(value[0][2])
+            elif key == "nd_in_crisis":
+                answer = (p.stage >= 1) == (value == "yes")
+            elif key == "always":
+                answer = crisis if value == "$CRISIS$" else value == "yes"
             elif key == "is_at_war":
                 answer = p.war == (value == "yes")
             elif key in self.triggers:
-                answer = self.condition(self.triggers[key], p) == (value == "yes")
+                answer = self.condition(self.triggers[key], p, crisis) == (value == "yes")
             else:
                 left, right = self.number(key, p), self.number(value, p)
                 answer = {"=": left == right, ">=": left >= right, "<=": left <= right,
@@ -107,15 +111,15 @@ class RiskModel:
             answers.append(answer)
         return all(answers)
 
-    def arithmetic(self, clauses, p, initial=0):
+    def arithmetic(self, clauses, p, initial=0, crisis=False):
         result, branch_taken = initial, False
         for key, _, value in clauses:
             if key in ("if", "else_if", "else"):
                 if key == "if":
                     branch_taken = False
                 limit = next((v for k, _, v in value if k == "limit"), [])
-                if (key == "if" or not branch_taken) and self.condition(limit, p):
-                    result = self.arithmetic([x for x in value if x[0] != "limit"], p, result)
+                if (key == "if" or not branch_taken) and self.condition(limit, p, crisis):
+                    result = self.arithmetic([x for x in value if x[0] != "limit"], p, result, crisis)
                     branch_taken = True
                 continue
             if key in ("round", "floor"):
@@ -149,17 +153,33 @@ class RiskModel:
             return self.number("nd_incident_permille_whole", p) / 1000
         return self.number("nd_incident_weekly_percent", p) / 100
 
-    def weights(self, p):
+    def family_weights(self, p, crisis):
         weights = {}
         for weight, _, effects in self.families:
-            family = next(v[0][2] for k, _, v in effects if k == "nd_log_incident")
+            record = next(v for k, _, v in effects if k == "debug_log" and "type=incident" in v)
+            family = re.search(r"family=(\w+);", record)[1]
             modifiers = next((v for k, _, v in effects if k == "modifier"), [])
-            weights[family] = self.arithmetic(modifiers, p, float(weight))
+            weights[family] = self.arithmetic(modifiers, p, float(weight), crisis)
         return weights
+
+    def weights(self, p):
+        """Each family's share of a meaningful incident: nd_fire_incident picks the
+        base or the crisis part of the week's exposure, then a family within it."""
+        base = self.number("nd_incident_base_share", p)
+        crisis = self.number("nd_incident_crisis_share", p)
+        result = {}
+        for part, share in ((False, base), (True, crisis)):
+            weights = self.family_weights(p, part)
+            total = sum(weights.values())
+            for family, weight in weights.items():
+                result[family] = result.get(family, 0.0) + (
+                    share / (base + crisis) * weight / total if share and total else 0.0)
+        return result
 
     def unheld_share(self, p):
         weights = self.weights(p)
-        warning_automatic = p.authority == 3 or (p.authority == 2 and (p.war or p.stage >= 3))
+        # Delegation executes a warning only in a war with the suspect.
+        warning_automatic = p.authority == 3 or (p.authority == 2 and p.war)
         dangerous = weights["isolated_commander"] + (weights["unconfirmed_warning"] if warning_automatic else 0)
         if p.authority == 4 and (p.war or p.stage >= 3 or (p.readiness == 3 and p.plausible_attacker)):
             total, explosive = 0.0, 0.0

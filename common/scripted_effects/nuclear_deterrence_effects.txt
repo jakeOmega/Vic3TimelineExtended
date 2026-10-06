@@ -185,6 +185,35 @@ nd_rebuild_posture_modifiers = {
 	}
 }
 
+# The incident-exposure band the panel shows, projected into an enum here so
+# no threshold is restated in loc or .gui (§10: no fake precision about hidden
+# risk). From nd_apply_posture_modifiers and weekly before the incident roll,
+# so a crisis's danger shows the week it moves. Thresholds are per mille a
+# month (nd_incident_permille): 0 very low, 1 low, 2 elevated, 3 high,
+# 4 extreme (an Acute crisis's weekly exposure).
+nd_refresh_risk_band = {
+	set_variable = { name = nd_risk_permille value = nd_incident_permille }
+	if = {
+		limit = { var:nd_risk_permille < 2 }
+		set_variable = { name = nd_risk_band value = 0 }
+	}
+	else_if = {
+		limit = { var:nd_risk_permille < 5 }
+		set_variable = { name = nd_risk_band value = 1 }
+	}
+	else_if = {
+		limit = { var:nd_risk_permille < 12 }
+		set_variable = { name = nd_risk_band value = 2 }
+	}
+	else_if = {
+		limit = { var:nd_risk_permille < 100 }
+		set_variable = { name = nd_risk_band value = 3 }
+	}
+	else = {
+		set_variable = { name = nd_risk_band value = 4 }
+	}
+}
+
 # ----------------------------------------------------------------------------
 # MODIFIERS — the single writer of the three managed families
 # ----------------------------------------------------------------------------
@@ -271,26 +300,7 @@ nd_apply_posture_modifiers = {
 			}
 			set_variable = { name = nd_upkeep_mod_on value = 1 }
 		}
-		# ---- the incident-exposure band the panel shows ------------------------
-		# Projected into an enum here, the one site that already re-evaluates
-		# posture, so no threshold is restated in loc or .gui (§10: no fake
-		# precision about hidden risk). 0 very low, 1 low, 2 elevated, 3 high.
-		set_variable = { name = nd_risk_permille value = nd_incident_permille }
-		if = {
-			limit = { var:nd_risk_permille < 2 }
-			set_variable = { name = nd_risk_band value = 0 }
-		}
-		else_if = {
-			limit = { var:nd_risk_permille < 5 }
-			set_variable = { name = nd_risk_band value = 1 }
-		}
-		else_if = {
-			limit = { var:nd_risk_permille < 12 }
-			set_variable = { name = nd_risk_band value = 2 }
-		}
-		else = {
-			set_variable = { name = nd_risk_band value = 3 }
-		}
+		nd_refresh_risk_band = yes
 	}
 	# Unarmed (the last warhead was used, a non-nuclear crisis party, or a
 	# programme that has not built one yet): nothing to maintain, nothing to
@@ -523,6 +533,7 @@ nd_weekly_update = {
 	# One meaningful-incident roll per country after the crisis figures.
 	if = {
 		limit = { nd_is_armed = yes }
+		nd_refresh_risk_band = yes
 		nd_log_risk_sample = yes
 		nd_roll_incident = yes
 	}
@@ -576,7 +587,8 @@ nd_monthly_update = {
 			chance = 10
 			random = {
 				chance = nd_routine_mishap_tenth_percent
-				nd_log_incident = { FAMILY = routine_mishap }
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=incident; family=routine_mishap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 				trigger_event = { id = nuclear_incident.40 }
 			}
 		}
@@ -707,7 +719,6 @@ nd_bind_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no 
 
 # D = 1..5; OFFENSIVE / LEAVES_NFU = yes | no. Call through the wrappers.
 nd_set_doctrine = {
-	nd_log_action = { ACTION = nd_set_doctrine_$D$ }
 	save_scope_as = nd_sd_self
 	# Leaving no first use is a repudiation (§3.1): it is announced, it is
 	# remembered, and it costs everything a broken promise costs.
@@ -728,6 +739,7 @@ nd_set_doctrine = {
 		set_variable = { name = nd_doctrine value = $D$ }
 		set_variable = { name = nd_doctrine_months value = 0 }
 	}
+	nd_log_doctrine_set = yes
 	# Announcing an offensive doctrine alarms the neighbourhood. The rival
 	# loop is hidden behind one line: an every_* renders every member in a
 	# tooltip preview.
@@ -766,12 +778,12 @@ nd_set_readiness_target_3 = { nd_set_readiness_target = { R = 3 STANDDOWN = no }
 # R = 0..3 (0 = Recessed): the target; nd_weekly_update walks the actual
 # readiness there.
 nd_set_readiness_target = {
-	nd_log_action = { ACTION = nd_set_readiness_target_$R$ }
 	custom_tooltip = {
 		text = nd_tt_readiness_target_$R$
 		set_variable = { name = nd_readiness_target value = $R$ }
 		set_variable = { name = nd_readiness_transition value = 0 }
 	}
+	nd_log_readiness_target_set = yes
 	# A stand-down is visible at once, even though the forces take weeks. Only
 	# a move down is one: Routine from Recessed is a raise. The limit reads the
 	# target as it stands in the tooltip preview; in the run the line renders
@@ -795,12 +807,12 @@ nd_set_authority_4 = { nd_set_authority = { A = 4 DELEGATED = no AUTOMATIC = yes
 # nd_can_set_authority. Re-applies the posture modifiers because Automatic
 # Retaliation carries upkeep of its own.
 nd_set_authority = {
-	nd_log_action = { ACTION = nd_set_authority_$A$ }
 	custom_tooltip = {
 		text = nd_tt_authority_adopted_$A$
 		set_variable = { name = nd_authority value = $A$ }
 		set_variable = { name = nd_authority_months value = 0 }
 	}
+	nd_log_authority_set = yes
 	if = {
 		limit = { always = $DELEGATED$ }
 		custom_tooltip = nd_tt_authority_consequence
@@ -1245,11 +1257,25 @@ nd_ai_review_posture = {
 			nd_readiness_locked = no
 			nd_readiness_withdrawn = no
 		}
+		# High Alert in a war with an armed enemy. In an Acute crisis only to
+		# match an opponent at Heightened or higher, or when our own forces
+		# could not ride out a first strike (survivability under 50, the line
+		# nd_yp_answer_value draws): an opponent that stays calm is not met
+		# with the posture most likely to misfire.
 		if = {
 			limit = {
 				var:nd_strain < 70
 				OR = {
-					nd_crisis_stage_at_least = { STAGE = 3 }
+					AND = {
+						nd_crisis_stage_at_least = { STAGE = 3 }
+						OR = {
+							var:nd_crisis_opponent ?= { nd_readiness_heightened_or_higher = yes }
+							AND = {
+								nd_authority_automatic = no
+								var:nd_survivability < 50
+							}
+						}
+					}
 					any_country = {
 						has_war_with = scope:nd_ai_self
 						nd_believed_armed = yes
@@ -1420,14 +1446,36 @@ nd_roll_incident = {
 	else = { random = { chance = nd_incident_weekly_percent nd_fire_incident = yes } }
 }
 
-# Meaningful families only. Weapons-handling accidents remain possible at
-# every readiness; permanent alert raises their weight from 5 to 35.
+# Meaningful families only. Which part of the week's exposure the incident
+# came from is drawn first, in proportion: the base part draws from every
+# eligible family, the crisis part only from the misreadings
+# (nd_incident_crisis_weekly_permille is zero when none is eligible).
 nd_fire_incident = {
 	set_variable = { name = nd_months_since_incident value = 0 }
 	random_list = {
+		0 = {
+			modifier = { add = nd_incident_base_share }
+			nd_fire_incident_family = { CRISIS = no }
+		}
+		0 = {
+			modifier = { add = nd_incident_crisis_share }
+			nd_fire_incident_family = { CRISIS = yes }
+		}
+	}
+}
+
+# CRISIS = yes leaves out the weapons accident. Weapons-handling accidents
+# otherwise remain possible at every readiness; permanent alert raises their
+# weight from 5 to 35.
+nd_fire_incident_family = {
+	random_list = {
 		5 = {
-			modifier = { if = { limit = { nd_incident_eligible_permanent_alert = yes } add = 30 } }
-			nd_log_incident = { FAMILY = weapons_accident }
+			modifier = {
+				if = { limit = { nd_incident_eligible_permanent_alert = yes } add = 30 }
+				if = { limit = { always = $CRISIS$ } multiply = 0 }
+			}
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=incident; family=weapons_accident; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			trigger_event = { id = nuclear_incident.30 }
 		}
 		0 = {
@@ -1438,12 +1486,14 @@ nd_fire_incident = {
 					if = { limit = { nd_crisis_stage_at_least = { STAGE = 2 } } add = 20 }
 				}
 			}
-			nd_log_incident = { FAMILY = unconfirmed_warning }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=incident; family=unconfirmed_warning; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			nd_start_unconfirmed_warning = yes
 		}
 		0 = {
 			modifier = { if = { limit = { nd_incident_eligible_exercise = yes } add = 25 } }
-			nd_log_incident = { FAMILY = exercise_misread }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=incident; family=exercise_misread; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			trigger_event = { id = nuclear_incident.10 }
 		}
 		0 = {
@@ -1457,7 +1507,8 @@ nd_fire_incident = {
 					}
 				}
 			}
-			nd_log_incident = { FAMILY = isolated_commander }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=incident; family=isolated_commander; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			trigger_event = { id = nuclear_incident.20 }
 		}
 	}
@@ -1547,12 +1598,13 @@ nd_start_unconfirmed_warning = {
 			limit = {
 				OR = {
 					nd_authority_launch_on_warning = yes
+					# Delegation hands the decision to a commander who has lost
+					# contact (Silence from the Capital, .20), not to the warning:
+					# outside a war with the suspect the government still decides,
+					# even in an Acute crisis.
 					AND = {
 						nd_authority_delegated_or_warning = yes
-						OR = {
-							has_war_with = scope:nd_warning_suspect
-							nd_crisis_stage_at_least = { STAGE = 3 }
-						}
+						has_war_with = scope:nd_warning_suspect
 					}
 				}
 			}
@@ -1592,9 +1644,10 @@ nd_roll_launch_hold = {
 	}
 	if = {
 		limit = { var:nd_launch_held = 1 }
-		nd_log_action = { ACTION = launch_held }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=launch_held; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	}
-	else = { nd_log_action = { ACTION = launch_not_held } }
+	else = { nd_log_context = yes debug_log = "TE_NUCLEAR: type=action; action=launch_not_held; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]" }
 }
 
 # ----------------------------------------------------------------------------
@@ -1685,7 +1738,8 @@ nd_tactical_strike_resolve = {
 	random_list = {
 		0 = {
 			modifier = nuclear_strike_success_chance
-			nd_log_action = { ACTION = tactical_hit }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=tactical_hit; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			# The nuclear taboo (nuclear_taboo_effects.txt); this country is
 			# the attacker and at war with the target.
 			if = {
@@ -1714,7 +1768,8 @@ nd_tactical_strike_resolve = {
 		}
 		0 = {
 			modifier = nuclear_strike_fail_chance
-			nd_log_action = { ACTION = tactical_miss }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=tactical_miss; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			scope:target_country = {
 				trigger_event = { id = nuclear_weapon_events.7 popup = yes }
 				change_relations = {
@@ -1732,7 +1787,8 @@ nd_tactical_strike_resolve = {
 nd_record_nuclear_use = {
 	save_scope_as = nd_rec_attacker
 	nd_exchange_note_launch = { ENEMY = $VICTIM$ }
-	nd_log_action = { ACTION = nuclear_use }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=nuclear_use; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	hidden_effect = {
 		# A pledge is breached unless the victim struck first; either way the
 		# pledge is gone.
@@ -1856,13 +1912,14 @@ nd_launch_or_intercept = {
 				nd_exchange_open = { ENEMY = scope:nd_strike_victim }
 			}
 			set_variable = { name = nd_last_launch_kind value = 1 }
-			nd_log_action = { ACTION = incident_launch_$KIND$ }
+			nd_log_incident_launch_$KIND$ = yes
 			if = { limit = { has_variable = nd_launch_tactical } nd_dispatch_tactical_strike = yes }
 			else = { nd_dispatch_strategic_strike = yes }
 		}
 		else = {
 			set_variable = { name = nd_last_launch_kind value = 2 }
-			nd_log_action = { ACTION = launch_intercepted_invalid_context }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=launch_intercepted_invalid_context; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			nd_intercepted_launch = { VICTIM = $VICTIM$ }
 		}
 		if = { limit = { has_variable = nd_launch_tactical } remove_variable = nd_launch_tactical }
@@ -2102,7 +2159,12 @@ nd_readiness_step_down = {
 nd_country_monthly_cleanup = {
 	if = {
 		limit = { has_variable = nd_exchange_id }
-		if = { limit = { NOT = { has_game_rule = nuclear_weapons_enabled } } nd_exchange_close = { RESULT = rule_disabled } }
+		if = {
+			limit = { NOT = { has_game_rule = nuclear_weapons_enabled } }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=exchange_end_rule_disabled; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			nd_exchange_close = yes
+		}
 		else_if = { limit = { NOT = { has_journal_entry = je_nuclear_program } } nd_exchange_weekly_update = yes }
 	}
 	if = {

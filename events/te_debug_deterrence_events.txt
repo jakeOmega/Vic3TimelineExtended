@@ -215,6 +215,18 @@ te_debug_deterrence.2 = { # REVIEWED 2026-09-25: console-only test event (`event
 		nd_exchange_weekly_update = yes
 		scope:nd_debug_exchange_other = { nd_exchange_weekly_update = yes }
 	}
+	# Observer sampling: the weekly TE_NUCLEAR risk and crisis-tick lines, for
+	# every armed country (nuclear_observer_effects.txt). Pick again to stop.
+	option = {
+		name = te_debug_deterrence.2.l
+		if = {
+			limit = { has_global_variable = nd_observer_logging }
+			remove_global_variable = nd_observer_logging
+		}
+		else = {
+			set_global_variable = { name = nd_observer_logging value = 1 }
+		}
+	}
 
 }
 

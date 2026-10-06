@@ -1384,6 +1384,16 @@ nd_incident_eligible_commander = {
 	}
 }
 
+# A family the crisis part of the week's exposure can draw (nd_fire_incident):
+# the misreadings, not a weapons accident.
+nd_incident_misreading_eligible = {
+	OR = {
+		nd_incident_eligible_warning = yes
+		nd_incident_eligible_exercise = yes
+		nd_incident_eligible_commander = yes
+	}
+}
+
 nd_incident_eligible_permanent_alert = {
 	OR = {
 		AND = {

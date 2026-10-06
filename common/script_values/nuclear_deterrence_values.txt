@@ -342,6 +342,12 @@ nd_own_danger_band = {
 # equivalents divided by 52/12; the crisis surcharge is already weekly.
 # Benchmark: two high-alert powers, danger >=75, strain 0, reliability 60,
 # Existential doctrine: ~50% chance of an incident across two weekly pulses each.
+#
+# Two parts, one roll. The base part draws from every family this country is
+# eligible for; the crisis part draws only from the misreadings a crisis
+# drives (a warning, an exercise, a commander cut off), never a weapons
+# accident in a depot, and is zero when none of them is eligible
+# (nd_fire_incident).
 nd_incident_base_monthly_permille = {
 	value = 1
 	if = { limit = { nd_readiness_recessed = yes } value = 0.5 }
@@ -354,10 +360,10 @@ nd_incident_crisis_weekly_permille = {
 	if = { limit = { nd_own_danger_band >= 3 } value = 175 }
 	else_if = { limit = { nd_own_danger_band >= 2 } value = 50 }
 	else_if = { limit = { nd_own_danger_band >= 1 } value = 5 }
-	# Stored warheads cannot be mistaken for an operational launch posture.
-	if = { limit = { nd_readiness_recessed = yes } multiply = 0.1 }
-	else_if = { limit = { nd_readiness_heightened_or_higher = no } multiply = 0.25 }
+	# A force below operational alert is harder to misread.
+	if = { limit = { nd_readiness_heightened_or_higher = no } multiply = 0.25 }
 	else_if = { limit = { nd_readiness_high_alert = no } multiply = 0.6 }
+	if = { limit = { nd_incident_misreading_eligible = no } value = 0 }
 }
 
 nd_incident_doctrine_multiplier = {
@@ -367,10 +373,9 @@ nd_incident_doctrine_multiplier = {
 	else_if = { limit = { nd_doctrine_flexible = yes } value = 1.15 }
 }
 
-nd_incident_weekly_permille = {
-	value = nd_incident_base_monthly_permille
-	divide = 4.333333
-	add = nd_incident_crisis_weekly_permille
+# Strain, reliability and doctrine scale both parts alike.
+nd_incident_rate_multiplier = {
+	value = 1
 	if = {
 		limit = { has_variable = nd_strain }
 		multiply = { value = var:nd_strain divide = 100 add = 1 }
@@ -380,8 +385,38 @@ nd_incident_weekly_permille = {
 		multiply = { value = 100 subtract = var:nd_reliability divide = 100 add = 0.5 }
 	}
 	multiply = nd_incident_doctrine_multiplier
+}
+
+nd_incident_base_weekly_permille = {
+	value = nd_incident_base_monthly_permille
+	divide = 4.333333
+	multiply = nd_incident_rate_multiplier
+}
+
+nd_incident_crisis_part_weekly_permille = {
+	value = nd_incident_crisis_weekly_permille
+	multiply = nd_incident_rate_multiplier
+}
+
+nd_incident_weekly_permille = {
+	value = nd_incident_base_weekly_permille
+	add = nd_incident_crisis_part_weekly_permille
 	max = 350
 	if = { limit = { has_variable = nd_debug_incident_odds } value = 1000 }
+}
+
+# nd_fire_incident's pool weights, in hundredths of a per mille: which part
+# of the week's exposure the incident came from. The base is never zero.
+nd_incident_base_share = {
+	value = nd_incident_base_weekly_permille
+	multiply = 100
+	round = yes
+	min = 1
+}
+nd_incident_crisis_share = {
+	value = nd_incident_crisis_part_weekly_permille
+	multiply = 100
+	round = yes
 }
 
 # Retain the display helper's name for old GUI callers. This is a monthly
@@ -429,6 +464,24 @@ nd_hold_chance = {
 	if = {
 		limit = { nd_authority_launch_on_warning = yes }
 		subtract = 10
+	}
+	# The moment the warning arrives in (the Petrov judgement): at peace with
+	# no crisis, a real first strike makes no sense and a few missiles on a
+	# screen look like a fault; in a Warning or a Confrontation it is
+	# thinkable; in an Acute crisis or a war nothing argues against it.
+	if = {
+		limit = {
+			is_at_war = no
+			nd_in_crisis = no
+		}
+		add = 25
+	}
+	else_if = {
+		limit = {
+			is_at_war = no
+			NOT = { nd_crisis_stage_at_least = { STAGE = 3 } }
+		}
+		add = 10
 	}
 	min = 20
 	max = 97

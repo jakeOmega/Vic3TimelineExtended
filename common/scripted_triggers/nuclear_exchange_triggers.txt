@@ -37,6 +37,8 @@ nd_exchange_offer_valid = {
 	save_temporary_scope_as = nd_exchange_offer_self
 	var:nd_exchange_opponent ?= { NOT = { has_war_with = scope:nd_exchange_offer_self } }
 	has_variable = nd_exchange_id
+	# A refusal already asked for war; no later offer can undo it.
+	NOT = { has_variable = nd_exchange_war_pending }
 	exists = scope:nd_exchange_offer_id
 	exists = scope:nd_exchange_offer_revision
 	var:nd_exchange_id = scope:nd_exchange_offer_id
@@ -52,5 +54,24 @@ nd_peacetime_incident_dispatch = {
 		scope:nd_incident_launch_commander ?= scope:nd_dispatching
 		scope:nd_incident_launch_system ?= scope:nd_dispatching
 		nd_was_struck_by = { ENEMY = scope:nd_strike_victim }
+	}
+}
+
+# The stand-down's AI weights (nuclear_incident.70): the conventional war a
+# refusal starts, judged by army size. $ENEMY$'s army is half again ours.
+nd_conventionally_outmatched_by = {
+	$ENEMY$ = { army_size > 0 }
+	army_size < {
+		value = $ENEMY$.army_size
+		divide = 1.5
+	}
+}
+
+# Ours is half again $ENEMY$'s.
+nd_conventionally_outmatches = {
+	army_size > 0
+	army_size >= {
+		value = $ENEMY$.army_size
+		multiply = 1.5
 	}
 }

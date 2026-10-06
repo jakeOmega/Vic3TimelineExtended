@@ -276,7 +276,8 @@ nd_crisis_open = {
 			}
 			# ---- the crisis's figures, before anyone weighs them ------------
 			nd_crisis_refresh_figures = yes
-			nd_log_action = { ACTION = crisis_open }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 			debug_log = "TE_NUCLEAR: type=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
 			# ---- both AIs reconsider their posture now ------------------------
 			scope:nd_issuer = { nd_crisis_ai_review = yes }
@@ -680,7 +681,8 @@ nd_crisis_weekly_tick = {
 			}
 			set_variable = { name = nd_crisis_stage value = 3 }
 			nd_crisis_refresh_figures = yes
-			nd_log_action = { ACTION = crisis_turns_acute }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=crisis_turns_acute; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		}
 		# ---- expiry -----------------------------------------------------------
 		if = {
@@ -917,8 +919,6 @@ nd_crisis_close = {
 			exists = scope:nd_target
 			scope:nd_issuer = { nd_is_crisis_owner = yes }
 		}
-		save_scope_as = nd_observer_country
-		debug_log = "TE_NUCLEAR: type=crisis_end; outcome=$OUTCOME$; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
 		# An outcome notice still unanswered from an earlier crisis settles
 		# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
 		scope:nd_issuer = { nd_crisis_flush_pending = yes }
@@ -926,6 +926,7 @@ nd_crisis_close = {
 		scope:nd_issuer = {
 			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
 		}
+		nd_log_crisis_end = yes
 		# Both sides stepping back strengthens the nuclear taboo.
 		if = {
 			limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
@@ -1349,7 +1350,8 @@ nd_lobby_react = {
 # win for the issuer, outcome 4) — nd_crisis_close then finds nothing to close,
 # so either way it closes exactly once.
 nd_crisis_act_yield = {
-	nd_log_action = { ACTION = crisis_yield }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_yield; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_yield
 	nd_crisis_yield_lines = yes
 	custom_tooltip = nd_tt_then_yield
@@ -1499,7 +1501,8 @@ nd_crisis_concede_war = {
 
 # Issuer scope: abandon the threat.
 nd_crisis_act_back_down = {
-	nd_log_action = { ACTION = crisis_back_down }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_back_down; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_back_down
 	if = {
 		limit = { nd_crisis_is_public = yes }
@@ -1522,7 +1525,8 @@ nd_crisis_act_back_down = {
 
 # Issuer scope: turn a private warning into a public ultimatum.
 nd_crisis_act_go_public = {
-	nd_log_action = { ACTION = crisis_go_public }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_go_public; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_go_public
 	change_infamy = nd_taboo_infamy_threat
 	if = {
@@ -1552,7 +1556,8 @@ nd_crisis_act_go_public = {
 # Target scope: refuse. A public ultimatum refused is recorded as defiance —
 # compellence's licence to strike (nd_doctrine_permits_strike).
 nd_crisis_act_reject = {
-	nd_log_action = { ACTION = crisis_reject }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_reject; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_reject
 	if = {
 		limit = { NOT = { nd_crisis_stage_at_least = { STAGE = 2 } } }
@@ -1581,7 +1586,8 @@ nd_crisis_act_reject = {
 
 # Target scope, armed targets only: answer threat with threat.
 nd_crisis_act_counter_threat = {
-	nd_log_action = { ACTION = crisis_counter_threat }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_counter_threat; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_counter
 	if = {
 		limit = { NOT = { nd_crisis_stage_at_least = { STAGE = 2 } } }
@@ -1628,7 +1634,8 @@ nd_crisis_record_defiance = {
 
 # Either party: propose a reciprocal stand-down. The other party gets .3.
 nd_crisis_act_propose_talks = {
-	nd_log_action = { ACTION = crisis_propose_talks }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_propose_talks; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_talks
 	custom_tooltip = nd_tt_talks_terms
 	nd_crisis_talks_credibility_lines = yes
@@ -1656,7 +1663,8 @@ nd_crisis_act_propose_talks = {
 
 # Either party, answering .3: both sides stand down and pledge non-use.
 nd_crisis_act_accept_standdown = {
-	nd_log_action = { ACTION = crisis_accept_standdown }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_accept_standdown; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_accept_standdown
 	custom_tooltip = nd_tt_standdown_terms
 	nd_crisis_talks_credibility_lines = yes
@@ -1706,7 +1714,8 @@ nd_standdown_one_side = {
 
 # Either party, answering .3: refuse.
 nd_crisis_act_refuse_talks = {
-	nd_log_action = { ACTION = crisis_refuse_talks }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_refuse_talks; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_refuse_talks
 	if = {
 		limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
@@ -1730,7 +1739,8 @@ nd_crisis_act_refuse_talks = {
 # Issuer scope, at the deadline: hold firm — the crisis turns acute and the
 # deadline moves out once more.
 nd_crisis_act_hold = {
-	nd_log_action = { ACTION = crisis_hold }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_hold; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_hold
 	custom_tooltip = nd_tt_hold_deadline
 	hidden_effect = {
@@ -1766,7 +1776,8 @@ nd_crisis_act_hold = {
 
 # Issuer scope, at the deadline: give them more time. Hesitation is noticed.
 nd_crisis_act_extend = {
-	nd_log_action = { ACTION = crisis_extend }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_extend; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_extend
 	custom_tooltip = {
 		text = nd_tt_credibility_down_3
@@ -1786,7 +1797,8 @@ nd_crisis_act_extend = {
 # threat is clearer and the danger higher; it also makes the Exercise They
 # Mistook eligible (nd_incident_eligible_exercise).
 nd_crisis_act_exercise = {
-	nd_log_action = { ACTION = crisis_exercise }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_exercise; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_exercise
 	add_modifier = {
 		name = nd_exercise_cost
@@ -1833,7 +1845,8 @@ nd_crisis_act_exercise = {
 # Issuer scope: carry out the threat. Only offered at war with the target and
 # with doctrine and pledges permitting; goes through the one dispatch path.
 nd_crisis_act_execute_threat = {
-	nd_log_action = { ACTION = crisis_execute_threat }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_execute_threat; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_execute
 	hidden_effect = {
 		nd_crisis_save_parties = yes
@@ -1948,14 +1961,16 @@ nd_crisis_option = {
 
 # Target scope: refuse again, when pressed. Nothing changes but the record.
 nd_crisis_act_stand_firm = {
-	nd_log_action = { ACTION = crisis_stand_firm }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_stand_firm; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_stand_firm
 }
 
 # Issuer scope, when a play turned into a war despite a public ultimatum: fight
 # it conventionally. The threat was not carried out, and everyone saw.
 nd_crisis_act_fight_conventional = {
-	nd_log_action = { ACTION = crisis_fight_conventional }
+	nd_log_context = yes
+	debug_log = "TE_NUCLEAR: type=action; action=crisis_fight_conventional; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	custom_tooltip = nd_tt_act_fight_conventional
 	custom_tooltip = {
 		text = nd_tt_credibility_down_10

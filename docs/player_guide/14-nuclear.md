@@ -228,12 +228,15 @@ once a year.
 | Authority | Needs | Effect |
 |---|---|---|
 | Central Authorization | Nothing | Only the government orders a launch |
-| Conditional Delegation | Radar | Cut-off commanders may fire. In a war, an incident can end in a launch you never approved |
+| Conditional Delegation | Radar | Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
 | Launch on Warning | Radar, Intercontinental Ballistic Missiles | A false warning can become a launch under standing orders |
 | Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Threats against you count as if your forces were survivable. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
 The Forces section's Chance of a halt row is the chance that someone in the
-chain halts a launch begun under delegation or launch on warning. Automatic
+chain halts a launch begun under delegation or launch on warning. It rises by
+25 points at peace with no crisis and by 10 in a Warning or Confrontation,
+since a sudden attack makes little sense then; an Acute crisis or a war gives
+no such benefit of the doubt. Automatic
 Retaliation never answers a retaliation, and answers a given attacker at most
 once in six months.
 
@@ -477,9 +480,13 @@ Flexible First Use raises exposure by 15%, Compellence by 35% and Warfighting by
 
 Crisis danger adds a separate weekly exposure to that base. At High Alert it
 adds 0.5% at danger 25–49, 5% at 50–74 and 17.5% at 75–100, before the same
-modifiers. Heightened takes six tenths of that addition, Routine one quarter,
-and Recessed one tenth. Meaningful exposure is capped at 35% per country per
-week. Two High Alert countries at danger 75 or higher, with reliability 60,
+modifiers. Heightened takes six tenths of that addition and Routine one
+quarter. This crisis exposure only ever produces a misreading (a false warning,
+a mistaken exercise or a commander cut off), never a weapons accident, so it
+needs one of those to be possible: none is at Recessed, and at Routine only a
+cut-off commander under delegation or launch on warning is. Meaningful exposure
+is capped at 35% per country per week. The Nuclear Posture section's incident
+exposure reads Extreme in a dangerous crisis. Two High Alert countries at danger 75 or higher, with reliability 60,
 no strain and Existential Deterrence, have about a 50% chance of at least one
 meaningful incident over two weekly checks each.
 
@@ -488,7 +495,7 @@ Routine mishaps have their own monthly roll: 0.5% at Recessed, 1% at Routine,
 
 | Incident | Can happen when | What it is |
 |---|---|---|
-| A false warning ("Conflicting Indications") | Radar, Heightened or higher, and a plausible armed opponent | An early warning that no second source confirms. Launch on Warning, or delegation during a war or an Acute crisis, can execute it without another order |
+| A false warning ("Conflicting Indications") | Radar, Heightened or higher, and a plausible armed opponent | An early warning that no second source confirms. Launch on Warning, or delegation in a war with the suspected attacker, can execute it without another order; otherwise the government decides |
 | The Exercise They Mistook | A crisis at Confrontation or beyond, Heightened or higher | Your opponent reads your exercise as cover for an attack |
 | Silence from the Capital | Delegation or Launch on Warning, assembled weapons, and war, an Acute crisis or a heightened force facing a plausible attacker | A commander cut off from the capital; another officer refuses, or the unit fires. War or Acute crisis makes this family six times as likely in the incident draw |
 | A Weapons Accident | Any armed posture; six times more weight after six months at High Alert or strain of 60 or more | Crashes, silo explosions, lost weapons, a contaminated state or failed maintenance |
@@ -519,11 +526,20 @@ the usual consequences.
 
 After at least seven days without another launch, the next weekly review offers
 both governments "After the Exchange". If both stand down, the exchange ends
-without starting a conventional war. If either refuses, a conventional war
-starts after both have answered. The refusing country initiates it. Another
+without a conventional war and a five-year truce binds the two countries. If
+either refuses, a conventional war starts after both have answered. The
+refusing country initiates it, and either side may still answer the strike
+with nuclear weapons until the war is under way. If no war has begun two weeks
+after the refusal, the exchange ends and both governments are told. Another
 launch cancels earlier votes and starts the quiet period again. An old offer
 cannot settle a renewed exchange. A recalled order is now a fallback for an
 invalid launch context, rather than the automatic result of being at peace.
+
+An AI government that launched by mistake usually stands down. One that was
+struck refuses more often: more so if it took the blow without answering,
+for every state of its that was hit, and if its army is half again the
+launcher's. An AI whose enemy's army is half again its own leans to standing
+down.
 
 ### The Monopoly Window
 
@@ -914,7 +930,7 @@ It retaliates at any taboo.
 
 - It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
-- It goes to High Alert in an Acute crisis or a war with an armed enemy, to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
+- It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its opponent is at Heightened or higher or its own forces could not ride out a first strike; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
 - It warns countries that threaten a protégé or its survival, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
 - At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Programme only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.

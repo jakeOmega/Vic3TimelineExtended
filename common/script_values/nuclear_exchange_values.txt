@@ -6,6 +6,32 @@
 		subtract = var:nd_exchange_last_launch
 	}
 }
+# Days since a refused stand-down asked for a war that has not begun.
+nd_exchange_war_pending_days = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_exchange_war_requested_on }
+		value = game_date
+		subtract = var:nd_exchange_war_requested_on
+	}
+}
+
+# AI weights for the stand-down (nuclear_incident.70). This side's struck
+# states: each one a reason to refuse.
+nd_exchange_states_struck = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			OR = {
+				has_modifier = nuclear_strike_aftermath
+				has_modifier = tactical_nuke_aftermath
+			}
+		}
+		add = 1
+	}
+	max = 5
+}
+
 nd_log_exchange_id = {
 	value = 0
 	if = {

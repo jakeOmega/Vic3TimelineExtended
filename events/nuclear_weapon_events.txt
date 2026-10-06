@@ -161,7 +161,13 @@ nuclear_weapon_events.1 = {
 				add = 10
 			}
 			modifier = {
-				trigger = { is_at_war = yes }
+				# A strike between countries at peace is answered as fully as one in a war.
+				trigger = {
+					OR = {
+						is_at_war = yes
+						nd_in_peacetime_exchange_with = { ENEMY = scope:attacking_country }
+					}
+				}
 				add = 8
 			}
 			modifier = {
@@ -923,7 +929,13 @@ nuclear_weapon_events.11 = {
 				add = 12
 			}
 			modifier = {
-				trigger = { is_at_war = yes }
+				# A strike between countries at peace is answered as fully as one in a war.
+				trigger = {
+					OR = {
+						is_at_war = yes
+						nd_in_peacetime_exchange_with = { ENEMY = scope:target_country }
+					}
+				}
 				add = 6
 			}
 			modifier = {

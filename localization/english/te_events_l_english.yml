@@ -3116,7 +3116,7 @@
  nuclear_incident.60.t:0 "A Secret Comes Out"
  nuclear_incident.70.a:0 "Stand down, if they will do the same."
  nuclear_incident.70.b:0 "There can be no peace after this."
- nuclear_incident.70.d:0 "No nuclear weapon has been launched between us and [SCOPE.sCountry('nd_exchange_offer_enemy').GetName] for at least a week. Both governments are being asked to stand down. If both accept, the nuclear exchange ends without a conventional war. If either refuses, war follows. Another launch would withdraw this offer."
+ nuclear_incident.70.d:0 "No nuclear weapon has been launched between us and [SCOPE.sCountry('nd_exchange_offer_enemy').GetName] for at least a week. Both governments are being asked to stand down. If both accept, the nuclear exchange ends without a conventional war, under a five-year truce. If either refuses, war follows. Another launch would withdraw this offer."
  nuclear_incident.70.f:0 "\"The last launch report is seven days old.\"\n\n\"And the casualty reports?\"\n\n\"Still arriving.\"\n\n\"Ask their government whether they are prepared to stop. Tell them we are considering the same question.\""
  nuclear_incident.70.t:0 "After the Exchange"
 
@@ -4825,6 +4825,7 @@
  te_debug_deterrence.2.i:0 "Toggle forced incident odds"
  te_debug_deterrence.2.j:0 "Force an unheld peacetime launch at another armed country."
  te_debug_deterrence.2.k:0 "Age this exchange seven quiet days and ask both governments to stand down."
+ te_debug_deterrence.2.l:0 "Toggle observer sampling (weekly TE_NUCLEAR risk and crisis lines)"
  te_debug_deterrence.2.t:0 "Deterrence Console: Incidents"
  te_debug_deterrence.3.a:0 "We warn them privately"
  te_debug_deterrence.3.b:0 "We issue them a public ultimatum"
