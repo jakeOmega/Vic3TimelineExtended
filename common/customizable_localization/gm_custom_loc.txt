@@ -515,3 +515,754 @@ gm_inscription = {
 		localization_key = gm_inscription_none
 	}
 }
+
+# ============================================================================
+# Names (v2 §3; gm_name_effects.txt lists the records)
+# ============================================================================
+# The form's noun, from gm_form. A faith form is the skin's own building
+# ("Basilica"), so it reads the skin. Plain-text targets.
+gm_form_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_catholic
+		}
+		localization_key = gm_skin_faith_catholic
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_protestant
+		}
+		localization_key = gm_skin_faith_protestant
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_orthodox
+		}
+		localization_key = gm_skin_faith_orthodox
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_oriental_orthodox
+		}
+		localization_key = gm_skin_faith_oriental_orthodox
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_sunni
+		}
+		localization_key = gm_skin_faith_sunni
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_shiite
+		}
+		localization_key = gm_skin_faith_shiite
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_ibadi
+		}
+		localization_key = gm_skin_faith_ibadi
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_jewish
+		}
+		localization_key = gm_skin_faith_jewish
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_mahayana
+		}
+		localization_key = gm_skin_faith_mahayana
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_gelugpa
+		}
+		localization_key = gm_skin_faith_gelugpa
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_theravada
+		}
+		localization_key = gm_skin_faith_theravada
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_confucian
+		}
+		localization_key = gm_skin_faith_confucian
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_hindu
+		}
+		localization_key = gm_skin_faith_hindu
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_shinto
+		}
+		localization_key = gm_skin_faith_shinto
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_sikh
+		}
+		localization_key = gm_skin_faith_sikh
+	}
+	text = {
+		trigger = {
+			has_variable = gm_form
+			var:gm_form = flag:faith
+			has_variable = gm_skin
+			var:gm_skin = flag:faith_animist
+		}
+		localization_key = gm_skin_faith_animist
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:column }
+		localization_key = gm_form_column
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:arch }
+		localization_key = gm_form_arch
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:obelisk }
+		localization_key = gm_form_obelisk
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:statue }
+		localization_key = gm_form_statue
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:gate }
+		localization_key = gm_form_gate
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:hall }
+		localization_key = gm_form_hall
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:tower }
+		localization_key = gm_form_tower
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:memorial }
+		localization_key = gm_form_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:mausoleum }
+		localization_key = gm_form_mausoleum
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:forum }
+		localization_key = gm_form_forum
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:pantheon }
+		localization_key = gm_form_pantheon
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stoa }
+		localization_key = gm_form_stoa
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:court }
+		localization_key = gm_form_court
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:pillar }
+		localization_key = gm_form_pillar
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stele }
+		localization_key = gm_form_stele
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:memorial_church }
+		localization_key = gm_form_memorial_church
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:pagoda }
+		localization_key = gm_form_pagoda
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:round_tower }
+		localization_key = gm_form_round_tower
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:high_cross }
+		localization_key = gm_form_high_cross
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:pyramid }
+		localization_key = gm_form_pyramid
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:rune_stone }
+		localization_key = gm_form_rune_stone
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:hall_of_fame }
+		localization_key = gm_form_hall_of_fame
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:hill_shrine }
+		localization_key = gm_form_hill_shrine
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:rock_cut }
+		localization_key = gm_form_rock_cut
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
+		localization_key = gm_form_opera_house
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:gardens }
+		localization_key = gm_form_gardens
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:observatory }
+		localization_key = gm_form_observatory
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:exhibition_hall }
+		localization_key = gm_form_exhibition_hall
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stadium }
+		localization_key = gm_form_stadium
+	}
+	text = {
+		localization_key = gm_form_monument
+	}
+}
+
+# What an honours name honours, by dedication: "the Column of the Crown".
+gm_honours_name = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
+		localization_key = gm_honours_crown
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_republic } }
+		localization_key = gm_honours_republic
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		localization_key = gm_honours_revolution
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_religious } }
+		localization_key = gm_honours_religious
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		localization_key = gm_honours_war_memorial
+	}
+	text = {
+		localization_key = gm_honours_civic
+	}
+}
+
+# The monument's name in the journal entry's row. Its targets read their data through
+# `State`, so this family serves only that context (customizable-
+# localization targets inherit the caller's; gm_name_effects.txt). First valid
+# wins: a typed name, the namesake, else the skin's own title (an undedicated
+# monument, or one older than names before its first refresh).
+gm_monument_name_row = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_name }
+		localization_key = gm_name_custom_row
+	}
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = city } }
+		localization_key = gm_name_city_row
+	}
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = state } }
+		localization_key = gm_name_state_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = ruler }
+			has_variable = gm_name_char
+			exists = var:gm_name_char
+		}
+		localization_key = gm_name_ruler_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = honours }
+			gm_state_takes_honours_name = yes
+		}
+		localization_key = gm_name_honours_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:victory
+			gm_state_enemy_cap_is_foreign = yes
+		}
+		localization_key = gm_name_victory_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:defeat
+		}
+		localization_key = gm_name_defeat_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:centenary
+		}
+		localization_key = gm_name_centenary_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_orbital
+		}
+		localization_key = gm_name_space_orbital_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_landing
+		}
+		localization_key = gm_name_space_moon_landing_row
+	}
+	# The year: its own namesake, and the fallback of the ruler and victory names.
+	text = {
+		trigger = { has_variable = gm_namesake has_variable = gm_name_year }
+		localization_key = gm_name_year_row
+	}
+	text = {
+		localization_key = gm_name_skin_row
+	}
+}
+
+# The monument's name in events. Its targets read their data through
+# `SCOPE.sState('monument_state')`, so this family serves only that context (customizable-
+# localization targets inherit the caller's; gm_name_effects.txt). First valid
+# wins: a typed name, the namesake, else the skin's own title (an undedicated
+# monument, or one older than names before its first refresh).
+gm_monument_name_evt = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_name }
+		localization_key = gm_name_custom_evt
+	}
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = city } }
+		localization_key = gm_name_city_evt
+	}
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = state } }
+		localization_key = gm_name_state_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = ruler }
+			has_variable = gm_name_char
+			exists = var:gm_name_char
+		}
+		localization_key = gm_name_ruler_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = honours }
+			gm_state_takes_honours_name = yes
+		}
+		localization_key = gm_name_honours_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:victory
+			gm_state_enemy_cap_is_foreign = yes
+		}
+		localization_key = gm_name_victory_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:defeat
+		}
+		localization_key = gm_name_defeat_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:centenary
+		}
+		localization_key = gm_name_centenary_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_orbital
+		}
+		localization_key = gm_name_space_orbital_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_landing
+		}
+		localization_key = gm_name_space_moon_landing_evt
+	}
+	# The year: its own namesake, and the fallback of the ruler and victory names.
+	text = {
+		trigger = { has_variable = gm_namesake has_variable = gm_name_year }
+		localization_key = gm_name_year_evt
+	}
+	text = {
+		localization_key = gm_name_skin_evt
+	}
+}
+
+# ============================================================================
+# Commissions (v2 §2): country scope, plain-text targets (the JE's Commission
+# section and the offer event read them through the country)
+# ============================================================================
+gm_com_ig_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:armed_forces }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:devout }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:industrialists }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:intelligentsia }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:landowners }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:petty_bourgeoisie }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:rural_folk }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { has_variable = gm_com_ig var:gm_com_ig = flag:trade_unions }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = gm_com_ig_unknown
+	}
+}
+
+gm_com_dedication_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:crown }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:republic }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:revolution }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:leader }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:religious }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:civic }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:war_memorial }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:artistic }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:naturalist }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:scientific }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:industrial }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_com_dedication var:gm_com_dedication = flag:athletic }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = pm_monument_undedicated
+	}
+}
+
+# The monument asked for, with its article: "an arch", "a mausoleum".
+gm_com_form_phrase = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:column }
+		localization_key = gm_com_form_column
+	}
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:arch }
+		localization_key = gm_com_form_arch
+	}
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:obelisk }
+		localization_key = gm_com_form_obelisk
+	}
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:memorial }
+		localization_key = gm_com_form_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:mausoleum }
+		localization_key = gm_com_form_mausoleum
+	}
+	text = {
+		localization_key = gm_com_form_default
+	}
+}
+
+# What the monument asked for will be named for.
+gm_com_namesake_phrase = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:victory
+		}
+		localization_key = gm_com_named_victory
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:defeat
+		}
+		localization_key = gm_com_named_defeat
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:centenary
+		}
+		localization_key = gm_com_named_centenary
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_orbital
+		}
+		localization_key = gm_com_named_space_orbital
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_landing
+		}
+		localization_key = gm_com_named_space_moon_landing
+	}
+	text = {
+		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:ruler }
+		localization_key = gm_com_named_ruler
+	}
+	text = {
+		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:year }
+		localization_key = gm_com_named_year
+	}
+	text = {
+		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:city }
+		localization_key = gm_com_named_city
+	}
+	text = {
+		localization_key = gm_com_named_city
+	}
+}
+
+# "A hundred" or "Two hundred", for the centenary offer.
+gm_com_centenary_years = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_centenary_200 }
+		localization_key = gm_com_years_200
+	}
+	text = {
+		localization_key = gm_com_years_100
+	}
+}
+
+# ============================================================================
+# The monument policy (v2 §5): country scope, plain-text targets
+# ============================================================================
+gm_policy_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:open }
+		localization_key = gm_policy_open
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:ceremonial }
+		localization_key = gm_policy_ceremonial
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
+		localization_key = gm_policy_mothballed
+	}
+	text = {
+		localization_key = gm_policy_standard
+	}
+}
+
+gm_policy_effects = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:open }
+		localization_key = gm_policy_effects_open
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:ceremonial }
+		localization_key = gm_policy_effects_ceremonial
+	}
+	text = {
+		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
+		localization_key = gm_policy_effects_mothballed
+	}
+	text = {
+		localization_key = gm_policy_effects_standard
+	}
+}
+
+# The commission's time in words for the offer (gm_com_time_months): five years
+# for a great power, ten for a major power.
+gm_com_time_words = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { country_rank >= rank_value:great_power }
+		localization_key = gm_com_time_5_years
+	}
+	text = {
+		localization_key = gm_com_time_10_years
+	}
+}

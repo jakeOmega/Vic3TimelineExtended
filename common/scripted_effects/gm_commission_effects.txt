@@ -1,0 +1,894 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — commissions: scripted effects (v2 §2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2;
+# plan: docs/superpowers/plans/2026-10-05-grand-monuments-v2-phases-1-3.md.
+#
+# A commission is an interest group's request for a monument. One record per
+# country, all country variables (a civil war's winner inherits variables,
+# not modifiers or lists):
+#   gm_com_offered        yes while the offer (monument_events.21) is open
+#   gm_com_open           yes while accepted and running
+#   gm_com_source         flag: victory, defeat, centenary, ruler_death,
+#                         regime, space, petition
+#   gm_com_ig             flag: the petitioning IG's type (gm_ig_to_flag_on_owner)
+#   gm_com_dedication     flag: one of the twelve dedication keys
+#   gm_com_state          state, when the commission names one
+#   gm_com_target         grandeur to add (5)
+#   gm_com_baseline       counted grandeur on acceptance (gm_com_fit_grandeur)
+#   gm_com_months_left    gm_com_time_months on acceptance (60, or 120 for a
+#                         major power), counted down by gm_com_monthly
+#   gm_com_extended       yes once Ask for More Time is used
+#   gm_com_namesake, gm_com_form, gm_com_occasion   flags: the name it asks for
+#   gm_com_name_year, gm_com_name_char, gm_com_name_enemy_cap   its records
+#   gm_com_cooldown       timed, 60 months after any commission closes: no
+#                         petition (world moments ignore it)
+# Kept across commissions: gm_com_last_state (the monument a level or a
+# dedication last touched) and the moment trackers (gm_ruler,
+# gm_ruler_months, gm_regime_last, gm_com_seen_space_<m>, gm_com_centenary_<n>,
+# gm_founded_year).
+#
+# Every reward and cost goes through ledgers (v1 §4.3), never a stacking
+# modifier: the petitioner's gm_ig_ledger_<ig> and the linear gm_promise_ledger.
+
+# ---- The record ------------------------------------------------------------------
+# Country scope. Forget the commission (offered or open).
+gm_com_clear = {
+	gm_remove_state_var = { VAR = gm_com_offered }
+	gm_remove_state_var = { VAR = gm_com_open }
+	gm_remove_state_var = { VAR = gm_com_source }
+	gm_remove_state_var = { VAR = gm_com_ig }
+	gm_remove_state_var = { VAR = gm_com_dedication }
+	gm_remove_state_var = { VAR = gm_com_state }
+	gm_remove_state_var = { VAR = gm_com_target }
+	gm_remove_state_var = { VAR = gm_com_baseline }
+	gm_remove_state_var = { VAR = gm_com_months_left }
+	gm_remove_state_var = { VAR = gm_com_extended }
+	gm_remove_state_var = { VAR = gm_com_namesake }
+	gm_remove_state_var = { VAR = gm_com_form }
+	gm_remove_state_var = { VAR = gm_com_occasion }
+	gm_remove_state_var = { VAR = gm_com_name_year }
+	gm_remove_state_var = { VAR = gm_com_name_char }
+	gm_remove_state_var = { VAR = gm_com_name_enemy_cap }
+	gm_remove_state_var = { VAR = gm_com_left }
+	gm_remove_state_var = { VAR = gm_com_gap_half }
+	gm_remove_state_var = { VAR = gm_com_offer_watch }
+	every_scope_state = {
+		limit = { has_variable = gm_unveiled_for_com }
+		remove_variable = gm_unveiled_for_com
+	}
+}
+
+# Country scope. A commission closes (declined, fulfilled, missed or lapsed):
+# no petition for 60 months (§2.5).
+gm_com_close = {
+	gm_com_clear = yes
+	set_variable = { name = gm_com_cooldown value = yes months = 60 }
+}
+
+# Country scope. Add $AMOUNT$ grandeur to the ledger of the IG whose type the
+# country's variable $VAR$ names (gm_com_ig). Through the per-IG curve,
+# 15 is about 2 approval, 8 about 1.3, 5 about 1 (§2.4).
+gm_country_ledger_ig_by_flag = {
+	gm_init_ledgers = yes
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = armed_forces }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = devout }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = industrialists }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = intelligentsia }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = landowners }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = petty_bourgeoisie }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = rural_folk }
+	gm_country_ledger_ig_by_flag_one = { VAR = $VAR$ AMOUNT = $AMOUNT$ IG = trade_unions }
+}
+
+gm_country_ledger_ig_by_flag_one = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			var:$VAR$ = flag:$IG$
+		}
+		change_variable = { name = gm_ig_ledger_$IG$ add = $AMOUNT$ }
+	}
+}
+
+# Country scope. The strongest interest group in the government ($IN$ = yes)
+# or outside it ($IN$ = no), as gm_com_ig; flag:none when there is none.
+gm_com_ig_by_clout = {
+	set_variable = { name = gm_com_ig value = flag:none }
+	ordered_interest_group = {
+		limit = { is_in_government = $IN$ }
+		order_by = ig_clout
+		position = 0
+		check_range_bounds = no
+		gm_ig_to_flag_on_owner = { VAR = gm_com_ig }
+	}
+}
+
+# ---- Making an offer (§2.2) ---------------------------------------------------------
+# Country scope. The common part of every offer: what is asked for and how it
+# would be named. The caller then sets gm_com_ig, any records and the state, and
+# sends it (gm_com_send_offer). FORM = default leaves the form to the
+# unveiling (the skin's first form).
+gm_com_begin = {
+	gm_com_clear = yes
+	set_variable = { name = gm_com_source value = flag:$SOURCE$ }
+	set_variable = { name = gm_com_dedication value = flag:$DEDICATION$ }
+	set_variable = { name = gm_com_namesake value = flag:$NAMESAKE$ }
+	set_variable = { name = gm_com_form value = flag:$FORM$ }
+	set_variable = { name = gm_com_target value = 5 }
+	set_variable = { name = gm_com_name_year value = year }
+}
+
+# Country scope. Fix the commission to the capital, if a monument of its
+# dedication can stand there; otherwise it can be met anywhere (one Grand
+# Monument per state: a capital holding another dedication could never meet it).
+gm_com_fix_to_capital = {
+	if = {
+		limit = {
+			capital ?= { gm_state_can_host_commission = yes }
+		}
+		capital = { save_scope_as = gm_com_capital }
+		set_variable = { name = gm_com_state value = scope:gm_com_capital }
+	}
+}
+
+# Country scope. Send the offer, once a petitioner is known; with none (no
+# interest group of the eight found), forget it.
+gm_com_send_offer = {
+	if = {
+		limit = {
+			has_variable = gm_com_ig
+			NOT = { var:gm_com_ig = flag:none }
+		}
+		set_variable = gm_com_offered
+		# The offer's watchdog: an offer still open after six months (its event
+		# never fired, or never closed) is forgotten by the world pass, so it
+		# cannot block every later commission.
+		set_variable = { name = gm_com_offer_watch value = yes months = 6 }
+		if = {
+			limit = {
+				NOT = { has_journal_entry = je_grand_monuments }
+			}
+			add_journal_entry = { type = je_grand_monuments }
+		}
+		trigger_event = { id = monument_events.21 }
+	}
+	else = {
+		gm_com_clear = yes
+	}
+}
+
+# Country scope. The scopes the offer's and the ceremony's text read: the
+# petitioning interest group, the commission's state, the enemy (its capital's
+# owner) and the late ruler.
+gm_com_save_scopes = {
+	gm_com_save_ig_scope = { IG = armed_forces }
+	gm_com_save_ig_scope = { IG = devout }
+	gm_com_save_ig_scope = { IG = industrialists }
+	gm_com_save_ig_scope = { IG = intelligentsia }
+	gm_com_save_ig_scope = { IG = landowners }
+	gm_com_save_ig_scope = { IG = petty_bourgeoisie }
+	gm_com_save_ig_scope = { IG = rural_folk }
+	gm_com_save_ig_scope = { IG = trade_unions }
+	if = {
+		limit = { has_variable = gm_com_state }
+		var:gm_com_state ?= { save_scope_as = gm_com_where }
+	}
+	if = {
+		limit = { has_variable = gm_com_name_enemy_cap }
+		var:gm_com_name_enemy_cap ?= {
+			owner ?= { save_scope_as = gm_com_enemy }
+		}
+	}
+	if = {
+		limit = { has_variable = gm_com_name_char }
+		var:gm_com_name_char ?= { save_scope_as = gm_com_honoree }
+	}
+}
+
+gm_com_save_ig_scope = {
+	if = {
+		limit = {
+			has_variable = gm_com_ig
+			var:gm_com_ig = flag:$IG$
+		}
+		ig:ig_$IG$ ?= { save_scope_as = gm_com_ig_scope }
+	}
+}
+
+# ---- The offer's two answers (monument_events.21) -------------------------------------
+# Country scope, ROOT = the country.
+gm_com_accept = {
+	gm_remove_state_var = { VAR = gm_com_offered }
+	set_variable = gm_com_open
+	set_variable = { name = gm_com_months_left value = gm_com_time_months }
+	set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }
+	set_variable = gm_active
+	gm_init_ledgers = yes
+	if = {
+		limit = { is_ai = yes }
+		gm_com_ai_queue = yes
+	}
+	trigger_event = { id = monument_events.20 }
+}
+
+gm_com_decline = {
+	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -5 }
+	set_variable = gm_active
+	gm_com_close = yes
+	trigger_event = { id = monument_events.20 }
+}
+
+# ---- The AI's construction (§2.6) -------------------------------------------------------
+# Country scope, AI only, on accepting. Queues the target's levels as
+# government construction (start_building_construction: the AI pays for them,
+# unlike create_building) in the first of: the commission's state; the tallest
+# fitting monument of its dedication; an undedicated monument (the ceremony's
+# AI weight then picks the commission's dedication); the capital, if it has no
+# monument; the most populous incorporated state without one. One level a call,
+# in a `while` with a limit: an <int> argument does not take a variable.
+gm_com_ai_queue = {
+	clear_saved_scope = gm_com_build_state
+	if = {
+		limit = { has_variable = gm_com_state }
+		var:gm_com_state ?= { save_scope_as = gm_com_build_state }
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				gm_state_status_fits = yes
+				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				gm_state_status_fits = yes
+				gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_com_build_state
+		}
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				has_building = building_grand_monument
+				gm_state_is_dedicated = no
+			}
+		}
+		random_scope_state = {
+			limit = {
+				has_building = building_grand_monument
+				gm_state_is_dedicated = no
+			}
+			save_scope_as = gm_com_build_state
+		}
+	}
+	else_if = {
+		limit = {
+			capital ?= {
+				NOT = { has_building = building_grand_monument }
+			}
+		}
+		capital = { save_scope_as = gm_com_build_state }
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				is_incorporated = yes
+				NOT = { has_building = building_grand_monument }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_incorporated = yes
+				NOT = { has_building = building_grand_monument }
+			}
+			order_by = state_population
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_com_build_state
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_com_build_state }
+		set_variable = { name = gm_com_queued value = 0 }
+		while = {
+			limit = { var:gm_com_queued < var:gm_com_target }
+			scope:gm_com_build_state = {
+				start_building_construction = building_grand_monument
+			}
+			change_variable = { name = gm_com_queued add = 1 }
+		}
+		remove_variable = gm_com_queued
+	}
+}
+
+# ---- The open commission (§2.3) -------------------------------------------------------
+# Country scope. From gm_country_refresh, before the totals so its rewards
+# count in the same refresh (a level finished, a dedication, the month), and
+# from gm_country_monthly before the clock: met once the progress reaches the
+# target. A counted monument that drops out (ceded, contested, demolished)
+# lowers the baseline with it, so it stops counting instead of cancelling
+# grandeur added since.
+gm_com_check_progress = {
+	if = {
+		limit = { has_variable = gm_com_open }
+		set_variable = {
+			name = gm_com_drop
+			value = {
+				value = var:gm_com_baseline
+				subtract = gm_com_fit_grandeur
+			}
+		}
+		if = {
+			limit = { var:gm_com_drop > 0 }
+			set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }
+		}
+		remove_variable = gm_com_drop
+		set_variable = {
+			name = gm_com_left
+			value = {
+				value = var:gm_com_target
+				subtract = gm_com_progress
+			}
+		}
+		if = {
+			limit = { var:gm_com_left <= 0 }
+			gm_com_fulfil = yes
+		}
+	}
+}
+
+# Country scope. From gm_country_monthly, after gm_com_check_progress and
+# before the refresh (so a commission met this month is already closed, and a
+# miss's resentment counts in this month's totals): the clock, then a lapse
+# before a miss, then the AI's extension.
+gm_com_monthly = {
+	if = {
+		limit = { has_variable = gm_com_open }
+		change_variable = { name = gm_com_months_left add = -1 }
+		set_variable = {
+			name = gm_com_gap_half
+			value = {
+				value = gm_com_progress
+				multiply = -2
+				add = var:gm_com_target
+			}
+		}
+		if = {
+			limit = { gm_com_has_lapsed = yes }
+			gm_com_lapse = yes
+		}
+		else_if = {
+			limit = { var:gm_com_months_left <= 0 }
+			gm_com_miss = yes
+		}
+		else_if = {
+			limit = {
+				is_ai = yes
+				gm_com_ai_wants_more_time = yes
+			}
+			gm_com_extend = yes
+		}
+	}
+}
+
+# Country scope. Ask for More Time: once, +36 months, the reward halved.
+gm_com_extend = {
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			NOT = { has_variable = gm_com_extended }
+		}
+		set_variable = gm_com_extended
+		change_variable = { name = gm_com_months_left add = 36 }
+	}
+}
+
+# Country scope. Met. The monument whose level or dedication completed it
+# (gm_com_last_state, if it still counts), else the tallest counting monument,
+# takes the commission's name -- unless it was unveiled while this commission
+# was open, when the player already chose its name with the commission's offered
+# first (gm_unveiled_for_com), or the commission asks only for the city's name
+# (a petition) and the monument already has a name: that would erase a chosen
+# name for everyone's default.
+gm_com_fulfil = {
+	clear_saved_scope = gm_com_named_state
+	if = {
+		limit = {
+			has_variable = gm_com_last_state
+			var:gm_com_last_state ?= { gm_state_com_counts = yes }
+		}
+		var:gm_com_last_state = { save_scope_as = gm_com_named_state }
+	}
+	else = {
+		ordered_scope_state = {
+			limit = { gm_state_com_counts = yes }
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_com_named_state
+		}
+	}
+	if = {
+		limit = { exists = scope:gm_com_named_state }
+		scope:gm_com_named_state = {
+			if = {
+				limit = {
+					NOT = { has_variable = gm_unveiled_for_com }
+					OR = {
+						NOT = { has_variable = gm_namesake }
+						owner = {
+							NOT = { var:gm_com_namesake = flag:city }
+						}
+					}
+				}
+				gm_state_take_commission_name = yes
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = gm_com_extended }
+		gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = 8 }
+		change_variable = { name = gm_promise_ledger add = 2.5 }
+	}
+	else = {
+		gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = 15 }
+		change_variable = { name = gm_promise_ledger add = 5 }
+	}
+	set_variable = gm_active
+	if = {
+		limit = { is_ai = no }
+		post_notification = gm_com_fulfilled_notice
+	}
+	gm_com_close = yes
+}
+
+# Country scope. Time ran out: a broken promise, resented more than an honest
+# refusal (owner, 2026-10-05), so refusing is the way out for a country that
+# can't build.
+gm_com_miss = {
+	gm_country_ledger_ig_by_flag = { VAR = gm_com_ig AMOUNT = -15 }
+	set_variable = gm_active
+	if = {
+		limit = { is_ai = no }
+		post_notification = gm_com_missed_notice
+	}
+	gm_com_close = yes
+}
+
+# Country scope. It can no longer be met, through no choice of ours: no cost.
+gm_com_lapse = {
+	if = {
+		limit = { is_ai = no }
+		post_notification = gm_com_lapsed_notice
+	}
+	gm_com_close = yes
+}
+
+# ---- The world pass (§2.2, §2.5): every country, every month --------------------------------
+# Country scope, from gm_com_world_on_action. Bookkeeping first, always (so a
+# moment seen while busy is dropped, not queued); each tracker offers only while
+# gm_com_can_offer holds.
+gm_com_world_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_com_seeded }
+		}
+		gm_com_seed = yes
+	}
+	if = {
+		limit = {
+			has_variable = gm_com_offered
+			NOT = { has_variable = gm_com_offer_watch }
+		}
+		gm_com_clear = yes
+	}
+	gm_com_track_ruler = yes
+	gm_com_init_founded = yes
+	gm_com_track_regime = yes
+	gm_com_track_space = yes
+	gm_com_track_centenary = yes
+	gm_com_try_petition = yes
+}
+
+# The ruler and how many months they have reigned, for a ruler's death (15
+# years). A ruler already reigning in 1836 counts from the game's start.
+gm_com_track_ruler = {
+	if = {
+		limit = { exists = ruler }
+		ruler = { save_scope_as = gm_com_tracked_ruler }
+		if = {
+			limit = {
+				has_variable = gm_ruler
+				var:gm_ruler = scope:gm_com_tracked_ruler
+				has_variable = gm_ruler_months
+			}
+			change_variable = { name = gm_ruler_months add = 1 }
+		}
+		else = {
+			set_variable = { name = gm_ruler value = scope:gm_com_tracked_ruler }
+			set_variable = { name = gm_ruler_months value = 0 }
+		}
+	}
+}
+
+# The founding year, for a country that appears after the game starts (a
+# release; formation sets it in gm_formed_on_action). Countries standing in 1836
+# carry gm_com_start_country and have a founding year only from
+# gm_seed_founding_years. Never for a side in a civil war: a revolutionary
+# country's own value would beat the nation's when it wins.
+gm_com_init_founded = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_founded_year }
+			NOT = { has_variable = gm_com_start_country }
+			NOT = { has_variable = te_cw_role }
+			is_revolutionary = no
+		}
+		set_variable = { name = gm_founded_year value = year }
+	}
+}
+
+# A new regime (§2.2): the form of government a regime dedication honours
+# changes to one that has no fitting monument. Read as an edge, month on month.
+# Revolution is tested first: a Council Republic is also a republic.
+gm_com_track_regime = {
+	set_variable = { name = gm_regime_now value = flag:none }
+	if = {
+		limit = { gm_government_is_revolutionary = yes }
+		set_variable = { name = gm_regime_now value = flag:revolution }
+	}
+	else_if = {
+		limit = { monument_government_is_crowned = yes }
+		set_variable = { name = gm_regime_now value = flag:crown }
+	}
+	else_if = {
+		limit = { monument_government_is_republican = yes }
+		set_variable = { name = gm_regime_now value = flag:republic }
+	}
+	if = {
+		limit = {
+			has_variable = gm_regime_last
+			gm_com_can_offer = yes
+		}
+		gm_com_try_regime = { KEY = crown IG = landowners }
+		gm_com_try_regime = { KEY = republic IG = intelligentsia }
+		gm_com_try_regime = { KEY = revolution IG = trade_unions }
+	}
+	# Not while a side in a civil war: a winning revolution keeps its own
+	# variables over the nation's, and one written all through the war would
+	# already hold the new regime, so the edge it brings would never be seen.
+	if = {
+		limit = {
+			NOT = { has_variable = te_cw_role }
+			is_revolutionary = no
+		}
+		set_variable = { name = gm_regime_last value = var:gm_regime_now }
+	}
+	remove_variable = gm_regime_now
+}
+
+gm_com_try_regime = {
+	if = {
+		limit = {
+			var:gm_regime_now = flag:$KEY$
+			NOT = { var:gm_regime_last = flag:$KEY$ }
+			gm_com_can_offer = yes
+			NOT = {
+				any_scope_state = {
+					gm_state_status_fits = yes
+					gm_state_has_pm = { PM = pm_monument_$KEY$ }
+				}
+			}
+		}
+		gm_com_begin = { SOURCE = regime DEDICATION = $KEY$ NAMESAKE = year FORM = column }
+		set_variable = { name = gm_com_ig value = flag:$IG$ }
+		gm_com_send_offer = yes
+	}
+}
+
+# A space first (§2.2): the two crewed world firsts. Seen once, offered if free.
+gm_com_track_space = {
+	gm_com_track_space_one = { M = orbital }
+	gm_com_track_space_one = { M = moon_landing }
+}
+
+gm_com_track_space_one = {
+	if = {
+		limit = {
+			has_variable = sr_was_first_$M$
+			NOT = { has_variable = gm_com_seen_space_$M$ }
+		}
+		set_variable = gm_com_seen_space_$M$
+		if = {
+			limit = { gm_com_can_offer = yes }
+			gm_com_begin = { SOURCE = space DEDICATION = civic NAMESAKE = occasion FORM = obelisk }
+			set_variable = { name = gm_com_occasion value = flag:space_$M$ }
+			set_variable = { name = gm_com_ig value = flag:intelligentsia }
+			gm_com_fix_to_capital = yes
+			gm_com_send_offer = yes
+		}
+	}
+}
+
+# A centenary (§2.2): the 100th or 200th year after the founding, in January.
+gm_com_track_centenary = {
+	if = {
+		limit = {
+			month = 0
+			has_variable = gm_founded_year
+		}
+		set_variable = {
+			name = gm_com_age
+			value = {
+				value = year
+				subtract = var:gm_founded_year
+			}
+		}
+		gm_com_track_centenary_n = { N = 100 }
+		gm_com_track_centenary_n = { N = 200 }
+		remove_variable = gm_com_age
+	}
+}
+
+gm_com_track_centenary_n = {
+	if = {
+		limit = {
+			var:gm_com_age = $N$
+			NOT = { has_variable = gm_com_centenary_$N$ }
+		}
+		set_variable = gm_com_centenary_$N$
+		if = {
+			limit = { gm_com_can_offer = yes }
+			gm_com_begin = { SOURCE = centenary DEDICATION = civic NAMESAKE = occasion FORM = column }
+			set_variable = { name = gm_com_occasion value = flag:centenary }
+			if = {
+				limit = {
+					ig:ig_petty_bourgeoisie ?= { is_marginal = no }
+				}
+				set_variable = { name = gm_com_ig value = flag:petty_bourgeoisie }
+			}
+			else = {
+				gm_com_ig_by_clout = { IN = yes }
+			}
+			gm_com_fix_to_capital = yes
+			gm_com_send_offer = yes
+		}
+	}
+}
+
+# A petition (§2.2, §2.5): a 1-in-120 chance a month (about one a decade),
+# none for 60 months after a commission closes, from an interest group in
+# government for a dedication it approves of with less than 5 fitting grandeur.
+gm_com_try_petition = {
+	if = {
+		limit = {
+			gm_com_can_offer = yes
+			NOT = { has_variable = gm_com_cooldown }
+		}
+		random_list = {
+			119 = { } # no petition this month
+			1 = { gm_com_offer_petition = yes }
+		}
+	}
+}
+
+gm_com_offer_petition = {
+	gm_com_count_fit = { KEY = war_memorial }
+	gm_com_count_fit = { KEY = religious }
+	gm_com_count_fit = { KEY = industrial }
+	gm_com_count_fit = { KEY = republic }
+	gm_com_count_fit = { KEY = artistic }
+	gm_com_count_fit = { KEY = scientific }
+	gm_com_count_fit = { KEY = crown }
+	gm_com_count_fit = { KEY = civic }
+	gm_com_count_fit = { KEY = naturalist }
+	gm_com_count_fit = { KEY = revolution }
+	gm_com_count_fit = { KEY = athletic }
+	if = {
+		limit = { gm_com_any_petition_fits = yes }
+		random_list = {
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = armed_forces KEY = war_memorial } }
+				gm_com_begin_petition = { IG = armed_forces KEY = war_memorial }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = devout KEY = religious } }
+				gm_com_begin_petition = { IG = devout KEY = religious }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = industrialists KEY = industrial } }
+				gm_com_begin_petition = { IG = industrialists KEY = industrial }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = intelligentsia KEY = republic } }
+				gm_com_begin_petition = { IG = intelligentsia KEY = republic }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = intelligentsia KEY = artistic } }
+				gm_com_begin_petition = { IG = intelligentsia KEY = artistic }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = intelligentsia KEY = scientific } }
+				gm_com_begin_petition = { IG = intelligentsia KEY = scientific }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = landowners KEY = crown } }
+				gm_com_begin_petition = { IG = landowners KEY = crown }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = petty_bourgeoisie KEY = civic } }
+				gm_com_begin_petition = { IG = petty_bourgeoisie KEY = civic }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = rural_folk KEY = naturalist } }
+				gm_com_begin_petition = { IG = rural_folk KEY = naturalist }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = trade_unions KEY = revolution } }
+				gm_com_begin_petition = { IG = trade_unions KEY = revolution }
+			}
+			10 = {
+				trigger = { gm_com_petition_fits = { IG = trade_unions KEY = athletic } }
+				gm_com_begin_petition = { IG = trade_unions KEY = athletic }
+			}
+		}
+	}
+	gm_com_forget_fit = { KEY = war_memorial }
+	gm_com_forget_fit = { KEY = religious }
+	gm_com_forget_fit = { KEY = industrial }
+	gm_com_forget_fit = { KEY = republic }
+	gm_com_forget_fit = { KEY = artistic }
+	gm_com_forget_fit = { KEY = scientific }
+	gm_com_forget_fit = { KEY = crown }
+	gm_com_forget_fit = { KEY = civic }
+	gm_com_forget_fit = { KEY = naturalist }
+	gm_com_forget_fit = { KEY = revolution }
+	gm_com_forget_fit = { KEY = athletic }
+}
+
+gm_com_begin_petition = {
+	gm_com_begin = { SOURCE = petition DEDICATION = $KEY$ NAMESAKE = city FORM = default }
+	set_variable = { name = gm_com_ig value = flag:$IG$ }
+	gm_com_send_offer = yes
+}
+
+# Country scope. gm_fit_$KEY$: the fitting grandeur of dedication $KEY$.
+gm_com_count_fit = {
+	set_variable = { name = gm_fit_$KEY$ value = 0 }
+	every_scope_state = {
+		limit = {
+			gm_state_status_fits = yes
+			gm_state_has_pm = { PM = pm_monument_$KEY$ }
+		}
+		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		owner = {
+			change_variable = { name = gm_fit_$KEY$ add = prev.var:gm_grandeur }
+		}
+	}
+}
+
+gm_com_forget_fit = {
+	gm_remove_state_var = { VAR = gm_fit_$KEY$ }
+}
+
+# ---- War's end (§2.2) --------------------------------------------------------------------
+# Country scope, from on_won_war / on_lost_war (monument_events_on_actions.txt)
+# for a war leader after a year of war, scope:enemy_country = the other side's
+# leader. Victory names the enemy (its capital, a state: a country stored in a
+# variable does not print its name); without one, the year.
+gm_com_war_victory = {
+	if = {
+		limit = { gm_com_can_offer = yes }
+		gm_com_begin = { SOURCE = victory DEDICATION = war_memorial NAMESAKE = occasion FORM = arch }
+		set_variable = { name = gm_com_occasion value = flag:victory }
+		set_variable = { name = gm_com_ig value = flag:armed_forces }
+		scope:enemy_country ?= {
+			capital ?= { save_scope_as = gm_com_enemy_capital }
+		}
+		if = {
+			limit = { exists = scope:gm_com_enemy_capital }
+			set_variable = { name = gm_com_name_enemy_cap value = scope:gm_com_enemy_capital }
+		}
+		else = {
+			set_variable = { name = gm_com_namesake value = flag:year }
+		}
+		gm_com_send_offer = yes
+	}
+}
+
+# The Armed Forces ask for a memorial to the fallen; if they are in the
+# government, the strongest group outside it does.
+gm_com_war_defeat = {
+	if = {
+		limit = { gm_com_can_offer = yes }
+		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = memorial }
+		set_variable = { name = gm_com_occasion value = flag:defeat }
+		if = {
+			limit = {
+				ig:ig_armed_forces ?= { is_in_government = yes }
+			}
+			gm_com_ig_by_clout = { IN = no }
+		}
+		else = {
+			set_variable = { name = gm_com_ig value = flag:armed_forces }
+		}
+		gm_com_send_offer = yes
+	}
+}
+
+# ---- A ruler's death (§2.2) -----------------------------------------------------------------
+# Country scope, scope:gm_late_ruler = the ruler who died after reigning 15
+# years or more. Their own interest group petitions; else the strongest in
+# government.
+gm_com_ruler_death = {
+	gm_com_begin = { SOURCE = ruler_death DEDICATION = civic NAMESAKE = ruler FORM = mausoleum }
+	set_variable = { name = gm_com_name_char value = scope:gm_late_ruler }
+	set_variable = { name = gm_com_ig value = flag:none }
+	scope:gm_late_ruler = {
+		interest_group ?= {
+			gm_ig_to_flag_on_owner = { VAR = gm_com_ig }
+		}
+	}
+	if = {
+		limit = { var:gm_com_ig = flag:none }
+		gm_com_ig_by_clout = { IN = yes }
+	}
+	gm_com_fix_to_capital = yes
+	gm_com_send_offer = yes
+}
+
+# ---- Seeding (history, and old saves) -----------------------------------------------------
+# Any scope. Every country standing now is a start country: it has a founding
+# year only if gm_seed_founding_years gives it one, so 1936 does not bring a
+# centenary to every country of 1836 at once. A space first already won is
+# marked seen: no commission for an old achievement.
+gm_com_seed = {
+	set_global_variable = gm_com_seeded
+	every_country = {
+		set_variable = gm_com_start_country
+		if = {
+			limit = { has_variable = sr_was_first_orbital }
+			set_variable = gm_com_seen_space_orbital
+		}
+		if = {
+			limit = { has_variable = sr_was_first_moon_landing }
+			set_variable = gm_com_seen_space_moon_landing
+		}
+	}
+	gm_seed_founding_years = yes
+}
+
+# Well-known foundings before 1836 (v2 §2.2), each country's own independence
+# year: its centenary and bicentenary are the moments the country itself marks.
+gm_seed_founding_years = {
+	gm_seed_founding_year = { TAG = USA YEAR = 1776 }
+	gm_seed_founding_year = { TAG = HAI YEAR = 1804 }
+	gm_seed_founding_year = { TAG = CLM YEAR = 1810 }
+	gm_seed_founding_year = { TAG = PRG YEAR = 1811 }
+	gm_seed_founding_year = { TAG = VNZ YEAR = 1811 }
+	gm_seed_founding_year = { TAG = ARG YEAR = 1816 }
+	gm_seed_founding_year = { TAG = CHL YEAR = 1818 }
+	gm_seed_founding_year = { TAG = MEX YEAR = 1821 }
+	gm_seed_founding_year = { TAG = GRE YEAR = 1821 }
+	gm_seed_founding_year = { TAG = BRZ YEAR = 1822 }
+	gm_seed_founding_year = { TAG = BOL YEAR = 1825 }
+	gm_seed_founding_year = { TAG = URU YEAR = 1825 }
+	gm_seed_founding_year = { TAG = BEL YEAR = 1830 }
+	gm_seed_founding_year = { TAG = ECU YEAR = 1830 }
+}
+
+gm_seed_founding_year = {
+	c:$TAG$ ?= {
+		if = {
+			limit = {
+				NOT = { has_variable = gm_founded_year }
+			}
+			set_variable = { name = gm_founded_year value = $YEAR$ }
+		}
+	}
+}

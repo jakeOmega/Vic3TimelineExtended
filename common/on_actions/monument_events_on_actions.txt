@@ -16,6 +16,7 @@ on_monthly_pulse_country = {
 	on_actions = {
 		monument_events_on_action
 		gm_country_on_action
+		gm_com_world_on_action
 	}
 }
 
@@ -27,10 +28,21 @@ on_monthly_pulse_country = {
 monument_events_on_action = {
 	trigger = {
 		gm_system_enabled = yes
+		# The monument policy (v2 §5): no anniversaries while Mothballed.
+		NOT = { gm_policy_is = { P = mothballed STANDARD = no } }
 	}
 	effect = {
 		random_list = {
-			800 = { } # overwhelmingly nothing
+			# Overwhelmingly nothing. Open to the Public halves this weight,
+			# which about doubles every anniversary's chance.
+			800 = {
+				modifier = {
+					if = {
+						limit = { gm_policy_is = { P = open STANDARD = no } }
+						multiply = 0.5
+					}
+				}
+			}
 
 			3 = {
 				trigger = {
@@ -190,6 +202,10 @@ gm_country_on_action = {
 				OR = {
 					any_scope_state = { has_building = building_grand_monument }
 					has_variable = gm_active
+					has_variable = gm_com_open
+					# A naming outlives its last monument until the sweep
+					# closes it (gm_name_sweep).
+					has_variable = gm_naming_active
 				}
 			}
 			gm_country_monthly = yes
@@ -258,5 +274,125 @@ gm_state_owner_change_on_action = {
 	}
 	effect = {
 		gm_state_changed_hands = yes
+	}
+}
+
+# ============================================================================
+# Commissions (v2 §2): the world pass and the moments it cannot poll
+# ============================================================================
+# Every country, every month: the moment trackers and the petition roll
+# (gm_com_world_monthly, gm_commission_effects.txt). Cheap: a few reads a
+# country, and the petition's counts only on a 1-in-120 roll.
+gm_com_world_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		gm_com_world_monthly = yes
+	}
+}
+
+# ROOT = a country on a side that has just won (on_won_war) or lost
+# (on_lost_war) a war, capitulations included; scope:war = the war,
+# scope:enemy_country = the other side's leader, scope:benefitted_from_wargoal /
+# scope:victim_of_wargoal = set if a war goal of this country's was enforced, or
+# one against it (1.14.5 00_code_on_actions.txt; vanilla moved recently_won_war
+# here). Victory and Defeat are for war leaders after a year of war (v2 §2.2).
+on_won_war = {
+	on_actions = {
+		gm_won_war_on_action
+	}
+}
+
+gm_won_war_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				exists = scope:benefitted_from_wargoal
+				exists = scope:war
+				scope:war = {
+					is_warleader = root
+					war_duration_months >= 12
+				}
+			}
+			gm_com_war_victory = yes
+		}
+	}
+}
+
+on_lost_war = {
+	on_actions = {
+		gm_lost_war_on_action
+	}
+}
+
+gm_lost_war_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				exists = scope:victim_of_wargoal
+				exists = scope:war
+				scope:war = {
+					is_warleader = root
+					war_duration_months >= 12
+				}
+			}
+			gm_com_war_defeat = yes
+		}
+	}
+}
+
+# ROOT = the character who died. A ruler who reigned 15 years or more
+# (gm_ruler_months, kept by the world pass) is offered a mausoleum.
+on_character_death = {
+	on_actions = {
+		gm_character_death_on_action
+	}
+}
+
+gm_character_death_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+		is_ruler_of_own_country = yes
+	}
+	effect = {
+		save_scope_as = gm_late_ruler
+		owner ?= {
+			if = {
+				limit = {
+					gm_com_can_offer = yes
+					has_variable = gm_ruler
+					var:gm_ruler = scope:gm_late_ruler
+					has_variable = gm_ruler_months
+					var:gm_ruler_months >= 180
+				}
+				gm_com_ruler_death = yes
+			}
+		}
+	}
+}
+
+# ROOT = the newly formed country: its founding is now (Germany in 1871 marks
+# 1971, not its Prussian past).
+on_country_formed = {
+	on_actions = {
+		gm_formed_on_action
+	}
+}
+
+gm_formed_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		set_variable = { name = gm_founded_year value = year }
+		gm_remove_state_var = { VAR = gm_com_centenary_100 }
+		gm_remove_state_var = { VAR = gm_com_centenary_200 }
 	}
 }

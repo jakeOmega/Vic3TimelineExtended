@@ -20,6 +20,12 @@ Checks, per `localization/**/*.yml`:
      splices the English tail back in after the translated half. Write a
      literal quote as `\"`.
   6. every `\"` in a value is paired, or the line shows a dangling quote mark
+  7. every value closes on its own line, and every other line is blank, a
+     comment or the header. A value written with a raw newline (a script's
+     "\n" where the file needs the two characters `\n`) leaves
+     `key:0 "first part` on one line and the rest on the next: the game reads
+     neither as the value, and organize_loc keeps the first line as the whole
+     value and drops the rest, after which no other check sees it.
 
 Pass a directory to check other trees too, e.g. the deploy-time language copies
 `scripts/generators/gen_non_english_loc.py` stages under `build/localization/`.
@@ -134,6 +140,18 @@ def check_file(path: str) -> list[str]:
     for index, line in enumerate(lines, start=1):
         parsed = split_loc_line(line)
         if parsed is None:
+            stripped = line.strip()
+            key_line = _KEY_RE.match(line)
+            if key_line and f"{key_line.group(1)}:" != expected_header:
+                problems.append(
+                    f"{rel}:{index}: the value of '{key_line.group(1)}' has no closing quote on its "
+                    f"line: a newline written into the value? Write it as `\\n`"
+                )
+            elif stripped and not stripped.startswith("#") and not re.match(r"^l_[a-z_]+:$", stripped):
+                problems.append(
+                    f"{rel}:{index}: not a key line, a comment or the header: the rest of a "
+                    f"value split across lines?"
+                )
             continue
         key, value, trailing = parsed
         # A comment follows the value only if no quote does: `""#bold x#!""`

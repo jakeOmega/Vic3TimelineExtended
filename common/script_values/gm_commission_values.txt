@@ -1,0 +1,133 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — commissions: script values (v2 §2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2.
+# Country scope throughout. Every var: read is guarded: the widget renders these
+# for countries that have never had a commission.
+
+# ---- Progress (§2.3) ------------------------------------------------------------
+# The grandeur of the monuments that count toward the open commission today
+# (gm_state_com_counts): fitting, of its dedication, in its state if it has one.
+gm_com_fit_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_dedication }
+		every_scope_state = {
+			limit = { gm_state_com_counts = yes }
+			add = gm_state_grandeur
+		}
+	}
+}
+
+# Grandeur added since acceptance, floored at 0: raising an old monument counts
+# as much as founding a new one, and a counted monument that is contested later
+# drops out without driving the count below zero.
+gm_com_progress = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			has_variable = gm_com_baseline
+		}
+		value = gm_com_fit_grandeur
+		subtract = var:gm_com_baseline
+		min = 0
+	}
+}
+
+# ---- Time (§2.3) -------------------------------------------------------------------
+# The months a commission runs, fixed on acceptance: 60 for a great power, 120
+# for a major power (owner, 2026-10-05: about half the construction for the same
+# five levels). A rank won or lost later does not change a running commission.
+gm_com_time_months = {
+	value = 120
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = 60
+	}
+}
+
+# ---- Journal entry displays (grand_monuments_widget.gui, Commission) -------------
+gm_disp_com_open = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_open }
+		value = 1
+	}
+}
+
+gm_disp_com_progress = {
+	value = gm_com_progress
+}
+
+gm_disp_com_target = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_target }
+		value = var:gm_com_target
+	}
+}
+
+# The bar: progress over target, 0-1.
+gm_disp_com_frac = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			has_variable = gm_com_target
+			var:gm_com_target > 0
+		}
+		value = gm_com_progress
+		divide = var:gm_com_target
+		max = 1
+	}
+}
+
+gm_disp_com_months = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_com_open
+			has_variable = gm_com_months_left
+		}
+		value = var:gm_com_months_left
+		min = 0
+	}
+}
+
+# 1 once Ask for More Time has been used.
+gm_disp_com_extended = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_extended }
+		value = 1
+	}
+}
+
+# 1 while the commission names a state.
+gm_disp_com_fixed = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_com_state }
+		value = 1
+	}
+}
+
+# ---- What fulfilment pays (§2.4), for the tooltips -------------------------------
+# The petitioner's ledger moves by this much grandeur; the promise ledger by
+# gm_com_reward_promise legitimacy. Halved after Ask for More Time.
+gm_com_reward_ig = {
+	value = 15
+	if = {
+		limit = { has_variable = gm_com_extended }
+		value = 8
+	}
+}
+
+gm_com_reward_promise = {
+	value = 5
+	if = {
+		limit = { has_variable = gm_com_extended }
+		value = 2.5
+	}
+}

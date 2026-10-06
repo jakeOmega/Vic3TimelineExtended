@@ -52,7 +52,11 @@ gm_system_enabled = {
 gm_entry_unlocked = {
 	custom_tooltip = {
 		text = gm_unlock_tt
-		any_scope_state = { has_building = building_grand_monument }
+		OR = {
+			any_scope_state = { has_building = building_grand_monument }
+			has_variable = gm_com_open
+			has_variable = gm_com_offered
+		}
 	}
 }
 
@@ -386,6 +390,7 @@ gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
 	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
+	gm_ledger_idle = { VAR = gm_promise_ledger }
 }
 
 # ======================================================================

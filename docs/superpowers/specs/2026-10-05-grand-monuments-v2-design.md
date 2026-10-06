@@ -40,7 +40,10 @@ Baseline: `main` at `c906371` (#743 merged).
 | History | **Monuments standing in 1836 are placed at the start.** v1's "History places no Grand Monuments" is reversed |
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
-| Phasing | Numbers → commissions with names → 1836 monuments → policy → trophies → historical commissions (§10) |
+| Phasing | Numbers → commissions with names → policy → 1836 monuments → trophies → historical commissions (§10). The owner swapped the policy ahead of the 1836 monuments on 2026-10-05 |
+| Who gets commissions (owner, 2026-10-05, after the build) | **Great and major powers only.** Five levels are 5,000 construction, beyond a minor power's means within five years. **A major power gets 120 months**, a great power 60 |
+| Refusing (owner, 2026-10-05, after the build) | **A miss costs more than a refusal** (−15 against −5 on the petitioner's ledger), and an unanswered offer is declined: otherwise accepting dominated refusing |
+| Vanity (owner, 2026-10-05, after the build) | **−1 legitimacy per ledger unit**, not −0.3, which rendered as "−0" |
 
 ## Engine facts this rests on
 
@@ -74,11 +77,14 @@ flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT).
 - **Country names from a stored variable:** `Var('x').GetCountry.GetName` failed in this mod's testing; the workaround
   stores a state and reads its owner, or keeps the text generic (`scripting_best_practices.md`, loc accessors).
 - **`pm_no_maintenance` is disabled under the default construction market setting** (`disable_pm_no_maintenance` in
-  `extra_game_rules.txt`), so a policy cannot cut upkeep by switching methods. It uses throughput instead (§5), which
-  assumes throughput scales a level-scaled maintenance input (check).
-- **On-actions for world moments:** `on_war_end` (ROOT = the diplomatic play, `scope:actor` / `scope:target`, no winner),
-  `on_wargoal_enforced`, `on_peace_agreement_signed_war_leader`, `on_character_death`, `on_new_ruler`,
-  `on_law_activated`. Which scopes the war ones carry, and so how a winner is told from a loser, is a plan task.
+  `extra_game_rules.txt`), so a policy cannot cut upkeep by switching methods. Throughput doesn't scale a
+  `level_scaled` input either (`scripting_best_practices.md` § "Production Method Modifier Scaling Blocks"), so the
+  policy puts `goods_input_construction_mult` on the monument building itself, as the engine's `pm_retooling` does
+  (built in phase 3).
+- **On-actions for world moments:** 1.14.5's `on_won_war` / `on_lost_war` (ROOT = a country on the winning or losing
+  side, `scope:war`, `scope:enemy_country` = the other side's leader, `scope:benefitted_from_wargoal` /
+  `scope:victim_of_wargoal`) tell a winner from a loser and fire for capitulations; `scope:war` takes `is_warleader`
+  and `war_duration_months`. Also `on_character_death`, `on_new_ruler`, `on_law_activated` (built in phase 2).
 - **Space race firsts** are recorded on the achiever as `sr_was_first_<milestone>` (`space_race_effects.txt`).
 - **Treaty articles** are the mod's own files (`common/treaty_articles/1xx_*.txt`: `kind`, `flags`, `possible`,
   `can_ratify`). **UN topics** are `un_topic_<key>` with `un_propose_<key>_*` buttons (`un_redesign_design.md` §0.12).
@@ -90,7 +96,7 @@ flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT).
 |---|---|---|---|
 | Construction per level | 10,000 | **1,000** | `construction_cost_grand_monument` (rewrite the construction-sink comment above it) |
 | Vanity: radicals in the state, per level finished in hard times | 5% of pops | **0.5%** | `gm_state_vanity_backlash` (`add_radicals_in_state = { value = 0.005 }`) |
-| Vanity: legitimacy per unit of `gm_vanity_ledger` | −3 | **−0.3** | `gm_step_vanity` and its static modifier (the registry test pins the pair) |
+| Vanity: legitimacy per unit of `gm_vanity_ledger` | −3 | **−1** (first −0.3, which rendered as "−0") | `gm_step_vanity` and its static modifier (the registry test pins the pair) |
 | Rededicate | 5,000 a level | **500 a level** | `gm_state_rededicate_cost` |
 | Curve, step values, ledgers | — | unchanged | |
 
@@ -179,8 +185,8 @@ Every reward and cost goes through ledgers, as v1 §4.3 does, so nothing stacks:
 |---|---|---|
 | Fulfilled | +15 grandeur (about +2 approval) | +5 to the new `gm_promise_ledger`, decays ×0.97 a month, applied **linearly** (`gm_national_promise`, "A Promise Kept") |
 | Fulfilled after an extension | +8 | +2.5 |
-| Declined | −10 (about −1.5 approval) | — |
-| Missed | −5 | — |
+| Declined | −5 (about −1 approval; owner, after the build) | — |
+| Missed | −15 (about −2: a broken promise costs more than a refusal) | — |
 | Lapsed | — | — |
 
 Vanilla's Government Petition pays +10 or +5 decaying legitimacy (`modifier_successfully_met_petition_legitimacy`); a
@@ -439,7 +445,7 @@ group and method, the slot modifier, the row's labels and tooltips, and `gm_name
 - A `"`, `#b` or `[` in a name, through the save and through `GetFlagName`.
 - Multiplayer: the rename and the scripted GUIs are commands; the watcher runs on the naming player's client.
 
-## 4. Monuments standing in 1836 (phase 3)
+## 4. Monuments standing in 1836 (phase 4)
 
 Placed in `common/history/extra_history.txt` (or a new `common/history/grand_monuments_history.txt` if the order
 allows), each with its dedication PM, `gm_raised_by` = its owner, `gm_seen`, a landmark skin and the landmark namesake:
@@ -460,7 +466,7 @@ allows), each with its dedication PM, `gm_raised_by` = its owner, `gm_seen`, a l
 - **One per state:** London and Paris each hold one Grand Monument, so Wellington Arch and the July Column are left
   out (London waits for Nelson's Column, §7).
 
-## 5. Monument policy (phase 4)
+## 5. Monument policy (phase 3)
 
 One national policy, set from the journal entry by three buttons (a fourth state, **Standard**, is the default and has
 no effect). A country variable, `gm_policy` (flag), so a civil war's winner keeps it. After a change, no other change for
@@ -473,9 +479,9 @@ no effect). A country variable, `gm_policy` (flag), so a civil war's winner keep
 | **Mothballed** | monuments' upkeep ×0.5 | prestige (standing) ×0.5; local effects ×0.5; no anniversaries |
 
 - **How:** the factors multiply the per-step values in `gm_compute_totals` and `gm_state_monthly` through one
-  `gm_policy_factor_*` script value each. Upkeep moves through a state modifier `gm_policy_upkeep` on each monument's
-  state (`building_grand_monument_throughput_add` ±0.5), refreshed by the state pulse. Two checks: the pattern is
-  registered (`/modifier-search`), and throughput scales the maintenance input.
+  `gm_policy_factor_*` script value each. Upkeep moves through `gm_policy_upkeep_open` / `_mothballed`
+  (`goods_input_construction_mult` ±0.5) on each monument building, refreshed by the state pulse; throughput would not
+  have moved it (engine facts).
 - **AI:** Mothballed in hard times or with a negative treasury; State Ceremonial with legitimacy under 40 and regime
   grandeur above 0; Open to the Public when a monument stands in a state with a Tourism Industry; else Standard.
   Re-evaluated yearly; the cooldown applies to the AI as well.
@@ -623,16 +629,17 @@ Checked in observer runs with the debug event (§9).
 
 ## 10. Phasing
 
-Each phase is its own PR.
+Each phase is its own PR, except phases 1–3, which the owner asked for as one (2026-10-05; plan
+`docs/superpowers/plans/2026-10-05-grand-monuments-v2-phases-1-3.md`).
 
 | Phase | Content | Needs |
 |---|---|---|
 | 1 | §1 numbers | — |
 | 2 | §2 commissions and §3 names (commissions supply names) | 1 |
-| 3 | §4 monuments standing in 1836 | 2 (their names) |
-| 4 | §5 policy | 1 |
+| 3 | §5 policy | 1 |
+| 4 | §4 monuments standing in 1836 | 2 (their names) |
 | 5 | §6 trophies | 2 (names on trophy rows) |
-| 6 | §7 historical commissions | 2, 3 (`LANDMARKS`) |
+| 6 | §7 historical commissions | 2, 4 (`LANDMARKS`) |
 
 ## Out of scope (possible extensions)
 
