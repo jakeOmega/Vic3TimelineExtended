@@ -311,7 +311,9 @@ from the limit. The owner accepted this on 2026-10-05.
 
 **What ran and what is specified.** Build 4 ran the company route end to end with a second click (**Use This Name**);
 build 7 ran the one-click watcher with a state as the carrier. The two together, as written here, have not been
-launched. (Build numbers are the prototype's test rounds; its code is not merged.)
+launched. Build numbers are the prototype's test rounds, one commit each on the reference branch
+`proto/gm-typed-name` (not for merging): build 4 is `ab1cde32`, 4.1 `aa3f9b34` (the company route as it ran) and 7
+`5a05cc5f` (the watcher).
 
 | Step | Status |
 |---|---|

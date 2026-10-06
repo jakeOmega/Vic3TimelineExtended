@@ -1371,7 +1371,7 @@ visible = "[GetVariableSystem.Exists(Concatenate('expanded_', State.GetIDString)
 
 ### Typed text into script: only through a base-game rename popup (tested in game, 1.14.5)
 
-**A mod's own editbox can't hand its text to script.** `PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('my_edit') )` reads the box, and a textbox renders the result (`.AccessSelf` after `FindChild` also works; `.Self` does not). But it returns a `CUTF8String`, and in 1.14 nothing turns that into the `CString` that `MakeScopeFlag`, the variable system and the string functions take. A prototype on the Grand Monuments row (2026-10-05) passed the box's text to every candidate; each logged `FetchData failed` every frame and produced nothing:
+**A mod's own editbox can't hand its text to script.** `PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('my_edit') )` reads the box, and a textbox renders the result (`.AccessSelf` after `FindChild` also works; `.Self` does not). But it returns a `CUTF8String`, and in 1.14 nothing turns that into the `CString` that `MakeScopeFlag`, the variable system and the string functions take. A prototype on the Grand Monuments row (2026-10-05, branch `proto/gm-typed-name`) passed the box's text to every candidate; each logged `FetchData failed` every frame and produced nothing:
 
 | The box's text passed to | Result |
 |---|---|
