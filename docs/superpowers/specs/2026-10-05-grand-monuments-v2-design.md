@@ -36,7 +36,7 @@ Baseline: `main` at `c906371` (#743 merged).
 | The events rule | v1's "every option positive" becomes: **owning a monument is never a penalty; not building one can be.** Declining a petition may cost approval. Anniversary events keep all-positive options |
 | Commissions | **One mechanism** for world moments, petitions and AI building; **at most one open at a time** |
 | Journal entry | **Appears for an open commission** as well as for an owned monument |
-| Names | A monument is named by choice: a **namesake** (city, state, ruler, what it honours, a year, an occasion) and a **form** (column, arch, statue, …). A **typed name** overrides the pair; it is possible but unverified in game (engine facts), so it ships behind its in-game test (§3.4) |
+| Names | A monument is named by choice: a **namesake** (city, state, ruler, what it honours, a year, an occasion) and a **form** (column, arch, statue, …). A **typed name** overrides the pair, typed in the base game's company-rename popup on a placeholder company that exists only while the player names (§3.5, tested in game). It costs a company-limit alert for a moment at each end, which the owner accepts |
 | History | **Monuments standing in 1836 are placed at the start.** v1's "History places no Grand Monuments" is reversed |
 | Historical commissions | **Yes**, as hand-written commissions for whoever holds the state; they fill v1's empty `LANDMARKS` table |
 | Trophies | **Yes.** A conqueror may carry a portable monument home. It keeps **half its grandeur** (as Rededicate). **Retaking the site offers to bring it home; it is a choice, not automatic** |
@@ -47,14 +47,15 @@ Baseline: `main` at `c906371` (#743 merged).
 v1's engine facts all still hold (buildings hold no variables; no effect removes levels; the dedication ratchet; modifiers
 flow down only; JE-scoped modifiers; `multiplier = var:` resolves against ROOT). New ones:
 
-- **Typed text can probably reach a saved variable, unverified in game.** The base-game rename boxes are tied to their
-  own engine objects and can't be reused. A mod's own editbox can feed a scripted GUI, though:
-  `PdxGuiEditboxGetText` → `MakeScopeFlag` → `AddScope` → `set_variable`, read back with `Scope.GetFlagName`. Every link
-  is in the 1.13.11 data types and has a shipped precedent elsewhere (EU5, the Community Mod Framework), but the whole
-  chain has not been run. The riskiest link is the `CUTF8String` → `MakeScopeFlag` conversion; the others are an
-  embedded `"`, formatting characters and multiplayer (`gui_modding_guide.md` § "Typed text into a saved variable").
-  Script can't write such a flag (`flag:` takes identifiers only), so typed names override names that script assigns
-  and can't replace them (§3).
+- **Typed text reaches script only through a base-game rename popup (tested in game, 1.14.5).** A mod's own editbox
+  returns a `CUTF8String`, which nothing converts into the `CString` script takes. A rename popup stores the typed name
+  on its object, and that name reads back as a `CString`. Of the carriers tried, only a placeholder company works: a
+  state's typed name can't be undone, the hub accessors ignore renames, and armies hold no variables
+  (`gui_modding_guide.md` § "Typed text into script", `scripting_best_practices.md` § "Player-Typed Names"). Script
+  can't write such a flag (`flag:` takes identifiers only), so typed names override names that script assigns and
+  can't replace them (§3).
+- **The hub accessors return the map's names.** `State.GetForestryHubName` ignored the player's rename of a logging
+  town, and `GetCityHubName` is the same family, so the City namesake prints the map's city name, not a player's.
 - **A high `ai_value` does not make the AI build a government building**; an event or decision with `ai_chance` does
   (`scripting_best_practices.md` § "AI and Cost-Only Buildings"). `start_building_construction` (state scope) "starts
   constructing a building in a scoped state as a government construction", so an accepted commission costs the AI
@@ -225,14 +226,14 @@ A monument's name is a **namesake** and a **form**: "Nelson's Column", "the Arch
 
 | Namesake | Pattern | Records on the state | Offered |
 |---|---|---|---|
-| City | "the [city] [form]" | none: the state's city hub, so a city the player renames through the base game's state popup renames the monument | always |
+| City | "the [city] [form]" | none: the state's city hub, as the map names it (a player's rename of the city doesn't show, engine facts) | always |
 | State | "the [state] [form]" | none | always |
 | Ruler | "[ruler]'s [form]" | `gm_name_char` (the ruler at the naming) | always |
 | What it honours | "[form] of the Crown / Republic / Revolution / Nation", "[form] of the Faith" | none (the dedication) | always |
 | Year | "the [form] of [year]" | `gm_name_year` | always |
 | Occasion | "Arch of the [enemy] War", "Centenary [form]", "[achievement] Monument" | `gm_name_year`, `gm_name_country` (or its capital state, see engine facts) | from a commission |
 | Landmark | the landmark's own name ("Arc de Triomphe") | the skin `landmark_<key>` | from history or a historical commission |
-| Custom | the player's own text | `gm_name` (a flag made from the typed text) | players only, from the unveiling or the rename button, once its test passes (§3.4) |
+| Custom | the player's own text | `gm_name` (a flag made from the typed text) | players only, from the JE row (§3.5) |
 
 Records: `gm_namesake` (flag) and `gm_form` (flag) on the state, beside v1's `gm_skin`. A customizable localization,
 `gm_monument_name`, switches on the pair; a state with `gm_name` prints that instead. The typed name sits on top of
@@ -275,20 +276,166 @@ The table is a first draft; the plan fixes it with the loc.
 - **Commissions** arrive with namesake and form filled in. The unveiling shows them first, and the player can change
   them.
 - **The AI** takes the commission's name, else the most specific skin, its first form and the city.
-- **Rename** from the monument's JE row, at any time, at no cost: choose namesake and form again, or type a name (a
-  `maxcharacters = 30` editbox and a Confirm button, as the base game's rename boxes have) once that is verified.
+- **Rename** from the monument's JE row, at any time, at no cost: choose namesake and form again, or type a name in the
+  base game's rename box (§3.5). The unveiling can't open that box (it is an event), so it mentions the row.
   Rededication asks again. A contested, heritage or trophy monument keeps its name.
 
 ### 3.4 Checks
 
 - A stored ruler still prints its name after death (`gm_name_char`). If not, the ruler namesake prints the year.
 - A stored country prints its name; else the occasion falls back to the year, or uses the capital-state workaround.
-- The city hub's name renders in loc from a state scope, including a custom name.
-- **Typed names**, before the editbox ships. Test one editbox and button writing a variable on the capital state, with
-  a text row that prints it. Reload from a normal save and from a debug-mode text save. Then: an embedded `"`, a `#b`
-  or `[` in the name, and data-binding errors in `debug.log` and `error.log`. If the direct `MakeScopeFlag` call fails,
-  try the `GetVariableSystem.Set` / `.Get` round trip in the same session. If none works, phase 2 ships without the
-  Custom namesake.
+- The city hub's name renders in loc from a state scope. It is the map's name: check that `GetCityHubName` ignores a
+  player's rename as `GetForestryHubName` does.
+- **Typed names** were tested in game on 2026-10-05; §3.5 has the result, and what is still to check.
+
+### 3.5 Typed names: the company carrier
+
+Tested in game on 2026-10-05 (1.14.5), over a day of prototype builds. A mod's own editbox can't hand its text to script,
+but the base game's company-rename popup can: it stores the typed name on the company, and
+`Company.GetNameNoFormatting` returns it as a `CString`, which `MakeScopeFlag` takes. So a naming borrows a placeholder
+company for the few seconds it takes. The other carriers tried, and why they fail, are in `gui_modding_guide.md`
+§ "Typed text into script"; the engine facts behind them are in `scripting_best_practices.md` § "Player-Typed Names".
+
+**What the player does.** Typing is offered from the JE row only, because the popup must be opened from the GUI; the
+unveiling (§3.3) can say so.
+
+1. **Name It** on the monument's row. The game's "Change name" box opens on the placeholder company.
+2. Type the name and confirm. The monument's title changes and the placeholder company is gone.
+3. Closing the box without confirming leaves the naming open; the row then shows the name so far with **Rename**
+   (reopen the box), **Use This Name** and **Cancel**.
+
+**The cost.** `add_company` lands at once, but the slot modifier that pays for the company lands at the next modifier
+update. So for a moment at the start a country at its limit is over it ("Above Company Limit"), and at the end it has a
+spare slot ("We have only established X/Y"). Adding the slot first only swaps the alerts, and no company type is exempt
+from the limit. The owner accepted this on 2026-10-05.
+
+**What ran and what is specified.** Build 4 ran the company route end to end with a second click (**Use This Name**);
+build 7 ran the one-click watcher with a state as the carrier. The two together, as written here, have not been
+launched. (Build numbers are the prototype's test rounds; its code is not merged.)
+
+| Step | Status |
+|---|---|
+| `add_company` and the slot modifier from a scripted GUI; `company:<type>` resolving in the same effect | ran (build 4) |
+| `PopupManager.ShowCompanyChangeName( ….Var('gm_name_carrier').GetCompany.Self )` from the JE row; Confirm renames it | ran (build 4) |
+| Opening the popup from a `_show` state once the company exists (in the same click it opens on nothing) | ran (build 4.1) |
+| `MakeScopeFlag( Company.GetNameNoFormatting )` → the state's `gm_name` → the row's title; survives save and reload | ran (build 4) |
+| Cancel removes the company and the slot | ran (build 4) |
+| The `trigger_when` watcher taking the name without a second click | ran with a state carrier (build 7) |
+| Storing the starting name on the country from `_show` (`gm_name_mark_old_sgui`) | specified (build 9 tried it on an army, which holds no variables) |
+| The monthly sweep of an abandoned naming | specified |
+
+**Files.** Script names as in the prototype; the prototype kept them in their own files.
+
+```
+# common/company_types/: on screen only while a naming is open, never by the AI
+company_gm_name_carrier = {
+	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	category = bureaucrat_owned
+	flavored_company = no
+	uses_dynamic_naming = no
+	building_types = { building_gm_name_carrier_anchor }	# every company type lists one
+	potential = { has_variable = gm_naming_active }
+	attainable = { always = yes }
+	possible = { always = yes }
+	prosperity_modifier = { }
+	ai_will_do = { always = no }
+}
+
+# common/buildings/ (+ pmg_gm_name_carrier_anchor, pm_gm_name_carrier_anchor with only a texture): never built
+building_gm_name_carrier_anchor = {
+	building_group = bg_grand_monuments
+	icon = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+	city_type = city
+	levels_per_mesh = -1
+	buildable = no
+	expandable = no
+	downsizeable = no
+	production_method_groups = { pmg_gm_name_carrier_anchor }
+}
+
+# common/static_modifiers/
+gm_name_carrier_slot = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+	country_max_companies_add = 1
+}
+```
+
+Once released, keep the anchor building type: a save made with it lists the type, and loading that save without it
+logs `Failed to read key reference: building_gm_name_carrier_anchor` (seen after build 5 removed it).
+
+Scripted GUIs, country scope, each with `ai_is_valid = { always = no }`:
+
+- **`gm_name_start_sgui`** (saved scope `gm_state`; valid while `scope:gm_state` is ours and no naming is open,
+  `NOT = { has_variable = gm_name_carrier }`). The order matters:
+
+  ```
+  scope:gm_state = { set_variable = gm_being_named }
+  set_variable = gm_naming_active			# before add_company: the type's potential reads it
+  set_variable = { name = gm_naming_open days = 30 }	# the monthly sweep's clock
+  add_modifier = { name = gm_name_carrier_slot }
+  add_company = company_type:company_gm_name_carrier
+  capital = { state_region = { save_scope_as = gm_name_carrier_hq } }
+  company:company_gm_name_carrier = { set_company_state_region = scope:gm_name_carrier_hq }
+  set_variable = { name = gm_name_carrier value = company:company_gm_name_carrier }
+  ```
+
+- **`gm_name_mark_old_sgui`** (saved scope `gm_old_name`): `set_variable = { name = gm_name_old value =
+  scope:gm_old_name }` on the country. Not on the company: whether companies hold variables is untested.
+- **`gm_name_use_sgui`** (saved scopes `gm_state`, `gm_name`). The watcher can send it twice before the first has
+  landed, so the effect repeats the validity check: inside `if = { limit = { scope:gm_state = { has_variable =
+  gm_being_named } } }` it sets the state's `gm_name` to `scope:gm_name`, then `gm_name_carrier_close`.
+- **`gm_name_cancel_sgui`**: `gm_name_carrier_close`.
+- **`gm_name_carrier_close`** (scripted effect): `remove_company` and `remove_modifier` (each behind its `has_` check),
+  then remove `gm_name_carrier`, `gm_naming_active`, `gm_naming_open`, `gm_name_old` and every state's
+  `gm_being_named`.
+- **The monthly sweep**, in `gm_country_monthly`: a naming whose `gm_naming_open` has expired is abandoned (the box was
+  closed and the row left), so `gm_name_carrier_close`. Closing the company popup itself can't cancel the naming: it is
+  vanilla's `companies_panel.gui`, which the mod doesn't override.
+
+A state script value `gm_is_being_named` (1 while `gm_being_named`, else 0) switches the row, and a country value
+`gm_has_name_old` (1 while `gm_name_old`) holds the watcher until the starting name is stored.
+
+The JE row (`gm_monument_row`), with `C` = `JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany` and
+`ROOT` = `GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )`:
+
+- Mode 0 (`gm_is_being_named` 0): **Name It** (`gm_name_start_sgui`, `gm_state` = `State.MakeScope`) and **Clear
+  Name**.
+- Mode 1: a container whose `visible` is mode 1 and which holds:
+
+  ```
+  state = {
+  	name = _show
+  	on_start = "[GetScriptedGui('gm_name_mark_old_sgui').Execute( ROOT.AddScope( 'gm_old_name', MakeScopeFlag( C.GetNameNoFormatting ) ).End )]"
+  	on_start = "[PopupManager.ShowCompanyChangeName( C.Self )]"
+  }
+  widget = {
+  	size = { 1 1 }
+  	state = {
+  		trigger_when = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_has_name_old'), '(CFixedPoint)1' ), Not( EqualTo_string( C.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_old').GetFlagName ) ) )]"
+  		on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( ROOT.AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( C.GetNameNoFormatting ) ).End )]"
+  	}
+  }
+  ```
+
+  then "New name: `[C.GetNameNoFormatting]`" and **Rename** (`ShowCompanyChangeName`), **Use This Name** (the
+  watcher's `on_finish` as an `onclick`) and **Cancel** (`gm_name_cancel_sgui`). Every read of
+  `Var('gm_name_carrier')` sits in mode 1, where the start has set it.
+- The title: a second textbox on `gm_row_title_named` (`"#b [State.MakeScope.Var('gm_name').GetFlagName]#! — …"`),
+  the two toggled on a state value for `has_variable = gm_name`. A `Var(…).IsSet` check is untested; a script value is
+  the proven idiom.
+
+Loc: the company's default name (`company_gm_name_carrier`, shown in the box when it opens), the anchor building, its
+group and method, the slot modifier, the row's labels and tooltips, and `gm_name_one_at_a_time_tt`.
+
+**Still to check when this is built**, beyond the table:
+
+- The default name. The box opens on it. A blank value would start the box empty, but whether an empty loc value gives
+  an empty company name or the raw key is untested; "Unnamed Monument" worked.
+- The name through `gm_monument_name` (customizable localization) and in event loc: `GetFlagName` has only run in the
+  row.
+- A `"`, `#b` or `[` in a name, through the save and through `GetFlagName`.
+- Multiplayer: the rename and the scripted GUIs are commands; the watcher runs on the naming player's client.
 
 ## 4. Monuments standing in 1836 (phase 3)
 
@@ -464,8 +611,8 @@ Checked in observer runs with the debug event (§9).
      government form adds a level to an existing monument.
   4. Progress, extension, fulfilment, a miss and a lapse each do what their tooltips say.
   5. The unveiling sets skin, form and namesake; the name shows in the JE row, events and notices; renaming works; a
-     typed name survives both kinds of save (§3.4).
-  6. A ruler's name still prints after the ruler dies; a renamed city renames the monument.
+     typed name survives a save and reload (§3.5).
+  6. A ruler's name still prints after the ruler dies; the City namesake prints the map's city name.
   7. The four 1836 monuments stand at start with their names and dedications; their owners' journal entries are active.
   8. The policy's factors show in the totals; throughput moves the monuments' upkeep.
   9. Carry It Home removes the monument and creates the trophy; the trophy counts for the holder; annexation and capture
