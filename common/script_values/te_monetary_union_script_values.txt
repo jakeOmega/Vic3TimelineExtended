@@ -223,8 +223,8 @@ te_mon_union_adopt_score = {
 	}
 	if = {
 		limit = {
-			exists = market
 			exists = power_bloc
+			exists = market.owner
 			market.owner = power_bloc.power_bloc_leader
 		}
 		add = 30

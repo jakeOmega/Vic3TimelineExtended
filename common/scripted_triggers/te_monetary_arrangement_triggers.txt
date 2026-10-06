@@ -277,7 +277,7 @@ te_mon_can_peg_to = {
 		OR = {
 			country_rank >= rank_value:major_power
 			AND = {
-				exists = prev.market
+				exists = prev.market.owner
 				prev.market.owner = this
 			}
 		}

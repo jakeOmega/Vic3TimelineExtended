@@ -228,7 +228,9 @@ class AuthorityTest(unittest.TestCase):
 
     def test_market_owner_and_no_junior(self):
         owns = self.triggers["te_tax_owns_market"]
-        self.assertEqual(owns.get("exists"), "market")
+        # The whole link, not just the market: a market can exist with an
+        # invalid owner (test_market_capital_guard.py).
+        self.assertEqual(owns.get("exists"), "market.owner")
         self.assertEqual(owns.get("market.owner"), "this")
         self.assertEqual(owns.get("is_junior_in_customs_union"), "no")
 

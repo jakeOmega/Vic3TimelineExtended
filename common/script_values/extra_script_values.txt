@@ -868,6 +868,7 @@ global_greenhouse_gas_emissions_script_value_display = {
 	every_state = {
 		if = {
 			limit = {
+				exists = owner.market_capital
 				owner.market_capital = THIS
 			}
 			owner = {
