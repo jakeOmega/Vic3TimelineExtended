@@ -19,6 +19,12 @@ Per prestige good of every company the mod defines, replaces or injects into:
 - `extension_only`: only an extension building produces the base good.
 - `not_produced`: no roster or extension building produces it.
 
+Per prestige good the mod defines in `common/prestige_goods/`:
+
+- `local_base_good`: its base good is local (`local = yes`: electricity,
+  services, transportation, the mod's digital access). A prestige version of
+  a local good does nothing, so no company can make use of it.
+
 A building produces a good when any production method of any of its PM groups
 carries `goods_output_<good>_add`.
 
@@ -38,7 +44,8 @@ Suppression
 A trailing `# REVIEWED YYYY-MM-DD: rationale` comment on the prestige good's
 line inside `possible_prestige_goods`, or on the company's opening
 `<name> = {` line (also `REPLACE:` / `INJECT:`) in `common/company_types/`,
-which covers every flag on that company.
+which covers every flag on that company. A `local_base_good` flag takes the
+comment on the prestige good's opening line in `common/prestige_goods/`.
 
 Data source
 -----------
@@ -71,7 +78,7 @@ COMPANIES_DIR = os.path.join("common", "company_types")
 PRESTIGE_GOODS_DIR = os.path.join("common", "prestige_goods")
 REPORT_PATH = os.path.join("docs", "engine", "prestige_good_roster_report.md")
 
-KIND_ORDER = ("not_produced", "extension_only")
+KIND_ORDER = ("local_base_good", "not_produced", "extension_only")
 
 GENERIC_PREFIX = "prestige_good_generic_"
 
@@ -245,6 +252,27 @@ def building_outputs(buildings: dict, pm_groups: dict, pms: dict) -> dict:
     return result
 
 
+def scan_prestige_definitions(mod_path: str) -> dict:
+    """{prestige good: (file, line, comment-or-None)} for each top-level
+    opener in the mod's `common/prestige_goods/` files."""
+    sites: dict = {}
+    root_dir = os.path.join(mod_path, PRESTIGE_GOODS_DIR)
+    if not os.path.isdir(root_dir):
+        return sites
+    for fname in sorted(os.listdir(root_dir)):
+        if not fname.endswith(".txt"):
+            continue
+        abs_p = os.path.join(root_dir, fname)
+        rel_p = os.path.relpath(abs_p, mod_path).replace(os.sep, "/")
+        with open(abs_p, "r", encoding="utf-8-sig", errors="replace") as fh:
+            clean, comments = blank_comments_and_strings(fh.read())
+        for line, text in enumerate(clean.split("\n"), start=1):
+            m = re.match(r"([A-Za-z_][\w:]*)\s*=\s*\{", text)
+            if m:
+                sites.setdefault(_entity_name(m.group(1)), (rel_p, line, comments.get(line)))
+    return sites
+
+
 def load_prestige_bases(mod_path: str) -> dict:
     """{prestige good: base good} for the mod's own prestige goods."""
     from paradox_file_parser import ParadoxFileParser
@@ -313,10 +341,28 @@ def _parse_reviewed(comment: str | None) -> dict | None:
     return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
-def check(companies: dict, outputs: dict, bases: dict, goods: dict, sources: dict) -> AuditResult:
+def _is_local(goods: dict, good: str) -> bool:
+    body = _unwrap(goods.get(good))
+    return isinstance(body, dict) and _names(body.get("local")) == ["yes"]
+
+
+def check(companies: dict, outputs: dict, bases: dict, goods: dict, sources: dict,
+          definitions: dict | None = None) -> AuditResult:
     """Judge merged `companies` against building `outputs` for every company
-    the mod's `sources` touch."""
+    the mod's `sources` touch, and each mod prestige good in `bases` (sited
+    by `definitions`) against its base good."""
     result = AuditResult()
+    for pg in sorted(bases):
+        good = bases[pg]
+        if not _is_local(goods, good):
+            continue
+        flag = Flag("local_base_good", "", pg, good,
+                    f"`{good}` is a local good (`local = yes`), and a prestige version of one does nothing")
+        site = (definitions or {}).get(pg)
+        if site:
+            flag.file, flag.line = site[0], site[1]
+            flag.exemption = _parse_reviewed(site[2])
+        result.flags.append(flag)
     for name in sorted(companies):
         src = sources.get(name)
         if src is None:
@@ -400,6 +446,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         load_prestige_bases(mod_path),
         mod_state.get_data("Goods") or {},
         scan_sources(mod_path),
+        scan_prestige_definitions(mod_path),
     )
 
 
@@ -409,6 +456,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def _describe(f: Flag) -> str:
+    if not f.company:
+        return f"`{f.prestige_good}` — {f.detail}"
     return f"`{f.company}`: `{f.prestige_good}` — {f.detail}"
 
 
@@ -431,11 +480,15 @@ def render_report(result: AuditResult) -> str:
         "`not_produced` (no roster or extension building makes the base good)",
         "and `extension_only` (only an `extension_building_types` building",
         "does, which needs an industry charter; a company holds one at a time).",
+        "Flagged per prestige good the mod defines: `local_base_good` (its base",
+        "good is `local = yes`, and a prestige version of a local good does",
+        "nothing).",
         "",
         "Suppress a deliberate case with a trailing",
         "`# REVIEWED YYYY-MM-DD: rationale` comment on the prestige good's line",
         "in `possible_prestige_goods` or on the company's opening `<name> = {`",
-        "line (covers every flag on that company).",
+        "line (covers every flag on that company); for `local_base_good`, on",
+        "the prestige good's opening line in `common/prestige_goods/`.",
         "",
         "## Unreviewed Flags",
         "",

@@ -12,11 +12,15 @@ Flagged, per prestige good of every company the mod touches:
 `not_produced` (no roster or extension building makes the base good)
 and `extension_only` (only an `extension_building_types` building
 does, which needs an industry charter; a company holds one at a time).
+Flagged per prestige good the mod defines: `local_base_good` (its base
+good is `local = yes`, and a prestige version of a local good does
+nothing).
 
 Suppress a deliberate case with a trailing
 `# REVIEWED YYYY-MM-DD: rationale` comment on the prestige good's line
 in `possible_prestige_goods` or on the company's opening `<name> = {`
-line (covers every flag on that company).
+line (covers every flag on that company); for `local_base_good`, on
+the prestige good's opening line in `common/prestige_goods/`.
 
 ## Unreviewed Flags
 
@@ -30,7 +34,7 @@ _None._
 
 - mod-touched companies checked: 314
 - vanilla-only companies not judged: 0
-- prestige goods checked: 201
+- prestige goods checked: 212
 - prestige goods with an unknown base good (vanilla named goods, not in the snapshot), not judged: 55
 - total flags: 0
 - unreviewed: 0
@@ -73,7 +77,7 @@ _None._
 - `prestige_good_pannonian_patent_flour`: `company_elso_budapesti_gozmalom`
 - `prestige_good_philips_chapel_radio`: `company_philips`
 - `prestige_good_port_wine`: `company_douro_wine_company`
-- `prestige_good_radiola_radios`: `company_general_electric`
+- `prestige_good_radiola_radios`: `company_apple`, `company_basic_electrics`, `company_ericsson`, `company_general_electric`, `company_nokia`, `company_samsung`
 - `prestige_good_river_plate_beef`: `company_compania_sansinena_de_carnes_congeladas`
 - `prestige_good_rosewood`: `company_kablin`
 - `prestige_good_russia_iron`: `company_john_hughes`

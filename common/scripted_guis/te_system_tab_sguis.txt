@@ -219,7 +219,8 @@ te_market_global_warming_leader_sgui = {
 # Strategic Reserve: Market panel (gui/market_panel.gui), je_strategic_reserve.
 # The system has no game rule. Its tab is on the strip from Logistics, when the
 # greyed entry first shows in the journal (its is_shown_when_inactive), and
-# opens once the entry runs, which is once a Strategic Reserve Hub exists. The
+# opens once the entry runs, which is once a Strategic Reserve Hub exists; it
+# stays open if the hub is lost, as the entry does. The
 # reserve buys and sells in the player's own market, so the tab shows only
 # while the panel shows that market (the test is in market_panel.gui: it is
 # the panel's, not the country's).
@@ -234,7 +235,7 @@ te_market_strategic_reserve_tab_sgui = {
 
 te_market_strategic_reserve_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_technology_researched = logistics }
+	is_shown = { has_technology_researched = logistics is_revolutionary = no }
 	ai_is_valid = { always = no }
 	is_valid = { st_res_entry_unlocked = yes }
 	effect = { }

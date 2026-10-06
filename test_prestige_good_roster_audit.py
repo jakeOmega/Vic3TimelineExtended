@@ -4,7 +4,8 @@ A company makes its prestige goods in place of their base good, in its own
 buildings, so a prestige good whose base good no `building_types` building
 produces never appears. The audit flags those (`not_produced`) and the ones
 only an extension building makes (`extension_only`), for every company the
-mod touches.
+mod touches, and each mod prestige good on a local base good
+(`local_base_good`), which does nothing.
 
 Each test builds a throwaway mod tree (companies, buildings, PM groups, PMs,
 goods, prestige goods) and a vanilla data set parsed from text, then runs the
@@ -37,7 +38,10 @@ pm_tools_a = { building_modifiers = { workforce_scaled = { goods_input_steel_add
 pm_tools_b = { building_modifiers = { level_scaled = { goods_output_tools_add = 10 } } }
 pm_lab = { building_modifiers = { workforce_scaled = { goods_output_research_add = 1 } } }
 """
-_GOODS = "steel = { cost = 50 }\ntools = { cost = 40 }\nresearch = { cost = 1 }\nwine = { cost = 30 }\n"
+_GOODS = (
+    "steel = { cost = 50 }\ntools = { cost = 40 }\nresearch = { cost = 1 }\nwine = { cost = 30 }\n"
+    "electricity = { cost = 30 local = yes }\n"
+)
 _PRESTIGE = "prestige_good_fine_tools = {\n    base_good = tools\n}\n"
 
 
@@ -69,7 +73,7 @@ def _company(name: str, roster=(), extensions=(), prestige=(), opener_comment=""
 class _Tree:
     """A temp mod tree holding `companies`, over shared buildings/PMs/goods."""
 
-    def __init__(self, companies="", vanilla_companies=""):
+    def __init__(self, companies="", vanilla_companies="", prestige=_PRESTIGE):
         self._tmp = tempfile.TemporaryDirectory()
         self.root = self._tmp.name
         for sub, text in (
@@ -78,7 +82,7 @@ class _Tree:
             ("production_method_groups", _PM_GROUPS),
             ("production_methods", _PMS),
             ("goods", _GOODS),
-            ("prestige_goods", _PRESTIGE),
+            ("prestige_goods", prestige),
         ):
             os.makedirs(os.path.join(self.root, "common", sub))
             if text:
@@ -219,6 +223,21 @@ class PrestigeGoodRosterAuditTest(unittest.TestCase):
             "    }\n}\n"
         ))
         self.assertEqual(self._kinds(result, unreviewed_only=False), [])
+
+    def test_prestige_good_on_a_local_good_is_flagged(self):
+        result = self._run(prestige=_PRESTIGE + "prestige_good_bright_power = {\n    base_good = electricity\n}\n")
+        self.assertEqual(self._kinds(result), [("local_base_good", "", "prestige_good_bright_power")])
+        flag = result.flags[0]
+        self.assertEqual((flag.file, flag.line), ("common/prestige_goods/test.txt", 4))
+        self.assertIn("### local_base_good", render_report(result))
+
+    def test_reviewed_on_the_definition_line_suppresses_local_flag(self):
+        result = self._run(prestige=(
+            "prestige_good_bright_power = { # REVIEWED 2026-10-05: engine test\n"
+            "    base_good = electricity\n}\n"
+        ))
+        self.assertEqual(self._kinds(result), [])
+        self.assertEqual(result.flags[0].exemption["date"], "2026-10-05")
 
 
 if __name__ == "__main__":

@@ -77,10 +77,13 @@ INJECT:company_east_india_company = {
 # Flavored Companies: Mod-Exclusive Building Extensions
 #============================================================
 
-# Rheinmetall (Germany) - artillery/munitions → aerospace extension
+# Rheinmetall (Germany) - artillery/munitions → aerospace extension; Match-Grade Ammunition (its munition plants)
 INJECT:company_rheinmetall = {
 	extension_building_types = {
 		building_aerospace_industry
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_ammunition
 	}
 }
 
@@ -125,10 +128,13 @@ INJECT:company_j_p_coats = {
 	}
 }
 
-# Armstrong Whitworth (GBR) - military shipyard/munitions → aerospace
+# Armstrong Whitworth (GBR) - military shipyard/munitions → aerospace; Match-Grade Ammunition (its munition plants)
 INJECT:company_armstrong_whitworth = {
 	extension_building_types = {
 		building_aerospace_industry
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_ammunition
 	}
 }
 
@@ -421,16 +427,19 @@ INJECT:company_bombay_burmah_trading_corporation = {
 	}
 }
 
-# Ericsson (Sweden) - electrics → semiconductors, software, network infra
+# Ericsson (Sweden) - electrics → semiconductors, software, network infra; Precision Wireless Gear (radios, via Telefonplan)
 INJECT:company_ericsson = {
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
 		building_software_industry
 		building_network_infrastructure
 	}
+	possible_prestige_goods = {
+		prestige_good_radiola_radios
+	}
 }
 
-# Nokia (Finland) - paper/electrics → software, semiconductors, network infra
+# Nokia (Finland) - paper/electrics → software, semiconductors, network infra; Precision Wireless Gear (radios, via the Cable Works)
 INJECT:company_nokia = {
 	building_types = {
 		building_software_industry
@@ -438,6 +447,9 @@ INJECT:company_nokia = {
 	extension_building_types = {
 		building_electronic_components_and_semiconductor_industry
 		building_network_infrastructure
+	}
+	possible_prestige_goods = {
+		prestige_good_radiola_radios
 	}
 }
 
@@ -853,10 +865,13 @@ INJECT:company_basic_motors = {
 	}
 }
 
-# Generic Munitions - adds aerospace extension
+# Generic Munitions - adds aerospace extension and Match-Grade Ammunition
 INJECT:company_basic_munitions = {
 	extension_building_types = {
 		building_aerospace_industry
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_ammunition
 	}
 }
 

@@ -99,7 +99,7 @@ st_res_init_effect = {
 	}
 	if = {
 		limit = { NOT = { has_variable = st_res_hub_workforce_cached } }
-		set_variable = { name = st_res_hub_workforce_cached value = 1 }
+		set_variable = { name = st_res_hub_workforce_cached value = 0 }
 	}
 }
 
@@ -124,8 +124,9 @@ st_res_reset_good_vars_effect = {
 }
 
 # --------------------------------------------------------------------------
-# st_res_reset_vars_effect — Zero all live SR vars. Called from JE invalidation so
-# a rebuilt hub starts from a clean slate rather than inheriting stale data.
+# st_res_reset_vars_effect — Zero all live SR vars. Called when a foreign power
+# captures the country's last hub (st_res_on_state_owner_change), so the stock
+# is lost with the depot and the next hub starts from a clean slate.
 # --------------------------------------------------------------------------
 st_res_reset_vars_effect = {
 	st_res_reset_good_vars_effect = { GOOD = grain }
@@ -139,7 +140,7 @@ st_res_reset_vars_effect = {
 	set_variable = { name = st_res_adjust_step_tier value = 1 }
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
-	set_variable = { name = st_res_hub_workforce_cached value = 1 }
+	set_variable = { name = st_res_hub_workforce_cached value = 0 }
 	# Clearing the one-shot AI markers lets st_res_ai_seed_policies_effect hand a
 	# rebuilt hub its presets again, exactly as a freshly activated JE would.
 	remove_variable = st_res_policy_ai_seeded
@@ -153,11 +154,16 @@ st_res_reset_vars_effect = {
 # st_res_refresh_hub_cache_effect — Bridge building -> country scope.
 # Reads the live hub's level and throughput modifier from building scope and
 # caches them on country vars so the rest of the system can stay country-scoped.
+# With no hub every cache reads 0, staffing included: no hub, no staff. It
+# read 1 until the entry learned to wait without a hub (je_strategic_reserve
+# has no invalid), and every flow gate (st_res_<good>_actual_rate and the
+# flow modifiers) tests staffing, so a waiting reserve with a release rate
+# still booked sales income.
 # --------------------------------------------------------------------------
 st_res_refresh_hub_cache_effect = {
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
-	set_variable = { name = st_res_hub_workforce_cached value = 1 }
+	set_variable = { name = st_res_hub_workforce_cached value = 0 }
 
 	if = {
 		limit = {
@@ -357,6 +363,33 @@ st_res_rebuild_fertilizer_flow_modifiers_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_idle_hub_flow_modifiers_effect — building scope (a hub). Sets every
+# good's flow to nothing, as st_res_rebuild_good_flow_modifiers_effect's
+# `else` does. For a hub whose owner has no running entry to rebuild its
+# flow: the rebels of a revolution, who keep the nation's hub
+# (st_res_on_state_owner_change) but start no reserve. Without it the hub
+# would keep buying or selling on the loser's last settings, with nothing
+# booked on either side, for the whole war.
+# --------------------------------------------------------------------------
+st_res_idle_good_flow_modifiers_effect = {
+	if = { limit = { has_modifier = st_res_$GOOD$_store_flow } remove_modifier = st_res_$GOOD$_store_flow }
+	if = { limit = { has_modifier = st_res_$GOOD$_withdraw_flow } remove_modifier = st_res_$GOOD$_withdraw_flow }
+	add_modifier = { name = st_res_$GOOD$_store_flow multiplier = -1 }
+	add_modifier = { name = st_res_$GOOD$_withdraw_flow multiplier = -1 }
+}
+
+st_res_idle_hub_flow_modifiers_effect = {
+	st_res_idle_good_flow_modifiers_effect = { GOOD = grain }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = ammunition }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = oil }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = small_arms }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = artillery }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = aeroplanes }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = tanks }
+	st_res_idle_good_flow_modifiers_effect = { GOOD = fertilizer }
+}
+
+# --------------------------------------------------------------------------
 # st_res_rebuild_hub_flow_modifiers_effect — Bridge country -> building scope.
 # Expects country vars and the hub cache to already be current. Applies the
 # transient hub modifiers that translate the signed reserve rates into market
@@ -512,9 +545,24 @@ st_res_refresh_hub_flow_effect = {
 # st_res_clamp_stockpiles_effect — Clamp stockpile variables to their legal bounds.
 # Mode text is derived on demand in st_res_custom_loc.txt, so no live mode vars are
 # written here.
+#
+# Only while a hub stands. Without one the journal entry waits with its stock
+# (je_strategic_reserve has no invalid), and the capacity counts only the
+# silos, or nothing: a clamp then would destroy the stock it is keeping. The
+# panel's rate and policy buttons stay clickable with no hub and end here.
 # --------------------------------------------------------------------------
 st_res_clamp_stockpiles_effect = {
 	st_res_init_effect = yes
+	if = {
+		limit = {
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+		st_res_clamp_stockpiles_with_hub_effect = yes
+	}
+}
+
+# The clamp itself; call st_res_clamp_stockpiles_effect, which checks the hub.
+st_res_clamp_stockpiles_with_hub_effect = {
 	clamp_variable = { name = st_res_grain_stored min = 0 max = st_res_grain_capacity }
 	clamp_variable = { name = st_res_ammunition_stored min = 0 max = st_res_ammunition_capacity }
 	clamp_variable = { name = st_res_oil_stored min = 0 max = st_res_oil_capacity }
@@ -655,6 +703,11 @@ st_res_weekly_update_effect = {
 		st_res_mark_good_no_hub_effect = { GOOD = tanks }
 		st_res_mark_good_no_hub_effect = { GOOD = fertilizer }
 
+		# The cache now reads no hub and no staff, so every actual rate is 0:
+		# this writes the week's sales income as 0 and clears the income
+		# modifier the last week with a hub left on the country.
+		st_res_apply_sell_profit_effect = yes
+
 		# The tick also runs with no hub: the price average keeps tracking,
 		# and the evaluator's `hub_level_cached <= 0` branch writes policy
 		# status 9 and touches no rate. Keeping the call in BOTH branches is
@@ -687,10 +740,6 @@ st_res_je_immediate_effect = {
 
 st_res_je_weekly_pulse_effect = {
 	st_res_weekly_update_effect = yes
-}
-
-st_res_je_invalid_effect = {
-	st_res_reset_vars_effect = yes
 }
 
 # --------------------------------------------------------------------------
@@ -1282,7 +1331,7 @@ st_res_policy_evaluate_good_effect = {
 	}
 	else_if = {
 		# No hub: nothing to drive. Leave the configured rate alone so it is
-		# still there if the hub comes back before the JE invalidates.
+		# still there when a hub stands again (the entry waits for one).
 		limit = { var:st_res_hub_level_cached <= 0 }
 		set_variable = { name = st_res_$GOOD$_policy_status value = 9 }
 		set_variable = { name = st_res_$GOOD$_engaged value = 0 }

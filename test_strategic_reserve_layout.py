@@ -724,7 +724,8 @@ class MarketTabTest(unittest.TestCase):
 
     def test_what_the_journal_draws_besides_the_roots_needs_nothing_in_the_tab(self):
         """§5.1: no goal bar, no scripted bars, status text only without a hub
-        (the entry is inactive then), and both scripted buttons the AI's."""
+        (before the first one, or while the entry waits for a new one), and
+        both scripted buttons the AI's."""
         je = _strip_comments(_read(JE))
         self.assertNotIn("progressbar", je)
         self.assertNotIn("scripted_progress_bar", je)

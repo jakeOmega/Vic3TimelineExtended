@@ -62,7 +62,8 @@
 ###   - decay rate      -> ScriptValue('st_res_<good>_annual_decay_rate'), the
 ###                        same value the weekly bookkeeping divides by 52,
 ###                        and ScriptValue('st_res_<good>_weekly_decay')
-###   - hub icon        -> ScriptValue('st_res_disp_hub_staffed')
+###   - hub icon        -> ScriptValue('st_res_disp_hub_staffed'), and
+###                        ScriptValue('st_res_disp_hub_exists') for No Hub
 ###   - fill history    -> te_hist_v_st_res_<good> on the shared history store's
 ###                        monthly containers, recorded by
 ###                        te_history_record_strategic_reserve_samples
@@ -319,9 +320,11 @@ types strategic_reserve_widget_types
 
 					### The hub: its own icon, at full colour while it is fully
 					### staffed and dimmed below that, when it trades nothing. The
-					### dimmed icon is always drawn; the lit one covers it.
+					### dimmed icon is always drawn; the lit one covers it. The
+					### entry stays open after losing its hub, so the word and
+					### the tooltip have a third case, No Hub (st_res_disp_hub_exists).
 					st_res_ov_cell = {
-						tooltip = "je_strategic_reserve_ov_hub_tt"
+						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_exists'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_tt', 'je_strategic_reserve_ov_hub_none_tt' )]"
 						blockoverride "cell_top" {
 							icon = {
 								size = { 36 36 }
@@ -337,7 +340,7 @@ types strategic_reserve_widget_types
 							}
 						}
 						blockoverride "label" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_staffed', 'je_strategic_reserve_ov_hub_understaffed' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_exists'), '(CFixedPoint)1' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_staffed', 'je_strategic_reserve_ov_hub_understaffed' ), 'je_strategic_reserve_ov_hub_none' )]"
 						}
 					}
 
