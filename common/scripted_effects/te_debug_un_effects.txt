@@ -244,6 +244,28 @@ te_debug_un_stage_grievance = {
 	te_debug_un_open_docket = yes
 }
 
+# Stage a trade dispute against us (docket item 12, without the embargo): the
+# strongest other member that can take it gets un_events.15 now, with us as
+# scope:trade_rival. Whichever option its AI picks, its notice reaches us
+# (un_trade_arbitration_received, un_trade_deal_received or
+# un_tariff_retaliation_received). The event's description still speaks of
+# an embargo.
+# Scope: country (the player, a member)
+te_debug_un_stage_trade_dispute = {
+	save_scope_as = trade_rival
+	ordered_country = {
+		limit = {
+			NOT = { this = scope:trade_rival }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			NOT = { has_modifier = un_trade_arbitration_modifier }
+			NOT = { has_modifier = un_unilateral_tariffs_modifier }
+		}
+		order_by = un_docket_share_order
+		max = 1
+		trigger_event = { id = un_events.15 }
+	}
+}
+
 # ---- Redesign phase 5: dues, teeth, regimes ----
 
 # Raise the UN one tier: adopt the charter reform the next tier needs, set

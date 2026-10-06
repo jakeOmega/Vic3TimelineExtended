@@ -465,6 +465,14 @@ a quarter of that. The
 lending facility's loan and conditions are covered in [The UN emergency
 loan](04-banking.md#the-un-emergency-loan).
 
+A trade dispute goes to the weaker side of an embargo between two members. It
+can accept the UN's arbitration, settle outside the UN by offering the other
+side trade concessions, or impose unilateral tariffs on it. Tariffs lower the
+other side's trade advantage, fading over five years, and sour relations
+between the two. The other side never sees the event: a notification names the
+country and says what its choice costs or gains you. None of the three ends the
+embargo.
+
 ### Lobbying for UN votes
 
 Any member can try to move an AI member's vote, for or against the resolution in
