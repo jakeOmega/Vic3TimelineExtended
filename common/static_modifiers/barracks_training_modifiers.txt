@@ -1,0 +1,39 @@
+﻿# ============================================================================
+# BARRACKS TRAINING METHODS — static modifiers
+# ============================================================================
+# Re-applied monthly with a multiplier by common/scripted_effects/
+# barracks_training_effects.txt; each has exactly that one refresh site.
+# Values are at multiplier 1.
+
+# Country. Multiplier: academy-trained battalions as a share of regular
+# battalions (0-1), so a country whose every barracks trains under Officer
+# Academies gets the full values. Vanilla's comparable Armed Forces strength
+# grants run +10% (Prussian education) to +50% (age of caudillos).
+te_officer_academies_standing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_armed_forces_pol_str_mult = 0.2
+	interest_group_ig_armed_forces_pop_attraction_mult = 0.1
+}
+
+# Country. Multiplier: battalions with commissars as a share of regular
+# battalions (0-1). Single-Party State itself grants +20%.
+te_political_commissars_indoctrination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_in_government_attraction_mult = 0.15
+}
+
+# State. Multiplier: the conscription rate that yields one conscript battalion
+# per reserve battalion (reserve battalions x 1000 / state population, at most
+# 0.25). Assumes the engine sizes conscription from population, per
+# CONSCRIPTION_CENTER_LEVEL_POPULATION_DIVISOR in 00_defines.txt.
+te_reserve_cadre_conscription = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_conscription_rate_add = 1
+}
+
+# State. Multiplier: reserve battalions, so the Army Model's cap on
+# conscription centers doesn't swallow them.
+te_reserve_cadre_capacity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_building_conscription_center_max_level_add = 1
+}

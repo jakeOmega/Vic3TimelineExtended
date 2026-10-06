@@ -1,0 +1,43 @@
+﻿# Barracks training methods: multipliers for the static modifiers in
+# common/static_modifiers/barracks_training_modifiers.txt. Read only at
+# apply time, into variables (te_update_*_modifiers), so the multipliers
+# themselves are flat variable lookups.
+
+# Scope: country. Academy-trained battalions as a share of regular battalions.
+# army_size counts battalions excluding conscripts, one per barracks level.
+te_academy_battalion_share_value = {
+	value = modifier:country_academy_trained_battalions_add
+	divide = {
+		value = army_size
+		min = 1
+	}
+	max = 1
+}
+
+# Scope: country. Battalions with commissars as a share of regular battalions.
+te_commissar_battalion_share_value = {
+	value = modifier:country_commissar_battalions_add
+	divide = {
+		value = army_size
+		min = 1
+	}
+	max = 1
+}
+
+# Scope: state. Reserve battalions, for te_reserve_cadre_capacity.
+te_reserve_battalions_value = {
+	value = modifier:state_reserve_battalions_add
+}
+
+# Scope: state. The conscription rate that adds one conscript battalion (1000
+# potential conscripts) per reserve battalion. Capped at 25% so a reserve in a
+# nearly empty state can't claim more conscripts than it has people.
+te_reserve_conscription_rate_value = {
+	value = modifier:state_reserve_battalions_add
+	multiply = 1000
+	divide = {
+		value = state_population
+		min = 1000
+	}
+	max = 0.25
+}

@@ -1,0 +1,17 @@
+﻿# Barracks training methods (common/production_methods/barracks_training_pms.txt).
+# Both on_actions are listed under the monthly pulses in extra_on_actions.txt.
+
+# Country scope. Officer Academies' and Political Commissars' national effects.
+te_barracks_doctrine_country_pulse = {
+	effect = {
+		te_update_barracks_doctrine_modifiers = yes
+	}
+}
+
+# State scope (ROOT = the state, as for tourism_on_action). Reserve Cadre's
+# conscription rate and conscription-center capacity.
+te_reserve_cadre_state_pulse = {
+	effect = {
+		te_update_reserve_cadre_modifiers = yes
+	}
+}

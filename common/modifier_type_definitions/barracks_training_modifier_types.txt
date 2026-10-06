@@ -1,0 +1,34 @@
+﻿# Counts declared by the barracks training methods
+# (common/production_methods/barracks_training_pms.txt) and read back by the
+# monthly pulses in common/on_actions/barracks_training_on_actions.txt. Any
+# other source (a law, a decree, a building) can declare them too, and the
+# same pulse converts its contribution; the tooltip breaks the total down by
+# source. script_only does not hide them from tooltips.
+
+# Reservists trained in this state. Each one lets the state raise one more
+# conscript battalion: te_update_reserve_cadre_modifiers adds conscription
+# rate for that many battalions and as many conscription-center levels.
+state_reserve_battalions_add = {
+	color = good
+	percent = no
+	decimals = 1
+	script_only = yes
+}
+
+# Battalions trained under Officer Academies. Their share of the country's
+# regular battalions scales te_officer_academies_standing.
+country_academy_trained_battalions_add = {
+	color = neutral
+	percent = no
+	decimals = 1
+	script_only = yes
+}
+
+# Battalions trained under Political Commissars. Their share of the country's
+# regular battalions scales te_political_commissars_indoctrination.
+country_commissar_battalions_add = {
+	color = neutral
+	percent = no
+	decimals = 1
+	script_only = yes
+}
