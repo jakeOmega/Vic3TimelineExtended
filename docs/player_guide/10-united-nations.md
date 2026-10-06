@@ -104,7 +104,9 @@ world shows over years. The target is the sum of eight pillars:
 
 Credibility, delivery and the nuclear half of peace and order are kept as
 ledgers: each act adds or subtracts points. Credibility entries halve every ten
-years; delivery entries and nuclear use halve every four. Acts by powerful
+years; delivery entries and nuclear use halve every four. The delivery ledger
+holds no more than its pillar shows, 0 to 10, so points past +10 are not banked
+for later. Acts by powerful
 countries count for more. Each entry is multiplied by the actor's **weight**,
 its share of world prestige against a typical great power's 10% (×1), up to ×5;
 the Policy row scales each country's modifier the same way. A permanent member walking out and a

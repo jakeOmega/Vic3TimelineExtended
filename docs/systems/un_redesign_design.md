@@ -992,6 +992,11 @@ same day, also at the owner's request. Not yet seen in a running game.
   0.99424 a month = 0.5^(1/120)). Delivery and order keep the four-year half-life
   (`un_ledger_decay_factor`). The credibility bar divides by `un_credibility_cap`, so it
   rescales with the range and zero stays the centre line.
+- **The delivery ledger is held to 0 … `un_delivery_cap`** after every entry and after the
+  monthly decay (`un_delivery_ledger_clamp`, 2026-10-06). Uncapped, it banked a surplus: the
+  2015 observer save held 24.9 against the cap of 10, so the pillar sat at +10 for years,
+  far from the "+7 in a quiet world" estimated below. A shorter half-life was the second
+  lever considered; the owner chose to try the cap alone first.
 
 **Rulings.**
 
