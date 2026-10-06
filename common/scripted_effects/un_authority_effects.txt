@@ -109,6 +109,8 @@ un_authority_monthly_update = {
 	if = {
 		limit = { has_global_variable = un_ledger_delivery }
 		change_global_variable = { name = un_ledger_delivery multiply = un_ledger_decay_factor }
+		# Also brings a save that banked a surplus before the cap back within it.
+		un_delivery_ledger_clamp = yes
 	}
 	if = {
 		limit = { has_global_variable = un_ledger_order }
@@ -326,6 +328,28 @@ un_ledger_subject_clear = {
 	}
 }
 
+# The delivery ledger holds only what its pillar can show, 0..un_delivery_cap.
+# Uncapped, it banked a surplus: the 2015 observer save held 24.9 against a
+# cap of 10, which kept the pillar pinned at +10 for years after deliveries
+# stopped (four-year half-life: about five years to fall back to 10). Points
+# past the cap are now lost, and so are points below 0, so a run of failures
+# cannot bank a deficit either (owner ruling, 2026-10-06). Runs after every
+# ledger entry, whichever pillar it went to (a cheap no-op for the others),
+# and after the monthly decay. Scope: any
+un_delivery_ledger_clamp = {
+	if = {
+		limit = { has_global_variable = un_ledger_delivery }
+		if = {
+			limit = { global_var:un_ledger_delivery > un_delivery_cap }
+			set_global_variable = { name = un_ledger_delivery value = un_delivery_cap }
+		}
+		else_if = {
+			limit = { global_var:un_ledger_delivery < 0 }
+			set_global_variable = { name = un_ledger_delivery value = 0 }
+		}
+	}
+}
+
 # The single implementation behind the three wrappers above. The amount is
 # staged in a global, as te_history_record_global_sample stages its value,
 # because it has to be read again inside the log container's scope.
@@ -353,6 +377,7 @@ un_ledger_record = {
 				set_global_variable = { name = un_ledger_$PILLAR$ value = 0 }
 			}
 			change_global_variable = { name = un_ledger_$PILLAR$ add = global_var:un_led_stage }
+			un_delivery_ledger_clamp = yes
 			# An option's tooltip evaluates this limit on every frame without
 			# running the set above, so the stage is unset there: without the
 			# has_global_variable test each render logged three errors per
