@@ -1,0 +1,130 @@
+﻿# Barracks-only alternatives in vanilla's mutually exclusive pmg_training.
+# Keep unit modifiers unscaled: a larger barracks must not multiply troop quality.
+# Goods scale with staffing; profession_ratio divides the unit-defined manpower
+# between soldiers and officers rather than adding a fixed employment budget.
+# Unit propagation and AI selection require the playtest in
+# docs/design/barracks_training_methods.md before merging this proposal.
+
+pm_te_cadre_training = {
+	texture = "gfx/interface/icons/production_method_icons/nco_incorporation.dds"
+	profession_ratio = {
+		soldiers = 70
+		officers = 30
+	}
+	unlocking_technologies = { nco_training }
+	disallowing_laws = { law_warrior_caste }
+	ai_weight = 0.5
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			unit_army_experience_gain_mult = 0.35
+			unit_morale_loss_mult = -0.10
+		}
+		level_scaled = {
+			building_training_rate_add = 20
+		}
+		workforce_scaled = {
+			goods_input_paper_add = 1
+			goods_input_ammunition_add = 0.25
+		}
+	}
+}
+
+pm_te_accelerated_replacement_training = {
+	texture = "gfx/interface/icons/production_method_icons/skirmish_infantry.dds"
+	profession_ratio = {
+		soldiers = 90
+		officers = 10
+	}
+	unlocking_technologies = { wargaming }
+	disallowing_laws = { law_warrior_caste }
+	# Emergency tradeoff for the player; do not reward speed alone in AI scoring.
+	ai_weight = 0
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			unit_army_experience_gain_mult = -0.25
+			unit_morale_loss_mult = 0.15
+		}
+		level_scaled = {
+			building_training_rate_add = 36
+		}
+		workforce_scaled = {
+			goods_input_paper_add = 0.5
+		}
+	}
+}
+
+pm_te_combined_arms_instruction = {
+	texture = "gfx/interface/icons/invention_icons/combined_arms.dds"
+	profession_ratio = {
+		soldiers = 80
+		officers = 20
+	}
+	unlocking_technologies = { combined_arms }
+	disallowing_laws = { law_warrior_caste }
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			unit_morale_recovery_mult = 0.05
+		}
+		level_scaled = {
+			building_training_rate_add = 28
+		}
+		workforce_scaled = {
+			goods_input_paper_add = 1
+			goods_input_ammunition_add = 0.5
+			goods_input_radios_add = 0.25
+		}
+	}
+}
+
+pm_te_networked_wargaming = {
+	texture = "gfx/interface/icons/invention_icons/network_centric_warfare.dds"
+	profession_ratio = {
+		soldiers = 85
+		officers = 15
+	}
+	unlocking_technologies = { network_centric_warfare }
+	disallowing_laws = { law_warrior_caste }
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			unit_army_experience_gain_mult = 0.10
+			unit_morale_recovery_mult = 0.10
+		}
+		level_scaled = {
+			building_training_rate_add = 34
+		}
+		workforce_scaled = {
+			goods_input_radios_add = 0.5
+			goods_input_electronic_components_add = 0.5
+			goods_input_digital_assets_add = 1
+		}
+	}
+}
+
+pm_te_immersive_simulation = {
+	texture = "gfx/interface/icons/invention_icons/augmented_reality_warfare.dds"
+	profession_ratio = {
+		soldiers = 90
+		officers = 10
+	}
+	unlocking_technologies = { augmented_reality_warfare }
+	disallowing_laws = { law_warrior_caste }
+	building_modifiers = {
+		unscaled = {
+			building_training_rate_add = 50
+			unit_army_experience_gain_mult = 0.20
+			unit_morale_recovery_mult = 0.15
+		}
+		level_scaled = {
+			building_training_rate_add = 40
+		}
+		workforce_scaled = {
+			goods_input_electronic_components_add = 1
+			goods_input_digital_assets_add = 2
+			goods_input_services_add = 1
+		}
+	}
+}

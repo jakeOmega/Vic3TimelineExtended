@@ -1,0 +1,11 @@
+﻿# Append after vanilla's 05_military.txt; preserve all vanilla choices/defaults.
+# Do not inject into pmg_training_conscription: these are standing-army methods.
+INJECT:pmg_training = {
+	production_methods = {
+		pm_te_cadre_training
+		pm_te_accelerated_replacement_training
+		pm_te_combined_arms_instruction
+		pm_te_networked_wargaming
+		pm_te_immersive_simulation
+	}
+}
