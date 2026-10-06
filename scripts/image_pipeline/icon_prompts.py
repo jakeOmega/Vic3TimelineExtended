@@ -1046,12 +1046,20 @@ ICONS: dict[str, dict[str, dict]] = {
         "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": 2},
         # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
         "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": 2},
-        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Apple, Samsung, Huawei.
+        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Huawei, Verizon, BlackBerry (Apple and Samsung moved to Precision Wireless Gear).
         "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": 3},
         # [tourism] Resort Travel: Disney, Axiom Space.
         "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": 1},
         # [lead, Conductive and Base Metals] Pure Heavy Metals: BHP.
         "prestige_good_generic_lead": {"subject": "a neat stack of polished copper ingots and blue-grey metal ingots, topped by a rainbow-iridescent bismuth crystal with stepped square terraces", "seed": 2},
+        # [rubber] Performance Tires: Michelin, Pirelli, JSR, IG Farben.
+        "prestige_good_generic_rubber": {"subject": "a single glossy black racing car tire standing upright at a slight angle, with a deep sharp tread and a thin red stripe around its plain smooth sidewall, on a polished silver five-spoke wheel", "seed": 3},
+        # [ammunition] Match-Grade Ammunition: Rheinmetall, Armstrong Whitworth, generic Munitions.
+        "prestige_good_generic_ammunition": {"subject": "a neat upright row of five long gleaming polished brass rifle cartridges with sharp pointed copper bullets, held together at their bases by a dark steel clip", "seed": 2},
+        # [tech_metals, Tech-Critical Metals] Refined Critical Metals: BHP, Vale, generic Metal and Mineral Mining.
+        # "A polished cylindrical ingot of bright silver-white metal standing on its end, with thin
+        # bands of purple-blue heat tint" drew pale lumps that read as soap or stone.
+        "prestige_good_generic_tech_metals": {"subject": "a neat stack of three mirror-polished chrome-bright metal bars with crisp sharp edges and strong reflections, one with a faint blue and violet sheen, beside a small heap of glittering dark-violet metal crystals", "seed": 1},
     },
     # Journal entries on vanilla's event icons (the nine Space Race milestones
     # shared its gears; the rest a newspaper, portrait, flag or building icon).

@@ -9,9 +9,11 @@
 #
 # Eligibility is te_history_record_sample's own te_history_country_is_tracked
 # check (player or major power), deliberately not widened. The gates below are
-# only "is the reserve running" and "is this good in the reserve": a good the
-# country has not unlocked has no row, so recording it would store a chart no
-# one can open.
+# only "is the reserve running with a hub" and "is this good in the reserve":
+# a good the country has not unlocked has no row, so recording it would store
+# a chart no one can open. The entry stays open without a hub
+# (je_strategic_reserve has no invalid); those months record nothing, since
+# the fill share then measures the stock against the silos alone.
 #
 # SERIES, one per good: st_res_<good> — the stockpile's share of capacity,
 # 0-100 (st_res_<good>_fill_pct, the value the row's fill bar shows). A share
@@ -36,7 +38,10 @@
 
 te_history_record_strategic_reserve_samples = {
 	if = {
-		limit = { has_journal_entry = je_strategic_reserve }
+		limit = {
+			has_journal_entry = je_strategic_reserve
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		if = {
 			limit = { st_res_grain_unlocked_trigger = yes }
 			te_history_record_sample = { METRIC = st_res_grain VALUE = st_res_grain_fill_pct }

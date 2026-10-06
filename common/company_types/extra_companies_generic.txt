@@ -204,6 +204,7 @@ REPLACE:company_basic_electrics = {
 
 	possible_prestige_goods = {
 		prestige_good_generic_consumer_appliances
+		prestige_good_radiola_radios
 	}
 
 	potential = {
@@ -758,6 +759,9 @@ INJECT:company_basic_metal_mining = {
 		building_nickel_cobalt_mine
 		building_lithium_mine
 	}
+	possible_prestige_goods = {
+		prestige_good_generic_tech_metals
+	}
 }
 
 INJECT:company_basic_mineral_mining = {
@@ -768,6 +772,9 @@ INJECT:company_basic_mineral_mining = {
 		building_phosphate_mine
 		building_potash_mine
 		building_industrial_mineral_salt_mine
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_tech_metals
 	}
 }
 

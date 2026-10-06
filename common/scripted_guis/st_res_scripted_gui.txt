@@ -51,6 +51,13 @@ st_res_adjust_grain_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -104,6 +111,13 @@ st_res_adjust_ammunition_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -157,6 +171,13 @@ st_res_adjust_oil_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -210,6 +231,13 @@ st_res_adjust_small_arms_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -263,6 +291,13 @@ st_res_adjust_artillery_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -316,6 +351,13 @@ st_res_adjust_aeroplanes_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -369,6 +411,13 @@ st_res_adjust_tanks_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -422,6 +471,13 @@ st_res_adjust_fertilizer_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:dir = 0 }
 			custom_tooltip = {
@@ -556,6 +612,13 @@ st_res_policy_grain_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -1063,6 +1126,13 @@ st_res_policy_ammunition_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -1570,6 +1640,13 @@ st_res_policy_oil_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -2077,6 +2154,13 @@ st_res_policy_small_arms_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -2584,6 +2668,13 @@ st_res_policy_artillery_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -3091,6 +3182,13 @@ st_res_policy_aeroplanes_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -3598,6 +3696,13 @@ st_res_policy_tanks_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -4105,6 +4210,13 @@ st_res_policy_fertilizer_sgui = {
 	}
 
 	is_valid = {
+		# Greyed with no hub, like Cycle Step Size and Reset Reserve Rates:
+		# the entry stays open without one (je_strategic_reserve has no
+		# invalid), and nothing set here would move until a hub stands.
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
 		trigger_if = {
 			limit = { scope:op = 0 }
 			custom_tooltip = {
@@ -4610,9 +4722,10 @@ st_res_policy_fertilizer_sgui = {
 # does, rather than every hub-flow modifier the refresh rebuilds; hiding a
 # tooltip does not change what runs.
 #
-# Neither button could be greyed out as a journal-entry button, and neither
-# can here: `is_valid` holds one condition, always true while the panel shows
-# (it is gated on the running entry, which needs the hub), so the composed
+# Neither button could be greyed out as a journal-entry button. Here
+# `is_valid` holds one condition, that a hub stands: the entry stays open
+# without one (je_strategic_reserve has no invalid), and the rate and policy
+# controls above grey on the same test. While a hub stands the composed
 # tooltip's first line reads as a tick rather than a blank.
 # ============================================================================
 

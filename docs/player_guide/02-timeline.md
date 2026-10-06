@@ -326,7 +326,7 @@ company owns gets the company's throughput bonus, which is often worth having
 on a flagship.
 
 The mod also adds extension buildings and prosperity bonuses to many base-game
-companies, and fifteen new prestige goods, from Luxury Automobiles to Heavy-Lift
+companies, and eighteen new prestige goods, from Luxury Automobiles to Heavy-Lift
 Launch Systems.
 
 ### Companies added by the mod

@@ -4207,12 +4207,14 @@ un_refugee_source_brain_drain_modifier = {
 	state_migration_pull_mult = -0.1
 }
 
+# Figures restated in notification_un_trade_deal_received_desc; change both.
 un_trade_deal_bilateral_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_trade_advantage_mult = 0.02
 	country_institution_impact_institution_ministry_of_commerce_mult = 0.05
 }
 
+# Figures restated in notification_un_tariff_retaliation_received_desc; change both.
 un_tariff_retaliation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_trade_advantage_mult = -0.03

@@ -956,6 +956,8 @@ st_res_fertilizer_sale_profit = {
 # GuiScope.ScriptValue, including for a country that has the JE visible-but-
 # inactive (is_shown_when_inactive = logistics) and has therefore never run
 # st_res_init_effect. An unguarded `var:` read there raises script-system errors.
+# Capped at 100: while the journal entry waits without a hub, the capacity
+# counts only the silos (or nothing), and the stock it keeps can exceed it.
 st_res_grain_fill_pct = {
 	value = 0
 	if = {
@@ -966,6 +968,7 @@ st_res_grain_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_ammunition_fill_pct = {
@@ -978,6 +981,7 @@ st_res_ammunition_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_oil_fill_pct = {
@@ -990,6 +994,7 @@ st_res_oil_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_small_arms_fill_pct = {
@@ -1002,6 +1007,7 @@ st_res_small_arms_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_artillery_fill_pct = {
@@ -1014,6 +1020,7 @@ st_res_artillery_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_aeroplanes_fill_pct = {
@@ -1026,6 +1033,7 @@ st_res_aeroplanes_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_tanks_fill_pct = {
@@ -1038,6 +1046,7 @@ st_res_tanks_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 st_res_fertilizer_fill_pct = {
@@ -1050,6 +1059,7 @@ st_res_fertilizer_fill_pct = {
 			min = 1
 		}
 		multiply = 100
+		max = 100
 	}
 }
 
@@ -1137,13 +1147,30 @@ st_res_fertilizer_last_net = {
 
 # The hub is staffed (1) or not (0): the overview's hub icon and its word.
 # The same test as the journal entry's "deactivated" status line and every
-# flow gate: st_res_hub_workforce_cached above 0.99.
+# flow gate: st_res_hub_workforce_cached above 0.99. With no hub the cache
+# reads 0, but only from its next refresh (st_res_refresh_hub_cache_effect,
+# weekly or on a click), so the hub itself is tested too.
 st_res_disp_hub_staffed = {
 	value = 0
 	if = {
 		limit = {
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
 			has_variable = st_res_hub_workforce_cached
 			var:st_res_hub_workforce_cached > 0.99
+		}
+		value = 1
+	}
+}
+
+# A hub stands (1) or not (0). The entry stays open after losing its hub
+# (je_strategic_reserve has no invalid), so the overview's hub cell has a
+# third word for that. Read live, not from st_res_hub_level_cached, which
+# waits for the weekly pulse.
+st_res_disp_hub_exists = {
+	value = 0
+	if = {
+		limit = {
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
 		}
 		value = 1
 	}

@@ -289,16 +289,24 @@ un_humanitarian_token_received = {
 	color = good
 }
 
+# The other side of the trade dispute (un_events.15), one per option.
+un_trade_arbitration_received = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/trade_route.dds"
+	notification_type = feed
+	color = neutral
+}
+
 un_trade_deal_received = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/trade_route.dds"
 	notification_type = feed
 	color = good
 }
 
 un_tariff_retaliation_received = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	texture = "gfx/interface/icons/notification_icons/trade_route.dds"
 	notification_type = feed
 	color = bad
 }

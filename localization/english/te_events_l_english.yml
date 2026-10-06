@@ -5117,6 +5117,7 @@
  te_debug_un.1.v:0 "Puppet a random minor member, or move our subject member along: puppet, protectorate, independent"
  te_debug_un.1.w:0 "Wipe my UN journal entry as a won revolution does (modifiers gone, record kept); the next month rebuilds it"
  te_debug_un.1.x:0 "Log every country's UN AI scores to debug.log (UN_AI_SCORES lines)"
+ te_debug_un.1.y:0 "Have the strongest other member take a trade dispute with us to the UN (its choice reaches us as a notification)"
  te_debug_un.1.z:0 "Close"
 
 #
