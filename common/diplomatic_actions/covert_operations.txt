@@ -27,6 +27,11 @@
 # - propose_score scales with rivalry, rank, ruler personality.
 # - Wartime ops have higher eval chance — urgency justifies faster decisions.
 # - Ruler personality: aggressive rulers more likely, cautious less.
+# - Target size: upkeep scales with the operator's GDP, so an operation whose
+#   payoff scales with the target's size takes covert_ai_target_worth_the_upkeep
+#   (covert_warfare_triggers.txt): no much weaker target without money to burn.
+#   Espionage, nuclear programme sabotage and secure loose material don't take
+#   it; test_covert_ai_targets.py holds the two lists.
 # ============================================================================
 
 # ---- PEACETIME: Election Interference ----
@@ -184,6 +189,8 @@ covert_election_interference_action = {
 				has_attitude = { who = scope:target_country attitude = domineering }
 			}
 			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -336,6 +343,8 @@ covert_financial_subversion_action = {
 				has_attitude = { who = scope:target_country attitude = domineering }
 			}
 			intelligence_capacity_total >= scope:target_country.intelligence_capacity_total
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -491,6 +500,11 @@ covert_infrastructure_sabotage_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Much weaker targets only with money to burn, unless losing to them
+			OR = {
+				is_losing_war_against = { ENEMY = scope:target_country }
+				covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			}
 		}
 
 		propose_score = {
@@ -644,6 +658,11 @@ covert_comms_disruption_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Much weaker targets only with money to burn, unless losing to them
+			OR = {
+				is_losing_war_against = { ENEMY = scope:target_country }
+				covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
+			}
 		}
 
 		propose_score = {
@@ -1104,6 +1123,8 @@ covert_influence_campaign_action = {
 			var:iw_funding_level >= 1
 			in_default = no
 			country_rank >= rank_value:major_power
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -1277,6 +1298,8 @@ covert_ideological_subversion_action = {
 				has_attitude = { who = scope:target_country attitude = domineering }
 				has_diplomatic_pact = { who = scope:target_country type = rivalry }
 			}
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -1447,6 +1470,8 @@ covert_destabilization_action = {
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
 			}
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -1618,6 +1643,8 @@ covert_regime_change_action = {
 			var:iw_funding_level >= 1
 			in_default = no
 			country_rank >= rank_value:major_power
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
@@ -2088,6 +2115,8 @@ covert_cultivate_assets_action = {
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
 			in_default = no
+			# Much weaker targets only with money to burn
+			covert_ai_target_worth_the_upkeep = { TARGET = scope:target_country }
 		}
 
 		propose_score = {
