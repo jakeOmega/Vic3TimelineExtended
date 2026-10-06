@@ -56,6 +56,27 @@ nd_nuclear_warning_action = {
 				limit = { ruler_is_aggressive = yes }
 				add = 0.02
 			}
+			# The nuclear taboo (owner ruling 2026-10-06): a world that treats
+			# the bomb as ordinary threatens with it more readily, one that
+			# finds it unthinkable less: x2 at 0, x1 at 35, x0.3 at 100, the
+			# strike actions' factor (nuke.txt). A threat in defence of a
+			# guaranteed country, our survival or our core is exempt, as
+			# retaliation is from the strike actions' factor.
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							exists = scope:target_country
+							OR = {
+								nd_dispute_guarantee_against = { TARGET = scope:target_country }
+								nd_enemy_threatens_existence = { ENEMY = scope:target_country }
+								nd_core_threatened_by = { ENEMY = scope:target_country }
+							}
+						}
+					}
+				}
+				multiply = nd_taboo_ai_use_factor
+			}
 		}
 
 		will_propose = {
@@ -121,6 +142,27 @@ nd_nuclear_ultimatum_action = {
 			if = {
 				limit = { ruler_is_aggressive = yes }
 				add = 0.02
+			}
+			# The nuclear taboo (owner ruling 2026-10-06): a world that treats
+			# the bomb as ordinary threatens with it more readily, one that
+			# finds it unthinkable less: x2 at 0, x1 at 35, x0.3 at 100, the
+			# strike actions' factor (nuke.txt). A threat in defence of a
+			# guaranteed country, our survival or our core is exempt, as
+			# retaliation is from the strike actions' factor.
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							exists = scope:target_country
+							OR = {
+								nd_dispute_guarantee_against = { TARGET = scope:target_country }
+								nd_enemy_threatens_existence = { ENEMY = scope:target_country }
+								nd_core_threatened_by = { ENEMY = scope:target_country }
+							}
+						}
+					}
+				}
+				multiply = nd_taboo_ai_use_factor
 			}
 		}
 

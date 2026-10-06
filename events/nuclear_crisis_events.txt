@@ -574,6 +574,16 @@ nuclear_crisis.4 = {
 				trigger = { nd_doctrine_warfighting = yes }
 				add = 6
 			}
+			# Warfighting in a world that still treats the bomb as an ordinary
+			# weapon uses it readily (owner ruling 2026-10-06: a power that had
+			# just built it used it at once).
+			modifier = {
+				trigger = {
+					nd_doctrine_warfighting = yes
+					nd_taboo_value < 25
+				}
+				add = 6
+			}
 			modifier = {
 				trigger = {
 					nd_doctrine_compellence = yes
@@ -584,6 +594,54 @@ nuclear_crisis.4 = {
 			modifier = {
 				trigger = { NOT = { nd_faces_retaliation_from = { ENEMY = scope:nd_target } } }
 				add = 3
+			}
+			# The nuclear taboo, as the strike actions weigh it
+			# (nd_taboo_ai_use_factor: x2 at 0, x1 at 35, x0.62 at 70) in
+			# literal rungs, since an ai_chance factor takes only a number.
+			# Above 70 nd_ai_nuclear_use_justified allows survival alone.
+			modifier = {
+				trigger = { nd_taboo_value < 10 }
+				factor = 1.8
+			}
+			modifier = {
+				trigger = {
+					nd_taboo_value >= 10
+					nd_taboo_value < 20
+				}
+				factor = 1.6
+			}
+			modifier = {
+				trigger = {
+					nd_taboo_value >= 20
+					nd_taboo_value < 35
+				}
+				factor = 1.25
+			}
+			modifier = {
+				trigger = {
+					nd_taboo_value >= 35
+					nd_taboo_value < 50
+				}
+				factor = 0.92
+			}
+			modifier = {
+				trigger = { nd_taboo_value >= 50 }
+				factor = 0.75
+			}
+			# An insurgency is a poor nuclear target: a fifth as likely. The
+			# 2026-10-06 observer run's one deliberate use was Germany's on
+			# Revolutionary Senegal (1986, taboo 22); our own civil war is
+			# already ruled out in nd_ai_nuclear_use_justified.
+			modifier = {
+				trigger = {
+					scope:nd_target = {
+						OR = {
+							is_revolutionary = yes
+							is_secessionist = yes
+						}
+					}
+				}
+				factor = 0.2
 			}
 			modifier = {
 				trigger = { NOT = { nd_ai_nuclear_use_justified = { ENEMY = scope:nd_target } } }
