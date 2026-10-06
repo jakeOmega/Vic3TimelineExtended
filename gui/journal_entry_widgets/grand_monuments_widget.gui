@@ -8,6 +8,9 @@
 ###     Hard Times while a finished level would cause vanity backlash (§5).
 ###   widget_je_gm_status     custom_widget_container_2
 ###     (The entry has no status description: its counts were the overview's.)
+###     Commission (open), only while one is open (v2 §2.7): who asked, the
+###     monument asked for, a progress bar, the months left and Ask for More
+###     Time.
 ###     National Effects (open): a bar per stepped total, then interest group
 ###     approval and the fading ledgers. Our Monuments (open): one row per
 ###     monument, from the country's gm_states list (rebuilt by every
@@ -339,6 +342,21 @@ types grand_monuments_widget_types
 			}
 		}
 
+		# Rename (v2 §3.3): an upheld monument's form and namesake again, at
+		# no cost. A contested or heritage monument keeps its name.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' )]"
+
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_rename" }
+			}
+		}
+
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
@@ -482,6 +500,89 @@ types grand_monuments_widget_types
 						tooltip = "gm_je_ov_hard_times_tt"
 						text = "gm_je_ov_hard_times"
 					}
+				}
+			}
+		}
+	}
+
+	### Commission (open), shown only while one is open (v2 §2.7): who asked for
+	### what, the monument it will be, a bar of the grandeur added against the
+	### target, the months left and Ask for More Time (once). Country reads
+	### only: the commission is the country's record.
+	type te_gm_sec_commission = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_open'), '(CFixedPoint)1' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_commission_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_commission_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_commission_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_commission_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_commission_closed'))]"
+			spacing = 2
+
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_com_ask_tt"
+				text = "gm_je_com_ask"
+			}
+			gm_text = {
+				text = "gm_je_com_named"
+			}
+			gm_step_row = {
+				tooltip = "gm_je_com_progress_tt"
+				blockoverride "row_label" {
+					text = "gm_je_com_lbl_progress"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_frac') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_com_val_progress"
+				}
+			}
+			gm_value_row = {
+				tooltip = "gm_je_com_months_tt"
+				blockoverride "row_label" {
+					text = "gm_je_com_lbl_months"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_com_val_months"
+				}
+			}
+
+			button = {
+				using = default_button_action
+				size = { 220 26 }
+				parentanchor = hcenter
+				margin_top = 4
+				datacontext = "[GetScriptedGui('gm_com_extend_sgui')]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "gm_button_com_extend_tooltip"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "gm_button_com_extend"
 				}
 			}
 		}
@@ -728,9 +829,9 @@ types grand_monuments_widget_types
 				}
 			}
 
-			# ---- Fading legitimacy: the teardown and vanity ledgers (§4.3, §5) ----
+			# ---- Fading legitimacy: the teardown, vanity and promise ledgers (§4.3, §5, v2 §2.4) ----
 			gm_subheader = {
-				visible = "[Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) )]"
+				visible = "[Or( Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' ) )]"
 				blockoverride "subheader_text" {
 					text = "gm_je_sub_fading"
 				}
@@ -753,6 +854,16 @@ types grand_monuments_widget_types
 				}
 				blockoverride "row_value" {
 					text = "gm_je_val_vanity"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_promise"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_promise"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_promise"
 				}
 			}
 		}
@@ -871,6 +982,25 @@ types grand_monuments_widget_types
 			gm_note = {
 				text = "gm_je_how_hard_times"
 			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_commissions"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_commissions"
+			}
+			gm_note = {
+				text = "gm_je_how_commissions_rewards"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_names"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_names"
+			}
 		}
 	}
 
@@ -886,6 +1016,7 @@ types grand_monuments_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		te_gm_sec_commission = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
 	}

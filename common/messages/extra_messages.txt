@@ -2166,3 +2166,25 @@ gm_vanity_backlash_notice = {
 	notification_type = toast
 	color = bad
 }
+
+# Grand Monuments: a commission closes (docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2.3)
+gm_com_fulfilled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = good
+}
+
+gm_com_missed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = toast
+	color = bad
+}
+
+gm_com_lapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = neutral
+}

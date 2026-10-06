@@ -114,3 +114,70 @@ gm_hard_times_sgui = {
 		always = no
 	}
 }
+
+# ---- Commissions (v2 §2.3) ----------------------------------------------------
+# Ask for More Time, once: +36 months, the reward halved. Scope-free: the
+# Commission section reads the country only.
+gm_com_extend_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = gm_com_open
+	}
+
+	is_valid = {
+		has_variable = gm_com_open
+		custom_tooltip = {
+			text = gm_com_extend_once_tt
+			NOT = { has_variable = gm_com_extended }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_com_extend_effect_tt
+			gm_com_extend = yes
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- Names (v2 §3.3) ------------------------------------------------------------
+# Rename the row's monument: the form (if its skin offers more than one) and
+# the namesake again, at no cost, the current name each event's default. Not
+# for a contested or heritage monument, which keeps its name.
+gm_rename_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_sgui_rename_upheld_tt
+				gm_state_status_fits = yes
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			custom_tooltip = {
+				text = gm_rename_effect_tt
+				gm_state_offer_name_choice = yes
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

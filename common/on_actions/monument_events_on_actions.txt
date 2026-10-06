@@ -16,6 +16,7 @@ on_monthly_pulse_country = {
 	on_actions = {
 		monument_events_on_action
 		gm_country_on_action
+		gm_com_world_on_action
 	}
 }
 
@@ -190,6 +191,7 @@ gm_country_on_action = {
 				OR = {
 					any_scope_state = { has_building = building_grand_monument }
 					has_variable = gm_active
+					has_variable = gm_com_open
 				}
 			}
 			gm_country_monthly = yes
@@ -258,5 +260,130 @@ gm_state_owner_change_on_action = {
 	}
 	effect = {
 		gm_state_changed_hands = yes
+	}
+}
+
+# ============================================================================
+# Commissions (v2 §2): the world pass and the moments it cannot poll
+# ============================================================================
+# Every country, every month: the moment trackers and the petition roll
+# (gm_com_world_monthly, gm_commission_effects.txt). Cheap: a few reads a
+# country, and the petition's counts only on a 1-in-120 roll.
+gm_com_world_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		gm_com_world_monthly = yes
+	}
+}
+
+# ROOT = the country enforcing a war goal, scope:target = the country it was
+# enforced against (00_code_on_actions.txt). Each side remembers the result,
+# and the other side's capital for the name, for a month: the war leader's peace
+# hook below reads them a day later, so the order the two fire in does not
+# matter.
+on_wargoal_enforced = {
+	on_actions = {
+		gm_wargoal_enforced_on_action
+	}
+}
+
+gm_wargoal_enforced_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		set_variable = { name = gm_war_won value = yes days = 30 }
+		scope:target ?= {
+			set_variable = { name = gm_war_lost value = yes days = 30 }
+			capital ?= { save_scope_as = gm_war_loser_capital }
+		}
+		capital ?= { save_scope_as = gm_war_winner_capital }
+		if = {
+			limit = { exists = scope:gm_war_loser_capital }
+			set_variable = { name = gm_war_enemy_cap value = scope:gm_war_loser_capital days = 30 }
+		}
+		if = {
+			limit = {
+				exists = scope:gm_war_winner_capital
+				exists = scope:target
+			}
+			scope:target = {
+				set_variable = { name = gm_war_enemy_cap value = scope:gm_war_winner_capital days = 30 }
+			}
+		}
+	}
+}
+
+# ROOT = a war leader that has signed a peace. The months it has been at war,
+# taken now (the world pass drops the count once the country is at peace), and
+# the decision a day later (monument_events.22).
+on_peace_agreement_signed_war_leader = {
+	on_actions = {
+		gm_peace_war_leader_on_action
+	}
+}
+
+gm_peace_war_leader_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		set_variable = { name = gm_war_months_at_peace value = 0 days = 30 }
+		if = {
+			limit = { has_variable = gm_war_months }
+			set_variable = { name = gm_war_months_at_peace value = var:gm_war_months days = 30 }
+		}
+		trigger_event = { id = monument_events.22 days = 1 }
+	}
+}
+
+# ROOT = the character who died. A ruler who reigned 15 years or more
+# (gm_ruler_months, kept by the world pass) is offered a mausoleum.
+on_character_death = {
+	on_actions = {
+		gm_character_death_on_action
+	}
+}
+
+gm_character_death_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+		is_ruler_of_own_country = yes
+	}
+	effect = {
+		save_scope_as = gm_late_ruler
+		owner ?= {
+			if = {
+				limit = {
+					gm_com_can_offer = yes
+					has_variable = gm_ruler
+					var:gm_ruler = scope:gm_late_ruler
+					has_variable = gm_ruler_months
+					var:gm_ruler_months >= 180
+				}
+				gm_com_ruler_death = yes
+			}
+		}
+	}
+}
+
+# ROOT = the newly formed country: its founding is now (Germany in 1871 marks
+# 1971, not its Prussian past).
+on_country_formed = {
+	on_actions = {
+		gm_formed_on_action
+	}
+}
+
+gm_formed_on_action = {
+	trigger = {
+		gm_system_enabled = yes
+	}
+	effect = {
+		set_variable = { name = gm_founded_year value = year }
+		gm_remove_state_var = { VAR = gm_com_centenary_100 }
+		gm_remove_state_var = { VAR = gm_com_centenary_200 }
 	}
 }

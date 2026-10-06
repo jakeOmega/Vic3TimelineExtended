@@ -12,23 +12,29 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "grand_monuments_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_grand_monuments.txt")
 VALUES = os.path.join(REPO, "common", "script_values", "gm_values.txt")
+COM_VALUES = os.path.join(REPO, "common", "script_values", "gm_commission_values.txt")
+SGUIS = os.path.join(REPO, "common", "scripted_guis", "gm_sguis.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "gm_effects.txt")
 LOC = os.path.join(REPO, "localization", "english", "te_miscellaneous_l_english.yml")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "grand_monuments_gui_icons.md")
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_english.yml")
 
-STATUS = ["te_gm_sec_national", "te_gm_sec_monuments"]
+STATUS = ["te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments"]
 REFERENCE = ["te_gm_sec_how"]
 # root -> (container, what it wraps)
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
-FLAGS = {"gm_national_closed", "gm_monuments_closed", "gm_how_open"}
-LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_national", "te_gm_sec_monuments", "gm_monument_row"]
+FLAGS = {"gm_commission_closed", "gm_national_closed", "gm_monuments_closed", "gm_how_open"}
+LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_national", "te_gm_sec_monuments",
+                 "gm_monument_row"]
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_national", "gm_je_how_counts",
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
-            "gm_je_how_hard_times"]
+            "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
+            "gm_je_how_names"]
+# The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5; v2 §2.4).
+FADING = ("teardown", "vanity", "promise")
 # Dedications with a national effect of their own: shown only while in force.
 SPECIFIC = ("leader", "religious", "war_memorial", "artistic", "scientific", "industrial")
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners",
@@ -193,11 +199,25 @@ class StateGatedTest(unittest.TestCase):
         row = _squash(_type_body(_gui(), "gm_monument_row"))
         self.assertIn(f'visible = "[{self.CONTESTED}]" default_format = "#tooltippable" '
                       f'tooltip = "gm_row_contest_tt" text = "gm_row_contest"', row)
-        buttons = re.search(r'flowcontainer = \{ direction = horizontal spacing = 4 parentanchor = hcenter '
-                            r'visible = "\[(.*?)\]" (gm_choice_button.*)', row)
-        self.assertTrue(buttons, "the choices are not a centred row")
-        self.assertEqual(buttons.group(1), self.CONTESTED)
-        self.assertEqual(buttons.group(2).count("gm_choice_button = {"), 3)
+        rows = re.findall(r'flowcontainer = \{ direction = horizontal spacing = 4 parentanchor = hcenter '
+                          r'visible = "\[(.*?)\]" ((?:gm_choice_button = \{.*?\} \} )+)\}', row)
+        self.assertEqual(len(rows), 2, "Rename's row and the contested choices' row, each centred")
+        gates = dict(rows)
+        self.assertEqual(gates[self.CONTESTED].count("gm_choice_button = {"), 3)
+        self.assertNotIn("gm_rename_sgui", gates[self.CONTESTED])
+
+    def test_rename_only_while_upheld(self):
+        """A contested or heritage monument keeps its name (v2 §3.3): Rename
+        shows only while the monument fits, and its scripted GUI says so."""
+        row = _squash(_type_body(_gui(), "gm_monument_row"))
+        upheld = "EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' )"
+        self.assertIn(f'visible = "[{upheld}]" gm_choice_button = {{ blockoverride "choice_context" '
+                      f'{{ datacontext = "[GetScriptedGui(\'gm_rename_sgui\')]" }}', row)
+        value = _squash(_block(_read(VALUES), "gm_state_can_rename"))
+        self.assertEqual(value, "value = 0 if = { limit = { gm_state_status_fits = yes } value = 1 }")
+        sgui = _squash(_block(_read(SGUIS), "gm_rename_sgui"))
+        self.assertIn("gm_state_status_fits = yes", sgui)
+        self.assertIn("ai_is_valid = { always = no }", sgui)
 
     def test_hard_times_only_while_it_holds(self):
         """The icon over a red phrase, both explaining on hover, in a line of
@@ -244,7 +264,7 @@ class StateGatedTest(unittest.TestCase):
         fading = re.search(r'gm_subheader = \{ visible = "\[Or\((.*?)\)\]" blockoverride "subheader_text" '
                            r'\{ text = "gm_je_sub_fading" \}', nat)
         self.assertTrue(fading)
-        for ledger in ("teardown", "vanity"):
+        for ledger in FADING:
             self.assertIn(f"ScriptValue('gm_display_{ledger}')", fading.group(1))
 
     def test_sections_never_start_empty(self):
@@ -275,7 +295,7 @@ class NationalEmptyStateTest(unittest.TestCase):
         nat = _type_body(_gui(), "te_gm_sec_national")
         anyv = _squash(_block(values, "gm_disp_national_any"))
         gates = set(re.findall(r"ScriptValue\('(gm_display_\w+)'\), '\(CFixedPoint\)0' \)", nat))
-        self.assertEqual(len(gates), len(FRACS) + len(IGS) + 2)
+        self.assertEqual(len(gates), len(FRACS) + len(IGS) + len(FADING))
         for display in gates:
             read_vars = set(re.findall(r"var:(\w+)", _block(values, display)))
             self.assertEqual(len(read_vars), 1, display)
@@ -361,7 +381,7 @@ class IconsTest(unittest.TestCase):
 class DisplayValuesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.values = _read(VALUES)
+        cls.values = _read(VALUES) + "\n" + _read(COM_VALUES)
         cls.loc = _loc()
         gui = _gui()
         keys = set(re.findall(r'(?:text|tooltip) = "([a-z]\w*)"', gui))
@@ -543,7 +563,7 @@ class LabelBudgetTest(unittest.TestCase):
             self._fits(val, value, LONGEST_VALUE)
         label, value = _cells(_type_body(self.gui, "gm_value_row"))
         rows = re.findall(r'gm_value_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
-        self.assertEqual(len(rows), len(IGS) + 2)
+        self.assertEqual(len(rows), len(IGS) + len(FADING))
         for lbl, val in rows:
             self._fits(lbl, label)
             self._fits(val, value, LONGEST_VALUE)
@@ -579,7 +599,7 @@ class LabelBudgetTest(unittest.TestCase):
     def test_choice_buttons(self):
         (cell,) = _cells(_type_body(self.gui, "gm_choice_button"))
         keys = re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))
-        self.assertEqual(len(keys), 3)
+        self.assertEqual(len(keys), 4, "Rename and the three contested choices")
         for key in keys:
             self._fits(key, cell)
 

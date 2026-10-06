@@ -63,6 +63,14 @@ gm_national_vanity = {
 	country_legitimacy_base_add = -0.3
 }
 
+# A commission met (v2 §2.4): the multiplier is the promise ledger itself,
+# LINEAR (only one commission is ever open, so nothing stacks). Fulfilled +5,
+# after an extension +2.5; fades by 3% a month.
+gm_national_promise = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 1
+}
+
 # ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
 gm_ig_approval_armed_forces = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds

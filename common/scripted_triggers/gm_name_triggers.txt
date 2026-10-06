@@ -1,0 +1,325 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — names: scripted triggers (v2 §3)
+# ============================================================================
+# State scope throughout. The forms each skin offers (plan Task 7's table, which
+# fixes the spec's §3.2 draft). test_grand_monument_registry.py pins FORMS to
+# these triggers, to monument_events.24's options and to the loc.
+
+# ---- Skins ---------------------------------------------------------------------------
+# No gm_skin reads as generic (a monument older than skins, before first sight).
+gm_state_skin_is = {
+	OR = {
+		AND = {
+			has_variable = gm_skin
+			var:gm_skin = flag:$SKIN$
+		}
+		AND = {
+			NOT = { has_variable = gm_skin }
+			always = $GENERIC$
+		}
+	}
+}
+
+gm_state_has_faith_skin = {
+	has_variable = gm_skin
+	OR = {
+		var:gm_skin = flag:faith_catholic
+		var:gm_skin = flag:faith_protestant
+		var:gm_skin = flag:faith_orthodox
+		var:gm_skin = flag:faith_oriental_orthodox
+		var:gm_skin = flag:faith_sunni
+		var:gm_skin = flag:faith_shiite
+		var:gm_skin = flag:faith_ibadi
+		var:gm_skin = flag:faith_jewish
+		var:gm_skin = flag:faith_mahayana
+		var:gm_skin = flag:faith_gelugpa
+		var:gm_skin = flag:faith_theravada
+		var:gm_skin = flag:faith_confucian
+		var:gm_skin = flag:faith_hindu
+		var:gm_skin = flag:faith_shinto
+		var:gm_skin = flag:faith_sikh
+		var:gm_skin = flag:faith_animist
+	}
+}
+
+# The five civic-progress dedications are buildings with a form of their own.
+gm_state_has_building_form = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_artistic }
+		gm_state_has_pm = { PM = pm_monument_naturalist }
+		gm_state_has_pm = { PM = pm_monument_scientific }
+		gm_state_has_pm = { PM = pm_monument_industrial }
+		gm_state_has_pm = { PM = pm_monument_athletic }
+	}
+}
+
+# A dedicated monument that takes a monument's form (not a building's, not a
+# faith's own building).
+gm_state_takes_monument_forms = {
+	gm_state_is_dedicated = yes
+	gm_state_has_building_form = no
+	gm_state_has_faith_skin = no
+}
+
+# ---- Forms -----------------------------------------------------------------------------
+gm_state_form_fits = {
+	gm_state_form_fits_$FORM$ = yes
+}
+
+gm_state_form_fits_column = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_latin GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_greek GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_slavonic GENERIC = no }
+	}
+}
+
+gm_state_form_fits_arch = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_latin GENERIC = no }
+	}
+}
+
+gm_state_form_fits_obelisk = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = generic GENERIC = yes }
+}
+
+gm_state_form_fits_statue = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = generic GENERIC = yes }
+}
+
+gm_state_form_fits_gate = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_hebrew GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_sanskrit GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_avestan GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_arabic GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_chinese GENERIC = no }
+	}
+}
+
+gm_state_form_fits_hall = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_avestan GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_arabic GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_chinese GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_norse GENERIC = no }
+	}
+}
+
+gm_state_form_fits_tower = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
+	}
+}
+
+gm_state_form_fits_memorial = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = generic GENERIC = yes }
+}
+
+# A mausoleum only for a late ruler's commission (§2.2), or a monument already one.
+gm_state_form_fits_mausoleum = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = generic GENERIC = yes }
+	OR = {
+		AND = {
+			has_variable = gm_form
+			var:gm_form = flag:mausoleum
+		}
+		AND = {
+			gm_state_answers_commission = yes
+			owner = { var:gm_com_form = flag:mausoleum }
+		}
+	}
+}
+
+gm_state_form_fits_forum = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_latin GENERIC = no }
+}
+
+gm_state_form_fits_pantheon = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_greek GENERIC = no }
+}
+
+gm_state_form_fits_stoa = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_greek GENERIC = no }
+}
+
+gm_state_form_fits_court = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_hebrew GENERIC = no }
+}
+
+gm_state_form_fits_pillar = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = heritage_hebrew GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_sanskrit GENERIC = no }
+	}
+}
+
+gm_state_form_fits_stele = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_geez GENERIC = no }
+}
+
+gm_state_form_fits_memorial_church = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_slavonic GENERIC = no }
+}
+
+gm_state_form_fits_pagoda = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_chinese GENERIC = no }
+}
+
+gm_state_form_fits_round_tower = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_irish GENERIC = no }
+}
+
+gm_state_form_fits_high_cross = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_irish GENERIC = no }
+}
+
+gm_state_form_fits_pyramid = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = heritage_nahuatl GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_mayan GENERIC = no }
+	}
+}
+
+gm_state_form_fits_rune_stone = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_norse GENERIC = no }
+}
+
+gm_state_form_fits_hall_of_fame = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
+}
+
+gm_state_form_fits_hill_shrine = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_prussian GENERIC = no }
+}
+
+gm_state_form_fits_rock_cut = {
+	gm_state_takes_monument_forms = yes
+	gm_state_skin_is = { SKIN = heritage_aramaic GENERIC = no }
+}
+
+gm_state_form_fits_faith = {
+	gm_state_is_dedicated = yes
+	gm_state_has_building_form = no
+	gm_state_has_faith_skin = yes
+}
+
+gm_state_form_fits_opera_house = {
+	gm_state_has_pm = { PM = pm_monument_artistic }
+}
+
+gm_state_form_fits_gardens = {
+	gm_state_has_pm = { PM = pm_monument_naturalist }
+}
+
+gm_state_form_fits_observatory = {
+	gm_state_has_pm = { PM = pm_monument_scientific }
+}
+
+gm_state_form_fits_exhibition_hall = {
+	gm_state_has_pm = { PM = pm_monument_industrial }
+}
+
+gm_state_form_fits_stadium = {
+	gm_state_has_pm = { PM = pm_monument_athletic }
+}
+
+# The skin offers more than one form: monument_events.24 asks.
+gm_state_has_form_choice = {
+	gm_state_takes_monument_forms = yes
+	OR = {
+		gm_state_skin_is = { SKIN = generic GENERIC = yes }
+		gm_state_skin_is = { SKIN = heritage_latin GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_greek GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_hebrew GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_sanskrit GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_slavonic GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_avestan GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_arabic GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_chinese GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_irish GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_norse GENERIC = no }
+		gm_state_skin_is = { SKIN = heritage_gothic GENERIC = no }
+	}
+}
+
+# ---- The commission's name -----------------------------------------------------------
+# This monument answers the owner's open commission: of its dedication, and in
+# its state if it names one (a just-dedicated monument fits, so the status test
+# of gm_state_com_counts is not repeated here).
+gm_state_answers_commission = {
+	owner = { has_variable = gm_com_open }
+	gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+	OR = {
+		owner = {
+			NOT = { has_variable = gm_com_state }
+		}
+		AND = {
+			owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_com_state }
+			this = scope:gm_tmp_com_state
+		}
+	}
+}
+
+# The commission's form fits this monument's skin.
+gm_state_com_form_fits = {
+	owner = { has_variable = gm_com_form }
+	OR = {
+		AND = { owner = { var:gm_com_form = flag:column } gm_state_form_fits_column = yes }
+		AND = { owner = { var:gm_com_form = flag:arch } gm_state_form_fits_arch = yes }
+		AND = { owner = { var:gm_com_form = flag:obelisk } gm_state_form_fits_obelisk = yes }
+		AND = { owner = { var:gm_com_form = flag:statue } gm_state_form_fits_statue = yes }
+		AND = { owner = { var:gm_com_form = flag:gate } gm_state_form_fits_gate = yes }
+		AND = { owner = { var:gm_com_form = flag:hall } gm_state_form_fits_hall = yes }
+		AND = { owner = { var:gm_com_form = flag:tower } gm_state_form_fits_tower = yes }
+		AND = { owner = { var:gm_com_form = flag:memorial } gm_state_form_fits_memorial = yes }
+		AND = { owner = { var:gm_com_form = flag:mausoleum } gm_state_form_fits_mausoleum = yes }
+	}
+}
+
+# ---- What a namesake needs (monument_events.25) -------------------------------------------
+# The dedications whose message makes a name: "the Column of the Crown".
+gm_state_takes_honours_name = {
+	OR = {
+		gm_state_has_pm = { PM = pm_monument_crown }
+		gm_state_has_pm = { PM = pm_monument_republic }
+		gm_state_has_pm = { PM = pm_monument_revolution }
+		gm_state_has_pm = { PM = pm_monument_civic }
+		gm_state_has_pm = { PM = pm_monument_religious }
+		gm_state_has_pm = { PM = pm_monument_war_memorial }
+	}
+}
+
+gm_state_namesake_is = {
+	has_variable = gm_namesake
+	var:gm_namesake = flag:$NAMESAKE$
+}

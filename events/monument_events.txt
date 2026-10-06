@@ -14,6 +14,9 @@
 # Events 16-17  - a fallen order's monuments: the contested notice, then one
 #                 event per monument (§4.5).
 # Event 20      - refresh (hidden plumbing).
+# Event 21      - a commission offered (v2 §2.3), from gm_com_send_offer.
+# Event 22      - a war leader's peace, a day on (hidden): Victory or Defeat
+#                 commissions (v2 §2.2).
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -49,6 +52,9 @@ monument_events.1 = {
 						limit = { gm_state_is_dedicated = no }
 						gm_state_start_ceremony = yes
 					}
+					# The monument a commission met by this level names
+					# (v2 §2.3).
+					owner = { set_variable = { name = gm_com_last_state value = prev } }
 					owner = { trigger_event = { id = monument_events.20 } }
 				}
 			}
@@ -78,7 +84,22 @@ monument_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = monument_events.2.t
-	desc = monument_events.2.d
+	# While a commission is open, the description names it (v2 §2.3): the
+	# options' order is fixed, so this line and the AI weight on the
+	# commission's dedication stand in for listing it first.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					owner = { has_variable = gm_com_open }
+				}
+				desc = monument_events.2.d_commission
+			}
+			triggered_desc = {
+				desc = monument_events.2.d
+			}
+		}
+	}
 	flavor = monument_events.2.f
 
 	duration = 3
@@ -96,6 +117,10 @@ monument_events.2 = {
 	# Named in the description and in every option tooltip.
 	immediate = {
 		save_scope_as = monument_state
+		owner = {
+			save_scope_as = gm_com_country
+			gm_com_save_scopes = yes
+		}
 	}
 
 	# Leave it undedicated; the ceremony asks again at the next level.
@@ -117,6 +142,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = crown } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { government_legitimacy < 40 }
@@ -138,6 +170,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = republic } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { government_legitimacy < 40 }
@@ -159,6 +198,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = revolution } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { government_legitimacy < 40 }
@@ -180,6 +226,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 5
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = leader } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { government_legitimacy < 40 }
@@ -203,6 +256,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = religious } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { has_law_or_variant = law_type:law_total_separation }
@@ -231,7 +291,16 @@ monument_events.2 = {
 	# To the Nation: never hidden, never falls.
 	option = {
 		name = monument_events.2.m
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = civic } }
+				}
+				add = 100
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.m.tt
 			gm_state_dedicate_timeless = { KEY = civic AXIS = heritage }
@@ -243,6 +312,13 @@ monument_events.2 = {
 		name = monument_events.2.e
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = war_memorial } }
+				}
+				add = 100
+			}
 			modifier = {
 				trigger = {
 					owner = { is_at_war = yes }
@@ -262,7 +338,16 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = romanticism }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = artistic } }
+				}
+				add = 100
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.g.tt
 			gm_state_dedicate_timeless = { KEY = artistic AXIS = none }
@@ -277,6 +362,13 @@ monument_events.2 = {
 		}
 		ai_chance = {
 			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = naturalist } }
+				}
+				add = 100
+			}
 			# The state itself has industry worth planting over.
 			modifier = {
 				trigger = {
@@ -297,7 +389,16 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = empiricism }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = scientific } }
+				}
+				add = 100
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.i.tt
 			gm_state_dedicate_timeless = { KEY = scientific AXIS = none }
@@ -313,7 +414,16 @@ monument_events.2 = {
 				NOT = { has_law_or_variant = law_type:law_industry_banned }
 			}
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = industrial } }
+				}
+				add = 100
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.j.tt
 			gm_state_dedicate_timeless = { KEY = industrial AXIS = none }
@@ -326,7 +436,16 @@ monument_events.2 = {
 		trigger = {
 			owner = { has_technology_researched = television_broadcasting }
 		}
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The open commission's dedication (v2 §2.6).
+			modifier = {
+				trigger = {
+					owner = { gm_com_wants = { KEY = athletic } }
+				}
+				add = 100
+			}
+		}
 		custom_tooltip = {
 			text = monument_events.2.k.tt
 			gm_state_dedicate_timeless = { KEY = athletic AXIS = none }
@@ -815,6 +934,146 @@ monument_events.20 = {
 
 	immediate = {
 		gm_country_refresh = yes
+	}
+}
+
+# ============================================================================
+# Event 21: a commission offered (v2 §2.3)
+# ============================================================================
+# From gm_com_send_offer, which has written the record (gm_commission_effects.txt).
+# The same offer for players and the AI: the AI accepts when not at war, not in
+# hard times, with under a year of government construction queued and no debt
+# (gm_com_ai_declines), and then queues the levels itself (gm_com_ai_queue).
+# Accept is the default: an offer left unanswered opens a commission, whose miss
+# costs less than a refusal. Each option's tooltip names its costs and rewards:
+# the ledgers render nothing by themselves (silent_variable_audit).
+monument_events.21 = {
+	type = country_event
+	placement = root
+
+	event_image = {
+		trigger = {
+			has_variable = gm_com_source
+			OR = {
+				var:gm_com_source = flag:victory
+				var:gm_com_source = flag:defeat
+			}
+		}
+		video = "unspecific_military_parade"
+	}
+	event_image = {
+		video = "unspecific_ruler_speaking_to_people"
+	}
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = monument_events.21.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:victory }
+				desc = monument_events.21.d_victory
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:defeat }
+				desc = monument_events.21.d_defeat
+			}
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:centenary
+					has_variable = gm_com_state
+				}
+				desc = monument_events.21.d_centenary
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:centenary }
+				desc = monument_events.21.d_centenary_anywhere
+			}
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:ruler_death
+					has_variable = gm_com_state
+				}
+				desc = monument_events.21.d_ruler_death
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:ruler_death }
+				desc = monument_events.21.d_ruler_death_anywhere
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:regime }
+				desc = monument_events.21.d_regime
+			}
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:space
+					has_variable = gm_com_state
+				}
+				desc = monument_events.21.d_space
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:space }
+				desc = monument_events.21.d_space_anywhere
+			}
+			triggered_desc = {
+				desc = monument_events.21.d_petition
+			}
+		}
+	}
+	flavor = monument_events.21.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = gm_com_offered
+		has_variable = gm_com_source
+	}
+
+	immediate = {
+		gm_com_save_scopes = yes
+	}
+
+	option = {
+		name = monument_events.21.a
+		default_option = yes
+		custom_tooltip = {
+			text = gm_com_accept_tt
+			gm_com_accept = yes
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { gm_com_ai_declines = yes }
+				factor = 0
+			}
+		}
+	}
+
+	option = {
+		name = monument_events.21.b
+		custom_tooltip = {
+			text = gm_com_decline_tt
+			gm_com_decline = yes
+		}
+		ai_chance = { base = 1 }
+	}
+}
+
+# ============================================================================
+# Event 22: a war leader's peace, a day on (hidden plumbing, v2 §2.2)
+# ============================================================================
+# From gm_peace_war_leader_on_action. A day's delay lets on_wargoal_enforced
+# record the result first, whichever of the two the engine fires first.
+monument_events.22 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+	}
+
+	immediate = {
+		gm_com_war_end = yes
 	}
 }
 
@@ -1415,6 +1674,379 @@ monument_events.11 = {
 	option = {
 		name = monument_events.11.generic
 		gm_state_choose_skin = { SKIN = generic }
+	}
+}
+
+# ============================================================================
+# Events 24-25: the monument's name (v2 §3.3)
+# ============================================================================
+# State events, players only, after the skin (gm_state_unveil) or from the
+# Rename button (gm_rename_sgui). gm_state_unveil has already set the default
+# form and namesake (the commission's, when one is open for this monument), so
+# each event's default option keeps what is set and the others offer the rest.
+# Event 24 asks only when the skin offers more than one form
+# (gm_state_has_form_choice); both chain to Event 25.
+monument_events.24 = {
+	type = state_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = monument_events.24.t
+	desc = monument_events.24.d
+	flavor = monument_events.24.f
+
+	duration = 3
+
+	trigger = {
+		gm_state_is_dedicated = yes
+		has_variable = gm_form
+	}
+
+	immediate = {
+		save_scope_as = monument_state
+	}
+
+	option = {
+		name = monument_events.24.keep
+		default_option = yes
+		custom_tooltip = gm_form_keep_tt
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.column
+		trigger = {
+			gm_state_form_fits_column = yes
+			NOT = { var:gm_form = flag:column }
+		}
+		gm_state_choose_form = { FORM = column }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.arch
+		trigger = {
+			gm_state_form_fits_arch = yes
+			NOT = { var:gm_form = flag:arch }
+		}
+		gm_state_choose_form = { FORM = arch }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.obelisk
+		trigger = {
+			gm_state_form_fits_obelisk = yes
+			NOT = { var:gm_form = flag:obelisk }
+		}
+		gm_state_choose_form = { FORM = obelisk }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.statue
+		trigger = {
+			gm_state_form_fits_statue = yes
+			NOT = { var:gm_form = flag:statue }
+		}
+		gm_state_choose_form = { FORM = statue }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.gate
+		trigger = {
+			gm_state_form_fits_gate = yes
+			NOT = { var:gm_form = flag:gate }
+		}
+		gm_state_choose_form = { FORM = gate }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.hall
+		trigger = {
+			gm_state_form_fits_hall = yes
+			NOT = { var:gm_form = flag:hall }
+		}
+		gm_state_choose_form = { FORM = hall }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.tower
+		trigger = {
+			gm_state_form_fits_tower = yes
+			NOT = { var:gm_form = flag:tower }
+		}
+		gm_state_choose_form = { FORM = tower }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.memorial
+		trigger = {
+			gm_state_form_fits_memorial = yes
+			NOT = { var:gm_form = flag:memorial }
+		}
+		gm_state_choose_form = { FORM = memorial }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.mausoleum
+		trigger = {
+			gm_state_form_fits_mausoleum = yes
+			NOT = { var:gm_form = flag:mausoleum }
+		}
+		gm_state_choose_form = { FORM = mausoleum }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.forum
+		trigger = {
+			gm_state_form_fits_forum = yes
+			NOT = { var:gm_form = flag:forum }
+		}
+		gm_state_choose_form = { FORM = forum }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.pantheon
+		trigger = {
+			gm_state_form_fits_pantheon = yes
+			NOT = { var:gm_form = flag:pantheon }
+		}
+		gm_state_choose_form = { FORM = pantheon }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.stoa
+		trigger = {
+			gm_state_form_fits_stoa = yes
+			NOT = { var:gm_form = flag:stoa }
+		}
+		gm_state_choose_form = { FORM = stoa }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.court
+		trigger = {
+			gm_state_form_fits_court = yes
+			NOT = { var:gm_form = flag:court }
+		}
+		gm_state_choose_form = { FORM = court }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.pillar
+		trigger = {
+			gm_state_form_fits_pillar = yes
+			NOT = { var:gm_form = flag:pillar }
+		}
+		gm_state_choose_form = { FORM = pillar }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.stele
+		trigger = {
+			gm_state_form_fits_stele = yes
+			NOT = { var:gm_form = flag:stele }
+		}
+		gm_state_choose_form = { FORM = stele }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.memorial_church
+		trigger = {
+			gm_state_form_fits_memorial_church = yes
+			NOT = { var:gm_form = flag:memorial_church }
+		}
+		gm_state_choose_form = { FORM = memorial_church }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.pagoda
+		trigger = {
+			gm_state_form_fits_pagoda = yes
+			NOT = { var:gm_form = flag:pagoda }
+		}
+		gm_state_choose_form = { FORM = pagoda }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.round_tower
+		trigger = {
+			gm_state_form_fits_round_tower = yes
+			NOT = { var:gm_form = flag:round_tower }
+		}
+		gm_state_choose_form = { FORM = round_tower }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.high_cross
+		trigger = {
+			gm_state_form_fits_high_cross = yes
+			NOT = { var:gm_form = flag:high_cross }
+		}
+		gm_state_choose_form = { FORM = high_cross }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.pyramid
+		trigger = {
+			gm_state_form_fits_pyramid = yes
+			NOT = { var:gm_form = flag:pyramid }
+		}
+		gm_state_choose_form = { FORM = pyramid }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.rune_stone
+		trigger = {
+			gm_state_form_fits_rune_stone = yes
+			NOT = { var:gm_form = flag:rune_stone }
+		}
+		gm_state_choose_form = { FORM = rune_stone }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.hall_of_fame
+		trigger = {
+			gm_state_form_fits_hall_of_fame = yes
+			NOT = { var:gm_form = flag:hall_of_fame }
+		}
+		gm_state_choose_form = { FORM = hall_of_fame }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.hill_shrine
+		trigger = {
+			gm_state_form_fits_hill_shrine = yes
+			NOT = { var:gm_form = flag:hill_shrine }
+		}
+		gm_state_choose_form = { FORM = hill_shrine }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.rock_cut
+		trigger = {
+			gm_state_form_fits_rock_cut = yes
+			NOT = { var:gm_form = flag:rock_cut }
+		}
+		gm_state_choose_form = { FORM = rock_cut }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+}
+
+monument_events.25 = {
+	type = state_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = monument_events.25.t
+	desc = monument_events.25.d
+	flavor = monument_events.25.f
+
+	duration = 3
+
+	trigger = {
+		gm_state_is_dedicated = yes
+	}
+
+	immediate = {
+		save_scope_as = monument_state
+		owner = {
+			ruler ?= { save_scope_as = gm_name_ruler_now }
+		}
+	}
+
+	# Keep the name set. It still counts as chosen for an open commission's
+	# monument, so fulfilment keeps it (gm_unveiled_for_com).
+	option = {
+		name = monument_events.25.keep
+		default_option = yes
+		custom_tooltip = gm_namesake_keep_tt
+		hidden_effect = { gm_state_mark_unveiled_for_com = yes }
+	}
+
+	option = {
+		name = monument_events.25.commission
+		trigger = {
+			gm_state_answers_commission = yes
+			NOT = { has_variable = gm_name_from_com }
+		}
+		gm_state_choose_commission_name = yes
+	}
+
+	option = {
+		name = monument_events.25.city
+		trigger = {
+			NOT = { gm_state_namesake_is = { NAMESAKE = city } }
+		}
+		gm_state_choose_namesake = { NAMESAKE = city }
+	}
+
+	option = {
+		name = monument_events.25.state
+		trigger = {
+			NOT = { gm_state_namesake_is = { NAMESAKE = state } }
+		}
+		gm_state_choose_namesake = { NAMESAKE = state }
+	}
+
+	# The ruler now, unless it is already named for them.
+	option = {
+		name = monument_events.25.ruler
+		trigger = {
+			exists = scope:gm_name_ruler_now
+			NOT = {
+				AND = {
+					gm_state_namesake_is = { NAMESAKE = ruler }
+					has_variable = gm_name_char
+					var:gm_name_char = scope:gm_name_ruler_now
+				}
+			}
+		}
+		gm_state_choose_namesake = { NAMESAKE = ruler }
+	}
+
+	option = {
+		name = monument_events.25.honours
+		trigger = {
+			gm_state_takes_honours_name = yes
+			NOT = { gm_state_namesake_is = { NAMESAKE = honours } }
+		}
+		gm_state_choose_namesake = { NAMESAKE = honours }
+	}
+
+	option = {
+		name = monument_events.25.year
+		trigger = {
+			NOT = { gm_state_namesake_is = { NAMESAKE = year } }
+		}
+		gm_state_choose_namesake = { NAMESAKE = year }
 	}
 }
 

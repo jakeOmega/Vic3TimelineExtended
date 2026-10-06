@@ -950,15 +950,17 @@ class ContestTests(unittest.TestCase):
         # remove_variable = gm_active -- a call hoisted above the outer if
         # would zero every country's ledgers monthly and still pass a
         # find()-based order check.
-        self.assertIn("gm_ledgers_idle = yes } gm_zero_ledgers = yes", monthly)
+        # v2 §2: the pulse also keeps running while a commission is open or on offer.
+        self.assertIn("gm_ledgers_idle = yes NOT = { has_variable = gm_com_open } "
+                      "NOT = { has_variable = gm_com_offered } } gm_zero_ledgers = yes", monthly)
         self.assertLess(monthly.find("gm_zero_ledgers = yes"), monthly.find("remove_variable = gm_active"))
 
     def test_gm_active_set_on_refresh_when_monument_seen(self):
         body = squash(block(self.e, "gm_country_refresh"))
-        self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { any_scope_state = "
-                                        "{ has_building = building_grand_monument } } set_variable = gm_active }"))
-        self.assertIn("any_scope_state = { has_building = building_grand_monument } } set_variable = gm_active",
-                      body)
+        # A monument, or an open commission (v2 §2.7), keeps the pulse running.
+        self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
+                                        "{ has_building = building_grand_monument } has_variable = gm_com_open } } "
+                                        "set_variable = gm_active }"), body[:200])
 
 
 # ---- Task 7: the ceremony, skins, the inscription ------------------------------------
@@ -1378,6 +1380,457 @@ class DebugTests(unittest.TestCase):
         log = block(read(EFFECTS), "gm_debug_log")
         self.assertIn('debug_log = "TE_MONUMENTS:', log)
         self.assertNotIn(".MakeScope", log, "debug_log's working form is [SCOPE.ScriptValue('x')|N]")
+
+
+
+# ==== v2 phase 2: commissions (docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2) ====
+COM_TRIGGERS = "common/scripted_triggers/gm_commission_triggers.txt"
+COM_EFFECTS = "common/scripted_effects/gm_commission_effects.txt"
+COM_VALUES = "common/script_values/gm_commission_values.txt"
+NAME_TRIGGERS = "common/scripted_triggers/gm_name_triggers.txt"
+NAME_EFFECTS = "common/scripted_effects/gm_name_effects.txt"
+HISTORY = "common/history/extra_history.txt"
+
+Source = namedtuple("Source", "key dedication namesake form fixed")
+# One row per source (§2.2): what it asks for and how the monument would be
+# named. A fixed source names the capital (gm_com_fix_to_capital), falling
+# back to anywhere when the capital holds a monument of another dedication.
+# "$KEY$": the regime's or the petition's dedication.
+COMMISSION_SOURCES = (
+    Source("victory", "war_memorial", "occasion", "arch", False),
+    Source("defeat", "war_memorial", "occasion", "memorial", False),
+    Source("centenary", "civic", "occasion", "column", True),
+    Source("ruler_death", "civic", "ruler", "mausoleum", True),
+    Source("regime", "$KEY$", "year", "column", False),
+    Source("space", "civic", "occasion", "obelisk", True),
+    Source("petition", "$KEY$", "city", "default", False),
+)
+# The regime source's petitioners: each regime dedication's approving IG.
+REGIME_IG = {"crown": "landowners", "republic": "intelligentsia", "revolution": "trade_unions"}
+# Ledger amounts (§2.4): grandeur into the petitioner's IG ledger, legitimacy into the promise ledger.
+REWARDS = {"fulfil": (15, 5), "fulfil_extended": (8, 2.5), "decline": -10, "miss": -5}
+FOUNDING_YEARS = {"USA": 1776, "HAI": 1804, "CLM": 1810, "PRG": 1811, "VNZ": 1811, "ARG": 1816, "CHL": 1818,
+                  "MEX": 1821, "GRE": 1821, "BRZ": 1822, "BOL": 1825, "URU": 1825, "BEL": 1830, "ECU": 1830}
+
+
+def _effect_containing(text, needle):
+    """The top-level scripted effect whose body contains needle (squashed)."""
+    for name, body in top_level_blocks(text):
+        if needle in squash(body):
+            return name, squash(body)
+    return None, ""
+
+
+class CommissionSourceTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(COM_EFFECTS)
+        cls.events = read(EVENTS)
+
+    def test_each_source_asks_for_its_table_row(self):
+        for src in COMMISSION_SOURCES:
+            call = (f"gm_com_begin = {{ SOURCE = {src.key} DEDICATION = {src.dedication} "
+                    f"NAMESAKE = {src.namesake} FORM = {src.form} }}")
+            name, body = _effect_containing(self.e, call)
+            self.assertIsNotNone(name, call)
+            self.assertEqual("gm_com_fix_to_capital = yes" in body, src.fixed, src.key)
+            self.assertIn("gm_com_send_offer = yes", body, src.key)
+
+    def test_each_source_has_its_offer_text(self):
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.21\s*=\s*\{"))
+        L = loc()
+        for src in COMMISSION_SOURCES:
+            if src.key != "petition":
+                self.assertIn(f"var:gm_com_source = flag:{src.key}", ev, src.key)
+            self.assertIn(f"monument_events.21.d_{src.key}", L, src.key)
+            if src.fixed:
+                self.assertIn(f"monument_events.21.d_{src.key}_anywhere", L, src.key)
+        for key in ("t", "f", "a", "b"):
+            self.assertIn(f"monument_events.21.{key}", L)
+
+    def test_regime_petitioners_are_the_approving_igs(self):
+        body = squash(block(self.e, "gm_com_track_regime"))
+        for key, ig in REGIME_IG.items():
+            self.assertEqual(BY_KEY[key].approve, ig, key)
+            self.assertIn(f"gm_com_try_regime = {{ KEY = {key} IG = {ig} }}", body)
+        # Revolution first: a Council Republic is also a republic.
+        self.assertLess(body.find("flag:revolution"), body.find("flag:crown"))
+        self.assertLess(body.find("flag:crown"), body.find("flag:republic"))
+
+    def test_petition_table_is_the_approve_column(self):
+        expected = {(d.approve, d.key) for d in DEDICATIONS if d.approve != "dynamic"}
+        any_fits = squash(block(read(COM_TRIGGERS), "gm_com_any_petition_fits"))
+        listed = set(re.findall(r"gm_com_petition_fits = \{ IG = (\w+) KEY = (\w+) \}", any_fits))
+        self.assertEqual(listed, expected)
+        offer = squash(block(self.e, "gm_com_offer_petition"))
+        picks = set(re.findall(r"trigger = \{ gm_com_petition_fits = \{ IG = (\w+) KEY = (\w+) \} \} "
+                               r"gm_com_begin_petition = \{ IG = \1 KEY = \2 \}", offer))
+        self.assertEqual(picks, expected)
+        counted = set(re.findall(r"gm_com_count_fit = \{ KEY = (\w+) \}", offer))
+        forgotten = set(re.findall(r"gm_com_forget_fit = \{ KEY = (\w+) \}", offer))
+        self.assertEqual(counted, {k for _, k in expected})
+        self.assertEqual(forgotten, counted)
+
+    def test_pacing(self):
+        roll = squash(block(self.e, "gm_com_try_petition"))
+        self.assertIn("gm_com_can_offer = yes NOT = { has_variable = gm_com_cooldown }", roll)
+        self.assertIn("random_list = { 119 = { } 1 = { gm_com_offer_petition = yes } }", roll)
+        self.assertIn("set_variable = { name = gm_com_cooldown value = yes months = 60 }",
+                      squash(block(self.e, "gm_com_close")))
+        can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
+        for s_ in ("NOT = { has_variable = gm_com_offered }", "NOT = { has_variable = gm_com_open }"):
+            self.assertIn(s_, can)
+
+    def test_civil_war_guards(self):
+        """A side in a civil war gets no offer, and a revolutionary country never
+        writes the founding year its win would put over the nation's."""
+        can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
+        self.assertIn("NOT = { has_variable = te_cw_role }", can)
+        self.assertIn("is_revolutionary = no", can)
+        init = squash(block(self.e, "gm_com_init_founded"))
+        for s_ in ("NOT = { has_variable = te_cw_role }", "is_revolutionary = no",
+                   "NOT = { has_variable = gm_com_start_country }"):
+            self.assertIn(s_, init)
+
+    def test_world_pass(self):
+        oa = read(ON_ACTIONS)
+        self.assertIn("gm_com_world_on_action", squash(block(oa, "on_monthly_pulse_country")))
+        self.assertIn("gm_com_world_monthly = yes", squash(block(oa, "gm_com_world_on_action")))
+        body = squash(block(self.e, "gm_com_world_monthly"))
+        order = ["gm_com_track_war", "gm_com_track_ruler", "gm_com_init_founded", "gm_com_track_regime",
+                 "gm_com_track_space", "gm_com_track_centenary", "gm_com_try_petition"]
+        found = [body.find(f"{t} = yes") for t in order]
+        self.assertNotIn(-1, found)
+        self.assertEqual(found, sorted(found))
+
+    def test_war_and_death_hooks(self):
+        oa = read(ON_ACTIONS)
+        for hook, name in (("on_wargoal_enforced", "gm_wargoal_enforced_on_action"),
+                           ("on_peace_agreement_signed_war_leader", "gm_peace_war_leader_on_action"),
+                           ("on_character_death", "gm_character_death_on_action"),
+                           ("on_country_formed", "gm_formed_on_action")):
+            self.assertIn(name, squash(block(oa, hook)), hook)
+            self.assertNotRegex(squash(block(oa, hook)), r"\beffect =", "vanilla on-actions take lists only")
+        peace = squash(block(oa, "gm_peace_war_leader_on_action"))
+        self.assertIn("trigger_event = { id = monument_events.22 days = 1 }", peace)
+        ev22 = squash(raw_block_at(self.events, r"(?m)^monument_events\.22\s*=\s*\{"))
+        self.assertIn("type = country_event hidden = yes", ev22)
+        self.assertIn("gm_com_war_end = yes", ev22)
+        war = squash(block(self.e, "gm_com_war_end"))
+        self.assertIn("var:gm_war_months_at_peace >= 12", war)
+        self.assertLess(war.find("gm_war_won"), war.find("gm_war_lost"), "a victory wins over a defeat")
+        death = squash(block(oa, "gm_character_death_on_action"))
+        self.assertIn("is_ruler_of_own_country = yes", death)
+        self.assertIn("var:gm_ruler_months >= 180", death)
+
+    def test_fixed_state_falls_back_to_anywhere(self):
+        fix = squash(block(self.e, "gm_com_fix_to_capital"))
+        self.assertIn("capital ?= { gm_state_can_host_commission = yes }", fix)
+        host = squash(block(read(COM_TRIGGERS), "gm_state_can_host_commission"))
+        for case in ("NOT = { has_building = building_grand_monument }", "gm_state_is_dedicated = no",
+                     "gm_state_status_fits = yes gm_state_has_dedication_flag = { VAR = gm_com_dedication }"):
+            self.assertIn(case, host)
+
+    def test_founding_years(self):
+        body = squash(block(self.e, "gm_seed_founding_years"))
+        listed = {t: int(y) for t, y in re.findall(r"gm_seed_founding_year = \{ TAG = (\w+) YEAR = (\d+) \}", body)}
+        self.assertEqual(listed, FOUNDING_YEARS)
+        self.assertTrue(all(y < 1836 for y in listed.values()))
+        self.assertIn("gm_com_seed = yes", squash(read(HISTORY)))
+        seed = squash(block(self.e, "gm_com_seed"))
+        self.assertIn("set_variable = gm_com_start_country", seed)
+        self.assertIn("gm_seed_founding_years = yes", seed)
+
+
+class CommissionLifeTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(COM_EFFECTS)
+        cls.t = read(COM_TRIGGERS)
+
+    def test_can_raise_matches_the_ceremony(self):
+        """A commission is offered and stays open only for a dedication the
+        ceremony would offer: each gate is the ceremony option's trigger."""
+        ev = strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{"))
+        for d in DEDICATIONS:
+            gate = squash(block(self.t, f"gm_country_can_raise_{d.key}"))
+            self.assertIsNotNone(gate, d.key)
+            if d.key in CEREMONY_GATE:
+                self.assertIn(CEREMONY_GATE[d.key], gate, d.key)
+            if d.key in TECH_GATES:
+                self.assertIn(f"has_technology_researched = {TECH_GATES[d.key]}", gate, d.key)
+            if d.key not in CEREMONY_GATE and d.key not in TECH_GATES:
+                self.assertEqual(gate, "always = yes", d.key)
+            self.assertIn(f"var:gm_com_dedication = flag:{d.key} gm_country_can_raise_{d.key} = yes",
+                          squash(block(self.t, "gm_country_com_gate_holds")))
+            self.assertIn(f"owner = {{ var:$VAR$ = flag:{d.key} }} gm_state_has_pm = {{ PM = pm_monument_{d.key} }}",
+                          squash(block(self.t, "gm_state_has_dedication_flag")))
+            self.assertIn(f"owner = {{ gm_com_wants = {{ KEY = {d.key} }} }}", squash(ev), d.key)
+
+    def test_ledger_dispatch_covers_every_ig(self):
+        body = squash(block(self.e, "gm_country_ledger_ig_by_flag"))
+        scopes = squash(block(self.e, "gm_com_save_scopes"))
+        names = squash(block(read(CUSTOM_LOC), "gm_com_ig_name"))
+        for ig in IGS:
+            self.assertIn(f"IG = {ig} }}", body, ig)
+            self.assertIn(f"gm_com_save_ig_scope = {{ IG = {ig} }}", scopes, ig)
+            self.assertIn(f"flag:{ig} }} localization_key = ig_{ig}", names, ig)
+
+    def test_the_promise_ledger(self):
+        e = read(EFFECTS)
+        self.assertIn("gm_init_ledger = { VAR = gm_promise_ledger }", squash(block(e, "gm_init_ledgers")))
+        self.assertIn("set_variable = { name = gm_promise_ledger value = 0 }", squash(block(e, "gm_zero_ledgers")))
+        self.assertIn("gm_decay = { VAR = gm_promise_ledger RATE = 0.97 }", squash(block(e, "gm_decay_ledgers")))
+        self.assertIn("gm_ledger_idle = { VAR = gm_promise_ledger }", squash(block(read(TRIGGERS), "gm_ledgers_idle")))
+        self.assertIn("gm_add_national = { NAME = gm_national_promise VAR = gm_promise_ledger }",
+                      squash(block(e, "gm_apply_national_modifiers")))
+        self.assertIn("remove_modifier = gm_national_promise", squash(block(e, "gm_remove_national_modifiers")))
+        ModifierTests().assert_pair("gm_national_promise", "country_legitimacy_base_add", "gm_step_promise", 1)
+
+    def test_rewards_and_costs(self):
+        ig, promise = REWARDS["fulfil"]
+        ig_x, promise_x = REWARDS["fulfil_extended"]
+        fulfil = squash(block(self.e, "gm_com_fulfil"))
+        self.assertIn(f"has_variable = gm_com_extended }} gm_country_ledger_ig_by_flag = {{ VAR = gm_com_ig AMOUNT = {ig_x} }} "
+                      f"change_variable = {{ name = gm_promise_ledger add = {promise_x} }}", fulfil)
+        self.assertIn(f"else = {{ gm_country_ledger_ig_by_flag = {{ VAR = gm_com_ig AMOUNT = {ig} }} "
+                      f"change_variable = {{ name = gm_promise_ledger add = {promise} }} }}", fulfil)
+        self.assertIn(f"AMOUNT = {REWARDS['decline']} }}", squash(block(self.e, "gm_com_decline")))
+        self.assertIn(f"AMOUNT = {REWARDS['miss']} }}", squash(block(self.e, "gm_com_miss")))
+        self.assertNotIn("ledger", squash(block(self.e, "gm_com_lapse")), "a lapse costs nothing")
+        rewards = read(COM_VALUES)
+        self.assertEqual(number(block(rewards, "gm_com_reward_ig"), "value"), ig)
+        self.assertEqual(number(block(rewards, "gm_com_reward_promise"), "value"), promise)
+
+    def test_the_offer(self):
+        ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.21\s*=\s*\{"))
+        self.assertIn("trigger = { has_variable = gm_com_offered has_variable = gm_com_source }", ev)
+        self.assertEqual(ev.count("option = {"), 2)
+        self.assertEqual(ev.count("default_option = yes"), 1)
+        self.assertIn("name = monument_events.21.a default_option = yes custom_tooltip = { text = gm_com_accept_tt "
+                      "gm_com_accept = yes }", ev)
+        self.assertIn("custom_tooltip = { text = gm_com_decline_tt gm_com_decline = yes }", ev)
+        self.assertIn("modifier = { trigger = { gm_com_ai_declines = yes } factor = 0 }", ev)
+        self.assertIn("event_image", ev)
+        declines = squash(block(self.t, "gm_com_ai_declines"))
+        for s_ in ("is_at_war = yes", "gm_country_hard_times = yes",
+                   "construction_queue_government_duration >= 52", "scaled_debt > 0"):
+            self.assertIn(s_, declines)
+
+    def test_accept_and_the_ai_queue(self):
+        accept = squash(block(self.e, "gm_com_accept"))
+        for s_ in ("set_variable = gm_com_open", "set_variable = { name = gm_com_months_left value = 60 }",
+                   "set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }",
+                   "if = { limit = { is_ai = yes } gm_com_ai_queue = yes }"):
+            self.assertIn(s_, accept)
+        queue = squash(block(self.e, "gm_com_ai_queue"))
+        self.assertIn("while = { limit = { var:gm_com_queued < var:gm_com_target } scope:gm_com_build_state = "
+                      "{ start_building_construction = building_grand_monument }", queue)
+        self.assertNotIn("create_building", queue, "the AI pays for its levels")
+
+    def test_progress_floors_at_zero(self):
+        body = squash(block(read(COM_VALUES), "gm_com_progress"))
+        self.assertIn("value = gm_com_fit_grandeur subtract = var:gm_com_baseline min = 0", body)
+        counts = squash(block(self.t, "gm_state_com_counts"))
+        self.assertIn("gm_state_status_fits = yes", counts, "a contested monument stops counting")
+
+    def test_the_month_and_the_refresh(self):
+        monthly = squash(block(self.e, "gm_com_monthly"))
+        self.assertLess(monthly.find("gm_com_has_lapsed = yes"), monthly.find("var:gm_com_months_left <= 0"),
+                        "a lapse is judged before a miss")
+        e = read(EFFECTS)
+        country = squash(block(e, "gm_country_monthly"))
+        self.assertLess(country.find("gm_com_monthly = yes"), country.find("gm_country_refresh = yes"))
+        refresh = squash(block(e, "gm_country_refresh"))
+        self.assertLess(refresh.find("gm_check_contests = yes"), refresh.find("gm_com_check_progress = yes"))
+        self.assertLess(refresh.find("gm_com_check_progress = yes"), refresh.find("gm_compute_totals = yes"))
+        self.assertIn("has_variable = gm_com_open", squash(block(read(ON_ACTIONS), "gm_country_on_action")))
+        lapsed = squash(block(self.t, "gm_com_has_lapsed"))
+        self.assertIn("gm_country_com_gate_holds = no", lapsed)
+        self.assertIn("NOT = { owner = scope:gm_tmp_com_holder }", lapsed)
+
+    def test_the_journal_entry_opens_for_a_commission(self):
+        je = read(JE)
+        clause = "has_variable = gm_com_open has_variable = gm_com_offered"
+        for name in ("is_shown_when_inactive", "possible"):
+            self.assertIn(clause, squash(block(je, name)), name)
+        invalid = squash(block(je, "invalid"))
+        self.assertIn("NOT = { has_variable = gm_com_open } NOT = { has_variable = gm_com_offered }", invalid)
+        self.assertIn(clause, squash(block(read(TRIGGERS), "gm_entry_unlocked")))
+        self.assertIn(clause, squash(block(read(EFFECTS), "gm_country_refresh")))
+
+    def test_the_ceremony_names_the_commission(self):
+        ev = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{"))
+        self.assertIn("trigger = { owner = { has_variable = gm_com_open } } desc = monument_events.2.d_commission", ev)
+        self.assertTrue(loc()["monument_events.2.d_commission"].startswith("$monument_events.2.d$"))
+
+    def test_the_last_monument_touched(self):
+        self.assertIn("owner = { set_variable = { name = gm_com_last_state value = prev } }",
+                      squash(block(read(EFFECTS), "gm_state_dedicate")))
+        ev1 = squash(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{"))
+        self.assertIn("owner = { set_variable = { name = gm_com_last_state value = prev } }", ev1)
+
+
+# ==== v2 phase 2: names (§3) =========================================================
+# form -> the skins that offer it ("generic" includes a monument with no skin
+# yet). The five civic-progress forms belong to their dedication; "faith" to
+# every faith skin. The plan's Task 7 table, which fixes the spec's §3.2 draft.
+FORMS = {
+    "column": ("generic", "heritage_latin", "heritage_greek", "heritage_slavonic"),
+    "arch": ("generic", "heritage_latin"),
+    "obelisk": ("generic",), "statue": ("generic",), "memorial": ("generic",), "mausoleum": ("generic",),
+    "gate": ("generic", "heritage_hebrew", "heritage_sanskrit", "heritage_avestan", "heritage_arabic",
+             "heritage_chinese"),
+    "hall": ("generic", "heritage_avestan", "heritage_arabic", "heritage_chinese", "heritage_norse"),
+    "tower": ("generic", "heritage_gothic"),
+    "forum": ("heritage_latin",), "pantheon": ("heritage_greek",), "stoa": ("heritage_greek",),
+    "court": ("heritage_hebrew",), "pillar": ("heritage_hebrew", "heritage_sanskrit"),
+    "stele": ("heritage_geez",), "memorial_church": ("heritage_slavonic",), "pagoda": ("heritage_chinese",),
+    "round_tower": ("heritage_irish",), "high_cross": ("heritage_irish",),
+    "pyramid": ("heritage_nahuatl", "heritage_mayan"), "rune_stone": ("heritage_norse",),
+    "hall_of_fame": ("heritage_gothic",), "hill_shrine": ("heritage_prussian",), "rock_cut": ("heritage_aramaic",),
+}
+# skin -> its default form, the first of its row in the plan's table.
+DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek": "pantheon",
+                "heritage_hebrew": "gate", "heritage_sanskrit": "pillar", "heritage_geez": "stele",
+                "heritage_slavonic": "memorial_church", "heritage_avestan": "gate", "heritage_arabic": "hall",
+                "heritage_chinese": "hall", "heritage_irish": "round_tower", "heritage_nahuatl": "pyramid",
+                "heritage_mayan": "pyramid", "heritage_norse": "rune_stone", "heritage_gothic": "hall_of_fame",
+                "heritage_prussian": "hill_shrine", "heritage_aramaic": "rock_cut"}
+BUILDING_FORMS = {"artistic": "opera_house", "naturalist": "gardens", "scientific": "observatory",
+                  "industrial": "exhibition_hall", "athletic": "stadium"}
+# namesake -> its pattern keys (gm_name_<pattern>_row / _evt).
+NAMESAKES = {"city": ("city",), "state": ("state",), "ruler": ("ruler",), "honours": ("honours",),
+             "year": ("year",),
+             "occasion": ("victory", "defeat", "centenary", "space_orbital", "space_moon_landing")}
+NAME_RECORDS = ("gm_namesake", "gm_name_year", "gm_name_char", "gm_name_occasion", "gm_name_enemy_cap",
+                "gm_name_from_com")
+
+
+class NameTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.t = read(NAME_TRIGGERS)
+        cls.e = read(NAME_EFFECTS)
+        cls.events = read(EVENTS)
+        cls.custom = read(CUSTOM_LOC)
+
+    def test_every_skin_offers_a_form(self):
+        offered = {skin for skins in FORMS.values() for skin in skins}
+        for skin in SKINS:
+            if not skin.startswith("faith_"):
+                self.assertIn(skin, offered, skin)
+
+    def test_form_triggers_match_the_table(self):
+        for form, skins in FORMS.items():
+            body = squash(block(self.t, f"gm_state_form_fits_{form}"))
+            self.assertIsNotNone(body, form)
+            self.assertIn("gm_state_takes_monument_forms = yes", body, form)
+            listed = set(re.findall(r"SKIN = (\w+)", body))
+            self.assertEqual(listed, set(skins), form)
+        for key, form in BUILDING_FORMS.items():
+            self.assertEqual(squash(block(self.t, f"gm_state_form_fits_{form}")),
+                             f"gm_state_has_pm = {{ PM = pm_monument_{key} }}")
+
+    def test_form_choice_lists_the_skins_with_two_or_more(self):
+        counts = {}
+        for skins in FORMS.values():
+            for skin in skins:
+                counts[skin] = counts.get(skin, 0) + 1
+        choice = set(re.findall(r"SKIN = (\w+)", squash(block(self.t, "gm_state_has_form_choice"))))
+        self.assertEqual(choice, {s for s, n in counts.items() if n > 1})
+
+    def test_default_form_is_each_skins_first(self):
+        body = squash(block(self.e, "gm_state_set_default_form"))
+        self.assertEqual(set(DEFAULT_FORM), {s for skins in FORMS.values() for s in skins})
+        self.assertTrue(body.startswith("set_variable = { name = gm_form value = flag:column }"))
+        for skin, first in DEFAULT_FORM.items():
+            self.assertIn(skin, FORMS[first], f"{skin}'s default {first} is not one of its forms")
+            if first == "column":
+                self.assertNotIn(f"SKIN = {skin} ", body, f"{skin} takes the column default")
+            else:
+                self.assertIn(f"gm_state_default_form_for_skin = {{ SKIN = {skin} FORM = {first} }}", body, skin)
+        for key, form in BUILDING_FORMS.items():
+            self.assertIn(f"pm_monument_{key} }} }} set_variable = {{ name = gm_form value = flag:{form} }}", body)
+
+    def test_every_form_has_its_noun_and_option(self):
+        L = loc()
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.24\s*=\s*\{"))
+        names = squash(block(self.custom, "gm_form_name"))
+        for form in list(FORMS) + list(BUILDING_FORMS.values()):
+            self.assertIn(f"gm_form_{form}", L, form)
+            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = gm_form_{form}", names, form)
+        for form in FORMS:
+            self.assertIn(f"name = monument_events.24.{form} trigger = {{ gm_state_form_fits_{form} = yes "
+                          f"NOT = {{ var:gm_form = flag:{form} }} }} gm_state_choose_form = {{ FORM = {form} }}", ev)
+            self.assertIn(f"monument_events.24.{form}", L, form)
+        for faith in FAITHS:
+            self.assertIn(f"var:gm_skin = flag:faith_{faith} }} localization_key = gm_skin_faith_{faith}", names)
+
+    def test_every_namesake_has_both_patterns(self):
+        L = loc()
+        for ctx in ("row", "evt"):
+            family = squash(block(self.custom, f"gm_monument_name_{ctx}"))
+            for patterns in NAMESAKES.values():
+                for pattern in patterns:
+                    key = f"gm_name_{pattern}_{ctx}"
+                    self.assertIn(f"localization_key = {key}", family, key)
+                    self.assertIn(key, L, key)
+            for key in (f"gm_name_custom_{ctx}", f"gm_name_skin_{ctx}"):
+                self.assertIn(f"localization_key = {key}", family)
+            obj = "State" if ctx == "row" else "SCOPE.sState('monument_state')"
+            for patterns in NAMESAKES.values():
+                for pattern in patterns:
+                    text = L[f"gm_name_{pattern}_{ctx}"]
+                    other = r"(?<![\w.])State\." if ctx == "evt" else r"SCOPE\."
+                    self.assertNotRegex(text.replace(obj, ""), other, f"gm_name_{pattern}_{ctx} reads another context")
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.25\s*=\s*\{"))
+        for namesake in ("city", "state", "ruler", "honours", "year"):
+            self.assertIn(f"gm_state_choose_namesake = {{ NAMESAKE = {namesake} }}", ev, namesake)
+        self.assertIn("gm_state_choose_commission_name = yes", ev)
+
+    def test_name_events_have_a_default_and_an_image(self):
+        for n in (24, 25):
+            ev = squash(raw_block_at(self.events, rf"(?m)^monument_events\.{n}\s*=\s*\{{"))
+            self.assertEqual(ev.count("default_option = yes"), 1, n)
+            self.assertIn(f"name = monument_events.{n}.keep default_option = yes", ev)
+            self.assertIn("event_image", ev)
+            self.assertIn("save_scope_as = monument_state", ev)
+
+    def test_the_unveiling_chain(self):
+        e = read(EFFECTS)
+        self.assertIn("NOT = { has_variable = gm_skin_axis } } gm_state_unveil = yes",
+                      squash(block(e, "gm_state_offer_skins")))
+        self.assertIn("hidden_effect = { gm_state_unveil = yes }", squash(block(e, "gm_state_choose_skin")))
+        unveil = squash(block(self.e, "gm_state_unveil"))
+        self.assertIn("gm_state_set_default_form = yes", unveil)
+        self.assertIn("owner = { is_ai = no } } gm_state_offer_name_choice = yes", unveil)
+        self.assertIn("gm_state_name_if_unnamed = yes", squash(block(e, "gm_country_refresh")))
+
+    def test_clear_state_forgets_the_name(self):
+        clear = squash(block(read(EFFECTS), "gm_clear_state"))
+        self.assertIn("gm_state_clear_namesake = yes", clear)
+        for var in ("gm_form", "gm_name", "gm_unveiled_for_com"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear)
+        forget = squash(block(self.e, "gm_state_clear_namesake"))
+        for var in NAME_RECORDS:
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", forget, var)
+
+    def test_the_commission_names_its_monument(self):
+        take = squash(block(self.e, "gm_state_take_commission_name"))
+        for var in ("gm_com_namesake", "gm_com_name_year", "gm_com_occasion", "gm_com_name_char",
+                    "gm_com_name_enemy_cap"):
+            self.assertIn(f"var:{var}", take, var)
+        self.assertIn("gm_state_com_form_fits = yes", take, "the commission's form only when it fits the skin")
+        fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
+        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } } gm_state_take_commission_name = yes", fulfil)
+
+    def test_names_print_where_the_skin_did(self):
+        L = loc()
+        self.assertIn("GetCustom('gm_monument_name_row')", L["gm_row_title"])
+        for n in (12, 13, 14, 15):
+            self.assertIn("GetCustom('gm_monument_name_evt')", L[f"monument_events.{n}.d"], n)
+            self.assertNotIn("gm_skin_name", L[f"monument_events.{n}.d"], n)
 
 
 if __name__ == "__main__":

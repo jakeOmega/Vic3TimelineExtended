@@ -1,7 +1,8 @@
 ﻿# ============================================================================
 # The Monuments journal entry (spec §6)
 # ============================================================================
-# Activates when the country owns a Grand Monument; goes when it owns none, no
+# Activates when the country owns a Grand Monument or has a commission on offer
+# or open (v2 §2.7); goes when it owns none, has no commission, no
 # ledger is still fading (plan decision 3), and no state still carries
 # gm_seen (its state pulse has not yet recorded the teardown of a monument
 # that is already gone). Comes back with the next monument. Holds the
@@ -41,14 +42,24 @@ je_grand_monuments = {
 		container = "custom_widget_container_3"
 	}
 
+	# A monument, or a commission on offer or open (v2 §2.7): a country with
+	# no monument yet has a commission's row to follow.
 	is_shown_when_inactive = {
 		gm_system_enabled = yes
-		any_scope_state = { has_building = building_grand_monument }
+		OR = {
+			any_scope_state = { has_building = building_grand_monument }
+			has_variable = gm_com_open
+			has_variable = gm_com_offered
+		}
 	}
 
 	possible = {
 		gm_system_enabled = yes
-		any_scope_state = { has_building = building_grand_monument }
+		OR = {
+			any_scope_state = { has_building = building_grand_monument }
+			has_variable = gm_com_open
+			has_variable = gm_com_offered
+		}
 	}
 
 	invalid = {
@@ -60,6 +71,8 @@ je_grand_monuments = {
 				}
 				gm_ledgers_idle = yes
 				NOT = { any_scope_state = { has_variable = gm_seen } }
+				NOT = { has_variable = gm_com_open }
+				NOT = { has_variable = gm_com_offered }
 			}
 		}
 	}
