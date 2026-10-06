@@ -4,7 +4,10 @@
 # active_principle_slot). The GUI passes the slot's principle as
 # scope:te_principle through PowerBlocPrinciple.MakeScope, which no vanilla GUI
 # calls; the probe checks that, and whether remove_principle takes a scope
-# rather than a principle key.
+# rather than a principle key. is_valid deliberately does not test the scope
+# (gui gotcha #22): a fail-closed check would grey the button whether MakeScope
+# failed or the scope never reached the scripted GUI, so the probe lets the
+# click through and reads the answer from debug.log.
 te_pb_remove_principle_sgui = {
 	scope = country
 	saved_scopes = { te_principle }
@@ -15,7 +18,6 @@ te_pb_remove_principle_sgui = {
 
 	is_valid = {
 		is_power_bloc_leader = yes
-		exists = scope:te_principle
 	}
 
 	effect = {

@@ -3024,7 +3024,6 @@ types power_bloc_panel_types
 
 			blockoverride "remove_button_properties" {
 				tooltip = "te_debug_pb_sgui_remove_tt"
-				enabled = "[GetScriptedGui('te_pb_remove_principle_sgui').IsValid(GuiScope.SetRoot(PowerBloc.GetLeader.MakeScope).AddScope('te_principle', PowerBlocPrinciple.MakeScope).End)]"
 				onclick = "[GetScriptedGui('te_pb_remove_principle_sgui').Execute(GuiScope.SetRoot(PowerBloc.GetLeader.MakeScope).AddScope('te_principle', PowerBlocPrinciple.MakeScope).End)]"
 			}
 
