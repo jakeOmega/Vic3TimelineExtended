@@ -851,6 +851,12 @@ every `POST /reload` and writes `docs/engine/pm_employment_report.md`. **Editing
 refreshes the `# Employment`/cost comments (`extra_pms.txt` is hand-authored except
 those comment headers).
 
+## A Building's Own `_mult` in a PM Belongs in `unscaled`
+
+A PM's `level_scaled` and `workforce_scaled` blocks multiply every value by the building's level (or staffed level). That is right for flat adds, and wrong for a multiplier on the building itself: `level_scaled = { building_mobilization_cost_mult = -0.5 }` on a 20-level barracks would apply −1000%. Put such a modifier in `unscaled`. `building_mobilization_cost_mult` scales vanilla's `mobilized_battalion_consumption` static modifier (`building_goods_input_mult = 1` while a battalion is mobilized), so −0.5 halves a barracks' wartime goods surcharge. It doesn't touch mobilization options' own goods (`pm_expeditionary_logistics`).
+
+On a building with no goods output, `ai_selection = most_productive` makes the AI take the method with the highest training rate (the owner's observation on barracks; not traced to engine code). Vanilla's `pmg_training` (barracks) is set this way, so a new barracks training method the AI should use must out-train the ladder, and one it should leave to players must train slower (`docs/systems/mod_systems.md` § Barracks training methods).
+
 ## Render Static Modifier Effects in Loc via `[GetStaticModifier('X').GetDesc]`
 
 For button / JE / event description loc that needs to claim *what a static modifier does*, embed the modifier's auto-rendered effect list rather than hand-writing the numbers. The data-system function `[GetStaticModifier('<name>').GetDesc]` renders the static modifier definition's full effect list and auto-updates when the modifier changes.
