@@ -33,6 +33,10 @@ types state_panel_types
 		{
 			visible = yes
 			onclick = "[PopupManager.HideStateChangeName]"
+			### PROTOTYPE (Grand Monuments v2 spec §3.4, test build 7): closing
+			### the popup without confirming cancels a monument naming that
+			### this state carries; the scripted GUI ignores any other state.
+			onclick = "[GetScriptedGui('gm_name_popup_closed_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_popup_state', State.MakeScope ).End )]"
 		}
 
 		blockoverride "entire_scrollarea"

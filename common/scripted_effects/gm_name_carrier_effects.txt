@@ -1,4 +1,4 @@
-﻿# PROTOTYPE (v2 spec §3.4, test build 6): the naming's carrier is a state we
+﻿# PROTOTYPE (v2 spec §3.4, test build 7): the naming's carrier is a state we
 # own whose name the player types over in the base game's state-rename popup;
 # State.GetNameNoFormatting returns it as a CString (build 5 showed the hub
 # accessors ignore renames). No effect writes a stored name back, so the
@@ -31,6 +31,7 @@ gm_name_carrier_close = {
 		}
 		var:gm_name_carrier_state = {
 			remove_variable = gm_carries_name
+			remove_variable = gm_name_old
 		}
 	}
 	remove_variable = gm_name_carrier_state
@@ -39,4 +40,19 @@ gm_name_carrier_close = {
 		limit = { has_variable = gm_being_named }
 		remove_variable = gm_being_named
 	}
+}
+
+# Country scope. Cancels a naming: resets a carrier that was on its map name
+# (a renamed one is left as it is; the player may not have changed it yet).
+gm_name_carrier_cancel = {
+	if = {
+		limit = {
+			NOT = { has_variable = gm_carrier_was_renamed }
+			exists = var:gm_name_carrier_state
+		}
+		var:gm_name_carrier_state = {
+			reset_state_name = yes
+		}
+	}
+	gm_name_carrier_close = yes
 }

@@ -115,25 +115,32 @@ gm_hard_times_sgui = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4, test build 6): name a monument by typing over a
+# PROTOTYPE (v2 spec §3.4, test build 7): name a monument by typing over a
 # state's name in the base game's state-rename popup (gm_name_carrier_effects
 # has why a state name). The .gui picks the carrier, because only it can
 # compare names: the capital while it has its map name, else the monument's
 # state, which may have a custom name the reset will lose.
 #   gm_name_start_sgui         carrier on its map name (capital or here)
 #   gm_name_start_renamed_sgui carrier with a custom name (the red tooltip)
+#                              Both store the carrier's name at the start as the
+#                              flag gm_name_old (saved scope gm_old_name), which
+#                              the row watches.
 #   gm_name_use_sgui           gets the carrier's name as the saved scope
 #                              gm_name (MakeScopeFlag in the .gui), stores it as
-#                              the monument state's gm_name, resets the carrier
+#                              the monument state's gm_name, resets the carrier.
+#                              The row runs it as soon as the carrier's name
+#                              differs from gm_name_old, or by hand.
 #   gm_name_cancel_sgui        resets a carrier that had its map name (a renamed
 #                              one is left as it is: the player may not have
 #                              changed it yet)
+#   gm_name_popup_closed_sgui  the same, from the popup's close button, when
+#                              the popup's state is the carrier
 # The carrier carries gm_carries_name (value gm_is_name_carrier), which
 # switches the popup (states_panel.gui) to show only its state-name field.
 # One naming at a time.
 gm_name_start_sgui = {
 	scope = country
-	saved_scopes = { gm_state gm_carrier }
+	saved_scopes = { gm_state gm_carrier gm_old_name }
 
 	is_shown = {
 		always = yes
@@ -142,6 +149,7 @@ gm_name_start_sgui = {
 	is_valid = {
 		exists = scope:gm_state
 		exists = scope:gm_carrier
+		exists = scope:gm_old_name
 		scope:gm_state = {
 			owner = root
 		}
@@ -156,6 +164,12 @@ gm_name_start_sgui = {
 
 	effect = {
 		gm_name_carrier_open = yes
+		scope:gm_carrier = {
+			set_variable = {
+				name = gm_name_old
+				value = scope:gm_old_name
+			}
+		}
 	}
 
 	ai_is_valid = {
@@ -165,7 +179,7 @@ gm_name_start_sgui = {
 
 gm_name_start_renamed_sgui = {
 	scope = country
-	saved_scopes = { gm_state gm_carrier }
+	saved_scopes = { gm_state gm_carrier gm_old_name }
 
 	is_shown = {
 		always = yes
@@ -174,6 +188,7 @@ gm_name_start_renamed_sgui = {
 	is_valid = {
 		exists = scope:gm_state
 		exists = scope:gm_carrier
+		exists = scope:gm_old_name
 		scope:gm_state = {
 			owner = root
 		}
@@ -188,6 +203,12 @@ gm_name_start_renamed_sgui = {
 
 	effect = {
 		gm_name_carrier_open = yes
+		scope:gm_carrier = {
+			set_variable = {
+				name = gm_name_old
+				value = scope:gm_old_name
+			}
+		}
 		set_variable = gm_carrier_was_renamed
 	}
 
@@ -213,20 +234,28 @@ gm_name_use_sgui = {
 		}
 	}
 
+	# The guard repeats is_valid's: the row's watcher may send this twice
+	# before the first has closed the naming, and the second must not store
+	# the carrier's already-reset name.
 	effect = {
-		scope:gm_state = {
-			set_variable = {
-				name = gm_name
-				value = scope:gm_name
-			}
-		}
 		if = {
-			limit = { exists = var:gm_name_carrier_state }
-			var:gm_name_carrier_state = {
-				reset_state_name = yes
+			limit = {
+				scope:gm_state = { has_variable = gm_being_named }
 			}
+			scope:gm_state = {
+				set_variable = {
+					name = gm_name
+					value = scope:gm_name
+				}
+			}
+			if = {
+				limit = { exists = var:gm_name_carrier_state }
+				var:gm_name_carrier_state = {
+					reset_state_name = yes
+				}
+			}
+			gm_name_carrier_close = yes
 		}
-		gm_name_carrier_close = yes
 	}
 
 	ai_is_valid = {
@@ -247,15 +276,42 @@ gm_name_cancel_sgui = {
 
 	effect = {
 		if = {
-			limit = {
-				NOT = { has_variable = gm_carrier_was_renamed }
-				exists = var:gm_name_carrier_state
-			}
-			var:gm_name_carrier_state = {
-				reset_state_name = yes
-			}
+			limit = { has_variable = gm_name_carrier_state }
+			gm_name_carrier_cancel = yes
 		}
-		gm_name_carrier_close = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# Every close of the state-rename popup sends this (states_panel.gui), so it
+# acts only when the popup's state is carrying a naming.
+gm_name_popup_closed_sgui = {
+	scope = country
+	saved_scopes = { gm_popup_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_popup_state
+		scope:gm_popup_state = {
+			has_variable = gm_carries_name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:gm_popup_state
+				scope:gm_popup_state = { has_variable = gm_carries_name }
+				has_variable = gm_name_carrier_state
+			}
+			gm_name_carrier_cancel = yes
+		}
 	}
 
 	ai_is_valid = {

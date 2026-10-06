@@ -283,7 +283,7 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### PROTOTYPE (v2 spec §3.4, test build 6): name a monument by typing over a
+	### PROTOTYPE (v2 spec §3.4, test build 7): name a monument by typing over a
 	### state's name in the base game's state-rename popup (gm_sguis.txt and
 	### gm_name_carrier_effects.txt have why). Two modes, on the state value
 	### gm_is_being_named:
@@ -291,11 +291,11 @@ types grand_monuments_widget_types
 	###      the capital while its name is its map name; else this state, on
 	###      its map name or (red tooltip) not. Only the .gui can compare
 	###      names (EqualTo_string), so it picks the carrier and passes it as
-	###      the saved scope gm_carrier.
-	###   1  the carrier's name so far; the popup opens as this mode appears
-	###      (the _show state) and Rename opens it again; Use This Name
-	###      passes MakeScopeFlag( <carrier name> ) to gm_name_use_sgui;
-	###      Cancel ends the naming
+	###      the saved scope gm_carrier, with its name now as gm_old_name.
+	###   1  the carrier's name so far. The popup opens as this mode appears
+	###      (the _show state); confirming it names the monument (the
+	###      trigger_when watcher); closing it cancels (states_panel.gui).
+	###      Rename, Use This Name and Cancel are the same by hand.
 	### Every read of Var('gm_name_carrier_state') sits in mode 1, where the
 	### start scripted GUI has set it, so nothing reads a missing variable.
 	type gm_rename_line = flowcontainer {
@@ -316,8 +316,8 @@ types grand_monuments_widget_types
 				visible = "[EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting )]"
 				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
 				tooltip = "gm_button_name_start_capital_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', JournalEntry.GetCountry.GetCapital.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting ) ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
 			}
 
@@ -325,8 +325,8 @@ types grand_monuments_widget_types
 				visible = "[And( Not( EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting ) ), EqualTo_string( State.GetNameNoFormatting, State.GetStateRegion.GetNameNoFormatting ) )]"
 				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
 				tooltip = "gm_button_name_start_here_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
 			}
 
@@ -334,8 +334,8 @@ types grand_monuments_widget_types
 				visible = "[And( Not( EqualTo_string( JournalEntry.GetCountry.GetCapital.GetNameNoFormatting, JournalEntry.GetCountry.GetCapital.GetStateRegion.GetNameNoFormatting ) ), Not( EqualTo_string( State.GetNameNoFormatting, State.GetStateRegion.GetNameNoFormatting ) ) )]"
 				datacontext = "[GetScriptedGui('gm_name_start_renamed_sgui')]"
 				tooltip = "gm_button_name_start_renamed_tooltip"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_carrier', State.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( State.GetNameNoFormatting ) ).End )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
 			}
 
@@ -358,6 +358,19 @@ types grand_monuments_widget_types
 			state = {
 				name = _show
 				on_start = "[PopupManager.ShowStateChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.Self )]"
+			}
+
+			### Use the name as soon as the popup's rename lands: the carrier's
+			### name no longer matches the one stored when the naming started
+			### (gm_name_old). A widget state's trigger_when is the Community
+			### Mod Framework's way to run a scripted GUI from a list row
+			### (com_hidden_trigger.gui). gm_name_use_sgui ignores a repeat.
+			widget = {
+				size = { 1 1 }
+				state = {
+					trigger_when = "[Not( EqualTo_string( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.MakeScope.Var('gm_name_old').GetFlagName ) )]"
+					on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier_state').GetState.GetNameNoFormatting ) ).End )]"
+				}
 			}
 
 			textbox = {
