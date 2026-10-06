@@ -116,21 +116,39 @@ nominal level").** Two scores:
   average GDP per head, +25 at twice it (each step inside the band), +10 at notorious infamy,
   laissez-faire −10 (was −25). The other terms are as in §0.13.
 - `un_ai_development_generosity` (size): only humanitarian regulations +20, championing +20 and
-  recipients among its subjects, bloc partners and allies +20, less the treasury penalty. A
-  contributor moves up from Token to Small at generosity 0, then raises at 20 per size held
+  recipients among its subjects, bloc partners and allies +10, less `un_ai_development_poverty`.
+  A contributor moves up from Token to Small at generosity 0, then raises at 20 per size held
   above Small, and cuts back the band (25) below the line it raised at, so wealth alone stays
   at Small. **(proposed, 2026-10-06)** Small (`un_ai_development_base_size`) is the old Token's
-  money, so adding Token and Small took nothing from the Fund's grants; a member in debt
-  (treasury penalty −10 or worse) stays at Token.
+  money.
+- **Poverty and debt hold it back (decided, 2026-10-06).** In a test game the great powers the
+  owner looked at all gave Modest: a great power almost always has a recipient among its
+  subjects, bloc partners and allies, and that term was a full size. The owner asked for it to
+  be smaller, and for being poor, "in treasury terms or GDP per head relative to other great
+  powers", to be "a pretty strong reason to downgrade or not upgrade". The figures are
+  **(proposed)**: the recipients term is half a size (+10), and `un_ai_development_poverty`
+  takes −15 below the great powers' average GDP per head and −30 below half of it, and −15 from
+  debt at a quarter of the ceiling on top of the shared treasury penalty (−10 at half, −25 at
+  three quarters). The bar is `global_var:un_dev_fund_gp_avg`, the represented great powers'
+  figures averaged country by country, snapshotted by the Fund's monthly update, for every
+  member whatever its rank, so a rank change doesn't move it; the members' average stands in
+  while no great power is represented. Every step is 15, inside the band. The reasons now sum
+  to 50, so the AI no longer reaches Generous (60).
+
+Generosity below assumes GDP per head at or above the great powers' average and no debt unless
+the row says otherwise.
 
 | Member | Will | Generosity | Gives |
 |---|---|---|---|
 | Rich great power, Established, no other reason | 25 + 5 + 5 = 35 | 0 | Small |
 | Same, laissez-faire | 25 | 0 | Small |
-| Same, debt at half its ceiling | 35 − 10 = 25 | −10 | Token |
+| Same, debt at a quarter of its ceiling | 35 | −15 | Token |
+| Great power with recipients among its allies | 35 + 15 = 50 | 10 | Small |
+| Same, below the great powers' average | 50 | 10 − 15 = −5 | Token |
 | Above-average great power, laissez-faire | 15 + 5 + 5 − 10 = 15 | 0 | nothing |
-| Humanitarian champion with recipients among its allies | 20 + 20 + 15 + … | 60 | Generous |
+| Humanitarian champion with recipients among its allies | 20 + 20 + 15 + … | 50 | Substantial |
 | Humanitarian member, nothing else | 20 + … | 20 | Modest |
+| Same, below the great powers' average | 20 + … | 5 | Small |
 
 ### Files
 
@@ -160,7 +178,9 @@ nominal level").** Two scores:
 5. After a year of contributing, Grateful Aid Recipients appears on the UN entry; a vote
    commitment request to a recipient shows the "contributions to the Fund" line, and a
    campaign on a recipient climbs faster than 3 a month.
-6. Rich AI members start Token contributions and move up to Small; few go above Small.
+6. Rich AI members start Token contributions and move up to Small; few go above Small. A great
+   power below the others' average GDP per head, or borrowing, stays at Token
+   (`te_debug_un.1` option x logs `dev_poverty`).
 7. A revolution's winner keeps the contribution at its size (the §0.9 restore).
 8. A save from the four sizes (2026-10-05) keeps each contribution's money: a Token becomes
    Small, a Modest stays Modest, and Our Obligations names the size it now has.

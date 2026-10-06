@@ -1012,11 +1012,13 @@ paying and can add up to it. A member the Fund pays more than its dues keeps
 paying even in default, and one that has lost its vote under Article 19 pays
 sooner. A healthy member doesn't withhold to save the levy and then pay again.
 - Members whose GDP per head is above the members' average often fund
-Development Programs, usually at Small size, or Token if their debt is high. So
-do members with Humanitarian Regulations, champions of the order, members with
-notorious infamy, and members with Fund recipients among their subjects, bloc
-partners and allies. Only Humanitarian Regulations, championing and recipients
-among their own make them give more, a size for each. Major powers contribute to peacekeeping for the
+Development Programs, usually at Small size. So do members with Humanitarian
+Regulations, champions of the order, members with notorious infamy, and members
+with Fund recipients among their subjects, bloc partners and allies. Only
+Humanitarian Regulations and championing make them give more, a size for each,
+and recipients among their own half a size. A member whose GDP per head is
+below the great powers' average, or that borrows, gives less and often stays at
+Token. Major powers contribute to peacekeeping for the
 same kinds of reasons, more when missions are in the field. They stop either
 one when their treasury fails or their laws turn against it, and stop
 peacekeeping at war; peacekeeping only once its ten years have run.

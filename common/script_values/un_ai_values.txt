@@ -88,7 +88,8 @@ un_ai_points_per_gdp_share = { value = 2000 }
 un_ai_money_cap = { value = 40 }
 
 # The largest yes/no term that flips without anyone deciding: debt crossing a
-# line (10 and 15), devastation or poverty (10), famine (10), rank slipping a
+# line (10 and 15), devastation or poverty (10), famine (10), GDP per head
+# crossing the great powers' average or half of it (15 each), rank slipping a
 # step (20 and 15), a climate emitter's share (20), UN sanctions on us (20), a
 # record crossing the condemnation line (10), authority's whole pull on the
 # order stance (15). Every band below must be
@@ -499,13 +500,17 @@ un_withhold_dues_ai_chance = {
 #     to one of those. Laissez-faire weighs less than it did (-10, was -25):
 #     a token now pays its way.
 #   - HOW MUCH (un_ai_development_generosity): only the reasons to give beyond
-#     a token, the humanitarian law, championing and recipients among our own,
-#     less the treasury penalty. A contributor with none of them and a sound
-#     treasury moves up to Small (un_ai_development_base_size); above that it
-#     raises a size at un_ai_development_size_step per size it already gives
-#     (20 for Modest, 40 for Substantial, 60 for Generous) and cuts back a
-#     band below the line of the size it holds, so a rich power with none of
-#     them stays at Small.
+#     a token, the humanitarian law and championing (a size each) and
+#     recipients among our own (half a size), less what we cannot afford
+#     (owner, 2026-10-06: being poor should hold a contribution back): GDP per
+#     head below the great powers' average, or half of it, and debt
+#     (un_ai_development_poverty). A contributor with none of them moves up to
+#     Small (un_ai_development_base_size); above that it raises a size at
+#     un_ai_development_size_step per size it already gives (20 for Modest,
+#     40 for Substantial, 60 for Generous, which these reasons, 50 together,
+#     do not reach) and cuts back a band below the line of the size it holds,
+#     so a rich power with none of them stays at Small, and a poor or
+#     borrowing one at Token.
 #
 #   size pair (un_raise / un_reduce_development_button), by the size we hold:
 #   size held     raise at   reduce below
@@ -624,17 +629,82 @@ un_ai_development_generosity = {
 		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
 		add = 20
 	}
+	# Half a size, since a great power almost always has a recipient among its
+	# subjects, bloc partners and allies (owner, 2026-10-06: it was a size,
+	# which put nearly every great power at Modest).
 	if = {
 		limit = { un_ai_development_recipients_among_ours = yes }
-		add = 20
+		add = 10
+	}
+	add = un_ai_development_poverty
+}
+
+# What we cannot afford to give, as a penalty on the generosity score (owner,
+# 2026-10-06: "being poor, in treasury terms or GDP per head relative to other
+# great powers, should count as a pretty strong reason to downgrade or not
+# upgrade"):
+#   - GDP per head below our peers' (un_ai_development_peer_ratio): -15, and
+#     below half of it -30. Each step flips on its own by 15, inside the band.
+#   - Debt: the shared treasury penalty (-10 at half the ceiling, -25 at three
+#     quarters, -60 in default) and -15 more from a quarter of the ceiling, so
+#     borrowing at all holds a contribution back.
+# Scope: country
+un_ai_development_poverty = {
+	value = 0
+	if = {
+		limit = { un_ai_development_peer_ratio < 0.5 }
+		add = -30
+	}
+	else_if = {
+		limit = { un_ai_development_peer_ratio < 1 }
+		add = -15
+	}
+	if = {
+		limit = { scaled_debt >= 0.25 }
+		add = -15
 	}
 	add = un_ai_treasury_penalty
 }
 
-# The size a contributor settles at with no reason to give more and a sound
-# treasury (generosity 0): Small, the money Token gave before the five sizes
-# (2026-10-06), so adding Token and Small took nothing from the Fund's grants.
-# A member in debt (a negative generosity) stays at Token.
+# Our GDP per head as a share of our peers': the represented great powers'
+# average (global_var:un_dev_fund_gp_avg), whatever our own rank, or the
+# members' average while no great power sits in the Assembly. 1 with no figure
+# to compare, so no figure is no penalty. A single bar for every rank keeps a
+# rank change from moving it. Scope: country
+un_ai_development_peer_gdp_ph = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_dev_fund_gp_avg
+			global_var:un_dev_fund_gp_avg > 0
+		}
+		add = global_var:un_dev_fund_gp_avg
+	}
+	else_if = {
+		limit = { has_global_variable = un_dev_fund_avg }
+		add = global_var:un_dev_fund_avg
+	}
+}
+
+un_ai_development_peer_ratio = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = un_dev_fund_gdp_ph
+			un_ai_development_peer_gdp_ph > 0
+		}
+		add = var:un_dev_fund_gdp_ph
+		divide = un_ai_development_peer_gdp_ph
+	}
+	else = {
+		add = 1
+	}
+}
+
+# The size a contributor settles at with no reason to give more and nothing
+# holding it back (generosity 0): Small, the money Token gave before the five
+# sizes (2026-10-06). A member poorer than its peers or in debt (a negative
+# generosity) stays at Token.
 un_ai_development_base_size = { value = 2 }
 
 # The generosity a contributor needs to raise from the size it holds: the

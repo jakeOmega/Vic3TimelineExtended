@@ -166,6 +166,38 @@ un_dev_fund_rich_line_value = {
 	}
 }
 
+# The represented great powers' GDP per head, the plain average of their
+# figures (each counts once, whatever its people), 0 with none: the bar the AI
+# holds a member's GDP per head to when it weighs how much to give
+# (un_ai_development_poverty, un_ai_values.txt; owner, 2026-10-06). Reads the
+# monthly update's step 1 figures, which only represented members hold.
+# Globals only.
+un_dev_fund_gp_count_value = {
+	value = 0
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			has_variable = un_dev_fund_gdp_ph
+		}
+		add = 1
+	}
+}
+
+un_dev_fund_gp_avg_value = {
+	value = 0
+	if = {
+		limit = { un_dev_fund_gp_count_value > 0 }
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				has_variable = un_dev_fund_gdp_ph
+			}
+			add = var:un_dev_fund_gdp_ph
+		}
+		divide = un_dev_fund_gp_count_value
+	}
+}
+
 # The people of the members the Fund would pay (un_dev_fund_eligible), and
 # how many members they are. Snapshotted monthly whether or not the Fund
 # stands, so the chamber can preview it.

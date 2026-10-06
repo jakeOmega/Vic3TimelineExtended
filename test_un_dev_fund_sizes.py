@@ -292,7 +292,50 @@ class AiSizeTest(unittest.TestCase):
         for term in ("un_dev_fund_rich = yes", "un_dev_fund_above_average = yes"):
             self.assertIn(term, will)
             self.assertNotIn(term, generosity)
-        self.assertIn("add = un_ai_treasury_penalty", generosity)
+
+    def test_recipients_among_ours_weigh_half_a_size(self):
+        # A great power almost always has a recipient among its subjects, bloc
+        # partners and allies; at a full size it put nearly every one at Modest
+        # (owner, 2026-10-06).
+        generosity = _flat(_block(self.values, "un_ai_development_generosity"))
+        step = _constant(self.values, "un_ai_development_size_step")
+        terms = dict(re.findall(r"limit = \{ (.+?) \} add = (-?\d+) \}", generosity))
+        self.assertEqual(float(terms["has_law = law_type:law_humanitarian_regulations"]), step)
+        self.assertEqual(float(terms["un_ai_development_recipients_among_ours = yes"]), step / 2)
+        self.assertTrue(generosity.endswith("add = un_ai_development_poverty"))
+
+    def test_poverty_and_debt_hold_a_contribution_back(self):
+        # Being poorer than the great powers, or borrowing, is a strong reason
+        # not to give more (owner, 2026-10-06), in steps that flip inside the
+        # band.
+        poverty = _flat(_block(self.values, "un_ai_development_poverty"))
+        self.assertIn("if = { limit = { un_ai_development_peer_ratio < 0.5 } add = -30 } "
+                      "else_if = { limit = { un_ai_development_peer_ratio < 1 } add = -15 }", poverty)
+        self.assertIn("if = { limit = { scaled_debt >= 0.25 } add = -15 }", poverty)
+        self.assertTrue(poverty.endswith("add = un_ai_treasury_penalty"))
+        # Each step flips on its own as GDP per head or debt moves, so none may
+        # be wider than un_ai_self_flipping_terms (which the band exceeds).
+        flipping = _constant(self.values, "un_ai_self_flipping_terms")
+        deep, below, debt = (int(x) for x in re.findall(r"add = (-\d+)", poverty))
+        for step in (-below, below - deep, -debt):
+            self.assertLessEqual(step, flipping)
+        ratio = _flat(_block(self.values, "un_ai_development_peer_ratio"))
+        self.assertIn("add = var:un_dev_fund_gdp_ph divide = un_ai_development_peer_gdp_ph", ratio)
+        self.assertTrue(ratio.endswith("else = { add = 1 }"))  # no figure, no penalty
+        peer = _flat(_block(self.values, "un_ai_development_peer_gdp_ph"))
+        self.assertLess(peer.index("add = global_var:un_dev_fund_gp_avg"),
+                        peer.index("add = global_var:un_dev_fund_avg"))
+
+    def test_the_great_powers_average_is_snapshotted_and_cleared(self):
+        effects = _read(ECONOMY_EFFECTS)
+        update = _flat(_block(effects, "un_dev_fund_monthly_update"))
+        snapshot = update.index("set_global_variable = { name = un_dev_fund_gp_avg value = un_dev_fund_gp_avg_value }")
+        self.assertLess(update.index("set_variable = { name = un_dev_fund_gdp_ph"), snapshot)
+        self.assertIn("un_dissolve_remove_global = { NAME = un_dev_fund_gp_avg }",
+                      _flat(_block(effects, "un_economy_on_dissolve")))
+        avg = _flat(_block(_read(ECONOMY), "un_dev_fund_gp_avg_value"))
+        self.assertIn("country_rank >= rank_value:great_power has_variable = un_dev_fund_gdp_ph", avg)
+        self.assertTrue(avg.endswith("divide = un_dev_fund_gp_count_value }"))
 
 
 class FundingPillarTest(unittest.TestCase):

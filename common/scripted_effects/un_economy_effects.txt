@@ -54,6 +54,9 @@
 #                                        standing is under it (owner,
 #                                        2026-10-03), so one always qualifies
 #            un_dev_fund_rich_line       twice it: the richest (the lean)
+#            un_dev_fund_gp_avg          the represented great powers' GDP per
+#                                        head, averaged country by country (the
+#                                        AI's generosity)
 #            un_dev_fund_eligible_pop    the people of the members below the line
 #            un_dev_fund_recipients      how many members they are
 #            un_dev_fund_donations       the contributors' programme expense a
@@ -257,8 +260,9 @@ un_dev_fund_monthly_update = {
 		}
 	}
 	# 2. The members' average, the line (at the charter's current level, never
-	#    below the poorest member in good standing: owner, 2026-10-03) and the
-	#    rich line. The floor reads step 1's figures and goes before the line.
+	#    below the poorest member in good standing: owner, 2026-10-03), the
+	#    rich line and the great powers' average (the AI's generosity). The
+	#    floor reads step 1's figures and goes before the line.
 	set_global_variable = { name = un_dev_fund_members_gdp value = un_dev_fund_members_gdp_value }
 	set_global_variable = { name = un_dev_fund_members_pop value = un_dev_fund_members_pop_value }
 	set_global_variable = { name = un_dev_fund_avg value = un_dev_fund_avg_value }
@@ -286,6 +290,7 @@ un_dev_fund_monthly_update = {
 	set_global_variable = { name = un_dev_fund_line_base value = un_dev_fund_line_base_value }
 	set_global_variable = { name = un_dev_fund_line value = un_dev_fund_line_value }
 	set_global_variable = { name = un_dev_fund_rich_line value = un_dev_fund_rich_line_value }
+	set_global_variable = { name = un_dev_fund_gp_avg value = un_dev_fund_gp_avg_value }
 	# 3. Who the Fund pays, and their people.
 	set_global_variable = { name = un_dev_fund_eligible_pop value = un_dev_fund_eligible_pop_value }
 	set_global_variable = { name = un_dev_fund_recipients value = un_dev_fund_recipients_value }
@@ -997,6 +1002,7 @@ un_economy_on_dissolve = {
 	un_dissolve_remove_global = { NAME = un_dev_fund_line_base }
 	un_dissolve_remove_global = { NAME = un_dev_fund_line }
 	un_dissolve_remove_global = { NAME = un_dev_fund_rich_line }
+	un_dissolve_remove_global = { NAME = un_dev_fund_gp_avg }
 	un_dissolve_remove_global = { NAME = un_dev_fund_eligible_pop }
 	un_dissolve_remove_global = { NAME = un_dev_fund_recipients }
 	un_dissolve_remove_global = { NAME = un_dev_fund_donations }
