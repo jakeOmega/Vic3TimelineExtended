@@ -43,9 +43,13 @@ te_company_failing_monthly_effect = {
 				remove_company = prev.type
 			}
 		}
-		# The engine's on_company_disbanded hook also runs this; it is
-		# idempotent, and a flagship must not outlive its company either way.
+		# The monthly cleanup in extra_on_actions.txt (and on_company_disbanded,
+		# if remove_company fires it) would remove the flagship within 30 days;
+		# this does it now. Same state-scope call and guard as the monthly one.
 		every_scope_state = {
+			limit = {
+				state_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+			}
 			remove_disbanded_company_buildings_effect = yes
 		}
 	}
