@@ -514,6 +514,11 @@ level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology
 to steal or ahead in space, and a funded AI at war or in a play uses the wartime
-operations. The AI raises priority to 2 against rivals and to 3 when a great
-power is at war with the target. It needs Seasoned Tradecraft for the two most
-severe operations, as you do, so it rarely launches them.
+operations. Upkeep grows with the operator's GDP, not the target's, so an AI
+leaves a country with less than a tenth of its GDP alone unless its gold
+reserves are at least half full and its budget is in surplus. Espionage,
+Nuclear Programme Sabotage and Secure Loose Material ignore the target's size,
+and so does a wartime operation against a country the AI is losing to. The AI
+raises priority to 2 against rivals and to 3 when a great power is at war with
+the target. It needs Seasoned Tradecraft for the two most severe operations, as
+you do, so it rarely launches them.
