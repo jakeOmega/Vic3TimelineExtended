@@ -193,7 +193,8 @@ ch_has_regressive_laws = {
 # communist ideology (an interest group counts its leader's ideology among its
 # own). The laws alone can't tell a communist one-party planned economy from a
 # nationalist, technocratic or military one, so the Communist model's one-party
-# branch asks who runs the party.
+# branch asks who runs the party. The Fascist model asks too: Cultural
+# Citizenship in a one-party state run by communists is not Fascist.
 ch_government_led_by_communists = {
 	any_interest_group = {
 		is_in_government = yes
