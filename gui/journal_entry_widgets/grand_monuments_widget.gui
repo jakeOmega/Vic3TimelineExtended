@@ -286,11 +286,15 @@ types grand_monuments_widget_types
 	### PROTOTYPE (v2 spec §3.4, test build 4): name a monument through the
 	### base game's company-rename popup (gm_sguis.txt has why). Two modes,
 	### on the state value gm_is_being_named:
-	###   0  Name... starts a naming (gm_name_start_sgui) and tries to open
-	###      the popup in the same click; Clear Name drops a stored name
-	###   1  the name typed so far, read off the carrier company; Rename opens
-	###      the popup; Use This Name passes MakeScopeFlag( <company name> )
-	###      to gm_name_use_sgui; Cancel ends the naming
+	###   0  Name It starts a naming (gm_name_start_sgui); Clear Name drops a
+	###      stored name
+	###   1  the name typed so far, read off the carrier company; the popup
+	###      opens as this mode appears (the _show state), and Rename opens
+	###      it again; Use This Name passes MakeScopeFlag( <company name> ) to
+	###      gm_name_use_sgui; Cancel ends the naming
+	### The popup can't open in Name It's own click: the company doesn't
+	### exist until the scripted GUI's effect has run, and a popup opened on
+	### no company refuses Confirm ("This action is not allowed", launch 4).
 	### Every read of Var('gm_name_carrier') sits in mode 1, where
 	### gm_name_start_sgui has set it, so nothing reads a missing variable.
 	type gm_rename_line = flowcontainer {
@@ -305,14 +309,11 @@ types grand_monuments_widget_types
 			spacing = 4
 			parentanchor = hcenter
 
-			### The second onclick only works if the company already exists
-			### when it runs; if not, Rename (mode 1) opens the popup.
 			gm_rename_button = {
 				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
 				tooltip = "gm_button_name_start_tooltip"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
-				onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
 				blockoverride "rename_text" { text = "gm_button_name_start" }
 			}
 
@@ -330,6 +331,14 @@ types grand_monuments_widget_types
 			direction = horizontal
 			spacing = 6
 			parentanchor = hcenter
+
+			### Open the popup once the company exists. Vanilla runs data
+			### functions from _show only on windows (companies_panel.gui);
+			### on an inner container it is untested, and Rename covers it.
+			state = {
+				name = _show
+				on_start = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+			}
 
 			textbox = {
 				autoresize = yes
