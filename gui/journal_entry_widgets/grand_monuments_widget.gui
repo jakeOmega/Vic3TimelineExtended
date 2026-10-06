@@ -8,8 +8,13 @@
 ###     Hard Times while a finished level would cause vanity backlash (§5).
 ###   widget_je_gm_status     custom_widget_container_2
 ###     (The entry has no status description: its counts were the overview's.)
+###     Commission (open), only while one is open (v2 §2.7): who asked, the
+###     monument asked for, a progress bar, the months left and Ask for More
+###     Time.
 ###     National Effects (open): a bar per stepped total, then interest group
-###     approval and the fading ledgers. Our Monuments (open): one row per
+###     approval, the fading ledgers and the monument policy's four buttons
+###     (v2 §5; the overview's last line names the policy in force). Our
+###     Monuments (open): one row per
 ###     monument, from the country's gm_states list (rebuilt by every
 ###     gm_country_refresh); a contested row carries three buttons.
 ###   widget_je_gm_reference  custom_widget_container_3
@@ -267,6 +272,125 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### A button of the naming line, its label set by naming_text.
+	type gm_naming_button = button {
+		using = default_button_action
+		size = { 150 24 }
+		margin_top = 2
+
+		block "naming_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 140
+			elide = right
+			using = fontsize_small
+			block "naming_text" {}
+		}
+	}
+
+	### Typed names (v2 §3.5, tested in game 2026-10-05): a monument named in
+	### the base game's company-rename popup, on the placeholder company
+	### company_gm_name_carrier (gm_sguis.txt). Shown only while this
+	### monument is being named (gm_is_being_named, set by Name It). As it
+	### appears, its _show state stores the company's starting name
+	### (gm_name_mark_old_sgui) and opens the popup: the popup can't open in
+	### Name It's own click, before the company exists. The watcher, a 1x1
+	### widget whose state fires when the company's name differs from the
+	### starting one, names the monument without a second click; Rename, Use
+	### This Name and Cancel do the same by hand. Every read of
+	### Var('gm_name_carrier') sits here, where Name It has set it.
+	type gm_naming_line = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+		parentanchor = hcenter
+		visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' )]"
+
+		state = {
+			name = _show
+			on_start = "[GetScriptedGui('gm_name_mark_old_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_old_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+			on_start = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+		}
+
+		widget = {
+			size = { 1 1 }
+			state = {
+				trigger_when = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_has_name_old'), '(CFixedPoint)1' ), Not( EqualTo_string( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting, JournalEntry.GetCountry.MakeScope.Var('gm_name_old').GetFlagName ) ) )]"
+				on_finish = "[GetScriptedGui('gm_name_use_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+			}
+		}
+
+		textbox = {
+			autoresize = yes
+			max_width = 470
+			elide = right
+			parentanchor = hcenter
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			text = "gm_name_pending"
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					tooltip = "gm_button_name_popup_tooltip"
+					onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_popup" }
+			}
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
+					tooltip = "gm_button_name_use_tooltip"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_use" }
+			}
+			gm_naming_button = {
+				blockoverride "naming_button" {
+					datacontext = "[GetScriptedGui('gm_name_cancel_sgui')]"
+					tooltip = "gm_button_name_cancel_tooltip"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				}
+				blockoverride "naming_text" { text = "gm_button_name_cancel" }
+			}
+		}
+	}
+
+	### One of the four monument policies (v2 §5), in National Effects. Two to a
+	### row (2 x 230 + 8 + 4 margins = 480). The current policy's button is
+	### disabled: its scripted GUI is invalid for the policy already in force.
+	type gm_policy_button = button {
+		using = default_button_action
+		size = { 230 24 }
+		margin_top = 2
+
+		block "policy_context" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+		block "policy_tooltip" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 220
+			elide = right
+			using = fontsize_small
+			block "policy_text" {}
+		}
+	}
+
 	### One monument: its status as an icon with the word beneath; its form
 	### and dedication; where it stands and its grandeur; while contested, who
 	### wants it kept and who resents it, and the three choices centred under
@@ -316,6 +440,7 @@ types grand_monuments_widget_types
 				spacing = 2
 
 				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' )]"
 					autoresize = yes
 					multiline = yes
 					minimumsize = { 376 -1 }
@@ -323,6 +448,18 @@ types grand_monuments_widget_types
 					align = left|nobaseline
 					using = fontsize_large
 					text = "gm_row_title"
+				}
+				# A typed name (v2 §3.5) prints straight from the state's
+				# gm_name, the form that ran in game, and only once it exists.
+				textbox = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' )]"
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 376 -1 }
+					maximumsize = { 376 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					text = "gm_row_title_named"
 				}
 				gm_row_line = {
 					text = "gm_row_detail"
@@ -338,6 +475,35 @@ types grand_monuments_widget_types
 				}
 			}
 		}
+
+		# Rename (v2 §3.3): an upheld monument's form and namesake again, at
+		# no cost; Name It types a name of our own (§3.5), Clear Name drops it.
+		# A contested or heritage monument keeps its name. Hidden while this
+		# monument is being named: the naming line below replaces it.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+			visible = "[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) )]"
+
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_rename" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_name_start" }
+			}
+			gm_choice_button = {
+				blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_clear_name_sgui')]" }
+				blockoverride "choice_tooltip" { tooltip = "gm_button_clear_name_tooltip" }
+				blockoverride "choice_text" { text = "gm_button_clear_name" }
+			}
+		}
+
+		gm_naming_line = {}
 
 		flowcontainer = {
 			direction = horizontal
@@ -482,6 +648,103 @@ types grand_monuments_widget_types
 						tooltip = "gm_je_ov_hard_times_tt"
 						text = "gm_je_ov_hard_times"
 					}
+				}
+
+				# The monument policy (v2 §5): its name, what it does on hover and
+				# when it can change. The buttons are in National Effects.
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					margin_top = 4
+					align = hcenter|nobaseline
+					using = fontsize_medium
+					default_format = "#tooltippable"
+					tooltip = "gm_je_ov_policy_tt"
+					text = "gm_je_ov_policy"
+				}
+			}
+		}
+	}
+
+	### Commission (open), shown only while one is open (v2 §2.7): who asked for
+	### what, the monument it will be, a bar of the grandeur added against the
+	### target, the months left and Ask for More Time (once). Country reads
+	### only: the commission is the country's record.
+	type te_gm_sec_commission = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_open'), '(CFixedPoint)1' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_commission_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_commission_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_commission_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_commission_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_commission_closed'))]"
+			spacing = 2
+
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_com_ask_tt"
+				text = "gm_je_com_ask"
+			}
+			gm_text = {
+				text = "gm_je_com_named"
+			}
+			gm_step_row = {
+				tooltip = "gm_je_com_progress_tt"
+				blockoverride "row_label" {
+					text = "gm_je_com_lbl_progress"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_frac') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_com_val_progress"
+				}
+			}
+			gm_value_row = {
+				tooltip = "gm_je_com_months_tt"
+				blockoverride "row_label" {
+					text = "gm_je_com_lbl_months"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_com_val_months"
+				}
+			}
+
+			button = {
+				using = default_button_action
+				size = { 220 26 }
+				parentanchor = hcenter
+				margin_top = 4
+				datacontext = "[GetScriptedGui('gm_com_extend_sgui')]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "gm_button_com_extend_tooltip"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 210
+					elide = right
+					using = fontsize_small
+					text = "gm_button_com_extend"
 				}
 			}
 		}
@@ -728,9 +991,9 @@ types grand_monuments_widget_types
 				}
 			}
 
-			# ---- Fading legitimacy: the teardown and vanity ledgers (§4.3, §5) ----
+			# ---- Fading legitimacy: the teardown, vanity and promise ledgers (§4.3, §5, v2 §2.4) ----
 			gm_subheader = {
-				visible = "[Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) )]"
+				visible = "[Or( Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' ) )]"
 				blockoverride "subheader_text" {
 					text = "gm_je_sub_fading"
 				}
@@ -753,6 +1016,55 @@ types grand_monuments_widget_types
 				}
 				blockoverride "row_value" {
 					text = "gm_je_val_vanity"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_promise"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_promise"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_promise"
+				}
+			}
+
+			# ---- The monument policy (v2 §5): one button each, two to a row ----
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_sub_policy"
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				parentanchor = hcenter
+
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_standard_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_standard_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_standard" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_open_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_open_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_open" }
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				parentanchor = hcenter
+
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_ceremonial_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_ceremonial_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_ceremonial" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_mothballed_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_mothballed_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_mothballed" }
 				}
 			}
 		}
@@ -871,6 +1183,33 @@ types grand_monuments_widget_types
 			gm_note = {
 				text = "gm_je_how_hard_times"
 			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_commissions"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_commissions"
+			}
+			gm_note = {
+				text = "gm_je_how_commissions_rewards"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_names"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_names"
+			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_policy"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_policy"
+			}
 		}
 	}
 
@@ -886,6 +1225,7 @@ types grand_monuments_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		te_gm_sec_commission = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
 	}

@@ -54,9 +54,19 @@ gm_national_teardown = {
 }
 
 # Vanity backlash (§5): the multiplier is the vanity ledger itself, LINEAR.
+# -1 a unit (owner, 2026-10-05: v2 §1's -0.3 rendered as "-0", since
+# country_legitimacy_base_add shows no decimals).
 gm_national_vanity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	country_legitimacy_base_add = -3
+	country_legitimacy_base_add = -1
+}
+
+# A commission met (v2 §2.4): the multiplier is the promise ledger itself,
+# LINEAR (only one commission is ever open, so nothing stacks). Fulfilled +5,
+# after an extension +2.5; fades by 3% a month.
+gm_national_promise = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 1
 }
 
 # ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
@@ -165,6 +175,33 @@ gm_local_industrial = {
 gm_local_athletic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	state_turmoil_effects_mult = -0.10
+}
+
+# ---- Typed names (v2 §3.5): on the country only while a naming is open ----------
+# The company slot company_gm_name_carrier takes, so naming a monument never
+# blocks or uses up a real company. It lands at the next modifier update, so
+# for a moment a country at its limit is over it (owner-accepted, §3.5).
+gm_name_carrier_slot = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_max_companies_add = 1
+}
+
+# ---- The monument policy (v2 §5): on the monument itself (building scope) ------
+# Refreshed by gm_state_monthly. The maintenance input, the only goods a Grand
+# Monument uses, is level_scaled, which throughput does not touch
+# (scripting_best_practices.md § "Production Method Modifier Scaling Blocks"),
+# so the policy scales the building's construction-goods input as the engine's
+# own pm_retooling does. On the building, not the state, so no other building
+# pays it. pm_no_maintenance is off under the default construction market rule,
+# so upkeep cannot move by switching methods.
+gm_policy_upkeep_open = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	goods_input_construction_mult = 0.5
+}
+
+gm_policy_upkeep_mothballed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	goods_input_construction_mult = -0.5
 }
 
 # ---- Flavour event rewards (§6.1): timed, normal_modifier_time (5 years) -----

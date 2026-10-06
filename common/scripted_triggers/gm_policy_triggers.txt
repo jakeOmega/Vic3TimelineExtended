@@ -1,0 +1,23 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — the monument policy: scripted triggers (v2 §5, phase 3)
+# ============================================================================
+# Country scope. gm_policy is a flag (standard, open, ceremonial, mothballed);
+# a country that never chose one reads as Standard.
+gm_policy_is = {
+	OR = {
+		AND = {
+			has_variable = gm_policy
+			var:gm_policy = flag:$P$
+		}
+		AND = {
+			NOT = { has_variable = gm_policy }
+			always = $STANDARD$
+		}
+	}
+}
+
+# Country scope. The policy may change now: no change in the last 60 months
+# (the first choice starts no wait; gm_policy_set).
+gm_policy_can_change = {
+	NOT = { has_variable = gm_policy_cooldown }
+}

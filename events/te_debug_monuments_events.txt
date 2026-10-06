@@ -82,3 +82,131 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 		gm_debug_log = yes
 	}
 }
+
+# ============================================================================
+# COMMISSIONS (v2 §2) — console test event: `event te_debug_monuments.2`
+# ============================================================================
+# Each offer option forgets any commission first, writes the record as its
+# source would (through the source's own effect where it can) and opens the
+# offer (monument_events.21). The last options close the open commission each
+# way and print it.
+te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event te_debug_monuments.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.2.t
+	desc = te_debug_monuments.2.desc
+	flavor = te_debug_monuments.2.flavor
+
+	# Victory over a random rival, as if a war leader's war of a year had been won.
+	option = {
+		name = te_debug_monuments.2.a
+		default_option = yes
+		gm_com_clear = yes
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				exists = capital
+			}
+			save_scope_as = enemy_country
+		}
+		gm_com_war_victory = yes
+	}
+
+	# Defeat, as if such a war had been lost.
+	option = {
+		name = te_debug_monuments.2.b
+		gm_com_clear = yes
+		gm_com_war_defeat = yes
+	}
+
+	# A centenary this year.
+	option = {
+		name = te_debug_monuments.2.c
+		gm_com_clear = yes
+		set_variable = { name = gm_founded_year value = { value = year subtract = 100 } }
+		gm_remove_state_var = { VAR = gm_com_centenary_100 }
+		set_variable = { name = gm_com_age value = 100 }
+		gm_com_track_centenary_n = { N = 100 }
+		remove_variable = gm_com_age
+	}
+
+	# The ruler's death, as if after a long reign (the ruler lives on).
+	option = {
+		name = te_debug_monuments.2.d
+		gm_com_clear = yes
+		if = {
+			limit = { exists = ruler }
+			ruler = { save_scope_as = gm_late_ruler }
+			gm_com_ruler_death = yes
+		}
+	}
+
+	# A new regime: forget last month's, so this month's reads as new.
+	option = {
+		name = te_debug_monuments.2.e
+		gm_com_clear = yes
+		set_variable = { name = gm_regime_last value = flag:none }
+		gm_com_track_regime = yes
+	}
+
+	# A space first (the orbital one), without touching the space race.
+	option = {
+		name = te_debug_monuments.2.f
+		gm_com_clear = yes
+		gm_com_begin = { SOURCE = space DEDICATION = civic NAMESAKE = occasion FORM = obelisk }
+		set_variable = { name = gm_com_occasion value = flag:space_orbital }
+		set_variable = { name = gm_com_ig value = flag:intelligentsia }
+		gm_com_fix_to_capital = yes
+		gm_com_send_offer = yes
+	}
+
+	# A petition, past the monthly roll and the cooldown.
+	option = {
+		name = te_debug_monuments.2.g
+		gm_com_clear = yes
+		gm_remove_state_var = { VAR = gm_com_cooldown }
+		gm_com_offer_petition = yes
+	}
+
+	# Meet the open commission now.
+	option = {
+		name = te_debug_monuments.2.h
+		if = {
+			limit = { has_variable = gm_com_open }
+			gm_com_fulfil = yes
+			gm_country_refresh = yes
+		}
+	}
+
+	# Miss it: the clock runs out this month.
+	option = {
+		name = te_debug_monuments.2.i
+		if = {
+			limit = { has_variable = gm_com_open }
+			set_variable = { name = gm_com_months_left value = 1 }
+			gm_com_monthly = yes
+			gm_country_refresh = yes
+		}
+	}
+
+	# Lapse it.
+	option = {
+		name = te_debug_monuments.2.j
+		if = {
+			limit = { has_variable = gm_com_open }
+			gm_com_lapse = yes
+			gm_country_refresh = yes
+		}
+	}
+
+	# Print the commission.
+	option = {
+		name = te_debug_monuments.2.k
+		gm_debug_log = yes
+	}
+}

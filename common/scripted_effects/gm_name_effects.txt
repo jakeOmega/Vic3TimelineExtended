@@ -1,0 +1,315 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — names: scripted effects (v2 §3)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §3;
+# plan: docs/superpowers/plans/2026-10-05-grand-monuments-v2-phases-1-3.md
+# Task 7 (the form and namesake tables).
+#
+# A monument's name is a NAMESAKE and a FORM: "the Lisbon Gate", "Nelson's
+# Column", "the Arch of 1856". The skin (v1 §1.1) is the style and the art;
+# the form is the noun, and each skin offers its own. Records on the state,
+# beside v1's gm_skin (gm_clear_state removes them all, so a rededicated
+# monument is named again):
+#   gm_namesake        flag: city, state, ruler, honours, year, occasion
+#   gm_form            flag: one of the forms in gm_state_form_fits_<form>
+#   gm_name_year       the year it was named (every name keeps one: the ruler
+#                      and the victory names fall back to it)
+#   gm_name_char       ruler: the character it is named for
+#   gm_name_occasion   occasion: victory, defeat, centenary, space_orbital,
+#                      space_moon_landing
+#   gm_name_enemy_cap  occasion victory: the enemy's capital (a state: a
+#                      country stored in a variable does not print its name)
+#   gm_name_from_com   the name came from a commission
+#   gm_name            a typed name (gm_name_carrier, §3.5), printed over the rest
+# The name prints through gm_monument_name_row (the JE row, `State`) and
+# gm_monument_name_evt (events, `SCOPE.sState('monument_state')`):
+# customizable-localization targets inherit their caller's context, so a
+# pattern that reads data exists once per context (gm_custom_loc.txt).
+
+# ---- Forms ---------------------------------------------------------------------------
+# State scope, with the dedication and skin set. The default form: the open
+# commission's, when it asks for this monument and the form fits; else the
+# skin's first (the Task 7 table). The five civic-progress dedications are
+# buildings, not objects: each has its own fixed form.
+gm_state_set_default_form = {
+	set_variable = { name = gm_form value = flag:column }
+	if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_artistic } }
+		set_variable = { name = gm_form value = flag:opera_house }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+		set_variable = { name = gm_form value = flag:gardens }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_scientific } }
+		set_variable = { name = gm_form value = flag:observatory }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_industrial } }
+		set_variable = { name = gm_form value = flag:exhibition_hall }
+	}
+	else_if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_athletic } }
+		set_variable = { name = gm_form value = flag:stadium }
+	}
+	else_if = {
+		limit = { gm_state_has_faith_skin = yes }
+		set_variable = { name = gm_form value = flag:faith }
+	}
+	else = {
+		gm_state_default_form_for_skin = { SKIN = heritage_greek FORM = pantheon }
+		gm_state_default_form_for_skin = { SKIN = heritage_hebrew FORM = gate }
+		gm_state_default_form_for_skin = { SKIN = heritage_sanskrit FORM = pillar }
+		gm_state_default_form_for_skin = { SKIN = heritage_geez FORM = stele }
+		gm_state_default_form_for_skin = { SKIN = heritage_slavonic FORM = memorial_church }
+		gm_state_default_form_for_skin = { SKIN = heritage_avestan FORM = gate }
+		gm_state_default_form_for_skin = { SKIN = heritage_arabic FORM = hall }
+		gm_state_default_form_for_skin = { SKIN = heritage_chinese FORM = hall }
+		gm_state_default_form_for_skin = { SKIN = heritage_irish FORM = round_tower }
+		gm_state_default_form_for_skin = { SKIN = heritage_nahuatl FORM = pyramid }
+		gm_state_default_form_for_skin = { SKIN = heritage_mayan FORM = pyramid }
+		gm_state_default_form_for_skin = { SKIN = heritage_norse FORM = rune_stone }
+		gm_state_default_form_for_skin = { SKIN = heritage_gothic FORM = hall_of_fame }
+		gm_state_default_form_for_skin = { SKIN = heritage_prussian FORM = hill_shrine }
+		gm_state_default_form_for_skin = { SKIN = heritage_aramaic FORM = rock_cut }
+		# The commission's form, when it asks for this monument and fits the
+		# skin (an arch for a victory, a mausoleum for a late ruler).
+		if = {
+			limit = {
+				gm_state_answers_commission = yes
+				owner = {
+					has_variable = gm_com_form
+					NOT = { var:gm_com_form = flag:default }
+				}
+				gm_state_com_form_fits = yes
+			}
+			set_variable = { name = gm_form value = owner.var:gm_com_form }
+		}
+	}
+}
+
+gm_state_default_form_for_skin = {
+	if = {
+		limit = {
+			has_variable = gm_skin
+			var:gm_skin = flag:$SKIN$
+		}
+		set_variable = { name = gm_form value = flag:$FORM$ }
+	}
+}
+
+# State scope, an option of monument_events.24.
+gm_state_choose_form = {
+	custom_tooltip = {
+		text = gm_form_choice_tt
+		set_variable = { name = gm_form value = flag:$FORM$ }
+	}
+}
+
+# ---- Namesakes -------------------------------------------------------------------------
+# State scope. Name it for $NAMESAKE$ (city, state, ruler, honours, year), with
+# the records the pattern reads. The year is always kept: the ruler's name falls
+# back to it once the character is gone.
+gm_state_set_namesake = {
+	gm_state_clear_namesake = yes
+	set_variable = { name = gm_namesake value = flag:$NAMESAKE$ }
+	set_variable = { name = gm_name_year value = year }
+	if = {
+		limit = {
+			var:gm_namesake = flag:ruler
+			owner = { exists = ruler }
+		}
+		owner = {
+			ruler = { save_scope_as = gm_name_ruler }
+		}
+		set_variable = { name = gm_name_char value = scope:gm_name_ruler }
+	}
+}
+
+# State scope. The commission's name (§3.3): its namesake, occasion and
+# records, and its form when the form fits this monument's skin. From the
+# unveiling (option) and from fulfilment (gm_com_fulfil).
+gm_state_take_commission_name = {
+	gm_state_clear_namesake = yes
+	set_variable = { name = gm_namesake value = owner.var:gm_com_namesake }
+	set_variable = { name = gm_name_year value = owner.var:gm_com_name_year }
+	set_variable = gm_name_from_com
+	if = {
+		limit = {
+			owner = { has_variable = gm_com_occasion }
+		}
+		set_variable = { name = gm_name_occasion value = owner.var:gm_com_occasion }
+	}
+	if = {
+		limit = {
+			owner = { has_variable = gm_com_name_char }
+		}
+		set_variable = { name = gm_name_char value = owner.var:gm_com_name_char }
+	}
+	if = {
+		limit = {
+			owner = { has_variable = gm_com_name_enemy_cap }
+		}
+		set_variable = { name = gm_name_enemy_cap value = owner.var:gm_com_name_enemy_cap }
+	}
+	if = {
+		limit = {
+			owner = {
+				has_variable = gm_com_form
+				NOT = { var:gm_com_form = flag:default }
+			}
+			gm_state_com_form_fits = yes
+		}
+		set_variable = { name = gm_form value = owner.var:gm_com_form }
+	}
+}
+
+gm_state_clear_namesake = {
+	gm_remove_state_var = { VAR = gm_namesake }
+	gm_remove_state_var = { VAR = gm_name_year }
+	gm_remove_state_var = { VAR = gm_name_char }
+	gm_remove_state_var = { VAR = gm_name_occasion }
+	gm_remove_state_var = { VAR = gm_name_enemy_cap }
+	gm_remove_state_var = { VAR = gm_name_from_com }
+}
+
+# State scope, an option of monument_events.25.
+gm_state_choose_namesake = {
+	custom_tooltip = {
+		text = gm_namesake_choice_tt
+		gm_state_set_namesake = { NAMESAKE = $NAMESAKE$ }
+		gm_state_mark_unveiled_for_com = yes
+	}
+	gm_remove_state_var = { VAR = gm_name_choice_open }
+}
+
+gm_state_choose_commission_name = {
+	custom_tooltip = {
+		text = gm_namesake_choice_tt
+		gm_state_take_commission_name = yes
+		gm_state_mark_unveiled_for_com = yes
+	}
+	gm_remove_state_var = { VAR = gm_name_choice_open }
+}
+
+# The player chose this monument's name with the commission's offered first:
+# fulfilment keeps that choice (gm_com_fulfil).
+gm_state_mark_unveiled_for_com = {
+	if = {
+		limit = { gm_state_answers_commission = yes }
+		set_variable = gm_unveiled_for_com
+	}
+}
+
+# ---- The unveiling (§3.3) ----------------------------------------------------------------
+# State scope, after the skin is settled (the refresh after
+# gm_state_offer_skins for the AI and a skin with no choice; the skin event's
+# options for players): the default form and namesake at once, for every
+# monument; then, for a player, the form (monument_events.24, only when the
+# skin offers more than one) and the namesake (monument_events.25). A name a
+# met commission already gave the monument (a commission met by the dedication
+# itself, while the skin event was still open) is kept, and so is its form if
+# the skin chosen still offers it.
+gm_state_unveil = {
+	if = {
+		limit = {
+			NOT = {
+				AND = {
+					has_variable = gm_name_from_com
+					gm_state_current_form_fits = yes
+				}
+			}
+		}
+		gm_state_set_default_form = yes
+	}
+	if = {
+		limit = { gm_state_answers_commission = yes }
+		gm_state_take_commission_name = yes
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = gm_name_from_com }
+		}
+		gm_state_set_namesake = { NAMESAKE = city }
+	}
+	if = {
+		limit = {
+			owner = { is_ai = no }
+		}
+		gm_state_offer_name_choice = yes
+	}
+}
+
+# State scope. A player's choice of form, then of namesake; also the Rename
+# button (gm_rename_sgui), which keeps the current name as each event's
+# default.
+gm_state_offer_name_choice = {
+	# One choice at a time: Rename waits until monument_events.25 is answered
+	# (or 90 days, if it never is).
+	set_variable = { name = gm_name_choice_open value = yes days = 90 }
+	if = {
+		limit = { gm_state_has_form_choice = yes }
+		trigger_event = { id = monument_events.24 }
+	}
+	else = {
+		trigger_event = { id = monument_events.25 }
+	}
+}
+
+# State scope. A monument dedicated before names existed, or named by nobody:
+# the AI's default, so every dedicated monument has a name.
+gm_state_name_if_unnamed = {
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			NOT = { has_variable = gm_namesake }
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = gm_form }
+			}
+			gm_state_set_default_form = yes
+		}
+		gm_state_set_namesake = { NAMESAKE = city }
+	}
+}
+
+# ---- Typed names (§3.5): the company carrier ------------------------------------------
+# Country scope. End a naming, the name used or not: the carrier company and
+# its slot (each behind its check), then the flags that showed it, the starting
+# name and every state's gm_being_named.
+gm_name_carrier_close = {
+	if = {
+		limit = { has_company = company_type:company_gm_name_carrier }
+		remove_company = company_type:company_gm_name_carrier
+	}
+	if = {
+		limit = { has_modifier = gm_name_carrier_slot }
+		remove_modifier = gm_name_carrier_slot
+	}
+	gm_remove_state_var = { VAR = gm_name_carrier }
+	gm_remove_state_var = { VAR = gm_naming_active }
+	gm_remove_state_var = { VAR = gm_naming_open }
+	gm_remove_state_var = { VAR = gm_name_old }
+	every_scope_state = {
+		limit = { has_variable = gm_being_named }
+		remove_variable = gm_being_named
+	}
+}
+
+# Country scope, monthly (gm_country_monthly, which runs while a naming is
+# active even with no monument left): a naming whose year has run out was
+# abandoned (the popup closed and the row left). A year, not a month: game
+# time runs while the box is open, and at top speed a month is seconds. Closing the company
+# popup itself can't cancel it: that is vanilla's companies_panel.gui, which
+# the mod does not override.
+gm_name_sweep = {
+	if = {
+		limit = {
+			has_variable = gm_naming_active
+			NOT = { has_variable = gm_naming_open }
+		}
+		gm_name_carrier_close = yes
+	}
+}

@@ -1,0 +1,269 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — commissions: scripted triggers (v2 §2)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2;
+# plan: docs/superpowers/plans/2026-10-05-grand-monuments-v2-phases-1-3.md.
+# The commission record is country variables (gm_commission_effects.txt lists
+# them); the dedication and the petitioning interest group are flags, never
+# scopes, so a civil war's winner can read them.
+
+# ---- What a country may raise -------------------------------------------------
+# Country scope. The dedication's gate, the same test the ceremony's option
+# makes (monument_events.2): a commission is only offered, and only stays open,
+# for a dedication the country could dedicate today.
+# test_grand_monument_registry.py pins each body to its ceremony option.
+gm_country_can_raise = {
+	gm_country_can_raise_$KEY$ = yes
+}
+
+gm_country_can_raise_crown = {
+	monument_government_is_crowned = yes
+}
+
+gm_country_can_raise_republic = {
+	monument_government_is_republican = yes
+}
+
+gm_country_can_raise_revolution = {
+	gm_government_is_revolutionary = yes
+}
+
+gm_country_can_raise_leader = {
+	gm_can_raise_leader_monument = yes
+}
+
+gm_country_can_raise_religious = {
+	NOT = { has_law_or_variant = law_type:law_state_atheism }
+}
+
+gm_country_can_raise_civic = {
+	always = yes
+}
+
+gm_country_can_raise_war_memorial = {
+	always = yes
+}
+
+gm_country_can_raise_artistic = {
+	has_technology_researched = romanticism
+}
+
+gm_country_can_raise_naturalist = {
+	has_technology_researched = romanticism
+}
+
+gm_country_can_raise_scientific = {
+	has_technology_researched = empiricism
+}
+
+gm_country_can_raise_industrial = {
+	has_technology_researched = marketing_research
+	NOT = { has_law_or_variant = law_type:law_industry_banned }
+}
+
+gm_country_can_raise_athletic = {
+	has_technology_researched = television_broadcasting
+}
+
+# Country scope. The open commission's dedication can still be raised; when it
+# can't (a crown falls), the commission lapses at no cost (§2.3).
+gm_country_com_gate_holds = {
+	has_variable = gm_com_dedication
+	OR = {
+		AND = { var:gm_com_dedication = flag:crown gm_country_can_raise_crown = yes }
+		AND = { var:gm_com_dedication = flag:republic gm_country_can_raise_republic = yes }
+		AND = { var:gm_com_dedication = flag:revolution gm_country_can_raise_revolution = yes }
+		AND = { var:gm_com_dedication = flag:leader gm_country_can_raise_leader = yes }
+		AND = { var:gm_com_dedication = flag:religious gm_country_can_raise_religious = yes }
+		AND = { var:gm_com_dedication = flag:civic gm_country_can_raise_civic = yes }
+		AND = { var:gm_com_dedication = flag:war_memorial gm_country_can_raise_war_memorial = yes }
+		AND = { var:gm_com_dedication = flag:artistic gm_country_can_raise_artistic = yes }
+		AND = { var:gm_com_dedication = flag:naturalist gm_country_can_raise_naturalist = yes }
+		AND = { var:gm_com_dedication = flag:scientific gm_country_can_raise_scientific = yes }
+		AND = { var:gm_com_dedication = flag:industrial gm_country_can_raise_industrial = yes }
+		AND = { var:gm_com_dedication = flag:athletic gm_country_can_raise_athletic = yes }
+	}
+}
+
+# ---- Which monuments count (§2.3) ---------------------------------------------
+# State scope. This monument's dedication is the one the owner's variable $VAR$
+# names (a dedication flag, e.g. gm_com_dedication).
+gm_state_has_dedication_flag = {
+	owner = { has_variable = $VAR$ }
+	OR = {
+		AND = { owner = { var:$VAR$ = flag:crown } gm_state_has_pm = { PM = pm_monument_crown } }
+		AND = { owner = { var:$VAR$ = flag:republic } gm_state_has_pm = { PM = pm_monument_republic } }
+		AND = { owner = { var:$VAR$ = flag:revolution } gm_state_has_pm = { PM = pm_monument_revolution } }
+		AND = { owner = { var:$VAR$ = flag:leader } gm_state_has_pm = { PM = pm_monument_leader } }
+		AND = { owner = { var:$VAR$ = flag:religious } gm_state_has_pm = { PM = pm_monument_religious } }
+		AND = { owner = { var:$VAR$ = flag:civic } gm_state_has_pm = { PM = pm_monument_civic } }
+		AND = { owner = { var:$VAR$ = flag:war_memorial } gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		AND = { owner = { var:$VAR$ = flag:artistic } gm_state_has_pm = { PM = pm_monument_artistic } }
+		AND = { owner = { var:$VAR$ = flag:naturalist } gm_state_has_pm = { PM = pm_monument_naturalist } }
+		AND = { owner = { var:$VAR$ = flag:scientific } gm_state_has_pm = { PM = pm_monument_scientific } }
+		AND = { owner = { var:$VAR$ = flag:industrial } gm_state_has_pm = { PM = pm_monument_industrial } }
+		AND = { owner = { var:$VAR$ = flag:athletic } gm_state_has_pm = { PM = pm_monument_athletic } }
+	}
+}
+
+# State scope. This monument counts toward the owner's commission: it fits
+# (dedicated, not contested, not heritage, its message stands), it is of the
+# commission's dedication, and it stands in the commission's state if it names
+# one. A monument contested after acceptance drops out; the progress count
+# floors at zero (gm_com_progress).
+gm_state_com_counts = {
+	owner = { has_variable = gm_com_dedication }
+	gm_state_status_fits = yes
+	gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+	OR = {
+		owner = {
+			NOT = { has_variable = gm_com_state }
+		}
+		AND = {
+			owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_com_state }
+			this = scope:gm_tmp_com_state
+		}
+	}
+}
+
+# State scope. A fixed-state commission can be met here: the state holds no
+# monument, an undedicated one (the ceremony will offer the dedication), or a
+# fitting one of the commission's dedication. One Grand Monument per state, so
+# anywhere else the commission falls back to "anywhere" (gm_com_fix_to_capital).
+gm_state_can_host_commission = {
+	OR = {
+		NOT = { has_building = building_grand_monument }
+		gm_state_is_dedicated = no
+		AND = {
+			gm_state_status_fits = yes
+			gm_state_has_dedication_flag = { VAR = gm_com_dedication }
+		}
+	}
+}
+
+# ---- Pacing (§2.5) ------------------------------------------------------------
+# Country scope. A great or major power (owner, 2026-10-05: five levels are
+# 5,000 construction, beyond a minor power's means within five years), with
+# nothing open or on offer, not a side in a civil war (the winner is judged
+# after it; scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"), and a country that can build. A rank lost after accepting does
+# not lapse the commission.
+gm_com_can_offer = {
+	gm_system_enabled = yes
+	country_rank >= rank_value:major_power
+	NOT = { has_variable = gm_com_offered }
+	NOT = { has_variable = gm_com_open }
+	NOT = { has_variable = te_cw_role }
+	is_revolutionary = no
+	NOT = { is_country_type = decentralized }
+	any_scope_state = { is_incorporated = yes }
+}
+
+# State scope, a monument at its dedication ceremony (monument_events.2): it
+# can answer the owner's open commission, being in the commission's state if it
+# names one. The AI's ceremony then takes the commission's dedication for
+# certain (gm_state_ceremony_for_commission +100, every other choice
+# gm_state_ceremony_not_for_commission x0): one monument per state, so another
+# dedication here would leave the commission unmeetable.
+gm_state_ceremony_answers_commission = {
+	owner = {
+		has_variable = gm_com_open
+		has_variable = gm_com_dedication
+	}
+	OR = {
+		owner = {
+			NOT = { has_variable = gm_com_state }
+		}
+		AND = {
+			owner.var:gm_com_state ?= { save_temporary_scope_as = gm_tmp_com_state }
+			this = scope:gm_tmp_com_state
+		}
+	}
+}
+
+gm_state_ceremony_for_commission = {
+	gm_state_ceremony_answers_commission = yes
+	owner = { var:gm_com_dedication = flag:$KEY$ }
+}
+
+gm_state_ceremony_not_for_commission = {
+	gm_state_ceremony_answers_commission = yes
+	owner = {
+		NOT = { var:gm_com_dedication = flag:$KEY$ }
+	}
+}
+
+# ---- The AI (§2.6) --------------------------------------------------------------
+# Country scope. The AI turns an offer down at war, in hard times, with more
+# than a year of government construction queued, or in debt.
+gm_com_ai_declines = {
+	OR = {
+		is_at_war = yes
+		gm_country_hard_times = yes
+		construction_queue_government_duration >= 52
+		scaled_debt > 0
+	}
+}
+
+# Country scope. The AI asks for more time once, when it is past half way and
+# six months or fewer remain (gm_com_monthly writes gm_com_gap_half, the target
+# less twice the progress).
+gm_com_ai_wants_more_time = {
+	has_variable = gm_com_open
+	NOT = { has_variable = gm_com_extended }
+	var:gm_com_months_left <= 6
+	var:gm_com_gap_half <= 0
+}
+
+# ---- Life cycle (§2.3) --------------------------------------------------------
+# Country scope. The open commission can no longer be met through no choice of
+# ours: its dedication's gate has fallen, or its state is no longer ours.
+gm_com_has_lapsed = {
+	has_variable = gm_com_open
+	OR = {
+		gm_country_com_gate_holds = no
+		AND = {
+			has_variable = gm_com_state
+			NOT = { exists = var:gm_com_state }
+		}
+		AND = {
+			has_variable = gm_com_state
+			save_temporary_scope_as = gm_tmp_com_holder
+			var:gm_com_state ?= {
+				NOT = { owner = scope:gm_tmp_com_holder }
+			}
+		}
+	}
+}
+
+# ---- Petitions (§2.2) -----------------------------------------------------------
+# Country scope. Interest group $IG$, in government, may petition for a
+# monument of dedication $KEY$: the country can raise it and has less than 5
+# fitting grandeur of it (gm_fit_$KEY$, written by gm_com_count_fit first).
+gm_com_petition_fits = {
+	ig:ig_$IG$ ?= {
+		is_in_government = yes
+	}
+	gm_country_can_raise = { KEY = $KEY$ }
+	has_variable = gm_fit_$KEY$
+	var:gm_fit_$KEY$ < 5
+}
+
+# The petition table: v1's approving interest group for each dedication (spec
+# §1), less the Leader, whose approving group is the ruler's own.
+# test_grand_monument_registry.py pins it to DEDICATIONS.
+gm_com_any_petition_fits = {
+	OR = {
+		gm_com_petition_fits = { IG = armed_forces KEY = war_memorial }
+		gm_com_petition_fits = { IG = devout KEY = religious }
+		gm_com_petition_fits = { IG = industrialists KEY = industrial }
+		gm_com_petition_fits = { IG = intelligentsia KEY = republic }
+		gm_com_petition_fits = { IG = intelligentsia KEY = artistic }
+		gm_com_petition_fits = { IG = intelligentsia KEY = scientific }
+		gm_com_petition_fits = { IG = landowners KEY = crown }
+		gm_com_petition_fits = { IG = petty_bourgeoisie KEY = civic }
+		gm_com_petition_fits = { IG = rural_folk KEY = naturalist }
+		gm_com_petition_fits = { IG = trade_unions KEY = revolution }
+		gm_com_petition_fits = { IG = trade_unions KEY = athletic }
+	}
+}

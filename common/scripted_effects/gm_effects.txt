@@ -256,6 +256,10 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_scientific
 	remove_modifier = gm_local_industrial
 	remove_modifier = gm_local_athletic
+	b:building_grand_monument ?= {
+		remove_modifier = gm_policy_upkeep_open
+		remove_modifier = gm_policy_upkeep_mothballed
+	}
 }
 
 gm_remove_state_var = {
@@ -284,7 +288,16 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_new_contest }
 	gm_remove_state_var = { VAR = gm_grandeur }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
+	gm_state_clear_namesake = yes
+	gm_remove_state_var = { VAR = gm_form }
+	gm_remove_state_var = { VAR = gm_name }
+	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unveil_pending }
+	gm_remove_state_var = { VAR = gm_name_choice_open }
+	gm_remove_state_var = { VAR = gm_being_named }
 	set_variable = { name = gm_local_steps value = 0 }
+	set_variable = { name = gm_local_tourism_steps value = 0 }
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
@@ -298,8 +311,36 @@ gm_state_monthly = {
 		# Last known level, read if the building disappears before the next pulse.
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
-		set_variable = { name = gm_local_steps value = gm_curve_steps_f5 }
-		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_steps }
+		# The monument policy (v2 §5) scales tourism and the local effect.
+		set_variable = {
+			name = gm_local_steps
+			value = {
+				value = gm_curve_steps_f5
+				multiply = gm_policy_factor_local
+			}
+		}
+		set_variable = {
+			name = gm_local_tourism_steps
+			value = {
+				value = gm_curve_steps_f5
+				multiply = gm_policy_factor_tourism
+			}
+		}
+		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
+		# Upkeep on the building itself: a fixed modifier per policy, so no
+		# multiplier has to resolve in building scope.
+		if = {
+			limit = {
+				owner = { gm_policy_is = { P = open STANDARD = no } }
+			}
+			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_open } }
+		}
+		else_if = {
+			limit = {
+				owner = { gm_policy_is = { P = mothballed STANDARD = no } }
+			}
+			b:building_grand_monument ?= { add_modifier = { name = gm_policy_upkeep_mothballed } }
+		}
 		if = {
 			limit = { gm_state_is_dedicated = yes }
 			gm_add_local = { KEY = crown }
@@ -330,6 +371,10 @@ gm_state_monthly = {
 		if = {
 			limit = { has_variable = gm_local_steps }
 			set_variable = { name = gm_local_steps value = 0 }
+		}
+		if = {
+			limit = { has_variable = gm_local_tourism_steps }
+			set_variable = { name = gm_local_tourism_steps value = 0 }
 		}
 	}
 }
@@ -367,6 +412,7 @@ gm_init_ledgers = {
 	gm_init_ledger = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_init_ledger = { VAR = gm_ig_ledger_rural_folk }
 	gm_init_ledger = { VAR = gm_ig_ledger_trade_unions }
+	gm_init_ledger = { VAR = gm_promise_ledger }
 }
 
 # Country scope. Zero every ledger (never remove: they back multipliers).
@@ -383,6 +429,7 @@ gm_zero_ledgers = {
 	set_variable = { name = gm_ig_ledger_petty_bourgeoisie value = 0 }
 	set_variable = { name = gm_ig_ledger_rural_folk value = 0 }
 	set_variable = { name = gm_ig_ledger_trade_unions value = 0 }
+	set_variable = { name = gm_promise_ledger value = 0 }
 }
 
 gm_decay = {
@@ -408,6 +455,7 @@ gm_decay_ledgers = {
 	gm_decay = { VAR = gm_ig_ledger_petty_bourgeoisie RATE = 0.97 }
 	gm_decay = { VAR = gm_ig_ledger_rural_folk RATE = 0.97 }
 	gm_decay = { VAR = gm_ig_ledger_trade_unions RATE = 0.97 }
+	gm_decay = { VAR = gm_promise_ledger RATE = 0.97 }
 }
 
 # ---- The national refresh (§2.4) ---------------------------------------------
@@ -418,7 +466,10 @@ gm_country_refresh = {
 	gm_init_ledgers = yes
 	if = {
 		limit = {
-			any_scope_state = { has_building = building_grand_monument }
+			OR = {
+				any_scope_state = { has_building = building_grand_monument }
+				has_variable = gm_com_open
+			}
 		}
 		set_variable = gm_active
 	}
@@ -431,7 +482,11 @@ gm_country_refresh = {
 		limit = {
 			gm_system_enabled = yes
 			NOT = { has_journal_entry = je_grand_monuments }
-			any_scope_state = { has_building = building_grand_monument }
+			OR = {
+				any_scope_state = { has_building = building_grand_monument }
+				has_variable = gm_com_open
+				has_variable = gm_com_offered
+			}
 		}
 		add_journal_entry = { type = je_grand_monuments }
 	}
@@ -440,12 +495,24 @@ gm_country_refresh = {
 		limit = { has_building = building_grand_monument }
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
 		gm_state_first_sight = yes
+		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
+		# then a monument older than names, or one nobody named, takes the
+		# default name (v2 §3.3).
+		if = {
+			limit = { has_variable = gm_unveil_pending }
+			remove_variable = gm_unveil_pending
+			gm_state_unveil = yes
+		}
+		gm_state_name_if_unnamed = yes
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}
 	}
 	gm_set_opposition_ig = yes
 	gm_check_contests = yes
+	# A commission met by this level, dedication or month (v2 §2.3): before the
+	# totals, so its rewards count in this refresh.
+	gm_com_check_progress = yes
 	gm_compute_totals = yes
 	gm_apply_national_modifiers = yes
 	gm_notify_new_contests = yes
@@ -456,16 +523,25 @@ gm_country_refresh = {
 gm_country_monthly = {
 	gm_init_ledgers = yes
 	gm_decay_ledgers = yes
+	# The open commission's month (v2 §2.3): met, lapsed, missed or extended
+	# before the refresh, which then counts its rewards.
+	gm_com_check_progress = yes
+	gm_com_monthly = yes
 	gm_country_refresh = yes
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
 	}
 	gm_ai_decide_contests = yes
+	gm_policy_ai_choose = yes
+	gm_name_sweep = yes
 	if = {
 		limit = {
 			NOT = { any_scope_state = { has_building = building_grand_monument } }
 			gm_ledgers_idle = yes
+			NOT = { has_variable = gm_com_open }
+			NOT = { has_variable = gm_com_offered }
+			NOT = { has_variable = gm_naming_active }
 		}
 		# Ledgers must not freeze un-snapped once the pulse stops running.
 		gm_zero_ledgers = yes
@@ -523,6 +599,13 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_scientific OUT = gm_s_scientific NEXT = gm_n_scientific F = 5 }
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
+	# The monument policy (v2 §5), on the steps so the effect moves by the
+	# factor: Mothballed halves prestige and cultural pull, State Ceremonial
+	# adds half to legitimacy and the Leader's authority.
+	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_standing }
+	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
+	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
+	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
 	gm_compute_ig = { IG = armed_forces }
 	gm_compute_ig = { IG = devout }
 	gm_compute_ig = { IG = industrialists }
@@ -611,6 +694,7 @@ gm_apply_national_modifiers = {
 		gm_add_national = { NAME = gm_national_industrial VAR = gm_s_industrial }
 		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
 		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
+		gm_add_national = { NAME = gm_national_promise VAR = gm_promise_ledger }
 		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
 		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
 		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
@@ -634,6 +718,7 @@ gm_remove_national_modifiers = {
 	remove_modifier = gm_national_industrial
 	remove_modifier = gm_national_teardown
 	remove_modifier = gm_national_vanity
+	remove_modifier = gm_national_promise
 	remove_modifier = gm_ig_approval_armed_forces
 	remove_modifier = gm_ig_approval_devout
 	remove_modifier = gm_ig_approval_industrialists
@@ -788,6 +873,10 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
+	# A commission's mark and a naming in progress belong to the old owner
+	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
+	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_being_named }
 	if = {
 		limit = {
 			owner = { has_variable = gm_cw_adopting }
@@ -1092,6 +1181,8 @@ gm_state_dedicate = {
 	}
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	set_variable = gm_seen
+	# The monument a commission met by this dedication names (v2 §2.3).
+	owner = { set_variable = { name = gm_com_last_state value = prev } }
 }
 
 # AXIS: heritage (To the Nation, War Memorial) or none (the civic-progress five).
@@ -1128,6 +1219,18 @@ gm_state_dedicate_faith = {
 gm_state_offer_skins = {
 	set_variable = { name = gm_skin value = flag:generic }
 	gm_state_offer_skins_$AXIS$ = yes
+	# No skin to choose (the AI, or one skin fits): the unveiling at the next
+	# refresh (the monument_events.20 below), not here. The unveiling reads the
+	# dedication's production method, and this effect has only just activated
+	# it: whether that is visible within the same effect is not established
+	# (gm_state_dedicate's note). Otherwise monument_events.11's option unveils
+	# (gm_state_choose_skin), an event later.
+	if = {
+		limit = {
+			NOT = { has_variable = gm_skin_axis }
+		}
+		set_variable = gm_unveil_pending
+	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }
 
@@ -1170,6 +1273,8 @@ gm_state_choose_skin = {
 		set_variable = { name = gm_skin value = flag:$SKIN$ }
 		gm_remove_state_var = { VAR = gm_skin_axis }
 	}
+	# Then the form and the namesake (v2 §3.3).
+	hidden_effect = { gm_state_unveil = yes }
 }
 
 # ---- Vanity backlash (§5) --------------------------------------------------------
@@ -1178,7 +1283,7 @@ gm_state_choose_skin = {
 # which takes legitimacy linearly (gm_national_vanity) and fades over about
 # two years. The journal entry warns beforehand (gm_hard_times_sgui, Task 9).
 gm_state_vanity_backlash = {
-	add_radicals_in_state = { value = 0.05 }
+	add_radicals_in_state = { value = 0.005 }
 	owner = {
 		gm_init_ledgers = yes
 		change_variable = { name = gm_vanity_ledger add = 1 }
@@ -1195,4 +1300,5 @@ gm_debug_log = {
 	debug_log = "TE_MONUMENTS: standing grandeur [SCOPE.ScriptValue('gm_display_g_standing')|0], prestige +[SCOPE.ScriptValue('gm_display_prestige')|1]; regime grandeur [SCOPE.ScriptValue('gm_display_g_regime')|0], legitimacy +[SCOPE.ScriptValue('gm_display_legitimacy')|1]; cultural pull +[SCOPE.ScriptValue('gm_display_culture')|1]"
 	debug_log = "TE_MONUMENTS: teardown legitimacy +[SCOPE.ScriptValue('gm_display_teardown')|1], vanity legitimacy [SCOPE.ScriptValue('gm_display_vanity')|1]"
 	debug_log = "TE_MONUMENTS: IG approval AF [SCOPE.ScriptValue('gm_display_ig_armed_forces')|1] DV [SCOPE.ScriptValue('gm_display_ig_devout')|1] IN [SCOPE.ScriptValue('gm_display_ig_industrialists')|1] IT [SCOPE.ScriptValue('gm_display_ig_intelligentsia')|1] LO [SCOPE.ScriptValue('gm_display_ig_landowners')|1] PB [SCOPE.ScriptValue('gm_display_ig_petty_bourgeoisie')|1] RF [SCOPE.ScriptValue('gm_display_ig_rural_folk')|1] TU [SCOPE.ScriptValue('gm_display_ig_trade_unions')|1]"
+	debug_log = "TE_MONUMENTS: commission open [SCOPE.ScriptValue('gm_disp_com_open')|0], grandeur added [SCOPE.ScriptValue('gm_disp_com_progress')|0] of [SCOPE.ScriptValue('gm_disp_com_target')|0], months left [SCOPE.ScriptValue('gm_disp_com_months')|0], extended [SCOPE.ScriptValue('gm_disp_com_extended')|0], fixed state [SCOPE.ScriptValue('gm_disp_com_fixed')|0]; promise legitimacy +[SCOPE.ScriptValue('gm_display_promise')|1]"
 }

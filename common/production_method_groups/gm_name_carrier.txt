@@ -1,0 +1,7 @@
+﻿# Grand Monuments v2 §3.5: building_gm_name_carrier_anchor's one group. The
+# building is never built.
+pmg_gm_name_carrier_anchor = {
+	production_methods = {
+		pm_gm_name_carrier_anchor
+	}
+}

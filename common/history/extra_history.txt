@@ -247,4 +247,8 @@ GLOBAL = {
 	every_state = {
 		extended_timeline_extra_construction_building = yes
 	}
+	# Grand Monuments v2 §2.2: founding years for the centenary commissions,
+	# and every country of 1836 marked as standing at the start
+	# (gm_commission_effects.txt).
+	gm_com_seed = yes
 }
