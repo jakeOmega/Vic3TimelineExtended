@@ -33,6 +33,31 @@ te_budget_administration_cost = {
 	}
 }
 
+# The Space Program's missions output country modifiers only, so like
+# Administration its negative weekly profit is its wages + input goods (Launch
+# Capacity). The engine pays it as a government building, under the civil
+# getters; the Breakdown shows it under Programme Costs, Space Race instead.
+te_budget_space_program_actual = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		add = { value = weekly_profit multiply = -1 min = 0 }
+	}
+}
+
+# Capped like Administration, at what the civil pool holds after it, so the two
+# moves together never take more than the civil getters contain.
+te_budget_space_program_cost = {
+	value = scope:space_program_actual
+	max = {
+		value = scope:civil_0
+		add = scope:civil_1
+		add = scope:civil_2
+		subtract = te_budget_administration_cost
+		min = 0
+	}
+}
+
 te_budget_produced_bureaucracy = { value = produced_bureaucracy min = 0 }
 
 te_budget_institution_pool = {

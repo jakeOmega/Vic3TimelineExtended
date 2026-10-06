@@ -1,0 +1,65 @@
+﻿# Company AI: the AI dissolves a company that has failed for five years.
+#
+# The engine's AI never disbands a company by choice: in the observer run's
+# saves (1972-2029) no surviving country dropped one company to found another,
+# and none of the great or major powers lost one. Its slots fill decades before
+# the mod's late-era companies unlock, so those never get founded. This stands
+# in for the choice a player makes in the companies panel.
+#
+# Script cannot read a company's profit, so "failing" is prosperity below
+# te_company_failing_prosperity, or owned levels below te_company_small_share
+# of the country's building levels, at te_company_failing_months consecutive
+# monthly checks; a check that passes both clears the count
+# (te_company_ai_values.txt has the evidence for the numbers).
+# on_monthly_pulse_country is a 30-day timer, so 60 checks are 4.9 years.
+#
+# Country scope. Every country counts, players included, so the count is a fact
+# about the company; only an AI acts on it. A country that changes hands acts
+# on the count it inherits.
+te_company_failing_monthly_effect = {
+	save_temporary_scope_value_as = {
+		name = te_company_min_levels
+		value = {
+			value = building_levels
+			multiply = te_company_small_share
+		}
+	}
+	every_company = {
+		if = {
+			limit = { te_company_fails_this_month = yes }
+			if = {
+				limit = { has_variable = te_company_months_failing }
+				change_variable = { name = te_company_months_failing add = 1 }
+			}
+			else = {
+				set_variable = { name = te_company_months_failing value = 1 }
+			}
+		}
+		else_if = {
+			limit = { has_variable = te_company_months_failing }
+			remove_variable = te_company_months_failing
+		}
+	}
+	# One company a check at most; a second failing one goes 30 days later.
+	if = {
+		limit = {
+			is_ai = yes
+			any_company = { te_company_is_failing = yes }
+		}
+		random_company = {
+			limit = { te_company_is_failing = yes }
+			owner ?= {
+				remove_company = prev.type
+			}
+		}
+		# The monthly cleanup in extra_on_actions.txt (and on_company_disbanded,
+		# if remove_company fires it) would remove the flagship within 30 days;
+		# this does it now. Same state-scope call and guard as the monthly one.
+		every_scope_state = {
+			limit = {
+				state_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+			}
+			remove_disbanded_company_buildings_effect = yes
+		}
+	}
+}

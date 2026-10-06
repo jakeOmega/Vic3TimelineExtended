@@ -109,6 +109,9 @@ company_basic_entertainment = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_basic_autarky = {
@@ -171,6 +174,9 @@ company_basic_autarky = {
 				level >= 3
 			}
 		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
 	}
 }
 
@@ -304,6 +310,9 @@ company_basic_power = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_basic_electronics = {
@@ -367,6 +376,9 @@ company_basic_electronics = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_basic_aerospace = {
@@ -427,6 +439,9 @@ company_basic_aerospace = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_basic_software = {
@@ -481,6 +496,9 @@ company_basic_software = {
 				level >= 3
 			}
 		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
 	}
 }
 
@@ -539,6 +557,9 @@ company_basic_advanced_materials = {
 				level >= 3
 			}
 		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
 	}
 }
 
@@ -616,6 +637,9 @@ company_basic_biotechnology = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_infrastructure = {
@@ -686,6 +710,9 @@ company_infrastructure = {
 			}
 		}
 	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
+	}
 }
 
 company_basic_synthetics = {
@@ -745,6 +772,9 @@ company_basic_synthetics = {
 				level >= 3
 			}
 		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
 	}
 }
 
@@ -851,7 +881,26 @@ company_megastructure_consortium = {
 		has_technology_researched = space_elevator
 	}
 	ai_construction_targets = {
-		building_aerospace_industry = { level = 10 }
-		building_advanced_material_fabricator = { level = 5 }
+		building_aerospace_industry = {
+			level = 10
+			state_trigger = {
+				OR = {
+					is_capital = yes
+					any_scope_building = { is_building_type = building_aerospace_industry }
+				}
+			}
+		}
+		building_advanced_material_fabricator = {
+			level = 5
+			state_trigger = {
+				OR = {
+					is_capital = yes
+					any_scope_building = { is_building_type = building_advanced_material_fabricator }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		value = te_company_ai_weight_generic
 	}
 }
