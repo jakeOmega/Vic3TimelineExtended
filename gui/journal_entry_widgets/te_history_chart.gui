@@ -300,8 +300,10 @@ types te_history_chart_types
 	### The chart itself.
 	###
 	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
-	### "bar_tooltip". Optional: "zero_axis" (signed series only) and
-	### "marker_pips" (override to nothing for a series with no markers).
+	### "bar_tooltip". Optional: "zero_axis" (signed series only),
+	### "marker_pips" (override to nothing for a series with no markers) and
+	### "plot_size" (the frame, for a chart whose bars are not 480px wide or
+	### 84px tall, with "plot_layouts" carrying the matching bar sizes).
 	### Override them here, on the chart instance; a custom "plot_layouts" holds
 	### plain te_history_plot instances. A type derived from te_history_plot
 	### that carries these blocks drew nothing in game (gui_modding_guide.md
@@ -366,9 +368,13 @@ types te_history_chart_types
 			}
 		}
 
-		### Plot area
+		### Plot area. 496 = 480px of bars + the plots' 8px right margin + 8px
+		### on the left. A chart with other bar counts overrides "plot_size"
+		### so its bars still reach the frame's left edge.
 		widget = {
-			size = { 496 96 }
+			block "plot_size" {
+				size = { 496 96 }
+			}
 			parentanchor = hcenter
 
 			background = {
