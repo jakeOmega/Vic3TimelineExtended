@@ -155,6 +155,17 @@ gm_has_custom_name = {
 	}
 }
 
+# PROTOTYPE (v2 spec §3.4, test build 4): 1 while this state's monument is
+# being named through company_gm_name_carrier (gm_name_start_sgui), else 0.
+# The row swaps its buttons on it.
+gm_is_being_named = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_being_named }
+		value = 1
+	}
+}
+
 # ---- National sums (§2.3, §2.4), country scope ---------------------------------
 # Standing grandeur: every monument that is not contested (prestige, cultural pull).
 gm_sum_standing = {

@@ -25,9 +25,6 @@ ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
 FLAGS = {"gm_national_closed", "gm_monuments_closed", "gm_how_open"}
-# PROTOTYPE (v2 spec §3.4): the typed-name test build's readouts toggle. Not a
-# collapsible section, so the section rule below does not apply to it.
-PROTOTYPE_FLAGS = {"gm_name_diag_open"}
 LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_national", "te_gm_sec_monuments", "gm_monument_row"]
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_national", "gm_je_how_counts",
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
@@ -142,7 +139,7 @@ class FlagTest(unittest.TestCase):
 
     def test_flags_say_their_default(self):
         text = _strip_comments(_gui())
-        flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", text)) - PROTOTYPE_FLAGS
+        flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", text))
         self.assertEqual(flags, FLAGS)
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", text))

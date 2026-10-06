@@ -1,0 +1,7 @@
+﻿# PROTOTYPE (v2 spec §3.4, test build 4): the company slot company_gm_name_carrier
+# takes, so naming a monument never blocks or uses up a real company. On the
+# country only while the carrier exists.
+gm_name_carrier_slot = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+	country_max_companies_add = 1
+}

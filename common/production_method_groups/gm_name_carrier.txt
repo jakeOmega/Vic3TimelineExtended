@@ -1,0 +1,7 @@
+﻿# PROTOTYPE (v2 spec §3.4, test build 4): building_gm_name_carrier_anchor's
+# one group. The building is never built.
+pmg_gm_name_carrier_anchor = {
+	production_methods = {
+		pm_gm_name_carrier_anchor
+	}
+}

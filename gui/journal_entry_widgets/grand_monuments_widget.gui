@@ -267,8 +267,7 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### A button of the rename line: 114 wide, four to a row (4 * 114 + 3 * 4
-	### = 468), its label set by rename_text.
+	### A button of the rename line, its label set by rename_text.
 	type gm_rename_button = button {
 		using = default_button_action
 		size = { 114 24 }
@@ -284,151 +283,97 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### A readout's label and its value, shown only while the readouts are on
-	### (gm_name_diag_open), since a failing read logs every frame it is drawn.
-	type gm_diag_label = textbox {
-		visible = "[GetVariableSystem.Exists('gm_name_diag_open')]"
-		size = { 170 18 }
-		align = left|nobaseline
-		using = fontsize_small
-		default_format = "#lore"
-	}
-
-	type gm_diag_value = textbox {
-		visible = "[GetVariableSystem.Exists('gm_name_diag_open')]"
-		size = { 298 18 }
-		align = left|nobaseline
-		using = fontsize_small
-		elide = right
-	}
-
-	### PROTOTYPE (v2 spec §3.4, gui_modding_guide.md § "Typed text into a
-	### saved variable"), test build 3. What launches 1 and 2 (2026-10-05)
-	### showed:
-	###   * Reading the box works: PdxGuiEditboxGetText( <box> ) renders the
-	###     typed text with <box> = PdxGuiWidget.AccessParent.FindChild('x')
-	###     (EU5's form) or that + .AccessSelf. With + .Self it fails.
-	###   * Flag to saved variable to text works: a flag from
-	###     MakeScopeFlag( GetVariableSystem.Get(..) ) reached gm_rename_sgui,
-	###     was stored and printed by GetFlagName.
-	###   * The gap is the type between them. The box returns a CUTF8String;
-	###     MakeScopeFlag( <that> ) binds but yields no scope ("Promote
-	###     'AddScope' returned nullptr"), and every vanilla argument to a
-	###     string function is a CString.
-	###   * A global function can't be chained (MakeScopeFlag(..).GetFlagName:
-	###     "Could not find promote"), so .GetString on the box's text is out.
-	### This build tries each string function that might take the CUTF8String
-	### and hand back a CString. Readouts (toggled) show each; the buttons
-	### rename through three of them. A route whose readout shows the text
-	### finishes the chain, since MakeScopeFlag( <CString> ) is proven.
-	type gm_rename_line = widget {
-		size = { 472 202 }
+	### PROTOTYPE (v2 spec §3.4, test build 4): name a monument through the
+	### base game's company-rename popup (gm_sguis.txt has why). Two modes,
+	### on the state value gm_is_being_named:
+	###   0  Name... starts a naming (gm_name_start_sgui) and tries to open
+	###      the popup in the same click; Clear Name drops a stored name
+	###   1  the name typed so far, read off the carrier company; Rename opens
+	###      the popup; Use This Name passes MakeScopeFlag( <company name> )
+	###      to gm_name_use_sgui; Cancel ends the naming
+	### Every read of Var('gm_name_carrier') sits in mode 1, where
+	### gm_name_start_sgui has set it, so nothing reads a missing variable.
+	type gm_rename_line = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 		parentanchor = hcenter
 
-		### ontextedited: vanilla binds TreatyDraft.OnEditName with no
-		### argument and the engine supplies the text. Whether Set takes the
-		### text the same way as its missing second argument is the test.
-		editbox = {
-			name = "gm_name_edit"
-			position = { 0 0 }
-			size = { 354 26 }
-			maxcharacters = 30
-			margin_left = 8
-			alwaystransparent = no
-			focuspolicy = click
-			focus_on_visible = no
-			align = left|nobaseline
-			using = fontsize_small
-			ontextedited = "[GetVariableSystem.Set('gm_name_typed')]"
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' )]"
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
 
-			background = {
-				using = text_edit_bg
+			### The second onclick only works if the company already exists
+			### when it runs; if not, Rename (mode 1) opens the popup.
+			gm_rename_button = {
+				datacontext = "[GetScriptedGui('gm_name_start_sgui')]"
+				tooltip = "gm_button_name_start_tooltip"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				blockoverride "rename_text" { text = "gm_button_name_start" }
+			}
+
+			gm_rename_button = {
+				datacontext = "[GetScriptedGui('gm_clear_name_sgui')]"
+				tooltip = "gm_button_clear_name_tooltip"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+				blockoverride "rename_text" { text = "gm_button_clear_name" }
 			}
 		}
 
-		gm_rename_button = {
-			position = { 358 0 }
-			tooltip = "gm_diag_toggle_tooltip"
-			onclick = "[GetVariableSystem.Toggle('gm_name_diag_open')]"
-			blockoverride "rename_text" { text = "gm_diag_toggle" }
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' )]"
+			direction = horizontal
+			spacing = 6
+			parentanchor = hcenter
+
+			textbox = {
+				autoresize = yes
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#lore"
+				text = "gm_name_pending_label"
+			}
+			textbox = {
+				autoresize = yes
+				max_width = 340
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				text = "[JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting]"
+			}
 		}
 
-		gm_rename_button = {
-			position = { 0 30 }
-			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
-			tooltip = "gm_button_rename_a_tooltip"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( Concatenate( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' ) ) ).End )]"
-			blockoverride "rename_text" { text = "gm_button_rename_a" }
-		}
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' )]"
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
 
-		gm_rename_button = {
-			position = { 118 30 }
-			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
-			tooltip = "gm_button_rename_b_tooltip"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( AddTextIf( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) ) ) ).End )]"
-			blockoverride "rename_text" { text = "gm_button_rename_b" }
-		}
+			gm_rename_button = {
+				tooltip = "gm_button_name_popup_tooltip"
+				onclick = "[PopupManager.ShowCompanyChangeName( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.Self )]"
+				blockoverride "rename_text" { text = "gm_button_name_popup" }
+			}
 
-		### Clear first, so a Set that fails leaves nothing behind and the
-		### name comes out empty rather than stale.
-		gm_rename_button = {
-			position = { 236 30 }
-			datacontext = "[GetScriptedGui('gm_rename_sgui')]"
-			tooltip = "gm_button_rename_c_tooltip"
-			onclick = "[GetVariableSystem.Clear('gm_name_text')]"
-			onclick = "[GetVariableSystem.Set( 'gm_name_text', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( GetVariableSystem.Get('gm_name_text') ) ).End )]"
-			blockoverride "rename_text" { text = "gm_button_rename_c" }
-		}
+			gm_rename_button = {
+				datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
+				tooltip = "gm_button_name_use_tooltip"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+				blockoverride "rename_text" { text = "gm_button_name_use" }
+			}
 
-		gm_rename_button = {
-			position = { 354 30 }
-			datacontext = "[GetScriptedGui('gm_clear_name_sgui')]"
-			tooltip = "gm_button_clear_name_tooltip"
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
-			blockoverride "rename_text" { text = "gm_button_clear_name" }
-		}
-
-		gm_diag_label = { position = { 0 58 } text = "gm_diag_label_1" }
-		gm_diag_value = {
-			position = { 174 58 }
-			text = "[PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') )]"
-		}
-		gm_diag_label = { position = { 0 76 } text = "gm_diag_label_2" }
-		gm_diag_value = {
-			position = { 174 76 }
-			text = "[Concatenate( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' )]"
-		}
-		gm_diag_label = { position = { 0 94 } text = "gm_diag_label_3" }
-		gm_diag_value = {
-			position = { 174 94 }
-			text = "[AddTextIf( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
-		}
-		gm_diag_label = { position = { 0 112 } text = "gm_diag_label_4" }
-		gm_diag_value = {
-			position = { 174 112 }
-			text = "[ConcatIfNeitherEmpty( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '.' )]"
-		}
-		gm_diag_label = { position = { 0 130 } text = "gm_diag_label_5" }
-		gm_diag_value = {
-			position = { 174 130 }
-			text = "[Select_CString( '(bool)yes', PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ), '' )]"
-		}
-		gm_diag_label = { position = { 0 148 } text = "gm_diag_label_6" }
-		gm_diag_value = {
-			position = { 174 148 }
-			text = "[Localize( PdxGuiEditboxGetText( PdxGuiWidget.AccessParent.FindChild('gm_name_edit') ) )]"
-		}
-		gm_diag_label = { position = { 0 166 } text = "gm_diag_label_7" }
-		gm_diag_value = {
-			position = { 174 166 }
-			text = "[GetVariableSystem.Get('gm_name_text')]"
-		}
-		gm_diag_label = { position = { 0 184 } text = "gm_diag_label_8" }
-		gm_diag_value = {
-			position = { 174 184 }
-			text = "[GetVariableSystem.Get('gm_name_typed')]"
+			gm_rename_button = {
+				datacontext = "[GetScriptedGui('gm_name_cancel_sgui')]"
+				tooltip = "gm_button_name_cancel_tooltip"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				blockoverride "rename_text" { text = "gm_button_name_cancel" }
+			}
 		}
 	}
 

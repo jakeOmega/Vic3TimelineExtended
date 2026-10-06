@@ -115,13 +115,67 @@ gm_hard_times_sgui = {
 	}
 }
 
-# PROTOTYPE (v2 spec §3.4): a typed name for a monument. The row's editbox
-# text arrives as the saved scope gm_name, a flag made by MakeScopeFlag (one
-# route per Rename button, grand_monuments_widget.gui). If no scope arrives,
-# is_valid fails and nothing happens. Launch 1 showed the rest of the chain
-# works: a flag from GetVariableSystem.Get was stored and the row's title
-# printed it (gm_row_title_named, Var('gm_name').GetFlagName).
-gm_rename_sgui = {
+# PROTOTYPE (v2 spec §3.4, test build 4): name a monument through the base
+# game's company-rename popup. Three launches showed a mod editbox's text
+# can't reach script (gui_modding_guide.md § "Typed text can't reach script"),
+# but a company's name can: the popup stores the typed text on the company,
+# and Company.GetNameNoFormatting returns it as a CString. So:
+#   gm_name_start_sgui  adds company_gm_name_carrier (and a company slot for
+#                       it) and marks the state; the row opens the popup
+#   gm_name_use_sgui    gets the company's name as the saved scope gm_name
+#                       (MakeScopeFlag in the .gui), stores it as the state's
+#                       gm_name, and removes the company
+#   gm_name_cancel_sgui removes the company without storing anything
+# One naming at a time: the carrier is one company type.
+gm_name_start_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+		}
+		custom_tooltip = {
+			text = gm_name_one_at_a_time_tt
+			NOT = { has_company = company_type:company_gm_name_carrier }
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			set_variable = gm_being_named
+		}
+		# Before add_company: the company type's potential reads it.
+		set_variable = gm_naming_active
+		add_modifier = {
+			name = gm_name_carrier_slot
+		}
+		add_company = company_type:company_gm_name_carrier
+		capital = {
+			state_region = {
+				save_scope_as = gm_name_carrier_hq
+			}
+		}
+		company:company_gm_name_carrier = {
+			set_company_state_region = scope:gm_name_carrier_hq
+		}
+		set_variable = {
+			name = gm_name_carrier
+			value = company:company_gm_name_carrier
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_name_use_sgui = {
 	scope = country
 	saved_scopes = { gm_state gm_name }
 
@@ -134,6 +188,7 @@ gm_rename_sgui = {
 		exists = scope:gm_name
 		scope:gm_state = {
 			owner = root
+			has_variable = gm_being_named
 		}
 	}
 
@@ -144,6 +199,27 @@ gm_rename_sgui = {
 				value = scope:gm_name
 			}
 		}
+		gm_name_carrier_close = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_name_cancel_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		has_variable = gm_naming_active
+	}
+
+	effect = {
+		gm_name_carrier_close = yes
 	}
 
 	ai_is_valid = {
