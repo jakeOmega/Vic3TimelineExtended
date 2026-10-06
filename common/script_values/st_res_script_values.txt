@@ -1148,7 +1148,8 @@ st_res_fertilizer_last_net = {
 # The hub is staffed (1) or not (0): the overview's hub icon and its word.
 # The same test as the journal entry's "deactivated" status line and every
 # flow gate: st_res_hub_workforce_cached above 0.99. With no hub the cache
-# reads 1 (st_res_refresh_hub_cache_effect), so the hub itself is tested too.
+# reads 0, but only from its next refresh (st_res_refresh_hub_cache_effect,
+# weekly or on a click), so the hub itself is tested too.
 st_res_disp_hub_staffed = {
 	value = 0
 	if = {

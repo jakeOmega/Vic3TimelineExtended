@@ -111,8 +111,11 @@ st_res_reserve_filling_up = {
 # instead of razing it; if the secession wins, the new country keeps it. A
 # hub kept outside its new owner's capital moves there at the owner's next
 # weekly pulse (st_res_relocate_hub_to_capital_effect), and so does the
-# captured one when the owner already has its own.
-# No stamp (a hub finished less than a week ago) counts as a capture.
+# captured one when the owner already has its own. The rebels of a revolution
+# have no reserve and no pulse, so their kept hub stays put and idle until the
+# war ends (st_res_idle_hub_flow_modifiers_effect).
+# No stamp (a hub finished less than a week ago) counts as a capture; the
+# decision Establish a Strategic Reserve writes one at once.
 st_res_hub_stays_within_nation = {
 	exists = scope:st_res_capture_holder
 	exists = scope:st_res_capture_new_owner

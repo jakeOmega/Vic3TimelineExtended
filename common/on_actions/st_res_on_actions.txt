@@ -13,8 +13,11 @@
 #
 # A hand-over between the two sides of a civil war keeps the hub, and the
 # stock: st_res_hub_stays_within_nation (st_res_triggers.txt) says why and
-# how. A kept hub outside its new owner's capital moves there at the next
-# weekly pulse (st_res_relocate_hub_to_capital_effect, st_res_effects.txt).
+# how. A kept hub outside its new owner's capital moves there at the owner's
+# next weekly pulse (st_res_relocate_hub_to_capital_effect, st_res_effects.txt).
+# The rebels of a revolution have no reserve and so no pulse
+# (je_strategic_reserve's is_shown_when_inactive): their hub stays where it
+# is, trading nothing, until the war ends.
 # ============================================================================
 
 on_state_owner_change = {
@@ -46,9 +49,13 @@ st_res_on_state_owner_change = {
 			# one it still holds elsewhere (a hub that has not finished moving
 			# to the capital) keeps the reserve. A hub with no stamp, less
 			# than a week old, has no known holder and costs nothing.
+			# Only a holder with a running entry: after an outbreak the stamp
+			# names the rebels, who keep no reserve, and a reset would seed
+			# them a zero stock that beats the loser's if they win (audit F11).
 			scope:st_res_capture_holder ?= {
 				if = {
 					limit = {
+						has_journal_entry = je_strategic_reserve
 						NOT = {
 							any_scope_building = { is_building_type = building_strategic_reserve_hub }
 						}
@@ -63,6 +70,20 @@ st_res_on_state_owner_change = {
 			# the new holder's weekly pulse.
 			set_variable = { name = st_res_hub_holder value = scope:st_res_capture_new_owner }
 			debug_log = "TE_ST_RES: a Strategic Reserve Hub changed hands within one nation and was kept"
+			# A new owner with no running entry (the rebels of a revolution)
+			# has no pulse to rebuild the hub's flow: stop it here. An owner
+			# with one rebuilds it at its next weekly pulse.
+			if = {
+				limit = {
+					scope:st_res_capture_new_owner = {
+						NOT = { has_journal_entry = je_strategic_reserve }
+					}
+				}
+				every_scope_building = {
+					limit = { is_building_type = building_strategic_reserve_hub }
+					st_res_idle_hub_flow_modifiers_effect = yes
+				}
+			}
 		}
 	}
 }

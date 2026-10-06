@@ -51,6 +51,8 @@ def _has_block(text, name):
 JE = _block(_read("common", "journal_entries", "je_strategic_reserve.txt"), "je_strategic_reserve")
 EFFECTS = _read("common", "scripted_effects", "st_res_effects.txt")
 ON_ACTIONS = _read("common", "on_actions", "st_res_on_actions.txt")
+SGUIS = _read("common", "scripted_guis", "st_res_scripted_gui.txt")
+HISTORY = _read("common", "scripted_effects", "te_history_strategic_reserve_effects.txt")
 
 
 class EntryLifecycleTests(unittest.TestCase):
@@ -93,6 +95,35 @@ class StockKeptWithoutHubTests(unittest.TestCase):
         self.assertNotIn("st_res_je_invalid_effect", EFFECTS)
 
 
+class NothingTradesWithoutHubTests(unittest.TestCase):
+    """Every flow gate tests the staffing cache, so with no hub it must read 0."""
+
+    def test_cache_reads_no_staff_without_a_hub(self):
+        cache = _block(EFFECTS, "st_res_refresh_hub_cache_effect")
+        head = cache[:cache.index("if = {")]
+        self.assertRegex(head, r"name\s*=\s*st_res_hub_workforce_cached\s+value\s*=\s*0\b")
+        for name in ("st_res_init_effect", "st_res_reset_vars_effect"):
+            with self.subTest(effect=name):
+                self.assertNotRegex(_block(EFFECTS, name),
+                                    r"name\s*=\s*st_res_hub_workforce_cached\s+value\s*=\s*1\b")
+
+    def test_no_hub_week_clears_the_sales_income(self):
+        weekly = _block(EFFECTS, "st_res_weekly_update_effect")
+        self.assertIn("st_res_apply_sell_profit_effect = yes", _block(weekly, "else", top_level=False))
+
+    def test_every_control_greys_without_a_hub(self):
+        names = re.findall(r"(?m)^(st_res_\w+_sgui)\s*=\s*\{", SGUIS)
+        self.assertEqual(len(names), 18)
+        for name in names:
+            with self.subTest(sgui=name):
+                valid = _block(_block(SGUIS, name), "is_valid", top_level=False)
+                self.assertRegex(valid, r"text\s*=\s*\"st_res_hub_built_possible\"\s*" + HUB)
+
+    def test_history_records_only_with_a_hub(self):
+        body = _block(HISTORY, "te_history_record_strategic_reserve_samples")
+        self.assertRegex(_block(body, "limit", top_level=False), HUB)
+
+
 class CaptureTests(unittest.TestCase):
     def test_capture_resets_the_holder_without_another_hub(self):
         effect = _block(_block(ON_ACTIONS, "st_res_on_state_owner_change"), "effect", top_level=False)
@@ -102,11 +133,20 @@ class CaptureTests(unittest.TestCase):
         self.assertIsNotNone(m, "the capture branch must reach the hub's holder")
         holder = capture[m.end():_close(capture, m.end() - 1)]
         self.assertRegex(holder, r"NOT\s*=\s*\{\s*" + HUB)
+        self.assertRegex(holder, r"has_journal_entry\s*=\s*je_strategic_reserve")
         self.assertIn("st_res_reset_vars_effect = yes", holder)
 
     def test_hand_over_within_the_nation_keeps_the_stock(self):
         effect = _block(_block(ON_ACTIONS, "st_res_on_state_owner_change"), "effect", top_level=False)
         self.assertNotIn("st_res_reset_vars_effect", _block(effect, "else", top_level=False))
+
+    def test_a_kept_hub_with_no_running_entry_stops_trading(self):
+        effect = _block(_block(ON_ACTIONS, "st_res_on_state_owner_change"), "effect", top_level=False)
+        kept = _block(effect, "else", top_level=False)
+        self.assertRegex(kept, r"NOT\s*=\s*\{\s*has_journal_entry\s*=\s*je_strategic_reserve\s*\}")
+        self.assertIn("st_res_idle_hub_flow_modifiers_effect = yes", kept)
+        idle = _block(EFFECTS, "st_res_idle_good_flow_modifiers_effect")
+        self.assertEqual(len(re.findall(r"multiplier\s*=\s*-1\b", idle)), 2)
 
 
 if __name__ == "__main__":

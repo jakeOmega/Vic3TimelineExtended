@@ -560,9 +560,9 @@ reserve means keeping your capital state.
 
 Losing the hub never closes the journal entry. Until you have a hub again the
 reserve waits: it buys, sells and loses nothing to decay, every good reads
-Blocked, and the entry offers a new hub. Build one in your capital, or take the
-decision Establish a Strategic Reserve to place it at once. After a capture the
-new hub starts empty.
+Blocked, its controls are grayed, and the entry offers a new hub. Build one in
+your capital, or take the decision Establish a Strategic Reserve to place it at
+once. After a capture the new hub starts empty.
 
 A revolution or secession that takes the hub's state does not cost you the
 stock. The rebels hold the building while the war lasts, and your stock waits
@@ -570,7 +570,9 @@ for a hub. If you win, the old hub comes back to you, and if you placed a new
 one in the meantime, the next weekly update removes the spare. If a revolution
 wins, its new government continues the nation and keeps the reserve. If a
 secession wins, the new country keeps the building, and you keep your stock for
-a new hub in your capital.
+a new hub in your capital. Silos in states you lose go with them: when a hub
+stands again, the reserve keeps only what the hub and your remaining silos can
+hold.
 
 ### Pledging grain to the World Food Reserve
 
