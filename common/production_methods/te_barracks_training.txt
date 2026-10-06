@@ -1,8 +1,9 @@
 ﻿# Barracks-only alternatives in vanilla's mutually exclusive pmg_training.
-# Keep unit modifiers unscaled: a larger barracks must not multiply troop quality.
+# Use training, staffing, goods and local qualifications; barracks-to-unit modifier
+# propagation is unverified in 1.14.5. Do not add unit_ effects without a test.
 # Goods scale with staffing; profession_ratio divides the unit-defined manpower
 # between soldiers and officers rather than adding a fixed employment budget.
-# Unit propagation and AI selection require the playtest in
+# Staffing, supply costs and AI selection require the playtest in
 # docs/design/barracks_training_methods.md before merging this proposal.
 
 pm_te_cadre_training = {
@@ -11,21 +12,26 @@ pm_te_cadre_training = {
 		soldiers = 70
 		officers = 30
 	}
-	unlocking_technologies = { nco_training }
+	unlocking_technologies = { combined_arms }
 	disallowing_laws = { law_warrior_caste }
 	ai_weight = 0.5
+	# Universities use this state hook at 0.1 per staffed level. The small
+	# military spillover is 1/100 of that and helps all professions, not only officers.
+	state_modifiers = {
+		workforce_scaled = {
+			state_pop_qualifications_mult = 0.001
+		}
+	}
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			unit_army_experience_gain_mult = 0.35
-			unit_morale_loss_mult = -0.10
 		}
 		level_scaled = {
-			building_training_rate_add = 20
+			building_training_rate_add = 30
 		}
 		workforce_scaled = {
 			goods_input_paper_add = 1
-			goods_input_ammunition_add = 0.25
+			goods_input_radios_add = 0.25
 		}
 	}
 }
@@ -33,24 +39,24 @@ pm_te_cadre_training = {
 pm_te_accelerated_replacement_training = {
 	texture = "gfx/interface/icons/production_method_icons/skirmish_infantry.dds"
 	profession_ratio = {
-		soldiers = 90
-		officers = 10
+		soldiers = 65
+		officers = 35
 	}
-	unlocking_technologies = { wargaming }
+	unlocking_technologies = { modern_management_techniques }
 	disallowing_laws = { law_warrior_caste }
-	# Emergency tradeoff for the player; do not reward speed alone in AI scoring.
+	# Instructor-intensive surge option; keep AI adoption conservative.
 	ai_weight = 0
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			unit_army_experience_gain_mult = -0.25
-			unit_morale_loss_mult = 0.15
 		}
 		level_scaled = {
 			building_training_rate_add = 36
 		}
 		workforce_scaled = {
-			goods_input_paper_add = 0.5
+			goods_input_paper_add = 2
+			goods_input_ammunition_add = 1
+			goods_input_radios_add = 0.5
 		}
 	}
 }
@@ -66,7 +72,6 @@ pm_te_combined_arms_instruction = {
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			unit_morale_recovery_mult = 0.05
 		}
 		level_scaled = {
 			building_training_rate_add = 28
@@ -90,8 +95,6 @@ pm_te_networked_wargaming = {
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			unit_army_experience_gain_mult = 0.10
-			unit_morale_recovery_mult = 0.10
 		}
 		level_scaled = {
 			building_training_rate_add = 34
@@ -115,8 +118,6 @@ pm_te_immersive_simulation = {
 	building_modifiers = {
 		unscaled = {
 			building_training_rate_add = 50
-			unit_army_experience_gain_mult = 0.20
-			unit_morale_recovery_mult = 0.15
 		}
 		level_scaled = {
 			building_training_rate_add = 40

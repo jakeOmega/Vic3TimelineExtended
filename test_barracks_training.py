@@ -56,36 +56,55 @@ class BarracksTrainingTest(unittest.TestCase):
         for key, (_, method) in self.methods.items():
             with self.subTest(method=key):
                 for tech in method["unlocking_technologies"][1]:
-                    self.assertIn(tech, self.state.get_data("Technologies"))
+                    technology = self.state.get_data("Technologies")[tech][1]
+                    era = int(technology["era"][1].removeprefix("era_"))
+                    self.assertGreaterEqual(era, 6, "new training belongs in mod eras")
                 for law in method["disallowing_laws"][1]:
                     self.assertIn(law, self.state.get_data("Laws"))
                 self.assertIn("law_warrior_caste", method["disallowing_laws"][1])
                 ratios = method["profession_ratio"][1]
                 self.assertEqual(set(ratios), {"soldiers", "officers"})
                 self.assertEqual(sum(float(v[1]) for v in ratios.values()), 100)
-                for _, block in method["building_modifiers"][1].values():
-                    for modifier in block:
-                        self.assertFalse(modifier.startswith("building_employment_"))
-                        if modifier.startswith("goods_input_"):
-                            self.assertIn(modifier[len("goods_input_"):-len("_add")], goods)
-                        else:
-                            self.assertIn(modifier, types)
+                for target in ("building_modifiers", "state_modifiers"):
+                    for _, block in method.get(target, ["=", {}])[1].values():
+                        for modifier in block:
+                            self.assertFalse(modifier.startswith("building_employment_"))
+                            if modifier.startswith("goods_input_"):
+                                self.assertIn(modifier[len("goods_input_"):-len("_add")], goods)
+                            else:
+                                self.assertIn(modifier, types)
                 self.assertIn(method["texture"][1], self.known_textures)
 
-    def test_quality_stays_local_and_does_not_scale_with_levels(self):
+    def test_no_unverified_unit_effects_or_countrywide_spillover(self):
         for key, (_, method) in self.methods.items():
             with self.subTest(method=key):
                 self.assertNotIn("country_modifiers", method)
-                self.assertNotIn("state_modifiers", method)
-                blocks = method["building_modifiers"][1]
-                self.assertTrue(any(m.startswith("unit_")
-                                    for m in blocks["unscaled"][1]))
-                for scaling, (_, modifiers) in blocks.items():
-                    for modifier in modifiers:
-                        if modifier.startswith("unit_"):
-                            self.assertEqual(scaling, "unscaled")
-                        if modifier.startswith("goods_input_"):
-                            self.assertEqual(scaling, "workforce_scaled")
+                for target in ("building_modifiers", "state_modifiers"):
+                    for scaling, (_, modifiers) in method.get(target, ["=", {}])[1].items():
+                        for modifier in modifiers:
+                            self.assertFalse(modifier.startswith("unit_"),
+                                             "unit propagation from barracks is unverified")
+                            if modifier.startswith("goods_input_"):
+                                self.assertEqual(target, "building_modifiers")
+                                self.assertEqual(scaling, "workforce_scaled")
+
+    def test_state_spillover_scales_with_staffing_and_stays_small(self):
+        sources = []
+        for key, (_, method) in self.methods.items():
+            state = method.get("state_modifiers", ["=", {}])[1]
+            if not state:
+                continue
+            sources.append(key)
+            self.assertEqual(set(state), {"workforce_scaled"})
+            modifiers = state["workforce_scaled"][1]
+            self.assertEqual(set(modifiers), {"state_pop_qualifications_mult"})
+            value = float(modifiers["state_pop_qualifications_mult"][1])
+            self.assertGreater(value, 0)
+            # At 100 staffed barracks levels, at most one scholastic university's boost.
+            university = self.vanilla["PMs"]["pm_scholastic_education"][1]
+            baseline = university["state_modifiers"][1]["workforce_scaled"][1]
+            self.assertLessEqual(value * 100, float(baseline["state_pop_qualifications_mult"][1]))
+        self.assertEqual(sources, ["pm_te_cadre_training"])
 
 
 if __name__ == "__main__":

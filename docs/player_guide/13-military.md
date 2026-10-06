@@ -39,18 +39,20 @@ large it is, and a formation without a general earns nothing at all.
 
 ![A general's traits with all six Combined Arms traits. The formation fields all five groups, so the general has Full Spectrum Dominance as well as one trait for each group.](images/combined_arms_full_spectrum.png)
 
-Barracks also gain five choices in Training Methods. Combined Arms Instruction
-(Combined Arms, era 6), Networked Wargaming (Network Centric Warfare, era 9) and
-Immersive Simulation (Augmented Reality Warfare, era 11) train replacements
-faster and improve morale recovery, at increasing supply costs. The latter two
-also improve experience gain. Cadre Training (NCO Training) uses more officers
-and trains replacements slowly, but gives the strongest experience bonus and
-reduces morale loss. Accelerated Replacement Training (Wargaming) uses fewer
-officers and fills ranks quickly, at the cost of slower experience gain and
-higher morale loss. These choices apply to standing troops; conscription keeps
-its own training methods. Read the tooltip for upkeep and exact bonuses. The AI
-uses the training group's normal selection, with a lower weight for Cadre
-Training and zero weight for Accelerated Replacement Training.
+Barracks gain five choices in Training Methods, all unlocked in the new eras.
+Combined Arms Instruction (Combined Arms, era 6), Networked Wargaming (Network
+Centric Warfare, era 9) and Immersive Simulation (Augmented Reality Warfare,
+era 11) train replacements faster with fewer officers, at increasing supply
+costs. Cadre Training (Combined Arms, era 6) uses a larger officer cadre to
+train replacements with less equipment, and its instructor schools improve
+qualifications for all professions in the state. The benefit scales with
+staffed barracks levels: 100 levels add 10% to qualification gain. Accelerated
+Replacement Training (Modern Management Techniques, era 6) runs intensive courses, using many more
+officers and exercise supplies for faster replacements. These choices apply
+to standing troops; conscription keeps its own training methods. They change
+manpower training, staffing, upkeep and Cadre's local qualifications. Read the
+tooltip for exact figures. The AI uses the training group's normal selection, with a lower weight for
+Cadre Training and zero weight for Accelerated Replacement Training.
 
 ## New combat units
 
