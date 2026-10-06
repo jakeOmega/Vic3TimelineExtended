@@ -114,6 +114,15 @@ nd_doctrine_bound_by_law = {
 	color = neutral
 }
 
+# A refused nuclear stand-down asked for a war that had not begun 14 days
+# later; the exchange closed without it (nd_exchange_weekly_update).
+nd_exchange_war_failed = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # Homelands
 homeland_created = {
 	type = state

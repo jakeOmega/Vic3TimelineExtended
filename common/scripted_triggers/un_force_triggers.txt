@@ -173,11 +173,12 @@ un_force_play_opens_with_annexation = {
 	}
 }
 
-# The play opened with humiliation: vanilla's play types whose war_goal it is.
+# The play opened with humiliation: vanilla and mod play types with that war goal.
 # Scope: diplomatic play
 un_force_play_opens_with_humiliation = {
 	OR = {
 		is_diplomatic_play_type = dp_humiliation
+		is_diplomatic_play_type = dp_nuclear_exchange
 		is_diplomatic_play_type = dp_balkan_war
 		is_diplomatic_play_type = dp_enforce_trialist_manifesto
 	}

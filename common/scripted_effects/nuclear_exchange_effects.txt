@@ -1,0 +1,288 @@
+﻿# An accidental launch starts a nuclear exchange while the pair remains at
+# peace. Damage and nuclear responses use the established strike effects.
+# Once launches have stopped for seven days both governments choose whether
+# to stand down. Only a refusal causes conventional war. A mutual stand-down
+# ends in a five-year truce.
+#
+# Per-country records, both sides: nd_exchange_id, _opponent, _role (1 the
+# launcher, 2 the victim), _revision (both sides equal), _last_launch (date),
+# _answer (0 none, 1 stand down, 2 refuse), _salvos (salvos this side
+# launched), _offer_sent (role 1 only). A refused stand-down whose war has not
+# yet begun adds _war_pending (1 the side that refused and starts the war, 2
+# the other) and _war_requested_on (date): the record, and with it the right
+# to answer the strike, lasts until the war is under way.
+nd_exchange_open = {
+	if = {
+		limit = { NOT = { has_variable = nd_exchange_id } }
+		save_scope_as = nd_exchange_initiator
+		$ENEMY$ = { save_scope_as = nd_exchange_other }
+		if = {
+			limit = { NOT = { has_global_variable = nd_exchange_counter } }
+			set_global_variable = { name = nd_exchange_counter value = 0 }
+		}
+		change_global_variable = { name = nd_exchange_counter add = 1 }
+		set_variable = { name = nd_exchange_id value = global_var:nd_exchange_counter }
+		set_variable = { name = nd_exchange_opponent value = scope:nd_exchange_other }
+		set_variable = { name = nd_exchange_role value = 1 }
+		set_variable = { name = nd_exchange_revision value = 0 }
+		set_variable = { name = nd_exchange_last_launch value = game_date }
+		set_variable = { name = nd_exchange_answer value = 0 }
+		set_variable = { name = nd_exchange_salvos value = 0 }
+		scope:nd_exchange_other = {
+			set_variable = { name = nd_exchange_id value = global_var:nd_exchange_counter }
+			set_variable = { name = nd_exchange_opponent value = scope:nd_exchange_initiator }
+			set_variable = { name = nd_exchange_role value = 2 }
+			set_variable = { name = nd_exchange_revision value = 0 }
+			set_variable = { name = nd_exchange_last_launch value = game_date }
+			set_variable = { name = nd_exchange_answer value = 0 }
+			set_variable = { name = nd_exchange_salvos value = 0 }
+		}
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=exchange_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	}
+}
+
+# Every dispatched launch, including a response salvo, restarts the quiet
+# clock and invalidates BOTH earlier decisions. It is called once per salvo
+# by nd_record_nuclear_use, not once per warhead. A war already requested
+# stays requested.
+nd_exchange_note_launch = {
+	if = {
+		limit = { nd_in_peacetime_exchange_with = { ENEMY = $ENEMY$ } }
+		change_variable = { name = nd_exchange_revision add = 1 }
+		change_variable = { name = nd_exchange_salvos add = 1 }
+		set_variable = { name = nd_exchange_last_launch value = game_date }
+		set_variable = { name = nd_exchange_answer value = 0 }
+		if = { limit = { has_variable = nd_exchange_offer_sent } remove_variable = nd_exchange_offer_sent }
+		save_scope_as = nd_exchange_launching
+		$ENEMY$ = {
+			set_variable = { name = nd_exchange_revision value = scope:nd_exchange_launching.var:nd_exchange_revision }
+			set_variable = { name = nd_exchange_last_launch value = game_date }
+			set_variable = { name = nd_exchange_answer value = 0 }
+			if = { limit = { has_variable = nd_exchange_offer_sent } remove_variable = nd_exchange_offer_sent }
+		}
+	}
+}
+
+# Only the initial launcher's weekly pulse sends the two offers. It does not
+# depend on an arsenal remaining: the last warhead can start an exchange.
+# While a requested war has not begun, the side that refused asks for it
+# again each week; after 14 days the exchange closes and both governments
+# are told why (nd_exchange_war_failed).
+nd_exchange_weekly_update = {
+	if = {
+		limit = { has_variable = nd_exchange_id }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_game_rule = nuclear_weapons_enabled }
+					NOT = { exists = var:nd_exchange_opponent }
+					NOT = { nd_exchange_pair_intact = yes }
+				}
+			}
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=exchange_orphaned; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			nd_exchange_clear_own_record = yes
+		}
+		else = {
+			var:nd_exchange_opponent = { save_scope_as = nd_exchange_enemy }
+			if = {
+				limit = { has_war_with = scope:nd_exchange_enemy }
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=exchange_end_existing_war; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				nd_exchange_close = yes
+			}
+			else_if = {
+				limit = {
+					has_variable = nd_exchange_war_pending
+					var:nd_exchange_war_pending = 1
+				}
+				if = {
+					limit = { nd_exchange_war_pending_days >= 14 }
+					nd_log_context = yes
+					debug_log = "TE_NUCLEAR: type=action; action=exchange_end_war_failed; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					post_notification = nd_exchange_war_failed
+					scope:nd_exchange_enemy = { post_notification = nd_exchange_war_failed }
+					nd_exchange_close = yes
+				}
+				else = {
+					nd_exchange_start_war = yes
+					if = {
+						limit = { has_war_with = scope:nd_exchange_enemy }
+						nd_log_context = yes
+						debug_log = "TE_NUCLEAR: type=action; action=exchange_end_war_started; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+						nd_exchange_close = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					var:nd_exchange_role = 1
+					NOT = { has_variable = nd_exchange_war_pending }
+					nd_exchange_quiet_days >= 7
+					NOT = { has_variable = nd_exchange_offer_sent }
+				}
+				set_variable = { name = nd_exchange_offer_sent value = 1 }
+				save_scope_value_as = { name = nd_exchange_offer_id value = var:nd_exchange_id }
+				save_scope_value_as = { name = nd_exchange_offer_revision value = var:nd_exchange_revision }
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=exchange_standdown_offered; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				trigger_event = { id = nuclear_incident.70 popup = yes }
+				scope:nd_exchange_enemy = { trigger_event = { id = nuclear_incident.70 popup = yes } }
+			}
+		}
+	}
+}
+
+# ANSWER: 1 accept, 2 refuse. Stale popups cannot decide a later exchange or
+# a new revision after another launch. Wait for both governments to answer.
+nd_exchange_choose = {
+	if = {
+		limit = { nd_exchange_offer_valid = yes }
+		set_variable = { name = nd_exchange_answer value = $ANSWER$ }
+		nd_log_exchange_answer = yes
+		var:nd_exchange_opponent = { save_scope_as = nd_exchange_enemy }
+		if = {
+			limit = { scope:nd_exchange_enemy = { var:nd_exchange_answer > 0 } }
+			if = {
+				limit = { var:nd_exchange_answer = 1 scope:nd_exchange_enemy = { var:nd_exchange_answer = 1 } }
+				create_bidirectional_truce = { country = scope:nd_exchange_enemy months = 60 }
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=exchange_end_mutual_standdown; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				nd_exchange_close = yes
+			}
+			else = {
+				if = { limit = { var:nd_exchange_answer = 2 } nd_exchange_request_war = yes }
+				else = {
+					save_scope_as = nd_exchange_accepting
+					scope:nd_exchange_enemy = {
+						save_scope_as = nd_exchange_refusing
+						scope:nd_exchange_accepting = { save_scope_as = nd_exchange_enemy }
+						nd_exchange_request_war = yes
+					}
+					scope:nd_exchange_refusing = { save_scope_as = nd_exchange_enemy }
+				}
+			}
+		}
+	}
+	else = { custom_tooltip = nd_tt_exchange_stale }
+}
+
+# The refusing side's scope, scope:nd_exchange_enemy the other. Asks for the
+# war; closes the exchange once the war is under way, or keeps it open as
+# war-pending (nd_exchange_weekly_update asks again, then gives up).
+nd_exchange_request_war = {
+	nd_exchange_start_war = yes
+	if = {
+		limit = { has_war_with = scope:nd_exchange_enemy }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=exchange_end_war_started; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_exchange_close = yes
+	}
+	else = {
+		set_variable = { name = nd_exchange_war_pending value = 1 }
+		set_variable = { name = nd_exchange_war_requested_on value = game_date }
+		scope:nd_exchange_enemy = {
+			set_variable = { name = nd_exchange_war_pending value = 2 }
+			set_variable = { name = nd_exchange_war_requested_on value = game_date }
+		}
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=exchange_war_pending; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+	}
+}
+
+# Native engine docs: create_diplomatic_play supports war=yes and initiator;
+# target is the current country. Reuse a bilateral play when one exists.
+# Actual engine timing still needs a play-test; report failure honestly.
+nd_exchange_start_war = {
+	if = {
+		limit = { NOT = { has_war_with = scope:nd_exchange_enemy } }
+		save_scope_as = nd_exchange_war_actor
+		if = {
+			limit = {
+				any_diplomatic_play = {
+					OR = {
+						AND = { initiator = scope:nd_exchange_war_actor target = scope:nd_exchange_enemy }
+						AND = { initiator = scope:nd_exchange_enemy target = scope:nd_exchange_war_actor }
+					}
+				}
+			}
+			random_diplomatic_play = {
+				limit = {
+					OR = {
+						AND = { initiator = scope:nd_exchange_war_actor target = scope:nd_exchange_enemy }
+						AND = { initiator = scope:nd_exchange_enemy target = scope:nd_exchange_war_actor }
+					}
+				}
+				set_war = yes
+			}
+		}
+		else = {
+			scope:nd_exchange_enemy = {
+				create_diplomatic_play = {
+					name = nd_nuclear_exchange_war
+					type = dp_nuclear_exchange
+					initiator = scope:nd_exchange_war_actor
+					war = yes # REVIEWED 2026-10-05: create_diplomatic_play parameter, effects.log 1.14.5 section create_diplomatic_play
+					escalation = 100
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = scope:nd_exchange_enemy }
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=exchange_war_started; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		}
+		else = {
+			nd_log_context = yes
+			debug_log = "TE_NUCLEAR: type=action; action=exchange_war_unconfirmed; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		}
+	}
+}
+
+# Closes both sides' records. The caller logs which ending it was.
+nd_exchange_close = {
+	save_scope_as = nd_exchange_closing
+	var:nd_exchange_opponent ?= {
+		if = {
+			limit = {
+				var:nd_exchange_opponent ?= scope:nd_exchange_closing
+				var:nd_exchange_id = scope:nd_exchange_closing.var:nd_exchange_id
+			}
+			nd_exchange_clear_own_record = yes
+		}
+	}
+	nd_exchange_clear_own_record = yes
+}
+
+nd_exchange_clear_own_record = {
+	# Do not carry a peacetime response licence into another exchange. A war
+	# that really started keeps its normal wartime response licence.
+	var:nd_exchange_opponent ?= { save_scope_as = nd_exchange_cleared_enemy }
+	if = {
+		limit = {
+			exists = scope:nd_exchange_cleared_enemy
+			NOT = { has_war_with = scope:nd_exchange_cleared_enemy }
+			var:nuked_by_country ?= scope:nd_exchange_cleared_enemy
+		}
+		remove_variable = nuked_by_country
+	}
+	if = {
+		limit = {
+			exists = scope:nd_exchange_cleared_enemy
+			NOT = { has_war_with = scope:nd_exchange_cleared_enemy }
+			var:nd_pending_retaliation ?= scope:nd_exchange_cleared_enemy
+		}
+		remove_variable = nd_pending_retaliation
+	}
+	remove_variable = nd_exchange_id
+	remove_variable = nd_exchange_opponent
+	remove_variable = nd_exchange_role
+	remove_variable = nd_exchange_revision
+	remove_variable = nd_exchange_last_launch
+	remove_variable = nd_exchange_answer
+	if = { limit = { has_variable = nd_exchange_salvos } remove_variable = nd_exchange_salvos }
+	if = { limit = { has_variable = nd_exchange_offer_sent } remove_variable = nd_exchange_offer_sent }
+	if = { limit = { has_variable = nd_exchange_war_pending } remove_variable = nd_exchange_war_pending }
+	if = { limit = { has_variable = nd_exchange_war_requested_on } remove_variable = nd_exchange_war_requested_on }
+}

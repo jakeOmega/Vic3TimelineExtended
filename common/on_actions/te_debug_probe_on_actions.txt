@@ -24,6 +24,12 @@
 # printed -1 through SCOPE.ScriptValue from a state under a country ROOT and
 # were moved to THIS.ScriptValue on the strength of it; line 9 printing 9 and
 # line 10 printing 7 confirms that move.
+#
+# Re-armed 2026-10-06 (marker _v3) with line 11: does a ScriptValue read in
+# debug_log see a saved scope? The TE_NUCLEAR observer records' crisis= and
+# exchange= IDs read the saved nd_observer_country that way. The capital is
+# saved and holds 9; the country (ROOT) holds 7. 9 means yes; -1 means the
+# saved scope was invisible.
 # ============================================================================
 
 on_monthly_pulse_country = {
@@ -37,9 +43,9 @@ te_debug_probe_loc_accessors = {
 		if = {
 			limit = {
 				is_ai = no
-				NOT = { has_global_variable = te_probe_loc_accessors_v2_done }
+				NOT = { has_global_variable = te_probe_loc_accessors_v3_done }
 			}
-			set_global_variable = { name = te_probe_loc_accessors_v2_done value = 1 }
+			set_global_variable = { name = te_probe_loc_accessors_v3_done value = 1 }
 			set_variable = { name = te_probe_loc_value value = 7 }
 			save_scope_as = te_probe_country
 			debug_log = "TE_PROBE_LOC 0 control: lines 1-8 should end in 7"
@@ -53,9 +59,11 @@ te_debug_probe_loc_accessors = {
 			debug_log = "TE_PROBE_LOC 8 SCOPE.sCountry().MakeScope.ScriptValue wrapper (for a saved country): [SCOPE.sCountry('te_probe_country').MakeScope.ScriptValue('te_probe_loc_value_sv')|0]"
 			capital = {
 				set_variable = { name = te_probe_loc_value value = 9 }
+				save_scope_as = te_probe_capital
 				debug_log = "TE_PROBE_LOC 9 THIS.ScriptValue from the capital (9 = the current scope, 7 = ROOT): [THIS.ScriptValue('te_probe_loc_value_sv')|0]"
 				debug_log = "TE_PROBE_LOC 10 SCOPE.ScriptValue from the capital (9 = the current scope, 7 = ROOT): [SCOPE.ScriptValue('te_probe_loc_value_sv')|0]"
 			}
+			debug_log = "TE_PROBE_LOC 11 SCOPE.ScriptValue wrapper reading a saved scope (9 = the saved capital was read, -1 = saved scopes are invisible to it): [SCOPE.ScriptValue('te_probe_loc_saved_scope_sv')|0]"
 		}
 	}
 }

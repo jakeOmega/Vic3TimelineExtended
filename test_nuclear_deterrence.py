@@ -71,7 +71,10 @@ SCRIPT_FILES = (EFFECTS, CRISIS_EFFECTS, TRIGGERS, ACTIONS, ARTICLE, JE, SGUIS,
                 CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE,
                 CUSTODY_EFFECTS, CUSTODY_TRIGGERS, CUSTODY_ON_ACTIONS, CUSTODY_EVENTS,
                 CIVIL_WAR_EFFECTS, CIVIL_WAR_ON_ACTIONS,
-                LOOSE_EFFECTS, LOOSE_TRIGGERS, LOOSE_EVENTS, SOCIAL_TENSIONS_ON_ACTIONS)
+                LOOSE_EFFECTS, LOOSE_TRIGGERS, LOOSE_EVENTS, SOCIAL_TENSIONS_ON_ACTIONS,
+                ROOT / "common/scripted_effects/nuclear_exchange_effects.txt",
+                ROOT / "common/scripted_triggers/nuclear_exchange_triggers.txt",
+                ROOT / "common/scripted_effects/nuclear_observer_effects.txt")
 EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, CUSTODY_EVENTS, LOOSE_EVENTS)
 
 
@@ -307,9 +310,9 @@ class TestIncidentRoll(unittest.TestCase):
     def test_the_inner_chances_are_rounded(self):
         roll = block(strip_comments(read(EFFECTS)), "nd_roll_incident")
         self.assertEqual(re.findall(r"chance\s*=\s*(\w+)", roll),
-                         ["1", "nd_incident_tenth_permille", "10", "nd_incident_permille_whole"])
+                         ["1", "nd_incident_tenth_permille", "10", "nd_incident_permille_whole", "nd_incident_weekly_percent"])
         values = strip_comments(read(VALUES))
-        for name in ("nd_incident_tenth_permille", "nd_incident_permille_whole"):
+        for name in ("nd_incident_tenth_permille", "nd_incident_permille_whole", "nd_incident_weekly_percent"):
             self.assertIn("round = yes", block(values, name), name)
 
 
@@ -1127,7 +1130,7 @@ class TestRecessed(unittest.TestCase):
         custom = strip_comments(read(CUSTOM_LOC))
         self.assertIn("localization_key = nd_readiness_0", block(custom, "nd_readiness_name"))
         self.assertIn("localization_key = nd_readiness_moving_0", block(custom, "nd_readiness_moving"))
-        self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_permille"))
+        self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_base_monthly_permille"))
 
 
 class TestLaunchGate(unittest.TestCase):
@@ -1419,7 +1422,7 @@ class TestReviewFixesUmbrellaRecessed(unittest.TestCase):
     def test_a_pending_answer_ends_with_its_war(self):
         weekly = block(self.e, "nd_weekly_update")
         pending = weekly[weekly.index("nd_pending_retaliation"):]
-        self.assertRegex(pending, r"NOT = \{ has_war_with = scope:nd_ready_enemy \}\s*\}\s*remove_variable = nd_pending_retaliation")
+        self.assertRegex(pending, r"NOT = \{ has_war_with = scope:nd_ready_enemy \}\s*NOT = \{ nd_in_peacetime_exchange_with = \{ ENEMY = scope:nd_ready_enemy \} \}\s*\}\s*remove_variable = nd_pending_retaliation")
 
     def test_assembling_is_not_called_a_stand_down(self):
         custom = block(strip_comments(read(CUSTOM_LOC)), "nd_readiness_moving")
