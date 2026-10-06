@@ -241,16 +241,17 @@ once in six months.
 
 The At Home section has a small table for each interest group with a view. It
 names the group and how it judges you (militarist, restraint, officers or
-business, some of them mild, hawkish or restrained). Then comes the approval
-your posture adds, and a row for each term behind it: Doctrine, Readiness,
-Launch authority, Crew strain, The arsenal itself, and Alerts and crises. Hover
-a row for what the group objects to or wants. A group's approval moves by at
-most 2 either way (1 for a mild view), so when its rows add up to more, a last
-row, Held to the cap, shows what was cut (Doctrine +2 and Readiness +1 give an
-approval of +2, with −1 held to the cap). The approval appears in the
-group's breakdown as Nuclear Posture: Enthusiastic (+2), Approving (+1), Uneasy
-(−1) or Opposed (−2). Opinions are reviewed monthly, and doctrine and readiness
-count only once a doctrine has stood for six months.
+business, some of them mild, hawkish or restrained); hover the word for what
+that view likes and dislikes. Then comes the approval your posture adds, and a
+row for each term behind it: Doctrine, Readiness, Launch authority, Crew strain,
+The arsenal itself, and Alerts and crises. Hover a row for what the group
+objects to or wants. A group's approval moves by at most 2 either way (1 for a
+mild view), so when its rows add up to more, a last row, Held to the cap, shows
+what was cut (Doctrine +2 and Readiness +1 give an approval of +2, with −1 held
+to the cap). The approval appears in the group's breakdown as Nuclear Posture:
+Enthusiastic (+2), Approving (+1), Uneasy (−1) or Opposed (−2). Opinions are
+reviewed monthly, and doctrine and readiness count only once a doctrine has
+stood for six months.
 
 | Group | Wants | Dislikes |
 |---|---|---|

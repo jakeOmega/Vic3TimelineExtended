@@ -63,6 +63,12 @@ concept_nuclear_taboo = {}
 concept_nuclear_doctrine = {}
 concept_nuclear_readiness = {}
 concept_launch_authority = {}
+# The four ways an interest group can judge the posture (the class word under
+# each group's name in the At Home table).
+concept_posture_militarist = {}
+concept_posture_restraint = {}
+concept_posture_officers = {}
+concept_posture_business = {}
 concept_space_race = {}
 concept_space_milestone = {}
 concept_solar_colonization = {}
