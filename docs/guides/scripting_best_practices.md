@@ -1292,6 +1292,7 @@ Every company building needs:
    - `building_<name>` (building name) and `building_<name>_desc` in `te_buildings_l_english.yml`
    - `pm_<name>` and `pmg_<name>` in `te_production_methods_l_english.yml`
    - **`state_building_<name>_max_level_add` AND `state_building_<name>_max_level_add_desc`** in `te_modifiers_l_english.yml` — pattern: `"[GetBuildingType('building_<name>').GetName] Max Level"` for the name, `"Increases the maximum number of levels that [GetBuildingType('building_<name>').GetName] can expand to in this state"` for the desc. Without both, the prosperity tooltip shows the raw modifier key.
+6. **`ai_value = { value = te_company_flagship_ai_value }`** after `ai_nationalization_desire = 0`. Without it a flagship scores like any production building and the AI rarely builds one (`test_company_ai.py` checks; docs/systems/mod_systems.md § "Company AI").
 
 Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
 
@@ -1331,6 +1332,12 @@ Output should be `truly missing loc: none`. Two pitfalls the audit accounts for:
 ## Company Prestige Goods Need a Roster Building That Makes the Base Good
 
 A company at full prosperity makes the prestige goods in its `possible_prestige_goods` in place of their base good, in the buildings it owns. If none of its `building_types` buildings produces the base good, the prestige good never appears. The engine accepts the definition and logs nothing. An `extension_building_types` building doesn't count. It joins the roster only through an industry charter, a company holds one at a time, and each grant has a cooldown. Google listed Precision Robotics with robotics only in its extensions, and five more mod companies had the same gap. Either move the building that makes the good into `building_types` or drop the prestige good. `prestige_good_roster_audit` catches both cases (`--strict` in CI). Vanilla's named prestige goods (Tailored Suits and the like) aren't in the `vanilla_parsed/` snapshot, so the audit can't check them; it reads base goods from the mod's `common/prestige_goods/` and takes `prestige_good_generic_<good>` to mean `<good>`.
+
+## Company AI Fields: Targets Need a `state_trigger`, and Profit Is Not Readable
+
+An `ai_construction_targets` entry is `building_x = { level = N state_trigger = { ... } }`. Without a `state_trigger` it does nothing: vanilla's `companies.md` says so, because an empty trigger would mean building in every state. The engine accepts it silently; all 82 mod flavored companies shipped that way. `ai_weight` is a country-scope script value and takes `if`/`add` like vanilla's Korea companies (`has_journal_entry = je_colonize_korea`).
+
+Script can read a company's `company_prosperity`, `company_productivity`, `company_global_productivity_comparison`, `company_employed_levels` and `company_owned_levels`, but not its profit or revenue: there is no trigger, link or building-to-owning-company scope for them, though the save records `profit_trend`. Companies hold variables (`set_variable` in company scope works; prestige goods already use it). Remove one from inside its own scope the way vanilla does: `owner ?= { remove_company = prev.type }`. Details and the evidence for using prosperity as a stand-in: docs/systems/mod_systems.md § "Company AI".
 
 ## Portrait Modifier Files
 

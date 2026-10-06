@@ -1,0 +1,29 @@
+﻿# Company AI tuning. One place for the numbers the company files and the
+# failing-company pulse read; see docs/systems/mod_systems.md § "Company AI".
+
+# ai_weight of a company type (country scope). The engine picks the next
+# company to work toward among those whose ai_will_do holds, by weight times
+# its own factors (00_ai.txt COMPANY_TYPE_*). Vanilla gives its flavored
+# companies 3 and its generic ones no ai_weight, i.e. 1. The mod's companies
+# are mostly late-era and compete for slots the AI filled decades earlier, so
+# they get more: flavored 10, plus 10 while the country holds one of the
+# company's preferred headquarters states; the mod's new generic companies 3.
+te_company_ai_weight_flavored = 10
+te_company_ai_weight_home = 10
+te_company_ai_weight_generic = 3
+
+# ai_value of a company flagship (common/buildings/company_buildings.txt).
+# Without one a production building scores PRODUCTION_BUILDING_BASE_VALUE
+# (1000) plus profit terms; vanilla's monuments use 10000 and its highest is
+# 50000. A flagship can only be built while its company is prosperous (its one
+# max level comes from the prosperity bonus), so this only acts there.
+te_company_flagship_ai_value = 50000
+
+# The AI dissolves a company whose prosperity stayed below this for
+# te_company_failing_months consecutive monthly checks (te_company_effects.txt).
+# Stand-in for "profit below 0.1% of GDP for five years", which script cannot
+# read: on the 2073 save, 50 of 406 AI companies with five years of history
+# stayed below 10 throughout, and 41 of those also earned less than 0.1% of
+# their country's GDP a year.
+te_company_failing_prosperity = 10
+te_company_failing_months = 60

@@ -1,0 +1,7 @@
+﻿# Company scope. True once the company has stayed below
+# te_company_failing_prosperity for te_company_failing_months monthly checks
+# (te_company_effects.txt).
+te_company_is_failing = {
+	has_variable = te_company_months_failing
+	var:te_company_months_failing >= te_company_failing_months
+}
