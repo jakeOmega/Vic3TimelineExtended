@@ -244,7 +244,7 @@ debt_receivership = {
 			else = {
 				if = {
 					limit = {
-						exists = scope:source_country.market
+						exists = scope:source_country.market.owner
 						scope:source_country.market.owner = this
 					}
 					add = {

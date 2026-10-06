@@ -227,7 +227,7 @@ lender_of_last_resort = {
 				# The recipient lives in the provider's market: its trouble is ours.
 				if = {
 					limit = {
-						exists = scope:target_country.market
+						exists = scope:target_country.market.owner
 						scope:target_country.market.owner = this
 					}
 					add = {
