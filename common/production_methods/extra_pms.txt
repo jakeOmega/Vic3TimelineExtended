@@ -18960,6 +18960,20 @@ pm_no_emissions_control = {
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
 	}
+
+	# AI ranking of the emissions-control tiers, 1 / 2 / 4. The tiers make no
+	# goods, so the engine treats every switch among them as a downgrade
+	# (PRODUCTION_METHOD_STICKINESS_DOWNGRADE, 0.6). If the weight multiplies
+	# the AI's score, as production_methods.md describes it ("base AI weight,
+	# default 1.0"; no vanilla method sets it), the AI moves up a tier once
+	# the higher tier's score is about 83% of the current one, and back down
+	# only for a score about 3.3 times better. Check in an observer run.
+	# Unweighted, near-equal pure-cost tiers flipped every few months (the
+	# 2015 observer run: 35 port switches between basic and advanced in four
+	# months, each a five-year retool). Owner ruling 2026-10-06: up, never
+	# down. Moderate rather than huge weights: a huge one would ignore cost
+	# entirely, and would also magnify the wrong way if a score went negative.
+	ai_weight = 1
 }
 
 # ===== BASIC-TIER POLLUTION MITIGATION METHODS =====
@@ -19343,6 +19357,9 @@ pm_basic_emissions_control = {
 			# Wage breakeven: 0.00
 		}
 	}
+
+	# See pm_no_emissions_control.
+	ai_weight = 2
 }
 
 pm_advanced_emissions_control = {
@@ -19372,6 +19389,9 @@ pm_advanced_emissions_control = {
 			# Wage breakeven: 0.00
 		}
 	}
+
+	# See pm_no_emissions_control.
+	ai_weight = 4
 }
 
 # ===== GLASSWORKS FUME VENTILATION =====
