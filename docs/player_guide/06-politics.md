@@ -627,9 +627,10 @@ government administrations.
 foreign leverage, the governing interest groups lose half their attraction, and
 subsistence farms produce twice as much.
 
-The count then starts again. Raising the average standard of living to 4 or more
-stops it, and it restarts from zero if living standards fall again.
-Decentralized countries are exempt.
+The count then starts again. A second collapse restarts Failed State's ten
+years; it does not add a second one. Raising the average standard of living to
+4 or more stops the count, and it restarts from zero if living standards fall
+again. Decentralized countries are exempt.
 
 ## New decrees
 
