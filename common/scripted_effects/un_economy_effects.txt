@@ -34,12 +34,13 @@
 #   Fund stands, every represented member that runs it and pays its dues
 #   (un_dev_fund_contributor) pays the Fund's grants with its expense
 #   (var:un_development_expense_cached, the multiplier of
-#   un_development_contributor_cost). Since 2026-10-05 (owner) it has four
-#   sizes, Token to Generous (0.125% to 1% of GDP a year), any member may give
-#   whatever its rank, and its benefits (infamy decay, prestige, standing, a
-#   lobbying bonus with the recipients) grow by a quarter of Substantial's
-#   with each doubling (un_economy_values.txt). The UN's funding pillar counts
-#   the money (un_funding_dev_money_ratio_value, un_authority_values.txt).
+#   un_development_contributor_cost). Since 2026-10-05 (owner) it has sizes,
+#   five since 2026-10-06, Token to Generous (0.0625% to 1% of GDP a year),
+#   any member may give whatever its rank, and its benefits (infamy decay,
+#   prestige, standing, a lobbying bonus with the recipients) grow by a
+#   quarter of Substantial's with each doubling (un_economy_values.txt). The
+#   UN's funding pillar counts the money (un_funding_dev_money_ratio_value,
+#   un_authority_values.txt).
 #   global   un_inst_development_fund    in force (un_development_fund_on_carried)
 #            un_dev_fund_members_gdp /   the represented members' GDP and people
 #            un_dev_fund_members_pop
@@ -53,14 +54,21 @@
 #                                        standing is under it (owner,
 #                                        2026-10-03), so one always qualifies
 #            un_dev_fund_rich_line       twice it: the richest (the lean)
+#            un_dev_fund_gp_avg          the represented great powers' GDP per
+#                                        head, averaged country by country (the
+#                                        AI's generosity)
 #            un_dev_fund_eligible_pop    the people of the members below the line
 #            un_dev_fund_recipients      how many members they are
 #            un_dev_fund_donations       the contributors' programme expense a
 #                                        week, together (the voluntary part)
 #            un_dev_fund_contributors    how many they are
-#   country  un_dev_fund_size            our contribution's size, 1..4 (kept after
+#   country  un_dev_fund_size            our contribution's size, 1..5 (kept after
 #                                        it ends; read through
 #                                        un_dev_fund_size_value)
+#            un_dev_fund_five_sizes      set with every size written since the
+#                                        five sizes; a size without it is from
+#                                        the four, a size lower
+#                                        (un_dev_fund_size_stored)
 #            un_dev_fund_benefit         its benefit factor: the multiplier of
 #                                        un_development_contributor_modifier
 #            un_dev_fund_patron          what the recipients remember of our
@@ -252,8 +260,9 @@ un_dev_fund_monthly_update = {
 		}
 	}
 	# 2. The members' average, the line (at the charter's current level, never
-	#    below the poorest member in good standing: owner, 2026-10-03) and the
-	#    rich line. The floor reads step 1's figures and goes before the line.
+	#    below the poorest member in good standing: owner, 2026-10-03), the
+	#    rich line and the great powers' average (the AI's generosity). The
+	#    floor reads step 1's figures and goes before the line.
 	set_global_variable = { name = un_dev_fund_members_gdp value = un_dev_fund_members_gdp_value }
 	set_global_variable = { name = un_dev_fund_members_pop value = un_dev_fund_members_pop_value }
 	set_global_variable = { name = un_dev_fund_avg value = un_dev_fund_avg_value }
@@ -281,6 +290,7 @@ un_dev_fund_monthly_update = {
 	set_global_variable = { name = un_dev_fund_line_base value = un_dev_fund_line_base_value }
 	set_global_variable = { name = un_dev_fund_line value = un_dev_fund_line_value }
 	set_global_variable = { name = un_dev_fund_rich_line value = un_dev_fund_rich_line_value }
+	set_global_variable = { name = un_dev_fund_gp_avg value = un_dev_fund_gp_avg_value }
 	# 3. Who the Fund pays, and their people.
 	set_global_variable = { name = un_dev_fund_eligible_pop value = un_dev_fund_eligible_pop_value }
 	set_global_variable = { name = un_dev_fund_recipients value = un_dev_fund_recipients_value }
@@ -359,27 +369,35 @@ un_dev_fund_lapse_contributions = {
 # Scope: country (the contributor, = ROOT)
 un_dev_fund_raise = {
 	if = {
-		limit = { un_dev_fund_size_stored >= 3 }
+		limit = { un_dev_fund_size_stored >= 4 }
 		custom_tooltip = un_dev_fund_to_generous_tt
 	}
 	else_if = {
-		limit = { un_dev_fund_size_stored >= 2 }
+		limit = { un_dev_fund_size_stored >= 3 }
 		custom_tooltip = un_dev_fund_to_substantial_tt
 	}
-	else = {
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 2 }
 		custom_tooltip = un_dev_fund_to_modest_tt
+	}
+	else = {
+		custom_tooltip = un_dev_fund_to_small_tt
 	}
 	un_dev_fund_resize = { STEP = 1 }
 }
 
 un_dev_fund_reduce = {
 	if = {
-		limit = { un_dev_fund_size_stored >= 4 }
+		limit = { un_dev_fund_size_stored >= 5 }
 		custom_tooltip = un_dev_fund_to_substantial_tt
 	}
 	else_if = {
-		limit = { un_dev_fund_size_stored >= 3 }
+		limit = { un_dev_fund_size_stored >= 4 }
 		custom_tooltip = un_dev_fund_to_modest_tt
+	}
+	else_if = {
+		limit = { un_dev_fund_size_stored >= 3 }
+		custom_tooltip = un_dev_fund_to_small_tt
 	}
 	else = {
 		custom_tooltip = un_dev_fund_to_token_tt
@@ -387,7 +405,7 @@ un_dev_fund_reduce = {
 	un_dev_fund_resize = { STEP = -1 }
 }
 
-# Move the contribution $STEP$ sizes, held to 1..4, and re-add both modifiers
+# Move the contribution $STEP$ sizes, held to 1..5, and re-add both modifiers
 # at the new size: the benefits at its factor, the cost at its expense. Both
 # multipliers read root.var, so ROOT must be the contributor (a button's
 # effect). un_state_off takes each modifier off with its mirror and the add
@@ -398,6 +416,7 @@ un_dev_fund_reduce = {
 un_dev_fund_resize = {
 	hidden_effect = {
 		set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored }
+		set_variable = un_dev_fund_five_sizes
 		change_variable = { name = un_dev_fund_size add = $STEP$ }
 		clamp_variable = { name = un_dev_fund_size min = 1 max = un_dev_fund_size_max }
 		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
@@ -419,17 +438,20 @@ un_dev_fund_resize = {
 
 # A contribution's month, from je_united_nations' member block (ROOT = the
 # member): a contribution from before the sizes becomes Substantial, the size
-# it paid for; the benefit factor and the expense follow the size and today's
-# GDP. The benefit modifier is re-added only for a contribution that was
-# migrated (a save from before the sizes holds it with no multiplier, which is
-# Substantial already, so nothing changes but the variable it will read).
+# it paid for, and one from the four sizes keeps its money and factor under
+# the size number it now has (un_dev_fund_size_stored); the benefit factor and
+# the expense follow the size and today's GDP. The benefit modifier is
+# re-added only for a contribution that was migrated (a save from before the
+# sizes holds it with no multiplier, which is Substantial already, so nothing
+# changes but the variable it will read).
 # Scope: country (= ROOT)
 un_dev_fund_contribution_monthly = {
 	if = {
 		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 		if = {
-			limit = { NOT = { has_variable = un_dev_fund_size } }
-			set_variable = { name = un_dev_fund_size value = un_dev_fund_size_legacy }
+			limit = { NOT = { has_variable = un_dev_fund_five_sizes } }
+			set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored }
+			set_variable = un_dev_fund_five_sizes
 		}
 		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
 		set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
@@ -763,16 +785,20 @@ un_economy_obligation_lines = {
 		if = {
 			limit = { un_dev_fund_contributor = yes }
 			if = {
-				limit = { un_dev_fund_size_value >= 4 }
+				limit = { un_dev_fund_size_value >= 5 }
 				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_generous
 			}
 			else_if = {
-				limit = { un_dev_fund_size_value >= 3 }
+				limit = { un_dev_fund_size_value >= 4 }
 				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_substantial
 			}
 			else_if = {
-				limit = { un_dev_fund_size_value >= 2 }
+				limit = { un_dev_fund_size_value >= 3 }
 				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_modest
+			}
+			else_if = {
+				limit = { un_dev_fund_size_value >= 2 }
+				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_small
 			}
 			else = {
 				custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_token
@@ -976,6 +1002,7 @@ un_economy_on_dissolve = {
 	un_dissolve_remove_global = { NAME = un_dev_fund_line_base }
 	un_dissolve_remove_global = { NAME = un_dev_fund_line }
 	un_dissolve_remove_global = { NAME = un_dev_fund_rich_line }
+	un_dissolve_remove_global = { NAME = un_dev_fund_gp_avg }
 	un_dissolve_remove_global = { NAME = un_dev_fund_eligible_pop }
 	un_dissolve_remove_global = { NAME = un_dev_fund_recipients }
 	un_dissolve_remove_global = { NAME = un_dev_fund_donations }

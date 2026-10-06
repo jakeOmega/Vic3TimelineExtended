@@ -55,8 +55,8 @@ un_standing_dr_floor = 0.1
 # standing only after they have run CONTINUOUSLY for the minimum, and the
 # combined accrual is capped per rolling year. Both numbers together are what
 # makes enable -> disable -> enable worthless. Development funding accrues at
-# its size's benefit factor (half the monthly gain at Token, 1.25x at
-# Generous); changing its size does not restart its clock.
+# its size's benefit factor (a quarter of the monthly gain at Token, 1.25x
+# at Generous); changing its size does not restart its clock.
 
 un_standing_program_min_months = 24
 un_standing_program_monthly_gain = 0.3
@@ -164,7 +164,7 @@ un_standing_gain_scale = {
 }
 
 # How many of the five ongoing programmes have run long enough to pay.
-# Development Programs counts at its size's benefit factor (0.5 for Token to
+# Development Programs counts at its size's benefit factor (0.25 for Token to
 # 1.25 for Generous, un_economy_values.txt; owner, 2026-10-05), so doubling a
 # contribution adds a quarter of a programme, not another one.
 # Scope: country

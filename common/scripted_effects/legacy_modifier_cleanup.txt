@@ -93,6 +93,17 @@
 #   2. their names and `_desc` keys in te_concepts_l_english.yml
 #   3. the destabilization strip in legacy_je_modifier_cleanup_effect below
 #
+# ── PENDING REMOVAL: covert_industrial_espionage /
+#    covert_military_espionage (added 2026-10-06) ──
+# Covert tech theft (#780) replaced espionage's +15% technology-spread self
+# modifiers with monthly theft of technology progress. Both were three-month
+# modifiers refreshed monthly on the operator; the strip below takes them off a
+# save made mid-operation. Remove ALL of the following together, one release
+# after 2026-10-06:
+#   1. the two blocks in common/static_modifiers/extra_modifiers.txt
+#   2. their names and `_desc` keys in te_concepts_l_english.yml
+#   3. the espionage strip in legacy_je_modifier_cleanup_effect below
+#
 # ── PENDING REMOVAL: te_mon_gold_carry_expense (added 2026-10-06) ──
 # Borrowed gold no longer pays the policy rate out of the budget
 # (docs/systems/monetary_policy_design.md §0.5, decision I, reversed). The
@@ -216,6 +227,9 @@ legacy_je_modifier_cleanup_effect = {
 		remove_modifier = covert_destabilization_general
 		every_political_movement = { remove_modifier = covert_destabilization_separatist }
 	}
+	# Espionage's retired technology-spread modifiers (PENDING REMOVAL above).
+	if = { limit = { has_modifier = covert_industrial_espionage } remove_modifier = covert_industrial_espionage }
+	if = { limit = { has_modifier = covert_military_espionage } remove_modifier = covert_military_espionage }
 
 	# ── World War (je:je_world_war) ──
 	if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }

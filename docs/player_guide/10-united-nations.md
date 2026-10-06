@@ -860,7 +860,7 @@ after 24 months.
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
-| Fund Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.125% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
+| Fund Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -877,15 +877,16 @@ and changing size doesn't restart the 24 months before it earns standing.
 
 | Size | Cost (share of GDP a year) | Infamy decay | Prestige | Standing a month after 24 months | Lobbying with the Fund's recipients |
 |---|---|---|---|---|---|
-| Token | 0.125% | +4% | +2% | 0.15 | up to +10% |
+| Token | 0.0625% | +2% | +1% | 0.075 | up to +5% |
+| Small | 0.125% | +4% | +2% | 0.15 | up to +10% |
 | Modest | 0.25% | +6% | +3% | 0.225 | up to +15% |
 | Substantial | 0.5% | +8% | +4% | 0.3 | up to +20% |
 | Generous | 1% | +10% | +5% | 0.375 | up to +25% |
 
 Each size doubles the money but adds only a quarter of Substantial's benefits,
-so Token buys them most cheaply. The larger sizes pay the Fund's recipients more
-and count for more in the funding pillar, which weighs the money, not the
-number of contributors.
+so Token and Small buy them most cheaply. The larger sizes pay the Fund's
+recipients more and count for more in the funding pillar, which weighs the
+money, not the number of contributors.
 
 The lobbying bonus is Grateful Aid Recipients on the UN journal entry: UN
 Lobbying Effectiveness with the members the Fund pays. It builds toward the
@@ -1011,11 +1012,13 @@ paying and can add up to it. A member the Fund pays more than its dues keeps
 paying even in default, and one that has lost its vote under Article 19 pays
 sooner. A healthy member doesn't withhold to save the levy and then pay again.
 - Members whose GDP per head is above the members' average often fund
-Development Programs, usually at Token size. So do members with Humanitarian
+Development Programs, usually at Small size. So do members with Humanitarian
 Regulations, champions of the order, members with notorious infamy, and members
 with Fund recipients among their subjects, bloc partners and allies. Only
-Humanitarian Regulations, championing and recipients among their own make them
-give more, a size for each. Major powers contribute to peacekeeping for the
+Humanitarian Regulations and championing make them give more, a size for each,
+and recipients among their own half a size. A member whose GDP per head is
+below the great powers' average, or that borrows, gives less and often stays at
+Token. Major powers contribute to peacekeeping for the
 same kinds of reasons, more when missions are in the field. They stop either
 one when their treasury fails or their laws turn against it, and stop
 peacekeeping at war; peacekeeping only once its ten years have run.

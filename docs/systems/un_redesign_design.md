@@ -51,7 +51,8 @@ benefits, so a nominal gift is the best value and the extra money goes to the re
 
 | Size | Share of GDP a year | Benefit factor | Infamy decay | Prestige | Standing a month (after 24 months) |
 |---|---|---|---|---|---|
-| Token | 0.125% | 0.5 | +4% | +2% | 0.15 |
+| Token | 0.0625% | 0.25 | +2% | +1% | 0.075 |
+| Small | 0.125% | 0.5 | +4% | +2% | 0.15 |
 | Modest | 0.25% | 0.75 | +6% | +3% | 0.225 |
 | Substantial | 0.5% (the old programme's cost) | 1 | +8% | +4% | 0.3 |
 | Generous | 1% | 1.25 | +10% | +5% | 0.375 |
@@ -61,10 +62,21 @@ benefits, so a nominal gift is the best value and the extra money goes to the re
 §0.9 restore), so it moved from the plain to the multiplied mirror list in
 `test_un_state_mirror.py`. A contribution from before the sizes holds it with no multiplier,
 which is Substantial, the size it paid for; the entry's monthly pulse writes
-`var:un_dev_fund_size` = 3 for it (`un_dev_fund_contribution_monthly`). The ministry bonus and the
+`var:un_dev_fund_size` = 4 for it (`un_dev_fund_contribution_monthly`). The ministry bonus and the
 bureaucracy cost are gone **(decided)**: the cost is the money. Changing size does not restart
 the standing clock. The Development Programs buttons left `gen_un_button_descs.py`'s scope: their
 modifier's unit values are not what a Token or Generous contribution gets.
+
+**Token and Small (decided, 2026-10-06).** The owner asked for "a level or two below the
+current Modest, maybe Small and Token". The sizes first built were Token, Modest, Substantial and
+Generous, so the old Token (0.125%) became Small and a new Token went below it at half the
+money. A size below that would get a benefit factor of 0 on the quarter-per-doubling ladder, so
+there is one new size, not two. A save from the four sizes stored 1 for what is now Small: every
+write of `var:un_dev_fund_size` since also sets `var:un_dev_fund_five_sizes`, so
+`un_dev_fund_size_stored` reads an unmarked size one up (the same money and factor) and the
+monthly pulse rewrites it. The marker keeps the variable's name, since a renamed one would leave
+the old name read but never set, which the engine logs on every load. The AI's base size is
+**(proposed)**: see the AI below.
 
 **Who may give (decided).** Any represented member, whatever its rank ("it would not be strange
 for Luxembourg to donate to the third world"), unless it withholds its dues (its money would not
@@ -104,17 +116,39 @@ nominal level").** Two scores:
   average GDP per head, +25 at twice it (each step inside the band), +10 at notorious infamy,
   laissez-faire −10 (was −25). The other terms are as in §0.13.
 - `un_ai_development_generosity` (size): only humanitarian regulations +20, championing +20 and
-  recipients among its subjects, bloc partners and allies +20, less the treasury penalty. A
-  contributor raises at 20 per size held and cuts back the band (25) below the line it raised
-  at, so wealth alone stays at Token.
+  recipients among its subjects, bloc partners and allies +10, less `un_ai_development_poverty`.
+  A contributor moves up from Token to Small at generosity 0, then raises at 20 per size held
+  above Small, and cuts back the band (25) below the line it raised at, so wealth alone stays
+  at Small. **(proposed, 2026-10-06)** Small (`un_ai_development_base_size`) is the old Token's
+  money.
+- **Poverty and debt hold it back (decided, 2026-10-06).** In a test game the great powers the
+  owner looked at all gave Modest: a great power almost always has a recipient among its
+  subjects, bloc partners and allies, and that term was a full size. The owner asked for it to
+  be smaller, and for being poor, "in treasury terms or GDP per head relative to other great
+  powers", to be "a pretty strong reason to downgrade or not upgrade". The figures are
+  **(proposed)**: the recipients term is half a size (+10), and `un_ai_development_poverty`
+  takes −15 below the great powers' average GDP per head and −30 below half of it, and −15 from
+  debt at a quarter of the ceiling on top of the shared treasury penalty (−10 at half, −25 at
+  three quarters). The bar is `global_var:un_dev_fund_gp_avg`, the represented great powers'
+  figures averaged country by country, snapshotted by the Fund's monthly update, for every
+  member whatever its rank, so a rank change doesn't move it; the members' average stands in
+  while no great power is represented. Every step is 15, inside the band. The reasons now sum
+  to 50, so the AI no longer reaches Generous (60).
+
+Generosity below assumes GDP per head at or above the great powers' average and no debt unless
+the row says otherwise.
 
 | Member | Will | Generosity | Gives |
 |---|---|---|---|
-| Rich great power, Established, no other reason | 25 + 5 + 5 = 35 | 0 | Token |
-| Same, laissez-faire | 25 | 0 | Token |
+| Rich great power, Established, no other reason | 25 + 5 + 5 = 35 | 0 | Small |
+| Same, laissez-faire | 25 | 0 | Small |
+| Same, debt at a quarter of its ceiling | 35 | −15 | Token |
+| Great power with recipients among its allies | 35 + 15 = 50 | 10 | Small |
+| Same, below the great powers' average | 50 | 10 − 15 = −5 | Token |
 | Above-average great power, laissez-faire | 15 + 5 + 5 − 10 = 15 | 0 | nothing |
-| Humanitarian champion with recipients among its allies | 20 + 20 + 15 + … | 60 | Generous |
+| Humanitarian champion with recipients among its allies | 20 + 20 + 15 + … | 50 | Substantial |
 | Humanitarian member, nothing else | 20 + … | 20 | Modest |
+| Same, below the great powers' average | 20 + … | 5 | Small |
 
 ### Files
 
@@ -133,7 +167,8 @@ nominal level").** Two scores:
 ### IN-GAME VERIFICATION CHECKLIST (§0.14)
 
 1. Fund Development Programs shows for a minor power and starts a Token contribution; the
-   modifier list shows +4% infamy decay and +2% prestige, and the expense is 0.125% of GDP a year.
+   modifier list shows +2% infamy decay and +1% prestige, and the expense is 0.0625% of GDP a
+   year.
 2. Raise and Reduce move one size each; the modifier and the expense change at once, and the
    tooltips name the size and its weekly cost.
 3. An old save's contributor shows Substantial in Our Obligations after a month, at the cost it
@@ -143,8 +178,12 @@ nominal level").** Two scores:
 5. After a year of contributing, Grateful Aid Recipients appears on the UN entry; a vote
    commitment request to a recipient shows the "contributions to the Fund" line, and a
    campaign on a recipient climbs faster than 3 a month.
-6. Rich AI members start Token contributions; few go above Token.
+6. Rich AI members start Token contributions and move up to Small; few go above Small. A great
+   power below the others' average GDP per head, or borrowing, stays at Token
+   (`te_debug_un.1` option x logs `dev_poverty`).
 7. A revolution's winner keeps the contribution at its size (the §0.9 restore).
+8. A save from the four sizes (2026-10-05) keeps each contribution's money: a Token becomes
+   Small, a Modest stays Modest, and Our Obligations names the size it now has.
 
 ---
 
@@ -586,7 +625,7 @@ Assembly founds it, the programme's money would reach nobody. A contribution run
 through `un_state_off`, as leaving the UN does) with a notice to the contributor.
 
 The donations are the existing Fund Development Programs programme
-(`un_fund_development_button`; since §0.14 it has four sizes, any rank may give, and its benefits
+(`un_fund_development_button`; since §0.14 it has five sizes, any rank may give, and its benefits
 were redone): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
 while the Fund stands each represented, dues-paying contributor's programme expense pays the
 Fund's grants instead of nothing. As first built (below), it needed Reform II and took a quarter

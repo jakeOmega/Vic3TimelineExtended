@@ -3662,8 +3662,9 @@ un_sanctions_busting_modifier = {
 
 # What a Development Programs contribution does for the contributor, at
 # Substantial (0.5% of GDP a year). Added with multiplier =
-# root.var:un_dev_fund_benefit, the size's benefit factor (0.5 / 0.75 / 1 /
-# 1.25 for Token / Modest / Substantial / Generous; un_economy_values.txt):
+# root.var:un_dev_fund_benefit, the size's benefit factor (0.25 / 0.5 / 0.75 /
+# 1 / 1.25 for Token / Small / Modest / Substantial / Generous;
+# un_economy_values.txt):
 # each doubling of the money adds a quarter of these. Its cost is the money
 # itself (un_development_contributor_cost), which pays the World Development
 # Fund's grants. A contribution from before the sizes holds it with no
@@ -6634,7 +6635,7 @@ covert_espionage_base = {
 
 # RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
 # technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly until it runs out. Delete after 2027-01-06.
+# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
 covert_industrial_espionage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_production_tech_spread_mult = 0.15
@@ -6642,7 +6643,7 @@ covert_industrial_espionage = {
 
 # RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
 # technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly until it runs out. Delete after 2027-01-06.
+# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
 covert_military_espionage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_military_tech_spread_mult = 0.15
