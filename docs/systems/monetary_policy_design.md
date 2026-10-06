@@ -490,7 +490,7 @@ and are tagged with the task that raised them.
 | **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **Decided 2026-09-20 (§0.5 owner decision K):** it takes a pin, at the anchor (2) rather than metal's 0 |
 | **T7** | `te_mon_stance_months` is capped at ±11 | §13 names no cap, and without one a decade-long stance takes a decade of the middle band to unwind. 11 makes the fade exactly as long as the climb — six pulses each way | one constant |
 | **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and a convertibility promise binds the rate dial to an external discipline nobody at home voted for — submitting the currency to the outside world is what an isolationist objects to | one line of generator input |
-| **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
+| **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` (since 2026-10-05 `sound_money_currency`, fiat neutral: §13) | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
 | **T7** | `ideological_opinion_impact` stays **0** on `lawgroup_monetary_policy` | it scales the *legitimacy* friction between disagreeing governing IGs, not the IG approval §13 wants, which runs off `IG_APPROVAL_FROM_LAW` / `IG_APPROVAL_FROM_LAW_CHANGE` and is ungated by it. **Inferred from the defines, not observed** — **checklist 17** | one value (0.25, like the mod's other economy law groups) |
 | **T8** | The `GetCustom`-in-`is_valid` single-cause line is kept, with no static fallback | precedent: `iw_funding_not_max_tt` uses a data function in an `is_valid` tooltip | ~40 lines of `trigger_if` branches — **checklist 21** |
 | **T8** | A no-dial or command country sees two **greyed** monetise buttons rather than a pure readout | consistent with the target stepper, which already behaves that way | a visible gate |
@@ -3060,8 +3060,8 @@ over each IG's baseline `ideologies` block — an IG holds several at once, so t
 | IG | commodity | gold | fiat | digital | crypto |
 |---|---|---|---|---|---|
 | Landowners | 0 | **+2** | −2 | −2 | −2 |
-| Petite Bourgeoisie | −1 | **+2** | −1 | 0 | −3 |
-| Armed Forces | 0 | **+1** | −1 | −1 | −1 |
+| Petite Bourgeoisie | −1 | **+2** | 0 | 0 | −3 |
+| Armed Forces | 0 | **+1** | 0 | −1 | −1 |
 | Rural Folk | −2 | **−1** | +1 | +1 | −3 |
 | Trade Unions | −2 | **−2** | +2 | +2 | −2 |
 | Intelligentsia | −1 | 0 | +1 | +2 | −1 |
@@ -3081,6 +3081,16 @@ of Gold on `ideology_agrarian` exactly) and `advanced_curency` on `ideology_meri
 (which left the Petite Bourgeoisie pro-digital); both were left untouched and the direction
 was landed by **adding** a stance to a free baseline instead — `ideology_isolationist` for
 Rural Folk, `ideology_patriotic` for the Petite Bourgeoisie (§0.4, T7).
+
+**Fiat neutral for patriotic (2026-10-05, owner).** `ideology_patriotic` now takes
+`sound_money_currency`, which is `simple_currency` with fiat at *neutral*, so the Petite
+Bourgeoisie and the Armed Forces net 0 on fiat (both were −1) and keep their gold lean. In an
+AI-only observer run, 11 countries that held Keynesian Economics and a national bank were still
+on gold in 1972, and the owner judged that a saver's real grievance by then is inflation, which
+this section already charges to those two IGs (the high and very high inflation bands) along
+with the Petite Bourgeoisie's backing for central bank independence (`ideology_meritocratic`).
+The Landowners stay at −2. The stance was not shown to be what held those countries on gold:
+fiat's AI weight is still at its floor before era 7 (§0.13).
 
 **Side effect worth watching in a long AI run.** The AI's *ideal law* per group is derived
 from its governing IGs' ideologies, and until now `lawgroup_monetary_policy` had stances from

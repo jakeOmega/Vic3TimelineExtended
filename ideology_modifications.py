@@ -162,13 +162,13 @@ traditional_rules_of_war = [
     ("law_total_war", "neutral"),
 ]
 # --- lawgroup_monetary_policy stances (monetary_policy_design.md section 13) ---
-# The four lists below — advanced_curency, simple_currency, libertarian_currency
-# and cross_of_gold_currency — are the whole of section 13's Part B, and they
-# reach an interest group through whichever ideologies it holds, which
-# common/interest_groups/00_*.txt reassigns per country.
+# The five lists below — advanced_curency, simple_currency, sound_money_currency,
+# libertarian_currency and cross_of_gold_currency — are the whole of section
+# 13's Part B, and they reach an interest group through whichever ideologies it
+# holds, which common/interest_groups/00_*.txt reassigns per country.
 #
 # SECTION 13 CARRIES A HAND-TRANSCRIBED NET-STANCE TABLE (per IG, per law)
-# derived from these four lists plus the per-ideology `modifications` entries
+# derived from these five lists plus the per-ideology `modifications` entries
 # further down this file. Nothing regenerates it. UPDATE IT WHENEVER ANY OF THIS
 # CHANGES: a stance added, removed or re-pointed here, or an ideology gaining or
 # losing one of these lists. Two IGs can also cancel each other's stance inside
@@ -185,6 +185,23 @@ simple_currency = [
     ("law_commodity_money", "neutral"),
     ("law_gold_standard", "approve"),
     ("law_fiat_currency", "disapprove"),
+    ("law_digital_currency", "disapprove"),
+    ("law_decentralized_cryptocurrency", "disapprove"),
+]
+# simple_currency with fiat at neutral, for ideology_patriotic (the Petite
+# Bourgeoisie and the Armed Forces): savers and officers on fixed pensions back
+# gold, but by the time fiat can be enacted (Keynesian Economics) what they
+# fear is inflation itself. Section 13 already charges that to them: the high
+# and very high inflation bands cost the Petite Bourgeoisie 3 and 5 approval
+# and the Armed Forces 2 and 3 (te_inflation_band_high / _very_high), and the
+# Petite Bourgeoisie's ideology_meritocratic strongly approves central bank
+# independence. Opposing the regime as well counted the same grievance twice
+# (owner, 2026-10-05). The Landowners stay against fiat (ideology_paternalistic
+# and ideology_hierarchic).
+sound_money_currency = [
+    ("law_commodity_money", "neutral"),
+    ("law_gold_standard", "approve"),
+    ("law_fiat_currency", "neutral"),
     ("law_digital_currency", "disapprove"),
     ("law_decentralized_cryptocurrency", "disapprove"),
 ]
@@ -819,8 +836,9 @@ modifications = {
         # the right answer rather than a side effect — an officer corps on fixed
         # salaries and fixed pensions is the classic sound-money constituency,
         # which is also why section 13's own "Inflation >= 8%" row already puts
-        # ig_armed_forces on the losing side of it.
-        "lawgroup_monetary_policy": simple_currency,
+        # ig_armed_forces on the losing side of it. Fiat is neutral rather than
+        # opposed (sound_money_currency, above).
+        "lawgroup_monetary_policy": sound_money_currency,
         "lawgroup_army_model": pmc_disapprove + [
             ("law_peasant_levies", "disapprove"),
             ("law_national_militia", "neutral"),

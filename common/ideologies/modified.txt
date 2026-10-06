@@ -334,7 +334,7 @@ REPLACE:ideology_patriotic = {
 	lawgroup_monetary_policy = {
 		law_commodity_money = neutral
 		law_gold_standard = approve
-		law_fiat_currency = disapprove
+		law_fiat_currency = neutral
 		law_digital_currency = disapprove
 		law_decentralized_cryptocurrency = disapprove
 	}
