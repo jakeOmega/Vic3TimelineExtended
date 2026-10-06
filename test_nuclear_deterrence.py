@@ -52,6 +52,8 @@ SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_action
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 EXTRA_BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 EXTRA_PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
+NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
+TABOO_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_taboo_triggers.txt"
 
 
 def tracked(path):
@@ -496,6 +498,49 @@ class TestOutcomeNotice(unittest.TestCase):
         for direction, n, amount in pairs:
             self.assertEqual(int(amount), int(n) if direction == "up" else -int(n))
         self.assertEqual(body.count("nd_change_credibility"), len(pairs), "a credibility change without its number line")
+
+
+def revalidate_branch(effects, dispute):
+    """The else_if of nd_crisis_revalidate_dispute that tests var:nd_crisis_dispute = N."""
+    body = block(effects, "nd_crisis_revalidate_dispute")
+    for m in re.finditer(r"else_if = \{", body):
+        branch = block(body[m.start():], "else_if")
+        if re.search(r"var:nd_crisis_dispute = " + str(dispute) + r"\b", block(branch, "limit")):
+            return branch
+    raise AssertionError(f"no revalidation branch for dispute {dispute}")
+
+
+class TestNativeCloses(unittest.TestCase):
+    """A native close (outcome 4) must observe a state the target can't undo at
+    will. Funding stepped to 0 ended a proliferation crisis as the issuer's win
+    with no freeze, and the target funded its programme again at once (UNL,
+    2026-10-05)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_programme_dispute_closes_only_when_stopped_for_good(self):
+        branch = revalidate_branch(self.effects, 4)
+        self.assertIn("nuclear_program_has_stopped = yes", branch)
+        self.assertNotIn("nuclear_program_is_proliferating", branch)
+        self.assertNotIn("nuclear_program_is_standing", branch)
+
+    def test_stopped_reads_neither_funding_nor_our_own_ceiling(self):
+        body = strip_comments(block(read(NUKE_TRIGGERS), "nuclear_program_has_stopped"))
+        self.assertNotIn("funding", body)
+        self.assertNotIn("nuclear_program_is_proliferating", body)
+        self.assertIn("nd_taboo_held_by_own_ceiling_only = no", body)
+
+    def test_own_ceiling_test_rules_out_every_other_hold(self):
+        body = strip_comments(block(read(TABOO_TRIGGERS), "nd_taboo_held_by_own_ceiling_only"))
+        for other_hold in ("nd_taboo_is_dismantling = no", "nd_treaty_ceiling", "nd_tpnw_ceiling",
+                           "nd_crisis_programme_freeze", "has_type = nuclear_program_pause"):
+            self.assertIn(other_hold, body)
+
+    def test_alert_dispute_ignores_the_targets_own_readiness(self):
+        branch = revalidate_branch(self.effects, 5)
+        self.assertIn("nd_is_armed = no", branch)
+        self.assertNotRegex(branch, r"var:nd_readiness_target\s*[<>=]")
 
 
 PREVIEW_PINS = {
@@ -1057,7 +1102,9 @@ class TestRecessed(unittest.TestCase):
         self.assertIn("var:nd_readiness_target > 1", concession)
 
     def test_stood_down_alert_includes_recessed(self):
-        self.assertIn("var:nd_readiness_target <= 1", self.crisis)
+        # No crisis test may treat Routine alone as stood down. The alert
+        # dispute's native close reads no readiness at all now
+        # (TestNativeCloses); the concession's lock is what binds.
         self.assertNotRegex(self.crisis, r"var:nd_readiness_target = 1\b")
 
     def test_recessed_has_no_readiness_modifier(self):

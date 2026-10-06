@@ -320,6 +320,10 @@ in a war.
 | A weapons program run by your rival, or by a country you are antagonistic, belligerent or domineering toward | Its program is frozen for 10 years |
 | An armed rival at Heightened readiness or higher | It stands down to Routine for 24 months |
 
+Only conceding binds the target. Cutting its program's funding to zero, setting
+its own arsenal ceiling or standing its forces down without conceding doesn't
+end the crisis, because it could undo each of them a week later.
+
 ### Crisis stages, danger and pressure
 
 A private warning starts at Warning; a public ultimatum starts at Confrontation.
@@ -382,10 +386,11 @@ or Rules of War law forbids a strike).
 
 A public bluff that ends in a climb-down or runs out its year costs 5 more
 credibility. The modifiers last five years. A crisis also ends when its war or
-play ends, or when nuclear weapons are used between the two. A non-use pledge
-from a stand-down blocks strikes on that partner until one side uses Repudiate
-Non-Use Pledge (−15 credibility, +5 infamy, −30 relations and a Broken Nuclear
-Pledge).
+play ends, when nuclear weapons are used between the two, when a treaty halts
+the program it is about, or when the country on alert no longer holds warheads.
+A non-use pledge from a stand-down blocks strikes on that partner until one side
+uses Repudiate Non-Use Pledge (−15 credibility, +5 infamy, −30 relations and a
+Broken Nuclear Pledge).
 
 ### Guarantors called in
 
