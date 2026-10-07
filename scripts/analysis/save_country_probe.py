@@ -138,6 +138,32 @@ check_save_history_order.py).
             the records decoded (40542 of 40542); a mismatch, or no database
             at all, is reported as a WARNING.
 
+  interest groups (not decoded by this tool; worked out 2026-10-07 on one 1.14.5
+            save of 313 countries, 2503 records)
+            u32:<id> = { 0x001b = "<name, e.g. ig_zamindars>"  0x2840 = u32:<country id>
+                         0x07dd = "<type, e.g. ig_landowners>"  [0x3160 = { <pop ids> }]
+                         0x2856 = u32:<leader character id>  ... }
+            Find them by their bytes: 14 00 <id, 4 bytes> 01 00 03 00 1b 00 01 00,
+            then 0f 00 or 17 00 and a string starting ig_; parse_block at the
+            first byte reads the record.
+            Verified: 0x2856 is the leader. Every French group's 0x2856 named a
+            character of France (its Armed Forces: Georges Boulanger). In
+            Bengal, seven groups' 0x2856 named no character in the save, and
+            they were exactly the seven the engine logged "Could not get
+            leader of interest group" for. The eighth, which resolved, never
+            logged it. No other group in the save dangled.
+
+  characters
+            u32:<id> = { 0x327a = "<first name>"  0x327b = "<last name>"
+                         0x27dd = i32  0x2840 = u32:<country id>  0x30aa = i32
+                         0x61cb = { "character_role_general" "character_role_ig_leader" ... } ... }
+            Find them by their bytes: 14 00 <id, 4 bytes> 01 00 03 00 7a 32 01 00,
+            then 0f 00 or 17 00 (0x327a right after the opening brace): 4307
+            records in that save.
+            A deleted character leaves no record, so a group whose 0x2856 is not
+            among these ids points at a character that is gone (the
+            Indian-revolution hack in docs/vanilla/vanilla_known_bugs.md).
+
   meta      0x3245 = i32 game date in hours: days = v // 24,
             year = days // 365 - 5000, day of year = days % 365.
 

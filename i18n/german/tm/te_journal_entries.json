@@ -4908,12 +4908,12 @@
   "de": "#bold Ziel:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]"
  },
  "je_un_chamber_propose_target_ceasefire": {
-  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim')]",
-  "de": "#bold Ziel:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim')]"
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetName)]",
+  "de": "#bold Ziel:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetAltName('DAT'))]"
  },
  "je_un_chamber_propose_target_ceasefire_victim": {
-  "en": ", at war with [SCOPE.sCountry('un_ceasefire_victim_pick').GetName]",
-  "de": ", im Krieg mit [SCOPE.sCountry('un_ceasefire_victim_pick').GetAltName('DAT')]"
+  "en": ", at war with ",
+  "de": ", im Krieg mit "
  },
  "je_un_chamber_propose_target_condemn": {
   "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_condemn_target').Exists, SCOPE.sCountry('un_propose_condemn_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_condemn_target').Exists), 'je_un_chamber_country_gone')]",

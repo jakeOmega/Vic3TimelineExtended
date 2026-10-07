@@ -1,4 +1,5 @@
-"""A key named in AddLocalizationIf( cond, 'key' ) renders without SCOPE.
+"""A key named in AddLocalizationIf( cond, 'key' ) or SelectLocalization( cond,
+'key', 'other' ) renders without SCOPE.
 
 The Subjugate action's tooltip (te_subjugation_strength_sufficient_tt, #710)
 picked its power-bloc identity line with AddLocalizationIf, and each line read
@@ -6,8 +7,10 @@ SCOPE.ScriptValue(...) and SCOPE.sCountry('target_country'). The parent's own
 SCOPE reads worked (it chose the right line), but inside the named key SCOPE
 was gone: every render logged "Promote 'SCOPE' returned nullptr" three times
 and the line came out blank (2,796 lines of each in four seconds, observer
-launch 2026-10-06). SelectLocalization( cond, 'key', 'te_tt_blank' ) passes
-SCOPE on; vanilla's Zanzibar notifications use it with SCOPE-reading keys.
+launch 2026-10-06). #767 switched to SelectLocalization on the strength of
+vanilla's Zanzibar notifications, and the France game that evening logged the
+same three failures 993 times from the SelectLocalization form. So the parent
+keeps every SCOPE read; a named key holds fixed text, or reads GetPlayer.
 """
 
 import re
@@ -17,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
-_CALL = re.compile(r"AddLocalizationIf\(")
+_CALL = re.compile(r"(?:AddLocalizationIf|SelectLocalization)\(")
 _STRING_OR_COMMENT = re.compile(r'("[^"\n]*")|#[^\n]*')
 
 
@@ -40,7 +43,7 @@ def expanded(key, loc, seen=()):
 
 
 def named_keys(text, loc):
-    """Loc keys named as string literals in each AddLocalizationIf( ... ) call."""
+    """Loc keys named as string literals in each AddLocalizationIf( ... ) or SelectLocalization( ... ) call."""
     found = []
     for m in _CALL.finditer(text):
         depth, j = 1, m.end()
@@ -52,7 +55,7 @@ def named_keys(text, loc):
 
 
 class TestAddLocalizationIfScope(unittest.TestCase):
-    def test_no_key_named_in_add_localization_if_reads_scope(self):
+    def test_no_key_named_in_add_localization_if_or_select_localization_reads_scope(self):
         loc = english_loc()
         sources = [(f"loc {k}", v) for k, v in loc.items()]
         for path in sorted((ROOT / "gui").rglob("*.gui")):
@@ -63,14 +66,14 @@ class TestAddLocalizationIfScope(unittest.TestCase):
                for where, text in sources
                for key in named_keys(text, loc)
                if "[SCOPE." in expanded(key, loc)]
-        self.assertEqual(bad, [], "use SelectLocalization( cond, 'key', 'te_tt_blank' ), which passes SCOPE on")
+        self.assertEqual(bad, [], "keep SCOPE reads in the parent string; the named key loses SCOPE")
 
     def test_the_check_sees_what_it_rejects(self):
         loc = {"a": "x [SCOPE.sCountry('t').GetName]", "b": "$a$!", "c": "no scope", "d": "",
                "p": "[AddLocalizationIf(EqualTo_CFixedPoint(SCOPE.ScriptValue('i'), '(CFixedPoint)1'), 'b')]"
                     "[AddLocalizationIf(Not(Is('x')), 'c')][SelectLocalization(Is('y'), 'a', 'd')]"}
-        self.assertEqual(named_keys(loc["p"], loc), ["b", "c"])
-        self.assertEqual([k for k in named_keys(loc["p"], loc) if "[SCOPE." in expanded(k, loc)], ["b"])
+        self.assertEqual(named_keys(loc["p"], loc), ["b", "c", "a", "d"])
+        self.assertEqual([k for k in named_keys(loc["p"], loc) if "[SCOPE." in expanded(k, loc)], ["b", "a"])
 
 
 if __name__ == "__main__":
