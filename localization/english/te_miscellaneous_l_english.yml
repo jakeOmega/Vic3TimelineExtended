@@ -3545,6 +3545,7 @@
  nd_tt_need_icbms:0 "We have researched $radar$ and $ICBMs$"
  nd_tt_need_radar:0 "We have researched $radar$"
  nd_tt_nfu_amendment_struck:0 "The #bold No-First-Strike Pledge#! [concept_amendment] is struck from our laws"
+ nd_tt_nfu_reaffirmed:0 "We tell the world that #v No First Use#! remains our doctrine"
  nd_tt_no_pledge:0 "We have not pledged not to use nuclear weapons against them"
  nd_tt_not_disarmed:0 "Our arsenal is not bound by a disarmament settlement or by the Non-Proliferation Treaty's disarmament terms"
  nd_tt_only_issuer:0 "We made the threat"
