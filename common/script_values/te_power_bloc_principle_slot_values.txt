@@ -2,9 +2,17 @@
 # (common/scripted_rules/00_scripted_rules.txt), the power bloc panel and
 # te_pb_principle_slot_free (the AI's limit) all read te_pb_principle_slot_cap.
 
-# Country scope (the bloc leader): slots from the leader's technologies.
+# Country scope (the bloc leader): slots from the leader's technologies. None
+# under the Power Bloc Principle Slots rule's "Four" setting
+# (te_principle_slots_rule in common/game_rules/extra_game_rules.txt).
 te_pb_tech_principle_slots = {
-	value = modifier:country_te_pb_principle_slots_add
+	value = 0
+	if = {
+		limit = {
+			NOT = { has_game_rule = te_principle_slots_four }
+		}
+		add = modifier:country_te_pb_principle_slots_add
+	}
 	min = 0
 	max = 4
 }

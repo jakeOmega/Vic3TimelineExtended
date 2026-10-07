@@ -416,3 +416,23 @@ te_tax_code_rule = {
 		flag = te_tax_code_enabled_customs
 	}
 }
+
+# Power bloc principle slots (te_power_bloc_principle_slot_values.txt). Eight:
+# the four slot technologies each add a slot to the base game's rank and member
+# slots, up to eight. Four: the technologies add none, so a bloc has the base
+# game's two to four. NPowerBlocs.MAX_PRINCIPLES stays 8 either way (a define
+# can't follow a game rule); everything that limits slots reads the bloc's
+# count, te_pb_principle_slot_cap, which this rule caps through
+# te_pb_tech_principle_slots. Checked as NOT = { has_game_rule =
+# te_principle_slots_four }, so a save without a value for it gets eight.
+te_principle_slots_rule = {
+	default = te_principle_slots_eight
+
+	te_principle_slots_eight = {
+		flag = te_principle_slots_eight
+	}
+
+	te_principle_slots_four = {
+		flag = te_principle_slots_four
+	}
+}

@@ -4608,6 +4608,7 @@ company_ig_farben = {
 	}
 	building_types = {
 		building_chemical_plant
+		building_synthetics_plant
 		building_synthetics_plant_rubber
 		building_ig_farben_buna_werke
 	}
