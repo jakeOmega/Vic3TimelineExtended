@@ -1036,6 +1036,24 @@ same day, also at the owner's request. Not yet seen in a running game.
   2015 observer save held 24.9 against the cap of 10, so the pillar sat at +10 for years,
   far from the "+7 in a quiet world" estimated below. A shorter half-life was the second
   lever considered; the owner chose to try the cap alone first.
+- **Every delivery reward was then halved** (2026-10-06), the half-life kept. Under the cap
+  the 1983 observer save still read 9.6 to 10: at four years' memory about 0.14 points a month
+  holds the ledger at the cap, and single entries of 1 to 2 refilled it every few months.
+  Owner: "keep the memory long, but you need more successes to keep the pillar strong." The
+  figures elsewhere in this document are the pre-halving ones. Now: a mission accomplished 1
+  (electoral 0.5), a mandate discharged 1, a ceasefire kept 0.75, a referendum held 0.5, a full
+  World Food Reserve draw 0.5, an emergency loan accepted (`un_events.35`) 0.5; a full
+  peacekeeping force or major relief effort (`un_events.4.a`, `.7.a`) 0.75, observers or
+  what can be spared (`.4.b`, `.7.b`) 0.25, both × weight.
+- **Votes go to credibility, outcomes to delivery** (same day, owner). A carried aid,
+  peacekeeping or observer request had booked delivery (1, or 0.5 vetoed or below
+  Established), and the mission it opened booked delivery again on success; it is now a
+  credibility entry like every other carried resolution (+1, or +0.5). A failed mission had
+  cost credibility −1; it is now a delivery debit of −1 (`un_mission_failure_delivery`),
+  since it is the UN failing to deliver rather than anyone defying it. The delivery floor of 0
+  means failures cancel recent successes rather than banking a deficit. Abused mandates,
+  defied ceasefire orders, refused referendums, defied court rulings and members refusing to
+  send aid or troops stay in credibility.
 
 **Rulings.**
 

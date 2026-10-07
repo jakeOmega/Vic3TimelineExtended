@@ -1808,8 +1808,8 @@
   "de": "Humanitäre Hilfe erhalten"
  },
  "notification_un_mission_aid_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. The Assembly's credibility suffers.",
-  "de": "Die [Concept('concept_un_mission_aid', 'UN-Hilfsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen. Die Glaubwürdigkeit der Versammlung leidet."
+  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. UN delivery falls.",
+  "de": "Die [Concept('concept_un_mission_aid', 'UN-Hilfsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen. Die Umsetzung der UN sinkt."
  },
  "notification_un_mission_aid_failed_notice_name": {
   "en": "A UN Aid Mission Fails",
@@ -1824,8 +1824,8 @@
   "de": "Eine UN-Hilfsmission erfüllt ihren Auftrag"
  },
  "notification_un_mission_electoral_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have left before an election: we were attacked, or we no longer hold elections. The Assembly's credibility suffers.",
-  "de": "Die [Concept('concept_un_mission_electoral', 'UN-Wahlbeobachter')] in [SCOPE.sState('un_msn_state_done').GetName] sind vor einer Wahl abgezogen: Wir wurden angegriffen, oder wir halten keine Wahlen mehr ab. Die Glaubwürdigkeit der Versammlung leidet."
+  "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have left before an election: we were attacked, or we no longer hold elections. UN delivery falls.",
+  "de": "Die [Concept('concept_un_mission_electoral', 'UN-Wahlbeobachter')] in [SCOPE.sState('un_msn_state_done').GetName] sind vor einer Wahl abgezogen: Wir wurden angegriffen, oder wir halten keine Wahlen mehr ab. Die Umsetzung der UN sinkt."
  },
  "notification_un_mission_electoral_failed_notice_name": {
   "en": "UN Electoral Observers Withdrawn",
@@ -1864,8 +1864,8 @@
   "de": "Eine UN-Mission trifft ein"
  },
  "notification_un_mission_peacekeeping_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, or everyone who served in it left. The Assembly's credibility suffers.",
-  "de": "Die [Concept('concept_un_mission_peacekeeping', 'UN-Friedensmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, oder alle, die in ihr gedient haben, sind abgezogen. Die Glaubwürdigkeit der Versammlung leidet."
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, or everyone who served in it left. UN delivery falls.",
+  "de": "Die [Concept('concept_un_mission_peacekeeping', 'UN-Friedensmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, oder alle, die in ihr gedient haben, sind abgezogen. Die Umsetzung der UN sinkt."
  },
  "notification_un_mission_peacekeeping_failed_notice_name": {
   "en": "A UN Peacekeeping Mission Fails",
@@ -1888,8 +1888,8 @@
   "de": "Eine UN-Mission verstärkt"
  },
  "notification_un_mission_stabilisation_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. The Assembly's credibility suffers.",
-  "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr gedient haben, sind abgezogen. Die Glaubwürdigkeit der Versammlung leidet."
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
+  "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr gedient haben, sind abgezogen. Die Umsetzung der UN sinkt."
  },
  "notification_un_mission_stabilisation_failed_notice_name": {
   "en": "A UN Stabilisation Mission Fails",

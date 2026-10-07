@@ -574,7 +574,7 @@ un_fr_min_stock = { value = 500 }
 # The relief lasts this many monthly state pulses (a year).
 un_fr_relief_duration = { value = 12 }
 # The delivery entry for a full relief (reason 34; less when less was drawn).
-un_fr_delivery_points = { value = 1 }
+un_fr_delivery_points = { value = 0.5 }
 # Standing for each pledger drawn on (reason 42; before diminishing returns).
 un_fr_pledger_standing_gain = { value = 2 }
 # The AI pledges once it holds this much grain.

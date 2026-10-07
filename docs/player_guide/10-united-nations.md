@@ -96,16 +96,18 @@ world shows over years. The target is the sum of eight pillars:
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
 | Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
-| Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions, World Court rulings obeyed or defied, ceasefire orders and referendums defied. |
+| Credibility | −25 to +25 | Resolutions carried (aid, peacekeeping and observer requests among them) or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, World Court rulings obeyed or defied, ceasefire orders and referendums defied. |
 | Funding | −10 to +10 | The power-weighted share of major and great power members running peacekeeping, human rights and arms control programs, plus the money members give the World Development Fund (0.7% of the members' GDP a year counts in full), minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, nuclear use, and aggressors fighting on under a ceasefire order. |
-| Delivery | −10 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished, ceasefires kept, referendums held and grain the World Food Reserve sends: 0 to +10. While the [World Food Reserve](#the-world-food-reserve-and-hunger) stands, hunger among members adds −10 to +3. |
+| Delivery | −10 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished less missions failed, ceasefires kept, referendums held and grain the World Food Reserve sends: 0 to +10. While the [World Food Reserve](#the-world-food-reserve-and-hunger) stands, hunger among members adds −10 to +3. |
 | Policy | −25 to +25 | The UN Authority Target modifier carried by laws and institutions, with each country's total scaled by its weight. A member that is not undermining the UN counts for or against; any other country counts only against. A negative total pulls authority down. See [What counts toward Policy](#what-counts-toward-policy). |
 
 Credibility, delivery and the nuclear half of peace and order are kept as
-ledgers: each act adds or subtracts points. Credibility entries halve every ten
-years; delivery entries and nuclear use halve every four. The delivery ledger
-holds no more than its pillar shows, 0 to 10, so points past +10 are not banked
+ledgers: each act adds or subtracts points. Credibility records votes and
+whether the UN is obeyed; delivery records what it gets done, so a failed
+mission takes delivery away. Credibility entries halve every ten years;
+delivery entries and nuclear use halve every four. The delivery ledger holds
+no more than its pillar shows, 0 to 10, so points past +10 are not banked
 for later. Acts by powerful
 countries count for more. Each entry is multiplied by the actor's **weight**,
 its share of world prestige against a typical great power's 10% (×1), up to ×5;
@@ -836,8 +838,8 @@ limit: one that is not done goes on for as long as it keeps contributors, so a
 member that keeps paying for its contingent can keep it in the field. Time
 works on the AI instead, which grows less willing to send a contingent to a
 mission the longer it has run. Success adds delivery and gives each
-contributor 3 standing and 15 relations with the host; failure costs
-credibility. The state panel shows a UN Mission tile, and contributors build
+contributor 3 standing and 15 relations with the host; failure takes
+delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
 
 Any major-power member not under sanctions can press Send a Contingent on a

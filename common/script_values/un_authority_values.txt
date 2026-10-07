@@ -48,6 +48,17 @@ un_participation_weight = { value = 25 }
 un_commitment_weight = { value = 25 }
 un_credibility_cap = { value = 25 }
 un_credibility_floor = { value = -25 }
+# Every delivery reward is half what it was before 2026-10-06 (owner: "keep the
+# memory long, but you need more successes to keep the pillar strong"). With
+# the cap alone, the 1983 observer save still read 9.6 to 10: at the four-year
+# half-life (un_ledger_decay_factor) about 0.14 points a month holds the ledger
+# at the cap, and single entries of 1 to 2 refilled it every few months. The
+# halved figures sit where each entry is booked and in the loc that states them.
+# The same ruling sorted the entries: votes go to credibility, outcomes to
+# delivery. A carried aid, peacekeeping or observer request is a credibility
+# entry like any other carried resolution, and a failed mission is a delivery
+# debit (it used to cost credibility). The floor of 0 keeps a run of failures
+# from banking a deficit: they cancel recent successes.
 un_delivery_cap = { value = 10 }
 # The delivery pillar's floor: the ledger alone cannot go below 0, but the
 # World Food Reserve's hunger term can take the pillar down to this (redesign
