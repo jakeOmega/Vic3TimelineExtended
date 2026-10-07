@@ -1216,6 +1216,19 @@ te_mon_credibility_c_own = {
 	else = {
 		value = 0.25
 	}
+	# What lenders believe of the mandate (#799): Inflation Targeting's bonus,
+	# as far as it has been earned (te_mon_mandate_cred_target). The variable
+	# is step 2's, so a country that has lost its dial does not read last
+	# year's figure.
+	if = {
+		limit = {
+			te_mon_is_metallic = no
+			te_mon_is_state_banking = no
+			te_mon_has_dial = yes
+			has_variable = te_mon_mandate_cred
+		}
+		add = var:te_mon_mandate_cred
+	}
 }
 
 # How far headline inflation has to sit from the anchor before credibility is
@@ -2881,6 +2894,148 @@ te_mon_mandate_growth_reaction_term = {
 	subtract = te_mon_mandate_growth_threshold
 	min = 0
 	multiply = te_mon_mandate_growth_reaction
+}
+
+# Inflation Targeting's weight on the cycle lean (#799). Mandate 4 is the Dual
+# Mandate's rule with the lean scaled by this:
+#   target = r^* + pi + 1.0 x (pi - anchor) + weight x cycle_lean
+# The Dual Mandate leans with weight 1, Growth with 1/2. A narrow
+# price-stability bank (the Bundesbank, the ECB, the Reserve Bank of New
+# Zealand from 1989) answers the cycle only through what it does to prices.
+#
+# 0, NOT A SMALL LEAN (docs/audits/banking_cycle_simulation.md §26). Prices
+# already carry the cycle under an inflation target: a panic is -4pp of
+# pressure (te_mon_phase_pressure), so core falls and the inflation term cuts
+# the rate.
+te_mon_mandate_inflation_lean_weight = {
+	value = 0
+}
+
+# The lean Inflation Targeting adds to its target. HIDDEN, like the cycle lean
+# it scales.
+te_mon_mandate_inflation_lean = {
+	value = te_mon_cycle_lean
+	multiply = te_mon_mandate_inflation_lean_weight
+}
+
+
+# --- What lenders believe of the mandate (#799) ------------------------------
+#
+# Inflation Targeting adds te_mon_mandate_cred_inflation to the credibility
+# anchor c (te_mon_credibility_c_own) of a bank that runs it: 0.4 -> 0.5
+# delegated, 0.7 -> 0.8 independent. No other mandate moves c, and a metallic
+# or state-owned bank, or a dial held by hand, gets nothing.
+#
+# GROWTH CARRIES NO PENALTY (docs/audits/banking_cycle_simulation.md §26). At
+# -0.1 a delegated fiat bank under +1pp of wage pressure averaged 5.4%
+# inflation instead of 5.0% and held a rate of 10% or more in 35% of months
+# instead of 24%: a second charge on a mandate whose price is already its
+# inflation, paid by every AI at war.
+#
+# BELIEF IS ASYMMETRIC. te_mon_mandate_cred holds what lenders believe today.
+# Step 2 moves it toward te_mon_mandate_cred_target: a loss lands at once,
+# while a gain builds by te_mon_mandate_cred_build a month, so a bank that
+# adopts Inflation Targeting takes two years to be believed.
+te_mon_mandate_cred_inflation = {
+	value = 0.1
+}
+
+# 0.1 / 24: the whole bonus in two years.
+te_mon_mandate_cred_build = {
+	value = 0.0042
+}
+
+# The adjustment the current mandate earns. Zero wherever the mandate does not
+# run the dial, or the credibility comes from somewhere else (metal pins
+# expectations; a state bank's 0.15 is the ruling that delegating to it buys
+# nothing).
+te_mon_mandate_cred_target = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_is_metallic = no
+			te_mon_is_state_banking = no
+			te_mon_mandate_runs_bank = yes
+			has_variable = te_mon_mandate
+			var:te_mon_mandate = 4
+		}
+		value = te_mon_mandate_cred_inflation
+	}
+}
+
+# A mandate change toward a looser rule (#799): how many steps looser. The
+# order is Inflation Targeting (0), Dual Mandate (1), Growth (2); Peg Defence
+# has no place in it, and a change to or from it moves nothing. Read by
+# te_mon_effect_mandate_changed with te_mon_mandate_last still holding the old
+# mandate.
+te_mon_mandate_rank_old = {
+	value = 0
+	if = {
+		limit = { var:te_mon_mandate_last = 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { var:te_mon_mandate_last = 2 }
+		value = 2
+	}
+}
+
+te_mon_mandate_rank_new = {
+	value = 0
+	if = {
+		limit = { var:te_mon_mandate = 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { var:te_mon_mandate = 2 }
+		value = 2
+	}
+}
+
+te_mon_mandate_loosen_steps = {
+	value = te_mon_mandate_rank_new
+	subtract = te_mon_mandate_rank_old
+	min = 0
+}
+
+# What a step looser does at once, in pp of expected inflation. The cyclical
+# premium half is the te_mon_mandate_loosened modifier (+0.5pp a step, fading
+# over two years).
+te_mon_mandate_loosen_expectation = {
+	value = 0.5
+}
+
+te_mon_mandate_loosen_jump = {
+	value = te_mon_mandate_loosen_steps
+	multiply = te_mon_mandate_loosen_expectation
+}
+
+# Months a mandate stays put after a change that was not made by statute: the
+# dashboard's buttons, the AI's own rule and an event's override (#799).
+te_mon_mandate_lock_length = {
+	value = 12
+}
+
+# Months between a statutory change (a mandate act attached to or removed from
+# Central Bank Independence) and the bank running the new rule (§6).
+te_mon_mandate_statute_delay = {
+	value = 12
+}
+
+# The mandate the independence law's act names: 1 for the Dual Mandate Act, 4
+# for the Inflation Targeting Act, 0 for none. Should both ever be attached
+# (two interest groups sponsoring different acts in one enactment), the Dual
+# Mandate Act wins and te_monetary_update_target strikes the other.
+te_mon_statute_mandate = {
+	value = 0
+	if = {
+		limit = { te_mon_has_dual_act = yes }
+		value = 1
+	}
+	else_if = {
+		limit = { te_mon_has_it_act = yes }
+		value = 4
+	}
 }
 
 

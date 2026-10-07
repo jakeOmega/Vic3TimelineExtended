@@ -2516,6 +2516,7 @@ add_amendment = {
 
 The pattern Collective Governance uses (`collective_governance_effects.txt`; `docs/systems/mod_systems.md` § Collective Governance): one amendment per state of *another* law, kept current by script.
 - **Vanilla does this.** `amendment_geheime_staatskonferenz` is attached from Austria's history with `would_sponsor = { always = no }`.
+- **An amendment needs no `modifier` either.** Vanilla's `amendment_preserved_bureaucratic_caste` has only a `sponsor_modifier`. The central bank's mandate acts (`amendment_cb_inflation_targeting`, `amendment_cb_dual_mandate`, #799) carry nothing: script reads `has_amendment` and sets the mandate, so their `_desc` loc is the only place the effect is told.
 - **An amendment needs no `parent`.** 12 of vanilla's 67 have none. A parentless amendment has no parent law for IGs to take a stance on, so it doesn't count the host law's approval a second time. Repeal requires an IG in government that opposes the parent law (`concept_amendment_repeal_desc`), so a parentless amendment can't be repealed from the UI either.
 - **Ask one trigger in both `possible` and `can_repeal` (negated).** Because `add_amendment` checks `possible` (above), the script can add the amendment exactly when it fits, and the player can't repeal the one that fits.
 - **A law's amendments leave with it** when the law is replaced (vanilla `amendment_geheime_staatskonferenz`: "can be removed by changing Distribution of Power"). The refresh only has to handle changes to the *other* law while the host stays.

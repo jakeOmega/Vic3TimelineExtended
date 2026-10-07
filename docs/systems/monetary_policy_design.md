@@ -8,6 +8,8 @@
 
 > **A road off gold (2026-10-05):** a deep slump the peg is prolonging (a Downturn or Panic with the stance Tight or Very Tight) now drains Peg Confidence 3 a month whatever the vault holds, so `te_peg.1` comes about two years into it; a suspension of convertibility ends in a choice (`te_peg.3`: resume at 50, or Fiat Money); and the AI's currency weights favour fiat once it is on offer. See [§0.13](#013-a-road-off-gold--2026-10-05).
 
+> **Mandates set by law (2026-10-07, #799):** Price Stability is renamed the **Dual Mandate** (its rule unchanged) and a fourth mandate, **Inflation Targeting**, is the same rule with no cycle lean and +0.1 credibility. Under central bank independence the mandate is an act on the law (the Inflation Targeting Act or the Dual Mandate Act) that the bank follows after the 12-month delay, AI and player alike; `te_mandate.1` asks for one whenever the law has none. Without independence the dashboard switch stays but each change locks it for a year, and a looser rule raises expected inflation and the risk premium. See [§6](#6-delegation-mandates-independence-ai) and `docs/audits/banking_cycle_simulation.md` §26.
+
 > **Borrowed gold costs the treasury nothing (2026-10-06):** owner decision I is reversed. The carry (`te_gold_carry`, the *Interest on Borrowed Gold* budget expense `te_mon_gold_carry_expense` and the dashboard's *Interest on It* row) is gone; hot money still leaves first, at double speed, once the gap is ≤ 0. Under gold the interest on balances a high rate drew in was paid by the private borrowers whose bills they bought, and a high rate already costs the treasury through its own market yield (step 7). If tight credit is too cheap, the fix belongs in the stance terms, not in a budget line. See decision I in [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks).
 
 > **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
@@ -123,7 +125,8 @@ wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-
 
 ### 0.2 Deferred (named in the design, deliberately not shipped)
 
-- **CBI's 12-month mandate-change delay** (§6, `(proposed)`).
+- ~~**CBI's 12-month mandate-change delay** (§6, `(proposed)`).~~ Shipped with #799's
+  mandates by law (§6).
 - **§5.1's minting axis.**
 - **France's commodity-money dial** (§5.1).
 - **Estimation error shrinking with finance techs** (§6) — the spec gives no magnitude. The
@@ -464,7 +467,7 @@ and are tagged with the task that raised them.
 | # | Ruling | Why | Cost if wrong |
 |---|---|---|---|
 | **P1** | Implement the in-scope `(proposed)` items: §9.4 wage pressure + the real-wage dividend, §9.1's credibility `c` table including state-owned banking at 0.15, and §7.6's unanchored-expectations and monetisation premium terms | all are named in §19 row 2 or load-bearing for §10's tuning invariant | small terms to retune or remove |
-| **P2** | Still deferred: §9.1's gold-supply term, §5.1's minting axis, CBI's 12-month mandate delay, France's commodity dial, estimation error shrinking with finance techs | owner undecided or phase 3; the plain regime pull `−π_core` carries the metallic deflation bias meanwhile | later additions, nothing to undo |
+| **P2** | Still deferred: §9.1's gold-supply term, §5.1's minting axis, CBI's 12-month mandate delay (shipped with #799, §6), France's commodity dial, estimation error shrinking with finance techs | owner undecided or phase 3; the plain regime pull `−π_core` carries the metallic deflation bias meanwhile | later additions, nothing to undo |
 | **P3** | Monetisation is the **GDP-scaled `country_minting_add`** | §11 marks it chosen | swap to the `country_minting_mult` variant |
 | **P4** | The deficit term annualises through a named `te_mon_deficit_annualise_factor` = **52**, and the computed deficit-%-of-GDP is printed in the console read-out | §17 check 12 is unverified; the engine docs make `income` weekly and `gdp` yearly, so 52 is the documented reading | one-line flip to 1 — **checklist 15** |
 | **P5** | Step 6 (inflation) runs between steps 5 and 7 and reads **last month's** stance gap; step 8's real rate becomes `te_policy_rate − te_inflation` | forced by the step layout, and §16.3 already tolerates a one-month-old gap | one month of lag in two places — it is also why §10's war line comes out at 0.61% rather than 0.7% |
@@ -2315,7 +2318,8 @@ update sets the target from the mandate formula instead of the player's stepper.
 
 | Mandate | Target formula (clamped to the regime's range) | Character |
 |---|---|---|
-| **Price stability** | `r̂* + π + 1.0 × (π − 2) + cycle_lean` | leans against inflation first; accepts slumps. (Sanity check: at π = 13 this asks for ~26%, clamped to 25 — Volcker territory; a plain Taylor weight of 0.5 would give ~20%) |
+| **Inflation targeting** (4, #799) | `r̂* + π + 1.0 × (π − 2) + 0 × cycle_lean` | the narrow mandate (the Bundesbank, the ECB, the Reserve Bank of New Zealand from 1989): answers the cycle only through what it does to prices. `te_mon_mandate_inflation_lean_weight` = 0; lenders believe it more (+0.1 to the credibility anchor c, built over two years) |
+| **Dual mandate** (1; **price stability** until #799) | `r̂* + π + 1.0 × (π − 2) + cycle_lean` | leans against inflation first, and against the cycle with its full weight: jobs as well as prices, the Fed's mandate since Humphrey-Hawkins (1978). (Sanity check: at π = 13 this asks for ~26%, clamped to 25 — Volcker territory; a plain Taylor weight of 0.5 would give ~20%) |
 | **Growth** | `r̂* + π − 0.25 + 1.0 × max(0, π − 4) + cycle_lean/2` | runs warm — `te_mon_mandate_growth_bias`, **−0.25 since 2026-09-22** (was −1.0: measured at 4× price stability's crash rate and a 4.1% equilibrium, not the ~3% intended; −0.25 lands at 3.2% and 1.7× the crashes while still buying about +1pp of manufacturing throughput — `docs/audits/banking_cycle_simulation.md` F7, §5) — and reacts only above 4% (zero-gap point π = 4.25), or frenzy. The reaction is **1.0 since 2026-09-25** (`te_mon_mandate_growth_reaction`, was 0.5): at half weight the mandate could not keep inflation off the 8% wage-spiral edge under standing wage pressure and ended up both hotter and deeper in slump than price stability (§12 of the study). Never more hawkish than price stability |
 | **Peg defence** (gold only) | `world_rate + 0.5 × reserve_shortfall_pp` | keeps gold flows at zero; ignores the domestic cycle |
 
@@ -2350,7 +2354,50 @@ price pressure, never past zero. A believed bank holds its target against standi
 pressure without holding the economy in stagnation to do it (study §13). It replaced −5%
 crash chance and −2% random momentum a level (2026-09-25), which the simulator found
 almost worthless. A player planning to inflate away war debt should not want it.
-Mandate changes under CBI take effect after a 12-month delay **(proposed)**.
+
+**Mandates set by law (#799).** Under CBI the mandate is a statute, not a button: one of two
+amendments on `law_central_bank_independence`, the **Inflation Targeting Act** (mandate 4,
+parent `law_gold_standard`, Industrialists sponsor) or the **Dual Mandate Act** (mandate 1,
+parent `law_directed_credit_development_banks`, Trade Unions sponsor). The parents decide who
+backs and who may repeal each act: the savers and creditors of §13 back inflation targeting
+and the debtors oppose it; the labour and populist ideologies back the dual mandate and the
+market liberals oppose it. The acts carry no modifier; what they do is the mandate.
+
+- **The 12-month delay.** Step 2 follows the act after `te_mon_mandate_statute_delay` (12)
+  months (`te_mon_mandate_pending`, `_pending_months`); a different act restarts the clock.
+- **Gold first.** On a convertible gold standard an independent bank defends the peg whatever
+  its act says; the act governs once convertibility ends, at once (leaving the peg is the
+  gold law's doing, not a change of statute).
+- **No act.** `te_mandate.1` (*What the Bank Is For*) asks for one whenever an independent
+  dial country off gold has none: the law just passed, an old save, an act repealed in the law
+  panel. Its options attach an act (cooldown 60 months) and move the sponsor's and its rival's
+  approval. Until it is answered the AI keeps its own rule and a player's bank its mandate.
+- **Both acts** (two sponsors in one enactment): the Dual Mandate Act wins and step 2 strikes
+  the other.
+- **`banking_cycle_events.16`.** B's override no longer writes the mandate under CBI; C
+  passes the Dual Mandate Act there (and moves a delegated bank without CBI), and is the old
+  *Monetary Accord* modifier where there is nothing to move.
+- **The AI follows its act** (owner, #799), so an independent AI bank does not go to Growth
+  for a war.
+
+**What a change costs (#799).** `te_monetary_settle_mandate_change` compares the mandate with
+`te_mon_mandate_last` every pulse, so it sees every writer (dashboard, event, AI rule, statute):
+
+- **The lock.** A change no statute made starts `te_mon_mandate_lock_length` (12) months in
+  which the dashboard's mandate buttons and the AI's rule leave the mandate alone (owner: "markets
+  react + 1-year lock"). Moves forced by the gold law (an AI going on gold, anyone coming off
+  it) do not lock.
+- **A looser rule** (the order is inflation targeting, dual mandate, growth; peg defence is
+  outside it) moves markets at once: `te_inflation_expected` +0.5pp a step and
+  `te_mon_mandate_loosened`, +0.5pp of cyclical premium a step fading over two years.
+- **A tighter rule is believed gradually.** Only inflation targeting moves c: lenders' belief,
+  `te_mon_mandate_cred`, climbs toward its +0.1 by 0.0042 a month and is lost at once. Growth
+  carries no penalty: at −0.1 it ran a delegated fiat bank under +1pp of wage pressure 0.3pp
+  hotter, with a rate of 10% or more in 35% of months instead of 24%
+  (`docs/audits/banking_cycle_simulation.md` §26).
+
+Only under CBI is the 12-month delay the price of a change; the lock and the market reaction
+apply to any mandate change, including the statute's when its clock runs out.
 
 **Players start delegated too (2026-09-22).** `te_monetary_init_variables` seeds
 `te_mon_delegated = 1`, so a player who never opens the dashboard has a bank running price
@@ -2362,7 +2409,8 @@ country whose dial was never touched sat at its seeded whole point while inflati
 §14 clear and the AI's monthly write are as before, and an existing save keeps its value.
 
 **AI.** AI countries are always delegated. Mandate by rule: gold standard → peg defence;
-at war, or `scaled_debt ≥ 0.5` → growth; otherwise price stability. This runs inside the
+at war, or `scaled_debt ≥ 0.5` → growth; otherwise the dual mandate. Since #799 the rule waits
+out the year's lock between two ordinary mandates, and under CBI an act replaces it. This runs inside the
 monthly update for `is_player = no` — a **documented exception** to
 `mod_systems.md` "Do not move AI logic out of the buttons". Precedent:
 `common/journal_entries/je_covert_warfare.txt:125-202`. That rule protects the discrete
@@ -2371,7 +2419,7 @@ toggle buttons, which all stay; here the mandate is a shared player/AI mechanic 
 `scripting_best_practices.md:2953` — the AI branch must carry no gate the player branch lacks.
 
 A national-bank country **without the JE** (no `stock_exchange` or no level-5 urban
-center) has no dashboard and is auto-delegated to price stability.
+center) has no dashboard and is auto-delegated to the dual mandate (under CBI, to its act).
 
 ---
 
@@ -4409,7 +4457,8 @@ arrangement modifiers.
 |---|---|---|
 | `te_policy_rate_target` | regime range, integer | 1 |
 | `te_policy_rate` | same, fractional | 1 |
-| `te_mon_delegated` / `te_mon_mandate` | 0–1 / 1–3 | 1 |
+| `te_mon_delegated` / `te_mon_mandate` | 0–1 / 1–4 (4 since #799) | 1 |
+| `te_mon_mandate_statute` / `_pending` / `_pending_months` / `_last` / `_lock_months` / `_cred` | 0, 1 or 4 / 0, 1 or 4 / 0–12 / 1–4 / 0–12 / 0–0.1 | #799 |
 | `te_premium_structural` / `te_premium_cyclical` | floor–30 / −10–40 | 1 |
 | `te_rate_paid_pts` | 0.5–60 | 1 |
 | `te_neutral_rate` / `te_neutral_error` | 1–6 / ±1.5 (hidden) | 1 |
@@ -4849,7 +4898,9 @@ P6-1…13).
 | Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp **−2**…+4 (loose side was −4 until 2026-09-22) | 8 |
 | Neutral rate: era base / growth coeff / walk | 3 → 2 / 0.25 / ±0.1 | 8 |
 | Estimation error (CBI) | ±1.5 (±0.5) | 6 |
-| Price-stability mandate: inflation weight / target | 1.0 / 2% | 6 |
+| Dual Mandate (Price Stability until #799): inflation weight / target | 1.0 / 2% | 6 |
+| Inflation Targeting: cycle lean weight / credibility bonus / months to earn it | 0 / +0.1 c / 24 (`te_mon_mandate_cred_build` 0.0042) | 6 |
+| Mandate change: lock / statute delay / looser step | 12 months / 12 months / +0.5pp expected, +0.5pp premium fading over 2 years | 6 |
 | Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / **1.0** (was 0.5 until 2026-09-25) / 4% | 6 |
 | Cycle lean's outlook: momentum months | 4.69 × momentum (six months at 0.9 decay; `te_mon_outlook_momentum_factor`, 2026-09-25) | 6 |
 | Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / +0.3–1.5 up, −0.5 / −2 / −4 down under an inflation target (−0.3 / −0.8 / −1.5 on metal; was that everywhere until 2026-10-02) / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |

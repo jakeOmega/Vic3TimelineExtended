@@ -7907,6 +7907,16 @@ te_mon_currency_reform_premium = {
 	country_risk_premium_add = 0.05
 }
 
+# A central bank put on a looser mandate (#799): +0.5pp of cyclical premium a
+# step looser (Inflation Targeting -> Dual Mandate -> Growth), fading over two
+# years. Applied only by te_monetary_mandate_loosened, the same timed-modifier
+# reasoning as the currency reform's above: lenders remember the change for a
+# while, and the clock shows in the modifier list.
+te_mon_mandate_loosened = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.005
+}
+
 # --- Phase 3: what the convertibility crisis leaves behind (§12.3) -----------
 # All four are TIMED, applied by the options of te_peg.1 (events/te_peg_events.txt)
 # with `days =`, on te_mon_currency_reform_premium's reasoning: lenders remember

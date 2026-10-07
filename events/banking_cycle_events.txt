@@ -1664,18 +1664,26 @@ banking_cycle_events.165 = {
 # central bank independence); under the simplified rule, a national bank (#428).
 # How the options act on the monetary layer (full system only):
 #   A  affirm      — nothing to change: the bank already holds the dial.
-#   B  override    — puts the bank on the Growth mandate, the rule that runs
-#                    looser and ignores inflation below about 4%: what the
-#                    politicians are asking for. te_mon_effect_set_mandate, the
-#                    dashboard's own control, legal under independence too.
-#   C  accord      — no dial write. The bank keeps its rule and its mandate;
-#                    the compromise is the bespoke banking_event_dual_mandate,
-#                    whose text (#448) no longer claims a "dual mandate" the
-#                    Mandate row would never show. The key keeps its old name
-#                    so saves holding the modifier carry on. .116 and .166 use
-#                    it for their compromise options too.
-# An AI's mandate is re-derived every month (te_monetary_update_target), so
-# B's write lasts only for a player — the same rule the dashboard lives by.
+#   B  override    — puts a delegated bank on the Growth mandate, the rule
+#                    that runs looser and ignores inflation below about 4%: what
+#                    the politicians are asking for. te_mon_effect_set_mandate,
+#                    the dashboard's own control. Not under independence
+#                    (#799): there the mandate is a statute, and an override
+#                    cannot repeal it.
+#   C  legislate   — (#799) puts the bank on the Dual Mandate: under
+#                    independence by passing the Dual Mandate Act in place of an
+#                    Inflation Targeting Act (te_mandate.1's act, the same
+#                    12-month delay), without it by moving a delegated bank.
+#                    Where there is nothing to move (the bank already runs or
+#                    holds it, or a gold peg), C is the old accord instead: the
+#                    bespoke banking_event_dual_mandate, "Monetary Accord", whose
+#                    key keeps its old name so saves holding the modifier carry
+#                    on. .116 and .166 use it for their compromise options too.
+# Both writes are priced at the next monthly pulse like a dashboard change
+# (te_monetary_settle_mandate_change): the lock, and a looser rule's premium.
+# An AI's mandate is re-derived every month (te_monetary_update_target), so a
+# delegated AI's B or C lasts until its rule next moves; an independent AI's C
+# is law.
 # --------------------------------------------------------------------------
 banking_cycle_events.16 = {
 	type = country_event
@@ -1724,11 +1732,13 @@ banking_cycle_events.16 = {
 		name = banking_cycle_events.16.b
 		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
 		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
-		# The override is a new rule for the bank: the Growth mandate.
+		# The override is a new rule for the bank: the Growth mandate. Not for
+		# an independent bank, whose mandate is a statute (#799).
 		if = {
 			limit = {
 				te_mon_full_system = yes
 				te_mon_has_dial = yes
+				te_mon_is_cbi = no
 				# The dashboard's own mandate gate, asked again: the event stays
 				# open for months, and the dial may have been taken back since.
 				te_mon_mandate_binds = yes
@@ -1752,9 +1762,43 @@ banking_cycle_events.16 = {
 		}
 	}
 
-	# Option C: Strike an accord with the central bank - compromise
+	# Option C: Legislate a dual mandate - compromise (#799)
+	option = {
+		name = banking_cycle_events.16.c_legislate
+		trigger = { te_mon_can_legislate_dual_mandate = yes }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
+		if = {
+			limit = { te_mon_is_cbi = yes }
+			active_law:lawgroup_financial_regulation ?= {
+				every_scope_amendment = {
+					limit = { type = amendment_type:amendment_cb_inflation_targeting }
+					remove_amendment = yes
+				}
+				add_amendment = {
+					type = amendment_cb_dual_mandate
+					sponsor = ROOT.ig:ig_trade_unions
+					cooldown = 60
+				}
+			}
+			custom_tooltip = banking_cycle_events.16.c.act_tt
+		}
+		else = {
+			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_cycle_events.16.c.mandate_tt }
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option C, where there is no mandate to move: Strike an accord with the
+	# central bank - compromise
 	option = {
 		name = banking_cycle_events.16.c
+		trigger = { NOT = { te_mon_can_legislate_dual_mandate = yes } }
 		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = {
