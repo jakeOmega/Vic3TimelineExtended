@@ -120,6 +120,17 @@ proliferator's case strength, or 30 if it signed the treaty (see [Grounds for
 UN censure](10-united-nations.md#grounds-for-un-censure)). Several answers
 shave progress off the proliferator.
 
+Accepting the new reality is an accommodation: +25 relations with the
+proliferator, and −15 with every country that opposes its program (its rivals,
+the countries hostile to it, and its opponent in a nuclear crisis). A nuclear
+power can instead extend its guarantee to the proliferator's neighbors, at −10
+relations with the proliferator. Every neighbor without the bomb or a guarantee
+that the power could sign a [Nuclear
+Guarantee](#the-nuclear-umbrella-and-nuclear-guarantees) with today is offered
+one, binding for ten years. A neighbor that accepts loses 10 relations with the
+proliferator. The power hears each answer, and an offer lapses if another
+power's guarantee was accepted first.
+
 Other countries see your arsenal only as an estimate, re-observed yearly at
 between 60% and 150% of the true count, and exact after a test or a strike. The
 Nuclear Powers leaderboard and the AI use these estimates.
