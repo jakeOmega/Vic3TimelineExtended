@@ -211,6 +211,15 @@ laws](06-politics.md#amendments-to-the-mods-laws)), your doctrine is held at No
 First Use, and leaving it strikes the amendment. An AI country keeps the
 amendment unless a militarist government takes power, which may repeal it.
 
+A launch your government never ordered (Launch on Warning, a commander cut off
+from the capital, or Automatic Retaliation misreading an accident) breaks the
+pledge too, but your doctrine stays No First Use and the amendment stays on
+your laws. Once the incident's own event is answered, "The Pledge After the
+Launch" lets you reaffirm No First Use in public (−10 legitimacy and −5%
+authority, fading over two and a half years, for +15 credibility at once),
+repudiate it at half the usual credibility and infamy cost with no two-year
+wait, or say nothing.
+
 ### Nuclear readiness levels
 
 Readiness moves one step every two weeks toward the level you order.
@@ -542,7 +551,8 @@ the exchange; it does not open ordinary peacetime strike actions. The normal
 stockpile, disarmament, pledge and assembled-force requirements still apply to
 an ordered response. An unauthorized first use breaches your pledges and pays
 the usual consequences, but it does not end No First Use or strike the
-No-First-Strike Pledge amendment: your government never chose to.
+No-First-Strike Pledge amendment: your government never chose to. It decides
+afterwards (see [Nuclear doctrine](#nuclear-doctrine)).
 
 After at least seven days without another launch, the next weekly review offers
 both governments "After the Exchange". If both stand down, the exchange ends
