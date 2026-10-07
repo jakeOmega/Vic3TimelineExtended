@@ -200,3 +200,17 @@ Event un_vote.5 is orphaned
 ```
 
 `un_vote.5` (`events/un_vote_events.txt`) used to dispatch the AI ballots. Since the late ballots (#531) nothing queues it, but an older save can still hold one queued, so the event stays and now only refreshes the leans. The engine logs it as orphaned at load, once per launch. The signature names this one event, so a real mod event that loses its trigger still shows up. Tracked at `docs/audits/open_issues.md#l25-un_vote5-kept-for-events-queued-in-older-saves`.
+
+### `event.cpp:358` — Grand Monuments v2 load-time notices
+- source: `event.cpp:358`
+- source: `guitexturehandler.h:155`
+- source: `jomini_effect.cpp:1139`
+- tracked: `docs/audits/open_issues.md#l26-grand-monuments-v2-load-time-notices`
+
+```
+No default option in event monument_events.11.
+building_gm_name_carrier_anchor has missing texture
+Flag 'leader' is used but is never set
+```
+
+Three lines once per launch. The skin choice has no `default_option` by design, the never-built name-carrier building lacks the same unidentified UI texture as the silo (L17), and `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see. Each signature names its own event, building or flag, so another event without a default, another building's missing texture or another never-set flag still shows up.

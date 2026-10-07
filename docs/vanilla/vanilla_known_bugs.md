@@ -117,13 +117,24 @@ Affected vanilla files (all share the same root cause):
 - `events/election_events/election_other_parties_events.txt`
 - `events/election_events/communist_fascist_election_events.txt`
 - `common/political_movements/02_cultural_movement.txt:1096`
+- `events/red_scare_events.txt:102, 125, 283, 306, 954`
+- `common/character_interactions/00_character_interactions.txt`
+- `common/political_lobbies/00_political_lobbies.txt:570`
+- `common/journal_entries/00_fascism.txt`
+- `events/agitators_events/government_petition_events.txt`
+- `events/commander_events.txt`
+- `events/prostitution_events.txt`
 
 ```
 Error: Could not get leader of interest group
 Error: Event target link 'leader' returned an unset scope
+Error: Invalid left side during comparison 'popularity'
+Error: Invalid right side during comparison 'popularity'
 ```
 
-`je_vanguard`, the related communism-event option, most election-event branches, and the cultural-movement leader-recruitment path iterate `any_interest_group = { leader = { ... } }` without first checking `has_leader = yes`. Marginal IGs and IGs in newly-formed or recently-released countries can lack a leader for several months. Vanilla pattern across multiple content systems — affects every country running these JEs/events/movements while an IG is leaderless.
+`je_vanguard`, the related communism-event option, most election-event branches, and the cultural-movement leader-recruitment path iterate `any_interest_group = { leader = { ... } }` without first checking `has_leader = yes`. Marginal IGs and IGs in newly-formed or recently-released countries can lack a leader for several months. Vanilla pattern across multiple content systems — affects every country running these JEs/events/movements while an IG is leaderless. The `popularity` comparisons are a character interaction reading the missing leader's popularity.
+
+A country can also stay leaderless for good, which multiplies these lines: about 1,700 an hour from one country in 2026-10-07's France game. Vanilla's Indian-revolution hack (the `00_code_on_actions.txt:5440` entry below) retires the rebels' interest-group leaders and the engine fails to replace them, so the groups keep pointing at deleted characters and never get new ones. Count a country's lines per hour before blaming the scripts above.
 
 ### `common/treaty_articles/18_acquire_monopoly_for_company.txt` — `Event target link 'type' returned an invalid object`
 
@@ -181,7 +192,7 @@ Error: set_only_legal_party_from_ig effect [ Invalid target interestgroup ]
 Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 ```
 
-Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug.
+Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice).
 
 ### `gui/block_windows.gui:650` — malformed item desc
 
@@ -697,6 +708,28 @@ has_diplomatic_relevance trigger [ Wrong target scope for has_diplomatic_relevan
 ```
 
 `requirement_to_maintain = { trigger = { has_diplomatic_relevance = scope:target_country } }` with no `exists` guard, evaluated for every lobby aimed at a country the same tick it is annexed. 15 lines in one tick, 2026-10-04.
+
+### `common/on_actions/00_code_on_actions.txt:5440` — the Indian-revolution hack leaves the rebels' interest groups pointing at deleted leaders
+
+```
+change_tag effect [ It's illegal to change tag to a tag that is in use! ]
+```
+
+`on_revolution_start` has a block commented "Script hack for Indian revolutions". When the East India Company faces a non-European revolution, it moves the rebels to the India tag (`change_tag = BHT`). Then it strips each of their primary cultures and retires every character of that culture, interest-group leaders included, before `grant_indian_cultures` gives them new cultures. The `change_tag` line fails when India already exists (in the 2026-10-06 France game it did), and the rest of the block runs anyway.
+
+The engine tries to replace the retired leaders while the country has no culture. That logs one `Invalid Culture scope when creating Character` per leader (`character_templates_utils.cpp:40`) and `Failed to generate leader for Armed Forces in Revolutionary Dominion of India!` (`pdx_assert.cpp:641`). Those two stay unregistered so a mod-caused culture or leader failure still surfaces.
+
+After this, the groups keep a leader id that names no character in the save, so the engine never generates a new one. In the France game, 7 of the 8 groups of the rebels, who won and took the Bengal tag, still pointed at deleted characters nine years later. They were the only 7 among the save's 2,503 groups. Every `leader` read on them logs the pair in the `leader = { ... }` entry above. To read a group's leader id from a save, see the BINARY LAYOUT in `scripts/analysis/save_country_probe.py`.
+
+### `gui/right_click_menu.gui` — the unassigned-commanders header sets margins on a plain `widget`
+
+```
+Property 'margin_top'(816) not handled
+Property 'margin_left'(814) not handled
+Error setting properties for '' (widget)
+```
+
+Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
 ## Expected mod-override noise
 
@@ -1364,6 +1397,15 @@ data system function 'skie'
 ```
 
 New in 1.13.9: the shipping-lane/sea-node tooltip (vanilla `interfaces_l_english.yml`, "Ports connected via this Sea Node") builds a `ConcatIfNeitherEmpty('title …', 'tooltippable_name …')` data-function call with localized state names inlined into the single-quoted argument. A name containing an apostrophe (observed: dynamic "Russo-American Kuril'skie Ostrova") terminates the string early — "Expected ','" (`:43`), plus companion "Failed to convert statement" (`:1112`/`:1092`) and "Could not find data system function 'skie'" (`:1466`). Vanilla tooltip code + vanilla dynamic name; fires only while that tooltip renders. Cosmetic (tooltip truncates).
+
+### `pdx_data_statementparser.cpp:230` — a vanilla loc string is missing a `.` before `GetCustom`
+- source: `pdx_data_statementparser.cpp:230`
+
+```
+SCOPE.sCulture('newcomer_culture')GetCustom('getPluralDemonym')
+```
+
+Vanilla's content_304 English loc writes `SCOPE.sCulture('newcomer_culture')GetCustom('getPluralDemonym')`, with no `.` between the two calls, so the parser rejects the rest of the statement and the demonym comes out blank. Once per render of that text; 2026-10-07, twice.
 
 ### `virtualfilesystem.cpp:420` — VFS pre-enumeration progress lines
 - source: `virtualfilesystem.cpp:420`

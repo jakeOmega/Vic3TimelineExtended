@@ -259,6 +259,20 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 ---
 
+### L26. Grand Monuments v2 load-time notices
+**Files:** `events/monument_events.txt` (`monument_events.11`), `common/buildings/gm_name_carrier.txt`, `common/scripted_effects/gm_commission_effects.txt:115`
+
+**Problem (2026-10-07):** Grand Monuments v2 (#759) logs three lines once per launch.
+- `No default option in event monument_events.11.` (`event.cpp:358`). By design: the skin choice leaves out `default_option` so that an expired event takes its first valid option, the most specific skin (the note above its Hebrew option).
+- `Database type building_gm_name_carrier_anchor has missing texture` (`guitexturehandler.h:155`). The placeholder building is never built and its `icon` exists, so this is the same unidentified UI slot as L17.
+- `Flag 'leader' is used but is never set` (`jomini_effect.cpp:1139`). `gm_com_dedication` is set as `flag:$DEDICATION$`, which the parse-time validator cannot see.
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these three.
+
+**Fix:** None needed for the first and third. Close the second with L17 once that slot is found.
+
+---
+
 ## Vanilla 1.13.7 patch impact (2026-05-27)
 
 Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly vanilla-internal (AI fleet logic, naval balance, Japan/USA content, bugfixes); the mod does not override Japan, USA decisions, tolls, treaty articles, or vanilla canals, so most of it needs no action. The real overlap is the **naval domain**.
