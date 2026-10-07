@@ -24,7 +24,7 @@ it still holds (`--tune pre_hold`). §19 (2026-10-05) makes the Bank Holiday sto
 momentum bounce (`--holiday`, `--tune pre_holiday`). §20 (2026-10-05) traces §18's gold capital-controls
 crashes to cells no AI runs and leaves the AI's weights alone (`--tune cc_cost=0`, `cc_damp=1`, `cc_weak=0`).
 §21 (2026-10-05) measures Cooperative Ownership for the first time, with an interim arm posted on #720, and
-retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). §24 (2026-10-05) measures the gold peg's deep-slump drain and ports `te_peg.1` (`--peg-slump`). Every table states which script it measured.
+retunes it. §22 adds a separate imported-crash population (`--imported-crash-years`); §23 makes command and cooperative arms permanent (`--economy`, `--hold-tools`, `--pool`). §24 (2026-10-05) measures the gold peg's deep-slump drain and ports `te_peg.1` (`--peg-slump`). §25 (2026-10-07) bounds the Emergency Liquidity Program to its crisis and ports its announcement (`--tune pre_eliq_bounds`, `--player-eliq`). Every table states which script it measured.
 
 ---
 
@@ -2274,3 +2274,89 @@ with or without the drain: its mandate cuts below the world rate in every slump 
 vault. Its stance in a slump is loose, so the drain never applies to it. The AI always runs peg
 defence and is unaffected. Reported to the owner with the drain (design §0.13); nothing here
 changes it.
+
+---
+
+## 25. Emergency liquidity, bounded to its crisis (2026-10-07)
+
+**Question (owner).** Should the Emergency Liquidity Program have a timeout like the Bank Holiday, for fun
+and realism? Not a calendar term: a bank holiday ends because no government can keep the banks shut, but a
+lender of last resort ends when the banks stop borrowing at its penalty rate, which is when the crisis ends,
+however long that takes. The holiday's other two bounds, a phase gate and one use per crisis, belong on it.
+
+**What was wrong.**
+
+- It opened in any phase, so it could be held through a boom as a standing −0.8pp cut to the risk premium.
+- Its announcement, +12 cycle value and +10 bubble pressure at once, landed on every opening, and closing
+  refunds 1% of GDP of the 1.2% it costs. An open-close round trip bought +12 cycle value for 0.2% of GDP, as
+  often as the player clicked: three in a Panic took the cycle from 5 to 41 in one day.
+- Nothing closed it but the player. Left open, its +0.8 bubble pressure a month fed every later boom (the
+  player rows below).
+- The simulator never ported the announcement, so §7, §8 and §18 measured the tool without it.
+
+**What shipped.**
+
+- `banking_possible_cb_emergency_liquidity_program` requires `banking_cycle_is_recession` (a Downturn or
+  Panic), behind `banking_eliq_phase_tt`, as the holiday does.
+- `banking_effect_cb_emergency_liquidity_program` lands the announcement only without
+  `banking_eliq_announced`, and sets it. Otherwise the button's tooltip says the market has already heard it
+  (`banking_eliq_announcement_spent_tt`).
+- `banking_cycle_eliq_wind_down`, in the monthly pulse after the crash check, counts the months the cycle holds
+  at 40 or above in `banking_eliq_recovery_months` while the program or the announcement is outstanding; any
+  month below 40 restarts it. At `banking_eliq_wind_down_months` (12) it closes an open program through the
+  Disable action's own effect (history marker, 1%-of-GDP refund), posts `banking_eliq_wound_down_notice` to a
+  human player, and clears both variables, so the next crisis gets its announcement. Both are variables, so a
+  revolution's winner inherits the spent announcement along with the crisis. A save with the program open
+  from before this change has no announcement variable; it is wound down the same way.
+
+**The port.** `on_tool_enabled` lands the announcement once per crisis, `tool_possible` carries the gate, and
+`eliq_wind_down` runs after the crash check. `--tune pre_eliq_bounds` is the script before (any phase, an
+announcement on every opening, no wind-down); `--tune eliq_oneshot=off,eliq_bounds=off` is the port before (no
+announcement either). `--player-eliq` replaces the AI with a player who opens the program whenever it can be
+opened and never closes it by hand. A held tool (`--hold-tools eliq`) stays open whatever the cycle does, as
+`prune_overdrawn_tools` already leaves it.
+
+### F31 — The AI never meets the new bounds
+
+Crashes a century, 200 runs × 100 years, mean over all 13 currency and mandate cells:
+
+| arm | 4 pt | 5 pt | 8 pt |
+|---|---:|---:|---:|
+| port before §25 (no announcement) | 13.33 | 12.52 | 10.27 |
+| script before §25 (`pre_eliq_bounds`) | 13.37 | 12.49 | 10.27 |
+| **shipped** | **13.37** | **12.49** | **10.27** |
+
+The AI opens the program 0.03 to 0.75 times a century in a cell, only in a Panic or a Downturn still falling
+at −4 or faster, and lifts it from Stable. The gate never binds, the wind-down fires at most 0.01 times a
+century, and no cell moves by more than 0.03 crashes between the script before and shipped. Porting the
+announcement moves no cell by more than 0.39 (`fiat/nothing/4pt`, a cell at 40 crashes a century), so the
+earlier sections' emergency-liquidity conclusions stand.
+
+### F32 — A player who never closes it no longer pays for forgetting
+
+4 points, no other tools, 200 runs × 100 years. *Never closed* opens the program at the first chance and never
+closes it: under the old rules that is month 0, and it stays open all century. Under the shipped rules it
+opens at every Downturn or Panic and closes itself after each recovery (open 3.8% of months, 0.6 to 3.3
+openings a century).
+
+| cell | no tools: crashes · recession % | never closed, before | never closed, shipped |
+|---|---|---|---|
+| `gold/price` | 8.6 · 3.8 | 18.7 · 12.4 | 9.0 · 3.0 |
+| `fiat/price` | 9.4 · 3.7 | 24.7 · 15.0 | 9.7 · 3.4 |
+| `digital/price` | 8.1 · 2.4 | 22.7 · 11.9 | 8.4 · 2.5 |
+| `commodity/growth` | 13.7 · 4.8 | 24.2 · 14.5 | 13.9 · 4.1 |
+| `gold/peg` | 13.6 · 6.7 | 23.7 · 17.5 | 14.3 · 5.0 |
+| `fiat/nothing` | 40.2 · 9.2 | 40.7 · 25.1 | 40.7 · 8.9 |
+| all 13 cells | 16.0 · 5.7 | 25.8 · 16.3 | 16.4 · 4.8 |
+
+Left open, the program's bubble pressure turned into crashes: 1.6 times the untooled rate on average, 2 to 2.8
+times under price stability, and nearly three times the months in a slump. Each crash looked like bad luck.
+Wound down after each recovery, it costs 0.4 crashes a century against no tools and takes 0.9 points off the
+share of months in a Downturn or Panic, which is what a lender of last resort is for.
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4,5,8 [--tune pre_eliq_bounds]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4,5,8 --tune eliq_oneshot=off,eliq_bounds=off
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4 --player-eliq [--tune pre_eliq_bounds]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4 --exclude-tool all
+```

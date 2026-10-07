@@ -71,7 +71,7 @@ the sections after it.
 | External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
 | External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
 | Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
-| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks |
+| Crisis Response | Emergency Liquidity Program | 4 | Investment Banks; Downturn or Panic |
 | Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
 | Crisis Response | Bail-in Regime | 3 | Globalization |
 

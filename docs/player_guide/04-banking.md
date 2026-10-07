@@ -356,7 +356,7 @@ Globalization and the deposit guarantee Consumer Credit.
 | Tool | What you gain | What you pay or give up |
 |---|---|---|
 | Declare a Bank Holiday | Falling momentum stops at once and cannot drop below 0 for 90 days. Crash likelihood −90% for those days, which keeps contagion out. If the banks stay shut the full 90 days, +1 momentum when they reopen. | 2 points; −20% services output and −5% tax collection while it lasts. Radicals: 5% of middle-strata pops, 3% of upper and 2% of lower, about 2.5 to 3% of your population. Only in a Downturn or Panic, and once in five years. Ending it early gives up the +1. |
-| Emergency Liquidity Program | +12 cycle value at once, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once and +0.8 a month. |
+| Emergency Liquidity Program | +12 cycle value at once, once per crisis, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once, with the +12, and +0.8 a month. Only in a Downturn or Panic. Closes itself, with the refund, once the cycle has held at Stable or above for 12 months. |
 | Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
 | Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
 | Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
@@ -367,9 +367,12 @@ it while the banks are shut and keeps a trading partner's crash out, but you get
 one every five years. It ends by itself after 90 days and the banks reopen with
 +1 momentum. You can end it sooner to stop paying for it, but then the banks
 reopen without the bounce. Emergency
-Liquidity lifts the cycle most at once, and closing it hands most of its cost
-back, so close it once you are out of the slump, before its bubble pressure
-feeds the next boom. A deposit guarantee is cheap to open and costly to
+Liquidity lifts the cycle most at once, but only the first time you open it in
+a crisis: reopen it before the cycle has held at Stable or above for 12 months
+and you get neither the +12 nor the +10 bubble pressure. Closing it hands most
+of its cost back, so close it once you are out of the slump, before its bubble
+pressure feeds the next boom. If you leave it open, it closes itself, refund
+included, after those 12 months. A deposit guarantee is cheap to open and costly to
 withdraw, so keep it for a lasting slump.
 
 Asset Relief Program and Bail-in Regime exclude each other. Asset Relief lifts

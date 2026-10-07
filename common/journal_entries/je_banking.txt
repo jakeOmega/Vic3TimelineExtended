@@ -279,6 +279,7 @@
 			banking_cycle_bank_holiday_reopen = yes
 			banking_cycle_advance_variables = yes
 			banking_cycle_check_and_execute_crash = yes
+			banking_cycle_eliq_wind_down = yes
 
 			# Sample the month's settled cycle state for the history charts.
 			# Runs after the crash check so a crash month's bar shows the

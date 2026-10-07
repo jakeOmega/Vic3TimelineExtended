@@ -163,6 +163,8 @@ banking_nonmod_war_end_lift_tooltip = {
 	}
 }
 
+# Opens only in a downturn or panic (banking_possible_cb_emergency_liquidity_program)
+# and closes itself once the crisis is over (banking_cycle_eliq_wind_down).
 banking_effect_cb_emergency_liquidity_program = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_liquidity_program }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_liquidity_program } }
@@ -172,16 +174,33 @@ banking_effect_cb_emergency_liquidity_program = {
 		limit = { has_variable = banking_eliq_strip_refunded }
 		remove_variable = banking_eliq_strip_refunded
 	}
-	# Big shock absorber
-	custom_tooltip = {
-		text = "BUBBLE_PRESSURE_10_DESC"
-		change_variable = { name = bubble_pressure add = 10 }
+	# The announcement steadies the market once per crisis. Closing the
+	# program refunds 1% of GDP of its 1.2%, so without this an open-close
+	# round trip bought +12 cycle value for 0.2% of GDP, as often as the
+	# player clicked. banking_eliq_announced stays until the cycle has held at
+	# stable or above for banking_eliq_wind_down_months, open or not
+	# (banking_cycle_eliq_wind_down); a revolution's winner inherits it, since
+	# the crisis carries on.
+	if = {
+		limit = { NOT = { has_variable = banking_eliq_announced } }
+		custom_tooltip = {
+			text = banking_eliq_announcement_tt
+			set_variable = { name = banking_eliq_announced value = 1 }
+		}
+		custom_tooltip = {
+			text = "BUBBLE_PRESSURE_10_DESC"
+			change_variable = { name = bubble_pressure add = 10 }
+		}
+		custom_tooltip = {
+			text = "CYCLE_VALUE_12_DESC"
+			change_variable = { name = finance_cycle_value add = 12 }
+		}
 	}
-	custom_tooltip = {
-		text = "CYCLE_VALUE_12_DESC"
-		change_variable = { name = finance_cycle_value add = 12 }
+	else = {
+		custom_tooltip = banking_eliq_announcement_spent_tt
 	}
 	add_treasury = emergency_liquidity_program_activation_cost
+	custom_tooltip = banking_eliq_wind_down_tt
 }
 
 banking_effect_cb_disable_emergency_liquidity_program = {

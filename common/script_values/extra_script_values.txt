@@ -2145,6 +2145,15 @@ emergency_liquidity_program_deactivation_refund = {
 	round = yes
 }
 
+# Months the cycle must hold at stable or above (value 40+) before the
+# Emergency Liquidity Program closes itself, refunding 1% of GDP, and its
+# once-per-crisis announcement can land again (banking_cycle_eliq_wind_down).
+# banking_eliq_wind_down_tt and banking_eliq_announcement_spent_tt quote it
+# literally: change them together.
+banking_eliq_wind_down_months = {
+	value = 12
+}
+
 export_credit_activation_cost = {
 	value = root.gdp
 	multiply = -0.002 # costs 0.2% of GDP to establish facility
