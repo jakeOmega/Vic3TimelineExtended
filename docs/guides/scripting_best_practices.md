@@ -2428,6 +2428,9 @@ if = {
 ### Loc Keys for Effect Display
 Diplomatic action confirmation dialogs show "Effects:" using `<action_name>_effect_desc_global:0` loc keys. Also provide `_effect_desc_first:0` and `_effect_desc_third:0` for notification messages.
 
+## `clear_scaled_debt` Takes a Share of the Credit Limit
+`clear_scaled_debt = <value>` clears value × the country's credit limit, the unit the `scaled_debt` trigger uses (debt over the limit). So `scaled_debt × 0.25` writes off a quarter of the debt whatever its size, where a flat `0.1` would be a 40% haircut at `scaled_debt` 0.25 and 10% at 1.0. It does not put the country in default (`in_default`). Its built-in tooltip line (`CLEAR_SCALED_DEBT`) calls the value "a factor of GDP" and prints the raw fraction, so wrap the effect in `custom_tooltip`. The engine doc's signature is `clear_scaled_debt = value`; whether it takes a script value rather than only a literal is not yet confirmed in game (`banking_partial_default_write_off`, #448).
+
 ## Extending Vanilla On-Actions Safely
 
 **Never add `effect = { }` directly to a vanilla on-action.** Adding `effect` to a vanilla on_action (e.g. `on_yearly_pulse_country`, `on_election_campaign_end`) **overwrites** the vanilla effect block, silently breaking base-game logic.

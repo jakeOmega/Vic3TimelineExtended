@@ -113,7 +113,11 @@ its rivals and its neighbors get "Nuclear Proliferation Alert". A nuclear power
 can answer with a public ultimatum, or with a public denunciation where no
 crisis can be opened. A country with a program of its own can crash it or stay
 the course. Anyone can push for a non-proliferation treaty, accept the new
-reality, or, with the Covert Warfare rule off, sponsor sabotage. Several answers
+reality, or, with the Covert Warfare rule off, sponsor sabotage. Once the
+Non-Proliferation Treaty is in force, a UN member pushing for it refers the
+program to the General Assembly instead: the first referral adds 20 to the
+proliferator's case strength, or 30 if it signed the treaty (see [Grounds for
+UN censure](10-united-nations.md#grounds-for-un-censure)). Several answers
 shave progress off the proliferator.
 
 Other countries see your arsenal only as an estimate, re-observed yearly at
@@ -204,7 +208,8 @@ credibility, +10 infamy, a ten-year Broken Nuclear Pledge modifier, and your
 restraint-minded interest groups disapprove. While the No-First-Strike Pledge
 amendment is on your laws (see [Amendments to the mod's
 laws](06-politics.md#amendments-to-the-mods-laws)), your doctrine is held at No
-First Use, and leaving it strikes the amendment.
+First Use, and leaving it strikes the amendment. An AI country keeps the
+amendment unless a militarist government takes power, which may repeal it.
 
 ### Nuclear readiness levels
 
@@ -536,7 +541,8 @@ that exchange remains open. This permission belongs to the two countries in
 the exchange; it does not open ordinary peacetime strike actions. The normal
 stockpile, disarmament, pledge and assembled-force requirements still apply to
 an ordered response. An unauthorized first use breaches your pledges and pays
-the usual consequences.
+the usual consequences, but it does not end No First Use or strike the
+No-First-Strike Pledge amendment: your government never chose to.
 
 After at least seven days without another launch, the next weekly review offers
 both governments "After the Exchange". If both stand down, the exchange ends

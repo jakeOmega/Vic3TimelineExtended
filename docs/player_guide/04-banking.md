@@ -961,6 +961,9 @@ scandals, mortgage-backed securities, shadow banking and many more, with their
 own versions for command economies and cooperatives. Which ones can fire depends
 on the phase, the bubble, your technology and your economic system. After one,
 no random banking event fires for at least 18 months, and none in a crash month.
-Their options move the cycle's readings, and the tooltip shows by how much. A
-few tie into the banking tools: The Bank Holiday appears only when you could
+Their options move the cycle's readings, and the tooltip shows by how much. The
+Sovereign Debt Scare, drawn only while your debt is past a quarter of your
+credit limit, can end in a partial default that writes off a quarter of the
+debt, at the price of 4 points of risk premium fading over ten years and 15%
+less prestige. A few tie into the banking tools: The Bank Holiday appears only when you could
 declare one, and its first option does.

@@ -328,6 +328,7 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 | Nuclear first strike | 40 |
 | Tactical nuclear strike | 20 |
 | Nuclear retaliation | 10 |
+| Nuclear program referred under the Non-Proliferation Treaty | 20, or 30 for a signatory |
 | Infamy | 0.8 per point, up to 50 |
 
 Each entry halves every five years. A condemnation needs 30, an arms embargo or a
