@@ -269,6 +269,8 @@ te_monetary_inherit_central_bank = {
 	te_mon_cw_take = { VAR = te_mon_delegated }
 	te_mon_cw_take = { VAR = te_mon_mandate }
 	te_mon_cw_take = { VAR = te_monetisation_level }
+	# The bank's bond purchases (#800) go with the level they stepped.
+	te_mon_cw_take = { VAR = te_mon_bond_support_months }
 	te_mon_cw_take = { VAR = te_mon_union_pressing }
 	# Adoption of the bloc currency is taken only if the winner is in a bloc
 	# that still has one. Otherwise the discovery would treat the loser's

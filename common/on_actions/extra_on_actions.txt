@@ -164,6 +164,8 @@ te_banking_law_change_cleanup = {
 				}
 			}
 			set_variable = { name = te_monetisation_level value = 0 }
+			# The bank's bond purchases (#800) end with the level they ran on.
+			set_variable = { name = te_mon_bond_support_months value = 0 }
 		}
 
 		# Dollarisation (§9.2, ruling P9). A country that abandoned its own money
