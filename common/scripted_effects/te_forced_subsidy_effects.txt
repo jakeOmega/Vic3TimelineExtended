@@ -1,0 +1,56 @@
+﻿# Forced subsidies: airports and highways under Interventionism / Command Economy
+# (common/on_actions/te_forced_subsidy_on_actions.txt).
+#
+# Both laws carry country_building_airport_require_subsidies_bool and
+# country_building_highway_require_subsidies_bool
+# (common/laws/construction_system_law_injections.txt). The modifiers do not
+# reach every building: in the 2073 plain-text save only 35 of the 52 airports
+# and highways of the 15 AI countries holding one of those laws were subsidized
+# (issue #792). Buildings that predate the law were missed (IUS 2 of 8, the 6
+# built before the law; UNL 0 of 6), and so was a highway built after it (AFG,
+# 2031). So the law's own requirement is enforced here, with set_subsidized on
+# each building, the call the AI company flagship subsidies
+# (te_company_ai_subsidy_monthly_effect, te_company_effects.txt) already use.
+#
+# validate_subsidies (country scope, "ensure its industrial subsidies are
+# valid") is deliberately not used: nothing says whether it turns subsidies ON
+# for a *_require_subsidies_bool modifier or only off for invalid ones, nor
+# whether it leaves the subsidies this mod set alone (a player's company
+# buildings). Try it in game before swapping it in.
+#
+# The renewable energy plants' forced subsidy (renewable_investment_modifier, a
+# global warming policy) probably has the same gap; not covered here.
+
+# Country scope, any country, player or AI: a requirement is not a choice, and a
+# subsidy only tops a building up to SUBSIDIES_MIN_GAIN (0), so a profitable
+# building costs nothing. A building already subsidized is skipped, so a repeat
+# call is a no-op. Guarded on the laws, so both call sites (the enactment hook
+# and the monthly backstop) can call it unconditionally.
+te_forced_subsidy_sweep_effect = {
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_interventionism
+				has_law = law_type:law_command_economy
+			}
+		}
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_building = building_airport
+					has_building = building_highway
+				}
+			}
+			every_scope_building = {
+				limit = {
+					OR = {
+						is_building_type = building_airport
+						is_building_type = building_highway
+					}
+					is_subsidized = no
+				}
+				set_subsidized = yes
+			}
+		}
+	}
+}

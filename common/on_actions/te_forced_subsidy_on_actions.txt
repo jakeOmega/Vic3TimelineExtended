@@ -1,0 +1,43 @@
+﻿# Forced subsidies: subsidize a country's airports and highways when it enacts
+# Interventionism or Command Economy, and again each month for buildings that
+# finish later (te_forced_subsidy_sweep_effect, te_forced_subsidy_effects.txt;
+# issue #792).
+
+# ROOT is the law just activated; its owner is the country. on_law_activated
+# fires after the new law is in force and for a law activated by script too
+# (extra_on_actions.txt, te_banking_economy_law_cleanup).
+on_law_activated = {
+	on_actions = {
+		te_forced_subsidy_on_law_activated
+	}
+}
+
+te_forced_subsidy_on_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					type = law_type:law_interventionism
+					type = law_type:law_command_economy
+				}
+			}
+			owner = {
+				te_forced_subsidy_sweep_effect = yes
+			}
+		}
+	}
+}
+
+# Backstop for a building completed (or a save loaded) after the law. The engine
+# did not subsidize all of those either. ROOT = country.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_forced_subsidy_monthly_on_action
+	}
+}
+
+te_forced_subsidy_monthly_on_action = {
+	effect = {
+		te_forced_subsidy_sweep_effect = yes
+	}
+}
