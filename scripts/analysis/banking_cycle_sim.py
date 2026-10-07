@@ -503,6 +503,13 @@ DC_NEW_SECTORS = DC_SECTORS[1:]
 # the cooldown variable.
 BANK_HOLIDAY_MONTHS = 3
 BANK_HOLIDAY_COOLDOWN_MONTHS = 60
+# banking_effect_cb_emergency_liquidity_program's announcement, once per crisis
+# (§25): two literal change_variable lines in the effect.
+ELIQ_ANNOUNCEMENT_CYCLE = 12.0
+ELIQ_ANNOUNCEMENT_BUBBLE = 10.0
+# banking_cycle_eliq_wind_down: months at stable or above before an open program
+# closes itself and its announcement can land again (§25).
+ELIQ_WIND_DOWN_MONTHS = K.sv("banking_eliq_wind_down_months")
 
 # ── banking_law_base_points_value, restated as a table (it is an if-chain) ────
 FIN_LAW_POINTS = {
@@ -652,6 +659,13 @@ PRE_HOLD = {
 PRE_HOLIDAY = {
     "holiday": "old",
 }
+# The Emergency Liquidity Program before §25 (2026-10-07): it opened in any
+# phase, its +12 cycle / +10 bubble announcement landed on every opening, and it
+# stayed open until lifted. `--tune eliq_oneshot=off` drops the announcement, as
+# the port stood before §25 (it never had one).
+PRE_ELIQ_BOUNDS = {
+    "eliq_bounds": "off",
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -661,6 +675,7 @@ PRESETS = {
     "pre_slump_pressure": PRE_SLUMP_PRESSURE,
     "pre_hold": PRE_HOLD,
     "pre_holiday": PRE_HOLIDAY,
+    "pre_eliq_bounds": PRE_ELIQ_BOUNDS,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -733,6 +748,9 @@ class Config:
     # default so the century matrix's gold cells read as they always have.
     peg_crisis: bool = False
     hold_tools: tuple[str, ...] = ()
+    # §25: a player who opens the Emergency Liquidity Program whenever it can be
+    # opened and never closes it by hand; AI clicks off, like hold_tools.
+    player_eliq: bool = False
     pool: bool = False
     pool_spend_cap: float = 1.2  # weekly spending in units of gross income
     pool_weekly_income: float = 1000.0  # cash scale for treasury-button thresholds
@@ -859,6 +877,12 @@ class State:
     # banking_bank_holiday_reopening: a holiday is running that has not been ended
     # early, so it reopens with a momentum bounce when its timer runs out (§19)
     holiday_reopening: bool = False
+    # banking_eliq_announced / banking_eliq_recovery_months (§25): the
+    # announcement has landed in this crisis, and the months the cycle has held
+    # at stable or above since; eliq_wind_downs counts the program closing itself
+    eliq_announced: bool = False
+    eliq_recovery_months: int = 0
+    eliq_wind_downs: int = 0
 
     # exogenous
     gdp: float = 1.0e7
@@ -1837,6 +1861,9 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
     if cfg.imported_crash_years and rng.random() < 1 / (12 * cfg.imported_crash_years):
         imported_crash(cfg, state, rng, month)
 
+    # 3c. banking_cycle_eliq_wind_down, on the month's settled value (§25)
+    eliq_wind_down(cfg, state)
+
     # (3b history sampling — not modelled)
 
     # 4. phase + bubble-inertia modifiers, applied for NEXT month
@@ -1856,7 +1883,9 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
         state.holiday_cooldown -= 1
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
-    if cfg.points > 0 and cfg.ai_tools and not cfg.hold_tools:
+    if cfg.player_eliq:
+        player_opens_eliq(cfg, state)
+    elif cfg.points > 0 and cfg.ai_tools and not cfg.hold_tools:
         consider_tools(cfg, state, rng, month)
     prune_overdrawn_tools(cfg, state)
 
@@ -2503,6 +2532,10 @@ def tool_possible(cfg: Config, state: State, tool: str) -> bool:
             return False
         if state.holiday_cooldown > 0:
             return False
+    if tool == "eliq" and TUNE.get("eliq_bounds") != "off":
+        # banking_possible_cb_emergency_liquidity_program's phase gate (§25)
+        if phase_of(state.finance_cycle_value) not in (PANIC, DOWNTURN):
+            return False
     if tool == "bail_in" and "asset_relief" in state.tools:
         return False
     if tool == "asset_relief" and "bail_in" in state.tools:
@@ -2521,6 +2554,48 @@ def on_tool_enabled(state: State, tool: str) -> None:
         else:
             state.finance_cycle_momentum = max(0.0, state.finance_cycle_momentum)
             state.holiday_reopening = True
+    elif tool == "eliq":
+        # The announcement, once per crisis (§25). Unclamped, as in script: the
+        # next advance_variables clamps both before the crash check reads them.
+        if TUNE.get("eliq_oneshot") == "off":
+            return
+        if TUNE.get("eliq_bounds") == "off" or not state.eliq_announced:
+            state.eliq_announced = True
+            state.finance_cycle_value += ELIQ_ANNOUNCEMENT_CYCLE
+            state.bubble_pressure += ELIQ_ANNOUNCEMENT_BUBBLE
+
+
+def eliq_wind_down(cfg: Config, state: State) -> None:
+    """banking_cycle_eliq_wind_down (§25).
+
+    While the program or its announcement is outstanding, count the months the
+    cycle holds at stable or above; any month below restarts the count. At
+    banking_eliq_wind_down_months an open program closes itself and the
+    announcement can land again. A held tool (--hold-tools) is fixed from
+    outside, so it stays, as prune_overdrawn_tools leaves it.
+    """
+    if TUNE.get("eliq_bounds") == "off":
+        return
+    if not (state.eliq_announced or "eliq" in state.tools):
+        return
+    if state.finance_cycle_value >= 40:
+        state.eliq_recovery_months += 1
+    else:
+        state.eliq_recovery_months = 0
+    if state.eliq_recovery_months >= tuned("eliq_wind_down", ELIQ_WIND_DOWN_MONTHS):
+        if "eliq" in state.tools and "eliq" not in cfg.hold_tools:
+            state.tools.discard("eliq")
+            state.eliq_wind_downs += 1
+        state.eliq_announced = False
+        state.eliq_recovery_months = 0
+
+
+def player_opens_eliq(cfg: Config, state: State) -> None:
+    """--player-eliq (§25): opens the program whenever it can and never closes it."""
+    if tool_possible(cfg, state, "eliq"):
+        state.tools.add("eliq")
+        state.tool_usage["eliq"] += 1
+        on_tool_enabled(state, "eliq")
 
 
 def disable_scores(cfg: Config, state: State) -> dict[str, float]:
@@ -3008,6 +3083,8 @@ def extension_summary(cfg: Config, states: list[State]) -> dict:
 def print_extensions(rows: list[dict], args) -> None:
     if args.economy != "market" or args.hold_tools:
         print(f"\nEconomy: {args.economy}; held tools: {args.hold_tools or 'none (AI selection)'}")
+    if args.player_eliq:
+        print("\nA player opens the Emergency Liquidity Program whenever it can and never closes it (§25).")
     if args.imported_crash_years:
         print(f"\nImported arrivals: mean {args.imported_crash_years:g} years; origin counts above exclude imports")
         print(f"{'cell':<32} {'crash/100y':>10} {'scare/100y':>10} {'under%':>7} {'crash dV':>9} {'dM':>7} {'scare dV':>9} {'dM':>7}")
@@ -3140,6 +3217,10 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         "tool_usage": {
             t: statistics.mean(s.tool_usage[t] for s in states) for t in economy_tools(cfg.economy)
         },
+        # §25: the Emergency Liquidity Program closing itself, per century
+        "eliq_wind_downs_per_century": statistics.mean(
+            s.eliq_wind_downs / cfg.years * 100 for s in states
+        ),
         # §18: per century, all tools and per tool
         "lifts_per_century": statistics.mean(
             sum(s.tool_lifts.values()) / cfg.years * 100 for s in states
@@ -3630,6 +3711,9 @@ def main() -> int:
                     help="mean years between foreign arrivals; 0 disables (default)")
     ap.add_argument("--hold-tools", default="",
                     help="comma-separated fixed player tools; disables AI clicks")
+    ap.add_argument("--player-eliq", action="store_true",
+                    help="a player who opens the Emergency Liquidity Program whenever it "
+                         "can be opened and never closes it by hand (§25); disables AI clicks")
     ap.add_argument("--pool", action="store_true", help="simulate a toy weekly investment pool")
     ap.add_argument("--pool-spend-cap", type=float, default=1.2,
                     help="private spending cap in units of weekly gross income (default 1.2)")
@@ -3673,7 +3757,8 @@ def main() -> int:
                          "--tune pre_anchoring for independence's institution bonus before §13, or "
                          "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
                          "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
-                         "--tune pre_hold for the AI's lift weights before the hold gates of §18.")
+                         "--tune pre_hold for the AI's lift weights before the hold gates of §18, or "
+                         "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -3823,6 +3908,7 @@ def main() -> int:
                     economy=args.economy,
                     imported_crash_years=args.imported_crash_years,
                     hold_tools=held,
+                    player_eliq=args.player_eliq,
                     pool=args.pool,
                     pool_spend_cap=args.pool_spend_cap,
                     pool_weekly_income=args.pool_weekly_income,

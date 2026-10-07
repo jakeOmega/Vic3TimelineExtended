@@ -262,11 +262,20 @@ banking_possible_cb_capital_controls_outflow = {
 	}
 }
 
+# A lender of last resort lends to banks facing a run, so like the bank holiday
+# it opens only in a downturn or panic: outside one no bank would borrow at its
+# penalty rate. Without the gate it could be opened in a boom as a standing cut
+# to the risk premium. It closes itself once the crisis is over
+# (banking_cycle_eliq_wind_down).
 banking_possible_cb_emergency_liquidity_program = {
 	modifier:country_can_use_emergency_liquidity_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
+	}
+	custom_tooltip = {
+		text = banking_eliq_phase_tt
+		banking_cycle_is_recession = yes
 	}
 }
 

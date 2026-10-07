@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import itertools
+import json
 import os
 import random
 import subprocess
@@ -284,6 +285,10 @@ class Extensions(unittest.TestCase):
 
     def test_default_market_json_is_byte_identical_to_before_extensions(self):
         # Captured from main 028ea9cf, with PYTHONHASHSEED=0 (tool sets sum floats).
+        # Keys added to every row since then are dropped before hashing; the
+        # sample never opens the Emergency Liquidity Program, so §25 moves nothing
+        # else in it.
+        added_since_capture = ('eliq_wind_downs_per_century',)
         with tempfile.TemporaryDirectory() as temp:
             result = Path(temp) / 'baseline.json'
             subprocess.run([sys.executable, str(ROOT / 'scripts/analysis/banking_cycle_sim.py'),
@@ -291,7 +296,11 @@ class Extensions(unittest.TestCase):
                             '--points', '0,4,8', '--jobs', '1', '--json', str(result)],
                            env={**os.environ, 'PYTHONHASHSEED': '0'}, check=True,
                            capture_output=True)
-            self.assertEqual(hashlib.sha256(result.read_bytes()).hexdigest(),
+            rows = json.loads(result.read_text(encoding='utf-8'))
+            for row in rows:
+                for key in added_since_capture:
+                    row.pop(key)
+            self.assertEqual(hashlib.sha256(json.dumps(rows, indent=2).encode()).hexdigest(),
                              'c779b9073eed7929d14b6b59410b8764acd7c87563600d2927dd80a123272336')
 
 

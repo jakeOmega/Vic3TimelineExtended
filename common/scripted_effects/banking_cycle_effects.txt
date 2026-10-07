@@ -2297,6 +2297,56 @@ banking_cycle_spread_contagion = {
 	}
 }
 
+# 3c. The Emergency Liquidity Program winds down once the crisis is over: when
+#     the cycle has held at stable or above (value 40+) for
+#     banking_eliq_wind_down_months in a row, an open program closes itself
+#     through the Disable action's own effect (history marker, 1%-of-GDP
+#     refund), and its once-per-crisis announcement can land again
+#     (banking_effect_cb_emergency_liquidity_program). Any month below 40
+#     restarts the count, so a shaky recovery keeps the backstop. The count
+#     runs while either the program or the announcement is outstanding, so a
+#     program closed early still clears the announcement, and a save from
+#     before 2026-10-07 with the program open (and no announcement) is wound
+#     down too. Run from the monthly pulse after
+#     banking_cycle_check_and_execute_crash, on the month's settled value.
+banking_cycle_eliq_wind_down = {
+	if = {
+		limit = {
+			OR = {
+				has_variable = banking_eliq_announced
+				banking_tool_eliq_active = yes
+			}
+		}
+		if = {
+			limit = { var:finance_cycle_value >= 40 }
+			if = {
+				limit = { NOT = { has_variable = banking_eliq_recovery_months } }
+				set_variable = { name = banking_eliq_recovery_months value = 0 }
+			}
+			change_variable = { name = banking_eliq_recovery_months add = 1 }
+		}
+		else = {
+			set_variable = { name = banking_eliq_recovery_months value = 0 }
+		}
+		if = {
+			limit = { var:banking_eliq_recovery_months >= banking_eliq_wind_down_months }
+			if = {
+				limit = { banking_tool_eliq_active = yes }
+				banking_effect_cb_disable_emergency_liquidity_program = yes
+				if = {
+					limit = { is_ai = no }
+					post_notification = banking_eliq_wound_down_notice
+				}
+			}
+			if = {
+				limit = { has_variable = banking_eliq_announced }
+				remove_variable = banking_eliq_announced
+			}
+			remove_variable = banking_eliq_recovery_months
+		}
+	}
+}
+
 # 4. Apply phase modifiers based on current cycle values.
 #    Removes old phase & bubble-inertia modifiers, then applies current ones.
 banking_cycle_apply_phase_modifiers = {

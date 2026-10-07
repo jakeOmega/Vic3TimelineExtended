@@ -2222,3 +2222,13 @@ gm_com_lapsed_notice = {
 	notification_type = toast
 	color = neutral
 }
+
+# Banking: the Emergency Liquidity Program closed itself once the cycle had held
+# at stable or above for twelve months, refunding 1% of GDP (to the country,
+# human only; banking_cycle_eliq_wind_down).
+banking_eliq_wound_down_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = good
+}
