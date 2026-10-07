@@ -469,8 +469,11 @@ types banking_dashboard_widget_types
 	}
 
 	### Momentum: an arrow per band, from the band word's own edges
-	### (banking_disp_momentum_band_code). The double arrows are Surging and
-	### Collapsing, which the old table also tagged overheating / contracting.
+	### (banking_disp_momentum_band_code). The double arrows are Collapsing and
+	### Surging, which the old table also tagged contracting / overheating.
+	### Freefall and Overheating, the bands past the bar's ends, draw them too
+	### until their own art exists (banking_gui_icons.md, placeholders): the
+	### word beside them, in red, tells them apart.
 	type te_banking_momentum_icons = widget {
 		size = { 32 32 }
 
@@ -482,21 +485,31 @@ types banking_dashboard_widget_types
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
-			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+			texture = "gfx/interface/icons/generic_icons/down_down.dds"
 		}
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
-			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
 		}
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
-			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
 		}
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)6' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)7' )]"
 			texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
 		}
 	}
@@ -534,7 +547,8 @@ types banking_dashboard_widget_types
 
 	### The crash-risk mark over the bubble icon's top-right corner, the old
 	### row's "(crash risk)" tag: the cycle at the top of its range, or booming
-	### with momentum surging. The instance sets its position. The top bar shows
+	### with momentum Surging or Overheating (+3 or more). The instance sets its
+	### position. The top bar shows
 	### the same state as a line of the phase's tooltip (banking_dash_top_phase_tt).
 	type te_banking_crash_risk_badge = icon {
 		size = { 16 16 }

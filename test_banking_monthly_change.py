@@ -239,19 +239,23 @@ class World:
         return lo, hi, shape
 
 
-MOMENTUM_BANDS = {1: (-8.0, -3.0), 2: (-3.0, -1.0), 3: (-1.0, 1.0), 4: (1.0, 3.0), 5: (3.0, 8.0)}
+# The momentum bands (banking_disp_momentum_band_code), the open ends of
+# Freefall and Overheating cut where sampling stops.
+MOMENTUM_BANDS = {1: (-8.0, -5.0), 2: (-5.0, -3.0), 3: (-3.0, -1.0), 4: (-1.0, 1.0),
+                  5: (1.0, 3.0), 6: (3.0, 5.0), 7: (5.0, 8.0)}
+LOW_EDGE_IN = {5, 6, 7}     # Rising, Surging and Overheating include their lower edge
+HIGH_EDGE_IN = {1, 2, 3}    # Freefall, Collapsing and Falling their upper one
 
 
 def momentum_in(band, rng):
     lo, hi = MOMENTUM_BANDS[band]
     m = rng.uniform(lo, hi)
-    # the band word's edges: Falling (-3, -1], Steady (-1, 1), Rising [1, 3)
-    return min(max(m, lo + 1e-9 if band in (3, 4, 5) else lo), hi - 1e-9 if band in (1, 2, 3) else hi)
+    return min(max(m, lo if band in LOW_EDGE_IN else lo + 1e-9), hi if band in HIGH_EDGE_IN else hi - 1e-9)
 
 
 def scenario(rng, ladder):
     """A hidden state, the inputs that make it, and its world."""
-    band = rng.randint(1, 5)
+    band = rng.randint(1, 7)
     m = momentum_in(band, rng)
     mods = {
         "country_finance_value_monthly_add": rng.uniform(-1.5, 1.5),
@@ -324,7 +328,7 @@ class TightnessTest(unittest.TestCase):
     def corners(self, world, ladder):
         band = int(world.number("banking_disp_momentum_band_code"))
         lo, hi = MOMENTUM_BANDS[band]
-        ms = [x for x, open_end in ((lo, band == 1), (hi, band == 5)) if not open_end]
+        ms = [x for x, open_end in ((lo, band == 1), (hi, band == 7)) if not open_end]
         gaps = [world.vars.get("te_mon_stance_gap", 0)]
         if world.flags["te_mon_has_stance"] and "te_mon_stance_band" in world.vars:
             bound = world.number("te_mon_forecast_error_bound")
@@ -371,8 +375,10 @@ class OpenBandTest(unittest.TestCase):
         return {r: w.shown(r)[2] for r in READINGS}
 
     def test_shapes(self):
-        self.assertEqual(self.shapes(5), {"value": 2, "momentum": 3, "bubble": 4})
-        self.assertEqual(self.shapes(-5), {"value": 3, "momentum": 2, "bubble": 4})
+        self.assertEqual(self.shapes(5), {"value": 2, "momentum": 3, "bubble": 4})       # Overheating
+        self.assertEqual(self.shapes(-5), {"value": 3, "momentum": 2, "bubble": 4})      # Freefall
+        self.assertEqual(self.shapes(4.9), {"value": 1, "momentum": 1, "bubble": 4})     # Surging
+        self.assertEqual(self.shapes(-4.9), {"value": 1, "momentum": 1, "bubble": 4})    # Collapsing
         # momentum floored at 0 for the month: the cycle value cannot move
         self.assertEqual(self.shapes(-5, holiday=True), {"value": 4, "momentum": 2, "bubble": 4})
         self.assertEqual(self.shapes(0), {"value": 1, "momentum": 1, "bubble": 4})

@@ -13,26 +13,34 @@
 # Scope: country (the viewer)
 # ============================================================================
 
-# Momentum band (banking_dash_momentum_band): 1 Collapsing · 2 Falling ·
-# 3 Steady · 4 Rising · 5 Surging.
+# Momentum band (banking_dash_momentum_band): 1 Freefall · 2 Collapsing ·
+# 3 Falling · 4 Steady · 5 Rising · 6 Surging · 7 Overheating.
 banking_disp_momentum_band_code = {
 	value = 0
 	if = {
 		limit = { has_variable = finance_cycle_momentum }
 		if = {
+			limit = { var:finance_cycle_momentum >= 5 }
+			value = 7
+		}
+		else_if = {
 			limit = { var:finance_cycle_momentum >= 3 }
-			value = 5
+			value = 6
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum >= 1 }
-			value = 4
+			value = 5
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum > -1 }
-			value = 3
+			value = 4
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum > -3 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:finance_cycle_momentum > -5 }
 			value = 2
 		}
 		else = {
@@ -162,7 +170,7 @@ banking_disp_price_band_code = {
 # momentum at 0; then the cycle value takes the new momentum. Every step moves the same way as its unknown, so the bounds
 # are the corners: the band's edges, the error's edges, the nudge's outcomes.
 #
-# Momentum's outer bands are open: Surging has no top and Collapsing no
+# Momentum's outer bands are open: Overheating has no top and Freefall no
 # bottom, so a range on that side is "or more" / "or less"
 # (banking_disp_*_change_shape). test_banking_monthly_change.py runs the
 # pulse's own script over sampled hidden states and checks every result lands
@@ -318,51 +326,68 @@ banking_disp_nudge_hi = {
 	min = 0
 }
 
-# Momentum's band edges (banking_disp_momentum_band_code): Collapsing at or
-# below -3, Falling to -1, Steady inside +/-1, Rising from 1, Surging from 3.
-# Collapsing has no lower edge and Surging no upper one; those read 0 here,
-# and the _shape values below say the range is open on that side.
+# Momentum's band edges (banking_disp_momentum_band_code): Freefall at or
+# below -5, Collapsing to -3, Falling to -1, Steady inside +/-1, Rising from 1,
+# Surging from 3, Overheating from 5. Freefall has no lower edge and
+# Overheating no upper one; those read 0 here, and the _shape values below say
+# the range is open on that side.
 banking_disp_momentum_band_lo = {
 	value = 0
 	if = {
-		limit = { banking_disp_momentum_band_code >= 5 }
+		limit = { banking_disp_momentum_band_code >= 7 }
+		value = 5
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 6 }
 		value = 3
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 4 }
+		limit = { banking_disp_momentum_band_code >= 5 }
 		value = 1
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 3 }
+		limit = { banking_disp_momentum_band_code >= 4 }
 		value = -1
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 2 }
+		limit = { banking_disp_momentum_band_code >= 3 }
 		value = -3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 2 }
+		value = -5
 	}
 }
 
 banking_disp_momentum_band_hi = {
 	value = 0
 	if = {
-		limit = { banking_disp_momentum_band_code >= 5 }
+		limit = { banking_disp_momentum_band_code >= 7 }
 		value = 0
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 4 }
+		limit = { banking_disp_momentum_band_code >= 6 }
+		value = 5
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 5 }
 		value = 3
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 3 }
+		limit = { banking_disp_momentum_band_code >= 4 }
 		value = 1
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 2 }
+		limit = { banking_disp_momentum_band_code >= 3 }
 		value = -1
 	}
 	else_if = {
-		limit = { banking_disp_momentum_band_code >= 1 }
+		limit = { banking_disp_momentum_band_code >= 2 }
 		value = -3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 1 }
+		value = -5
 	}
 }
 
@@ -408,7 +433,7 @@ banking_disp_momentum_push_hi = {
 }
 
 # Momentum once next month's pulse has run: what the cycle value takes. A bank
-# holiday floors it at 0, which is also Collapsing's low end under one.
+# holiday floors it at 0, which is also Freefall's low end under one.
 banking_disp_momentum_next_lo = {
 	value = banking_disp_momentum_band_lo
 	multiply = 0.9
@@ -486,14 +511,14 @@ banking_disp_bubble_change_hi = {
 
 # Which text each range line shows: 1 "low to high", 2 "low or more" (no
 # top), 3 "high or less" (no bottom), 4 a single figure (both ends equal).
-# Surging momentum leaves the cycle value's change no top and momentum's own
-# change no bottom (the decay grows with it); Collapsing the reverse, except
+# Overheating momentum leaves the cycle value's change no top and momentum's
+# own change no bottom (the decay grows with it); Freefall the reverse, except
 # that a bank holiday gives the cycle value's change a bottom (momentum
 # floored at 0).
 banking_disp_value_change_shape = {
 	value = 1
 	if = {
-		limit = { banking_disp_momentum_band_code >= 5 }
+		limit = { banking_disp_momentum_band_code >= 7 }
 		value = 2
 	}
 	else_if = {
@@ -512,7 +537,7 @@ banking_disp_value_change_shape = {
 banking_disp_momentum_change_shape = {
 	value = 1
 	if = {
-		limit = { banking_disp_momentum_band_code >= 5 }
+		limit = { banking_disp_momentum_band_code >= 7 }
 		value = 3
 	}
 	else_if = {

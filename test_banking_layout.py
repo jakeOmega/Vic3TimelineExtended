@@ -257,9 +257,10 @@ class TidyTest(unittest.TestCase):
 # icon, and which code each of the word's keys is.
 BANDS = {
     "banking_dash_momentum_band": ("banking_disp_momentum_band_code", {
-        "banking_dash_momentum_band_surging": 5, "banking_dash_momentum_band_rising": 4,
-        "banking_dash_momentum_band_steady": 3, "banking_dash_momentum_band_falling": 2,
-        "banking_dash_momentum_band_collapsing": 1}),
+        "banking_dash_momentum_band_overheating": 7, "banking_dash_momentum_band_surging": 6,
+        "banking_dash_momentum_band_rising": 5, "banking_dash_momentum_band_steady": 4,
+        "banking_dash_momentum_band_falling": 3, "banking_dash_momentum_band_collapsing": 2,
+        "banking_dash_momentum_band_freefall": 1}),
     "banking_dash_bubble_band": ("banking_disp_bubble_band_code", {
         "banking_dash_bubble_band_low": 1, "banking_dash_bubble_band_building": 2,
         "banking_dash_bubble_band_elevated": 3, "banking_dash_bubble_band_high": 4,
@@ -491,8 +492,10 @@ BAND_ICONS = {
     "banking_disp_price_band_code": ["price_deflation", "price_stable", "price_elevated", "price_high",
                                      "price_very_high", "price_hyper", "price_dollarised", "price_planned"],
 }
-# Kept as vanilla's marks, as the icon list allowed.
-MOMENTUM_ICONS = ["down_down", "trend_down", "trend_nochange", "trend_up", "trend_upup"]
+# Kept as vanilla's marks, as the icon list allowed. Freefall and Overheating,
+# past the momentum bar's ends, borrow the double arrows until their own art
+# exists (banking_gui_icons.md, placeholders).
+MOMENTUM_ICONS = ["down_down", "down_down", "trend_down", "trend_nochange", "trend_up", "trend_upup", "trend_upup"]
 VANILLA_KEPT = {f"gfx/interface/icons/generic_icons/{n}.dds" for n in MOMENTUM_ICONS + ["warning"]}
 
 
