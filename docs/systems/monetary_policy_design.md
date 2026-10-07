@@ -2371,7 +2371,10 @@ toggle buttons, which all stay; here the mandate is a shared player/AI mechanic 
 `scripting_best_practices.md:2953` — the AI branch must carry no gate the player branch lacks.
 
 A national-bank country **without the JE** (no `stock_exchange` or no level-5 urban
-center) has no dashboard and is auto-delegated to price stability.
+center) has no dashboard and is auto-delegated to price stability. Since #805 it reads
+its rate, mandate, exchange rate and peg confidence in the Budget panel's Banking tab,
+read-only (`te_banking_mon_readout`; `mod_systems.md` § Policy Dashboard), as does an
+anchored country without the JE.
 
 ---
 

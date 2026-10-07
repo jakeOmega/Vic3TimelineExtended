@@ -30,10 +30,16 @@
 # needs only a national bank, not the entry) has no dashboard, so none of the
 # player text — the desc or the option tooltips — may rely on having seen it
 # coming (#428). Nor may it name what only the dashboard shows: each option's
-# tooltip comes in two, the .tt naming the dashboard's gauges (Peg Confidence,
-# the Exchange Rate Index, the dial) and the .no_je_tt, for a country without
-# the entry, saying the same without them (#448). te_peg.2 and te_peg.3 follow
-# the same rule. The old event's flavour text lives on as te_peg.1.f.
+# tooltip comes in two, the .tt naming the dashboard's gauges and controls and
+# the .no_je_tt, for a country without the entry, saying the same without the
+# ones it cannot see (#448). Since #805 such a country has a read-only readout
+# in the Budget panel's Banking tab (te_banking_mon_readout): the policy rate,
+# the world rate, the mandate, the anchor, the Exchange Rate Index and Peg
+# Confidence. So the .no_je_tt names those, with their figures, and leaves out
+# only what the dashboard alone has: the dial (the rate target), the mandate
+# buttons, the bank's gold reserve and the banking tools. te_peg.2 and
+# te_peg.3 follow the same rule. The old event's flavour text lives on as
+# te_peg.1.f.
 #
 # EVERY OPTION WRITES AN INPUT, NEVER THE RATE. Defend writes a month counter
 # that te_mon_target_min reads; Suspend writes the counter te_mon_is_on_gold

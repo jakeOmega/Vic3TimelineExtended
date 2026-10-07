@@ -152,16 +152,19 @@ types budget
 				# tab's tooltip lists the unlock conditions with ticks. tab_buttons
 				# defaults both halves of an unused tab to `visible = no`, so each
 				# visibility block below tests the gate as well as the tab.
+				# EXCEPTION (#805): a country with a monetary stance but no entry
+				# (te_budget_banking_readout_sgui) gets the tab enabled, read-only,
+				# with the monetary readout; its tooltip still lists the conditions.
 				blockoverride "fourth_button"
 				{
 					text = "te_budget_tab_banking"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fourth_button_click"
 				{
-					enabled = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[InformationPanel.SelectTab('te_banking')]"
 				}
 				blockoverride "fourth_button_visibility"
@@ -1572,18 +1575,57 @@ types budget
 			# on a parent of the datacontext, never on the widget that carries it:
 			# vanilla's shape for GetPlayerJournalEntry (states_panel.gui, the Meiji
 			# faction button).
+			#
+			# A country with a monetary stance but no entry (#805,
+			# te_budget_banking_readout_sgui) gets the monetary readout instead,
+			# under a Monetary Policy header, with a note naming what opens the
+			# rest. The readout reads GetPlayer, so it needs no datacontext. Its
+			# gate and the entry's are never true together, so exactly one header
+			# shows.
 			flowcontainer = {
 				name = "te_budget_banking_tab"
 				visible = "[InformationPanel.IsTabSelected('te_banking')]"
 				using = default_content_fade
 				using = default_list_position
 				direction = vertical
+				ignoreinvisible = yes
 				spacing = 10
 				margin_bottom = 15
 
 				default_header = {
+					visible = "[Not( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					blockoverride "text" {
 						text = "je_banking_cycle"
+					}
+				}
+
+				default_header = {
+					visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					blockoverride "text" {
+						text = "banking_dash_cat_monetary"
+					}
+				}
+
+				flowcontainer = {
+					visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					using = default_list_position
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 10
+
+					te_banking_mon_readout = {}
+
+					# What opens the rest: the tab's own unlock checklist on hover,
+					# asked IsValid first like the tab's tooltip.
+					textbox = {
+						parentanchor = hcenter
+						autoresize = yes
+						multiline = yes
+						max_width = 480
+						align = center|nobaseline
+						using = fontsize_medium
+						text = "banking_dash_ro_note"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'banking_dash_ro_note_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 					}
 				}
 
