@@ -1864,6 +1864,8 @@
  nd_incident_scandal_desc:0 "An accident or a false alarm with our nuclear forces has become public."
  nd_loose_inspections:0 "Custody Inspections"
  nd_loose_inspections_desc:0 "Foreign inspectors count and guard our nuclear warheads, after one of them was traced to us."
+ nd_nfu_reaffirmed:0 "No First Use Reaffirmed"
+ nd_nfu_reaffirmed_desc:0 "After a launch nobody in government ordered, we told the world that No First Use still stands, and spent our own standing at home to be believed."
  nd_nuclear_ultimatum_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has issued a nuclear ultimatum to [TARGET_COUNTRY.GetName]."
  nd_nuclear_ultimatum_action_action_notification_third_party_desc:0 "[INITIATOR_COUNTRY.GetName] has issued a public nuclear ultimatum to [TARGET_COUNTRY.GetName]."
  nd_nuclear_ultimatum_action_desc:0 "Tell the world what we demand of them, and what we will do if they refuse. The strongest signal we can send, and a commitment we will be judged on."

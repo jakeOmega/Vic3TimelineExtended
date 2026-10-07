@@ -184,6 +184,15 @@ nd_pledge_broken_mod = {
 	country_improve_relations_speed_mult = -0.15
 }
 
+# We reaffirmed no first use in public after a launch nobody ordered broke it
+# (nd_reaffirm_nfu, nuclear_incident.6 option a): our standing at home pays
+# for being believed abroad. Two and a half years, decaying.
+nd_nfu_reaffirmed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -10
+	country_authority_mult = -0.05
+}
+
 # We used nuclear weapons in our own civil war (nd_custody_struck_own_people,
 # nuclear_custody_effects.txt). Twenty years, decaying; the same for every
 # regime (owner ruling 2026-09-25).

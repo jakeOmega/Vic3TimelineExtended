@@ -613,6 +613,17 @@ banking_mon_shows_arrangements = {
 	effect = { }
 }
 
+# Is this country's money tied to another's? The Budget tab's readout
+# (te_banking_mon_readout, #805) shows the Monetary Anchor row on it; the
+# dashboard's arrangements block above answers a wider question.
+banking_mon_is_anchored = {
+	scope = country
+	is_shown = { te_mon_is_anchored = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ...and the treaty pegger's Peg Confidence row and meter?
 banking_mon_shows_anchor_peg = {
 	scope = country

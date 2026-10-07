@@ -282,7 +282,8 @@ nuclear_program_can_table_npt = {
 	NOT = { has_global_variable = un_vote_active }
 }
 
-# Nations — with the Non-Proliferation Treaty in force, refer
+# Country scope: can this country answer nuclear_weapon_events.18's option d
+# through the United Nations — with the Non-Proliferation Treaty in force, refer
 # scope:proliferating_country's programme to the General Assembly (#448)?
 # nuclear_weapon_events.18 option d's road once there is no treaty left to
 # table: a member, the treaty in force. The referral is a record in the
@@ -293,4 +294,20 @@ nuclear_program_can_refer_npt = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	un_propose_npt_in_force = yes
 	exists = scope:proliferating_country
+}
+
+# Country scope: does this country oppose $PROLIFERATOR$'s bomb? It is the
+# proliferator's rival or antagonist, the countries a proliferation dispute
+# could set against it (nd_dispute_proliferation_by, without its funding test:
+# a programme the alert has announced is known to be running), or its
+# opponent in a nuclear crisis. These are who an accommodation of the
+# proliferator offends (nuclear_weapon_events.18 option e, #804).
+nuclear_program_opposes = {
+	OR = {
+		has_diplomatic_pact = { who = $PROLIFERATOR$ type = rivalry }
+		has_attitude = { who = $PROLIFERATOR$ attitude = antagonistic }
+		has_attitude = { who = $PROLIFERATOR$ attitude = belligerent }
+		has_attitude = { who = $PROLIFERATOR$ attitude = domineering }
+		var:nd_crisis_opponent ?= $PROLIFERATOR$
+	}
 }

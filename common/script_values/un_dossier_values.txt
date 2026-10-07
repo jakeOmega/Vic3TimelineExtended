@@ -129,8 +129,9 @@ un_case_strength = {
 		limit = { has_variable = un_dos_nuclear }
 		add = var:un_dos_nuclear
 	}
-	# The Supranational standing case against an outsider (redesign phase 5,
-	# un_teeth_values.txt): 0 for everyone else.
+	# The Supranational standing case against an outsider, or a member
+	# building a bomb outside the Non-Proliferation Treaty (redesign phase 5,
+	# #804; un_teeth_values.txt): 0 for everyone else.
 	add = un_case_standing_term
 	min = 0
 	max = 100

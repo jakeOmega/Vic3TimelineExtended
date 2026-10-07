@@ -91,7 +91,7 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 ### 9. Where a system's panel goes
 
 - **A system with a natural vanilla home becomes a tab in that window:** Banking in Budget, Cultural Hegemony in Society, the UN in Diplomacy. The system doesn't need a new window. Systems with no vanilla home go in one mod window rather than scattered tabs (`docs/systems/system_panels_feasibility.md` §9, item 3).
-- The tab is **greyed until the system's journal entry is active**, and its tooltip lists the unlock conditions with ticks and crosses (the gates in `common/scripted_guis/te_system_tab_sguis.txt`).
+- The tab is **greyed until the system's journal entry is active**, and its tooltip lists the unlock conditions with ticks and crosses (the gates in `common/scripted_guis/te_system_tab_sguis.txt`). The one exception is Banking (#805): a country whose central bank already sets a rate, or whose currency is tied to another's, gets the tab early with a read-only readout of that state, because it can meet a peg crisis without the entry.
 - *(play-test, 2026-09-30)* **System tabs in vanilla panels, and in the mod's own window, carry no icon**, as vanilla's tabs don't; the tab's place after vanilla's and its greyed-until-unlocked checklist mark it as the mod's.
 - The tab reads the entry through `GetPlayerJournalEntry('<key>')` (gotcha #29) and ends with an **"Open Journal Entry"** button, placed below everything else.
 - **Build each section as a type**, so the journal entry and the tab compose the same pieces. The journal entry stays and may shrink to a stub once the tab carries everything.
