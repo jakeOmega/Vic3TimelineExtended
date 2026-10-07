@@ -31,6 +31,36 @@ un_case_standing_applies = {
 	}
 }
 
+# The same standing case against a member that stays outside the
+# Non-Proliferation Treaty while it builds a bomb (§5.3's "a non-signatory
+# proliferator is an automatic sanctions case", #804). Outside it means not
+# party while the treaty is in force: a member that refused to ratify it
+# (un_vote.3), since every later joiner accedes on joining
+# (un_apply_ratified_conventions). un_nonproliferation_refusal_modifier is not
+# read: it marks a refusal to table the treaty (un_events.14), before there is
+# one to be outside of, and it lapses after five years. Building a bomb means
+# being a threshold state, the kind the treaty's inspections restrain
+# (un_regime_npt_threshold); holding a bomb built while outside the treaty
+# counts too (un_npt_built_outside, set by the programme on its first
+# device), so succeeding does not end the case. A power armed before the
+# treaty is not held to it, as the treaty's own nuclear-weapon states were
+# not. Leaving and rejoining accedes; an outsider's case is
+# un_case_standing_applies's.
+# Scope: country
+un_case_npt_standing_applies = {
+	un_tier_is_supranational = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_propose_npt_in_force = yes
+	NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+	OR = {
+		un_regime_npt_threshold = yes
+		AND = {
+			has_variable = un_npt_built_outside
+			has_modifier = nuclear_power
+		}
+	}
+}
+
 # The scoped member is called on to enforce a sanctions regime with an
 # embargo (un_teeth_sanctions_embargo): a member of major-power rank with
 # diplomatic relevance to the target, not already embargoing it, that voted

@@ -136,6 +136,16 @@ nuclear_program_weekly_progress = {
 				name = nuclear_program_first_device_year
 				value = year
 			}
+			# Built outside the Non-Proliferation Treaty while it stood: a
+			# member that stays outside it keeps the Supranational standing
+			# case its programme carried (un_case_npt_standing_applies, #804).
+			if = {
+				limit = {
+					un_propose_npt_in_force = yes
+					NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+				}
+				set_variable = un_npt_built_outside
+			}
 			# Track whether this is the first nuclear power in the world
 			if = {
 				limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
