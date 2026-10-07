@@ -1960,7 +1960,7 @@
  je_un_record_no:0 "#G No#!"
  je_un_record_nuclear:0 "Nuclear weapons"
  je_un_record_standing:0 "#tooltippable Standing case#!"
- je_un_record_standing_tt:0 "A supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear programme or arsenal, answerable for staying out. Joining ends it."
+ je_un_record_standing_tt:0 "A supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear programme or arsenal, answerable for staying out. Joining ends it.\n\nIt holds a member to the same account for staying outside the Non-Proliferation Treaty with a nuclear programme and no bomb yet, or with a bomb it built outside the treaty. Leaving the UN and joining again accedes to the treaty and ends it."
  je_un_record_supports_condemn:0 "A condemnation, at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_condemn')|0]#!"
  je_un_record_supports_header:0 "Would Support"
  je_un_record_supports_mandate:0 "A military mandate, at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_mandate')|0]#!"
