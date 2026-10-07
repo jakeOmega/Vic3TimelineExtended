@@ -2047,6 +2047,65 @@ class TestReviewFixes474(unittest.TestCase):
         self.assertIn("id = nuclear_loose.7", blame)
 
 
+class TestPledgeAfterUnorderedLaunch(unittest.TestCase):
+    """#803: after a launch nobody ordered broke No First Use (#448 left the
+    doctrine and the amendment standing), the government answers in
+    nuclear_incident.6: reaffirm, repudiate at half price, or say nothing."""
+
+    def setUp(self):
+        self.e = strip_comments(read(EFFECTS))
+        self.inc = strip_comments(read(INCIDENT_EVENTS))
+
+    def test_only_an_incident_launch_under_nfu_marks_the_breach(self):
+        record = block(self.e, "nd_record_nuclear_use")
+        nfu = record[record.index("nd_doctrine_nfu = yes"):]
+        nfu = nfu[:nfu.index("set_variable = { name = nd_has_used")]
+        self.assertIn("nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }", nfu)
+        self.assertIn("set_variable = nd_nfu_unordered_breach", nfu)
+        for kind in ("warning", "commander", "system"):
+            self.assertIn(f"scope:nd_incident_launch_{kind} ?= scope:nd_rec_attacker", nfu)
+        # The ruling stands: the record itself moves no doctrine.
+        self.assertNotIn("nd_set_doctrine", record)
+        self.assertNotIn("nd_repudiate_nfu", record)
+
+    def test_every_incident_that_can_launch_asks_afterwards(self):
+        for event in ("nuclear_incident.3", "nuclear_incident.20", "nuclear_incident.30"):
+            self.assertIn("nd_nfu_breach_follow_up = yes", block(block(self.inc, event), "after"), event)
+        follow = block(self.e, "nd_nfu_breach_follow_up")
+        self.assertIn("remove_variable = nd_nfu_unordered_breach", follow)
+        self.assertIn("id = nuclear_incident.6", follow)
+
+    def test_the_three_answers(self):
+        ev = block(self.inc, "nuclear_incident.6")
+        self.assertIn("nd_doctrine_nfu = yes", block(ev, "trigger"))
+        self.assertIn("nd_reaffirm_nfu = yes", option_body(self.inc, "nuclear_incident.6.a"))
+        self.assertIn("nd_set_doctrine_2_after_breach = yes", option_body(self.inc, "nuclear_incident.6.b"))
+        silent = option_body(self.inc, "nuclear_incident.6.c")
+        self.assertIn("default_option = yes", silent)
+        for effect in ("nd_reaffirm_nfu", "nd_repudiate_nfu", "nd_set_doctrine"):
+            self.assertNotIn(effect, silent)
+
+    def test_reaffirming_costs_standing_and_restores_credibility(self):
+        reaffirm = block(self.e, "nd_reaffirm_nfu")
+        self.assertIn("name = nd_nfu_reaffirmed", reaffirm)
+        self.assertIn("is_decaying = yes", reaffirm)
+        self.assertIn("change_variable = { name = nd_credibility add = 15 }", reaffirm)
+        self.assertIn("text = nd_tt_credibility_up_15", reaffirm)
+        self.assertNotIn("nd_set_doctrine", reaffirm)
+        self.assertIn("country_legitimacy_base_add = -10",
+                      block(strip_comments(read(MODIFIERS)), "nd_nfu_reaffirmed"))
+
+    def test_repudiating_after_the_breach_is_half_price_and_strikes_the_amendment(self):
+        after = block(self.e, "nd_set_doctrine_2_after_breach")
+        self.assertIn("nd_repudiate_nfu = { CREDIBILITY = 10 INFAMY = 5 }", after)
+        # The core must not charge the full repudiation on top.
+        self.assertIn("nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = no }", after)
+        self.assertIn("nd_repudiate_nfu = { CREDIBILITY = 20 INFAMY = 10 }", block(self.e, "nd_set_doctrine"))
+        repudiate = block(self.e, "nd_repudiate_nfu")
+        self.assertIn("nd_break_pledge_effects = { CREDIBILITY = $CREDIBILITY$ INFAMY = $INFAMY$ }", repudiate)
+        self.assertIn("nd_strike_nfu_amendment = yes", repudiate)
+
+
 class TestProliferationAlertAnswers(unittest.TestCase):
     """The proliferation alert's accommodation and reassurance answers, and the
     NPT standing case (#804)."""
