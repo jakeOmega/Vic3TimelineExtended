@@ -1835,6 +1835,16 @@ banking_event_expense_huge = {
 	multiply = 0.0006
 }
 
+# The Sovereign Debt Scare's partial default (banking_cycle_events.10, .110 and
+# .160, option C; #448): a quarter of the debt written off, about the share
+# Greece's 2012 exchange cut from its total. clear_scaled_debt clears this
+# multiple of the credit limit and scaled_debt is the debt over that limit, so
+# a quarter of scaled_debt is a quarter of the debt itself, whatever its size.
+banking_partial_default_haircut = {
+	value = scaled_debt
+	multiply = 0.25
+}
+
 # Base points provided by the currently active laws (used for JE setup / display).
 # Values must mirror each law's country_banking_intervention_max_add modifier in
 # common/laws/extra_laws.txt (lawgroup_financial_regulation + lawgroup_national_bank).

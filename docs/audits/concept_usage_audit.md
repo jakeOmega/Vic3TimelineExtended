@@ -105,7 +105,7 @@ Misuses were corrected in this pass (the `[concept_X]` / `[Concept(...)]` wrappe
 | kept (in place) | borderline | `concept_obligation` | `te_events_l_english.yml:3775` | `un_events.1.d` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
 | kept (in place) | borderline | `concept_obligation` | `te_events_l_english.yml:3776` | `un_events.1.d_authoritarian` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
 | kept (in place) | borderline | `concept_obligation` | `te_events_l_english.yml:4330` | `banking_event_interbank_guarantee_desc` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
-| kept (in place) | borderline | `concept_obligation` | `te_events_l_english.yml:4348` | `banking_event_partial_default_desc` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
+| kept (in place; since reworded, #448) | borderline | `concept_obligation` | `te_events_l_english.yml:4348` | `banking_event_partial_default_desc` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
 | kept (in place) | borderline | `concept_obligation` | `te_laws_l_english.yml:58` | `law_feudal_contracts_desc` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
 | kept (in place) | borderline | `concept_obligation` | `te_miscellaneous_l_english.yml:1028` | `banking_cycle_status_bubble_extreme_coop` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |
 | kept (in place) | borderline | `concept_obligation` | `te_miscellaneous_l_english.yml:1034` | `banking_cycle_status_bubble_stable_coop` | treaty/debt/legal 'obligation' — concept is a diplomatic favor owed |

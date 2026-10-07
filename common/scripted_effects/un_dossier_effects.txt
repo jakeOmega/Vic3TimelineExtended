@@ -35,7 +35,8 @@
 #   violation   un_mandate_on_violated (un_mandate_effects.txt)
 #   covert      covert_warfare.1's immediate (a severe operation exposed)
 #   nuclear     nuclear_first_strike / _tactical_strike / _response_strike
-#               (extra_effects.txt)
+#               (extra_effects.txt); nuclear_weapon_events.18 option d (a
+#               programme referred under the Non-Proliferation Treaty, #448)
 # ============================================================================
 
 # ---- The dossier -------------------------------------------------------------------

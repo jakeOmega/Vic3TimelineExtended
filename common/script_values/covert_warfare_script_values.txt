@@ -162,6 +162,12 @@ covert_net_burn_loss = 25
 # burn cost the perpetrator's own network — one country's loss, the other's
 # foothold. Through covert_net_gain, so it adds less above half strength.
 covert_net_retaliation_seed = 25
+# Expelling the perpetrator's diplomats (covert_warfare.2 option c, #448): its
+# officers under diplomatic cover go home, a second roll-up on top of the
+# burn's, and the expulsion is answered in kind against any network of ours
+# inside its country. The burn's size: a year of single-op work, each way.
+covert_net_expulsion_loss = 25
+covert_expulsion_relations = -25
 # Raw detection points removed per point of strength (-5 at full strength),
 # before covert efficiency like the rest of the raw score.
 covert_net_detect_factor = 0.05

@@ -503,6 +503,24 @@ covert_net_loss = {
 	covert_net_clamp = yes
 }
 
+# Expulsion (#448) — covert_warfare.2 option c. Shrinks the scoped operator's
+# network inside $TARGET$, if it has one, by covert_net_expulsion_loss; the
+# event calls it both ways, for the perpetrator's network inside the defender
+# and for the defender's inside the perpetrator. A network that reaches 0 with
+# no operation running is reaped by the next monthly pass, like any other.
+# Parameters: $TARGET$ = the country the network is inside (a scope: reference)
+# Scope: the network's operator
+covert_net_expel = {
+	if = {
+		limit = { has_variable_list = iw_nets }
+		random_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= $TARGET$ }
+			covert_net_loss = { AMOUNT = covert_net_expulsion_loss }
+		}
+	}
+}
+
 # Retaliation in kind (#430) — covert_warfare.2 option b. The defender's own
 # service turns an exposure (the other side's agents caught, its couriers and
 # channels blown) into a foothold inside the service that ran the operation:

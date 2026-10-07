@@ -29,7 +29,11 @@
 # fall on its dashboard for months beforehand. One without the entry (a dial
 # needs only a national bank, not the entry) has no dashboard, so none of the
 # player text — the desc or the option tooltips — may rely on having seen it
-# coming (#428). The old event's flavour text lives on as te_peg.1.f.
+# coming (#428). Nor may it name what only the dashboard shows: each option's
+# tooltip comes in two, the .tt naming the dashboard's gauges (Peg Confidence,
+# the Exchange Rate Index, the dial) and the .no_je_tt, for a country without
+# the entry, saying the same without them (#448). te_peg.2 and te_peg.3 follow
+# the same rule. The old event's flavour text lives on as te_peg.1.f.
 #
 # EVERY OPTION WRITES AN INPUT, NEVER THE RATE. Defend writes a month counter
 # that te_mon_target_min reads; Suspend writes the counter te_mon_is_on_gold
@@ -120,7 +124,13 @@ te_peg.1 = {
 	option = {
 		name = te_peg.1.a
 		default_option = yes
-		custom_tooltip = te_peg.1.a.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.1.a.tt
+		}
+		else = {
+			custom_tooltip = te_peg.1.a.no_je_tt
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_peg_defend_months value = te_mon_peg_defend_months }
@@ -161,7 +171,13 @@ te_peg.1 = {
 	# sends te_peg.3: resume at te_mon_peg_devalue_confidence, or Fiat Money.
 	option = {
 		name = te_peg.1.b
-		custom_tooltip = te_peg.1.b.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.1.b.tt
+		}
+		else = {
+			custom_tooltip = te_peg.1.b.no_je_tt
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_peg_suspended_months value = te_mon_peg_suspension_months }
@@ -206,7 +222,13 @@ te_peg.1 = {
 	# now the ONLY deliberate devaluation in the mod.
 	option = {
 		name = te_peg.1.c
-		custom_tooltip = te_peg.1.c.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.1.c.tt
+		}
+		else = {
+			custom_tooltip = te_peg.1.c.no_je_tt
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
@@ -321,7 +343,13 @@ te_peg.2 = {
 	option = {
 		name = te_peg.2.a
 		default_option = yes
-		custom_tooltip = te_peg.2.a.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.2.a.tt
+		}
+		else = {
+			custom_tooltip = te_peg.2.a.no_je_tt
+		}
 
 		hidden_effect = {
 			te_mon_effect_anchor_peg_defend = yes
@@ -344,7 +372,13 @@ te_peg.2 = {
 		# withdrawing from an enforced article is what the imposer's war goal
 		# exists to answer.
 		trigger = { te_mon_is_imposed_pegger = no }
-		custom_tooltip = te_peg.2.b.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.2.b.tt
+		}
+		else = {
+			custom_tooltip = te_peg.2.b.no_je_tt
+		}
 
 		hidden_effect = {
 			te_mon_effect_anchor_peg_break = yes
@@ -374,7 +408,13 @@ te_peg.2 = {
 
 	option = {
 		name = te_peg.2.c
-		custom_tooltip = te_peg.2.c.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.2.c.tt
+		}
+		else = {
+			custom_tooltip = te_peg.2.c.no_je_tt
+		}
 
 		hidden_effect = {
 			te_mon_effect_anchor_peg_repeg = yes
@@ -466,7 +506,13 @@ te_peg.3 = {
 	option = {
 		name = te_peg.3.a
 		default_option = yes
-		custom_tooltip = te_peg.3.a.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.3.a.tt
+		}
+		else = {
+			custom_tooltip = te_peg.3.a.no_je_tt
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_peg_suspended_months value = 0 }
@@ -499,7 +545,13 @@ te_peg.3 = {
 			}
 		}
 		show_as_unavailable = { always = yes }
-		custom_tooltip = te_peg.3.b.tt
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = te_peg.3.b.tt
+		}
+		else = {
+			custom_tooltip = te_peg.3.b.no_je_tt
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_peg_suspended_months value = 0 }

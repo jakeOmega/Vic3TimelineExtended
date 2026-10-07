@@ -461,6 +461,14 @@ amendment_whistleblower_shield = {
 # leaving No First Use repudiates it and strikes it from the law
 # (nd_set_doctrine → nd_strike_nfu_amendment). No on_activate / on_deactivate:
 # the weekly binding covers every way in, and a hook on removal would loop.
+#
+# An AI may repeal it only under a militarist regime (#448). Before that it
+# was permanent for an AI: the weekly binding holds the doctrine, the AI
+# posture review leaves doctrine alone while the amendment is on file, and
+# nothing else takes it off. ai_will_revoke is a permission, not an order
+# (vanilla's Austrian amendments use it to stop one ruler revoking), so a
+# militarist AI may repeal it, and leaving No First Use afterwards still pays
+# the repudiation.
 amendment_no_first_strike = {
 	parent = law_limited_war
 
@@ -488,7 +496,7 @@ amendment_no_first_strike = {
 	}
 
 	ai_will_revoke = {
-		always = no
+		nd_regime_is_militarist = yes
 	}
 
 	can_repeal = {

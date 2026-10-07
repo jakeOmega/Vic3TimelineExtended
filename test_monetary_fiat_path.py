@@ -310,9 +310,19 @@ class SuspensionEndEvent(unittest.TestCase):
         self.assertEqual(enacting, group)
 
     def test_every_option_explains_itself(self):
-        # silent_variable: the writes are hidden, so each option says what it does.
+        # silent_variable: the writes are hidden, so each option says what it does,
+        # either directly or on both sides of the journal-entry split (#448: the
+        # dashboard's words for a holder, plain words for a country without it).
         for option in self.options:
-            self.assertIn('custom_tooltip', [key for key, _, _ in option])
+            keys = [key for key, _, _ in option]
+            if 'custom_tooltip' in keys:
+                continue
+            split = ('limit', '=', [('has_journal_entry', '=', 'je_banking_cycle')])
+            at = next(i for i, (key, _, val) in enumerate(option)
+                      if key == 'if' and split in val)
+            self.assertEqual(option[at + 1][0], 'else', option)
+            for _, _, branch in option[at:at + 2]:
+                self.assertIn('custom_tooltip', [key for key, _, _ in branch])
 
 
 def block(text, name, start=0):

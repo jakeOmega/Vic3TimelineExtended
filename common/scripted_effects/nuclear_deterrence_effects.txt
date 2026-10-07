@@ -1112,9 +1112,12 @@ nd_ai_review_posture = {
 	nd_init_posture = yes
 	save_scope_as = nd_ai_self
 	# ---- doctrine -----------------------------------------------------------
-	# Not while the No-First-Strike Pledge is on our laws (#430): the AI never
-	# repeals it (ai_will_revoke = no), and leaving No First Use would
-	# repudiate it — a cost the review's lottery should not pay by chance.
+	# Not while the No-First-Strike Pledge is on our laws (#430): leaving No
+	# First Use would repudiate it — a cost the review's lottery should not pay
+	# by chance. A militarist AI may repeal the amendment through the law
+	# system (its ai_will_revoke, #448); once it is off our laws this review
+	# can move the doctrine again, and leaving No First Use still pays the
+	# repudiation (nd_set_doctrine).
 	if = {
 		limit = {
 			var:nd_doctrine_months >= nd_doctrine_tenure_months
@@ -1812,6 +1815,16 @@ nd_record_nuclear_use = {
 		}
 		# Under no first use, anything but retaliation — an unauthorised or
 		# mistaken launch included — breaks the pledge (§3.1).
+		#
+		# It does not move the doctrine or strike the No-First-Strike Pledge
+		# from our laws (owner ruling, #448). A launch the government never
+		# ordered (launch on warning, delegated authority, the isolated
+		# commander) pays the broken pledge's price here, but the policy
+		# stands: the government did not choose to abandon it, and a law is
+		# not repealed because a commander fired. A government that does
+		# choose a first use has to leave no first use first (the doctrine
+		# gates on every ordered launch), and nd_set_doctrine strikes the
+		# amendment then.
 		if = {
 			limit = {
 				nd_doctrine_nfu = yes
