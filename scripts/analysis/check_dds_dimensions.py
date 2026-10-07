@@ -14,6 +14,7 @@ Usage:
     python3 scripts/analysis/check_dds_dimensions.py [root_or_file ...]
     python3 scripts/analysis/check_dds_dimensions.py --list       # print every BC texture
     python3 scripts/analysis/check_dds_dimensions.py --repo-root=DIR --allowlist=FILE
+    python3 scripts/analysis/check_dds_dimensions.py --pr-scope=BASE   # what CI scans
 
 With no positional argument it scans `gfx/` under the repo root. Known offenders
 listed in `scripts/analysis/dds_dimension_allowlist.txt` are reported but do not
@@ -24,17 +25,31 @@ The stale-allowlist check ("listed but no longer violates — drop the line") on
 runs on that default full-tree sweep. Passing a path narrows the scan, and an
 allowlist entry outside the narrowed scope is merely unvisited, not dead — so
 reporting it would fail a clean partial run. See `scan(..., check_stale=...)`.
+
+`--pr-scope=BASE` prints what a pull request's CI run scans, one path per line,
+from the tree diff between BASE and HEAD: the .dds files under gfx/ the PR adds or
+changes, or `gfx/` alone for the full sweep. CI fetches only those, since the
+whole tree is ~1.7 GB; see `pr_scan_scope`. It reads trees only, so it works in a
+blobless clone without downloading any file contents.
 """
 
 from __future__ import annotations
 
 import os
 import struct
+import subprocess
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ALLOWLIST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                               "dds_dimension_allowlist.txt")
+
+# A PR that changes either of these can change the verdict on textures it left
+# alone, so it gets the full sweep.
+FULL_SWEEP_TRIGGERS = frozenset({
+    "scripts/analysis/check_dds_dimensions.py",
+    "scripts/analysis/dds_dimension_allowlist.txt",
+})
 
 DDS_MAGIC = b"DDS "
 HEADER_SIZE = 128  # magic (4) + DDS_HEADER (124)
@@ -188,6 +203,36 @@ def scan(roots: list[str], repo_root: str = REPO_ROOT,
     }
 
 
+def pr_scan_scope(changes: list[tuple[str, str]], allowlist: set[str]) -> list[str]:
+    """The paths a PR's CI run scans, from its `(status, path)` changes against the base.
+
+    `["gfx/"]` is the full sweep, for a PR that touches the checker, the allowlist
+    or a listed texture: any of those can turn the tree red without a new
+    violation (a fixed icon still listed is a stale line, which only the full
+    sweep reports). Otherwise it is the .dds files under gfx/ the PR adds or
+    changes, possibly none; a deleted texture leaves nothing to scan.
+    """
+    if {path for _status, path in changes} & (FULL_SWEEP_TRIGGERS | allowlist):
+        return ["gfx/"]
+    return sorted(path for status, path in changes
+                  if status != "D" and path.startswith("gfx/")
+                  and path.lower().endswith(".dds"))
+
+
+def git_changes(base: str, repo_root: str = REPO_ROOT) -> list[tuple[str, str]]:
+    """`(status, path)` for every file that differs between `base` and HEAD.
+
+    `--no-renames` matters in a blobless clone: rename detection reads file
+    contents, which would download every added and deleted blob.
+    """
+    out = subprocess.run(
+        ["git", "diff-tree", "-r", "-z", "--no-renames", "--name-status", base, "HEAD"],
+        cwd=repo_root, check=True, capture_output=True,
+    ).stdout
+    fields = [os.fsdecode(f) for f in out.split(b"\0")[:-1]]
+    return list(zip(fields[0::2], fields[1::2]))
+
+
 def main(argv: list[str] | None = None) -> int:
     args = list(argv if argv is not None else sys.argv[1:])
     list_all = "--list" in args
@@ -195,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
         args.remove("--list")
     repo_root = REPO_ROOT
     allowlist_path = ALLOWLIST_PATH
+    pr_scope_base = None
     for arg in list(args):
         if arg.startswith("--repo-root="):
             # Only affects how paths are displayed / matched against the allowlist;
@@ -204,6 +250,15 @@ def main(argv: list[str] | None = None) -> int:
         elif arg.startswith("--allowlist="):
             allowlist_path = arg.split("=", 1)[1]
             args.remove(arg)
+        elif arg.startswith("--pr-scope="):
+            pr_scope_base = arg.split("=", 1)[1]
+            args.remove(arg)
+
+    if pr_scope_base is not None:
+        for path in pr_scan_scope(git_changes(pr_scope_base, repo_root),
+                                  load_allowlist(allowlist_path)):
+            print(path)
+        return 0
     # No positional argument = the default whole-`gfx/` sweep, the only mode in
     # which "this allowlist line matched nothing" means the line is dead rather
     # than out of scope.
