@@ -5,8 +5,12 @@ neither the 1.8 GB gfx/ tree nor an image library.
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import os
+import shutil
 import struct
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -18,6 +22,7 @@ from check_dds_dimensions import (  # noqa: E402
     load_allowlist,
     main,
     parse_dds_header,
+    pr_scan_scope,
     scan,
 )
 
@@ -156,6 +161,64 @@ class ScanTests(unittest.TestCase):
                       os.path.join(d, "gfx")]),
                 0,
             )
+
+
+class PrScopeTests(unittest.TestCase):
+    """CI fetches and scans only what `pr_scan_scope` returns (the whole of
+    gfx/ is ~1.7 GB, and its fetch has stalled), so it must not under-select."""
+
+    LISTED = "gfx/interface/icons/listed.dds"
+
+    def scope(self, *changes):
+        return pr_scan_scope(list(changes), {self.LISTED})
+
+    def test_a_pr_without_textures_scans_nothing(self):
+        self.assertEqual(self.scope(("M", "events/x.txt"), ("A", "docs/y.md")), [])
+
+    def test_added_and_changed_textures_are_scanned_and_deleted_ones_are_not(self):
+        self.assertEqual(
+            self.scope(("A", "gfx/new.dds"), ("M", "gfx/sub/CHANGED.DDS"),
+                       ("D", "gfx/gone.dds"), ("M", "gfx/models/x.txt")),
+            ["gfx/new.dds", "gfx/sub/CHANGED.DDS"],
+        )
+
+    def test_a_texture_outside_gfx_is_not_scanned(self):
+        # The full sweep covers gfx/ only, so the PR scan does too.
+        self.assertEqual(self.scope(("A", "generated_images/x.dds")), [])
+
+    def test_the_checker_or_its_allowlist_forces_the_full_sweep(self):
+        for path in ("scripts/analysis/check_dds_dimensions.py",
+                     "scripts/analysis/dds_dimension_allowlist.txt"):
+            self.assertEqual(self.scope(("M", path), ("A", "gfx/new.dds")), ["gfx/"], path)
+
+    def test_a_listed_texture_forces_the_full_sweep(self):
+        # Fixed but still listed is a stale line; deleted but still listed too.
+        for status in ("M", "D"):
+            self.assertEqual(self.scope((status, self.LISTED)), ["gfx/"], status)
+
+    def test_main_reads_the_diff_from_git(self):
+        if shutil.which("git") is None:
+            self.skipTest("git not installed")
+        with _TempTree({"gfx/old.dds": make_dds(64, 64), "gfx/keep.dds": make_dds(64, 64),
+                        "allow.txt": b""}) as d:
+            def git(*cmd):
+                subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *cmd],
+                               cwd=d, check=True, capture_output=True)
+            git("init", "-q")
+            git("add", "-A")
+            git("commit", "-q", "-m", "base")
+            # A pure rename: with rename detection on, git would report it as an R.
+            os.rename(os.path.join(d, "gfx/old.dds"), os.path.join(d, "gfx/renamed.dds"))
+            with open(os.path.join(d, "gfx/keep.dds"), "wb") as fh:
+                fh.write(make_dds(128, 128))
+            git("add", "-A")
+            git("commit", "-q", "-m", "pr")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = main([f"--repo-root={d}", f"--allowlist={d}/allow.txt",
+                             "--pr-scope=HEAD^1"])
+        self.assertEqual(code, 0)
+        self.assertEqual(out.getvalue().splitlines(), ["gfx/keep.dds", "gfx/renamed.dds"])
 
 
 class AllowlistTests(unittest.TestCase):

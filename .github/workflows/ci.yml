@@ -47,8 +47,8 @@ jobs:
       - name: Check out (without gfx/)
         uses: actions/checkout@v4
         with:
-          # gfx/ is ~1.8 GB of textures that nothing in this job reads; the
-          # dds-dimensions job below checks it out on its own.
+          # gfx/ is ~1.7 GB of textures that nothing in this job reads; the
+          # dds-dimensions job below fetches the ones it scans.
           sparse-checkout: |
             /*
             !/gfx/
@@ -292,18 +292,25 @@ jobs:
   dds-dimensions:
     name: DDS texture dimensions
     runs-on: ubuntu-latest
-    # Dominated by the gfx/ checkout (~1.8 GB, blobless); the scan itself is
-    # seconds. 10 caps a stalled clone.
-    timeout-minutes: 10
+    # A PR scans the textures it adds or changes; a push to main scans all of
+    # gfx/ (~1.7 GB). That download takes about 30 s, but GitHub sometimes
+    # sends nothing for it: git has no timeout of its own, and 6 of 100 runs on
+    # 2026-10-06/07 hung until this job was killed. The fetch step below gives
+    # each attempt 150 s and tries three times; this limit sits above that.
+    timeout-minutes: 12
     steps:
-      - name: Check out gfx/ only
+      - name: Check out the checker only
         uses: actions/checkout@v4
         with:
-          # scripts/analysis carries the checker and its allowlist.
+          # Commits and trees, but file contents only for these two files;
+          # the textures come in the fetch step. Depth 2 gives HEAD^1, the
+          # base side of a PR's merge commit, to diff against.
           sparse-checkout: |
-            gfx
-            scripts/analysis
+            /scripts/analysis/check_dds_dimensions.py
+            /scripts/analysis/dds_dimension_allowlist.txt
+          sparse-checkout-cone-mode: false
           filter: blob:none
+          fetch-depth: 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -311,5 +318,54 @@ jobs:
           python-version: '3.12'
 
       # No pip install: the checker is stdlib-only (it reads DDS headers directly).
+      # It prints `gfx/` alone for the full sweep, which a PR gets when it
+      # touches the checker, the allowlist or a listed texture.
+      - name: Choose the textures to scan
+        id: scope
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            python3 scripts/analysis/check_dds_dimensions.py --pr-scope=HEAD^1 > "$RUNNER_TEMP/dds_scope"
+          else
+            echo gfx/ > "$RUNNER_TEMP/dds_scope"
+          fi
+          if [ -s "$RUNNER_TEMP/dds_scope" ]; then
+            cat "$RUNNER_TEMP/dds_scope"
+            echo "scan=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "This PR adds or changes no texture under gfx/; nothing to scan."
+          fi
+
+      - name: Fetch them (time-limited, retried)
+        if: steps.scope.outputs.scan == 'true'
+        run: |
+          xargs -d '\n' -a "$RUNNER_TEMP/dds_scope" git ls-tree -r HEAD -- \
+            | awk '{print $3}' > "$RUNNER_TEMP/dds_blobs"
+          echo "Fetching $(wc -l < "$RUNNER_TEMP/dds_blobs") file(s)"
+          # The same fetch git runs on demand for a blobless checkout, run
+          # here so it can be timed out (timeout kills its whole process
+          # group) and shows progress, the server's included.
+          for attempt in 1 2 3; do
+            if timeout 150 git -c fetch.negotiationAlgorithm=noop fetch --progress \
+                --no-tags --no-write-fetch-head --recurse-submodules=no \
+                --filter=blob:none --stdin origin < "$RUNNER_TEMP/dds_blobs"; then
+              break
+            elif [ "$attempt" = 3 ]; then
+              echo "::error::Fetching the textures failed or stalled three times; re-run the job."
+              exit 1
+            fi
+            echo "::warning::Texture fetch attempt $attempt failed or stalled; retrying."
+          done
+          # Every blob is local now, so this only writes files.
+          sed 's|^|/|' "$RUNNER_TEMP/dds_scope" | git sparse-checkout add --stdin
+
       - name: Block-compressed textures must be multiples of 4
-        run: python3 scripts/analysis/check_dds_dimensions.py
+        if: steps.scope.outputs.scan == 'true'
+        run: |
+          # Bare for the full sweep: only that runs the stale-allowlist check.
+          if [ "$(cat "$RUNNER_TEMP/dds_scope")" = gfx/ ]; then
+            python3 scripts/analysis/check_dds_dimensions.py
+          else
+            xargs -d '\n' -a "$RUNNER_TEMP/dds_scope" python3 scripts/analysis/check_dds_dimensions.py
+          fi
