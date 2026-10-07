@@ -512,8 +512,9 @@ can have one, or a pegged currency, before the entry appears. Until then the
 Banking tab shows a read-only Monetary Policy readout: your Policy Rate beside
 the World Rate, the Mandate (with a dial) or the Monetary Anchor (when pegged),
 the Exchange Rate and, on a gold standard or a treaty peg, Peg Confidence with
-its bar. You can't change anything there: a central bank runs Price Stability
-until the entry gives you the controls.
+its bar. You can't change anything there: your central bank runs the Dual
+Mandate (under Central Bank Independence, the mandate its act names) until the
+entry gives you the controls.
 
 Once you have the entry, the Monetary Policy section shows it all. Its rows
 are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
