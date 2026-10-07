@@ -10,6 +10,9 @@
 ###   te_banking_topbar_readings    the cycle's phase in vanilla's top bar
 ###                                 (gui/topbar.gui), from the overview's icon
 ###                                 type
+###   te_banking_mon_readout        the Budget tab's read-only monetary
+###                                 readings, for a country with a dial or an
+###                                 anchor but no entry (#805); reads GetPlayer
 ### gui/journal_entry_widgets/banking_layout_widget.gui sets their order, with
 ### the history charts (banking_history_widget.gui) and How Banking Works, for
 ### both hosts: the journal entry (je_banking.txt attaches the named roots at
@@ -2520,6 +2523,169 @@ types banking_dashboard_widget_types
 						datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
 						text = "banking_dash_btn_disable"
 					}
+				}
+			}
+		}
+	}
+
+	### ==========================================================================
+	### THE MONETARY READOUT (#805)
+	### ==========================================================================
+	### What the Budget panel's Banking tab shows a country that has a monetary
+	### stance but not the journal entry (te_budget_banking_readout_sgui): a
+	### national bank's dial (te_mon_has_dial needs a bank, not the entry), or a
+	### currency tied to another's. Such a country runs a central bank and can
+	### meet a peg crisis, so it sees the readings that matter for one, and no
+	### control: Policy Rate and World Rate, the Mandate (a dial), the Monetary
+	### Anchor (anchored), the Exchange Rate, and Peg Confidence with its meter
+	### (a gold dial, or a treaty peg). The dashboard's own rows have the rest.
+	###
+	### THE ONE TYPE IN THIS FILE THAT DOES NOT READ JournalEntry. It is drawn
+	### where there is no entry, so every expression reads GetPlayer, and its
+	### keys are the banking_dash_ro_* copies of the dashboard's. Its row
+	### gates are the dashboard's own scripted GUIs, with GetPlayer as the root.
+	### 20 + 460 + 20 = 500, the width of the entry's sections.
+	type te_banking_mon_readout = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+		minimumsize = { 500 -1 }
+		margin = { 20 8 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.35
+		}
+
+		### Before the first monthly update there is nothing to read, and a
+		### missing `var:` logs once a frame (banking_mon_display_ready).
+		textbox = {
+			visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			text = "banking_dash_mon_not_ready"
+			autoresize = yes
+			multiline = yes
+			max_width = 460
+			align = left|nobaseline
+		}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+			### The rate, and the world rate it is measured against: what Peg
+			### Defence follows, and what a gold country's gold moves on.
+			banking_dash_pair_row = {
+				blockoverride "pair_left" {
+					banking_dash_pair = {
+						tooltip = "banking_dash_ro_rate_tt"
+						blockoverride "pair_label" {
+							text = "banking_dash_mon_rate_label"
+						}
+						blockoverride "pair_value" {
+							text = "banking_dash_ro_rate_value"
+						}
+					}
+				}
+				blockoverride "pair_right" {
+					banking_dash_pair = {
+						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_worldrate_tt"
+						blockoverride "pair_label" {
+							text = "banking_dash_mon_worldrate_label"
+						}
+						blockoverride "pair_value" {
+							text = "banking_dash_ro_worldrate_value"
+						}
+					}
+				}
+			}
+
+			banking_dash_condition_row = {
+				visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_mandate_tt"
+				blockoverride "condition_label" {
+					text = "banking_dash_mon_mandate_label"
+				}
+				blockoverride "condition_value" {
+					banking_dash_condition_value = {
+						text = "banking_dash_ro_mandate_value"
+					}
+				}
+			}
+
+			banking_dash_condition_row = {
+				visible = "[GetScriptedGui('banking_mon_is_anchored').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_anchor_tt"
+				blockoverride "condition_label" {
+					text = "banking_dash_mon_anchor_label"
+				}
+				blockoverride "condition_value" {
+					banking_dash_condition_value = {
+						multiline = yes
+						text = "banking_dash_ro_anchor_value"
+					}
+				}
+			}
+
+			banking_dash_condition_row = {
+				tooltip = "banking_dash_ro_fx_tt"
+				blockoverride "condition_label" {
+					text = "banking_dash_mon_fx_label"
+				}
+				blockoverride "condition_value" {
+					banking_dash_condition_value = {
+						multiline = yes
+						text = "banking_dash_ro_fx_value"
+					}
+				}
+			}
+
+			### Peg Confidence: a gold dial's (banking_mon_shows_gold), or a
+			### treaty pegger's (banking_mon_shows_anchor_peg). Never both: an
+			### anchored country has no dial.
+			banking_dash_condition_row = {
+				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_pegconf_tt"
+				blockoverride "condition_label" {
+					text = "banking_dash_mon_pegconf_label"
+				}
+				blockoverride "condition_value" {
+					banking_dash_condition_value = {
+						multiline = yes
+						text = "banking_dash_ro_pegconf_value"
+					}
+				}
+			}
+
+			banking_dash_mon_meter = {
+				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_pegconf_tt"
+				blockoverride "meter_value" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+				}
+			}
+
+			banking_dash_condition_row = {
+				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_anchorpeg_tt"
+				blockoverride "condition_label" {
+					text = "banking_dash_mon_pegconf_label"
+				}
+				blockoverride "condition_value" {
+					banking_dash_condition_value = {
+						text = "banking_dash_ro_anchorpeg_value"
+					}
+				}
+			}
+
+			banking_dash_mon_meter = {
+				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "banking_dash_ro_anchorpeg_tt"
+				blockoverride "meter_value" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
 				}
 			}
 		}

@@ -587,7 +587,9 @@ class TabUnlockTooltipTest(unittest.TestCase):
                         self.assertIn("GetScriptedGui('%s').IsValid(" % sgui, line)
                         self.assertIn("'te_system_tab_met_tt'", line)
                         self.assertLess(line.index("'te_system_tab_met_tt'"), line.index(".IsValidTooltip("))
-        self.assertEqual(found, 6)   # Banking, Tax Code, Hegemony, UN, Nuclear, Covert
+        # Banking, Tax Code, Hegemony, UN, Nuclear, Covert, and the Banking
+        # tab's monetary readout note (#805)
+        self.assertEqual(found, 7)
 
     def test_no_bare_or(self):
         for name in UNLOCK_TRIGGERS:

@@ -44,6 +44,28 @@ te_budget_banking_tab_unlock_sgui = {
 	effect = { }
 }
 
+# The one exception to "greyed until the entry runs" (#805). A country can hold
+# a monetary stance without the entry: a central bank dial needs only a national
+# bank (te_mon_has_dial), and a treaty peg, a common currency or a currency
+# board ties its money to another's (te_mon_is_anchored). Its bank sets a rate,
+# runs a mandate and can meet a peg crisis (te_peg.1/.2/.3), so the tab opens
+# read-only for it: the monetary readout (te_banking_mon_readout in
+# gui/journal_entry_widgets/banking_dashboard_widget.gui) in place of the
+# entry's panels. Under banking_system_simplified nobody has a stance, so the
+# rule's middle setting keeps the plain greyed tab. Never true together with
+# te_budget_banking_tab_sgui.
+te_budget_banking_readout_sgui = {
+	scope = country
+	is_shown = {
+		te_mon_full_system = yes
+		NOT = { has_journal_entry = je_banking_cycle }
+		te_mon_has_stance = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ---------------------------------------------------------------------------
 # Legislated Tax Code: Budget panel (gui/budget_panel.gui, the fifth slot),
 # je_tax_code. The tab is on the strip whenever the rule is on (either enabled

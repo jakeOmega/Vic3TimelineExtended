@@ -32,8 +32,11 @@ carries on the cycle and the central bank where the old one left them (see
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
-in one shows in the other. The tab is grayed until the journal entry appears;
-hover it for what you still need. It ends with an Open Journal Entry button,
+in one shows in the other. The tab is grayed until the journal entry appears,
+unless your central bank already sets a rate or your currency is tied to
+another's: then it opens early with your monetary readings (see [Monetary
+policy under the full Banking System](#monetary-policy-under-the-full-banking-system)).
+Hover it for what you still need. It ends with an Open Journal Entry button,
 which opens the entry with its description and status text. [The banking
 panels](#the-banking-panels) describes what they show.
 
@@ -504,7 +507,15 @@ and the United States with Free & Mutual Banking.
 ## Monetary policy under the full Banking System
 
 With the rule on Enabled, every country runs the monetary model whether or not
-it holds the journal entry, and the Monetary Policy section shows it. Its rows
+it holds the journal entry. A dial needs a National Bank, not the entry, so you
+can have one, or a pegged currency, before the entry appears. Until then the
+Banking tab shows a read-only Monetary Policy readout: your Policy Rate beside
+the World Rate, the Mandate (with a dial) or the Monetary Anchor (when pegged),
+the Exchange Rate and, on a gold standard or a treaty peg, Peg Confidence with
+its bar. You can't change anything there: a central bank runs Price Stability
+until the entry gives you the controls.
+
+Once you have the entry, the Monetary Policy section shows it all. Its rows
 are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
