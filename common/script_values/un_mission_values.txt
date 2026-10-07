@@ -95,10 +95,11 @@ un_mission_aid_sol_add = { value = 1.5 }
 # this many months lapses: the Assembly voted for a force nobody sent.
 un_mission_unstaffed_months = { value = 6 }
 
-# What an outcome is worth. Delivery and credibility are institutional ledger
-# entries; standing goes to each contributor.
+# What an outcome is worth. Success and failure are institutional delivery
+# entries (owner, 2026-10-06: a failed mission is the UN failing to deliver,
+# not anyone defying it); standing goes to each contributor.
 un_mission_success_delivery = { value = 1 }
-un_mission_failure_credibility = { value = -1 }
+un_mission_failure_delivery = { value = -1 }
 un_mission_success_standing = { value = 3 }
 
 # The contributors' covert networks in a mission's host grow this much faster
@@ -121,7 +122,7 @@ un_mission_electoral_progress_campaign = { value = 50 }
 
 # What its outcome is worth. Success is a delivery entry (half a peacekeeping
 # mission's: an election comes round far sooner than two years of peace) and
-# standing for the host; failure is the usual credibility debit. A host that
+# standing for the host; failure is the usual delivery debit. A host that
 # does away with its elections while the observers are there loses standing
 # (reason 46).
 un_mission_electoral_success_delivery = { value = 0.5 }

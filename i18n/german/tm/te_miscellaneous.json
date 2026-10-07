@@ -3624,8 +3624,8 @@
   "de": "Wahlbeobachter anfordern"
  },
  "UN_PROPOSE_OBSERVER_REQUEST_DESC": {
-  "en": "Ask the General Assembly to send observers to our next election. The vote takes a year. If it carries, an [concept_un_mission_electoral] goes to our capital, paid from the UN's budget: our [concept_legitimacy] rises, and foreign Election Interference against us is easier to catch and does half the harm to our [concept_electoral_confidence]. It succeeds when an election campaign ends while it is here. #G UN delivery +0.5 if passed.#! Requires Charter Reform I, elections and peace.",
-  "de": "Bittet die Generalversammlung, Beobachter zu unserer nächsten Wahl zu entsenden. Die Abstimmung dauert ein Jahr. Wird sie angenommen, geht eine [concept_un_mission_electoral] in unsere Hauptstadt, bezahlt aus dem Haushalt der UN: Unsere [concept_legitimacy] steigt, und ausländische Wahleinmischung gegen uns ist leichter aufzudecken und schadet unserem [concept_electoral_confidence] nur halb so stark. Sie ist erfolgreich, wenn ein Wahlkampf endet, während sie hier ist. #G UN-Leistung +0,5, wenn sie angenommen wird.#! Erfordert Charta-Reform I, Wahlen und Frieden."
+  "en": "Ask the General Assembly to send observers to our next election. The vote takes a year. If it carries, an [concept_un_mission_electoral] goes to our capital, paid from the UN's budget: our [concept_legitimacy] rises, and foreign Election Interference against us is easier to catch and does half the harm to our [concept_electoral_confidence]. It succeeds when an election campaign ends while it is here. #G UN credibility +1 if passed.#! Requires Charter Reform I, elections and peace.",
+  "de": "Bittet die Generalversammlung, Beobachter zu unserer nächsten Wahl zu entsenden. Die Abstimmung dauert ein Jahr. Wird sie angenommen, geht eine [concept_un_mission_electoral] in unsere Hauptstadt, bezahlt aus dem Haushalt der UN: Unsere [concept_legitimacy] steigt, und ausländische Wahleinmischung gegen uns ist leichter aufzudecken und schadet unserem [concept_electoral_confidence] nur halb so stark. Sie ist erfolgreich, wenn ein Wahlkampf endet, während sie hier ist. #G UN-Glaubwürdigkeit +1, wenn sie angenommen wird.#! Erfordert Charta-Reform I, Wahlen und Frieden."
  },
  "UN_PROPOSE_OBSERVER_REQUEST_TT": {
   "en": "#bold A General Assembly vote has been called#! on sending observers to our next election. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
@@ -17708,8 +17708,8 @@
   "de": "UN-Wahlbeobachter"
  },
  "un_mission_expelled_tt": {
-  "en": "#R We send the [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] home.#! It fails, and the Assembly's credibility suffers.",
-  "de": "#R Wir schicken die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] nach Hause.#! Sie scheitert, und die Glaubwürdigkeit der Versammlung leidet."
+  "en": "#R We send the [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] home.#! It fails, and UN delivery falls.",
+  "de": "#R Wir schicken die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] nach Hause.#! Sie scheitert, und die Umsetzung der UN sinkt."
  },
  "un_mission_host_intel_tt": {
   "en": "While the mission stays, the intelligence networks of the countries serving in it grow faster in our country.",
@@ -17832,8 +17832,8 @@
   "de": "Wir sind das letzte Mitglied, das in ihr dient, aber die [concept_un_standing_force] bleibt: Die Mission geht mit verringerter Stärke weiter."
  },
  "un_mission_withdraw_last_tt": {
-  "en": "#R We are the last to serve in it: the mission fails at the next monthly update, and the Assembly's credibility suffers.#!",
-  "de": "#R Wir sind die Letzten, die in ihr dienen: Die Mission scheitert bei der nächsten monatlichen Aktualisierung, und die Glaubwürdigkeit der Versammlung leidet.#!"
+  "en": "#R We are the last to serve in it: the mission fails at the next monthly update, and UN delivery falls.#!",
+  "de": "#R Wir sind die Letzten, die in ihr dienen: Die Mission scheitert bei der nächsten monatlichen Aktualisierung, und die Umsetzung der UN sinkt.#!"
  },
  "un_mission_withdraw_relations_tt": {
   "en": "[SCOPE.sCountry('un_msn_tt_host').GetName] resents being left: #R −10#! relations.",
@@ -18400,8 +18400,8 @@
   "de": "Diplomatische Isolation nach [concept_un_veto]"
  },
  "un_vote_aid_request_passed_tt": {
-  "en": "The humanitarian aid program was authorized. #G UN delivery +0.5, moving [concept_un_authority]'s target.#! Contributing nations will provide aid. The requesting country receives benefits scaled by donor count.",
-  "de": "Das Programm für humanitäre Hilfe wurde genehmigt. #G UN-Wirksamkeit +0,5, verschiebt das Ziel der [concept_un_authority].#! Beitragende Nationen werden Hilfe leisten. Das antragstellende Land erhält Vorteile, die sich nach der Zahl der Geber richten."
+  "en": "The humanitarian aid program was authorized. #G UN credibility +1, moving [concept_un_authority]'s target.#! Contributing nations will provide aid. The requesting country receives benefits scaled by donor count.",
+  "de": "Das Programm für humanitäre Hilfe wurde genehmigt. #G UN-Glaubwürdigkeit +1, verschiebt das Ziel der [concept_un_authority].#! Beitragende Nationen werden Hilfe leisten. Das antragstellende Land erhält Vorteile, die sich nach der Zahl der Geber richten."
  },
  "un_vote_arms_embargo_passed_tt": {
   "en": "The arms embargo carried. #G UN credibility +1, moving [concept_un_authority]'s target.#! For ten years the target's [concept_trade_advantage] in every [Concept('concept_military_good', 'military good')] falls by 30% and its military goods cost 5% more, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier). A target that voted for its own embargo takes the voluntary one instead: half the penalty, for five years.",
@@ -18544,24 +18544,24 @@
   "de": "Der Vertrag über das Verbot von Nuklearwaffen wurde angenommen. #G UN-Glaubwürdigkeit +1, verschiebt das Ziel der [concept_un_authority].#! Eine Vertragspartei mit Sprengköpfen bleibt an die Zahl gebunden, die sie bei der Ratifizierung hatte, #R alle fünf Jahre ein Fünftel weniger#! und nach 25 Jahren keine; eine Vertragspartei ohne Sprengköpfe darf keine bauen. Ein Mitglied mit Sprengköpfen, das nicht darüber abgestimmt hat oder später beitritt, ist nicht gebunden. Solange der Vertrag in Kraft ist, steigt das Ziel des [Concept('concept_nuclear_taboo', 'Nuklearen Tabus')] um bis zu #G 6#!, ebenso stark wie die UN-Autorität."
  },
  "un_vote_observer_request_passed_tt": {
-  "en": "The request for electoral observers was granted. #G UN delivery +0.5, moving [concept_un_authority]'s target.#!",
-  "de": "Die Bitte um Wahlbeobachter wurde gewährt. #G UN-Leistung +0,5, verschiebt das Ziel der [concept_un_authority].#!"
+  "en": "The request for electoral observers was granted. #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "de": "Die Bitte um Wahlbeobachter wurde gewährt. #G UN-Glaubwürdigkeit +1, verschiebt das Ziel der [concept_un_authority].#!"
  },
  "un_vote_pandemic_passed_tt": {
   "en": "The Pandemic Cooperation Resolution was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The World Health Organization (WHO) is established.",
   "de": "Die Resolution zur Pandemiezusammenarbeit wurde angenommen. #G UN-Glaubwürdigkeit +1,5, verschiebt das Ziel der [concept_un_authority].#! Die Weltgesundheitsorganisation (WHO) wird eingerichtet."
  },
  "un_vote_peacekeeping_request_passed_tt": {
-  "en": "The peacekeeping deployment was authorized. #G UN delivery +0.5, moving [concept_un_authority]'s target.#! Contributing nations will deploy forces. The requesting country receives peacekeeping benefits scaled by donor count.",
-  "de": "Die Entsendung der Friedenssicherungstruppe wurde genehmigt. #G UN-Wirksamkeit +0,5, verschiebt das Ziel der [concept_un_authority].#! Beitragende Nationen werden Truppen entsenden. Das antragstellende Land erhält Vorteile der Friedenssicherung, die sich nach der Zahl der Geber richten."
+  "en": "The peacekeeping deployment was authorized. #G UN credibility +1, moving [concept_un_authority]'s target.#! Contributing nations will deploy forces. The requesting country receives peacekeeping benefits scaled by donor count.",
+  "de": "Die Entsendung der Friedenssicherungstruppe wurde genehmigt. #G UN-Glaubwürdigkeit +1, verschiebt das Ziel der [concept_un_authority].#! Beitragende Nationen werden Truppen entsenden. Das antragstellende Land erhält Vorteile der Friedenssicherung, die sich nach der Zahl der Geber richten."
  },
  "un_vote_peacekeeping_request_passed_vetoed_tt": {
-  "en": "The peacekeeping request passed the GA but was vetoed in the Security Council. #G UN delivery +0.25, moving [concept_un_authority]'s target.#! Only an observer mission is dispatched — no contributing forces are levied.",
-  "de": "Der Antrag auf Friedenssicherung wurde von der Generalversammlung angenommen, aber im Sicherheitsrat mit einem Veto belegt. #G UN-Wirksamkeit +0,25, verschiebt das Ziel der [concept_un_authority].#! Es wird nur eine Beobachtermission entsandt — es werden keine Truppensteller aufgeboten."
+  "en": "The peacekeeping request passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! Only an observer mission is dispatched — no contributing forces are levied.",
+  "de": "Der Antrag auf Friedenssicherung wurde von der Generalversammlung angenommen, aber im Sicherheitsrat mit einem Veto belegt. #G UN-Glaubwürdigkeit +0,5, verschiebt das Ziel der [concept_un_authority].#! Es wird nur eine Beobachtermission entsandt — es werden keine Truppensteller aufgeboten."
  },
  "un_vote_peacekeeping_request_passed_weak_tt": {
-  "en": "The peacekeeping request passed, but the United Nations is below the Established tier and can field no force. #G UN delivery +0.25, moving [concept_un_authority]'s target.#! Only an observer mission is dispatched — no contributing forces are levied.",
-  "de": "Der Antrag auf Friedenssicherung wurde angenommen, aber die Vereinten Nationen liegen unter der Stufe Etabliert und können keine Truppe aufstellen. #G UN-Wirksamkeit +0,25, verschiebt das Ziel der [concept_un_authority].#! Es wird nur eine Beobachtermission entsandt — es werden keine Truppensteller aufgeboten."
+  "en": "The peacekeeping request passed, but the United Nations is below the Established tier and can field no force. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! Only an observer mission is dispatched — no contributing forces are levied.",
+  "de": "Der Antrag auf Friedenssicherung wurde angenommen, aber die Vereinten Nationen liegen unter der Stufe Etabliert und können keine Truppe aufstellen. #G UN-Glaubwürdigkeit +0,5, verschiebt das Ziel der [concept_un_authority].#! Es wird nur eine Beobachtermission entsandt — es werden keine Truppensteller aufgeboten."
  },
  "un_vote_physical_protection_passed_tt": {
   "en": "The Convention on the Physical Protection of Nuclear Material was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! Its parties' custody of their warheads counts as secured: #G half#! as many go missing whenever they change hands, and each month there is a #v 3%#! chance to find one of theirs that already has.",

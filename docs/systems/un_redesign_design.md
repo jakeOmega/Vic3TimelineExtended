@@ -1044,8 +1044,16 @@ same day, also at the owner's request. Not yet seen in a running game.
   (electoral 0.5), a mandate discharged 1, a ceasefire kept 0.75, a referendum held 0.5, a full
   World Food Reserve draw 0.5, an emergency loan accepted (`un_events.35`) 0.5; a full
   peacekeeping force or major relief effort (`un_events.4.a`, `.7.a`) 0.75, observers or
-  what can be spared (`.4.b`, `.7.b`) 0.25, both × weight; a carried aid, peacekeeping or
-  observer request 0.5 (0.25 when vetoed or below Established).
+  what can be spared (`.4.b`, `.7.b`) 0.25, both × weight.
+- **Votes go to credibility, outcomes to delivery** (same day, owner). A carried aid,
+  peacekeeping or observer request had booked delivery (1, or 0.5 vetoed or below
+  Established), and the mission it opened booked delivery again on success; it is now a
+  credibility entry like every other carried resolution (+1, or +0.5). A failed mission had
+  cost credibility −1; it is now a delivery debit of −1 (`un_mission_failure_delivery`),
+  since it is the UN failing to deliver rather than anyone defying it. The delivery floor of 0
+  means failures cancel recent successes rather than banking a deficit. Abused mandates,
+  defied ceasefire orders, refused referendums, defied court rulings and members refusing to
+  send aid or troops stay in credibility.
 
 **Rulings.**
 

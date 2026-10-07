@@ -891,7 +891,7 @@ un_mission_outcome_succeeded = {
 # scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_failed = {
-	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 ELECTORAL = 38 }
+	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_failure_delivery PEACEKEEPING = 24 AID = 25 STABILISATION = 26 ELECTORAL = 38 }
 	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= { un_mission_post_failed_notice = yes }
 	if = {
@@ -1257,12 +1257,12 @@ un_observer_request_chamber_preview = {
 # observers are not sent into a war (un_observer_request_can_table asks the
 # same at tabling), and one they arrived in would never fail them
 # (un_msn_war_at_open). Either way nothing is sent. Booked as the aid request
-# is: UN delivery +0.5 under the resolution code.
+# is: UN credibility +1 under the resolution code.
 # Scope: un_vote.2's ROOT (the proposer, the requester); expects
 # scope:un_resolution and scope:un_vote_proposer
 un_observer_request_on_carried = {
 	custom_tooltip = un_vote_observer_request_passed_tt
-	un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 1 }
+	un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 	if = {
 		limit = { exists = scope:un_vote_proposer }
 		if = {
