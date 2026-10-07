@@ -63,3 +63,57 @@ te_company_failing_monthly_effect = {
 		}
 	}
 }
+
+# Company AI: the AI subsidizes its company flagships while it is not in default.
+#
+# The engine's AI almost never changes a subsidy itself: it keeps the ones a
+# building gets by default (ports, railways, power plants) and adds none. On
+# the 2073 save it subsidized 0 of its 23 company buildings (the player 20 of
+# 20), 0 of 140 shipyards, and 0 of 250 airports and highways outside the laws
+# that force them. 12 of the 23 were under half staffed, some losing workers to
+# subsidized buildings nearby: a building that is not subsidized stops hiring
+# when earnings per worker would fall below
+# BUILDING_DEFAULT_MIN_EARNINGS_TO_HIRE_EMPLOYEES. A subsidy only tops a
+# building up to SUBSIDIES_MIN_GAIN (0), so a profitable flagship costs nothing.
+#
+# Country scope, AI only. In default it stops: the AI never drops a subsidy on
+# its own (in default it still paid for 60 of 61 railways), so this does. A
+# player's subsidies are the player's.
+te_company_ai_subsidy_monthly_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			in_default = no
+		}
+		every_scope_state = {
+			limit = {
+				state_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+			}
+			every_scope_building = {
+				limit = {
+					is_building_group = bg_company_buildings
+					is_subsidized = no
+				}
+				set_subsidized = yes
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			is_ai = yes
+			in_default = yes
+		}
+		every_scope_state = {
+			limit = {
+				state_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+			}
+			every_scope_building = {
+				limit = {
+					is_building_group = bg_company_buildings
+					is_subsidized = yes
+				}
+				set_subsidized = no
+			}
+		}
+	}
+}

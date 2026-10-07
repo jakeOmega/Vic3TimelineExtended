@@ -1,5 +1,6 @@
-﻿# Company AI: failing-company count and the AI's dissolution of a company
-# that has failed for five years (common/scripted_effects/te_company_effects.txt).
+﻿# Company AI: failing-company count, the AI's dissolution of a company that
+# has failed for five years, and the AI's subsidies for its company flagships
+# (common/scripted_effects/te_company_effects.txt).
 
 on_monthly_pulse_country = {
 	on_actions = {
@@ -10,5 +11,6 @@ on_monthly_pulse_country = {
 te_company_monthly_on_action = {
 	effect = {
 		te_company_failing_monthly_effect = yes
+		te_company_ai_subsidy_monthly_effect = yes
 	}
 }
