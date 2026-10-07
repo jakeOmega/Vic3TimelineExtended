@@ -2,7 +2,8 @@
 ###
 ### A type library, one type per section:
 ###   te_banking_overview_panel     the entry's four bars and the readings'
-###                                 icons, always shown
+###                                 icons, with next month's ranges under
+###                                 the first row, always shown
 ###   te_banking_sec_active         Active Policies
 ###   te_banking_sec_monetary       Monetary Policy (the dial block)
 ###   te_banking_sec_interventions  Available Interventions, one collapsible
@@ -397,6 +398,28 @@ types banking_dashboard_widget_types
 		using = fontsize_small
 	}
 
+	### A first-row cell's third line: how far its reading can move at the next
+	### monthly update. As wide as the cell, with its text at the cell's x (34),
+	### so it reads as the cell's own line under the word. The instance puts the
+	### breakdown on the line, which is hoverable apart from the cell above, and
+	### one te_banking_ov_change_text per shape of range in "range".
+	type te_banking_ov_change = widget {
+		size = { 158 18 }
+		block "range" {}
+	}
+
+	### One shape of a change line's range. Underlined, as hoverable text is,
+	### since its tooltip is not the cell's.
+	type te_banking_ov_change_text = textbox {
+		position = { 34 0 }
+		autoresize = yes
+		max_width = 124
+		elide = right
+		align = left|nobaseline
+		using = fontsize_small
+		default_format = "#tooltippable"
+	}
+
 	### The icons of the cycle's three readings, one per state, each with its own
 	### visible: the phase from the banking_dash_phase_* scripted GUI its word
 	### uses, momentum and bubble pressure from their display codes
@@ -547,89 +570,170 @@ types banking_dashboard_widget_types
 		### entry that does.
 		te_je_scripted_bars = {}
 
-		### Row 1: the cycle — phase, momentum, bubble pressure.
+		### Row 1: the cycle — phase, momentum, bubble pressure — and, on a third
+		### line under each, how far it can move next month. The line hangs off its
+		### cell (no spacing between the two rows), so it reads as the cell's own.
 		flowcontainer = {
-			direction = horizontal
+			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
-			spacing = 3
 
-			### The phase: icon and coloured word from the same banking_dash_phase_*
-			### scripted GUI, the one the word always used.
-			te_banking_ov_cell = {
-				tooltip = "banking_dash_phase_tt"
-				blockoverride "caption" {
-					text = "banking_dash_phase_label"
+			### The readings.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 3
+
+				### The phase: icon and coloured word from the same banking_dash_phase_*
+				### scripted GUI, the one the word always used.
+				te_banking_ov_cell = {
+					tooltip = "banking_dash_phase_tt"
+					blockoverride "caption" {
+						text = "banking_dash_phase_label"
+					}
+					blockoverride "icons" {
+						te_banking_phase_icons = {}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_panic_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_downturn_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_stagnation_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_stable_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_expansion_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_boom_value"
+						}
+						te_banking_ov_word = {
+							visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							text = "banking_dash_phase_frenzy_value"
+						}
+					}
 				}
-				blockoverride "icons" {
-					te_banking_phase_icons = {}
+
+				### Momentum's band (te_banking_momentum_icons).
+				te_banking_ov_cell = {
+					tooltip = "banking_dash_momentum_tt"
+					blockoverride "caption" {
+						text = "banking_dash_momentum_label"
+					}
+					blockoverride "icons" {
+						te_banking_momentum_icons = {}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "banking_dash_momentum_value"
+						}
+					}
 				}
-				blockoverride "word" {
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_panic_value"
+
+				### Bubble pressure's band (te_banking_bubble_icons), with the crash-risk
+				### badge over the icon's corner.
+				te_banking_ov_cell = {
+					tooltip = "banking_dash_bubble_tt"
+					blockoverride "caption" {
+						text = "banking_dash_bubble_label"
 					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_downturn_value"
+					blockoverride "icons" {
+						te_banking_bubble_icons = {}
 					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_stagnation_value"
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "banking_dash_bubble_value"
+						}
 					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_stable_value"
-					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_expansion_value"
-					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_boom_value"
-					}
-					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						text = "banking_dash_phase_frenzy_value"
+					blockoverride "badge" {
+						te_banking_crash_risk_badge = {
+							position = { 22 0 }
+						}
 					}
 				}
 			}
 
-			### Momentum's band (te_banking_momentum_icons).
-			te_banking_ov_cell = {
-				tooltip = "banking_dash_momentum_tt"
-				blockoverride "caption" {
-					text = "banking_dash_momentum_label"
-				}
-				blockoverride "icons" {
-					te_banking_momentum_icons = {}
-				}
-				blockoverride "word" {
-					te_banking_ov_word = {
-						text = "banking_dash_momentum_value"
-					}
-				}
-			}
+			### Their change at the next monthly update, as a range worked out from
+			### the readings (banking_disp_*_change_*, banking_overview_display_values.txt),
+			### one shape of text per banking_disp_*_change_shape: 1 low to high,
+			### 2 low or more, 3 high or less, 4 one figure. The breakdown is on hover.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 3
 
-			### Bubble pressure's band (te_banking_bubble_icons), with the crash-risk
-			### badge over the icon's corner.
-			te_banking_ov_cell = {
-				tooltip = "banking_dash_bubble_tt"
-				blockoverride "caption" {
-					text = "banking_dash_bubble_label"
-				}
-				blockoverride "icons" {
-					te_banking_bubble_icons = {}
-				}
-				blockoverride "word" {
-					te_banking_ov_word = {
-						text = "banking_dash_bubble_value"
+				### Under the phase: the cycle value.
+				te_banking_ov_change = {
+					tooltip = "banking_dash_value_change_tt"
+					blockoverride "range" {
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)1' )]"
+							text = "banking_dash_value_change_range"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)2' )]"
+							text = "banking_dash_value_change_more"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)3' )]"
+							text = "banking_dash_value_change_less"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)4' )]"
+							text = "banking_dash_value_change_single"
+						}
 					}
 				}
-				blockoverride "badge" {
-					te_banking_crash_risk_badge = {
-						position = { 22 0 }
+
+				### Under momentum.
+				te_banking_ov_change = {
+					tooltip = "banking_dash_momentum_change_tt"
+					blockoverride "range" {
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)1' )]"
+							text = "banking_dash_momentum_change_range"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)2' )]"
+							text = "banking_dash_momentum_change_more"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)3' )]"
+							text = "banking_dash_momentum_change_less"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)4' )]"
+							text = "banking_dash_momentum_change_single"
+						}
+					}
+				}
+
+				### Under bubble pressure. Its range is always closed.
+				te_banking_ov_change = {
+					tooltip = "banking_dash_bubble_change_tt"
+					blockoverride "range" {
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)1' )]"
+							text = "banking_dash_bubble_change_range"
+						}
+						te_banking_ov_change_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)4' )]"
+							text = "banking_dash_bubble_change_single"
+						}
 					}
 				}
 			}

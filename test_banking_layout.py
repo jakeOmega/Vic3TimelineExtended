@@ -397,11 +397,18 @@ class OverviewTest(unittest.TestCase):
         self.assertRegex(body, r"(?m)^\t\tmargin = \{ 10 8 \}")   # 10 + 480 bars + 10 = 500
         header = _type_body(dash, "banking_dash_category_header")
         self.assertIn("size = { 500 32 }", header)
-        for m in re.finditer(r"(?m)^\t\t### Row \d", body):
-            row = _block_from(body, body.index("flowcontainer = {", m.end()))
-            n = len(re.findall(r"te_banking_ov_cell = \{", row))
+        change = _type_body(dash, "te_banking_ov_change")
+        self.assertEqual(int(re.search(r"size = \{ (\d+) \d+ \}", change).group(1)), w)
+        rows = 0
+        for m in re.finditer(r"flowcontainer = \{\s*direction = horizontal", body):
+            row = _block_from(body, m.start())
+            n = len(re.findall(r"te_banking_ov_(?:cell|change) = \{", row))
+            if not n:
+                continue
+            rows += 1
             spacing = int(re.search(r"spacing = (\d+)", row).group(1))
             self.assertLessEqual(n * w + (n - 1) * spacing, 480, row[:80])
+        self.assertEqual(rows, 3)   # the readings, their changes, what the player sets
         for textbox in re.findall(r"max_width = (\d+)", cell) + \
                 re.findall(r"max_width = (\d+)", _type_body(dash, "te_banking_ov_word")):
             self.assertLessEqual(int(textbox), w)
@@ -632,15 +639,16 @@ class ShortPanelTest(unittest.TestCase):
         parts = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", target)]
         self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), 230, parts)
 
-    def test_status_text_keeps_only_the_breakdown(self):
+    def test_status_text_is_empty_while_active(self):
+        """The overview shows all it said: the readings as icons, and the
+        three monthly modifier totals in the tooltips of the ranges under them
+        (test_banking_monthly_change.py). One line remains for the entry
+        before it starts, when the overview draws nothing."""
         je = _read(JE)
         status = _block_from(je, je.index("status_desc = {"))
-        self.assertEqual(re.findall(r"desc = (\w+)", status),
-                         ["banking_cycle_status_not_started", "BANKING_CURR_MODIFIERS"])
+        self.assertEqual(re.findall(r"desc = (\w+)", status), ["banking_cycle_status_not_started"])
         self.assertIn("NOT = { has_variable = finance_cycle_value }", status)
-        cloc = _concept_loc()
-        v = cloc["BANKING_CURR_MODIFIERS"]
-        self.assertFalse(v.startswith("\\n") or v.endswith("\\n"))
+        self.assertNotIn("BANKING_CURR_MODIFIERS", _concept_loc())
         self.assertIn("banking_cycle_status_not_started", _loc())
 
 
@@ -826,6 +834,21 @@ class WidthBudgetTest(unittest.TestCase):
                 self.fits(key, cell)
         # the longest band word, named: the price band's
         self.assertEqual(self.shown("banking_dash_mon_band_value"), "Hyperinflation")
+
+    def test_overview_change_lines(self):
+        """The ranges under the first row (test_banking_monthly_change.py).
+        The cycle value and bubble pressure print one decimal; momentum
+        prints two, and its monthly change stays well inside +/-10 (a tenth of
+        momentum decays, and the pushes come to a few points at most)."""
+        body = _type_body(self.dash, "te_banking_overview_panel")
+        box = _type_body(self.dash, "te_banking_ov_change_text")
+        cell = (int(re.search(r"max_width = (\d+)", box).group(1)),
+                re.search(r"using = fontsize_(\w+)", box).group(1))
+        keys = sorted(set(re.findall(r'te_banking_ov_change_text = \{[^{}]*?text = "(\w+)"', body)))
+        self.assertEqual(len(keys), 10)   # four shapes each for value and momentum, two for bubble
+        for key in keys:
+            with self.subTest(line=key):
+                self.fits(key, cell, "-9.99" if "_momentum_" in key else NUMBER)
 
     def test_buttons(self):
         """A button's label is in the medium type (assumed: its font is the

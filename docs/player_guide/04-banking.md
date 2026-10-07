@@ -34,7 +34,7 @@ switched on are lost and must be enabled again.
 The same panels appear as a Banking tab in the Budget panel, and a change made
 in one shows in the other. The tab is grayed until the journal entry appears;
 hover it for what you still need. It ends with an Open Journal Entry button,
-which opens the entry with its description and status text. [The banking
+which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
 
 ![The Banking tab of the Budget panel: the four bars, the overview's icons, Active Policies and the start of Monetary Policy.](images/banking_tab.png)
@@ -53,10 +53,16 @@ under the full Banking System.
 The overview's icons report momentum and bubble pressure as bands, not figures.
 Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
 reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
-(75 and up). The entry's status text lists the Financial Cycle Modifiers:
-Monthly Cycle Value, Monthly Momentum and Monthly Bubble Pressure, the change
-your country's modifiers make to each reading every month. Hover a figure for
-the modifiers behind it.
+(75 and up).
+
+Under the phase, momentum and bubble pressure icons, a third line gives how far
+the cycle value, momentum and bubble pressure can move at the next monthly
+update, as a range such as −1.1 to +2.2. It is worked out from what the panels
+show: the bands, your modifiers, your policy stance and the random nudge. The
+ranges are wide because the bands are: Steady momentum lies anywhere from −1 to
++1, so the cycle value's range is nearly two points wide before anything else
+moves it. Crashes and events can move a reading further. Hover a range for its
+parts, and hover a figure in it for the modifiers behind it.
 
 ### The seven banking cycle phases
 
@@ -193,7 +199,11 @@ sections, in the same order. The overview at the top is always shown: the four
 bars, then two rows of icons, each with a caption above it and a word beside
 it. Hover a caption for what the term means, and hover the icon or its word for
 the reading in detail; the first row's tooltips also list what pushes the cycle
-each month.
+each month. Under the first row's words, a third line gives next month's range
+for the cycle value, momentum and bubble pressure (see [Cycle value, momentum
+and bubble pressure](#cycle-value-momentum-and-bubble-pressure)). With
+momentum Surging the range has no top for the cycle value, which reads "+1.9 or
+more", and no bottom for momentum; with momentum Collapsing it is the reverse.
 
 | Caption | Icon | Word |
 |---|---|---|
