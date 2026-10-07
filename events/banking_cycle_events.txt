@@ -1024,11 +1024,16 @@ banking_cycle_events.9 = {
 #
 # Drawn only with a debt the markets price and no default already declared
 # (banking_sovereign_debt_is_priced: scaled_debt > 0.25, where the rate stack's
-# debt-load premium starts). Option C used to read "Default on some
-# obligations" but no effect can put a country into the engine's default, and
-# the option never touched the debt: it is a THREAT, priced by the markets
-# (banking_event_partial_default's premium and prestige) and felt by the
-# banks (cycle value, bubble). Its text says so now (#428).
+# debt-load premium starts). Option C is a real partial default (#448): a
+# quarter of the debt is written off (clear_scaled_debt,
+# banking_partial_default_haircut), and the bondholders who lose it are the
+# upper strata. It does not put the country into the engine's default state;
+# the markets price it instead (banking_event_partial_default: a risk premium
+# decaying over ten years, and prestige), and the banks holding the bonds feel
+# it (cycle value, bubble). The write-off lowers the debt-load premium by
+# about a point at most, so the default premium outweighs it for years: C buys
+# room under the credit limit, not cheaper credit. #428 had reworded it to a
+# threat, which touched no debt; the .110 and .160 variants share the option.
 # --------------------------------------------------------------------------
 banking_cycle_events.10 = {
 	type = country_event
@@ -1083,11 +1088,10 @@ banking_cycle_events.10 = {
 		}
 	}
 
-	# Option C: Threaten a partial default - drastic. Nothing is defaulted on:
-	# no effect enters the engine's default state, and the debt stands.
+	# Option C: Default on a quarter of the debt - drastic (see the header).
 	option = {
 		name = banking_cycle_events.10.c
-		custom_tooltip = banking_cycle_events.10.c.tt
+		banking_partial_default_write_off = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = {
@@ -1096,7 +1100,7 @@ banking_cycle_events.10 = {
 			is_decaying = yes
 		}
 		add_radicals = {
-			value = small_radicals
+			value = medium_radicals
 			strata = upper
 		}
 		ai_chance = {
@@ -1147,13 +1151,15 @@ banking_cycle_events.110 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Formally cancel some commitments: partial plan default
+	# Option C: Formally cancel some commitments: partial plan default, a
+	# quarter of the debt written off (.10's header)
 	option = {
 		name = banking_cycle_events.110.c
+		banking_partial_default_write_off = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = small_radicals pop_type = bureaucrats }
+		add_radicals = { value = medium_radicals pop_type = bureaucrats }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
 
@@ -1198,13 +1204,15 @@ banking_cycle_events.160 = {
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
-	# Option C: Dissolve some inter-cooperative agreements: partial defaults on shared obligations
+	# Option C: Dissolve some inter-cooperative agreements: partial defaults on
+	# shared obligations, a quarter of the debt written off (.10's header)
 	option = {
 		name = banking_cycle_events.160.c
+		banking_partial_default_write_off = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
-		add_radicals = { value = small_radicals strata = upper }
+		add_radicals = { value = medium_radicals strata = upper }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
 
@@ -1660,8 +1668,12 @@ banking_cycle_events.165 = {
 #                    looser and ignores inflation below about 4%: what the
 #                    politicians are asking for. te_mon_effect_set_mandate, the
 #                    dashboard's own control, legal under independence too.
-#   C  restructure — no dial write: the monetary layer has no dual mandate, so
-#                    the compromise stays the bespoke banking_event_dual_mandate.
+#   C  accord      — no dial write. The bank keeps its rule and its mandate;
+#                    the compromise is the bespoke banking_event_dual_mandate,
+#                    whose text (#448) no longer claims a "dual mandate" the
+#                    Mandate row would never show. The key keeps its old name
+#                    so saves holding the modifier carry on. .116 and .166 use
+#                    it for their compromise options too.
 # An AI's mandate is re-derived every month (te_monetary_update_target), so
 # B's write lasts only for a player — the same rule the dashboard lives by.
 # --------------------------------------------------------------------------
@@ -1740,7 +1752,7 @@ banking_cycle_events.16 = {
 		}
 	}
 
-	# Option C: Restructure the central bank mandate - compromise
+	# Option C: Strike an accord with the central bank - compromise
 	option = {
 		name = banking_cycle_events.16.c
 		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
@@ -3644,9 +3656,11 @@ banking_cycle_events.39 = {
 	immediate = {
 	}
 
+	# Not the default (#448): under the full monetary system A starts open-market
+	# operations, a standing policy with an activation cost that runs until it
+	# is switched off, and an event left to time out must not start one.
 	option = {
 		name = banking_cycle_events.39.a
-		default_option = yes
 		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
 		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
 		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
@@ -3679,8 +3693,10 @@ banking_cycle_events.39 = {
 		}
 	}
 
+	# The default: limited purchases commit to nothing that outlives the event.
 	option = {
 		name = banking_cycle_events.39.b
+		default_option = yes
 		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
 		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }

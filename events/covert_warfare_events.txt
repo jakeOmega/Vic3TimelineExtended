@@ -411,15 +411,37 @@ covert_warfare.2 = {
 		}
 	}
 
-	# Make the evidence public: the exposure buys us diplomatic credibility.
-	# The effect "Retaliate in kind" carried until #430, under its honest name.
+	# Expel their diplomats (#448): the officers they run under diplomatic
+	# cover are sent home, which rolls up more of their network inside our
+	# country than the exposure did (covert_net_expel), and relations fall. An
+	# expulsion is answered in kind, so any network of ours inside theirs
+	# loses the same: (a) protects, (b) strikes back in secret, (c) answers in
+	# the open. Until #448 this option took 1 infamy off us, all that was left
+	# of what "Retaliate in kind" did before #430. It needs the perpetrator,
+	# like (b), and is hidden without one.
 	option = {
 		name = covert_warfare.2.c
-
-		change_infamy = -1
+		trigger = {
+			exists = scope:iw_exposed_by
+			scope:iw_exposed_by = { is_country_alive = yes }
+			NOT = { this = scope:iw_exposed_by }
+		}
+		custom_tooltip = {
+			text = covert_warfare.2.c_tt
+			scope:iw_exposed_by = { covert_net_expel = { TARGET = ROOT } }
+			covert_net_expel = { TARGET = scope:iw_exposed_by }
+		}
+		change_relations = {
+			country = scope:iw_exposed_by
+			value = covert_expulsion_relations
+		}
 
 		ai_chance = {
 			base = 5
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:iw_exposed_by } }
+				add = 5
+			}
 		}
 	}
 }

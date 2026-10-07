@@ -1460,8 +1460,15 @@ nuclear_weapon_events.18 = {
 	# Non-Proliferation Treaty goes on the docket as an item offered to us
 	# first, through its own proposer event, un_events.14 — which reserves
 	# the floor and opens the vote, and whose inspections are then what slows
-	# threshold programmes. Otherwise — no UN, not a member, the treaty
-	# already in force, the floor taken, or an offer already made to us —
+	# threshold programmes. With the treaty already in force there is nothing
+	# to table, so a member refers the programme to the Assembly instead
+	# (#448): a nuclear record in the proliferator's UN dossier, the grounds
+	# sanctions are tabled on — un_dos_points_npt_referral for a country that
+	# never ratified the treaty, un_dos_points_npt_breach for a signatory
+	# building a bomb anyway. Only the first referral of a programme writes
+	# it (nuclear_npt_referred), since the alert reaches every great power,
+	# rival and neighbour and each could otherwise pile on. Otherwise — no
+	# UN, not a member, the floor taken, or an offer already made to us —
 	# bilateral pressure, as before.
 	#
 	# The offer is made the docket's way, so un_events.14's "leave it to
@@ -1490,6 +1497,36 @@ nuclear_weapon_events.18 = {
 				trigger_event = { id = un_events.14 }
 			}
 		}
+		else_if = {
+			limit = { nuclear_program_can_refer_npt = yes }
+			if = {
+				limit = { scope:proliferating_country = { has_variable = nuclear_npt_referred } }
+				custom_tooltip = NW_PROLIF_REFER_JOINED_TT
+			}
+			else_if = {
+				limit = {
+					scope:proliferating_country = {
+						je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+					}
+				}
+				custom_tooltip = {
+					text = NW_PROLIF_REFER_BREACH_TT
+					scope:proliferating_country = {
+						un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_npt_breach }
+						set_variable = nuclear_npt_referred
+					}
+				}
+			}
+			else = {
+				custom_tooltip = {
+					text = NW_PROLIF_REFER_UN_TT
+					scope:proliferating_country = {
+						un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_npt_referral }
+						set_variable = nuclear_npt_referred
+					}
+				}
+			}
+		}
 		else = {
 			custom_tooltip = {
 				text = NW_PROLIF_LOBBY_TT
@@ -1512,8 +1549,13 @@ nuclear_weapon_events.18 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { ruler_is_cautious = yes } add = 6 }
+			# A rival would rather act than lobby, unless lobbying means
+			# building the case against them at the Assembly (#448).
 			modifier = {
-				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				trigger = {
+					any_rival_country = { THIS = scope:proliferating_country }
+					NOT = { nuclear_program_can_refer_npt = yes }
+				}
 				add = -10
 			}
 			modifier = {

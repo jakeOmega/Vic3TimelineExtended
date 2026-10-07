@@ -1910,6 +1910,22 @@ banking_change_cycle_value = {
 	}
 }
 
+# The Sovereign Debt Scare's partial default: option C of
+# banking_cycle_events.10, .110 and .160 (#448). A quarter of the debt is
+# written off (banking_partial_default_haircut). The tooltip is ours: the
+# engine's own clear_scaled_debt line reads "cleared by a factor of 0.19 of
+# GDP", which is neither the share written off nor a share of GDP. The event
+# is drawn only while the debt is priced (scaled_debt > 0.25), so there is
+# always debt to write off; the option is clicked days later, by when it may
+# have shrunk, and a quarter of what is left is still a quarter.
+# Scope: country
+banking_partial_default_write_off = {
+	custom_tooltip = {
+		text = banking_partial_default_write_off_tt
+		clear_scaled_debt = banking_partial_default_haircut
+	}
+}
+
 # 0. Weekly effects
 banking_cycle_weekly_effects = {
 	add_investment_pool = investment_pool_banking_cycle_add

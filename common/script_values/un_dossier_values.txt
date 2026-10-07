@@ -13,7 +13,8 @@
 #                       court defied
 #   un_dos_violation    authorized mandates violated or abandoned
 #   un_dos_covert       severe covert operations exposed
-#   un_dos_nuclear      nuclear use
+#   un_dos_nuclear      nuclear use, and nuclear programmes referred to the
+#                       Assembly under the Non-Proliferation Treaty (#448)
 #
 # Their sum, with the infamy term, is the CASE STRENGTH (0-100). A punitive
 # topic can be tabled against a country only when its case reaches the topic's
@@ -61,6 +62,12 @@ un_dos_points_covert = { value = 15 }
 un_dos_points_first_strike = { value = 40 }
 un_dos_points_tactical = { value = 20 }
 un_dos_points_retaliation = { value = 10 }
+# A programme referred to the Assembly once the Non-Proliferation Treaty is in
+# force (nuclear_weapon_events.18 option d, #448): a country that never
+# ratified the treaty, or a signatory building a bomb in breach of it. Neither
+# reaches sanctions' 50 alone; with infamy or another record it can.
+un_dos_points_npt_referral = { value = 20 }
+un_dos_points_npt_breach = { value = 30 }
 
 # The grounds each punitive topic needs.
 un_case_threshold_condemn = { value = 30 }
