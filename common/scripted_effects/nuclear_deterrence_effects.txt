@@ -718,6 +718,18 @@ nd_set_doctrine_5 = { nd_set_doctrine = { D = 5 OFFENSIVE = yes LEAVES_NFU = yes
 # taboo is not credited.
 nd_bind_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
 
+# Leaving no first use after a launch nobody ordered broke it
+# (nuclear_incident.6 option b, #803). The world already blames the launch,
+# so the repudiation costs half what a deliberate one does (nd_set_doctrine's
+# 20 and 10), and it still strikes the No-First-Strike Pledge amendment. It is
+# charged here, so the shared core is told the move leaves nothing
+# (LEAVES_NFU = no) and charges nothing more. The caller has checked
+# nd_doctrine_nfu.
+nd_set_doctrine_2_after_breach = {
+	nd_repudiate_nfu = { CREDIBILITY = 10 INFAMY = 5 }
+	nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = no }
+}
+
 # D = 1..5; OFFENSIVE / LEAVES_NFU = yes | no. Call through the wrappers.
 nd_set_doctrine = {
 	save_scope_as = nd_sd_self
@@ -728,12 +740,7 @@ nd_set_doctrine = {
 			always = $LEAVES_NFU$
 			nd_doctrine_nfu = yes
 		}
-		nd_break_pledge_effects = { CREDIBILITY = 20 INFAMY = 10 }
-		# ...and a pledge written into our laws is struck from them (#430).
-		if = {
-			limit = { nd_nfu_amendment_on_file = yes }
-			nd_strike_nfu_amendment = yes
-		}
+		nd_repudiate_nfu = { CREDIBILITY = 20 INFAMY = 10 }
 	}
 	custom_tooltip = {
 		text = nd_tt_doctrine_adopted_$D$
@@ -761,6 +768,38 @@ nd_set_doctrine = {
 		}
 	}
 	nd_apply_posture_modifiers = yes
+}
+
+# Repudiate no first use: the broken pledge's costs, and a pledge written into
+# our laws is struck from them (#430). CREDIBILITY and INFAMY are literals.
+# The caller moves the doctrine.
+nd_repudiate_nfu = {
+	nd_break_pledge_effects = { CREDIBILITY = $CREDIBILITY$ INFAMY = $INFAMY$ }
+	if = {
+		limit = { nd_nfu_amendment_on_file = yes }
+		nd_strike_nfu_amendment = yes
+	}
+}
+
+# Reaffirm no first use after a launch nobody ordered broke it
+# (nuclear_incident.6 option a, #803). The government spends its own standing
+# at home to tell the world the policy stands, and the world's doubt eases
+# sooner: credibility drifts back by 2% of the gap a month
+# (nd_credibility_step), and this returns half of the 30 the launch cost at
+# once. The Broken Nuclear Pledge modifier and the restraint groups'
+# disapproval run on: the pledge was still broken.
+nd_reaffirm_nfu = {
+	custom_tooltip = nd_tt_nfu_reaffirmed
+	add_modifier = {
+		name = nd_nfu_reaffirmed
+		days = short_modifier_time
+		is_decaying = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_credibility_up_15
+		change_variable = { name = nd_credibility add = 15 }
+		clamp_variable = { name = nd_credibility min = 0 max = 100 }
+	}
 }
 
 nd_set_readiness_target_0 = {
@@ -1831,6 +1870,21 @@ nd_record_nuclear_use = {
 				NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } }
 			}
 			nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }
+			# The government is then asked what it does with the pledge
+			# (nuclear_incident.6, #803), once the incident's own event is
+			# answered (nd_nfu_breach_follow_up). Only for an incident's launch
+			# (nd_launch_or_intercept saved us as its launcher), as
+			# nd_peacetime_incident_dispatch tells them apart.
+			if = {
+				limit = {
+					OR = {
+						scope:nd_incident_launch_warning ?= scope:nd_rec_attacker
+						scope:nd_incident_launch_commander ?= scope:nd_rec_attacker
+						scope:nd_incident_launch_system ?= scope:nd_rec_attacker
+					}
+				}
+				set_variable = nd_nfu_unordered_breach
+			}
 		}
 		set_variable = { name = nd_has_used value = 1 }
 		set_variable = { name = nd_first_use_cooldown value = 6 }
@@ -2033,6 +2087,20 @@ nd_inquiry_punish_skeptic = {
 			name = ig_approval_negative_modifier
 			days = short_modifier_time
 			is_decaying = yes
+		}
+	}
+}
+
+# After the incident's own event (the `after` of .3, .20 and .30): if its
+# launch broke our no-first-use pledge (nd_nfu_unordered_breach, written by
+# nd_record_nuclear_use), the government decides what to do with the pledge
+# (nuclear_incident.6, #803). Hidden: `after` runs whichever option was taken.
+nd_nfu_breach_follow_up = {
+	hidden_effect = {
+		if = {
+			limit = { has_variable = nd_nfu_unordered_breach }
+			remove_variable = nd_nfu_unordered_breach
+			trigger_event = { id = nuclear_incident.6 days = 3 }
 		}
 	}
 }

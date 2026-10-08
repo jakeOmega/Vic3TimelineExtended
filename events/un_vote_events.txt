@@ -2225,6 +2225,17 @@ un_vote.3 = {
 				}
 				add = 50
 			}
+			# ...unless the UN is Supranational, where a threshold state
+			# outside the treaty carries a standing case of 50, enough for
+			# sanctions on its own (un_case_npt_standing_applies, #804).
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_npt }
+					un_regime_npt_threshold = yes
+					un_tier_is_supranational = yes
+				}
+				factor = 0.25
+			}
 			# Climate: heavy industry nations refuse binding targets
 			modifier = {
 				trigger = {

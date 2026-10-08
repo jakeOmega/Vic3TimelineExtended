@@ -32,8 +32,11 @@ carries on the cycle and the central bank where the old one left them (see
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
-in one shows in the other. The tab is grayed until the journal entry appears;
-hover it for what you still need. It ends with an Open Journal Entry button,
+in one shows in the other. The tab is grayed until the journal entry appears,
+unless your central bank already sets a rate or your currency is tied to
+another's: then it opens early with your monetary readings (see [Monetary
+policy under the full Banking System](#monetary-policy-under-the-full-banking-system)).
+Hover it for what you still need. It ends with an Open Journal Entry button,
 which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
 
@@ -518,7 +521,16 @@ and the United States with Free & Mutual Banking.
 ## Monetary policy under the full Banking System
 
 With the rule on Enabled, every country runs the monetary model whether or not
-it holds the journal entry, and the Monetary Policy section shows it. Its rows
+it holds the journal entry. A dial needs a National Bank, not the entry, so you
+can have one, or a pegged currency, before the entry appears. Until then the
+Banking tab shows a read-only Monetary Policy readout: your Policy Rate beside
+the World Rate, the Mandate (with a dial) or the Monetary Anchor (when pegged),
+the Exchange Rate and, on a gold standard or a treaty peg, Peg Confidence with
+its bar. You can't change anything there: your central bank runs the Dual
+Mandate (under Central Bank Independence, the mandate its act names) until the
+entry gives you the controls.
+
+Once you have the entry, the Monetary Policy section shows it all. Its rows
 are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
@@ -552,25 +564,53 @@ free of charge.
 
 | Mandate | What the bank does |
 |---|---|
-| Price Stability | Raises the rate more than a point for each point of inflation above target, and leans fully against where the cycle is heading |
+| Inflation Targeting | Raises the rate more than a point for each point of inflation above target, and leaves the financial cycle to prices, so booms run further and slumps go deeper before it acts. Lenders believe it most, which holds expected inflation nearer the target |
+| Dual Mandate | Reacts to inflation as hard, and also leans fully against where the cycle is heading. Every bank starts on it |
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
 | Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
 A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
 or worse.
 
-Central Bank Independence makes delegation permanent: you choose the mandate,
-but you no longer set the rate or print money. Lenders reward it. Your credit
+A new mandate takes effect at the next monthly update, and is then fixed for a
+year. Lenders price a looser rule at once: for each step from Inflation
+Targeting to the Dual Mandate to Growth, expected inflation rises by half a
+point and the Looser Mandate modifier adds half a point of risk premium, fading
+over two years. A tighter rule earns nothing at once, and Inflation Targeting's
+extra credibility takes two years to build and is gone the month you leave it.
+An AI bank moves to Growth at war or deep in debt and back to the Dual Mandate
+in peace, and waits out the same year between changes.
+
+Central Bank Independence makes delegation permanent, and you no longer set the
+rate or print money. Lenders reward it. Your credit
 standing improves by half a point and its floor drops from 0.5 to 0.25 points,
 and the bank's estimate of what your economy can bear (see [Monetary policy
 stance](#monetary-policy-stance)) errs by less. Each level of the National Bank
 institution adds a tenth of a point of Inflation Anchoring, which absorbs that
 much standing wage and price pressure.
 
+Under Central Bank Independence the mandate is an act on the law rather than a
+dashboard choice: the Inflation Targeting Act or the Dual Mandate Act. When the
+law has no act, because it has just passed or an act was repealed, the event
+What the Bank Is For asks you to pass one. The Industrialists gain approval
+for the Inflation Targeting Act and the Trade Unions for the Dual Mandate Act,
+and each loses it when the other's act passes. An interest group can also
+sponsor an act while the law is debated, and the Central Bank Independence
+Debate's compromise passes the Dual Mandate Act. The bank moves to the act's
+mandate 12 months after it passes. The dashboard shows the act in a Mandate by
+Law row in place of the mandate buttons, and a Takes Effect In row counts the
+months down. To change the act, repeal it in the law panel, which needs an
+interest group in government that opposes it. By default the Trade Unions and
+Rural Folk oppose the Inflation Targeting Act, and the Industrialists, Petite
+Bourgeoisie and Intelligentsia the Dual Mandate Act.
+On a convertible gold standard an independent bank defends the peg whatever
+its act says. AI countries pass and follow acts the same way, so an
+independent AI bank does not loosen for a war.
+
 ### When the bank cannot cut
 
-A rate on its floor can't fall further, and a deflation can hold it there. Both
-mandates ask for far less than the floor allows, and falling prices keep the
+A rate on its floor can't fall further, and a deflation can hold it there. Every
+mandate asks for far less than the floor allows, and falling prices keep the
 real rate high even at −3%, so the Policy Stance can read Neutral while prices
 fall. A bank that runs its mandate, whether delegated or independent, carries on
 cutting on paper. It works out where it would put the rate if there were no
@@ -588,7 +628,7 @@ The mandate decides when the bank buys:
 
 | Mandate | Buys assets |
 |---|---|
-| Price Stability | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
+| Inflation Targeting, Dual Mandate | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
 | Growth | Whenever its rule asks for a rate below the floor, including a slump with inflation on target. |
 
 The purchases cost no intervention points and no money, and you don't switch
@@ -705,7 +745,9 @@ inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
 Independence, Command Economy, dollarization and an anchored currency rule it
 out. An independent bank still buys assets by itself in a deflation (see [When
-the bank cannot cut](#when-the-bank-cannot-cut)).
+the bank cannot cut](#when-the-bank-cannot-cut)). The Sovereign Debt Scare's
+central bank option adds one level for a year (see [Banking
+events](#banking-events)).
 
 ### Currency regimes and the policy rate
 
@@ -913,6 +955,36 @@ four points and a law that allows it, and The Gold Window Closes, a
 gold-standard crisis event, appears only under this setting. With the rule on
 *Disabled* interest works the same way, minus the cycle's premium.
 
+## Restructuring the public debt
+
+Once your debt passes a quarter of your credit limit, or you are in default, the
+decision Restructure the Public Debt opens talks with your creditors. It needs
+the Banking Cycle journal entry. In Restructuring Talks you choose how much of
+the debt they write off:
+
+| Option | Written off | What it costs |
+|---|---|---|
+| Reprofile: write off a tenth and stretch the rest | 10% | Reprofiled Debt: +1.5 points of risk premium and −5% prestige, fading over five years; −10 relations with your investors |
+| Negotiate a haircut of a quarter | 25% | Partial Default: +4 points of risk premium and −15% prestige, fading over ten years; Wary Lenders: −10% building cash reserves, fading over five years; −25 relations with your investors |
+| Make them take half (in default only) | 50% | Deep Default: +6 points of risk premium and −25% prestige, fading over ten years; Shut Out of the Markets: −25% building cash reserves, fading over five years; −50 relations with your investors |
+| Break off the talks | Nothing | Nothing; the talks wait a year |
+
+Your investors are the countries that own more than 5% of your GDP. Every
+haircut also radicalizes the upper strata who held the bonds, more for a larger
+one, and costs the banks some cycle value. Your credit limit is your buildings'
+cash reserves plus a base set by your GDP, so the cash-reserve cuts shrink it
+for a few years: that is the markets shutting you out. After a reprofiling your
+creditors will not talk again for five years, after a haircut for ten.
+
+A write-off buys room under your credit limit, not cheaper credit. The debt-load
+part of your risk premium falls by a point and a third for a quarter of a debt
+at the limit, while the haircut's own premium adds four. Half is for a government that
+has already stopped paying: the middle way between paying and the base game's
+Declare Bankruptcy, which erases every loan at a far heavier price. The Sovereign
+Debt Scare's partial default is the same quarter haircut, with the same costs.
+The AI opens talks in default, or with debt at three quarters of its credit
+limit and still growing.
+
 ## Bailouts and the Great Depression
 
 One country can ask another to rescue its banks, a wave of crashes can become a
@@ -933,9 +1005,21 @@ International Bailout Request:
 | Extend a generous rescue package | A sum scaled to the rescuer's GDP, capped at a fifth of the recipient's; +30 relations; five years of Restored Banking Confidence for the recipient |
 | Offer a smaller emergency grant | An eighth of the package; +10 relations; two and a half years of Restored Banking Confidence |
 | They must solve their own problems | −20 relations, and the largest of the three hits to the rescuer's own cycle |
+| Lend, on conditions | The rescue package's sum, offered as a loan on conditions; +10 relations. Nothing is paid unless the recipient signs |
 
 Restored Banking Confidence lowers crash likelihood by 10%, raises company
 throughput by 5% and blocks another appeal while it lasts.
+
+A loan on conditions reaches the recipient as The Rescue's Terms. Refusing, the
+default, costs nothing. Signing pays a third of the sum at once and puts you
+under two years of Rescue Programme (−1 point of risk premium, −5 legitimacy)
+and Restored Banking Confidence; Trade Unions disapprove and Industrialists
+approve. The other two thirds come at yearly reviews, each only if your budget
+took loans in no more than 6 of the 12 months before it. Miss a review and the
+programme is suspended: no more payments, −20 relations with the rescuer and +2
+points of risk premium fading over five years. Both sides get a notice at each
+review. While a programme still owes you money, no one else is asked to rescue
+you.
 
 ### The Great Depression
 
@@ -977,7 +1061,10 @@ on the phase, the bubble, your technology and your economic system. After one,
 no random banking event fires for at least 18 months, and none in a crash month.
 Their options move the cycle's readings, and the tooltip shows by how much. The
 Sovereign Debt Scare, drawn only while your debt is past a quarter of your
-credit limit, can end in a partial default that writes off a quarter of the
-debt, at the price of 4 points of risk premium fading over ten years and 15%
-less prestige. A few tie into the banking tools: The Bank Holiday appears only when you could
+credit limit, can end in a partial default, the quarter haircut of
+[Restructuring the public debt](#restructuring-the-public-debt) at the same
+price. Its central bank option, where your bank may monetize the deficit under
+the full Banking System, has the bank buy government bonds: Monetise Deficit
+rises one level for 12 months, with that level's inflation and risk premium,
+then steps back. A few tie into the banking tools: The Bank Holiday appears only when you could
 declare one, and its first option does.

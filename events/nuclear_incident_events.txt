@@ -16,6 +16,7 @@
 #   .3   The Inquiry                   what caused it, and what we make of it
 #   .4   After the Launch              a launch happened: struck, or recalled
 #   .5   Their Launchers Were Ready    to the country that was nearly struck
+#   .6   The Pledge After the Launch   an unordered launch broke No First Use
 #   .10  The Exercise They Mistook     Able Archer
 #   .11  Is This the Real Thing?       .10's player opponent chooses its own alert
 #   .12  They Showed Us the Timetable  .10's invitation, to the crisis issuer
@@ -379,6 +380,7 @@ nuclear_incident.3 = {
 			limit = { has_variable = nd_warning_launched }
 			remove_variable = nd_warning_launched
 		}
+		nd_nfu_breach_follow_up = yes
 	}
 }
 
@@ -527,6 +529,91 @@ nuclear_incident.5 = {
 				trigger = { ruler_is_aggressive = yes }
 				add = 4
 			}
+		}
+	}
+}
+
+# ---- .6 The Pledge After the Launch ---------------------------------------------
+# A launch nobody in government ordered (on an unconfirmed warning, by a
+# commander cut off from the capital, by the Automatic Retaliation system)
+# broke our no-first-use pledge. nd_record_nuclear_use has charged the broken
+# pledge and left the doctrine and any No-First-Strike Pledge amendment in
+# place (owner ruling, #448); this is the government's own answer (#803).
+# Fired by nd_nfu_breach_follow_up from the `after` of the incident's event
+# (.3, .20, .30), so the government answers knowing what happened.
+nuclear_incident.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_incident.6.t
+	desc = nuclear_incident.6.d
+	flavor = nuclear_incident.6.f
+
+	duration = 3
+
+	trigger = {
+		nd_doctrine_nfu = yes
+	}
+
+	# Reaffirm it publicly: legitimacy and authority now, credibility back
+	# sooner.
+	option = {
+		name = nuclear_incident.6.a
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.6.a; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_reaffirm_nfu = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Repudiate it: leave No First Use now, at half the usual price.
+	option = {
+		name = nuclear_incident.6.b
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.6.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_set_doctrine_2_after_breach = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 2
+			}
+			# A pledge written into our laws is harder to throw away.
+			modifier = {
+				trigger = { nd_nfu_amendment_on_file = yes }
+				factor = 0.5
+			}
+		}
+	}
+
+	# Say nothing: the doctrine stands and the broken pledge's costs run on.
+	option = {
+		name = nuclear_incident.6.c
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_incident.6.c; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		default_option = yes
+		custom_tooltip = nuclear_incident.6.c.tt
+		ai_chance = {
+			base = 3
 		}
 	}
 }
@@ -1132,6 +1219,10 @@ nuclear_incident.20 = {
 			}
 		}
 	}
+
+	after = {
+		nd_nfu_breach_follow_up = yes
+	}
 }
 
 # ---- .30 The Cost of Permanent Alert ----------------------------------------------
@@ -1377,6 +1468,7 @@ nuclear_incident.30 = {
 			limit = { has_variable = nd_system_reacted }
 			remove_variable = nd_system_reacted
 		}
+		nd_nfu_breach_follow_up = yes
 	}
 }
 

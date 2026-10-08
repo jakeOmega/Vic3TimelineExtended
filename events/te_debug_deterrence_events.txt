@@ -202,6 +202,9 @@ te_debug_deterrence.2 = { # REVIEWED 2026-09-25: console-only test event (`event
 		if = {
 			limit = { exists = scope:nd_debug_exchange_enemy }
 			nd_launch_or_intercept = { VICTIM = scope:nd_debug_exchange_enemy NARRATE = yes KIND = warning }
+			# No inquiry follows this launch, so ask about a broken no-first-use
+			# pledge here (nuclear_incident.6).
+			nd_nfu_breach_follow_up = yes
 		}
 	}
 	option = {

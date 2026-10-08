@@ -554,6 +554,123 @@ amendment_military_necessity_clause = {
 }
 
 # ======================================================================
+#  CENTRAL BANK MANDATES (#799)
+#
+#  Under central bank independence the bank's mandate is a statute:
+#  one of these acts on law_central_bank_independence. They carry no
+#  modifier; what they do is the mandate. te_monetary_update_target
+#  (common/scripted_effects/te_monetary_effects.txt) reads the act and
+#  moves the bank to its mandate 12 months later, AI or player alike,
+#  unless the country is on a convertible gold standard, where the bank
+#  defends the peg. Spec: docs/systems/monetary_policy_design.md §6.
+#
+#  WAYS IN. te_mandate.1 asks an independent bank with no act to pass
+#  one (when the law passes, on an old save, after a repeal);
+#  banking_cycle_events.16 option c passes the Dual Mandate Act; and an
+#  interest group may sponsor either while the law is debated.
+#
+#  CHANGING ONE is repealing it in the law panel (the engine's gate: an
+#  interest group in government that opposes the parent law, and its side
+#  out-clouting the other), after which te_mandate.1 asks again.
+#
+#  THE PARENTS are chosen for who backs and who can repeal each act.
+#  Inflation Targeting takes its stances from the Gold Standard: the
+#  savers and creditors of monetary_policy_design.md §13 (Landowners,
+#  Petite Bourgeoisie) back it, and the debtors (Trade Unions, Rural Folk)
+#  oppose it. The Dual Mandate takes them from Directed Credit, credit
+#  steered toward jobs: the labour and populist ideologies back it, the
+#  market-liberal ones oppose it. Each act's named sponsor is the issue's:
+#  Industrialists for inflation targeting, Trade Unions for the dual
+#  mandate.
+# ======================================================================
+
+# Inflation Targeting Act - the bank answers for prices alone (mandate 4).
+amendment_cb_inflation_targeting = {
+	parent = law_gold_standard
+
+	allowed_laws = {
+		law_central_bank_independence
+	}
+
+	# The mandates exist only under the full monetary system.
+	possible = {
+		te_mon_full_system = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	# Only a powerful opponent in government repeals it: each repeal is a
+	# mandate change lenders price, and te_mandate.1 then asks again.
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			is_powerful = yes
+			law_stance = {
+				law = law_type:law_gold_standard
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Dual Mandate Act - the bank answers for jobs as well as prices
+# (mandate 1). When both acts sit on the law, this one wins.
+amendment_cb_dual_mandate = {
+	parent = law_directed_credit_development_banks
+
+	allowed_laws = {
+		law_central_bank_independence
+	}
+
+	possible = {
+		te_mon_full_system = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_trade_unions
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	# Only a powerful opponent in government repeals it: each repeal is a
+	# mandate change lenders price, and te_mandate.1 then asks again.
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			is_powerful = yes
+			law_stance = {
+				law = law_type:law_directed_credit_development_banks
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# ======================================================================
 #  ELECTORAL FINANCE
 # ======================================================================
 

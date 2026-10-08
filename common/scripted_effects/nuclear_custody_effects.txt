@@ -1120,6 +1120,8 @@ nd_bp_treaty_lead = {
 	}
 }
 
+# Also the guarantee an armed power offers a proliferator's neighbour
+# (nuclear_weapon_events.25, #804).
 nd_bp_treaty_guarantee = {
 	create_treaty = {
 		first_country = $GUARANTOR$

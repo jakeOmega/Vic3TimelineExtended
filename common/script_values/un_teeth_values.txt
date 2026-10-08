@@ -31,7 +31,10 @@
 #                  members with a vote.
 #   standing case  Supranational: a non-member of major-power rank, or a
 #                  non-member with a nuclear programme or arsenal, carries a
-#                  standing case of un_case_standing_value in its dossier.
+#                  standing case of un_case_standing_value in its dossier. So
+#                  does a member outside the Non-Proliferation Treaty in force
+#                  that is building a bomb, or holds one it built outside it
+#                  (#804).
 #
 # The writers are in common/scripted_effects/un_teeth_effects.txt, the tests in
 # common/scripted_triggers/un_teeth_triggers.txt. Every figure is here, once;
@@ -85,11 +88,18 @@ un_war_surcharge_value = {
 
 # ---- The standing case ----------------------------------------------------------
 
+# An outsider's case and a member's under the Non-Proliferation Treaty are
+# one case: no country is both.
 # Scope: country
 un_case_standing_term = {
 	value = 0
 	if = {
-		limit = { un_case_standing_applies = yes }
+		limit = {
+			OR = {
+				un_case_standing_applies = yes
+				un_case_npt_standing_applies = yes
+			}
+		}
 		add = un_case_standing_value
 	}
 }

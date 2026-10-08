@@ -202,7 +202,8 @@ nd_bp_guarantor_valid = {
 # may create. The lead guarantor holds the new state's disarmament
 # (nuclear_disarmament: source = the state that disarms, target = the
 # demander, which pays) beside its guarantee; every other guarantor signs the
-# guarantee alone.
+# guarantee alone. The guarantee alone is also the one an armed power offers a
+# proliferator's neighbour (nuclear_weapon_events.25, #804).
 nd_bp_can_treaty_lead = {
 	can_create_treaty = {
 		first_country = $GUARANTOR$
