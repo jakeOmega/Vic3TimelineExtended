@@ -711,6 +711,44 @@ ICONS: dict[str, dict[str, dict]] = {
         # Mod-added buildings on another building's (or a good's) icon. Company
         # buildings are left out: flagships carry their company's own logo by
         # design (docs/vanilla/vanilla_company_buildings_reference.md).
+        # Except the generic flagships of the basic company types, which all
+        # sat on vanilla's skyscraper.dds: their companies' logos are the basic
+        # industry icons, shared by several companies, so each gets a painting
+        # of what it does. Not the eleven retired ones the monthly cleanup removes.
+        "building_generic_rd_complex": {"subject": "a modern research campus of glass-walled laboratory buildings around a green courtyard, a small satellite dish on one roof", "seed": None},
+        "building_generic_logistics_hub": {"subject": "a large logistics warehouse complex with rows of loading docks, parked lorries and stacked shipping containers", "seed": None},
+        "building_generic_industrial_zone": {"subject": "a cluster of factory halls with sawtooth roofs, pipe racks and small chimneys, linked by roads and a rail spur", "seed": None},
+        "building_generic_materials_lab": {"subject": "a materials research laboratory with a domed furnace building and racks of shiny metal sheets and carbon-fibre rolls outside", "seed": None},
+        "building_generic_robotics_institute": {"subject": "a modern institute building with tall windows showing orange industrial robot arms at work inside, a test yard beside it", "seed": None},
+        "building_generic_data_fortress": {"subject": "a low fortified concrete data centre bunker with rows of cooling fans on its roof inside a high security fence", "seed": None},
+        "building_generic_media_hq": {"subject": "a modern media headquarters tower with large satellite dishes and broadcast antennas on its roof", "seed": None},
+        "building_generic_power_hub": {"subject": "a compact modern power station with a substation yard of transformers and high-voltage pylons leading away", "seed": None},
+        "building_generic_proving_grounds": {"subject": "a military proving ground in open scrubland, a concrete observation bunker beside a dirt test track with a tank on it", "seed": None},
+        "building_generic_resource_depository": {"subject": "a fortified depository of low concrete vaults with heavy steel doors, beside heaps of ore and stacks of metal ingots", "seed": None},
+        "building_generic_granary_complex": {"subject": "a grain storage complex of tall round concrete silos beside a rail siding, golden wheat fields around it", "seed": None},
+        "building_generic_textile_depot": {"subject": "a brick textile warehouse with dyeing vats in its yard and long bolts of coloured cloth hung up to dry", "seed": None},
+        "building_generic_cold_storage": {"subject": "a large windowless refrigerated warehouse with insulated walls, lorries backed up to its loading bays", "seed": None},
+        "building_generic_paper_mill_complex": {"subject": "a pulp and paper mill beside a river, with log piles, a tall chimney and big rolls of paper stacked in the yard", "seed": None},
+        "building_generic_foundry_complex": {"subject": "a sprawling steel foundry with blast furnaces, molten metal glowing orange and tall smoking chimneys", "seed": None},
+        "building_generic_machine_shop": {"subject": "a large brick machine shop with big windows, lathes visible inside and heaps of gears and machine parts in the yard", "seed": None},
+        "building_generic_chem_works": {"subject": "a chemical works with tall distillation columns, spherical storage tanks and tangled pipework", "seed": None},
+        "building_generic_tank_farm": {"subject": "an oil tank farm with rows of large round storage tanks joined by pipelines, a small refinery tower beside them", "seed": None},
+        "building_generic_ordnance_depot": {"subject": "a military ordnance depot of earth-covered concrete bunkers behind barbed wire, crates of shells stacked outside", "seed": None},
+        "building_generic_motor_works": {"subject": "a motor vehicle factory with a long assembly hall and rows of new cars parked in its yard", "seed": None},
+        "building_generic_dry_dock": {"subject": "a large dry dock with a steel ship hull inside it, tall cranes standing over it at the waterside", "seed": None},
+        "building_generic_arsenal": {"subject": "a fortified brick arsenal with crenellated walls, cannons and stacked weapon crates in its courtyard", "seed": None},
+        "building_generic_fish_market": {"subject": "a harbourside fish market hall with fishing boats moored at its quay and crates of fish on the stones", "seed": None},
+        "building_generic_colonial_depot": {"subject": "a colonial trading depot of whitewashed warehouses with a veranda, tea chests and bales stacked on a wharf", "seed": None},
+        "building_generic_export_warehouse": {"subject": "a bonded export warehouse on a riverside quay, sacks of coffee and bales of cotton being loaded onto a cargo ship", "seed": None},
+        "building_generic_electronics_lab": {"subject": "a modern electronics laboratory building with a radio mast on its roof and rows of lit windows", "seed": None},
+        "building_generic_assay_office": {"subject": "a solid stone assay office with barred windows, a small cart of gold bullion bars at its door", "seed": None},
+        "building_generic_ore_processing": {"subject": "an ore processing plant with crushers, conveyor belts and heaps of crushed ore beside a smelter chimney", "seed": None},
+        "building_generic_mineral_refinery": {"subject": "a mineral refinery with tall leaching tanks, conveyor belts and heaps of white and yellow mineral powder", "seed": None},
+        "building_generic_silk_exchange": {"subject": "an East Asian trading house with curved tiled roofs, bales of raw silk and dyed silk cloth stacked outside", "seed": None},
+        "building_generic_vintner_hall": {"subject": "a stone winery hall among vineyards, rows of oak barrels outside and grape vines on the hillside", "seed": None},
+        "building_generic_furniture_showroom": {"subject": "a furniture emporium with large shop windows full of furniture, a carpentry workshop with stacked timber behind it", "seed": None},
+        "building_generic_lumber_yard": {"subject": "an industrial sawmill and timber yard with stacks of sawn planks and piles of logs beside a river", "seed": None},
+        "building_generic_dye_fiber_park": {"subject": "a campus of small laboratories and pilot plants with pipes and tanks, spools of brightly dyed fibre in the yard", "seed": None},
         # Wonders: the landmark alone, as vanilla draws its monuments.
         "building_wonder_golden_gate_bridge": {"subject": "the Golden Gate Bridge, its red-orange suspension towers and cables spanning a blue strait between green headlands, a little fog rolling in", "seed": 0},
         "building_wonder_empire_state_building": {"subject": "the Empire State Building, a limestone Art Deco skyscraper with stepped setbacks and a slender mast, towering over Manhattan's city blocks", "seed": 0},
@@ -935,6 +973,27 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": None},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": None},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": None},
+        "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": None},
+        "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": None},
+        "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": None},
+        "law_national_bank": {"subject": "a heavy round steel bank vault door standing half open on its big hinge", "seed": None},
+        "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": None},
+        "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": None},
+        "law_ministry_of_intelligence_and_security": {"subject": "a brass spyglass lying across a locked steel strongbox", "seed": None},
+        "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": None},
+        "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": None},
+        "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": None},
+        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": None},
+        "law_ministry_of_consumer_protection": {"subject": "a wicker shopping basket full of bread and fruit behind a raised round shield", "seed": None},
+        "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": None},
+        "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": None},
+        "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": None},
+        "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": None},
+        "law_decentralized_cryptocurrency": {"subject": "three thick metal coins etched with simple circuit lines, linked in a row by short chain links", "seed": None},
+        "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": None},
+        "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": None},
+        "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": None},
+        "law_protected_class": {"subject": "a level balance scale with a man's top hat in one pan and a woman's bonnet in the other", "seed": None},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1107,8 +1166,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_state_collapse": {"subject": "a single weathered stone column with its top half fallen and lying broken in rubble at its base", "seed": 0},
         "je_create_new_religion": {"subject": "a plain grey stone altar block with a lit red candle on top and a brass bowl beside it", "seed": 0},
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
-        # Legislated tax code (plan Task 7): on vanilla's event_scales.dds until reviewed.
-        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": None},
+        # Legislated tax code: s1 stamped a coin with $ and s3 with a rouble sign.
+        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": 2},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon
@@ -1130,7 +1189,7 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {
-        "te_systems_window_btn": {"subject": "a small brass hourglass, its upper glass bulb holding a blue globe of the Earth with green continents, its lower bulb a small silver rocket pointing up", "seed": None,
+        "te_systems_window_btn": {"subject": "a small brass hourglass, its upper glass bulb holding a blue globe of the Earth with green continents, its lower bulb a small silver rocket pointing up", "seed": 1,
                                   "now": "gfx/interface/main_hud/journal_btn.dds"},
     },
     # The UN's GUI icons (docs/systems/un_gui_icons.md). Keys are the file

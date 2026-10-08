@@ -467,7 +467,7 @@ class JournalEntryTest(unittest.TestCase):
         for key in ("je_tax_code", "je_tax_code_desc", "je_tax_code_reason"):
             with self.subTest(key=key):
                 self.assertTrue(table.get(key))
-        self.assertIn('icon = "gfx/interface/icons/event_icons/event_scales.dds"', self.body)
+        self.assertIn('icon = "gfx/interface/icons/event_icons/je_tax_code.dds"', self.body)
 
 
 class SguiTest(unittest.TestCase):

@@ -621,7 +621,7 @@ class LocTest(unittest.TestCase):
 
 
 class IconsTest(unittest.TestCase):
-    LAUNCHER = "gfx/interface/main_hud/journal_btn.dds"   # the placeholder
+    LAUNCHER = "gfx/interface/main_hud/te_systems_window_btn.dds"   # the mod's own (icon pipeline)
     FADE_MASK = "gfx/interface/masks/fade_horizontal_right.dds"   # vanilla's, for the hover strip
 
     def test_no_tab_sets_an_icon(self):
@@ -633,7 +633,7 @@ class IconsTest(unittest.TestCase):
         self.assertNotRegex(panel, r'blockoverride "\w+_button_icon"')
         self.assertNotRegex(strip, r"\bicon = \{|\btexture =|\bbutton_icon")
 
-    def test_the_launcher_draws_its_placeholder(self):
+    def test_the_launcher_draws_its_own_icon(self):
         gui = _read(GUI)
         button = _named(gui, "te_systems_window_launcher_button")
         # the hover strip's fade is vanilla's mask, not the window's art
