@@ -333,11 +333,14 @@ a literal line at its call site (`nd_log_context = yes`, then `debug_log`): a
 parameter are chosen by branching on the variable just set (`nd_log_doctrine_set`,
 `nd_log_crisis_end`, …) or by dispatch (`nd_log_incident_launch_$KIND$`).
 `test_nuclear_incident_risk.TestObserverRecords` fails on a `$` inside a record.
-Country ID wrappers enter a saved logger scope explicitly, so lifecycle hooks
-with a Diplomatic Play ROOT still log the right record; that saved-scope read is
-what `TE_PROBE_LOC 11` (`te_debug_probe_on_actions.txt`) confirms on the next
-launch. No direct variable localization accessors or unverified
-`THIS.ScriptValue` templates are used.
+`nd_log_context` copies the record's crisis and exchange IDs, and the issuer's
+stage, weeks and dispute, into global variables, and the wrappers read those.
+Until 2026-10-08 the wrappers entered a saved scope instead, and a ScriptValue
+read inside `debug_log` can't see a saved scope (`TE_PROBE_LOC 11` printed the
+fallback), so every `crisis=` and `exchange=` printed 0. A global reads the same
+under any ROOT, including a Diplomatic Play's. The issuer, target, opponent and
+enemy names still print through `SCOPE.sCountry(<saved scope>)`, which printed
+blank in that day's demographics probe; unconfirmed for these records.
 
 The weekly `type=risk` and `type=crisis_tick` samples write only while the
 global `nd_observer_logging` is set: `te_debug_deterrence.2`'s last option
@@ -355,8 +358,9 @@ choices and `exchange_answer_1`/`_2` for accepted/refused stand-downs.
 
 **Console probes:** `event te_debug_deterrence.2` now offers an unheld peacetime launch against a randomly selected other armed country, a second choice to age a live exchange seven days and open both stand-down offers, and a third that toggles observer sampling. These choices are console-only and the first two can damage the test save.
 
-**In-game checks still required:** read `TE_PROBE_LOC 11` and one `TE_NUCLEAR:
-type=action` line; force an unheld peace warning, verify damage
+**In-game checks still required:** read one `TE_NUCLEAR: type=action` line
+during a crisis (a non-zero `crisis=`, and whether the issuer and target names
+print); force an unheld peace warning, verify damage
 and an available NFU response; repeat with Automatic Retaliation; accept both
 stand-downs and confirm no war and the truce; refuse on either side and confirm a
 native war (or, if it does not start, the `exchange_war_pending` record, the

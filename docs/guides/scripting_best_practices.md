@@ -1759,8 +1759,9 @@ Containers are also the way to store a *history* of a value. Vic3 variables hold
 - **Syntax:** `debug_log = "My message with [Scope.Function] interpolation"` — used inside `effect = { }` blocks.
 - **Output goes to:** `debug.log` (in game logs directory).
 - **Scope interpolation:**
-  - `ROOT` does NOT work: every `[ROOT.GetCountry.…]` logs `Promote 'ROOT' returned nullptr` and prints nothing. `THIS` does — vanilla's own `[THIS.GetCountry.GetNameNoFormatting]` (`00_code_on_actions.txt`, "Election Campaign Started - Tidore") prints the name (2026-09-26). Named scopes work too: `[SCOPE.sType('name').Method]`. So write `THIS`, and `save_scope_as` whatever `THIS` isn't.
-  - Pattern: First `save_scope_as = my_scope`, then `debug_log = "[SCOPE.sState('my_scope').GetName]"`.
+  - `ROOT` does NOT work: every `[ROOT.GetCountry.…]` logs `Promote 'ROOT' returned nullptr` and prints nothing. `THIS` does — vanilla's own `[THIS.GetCountry.GetNameNoFormatting]` (`00_code_on_actions.txt`, "Election Campaign Started - Tidore") prints the name (2026-09-26). So write `THIS`, and log from inside the scope you mean.
+  - **A scope the script saves isn't reliably visible.** A hook's own named scopes print: on `on_war_end`, `[SCOPE.sCountry('actor').GetNameNoFormatting]` named both sides. But `save_scope_as = x` followed by `[SCOPE.sCountry('x').GetNameNoFormatting]` printed blank for three scopes in the 2026-10-08 demographics probe, and every variable read through `SCOPE.sCountry('x')` failed one way or another (the accessor table in § "`debug_log` Loc-String Templating Limitations"). To print a value from another scope, copy it into a global variable first and read it through a `SCOPE.ScriptValue` wrapper (`nd_log_context` does this for the nuclear observer records).
+  - **A line renders when it runs.** A global set to 1, logged, set to 2 and logged printed 1, then 2 (2026-10-08). Removing or overwriting a variable after its line is safe.
   - Scope type accessors: `sState`, `sCountry`, `sParty`, `sCharacter`, `sPop`, `gsInterestGroup` (not `sInterestGroup`, which does not exist), etc.
   - Global variables: `[GetGlobalVariable('var_name').GetValue]`.
   - Plain strings always work: `debug_log = "Effect fired"`.
@@ -4087,10 +4088,24 @@ Some sibling triggers/effects don't share scope rules. Two cases bitten repeated
 `debug_log = "message"` accepts loc-string templating per the engine docs ("ROOT, SCOPE and PREV available"), but the templating engine in this context is a SUBSET of the full .yml loc parser. Patterns that work in localization files fail silently in `debug_log` and emit `pdx_data_localize.cpp:136 | Data error in loc string '<raw template>'` per render.
 
 **What works:**
-- `[SCOPE.ScriptValue('my_sv')|0]` — script value, formatted as integer (note: NO `.MakeScope`). **It evaluates against ROOT, not the current scope.** The Settlement Authority's `TE_RESETTLEMENT:` lines ran in a state under a country ROOT and printed the wrappers' `-1` fallback for variables the state held; the same wrappers read correctly from a state pulse, where ROOT is the state (2026-09-27). For a scope that is not ROOT use `[THIS.ScriptValue('my_sv')|0]`: `THIS` is the current scope in `debug_log` (`[THIS.GetCountry.GetNameNoFormatting]` named the dead loser inside its own scope in the civil-war lines). `THIS.ScriptValue` itself is still unobserved; `TE_PROBE_LOC 9`/`10` (`common/on_actions/te_debug_probe_on_actions.txt`) settle it on the next launch. Whether such a wrapper can read a **saved scope** (`scope:x = { … }` inside the script value) is unobserved too; the nuclear observer records' crisis and exchange IDs depend on it, and `TE_PROBE_LOC 11` settles it.
+- `[SCOPE.ScriptValue('my_sv')|0]` — script value, formatted as integer (note: NO `.MakeScope`). **It evaluates against ROOT, not the current scope.** The Settlement Authority's `TE_RESETTLEMENT:` lines ran in a state under a country ROOT and printed the wrappers' `-1` fallback for variables the state held; the same wrappers read correctly from a state pulse, where ROOT is the state (2026-09-27). `TE_PROBE_LOC 10` confirmed it: read from the capital under a country ROOT, it printed the country's value.
+- `[THIS.ScriptValue('my_sv')|0]` — the same, evaluated against the current scope: from the capital it printed the capital's value (`TE_PROBE_LOC 9`). Use it for any scope that isn't ROOT.
+- **A script value read inside `debug_log` can't see a saved scope.** A wrapper whose body entered `scope:x` (saved just before) printed its fallback (`TE_PROBE_LOC 11`). Copy the value into a global variable in the effect, where saved scopes are visible, and have the wrapper read the global.
 - `[SCOPE.ScriptValue('my_sv')|3]` — script value, 3 decimal places
 - `[SCOPE.GetTag]`, `[SCOPE.GetName]`, `[SCOPE.sParty('X').GetNameNoFormatting]` — string accessors
 - `[TimeKeeper.GetCurrentDate.GetString]` — the game date, e.g. `January 8, 2069`. Vanilla 1.14.5's election lines (`00_code_on_actions.txt:7414`, `:7437`) print it from country scope in `debug.log` (read 2026-10-02); the tax-code scheduler stamps every line with it. From the global `on_monthly_pulse`, which has no scope, it is unobserved.
+
+**What each variable accessor printed** (`TE_PROBE_LOC`, a live country under its own monthly pulse holding 7, read 2026-10-08; the probe is deleted, its results kept in `docs/testing/demographics-probe-results-2026-10-08.md`):
+
+| Accessor | Printed |
+|---|---|
+| `[THIS.GetVariable('x').GetValue]` | 7 |
+| `[THIS.Var('x').GetValue\|0]` | 7 |
+| `[THIS.GetCountry.MakeScope.Var('x').GetValue\|0]` | 7 |
+| `[SCOPE.ScriptValue('x_sv')\|0]`, `[THIS.GetCountry.MakeScope.ScriptValue('x_sv')\|0]` | 7 |
+| `[SCOPE.sCountry('c').GetVariable('x').GetValue]` (`c` saved) | `Data error in loc string` |
+| `[SCOPE.sCountry('c').MakeScope.Var('x').GetValue\|0]` | 0, silently |
+| `[SCOPE.sCountry('c').MakeScope.ScriptValue('x_sv')\|0]` | the wrapper's fallback |
 
 **What silently fails (emits "Data error in loc string"):**
 - `[SCOPE.MakeScope.ScriptValue('my_sv')|0]` — the canonical .yml-loc pattern. `.MakeScope` on an already-scoped reference is rejected.
