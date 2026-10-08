@@ -91,47 +91,66 @@ extremist_privacy_entry = [
     ("law_strong_privacy_rights", "strongly_disapprove"),
     ("law_intrusive_surveillance", "strongly_approve"),
 ]
+# Inheritance (spec docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+# §8). Order: Primogeniture & Entail, Customary Inheritance, Forced Heirship,
+# Freedom of Testation, State as Universal Heir, Possession by Use. The left
+# splits by heir: the communist wants the state to inherit, the anarchist
+# wants nobody to. The amendments take their stances from their parent laws.
 traditional_inheritance = [
     ("law_primogeniture", "strongly_approve"),
     ("law_partible", "neutral"),
     ("law_equal_inheritance", "disapprove"),
+    ("law_free_testation", "disapprove"),
+    ("law_state_universal_heir", "strongly_disapprove"),
+    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
+]
+moderate_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_free_testation", "strongly_approve"),
+    ("law_state_universal_heir", "strongly_disapprove"),
     ("law_non_inheritable_usage_rights", "strongly_disapprove"),
 ]
 reform_inheritance = [
     ("law_primogeniture", "disapprove"),
     ("law_partible", "approve"),
     ("law_equal_inheritance", "approve"),
+    ("law_free_testation", "neutral"),
+    ("law_state_universal_heir", "disapprove"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
+bonapartist_inheritance = [
+    ("law_primogeniture", "disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "strongly_approve"),
+    ("law_free_testation", "neutral"),
+    ("law_state_universal_heir", "disapprove"),
     ("law_non_inheritable_usage_rights", "disapprove"),
 ]
 progressive_inheritance = [
     ("law_primogeniture", "strongly_disapprove"),
     ("law_partible", "neutral"),
     ("law_equal_inheritance", "approve"),
-    ("law_non_inheritable_usage_rights", "strongly_approve"),
+    ("law_free_testation", "disapprove"),
+    ("law_state_universal_heir", "approve"),
+    ("law_non_inheritable_usage_rights", "approve"),
 ]
-radical_inheritance = [
+communist_inheritance = [
     ("law_primogeniture", "strongly_disapprove"),
     ("law_partible", "disapprove"),
     ("law_equal_inheritance", "neutral"),
-    ("law_non_inheritable_usage_rights", "strongly_approve"),
-]
-communal_inheritance = [
-    ("law_primogeniture", "strongly_disapprove"),
-    ("law_partible", "disapprove"),
-    ("law_equal_inheritance", "neutral"),
-    ("law_non_inheritable_usage_rights", "strongly_approve"),
-]
-moderate_inheritance = [
-    ("law_primogeniture", "disapprove"),
-    ("law_partible", "approve"),
-    ("law_equal_inheritance", "neutral"),
-    ("law_non_inheritable_usage_rights", "strongly_disapprove"),
-]
-bonapartist_inheritance = [
-    ("law_primogeniture", "disapprove"),
-    ("law_partible", "neutral"),
-    ("law_equal_inheritance", "strongly_approve"),
+    ("law_free_testation", "strongly_disapprove"),
+    ("law_state_universal_heir", "strongly_approve"),
     ("law_non_inheritable_usage_rights", "disapprove"),
+]
+anarchist_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "disapprove"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_free_testation", "strongly_disapprove"),
+    ("law_state_universal_heir", "disapprove"),
+    ("law_non_inheritable_usage_rights", "strongly_approve"),
 ]
 aggressive_rules_of_war = [
     ("law_traditional_rules_of_war", "approve"),
@@ -1425,7 +1444,7 @@ modifications = {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
         ),
-        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_inheritance": anarchist_inheritance,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "strongly_approve"),
@@ -1821,7 +1840,7 @@ modifications = {
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "+"
         ),
-        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_inheritance": communist_inheritance,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
@@ -2775,7 +2794,7 @@ modifications = {
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
         ),
-        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_inheritance": communist_inheritance,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_internet_governance": [
             ("law_no_internet_policy", "neutral"),
@@ -2851,7 +2870,7 @@ modifications = {
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
         ),
-        "lawgroup_inheritance": communal_inheritance,
+        "lawgroup_inheritance": communist_inheritance,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_family_reproductive_policy": [
             ("law_traditional_family_structure", "strongly_disapprove"),

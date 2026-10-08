@@ -519,7 +519,7 @@ IMAGES = {
     "digital_privacy_screen": {
         "prompt": "A person at a desk surrounded by screens showing encrypted data.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["extra_law_events.16", "extra_law_events.17"],
+        "events": ["extra_law_events.16"],
     },
     "immigration_checkpoint": {
         "prompt": "Families waiting at an immigration checkpoint.",
@@ -917,7 +917,7 @@ IMAGES = {
     "digital_activism_screens": {
         "prompt": "Activists coordinating a campaign across multiple screens.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["movement_events_te.13", "movement_events_te.14"],
+        "events": ["movement_events_te.13", "movement_events_te.14", "inheritance_events.7"],
     },
     "transhumanist_demonstration": {
         "prompt": "People with visible cybernetic enhancements marching together.",

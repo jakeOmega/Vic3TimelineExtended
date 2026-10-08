@@ -72,7 +72,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Law group | Laws | What it governs |
 |---|---|---|
 | State Power | Traditional Vassalage, Unitary State, Federal System, Devolved Administration | Centralization: authority, incorporation, decree costs, separatism. |
-| Inheritance Laws | Primogeniture, Partible Inheritance, Equal Inheritance, Non-Inheritable Usage Rights | Birth rate, landowner power, tax capacity. |
+| Inheritance Laws | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation, State as Universal Heir, Possession by Use | Who inherits an estate: the concentration of wealth, and birth rates and migration on the land. See [Who inherits](#who-inherits). |
 | Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | Devastation, casualties, war support and diplomatic standing. |
@@ -249,6 +249,73 @@ complaints against police officers and licensed firms, from the Civil Rights
 Movement technology on, and interest groups judge it as they judge Guaranteed
 Liberties; the Who Watches the Watchmen event offers it during the debate.
 
+### Who inherits
+
+The Inheritance group decides who inherits an estate. Interest groups judge
+the inheritance law in force for as long as it stands, so a group that dislikes
+yours loses approval the whole time.
+
+| Law | Available | Wealth Concentration target | Also |
+|---|---|---|---|
+| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10% |
+| Customary Inheritance | From the start | 50 | Nothing |
+| Forced Heirship | Egalitarianism | 25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
+| Freedom of Testation | From the start | 60 | Capitalists invest 10% more |
+| State as Universal Heir | Command Economy | 0 | +200 authority, Bureaucrats +10% political strength; the upper and middle strata invest less |
+| Possession by Use | Cooperative Ownership | 0 | Rural Folk and Trade Unions +10% political strength; the upper and middle strata invest less |
+
+France starts with Forced Heirship, Britain and Japan with Primogeniture &
+Entail, the United States with Freedom of Testation and every other country
+with Customary Inheritance. A country that leaves Command Economy loses State
+as Universal Heir and moves to Possession by Use if it now has Cooperative
+Ownership, else to Forced Heirship if you have Egalitarianism, else to
+Customary Inheritance; Possession by Use falls the same way.
+
+**Wealth Concentration** measures, from 0 to 100, how much of your wealth sits
+in great family fortunes. It moves 3% of the way to the law's target each
+year, so a new law takes about a generation to show: a country that abolishes
+entail still has great houses twenty years later. Above 50, Great Family
+Fortunes strengthens the Aristocrats and Capitalists, raises their investment
+and adds radicals; below 50, Dispersed Wealth weakens the Aristocrats and lets
+Farmers and Shopkeepers invest more. Both grow with the distance from 50. The
+Inheritance group's description shows the score and where it is heading.
+
+The farming effects follow the share of Peasants and Farmers in each state.
+Under Forced Heirship, smallholders have fewer children so the farm is not
+split again, and stay on their plots; under Primogeniture & Entail families
+are large and the younger sons leave the land. Industrial states are hardly
+touched, so the effect fades as you urbanize. States update once a year, so a
+new law takes up to a year to reach them.
+
+Four amendments adjust the inheritance laws (see [Amendments to the mod's
+laws](#amendments-to-the-mods-laws)). Estate Duties and the Birthright
+Endowment tax estates and pull the score down; Perpetual Dynastic Trusts push it
+up; Undivided Farm Succession lets one heir take the family farm whole, which
+switches off Forced Heirship's farming effects and sends the other siblings off
+the land. A law's amendments leave with it. When you enact another law with
+private estates, the debate events offer to carry an estate duty, the
+Endowment or the farm rule over.
+
+Once you have held a law for 20 years, its generation event can come, at
+most once every 25 years: The Cadet Sons under Primogeniture & Entail, The Last
+Division under Forced Heirship (one answer attaches Undivided Farm Succession)
+and The Founder's Will under Freedom of Testation. The Great Estates for Sale
+comes after 15 years of an estate duty. Their answers move the score, a pop
+group or a modifier for up to ten years.
+
+With Mind Backups or Biological Immortality, Posthumous Title asks whether a
+person can outlive their estate. Recognising continuity of title freezes
+Wealth Concentration where it stands, at a cost of 10% innovation and 10%
+qualifications, and five years later the young who will never inherit
+organize. Declaring legal death lets estates pass and strengthens the
+Transhumanist movement for ten years.
+
+Traditionalists, paternalists and the patriarchs favor Primogeniture & Entail.
+Liberals and individualists favor Freedom of Testation. Reformers, social
+democrats and agrarians favor Customary Inheritance and Forced Heirship, and
+Bonapartists strongly favor Forced Heirship. Communists favor State as
+Universal Heir, and anarchists Possession by Use.
+
 ### Law enactment events
 
 The mod's laws have their own events at the enactment checkpoints, such as a
@@ -361,6 +428,10 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
+| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −25; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
+| Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
+| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
+| Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
 
 ### Amendment petitions
 
@@ -443,7 +514,7 @@ group that dislikes the current law doesn't back a new law it has no view on.
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
 | Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism, Contracted Administration and Private Policing |
-| Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Partible and Equal Inheritance |
+| Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Customary Inheritance and Forced Heirship |
 
 Interest-group leaders, commanders and politicians are more often women under
 Protected Class, the higher LGBTQ+ Rights laws and related technologies.

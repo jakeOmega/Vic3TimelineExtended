@@ -1,0 +1,152 @@
+﻿# ======================================================================
+#  INHERITANCE — script values
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md §3-4
+#  Effects: common/scripted_effects/te_inheritance_effects.txt.
+#  Docs: docs/systems/mod_systems.md § Inheritance.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+#  The concentration score (country scope)
+#  te_inh_concentration, 0-100: how much of the nation's wealth sits in
+#  great family fortunes. It drifts toward a target set by the law and its
+#  amendments, closing 3% of the gap a year (half in about 23 years, one
+#  generation).
+# ----------------------------------------------------------------------
+
+# The law's own target, before amendments. Customary Inheritance (and a
+# country with no inheritance law) is the 50 baseline.
+te_inh_law_target = {
+	value = 50
+	if = {
+		limit = { has_law = law_type:law_primogeniture }
+		value = 80
+	}
+	else_if = {
+		limit = { has_law = law_type:law_free_testation }
+		value = 60
+	}
+	else_if = {
+		limit = { has_law = law_type:law_equal_inheritance }
+		value = 25
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_state_universal_heir
+				has_law = law_type:law_non_inheritable_usage_rights
+			}
+		}
+		value = 0
+	}
+}
+
+# The target with amendments, 0-100. Recognised continuity of title
+# (inheritance_events.6) pins it at the current score: nobody's estate
+# passes on.
+te_inh_concentration_target = {
+	value = te_inh_law_target
+	if = {
+		limit = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_estate_duties
+			}
+		}
+		add = -25
+	}
+	if = {
+		limit = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_birthright_endowment
+			}
+		}
+		add = -30
+	}
+	if = {
+		limit = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_perpetual_trusts
+			}
+		}
+		add = 30
+	}
+	if = {
+		limit = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_undivided_farm_succession
+			}
+		}
+		add = 10
+	}
+	min = 0
+	max = 100
+	if = {
+		limit = {
+			has_variable = te_inh_title_continuity
+			has_variable = te_inh_concentration
+		}
+		value = var:te_inh_concentration
+	}
+}
+
+# Next year's score: 3% of the gap to the target closes.
+te_inh_concentration_next = {
+	value = te_inh_concentration_target
+	subtract = var:te_inh_concentration
+	multiply = 0.03
+	add = var:te_inh_concentration
+	min = 0
+	max = 100
+}
+
+# inh_great_fortunes' multiplier: (score - 50) / 50 above 50, else 0.
+te_inh_great_fortunes_mult_value = {
+	value = var:te_inh_concentration
+	subtract = 50
+	divide = 50
+	min = 0
+	max = 1
+}
+
+# inh_dispersed_wealth's multiplier: (50 - score) / 50 below 50, else 0.
+te_inh_dispersed_mult_value = {
+	value = 50
+	subtract = var:te_inh_concentration
+	divide = 50
+	min = 0
+	max = 1
+}
+
+# Display (law tooltips, the concept, the modifiers' descriptions). Safe
+# before the first yearly pulse has set the score: the target stands in.
+te_inh_concentration_display = {
+	value = te_inh_concentration_target
+	if = {
+		limit = { has_variable = te_inh_concentration }
+		value = var:te_inh_concentration
+	}
+}
+
+# ----------------------------------------------------------------------
+#  Rural share (state scope)
+#  Peasants plus Farmers as a share of the state's population, 0-1: the
+#  multiplier of the rural-scaled birth and migration modifiers. The pop
+#  walk is colonial_territory_primary_share_value's.
+# ----------------------------------------------------------------------
+te_inh_agrarian_share_value = {
+	value = 0
+	every_scope_pop = {
+		limit = {
+			OR = {
+				is_pop_type = peasants
+				is_pop_type = farmers
+			}
+		}
+		add = total_size
+	}
+	divide = {
+		value = state_population
+		min = 1
+	}
+	min = 0
+	max = 1
+}

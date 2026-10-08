@@ -1,5 +1,16 @@
 # Inheritance: who inherits, what the community takes, and a generational clock — design
 
+## What shipped (2026-10-08)
+
+Everything below except three generation events: State as Universal Heir's *The Hidden Estates*, Possession by Use's
+*The Empty Holding* and the Endowment's *The First Cohort* (§5 names the first wave; these are the second). The open
+questions (§9) were settled as follows: Perpetual Trusts' parent is `law_laissez_faire`; the Endowment swap adds the
+Endowment before it removes the duty, so it works whether or not `add_amendment` sees a same-block removal; the
+Ottoman Empire stays on Customary; the values are the proposals here, with the modifier sizes in
+`docs/systems/mod_systems.md` § Inheritance. Freedom of Testation's progressiveness is 5, below Customary, so the
+consistency walk falls back to Customary rather than to it. The two new laws come after the old four in file order,
+and a defensive old-save repair clears any country a pre-change save leaves holding two inheritance laws.
+
 ## Context
 
 The Inheritance law group (`lawgroup_inheritance`) was added for France: Equal Inheritance's birth-rate penalty gives

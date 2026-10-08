@@ -1136,6 +1136,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
+        # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
+        # sheared the roll. State heir: an open iron strongbox drew
+        # Primogeniture's chest again and lettered STATE on it; a rubber stamp
+        # on a house was the first pick, and the tint turns gold coins pale.
+        "law_free_testation": {"subject": "a single tightly rolled parchment scroll lying on its side, tied around its middle with a black ribbon and a big red wax seal, a feather quill pen and a small inkwell standing beside it", "seed": 3},
+        "law_state_universal_heir": {"subject": "a small neoclassical government building with columns and a triangular pediment, a little model house and a sack of coins set on its front steps", "seed": 5},
         "law_non_inheritable_usage_rights": {"subject": "a round stone village well with a small wooden roof and a bucket on a rope", "seed": 2},
         "law_partible": {"subject": "a small square diorama of farmland split by wooden fences into three unequal fields", "seed": 1},
         "law_primogeniture": {"subject": "one large ornate iron-bound treasure chest with a single big iron key in its lock", "seed": 1},

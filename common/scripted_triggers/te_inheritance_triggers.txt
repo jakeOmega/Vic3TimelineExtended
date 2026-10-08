@@ -1,0 +1,64 @@
+﻿# ======================================================================
+#  INHERITANCE — scripted triggers (country scope)
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Docs: docs/systems/mod_systems.md § Inheritance.
+# ======================================================================
+
+# The law in force carries Undivided Farm Succession.
+te_inh_has_undivided_farms = {
+	active_law:lawgroup_inheritance ?= {
+		has_amendment = amendment_type:amendment_undivided_farm_succession
+	}
+}
+
+# An estate duty is levied: Estate Duties, or the Birthright Endowment,
+# which levies the duty to pay the stake.
+te_inh_levies_estate_duty = {
+	active_law:lawgroup_inheritance ?= {
+		OR = {
+			has_amendment = amendment_type:amendment_estate_duties
+			has_amendment = amendment_type:amendment_birthright_endowment
+		}
+	}
+}
+
+# A law with private estates to tax: the hosts of Estate Duties and the
+# Birthright Endowment (their allowed_laws, restated; keep them in step).
+te_inh_has_private_estates_law = {
+	OR = {
+		has_law = law_type:law_primogeniture
+		has_law = law_type:law_partible
+		has_law = law_type:law_equal_inheritance
+		has_law = law_type:law_free_testation
+	}
+}
+
+# A law with private estates is being enacted (the amendment debate events'
+# hosts for Estate Duties and the Birthright Endowment).
+te_inh_enacting_private_estates_law = {
+	OR = {
+		is_enacting_law = law_type:law_primogeniture
+		is_enacting_law = law_type:law_partible
+		is_enacting_law = law_type:law_equal_inheritance
+		is_enacting_law = law_type:law_free_testation
+	}
+}
+
+# A reformist or social-democratic group is in government (the Estate
+# Duties and Birthright Endowment petitions).
+te_inh_reformers_in_government = {
+	any_interest_group = {
+		is_in_government = yes
+		OR = {
+			has_ideology = ideology:ideology_reformer
+			has_ideology = ideology:ideology_social_democrat
+		}
+	}
+}
+
+# The generation events: the law in force has been held for a generation
+# (te_inh_law_recent, set for 20 years by each law's on_activate, has run
+# out; a save from before the redesign never set it).
+te_inh_generation_due = {
+	NOT = { has_variable = te_inh_law_recent }
+}

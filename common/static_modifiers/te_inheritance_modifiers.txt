@@ -1,0 +1,125 @@
+﻿# ======================================================================
+#  INHERITANCE — modifiers
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Applied by common/scripted_effects/te_inheritance_effects.txt and
+#  events/inheritance_events.txt. Docs: docs/systems/mod_systems.md
+#  § Inheritance.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+#  The concentration score (country). Unit values; the yearly country
+#  pulse applies one of the two with a multiplier of 0-1 read from a
+#  country variable (te_inh_great_fortunes_mult, te_inh_dispersed_mult).
+# ----------------------------------------------------------------------
+
+# Score above 50: multiplier (score - 50) / 50.
+inh_great_fortunes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_aristocrats_pol_str_mult = 0.2
+	country_capitalists_pol_str_mult = 0.2
+	state_aristocrats_investment_pool_efficiency_mult = 0.1
+	state_capitalists_investment_pool_efficiency_mult = 0.1
+	state_radicals_from_political_movements_mult = 0.1
+}
+
+# Score below 50: multiplier (50 - score) / 50.
+inh_dispersed_wealth = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_aristocrats_pol_str_mult = -0.2
+	state_farmers_investment_pool_efficiency_mult = 0.1
+	state_shopkeepers_investment_pool_efficiency_mult = 0.1
+}
+
+# ----------------------------------------------------------------------
+#  Rural-scaled birth and migration (state). The state's yearly pulse
+#  applies them with its agrarian share (Peasants plus Farmers over its
+#  population, 0-1) as the multiplier, read from the state variable
+#  te_inh_agrarian_share.
+# ----------------------------------------------------------------------
+
+# Forced Heirship: smallholders have fewer children so the plot is not
+# split again, and stay on it.
+inh_forced_heirship_rural = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_birth_rate_mult = -0.15
+	state_migration_quota_mult = -0.2
+}
+
+# Primogeniture & Entail: large families, and the younger sons leave the
+# land.
+inh_primogeniture_rural = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_birth_rate_mult = 0.1
+	state_migration_quota_mult = 0.2
+}
+
+# Undivided Farm Succession: one heir takes the farm and the siblings
+# leave, as under Primogeniture. Under Forced Heirship it replaces
+# inh_forced_heirship_rural.
+inh_undivided_farm_rural = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_migration_quota_mult = 0.2
+}
+
+# ----------------------------------------------------------------------
+#  Generation events (events/inheritance_events.txt), country, timed
+# ----------------------------------------------------------------------
+
+# The Cadet Sons
+inh_cadets_army = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	interest_group_ig_armed_forces_pol_str_mult = 0.1
+}
+inh_cadets_church = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	interest_group_ig_devout_pol_str_mult = 0.1
+}
+inh_cadets_colonies = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_colony_growth_speed_mult = 0.15
+}
+
+# The Last Division
+inh_fewer_children = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_birth_rate_mult = -0.05
+}
+inh_split_farm_emigration = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_quota_mult = 0.15
+}
+
+# The Founder's Will
+inh_foundation_endowed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_education_access_add = 0.03
+	country_weekly_innovation_mult = 0.05
+}
+inh_dynasty_founded = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_capitalists_investment_pool_efficiency_mult = 0.1
+}
+inh_probate_litigation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_bureaucracy_investment_cost_factor_mult = 0.05
+}
+
+# ----------------------------------------------------------------------
+#  Posthumous Title (events/inheritance_events.txt .6/.7)
+# ----------------------------------------------------------------------
+
+# Backed-up minds keep their property: nobody's estate passes on. Held
+# while te_inh_title_continuity is set.
+inh_continuity_of_title = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_weekly_innovation_mult = -0.1
+	state_pop_qualifications_mult = -0.1
+}
+inh_heirs_youth_movement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_pop_support_movement_radical_mult = 0.25
+}
+inh_legal_death_backlash = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_pop_support_movement_transhumanist_mult = 0.25
+}

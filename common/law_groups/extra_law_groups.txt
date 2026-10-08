@@ -9,9 +9,11 @@ lawgroup_privacy_rights = {
 	affected_by_regime_change = yes
 }
 
+# Groups react to the inheritance law in force, not only while one is being
+# enacted (2026-10-08 redesign; it was 0, like vanilla's colonization).
 lawgroup_inheritance = {
 	law_group_category = power_structure
-	ideological_opinion_impact = 0
+	ideological_opinion_impact = 0.5
 }
 
 lawgroup_rules_of_war = {

@@ -43,6 +43,11 @@ on_yearly_pulse_country = {
 		te_amendment_petition_spoils_system
 		te_amendment_petition_corporate_security_powers
 		te_amendment_petition_civilian_police_oversight
+		te_amendment_petition_estate_duties
+		te_amendment_petition_estate_duties_war
+		te_amendment_petition_perpetual_trusts
+		te_amendment_petition_birthright_endowment
+		te_amendment_petition_undivided_farm_succession
 	}
 }
 
@@ -172,5 +177,49 @@ te_amendment_petition_civilian_police_oversight = {
 	random_events = {
 		950 = 0
 		50 = amendment_petition_events.16
+	}
+}
+
+# What the Dead Owe: reformers in government last for years. 2.5%.
+te_amendment_petition_estate_duties = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.17
+	}
+}
+
+# What the Dead Owe, at war: wars are short, and an estate duty has come with
+# war spending (Britain 1894 with naval spending, the US 1916). 25% more.
+te_amendment_petition_estate_duties_war = {
+	trigger = {
+		is_at_war = yes
+	}
+	random_events = {
+		750 = 0
+		250 = amendment_petition_events.17
+	}
+}
+
+# Dynasty Trusts: powerful Industrialists are a lasting state. 2.5%.
+te_amendment_petition_perpetual_trusts = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.18
+	}
+}
+
+# The Duty and the Stake: reformers in government last for years. 2.5%.
+te_amendment_petition_birthright_endowment = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.19
+	}
+}
+
+# The Farm Is Not to Be Cut: powerful Rural Folk are a lasting state. 2.5%.
+te_amendment_petition_undivided_farm_succession = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.20
 	}
 }

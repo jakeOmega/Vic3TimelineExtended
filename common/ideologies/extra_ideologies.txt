@@ -591,9 +591,13 @@ ideology_islamic_inheritance = {
 	priority = 200
 
 	lawgroup_inheritance = {
+		# The Quran's fixed shares are forced heirship in substance; a will may
+		# dispose of a third at most, so testation is disapproved.
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = disapprove
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 }
@@ -766,6 +770,8 @@ ideology_custom_religion_traditionalist_economy = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 
@@ -859,6 +865,8 @@ ideology_custom_religion_free_market_economy = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = disapprove
+		law_free_testation = strongly_approve
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 
@@ -949,10 +957,14 @@ ideology_custom_religion_socialist_economy = {
 	}
 
 	lawgroup_inheritance = {
+		# The state-ownership side approves the state as heir; communal
+		# possession drops to disapprove (spec §8).
 		law_primogeniture = disapprove
 		law_partible = neutral
 		law_equal_inheritance = approve
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = strongly_disapprove
+		law_state_universal_heir = strongly_approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 
 	lawgroup_intellectual_property = {
@@ -1045,6 +1057,8 @@ ideology_custom_religion_social_democratic_economy = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = neutral
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = neutral
 	}
 
@@ -1135,10 +1149,14 @@ ideology_custom_religion_imperial_cult_economy = {
 	}
 
 	lawgroup_inheritance = {
+		# The state-ownership side approves the state as heir; communal
+		# possession drops to disapprove (spec §8).
 		law_primogeniture = disapprove
 		law_partible = neutral
 		law_equal_inheritance = disapprove
-		law_non_inheritable_usage_rights = approve
+		law_free_testation = disapprove
+		law_state_universal_heir = approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 
 	lawgroup_intellectual_property = {
@@ -1228,10 +1246,14 @@ ideology_custom_religion_theocratic_economy = {
 	}
 
 	lawgroup_inheritance = {
+		# The state-ownership side approves the state as heir; communal
+		# possession drops to disapprove (spec §8).
 		law_primogeniture = approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 
 	lawgroup_intellectual_property = {

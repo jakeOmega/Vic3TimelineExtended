@@ -6,8 +6,8 @@
 #  Rare events in which an interest group asks for one of the mod's
 #  amendments on a law that is already in force, because the country's
 #  situation gives it a case. The enactment events (extra_law_events.28–34,
-#  .87–.90) offer amendments while a law is debated; these reach a law
-#  years after it passed.
+#  .87–.90, inheritance_events.10–.13) offer amendments while a law is
+#  debated; these reach a law years after it passed.
 #
 #  Shape of every event:
 #    trigger    te_ap_window_open (one petition per five years), the law in
@@ -1642,6 +1642,387 @@ amendment_petition_events.16 = {
 			modifier = {
 				trigger = { ig:ig_armed_forces ?= { is_in_government = yes } }
 				add = 1
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  17 – What the Dead Owe  (Estate Duties)
+#  A war to pay for, or reformers in government; the Intelligentsia ask
+#  for a duty on great estates. Rolls 2.5% a year, and 25% more while at
+#  war (two sub-actions, amendment_petition_on_actions.txt).
+# ======================================================================
+amendment_petition_events.17 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.17.t
+	desc = amendment_petition_events.17.d
+	flavor = amendment_petition_events.17.f
+
+	event_image = { video = "europenorthamerica_london_center" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_estate_duties = yes
+		# amendment_estate_duties's `possible` (the Endowment half is in
+		# te_ap_law_ok_estate_duties)
+		has_technology_researched = political_agitation
+		OR = {
+			is_at_war = yes
+			te_inh_reformers_in_government = yes
+		}
+		OR = {
+			ig:ig_intelligentsia ?= { is_marginal = no }
+			ig:ig_trade_unions ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_inheritance ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_intelligentsia ?= { is_marginal = no } }
+			ig:ig_intelligentsia = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_trade_unions ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_estate_duties = yes }
+	}
+
+	option = { # Levy the duty
+		name = amendment_petition_events.17.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_estate_duties
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = aristocrats
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Estates pass untaxed
+		name = amendment_petition_events.17.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = aristocrats
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  18 – Dynasty Trusts  (Perpetual Dynastic Trusts)
+#  Under Freedom of Testation with powerful Industrialists, who ask that a
+#  trust may run for ever.
+# ======================================================================
+amendment_petition_events.18 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.18.t
+	desc = amendment_petition_events.18.d
+	flavor = amendment_petition_events.18.f
+
+	event_image = { video = "middleeast_upperclass_party" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_perpetual_trusts = yes
+		# amendment_perpetual_trusts's `possible`
+		has_technology_researched = globalization
+		ig:ig_industrialists ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_inheritance ?= { save_scope_as = petition_law }
+		ig:ig_industrialists ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_perpetual_trusts = yes }
+	}
+
+	option = { # Let the trusts run for ever
+		name = amendment_petition_events.18.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_perpetual_trusts
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Every fortune passes through an estate
+		name = amendment_petition_events.18.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_trade_unions ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  19 – The Duty and the Stake  (Birthright Endowment)
+#  On a law carrying Estate Duties, with reformers in government; the
+#  Trade Unions ask that the duty pay every young adult a capital stake.
+#  The Endowment replaces the duty (te_inh_swap_duties_for_endowment).
+# ======================================================================
+amendment_petition_events.19 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.19.t
+	desc = amendment_petition_events.19.d
+	flavor = amendment_petition_events.19.f
+
+	event_image = { video = "middleeast_middleclass_cafe" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_birthright_endowment = yes
+		# amendment_birthright_endowment's `possible`
+		has_technology_researched = universal_basic_income
+		te_inh_reformers_in_government = yes
+		OR = {
+			ig:ig_trade_unions ?= { is_marginal = no }
+			ig:ig_intelligentsia ?= { is_marginal = no }
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_inheritance ?= { save_scope_as = petition_law }
+		if = {
+			limit = { ig:ig_trade_unions ?= { is_marginal = no } }
+			ig:ig_trade_unions = { save_scope_as = petition_sponsor_ig }
+		}
+		else = {
+			ig:ig_intelligentsia ?= { save_scope_as = petition_sponsor_ig }
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_birthright_endowment = yes }
+	}
+
+	option = { # The duty pays the stake
+		name = amendment_petition_events.19.a
+		te_inh_swap_duties_for_endowment = { SPONSOR = scope:petition_sponsor_ig }
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # The duty goes to the treasury
+		name = amendment_petition_events.19.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  20 – The Farm Is Not to Be Cut  (Undivided Farm Succession)
+#  Under Forced Heirship or Customary Inheritance with powerful Rural Folk,
+#  who ask that one heir may take the farm whole.
+# ======================================================================
+amendment_petition_events.20 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.20.t
+	desc = amendment_petition_events.20.d
+	flavor = amendment_petition_events.20.f
+
+	event_image = { video = "africa_prosperous_farm" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_undivided_farm_succession = yes
+		# amendment_undivided_farm_succession has no `possible` condition
+		ig:ig_rural_folk ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_inheritance ?= { save_scope_as = petition_law }
+		ig:ig_rural_folk ?= { save_scope_as = petition_sponsor_ig }
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_undivided_farm_succession = yes }
+	}
+
+	option = { # One heir takes the farm
+		name = amendment_petition_events.20.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_undivided_farm_succession
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = peasants
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+
+	option = { # Every child keeps a share
+		name = amendment_petition_events.20.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_in_government = yes } }
+				add = 2
 			}
 		}
 	}

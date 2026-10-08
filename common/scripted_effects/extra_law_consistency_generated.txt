@@ -4009,12 +4009,49 @@ te_fix_inconsistent_lawgroup_inheritance = {
 			has_law = law_type:law_non_inheritable_usage_rights
 			OR = {
 				NOR = {
-					has_law = law_type:law_command_economy
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
 		}
 		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_command_economy
+				}
+			}
+			activate_law = law_type:law_state_universal_heir
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = egalitarianism
+			}
+			activate_law = law_type:law_equal_inheritance
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_partible
+		}
+	}
+
+	# Active: law_state_universal_heir  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_state_universal_heir
+			OR = {
+				NOR = {
+					has_law = law_type:law_command_economy
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_cooperative_ownership
+				}
+			}
+			activate_law = law_type:law_non_inheritable_usage_rights
+		}
+		else_if = {
 			limit = {
 				has_technology_researched = egalitarianism
 			}

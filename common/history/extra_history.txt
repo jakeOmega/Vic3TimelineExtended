@@ -91,13 +91,16 @@ GLOBAL = {
 		activate_law = law_type:law_primogeniture
 	}
 	c:RUS = {
-		activate_law = law_type:law_primogeniture
+		# Customary Inheritance, the GLOBAL default: Anna repealed Peter's 1714
+		# single-inheritance law in 1731 and nobles divided estates among
+		# their sons.
 		activate_law = law_type:law_minority_rights_ghettoization
 		activate_law = law_type:law_feudal_contracts
 		activate_law = law_type:law_ministry_of_foreign_affairs # Russian MFA, 1802 reforms
 		activate_law = law_type:law_ministry_of_war # Ministry of War, 1802
 	}
 	c:USA = {
+		activate_law = law_type:law_free_testation # Primogeniture and entail gone by c. 1800, no forced shares
 		activate_law = law_type:law_federal_system
 		activate_law = law_type:law_free_mutual_banking
 		activate_law = law_type:law_traditional_ip_protection # Copyright Act 1790, Patent Act 1790

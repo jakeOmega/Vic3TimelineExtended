@@ -24,8 +24,8 @@ te_ap_window_open = {
 #
 #  A petition amends the law in force. While another law of the same group
 #  is being enacted, the amendment would leave with the outgoing law, and
-#  the enactment events (extra_law_events.28–34, .87–.90) already offer
-#  amendments to the incoming one. Each list names every law in the group,
+#  the enactment events (extra_law_events.28–34, .87–.90,
+#  inheritance_events.10–.13) already offer amendments to the incoming one. Each list names every law in the group,
 #  variants included (law_crownland_diets); a law added to a group later
 #  belongs here too.
 # ----------------------------------------------------------------------
@@ -129,6 +129,17 @@ te_ap_enacting_in_policing = {
 		is_enacting_law = law_type:law_dedicated_police
 		is_enacting_law = law_type:law_militarized_police
 		is_enacting_law = law_type:law_private_policing
+	}
+}
+
+te_ap_enacting_in_inheritance = {
+	OR = {
+		is_enacting_law = law_type:law_primogeniture
+		is_enacting_law = law_type:law_partible
+		is_enacting_law = law_type:law_equal_inheritance
+		is_enacting_law = law_type:law_non_inheritable_usage_rights
+		is_enacting_law = law_type:law_free_testation
+		is_enacting_law = law_type:law_state_universal_heir
 	}
 }
 
@@ -318,6 +329,51 @@ te_ap_law_ok_civilian_police_oversight = {
 		NOT = { has_amendment = amendment_type:amendment_civilian_police_oversight }
 	}
 	NOT = { te_ap_enacting_in_policing = yes }
+}
+
+# Estate Duties: a law with private estates (te_inh_has_private_estates_law,
+# te_inheritance_triggers.txt). Its `possible` keeps it off a law with the
+# Birthright Endowment, which levies the duty itself.
+te_ap_law_ok_estate_duties = {
+	te_inh_has_private_estates_law = yes
+	active_law:lawgroup_inheritance ?= {
+		NOR = {
+			has_amendment = amendment_type:amendment_estate_duties
+			has_amendment = amendment_type:amendment_birthright_endowment
+		}
+	}
+	NOT = { te_ap_enacting_in_inheritance = yes }
+}
+
+te_ap_law_ok_perpetual_trusts = {
+	has_law = law_type:law_free_testation
+	active_law:lawgroup_inheritance ?= {
+		NOT = { has_amendment = amendment_type:amendment_perpetual_trusts }
+	}
+	NOT = { te_ap_enacting_in_inheritance = yes }
+}
+
+# The Birthright Endowment's petition swaps it for Estate Duties, so it asks
+# for a law that carries the duty (spec §2.3). A law with neither takes the
+# Endowment through the debate event (inheritance_events.12).
+te_ap_law_ok_birthright_endowment = {
+	te_inh_has_private_estates_law = yes
+	active_law:lawgroup_inheritance ?= {
+		has_amendment = amendment_type:amendment_estate_duties
+		NOT = { has_amendment = amendment_type:amendment_birthright_endowment }
+	}
+	NOT = { te_ap_enacting_in_inheritance = yes }
+}
+
+te_ap_law_ok_undivided_farm_succession = {
+	OR = {
+		has_law = law_type:law_equal_inheritance
+		has_law = law_type:law_partible
+	}
+	active_law:lawgroup_inheritance ?= {
+		NOT = { has_amendment = amendment_type:amendment_undivided_farm_succession }
+	}
+	NOT = { te_ap_enacting_in_inheritance = yes }
 }
 
 # ----------------------------------------------------------------------

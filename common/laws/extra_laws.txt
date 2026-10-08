@@ -478,6 +478,31 @@ law_strong_privacy_rights = {
 	}
 }
 
+# =================================================================
+#  INHERITANCE — who inherits
+#  Six laws answer one question: who inherits an estate. The group's
+#  systemic effects come from script rather than from these blocks: the
+#  wealth-concentration score (te_inh_concentration), rural-scaled birth and
+#  migration effects, generation events and four amendments. See
+#  te_inheritance_effects.txt and docs/systems/mod_systems.md § Inheritance.
+#  Keys stay where a law keeps its meaning, so saves keep their laws; only
+#  the display names changed. The two new laws come after the old four in
+#  file order: a law inserted at the head of an existing group switched on
+#  in every country of a pre-change save (#520, scripting_best_practices.md
+#  § "First Law in a Lawgroup File Is the Unseeded Default").
+#  Progressiveness keeps the consistency walk sensible: a country that loses
+#  Command Economy or Cooperative Ownership lands on the other left law when
+#  it can (State as Universal Heir 50, Possession by Use 60), else on Forced
+#  Heirship (25), or Customary (10) without Egalitarianism. Freedom of
+#  Testation (5) sits below Customary: Le Play's cause, a conservative one.
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+# =================================================================
+
+# Primogeniture & Entail: the eldest takes the estate, and entail stops him
+# breaking it up. Great houses last; younger sons go into the army, the
+# church, the colonies and the city. Landowner clout comes from the
+# concentration score (target 80); birth rate and migration from the
+# rural-scaled state effects.
 law_primogeniture = {
 	group = lawgroup_inheritance
 
@@ -485,16 +510,28 @@ law_primogeniture = {
 
 	progressiveness = 0
 
+	on_enact = {
+		custom_tooltip = { text = LAW_PRIMOGENITURE_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
+
 	modifier = {
-		state_birth_rate_mult = 0.05
 		state_radicals_from_political_movements_mult = 0.1
-		interest_group_ig_landowners_pol_str_mult = 0.1
 		state_pop_qualifications_mult = -0.1
 		state_tax_capacity_mult = -0.1
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 	}
 }
 
+# Customary Inheritance: local custom decides. The blank baseline every
+# country starts on unless history says otherwise (extra_history.txt).
 law_partible = {
 	group = lawgroup_inheritance
 
@@ -502,10 +539,26 @@ law_partible = {
 
 	progressiveness = 10
 
+	on_enact = {
+		custom_tooltip = { text = LAW_PARTIBLE_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
+
 	modifier = {
 	}
 }
 
+# Forced Heirship: the Code Napoléon's reserved shares. Farms split each
+# generation, so peasants have fewer children and stay on the land (the
+# rural-scaled state effects); great fortunes dissolve over a generation
+# (concentration target 25).
 law_equal_inheritance = {
 	group = lawgroup_inheritance
 
@@ -517,36 +570,148 @@ law_equal_inheritance = {
 
 	progressiveness = 25
 
+	on_enact = {
+		custom_tooltip = { text = LAW_EQUAL_INHERITANCE_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
+
 	modifier = {
-		state_birth_rate_mult = -0.1
 		state_radicals_from_political_movements_mult = -0.1
-		interest_group_ig_landowners_pol_str_mult = -0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.1
 		state_education_access_add = 0.05
-		state_migration_quota_mult = 0.1
 		state_tax_capacity_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 	}
 }
 
+# Possession by Use: Proudhon's possession against property. Holdings go
+# back to the commune that uses them, not to the state, so the authority
+# package that Non-Inheritable Usage Rights carried went to State as
+# Universal Heir. Local, decentralised effects instead. With no bequest to
+# save for, the upper and middle strata save less.
 law_non_inheritable_usage_rights = {
 	group = lawgroup_inheritance
 
 	icon = "gfx/interface/icons/law_icons/law_non_inheritable_usage_rights.dds"
 
 	unlocking_laws = {
-		law_command_economy
 		law_cooperative_ownership
 	}
 
-	progressiveness = 25
+	progressiveness = 60
+
+	on_enact = {
+		custom_tooltip = { text = LAW_NON_INHERITABLE_USAGE_RIGHTS_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
 
 	modifier = {
-		state_birth_rate_mult = -0.1
+		# The communes keep their own registers of who works what.
+		state_bureaucracy_population_base_cost_factor_mult = -0.05
+		interest_group_ig_rural_folk_pol_str_mult = 0.1
+		interest_group_ig_trade_unions_pol_str_mult = 0.1
+		# Nothing to leave the children: less is saved.
+		state_aristocrats_investment_pool_efficiency_mult = -0.2
+		state_capitalists_investment_pool_efficiency_mult = -0.2
+		state_shopkeepers_investment_pool_efficiency_mult = -0.1
+		state_farmers_investment_pool_efficiency_mult = -0.1
+		state_clergymen_investment_pool_efficiency_mult = -0.1
+		state_academics_investment_pool_efficiency_mult = -0.1
+		state_engineers_investment_pool_efficiency_mult = -0.1
+		state_officers_investment_pool_efficiency_mult = -0.1
+		state_bureaucrats_investment_pool_efficiency_mult = -0.1
+		state_clerks_investment_pool_efficiency_mult = -0.1
+	}
+}
+
+# Freedom of Testation: the owner chooses the heirs. Family firms pass
+# intact to the child who runs them, and fortunes can be left to
+# foundations (concentration target 60). The USA's law from the start.
+law_free_testation = {
+	group = lawgroup_inheritance
+
+	icon = "gfx/interface/icons/law_icons/law_free_testation.dds"
+
+	progressiveness = 5
+
+	on_enact = {
+		custom_tooltip = { text = LAW_FREE_TESTATION_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
+
+	modifier = {
+		# The firm goes to the heir who runs it, whole.
+		state_capitalists_investment_pool_efficiency_mult = 0.1
+		# Wills are contested in court.
+		country_bureaucracy_investment_cost_factor_mult = 0.03
+	}
+}
+
+# State as Universal Heir: the Saint-Simonians (1829) and measure 3 of the
+# Communist Manifesto. Estates pass to the state, which administers them:
+# the authority and dividend package Non-Inheritable Usage Rights used to
+# carry. With no bequest to save for, the upper and middle strata save
+# less.
+law_state_universal_heir = {
+	group = lawgroup_inheritance
+
+	icon = "gfx/interface/icons/law_icons/law_state_universal_heir.dds"
+
+	unlocking_laws = {
+		law_command_economy
+	}
+
+	progressiveness = 50
+
+	on_enact = {
+		custom_tooltip = { text = LAW_STATE_UNIVERSAL_HEIR_INHERITANCE_TT }
+	}
+
+	# The generation clock: the generation events wait 20 years from a law
+	# taking effect (te_inh_generation_due).
+	on_activate = {
+		hidden_effect = {
+			set_variable = { name = te_inh_law_recent years = 20 }
+		}
+	}
+
+	modifier = {
 		country_authority_add = 200
 		country_government_dividends_efficiency_add = 0.05
 		country_bureaucrats_pol_str_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
+		# Nothing to leave the children: less is saved.
+		state_aristocrats_investment_pool_efficiency_mult = -0.2
+		state_capitalists_investment_pool_efficiency_mult = -0.2
+		state_shopkeepers_investment_pool_efficiency_mult = -0.1
+		state_farmers_investment_pool_efficiency_mult = -0.1
+		state_clergymen_investment_pool_efficiency_mult = -0.1
+		state_academics_investment_pool_efficiency_mult = -0.1
+		state_engineers_investment_pool_efficiency_mult = -0.1
+		state_officers_investment_pool_efficiency_mult = -0.1
+		state_bureaucrats_investment_pool_efficiency_mult = -0.1
+		state_clerks_investment_pool_efficiency_mult = -0.1
 	}
 }
 

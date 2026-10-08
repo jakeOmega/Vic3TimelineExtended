@@ -1601,3 +1601,233 @@ amendment_collective_algorithmic_commons = {
 	}
 	amendment_activism_multiplier = 0
 }
+
+# ======================================================================
+#  INHERITANCE
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md §2
+#  No inheritance law stands for taxing estates, so each amendment takes
+#  its interest-group stances from the law elsewhere whose supporters
+#  backed it in history (vanilla does this for 18 of its 67). Most work
+#  through the wealth-concentration score: its target reads them
+#  (te_inh_concentration_target, te_inheritance_values.txt), so their
+#  _desc loc is where that effect is told. Ways in: the debate events
+#  inheritance_events.10-.13 and the petitions amendment_petition_events
+#  .17-.20. A law's amendments leave with it; the debate events offer to
+#  carry one over to the incoming law.
+# ======================================================================
+
+# Estate Duties - a progressive duty on estates: Britain 1894, the US
+# federal estate tax 1916, both with war or naval spending behind them.
+# No standing revenue: it lowers the concentration target by 25. Estate
+# taxes raise about 0.5% of OECD tax revenue today, and the tax-code spec
+# keeps the dividend tax from being relabelled one. Not on a law that has
+# the Birthright Endowment, which levies the duty itself.
+amendment_estate_duties = {
+	parent = law_graduated_taxation
+
+	allowed_laws = {
+		law_primogeniture
+		law_partible
+		law_equal_inheritance
+		law_free_testation
+	}
+
+	possible = {
+		has_technology_researched = political_agitation
+		NOT = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_birthright_endowment
+			}
+		}
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_graduated_taxation
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Perpetual Dynastic Trusts - a trust that never has to vest, so a fortune
+# need never pass through an estate: South Dakota dropped the rule against
+# perpetuities in 1983, other states and the offshore trusts followed.
+# Freedom of Testation only: entail already is a perpetual trust, the rule
+# against perpetuities was invented to stop it. Raises the concentration
+# target by 30 and can sit beside the duty (the trusts exist largely to
+# avoid it). Parent Laissez-Faire, as vanilla's
+# amendment_extraterritoriality_rights: the Industrialists and finance
+# lobbied for the trusts.
+amendment_perpetual_trusts = {
+	parent = law_laissez_faire
+
+	allowed_laws = {
+		law_free_testation
+	}
+
+	modifier = {
+		state_capitalists_investment_pool_efficiency_mult = 0.1
+	}
+
+	possible = {
+		has_technology_researched = globalization
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_laissez_faire
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Birthright Endowment - Paine's Agrarian Justice (1797): a duty on estates
+# pays every young adult a capital stake. It says nothing about who gets
+# the untaxed rest, so it fits every law with private estates. It replaces
+# Estate Duties instead of stacking on it, because the duty is what pays
+# for it: one amendment both levies the duty and pays the stake, and
+# repealing it removes both. Two would break when the duty was repealed:
+# `possible` is read only when an amendment is added, so an Endowment that
+# required the duty would outlive it. Lowers the concentration target by
+# 30. Parent Old Age Pension: Paine paired the stake at 21 with a pension
+# from 50. An Endowment paid from general revenue (Britain's Child Trust
+# Fund, 2005) is a welfare programme, not inheritance policy.
+amendment_birthright_endowment = {
+	parent = law_old_age_pension
+
+	allowed_laws = {
+		law_primogeniture
+		law_partible
+		law_equal_inheritance
+		law_free_testation
+	}
+
+	modifier = {
+		state_pop_qualifications_mult = 0.1
+		state_education_access_add = 0.05
+		state_laborers_investment_pool_efficiency_mult = 0.1
+		state_farmers_investment_pool_efficiency_mult = 0.1
+		state_shopkeepers_investment_pool_efficiency_mult = 0.1
+	}
+
+	# Deliberately silent on Estate Duties: the swap
+	# (te_inh_swap_duties_for_endowment) adds the Endowment before it
+	# removes the duty, and te_inh_tidy_amendments drops a duty that ends
+	# up beside it.
+	possible = {
+		has_technology_researched = universal_basic_income
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_trade_unions
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_old_age_pension
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Undivided Farm Succession - one heir takes the family farm whole and pays
+# the others out: northwest Germany's Hoefeordnung (1947), Austria's
+# Anerbengesetz (1958), Norway's odel and asete rights. The remedy for the
+# fragmentation equal division causes, so it sits on Forced Heirship and
+# Customary Inheritance; Primogeniture already keeps estates whole, and
+# under Freedom of Testation an owner can leave the farm to one child.
+# Switches Forced Heirship's rural birth-rate effect off and turns its
+# migration effect around (te_inh_refresh_rural_effects), and raises the
+# concentration target by 10. Parent Peasant Proprietorship: agrarians
+# back it, the hierarchic and oligarchic ideologies oppose it.
+amendment_undivided_farm_succession = {
+	parent = law_peasant_proprietorship
+
+	allowed_laws = {
+		law_equal_inheritance
+		law_partible
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_rural_folk
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_peasant_proprietorship
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
