@@ -27,7 +27,7 @@
 # Tax Legislation Works at the foot.
 
 je_tax_code = {
-	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	icon = "gfx/interface/icons/event_icons/je_tax_code.dds"
 	group = je_group_internal_affairs
 
 	widget = {

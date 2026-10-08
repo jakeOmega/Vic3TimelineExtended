@@ -894,7 +894,7 @@ widget = {
 							}
 							sidepanel_button_small = {
 								blockoverride "icon" {
-									texture = "gfx/interface/main_hud/journal_btn.dds"
+									texture = "gfx/interface/main_hud/te_systems_window_btn.dds"
 								}
 								blockoverride "button_selected" {
 									visible = no
@@ -918,7 +918,7 @@ widget = {
 							}
 							sidepanel_button_small = {
 								blockoverride "icon" {
-									texture = "gfx/interface/main_hud/journal_btn.dds"
+									texture = "gfx/interface/main_hud/te_systems_window_btn.dds"
 								}
 								blockoverride "button_selected" {
 									visible = yes

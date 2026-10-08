@@ -495,8 +495,12 @@ BAND_ICONS = {
 # Kept as vanilla's marks, as the icon list allowed. Freefall and Overheating,
 # past the momentum bar's ends, borrow the double arrows until their own art
 # exists (banking_gui_icons.md, placeholders).
-MOMENTUM_ICONS = ["down_down", "down_down", "trend_down", "trend_nochange", "trend_up", "trend_upup", "trend_upup"]
-VANILLA_KEPT = {f"gfx/interface/icons/generic_icons/{n}.dds" for n in MOMENTUM_ICONS + ["warning"]}
+# Momentum: vanilla's five arrows, and the mod's red triple arrows for the two outer bands.
+MOMENTUM_ICONS = ["banking_icons/momentum_freefall", "generic_icons/down_down", "generic_icons/trend_down",
+                  "generic_icons/trend_nochange", "generic_icons/trend_up", "generic_icons/trend_upup",
+                  "banking_icons/momentum_overheating"]
+VANILLA_KEPT = {f"gfx/interface/icons/{n}.dds" for n in MOMENTUM_ICONS + ["generic_icons/warning"]
+                if n.startswith("generic_icons/")}
 
 
 class BankingIconsTest(unittest.TestCase):
@@ -518,7 +522,7 @@ class BankingIconsTest(unittest.TestCase):
             with self.subTest(value=value):
                 self.assertEqual(drawn[value], {str(i): f"{BANKING_ICONS}{n}.dds" for i, n in enumerate(names, 1)})
         self.assertEqual(drawn["banking_disp_momentum_band_code"],
-                         {str(i): f"gfx/interface/icons/generic_icons/{n}.dds" for i, n in enumerate(MOMENTUM_ICONS, 1)})
+                         {str(i): f"gfx/interface/icons/{n}.dds" for i, n in enumerate(MOMENTUM_ICONS, 1)})
 
     def test_the_budget_and_the_cost_share_one_icon(self):
         self.assertEqual(self.drawn()[None], {"budget": f"{BANKING_ICONS}budget.dds"})

@@ -26,53 +26,22 @@ buildings:
   reason: the Construction Site is a construction camp; kept in the building icon review (2026-09-27)
 - image: gfx/interface/icons/building_icons/skyscraper.dds
   entities:
-  - building_generic_arsenal
   - building_generic_assay_office
-  - building_generic_chem_works
-  - building_generic_cold_storage
-  - building_generic_colonial_depot
   - building_generic_corporate_university
-  - building_generic_data_fortress
-  - building_generic_dry_dock
-  - building_generic_dye_fiber_park
-  - building_generic_electronics_lab
   - building_generic_exhibition_centre
-  - building_generic_export_warehouse
   - building_generic_financial_center
-  - building_generic_fish_market
-  - building_generic_foundry_complex
   - building_generic_furniture_showroom
-  - building_generic_granary_complex
   - building_generic_hq_skyscraper
   - building_generic_industrial_city
-  - building_generic_industrial_zone
-  - building_generic_logistics_hub
-  - building_generic_lumber_yard
-  - building_generic_machine_shop
-  - building_generic_materials_lab
-  - building_generic_media_hq
   - building_generic_mega_factory
-  - building_generic_mineral_refinery
   - building_generic_monument_to_industry
-  - building_generic_motor_works
-  - building_generic_ordnance_depot
-  - building_generic_ore_processing
-  - building_generic_paper_mill_complex
   - building_generic_pipeline_terminus
-  - building_generic_power_hub
-  - building_generic_proving_grounds
   - building_generic_rail_nexus
-  - building_generic_rd_complex
-  - building_generic_resource_depository
-  - building_generic_robotics_institute
   - building_generic_shipping_terminal
-  - building_generic_silk_exchange
   - building_generic_spaceport
-  - building_generic_tank_farm
   - building_generic_textile_depot
-  - building_generic_vintner_hall
   - building_skyscraper
-  reason: placeholder - the generic company buildings borrow vanilla's skyscraper until a company-building icon pass; the 2026-09-27 building icon batch covered non-company buildings only
+  reason: the eleven retired generic flagships (removed by the monthly company-building cleanup) and the textile depot, assay office and furniture showroom (rerolling) keep vanilla's skyscraper; icon batch 3 (2026-10-07) gave the other 31 their own
 - image: gfx/interface/icons/building_icons/synthetics_plants.dds
   entities:
   - building_synthetics_plant
@@ -358,13 +327,6 @@ technologies:
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 laws:
 - images:
-  - gfx/interface/icons/law_icons/active_persecution.dds
-  - gfx/interface/icons/law_icons/minority_rights_violent_hostility.dds
-  entities:
-  - law_active_persecution
-  - law_minority_rights_violent_hostility
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- images:
   - gfx/interface/icons/law_icons/algorithmic_governance.dds
   - gfx/interface/icons/law_icons/decentralized_cryptocurrency.dds
   entities:
@@ -379,7 +341,6 @@ laws:
   - gfx/interface/icons/law_icons/minority_rights_discrimination.dds
   - gfx/interface/icons/law_icons/minority_rights_indifference.dds
   - gfx/interface/icons/law_icons/minority_rights_protection.dds
-  - gfx/interface/icons/law_icons/protected_class.dds
   entities:
   - law_basic_protections
   - law_comprehensive_rights
@@ -388,7 +349,6 @@ laws:
   - law_minority_rights_discrimination
   - law_minority_rights_indifference
   - law_minority_rights_protection
-  - law_protected_class
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
   - gfx/interface/icons/law_icons/central_bank_independence.dds
@@ -471,12 +431,10 @@ laws:
   - gfx/interface/icons/law_icons/direct_democracy.dds
   - gfx/interface/icons/law_icons/donation_limits.dds
   - gfx/interface/icons/law_icons/publicly_funded_elections.dds
-  - gfx/interface/icons/law_icons/unregulated_donations.dds
   entities:
   - law_direct_democracy
   - law_donation_limits
   - law_publicly_funded_elections
-  - law_unregulated_donations
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
   - gfx/interface/icons/law_icons/equal_inheritance.dds
@@ -496,11 +454,9 @@ laws:
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
   - gfx/interface/icons/law_icons/freedom_of_information.dds
-  - gfx/interface/icons/law_icons/neocolonialism.dds
   - gfx/interface/icons/law_icons/open_government.dds
   entities:
   - law_freedom_of_information
-  - law_neocolonialism
   - law_open_government
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
@@ -526,13 +482,6 @@ laws:
   - law_war_crimes_forbidden
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
-  - gfx/interface/icons/law_icons/informal_government_secrecy.dds
-  - gfx/interface/icons/law_icons/intrusive_surveillance.dds
-  entities:
-  - law_informal_government_secrecy
-  - law_intrusive_surveillance
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- images:
   - gfx/interface/icons/law_icons/legal_limbo.dds
   - gfx/interface/icons/law_icons/minority_rights_cultural_assimilation.dds
   entities:
@@ -540,38 +489,12 @@ laws:
   - law_minority_rights_cultural_assimilation
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
-  - gfx/interface/icons/law_icons/ministry_of_commerce.dds
   - gfx/interface/icons/law_icons/ministry_of_consumer_protection.dds
-  - gfx/interface/icons/law_icons/ministry_of_culture.dds
-  - gfx/interface/icons/law_icons/ministry_of_foreign_affairs.dds
-  - gfx/interface/icons/law_icons/ministry_of_intelligence_and_security.dds
-  - gfx/interface/icons/law_icons/ministry_of_international_aid.dds
-  - gfx/interface/icons/law_icons/ministry_of_propaganda.dds
-  - gfx/interface/icons/law_icons/ministry_of_refugee_affairs.dds
-  - gfx/interface/icons/law_icons/ministry_of_religion.dds
-  - gfx/interface/icons/law_icons/ministry_of_science.dds
-  - gfx/interface/icons/law_icons/ministry_of_the_environment.dds
-  - gfx/interface/icons/law_icons/ministry_of_thought_control.dds
-  - gfx/interface/icons/law_icons/ministry_of_urban_planning.dds
-  - gfx/interface/icons/law_icons/ministry_of_war.dds
   - gfx/interface/icons/law_icons/national_bank.dds
   - gfx/interface/icons/law_icons/pro_capital_ministry_of_labor.dds
   - gfx/interface/icons/law_icons/pro_labor_ministry_of_labor.dds
   entities:
-  - law_ministry_of_commerce
   - law_ministry_of_consumer_protection
-  - law_ministry_of_culture
-  - law_ministry_of_foreign_affairs
-  - law_ministry_of_intelligence_and_security
-  - law_ministry_of_international_aid
-  - law_ministry_of_propaganda
-  - law_ministry_of_refugee_affairs
-  - law_ministry_of_religion
-  - law_ministry_of_science
-  - law_ministry_of_the_environment
-  - law_ministry_of_thought_control
-  - law_ministry_of_urban_planning
-  - law_ministry_of_war
   - law_national_bank
   - law_pro_capital_ministry_of_labor
   - law_pro_labor_ministry_of_labor
@@ -593,38 +516,12 @@ laws:
   - law_unregulated_internet
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
-  - gfx/interface/icons/law_icons/no_ministry_of_commerce.dds
   - gfx/interface/icons/law_icons/no_ministry_of_consumer_protection.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_culture.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_foreign_affairs.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_intelligence_and_security.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_international_aid.dds
   - gfx/interface/icons/law_icons/no_ministry_of_labor.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_propaganda.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_refugee_affairs.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_religion.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_science.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_the_environment.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_thought_control.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_urban_planning.dds
-  - gfx/interface/icons/law_icons/no_ministry_of_war.dds
   - gfx/interface/icons/law_icons/no_national_bank.dds
   entities:
-  - law_no_ministry_of_commerce
   - law_no_ministry_of_consumer_protection
-  - law_no_ministry_of_culture
-  - law_no_ministry_of_foreign_affairs
-  - law_no_ministry_of_intelligence_and_security
-  - law_no_ministry_of_international_aid
   - law_no_ministry_of_labor
-  - law_no_ministry_of_propaganda
-  - law_no_ministry_of_refugee_affairs
-  - law_no_ministry_of_religion
-  - law_no_ministry_of_science
-  - law_no_ministry_of_the_environment
-  - law_no_ministry_of_thought_control
-  - law_no_ministry_of_urban_planning
-  - law_no_ministry_of_war
   - law_no_national_bank
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:

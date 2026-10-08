@@ -71,6 +71,14 @@ class RegistryTests(unittest.TestCase):
                                "now": f"{gi_}/x.dds"},                       # due: emblem accepted
                     "bad_tint": {"from": "un_part/emblem", "tint": "sepia", "now": f"{gi_}/x.dds"},
                     "flag_no_size": {"from": "un_part/emblem", "layout": "flag", "now": f"{gi_}/x.dds"},
+                    # Drawn outright: due at once, since it depends on nothing.
+                    "drawn": {"drawn": True, "marks": [{"draw": "trend", "dir": "up", "count": 3}],
+                              "now": f"{gi_}/x.dds"},
+                    "drawn_no_marks": {"drawn": True, "now": f"{gi_}/x.dds"},
+                    "drawn_from": {"drawn": True, "from": "un_part/emblem", "now": f"{gi_}/x.dds",
+                                   "marks": [{"draw": "star"}]},
+                    "drawn_icon_mark": {"drawn": True, "now": f"{gi_}/x.dds",
+                                        "marks": [{"icon": f"{gi_}/red_cross.dds"}]},
                 },
             }
             r = ip.check(tempfile.mkdtemp(), on_disk=set())
@@ -80,8 +88,10 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(sorted(r["bad_entry"]), [
             ("un_disc", "bad_from"), ("un_disc", "bad_mark"), ("un_disc", "from_derived"),
             ("un_disc", "no_now"), ("un_disc", "part_not_a_part"),
-            ("un_member", "bad_tint"), ("un_member", "flag_no_size")])
-        self.assertEqual(sorted(r["missing_dds"]), [("un_disc", "agency_a"), ("un_member", "member")])
+            ("un_member", "bad_tint"), ("un_member", "drawn_from"), ("un_member", "drawn_icon_mark"),
+            ("un_member", "drawn_no_marks"), ("un_member", "flag_no_size")])
+        self.assertEqual(sorted(r["missing_dds"]), [("un_disc", "agency_a"), ("un_member", "drawn"),
+                                                    ("un_member", "member")])
         self.assertEqual(r["states"]["un_disc"]["derived"], 1)
 
     def test_check_flags_bad_entries(self):
@@ -859,6 +869,78 @@ class PanelStateTests(unittest.TestCase):
         finally:
             ip.ICONS, gi.MOD_ROOT, icon_render.vanilla_icons_dir = saved
             gi.ICONS = ip.ICONS
+
+    def test_bare_drawn_entry_is_its_marks_alone(self):
+        e = {"drawn": True, "now": "gfx/x.dds",
+             "marks": [{"draw": "trend", "dir": "down", "count": 3, "at": (0.5, 0.5), "scale": 1.0}]}
+        self.assertTrue(gi.is_derived(e))
+        self.assertEqual(gi.depends_on(e), [])                                # waits on nothing
+        im = np.asarray(gi.Finals(Path(tempfile.mkdtemp())).derived(e, 0)).astype(int)
+        self.assertEqual(im[0, 0, 3], 0)                                      # no disc behind it
+        r, g, b, a = im[75, 60]
+        self.assertEqual(a, 255)
+        self.assertGreater(r, g + 60)                                         # red
+
+    def test_entity_category_derived_entry_is_checked_and_wired(self):
+        """A "no X" law: X's icon under the prohibition ring, wired like a render."""
+        root = Path(tempfile.mkdtemp())
+        (root / "common" / "laws").mkdir(parents=True)
+        (root / "common" / "laws" / "x.txt").write_text(
+            'law_x = {\n\ticon = "gfx/old.dds"\n}\nlaw_no_x = {\n\ticon = "gfx/old.dds"\n}\n')
+        ring = [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]
+        saved = (ip.ICONS, gi.MOD_ROOT)
+        try:
+            ip.ICONS = gi.ICONS = {"law": {"law_x": {"subject": "a bell", "seed": 0},
+                                           "law_no_x": {"from": "law/law_x", "base": {"scale": 0.72}, "marks": ring},
+                                           "law_no_y": {"from": "law/law_x", "marks": [{"draw": "spiral"}]}}}
+            r = ip.check(str(root), on_disk=set())
+            self.assertEqual(r["bad_entry"], [("law", "law_no_y")])          # an unknown drawn mark
+            self.assertEqual(r["unknown"], [("law", "law_no_y")])
+            del ip.ICONS["law"]["law_no_y"]
+            gi.MOD_ROOT = root
+            for key in ("law_x", "law_no_x"):
+                (root / ip.icon_path("law", key)).parent.mkdir(parents=True, exist_ok=True)
+                (root / ip.icon_path("law", key)).write_bytes(b"DDS ")
+            gi.stage_wire("law", set(), dry_run=False)
+            text = (root / "common" / "laws" / "x.txt").read_text()
+            self.assertIn(f'icon = "{ip.icon_path("law", "law_no_x")}"', text)
+        finally:
+            ip.ICONS, gi.MOD_ROOT = saved
+            gi.ICONS = ip.ICONS
+
+    def test_use_of_an_unwritten_sibling_waits(self):
+        """Tiers 2-5 of a principle use tier 1's icon: not wired before it is written."""
+        root = Path(tempfile.mkdtemp())
+        (root / "common" / "power_bloc_principles").mkdir(parents=True)
+        f = root / "common" / "power_bloc_principles" / "p.txt"
+        f.write_text('principle_a_1 = {\n\ticon = "gfx/old.dds"\n}\nprinciple_a_2 = {\n\ticon = "gfx/old.dds"\n}\n')
+        saved = (ip.ICONS, gi.MOD_ROOT)
+        try:
+            tier1 = ip.icon_path("principle", "principle_a_1")
+            ip.ICONS = gi.ICONS = {"principle": {"principle_a_1": {"subject": "a cart", "seed": None},
+                                                 "principle_a_2": {"use": tier1}}}
+            gi.MOD_ROOT = root
+            gi.stage_wire("principle", set(), dry_run=False)
+            self.assertNotIn(tier1, f.read_text())
+            (root / tier1).parent.mkdir(parents=True)
+            (root / tier1).write_bytes(b"DDS ")
+            gi.stage_wire("principle", set(), dry_run=False)
+            self.assertIn(f'principle_a_2 = {{\n\ticon = "{tier1}"', f.read_text())
+        finally:
+            ip.ICONS, gi.MOD_ROOT = saved
+            gi.ICONS = ip.ICONS
+
+    def test_trend_arrow_stacks_its_heads(self):
+        import icon_render
+        down = np.asarray(icon_render.trend_arrow(150, "down", "red", 3))[..., 3]
+        up = np.asarray(icon_render.trend_arrow(150, "up", "red", 3))[..., 3]
+        rows = np.flatnonzero(down.max(axis=1) > 128)
+        self.assertGreater(down[rows[0] + 2, 20], 128)                        # down: wide at the top
+        self.assertEqual(down[rows[-1] - 2, 20], 0)                           # narrow at the bottom
+        self.assertLess(np.abs(up.astype(int) - down[::-1].astype(int)).max(), 40)  # up mirrors down
+        # Three heads: the centre column crosses three dark rims between the lit faces.
+        col = np.asarray(icon_render.trend_arrow(150, "down", "red", 3))[rows[0]:rows[-1], 60, 0] > 120
+        self.assertEqual(int(np.sum(col[1:] & ~col[:-1])) + int(col[0]), 3)
 
 
 class RestyleTests(unittest.TestCase):

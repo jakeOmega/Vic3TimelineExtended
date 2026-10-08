@@ -41,7 +41,8 @@ icon), "rotate" (degrees) and, for a part, "tint". The system panels' states
 "damage" "crack"|"split" (FLUX will not break things), "tilt" (a lean about
 its foot), "turn" (about its centre), "base" {"scale", "at"} (the emblem
 shrunk and placed), and "disc" in place of "from": drawn outright on a disc
-of its own colours (the warming tiers). "solid": True fills back any hole the cut-out left inside the
+of its own colours (the warming tiers). "drawn": True in place of either is
+a bare canvas holding only its drawn marks (banking momentum's triple arrows). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
 objects with no real holes. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
@@ -138,6 +139,14 @@ UN_STYLE = ("{subject}, one compact bold object filling the frame, simple chunky
 ORBIT = ("{subject}, seen from close by in orbit, filling most of the picture, the curved blue edge of the "
          "Earth below it and black starry space above, detailed painted illustration, warm golden sunlight, "
          "muted palette")
+
+# Company logos (256 px, CompanyType.GetIcon). Vanilla's basic industries and
+# historical companies are emblem badges seen straight on: an illustration of
+# the trade inside a frame, each frame its own. Vanilla's span 0.91-1.00 of
+# the side (median 0.97 for the basic industries, 0.93 for the historical).
+EMBLEM = ("a vintage company emblem badge seen straight on: {subject}, painted on a dark slate-blue enamel disc "
+          "inside an ornate bronze frame with scrollwork, detailed painterly illustration with visible brush "
+          "strokes, muted warm colours, blank unmarked surfaces, centered, isolated on a plain white background")
 
 # The system panels whose GUI icons come from here (the style pass,
 # #573-#583): registry prefix -> folder under gfx/interface/icons/, and the
@@ -351,6 +360,38 @@ CATEGORIES = {
                     "nebula clouds and many fine stars, the curved blue-lit edge of a planet across the "
                     "lower third, no objects, no spacecraft, stylized hand-painted video game background "
                     "art with visible brush strokes")),
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # Power bloc principles (210 px, PowerBlocPrinciple.GetIcon): painted
+    # objects on transparency, one per group, which all its tiers share.
+    # Vanilla's span 0.72-0.85 of the side (median 0.79).
+    "principle": dict(
+        folder="principles_icons", size=210, mode="cutout", fill=0.79,
+        entity_dir="common/power_bloc_principles", field="icon",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # Basic industries (company_basic_*): written to company_icons/ beside vanilla's basic_*.
+    "company": dict(
+        folder="company_icons", size=256, mode="cutout", fill=0.96, grade_strength=0.5,
+        entity_dir="common/company_types", field="icon", style=EMBLEM),
+    # Historical companies that showed gen_placeholder_company_icons.py's
+    # PLACEHOLDER card. GUI-hosted in effect: each company and its flagship
+    # building already point at historical_company_icons/<key>.dds, so the key
+    # is the file name, `now` is the card being replaced, and writing the file
+    # is the whole change (gui=(): no .gui file draws them).
+    "company_logo": dict(
+        folder="company_icons/historical_company_icons", size=256, mode="cutout", fill=0.93, grade_strength=0.5,
+        grade_folder="company_icons/historical_company_icons", gui=(), style=EMBLEM),
+    # The sidebar's small buttons (main_hud/*_btn.dds, 76 px, drawn at 42x40 by
+    # sidepanel_button_small): vanilla's are painted single objects on
+    # transparency (a book, a globe, coins), spanning ~0.7 of the side. The
+    # Timeline Extended window's launcher is the mod's only one
+    # (docs/systems/te_systems_window_gui_icons.md); its brief asked for gold
+    # line art, but vanilla's buttons are painted, so it is painted too.
+    # main_hud also holds the top bar and speedometer art, so grading follows
+    # event_icons' painted objects instead.
+    "sidebar_button": dict(
+        folder="main_hud", root="gfx/interface", size=76, mode="cutout", fill=0.74, grade_strength=0.5,
+        grade_folder="event_icons", neighbours="../main_hud",
+        gui=("gui/te_systems_window.gui",),
         style="{subject}, one chunky readable object, " + PAINTED),
     # The UN's journal and Diplomacy-tab GUI (docs/systems/un_gui_icons.md):
     # icons that belong to no game entity, only to a `texture =` line in a .gui
@@ -645,6 +686,13 @@ ICONS: dict[str, dict[str, dict]] = {
         "enforce_emissions_reduction": {"subject": "a factory chimney with a big green cork stopper in its top", "seed": 0},
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
+        # The monetary articles, on law icons until now.
+        # Owner picks (2026-10-07): the $ on a coin is unreadable at icon size.
+        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": 0},
+        "imposed_currency_peg": {"subject": "a small copper coin chained to a big gold coin by a heavy iron chain with a closed iron padlock on it", "seed": 2},
+        "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": 1},
+        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 2},
+        "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": 1},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -691,6 +739,48 @@ ICONS: dict[str, dict[str, dict]] = {
         # Mod-added buildings on another building's (or a good's) icon. Company
         # buildings are left out: flagships carry their company's own logo by
         # design (docs/vanilla/vanilla_company_buildings_reference.md).
+        # Except the generic flagships of the basic company types, which all
+        # sat on vanilla's skyscraper.dds: their companies' logos are the basic
+        # industry icons, shared by several companies, so each gets a painting
+        # of what it does. Not the eleven retired ones the monthly cleanup removes.
+        # Skipped for lettering or watermarks: rd_complex s0, granary s0, vintner s1, lumber s1.
+        "building_generic_rd_complex": {"subject": "a modern research campus of glass-walled laboratory buildings around a green courtyard, a small satellite dish on one roof", "seed": 1},
+        "building_generic_logistics_hub": {"subject": "a large logistics warehouse complex with rows of loading docks, parked lorries and stacked shipping containers", "seed": 1},
+        "building_generic_industrial_zone": {"subject": "a cluster of factory halls with sawtooth roofs, pipe racks and small chimneys, linked by roads and a rail spur", "seed": 0},
+        "building_generic_materials_lab": {"subject": "a materials research laboratory with a domed furnace building and racks of shiny metal sheets and carbon-fibre rolls outside", "seed": 0},
+        "building_generic_robotics_institute": {"subject": "a modern institute building with tall windows showing orange industrial robot arms at work inside, a test yard beside it", "seed": 0},
+        "building_generic_data_fortress": {"subject": "a low fortified concrete data centre bunker with rows of cooling fans on its roof inside a high security fence", "seed": 1},
+        "building_generic_media_hq": {"subject": "a modern media headquarters tower with large satellite dishes and broadcast antennas on its roof", "seed": 0},
+        "building_generic_power_hub": {"subject": "a compact modern power station with a substation yard of transformers and high-voltage pylons leading away", "seed": 0},
+        "building_generic_proving_grounds": {"subject": "a military proving ground in open scrubland, a concrete observation bunker beside a dirt test track with a tank on it", "seed": 1},
+        "building_generic_resource_depository": {"subject": "a fortified depository of low concrete vaults with heavy steel doors, beside heaps of ore and stacks of metal ingots", "seed": 1},
+        "building_generic_granary_complex": {"subject": "a grain storage complex of tall round concrete silos beside a rail siding, golden wheat fields around it", "seed": 1},
+        # Round 1 showed no cloth.
+        "building_generic_textile_depot": {"subject": "a brick textile warehouse whose yard is crossed by long lines hung with bolts of bright red, blue and yellow cloth drying in the sun, round dyeing vats beside them", "seed": None},
+        "building_generic_cold_storage": {"subject": "a large windowless refrigerated warehouse with insulated walls, lorries backed up to its loading bays", "seed": 1},
+        "building_generic_paper_mill_complex": {"subject": "a pulp and paper mill beside a river, with log piles, a tall chimney and big rolls of paper stacked in the yard", "seed": 1},
+        "building_generic_foundry_complex": {"subject": "a sprawling steel foundry with blast furnaces, molten metal glowing orange and tall smoking chimneys", "seed": 0},
+        "building_generic_machine_shop": {"subject": "a large brick machine shop with big windows, lathes visible inside and heaps of gears and machine parts in the yard", "seed": 0},
+        "building_generic_chem_works": {"subject": "a chemical works with tall distillation columns, spherical storage tanks and tangled pipework", "seed": 0},
+        "building_generic_tank_farm": {"subject": "an oil tank farm with rows of large round storage tanks joined by pipelines, a small refinery tower beside them", "seed": 0},
+        "building_generic_ordnance_depot": {"subject": "a military ordnance depot of earth-covered concrete bunkers behind barbed wire, crates of shells stacked outside", "seed": 0},
+        "building_generic_motor_works": {"subject": "a motor vehicle factory with a long assembly hall and rows of new cars parked in its yard", "seed": 0},
+        "building_generic_dry_dock": {"subject": "a large dry dock with a steel ship hull inside it, tall cranes standing over it at the waterside", "seed": 0},
+        "building_generic_arsenal": {"subject": "a fortified brick arsenal with crenellated walls, cannons and stacked weapon crates in its courtyard", "seed": 0},
+        "building_generic_fish_market": {"subject": "a harbourside fish market hall with fishing boats moored at its quay and crates of fish on the stones", "seed": 1},
+        "building_generic_colonial_depot": {"subject": "a colonial trading depot of whitewashed warehouses with a veranda, tea chests and bales stacked on a wharf", "seed": 0},
+        "building_generic_export_warehouse": {"subject": "a bonded export warehouse on a riverside quay, sacks of coffee and bales of cotton being loaded onto a cargo ship", "seed": 1},
+        "building_generic_electronics_lab": {"subject": "a modern electronics laboratory building with a radio mast on its roof and rows of lit windows", "seed": 0},
+        # Round 1: ASSAY OFFICE on the facade (s0), a watermark (s1).
+        "building_generic_assay_office": {"subject": "a squat solid stone strongroom building with barred windows and a heavy iron door, a small wooden cart loaded with gold bullion bars at its door, blank unmarked walls", "seed": None},
+        "building_generic_ore_processing": {"subject": "an ore processing plant with crushers, conveyor belts and heaps of crushed ore beside a smelter chimney", "seed": 0},
+        "building_generic_mineral_refinery": {"subject": "a mineral refinery with tall leaching tanks, conveyor belts and heaps of white and yellow mineral powder", "seed": 0},
+        "building_generic_silk_exchange": {"subject": "an East Asian trading house with curved tiled roofs, bales of raw silk and dyed silk cloth stacked outside", "seed": 0},
+        "building_generic_vintner_hall": {"subject": "a stone winery hall among vineyards, rows of oak barrels outside and grape vines on the hillside", "seed": 0},
+        # Round 1: EMPORIUM (s0) and a lettered plaque (s1).
+        "building_generic_furniture_showroom": {"subject": "a two-storey brick furniture workshop with tall plain glass windows showing chairs and tables inside, stacked timber planks in the yard behind it, blank unmarked walls", "seed": None},
+        "building_generic_lumber_yard": {"subject": "an industrial sawmill and timber yard with stacks of sawn planks and piles of logs beside a river", "seed": 0},
+        "building_generic_dye_fiber_park": {"subject": "a campus of small laboratories and pilot plants with pipes and tanks, spools of brightly dyed fibre in the yard", "seed": 1},
         # Wonders: the landmark alone, as vanilla draws its monuments.
         "building_wonder_golden_gate_bridge": {"subject": "the Golden Gate Bridge, its red-orange suspension towers and cables spanning a blue strait between green headlands, a little fog rolling in", "seed": 0},
         "building_wonder_empire_state_building": {"subject": "the Empire State Building, a limestone Art Deco skyscraper with stepped setbacks and a slender mast, towering over Manhattan's city blocks", "seed": 0},
@@ -911,6 +1001,49 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": 1},
         # s1 is retouched: hull number, bow emblems and truck lettering painted out.
         "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 1},
+        # Resource Transition (#660): subjects from the spec's placeholders audit.
+        "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
+        "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
+        "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
+        # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
+        "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
+        "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
+        "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": 0},
+        # Round 1's round doors read as portholes: show the gold behind.
+        "law_national_bank": {"subject": "a heavy round steel bank vault door swung half open, stacks of gold bars inside the vault behind it", "seed": None},
+        # Culture s0 has a signature and s1 lettering; commerce s1 a signature; secrecy s1 a W seal.
+        "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": 2},
+        "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": 1},
+        "law_ministry_of_intelligence_and_security": {"subject": "a brass spyglass lying across a locked steel strongbox", "seed": 2},
+        "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": 2},
+        "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": 1},
+        "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": 1},
+        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": 0},
+        # Round 1's round shield read as a plate or a mirror.
+        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": None},
+        "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": 1},
+        "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": 1},
+        "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": 2},
+        # The "no ministry" laws all shared one picture too. Vanilla draws a "no X"
+        # law as X inside its prohibition ring (no police, no schools): each is
+        # its ministry's icon, shrunk, under the ring lifted from no_police.dds.
+        # Not No Ministry of Labor: its ministry keeps an older picture of its own.
+        **{f"law_no_{m}": {"from": f"law/law_{m}", "base": {"scale": 0.78},
+                           "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]}
+           for m in ("ministry_of_foreign_affairs", "ministry_of_war", "ministry_of_commerce", "national_bank",
+                     "ministry_of_culture", "ministry_of_the_environment", "ministry_of_intelligence_and_security",
+                     "ministry_of_refugee_affairs", "ministry_of_propaganda", "ministry_of_science",
+                     "ministry_of_thought_control", "ministry_of_consumer_protection", "ministry_of_urban_planning",
+                     "ministry_of_religion", "ministry_of_international_aid")},
+        # Six pairs of unrelated laws had byte-identical files (spec, mod placeholders
+        # audit): the law whose old picture fits worse gets its own.
+        "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": 2},
+        # Round 1 stamped a B on every coin (one with a lettered tag): a block chain, no coins.
+        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": None},
+        "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": 1},
+        "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": 0},
+        "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": 2},
+        "law_protected_class": {"subject": "a level balance scale with a man's top hat in one pan and a woman's bonnet in the other", "seed": 1},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1083,8 +1216,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_state_collapse": {"subject": "a single weathered stone column with its top half fallen and lying broken in rubble at its base", "seed": 0},
         "je_create_new_religion": {"subject": "a plain grey stone altar block with a lit red candle on top and a brass bowl beside it", "seed": 0},
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
-        # Legislated tax code (plan Task 7): on vanilla's event_scales.dds until reviewed.
-        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": None},
+        # Legislated tax code: s1 stamped a coin with $ and s3 with a rouble sign.
+        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": 2},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon
@@ -1103,6 +1236,145 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 1},
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
+    },
+    # Mod principle groups on one of four vanilla icons (spec, mod placeholders
+    # audit). One picture per group, as vanilla gives; tiers 2-5 use tier 1's.
+    "principle": {
+        "principle_artistic_expression_1": {"subject": "a wooden painter's easel holding a small colourful landscape canvas, a palette and brushes at its foot", "seed": 1},
+        "principle_artistic_expression_2": {"use": f"{_GI}/principles_icons/principle_artistic_expression_1.dds"},
+        "principle_artistic_expression_3": {"use": f"{_GI}/principles_icons/principle_artistic_expression_1.dds"},
+        "principle_artistic_expression_4": {"use": f"{_GI}/principles_icons/principle_artistic_expression_1.dds"},
+        "principle_artistic_expression_5": {"use": f"{_GI}/principles_icons/principle_artistic_expression_1.dds"},
+        "principle_cultural_plurality_1": {"subject": "a folded patchwork quilt of many differently coloured and patterned squares", "seed": 1},
+        "principle_cultural_plurality_2": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
+        "principle_cultural_plurality_3": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
+        "principle_cultural_plurality_4": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
+        "principle_cultural_plurality_5": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
+        "principle_cultural_unity_1": {"subject": "many differently coloured threads braided together into one thick rope, coiled", "seed": 0},
+        "principle_cultural_unity_2": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
+        "principle_cultural_unity_3": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
+        "principle_cultural_unity_4": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
+        "principle_cultural_unity_5": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
+        "principle_diplomacy_1": {"subject": "a rolled parchment treaty scroll with two red wax seals, a feather quill and an inkwell beside it", "seed": 0},
+        "principle_diplomacy_2": {"use": f"{_GI}/principles_icons/principle_diplomacy_1.dds"},
+        "principle_diplomacy_3": {"use": f"{_GI}/principles_icons/principle_diplomacy_1.dds"},
+        "principle_diplomacy_4": {"use": f"{_GI}/principles_icons/principle_diplomacy_1.dds"},
+        "principle_diplomacy_5": {"use": f"{_GI}/principles_icons/principle_diplomacy_1.dds"},
+        "principle_education_1": {"subject": "a small brass desk globe standing on a stack of three leather-bound school books, a wooden ruler leaning on them", "seed": 0},
+        "principle_education_2": {"use": f"{_GI}/principles_icons/principle_education_1.dds"},
+        "principle_education_3": {"use": f"{_GI}/principles_icons/principle_education_1.dds"},
+        "principle_education_4": {"use": f"{_GI}/principles_icons/principle_education_1.dds"},
+        "principle_education_5": {"use": f"{_GI}/principles_icons/principle_education_1.dds"},
+        "principle_engineering_and_logistics_1": {"subject": "a big steel gear wheel and a heavy wrench leaning against a stack of wooden shipping crates", "seed": 1},
+        "principle_engineering_and_logistics_2": {"use": f"{_GI}/principles_icons/principle_engineering_and_logistics_1.dds"},
+        "principle_engineering_and_logistics_3": {"use": f"{_GI}/principles_icons/principle_engineering_and_logistics_1.dds"},
+        "principle_engineering_and_logistics_4": {"use": f"{_GI}/principles_icons/principle_engineering_and_logistics_1.dds"},
+        "principle_engineering_and_logistics_5": {"use": f"{_GI}/principles_icons/principle_engineering_and_logistics_1.dds"},
+        "principle_environmental_sustainability_1": {"subject": "a small white wind turbine beside a young green tree on a grassy mound", "seed": 1},
+        "principle_environmental_sustainability_2": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
+        "principle_environmental_sustainability_3": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
+        "principle_environmental_sustainability_4": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
+        "principle_environmental_sustainability_5": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
+        # Round 1's round shield drew a porthole: a helmet on a globe instead.
+        "principle_global_security_1": {"subject": "an empty light-blue steel army helmet resting on top of a small globe of the Earth with green continents and blue oceans", "seed": None},
+        "principle_global_security_2": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
+        "principle_global_security_3": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
+        "principle_global_security_4": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
+        "principle_global_security_5": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
+        "principle_healthcare_1": {"subject": "a brass mortar and pestle with green herbs, beside a roll of bandage and a small glass vial", "seed": 1},
+        "principle_healthcare_2": {"use": f"{_GI}/principles_icons/principle_healthcare_1.dds"},
+        "principle_healthcare_3": {"use": f"{_GI}/principles_icons/principle_healthcare_1.dds"},
+        "principle_healthcare_4": {"use": f"{_GI}/principles_icons/principle_healthcare_1.dds"},
+        "principle_healthcare_5": {"use": f"{_GI}/principles_icons/principle_healthcare_1.dds"},
+        "principle_military_training_1": {"subject": "a pair of worn brown army boots beside an empty steel helmet and a coiled climbing rope", "seed": 1},
+        "principle_military_training_2": {"use": f"{_GI}/principles_icons/principle_military_training_1.dds"},
+        "principle_military_training_3": {"use": f"{_GI}/principles_icons/principle_military_training_1.dds"},
+        "principle_military_training_4": {"use": f"{_GI}/principles_icons/principle_military_training_1.dds"},
+        "principle_military_training_5": {"use": f"{_GI}/principles_icons/principle_military_training_1.dds"},
+        "principle_monetary_union_1": {"subject": "an open wooden strongbox full of identical gold coins each stamped with a small star", "seed": 1},
+        "principle_monetary_union_2": {"use": f"{_GI}/principles_icons/principle_monetary_union_1.dds"},
+        "principle_monetary_union_3": {"use": f"{_GI}/principles_icons/principle_monetary_union_1.dds"},
+        "principle_monetary_union_4": {"use": f"{_GI}/principles_icons/principle_monetary_union_1.dds"},
+        "principle_monetary_union_5": {"use": f"{_GI}/principles_icons/principle_monetary_union_1.dds"},
+        "principle_multilateral_institutions_1": {"subject": "a round marble rotunda building with a dome and a ring of columns", "seed": 1},
+        "principle_multilateral_institutions_2": {"use": f"{_GI}/principles_icons/principle_multilateral_institutions_1.dds"},
+        "principle_multilateral_institutions_3": {"use": f"{_GI}/principles_icons/principle_multilateral_institutions_1.dds"},
+        "principle_multilateral_institutions_4": {"use": f"{_GI}/principles_icons/principle_multilateral_institutions_1.dds"},
+        "principle_multilateral_institutions_5": {"use": f"{_GI}/principles_icons/principle_multilateral_institutions_1.dds"},
+        "principle_rural_1": {"subject": "a wooden farm cart loaded with hay bales, a pitchfork leaning against its wheel", "seed": 1},
+        "principle_rural_2": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
+        "principle_rural_3": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
+        "principle_rural_4": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
+        "principle_rural_5": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
+        # Round 1's cut-out lost the townhouses behind the tram: the tram alone.
+        "principle_urban_planning_1": {"subject": "a chunky red and cream city tram car on a short stretch of rails", "seed": None},
+        "principle_urban_planning_2": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
+        "principle_urban_planning_3": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
+        "principle_urban_planning_4": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
+        "principle_urban_planning_5": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
+        "principle_welfare_1": {"subject": "a wicker basket holding a loaf of bread, apples and a jug of milk", "seed": 0},
+        "principle_welfare_2": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
+        "principle_welfare_3": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
+        "principle_welfare_4": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
+        "principle_welfare_5": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
+    },
+    # The nine new basic industries, on vanilla basic_* icons until now (spec, mod placeholders audit).
+    "company": {
+        "company_basic_entertainment": {"subject": "a vintage movie camera on a short tripod with two round film reels on top", "seed": 1},
+        "company_basic_power": {"subject": "a tall steel electricity pylon carrying power lines, a bright yellow lightning bolt above it", "seed": 1},
+        "company_basic_electronics": {"subject": "a vintage wooden valve radio set with a glowing amber dial", "seed": 1},
+        "company_basic_aerospace": {"subject": "a silver jet airliner climbing beside a slender rocket on its launch tower", "seed": 1},
+        "company_basic_software": {"subject": "a beige desktop computer with a dark screen glowing green and a keyboard in front of it", "seed": 1},
+        "company_basic_advanced_materials": {"subject": "a gleaming hexagonal honeycomb lattice of grey carbon atoms over a roll of black carbon-fibre cloth", "seed": 1},
+        "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": 1},
+        "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": 1},
+        "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
+    },
+    # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
+    # Interim for the seventeen real companies: the owner may draw their real logos (2026-10-07); drop an
+    # entry when its company's logo replaces the file. The Rosen Association's (fictional) is final.
+    "company_logo": {
+        "british_rolls_royce": {"subject": "a gleaming silver aircraft jet engine seen from the front, its fan blades spread", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/british_rolls_royce.dds"},
+        "british_bp": {"subject": "an offshore oil platform standing in a green sea under a round yellow sun", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/british_bp.dds"},
+        "german_bayer": {"subject": "a glass laboratory flask of bright green liquid beside a scatter of round pills", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/german_bayer.dds"},
+        "german_thyssen": {"subject": "a steel mill ladle pouring a stream of glowing orange molten steel", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/german_thyssen.dds"},
+        "american_boeing": {"subject": "a silver jet airliner climbing into a blue sky", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/american_boeing.dds"},
+        "french_renault": {"subject": "a dark blue vintage motor car with large spoked wheels, seen from the side", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/french_renault.dds"},
+        "french_michelin": {"subject": "a neat stack of three black rubber tyres", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/french_michelin.dds"},
+        "italian_pirelli": {"subject": "a coil of thick black rubber electrical cable beside a single black car tyre", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/italian_pirelli.dds"},
+        "british_jardine_matheson": {"subject": "a tall clipper sailing ship with full sails on a green sea, tea chests stacked on its deck", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/british_jardine_matheson.dds"},
+        "japanese_sumitomo_besshi": {"subject": "a copper mine entrance in a forested mountainside, a mine cart of reddish copper ore on rails in front", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/japanese_sumitomo_besshi.dds"},
+        "american_genentech": {"subject": "a twisting DNA double helix model in blue and gold", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/american_genentech.dds"},
+        "american_monsanto": {"subject": "a cob of golden maize with green husks beside a glass chemical flask", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/american_monsanto.dds"},
+        "danish_novo_nordisk": {"subject": "a small glass medicine vial with a blue cap beside a slim syringe", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/danish_novo_nordisk.dds"},
+        "japanese_ajinomoto": {"subject": "a red lacquered bowl of steaming soup broth with a pair of chopsticks resting across it", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/japanese_ajinomoto.dds"},
+        "indian_biocon": {"subject": "a glass laboratory fermenter tank of green liquid full of bubbles", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/indian_biocon.dds"},
+        "chinese_bgi": {"subject": "a metal rack of glass sample tubes filled with colourful liquids", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/chinese_bgi.dds"},
+        "german_biontech": {"subject": "a spiky round red and grey virus particle model beside a glass vaccine vial with an orange cap", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/german_biontech.dds"},
+        "scifi_rosen_association": {"subject": "a lifelike artificial owl made of brass and glass, its eyes glowing amber", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/scifi_rosen_association.dds"},
+    },
+    # The Timeline Extended window's launcher, on vanilla's Journal button until now.
+    "sidebar_button": {
+        "te_systems_window_btn": {"subject": "a small brass hourglass, its upper glass bulb holding a blue globe of the Earth with green continents, its lower bulb a small silver rocket pointing up", "seed": 1,
+                                  "now": "gfx/interface/main_hud/journal_btn.dds"},
     },
     # The UN's GUI icons (docs/systems/un_gui_icons.md). Keys are the file
     # names. `now` is the vanilla placeholder the .gui drew before them. Symbols on the blue disc are warm or light, for contrast.
@@ -1131,6 +1403,13 @@ ICONS: dict[str, dict[str, dict]] = {
                        "now": f"{_GI}/institution_icons/police.dds"},
         "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": 0,
                          "now": f"{_GI}/goods_icons/explosives.dds"},
+        # Phase 7 agencies, until now byte copies (CCD of UNESCO, TPNW of IAEA, INCB of WHO).
+        "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": 1,
+                       "now": f"{_GI}/goods_icons/fine_art.dds"},
+        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 0,
+                        "now": f"{_GI}/goods_icons/electricity.dds"},
+        "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
+                        "now": f"{_GI}/institution_icons/health_service.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
         # War, condemned: the mandate's crossed swords under vanilla's red cross.
         # A lone sword was too thin at 40 px, and a gauntlet read as a mug.
@@ -1173,7 +1452,34 @@ ICONS: dict[str, dict[str, dict]] = {
                ("heritage", "unesco", f"{_GI}/goods_icons/fine_art.dds"),
                ("space", "unoosa", f"{_GI}/goods_icons/aeroplanes.dds"),
                ("law_of_sea", "itlos", f"{_GI}/goods_icons/merchant_marine.dds"),
-               ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"))},
+               ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"),
+               ("cultural_diversity", "ccd", f"{_GI}/goods_icons/fine_art.dds"),
+               ("nuclear_ban", "tpnw", f"{_GI}/goods_icons/electricity.dds"),
+               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
+        # Phase 7 topics that are no agency's, until now byte copies of older topics.
+        # Round 1 drew a clock and a box under the map, no scales: name the two pans.
+        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": None,
+                                 "now": f"{_GI}/institution_icons/police.dds"},
+        # Round 1's olive shells read as barrels and drums: a pointed brass shell.
+        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": None,
+                               "now": f"{_GI}/alert_icons/blockaded.dds"},
+        # Suspended credentials: the folder under vanilla's red cross, as Condemn is the mandate under it.
+        "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": 0,
+                              "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
+                              "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
+        "topic_standing_force": {"subject": "three empty light-blue steel army helmets in a row, seen from the side", "seed": 1,
+                                 "now": f"{_GI}/goods_icons/small_arms.dds"},
+        "topic_observer_request": {"subject": "a pair of black binoculars resting on top of a small dark wooden box with a slot in its lid", "seed": 1,
+                                   "now": f"{_GI}/institution_icons/social_security.dds"},
+        "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": 1,
+                               "now": f"{_GI}/goods_icons/groceries.dds"},
+        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": 1,
+                            "now": f"{_GI}/alert_icons/land_invasion.dds"},
+        "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": 2,
+                                   "now": f"{_GI}/goods_icons/groceries.dds"},
+        # Round 1 drew open chests: a closed box with a lock and a slot.
+        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": None,
+                             "now": f"{_GI}/alert_icons/secession.dds"},
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.
     "un_tier": {
@@ -1589,6 +1895,15 @@ ICONS.update({
                               marks=[{"draw": "arrow", "dir": "up", "colour": "red", "double": True, "scale": 0.58},
                                      {"part": "banking_part/coin", "at": (0.2, 0.86), "scale": 0.22},
                                      {"part": "banking_part/coin", "at": (0.36, 0.9), "scale": 0.2}]),
+        # Momentum's outer bands (#812): vanilla's arrows stop at the double, so
+        # Freefall and Overheating get a third head, drawn in vanilla's faceted
+        # style and red, the overview's colour for the extremes.
+        "momentum_freefall": {"drawn": True, "now": f"{_GI}/generic_icons/down_down.dds",
+                              "marks": [{"draw": "trend", "dir": "down", "colour": "red", "count": 3,
+                                         "at": (0.5, 0.5), "scale": 1.0}]},
+        "momentum_overheating": {"drawn": True, "now": f"{_GI}/generic_icons/trend_upup.dds",
+                                 "marks": [{"draw": "trend", "dir": "up", "colour": "red", "count": 3,
+                                            "at": (0.5, 0.5), "scale": 1.0}]},
         "bubble_low": _bubble(f"{_GI}/generic_icons/green_checkmark.dds", 0.5, "green"),
         "bubble_building": _bubble(f"{_GI}/generic_icons/maybe_icon.dds", 0.6, "white"),
         "bubble_elevated": _bubble(f"{_TM}/modifier_coins_negative.dds", 0.72, "yellow"),
@@ -1917,7 +2232,7 @@ LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
                "disc", "shield", "dome", "link", "rays", "eyelid",
-               "arrows_in")
+               "arrows_in", "trend", "prohibition")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
@@ -1956,8 +2271,9 @@ def _style_ok(style) -> bool:
 
 
 def _is_derived(entry: dict) -> bool:
-    """Built on another entry's icon ("from") or drawn on a disc ("disc"): no render of its own."""
-    return "from" in entry or "disc" in entry
+    """Built on another entry's icon ("from"), drawn on a disc ("disc") or drawn outright ("drawn"):
+    no render of its own."""
+    return "from" in entry or "disc" in entry or bool(entry.get("drawn"))
 
 
 def _depends_on(entry: dict) -> list[tuple[str, str]]:
@@ -1995,13 +2311,21 @@ def _marks_ok(marks) -> bool:
 
 
 def _derived_ok(spec: dict, entry: dict) -> bool:
-    """A derived entry: GUI-hosted, built on a rendered entry or a drawn disc, with a known tint, damage and layout."""
-    if "gui" not in spec:
-        return False
+    """A derived entry: built on a rendered entry or a drawn disc, with a known tint, damage and layout.
+
+    GUI-hosted categories have them for states of one emblem; an entity
+    category for an entity drawn as another's icon reworked (vanilla's "no X"
+    laws, X under a prohibition ring).
+    """
     if "disc" in entry:
         disc = entry["disc"]
         if "from" in entry or not all(isinstance(disc.get(k), tuple) and len(disc[k]) == 3
                                       for k in ("centre", "edge", "rim_light", "rim_dark")):
+            return False
+    elif entry.get("drawn"):
+        # Marks on a bare canvas: nothing to draw them on but the marks themselves.
+        if "from" in entry or entry["drawn"] is not True or not entry.get("marks") \
+                or any("draw" not in m for m in entry["marks"]):
             return False
     else:
         src = _ref(entry["from"])

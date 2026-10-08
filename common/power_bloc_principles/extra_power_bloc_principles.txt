@@ -1651,7 +1651,7 @@ principle_ideological_truth_5 = {
 ### Cultural Unity
 
 principle_cultural_unity_1 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_unity_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -1699,7 +1699,7 @@ principle_cultural_unity_1 = {
 }
 
 principle_cultural_unity_2 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_unity_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -1733,7 +1733,7 @@ principle_cultural_unity_2 = {
 }
 
 principle_cultural_unity_3 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_unity_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -1769,7 +1769,7 @@ principle_cultural_unity_3 = {
 }
 
 principle_cultural_unity_4 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_unity_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -1815,7 +1815,7 @@ principle_cultural_unity_4 = {
 }
 
 principle_cultural_unity_5 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_unity_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -1864,7 +1864,7 @@ principle_cultural_unity_5 = {
 ### Cultural Plurality
 
 principle_cultural_plurality_1 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_plurality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -1911,7 +1911,7 @@ principle_cultural_plurality_1 = {
 }
 
 principle_cultural_plurality_2 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_plurality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -1936,7 +1936,7 @@ principle_cultural_plurality_2 = {
 }
 
 principle_cultural_plurality_3 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_plurality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -1968,7 +1968,7 @@ principle_cultural_plurality_3 = {
 }
 
 principle_cultural_plurality_4 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_plurality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2003,7 +2003,7 @@ principle_cultural_plurality_4 = {
 }
 
 principle_cultural_plurality_5 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_cultural_plurality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -2038,7 +2038,7 @@ principle_cultural_plurality_5 = {
 }
 
 principle_education_1 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_education_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -2084,7 +2084,7 @@ principle_education_1 = {
 }
 
 principle_education_2 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_education_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -2121,7 +2121,7 @@ principle_education_2 = {
 }
 
 principle_education_3 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_education_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -2158,7 +2158,7 @@ principle_education_3 = {
 }
 
 principle_education_4 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_education_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2210,7 +2210,7 @@ principle_education_4 = {
 }
 
 principle_education_5 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_education_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -2265,7 +2265,7 @@ principle_education_5 = {
 }
 
 principle_diplomacy_1 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_diplomacy_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -2292,7 +2292,7 @@ principle_diplomacy_1 = {
 }
 
 principle_diplomacy_2 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_diplomacy_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -2321,7 +2321,7 @@ principle_diplomacy_2 = {
 }
 
 principle_diplomacy_3 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_diplomacy_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -2355,7 +2355,7 @@ principle_diplomacy_3 = {
 }
 
 principle_diplomacy_4 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_diplomacy_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2395,7 +2395,7 @@ principle_diplomacy_4 = {
 }
 
 principle_diplomacy_5 = {
-	icon = "gfx/interface/icons/principles_icons/ideological_truth.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_diplomacy_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -2435,7 +2435,7 @@ principle_diplomacy_5 = {
 }
 
 principle_environmental_sustainability_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_environmental_sustainability_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -2472,7 +2472,7 @@ principle_environmental_sustainability_1 = {
 }
 
 principle_environmental_sustainability_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_environmental_sustainability_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -2499,7 +2499,7 @@ principle_environmental_sustainability_2 = {
 }
 
 principle_environmental_sustainability_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_environmental_sustainability_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -2528,7 +2528,7 @@ principle_environmental_sustainability_3 = {
 }
 
 principle_environmental_sustainability_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_environmental_sustainability_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2560,7 +2560,7 @@ principle_environmental_sustainability_4 = {
 }
 
 principle_environmental_sustainability_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_environmental_sustainability_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -2816,7 +2816,7 @@ principle_urban_planning_5 = {
 }
 
 principle_rural_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_rural_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -2877,7 +2877,7 @@ principle_rural_1 = {
 }
 
 principle_rural_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_rural_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -2911,7 +2911,7 @@ principle_rural_2 = {
 }
 
 principle_rural_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_rural_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -2950,7 +2950,7 @@ principle_rural_3 = {
 }
 
 principle_rural_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_rural_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2991,7 +2991,7 @@ principle_rural_4 = {
 }
 
 principle_rural_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_rural_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3227,7 +3227,7 @@ principle_global_security_5 = {
 }
 
 principle_healthcare_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -3266,7 +3266,7 @@ principle_healthcare_1 = {
 }
 
 principle_healthcare_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3290,7 +3290,7 @@ principle_healthcare_2 = {
 }
 
 principle_healthcare_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3316,7 +3316,7 @@ principle_healthcare_3 = {
 }
 
 principle_healthcare_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3347,7 +3347,7 @@ principle_healthcare_4 = {
 }
 
 principle_healthcare_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3379,7 +3379,7 @@ principle_healthcare_5 = {
 }
 
 principle_welfare_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_welfare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -3425,7 +3425,7 @@ principle_welfare_1 = {
 }
 
 principle_welfare_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_welfare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3452,7 +3452,7 @@ principle_welfare_2 = {
 }
 
 principle_welfare_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_welfare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3480,7 +3480,7 @@ principle_welfare_3 = {
 }
 
 principle_welfare_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_welfare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3514,7 +3514,7 @@ principle_welfare_4 = {
 }
 
 principle_welfare_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_welfare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3549,7 +3549,7 @@ principle_welfare_5 = {
 }
 
 principle_artistic_expression_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_artistic_expression_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -3583,7 +3583,7 @@ principle_artistic_expression_1 = {
 }
 
 principle_artistic_expression_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_artistic_expression_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3603,7 +3603,7 @@ principle_artistic_expression_2 = {
 }
 
 principle_artistic_expression_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_artistic_expression_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3625,7 +3625,7 @@ principle_artistic_expression_3 = {
 }
 
 principle_artistic_expression_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_artistic_expression_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3655,7 +3655,7 @@ principle_artistic_expression_4 = {
 }
 
 principle_artistic_expression_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_artistic_expression_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3685,7 +3685,7 @@ principle_artistic_expression_5 = {
 }
 
 principle_military_training_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_military_training_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -3737,7 +3737,7 @@ principle_military_training_1 = {
 }
 
 principle_military_training_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_military_training_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3759,7 +3759,7 @@ principle_military_training_2 = {
 }
 
 principle_military_training_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_military_training_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3782,7 +3782,7 @@ principle_military_training_3 = {
 }
 
 principle_military_training_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_military_training_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3808,7 +3808,7 @@ principle_military_training_4 = {
 }
 
 principle_military_training_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_military_training_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3833,7 +3833,7 @@ principle_military_training_5 = {
 }
 
 principle_engineering_and_logistics_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_engineering_and_logistics_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	possible = {
@@ -3885,7 +3885,7 @@ principle_engineering_and_logistics_1 = {
 }
 
 principle_engineering_and_logistics_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_engineering_and_logistics_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3904,7 +3904,7 @@ principle_engineering_and_logistics_2 = {
 }
 
 principle_engineering_and_logistics_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_engineering_and_logistics_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3926,7 +3926,7 @@ principle_engineering_and_logistics_3 = {
 }
 
 principle_engineering_and_logistics_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_engineering_and_logistics_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3952,7 +3952,7 @@ principle_engineering_and_logistics_4 = {
 }
 
 principle_engineering_and_logistics_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_engineering_and_logistics_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -4217,7 +4217,7 @@ principle_shared_canon_5 = {
 # scaler to Tiers II-V: see docs/superpowers/plans/2026-07-06-*.md.
 
 principle_multilateral_institutions_1 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -4244,7 +4244,7 @@ principle_multilateral_institutions_1 = {
 }
 
 principle_multilateral_institutions_2 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -4276,7 +4276,7 @@ principle_multilateral_institutions_2 = {
 }
 
 principle_multilateral_institutions_3 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -4304,7 +4304,7 @@ principle_multilateral_institutions_3 = {
 }
 
 principle_multilateral_institutions_4 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -4341,7 +4341,7 @@ principle_multilateral_institutions_4 = {
 }
 
 principle_multilateral_institutions_5 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -4431,7 +4431,7 @@ principle_multilateral_institutions_5 = {
 # technology line beside it). Both must hold.
 
 principle_monetary_union_1 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_monetary_union_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
@@ -4463,7 +4463,7 @@ principle_monetary_union_1 = {
 }
 
 principle_monetary_union_2 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_monetary_union_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
@@ -4500,7 +4500,7 @@ principle_monetary_union_2 = {
 }
 
 principle_monetary_union_3 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_monetary_union_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
@@ -4540,7 +4540,7 @@ principle_monetary_union_3 = {
 }
 
 principle_monetary_union_4 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_monetary_union_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
@@ -4584,7 +4584,7 @@ principle_monetary_union_4 = {
 }
 
 principle_monetary_union_5 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_monetary_union_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
