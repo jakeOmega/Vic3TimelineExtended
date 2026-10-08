@@ -1392,11 +1392,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": 0,
                          "now": f"{_GI}/goods_icons/explosives.dds"},
         # Phase 7 agencies, until now byte copies (CCD of UNESCO, TPNW of IAEA, INCB of WHO).
-        "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": None,
+        "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": 1,
                        "now": f"{_GI}/goods_icons/fine_art.dds"},
-        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": None,
+        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 0,
                         "now": f"{_GI}/goods_icons/electricity.dds"},
-        "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": None,
+        "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
                         "now": f"{_GI}/institution_icons/health_service.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
         # War, condemned: the mandate's crossed swords under vanilla's red cross.
@@ -1445,23 +1445,28 @@ ICONS: dict[str, dict[str, dict]] = {
                ("nuclear_ban", "tpnw", f"{_GI}/goods_icons/electricity.dds"),
                ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
         # Phase 7 topics that are no agency's, until now byte copies of older topics.
-        "topic_court_referral": {"subject": "a polished brass balance scale, a small rolled tan map tied with red cord lying in one pan", "seed": None,
+        # Round 1 drew a clock and a box under the map, no scales: name the two pans.
+        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": None,
                                  "now": f"{_GI}/institution_icons/police.dds"},
-        "topic_arms_embargo": {"subject": "a big dark olive-green artillery shell standing upright, wrapped in a heavy iron chain with a closed padlock", "seed": None,
+        # Round 1's olive shells read as barrels and drums: a pointed brass shell.
+        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": None,
                                "now": f"{_GI}/alert_icons/blockaded.dds"},
-        "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": None,
+        # Suspended credentials: the folder under vanilla's red cross, as Condemn is the mandate under it.
+        "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": 0,
+                              "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds"}],
                               "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
-        "topic_standing_force": {"subject": "three empty light-blue steel army helmets in a row, seen from the side", "seed": None,
+        "topic_standing_force": {"subject": "three empty light-blue steel army helmets in a row, seen from the side", "seed": 1,
                                  "now": f"{_GI}/goods_icons/small_arms.dds"},
-        "topic_observer_request": {"subject": "a pair of black binoculars resting on top of a small dark wooden box with a slot in its lid", "seed": None,
+        "topic_observer_request": {"subject": "a pair of black binoculars resting on top of a small dark wooden box with a slot in its lid", "seed": 1,
                                    "now": f"{_GI}/institution_icons/social_security.dds"},
-        "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": None,
+        "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": 1,
                                "now": f"{_GI}/goods_icons/groceries.dds"},
-        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": None,
+        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": 1,
                             "now": f"{_GI}/alert_icons/land_invasion.dds"},
-        "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": None,
+        "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": 2,
                                    "now": f"{_GI}/goods_icons/groceries.dds"},
-        "topic_referendum": {"subject": "a small dark wooden box with a slot in its lid and a folded tan paper slip half inside the slot", "seed": None,
+        # Round 1 drew open chests: a closed box with a lock and a slot.
+        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": None,
                              "now": f"{_GI}/alert_icons/secession.dds"},
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.
