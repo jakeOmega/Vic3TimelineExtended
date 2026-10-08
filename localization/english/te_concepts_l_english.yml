@@ -60,7 +60,6 @@
  AI_TOTAL_WAR:0 "from having adopted total war"
  AI_WARY_ATTITUDE:0 "from wary relations"
  AT_WAR:0 "At War"
- BANKING_CURR_MODIFIERS:0 "#title Financial Cycle Modifiers#!\nMonthly Cycle Value: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]    Monthly Momentum: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')]    Monthly [concept_bubble_pressure]: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')]"
  CB_ASSET_RELIEF:"Asset Relief Program"
  CB_BAIL_IN:"Bail-in Regime"
  CB_BANK_HOLIDAY:"Declare a Bank Holiday"

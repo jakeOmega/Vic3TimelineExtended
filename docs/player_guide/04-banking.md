@@ -37,7 +37,7 @@ unless your central bank already sets a rate or your currency is tied to
 another's: then it opens early with your monetary readings (see [Monetary
 policy under the full Banking System](#monetary-policy-under-the-full-banking-system)).
 Hover it for what you still need. It ends with an Open Journal Entry button,
-which opens the entry with its description and status text. [The banking
+which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
 
 ![The Banking tab of the Budget panel: the four bars, the overview's icons, Active Policies and the start of Monetary Policy.](images/banking_tab.png)
@@ -54,12 +54,20 @@ from tight to loose and shows where your interest rate sits; it moves only
 under the full Banking System.
 
 The overview's icons report momentum and bubble pressure as bands, not figures.
-Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
+Momentum reads Freefall (−5 or less), Collapsing (−5 to −3), Falling (−3 to −1),
+Steady (−1 to +1), Rising (+1 to +3), Surging (+3 to +5) or Overheating (+5
+and up); the two outer bands are past the ends of the momentum bar. Bubble pressure
 reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
-(75 and up). The entry's status text lists the Financial Cycle Modifiers:
-Monthly Cycle Value, Monthly Momentum and Monthly Bubble Pressure, the change
-your country's modifiers make to each reading every month. Hover a figure for
-the modifiers behind it.
+(75 and up).
+
+Under the phase, momentum and bubble pressure icons, a third line gives how far
+the cycle value, momentum and bubble pressure can move at the next monthly
+update, as a range such as −1.1 to +2.2. It is worked out from what the panels
+show: the bands, your modifiers, your policy stance and the random nudge. The
+ranges are wide because the bands are: Steady momentum lies anywhere from −1 to
++1, so the cycle value's range is nearly two points wide before anything else
+moves it. Crashes and events can move a reading further. Hover a range for its
+parts, and hover a figure in it for the modifiers behind it.
 
 ### The seven banking cycle phases
 
@@ -196,12 +204,17 @@ sections, in the same order. The overview at the top is always shown: the four
 bars, then two rows of icons, each with a caption above it and a word beside
 it. Hover a caption for what the term means, and hover the icon or its word for
 the reading in detail; the first row's tooltips also list what pushes the cycle
-each month.
+each month. Under the first row's words, a third line gives next month's range
+for the cycle value, momentum and bubble pressure (see [Cycle value, momentum
+and bubble pressure](#cycle-value-momentum-and-bubble-pressure)). With
+momentum Overheating the range has no top for the cycle value, which reads "+4.2
+or more", and no bottom for momentum; with momentum in Freefall it is the
+reverse.
 
 | Caption | Icon | Word |
 |---|---|---|
 | Cycle Phase | A bank front with a mark: arrows down in a Panic or Downturn, a level bar in Stagnation or Stable, arrows up from Expansion, and the bank gilded in a Boom or Frenzy | The phase |
-| Momentum | An arrow, doubled for Collapsing and Surging | The momentum band |
+| Momentum | An arrow, doubled from Collapsing and Surging outward | The momentum band |
 | Bubble Pressure | Coins inside a bubble that grows band by band, its rim going from green to red, cracked at Severe | The bubble band |
 | Policy Stance | A tap: the more coins fall from it, the looser the stance, and a padlock at Very Tight | Very Loose, Loose, Neutral, Tight or Very Tight |
 | Inflation | A price tag marked for the band, from a blue arrow down at Deflation to a flame at Very high; a wheelbarrow of banknotes at Hyperinflation | The price band, or Foreign money once you dollarize, or Set by plan in a command economy |
@@ -209,10 +222,11 @@ each month.
 
 Policy Stance appears only once you hold a dial, and Inflation only under the
 full Banking System. A warning mark on the bubble means a crash is at its most
-likely: the cycle value is 90 or more, or a Boom or Frenzy has momentum
-Surging. The words are colored by how far the reading is from calm: green and
-white are safe, yellow and gold warn, and red marks an extreme (Panic, Frenzy,
-Collapsing momentum, Severe bubble pressure). A Boom reads blue.
+likely: the cycle value is 90 or more, or a Boom or Frenzy has momentum Surging
+or Overheating. The words are colored by how far the reading is from calm: green
+and white are safe, yellow and gold warn, and red marks an extreme (Panic,
+Frenzy, Freefall or Overheating momentum, Severe bubble pressure). A Boom reads
+blue.
 
 The cycle's phase also shows in the top bar, as its icon right after your
 weekly balance, while the journal entry is running. Hover it for the phase's
@@ -291,7 +305,7 @@ early.
 
 The AI uses Moral Suasion in an Expansion, reserve requirements and the buffer
 from Expansion upward, and margin requirements in a Boom or Frenzy. It uses any
-of them while momentum reads Surging. It keeps the buffer, reserve requirements
+of them while momentum reads Surging or Overheating. It keeps the buffer, reserve requirements
 and margin requirements until the cycle is back below Expansion and no longer
 climbing, and drops Moral Suasion more freely, since switching it costs nothing.
 
@@ -339,7 +353,7 @@ collection while it runs. It needs Corporate Governance, and Prudential / Narrow
 Banking forbids it.
 
 AI countries direct credit in a Downturn, in Stagnation, or while a Stable cycle
-has momentum Collapsing. They choose the sector by who governs: heavy industry
+has momentum Collapsing or in Freefall. They choose the sector by who governs: heavy industry
 for Industrialists, agriculture for Landowners or Rural Folk, armaments for the
 Armed Forces or in war, electrification for the Intelligentsia, infrastructure
 otherwise. They pay the same points as you, so a sector they cannot afford is

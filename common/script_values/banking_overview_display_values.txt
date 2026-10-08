@@ -13,26 +13,34 @@
 # Scope: country (the viewer)
 # ============================================================================
 
-# Momentum band (banking_dash_momentum_band): 1 Collapsing · 2 Falling ·
-# 3 Steady · 4 Rising · 5 Surging.
+# Momentum band (banking_dash_momentum_band): 1 Freefall · 2 Collapsing ·
+# 3 Falling · 4 Steady · 5 Rising · 6 Surging · 7 Overheating.
 banking_disp_momentum_band_code = {
 	value = 0
 	if = {
 		limit = { has_variable = finance_cycle_momentum }
 		if = {
+			limit = { var:finance_cycle_momentum >= 5 }
+			value = 7
+		}
+		else_if = {
 			limit = { var:finance_cycle_momentum >= 3 }
-			value = 5
+			value = 6
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum >= 1 }
-			value = 4
+			value = 5
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum > -1 }
-			value = 3
+			value = 4
 		}
 		else_if = {
 			limit = { var:finance_cycle_momentum > -3 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:finance_cycle_momentum > -5 }
 			value = 2
 		}
 		else = {
@@ -136,5 +144,416 @@ banking_disp_price_band_code = {
 		else = {
 			value = 6
 		}
+	}
+}
+
+# ============================================================================
+# NEXT MONTH'S CHANGE — the range under each of the overview's first-row cells
+# ============================================================================
+# How far banking_cycle_advance_variables (banking_cycle_effects.txt) can move
+# the cycle value, momentum and bubble pressure at the next monthly pulse,
+# worked out only from what the panels show: the three monthly modifier
+# totals, the momentum band, the policy stance band and the bound on the
+# bank's forecasting error (te_mon_forecast_error_bound, which the
+# independence law prints). Never from the hidden figures: momentum and bubble
+# pressure are shown as bands, and the stance gap would give away the neutral
+# rate (monetary_policy_design.md §8). So a range is as wide as the bands
+# leave it, and it holds every month the pulse can produce from them, before
+# crashes and events.
+#
+# The pulse, in order: a full-term bank holiday's reopening bounce; momentum
+# x 0.9; plus the three monthly modifiers; plus the stance's push on momentum
+# and bubble pressure; plus the random nudge on momentum, which only ever
+# pulls the cycle towards 50 (its weights are (v - 50) / 5 and (50 - v) / 5
+# against 50 for no nudge: `value =` in a random_list modifier replaces the
+# literal weight, as banking_cycle_sim.py notes); a bank holiday floors
+# momentum at 0; then the cycle value takes the new momentum. Every step moves the same way as its unknown, so the bounds
+# are the corners: the band's edges, the error's edges, the nudge's outcomes.
+#
+# Momentum's outer bands are open: Overheating has no top and Freefall no
+# bottom, so a range on that side is "or more" / "or less"
+# (banking_disp_*_change_shape). test_banking_monthly_change.py runs the
+# pulse's own script over sampled hidden states and checks every result lands
+# inside the range shown, and that the range is no wider than it must be.
+# Display only, like the rest of this file.
+# ============================================================================
+
+# Does a policy stance push the cycle? The push reads te_mon_stance_gap, which
+# the monthly monetary update holds at exactly 0 for a country without a stance
+# (te_monetary_update_stance), and which a country whose update has not run
+# yet lacks.
+banking_disp_stance_pushes = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_mon_stance_gap
+			has_variable = te_mon_stance_band
+			te_mon_has_stance = yes
+		}
+		value = 1
+	}
+}
+
+# The true gap's range for the band shown. The band is the bank's estimate,
+# the gap less the forecasting error, cut at -2, -0.75, 0.75 and 2
+# (te_monetary_update_stance), so the gap lies within the error's bound of the
+# band's edges. Band 1 has no lower edge and band 5 no upper one: the gap's own
+# limits (+/-10, the same effect) stand in. Clamped last, as
+# te_mon_stance_gap_clamped clamps what the cycle reads.
+banking_disp_stance_gap_lo = {
+	value = 0
+	if = {
+		limit = { banking_disp_stance_pushes > 0 }
+		if = {
+			limit = { var:te_mon_stance_band <= 1 }
+			value = -10
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 2 }
+			value = -2
+			subtract = te_mon_forecast_error_bound
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 3 }
+			value = -0.75
+			subtract = te_mon_forecast_error_bound
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 4 }
+			value = 0.75
+			subtract = te_mon_forecast_error_bound
+		}
+		else = {
+			value = 2
+			subtract = te_mon_forecast_error_bound
+		}
+		min = te_mon_stance_gap_clamp_loose
+		max = te_mon_stance_gap_clamp_tight
+	}
+}
+
+banking_disp_stance_gap_hi = {
+	value = 0
+	if = {
+		limit = { banking_disp_stance_pushes > 0 }
+		if = {
+			limit = { var:te_mon_stance_band <= 1 }
+			value = -2
+			add = te_mon_forecast_error_bound
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 2 }
+			value = -0.75
+			add = te_mon_forecast_error_bound
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 3 }
+			value = 0.75
+			add = te_mon_forecast_error_bound
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 4 }
+			value = 2
+			add = te_mon_forecast_error_bound
+		}
+		else = {
+			value = 10
+		}
+		min = te_mon_stance_gap_clamp_loose
+		max = te_mon_stance_gap_clamp_tight
+	}
+}
+
+# The stance's monthly push, at te_mon_stance_momentum_add's -0.125 and
+# te_mon_stance_bubble_add's -0.75 a point of gap. A tighter gap pushes down,
+# so the low end comes from the high gap.
+banking_disp_stance_momentum_lo = {
+	value = banking_disp_stance_gap_hi
+	multiply = -0.125
+}
+
+banking_disp_stance_momentum_hi = {
+	value = banking_disp_stance_gap_lo
+	multiply = -0.125
+}
+
+banking_disp_stance_bubble_lo = {
+	value = banking_disp_stance_gap_hi
+	multiply = -0.75
+}
+
+banking_disp_stance_bubble_hi = {
+	value = banking_disp_stance_gap_lo
+	multiply = -0.75
+}
+
+# The cycle value the nudge's weights read: today's, plus the monthly value
+# modifiers, which the pulse adds first.
+banking_disp_nudge_cycle_value = {
+	value = 0
+	if = {
+		limit = { has_variable = finance_cycle_value }
+		value = var:finance_cycle_value
+	}
+	add = modifier:country_finance_value_monthly_add
+}
+
+# The nudge's two ends: above 50 it can only pull momentum down
+# (banking_random_nudge_down_value), below 50 only up, and at 50 not at all.
+banking_disp_nudge_lo = {
+	value = 0
+	if = {
+		limit = { banking_disp_nudge_cycle_value > 50 }
+		add = banking_random_nudge_down_value
+	}
+	else_if = {
+		limit = { banking_disp_nudge_cycle_value < 50 }
+		add = banking_random_nudge_up_value
+	}
+	max = 0
+}
+
+banking_disp_nudge_hi = {
+	value = 0
+	if = {
+		limit = { banking_disp_nudge_cycle_value > 50 }
+		add = banking_random_nudge_down_value
+	}
+	else_if = {
+		limit = { banking_disp_nudge_cycle_value < 50 }
+		add = banking_random_nudge_up_value
+	}
+	min = 0
+}
+
+# Momentum's band edges (banking_disp_momentum_band_code): Freefall at or
+# below -5, Collapsing to -3, Falling to -1, Steady inside +/-1, Rising from 1,
+# Surging from 3, Overheating from 5. Freefall has no lower edge and
+# Overheating no upper one; those read 0 here, and the _shape values below say
+# the range is open on that side.
+banking_disp_momentum_band_lo = {
+	value = 0
+	if = {
+		limit = { banking_disp_momentum_band_code >= 7 }
+		value = 5
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 6 }
+		value = 3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 5 }
+		value = 1
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 4 }
+		value = -1
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 3 }
+		value = -3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 2 }
+		value = -5
+	}
+}
+
+banking_disp_momentum_band_hi = {
+	value = 0
+	if = {
+		limit = { banking_disp_momentum_band_code >= 7 }
+		value = 0
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 6 }
+		value = 5
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 5 }
+		value = 3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 4 }
+		value = 1
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 3 }
+		value = -1
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 2 }
+		value = -3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code >= 1 }
+		value = -5
+	}
+}
+
+# A bank holiday that ran its full term pays its reopening bounce at the start
+# of the next pulse (banking_cycle_bank_holiday_reopen), before the decay, so
+# nine-tenths of it is left for the cycle value to take.
+banking_disp_momentum_reopen = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = banking_bank_holiday_reopening
+			banking_tool_bank_holiday_active = no
+		}
+		value = banking_bank_holiday_reopen_momentum
+		multiply = 0.9
+	}
+}
+
+# 1 while a bank holiday holds momentum at 0 or above (the momentum tooltip's
+# last line).
+banking_disp_bank_holiday = {
+	value = 0
+	if = {
+		limit = { banking_tool_bank_holiday_active = yes }
+		value = 1
+	}
+}
+
+# Everything the pulse adds to momentum besides the decay: the modifiers, the
+# stance, the nudge and a reopening bounce.
+banking_disp_momentum_push_lo = {
+	value = modifier:country_finance_momentum_monthly_add
+	add = banking_disp_stance_momentum_lo
+	add = banking_disp_nudge_lo
+	add = banking_disp_momentum_reopen
+}
+
+banking_disp_momentum_push_hi = {
+	value = modifier:country_finance_momentum_monthly_add
+	add = banking_disp_stance_momentum_hi
+	add = banking_disp_nudge_hi
+	add = banking_disp_momentum_reopen
+}
+
+# Momentum once next month's pulse has run: what the cycle value takes. A bank
+# holiday floors it at 0, which is also Freefall's low end under one.
+banking_disp_momentum_next_lo = {
+	value = banking_disp_momentum_band_lo
+	multiply = 0.9
+	add = banking_disp_momentum_push_lo
+	if = {
+		limit = { banking_tool_bank_holiday_active = yes }
+		if = {
+			limit = { banking_disp_momentum_band_code <= 1 }
+			value = 0
+		}
+		min = 0
+	}
+}
+
+banking_disp_momentum_next_hi = {
+	value = banking_disp_momentum_band_hi
+	multiply = 0.9
+	add = banking_disp_momentum_push_hi
+	if = {
+		limit = { banking_tool_bank_holiday_active = yes }
+		min = 0
+	}
+}
+
+# The cycle value's change: its monthly modifiers plus next month's momentum.
+banking_disp_value_change_lo = {
+	value = modifier:country_finance_value_monthly_add
+	add = banking_disp_momentum_next_lo
+}
+
+banking_disp_value_change_hi = {
+	value = modifier:country_finance_value_monthly_add
+	add = banking_disp_momentum_next_hi
+}
+
+# Momentum's change: next month's momentum less today's, i.e. a tenth of
+# today's lost to the decay plus the pushes. Under a bank holiday it can fall
+# no further than to 0, so by no more than the band's top edge.
+banking_disp_momentum_change_lo = {
+	value = banking_disp_momentum_band_hi
+	multiply = -0.1
+	add = banking_disp_momentum_push_lo
+	if = {
+		limit = { banking_tool_bank_holiday_active = yes }
+		min = {
+			value = banking_disp_momentum_band_hi
+			multiply = -1
+		}
+	}
+}
+
+banking_disp_momentum_change_hi = {
+	value = banking_disp_momentum_band_lo
+	multiply = -0.1
+	add = banking_disp_momentum_push_hi
+	if = {
+		limit = { banking_tool_bank_holiday_active = yes }
+		min = {
+			value = banking_disp_momentum_band_lo
+			multiply = -1
+		}
+	}
+}
+
+# Bubble pressure's change: its monthly modifiers plus the stance's push.
+banking_disp_bubble_change_lo = {
+	value = modifier:country_bubble_pressure_monthly_add
+	add = banking_disp_stance_bubble_lo
+}
+
+banking_disp_bubble_change_hi = {
+	value = modifier:country_bubble_pressure_monthly_add
+	add = banking_disp_stance_bubble_hi
+}
+
+# Which text each range line shows: 1 "low to high", 2 "low or more" (no
+# top), 3 "high or less" (no bottom), 4 a single figure (both ends equal).
+# Overheating momentum leaves the cycle value's change no top and momentum's
+# own change no bottom (the decay grows with it); Freefall the reverse, except
+# that a bank holiday gives the cycle value's change a bottom (momentum
+# floored at 0).
+banking_disp_value_change_shape = {
+	value = 1
+	if = {
+		limit = { banking_disp_momentum_band_code >= 7 }
+		value = 2
+	}
+	else_if = {
+		limit = {
+			banking_disp_momentum_band_code <= 1
+			banking_tool_bank_holiday_active = no
+		}
+		value = 3
+	}
+	else_if = {
+		limit = { banking_disp_value_change_lo >= banking_disp_value_change_hi }
+		value = 4
+	}
+}
+
+banking_disp_momentum_change_shape = {
+	value = 1
+	if = {
+		limit = { banking_disp_momentum_band_code >= 7 }
+		value = 3
+	}
+	else_if = {
+		limit = { banking_disp_momentum_band_code <= 1 }
+		value = 2
+	}
+	else_if = {
+		limit = { banking_disp_momentum_change_lo >= banking_disp_momentum_change_hi }
+		value = 4
+	}
+}
+
+banking_disp_bubble_change_shape = {
+	value = 1
+	if = {
+		limit = { banking_disp_bubble_change_lo >= banking_disp_bubble_change_hi }
+		value = 4
 	}
 }
