@@ -81,13 +81,15 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | World population | **Retune it.** The share of women of childbearing age drives the birth rate and the share of old people the death rate. **Wealth, education and technology (birth control) drive fertility** and so long-run growth (§2.3) |
 | Calibration | **History to 2020; after that the UN projection is only a check** on a world where the AI does nothing special (§2.3) |
 | Death by age | **Depends on technology, healthcare, consumer safety and the like**, each acting on the ages it really affects: consumer safety on the young, for example (§2.4) |
-| Age resolution | **Smaller than ten-year bands.** Proposed: five-year birth cohorts, which age exactly with a yearly update (§1) |
+| Age resolution | **Birth cohorts**, which age exactly with a yearly update. **One-year cohorts if a benchmark shows them cheap, otherwise five-year** (§1, §14 Q9) |
 | Sex | **Track women and men directly**, not one sex as a share of the other. Births then scale with *x*, not 1 − *x*, and the female population follows a steadier path (§3) |
 | Wealth Concentration | **One score, kept per state**: how much of the state's property belongs to a few great fortunes rather than many owners. The national figure is weighted by ownership levels: owner buildings, self-owned buildings and a share of bureaucrats for state property (§4.2) |
 | Migration profile | **Organic, not by date**: from the destination's jobs, transport technology, women's rights at the origin and destination, and crises at the origin (§2.5) |
 | Late-era display | **A toggle between calendar and biological age** on the pyramid from era 11 (§1) |
 | Coercive pronatalism | **No separate mechanic.** The pro-natalist law's description stays open: "through propaganda, incentives, or even coercion". Players read what a given state does into it (§8.1) |
-| Population measures | **GUI buttons, not amendments**: a measure is a policy choice made within a law, not a new legal framework (§8.1) |
+| Population measures | **GUI buttons, not amendments**: a measure is a policy choice made within a law, not a new legal framework. **The catalogue in §8.1 stands, national only for now**; decree versions may come later (§8.1) |
+| Pension age | **A three-way setting** (Early, Standard, Raised) under Old Age Pension, not amendments (§8.2) |
+| Settlement pattern | **Labels and effect sizes as proposed** (§5.2) |
 | Where the country view goes | **The vanilla Population panel**, as a new tab (§10) |
 | One metropolis or several cities | **Design it** (§5.2): it interacts both ways with economic pull, infrastructure and Migration Crowding. Not the first priority |
 | Game rule | **Yes**: Full / Display only / Off. Display only is kept because it costs almost nothing once Off works (§11.4) |
@@ -155,17 +157,29 @@ Every five years the open cohort closes and a new one opens. The oldest cohort, 
 over" pool, and its slot is reused. The pool also keeps the mean age of its members, so its death rate stays right
 however long people live.
 
-**Cost.** About 20 slots, each holding women and men, makes about 40 variables a state. That is arithmetic, not pop
-walks (§11.3), once a year, against the Demography mod's 17 bands updated monthly. The 20 slots are 20 calls of one
-scripted effect with `$SLOT$`, written by a generator (the mod's idiom for repeated script). The slot for a cohort is
-(first birth year ÷ 5) mod 20.
+**Cost.** Five-year cohorts take about 20 slots, each holding women and men: about 40 variables a state. One-year
+cohorts take about 100 slots and 200 variables. Either way the work is arithmetic, not pop walks (§11.3), once a year;
+the Demography mod updates 17 bands monthly. The slots are calls of one scripted effect with `$SLOT$`, written by a
+generator (the mod's idiom for repeated script). The slot for a cohort is (first birth year ÷ the width) mod the
+number of slots.
 
 **Display.** The pyramid draws fixed five-year age bands: 0–4, 5–9 … 85+. Each cohort straddles two of them in most
 years, so its people are split between the two in proportion. That happens in the display only; the model never
 splits a cohort.
 
-**The finer option.** One-year cohorts (about 100 slots, 200 variables a state) would give single-year ages.
-Five-year cohorts already age exactly, and nothing in §7 needs a finer age, so they are the proposal.
+**Cohort width is a generator parameter (owner, 2026-10-08: measure, then choose).**
+- **One-year cohorts** (about 100 slots, 200 variables a state) give single-year ages: a pyramid with no display split,
+  and booms and wars visible to the year. The owner would like them if they are cheap, but not at a real slowdown.
+- **Five-year cohorts** (about 20 slots) age exactly too, and nothing in §7 needs a finer age.
+- **Only the generator changes between them.** It writes one call of the slot effect per slot, a ring of N slots and
+  rate lookups by age. The script logic is the same for any width W: births go into the open cohort, which closes
+  every W years.
+- **The benchmark** (§14 Q9) picks W. It times the yearly cohort step in every state, with 20 slots and with 100, in a
+  1950s and a 2050s save.
+- **Decision rule:** one-year cohorts if the extra time per year, spread over the twelve monthly pulses (§11.3), is
+  negligible against a month's tick. Otherwise five-year.
+- **The late eras scale the same way:** biological age adds one variable a slot, and a ring to age 150 is about 150
+  one-year slots or 30 five-year ones.
 
 ### Ages past 95 and the late eras (the owner's question)
 
@@ -575,7 +589,8 @@ the system's most invented number, so it is built last (§12), with every effect
 | **Fertility** | big-city housing lowers births (the urban term in §2.3, raised by the share) | an older, smaller metropolis over time |
 | **Unrest** | one city concentrates its radicals: turmoil effects up a little | the Paris of 1848 |
 
-**Labels:** Metropolis (≥ 60, New York), Leading City (40–60), Several Cities (20–40, Texas), Market Towns (< 20).
+**Labels** (owner, 2026-10-08): Metropolis (≥ 60, New York), Leading City (40–60), Several Cities (20–40, Texas),
+Market Towns (< 20).
 
 ## 6. What feeds in
 
@@ -709,6 +724,8 @@ Measures are buttons rather than amendments for four reasons:
 - **AI weights** for every law in the group. Today it has none.
 - **Natalism Initiative** goes from +50% to about +15%. With the model it no longer needs to be large: a small push now
   shows up as a cohort later. A per-state measure like this one stays a decree.
+- **Scope:** measures are national for now (owner, 2026-10-08). Decree versions for single states, such as a regional
+  Birth Limit or Child Allowance, can come later.
 - **Youth Centers** stay as they are: no measure or Population Control unlocks them.
 
 ### 8.2 Retirement
@@ -874,7 +891,7 @@ Monuments' pattern).
 
 | Phase | Contents | Gate |
 |---|---|---|
-| 0. Probes and harness | §14; the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death | the harness meets §2.3's targets |
+| 0. Probes and harness | §14, including the cohort-width benchmark; the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, map modes, history, the rule. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
 | 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
@@ -885,13 +902,8 @@ to be sane.
 ## 13. Still open
 
 1. **The bureaucrats' share** that stands for state-owned property in the national Wealth Concentration (§4.2).
-2. **The measures catalogue (§8.1).** Which measures, which laws allow them, and their costs. Should any measure be
-   per-state, as decrees are?
-3. **The pension age as a three-way setting (§8.2)**, in place of the two amendments proposed earlier?
-4. **Cohort width:** five-year birth cohorts (proposed) or one-year (finer, five times the variables)?
-5. **The settlement pattern (§5.2)**: labels and effect sizes, pending the owner's read of the full text.
-6. **Ages past 95 (§1):** biological age with a 20-slot ring (proposed), or also a 30-slot ring from 1836 for a finer
-   pyramid top in the late eras?
+2. **Ages past 95 (§1):** biological age with a ring to about 100 (proposed), or a ring to about 150 from 1836 for a
+   finer pyramid top in the late eras? The benchmark (§14 Q9) prices both.
 
 ## 14. Engine checks before building
 
@@ -915,5 +927,9 @@ to be sane.
    - scripted GUI buttons in a vanilla panel outside the journal (the system tabs already use them);
    - whether a list of the country's states can be ordered by a script value;
    - mirrored `progressbar` pyramids.
-9. **Cost:** the profiler on a yearly pulse with the walks and the cohort step in every state, in a 1950s and a 2050s
-   save.
+9. **Cost, and the cohort width:**
+   - **Setup:** a throwaway benchmark (generated script, a console event) runs the yearly cohort step in every state
+     with 20 slots and with 100, plus the pop and building walks, in a 1950s and a 2050s save.
+   - **Read:** the profiler (`scripting_best_practices.md`: profiler commands), the step's time against a month's tick,
+     and save-file growth from 200 variables a state.
+   - **Decides:** the cohort width (§1) and whether the stagger over monthly pulses (§11.3) is needed.
