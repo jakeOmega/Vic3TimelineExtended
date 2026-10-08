@@ -21,11 +21,12 @@ steer it, and the weak Population Control law should become a real lever. The pi
 **What the engine gives us.** Pops have no age or sex. The only demographic axes are:
 - **Workforce and dependents**, set by a working-adult ratio. Vanilla's default is a define outside the repo;
   `pop_types` sets aristocrats 0.2 and slaves 0.5. It is moved by `state_working_adult_ratio_add`: vanilla's
-  women's-rights laws add 0.05 to 0.3, and Old Age Pension subtracts 0.01.
+  women's-rights laws add 0.05 to 0.3, and Old Age Pension subtracts 0.01 per level of its institution.
 - **Birth rate and mortality**, from the standard-of-living curves in the defines plus `state_birth_rate_mult` and the
   `*_mortality_mult` family. The mod's defines (`common/defines/extra_defines.txt:79-88`) run births from 5.7% a year
-  at SoL 0 down to 0.96% at SoL 35, and deaths down to 1.2%. A state at SoL 35 or above shrinks by 0.24% a year from
-  the day it gets there, whatever its history.
+  at SoL 0 down to 0.96% at SoL 35, and deaths down to 1.2%. Modifiers scale those base rates: a −50% mortality
+  modifier halves deaths to 0.6%, so the state grows. Absent modifiers, a state at SoL 35 or above shrinks by 0.24% a
+  year. Either way, its rates depend only on its SoL and modifiers today, not on its history.
 - **Readable values**:
   - a pop's `total_size`, `wealth`, `standard_of_living` and `literacy_rate`;
   - a state's `state_population`, `total_urbanization`, `average_sol`, `state_unemployment_rate`, `gdp`, `migration_pull`
@@ -82,7 +83,9 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | Death by age | **Depends on technology, healthcare, consumer safety and the like**, each acting on the ages it really affects: consumer safety on the young, for example (§2.4) |
 | Age resolution | **Smaller than ten-year bands.** Proposed: five-year birth cohorts, which age exactly with a yearly update (§1) |
 | Sex | **Track women and men directly**, not one sex as a share of the other. Births then scale with *x*, not 1 − *x*, and the female population follows a steadier path (§3) |
-| Wealth Concentration | **One score, kept per state** (§4.2). What exactly it represents is still open (§4.2, §13) |
+| Wealth Concentration | **One score, kept per state**: how much of the state's property belongs to a few great fortunes rather than many owners. The national figure is weighted by ownership levels: owner buildings, self-owned buildings and a share of bureaucrats for state property (§4.2) |
+| Migration profile | **Organic, not by date**: from the destination's jobs, transport technology, women's rights at the origin and destination, and crises at the origin (§2.5) |
+| Late-era display | **A toggle between calendar and biological age** on the pyramid from era 11 (§1) |
 | Coercive pronatalism | **No separate mechanic.** The pro-natalist law's description stays open: "through propaganda, incentives, or even coercion". Players read what a given state does into it (§8.1) |
 | Population measures | **GUI buttons, not amendments**: a measure is a policy choice made within a law, not a new legal framework (§8.1) |
 | Where the country view goes | **The vanilla Population panel**, as a new tab (§10) |
@@ -181,6 +184,9 @@ how old their body is, not the year they were born.
   - The pool fills with people who are calendar-old and biologically middle-aged. The pyramid's top bar grows into the
     late game's striking image.
   - The panel adds "Over 100" and the mean biological age.
+  - From era 11 a toggle on the pyramid switches it between calendar age and biological age (owner, 2026-10-08). It is
+    a client-side GUI value (`GetVariableSystem`), so it needs no script. In biological age, each cohort's bar sits at
+    the band of its biological age.
   - Old age stops making people dependents, so the pension question fades. Deaths fall towards external causes only,
     so births decide growth, and Population Control becomes essential (§8.3).
 - **Option: access.** Rejuvenation could reach the upper strata first, scaled by SoL and the health system, so lifespan
@@ -345,14 +351,35 @@ The engine moves and kills people; the model sees only the result. Each year:
    - Resettlement records its arrivals and departures, with its programme's profile.
    - Violent Hostility's kills come from all ages.
 3. **The residual**: the population change, less natural change, less (1) and (2). This is mostly migration.
-   - A gain arrives with a migrant's profile: mostly people aged 18–35. Before about 1900 a third of them are women,
-     rising to about half by the mid-20th century.
-   - A loss leaves with the same profile.
+   - A gain arrives with the destination's migrant profile, and a loss leaves with the origin's (below).
+   - The profile is worked out each year from the state and its country, not from the calendar.
    - A residual under 0.3% of the population is treated as model error and spread over all cohorts. Otherwise the
      model's own rounding would make states look like migration hubs.
 
-This makes frontier and immigrant states young and male, and emigrant states old and female, with no extra script.
-That is what happened in the American West, Argentina, Australia, Ireland and southern Italy.
+**The migrant profile.** The model sees only each state's net change, not where its migrants came from. So a state's
+arrivals take the profile of the state they arrive in, and its departures the profile of the state they leave. Each
+profile mixes three kinds of migrant:
+
+| Kind | Ages | Women's share | Its weight rises with |
+|---|---|---|---|
+| **Labour migrants** | 18–35 | set by the jobs at the destination (below) | the destination's job openings; the cost of the move being high |
+| **Families** | parents with children; few over 60 | about half | cheaper transport (`paddle_steamer`, `railways`, `combustion_engine` and the mod's aviation techs); women's rights at the origin, since women can move on their own account; the time a migration has been running (chain migration: the men send for their families) |
+| **Refugees** | everyone | about half | war, devastation, turmoil and Violent Hostility at the origin |
+
+**Labour migrants' women's share follows the destination's jobs.**
+- Mines, logging, plantations, construction, railways and the army draw men.
+- Textiles, light industry and services draw women, as far as the destination's women's-rights laws let women work
+  (the same workforce share as work deaths, §2.4).
+- The weights come from the destination's employment by building group, read in the yearly pop walk.
+
+**What it produces.**
+- A frontier mining state fills with young men.
+- A textile town draws young women: Lowell's mill girls, Lancashire.
+- Cheaper steamships turn a male stream into a family one.
+- A civil war sends out whole families.
+- The places left behind grow older and, where the men left, more female, as Ireland and southern Italy did.
+
+None of it is scripted by date.
 
 ### 2.6 Starting values and new states
 
@@ -381,7 +408,7 @@ panel is derived.
 | Sex ratio at birth | 105 boys per 100 girls normally | the biological constant |
 | Sex-selective births | up to about 115–120 boys per 100 girls under a birth limit once prenatal sexing exists (§8.1) | China's sex ratio at birth reached about 118 in the 2000s |
 | War dead | about 95% men, aged 18–40 | the Soviet Union in 1959: about 0.82 men per woman |
-| Migration | before about 1900 a third of migrants are women, later half | California in 1850 was over 90% male |
+| Migration | labour migrants to mines and frontiers are mostly men, to mills and services more often women; families and refugees are balanced (§2.5) | California in 1850 was over 90% male; Lowell's mill workers were mostly young women |
 | Mortality | men die more from external and chronic causes, women from maternal causes; women outlive men by about 2 years at a life expectancy of 35 and 5–7 at 75 | |
 
 **What it moves** (adults 20–59, capped, small on purpose; the evidence on effects is weaker than on causes):
@@ -420,12 +447,12 @@ state. The stock is the #822 score.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
 
-**What it should represent (open, §13 Q1).** The engine already has inequality *between* classes: each stratum's pops
+**What it represents (owner, 2026-10-08).** The engine already has inequality *between* classes: each stratum's pops
 carry their own wealth, and §4.1's Gini measures it. A score that restated it would double-count. What pops can't
 show is how property is held *within* the owning classes. A state's capitalists are one pop, whether its factories
 belong to three dynasties or to ten thousand shareholders.
 
-**Proposal: how much of the state's property belongs to a few great fortunes rather than to many owners.** The form it
+**How much of the state's property belongs to a few great fortunes rather than to many owners.** The form it
 takes depends on the state:
 - **On the land:** great estates against smallholdings. Prussia's Junker east and Andalusia's latifundia sit at the top;
   Württemberg's divided farms and America's homesteads at the bottom.
@@ -444,9 +471,16 @@ It is grounded in readouts the engine has:
 - **(C) a purely political oligarchy index.** This loses the economics.
 
 **The score.** One score per state. It keeps #822's 0–100 scale, its 3% yearly drift and its two modifiers' effects.
-Each state drifts toward its own target. The country figure is a weighted average of the states, kept in
-`te_inh_concentration` so #822's loc and tooltips keep working; how to weight it is §13 Q1. The panel shows the
-target's terms as bars (style guide rule 5) and a map mode.
+Each state drifts toward its own target. The country figure, kept in `te_inh_concentration` so #822's loc and
+tooltips keep working, is the states' average weighted by **ownership levels** (owner, 2026-10-08). That is where the
+property is held:
+- each level of a Financial District, Manor House or company headquarters (`building_financial_district`,
+  `building_manor_house`, `building_company_headquarter`, `building_company_regional_headquarter`) counts 1;
+- each level of a self-owned building counts 1;
+- state-owned property counts a share of the state's bureaucrats, since the government holds it through its
+  administration. The share is set in calibration.
+
+The panel shows the target's terms as bars (style guide rule 5) and a map mode.
 
 **The target** is a sum of terms around 50:
 
@@ -557,8 +591,8 @@ the system's most invented number, so it is built last (§12), with every effect
 | Drugs and alcohol, pollution, heat | chronic and old-age deaths | §2.4 |
 | Every other birth or mortality modifier (vanilla laws, events, starvation, devastation) | fertility, mortality | read through, placed by age |
 | Family & Reproductive Policy and its measures | desired fertility, the means, the sex ratio at birth, maternal deaths | §8.1 |
-| Wars | men aged 18–40 | `num_country_dead` shared out by soldiers (§2.5) |
-| Migration, mass migration, the migration laws | ages 18–35, more men early on | residual (§2.5) |
+| Wars | men aged 18–40; refugees from war zones | `num_country_dead` shared out by soldiers; the refugee share of the migrant profile (§2.5) |
+| Migration, mass migration, the migration laws | by the migrant profile: labour, families or refugees (§2.5) | residual, profiled by jobs, transport technology, women's rights and crises |
 | Internal Resettlement | its programme's profile (Rustication takes the young, Managed Retreat the old) | its own counters |
 | Nuclear strikes, Violent Hostility | all ages | recorded or residual |
 | Child-labour, pension and retirement settings | who among the young and old works | participation weights (§7) |
@@ -590,7 +624,8 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 - ages 15–64;
 - plus the 10–14s times their participation: 0.3 under Child Labor Allowed, 0.1 under Restricted, 0 under Compulsory
   Primary School;
-- plus the over-65s times theirs: 0.5 with no pension, 0.15 under Old Age Pension, moved by the pension-age setting
+- plus the over-65s times theirs: 0.5 with no pension, falling towards 0.15 as Old Age Pension's institution rises,
+  moved by the pension-age setting
   (§8.2).
 
 **The reference** is the same formula on the 1836 structure under the laws in force. So a law adds nothing flat;
@@ -750,6 +785,7 @@ there is no journal entry to gate it. Style guide rules apply.
     glance.
   - Hovering children per woman shows its terms: wealth, education, child survival, urban life, means.
   - Hovering life expectancy shows the five causes.
+  - From era 11, a toggle switches the pyramid between calendar and biological age (§1).
 - **Family Policy** (open): the law in force, the measures as buttons (on, off or greyed, each with its upkeep and
   remaining term), and the pension-age setting under Old Age Pension.
 - **Wealth** (open):
@@ -848,11 +884,7 @@ to be sane.
 
 ## 13. Still open
 
-1. **Wealth Concentration's meaning (§4.2).**
-   - Is "how much of the state's property belongs to a few great fortunes rather than to many owners" the right
-     reading?
-   - If so, weight the national figure by each state's privately owned building levels (where the property is), by
-     GDP, or by population?
+1. **The bureaucrats' share** that stands for state-owned property in the national Wealth Concentration (§4.2).
 2. **The measures catalogue (§8.1).** Which measures, which laws allow them, and their costs. Should any measure be
    per-state, as decrees are?
 3. **The pension age as a three-way setting (§8.2)**, in place of the two amendments proposed earlier?
