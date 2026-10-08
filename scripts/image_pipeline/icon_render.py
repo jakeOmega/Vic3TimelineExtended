@@ -433,14 +433,44 @@ def cut(raw: Image.Image, spec: dict) -> Image.Image:
     real holes: an anchor's ring or a wreath's gaps would be filled too.
     """
     obj = cut_out(raw)
-    if not spec.get("solid"):
-        return obj
-    from scipy.ndimage import binary_fill_holes
-    alpha = np.asarray(obj.getchannel("A"))
-    holes = binary_fill_holes(alpha > 128) & (alpha <= 128)
+    if spec.get("solid"):
+        from scipy.ndimage import binary_fill_holes
+        alpha = np.asarray(obj.getchannel("A"))
+        holes = binary_fill_holes(alpha > 128) & (alpha <= 128)
+        out = np.asarray(obj.convert("RGBA")).copy()
+        out[holes, :3] = np.asarray(raw.convert("RGB"))[holes]
+        out[holes, 3] = 255
+        obj = Image.fromarray(out, "RGBA")
+    if spec.get("see_through"):
+        obj = see_through(obj, raw, spec["see_through"])
+    return obj
+
+
+def see_through(obj: Image.Image, raw: Image.Image, box) -> Image.Image:
+    """The light backdrop the cut-out kept inside `box` (x0, y0, x1, y1 as shares of the side) made clear.
+
+    rembg keeps background it cannot reach from the edge: the white seen
+    between a gate's bars stayed white, where the panel should show through.
+    Inside the box, a pixel lighter than dark ironwork and greyer than brick
+    (luminance over 110, saturation under 0.5: the backdrop's white and the
+    brown glow FLUX shades it into) goes transparent and its neighbours half
+    so; the bars and the brickwork stay.
+    """
+    from scipy.ndimage import binary_dilation
+    rgb = np.asarray(raw.convert("RGB")).astype(np.float64)
+    h, w = rgb.shape[:2]
+    x0, y0, x1, y1 = (int(round(v * s)) for v, s in zip(box, (w, h, w, h)))
+    inside = np.zeros((h, w), bool)
+    inside[y0:y1, x0:x1] = True
+    hi, lo = rgb.max(axis=2), rgb.min(axis=2)
+    light = (rgb @ [0.299, 0.587, 0.114] > 110) & ((hi - lo) / np.maximum(hi, 1) < 0.5)
+    clear = light & inside
+    edge = binary_dilation(clear) & ~clear & inside
     out = np.asarray(obj.convert("RGBA")).copy()
-    out[holes, :3] = np.asarray(raw.convert("RGB"))[holes]
-    out[holes, 3] = 255
+    alpha = out[..., 3].astype(np.float64)
+    alpha[clear] = 0
+    alpha[edge] *= 0.5
+    out[..., 3] = alpha.astype(np.uint8)
     return Image.fromarray(out, "RGBA")
 
 

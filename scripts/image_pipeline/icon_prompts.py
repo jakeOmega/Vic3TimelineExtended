@@ -44,7 +44,9 @@ shrunk and placed), and "disc" in place of "from": drawn outright on a disc
 of its own colours (the warming tiers). "drawn": True in place of either is
 a bare canvas holding only its drawn marks (banking momentum's triple arrows). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
-objects with no real holes. A `part` category is reviewed like icons but never written; it
+objects with no real holes. "see_through": (x0, y0, x1, y1), shares of the side, does the
+reverse inside that box: the light backdrop the cut-out kept there (the white between a
+gate's bars) goes transparent. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
 A subject describes one physical object, with its material and colour. FLUX
 fills in whatever a subject leaves open, and review kept catching the same
@@ -1061,7 +1063,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_te_tax_code": {"subject": "a thick closed leather-bound ledger with plain brass corners, sealed shut with a red wax seal", "seed": 0},
         # Four later laws gen_law_icons.py drew in the same glyph style (2026-09-28 to 10-04).
         # Vanilla draws each bureaucracy law as an object beside a quill in an inkwell.
-        "law_automated_bureaucracy": {"subject": "a small brass robot arm holding a feather quill over a square glass inkwell", "seed": 2},
+        "law_automated_bureaucracy": {"subject": "a small brass robot arm holding a feather quill over a square glass inkwell", "seed": 1},
         "law_contracted_administration": {"subject": "a closed leather briefcase beside a feather quill standing in a square glass inkwell", "seed": 0},
         "law_communal_administration": {"subject": "three raised open hands side by side beside a feather quill in a square glass inkwell", "seed": 0},
         "law_private_policing": {"subject": "a security guard's peaked cap lying beside a big ring of keys and a flashlight", "seed": 0},
@@ -1070,18 +1072,18 @@ ICONS: dict[str, dict[str, dict]] = {
         # silhouette, since the tint drops colour. A "no X" law whose sibling's object
         # crossed out reads right is that object under the prohibition ring.
         # LGBTQ+ Rights
-        "law_active_persecution": {"subject": "a heavy wooden judge's gavel lying across a pair of thick iron shackles joined by a chain", "seed": 0},
-        "law_basic_protections": {"subject": "a big iron padlock hanging open and unlocked, its large key still in the lock", "seed": 0},
+        "law_active_persecution": {"subject": "a heavy wooden judge's gavel lying across a pair of thick iron shackles joined by a chain", "seed": 2},
+        "law_basic_protections": {"subject": "a small plain wooden kite shield with an iron rim, propped upright on a short wooden stake", "seed": None},
         "law_comprehensive_rights": {"subject": "a large sturdy umbrella opened wide, its curved wooden handle resting on the ground", "seed": 0},
         "law_full_equality_and_protection": {"subject": "two identical thick gold wedding rings interlocked, standing upright on a small square wooden base", "seed": 1},
-        "law_legal_limbo": {"subject": "a short sagging rope bridge segment with several of its wooden planks missing", "seed": 2},
+        "law_legal_limbo": {"subject": "a short sagging rope bridge segment with several of its wooden planks missing", "seed": 1},
         # Antitrust & Market Structure
         "law_command_cooperative_economy": {"subject": "a large wooden abacus with rows of heavy beads, a small cog wheel leaning against it", "seed": 2},
         "law_dirigisme": {"subject": "a large wooden ship's steering wheel standing on its tall carved wooden helm post", "seed": 2},
         "law_freedom_of_contract": {"subject": "two hands clasped in a firm handshake, white shirt cuffs and dark jacket sleeves showing", "seed": 1},
         "law_guilds_chartered_monopolies": {"subject": "a blacksmith's iron anvil with a hammer resting on it, a heavy padlock hanging from its side", "seed": 2},
-        "law_regulated_utilities": {"subject": "a junction of thick steel pipes branching out three ways, fitted with a big lever valve", "seed": 1},
-        "law_trust_busting": {"subject": "a heavy sledgehammer smashing a thick iron chain, one big link burst apart", "seed": 0},
+        "law_regulated_utilities": {"subject": "a tall steel electricity pylon with its cables, a short water pipe with a lever valve at its foot", "seed": None},
+        "law_trust_busting": {"subject": "a big pair of iron bolt cutters snapping through a thick iron chain", "seed": None},
         # Criminal Justice
         "law_punishment_focused_criminal_justice": {"subject": "a heavy barred steel prison cell door slammed shut and bolted with a thick iron bar", "seed": 0},
         "law_rehabilitation_focused_criminal_justice": {"subject": "a small carpenter's workbench with a hand saw, a wood plane and a closed book on top", "seed": 1},
@@ -1090,18 +1092,18 @@ ICONS: dict[str, dict[str, dict]] = {
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
         # Electoral Finance
-        "law_donation_limits": {"subject": "a heavy iron bench vise clamped tight around a fat leather purse, squeezing it thin", "seed": 0},
+        "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": None},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_publicly_funded_elections": {"subject": "two identical plain wooden speaker's lecterns standing side by side at exactly equal height", "seed": 1},
         # Family & Reproductive Policy
         "law_communal_child_rearing": {"subject": "a tall three-tier iron dormitory bunk bed made up with identical small pillows and blankets", "seed": 2},
-        "law_population_control_measures": {"subject": "a white stork standing locked inside a tall iron birdcage with a padlocked door", "seed": 1},
+        "law_population_control_measures": {"subject": "a white stork standing locked inside a tall iron birdcage with a padlocked door", "seed": 2},
         "law_pro_natalist_subsidies": {"subject": "a large old-fashioned baby pram with a fat drawstring money pouch tied to its handle", "seed": 1},
         "law_state_sponsored_family_planning": {"subject": "a doctor's leather medical bag standing open beside a small plain glass pill bottle", "seed": 2},
         "law_traditional_family_structure": {"subject": "a small cosy cottage with a pitched roof, a front porch and a smoking brick chimney", "seed": 1},
         # Financial Regulation
-        "law_central_bank_independence": {"subject": "a large brass control lever on a pedestal, sealed inside a locked glass display case", "seed": 1},
+        "law_central_bank_independence": {"subject": "a brass steam engine governor with two heavy iron balls on swinging arms, on a small pedestal", "seed": None},
         # Round 1's funnel read as a loudspeaker horn, Ministry of Propaganda's object.
         "law_directed_credit_development_banks": {"subject": "a big tin watering can pouring water onto a small brick factory with a tall smokestack", "seed": 0},
         "law_free_mutual_banking": {"subject": "a traditional domed straw beehive skep on a wooden stand, a few bees around it", "seed": 0},
@@ -1131,20 +1133,20 @@ ICONS: dict[str, dict[str, dict]] = {
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         "law_non_inheritable_usage_rights": {"subject": "a round stone village well with a small wooden roof and a bucket on a rope", "seed": 2},
-        "law_partible": {"subject": "a heavy woodcutter's axe beside a thick log split into several uneven pieces", "seed": 0},
+        "law_partible": {"subject": "a round wheel of cheese cut into three uneven wedges pulled slightly apart", "seed": None},
         "law_primogeniture": {"subject": "one large ornate iron-bound treasure chest with a single big iron key in its lock", "seed": 1},
         # Intellectual Property
         "law_creative_commons": {"subject": "a painter's wooden easel with a blank canvas, a jar of brushes standing beside it", "seed": 1},
         "law_no_ip_protection": {"from": "law/law_traditional_ip_protection", "base": {"scale": 0.78},
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_open_source_innovation": {"subject": "three large interlocking jigsaw puzzle pieces fitted together, a fourth piece sliding into place", "seed": 2},
-        "law_state_intellectual_property": {"subject": "a tall steel filing cabinet with its top drawer pulled open, rolled blueprints sticking out", "seed": 2},
-        "law_strict_ip_protection": {"subject": "a large steel bear trap set open with a single glass light bulb resting in its jaws", "seed": 1},
-        "law_traditional_ip_protection": {"subject": "a glass light bulb with a big brass padlock hanging from its screw base", "seed": 1},
+        "law_state_intellectual_property": {"subject": "a tall steel filing cabinet with its top drawer pulled open, rolled blueprints sticking out", "seed": 1},
+        "law_strict_ip_protection": {"subject": "a glass light bulb wrapped tightly in heavy iron chains locked with a big padlock", "seed": None},
+        "law_traditional_ip_protection": {"subject": "a rolled patent scroll tied with a ribbon and wax seal, a glass light bulb standing beside it", "seed": None},
         # Internet Governance
         "law_net_neutrality": {"subject": "a sleek network router with antennas, a carpenter's spirit level lying flat across its top", "seed": 1},
         "law_no_internet_policy": {"subject": "an empty modern swivel office chair with a network cable coiled loosely on its seat", "seed": 0},
-        "law_state_controlled_internet": {"subject": "a tall computer server cabinet wrapped in heavy iron chains and locked with a big padlock", "seed": 1},
+        "law_state_controlled_internet": {"subject": "a tall computer server cabinet wrapped in heavy iron chains and locked with a big padlock", "seed": 0},
         "law_unregulated_internet": {"subject": "a covered pioneer wagon loaded high with computer servers and coiled network cables", "seed": 1},
         # Language Policy
         "law_civic_monolingualism": {"subject": "a large ornate iron key lying across one thick closed book with brass corners", "seed": 2},
@@ -1152,7 +1154,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_linguistic_purity": {"subject": "a pair of iron pruning shears beside a small neatly clipped topiary bush in a clay pot", "seed": 1},
         "law_local_vernacular": {"subject": "a folded patchwork quilt of mismatched squares draped over a rustic wooden stool", "seed": 0},
         "law_multilingual_federalism": {"subject": "three brass bells of different sizes and shapes hanging together from one sturdy wooden beam", "seed": 1},
-        "law_state_led_language_reform": {"subject": "a feather quill in a heavy brass inkwell, a wooden set square leaning against it", "seed": 2},
+        "law_state_led_language_reform": {"subject": "a feather quill in a heavy brass inkwell, a wooden set square leaning against it", "seed": 0},
         "law_ubiquitous_translation": {"subject": "a sleek mechanical robot parrot with metal feathers perched on a small brass stand", "seed": 0},
         # Ministry of Labor
         "law_no_ministry_of_labor": {"from": "law/law_pro_labor_ministry_of_labor", "base": {"scale": 0.78},
@@ -1163,7 +1165,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_minority_rights_affirmative_action": {"subject": "a sturdy wooden ladder leaning against a tall stone pedestal, offering a way up", "seed": 2},
         "law_minority_rights_cultural_assimilation": {"subject": "a large black iron melting pot over a fire, assorted small trinkets melting together inside", "seed": 1},
         "law_minority_rights_discrimination": {"subject": "a thick velvet rope barrier hanging between two polished brass stanchion posts, blocking the way", "seed": 2},
-        "law_minority_rights_ghettoization": {"subject": "a section of high brick wall topped with barbed wire, a narrow iron-barred gate in it", "seed": 1},
+        # The white seen between the gate's bars stayed in the cut-out: `see_through` clears it.
+        "law_minority_rights_ghettoization": {"subject": "a section of high brick wall topped with barbed wire, a narrow iron-barred gate in it", "seed": 1, "see_through": (0.42, 0.40, 0.63, 0.86)},
         # Every round-1 seed opened the "closed" shutters: the guard looks away instead.
         "law_minority_rights_indifference": {"subject": "a big guard dog curled up fast asleep in front of its wooden kennel on a straw mat", "seed": 1},
         "law_minority_rights_protection": {"subject": "a polished steel armour cuirass mounted upright on a simple wooden armour stand", "seed": 1},
@@ -1176,20 +1179,20 @@ ICONS: dict[str, dict[str, dict]] = {
         # Privacy Rights
         "law_intrusive_surveillance": {"subject": "a cluster of several security cameras mounted on one steel pole, pointing in all directions", "seed": 1},
         "law_minimal_privacy_protection": {"subject": "a short section of white wooden picket fence with a small latched garden gate", "seed": 2},
-        "law_moderate_data_privacy": {"subject": "a closed laptop computer with a sturdy brass padlock looped through a hasp on its lid", "seed": 1},
+        "law_moderate_data_privacy": {"subject": "a closed laptop computer with a sturdy brass padlock looped through a hasp on its lid", "seed": 0},
         "law_strong_privacy_rights": {"subject": "a small stone castle keep with its wooden drawbridge raised and its gate shut", "seed": 1},
         # Right to Information
         "law_freedom_of_information": {"subject": "a long wooden archive drawer pulled fully open, plain folders fanned upward inside it", "seed": 2},
-        "law_open_government": {"subject": "a bright brass oil lantern with clear glass panes, its open door letting light shine out", "seed": 1},
+        "law_open_government": {"subject": "a bright brass oil lantern with clear glass panes, its open door letting light shine out", "seed": 0},
         "law_state_secrets": {"subject": "a tall upright steel safe with thick riveted walls and a heavy lever handle on its door", "seed": 1},
         # Rules of War
-        "law_humanitarian_regulations": {"subject": "a canvas army field stretcher with wooden poles and a folded wool blanket on it", "seed": 0},
-        "law_limited_war": {"subject": "an old field cannon on wooden wheels with a wooden stopper plugging its muzzle", "seed": 1},
-        "law_total_war": {"subject": "a big artillery shell standing upright, a crowded cluster of smaller shells piled around it", "seed": 2},
+        "law_humanitarian_regulations": {"subject": "a canvas army field stretcher with wooden poles and a folded wool blanket on it", "seed": 2},
+        "law_limited_war": {"subject": "a sheathed sword with its hilt tied fast to the scabbard by a knotted cord", "seed": None},
+        "law_total_war": {"subject": "a big artillery shell standing upright, a crowded cluster of smaller shells piled around it", "seed": 0},
         "law_traditional_rules_of_war": {"subject": "a large carved wooden chess knight piece standing alone on a small stone pedestal", "seed": 1},
-        "law_war_crimes_forbidden": {"subject": "a bolt-action rifle lying on its side with a pair of steel handcuffs locked around it", "seed": 1},
+        "law_war_crimes_forbidden": {"subject": "a bolt-action rifle lying on its side with a pair of steel handcuffs locked around it", "seed": 2},
         # State Power
-        "law_devolution": {"subject": "a heavy bunch of different iron keys, several of them taken off and lying beside it", "seed": 0},
+        "law_devolution": {"subject": "a heavy bunch of different iron keys, several of them taken off and lying beside it", "seed": 1},
         "law_federal_system": {"subject": "a sturdy wooden barrel built of separate staves bound together by iron hoops", "seed": 1},
         "law_feudal_contracts": {"subject": "a medieval longsword lying diagonally across a thick sheaf of wheat tied with twine", "seed": 0},
         "law_unitary_state": {"subject": "a classical stone arch with a large prominent central keystone holding it together", "seed": 0},

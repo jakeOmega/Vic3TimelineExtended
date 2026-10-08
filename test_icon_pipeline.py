@@ -647,6 +647,30 @@ class DerivedIconTests(unittest.TestCase):
         self.assertEqual(tuple(solid[30, 30, :3]), (120, 80, 40))         # the raw's colours
         self.assertEqual(solid[5, 5, 3], 0)                               # outside stays clear
 
+    def test_see_through_clears_the_backdrop_inside_its_box_only(self):
+        try:
+            import scipy  # noqa: F401  (icon_render.see_through's binary_dilation)
+        except ImportError:
+            self.skipTest("scipy is not installed")
+        raw = Image.new("RGB", (100, 100), (255, 255, 255))               # the white backdrop
+        raw.paste((180, 90, 60), (10, 10, 90, 90))                        # a brick wall
+        raw.paste((250, 250, 250), (35, 20, 65, 90))                      # its opening, white
+        raw.paste((60, 60, 60), (48, 20, 52, 90))                         # one iron bar across it
+        raw.paste((200, 160, 140), (36, 80, 47, 90))                      # brown glow at the foot
+        kept = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        kept.paste((0, 0, 0, 255), (10, 10, 90, 90))                      # rembg kept the opening
+        saved = self.r.cut_out
+        self.r.cut_out = lambda im: kept
+        try:
+            out = np.asarray(self.r.cut(raw, {"see_through": (0.3, 0.15, 0.7, 0.95)}))
+        finally:
+            self.r.cut_out = saved
+        self.assertEqual(out[50, 40, 3], 0)                               # the opening clears
+        self.assertEqual(out[85, 40, 3], 0)                               # so does the glow
+        self.assertEqual(out[50, 50, 3], 255)                             # the bar stays
+        self.assertEqual(out[50, 25, 3], 255)                             # brick outside the box
+        self.assertEqual(out[50, 32, 3], 255)                             # brick inside the box
+
     def test_flag_layout(self):
         emblem = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
         emblem.paste((200, 160, 60, 255), (30, 30, 70, 70))
