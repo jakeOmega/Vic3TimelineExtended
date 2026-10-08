@@ -394,7 +394,10 @@ class CounterintelligenceTests(unittest.TestCase):
         option = event[event.index("name = covert_warfare.2.c"):]
         option = option[: option.index("\n\t}\n")]
         self.assertIn("var:iw_target ?= scope:iw_exposed_by", option)
-        self.assertIn("var:iw_net_strength >= covert_net_intel_tier_1_strength", option)
+        # The tier code, not the strength: covert_net_intel_tier_value is the
+        # only place the thresholds are compared.
+        self.assertIn("var:iw_net_intel_tier >= 1", option)
+        self.assertNotIn("covert_net_intel_tier_1_strength", option)
         self.assertIn("factor = 0.2", option)
 
     def test_harness_plants_networks_through_the_shipping_create(self):

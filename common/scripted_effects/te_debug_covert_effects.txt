@@ -265,10 +265,12 @@ te_debug_covert_hostile_cultivate = {
 
 # Every country we run an operation against gets a network of $VALUE$ strength
 # inside us (network counterintelligence), so each operation row's detection
-# line rises at once by covert_net_catch_penalty. Goes through the shipping
-# covert_net_create in the target's own scope, like a retaliation seed; the
-# target need not hold the journal entry, which only ticks the network.
-# Then re-stages our detection.
+# line rises at once by covert_net_catch_penalty (unless the row sits on the
+# floor even then: at funding 5 with a full network of our own there, raw is
+# -4 — step funding down first). Goes through the shipping covert_net_create
+# in the target's own scope, like a retaliation seed. A target without the
+# journal entry never ticks the network, so it neither decays nor is reaped:
+# run this again with VALUE = 0 to neutralise it. Then re-stages our detection.
 # Parameters: $VALUE$ = 0 .. covert_net_max
 # Scope: country
 te_debug_covert_hostile_networks = {

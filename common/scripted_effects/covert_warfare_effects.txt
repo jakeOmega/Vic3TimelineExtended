@@ -440,7 +440,9 @@ covert_net_clamp = {
 # not the target's own iw_ops, whose sync only runs while the target's journal
 # entry is active; every phase counts. It is the ONE place the mod tells a
 # country about hostile operations it has not caught (see covert_op_burn):
-# earned by holding a strong network inside the other service.
+# earned by holding a strong network inside the other service. (The OPERATOR
+# can infer the other way round, from a detection risk higher than the inputs
+# its row prints: covert_net_catch_penalty is in iw_detect but never printed.)
 # Called from covert_nets_sync step 3, straight after the strength write, and
 # from the console harness. Never from a tooltip-walked path: it relies on
 # saved scopes. Both saved scopes are re-saved before use on every call, so a

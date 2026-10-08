@@ -55,7 +55,7 @@ Terms the mod introduces, or uses in its own sense.
 
 | Term | Meaning | Chapter |
 |---|---|---|
-| Agent network | Your 0–100 presence inside one target country. It gives operations a head start, cover from detection, and intelligence reports. | [Cultural hegemony and covert warfare](11-influence.md#agent-networks) |
+| Agent network | Your 0–100 presence inside one target country. It gives operations a head start, cover from detection, and intelligence reports, and makes that country's operations against you likelier to be caught. | [Cultural hegemony and covert warfare](11-influence.md#agent-networks) |
 | Arsenal ceiling | The most warheads you choose to hold, or a Nuclear Arms Limitation treaty or the UN Prohibition Treaty holds you to. Warheads above it are taken apart, and your program builds nothing while you are at or above it. | [Nuclear weapons](14-nuclear.md#reducing-or-giving-up-an-arsenal) |
 | Bubble pressure | Speculation that builds up during a boom. It sets how likely a banking crash is and how hard it hits. | [Banking and monetary policy](04-banking.md#cycle-value-momentum-and-bubble-pressure) |
 | Bulk Transportation | The base game's Merchant Marine good, renamed: freight, produced by transport infrastructure and used by industry. | [Economy and construction](03-economy.md#bulk-transportation-and-freight) |
@@ -72,7 +72,7 @@ Terms the mod introduces, or uses in its own sense.
 | Credit standing | The part of your borrowing cost set by what your country is: rank, finance technologies and a stock exchange, institutions and currency credibility. | [Banking and monetary policy](04-banking.md#what-your-government-pays-to-borrow) |
 | Cultural share | Your cultural pull as a share of the world's total. It sets your standing in the cultural hegemony race. | [Cultural hegemony and covert warfare](11-influence.md#cultural-share-and-influence-tiers) |
 | Cycle value | The 0–100 reading that places your economy in one of the seven banking phases, from Panic to Frenzy. | [Banking and monetary policy](04-banking.md#the-seven-banking-cycle-phases) |
-| Detection Risk | The monthly chance that one of your covert operations is caught. Funding, your network in the target and your Efficiency Factor lower it; priority and the target's counterintelligence raise it. | [Cultural hegemony and covert warfare](11-influence.md#detection-and-exposure) |
+| Detection Risk | The monthly chance that one of your covert operations is caught. Funding, your network in the target and your Efficiency Factor lower it; priority, the target's counterintelligence and any network the target holds inside your country raise it. | [Cultural hegemony and covert warfare](11-influence.md#detection-and-exposure) |
 | Docket | The UN's monthly scan of world events, which puts real situations before the countries concerned. | [The United Nations](10-united-nations.md#the-un-docket) |
 | Exchange Rate Index | The real value of your currency, where 100 is par. | [Banking and monetary policy](04-banking.md#the-exchange-rate-index-and-capital-controls) |
 | Flagship building | A company's own unique building, built by the government while the company's prosperity bonus is active. | [The extended timeline](02-timeline.md#company-flagship-buildings) |

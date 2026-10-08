@@ -407,12 +407,13 @@ A strong network gives new operations there a head start of up to five months
 (strength ÷ 20) and takes up to 5 points off their detection risk. It also adds
 up to 10 points (strength ÷ 10) to the detection risk of every operation that
 country runs against you, because your agents inside its service hear of them;
-the network's row shows how many. From strength 50 it reports the target's
-intelligence capacity and technology count beside yours, and from 75 how many
-covert operations the target runs against you: the only way to learn of
-operations your counterintelligence has not caught, though it never says which. Each network's row shows its strength as a number and a
-bar, with an arrow for growing, decaying or at full strength; hover the strength
-for what the report shows at 50 and at 75. In the space race, the same two tiers
+the network's row shows how many points. From strength 50 it reports the
+target's intelligence capacity and technology count beside yours, and from 75
+how many covert operations the target runs against you: the only way to learn
+of operations your counterintelligence has not caught, though it never says
+which. Each network's row shows its strength as a number and a bar, with an
+arrow for growing, decaying or at full strength; hover the strength for what the
+report shows at 50 and at 75. In the space race, the same two tiers
 narrow your estimate of that country's progress on a milestone from ±25% of the
 goal to ±10% and ±5% (see [The space milestone
 panel](16-space.md#the-space-milestone-panel)).

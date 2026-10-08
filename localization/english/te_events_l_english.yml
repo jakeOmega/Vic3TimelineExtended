@@ -4899,7 +4899,7 @@
  te_debug_covert.2.h:0 "Raise one operation to maximum priority (through the real step effect; upkeep and detection change now, effects at next month's pulse)"
  te_debug_covert.2.i:0 "Raise every network to full strength (detection drops now; new operations start 5 months along)"
  te_debug_covert.2.j:0 "Run one month of network growth and decay now"
- te_debug_covert.2.k:0 "Give every country we run an operation against a full-strength network inside us (detection rises now)"
+ te_debug_covert.2.k:0 "Give every country we run an operation against a full-strength network inside us (detection rises now, unless a row is still on the floor)"
  te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
  te_debug_covert.3.a:0 "Set Tradecraft to 45 (Established)"
  te_debug_covert.3.b:0 "Set Tradecraft to 85 (Veteran)"
