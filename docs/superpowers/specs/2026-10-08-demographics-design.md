@@ -117,7 +117,7 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | **Age and sex**: about 20 five-year birth cohorts, each holding its women and its men | state; the country's is the sum | modelled (§2) | population pyramid, men left and women right |
 | Derived: median age, dependency ratio, working-age share, sex balance | state, country | from the cohorts | table, with a trend arrow |
 | **Fertility**: children per woman, with its wealth, education and technology terms | state | modelled from engine inputs (§2.3) | table; the terms on hover |
-| **Mortality**: life expectancy at birth and at 65, infant mortality, with the four causes' terms | state | modelled from engine inputs (§2.4) | table; the terms on hover |
+| **Mortality**: life expectancy at birth and at 65, infant mortality, with the five causes' terms | state | modelled from engine inputs (§2.4) | table; the terms on hover |
 | **Net migration** last year | state | the residual after natural change (§2.5) | table |
 | **Income inequality**: a Gini coefficient | state; country | computed from pops each year (§4.1) | table, map mode |
 | **Wealth Concentration**: the #822 score, now per state | state; country | modelled stock (§4.2) | bar with its target segment; map mode |
@@ -171,7 +171,7 @@ Per state, on the yearly state pulse:
 
 1. **Births** = the age-specific fertility of each cohort of women aged 15–49 (peaking at 25–29), scaled to the
    state's children per woman (§2.3), into the open cohort. 105 boys are born for every 100 girls (§3).
-2. **Deaths**: each cohort's women and men lose their rates, the sum of the four causes at their age (§2.4).
+2. **Deaths**: each cohort's women and men lose their rates, the sum of the five causes at their age (§2.4).
 3. **War dead, known kills and migration** come out of, or go into, the cohorts at the right ages (§2.5).
 4. **Scale** the ring to the engine's population, and store the population for next year's residual.
 5. **Refresh** the births and deaths modifiers and the effects in §7.
@@ -261,17 +261,24 @@ Heirship's rural cut.
 
 ### 2.4 Mortality by age
 
-**Four causes, each on the ages it really affects.** This is the epidemiological transition: infection first, then
+**Five causes, each on the ages it really affects.** This is the epidemiological transition: infection first, then
 accidents and violence, then the chronic diseases of old age (Omran, 1971). Each cause is a rate schedule over age,
-for women and for men. A cohort's death rate is the sum of the four at its age. Life expectancy at birth and at 65,
+for women and for men. A cohort's death rate is the sum of the five at its age. Life expectancy at birth and at 65,
 and infant mortality, are computed from the rates for the panel and for fertility's child-survival term.
 
 | Cause | Ages | Lowered by | Raised by | Anchors |
 |---|---|---|---|---|
 | **Infection and malnutrition** | mostly under 5; also 5–14 and the old | SoL (nutrition: the engine's curve); mothers' literacy; the health system law and institution; `medical_degrees`, `pharmaceuticals`, `modern_nursing`, `antibiotics`, `modern_vaccines`, `antibiotic_mass_production` | crowding in cities before sanitation (Migration Crowding active and no urban planning); starvation and devastation (engine, read through); tropical disease and heat (global warming) | infant mortality about 150–250 per 1,000 births in 1836 Europe, about 50 in 1950, under 5 today |
-| **External causes**: accidents, violence, work | 15–44; men about three times women | the Workplace Safety institution; the Ministry of Consumer Protection (move its flat −1% here); policing | turmoil (`state_mortality_turmoil_mult`, read through); child labour (engine); motor vehicles from about era 5 until road-safety techs | |
+| **External causes: work** (industrial and mining accidents) | 15–64, split between the sexes by their share of the workforce | the Workplace Safety institution | child labour (engine); mining and heavy-industry employment | |
+| **External causes: other** (violence, traffic, everyday accidents) | 15–44; men about three times women | the Ministry of Consumer Protection (move its flat −1% here); policing; road-safety techs | turmoil (`state_mortality_turmoil_mult`, read through); motor vehicles from about era 5 | |
 | **Maternal** | women 15–44, per birth | the health system; `modern_nursing`, `antibiotics` | high fertility (more births); restricted contraception (§8.1) | about 1 death in 100–200 births in the 19th century; about 1 in 10,000 in rich countries today |
 | **Chronic and old age** | rising from 40, doubling about every 8 years; men higher | the health system law (public insurance most); `modern_pharmaceuticals`, `personalized_medicine`, `telemedicine`; pensions (old-age poverty); `biological_immortality` (halts the rise, §8.3) | pollution (engine, read through); drugs and alcohol (the drugs system); heat waves (global warming) | life expectancy at 65: about 10 years in 1900 and about 20 today, most of the gain since 1970 |
+
+**Work deaths follow the workforce.** Work accidents are split between women and men by each sex's share of the
+workforce, which the women's-rights laws set: lowest under No Women's Rights, higher on farms under Women in the
+Fields, and close to men's share under Women in the Workplace, Women's Suffrage and Protected Class. So Workplace
+Safety protects women more as they enter work, and a country that brings women into mines and factories without it
+sees their deaths rise. The other external causes stay mostly men's.
 
 **Applied as** one deaths modifier, refreshed yearly from the state pulse: the model's deaths ÷ the engine's deaths
 before the modifier − 1. The engine's own mortality modifiers (starvation, devastation, pollution, turmoil, vanilla's
@@ -282,7 +289,8 @@ Japan's is 13 per 1,000 because a third of its people are over 60, not because i
 
 **Why split by cause.** Each cause has its own levers, so the player sees them separately:
 - schools and vaccines save children;
-- workplace safety and consumer protection save young men;
+- workplace safety saves workers, women as well as men once women's-rights laws bring women into work;
+- consumer protection and policing save young men;
 - hospitals and pharmaceuticals add years at the end.
 
 That makes the health and safety institutions matter beyond their flat percentages. It also gives the late game
@@ -509,8 +517,9 @@ the system's most invented number, so it is built last (§12), with every effect
 | SoL (wealth) | fertility; infection and malnutrition deaths | the retuned curves (§2.3, §2.4) |
 | Literacy (education) | desired fertility; access to the means; child deaths | the yearly pop walk (§2.3, §2.4) |
 | Contraception technology: `vulcanization`, `contraceptive_pill`, `modern_pharmaceuticals` | the means | tech tiers (§2.3) |
-| Medical technology, health laws and institutions | the four causes of death, each at its own ages | §2.4 |
-| Workplace Safety, Ministry of Consumer Protection, policing | external causes: young adults, mostly men | §2.4 |
+| Medical technology, health laws and institutions | the five causes of death, each at its own ages | §2.4 |
+| Workplace Safety; women's-rights laws | work deaths, split between the sexes by their share of the workforce | §2.4 |
+| Ministry of Consumer Protection, policing | other external deaths: young adults, mostly men | §2.4 |
 | Pensions | old-age deaths; who among the old works | §2.4, §7 |
 | Drugs and alcohol, pollution, heat | chronic and old-age deaths | §2.4 |
 | Every other birth or mortality modifier (vanilla laws, events, starvation, devastation) | fertility, mortality | read through, placed by age |
@@ -654,7 +663,7 @@ pension law, participation stays at 0.5: people work until they can't.
 |---|---|
 | Schools, literacy, education access | desired fertility, access to the means and child deaths (§2.3, §2.4) |
 | Health laws and institutions, medical technology | each cause of death at its own ages (§2.4) |
-| Workplace Safety, Ministry of Consumer Protection, policing | young adults' deaths (§2.4) |
+| Workplace Safety, Ministry of Consumer Protection, policing | working-age and young adults' deaths; women's-rights laws decide how much of the work risk falls on women (§2.4) |
 | Child-labour and schooling laws | the 10–14s' participation (§7). Vanilla's own effects (children's earnings in the dependent wage, the mortality cost) stay |
 | Women's-rights laws | vanilla's birth and workforce modifiers, read through |
 | Migration laws | how large the young-adult inflow is |
@@ -707,7 +716,7 @@ there is no journal entry to gate it. Style guide rules apply.
     forward from current rates, country only, at the yearly pulse. It answers "is my workforce about to shrink?" at a
     glance.
   - Hovering children per woman shows its terms: wealth, education, child survival, urban life, means.
-  - Hovering life expectancy shows the four causes.
+  - Hovering life expectancy shows the five causes.
 - **Family Policy** (open): the law in force, the measures as buttons (on, off or greyed, each with its upkeep and
   remaining term), and the pension-age setting under Old Age Pension.
 - **Wealth** (open):
@@ -796,7 +805,7 @@ Monuments' pattern).
 
 | Phase | Contents | Gate |
 |---|---|---|
-| 0. Probes and harness | §14; the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the four causes of death | the harness meets §2.3's targets |
+| 0. Probes and harness | §14; the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, map modes, history, the rule. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
 | 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
