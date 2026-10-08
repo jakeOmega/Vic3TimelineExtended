@@ -687,11 +687,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
         # The monetary articles, on law icons until now.
-        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": None},
-        "imposed_currency_peg": {"subject": "a small copper coin chained to a big gold coin by a heavy iron chain with a closed iron padlock on it", "seed": None},
-        "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": None},
-        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": None},
-        "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": None},
+        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": 2},
+        # Round 1 (no marks named) stamped $ on a coin in all three candidates.
+        "imposed_currency_peg": {"subject": "a small plain copper coin stamped with a small star, chained to a big plain gold coin stamped with a small star by a heavy iron chain with a closed iron padlock on it", "seed": None},
+        "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": 1},
+        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 0},
+        "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": 1},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
