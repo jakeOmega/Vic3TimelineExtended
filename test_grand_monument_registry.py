@@ -897,7 +897,33 @@ class ContestTests(unittest.TestCase):
         body = squash(block(self.e, "gm_state_start_ceremony"))
         self.assertIn("NOT = { has_variable = gm_ceremony_pending }", body)
         self.assertIn("set_variable = { name = gm_ceremony_pending days = 30 }", body)
+        self.assertIn("set_variable = { name = gm_ceremony_level value = gm_state_grandeur }", body)
         self.assertIn("trigger_event = { id = monument_events.2 }", body)
+
+    def test_the_refresh_asks_a_ceremony_the_hook_missed(self):
+        """Five queued levels finishing on one day fired no on_building_built
+        (2026-10-07): the refresh asks once for each grandeur no ceremony has
+        asked about, so leaving a monument undedicated waits for its next level."""
+        sweep = squash(block(self.e, "gm_state_offer_missed_ceremony"))
+        self.assertIn("if = { limit = { gm_system_enabled = yes gm_state_is_dedicated = no "
+                      "NOT = { has_variable = gm_ceremony_pending } "
+                      "OR = { NOT = { has_variable = gm_ceremony_level } "
+                      "AND = { has_variable = gm_ceremony_level var:gm_ceremony_level < gm_state_grandeur } } } "
+                      "gm_state_start_ceremony = yes }", sweep)
+        refresh = squash(block(self.e, "gm_country_refresh"))
+        self.assertLess(refresh.find("every_scope_state = { limit = { has_building = building_grand_monument }"),
+                        refresh.find("gm_state_offer_missed_ceremony = yes"))
+        self.assertLess(refresh.find("gm_state_offer_missed_ceremony = yes"),
+                        refresh.find("add_to_variable_list = { name = gm_states target = prev }"))
+        self.assertIn("gm_remove_state_var = { VAR = gm_ceremony_level }", squash(block(self.e, "gm_clear_state")))
+        # The event records the level again as it opens: a Rededicate rebuild's
+        # level may not be readable in the effect that rebuilt it.
+        ev2 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")))
+        self.assertIn("immediate = { set_variable = { name = gm_ceremony_level value = gm_state_grandeur }", ev2)
+        # Leaving it undedicated ends the pending ceremony; the recorded level
+        # is what holds the next ask back.
+        self.assertIn("default_option = yes", ev2)
+        self.assertIn("hidden_effect = { gm_remove_state_var = { VAR = gm_ceremony_pending } }", ev2)
 
     def test_demolished_contested_counts_as_torn_down(self):
         body = squash(block(self.e, "gm_state_monthly"))
@@ -1733,9 +1759,21 @@ class ReviewFixTests(unittest.TestCase):
 
     def test_a_lost_monument_lowers_the_baseline(self):
         body = squash(block(read(COM_EFFECTS), "gm_com_check_progress"))
-        self.assertIn("if = { limit = { var:gm_com_drop > 0 } set_variable = { name = gm_com_baseline "
-                      "value = gm_com_fit_grandeur } }", body)
-        self.assertLess(body.find("gm_com_drop"), body.find("gm_com_left"))
+        lower = ("if = { limit = { var:gm_com_baseline > gm_com_fit_grandeur } "
+                 "set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur } }")
+        met = "if = { limit = { var:gm_com_target <= gm_com_progress } gm_com_fulfil = yes }"
+        self.assertIn(lower, body)
+        self.assertIn(met, body)
+        self.assertLess(body.find(lower), body.find(met))
+
+    def test_progress_writes_no_variable_it_reads(self):
+        """The policy buttons' tooltips walk the refresh without writing:
+        a variable set and then read in gm_com_check_progress read as unset
+        there and logged three errors a frame (gm_com_drop, 2026-10-07)."""
+        body = squash(block(read(COM_EFFECTS), "gm_com_check_progress"))
+        # Only the baseline, which acceptance already set, so a tooltip pass
+        # reads the stored value.
+        self.assertEqual(set(re.findall(r"set_variable = \{ name = (\w+)", body)), {"gm_com_baseline"})
 
     def test_a_vanished_state_lapses(self):
         self.assertIn("has_variable = gm_com_state NOT = { exists = var:gm_com_state }",

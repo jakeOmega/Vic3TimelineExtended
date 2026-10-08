@@ -978,6 +978,8 @@ text = "[GetScriptedGui('my_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalE
 
 Vanilla ships exactly this for a country list: `je_hispanoamerica_not_recognized_countries_sgui` + `HISPANOAMERICA_RECOGNITION_COUNTRIES_LIST_ENTRY` (`ip4_spain_l_english.yml`). Numbers and script values on the current scope read as `[THIS.Var('x').GetValue|0]` / `[THIS.ScriptValue('x')|0]`, and a scope saved earlier in the same effect chain reads as `[SCOPE.sCountry('x').GetName]`. `AddLocalizationIf(bool, 'LOC_KEY')` localizes the key (434 vanilla uses), so the fallback branch is a normal loc key.
 
+A button's tooltip walks its `effect` the same way, `hidden_effect` included, and writes nothing. So a `set_variable` followed by a `var:` read of that name in a `limit` reads as unset in the tooltip pass. It logs `Failed to fetch variable`, `Event target link 'var' returned an unset scope` and `Invalid left side during comparison 'var'` each frame the tooltip shows. The real click is unaffected. Compare the values directly instead (`var:a > some_script_value`), or read a variable that persists between runs. The Grand Monument policy buttons call `gm_country_refresh`, and its commission check logged about 150 such lines a burst through a temporary `gm_com_drop` until 2026-10-07.
+
 One cost to budget for: `ExecuteTooltip` re-renders **every frame** the widget is visible, so put long lists behind a collapsed-by-default toggle. Keeping the logic in `common/scripted_effects/` helpers and letting the SGUI just call them is still the tidier split, though since #305 `effect_trigger_validity_audit` name-validates `common/scripted_guis/` and `common/customizable_localization/` too. `gui/journal_entry_widgets/un_chamber_widget.gui` + `common/scripted_guis/un_chamber_sguis.txt` + `common/scripted_effects/un_chamber_display_effects.txt` are the worked example.
 
 ### `save_scope_as` vs `set_variable` for Scope References
@@ -1425,6 +1427,10 @@ The building's operational PM then grants `state_building_X_max_level_add = 1` p
 **When NOT to use `has_max_level`:** If a building is meant to be a non-buyable unique monument (`buildable = no`, `expandable = no`), it cannot be purchased by companies — no `has_max_level` pattern is needed. The old `buildable = no` + `expandable = no` pattern is correct for buildings you never want companies to acquire.
 
 **Megastructure buildings** (`building_space_elevator`, `building_solar_collector`, `building_orbital_battlestation`, `building_mind_upload_nexus`, `building_antimatter_facility`, `building_nanofabrication_center`, `building_consciousness_network`) use `has_max_level` because they were deliberately converted to allow company ownership while retaining on_action level gating.
+
+## `on_building_built` Missed Levels That Finished Together
+
+Seen in the owner's game on 2026-10-07 (1.14.5, read from the autosaves either side). A player queued five levels of a new Grand Monument at once. The engine created the building at level 0 when construction started and kept one queue entry per level. The five ran in parallel at the same progress and finished on the same day, and `on_building_built` ran nothing for that building: `monument_events.1` never set its country marker, so no dedication ceremony appeared. In the same session an AI monument whose levels finished one at a time fired the hook on its first level. Why the batch was missed is unknown. Whether the hook fires for a level after the first is untested too; vanilla has a separate `on_building_expanded`. So don't let a building hook be the only way script notices a level. Back it with a check in a pulse that compares the level with the one last handled. The Grand Monuments do this in `gm_state_offer_missed_ceremony`, called from `gm_country_refresh`, which asks once for each grandeur no ceremony has asked about (`gm_ceremony_level`).
 
 ## Locking Production Methods: Game-Rule Flags Per Game, Self-Reference Ratchet Per Building
 
