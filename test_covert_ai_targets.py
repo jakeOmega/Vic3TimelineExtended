@@ -66,16 +66,17 @@ BREAK_WHEN = {
     "regime_change": [HOSTILITY_GONE],
     "nuclear_sabotage": [HOSTILITY_GONE],
     "cultivate_assets": [HOSTILITY_GONE],
-    "industrial_espionage": [
-        "NOT = { covert_tech_stealable_production = { " + TARGET + " } }"
-    ],
-    "military_espionage": [
-        "NOT = { covert_tech_stealable_military = { " + TARGET + " } }"
-    ],
     "space_espionage": ["sr_has_running_milestone = no"],
 }
 # Never by choice: requirement_to_maintain ends them when their purpose goes.
-NEVER_BREAK = {"infrastructure_sabotage", "comms_disruption", "influence_campaign", "secure_material"}
+NEVER_BREAK = {
+    "infrastructure_sabotage",
+    "comms_disruption",
+    "influence_campaign",
+    "secure_material",
+    "industrial_espionage",
+    "military_espionage",
+}
 # Launch-only tests: none of them is a reason to end a running operation.
 LAUNCH_ONLY = (
     "covert_operations_available_slots",

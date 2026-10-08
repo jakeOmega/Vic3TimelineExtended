@@ -146,7 +146,10 @@ EFFECTS_PREAMBLE = (
 )
 TRIGGERS_PREAMBLE = (
     "# Scope: country (the would-be operator). True when $TARGET$ has researched a\n"
-    "# technology of the category that we have not and could research now.\n"
+    "# technology of the category that we have not and could research now, or are\n"
+    "# researching: exactly when covert_tech_steal_<category> would take something.\n"
+    "# Espionage's launch (possible, will_propose) and keep (requirement_to_maintain)\n"
+    "# gates.\n"
 )
 CUSTOM_LOC_PREAMBLE = (
     "# The latest technology an operation stole, from its container's\n"
@@ -207,11 +210,20 @@ def render_grant(era: int, values: list[int]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _candidate(tech: Tech, target: str, depth: int) -> list[str]:
+def _candidate(tech: Tech, target: str, depth: int, *, or_current: bool = False) -> list[str]:
+    """One technology's theft condition. `or_current` also accepts it while
+    we research it: the steal's current-research branch reads no
+    can_research, so a gate must not either, or it could end an operation
+    that is still stealing."""
     tab = "\t" * depth
+    researchable = (
+        f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}"
+        if or_current
+        else f"can_research = {tech.key}"
+    )
     return [
         f"{tab}NOT = {{ has_technology_researched = {tech.key} }}",
-        f"{tab}can_research = {tech.key}",
+        f"{tab}{researchable}",
         f"{tab}{target} ?= {{ has_technology_researched = {tech.key} }}",
     ]
 
@@ -254,7 +266,7 @@ def render_steal(category: str, techs: list[Tech]) -> str:
 def render_stealable(category: str, techs: list[Tech]) -> str:
     lines = [f"covert_tech_stealable_{category} = {{", "\tOR = {"]
     for tech in techs:
-        lines += ["\t\tAND = {", *_candidate(tech, "$TARGET$", 3), "\t\t}"]
+        lines += ["\t\tAND = {", *_candidate(tech, "$TARGET$", 3, or_current=True), "\t\t}"]
     lines += ["\t}", "}"]
     return "\n".join(lines) + "\n"
 
