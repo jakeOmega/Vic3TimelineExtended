@@ -144,7 +144,8 @@ Monarchist.
 The pie chart shows each model's share of world culture, weighted
 by the cultural pull of the countries running it rather than by their number.
 Hover a model in the legend for what qualifies. The tests run in a fixed
-order and a country counts as the first model it fits, so a monarchy with
+order and a country counts as the first model it fits, so a Council Republic
+under Anarchy is Anarchist, not Communist, a monarchy with
 Universal Suffrage is Constitutional Monarchist, not Liberal, a monarchy under
 Technocracy is Technocratic, and a Single-Party State with Ancestral Citizenship
 and a Command Economy is Fascist, not Communist.
