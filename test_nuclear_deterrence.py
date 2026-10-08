@@ -2047,5 +2047,154 @@ class TestReviewFixes474(unittest.TestCase):
         self.assertIn("id = nuclear_loose.7", blame)
 
 
+class TestPledgeAfterUnorderedLaunch(unittest.TestCase):
+    """#803: after a launch nobody ordered broke No First Use (#448 left the
+    doctrine and the amendment standing), the government answers in
+    nuclear_incident.6: reaffirm, repudiate at half price, or say nothing."""
+
+    def setUp(self):
+        self.e = strip_comments(read(EFFECTS))
+        self.inc = strip_comments(read(INCIDENT_EVENTS))
+
+    def test_only_an_incident_launch_under_nfu_marks_the_breach(self):
+        record = block(self.e, "nd_record_nuclear_use")
+        nfu = record[record.index("nd_doctrine_nfu = yes"):]
+        nfu = nfu[:nfu.index("set_variable = { name = nd_has_used")]
+        self.assertIn("nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }", nfu)
+        self.assertIn("set_variable = nd_nfu_unordered_breach", nfu)
+        for kind in ("warning", "commander", "system"):
+            self.assertIn(f"scope:nd_incident_launch_{kind} ?= scope:nd_rec_attacker", nfu)
+        # The ruling stands: the record itself moves no doctrine.
+        self.assertNotIn("nd_set_doctrine", record)
+        self.assertNotIn("nd_repudiate_nfu", record)
+
+    def test_every_incident_that_can_launch_asks_afterwards(self):
+        for event in ("nuclear_incident.3", "nuclear_incident.20", "nuclear_incident.30"):
+            self.assertIn("nd_nfu_breach_follow_up = yes", block(block(self.inc, event), "after"), event)
+        follow = block(self.e, "nd_nfu_breach_follow_up")
+        self.assertIn("remove_variable = nd_nfu_unordered_breach", follow)
+        self.assertIn("id = nuclear_incident.6", follow)
+
+    def test_the_three_answers(self):
+        ev = block(self.inc, "nuclear_incident.6")
+        self.assertIn("nd_doctrine_nfu = yes", block(ev, "trigger"))
+        self.assertIn("nd_reaffirm_nfu = yes", option_body(self.inc, "nuclear_incident.6.a"))
+        self.assertIn("nd_set_doctrine_2_after_breach = yes", option_body(self.inc, "nuclear_incident.6.b"))
+        silent = option_body(self.inc, "nuclear_incident.6.c")
+        self.assertIn("default_option = yes", silent)
+        for effect in ("nd_reaffirm_nfu", "nd_repudiate_nfu", "nd_set_doctrine"):
+            self.assertNotIn(effect, silent)
+
+    def test_reaffirming_costs_standing_and_restores_credibility(self):
+        reaffirm = block(self.e, "nd_reaffirm_nfu")
+        self.assertIn("name = nd_nfu_reaffirmed", reaffirm)
+        self.assertIn("is_decaying = yes", reaffirm)
+        self.assertIn("change_variable = { name = nd_credibility add = 15 }", reaffirm)
+        self.assertIn("text = nd_tt_credibility_up_15", reaffirm)
+        self.assertNotIn("nd_set_doctrine", reaffirm)
+        self.assertIn("country_legitimacy_base_add = -10",
+                      block(strip_comments(read(MODIFIERS)), "nd_nfu_reaffirmed"))
+
+    def test_repudiating_after_the_breach_is_half_price_and_strikes_the_amendment(self):
+        after = block(self.e, "nd_set_doctrine_2_after_breach")
+        self.assertIn("nd_repudiate_nfu = { CREDIBILITY = 10 INFAMY = 5 }", after)
+        # The core must not charge the full repudiation on top.
+        self.assertIn("nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = no }", after)
+        self.assertIn("nd_repudiate_nfu = { CREDIBILITY = 20 INFAMY = 10 }", block(self.e, "nd_set_doctrine"))
+        repudiate = block(self.e, "nd_repudiate_nfu")
+        self.assertIn("nd_break_pledge_effects = { CREDIBILITY = $CREDIBILITY$ INFAMY = $INFAMY$ }", repudiate)
+        self.assertIn("nd_strike_nfu_amendment = yes", repudiate)
+
+
+class TestProliferationAlertAnswers(unittest.TestCase):
+    """The proliferation alert's accommodation and reassurance answers, and the
+    NPT standing case (#804)."""
+
+    def setUp(self):
+        self.ev = strip_comments(read(WEAPON_EVENTS))
+        self.t = strip_comments(read(TRIGGERS))
+        self.nt = strip_comments(read(NUKE_TRIGGERS))
+
+    def test_accommodation_pays_with_the_opponents(self):
+        e = option_body(self.ev, "nuclear_weapon_events.18.opt_e")
+        self.assertIn("value = 25", e)
+        self.assertIn("catalyst_event_positive", e)
+        opponents = block(e, "every_country")
+        self.assertIn("nuclear_program_opposes = { PROLIFERATOR = scope:proliferating_country }", opponents)
+        self.assertIn("NOT = { THIS = ROOT }", opponents)
+        self.assertIn("value = -15", opponents)
+        # The AI never accommodates a programme it opposes.
+        ai = block(e, "ai_chance")
+        self.assertRegex(ai, r"nuclear_program_opposes = \{ PROLIFERATOR = scope:proliferating_country \}"
+                             r"\s*\}\s*factor = 0")
+        self.assertIn("rivalry", block(self.nt, "nuclear_program_opposes"))
+        self.assertIn("nd_crisis_opponent", block(self.nt, "nuclear_program_opposes"))
+
+    def test_guarantee_offer_reaches_only_candidates(self):
+        g = option_body(self.ev, "nuclear_weapon_events.18.opt_g")
+        trig = block(g, "trigger")
+        self.assertIn("nd_is_armed = yes", trig)
+        call = "nd_proliferation_guarantee_candidate = { GUARANTOR = ROOT PROLIFERATOR = scope:proliferating_country }"
+        self.assertIn(call, trig)
+        self.assertIn(call, block(g, "every_country"))
+        self.assertIn("id = nuclear_weapon_events.25", g)
+        self.assertIn("save_scope_as = nuclear_pg_guarantor", g)
+
+    def test_candidate_reads_the_articles_gates(self):
+        body = block(self.t, "nd_proliferation_guarantee_candidate")
+        for line in ("any_neighbouring_state = { owner = $PROLIFERATOR$ }",
+                     "nd_believed_armed = no",
+                     "nd_is_guaranteed = no",
+                     "NOT = { is_direct_subject_of = scope:nd_pg_guarantor }",
+                     "NOT = { has_war_with = scope:nd_pg_guarantor }",
+                     "relations_threshold:poor",
+                     "has_type = alliance",
+                     "has_type = defensive_pact",
+                     "has_type = guarantee_independence",
+                     "is_in_same_power_bloc = scope:nd_pg_beneficiary",
+                     "nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_pg_guarantor STATE = scope:nd_pg_beneficiary }"):
+            self.assertIn(line, body)
+        # The article's own ties: a Guarantee Independence counts only from
+        # the guarantor to the beneficiary, and a bloc only if there is one.
+        gi = body[body.index("has_type = guarantee_independence"):]
+        self.assertIn("source_country = scope:nd_pg_guarantor", gi)
+        self.assertIn("target_country = scope:nd_pg_beneficiary", gi)
+        self.assertIn("is_in_power_bloc = yes", body)
+
+    def test_answer_rechecks_and_signs_the_budapest_guarantee(self):
+        ev = block(self.ev, "nuclear_weapon_events.25")
+        accept = option_body(ev, "nuclear_weapon_events.25.a")
+        recheck = ("nd_proliferation_guarantee_candidate = { GUARANTOR = scope:nuclear_pg_guarantor "
+                   "PROLIFERATOR = scope:proliferating_country }")
+        self.assertIn(recheck, block(accept, "trigger"))
+        self.assertIn("nd_bp_treaty_guarantee = { GUARANTOR = scope:nuclear_pg_guarantor STATE = ROOT }", accept)
+        self.assertIn("name = nuclear_pg_accepted", accept)
+        self.assertIn("id = nuclear_weapon_events.26", accept)
+        self.assertIn("NOT = { " + recheck + " }", block(option_body(ev, "nuclear_weapon_events.25.c"), "trigger"))
+        decline = option_body(ev, "nuclear_weapon_events.25.b")
+        self.assertIn(recheck, block(decline, "trigger"))
+        self.assertIn("id = nuclear_weapon_events.26", decline)
+        self.assertIn("exists = scope:nuclear_pg_accepted", block(self.ev, "nuclear_weapon_events.26"))
+
+    def test_npt_standing_case(self):
+        teeth = strip_comments(read(ROOT / "common/scripted_triggers/un_teeth_triggers.txt"))
+        body = block(teeth, "un_case_npt_standing_applies")
+        for line in ("un_tier_is_supranational = yes",
+                     "has_modifier = un_member_modifier",
+                     "un_propose_npt_in_force = yes",
+                     "NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }",
+                     "un_regime_npt_threshold = yes",
+                     "has_variable = un_npt_built_outside"):
+            self.assertIn(line, body)
+        term = block(strip_comments(read(ROOT / "common/script_values/un_teeth_values.txt")),
+                     "un_case_standing_term")
+        self.assertIn("un_case_npt_standing_applies = yes", term)
+        self.assertEqual(term.count("add = un_case_standing_value"), 1)
+        first = strip_comments(read(ROOT / "common/scripted_effects/nuclear_weapon_effects.txt"))
+        first = first[first.index("name = nuclear_weapons_program_first_nuke_done"):]
+        first = first[:first.index("world_first_nuclear_weapon")]
+        self.assertIn("set_variable = un_npt_built_outside", first)
+
+
 if __name__ == "__main__":
     unittest.main()

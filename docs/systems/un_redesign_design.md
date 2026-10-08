@@ -2139,7 +2139,15 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
     Strong tier (the tier carries the hysteresis).
 13. **The Supranational standing case (§4.2, §5.3):** an outsider of major rank, or one with a
     nuclear programme or arsenal, carries +50 in `un_case_strength` (`un_case_standing_term`):
-    enough for sanctions on its own. Our Exposure names it.
+    enough for sanctions on its own. Our Exposure names it. **§5.3's NPT half (#804):** so does a
+    member outside the Non-Proliferation Treaty in force (`un_case_npt_standing_applies`). It
+    refused to ratify it in `un_vote.3`, since every later joiner accedes. The case applies while it
+    is a threshold state (a programme and no bomb), or while it holds a bomb it built outside the
+    treaty (`un_npt_built_outside`, set on the first device), so succeeding keeps the case. A power
+    armed before the treaty is not held to it. `un_nonproliferation_refusal_modifier` is not the
+    test: it marks a refusal to *table* the treaty (`un_events.14`), lapses after five years, and
+    exists before there is a treaty to be outside of. An AI threshold state at Supranational
+    refuses ratification a quarter as often.
 14. **Convention regimes (§5.3):**
     - Every convention's member modifier is applied with `multiplier = un_convention_multiplier`:
       E, but never below 0.01, so ×0.01 at Moribund and ×2.5 at Supranational. Holding the
@@ -3525,7 +3533,7 @@ of this file, as `monetary_policy_design.md` does.
 | standing: withholding / Article 19 | −3 once / −5 once (phase 5) | §7.2 |
 | war-goal surcharge | 2 / 4 / 10 infamy at Established / Strong / Supranational; ×2 against a peacekept country from Strong (phase 5) | §5.2 |
 | condemnation from Strong / at Supranational | diplomatic reputation −6 × E / play maneuvers −10% and infamy generation +10% × E (phase 5) | §5.2 |
-| Supranational standing case | +50 to an outsider's case (phase 5) | §4.2 |
+| Supranational standing case | +50 to an outsider's case (phase 5), and to a member outside the NPT that builds or built a bomb outside it (#804) | §4.2, §5.3 |
 | climate emitter / low emitter | ≥ 10% / < 2% of world emissions, as market leader (phase 5) | §5.3 |
 | refugee hosts / sources | GDP-per-head rank ≤ 20 / > 60 (phase 5) | §5.3 |
 | space leader / laggard | the most milestones, at least 3 / 3 or more behind (phase 5) | §5.3 |

@@ -1568,9 +1568,36 @@ nuclear_weapon_events.18 = {
 		}
 	}
 
-	# Option E — Anyone: "Acknowledge the new strategic reality."
+	# Option E — Anyone: "Acknowledge the new strategic reality." A real
+	# accommodation (#804): we open relations with the new power, as the
+	# United States did with India in 2005, and pay for it with every country
+	# that opposes its programme (nuclear_program_opposes: its rivals and
+	# antagonists, and its opponent in a nuclear crisis). Nothing here slows
+	# the programme; accepting it is the point.
 	option = {
 		name = nuclear_weapon_events.18.opt_e
+		if = {
+			limit = { exists = scope:proliferating_country }
+			change_relations = {
+				country = scope:proliferating_country
+				value = 25
+			}
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:proliferating_country }
+			custom_tooltip = {
+				text = NW_PROLIF_ACCOMMODATE_TT
+				every_country = {
+					limit = {
+						NOT = { THIS = ROOT }
+						NOT = { THIS = scope:proliferating_country }
+						nuclear_program_opposes = { PROLIFERATOR = scope:proliferating_country }
+					}
+					change_relations = {
+						country = ROOT
+						value = -15
+					}
+				}
+			}
+		}
 		add_modifier = { name = prestige_loss_tiny days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 2
@@ -1580,6 +1607,29 @@ nuclear_weapon_events.18 = {
 					NOT = { nuclear_program_has_programme = yes }
 				}
 				add = 3
+			}
+			# A friend of the new power accommodates it.
+			modifier = {
+				trigger = {
+					exists = scope:proliferating_country
+					OR = {
+						scope:proliferating_country.relations:root >= relations_threshold:cordial
+						has_treaty_alliance_with = { TARGET = scope:proliferating_country }
+						AND = {
+							is_in_power_bloc = yes
+							is_in_same_power_bloc = scope:proliferating_country
+						}
+					}
+				}
+				add = 6
+			}
+			# Not one of the countries an accommodation would offend.
+			modifier = {
+				trigger = {
+					exists = scope:proliferating_country
+					nuclear_program_opposes = { PROLIFERATOR = scope:proliferating_country }
+				}
+				factor = 0
 			}
 		}
 	}
@@ -1639,6 +1689,65 @@ nuclear_weapon_events.18 = {
 			modifier = {
 				trigger = { ruler_is_cautious = yes }
 				add = -8
+			}
+		}
+	}
+
+	# Option G — Armed powers: "Extend our nuclear guarantee to their
+	# neighbours." (#804) The reassurance half of extended deterrence, as the
+	# United States stood behind Japan and South Korea. Every neighbour of the
+	# proliferator we could sign a Nuclear Guarantee with now
+	# (nd_proliferation_guarantee_candidate) is offered one, in force for ten
+	# years if it accepts (nuclear_weapon_events.25, which weighs it the way
+	# the article's AI does); we hear each answer (.26). Each guarantee's
+	# upkeep and its promise are the price, and the proliferator takes the
+	# offers as the coalition against it that they are.
+	option = {
+		name = nuclear_weapon_events.18.opt_g
+		trigger = {
+			exists = scope:proliferating_country
+			nd_is_armed = yes
+			any_country = {
+				nd_proliferation_guarantee_candidate = { GUARANTOR = ROOT PROLIFERATOR = scope:proliferating_country }
+			}
+		}
+		save_scope_as = nuclear_pg_guarantor
+		custom_tooltip = NW_PROLIF_GUARANTEE_TT
+		hidden_effect = {
+			every_country = {
+				limit = {
+					nd_proliferation_guarantee_candidate = { GUARANTOR = ROOT PROLIFERATOR = scope:proliferating_country }
+				}
+				trigger_event = { id = nuclear_weapon_events.25 days = 3 }
+			}
+		}
+		change_relations = {
+			country = scope:proliferating_country
+			value = -10
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nuclear_program_opposes = { PROLIFERATOR = scope:proliferating_country } }
+				add = 10
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+			# Not against a friend's bomb.
+			modifier = {
+				trigger = {
+					OR = {
+						scope:proliferating_country.relations:root >= relations_threshold:cordial
+						has_treaty_alliance_with = { TARGET = scope:proliferating_country }
+					}
+				}
+				factor = 0
 			}
 		}
 	}
@@ -2279,6 +2388,172 @@ nuclear_weapon_events.24 = {
 		hidden_effect = {
 			nd_auto_answer_record = { ENEMY = scope:attacking_country }
 		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ---- .25 An Offer of Extended Deterrence ------------------------------------------
+# To each neighbour of a nearly finished bomb that an armed power answering the
+# proliferation alert offered a Nuclear Guarantee (.18 option g, #804), three
+# days later. scope:nuclear_pg_guarantor = the power offering it,
+# scope:proliferating_country = the country building the bomb. Accepting
+# creates the guarantee in force for ten years, if the guarantor still could
+# sign it (nd_proliferation_guarantee_candidate, read again: another guarantor
+# may have got there first). The guarantor hears the answer (.26).
+nuclear_weapon_events.25 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.25.t
+	desc = nuclear_weapon_events.25.d
+	flavor = nuclear_weapon_events.25.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nuclear_pg_guarantor
+		exists = scope:proliferating_country
+	}
+
+	immediate = {
+		save_scope_as = nuclear_pg_beneficiary
+	}
+
+	# Accept: the guarantee, in force for ten years. Standing with one nuclear
+	# power against another's bomb costs a little with the proliferator.
+	option = {
+		name = nuclear_weapon_events.25.a
+		trigger = {
+			nd_proliferation_guarantee_candidate = { GUARANTOR = scope:nuclear_pg_guarantor PROLIFERATOR = scope:proliferating_country }
+		}
+		highlighted_option = yes
+		custom_tooltip = NW_PROLIF_GUARANTEE_ACCEPT_TT
+		hidden_effect = {
+			nd_bp_treaty_guarantee = { GUARANTOR = scope:nuclear_pg_guarantor STATE = ROOT }
+			save_scope_value_as = { name = nuclear_pg_accepted value = 1 }
+			scope:nuclear_pg_guarantor = {
+				trigger_event = { id = nuclear_weapon_events.26 days = 1 }
+			}
+		}
+		change_relations = {
+			country = scope:proliferating_country
+			value = -10
+		}
+		ai_chance = {
+			base = 10
+			# The bomb is a rival's or an antagonist's.
+			modifier = {
+				trigger = { nuclear_program_opposes = { PROLIFERATOR = scope:proliferating_country } }
+				add = 15
+			}
+			modifier = {
+				trigger = { any_rival_country = { nd_believed_armed = yes } }
+				add = 10
+			}
+			modifier = {
+				trigger = { scope:nuclear_pg_guarantor.relations:root >= relations_threshold:cordial }
+				add = 5
+			}
+			# Not from a power we distrust, as the article's AI weighs it.
+			modifier = {
+				trigger = {
+					OR = {
+						has_diplomatic_pact = { who = scope:nuclear_pg_guarantor type = rivalry }
+						has_attitude = { who = scope:nuclear_pg_guarantor attitude = wary }
+					}
+				}
+				factor = 0
+			}
+		}
+	}
+
+	# The offer can no longer be signed: the guarantor lost its warheads or its
+	# ties with us, a war came between us, or another power's guarantee came
+	# first. Nothing happens.
+	option = {
+		name = nuclear_weapon_events.25.c
+		# REVIEWED 2026-10-07 (no_effect_option): the offer lapsed; there is nothing left to answer
+		trigger = {
+			NOT = { nd_proliferation_guarantee_candidate = { GUARANTOR = scope:nuclear_pg_guarantor PROLIFERATOR = scope:proliferating_country } }
+		}
+		default_option = yes
+		custom_tooltip = NW_PROLIF_GUARANTEE_LAPSED_TT
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	# Decline: we take no side between them.
+	option = {
+		name = nuclear_weapon_events.25.b
+		trigger = {
+			nd_proliferation_guarantee_candidate = { GUARANTOR = scope:nuclear_pg_guarantor PROLIFERATOR = scope:proliferating_country }
+		}
+		default_option = yes
+		custom_tooltip = NW_PROLIF_GUARANTEE_DECLINE_TT
+		hidden_effect = {
+			scope:nuclear_pg_guarantor = {
+				trigger_event = { id = nuclear_weapon_events.26 days = 1 }
+			}
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { scope:proliferating_country.relations:root >= relations_threshold:cordial }
+				add = 10
+			}
+			modifier = {
+				trigger = { has_law_or_variant = law_type:law_isolationism }
+				add = 10
+			}
+		}
+	}
+}
+
+# ---- .26 the guarantor hears the answer ---------------------------------------------
+# From .25, to the power that made the offer. scope:nuclear_pg_beneficiary =
+# the country that answered; scope:nuclear_pg_accepted exists if it accepted.
+nuclear_weapon_events.26 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.26.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_weapon_events.26.d_accepted
+				trigger = { exists = scope:nuclear_pg_accepted }
+			}
+			triggered_desc = {
+				desc = nuclear_weapon_events.26.d_declined
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.26.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nuclear_pg_beneficiary
+	}
+
+	option = {
+		name = nuclear_weapon_events.26.a
+		default_option = yes
 		ai_chance = {
 			base = 1
 		}

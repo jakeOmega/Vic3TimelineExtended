@@ -1337,6 +1337,63 @@ nd_can_issue_proliferation_ultimatum = {
 	}
 }
 
+# Could $GUARANTOR$ offer this country a nuclear guarantee against
+# $PROLIFERATOR$'s nearly finished bomb (nuclear_weapon_events.18 option g,
+# #804)? Read when the offer is made and again when it is answered (.25).
+# Scope: the country offered it.
+#   * a neighbour of the proliferator, not the proliferator's subject;
+#   * one that needs it: no bomb of its own as the world sees it, and no
+#     guarantee or umbrella already (guarantors do not add up);
+#   * every gate a new guarantee passes in the article
+#     (115_nuclear_guarantee.txt), read without a draft. possible's: the
+#     guarantor armed, the two at peace, relations above Poor, not the
+#     guarantor's direct subject (its umbrella covers those). can_ratify's:
+#     no guarantee from it already (the line above), military ties in force
+#     (an alliance or defensive pact, its Guarantee Independence of us, or a
+#     shared power bloc), and outgunning us as the world sees it, which an
+#     armed guarantor of a country not believed armed always does
+#     (nd_believed_stockpile is 0). Keep these in step with the article;
+#   * and the engine's own word on the treaty .25 creates
+#     (nd_bp_can_treaty_guarantee, the Budapest offer's guarantee).
+nd_proliferation_guarantee_candidate = {
+	save_temporary_scope_as = nd_pg_beneficiary
+	$GUARANTOR$ = { save_temporary_scope_as = nd_pg_guarantor }
+	NOT = { this = scope:nd_pg_guarantor }
+	NOT = { this = $PROLIFERATOR$ }
+	NOT = { is_country_type = decentralized }
+	any_neighbouring_state = { owner = $PROLIFERATOR$ }
+	NOT = { is_subject_of = $PROLIFERATOR$ }
+	nd_believed_armed = no
+	nd_is_guaranteed = no
+	NOT = { is_direct_subject_of = scope:nd_pg_guarantor }
+	NOT = { has_war_with = scope:nd_pg_guarantor }
+	scope:nd_pg_guarantor = {
+		nd_is_armed = yes
+		scope:nd_pg_beneficiary.relations:this > relations_threshold:poor
+		OR = {
+			any_scope_treaty = {
+				binds = scope:nd_pg_beneficiary
+				any_scope_article = {
+					OR = {
+						has_type = alliance
+						has_type = defensive_pact
+						AND = {
+							has_type = guarantee_independence
+							source_country = scope:nd_pg_guarantor
+							target_country = scope:nd_pg_beneficiary
+						}
+					}
+				}
+			}
+			AND = {
+				is_in_power_bloc = yes
+				is_in_same_power_bloc = scope:nd_pg_beneficiary
+			}
+		}
+	}
+	nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_pg_guarantor STATE = scope:nd_pg_beneficiary }
+}
+
 # ----------------------------------------------------------------------------
 # INCIDENT ELIGIBILITY (§8) — country scope
 # ----------------------------------------------------------------------------

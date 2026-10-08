@@ -120,6 +120,17 @@ proliferator's case strength, or 30 if it signed the treaty (see [Grounds for
 UN censure](10-united-nations.md#grounds-for-un-censure)). Several answers
 shave progress off the proliferator.
 
+Accepting the new reality is an accommodation: +25 relations with the
+proliferator, and −15 with every country that opposes its program (its rivals,
+the countries hostile to it, and its opponent in a nuclear crisis). A nuclear
+power can instead extend its guarantee to the proliferator's neighbors, at −10
+relations with the proliferator. Every neighbor without the bomb or a guarantee
+that the power could sign a [Nuclear
+Guarantee](#the-nuclear-umbrella-and-nuclear-guarantees) with today is offered
+one, binding for ten years. A neighbor that accepts loses 10 relations with the
+proliferator. The power hears each answer, and an offer lapses if another
+power's guarantee was accepted first.
+
 Other countries see your arsenal only as an estimate, re-observed yearly at
 between 60% and 150% of the true count, and exact after a test or a strike. The
 Nuclear Powers leaderboard and the AI use these estimates.
@@ -210,6 +221,15 @@ amendment is on your laws (see [Amendments to the mod's
 laws](06-politics.md#amendments-to-the-mods-laws)), your doctrine is held at No
 First Use, and leaving it strikes the amendment. An AI country keeps the
 amendment unless a militarist government takes power, which may repeal it.
+
+A launch your government never ordered (Launch on Warning, a commander cut off
+from the capital, or Automatic Retaliation misreading an accident) breaks the
+pledge too, but your doctrine stays No First Use and the amendment stays on
+your laws. Once the incident's own event is answered, "The Pledge After the
+Launch" lets you reaffirm No First Use in public (−10 legitimacy and −5%
+authority, fading over two and a half years, for +15 credibility at once),
+repudiate it at half the usual credibility and infamy cost with no two-year
+wait, or say nothing.
 
 ### Nuclear readiness levels
 
@@ -542,7 +562,8 @@ the exchange; it does not open ordinary peacetime strike actions. The normal
 stockpile, disarmament, pledge and assembled-force requirements still apply to
 an ordered response. An unauthorized first use breaches your pledges and pays
 the usual consequences, but it does not end No First Use or strike the
-No-First-Strike Pledge amendment: your government never chose to.
+No-First-Strike Pledge amendment: your government never chose to. It decides
+afterwards (see [Nuclear doctrine](#nuclear-doctrine)).
 
 After at least seven days without another launch, the next weekly review offers
 both governments "After the Exchange". If both stand down, the exchange ends

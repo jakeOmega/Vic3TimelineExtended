@@ -32,8 +32,11 @@ carries on the cycle and the central bank where the old one left them (see
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
-in one shows in the other. The tab is grayed until the journal entry appears;
-hover it for what you still need. It ends with an Open Journal Entry button,
+in one shows in the other. The tab is grayed until the journal entry appears,
+unless your central bank already sets a rate or your currency is tied to
+another's: then it opens early with your monetary readings (see [Monetary
+policy under the full Banking System](#monetary-policy-under-the-full-banking-system)).
+Hover it for what you still need. It ends with an Open Journal Entry button,
 which opens the entry with its description and status text. [The banking
 panels](#the-banking-panels) describes what they show.
 
@@ -504,7 +507,16 @@ and the United States with Free & Mutual Banking.
 ## Monetary policy under the full Banking System
 
 With the rule on Enabled, every country runs the monetary model whether or not
-it holds the journal entry, and the Monetary Policy section shows it. Its rows
+it holds the journal entry. A dial needs a National Bank, not the entry, so you
+can have one, or a pegged currency, before the entry appears. Until then the
+Banking tab shows a read-only Monetary Policy readout: your Policy Rate beside
+the World Rate, the Mandate (with a dial) or the Monetary Anchor (when pegged),
+the Exchange Rate and, on a gold standard or a treaty peg, Peg Confidence with
+its bar. You can't change anything there: your central bank runs the Dual
+Mandate (under Central Bank Independence, the mandate its act names) until the
+entry gives you the controls.
+
+Once you have the entry, the Monetary Policy section shows it all. Its rows
 are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
@@ -538,25 +550,53 @@ free of charge.
 
 | Mandate | What the bank does |
 |---|---|
-| Price Stability | Raises the rate more than a point for each point of inflation above target, and leans fully against where the cycle is heading |
+| Inflation Targeting | Raises the rate more than a point for each point of inflation above target, and leaves the financial cycle to prices, so booms run further and slumps go deeper before it acts. Lenders believe it most, which holds expected inflation nearer the target |
+| Dual Mandate | Reacts to inflation as hard, and also leans fully against where the cycle is heading. Every bank starts on it |
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
 | Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
 A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
 or worse.
 
-Central Bank Independence makes delegation permanent: you choose the mandate,
-but you no longer set the rate or print money. Lenders reward it. Your credit
+A new mandate takes effect at the next monthly update, and is then fixed for a
+year. Lenders price a looser rule at once: for each step from Inflation
+Targeting to the Dual Mandate to Growth, expected inflation rises by half a
+point and the Looser Mandate modifier adds half a point of risk premium, fading
+over two years. A tighter rule earns nothing at once, and Inflation Targeting's
+extra credibility takes two years to build and is gone the month you leave it.
+An AI bank moves to Growth at war or deep in debt and back to the Dual Mandate
+in peace, and waits out the same year between changes.
+
+Central Bank Independence makes delegation permanent, and you no longer set the
+rate or print money. Lenders reward it. Your credit
 standing improves by half a point and its floor drops from 0.5 to 0.25 points,
 and the bank's estimate of what your economy can bear (see [Monetary policy
 stance](#monetary-policy-stance)) errs by less. Each level of the National Bank
 institution adds a tenth of a point of Inflation Anchoring, which absorbs that
 much standing wage and price pressure.
 
+Under Central Bank Independence the mandate is an act on the law rather than a
+dashboard choice: the Inflation Targeting Act or the Dual Mandate Act. When the
+law has no act, because it has just passed or an act was repealed, the event
+What the Bank Is For asks you to pass one. The Industrialists gain approval
+for the Inflation Targeting Act and the Trade Unions for the Dual Mandate Act,
+and each loses it when the other's act passes. An interest group can also
+sponsor an act while the law is debated, and the Central Bank Independence
+Debate's compromise passes the Dual Mandate Act. The bank moves to the act's
+mandate 12 months after it passes. The dashboard shows the act in a Mandate by
+Law row in place of the mandate buttons, and a Takes Effect In row counts the
+months down. To change the act, repeal it in the law panel, which needs an
+interest group in government that opposes it. By default the Trade Unions and
+Rural Folk oppose the Inflation Targeting Act, and the Industrialists, Petite
+Bourgeoisie and Intelligentsia the Dual Mandate Act.
+On a convertible gold standard an independent bank defends the peg whatever
+its act says. AI countries pass and follow acts the same way, so an
+independent AI bank does not loosen for a war.
+
 ### When the bank cannot cut
 
-A rate on its floor can't fall further, and a deflation can hold it there. Both
-mandates ask for far less than the floor allows, and falling prices keep the
+A rate on its floor can't fall further, and a deflation can hold it there. Every
+mandate asks for far less than the floor allows, and falling prices keep the
 real rate high even at −3%, so the Policy Stance can read Neutral while prices
 fall. A bank that runs its mandate, whether delegated or independent, carries on
 cutting on paper. It works out where it would put the rate if there were no
@@ -574,7 +614,7 @@ The mandate decides when the bank buys:
 
 | Mandate | Buys assets |
 |---|---|
-| Price Stability | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
+| Inflation Targeting, Dual Mandate | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
 | Growth | Whenever its rule asks for a rate below the floor, including a slump with inflation on target. |
 
 The purchases cost no intervention points and no money, and you don't switch

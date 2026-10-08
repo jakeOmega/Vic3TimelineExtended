@@ -348,6 +348,145 @@ te_mon_mandate_binds = {
 	}
 }
 
+# Does a mandate formula set this country's target this month? The condition of
+# step 2's formula branch: delegated, independent, run by the AI, or a national
+# bank without the journal entry (which has no dashboard to take the dial on).
+# Read by te_mon_mandate_cred_target, so a dial held by hand earns no
+# credibility from a mandate it is not running.
+te_mon_mandate_runs_bank = {
+	te_mon_has_dial = yes
+	OR = {
+		te_mon_mandate_binds = yes
+		is_player = no
+		NOT = { has_journal_entry = je_banking_cycle }
+	}
+}
+
+
+# --- Mandates set by law (#799) ---------------------------------------------
+#
+# Under central bank independence the mandate is a statute: an amendment on
+# law_central_bank_independence (common/amendments/extra_amendments.txt). The
+# Inflation Targeting Act sets mandate 4 and the Dual Mandate Act mandate 1.
+# te_monetary_update_target follows the act after te_mon_mandate_statute_delay
+# months, for the AI as for a player. An independent bank with no act is asked
+# for one by te_mandate.1 (events/te_mandate_events.txt).
+
+te_mon_has_it_act = {
+	active_law:lawgroup_financial_regulation ?= {
+		has_amendment = amendment_type:amendment_cb_inflation_targeting
+	}
+}
+
+te_mon_has_dual_act = {
+	active_law:lawgroup_financial_regulation ?= {
+		has_amendment = amendment_type:amendment_cb_dual_mandate
+	}
+}
+
+te_mon_has_mandate_act = {
+	OR = {
+		te_mon_has_it_act = yes
+		te_mon_has_dual_act = yes
+	}
+}
+
+# A law of the financial-regulation group is being enacted. An act attached to
+# the law in force would leave with it, so te_mandate.1 waits. Lists every law
+# in the group; a law added to it belongs here too.
+te_mon_enacting_financial_regulation = {
+	OR = {
+		is_enacting_law = law_type:law_unregulated_banking
+		is_enacting_law = law_type:law_free_mutual_banking
+		is_enacting_law = law_type:law_universal_banking_light_prudence
+		is_enacting_law = law_type:law_prudential_narrow_banking
+		is_enacting_law = law_type:law_directed_credit_development_banks
+		is_enacting_law = law_type:law_state_owned_banking
+		is_enacting_law = law_type:law_central_bank_independence
+	}
+}
+
+# Should this country be asked to legislate a mandate (te_mandate.1)? An
+# independent bank with a dial and no act. A bank on a convertible gold
+# standard is left alone: it defends the peg whatever its act says
+# (te_monetary_update_target), and is asked once convertibility ends.
+te_mon_needs_mandate_act = {
+	te_mon_full_system = yes
+	te_mon_is_cbi = yes
+	te_mon_has_dial = yes
+	te_mon_is_on_gold = no
+	NOT = { te_mon_has_mandate_act = yes }
+	NOT = { te_mon_enacting_financial_regulation = yes }
+}
+
+# Has the mandate changed within the last te_mon_mandate_lock_length months
+# without a statute behind the change? The dashboard's mandate buttons and the
+# AI's own rule wait it out (#799).
+te_mon_mandate_is_locked = {
+	has_variable = te_mon_mandate_lock_months
+	var:te_mon_mandate_lock_months > 0
+}
+
+# Can banking_cycle_events.16's compromise put the bank on the Dual Mandate?
+# Under independence, by passing the Dual Mandate Act (in place of an
+# Inflation Targeting Act); without it, a delegated bank on another mandate is
+# simply moved. Where neither applies, the option is the old accord.
+te_mon_can_legislate_dual_mandate = {
+	te_mon_full_system = yes
+	te_mon_has_dial = yes
+	OR = {
+		AND = {
+			te_mon_is_cbi = yes
+			te_mon_is_on_gold = no
+			NOT = { te_mon_has_dual_act = yes }
+			NOT = { te_mon_enacting_financial_regulation = yes }
+		}
+		AND = {
+			te_mon_is_cbi = no
+			te_mon_is_delegated = yes
+			te_mon_is_on_gold = no
+			has_variable = te_mon_mandate
+			NOT = { var:te_mon_mandate = 1 }
+		}
+	}
+}
+
+# The dashboard's mandate buttons (ops 4, 5, 6 and 14 of banking_mon_control_sgui):
+# every line a mandate button is greyed on, each a custom_tooltip phrased as a
+# condition for IsValidTooltip's tick or cross. $MANDATE$ is the button's own
+# mandate, which is invalid while it is the one in force.
+te_mon_mandate_button_valid = {
+	custom_tooltip = {
+		text = banking_mon_tt_needs_dial
+		te_mon_has_dial = yes
+	}
+	custom_tooltip = {
+		text = banking_mon_tt_mandate_not_statute
+		te_mon_is_cbi = no
+	}
+	custom_tooltip = {
+		text = banking_mon_tt_mandate_binds
+		te_mon_mandate_binds = yes
+	}
+	custom_tooltip = {
+		text = banking_mon_tt_mandate_unlocked
+		te_mon_mandate_is_locked = no
+	}
+	custom_tooltip = {
+		text = banking_mon_tt_mandate_other
+		OR = {
+			NOT = { has_variable = te_mon_mandate }
+			NOT = { var:te_mon_mandate = $MANDATE$ }
+		}
+	}
+}
+
+# Is a statutory change counting down to the bank (te_mon_mandate_statute_delay)?
+te_mon_mandate_change_pending = {
+	has_variable = te_mon_mandate_pending
+	var:te_mon_mandate_pending > 0
+}
+
 # Does a cut move at the emergency speed (te_mon_drift_step_down)? Only for a
 # bank running its mandate — delegated, AI (te_monetary_update_target writes
 # te_mon_delegated = 1 for every AI before the drift step reads this) or
