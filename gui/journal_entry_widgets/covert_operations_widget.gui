@@ -915,6 +915,12 @@ types covert_operations_widget_types
 		widget_je_covert_operation_detail = {
 			text = "je_iw_net_row_benefit"
 		}
+		# What the network adds to the detection risk of the target's own
+		# operations against us (covert_net_catch_display, network scope).
+		widget_je_covert_operation_detail = {
+			text = "je_iw_net_row_catch"
+			tooltip = "je_iw_net_row_catch_tt"
+		}
 
 		# ---- What the network reports on its target (slice 7) ----
 		# Chosen by the stored iw_net_intel_tier code (0 / 1 / 2), which

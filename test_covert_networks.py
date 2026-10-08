@@ -20,6 +20,7 @@ WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
 JE = ROOT / "common/journal_entries/je_covert_warfare.txt"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_covert_events.txt"
+EVENTS = ROOT / "events/covert_warfare_events.txt"
 LOC_DIR = ROOT / "localization/english"
 
 
@@ -55,6 +56,7 @@ class ConstantTests(unittest.TestCase):
             ("covert_net_maintain_decay_mult", "0.5"),
             ("covert_net_burn_loss", "25"),
             ("covert_net_detect_factor", "0.05"),
+            ("covert_net_catch_factor", "0.1"),
             ("covert_net_head_start_per_point", "0.05"),
             ("covert_net_head_start_max", "5"),
         ):
@@ -255,6 +257,8 @@ NET_LOC_KEYS = (
     "je_iw_net_row_trend_decaying",
     "je_iw_net_row_trend_holding",
     "je_iw_net_row_benefit",
+    "je_iw_net_row_catch",
+    "je_iw_net_row_catch_tt",
 )
 
 
@@ -313,7 +317,7 @@ class HarnessTests(unittest.TestCase):
     def test_harness_options_have_loc(self):
         events = _text(DEBUG_EVENTS)
         loc = _all_loc()
-        for opt in ("te_debug_covert.2.i", "te_debug_covert.2.j"):
+        for opt in ("te_debug_covert.2.i", "te_debug_covert.2.j", "te_debug_covert.2.k"):
             self.assertIn("name = %s" % opt, events)
             self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(opt))
 
@@ -335,6 +339,70 @@ class ReviewFixTests(unittest.TestCase):
             "set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }",
             block,
         )
+
+
+class CounterintelligenceTests(unittest.TestCase):
+    """The target's network inside the operator raises the detection risk of
+    the operator's operations against it: the defender's agents inside the
+    operator's service hear of them."""
+
+    def test_detection_adds_their_network_before_efficiency(self):
+        block = _top_level_block(_text(VALUES), "covert_operation_detection_chance = {")
+        target = block.index("add = target_counterintelligence_penalty")
+        catch = block.index("add = covert_net_catch_penalty")
+        efficiency = block.index("modifier:country_covert_operation_efficiency_mult")
+        self.assertLess(target, catch)
+        self.assertLess(catch, efficiency)
+
+    def test_catch_penalty_reads_guarded_staging(self):
+        block = _top_level_block(_text(VALUES), "covert_net_catch_penalty = {")
+        self.assertIn("has_variable = iw_tgt_net_strength_staging", block)
+        self.assertIn("multiply = covert_net_catch_factor", block)
+
+    def test_displays_read_the_factor(self):
+        body = _text(VALUES)
+        for name in ("covert_net_catch_max_display = {", "covert_net_catch_display = {"):
+            self.assertIn("multiply = covert_net_catch_factor", _top_level_block(body, name))
+
+    def test_lookup_in_the_targets_list_zeroed_first(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_refresh_detection = {")
+        zero = block.index("set_variable = { name = iw_tgt_net_strength_staging value = 0 }")
+        target = block.index("scope:iw_det_tgt = {", zero)
+        pick = block.index("limit = { var:iw_target ?= scope:iw_operator }", target)
+        write = block.index(
+            "set_variable = { name = iw_tgt_net_strength_staging value = PREV.var:iw_net_strength }",
+            pick,
+        )
+        chance = block.index("covert_operation_detection_chance", write)
+        self.assertLess(write, chance)
+        self.assertIn("remove_variable = iw_tgt_net_strength_staging", block)
+        # Our own network's lookup stays first: test_detection_lookup_zeroed_first
+        # pins the first random_in_list to it.
+        self.assertLess(block.index("iw_net_strength_staging value = 0"), zero)
+
+    def test_network_row_shows_the_catch(self):
+        gui = _text(WIDGET)
+        self.assertIn('text = "je_iw_net_row_catch"', gui)
+        self.assertIn('tooltip = "je_iw_net_row_catch_tt"', gui)
+        loc = _all_loc()
+        line = re.search(r"(?m)^ je_iw_net_row_catch:0 .*$", loc).group(0)
+        self.assertIn("covert_net_catch_display", line)
+
+    def test_ai_keeps_a_strong_network_rather_than_expel(self):
+        body = _text(EVENTS)
+        event = body[body.index("\ncovert_warfare.2 = {"):]
+        option = event[event.index("name = covert_warfare.2.c"):]
+        option = option[: option.index("\n\t}\n")]
+        self.assertIn("var:iw_target ?= scope:iw_exposed_by", option)
+        self.assertIn("var:iw_net_strength >= covert_net_intel_tier_1_strength", option)
+        self.assertIn("factor = 0.2", option)
+
+    def test_harness_plants_networks_through_the_shipping_create(self):
+        block = _top_level_block(_text(DEBUG_EFFECTS), "te_debug_covert_hostile_networks = {")
+        self.assertIn("covert_net_create = { TARGET = scope:te_debug_covert_victim }", block)
+        self.assertIn("covert_net_clamp = yes", block)
+        self.assertIn("covert_ops_sync_all = yes", block)
+        self.assertIn("te_debug_covert_hostile_networks = { VALUE = 100 }", _text(DEBUG_EVENTS))
 
 
 if __name__ == "__main__":

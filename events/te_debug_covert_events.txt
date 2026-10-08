@@ -152,6 +152,15 @@ te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_
 		name = te_debug_covert.2.j
 		te_debug_covert_tick_nets = yes
 	}
+
+	# ---- Network counterintelligence: every country we run an operation
+	#      against gets a full-strength network inside us. Each row's
+	#      detection line rises at once (+10 points before efficiency).
+	option = {
+		name = te_debug_covert.2.k
+		trigger = { covert_operations_active >= 1 }
+		te_debug_covert_hostile_networks = { VALUE = 100 }
+	}
 }
 
 te_debug_covert.3 = { # REVIEWED 2026-09-22: console-only test event (`event te_debug_covert.3`); never fired by script on purpose
