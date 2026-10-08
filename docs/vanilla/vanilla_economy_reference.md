@@ -317,6 +317,8 @@ For an intra-market move to be possible:
 
 Move *volume* is roughly 5 × (attraction difference) plus 1 per 100,000 pop, with weekly per-state caps based on infrastructure (`500 + 5 × infrastructure`) and a 0.5%-of-population emigration ceiling. Caps shrink in small states. Unemployment increases the immigration cap.
 
+`state_migration_quota_mult` moves a state's immigration and emigration together, so it can't push a one-way flow: it sets how much moves, and attraction (`state_migration_pull_*`) sets which way.
+
 ### 8.4 Cross-power-bloc movement
 
 Intra-market migration is normally bounded by the market. Trade-League power blocs and the principles **Market Unification II** and **Freedom of Movement III** allow intra-market migration to flow across bloc-internal borders. Freedom of Movement also adds +25% migration volume (T1) and +50% mass-migration attraction (T2).
