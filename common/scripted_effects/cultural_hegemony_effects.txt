@@ -290,9 +290,10 @@ ch_effect_disable_cultural_protectionism = {
 #    5 socialist          10 military_junta           15 developmentalist_junta
 #
 # The ORDER of the checks is part of the classification: a country that fits
-# several families is the first one it reaches. A Corporate State that is also
+# several families is the first one it reaches. A council republic under
+# Anarchy is Anarchist. A Corporate State that is also
 # an Ethnostate is Fascist, and so is a one-party Ethnostate with a Command
-# Economy (Communist splits round Fascist: council republics first, one-party
+# Economy (Communist splits round Fascist: council republics before it, one-party
 # command economies run by communists after; a Command Economy run by the rest
 # of the left is Socialist). Cultural Citizenship, a common starting law, is
 # Fascist in a one-party state unless the left runs it, and under Autocracy
@@ -310,18 +311,21 @@ ch_effect_disable_cultural_protectionism = {
 # a change here needs the matching change there.
 # Scope: country. Writes var:ch_model.
 ch_set_political_model = {
-	# Communist / Vanguardist: a council republic. A one-party command economy
-	# is the second Communist branch, after Fascist, so an Ethnostate one-party
-	# state that also plans its economy stays Fascist, and so does a National
-	# Supremacy one that the left does not run.
+	# Anarchist, even in a council republic. Vanilla's Anarchy needs Cooperative
+	# Ownership, which a Council Republic or a Corporate State unlocks, so most
+	# anarchist countries are council republics too; tested the other way round,
+	# Anarchist would almost never come up.
 	if = {
-		limit = { has_law_or_variant = law_type:law_council_republic }
-		set_variable = { name = ch_model value = 1 }
-	}
-	# Anarchist
-	else_if = {
 		limit = { has_law_or_variant = law_type:law_anarchy }
 		set_variable = { name = ch_model value = 2 }
+	}
+	# Communist / Vanguardist: a council republic not under Anarchy. A one-party
+	# command economy is the second Communist branch, after Fascist, so an
+	# Ethnostate one-party state that also plans its economy stays Fascist, and
+	# so does a National Supremacy one that the left does not run.
+	else_if = {
+		limit = { has_law_or_variant = law_type:law_council_republic }
+		set_variable = { name = ch_model value = 1 }
 	}
 	# Fascist / Ethnonationalist: Ancestral Citizenship (Ethnostate), or Cultural
 	# Citizenship (National Supremacy) in a one-party state not run by the
