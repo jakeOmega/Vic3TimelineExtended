@@ -813,3 +813,39 @@ te_decision_space_mission_interstellar = {
 		}
 	}
 }
+
+# ============================================================================
+# Restructure the Public Debt (#800, mod_systems.md § Banking Cycle)
+# A country whose debt the markets price (banking_sovereign_debt_is_priced,
+# where the debt-load premium starts) or that is in default opens talks with
+# its creditors, and chooses the haircut there (banking_debt_events.1): 10%,
+# 25%, or 50% in default only. Before #800 the only deliberate relief was the
+# Sovereign Debt Scare's option C, an event draw. The talks may be broken off;
+# opening them again waits a year (banking_restructuring_talks), and a deal
+# waits five or ten years for the next (banking_debt_restructured).
+#
+# ai_chance: banking_restructuring_ai_value, in default or with the debt at
+# three quarters of the credit limit and still growing. The haircut itself is
+# the talks' option weights.
+# ============================================================================
+te_decision_restructure_debt = {
+	is_shown = {
+		banking_restructuring_shown = yes
+	}
+
+	possible = {
+		banking_restructuring_possible = yes
+	}
+
+	when_taken = {
+		custom_tooltip = {
+			text = te_decision_tt_restructure_debt
+			set_variable = { name = banking_restructuring_talks value = yes days = 365 }
+		}
+		trigger_event = { id = banking_debt_events.1 popup = yes }
+	}
+
+	ai_chance = {
+		value = banking_restructuring_ai_value
+	}
+}

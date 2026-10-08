@@ -1,0 +1,293 @@
+﻿# Sovereign debt crises as a process (#800): the chosen restructuring and the
+# conditional rescue. Triggers: common/scripted_triggers/banking_debt_triggers.txt;
+# values: common/script_values/banking_debt_values.txt; events:
+# events/banking_debt_events.txt. Scope: country throughout.
+
+# ============================================================================
+# RESTRUCTURING
+# ============================================================================
+# The three haircuts of the restructuring talks (banking_debt_events.1, opened
+# by the te_decision_restructure_debt decision). Bigger haircuts cost more:
+#
+#   haircut     written off  risk premium            prestige  lenders' reserves    investors  next deal
+#   reprofile   10%          +1.5pp, 5 yrs decaying  -5%       -                    -10        5 yrs
+#   haircut     25%          +4pp, 10 yrs decaying   -15%      -10%, 5 yrs decaying -25        10 yrs
+#   deep        50%          +6pp, 10 yrs decaying   -25%      -25%, 5 yrs decaying -50        10 yrs
+#
+# The 25% haircut is also option C of the Sovereign Debt Scare
+# (banking_cycle_events.10, .110, .160), so a quarter written off costs the
+# same whichever way it is reached. The deep haircut needs the engine's default
+# state (banking_restructuring_deep_possible).
+#
+# MARKET EXCLUSION IS A SMALLER CREDIT LIMIT. The engine's credit limit is the
+# sum of every domestic building's cash reserves plus a GDP-scaled base
+# (vanilla concept_credit_desc), and no modifier reaches it directly
+# (monetary_policy_design.md § "Supporting facts"). building_cash_reserves_mult
+# lowers what each building may hold, so the reserves, and the limit with
+# them, shrink as the buildings pay the excess out, and come back as the
+# decaying modifier fades. Vanilla's postal_savings tech grants the same type
+# at country level, which is the evidence it reaches buildings from there.
+#
+# Who the investors are: every country owning more than 5% of our GDP
+# (gdp_ownership_ratio, vanilla's foreign-investment read; the threshold of
+# decolonization_events.15's "meaningful foreign ownership"). Bondholders at
+# home are the upper strata, whose radicals each option adds itself.
+#
+# The cycle and bubble costs (the banks holding the bonds) and the radicals
+# are the options' own, as the scare's are, because the command economy's
+# variant charges its bureaucrats instead.
+
+# Relations with the countries most invested in us fall by VALUE (negative).
+# TEXT names the fall; the engine's own line would list every country.
+banking_restructuring_investor_relations = {
+	custom_tooltip = {
+		text = $TEXT$
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				root = {
+					gdp_ownership_ratio = {
+						target = prev
+						value > 0.05
+					}
+				}
+			}
+			change_relations = {
+				country = root
+				value = $VALUE$
+			}
+		}
+	}
+}
+
+banking_restructuring_reprofile = {
+	custom_tooltip = {
+		text = banking_restructuring_reprofile_write_off_tt
+		clear_scaled_debt = banking_restructuring_haircut_reprofile
+	}
+	add_modifier = {
+		name = banking_restructuring_reprofiled
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	banking_restructuring_investor_relations = { VALUE = -10 TEXT = banking_restructuring_investors_10_tt }
+	custom_tooltip = {
+		text = banking_restructuring_cooldown_5_tt
+		set_variable = { name = banking_debt_restructured value = yes days = 1825 }
+	}
+}
+
+# The quarter: the scare's option C and the talks' option B.
+banking_restructuring_haircut = {
+	banking_partial_default_write_off = yes
+	add_modifier = {
+		name = banking_event_partial_default
+		days = long_modifier_time
+		is_decaying = yes
+	}
+	add_modifier = {
+		name = banking_restructuring_wary_lenders
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	banking_restructuring_investor_relations = { VALUE = -25 TEXT = banking_restructuring_investors_25_tt }
+	custom_tooltip = {
+		text = banking_restructuring_cooldown_10_tt
+		set_variable = { name = banking_debt_restructured value = yes days = 3650 }
+	}
+}
+
+banking_restructuring_deep_haircut = {
+	custom_tooltip = {
+		text = banking_restructuring_deep_write_off_tt
+		clear_scaled_debt = banking_restructuring_haircut_deep
+	}
+	add_modifier = {
+		name = banking_restructuring_deep_default
+		days = long_modifier_time
+		is_decaying = yes
+	}
+	add_modifier = {
+		name = banking_restructuring_shut_out
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	banking_restructuring_investor_relations = { VALUE = -50 TEXT = banking_restructuring_investors_50_tt }
+	custom_tooltip = {
+		text = banking_restructuring_cooldown_10_tt
+		set_variable = { name = banking_debt_restructured value = yes days = 3650 }
+	}
+}
+
+# ============================================================================
+# THE CONDITIONAL RESCUE
+# ============================================================================
+# The bailout appeal's fourth answer (banking_cycle_events.45 option E): the
+# donor lends the rescue package of option A on conditions, the shape of an
+# IMF stand-by arrangement. The recipient decides (banking_debt_events.2); if
+# it signs, a third is paid at once and a third at each of two yearly reviews,
+# each paid only if the budget borrowed (taking_loans) in no more than
+# banking_rescue_borrowing_months_allowed of the months since the last review.
+# A missed review suspends the programme: no more tranches, relations with the
+# donor -20 and a risk premium of +2pp decaying over five years. Each review is
+# reported to both (banking_debt_events.3 to the recipient, .4 to the donor).
+#
+# The programme lives in variables on the recipient, read by its banking
+# journal entry's monthly pulse (je_banking.txt), so a revolution's winner
+# carries it on (#460-#465): banking_rescue_tranches_left (tranches still owed),
+# banking_rescue_review_months (to the next review), banking_rescue_borrowing_
+# months (months borrowing since the last), banking_rescue_tranche (one
+# tranche, in money) and banking_rescue_donor (the donor). Only the
+# programme's modifier is lost to a revolution, and with it the premium relief.
+
+# ROOT = the donor, scope:bailout_country = the recipient (.45 option E).
+banking_rescue_offer_terms = {
+	scope:bailout_country = {
+		set_variable = {
+			name = banking_rescue_offer
+			value = banking_rescue_offer_value
+			days = 120
+		}
+		trigger_event = { id = banking_debt_events.2 }
+	}
+}
+
+# ROOT = the recipient, scope:bailout_donor = the donor (.2 option A). The
+# first tranche moves before the offer is removed, since both treasury lines
+# read it through banking_rescue_tranche_display.
+banking_rescue_accept = {
+	add_treasury = banking_rescue_tranche_display
+	hidden_effect = {
+		scope:bailout_donor = {
+			add_treasury = {
+				value = 0
+				subtract = root.banking_rescue_tranche_display
+			}
+		}
+	}
+	add_modifier = {
+		name = banking_rescue_programme
+		days = 730
+	}
+	add_modifier = {
+		name = finreg_banking_stability
+		days = 730
+	}
+	change_relations = {
+		country = scope:bailout_donor
+		value = 10
+	}
+	custom_tooltip = {
+		text = banking_rescue_terms_tt
+		set_variable = { name = banking_rescue_tranche value = banking_rescue_tranche_display }
+		set_variable = { name = banking_rescue_donor value = scope:bailout_donor }
+		set_variable = {
+			name = banking_rescue_tranches_left
+			value = {
+				value = banking_rescue_tranches
+				subtract = 1
+			}
+		}
+		set_variable = { name = banking_rescue_review_months value = banking_rescue_review_months_term }
+		set_variable = { name = banking_rescue_borrowing_months value = 0 }
+		remove_variable = banking_rescue_offer
+	}
+	hidden_effect = {
+		scope:bailout_donor = {
+			set_variable = { name = banking_rescue_donor_outcome value = 1 days = 120 }
+			trigger_event = { id = banking_debt_events.4 }
+		}
+	}
+}
+
+# ROOT = the recipient, scope:bailout_donor = the donor (.2 option B).
+banking_rescue_refuse = {
+	custom_tooltip = banking_rescue_refuse_tt
+	hidden_effect = {
+		remove_variable = banking_rescue_offer
+		scope:bailout_donor = {
+			set_variable = { name = banking_rescue_donor_outcome value = 2 days = 120 }
+			trigger_event = { id = banking_debt_events.4 }
+		}
+	}
+}
+
+# The recipient's banking journal entry, monthly (je_banking.txt).
+banking_rescue_programme_monthly = {
+	if = {
+		limit = { banking_rescue_programme_running = yes }
+		if = {
+			limit = { taking_loans = yes }
+			change_variable = { name = banking_rescue_borrowing_months add = 1 }
+		}
+		change_variable = { name = banking_rescue_review_months subtract = 1 }
+		if = {
+			limit = { var:banking_rescue_review_months <= 0 }
+			banking_rescue_review = yes
+		}
+	}
+}
+
+# A review (ROOT = the recipient). banking_rescue_borrowed_last keeps the
+# months the review counted for the notices, since the count restarts.
+banking_rescue_review = {
+	save_scope_as = bailout_country
+	set_variable = { name = banking_rescue_borrowed_last value = var:banking_rescue_borrowing_months days = 120 }
+	if = {
+		limit = { banking_rescue_donor_exists = no }
+		set_variable = { name = banking_rescue_outcome value = 4 days = 120 }
+		banking_rescue_programme_end = yes
+	}
+	else = {
+		var:banking_rescue_donor = { save_scope_as = bailout_donor }
+		if = {
+			limit = { banking_rescue_condition_met = yes }
+			add_treasury = var:banking_rescue_tranche
+			scope:bailout_donor = {
+				add_treasury = {
+					value = 0
+					subtract = root.var:banking_rescue_tranche
+				}
+				set_variable = { name = banking_rescue_donor_outcome value = 3 days = 120 }
+			}
+			change_variable = { name = banking_rescue_tranches_left subtract = 1 }
+			if = {
+				limit = { var:banking_rescue_tranches_left > 0 }
+				set_variable = { name = banking_rescue_outcome value = 1 days = 120 }
+				set_variable = { name = banking_rescue_review_months value = banking_rescue_review_months_term }
+				set_variable = { name = banking_rescue_borrowing_months value = 0 }
+			}
+			else = {
+				set_variable = { name = banking_rescue_outcome value = 2 days = 120 }
+				banking_rescue_programme_end = yes
+			}
+		}
+		else = {
+			set_variable = { name = banking_rescue_outcome value = 3 days = 120 }
+			remove_modifier_if_exists_effect = { MODIFIER = banking_rescue_programme }
+			add_modifier = {
+				name = banking_rescue_programme_suspended
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+			change_relations = {
+				country = scope:bailout_donor
+				value = -20
+			}
+			scope:bailout_donor = {
+				set_variable = { name = banking_rescue_donor_outcome value = 4 days = 120 }
+			}
+			banking_rescue_programme_end = yes
+		}
+		scope:bailout_donor = { trigger_event = { id = banking_debt_events.4 } }
+	}
+	trigger_event = { id = banking_debt_events.3 }
+}
+
+# Nothing more is owed. The tranche and the donor stay for the notices; the
+# next programme overwrites them.
+banking_rescue_programme_end = {
+	set_variable = { name = banking_rescue_tranches_left value = 0 }
+	set_variable = { name = banking_rescue_review_months value = 0 }
+	set_variable = { name = banking_rescue_borrowing_months value = 0 }
+}

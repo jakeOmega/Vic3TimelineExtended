@@ -219,10 +219,6 @@
   "en": "At War",
   "de": "Im Krieg"
  },
- "BANKING_CURR_MODIFIERS": {
-  "en": "#title Financial Cycle Modifiers#!\\nMonthly Cycle Value: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]    Monthly Momentum: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')]    Monthly [concept_bubble_pressure]: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')]",
-  "de": "#title Modifikatoren des Finanzzyklus#!\\nMonatlicher Zykluswert: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_value_monthly_add')]    Monatliches Momentum: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')]    Monatlicher [concept_bubble_pressure]: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')]"
- },
  "CB_ASSET_RELIEF": {
   "en": "Asset Relief Program",
   "de": "Vermögensentlastungsprogramm"

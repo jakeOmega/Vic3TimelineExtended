@@ -705,6 +705,29 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_mon_mandate } }
 		set_variable = { name = te_mon_mandate value = 1 }
 	}
+	# The mandate's clocks and credibility (#799): no lock, no statute counting
+	# down, no credibility earned yet. te_mon_mandate_last is seeded by step 2
+	# from the mandate itself, so a first pulse is never read as a change.
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_lock_months } }
+		set_variable = { name = te_mon_mandate_lock_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_pending } }
+		set_variable = { name = te_mon_mandate_pending value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_pending_months } }
+		set_variable = { name = te_mon_mandate_pending_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_statute } }
+		set_variable = { name = te_mon_mandate_statute value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_cred } }
+		set_variable = { name = te_mon_mandate_cred value = 0 }
+	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_regime } }
 		set_variable = { name = te_mon_regime value = 0 }
@@ -856,6 +879,10 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_monetisation_minting_applied } }
 		set_variable = { name = te_monetisation_minting_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_bond_support_months } }
+		set_variable = { name = te_mon_bond_support_months value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_dollarised } }
@@ -1033,10 +1060,23 @@ te_monetary_set_regime = {
 # month's number instead of last month's, and the deficit read-out the console
 # prints is the one the pressure used.
 #
-# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1. The steppers at the foot
-# of this file write it and the next pulse picks it up, exactly like the rate
-# target — which is also why this step is the only writer that runs inside the
-# update, and why no other step may write the level.
+# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1 and the bond-support
+# clock below. The steppers at the foot of this file write it and the next
+# pulse picks it up, exactly like the rate target — which is also why this step
+# is the only writer that runs inside the update, and why no other step may
+# write the level.
+#
+# THE BOND-SUPPORT CLOCK (#800). The Sovereign Debt Scare's option B
+# (banking_cycle_events.10) has the bank buy government bonds: one temporary
+# step of the level, te_mon_effect_bond_support at the foot of this file, which
+# also starts te_mon_bond_support_months at te_mon_bond_support_term. The clock
+# runs down here, a month a pulse, and when it reaches 0 a player's level steps
+# back by one (never below 0), so the step the bank took is the step it
+# withdraws. The player may move the stepper meanwhile; the withdrawal still
+# takes one step off whatever they left. An AI's level is its own rule's, so
+# the clock only holds the rule's step back while it runs: the AI keeps the
+# step for the term and drops it the month the clock ends. A country that may
+# no longer monetise loses the clock with the level (rule 1).
 #
 # ELIGIBILITY IS RE-ASKED EVERY MONTH, not only on a law change. §14 has
 # te_banking_law_change_cleanup zero the level the moment a disqualifying law
@@ -1090,9 +1130,29 @@ te_monetary_update_monetisation = {
 	if = {
 		limit = { te_mon_can_monetise = no }
 		set_variable = { name = te_monetisation_level value = 0 }
+		set_variable = { name = te_mon_bond_support_months value = 0 }
 	}
-	else_if = {
-		limit = { is_player = no }
+	else = {
+		# The bond-support clock (see the header). The player's withdrawal is
+		# here; the AI's is its rule's own step back, below.
+		if = {
+			limit = { var:te_mon_bond_support_months > 0 }
+			change_variable = { name = te_mon_bond_support_months subtract = 1 }
+			if = {
+				limit = {
+					var:te_mon_bond_support_months = 0
+					is_player = yes
+					var:te_monetisation_level > 0
+				}
+				change_variable = { name = te_monetisation_level subtract = 1 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			te_mon_can_monetise = yes
+			is_player = no
+		}
 		if = {
 			limit = {
 				is_at_war = yes
@@ -1116,7 +1176,11 @@ te_monetary_update_monetisation = {
 			}
 		}
 		else_if = {
-			limit = { var:te_monetisation_level > 0 }
+			limit = {
+				var:te_monetisation_level > 0
+				# Held while the bank's bond purchases run (the clock above).
+				var:te_mon_bond_support_months = 0
+			}
 			change_variable = { name = te_monetisation_level subtract = 1 }
 		}
 		clamp_variable = {
@@ -1172,13 +1236,27 @@ te_monetary_update_monetisation = {
 # dashboard (§6). Otherwise it is whatever the player's stepper left in
 # te_policy_rate_target and this step only re-clamps it to the regime's range.
 #
-# AI MANDATE RULE (§6): gold standard -> peg defence; at war or scaled_debt >=
-# 0.5 -> growth; otherwise price stability. This is a documented exception to
-# mod_systems.md's "do not move AI logic out of the buttons" — the mandate is a
-# shared player/AI mechanic, every discrete banking button keeps its ai_chance,
-# and no ai_chance is bypassed. Precedent: je_covert_warfare.txt:125-202.
-# The AI branch deliberately carries NO gate the player branch lacks
-# (scripting_best_practices.md:2953, the orphan-gate trap).
+# WHICH MANDATE (#799), in this order:
+#   1. INDEPENDENCE: the act on law_central_bank_independence, followed after
+#      te_mon_mandate_statute_delay months (te_monetary_follow_statute). On a
+#      convertible gold standard the bank defends the peg instead. With no
+#      act yet, te_mandate.1 asks for one, and meanwhile the AI keeps its rule
+#      and a player's bank its mandate.
+#   2. THE AI'S RULE (te_monetary_ai_mandate_rule): gold standard -> peg
+#      defence; at war or scaled_debt >= 0.5 -> growth; otherwise the Dual
+#      Mandate, waiting out the lock like a player.
+#   3. NO JOURNAL ENTRY: the Dual Mandate.
+#   4. A PLAYER WITHOUT INDEPENDENCE: whatever the dashboard last set.
+# Then te_monetary_settle_mandate_change charges any change: the lock, the
+# market reaction to a looser rule, and the slow build of a tighter rule's
+# credibility.
+#
+# The AI rule is a documented exception to mod_systems.md's "do not move AI
+# logic out of the buttons" — the mandate is a shared player/AI mechanic, every
+# discrete banking button keeps its ai_chance, and no ai_chance is bypassed.
+# Precedent: je_covert_warfare.txt:125-202. The AI branch deliberately carries
+# NO gate the player branch lacks (scripting_best_practices.md:2953, the
+# orphan-gate trap): the lock binds both, and so does the statute.
 #
 # te_mon_delegated is written to 1 only for AI countries, where it is simply
 # true (§6: "AI countries are always delegated"). It is NOT written for a CBI or
@@ -1189,11 +1267,17 @@ te_monetary_update_monetisation = {
 # THE MANDATE FORMULAS (§6), with pi = te_inflation_core — a delegated bank
 # looks THROUGH a supply shock and steers on the persistent half (§9.1):
 #
-#   price stability   r^* + pi + 1.0 x (pi - anchor) + cycle_lean
-#   growth            r^* + pi - 0.25 + 1.0 x max(0, pi - 4) + cycle_lean / 2
-#   peg defence       the world reference rate (gold only; ignores pi and the cycle)
+#   1 dual mandate          r^* + pi + 1.0 x (pi - anchor) + cycle_lean
+#   4 inflation targeting   r^* + pi + 1.0 x (pi - anchor) + 0 x cycle_lean
+#   2 growth                r^* + pi - 0.25 + 1.0 x max(0, pi - 4) + cycle_lean / 2
+#   3 peg defence           the world reference rate (gold only; ignores pi and the cycle)
 #
-# The second pi term is what makes price stability move MORE than one for one
+# The Dual Mandate was called Price Stability until #799: it leans on the cycle
+# with its full weight, so it answers for jobs as well as prices, as the Fed
+# has since Humphrey-Hawkins (1978). Inflation Targeting is the narrow rule
+# (te_mon_mandate_inflation_lean_weight).
+#
+# The second pi term is what makes the two price rules move MORE than one for one
 # with inflation — the Taylor principle, and the reason a delegated bank can
 # disinflate where a fixed manual target cannot (§9.1). Growth's zero-gap point
 # is pi = 4.25, and below 4% it simply does not see inflation.
@@ -1201,9 +1285,9 @@ te_monetary_update_monetisation = {
 # cycle_lean reads the cycle's OUTLOOK (te_mon_cycle_outlook: value plus six
 # months of momentum), not its phase today — see te_mon_cycle_lean.
 #
-# GROWTH IS NEVER MORE HAWKISH THAN PRICE STABILITY. The two formulas cross at
+# GROWTH IS NEVER MORE HAWKISH THAN THE DUAL MANDATE. The two formulas cross at
 # low inflation under a negative cycle lean: at pi = 0 in a panic (lean -3),
-# growth asks for r^* - 2.5 and price stability for r^* - 5, so the "looser"
+# growth asks for r^* - 2.5 and the Dual Mandate for r^* - 5, so the "looser"
 # mandate would be the tighter one. Both are computed and the LOWER is taken.
 #
 # Each constant is a named script value (§21): te_mon_mandate_inflation_weight,
@@ -1213,7 +1297,7 @@ te_monetary_update_monetisation = {
 # both need a max() or a subtraction against the anchor that change_variable
 # cannot express. The anchor is te_mon_inflation_anchor rather than a literal
 # 2: §9.1 calls it "the mandate target" and gives it as 0 under a metallic
-# regime, and a gold bank on price stability would otherwise target r^* - 2
+# regime, and a gold bank on the Dual Mandate would otherwise target r^* - 2
 # against its own pinned zero inflation — permanently loose at the bottom of
 # its band.
 #
@@ -1223,41 +1307,93 @@ te_monetary_update_monetisation = {
 # 0.1pp a month and core by a tenth of its own gap, while the hysteresis below
 # only lets the target move in whole points at a 0.75pp margin anyway.
 te_monetary_update_target = {
-	# --- which mandate? ---
+	# --- the mandate's clock (#799) ---
 	if = {
-		limit = { is_player = no }
-		set_variable = { name = te_mon_delegated value = 1 }
+		limit = { te_mon_mandate_is_locked = yes }
+		change_variable = { name = te_mon_mandate_lock_months subtract = 1 }
+	}
+
+	# --- which mandate? ---
+	# The act's mandate, read from the independence law (0 without one; the
+	# acts can only sit on that law).
+	set_variable = { name = te_mon_mandate_statute value = te_mon_statute_mandate }
+	if = {
+		# THE STATUTE FIRST (#799). An independent bank answers to the act on
+		# its independence law, AI or player alike, and a war or a debt does not
+		# move it. On a convertible gold standard it defends the peg instead:
+		# convertibility is the statute it answers to there, and the act governs
+		# once convertibility ends.
+		limit = { te_mon_is_cbi = yes }
 		if = {
-			# te_mon_is_on_gold, not the law: an AI that suspended convertibility
-			# (§12.3) has a free dial for five years and runs it on an ordinary
-			# mandate, then goes back to defending the peg when the suspension
-			# ends.
-			limit = { te_mon_is_on_gold = yes }
-			set_variable = { name = te_mon_mandate value = 3 }
+			limit = { is_player = no }
+			set_variable = { name = te_mon_delegated value = 1 }
 		}
-		else_if = {
+		# Both acts on one law (two sponsors in one enactment): the Dual
+		# Mandate Act wins (te_mon_statute_mandate) and the other is struck,
+		# so the law panel shows the act the bank runs.
+		if = {
 			limit = {
-				OR = {
-					is_at_war = yes
-					scaled_debt >= 0.5
+				te_mon_has_dual_act = yes
+				te_mon_has_it_act = yes
+			}
+			active_law:lawgroup_financial_regulation ?= {
+				every_scope_amendment = {
+					limit = { type = amendment_type:amendment_cb_inflation_targeting }
+					remove_amendment = yes
 				}
 			}
-			set_variable = { name = te_mon_mandate value = 2 }
+		}
+		if = {
+			limit = { te_mon_is_on_gold = yes }
+			set_variable = { name = te_mon_mandate value = 3 }
+			te_monetary_clear_pending_mandate = yes
+		}
+		else_if = {
+			limit = { var:te_mon_mandate_statute > 0 }
+			if = {
+				# Leaving peg defence is the gold law's doing, not a change of
+				# statute: the act's mandate applies at once.
+				limit = { var:te_mon_mandate = 3 }
+				set_variable = { name = te_mon_mandate value = var:te_mon_mandate_statute }
+				te_monetary_clear_pending_mandate = yes
+			}
+			else = {
+				te_monetary_follow_statute = yes
+			}
 		}
 		else = {
-			set_variable = { name = te_mon_mandate value = 1 }
+			# No act yet: te_mandate.1 asks for one (fired below). Until it
+			# passes, the AI keeps its own rule and a player's bank keeps the
+			# mandate it had.
+			te_monetary_clear_pending_mandate = yes
+			if = {
+				limit = { is_player = no }
+				te_monetary_ai_mandate_rule = yes
+			}
 		}
 	}
 	else_if = {
+		limit = { is_player = no }
+		set_variable = { name = te_mon_delegated value = 1 }
+		te_monetary_clear_pending_mandate = yes
+		te_monetary_ai_mandate_rule = yes
+	}
+	else_if = {
 		# A national-bank country without the journal entry has no dashboard to
-		# pick a mandate on, so it runs price stability (§6).
+		# pick a mandate on, so it runs the Dual Mandate (§6).
 		limit = { NOT = { has_journal_entry = je_banking_cycle } }
+		te_monetary_clear_pending_mandate = yes
 		set_variable = { name = te_mon_mandate value = 1 }
+	}
+	else = {
+		# A player without independence: the dashboard sets the mandate, and a
+		# statutory clock left from a repealed independence law is void.
+		te_monetary_clear_pending_mandate = yes
 	}
 
 	# Peg defence is a gold-standard mandate only (§6). A country that leaves
 	# gold — or suspends convertibility, which leaves no peg to defend (§12.3) —
-	# falls back to price stability rather than keeping a mandate whose formula
+	# falls back to the Dual Mandate rather than keeping a mandate whose formula
 	# no longer means anything.
 	if = {
 		limit = {
@@ -1265,6 +1401,23 @@ te_monetary_update_target = {
 			te_mon_is_on_gold = no
 		}
 		set_variable = { name = te_mon_mandate value = 1 }
+	}
+
+	# --- what the change costs, and what lenders believe (#799) ---
+	te_monetary_settle_mandate_change = yes
+
+	# --- an independent bank with no act is asked for one (#799) ---
+	# te_mon_mandate_asked (120 days, beyond the event's life: the
+	# te_peg_resume_asked shape) keeps a monthly pulse from stacking a second
+	# te_mandate.1 while the first waits for an answer, and lets a question
+	# that was lost be asked again.
+	if = {
+		limit = {
+			te_mon_needs_mandate_act = yes
+			NOT = { has_variable = te_mon_mandate_asked }
+		}
+		set_variable = { name = te_mon_mandate_asked value = 1 days = 120 }
+		trigger_event = { id = te_mandate.1 }
 	}
 
 	# --- the mandate formula ---
@@ -1323,13 +1476,22 @@ te_monetary_update_target = {
 			set_variable = { name = te_mon_work value = var:te_policy_rate_target }
 		}
 		else = {
-			# 1 price stability: r^* + pi + 1.0 x (pi - anchor) + cycle_lean.
+			# 1 the Dual Mandate: r^* + pi + 1.0 x (pi - anchor) + cycle_lean.
 			# Computed for the growth mandate as well, as the cap below.
 			set_variable = { name = te_mon_work value = var:te_neutral_rate }
 			change_variable = { name = te_mon_work add = var:te_neutral_error }
 			change_variable = { name = te_mon_work add = var:te_inflation_core }
 			change_variable = { name = te_mon_work add = te_mon_mandate_price_reaction }
-			change_variable = { name = te_mon_work add = te_mon_cycle_lean }
+			if = {
+				# 4 Inflation Targeting (#799): the same rule with the lean
+				# scaled by te_mon_mandate_inflation_lean_weight. It answers the
+				# cycle only through what the cycle does to prices.
+				limit = { var:te_mon_mandate = 4 }
+				change_variable = { name = te_mon_work add = te_mon_mandate_inflation_lean }
+			}
+			else = {
+				change_variable = { name = te_mon_work add = te_mon_cycle_lean }
+			}
 
 			if = {
 				# 2 growth: r^* + pi - 0.25 + 1.0 x max(0, pi - 4) + lean / 2.
@@ -1349,7 +1511,7 @@ te_monetary_update_target = {
 				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_bias }
 				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_reaction_term }
 
-				# Never more hawkish than price stability (§6): the two formulas
+				# Never more hawkish than the Dual Mandate (§6): the two formulas
 				# cross at low inflation under a negative lean, so growth takes
 				# whichever of the two is lower.
 				if = {
@@ -1394,6 +1556,207 @@ te_monetary_update_target = {
 	# Clamp in both branches: the regime may have changed under a target that
 	# was legal last month.
 	te_monetary_clamp_target = yes
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 2 HELPERS — the mandate's statute, the AI's rule, and what a change costs
+# (#799)
+# ----------------------------------------------------------------------------
+# Scope: country, dial countries only, called from te_monetary_update_target.
+#
+# THE VARIABLES (all country):
+#   te_mon_mandate_statute        the act's mandate this month: 0 none, 1 Dual
+#                                 Mandate, 4 Inflation Targeting. Derived each
+#                                 pulse from the independence law's amendments.
+#   te_mon_mandate_pending        the statute's mandate while its clock runs, 0
+#                                 when no clock runs
+#   te_mon_mandate_pending_months months left on that clock
+#   te_mon_mandate_last           the mandate the last pulse settled, so a
+#                                 change made between pulses (a dashboard click,
+#                                 an event option) is seen at the next one
+#   te_mon_mandate_lock_months    months before a change no statute made may be
+#                                 made again
+#   te_mon_mandate_cred           the credibility lenders believe of the mandate,
+#                                 added to te_mon_credibility_c_own
+
+te_monetary_clear_pending_mandate = {
+	set_variable = { name = te_mon_mandate_pending value = 0 }
+	set_variable = { name = te_mon_mandate_pending_months value = 0 }
+}
+
+# The 12-month delay (§6, te_mon_mandate_statute_delay). A statute that differs
+# from what the bank runs starts the clock; a different statute restarts it; a
+# statute the bank already runs stops it. The bank moves when the clock runs
+# out. var:te_mon_mandate_statute is set and > 0 here.
+te_monetary_follow_statute = {
+	if = {
+		limit = { var:te_mon_mandate = var:te_mon_mandate_statute }
+		te_monetary_clear_pending_mandate = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				te_mon_mandate_change_pending = no
+				NOT = { var:te_mon_mandate_pending = var:te_mon_mandate_statute }
+			}
+		}
+		set_variable = { name = te_mon_mandate_pending value = var:te_mon_mandate_statute }
+		set_variable = { name = te_mon_mandate_pending_months value = te_mon_mandate_statute_delay }
+	}
+	else = {
+		change_variable = { name = te_mon_mandate_pending_months subtract = 1 }
+		if = {
+			limit = { var:te_mon_mandate_pending_months <= 0 }
+			set_variable = { name = te_mon_mandate value = var:te_mon_mandate_pending }
+			te_monetary_clear_pending_mandate = yes
+		}
+	}
+}
+
+# AI MANDATE RULE (§6): gold standard -> peg defence; at war or scaled_debt >=
+# 0.5 -> growth; otherwise the Dual Mandate. An AI under independence runs it
+# only until its act passes.
+#
+# THE LOCK BINDS IT TOO (#799): between two ordinary mandates the AI waits out
+# te_mon_mandate_lock_months like a player at the dashboard, which also stops a
+# debt hovering at 0.5 from flipping the bank every month. Leaving peg defence
+# is not waited out: that is the gold law's doing, not a choice.
+te_monetary_ai_mandate_rule = {
+	if = {
+		# te_mon_is_on_gold, not the law: an AI that suspended convertibility
+		# (§12.3) has a free dial for five years and runs it on an ordinary
+		# mandate, then goes back to defending the peg when the suspension
+		# ends.
+		limit = { te_mon_is_on_gold = yes }
+		set_variable = { name = te_mon_mandate value = 3 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_mon_mandate }
+				var:te_mon_mandate = 3
+				te_mon_mandate_is_locked = no
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					is_at_war = yes
+					scaled_debt >= 0.5
+				}
+			}
+			set_variable = { name = te_mon_mandate value = 2 }
+		}
+		else = {
+			set_variable = { name = te_mon_mandate value = 1 }
+		}
+	}
+}
+
+# WHAT A CHANGE COSTS (#799). Runs every pulse after the mandate is settled, and
+# compares it with the one the last pulse settled, so it sees every writer: the
+# dashboard, an event option, the AI's rule and the statute's clock.
+#
+#   * THE LOCK. A change no statute made (no independence) starts
+#     te_mon_mandate_lock_length months in which the dashboard's buttons and
+#     the AI's rule leave the mandate alone. A move forced by the gold law (an
+#     AI going on gold, any bank coming off it) does not.
+#   * A LOOSER RULE moves markets at once: expected inflation rises by
+#     te_mon_mandate_loosen_expectation a step, and te_mon_mandate_loosened adds
+#     half a point of risk premium a step, fading over two years. The order is
+#     Inflation Targeting, Dual Mandate, Growth; Peg Defence is outside it.
+#   * A TIGHTER RULE is believed gradually: te_mon_mandate_cred climbs toward
+#     what the new mandate earns by te_mon_mandate_cred_build a month, where a
+#     loss lands at once.
+te_monetary_settle_mandate_change = {
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_last } }
+		set_variable = { name = te_mon_mandate_last value = var:te_mon_mandate }
+	}
+	if = {
+		limit = { NOT = { var:te_mon_mandate = var:te_mon_mandate_last } }
+		if = {
+			limit = {
+				te_mon_is_cbi = no
+				NOT = {
+					AND = {
+						var:te_mon_mandate_last = 3
+						te_mon_is_on_gold = no
+					}
+				}
+				NOT = {
+					AND = {
+						is_player = no
+						var:te_mon_mandate = 3
+					}
+				}
+			}
+			set_variable = { name = te_mon_mandate_lock_months value = te_mon_mandate_lock_length }
+		}
+		if = {
+			limit = {
+				NOT = { var:te_mon_mandate = 3 }
+				NOT = { var:te_mon_mandate_last = 3 }
+				te_mon_mandate_loosen_steps > 0
+			}
+			te_monetary_mandate_loosened = yes
+		}
+		set_variable = { name = te_mon_mandate_last value = var:te_mon_mandate }
+	}
+
+	if = {
+		limit = { NOT = { has_variable = te_mon_mandate_cred } }
+		set_variable = { name = te_mon_mandate_cred value = 0 }
+	}
+	set_variable = { name = te_mon_work value = te_mon_mandate_cred_target }
+	if = {
+		limit = { var:te_mon_work < var:te_mon_mandate_cred }
+		set_variable = { name = te_mon_mandate_cred value = var:te_mon_work }
+	}
+	else = {
+		change_variable = { name = te_mon_mandate_cred add = te_mon_mandate_cred_build }
+		if = {
+			limit = { var:te_mon_mandate_cred > var:te_mon_work }
+			set_variable = { name = te_mon_mandate_cred value = var:te_mon_work }
+		}
+	}
+}
+
+# A looser mandate, priced (#799). Expected inflation is pinned on metal and
+# when dollarised (step 6), so the jump is written only where it would survive
+# the month; the premium is charged everywhere, since lenders price the rule
+# whatever money it governs. te_mon_mandate_loosened is applied here and
+# nowhere else.
+te_monetary_mandate_loosened = {
+	if = {
+		limit = {
+			te_mon_is_metallic = no
+			te_mon_is_dollarised = no
+		}
+		change_variable = { name = te_inflation_expected add = te_mon_mandate_loosen_jump }
+		clamp_variable = {
+			name = te_inflation_expected
+			min = -10
+			max = 100
+		}
+	}
+	if = {
+		limit = { te_mon_mandate_loosen_steps >= 2 }
+		add_modifier = {
+			name = te_mon_mandate_loosened
+			days = 730
+			multiplier = 2
+			is_decaying = yes
+		}
+	}
+	else = {
+		add_modifier = {
+			name = te_mon_mandate_loosened
+			days = 730
+			is_decaying = yes
+		}
+	}
 }
 
 
@@ -1457,8 +1820,8 @@ te_monetary_clamp_target = {
 #
 # The virtual target may go te_mon_virtual_depth_max under the floor — the depth
 # at which the purchases reach their cap — and only while
-# te_mon_bank_may_go_under_floor holds (price stability: prices under target;
-# growth: always).
+# te_mon_bank_may_go_under_floor holds (the Dual Mandate and Inflation
+# Targeting: prices under target; growth: always).
 
 # STEP 1d, every country, before steps 2 and 3. The virtual pair only means
 # anything UNDER the floor, so it is reset to the real pair unless the bank can
@@ -3386,18 +3749,19 @@ te_mon_effect_delegate_off = {
 	custom_tooltip = banking_mon_delegate_off_tt
 }
 
-# Parameters: $MANDATE$ = 1 price stability, 2 growth, 3 peg defence (§6).
+# Parameters: $MANDATE$ = 1 Dual Mandate, 2 growth, 3 peg defence, 4 Inflation
+#                         Targeting (§6, #799).
 #             $TT$      the loc key the button's ExecuteTooltip renders.
 #
-# $TT$ exists because peg defence is the one mandate whose rule is about
-# something outside your own country — it parks the target on the world
-# reference rate — and a button that says only "changes the rule your central
-# bank follows" leaves the player to go looking for which rule. A `$MANDATE$ = 3`
-# test is not available here: a parameter is substituted as text, not compared.
+# $TT$ exists because each mandate's button says what that rule does and what
+# the change costs, and a `$MANDATE$ = 3` test is not available here: a
+# parameter is substituted as text, not compared.
 #
-# The change takes effect on the next monthly pulse, including under central
-# bank independence: the spec's 12-month CBI mandate delay is deferred to a
-# later phase (plan ruling R2).
+# The change takes effect on the next monthly pulse, and that pulse charges it
+# (te_monetary_settle_mandate_change): a year's lock on the next change, and a
+# premium and higher expected inflation for a looser rule. Under central bank
+# independence nothing calls this: the act on the law sets the mandate, after
+# the 12-month delay.
 te_mon_effect_set_mandate = {
 	hidden_effect = {
 		set_variable = { name = te_mon_mandate value = $MANDATE$ }
@@ -3441,6 +3805,48 @@ te_mon_effect_monetisation_step_up = {
 		}
 	}
 	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+# THE BANK BUYS GOVERNMENT BONDS (#800): option B of the Sovereign Debt Scare
+# (banking_cycle_events.10), for a country that may monetise. One step of
+# te_monetisation_level for te_mon_bond_support_term months, after which step
+# 1b takes it back (its header has the clock). The step is priced like any
+# other: minting worth te_mon_monetisation_gdp_share of GDP a year, +2.5pp of
+# inflation pressure and +0.5pp of risk premium, all of them step 1b's and the
+# next pulse's. Like the steppers it writes inputs only.
+#
+# A second purchase while one runs restarts the clock and takes no second
+# step. A level already at te_mon_monetisation_max has no step left to take,
+# so the option's market effects stand alone and the tooltip says why.
+#
+# Scope: country. The caller checks te_mon_full_system and te_mon_can_monetise.
+te_mon_effect_bond_support = {
+	if = {
+		limit = {
+			has_variable = te_mon_bond_support_months
+			var:te_mon_bond_support_months > 0
+		}
+		custom_tooltip = te_mon_bond_support_extend_tt
+		hidden_effect = {
+			set_variable = { name = te_mon_bond_support_months value = te_mon_bond_support_term }
+		}
+	}
+	else_if = {
+		limit = { te_mon_monetise_can_step_up = yes }
+		custom_tooltip = te_mon_bond_support_tt
+		hidden_effect = {
+			change_variable = { name = te_monetisation_level add = 1 }
+			clamp_variable = {
+				name = te_monetisation_level
+				min = 0
+				max = te_mon_monetisation_max
+			}
+			set_variable = { name = te_mon_bond_support_months value = te_mon_bond_support_term }
+		}
+	}
+	else = {
+		custom_tooltip = te_mon_bond_support_at_max_tt
+	}
 }
 
 

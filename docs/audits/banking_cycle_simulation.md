@@ -2360,3 +2360,67 @@ share of months in a Downturn or Panic, which is what a lender of last resort is
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4 --player-eliq [--tune pre_eliq_bounds]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 4 --exclude-tool all
 ```
+
+---
+
+## 26. Inflation Targeting, and what lenders believe of a mandate (2026-10-07, #799)
+
+**Question (issue #799).** Price Stability leaned on the cycle with full weight, so it was already a dual
+mandate; it is now called the Dual Mandate. The issue adds a narrow rule, Inflation Targeting: "the
+inflation term, with little or no cycle lean". How much lean should it keep? And a tighter mandate "is
+believed only gradually": should the mandate move the credibility anchor c, and which mandates?
+
+**The port.** The `inflation` cells run mandate 4: the Dual Mandate's rule with the cycle lean scaled by
+`te_mon_mandate_inflation_lean_weight` (`--tune it_lean=`). `mandate_cred_target` ports
+`te_mon_mandate_cred_target`: +`te_mon_mandate_cred_inflation` to c for a mandate-run bank on inflation
+targeting that is not metallic or state-owned, earned at `te_mon_mandate_cred_build` a month (`--tune
+cred_it=`; `--tune cred_growth=` measures a Growth penalty, 0 as shipped). A run keeps one mandate all
+century, so the lock and the reaction to a looser rule, both one-offs at a change, are not ported.
+
+### F33 — Without a lean, inflation targeting trades the cycle for prices
+
+300 runs × 100 years, 0 points, delegated (universal banking) unless marked. *IT* is inflation targeting
+as shipped (lean 0, +0.1 c); *dual* is the Dual Mandate.
+
+| cell | crashes | recession % | frenzy % | longest slump | inflation | rate | rate ≥ 10% | services |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| fiat, no wage pressure: IT | 12.4 | 9.2 | 2.0 | 24 | 2.20 | 4.89 | 0.5 | 2.4 |
+| fiat, no wage pressure: IT, lean 0.25 | 12.2 | 8.1 | 1.7 | 23 | 2.23 | 4.95 | 0.5 | 2.8 |
+| fiat, no wage pressure: dual | 11.1 | 7.3 | 0.9 | 23 | 2.22 | 5.08 | 0.9 | 3.5 |
+| digital, no wage pressure: IT | 12.6 | 8.9 | 1.9 | 23 | 2.20 | 4.91 | 0.6 | 3.3 |
+| digital, no wage pressure: dual | 10.6 | 6.0 | 0.4 | 21 | 2.21 | 5.09 | 1.0 | 4.6 |
+| fiat, +1pp wage pressure: IT | 1.3 | 2.7 | 0.1 | 60 | 3.30 | 7.11 | 4.4 | −4.3 |
+| fiat, +1pp wage pressure: dual | 1.0 | 0.9 | 0.0 | 84 | 3.50 | 7.44 | 8.0 | −4.7 |
+| digital, +1pp wage pressure: IT | 0.7 | 2.0 | 0.0 | 54 | 3.29 | 7.16 | 5.5 | −4.1 |
+| digital, +1pp wage pressure: dual | 0.5 | 0.6 | 0.0 | 68 | 3.50 | 7.48 | 8.7 | −4.3 |
+| fiat, independent L9: IT | 12.6 | 9.9 | 1.8 | 22 | 2.15 | 4.80 | 0.3 | 3.2 |
+| fiat, independent L9: dual | 11.4 | 7.4 | 0.7 | 21 | 2.22 | 5.04 | 0.7 | 4.4 |
+| fiat, independent L9, +1pp: IT | 10.4 | 8.4 | 1.4 | 23 | 2.25 | 5.01 | 0.4 | 2.4 |
+| fiat, independent L9, +1pp: dual | 9.2 | 6.1 | 0.5 | 21 | 2.32 | 5.23 | 0.8 | 3.5 |
+
+In a calm world inflation targeting holds the same 2.2% as the Dual Mandate and pays for ignoring the
+cycle: about 1.2 to 2 more crashes a century, 2 to 3 points more of months in a Downturn or Panic, two to
+five times the frenzy, and a point less services output. Its rate averages 0.2pp lower. Under standing wage pressure,
+where the Dual Mandate sits in §12's stagnation trap, the trade turns: the longest slump falls from 84 to
+60 months (fiat) and 68 to 54 (digital), inflation from 3.5% to 3.3%, and months at a rate of 10% or more
+nearly halve, for more months in recession (2 to 2.7% against under 1%). Each rule wins where the other
+loses, which is what a choice should look like. A quarter of the lean recovers about half of the calm-world
+recession gap and blurs that line, so the weight is 0, the issue's "little or no".
+
+### F34 — Credibility for inflation targeting only
+
+The +0.1 to c matters only under standing pressure. Delegated fiat at +1pp: inflation 3.40 → 3.30%, months
+at 10% or more 6.5 → 4.4%, longest slump 70 → 60 months. An independent bank already anchors most of that
+pressure away, so the same bonus moves its inflation 2.29 → 2.25%. In a calm world it does nothing
+measurable.
+
+A Growth penalty of −0.1 was measured and turned down. Delegated fiat at +1pp: inflation 5.03 → 5.37%, a
+rate of 10% or more in 23.8 → 35.0% of months, services −1.2 → −3.2%. That is a second charge on a mandate
+whose price is already its inflation, and every AI at war runs Growth. So only inflation targeting moves c,
+and "a tighter rule is believed gradually" means its bonus builds over two years (0.0042 a month) while a
+move off it loses the bonus at once.
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat [--wage-pressure 1.0] [--tune it_lean=0.25 | --tune cred_it=0 | --tune cred_growth=-0.1]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat --fin-law law_central_bank_independence --bank-level 9 [--wage-pressure 1.0] [--tune cred_it=0]
+```

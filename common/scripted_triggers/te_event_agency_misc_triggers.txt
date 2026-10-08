@@ -30,8 +30,11 @@ te_ea_lolr_answer_honoured = {
 # banking_is_bailout_recipient). Not already deciding whether to ask, or just
 # having decided: .68 sets te_ea_bailout_asked for a year when it fires, so a
 # human in a long downturn is not asked every month by another donor's pulse.
+# Nor under a conditional rescue still paying out (.45 option E, #800): one
+# programme at a time.
 te_ea_bailout_can_be_asked = {
 	NOT = { has_variable = te_ea_bailout_asked }
+	NOT = { banking_rescue_programme_running = yes }
 }
 
 # banking_cycle_events.69 (ROOT = the country that asked). Which answer came

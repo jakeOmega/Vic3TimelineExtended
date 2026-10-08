@@ -6,10 +6,16 @@
 # These two blocks turn the hidden variables into that band for the Current
 # Conditions rows (gui/journal_entry_widgets/banking_dashboard_widget.gui).
 # The band edges reuse thresholds the script already acts on (momentum +-3 is
-# banking_cycle_bubble_risk_rising / banking_cycle_risk_falling; bubble 15 / 30
-# / 50 are crash-roll steps in banking_cycle_effects.txt). je_banking_cycle's
-# status_desc bands momentum and bubble pressure at the same edges; keep the
-# two in step.
+# banking_cycle_bubble_risk_rising / banking_cycle_risk_falling, and +-5 the
+# ends of banking_cycle_momentum_bar and the deepest crash tier's momentum;
+# bubble 15 / 30 / 50 are crash-roll steps in banking_cycle_effects.txt).
+# Momentum has seven bands, so that its two open-ended ones, Freefall and
+# Overheating, are past the bar's ends: in the cycle simulator momentum is
+# there in under 1% of months, where +-3 was crossed in up to a quarter, and
+# a monthly-change range open on one side (banking_disp_*_change_shape) is
+# that rare too. The overview's icon
+# codes and the monthly-change ranges (banking_overview_display_values.txt)
+# band momentum and bubble pressure at the same edges; keep them in step.
 # ============================================================================
 
 banking_dash_momentum_band = {
@@ -19,6 +25,10 @@ banking_dash_momentum_band = {
 	text = {
 		trigger = { NOT = { has_variable = finance_cycle_momentum } }
 		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 5 }
+		localization_key = banking_dash_momentum_band_overheating
 	}
 	text = {
 		trigger = { var:finance_cycle_momentum >= 3 }
@@ -37,7 +47,53 @@ banking_dash_momentum_band = {
 		localization_key = banking_dash_momentum_band_falling
 	}
 	text = {
+		trigger = { var:finance_cycle_momentum > -5 }
 		localization_key = banking_dash_momentum_band_collapsing
+	}
+	text = {
+		localization_key = banking_dash_momentum_band_freefall
+	}
+}
+
+# Momentum's band as the figures it spans, for the tooltips of the monthly
+# change under the overview's first row (banking_dash_*_change_tt): the band's
+# edges are public, its figure is not. The same tests as
+# banking_dash_momentum_band above, in the same order
+# (test_banking_monthly_change.py compares them).
+banking_dash_momentum_band_edges = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_momentum } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 5 }
+		localization_key = banking_dash_momentum_edges_overheating
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 3 }
+		localization_key = banking_dash_momentum_edges_surging
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum >= 1 }
+		localization_key = banking_dash_momentum_edges_rising
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -1 }
+		localization_key = banking_dash_momentum_edges_steady
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -3 }
+		localization_key = banking_dash_momentum_edges_falling
+	}
+	text = {
+		trigger = { var:finance_cycle_momentum > -5 }
+		localization_key = banking_dash_momentum_edges_collapsing
+	}
+	text = {
+		localization_key = banking_dash_momentum_edges_freefall
 	}
 }
 
@@ -296,8 +352,8 @@ te_mon_delegation_state = {
 
 # Which rule a delegated bank follows (§6). Peg defence can only be in force on
 # a gold standard — te_monetary_update_target falls a country that leaves gold
-# back to price stability on its next pulse — so no branch here has to check the
-# currency law.
+# back to the Dual Mandate on its next pulse — so no branch here has to check
+# the currency law. Also read by te_mandate.1's desc.
 te_mon_mandate_name = {
 	type = country
 	random_valid = no
@@ -307,7 +363,11 @@ te_mon_mandate_name = {
 		localization_key = banking_dash_band_unknown
 	}
 	text = {
-		trigger = { var:te_mon_mandate >= 3 }
+		trigger = { var:te_mon_mandate = 4 }
+		localization_key = banking_dash_mon_mandate_inflation
+	}
+	text = {
+		trigger = { var:te_mon_mandate = 3 }
 		localization_key = banking_dash_mon_mandate_peg
 	}
 	text = {
@@ -315,7 +375,43 @@ te_mon_mandate_name = {
 		localization_key = banking_dash_mon_mandate_growth
 	}
 	text = {
-		localization_key = banking_dash_mon_mandate_price
+		localization_key = banking_dash_mon_mandate_dual
+	}
+}
+
+# The Mandate by Law row (#799), for an independent bank: the act in force, or
+# that there is none yet (te_mandate.1 is asking for one). The Takes Effect In
+# row under it counts down a change the act has ordered.
+te_mon_mandate_act_status = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_dual_act = yes }
+		localization_key = amendment_cb_dual_mandate
+	}
+	text = {
+		trigger = { te_mon_has_it_act = yes }
+		localization_key = amendment_cb_inflation_targeting
+	}
+	text = {
+		localization_key = banking_dash_mon_act_none
+	}
+}
+
+# The mandate buttons' lock line (#799), phrased as a condition either way so
+# IsValidTooltip's tick or cross reads right; the crossed form counts the
+# months left.
+te_mon_mandate_lock_condition = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_mandate_is_locked = yes }
+		localization_key = banking_mon_tt_mandate_locked
+	}
+	text = {
+		localization_key = banking_mon_tt_mandate_free
 	}
 }
 
