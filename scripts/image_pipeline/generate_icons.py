@@ -380,14 +380,14 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
 
 
 # Per-entry settings that change how an entry's render is composed.
-ENTRY_SPEC_KEYS = ("solid",)
+ENTRY_SPEC_KEYS = ("solid", "see_through")
 # A derived entry's settings added after the UN's (tint, layout, size,
 # marks); recorded only when set, so the UN's manifest entries stay valid.
 DERIVED_KEYS = ("damage", "tilt", "base", "turn", "flip")
 
 
 def entry_spec(cat: str, e: dict) -> dict:
-    """The category's spec with the entry's own compose settings (`solid`) over it."""
+    """The category's spec with the entry's own compose settings (`solid`, `see_through`) over it."""
     own = {k: e[k] for k in ENTRY_SPEC_KEYS if k in e}
     return dict(CATEGORIES[cat], **own) if own else CATEGORIES[cat]
 

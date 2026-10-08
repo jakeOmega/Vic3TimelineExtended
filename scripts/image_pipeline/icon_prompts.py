@@ -44,7 +44,9 @@ shrunk and placed), and "disc" in place of "from": drawn outright on a disc
 of its own colours (the warming tiers). "drawn": True in place of either is
 a bare canvas holding only its drawn marks (banking momentum's triple arrows). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
-objects with no real holes. A `part` category is reviewed like icons but never written; it
+objects with no real holes. "see_through": (x0, y0, x1, y1), shares of the side, does the
+reverse inside that box: the light backdrop the cut-out kept there (the white between a
+gate's bars) goes transparent. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
 A subject describes one physical object, with its material and colour. FLUX
 fills in whatever a subject leaves open, and review kept catching the same
@@ -380,6 +382,14 @@ CATEGORIES = {
     "company_logo": dict(
         folder="company_icons/historical_company_icons", size=256, mode="cutout", fill=0.93, grade_strength=0.5,
         grade_folder="company_icons/historical_company_icons", gui=(), style=EMBLEM),
+    # Mod goods drawn by older generators (flat vector art, badges) instead of
+    # vanilla's painted objects. GUI-hosted in effect, like company_logo:
+    # common/goods and the goods' text icons (gui/zzz_extra_goods_texticons.gui)
+    # already point at goods_icons/<key>.dds, so the key is the file name and
+    # writing it is the whole change. Vanilla's span 0.86-0.95 of the side (median 0.90).
+    "good": dict(
+        folder="goods_icons", size=256, mode="cutout", fill=0.90, grade_strength=0.4,
+        gui=(), style="{subject}, one chunky readable object, " + PAINTED),
     # The sidebar's small buttons (main_hud/*_btn.dds, 76 px, drawn at 42x40 by
     # sidepanel_button_small): vanilla's are painted single objects on
     # transparency (a book, a globe, coins), spanning ~0.7 of the side. The
@@ -575,6 +585,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "unmanned_aerial_vehicles": {"subject": "a slender grey military drone with long straight wings and a bulbous camera nose", "seed": 1},
         "biotechnology": {"subject": "a glass test tube holding a glowing green seedling with its roots in liquid", "seed": 1},
         "clean_energy_technologies": {"subject": "a pale grey three-bladed wind turbine standing beside a tilted blue solar panel", "seed": 1},
+        # Shared clean_energy_technologies.dds until 2026-10-08. s1 cut the rock off at the frame.
+        "carbon_capture_and_storage": {"subject": "a row of boxy grey steel air-capture machines with big fan grilles, a thick green pipe bending down into dark rock below", "seed": 2},
         "cloud_computing": {"subject": "a soft blue-grey cloud floating above a black rack of server units with blinking lights", "seed": 1},
         "digital_telecommunications": {"subject": "a grey metal telephone switching cabinet with rows of small green indicator lights and thick bundles of blue cables plugged into its front", "seed": 1},
         "e-commerce": {"subject": "a cardboard delivery parcel resting on a closed silver laptop", "seed": 0},
@@ -756,7 +768,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_generic_resource_depository": {"subject": "a fortified depository of low concrete vaults with heavy steel doors, beside heaps of ore and stacks of metal ingots", "seed": 1},
         "building_generic_granary_complex": {"subject": "a grain storage complex of tall round concrete silos beside a rail siding, golden wheat fields around it", "seed": 1},
         # Round 1 showed no cloth.
-        "building_generic_textile_depot": {"subject": "a brick textile warehouse whose yard is crossed by long lines hung with bolts of bright red, blue and yellow cloth drying in the sun, round dyeing vats beside them", "seed": None},
+        "building_generic_textile_depot": {"subject": "a brick textile warehouse whose yard is crossed by long lines hung with bolts of bright red, blue and yellow cloth drying in the sun, round dyeing vats beside them", "seed": 0},
         "building_generic_cold_storage": {"subject": "a large windowless refrigerated warehouse with insulated walls, lorries backed up to its loading bays", "seed": 1},
         "building_generic_paper_mill_complex": {"subject": "a pulp and paper mill beside a river, with log piles, a tall chimney and big rolls of paper stacked in the yard", "seed": 1},
         "building_generic_foundry_complex": {"subject": "a sprawling steel foundry with blast furnaces, molten metal glowing orange and tall smoking chimneys", "seed": 0},
@@ -772,13 +784,13 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_generic_export_warehouse": {"subject": "a bonded export warehouse on a riverside quay, sacks of coffee and bales of cotton being loaded onto a cargo ship", "seed": 1},
         "building_generic_electronics_lab": {"subject": "a modern electronics laboratory building with a radio mast on its roof and rows of lit windows", "seed": 0},
         # Round 1: ASSAY OFFICE on the facade (s0), a watermark (s1).
-        "building_generic_assay_office": {"subject": "a squat solid stone strongroom building with barred windows and a heavy iron door, a small wooden cart loaded with gold bullion bars at its door, blank unmarked walls", "seed": None},
+        "building_generic_assay_office": {"subject": "a squat solid stone strongroom building with barred windows and a heavy iron door, a small wooden cart loaded with gold bullion bars at its door, blank unmarked walls", "seed": 0},
         "building_generic_ore_processing": {"subject": "an ore processing plant with crushers, conveyor belts and heaps of crushed ore beside a smelter chimney", "seed": 0},
         "building_generic_mineral_refinery": {"subject": "a mineral refinery with tall leaching tanks, conveyor belts and heaps of white and yellow mineral powder", "seed": 0},
         "building_generic_silk_exchange": {"subject": "an East Asian trading house with curved tiled roofs, bales of raw silk and dyed silk cloth stacked outside", "seed": 0},
         "building_generic_vintner_hall": {"subject": "a stone winery hall among vineyards, rows of oak barrels outside and grape vines on the hillside", "seed": 0},
         # Round 1: EMPORIUM (s0) and a lettered plaque (s1).
-        "building_generic_furniture_showroom": {"subject": "a two-storey brick furniture workshop with tall plain glass windows showing chairs and tables inside, stacked timber planks in the yard behind it, blank unmarked walls", "seed": None},
+        "building_generic_furniture_showroom": {"subject": "a two-storey brick furniture workshop with tall plain glass windows showing chairs and tables inside, stacked timber planks in the yard behind it, blank unmarked walls", "seed": 0},
         "building_generic_lumber_yard": {"subject": "an industrial sawmill and timber yard with stacks of sawn planks and piles of logs beside a river", "seed": 0},
         "building_generic_dye_fiber_park": {"subject": "a campus of small laboratories and pilot plants with pipes and tanks, spools of brightly dyed fibre in the yard", "seed": 1},
         # Wonders: the landmark alone, as vanilla draws its monuments.
@@ -1009,8 +1021,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
         "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": 0},
-        # Round 1's round doors read as portholes: show the gold behind.
-        "law_national_bank": {"subject": "a heavy round steel bank vault door swung half open, stacks of gold bars inside the vault behind it", "seed": None},
+        # A round vault door read as a porthole twice (rounds 1 and 2): no door.
+        # s0 is retouched: numbers painted off the bars' faces.
+        "law_national_bank": {"subject": "a neat pyramid of stacked gold bars with a heavy brass bank key lying in front of it", "seed": 0},
         # Culture s0 has a signature and s1 lettering; commerce s1 a signature; secrecy s1 a W seal.
         "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": 2},
         "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": 1},
@@ -1018,9 +1031,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": 2},
         "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": 1},
         "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": 1},
-        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": 0},
+        # The wired headband read as headphones: a bust in a wired cap (owner, 2026-10-08).
+        "law_ministry_of_thought_control": {"subject": "a plaster bust of a head in profile wearing a metal cap bristling with wires that run to a small box covered in dials", "seed": 0},
         # Round 1's round shield read as a plate or a mirror.
-        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": None},
+        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": 1},
         "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": 1},
         "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": 1},
         "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": 2},
@@ -1039,11 +1053,158 @@ ICONS: dict[str, dict[str, dict]] = {
         # audit): the law whose old picture fits worse gets its own.
         "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": 2},
         # Round 1 stamped a B on every coin (one with a lettered tag): a block chain, no coins.
-        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": None},
+        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": 2},
         "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": 1},
         "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": 0},
         "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": 2},
         "law_protected_class": {"subject": "a level balance scale with a man's top hat in one pan and a woman's bonnet in the other", "seed": 1},
+        # The Legislated Tax Code's carrier law, visible under its game rule, on
+        # vanilla's proportional_taxation.dds until 2026-10-08. Round 1 lettered
+        # the "statute book" STATUTE and drew the rubber stamp as a chess piece.
+        "law_te_tax_code": {"subject": "a thick closed leather-bound ledger with plain brass corners, sealed shut with a red wax seal", "seed": 0},
+        # Four later laws gen_law_icons.py drew in the same glyph style (2026-09-28 to 10-04).
+        # Vanilla draws each bureaucracy law as an object beside a quill in an inkwell.
+        "law_automated_bureaucracy": {"subject": "a small brass robot arm holding a feather quill over a square glass inkwell", "seed": 1},
+        "law_contracted_administration": {"subject": "a closed leather briefcase beside a feather quill standing in a square glass inkwell", "seed": 0},
+        "law_communal_administration": {"subject": "three raised open hands side by side beside a feather quill in a square glass inkwell", "seed": 0},
+        "law_private_policing": {"subject": "a security guard's peaked cap lying beside a big ring of keys and a flashlight", "seed": 0},
+        # gen_law_icons.py's flat bronze glyphs (2026-04-12), many near-identical
+        # (spec, "Batch 4"). One object per law in the law style; siblings differ in
+        # silhouette, since the tint drops colour. A "no X" law whose sibling's object
+        # crossed out reads right is that object under the prohibition ring.
+        # LGBTQ+ Rights
+        "law_active_persecution": {"subject": "a heavy wooden judge's gavel lying across a pair of thick iron shackles joined by a chain", "seed": 2},
+        "law_basic_protections": {"subject": "a small plain wooden kite shield with an iron rim, propped upright on a short wooden stake", "seed": 2},
+        "law_comprehensive_rights": {"subject": "a large sturdy umbrella opened wide, its curved wooden handle resting on the ground", "seed": 0},
+        "law_full_equality_and_protection": {"subject": "two identical thick gold wedding rings interlocked, standing upright on a small square wooden base", "seed": 1},
+        "law_legal_limbo": {"subject": "a short sagging rope bridge segment with several of its wooden planks missing", "seed": 1},
+        # Antitrust & Market Structure
+        "law_command_cooperative_economy": {"subject": "a large wooden abacus with rows of heavy beads, a small cog wheel leaning against it", "seed": 2},
+        "law_dirigisme": {"subject": "a large wooden ship's steering wheel standing on its tall carved wooden helm post", "seed": 2},
+        "law_freedom_of_contract": {"subject": "two hands clasped in a firm handshake, white shirt cuffs and dark jacket sleeves showing", "seed": 1},
+        "law_guilds_chartered_monopolies": {"subject": "a blacksmith's iron anvil with a hammer resting on it, a heavy padlock hanging from its side", "seed": 2},
+        "law_regulated_utilities": {"subject": "a big brass water tap and a chunky electric wall socket mounted side by side on a wooden board", "seed": 2},
+        # Owner rerolls: bolt cutters read as shears over an uncut chain, a chisel as a cleaver.
+        "law_trust_busting": {"subject": "a short length of thick iron chain with its middle link snapped open, the two ends pulled apart", "seed": 3},
+        # Criminal Justice
+        "law_punishment_focused_criminal_justice": {"subject": "a heavy barred steel prison cell door slammed shut and bolted with a thick iron bar", "seed": 0},
+        "law_rehabilitation_focused_criminal_justice": {"subject": "a small carpenter's workbench with a hand saw, a wood plane and a closed book on top", "seed": 1},
+        # Round 1's gold-mended vase lost its gold to the tint: a broken pot.
+        "law_restorative_justice": {"subject": "a cracked clay pot held together by thick metal staples across its cracks and a tight band of twine", "seed": 0},
+        # Distribution of Power (a vanilla group)
+        "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
+        # Electoral Finance
+        "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
+        "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
+            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
+        "law_publicly_funded_elections": {"subject": "two identical plain wooden speaker's lecterns standing side by side at exactly equal height", "seed": 1},
+        # Family & Reproductive Policy
+        "law_communal_child_rearing": {"subject": "a tall three-tier iron dormitory bunk bed made up with identical small pillows and blankets", "seed": 2},
+        "law_population_control_measures": {"subject": "a white stork standing locked inside a tall iron birdcage with a padlocked door", "seed": 2},
+        "law_pro_natalist_subsidies": {"subject": "a large old-fashioned baby pram with a fat drawstring money pouch tied to its handle", "seed": 1},
+        "law_state_sponsored_family_planning": {"subject": "a doctor's leather medical bag standing open beside a small plain glass pill bottle", "seed": 2},
+        "law_traditional_family_structure": {"subject": "a small cosy cottage with a pitched roof, a front porch and a smoking brick chimney", "seed": 1},
+        # Financial Regulation
+        # Round 1's lever in a glass case, round 2's governor (it drew scales) and round 3's
+        # gyroscope (ship's wheels) missed. Alternative: an owl on gold bars (sheet 11).
+        "law_central_bank_independence": {"subject": "a bronze hawk and a white dove perched side by side on one stone pedestal", "seed": 3},
+        # Round 1's funnel read as a loudspeaker horn, Ministry of Propaganda's object.
+        "law_directed_credit_development_banks": {"subject": "a big tin watering can pouring water onto a small brick factory with a tall smokestack", "seed": 0},
+        "law_free_mutual_banking": {"subject": "a traditional domed straw beehive skep on a wooden stand, a few bees around it", "seed": 0},
+        "law_prudential_narrow_banking": {"subject": "a ceramic piggy bank sitting safely behind a low, thick, solid brick wall", "seed": 2},
+        "law_state_owned_banking": {"subject": "a classical stone bank building with four columns and an empty flagpole on its roof", "seed": 0},
+        "law_universal_banking_light_prudence": {"subject": "a big multi-tool pocket knife with all of its blades and tools folded out", "seed": 0},
+        "law_unregulated_banking": {"subject": "a tall precarious tower of stacked wooden building blocks leaning dangerously, about to topple", "seed": 0},
+        # Genetic Rights
+        "law_ban_on_genetic_modification": {"from": "law/law_open_source_genetics", "base": {"scale": 0.78},
+            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
+        "law_corporate_genetic_licensing": {"subject": "a sealed glass vial holding a tiny DNA helix, displayed in an open velvet-lined jewellery case", "seed": 1},
+        "law_open_source_genetics": {"subject": "a chunky twisted DNA double helix sculpture standing upright, cradled at its base by two open hands", "seed": 2},
+        "law_state_eugenics_program": {"subject": "a brass laboratory microscope standing beside a wooden rack of glass test tubes and a syringe", "seed": 2},
+        "law_traditional_heredity": {"subject": "a gnarled old oak tree with a thick trunk, a full leafy canopy and deep spreading roots", "seed": 1},
+        # Distribution of Power (a vanilla group)
+        "law_direct_democracy": {"subject": "a long rectangular wooden table with a row of identical high-backed chairs down both long sides", "seed": 0},
+        "law_neocameralism": {"subject": "a sleek modern glass-and-steel corporate skyscraper model with a small helipad on its roof", "seed": 1},
+        # Human Augmentation
+        "law_human_purity": {"subject": "a classical white marble statue of a standing athlete, unaltered, on a square stone plinth", "seed": 1},
+        "law_mandatory_augmentation": {"subject": "a reclined steel surgical chair with wrist restraints, a robotic surgical arm poised above it", "seed": 0},
+        # Round 1's X of crutch and prosthetic read as two crossed crutches.
+        "law_medical_augmentation_only": {"subject": "a steel prosthetic leg with a hinged knee joint standing upright beside a plain wooden crutch", "seed": 0},
+        "law_no_augmentation": {"from": "law/law_regulated_augmentation_market", "base": {"scale": 0.78},
+            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
+        "law_regulated_augmentation_market": {"subject": "a sleek robotic cybernetic hand standing upright on a small velvet-topped display pedestal", "seed": 0},
+        "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
+        # Inheritance Laws
+        "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
+        "law_non_inheritable_usage_rights": {"subject": "a round stone village well with a small wooden roof and a bucket on a rope", "seed": 2},
+        "law_partible": {"subject": "a small square diorama of farmland split by wooden fences into three unequal fields", "seed": 1},
+        "law_primogeniture": {"subject": "one large ornate iron-bound treasure chest with a single big iron key in its lock", "seed": 1},
+        # Intellectual Property
+        "law_creative_commons": {"subject": "a painter's wooden easel with a blank canvas, a jar of brushes standing beside it", "seed": 1},
+        "law_no_ip_protection": {"from": "law/law_traditional_ip_protection", "base": {"scale": 0.78},
+            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
+        "law_open_source_innovation": {"subject": "three large interlocking jigsaw puzzle pieces fitted together, a fourth piece sliding into place", "seed": 2},
+        "law_state_intellectual_property": {"subject": "a tall steel filing cabinet with its top drawer pulled open, rolled blueprints sticking out", "seed": 1},
+        "law_strict_ip_protection": {"subject": "a glass light bulb wrapped tightly in heavy iron chains locked with a big padlock", "seed": 0},
+        "law_traditional_ip_protection": {"subject": "a whole rolled parchment scroll tied with a red ribbon and a wax seal, a glass light bulb standing beside it", "seed": 3},
+        # Internet Governance
+        "law_net_neutrality": {"subject": "a sleek network router with antennas, a carpenter's spirit level lying flat across its top", "seed": 1},
+        "law_no_internet_policy": {"subject": "an empty modern swivel office chair with a network cable coiled loosely on its seat", "seed": 0},
+        "law_state_controlled_internet": {"subject": "a tall computer server cabinet wrapped in heavy iron chains and locked with a big padlock", "seed": 0},
+        "law_unregulated_internet": {"subject": "a covered pioneer wagon loaded high with computer servers and coiled network cables", "seed": 1},
+        # Language Policy
+        "law_civic_monolingualism": {"subject": "a large ornate iron key lying across one thick closed book with brass corners", "seed": 2},
+        # Round 1's cage muzzle came out as a birdcage, Population Control's object.
+        "law_linguistic_purity": {"subject": "a pair of iron pruning shears beside a small neatly clipped topiary bush in a clay pot", "seed": 1},
+        "law_local_vernacular": {"subject": "a folded patchwork quilt of mismatched squares draped over a rustic wooden stool", "seed": 0},
+        "law_multilingual_federalism": {"subject": "three brass bells of different sizes and shapes hanging together from one sturdy wooden beam", "seed": 1},
+        "law_state_led_language_reform": {"subject": "a feather quill in a heavy brass inkwell, a wooden set square leaning against it", "seed": 0},
+        "law_ubiquitous_translation": {"subject": "a sleek mechanical robot parrot with metal feathers perched on a small brass stand", "seed": 0},
+        # Ministry of Labor
+        "law_no_ministry_of_labor": {"from": "law/law_pro_labor_ministry_of_labor", "base": {"scale": 0.78},
+            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
+        "law_pro_capital_ministry_of_labor": {"subject": "a worker's riveted steel hard hat with a gentleman's tall silk top hat standing beside it", "seed": 0},
+        "law_pro_labor_ministry_of_labor": {"subject": "a worker's riveted steel hard hat sitting on top of a dented tin lunch pail", "seed": 1},
+        # Minority Rights
+        "law_minority_rights_affirmative_action": {"subject": "a sturdy wooden ladder leaning against a tall stone pedestal, offering a way up", "seed": 2},
+        "law_minority_rights_cultural_assimilation": {"subject": "a large black iron melting pot over a fire, assorted small trinkets melting together inside", "seed": 1},
+        "law_minority_rights_discrimination": {"subject": "a thick velvet rope barrier hanging between two polished brass stanchion posts, blocking the way", "seed": 2},
+        # The white seen between the gate's bars stayed in the cut-out: `see_through` clears it.
+        "law_minority_rights_ghettoization": {"subject": "a section of high brick wall topped with barbed wire, a narrow iron-barred gate in it", "seed": 1, "see_through": (0.42, 0.40, 0.63, 0.86)},
+        # Every round-1 seed opened the "closed" shutters: the guard looks away instead.
+        "law_minority_rights_indifference": {"subject": "a big guard dog curled up fast asleep in front of its wooden kennel on a straw mat", "seed": 1},
+        "law_minority_rights_protection": {"subject": "a polished steel armour cuirass mounted upright on a simple wooden armour stand", "seed": 1},
+        # Monetary Policy
+        "law_commodity_money": {"subject": "a heap of rough raw gold nuggets beside a small chunky hand-forged silver ingot", "seed": 0},
+        "law_digital_currency": {"subject": "an open slim leather wallet with a large gold microchip filling its inner pocket", "seed": 1},
+        "law_fiat_currency": {"subject": "a heavy cast-iron printing press with a fresh stack of blank paper sheets beside it", "seed": 1},
+        # s2 is retouched: GOLD and a mint mark painted off the bar.
+        "law_gold_standard": {"subject": "brass balance scales, a gold bar in one pan and a tied bundle of plain paper in the other", "seed": 2},
+        # Privacy Rights
+        "law_intrusive_surveillance": {"subject": "a cluster of several security cameras mounted on one steel pole, pointing in all directions", "seed": 1},
+        "law_minimal_privacy_protection": {"subject": "a short section of white wooden picket fence with a small latched garden gate", "seed": 2},
+        "law_moderate_data_privacy": {"subject": "a closed laptop computer with a sturdy brass padlock looped through a hasp on its lid", "seed": 0},
+        "law_strong_privacy_rights": {"subject": "a small stone castle keep with its wooden drawbridge raised and its gate shut", "seed": 1},
+        # Right to Information
+        "law_freedom_of_information": {"subject": "a long wooden archive drawer pulled fully open, plain folders fanned upward inside it", "seed": 2},
+        "law_open_government": {"subject": "a bright brass oil lantern with clear glass panes, its open door letting light shine out", "seed": 0},
+        "law_state_secrets": {"subject": "a tall upright steel safe with thick riveted walls and a heavy lever handle on its door", "seed": 1},
+        # Rules of War
+        "law_humanitarian_regulations": {"subject": "a canvas army field stretcher with wooden poles and a folded wool blanket on it", "seed": 2},
+        # Owner rerolls (2026-10-08): a sword tied or locked to its scabbard came out
+        # unsheathed, a hood over a cannon's muzzle not at all; s0 lettered a tag.
+        "law_limited_war": {"subject": "an old field cannon wrapped in a heavy iron chain padlocked around its barrel and wheel", "seed": 1},
+        "law_total_war": {"subject": "a big artillery shell standing upright, a crowded cluster of smaller shells piled around it", "seed": 0},
+        "law_traditional_rules_of_war": {"subject": "a large carved wooden chess knight piece standing alone on a small stone pedestal", "seed": 1},
+        "law_war_crimes_forbidden": {"subject": "a bolt-action rifle lying on its side with a pair of steel handcuffs locked around it", "seed": 2},
+        # State Power
+        "law_devolution": {"subject": "a heavy bunch of different iron keys, several of them taken off and lying beside it", "seed": 1},
+        "law_federal_system": {"subject": "a sturdy wooden barrel built of separate staves bound together by iron hoops", "seed": 1},
+        "law_feudal_contracts": {"subject": "a medieval longsword lying diagonally across a thick sheaf of wheat tied with twine", "seed": 0},
+        "law_unitary_state": {"subject": "a classical stone arch with a large prominent central keystone holding it together", "seed": 0},
+        # Distribution of Power (a vanilla group)
+        "law_post-scarcity": {"subject": "a large overflowing cornucopia horn spilling out fruit, bread and small machine gears", "seed": 1},
+        "law_universal_basic_income": {"subject": "a sturdy knotted rope safety net slung taut between two thick wooden posts", "seed": 1},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1276,7 +1437,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_environmental_sustainability_4": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
         "principle_environmental_sustainability_5": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
         # Round 1's round shield drew a porthole: a helmet on a globe instead.
-        "principle_global_security_1": {"subject": "an empty light-blue steel army helmet resting on top of a small globe of the Earth with green continents and blue oceans", "seed": None},
+        "principle_global_security_1": {"subject": "an empty light-blue steel army helmet resting on top of a small globe of the Earth with green continents and blue oceans", "seed": 0},
         "principle_global_security_2": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
         "principle_global_security_3": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
         "principle_global_security_4": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
@@ -1307,7 +1468,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_rural_4": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
         "principle_rural_5": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
         # Round 1's cut-out lost the townhouses behind the tram: the tram alone.
-        "principle_urban_planning_1": {"subject": "a chunky red and cream city tram car on a short stretch of rails", "seed": None},
+        "principle_urban_planning_1": {"subject": "a chunky red and cream city tram car on a short stretch of rails", "seed": 2},
         "principle_urban_planning_2": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
         "principle_urban_planning_3": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
         "principle_urban_planning_4": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
@@ -1328,6 +1489,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_advanced_materials": {"subject": "a gleaming hexagonal honeycomb lattice of grey carbon atoms over a roll of black carbon-fibre cloth", "seed": 1},
         "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": 1},
         "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": 1},
+        # On vanilla's basic_construction until 2026-10-08, which vanilla's power bloc construction company keeps.
+        # Megastructure stays on it too: three subjects (a space elevator, a lattice tower, an orbital ring)
+        # drew a radio mast, an oil derrick and a station on a pale disc that broke the badge style.
+        "company_infrastructure": {"subject": "a steel truss railway bridge with a train crossing it, a concrete highway running underneath", "seed": 1},
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
@@ -1371,6 +1536,28 @@ ICONS: dict[str, dict[str, dict]] = {
         "scifi_rosen_association": {"subject": "a lifelike artificial owl made of brass and glass, its eyes glowing amber", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_rosen_association.dds"},
     },
+    # Mod goods drawn by older generators: flat vector art and badges, not
+    # vanilla's painted objects. Keys are the file names (written in place).
+    "good": {
+        "rocket": {"subject": "a tall white multi-stage rocket standing upright on a small steel launch pad", "seed": 1,
+                   "now": f"{_GI}/goods_icons/rocket.dds"},
+        "robot": {"subject": "a yellow industrial robot arm with a steel two-fingered gripper on a heavy base", "seed": 0,
+                  "now": f"{_GI}/goods_icons/robot.dds"},
+        "software": {"subject": "a short stack of colourful floppy disks with blank unmarked labels, a silver compact disc leaning on them", "seed": 0,
+                     "now": f"{_GI}/goods_icons/software.dds"},
+        # s0 is retouched: a brand name painted off the router's front.
+        "digital_access": {"subject": "a white wireless router with two antennas beside a black smartphone with a dark blank screen", "seed": 0,
+                           "now": f"{_GI}/goods_icons/digital_access.dds"},
+        "consumer_appliances": {"subject": "a cream-coloured retro refrigerator beside a small chrome toaster and a kitchen blender", "seed": 0,
+                                "now": f"{_GI}/goods_icons/consumer_appliances.dds"},
+        # s0 lettered its circuit board.
+        "electronic_components": {"subject": "a green circuit board holding a black microchip, round capacitors and striped resistors", "seed": 1,
+                                  "now": f"{_GI}/goods_icons/electronic_components.dds"},
+        "tech_metals": {"subject": "a pile of shiny silvery metal ingots with a few dark glittering mineral crystals", "seed": 1,
+                        "now": f"{_GI}/goods_icons/tech_metals.dds"},
+        "tourism": {"subject": "a brown leather suitcase with a camera on a strap and a straw sun hat resting on top", "seed": 2,
+                    "now": f"{_GI}/goods_icons/tourism.dds"},
+    },
     # The Timeline Extended window's launcher, on vanilla's Journal button until now.
     "sidebar_button": {
         "te_systems_window_btn": {"subject": "a small brass hourglass, its upper glass bulb holding a blue globe of the Earth with green continents, its lower bulb a small silver rocket pointing up", "seed": 1,
@@ -1406,7 +1593,8 @@ ICONS: dict[str, dict[str, dict]] = {
         # Phase 7 agencies, until now byte copies (CCD of UNESCO, TPNW of IAEA, INCB of WHO).
         "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": 1,
                        "now": f"{_GI}/goods_icons/fine_art.dds"},
-        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 0,
+        # The dark grey bomb was dark on the blue disc: brass (owner, 2026-10-08).
+        "agency_tpnw": {"subject": "a fat polished brass aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 2,
                         "now": f"{_GI}/goods_icons/electricity.dds"},
         "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
                         "now": f"{_GI}/institution_icons/health_service.dds"},
@@ -1458,10 +1646,10 @@ ICONS: dict[str, dict[str, dict]] = {
                ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
         # Phase 7 topics that are no agency's, until now byte copies of older topics.
         # Round 1 drew a clock and a box under the map, no scales: name the two pans.
-        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": None,
+        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": 1,
                                  "now": f"{_GI}/institution_icons/police.dds"},
         # Round 1's olive shells read as barrels and drums: a pointed brass shell.
-        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": None,
+        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": 2,
                                "now": f"{_GI}/alert_icons/blockaded.dds"},
         # Suspended credentials: the folder under vanilla's red cross, as Condemn is the mandate under it.
         "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": 0,
@@ -1473,12 +1661,13 @@ ICONS: dict[str, dict[str, dict]] = {
                                    "now": f"{_GI}/institution_icons/social_security.dds"},
         "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": 1,
                                "now": f"{_GI}/goods_icons/groceries.dds"},
-        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": 1,
+        # The black iron cannon was dark on the blue disc: bronze on red wheels (owner, 2026-10-08).
+        "topic_ceasefire": {"subject": "a small bronze field cannon on red wooden wheels with a leafy green olive branch sticking out of its muzzle", "seed": 1,
                             "now": f"{_GI}/alert_icons/land_invasion.dds"},
         "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": 2,
                                    "now": f"{_GI}/goods_icons/groceries.dds"},
         # Round 1 drew open chests: a closed box with a lock and a slot.
-        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": None,
+        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": 0,
                              "now": f"{_GI}/alert_icons/secession.dds"},
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.

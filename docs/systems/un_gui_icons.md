@@ -56,7 +56,7 @@ One drawn disc (UN-blue enamel, a gold rim) under one warm or light symbol each.
 | ICC | a judge's gavel on its block | `agency_icc.dds` |
 | CPPNM | a brass padlock with a radiation trefoil | `agency_cppnm.dds` |
 | CCD | a wooden painter's palette with red, yellow and green paint | `agency_ccd.dds` |
-| TPNW | a dark grey aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
+| TPNW | a brass aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
 | INCB | a red poppy and its green seed pod | `agency_incb.dds` |
 
 ## General Assembly: resolution topics
@@ -84,16 +84,16 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 16 | Law of the Sea | ITLOS's anchor + the scroll | `topic_law_of_sea.dds` |
 | 17 | Physical protection of nuclear material | CPPNM's padlock + the scroll | `topic_physical_protection.dds` |
 | 18 | Convention on Cultural Diversity | CCD's palette + the scroll | `topic_cultural_diversity.dds` |
-| 19 | Treaty on the Prohibition of Nuclear Weapons | TPNW's chained bomb + the scroll | `topic_nuclear_ban.dds` |
-| 20 | Referral to the World Court | REROLL PENDING: still a copy of the ICC topic | `topic_court_referral.dds` |
-| 21 | Arms embargo | REROLL PENDING: still a copy of sanctions | `topic_arms_embargo.dds` |
+| 19 | Treaty on the Prohibition of Nuclear Weapons | TPNW's chained brass bomb + the scroll | `topic_nuclear_ban.dds` |
+| 20 | Referral to the World Court | brass balance scales, a rolled paper tied with red cord in one pan | `topic_court_referral.dds` |
+| 21 | Arms embargo | a brass artillery shell bound in a padlocked chain | `topic_arms_embargo.dds` |
 | 22 | Suspension of credentials | a leather diplomatic folder with a gold seal, under vanilla's red cross | `topic_credentials.dds` |
 | 23 | Standing UN Force | three light-blue helmets | `topic_standing_force.dds` |
 | 24 | Electoral observers | black binoculars on a wooden box | `topic_observer_request.dds` |
 | 25 | World Food Reserve | a steel grain silo, a heap of grain at its foot | `topic_food_reserve.dds` |
-| 26 | Binding ceasefire | a field cannon with an olive branch in its muzzle | `topic_ceasefire.dds` |
+| 26 | Binding ceasefire | a bronze field cannon on red wheels, an olive branch in its muzzle | `topic_ceasefire.dds` |
 | 27 | World Development Fund | a stack of gold coins with a seedling sprouting from the top | `topic_development_fund.dds` |
-| 28 | Supervised referendum | REROLL PENDING: still a copy of decolonization | `topic_referendum.dds` |
+| 28 | Supervised referendum | a wooden ballot box, a paper ballot in its slot | `topic_referendum.dds` |
 | 29 | Narcotics convention | INCB's poppy + the scroll | `topic_narcotics.dds` |
 
 ## Overview: member-share pies

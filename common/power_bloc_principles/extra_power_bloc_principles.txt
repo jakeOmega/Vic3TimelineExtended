@@ -2594,7 +2594,7 @@ principle_environmental_sustainability_5 = {
 }
 
 principle_urban_planning_1 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_urban_planning_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -2642,7 +2642,7 @@ principle_urban_planning_1 = {
 }
 
 principle_urban_planning_2 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_urban_planning_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -2685,7 +2685,7 @@ principle_urban_planning_2 = {
 }
 
 principle_urban_planning_3 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_urban_planning_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -2729,7 +2729,7 @@ principle_urban_planning_3 = {
 }
 
 principle_urban_planning_4 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_urban_planning_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -2772,7 +2772,7 @@ principle_urban_planning_4 = {
 }
 
 principle_urban_planning_5 = {
-	icon = "gfx/interface/icons/principles_icons/food_standardization.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_urban_planning_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
@@ -3031,7 +3031,7 @@ principle_rural_5 = {
 }
 
 principle_global_security_1 = {
-	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_global_security_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -3064,7 +3064,7 @@ principle_global_security_1 = {
 }
 
 principle_global_security_2 = {
-	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_global_security_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -3099,7 +3099,7 @@ principle_global_security_2 = {
 }
 
 principle_global_security_3 = {
-	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_global_security_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -3139,7 +3139,7 @@ principle_global_security_3 = {
 }
 
 principle_global_security_4 = {
-	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_global_security_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -3182,7 +3182,7 @@ principle_global_security_4 = {
 }
 
 principle_global_security_5 = {
-	icon = "gfx/interface/icons/principles_icons/dedicated_police.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_global_security_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
