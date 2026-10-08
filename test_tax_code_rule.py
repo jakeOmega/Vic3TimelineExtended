@@ -196,7 +196,7 @@ class CarrierLawTest(unittest.TestCase):
         self.assertEqual(self.law["group"], "lawgroup_taxation")
         self.assertEqual(self.law["progressiveness"], "0")
         self.assertEqual(
-            self.law["icon"], '"gfx/interface/icons/law_icons/proportional_taxation.dds"'
+            self.law["icon"], '"gfx/interface/icons/law_icons/law_te_tax_code.dds"'
         )
 
     def test_visible_only_under_the_rule_and_never_enactable_by_a_player(self):
