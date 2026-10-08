@@ -2092,8 +2092,87 @@ monument_events.25 = {
 
 	# Keep the name set. It still counts as chosen for an open commission's
 	# monument, so fulfilment keeps it (gm_unveiled_for_com).
+	# One name per branch of gm_monument_name_evt, same triggers in the same
+	# order (first match wins). Called from an option name, a customizable-
+	# localization target loses the event's saved scopes, so each key splices
+	# its branch's pattern in here instead ("the HUB_NAME__city" otherwise).
 	option = {
-		name = monument_events.25.keep
+		name = {
+			trigger = { has_variable = gm_name }
+			text = monument_events.25.keep_custom
+		}
+		name = {
+			trigger = { gm_state_namesake_is = { NAMESAKE = city } }
+			text = monument_events.25.keep_city
+		}
+		name = {
+			trigger = { gm_state_namesake_is = { NAMESAKE = state } }
+			text = monument_events.25.keep_state
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = ruler }
+				has_variable = gm_name_char
+				exists = var:gm_name_char
+			}
+			text = monument_events.25.keep_ruler
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = honours }
+				gm_state_takes_honours_name = yes
+			}
+			text = monument_events.25.keep_honours
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:victory
+				gm_state_enemy_cap_is_foreign = yes
+			}
+			text = monument_events.25.keep_victory
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:defeat
+			}
+			text = monument_events.25.keep_defeat
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:centenary
+			}
+			text = monument_events.25.keep_centenary
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_orbital
+			}
+			text = monument_events.25.keep_space_orbital
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_moon_landing
+			}
+			text = monument_events.25.keep_space_moon_landing
+		}
+		name = {
+			trigger = { has_variable = gm_namesake has_variable = gm_name_year }
+			text = monument_events.25.keep_year
+		}
+		name = {
+			trigger = { always = yes }
+			text = monument_events.25.keep_skin
+		}
 		default_option = yes
 		custom_tooltip = gm_namesake_keep_tt
 		hidden_effect = {

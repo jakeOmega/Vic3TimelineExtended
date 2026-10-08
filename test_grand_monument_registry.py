@@ -1946,9 +1946,45 @@ class NameTests(unittest.TestCase):
         for n in (24, 25):
             ev = squash(raw_block_at(self.events, rf"(?m)^monument_events\.{n}\s*=\s*\{{"))
             self.assertEqual(ev.count("default_option = yes"), 1, n)
-            self.assertIn(f"name = monument_events.{n}.keep default_option = yes", ev)
             self.assertIn("event_image", ev)
             self.assertIn("save_scope_as = monument_state", ev)
+        self.assertIn("name = monument_events.24.keep default_option = yes",
+                      squash(raw_block_at(self.events, r"(?m)^monument_events\.24\s*=\s*\{")))
+        self.assertIn("text = monument_events.25.keep_skin } default_option = yes",
+                      squash(raw_block_at(self.events, r"(?m)^monument_events\.25\s*=\s*\{")))
+
+    def test_keep_the_name_spells_out_each_pattern(self):
+        # A customizable-localization target loses the event's saved scopes when
+        # an option name calls it (`SCOPE.sState(...)` is empty: "the
+        # HUB_NAME__city"). So .25's keep option carries one name per branch of
+        # gm_monument_name_evt, same triggers in the same order, each splicing
+        # that branch's key into the option name itself, where SCOPE resolves.
+        L = loc()
+        family = strip_comments(block(self.custom, "gm_monument_name_evt"))
+        branches = []
+        for m in re.finditer(r"\btext\s*=\s*\{", family):
+            body = _match_brace(family, m.end())
+            trig = block(body, "trigger")
+            key = re.search(r"localization_key\s*=\s*(\w+)", body).group(1)
+            branches.append((squash(trig) if trig is not None else "always = yes", key))
+        ev = strip_comments(raw_block_at(self.events, r"(?m)^monument_events\.25\s*=\s*\{"))
+        keep = next(_match_brace(ev, m.end()) for m in re.finditer(r"\boption\s*=\s*\{", ev)
+                    if "monument_events.25.keep_" in _match_brace(ev, m.end()))
+        names = []
+        for m in re.finditer(r"\bname\s*=\s*\{", keep):
+            body = _match_brace(keep, m.end())
+            names.append((squash(block(body, "trigger")), re.search(r"text\s*=\s*(\S+)", body).group(1)))
+        self.assertEqual(len(names), len(branches))
+        for (trig, key), (name_trig, text) in zip(branches, names):
+            pattern = key.removeprefix("gm_name_").removesuffix("_evt")
+            self.assertEqual(name_trig, trig, key)
+            self.assertEqual(text, f"monument_events.25.keep_{pattern}", key)
+            self.assertIn(f"${key}$", L[text], text)
+        # No option name anywhere in the file reaches the family through GetCustom.
+        for m in re.finditer(r"\boption\s*=\s*\{", strip_comments(self.events)):
+            opt = _match_brace(strip_comments(self.events), m.end())
+            for k in re.findall(r"\b(?:name|text)\s*=\s*([\w.]+)", opt):
+                self.assertNotIn("GetCustom('gm_monument_name_evt')", L.get(k, ""), k)
 
     def test_the_unveiling_chain(self):
         e = read(EFFECTS)
