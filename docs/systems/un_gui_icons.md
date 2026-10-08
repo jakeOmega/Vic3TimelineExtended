@@ -91,7 +91,7 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 23 | Standing UN Force | three light-blue helmets | `topic_standing_force.dds` |
 | 24 | Electoral observers | black binoculars on a wooden box | `topic_observer_request.dds` |
 | 25 | World Food Reserve | a steel grain silo, a heap of grain at its foot | `topic_food_reserve.dds` |
-| 26 | Binding ceasefire | a field cannon with an olive branch in its muzzle | `topic_ceasefire.dds` |
+| 26 | Binding ceasefire | a bronze field cannon on red wheels, an olive branch in its muzzle | `topic_ceasefire.dds` |
 | 27 | World Development Fund | a stack of gold coins with a seedling sprouting from the top | `topic_development_fund.dds` |
 | 28 | Supervised referendum | a wooden ballot box, a paper ballot in its slot | `topic_referendum.dds` |
 | 29 | Narcotics convention | INCB's poppy + the scroll | `topic_narcotics.dds` |

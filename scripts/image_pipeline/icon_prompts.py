@@ -1073,7 +1073,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # crossed out reads right is that object under the prohibition ring.
         # LGBTQ+ Rights
         "law_active_persecution": {"subject": "a heavy wooden judge's gavel lying across a pair of thick iron shackles joined by a chain", "seed": 2},
-        "law_basic_protections": {"subject": "a small plain wooden kite shield with an iron rim, propped upright on a short wooden stake", "seed": None},
+        "law_basic_protections": {"subject": "a small plain wooden kite shield with an iron rim, propped upright on a short wooden stake", "seed": 2},
         "law_comprehensive_rights": {"subject": "a large sturdy umbrella opened wide, its curved wooden handle resting on the ground", "seed": 0},
         "law_full_equality_and_protection": {"subject": "two identical thick gold wedding rings interlocked, standing upright on a small square wooden base", "seed": 1},
         "law_legal_limbo": {"subject": "a short sagging rope bridge segment with several of its wooden planks missing", "seed": 1},
@@ -1082,8 +1082,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_dirigisme": {"subject": "a large wooden ship's steering wheel standing on its tall carved wooden helm post", "seed": 2},
         "law_freedom_of_contract": {"subject": "two hands clasped in a firm handshake, white shirt cuffs and dark jacket sleeves showing", "seed": 1},
         "law_guilds_chartered_monopolies": {"subject": "a blacksmith's iron anvil with a hammer resting on it, a heavy padlock hanging from its side", "seed": 2},
-        "law_regulated_utilities": {"subject": "a tall steel electricity pylon with its cables, a short water pipe with a lever valve at its foot", "seed": None},
-        "law_trust_busting": {"subject": "a big pair of iron bolt cutters snapping through a thick iron chain", "seed": None},
+        "law_regulated_utilities": {"subject": "a big brass water tap and a chunky electric wall socket mounted side by side on a wooden board", "seed": 2},
+        "law_trust_busting": {"subject": "a big pair of iron bolt cutters snapping through a thick iron chain", "seed": 2},
         # Criminal Justice
         "law_punishment_focused_criminal_justice": {"subject": "a heavy barred steel prison cell door slammed shut and bolted with a thick iron bar", "seed": 0},
         "law_rehabilitation_focused_criminal_justice": {"subject": "a small carpenter's workbench with a hand saw, a wood plane and a closed book on top", "seed": 1},
@@ -1092,7 +1092,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
         # Electoral Finance
-        "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": None},
+        "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_publicly_funded_elections": {"subject": "two identical plain wooden speaker's lecterns standing side by side at exactly equal height", "seed": 1},
@@ -1103,7 +1103,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_state_sponsored_family_planning": {"subject": "a doctor's leather medical bag standing open beside a small plain glass pill bottle", "seed": 2},
         "law_traditional_family_structure": {"subject": "a small cosy cottage with a pitched roof, a front porch and a smoking brick chimney", "seed": 1},
         # Financial Regulation
-        "law_central_bank_independence": {"subject": "a brass steam engine governor with two heavy iron balls on swinging arms, on a small pedestal", "seed": None},
+        # Round 1's lever in a glass case, round 2's governor (it drew scales) and round 3's
+        # gyroscope (ship's wheels) missed. Alternative: an owl on gold bars (sheet 11).
+        "law_central_bank_independence": {"subject": "a bronze hawk and a white dove perched side by side on one stone pedestal", "seed": 3},
         # Round 1's funnel read as a loudspeaker horn, Ministry of Propaganda's object.
         "law_directed_credit_development_banks": {"subject": "a big tin watering can pouring water onto a small brick factory with a tall smokestack", "seed": 0},
         "law_free_mutual_banking": {"subject": "a traditional domed straw beehive skep on a wooden stand, a few bees around it", "seed": 0},
@@ -1133,7 +1135,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         "law_non_inheritable_usage_rights": {"subject": "a round stone village well with a small wooden roof and a bucket on a rope", "seed": 2},
-        "law_partible": {"subject": "a round wheel of cheese cut into three uneven wedges pulled slightly apart", "seed": None},
+        "law_partible": {"subject": "a small square diorama of farmland split by wooden fences into three unequal fields", "seed": 1},
         "law_primogeniture": {"subject": "one large ornate iron-bound treasure chest with a single big iron key in its lock", "seed": 1},
         # Intellectual Property
         "law_creative_commons": {"subject": "a painter's wooden easel with a blank canvas, a jar of brushes standing beside it", "seed": 1},
@@ -1141,8 +1143,8 @@ ICONS: dict[str, dict[str, dict]] = {
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_open_source_innovation": {"subject": "three large interlocking jigsaw puzzle pieces fitted together, a fourth piece sliding into place", "seed": 2},
         "law_state_intellectual_property": {"subject": "a tall steel filing cabinet with its top drawer pulled open, rolled blueprints sticking out", "seed": 1},
-        "law_strict_ip_protection": {"subject": "a glass light bulb wrapped tightly in heavy iron chains locked with a big padlock", "seed": None},
-        "law_traditional_ip_protection": {"subject": "a rolled patent scroll tied with a ribbon and wax seal, a glass light bulb standing beside it", "seed": None},
+        "law_strict_ip_protection": {"subject": "a glass light bulb wrapped tightly in heavy iron chains locked with a big padlock", "seed": 0},
+        "law_traditional_ip_protection": {"subject": "a rolled patent scroll tied with a ribbon and wax seal, a glass light bulb standing beside it", "seed": 3},
         # Internet Governance
         "law_net_neutrality": {"subject": "a sleek network router with antennas, a carpenter's spirit level lying flat across its top", "seed": 1},
         "law_no_internet_policy": {"subject": "an empty modern swivel office chair with a network cable coiled loosely on its seat", "seed": 0},
@@ -1187,7 +1189,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_state_secrets": {"subject": "a tall upright steel safe with thick riveted walls and a heavy lever handle on its door", "seed": 1},
         # Rules of War
         "law_humanitarian_regulations": {"subject": "a canvas army field stretcher with wooden poles and a folded wool blanket on it", "seed": 2},
-        "law_limited_war": {"subject": "a sheathed sword with its hilt tied fast to the scabbard by a knotted cord", "seed": None},
+        "law_limited_war": {"subject": "a sheathed sword with its hilt tied fast to the scabbard by a knotted cord", "seed": 2},
         "law_total_war": {"subject": "a big artillery shell standing upright, a crowded cluster of smaller shells piled around it", "seed": 0},
         "law_traditional_rules_of_war": {"subject": "a large carved wooden chess knight piece standing alone on a small stone pedestal", "seed": 1},
         "law_war_crimes_forbidden": {"subject": "a bolt-action rifle lying on its side with a pair of steel handcuffs locked around it", "seed": 2},
@@ -1654,7 +1656,8 @@ ICONS: dict[str, dict[str, dict]] = {
                                    "now": f"{_GI}/institution_icons/social_security.dds"},
         "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": 1,
                                "now": f"{_GI}/goods_icons/groceries.dds"},
-        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": 1,
+        # The black iron cannon was dark on the blue disc: bronze on red wheels (owner, 2026-10-08).
+        "topic_ceasefire": {"subject": "a small bronze field cannon on red wooden wheels with a leafy green olive branch sticking out of its muzzle", "seed": 1,
                             "now": f"{_GI}/alert_icons/land_invasion.dds"},
         "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": 2,
                                    "now": f"{_GI}/goods_icons/groceries.dds"},
