@@ -56,7 +56,7 @@ One drawn disc (UN-blue enamel, a gold rim) under one warm or light symbol each.
 | ICC | a judge's gavel on its block | `agency_icc.dds` |
 | CPPNM | a brass padlock with a radiation trefoil | `agency_cppnm.dds` |
 | CCD | a wooden painter's palette with red, yellow and green paint | `agency_ccd.dds` |
-| TPNW | a dark grey aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
+| TPNW | a brass aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
 | INCB | a red poppy and its green seed pod | `agency_incb.dds` |
 
 ## General Assembly: resolution topics
@@ -84,7 +84,7 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 16 | Law of the Sea | ITLOS's anchor + the scroll | `topic_law_of_sea.dds` |
 | 17 | Physical protection of nuclear material | CPPNM's padlock + the scroll | `topic_physical_protection.dds` |
 | 18 | Convention on Cultural Diversity | CCD's palette + the scroll | `topic_cultural_diversity.dds` |
-| 19 | Treaty on the Prohibition of Nuclear Weapons | TPNW's chained bomb + the scroll | `topic_nuclear_ban.dds` |
+| 19 | Treaty on the Prohibition of Nuclear Weapons | TPNW's chained brass bomb + the scroll | `topic_nuclear_ban.dds` |
 | 20 | Referral to the World Court | brass balance scales, a rolled paper tied with red cord in one pan | `topic_court_referral.dds` |
 | 21 | Arms embargo | a brass artillery shell bound in a padlocked chain | `topic_arms_embargo.dds` |
 | 22 | Suspension of credentials | a leather diplomatic folder with a gold seal, under vanilla's red cross | `topic_credentials.dds` |

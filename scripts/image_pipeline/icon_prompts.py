@@ -1031,7 +1031,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": 2},
         "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": 1},
         "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": 1},
-        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": 0},
+        # The wired headband read as headphones: a bust in a wired cap (owner, 2026-10-08).
+        "law_ministry_of_thought_control": {"subject": "a plaster bust of a head in profile wearing a metal cap bristling with wires that run to a small box covered in dials", "seed": 0},
         # Round 1's round shield read as a plate or a mirror.
         "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": 1},
         "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": 1},
@@ -1083,7 +1084,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_freedom_of_contract": {"subject": "two hands clasped in a firm handshake, white shirt cuffs and dark jacket sleeves showing", "seed": 1},
         "law_guilds_chartered_monopolies": {"subject": "a blacksmith's iron anvil with a hammer resting on it, a heavy padlock hanging from its side", "seed": 2},
         "law_regulated_utilities": {"subject": "a big brass water tap and a chunky electric wall socket mounted side by side on a wooden board", "seed": 2},
-        "law_trust_busting": {"subject": "a big pair of iron bolt cutters snapping through a thick iron chain", "seed": 2},
+        # Owner rerolls: bolt cutters read as shears over an uncut chain, a chisel as a cleaver.
+        "law_trust_busting": {"subject": "a short length of thick iron chain with its middle link snapped open, the two ends pulled apart", "seed": 3},
         # Criminal Justice
         "law_punishment_focused_criminal_justice": {"subject": "a heavy barred steel prison cell door slammed shut and bolted with a thick iron bar", "seed": 0},
         "law_rehabilitation_focused_criminal_justice": {"subject": "a small carpenter's workbench with a hand saw, a wood plane and a closed book on top", "seed": 1},
@@ -1144,7 +1146,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_open_source_innovation": {"subject": "three large interlocking jigsaw puzzle pieces fitted together, a fourth piece sliding into place", "seed": 2},
         "law_state_intellectual_property": {"subject": "a tall steel filing cabinet with its top drawer pulled open, rolled blueprints sticking out", "seed": 1},
         "law_strict_ip_protection": {"subject": "a glass light bulb wrapped tightly in heavy iron chains locked with a big padlock", "seed": 0},
-        "law_traditional_ip_protection": {"subject": "a rolled patent scroll tied with a ribbon and wax seal, a glass light bulb standing beside it", "seed": 3},
+        "law_traditional_ip_protection": {"subject": "a whole rolled parchment scroll tied with a red ribbon and a wax seal, a glass light bulb standing beside it", "seed": 3},
         # Internet Governance
         "law_net_neutrality": {"subject": "a sleek network router with antennas, a carpenter's spirit level lying flat across its top", "seed": 1},
         "law_no_internet_policy": {"subject": "an empty modern swivel office chair with a network cable coiled loosely on its seat", "seed": 0},
@@ -1189,7 +1191,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_state_secrets": {"subject": "a tall upright steel safe with thick riveted walls and a heavy lever handle on its door", "seed": 1},
         # Rules of War
         "law_humanitarian_regulations": {"subject": "a canvas army field stretcher with wooden poles and a folded wool blanket on it", "seed": 2},
-        "law_limited_war": {"subject": "a sheathed sword with its hilt tied fast to the scabbard by a knotted cord", "seed": 2},
+        # Owner rerolls (2026-10-08): a sword tied or locked to its scabbard came out
+        # unsheathed, a hood over a cannon's muzzle not at all; s0 lettered a tag.
+        "law_limited_war": {"subject": "an old field cannon wrapped in a heavy iron chain padlocked around its barrel and wheel", "seed": 1},
         "law_total_war": {"subject": "a big artillery shell standing upright, a crowded cluster of smaller shells piled around it", "seed": 0},
         "law_traditional_rules_of_war": {"subject": "a large carved wooden chess knight piece standing alone on a small stone pedestal", "seed": 1},
         "law_war_crimes_forbidden": {"subject": "a bolt-action rifle lying on its side with a pair of steel handcuffs locked around it", "seed": 2},
@@ -1589,7 +1593,8 @@ ICONS: dict[str, dict[str, dict]] = {
         # Phase 7 agencies, until now byte copies (CCD of UNESCO, TPNW of IAEA, INCB of WHO).
         "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": 1,
                        "now": f"{_GI}/goods_icons/fine_art.dds"},
-        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 0,
+        # The dark grey bomb was dark on the blue disc: brass (owner, 2026-10-08).
+        "agency_tpnw": {"subject": "a fat polished brass aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": 2,
                         "now": f"{_GI}/goods_icons/electricity.dds"},
         "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
                         "now": f"{_GI}/institution_icons/health_service.dds"},
