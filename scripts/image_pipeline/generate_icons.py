@@ -695,6 +695,8 @@ def stage_wire(cat: str, only: set[str], dry_run: bool) -> None:
         return
     targets = {key: icon_path(cat, key) for key, e in generated(cat, only).items()
                if accepted(e) and (MOD_ROOT / icon_path(cat, key)).exists()}
+    targets.update({key: icon_path(cat, key) for key, e in derived(cat, only).items()
+                    if derived_ready(e) and (MOD_ROOT / icon_path(cat, key)).exists()})
     targets.update({key: e["use"] for key, e in entries(cat, only).items() if "use" in e})
     total = 0
     for path in sorted((MOD_ROOT / spec["entity_dir"]).rglob("*.txt")):

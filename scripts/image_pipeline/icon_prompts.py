@@ -1000,6 +1000,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
+        # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": None},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": None},
         "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": None},
@@ -1015,6 +1016,19 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": None},
         "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": None},
         "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": None},
+        # The "no ministry" laws all shared one picture too. Vanilla draws a "no X"
+        # law as X inside its prohibition ring (no police, no schools): each is
+        # its ministry's icon, shrunk, under the ring lifted from no_police.dds.
+        # Not No Ministry of Labor: its ministry keeps an older picture of its own.
+        **{f"law_no_{m}": {"from": f"law/law_{m}", "base": {"scale": 0.72},
+                           "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]}
+           for m in ("ministry_of_foreign_affairs", "ministry_of_war", "ministry_of_commerce", "national_bank",
+                     "ministry_of_culture", "ministry_of_the_environment", "ministry_of_intelligence_and_security",
+                     "ministry_of_refugee_affairs", "ministry_of_propaganda", "ministry_of_science",
+                     "ministry_of_thought_control", "ministry_of_consumer_protection", "ministry_of_urban_planning",
+                     "ministry_of_religion", "ministry_of_international_aid")},
+        # Six pairs of unrelated laws had byte-identical files (spec, mod placeholders
+        # audit): the law whose old picture fits worse gets its own.
         "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": None},
         "law_decentralized_cryptocurrency": {"subject": "three thick metal coins etched with simple circuit lines, linked in a row by short chain links", "seed": None},
         "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": None},
@@ -2200,7 +2214,7 @@ LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
                "disc", "shield", "dome", "link", "rays", "eyelid",
-               "arrows_in", "trend")
+               "arrows_in", "trend", "prohibition")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
@@ -2279,9 +2293,12 @@ def _marks_ok(marks) -> bool:
 
 
 def _derived_ok(spec: dict, entry: dict) -> bool:
-    """A derived entry: GUI-hosted, built on a rendered entry or a drawn disc, with a known tint, damage and layout."""
-    if "gui" not in spec:
-        return False
+    """A derived entry: built on a rendered entry or a drawn disc, with a known tint, damage and layout.
+
+    GUI-hosted categories have them for states of one emblem; an entity
+    category for an entity drawn as another's icon reworked (vanilla's "no X"
+    laws, X under a prohibition ring).
+    """
     if "disc" in entry:
         disc = entry["disc"]
         if "from" in entry or not all(isinstance(disc.get(k), tuple) and len(disc[k]) == 3

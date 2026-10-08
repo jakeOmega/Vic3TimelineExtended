@@ -881,6 +881,33 @@ class PanelStateTests(unittest.TestCase):
         self.assertEqual(a, 255)
         self.assertGreater(r, g + 60)                                         # red
 
+    def test_entity_category_derived_entry_is_checked_and_wired(self):
+        """A "no X" law: X's icon under the prohibition ring, wired like a render."""
+        root = Path(tempfile.mkdtemp())
+        (root / "common" / "laws").mkdir(parents=True)
+        (root / "common" / "laws" / "x.txt").write_text(
+            'law_x = {\n\ticon = "gfx/old.dds"\n}\nlaw_no_x = {\n\ticon = "gfx/old.dds"\n}\n')
+        ring = [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]
+        saved = (ip.ICONS, gi.MOD_ROOT)
+        try:
+            ip.ICONS = gi.ICONS = {"law": {"law_x": {"subject": "a bell", "seed": 0},
+                                           "law_no_x": {"from": "law/law_x", "base": {"scale": 0.72}, "marks": ring},
+                                           "law_no_y": {"from": "law/law_x", "marks": [{"draw": "spiral"}]}}}
+            r = ip.check(str(root), on_disk=set())
+            self.assertEqual(r["bad_entry"], [("law", "law_no_y")])          # an unknown drawn mark
+            self.assertEqual(r["unknown"], [("law", "law_no_y")])
+            del ip.ICONS["law"]["law_no_y"]
+            gi.MOD_ROOT = root
+            for key in ("law_x", "law_no_x"):
+                (root / ip.icon_path("law", key)).parent.mkdir(parents=True, exist_ok=True)
+                (root / ip.icon_path("law", key)).write_bytes(b"DDS ")
+            gi.stage_wire("law", set(), dry_run=False)
+            text = (root / "common" / "laws" / "x.txt").read_text()
+            self.assertIn(f'icon = "{ip.icon_path("law", "law_no_x")}"', text)
+        finally:
+            ip.ICONS, gi.MOD_ROOT = saved
+            gi.ICONS = ip.ICONS
+
     def test_trend_arrow_stacks_its_heads(self):
         import icon_render
         down = np.asarray(icon_render.trend_arrow(150, "down", "red", 3))[..., 3]

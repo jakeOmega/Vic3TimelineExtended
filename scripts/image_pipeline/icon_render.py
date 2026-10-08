@@ -844,6 +844,32 @@ def trend_arrow(size: int, direction: str = "up", colour: str = "red", count: in
     return resize_premultiplied(im, (size, size))
 
 
+def prohibition(size: int) -> Image.Image:
+    """Vanilla's prohibition ring and slash, lifted off law_icons/no_police.dds.
+
+    Vanilla draws each "no X" law as X inside a metal ring crossed by a slash
+    (no police, no schools, no colonial affairs), in the law icons' bronze.
+    The ring spans 0.76-0.89 of the half side and the slash, rims included,
+    0.058 of the side across the top-left to bottom-right diagonal, a hair
+    left of centre; outside those bands the helmet is masked away. Drawn last,
+    over the object shrunk to sit inside the ring.
+    """
+    a = np.asarray(load_rgba(vanilla_icons_dir() / "law_icons" / "no_police.dds")).astype(np.float32)
+    n = a.shape[0]
+    c = (n - 1) / 2
+    yy, xx = np.mgrid[0:n, 0:n].astype(np.float32)
+    r = np.hypot(xx - c, yy - c) / c
+    d = (xx - yy) / np.sqrt(2) / n + 0.0033
+    feather = 1.0 / n
+
+    def band(v, lo, hi):
+        return np.clip((v - lo) / feather + 0.5, 0, 1) * np.clip((hi - v) / feather + 0.5, 0, 1)
+
+    keep = np.maximum(band(r, 0.76, 0.89), band(d, -0.029, 0.029) * (r < 0.8))
+    a[..., 3] *= keep
+    return resize_premultiplied(Image.fromarray(a.astype(np.uint8), "RGBA"), (size, size))
+
+
 def arrow_down(size: int) -> Image.Image:
     """A thick red arrow pointing down, `size` px square: loss, as vanilla's alerts draw it.
 
@@ -1149,6 +1175,7 @@ DRAWN = {
     "star": lambda box, m: star(box),
     "pause": lambda box, m: pause(box),
     "arrow_down": lambda box, m: arrow_down(box),
+    "prohibition": lambda box, m: prohibition(box),
     "trend": lambda box, m: trend_arrow(box, m.get("dir", "up"), m.get("colour", "red"), m.get("count", 3)),
     "arrow": lambda box, m: arrow(box, m.get("dir", "down"), m.get("colour", "red"), m.get("double", False)),
     "bar": lambda box, m: bar(box, m.get("colour", "white")),
