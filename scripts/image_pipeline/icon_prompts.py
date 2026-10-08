@@ -687,11 +687,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
         # The monetary articles, on law icons until now.
-        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": 2},
-        # Round 1 (no marks named) stamped $ on a coin in all three candidates.
-        "imposed_currency_peg": {"subject": "a small plain copper coin stamped with a small star, chained to a big plain gold coin stamped with a small star by a heavy iron chain with a closed iron padlock on it", "seed": None},
+        # Owner picks (2026-10-07): the $ on a coin is unreadable at icon size.
+        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": 0},
+        "imposed_currency_peg": {"subject": "a small copper coin chained to a big gold coin by a heavy iron chain with a closed iron padlock on it", "seed": 2},
         "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": 1},
-        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 0},
+        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": 2},
         "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": 1},
     },
     "diplomatic_action": {
@@ -765,7 +765,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_generic_tank_farm": {"subject": "an oil tank farm with rows of large round storage tanks joined by pipelines, a small refinery tower beside them", "seed": 0},
         "building_generic_ordnance_depot": {"subject": "a military ordnance depot of earth-covered concrete bunkers behind barbed wire, crates of shells stacked outside", "seed": 0},
         "building_generic_motor_works": {"subject": "a motor vehicle factory with a long assembly hall and rows of new cars parked in its yard", "seed": 0},
-        "building_generic_dry_dock": {"subject": "a large dry dock with a steel ship hull inside it, tall cranes standing over it at the waterside", "seed": 1},
+        "building_generic_dry_dock": {"subject": "a large dry dock with a steel ship hull inside it, tall cranes standing over it at the waterside", "seed": 0},
         "building_generic_arsenal": {"subject": "a fortified brick arsenal with crenellated walls, cannons and stacked weapon crates in its courtyard", "seed": 0},
         "building_generic_fish_market": {"subject": "a harbourside fish market hall with fishing boats moored at its quay and crates of fish on the stones", "seed": 1},
         "building_generic_colonial_depot": {"subject": "a colonial trading depot of whitewashed warehouses with a veranda, tea chests and bales stacked on a wharf", "seed": 0},
@@ -1250,7 +1250,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_cultural_plurality_3": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
         "principle_cultural_plurality_4": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
         "principle_cultural_plurality_5": {"use": f"{_GI}/principles_icons/principle_cultural_plurality_1.dds"},
-        "principle_cultural_unity_1": {"subject": "many differently coloured threads braided together into one thick rope, coiled", "seed": 1},
+        "principle_cultural_unity_1": {"subject": "many differently coloured threads braided together into one thick rope, coiled", "seed": 0},
         "principle_cultural_unity_2": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
         "principle_cultural_unity_3": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
         "principle_cultural_unity_4": {"use": f"{_GI}/principles_icons/principle_cultural_unity_1.dds"},
@@ -1331,6 +1331,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
+    # Interim for the seventeen real companies: the owner may draw their real logos (2026-10-07); drop an
+    # entry when its company's logo replaces the file. The Rosen Association's (fictional) is final.
     "company_logo": {
         "british_rolls_royce": {"subject": "a gleaming silver aircraft jet engine seen from the front, its fan blades spread", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/british_rolls_royce.dds"},
