@@ -1002,26 +1002,29 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
         # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
-        "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": None},
-        "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": None},
-        "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": None},
-        "law_national_bank": {"subject": "a heavy round steel bank vault door standing half open on its big hinge", "seed": None},
-        "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": None},
-        "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": None},
-        "law_ministry_of_intelligence_and_security": {"subject": "a brass spyglass lying across a locked steel strongbox", "seed": None},
-        "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": None},
-        "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": None},
-        "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": None},
-        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": None},
-        "law_ministry_of_consumer_protection": {"subject": "a wicker shopping basket full of bread and fruit behind a raised round shield", "seed": None},
-        "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": None},
-        "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": None},
-        "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": None},
+        "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
+        "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
+        "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": 0},
+        # Round 1's round doors read as portholes: show the gold behind.
+        "law_national_bank": {"subject": "a heavy round steel bank vault door swung half open, stacks of gold bars inside the vault behind it", "seed": None},
+        # Culture s0 has a signature and s1 lettering; commerce s1 a signature; secrecy s1 a W seal.
+        "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": 2},
+        "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": 1},
+        "law_ministry_of_intelligence_and_security": {"subject": "a brass spyglass lying across a locked steel strongbox", "seed": 2},
+        "law_ministry_of_refugee_affairs": {"subject": "a worn leather suitcase with a rolled blanket and a round loaf of bread on top of it", "seed": 2},
+        "law_ministry_of_propaganda": {"subject": "a big flared loudspeaker horn mounted on a short pole", "seed": 1},
+        "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": 1},
+        "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": 0},
+        # Round 1's round shield read as a plate or a mirror.
+        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": None},
+        "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": 1},
+        "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": 1},
+        "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": 2},
         # The "no ministry" laws all shared one picture too. Vanilla draws a "no X"
         # law as X inside its prohibition ring (no police, no schools): each is
         # its ministry's icon, shrunk, under the ring lifted from no_police.dds.
         # Not No Ministry of Labor: its ministry keeps an older picture of its own.
-        **{f"law_no_{m}": {"from": f"law/law_{m}", "base": {"scale": 0.72},
+        **{f"law_no_{m}": {"from": f"law/law_{m}", "base": {"scale": 0.78},
                            "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]}
            for m in ("ministry_of_foreign_affairs", "ministry_of_war", "ministry_of_commerce", "national_bank",
                      "ministry_of_culture", "ministry_of_the_environment", "ministry_of_intelligence_and_security",
@@ -1030,12 +1033,13 @@ ICONS: dict[str, dict[str, dict]] = {
                      "ministry_of_religion", "ministry_of_international_aid")},
         # Six pairs of unrelated laws had byte-identical files (spec, mod placeholders
         # audit): the law whose old picture fits worse gets its own.
-        "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": None},
-        "law_decentralized_cryptocurrency": {"subject": "three thick metal coins etched with simple circuit lines, linked in a row by short chain links", "seed": None},
-        "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": None},
-        "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": None},
-        "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": None},
-        "law_protected_class": {"subject": "a level balance scale with a man's top hat in one pan and a woman's bonnet in the other", "seed": None},
+        "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": 2},
+        # Round 1 stamped a B on every coin (one with a lettered tag): a block chain, no coins.
+        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": None},
+        "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": 1},
+        "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": 0},
+        "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": 2},
+        "law_protected_class": {"subject": "a level balance scale with a man's top hat in one pan and a woman's bonnet in the other", "seed": 1},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
