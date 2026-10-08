@@ -51,7 +51,7 @@
 }
 
 company_basic_entertainment = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_entertainment.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -115,7 +115,7 @@ company_basic_entertainment = {
 }
 
 company_basic_autarky = {
-	icon = "gfx/interface/icons/company_icons/basic_chemicals.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_autarky.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -250,7 +250,7 @@ REPLACE:company_basic_electrics = {
 }
 
 company_basic_power = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_power.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -316,7 +316,7 @@ company_basic_power = {
 }
 
 company_basic_electronics = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_electronics.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -382,7 +382,7 @@ company_basic_electronics = {
 }
 
 company_basic_aerospace = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_aerospace.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -445,7 +445,7 @@ company_basic_aerospace = {
 }
 
 company_basic_software = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_software.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -503,7 +503,7 @@ company_basic_software = {
 }
 
 company_basic_advanced_materials = {
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_advanced_materials.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
@@ -564,7 +564,7 @@ company_basic_advanced_materials = {
 }
 
 company_basic_biotechnology = {
-	icon = "gfx/interface/icons/company_icons/company_basic_agriculture_1.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_biotechnology.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_farm_wheat.dds"
 
 	uses_dynamic_naming = yes
@@ -716,7 +716,7 @@ company_infrastructure = {
 }
 
 company_basic_synthetics = {
-	icon = "gfx/interface/icons/company_icons/basic_chemicals.dds"
+	icon = "gfx/interface/icons/company_icons/company_basic_synthetics.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes

@@ -1320,15 +1320,15 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # The nine new basic industries, on vanilla basic_* icons until now (spec, mod placeholders audit).
     "company": {
-        "company_basic_entertainment": {"subject": "a vintage movie camera on a short tripod with two round film reels on top", "seed": None},
-        "company_basic_power": {"subject": "a tall steel electricity pylon carrying power lines, a bright yellow lightning bolt above it", "seed": None},
-        "company_basic_electronics": {"subject": "a vintage wooden valve radio set with a glowing amber dial", "seed": None},
-        "company_basic_aerospace": {"subject": "a silver jet airliner climbing beside a slender rocket on its launch tower", "seed": None},
-        "company_basic_software": {"subject": "a beige desktop computer with a dark screen glowing green and a keyboard in front of it", "seed": None},
-        "company_basic_advanced_materials": {"subject": "a gleaming hexagonal honeycomb lattice of grey carbon atoms over a roll of black carbon-fibre cloth", "seed": None},
-        "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": None},
-        "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": None},
-        "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": None},
+        "company_basic_entertainment": {"subject": "a vintage movie camera on a short tripod with two round film reels on top", "seed": 1},
+        "company_basic_power": {"subject": "a tall steel electricity pylon carrying power lines, a bright yellow lightning bolt above it", "seed": 1},
+        "company_basic_electronics": {"subject": "a vintage wooden valve radio set with a glowing amber dial", "seed": 1},
+        "company_basic_aerospace": {"subject": "a silver jet airliner climbing beside a slender rocket on its launch tower", "seed": 1},
+        "company_basic_software": {"subject": "a beige desktop computer with a dark screen glowing green and a keyboard in front of it", "seed": 1},
+        "company_basic_advanced_materials": {"subject": "a gleaming hexagonal honeycomb lattice of grey carbon atoms over a roll of black carbon-fibre cloth", "seed": 1},
+        "company_basic_autarky": {"subject": "a black rubber tyre leaning against an oil barrel in front of a tall distillation tower", "seed": 1},
+        "company_basic_synthetics": {"subject": "spools of brightly dyed red, blue and yellow thread beside a glass flask of purple dye", "seed": 1},
+        "company_basic_biotechnology": {"subject": "a glass laboratory flask with a green leafy sprout growing out of its neck, a red apple beside it", "seed": 1},
     },
     # The PLACEHOLDER cards of gen_placeholder_company_icons.py: the company's trade, no logo or lettering.
     "company_logo": {
