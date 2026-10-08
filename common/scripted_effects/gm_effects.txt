@@ -288,6 +288,7 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_new_contest }
 	gm_remove_state_var = { VAR = gm_grandeur }
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
+	gm_remove_state_var = { VAR = gm_ceremony_level }
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
 	gm_state_clear_namesake = yes
 	gm_remove_state_var = { VAR = gm_form }
@@ -504,6 +505,8 @@ gm_country_refresh = {
 			gm_state_unveil = yes
 		}
 		gm_state_name_if_unnamed = yes
+		# A ceremony a finished level's hook missed.
+		gm_state_offer_missed_ceremony = yes
 		owner = {
 			add_to_variable_list = { name = gm_states target = prev }
 		}
@@ -1085,13 +1088,42 @@ gm_state_choose_preserve = {
 
 # State scope. The dedication ceremony, once: a rebuilt monument may also fire
 # on_building_built, and two ceremonies queued together would both show.
+# gm_ceremony_level records the grandeur it asked at (monument_events.2
+# records it again as the event opens, when a rebuilt level is readable), so
+# gm_state_offer_missed_ceremony asks once per new level.
 gm_state_start_ceremony = {
 	if = {
 		limit = {
 			NOT = { has_variable = gm_ceremony_pending }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
+		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
 		trigger_event = { id = monument_events.2 }
+	}
+}
+
+# State scope, from gm_country_refresh. The ceremony for an undedicated
+# monument that has grown since one last asked, or that no ceremony ever asked
+# about. monument_events.1 is the immediate path, but on_building_built did
+# not fire when five queued levels of a new monument finished on the same day
+# (owner's game, 2026-10-07; one level at a time it did), and whether it fires
+# for levels after the first is untested. Asking once per new grandeur keeps
+# the ceremony's promise that "leave it undedicated" waits for the next level.
+gm_state_offer_missed_ceremony = {
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			gm_state_is_dedicated = no
+			NOT = { has_variable = gm_ceremony_pending }
+			OR = {
+				NOT = { has_variable = gm_ceremony_level }
+				AND = {
+					has_variable = gm_ceremony_level
+					var:gm_ceremony_level < gm_state_grandeur
+				}
+			}
+		}
+		gm_state_start_ceremony = yes
 	}
 }
 

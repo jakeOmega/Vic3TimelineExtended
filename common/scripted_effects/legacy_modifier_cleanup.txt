@@ -104,6 +104,20 @@
 #   2. their names and `_desc` keys in te_concepts_l_english.yml
 #   3. the espionage strip in legacy_je_modifier_cleanup_effect below
 #
+# ── PENDING REMOVAL: covert_espionage_base /
+#    covert_military_espionage_unit (added 2026-10-07) ──
+# Espionage now pays in stolen technology only: industrial espionage's +5
+# innovation and military espionage's +5% unit offense and defense went, and
+# both operations end once nothing is left to steal. Both were three-month
+# modifiers refreshed monthly on the operator; the strip below takes them off a
+# save made mid-operation. Remove ALL of the following together, one release
+# after 2026-10-07:
+#   1. the two blocks in common/static_modifiers/extra_modifiers.txt
+#   2. their names and `_desc` keys (te_concepts_l_english.yml,
+#      te_miscellaneous_l_english.yml)
+#   3. the strip next to the espionage one in legacy_je_modifier_cleanup_effect
+#      below
+#
 # ── PENDING REMOVAL: te_mon_gold_carry_expense (added 2026-10-06) ──
 # Borrowed gold no longer pays the policy rate out of the budget
 # (docs/systems/monetary_policy_design.md §0.5, decision I, reversed). The
@@ -230,6 +244,9 @@ legacy_je_modifier_cleanup_effect = {
 	# Espionage's retired technology-spread modifiers (PENDING REMOVAL above).
 	if = { limit = { has_modifier = covert_industrial_espionage } remove_modifier = covert_industrial_espionage }
 	if = { limit = { has_modifier = covert_military_espionage } remove_modifier = covert_military_espionage }
+	# Espionage's retired self bonuses (PENDING REMOVAL above, 2026-10-07).
+	if = { limit = { has_modifier = covert_espionage_base } remove_modifier = covert_espionage_base }
+	if = { limit = { has_modifier = covert_military_espionage_unit } remove_modifier = covert_military_espionage_unit }
 
 	# ── World War (je:je_world_war) ──
 	if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }

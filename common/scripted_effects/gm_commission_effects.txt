@@ -50,7 +50,6 @@ gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_name_year }
 	gm_remove_state_var = { VAR = gm_com_name_char }
 	gm_remove_state_var = { VAR = gm_com_name_enemy_cap }
-	gm_remove_state_var = { VAR = gm_com_left }
 	gm_remove_state_var = { VAR = gm_com_gap_half }
 	gm_remove_state_var = { VAR = gm_com_offer_watch }
 	every_scope_state = {
@@ -313,30 +312,19 @@ gm_com_ai_queue = {
 # target. A counted monument that drops out (ceded, contested, demolished)
 # lowers the baseline with it, so it stops counting instead of cancelling
 # grandeur added since.
+# Compared directly, never through a variable written here: the refresh also
+# runs inside the policy buttons' tooltips, which walk the effect without
+# writing anything, so a variable set and read in one pass reads as unset
+# there (the old gm_com_drop logged ~150 errors a burst, 2026-10-07).
 gm_com_check_progress = {
 	if = {
 		limit = { has_variable = gm_com_open }
-		set_variable = {
-			name = gm_com_drop
-			value = {
-				value = var:gm_com_baseline
-				subtract = gm_com_fit_grandeur
-			}
-		}
 		if = {
-			limit = { var:gm_com_drop > 0 }
+			limit = { var:gm_com_baseline > gm_com_fit_grandeur }
 			set_variable = { name = gm_com_baseline value = gm_com_fit_grandeur }
 		}
-		remove_variable = gm_com_drop
-		set_variable = {
-			name = gm_com_left
-			value = {
-				value = var:gm_com_target
-				subtract = gm_com_progress
-			}
-		}
 		if = {
-			limit = { var:gm_com_left <= 0 }
+			limit = { var:gm_com_target <= gm_com_progress }
 			gm_com_fulfil = yes
 		}
 	}

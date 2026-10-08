@@ -38,8 +38,8 @@ GATES = {
 }
 
 # No technology: the journal entry is their gate, or they have one of
-# their own (a war or play with the target, a target ahead in space, a
-# proliferating programme, loose warheads).
+# their own (a technology to steal, a war or play with the target, a target
+# ahead in space, a proliferating programme, loose warheads).
 UNGATED = {
     "cultivate_assets",
     "industrial_espionage",

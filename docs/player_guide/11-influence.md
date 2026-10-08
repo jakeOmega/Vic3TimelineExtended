@@ -328,8 +328,8 @@ have agencies of their own.
 | Financial Subversion | Target +2 bubble pressure a month | Computer Networks |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target |
 | Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target |
-| Industrial Espionage | You: +5 weekly innovation, and [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now |
-| Military Espionage | You: +5% unit offense and defense, and [stolen military technology](#stealing-technology). Target: −3 authority | |
+| Industrial Espionage | You: [stolen production technology](#stealing-technology). Target: −3 authority | Target has researched a production technology that you could research now |
+| Military Espionage | You: [stolen military technology](#stealing-technology). Target: −3 authority | Target has researched a military technology that you could research now |
 | Influence Campaign | Target −15% leverage resistance | Mass Media; you lead a power bloc the target is not in |
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement |
@@ -339,10 +339,10 @@ have agencies of their own.
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on |
 
-If you run several espionage operations of one type, their bonuses come from the
-strongest and don't add up. Stolen technology does add up: each operation steals
-from its own target. Election Interference cuts electoral confidence by
-5% once establishing and 10% once fully operational, half that against a
+If you run several Space Programme Espionage operations, their bonuses come
+from the strongest and don't add up. Stolen technology does add up: each
+Industrial or Military Espionage operation steals from its own target.
+Election Interference cuts electoral confidence by 5% once establishing and 10% once fully operational, half that against a
 country hosting UN [electoral observers](10-united-nations.md#electoral-observers),
 which also catch it more often. Bubble pressure is
 explained in [Banking and monetary policy](04-banking.md), nuclear programs and
@@ -355,8 +355,8 @@ From its sixth month, each Industrial Espionage operation steals production
 technology from its target every month, and each Military Espionage operation
 steals military technology. The progress goes to your current research if it
 is in that tree and the target has researched it. Otherwise it goes to a random
-technology in that tree that the target has and you could research now. If
-there is none, nothing is stolen that month.
+technology in that tree that the target has and you could research now. Once
+the target has nothing left that you could take, the operation ends.
 
 Each theft is 5% of the technology's era cost at base strength, 10% once fully
 operational, and 16% fully operational at priority 3. Progress that reaches a
@@ -515,7 +515,7 @@ An operation runs until one of these happens:
 - Your funding drops to 0, which ends every operation.
 - A truce with the target begins.
 - A wartime operation's war ends, or its diplomatic play ends without one.
-- Something it needs goes: the target's elections, its political movements, its lead in space, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. Technology and Tradecraft conditions only gate the launch.
+- Something it needs goes: the target's elections, its political movements, its lead in space, the last technology you could steal from it, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. Destabilization also ends if relations reach cordial. The technologies named in the operations table and Tradecraft only gate the launch.
 
 A war with the target does not end a peacetime operation.
 
@@ -541,6 +541,5 @@ raises priority to 2 against rivals and to 3 when a great power is at war with
 the target. Once launched, an operation stays until it is fully operational,
 unless it is caught or something it needs goes. After that the AI calls it off
 only when its reason has gone: no rivalry either way, no hostile attitude and
-relations above poor, nothing left to steal, or no space milestone of its own
-under way. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
+relations above poor, or no space milestone of its own under way. It stops Cultivate Assets once its network reaches 75. It needs Seasoned Tradecraft for the two most severe operations, as
 you do, so it rarely launches them.
