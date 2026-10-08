@@ -392,9 +392,11 @@ The engine moves and kills people; the model sees only the result. Each year:
    - The dead come from the men of the cohorts aged 18–40, about 95% of them men.
    - The mod defines a Women in Combat Roles modifier (`women_combat_roles_modifier`) that nothing grants yet. Whatever
      grants it should lower that share.
-   - The counters can't be read at the war's end: on `on_war_end` the war scope still exists, but every counter reads 0
-     (seven wars in the probe). So each war's `num_country_dead` is snapshotted on the owner's monthly pulse, and the
-     yearly step takes the change. The dead of a war's last part-month are lost.
+   - The counters can't be relied on at the war's end: on `on_war_end` the war scope still exists, but every counter
+     printed 0 (seven wars in the probe). That line had no control value, and ROOT there is a diplomatic play, so a
+     value that fails to print under that ROOT would look the same. Either way each war's `num_country_dead` is
+     snapshotted on the owner's monthly pulse, and the yearly step takes the change. The dead of a war's last
+     part-month are lost.
    - Read the dead, not the casualties: casualties = dead + wounded.
 2. **Known kills.**
    - Nuclear strikes record their dead per state; they come from all ages and both sexes.
@@ -987,7 +989,8 @@ The sections above already use the answers.
 4. **War dead:**
    - `"num_country_dead(<country>)"` reads as a value in war scope, as do `num_country_wounded`,
      `num_country_casualties` and `num_dead`;
-   - the counters read 0 at `on_war_end`, so they are snapshotted monthly (§2.5);
+   - the counters printed 0 at `on_war_end` (unconfirmed: that line had no control value), so they are snapshotted
+     monthly (§2.5);
    - **still open:** whether battle dead come out of the soldiers' home-state pops. A comparison of two saves around a
      battle settles it.
 5. **State modifier reads include the country's: yes** (§2.3).
