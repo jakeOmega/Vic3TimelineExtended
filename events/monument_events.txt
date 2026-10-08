@@ -115,6 +115,9 @@ monument_events.2 = {
 
 	# Named in the description and in every option tooltip.
 	immediate = {
+		# The grandeur this ceremony asks at (gm_state_start_ceremony), again
+		# now: a Rededicate rebuild's level may not have been readable then.
+		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
 		save_scope_as = monument_state
 		owner = {
 			save_scope_as = gm_com_country
