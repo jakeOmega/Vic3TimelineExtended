@@ -697,7 +697,11 @@ def stage_wire(cat: str, only: set[str], dry_run: bool) -> None:
                if accepted(e) and (MOD_ROOT / icon_path(cat, key)).exists()}
     targets.update({key: icon_path(cat, key) for key, e in derived(cat, only).items()
                     if derived_ready(e) and (MOD_ROOT / icon_path(cat, key)).exists()})
-    targets.update({key: e["use"] for key, e in entries(cat, only).items() if "use" in e})
+    # A `use` of another entry's icon in this category (a principle's tiers
+    # 2-5 on tier 1's) waits until that icon is written.
+    own = {icon_path(cat, k) for k in ICONS[cat]}
+    targets.update({key: e["use"] for key, e in entries(cat, only).items()
+                    if "use" in e and (e["use"] not in own or (MOD_ROOT / e["use"]).exists())})
     total = 0
     for path in sorted((MOD_ROOT / spec["entity_dir"]).rglob("*.txt")):
         changed = rewrite_icon_refs(path, spec["field"], targets, dry_run)

@@ -908,6 +908,28 @@ class PanelStateTests(unittest.TestCase):
             ip.ICONS, gi.MOD_ROOT = saved
             gi.ICONS = ip.ICONS
 
+    def test_use_of_an_unwritten_sibling_waits(self):
+        """Tiers 2-5 of a principle use tier 1's icon: not wired before it is written."""
+        root = Path(tempfile.mkdtemp())
+        (root / "common" / "power_bloc_principles").mkdir(parents=True)
+        f = root / "common" / "power_bloc_principles" / "p.txt"
+        f.write_text('principle_a_1 = {\n\ticon = "gfx/old.dds"\n}\nprinciple_a_2 = {\n\ticon = "gfx/old.dds"\n}\n')
+        saved = (ip.ICONS, gi.MOD_ROOT)
+        try:
+            tier1 = ip.icon_path("principle", "principle_a_1")
+            ip.ICONS = gi.ICONS = {"principle": {"principle_a_1": {"subject": "a cart", "seed": None},
+                                                 "principle_a_2": {"use": tier1}}}
+            gi.MOD_ROOT = root
+            gi.stage_wire("principle", set(), dry_run=False)
+            self.assertNotIn(tier1, f.read_text())
+            (root / tier1).parent.mkdir(parents=True)
+            (root / tier1).write_bytes(b"DDS ")
+            gi.stage_wire("principle", set(), dry_run=False)
+            self.assertIn(f'principle_a_2 = {{\n\ticon = "{tier1}"', f.read_text())
+        finally:
+            ip.ICONS, gi.MOD_ROOT = saved
+            gi.ICONS = ip.ICONS
+
     def test_trend_arrow_stacks_its_heads(self):
         import icon_render
         down = np.asarray(icon_render.trend_arrow(150, "down", "red", 3))[..., 3]
