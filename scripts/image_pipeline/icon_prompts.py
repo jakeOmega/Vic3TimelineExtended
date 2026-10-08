@@ -756,7 +756,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_generic_resource_depository": {"subject": "a fortified depository of low concrete vaults with heavy steel doors, beside heaps of ore and stacks of metal ingots", "seed": 1},
         "building_generic_granary_complex": {"subject": "a grain storage complex of tall round concrete silos beside a rail siding, golden wheat fields around it", "seed": 1},
         # Round 1 showed no cloth.
-        "building_generic_textile_depot": {"subject": "a brick textile warehouse whose yard is crossed by long lines hung with bolts of bright red, blue and yellow cloth drying in the sun, round dyeing vats beside them", "seed": None},
+        "building_generic_textile_depot": {"subject": "a brick textile warehouse whose yard is crossed by long lines hung with bolts of bright red, blue and yellow cloth drying in the sun, round dyeing vats beside them", "seed": 0},
         "building_generic_cold_storage": {"subject": "a large windowless refrigerated warehouse with insulated walls, lorries backed up to its loading bays", "seed": 1},
         "building_generic_paper_mill_complex": {"subject": "a pulp and paper mill beside a river, with log piles, a tall chimney and big rolls of paper stacked in the yard", "seed": 1},
         "building_generic_foundry_complex": {"subject": "a sprawling steel foundry with blast furnaces, molten metal glowing orange and tall smoking chimneys", "seed": 0},
@@ -772,13 +772,13 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_generic_export_warehouse": {"subject": "a bonded export warehouse on a riverside quay, sacks of coffee and bales of cotton being loaded onto a cargo ship", "seed": 1},
         "building_generic_electronics_lab": {"subject": "a modern electronics laboratory building with a radio mast on its roof and rows of lit windows", "seed": 0},
         # Round 1: ASSAY OFFICE on the facade (s0), a watermark (s1).
-        "building_generic_assay_office": {"subject": "a squat solid stone strongroom building with barred windows and a heavy iron door, a small wooden cart loaded with gold bullion bars at its door, blank unmarked walls", "seed": None},
+        "building_generic_assay_office": {"subject": "a squat solid stone strongroom building with barred windows and a heavy iron door, a small wooden cart loaded with gold bullion bars at its door, blank unmarked walls", "seed": 0},
         "building_generic_ore_processing": {"subject": "an ore processing plant with crushers, conveyor belts and heaps of crushed ore beside a smelter chimney", "seed": 0},
         "building_generic_mineral_refinery": {"subject": "a mineral refinery with tall leaching tanks, conveyor belts and heaps of white and yellow mineral powder", "seed": 0},
         "building_generic_silk_exchange": {"subject": "an East Asian trading house with curved tiled roofs, bales of raw silk and dyed silk cloth stacked outside", "seed": 0},
         "building_generic_vintner_hall": {"subject": "a stone winery hall among vineyards, rows of oak barrels outside and grape vines on the hillside", "seed": 0},
         # Round 1: EMPORIUM (s0) and a lettered plaque (s1).
-        "building_generic_furniture_showroom": {"subject": "a two-storey brick furniture workshop with tall plain glass windows showing chairs and tables inside, stacked timber planks in the yard behind it, blank unmarked walls", "seed": None},
+        "building_generic_furniture_showroom": {"subject": "a two-storey brick furniture workshop with tall plain glass windows showing chairs and tables inside, stacked timber planks in the yard behind it, blank unmarked walls", "seed": 0},
         "building_generic_lumber_yard": {"subject": "an industrial sawmill and timber yard with stacks of sawn planks and piles of logs beside a river", "seed": 0},
         "building_generic_dye_fiber_park": {"subject": "a campus of small laboratories and pilot plants with pipes and tanks, spools of brightly dyed fibre in the yard", "seed": 1},
         # Wonders: the landmark alone, as vanilla draws its monuments.
@@ -1009,8 +1009,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
         "law_ministry_of_commerce": {"subject": "a merchant's balance scale beside a small wooden crate and a short stack of coins", "seed": 0},
-        # Round 1's round doors read as portholes: show the gold behind.
-        "law_national_bank": {"subject": "a heavy round steel bank vault door swung half open, stacks of gold bars inside the vault behind it", "seed": None},
+        # A round vault door read as a porthole twice (rounds 1 and 2): no door.
+        "law_national_bank": {"subject": "a neat pyramid of stacked gold bars with a heavy brass bank key lying in front of it", "seed": None},
         # Culture s0 has a signature and s1 lettering; commerce s1 a signature; secrecy s1 a W seal.
         "law_ministry_of_culture": {"subject": "a lyre leaning against a classical marble bust of a man", "seed": 2},
         "law_ministry_of_the_environment": {"subject": "a young leafy tree sapling growing from a mound of soil, a small watering can beside it", "seed": 1},
@@ -1020,7 +1020,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_ministry_of_science": {"subject": "a brass telescope on a tripod beside a round glass laboratory flask", "seed": 1},
         "law_ministry_of_thought_control": {"subject": "a metal headband fitted with wires that run to a small box covered in dials", "seed": 0},
         # Round 1's round shield read as a plate or a mirror.
-        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": None},
+        "law_ministry_of_consumer_protection": {"subject": "a pointed knight's heater shield standing in front of a wicker shopping basket full of bread and fruit", "seed": 1},
         "law_ministry_of_urban_planning": {"subject": "a drafting compass standing over a small model of city blocks on a square board", "seed": 1},
         "law_ministry_of_religion": {"subject": "two lit candles in tall candlesticks beside a closed book with a clasp", "seed": 1},
         "law_ministry_of_international_aid": {"subject": "a stack of burlap grain sacks and wooden crates on a wooden pallet", "seed": 2},
@@ -1039,7 +1039,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # audit): the law whose old picture fits worse gets its own.
         "law_neocolonialism": {"subject": "an empty pith helmet resting on top of a closed leather briefcase", "seed": 2},
         # Round 1 stamped a B on every coin (one with a lettered tag): a block chain, no coins.
-        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": None},
+        "law_decentralized_cryptocurrency": {"subject": "a short chain of four thick metal cubes linked together, each cube etched with simple circuit lines", "seed": 2},
         "law_unregulated_donations": {"subject": "a bulging cloth money sack tied with cord, coins spilling from it onto the steps of a small columned government building", "seed": 1},
         "law_informal_government_secrecy": {"subject": "a thick closed folder tied shut with ribbon and sealed with a wax seal, a large old iron key lying on top", "seed": 0},
         "law_minority_rights_violent_hostility": {"subject": "a burning wooden torch crossed with a heavy wooden club", "seed": 2},
@@ -1276,7 +1276,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_environmental_sustainability_4": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
         "principle_environmental_sustainability_5": {"use": f"{_GI}/principles_icons/principle_environmental_sustainability_1.dds"},
         # Round 1's round shield drew a porthole: a helmet on a globe instead.
-        "principle_global_security_1": {"subject": "an empty light-blue steel army helmet resting on top of a small globe of the Earth with green continents and blue oceans", "seed": None},
+        "principle_global_security_1": {"subject": "an empty light-blue steel army helmet resting on top of a small globe of the Earth with green continents and blue oceans", "seed": 0},
         "principle_global_security_2": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
         "principle_global_security_3": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
         "principle_global_security_4": {"use": f"{_GI}/principles_icons/principle_global_security_1.dds"},
@@ -1307,7 +1307,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_rural_4": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
         "principle_rural_5": {"use": f"{_GI}/principles_icons/principle_rural_1.dds"},
         # Round 1's cut-out lost the townhouses behind the tram: the tram alone.
-        "principle_urban_planning_1": {"subject": "a chunky red and cream city tram car on a short stretch of rails", "seed": None},
+        "principle_urban_planning_1": {"subject": "a chunky red and cream city tram car on a short stretch of rails", "seed": 2},
         "principle_urban_planning_2": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
         "principle_urban_planning_3": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
         "principle_urban_planning_4": {"use": f"{_GI}/principles_icons/principle_urban_planning_1.dds"},
@@ -1458,10 +1458,10 @@ ICONS: dict[str, dict[str, dict]] = {
                ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
         # Phase 7 topics that are no agency's, until now byte copies of older topics.
         # Round 1 drew a clock and a box under the map, no scales: name the two pans.
-        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": None,
+        "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": 1,
                                  "now": f"{_GI}/institution_icons/police.dds"},
         # Round 1's olive shells read as barrels and drums: a pointed brass shell.
-        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": None,
+        "topic_arms_embargo": {"subject": "a tall pointed brass artillery shell with a copper band, standing upright, a heavy iron chain wrapped around it with a closed padlock hanging from the chain", "seed": 2,
                                "now": f"{_GI}/alert_icons/blockaded.dds"},
         # Suspended credentials: the folder under vanilla's red cross, as Condemn is the mandate under it.
         "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": 0,
@@ -1478,7 +1478,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": 2,
                                    "now": f"{_GI}/goods_icons/groceries.dds"},
         # Round 1 drew open chests: a closed box with a lock and a slot.
-        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": None,
+        "topic_referendum": {"subject": "a closed square wooden ballot box with a brass lock on its front and a narrow slot in its flat lid, a folded tan paper ballot standing half out of the slot", "seed": 0,
                              "now": f"{_GI}/alert_icons/secession.dds"},
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.

@@ -26,11 +26,9 @@ buildings:
   reason: the Construction Site is a construction camp; kept in the building icon review (2026-09-27)
 - image: gfx/interface/icons/building_icons/skyscraper.dds
   entities:
-  - building_generic_assay_office
   - building_generic_corporate_university
   - building_generic_exhibition_centre
   - building_generic_financial_center
-  - building_generic_furniture_showroom
   - building_generic_hq_skyscraper
   - building_generic_industrial_city
   - building_generic_mega_factory
@@ -39,9 +37,8 @@ buildings:
   - building_generic_rail_nexus
   - building_generic_shipping_terminal
   - building_generic_spaceport
-  - building_generic_textile_depot
   - building_skyscraper
-  reason: the eleven retired generic flagships (removed by the monthly company-building cleanup) and the textile depot, assay office and furniture showroom (rerolling) keep vanilla's skyscraper; icon batch 3 (2026-10-07) gave the other 31 their own
+  reason: the eleven retired generic flagships (removed by the monthly company-building cleanup) keep vanilla's skyscraper; icon batch 3 (2026-10-07 and 2026-10-08) gave the other 34 their own
 - image: gfx/interface/icons/building_icons/synthetics_plants.dds
   entities:
   - building_synthetics_plant
@@ -327,13 +324,6 @@ technologies:
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 laws:
 - images:
-  - gfx/interface/icons/law_icons/algorithmic_governance.dds
-  - gfx/interface/icons/law_icons/decentralized_cryptocurrency.dds
-  entities:
-  - law_algorithmic_governance
-  - law_decentralized_cryptocurrency
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- images:
   - gfx/interface/icons/law_icons/basic_protections.dds
   - gfx/interface/icons/law_icons/comprehensive_rights.dds
   - gfx/interface/icons/law_icons/full_equality_and_protection.dds
@@ -489,12 +479,10 @@ laws:
   - law_minority_rights_cultural_assimilation
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
-  - gfx/interface/icons/law_icons/ministry_of_consumer_protection.dds
   - gfx/interface/icons/law_icons/national_bank.dds
   - gfx/interface/icons/law_icons/pro_capital_ministry_of_labor.dds
   - gfx/interface/icons/law_icons/pro_labor_ministry_of_labor.dds
   entities:
-  - law_ministry_of_consumer_protection
   - law_national_bank
   - law_pro_capital_ministry_of_labor
   - law_pro_labor_ministry_of_labor
@@ -516,11 +504,9 @@ laws:
   - law_unregulated_internet
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - images:
-  - gfx/interface/icons/law_icons/no_ministry_of_consumer_protection.dds
   - gfx/interface/icons/law_icons/no_ministry_of_labor.dds
   - gfx/interface/icons/law_icons/no_national_bank.dds
   entities:
-  - law_no_ministry_of_consumer_protection
   - law_no_ministry_of_labor
   - law_no_national_bank
   reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag

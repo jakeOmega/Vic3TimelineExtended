@@ -4954,7 +4954,7 @@ building_generic_granary_complex = {
 # --- Generic Textile Depot (Fabrics/Textiles) ---
 building_generic_textile_depot = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_textile_depot.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5857,7 +5857,7 @@ building_generic_electronics_lab = {
 
 building_generic_assay_office = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_assay_office.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -6154,7 +6154,7 @@ building_generic_vintner_hall = {
 # --- Generic Furniture Showroom (Home Goods) ---
 building_generic_furniture_showroom = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_furniture_showroom.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
