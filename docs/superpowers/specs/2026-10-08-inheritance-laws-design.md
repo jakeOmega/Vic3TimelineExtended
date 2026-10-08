@@ -34,6 +34,8 @@ Why the group felt dull:
 | Estate Duties | **An amendment** on the four private-ownership laws, not a law (§2.1) |
 | Birthright Endowment | **An amendment** too (§2.3): it says nothing about who receives the untaxed rest of an estate, so it fits any private-ownership law. It replaces Estate Duties instead of stacking on it, because the duty is what pays for it |
 | Perpetual Dynastic Trusts | **An amendment** (§2.2) |
+| Undivided Farm Succession | **An amendment** on Forced Heirship and Customary (§2.4): one heir takes the farm whole, the fix Germany, Austria and Norway used for fragmentation |
+| Estate Duties' revenue | **None standing**; the duty works through the concentration score (§2.1) |
 | Posthumous Title | **An event chain** off `mind_backups` (§6), not a law |
 | The left | **Split by heir**: the communist wants the state to inherit, the anarchist wants nobody to |
 | Systemic layer | Wealth-concentration score (§3), rural-scaled birth and migration effects (§4), generation events (§5), and law stances that bite while the law is in force (§8) |
@@ -72,7 +74,7 @@ law-consistency walk (`gen_law_consistency.py`), as it drops Usage Rights today.
 
 ## 2. Amendments
 
-All three need a scripted way in (`scripting_best_practices.md` § `add_amendment` Requirements): a debate event in
+All four need a scripted way in (`scripting_best_practices.md` § `add_amendment` Requirements): a debate event in
 the `on_law_checkpoint_debate` pool while a host law is being enacted (the `extra_law_events.87`/`.88` pattern), and an
 amendment petition on a host law already in force (`events/amendment_petition_events.txt`, § Amendment Petitions in
 `docs/systems/mod_systems.md`).
@@ -96,8 +98,10 @@ stances from the law elsewhere whose supporters backed it in history. Vanilla do
 - **Parent**: `law_graduated_taxation`. The groups that want a progressive income tax want a progressive duty on
   estates.
 - **Petition**: rolls higher during a war or with a reformist or social-democratic IG in government.
-- **Revenue is an open question** (§9). The tax-code spec forbids relabelling the dividend tax as an inheritance tax
-  (`2026-09-29-legislated-tax-code-design.md` §2, §3).
+- **No standing revenue.** The duty works through the score. Inheritance and estate taxes raise about 0.5% of tax
+  revenue across the OECD today, though they mattered more to Britain before the Second World War. One-off sums can
+  come through its events (§5). This also keeps clear of the tax-code spec's rule against relabelling the dividend tax
+  as an inheritance tax (`2026-09-29-legislated-tax-code-design.md` §2, §3).
 
 ### 2.2 Perpetual Dynastic Trusts (`amendment_perpetual_trusts`)
 
@@ -133,13 +137,32 @@ gets the untaxed rest, so it fits any law with private estates.
 - An Endowment funded from general revenue instead (Britain's Child Trust Fund, 2005) is a welfare programme, not
   inheritance policy, and is out of scope here.
 
+### 2.4 Undivided Farm Succession (`amendment_undivided_farm_succession`)
+
+One heir takes the family farm whole and pays the other heirs out. It is the remedy for the fragmentation that equal
+division causes: northwest Germany's Höfeordnung (1947), Austria's Anerbengesetz (1958), Norway's odel and åsete rights;
+even France lets one heir take the farm and buy out the rest. Single-heir farm custom already held in Westphalia,
+Hanover and Bavaria in 1836. The Nazi Reichserbhofgesetz (1933) made such farms inalienable and open only to
+"Aryan" farmers; the British zone's Höfeordnung replaced it with a register farmers could opt into.
+
+- **Allowed on** Forced Heirship and Customary Inheritance. Primogeniture already keeps estates whole, and under
+  Freedom of Testation an owner can leave the farm to one child.
+- **Unlock**: none; available from the start.
+- **Effect**: cancels Forced Heirship's rural birth-rate effect (§4), since peasants no longer need fewer children to
+  keep the farm whole, and turns its migration effect around: the siblings who don't inherit leave the land, as under
+  Primogeniture. Raises the concentration target by 10.
+- **Parent**: `law_peasant_proprietorship`. Agrarians back it (Jeffersonian agrarians strongly), the hierarchic and
+  oligarchic ideologies strongly oppose it.
+- **Ways in**: a fourth option in Forced Heirship's Last Division event (§5), the debate event, and a petition when
+  Rural Folk are powerful.
+
 ## 3. The concentration score
 
 One country variable, `te_inh_concentration`, 0–100: how much of the nation's wealth sits in great family fortunes.
 
 - **Target** set by the law plus amendments: Primogeniture & Entail 80, Freedom of Testation 60, Customary 50, Forced
   Heirship 25, State as Universal Heir 0, Possession by Use 0; Estate Duties −25, Birthright Endowment −30, Perpetual
-  Trusts +30.
+  Trusts +30, Undivided Farm Succession +10.
 - **Drift**: each year the score closes 3% of the gap to its target, so half the gap closes in about 23 years, one
   generation. A republic that abolishes entail in 1848 still has great houses in 1870.
 - **Start**: each 1836 country starts at its law's target, so nothing drifts at game start.
@@ -167,7 +190,8 @@ apply per state from `on_yearly_pulse_state`, multiplied by the state's agrarian
 Because the quota is symmetric, scaling it by rural share is what makes it work: a farm state rarely draws migrants,
 so a lower quota there mostly holds people in, while France's industrial départements (where its late-century
 immigrants went) are untouched. The target: France's lead in the fertility transition shows from 1836 to about 1880 and
-fades by 1900 as it urbanises and other countries catch up.
+fades by 1900 as it urbanises and other countries catch up. Undivided Farm Succession (§2.4) switches Forced Heirship's
+rural effects off.
 
 `pop_type_percent_state` is a trigger, not a value, so the multiplier is a few steps unless a script-value sum over the
 state's pops works; check before building.
@@ -180,7 +204,7 @@ the law for 20 years, with a 25-year cooldown. Each option moves the score, a po
 | Law | Event | Choices |
 |---|---|---|
 | Primogeniture & Entail | The Cadet Sons | Army, church, colonies or the city |
-| Forced Heirship | The Last Division | Fewer children (the French path), emigrate (Württemberg and Baden, whose split farms sent thousands to America), or sell to a neighbour (score up) |
+| Forced Heirship | The Last Division | Fewer children (the French path), emigrate (Württemberg and Baden, whose split farms sent thousands to America), sell to a neighbour (score up), or legislate undivided succession (adds §2.4) |
 | Freedom of Testation | The Founder's Will | Endow a foundation (score down; Carnegie's *Gospel of Wealth*, 1889), found a dynasty (score up), or the heirs go to court |
 | State as Universal Heir | The Hidden Estates | Crack down (authority, radicals) or look away (score creeps up under a law that says zero) |
 | Possession by Use | The Empty Holding | The commune reallocates it or a family claims continuity |
@@ -237,11 +261,9 @@ theocratic), the approval moves to State as Universal Heir and Possession by Use
 
 ## 9. Open questions
 
-- **Estate Duties' revenue.** None (score effects only), or a yearly payer deduction with `add_pop_wealth` on
-  Aristocrats and Capitalists plus `add_treasury` from a proxy. The tax-code spec's test applies: a real base, a real
-  payer, a real transfer, or leave it out.
 - **Amendment parents** (§2): Perpetual Trusts on `law_laissez_faire` or `law_primogeniture`. Check that the
-  vanilla stances on graduated taxation and old-age pensions give sensible backers for the duty and the Endowment.
+  vanilla stances on graduated taxation, old-age pensions and peasant proprietorship give sensible backers for the
+  duty, the Endowment and the farm amendment.
 - **The Endowment swap.** Whether `add_amendment` sees an Estate Duties removal made earlier in the same effect block.
   If not, the swap removes the duty and adds the Endowment in two steps.
 - **Ottoman start.** Islamic law is forced heirship in substance, but Ottoman fertility stayed high. On Customary it
