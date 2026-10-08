@@ -505,9 +505,12 @@ Every monument, whatever it honors, gives:
 ### Monument dedications
 
 When a level of an undedicated monument finishes, a dedication ceremony asks
-what it honors. The choice is permanent, and the ceremony's tooltips list each
-dedication's effects. An undedicated monument gives only the prestige, tourism
-and cultural pull above; the ceremony asks again at its next level.
+what it honors. A new monument starts undedicated, whatever your other
+monuments honor. The choice is permanent: choosing Undedicated in a dedicated
+monument's building panel switches it straight back. The ceremony's tooltips
+list each dedication's effects. An undedicated monument gives only the
+prestige, tourism and cultural pull above; the ceremony asks again at its next
+level.
 
 | Dedication | Requires | Approves / objects | National, per step | In its state, per step |
 |---|---|---|---|---|

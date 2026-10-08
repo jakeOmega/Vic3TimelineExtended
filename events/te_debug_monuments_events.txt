@@ -210,3 +210,194 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		gm_debug_log = yes
 	}
 }
+
+# ============================================================================
+# THE DEDICATION LOCK — console test event: `event te_debug_monuments.3`
+# ============================================================================
+# Option a answers whether activate_production_method can move a monument
+# between dedications past the self-referencing lock (grand_monument_pms.txt).
+# Undedicated stays selectable so that script can always switch a new
+# monument off a dedication it copied from its siblings; if script can
+# override the lock as well, Undedicated could be locked again. It tries our
+# tallest monument on To the Nation (the War Memorial, if it is To the Nation
+# already), neither of which a technology gates, and
+# te_debug_monuments.4 reads the result a day later and puts the dedication
+# back. The other options re-open one monument's dedication: its records go
+# and the ceremony asks again, from Undedicated. They are for a monument that
+# kept a copied dedication before gm_state_reset_copied_dedication existed.
+te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event te_debug_monuments.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.3.t
+	desc = te_debug_monuments.3.desc
+	flavor = te_debug_monuments.3.flavor
+
+	# Our three tallest monuments, named in the re-open options.
+	immediate = {
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m1
+		}
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 1
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m2
+		}
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 2
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m3
+		}
+	}
+
+	# Probe the lock on our tallest dedicated monument.
+	option = {
+		name = te_debug_monuments.3.a
+		default_option = yes
+		ordered_scope_state = {
+			limit = {
+				gm_state_is_dedicated = yes
+				has_variable = gm_dedication
+			}
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			# Holds gm_state_keep_dedication off until te_debug_monuments.4.
+			set_variable = { name = gm_pm_probe days = 5 }
+			if = {
+				limit = {
+					can_activate_production_method = {
+						building_type = building_grand_monument
+						production_method = pm_monument_undedicated
+					}
+				}
+				debug_log = "TE_MONUMENTS: lock probe: Undedicated can be activated (expected: it is never locked)"
+			}
+			else = {
+				debug_log = "TE_MONUMENTS: lock probe: Undedicated can NOT be activated (unexpected: it is never locked)"
+			}
+			if = {
+				limit = { gm_state_has_pm = { PM = pm_monument_civic } }
+				set_variable = { name = gm_pm_probe_target value = flag:war_memorial }
+				if = {
+					limit = {
+						can_activate_production_method = {
+							building_type = building_grand_monument
+							production_method = pm_monument_war_memorial
+						}
+					}
+					debug_log = "TE_MONUMENTS: lock probe: the engine calls the War Memorial available (unexpected: the lock should hide it)"
+				}
+				else = {
+					debug_log = "TE_MONUMENTS: lock probe: the engine calls the War Memorial unavailable, as the lock should"
+				}
+				activate_production_method = {
+					building_type = building_grand_monument
+					production_method = pm_monument_war_memorial
+				}
+			}
+			else = {
+				set_variable = { name = gm_pm_probe_target value = flag:civic }
+				if = {
+					limit = {
+						can_activate_production_method = {
+							building_type = building_grand_monument
+							production_method = pm_monument_civic
+						}
+					}
+					debug_log = "TE_MONUMENTS: lock probe: the engine calls To the Nation available (unexpected: the lock should hide it)"
+				}
+				else = {
+					debug_log = "TE_MONUMENTS: lock probe: the engine calls To the Nation unavailable, as the lock should"
+				}
+				activate_production_method = {
+					building_type = building_grand_monument
+					production_method = pm_monument_civic
+				}
+			}
+		}
+		trigger_event = { id = te_debug_monuments.4 days = 1 }
+	}
+
+	# Re-open the dedication of one monument.
+	option = {
+		name = te_debug_monuments.3.b
+		trigger = { exists = scope:gm_dbg_m1 }
+		scope:gm_dbg_m1 = {
+			gm_clear_state = yes
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.3.c
+		trigger = { exists = scope:gm_dbg_m2 }
+		scope:gm_dbg_m2 = {
+			gm_clear_state = yes
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.3.d
+		trigger = { exists = scope:gm_dbg_m3 }
+		scope:gm_dbg_m3 = {
+			gm_clear_state = yes
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+}
+
+# Option a's result, a day after its switch: did the monument move to the
+# locked dedication? Then the dedication goes back (gm_state_keep_dedication,
+# through Undedicated).
+te_debug_monuments.4 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = gm_pm_probe }
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							var:gm_pm_probe_target = flag:civic
+							gm_state_has_pm = { PM = pm_monument_civic }
+						}
+						AND = {
+							var:gm_pm_probe_target = flag:war_memorial
+							gm_state_has_pm = { PM = pm_monument_war_memorial }
+						}
+					}
+				}
+				debug_log = "TE_MONUMENTS: lock probe result: MOVED. Script overrides the lock; Undedicated could be locked again"
+			}
+			else_if = {
+				limit = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+				debug_log = "TE_MONUMENTS: lock probe result: the monument went to Undedicated, not the target"
+			}
+			else = {
+				debug_log = "TE_MONUMENTS: lock probe result: KEPT. Script cannot override the lock; Undedicated must stay unlocked"
+			}
+			remove_variable = gm_pm_probe
+			remove_variable = gm_pm_probe_target
+			gm_state_keep_dedication = yes
+		}
+	}
+}

@@ -264,6 +264,9 @@ gm_state_name_if_unnamed = {
 		limit = {
 			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_namesake }
+			# Not a copy the ceremony is replacing, which may still read as
+			# dedicated in the refresh that switched it back.
+			NOT = { has_variable = gm_ceremony_pending }
 		}
 		if = {
 			limit = {

@@ -1480,10 +1480,9 @@ To make a per-building PM choice **permanent**, exploit the fact that
 `unlocking_production_methods` is an **OR** over its list and can reference the PM itself:
 
 ```
-pm_foo_undedicated = {          # the entry point
+pm_foo_undedicated = {          # the entry point: never locked (below)
     is_default = yes
     is_hidden_when_unavailable = yes
-    unlocking_production_methods = { pm_foo_undedicated }
 }
 
 pm_foo_variant_a = {
@@ -1492,17 +1491,32 @@ pm_foo_variant_a = {
 }
 ```
 
-Fresh build: the default is active, so every variant is available. After picking one, only that
-variant's own self-reference is satisfied — the default and every sibling become unreachable, and
-changing the choice means demolishing the building. `is_hidden_when_unavailable` keeps the group
-showing exactly one row instead of a column of dead ends. Never put `replacement_if_valid` on a
-ratcheted PM; it auto-swaps and defeats the lock.
+With the default active, every variant is available. After picking one, only that variant's own
+self-reference is satisfied, so every sibling becomes unreachable. `is_hidden_when_unavailable`
+keeps the group showing the chosen row and the default instead of a column of dead ends. Never put
+`replacement_if_valid` on a ratcheted PM; it auto-swaps and defeats the lock.
 
-Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`).
+**A new building does not start on `is_default`.** It starts on the production methods most of
+its owner's buildings of that type already use. In the owner's France (2026-10-08) a third Grand
+Monument stood at level 0, construction just queued, on To the Revolution, the dedication of its
+two siblings, before any script had run. With the default locked behind itself
+(`unlocking_production_methods = { pm_foo_undedicated }`, this section's first version), that copy
+is permanent from the first day: no entry point, no choice, every later building of the type locked
+to the first one's pick. So leave the default unlocked, have script switch a copy back (it can
+tell one: the variant is active but nothing recorded a choice), and keep a real choice with
+script: record it in a variable and restore it from `on_production_method_changed` (ROOT = the
+building) and a periodic pulse when the panel switches to the default. Whether
+`activate_production_method` can move a building between two locked siblings, which would let the
+default be locked again, is untested; the console probe is `te_debug_monuments.3`, option a.
+
+Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`), with
+`gm_state_reset_copied_dedication` and `gm_state_keep_dedication` in
+`common/scripted_effects/gm_effects.txt`.
 
 **Caveat:** every *other* use of `unlocking_production_methods` in this repo is cross-group, so
-the self-reference is unusual. Verify in-game that (a) the default really is selectable at build
-time and (b) siblings really do disappear after a pick. Secondary deterrent if it ever loosens:
+the self-reference is unusual. Verify in-game that siblings really do disappear after a pick
+(the owner's report that a copied dedication left only one choice says they do). Secondary
+deterrent if it ever loosens:
 this mod's `pm_retooling` override applies `goods_input_construction_mult = 10`
 (`common/static_modifiers/extra_modifiers.txt`), which taxes any PM change in proportion to the
 building's construction-goods input (except in `free_market_construction_rule`'s no-retooling and

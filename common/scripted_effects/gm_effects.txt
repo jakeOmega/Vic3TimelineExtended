@@ -12,14 +12,19 @@
 
 # ---- Records (§3) ------------------------------------------------------------
 # State scope. A dedicated monument the pulse finds without records (a pick
-# made in the building panel, or a monument from a save older than this
-# system) gets them from its current owner, once. The ceremony writes them
-# itself, so this does nothing for a monument it dedicated.
+# made in the building panel after a ceremony asked, or a monument from a save
+# older than this system) gets them from its current owner, once. The
+# ceremony writes them itself, so this does nothing for a monument it
+# dedicated. One no ceremony has asked about is the engine's copy, which
+# gm_state_reset_copied_dedication sends to the ceremony first.
 gm_state_first_sight = {
 	if = {
 		limit = {
 			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_seen }
+			# A ceremony asking: the dedication is its to set, and a copy it
+			# has just switched back may still read as dedicated here.
+			NOT = { has_variable = gm_ceremony_pending }
 		}
 		set_variable = gm_seen
 		if = {
@@ -275,6 +280,7 @@ gm_remove_state_var = {
 gm_clear_state = {
 	gm_remove_local_modifiers = yes
 	gm_remove_state_var = { VAR = gm_seen }
+	gm_remove_state_var = { VAR = gm_dedication }
 	gm_remove_state_var = { VAR = gm_raised_by }
 	gm_remove_state_var = { VAR = gm_honoree }
 	gm_remove_state_var = { VAR = gm_honoree_ig }
@@ -495,7 +501,14 @@ gm_country_refresh = {
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		# A new monument copies its siblings' dedication: back to Undedicated,
+		# and the ceremony.
+		gm_state_reset_copied_dedication = yes
 		gm_state_first_sight = yes
+		# What it is dedicated to, kept against a pick of Undedicated in the
+		# panel that on_production_method_changed missed.
+		gm_state_note_dedication = yes
+		gm_state_keep_dedication = yes
 		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
 		# then a monument older than names, or one nobody named, takes the
 		# default name (v2 §3.3).
@@ -767,6 +780,9 @@ gm_check_contests = {
 			limit = {
 				gm_state_is_dedicated = yes
 				gm_state_is_bound = yes
+				# A copy the ceremony is replacing has no records yet, and
+				# would read as not fitting.
+				NOT = { has_variable = gm_ceremony_pending }
 			}
 			if = {
 				limit = {
@@ -1090,11 +1106,21 @@ gm_state_choose_preserve = {
 # on_building_built, and two ceremonies queued together would both show.
 # gm_ceremony_level records the grandeur it asked at (monument_events.2
 # records it again as the event opens, when a rebuilt level is readable), so
-# gm_state_offer_missed_ceremony asks once per new level.
+# gm_state_offer_missed_ceremony asks once per new level. It starts from
+# Undedicated, where every dedication is open: a new or rebuilt monument may
+# stand on its siblings' dedication (gm_state_has_copied_dedication), and the
+# event switches it back again as it opens. A dedication some ceremony or
+# pulse recorded (gm_seen) is never switched here.
 gm_state_start_ceremony = {
 	if = {
 		limit = {
 			NOT = { has_variable = gm_ceremony_pending }
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = gm_seen }
+			}
+			gm_state_undedicate = yes
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
 		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
@@ -1124,6 +1150,112 @@ gm_state_offer_missed_ceremony = {
 			}
 		}
 		gm_state_start_ceremony = yes
+	}
+}
+
+# ---- The engine's copy, and keeping a dedication -------------------------------
+# A new building starts on the production methods most of its owner's
+# buildings of that type use, not on is_default (grand_monument_pms.txt), so
+# Undedicated stays selectable and these keep the lock by script.
+
+# State scope. Back to Undedicated. A no-op where it is already; from another
+# dedication it needs Undedicated selectable, which it always is.
+gm_state_undedicate = {
+	if = {
+		limit = {
+			NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+		}
+		activate_production_method = {
+			building_type = building_grand_monument
+			production_method = pm_monument_undedicated
+		}
+	}
+}
+
+# State scope, from gm_country_refresh and monument_events.1. A monument on a
+# dedication no ceremony gave it and no pulse recorded gets the ceremony,
+# which switches it back to Undedicated first.
+gm_state_reset_copied_dedication = {
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			gm_state_has_copied_dedication = yes
+		}
+		gm_state_start_ceremony = yes
+	}
+}
+
+# State scope, from gm_country_refresh. Records what a seen, dedicated
+# monument is dedicated to, once: a pick first sight has just recorded, or a
+# monument from a save older than gm_dedication. The ceremony records its own
+# (gm_state_dedicate).
+gm_state_note_dedication = {
+	if = {
+		limit = {
+			has_variable = gm_seen
+			NOT = { has_variable = gm_dedication }
+			gm_state_is_dedicated = yes
+		}
+		gm_state_note_dedication_if = { KEY = crown }
+		gm_state_note_dedication_if = { KEY = republic }
+		gm_state_note_dedication_if = { KEY = revolution }
+		gm_state_note_dedication_if = { KEY = leader }
+		gm_state_note_dedication_if = { KEY = religious }
+		gm_state_note_dedication_if = { KEY = civic }
+		gm_state_note_dedication_if = { KEY = war_memorial }
+		gm_state_note_dedication_if = { KEY = artistic }
+		gm_state_note_dedication_if = { KEY = naturalist }
+		gm_state_note_dedication_if = { KEY = scientific }
+		gm_state_note_dedication_if = { KEY = industrial }
+		gm_state_note_dedication_if = { KEY = athletic }
+	}
+}
+
+gm_state_note_dedication_if = {
+	if = {
+		limit = { gm_state_has_pm = { PM = pm_monument_$KEY$ } }
+		set_variable = { name = gm_dedication value = flag:$KEY$ }
+	}
+}
+
+# State scope, from on_production_method_changed (gm_pm_changed_on_action) and
+# gm_country_refresh. A dedicated monument switched to Undedicated in the panel
+# goes straight back. One on another dedication (both switches made between
+# two refreshes, with the hook missed) goes to Undedicated first, since a
+# dedication opens only from there; if that switch is not readable at once,
+# the hook it fires or the next refresh finishes the job. gm_pm_probe is
+# te_debug_monuments.3's, which switches a monument on purpose.
+gm_state_keep_dedication = {
+	if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_dedication
+			NOT = { has_variable = gm_pm_probe }
+			gm_state_keeps_its_dedication = no
+		}
+		gm_state_undedicate = yes
+		gm_state_restore_dedication = { KEY = crown }
+		gm_state_restore_dedication = { KEY = republic }
+		gm_state_restore_dedication = { KEY = revolution }
+		gm_state_restore_dedication = { KEY = leader }
+		gm_state_restore_dedication = { KEY = religious }
+		gm_state_restore_dedication = { KEY = civic }
+		gm_state_restore_dedication = { KEY = war_memorial }
+		gm_state_restore_dedication = { KEY = artistic }
+		gm_state_restore_dedication = { KEY = naturalist }
+		gm_state_restore_dedication = { KEY = scientific }
+		gm_state_restore_dedication = { KEY = industrial }
+		gm_state_restore_dedication = { KEY = athletic }
+	}
+}
+
+gm_state_restore_dedication = {
+	if = {
+		limit = { var:gm_dedication = flag:$KEY$ }
+		activate_production_method = {
+			building_type = building_grand_monument
+			production_method = pm_monument_$KEY$
+		}
 	}
 }
 
@@ -1207,6 +1339,9 @@ gm_notify_new_contests = {
 # production method back: whether activate_production_method is visible within
 # the same effect is not established.
 gm_state_dedicate = {
+	# Recorded before the switch, so the on_production_method_changed hook it
+	# fires (gm_state_keep_dedication) reads the new record, never an old one.
+	set_variable = { name = gm_dedication value = flag:$KEY$ }
 	activate_production_method = {
 		building_type = building_grand_monument
 		production_method = pm_monument_$KEY$
