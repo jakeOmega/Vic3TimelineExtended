@@ -1246,6 +1246,9 @@ gm_state_keep_dedication = {
 		gm_state_restore_dedication = { KEY = scientific }
 		gm_state_restore_dedication = { KEY = industrial }
 		gm_state_restore_dedication = { KEY = athletic }
+		# A tell for the play-test: Undedicated is listed first and every
+		# dedication is identical, so an AI that took it would churn here.
+		debug_log = "TE_MONUMENTS: kept a dedication the panel or the AI had switched away"
 	}
 }
 
