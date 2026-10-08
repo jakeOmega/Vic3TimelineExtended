@@ -35,28 +35,11 @@ REPO_ROOT = SCRIPT_DIR.parent.parent
 ICON_DIR = REPO_ROOT / "gfx/interface/icons/company_icons/historical_company_icons"
 SIZE = 256
 
-# (output_stem, display label, industry tint RGB)
-ICONS = [
-    ("british_rolls_royce", "Rolls-Royce", (60, 60, 72)),
-    ("british_bp", "BP", (24, 96, 60)),
-    ("german_bayer", "Bayer", (40, 80, 130)),
-    ("german_thyssen", "Thyssen", (90, 90, 96)),
-    ("american_boeing", "Boeing", (30, 70, 120)),
-    ("french_renault", "Renault", (150, 120, 30)),
-    ("french_michelin", "Michelin", (40, 70, 110)),
-    ("italian_pirelli", "Pirelli", (110, 30, 36)),
-    ("british_jardine_matheson", "Jardine\nMatheson", (70, 50, 96)),
-    ("japanese_sumitomo_besshi", "Sumitomo\nBesshi Mine", (96, 64, 40)),
-    # Biotechnology companies
-    ("american_genentech", "Genentech", (20, 100, 110)),
-    ("american_monsanto", "Monsanto", (60, 110, 40)),
-    ("danish_novo_nordisk", "Novo\nNordisk", (20, 60, 120)),
-    ("japanese_ajinomoto", "Ajinomoto", (150, 40, 40)),
-    ("indian_biocon", "Biocon", (90, 60, 120)),
-    ("chinese_bgi", "BGI Group", (30, 90, 140)),
-    ("german_biontech", "BioNTech", (40, 40, 60)),
-    ("scifi_rosen_association", "Rosen\nAssociation", (80, 40, 40)),
-]
+# (output_stem, display label, industry tint RGB). Empty: the icon pipeline's company_logo
+# category replaced all eighteen cards on 2026-10-07 (icon batch 3, #813), and
+# a rerun would write the cards back over the art. Add a stem here only for a
+# new company still waiting for its logo.
+ICONS: list[tuple[str, str, tuple[int, int, int]]] = []
 
 
 def _font(size: int):
