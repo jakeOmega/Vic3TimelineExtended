@@ -1,0 +1,173 @@
+﻿# ============================================================================
+# Monetary Policy — the central bank's mandate, set by law (#799)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §6. System overview:
+# docs/systems/mod_systems.md § Banking Cycle -> Monetary Policy. The acts are
+# amendment_cb_inflation_targeting and amendment_cb_dual_mandate
+# (common/amendments/extra_amendments.txt).
+#
+# HOW IT IS REACHED. Step 2 of the monthly update (te_monetary_update_target,
+# common/scripted_effects/te_monetary_effects.txt) fires this for a country that
+# holds central bank independence, a dial and no mandate act, off a convertible
+# gold standard (te_mon_needs_mandate_act). That covers the three moments the
+# owner named: the law passing without an act, an old save whose bank is
+# already independent, and an act repealed in the law panel. It sets
+# te_mon_mandate_asked for 120 days (te_peg.3's shape), so the question is not
+# stacked while it waits and is asked again if it was lost. NO `trigger` BLOCK:
+# the gate lives in step 2 alone.
+#
+# WHAT THE OPTIONS DO. Each attaches one act to the independence law in force,
+# sponsored by the interest group the issue names (Industrialists for inflation
+# targeting, Trade Unions for the dual mandate), with a five-year cooldown on
+# repeal. The bank moves to the act's mandate 12 months later
+# (te_mon_mandate_statute_delay), and that switch is priced like any other
+# (te_monetary_settle_mandate_change): a looser rule raises expected inflation
+# and the risk premium at once, and Inflation Targeting's credibility builds
+# over two years. The sponsor's approval rises and its rival's falls, five
+# years decaying, the amendment petitions' reactions.
+#
+# The Dual Mandate is the default: it is the rule every bank starts on, so a
+# government that lets the question lapse writes into law what it already has.
+
+namespace = te_mandate
+
+te_mandate.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_mandate.1.t
+	desc = te_mandate.1.d
+	flavor = te_mandate.1.f
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	# A law change while the question waits (independence repealed, an act
+	# passed by sponsorship, a return to gold) leaves nothing to answer.
+	cancellation_trigger = {
+		NOT = { te_mon_needs_mandate_act = yes }
+	}
+
+	# --- the Inflation Targeting Act ------------------------------------------
+	option = {
+		name = te_mandate.1.a
+		active_law:lawgroup_financial_regulation ?= {
+			add_amendment = {
+				type = amendment_cb_inflation_targeting
+				sponsor = ROOT.ig:ig_industrialists
+				cooldown = 60
+			}
+		}
+		if = {
+			limit = {
+				has_variable = te_mon_mandate
+				var:te_mon_mandate = 4
+			}
+			custom_tooltip = te_mandate.1.same_tt
+		}
+		else = {
+			custom_tooltip = te_mandate.1.a.tt
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_variable = te_mon_mandate_asked }
+				remove_variable = te_mon_mandate_asked
+			}
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 30
+			}
+			modifier = {
+				trigger = { ig:ig_petty_bourgeoisie ?= { is_in_government = yes } }
+				add = 20
+			}
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_in_government = yes } }
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					has_variable = te_inflation
+					var:te_inflation > 5
+				}
+				add = 20
+			}
+		}
+	}
+
+	# --- the Dual Mandate Act -------------------------------------------------
+	option = {
+		name = te_mandate.1.b
+		default_option = yes
+		active_law:lawgroup_financial_regulation ?= {
+			add_amendment = {
+				type = amendment_cb_dual_mandate
+				sponsor = ROOT.ig:ig_trade_unions
+				cooldown = 60
+			}
+		}
+		if = {
+			limit = {
+				has_variable = te_mon_mandate
+				var:te_mon_mandate = 1
+			}
+			custom_tooltip = te_mandate.1.same_tt
+		}
+		else = {
+			custom_tooltip = te_mandate.1.b.tt
+		}
+		# Off Inflation Targeting is a step looser, which lenders price at the
+		# switch.
+		if = {
+			limit = {
+				has_variable = te_mon_mandate
+				var:te_mon_mandate = 4
+			}
+			custom_tooltip = te_mandate.1.b.looser_tt
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_variable = te_mon_mandate_asked }
+				remove_variable = te_mon_mandate_asked
+			}
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				trigger = { ig:ig_trade_unions ?= { is_in_government = yes } }
+				add = 30
+			}
+			modifier = {
+				trigger = { ig:ig_rural_folk ?= { is_in_government = yes } }
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						is_at_war = yes
+						scaled_debt >= 0.5
+					}
+				}
+				add = 20
+			}
+		}
+	}
+}

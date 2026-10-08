@@ -296,8 +296,8 @@ te_mon_delegation_state = {
 
 # Which rule a delegated bank follows (§6). Peg defence can only be in force on
 # a gold standard — te_monetary_update_target falls a country that leaves gold
-# back to price stability on its next pulse — so no branch here has to check the
-# currency law.
+# back to the Dual Mandate on its next pulse — so no branch here has to check
+# the currency law. Also read by te_mandate.1's desc.
 te_mon_mandate_name = {
 	type = country
 	random_valid = no
@@ -307,7 +307,11 @@ te_mon_mandate_name = {
 		localization_key = banking_dash_band_unknown
 	}
 	text = {
-		trigger = { var:te_mon_mandate >= 3 }
+		trigger = { var:te_mon_mandate = 4 }
+		localization_key = banking_dash_mon_mandate_inflation
+	}
+	text = {
+		trigger = { var:te_mon_mandate = 3 }
 		localization_key = banking_dash_mon_mandate_peg
 	}
 	text = {
@@ -315,7 +319,43 @@ te_mon_mandate_name = {
 		localization_key = banking_dash_mon_mandate_growth
 	}
 	text = {
-		localization_key = banking_dash_mon_mandate_price
+		localization_key = banking_dash_mon_mandate_dual
+	}
+}
+
+# The Mandate by Law row (#799), for an independent bank: the act in force, or
+# that there is none yet (te_mandate.1 is asking for one). The Takes Effect In
+# row under it counts down a change the act has ordered.
+te_mon_mandate_act_status = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_dual_act = yes }
+		localization_key = amendment_cb_dual_mandate
+	}
+	text = {
+		trigger = { te_mon_has_it_act = yes }
+		localization_key = amendment_cb_inflation_targeting
+	}
+	text = {
+		localization_key = banking_dash_mon_act_none
+	}
+}
+
+# The mandate buttons' lock line (#799), phrased as a condition either way so
+# IsValidTooltip's tick or cross reads right; the crossed form counts the
+# months left.
+te_mon_mandate_lock_condition = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_mandate_is_locked = yes }
+		localization_key = banking_mon_tt_mandate_locked
+	}
+	text = {
+		localization_key = banking_mon_tt_mandate_free
 	}
 }
 

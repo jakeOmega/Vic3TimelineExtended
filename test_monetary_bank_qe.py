@@ -575,7 +575,7 @@ class TooltipNumbers(unittest.TestCase):
         self.assertEqual(cap, 5.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertIn('#b one point#! of upward pressure on prices for every point it would have cut below the floor', text)
         self.assertIn('at most #b five#!', text)
-        self.assertIn('$banking_dash_mon_mandate_price$ buys only while prices are under its target', text)
+        self.assertIn('$banking_dash_mon_mandate_inflation$ and the $banking_dash_mon_mandate_dual$ buy only while prices are under their target', text)
         self.assertIn('$banking_dash_mon_mandate_growth$ also buys through a slump with prices on target', text)
 
     def test_delegation_tooltip_says_independence_cannot_print(self):

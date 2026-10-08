@@ -696,9 +696,13 @@ MODE_NOTHING = "nothing"
 MODE_PRICE = "price"
 MODE_GROWTH = "growth"
 MODE_PEG = "peg"
-MODES = [MODE_NOTHING, MODE_PRICE, MODE_GROWTH, MODE_PEG]
+# Inflation Targeting (#799): the Dual Mandate's rule ("price" here, the
+# mandate's name before #799) with the cycle lean scaled by
+# te_mon_mandate_inflation_lean_weight, and a credibility bonus.
+MODE_INFLATION = "inflation"
+MODES = [MODE_NOTHING, MODE_INFLATION, MODE_PRICE, MODE_GROWTH, MODE_PEG]
 
-MANDATE_PRICE, MANDATE_GROWTH, MANDATE_PEG = 1, 2, 3
+MANDATE_PRICE, MANDATE_GROWTH, MANDATE_PEG, MANDATE_INFLATION = 1, 2, 3, 4
 
 
 @dataclass
@@ -831,6 +835,8 @@ class State:
     inflation: float = 0.0
     inflation_core: float = 0.0
     inflation_expected: float = 2.0
+    # te_mon_mandate_cred (#799): the credibility adjustment lenders believe
+    mandate_cred: float = 0.0
     inflation_noise: float = 0.0
     inflation_band: int = 2
     inflation_band_applied: int = 0
@@ -1221,6 +1227,8 @@ def mandate_for(cfg: Config, state: State) -> int | None:
         mandate = MANDATE_PRICE
     elif cfg.mode == MODE_GROWTH:
         mandate = MANDATE_GROWTH
+    elif cfg.mode == MODE_INFLATION:
+        mandate = MANDATE_INFLATION
     else:
         mandate = MANDATE_PEG
     # Peg defence is a gold mandate only; otherwise it falls back to price.
@@ -1229,7 +1237,27 @@ def mandate_for(cfg: Config, state: State) -> int | None:
     return mandate
 
 
+def mandate_cred_target(cfg: Config, state: State) -> float:
+    """te_mon_mandate_cred_target (#799)."""
+    mandate = mandate_for(cfg, state)
+    if mandate is None or is_metallic(cfg) or cfg.fin_law == "law_state_owned_banking":
+        return 0.0
+    if mandate == MANDATE_INFLATION:
+        return tuned("cred_it", K.sv("te_mon_mandate_cred_inflation"))
+    # `--tune cred_growth=-0.1` measures the Growth penalty §26 turned down
+    if mandate == MANDATE_GROWTH:
+        return tuned("cred_growth", 0.0)
+    return 0.0
+
+
 def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None:
+    # Belief in the mandate (#799): a loss lands at once, a gain builds.
+    want = mandate_cred_target(cfg, state)
+    if want < state.mandate_cred:
+        state.mandate_cred = want
+    else:
+        state.mandate_cred = min(want, state.mandate_cred + K.sv("te_mon_mandate_cred_build"))
+
     mandate = mandate_for(cfg, state)
     if mandate is None:
         clamp_target(cfg, state, world_rate)
@@ -1251,7 +1279,11 @@ def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None
         work = state.neutral_rate + state.neutral_error + state.inflation_core
         work += (state.inflation_core - anchor) * K.sv("te_mon_mandate_inflation_weight")
         lean = cycle_lean(state)
-        work += lean
+        if mandate == MANDATE_INFLATION:
+            # 4 inflation targeting: the same rule, the lean scaled (#799)
+            work += lean * tuned("it_lean", K.sv("te_mon_mandate_inflation_lean_weight"))
+        else:
+            work += lean
 
         if mandate == MANDATE_GROWTH:
             # 2 growth: lean/2 + r* + error + pi_core + bias + 1.0 x max(0, pi-4)
@@ -1379,6 +1411,9 @@ def monetary_update_inflation(
         c_own = 0.7 if is_cbi(cfg) else (0.4 if cfg.mode != MODE_NOTHING else 0.25)
         if cfg.fin_law == "law_state_owned_banking":
             c_own = 0.15
+        else:
+            # what lenders believe of the mandate (#799), moved in step 2
+            c_own += state.mandate_cred
         cred = max(0.0, 1 - gap_abs / K.sv("te_mon_deanchor_span")) * c_own
         target = state.inflation * (1 - cred) + anchor * cred
         alpha = 1 / 12 if is_cbi(cfg) else 1 / 24

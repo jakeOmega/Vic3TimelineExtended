@@ -94,6 +94,8 @@ NOT_COPIED = {
     "te_mon_arr_provider_pts", "te_mon_arr_standing_pts",
     "te_mon_union_holdouts", "te_mon_union_refusers",
     "te_mon_union_seigniorage_pts", "te_mon_commodity_centre",
+    # The independence law's act, re-read from the winner's own law (#799).
+    "te_mon_mandate_statute",
     # Per-pulse copies of world figures, and the global passes' shares.
     "te_mon_era_base_now", "te_mon_world_rate_now",
     "te_mon_world_inflation_now", "te_mon_world_own_num",
@@ -108,6 +110,9 @@ NOT_COPIED = {
     # each. The winner holds the suspension counter, not the loser's event, so
     # it must be asked afresh rather than inherit "already asked".
     "te_peg_crisis_slump", "te_peg_resume_asked",
+    # te_mandate.1's asked flag (#799), 120 days, on te_peg.3's reasoning: the
+    # winner is asked for its own act if its law needs one.
+    "te_mon_mandate_asked",
 }
 
 # Written by the effect other than through a copy, each for a stated reason:

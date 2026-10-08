@@ -289,6 +289,9 @@ class Extensions(unittest.TestCase):
         # sample never opens the Emergency Liquidity Program, so §25 moves nothing
         # else in it.
         added_since_capture = ('eliq_wind_downs_per_century',)
+        # Cells added since then are dropped too: the inflation-targeting
+        # mandate (#799) adds a mode, and leaves every older cell unchanged.
+        modes_added_since_capture = ('inflation',)
         with tempfile.TemporaryDirectory() as temp:
             result = Path(temp) / 'baseline.json'
             subprocess.run([sys.executable, str(ROOT / 'scripts/analysis/banking_cycle_sim.py'),
@@ -296,7 +299,8 @@ class Extensions(unittest.TestCase):
                             '--points', '0,4,8', '--jobs', '1', '--json', str(result)],
                            env={**os.environ, 'PYTHONHASHSEED': '0'}, check=True,
                            capture_output=True)
-            rows = json.loads(result.read_text(encoding='utf-8'))
+            rows = [row for row in json.loads(result.read_text(encoding='utf-8'))
+                    if row['mode'] not in modes_added_since_capture]
             for row in rows:
                 for key in added_since_capture:
                     row.pop(key)

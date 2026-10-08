@@ -25,7 +25,7 @@
 #    trigger in te_monetary_triggers.txt and a shared effect in
 #    te_monetary_effects.txt, so the tooltip and the click can never disagree.
 #
-# 2. SIX SCOPE-FREE DISPLAY HANDLERS — they answer "which control applies here"
+# 2. THE SCOPE-FREE DISPLAY HANDLERS — they answer "which control applies here"
 #    with `is_shown` alone. Whether a saved scope reaches `is_shown` is thinly
 #    evidenced, and the failure direction here is the bad one: if the scope went
 #    missing, an op-branching `is_shown` would hide the whole monetary block and
@@ -44,11 +44,14 @@
 #   1   policy rate target   step up one point
 #   2   delegation           hand the dial to the central bank
 #   3   delegation           take the dial back
-#   4   mandate              price stability
+#   4   mandate              dual mandate (price stability until #799)
 #   5   mandate              growth
 #   6   mandate              peg defence (gold standard only)
 #   7   monetisation level   step down one level
 #   8   monetisation level   step up one level
+#   9-12 policy rate target  the fine and the far steps (ctrl- and shift-click)
+#   13  recapitalise         treasury -> the bank's vault
+#   14  mandate              inflation targeting (#799)
 # ============================================================================
 
 banking_mon_control_sgui = {
@@ -205,68 +208,32 @@ banking_mon_control_sgui = {
 			}
 		}
 
-		# --- 4 / 5 / 6: the mandate (§6) ---
-		# Pickable while the mandate actually drives the dial — delegated, or
-		# bound by independence. The mandate already in force is deliberately
-		# INVALID: greying it out is the "you are here" marker, and it saves a
-		# parallel highlight path.
+		# --- 4 / 5 / 6 / 14: the mandate (§6, #799) ---
+		# Pickable while the government sets it (under independence an act of
+		# law does, and the buttons are not drawn), while the mandate drives the
+		# dial (delegated), and once the last change is a year old. The mandate
+		# already in force is deliberately INVALID: greying it out is the "you
+		# are here" marker, and it saves a parallel highlight path. The shared
+		# lines live in te_mon_mandate_button_valid.
 		trigger_else_if = {
 			limit = { scope:op = 4 }
-			custom_tooltip = {
-				text = banking_mon_tt_needs_dial
-				te_mon_has_dial = yes
-			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_binds
-				te_mon_mandate_binds = yes
-			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_other
-				OR = {
-					NOT = { has_variable = te_mon_mandate }
-					NOT = { var:te_mon_mandate = 1 }
-				}
-			}
+			te_mon_mandate_button_valid = { MANDATE = 1 }
 		}
 		trigger_else_if = {
 			limit = { scope:op = 5 }
-			custom_tooltip = {
-				text = banking_mon_tt_needs_dial
-				te_mon_has_dial = yes
-			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_binds
-				te_mon_mandate_binds = yes
-			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_other
-				OR = {
-					NOT = { has_variable = te_mon_mandate }
-					NOT = { var:te_mon_mandate = 2 }
-				}
-			}
+			te_mon_mandate_button_valid = { MANDATE = 2 }
 		}
 		trigger_else_if = {
 			limit = { scope:op = 6 }
 			custom_tooltip = {
-				text = banking_mon_tt_needs_dial
-				te_mon_has_dial = yes
-			}
-			custom_tooltip = {
 				text = banking_mon_tt_gold_only
 				te_mon_is_on_gold = yes
 			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_binds
-				te_mon_mandate_binds = yes
-			}
-			custom_tooltip = {
-				text = banking_mon_tt_mandate_other
-				OR = {
-					NOT = { has_variable = te_mon_mandate }
-					NOT = { var:te_mon_mandate = 3 }
-				}
-			}
+			te_mon_mandate_button_valid = { MANDATE = 3 }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 14 }
+			te_mon_mandate_button_valid = { MANDATE = 4 }
 		}
 
 		# --- 7 / 8: monetising the deficit (§11) ---
@@ -355,6 +322,10 @@ banking_mon_control_sgui = {
 			# Peg defence gets its own line: its rule points outside the country,
 			# at the world reference rate the dashboard now shows as a row.
 			te_mon_effect_set_mandate = { MANDATE = 3 TT = banking_mon_mandate_peg_set_tt }
+		}
+		else_if = {
+			limit = { scope:op = 14 }
+			te_mon_effect_set_mandate = { MANDATE = 4 TT = banking_mon_mandate_set_tt }
 		}
 		else_if = {
 			limit = { scope:op = 7 }
@@ -507,7 +478,45 @@ banking_mon_is_delegated = {
 	effect = { }
 }
 
-# Peg defence is a gold-standard mandate only (§6), so the third mandate button
+# Who sets the mandate (#799): the government, from the dashboard's buttons, or
+# under central bank independence an act of law, which the Mandate by Law row
+# shows in their place.
+banking_mon_mandate_by_choice = {
+	scope = country
+	is_shown = {
+		te_mon_has_dial = yes
+		te_mon_is_cbi = no
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_mon_mandate_by_law = {
+	scope = country
+	is_shown = {
+		te_mon_has_dial = yes
+		te_mon_is_cbi = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is the statute's 12-month clock running? The Takes Effect In row.
+banking_mon_mandate_pending = {
+	scope = country
+	is_shown = {
+		te_mon_has_dial = yes
+		te_mon_is_cbi = yes
+		te_mon_mandate_change_pending = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Peg defence is a gold-standard mandate only (§6), so the peg defence button
 # only exists on gold.
 #
 # te_mon_is_on_gold, not the law: a country that has suspended convertibility

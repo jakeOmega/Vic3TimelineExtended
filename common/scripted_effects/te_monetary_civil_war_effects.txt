@@ -66,7 +66,9 @@
 #       from the copied state correctly; copying the loser's tracker without the
 #       loser's modifier is exactly audit F7's bug. Nor the events' 120-day
 #       flags (te_lolr_answer / _paid, te_peg_crisis_slump,
-#       te_peg_resume_asked): they describe an event the loser holds. A winner
+#       te_peg_resume_asked, te_mandate.1's te_mon_mandate_asked): they describe
+#       an event the loser holds. Nor te_mon_mandate_statute, which step 2
+#       re-reads from the winner's own independence law (#799). A winner
 #       still suspended in the last month is asked te_peg.3 afresh at its next
 #       pulse — or, if the engine's own inheritance carried the flag across,
 #       once it lapses.
@@ -268,6 +270,15 @@ te_monetary_inherit_central_bank = {
 	te_mon_cw_take = { VAR = te_policy_rate_target }
 	te_mon_cw_take = { VAR = te_mon_delegated }
 	te_mon_cw_take = { VAR = te_mon_mandate }
+	# The mandate's history with it (#799): the mandate the last pulse settled,
+	# so taking the loser's mandate is not read as a change and charged; the
+	# lock, the statute's clock and the credibility already earned. The
+	# statute itself is re-read from the winner's own law next pulse.
+	te_mon_cw_take = { VAR = te_mon_mandate_last }
+	te_mon_cw_take = { VAR = te_mon_mandate_lock_months }
+	te_mon_cw_take = { VAR = te_mon_mandate_pending }
+	te_mon_cw_take = { VAR = te_mon_mandate_pending_months }
+	te_mon_cw_take = { VAR = te_mon_mandate_cred }
 	te_mon_cw_take = { VAR = te_monetisation_level }
 	te_mon_cw_take = { VAR = te_mon_union_pressing }
 	# Adoption of the bloc currency is taken only if the winner is in a bloc

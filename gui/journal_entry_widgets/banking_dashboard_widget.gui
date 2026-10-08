@@ -31,10 +31,11 @@
 ###
 ### The Monetary Policy section's dial block is answered by a second file,
 ### common/scripted_guis/te_monetary_sguis.txt — one op-parameterised handler
-### (banking_mon_control_sgui, ops 0-8: 0/1 target stepper, 2/3 delegation,
-### 4/5/6 mandate, 7/8 monetisation stepper) plus six scope-free display
-### handlers. That op table is an implicit contract between this file and that
-### one; keep both headers in step.
+### (banking_mon_control_sgui, ops 0-14: 0/1 target stepper, 2/3 delegation,
+### 4/5/6/14 mandate, 7/8 monetisation stepper, 9-12 the fine and far steps,
+### 13 recapitalise) plus scope-free display handlers. That op table is an
+### implicit contract between this file and that one; keep both headers in
+### step.
 
 types banking_dashboard_widget_types
 {
@@ -1888,7 +1889,9 @@ types banking_dashboard_widget_types
 						}
 					}
 
-					### Mandate — which rule a delegated bank follows.
+					### Mandate — which rule a delegated or independent bank follows. The
+					### value takes the width the row has free (164 + 4 + 290 = 458), since
+					### "Inflation Targeting" runs past the value column's 160.
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
@@ -1903,17 +1906,84 @@ types banking_dashboard_widget_types
 							}
 						}
 
-						banking_dash_mon_value = {
-							blockoverride "mon_value_text" {
+						widget = {
+							size = { 290 26 }
+
+							textbox = {
+								parentanchor = left|vcenter
+								autoresize = yes
+								max_width = 290
+								elide = right
+								align = nobaseline
+								using = fontsize_medium
 								text = "banking_dash_mon_mandate_value"
 							}
 						}
 					}
 
-					### Ops 4 / 5 / 6. The mandate already in force is greyed out
-					### by the handler's is_valid — that is the "you are here"
-					### marker — and peg defence only exists on a gold standard.
-					### 150 each (3 x 150 + 2 x 4 = 458), so "Price Stability" fits.
+					### Mandate by Law (#799) — under central bank independence the
+					### mandate is an act on the law, so this row stands where the
+					### mandate buttons would: the act in force, or that there is none
+					### yet. As wide as the Mandate row's value, for the act's name.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = left
+						tooltip = "banking_dash_mon_act_tt"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_law').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_act_label"
+							}
+						}
+
+						widget = {
+							size = { 290 26 }
+
+							textbox = {
+								parentanchor = left|vcenter
+								autoresize = yes
+								max_width = 290
+								elide = right
+								align = nobaseline
+								using = fontsize_medium
+								text = "banking_dash_mon_act_value"
+							}
+						}
+					}
+
+					### The statute's 12 months, counting down, while the bank still runs the
+					### mandate it had before its act (#799).
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = left
+						tooltip = "banking_dash_mon_act_tt"
+						visible = "[GetScriptedGui('banking_mon_mandate_pending').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_pending_label"
+							}
+						}
+
+						banking_dash_mon_value = {
+							blockoverride "mon_value_text" {
+								text = "banking_dash_mon_pending_value"
+							}
+						}
+					}
+
+					### Ops 14 / 4 / 5 / 6, a two-by-two grid: Inflation Targeting and the
+					### Dual Mandate, then Growth and (on a gold standard) Peg Defence (#799).
+					### 226 each (2 x 226 + 4 = 456), so every mandate shows its full name.
+					### The mandate already in force is greyed out by the handler's is_valid
+					### (that is the "you are here" marker), and so is every button for a
+					### year after a change. Not drawn under independence, where an act sets
+					### the mandate (the row above).
 					flowcontainer = {
 						direction = horizontal
 						ignoreinvisible = yes
@@ -1921,21 +1991,39 @@ types banking_dashboard_widget_types
 						parentanchor = hcenter
 						margin_bottom = 2
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+							size = { 226 26 }
+							text = "banking_dash_mon_mandate_inflation"
+						}
 
 						banking_dash_mon_button = {
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-							size = { 150 26 }
-							text = "banking_dash_mon_mandate_price"
+							size = { 226 26 }
+							text = "banking_dash_mon_mandate_dual"
 						}
+					}
+
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+						margin_bottom = 2
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-							size = { 150 26 }
+							size = { 226 26 }
 							text = "banking_dash_mon_mandate_growth"
 						}
 
@@ -1944,7 +2032,7 @@ types banking_dashboard_widget_types
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-							size = { 150 26 }
+							size = { 226 26 }
 							text = "banking_dash_mon_mandate_peg"
 						}
 					}

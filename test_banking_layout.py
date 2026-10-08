@@ -798,6 +798,11 @@ class WidthBudgetTest(unittest.TestCase):
         self.fits("banking_dash_mon_target_value", self.box(body, '"banking_dash_mon_target_value"'))
         self.fits("banking_dash_mon_monetise_value", self.box(body, '"banking_dash_mon_monetise_value"'),
                   number=MONETISE)
+        # The two mandate rows take the width the row has free (#799):
+        # "Inflation Targeting" and "Inflation Targeting Act" run past 160.
+        for key in ("banking_dash_mon_mandate_value", "banking_dash_mon_act_value"):
+            with self.subTest(value=key):
+                self.fits(key, self.box(body, '"%s"' % key))
         value = self.dash[self.dash.index("type banking_dash_condition_value = textbox {"):]
         value = _block_from(value, value.index("{"))
         cell = (int(re.search(r"max_width = (\d+)", value).group(1)),
