@@ -475,16 +475,15 @@ types banking_dashboard_widget_types
 	### Momentum: an arrow per band, from the band word's own edges
 	### (banking_disp_momentum_band_code). The double arrows are Collapsing and
 	### Surging, which the old table also tagged contracting / overheating.
-	### Freefall and Overheating, the bands past the bar's ends, draw them too
-	### until their own art exists (banking_gui_icons.md, placeholders): the
-	### word beside them, in red, tells them apart.
+	### Freefall and Overheating, the bands past the bar's ends, draw the mod's
+	### red triple arrows (banking_gui_icons.md): vanilla's stop at the double.
 	type te_banking_momentum_icons = widget {
 		size = { 32 32 }
 
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
-			texture = "gfx/interface/icons/generic_icons/down_down.dds"
+			texture = "gfx/interface/icons/banking_icons/momentum_freefall.dds"
 		}
 		icon = {
 			size = { 100% 100% }
@@ -514,7 +513,7 @@ types banking_dashboard_widget_types
 		icon = {
 			size = { 100% 100% }
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)7' )]"
-			texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
+			texture = "gfx/interface/icons/banking_icons/momentum_overheating.dds"
 		}
 	}
 

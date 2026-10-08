@@ -1,12 +1,12 @@
 # Banking GUI: Icons
 
-The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. The tool rows draw one more icon, beside each tool's point cost. The icons started as placeholders in the style-guide pass: vanilla timed-modifier and generic icons, requested by the owner's first play-test (2026-09-29). PR #586 replaced them with 26 icons of the mod's own, all in `gfx/interface/icons/banking_icons/`. The momentum arrows and the crash-risk badge stay vanilla's, as the list allowed. Momentum's two outer bands, added later, still borrow vanilla's double arrows (below).
+The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. The tool rows draw one more icon, beside each tool's point cost. The icons started as placeholders in the style-guide pass: vanilla timed-modifier and generic icons, requested by the owner's first play-test (2026-09-29). PR #586 replaced them with 26 icons of the mod's own, all in `gfx/interface/icons/banking_icons/`. The momentum arrows and the crash-risk badge stay vanilla's, as the list allowed. Momentum's two outer bands, added later, have red triple arrows of the mod's own (below).
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/banking_dashboard_widget.gui`. The cycle's three readings have a type each, `te_banking_phase_icons`, `te_banking_momentum_icons` and `te_banking_bubble_icons`, with the crash-risk badge in `te_banking_crash_risk_badge`. The overview's cells draw them at 32 px, and the top bar draws the phase's at 32 px too (`te_banking_topbar_readings`, instanced by `gui/topbar.gui`), so the two show the same art. The stance, price-band and budget icons are in `te_banking_overview_panel` itself, and the cost icon in `banking_dash_policy_row`'s `cost_icon` block. No script reads the paths. Two things pick an icon:
 - The cycle phase uses the `banking_dash_phase_*` scripted GUI that also picks its coloured word.
 - The other readings use a display code, `banking_disp_<reading>_band_code` in `common/script_values/banking_overview_display_values.txt`. Each code repeats its band word's customizable-localization tests, so the icon and the word cannot disagree.
 
-`BankingIconsTest` in `test_banking_layout.py` holds each code to its file and fails on any placeholder left outside momentum's two listed below. `IconsDocTest` holds each row below to the code. `BandCodeTest` holds each code to its word.
+`BankingIconsTest` in `test_banking_layout.py` holds each code to its file and fails on any placeholder. `IconsDocTest` holds each row below to the code. `BandCodeTest` holds each code to its word.
 
 **Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`), under the banking categories of `icon_prompts.py` that PR #586 added. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
@@ -30,19 +30,19 @@ The list asked for Panic as a crowd-dark doorway with an arrow crashing through 
 
 ## Overview row 1: momentum
 
-Vanilla's arrows, kept. 32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The double arrows mark the two bands the old table tagged "(contracting)" and "(overheating)". Seven bands since 2026-10-07: Freefall and Overheating are momentum past the bar's ends (±5), where the next-month ranges under the overview have no outer edge.
+Vanilla's arrows, kept, with a red triple arrow of the mod's own at each end. 32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The double arrows mark the two bands the old table tagged "(contracting)" and "(overheating)". Seven bands since 2026-10-07: Freefall and Overheating are momentum past the bar's ends (±5), where the next-month ranges under the overview have no outer edge.
 
 | Code | Band | Shows | File |
 |---|---|---|---|
-| 1 | Freefall | **placeholder:** vanilla's double down arrow, as Collapsing | `gfx/interface/icons/generic_icons/down_down.dds` |
+| 1 | Freefall | a red triple down arrow, faceted as vanilla's | `gfx/interface/icons/banking_icons/momentum_freefall.dds` |
 | 2 | Collapsing | vanilla's double down arrow | `gfx/interface/icons/generic_icons/down_down.dds` |
 | 3 | Falling | vanilla's down arrow | `gfx/interface/icons/generic_icons/trend_down.dds` |
 | 4 | Steady | vanilla's level arrow | `gfx/interface/icons/generic_icons/trend_nochange.dds` |
 | 5 | Rising | vanilla's up arrow | `gfx/interface/icons/generic_icons/trend_up.dds` |
 | 6 | Surging | vanilla's double up arrow | `gfx/interface/icons/generic_icons/trend_upup.dds` |
-| 7 | Overheating | **placeholder:** vanilla's double up arrow, as Surging | `gfx/interface/icons/generic_icons/trend_upup.dds` |
+| 7 | Overheating | a red triple up arrow, faceted as vanilla's | `gfx/interface/icons/banking_icons/momentum_overheating.dds` |
 
-**The two placeholders.** Vanilla has no arrow past the double, so Freefall and Overheating borrow their neighbours' and the red word beside them tells them apart. Final art, for the icon pipeline (`banking_state`, drawn marks only, no FLUX part): a triple arrow in vanilla's style, down in red for Freefall (`gfx/interface/icons/banking_icons/momentum_freefall.dds`) and up in red for Overheating (`gfx/interface/icons/banking_icons/momentum_overheating.dds`). If a triple arrow does not match vanilla's five beside it, all seven can move to drawn arrows together. Swapping one in is the texture line in `te_banking_momentum_icons`, this row and `MOMENTUM_ICONS` in `test_banking_layout.py`.
+**The triple arrows.** Vanilla has no arrow past the double, so Freefall and Overheating have their own: three heads stacked, faceted as vanilla's are (a lit left face, a shaded right one, a dark rim), in red. They are drawn, not rendered: the icon pipeline's `banking_state` entries `momentum_freefall` and `momentum_overheating`, a `trend` mark on a bare canvas (`icon_render.trend_arrow`). Vanilla's five beside them are not one set either (a bronze double chevron, orange and lime heads, a yellow dot, a green double), so the red pair reads as the extremes rather than as strangers. If they look out of place in game, all seven can move to drawn arrows together.
 
 ## Overview row 1: bubble pressure
 
