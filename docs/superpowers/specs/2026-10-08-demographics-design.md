@@ -86,6 +86,8 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | Wealth Concentration | **One score, kept per state**: how much of the state's property belongs to a few great fortunes rather than many owners. The national figure is weighted by ownership levels: owner buildings, self-owned buildings and a share of bureaucrats for state property (§4.2) |
 | Migration profile | **Organic, not by date**: from the destination's jobs, transport technology, women's rights at the origin and destination, and crises at the origin (§2.5) |
 | Late-era display | **A toggle between calendar and biological age** on the pyramid from era 11 (§1) |
+| Cohort ring | **To about age 150 from 1836**, provisional; empty slots are skipped until people live that long (§1) |
+| State property in the national Wealth Concentration | **The country's state-owned levels × the state's share of its bureaucrats × 0.1** (§4.2) |
 | Coercive pronatalism | **No separate mechanic.** The pro-natalist law's description stays open: "through propaganda, incentives, or even coercion". Players read what a given state does into it (§8.1) |
 | Population measures | **GUI buttons, not amendments**: a measure is a policy choice made within a law, not a new legal framework. **The catalogue in §8.1 stands, national only for now**; decree versions may come later (§8.1) |
 | Pension age | **A three-way setting** (Early, Standard, Raised) under Old Age Pension, not amendments (§8.2) |
@@ -119,7 +121,7 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 
 | Stat | Scope | Source | Shown as |
 |---|---|---|---|
-| **Age and sex**: about 20 five-year birth cohorts, each holding its women and its men | state; the country's is the sum | modelled (§2) | population pyramid, men left and women right |
+| **Age and sex**: birth cohorts (one or five years wide, §1) reaching about age 150, each holding its women and its men | state; the country's is the sum | modelled (§2) | population pyramid, men left and women right |
 | Derived: median age, dependency ratio, working-age share, sex balance | state, country | from the cohorts | table, with a trend arrow |
 | **Fertility**: children per woman, with its wealth, education and technology terms | state | modelled from engine inputs (§2.3) | table; the terms on hover |
 | **Mortality**: life expectancy at birth and at 65, infant mortality, with the five causes' terms | state | modelled from engine inputs (§2.4) | table; the terms on hover |
@@ -153,33 +155,35 @@ group born in the same five years, with nobody dying:
 - migrants and war dead come out of the cohorts at the right ages (§2.5);
 - the whole ring is scaled to the engine's population.
 
-Every five years the open cohort closes and a new one opens. The oldest cohort, at about 95, folds into a "95 and
-over" pool, and its slot is reused. The pool also keeps the mean age of its members, so its death rate stays right
-however long people live.
+Every five years the open cohort closes and a new one opens. The ring runs to about age 150 from 1836 (owner,
+provisional). The oldest cohort, at about 150, folds into a "150 and over" pool, and its slot is reused. The pool also
+keeps the mean age of its members, so its death rate stays right however long people live. Before the late eras,
+slots above about 95 hold nobody and are skipped.
 
-**Cost.** Five-year cohorts take about 20 slots, each holding women and men: about 40 variables a state. One-year
-cohorts take about 100 slots and 200 variables. Either way the work is arithmetic, not pop walks (§11.3), once a year;
+**Cost.** To age 150, five-year cohorts take about 30 slots, each holding women and men: about 60 variables a state.
+One-year cohorts take about 150 slots and 300 variables. Until lifespans pass 95, only about 20 or 100 of those slots
+are occupied, and the empty ones are skipped. Either way the work is arithmetic, not pop walks (§11.3), once a year;
 the Demography mod updates 17 bands monthly. The slots are calls of one scripted effect with `$SLOT$`, written by a
 generator (the mod's idiom for repeated script). The slot for a cohort is (first birth year ÷ the width) mod the
 number of slots.
 
-**Display.** The pyramid draws fixed five-year age bands: 0–4, 5–9 … 85+. Each cohort straddles two of them in most
+**Display.** The pyramid draws fixed five-year age bands: 0–4, 5–9 … 85+, with the top band moving up as lifespans
+grow. Each cohort straddles two of them in most
 years, so its people are split between the two in proportion. That happens in the display only; the model never
 splits a cohort.
 
 **Cohort width is a generator parameter (owner, 2026-10-08: measure, then choose).**
-- **One-year cohorts** (about 100 slots, 200 variables a state) give single-year ages: a pyramid with no display split,
+- **One-year cohorts** (about 150 slots, 300 variables a state) give single-year ages: a pyramid with no display split,
   and booms and wars visible to the year. The owner would like them if they are cheap, but not at a real slowdown.
-- **Five-year cohorts** (about 20 slots) age exactly too, and nothing in §7 needs a finer age.
+- **Five-year cohorts** (about 30 slots) age exactly too, and nothing in §7 needs a finer age.
 - **Only the generator changes between them.** It writes one call of the slot effect per slot, a ring of N slots and
   rate lookups by age. The script logic is the same for any width W: births go into the open cohort, which closes
   every W years.
-- **The benchmark** (§14 Q9) picks W. It times the yearly cohort step in every state, with 20 slots and with 100, in a
+- **The benchmark** (§14 Q9) picks W. It times the yearly cohort step in every state, with 30 slots and with 150, in a
   1950s and a 2050s save.
 - **Decision rule:** one-year cohorts if the extra time per year, spread over the twelve monthly pulses (§11.3), is
   negligible against a month's tick. Otherwise five-year.
-- **The late eras scale the same way:** biological age adds one variable a slot, and a ring to age 150 is about 150
-  one-year slots or 30 five-year ones.
+- **The late eras:** from era 11, biological age adds one variable a slot.
 
 ### Ages past 95 and the late eras (the owner's question)
 
@@ -195,8 +199,8 @@ how old their body is, not the year they were born.
 - **What reads it.** Every age-specific rate reads biological age: the five causes of death, fertility, and the
   workforce rule's 15–64 and over-65 parts (§7).
 - **What happens.**
-  - The pool fills with people who are calendar-old and biologically middle-aged. The pyramid's top bar grows into the
-    late game's striking image.
+  - The top slots fill with people who are calendar-old and biologically middle-aged. The calendar pyramid turns into
+    a column, the late game's striking image.
   - The panel adds "Over 100" and the mean biological age.
   - From era 11 a toggle on the pyramid switches it between calendar age and biological age (owner, 2026-10-08). It is
     a client-side GUI value (`GetVariableSystem`), so it needs no script. In biological age, each cohort's bar sits at
@@ -207,14 +211,13 @@ how old their body is, not the year they were born.
   becomes another form of inequality for Wealth Concentration to read. This is one switch on the ageing rate per
   stratum share.
 
-**Why not extra slots switched on in era 10 or 11.**
+**Why the ring is long from the start rather than extended in era 10 or 11.**
 - **Remapping.** A cohort's slot is (first birth year ÷ 5) mod the ring's size. Changing the size mid-game remaps every
   cohort, so slots can't be switched on later without a migration step.
 - **Little gain.** Calendar detail past 95 changes no effect once rates read biological age. It only refines the
   pyramid's top.
-- **If that display matters:** give the ring about 30 slots, to age 150, from 1836. The extra slots sit empty, and are
-  skipped, until someone lives that long. The cost is 20 more variables a state and nothing else until they fill (§13
-  Q6).
+- **So the ring runs to about 150 from 1836** (owner, provisional). The extra slots sit empty, and are skipped, until
+  someone lives that long. The benchmark (§14 Q9) prices them.
 
 ## 2. The age model
 
@@ -491,8 +494,14 @@ property is held:
 - each level of a Financial District, Manor House or company headquarters (`building_financial_district`,
   `building_manor_house`, `building_company_headquarter`, `building_company_regional_headquarter`) counts 1;
 - each level of a self-owned building counts 1;
-- state-owned property counts a share of the state's bureaucrats, since the government holds it through its
-  administration. The share is set in calibration.
+- **state-owned property** goes where the government's administrators are (owner, 2026-10-08). The country's total
+  state-owned levels × the state's share of the country's bureaucrats × 0.1. A capital with half the country's
+  bureaucrats gets 0.05 × the country's state-owned levels.
+  - The 0.1 keeps the average leaning to private and cooperative property in a mixed economy.
+  - In a command economy, where nearly everything is state-owned, these weights are nearly all there is, so the
+    average still works.
+  - The state-owned levels come from the building walk (`country_ownership_fraction` × levels, summed over the
+    country), and the bureaucrats from the pop walk.
 
 The panel shows the target's terms as bars (style guide rule 5) and a map mode.
 
@@ -856,7 +865,7 @@ One yearly state effect:
 - **one pop walk**, for the Gini sums, literacy, the soldier share and the agrarian share. It replaces inheritance's
   agrarian-share walk, so the mod walks pops once a year per state, not twice;
 - **one building walk**, for the ownership shares (§4.2);
-- **arithmetic on about 40 cohort variables**;
+- **arithmetic on the occupied cohort slots** (§1: about 20 or 100 before the late eras);
 - **the GUI reads variables, never walks** (`scripting_best_practices.md`: GUI and loc re-evaluate every frame).
 
 If the profiler shows a January spike, stagger states over the twelve monthly pulses by state id.
@@ -901,9 +910,9 @@ to be sane.
 
 ## 13. Still open
 
-1. **The bureaucrats' share** that stands for state-owned property in the national Wealth Concentration (§4.2).
-2. **Ages past 95 (§1):** biological age with a ring to about 100 (proposed), or a ring to about 150 from 1836 for a
-   finer pyramid top in the late eras? The benchmark (§14 Q9) prices both.
+No design question is open. Two answers wait on the benchmark (§14 Q9):
+- **Cohort width:** one-year cohorts if cheap, otherwise five-year.
+- **The ring to about age 150:** provisional; the benchmark prices its empty slots.
 
 ## 14. Engine checks before building
 
@@ -929,7 +938,8 @@ to be sane.
    - mirrored `progressbar` pyramids.
 9. **Cost, and the cohort width:**
    - **Setup:** a throwaway benchmark (generated script, a console event) runs the yearly cohort step in every state
-     with 20 slots and with 100, plus the pop and building walks, in a 1950s and a 2050s save.
+     with 30 slots and with 150 (the ring to about age 150, with and without its top slots occupied), plus the pop
+     and building walks, in a 1950s and a 2050s save.
    - **Read:** the profiler (`scripting_best_practices.md`: profiler commands), the step's time against a month's tick,
-     and save-file growth from 200 variables a state.
+     and save-file growth from up to 300 variables a state (more with biological age).
    - **Decides:** the cohort width (§1) and whether the stagger over monthly pulses (§11.3) is needed.
