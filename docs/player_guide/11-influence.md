@@ -404,13 +404,16 @@ months). With nothing running it decays by 1.5 a month. An exposed operation
 costs its network 25.
 
 A strong network gives new operations there a head start of up to five months
-(strength ÷ 20) and takes up to 5 points off their detection risk. From strength
-50 it reports the target's intelligence capacity and technology count beside
-yours, and from 75 how many covert operations the target runs against you: the
-only way to learn of operations your counterintelligence has not caught, though
-it never says which. Each network's row shows its strength as a number and a
-bar, with an arrow for growing, decaying or at full strength; hover the strength
-for what the report shows at 50 and at 75. In the space race, the same two tiers
+(strength ÷ 20) and takes up to 5 points off their detection risk. It also adds
+up to 10 points (strength ÷ 10) to the detection risk of every operation that
+country runs against you, because your agents inside its service hear of them;
+the network's row shows how many points. From strength 50 it reports the
+target's intelligence capacity and technology count beside yours, and from 75
+how many covert operations the target runs against you: the only way to learn
+of operations your counterintelligence has not caught, though it never says
+which. Each network's row shows its strength as a number and a bar, with an
+arrow for growing, decaying or at full strength; hover the strength for what the
+report shows at 50 and at 75. In the space race, the same two tiers
 narrow your estimate of that country's progress on a milestone from ±25% of the
 goal to ±10% and ±5% (see [The space milestone
 panel](16-space.md#the-space-milestone-panel)).
@@ -440,9 +443,10 @@ networks grow 15% faster. Falling below a tier never ends a running operation.
 
 Each operation has its own monthly Detection Risk, shown on its row (hover
 it for how it is made up). It starts at 10%, falls with your Funding Stealth and
-your network in the target, and rises with priority and with the target's
+your network in the target, and rises with priority, with the target's
 counterintelligence (its capacity plus its defense against that kind of
-operation, compared to yours; up to +20 points). Your Efficiency Factor, from
+operation, compared to yours; up to +20 points) and with any network the target
+holds inside your country (up to +10 points). Your Efficiency Factor, from
 the Covert Operation Efficiency modifier that technologies, laws and the
 Ministry of Intelligence and Security give, then cuts it by up to four fifths,
 within a range of 0.1% to 50%. The Operations section lists the base risk, your

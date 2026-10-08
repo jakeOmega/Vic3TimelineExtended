@@ -171,6 +171,15 @@ covert_expulsion_relations = -25
 # Raw detection points removed per point of strength (-5 at full strength),
 # before covert efficiency like the rest of the raw score.
 covert_net_detect_factor = 0.05
+# Counterintelligence through a network: raw detection points ADDED to an
+# operation per point of strength of the TARGET's network inside the
+# operator's own country (+10 at full strength), before covert efficiency.
+# The defender's agents inside the operator's service hear of the operation.
+# Twice the cover factor on purpose: a penetrated service is the decisive
+# counterintelligence advantage, and it is the one term that lifts a fully
+# funded operation (raw -9 against an equal) back off the floor. Two services
+# that hold full networks inside each other each run +5 on balance.
+covert_net_catch_factor = 0.1
 # Months of head start a new operation gets per point of strength, rounded.
 # The cap stays below the 6-month establishing threshold, so phase 1 is never
 # skipped: a full network puts a new operation one month from establishing.
@@ -423,7 +432,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), operation priority, attacker efficiency
-# Formula: raw = base - funding_reduction - network + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
+# Formula: raw = base - funding_reduction - network + target_defense_penalty + their_network + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -461,6 +470,10 @@ covert_operation_detection_chance = {
 	subtract = covert_net_detect_reduction
 	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
+	# ...and so does the target's network inside our own service, which
+	# hears of the operation. Staged per operation by
+	# covert_op_refresh_detection; 0 without one.
+	add = covert_net_catch_penalty
 	# Priority: a busier operation is more exposed (before efficiency, so
 	# better tradecraft still hides most of it)
 	add = covert_op_priority_detect_penalty
@@ -1221,6 +1234,39 @@ covert_net_detect_reduction = {
 covert_net_detect_reduction_max_display = {
 	value = covert_net_max
 	multiply = covert_net_detect_factor
+}
+
+# Raw detection points the target's network inside the operator adds: the
+# defender's agents in the operator's service hear of the operation.
+# var:iw_tgt_net_strength_staging is staged on the operator by
+# covert_op_refresh_detection (0 when the target holds no network here).
+# Scope: operator country
+covert_net_catch_penalty = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_tgt_net_strength_staging }
+		add = var:iw_tgt_net_strength_staging
+		multiply = covert_net_catch_factor
+	}
+}
+
+# Display: the most a full network adds to its operator's chance of catching
+# its target's operations against the operator.
+covert_net_catch_max_display = {
+	value = covert_net_max
+	multiply = covert_net_catch_factor
+}
+
+# Display, on the network row: what this network adds to the raw detection
+# score of every operation its target runs against the operator.
+# Scope: network container
+covert_net_catch_display = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_net_strength }
+		add = var:iw_net_strength
+		multiply = covert_net_catch_factor
+	}
 }
 
 # The intelligence tier this network's strength reaches (slice 7): 0 nothing,

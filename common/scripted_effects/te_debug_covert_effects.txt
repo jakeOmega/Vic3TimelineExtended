@@ -263,6 +263,46 @@ te_debug_covert_hostile_cultivate = {
 	te_debug_covert_refresh_net_intel = yes
 }
 
+# Every country we run an operation against gets a network of $VALUE$ strength
+# inside us (network counterintelligence), so each operation row's detection
+# line rises at once by covert_net_catch_penalty (unless the row sits on the
+# floor even then: at funding 5 with a full network of our own there, raw is
+# -4 — step funding down first). Goes through the shipping covert_net_create
+# in the target's own scope, like a retaliation seed. A target without the
+# journal entry never ticks the network, so it neither decays nor is reaped:
+# run this again with VALUE = 0 to neutralise it. Then re-stages our detection.
+# Parameters: $VALUE$ = 0 .. covert_net_max
+# Scope: country
+te_debug_covert_hostile_networks = {
+	save_scope_as = te_debug_covert_victim
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					add_to_temporary_list = te_debug_covert_net_hosts
+				}
+			}
+		}
+		every_in_list = {
+			list = te_debug_covert_net_hosts
+			covert_net_create = { TARGET = scope:te_debug_covert_victim }
+			if = {
+				limit = { has_variable_list = iw_nets }
+				random_in_list = {
+					variable = iw_nets
+					limit = { var:iw_target ?= scope:te_debug_covert_victim }
+					set_variable = { name = iw_net_strength value = $VALUE$ }
+					covert_net_clamp = yes
+				}
+			}
+		}
+	}
+	covert_ops_sync_all = yes
+}
+
 # Refresh every network's intelligence report now (slice 7), without a tick.
 # Re-saves scope:iw_net_operator first: planting an operation from another
 # country's scope (above) re-saves it as that country.

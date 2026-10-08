@@ -442,6 +442,23 @@ covert_warfare.2 = {
 				trigger = { any_rival_country = { THIS = scope:iw_exposed_by } }
 				add = 5
 			}
+			# The expulsion is answered in kind, so it would cost 25 of our
+			# own network inside their service, the one that helps catch
+			# their operations against us (covert_net_catch_penalty). A
+			# service strong enough there to report on theirs (intelligence
+			# tier 1, the code covert_net_clamp writes) keeps quiet instead.
+			modifier = {
+				trigger = {
+					has_variable_list = iw_nets
+					any_in_list = {
+						variable = iw_nets
+						var:iw_target ?= scope:iw_exposed_by
+						has_variable = iw_net_intel_tier
+						var:iw_net_intel_tier >= 1
+					}
+				}
+				factor = 0.2
+			}
 		}
 	}
 }

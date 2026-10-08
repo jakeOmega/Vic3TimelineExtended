@@ -148,10 +148,11 @@ covert_op_destroy = {
 
 # Recompute the target and detection data the JE shows for one operation.
 # covert_operation_detection_chance reads target_max_ic / target_type_defense /
-# iw_priority_staging / iw_net_strength_staging off the operator, so they are
-# staged there first. The priority and the network strength are copied with
-# PREV.var: from inside the operator (PREV is the container being read); a
-# scope:<container>.var: chain is avoided on purpose.
+# iw_priority_staging / iw_net_strength_staging / iw_tgt_net_strength_staging
+# off the operator, so they are staged there first. The priority and both
+# network strengths (ours inside the target, the target's inside us) are
+# copied with PREV.var: from inside the operator (PREV is the container being
+# read); a scope:<container>.var: chain is avoided on purpose.
 # Parameters: $DEFENSE_MOD$ = type-specific defense modifier
 # Scope: operation container; scope:iw_operator = operator country
 covert_op_refresh_detection = {
@@ -184,6 +185,21 @@ covert_op_refresh_detection = {
 					scope:iw_operator = { set_variable = { name = iw_net_strength_staging value = PREV.var:iw_net_strength } }
 				}
 			}
+			# The target's network inside US: its agents in our service hear
+			# of the operation. Looked up in the target's own iw_nets, zeroed
+			# first for the same reason as above. A target without the journal
+			# entry has no networks, and the lookup misses.
+			set_variable = { name = iw_tgt_net_strength_staging value = 0 }
+			scope:iw_det_tgt = {
+				if = {
+					limit = { has_variable_list = iw_nets }
+					random_in_list = {
+						variable = iw_nets
+						limit = { var:iw_target ?= scope:iw_operator }
+						scope:iw_operator = { set_variable = { name = iw_tgt_net_strength_staging value = PREV.var:iw_net_strength } }
+					}
+				}
+			}
 			set_variable = { name = iw_detect_staging value = covert_operation_detection_chance }
 		}
 	}
@@ -194,6 +210,7 @@ covert_op_refresh_detection = {
 		remove_variable = iw_detect_staging
 		remove_variable = iw_priority_staging
 		remove_variable = iw_net_strength_staging
+		remove_variable = iw_tgt_net_strength_staging
 	}
 }
 
@@ -423,7 +440,9 @@ covert_net_clamp = {
 # not the target's own iw_ops, whose sync only runs while the target's journal
 # entry is active; every phase counts. It is the ONE place the mod tells a
 # country about hostile operations it has not caught (see covert_op_burn):
-# earned by holding a strong network inside the other service.
+# earned by holding a strong network inside the other service. (The OPERATOR
+# can infer the other way round, from a detection risk higher than the inputs
+# its row prints: covert_net_catch_penalty is in iw_detect but never printed.)
 # Called from covert_nets_sync step 3, straight after the strength write, and
 # from the console harness. Never from a tooltip-walked path: it relies on
 # saved scopes. Both saved scopes are re-saved before use on every call, so a
