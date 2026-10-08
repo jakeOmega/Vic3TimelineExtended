@@ -1,6 +1,6 @@
 ﻿carbon_capture_and_storage = {
 	era = era_10
-	texture = "gfx/interface/icons/invention_icons/clean_energy_technologies.dds"
+	texture = "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds"
 	category = production
 	unlocking_technologies = { clean_energy_technologies }
 	ai_weight = { value = 1 }

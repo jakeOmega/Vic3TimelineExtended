@@ -643,7 +643,7 @@ company_basic_biotechnology = {
 }
 
 company_infrastructure = {
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/company_infrastructure.dds"
 	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
 
 	uses_dynamic_naming = yes
