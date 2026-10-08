@@ -41,7 +41,8 @@ icon), "rotate" (degrees) and, for a part, "tint". The system panels' states
 "damage" "crack"|"split" (FLUX will not break things), "tilt" (a lean about
 its foot), "turn" (about its centre), "base" {"scale", "at"} (the emblem
 shrunk and placed), and "disc" in place of "from": drawn outright on a disc
-of its own colours (the warming tiers). "solid": True fills back any hole the cut-out left inside the
+of its own colours (the warming tiers). "drawn": True in place of either is
+a bare canvas holding only its drawn marks (banking momentum's triple arrows). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
 objects with no real holes. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
@@ -352,6 +353,19 @@ CATEGORIES = {
                     "lower third, no objects, no spacecraft, stylized hand-painted video game background "
                     "art with visible brush strokes")),
         style="{subject}, one chunky readable object, " + PAINTED),
+    # The sidebar's small buttons (main_hud/*_btn.dds, 76 px, drawn at 42x40 by
+    # sidepanel_button_small): vanilla's are painted single objects on
+    # transparency (a book, a globe, coins), spanning ~0.7 of the side. The
+    # Timeline Extended window's launcher is the mod's only one
+    # (docs/systems/te_systems_window_gui_icons.md); its brief asked for gold
+    # line art, but vanilla's buttons are painted, so it is painted too.
+    # main_hud also holds the top bar and speedometer art, so grading follows
+    # event_icons' painted objects instead.
+    "sidebar_button": dict(
+        folder="main_hud", root="gfx/interface", size=76, mode="cutout", fill=0.74, grade_strength=0.5,
+        grade_folder="event_icons", neighbours="../main_hud",
+        gui=("gui/te_systems_window.gui",),
+        style="{subject}, one chunky readable object, " + PAINTED),
     # The UN's journal and Diplomacy-tab GUI (docs/systems/un_gui_icons.md):
     # icons that belong to no game entity, only to a `texture =` line in a .gui
     # file, so the category is GUI-hosted (`gui`): each entry names the
@@ -645,6 +659,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "enforce_emissions_reduction": {"subject": "a factory chimney with a big green cork stopper in its top", "seed": 0},
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
+        # The monetary articles, on law icons until now.
+        "currency_peg": {"subject": "a big gold coin and a smaller silver coin joined by a short heavy brass chain, both stamped with a small star", "seed": None},
+        "imposed_currency_peg": {"subject": "a small copper coin chained to a big gold coin by a heavy iron chain with a closed iron padlock on it", "seed": None},
+        "swap_line": {"subject": "two short stacks of plain coins side by side, one gold and one silver, with one gold coin and one silver coin swapped on top of the other stack", "seed": None},
+        "lender_of_last_resort": {"subject": "a red and orange striped life ring buoy around a short stack of plain gold coins stamped with a small star", "seed": None},
+        "debt_receivership": {"subject": "a thick brown leather ledger book bound shut with a heavy iron chain and a closed iron padlock", "seed": None},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -911,6 +931,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_littoral_defense": {"subject": "a squat round stone coastal gun tower on a rocky shore, a small fast patrol boat beside it", "seed": 1},
         # s1 is retouched: hull number, bow emblems and truck lettering painted out.
         "law_auxiliary_fleet": {"subject": "a big sealift cargo ship with army trucks and crates lashed on its deck", "seed": 1},
+        # Resource Transition (#660): subjects from the spec's placeholders audit.
+        "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": None},
+        "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": None},
+        "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": None},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1104,6 +1128,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
     },
+    # The Timeline Extended window's launcher, on vanilla's Journal button until now.
+    "sidebar_button": {
+        "te_systems_window_btn": {"subject": "a small brass hourglass, its upper glass bulb holding a blue globe of the Earth with green continents, its lower bulb a small silver rocket pointing up", "seed": None,
+                                  "now": "gfx/interface/main_hud/journal_btn.dds"},
+    },
     # The UN's GUI icons (docs/systems/un_gui_icons.md). Keys are the file
     # names. `now` is the vanilla placeholder the .gui drew before them. Symbols on the blue disc are warm or light, for contrast.
     "un_disc": {
@@ -1131,6 +1160,13 @@ ICONS: dict[str, dict[str, dict]] = {
                        "now": f"{_GI}/institution_icons/police.dds"},
         "agency_cppnm": {"subject": "a heavy closed brass padlock with a black-and-yellow radiation trefoil on its body", "seed": 0,
                          "now": f"{_GI}/goods_icons/explosives.dds"},
+        # Phase 7 agencies, until now byte copies (CCD of UNESCO, TPNW of IAEA, INCB of WHO).
+        "agency_ccd": {"subject": "a wooden artist's palette with thick blobs of red, yellow, blue and green paint", "seed": None,
+                       "now": f"{_GI}/goods_icons/fine_art.dds"},
+        "agency_tpnw": {"subject": "a fat dark grey aerial bomb with stubby tail fins lying on its side, wrapped in a heavy iron chain", "seed": None,
+                        "now": f"{_GI}/goods_icons/electricity.dds"},
+        "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": None,
+                        "now": f"{_GI}/institution_icons/health_service.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
         # War, condemned: the mandate's crossed swords under vanilla's red cross.
         # A lone sword was too thin at 40 px, and a gauntlet read as a mug.
@@ -1173,7 +1209,29 @@ ICONS: dict[str, dict[str, dict]] = {
                ("heritage", "unesco", f"{_GI}/goods_icons/fine_art.dds"),
                ("space", "unoosa", f"{_GI}/goods_icons/aeroplanes.dds"),
                ("law_of_sea", "itlos", f"{_GI}/goods_icons/merchant_marine.dds"),
-               ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"))},
+               ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"),
+               ("cultural_diversity", "ccd", f"{_GI}/goods_icons/fine_art.dds"),
+               ("nuclear_ban", "tpnw", f"{_GI}/goods_icons/electricity.dds"),
+               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
+        # Phase 7 topics that are no agency's, until now byte copies of older topics.
+        "topic_court_referral": {"subject": "a polished brass balance scale, a small rolled tan map tied with red cord lying in one pan", "seed": None,
+                                 "now": f"{_GI}/institution_icons/police.dds"},
+        "topic_arms_embargo": {"subject": "a big dark olive-green artillery shell standing upright, wrapped in a heavy iron chain with a closed padlock", "seed": None,
+                               "now": f"{_GI}/alert_icons/blockaded.dds"},
+        "topic_credentials": {"subject": "a closed brown leather diplomatic folder with a round gold seal on its cover and a red ribbon", "seed": None,
+                              "now": f"{_GI}/alert_icons/is_losing_rank.dds"},
+        "topic_standing_force": {"subject": "three empty light-blue steel army helmets in a row, seen from the side", "seed": None,
+                                 "now": f"{_GI}/goods_icons/small_arms.dds"},
+        "topic_observer_request": {"subject": "a pair of black binoculars resting on top of a small dark wooden box with a slot in its lid", "seed": None,
+                                   "now": f"{_GI}/institution_icons/social_security.dds"},
+        "topic_food_reserve": {"subject": "a tall round grey steel grain silo with a domed roof, a heap of golden wheat grain at its foot", "seed": None,
+                               "now": f"{_GI}/goods_icons/groceries.dds"},
+        "topic_ceasefire": {"subject": "a small black iron field cannon with a leafy green olive branch sticking out of its muzzle", "seed": None,
+                            "now": f"{_GI}/alert_icons/land_invasion.dds"},
+        "topic_development_fund": {"subject": "a short stack of plain gold coins with a green seedling sprouting from the top coin", "seed": None,
+                                   "now": f"{_GI}/goods_icons/groceries.dds"},
+        "topic_referendum": {"subject": "a small dark wooden box with a slot in its lid and a folded tan paper slip half inside the slot", "seed": None,
+                             "now": f"{_GI}/alert_icons/secession.dds"},
     },
     # Authority tiers (32 px): the colonnade gains columns and finer metal.
     "un_tier": {
@@ -1589,6 +1647,15 @@ ICONS.update({
                               marks=[{"draw": "arrow", "dir": "up", "colour": "red", "double": True, "scale": 0.58},
                                      {"part": "banking_part/coin", "at": (0.2, 0.86), "scale": 0.22},
                                      {"part": "banking_part/coin", "at": (0.36, 0.9), "scale": 0.2}]),
+        # Momentum's outer bands (#812): vanilla's arrows stop at the double, so
+        # Freefall and Overheating get a third head, drawn in vanilla's faceted
+        # style and red, the overview's colour for the extremes.
+        "momentum_freefall": {"drawn": True, "now": f"{_GI}/generic_icons/down_down.dds",
+                              "marks": [{"draw": "trend", "dir": "down", "colour": "red", "count": 3,
+                                         "at": (0.5, 0.5), "scale": 1.0}]},
+        "momentum_overheating": {"drawn": True, "now": f"{_GI}/generic_icons/trend_upup.dds",
+                                 "marks": [{"draw": "trend", "dir": "up", "colour": "red", "count": 3,
+                                            "at": (0.5, 0.5), "scale": 1.0}]},
         "bubble_low": _bubble(f"{_GI}/generic_icons/green_checkmark.dds", 0.5, "green"),
         "bubble_building": _bubble(f"{_GI}/generic_icons/maybe_icon.dds", 0.6, "white"),
         "bubble_elevated": _bubble(f"{_TM}/modifier_coins_negative.dds", 0.72, "yellow"),
@@ -1917,7 +1984,7 @@ LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
                "disc", "shield", "dome", "link", "rays", "eyelid",
-               "arrows_in")
+               "arrows_in", "trend")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
@@ -1956,8 +2023,9 @@ def _style_ok(style) -> bool:
 
 
 def _is_derived(entry: dict) -> bool:
-    """Built on another entry's icon ("from") or drawn on a disc ("disc"): no render of its own."""
-    return "from" in entry or "disc" in entry
+    """Built on another entry's icon ("from"), drawn on a disc ("disc") or drawn outright ("drawn"):
+    no render of its own."""
+    return "from" in entry or "disc" in entry or bool(entry.get("drawn"))
 
 
 def _depends_on(entry: dict) -> list[tuple[str, str]]:
@@ -2002,6 +2070,11 @@ def _derived_ok(spec: dict, entry: dict) -> bool:
         disc = entry["disc"]
         if "from" in entry or not all(isinstance(disc.get(k), tuple) and len(disc[k]) == 3
                                       for k in ("centre", "edge", "rim_light", "rim_dark")):
+            return False
+    elif entry.get("drawn"):
+        # Marks on a bare canvas: nothing to draw them on but the marks themselves.
+        if "from" in entry or entry["drawn"] is not True or not entry.get("marks") \
+                or any("draw" not in m for m in entry["marks"]):
             return False
     else:
         src = _ref(entry["from"])

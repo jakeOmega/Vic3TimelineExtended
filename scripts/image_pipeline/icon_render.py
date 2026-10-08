@@ -802,6 +802,48 @@ def arrow(size: int, direction: str = "down", colour: str = "red", double: bool 
     return _shape_mark(size, polys, colour)
 
 
+def trend_arrow(size: int, direction: str = "up", colour: str = "red", count: int = 3) -> Image.Image:
+    """`count` arrowheads stacked, up or down, faceted as vanilla's trend arrows are.
+
+    Vanilla's generic_icons arrows (trend_upup, down_down) are heads split
+    down a centre crease, the left facet lit and the right in shade, each
+    with a dark rim, the head nearest the tail in front. Vanilla stops at two; banking
+    momentum's outer bands (Freefall, Overheating) need a third.
+    """
+    ss = 4
+    n = size * ss
+    rim = max(2, round(n * 0.022))
+    top, bottom = (np.array(c, np.float32) for c in MARK_COLOURS[colour])
+    step = 0.74 / (count + 1)
+    height = 1.85 * step
+    y0 = (1 - (step * (count - 1) + height)) / 2
+    heads = [(y0 + i * step, y0 + i * step + height) for i in range(count)]
+    if direction == "up":
+        heads = [(1 - b, 1 - a) for a, b in heads][::-1]
+    im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    # Back to front: the head nearest the tail first, so each overlaps the one
+    # behind it and the rest show as chevrons (an up arrow is the down one mirrored).
+    for a, b in sorted(heads, key=lambda h: -h[0] if direction == "down" else h[0]):
+        base, apex = (a, b) if direction == "down" else (b, a)
+        tri = [(0.08 * n, base * n), (0.92 * n, base * n), (0.5 * n, apex * n)]
+        shape = Image.new("L", (n, n), 0)
+        ImageDraw.Draw(shape).polygon(tri, fill=255)
+        edge = shape.filter(ImageFilter.MaxFilter(2 * rim + 1))
+        dark = Image.new("RGBA", (n, n), (24, 12, 10, 0))
+        dark.putalpha(edge.point(lambda v: int(v * 0.9)))
+        im.alpha_composite(dark)
+        t = np.clip((np.arange(n, dtype=np.float32)[:, None] / n - min(a, b)) / (b - a), 0, 1)[..., None]
+        rgb = top * (1 - t) + bottom * t
+        xs = np.arange(n, dtype=np.float32)[None, :, None]
+        # Lit left facet, shaded right one, a thin bright ridge on the crease.
+        rgb = rgb * np.where(xs < n / 2, 1.12, 0.78)
+        rgb = np.where(np.abs(xs - n / 2) < n * 0.012, np.minimum(rgb * 1.3 + 20, 255), rgb)
+        rgb = np.broadcast_to(np.clip(rgb, 0, 255), (n, n, 3))
+        face = Image.fromarray(np.dstack([rgb, np.asarray(shape)]).astype(np.uint8), "RGBA")
+        im.alpha_composite(face)
+    return resize_premultiplied(im, (size, size))
+
+
 def arrow_down(size: int) -> Image.Image:
     """A thick red arrow pointing down, `size` px square: loss, as vanilla's alerts draw it.
 
@@ -1107,6 +1149,7 @@ DRAWN = {
     "star": lambda box, m: star(box),
     "pause": lambda box, m: pause(box),
     "arrow_down": lambda box, m: arrow_down(box),
+    "trend": lambda box, m: trend_arrow(box, m.get("dir", "up"), m.get("colour", "red"), m.get("count", 3)),
     "arrow": lambda box, m: arrow(box, m.get("dir", "down"), m.get("colour", "red"), m.get("double", False)),
     "bar": lambda box, m: bar(box, m.get("colour", "white")),
     "chevrons": lambda box, m: chevrons(box, m.get("count", 1), m.get("colour", "gold"), m.get("patch", False)),

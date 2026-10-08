@@ -79,8 +79,9 @@ def entries(cat: str, only: set[str]) -> dict[str, dict]:
 
 
 def is_derived(e: dict) -> bool:
-    """Built from another entry's icon ("from") or drawn on a disc ("disc"), with no render of its own."""
-    return "from" in e or "disc" in e
+    """Built from another entry's icon ("from"), drawn on a disc ("disc") or drawn outright ("drawn"),
+    with no render of its own."""
+    return "from" in e or "disc" in e or bool(e.get("drawn"))
 
 
 def generated(cat: str, only: set[str]) -> dict[str, dict]:
@@ -463,7 +464,7 @@ class Finals:
     def derived(self, e: dict, seed: int, size: int = 150):
         """A derived entry built on its source's candidate `seed`; None with no render.
 
-        In order: the source (or, for a drawn entry, its `disc`), `pre` marks,
+        In order: the source (or, for a drawn entry, its `disc` or a bare canvas), `pre` marks,
         `tint`, `flip` (mirrored), `turn` (about its centre), `damage` and `tilt` (a lean about its foot),
         `base` (shrunk and placed), the `flag` layout, then the marks. A drawn entry has one candidate, whatever `seed` says.
         """
@@ -471,6 +472,9 @@ class Finals:
 
         if "disc" in e:
             base = draw_disc(size, e["disc"])
+        elif e.get("drawn"):
+            from PIL import Image
+            base = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         else:
             base = self.get(*ref(e["from"]), seed)
             if base is None:
@@ -614,7 +618,8 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     def want_for(c: str, e: dict) -> list:
         """What an icon is made from, as the manifest stores it; a change rewrites the icon."""
         if is_derived(e):
-            src = ["disc", e["disc"]] if "disc" in e else ["from", want_for(*_src(e))]
+            src = (["disc", e["disc"]] if "disc" in e else ["drawn"] if e.get("drawn")
+                   else ["from", want_for(*_src(e))])
             want = src + [e.get(k) for k in ("tint", "layout", "size", "marks")] + part_seeds(e)
             extra = {k: e[k] for k in DERIVED_KEYS if k in e}
             if extra:
