@@ -84,6 +84,15 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(entries.count("\t1 = {"), len(self.production))
         self.assertEqual(entries.count("can_research = "), len(self.production))
 
+    def test_stealable_accepts_current_research(self):
+        # The theft's current-research branch needs no can_research, so the
+        # launch and keep gates must not need it for that technology either:
+        # a gate stricter than the theft would end an operation still stealing.
+        text = gen.render_stealable("production", self.production)
+        self.assertEqual(text.count("\t\tAND = {"), len(self.production))
+        for tech in self.production:
+            self.assertIn(f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}", text)
+
     def test_target_reads_are_guarded(self):
         for text in self.outputs.values():
             self.assertNotIn("scope:iw_theft_target = {", text)
@@ -117,6 +126,36 @@ def _block(path: str, name: str) -> str:
     raise AssertionError(f"unclosed block {name}")
 
 
+def _starts(block: str, header: str) -> list[int]:
+    """Every position of `header` in `block`."""
+    import re
+
+    return [match.start() for match in re.finditer(re.escape(header), block)]
+
+
+def _sub(block: str, header: str, at: int | None = None) -> str:
+    """The `header` sub-block of `block` (the first, or the one at `at`), by brace counting."""
+    start = block.index(header) if at is None else at
+    depth = 0
+    for position in range(start, len(block)):
+        if block[position] == "{":
+            depth += 1
+        elif block[position] == "}":
+            depth -= 1
+            if depth == 0:
+                return block[start : position + 1]
+    raise AssertionError(f"unclosed sub-block {header}")
+
+
+def _loc_keys() -> set[str]:
+    import re
+
+    keys = set()
+    for path in (ROOT / "localization/english").glob("*_l_english.yml"):
+        keys |= set(re.findall(r"(?m)^ ([\w.]+):\d* ", path.read_text(encoding="utf-8-sig")))
+    return keys
+
+
 class WiringTest(unittest.TestCase):
     EFFECTS = "common/scripted_effects/covert_warfare_effects.txt"
     ACTIONS = "common/diplomatic_actions/covert_operations.txt"
@@ -133,15 +172,42 @@ class WiringTest(unittest.TestCase):
         self.assertIn("covert_ops_steal_tech_all = yes", master)
         self.assertNotIn("MODIFIER = covert_industrial_espionage }", master)
         self.assertNotIn("covert_military_espionage MONTHS", master)
+        # Retired 2026-10-07: espionage pays in stolen technology only.
+        self.assertNotIn("MODIFIER = covert_espionage_base", master)
+        self.assertNotIn("MODIFIER = covert_military_espionage_unit", master)
 
     def test_actions_use_stealable_check(self):
-        industrial = _block(self.ACTIONS, "covert_industrial_espionage_action")
-        military = _block(self.ACTIONS, "covert_military_espionage_action")
-        # possible (industrial only), will_propose, and the AI's will_break
-        self.assertEqual(industrial.count("covert_tech_stealable_production = { TARGET = scope:target_country }"), 3)
-        self.assertEqual(military.count("covert_tech_stealable_military = { TARGET = scope:target_country }"), 2)
-        for block in (industrial, military):
-            self.assertNotIn("techs_researched > ROOT.techs_researched", block)
+        # Launch (possible), keep (requirement_to_maintain) and the AI's
+        # launch (will_propose), for both types. The maintain gate ends a
+        # running operation once nothing is left to steal, the AI's too.
+        loc = _loc_keys()
+        for name, category in (
+            ("covert_industrial_espionage_action", "production"),
+            ("covert_military_espionage_action", "military"),
+        ):
+            with self.subTest(action=name):
+                block = _block(self.ACTIONS, name)
+                check = f"covert_tech_stealable_{category} = {{ TARGET = scope:target_country }}"
+                tooltip = f"iw_target_has_stealable_{category}_tt"
+                self.assertEqual(block.count(check), 3)
+                possible = _sub(block, "possible = {")
+                self.assertIn(check, possible)
+                self.assertIn(f"text = {tooltip}", possible)
+                maintains = [_sub(block, "requirement_to_maintain = {", at) for at in _starts(block, "requirement_to_maintain = {")]
+                self.assertEqual(sum(check in maintain for maintain in maintains), 1)
+                self.assertTrue(any(f"text = {tooltip}" in maintain for maintain in maintains))
+                self.assertIn(check, _sub(block, "will_propose = {"))
+                self.assertNotIn(check, _sub(block, "will_break = {"))
+                self.assertIn(tooltip, loc)
+                self.assertNotIn("techs_researched > ROOT.techs_researched", block)
+
+    def test_previews_drop_retired_self_modifiers(self):
+        for name, modifier in (
+            ("covert_industrial_espionage_action", "covert_espionage_base"),
+            ("covert_military_espionage_action", "covert_military_espionage_unit"),
+        ):
+            with self.subTest(action=name):
+                self.assertNotIn(f"name = {modifier}", _block(self.ACTIONS, name))
 
 
 class ReviewFixTest(unittest.TestCase):

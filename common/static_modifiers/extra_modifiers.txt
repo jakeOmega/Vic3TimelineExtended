@@ -6669,7 +6669,10 @@ iw_tradecraft_bonus = {
 	country_intelligence_capacity_mult = 0.05
 }
 
-# Applied to SELF when espionage target has NO tech advantage (base bonus only)
+# RETIRED 2026-10-07: industrial espionage's +5 innovation; the operation now
+# pays in stolen technology only. Kept defined so a save carrying it (a
+# three-month timed modifier) loads cleanly; legacy_modifier_cleanup.txt strips
+# it (PENDING REMOVAL).
 covert_espionage_base = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_weekly_innovation_add = 5
@@ -6727,7 +6730,10 @@ covert_infra_sabotage_morale = {
 	unit_morale_loss_mult = 0.15
 }
 
-# Applied to SELF during military espionage (unit effectiveness bonus, country-scoped)
+# RETIRED 2026-10-07: military espionage's unit bonus, which helped against
+# every enemy, not only the target; the operation now pays in stolen technology
+# only. Kept defined so a save carrying it (a three-month timed modifier) loads
+# cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
 covert_military_espionage_unit = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	unit_offense_mult = 0.05

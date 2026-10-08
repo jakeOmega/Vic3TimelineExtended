@@ -735,9 +735,11 @@ covert_comms_disruption_action = {
 }
 
 # ---- PEACETIME: Industrial Espionage ----
-# Steal production secrets and technology from a target nation
-# Requires the target to have researched a production technology we could
-# research now (covert_tech_stealable_production).
+# Steal production technology from a target nation: its only effect on us
+# (the +5 innovation went 2026-10-07). Launches and runs only while the target
+# has researched a production technology we could research now or are
+# researching (covert_tech_stealable_production, in possible and in a
+# requirement_to_maintain).
 # Effect phases through preparatory → establishing → fully operational.
 covert_industrial_espionage_action = {
 	texture = "gfx/interface/icons/diplomatic_action_icons/covert_industrial_espionage_action.dds"
@@ -755,7 +757,6 @@ covert_industrial_espionage_action = {
 			text = covert_op_preview_header_tt
 		}
 		show_as_tooltip = {
-			add_modifier = { name = covert_espionage_base }
 			scope:target_country = {
 				add_modifier = { name = covert_industrial_espionage_detected }
 			}
@@ -836,6 +837,15 @@ covert_industrial_espionage_action = {
 			}
 		}
 
+		# Ends once the target has nothing left we could take.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_has_stealable_production_tt
+					covert_tech_stealable_production = { TARGET = scope:target_country }
+				}
+			}
+		}
 
 		# Allowed during war: do not auto-break when war starts
 
@@ -873,11 +883,9 @@ covert_industrial_espionage_action = {
 			covert_tech_stealable_production = { TARGET = scope:target_country }
 		}
 
-		# Kept until fully operational, then while there is something to steal
-		will_break = {
-			covert_ai_op_settled = { TYPE = industrial_espionage TARGET = scope:target_country }
-			NOT = { covert_tech_stealable_production = { TARGET = scope:target_country } }
-		}
+		# Never called off by choice: it ends when nothing is left to steal
+		# (requirement_to_maintain)
+		will_break = { always = no }
 
 		propose_score = {
 			value = 10
@@ -890,7 +898,11 @@ covert_industrial_espionage_action = {
 }
 
 # ---- PEACETIME: Military Espionage ----
-# Gather intelligence on a target's military capabilities and steal secrets
+# Steal military technology from a target nation: its only effect on us (the
+# +5% unit offense and defense went 2026-10-07). Launches and runs only while
+# the target has researched a military technology we could research now or are
+# researching (covert_tech_stealable_military, in possible and in a
+# requirement_to_maintain).
 # Effect phases through preparatory → establishing → fully operational.
 covert_military_espionage_action = {
 	texture = "gfx/interface/icons/diplomatic_action_icons/covert_military_espionage_action.dds"
@@ -908,7 +920,6 @@ covert_military_espionage_action = {
 			text = covert_op_preview_header_tt
 		}
 		show_as_tooltip = {
-			add_modifier = { name = covert_military_espionage_unit }
 			scope:target_country = {
 				add_modifier = { name = covert_military_espionage_detected }
 			}
@@ -968,6 +979,10 @@ covert_military_espionage_action = {
 				}
 			}
 		}
+		custom_tooltip = {
+			text = iw_target_has_stealable_military_tt
+			covert_tech_stealable_military = { TARGET = scope:target_country }
+		}
 	}
 
 	pact = {
@@ -985,6 +1000,15 @@ covert_military_espionage_action = {
 			}
 		}
 
+		# Ends once the target has nothing left we could take.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_has_stealable_military_tt
+					covert_tech_stealable_military = { TARGET = scope:target_country }
+				}
+			}
+		}
 
 		# Allowed during war: do not auto-break when war starts
 
@@ -1021,11 +1045,9 @@ covert_military_espionage_action = {
 			covert_tech_stealable_military = { TARGET = scope:target_country }
 		}
 
-		# Kept until fully operational, then while there is something to steal
-		will_break = {
-			covert_ai_op_settled = { TYPE = military_espionage TARGET = scope:target_country }
-			NOT = { covert_tech_stealable_military = { TARGET = scope:target_country } }
-		}
+		# Never called off by choice: it ends when nothing is left to steal
+		# (requirement_to_maintain)
+		will_break = { always = no }
 
 		propose_score = {
 			value = 10
