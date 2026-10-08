@@ -12,14 +12,19 @@
 
 # ---- Records (§3) ------------------------------------------------------------
 # State scope. A dedicated monument the pulse finds without records (a pick
-# made in the building panel, or a monument from a save older than this
-# system) gets them from its current owner, once. The ceremony writes them
-# itself, so this does nothing for a monument it dedicated.
+# made in the building panel after a ceremony asked, or a monument from a save
+# older than this system) gets them from its current owner, once. The
+# ceremony writes them itself, so this does nothing for a monument it
+# dedicated. One no ceremony has asked about is the engine's copy, which
+# gm_state_reset_copied_dedication sends to the ceremony first.
 gm_state_first_sight = {
 	if = {
 		limit = {
 			gm_state_is_dedicated = yes
 			NOT = { has_variable = gm_seen }
+			# A ceremony asking: the dedication is its to set, and a copy it
+			# will replace still reads as dedicated.
+			NOT = { has_variable = gm_ceremony_pending }
 		}
 		set_variable = gm_seen
 		if = {
@@ -495,6 +500,9 @@ gm_country_refresh = {
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
+		# A new monument copies its siblings' dedication: the ceremony
+		# replaces it.
+		gm_state_reset_copied_dedication = yes
 		gm_state_first_sight = yes
 		# A dedication's unveiling, deferred to here (gm_state_offer_skins);
 		# then a monument older than names, or one nobody named, takes the
@@ -767,6 +775,9 @@ gm_check_contests = {
 			limit = {
 				gm_state_is_dedicated = yes
 				gm_state_is_bound = yes
+				# A copy the ceremony is replacing has no records yet, and
+				# would read as not fitting.
+				NOT = { has_variable = gm_ceremony_pending }
 			}
 			if = {
 				limit = {
@@ -1090,7 +1101,10 @@ gm_state_choose_preserve = {
 # on_building_built, and two ceremonies queued together would both show.
 # gm_ceremony_level records the grandeur it asked at (monument_events.2
 # records it again as the event opens, when a rebuilt level is readable), so
-# gm_state_offer_missed_ceremony asks once per new level.
+# gm_state_offer_missed_ceremony asks once per new level. A new or rebuilt
+# monument may stand on its siblings' dedication
+# (gm_state_has_copied_dedication); nothing switches it here, the ceremony's
+# answer does, once (gm_state_dedicate, gm_state_undedicate).
 gm_state_start_ceremony = {
 	if = {
 		limit = {
@@ -1122,6 +1136,42 @@ gm_state_offer_missed_ceremony = {
 					var:gm_ceremony_level < gm_state_grandeur
 				}
 			}
+		}
+		gm_state_start_ceremony = yes
+	}
+}
+
+# ---- The engine's copy --------------------------------------------------------
+# A new building starts on the production methods most of its owner's
+# buildings of that type use, not on is_default (grand_monument_pms.txt). The
+# lock binds the panel only: activate_production_method moves a monument past
+# it, so the ceremony's answer replaces a copy directly.
+#
+# One switch per answer, and never to the method already active: two in one
+# tick (a hook firing on the first) left a monument's dedication listed twice
+# in the save (te_debug_monuments probe, 2026-10-08).
+
+# State scope. Back to Undedicated, from a dedication: the ceremony's "leave it
+# undedicated" for a copy.
+gm_state_undedicate = {
+	if = {
+		limit = {
+			NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
+		}
+		activate_production_method = {
+			building_type = building_grand_monument
+			production_method = pm_monument_undedicated
+		}
+	}
+}
+
+# State scope, from gm_country_refresh and monument_events.1. A monument on a
+# dedication no ceremony gave it and no pulse recorded gets the ceremony.
+gm_state_reset_copied_dedication = {
+	if = {
+		limit = {
+			gm_system_enabled = yes
+			gm_state_has_copied_dedication = yes
 		}
 		gm_state_start_ceremony = yes
 	}
@@ -1207,9 +1257,16 @@ gm_notify_new_contests = {
 # production method back: whether activate_production_method is visible within
 # the same effect is not established.
 gm_state_dedicate = {
-	activate_production_method = {
-		building_type = building_grand_monument
-		production_method = pm_monument_$KEY$
+	# Past the lock when the monument stands on a sibling's dedication (the
+	# engine's copy); not at all when it already stands on this one.
+	if = {
+		limit = {
+			NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } }
+		}
+		activate_production_method = {
+			building_type = building_grand_monument
+			production_method = pm_monument_$KEY$
+		}
 	}
 	gm_remove_state_var = { VAR = gm_ceremony_pending }
 	set_variable = gm_seen

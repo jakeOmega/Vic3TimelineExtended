@@ -1492,17 +1492,37 @@ pm_foo_variant_a = {
 }
 ```
 
-Fresh build: the default is active, so every variant is available. After picking one, only that
-variant's own self-reference is satisfied — the default and every sibling become unreachable, and
-changing the choice means demolishing the building. `is_hidden_when_unavailable` keeps the group
-showing exactly one row instead of a column of dead ends. Never put `replacement_if_valid` on a
-ratcheted PM; it auto-swaps and defeats the lock.
+With the default active, every variant is available. After picking one, only that variant's own
+self-reference is satisfied: the default and every sibling become unreachable from the panel.
+`is_hidden_when_unavailable` keeps the group showing exactly one row instead of a column of dead
+ends. Never put `replacement_if_valid` on a ratcheted PM; it auto-swaps and defeats the lock.
 
-Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`).
+**A new building does not start on `is_default`.** It starts on the production methods most of
+its owner's buildings of that type already use. In the owner's France (2026-10-08) a third Grand
+Monument stood at level 0, construction just queued, on To the Revolution, the dedication of its
+two siblings, before any script had run. Under the ratchet that copy is locked from the first day,
+so every later building of the type is held to the first one's pick. Script has to tell a copy
+from a choice (the variant is active but nothing recorded one) and replace it.
+
+**The lock binds the panel, not script.** `activate_production_method` moves a building onto a
+method its `unlocking_production_methods` doesn't allow: in the same test, `can_activate_production_method`
+called the target unavailable and the switch took, five times out of five, once straight from one
+locked sibling to another (`te_debug_monuments` probe, 2026-10-08). So script replaces a copy
+directly, with no unlocked default. Two cautions from the same test. `on_production_method_changed`
+(ROOT = the building) fires for a script switch too. And a guard that switched back from that hook
+as well as from its own caller left the method listed twice in the save
+(`production_methods={ "pm_maintenance" "pm_monument_revolution" "pm_monument_revolution" }`).
+Switch a building once per decision, never to the method already active, and never from that hook.
+This was tested with `unlocking_production_methods` only, not with `unlocking_technologies`.
+
+Live example: `common/production_methods/grand_monument_pms.txt` (`pmg_monument_dedication`), with
+`gm_state_reset_copied_dedication` and `gm_state_dedicate` in
+`common/scripted_effects/gm_effects.txt`.
 
 **Caveat:** every *other* use of `unlocking_production_methods` in this repo is cross-group, so
-the self-reference is unusual. Verify in-game that (a) the default really is selectable at build
-time and (b) siblings really do disappear after a pick. Secondary deterrent if it ever loosens:
+the self-reference is unusual. Verify in-game that siblings really do disappear after a pick
+(the owner's report that a copied dedication left only one choice says they do). Secondary
+deterrent if it ever loosens:
 this mod's `pm_retooling` override applies `goods_input_construction_mult = 10`
 (`common/static_modifiers/extra_modifiers.txt`), which taxes any PM change in proportion to the
 building's construction-goods input (except in `free_market_construction_rule`'s no-retooling and

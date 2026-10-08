@@ -378,6 +378,9 @@ class PMTests(unittest.TestCase):
         text = read(PMS)
         undedicated = squash(block(text, "pm_monument_undedicated"))
         self.assertIn("is_default = yes", undedicated)
+        # Locked behind itself again: activate_production_method passes the
+        # lock (te_debug_monuments probe, 2026-10-08), so script can still
+        # replace the engine's copy of a sibling's dedication (CopiedDedicationTests).
         self.assertIn("unlocking_production_methods = { pm_monument_undedicated }", undedicated)
         for d in DEDICATIONS:
             body = squash(block(text, f"pm_monument_{d.key}"))
@@ -802,7 +805,8 @@ class ContestTests(unittest.TestCase):
     def test_monthly_check(self):
         body = squash(block(self.e, "gm_check_contests"))
         self.assertTrue(body.startswith("if = { limit = { NOT = { has_variable = te_cw_role } }"))
-        self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes }", body)
+        self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes "
+                      "NOT = { has_variable = gm_ceremony_pending } }", body)
         self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
         # A shrine this country did not raise always becomes heritage, whatever
         # the route it arrived by (conquest, a secession that drops te_cw_role,
@@ -923,7 +927,8 @@ class ContestTests(unittest.TestCase):
         # Leaving it undedicated ends the pending ceremony; the recorded level
         # is what holds the next ask back.
         self.assertIn("default_option = yes", ev2)
-        self.assertIn("hidden_effect = { gm_remove_state_var = { VAR = gm_ceremony_pending } }", ev2)
+        self.assertIn("hidden_effect = { gm_remove_state_var = { VAR = gm_ceremony_pending } "
+                      "gm_state_undedicate = yes }", ev2)
 
     def test_demolished_contested_counts_as_torn_down(self):
         body = squash(block(self.e, "gm_state_monthly"))
@@ -2155,6 +2160,85 @@ class TypedNameTests(unittest.TestCase):
         self.assertIn("gm_name_sweep = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
         self.assertAlmostEqual(number(block(read(MODIFIERS), "gm_name_carrier_slot"), "country_max_companies_add"), 1)
 
+
+
+# ---- A new monument copies its siblings' dedication (owner's France, 2026-10-08) -------
+
+class CopiedDedicationTests(unittest.TestCase):
+    """A new building starts on the production methods most of its owner's
+    buildings of that type use, not on is_default: France's third monument
+    stood at level 0 on To the Revolution, its two siblings' dedication, so no
+    ceremony asked and the ratchet locked it. The lock binds the panel only,
+    so the ceremony's answer replaces the copy, with one switch: two in one
+    tick left a dedication listed twice in the save."""
+
+    def setUp(self):
+        self.e = read(EFFECTS)
+        self.t = read(TRIGGERS)
+
+    def test_a_copy_is_a_dedication_nothing_recorded(self):
+        body = squash(block(self.t, "gm_state_has_copied_dedication"))
+        self.assertEqual(body, "gm_state_is_dedicated = yes NOT = { has_variable = gm_seen } "
+                               "NOT = { has_variable = gm_ceremony_level } "
+                               "NOT = { has_variable = gm_ceremony_pending }")
+        reset = squash(block(self.e, "gm_state_reset_copied_dedication"))
+        self.assertEqual(reset, "if = { limit = { gm_system_enabled = yes gm_state_has_copied_dedication = yes } "
+                                "gm_state_start_ceremony = yes }")
+
+    def test_reset_runs_before_first_sight_and_in_the_level_hook(self):
+        refresh = squash(block(self.e, "gm_country_refresh"))
+        order = ["set_variable = { name = gm_grandeur value = gm_state_grandeur }",
+                 "gm_state_reset_copied_dedication = yes", "gm_state_first_sight = yes",
+                 "gm_state_offer_missed_ceremony = yes"]
+        positions = [refresh.find(x) for x in order]
+        self.assertNotIn(-1, positions, dict(zip(order, positions)))
+        self.assertEqual(positions, sorted(positions))
+        ev1 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.1\s*=\s*\{")))
+        self.assertIn("gm_state_reset_copied_dedication = yes if = { limit = { gm_state_is_dedicated = no } "
+                      "gm_state_start_ceremony = yes }", ev1)
+
+    def test_the_answer_is_the_one_switch(self):
+        self.assertNotIn("activate_production_method", squash(block(self.e, "gm_state_start_ceremony")))
+        ev2 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.2\s*=\s*\{")))
+        self.assertIn("trigger = { gm_system_enabled = yes any_scope_building = { "
+                      "is_building_type = building_grand_monument } NOT = { has_variable = gm_seen } }", ev2)
+        self.assertNotIn("has_active_production_method = pm_monument_undedicated", ev2)
+        immediate = ev2[ev2.find("immediate = {"):ev2.find("option = {")]
+        self.assertNotIn("gm_state_undedicate", immediate)
+        self.assertIn("hidden_effect = { gm_remove_state_var = { VAR = gm_ceremony_pending } "
+                      "gm_state_undedicate = yes }", ev2)
+        self.assertEqual(squash(block(self.e, "gm_state_undedicate")),
+                         "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } } } "
+                         "activate_production_method = { building_type = building_grand_monument "
+                         "production_method = pm_monument_undedicated } }")
+        self.assertTrue(squash(block(self.e, "gm_state_dedicate")).startswith(
+            "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } } } "
+            "activate_production_method = { building_type = building_grand_monument "
+            "production_method = pm_monument_$KEY$ } }"))
+        # Nothing switches a monument from a production-method hook.
+        self.assertIsNone(block(read(ON_ACTIONS), "on_production_method_changed"))
+        self.assertEqual(len(re.findall(r"activate_production_method\s*=", strip_comments(self.e))), 2,
+                         "gm_state_undedicate and gm_state_dedicate are the only switches")
+
+    def test_nothing_records_a_copy_the_ceremony_is_replacing(self):
+        pending = "NOT = { has_variable = gm_ceremony_pending }"
+        self.assertIn(pending, squash(block(self.e, "gm_state_first_sight")))
+        self.assertIn(pending, squash(block(read(NAME_EFFECTS), "gm_state_name_if_unnamed")))
+        self.assertIn("gm_state_is_bound = yes " + pending, squash(block(self.e, "gm_check_contests")))
+
+    def test_reopen(self):
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.3 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        ev3 = squash(strip_comments(raw_block_at(text, r"(?m)^te_debug_monuments\.3\s*=\s*\{")))
+        for n, o in ((1, "a"), (2, "b"), (3, "c")):
+            self.assertIn(f"name = te_debug_monuments.3.{o} ", ev3)
+            self.assertIn(f"trigger = {{ exists = scope:gm_dbg_m{n} }} scope:gm_dbg_m{n} = {{ "
+                          f"hidden_effect = {{ gm_clear_state = yes }} gm_state_start_ceremony = yes }}", ev3)
+        self.assertNotIn("te_debug_monuments.4", text)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b", "c"):
+            self.assertIn(f"te_debug_monuments.3.{k}", L)
+        self.assertNotIn("te_debug_monuments.3.d", L)
 
 if __name__ == "__main__":
     unittest.main()

@@ -120,6 +120,18 @@ gm_state_is_dedicated = {
 	NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } }
 }
 
+# A dedication no ceremony gave it and no pulse has recorded. A new building
+# starts on the production methods most of its owner's buildings of that type
+# use, so a second monument stands on its sibling's dedication before any
+# script runs (grand_monument_pms.txt). A pick in the panel before any
+# ceremony asked reads the same, and the ceremony replaces it too.
+gm_state_has_copied_dedication = {
+	gm_state_is_dedicated = yes
+	NOT = { has_variable = gm_seen }
+	NOT = { has_variable = gm_ceremony_level }
+	NOT = { has_variable = gm_ceremony_pending }
+}
+
 gm_state_kind_regime = {
 	OR = {
 		gm_state_has_pm = { PM = pm_monument_crown }

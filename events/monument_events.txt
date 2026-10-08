@@ -47,6 +47,9 @@ monument_events.1 = {
 						}
 						gm_state_vanity_backlash = yes
 					}
+					# A new monument stands on its siblings' dedication
+					# (gm_state_has_copied_dedication): the ceremony replaces it.
+					gm_state_reset_copied_dedication = yes
 					if = {
 						limit = { gm_state_is_dedicated = no }
 						gm_state_start_ceremony = yes
@@ -103,14 +106,17 @@ monument_events.2 = {
 
 	duration = 3
 
-	# Only for a monument not yet dedicated. `has_building` alone would re-open
-	# the question every time an existing monument gains a level.
+	# Only for a monument whose dedication no ceremony or pulse has recorded
+	# (gm_seen). `has_building` alone would re-open the question every time an
+	# existing monument gains a level. Not "on Undedicated": a new or rebuilt
+	# monument may stand on its siblings' dedication, which the answer replaces
+	# (gm_state_has_copied_dedication).
 	trigger = {
 		gm_system_enabled = yes
 		any_scope_building = {
 			is_building_type = building_grand_monument
-			has_active_production_method = pm_monument_undedicated
 		}
+		NOT = { has_variable = gm_seen }
 	}
 
 	# Named in the description and in every option tooltip.
@@ -139,6 +145,8 @@ monument_events.2 = {
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
+			# A copy of a sibling's dedication goes back to Undedicated.
+			gm_state_undedicate = yes
 		}
 	}
 

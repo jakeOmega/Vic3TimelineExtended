@@ -11,10 +11,17 @@
 #   pm_monument_undedicated  unlocks on { itself }
 #   every dedication         unlocks on { pm_monument_undedicated, itself }
 #
-# Fresh build  -> Undedicated is active (is_default), so every dedication is
-#                 available. After a pick -> only the chosen PM's own
-#                 self-reference is satisfied. The choice is permanent;
-#                 Rededicate (§4.3) rebuilds the monument.
+# Undedicated active -> every dedication is available. After a pick -> only
+# the chosen PM's own self-reference is satisfied. The choice is permanent;
+# Rededicate (§4.3) rebuilds the monument.
+#
+# THE ENGINE'S COPY. A new building starts on the production methods most of
+# its owner's buildings of that type use, not on is_default: the owner's
+# France (2026-10-08) queued a third monument and it stood at level 0 on To
+# the Revolution, its two siblings' dedication, before any script ran. The
+# lock binds the panel only: activate_production_method moves a monument past
+# it (te_debug_monuments probe, 2026-10-08). So the ceremony replaces a copy
+# directly (gm_state_reset_copied_dedication, gm_effects.txt).
 #
 # Every PM carries is_hidden_when_unavailable so the group shows one row.
 # Do NOT add replacement_if_valid to any of these -- it would defeat the ratchet.
@@ -27,8 +34,10 @@
 # carries country_modifiers, state_modifiers or goods.
 #
 # The dedication is set by the ceremony (monument_events.2) through
-# activate_production_method; a pick made in the building panel is recorded by
-# the first monthly pulse that sees it (gm_state_first_sight).
+# activate_production_method; a pick made in the building panel after the
+# ceremony has asked is recorded by the first monthly pulse that sees it
+# (gm_state_first_sight). A dedication found before any ceremony asked is the
+# engine's copy, and the ceremony replaces it.
 
 # Entry point and fallback: a monument whose meaning is not yet settled.
 pm_monument_undedicated = {

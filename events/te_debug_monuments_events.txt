@@ -210,3 +210,83 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		gm_debug_log = yes
 	}
 }
+
+# ============================================================================
+# RE-OPEN A DEDICATION — console test event: `event te_debug_monuments.3`
+# ============================================================================
+# Each option re-opens one of our three tallest monuments: its records go and
+# the ceremony asks again. For a monument that kept a sibling's dedication
+# (the engine's copy, grand_monument_pms.txt) before
+# gm_state_reset_copied_dedication existed. The records are cleared out of
+# the tooltip: previewing gm_clear_state's remove_modifier lines logged an
+# error for every modifier the monument lacks. Option a of an earlier version
+# answered whether activate_production_method passes the dedication lock (it
+# does, 2026-10-08).
+te_debug_monuments.3 = { # REVIEWED 2026-10-08: console-only test event (`event te_debug_monuments.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.3.t
+	desc = te_debug_monuments.3.desc
+	flavor = te_debug_monuments.3.flavor
+
+	# Our three tallest monuments, named in the options.
+	immediate = {
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 0
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m1
+		}
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 1
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m2
+		}
+		ordered_scope_state = {
+			limit = { has_building = building_grand_monument }
+			order_by = gm_state_grandeur
+			position = 2
+			check_range_bounds = no
+			save_scope_as = gm_dbg_m3
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.3.a
+		default_option = yes
+		trigger = { exists = scope:gm_dbg_m1 }
+		scope:gm_dbg_m1 = {
+			hidden_effect = { gm_clear_state = yes }
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.3.b
+		trigger = { exists = scope:gm_dbg_m2 }
+		scope:gm_dbg_m2 = {
+			hidden_effect = { gm_clear_state = yes }
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+
+	option = {
+		name = te_debug_monuments.3.c
+		trigger = { exists = scope:gm_dbg_m3 }
+		scope:gm_dbg_m3 = {
+			hidden_effect = { gm_clear_state = yes }
+			gm_state_start_ceremony = yes
+		}
+		trigger_event = { id = monument_events.20 }
+	}
+}
