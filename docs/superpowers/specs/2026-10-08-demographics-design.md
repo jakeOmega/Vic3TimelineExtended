@@ -3,7 +3,9 @@
 > **Status: scoping draft, 2026-10-08, third round.** It widens the Wealth Concentration score from #822
 > (`2026-10-08-inheritance-laws-design.md` §3) into a demographics system with its own panel. It covers what to
 > track, what moves each number, what each number moves and what the player controls. The owner has answered two
-> rounds of questions (Decisions, below). §13 lists what is still open and §14 the engine checks that come first.
+> rounds of questions (Decisions, below). §13 lists what is still open. §14's engine checks were run in game on
+> 2026-10-08; each answer is written into the section that uses it, with the evidence in
+> `docs/testing/demographics-probe-results-2026-10-08.md`.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context
@@ -19,7 +21,7 @@ laws children don't work, so a fast-growing population has a lower workforce sha
 steer it, and the weak Population Control law should become a real lever. The pillars are realism, fun and balance.
 
 **What the engine gives us.** Pops have no age or sex. The only demographic axes are:
-- **Workforce and dependents**, set by a working-adult ratio. Vanilla's default is a define outside the repo;
+- **Workforce and dependents**, set by a working-adult ratio. Vanilla's default is 0.25 (`WORKING_ADULT_RATIO_BASE`);
   `pop_types` sets aristocrats 0.2 and slaves 0.5. It is moved by `state_working_adult_ratio_add`: vanilla's
   women's-rights laws add 0.05 to 0.3, and Old Age Pension subtracts 0.01 per level of its institution.
 - **Birth rate and mortality**, from the standard-of-living curves in the defines plus `state_birth_rate_mult` and the
@@ -31,9 +33,14 @@ steer it, and the weak Population Control law should become a real lever. The pi
   - a pop's `total_size`, `wealth`, `standard_of_living` and `literacy_rate`;
   - a state's `state_population`, `total_urbanization`, `average_sol`, `state_unemployment_rate`, `gdp`, `migration_pull`
     and `modifier:<key>` totals;
-  - a building's `private_ownership_fraction`, `self_ownership_fraction` and `country_ownership_fraction`;
-  - a war's `num_country_dead(<country>)`.
+  - a building's `private_ownership_fraction`, `self_ownership_fraction` and `country_ownership_fraction`, as bareword
+    fields (`multiply = private_ownership_fraction`), and `"fraction_of_levels_owned_by_country(<country>)"`;
+  - a war's `"num_country_dead(<country>)"`, `"num_country_wounded(<country>)"` and `num_dead`, while the war lasts
+    (§2.5);
+  - the year (`add = year`).
 - **Iteration.** Script values can walk pops and states (`te_inh_agrarian_share_value`, `country_max_state_population`).
+  One effect walk fills any number of sums: local variables, the state's variables through `PREV`, and named pop-scope
+  script values read as `PREV.<value>` all match separate walks exactly.
 - **What script can't read:** a pop's income, migration, and births. The GUI alone has
   `State.GetWeeklyPopNetMigration` and the Population panel's `PopsOverviewPanel.GetAverageIncomePoor/Middle/Rich`.
 
@@ -64,8 +71,9 @@ So age and sex must be **modelled**. The model takes engine readouts as inputs a
 - **Mortality the mod already touches.** The Ministry of Consumer Protection (`institution_ministry_of_consumer_protection`,
   −1% mortality), the pharmaceutical companies and the drugs system (`mod_systems.md` § Drugs).
 - **Panels.**
-  - The vanilla **Population** panel (`PopsOverviewPanel`; title `POPS_OVERVIEW_TITLE`, tabs "Overview" and
-    "Detailed List") shows strata over time, SoL over time, spending and the pop list. The mod doesn't override it yet.
+  - The vanilla **Population** panel (`gui/pops_overview.gui`, `PopsOverviewPanel`; title `POPS_OVERVIEW_TITLE`) has
+    four tabs: Overview, Charts, Detailed List and National Cast. It shows strata over time, SoL over time, spending and
+    the pop list. The mod doesn't override it yet.
   - The state panel's Population tab has three 170 px subtabs: Statistics, Pops and Characters.
   - The history store draws column charts of stored samples.
   - A map mode can paint any per-state script value (`te_map_mode_script_values.txt`).
@@ -165,7 +173,7 @@ One-year cohorts take about 150 slots and 300 variables. Until lifespans pass 95
 are occupied, and the empty ones are skipped. Either way the work is arithmetic, not pop walks (§11.3), once a year;
 the Demography mod updates 17 bands monthly. The slots are calls of one scripted effect with `$SLOT$`, written by a
 generator (the mod's idiom for repeated script). The slot for a cohort is (first birth year ÷ the width) mod the
-number of slots.
+number of slots. The year reads as a value (`add = year`), so no counter is needed.
 
 **Display.** The pyramid draws fixed five-year age bands: 0–4, 5–9 … 85+, with the top band moving up as lifespans
 grow. Each cohort straddles two of them in most
@@ -184,6 +192,15 @@ splits a cohort.
 - **Decision rule:** one-year cohorts if the extra time per year, spread over the twelve monthly pulses (§11.3), is
   negligible against a month's tick. Otherwise five-year.
 - **The late eras:** from era 11, biological age adds one variable a slot.
+- **Result (2026-10-08, 1836, 887 states).** One run of the step across every state took:
+  - about 0.1 s with five-year cohorts (20 of 30 slots occupied);
+  - 0.75 s with one-year cohorts (100 of 150 occupied), 1.0 s with all 150 occupied.
+
+  A game month took 11–16 s of wall-clock time. The engine spreads the yearly state pulse over the year (§11.3), so the
+  one-year step costs about 1 ms per state on that state's own day. **By the decision rule, one-year cohorts.** Each
+  variable adds 60–85 bytes to a plain-text save: the full one-year ring added 16.9 MB to a 197 MB 1836 save, and 100
+  occupied slots would add 11–15 MB. The cost scales with states and occupied slots, not pops; a re-run in a late-game
+  save (`event te_debug_demog.1` on the probe branch) would confirm it there.
 
 ### Ages past 95 and the late eras (the owner's question)
 
@@ -217,13 +234,13 @@ how old their body is, not the year they were born.
 - **Little gain.** Calendar detail past 95 changes no effect once rates read biological age. It only refines the
   pyramid's top.
 - **So the ring runs to about 150 from 1836** (owner, provisional). The extra slots sit empty, and are skipped, until
-  someone lives that long. The benchmark (§14 Q9) prices them.
+  someone lives that long. The benchmark (§14 Q9) found them cheap: an empty slot costs one variable check.
 
 ## 2. The age model
 
 ### 2.1 The yearly step
 
-Per state, on the yearly state pulse:
+Per state, on the yearly state pulse (the engine fires it on a different day for each state, §11.3):
 
 1. **Births** = the age-specific fertility of each cohort of women aged 15–49 (peaking at 25–29), scaled to the
    state's children per woman (§2.3), into the open cohort. 105 boys are born for every 100 girls (§3).
@@ -292,9 +309,18 @@ means" view of the fertility transition.
 moves the birth rate by construction.
 
 **Applied as** one births modifier, refreshed yearly from the state pulse: the model's births ÷ the engine's births
-before the modifier − 1. It is clamped so that, with every other modifier, the total stays above vanilla's −0.9. Every
-other birth modifier stays an input and is read through. That covers vanilla's laws, events, starvation, and Forced
-Heirship's rural cut.
+before the modifier − 1. Every other birth modifier stays an input and is read through. That covers vanilla's laws,
+events, starvation, and Forced Heirship's rural cut.
+- **Reading the rest.** A state's `modifier:state_birth_rate_mult` includes the country's modifiers (a test modifier on
+  the country showed in every state's read), so the model reads the total at state scope and takes out its own term.
+- **The clamp.** At −0.9 Qing's births fell to about a tenth, as 1 + the total says. At −3 they stopped; they never
+  turn negative (Qing lost what its deaths alone would take). Where between −0.9 and −3 they reach zero wasn't
+  measured, presumably at −1. The clamp keeps the total at −0.9 or above, a safe margin.
+- **The engine's births before the modifier** are taken to be each pop's SoL curve × its size × (1 + the other
+  modifiers). Qing's births, worked out on that model, came to 0.44% a month against the curve's 0.475% for low-SoL
+  pops: consistent, not proof. The world-wide check across all SoL bands is the harness's first step (§12).
+- **Changes show within a month, not at once.** Adding a birth modifier showed in full in the first month; the switch
+  from −0.9 to −3 and the removal each took part of a month to show fully.
 
 **Sketch results** (the formula above, with plausible inputs):
 
@@ -314,6 +340,10 @@ Heirship's rural cut.
 - **Great-power ratios** at 1900, 1950 and 2000.
 - **After 2020**, the UN's medium projection (a peak of about 10.3 billion in the 2080s, WPP 2024) is only a check on a
   world where the AI does nothing special. Players and era-12 technologies are free to diverge from it.
+
+**Where today's defines start** (probe, early 1836): the world grows about 1% a year, above the 0.6% a year that
+"1900 ≈ 1.5× 1836" implies. Great Britain shrinks by 0.06–0.09% a month, most likely through emigration, so the
+harness has to carry migration.
 
 ### 2.4 Mortality by age
 
@@ -362,7 +392,12 @@ The engine moves and kills people; the model sees only the result. Each year:
    - The dead come from the men of the cohorts aged 18–40, about 95% of them men.
    - The mod defines a Women in Combat Roles modifier (`women_combat_roles_modifier`) that nothing grants yet. Whatever
      grants it should lower that share.
-   - The war's counter disappears when the war ends, so snapshot it monthly or at war end (§14).
+   - The counters can't be relied on at the war's end: on `on_war_end` the war scope still exists, but every counter
+     printed 0 (seven wars in the probe). That line had no control value, and ROOT there is a diplomatic play, so a
+     value that fails to print under that ROOT would look the same. Either way each war's `num_country_dead` is
+     snapshotted on the owner's monthly pulse, and the yearly step takes the change. The dead of a war's last
+     part-month are lost.
+   - Read the dead, not the casualties: casualties = dead + wounded.
 2. **Known kills.**
    - Nuclear strikes record their dead per state; they come from all ages and both sexes.
    - Resettlement records its arrivals and departures, with its programme's profile.
@@ -448,10 +483,11 @@ state. The stock is the #822 score.
 - **The measure.** A Gini coefficient from the state's pops. Pop income can't be read in script, but `wealth` can. A
   generator turns the wealth level into spending per head using the pop-needs curve from `pop_needs_curves`, as a
   proxy for income.
-  - **Grouped form:** each stratum's share of people and of income, ordered lower < middle < upper. This takes one pop
-    walk if a single walk can fill several sums (§14), or one walk per stratum.
-  - **Or the engine's own figure:** if `wealth_share = { pop_type = X … }` reads as a value, it gives the share of
-    wealth each pop type holds directly.
+  - **Grouped form:** each stratum's share of people and of income, ordered lower < middle < upper. One pop walk fills
+    all the sums (§14 Q1).
+  - **Not the engine's `wealth_share`:** it has no value form (rejected at load), and it measures political strength
+    from wealth, not wealth. Britain's aristocrats pass `value > 0.2` while holding 2.8% of the country's pop wealth ×
+    size.
   - **Scaling:** the grouped Gini misses inequality within each group, so scale it to the anchors:
     - Britain about 0.5–0.55 in the 1830s and the US about 0.5 in 1870 (Lindert and Williamson);
     - Nordic countries 0.25–0.3 today, the US 0.39 after taxes, South Africa about 0.63.
@@ -480,8 +516,12 @@ It is grounded in readouts the engine has:
 - the land tenure law, weighted by the state's agrarian share;
 - the state's building levels in private hands against self-owned (cooperative) and state-owned levels
   (`private_ownership_fraction`, `self_ownership_fraction`, `country_ownership_fraction`), summed over its buildings
-  once a year;
-- foreign ownership, for absentee fortunes (`fraction_of_levels_owned_by_country`).
+  once a year. The fractions read as values, but **the walk must skip buildings that aren't capital in this sense**.
+  Manor Houses and Financial Districts read self-owned (they own themselves), Subsistence Farms read private, and
+  government buildings such as the Construction Sector read state-owned. Britain's three largest buildings in 1836
+  were a Manor House (173 levels), a Financial District (159) and a Subsistence Farm (140);
+- foreign ownership, for absentee fortunes: 1 − `"fraction_of_levels_owned_by_country(<owner>)"`. That value counts
+  the owner country and its investors, and includes self-owned and state-owned levels.
 
 **Alternatives:**
 - **(B) the top tenth's share of all wealth.** This overlaps the Gini.
@@ -493,7 +533,8 @@ tooltips keep working, is the states' average weighted by **ownership levels** (
 property is held:
 - each level of a Financial District, Manor House or company headquarters (`building_financial_district`,
   `building_manor_house`, `building_company_headquarter`, `building_company_regional_headquarter`) counts 1;
-- each level of a self-owned building counts 1;
+- each level of a self-owned building counts 1, leaving out the ownership buildings above, which read self-owned
+  too;
 - **state-owned property** goes where the government's administrators are (owner, 2026-10-08). The country's total
   state-owned levels × the state's share of the country's bureaucrats × 0.1. A capital with half the country's
   bureaucrats gets 0.05 × the country's state-owned levels.
@@ -635,7 +676,7 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 |---|---|---|---|
 | **Workforce** | `state_working_adult_ratio_add` | 0.3 × (effective working share ÷ the reference − 1). The effective working share is defined below | ±0.08 |
 | **Births and deaths** | `state_birth_rate_mult`, `state_mortality_mult` | §2.3, §2.4 | births clamped above −0.9 in total |
-| **The pension and health bill** | `country_institution_cost_institution_social_security_mult` and `_health_system_mult` (institution costs are bureaucracy) | 0.5 × (national 65+ share ÷ 0.07 − 1). Whether pensions also need a money cost is §14's probe | +1.0 |
+| **The pension and health bill** | `country_institution_cost_institution_social_security_mult` and `_health_system_mult` (institution costs are bureaucracy) | 0.5 × (national 65+ share ÷ 0.07 − 1). Pensions also need a money cost: vanilla's charges the treasury nothing for the old (§14 Q6, open in §13) | +1.0 |
 | **Conscription** | `state_conscription_rate_mult` | men aged 20–39 ÷ the 1836 reference − 1 | ±0.25 |
 | **Youth bulge** | radicals from movements, turmoil effects | ages 20–29 above about 18% of the population (1836's share is about 17%), × the state's unemployment rate | small |
 | **Sex balance** | births, working-adult ratio, movements, radicals | §3 | small |
@@ -651,6 +692,10 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 - plus the over-65s times theirs: 0.5 with no pension, falling towards 0.15 as Old Age Pension's institution rises,
   moved by the pension-age setting
   (§8.2).
+
+**How fast it bites.** The mod sets `WORKING_ADULT_RATIO_SKEW_MAXIMUM = 1000000` (`extra_defines.txt:67`; vanilla
+2.0). That define caps how hard a pop's actual ratio is pulled back to its target, the dial this effect moves. Whether
+the mod's value makes a change take hold at once is unmeasured (§14 Q11).
 
 **The reference** is the same formula on the 1836 structure under the laws in force. So a law adds nothing flat;
 vanilla's own law effects stay as they are. What a law sets is how much a young or old population costs.
@@ -797,15 +842,23 @@ Each fires when the model crosses a threshold, at most once a generation per cou
 
 ## 10. The panel
 
-**Country view: a "Demographics" tab in the vanilla Population panel** (`PopsOverviewPanel`). Its vanilla `.gui` file
-is not in the repo; confirm its name on the machine with the game. Adding a tab means the mod overrides that file in
-full, which adds one more vanilla file to the 3-way merge on every patch (`gui_modding_guide.md`). Custom tab names
-already work (`InformationPanel.SelectTab`, proven by the Banking tab). The tab is available whenever the rule is on;
-there is no journal entry to gate it. Style guide rules apply.
+**Country view: a "Demographics" tab in the vanilla Population panel** (`PopsOverviewPanel`, `gui/pops_overview.gui`,
+2,820 lines). Adding a tab means the mod overrides that file in full, which adds one more vanilla file to the 3-way
+merge on every patch (`gui_modding_guide.md`). Custom tab names already work (`InformationPanel.SelectTab`, proven by
+the Banking tab). The tab is available whenever the rule is on; there is no journal entry to gate it. Style guide rules
+apply.
+- **The strip.** Vanilla has four tabs (Overview, Charts, Detailed List, National Cast), so Demographics is the fifth
+  and last slot of `tab_buttons`, set with `fifth_button*` blockoverrides. At five slots "Demographics", "National
+  Cast" and a selected "Detailed List" shrink towards the 12-point minimum; nothing is cut off.
+- **Two quirks.** The sidebar's Population button cycles only the first three tabs, so it never lands on Demographics;
+  links open it with `OpenPanelTab('pops_overview', '<tab>')`. The Pop Browser button in the footer shows under every
+  tab.
 
 - **Overview** (always shown): median age, children per woman, life expectancy, dependency ratio, sex balance, Gini,
   Wealth Concentration and urban pattern. Each reads "Label: value" with a trend arrow.
 - **Pyramid** (open): five-year bars, men left and women right (§1's display split).
+  - The men's bars grow leftwards through vanilla's "reverse hack" (`gui/shared/progressbars.gui`): a `progressbar`
+    with `min = -N`, `max = 0`, swapped textures and the negated share. Vanilla has no mirrored progressbar.
   - Behind them is a translucent outline of the structure twenty years ahead. It is drawn by running the cohort model
     forward from current rates, country only, at the yearly pulse. It answers "is my workforce about to shrink?" at a
     glance.
@@ -822,7 +875,8 @@ there is no journal entry to gate it. Style guide rules apply.
 - **Where people live** (open): urban share, primacy, the effective number of cities and the three largest cities
   from the city ranking. Then the states by settlement pattern.
 - **States** (open): a row per state with population, median age, children per woman, sex balance, Gini and Wealth
-  Concentration. Vanilla GUI can't sort by script values; the order is a §14 check.
+  Concentration. No GUI sort takes a script value, so the yearly step stores the states as a variable list in the
+  order wanted (`ordered_scope_state` by a script value), drawn with `GetList`, as Grand Monuments does.
 - **History** (open): yearly samples of median age, fertility, life expectancy, Gini and Wealth Concentration in the
   history store's column charts.
 - **How Demographics Works** (collapsed).
@@ -868,7 +922,9 @@ One yearly state effect:
 - **arithmetic on the occupied cohort slots** (§1: about 20 or 100 before the late eras);
 - **the GUI reads variables, never walks** (`scripting_best_practices.md`: GUI and loc re-evaluate every frame).
 
-If the profiler shows a January spike, stagger states over the twelve monthly pulses by state id.
+**No stagger is needed.** The engine already fires the yearly state pulse on a different day for each state (Britain's
+26 states on 26 days from March to January), so the work is spread over the year. Measured in 1836 across all 887
+states: the one-year cohort step 0.75–1.0 s in total, the pop walk and the building walk under 0.1 s each (§1).
 
 ### 11.4 Game rule
 
@@ -900,7 +956,7 @@ Monuments' pattern).
 
 | Phase | Contents | Gate |
 |---|---|---|
-| 0. Probes and harness | §14, including the cohort-width benchmark; the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death | the harness meets §2.3's targets |
+| 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, map modes, history, the rule. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
 | 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
@@ -910,36 +966,51 @@ to be sane.
 
 ## 13. Still open
 
-No design question is open. Two answers wait on the benchmark (§14 Q9):
-- **Cohort width:** one-year cohorts if cheap, otherwise five-year.
-- **The ring to about age 150:** provisional; the benchmark prices its empty slots.
+- **Cohort width:** the benchmark found one-year cohorts cheap (§1), so the rule gives one-year cohorts. For the owner
+  to confirm, given their save-file cost (11–15 MB in an 1836 plain-text save).
+- **The ring to about age 150:** cheap. Filling the top 50 of 150 slots added about 0.25 s a world-year, and an empty
+  slot costs one variable check.
+- **The pensions' money cost (§7).** Vanilla's Old Age Pension charges the treasury nothing for the old (§14 Q6).
+  Proposal: an expense modifier (`country_expenses_add`) refreshed yearly with a multiplier from the national 65+
+  population, the mod's "Expense Scaling with GDP" pattern (`scripting_best_practices.md`), sized in the harness. The
+  owner decides whether ageing costs money as well as bureaucracy.
 
-## 14. Engine checks before building
+## 14. Engine checks (run 2026-10-08)
 
-1. **One walk, several sums.** Can `every_scope_pop = { … }` in an effect accumulate several state variables in one
-   pass, through a named script value in pop scope (`change_variable = { add = te_x }` on `PREV`/`state`)? If not, use
-   one script-value walk per sum. The same question applies to the building walk for ownership.
-2. **Ownership reads:** `private_ownership_fraction`, `self_ownership_fraction` and `country_ownership_fraction` as
-   values in building scope, weighted by levels.
-3. **`wealth_share`** as a value in state scope (the quoted form). If it works, it replaces the wealth proxy.
+A probe answered these in a fresh 1836 game as Britain. The evidence is in
+`docs/testing/demographics-probe-results-2026-10-08.md`; the probe itself is on the local branch `probe/demographics`.
+The sections above already use the answers.
+
+1. **One walk, several sums: yes.** Local variables, the state's variables through `PREV`, and named pop-scope script
+   values read as `PREV.<value>` all match separate walks. The same holds for a building walk.
+2. **Ownership reads: yes, as values,** weighted by levels. The ownership buildings read self-owned, Subsistence Farms
+   private and government buildings state-owned, so the walk filters them (§4.2).
+3. **`wealth_share`: no.** It has no value form, and it measures political strength, not wealth (§4.1).
 4. **War dead:**
-   - `num_country_dead(root)` as a value;
-   - whether war counters survive the war's end;
-   - whether battle dead come out of the soldiers' home-state pops.
-5. **`modifier:state_birth_rate_mult` and `modifier:state_mortality_mult`** on a state include laws and techs passed
-   down from the country, so the model can take out its own share.
-6. **Who pays pensions in money** under Old Age Pension: the dependent wage, welfare payments or the state. This decides
-   whether §7 needs a money cost.
-7. **Births floor:** what the engine does when the total birth multiplier goes below −1. This sets the clamp in §2.3.
-8. **GUI:**
-   - the Population panel's vanilla file, and whether a third tab fits its strip;
-   - scripted GUI buttons in a vanilla panel outside the journal (the system tabs already use them);
-   - whether a list of the country's states can be ordered by a script value;
-   - mirrored `progressbar` pyramids.
-9. **Cost, and the cohort width:**
-   - **Setup:** a throwaway benchmark (generated script, a console event) runs the yearly cohort step in every state
-     with 30 slots and with 150 (the ring to about age 150, with and without its top slots occupied), plus the pop
-     and building walks, in a 1950s and a 2050s save.
-   - **Read:** the profiler (`scripting_best_practices.md`: profiler commands), the step's time against a month's tick,
-     and save-file growth from up to 300 variables a state (more with biological age).
-   - **Decides:** the cohort width (§1) and whether the stagger over monthly pulses (§11.3) is needed.
+   - `"num_country_dead(<country>)"` reads as a value in war scope, as do `num_country_wounded`,
+     `num_country_casualties` and `num_dead`;
+   - the counters printed 0 at `on_war_end` (unconfirmed: that line had no control value), so they are snapshotted
+     monthly (§2.5);
+   - **still open:** whether battle dead come out of the soldiers' home-state pops. A comparison of two saves around a
+     battle settles it.
+5. **State modifier reads include the country's: yes** (§2.3).
+6. **Who pays pensions in money: nobody, for the old** (from the game files). Old Age Pension's welfare payments are a
+   treasury expense, but they go to workforce pops paid below a fraction of the normal wage
+   (`concept_welfare_payments_desc`). Its +20% dependents income per level has no payer and no budget line. So §7 needs
+   its own money cost (§13).
+7. **Births floor:** births ran at about a tenth at −0.9 and stopped at −3; they never go negative. The point between
+   where they reach zero wasn't measured (§2.3).
+8. **GUI** (from the game files):
+   - the panel is `gui/pops_overview.gui`, with four tabs; Demographics fits as the fifth (§10);
+   - scripted GUI buttons already work in vanilla panels outside the journal (the system tabs);
+   - no GUI sort takes a script value, so the states are ordered in script (§10);
+   - left-growing bars come from vanilla's reverse hack, not a mirror property (§10).
+9. **Cost: cheap.** One-year cohorts take about 1 s per world-year in 1836, five-year about 0.1 s. The engine spreads
+   the yearly state pulse over the year, and each variable takes 60–85 bytes of a plain-text save (§1, §11.3). **Still
+   open:** a re-run in a late-game save.
+10. **New, still open: does the engine's monthly change follow the SoL curves world-wide?** The probe's own check
+    failed: script-value literals allow at most five decimal places, and longer ones read as 0. Qing's births are
+    consistent with the curve. The harness checks the rest before anything is tuned (§12).
+11. **New, still open: `WORKING_ADULT_RATIO_SKEW_MAXIMUM`.** The mod sets it to 1,000,000 (vanilla 2.0). A save
+    comparison of a pop's workforce share before and after a ratio modifier changes shows how fast §7's workforce effect
+    takes hold.
