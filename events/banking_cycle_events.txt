@@ -1030,10 +1030,18 @@ banking_cycle_events.9 = {
 # upper strata. It does not put the country into the engine's default state;
 # the markets price it instead (banking_event_partial_default: a risk premium
 # decaying over ten years, and prestige), and the banks holding the bonds feel
-# it (cycle value, bubble). The write-off lowers the debt-load premium by
+# it (cycle value, bubble). Since #800 it is the talks' 25% haircut,
+# banking_restructuring_haircut (banking_debt_effects.txt), so it also costs
+# the lenders' reserves (a smaller credit limit for five years), relations
+# with the countries most invested in us, and ten years before the next deal. The write-off lowers the debt-load premium by
 # about a point at most, so the default premium outweighs it for years: C buys
 # room under the credit limit, not cheaper credit. #428 had reworded it to a
 # threat, which touched no debt; the .110 and .160 variants share the option.
+# Since #800 a chosen restructuring is also open outside this draw, through the
+# Restructure the Public Debt decision (banking_debt_events.1).
+#
+# Option B is the bank buying bonds where it may monetise (#800, the option's
+# own comment); .110 and .160 have no such bank and keep their B.
 # --------------------------------------------------------------------------
 banking_cycle_events.10 = {
 	type = country_event
@@ -1077,28 +1085,44 @@ banking_cycle_events.10 = {
 		}
 	}
 
-	# Option B: Reassure markets with central bank intervention
+	# Option B: Reassure markets with central bank intervention. Where the bank
+	# may monetise under the full system it buys government bonds: one step of
+	# te_monetisation_level for a year (te_mon_effect_bond_support, #800), with
+	# the minting, inflation pressure and risk premium a step carries. Elsewhere
+	# (metal, independence, no bank, the simplified rule) it is talk.
 	option = {
 		name = banking_cycle_events.10.b
 		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		if = {
+			limit = {
+				te_mon_full_system = yes
+				te_mon_can_monetise = yes
+			}
+			te_mon_effect_bond_support = yes
+		}
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_is_panic = yes }
+			# Printing into a high inflation: the bank's purchases add to it.
+			modifier = {
+				trigger = {
+					te_mon_full_system = yes
+					te_mon_can_monetise = yes
+					has_variable = te_inflation
+					var:te_inflation >= te_mon_band_edge_high
+				}
+				add = -25
+			}
 		}
 	}
 
 	# Option C: Default on a quarter of the debt - drastic (see the header).
 	option = {
 		name = banking_cycle_events.10.c
-		banking_partial_default_write_off = yes
+		banking_restructuring_haircut = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
-		add_modifier = {
-			name = banking_event_partial_default
-			days = long_modifier_time
-			is_decaying = yes
-		}
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -1155,10 +1179,9 @@ banking_cycle_events.110 = {
 	# quarter of the debt written off (.10's header)
 	option = {
 		name = banking_cycle_events.110.c
-		banking_partial_default_write_off = yes
+		banking_restructuring_haircut = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
-		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals pop_type = bureaucrats }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
@@ -1208,10 +1231,9 @@ banking_cycle_events.160 = {
 	# shared obligations, a quarter of the debt written off (.10's header)
 	option = {
 		name = banking_cycle_events.160.c
-		banking_partial_default_write_off = yes
+		banking_restructuring_haircut = yes
 		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
 		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
-		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = upper }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
 	}
@@ -4128,8 +4150,9 @@ banking_cycle_events.44 = {
 #
 # The partner asked: the donor's banking pulse (banking_cycle_random_event_effect)
 # picks it and sends it .68, and only its "appeal" option sends this event to
-# the donor, with scope:bailout_country saved. Every answer is reported back
-# to the partner through .69.
+# the donor, with scope:bailout_country saved. Options A-C are reported back
+# to the partner through .69; option E (#800), a rescue on conditions, sends
+# it the terms instead (banking_debt_events.2).
 # --------------------------------------------------------------------------
 banking_cycle_events.45 = {
 	type = country_event
@@ -4228,6 +4251,35 @@ banking_cycle_events.45 = {
 		}
 		ai_chance = {
 			base = 25
+		}
+	}
+
+	# Option E (#800): the rescue package of option A, lent on conditions, the
+	# shape of an IMF stand-by arrangement. Nothing is paid until the partner
+	# signs (banking_debt_events.2); then a third at once and a third at each
+	# of two yearly reviews, each only if its budget has stopped borrowing for
+	# most of the year (banking_debt_effects.txt has the programme).
+	option = {
+		name = banking_cycle_events.45.e
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		if = {
+			limit = { exists = scope:bailout_country }
+			change_relations = {
+				country = scope:bailout_country
+				value = 10
+			}
+			custom_tooltip = banking_cycle_events.45.e.tt
+			hidden_effect = {
+				banking_rescue_offer_terms = yes
+			}
+		}
+		ai_chance = {
+			base = 30
+			# Conditions are for a crisis the budget made.
+			modifier = {
+				trigger = { scope:bailout_country ?= { taking_loans = yes } }
+				add = 15
+			}
 		}
 	}
 

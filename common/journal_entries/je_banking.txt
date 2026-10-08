@@ -280,6 +280,8 @@
 			banking_cycle_advance_variables = yes
 			banking_cycle_check_and_execute_crash = yes
 			banking_cycle_eliq_wind_down = yes
+			# A conditional rescue's reviews (#800, banking_debt_effects.txt).
+			banking_rescue_programme_monthly = yes
 
 			# Sample the month's settled cycle state for the history charts.
 			# Runs after the crash check so a crash month's bar shows the

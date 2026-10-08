@@ -192,6 +192,13 @@
 #                                                   for the swap in step 6c, never
 #                                                   displayed
 #   te_monetisation_level   0 to 3      displayed   the deficit-monetisation stepper (§11)
+#   te_mon_bond_support_months 0 to 12              months left of the bank's bond
+#                                                   purchases (#800): one temporary
+#                                                   step of te_monetisation_level,
+#                                                   started by te_mon_effect_bond_
+#                                                   support, run down and withdrawn
+#                                                   by step 1b; zeroed wherever the
+#                                                   level is zeroed
 #   te_monetisation_minting_applied >= 0            the value last written into
 #                                                   te_monetisation_minting's multiplier
 #                                                   (pounds of extra minting a week).
@@ -1424,6 +1431,20 @@ te_mon_monetisation_gdp_share = {
 # AI rule clamp against this, so the ceiling is stated in exactly one place.
 te_mon_monetisation_max = {
 	value = 3
+}
+
+# How long the bank's bond purchases last, in months (#800): option B of the
+# Sovereign Debt Scare (banking_cycle_events.10) takes one monetisation step
+# for this long (te_mon_effect_bond_support), and step 1b takes it back. A year
+# at one step is 1% of GDP of bonds bought, about what the ECB's Securities
+# Markets Programme bought of the eurozone's in its first year. At +2.5pp of
+# pressure a step, core inflation climbs about 1.8pp by the end of the term
+# (0.10 of the gap a month for twelve months) and falls back after it.
+#
+# STATED IN WORDS by te_mon_bond_support_tt and te_mon_bond_support_extend_tt;
+# test_banking_debt_crisis.py holds them to this value.
+te_mon_bond_support_term = {
+	value = 12
 }
 
 # How near insolvency has to be before the AI escalates from level 1 to level 2

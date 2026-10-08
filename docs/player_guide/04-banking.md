@@ -731,7 +731,9 @@ inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
 Independence, Command Economy, dollarization and an anchored currency rule it
 out. An independent bank still buys assets by itself in a deflation (see [When
-the bank cannot cut](#when-the-bank-cannot-cut)).
+the bank cannot cut](#when-the-bank-cannot-cut)). The Sovereign Debt Scare's
+central bank option adds one level for a year (see [Banking
+events](#banking-events)).
 
 ### Currency regimes and the policy rate
 
@@ -939,6 +941,36 @@ four points and a law that allows it, and The Gold Window Closes, a
 gold-standard crisis event, appears only under this setting. With the rule on
 *Disabled* interest works the same way, minus the cycle's premium.
 
+## Restructuring the public debt
+
+Once your debt passes a quarter of your credit limit, or you are in default, the
+decision Restructure the Public Debt opens talks with your creditors. It needs
+the Banking Cycle journal entry. In Restructuring Talks you choose how much of
+the debt they write off:
+
+| Option | Written off | What it costs |
+|---|---|---|
+| Reprofile: write off a tenth and stretch the rest | 10% | Reprofiled Debt: +1.5 points of risk premium and −5% prestige, fading over five years; −10 relations with your investors |
+| Negotiate a haircut of a quarter | 25% | Partial Default: +4 points of risk premium and −15% prestige, fading over ten years; Wary Lenders: −10% building cash reserves, fading over five years; −25 relations with your investors |
+| Make them take half (in default only) | 50% | Deep Default: +6 points of risk premium and −25% prestige, fading over ten years; Shut Out of the Markets: −25% building cash reserves, fading over five years; −50 relations with your investors |
+| Break off the talks | Nothing | Nothing; the talks wait a year |
+
+Your investors are the countries that own more than 5% of your GDP. Every
+haircut also radicalizes the upper strata who held the bonds, more for a larger
+one, and costs the banks some cycle value. Your credit limit is your buildings'
+cash reserves plus a base set by your GDP, so the cash-reserve cuts shrink it
+for a few years: that is the markets shutting you out. After a reprofiling your
+creditors will not talk again for five years, after a haircut for ten.
+
+A write-off buys room under your credit limit, not cheaper credit. The debt-load
+part of your risk premium falls by a point and a third for a quarter of a debt
+at the limit, while the haircut's own premium adds four. Half is for a government that
+has already stopped paying: the middle way between paying and the base game's
+Declare Bankruptcy, which erases every loan at a far heavier price. The Sovereign
+Debt Scare's partial default is the same quarter haircut, with the same costs.
+The AI opens talks in default, or with debt at three quarters of its credit
+limit and still growing.
+
 ## Bailouts and the Great Depression
 
 One country can ask another to rescue its banks, a wave of crashes can become a
@@ -959,9 +991,21 @@ International Bailout Request:
 | Extend a generous rescue package | A sum scaled to the rescuer's GDP, capped at a fifth of the recipient's; +30 relations; five years of Restored Banking Confidence for the recipient |
 | Offer a smaller emergency grant | An eighth of the package; +10 relations; two and a half years of Restored Banking Confidence |
 | They must solve their own problems | −20 relations, and the largest of the three hits to the rescuer's own cycle |
+| Lend, on conditions | The rescue package's sum, offered as a loan on conditions; +10 relations. Nothing is paid unless the recipient signs |
 
 Restored Banking Confidence lowers crash likelihood by 10%, raises company
 throughput by 5% and blocks another appeal while it lasts.
+
+A loan on conditions reaches the recipient as The Rescue's Terms. Refusing, the
+default, costs nothing. Signing pays a third of the sum at once and puts you
+under two years of Rescue Programme (−1 point of risk premium, −5 legitimacy)
+and Restored Banking Confidence; Trade Unions disapprove and Industrialists
+approve. The other two thirds come at yearly reviews, each only if your budget
+took loans in no more than 6 of the 12 months before it. Miss a review and the
+programme is suspended: no more payments, −20 relations with the rescuer and +2
+points of risk premium fading over five years. Both sides get a notice at each
+review. While a programme still owes you money, no one else is asked to rescue
+you.
 
 ### The Great Depression
 
@@ -1003,7 +1047,10 @@ on the phase, the bubble, your technology and your economic system. After one,
 no random banking event fires for at least 18 months, and none in a crash month.
 Their options move the cycle's readings, and the tooltip shows by how much. The
 Sovereign Debt Scare, drawn only while your debt is past a quarter of your
-credit limit, can end in a partial default that writes off a quarter of the
-debt, at the price of 4 points of risk premium fading over ten years and 15%
-less prestige. A few tie into the banking tools: The Bank Holiday appears only when you could
+credit limit, can end in a partial default, the quarter haircut of
+[Restructuring the public debt](#restructuring-the-public-debt) at the same
+price. Its central bank option, where your bank may monetize the deficit under
+the full Banking System, has the bank buy government bonds: Monetise Deficit
+rises one level for 12 months, with that level's inflation and risk premium,
+then steps back. A few tie into the banking tools: The Bank Holiday appears only when you could
 declare one, and its first option does.

@@ -1,0 +1,92 @@
+﻿# Sovereign debt crises as a process (#800): the chosen restructuring and the
+# conditional rescue. The effects are in
+# common/scripted_effects/banking_debt_effects.txt, the events in
+# events/banking_debt_events.txt; mod_systems.md § Banking Cycle has the design.
+
+# ---- Restructuring: the write-offs -------------------------------------------
+# clear_scaled_debt clears that multiple of the credit limit, and scaled_debt is
+# the debt over the limit, so scaled_debt x share is that share of the debt
+# itself, whatever its size (scripting_best_practices.md § "clear_scaled_debt
+# Takes a Share of the Credit Limit"). The quarter is
+# banking_partial_default_haircut (extra_script_values.txt), shared with the
+# Sovereign Debt Scare's option C.
+
+# Reprofiling: a tenth written off, the rest's maturities stretched. Uruguay's
+# 2003 reprofiling cost its bondholders roughly 13% in present value.
+banking_restructuring_haircut_reprofile = {
+	value = scaled_debt
+	multiply = 0.1
+}
+
+# The deep haircut: half written off, open only in the engine's default state
+# (banking_restructuring_deep_possible). Greece's 2012 private exchange cut the
+# face value of the bonds it covered by 53.5%.
+banking_restructuring_haircut_deep = {
+	value = scaled_debt
+	multiply = 0.5
+}
+
+# ---- The conditional rescue ----------------------------------------------------
+# The offer (banking_cycle_events.45 option E), evaluated on the recipient with
+# ROOT the donor: the same sum as the rescue package of option A (the donor's
+# banking_event_expense_large over normal_modifier_time, in the fortnights
+# banking_transfer_emergency_aid counts, capped by the recipient's
+# banking_bailout_rescue_cap), but paid in banking_rescue_tranches parts.
+banking_rescue_offer_value = {
+	value = root.banking_event_expense_large
+	multiply = normal_modifier_time
+	divide = 14
+	max = banking_bailout_rescue_cap
+}
+
+# The offer is paid in three equal tranches: one when the programme is signed,
+# one at each of two yearly reviews. A stand-by arrangement of the IMF's shape.
+banking_rescue_tranches = { value = 3 }
+
+# Months between reviews.
+banking_rescue_review_months_term = { value = 12 }
+
+# The condition: of the months between reviews, the budget may be borrowing
+# (taking_loans) in at most this many. Half the year: a government that asked
+# for a rescue in a downturn is borrowing when it signs, and has six months to
+# close the gap. STATED IN WORDS by banking_rescue_terms_tt and the review
+# notices; test_banking_debt_crisis.py holds them to this value.
+banking_rescue_borrowing_months_allowed = { value = 6 }
+
+# One tranche, in money: read from the offer while the terms event is open
+# (banking_rescue_accept removes the offer when it signs), from the signed
+# programme afterwards. The offer comes first because a past programme's
+# tranche is never removed: the notices read it after the programme ends.
+# Scope: the recipient.
+banking_rescue_tranche_display = {
+	value = 0
+	if = {
+		limit = { has_variable = banking_rescue_offer }
+		add = var:banking_rescue_offer
+		divide = banking_rescue_tranches
+	}
+	else_if = {
+		limit = { has_variable = banking_rescue_tranche }
+		add = var:banking_rescue_tranche
+	}
+}
+
+# ---- AI ------------------------------------------------------------------------
+# The decision opens the talks (banking_debt_events.1), where the AI then picks
+# a haircut or breaks off. It opens them in default, where the deep haircut is
+# the way out short of Declare Bankruptcy, or when the debt is three quarters
+# of the credit limit and still growing.
+banking_restructuring_ai_value = {
+	value = 0
+	if = {
+		limit = { in_default = yes }
+		add = 50
+	}
+	else_if = {
+		limit = {
+			scaled_debt >= 0.75
+			taking_loans = yes
+		}
+		add = 10
+	}
+}

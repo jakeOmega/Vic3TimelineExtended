@@ -730,6 +730,48 @@ banking_event_partial_default = {
 	country_risk_premium_add = 0.04
 }
 
+# --- Sovereign debt restructuring and the conditional rescue (#800) ---
+# The talks' tiers (banking_debt_effects.txt has the whole ladder). The 25%
+# haircut's premium is banking_event_partial_default above, shared with the
+# Sovereign Debt Scare. The two lenders' modifiers lower what every building
+# may hold in cash reserves, and with them the credit limit, which is those
+# reserves plus a GDP-scaled base.
+banking_restructuring_reprofiled = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+	country_risk_premium_add = 0.015
+}
+
+banking_restructuring_deep_default = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.25
+	country_risk_premium_add = 0.06
+}
+
+banking_restructuring_wary_lenders = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_cash_reserves_mult = -0.1
+}
+
+banking_restructuring_shut_out = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_cash_reserves_mult = -0.25
+}
+
+# A signed conditional rescue (banking_debt_events.2): a creditor government
+# stands behind us, and its conditions are written abroad.
+banking_rescue_programme = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+	country_legitimacy_base_add = -5
+}
+
+# The programme suspended at a review: the markets read the missed condition.
+banking_rescue_programme_suspended = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.02
+}
+
 # --- Event 11: Insurance Sector Wobble ---
 banking_event_insurance_reserves = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds

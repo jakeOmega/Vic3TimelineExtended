@@ -1,0 +1,330 @@
+﻿namespace = banking_debt_events
+
+# ============================================================================
+# SOVEREIGN DEBT CRISES AS A PROCESS (#800)
+# The chosen restructuring and the conditional rescue. Effects, triggers and
+# values: banking_debt_effects.txt, banking_debt_triggers.txt and
+# banking_debt_values.txt; mod_systems.md § Banking Cycle has the design.
+#
+#  1. Restructuring Talks       - from te_decision_restructure_debt
+#  2. The Rescue's Terms        - to the partner, from banking_cycle_events.45 E
+#  3. Programme Review          - to the partner, from its banking pulse
+#  4. Our Rescue Programme      - to the donor, at signing and at each review
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# 1. Restructuring Talks
+# The decision opens them (te_decision_restructure_debt); the haircut is
+# chosen here. C, half the debt, is offered only in the engine's default state
+# (banking_restructuring_deep_possible), and the text says so when it is not.
+# B is the Sovereign Debt Scare's option C (banking_restructuring_haircut).
+# --------------------------------------------------------------------------
+banking_debt_events.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = banking_debt_events.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_restructuring_deep_possible = yes }
+				desc = banking_debt_events.1.d_default
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_debt_events.1.d
+			}
+		}
+	}
+	flavor = banking_debt_events.1.f
+
+	duration = 3
+
+	trigger = {
+		banking_restructuring_shown = yes
+	}
+
+	# Option A: Reprofile — a tenth written off, the rest stretched.
+	option = {
+		name = banking_debt_events.1.a
+		banking_restructuring_reprofile = yes
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		add_radicals = {
+			value = small_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { scaled_debt < 0.6 }
+				add = 10
+			}
+		}
+	}
+
+	# Option B: A haircut of a quarter.
+	option = {
+		name = banking_debt_events.1.b
+		banking_restructuring_haircut = yes
+		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { scaled_debt >= 0.75 }
+				add = 15
+			}
+		}
+	}
+
+	# Option C: Half, in default only.
+	option = {
+		name = banking_debt_events.1.c
+		trigger = { banking_restructuring_deep_possible = yes }
+		banking_restructuring_deep_haircut = yes
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_bubble_pressure = { ADD = -20 TEXT = BUBBLE_PRESSURE_MINUS_20_DESC }
+		add_radicals = {
+			value = large_radicals
+			strata = upper
+		}
+		ai_chance = {
+			base = 40
+		}
+	}
+
+	# Option E: Break off the talks. The default: an unanswered event writes
+	# off nothing.
+	option = {
+		name = banking_debt_events.1.e
+		# REVIEWED 2026-10-07 (no_effect_option): the decline; the tooltip says nothing is written off and the talks wait a year
+		default_option = yes
+		custom_tooltip = banking_debt_events.1.e.tt
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# --------------------------------------------------------------------------
+# 2. The Rescue's Terms
+# To the distressed partner, from the donor's .45 option E
+# (banking_rescue_offer_terms), which saved scope:bailout_donor and
+# scope:bailout_country and left the offer in var:banking_rescue_offer.
+# Refusing is the default: signing commits the budget for two years.
+# --------------------------------------------------------------------------
+banking_debt_events.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = banking_debt_events.2.t
+	desc = banking_debt_events.2.d
+	flavor = banking_debt_events.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:bailout_donor
+		has_variable = banking_rescue_offer
+		NOT = { banking_rescue_programme_running = yes }
+	}
+
+	cancellation_trigger = { NOT = { exists = scope:bailout_donor } }
+
+	# Option A: Sign the programme.
+	option = {
+		name = banking_debt_events.2.a
+		banking_rescue_accept = yes
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { banking_cycle_is_panic = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Option B: Refuse the terms.
+	option = {
+		name = banking_debt_events.2.b
+		default_option = yes
+		banking_rescue_refuse = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# --------------------------------------------------------------------------
+# 3. Programme Review
+# To the partner, from its banking journal entry's monthly pulse when a review
+# falls due (banking_rescue_review). var:banking_rescue_outcome: 1 a tranche
+# paid with one to come, 2 the last tranche paid, 3 suspended for missing the
+# condition, 4 lapsed with the donor gone. The money and the relations already
+# moved; this only tells us.
+# --------------------------------------------------------------------------
+banking_debt_events.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/state_bank_reserves.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_rescue_outcome_is = { OUTCOME = 3 } }
+				desc = banking_debt_events.3.t_suspended
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_outcome_is = { OUTCOME = 4 } }
+				desc = banking_debt_events.3.t_lapsed
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_debt_events.3.t_paid
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_rescue_outcome_is = { OUTCOME = 1 } }
+				desc = banking_debt_events.3.d_paid
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_outcome_is = { OUTCOME = 2 } }
+				desc = banking_debt_events.3.d_complete
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_outcome_is = { OUTCOME = 3 } }
+				desc = banking_debt_events.3.d_suspended
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_debt_events.3.d_lapsed
+			}
+		}
+	}
+	flavor = banking_debt_events.3.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = banking_rescue_outcome
+	}
+
+	option = {
+		name = {
+			trigger = { banking_rescue_outcome_is = { OUTCOME = 3 } }
+			text = banking_debt_events.3.a_suspended
+		}
+		name = {
+			trigger = { banking_rescue_outcome_is = { OUTCOME = 4 } }
+			text = banking_debt_events.3.a_lapsed
+		}
+		name = {
+			trigger = {
+				NOT = { banking_rescue_outcome_is = { OUTCOME = 3 } }
+				NOT = { banking_rescue_outcome_is = { OUTCOME = 4 } }
+			}
+			text = banking_debt_events.3.a
+		}
+		default_option = yes
+	}
+}
+
+# --------------------------------------------------------------------------
+# 4. Our Rescue Programme
+# To the donor: the partner's answer to the terms (banking_rescue_accept /
+# _refuse) and each review (banking_rescue_review), with scope:bailout_country
+# saved. var:banking_rescue_donor_outcome: 1 signed (the first tranche paid),
+# 2 refused, 3 a tranche paid at a review, 4 suspended. Like .3, a notice.
+# --------------------------------------------------------------------------
+banking_debt_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_rescue_donor_outcome_is = { OUTCOME = 2 } }
+				desc = banking_debt_events.4.t_refused
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_donor_outcome_is = { OUTCOME = 4 } }
+				desc = banking_debt_events.4.t_suspended
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_debt_events.4.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_rescue_donor_outcome_is = { OUTCOME = 1 } }
+				desc = banking_debt_events.4.d_signed
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_donor_outcome_is = { OUTCOME = 2 } }
+				desc = banking_debt_events.4.d_refused
+			}
+			triggered_desc = {
+				trigger = { banking_rescue_donor_outcome_is = { OUTCOME = 3 } }
+				desc = banking_debt_events.4.d_paid
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_debt_events.4.d_suspended
+			}
+		}
+	}
+	flavor = banking_debt_events.4.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:bailout_country
+		has_variable = banking_rescue_donor_outcome
+	}
+
+	option = {
+		name = banking_debt_events.4.a
+		default_option = yes
+	}
+}

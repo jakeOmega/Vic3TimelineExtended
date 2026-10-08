@@ -881,6 +881,10 @@ te_monetary_init_variables = {
 		set_variable = { name = te_monetisation_minting_applied value = 0 }
 	}
 	if = {
+		limit = { NOT = { has_variable = te_mon_bond_support_months } }
+		set_variable = { name = te_mon_bond_support_months value = 0 }
+	}
+	if = {
 		limit = { NOT = { has_variable = te_mon_dollarised } }
 		set_variable = { name = te_mon_dollarised value = 0 }
 	}
@@ -1056,10 +1060,23 @@ te_monetary_set_regime = {
 # month's number instead of last month's, and the deficit read-out the console
 # prints is the one the pressure used.
 #
-# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1. The steppers at the foot
-# of this file write it and the next pulse picks it up, exactly like the rate
-# target — which is also why this step is the only writer that runs inside the
-# update, and why no other step may write the level.
+# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1 and the bond-support
+# clock below. The steppers at the foot of this file write it and the next
+# pulse picks it up, exactly like the rate target — which is also why this step
+# is the only writer that runs inside the update, and why no other step may
+# write the level.
+#
+# THE BOND-SUPPORT CLOCK (#800). The Sovereign Debt Scare's option B
+# (banking_cycle_events.10) has the bank buy government bonds: one temporary
+# step of the level, te_mon_effect_bond_support at the foot of this file, which
+# also starts te_mon_bond_support_months at te_mon_bond_support_term. The clock
+# runs down here, a month a pulse, and when it reaches 0 a player's level steps
+# back by one (never below 0), so the step the bank took is the step it
+# withdraws. The player may move the stepper meanwhile; the withdrawal still
+# takes one step off whatever they left. An AI's level is its own rule's, so
+# the clock only holds the rule's step back while it runs: the AI keeps the
+# step for the term and drops it the month the clock ends. A country that may
+# no longer monetise loses the clock with the level (rule 1).
 #
 # ELIGIBILITY IS RE-ASKED EVERY MONTH, not only on a law change. §14 has
 # te_banking_law_change_cleanup zero the level the moment a disqualifying law
@@ -1113,9 +1130,29 @@ te_monetary_update_monetisation = {
 	if = {
 		limit = { te_mon_can_monetise = no }
 		set_variable = { name = te_monetisation_level value = 0 }
+		set_variable = { name = te_mon_bond_support_months value = 0 }
 	}
-	else_if = {
-		limit = { is_player = no }
+	else = {
+		# The bond-support clock (see the header). The player's withdrawal is
+		# here; the AI's is its rule's own step back, below.
+		if = {
+			limit = { var:te_mon_bond_support_months > 0 }
+			change_variable = { name = te_mon_bond_support_months subtract = 1 }
+			if = {
+				limit = {
+					var:te_mon_bond_support_months = 0
+					is_player = yes
+					var:te_monetisation_level > 0
+				}
+				change_variable = { name = te_monetisation_level subtract = 1 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			te_mon_can_monetise = yes
+			is_player = no
+		}
 		if = {
 			limit = {
 				is_at_war = yes
@@ -1139,7 +1176,11 @@ te_monetary_update_monetisation = {
 			}
 		}
 		else_if = {
-			limit = { var:te_monetisation_level > 0 }
+			limit = {
+				var:te_monetisation_level > 0
+				# Held while the bank's bond purchases run (the clock above).
+				var:te_mon_bond_support_months = 0
+			}
 			change_variable = { name = te_monetisation_level subtract = 1 }
 		}
 		clamp_variable = {
@@ -3764,6 +3805,48 @@ te_mon_effect_monetisation_step_up = {
 		}
 	}
 	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+# THE BANK BUYS GOVERNMENT BONDS (#800): option B of the Sovereign Debt Scare
+# (banking_cycle_events.10), for a country that may monetise. One step of
+# te_monetisation_level for te_mon_bond_support_term months, after which step
+# 1b takes it back (its header has the clock). The step is priced like any
+# other: minting worth te_mon_monetisation_gdp_share of GDP a year, +2.5pp of
+# inflation pressure and +0.5pp of risk premium, all of them step 1b's and the
+# next pulse's. Like the steppers it writes inputs only.
+#
+# A second purchase while one runs restarts the clock and takes no second
+# step. A level already at te_mon_monetisation_max has no step left to take,
+# so the option's market effects stand alone and the tooltip says why.
+#
+# Scope: country. The caller checks te_mon_full_system and te_mon_can_monetise.
+te_mon_effect_bond_support = {
+	if = {
+		limit = {
+			has_variable = te_mon_bond_support_months
+			var:te_mon_bond_support_months > 0
+		}
+		custom_tooltip = te_mon_bond_support_extend_tt
+		hidden_effect = {
+			set_variable = { name = te_mon_bond_support_months value = te_mon_bond_support_term }
+		}
+	}
+	else_if = {
+		limit = { te_mon_monetise_can_step_up = yes }
+		custom_tooltip = te_mon_bond_support_tt
+		hidden_effect = {
+			change_variable = { name = te_monetisation_level add = 1 }
+			clamp_variable = {
+				name = te_monetisation_level
+				min = 0
+				max = te_mon_monetisation_max
+			}
+			set_variable = { name = te_mon_bond_support_months value = te_mon_bond_support_term }
+		}
+	}
+	else = {
+		custom_tooltip = te_mon_bond_support_at_max_tt
+	}
 }
 
 

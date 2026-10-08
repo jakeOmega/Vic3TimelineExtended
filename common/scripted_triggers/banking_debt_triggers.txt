@@ -1,0 +1,85 @@
+﻿# Sovereign debt crises as a process (#800). Scope: country throughout.
+# Values: common/script_values/banking_debt_values.txt; effects:
+# common/scripted_effects/banking_debt_effects.txt.
+
+# ---- Restructuring -------------------------------------------------------------
+
+# Who sees the Restructure the Public Debt decision: a banking-system country
+# whose debt the markets price (banking_sovereign_debt_is_priced, where the
+# debt-load premium starts), or one already in default, which the deep haircut
+# is for. The rebels of a running revolution owe nothing yet: the winner
+# continues the nation (#460-#465), and the nation's debt with it.
+banking_restructuring_shown = {
+	has_journal_entry = je_banking_cycle
+	is_revolutionary = no
+	OR = {
+		banking_sovereign_debt_is_priced = yes
+		in_default = yes
+	}
+}
+
+# Whether talks can open now. banking_debt_restructured is the markets'
+# memory of the last deal (5 years after a reprofiling, 10 after a haircut,
+# whether chosen here or taken in the Sovereign Debt Scare);
+# banking_restructuring_talks is the year after talks were opened, so a
+# country that broke them off is not back at the table next month.
+banking_restructuring_possible = {
+	custom_tooltip = {
+		text = banking_restructuring_not_recent_tt
+		NOT = { has_variable = banking_debt_restructured }
+	}
+	custom_tooltip = {
+		text = banking_restructuring_no_talks_tt
+		NOT = { has_variable = banking_restructuring_talks }
+	}
+}
+
+# The deep haircut (half the debt) is tied to the engine's own default state:
+# only a government that has already stopped paying can make its creditors
+# accept half. Vanilla's Declare Bankruptcy, open in default too, erases all of
+# it at a far higher price (the declared_bankruptcy modifier).
+banking_restructuring_deep_possible = {
+	in_default = yes
+}
+
+# ---- The conditional rescue -----------------------------------------------------
+
+# A programme is running: tranches are still owed. The variables carry it, not
+# the programme's modifier, so a revolution's winner keeps the programme
+# (#460-#465). Read by the bailout appeal's gate (te_ea_bailout_can_be_asked),
+# so a country under a programme is not offered a second one.
+banking_rescue_programme_running = {
+	has_variable = banking_rescue_tranches_left
+	var:banking_rescue_tranches_left > 0
+}
+
+# At a review: did the budget keep to the condition, borrowing in no more than
+# banking_rescue_borrowing_months_allowed of the months since the last one?
+banking_rescue_condition_met = {
+	has_variable = banking_rescue_borrowing_months
+	var:banking_rescue_borrowing_months <= banking_rescue_borrowing_months_allowed
+}
+
+# The donor can still pay: it exists and is alive (a dead country can still be
+# read for a while, te_monetary_civil_war_effects.txt's loser). A donor that
+# has ceased to exist owes nothing, and the programme lapses.
+banking_rescue_donor_exists = {
+	has_variable = banking_rescue_donor
+	exists = var:banking_rescue_donor
+	var:banking_rescue_donor = { is_country_alive = yes }
+}
+
+# Which outcome a notice reports. On the recipient (banking_debt_events.3):
+# 1 tranche paid, more to come; 2 the last tranche paid; 3 suspended for
+# breaking the condition; 4 lapsed, the donor gone. On the donor
+# (banking_debt_events.4): 1 terms accepted; 2 terms refused; 3 tranche paid
+# at a review; 4 programme suspended.
+banking_rescue_outcome_is = {
+	has_variable = banking_rescue_outcome
+	var:banking_rescue_outcome = $OUTCOME$
+}
+
+banking_rescue_donor_outcome_is = {
+	has_variable = banking_rescue_donor_outcome
+	var:banking_rescue_donor_outcome = $OUTCOME$
+}
