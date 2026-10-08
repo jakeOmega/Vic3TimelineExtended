@@ -106,7 +106,6 @@ gm_country_hard_times = {
 #   gm_faith          Grand Shrine: the religion it honours
 #   gm_skin           flag: the form it takes (§1.1)
 #   gm_seen           its records have been written
-#   gm_dedication     flag: the dedication it keeps (its PM's key)
 #   gm_contested      months it has stood contested (§4)
 #   gm_heritage       preserved as heritage (§4.3)
 #   gm_base_ig / gm_supporter_ig   IG flags recorded at contest (§4.1)
@@ -131,26 +130,6 @@ gm_state_has_copied_dedication = {
 	NOT = { has_variable = gm_seen }
 	NOT = { has_variable = gm_ceremony_level }
 	NOT = { has_variable = gm_ceremony_pending }
-}
-
-# Still on the dedication gm_dedication records. Undedicated stays selectable
-# in the panel, so script keeps the choice (gm_state_keep_dedication).
-gm_state_keeps_its_dedication = {
-	has_variable = gm_dedication
-	OR = {
-		AND = { var:gm_dedication = flag:crown gm_state_has_pm = { PM = pm_monument_crown } }
-		AND = { var:gm_dedication = flag:republic gm_state_has_pm = { PM = pm_monument_republic } }
-		AND = { var:gm_dedication = flag:revolution gm_state_has_pm = { PM = pm_monument_revolution } }
-		AND = { var:gm_dedication = flag:leader gm_state_has_pm = { PM = pm_monument_leader } }
-		AND = { var:gm_dedication = flag:religious gm_state_has_pm = { PM = pm_monument_religious } }
-		AND = { var:gm_dedication = flag:civic gm_state_has_pm = { PM = pm_monument_civic } }
-		AND = { var:gm_dedication = flag:war_memorial gm_state_has_pm = { PM = pm_monument_war_memorial } }
-		AND = { var:gm_dedication = flag:artistic gm_state_has_pm = { PM = pm_monument_artistic } }
-		AND = { var:gm_dedication = flag:naturalist gm_state_has_pm = { PM = pm_monument_naturalist } }
-		AND = { var:gm_dedication = flag:scientific gm_state_has_pm = { PM = pm_monument_scientific } }
-		AND = { var:gm_dedication = flag:industrial gm_state_has_pm = { PM = pm_monument_industrial } }
-		AND = { var:gm_dedication = flag:athletic gm_state_has_pm = { PM = pm_monument_athletic } }
-	}
 }
 
 gm_state_kind_regime = {

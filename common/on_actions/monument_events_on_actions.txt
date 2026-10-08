@@ -12,27 +12,6 @@ on_building_built = {
 	}
 }
 
-# A dedicated monument switched to Undedicated in the building panel goes
-# straight back (Undedicated stays selectable so script can undo the engine's
-# copy of a sibling's dedication; grand_monument_pms.txt). ROOT = the building.
-# The refresh catches a switch this misses.
-on_production_method_changed = {
-	on_actions = {
-		gm_pm_changed_on_action
-	}
-}
-
-gm_pm_changed_on_action = {
-	trigger = {
-		is_building_type = building_grand_monument
-	}
-	effect = {
-		state = {
-			gm_state_keep_dedication = yes
-		}
-	}
-}
-
 on_monthly_pulse_country = {
 	on_actions = {
 		monument_events_on_action

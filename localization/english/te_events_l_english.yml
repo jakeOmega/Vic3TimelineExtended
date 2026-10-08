@@ -5103,13 +5103,12 @@
  te_debug_monuments.2.j:0 "Lapse the open commission now"
  te_debug_monuments.2.k:0 "Print the commission and every total to debug.log"
  te_debug_monuments.2.t:0 "Debug: Commissions"
- te_debug_monuments.3.a:0 "Probe the lock on our tallest dedicated monument"
- te_debug_monuments.3.b:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m1').GetName]"
- te_debug_monuments.3.c:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m2').GetName]"
- te_debug_monuments.3.d:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m3').GetName]"
- te_debug_monuments.3.desc:0 "The first option tries to move a dedicated monument to another dedication by script, past the lock that hides it, and writes TE_MONUMENTS: lines to debug.log, the result a day later. The others re-open one monument's dedication: its records go, and the ceremony asks again."
+ te_debug_monuments.3.a:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m1').GetName]"
+ te_debug_monuments.3.b:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m2').GetName]"
+ te_debug_monuments.3.c:0 "Re-open the dedication in [SCOPE.sState('gm_dbg_m3').GetName]"
+ te_debug_monuments.3.desc:0 "Re-open one monument's dedication: its records and name go, and the ceremony asks again."
  te_debug_monuments.3.flavor:0 "Console only."
- te_debug_monuments.3.t:0 "Debug: The Dedication Lock"
+ te_debug_monuments.3.t:0 "Debug: Re-open a Dedication"
 
 #
 # TE_DEBUG_NUCLEAR

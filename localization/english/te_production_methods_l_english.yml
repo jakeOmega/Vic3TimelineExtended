@@ -1350,7 +1350,7 @@
  pm_monument_scientific:0 "Grand Observatory"
  pm_monument_scientific_desc:0 "A telescope, a planetarium, a museum of the sciences. Pleases the Intelligentsia. #R The dedication is permanent.#!"
  pm_monument_undedicated:0 "Undedicated"
- pm_monument_undedicated_desc:0 "The stone is up; the meaning is not yet settled. An undedicated monument gives prestige and draws visitors, nothing more. #R The dedication, once chosen, is permanent: choosing Undedicated for a dedicated monument switches it straight back.#!"
+ pm_monument_undedicated_desc:0 "The stone is up; the meaning is not yet settled. An undedicated monument gives prestige and draws visitors, nothing more. #R The dedication, once chosen, is permanent.#!"
  pm_monument_war_memorial:0 "War Memorial"
  pm_monument_war_memorial_desc:0 "Names cut into stone, and a place to read them. Pleases the Armed Forces. #R The dedication is permanent.#!"
  pm_moon_mission:0 "Moon Mission"

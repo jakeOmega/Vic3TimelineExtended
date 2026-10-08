@@ -3,33 +3,27 @@
 #==================================================
 # Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
 #
-# THE RATCHET -- why every dedication lists itself in unlocking_production_methods.
+# THE RATCHET -- why every PM below lists itself in unlocking_production_methods.
 #
 # The engine has no "lock this PM once chosen" feature, so the lock is built
 # out of unlocking_production_methods, which is an OR over its list:
 #
-#   pm_monument_undedicated  always available
+#   pm_monument_undedicated  unlocks on { itself }
 #   every dedication         unlocks on { pm_monument_undedicated, itself }
 #
 # Undedicated active -> every dedication is available. After a pick -> only
-# the chosen PM's own self-reference and Undedicated are. Rededicate (§4.3)
-# rebuilds the monument.
+# the chosen PM's own self-reference is satisfied. The choice is permanent;
+# Rededicate (§4.3) rebuilds the monument.
 #
-# WHY UNDEDICATED IS NOT LOCKED. A new building starts on the production
-# methods most of its owner's buildings of that type use, not on is_default:
-# the owner's France (2026-10-08) queued a third monument and it stood at level
-# 0 on To the Revolution, its two siblings' dedication, before any script ran.
-# With Undedicated locked behind itself, that copy was permanent and no
-# ceremony ever asked. Script now switches a copy back
-# (gm_state_reset_copied_dedication, gm_effects.txt), and keeps a chosen
-# dedication against a pick of Undedicated in the panel
-# (gm_state_keep_dedication, from on_production_method_changed and the
-# refresh). Whether activate_production_method can override the lock itself
-# is untested (console: te_debug_monuments.3, option a); if it can,
-# Undedicated could be locked again.
+# THE ENGINE'S COPY. A new building starts on the production methods most of
+# its owner's buildings of that type use, not on is_default: the owner's
+# France (2026-10-08) queued a third monument and it stood at level 0 on To
+# the Revolution, its two siblings' dedication, before any script ran. The
+# lock binds the panel only: activate_production_method moves a monument past
+# it (te_debug_monuments probe, 2026-10-08). So the ceremony replaces a copy
+# directly (gm_state_reset_copied_dedication, gm_effects.txt).
 #
-# Every PM carries is_hidden_when_unavailable so the group shows one row
-# beside Undedicated.
+# Every PM carries is_hidden_when_unavailable so the group shows one row.
 # Do NOT add replacement_if_valid to any of these -- it would defeat the ratchet.
 #
 # STAFF ONLY. A dedication PM carries the caretaker staff and nothing else.
@@ -50,6 +44,10 @@ pm_monument_undedicated = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 	is_hidden_when_unavailable = yes
 	is_default = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+	}
 
 	building_modifiers = {
 		# A caretaker staff, not a workforce that grows with the monument's height.

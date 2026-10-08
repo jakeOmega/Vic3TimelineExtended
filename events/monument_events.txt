@@ -109,8 +109,8 @@ monument_events.2 = {
 	# Only for a monument whose dedication no ceremony or pulse has recorded
 	# (gm_seen). `has_building` alone would re-open the question every time an
 	# existing monument gains a level. Not "on Undedicated": a new or rebuilt
-	# monument may stand on its siblings' dedication, which immediate switches
-	# back (gm_state_has_copied_dedication).
+	# monument may stand on its siblings' dedication, which the answer replaces
+	# (gm_state_has_copied_dedication).
 	trigger = {
 		gm_system_enabled = yes
 		any_scope_building = {
@@ -124,10 +124,6 @@ monument_events.2 = {
 		# The grandeur this ceremony asks at (gm_state_start_ceremony), again
 		# now: a Rededicate rebuild's level may not have been readable then.
 		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
-		# Every dedication opens only from Undedicated. gm_state_start_ceremony
-		# switched a copied one back; again here, in case that switch came
-		# before the rebuilt building could take it.
-		gm_state_undedicate = yes
 		save_scope_as = monument_state
 		owner = {
 			save_scope_as = gm_com_country
@@ -149,6 +145,8 @@ monument_events.2 = {
 		custom_tooltip = monument_events.2.a.tt
 		hidden_effect = {
 			gm_remove_state_var = { VAR = gm_ceremony_pending }
+			# A copy of a sibling's dedication goes back to Undedicated.
+			gm_state_undedicate = yes
 		}
 	}
 
