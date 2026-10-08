@@ -212,12 +212,12 @@
   "de": "Es werden Obergrenzen dafür festgelegt, wie viel eine einzelne Instanz an eine politische Kampagne spenden darf, um den Einfluss von Reichtum zu verringern."
  },
  "law_equal_inheritance": {
-  "en": "Equal Inheritance",
-  "de": "Gleiches Erbrecht"
+  "en": "Forced Heirship",
+  "de": "Noterbrecht"
  },
  "law_equal_inheritance_desc": {
-  "en": "All children inherit an equal share of the estate or assets, regardless of birth order. This system promotes fairness and equality among siblings, ensuring that wealth is distributed evenly.",
-  "de": "Alle Kinder erben einen gleichen Anteil am Nachlass oder Vermögen, unabhängig von der Geburtsreihenfolge. Dieses System fördert Fairness und Gleichheit unter Geschwistern und sorgt für eine gleichmäßige Vermögensverteilung."
+  "en": "The law reserves every child a fixed share of the estate, as the Napoleonic Code does. Farms divide with each generation, so peasants have fewer children to keep the plot whole and stay on the land, while the great fortunes slowly dissolve.",
+  "de": "Das Gesetz sichert jedem Kind einen festen Anteil am Nachlass, wie der Code Napoléon. Höfe werden mit jeder Generation geteilt, also bekommen die Bauern weniger Kinder, um die Parzelle zu erhalten, und bleiben auf dem Land, während sich die großen Vermögen langsam auflösen."
  },
  "law_federal_system": {
   "en": "Federal System",
@@ -258,6 +258,14 @@
  "law_free_mutual_banking_desc": {
   "en": "A patchwork of private and cooperative banks clears through mutual arrangements. Some informal coordination is possible, but there is no true central bank.",
   "de": "Ein Flickenteppich aus privaten und genossenschaftlichen Banken rechnet über gegenseitige Vereinbarungen ab. Informelle Abstimmung ist möglich, doch es gibt keine echte Zentralbank."
+ },
+ "law_free_testation": {
+  "en": "Freedom of Testation",
+  "de": "Testierfreiheit"
+ },
+ "law_free_testation_desc": {
+  "en": "The owner's will decides who inherits, and no share is reserved for the children. A family firm can pass whole to the heir who runs it, and a fortune can go to a foundation instead of a dynasty.",
+  "de": "Das Testament des Eigentümers bestimmt, wer erbt, und den Kindern ist kein Anteil vorbehalten. Ein Familienunternehmen kann ungeteilt an den Erben gehen, der es führt, und ein Vermögen kann statt einer Dynastie einer Stiftung zufallen."
  },
  "law_freedom_of_contract": {
   "en": "Freedom of Contract",
@@ -780,12 +788,12 @@
   "de": "Wir haben keine Nationalbank."
  },
  "law_non_inheritable_usage_rights": {
-  "en": "Non-Inheritable Usage Rights",
-  "de": "Nicht vererbbare Nutzungsrechte"
+  "en": "Possession by Use",
+  "de": "Besitz durch Nutzung"
  },
  "law_non_inheritable_usage_rights_desc": {
-  "en": "Property is not owned by individuals but by the community or state. Citizens are granted usage rights but cannot pass the property to their descendants. This system aims to prevent the accumulation of wealth and promote social equality.",
-  "de": "Eigentum gehört nicht Einzelpersonen, sondern der Gemeinschaft oder dem Staat. Bürger erhalten Nutzungsrechte, können das Eigentum aber nicht an ihre Nachkommen weitergeben. Dieses System soll die Anhäufung von Vermögen verhindern und soziale Gleichheit fördern."
+  "en": "Land and workshops belong to those who work them, not to an owner who can bequeath them. When a holder dies, the commune that uses the holding reallocates it; nothing passes to the state. With nothing to leave their children, families save less.",
+  "de": "Land und Werkstätten gehören denen, die sie bearbeiten, nicht einem Eigentümer, der sie vererben könnte. Stirbt ein Inhaber, vergibt die Gemeinde, die den Besitz nutzt, ihn neu; nichts fällt an den Staat. Da sie ihren Kindern nichts hinterlassen können, sparen Familien weniger."
  },
  "law_open_government": {
   "en": "Open Government",
@@ -812,12 +820,12 @@
   "de": "Der Schutz geistigen Eigentums ist darauf ausgerichtet, Innovation und Zusammenarbeit zu fördern, mit Schwerpunkt auf Open-Source-[Concept('concept_power_bloc_principle', 'Prinzipien')]. Urheber werden ermutigt, ihre Arbeit zu teilen, behalten dabei aber bestimmte Rechte und erhalten Anerkennung für ihre Beiträge."
  },
  "law_partible": {
-  "en": "Partible Inheritance",
-  "de": "Realteilung"
+  "en": "Customary Inheritance",
+  "de": "Gewohnheitsrechtliche Erbfolge"
  },
  "law_partible_desc": {
-  "en": "Estates are divided among multiple heirs, with some flexibility in how assets are distributed.",
-  "de": "Nachlässe werden unter mehreren Erben aufgeteilt, mit gewisser Flexibilität bei der Verteilung der Vermögenswerte."
+  "en": "No national rule decides who inherits: local custom does, so estates are divided in one province and kept whole in the next.",
+  "de": "Kein Reichsgesetz bestimmt, wer erbt, sondern der örtliche Brauch: In einer Provinz werden Güter geteilt, in der nächsten bleiben sie ganz."
  },
  "law_penal_labor_camps": {
   "en": "Penal Labor Camps",
@@ -844,12 +852,12 @@
   "de": "In diesem Wirtschaftsmodell haben fortschrittliche Technologien und effizientes Ressourcenmanagement [concept_post_scarcity_system] erreicht, sodass Mangel der Vergangenheit angehört. Alle wesentlichen Güter und Dienstleistungen stehen jedem Bürger frei zur Verfügung, wodurch die klassischen wirtschaftlichen Herausforderungen von Angebot und Nachfrage entfallen."
  },
  "law_primogeniture": {
-  "en": "Primogeniture",
-  "de": "Primogenitur"
+  "en": "Primogeniture & Entail",
+  "de": "Primogenitur und Fideikommiss"
  },
  "law_primogeniture_desc": {
-  "en": "The eldest child, typically the firstborn son, inherits the entire estate or title of the deceased parent. This system ensures the preservation of family wealth and power within a single line of descent.",
-  "de": "Das älteste Kind, meist der erstgeborene Sohn, erbt den gesamten Nachlass oder Titel des verstorbenen Elternteils. Dieses System sichert den Erhalt von Familienvermögen und -macht innerhalb einer einzigen Erblinie."
+  "en": "The eldest son inherits the estate whole, and entail binds each heir to pass it on undivided. The great houses last for generations; the younger sons make their way in the army, the church, the colonies and the city.",
+  "de": "Der älteste Sohn erbt das Gut ungeteilt, und das Fideikommiss verpflichtet jeden Erben, es ungeteilt weiterzugeben. Die großen Häuser überdauern Generationen; die jüngeren Söhne suchen ihr Auskommen in Armee, Kirche, Kolonien und Stadt."
  },
  "law_private_military_contractors": {
   "en": "Private Military Contractors",
@@ -1002,6 +1010,14 @@
  "law_state_sponsored_family_planning_desc": {
   "en": "Empowering citizens with the knowledge and means to choose the size of their own family is a hallmark of a modern, healthy society. The state provides education and access to contraception to manage population growth.",
   "de": "Bürgern das Wissen und die Mittel zu geben, die Größe ihrer eigenen Familie selbst zu bestimmen, ist ein Kennzeichen einer modernen, gesunden Gesellschaft. Der Staat stellt Aufklärung und Zugang zu Verhütungsmitteln bereit, um das Bevölkerungswachstum zu steuern."
+ },
+ "law_state_universal_heir": {
+  "en": "State as Universal Heir",
+  "de": "Staat als Universalerbe"
+ },
+ "law_state_universal_heir_desc": {
+  "en": "Private property ends with its owner's life: estates pass to the state, which administers them for the nation. With nothing to leave their children, families save less.",
+  "de": "Privateigentum endet mit dem Leben seines Eigentümers: Nachlässe fallen an den Staat, der sie für die Nation verwaltet. Da sie ihren Kindern nichts hinterlassen können, sparen Familien weniger."
  },
  "law_strict_ip_protection": {
   "en": "Strict IP Protection",
@@ -1216,8 +1232,8 @@
   "de": "Erbrecht"
  },
  "lawgroup_inheritance_desc": {
-  "en": "The rules and regulations governing the transfer of property, assets, and wealth from one generation to the next.",
-  "de": "Die Regeln und Vorschriften für die Übertragung von Eigentum, Vermögenswerten und Reichtum von einer Generation zur nächsten."
+  "en": "Who inherits an estate. The law in force, with its amendments, sets the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
+  "de": "Wer einen Nachlass erbt. Das geltende Gesetz bestimmt mit seinen Nachträgen das Ziel, dem sich die [concept_inheritance_concentration] nähert: derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, auf dem Weg zu #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
  },
  "lawgroup_intellectual_property": {
   "en": "Intellectual Property",

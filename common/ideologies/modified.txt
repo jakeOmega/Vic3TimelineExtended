@@ -58,6 +58,8 @@ REPLACE:ideology_paternalistic = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_propaganda = {
@@ -424,8 +426,10 @@ REPLACE:ideology_liberal = {
 	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
-		law_partible = approve
+		law_partible = neutral
 		law_equal_inheritance = neutral
+		law_free_testation = strongly_approve
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_thought_control = {
@@ -1321,6 +1325,8 @@ REPLACE:ideology_traditionalist = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -1602,6 +1608,8 @@ REPLACE:ideology_reformer = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_urban_planning = {
@@ -2608,6 +2616,8 @@ REPLACE:ideology_social_democrat = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_thought_control = {
@@ -4391,6 +4401,8 @@ REPLACE:ideology_anarchist = {
 		law_primogeniture = strongly_disapprove
 		law_partible = disapprove
 		law_equal_inheritance = neutral
+		law_free_testation = strongly_disapprove
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = strongly_approve
 	}
 	lawgroup_ministry_of_religion = {
@@ -5194,8 +5206,10 @@ REPLACE:ideology_meritocratic = {
 	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
-		law_partible = approve
+		law_partible = neutral
 		law_equal_inheritance = neutral
+		law_free_testation = strongly_approve
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_urban_planning = {
@@ -5681,8 +5695,10 @@ REPLACE:ideology_individualist = {
 	icon = "gfx/interface/icons/ideology_icons/individualist.dds"
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
-		law_partible = approve
+		law_partible = neutral
 		law_equal_inheritance = neutral
+		law_free_testation = strongly_approve
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_consumer_protection = {
@@ -5787,7 +5803,9 @@ REPLACE:ideology_proletarian = {
 		law_primogeniture = strongly_disapprove
 		law_partible = neutral
 		law_equal_inheritance = approve
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = disapprove
+		law_state_universal_heir = approve
+		law_non_inheritable_usage_rights = approve
 	}
 	lawgroup_ministry_of_urban_planning = {
 		law_no_ministry_of_urban_planning = disapprove
@@ -5924,7 +5942,9 @@ REPLACE:ideology_communist = {
 		law_primogeniture = strongly_disapprove
 		law_partible = disapprove
 		law_equal_inheritance = neutral
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = strongly_disapprove
+		law_state_universal_heir = strongly_approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_intelligence_and_security = {
 		law_no_ministry_of_intelligence_and_security = neutral
@@ -8546,6 +8566,8 @@ REPLACE:ideology_papal_moralist = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8578,6 +8600,8 @@ REPLACE:ideology_confucian = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8621,6 +8645,8 @@ REPLACE:ideology_bakufu = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_governance_principles = {
@@ -8667,6 +8693,8 @@ REPLACE:ideology_shinto_moralist = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8759,6 +8787,8 @@ REPLACE:ideology_buddhist_moralist = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8794,8 +8824,10 @@ REPLACE:ideology_hindu_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
-		law_partible = approve
+		law_partible = neutral
 		law_equal_inheritance = neutral
+		law_free_testation = strongly_approve
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8854,6 +8886,8 @@ REPLACE:ideology_sikh_moralist = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -8925,6 +8959,8 @@ REPLACE:ideology_orleanist = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
@@ -9207,6 +9243,8 @@ REPLACE:ideology_legitimist = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_governance_principles = {
@@ -9471,6 +9509,8 @@ REPLACE:ideology_bonapartist = {
 		law_primogeniture = disapprove
 		law_partible = neutral
 		law_equal_inheritance = strongly_approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
@@ -9757,6 +9797,8 @@ REPLACE:ideology_republican_leader = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
@@ -10708,6 +10750,8 @@ REPLACE:ideology_russian_patriarch = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
@@ -10751,6 +10795,8 @@ REPLACE:ideology_orthodox_patriarch = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
@@ -10787,6 +10833,8 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
@@ -11337,6 +11385,8 @@ INJECT:ideology_agrarian = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_genetic_rights = {
@@ -11684,6 +11734,8 @@ REPLACE:ideology_agrarian_jeffersonian = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_labor = {
@@ -12893,7 +12945,9 @@ REPLACE:ideology_proletarian_movement = {
 		law_primogeniture = strongly_disapprove
 		law_partible = disapprove
 		law_equal_inheritance = neutral
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = strongly_disapprove
+		law_state_universal_heir = strongly_approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_labor = {
 		law_no_ministry_of_labor = neutral
@@ -13095,7 +13149,9 @@ REPLACE:ideology_communist_movement = {
 		law_primogeniture = strongly_disapprove
 		law_partible = disapprove
 		law_equal_inheritance = neutral
-		law_non_inheritable_usage_rights = strongly_approve
+		law_free_testation = strongly_disapprove
+		law_state_universal_heir = strongly_approve
+		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_ministry_of_labor = {
 		law_no_ministry_of_labor = neutral
@@ -14101,6 +14157,8 @@ REPLACE:ideology_traditionalist_movement = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -14153,6 +14211,8 @@ REPLACE:ideology_traditionalist_minoritarian_movement = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
@@ -14319,6 +14379,8 @@ REPLACE:ideology_orleanist_movement = {
 		law_primogeniture = disapprove
 		law_partible = approve
 		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
@@ -14376,6 +14438,8 @@ REPLACE:ideology_bonapartist_movement = {
 		law_primogeniture = disapprove
 		law_partible = neutral
 		law_equal_inheritance = strongly_approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
 		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
@@ -14442,6 +14506,8 @@ REPLACE:ideology_legitimist_movement = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
 		law_equal_inheritance = disapprove
+		law_free_testation = disapprove
+		law_state_universal_heir = strongly_disapprove
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_governance_principles = {

@@ -1,0 +1,247 @@
+﻿# ======================================================================
+#  INHERITANCE — scripted effects
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Values: common/script_values/te_inheritance_values.txt.
+#  Modifiers: common/static_modifiers/te_inheritance_modifiers.txt.
+#  Hooks: common/on_actions/te_inheritance_on_actions.txt.
+#  Docs: docs/systems/mod_systems.md § Inheritance.
+#
+#  Variables (country):
+#    te_inh_concentration        0-100, the wealth-concentration score.
+#                                Set at game start (inheritance_events.1)
+#                                and, on a save from before the redesign,
+#                                at the country's first yearly pulse, both
+#                                at its target, so nothing drifts at first.
+#    te_inh_great_fortunes_mult  multipliers the two score modifiers read;
+#    te_inh_dispersed_mult       never removed (a modifier's multiplier is
+#                                re-read after it is applied)
+#    te_inh_law_recent           20 years from an inheritance law taking
+#                                effect (the laws' on_activate); the
+#                                generation events wait for it to lapse
+#    te_inh_duty_years           years the estate duty (Estate Duties or
+#                                the Birthright Endowment) has been in force
+#    te_inh_title_continuity     backed-up minds keep their property: the
+#                                target is pinned at the score
+#    te_inh_posthumous_decided   the Posthumous Title question was answered
+#  Variables (state):
+#    te_inh_agrarian_share       Peasants plus Farmers over the population,
+#                                the rural modifiers' multiplier
+#
+#  Revolutions: the score is a variable, so a revolution's winner keeps the
+#  loser's when it held none of its own; inh_repair_after_civil_war copies
+#  it over the winner's own and puts the modifiers back
+#  (scripting_best_practices.md § "What a Civil War's Winner Inherits").
+# ======================================================================
+
+# Country scope; ROOT must be the country, since add_modifier's multiplier
+# resolves against ROOT. Called from on_yearly_pulse_country.
+te_inh_yearly_update = {
+	if = {
+		limit = { NOT = { has_variable = te_inh_concentration } }
+		set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
+	}
+	else = {
+		set_variable = { name = te_inh_concentration value = te_inh_concentration_next }
+	}
+	te_inh_tidy_amendments = yes
+	te_inh_count_duty_years = yes
+	te_inh_apply_concentration_modifiers = yes
+}
+
+# Country scope; ROOT the country (inheritance_events.1 at game start).
+# Every 1836 country starts at its law's target.
+te_inh_game_start = {
+	set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
+	te_inh_apply_concentration_modifiers = yes
+}
+
+# Country scope; ROOT the country. The two score modifiers, from the
+# current score; and the continuity-of-title modifier while the pin holds
+# (a revolution's winner inherits the variable but not the modifier).
+te_inh_apply_concentration_modifiers = {
+	set_variable = { name = te_inh_great_fortunes_mult value = te_inh_great_fortunes_mult_value }
+	set_variable = { name = te_inh_dispersed_mult value = te_inh_dispersed_mult_value }
+	if = {
+		limit = { has_modifier = inh_great_fortunes }
+		remove_modifier = inh_great_fortunes
+	}
+	if = {
+		limit = { has_modifier = inh_dispersed_wealth }
+		remove_modifier = inh_dispersed_wealth
+	}
+	if = {
+		limit = { var:te_inh_great_fortunes_mult > 0.01 }
+		add_modifier = {
+			name = inh_great_fortunes
+			multiplier = var:te_inh_great_fortunes_mult
+		}
+	}
+	if = {
+		limit = { var:te_inh_dispersed_mult > 0.01 }
+		add_modifier = {
+			name = inh_dispersed_wealth
+			multiplier = var:te_inh_dispersed_mult
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_inh_title_continuity
+			NOT = { has_modifier = inh_continuity_of_title }
+		}
+		add_modifier = { name = inh_continuity_of_title }
+	}
+}
+
+# Country scope. Event options move the score by AMOUNT (negative to lower
+# it), clamped to 0-100. The modifiers follow at the next yearly pulse.
+te_inh_shift_concentration = {
+	if = {
+		limit = { NOT = { has_variable = te_inh_concentration } }
+		set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
+	}
+	change_variable = {
+		name = te_inh_concentration
+		add = $AMOUNT$
+	}
+	clamp_variable = {
+		name = te_inh_concentration
+		min = 0
+		max = 100
+	}
+}
+
+# Country scope. The Birthright Endowment levies the duty itself, so it
+# replaces Estate Duties rather than stacking on it (spec §2.3). Estate
+# Duties' `possible` keeps it off a law with the Endowment, but an interest
+# group could sponsor the Endowment onto a law that has the duty; the
+# yearly pulse drops the duty then.
+te_inh_tidy_amendments = {
+	active_law:lawgroup_inheritance ?= {
+		if = {
+			limit = {
+				has_amendment = amendment_type:amendment_birthright_endowment
+				has_amendment = amendment_type:amendment_estate_duties
+			}
+			random_scope_amendment = {
+				limit = { amendment_type:amendment_estate_duties ?= this.type }
+				remove_amendment = yes
+			}
+		}
+	}
+}
+
+# Country scope. Swap Estate Duties for the Birthright Endowment on the law
+# in force (the Endowment petition, amendment_petition_events.19). The
+# Endowment goes on first, so its `possible` (which does not ask about the
+# duty) is read with the duty still there; whether add_amendment sees a
+# removal made earlier in the same block is not known (spec §9), and this
+# order makes it not matter. SPONSOR is the sponsoring interest group.
+te_inh_swap_duties_for_endowment = {
+	active_law:lawgroup_inheritance ?= {
+		add_amendment = {
+			type = amendment_birthright_endowment
+			sponsor = $SPONSOR$
+			cooldown = 60
+		}
+		random_scope_amendment = {
+			limit = { amendment_type:amendment_estate_duties ?= this.type }
+			remove_amendment = yes
+		}
+	}
+}
+
+# Country scope. Years the estate duty has been in force, for the Great
+# Estates for Sale (inheritance_events.5).
+te_inh_count_duty_years = {
+	if = {
+		limit = { te_inh_levies_estate_duty = yes }
+		if = {
+			limit = { has_variable = te_inh_duty_years }
+			change_variable = { name = te_inh_duty_years add = 1 }
+		}
+		else = {
+			set_variable = { name = te_inh_duty_years value = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_inh_duty_years }
+		remove_variable = te_inh_duty_years
+	}
+}
+
+# State scope; ROOT the state (on_yearly_pulse_state), since the
+# multiplier resolves against ROOT. One refresh site for the three rural
+# modifiers. Undivided Farm Succession switches Forced Heirship's off.
+te_inh_refresh_rural_effects = {
+	if = {
+		limit = { has_modifier = inh_forced_heirship_rural }
+		remove_modifier = inh_forced_heirship_rural
+	}
+	if = {
+		limit = { has_modifier = inh_primogeniture_rural }
+		remove_modifier = inh_primogeniture_rural
+	}
+	if = {
+		limit = { has_modifier = inh_undivided_farm_rural }
+		remove_modifier = inh_undivided_farm_rural
+	}
+	if = {
+		limit = {
+			owner ?= {
+				OR = {
+					has_law = law_type:law_equal_inheritance
+					has_law = law_type:law_primogeniture
+					te_inh_has_undivided_farms = yes
+				}
+			}
+		}
+		set_variable = { name = te_inh_agrarian_share value = te_inh_agrarian_share_value }
+		if = {
+			limit = { owner = { te_inh_has_undivided_farms = yes } }
+			add_modifier = {
+				name = inh_undivided_farm_rural
+				multiplier = var:te_inh_agrarian_share
+			}
+		}
+		else_if = {
+			limit = { owner = { has_law = law_type:law_equal_inheritance } }
+			add_modifier = {
+				name = inh_forced_heirship_rural
+				multiplier = var:te_inh_agrarian_share
+			}
+		}
+		else_if = {
+			limit = { owner = { has_law = law_type:law_primogeniture } }
+			add_modifier = {
+				name = inh_primogeniture_rural
+				multiplier = var:te_inh_agrarian_share
+			}
+		}
+	}
+}
+
+# Country scope; ROOT the winner (te_civil_war_on_won). The winner
+# continues the nation: a revolution's winner takes the loser's score and
+# Posthumous Title answer, and gets the modifiers back.
+inh_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			scope:te_cw_loser ?= { has_variable = te_inh_concentration }
+		}
+		set_variable = { name = te_inh_concentration value = scope:te_cw_loser.var:te_inh_concentration }
+		if = {
+			limit = { scope:te_cw_loser = { has_variable = te_inh_posthumous_decided } }
+			set_variable = te_inh_posthumous_decided
+		}
+		if = {
+			limit = { scope:te_cw_loser = { has_variable = te_inh_title_continuity } }
+			set_variable = te_inh_title_continuity
+		}
+	}
+	if = {
+		limit = { has_variable = te_inh_concentration }
+		te_inh_apply_concentration_modifiers = yes
+	}
+}

@@ -123,6 +123,7 @@ te_civil_war_on_won = {
 		decol_repair_after_civil_war = yes		# PR #508
 		gm_repair_after_civil_war = yes			# Grand Monuments: adopt the loser's monuments
 		te_tax_repair_after_civil_war = yes		# Legislated tax code: the winner's code applies
+		inh_repair_after_civil_war = yes		# Inheritance: the concentration score
 		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}

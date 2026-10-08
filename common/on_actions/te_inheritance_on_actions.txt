@@ -1,0 +1,107 @@
+﻿# ======================================================================
+#  INHERITANCE — on actions
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Effects: common/scripted_effects/te_inheritance_effects.txt.
+#  Docs: docs/systems/mod_systems.md § Inheritance.
+# ======================================================================
+
+# Every 1836 country starts at its law's target. on_game_started has no
+# ROOT, and add_modifier's multiplier resolves against ROOT, so the work
+# runs in a hidden country event (scripting_best_practices.md
+# § "add_modifier { multiplier = var:X } Resolves Against ROOT"); the
+# fan-out is te_monetary_on_game_started's.
+on_game_started = {
+	on_actions = {
+		te_inh_on_game_started
+	}
+}
+
+te_inh_on_game_started = {
+	effect = {
+		every_country = {
+			trigger_event = {
+				id = inheritance_events.1
+			}
+		}
+	}
+}
+
+# Root = Country. The score drifts and its modifiers follow, once a year;
+# then the generation events and Posthumous Title each roll.
+on_yearly_pulse_country = {
+	on_actions = {
+		te_inh_yearly_on_action
+		te_inh_generation_primogeniture
+		te_inh_generation_forced_heirship
+		te_inh_generation_free_testation
+		te_inh_generation_estate_duties
+		te_inh_posthumous_title
+	}
+}
+
+te_inh_yearly_on_action = {
+	effect = {
+		te_inh_yearly_update = yes
+	}
+}
+
+# Root = State. The rural-scaled birth and migration modifiers: a state
+# pulse, because their multiplier is the state's own agrarian share.
+on_yearly_pulse_state = {
+	on_actions = {
+		te_inh_state_yearly_on_action
+	}
+}
+
+te_inh_state_yearly_on_action = {
+	effect = {
+		te_inh_refresh_rural_effects = yes
+	}
+}
+
+# Generation events: each rolls 10% a year once its law has been held for a
+# generation (te_inh_generation_due), with a 25-year cooldown of its own.
+# The no-event weight is the amendment-petition idiom
+# (amendment_petition_on_actions.txt).
+
+# The Cadet Sons (Primogeniture & Entail).
+te_inh_generation_primogeniture = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.2
+	}
+}
+
+# The Last Division (Forced Heirship).
+te_inh_generation_forced_heirship = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.3
+	}
+}
+
+# The Founder's Will (Freedom of Testation).
+te_inh_generation_free_testation = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.4
+	}
+}
+
+# The Great Estates for Sale (Estate Duties, or the Birthright Endowment's
+# duty, in force for 15 years).
+te_inh_generation_estate_duties = {
+	random_events = {
+		900 = 0
+		100 = inheritance_events.5
+	}
+}
+
+# Posthumous Title: once Mind Backups or Biological Immortality is
+# researched, 20% a year until it is answered.
+te_inh_posthumous_title = {
+	random_events = {
+		800 = 0
+		200 = inheritance_events.6
+	}
+}

@@ -1,0 +1,977 @@
+﻿namespace = inheritance_events
+
+# ======================================================================
+#  INHERITANCE EVENTS
+#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Docs: docs/systems/mod_systems.md § Inheritance.
+#
+#    1       hidden: every country's score set at game start
+#    2-5     generation events (§5, first wave), rolled yearly from
+#            te_inh_generation_* (te_inheritance_on_actions.txt) once the
+#            law has been held for a generation; 25-year cooldowns
+#    6-7     Posthumous Title (§6), from Mind Backups or Biological
+#            Immortality, once per country
+#    10-13   amendment debate events (§2), pooled in
+#            on_law_checkpoint_debate (law_events_on_actions.txt). Each
+#            trigger restates its amendment's `possible`, since
+#            add_amendment silently does nothing when it fails. When the
+#            law in force carries the amendment, the event offers to carry
+#            it over to the incoming law (a law's amendments leave with it)
+#
+#  Options that move the concentration score call
+#  te_inh_shift_concentration inside a custom_tooltip, since a variable
+#  change prints nothing (silent_variable_audit).
+# ======================================================================
+
+# ======================================================================
+#  1 – Game start (hidden)
+#  on_game_started has no ROOT, so the score and its modifiers are set
+#  here, where ROOT is the country (te_inh_on_game_started). The laws'
+#  on_activate may have started the generation clock while history set
+#  them; the 1836 laws are old, so it is cleared.
+# ======================================================================
+inheritance_events.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_inh_law_recent }
+			remove_variable = te_inh_law_recent
+		}
+		te_inh_game_start = yes
+	}
+}
+
+# ======================================================================
+#  2 – The Cadet Sons  (Primogeniture & Entail)
+#  The eldest has the estate; the younger sons need a living.
+# ======================================================================
+inheritance_events.2 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.2.t
+	desc = inheritance_events.2.d
+	flavor = inheritance_events.2.f
+
+	event_image = { video = "unspecific_military_parade" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		has_law = law_type:law_primogeniture
+		te_inh_generation_due = yes
+	}
+
+	option = { # The army
+		name = inheritance_events.2.a
+		default_option = yes
+		add_modifier = { name = inh_cadets_army years = 10 }
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # The church
+		name = inheritance_events.2.b
+		add_modifier = { name = inh_cadets_church years = 10 }
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The colonies
+		name = inheritance_events.2.c
+		trigger = { has_technology_researched = colonization }
+		add_modifier = { name = inh_cadets_colonies years = 10 }
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The city
+		name = inheritance_events.2.e
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  3 – The Last Division  (Forced Heirship)
+#  The reserved shares have split a family's farm once too often.
+# ======================================================================
+inheritance_events.3 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.3.t
+	desc = inheritance_events.3.d
+	flavor = inheritance_events.3.f
+
+	event_image = { video = "africa_prosperous_farm" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		has_law = law_type:law_equal_inheritance
+		te_inh_generation_due = yes
+		# One heir already takes the farm whole.
+		NOT = { te_inh_has_undivided_farms = yes }
+	}
+
+	immediate = {
+		ig:ig_rural_folk ?= { save_scope_as = rural_folk_ig }
+		active_law:lawgroup_inheritance ?= { save_scope_as = division_law }
+	}
+
+	option = { # Fewer children (the French path)
+		name = inheritance_events.3.a
+		default_option = yes
+		add_modifier = { name = inh_fewer_children years = 10 }
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Emigrate
+		name = inheritance_events.3.b
+		add_modifier = { name = inh_split_farm_emigration years = 10 }
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = peasants
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Sell to a neighbour
+		name = inheritance_events.3.c
+		custom_tooltip = {
+			text = inheritance_events.3.c.tt
+			te_inh_shift_concentration = { AMOUNT = 5 }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = peasants
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Legislate undivided succession
+		name = inheritance_events.3.e
+		trigger = {
+			exists = scope:rural_folk_ig
+			exists = scope:division_law
+			NOT = { te_ap_enacting_in_inheritance = yes }
+		}
+		scope:division_law = {
+			add_amendment = {
+				type = amendment_undivided_farm_succession
+				sponsor = scope:rural_folk_ig
+				cooldown = 60
+			}
+		}
+		scope:rural_folk_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:rural_folk_ig ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  4 – The Founder's Will  (Freedom of Testation)
+#  A great fortune's founder dies, and the will says where it goes.
+# ======================================================================
+inheritance_events.4 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.4.t
+	desc = inheritance_events.4.d
+	flavor = inheritance_events.4.f
+
+	event_image = { video = "unspecific_signed_contract" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		has_law = law_type:law_free_testation
+		te_inh_generation_due = yes
+	}
+
+	option = { # Endow a foundation
+		name = inheritance_events.4.a
+		default_option = yes
+		custom_tooltip = {
+			text = inheritance_events.4.a.tt
+			te_inh_shift_concentration = { AMOUNT = -5 }
+		}
+		add_modifier = { name = inh_foundation_endowed years = 10 }
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Found a dynasty
+		name = inheritance_events.4.b
+		custom_tooltip = {
+			text = inheritance_events.4.b.tt
+			te_inh_shift_concentration = { AMOUNT = 5 }
+		}
+		add_modifier = { name = inh_dynasty_founded years = 10 }
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The heirs go to court
+		name = inheritance_events.4.c
+		custom_tooltip = {
+			text = inheritance_events.4.c.tt
+			te_inh_shift_concentration = { AMOUNT = -2 }
+		}
+		add_modifier = { name = inh_probate_litigation years = 5 }
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  5 – The Great Estates for Sale  (Estate Duties)
+#  A generation of duty has come due on the great houses, and the
+#  estates come onto the market (a quarter of England changed hands in
+#  1918-21). Under the duty Estate Duties or the Birthright Endowment
+#  levies, held for 15 years (te_inh_duty_years).
+# ======================================================================
+inheritance_events.5 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.5.t
+	desc = inheritance_events.5.d
+	flavor = inheritance_events.5.f
+
+	event_image = { video = "europenorthamerica_rich_and_poor" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	cooldown = { years = 25 }
+
+	trigger = {
+		te_inh_levies_estate_duty = yes
+		has_variable = te_inh_duty_years
+		var:te_inh_duty_years >= 15
+	}
+
+	option = { # The state buys them
+		name = inheritance_events.5.a
+		custom_tooltip = {
+			text = inheritance_events.5.a.tt
+			te_inh_shift_concentration = { AMOUNT = -5 }
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.05
+		}
+		ig:ig_rural_folk ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The market takes them
+		name = inheritance_events.5.b
+		default_option = yes
+		custom_tooltip = {
+			text = inheritance_events.5.b.tt
+			te_inh_shift_concentration = { AMOUNT = -5 }
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = 0.03
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Exempt the farms
+		name = inheritance_events.5.c
+		custom_tooltip = {
+			text = inheritance_events.5.c.tt
+			te_inh_shift_concentration = { AMOUNT = 3 }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ======================================================================
+#  6 – Posthumous Title  (Mind Backups, Biological Immortality)
+#  The first backed-up mind contests its own probate; or, with nobody
+#  dying, the question of who inherits asks itself. Once per country.
+# ======================================================================
+inheritance_events.6 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.6.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = inheritance_events.6.d_backup
+				trigger = { has_technology_researched = mind_backups }
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = inheritance_events.6.d_immortal
+			}
+		}
+	}
+	flavor = inheritance_events.6.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		OR = {
+			has_technology_researched = mind_backups
+			has_technology_researched = biological_immortality
+		}
+		NOT = { has_variable = te_inh_posthumous_decided }
+	}
+
+	immediate = {
+		set_variable = te_inh_posthumous_decided
+	}
+
+	option = { # Recognise continuity of title
+		name = inheritance_events.6.a
+		custom_tooltip = {
+			text = inheritance_events.6.a.tt
+			set_variable = te_inh_title_continuity
+		}
+		add_modifier = { name = inh_continuity_of_title }
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		hidden_effect = {
+			trigger_event = { id = inheritance_events.7 days = 1825 }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Declare legal death
+		name = inheritance_events.6.b
+		default_option = yes
+		add_modifier = { name = inh_legal_death_backlash years = 10 }
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# ======================================================================
+#  7 – The Heirs Who Never Inherit  (Posthumous Title follow-up)
+#  Five years after continuity of title was recognised, the generation
+#  that will never inherit organises.
+# ======================================================================
+inheritance_events.7 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.7.t
+	desc = inheritance_events.7.d
+	flavor = inheritance_events.7.f
+
+	event_image = { texture = "gfx/event_pictures/digital_activism_screens.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	trigger = {
+		has_variable = te_inh_title_continuity
+	}
+
+	option = { # The courts hold the line
+		name = inheritance_events.7.a
+		default_option = yes
+		add_modifier = { name = inh_heirs_youth_movement years = 10 }
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # A stake for every heir
+		name = inheritance_events.7.b
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.1
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Reverse the ruling
+		name = inheritance_events.7.c
+		custom_tooltip = {
+			text = inheritance_events.7.c.tt
+			remove_variable = te_inh_title_continuity
+		}
+		remove_modifier = inh_continuity_of_title
+		add_modifier = { name = inh_legal_death_backlash years = 10 }
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  10 – Death Duties  (Inheritance – Amendment)
+#  The scripted way in for amendment_estate_duties while a law with private
+#  estates is enacted: a group that backs graduated taxation asks for a
+#  duty on estates, or to keep the one the outgoing law carries. Pooled in
+#  on_law_checkpoint_debate.
+# ======================================================================
+inheritance_events.10 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.10.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = inheritance_events.10.d_carry
+				trigger = {
+					active_law:lawgroup_inheritance ?= {
+						has_amendment = amendment_type:amendment_estate_duties
+					}
+				}
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = inheritance_events.10.d
+			}
+		}
+	}
+	flavor = inheritance_events.10.f
+
+	category = enactment
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		te_inh_enacting_private_estates_law = yes
+		# amendment_estate_duties's `possible`
+		has_technology_researched = political_agitation
+		NOT = {
+			active_law:lawgroup_inheritance ?= {
+				has_amendment = amendment_type:amendment_birthright_endowment
+			}
+		}
+		NOT = {
+			currently_enacting_law = {
+				OR = {
+					has_amendment = amendment_type:amendment_estate_duties
+					has_amendment = amendment_type:amendment_birthright_endowment
+				}
+			}
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			OR = {
+				is_interest_group_type = ig_intelligentsia
+				law_stance = {
+					law = law_type:law_graduated_taxation
+					value > neutral
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				OR = {
+					is_interest_group_type = ig_intelligentsia
+					law_stance = {
+						law = law_type:law_graduated_taxation
+						value > neutral
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = duty_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Write the duty into the bill
+		name = inheritance_events.10.a
+		trigger = { exists = scope:duty_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_estate_duties
+				sponsor = scope:duty_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = aristocrats
+		}
+	}
+
+	option = { # Leave the estates untaxed
+		name = inheritance_events.10.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:duty_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# ======================================================================
+#  11 – The Trust That Never Ends  (Inheritance – Amendment)
+#  The scripted way in for amendment_perpetual_trusts while Freedom of
+#  Testation is enacted: the Industrialists ask that a trust need never
+#  vest. Pooled in on_law_checkpoint_debate.
+# ======================================================================
+inheritance_events.11 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.11.t
+	desc = inheritance_events.11.d
+	flavor = inheritance_events.11.f
+
+	category = enactment
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_free_testation
+		# amendment_perpetual_trusts's `possible`
+		has_technology_researched = globalization
+		ig:ig_industrialists ?= { ig_counts_as_marginal = no }
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_perpetual_trusts
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_industrialists = {
+			save_scope_as = industrialists_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Let the trusts run for ever
+		name = inheritance_events.11.a
+		trigger = { exists = scope:industrialists_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_perpetual_trusts
+				sponsor = scope:industrialists_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = very_small_radicals
+			strata = lower
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = capitalists
+		}
+	}
+
+	option = { # Every fortune passes through an estate
+		name = inheritance_events.11.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:industrialists_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# ======================================================================
+#  12 – A Stake at Twenty-One  (Inheritance – Amendment)
+#  The scripted way in for amendment_birthright_endowment while a law with
+#  private estates is enacted: a group that backs pensions asks that the
+#  duty on estates pay every young adult a capital stake, or to keep the
+#  Endowment the outgoing law carries. The Endowment replaces Estate
+#  Duties, so the accept option drops a duty already written into the bill.
+#  Pooled in on_law_checkpoint_debate.
+# ======================================================================
+inheritance_events.12 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.12.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = inheritance_events.12.d_carry
+				trigger = {
+					active_law:lawgroup_inheritance ?= {
+						has_amendment = amendment_type:amendment_birthright_endowment
+					}
+				}
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = inheritance_events.12.d
+			}
+		}
+	}
+	flavor = inheritance_events.12.f
+
+	category = enactment
+
+	event_image = { video = "asia_politician_parliament_motion" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		te_inh_enacting_private_estates_law = yes
+		# amendment_birthright_endowment's `possible`
+		has_technology_researched = universal_basic_income
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_birthright_endowment
+			}
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			OR = {
+				is_interest_group_type = ig_trade_unions
+				law_stance = {
+					law = law_type:law_old_age_pension
+					value > neutral
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				OR = {
+					is_interest_group_type = ig_trade_unions
+					law_stance = {
+						law = law_type:law_old_age_pension
+						value > neutral
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = endowment_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # A stake for every young adult
+		name = inheritance_events.12.a
+		trigger = { exists = scope:endowment_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_birthright_endowment
+				sponsor = scope:endowment_ig
+				cooldown = 120
+			}
+			random_scope_amendment = {
+				limit = { amendment_type:amendment_estate_duties ?= this.type }
+				remove_amendment = yes
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = lower
+		}
+	}
+
+	option = { # The estates are not a welfare fund
+		name = inheritance_events.12.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:endowment_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# ======================================================================
+#  13 – One Heir to the Farm  (Inheritance – Amendment)
+#  The scripted way in for amendment_undivided_farm_succession while
+#  Forced Heirship or Customary Inheritance is enacted: the Rural Folk ask
+#  that one heir may take the farm whole and pay the others out, or to keep
+#  the rule the outgoing law carries. Pooled in on_law_checkpoint_debate.
+# ======================================================================
+inheritance_events.13 = {
+	type = country_event
+	placement = root
+
+	title = inheritance_events.13.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = inheritance_events.13.d_carry
+				trigger = { te_inh_has_undivided_farms = yes }
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = inheritance_events.13.d
+			}
+		}
+	}
+	flavor = inheritance_events.13.f
+
+	category = enactment
+
+	event_image = { video = "asia_farmers_market" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_partible
+		}
+		ig:ig_rural_folk ?= { ig_counts_as_marginal = no }
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_undivided_farm_succession
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ig:ig_rural_folk = {
+			save_scope_as = rural_folk_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # One heir takes the farm
+		name = inheritance_events.13.a
+		trigger = { exists = scope:rural_folk_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_undivided_farm_succession
+				sponsor = scope:rural_folk_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = very_small_radicals
+			pop_type = peasants
+		}
+	}
+
+	option = { # Every child keeps a share
+		name = inheritance_events.13.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:rural_folk_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}

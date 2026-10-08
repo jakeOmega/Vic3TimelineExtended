@@ -102,6 +102,10 @@ you qualify.
 | Spoils System (*Rotation in Office*) | One group holds at least half of your government's political strength | 2.5% | That group |
 | Corporate Security Powers (*Company Men*) | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | 5% | Industrialists |
 | Civilian Oversight (*Complaints Against the Force*) | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | 5% | Intelligentsia |
+| Estate Duties (*What the Dead Owe*) | At war, or a reformist or social democratic group in government; from Political Agitation on, on a law with private estates and no Birthright Endowment | 2.5%, and 25% more at war | Intelligentsia, or Trade Unions |
+| Perpetual Dynastic Trusts (*Dynasty Trusts*) | Freedom of Testation, with the Industrialists powerful or in government; from Globalization on | 2.5% | Industrialists |
+| Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or social democratic group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
+| Undivided Farm Succession (*The Farm Is Not to Be Cut*) | Forced Heirship or Customary Inheritance, with the Rural Folk powerful or in government | 2.5% | Rural Folk |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
 for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval

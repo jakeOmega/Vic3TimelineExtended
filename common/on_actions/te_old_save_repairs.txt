@@ -13,6 +13,7 @@
 on_monthly_pulse = {
 	on_actions = {
 		te_repair_double_criminal_justice_law
+		te_repair_double_inheritance_law
 	}
 }
 
@@ -107,6 +108,138 @@ te_repair_double_criminal_justice_law = {
 			else = {
 				activate_law = law_type:law_rehabilitation_focused_criminal_justice
 				debug_log = "TE_CJ_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two criminal-justice laws; kept Rehabilitation-Focused"
+			}
+		}
+	}
+}
+
+# OLD-SAVE REPAIR (#821): remove after 2026-12-08 or at vanilla 1.15, whichever comes first.
+#
+# The 2026-10-08 inheritance redesign added law_free_testation and
+# law_state_universal_heir to lawgroup_inheritance. They come after the old
+# four in file order, unlike #520's Penal Labor Camps, which went first; whether
+# that is enough to keep a pre-change save from switching a second law on in
+# every country (the #547 fault above) was not tested in game. So the same net:
+# a country holding two inheritance laws keeps one.
+#
+# The law kept: one of the four laws a pre-change save could hold over either
+# new law (the load could not have enacted them), and any other old law over
+# Primogeniture, the group's first law and the one a #520-style load would have
+# switched on. The group is cleared, then the kept law activated (vanilla's
+# order, as above). The laws' only on_activate sets te_inh_law_recent, which
+# holds back the generation events for 20 years: a repaired country waits a
+# generation for them, nothing worse. Monthly and idempotent: a country is touched only while it holds two.
+# A TE_INH_REPAIR line for the same country in two months running means the
+# repair does not hold.
+te_repair_double_inheritance_law = {
+	effect = {
+		every_country = {
+			limit = {
+				OR = {
+					AND = {
+						OR = {
+							has_law = law_type:law_free_testation
+							has_law = law_type:law_state_universal_heir
+						}
+						OR = {
+							has_law = law_type:law_primogeniture
+							has_law = law_type:law_partible
+							has_law = law_type:law_equal_inheritance
+							has_law = law_type:law_non_inheritable_usage_rights
+						}
+					}
+					AND = {
+						has_law = law_type:law_free_testation
+						has_law = law_type:law_state_universal_heir
+					}
+					AND = {
+						has_law = law_type:law_primogeniture
+						OR = {
+							has_law = law_type:law_partible
+							has_law = law_type:law_equal_inheritance
+							has_law = law_type:law_non_inheritable_usage_rights
+						}
+					}
+				}
+			}
+			# Decide before touching the group: 1 Customary, 2 Forced Heirship,
+			# 3 Possession by Use, 4 Primogeniture, 5 Freedom of Testation,
+			# 6 State as Universal Heir.
+			if = {
+				limit = { has_law = law_type:law_equal_inheritance }
+				set_local_variable = { name = te_inh_keep value = 2 }
+			}
+			else_if = {
+				limit = { has_law = law_type:law_non_inheritable_usage_rights }
+				set_local_variable = { name = te_inh_keep value = 3 }
+			}
+			else_if = {
+				limit = { has_law = law_type:law_partible }
+				set_local_variable = { name = te_inh_keep value = 1 }
+			}
+			else_if = {
+				limit = { has_law = law_type:law_primogeniture }
+				set_local_variable = { name = te_inh_keep value = 4 }
+			}
+			else_if = {
+				limit = { has_law = law_type:law_free_testation }
+				set_local_variable = { name = te_inh_keep value = 5 }
+			}
+			else = {
+				set_local_variable = { name = te_inh_keep value = 6 }
+			}
+			if = {
+				limit = { has_law = law_type:law_primogeniture }
+				deactivate_law = law_type:law_primogeniture
+			}
+			if = {
+				limit = { has_law = law_type:law_partible }
+				deactivate_law = law_type:law_partible
+			}
+			if = {
+				limit = { has_law = law_type:law_equal_inheritance }
+				deactivate_law = law_type:law_equal_inheritance
+			}
+			if = {
+				limit = { has_law = law_type:law_non_inheritable_usage_rights }
+				deactivate_law = law_type:law_non_inheritable_usage_rights
+			}
+			if = {
+				limit = { has_law = law_type:law_free_testation }
+				deactivate_law = law_type:law_free_testation
+			}
+			if = {
+				limit = { has_law = law_type:law_state_universal_heir }
+				deactivate_law = law_type:law_state_universal_heir
+			}
+			if = {
+				limit = { local_var:te_inh_keep = 1 }
+				activate_law = law_type:law_partible
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept Customary Inheritance"
+			}
+			else_if = {
+				limit = { local_var:te_inh_keep = 2 }
+				activate_law = law_type:law_equal_inheritance
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept Forced Heirship"
+			}
+			else_if = {
+				limit = { local_var:te_inh_keep = 3 }
+				activate_law = law_type:law_non_inheritable_usage_rights
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept Possession by Use"
+			}
+			else_if = {
+				limit = { local_var:te_inh_keep = 4 }
+				activate_law = law_type:law_primogeniture
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept Primogeniture"
+			}
+			else_if = {
+				limit = { local_var:te_inh_keep = 5 }
+				activate_law = law_type:law_free_testation
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept Freedom of Testation"
+			}
+			else = {
+				activate_law = law_type:law_state_universal_heir
+				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept State as Universal Heir"
 			}
 		}
 	}

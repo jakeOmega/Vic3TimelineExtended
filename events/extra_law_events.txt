@@ -1248,7 +1248,7 @@ extra_law_events.17 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/digital_privacy_screen.dds" }
+	event_image = { video = "southamerica_aristocrats" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1261,6 +1261,8 @@ extra_law_events.17 = {
 	trigger = {
 		OR = {
 			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_free_testation
+			is_enacting_law = law_type:law_state_universal_heir
 			is_enacting_law = law_type:law_non_inheritable_usage_rights
 		}
 		NOR = {
@@ -5472,6 +5474,8 @@ extra_law_events.53 = {
 	trigger = {
 		OR = {
 			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_free_testation
+			is_enacting_law = law_type:law_state_universal_heir
 			is_enacting_law = law_type:law_non_inheritable_usage_rights
 		}
 		NOR = {
@@ -7073,7 +7077,7 @@ extra_law_events.76 = {
 }
 
 # ======================================================================
-#  77 – Equal Split vs Primogeniture  (Inheritance – debate)
+#  77 – The Many Heirs or the Great Houses?  (Inheritance – debate)
 # ======================================================================
 extra_law_events.77 = {
 	type = country_event
@@ -7095,6 +7099,8 @@ extra_law_events.77 = {
 	trigger = {
 		OR = {
 			is_enacting_law = law_type:law_equal_inheritance
+			is_enacting_law = law_type:law_free_testation
+			is_enacting_law = law_type:law_state_universal_heir
 			is_enacting_law = law_type:law_non_inheritable_usage_rights
 		}
 		NOR = {
