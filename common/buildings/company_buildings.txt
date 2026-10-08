@@ -3132,7 +3132,7 @@ building_jsw_vijayanagar_works = {
 # --- Central Research & Development Complex ---
 building_generic_rd_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_rd_complex.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3192,7 +3192,7 @@ building_generic_rd_complex = {
 # --- National Logistics Hub ---
 building_generic_logistics_hub = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_logistics_hub.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3279,7 +3279,7 @@ building_generic_hq_skyscraper = {
 # --- Specialized Industrial Zone ---
 building_generic_industrial_zone = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_industrial_zone.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3411,7 +3411,7 @@ building_generic_shipping_terminal = {
 # --- Advanced Materials Laboratory ---
 building_generic_materials_lab = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_materials_lab.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3471,7 +3471,7 @@ building_generic_materials_lab = {
 # --- Automation & Robotics Institute ---
 building_generic_robotics_institute = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_robotics_institute.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3555,7 +3555,7 @@ building_generic_corporate_university = {
 # --- National Data Fortress ---
 building_generic_data_fortress = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_data_fortress.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3639,7 +3639,7 @@ building_generic_industrial_city = {
 # --- Global Media Headquarters ---
 building_generic_media_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_media_hq.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3699,7 +3699,7 @@ building_generic_media_hq = {
 # --- High-Efficiency Power Hub ---
 building_generic_power_hub = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_power_hub.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3808,7 +3808,7 @@ building_generic_rail_nexus = {
 # --- Strategic Proving Grounds ---
 building_generic_proving_grounds = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_proving_grounds.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -3868,7 +3868,7 @@ building_generic_proving_grounds = {
 # --- National Resource Depository ---
 building_generic_resource_depository = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_resource_depository.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -4893,7 +4893,7 @@ building_fiat_lingotto_factory = {
 # --- Generic Granary Complex (Agriculture) ---
 building_generic_granary_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_granary_complex.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5015,7 +5015,7 @@ building_generic_textile_depot = {
 # --- Generic Cold Storage (Food) ---
 building_generic_cold_storage = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_cold_storage.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5075,7 +5075,7 @@ building_generic_cold_storage = {
 # --- Generic Paper Mill Complex (Paper) ---
 building_generic_paper_mill_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_paper_mill_complex.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5135,7 +5135,7 @@ building_generic_paper_mill_complex = {
 # --- Generic Foundry Complex (Steel) ---
 building_generic_foundry_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_foundry_complex.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5196,7 +5196,7 @@ building_generic_foundry_complex = {
 # --- Generic Machine Shop (Metalworks) ---
 building_generic_machine_shop = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_machine_shop.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5256,7 +5256,7 @@ building_generic_machine_shop = {
 # --- Generic Chemical Works (Chemicals) ---
 building_generic_chem_works = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_chem_works.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5316,7 +5316,7 @@ building_generic_chem_works = {
 # --- Generic Tank Farm (Oil) ---
 building_generic_tank_farm = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_tank_farm.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5376,7 +5376,7 @@ building_generic_tank_farm = {
 # --- Generic Ordnance Depot (Munitions) ---
 building_generic_ordnance_depot = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_ordnance_depot.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5436,7 +5436,7 @@ building_generic_ordnance_depot = {
 # --- Generic Motor Works (Motors) ---
 building_generic_motor_works = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_motor_works.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5496,7 +5496,7 @@ building_generic_motor_works = {
 # --- Generic Dry Dock (Shipyards) ---
 building_generic_dry_dock = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_dry_dock.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5556,7 +5556,7 @@ building_generic_dry_dock = {
 # --- Generic Arsenal (Weapons) ---
 building_generic_arsenal = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_arsenal.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5616,7 +5616,7 @@ building_generic_arsenal = {
 # --- Generic Fish Market (Fishing) ---
 building_generic_fish_market = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_fish_market.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5680,7 +5680,7 @@ building_generic_fish_market = {
 
 building_generic_colonial_depot = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_colonial_depot.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5739,7 +5739,7 @@ building_generic_colonial_depot = {
 
 building_generic_export_warehouse = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_export_warehouse.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5798,7 +5798,7 @@ building_generic_export_warehouse = {
 
 building_generic_electronics_lab = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_electronics_lab.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5916,7 +5916,7 @@ building_generic_assay_office = {
 
 building_generic_ore_processing = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_ore_processing.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -5975,7 +5975,7 @@ building_generic_ore_processing = {
 
 building_generic_mineral_refinery = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_mineral_refinery.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -6035,7 +6035,7 @@ building_generic_mineral_refinery = {
 
 building_generic_silk_exchange = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_silk_exchange.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -6094,7 +6094,7 @@ building_generic_silk_exchange = {
 
 building_generic_vintner_hall = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_vintner_hall.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -6214,7 +6214,7 @@ building_generic_furniture_showroom = {
 # --- Generic Lumber Yard (Forestry) ---
 building_generic_lumber_yard = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_lumber_yard.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -6274,7 +6274,7 @@ building_generic_lumber_yard = {
 # --- Generic Dye & Fiber Research Park (Synthetics) ---
 building_generic_dye_fiber_park = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/building_icons/skyscraper.dds"
+	icon = "gfx/interface/icons/building_icons/building_generic_dye_fiber_park.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
