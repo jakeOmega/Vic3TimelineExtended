@@ -38,7 +38,8 @@ The spec now states each answer where the design uses it; this file keeps the ev
 | — | The year as a value | `add = year` gives 1836 |
 | — | #822's `te_inh_agrarian_share_value` | **Correct.** London 0.174, the same as a bareword `divide = state_population`. Its nested `divide = { value = state_population min = 1 }` works, despite `scripting_best_practices.md`'s warning about nested `value =` population reads |
 
-**Finding 1: a literal may have at most five decimal places.** Every literal with six, including trailing zeros
+**Finding 1: a literal may have at most five decimal places** (already in `scripting_best_practices.md`; this run adds
+that such a literal reads as 0). Every literal with six, including trailing zeros
 (`0.025000`, `-16.458333`), logs `Badly read script value <x> at <file>:<line>` at load and reads as 0. The benchmark's
 seeds were `state population × 0.025000`, and the save stored every one as 0. `0.01234` (five places) printed exactly.
 
