@@ -7,8 +7,13 @@
 # incident name is written out where the caller knows it, and a name that
 # depends on a parameter is chosen by branching on the variable it just set.
 # Only confirmed accessors: THIS country name, the game date, ScriptValue
-# wrappers. The ID wrappers enter the saved nd_observer_country explicitly:
-# an action can run under a diplomatic-play ROOT.
+# wrappers. The ID and crisis-figure wrappers read global variables that
+# nd_log_context fills just before each record: inside debug_log a ScriptValue
+# can't see a saved scope, and it evaluates against ROOT, which can be a
+# diplomatic play (scripting_best_practices.md § "`debug_log` Loc-String
+# Templating Limitations"). The issuer, target, opponent and enemy names print
+# through SCOPE.sCountry(<saved scope>), which printed blank in a 2026-10-08
+# probe; unconfirmed here.
 #
 # Event-driven records (actions, incidents, crisis open/acute/end, exchange
 # lifecycle) are always on: they are rare. The weekly risk sample and the
@@ -17,9 +22,36 @@
 # country per week would fill debug.log (scripting_best_practices.md
 # § "Debug instrumentation pattern", item 4).
 
-# Before every record: the country the ID wrappers read.
+# Before every record, THIS = the country it is about: copy what the ID and
+# crisis-figure wrappers print (nuclear_exchange_values.txt) into globals.
 nd_log_context = {
-	save_scope_as = nd_observer_country
+	set_global_variable = { name = nd_log_crisis_id_now value = 0 }
+	if = {
+		limit = { has_variable = nd_crisis_id }
+		set_global_variable = { name = nd_log_crisis_id_now value = var:nd_crisis_id }
+	}
+	set_global_variable = { name = nd_log_exchange_id_now value = 0 }
+	if = {
+		limit = { has_variable = nd_exchange_id }
+		set_global_variable = { name = nd_log_exchange_id_now value = var:nd_exchange_id }
+	}
+	set_global_variable = { name = nd_log_crisis_stage_now value = 0 }
+	set_global_variable = { name = nd_log_crisis_weeks_now value = 0 }
+	set_global_variable = { name = nd_log_crisis_dispute_now value = 0 }
+	scope:nd_issuer ?= {
+		if = {
+			limit = { has_variable = nd_crisis_stage }
+			set_global_variable = { name = nd_log_crisis_stage_now value = var:nd_crisis_stage }
+		}
+		if = {
+			limit = { has_variable = nd_crisis_weeks }
+			set_global_variable = { name = nd_log_crisis_weeks_now value = var:nd_crisis_weeks }
+		}
+		if = {
+			limit = { has_variable = nd_crisis_dispute }
+			set_global_variable = { name = nd_log_crisis_dispute_now value = var:nd_crisis_dispute }
+		}
+	}
 }
 
 # After nd_set_doctrine / nd_set_readiness_target / nd_set_authority wrote

@@ -158,7 +158,6 @@ te_debug_gw_log_ai_will = {
 	debug_log = "GW_AI_WILL: temperature=[GetGlobalVariable('greenhouse_gas_emissions').GetValue] (hundredths x100) mean_sol=[GetGlobalVariable('gw_g_mean_sol').GetValue]"
 	every_country = {
 		limit = { has_journal_entry = je_global_warming }
-		save_scope_as = te_debug_gw_c
 		set_variable = { name = te_dbg_gw_shared value = gw_ai_will_shared }
 		set_variable = { name = te_dbg_gw_lf value = gw_ai_sig_laissez_faire }
 		set_variable = { name = te_dbg_gw_ind value = gw_ai_sig_industrialists }
@@ -204,8 +203,8 @@ te_debug_gw_log_ai_will = {
 			limit = { authority < 0 }
 			set_variable = { name = te_dbg_gw_auth value = -1 }
 		}
-		debug_log = "GW_AI_WILL: [SCOPE.sCountry('te_debug_gw_c').GetName] shared=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_shared').GetValue] lf=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_lf').GetValue] ind=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_ind').GetValue] mov=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_mov').GetValue] wealth=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_wealth').GetValue] fossil=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_fossil').GetValue] policies=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_policies').GetValue] market_leader=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_leader').GetValue] authority_covers=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_auth').GetValue]"
-		debug_log = "GW_AI_WILL: [SCOPE.sCountry('te_debug_gw_c').GetName] wills adapt=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_adapt').GetValue] refor=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_refor').GetValue] renew=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_renew').GetValue] transit=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_transit').GetValue] codes=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_codes').GetValue] standards=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_standards').GetValue] carbon=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_carbon').GetValue] divest=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_divest').GetValue] removal=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_removal').GetValue]"
+		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] shared=[THIS.Var('te_dbg_gw_shared').GetValue|2] lf=[THIS.Var('te_dbg_gw_lf').GetValue|2] ind=[THIS.Var('te_dbg_gw_ind').GetValue|2] mov=[THIS.Var('te_dbg_gw_mov').GetValue|2] wealth=[THIS.Var('te_dbg_gw_wealth').GetValue|2] fossil=[THIS.Var('te_dbg_gw_fossil').GetValue|2] policies=[THIS.Var('te_dbg_gw_policies').GetValue|0] market_leader=[THIS.Var('te_dbg_gw_leader').GetValue|0] authority_covers=[THIS.Var('te_dbg_gw_auth').GetValue|0]"
+		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] wills adapt=[THIS.Var('te_dbg_gw_w_adapt').GetValue|2] refor=[THIS.Var('te_dbg_gw_w_refor').GetValue|2] renew=[THIS.Var('te_dbg_gw_w_renew').GetValue|2] transit=[THIS.Var('te_dbg_gw_w_transit').GetValue|2] codes=[THIS.Var('te_dbg_gw_w_codes').GetValue|2] standards=[THIS.Var('te_dbg_gw_w_standards').GetValue|2] carbon=[THIS.Var('te_dbg_gw_w_carbon').GetValue|2] divest=[THIS.Var('te_dbg_gw_w_divest').GetValue|2] removal=[THIS.Var('te_dbg_gw_w_removal').GetValue|2]"
 		remove_variable = te_dbg_gw_shared
 		remove_variable = te_dbg_gw_lf
 		remove_variable = te_dbg_gw_ind

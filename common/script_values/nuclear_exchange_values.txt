@@ -32,46 +32,48 @@ nd_exchange_states_struck = {
 	max = 5
 }
 
+# What a TE_NUCLEAR observer record prints for its IDs and crisis figures
+# (nuclear_observer_effects.txt). nd_log_context copies them into these global
+# variables just before the record: a ScriptValue read inside debug_log can't
+# see a saved scope and evaluates against ROOT, while a global reads the same
+# from any scope (scripting_best_practices.md § "`debug_log` Loc-String
+# Templating Limitations").
 nd_log_exchange_id = {
 	value = 0
 	if = {
-		limit = { exists = scope:nd_observer_country }
-		scope:nd_observer_country = {
-			if = { limit = { has_variable = nd_exchange_id } add = var:nd_exchange_id }
-		}
+		limit = { has_global_variable = nd_log_exchange_id_now }
+		value = global_var:nd_log_exchange_id_now
 	}
 }
 nd_log_crisis_id = {
 	value = 0
 	if = {
-		limit = { exists = scope:nd_observer_country }
-		scope:nd_observer_country = {
-			if = { limit = { has_variable = nd_crisis_id } add = var:nd_crisis_id }
-		}
+		limit = { has_global_variable = nd_log_crisis_id_now }
+		value = global_var:nd_log_crisis_id_now
 	}
 }
 
 nd_log_crisis_stage = {
 	value = 0
 	if = {
-		limit = { exists = scope:nd_issuer }
-		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_stage } add = var:nd_crisis_stage } }
+		limit = { has_global_variable = nd_log_crisis_stage_now }
+		value = global_var:nd_log_crisis_stage_now
 	}
 }
 
 nd_log_crisis_weeks = {
 	value = 0
 	if = {
-		limit = { exists = scope:nd_issuer }
-		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_weeks } add = var:nd_crisis_weeks } }
+		limit = { has_global_variable = nd_log_crisis_weeks_now }
+		value = global_var:nd_log_crisis_weeks_now
 	}
 }
 
 nd_log_crisis_dispute = {
 	value = 0
 	if = {
-		limit = { exists = scope:nd_issuer }
-		scope:nd_issuer = { if = { limit = { has_variable = nd_crisis_dispute } add = var:nd_crisis_dispute } }
+		limit = { has_global_variable = nd_log_crisis_dispute_now }
+		value = global_var:nd_log_crisis_dispute_now
 	}
 }
 

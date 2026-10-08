@@ -523,7 +523,6 @@ te_debug_un_drop = {
 te_debug_un_log_ai_scores = {
 	every_country = {
 		limit = { un_membership_eligible = yes }
-		save_scope_as = te_debug_un_c
 		set_variable = { name = te_dbg_un_member value = 0 }
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
@@ -546,7 +545,7 @@ te_debug_un_log_ai_scores = {
 				multiply = 100
 			}
 		}
-		debug_log = "UN_AI_SCORES: [SCOPE.sCountry('te_debug_un_c').GetName] member=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_member').GetValue] membership=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_m').GetValue] dues=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_d').GetValue] development=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev').GetValue] dev_generosity=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev_gen').GetValue] dev_poverty=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev_poor').GetValue] dev_size=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev_size').GetValue] peacekeeping=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_pk').GetValue] order_stance=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_order').GetValue] conventions=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_conv').GetValue] money=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_money').GetValue] fund_prospect_pct_gdp=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_prospect').GetValue]"
+		debug_log = "UN_AI_SCORES: [THIS.GetCountry.GetNameNoFormatting] member=[THIS.Var('te_dbg_un_member').GetValue|0] membership=[THIS.Var('te_dbg_un_m').GetValue|2] dues=[THIS.Var('te_dbg_un_d').GetValue|2] development=[THIS.Var('te_dbg_un_dev').GetValue|2] dev_generosity=[THIS.Var('te_dbg_un_dev_gen').GetValue|2] dev_poverty=[THIS.Var('te_dbg_un_dev_poor').GetValue|2] dev_size=[THIS.Var('te_dbg_un_dev_size').GetValue|2] peacekeeping=[THIS.Var('te_dbg_un_pk').GetValue|2] order_stance=[THIS.Var('te_dbg_un_order').GetValue|2] conventions=[THIS.Var('te_dbg_un_conv').GetValue|2] money=[THIS.Var('te_dbg_un_money').GetValue|2] fund_prospect_pct_gdp=[THIS.Var('te_dbg_un_prospect').GetValue|2]"
 		remove_variable = te_dbg_un_member
 		remove_variable = te_dbg_un_m
 		remove_variable = te_dbg_un_d
