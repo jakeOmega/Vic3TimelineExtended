@@ -149,7 +149,8 @@ group born in the same five years, with nobody dying:
 - the whole ring is scaled to the engine's population.
 
 Every five years the open cohort closes and a new one opens. The oldest cohort, at about 95, folds into a "95 and
-over" slot, and its slot is reused.
+over" pool, and its slot is reused. The pool also keeps the mean age of its members, so its death rate stays right
+however long people live.
 
 **Cost.** About 20 slots, each holding women and men, makes about 40 variables a state. That is arithmetic, not pop
 walks (§11.3), once a year, against the Demography mod's 17 bands updated monthly. The 20 slots are 20 calls of one
@@ -162,6 +163,38 @@ splits a cohort.
 
 **The finer option.** One-year cohorts (about 100 slots, 200 variables a state) would give single-year ages.
 Five-year cohorts already age exactly, and nothing in §7 needs a finer age, so they are the proposal.
+
+### Ages past 95 and the late eras (the owner's question)
+
+In eras 11 and 12, lifespans can run well past 100. **The proposal is not to add calendar slots but to add biological
+age.** From the moment rejuvenation works, what sets someone's risk of death, chance of a child and ability to work is
+how old their body is, not the year they were born.
+
+- **Biological age.** Until `personalized_medicine` (era 11), biological age equals calendar age and costs nothing.
+  When that technology arrives, each cohort and the pool get a second variable, a biological age, starting at their
+  calendar age.
+- **How it advances.** It gains a year each year normally, about half a year with era-11 medicine, and nothing under
+  `biological_immortality`, which can also wind it back towards about 35.
+- **What reads it.** Every age-specific rate reads biological age: the five causes of death, fertility, and the
+  workforce rule's 15–64 and over-65 parts (§7).
+- **What happens.**
+  - The pool fills with people who are calendar-old and biologically middle-aged. The pyramid's top bar grows into the
+    late game's striking image.
+  - The panel adds "Over 100" and the mean biological age.
+  - Old age stops making people dependents, so the pension question fades. Deaths fall towards external causes only,
+    so births decide growth, and Population Control becomes essential (§8.3).
+- **Option: access.** Rejuvenation could reach the upper strata first, scaled by SoL and the health system, so lifespan
+  becomes another form of inequality for Wealth Concentration to read. This is one switch on the ageing rate per
+  stratum share.
+
+**Why not extra slots switched on in era 10 or 11.**
+- **Remapping.** A cohort's slot is (first birth year ÷ 5) mod the ring's size. Changing the size mid-game remaps every
+  cohort, so slots can't be switched on later without a migration step.
+- **Little gain.** Calendar detail past 95 changes no effect once rates read biological age. It only refines the
+  pyramid's top.
+- **If that display matters:** give the ring about 30 slots, to age 150, from 1836. The extra slots sit empty, and are
+  skipped, until someone lives that long. The cost is 20 more variables a state and nothing else until they fill (§13
+  Q6).
 
 ## 2. The age model
 
@@ -670,7 +703,7 @@ pension law, participation stays at 0.5: people work until they can't.
 | Youth Centers | the birth PMs; Ectogenesis |
 | Planned Capital, regional development, urban planning | the urban and settlement patterns (§5) |
 | Taxes, land reform, inheritance, ownership laws | Wealth Concentration (§4.2) |
-| **Biological Immortality** (era 12) | It halts the rise of chronic and old-age death with age, so people stop ageing out and the dependency ratio collapses. With almost no deaths, every birth adds to the population. Crowding returns, and Population Control and its Birth Limit become the late game's essential policy, which gives the group an era-12 role |
+| **Biological Immortality** (era 12) | It stops biological ageing and can wind it back (§1, "Ages past 95"), so people stop becoming dependents and the dependency ratio collapses. With almost no deaths, every birth adds to the population. Crowding returns, and Population Control and its Birth Limit become the late game's essential policy, which gives the group an era-12 role |
 
 ### 8.4 Flat modifiers that move into the model
 
@@ -825,6 +858,8 @@ to be sane.
 3. **The pension age as a three-way setting (§8.2)**, in place of the two amendments proposed earlier?
 4. **Cohort width:** five-year birth cohorts (proposed) or one-year (finer, five times the variables)?
 5. **The settlement pattern (§5.2)**: labels and effect sizes, pending the owner's read of the full text.
+6. **Ages past 95 (§1):** biological age with a 20-slot ring (proposed), or also a 30-slot ring from 1836 for a finer
+   pyramid top in the late eras?
 
 ## 14. Engine checks before building
 
