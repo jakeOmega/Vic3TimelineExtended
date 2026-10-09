@@ -1484,17 +1484,28 @@ amendment_langreform_national_focus = {
 #  Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
 # ======================================================================
 
+# Direct Democracy and Free Federation: movements decide, but softly. Both
+# used to carry country_must_have_movement_to_enact_laws_bool, which blocked
+# every law no movement backed: four of the mod's law groups have no movement
+# stance at all, and under Anarchy the anarchist movement, content with the
+# regime, backs nothing. Instead every law pays a flat "no mandate" -10%
+# enactment success (vanilla's hamstrung-legislature amendments use -5, -10
+# and -15%), and a law a movement backs gets that movement's support as
+# success chance from the engine (LAW_ENACTMENT_MOVEMENT_SUPPORT_PASS_EFFECT
+# = 1.0; while the law is enacted the movement's activism stays at the 25%
+# it needs to count). Direct Democracy's +25% success, which sped up the
+# laws the gate let through, went with the gate; its +100% pop attraction
+# keeps backed laws ahead of the rest.
 amendment_collective_direct_democracy = {
 	allowed_laws = { law_direct_democracy }
 	modifier = {
-		country_must_have_movement_to_enact_laws_bool = yes
 		political_movement_pop_attraction_mult = 1
 		political_movement_radicalism_add = 0.5
 		political_movement_radicalism_from_enactment_approval_mult = -0.75
 		political_movement_radicalism_from_enactment_disapproval_mult = -0.75
 		country_legitimacy_govt_total_votes_add = 30
 		state_political_strength_from_wealth_mult = -0.25
-		country_law_enactment_success_add = 0.25
+		country_law_enactment_success_add = -0.1
 		country_agitator_slots_add = 1
 	}
 	possible = { collective_governance_is_popular = yes }
@@ -1544,11 +1555,19 @@ amendment_collective_administration = {
 	amendment_activism_multiplier = 0
 }
 
+# Delegates act on mandates from below: the soft gate above, and a law a
+# movement backs pays off. Its passage turns half again as many of the
+# movement's supporters loyal (vanilla MOVEMENT_LOYALISTS_ON_APPROVED_ENACTMENT
+# 0.25 -> 0.375; vanilla's largest source is Righteous legitimacy's +0.33),
+# and bolstering a movement costs half, which offsets Anarchy's -50%
+# authority for it.
 amendment_collective_free_federation = {
 	allowed_laws = { law_direct_democracy }
 	modifier = {
-		country_must_have_movement_to_enact_laws_bool = yes
 		political_movement_pop_attraction_mult = 0.5
+		country_law_enactment_success_add = -0.1
+		state_loyalists_from_political_movements_mult = 0.5
+		country_bolster_cost_mult = -0.5
 	}
 	possible = { collective_governance_is_anarchic = yes }
 	would_sponsor = { always = no }

@@ -163,16 +163,19 @@ class TriggerTests(unittest.TestCase):
 
 AMENDMENTS = _path("common", "amendments", "extra_amendments.txt")
 
-# Today's Direct Democracy law block, moved verbatim onto the amendment (spec §2).
+# The old Direct Democracy law block, moved onto the amendment (spec §2). The
+# movement gate became a soft one in 2026-10: no
+# country_must_have_movement_to_enact_laws_bool, and the +25% success it sped up
+# became a flat -10%, which a backing movement's support makes up. The bool
+# must not come back on any expression (test_no_movement_gate).
 DIRECT_DEMOCRACY_PACKAGE = {
-    "country_must_have_movement_to_enact_laws_bool": "yes",
     "political_movement_pop_attraction_mult": "1",
     "political_movement_radicalism_add": "0.5",
     "political_movement_radicalism_from_enactment_approval_mult": "-0.75",
     "political_movement_radicalism_from_enactment_disapproval_mult": "-0.75",
     "country_legitimacy_govt_total_votes_add": "30",
     "state_political_strength_from_wealth_mult": "-0.25",
-    "country_law_enactment_success_add": "0.25",
+    "country_law_enactment_success_add": "-0.1",
     "country_agitator_slots_add": "1",
 }
 
@@ -184,8 +187,10 @@ EXPRESSION_MODIFIERS = {
         "state_decree_cost_mult": "0.25",
     },
     "amendment_collective_free_federation": {
-        "country_must_have_movement_to_enact_laws_bool": "yes",
         "political_movement_pop_attraction_mult": "0.5",
+        "country_law_enactment_success_add": "-0.1",
+        "state_loyalists_from_political_movements_mult": "0.5",
+        "country_bolster_cost_mult": "-0.5",
     },
     "amendment_collective_patrician_council": {
         "country_aristocrats_pol_str_mult": "0.15",
@@ -233,6 +238,16 @@ class AmendmentTests(unittest.TestCase):
             with self.subTest(amendment=e.amendment):
                 body = _block(self.text, e.amendment)
                 self.assertEqual(_modifiers(_inner(body, "modifier")), EXPRESSION_MODIFIERS[e.amendment])
+
+    def test_no_movement_gate(self):
+        # The hard gate blocked every law no movement backed, and some law groups
+        # have no movement stance at all; the soft -10% replaced it on purpose.
+        law = _block(_read(_path("common", "laws", "extra_laws.txt")), "law_direct_democracy")
+        self.assertNotIn("country_must_have_movement_to_enact_laws_bool", law)
+        for e in EXPRESSIONS:
+            with self.subTest(amendment=e.amendment):
+                self.assertNotIn("country_must_have_movement_to_enact_laws_bool",
+                                 _block(self.text, e.amendment))
 
     def test_no_stale_collective_amendment(self):
         defined = {n for n in _top_level_names(self.text) if n.startswith("amendment_collective_")}

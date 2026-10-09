@@ -149,6 +149,8 @@ otherwise count the governance law's approval a second time. If the panel misbeh
 | `amendment_collective_free_federation` | Free Federation | anarchic | `country_must_have_movement_to_enact_laws_bool = yes` (delegates act only on mandates from below); `political_movement_pop_attraction_mult = 0.5` |
 | `amendment_collective_patrician_council` | Patrician Council | patrician | `country_aristocrats_pol_str_mult = 0.15`, `country_capitalists_pol_str_mult = 0.15`: the powerful govern as peers |
 
+> **Changed 2026-10-09:** Direct Democracy and Free Federation no longer carry `country_must_have_movement_to_enact_laws_bool`. Both take a flat −10% enactment success, Direct Democracy loses its +25%, and Free Federation gains +50% loyalists from political movements and −50% bolster cost. Current values and reasons: `docs/systems/mod_systems.md` § Collective Governance.
+
 Every modifier name is validated against `/modifier-search` before use. The plan settles final values using defines, per
 the evidence-based-tuning rule.
 
