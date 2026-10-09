@@ -108,7 +108,7 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | Settlement pattern | **Labels and effect sizes as proposed** (§5.2) |
 | Where the country view goes | **The vanilla Population panel**, as a new tab (§10) |
 | One metropolis or several cities | **Design it** (§5.2): it interacts both ways with economic pull, infrastructure and Migration Crowding. Not the first priority |
-| Game rule | **Yes**: Full / Display only / Off. Display only is kept because it costs almost nothing once Off works (§11.4) |
+| Game rule | **Yes**: Full / Display only / Disabled. Display only is kept because it costs almost nothing once Disabled works (§11.4) |
 
 ## Design rules (the pillars, made concrete)
 
@@ -140,10 +140,10 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
 | **Fertility**: children per woman, with its wealth, education and technology terms | state | modelled from engine inputs (§2.3) | table; the terms on hover |
 | **Mortality**: life expectancy at birth and at 65, infant mortality, with the five causes' terms | state | modelled from engine inputs (§2.4) | table; the terms on hover |
 | **Net migration** last year | state | the residual after natural change (§2.5) | table |
-| **Income inequality**: a Gini coefficient | state; country | computed from pops each year (§4.1) | table, map mode |
-| **Wealth Concentration**: the #822 score, now per state | state; country | modelled stock (§4.2) | bar with its target segment; map mode |
+| **Income inequality**: a Gini coefficient | state; country | computed from pops each year (§4.1) | table; map mode (blocked, §10) |
+| **Wealth Concentration**: the #822 score, now per state | state; country | modelled stock (§4.2) | bar with its target segment; map mode (blocked, §10) |
 | **National urban pattern**: the largest city's share, the effective number of cities | country | computed from states (§5.1) | label and figures |
-| **Settlement pattern**: one metropolis or several cities | state | modelled stock (§5.2) | label, map mode |
+| **Settlement pattern**: one metropolis or several cities | state | modelled stock (§5.2) | label; map mode (blocked, §10) |
 
 **Left out:** ages on individual pops, age by culture or religion, and education by age. Each costs far more than it
 returns at Victoria's level of detail.
@@ -333,7 +333,7 @@ events, starvation, and Forced Heirship's rural cut.
 | Case | Sketch | Real |
 |---|---|---|
 | Britain 1836 | 5.5 | about 5 |
-| France 1836 (historical override: means 0.8, Forced Heirship) | 4.2 | about 3.8 |
+| France 1836 (Family Limitation, §2.6). The sketch leaves out Forced Heirship's birth cut, which the engine applies on top | 4.9 | about 3.8 |
 | Britain 1900 | 3.9 | about 3.5 |
 | The West 1950 (before the Pill) | 3.0 | 2.5 (Europe) to 3.5 (US) |
 | The West 1990 | 1.4 | about 1.7 |
@@ -552,7 +552,7 @@ property is held:
   - The state-owned levels come from the building walk (`country_ownership_fraction` × levels, summed over the
     country), and the bureaucrats from the pop walk.
 
-The panel shows the target's terms as bars (style guide rule 5) and a map mode.
+The panel shows the target's terms as bars (style guide rule 5), and will show a map mode when one works (blocked, §10).
 
 **The target** is a sum of terms around 50:
 
@@ -941,23 +941,23 @@ states: the one-year cohort step 0.75–1.0 s in total, the pop walk and the bui
 
 ### 11.4 Game rule
 
-**Demographics: Full / Display only / Off.**
+**Demographics: Full / Display only / Disabled.**
 
 The retuned defines can't be switched by a game rule. Without the model's fertility and mortality terms, rich states
-would keep about 3.5 children per woman and grow without limit. So **Off** still applies the fertility and mortality
-terms, but against the *equilibrium* structure for the state's rates, taken from the same lookup that seeds 1836
-(§2.6), not against tracked cohorts. Long-run population behaves as in Full, without the momentum. With Off in place,
-**Display only** costs almost nothing: it runs the cohorts and the panel but applies Off's modifiers.
+would keep about 3.5 children per woman and grow without limit. So **Disabled** still applies the fertility and
+mortality terms, but against the *equilibrium* structure for the state's rates, taken from the same lookup that seeds
+1836 (§2.6), not against tracked cohorts. Long-run population behaves as in Full, without the momentum. With Disabled
+in place, **Display only** costs almost nothing: it runs the cohorts and the panel but applies Disabled's modifiers.
 
 | Setting | Cohorts and panel | Births and deaths modifiers | Workforce, pension, youth and other effects; measures |
 |---|---|---|---|
 | Full | yes | from the cohorts | yes |
 | Display only | yes | from the equilibrium | no |
-| Off | no | from the equilibrium | no |
+| Disabled | no | from the equilibrium | no |
 
 The rule's settings are `demographics_full` (Full, the default), `demographics_display_only` (Display only) and
-`demographics_disabled` (Off). Write the checks as `NOT = { has_game_rule = demographics_disabled }`, so a save from
-before the rule keeps the system (Grand Monuments' pattern).
+`demographics_disabled` (Disabled). Write the checks as `NOT = { has_game_rule = demographics_disabled }`, so a save
+from before the rule keeps the system (Grand Monuments' pattern).
 
 ### 11.5 Compatibility
 
@@ -974,6 +974,8 @@ before the rule keeps the system (Grand Monuments' pattern).
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
 | 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
+
+Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.
 
 Phase 1 alone is a playable feature: a census the player reads. Each later phase adds effects to numbers already seen
 to be sane.
