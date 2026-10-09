@@ -56,6 +56,7 @@ te_tax_light_migrate_country = {
 			OR = { NOT = { has_variable = te_tax_light_on } var:te_tax_light_on < 1 }
 		}
 		te_tax_light_gen_init = yes
+		te_tax_light_gen_reset = yes
 		te_tax_light_gen_uniform = yes
 		set_variable = { name = te_tax_light_law value = te_tax_light_law_id }
 		set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
@@ -71,16 +72,19 @@ te_tax_light_migrate_country = {
 # changes nothing. In order:
 #   1. the active law changed since the last sync (on_law_activated raises
 #      te_tax_light.3; the 1st catches anything else): a player's code is
-#      clamped into the new law's range (te_tax_light_gen_clamp), an AI's
-#      follows the native level; no reaction, the law change's own approval
-#      covers it;
+#      clamped into the new law's range, at most the law's rate at the tax
+#      level, so the change never raises the level (te_tax_light_gen_clamp);
+#      an AI's follows the native level; no reaction, the law change's own
+#      approval covers it;
 #   2. an AI country: every tax at the law's rate for its native level, each
 #      change scored (te_tax_light_gen_uniform_scored);
 #      a player's: if the native level moved outside the code (only script can
 #      move it; the buttons are greyed), each tax moves by its law's difference
 #      between the two levels (te_tax_light_gen_shift), scored;
 #   3. each tax's step, and for a player's country the tax level they give;
-#   4. relief, reactions and bands.
+#   4. relief, reactions and bands (the view-band modifiers).
+# Every limit on the way reads a persistent variable, never one set earlier in
+# the same run: a step button's tooltip walks this without running it.
 te_tax_light_sync = {
 	if = {
 		limit = { te_tax_light_in_force = yes }
@@ -140,7 +144,6 @@ te_tax_light_sync = {
 		te_tax_light_gen_relief = yes
 		te_tax_light_gen_apply_reactions = yes
 		te_tax_light_gen_bands = yes
-		te_tax_gen_ig_views = yes
 	}
 }
 

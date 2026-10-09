@@ -66,7 +66,7 @@ mode:
 - A tax it newly levies starts at the new law's rate at the current tax level, which is what
   enacting that law gives in vanilla.
 
-The derived level is therefore unchanged unless a clamp moves the heaviest tax. Vanilla's
+As built, a continuing tax is clamped to at most the new law's rate at the current level (review I1: Proportional's 20% wage tax would otherwise sit on Graduated's very-high step and raise the level to very high), so a law change never raises the level. Vanilla's
 law-change approval already prices the switch, so the clamp scores no reaction of its own. The
 bounds are generated from `MIGRATION` in `gen_tax_code.py` as
 `te_tax_light_min/max_<key>` per law (`test_tax_code_migration.py` already pins that table to
@@ -109,7 +109,8 @@ bounds are generated from `MIGRATION` in `gen_tax_code.py` as
   | Graduated dividends 10% → 30% | Industrialists (1.0) | −10 |
 
 - **Cuts count half (decided).** A positive step score is halved. Raising a tax and cutting it
-  back then nets a cost, so the reaction can't be pumped before an election. This is a call on
+  back then nets a cost. It doesn't stop timing: a raise made long enough before an election has
+  faded by then, and a cut just before it still counts half. This is a call on
   how a cut is received in the fiction, so it's yours to make.
 
 ## 5. The AI: it keeps vanilla's tax level, and the code follows it
@@ -167,11 +168,13 @@ In light mode the Tax Code tab and the entry show:
 
 - the law, the tax level and which tax sets it;
 - one workbench row per tax the law levies: its range (where the "Law" column is), the rate,
-  then − and +, which apply at once.
+  then − and +, which apply at once, and the step the rate sits on.
 
-A button's tooltip says whether the step changes the tax level and how each group reacts. Shift
-and right-click keep their meanings within the range (floor, ceiling). There is no draft, review
-or politics section. "How the light tax code works" is one collapsed explanation.
+A button's tooltip says what the step does, whether it raises or lowers the tax level, and which
+groups pay the tax most (a static line per tax; per-group figures would need a preview value per
+tax, direction and group). Shift-click goes to the law's floor or ceiling; right-click does nothing
+in light mode. There is no draft, review or politics section. "How the Light Tax Code Works" is one
+collapsed explanation.
 
 ## 9. Tests (task 5)
 

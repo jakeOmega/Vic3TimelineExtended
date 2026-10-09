@@ -2612,16 +2612,13 @@ def _view_values():
         "# opposes .. 2 strongly endorses (law_stance, strongest bucket first), toward the vanilla",
         "# taxation law the enacted code is equivalent to (te_tax_code_equivalent_<law>,",
         "# te_tax_triggers.txt, which need the rule and the carrier law); 0 without the carrier, or",
-        "# for a neutral stance. Under the light setting the band is the group's relief band instead",
-        "# (te_tax_light_band_<ig>, 0..2, written by te_tax_light_gen_bands): the vanilla law is",
-        "# still enacted, so the engine already gives its stance approval. Iterates nothing.",
+        "# for a neutral stance. Reads no variable and iterates nothing. (The light code sets the",
+        "# same modifiers from its own relief bands: te_tax_light_gen_bands.)",
     ]
     for ig in IGS:
-        lines += [f"te_tax_ig_band_{ig} = {{", "\tvalue = 0",
-                  f"\tif = {{ limit = {{ te_tax_code_light_on = yes has_variable = te_tax_light_band_{ig} }} "
-                  f"value = var:te_tax_light_band_{ig} }}"]
-        for short, law in EQUIVALENT_LAWS:
-            lines += ["\telse_if = {",
+        lines += [f"te_tax_ig_band_{ig} = {{", "\tvalue = 0"]
+        for n, (short, law) in enumerate(EQUIVALENT_LAWS):
+            lines += [f"\t{'if' if n == 0 else 'else_if'} = {{",
                       f"\t\tlimit = {{ te_tax_code_equivalent_{short} = yes }}"]
             for m, (comparison, stance) in enumerate(STANCE_BRANCHES):
                 lines.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ ig:ig_{ig} ?= {{ law_stance = "
@@ -4484,8 +4481,13 @@ LIGHT_REACTION_FLOOR = Decimal("0.05")
 # Standing view (the view bands' light branch): the relief a group's members get, in vanilla
 # tax levels (LEVEL_STEPS) of a tax they pay in full, of at least the first value gives the band.
 LIGHT_BANDS = ((2, 2), (1, 1))  # one level of relief on a tax the group pays in full: +1
+# The weights are written to five places, so a sum meant to reach a threshold may fall short by a
+# few hundred-thousandths (a third rounds down): compare against the threshold less this.
+LIGHT_BAND_TOLERANCE = Decimal("0.0001")
 # The payers a step's tooltip names: groups with at least this exposure to the tax.
 LIGHT_PAYER_EXPOSURE = Decimal("0.5")
+# Scratch values of one sync or step, persistent so a tooltip pass never reads them unset.
+LIGHT_SCRATCH = ("te_tax_light_tgt", "te_tax_light_d", "te_tax_light_was", "te_tax_light_s", "te_tax_light_rlv")
 # te_tax_light_step_<key>_sgui's op table: 0 one step down, 1 one step up, 2 to the law's
 # very-low rate, 3 to its very-high rate (te_tax_light_cmd_step DIR).
 LIGHT_OPS = (0, 1, 2, 3)
@@ -4673,7 +4675,9 @@ def _light_values():
         ]
     for ig in IGS:
         lines += [f"te_tax_view_light_react_{ig} = {{", "\tvalue = 0",
-                  f"\tif = {{ limit = {{ has_variable = te_tax_lr_{ig} }} value = var:te_tax_lr_{ig} }}", "}"]
+                  f"\tif = {{ limit = {{ has_variable = te_tax_lr_{ig} }} value = var:te_tax_lr_{ig} }}", "}",
+                  f"te_tax_view_light_band_{ig} = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ has_variable = te_tax_light_band_{ig} }} value = var:te_tax_light_band_{ig} }}", "}"]
     return lines
 
 
@@ -4751,7 +4755,7 @@ def _light_react():
     lines = [
         "",
         "# A change's reaction: KEY's enacted index moved by var:te_tax_light_d (signed). Per group,",
-        "# score = te_tax_light_rc_<KEY>_<ig> x d; a score above zero (it pleases the group) counts",
+        "# score (te_tax_light_s) = te_tax_light_rc_<KEY>_<ig> x d; a score above zero (it pleases the group) counts",
         f"# {fmt(LIGHT_PLEASE_WEIGHT)}; the running reaction te_tax_lr_<ig> moves by score / "
         f"{LIGHT_REACTION_DIVISOR}, within +-{LIGHT_REACTION_CAP}.",
         "# Called by te_tax_light_cmd_step and the AI's and an outside level change's adoption.",
@@ -4759,13 +4763,13 @@ def _light_react():
     ]
     for ig in IGS:
         lines += [
-            f"\tset_local_variable = {{ name = te_tax_lt_s value = te_tax_light_rc_$KEY$_{ig} }}",
-            "\tchange_local_variable = { name = te_tax_lt_s multiply = var:te_tax_light_d }",
-            f"\tif = {{ limit = {{ local_var:te_tax_lt_s > 0 }} change_local_variable = {{ name = te_tax_lt_s "
+            f"\tset_variable = {{ name = te_tax_light_s value = te_tax_light_rc_$KEY$_{ig} }}",
+            "\tchange_variable = { name = te_tax_light_s multiply = var:te_tax_light_d }",
+            f"\tif = {{ limit = {{ var:te_tax_light_s > 0 }} change_variable = {{ name = te_tax_light_s "
             f"multiply = {fmt(LIGHT_PLEASE_WEIGHT)} }} }}",
             f"\tif = {{ limit = {{ NOT = {{ has_variable = te_tax_lr_{ig} }} }} set_variable = {{ name = te_tax_lr_{ig} "
             "value = 0 } }",
-            f"\tchange_variable = {{ name = te_tax_lr_{ig} add = {{ value = local_var:te_tax_lt_s "
+            f"\tchange_variable = {{ name = te_tax_lr_{ig} add = {{ value = var:te_tax_light_s "
             f"divide = {LIGHT_REACTION_DIVISOR} }} }}",
             f"\tclamp_variable = {{ name = te_tax_lr_{ig} min = -{LIGHT_REACTION_CAP} max = {LIGHT_REACTION_CAP} }}",
         ]
@@ -4793,6 +4797,25 @@ def light_effects():
         for var in (f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}", f"te_tax_light_band_{ig}"):
             lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
                          "value = 0 } }")
+    # The scratch values of one sync or step. A button's tooltip walks its hidden effect without
+    # running it, so a limit that reads one set earlier in the same effect reads it as unset
+    # (scripting_best_practices.md, "ExecuteTooltip"): these persist between runs instead.
+    for var in LIGHT_SCRATCH:
+        lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
+                     "value = 0 } }")
+    lines += [
+        "}",
+        "",
+        "# A fresh start for a migrating country (a released or rebel country may be a revived tag",
+        "# holding an earlier life's values): no running reactions, bands, relief or steps.",
+        "te_tax_light_gen_reset = {",
+    ]
+    for ig in IGS:
+        for var in (f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}", f"te_tax_light_band_{ig}"):
+            lines.append(f"\tset_variable = {{ name = {var} value = 0 }}")
+    for instrument in INSTRUMENTS:
+        lines += [f"\tset_variable = {{ name = te_tax_light_rl_{instrument.key} value = 0 }}",
+                  f"\tset_variable = {{ name = te_tax_light_rg_{instrument.key} value = -1 }}"]
     lines += [
         "}",
         "",
@@ -4822,8 +4845,10 @@ def light_effects():
         "",
         "# The active law changed (a player's country): a tax it does not levy goes to 0; one it",
         "# newly levies (enacted index 0) starts at its rate for the tax level the code last set,",
-        "# as enacting the law gives in the base game; every other tax is clamped into the new",
-        "# range. No reaction: the law change's own approval covers it.",
+        "# as enacting the law gives in the base game; every other tax is clamped between the new",
+        "# law's floor and its rate at that tax level, so a law change never raises the tax level",
+        "# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the",
+        "# law change's own approval covers it.",
         "te_tax_light_gen_clamp = {",
     ]
     for instrument in INSTRUMENTS:
@@ -4832,7 +4857,8 @@ def light_effects():
         lines += [
             f"\tif = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} set_variable = {{ name = {en} value = 0 }} }}",
             f"\telse_if = {{ limit = {{ var:{en} = 0 }} set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }}",
-            f"\telse = {{ clamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_max_{key} }} }}",
+            f"\telse = {{ clamp_variable = {{ name = {en} min = te_tax_light_min_{key} "
+            f"max = te_tax_light_idx_{key}_at_level }} }}",
         ]
     lines += [
         "}",
@@ -4907,7 +4933,7 @@ def light_effects():
         "}",
         "",
         "# The running reactions as approval: te_tax_light_react_<ig>_pos or _neg with the rounded",
-        "# size (te_tax_lr_mag_<ig>) as multiplier, or neither under half a point.",
+        "# size (te_tax_lr_mag_<ig>, always positive) as multiplier, or neither when it rounds to 0.",
         "te_tax_light_gen_apply_reactions = {",
     ]
     for ig in IGS:
@@ -4916,10 +4942,10 @@ def light_effects():
         lines += [
             f"\tif = {{ limit = {{ has_modifier = {pos} }} remove_modifier = {pos} }}",
             f"\tif = {{ limit = {{ has_modifier = {neg} }} remove_modifier = {neg} }}",
-            f"\tif = {{ limit = {{ var:{lr} >= 0.5 }} set_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }} "
-            f"add_modifier = {{ name = {pos} multiplier = var:{mag} }} }}",
-            f"\telse_if = {{ limit = {{ var:{lr} <= -0.5 }} set_variable = {{ name = {mag} value = {{ value = var:{lr} "
-            f"multiply = -1 round = yes }} }} add_modifier = {{ name = {neg} multiplier = var:{mag} }} }}",
+            f"\tset_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }}",
+            f"\tif = {{ limit = {{ var:{mag} >= 1 }} add_modifier = {{ name = {pos} multiplier = var:{mag} }} }}",
+            f"\telse_if = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} "
+            f"add_modifier = {{ name = {neg} multiplier = var:{mag} }} }}",
             f"\telse = {{ set_variable = {{ name = {mag} value = 0 }} }}",
         ]
     lines += [
@@ -4939,10 +4965,11 @@ def light_effects():
     lines += [
         "}",
         "",
-        "# The standing view: each group's exposure-weighted relief in levels (te_tax_light_rlv_<ig>)",
-        "# gives its band (te_tax_light_band_<ig>, 0..2), which te_tax_ig_band_<ig> reads under the",
-        "# light setting and te_tax_gen_ig_views applies. Relief only: a code with every tax on one",
-        "# step gives no group a band.",
+        "# The standing view: the relief each group's members get, in levels (te_tax_light_rlv_<ig>),",
+        "# gives its band (te_tax_light_band_<ig>, 0..2), carried by the legislated code's own view-band",
+        "# modifiers te_tax_ig_view_<ig>_p1/_p2 (the m1/m2 bands are the legislated code's only, and",
+        "# are cleared). Relief only: a code with every tax on one step gives no group a band. Reads",
+        "# persistent variables only, so a step button's tooltip pass reads nothing unset.",
         "te_tax_light_gen_bands = {",
     ]
     for ig in IGS:
@@ -4950,10 +4977,19 @@ def light_effects():
         lines.append(f"\tset_variable = {{ name = te_tax_light_rlv value = te_tax_light_rlv_{ig} }}")
         first = True
         for threshold, value in LIGHT_BANDS:
-            lines.append(f"\t{'if' if first else 'else_if'} = {{ limit = {{ var:te_tax_light_rlv >= {threshold} }} "
-                         f"set_variable = {{ name = {band} value = {value} }} }}")
+            lines.append(f"\t{'if' if first else 'else_if'} = {{ limit = {{ var:te_tax_light_rlv >= "
+                         f"{fmt(threshold - LIGHT_BAND_TOLERANCE)} }} set_variable = {{ name = {band} value = {value} }} }}")
             first = False
         lines.append(f"\telse = {{ set_variable = {{ name = {band} value = 0 }} }}")
+        for name, value in VIEW_BANDS:
+            modifier = f"te_tax_ig_view_{ig}_{name}"
+            if value > 0:
+                lines += [f"\tif = {{ limit = {{ var:{band} = {value} NOT = {{ has_modifier = {modifier} }} }} "
+                          f"add_modifier = {{ name = {modifier} }} }}",
+                          f"\tif = {{ limit = {{ NOT = {{ var:{band} = {value} }} has_modifier = {modifier} }} "
+                          f"remove_modifier = {modifier} }}"]
+            else:
+                lines.append(f"\tif = {{ limit = {{ has_modifier = {modifier} }} remove_modifier = {modifier} }}")
     lines.append("}")
     lines += _light_react()
     return _txt("\n".join(lines) + "\n")

@@ -8724,13 +8724,11 @@ te_tax_prom_trade_unions = {
 # opposes .. 2 strongly endorses (law_stance, strongest bucket first), toward the vanilla
 # taxation law the enacted code is equivalent to (te_tax_code_equivalent_<law>,
 # te_tax_triggers.txt, which need the rule and the carrier law); 0 without the carrier, or
-# for a neutral stance. Under the light setting the band is the group's relief band instead
-# (te_tax_light_band_<ig>, 0..2, written by te_tax_light_gen_bands): the vanilla law is
-# still enacted, so the engine already gives its stance approval. Iterates nothing.
+# for a neutral stance. Reads no variable and iterates nothing. (The light code sets the
+# same modifiers from its own relief bands: te_tax_light_gen_bands.)
 te_tax_ig_band_armed_forces = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_armed_forces } value = var:te_tax_light_band_armed_forces }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_armed_forces ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_armed_forces ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8768,8 +8766,7 @@ te_tax_ig_band_armed_forces = {
 }
 te_tax_ig_band_devout = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_devout } value = var:te_tax_light_band_devout }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_devout ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_devout ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8807,8 +8804,7 @@ te_tax_ig_band_devout = {
 }
 te_tax_ig_band_industrialists = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_industrialists } value = var:te_tax_light_band_industrialists }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_industrialists ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_industrialists ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8846,8 +8842,7 @@ te_tax_ig_band_industrialists = {
 }
 te_tax_ig_band_intelligentsia = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_intelligentsia } value = var:te_tax_light_band_intelligentsia }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_intelligentsia ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_intelligentsia ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8885,8 +8880,7 @@ te_tax_ig_band_intelligentsia = {
 }
 te_tax_ig_band_landowners = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_landowners } value = var:te_tax_light_band_landowners }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_landowners ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_landowners ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8924,8 +8918,7 @@ te_tax_ig_band_landowners = {
 }
 te_tax_ig_band_petty_bourgeoisie = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_petty_bourgeoisie } value = var:te_tax_light_band_petty_bourgeoisie }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_petty_bourgeoisie ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_petty_bourgeoisie ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -8963,8 +8956,7 @@ te_tax_ig_band_petty_bourgeoisie = {
 }
 te_tax_ig_band_rural_folk = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_rural_folk } value = var:te_tax_light_band_rural_folk }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_rural_folk ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_rural_folk ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }
@@ -9002,8 +8994,7 @@ te_tax_ig_band_rural_folk = {
 }
 te_tax_ig_band_trade_unions = {
 	value = 0
-	if = { limit = { te_tax_code_light_on = yes has_variable = te_tax_light_band_trade_unions } value = var:te_tax_light_band_trade_unions }
-	else_if = {
+	if = {
 		limit = { te_tax_code_equivalent_graduated = yes }
 		if = { limit = { ig:ig_trade_unions ?= { law_stance = { law = law_type:law_graduated_taxation value > approve } } } value = 2 }
 		else_if = { limit = { ig:ig_trade_unions ?= { law_stance = { law = law_type:law_graduated_taxation value > neutral } } } value = 1 }

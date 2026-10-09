@@ -81,8 +81,11 @@ the base game.
 
 When you enact another taxation law, every rate moves into the new law's range.
 A tax the new law doesn't levy stops, and a tax it adds starts at the new law's
-rate for your current tax level, as it would in the base game. The law change's
-own approval changes are the base game's; the move adds no reaction of its own.
+rate for your current tax level, as it would in the base game. No tax ends up
+above the new law's rate for your current tax level, so a change of law never
+raises your tax level: a 20% wage tax under Proportional Taxation at Medium
+becomes 15% under Graduated Taxation. The law change's own approval changes are
+the base game's; the move adds no reaction of its own.
 
 AI countries keep choosing their tax level as in the base game, and their taxes
 follow it: every tax at their law's rate for that level. Their interest groups

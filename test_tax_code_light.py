@@ -298,6 +298,26 @@ class GeneratedEffectsTest(unittest.TestCase):
             self.assertIn(f"limit = {{ var:te_tax_light_level = {n} NOT = {{ tax_level = {level} }} }} "
                           f"set_tax_level = {level}", levels)
 
+    def test_a_law_change_never_raises_the_tax_level(self):
+        # Clamped to at most the new law's rate at the stored level, every tax sits on that step or
+        # lower; a newly levied one starts on it. Without the cap, Proportional's 20% wage tax would
+        # sit on Graduated's very-high step and the next sync would set the tax level to very high.
+        for old, old_ladders in ladders().items():
+            for new, new_ladders in ladders().items():
+                for level in range(len(LEVELS)):
+                    for key in KEYS:
+                        new_ladder = new_ladders[key]
+                        if not new_ladder[-1]:
+                            continue
+                        old_ladder = old_ladders[key]
+                        for idx in (range(old_ladder[0], old_ladder[-1] + 1) if old_ladder[-1] else [0]):
+                            if idx == 0:
+                                after = new_ladder[level]
+                            else:
+                                after = min(max(idx, new_ladder[0]), new_ladder[level])
+                            with self.subTest(old=old, new=new, level=level, key=key, idx=idx):
+                                self.assertLessEqual(rung(new_ladder, after), level)
+
     def test_a_law_change_clamps_and_starts_a_new_tax_at_the_level(self):
         body = flat(block(self.text, "te_tax_light_gen_clamp"))
         for key in KEYS:
@@ -305,7 +325,7 @@ class GeneratedEffectsTest(unittest.TestCase):
             self.assertIn(f"if = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} "
                           f"set_variable = {{ name = {en} value = 0 }} }} else_if = {{ limit = {{ var:{en} = 0 }} "
                           f"set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }} else = {{ "
-                          f"clamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_max_{key} }} }}",
+                          f"clamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_idx_{key}_at_level }} }}",
                           body)
         # No reaction for a law change: its own approval covers it.
         self.assertNotIn("te_tax_light_gen_react", body)
@@ -328,11 +348,12 @@ class GeneratedEffectsTest(unittest.TestCase):
         weight = gen.fmt(gen.LIGHT_PLEASE_WEIGHT)
         for ig in gen.IGS:
             with self.subTest(ig=ig):
-                self.assertIn(f"set_local_variable = {{ name = te_tax_lt_s value = te_tax_light_rc_$KEY$_{ig} }} "
-                              "change_local_variable = { name = te_tax_lt_s multiply = var:te_tax_light_d } "
-                              f"if = {{ limit = {{ local_var:te_tax_lt_s > 0 }} change_local_variable = "
-                              f"{{ name = te_tax_lt_s multiply = {weight} }} }}", body)
-                self.assertIn(f"change_variable = {{ name = te_tax_lr_{ig} add = {{ value = local_var:te_tax_lt_s "
+                # Persistent, not local: a button's tooltip pass reads it without running the set.
+                self.assertIn(f"set_variable = {{ name = te_tax_light_s value = te_tax_light_rc_$KEY$_{ig} }} "
+                              "change_variable = { name = te_tax_light_s multiply = var:te_tax_light_d } "
+                              f"if = {{ limit = {{ var:te_tax_light_s > 0 }} change_variable = "
+                              f"{{ name = te_tax_light_s multiply = {weight} }} }}", body)
+                self.assertIn(f"change_variable = {{ name = te_tax_lr_{ig} add = {{ value = var:te_tax_light_s "
                               f"divide = {gen.LIGHT_REACTION_DIVISOR} }} }} clamp_variable = {{ name = te_tax_lr_{ig} "
                               f"min = -{gen.LIGHT_REACTION_CAP} max = {gen.LIGHT_REACTION_CAP} }}", body)
         self.assertEqual(gen.LIGHT_PLEASE_WEIGHT, Decimal("0.5"))  # owner ruling 2026-10-09
@@ -346,24 +367,51 @@ class GeneratedEffectsTest(unittest.TestCase):
         self.assertEqual(4 * gen.MATERIAL_WEIGHT / gen.LIGHT_REACTION_DIVISOR, -gen.LIGHT_REACTION_CAP)
 
     def test_apply_reactions_swaps_one_modifier_by_sign(self):
+        # Rounded first, so a modifier is added only for a whole point or more (never a "+0").
         body = flat(block(self.text, "te_tax_light_gen_apply_reactions"))
         for ig in gen.IGS:
             lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
-            self.assertIn(f"if = {{ limit = {{ var:{lr} >= 0.5 }} set_variable = {{ name = {mag} value = {{ value = "
-                          f"var:{lr} round = yes }} }} add_modifier = {{ name = te_tax_light_react_{ig}_pos "
+            self.assertIn(f"set_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }} "
+                          f"if = {{ limit = {{ var:{mag} >= 1 }} add_modifier = {{ name = te_tax_light_react_{ig}_pos "
+                          f"multiplier = var:{mag} }} }} else_if = {{ limit = {{ var:{mag} <= -1 }} change_variable = "
+                          f"{{ name = {mag} multiply = -1 }} add_modifier = {{ name = te_tax_light_react_{ig}_neg "
                           f"multiplier = var:{mag} }} }}", body)
-            self.assertIn(f"else_if = {{ limit = {{ var:{lr} <= -0.5 }} set_variable = {{ name = {mag} value = {{ "
-                          f"value = var:{lr} multiply = -1 round = yes }} }} add_modifier = {{ name = "
-                          f"te_tax_light_react_{ig}_neg multiplier = var:{mag} }} }}", body)
 
     def test_bands_read_the_relief_each_group_gets(self):
+        # Thresholds less a tolerance: the weights are written to five places and a third rounds down.
         body = flat(block(self.text, "te_tax_light_gen_bands"))
         for ig in gen.IGS:
             self.assertIn(f"set_variable = {{ name = te_tax_light_rlv value = te_tax_light_rlv_{ig} }} "
-                          f"if = {{ limit = {{ var:te_tax_light_rlv >= 2 }} set_variable = {{ name = "
-                          f"te_tax_light_band_{ig} value = 2 }} }} else_if = {{ limit = {{ var:te_tax_light_rlv >= 1 }} "
+                          f"if = {{ limit = {{ var:te_tax_light_rlv >= 1.9999 }} set_variable = {{ name = "
+                          f"te_tax_light_band_{ig} value = 2 }} }} else_if = {{ limit = {{ var:te_tax_light_rlv >= 0.9999 }} "
                           f"set_variable = {{ name = te_tax_light_band_{ig} value = 1 }} }} else = {{ set_variable = "
                           f"{{ name = te_tax_light_band_{ig} value = 0 }} }}", body)
+            # The view-band modifiers, swapped from the persistent band; the m bands are the legislated code's.
+            for band in (1, 2):
+                self.assertIn(f"if = {{ limit = {{ var:te_tax_light_band_{ig} = {band} NOT = {{ has_modifier = "
+                              f"te_tax_ig_view_{ig}_p{band} }} }} add_modifier = {{ name = te_tax_ig_view_{ig}_p{band} }} }}", body)
+                self.assertIn(f"if = {{ limit = {{ has_modifier = te_tax_ig_view_{ig}_m{band} }} remove_modifier = "
+                              f"te_tax_ig_view_{ig}_m{band} }}", body)
+        # The worst error the written weights can put into a group's relief (each weight's rounding
+        # times the most relief steps its tax can carry under the law) stays inside the tolerance.
+        for ig in gen.IGS:
+            for law, by_key in ladders().items():
+                weights = gen.light_band_weights(ig, law)
+                worst = sum(abs(Decimal(gen._dec(w)) - w) * (by_key[key][-1] - by_key[key][0])
+                            for key, w in weights.items())
+                with self.subTest(ig=ig, law=law):
+                    self.assertLess(worst, gen.LIGHT_BAND_TOLERANCE)
+
+    def test_scratch_values_persist_for_the_tooltip_pass(self):
+        init = flat(block(self.text, "te_tax_light_gen_init"))
+        for var in gen.LIGHT_SCRATCH:
+            self.assertIn(f"if = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} value = 0 }} }}", init)
+        # No local variable anywhere a step's hidden effect reaches.
+        for name in ("te_tax_light_gen_react", "te_tax_light_gen_relief", "te_tax_light_gen_steps",
+                     "te_tax_light_gen_apply_reactions", "te_tax_light_gen_bands", "te_tax_light_gen_set_level"):
+            self.assertNotIn("local_var", block(self.text, name), name)
+        self.assertNotIn("local_var", strip_comments(read(EFFECTS)))
+        self.assertNotIn("te_tax_gen_ig_views", strip_comments(read(EFFECTS)))
 
 
 class ValuesTest(unittest.TestCase):
@@ -462,7 +510,7 @@ class SyncTest(unittest.TestCase):
                        "value = var:te_tax_light_tgt } te_tax_light_gen_set_level = yes"], at)
         # 3. Relief, reactions and views, for both.
         in_order(["te_tax_light_gen_relief = yes", "te_tax_light_gen_apply_reactions = yes",
-                  "te_tax_light_gen_bands = yes", "te_tax_gen_ig_views = yes"], at)
+                  "te_tax_light_gen_bands = yes"], at)
 
     def test_monthly_fades_then_syncs(self):
         body = flat(block(self.text, "te_tax_light_process_month"))
@@ -471,7 +519,7 @@ class SyncTest(unittest.TestCase):
     def test_migration_writes_the_uniform_code_then_syncs(self):
         body = flat(block(self.text, "te_tax_light_migrate_country"))
         self.assertIn("te_tax_code_light_on = yes", body)
-        order = ["te_tax_light_gen_init = yes", "te_tax_light_gen_uniform = yes",
+        order = ["te_tax_light_gen_init = yes", "te_tax_light_gen_reset = yes", "te_tax_light_gen_uniform = yes",
                  "set_variable = { name = te_tax_light_law value = te_tax_light_law_id }",
                  "set_variable = { name = te_tax_light_level value = te_tax_light_native_level }",
                  "set_variable = { name = te_tax_light_on value = 1 }", "te_tax_light_sync = yes"]

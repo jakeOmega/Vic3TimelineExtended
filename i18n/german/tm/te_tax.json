@@ -700,8 +700,8 @@
   "de": "So funktioniert die Leichte Steuerordnung"
  },
  "te_tax_lt_how_law": {
-  "en": "When you enact another taxation law, every rate moves into the new law's range. A tax the new law does not levy stops, and a tax it adds starts at the new law's rate for your current tax level.",
-  "de": "Wenn Sie ein anderes Steuergesetz verabschieden, rückt jeder Satz in die Spanne des neuen Gesetzes. Eine Steuer, die das neue Gesetz nicht erhebt, endet, und eine Steuer, die es hinzufügt, beginnt mit dem Satz des neuen Gesetzes für Ihre aktuelle Besteuerungsstufe."
+  "en": "When you enact another taxation law, every rate moves into the new law's range. A tax the new law does not levy stops, and a tax it adds starts at the new law's rate for your current tax level. No tax ends up above the new law's rate for your current tax level, so a change of law never raises your tax level.",
+  "de": "Wenn Sie ein anderes Steuergesetz verabschieden, rückt jeder Satz in die Spanne des neuen Gesetzes. Eine Steuer, die das neue Gesetz nicht erhebt, endet, und eine Steuer, die es hinzufügt, beginnt mit dem Satz des neuen Gesetzes für Ihre aktuelle Besteuerungsstufe. Keine Steuer liegt danach über dem Satz des neuen Gesetzes für Ihre aktuelle Besteuerungsstufe, sodass ein Gesetzeswechsel Ihre Besteuerungsstufe nie anhebt."
  },
  "te_tax_lt_how_level": {
   "en": "Each rate sits on a step: the lowest tax level whose rate under your law is at or above it. Your tax level is the highest step among your taxes, and its legitimacy, radicalism and expected standard of living effects apply as in the base game. A tax below that step is collected at its own rate, so lowering a tax costs revenue but lowers the tax level only when no other tax shares its step.",

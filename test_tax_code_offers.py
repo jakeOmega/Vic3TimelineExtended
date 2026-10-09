@@ -691,10 +691,10 @@ class IgViewTest(unittest.TestCase):
                     writers.append(path.name)
                 if "te_tax_refresh_ig_views = yes" in text or "te_tax_gen_ig_views = yes" in text:
                     callers.append(path.name)
-        self.assertEqual(writers, ["te_tax_generated_effects.txt"])
-        # And the light code's sync (te_tax_light_effects.txt; test_tax_code_light.py).
-        self.assertEqual(sorted(callers), ["te_tax_internal_events.txt", "te_tax_light_effects.txt",
-                                           "te_tax_offer_effects.txt", "te_tax_schedule_effects.txt"])
+        # And the light code's band swap, from its own relief bands (test_tax_code_light.py).
+        self.assertEqual(writers, ["te_tax_generated_effects.txt", "te_tax_light_generated_effects.txt"])
+        self.assertEqual(sorted(callers), ["te_tax_internal_events.txt", "te_tax_offer_effects.txt",
+                                           "te_tax_schedule_effects.txt"])
 
     def test_refresh_is_gated(self):
         refresh = norm(block(read(OFFERS), "te_tax_refresh_ig_views"))
@@ -707,10 +707,7 @@ class IgViewTest(unittest.TestCase):
         for ig in IGS:
             body = norm(block(values, f"te_tax_ig_band_{ig}"))
             with self.subTest(ig=ig):
-                # Under the light setting, the group's relief band (test_tax_code_light.py).
-                self.assertTrue(body.startswith(
-                    f"value = 0 if = {{ limit = {{ te_tax_code_light_on = yes has_variable = te_tax_light_band_{ig} }} "
-                    f"value = var:te_tax_light_band_{ig} }} else_if = {{ limit = {{ te_tax_code_equivalent_graduated = yes }}"))
+                self.assertTrue(body.startswith("value = 0 if = { limit = { te_tax_code_equivalent_graduated = yes }"))
                 positions = [body.find(f"te_tax_code_equivalent_{short} = yes") for short, _ in EQUIVALENT]
                 self.assertEqual(positions, sorted(positions))
                 self.assertNotIn(-1, positions)
@@ -719,7 +716,7 @@ class IgViewTest(unittest.TestCase):
                                      f"{{ law = law_type:{law} {comparison} }} }} }} value = {stance} }}"
                                      for n, (comparison, stance) in enumerate(branches))
                     self.assertIn(chain, body)
-                self.assertNotIn("var:", body.replace(f"var:te_tax_light_band_{ig}", ""))
+                self.assertNotIn("var:", body)
 
     def test_the_equivalence_triggers_follow_the_ruling_order(self):
         triggers = read(TRIGGERS)
