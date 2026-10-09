@@ -6,6 +6,9 @@
 > rounds of questions (Decisions, below). §13 lists what is still open. §14's engine checks were run in game on
 > 2026-10-08; each answer is written into the section that uses it, with the evidence in
 > `docs/testing/demographics-probe-results-2026-10-08.md`.
+> The plan for phases 0 and 1 is `docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md`. Its research
+> corrected the places where this draft assumed something the code doesn't have (rule names, map modes, sorted lists,
+> cohort storage, urban population, land tenure and France's start); each is fixed in place.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context
@@ -76,7 +79,10 @@ So age and sex must be **modelled**. The model takes engine readouts as inputs a
     the pop list. The mod doesn't override it yet.
   - The state panel's Population tab has three 170 px subtabs: Statistics, Pops and Characters.
   - The history store draws column charts of stored samples.
-  - A map mode can paint any per-state script value (`te_map_mode_script_values.txt`).
+  - The mod's map-mode mechanism (`te_map_mode_script_values.txt`) repurposes vanilla's Migration Attraction map mode
+    to paint a per-state script value, but it is switched off. State-scope `migration_pull` returns the country's
+    value, so the map shows no gradient (`common/decisions/extra_decisions.txt:96-108`). The six map modes in §10 wait
+    for a working per-state source.
 
 **Prior art.** The Demography Workshop mod (`3759720467`, `docs/systems/system_panels_feasibility.md` §7) gives every
 state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 covers players who do.
@@ -437,8 +443,9 @@ None of it is scripted by date.
 
 - **1836.** Each state starts at the equilibrium of its own inputs, taken from a lookup by fertility and life
   expectancy that a generator writes. Historical overrides:
-  - France starts with fertility well below its neighbours'. Its transition began around 1800, and #822's Forced
-    Heirship already pushes it there.
+  - France starts with fertility well below its neighbours'. Its transition began around 1800. The head start is a
+    modifier, Family Limitation (`country_fertility_means_add`, +0.6), which France starts with and other countries can
+    be given. #822's Forced Heirship already pushes the same way.
   - The US frontier states start young and male.
 - **A state with no variables** (a new state, a split state region, an old save) starts at its equilibrium. A split
   state could copy its sibling's cohorts instead, since it is the same people.
@@ -447,11 +454,12 @@ None of it is scripted by date.
 
 ## 3. Sex
 
-**Each cohort stores its women and its men** as two shares of the state's population. Births come from the women's
-counts, war dead and most external deaths from the men's, maternal deaths from the women's. Nothing is computed as one
-minus another. A war that kills half the young men leaves the women's counts, and the births they carry, on their
-steady path, while the men's deficit works up the pyramid and out within a lifetime. The female share shown in the
-panel is derived.
+**Each cohort stores its women and its men as numbers of people.** The engine keeps script values in units of 1e-5,
+and a one-year cohort of the very old is a share near that, so its deaths would round away. Births come from the
+women's counts, war dead and most external deaths from the men's, maternal deaths from the women's. Nothing is
+computed as one minus another. A war that kills half the young men leaves the women's counts, and the births they
+carry, on their steady path, while the men's deficit works up the pyramid and out within a lifetime. The female share
+shown in the panel is derived.
 
 **What moves the balance:**
 
@@ -551,7 +559,7 @@ The panel shows the target's terms as bars (style guide rule 5) and a map mode.
 | Term | Scope | Proposal | Why |
 |---|---|---|---|
 | Inheritance law and amendments | national | today's targets re-centred on 50: Primogeniture +30, Testation +10, Customary 0, Forced Heirship −25, State Heir and Possession −50; amendments as now | how fortunes pass between generations; #822 unchanged in effect |
-| Land tenure (vanilla land reform laws) | national law × the state's agrarian share | Serfdom +15, Tenant Farmers +5, Commercialized Agriculture 0, Homesteading −10, Collectivized Agriculture −20 | land was most of the wealth in 1836, and it matters where the land is |
+| Land tenure (vanilla land reform laws) | national law × the state's agrarian share | Values sit on vanilla's five base laws: Serfdom +15, Tenant Farmers +5, Commercialized Agriculture 0, Peasant Proprietorship −10, Collectivized Agriculture −20. The four variants (`parent =`) take their parent's value: Manorialism Serfdom's; Latifundias and Expanded Latifundias Tenant Farmers'; Homesteading Peasant Proprietorship's | land was most of the wealth in 1836, and it matters where the land is |
 | Ownership | state | the share of the state's building levels in private hands, against cooperative and state levels | who holds the capital |
 | Income inequality | state | +0.5 × (the state's Gini − 0.40) × 100, capped ±15 | fortunes grow from unequal flows: the rich save more |
 | Taxes on wealth | national | Graduated Taxation −5; the tax code's dividend and estate settings when that rule is on | |
@@ -586,7 +594,9 @@ The first two are #822's effects, split by scope. That makes two state modifiers
 
 ### 5.1 The national urban pattern (computed)
 
-- **Urban population per state** = population × the vanilla urbanisation rate (`state_urbanization_rate`).
+- **Urban population per state.** The engine has no per-state urbanisation rate (`total_urbanization` is points, not a
+  share). Urban population is the pop walk's people whose workplace isn't in a rural building group. Pops with no
+  workplace count as rural if they are Peasants, otherwise urban.
 - **Primacy** = the largest city's share of the country's urban population.
 - **Effective number of cities** = 1 ÷ the sum of each state's squared share. It answers "one metropolis or ten
   cities" in a single number.
@@ -876,7 +886,8 @@ apply.
   from the city ranking. Then the states by settlement pattern.
 - **States** (open): a row per state with population, median age, children per woman, sex balance, Gini and Wealth
   Concentration. No GUI sort takes a script value, so the yearly step stores the states as a variable list in the
-  order wanted (`ordered_scope_state` by a script value), drawn with `GetList`, as Grand Monuments does.
+  order wanted (`ordered_scope_state` by a script value), drawn with `GetList`, as the trade-partner lists do
+  (`common/scripted_effects/trade_partner_effects.txt:147-182`); `gm_states` is unsorted.
 - **History** (open): yearly samples of median age, fertility, life expectancy, Gini and Wealth Concentration in the
   history store's column charts.
 - **How Demographics Works** (collapsed).
@@ -885,8 +896,10 @@ apply.
 four of about 130. It shows the state's pyramid, its figures, net migration, Gini, Wealth Concentration and settlement
 pattern.
 
-**Map modes:** median age, fertility, life expectancy, Gini, Wealth Concentration and settlement pattern, through the
-existing map-mode hijack (`te_map_mode_script_values.txt`).
+**Map modes (blocked):** median age, fertility, life expectancy, Gini, Wealth Concentration and settlement pattern. The
+only map-mode mechanism is the hijack of Migration Attraction (`te_map_mode_script_values.txt`), and it is switched off
+because state-scope `migration_pull` returns the country's value (`common/decisions/extra_decisions.txt:96-108`). The
+six wait for a working per-state source and belong to no phase until one exists.
 
 ## 11. Balance, AI, performance, rule and compatibility
 
@@ -942,8 +955,9 @@ terms, but against the *equilibrium* structure for the state's rates, taken from
 | Display only | yes | from the equilibrium | no |
 | Off | no | from the equilibrium | no |
 
-Write the checks as `NOT = { has_game_rule = …_off }`, so a save from before the rule keeps the system (Grand
-Monuments' pattern).
+The rule's settings are `demographics_full` (Full, the default), `demographics_display_only` (Display only) and
+`demographics_disabled` (Off). Write the checks as `NOT = { has_game_rule = demographics_disabled }`, so a save from
+before the rule keeps the system (Grand Monuments' pattern).
 
 ### 11.5 Compatibility
 
@@ -957,7 +971,7 @@ Monuments' pattern).
 | Phase | Contents | Gate |
 |---|---|---|
 | 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
-| 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, map modes, history, the rule. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
+| 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
 | 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
@@ -966,8 +980,11 @@ to be sane.
 
 ## 13. Still open
 
-- **Cohort width:** the benchmark found one-year cohorts cheap (§1), so the rule gives one-year cohorts. For the owner
-  to confirm, given their save-file cost (11–15 MB in an 1836 plain-text save).
+- **Cohort width, at the cost as built:** the benchmark found one-year cohorts cheap (§1), so the rule gives one-year
+  cohorts. The plan builds them with about 345 variables a state, about 26 MB of an 1836 plain-text save; the 11–15 MB
+  counted the cohorts alone. For the owner to confirm at that figure.
+- **The ownership coefficient (§4.2):** the table gives the ownership term no value. The plan starts it at
+  40 × (the private share of capital levels − 0.5), capped ±20. For the owner to confirm, or for calibration to change.
 - **The ring to about age 150:** cheap. Filling the top 50 of 150 slots added about 0.25 s a world-year, and an empty
   slot costs one variable check.
 - **The pensions' money cost (§7).** Vanilla's Old Age Pension charges the treasury nothing for the old (§14 Q6).
