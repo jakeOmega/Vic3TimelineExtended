@@ -160,7 +160,7 @@ st_res_<GOOD>_last_net = {
 
 ### Panel display values (four more, in the "Panel display values" group after the accessors)
 
-Display only: the row's status icon, its policy icon and the two markers on its fill bar. No script reads them. **Guard every read**, for the same every-frame reason as the accessors. `_disp_target` and `_disp_floor` must use the same policy codes the evaluator does (target while the policy can buy, 1 and 3; protected while it can sell, 2 and 3), and sit at the bar's ends (100 / 0) otherwise, where the widget hides the marker. `_disp_status` must group `st_res_<GOOD>_last_status` exactly as the good's `st_res_<GOOD>_mode_text` custom loc does (1 and 3 Storing, 2 and 4 Withdrawing, 5 and up Blocked, else Idle). `test_strategic_reserve_layout.py` checks all four.
+Display only: the row's status icon, its policy icon and the two markers on its fill bar. No script reads them. **Guard every read**, for the same every-frame reason as the accessors. `_disp_target` and `_disp_floor` must use the same policy codes the evaluator does (target while the policy can buy, 1, 3 and 4; protected while it can sell, 2, 3 and 4), and sit at the bar's ends (100 / 0) otherwise, where the widget hides the marker. `_disp_status` must group `st_res_<GOOD>_last_status` exactly as the good's `st_res_<GOOD>_mode_text` custom loc does (1 and 3 Storing, 2 and 4 Withdrawing, 5 and up Blocked, else Idle). `test_strategic_reserve_layout.py` checks all four.
 
 ```
 st_res_<GOOD>_disp_status = {
@@ -213,6 +213,7 @@ st_res_<GOOD>_disp_target = {
 			OR = {
 				var:st_res_<GOOD>_policy = 1
 				var:st_res_<GOOD>_policy = 3
+				var:st_res_<GOOD>_policy = 4
 			}
 		}
 		value = var:st_res_<GOOD>_ceil_pct
@@ -227,6 +228,7 @@ st_res_<GOOD>_disp_floor = {
 			OR = {
 				var:st_res_<GOOD>_policy = 2
 				var:st_res_<GOOD>_policy = 3
+				var:st_res_<GOOD>_policy = 4
 			}
 		}
 		value = var:st_res_<GOOD>_floor_pct
@@ -394,14 +396,24 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 	st_res_policy_tick_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch too — see below)
 	st_res_set_good_status_effect    = { GOOD = <GOOD> }  # at the END of st_res_refresh_hub_flow_effect
 	st_res_switch_to_manual_base     = { GOOD = <GOOD> }  # in st_res_reset_rates_effect
+	st_res_bulk_policy_good_base     = { GOOD = <GOOD> POLICY = 3 PRESET = standard }  # in st_res_all_goods_stabilize_effect
+	st_res_bulk_manual_good_base     = { GOOD = <GOOD> }  # in st_res_all_goods_manual_effect
 	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 3 }  # in st_res_ai_seed_policies_effect; every good is on Stabilize Prices
+```
+
+War materiel only (the set `MILITARY` in `test_strategic_reserve_policies.py` pins):
+
+```
+	st_res_bulk_policy_good_base = { GOOD = <GOOD> POLICY = 4 PRESET = stockpile }  # in st_res_military_goods_stockpile_effect
+	st_res_set_good_policy_base  = { GOOD = <GOOD> POLICY = 4 PRESET = stockpile }  # in st_res_ai_review_policies_effect, stockpile branch
+	st_res_set_good_policy_base  = { GOOD = <GOOD> POLICY = 3 PRESET = conservative }  # in st_res_ai_review_policies_effect, stabilize branch
 ```
 
 `st_res_policy_tick_good_effect` goes in **both** branches of the weekly pulse. That is not redundancy: it advances the good's running price average and then runs `st_res_policy_evaluate_good_effect`, the single derivation site for `st_res_<GOOD>_policy_status`, whose no-hub branch is what writes status 9. Drop the else-branch call and a policy's explanation goes stale the moment the hub is destroyed. Never call the tick from a click path — the price average must advance once a week, not once per click.
 
 Its position in the hub branch matters too — after `st_res_apply_weekly_good_effect` (so last week's movement is booked first) and before the shared `st_res_refresh_hub_flow_effect` / `st_res_clamp_stockpiles_effect` tail (so the rate it picks is the one the hub trades on next week). The tail still runs **once**, not once per good.
 
-For `st_res_ai_seed_good_effect`, pick the AI's policy: `3` (Stabilize Prices) for a civilian good whose price the AI should smooth, `1` (Buy When Cheap) for war materiel. Grain and `fertilizer` (Chemicals) are the only `3`s today.
+`st_res_ai_seed_good_effect` takes `3` (Stabilize Prices) for every good. War materiel then moves to Stockpile through the weekly review (`st_res_ai_review_policies_effect`) while the AI's treasury allows, which is why a military good goes in its two branches and in the player's **Military: Stockpile** effect too.
 
 The twelve per-good policy settings need **no** new init code — `st_res_init_good_effect` seeds them behind its two `has_variable` guards, and `st_res_reset_good_vars_effect` resets them (and removes the running price average so it re-seeds from the live price), all already `$GOOD$`-parameterized.
 
@@ -617,7 +629,7 @@ The nine `st_res_reason_*` and four `st_res_mode_*` keys are **shared across all
 
 ### Policy custom loc (two more blocks)
 
-`st_res_<GOOD>_policy_text` (4 branches on `st_res_<GOOD>_policy`) and `st_res_<GOOD>_policy_reason_text` (10 branches on `st_res_<GOOD>_policy_status`). Copy the grain pair and swap the good name; every branch keeps its `has_variable` guard for the same reason the existing pair does. The `localization_key` values are shared across goods — no new loc keys are needed for these two.
+`st_res_<GOOD>_policy_text` (5 branches on `st_res_<GOOD>_policy`) and `st_res_<GOOD>_policy_reason_text` (11 branches on `st_res_<GOOD>_policy_status`). Copy the grain pair and swap the good name; every branch keeps its `has_variable` guard for the same reason the existing pair does. The `localization_key` values are shared across goods — no new loc keys are needed for these two.
 
 ---
 
