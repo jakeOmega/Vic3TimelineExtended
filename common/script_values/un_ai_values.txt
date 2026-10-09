@@ -248,7 +248,7 @@ un_ai_membership_will = {
 			any_scope_state = {
 				OR = {
 					average_sol < 8
-					devastation > 5
+					devastation > 0.05
 				}
 			}
 		}

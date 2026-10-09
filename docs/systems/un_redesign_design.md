@@ -266,7 +266,7 @@ covers members only.
   leave as the crisis deepens, those with the weakest reasons first (ruling 2): a typical small
   member (about 40) near authority 8, one with weak reasons (about 25) near 13, a great power or a
   humanitarian member (60 and more) only as the UN dies;
-- help only a member can ask for: +10 with a state below 8 SoL or above 5 devastation, +10 for a
+- help only a member can ask for: +10 with a state below 8 SoL or above 5% devastation, +10 for a
   famine while the World Food Reserve stands;
 - the conventions in force, by the regimes' own tests (`un_ai_convention_terms`, −40 to +15): a
   climate emitter −15, an NPT threshold state −15, a rights violator −15, a colonial power under
@@ -2378,7 +2378,7 @@ docket prompts reaching human players, and the aggrieved party going first.
    |---|---|---|
    | nuclear strike (in the last two years) | 95 | the struck country, then a member with a stake (`un_events.2`) |
    | "never again": a war of 12+ months between great powers has ended | 75 | a proposer: human rights (`un_events.3`), else the ICC (`un_events.22`) |
-   | war of aggression on a member, 6+ months, a state devastated past 30 | 40 + 100 × the power share at war with the aggressor, max 85 | the attacked member, then a member with a stake (`un_events.2`) |
+   | war of aggression on a member, 6+ months, a state devastated past 30% | 40 + 100 × the power share at war with the aggressor, max 85 | the attacked member, then a member with a stake (`un_events.2`) |
    | warming threshold crossed (0.5 / 1 / 2 / 3 °C) | 50 / 55 / 65 / 75 | a proposer (`un_events.17`) |
    | a new nuclear power (first bomb built) | 60 | a proposer (`un_events.14`) |
    | severe covert operation exposed (in the last two years) | 55 | the target, then a member with a stake (`un_events.2`) |
@@ -3524,7 +3524,7 @@ of this file, as `monetary_policy_design.md` does.
 | lean: consensus / veto line (recent veto, Moribund) / noise / reason size | +10 / −30 (−50, −10) / ±20 in steps of 10 / 10 | §6.2 |
 | docket cadence | ≤ 1 new item per 3 months (phase 4) | §8.1 |
 | docket: Assembly business / offers per item | ≤ 1 per 24 months / 2 (phase 4; §0.4 rulings 1, 4) | §8.1, §8.3 |
-| docket: war threshold | 6 months at war and a member's state devastated past 30 (phase 4) | §8.1 |
+| docket: war threshold | 6 months at war and a member's state devastated past 30% (`un_docket_war_devastation` = 0.3; phase 4) | §8.1 |
 | docket scores | see §0.4 ruling 2 | §8.1 |
 | token aid and observers | a quarter of a programme's GDP-scaled expense (phase 4) | §8.2 |
 | recess | 3 months | §8.3 |

@@ -428,11 +428,15 @@ un_mission_aid_progress_value = {
 # ---- Where a mission goes (Scope: state) ---------------------------------------------
 
 # Aid: the state most in need, by standard of living, and by devastation,
-# since an aid request can be carried on devastation alone.
+# since an aid request can be carried on devastation alone. Devastation reads
+# 0..1; ×100 weighs each percent of it like a point of standard of living.
 un_mission_sol_need_order = {
 	value = 100
 	subtract = average_sol
-	add = devastation
+	add = {
+		value = devastation
+		multiply = 100
+	}
 }
 
 # ---- Display ------------------------------------------------------------------------
