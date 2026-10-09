@@ -1,0 +1,230 @@
+"""The demographics cohort model (scripts/analysis/demographics_model.py).
+
+Pins the model's behaviour to the design's anchors
+(docs/superpowers/specs/2026-10-08-demographics-design.md §1, §2.2-§2.4, §3) so a
+parameter change that breaks a real-world anchor fails here, before it is generated
+into script.
+"""
+
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+
+import demographics_model as M  # noqa: E402
+import demographics_params as P  # noqa: E402
+
+MODERN = frozenset({
+    "medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
+    "antibiotic_mass_production", "vulcanization", "contraceptive_pill", "modern_pharmaceuticals",
+    "combustion_engine",
+})
+EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization"})
+
+AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
+BRITAIN_1836 = M.Inputs(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
+FRANCE_1836 = M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_add=P.FAMILY_LIMITATION_MEANS)
+WEST_1950 = M.Inputs(sol=25, literacy=0.9, urban_share=0.6, techs=EARLY_MEDICINE,
+                     laws=frozenset({"law_private_health_insurance", "law_women_in_the_workplace"}),
+                     institutions={"institution_health_system": 2, "institution_workplace_safety": 2})
+WEST_1990 = M.Inputs(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
+                     laws=frozenset({"law_public_health_insurance", "law_womens_suffrage",
+                                     "law_old_age_pension", "law_dedicated_police"}),
+                     institutions={"institution_health_system": 4, "institution_workplace_safety": 4,
+                                   "institution_ministry_of_consumer_protection": 3})
+INDIA_1975 = M.Inputs(sol=9, literacy=0.35, urban_share=0.2,
+                      techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
+                      laws=frozenset({"law_charitable_health_system"}))
+
+
+class TestFertility(unittest.TestCase):
+    """§2.3's sketch table: the formula with plausible inputs."""
+
+    def tfr(self, inp):
+        _ring, last = M.run_constant(inp, years=200)
+        return last["tfr"]
+
+    def test_sketch_cases(self):
+        for inp, expected, label in [
+            (BRITAIN_1836, 5.5, "Britain 1836"),
+            (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
+            (WEST_1950, 3.1, "the West 1950"),
+            (WEST_1990, 1.4, "the West 1990"),
+            (INDIA_1975, 5.1, "India 1975"),
+        ]:
+            with self.subTest(label):
+                self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
+
+    def test_wealth_term_endpoints(self):
+        self.assertAlmostEqual(M.wealth_tfr(0), 6.2)
+        self.assertAlmostEqual(M.wealth_tfr(8), 6.2)
+        self.assertAlmostEqual(M.wealth_tfr(35), 3.5)
+        self.assertAlmostEqual(M.wealth_tfr(60), 3.5)
+
+    def test_means_capped(self):
+        rich = M.Inputs(literacy=1.0, techs=MODERN, laws=frozenset({"law_state_sponsored_family_planning"}))
+        self.assertLessEqual(M.means(rich), P.MEANS_CAP)
+
+    def test_asfr_shape_sums_to_one(self):
+        self.assertAlmostEqual(sum(M.asfr_shape(r) for r in range(100)), 100000.0)
+
+
+class TestMortality(unittest.TestCase):
+    """§2.4's anchors: infant mortality, life expectancy at birth and at 65."""
+
+    def table(self, inp):
+        qf, qm, _ = M.group_rates(inp)
+        f, m = M.life_table(qf), M.life_table(qm)
+        return {k: (f[k] + m[k]) / 2 for k in f}
+
+    def test_1836_europe(self):
+        t = self.table(BRITAIN_1836)
+        self.assertTrue(150 <= t["q0_per_1000"] <= 250, t)
+        self.assertTrue(35 <= t["e0"] <= 43, t)
+        self.assertTrue(10 <= t["e65"] <= 14, t)
+
+    def test_rich_country_today(self):
+        t = self.table(WEST_1990)
+        self.assertLess(t["q0_per_1000"], 15)
+        self.assertTrue(72 <= t["e0"] <= 80, t)
+        self.assertTrue(17 <= t["e65"] <= 23, t)
+
+    def test_women_outlive_men(self):
+        for inp in (BRITAIN_1836, WEST_1990):
+            qf, qm, _ = M.group_rates(inp)
+            gap = M.life_table(qf)["e0"] - M.life_table(qm)["e0"]
+            self.assertTrue(1.0 <= gap <= 8.0, gap)
+
+    def test_no_deaths_lives_to_the_end_of_the_ring(self):
+        self.assertAlmostEqual(M.life_table([0.0] * len(P.GROUPS))["e0"], 150.0)
+
+    def test_work_deaths_follow_the_workforce(self):
+        before = M.group_rates(M.Inputs(laws=frozenset({"law_no_womens_rights"})))[0]
+        after = M.group_rates(M.Inputs(laws=frozenset({"law_women_in_the_workplace"})))[0]
+        g = P.group_of(30)
+        self.assertGreater(after[g], before[g])
+
+
+class TestStructure(unittest.TestCase):
+    """§2.2's equilibrium table and the demographic dividend."""
+
+    def test_agrarian_reference(self):
+        ring, last = M.run_constant(AGRARIAN_1836, years=300)
+        s = M.structure(ring)
+        self.assertTrue(0.33 <= s["young"] <= 0.43, s)
+        self.assertTrue(0.03 <= s["old"] <= 0.07, s)
+        self.assertTrue(0.008 <= last["growth"] <= 0.02, last["growth"])
+
+    def test_aged(self):
+        ring, last = M.run_constant(WEST_1990, years=300)
+        s = M.structure(ring)
+        self.assertTrue(0.09 <= s["young"] <= 0.14, s)
+        self.assertTrue(0.28 <= s["old"] <= 0.38, s)
+        self.assertTrue(-0.015 <= last["growth"] <= -0.008, last["growth"])
+
+    def test_dividend_window(self):
+        ring, _ = M.run_constant(AGRARIAN_1836, years=300)
+        start = M.structure(ring)["working"]
+        factor = M.fertility(AGRARIAN_1836, 40)["factor"]
+        low = M.Inputs(sol=8, literacy=0.2, urban_share=0.1, wealth_tfr=2.2 / factor)
+        year = ring.year
+        peak = start
+        for _ in range(30):
+            year += 1
+            M.step(ring, low, year)
+            peak = max(peak, M.structure(ring)["working"])
+        self.assertGreaterEqual(peak - start, 0.08)
+
+    def test_sex_balance(self):
+        ring, _ = M.run_constant(BRITAIN_1836, years=200)
+        self.assertTrue(90 <= M.structure(ring)["men_per_100_women"] <= 102)
+
+
+class TestRing(unittest.TestCase):
+    """§1: birth cohorts age exactly; the ring wraps; scaling matches the engine."""
+
+    def test_seed_is_steady(self):
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        before = M.structure(ring)
+        for year in range(1837, 1857):
+            M.step(ring, AGRARIAN_1836, year)
+        after = M.structure(ring)
+        self.assertLess(abs(after["young"] - before["young"]), 0.015)
+        self.assertLess(abs(after["old"] - before["old"]), 0.01)
+
+    def test_a_birth_cohort_does_not_spread(self):
+        """Extra men born in 1800 stay in one slot for 120 years, then fold into the pool."""
+        ring = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        twin = M.seed(AGRARIAN_1836, 1836, 1_000_000)
+        marked = 1800 % P.RING_YEARS
+        ring.m[marked] += 777.0
+        for year in range(1837, 1921):
+            M.step(ring, AGRARIAN_1836, year)
+            M.step(twin, AGRARIAN_1836, year)
+        diffs = [a - b for a, b in zip(ring.m, twin.m)]
+        self.assertEqual(ring.age_of_slot(marked), 120)
+        self.assertGreater(diffs[marked], 0.0)
+        self.assertLess(sum(abs(d) for i, d in enumerate(diffs) if i != marked), 1e-6)
+        for year in range(1921, 1951):
+            M.step(ring, AGRARIAN_1836, year)
+            M.step(twin, AGRARIAN_1836, year)
+        self.assertEqual(ring.age_of_slot(marked), 0)
+        self.assertGreater(ring.pool_m, twin.pool_m)
+
+    def test_scaled_to_engine_population(self):
+        ring = M.seed(BRITAIN_1836, 1836, 2_500_000)
+        self.assertAlmostEqual(ring.people(), 2_500_000, delta=1)
+        M.step(ring, BRITAIN_1836, 1837, engine_pop=2_510_000)
+        self.assertAlmostEqual(ring.people(), 2_510_000, delta=1)
+
+    def test_births_minus_deaths_balance(self):
+        ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        before = ring.people()
+        out = M.step(ring, BRITAIN_1836, 1837)
+        self.assertAlmostEqual(ring.people(), before + out["births"] - out["deaths"], delta=0.01)
+
+    def test_empty_state_steps_without_error(self):
+        ring = M.seed(BRITAIN_1836, 1836, 0)
+        self.assertEqual(ring.people(), 0)
+        M.step(ring, BRITAIN_1836, 1837, engine_pop=0, war_dead=50, kills=10, migration=-200)
+        self.assertEqual(ring.people(), 0)
+        M.step(ring, BRITAIN_1836, 1838, engine_pop=1000, migration=1000)
+        self.assertAlmostEqual(ring.people(), 1000, delta=0.01)
+
+    def test_war_dead_are_young_men(self):
+        ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        twin = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        M.step(ring, BRITAIN_1836, 1837, war_dead=10_000)
+        M.step(twin, BRITAIN_1836, 1837)
+        lost_m = sum(t[2] - r[2] for r, t in zip(ring.by_age(), twin.by_age()))
+        lost_f = sum(t[1] - r[1] for r, t in zip(ring.by_age(), twin.by_age()))
+        self.assertAlmostEqual(lost_m, 9_500, delta=250)  # last year's denominators
+        self.assertAlmostEqual(lost_f, 500, delta=50)
+        old_m = sum(t[2] - r[2] for r, t in zip(ring.by_age(), twin.by_age()) if r[0] > 41)
+        self.assertAlmostEqual(old_m, 0.0, delta=1.0)
+
+    def test_labour_migrants_are_young_adults(self):
+        ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        twin = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        M.step(ring, BRITAIN_1836, 1837, migration=20_000)
+        M.step(twin, BRITAIN_1836, 1837)
+        gained = {a: (r[1] + r[2]) - (t[1] + t[2]) for r, t in zip(ring.by_age(), twin.by_age()) for a in [r[0]]}
+        prime = sum(v for a, v in gained.items() if 18 <= a <= 35)
+        self.assertGreater(prime / 20_000, 0.5)
+
+
+class TestInequality(unittest.TestCase):
+    """§4.1: the grouped Gini and its map to the panel's figure."""
+
+    def test_equal_groups(self):
+        self.assertAlmostEqual(M.grouped_gini([(10, 100), (10, 100)]), 0.0)
+
+    def test_one_group_owns_everything(self):
+        self.assertGreater(M.grouped_gini([(99, 0.0001), (1, 1000)]), 0.98)
+
+    def test_britain_1836_anchor(self):
+        # Britain's strata in the 1836 save (people, spending per head at capped wealth)
+        groups = [(23.65e6, 23.65e6 * 314), (2.08e6, 2.08e6 * 685), (0.22e6, 0.22e6 * 9759)]
+        self.assertAlmostEqual(M.shown_gini(M.grouped_gini(groups)), 0.52, delta=0.02)
