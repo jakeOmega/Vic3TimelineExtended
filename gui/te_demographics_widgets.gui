@@ -3076,7 +3076,7 @@ types te_demographics_widgets
 				}
 			}
 			te_demog_note = {
-				text = "te_demog_how_gini"
+				text = "te_demog_how_gini_state"
 			}
 			te_demog_note = {
 				text = "te_demog_how_wc"

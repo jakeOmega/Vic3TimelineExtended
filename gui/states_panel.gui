@@ -2517,6 +2517,7 @@ types state_panel_types
 
 				### Statistics subtab
 				widget = {
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
 					size = { 135 40 }
 
 					background = {
@@ -2546,6 +2547,7 @@ types state_panel_types
 
 				### Pop List subtab
 				widget = {
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
 					size = { 135 40 }
 
 					background = {
@@ -2575,6 +2577,7 @@ types state_panel_types
 
 				### Characters subtab
 				widget = {
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
 					size = { 135 40 }
 
 					background = {

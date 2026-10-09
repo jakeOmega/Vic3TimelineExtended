@@ -276,9 +276,9 @@ shows where today's course leads, not a forecast. Only your own country gets it.
 
 Each year, the people of every age lose their dead at that age's rate, the
 newborn enter at age 0, and the war dead, people killed by events and migrants
-are taken from or added to the ages they belong to. The war dead are nearly all
-men aged 18 to 40, nineteen in twenty of them men. Children per woman follows
-wealth, then falls with literacy, child survival and city life; the means to
+are taken from or added to the ages they belong to. The war dead are people aged
+18 to 40, nineteen in twenty of them men. Children per woman follows wealth, then
+falls with literacy, child survival and city life; the means to
 plan a family grow with literacy and medicine. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
 bring down.
