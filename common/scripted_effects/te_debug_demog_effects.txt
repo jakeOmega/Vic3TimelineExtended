@@ -138,7 +138,8 @@ te_debug_demog_census_line = {
 # THIS = a state at the top of its yearly pulse (te_demog_state_yearly), before the
 # seed-or-step branches read its census year. Only the player's capital writes: one
 # line a year means one step a year (a second line in a calendar year does nothing, a
-# skipped year re-seeds). An observer game has no player, so it writes none.
+# skipped year re-seeds). An observer game has no player, so it writes none; the
+# why line below writes for every capital.
 te_debug_demog_pulse_line = {
 	if = {
 		limit = {
@@ -146,6 +147,91 @@ te_debug_demog_pulse_line = {
 			owner = { is_ai = no }
 		}
 		debug_log = "TE_DEMOG_PULSE state=capital year=[THIS.ScriptValue('te_demog_year')|0] te_dg_year=[THIS.ScriptValue('te_debug_demog_census_year')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	te_debug_demog_why_line = yes
+}
+
+# THIS = a state at the top of its yearly pulse, after the pulse line: for every
+# country's capital with a census (an observer game's too), which of the seed-or-step
+# branch's conditions hold. In the observer test of #830 (2026-10-09) every state
+# seeded at every pulse and none stepped, though its census was a year old and its
+# people within a quarter of the last census's. Each condition is tested twice, in the
+# form te_demog_state_yearly used then ("old") and in the local form it uses now
+# ("now"), and writes its own line only when it holds, so the answer is which lines
+# appear: a census a year old with people within a quarter should write only the two
+# "gap = 1" lines.
+te_debug_demog_why_line = {
+	if = {
+		limit = {
+			is_capital = yes
+			has_variable = te_dg_year
+			has_variable = te_dg_pop_last
+			has_variable = te_dg_raw
+		}
+		set_local_variable = {
+			name = te_dg_dbg_gap
+			value = { value = te_demog_year subtract = var:te_dg_year }
+		}
+		set_local_variable = {
+			name = te_dg_dbg_moved
+			value = { value = state_population divide = { value = var:te_dg_pop_last min = 1 } }
+		}
+		set_local_variable = {
+			name = te_dg_dbg_over
+			value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 1.25 } }
+		}
+		set_local_variable = {
+			name = te_dg_dbg_under
+			value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }
+		}
+		set_variable = { name = te_dg_dbg_gap value = local_var:te_dg_dbg_gap }
+		set_variable = { name = te_dg_dbg_moved value = local_var:te_dg_dbg_moved }
+		owner = {
+			debug_log = "TE_DEMOG_WHY capital of [THIS.GetCountry.GetTagName]"
+		}
+		debug_log = "TE_DEMOG_WHY year=[THIS.ScriptValue('te_demog_year')|0] te_dg_year=[THIS.ScriptValue('te_debug_demog_census_year')|0] gap=[THIS.Var('te_dg_dbg_gap').GetValue|2] old_gap=[THIS.ScriptValue('te_demog_year_gap')|2] moved=[THIS.Var('te_dg_dbg_moved').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString]"
+		if = {
+			limit = { te_demog_year_gap > 1 }
+			debug_log = "TE_DEMOG_WHY old: te_demog_year_gap above 1"
+		}
+		if = {
+			limit = { te_demog_year_gap = 1 }
+			debug_log = "TE_DEMOG_WHY old: te_demog_year_gap = 1"
+		}
+		if = {
+			limit = { state_population > { value = var:te_dg_pop_last multiply = 1.25 } }
+			debug_log = "TE_DEMOG_WHY old: state_population above 1.25 times te_dg_pop_last"
+		}
+		if = {
+			limit = { state_population < { value = var:te_dg_pop_last multiply = 0.75 } }
+			debug_log = "TE_DEMOG_WHY old: state_population below 0.75 times te_dg_pop_last"
+		}
+		if = {
+			limit = { var:te_dg_raw < 1 }
+			debug_log = "TE_DEMOG_WHY te_dg_raw below 1"
+		}
+		if = {
+			limit = { has_variable = te_dg_reseed }
+			debug_log = "TE_DEMOG_WHY te_dg_reseed is set"
+		}
+		if = {
+			limit = { local_var:te_dg_dbg_gap > 1 }
+			debug_log = "TE_DEMOG_WHY now: gap above 1"
+		}
+		if = {
+			limit = { local_var:te_dg_dbg_gap = 1 }
+			debug_log = "TE_DEMOG_WHY now: gap = 1"
+		}
+		if = {
+			limit = { local_var:te_dg_dbg_over > 0 }
+			debug_log = "TE_DEMOG_WHY now: people above 1.25 times te_dg_pop_last"
+		}
+		if = {
+			limit = { local_var:te_dg_dbg_under < 0 }
+			debug_log = "TE_DEMOG_WHY now: people below 0.75 times te_dg_pop_last"
+		}
+		remove_variable = te_dg_dbg_gap
+		remove_variable = te_dg_dbg_moved
 	}
 }
 
