@@ -31,8 +31,8 @@
 # or every state and war, and their tooltips wrote about 1,200 error lines a second
 # while the event was open (2026-10-09). Each sets te_dg_dbg_click and does its work
 # only under has_variable = te_dg_dbg_click: the tooltip pass never sets it, so it
-# skips the work (docs/guides/scripting_best_practices.md, "An Option's Tooltip Walks
-# Its Effects").
+# skips the work, and the event now logs nothing while open (confirmed 2026-10-09;
+# docs/guides/scripting_best_practices.md, "An Option's Tooltip Walks Its Effects").
 # ============================================================================
 namespace = te_debug_demog
 

@@ -1834,7 +1834,7 @@ custom_tooltip = {
 }
 ```
 
-The guard rests on the same rule as the parameter-preview gotcha below (§ "`$D$ = 1` Is Not a Trigger"): a preview tests a `limit` against the state as it stands. It is unconfirmed in game until a relaunch shows `te_debug_demog.1` open with no `te_demog_effects.txt` lines. Use it on console and debug events. On a player event it would also hide the effects' own tooltip lines.
+The guard rests on the same rule as the parameter-preview gotcha below (§ "`$D$ = 1` Is Not a Trigger"): a preview tests a `limit` against the state as it stands. It held in game (2026-10-09). `te_debug_demog.1` sat open for eight seconds with nothing logged, and option a, clicked, still wrote its `TE_DEMOG_REPLAY` lines. Use it on console and debug events. On a player event it would also hide the effects' own tooltip lines.
 
 ## Mandatory Reference Doc Consultation
 
