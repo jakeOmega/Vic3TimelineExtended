@@ -66,6 +66,8 @@
 #   te_dg_kills_in      state: people the mod's own script killed since the last
 #                       step (te_demog_note_kills), taken and removed the same way
 #   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#   te_dg_mig_raw       state: the same residual before the noise band; the country's sum of it
+#                       (te_demog_country_census) is the census log's gate figure
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
 #   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
 #   te_dg_war_year      country: the year's rise in war dead, until 31 December (read by the
@@ -96,7 +98,8 @@
 #   te_dg_tfr           the states' weighted by their women aged 15-49
 #   te_dg_e0, te_dg_e65 the states' weighted by people; te_dg_imr by births (by people while the
 #                       census holds no births, as in a seed-only census, whose births are 0)
-#   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration the sum.
+#   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration and
+#                       te_dg_mig_raw the sums.
 #                       CBR and CDR are not real while te_dg_stepped is 0: a seed writes no births
 #                       or deaths, so they read 0. That is apart from te_dg_trend_ok (which
 #                       only says whether an arrow may be drawn): a panel shows no CBR and CDR
@@ -519,6 +522,7 @@ te_demog_seed = {
 	}
 	# no migration yet (only a step's flows write it): the country's census sums it over every state with a census
 	set_variable = { name = te_dg_net_migration value = 0 }
+	set_variable = { name = te_dg_mig_raw value = 0 }
 	set_variable = { name = te_dg_pf value = 0 }
 	set_variable = { name = te_dg_pm value = 0 }
 	set_variable = { name = te_dg_pa value = 150 }
@@ -784,6 +788,9 @@ te_demog_flows = {
 			add = local_var:te_dg_kills
 		}
 	}
+	# kept before the band for the census log: summed over a country, moves between its own
+	# states cancel here, where the band would zero a state's small loss and keep a city's gain
+	set_variable = { name = te_dg_mig_raw value = local_var:te_dg_mig }
 	# a residual inside the noise band is model error, not migration
 	set_local_variable = { name = te_dg_noise value = { value = var:te_dg_people multiply = te_demog_k_residual_noise_share } }
 	set_local_variable = { name = te_dg_neg_noise value = { value = local_var:te_dg_noise multiply = -1 } }
@@ -1298,6 +1305,7 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_births value = 0 }
 	set_local_variable = { name = te_dg_c_deaths value = 0 }
 	set_local_variable = { name = te_dg_c_mig value = 0 }
+	set_local_variable = { name = te_dg_c_mig_raw value = 0 }
 	set_local_variable = { name = te_dg_c_tfr_w value = 0 }
 	set_local_variable = { name = te_dg_c_women value = 0 }
 	set_local_variable = { name = te_dg_c_e0_w value = 0 }
@@ -1328,6 +1336,11 @@ te_demog_country_census = {
 		change_local_variable = { name = te_dg_c_births add = var:te_dg_births }
 		change_local_variable = { name = te_dg_c_deaths add = var:te_dg_deaths }
 		change_local_variable = { name = te_dg_c_mig add = var:te_dg_net_migration }
+		# a state from a save made before te_dg_mig_raw existed has none until its next step
+		if = {
+			limit = { has_variable = te_dg_mig_raw }
+			change_local_variable = { name = te_dg_c_mig_raw add = var:te_dg_mig_raw }
+		}
 		change_local_variable = { name = te_dg_c_tfr_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
 		change_local_variable = { name = te_dg_c_women add = var:te_dg_w1549 }
 		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
@@ -1367,6 +1380,7 @@ te_demog_country_census = {
 		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_net_migration value = local_var:te_dg_c_mig }
+		set_variable = { name = te_dg_mig_raw value = local_var:te_dg_c_mig_raw }
 		set_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 		set_variable = { name = te_dg_e0 value = { value = local_var:te_dg_c_e0_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 		set_variable = { name = te_dg_e65 value = { value = local_var:te_dg_c_e65_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }

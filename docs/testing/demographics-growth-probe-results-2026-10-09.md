@@ -123,6 +123,18 @@ table, by the workplace's group and its ancestors. Building reads of production-
 - **The census's own estimate** missed it by −3.4 (1836) and −6.5 (1917): it multiplied births by the state
   read (×1.05 in 1836, ×1.09 in 1917) and left out every per-pop term.
 
+## After the fix
+
+The phase-1 gate run (a new 1836 game, observed, census log on) read to 1877:
+- **World net migration**, weighted by people: about +0.3 per 1,000 a year, within ±1 in 40 of 41 years (it was −6 to
+  −7). Closed Borders countries: +0.0 to +0.4 in most years.
+- **The report's Closed Borders median read +0.00, but it could not have failed.** The census zeroes each state's
+  residual under 0.3% of its people before the country sums it, so the median sits at 0 for any error under 3 per
+  1,000. The same floor tilts country sums upward: a city's gain is kept while the small losses of the states that
+  feed it are zeroed (Closed Borders countries above 0 outnumbered those below about 2 to 1). The census line now also
+  carries `mig_raw`, the residual before the floor, and the check reads that. The report also counted each line once
+  per archived copy of `debug.log`; it now counts each country and year once.
+
 ## Open
 
 - Turmoil (`state_mortality_turmoil_mult`) and wealth (`state_mortality_wealth_mult`) mortality: the scaling

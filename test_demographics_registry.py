@@ -871,6 +871,7 @@ class TestCohortScript(unittest.TestCase):
         self.check_step(eng, ring, figures, pop)
         self.check_flows(eng, flows, want_inflow_years=0)
         self.close(eng.vars["te_dg_net_migration"], -6000.0, what="net migration")
+        self.close(eng.vars["te_dg_mig_raw"], -6000.0, what="the residual before the noise band")
         self.assertEqual(eng.locals["te_dg_mig_in"], 0)
         self.assertGreater(eng.locals["te_dg_mig_out"], 0)
 
@@ -881,6 +882,8 @@ class TestCohortScript(unittest.TestCase):
         self.check_step(eng, ring, figures, pop)
         self.check_flows(eng, flows, want_inflow_years=0)
         self.assertEqual(eng.vars["te_dg_net_migration"], 0.0)
+        # the census log's gate check reads the residual before the band (te_debug_demog_census_line)
+        self.close(eng.vars["te_dg_mig_raw"], 0.002 * self.POP, what="the residual before the noise band")
         flows["migration"] = 0.004 * self.POP
         eng, ring, figures, pop = self.step_both(flows=flows)
         self.check_step(eng, ring, figures, pop)
@@ -1346,8 +1349,10 @@ class TestTrend(unittest.TestCase):
         """Only a step's flows write it, and the country sums it over every state with a census."""
         eng = _engine_for(self.INP, 1836, self.POP)
         eng.vars["te_dg_net_migration"] = 4000.0
+        eng.vars["te_dg_mig_raw"] = 4000.0
         eng.call("te_demog_seed")
         self.assertEqual(eng.vars["te_dg_net_migration"], 0.0)
+        self.assertEqual(eng.vars["te_dg_mig_raw"], 0.0)
 
 
 class TestCountry(unittest.TestCase):
@@ -1360,6 +1365,16 @@ class TestCountry(unittest.TestCase):
         lists = _block(_text(EFFECTS), "te_demog_country_lists")
         for m in re.finditer(r"ordered_scope_state = \{", lists):
             self.assertIn("te_demog_has_census = yes", lists[m.end():m.end() + 200])
+
+    def test_the_country_sums_the_residual_before_the_noise_band(self):
+        """The census log's gate check: moves between a country's own states cancel in this sum, which
+        the floored te_dg_net_migration can't promise (a state's small loss is zeroed, a city's gain kept).
+        A state loaded from a save made before te_dg_mig_raw existed has none until its next step."""
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        self.assertIn("set_local_variable = { name = te_dg_c_mig_raw value = 0 }", body)
+        add = body.index("change_local_variable = { name = te_dg_c_mig_raw add = var:te_dg_mig_raw }")
+        self.assertLess(body.rindex("has_variable = te_dg_mig_raw", 0, add), add)
+        self.assertIn("set_variable = { name = te_dg_mig_raw value = local_var:te_dg_c_mig_raw }", body)
 
     def test_a_revolutions_winner_gets_its_lists_back(self):
         """Review on #830: the winner inherits te_dg_census_year but no variable list, so the
