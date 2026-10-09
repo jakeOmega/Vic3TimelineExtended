@@ -568,9 +568,10 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 |---|---|---|---|
 | Inheritance law and amendments | national | today's targets re-centred on 50: Primogeniture +30, Testation +10, Customary 0, Forced Heirship −25, State Heir and Possession −50; amendments as now | how fortunes pass between generations; #822 unchanged in effect |
 | Land tenure (vanilla land reform laws) | national law × the state's agrarian share | Values sit on vanilla's five base laws: Serfdom +15, Tenant Farmers +5, Commercialized Agriculture 0, Peasant Proprietorship −10, Collectivized Agriculture −20. The four variants (`parent =`) take their parent's value: Manorialism Serfdom's; Latifundias and Expanded Latifundias Tenant Farmers'; Homesteading Peasant Proprietorship's | land was most of the wealth in 1836, and it matters where the land is |
-| Ownership | state | the share of the state's building levels in private hands, against cooperative and state levels | who holds the capital |
+| Ownership | state | the share of the state's building levels in private hands, against cooperative and state levels: 40 × (share − 0.65), capped ±20 (§13) | who holds the capital |
 | Income inequality | state | +0.5 × (the state's Gini − 0.40) × 100, capped ±15 | fortunes grow from unequal flows: the rich save more |
 | Taxes on wealth | national | Graduated Taxation −5; the tax code's dividend and estate settings when that rule is on | |
+| Economic laws (owner, 2026-10-09) | national | Laissez-Faire +10, Extraction Economy +5, Interventionism −5; Guilds and Chartered Monopolies and Freedom of Contract +5, Antitrust Enforcement (`law_trust_busting`) and Regulated Utilities −5; others 0; capped ±15 | how freely capital compounds and combines: top-decile wealth shares rose to about 1910 under laissez-faire and fell to the 1970s under regulation, which the other terms alone ran backwards |
 | Return on capital against growth (later phase) | national | from the banking system's policy rate against GDP growth | Piketty's r > g; only where the banking system runs |
 
 **Shocks** jump the score instead of moving its target. They follow Scheidel's four levellers (*The Great Leveler*,
@@ -1006,10 +1007,12 @@ to be sane.
 - **Cohort width, at the cost as built:** the benchmark found one-year cohorts cheap (§1), so the rule gives one-year
   cohorts. The plan builds them with about 345 variables a state, about 26 MB of an 1836 plain-text save; the 11–15 MB
   counted the cohorts alone. For the owner to confirm at that figure.
-- **The ownership coefficient (§4.2):** the table gives the ownership term no value. As built it is
-  40 × (the private share of capital levels − 0.9), capped ±20, centred on the 1836 reference: almost all 1836 capital
-  is private, so the plan's centre of 0.5 put every country near +20 on day one and switched Great Family Fortunes on
-  where #822 opened at 50. For the owner to confirm, or for calibration to change.
+- **The ownership coefficient (§4.2): settled 2026-10-09.** 40 × (the private share of capital levels − 0.65),
+  capped ±20. #833's centre of 0.9 assumed almost all 1836 capital was private; read from an 1836 save, large
+  countries' capital is 55–65% private (self-owned farms, mines and workshops), so 0.9 held almost every country 10–17
+  points down all game (72 of 285 countries at the −20 cap in 1836; −11 to −20 in a 2062 observer save). The owner
+  re-centred it on the measured share and added the economic-laws term. A state-owned Construction Sector counts as
+  state capital (the mod's `bg_construction` is not government-funded); left as it is (owner).
 - **The ring to about age 150:** cheap. Filling the top 50 of 150 slots added about 0.25 s a world-year, and an empty
   slot costs one variable check.
 - **The pensions' money cost (§7).** Vanilla's Old Age Pension charges the treasury nothing for the old (§14 Q6).

@@ -215,6 +215,76 @@ def country_inputs(sections):
     return out
 
 
+# ---- script variables (Wealth Concentration as the game holds it) -----------------------
+
+_SECTION = re.compile(r"^([a-z_]+)=\{$")
+
+
+def fixed_point(raw):
+    """A script value's saved `identity`: i64 x 1e5 written unsigned, so a negative wraps past 2^63."""
+    v = int(raw)
+    if v >= 2 ** 63:
+        v -= 2 ** 64
+    return v / 1e5
+
+
+def read_variables(path, country_vars, state_vars):
+    """(countries, states) from a plain-text save's script variables and active laws.
+
+    countries: {id: {"tag": str, "laws": set, "vars": {name: value}}} for the variables named in
+    country_vars; states: {id: {"owner": country id, "vars": {...}}} for state_vars. A record's
+    nested blocks can restart at column 0 (`0={` inside a country), so records are told by brace
+    depth, not by indentation. Raises NotPlainText as read_sections does.
+    """
+    check_plain_text(path)
+    countries, states = {}, {}
+    law_owner = {}
+    section, rec, flag, law = None, None, None, {}
+    depth = 0
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            before = depth
+            depth += line.count("{") - line.count("}")
+            if before == 0:
+                m = _SECTION.match(line.rstrip("\n"))
+                section = m.group(1) if m else None
+                continue
+            if section not in ("country_manager", "states", "laws"):
+                continue
+            if before == 2:
+                m = _RECORD.match(line)
+                if m:
+                    rec, flag, law = m.group(1), None, {}
+                    if section == "country_manager":
+                        countries[rec] = {"tag": "", "laws": set(), "vars": {}}
+                    elif section == "states":
+                        states[rec] = {"owner": None, "vars": {}}
+                continue
+            text = line.strip()
+            if section == "laws":
+                if before == 3 and "=" in text:
+                    key, _, value = text.partition("=")
+                    law[key] = value
+                    if law.get("active") == "yes" and "law" in law and "country" in law:
+                        law_owner.setdefault(law["country"], set()).add(law["law"])
+                continue
+            if before == 3 and section == "country_manager" and text.startswith("definition="):
+                countries[rec]["tag"] = text[11:].strip('"')
+            elif before == 3 and section == "states" and text.startswith("country="):
+                states[rec]["owner"] = text[8:]
+            elif text.startswith("flag="):
+                flag = text[5:]
+            elif text.startswith("identity=") and flag:
+                wanted = country_vars if section == "country_manager" else state_vars
+                if flag in wanted:
+                    (countries if section == "country_manager" else states)[rec]["vars"][flag] = fixed_point(text[9:])
+                flag = None
+    for cid, laws in law_owner.items():
+        if cid in countries:
+            countries[cid]["laws"] = laws
+    return countries, states
+
+
 def write_slice(sections, tags, max_pops, out_path):
     """A small save holding only the read fields of the named countries' first pops."""
     ids = {cid for cid, rec in sections["country_manager"].items() if rec.get("definition", "").strip('"') in tags}

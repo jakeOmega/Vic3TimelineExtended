@@ -1637,7 +1637,8 @@ amendment_collective_algorithmic_commons = {
 
 # Estate Duties - a progressive duty on estates: Britain 1894, the US
 # federal estate tax 1916, both with war or naval spending behind them.
-# No standing revenue: it lowers the concentration target by 25. Estate
+# No standing revenue: it lowers the concentration target by 30, more than
+# the Birthright Endowment, whose duty is set to pay the stakes. Estate
 # taxes raise about 0.5% of OECD tax revenue today, and the tax-code spec
 # keeps the dividend tax from being relabelled one. Not on a law that has
 # the Birthright Endowment, which levies the duty itself.
@@ -1746,9 +1747,12 @@ amendment_perpetual_trusts = {
 # repealing it removes both. Two would break when the duty was repealed:
 # `possible` is read only when an amendment is added, so an Endowment that
 # required the duty would outlive it. Lowers the concentration target by
-# 30. Parent Old Age Pension: Paine paired the stake at 21 with a pension
+# 20. Parent Old Age Pension: Paine paired the stake at 21 with a pension
 # from 50. An Endowment paid from general revenue (Britain's Child Trust
 # Fund, 2005) is a welfare programme, not inheritance policy.
+# Balance (2026-10-09): the duty pays for the stakes, so it levels less than
+# Estate Duties (-20 against -30), and an account for every young adult
+# costs administration.
 amendment_birthright_endowment = {
 	parent = law_old_age_pension
 
@@ -1760,6 +1764,7 @@ amendment_birthright_endowment = {
 	}
 
 	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_pop_qualifications_mult = 0.1
 		state_education_access_add = 0.05
 		state_laborers_investment_pool_efficiency_mult = 0.1

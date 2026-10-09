@@ -11,6 +11,16 @@ Ottoman Empire stays on Customary; the values are the proposals here, with the m
 consistency walk falls back to Customary rather than to it. The two new laws come after the old four in file order,
 and a defensive old-save repair clears any country a pre-change save leaves holding two inheritance laws.
 
+**Balance pass (2026-10-09, owner's table).** After a playtest, and with the score's effects split by scope
+(demographics spec §4.2, "Built"): each law has an upside and a cost of its own, and none repeats what the state's
+score carries (radicals, qualifications, education access). Primogeniture & Entail: tax capacity −10%, population
+bureaucracy cost −10% (was also radicals +10%, qualifications −10%, institution cost −5%). Customary: population
+bureaucracy cost −5%, tax capacity −5% (was nothing). Forced Heirship: Rural Folk +10%, tax capacity +10%, bureaucracy
+cost +5% (radicals −10% and education access +0.05 removed). Freedom of Testation: bureaucracy cost 3% → 5%. Estate
+Duties −25 → −30; the Birthright Endowment −30 → −20 and bureaucracy cost +5%, so the pure duty is the stronger
+leveller and the Endowment trades levelling for mobility. The Great Estates for Sale: the state's purchase −5 → −10,
+the market's −5 → −2. Numbers in `docs/systems/mod_systems.md` § Inheritance.
+
 ## Context
 
 The Inheritance law group (`lawgroup_inheritance`) was added for France: Equal Inheritance's birth-rate penalty gives
@@ -105,7 +115,7 @@ stances from the law elsewhere whose supporters backed it in history. Vanilla do
   private estates to tax.
 - **Unlock** (`possible`): `political_agitation` (era 4). Britain's progressive estate duty is 1894, the US federal
   estate tax 1916; both came with war or naval spending.
-- **Effect**: lowers the concentration target (§3) by 25, floored at 0.
+- **Effect**: lowers the concentration target (§3) by 25, floored at 0 (30 since the balance pass).
 - **Parent**: `law_graduated_taxation`. The groups that want a progressive income tax want a progressive duty on
   estates.
 - **Petition**: rolls higher during a war or with a reformist or social-democratic IG in government.
@@ -140,7 +150,7 @@ gets the untaxed rest, so it fits any law with private estates.
   `possible` only when an amendment is added, so an Endowment that required the duty would outlive it. With one
   amendment, repealing it removes both, which is right: the fund is the duty. Estate Duties' `possible` excludes a law
   that has the Endowment.
-- **Effect**: lowers the concentration target by 30 (it taxes the top and spreads capital at the bottom), plus
+- **Effect**: lowers the concentration target by 30 (20 since the balance pass, with a bureaucracy cost) (it taxes the top and spreads capital at the bottom), plus
   qualifications, education access and lower-strata investment-pool efficiency
   (`state_laborers_investment_pool_efficiency_mult`, Farmers', Shopkeepers').
 - **Parent**: `law_old_age_pension`. Paine's plan paired the stake at 21 with a pension from 50.
@@ -172,7 +182,7 @@ Hanover and Bavaria in 1836. The Nazi Reichserbhofgesetz (1933) made such farms 
 One country variable, `te_inh_concentration`, 0–100: how much of the nation's wealth sits in great family fortunes.
 
 - **Target** set by the law plus amendments: Primogeniture & Entail 80, Freedom of Testation 60, Customary 50, Forced
-  Heirship 25, State as Universal Heir 0, Possession by Use 0; Estate Duties −25, Birthright Endowment −30, Perpetual
+  Heirship 25, State as Universal Heir 0, Possession by Use 0; Estate Duties −25 (−30 since the balance pass), Birthright Endowment −30 (−20), Perpetual
   Trusts +30, Undivided Farm Succession +10.
 - **Drift**: each year the score closes 3% of the gap to its target, so half the gap closes in about 23 years, one
   generation. A republic that abolishes entail in 1848 still has great houses in 1870.

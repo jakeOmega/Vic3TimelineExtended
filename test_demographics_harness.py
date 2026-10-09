@@ -391,3 +391,134 @@ class TestConsoleReplayLines(unittest.TestCase):
                 code = H.main(["replay", str(path)])
         self.assertEqual(code, 0, out.getvalue())
         self.assertIn("capital 1837: worst slot error", out.getvalue())
+
+
+# A plain-text save cut to what `wc` reads. Country 1's record holds a nested database that
+# restarts at column 0, as the game writes it; its variables include a negative (unsigned i64).
+WC_SAVE = """SAV0100wc-test
+meta_data={
+\tversion="1.14.5"
+}
+country_manager={
+\tdatabase={
+0=none
+1={
+\tdefinition="GBR"
+\tbudget={
+0={
+\tvalue=3
+}
+\t}
+\tvariables={
+\t\tdata={ {
+\t\t\t\tflag=te_inh_concentration
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=7632845
+\t\t\t\t}
+\t\t\t} {
+\t\t\t\tflag=te_dg_wc_t_own
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=18446744073708401616
+\t\t\t\t}
+\t\t\t} {
+\t\t\t\tflag=te_unrelated
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=100000
+\t\t\t\t}
+\t\t\t} }
+\t}
+}
+2={
+\tdefinition="SIC"
+}
+\t}
+}
+states={
+\tdatabase={
+5={
+\tcountry=1
+\tvariables={
+\t\tdata={ {
+\t\t\t\tflag=te_dg_wc
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=9400000
+\t\t\t\t}
+\t\t\t} {
+\t\t\t\tflag=te_dg_walk_pop
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=200000000000
+\t\t\t\t}
+\t\t\t} }
+\t}
+}
+6={
+\tcountry=1
+\tvariables={
+\t\tdata={ {
+\t\t\t\tflag=te_dg_wc
+\t\t\t\tdata={
+\t\t\t\t\ttype=value
+\t\t\t\t\tidentity=4000000
+\t\t\t\t}
+\t\t\t} }
+\t}
+}
+\t}
+}
+laws={
+\tdatabase={
+10={
+\tlaw=law_primogeniture
+\tcountry=1
+\tactive=yes
+}
+11={
+\tlaw=law_partible
+\tcountry=1
+}
+\t}
+}
+"""
+
+
+class TestWealthConcentrationReader(unittest.TestCase):
+    """`wc`: the national figure, its terms and the states' scores read from script variables."""
+
+    def setUp(self):
+        self.path = Path(tempfile.mkdtemp()) / "wc.v3"
+        self.path.write_text(WC_SAVE, encoding="utf-8")
+
+    def test_variables_decode_as_fixed_point_and_wrap_negative(self):
+        self.assertEqual(S.fixed_point("7632845"), 76.32845)
+        self.assertEqual(S.fixed_point(str(2 ** 64 - 1150000)), -11.5)
+
+    def test_the_reader_finds_country_and_state_variables(self):
+        countries, states = S.read_variables(self.path, H.WC_COUNTRY_VARS, H.WC_STATE_VARS)
+        self.assertEqual(countries["1"]["tag"], "GBR")
+        self.assertEqual(countries["1"]["vars"], {"te_inh_concentration": 76.32845, "te_dg_wc_t_own": -11.5})
+        self.assertEqual(countries["1"]["laws"], {"law_primogeniture"}, "only the active law")
+        self.assertEqual(countries["2"]["vars"], {})
+        self.assertEqual(states["5"], {"owner": "1", "vars": {"te_dg_wc": 94.0, "te_dg_walk_pop": 2e6}})
+        self.assertEqual(states["6"]["vars"], {"te_dg_wc": 40.0})
+
+    def test_the_cli_prints_each_country_and_the_laws_summary(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["wc", str(self.path)]), 0)
+        text = out.getvalue()
+        self.assertRegex(text, r"GBR\s+2\.0\s+76\.3")
+        self.assertIn("1/2", text, "one of the two states above 50")
+        self.assertIn("40-94", text)
+        self.assertNotIn("SIC", text, "no national figure: left out")
+        self.assertRegex(text, r"primogeniture\s+countries\s+1\s+above 50\s+1")
+
+    def test_wc_exits_1_on_a_non_plain_text_save(self):
+        bad = self.path.with_name("binary.v3")
+        bad.write_bytes(b"SAV010000\x00\x01binary")
+        with redirect_stderr(io.StringIO()):
+            self.assertEqual(H.main(["wc", str(bad)]), 1)

@@ -501,8 +501,11 @@ law_strong_privacy_rights = {
 # Primogeniture & Entail: the eldest takes the estate, and entail stops him
 # breaking it up. Great houses last; younger sons go into the army, the
 # church, the colonies and the city. Landowner clout comes from the
-# concentration score (target 80); birth rate and migration from the
-# rural-scaled state effects.
+# concentration score (target 80), and with it the states' radicals, lower
+# qualifications and education access (inh_concentrated_property), so the
+# law no longer carries them itself; birth rate and migration from the
+# rural-scaled state effects. The gentry sit as unpaid magistrates (local
+# administration is cheaper), and entailed land is assessed lightly.
 law_primogeniture = {
 	group = lawgroup_inheritance
 
@@ -523,15 +526,15 @@ law_primogeniture = {
 	}
 
 	modifier = {
-		state_radicals_from_political_movements_mult = 0.1
-		state_pop_qualifications_mult = -0.1
 		state_tax_capacity_mult = -0.1
-		country_bureaucracy_investment_cost_factor_mult = -0.05
+		state_bureaucracy_population_base_cost_factor_mult = -0.1
 	}
 }
 
-# Customary Inheritance: local custom decides. The blank baseline every
-# country starts on unless history says otherwise (extra_history.txt).
+# Customary Inheritance: local custom decides. The baseline every country
+# starts on unless history says otherwise (extra_history.txt), so its two
+# effects are small: village courts and clergy settle estates without the
+# state, and nobody registers what was inherited.
 law_partible = {
 	group = lawgroup_inheritance
 
@@ -552,13 +555,16 @@ law_partible = {
 	}
 
 	modifier = {
+		state_bureaucracy_population_base_cost_factor_mult = -0.05
+		state_tax_capacity_mult = -0.05
 	}
 }
 
 # Forced Heirship: the Code Napoléon's reserved shares. Farms split each
 # generation, so peasants have fewer children and stay on the land (the
 # rural-scaled state effects); great fortunes dissolve over a generation
-# (concentration target 25).
+# (concentration target 25). Every share passes through a notary's
+# register, which the tax office reads.
 law_equal_inheritance = {
 	group = lawgroup_inheritance
 
@@ -583,9 +589,7 @@ law_equal_inheritance = {
 	}
 
 	modifier = {
-		state_radicals_from_political_movements_mult = -0.1
 		interest_group_ig_rural_folk_pol_str_mult = 0.1
-		state_education_access_add = 0.05
 		state_tax_capacity_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 	}
@@ -664,7 +668,7 @@ law_free_testation = {
 		# The firm goes to the heir who runs it, whole.
 		state_capitalists_investment_pool_efficiency_mult = 0.1
 		# Wills are contested in court.
-		country_bureaucracy_investment_cost_factor_mult = 0.03
+		country_bureaucracy_investment_cost_factor_mult = 0.05
 	}
 }
 

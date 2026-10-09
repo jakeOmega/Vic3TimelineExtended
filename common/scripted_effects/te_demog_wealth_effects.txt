@@ -130,8 +130,9 @@ te_demog_gini_from_locals = {
 #                       te_demog_wc_shock move
 #   te_dg_wc_target     the states' targets, weighted the same way
 #   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
-#   te_dg_wc_t_tax      the target's terms, signed around 50 and weighted the
-#                       same way, so they add up to the target (the panel's bars)
+#   te_dg_wc_t_tax, te_dg_wc_t_econ  the target's terms, signed around 50 and
+#                       weighted the same way, so they add up to the target (the
+#                       panel's bars)
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
 #   te_dg_gini          the Gini over all the states' strata
 #   te_dg_war_shock     the war shocks taken since the country was last at peace
@@ -372,6 +373,7 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_own value = { value = local_var:te_dg_wc_s_own divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
+		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
 		te_demog_gini_from_locals = yes
 		# the most and least concentrated states, for the panel
 		ordered_scope_state = {

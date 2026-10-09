@@ -279,8 +279,8 @@ yours loses approval the whole time.
 
 | Law | Available | Law's Wealth Concentration target | Also |
 |---|---|---|---|
-| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10% |
-| Customary Inheritance | From the start | 50 | Nothing |
+| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
+| Customary Inheritance | From the start | 50 | Tax capacity −5%; local administration costs 5% less bureaucracy |
 | Forced Heirship | Egalitarianism | 25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
 | Freedom of Testation | From the start | 60 | Capitalists invest 10% more |
 | State as Universal Heir | Command Economy | 0 | +200 authority, Bureaucrats +10% political strength; the upper and middle strata invest less |
@@ -298,7 +298,10 @@ in great family fortunes. Each state keeps its own score, which moves 3% of the
 way to its own target each year, and your country's figure is the states'
 average, weighted by where property is held. The law and its amendments set where
 a state's target starts. Land tenure, who owns the state's capital, how unequal
-incomes are and taxes on wealth move it from there. War losses, a lost war that
+incomes are, taxes on wealth and your economic laws move it from there.
+Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
+Chartered Monopolies (+5) raise it; Interventionism, Antitrust Enforcement and
+Regulated Utilities (−5 each) lower it. War losses, a lost war that
 cost you a war goal, a winning revolution of the left and a banking crash knock
 scores down at once, and devastation lowers a state's score every year it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
@@ -473,9 +476,9 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
-| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −25; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
+| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
-| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
+| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
 | Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
 
 The mod also changes one base-game amendment. Anarchy holds elections, so the
