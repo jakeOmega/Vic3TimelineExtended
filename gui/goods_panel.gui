@@ -1671,10 +1671,10 @@ types "production_method_items" {
 		}
 
 		block "enabled" {
-			### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_controls_sgui).
+			### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui).
 			# Every goods view instantiates this type: this file, goods_state_panel.gui and custom_tooltip.gui.
 			# vanilla: enabled = "[IsValid( Goods.ToggleTaxation(GetMetaPlayer.GetPlayedOrObservedCountry) )]"
-			enabled = "[And( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetMetaPlayer.GetPlayedOrObservedCountry) ) )]"
+			enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetMetaPlayer.GetPlayedOrObservedCountry) ) )]"
 			### END MOD ###
 		}
 

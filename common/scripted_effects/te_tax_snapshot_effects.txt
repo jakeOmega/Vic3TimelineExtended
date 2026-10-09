@@ -29,7 +29,7 @@
 te_tax_take_snapshot = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		set_variable = { name = te_tax_snap_month value = te_history_month_index }
@@ -74,7 +74,7 @@ te_tax_take_snapshot = {
 te_tax_record_fiscal_month = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		if = {

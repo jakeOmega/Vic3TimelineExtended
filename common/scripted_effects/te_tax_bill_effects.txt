@@ -691,7 +691,7 @@ te_tax_cmd_package_release = {
 te_tax_refresh_support = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_bill_active = yes
 		}
 		te_tax_gen_refresh_support = yes

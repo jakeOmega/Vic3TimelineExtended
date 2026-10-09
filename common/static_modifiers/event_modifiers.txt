@@ -114,7 +114,7 @@ re_spectrum_auction = {
 	tax_dividends_add = 0.01
 	country_legitimacy_base_add = -5
 }
-# Under the legislated tax code (te_tax_code_on) only the code sets tax rates,
+# Under the legislated tax code (te_tax_code_full) only the code sets tax rates,
 # so repeatable_events.60.a grants these two instead of re_spectrum_auction:
 # its legitimacy cost, and the auction's yield as flat income, applied with
 # multiplier = sv_money_flow_event_small (0.01% of GDP a week, about 0.5% a

@@ -15,9 +15,9 @@
 			right_click_menu_item = {
 				blockoverride "properties" {
 					onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
-					### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_controls_sgui).
+					### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui).
 					# vanilla: enabled = "[IsValid( Goods.ToggleTaxation(GetPlayer) )]"
-					enabled = "[And( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
+					enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
 					### END MOD ###
 					tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
 

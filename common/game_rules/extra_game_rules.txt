@@ -416,10 +416,14 @@ demographics_rule = {
 # Off by default: with it off, taxes work exactly as in the base game. The two
 # enabled settings replace the five vanilla taxation laws with one carrier law,
 # law_te_tax_code, whose generated amendments hold the rates; the second also
-# puts customs and trade policy under legislation.
+# puts customs and trade policy under legislation. The light setting
+# (docs/superpowers/specs/2026-10-09-tax-code-light-design.md) keeps the vanilla
+# taxation law, which bounds each rate, and lets the country set each rate at
+# once from the tax code's panel, with no bills.
 #
-# Every check is written POSITIVELY, through te_tax_code_on and te_tax_customs_on
-# (common/scripted_triggers/te_tax_triggers.txt), never as
+# Every check is written POSITIVELY, through te_tax_code_on (any setting but
+# disabled), te_tax_code_full (the two enabled settings), te_tax_code_light and
+# te_tax_customs_on (common/scripted_triggers/te_tax_triggers.txt), never as
 # NOT = { has_game_rule = te_tax_code_disabled }. A save from before this rule
 # existed has no value stored for it, and a negated check would read that as
 # "enabled" and migrate a running campaign onto the carrier law.
@@ -436,6 +440,10 @@ te_tax_code_rule = {
 
 	te_tax_code_enabled_customs = {
 		flag = te_tax_code_enabled_customs
+	}
+
+	te_tax_code_light = {
+		flag = te_tax_code_light
 	}
 }
 

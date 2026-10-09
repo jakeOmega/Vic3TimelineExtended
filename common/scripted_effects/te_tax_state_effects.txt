@@ -22,7 +22,7 @@
 # it is named in no relief), nor are the relief lists (a missing list is empty).
 te_tax_init_country = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = { limit = { NOT = { has_variable = te_tax_migrated } } set_variable = { name = te_tax_migrated value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_code_version } } set_variable = { name = te_tax_code_version value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_last_month } } set_variable = { name = te_tax_last_month value = -1 } }

@@ -1,10 +1,12 @@
 ﻿# ============================================================================
 # The Tax Code journal entry (legislated tax code, plan Task 7)
 # ============================================================================
-# Exists only under the tax code rule (te_tax_code_on, written positively, so
-# a save from before the rule existed never shows it) and runs for a country
-# once its taxation law has been carried over into a code (te_tax_entry_unlocked:
-# te_tax_code_in_force, the migration marker te_tax_migrated >= 1). The engine
+# Exists only under the tax code rule, full or light (te_tax_code_on, written
+# positively, so a save from before the rule existed never shows it) and runs
+# for a country once its taxation law has been carried over into a code
+# (te_tax_entry_unlocked: te_tax_code_in_force, the migration marker
+# te_tax_migrated >= 1, or under the light setting te_tax_light_in_force, the
+# marker te_tax_light_on >= 1). The engine
 # activates it on its next check once both `is_shown_when_inactive` and
 # `possible` hold, as it does je_banking_cycle; nothing adds it by effect, so
 # the migration flow (te_tax.3) is unchanged. It never completes, fails or

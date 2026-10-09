@@ -68,10 +68,10 @@ te_budget_banking_readout_sgui = {
 
 # ---------------------------------------------------------------------------
 # Legislated Tax Code: Budget panel (gui/budget_panel.gui, the fifth slot),
-# je_tax_code. The tab is on the strip whenever the rule is on (either enabled
-# setting, te_tax_code_on, written positively) and opens once the country's
-# taxation law has been carried over into a code (te_tax_entry_unlocked, which
-# is also the entry's `possible`).
+# je_tax_code. The tab is on the strip whenever the rule is on (any setting but
+# disabled, te_tax_code_on, written positively) and opens once the country's
+# taxation law has been carried over into a code, full or light
+# (te_tax_entry_unlocked, which is also the entry's `possible`).
 # ---------------------------------------------------------------------------
 te_budget_tax_tab_sgui = {
 	scope = country

@@ -26,7 +26,7 @@ te_tax.1 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_process_month = yes
@@ -40,7 +40,7 @@ te_tax.2 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_watchdog_month = yes
@@ -56,7 +56,7 @@ te_tax.3 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_migrate_country = yes
@@ -73,7 +73,7 @@ te_tax.4 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		debug_log = "TE_TAX post-migration sync month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -99,7 +99,7 @@ te_tax.5 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_reassert_carrier = yes
@@ -115,7 +115,7 @@ te_tax.6 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_adopt_copied_code = yes
@@ -135,7 +135,7 @@ te_tax.7 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		te_tax_customs_revalidate = yes

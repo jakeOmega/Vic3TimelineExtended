@@ -25,7 +25,7 @@
 te_tax_migrate_country = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
 		}
 		# Every schema token, with its sentinel where absent.
@@ -73,7 +73,7 @@ te_tax_migrate_country = {
 te_tax_reassert_carrier = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_migrated
 			var:te_tax_migrated >= 1
 			NOT = { has_law = law_type:law_te_tax_code }

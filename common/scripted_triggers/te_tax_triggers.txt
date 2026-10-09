@@ -1,20 +1,40 @@
 ﻿# Legislated tax code: game-rule gates (common/game_rules/extra_game_rules.txt,
 # te_tax_code_rule).
 #
-# Both read only a game rule, so they work from any scope. Every hook, pulse,
-# event, effect entry point, GUI root and AI path of the tax code asks
-# te_tax_code_on; customs legislation asks te_tax_customs_on as well.
+# All four read only a game rule, so they work from any scope. Every hook,
+# pulse, event, effect entry point, GUI root and AI path of the full code (the
+# carrier law, bills, offers, promises, packages, customs) asks
+# te_tax_code_full; customs legislation asks te_tax_customs_on as well. The
+# light code (docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
+# te_tax_light_effects.txt) asks te_tax_code_light. te_tax_code_on is either
+# one: what both settings share (the journal entry, the Budget tab, the greyed
+# tax-level buttons).
 #
 # They are written positively on purpose. A save from before the rule existed
 # has no value stored for it, so NOT = { has_game_rule = te_tax_code_disabled }
 # would be true there and migrate the campaign. Do not rewrite these as
 # negations, and do not add a negated check anywhere else.
 
-# True under both enabled settings.
+# True under both enabled settings: the legislated (full) code.
+te_tax_code_full = {
+	OR = {
+		has_game_rule = te_tax_code_enabled
+		has_game_rule = te_tax_code_enabled_customs
+	}
+}
+
+# True under the light setting only: the vanilla taxation law stays and bounds
+# each rate.
+te_tax_code_light = {
+	has_game_rule = te_tax_code_light
+}
+
+# True under any setting but disabled.
 te_tax_code_on = {
 	OR = {
 		has_game_rule = te_tax_code_enabled
 		has_game_rule = te_tax_code_enabled_customs
+		has_game_rule = te_tax_code_light
 	}
 }
 
@@ -88,7 +108,7 @@ te_tax_customs_drop_due_bill = {
 # offset is at least 1). te_tax_store_package checks it; Task 6's passage
 # trigger repeats the sunset and slot checks for the player's tooltip.
 te_tax_can_store_package = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_variable = te_tax_schema
 	var:te_tax_p$SLOT$_on = 0
 	has_variable = te_tax_bl_due
@@ -168,21 +188,35 @@ te_tax_fisc_rec_bur_ok = {
 
 # The code is in force: the rule is on and the country's code exists.
 te_tax_code_in_force = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_variable = te_tax_schema
 	has_variable = te_tax_migrated
 	var:te_tax_migrated >= 1
 }
 
+# The light code is in force: the light setting, and the country's taxation law
+# has been carried over into rates (te_tax_light_migrate_country,
+# te_tax_light_effects.txt). The full code's te_tax_code_in_force is never true
+# under the light setting, so nothing of the full code runs for this country.
+te_tax_light_in_force = {
+	te_tax_code_light = yes
+	has_variable = te_tax_light_on
+	var:te_tax_light_on >= 1
+}
+
 # The journal entry (je_tax_code's `possible`) and the Budget panel's Tax Code
 # tab (te_budget_tax_tab_unlock_sgui's `is_valid`) open once the code is in
-# force, so the greyed tab's checklist and the entry cannot disagree. One
-# custom_tooltip line: the checklist is IsValidTooltip, which would print the
-# conditions inside te_tax_code_in_force without a heading of their own.
+# force, full or light, so the greyed tab's checklist and the entry cannot
+# disagree. One custom_tooltip line: the checklist is IsValidTooltip, which
+# would print the conditions inside te_tax_code_in_force without a heading of
+# their own.
 te_tax_entry_unlocked = {
 	custom_tooltip = {
 		text = te_tax_tt_code_in_force
-		te_tax_code_in_force = yes
+		OR = {
+			te_tax_code_in_force = yes
+			te_tax_light_in_force = yes
+		}
 	}
 }
 
@@ -738,7 +772,7 @@ te_tax_can_package_release = {
 
 # Per-Capita: a wage tax and a head tax, as the law levies both.
 te_tax_code_counts_as_per_capita = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_law = law_type:law_te_tax_code
 	has_variable = te_tax_en_head
 	has_variable = te_tax_en_wage
@@ -749,7 +783,7 @@ te_tax_code_counts_as_per_capita = {
 # Proportional: a wage tax of at least 10% (index 4) and a dividend tax (the
 # law's lowest level taxes wages at 10% and dividends at 2.5%, index 1).
 te_tax_code_counts_as_proportional = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_law = law_type:law_te_tax_code
 	has_variable = te_tax_en_wage
 	has_variable = te_tax_en_div
@@ -761,7 +795,7 @@ te_tax_code_counts_as_proportional = {
 # as heavily as wages (the law's levels tax dividends at or above wages; the
 # two share a step, so the indices compare as the rates do).
 te_tax_code_counts_as_graduated = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_law = law_type:law_te_tax_code
 	has_variable = te_tax_en_wage
 	has_variable = te_tax_en_div
@@ -794,7 +828,7 @@ te_tax_code_equivalent_per_capita = {
 }
 
 te_tax_code_equivalent_land_based = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_law = law_type:law_te_tax_code
 	NOT = { te_tax_code_counts_as_graduated = yes }
 	NOT = { te_tax_code_counts_as_proportional = yes }
@@ -804,7 +838,7 @@ te_tax_code_equivalent_land_based = {
 }
 
 te_tax_code_equivalent_consumption_based = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	has_law = law_type:law_te_tax_code
 	NOT = { te_tax_code_counts_as_graduated = yes }
 	NOT = { te_tax_code_counts_as_proportional = yes }

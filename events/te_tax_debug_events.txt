@@ -22,7 +22,7 @@ te_tax_debug.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		debug_log = "TE_TAX debug: activating Per-Capita Taxation over the tax code law; country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -44,7 +44,7 @@ te_tax_debug.2 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -81,7 +81,7 @@ te_tax_debug.3 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -100,7 +100,7 @@ te_tax_debug.4 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -125,7 +125,7 @@ te_tax_debug.5 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -191,7 +191,7 @@ te_tax_debug.6 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -211,7 +211,7 @@ te_tax_debug.7 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -231,7 +231,7 @@ te_tax_debug.8 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
