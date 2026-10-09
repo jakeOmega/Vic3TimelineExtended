@@ -1036,14 +1036,17 @@ impose_neocolonial_investment_trade_treaty = {
 #
 # Everything else (the programme's modifier, the expense line) follows the
 # level through colonial_programmes_refresh_modifiers.
+#
+# Each core starts a missing level from colonial_*_level_value, which reads a
+# running programme on a save from before the levels as the top level until
+# the pulse migrates it; a missing level is never assumed to be 0.
+#
+# The one-offs charge the cost base cached by the last monthly pulse (or the
+# entry's `immediate`), the figure the row and the step's tooltip show, so the
+# click pays what the tooltip said.
 # ---------------------------------------------------------------------------
 
 colonial_programme_invest_up = {
-	# The cost base, so the step charges this month's colonies rather than the
-	# last pulse's.
-	hidden_effect = {
-		colonial_programmes_refresh_cost_base = yes
-	}
 	if = {
 		limit = { colonial_invest_level_value < 1 }
 		# Starting the programme: the Industrialists wanted the capital at home
@@ -1055,7 +1058,7 @@ colonial_programme_invest_up = {
 		text = CE_INVEST_UP_TT
 		if = {
 			limit = { NOT = { has_variable = colonial_invest_level } }
-			set_variable = { name = colonial_invest_level value = 0 }
+			set_variable = { name = colonial_invest_level value = colonial_invest_level_value }
 		}
 		change_variable = { name = colonial_invest_level add = 1 }
 		clamp_variable = { name = colonial_invest_level min = 0 max = colonial_programme_max_level }
@@ -1066,6 +1069,10 @@ colonial_programme_invest_up = {
 colonial_programme_invest_down = {
 	custom_tooltip = {
 		text = CE_INVEST_DOWN_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_invest_level } }
+			set_variable = { name = colonial_invest_level value = colonial_invest_level_value }
+		}
 		change_variable = { name = colonial_invest_level subtract = 1 }
 		clamp_variable = { name = colonial_invest_level min = 0 max = colonial_programme_max_level }
 	}
@@ -1082,7 +1089,7 @@ colonial_programme_garrison_up = {
 		text = CE_GARRISON_UP_TT
 		if = {
 			limit = { NOT = { has_variable = colonial_garrison_level } }
-			set_variable = { name = colonial_garrison_level value = 0 }
+			set_variable = { name = colonial_garrison_level value = colonial_garrison_level_value }
 		}
 		change_variable = { name = colonial_garrison_level add = 1 }
 		clamp_variable = { name = colonial_garrison_level min = 0 max = colonial_programme_max_level }
@@ -1092,20 +1099,21 @@ colonial_programme_garrison_up = {
 colonial_programme_garrison_down = {
 	custom_tooltip = {
 		text = CE_GARRISON_DOWN_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_garrison_level } }
+			set_variable = { name = colonial_garrison_level value = colonial_garrison_level_value }
+		}
 		change_variable = { name = colonial_garrison_level subtract = 1 }
 		clamp_variable = { name = colonial_garrison_level min = 0 max = colonial_programme_max_level }
 	}
 }
 
 colonial_programme_assimilation_up = {
-	hidden_effect = {
-		colonial_programmes_refresh_cost_base = yes
-	}
 	custom_tooltip = {
 		text = CE_ASSIMILATION_UP_TT
 		if = {
 			limit = { NOT = { has_variable = colonial_assim_level } }
-			set_variable = { name = colonial_assim_level value = 0 }
+			set_variable = { name = colonial_assim_level value = colonial_assim_level_value }
 		}
 		change_variable = { name = colonial_assim_level add = 1 }
 		clamp_variable = { name = colonial_assim_level min = 0 max = colonial_programme_max_level }
@@ -1116,6 +1124,10 @@ colonial_programme_assimilation_up = {
 colonial_programme_assimilation_down = {
 	custom_tooltip = {
 		text = CE_ASSIMILATION_DOWN_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_assim_level } }
+			set_variable = { name = colonial_assim_level value = colonial_assim_level_value }
+		}
 		change_variable = { name = colonial_assim_level subtract = 1 }
 		clamp_variable = { name = colonial_assim_level min = 0 max = colonial_programme_max_level }
 	}
@@ -1269,14 +1281,17 @@ colonial_assim_disrupt_colonies = {
 #
 # 1. Lower. Each running programme drops one level when its top level is
 #    wasted (the change without it still reaches colonial_ai_programme_ceiling:
-#    the monthly cap, or 0 at a full bar), when a level adds nothing, when
+#    the monthly cap, or +0.5 at a full bar), when a level adds nothing, when
 #    the colonies are gone, or when it is unaffordable (colonial_ai_should_lower_*).
 #    One programme at a time, each re-reading the change, so the three never
 #    all drop for the same surplus. A cut for cost holds that programme off
 #    for a year (colonial_ai_hold_*).
 # 2. Raise, only if nothing was lowered: while the change is under the
 #    ceiling, one programme goes up a level, picked by weight among those the
-#    country can carry (colonial_ai_*_raise_weight).
+#    country can carry (colonial_ai_*_raise_weight). The weights are read with
+#    `value =`, vanilla's random_list form (04_neg_event_options_scripted_effects.txt);
+#    `add = <named script value>` in a weight modifier logs "Malformed token"
+#    (scripting_best_practices.md).
 #
 # The two rules leave a dead band one level wide (raise below the ceiling,
 # lower only when a level's worth above it), so the review does not flip a
@@ -1328,19 +1343,19 @@ colonial_ai_review_programmes = {
 		random_list = {
 			0 = {
 				modifier = {
-					add = colonial_ai_invest_raise_weight
+					value = colonial_ai_invest_raise_weight
 				}
 				colonial_programme_invest_up = yes
 			}
 			0 = {
 				modifier = {
-					add = colonial_ai_garrison_raise_weight
+					value = colonial_ai_garrison_raise_weight
 				}
 				colonial_programme_garrison_up = yes
 			}
 			0 = {
 				modifier = {
-					add = colonial_ai_assim_raise_weight
+					value = colonial_ai_assim_raise_weight
 				}
 				colonial_programme_assimilation_up = yes
 			}

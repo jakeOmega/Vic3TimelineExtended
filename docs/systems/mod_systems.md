@@ -1655,21 +1655,21 @@ Three programmes: Development Investment (`colonial_development_investment_modif
 | Cost | Value | Where |
 |---|---|---|
 | Investment upkeep, per level | 5% a year of the colonies' yearly GDP (Σ `gdp` of our overseas colonial states, cached monthly in `colonial_dev_colonial_gdp`), the base never under 1% of our GDP; ÷ 52 a week | `colonial_invest_level_cost`; the expense line's multiplier is `var:colonial_invest_cost_week` |
-| Investment one-off | 26 weeks of one level's upkeep, every step up | `colonial_invest_step_cost` |
+| Investment one-off | 26 weeks of one level's upkeep, every step up, on the cost base the row shows (cached monthly and when the entry starts) | `colonial_invest_step_cost` |
 | Assimilation one-off | 13 weeks of one Investment level's upkeep, every step up | `colonial_assim_step_cost` |
 | Garrison | 100 authority a level (the modifier's 300 × level ÷ 3); a step up needs authority > 100 | `colonial_garrison_authority_per_level` |
 | Starting a programme (0 → 1 only) | Investment: Industrialists' and Petite Bourgeoisie's disapproval; Garrison: +5 infamy | the up cores |
 
 As a share of GDP a year per Investment level: 0.5% when the colonies make a tenth of GDP (the target for a typical empire; 1.5% at level 3), 1.25% at a quarter, 0.05% on the floor (colonies under 1%). The play-test case is on the floor: £22.3k a week a level, £66.8k at level 3. A Cultural Hegemony funding level, for scale, is about 0.26%.
 
-**The AI review** (`colonial_ai_review_programmes`, monthly from the pulse, `is_ai = yes`; the six AI-only enable/disable buttons are gone). The ceiling `colonial_ai_programme_ceiling` is the monthly cap (1.667) while the bar is below 100 and 0 at 100: at a full bar a level only matters while it keeps the change from going negative, because a dip below 100 restarts the 60-month completion count. The change it compares is the widget's `colonial_stability_drift_uncapped_display`.
+**The AI review** (`colonial_ai_review_programmes`, monthly from the pulse, `is_ai = yes`; the six AI-only enable/disable buttons are gone). The ceiling `colonial_ai_programme_ceiling` is the monthly cap (1.667) while the bar is below 100 and `colonial_ai_full_bar_margin` (+0.5, the war term) at 100: at a full bar a level only matters while it keeps the change safely positive, because a dip below 100 restarts the 60-month completion count, and a change trimmed to 0 would dip at the first war. The change it compares is the widget's `colonial_stability_drift_uncapped_display`.
 1. **Lower** (Investment, Assimilation, Garrison, one level each at most, re-reading the change between them): when the change without the top level still reaches the ceiling (`colonial_ai_drift_without_<p>_step`), a level adds nothing (laws), the colonies are gone, or the programme is unaffordable (Investment: in default or `net_fixed_income < 0`; Garrison: authority < 0; Assimilation: authority or bureaucracy < 0). A cut for cost holds that programme off for 12 months (`colonial_ai_hold_<p>`).
-2. **Raise** (only if nothing was lowered): while the change is under the ceiling, one programme up a level, by weight among those it can carry (`colonial_ai_can_raise_<p>`: the up gate, a positive term, out of default and `net_fixed_income` above one level's upkeep for Investment, authority > 34 and a bureaucracy surplus for Assimilation). The weights are the old buttons' `ai_chance` (`colonial_ai_<p>_raise_weight`).
+2. **Raise** (only if nothing was lowered): while the change is under the ceiling, one programme up a level, by weight among those it can carry (`colonial_ai_can_raise_<p>`: the up gate, a positive term, out of default and `net_fixed_income` above one level's upkeep for Investment, authority > 34 and a bureaucracy surplus above one level's cut (5% of produced bureaucracy) for Assimilation). The weights are the old buttons' `ai_chance` (`colonial_ai_<p>_raise_weight`), read with `value =` in the `random_list` (vanilla's form; `add = <named script value>` there logs "Malformed token").
 The raise and lower rules leave a dead band one level wide, so a programme does not flip back and forth.
 
 **Endings.** The programme-month counters (`colonial_invest_months` etc.) add level ÷ 3 a month, so a month at level 3 counts 1 as before and a cheap low level cannot steer the ending as fast.
 
-**Old saves.** A save holding a programme modifier but no level gets level 3 (`decol_migrate_programmes`, top of the pulse) and pays the new upkeep. Its leftover `<modifier>_held` records are inert.
+**Old saves.** A save holding a programme modifier but no level gets level 3 (`decol_migrate_programmes`, top of the pulse) and pays the new upkeep. Until that pulse, `colonial_<p>_level_value` reads the modifier as level 3 and each step core starts a missing level from it, so a click in the first month neither zeroes the programme nor strips the other two. Leftover `<modifier>_held` records are inert.
 
 ### Stability Bar Formula (`colonial_stability_bar.monthly_progress`)
 

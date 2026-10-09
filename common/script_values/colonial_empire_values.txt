@@ -274,7 +274,11 @@ colonial_overreach_ratio = {
 #
 # Read the levels through the *_level_value wrappers: before a country first
 # steps a programme the variable does not exist, and the widget and the bar
-# read these every frame.
+# read these every frame. A save from before the levels holds a running
+# programme's modifier and no level until the entry's next monthly pulse
+# migrates it (decol_migrate_programmes); until then the wrapper reads the
+# modifier as the top level, so a step, the refresh and the bar all see the
+# programme it was running, not 0.
 #
 # SCOPE: country.
 # ============================================================================
@@ -291,6 +295,10 @@ colonial_invest_level_value = {
 		limit = { has_variable = colonial_invest_level }
 		value = var:colonial_invest_level
 	}
+	else_if = {
+		limit = { has_modifier = colonial_development_investment_modifier }
+		value = colonial_programme_max_level
+	}
 }
 
 colonial_garrison_level_value = {
@@ -299,6 +307,10 @@ colonial_garrison_level_value = {
 		limit = { has_variable = colonial_garrison_level }
 		value = var:colonial_garrison_level
 	}
+	else_if = {
+		limit = { has_modifier = colonial_military_garrison_modifier }
+		value = colonial_programme_max_level
+	}
 }
 
 colonial_assim_level_value = {
@@ -306,6 +318,10 @@ colonial_assim_level_value = {
 	if = {
 		limit = { has_variable = colonial_assim_level }
 		value = var:colonial_assim_level
+	}
+	else_if = {
+		limit = { has_modifier = colonial_cultural_assimilation_modifier }
+		value = colonial_programme_max_level
 	}
 }
 
@@ -402,7 +418,7 @@ colonial_garrison_authority_per_level = 100
 colonial_assim_authority_per_level = 34
 
 # The yearly GDP of our overseas colonial states. Iterates every state, so it is
-# cached once a month (and on a step up) into var:colonial_dev_colonial_gdp by
+# cached once a month (and when the entry starts) into var:colonial_dev_colonial_gdp by
 # colonial_programmes_refresh_cost_base; everything else reads the cache.
 colonial_development_gdp = {
 	value = 0
@@ -449,6 +465,15 @@ colonial_invest_step_cost = {
 	multiply = -1
 }
 
+# What one Assimilation level takes off our bureaucracy: the modifier's -15%
+# over the three levels, as a share of what we produce. The AI raises it only
+# with a surplus larger than this (colonial_ai_can_raise_assim).
+colonial_assim_bureaucracy_per_level = {
+	value = produced_bureaucracy
+	multiply = 0.05
+	min = 0
+}
+
 # One-off payment for each Assimilation step up. Negative, for add_treasury.
 colonial_assim_step_cost = {
 	value = colonial_invest_level_cost
@@ -477,17 +502,24 @@ colonial_garrison_authority_display = {
 # AI PROGRAMME REVIEW (colonial_ai_review_programmes, decolonization.txt)
 #
 # The monthly change above which another programme level adds nothing: the
-# monthly cap while the bar is below 100, and 0 once it is at 100. At 100 the
-# bar cannot rise, so a level is useful only while it keeps the change from
-# going negative: a dip below 100 restarts the 60-month completion count
-# (colonial_at_100_months), so "the bar is full" alone is no reason to cut.
+# monthly cap while the bar is below 100, and colonial_ai_full_bar_margin once
+# it is at 100. At 100 the bar cannot rise, so a level is useful only while it
+# keeps the change safely positive: a dip below 100 restarts the 60-month
+# completion count (colonial_at_100_months), so "the bar is full" alone is no
+# reason to cut. Trimmed to 0, the change would leave the bar at 100 only
+# until the first war or bout of turmoil, and the review would then pay to
+# raise the levels again below 100.
 # ============================================================================
+
+# The buffer the AI keeps at a full bar: the size of the war term
+# (colonial_stability_term_war), so a new war alone does not knock the bar off 100.
+colonial_ai_full_bar_margin = 0.5
 
 colonial_ai_programme_ceiling = {
 	value = colonial_stability_drift_cap
 	if = {
 		limit = { colonial_stability_bar_at_least = { N = 100 } }
-		value = 0
+		value = colonial_ai_full_bar_margin
 	}
 }
 

@@ -697,7 +697,7 @@ colonial_empire_possible_assimilation_down = {
 # Raise a programme only while the level would not be wasted and we can carry
 # it: the up gate passes, a level adds something to the bar (laws can push a
 # programme's figure to 0 or below), the monthly change is still under the
-# ceiling (the cap, or 0 at a full bar: colonial_ai_programme_ceiling), and the
+# ceiling (the cap, or a small margin at a full bar: colonial_ai_programme_ceiling), and the
 # programme's cost fits. The cost tests are the affordability checks the
 # Cultural Hegemony funding buttons use: out of default and a weekly surplus
 # larger than the step's cost (net_fixed_income is weekly, like the cost).
@@ -732,7 +732,7 @@ colonial_ai_can_raise_assim = {
 	colonial_ai_programme_has_headroom = yes
 	in_default = no
 	authority > colonial_assim_authority_per_level
-	bureaucracy > 0
+	bureaucracy > colonial_assim_bureaucracy_per_level
 }
 
 # Lower a running programme when its top level is wasted (without it the

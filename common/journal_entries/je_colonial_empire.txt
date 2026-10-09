@@ -86,6 +86,10 @@
 		# Populate the widget's display state on the first frame, so a freshly
 		# activated entry shows real numbers instead of dashes for a month.
 		colonial_empire_refresh_display = yes
+		# And the colonies' GDP that Investment's costs are a share of, so the
+		# first month's rows and steps charge the real figure, not the floor. A
+		# cache recomputed from live state, so re-running it is harmless.
+		colonial_programmes_refresh_cost_base = yes
 	}
 
 	progressbar = no

@@ -353,14 +353,18 @@ in the same strategic region, and player great powers, get a notification.
 
 The AI plays by the same rules and uses the same programs and decisions. Once a
 month it reviews its programs. It lowers a program by a level when that level is
-wasted (without it, the bar's change would still reach the monthly limit, or the
-bar is full and would stay full) or when it can no longer pay for it: in
-default, or with weekly income below its expenses for Investment, and short of
-authority or bureaucracy for the other two. A program cut for cost stays down
-for a year. Otherwise, while the bar's change is below the limit, it raises one
-program a level if it can afford the step, preferring the garrison when several
-colonies are badly unaccepted. An AI that isn't a great power leans strongly toward Planned Full Decolonization, more
-so when three great powers condemn it or three of its colonies are badly
+wasted, or when it can no longer pay for it: in default, or with weekly income
+below its expenses, for Investment; short of authority or bureaucracy for the
+other two. A level is wasted when, without it, the bar's monthly change would
+still reach the monthly limit, or, with the bar full, would still be +0.5 or
+more. That margin keeps a full bar full through a new war. A program cut for
+cost stays down for a year. If it lowered nothing, the AI raises one program a
+level while the change is below the limit (below +0.5 with the bar full) and it
+can afford the step, preferring the garrison when several colonies are badly
+unaccepted.
+
+An AI that isn't a great power leans strongly toward Planned Full Decolonization,
+more so when three great powers condemn it or three of its colonies are badly
 unaccepted. AI great powers are less willing, and no AI plans full
 decolonization while two of its colonies are well accepted. In events, AI
 empires lean toward negotiation and release, and an AI takes the Imperial

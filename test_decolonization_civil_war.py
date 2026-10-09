@@ -245,6 +245,47 @@ class RecordTests(unittest.TestCase):
                 self.assertRegex(cleanup, r"remove_variable\s*=\s*" + level + r"\b")
 
 
+    def test_a_missing_level_reads_the_running_modifier(self):
+        # A save from before the levels holds a running programme's modifier and
+        # no level until the next pulse migrates it. A step in that month must
+        # start from the programme it was running (the top level), not from 0,
+        # or the refresh that follows strips the modifiers of the others.
+        values = _read("common", "script_values", "colonial_empire_values.txt")
+        for modifier, level, up, down in PROGRAMMES:
+            with self.subTest(programme=modifier):
+                value = _block(values, level + "_value")
+                self.assertIn("has_variable = " + level, value)
+                self.assertRegex(value, r"has_modifier\s*=\s*" + modifier + r"\b")
+                for core in (up, down):
+                    body = _block(EFFECTS, core)
+                    self.assertRegex(body, r"set_variable\s*=\s*\{\s*name\s*=\s*" + level
+                                     + r"\s+value\s*=\s*" + level + r"_value\s*\}")
+                    self.assertNotRegex(body, r"name\s*=\s*" + level + r"\s+value\s*=\s*0\b")
+
+
+class AiReviewTests(unittest.TestCase):
+    VALUES = _read("common", "script_values", "colonial_empire_values.txt")
+
+    def test_a_full_bar_keeps_a_margin(self):
+        # At 100 the ceiling is a positive margin, not 0: trimmed to 0, the
+        # change would drop the bar off 100 at the first war and restart the
+        # 60-month completion count.
+        ceiling = _block(self.VALUES, "colonial_ai_programme_ceiling")
+        self.assertIn("colonial_stability_bar_at_least = { N = 100 }", ceiling)
+        self.assertIn("value = colonial_ai_full_bar_margin", ceiling)
+        margin = re.search(r"(?m)^colonial_ai_full_bar_margin\s*=\s*([\d.]+)", self.VALUES)
+        self.assertTrue(margin and float(margin.group(1)) > 0)
+
+    def test_raise_weights_use_value(self):
+        # `add = <named script value>` in a weight modifier logs "Malformed token".
+        review = _block(EFFECTS, "colonial_ai_review_programmes")
+        weights = re.findall(r"modifier\s*=\s*\{\s*(\w+)\s*=\s*(colonial_ai_\w+_raise_weight)\s*\}", review)
+        self.assertEqual(sorted(w for _, w in weights),
+                         ["colonial_ai_assim_raise_weight", "colonial_ai_garrison_raise_weight",
+                          "colonial_ai_invest_raise_weight"])
+        self.assertEqual({op for op, _ in weights}, {"value"})
+
+
 class RepairTests(unittest.TestCase):
     def test_the_civil_war_hook_runs_the_repair(self):
         self.assertIn("decol_repair_after_civil_war = yes", _block(CIVIL_WAR, "te_civil_war_on_won"))
