@@ -75,7 +75,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Inheritance Laws | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation, State as Universal Heir, Possession by Use | Who inherits an estate: the concentration of wealth, and birth rates and migration on the land. See [Who inherits](#who-inherits). |
 | Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
-| Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | Devastation, casualties, war support and diplomatic standing. |
+| Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. Intrusive Surveillance System needs Social Media or Automated Surveillance. |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
 
@@ -85,18 +85,40 @@ capacity by 10%. Devolved Administration cuts the bureaucracy cost of
 institutions by 20%, slows assimilation and resists separatism and coups.
 Traditional Vassalage strengthens the aristocrats and costs authority.
 
-Total War (from Bombing Aircraft) doubles devastation and cuts the war-support
-loss from casualties by three quarters, at a cost of 20 diplomatic reputation
-and a stronger anti-war movement. The humane end, up to Limited War (from
-Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
-diplomatic-play escalation, adds reputation and lowers your Ministry of War's
-cap. Humanitarian Regulations and Limited War also restrict nuclear strikes; see
-[Strategic and tactical strike
-actions](14-nuclear.md#strategic-and-tactical-strike-actions). The Rules of War
-laws also count toward UN Authority: Total War −2, War Crimes Forbidden +0.5,
+### The rules of war
+
+Each Rules of War law is best at one thing, so the choice follows what you are
+doing rather than your research. Every country starts on Traditional Rules of
+War.
+
+| Law | From | Best for | What you give up |
+|---|---|---|---|
+| Total War | Chemical Warfare | A war you must win. Kill rate +0.1, double devastation (it drains the enemy's war support but ruins land you mean to keep), casualties cost half the usual war support, and armies mobilize 25% faster. | 10 diplomatic reputation, a stronger anti-war movement, 25% faster escalation in every play you are part of, one level of Ministry of Foreign Affairs |
+| Traditional Rules of War | Start | A free hand. Armies lose 5% less morale and gain experience 25% faster, and nothing is forbidden. | What the other four offer |
+| War Crimes Forbidden | Wargaming | Conquest you mean to keep. 25% fewer radicals in the states you conquer and 25% less devastation. | Kill rate −0.05 |
+| Humanitarian Regulations | Nuclear Weapons | Allies and treaties. +6 diplomatic reputation, the most of any law, so other countries sign treaties with you and back your plays more readily; 10% more of your wounded survive; half the devastation. | Kill rate −0.05; no strategic nuclear strikes |
+| Limited War | Intercontinental Ballistic Missiles | Small wars for limited aims. You gain 25% less infamy, plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | War goals in plays you start cost twice the maneuvers, so each play takes fewer states; kill rate −0.05; no nuclear strikes at all |
+
+Patriotic, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
+Traditionalists and Theocrats Traditional Rules of War, Reformers and the Pious
+War Crimes Forbidden, Liberals, Market Liberals and Humanitarians both
+Humanitarian Regulations and Limited War, and Pacifists and Anarchists Limited
+War.
+
+Humanitarian Regulations and Limited War show their ban in the law's tooltip, as
+Strategic Nuclear Strikes Forbidden and Tactical Nuclear Strikes Forbidden. The
+ban lifts once you or a country you protect has been struck, or when an enemy's
+war goal would annex or subjugate you; see [Strategic and tactical strike
+actions](14-nuclear.md#strategic-and-tactical-strike-actions). The laws also
+count toward UN Authority: Total War −2, War Crimes Forbidden +0.5,
 Humanitarian Regulations +1 and Limited War +1.5 on the UN Authority Target. A
 positive figure counts only while you are a UN member not undermining it; see
 [What counts toward Policy](10-united-nations.md#what-counts-toward-policy).
+
+A change of law takes the usual enactment time, so moving to Total War when a
+war breaks out costs months and holds up your other laws. The AI moves to Total
+War in a war against a major or great power, or one whose war goals would annex
+or subjugate it, and back to another law once it is at peace.
 
 ### Economic law groups
 
@@ -257,8 +279,8 @@ yours loses approval the whole time.
 
 | Law | Available | Law's Wealth Concentration target | Also |
 |---|---|---|---|
-| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10% |
-| Customary Inheritance | From the start | 50 | Nothing |
+| Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
+| Customary Inheritance | From the start | 50 | Tax capacity −5%; local administration costs 5% less bureaucracy |
 | Forced Heirship | Egalitarianism | 25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
 | Freedom of Testation | From the start | 60 | Capitalists invest 10% more |
 | State as Universal Heir | Command Economy | 0 | +200 authority, Bureaucrats +10% political strength; the upper and middle strata invest less |
@@ -276,18 +298,35 @@ in great family fortunes. Each state keeps its own score, which moves 3% of the
 way to its own target each year, and your country's figure is the states'
 average, weighted by where property is held. The law and its amendments set where
 a state's target starts. Land tenure, who owns the state's capital, how unequal
-incomes are and taxes on wealth move it from there. War losses, a lost war that
+incomes are, taxes on wealth and your economic laws move it from there.
+Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
+Chartered Monopolies (+5) raise it; Interventionism, Antitrust Enforcement and
+Regulated Utilities (−5 each) lower it. War losses, a lost war that
 cost you a war goal, a winning revolution of the left and a banking crash knock
 scores down at once, and devastation lowers a state's score every year it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
-houses twenty years later. Above 50, Great
-Family Fortunes strengthens the Aristocrats and Capitalists, raises their
-investment and adds radicals; below 50, Dispersed Wealth weakens the Aristocrats
-and lets Farmers and Shopkeepers invest more. Both grow with the distance from
-50. The Inheritance group's description shows the score and where it is heading,
-and the Wealth section of the [Demographics tab](08-states.md#demographics) shows
-what sets the target. With the Demographics rule set to Disabled the tab is gone,
-but Wealth Concentration still runs and the group's description still shows it.
+houses twenty years later.
+
+Your country's figure sets the political weight of great fortunes. Above 50,
+Great Family Fortunes strengthens the Aristocrats and Capitalists; below 50,
+Dispersed Wealth weakens the Aristocrats. Each state's own score does the rest
+in that state:
+
+| A state's score | Modifier | Effect at 100 or 0 |
+|---|---|---|
+| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 10% more; radicals +10%; qualifications −10%; education access −5% |
+| Above 50, in farming states | Land Hunger | Migration +20%, scaled by the state's share of Peasants and Farmers |
+| Below 50 | Dispersed Property | Farmers and Shopkeepers invest 10% more |
+
+Every effect grows with the distance from 50, so a state at 75 gets half of
+it. A state's modifiers update with its yearly count, so a war loss or an event
+that moves the scores reaches them within a year. A capital full of Financial
+Districts can carry Concentrated Property while your country as a whole sits
+below 50. The Inheritance group's description shows the score and where it is
+heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
+shows what sets the target. With the Demographics rule set to Disabled the tab
+is gone, but Wealth Concentration and all its effects still run and the group's
+description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
 Under Forced Heirship, smallholders have fewer children so the farm is not
@@ -437,9 +476,9 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
-| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −25; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
+| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
-| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
+| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
 | Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
 
 The mod also changes one base-game amendment. Anarchy holds elections, so the

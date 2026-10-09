@@ -8,6 +8,7 @@ Usage:
     demographics_harness.py seed SAVE --tag GBR         # the seeded structure and life figures
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
+    demographics_harness.py wc SAVE [--tag GBR] [--top 30]  # Wealth Concentration as the game holds it
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -384,6 +385,58 @@ def cmd_replay(args):
     return 1 if bad else 0
 
 
+WC_COUNTRY_VARS = ("te_inh_concentration", "te_dg_wc_target", "te_dg_wc_t_law", "te_dg_wc_t_land", "te_dg_wc_t_own",
+                   "te_dg_wc_t_ineq", "te_dg_wc_t_tax", "te_dg_wc_t_econ", "te_inh_great_fortunes_mult",
+                   "te_inh_dispersed_mult")
+WC_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop")
+INHERITANCE_LAWS = ("law_primogeniture", "law_free_testation", "law_partible", "law_equal_inheritance",
+                    "law_state_universal_heir", "law_non_inheritable_usage_rights")
+
+
+def wc_rows(countries, states):
+    """[(tag, people, country vars, state scores, inheritance law)] for every country with a national
+    figure, the most people first."""
+    scores, people = {}, {}
+    for st in states.values():
+        if "te_dg_wc" in st["vars"]:
+            scores.setdefault(st["owner"], []).append(st["vars"]["te_dg_wc"])
+            people[st["owner"]] = people.get(st["owner"], 0.0) + st["vars"].get("te_dg_walk_pop", 0.0)
+    rows = []
+    for cid, c in countries.items():
+        if "te_inh_concentration" not in c["vars"]:
+            continue
+        law = next((x for x in INHERITANCE_LAWS if x in c["laws"]), "-")
+        rows.append((c["tag"] or cid, people.get(cid, 0.0), c["vars"], scores.get(cid, []), law))
+    return sorted(rows, key=lambda r: -r[1])
+
+
+def cmd_wc(args):
+    """Each country's national figure, the target's terms and modifier multipliers, and its states'
+    range, read from the save's script variables (spec 4.2). A balance pass's in-game check."""
+    rows = wc_rows(*S.read_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS))
+    if args.tag:
+        rows = [r for r in rows if r[0] in args.tag]
+    terms = ("law", "land", "own", "ineq", "tax", "econ")
+    print(f"{'tag':5s} {'M ppl':>6s} {'WC':>5s} {'target':>6s} " + " ".join(f"{t:>5s}" for t in terms)
+          + "    GF    DW  states>50  range   inheritance")
+    for tag, ppl, v, wcs, law in rows[:args.top]:
+        print(f"{tag:5s} {ppl / 1e6:6.1f} {v['te_inh_concentration']:5.1f} {v.get('te_dg_wc_target', 0):6.1f} "
+              + " ".join(f"{v.get('te_dg_wc_t_' + t, 0):+5.1f}" for t in terms)
+              + f" {v.get('te_inh_great_fortunes_mult', 0):5.2f} {v.get('te_inh_dispersed_mult', 0):5.2f}"
+              f"  {sum(w > 50 for w in wcs):4d}/{len(wcs):<4d} {min(wcs, default=0):3.0f}-{max(wcs, default=0):<3.0f}"
+              f" {law.replace('law_', '')}")
+    by_law = {}
+    for tag, ppl, v, wcs, law in rows:
+        by_law.setdefault(law, []).append((ppl, v["te_inh_concentration"]))
+    for law, xs in sorted(by_law.items(), key=lambda kv: -len(kv[1])):
+        weight = sum(p for p, _ in xs)
+        mean = sum(p * w for p, w in xs) / weight if weight else 0.0
+        median = sorted(w for _, w in xs)[len(xs) // 2]
+        print(f"{law.replace('law_', ''):32s} countries {len(xs):3d}  above 50 {sum(w > 50 for _, w in xs):3d}  "
+              f"median {median:5.1f}  weighted by people {mean:5.1f}")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -411,6 +464,11 @@ def main(argv=None):
     p.add_argument("log")
     p.add_argument("--tolerance", type=float, default=DEFAULT_TOLERANCE)
     p.set_defaults(fn=cmd_replay)
+    p = sub.add_parser("wc")
+    p.add_argument("save")
+    p.add_argument("--tag", action="append", default=[])
+    p.add_argument("--top", type=int, default=30)
+    p.set_defaults(fn=cmd_wc)
     args = ap.parse_args(argv)
     try:
         return args.fn(args)

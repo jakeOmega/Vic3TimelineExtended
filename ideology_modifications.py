@@ -166,15 +166,27 @@ moderate_rules_of_war = [
     ("law_limited_war", "disapprove"),
     ("law_total_war", "disapprove"),
 ]
-peaceful_rules_of_war = [
+# Liberals back both humane statutes strongly: Humanitarian Regulations is the
+# trusted partner's law (reputation, treaties). Limited War stays strongly
+# approved so their nuclear posture class (Limited War over Total War,
+# nd_stance_restraint_full in nuclear_deterrence_triggers.txt) is unchanged.
+liberal_rules_of_war = [
+    ("law_traditional_rules_of_war", "disapprove"),
+    ("law_war_crimes_forbidden", "neutral"),
+    ("law_humanitarian_regulations", "strongly_approve"),
+    ("law_limited_war", "strongly_approve"),
+    ("law_total_war", "strongly_disapprove"),
+]
+pacifist_rules_of_war = [
     ("law_traditional_rules_of_war", "disapprove"),
     ("law_war_crimes_forbidden", "neutral"),
     ("law_humanitarian_regulations", "approve"),
     ("law_limited_war", "strongly_approve"),
     ("law_total_war", "strongly_disapprove"),
 ]
+# The soldier's code is the traditionalists' own (2026-10-09; was approve).
 traditional_rules_of_war = [
-    ("law_traditional_rules_of_war", "approve"),
+    ("law_traditional_rules_of_war", "strongly_approve"),
     ("law_war_crimes_forbidden", "neutral"),
     ("law_humanitarian_regulations", "disapprove"),
     ("law_limited_war", "disapprove"),
@@ -905,7 +917,7 @@ modifications = {
         "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_like,
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": liberal_rules_of_war,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
@@ -958,7 +970,7 @@ modifications = {
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_like,
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": liberal_rules_of_war,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
@@ -1037,7 +1049,7 @@ modifications = {
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_intellectual_property": moderate_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_indifference,
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": liberal_rules_of_war,
         "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_ministry_of_intelligence_and_security": ministry_constructor(
             "ministry_of_intelligence_and_security", "-"
@@ -1433,7 +1445,7 @@ modifications = {
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_intellectual_property": communal_ip_laws,
         "lawgroup_LGBTQ_rights": lgbtq_love,
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": pacifist_rules_of_war,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "--"
@@ -1877,7 +1889,7 @@ modifications = {
         "lawgroup_ministry_of_international_aid": ministry_constructor(
             "ministry_of_international_aid", "++"
         ),
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": pacifist_rules_of_war,
         "lawgroup_colonization": [("law_neocolonialism", "neutral")],
     },
     "ideology_plutocratic": {
@@ -1977,7 +1989,7 @@ modifications = {
     "ideology_humanitarian": {
         "lawgroup_LGBTQ_rights": lgbtq_love,
         "lawgroup_criminal_justice": progressive_criminal_justice,
-        "lawgroup_rules_of_war": peaceful_rules_of_war,
+        "lawgroup_rules_of_war": liberal_rules_of_war,
         "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_rights_of_women": [("law_protected_class", "strongly_approve")],
         "lawgroup_ministry_of_science": ministry_constructor(

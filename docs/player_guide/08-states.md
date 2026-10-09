@@ -241,8 +241,8 @@ The census changes nothing about your population yet. Births, deaths and the
 workforce still follow the base game's rules, and the tab reports what they
 produce. The Demographics game rule has three settings: Full, the default;
 Display only, which for now behaves the same; and Disabled, which removes the
-census and both tabs. Wealth Concentration (see [Who
-inherits](06-politics.md#who-inherits)) keeps working under all three.
+census and both tabs. Wealth Concentration and its effects on each state (see
+[Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
 ### What the tab shows
 

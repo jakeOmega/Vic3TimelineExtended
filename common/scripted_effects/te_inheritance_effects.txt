@@ -15,7 +15,7 @@
 #                                with no scored state keeps its own: set at
 #                                its target by its first yearly pulse, then
 #                                drifting 3% a year (te_inh_yearly_update).
-#    te_inh_great_fortunes_mult  multipliers the two score modifiers read;
+#    te_inh_great_fortunes_mult  multipliers the two country modifiers read;
 #    te_inh_dispersed_mult       never removed (a modifier's multiplier is
 #                                re-read after it is applied)
 #    te_inh_law_recent           20 years from an inheritance law taking
@@ -29,12 +29,17 @@
 #  Variables (state):
 #    te_inh_agrarian_share       Peasants plus Farmers over the population,
 #                                the rural modifiers' multiplier
+#    te_inh_wc_high_mult,        multipliers of the three state modifiers
+#    te_inh_wc_low_mult,         (inh_concentrated_property,
+#    te_inh_land_hunger_mult     inh_dispersed_property, inh_land_hunger),
+#                                from the state's own score; never removed
 #
 #  Revolutions: the score is a variable, so a revolution's winner keeps the
 #  loser's when it held none of its own; inh_repair_after_civil_war copies
 #  it over the winner's own, then the national figure follows the winner's
-#  states and puts the modifiers back (scripting_best_practices.md § "What a
-#  Civil War's Winner Inherits").
+#  states and puts the country modifiers back (scripting_best_practices.md
+#  § "What a Civil War's Winner Inherits"). The state modifiers are the
+#  states', which keep them as they change hands.
 # ======================================================================
 
 # Country scope; ROOT must be the country, since add_modifier's multiplier
@@ -253,6 +258,59 @@ te_inh_refresh_rural_effects = {
 			add_modifier = {
 				name = inh_primogeniture_rural
 				multiplier = var:te_inh_agrarian_share
+			}
+		}
+	}
+}
+
+# State scope; ROOT the state (te_demog_state_yearly, on the state's yearly
+# pulse straight after te_demog_wc_state_yearly, so it reads this year's
+# score and the walk's agrarian share; and inheritance_events.8 at game
+# start), since the multiplier resolves against ROOT. The one refresh site
+# of the three state modifiers. A country-scope shift or shock moves the
+# score at once; the modifiers follow at the state's next yearly pulse. The
+# multiplier variables are never removed: a modifier's multiplier is re-read
+# after it is applied.
+te_inh_refresh_wc_state_effects = {
+	if = {
+		limit = { has_modifier = inh_concentrated_property }
+		remove_modifier = inh_concentrated_property
+	}
+	if = {
+		limit = { has_modifier = inh_dispersed_property }
+		remove_modifier = inh_dispersed_property
+	}
+	if = {
+		limit = { has_modifier = inh_land_hunger }
+		remove_modifier = inh_land_hunger
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_wc
+			has_variable = te_dg_agr_share
+		}
+		set_variable = { name = te_inh_wc_high_mult value = te_inh_wc_high_mult_value }
+		set_variable = { name = te_inh_wc_low_mult value = te_inh_wc_low_mult_value }
+		set_variable = { name = te_inh_land_hunger_mult value = te_inh_land_hunger_mult_value }
+		if = {
+			limit = { var:te_inh_wc_high_mult > 0.01 }
+			add_modifier = {
+				name = inh_concentrated_property
+				multiplier = var:te_inh_wc_high_mult
+			}
+		}
+		if = {
+			limit = { var:te_inh_wc_low_mult > 0.01 }
+			add_modifier = {
+				name = inh_dispersed_property
+				multiplier = var:te_inh_wc_low_mult
+			}
+		}
+		if = {
+			limit = { var:te_inh_land_hunger_mult > 0.01 }
+			add_modifier = {
+				name = inh_land_hunger
+				multiplier = var:te_inh_land_hunger_mult
 			}
 		}
 	}

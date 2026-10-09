@@ -6,6 +6,8 @@
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 #
 #    1       hidden: every country's score set at game start
+#    8       hidden state event: a state's Wealth Concentration modifiers
+#            at game start (ROOT the state, for the multiplier)
 #    2-5     generation events (§5, first wave), rolled yearly from
 #            te_inh_generation_* (te_inheritance_on_actions.txt) once the
 #            law has been held for a generation; 25-year cooldowns
@@ -40,6 +42,26 @@ inheritance_events.1 = {
 			remove_variable = te_inh_law_recent
 		}
 		te_inh_game_start = yes
+		# The state modifiers' multipliers resolve against ROOT, which is the
+		# country here: each state refreshes its own in .8.
+		every_scope_state = {
+			trigger_event = { id = inheritance_events.8 }
+		}
+	}
+}
+
+# ======================================================================
+#  8 – Game start, per state (hidden)
+#  ROOT is the state, so the state modifiers' multipliers read its own
+#  score (te_inh_refresh_wc_state_effects). Fired by .1 after the states
+#  are seeded; from then on each state's yearly pulse refreshes them.
+# ======================================================================
+inheritance_events.8 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		te_inh_refresh_wc_state_effects = yes
 	}
 }
 
@@ -322,11 +344,11 @@ inheritance_events.5 = {
 		var:te_inh_duty_years >= 15
 	}
 
-	option = { # The state buys them
+	option = { # The state buys them: the land goes to smallholders
 		name = inheritance_events.5.a
 		custom_tooltip = {
 			text = inheritance_events.5.a.tt
-			te_inh_shift_concentration = { AMOUNT = -5 }
+			te_inh_shift_concentration = { AMOUNT = -10 }
 		}
 		add_treasury = {
 			value = yearly_gross_income
@@ -343,12 +365,12 @@ inheritance_events.5 = {
 		}
 	}
 
-	option = { # The market takes them
+	option = { # The market takes them: other fortunes buy, and the duty is paid
 		name = inheritance_events.5.b
 		default_option = yes
 		custom_tooltip = {
 			text = inheritance_events.5.b.tt
-			te_inh_shift_concentration = { AMOUNT = -5 }
+			te_inh_shift_concentration = { AMOUNT = -2 }
 		}
 		add_treasury = {
 			value = yearly_gross_income

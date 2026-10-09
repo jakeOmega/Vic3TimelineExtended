@@ -607,12 +607,13 @@ is_unintegrated_culturally_distinct_state = {
 # ============================================================================
 # COLONIAL EMPIRE — BUTTON GATES (shared by the JE buttons and the widget)
 #
-# One trigger per scripted button's `possible` block, extracted verbatim so the
-# vanilla button grid (which now only the AI sees) and the journal-entry widget
+# One trigger per control, so the AI and the journal-entry widget
 # (gui/journal_entry_widgets/colonial_empire_widget.gui, via
 # common/scripted_guis/colonial_empire_sguis.txt) cannot drift apart. The
-# button's `possible` and the sgui's `is_valid` both call the trigger below;
-# neither restates a condition.
+# decision gates are also each scripted button's `possible` (the button grid
+# only the AI sees); the programme gates are the widget's steppers' `is_valid`
+# and the AI's monthly programme review (colonial_ai_review_programmes) reads
+# the same ones. Nothing restates a condition.
 #
 # SCOPE: country.
 #
@@ -621,7 +622,13 @@ is_unintegrated_culturally_distinct_state = {
 # widget button's IsValidTooltip, so phrase it as a CONDITION, not a complaint.
 # ============================================================================
 
-colonial_empire_possible_invest = {
+# The three programmes run at a level, 0-3 (PROGRAMME LEVELS in
+# colonial_empire_values.txt); each has an up gate and a down gate. The 3 in
+# each `< 3` is colonial_programme_max_level.
+#
+# Every programme needs colonial holdings to start or raise. Lowering needs
+# only a level to lower, so a programme can always be wound down.
+colonial_empire_has_colonial_holdings = {
 	custom_tooltip = {
 		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
 		OR = {
@@ -631,50 +638,152 @@ colonial_empire_possible_invest = {
 			country_has_qualifying_colonial_subject = yes
 		}
 	}
-	NOT = { has_modifier = colonial_development_investment_modifier }
 }
 
-colonial_empire_possible_remove_invest = {
-	has_modifier = colonial_development_investment_modifier
-}
-
-colonial_empire_possible_garrison = {
+colonial_empire_possible_invest_up = {
+	colonial_empire_has_colonial_holdings = yes
 	custom_tooltip = {
-		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
-		OR = {
-			any_scope_state = {
-				is_overseas_colonial_state = yes
-			}
-			country_has_qualifying_colonial_subject = yes
-		}
+		text = CE_PROGRAMME_BELOW_TOP_LEVEL
+		colonial_invest_level_value < 3
 	}
-	NOT = { has_modifier = colonial_military_garrison_modifier }
-	# Hard authority gate — Garrison is unsustainable for liberal AIs without
-	# the authority-generating regressive law stack. The cruel/Iron-Fist
-	# state has authority to spare; the AI without it can't even click.
-	authority > 300
 }
 
-colonial_empire_possible_remove_garrison = {
-	has_modifier = colonial_military_garrison_modifier
-}
-
-colonial_empire_possible_assimilation = {
+colonial_empire_possible_invest_down = {
 	custom_tooltip = {
-		text = CE_NEEDS_COLONIAL_STATES_OR_SUBJECTS
-		OR = {
-			any_scope_state = {
-				is_overseas_colonial_state = yes
-			}
-			country_has_qualifying_colonial_subject = yes
-		}
+		text = CE_PROGRAMME_RUNNING
+		colonial_invest_level_value >= 1
 	}
+}
+
+colonial_empire_possible_garrison_up = {
+	colonial_empire_has_colonial_holdings = yes
+	custom_tooltip = {
+		text = CE_PROGRAMME_BELOW_TOP_LEVEL
+		colonial_garrison_level_value < 3
+	}
+	# Hard authority gate: each level costs colonial_garrison_authority_per_level
+	# (100) authority for as long as it runs. The cruel/Iron-Fist state has
+	# authority to spare; a liberal one without the regressive law stack runs
+	# dry after a level or none.
+	authority > 100
+}
+
+colonial_empire_possible_garrison_down = {
+	custom_tooltip = {
+		text = CE_PROGRAMME_RUNNING
+		colonial_garrison_level_value >= 1
+	}
+}
+
+colonial_empire_possible_assimilation_up = {
+	colonial_empire_has_colonial_holdings = yes
 	modifier:country_can_use_cultural_assimilation_bool = yes
-	NOT = { has_modifier = colonial_cultural_assimilation_modifier }
+	custom_tooltip = {
+		text = CE_PROGRAMME_BELOW_TOP_LEVEL
+		colonial_assim_level_value < 3
+	}
 }
 
-colonial_empire_possible_remove_assimilation = {
-	has_modifier = colonial_cultural_assimilation_modifier
+colonial_empire_possible_assimilation_down = {
+	custom_tooltip = {
+		text = CE_PROGRAMME_RUNNING
+		colonial_assim_level_value >= 1
+	}
+}
+
+# ----------------------------------------------------------------------------
+# AI programme review (colonial_ai_review_programmes, decolonization.txt).
+#
+# Raise a programme only while the level would not be wasted and we can carry
+# it: the up gate passes, a level adds something to the bar (laws can push a
+# programme's figure to 0 or below), the monthly change is still under the
+# ceiling (the cap, or a small margin at a full bar: colonial_ai_programme_ceiling), and the
+# programme's cost fits. The cost tests are the affordability checks the
+# Cultural Hegemony funding buttons use: out of default and a weekly surplus
+# larger than the step's cost (net_fixed_income is weekly, like the cost).
+# A programme cut for cost waits a year before the review raises it again
+# (colonial_ai_hold_*), so a budget hovering at the line does not pay the
+# one-off every other month.
+# ----------------------------------------------------------------------------
+colonial_ai_programme_has_headroom = {
+	colonial_stability_drift_uncapped_display < colonial_ai_programme_ceiling
+}
+
+colonial_ai_can_raise_invest = {
+	colonial_empire_possible_invest_up = yes
+	NOT = { has_variable = colonial_ai_hold_invest }
+	colonial_invest_step_term > 0
+	colonial_ai_programme_has_headroom = yes
+	in_default = no
+	net_fixed_income > colonial_invest_level_cost
+}
+
+colonial_ai_can_raise_garrison = {
+	colonial_empire_possible_garrison_up = yes
+	NOT = { has_variable = colonial_ai_hold_garrison }
+	colonial_garrison_step_term > 0
+	colonial_ai_programme_has_headroom = yes
+}
+
+colonial_ai_can_raise_assim = {
+	colonial_empire_possible_assimilation_up = yes
+	NOT = { has_variable = colonial_ai_hold_assim }
+	colonial_assim_step_term > 0
+	colonial_ai_programme_has_headroom = yes
+	in_default = no
+	authority > colonial_assim_authority_per_level
+	bureaucracy > colonial_assim_bureaucracy_per_level
+}
+
+# Lower a running programme when its top level is wasted (without it the
+# change still reaches the ceiling), when a level adds nothing, or when the
+# country can no longer carry it.
+colonial_ai_invest_unaffordable = {
+	OR = {
+		in_default = yes
+		net_fixed_income < 0
+	}
+}
+
+colonial_ai_garrison_unaffordable = {
+	authority < 0
+}
+
+colonial_ai_assim_unaffordable = {
+	OR = {
+		authority < 0
+		bureaucracy < 0
+	}
+}
+
+colonial_ai_should_lower_invest = {
+	colonial_invest_level_value >= 1
+	OR = {
+		colonial_invest_step_term <= 0
+		colonial_ai_drift_without_invest_step >= colonial_ai_programme_ceiling
+		colonial_ai_invest_unaffordable = yes
+		colonial_empire_has_colonial_holdings = no
+	}
+}
+
+colonial_ai_should_lower_garrison = {
+	colonial_garrison_level_value >= 1
+	OR = {
+		colonial_garrison_step_term <= 0
+		colonial_ai_drift_without_garrison_step >= colonial_ai_programme_ceiling
+		colonial_ai_garrison_unaffordable = yes
+		colonial_empire_has_colonial_holdings = no
+	}
+}
+
+colonial_ai_should_lower_assim = {
+	colonial_assim_level_value >= 1
+	OR = {
+		colonial_assim_step_term <= 0
+		colonial_ai_drift_without_assim_step >= colonial_ai_programme_ceiling
+		colonial_ai_assim_unaffordable = yes
+		colonial_empire_has_colonial_holdings = no
+	}
 }
 
 colonial_empire_possible_release_territory = {

@@ -54,7 +54,7 @@ te_inh_law_amendment_target = {
 				has_amendment = amendment_type:amendment_estate_duties
 			}
 		}
-		add = -25
+		add = -30
 	}
 	if = {
 		limit = {
@@ -62,7 +62,7 @@ te_inh_law_amendment_target = {
 				has_amendment = amendment_type:amendment_birthright_endowment
 			}
 		}
-		add = -30
+		add = -20
 	}
 	if = {
 		limit = {
@@ -87,10 +87,10 @@ te_inh_law_amendment_target = {
 # The target the law tooltip and the concept show, and the drift's for a
 # country with no scored state: the states' ownership-weighted target once
 # they have scores (te_demog_wc_national); until then the law's own.
-# The law (with its amendments) and the taxes on wealth move every state's
-# target alike, so a change since the last national refresh shows at once:
-# the stored target moves by the difference between the term now and the
-# term te_demog_wc_national summed (the states' own drift reads the live
+# The law (with its amendments), the taxes on wealth and the economic laws
+# move every state's target alike, so a change since the last national
+# refresh shows at once: the stored target moves by the difference between
+# the term now and the term te_demog_wc_national summed (the states' own drift reads the live
 # target at their pulses). Recognised continuity of title
 # (inheritance_events.6) pins it at the current score: nobody's estate
 # passes on.
@@ -108,6 +108,11 @@ te_inh_concentration_target = {
 			limit = { has_variable = te_dg_wc_t_tax }
 			add = te_demog_wc_tax_term
 			subtract = var:te_dg_wc_t_tax
+		}
+		if = {
+			limit = { has_variable = te_dg_wc_t_econ }
+			add = te_demog_wc_econ_term
+			subtract = var:te_dg_wc_t_econ
 		}
 	}
 	min = 0
@@ -132,6 +137,7 @@ te_inh_concentration_next = {
 	max = 100
 }
 
+# The country modifiers' multipliers, from the national figure.
 # inh_great_fortunes' multiplier: (score - 50) / 50 above 50, else 0.
 te_inh_great_fortunes_mult_value = {
 	value = var:te_inh_concentration
@@ -146,6 +152,34 @@ te_inh_dispersed_mult_value = {
 	value = 50
 	subtract = var:te_inh_concentration
 	divide = 50
+	min = 0
+	max = 1
+}
+
+# State scope (te_inh_refresh_wc_state_effects): the state modifiers'
+# multipliers, from the state's own score. inh_concentrated_property:
+# (score - 50) / 50 above 50; inh_dispersed_property: (50 - score) / 50
+# below 50; inh_land_hunger: the first times the state's agrarian share
+# (te_dg_agr_share, Peasants and Farmers over its people).
+te_inh_wc_high_mult_value = {
+	value = var:te_dg_wc
+	subtract = 50
+	divide = 50
+	min = 0
+	max = 1
+}
+
+te_inh_wc_low_mult_value = {
+	value = 50
+	subtract = var:te_dg_wc
+	divide = 50
+	min = 0
+	max = 1
+}
+
+te_inh_land_hunger_mult_value = {
+	value = te_inh_wc_high_mult_value
+	multiply = var:te_dg_agr_share
 	min = 0
 	max = 1
 }

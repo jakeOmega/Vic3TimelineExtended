@@ -1580,6 +1580,21 @@ types te_demographics_widgets
 						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_tax_term')|+0]"
 					}
 				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_econ_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_econ"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_econ_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_econ_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_econ_term')|+0]"
+					}
+				}
 
 				te_demog_note = {
 					visible = "[GetScriptedGui('te_demog_wc_pinned_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
