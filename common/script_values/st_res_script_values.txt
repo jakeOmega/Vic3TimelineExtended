@@ -1177,7 +1177,8 @@ st_res_disp_hub_exists = {
 }
 
 # The good's reserve policy code (0 Manual, 1 Buy When Cheap, 2 Release When
-# Expensive, 3 Stabilize Prices) for the row's automation icon, lit above 0.
+# Expensive, 3 Stabilize Prices, 4 Stockpile) for the row's automation icon,
+# lit above 0.
 # A save from before policies has no variable and reads as Manual.
 st_res_grain_disp_policy = {
 	value = 0
@@ -1470,8 +1471,9 @@ st_res_fertilizer_disp_status = {
 
 # Where the row's fill bar marks the policy's stock band, in percent of
 # capacity (the bar's own scale). The target stockpile applies while the
-# policy can buy (Buy When Cheap, Stabilize Prices), the protected stockpile
-# while it can sell (Release When Expensive, Stabilize Prices); the evaluator,
+# policy can buy (Buy When Cheap, Stabilize Prices, Stockpile), the protected
+# stockpile while it can sell (Release When Expensive, Stabilize Prices,
+# Stockpile); the evaluator,
 # st_res_policy_evaluate_good_effect, reads them under the same policies.
 # Otherwise each value sits at its end of the bar (target 100, protected 0),
 # where the widget hides its marker, so a Manual good shows no marker.
@@ -1484,6 +1486,7 @@ st_res_grain_disp_target = {
 			OR = {
 				var:st_res_grain_policy = 1
 				var:st_res_grain_policy = 3
+				var:st_res_grain_policy = 4
 			}
 		}
 		value = var:st_res_grain_ceil_pct
@@ -1498,6 +1501,7 @@ st_res_grain_disp_floor = {
 			OR = {
 				var:st_res_grain_policy = 2
 				var:st_res_grain_policy = 3
+				var:st_res_grain_policy = 4
 			}
 		}
 		value = var:st_res_grain_floor_pct
@@ -1512,6 +1516,7 @@ st_res_ammunition_disp_target = {
 			OR = {
 				var:st_res_ammunition_policy = 1
 				var:st_res_ammunition_policy = 3
+				var:st_res_ammunition_policy = 4
 			}
 		}
 		value = var:st_res_ammunition_ceil_pct
@@ -1526,6 +1531,7 @@ st_res_ammunition_disp_floor = {
 			OR = {
 				var:st_res_ammunition_policy = 2
 				var:st_res_ammunition_policy = 3
+				var:st_res_ammunition_policy = 4
 			}
 		}
 		value = var:st_res_ammunition_floor_pct
@@ -1540,6 +1546,7 @@ st_res_oil_disp_target = {
 			OR = {
 				var:st_res_oil_policy = 1
 				var:st_res_oil_policy = 3
+				var:st_res_oil_policy = 4
 			}
 		}
 		value = var:st_res_oil_ceil_pct
@@ -1554,6 +1561,7 @@ st_res_oil_disp_floor = {
 			OR = {
 				var:st_res_oil_policy = 2
 				var:st_res_oil_policy = 3
+				var:st_res_oil_policy = 4
 			}
 		}
 		value = var:st_res_oil_floor_pct
@@ -1568,6 +1576,7 @@ st_res_small_arms_disp_target = {
 			OR = {
 				var:st_res_small_arms_policy = 1
 				var:st_res_small_arms_policy = 3
+				var:st_res_small_arms_policy = 4
 			}
 		}
 		value = var:st_res_small_arms_ceil_pct
@@ -1582,6 +1591,7 @@ st_res_small_arms_disp_floor = {
 			OR = {
 				var:st_res_small_arms_policy = 2
 				var:st_res_small_arms_policy = 3
+				var:st_res_small_arms_policy = 4
 			}
 		}
 		value = var:st_res_small_arms_floor_pct
@@ -1596,6 +1606,7 @@ st_res_artillery_disp_target = {
 			OR = {
 				var:st_res_artillery_policy = 1
 				var:st_res_artillery_policy = 3
+				var:st_res_artillery_policy = 4
 			}
 		}
 		value = var:st_res_artillery_ceil_pct
@@ -1610,6 +1621,7 @@ st_res_artillery_disp_floor = {
 			OR = {
 				var:st_res_artillery_policy = 2
 				var:st_res_artillery_policy = 3
+				var:st_res_artillery_policy = 4
 			}
 		}
 		value = var:st_res_artillery_floor_pct
@@ -1624,6 +1636,7 @@ st_res_aeroplanes_disp_target = {
 			OR = {
 				var:st_res_aeroplanes_policy = 1
 				var:st_res_aeroplanes_policy = 3
+				var:st_res_aeroplanes_policy = 4
 			}
 		}
 		value = var:st_res_aeroplanes_ceil_pct
@@ -1638,6 +1651,7 @@ st_res_aeroplanes_disp_floor = {
 			OR = {
 				var:st_res_aeroplanes_policy = 2
 				var:st_res_aeroplanes_policy = 3
+				var:st_res_aeroplanes_policy = 4
 			}
 		}
 		value = var:st_res_aeroplanes_floor_pct
@@ -1652,6 +1666,7 @@ st_res_tanks_disp_target = {
 			OR = {
 				var:st_res_tanks_policy = 1
 				var:st_res_tanks_policy = 3
+				var:st_res_tanks_policy = 4
 			}
 		}
 		value = var:st_res_tanks_ceil_pct
@@ -1666,6 +1681,7 @@ st_res_tanks_disp_floor = {
 			OR = {
 				var:st_res_tanks_policy = 2
 				var:st_res_tanks_policy = 3
+				var:st_res_tanks_policy = 4
 			}
 		}
 		value = var:st_res_tanks_floor_pct
@@ -1680,6 +1696,7 @@ st_res_fertilizer_disp_target = {
 			OR = {
 				var:st_res_fertilizer_policy = 1
 				var:st_res_fertilizer_policy = 3
+				var:st_res_fertilizer_policy = 4
 			}
 		}
 		value = var:st_res_fertilizer_ceil_pct
@@ -1694,6 +1711,7 @@ st_res_fertilizer_disp_floor = {
 			OR = {
 				var:st_res_fertilizer_policy = 2
 				var:st_res_fertilizer_policy = 3
+				var:st_res_fertilizer_policy = 4
 			}
 		}
 		value = var:st_res_fertilizer_floor_pct
@@ -1780,6 +1798,7 @@ st_res_policy_min_gap = {
 
 # Absolute stepper bounds.
 st_res_policy_thr_floor = { value = -50 }     # lowest purchase threshold, pp
+st_res_policy_buy_thr_ceiling = { value = 25 } # highest purchase threshold, pp
 st_res_policy_thr_ceiling = { value = 75 }    # highest release threshold, pp
 st_res_policy_flow_min = { value = 50 }
 st_res_policy_budget_min = { value = 1000 }
@@ -1825,7 +1844,23 @@ st_res_preset_aggressive_flow_pct = { value = 12 }
 st_res_preset_conservative_budget_pct = { value = 0.1 }
 st_res_preset_standard_budget_pct = { value = 0.3 }
 st_res_preset_aggressive_budget_pct = { value = 0.8 }
+st_res_preset_stockpile_flow_pct = { value = 5 }
+st_res_preset_stockpile_budget_pct = { value = 0.3 }
 st_res_weeks_per_year = { value = 52 }
+
+# Stockpile (policy 4) keeps its stock for a war. At war it releases above the
+# release threshold like any other policy; in peacetime only above this many
+# points over base price, or above the release threshold if that is higher.
+# Prices run from -75% to +75% of base, so +50 is a severe peacetime shortage,
+# such as an army mobilized for a diplomatic play that never became a war.
+st_res_policy_stockpile_peace_release = { value = 50 }
+
+# The AI puts its military goods on Stockpile while it can afford to
+# (st_res_ai_review_policies_effect): no default, no loans, and at least this
+# share of its gold reserves' limit in hand to start. Once stockpiling it
+# carries on until it defaults or borrows, so a treasury hovering near the
+# line does not flip the policy back and forth.
+st_res_ai_stockpile_min_reserves = { value = 0.25 }
 
 # Price smoothing. The policies act on a running (exponential) average of the
 # market price rather than this week's reading: every weekly tick the average

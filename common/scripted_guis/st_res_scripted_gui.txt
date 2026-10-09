@@ -541,9 +541,11 @@ st_res_adjust_fertilizer_sgui = {
 #    1  | select policy Buy When Cheap
 #    2  | select policy Release When Expensive
 #    3  | select policy Stabilize Prices
+#    4  | select policy Stockpile, and load the Stockpile preset
 #   10  | apply the Conservative preset
 #   11  | apply the Standard preset
 #   12  | apply the Aggressive preset
+#   13  | apply the Stockpile preset
 #   20  | purchase threshold  -  (st_res_policy_thr_step)
 #   21  | purchase threshold  +
 #   22  | release threshold   -
@@ -648,6 +650,13 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_grain_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_grain_preset, cleared by any stepper click).
@@ -674,6 +683,13 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_grain_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -684,7 +700,7 @@ st_res_policy_grain_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_grain_buy_thr < 0
+				var:st_res_grain_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -853,6 +869,12 @@ st_res_policy_grain_sgui = {
 			st_res_policy_select_base = { GOOD = grain POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = grain POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = grain }
 		}
@@ -865,13 +887,17 @@ st_res_policy_grain_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = grain }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = grain }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = grain
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -881,7 +907,7 @@ st_res_policy_grain_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -1162,6 +1188,13 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_ammunition_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_ammunition_preset, cleared by any stepper click).
@@ -1188,6 +1221,13 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_ammunition_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -1198,7 +1238,7 @@ st_res_policy_ammunition_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_ammunition_buy_thr < 0
+				var:st_res_ammunition_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -1367,6 +1407,12 @@ st_res_policy_ammunition_sgui = {
 			st_res_policy_select_base = { GOOD = ammunition POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = ammunition POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = ammunition }
 		}
@@ -1379,13 +1425,17 @@ st_res_policy_ammunition_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = ammunition }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = ammunition }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = ammunition
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -1395,7 +1445,7 @@ st_res_policy_ammunition_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -1676,6 +1726,13 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_oil_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_oil_preset, cleared by any stepper click).
@@ -1702,6 +1759,13 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_oil_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -1712,7 +1776,7 @@ st_res_policy_oil_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_oil_buy_thr < 0
+				var:st_res_oil_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -1881,6 +1945,12 @@ st_res_policy_oil_sgui = {
 			st_res_policy_select_base = { GOOD = oil POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = oil POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = oil }
 		}
@@ -1893,13 +1963,17 @@ st_res_policy_oil_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = oil }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = oil }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = oil
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -1909,7 +1983,7 @@ st_res_policy_oil_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -2190,6 +2264,13 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_small_arms_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_small_arms_preset, cleared by any stepper click).
@@ -2216,6 +2297,13 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_small_arms_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -2226,7 +2314,7 @@ st_res_policy_small_arms_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_small_arms_buy_thr < 0
+				var:st_res_small_arms_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -2395,6 +2483,12 @@ st_res_policy_small_arms_sgui = {
 			st_res_policy_select_base = { GOOD = small_arms POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = small_arms POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = small_arms }
 		}
@@ -2407,13 +2501,17 @@ st_res_policy_small_arms_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = small_arms }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = small_arms }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = small_arms
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -2423,7 +2521,7 @@ st_res_policy_small_arms_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -2704,6 +2802,13 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_artillery_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_artillery_preset, cleared by any stepper click).
@@ -2730,6 +2835,13 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_artillery_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -2740,7 +2852,7 @@ st_res_policy_artillery_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_artillery_buy_thr < 0
+				var:st_res_artillery_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -2909,6 +3021,12 @@ st_res_policy_artillery_sgui = {
 			st_res_policy_select_base = { GOOD = artillery POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = artillery POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = artillery }
 		}
@@ -2921,13 +3039,17 @@ st_res_policy_artillery_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = artillery }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = artillery }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = artillery
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -2937,7 +3059,7 @@ st_res_policy_artillery_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -3218,6 +3340,13 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_aeroplanes_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_aeroplanes_preset, cleared by any stepper click).
@@ -3244,6 +3373,13 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_aeroplanes_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -3254,7 +3390,7 @@ st_res_policy_aeroplanes_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_aeroplanes_buy_thr < 0
+				var:st_res_aeroplanes_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -3423,6 +3559,12 @@ st_res_policy_aeroplanes_sgui = {
 			st_res_policy_select_base = { GOOD = aeroplanes POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = aeroplanes POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = aeroplanes }
 		}
@@ -3435,13 +3577,17 @@ st_res_policy_aeroplanes_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = aeroplanes }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = aeroplanes }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = aeroplanes
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -3451,7 +3597,7 @@ st_res_policy_aeroplanes_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -3732,6 +3878,13 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_tanks_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_tanks_preset, cleared by any stepper click).
@@ -3758,6 +3911,13 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_tanks_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -3768,7 +3928,7 @@ st_res_policy_tanks_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_tanks_buy_thr < 0
+				var:st_res_tanks_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -3937,6 +4097,12 @@ st_res_policy_tanks_sgui = {
 			st_res_policy_select_base = { GOOD = tanks POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = tanks POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = tanks }
 		}
@@ -3949,13 +4115,17 @@ st_res_policy_tanks_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = tanks }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = tanks }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = tanks
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -3965,7 +4135,7 @@ st_res_policy_tanks_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -4246,6 +4416,13 @@ st_res_policy_fertilizer_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_fertilizer_policy = 4 }
+			}
+		}
+		trigger_else_if = {
 			# Presets 10-12: every preset is internally consistent by
 			# construction, so the only gate is that it is not already in
 			# force (st_res_fertilizer_preset, cleared by any stepper click).
@@ -4272,6 +4449,13 @@ st_res_policy_fertilizer_sgui = {
 			}
 		}
 		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_fertilizer_preset ?= 4 }
+			}
+		}
+		trigger_else_if = {
 			limit = { scope:op = 20 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
@@ -4282,7 +4466,7 @@ st_res_policy_fertilizer_sgui = {
 			limit = { scope:op = 21 }
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_fertilizer_buy_thr < 0
+				var:st_res_fertilizer_buy_thr < st_res_policy_buy_thr_ceiling
 			}
 			custom_tooltip = {
 				text = "st_res_policy_band_possible"
@@ -4451,6 +4635,12 @@ st_res_policy_fertilizer_sgui = {
 			st_res_policy_select_base = { GOOD = fertilizer POLICY = 3 }
 		}
 		else_if = {
+			# Stockpile loads its own preset: the other presets buy only
+			# below base price, where a stockpile would hardly ever buy.
+			limit = { scope:op = 4 }
+			st_res_set_good_policy_base = { GOOD = fertilizer POLICY = 4 PRESET = stockpile }
+		}
+		else_if = {
 			limit = { scope:op = 10 }
 			st_res_apply_preset_conservative_base = { GOOD = fertilizer }
 		}
@@ -4463,13 +4653,17 @@ st_res_policy_fertilizer_sgui = {
 			st_res_apply_preset_aggressive_base = { GOOD = fertilizer }
 		}
 		else_if = {
+			limit = { scope:op = 13 }
+			st_res_apply_preset_stockpile_base = { GOOD = fertilizer }
+		}
+		else_if = {
 			limit = { scope:op = 20 }
 			st_res_policy_step_down_base = {
 				GOOD = fertilizer
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -4479,7 +4673,7 @@ st_res_policy_fertilizer_sgui = {
 				SETTING = buy_thr
 				STEP = st_res_policy_thr_step
 				MIN = st_res_policy_thr_floor
-				MAX = 0
+				MAX = st_res_policy_buy_thr_ceiling
 			}
 		}
 		else_if = {
@@ -4777,6 +4971,99 @@ st_res_reset_rates_sgui = {
 		custom_tooltip = st_res_reset_rates_sgui_effect_tt
 		hidden_effect = {
 			st_res_reset_rates_effect = yes
+		}
+	}
+}
+
+# ============================================================================
+# Policies for all goods — the inventory's second row of panel buttons
+# ============================================================================
+# All: Stabilize, Military: Stockpile and All: Manual set the policy, and the
+# preset with it, of every good the table shows (the country's unlocked
+# goods): st_res_all_goods_stabilize_effect, st_res_military_goods_stockpile_effect
+# and st_res_all_goods_manual_effect in st_res_effects.txt. They are scripted
+# GUIs and not journal-entry scripted buttons because the entry binds its
+# scripted buttons only when it activates, so a running entry would never
+# show new ones. Same shape as Reset Reserve Rates above: one condition, that
+# a hub stands, and the effect in a hidden_effect under one custom_tooltip
+# line. No AI path: the AI sets its policies in script
+# (st_res_ai_review_policies_effect).
+# ============================================================================
+
+st_res_all_stabilize_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	effect = {
+		custom_tooltip = st_res_all_stabilize_sgui_effect_tt
+		hidden_effect = {
+			st_res_all_goods_stabilize_effect = yes
+		}
+	}
+}
+
+st_res_military_stockpile_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	effect = {
+		custom_tooltip = st_res_military_stockpile_sgui_effect_tt
+		hidden_effect = {
+			st_res_military_goods_stockpile_effect = yes
+		}
+	}
+}
+
+st_res_all_manual_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	effect = {
+		custom_tooltip = st_res_all_manual_sgui_effect_tt
+		hidden_effect = {
+			st_res_all_goods_manual_effect = yes
 		}
 	}
 }
