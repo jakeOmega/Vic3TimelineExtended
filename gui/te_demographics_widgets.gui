@@ -1,0 +1,2209 @@
+﻿### Demographics: the census as a tab of the Population panel
+### (docs/superpowers/specs/2026-10-08-demographics-design.md §10; plan Task 13).
+###
+### gui/pops_overview.gui, a full-file override re-merged every vanilla patch,
+### holds one instance of te_demog_tab_sections in its fifth tab (te_demog);
+### every section is a type here (gui_style_guide.md rule 9), so the state
+### panel's Demographics subtab (Task 14) composes the same pieces. In order:
+###   te_demog_overview         always shown: the census year and eight figures,
+###                             each "Label: value" with a trend arrow
+###   te_demog_sec_pyramid      open: 18 five-year bands, men left, women right,
+###                             with the outline twenty years ahead
+###   te_demog_sec_wealth       open: the Gini beside the strata's incomes, Wealth
+###                             Concentration as a bar heading for its target, the
+###                             target's five terms, the most and least
+###                             concentrated states
+###   te_demog_sec_places       open: urban share, primacy, the effective number
+###                             of cities, the pattern, the three largest cities
+###   te_demog_sec_states       open: a row per state, from te_dg_states
+###   te_demog_sec_history      open: median age, children per woman and life
+###                             expectancy by census year
+###   te_demog_sec_how          collapsed: How Demographics Works
+###
+### EDITING RULES
+### * No Scope in GUI can ask whether a variable exists, and reading a missing
+###   one logs every frame (gui_modding_guide.md gotchas #14 and #23). Every
+###   figure is read under a gate that asks script: the census
+###   (te_pops_demog_tab_unlock_sgui's IsValid, te_dg_census_year), Wealth
+###   Concentration's national figures (te_demog_wealth_ready_sgui), the outline
+###   (te_demog_outline_ready_sgui), the capital's census
+###   (te_demog_capital_census_sgui) and a stepped census for births and deaths
+###   (te_demog_stepped_sgui); common/scripted_guis/te_demog_sguis.txt. A loc key
+###   that reads a gated figure is picked by SelectLocalization on the gate, so
+###   the branch not taken is never rendered.
+### * Country figures read GetPlayer.MakeScope.Var('te_dg_x').GetValue; a state
+###   row's, State.MakeScope.Var(...). Never SCOPE.sCountry(...), which printed
+###   wrong values in the 2026-10-08 probe (scripting_best_practices.md).
+### * A trend arrow tests a te_demog_trend_* code (te_demog_display_values.txt)
+###   for identity (gotcha #23): 1 rose, -1 fell, 0 level, 2 none.
+### * A tooltip inside a datamodel row reads only that row's State (gotcha #24);
+###   a history bar's, only its ScriptContainer.
+### * Collapse flags say their default: *_closed sections start open, *_open
+###   ones collapsed (gui_style_guide.md rule 7).
+### * @panel_width constants are file-scoped in vanilla, so the sizes here are
+###   literals: 520 sections, a 480 column inside a 20 px margin (rule 8).
+
+types te_demographics_widgets
+{
+	### ======================================================================
+	### BUILDING BLOCKS (Grand Monuments' shapes, grand_monuments_widget.gui)
+	### ======================================================================
+
+	type te_demog_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		spacing = 3
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	type te_demog_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it.
+	type te_demog_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading in How Demographics Works.
+	type te_demog_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### A live line of text across the panel.
+	type te_demog_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+	}
+
+	### A figure: its label (hover the row for what it means and last year's
+	### figure), its value and a trend arrow. Fixed cells, 240 + 200 + 24 and
+	### two 8 px gaps = 480, so a long label or value cannot widen the row:
+	### "Wealth Concentration" is 20 characters, about 190 units in the medium
+	### font; "100 men per 100 women", 21, about 200.
+	type te_demog_figure_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 8
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 240 -1 }
+			maximumsize = { 240 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_value" {}
+		}
+		widget = {
+			size = { 24 22 }
+			parentanchor = vcenter
+			block "row_trend" {}
+		}
+	}
+
+	### Trend arrows. The instance sets each icon's `visible` from a
+	### te_demog_trend_* code. Three flavours, by whether the direction is good
+	### for the player (gui_style_guide.md rule 5: green good, red bad,
+	### whatever the direction):
+	###   te_demog_trend_good_up    life expectancy: rising green, falling orange
+	###   te_demog_trend_good_down  the dependency ratio: vanilla's arrows turned
+	###                             over (mirror = vertical), so a rise is an
+	###                             orange arrow pointing up
+	###   te_demog_trend_neutral    a figure whose direction is neither good nor
+	###                             bad in itself (median age, children per
+	###                             woman, sex balance, urban share): a bronze
+	###                             chevron, the politics summary's arrow, so the
+	###                             colour claims nothing
+	type te_demog_trend_good_up = widget {
+		size = { 24 22 }
+
+		icon = {
+			size = { 20 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+			block "trend_up" {}
+		}
+		icon = {
+			size = { 20 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+			block "trend_down" {}
+		}
+		icon = {
+			size = { 8 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+			block "trend_level" {}
+		}
+	}
+
+	type te_demog_trend_good_down = widget {
+		size = { 24 22 }
+
+		icon = {
+			size = { 20 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+			mirror = vertical
+			block "trend_up" {}
+		}
+		icon = {
+			size = { 20 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+			mirror = vertical
+			block "trend_down" {}
+		}
+		icon = {
+			size = { 8 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+			block "trend_level" {}
+		}
+	}
+
+	type te_demog_trend_neutral = widget {
+		size = { 24 22 }
+
+		icon = {
+			size = { 18 8 }
+			parentanchor = center
+			texture = "gfx/interface/politics_view/summary_arrow_down.dds"
+			mirror = vertical
+			block "trend_up" {}
+		}
+		icon = {
+			size = { 18 8 }
+			parentanchor = center
+			texture = "gfx/interface/politics_view/summary_arrow_down.dds"
+			block "trend_down" {}
+		}
+		icon = {
+			size = { 8 20 }
+			parentanchor = center
+			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+			block "trend_level" {}
+		}
+	}
+
+	### One five-year band of the pyramid: the men's bar growing left from the
+	### centre, the band's ages, the women's bar growing right. Fixed cells,
+	### 196 + 64 + 196 and two 12 px gaps = 480.
+	###
+	### Each bar is two layers in one 196 x 14 cell. Behind, full height and
+	### pale (the bar's own colour at 35%), the band twenty years ahead; in
+	### front, 8 px high and centred, the band now. So the pale band shows
+	### round the solid bar as far as the outline reaches, and past its end
+	### when the band will grow: where the pale stops is the band in twenty
+	### years, where the solid stops is the band today. The plain rule-5 form
+	### (solid to the lower of the two, pale to the higher) would draw a
+	### shrinking band's solid bar at its future size, and the pyramid's first
+	### job is today's shape.
+	###
+	### The men's bars are vanilla's REVERSE HACK (gui/shared/progressbars.gui,
+	### double_direction_progressbar's left half): progress and no-progress
+	### textures swapped and a range of -max .. 0, with the value negated, so
+	### the coloured part runs from the value to the right-hand end.
+	###
+	### Blocks: "band_label" (the ages), "men_now", "women_now", "men_next",
+	### "women_next" (each a `value`), "next_visible" (the outline's gate),
+	### "men_range" and "women_range" (min and max; the country's
+	### te_demog_pyramid_max by default, so a state's pyramid overrides them),
+	### and "row_tooltip".
+	type te_demog_pyramid_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 12
+		block "row_tooltip" {}
+
+		widget = {
+			size = { 196 14 }
+			parentanchor = vcenter
+
+			widget = {
+				size = { 196 14 }
+				parentanchor = vcenter
+				block "next_visible" {}
+
+				progressbar = {
+					size = { 196 14 }
+					parentanchor = vcenter
+					direction = horizontal
+					progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					noprogresstexture = "gfx/interface/backgrounds/white.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.36 0.56 0.82 0.35 }
+					block "men_range" {
+						min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') ) )]"
+						max = 0
+					}
+					block "men_next" {}
+				}
+			}
+			progressbar = {
+				size = { 196 8 }
+				parentanchor = vcenter
+				direction = horizontal
+				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				noprogresstexture = "gfx/interface/backgrounds/white.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.36 0.56 0.82 1.0 }
+				block "men_range" {
+					min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') ) )]"
+					max = 0
+				}
+				block "men_now" {}
+			}
+		}
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 64 -1 }
+			maximumsize = { 64 -1 }
+			parentanchor = vcenter
+			align = hcenter|nobaseline
+			using = fontsize_small
+			block "band_label" {}
+		}
+
+		widget = {
+			size = { 196 14 }
+			parentanchor = vcenter
+
+			widget = {
+				size = { 196 14 }
+				parentanchor = vcenter
+				block "next_visible" {}
+
+				progressbar = {
+					size = { 196 14 }
+					parentanchor = vcenter
+					direction = horizontal
+					progresstexture = "gfx/interface/backgrounds/white.dds"
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.82 0.42 0.44 0.35 }
+					block "women_range" {
+						min = 0
+						max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') )]"
+					}
+					block "women_next" {}
+				}
+			}
+			progressbar = {
+				size = { 196 8 }
+				parentanchor = vcenter
+				direction = horizontal
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.82 0.42 0.44 1.0 }
+				block "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') )]"
+				}
+				block "women_now" {}
+			}
+		}
+	}
+
+	### One term of Wealth Concentration's target as a pillar (the Colonial
+	### Empire's colonial_empire_pillar_row): its name, a bar either side of a
+	### centre line on one shared scale of -50 .. +50, so the terms compare,
+	### and its signed value. Fixed cells, 190 + 190 + 72, two 8 px gaps and
+	### the 4 px margins = 476.
+	###
+	### The bar is drawn here rather than with vanilla's double bar, whose
+	### halves are red and green: neither direction is good or bad for the
+	### player in itself (rule 5), so both halves take one neutral fill. The
+	### left half is the reverse hack, as the pyramid's men's bars are. Blocks:
+	### "term_left" (the value, clamped to 0 or below) and "term_right" (0 or
+	### above).
+	type te_demog_term_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 8
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 190 -1 }
+			maximumsize = { 190 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			elide = right
+			block "row_label" {}
+		}
+		widget = {
+			size = { 190 14 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.50 0.50 0.50 0.20 }
+			}
+			widget = {
+				size = { 95 14 }
+				parentanchor = left|vcenter
+
+				progressbar = {
+					size = { 95 14 }
+					direction = horizontal
+					progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					noprogresstexture = "gfx/interface/backgrounds/white.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.78 0.68 0.46 1.0 }
+					min = -50
+					max = 0
+					block "term_left" {}
+				}
+			}
+			widget = {
+				size = { 95 14 }
+				parentanchor = right|vcenter
+
+				progressbar = {
+					size = { 95 14 }
+					direction = horizontal
+					progresstexture = "gfx/interface/backgrounds/white.dds"
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.78 0.68 0.46 1.0 }
+					min = 0
+					max = 50
+					block "term_right" {}
+				}
+			}
+			icon = {
+				size = { 2 18 }
+				parentanchor = center
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.96 0.90 0.72 0.80 }
+			}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 72 -1 }
+			maximumsize = { 72 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			elide = right
+			block "row_value" {}
+		}
+	}
+
+	### The States table's column heads, in the small font, each with its hover.
+	### Fixed cells as te_demog_state_row's.
+	type te_demog_state_head = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 164 -1 }
+			maximumsize = { 164 -1 }
+			align = left|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_state"
+			tooltip = "te_demog_states_head_state_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 64 -1 }
+			maximumsize = { 64 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_people"
+			tooltip = "te_demog_states_head_people_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_median"
+			tooltip = "te_demog_states_head_median_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_tfr"
+			tooltip = "te_demog_states_head_tfr_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_sex"
+			tooltip = "te_demog_states_head_sex_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_gini"
+			tooltip = "te_demog_states_head_gini_tt"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			elide = right
+			text = "te_demog_states_head_wc"
+			tooltip = "te_demog_states_head_wc_tt"
+		}
+	}
+
+	### One state of te_dg_states (datacontext State). Fixed cells, 164 + 64 +
+	### 5 x 44 and six 4 px gaps = 472: the state's name shrinks to the small
+	### font before it elides ("South Atlantic Islands", 22 characters, is about
+	### 190 units in the medium font). The tooltip reads only State (gotcha #24).
+	type te_demog_state_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		tooltip = "te_demog_state_row_tt"
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 164 -1 }
+			maximumsize = { 164 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			fontsize_min = 12
+			elide = right
+			text = "[State.GetNameNoFormatting]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 64 -1 }
+			maximumsize = { 64 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_people').GetValue|D]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_median').GetValue|1]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_tfr').GetValue|1]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_sex_balance').GetValue|0]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_gini').GetValue|2]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 44 -1 }
+			maximumsize = { 44 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			text = "[State.MakeScope.Var('te_dg_wc').GetValue|0]"
+		}
+	}
+
+	### One of the three largest cities (te_dg_cities; datacontext State): the
+	### state, which counts as one city, and its urban people. Fixed cells,
+	### 300 + 176 and a 4 px gap = 480.
+	type te_demog_city_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		tooltip = "te_demog_city_row_tt"
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 300 -1 }
+			maximumsize = { 300 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			fontsize_min = 12
+			elide = right
+			text = "[State.GetNameNoFormatting]"
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 176 -1 }
+			maximumsize = { 176 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			elide = right
+			text = "te_demog_city_row_value"
+		}
+	}
+
+	### A cell of the Wealth section's first row: a small heading over a figure.
+	### 120 wide for the Gini, 112 for each stratum's income: 120 + 3 x 112 and
+	### three 8 px gaps = 480.
+	type te_demog_wealth_cell = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "cell_size" {
+			minimumsize = { 112 -1 }
+			maximumsize = { 112 -1 }
+		}
+
+		textbox = {
+			autoresize = yes
+			parentanchor = hcenter
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "cell_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			parentanchor = hcenter
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			block "cell_value" {}
+		}
+	}
+
+	### ======================================================================
+	### SECTIONS
+	### ======================================================================
+
+	### The overview: always shown, no header (rule 1). The census year, then
+	### the eight figures, each with its trend against last year's. The Gini has
+	### no arrow (the census keeps no last year's Gini); Wealth Concentration's
+	### value says where it is heading instead ("62 → 68", rule 5). The Gini and
+	### the urban pattern pick their loc by gate, so a figure not yet written
+	### is never read.
+	type te_demog_overview = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_demog_panel = {
+			te_demog_text = {
+				default_format = "#tooltippable"
+				text = "te_demog_ov_census"
+				tooltip = "te_demog_ov_census_tt"
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_median_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_median"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_median_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_tfr_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_tfr"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_tfr_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_e0_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_e0"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_e0_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_good_up = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_dependency_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_dependency"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_dependency_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_good_down = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_sex_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_sex"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_sex_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_gini_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_gini"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GetScriptedGui('te_demog_wealth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_gini_value', 'te_demog_ov_pending' )]"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_wc_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_wc"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_wc_value"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_pattern_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_pattern"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_pattern_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### The population pyramid: 18 five-year bands, 85 and over at the top, men
+	### left and women right, all on one scale (te_demog_pyramid_max, the largest
+	### band now or in the outline). The outline twenty years ahead shows while
+	### the player's country has one (te_demog_outline_ready_sgui).
+	type te_demog_sec_pyramid = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_pyramid"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_pyr_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_pyr_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_pyr_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_pyr_closed'))]"
+
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 12
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 196 -1 }
+					maximumsize = { 196 -1 }
+					align = right|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_men"
+				}
+				textbox = {
+					autoresize = yes
+					minimumsize = { 64 -1 }
+					maximumsize = { 64 -1 }
+					align = hcenter|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_age"
+				}
+				textbox = {
+					autoresize = yes
+					minimumsize = { 196 -1 }
+					maximumsize = { 196 -1 }
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_women"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_17', 'te_demog_pyr_tt_now_17' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "85+"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm17').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf17').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm17').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf17').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_16', 'te_demog_pyr_tt_now_16' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "80–84"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm16').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf16').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm16').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf16').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_15', 'te_demog_pyr_tt_now_15' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "75–79"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm15').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf15').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm15').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf15').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_14', 'te_demog_pyr_tt_now_14' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "70–74"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm14').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf14').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm14').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf14').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_13', 'te_demog_pyr_tt_now_13' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "65–69"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm13').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf13').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm13').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf13').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_12', 'te_demog_pyr_tt_now_12' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "60–64"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm12').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf12').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm12').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf12').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_11', 'te_demog_pyr_tt_now_11' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "55–59"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm11').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf11').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm11').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf11').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_10', 'te_demog_pyr_tt_now_10' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "50–54"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm10').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf10').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm10').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf10').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_9', 'te_demog_pyr_tt_now_9' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "45–49"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm9').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf9').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm9').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf9').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_8', 'te_demog_pyr_tt_now_8' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "40–44"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm8').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf8').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm8').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf8').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_7', 'te_demog_pyr_tt_now_7' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "35–39"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm7').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf7').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm7').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf7').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_6', 'te_demog_pyr_tt_now_6' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "30–34"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm6').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf6').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm6').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf6').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_5', 'te_demog_pyr_tt_now_5' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "25–29"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm5').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf5').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm5').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf5').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_4', 'te_demog_pyr_tt_now_4' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "20–24"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm4').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf4').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm4').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf4').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_3', 'te_demog_pyr_tt_now_3' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "15–19"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm3').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf3').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm3').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf3').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_2', 'te_demog_pyr_tt_now_2' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "10–14"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm2').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf2').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm2').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf2').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_1', 'te_demog_pyr_tt_now_1' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "5–9"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm1').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf1').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm1').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf1').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_pyr_tt_0', 'te_demog_pyr_tt_now_0' )]"
+				}
+				blockoverride "band_label" {
+					raw_text = "0–4"
+				}
+				blockoverride "next_visible" {
+					visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbm0').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_cbf0').GetValue )]"
+				}
+				blockoverride "men_next" {
+					value = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjm0').GetValue ) )]"
+				}
+				blockoverride "women_next" {
+					value = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pjf0').GetValue )]"
+				}
+			}
+			te_demog_note = {
+				visible = "[GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				text = "te_demog_pyr_legend"
+			}
+			te_demog_note = {
+				visible = "[Not( GetScriptedGui('te_demog_outline_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_pyr_legend_now"
+			}
+		}
+	}
+
+	### Wealth: the Gini beside the strata's average incomes (vanilla's own
+	### figures and hovers), Wealth Concentration as a bar heading for its
+	### target, the target's five terms as pillars, and the most and least
+	### concentrated states. Wealth Concentration's national figures exist once
+	### a state has a score (te_demog_wealth_ready_sgui); until then one line.
+	type te_demog_sec_wealth = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_wealth"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_wealth_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_wealth_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_wealth_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_wealth_closed'))]"
+
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_wealth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_wealth_pending"
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_demog_wealth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 8
+
+					te_demog_wealth_cell = {
+						tooltip = "te_demog_gini_tt"
+						blockoverride "cell_size" {
+							minimumsize = { 120 -1 }
+							maximumsize = { 120 -1 }
+						}
+						blockoverride "cell_label" {
+							text = "te_demog_gini_label"
+						}
+						blockoverride "cell_value" {
+							text = "te_demog_gini_value"
+						}
+					}
+					te_demog_wealth_cell = {
+						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL_TOOLTIP"
+						blockoverride "cell_label" {
+							text = "LOWER_NO_ICON"
+						}
+						blockoverride "cell_value" {
+							text = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL"
+						}
+					}
+					te_demog_wealth_cell = {
+						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL_TOOLTIP"
+						blockoverride "cell_label" {
+							text = "MIDDLE_NO_ICON"
+						}
+						blockoverride "cell_value" {
+							text = "POPS_OVERVIEW_AVERAGE_INCOME_MIDDLE_LABEL"
+						}
+					}
+					te_demog_wealth_cell = {
+						tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL_TOOLTIP"
+						blockoverride "cell_label" {
+							text = "UPPER_NO_ICON"
+						}
+						blockoverride "cell_value" {
+							text = "POPS_OVERVIEW_AVERAGE_INCOME_UPPER_LABEL"
+						}
+					}
+				}
+
+				te_demog_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_demog_wc_head"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_ov_wc_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_now"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_ov_wc_value"
+					}
+				}
+
+				### Wealth Concentration on its 0-100 scale, heading for its target
+				### (rule 5), in Global Warming's temperature-bar layers: the bar's
+				### background and frame; a pale segment of the bar's own fill to the
+				### higher of score and target (neither direction is good or bad for
+				### the player in itself); the solid fill to the lower; and a thin line
+				### at 50, where #822's modifiers change sides, with its own hover.
+				widget = {
+					size = { 480 18 }
+					tooltip = "te_demog_wc_bar_tt"
+
+					default_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "values" {
+							value = 0
+							min = 0
+							max = 1
+						}
+					}
+					widget = {
+						size = { 100% 100% }
+						alpha = 0.4
+
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+								min = 0
+								max = 100
+							}
+						}
+					}
+					default_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "background" {}
+						blockoverride "frame" {}
+						blockoverride "values" {
+							value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+							min = 0
+							max = 100
+						}
+					}
+					icon = {
+						size = { 3 24 }
+						parentanchor = center
+						texture = "gfx/interface/backgrounds/white.dds"
+						color = { 0.96 0.90 0.72 0.95 }
+						tooltip = "te_demog_wc_line_tt"
+					}
+				}
+
+				te_demog_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_demog_wc_terms_head"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_law_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_law"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_land_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_land"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_land').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_land').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_land').GetValue|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_own_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_own"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_own').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_own').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_own').GetValue|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_ineq_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_ineq"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_ineq').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_ineq').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_ineq').GetValue|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_tax_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_tax"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue|+0]"
+					}
+				}
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_wc_top_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_top"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_wc_top_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_wc_bottom_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_bottom"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_wc_bottom_value"
+					}
+				}
+			}
+		}
+	}
+
+	### Where people live: the national urban pattern (spec §5.1), then the
+	### three largest cities, a state each, by the game's city ranking.
+	type te_demog_sec_places = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_places"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_places_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_places_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_places_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_places_closed'))]"
+
+			te_demog_figure_row = {
+				tooltip = "te_demog_pl_urban_tt"
+				blockoverride "row_label" {
+					text = "te_demog_pl_urban"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_pl_urban_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_pl_primacy_tt"
+				blockoverride "row_label" {
+					text = "te_demog_pl_primacy"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_pl_primacy_value"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_pl_cities_tt"
+				blockoverride "row_label" {
+					text = "te_demog_pl_cities"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_pl_cities_value"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_pattern_tt"
+				blockoverride "row_label" {
+					text = "te_demog_pl_pattern"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_pl_pattern_value"
+				}
+			}
+
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_cities_head"
+				}
+			}
+			te_demog_text = {
+				visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_cities') )]"
+				text = "te_demog_cities_none"
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[GetPlayer.MakeScope.GetList('te_dg_cities')]"
+
+				item = {
+					te_demog_city_row = {
+						datacontext = "[Scope.GetState]"
+					}
+				}
+			}
+		}
+	}
+
+	### States: a row per state of te_dg_states (the largest 40 by people,
+	### stored in that order by the census; a datamodel draws a list in its
+	### stored order), the Grand Monuments row form.
+	type te_demog_sec_states = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_states"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_states_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_states_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_states_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_states_closed'))]"
+
+			te_demog_state_head = {}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				datamodel = "[GetPlayer.MakeScope.GetList('te_dg_states')]"
+
+				item = {
+					te_demog_state_row = {
+						datacontext = "[Scope.GetState]"
+					}
+				}
+			}
+		}
+	}
+
+	### History: one bar a census year from te_dg_hist (Task 12; the player's
+	### country is always tracked), three charts on one range: 5, 20 or 100
+	### years (te_demog_hist_range; unset shows every sample, up to 100). Each
+	### chart is a te_history_chart instance with its plot blocks overridden on
+	### the instance (gotcha #37), as Cultural Hegemony's annual chart does:
+	### 5 / 20 / 100 years at 80 / 20 / 4 px are 400 px of bars, in a frame of
+	### 48 px for the axis labels + 400 + the plots' 8 px right margin. A
+	### sample that lacks a figure draws an empty slot, not a zero.
+	type te_demog_sec_history = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_history"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_hist_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_hist_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_hist_closed'))]"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_hist_closed'))]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				spacing = 4
+				margin = { 4 4 }
+
+				te_history_range_button = {
+					size = { 96 26 }
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue('te_demog_hist_range', '5'))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set('te_demog_hist_range', '5')]"
+					}
+				}
+				te_history_range_button = {
+					size = { 96 26 }
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue('te_demog_hist_range', '20'))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set('te_demog_hist_range', '20')]"
+					}
+				}
+				te_history_range_button = {
+					size = { 96 26 }
+					blockoverride "range_text" {
+						text = "te_demog_hist_range_100y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or(GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20'))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set('te_demog_hist_range', '100')]"
+					}
+				}
+			}
+
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_demog_hist_median_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_demog_hist_median_legend"
+				}
+				blockoverride "sample_datamodel" {
+					datamodel = "[GetPlayer.MakeScope.GetList('te_dg_hist')]"
+				}
+				blockoverride "sample_visible" {
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+				}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_demog_hist_median_tt"
+				}
+				blockoverride "marker_pips" {} # the census has no policy or crash markers
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable('te_dg_h_median')]"
+						blockoverride "values" {
+							min = 0
+							max = 60
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)1.2', ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 60
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), '(CFixedPoint)2.4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.55 0.62 0.78 1.0 }
+						}
+					}
+				}
+				blockoverride "plot_size" {
+					size = { 456 96 }
+				}
+				blockoverride "plot_layouts" {
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+						blockoverride "bar_size" {
+							size = { 80 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+						blockoverride "bar_size" {
+							size = { 20 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+						blockoverride "bar_size" {
+							size = { 4 84 }
+						}
+					}
+					textbox = {
+						parentanchor = left|top
+						position = { 8 6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "60"
+					}
+					textbox = {
+						parentanchor = left|bottom
+						position = { 8 -6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "0"
+					}
+				}
+				blockoverride "empty_visible" {
+					visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_hist') )]"
+				}
+				blockoverride "empty_text" {
+					text = "te_demog_hist_empty"
+				}
+			}
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_demog_hist_tfr_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_demog_hist_tfr_legend"
+				}
+				blockoverride "sample_datamodel" {
+					datamodel = "[GetPlayer.MakeScope.GetList('te_dg_hist')]"
+				}
+				blockoverride "sample_visible" {
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+				}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_demog_hist_tfr_tt"
+				}
+				blockoverride "marker_pips" {} # the census has no policy or crash markers
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable('te_dg_h_tfr')]"
+						blockoverride "values" {
+							min = 0
+							max = 8
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.16', ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 8
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), '(CFixedPoint)0.32' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.82 0.52 0.48 1.0 }
+						}
+					}
+				}
+				blockoverride "plot_size" {
+					size = { 456 96 }
+				}
+				blockoverride "plot_layouts" {
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+						blockoverride "bar_size" {
+							size = { 80 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+						blockoverride "bar_size" {
+							size = { 20 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+						blockoverride "bar_size" {
+							size = { 4 84 }
+						}
+					}
+					textbox = {
+						parentanchor = left|top
+						position = { 8 6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "8"
+					}
+					textbox = {
+						parentanchor = left|bottom
+						position = { 8 -6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "0"
+					}
+				}
+				blockoverride "empty_visible" {
+					visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_hist') )]"
+				}
+				blockoverride "empty_text" {
+					text = "te_demog_hist_empty"
+				}
+			}
+			te_history_chart = {
+				blockoverride "chart_title" {
+					text = "te_demog_hist_e0_title"
+				}
+				blockoverride "chart_legend" {
+					text = "te_demog_hist_e0_legend"
+				}
+				blockoverride "sample_datamodel" {
+					datamodel = "[GetPlayer.MakeScope.GetList('te_dg_hist')]"
+				}
+				blockoverride "sample_visible" {
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+				}
+				blockoverride "bar_tooltip" {
+					tooltip = "te_demog_hist_e0_tt"
+				}
+				blockoverride "marker_pips" {} # the census has no policy or crash markers
+				blockoverride "bar_body" {
+					te_history_bar_unsigned = {
+						visible = "[ScriptContainer.HasVariable('te_dg_h_e0')]"
+						blockoverride "values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue('te_dg_h_e0') ) )]"
+						}
+						blockoverride "cover_values" {
+							min = 0
+							max = 100
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)4' ) ) )]"
+						}
+						blockoverride "color" {
+							color = { 0.42 0.70 0.48 1.0 }
+						}
+					}
+				}
+				blockoverride "plot_size" {
+					size = { 456 96 }
+				}
+				blockoverride "plot_layouts" {
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+						blockoverride "bar_size" {
+							size = { 80 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+						blockoverride "bar_size" {
+							size = { 20 84 }
+						}
+					}
+					te_history_plot = {
+						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+						blockoverride "bar_size" {
+							size = { 4 84 }
+						}
+					}
+					textbox = {
+						parentanchor = left|top
+						position = { 8 6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "100"
+					}
+					textbox = {
+						parentanchor = left|bottom
+						position = { 8 -6 }
+						autoresize = yes
+						using = fontsize_small
+						raw_text = "0"
+					}
+				}
+				blockoverride "empty_visible" {
+					visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_hist') )]"
+				}
+				blockoverride "empty_text" {
+					text = "te_demog_hist_empty"
+				}
+			}
+		}
+	}
+
+	### How Demographics Works: every explanation, collapsed by default, one
+	### heading per topic (rule 1).
+	type te_demog_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_how"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_demog_how_open')]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[GetVariableSystem.Exists('te_demog_how_open')]"
+
+			te_demog_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_census"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_census"
+			}
+			te_demog_note = {
+				text = "te_demog_how_applied"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_fertility"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_fertility"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_mortality"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_mortality"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_outline"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_outline"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_migration"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_migration"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_wealth"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_gini"
+			}
+			te_demog_note = {
+				text = "te_demog_how_wc"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_places"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_places"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_sources"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_sources"
+			}
+		}
+	}
+
+	### ======================================================================
+	### THE TAB
+	### ======================================================================
+
+	### The sections in their one order; gui/pops_overview.gui instances this
+	### once. A fixed 520 width (rule 8). Until the country's first census
+	### (te_pops_demog_tab_unlock_sgui's is_valid) one line says when it comes:
+	### the tab is greyed then, but a panel reopened on it still shows the
+	### line. The system has no journal entry, so there is no Open Journal
+	### Entry button (rule 9).
+	type te_demog_tab_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 10
+		minimumsize = { 520 -1 }
+		maximumsize = { 520 -1 }
+
+		te_demog_panel = {
+			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+
+			te_demog_text = {
+				text = "te_demog_pending"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 10
+
+			te_demog_overview = {}
+			te_demog_sec_pyramid = {}
+			te_demog_sec_wealth = {}
+			te_demog_sec_places = {}
+			te_demog_sec_states = {}
+			te_demog_sec_history = {}
+		}
+
+		te_demog_sec_how = {}
+	}
+}

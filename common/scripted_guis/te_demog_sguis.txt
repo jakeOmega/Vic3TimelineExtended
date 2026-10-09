@@ -1,0 +1,62 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — display gates for the Population panel's Demographics tab
+# (gui/te_demographics_widgets.gui; plan Task 13)
+# ============================================================================
+# A .gui read of a variable that does not exist logs "Failed to fetch variable"
+# every frame (gui_modding_guide.md gotchas #14 and #23), and no Scope in GUI
+# can ask whether a variable exists. So each family of figures the census
+# writes together is shown only under a gate that asks script. The tab's own
+# pair (te_system_tab_sguis.txt) covers the census: te_pops_demog_tab_unlock_sgui
+# is valid once te_dg_census_year exists, and every figure, band, list and
+# label the country census writes exists with it. These cover the rest. Each
+# reads only its root, the player's country (is_shown only: none changes
+# anything, so none is valid or does anything).
+# ============================================================================
+
+# Wealth Concentration's national figures and the country's Gini: written
+# together by te_demog_wc_national once a state has a score (te_dg_wc_target,
+# te_dg_wc_t_*, te_dg_gini, te_dg_wc_top, te_dg_wc_bottom). A game-start census
+# can come before them.
+te_demog_wealth_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_wc_target }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>): written for the
+# player's country at its census (te_demog_project), so it is missing for a
+# country the player took over since its last census.
+te_demog_outline_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_pjf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The capital's own census, for the tooltips that break children per woman
+# and life expectancy into their terms from the capital's figures.
+te_demog_capital_census_sgui = {
+	scope = country
+	is_shown = {
+		capital ?= { te_demog_has_census = yes }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Births and deaths per 1,000 people are real only when the figures came from
+# a step: a seed writes no births or deaths (te_dg_stepped, te_demog_set_trend).
+te_demog_stepped_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_stepped
+		var:te_dg_stepped > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

@@ -1,0 +1,218 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — display values for the Population panel's Demographics tab
+# (gui/te_demographics_widgets.gui; plan Task 13). Read-only: nothing here is
+# stored, and the census never reads them.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Trend arrows. Each is 1 (rose), -1 (fell) or 0 (level) for a figure against
+# last year's (te_dg_prev_<name>), and 2 (no arrow) unless te_dg_trend_ok says
+# both years came from a step: a seed's figures are no year to compare with
+# (te_demog_set_trend). The change divided by the step below, clamped and
+# rounded, so a change of under half a step reads level. The panel tests the
+# code for identity (gui_modding_guide.md gotcha #23). A state and a country
+# keep the same names, so these work in either scope.
+# ----------------------------------------------------------------------------
+
+# Median age: a step of 0.1 years.
+te_demog_trend_median = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_median
+			has_variable = te_dg_prev_median
+		}
+		value = var:te_dg_median
+		subtract = var:te_dg_prev_median
+		divide = 0.1
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# Children per woman: a step of 0.02.
+te_demog_trend_tfr = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_tfr
+			has_variable = te_dg_prev_tfr
+		}
+		value = var:te_dg_tfr
+		subtract = var:te_dg_prev_tfr
+		divide = 0.02
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# Life expectancy at birth: a step of 0.1 years.
+te_demog_trend_e0 = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_e0
+			has_variable = te_dg_prev_e0
+		}
+		value = var:te_dg_e0
+		subtract = var:te_dg_prev_e0
+		divide = 0.1
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# Dependency ratio (dependants per person of working age): a step of 0.004.
+te_demog_trend_dependency = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_dependency
+			has_variable = te_dg_prev_dependency
+		}
+		value = var:te_dg_dependency
+		subtract = var:te_dg_prev_dependency
+		divide = 0.004
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# Sex balance (men per 100 women aged 20-59): a step of 0.2.
+te_demog_trend_sex_balance = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_sex_balance
+			has_variable = te_dg_prev_sex_balance
+		}
+		value = var:te_dg_sex_balance
+		subtract = var:te_dg_prev_sex_balance
+		divide = 0.2
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# Urban share (the urban pattern's line; a country only): a step of 0.002.
+te_demog_trend_urban_share = {
+	value = 2
+	if = {
+		limit = {
+			has_variable = te_dg_trend_ok
+			var:te_dg_trend_ok > 0
+			has_variable = te_dg_urban_share
+			has_variable = te_dg_prev_urban_share
+		}
+		value = var:te_dg_urban_share
+		subtract = var:te_dg_prev_urban_share
+		divide = 0.002
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The population pyramid's scale. Country scope: the largest of the census's 36
+# bands (te_dg_cbf<b>, te_dg_cbm<b>) and, while the player has one, the 36 of
+# the outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>), so both share
+# one scale and neither runs off the bar. At least 1, so a bar never has an
+# empty range. `min` floors the running value: a running maximum.
+# ----------------------------------------------------------------------------
+te_demog_pyramid_max = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_census_year }
+		min = var:te_dg_cbf0
+		min = var:te_dg_cbm0
+		min = var:te_dg_cbf1
+		min = var:te_dg_cbm1
+		min = var:te_dg_cbf2
+		min = var:te_dg_cbm2
+		min = var:te_dg_cbf3
+		min = var:te_dg_cbm3
+		min = var:te_dg_cbf4
+		min = var:te_dg_cbm4
+		min = var:te_dg_cbf5
+		min = var:te_dg_cbm5
+		min = var:te_dg_cbf6
+		min = var:te_dg_cbm6
+		min = var:te_dg_cbf7
+		min = var:te_dg_cbm7
+		min = var:te_dg_cbf8
+		min = var:te_dg_cbm8
+		min = var:te_dg_cbf9
+		min = var:te_dg_cbm9
+		min = var:te_dg_cbf10
+		min = var:te_dg_cbm10
+		min = var:te_dg_cbf11
+		min = var:te_dg_cbm11
+		min = var:te_dg_cbf12
+		min = var:te_dg_cbm12
+		min = var:te_dg_cbf13
+		min = var:te_dg_cbm13
+		min = var:te_dg_cbf14
+		min = var:te_dg_cbm14
+		min = var:te_dg_cbf15
+		min = var:te_dg_cbm15
+		min = var:te_dg_cbf16
+		min = var:te_dg_cbm16
+		min = var:te_dg_cbf17
+		min = var:te_dg_cbm17
+	}
+	if = {
+		limit = { has_variable = te_dg_pjf0 }
+		min = var:te_dg_pjf0
+		min = var:te_dg_pjm0
+		min = var:te_dg_pjf1
+		min = var:te_dg_pjm1
+		min = var:te_dg_pjf2
+		min = var:te_dg_pjm2
+		min = var:te_dg_pjf3
+		min = var:te_dg_pjm3
+		min = var:te_dg_pjf4
+		min = var:te_dg_pjm4
+		min = var:te_dg_pjf5
+		min = var:te_dg_pjm5
+		min = var:te_dg_pjf6
+		min = var:te_dg_pjm6
+		min = var:te_dg_pjf7
+		min = var:te_dg_pjm7
+		min = var:te_dg_pjf8
+		min = var:te_dg_pjm8
+		min = var:te_dg_pjf9
+		min = var:te_dg_pjm9
+		min = var:te_dg_pjf10
+		min = var:te_dg_pjm10
+		min = var:te_dg_pjf11
+		min = var:te_dg_pjm11
+		min = var:te_dg_pjf12
+		min = var:te_dg_pjm12
+		min = var:te_dg_pjf13
+		min = var:te_dg_pjm13
+		min = var:te_dg_pjf14
+		min = var:te_dg_pjm14
+		min = var:te_dg_pjf15
+		min = var:te_dg_pjm15
+		min = var:te_dg_pjf16
+		min = var:te_dg_pjm16
+		min = var:te_dg_pjf17
+		min = var:te_dg_pjm17
+	}
+}

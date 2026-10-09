@@ -58,28 +58,40 @@ te_demog_open_slot = {
 # education x child survival x urban life. Reads this year's e0 (te_demog_life_table).
 te_demog_desired = {
 	value = 1
-	multiply = {
-		value = var:te_dg_lit
-		multiply = te_demog_k_education_weight
-		multiply = -1
-		add = 1
-	}
-	multiply = {
-		value = var:te_dg_e0
-		subtract = 30
-		divide = 50
-		min = 0
-		max = 1
-		multiply = te_demog_k_survival_weight
-		multiply = -1
-		add = 1
-	}
-	multiply = {
-		value = var:te_dg_urban_share
-		multiply = te_demog_k_urban_weight
-		multiply = -1
-		add = 1
-	}
+	multiply = te_demog_tfr_education
+	multiply = te_demog_tfr_survival
+	multiply = te_demog_tfr_urban
+}
+
+# State scope: desired fertility's three factors, each 1 at its reference and lower as
+# the input grows. Named so the Demographics panel's children-per-woman tooltip shows
+# the capital's (gui/te_demographics_widgets.gui) from the census's own formula.
+# Literacy:
+te_demog_tfr_education = {
+	value = var:te_dg_lit
+	multiply = te_demog_k_education_weight
+	multiply = -1
+	add = 1
+}
+
+# Child survival, from life expectancy at birth between 30 and 80:
+te_demog_tfr_survival = {
+	value = var:te_dg_e0
+	subtract = 30
+	divide = 50
+	min = 0
+	max = 1
+	multiply = te_demog_k_survival_weight
+	multiply = -1
+	add = 1
+}
+
+# Urban life, from the state's urban share:
+te_demog_tfr_urban = {
+	value = var:te_dg_urban_share
+	multiply = te_demog_k_urban_weight
+	multiply = -1
+	add = 1
 }
 
 # State scope: children per woman = wealth x (1 - means x (1 - desired)) (spec §2.3;

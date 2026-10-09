@@ -262,6 +262,37 @@ te_market_strategic_reserve_tab_unlock_sgui = {
 	is_valid = { st_res_entry_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Demographics: Population panel (gui/pops_overview.gui, the fifth slot). The
+# system has no journal entry: the tab is on the strip whenever the rule runs
+# the census, and opens once the country has taken one (te_dg_census_year,
+# written by te_demog_country_census at game start and every 31 December), so
+# the census plays the entry's part. te_pops_demog_tab_sgui is the rule alone
+# (the state panel's Demographics subtab reads it too); the unlock gate's
+# is_valid is the census, and the tab's sections show only while it passes
+# (the census-pending note otherwise). Both read only the root.
+# ---------------------------------------------------------------------------
+te_pops_demog_tab_sgui = {
+	scope = country
+	is_shown = { te_demog_cohorts_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_pops_demog_tab_unlock_sgui = {
+	scope = country
+	is_shown = { te_demog_cohorts_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_demog_tab_first_census_tt
+			has_variable = te_dg_census_year
+		}
+	}
+	effect = { }
+}
 # The Timeline Extended window (gui/te_systems_window.gui) uses the same pair
 # per tab, named te_window_<system>_tab_sgui / _tab_unlock_sgui, plus a gate for
 # its launcher and one per Space Race entry (at the foot of this file).
