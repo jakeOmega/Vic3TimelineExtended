@@ -86,6 +86,9 @@ class TestMortality(unittest.TestCase):
         self.assertTrue(10 <= t["e65"] <= 14, t)
 
     def test_rich_country_today(self):
+        # §2.4's anchor is an infant mortality under 5 per 1,000; the starting parameters give
+        # about 10 (10.2 for WEST_1990), so this pins the bound they meet. Meeting the anchor is
+        # calibration's job (the plan's 'After this plan').
         t = self.table(WEST_1990)
         self.assertLess(t["q0_per_1000"], 15)
         self.assertTrue(72 <= t["e0"] <= 80, t)
@@ -249,6 +252,30 @@ class TestRing(unittest.TestCase):
         gained = {a: (r[1] + r[2]) - (t[1] + t[2]) for r, t in zip(ring.by_age(), twin.by_age()) for a in [r[0]]}
         prime = sum(v for a, v in gained.items() if 18 <= a <= 35)
         self.assertGreater(prime / 20_000, 0.5)
+
+
+class TestGrowthFactor(unittest.TestCase):
+    """d = NRR^(-1/29): the generated script's table spans NRR 0.2 to 4.0 and clamps there."""
+
+    def test_zero_nrr_is_clamped_to_the_table(self):
+        self.assertEqual(M.growth_factor(0), M.growth_factor(0.2))
+        self.assertEqual(M.growth_factor(-1), M.growth_factor(0.2))
+
+    def test_large_nrr_is_clamped_to_the_table(self):
+        self.assertEqual(M.growth_factor(10), M.growth_factor(4.0))
+
+    def test_inside_the_table_it_is_the_power(self):
+        self.assertAlmostEqual(M.growth_factor(1.0), 1.0)
+        self.assertAlmostEqual(M.growth_factor(2.0), 2.0 ** (-1 / 29))
+
+
+class TestMigrantProfile(unittest.TestCase):
+    def test_each_kinds_weights_sum_to_one(self):
+        # migrant_profile combines the three kinds' weights without normalising them.
+        for kind, spec in P.MIGRANT_PROFILE.items():
+            with self.subTest(kind):
+                self.assertEqual(len(spec["weights"]), len(P.MIGRANT_CLASSES))
+                self.assertAlmostEqual(sum(spec["weights"]), 1.0)
 
 
 class TestInequality(unittest.TestCase):

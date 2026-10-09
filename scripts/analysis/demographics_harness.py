@@ -9,9 +9,10 @@ Usage:
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
 
-SAVE is a plain-text save (debug mode). The model is demographics_model.py with
-demographics_params.py; the generator writes the script from the same two files, so a
-parameter tuned here reaches the game by `python3 scripts/generators/gen_demographics.py`.
+SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
+The model is demographics_model.py with demographics_params.py; the generator writes the
+script from the same two files, so a parameter tuned here reaches the game by
+`python3 scripts/generators/gen_demographics.py`.
 
 Calibration to world history (§2.3's targets) is not here yet: it needs an observer
 run's yearly saves and belongs to phase 2's plan.
@@ -56,9 +57,13 @@ def income_proxy(wealth, costs):
 
 
 def inputs_for(c):
-    """Model inputs for a save's country (no institutions: the reader doesn't read them)."""
+    """Model inputs for a save's country.
+
+    No institutions or modifiers: the reader doesn't read them. The wealth term is the
+    pop-weighted curve, as the game computes it, not the curve at the mean SoL.
+    """
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share,
-                    techs=frozenset(c.techs), laws=frozenset(c.laws))
+                    techs=frozenset(c.techs), laws=frozenset(c.laws), wealth_tfr=c.wealth_tfr)
 
 
 def cmd_sketch(_args):
@@ -93,9 +98,17 @@ def cmd_gini(args):
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
     tags = args.tag or sorted(inputs, key=lambda t: -inputs[t].population)[:15]
-    grouped = {t: M.grouped_gini(country_groups(sections, t, costs)) for t in set(tags) | {args.anchor_tag}}
+    groups = {t: country_groups(sections, t, costs) for t in set(tags) | {args.anchor_tag}}
+    if not groups[args.anchor_tag]:
+        print(f"no pops for anchor tag {args.anchor_tag} in {args.save}", file=sys.stderr)
+        return 1
+    grouped = {t: M.grouped_gini(g) for t, g in groups.items()}
     anchor = grouped[args.anchor_tag]
-    scale = (args.anchor - P.GINI_FLOOR) / anchor if anchor else 0.0
+    if anchor <= 0:
+        print(f"anchor tag {args.anchor_tag} has a grouped Gini of 0 (one stratum or equal incomes): "
+              "no scale reaches the anchor", file=sys.stderr)
+        return 1
+    scale = (args.anchor - P.GINI_FLOOR) / anchor
     print(f"GINI_SCALE for {args.anchor_tag} = {args.anchor}: {scale:.2f} (params: {P.GINI_SCALE})")
     for t in tags:
         shown = M.clamp(P.GINI_FLOOR + scale * grouped[t], 0, 0.9)
@@ -145,6 +158,9 @@ def cmd_natural_change(args):
 
 
 _REPLAY = re.compile(r"TE_DEMOG_REPLAY (\w+) (.*)$")
+DEFAULT_TOLERANCE = 0.001   # a fraction of the slot; a correct step's noise measured 0.01% at 2 million people
+PRINT_STEP = 1e-5           # per mille: _fmt prints each slot to five decimals
+BEFORE_SUM_TOLERANCE = 0.01  # the before-state's slots and pool must sum to 1000 per mille within this
 HEAD_PEOPLE = ("pop_last", "pop", "war", "kills", "mig")
 HEAD_RATES = ("tfr", "mmr", "m_inf", "m_ext", "m_chr", "m_work_f", "m_work_m")
 
@@ -242,7 +258,10 @@ def check_block(b):
 
     A complete block has every head field, all RING_YEARS slots of each sex in both `before`
     and `after`, and the pool (slot-0 line) in both. replay_block compares only the slots it
-    is given, so without this a log cut short would pass.
+    is given, so without this a log cut short would pass. A complete block's before-state
+    (both sexes' slots plus the pool) must also sum to 1000 per mille within
+    BEFORE_SUM_TOLERANCE: replay_block scales whatever it is given to the state's population,
+    so a before-state that is short of 1000 would otherwise replay as if it were whole.
     """
     if b.get("errors"):
         return "malformed: " + b["errors"][0]
@@ -272,11 +291,25 @@ def check_block(b):
                 gaps.append(f"{when} {who} {len(slots)} of {P.RING_YEARS} slots")
         if "pool" not in b[when]:
             gaps.append(f"{when} pool missing")
-    return "incomplete: " + "; ".join(gaps) if gaps else None
+    if gaps:
+        return "incomplete: " + "; ".join(gaps)
+    total = sum(sum(b["before"][sex].values()) for sex in ("f", "m")) + b["before"]["pool"][0] + b["before"]["pool"][1]
+    if abs(total - 1000.0) > 1000.0 * BEFORE_SUM_TOLERANCE:
+        return f"malformed: before-state sums to {total:.0f}\u2030"
+    return None
 
 
 def replay_block(b):
-    """Step the model from a logged before-state; the worst relative error over slots above 0.05 per mille."""
+    """Step the model from a logged before-state; the worst relative error over the slots that hold a person.
+
+    A slot is compared when either side holds at least one person (its per mille times the
+    state's people after the step). The game drops a cohort under half a person, so a smaller
+    one reads 0 on one side and a few thousandths on the other, which a per-mille cutoff
+    would compare as 100% off in a state of a few thousand people. The log prints each slot to
+    PRINT_STEP per mille and the before-state arrives rounded the same way, so a difference up
+    to one PRINT_STEP is the log's resolution and is not counted: without that, a correct step
+    shows 0.5% at a slot of 1.5 people in a 2-million-person state.
+    """
     h = b["head"]
     year = int(h["year"])
     pop_last = _ungroup(h["pop_last"])
@@ -297,15 +330,32 @@ def replay_block(b):
            kills=_ungroup(h["kills"]), migration=_ungroup(h["mig"]),
            rates=(qf, qm, float(h["mmr"]), float(h["tfr"]), prof))
     mine_f, mine_m, _pool = _per_mille(ring)
+    people_per_mille = ring.people() / 1000.0
     worst = 0.0
     for sex, mine in (("f", mine_f), ("m", mine_m)):
         for k, logged in b["after"][sex].items():
-            if max(mine[k], logged) > 0.05:
-                worst = max(worst, abs(mine[k] - logged) / max(mine[k], logged))
+            big = max(mine[k], logged)
+            if big * people_per_mille < 1.0:
+                continue
+            worst = max(worst, max(0.0, abs(mine[k] - logged) - PRINT_STEP) / big)
     return worst
 
 
 def cmd_replay(args):
+    """Step the model from each logged before-state and compare it with the logged after-state.
+
+    Exit 1 if any block is malformed or incomplete (a missing line, a before-state that does not
+    sum to 1000 per mille) or has a slot off by more than --tolerance, a fraction of that slot
+    (default DEFAULT_TOLERANCE, 0.1%: a correct step measured 0.01% at a 2-million-person state,
+    a step without maternal deaths 0.16%).
+
+    What stays below detection: the order of deaths and flows within the step (the pre-/post-death
+    ordering), and flows under about 1% of the cohorts they touch, move a slot by less than the
+    tolerance. The script's registry tests are the check on those lines, not this. The default
+    may need resetting from the first real in-game log. A state of a few thousand people reads a
+    systematic offset (about 0.1% at 3,000) if the script scales the survivors back up to the
+    state's population after dropping its sub-half-person cohorts; raise --tolerance for those.
+    """
     lines = Path(args.log).read_text(encoding="utf-8", errors="replace").splitlines()
     blocks = parse_replay(lines)
     if not blocks:
@@ -355,10 +405,14 @@ def main(argv=None):
     p.set_defaults(fn=cmd_natural_change)
     p = sub.add_parser("replay")
     p.add_argument("log")
-    p.add_argument("--tolerance", type=float, default=0.01)
+    p.add_argument("--tolerance", type=float, default=DEFAULT_TOLERANCE)
     p.set_defaults(fn=cmd_replay)
     args = ap.parse_args(argv)
-    return args.fn(args)
+    try:
+        return args.fn(args)
+    except S.NotPlainText as e:
+        print(e, file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
