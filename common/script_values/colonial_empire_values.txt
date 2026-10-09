@@ -233,14 +233,6 @@ colonial_maintenance_bureaucracy_cost = {
 	min = -0.25
 }
 
-# Colonial development investment cost - scales with colonial holdings
-colonial_development_cost = {
-	value = colonial_state_count
-	multiply = 50
-	add = 100
-	min = 100
-}
-
 # Metropole state count: total states minus overseas colonial states.
 # Floored at 1 to avoid divide-by-zero when an empire is wholly colonial.
 metropole_state_count = {
@@ -265,30 +257,337 @@ colonial_overreach_ratio = {
 	min = 0
 }
 
-# Colonial GDP-scaled monthly expense for the Investment policy. Used as the
-# multiplier on colonial_development_investment_expense_modifier so the cost
-# appears as a line item in the country's budget panel (~0.5% of GDP/month).
-# Positive — multiplier scales country_expenses_add = 1 into actual expenses.
-colonial_invest_monthly_expense = {
-	value = gdp
-	multiply = 0.005
+# ============================================================================
+# PROGRAMME LEVELS
+#
+# Each of the three colonial programmes runs at a level from 0 (off) to
+# colonial_programme_max_level, held in a country variable: colonial_invest_level,
+# colonial_garrison_level, colonial_assim_level. The top level is the full
+# programme and each level is an equal share of it, linearly: the bar term
+# (colonial_stability_term_*), the programme's static modifier (applied by
+# colonial_programmes_refresh_modifiers at a third, two thirds or all of its
+# values) and its costs all scale with the level.
+#
+# The level variables are also the record a revolution's winner inherits:
+# variables merge, modifiers do not, so the refresh rebuilds the modifiers from
+# the levels (decol_sync_programmes, decolonization.txt).
+#
+# Read the levels through the *_level_value wrappers: before a country first
+# steps a programme the variable does not exist, and the widget and the bar
+# read these every frame. A save from before the levels holds a running
+# programme's modifier and no level until the entry's next monthly pulse
+# migrates it (decol_migrate_programmes); until then the wrapper reads the
+# modifier as the top level, so a step, the refresh and the bar all see the
+# programme it was running, not 0.
+#
+# SCOPE: country.
+# ============================================================================
+
+# The top level. Literal 3s that mean this value: the `< 3` gates in
+# colonial_empire_possible_*_up (colonial_empire_triggers.txt), the multiplier
+# ladder in colonial_programme_apply_modifier and the "/ 3" in the widget's
+# level labels (decolonization.txt, te_journal_entries_l_english.yml).
+colonial_programme_max_level = 3
+
+colonial_invest_level_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_invest_level }
+		value = var:colonial_invest_level
+	}
+	else_if = {
+		limit = { has_modifier = colonial_development_investment_modifier }
+		value = colonial_programme_max_level
+	}
 }
 
-# One-shot startup cost for the Development Investment program, scaled to GDP
-# so the gate matches the scale of the empire — ~2% of monthly GDP, applied
-# once on activation. Mirrored by colonial_assimilate_startup_cost so the two
-# program-startup costs read as parallel. Negative because used with add_treasury.
-colonial_invest_startup_cost = {
-	value = gdp
-	multiply = -0.02
+colonial_garrison_level_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_garrison_level }
+		value = var:colonial_garrison_level
+	}
+	else_if = {
+		limit = { has_modifier = colonial_military_garrison_modifier }
+		value = colonial_programme_max_level
+	}
 }
 
-# One-shot startup cost for the Cultural Assimilation program. Parallel to
-# colonial_invest_startup_cost — smaller because Assimilation already carries
-# the heavy bureaucracy mult drag.
-colonial_assimilate_startup_cost = {
-	value = gdp
-	multiply = -0.01
+colonial_assim_level_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_assim_level }
+		value = var:colonial_assim_level
+	}
+	else_if = {
+		limit = { has_modifier = colonial_cultural_assimilation_modifier }
+		value = colonial_programme_max_level
+	}
+}
+
+# The share of the full programme now running, 0-1. Scales the bar term and the
+# programme-month counters that choose the ending (a month at the top level
+# counts one, as a month of the old on/off programme did).
+colonial_invest_strength = {
+	value = colonial_invest_level_value
+	divide = colonial_programme_max_level
+}
+
+colonial_garrison_strength = {
+	value = colonial_garrison_level_value
+	divide = colonial_programme_max_level
+}
+
+colonial_assim_strength = {
+	value = colonial_assim_level_value
+	divide = colonial_programme_max_level
+}
+
+# What one level adds to the bar's monthly change: the full-strength figure (the
+# law-adjusted effectiveness aggregate) divided by the levels. Read by the AI
+# review and by the widget's rows and step tooltips.
+colonial_invest_step_term = {
+	value = modifier:country_colonial_invest_effectiveness_add
+	divide = colonial_programme_max_level
+}
+
+colonial_garrison_step_term = {
+	value = modifier:country_colonial_garrison_effectiveness_add
+	divide = colonial_programme_max_level
+}
+
+colonial_assim_step_term = {
+	value = modifier:country_colonial_assim_effectiveness_add
+	divide = colonial_programme_max_level
+}
+
+# ============================================================================
+# PROGRAMME COSTS
+#
+# UNITS. country_expenses_add is a WEEKLY amount (the budget panel's lines are
+# weekly) and `gdp` is a YEARLY figure (the engine's "yearly predicted GDP",
+# in country and state scope alike), so every money value here divides a
+# yearly figure by colonial_weeks_per_year. Until 2026-10 the running cost was
+# gdp x 0.005, commented as a monthly charge but paid weekly: 0.5% of yearly
+# GDP every week, 26% of GDP a year, whatever the size of the empire. A
+# play-test AI with GDP £2.314B and two small colonies paid £11,570,607 a week,
+# over half its spending.
+#
+# INVESTMENT's running cost scales with what is being developed: the yearly
+# GDP of our overseas colonial states, never counted as less than
+# colonial_dev_base_floor_share of our own GDP. The floor is the programme's
+# fixed overhead, and it gives an empire of colonial subjects alone, which has
+# no colonial states of its own, a cost. Each level costs
+# colonial_invest_rate_per_level of that base a year.
+#
+# Target, as a share of our GDP a year per level:
+#   colonies make 10% of our GDP (a typical empire)   0.5%   (1.5% at level 3)
+#   colonies make 25%                                 1.25%  (3.75%)
+#   colonies under 1% (the floor)                     0.05%  (0.15%)
+# For scale, one Cultural Hegemony funding level costs about 0.26% a year.
+# The play-test case above is on the floor: £22.3k a week per level, £66.8k at
+# level 3, against the old £11.57M.
+#
+# ONE-OFFS are charged on every step up, in weeks of one Investment level's
+# running cost, so they scale with the colonies too (they were 2% and 1% of
+# yearly GDP, commented as monthly). A typical empire pays 0.25% of GDP a step
+# for Investment and 0.125% for Assimilation; the play-test case £0.58M and
+# £0.29M.
+#
+# Garrison costs no money: its authority upkeep is in its static modifier and
+# scales with the level like the rest of it (100 a level, 300 at the top).
+# ============================================================================
+
+colonial_weeks_per_year = 52
+
+colonial_invest_rate_per_level = 0.05
+
+colonial_dev_base_floor_share = 0.01
+
+colonial_invest_startup_weeks = 26
+
+colonial_assim_startup_weeks = 13
+
+# Garrison's authority upkeep per level: colonial_military_garrison_modifier's
+# country_authority_cost_add (300) over the three levels. The raise gate
+# (colonial_empire_possible_garrison_up) and the widget's cost line read it.
+colonial_garrison_authority_per_level = 100
+
+# Assimilation's authority upkeep per level: colonial_cultural_assimilation_modifier's
+# 100 over the three levels, rounded up. The AI's raise check reads it.
+colonial_assim_authority_per_level = 34
+
+# The yearly GDP of our overseas colonial states. Iterates every state, so it is
+# cached once a month (and when the entry starts) into var:colonial_dev_colonial_gdp by
+# colonial_programmes_refresh_cost_base; everything else reads the cache.
+colonial_development_gdp = {
+	value = 0
+	every_scope_state = {
+		limit = { is_overseas_colonial_state = yes }
+		add = gdp
+	}
+}
+
+# The base each Investment level costs a share of: the cached colonial GDP,
+# never less than the floor share of our own GDP. O(1), so the widget can read
+# it every frame. Before the cache exists it is the floor.
+colonial_dev_cost_base = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_dev_colonial_gdp }
+		value = var:colonial_dev_colonial_gdp
+	}
+	min = {
+		value = gdp
+		multiply = colonial_dev_base_floor_share
+	}
+}
+
+# The weekly cost of ONE Investment level. Positive.
+colonial_invest_level_cost = {
+	value = colonial_dev_cost_base
+	multiply = colonial_invest_rate_per_level
+	divide = colonial_weeks_per_year
+}
+
+# The weekly running cost at the current level. colonial_programmes_refresh_modifiers
+# copies it into var:colonial_invest_cost_week, which is the expense modifier's
+# multiplier (a flat variable, so the stored multiplier never re-runs the sum).
+colonial_invest_weekly_cost = {
+	value = colonial_invest_level_cost
+	multiply = colonial_invest_level_value
+}
+
+# One-off payment for each Investment step up. Negative, for add_treasury.
+colonial_invest_step_cost = {
+	value = colonial_invest_level_cost
+	multiply = colonial_invest_startup_weeks
+	multiply = -1
+}
+
+# What one Assimilation level takes off our bureaucracy: the modifier's -15%
+# over the three levels, as a share of what we produce. The AI raises it only
+# with a surplus larger than this (colonial_ai_can_raise_assim).
+colonial_assim_bureaucracy_per_level = {
+	value = produced_bureaucracy
+	multiply = 0.05
+	min = 0
+}
+
+# One-off payment for each Assimilation step up. Negative, for add_treasury.
+colonial_assim_step_cost = {
+	value = colonial_invest_level_cost
+	multiply = colonial_assim_startup_weeks
+	multiply = -1
+}
+
+# The two one-offs as positive amounts, for the widget's cost lines.
+colonial_invest_step_cost_display = {
+	value = colonial_invest_step_cost
+	multiply = -1
+}
+
+colonial_assim_step_cost_display = {
+	value = colonial_assim_step_cost
+	multiply = -1
+}
+
+# Garrison's authority upkeep at the current level, for the widget.
+colonial_garrison_authority_display = {
+	value = colonial_garrison_level_value
+	multiply = colonial_garrison_authority_per_level
+}
+
+# ============================================================================
+# AI PROGRAMME REVIEW (colonial_ai_review_programmes, decolonization.txt)
+#
+# The monthly change above which another programme level adds nothing: the
+# monthly cap while the bar is below 100, and colonial_ai_full_bar_margin once
+# it is at 100. At 100 the bar cannot rise, so a level is useful only while it
+# keeps the change safely positive: a dip below 100 restarts the 60-month
+# completion count (colonial_at_100_months), so "the bar is full" alone is no
+# reason to cut. Trimmed to 0, the change would leave the bar at 100 only
+# until the first war or bout of turmoil, and the review would then pay to
+# raise the levels again below 100.
+# ============================================================================
+
+# The buffer the AI keeps at a full bar: the size of the war term
+# (colonial_stability_term_war), so a new war alone does not knock the bar off 100.
+colonial_ai_full_bar_margin = 0.5
+
+colonial_ai_programme_ceiling = {
+	value = colonial_stability_drift_cap
+	if = {
+		limit = { colonial_stability_bar_at_least = { N = 100 } }
+		value = colonial_ai_full_bar_margin
+	}
+}
+
+# The monthly change, before the cap, with one level of a programme taken
+# away. The AI lowers that programme when this still reaches the ceiling: the
+# level is wasted. O(1), like the display value it starts from.
+colonial_ai_drift_without_invest_step = {
+	value = colonial_stability_drift_uncapped_display
+	subtract = colonial_invest_step_term
+}
+
+colonial_ai_drift_without_garrison_step = {
+	value = colonial_stability_drift_uncapped_display
+	subtract = colonial_garrison_step_term
+}
+
+colonial_ai_drift_without_assim_step = {
+	value = colonial_stability_drift_uncapped_display
+	subtract = colonial_assim_step_term
+}
+
+# The weights the review picks a programme to raise by, 0 when it cannot be
+# raised (colonial_ai_can_raise_*, colonial_empire_triggers.txt). They are the
+# weights the six AI-only scripted buttons carried before the levels:
+# Investment for any empire, more with restless colonies and for a great
+# power; Garrison only with two or more restless colonies; Assimilation for
+# any empire, more with an accepted colony.
+colonial_ai_invest_raise_weight = {
+	value = 0
+	if = {
+		limit = { colonial_ai_can_raise_invest = yes }
+		add = 30
+		if = {
+			limit = { colonial_low_acceptance_count >= 2 }
+			add = 20
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = 10
+		}
+	}
+}
+
+colonial_ai_garrison_raise_weight = {
+	value = 0
+	if = {
+		limit = {
+			colonial_ai_can_raise_garrison = yes
+			colonial_low_acceptance_count >= 2
+		}
+		add = 40
+		if = {
+			limit = { colonial_low_acceptance_count >= 4 }
+			add = 20
+		}
+	}
+}
+
+colonial_ai_assim_raise_weight = {
+	value = 0
+	if = {
+		limit = { colonial_ai_can_raise_assim = yes }
+		add = 20
+		if = {
+			limit = { colonial_high_acceptance_count >= 1 }
+			add = 15
+		}
+	}
 }
 
 # Scope: state. SoL threshold below which the state qualifies as colonial-
@@ -451,30 +750,24 @@ colonial_stability_term_gp_support = {
 	multiply = 0.3
 }
 
-# --- Active programme effectiveness (aggregated modifiers; see
+# --- Programme effectiveness (aggregated modifiers; see
 #     common/modifier_type_definitions/colonial_empire_modifier_types.txt) ---
+# The aggregate is the programme's full-strength figure (base plus laws); each
+# runs at a level, and each level is an equal share of it (PROGRAMME LEVELS
+# above). 0 at level 0, which is the gate.
 colonial_stability_term_garrison = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = modifier:country_colonial_garrison_effectiveness_add
-	}
+	value = modifier:country_colonial_garrison_effectiveness_add
+	multiply = colonial_garrison_strength
 }
 
 colonial_stability_term_assim = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = modifier:country_colonial_assim_effectiveness_add
-	}
+	value = modifier:country_colonial_assim_effectiveness_add
+	multiply = colonial_assim_strength
 }
 
 colonial_stability_term_invest = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = modifier:country_colonial_invest_effectiveness_add
-	}
+	value = modifier:country_colonial_invest_effectiveness_add
+	multiply = colonial_invest_strength
 }
 
 # --- Colonial acceptance ---
@@ -693,8 +986,8 @@ colonial_stability_drift_cap_display = {
 # and the three programme aggregate keys, where the confirmed chain applies.
 #
 # These read the aggregate UNCONDITIONALLY -- unlike colonial_stability_term_*,
-# which zeroes when its programme is off -- so the widget can preview what a
-# programme WOULD contribute before it is switched on.
+# which scales it by the programme's level -- so the widget can show the full
+# strength a programme reaches at its top level before it is raised there.
 # ============================================================================
 
 colonial_invest_effectiveness_display = {
@@ -707,19 +1000,6 @@ colonial_garrison_effectiveness_display = {
 
 colonial_assim_effectiveness_display = {
 	value = modifier:country_colonial_assim_effectiveness_add
-}
-
-# colonial_invest_startup_cost is negative (it feeds add_treasury). Flipped here
-# so the cost row can show a positive amount next to the word "one-off".
-colonial_invest_startup_cost_display = {
-	value = colonial_invest_startup_cost
-	multiply = -1
-}
-
-# Likewise for the Cultural Assimilation programme's startup cost.
-colonial_assimilate_startup_cost_display = {
-	value = colonial_assimilate_startup_cost
-	multiply = -1
 }
 
 # ============================================================================

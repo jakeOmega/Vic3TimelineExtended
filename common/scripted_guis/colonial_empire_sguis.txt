@@ -4,17 +4,19 @@
 # Backs gui/journal_entry_widgets/colonial_empire_widget.gui, the player-facing
 # surface for je_colonial_empire now that the vanilla button grid is AI-only.
 #
-# Every action handler delegates: `is_valid` calls the same
-# colonial_empire_possible_* trigger the scripted button's `possible` calls, and
-# `effect` calls the same colonial_empire_effect_* effect the button's `effect`
-# calls. Nothing here restates a condition or an action, so the AI's grid and the
-# player's widget cannot drift apart. Change the shared helper in
+# Every action handler delegates: `is_valid` calls a colonial_empire_possible_*
+# trigger and `effect` a colonial_empire_effect_* effect. A decision's trigger
+# and effect are also its scripted button's `possible` and `effect`; a
+# programme's are the gates and steps the AI's monthly review uses too. Nothing
+# here restates a condition or an action, so the AI and the player's widget
+# cannot drift apart. Change the shared helper in
 # common/scripted_triggers/colonial_empire_triggers.txt or
 # common/scripted_effects/decolonization.txt -- never here.
 #
-# The AI never uses any of these (`ai_is_valid = { always = no }` on all four):
-# AI policy and decolonization choices still run through the `ai_chance` blocks
-# on the je_colonial_empire scripted buttons, which are untouched.
+# The AI never uses any of these (`ai_is_valid = { always = no }` on all of
+# them): its decolonization decisions run through the `ai_chance` blocks on the
+# je_colonial_empire scripted buttons, and its programme levels through
+# colonial_ai_review_programmes in the entry's monthly pulse.
 #
 # Read-only handlers carry `is_valid = { always = no }` so nothing can execute
 # them; they exist purely so the widget can ask script a question it cannot ask
@@ -22,9 +24,9 @@
 #
 # ---------------------------------------------------------------------------
 # OP TABLE — colonial_empire_policy_sgui (saved_scopes = { op })
-#   0  enable  Development Investment      1  disable Development Investment
-#   2  enable  Military Garrison           3  disable Military Garrison
-#   4  enable  Cultural Assimilation       5  disable Cultural Assimilation
+#   0  raise Development Investment      1  lower Development Investment
+#   2  raise Military Garrison           3  lower Military Garrison
+#   4  raise Cultural Assimilation       5  lower Cultural Assimilation
 #
 # OP TABLE — colonial_empire_decision_sgui (saved_scopes = { op })
 #   0  Release a Colonial Territory   (-> decolonization_events.400)
@@ -46,12 +48,13 @@
 # written fail-open, so it would look fine either way. Vanilla's
 # scripted_guis.md only promises saved scopes "in triggers / effects".
 #
-# With the button grid hidden from humans, a programme row whose visibility
-# quietly evaluated false would leave the player no control at all — the one
-# failure this surface cannot afford. So each programme's Enable/Disable pair
-# takes its visibility from a SCOPE-FREE read-only handler below
+# With the button grid hidden from humans, a control whose visibility quietly
+# evaluated false would leave the player no control at all — the one failure
+# this surface cannot afford. So each programme's stepper is always drawn and
+# greys out through IsValid, and the overview's lit programme icons take their
+# visibility from a SCOPE-FREE read-only handler below
 # (colonial_empire_active_*_sgui), which is the shape banking's dashboard has
-# been play-tested with. The op code still selects the gate, the effect and the
+# been play-tested with. The op code selects the gate, the effect and the
 # tooltip text.
 # ============================================================================
 
@@ -96,27 +99,22 @@ colonial_empire_has_candidates = {
 
 
 # ---------------------------------------------------------------------------
-# Read-only: is programme X running? One per programme, and the ONLY thing that
-# decides which half of each Enable/Disable pair the widget draws.
+# Read-only: is programme X running, at any level? One per programme; the
+# overview lights the programme's icon from it.
 #
 # Deliberately scope-free (no `saved_scopes`), because whether a saved scope
 # reaches `is_shown` is unproven here — see the note in the file header. This is
 # the shape banking's dashboard has been play-tested with.
 #
-# Each `is_shown` is the same check as the matching scripted_button's `visible`
-# (minus its `is_ai = yes`), read in the SAME scope the button reads it in. The
-# three programme modifiers are country-scoped: the button effects apply them at
-# the top level of a country-scope effect, the bar reads them as
-# `owner = { has_modifier = … }`, and colonial_empire_je_cleanup_effect removes
-# them in country scope. (Contrast the five colonial_empire_*_modifier PHASE
-# modifiers, which the JE pulse applies to the ENTRY with
-# `je:je_colonial_empire = { add_modifier = … }` and which a country-scope
-# has_modifier would therefore never see. None of those are read here.)
+# Each reads the programme's level (colonial_*_level_value, which is 0 before
+# the variable exists), the same value the bar term and the steppers read. The
+# level, not the modifier: a revolution's winner holds the level a pulse before
+# the refresh puts the modifier back.
 # ---------------------------------------------------------------------------
 colonial_empire_active_invest_sgui = {
 	scope = country
 	is_shown = {
-		has_modifier = colonial_development_investment_modifier
+		colonial_invest_level_value >= 1
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -126,7 +124,7 @@ colonial_empire_active_invest_sgui = {
 colonial_empire_active_garrison_sgui = {
 	scope = country
 	is_shown = {
-		has_modifier = colonial_military_garrison_modifier
+		colonial_garrison_level_value >= 1
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -136,7 +134,7 @@ colonial_empire_active_garrison_sgui = {
 colonial_empire_active_assimilation_sgui = {
 	scope = country
 	is_shown = {
-		has_modifier = colonial_cultural_assimilation_modifier
+		colonial_assim_level_value >= 1
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -274,19 +272,17 @@ colonial_empire_territories_sgui = {
 
 
 # ---------------------------------------------------------------------------
-# The three colonial programmes, enable and disable.
+# The three colonial programmes, one level up or down.
 #
-# `is_valid` delegates to the same trigger the matching scripted_button's
-# `possible` calls, and `effect` to the same effect its `effect` calls, selected
-# by op code. Those three paths (IsValid / Execute / the tooltips) are the ones
-# `AddScope` is proven on in this mod.
+# `is_valid` delegates to the programme's up or down gate and `effect` to its
+# step, selected by op code. Those three paths (IsValid / Execute / the
+# tooltips) are the ones `AddScope` is proven on in this mod.
 #
-# `is_shown` is deliberately unconditional: WHICH half of each pair is drawn is
-# decided by the scope-free colonial_empire_active_*_sgui handlers above, so no
-# control's visibility depends on a saved scope reaching an `is_shown` block.
-# See the file header for why. A stray op code cannot produce a live control
-# either way -- `is_valid`'s `trigger_else = { always = no }` greys out anything
-# outside 0-5, and `effect` has no branch for it.
+# `is_shown` is deliberately unconditional: each programme's minus and plus are
+# always drawn, and a step that cannot be taken greys out with the reason in
+# its IsValidTooltip. A stray op code cannot produce a live control either way
+# -- `is_valid`'s `trigger_else = { always = no }` greys out anything outside
+# 0-5, and `effect` has no branch for it.
 # ---------------------------------------------------------------------------
 colonial_empire_policy_sgui = {
 	scope = country
@@ -299,27 +295,27 @@ colonial_empire_policy_sgui = {
 	is_valid = {
 		trigger_if = {
 			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_possible_invest = yes
+			colonial_empire_possible_invest_up = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_possible_remove_invest = yes
+			colonial_empire_possible_invest_down = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_possible_garrison = yes
+			colonial_empire_possible_garrison_up = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 3 }
-			colonial_empire_possible_remove_garrison = yes
+			colonial_empire_possible_garrison_down = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 4 }
-			colonial_empire_possible_assimilation = yes
+			colonial_empire_possible_assimilation_up = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 5 }
-			colonial_empire_possible_remove_assimilation = yes
+			colonial_empire_possible_assimilation_down = yes
 		}
 		trigger_else = { always = no }
 	}
@@ -327,27 +323,27 @@ colonial_empire_policy_sgui = {
 	effect = {
 		if = {
 			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_effect_invest = yes
+			colonial_empire_effect_invest_up = yes
 		}
 		else_if = {
 			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_effect_remove_invest = yes
+			colonial_empire_effect_invest_down = yes
 		}
 		else_if = {
 			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_effect_garrison = yes
+			colonial_empire_effect_garrison_up = yes
 		}
 		else_if = {
 			limit = { exists = scope:op scope:op = 3 }
-			colonial_empire_effect_remove_garrison = yes
+			colonial_empire_effect_garrison_down = yes
 		}
 		else_if = {
 			limit = { exists = scope:op scope:op = 4 }
-			colonial_empire_effect_assimilation = yes
+			colonial_empire_effect_assimilation_up = yes
 		}
 		else_if = {
 			limit = { exists = scope:op scope:op = 5 }
-			colonial_empire_effect_remove_assimilation = yes
+			colonial_empire_effect_assimilation_down = yes
 		}
 	}
 }

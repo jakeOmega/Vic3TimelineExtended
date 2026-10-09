@@ -2,6 +2,7 @@
 # COLONIAL EMPIRE TEST CONSOLE — fired only from the console:
 #   event te_debug_colonial_empire.1    put the stability bar in any band
 #   event te_debug_colonial_empire.2    great-power pressure and the decisions
+#   event te_debug_colonial_empire.3    programme costs and the AI's review
 # ============================================================================
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires these events.
@@ -188,5 +189,58 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 		name = te_debug_colonial_empire.2.g
 		colonial_empire_refresh_display = yes
 		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[THIS.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
+	}
+}
+
+
+te_debug_colonial_empire.3 = { # REVIEWED 2026-10-09: console-only test event (`event te_debug_colonial_empire.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_colonial_empire.3.t
+	desc = te_debug_colonial_empire.3.d
+	flavor = te_debug_colonial_empire.3.f
+
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
+
+	# The description reads the figures behind Investment's weekly cost and
+	# the AI's review (PROGRAMME COSTS / AI PROGRAMME REVIEW in
+	# colonial_empire_values.txt). This option re-reads the colonies' GDP now
+	# rather than at the next monthly pulse, and re-applies the modifiers.
+	option = {
+		name = te_debug_colonial_empire.3.a
+		default_option = yes
+		colonial_programmes_refresh_cost_base = yes
+		colonial_programmes_refresh_modifiers = yes
+		colonial_empire_refresh_display = yes
+	}
+
+	# Run the AI's monthly programme review on us, as the entry's pulse does for
+	# an AI: it raises or lowers at most one level per programme, paying what a
+	# step pays, then the one refresh.
+	option = {
+		name = te_debug_colonial_empire.3.b
+		colonial_programmes_refresh_cost_base = yes
+		colonial_ai_review_programmes = yes
+		colonial_programmes_refresh_modifiers = yes
+		colonial_empire_refresh_display = yes
+	}
+
+	# Stop all three programmes at once, with no refund.
+	option = {
+		name = te_debug_colonial_empire.3.c
+		set_variable = { name = colonial_invest_level value = 0 }
+		set_variable = { name = colonial_garrison_level value = 0 }
+		set_variable = { name = colonial_assim_level value = 0 }
+		colonial_programmes_refresh_modifiers = yes
+		colonial_empire_refresh_display = yes
 	}
 }

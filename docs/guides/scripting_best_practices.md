@@ -103,6 +103,7 @@ When auditing or rebalancing infamy-related modifiers, read the in-fiction frami
 
 - **Never use flat `country_expenses_add` values** (e.g., `country_expenses_add = 50000`). Flat values don't scale with country or economy size.
 - **Pattern:** Set `country_expenses_add = 1` in the static modifier, then use `add_modifier = { name = X multiplier = <gdp_script_value> }` in the event.
+- **`country_expenses_add` is a weekly amount and `gdp` a yearly one.** The budget panel's lines are weekly; `gdp` is "the scoped country's yearly predicted GDP". A running cost of X% of GDP a year is `gdp × X ÷ 52`, not `gdp × X`. The colonial Development Investment programme charged `gdp × 0.005`, commented as a monthly cost: every week, so 26% of GDP a year, and a play-test AI paid £11.57M a week for two small colonies (fixed 2026-10; `colonial_empire_values.txt` § PROGRAMME COSTS). State the intended share of GDP *a year* in the value's comment, so the units can be checked.
 - **GDP script values** (defined in `extra_script_values.txt`): `banking_event_expense_small` (0.5% GDP), `banking_event_expense_medium` (1% GDP), `banking_event_expense_large` (2% GDP), `banking_event_expense_huge` (3% GDP).
 - **When a modifier has BOTH expenses and gameplay effects**, split into two modifiers: one for gameplay (applied without multiplier) and one `_cost` modifier with `country_expenses_add = 1` (applied with GDP multiplier).
 - **Avoid negative `country_expenses_add`**. For austerity/savings, use `country_loan_interest_rate_mult`, `country_minting_add`, or `country_tax_income_add`.
@@ -3782,7 +3783,7 @@ Always grep `common/laws/` for the actual ID before writing `has_law = law_type:
 
 ## `add_treasury` Accepts Script Values for GDP-Scaled Drains
 
-`add_treasury = colonial_invest_monthly_cost` works (script value, scope is country, evaluates `gdp * -0.005` per pulse — note plain `gdp`, not `country_gdp`; the latter is not a script value and silently produces "Badly read script value" errors). Used in `je_colonial_empire` on_monthly_pulse for the Investment policy's GDP-scaled cost. Pattern works for any "cost is X% of GDP per month" drain — modifiers can't express this directly (no `country_weekly_treasury_add`-style modifier), but a JE pulse + script value can.
+`add_treasury = <script value>` works (scope is country; note plain `gdp`, not `country_gdp`; the latter is not a script value and silently produces "Badly read script value" errors). The colonial programmes' one-offs use it: `add_treasury = colonial_invest_step_cost`, a negative value of some weeks of the programme's weekly upkeep. Pattern works for any one-off or pulse-driven drain; for a running cost prefer an expense modifier (`country_expenses_add = 1` with a weekly multiplier, § Expense Scaling with GDP), which shows as a budget line.
 
 ## Capstone Decisions That Complete a JE
 

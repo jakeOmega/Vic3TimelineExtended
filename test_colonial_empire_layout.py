@@ -970,7 +970,8 @@ class WidthBudgetTest(unittest.TestCase):
         cls.legend_cell = int(re.search(r"max_width = (\d+)", _type_body(cls.gui, "te_ce_ov_legend_row")).group(1))
         button = _type_body(cls.gui, "colonial_empire_decision_row")
         cls.choice_cell = int(re.search(r"max_width = (\d+)", button).group(1))
-        cls.action_cell = int(re.search(r"max_width = (\d+)", _type_body(cls.gui, "colonial_empire_action_button")).group(1))
+        cls.level_cell = int(re.search(r'max_width = (\d+)[^}]*?block "row_level"',
+                                       _type_body(cls.gui, "colonial_empire_policy_row"), re.S).group(1))
 
     def assertFits(self, text, font, cell, what):
         need = len(text) * UNITS[font] * MARGIN
@@ -984,8 +985,6 @@ class WidthBudgetTest(unittest.TestCase):
             ("je_colonial_empire_candidates_largest", "medium", self.label_cell),
             ("je_colonial_empire_ov_stability_label", "medium", self.ov_label),
             ("je_colonial_empire_btn_open_choice", "small", self.choice_cell),
-            ("je_colonial_empire_btn_enable", "small", self.action_cell),
-            ("je_colonial_empire_btn_disable", "small", self.action_cell),
             ("je_colonial_empire_ov_isolation", "small", self.icon_cell),
             ("je_colonial_empire_ov_consensus", "small", self.icon_cell),
             ("je_colonial_empire_territories_header", "medium", 440 - 32),   # nested header, after its arrow
@@ -1014,10 +1013,63 @@ class WidthBudgetTest(unittest.TestCase):
             ("-10.00", "medium", self.pillar_value, "a term's value"),
             ("Supporting: 100%", "medium", self.legend_cell, "the pie's legend"),
             ("999", "medium", self.value_cell, "a candidate count"),
+            ("3 / 3", "medium", self.level_cell, "a programme's level"),
         ]
         for text, font, cell, what in cases:
             with self.subTest(what=what):
                 self.assertFits(text, font, cell, what)
+
+
+SGUIS = os.path.join(REPO, "common", "scripted_guis", "colonial_empire_sguis.txt")
+# Each programme's row in te_ce_sec_programmes, its op codes (raise, lower) and
+# the helpers colonial_empire_policy_sgui calls for them.
+STEPPERS = [("invest", 0, 1), ("garrison", 2, 3), ("assimilation", 4, 5)]
+
+
+class ProgrammeStepperTest(unittest.TestCase):
+    """Each programme is a level, 0-3, with a minus and a plus (2026-10). Both
+    controls are always drawn and grey out through IsValid; each addresses the
+    op codes the scripted GUI maps to that programme's down and up steps."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.section = _type_body(cls.gui, "te_ce_sec_programmes")
+        sgui = _read(SGUIS)
+        cls.policy = _block(sgui, "colonial_empire_policy_sgui")
+
+    def _rows(self):
+        return [self.section[slice(*_span(self.section, m.start()))]
+                for m in re.finditer(r"colonial_empire_policy_row = \{", self.section)]
+
+    def test_each_row_steps_its_own_programme(self):
+        rows = self._rows()
+        self.assertEqual(len(rows), len(STEPPERS))
+        for (p, up, down), row in zip(STEPPERS, rows):
+            with self.subTest(programme=p):
+                self.assertIn(f'text = "je_colonial_empire_level_{p}"', row)
+                for block, op in (("up_action", up), ("down_action", down)):
+                    body = row[slice(*_span(row, row.index(f'blockoverride "{block}"')))]
+                    ops = set(re.findall(r"\(CFixedPoint\)(\d+)", body))
+                    self.assertEqual(ops, {str(op)}, block)
+                    self.assertNotIn("visible", body, "a stepper is always drawn")
+                    for prop in ("enabled", "onclick", "tooltip"):
+                        self.assertRegex(body, rf"\b{prop} = ")
+
+    def test_the_op_table_maps_to_the_steps(self):
+        for p, up, down in STEPPERS:
+            for op, way in ((up, "up"), (down, "down")):
+                with self.subTest(op=op):
+                    self.assertRegex(self.policy, rf"scope:op = {op} \}}\s*colonial_empire_possible_{p}_{way} = yes")
+                    self.assertRegex(self.policy, rf"scope:op = {op} \}}\s*colonial_empire_effect_{p}_{way} = yes")
+
+    def test_the_level_reads_the_guarded_value(self):
+        loc = _loc()
+        for p, value in (("invest", "colonial_invest_level_value"), ("garrison", "colonial_garrison_level_value"),
+                         ("assimilation", "colonial_assim_level_value")):
+            with self.subTest(programme=p):
+                self.assertIn(f"ScriptValue('{value}')", loc[f"je_colonial_empire_level_{p}"])
+                self.assertNotIn("Var(", loc[f"je_colonial_empire_level_{p}"])
 
 
 class LocHygieneTest(unittest.TestCase):
