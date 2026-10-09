@@ -2,7 +2,7 @@
 # TEMPORARY GROWTH PROBE (branch probe/demographics-growth, not for main):
 # `event te_debug_growth.1` in the console. The schedule and the lines it writes
 # are described in common/scripted_effects/te_debug_growth_effects.txt.
-# Start it as a large country that will survive four years (the 30-day tick
+# Start it as a large country that will survive four years (the 28-day tick
 # runs on it), then type `observe`. Use a save you can throw away: it freezes
 # migration everywhere and switches births and deaths off and on.
 # ============================================================================
@@ -63,7 +63,8 @@ te_debug_growth.1 = { # REVIEWED 2026-10-09: console-only probe event (`event te
 	}
 }
 
-# The daily line, for the first 36 days. ROOT = the starting country.
+# The daily lines: the tracked countries for the first 36 days, their states'
+# changes for the first 112 (16 weeks). ROOT = the starting country.
 te_debug_growth.2 = {
 	type = country_event
 	hidden = yes
@@ -77,17 +78,23 @@ te_debug_growth.2 = {
 			change_global_variable = { name = te_pg_day add = 1 }
 			every_country = {
 				limit = { has_variable = te_pg_track }
-				te_pg_day_line = yes
+				if = {
+					limit = { global_var:te_pg_day <= 36 }
+					te_pg_day_line = yes
+				}
+				every_scope_state = {
+					te_pg_state_line = yes
+				}
 			}
 			if = {
-				limit = { global_var:te_pg_day < 36 }
+				limit = { global_var:te_pg_day < 112 }
 				trigger_event = { id = te_debug_growth.2 days = 1 }
 			}
 		}
 	}
 }
 
-# The 30-day tick. ROOT = the starting country.
+# The 28-day tick. ROOT = the starting country.
 te_debug_growth.3 = {
 	type = country_event
 	hidden = yes

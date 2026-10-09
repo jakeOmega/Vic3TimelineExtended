@@ -8,21 +8,27 @@
 #   - te_pg_freeze on every country: no international or internal migration,
 #     so a country's change is its births less its deaths (and war);
 #   - every country of 250,000 people or more gets a group, 0-7;
-#   - every 30 days (te_debug_growth.3 on the starting country) a tick logs one
+#   - every 28 days (te_debug_growth.3 on the starting country) a tick logs one
 #     TE_PG line per such country, then every third tick switches each
 #     country's phase: phase p = (block + group) mod 8, so each block of three
 #     ticks has every phase running somewhere (a Latin square over time);
-#   - 48 ticks: two cycles of eight phases, three ticks each (about 4 years);
+#   - 48 ticks: two cycles of eight phases, three ticks each (about 3.7 years);
 #   - for the first 36 days, a TE_PG_DAY line a day for a few large countries,
-#     to show whether growth lands daily, weekly or once a month.
+#     and for the first 112 days a TE_PG_ST line whenever one of their states'
+#     populations changes, to show when each pop's growth lands.
+# Why 28 days: growth lands once a week, on the same weekday everywhere, and each
+# week's change swings as if only a batch of pops updated (first run, 2026-10-09).
+# A 30-day window held four or five of those weeks; 28 days holds exactly four, so
+# any batch cycle of one, two or four weeks is counted once per window.
 # Phases (cycle 1 / cycle 2 where they differ):
 #   0 none              1 births off           2 deaths off      3 both off
 #   4 deaths off, births +0.5 / -0.5          5 deaths off, births +1.0 / -0.9
 #   6 births off, deaths +0.5 / -0.5          7 births off, deaths +1.0 / -0.9
-# A TE_PG line's ph= is the phase that ran in the 30 days before it (cycle x 8 +
+# A TE_PG line's ph= is the phase that ran in the 28 days before it (cycle x 8 +
 # phase; -1 before the first switch), so its change from the country's previous
 # line is that phase's. The first window after a switch is a transition.
-# scripts/analysis/demographics_growth_probe.py reads the lines.
+# scripts/analysis/demographics_growth_probe.py reads the lines. Every line carries v=2:
+# the first run's 30-day lines (v absent) share the log archive and are skipped.
 #
 # The walk's sums are per month, in people: te_demog_pop_engine_births and
 # _deaths are the curves x 100,000 a month (te_demog_generated_values.txt).
@@ -56,17 +62,26 @@ te_pg_start = {
 	c:FRA ?= { set_variable = te_pg_track }
 	c:USA ?= { set_variable = te_pg_track }
 	c:JAP ?= { set_variable = te_pg_track }
+	set_local_variable = { name = te_pg_sid value = 0 }
+	every_country = {
+		limit = { has_variable = te_pg_track }
+		every_scope_state = {
+			change_local_variable = { name = te_pg_sid add = 1 }
+			set_variable = { name = te_pg_sid value = local_var:te_pg_sid }
+			set_variable = { name = te_pg_spop value = state_population }
+		}
+	}
 	set_variable = { name = te_pg_dbg_k value = local_var:te_pg_k }
-	debug_log = "TE_PG_START countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_START v=2 countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_k
 	te_pg_tick = yes
 	trigger_event = { id = te_debug_growth.2 days = 1 }
 }
 
-# THIS = the starting country, every 30 days (te_debug_growth.3) and once at the start.
+# THIS = the starting country, every 28 days (te_debug_growth.3) and once at the start.
 te_pg_tick = {
 	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
-	debug_log = "TE_PG_TICK t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_TICK v=2 t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_t
 	# a country formed since the start (a released nation, a revolution's winner) has no
 	# freeze and would take its neighbours' emigrants
@@ -95,7 +110,7 @@ te_pg_tick = {
 			}
 		}
 		change_global_variable = { name = te_pg_tick add = 1 }
-		trigger_event = { id = te_debug_growth.3 days = 30 }
+		trigger_event = { id = te_debug_growth.3 days = 28 }
 	}
 }
 
@@ -318,7 +333,7 @@ te_pg_line = {
 	set_variable = { name = te_pg_dbg_edslv value = { value = local_var:te_pg_edslv divide = 100000 } }
 	set_variable = { name = te_pg_dbg_edtu value = { value = local_var:te_pg_edtu divide = 100000 } }
 	set_variable = { name = te_pg_dbg_md value = { value = local_var:te_pg_mdw divide = { value = local_var:te_pg_ed min = 1 } } }
-	debug_log = "TE_PG t=[THIS.Var('te_pg_dbg_t').GetValue|0] tag=[THIS.GetCountry.GetTagName] g=[THIS.Var('te_pg_group').GetValue|0] ph=[THIS.Var('te_pg_phase').GetValue|0] st=[THIS.Var('te_pg_dbg_st').GetValue|0] war=[THIS.Var('te_pg_dbg_war').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] n=[THIS.Var('te_pg_dbg_n').GetValue|0] eb=[THIS.Var('te_pg_dbg_eb').GetValue|2] ebl=[THIS.Var('te_pg_dbg_ebl').GetValue|2] ebs=[THIS.Var('te_pg_dbg_ebs').GetValue|2] ebm=[THIS.Var('te_pg_dbg_ebm').GetValue|2] ebst=[THIS.Var('te_pg_dbg_ebst').GetValue|2] ebsv=[THIS.Var('te_pg_dbg_ebsv').GetValue|2] mb=[THIS.Var('te_pg_dbg_mb').GetValue|5] ed=[THIS.Var('te_pg_dbg_ed').GetValue|2] edst=[THIS.Var('te_pg_dbg_edst').GetValue|2] edsv=[THIS.Var('te_pg_dbg_edsv').GetValue|2] edlab=[THIS.Var('te_pg_dbg_edlab').GetValue|2] edmach=[THIS.Var('te_pg_dbg_edmach').GetValue|2] edeng=[THIS.Var('te_pg_dbg_edeng').GetValue|2] edslv=[THIS.Var('te_pg_dbg_edslv').GetValue|2] edtu=[THIS.Var('te_pg_dbg_edtu').GetValue|2] md=[THIS.Var('te_pg_dbg_md').GetValue|5]"
+	debug_log = "TE_PG v=2 t=[THIS.Var('te_pg_dbg_t').GetValue|0] tag=[THIS.GetCountry.GetTagName] g=[THIS.Var('te_pg_group').GetValue|0] ph=[THIS.Var('te_pg_phase').GetValue|0] st=[THIS.Var('te_pg_dbg_st').GetValue|0] war=[THIS.Var('te_pg_dbg_war').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] n=[THIS.Var('te_pg_dbg_n').GetValue|0] eb=[THIS.Var('te_pg_dbg_eb').GetValue|2] ebl=[THIS.Var('te_pg_dbg_ebl').GetValue|2] ebs=[THIS.Var('te_pg_dbg_ebs').GetValue|2] ebm=[THIS.Var('te_pg_dbg_ebm').GetValue|2] ebst=[THIS.Var('te_pg_dbg_ebst').GetValue|2] ebsv=[THIS.Var('te_pg_dbg_ebsv').GetValue|2] mb=[THIS.Var('te_pg_dbg_mb').GetValue|5] ed=[THIS.Var('te_pg_dbg_ed').GetValue|2] edst=[THIS.Var('te_pg_dbg_edst').GetValue|2] edsv=[THIS.Var('te_pg_dbg_edsv').GetValue|2] edlab=[THIS.Var('te_pg_dbg_edlab').GetValue|2] edmach=[THIS.Var('te_pg_dbg_edmach').GetValue|2] edeng=[THIS.Var('te_pg_dbg_edeng').GetValue|2] edslv=[THIS.Var('te_pg_dbg_edslv').GetValue|2] edtu=[THIS.Var('te_pg_dbg_edtu').GetValue|2] md=[THIS.Var('te_pg_dbg_md').GetValue|5]"
 	remove_variable = te_pg_dbg_t
 	remove_variable = te_pg_dbg_war
 	remove_variable = te_pg_dbg_pop
@@ -355,10 +370,27 @@ te_pg_day_line = {
 		limit = { has_variable = te_pg_phase }
 		set_variable = { name = te_pg_dbg_ph value = var:te_pg_phase }
 	}
-	debug_log = "TE_PG_DAY d=[THIS.Var('te_pg_dbg_d').GetValue|0] tag=[THIS.GetCountry.GetTagName] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] ph=[THIS.Var('te_pg_dbg_ph').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_DAY v=2 d=[THIS.Var('te_pg_dbg_d').GetValue|0] tag=[THIS.GetCountry.GetTagName] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] ph=[THIS.Var('te_pg_dbg_ph').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_d
 	remove_variable = te_pg_dbg_pop
 	remove_variable = te_pg_dbg_ph
+}
+
+# THIS = a tracked state, daily for the first 112 days (te_debug_growth.2): a line
+# when its population has changed since the last one. sid numbers the tracked states.
+te_pg_state_line = {
+	if = {
+		limit = {
+			has_variable = te_pg_sid
+			NOT = { var:te_pg_spop = state_population }
+		}
+		set_variable = { name = te_pg_dbg_d value = global_var:te_pg_day }
+		set_variable = { name = te_pg_dbg_pop value = state_population }
+		debug_log = "TE_PG_ST v=2 d=[THIS.Var('te_pg_dbg_d').GetValue|0] sid=[THIS.Var('te_pg_sid').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] prev=[THIS.Var('te_pg_spop').GetValue|0]"
+		set_variable = { name = te_pg_spop value = state_population }
+		remove_variable = te_pg_dbg_d
+		remove_variable = te_pg_dbg_pop
+	}
 }
 
 # THIS = any country: at the 48th tick or from the console's abort (option b).
@@ -382,6 +414,11 @@ te_pg_finish = {
 			limit = { has_variable = te_pg_track }
 			remove_variable = te_pg_track
 		}
+	}
+	every_state = {
+		limit = { has_variable = te_pg_sid }
+		remove_variable = te_pg_sid
+		remove_variable = te_pg_spop
 	}
 	debug_log = "TE_PG_DONE date=[TimeKeeper.GetCurrentDate.GetString]"
 }

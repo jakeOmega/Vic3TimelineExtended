@@ -47,7 +47,7 @@ def _synthetic_log(path, countries=48, seed=7):
                 prev_steps = _steps(ph)
             lines.append(
                 f"[00:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_growth_effects.txt:1: "
-                f"TE_PG t={t} tag={tag} g={g} ph={ph} st=3 war=0 pop={pop:.0f} n={pop:.0f} eb={eb:.2f} "
+                f"TE_PG v=2 t={t} tag={tag} g={g} ph={ph} st=3 war=0 pop={pop:.0f} n={pop:.0f} eb={eb:.2f} "
                 f"ebl={eb * lit:.2f} ebs={eb * 8:.2f} ebm=0.00 ebst={eb * mild:.2f} ebsv=0.00 mb={mb:.5f} "
                 f"ed={ed:.2f} edst={ed * mild:.2f} edsv=0.00 edlab={ed * lab:.2f} edmach=0.00 edeng=0.00 "
                 f"edslv=0.00 edtu=0.00 md={md:.5f}")
@@ -88,6 +88,15 @@ class TestAnalysis(unittest.TestCase):
         for tag, f in self.fits.items():
             for x, (got, lin) in f["b"]["floor"].items():
                 self.assertAlmostEqual((got - lin) / f["b"]["slope"], 0.0, places=3, msg=(tag, x))
+
+    def test_lines_without_the_version_are_skipped(self):
+        old_run = self.tmp.name + ".old"
+        Path(old_run).write_text("[00:00:00][x]: TE_PG t=1 tag=T00 g=0 ph=0 st=3 war=0 pop=1 n=1 eb=1 ebl=0 ebs=0 "
+                                 "ebm=0 ebst=0 ebsv=0 mb=0 ed=1 edst=0 edsv=0 edlab=0 edmach=0 edeng=0 edslv=0 "
+                                 "edtu=0 md=0\n", encoding="utf-8")
+        rows, _, _, bad = G.parse([old_run, self.tmp.name])
+        self.assertNotEqual(rows[("T00", 1)]["pop"], 1.0)
+        self.assertEqual(bad, [])
 
     def test_check_and_report_run(self):
         self.assertEqual(G.main(["check", self.tmp.name]), 0)

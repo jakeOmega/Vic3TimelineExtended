@@ -4,15 +4,17 @@
     demographics_growth_probe.py check  LOG [LOG ...]   # mid-run health: ticks, groups, phases, both-off, daily lines
     demographics_growth_probe.py report LOG [LOG ...]   # the fits
 
-LOG may be any mix of debug.log generations and archived copies; identical lines are read once.
+LOG may be any mix of debug.log generations and archived copies; identical lines are read once. Only
+v=2 lines are read (the 28-day schedule); the first run's 30-day lines carry no v and are skipped.
 
-The probe (common/scripted_effects/te_debug_growth_effects.txt) logs every probe country every 30 days.
+The probe (common/scripted_effects/te_debug_growth_effects.txt) logs every probe country every 28 days
+(four of the engine's weekly growth days, so each window holds whole batch cycles).
 A line's ph= is the phase that ran in the 30 days before it, so the window from tick t-1 to t belongs to
 ph(t). The schedule switches at ticks 0, 3, 6 ...: phase = cycle x 8 + (block + group) mod 8, where
 block = (t - 1) // 3 and cycle = block // 8. The first window after a switch is a transition and is
 not measured.
 
-Model under test, per country and month (eb, ed: the curves' births and deaths without modifiers):
+Model under test, per country and 28-day window (eb, ed: the curves' births and deaths a month, no modifiers):
     births = s_b x (1 + M_b + X)     deaths = s_d x (1 + M_d + Y)
 X and Y are the probe's steps. s_b / eb and s_d / ed should be 1; M_b less the state read mb is what the
 census misses (per-pop terms: literacy, starvation ...), and is regressed on the logged shares.
@@ -37,9 +39,10 @@ SLOPE_X = (0.0, 0.5, 1.0)   # the steps the slopes are fitted from; -0.5 and -0.
 TICKS = 48
 NUM = ("t", "g", "ph", "st", "war", "pop", "n", "eb", "ebl", "ebs", "ebm", "ebst", "ebsv", "mb",
        "ed", "edst", "edsv", "edlab", "edmach", "edeng", "edslv", "edtu", "md")
-_LINE = re.compile(r"TE_PG (t=.*)$")
-_TICK = re.compile(r"TE_PG_TICK t=(-?\d+) date=(.*)$")
-_DAY = re.compile(r"TE_PG_DAY d=(\d+) tag=(\S+) pop=(-?[\d.]+) ph=(-?\d+) date=(.*)$")
+_LINE = re.compile(r"TE_PG v=2 (t=.*)$")
+_TICK = re.compile(r"TE_PG_TICK v=2 t=(-?\d+) date=(.*)$")
+_DAY = re.compile(r"TE_PG_DAY v=2 d=(\d+) tag=(\S+) pop=(-?[\d.]+) ph=(-?\d+) date=(.*)$")
+_ST = re.compile(r"TE_PG_ST v=2 d=(\d+) sid=(\d+) pop=(-?[\d.]+) prev=(-?[\d.]+)")
 
 
 def expected_phase(t, group):
@@ -55,6 +58,7 @@ def measured(t):
 
 def parse(paths):
     rows, ticks, days, bad = {}, {}, {}, []
+    states = collections.defaultdict(dict)
     seen = set()
     for path in paths:
         with open(path, encoding="utf-8", errors="replace") as fh:
@@ -71,6 +75,10 @@ def parse(paths):
                 if m:
                     days[(m.group(2), int(m.group(1)))] = (float(m.group(3)), int(m.group(4)), m.group(5).strip())
                     continue
+                m = _ST.search(line)
+                if m:
+                    states[int(m.group(2))][int(m.group(1))] = float(m.group(3)) - float(m.group(4))
+                    continue
                 m = _LINE.search(line)
                 if not m:
                     continue
@@ -82,6 +90,7 @@ def parse(paths):
                     continue
                 rec["tag"] = fields.get("tag", "?")
                 rows[(rec["tag"], int(rec["t"]))] = rec
+    parse.states = states
     return rows, ticks, days, bad
 
 
@@ -207,6 +216,19 @@ def cmd_check(args):
             nonzero = [c for c in ch if c[1]]
             print(f"  {tag}: {len(ch)} days, {len(nonzero)} with a change; "
                   + ", ".join(f"d{d} {c:+.0f} ({date})" for d, c, date in ch[:12]))
+    states = parse.states
+    if states:
+        gaps = collections.Counter()
+        per_state = []
+        for sid, ch in states.items():
+            ds = sorted(ch)
+            per_state.append(len(ds))
+            gaps.update(b - a for a, b in zip(ds, ds[1:]))
+        weekdays = collections.Counter(d % 7 for ch in states.values() for d in ch)
+        print(f"state change lines: {len(states)} states; changes per state min {min(per_state)} "
+              f"median {st.median(per_state)} max {max(per_state)}")
+        print("  days between a state's changes:", dict(sorted(gaps.items())))
+        print("  change days mod 7:", dict(sorted(weekdays.items())))
     return 0
 
 
