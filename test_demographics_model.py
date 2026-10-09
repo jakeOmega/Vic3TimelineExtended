@@ -195,7 +195,9 @@ class TestRing(unittest.TestCase):
         M.step(ring, BRITAIN_1836, 1837, engine_pop=0, war_dead=50, kills=10, migration=-200)
         self.assertEqual(ring.people(), 0)
         M.step(ring, BRITAIN_1836, 1838, engine_pop=1000, migration=1000)
-        self.assertAlmostEqual(ring.people(), 1000, delta=0.01)
+        self.assertEqual(ring.people(), 0)   # no class to take arrivals; the script re-seeds instead
+        reseeded = M.seed(BRITAIN_1836, 1838, 1000)
+        self.assertAlmostEqual(reseeded.people(), 1000, delta=0.01)
 
     def test_war_dead_are_young_men(self):
         ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
