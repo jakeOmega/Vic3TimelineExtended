@@ -5,7 +5,8 @@
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 # ======================================================================
 
-# Every 1836 country starts at its law's target. on_game_started has no
+# Every 1836 state starts at its own target, and the country's figure is
+# their weighted average (te_inh_game_start). on_game_started has no
 # ROOT, and add_modifier's multiplier resolves against ROOT, so the work
 # runs in a hidden country event (scripting_best_practices.md
 # § "add_modifier { multiplier = var:X } Resolves Against ROOT"); the

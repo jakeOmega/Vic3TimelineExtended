@@ -124,7 +124,10 @@ te_demog_gini_from_locals = {
 # Country variables (te_demog_wc_national, the one refresh site):
 #   te_inh_concentration  the national figure: the states' scores weighted by
 #                       where property is held. #822's name, so its loc,
-#                       tooltips and two modifiers keep reading it
+#                       tooltips and two modifiers keep reading it. A
+#                       country with no scored state keeps its own, which
+#                       te_inh_yearly_update, te_inh_shift_concentration and
+#                       te_demog_wc_shock move
 #   te_dg_wc_target     the states' targets, weighted the same way
 #   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
 #   te_dg_wc_t_tax      the target's terms, signed around 50 and weighted the
@@ -190,9 +193,22 @@ te_demog_wc_jump = {
 
 # THIS = ROOT = a country (te_inh_apply_concentration_modifiers needs ROOT to
 # be it): a shock to every state's score, then the national figure and #822's
-# modifiers follow at once.
+# modifiers follow at once. A country with no scored state (an old save before
+# its states' first pulse, a landless country) takes the shock on its own
+# figure, as te_inh_shift_concentration does.
 te_demog_wc_shock = {
-	te_demog_wc_jump = { AMOUNT = $AMOUNT$ }
+	if = {
+		limit = { any_scope_state = { has_variable = te_dg_wc } }
+		te_demog_wc_jump = { AMOUNT = $AMOUNT$ }
+	}
+	else = {
+		if = {
+			limit = { NOT = { has_variable = te_inh_concentration } }
+			set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
+		}
+		change_variable = { name = te_inh_concentration add = $AMOUNT$ }
+		clamp_variable = { name = te_inh_concentration min = 0 max = 100 }
+	}
 	te_demog_wc_national = yes
 }
 
@@ -316,9 +332,9 @@ te_demog_wc_national = {
 					name = te_dg_wc_w
 					value = {
 						value = var:te_dg_bureaucrats
-						divide = { value = local_var:te_dg_wc_bur min = 1 }
 						multiply = local_var:te_dg_wc_ctry
 						multiply = 0.1
+						divide = { value = local_var:te_dg_wc_bur min = 1 }
 						add = var:te_dg_lv_own
 						add = var:te_dg_lv_self
 					}

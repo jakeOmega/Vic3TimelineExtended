@@ -158,15 +158,19 @@ te_demog_wc_capital_levels = {
 }
 
 # State scope: the ownership term. The private share of the state's capital against
-# cooperative and state ownership, centred on half: all private +20, none -20. 0 for a
-# state with under one level of capital.
+# cooperative and state ownership, x 40 around the 1836 reference of 0.9 and capped at
+# 20 either way: all private +4, 40% private or less -20. Almost all capital is private
+# in 1836, so the plan's centre of half put every country near +20 and switched Great
+# Family Fortunes on from day one where #822 opened at 50. Centred on 0.9 the term is
+# near 0 in 1836 and falls as cooperative and state property grow. 0 for a state with
+# under one level of capital.
 te_demog_wc_ownership_term = {
 	value = 0
 	if = {
 		limit = { te_demog_wc_capital_levels >= 1 }
 		value = var:te_dg_lv_priv
 		divide = { value = te_demog_wc_capital_levels min = 1 }
-		subtract = 0.5
+		subtract = 0.9
 		multiply = 40
 		min = -20
 		max = 20

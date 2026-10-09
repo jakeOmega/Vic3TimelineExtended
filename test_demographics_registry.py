@@ -1583,14 +1583,17 @@ class TestWealth(unittest.TestCase):
 
     def test_the_target_sums_its_terms(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
-        # law 80, land 6, ownership (30/40 - 0.5) x 40 = 10, inequality (0.5 - 0.4) x 50 = 5, taxes -5
-        self.assertAlmostEqual(self.target(state), 96.0)
-        self.assertEqual(self.target(state, law=100.0), 100.0)
+        # law 80, land 6, ownership (30/40 - 0.9) x 40 = -6, inequality (0.5 - 0.4) x 50 = 5, taxes -5
+        self.assertAlmostEqual(self.target(state), 80.0)
+        self.assertEqual(self.target(state, law=100.0, land=15.0), 100.0)
         self.assertEqual(self.target(state, law=0.0, land=-20.0), 0.0)
 
     def test_the_ownership_and_inequality_terms_are_capped(self):
         private = {"te_dg_lv_priv": 50.0, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.9}
-        self.assertAlmostEqual(self.target(private, law=50.0, land=0.0, tax=0.0), 50 + 20 + 15)
+        # centred on 1836's 0.9 private: all private is +4, the most the term can add
+        self.assertAlmostEqual(self.target(private, law=50.0, land=0.0, tax=0.0), 50 + 4 + 15)
+        nine_tenths = {"te_dg_lv_priv": 90.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 5.0, "te_dg_gini": 0.4}
+        self.assertAlmostEqual(self.target(nine_tenths, law=50.0, land=0.0, tax=0.0), 50.0, msg="1836's mix: no term")
         state_owned = {"te_dg_lv_priv": 0.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 45.0, "te_dg_gini": 0.0}
         self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 15)
         no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.4}
@@ -1600,7 +1603,7 @@ class TestWealth(unittest.TestCase):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5,
                  "te_dg_wc": 33.0}
         self.assertEqual(self.target(state, owner={"te_inh_title_continuity": 1.0}), 33.0)
-        self.assertAlmostEqual(self.target(state), 96.0)
+        self.assertAlmostEqual(self.target(state), 80.0)
 
     # -- the national figure, through the interpreter ------------------------------------------------
 
@@ -1624,8 +1627,10 @@ class TestWealth(unittest.TestCase):
         return eng.vars
 
     def test_the_national_figure_weighs_states_by_property(self):
-        a = self.scored(80, 70, own=30, ctry=40, bur=900, gini=0.5, groups=((900e3, 1.2e6), (90e3, 3e5), (1e4, 2e5)))
-        b = self.scored(40, 50, coop=10, ctry=60, bur=100, gini=0.3, groups=((500e3, 6e5), (40e3, 9e4), (2e3, 3e4)))
+        a = self.scored(80, 70, own=30, ctry=40, bur=900, gini=0.5, priv=400,
+                        groups=((900e3, 1.2e6), (90e3, 3e5), (1e4, 2e5)))
+        b = self.scored(40, 50, coop=10, ctry=60, bur=100, gini=0.3, priv=200,
+                        groups=((500e3, 6e5), (40e3, 9e4), (2e3, 3e4)))
         c = {"te_dg_walk_pop": 9e9, "te_dg_lv_own": 9e9}   # no score: left out
         v = self.national([a, b, c])
         # 100 state-owned levels where 1,000 bureaucrats work: a holds 900 of them, b 100
@@ -1636,7 +1641,9 @@ class TestWealth(unittest.TestCase):
         self.assertEqual(v["applied"], v["te_inh_concentration"], "the modifiers read this year's figure")
         self.assertAlmostEqual(v["te_dg_wc_t_law"], 25.0)
         self.assertAlmostEqual(v["te_dg_wc_t_land"], 4.0)
-        self.assertAlmostEqual(v["te_dg_wc_t_own"], mean((10 / 50 - 0.5) * 40, (10 / 80 - 0.5) * 40))
+        own_a, own_b = (400 / 440 - 0.9) * 40, (200 / 270 - 0.9) * 40   # +0.36 and -6.37: inside the caps
+        self.assertTrue(-20 < own_b < own_a < 20)
+        self.assertAlmostEqual(v["te_dg_wc_t_own"], mean(own_a, own_b))
         self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(5, -5))
         self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
         self.assertIs(v["te_dg_wc_top"], a)
@@ -1644,6 +1651,13 @@ class TestWealth(unittest.TestCase):
         groups = [(a[f"te_dg_n_{g}"] + b[f"te_dg_n_{g}"], a[f"te_dg_y_{g}"] + b[f"te_dg_y_{g}"]) for g in ("lo", "mi", "up")]
         expected = demographics_model.shown_gini(demographics_model.grouped_gini(groups))
         self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed groups")
+
+    def test_the_bureaucrat_share_multiplies_before_it_divides(self):
+        """A state with a tiny share of the bureaucrats keeps its precision: values are i64 x 1e-5."""
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_national")
+        weight = body[body.index("value = var:te_dg_bureaucrats"):]
+        self.assertLess(weight.index("multiply = local_var:te_dg_wc_ctry"),
+                        weight.index("divide = { value = local_var:te_dg_wc_bur min = 1 }"))
 
     def test_without_property_the_states_weigh_by_people(self):
         v = self.national([self.scored(80, 70, pop=2e6), self.scored(40, 50, pop=1e6, ctry=30)])
@@ -1666,6 +1680,18 @@ class TestWealth(unittest.TestCase):
         eng.run(_parse_script("te_demog_wc_shock = { AMOUNT = -5 }"))
         self.assertEqual((a["te_dg_wc"], b["te_dg_wc"]), (75.0, 0.0))
         self.assertAlmostEqual(eng.vars["te_inh_concentration"], 37.5)
+
+    def test_a_shock_reaches_a_country_with_no_scored_state(self):
+        """An old save before its states' first pulse, or a landless country: the shock lands on its own
+        figure, clamped, and the modifiers follow; with no figure yet it starts from #822's target."""
+        for before, amount, after in ((63.0, -5, 58.0), (3.0, -5, 0.0), (98.0, 5, 100.0), (None, -20, 30.0)):
+            states = [{"te_dg_walk_pop": 1e5}]
+            eng = _CountryEngine(states=states, effects=APPLIED, fixtures={"te_inh_concentration_target": 50.0})
+            if before is not None:
+                eng.vars["te_inh_concentration"] = before
+            eng.run(_parse_script(f"te_demog_wc_shock = {{ AMOUNT = {amount} }}"))
+            self.assertEqual((eng.vars["te_inh_concentration"], eng.vars["applied"]), (after, after), before)
+            self.assertNotIn("te_dg_wc", states[0])
 
     # -- the war shock on 31 December -----------------------------------------------------------------
 
