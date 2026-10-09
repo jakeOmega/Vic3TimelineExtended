@@ -451,8 +451,10 @@ how many units of each good the hub may move in a week (hover it for where
 that comes from), and Sales Income, what this week's releases earn.
 
 The Reserve Inventory starts open. Its first line shows the Adjustment Step,
-with the Cycle Step and Reset Rates buttons beside it. Below that is a row for
-each good you have unlocked:
+with the Cycle Step and Reset Rates buttons beside it. The second line holds
+All: Stabilize, Military: Stockpile and All: Manual, which set the policy of
+every good at once (see [Reserve policies and presets](#reserve-policies-and-presets)).
+Below them is a row for each good you have unlocked:
 
 | Cell | What it shows |
 |---|---|
@@ -487,7 +489,8 @@ A positive rate buys that many units a week from the market into the reserve; a
 negative rate releases that many onto the market. Every press of a good's
 decrease or increase button moves its rate by the Adjustment Step, which the
 Cycle Step button sets to 1, 10, 100, 1,000 or 10,000 (10 at first). The stop
-button sets the good's rate to 0, and Reset Rates sets every good's rate to 0.
+button sets the good's rate to 0. Reset Rates sets every good's rate to 0 and
+switches every good to Manual.
 The game keeps each rate within the weekly flow limit and the room or stock
 left, and sets it to 0 when the reserve fills or empties.
 
@@ -508,8 +511,8 @@ and −2,000 a week of expenses at the same time.
 Instead of setting a rate by hand, you can give each good a policy that decides
 its rate every week from the national market price, measured against the good's
 base price and averaged over several weeks. Click a good's policy icon, or
-expand its row and open Policy Settings, to choose one. The four policy buttons
-there use short names: Manual, Buy Cheap, Release High and Stabilize.
+expand its row and open Policy Settings, to choose one. The five policy buttons
+there use short names: Manual, Buy Cheap, Release High, Stabilize and Stockpile.
 
 | Policy | What it does |
 |---|---|
@@ -517,17 +520,30 @@ there use short names: Manual, Buy Cheap, Release High and Stabilize.
 | Buy When Cheap | Buys while the averaged price is below your purchase threshold. Never sells. |
 | Release When Expensive | Sells while the averaged price is above your release threshold. Never buys. |
 | Stabilize Prices | Does both. |
+| Stockpile | Buys at full flow while the averaged price is at or below your purchase threshold. Sells above your release threshold while you are at war, and in peacetime only above +50%. |
 
-Eight settings shape a policy, and three presets fill them all in one click:
+Stockpile is for goods you want in hand before a war, such as ammunition. A
+munitions industry is rarely profitable enough to push the price far below
+base, so the other buying policies seldom fill a reserve of it. Choosing
+Stockpile loads the Stockpile preset, which buys at or below +5% of base price,
+and the response ramp does not slow its purchases. At war it sells into the
+price spike; in peacetime it keeps the stock unless the price passes +50%, as it
+can when an army mobilizes for a diplomatic play. Between your release
+threshold and +50% in peacetime, the good's row says Holding.
 
-| Setting | Conservative | Standard | Aggressive |
-|---|---|---|---|
-| Buy below (% of base price) | −20 | −10 | −5 |
-| Release above (% of base price) | +30 | +20 | +10 |
-| Maximum weekly flow (units) | 2% of capacity | 5% of capacity | 12% of capacity |
-| Weekly purchase budget (estimated) | 0.1% of weekly GDP | 0.3% of weekly GDP | 0.8% of weekly GDP |
-| Price memory (weeks averaged) | 8 | 4 | 2 |
-| Response ramp (points) | 20 | 10 | 5 |
+Eight settings shape a policy, and four presets fill them all in one click:
+
+| Setting | Conservative | Standard | Aggressive | Stockpile |
+|---|---|---|---|---|
+| Buy below (% of base price) | −20 | −10 | −5 | +5 (at or below) |
+| Release above (% of base price) | +30 | +20 | +10 | +20 (at war) |
+| Maximum weekly flow (units) | 2% of capacity | 5% of capacity | 12% of capacity | 5% of capacity |
+| Weekly purchase budget (estimated) | 0.1% of weekly GDP | 0.3% of weekly GDP | 0.8% of weekly GDP | 0.3% of weekly GDP |
+| Price memory (weeks averaged) | 8 | 4 | 2 | 4 |
+| Response ramp (points) | 20 | 10 | 5 | 10 (sales only) |
+
+The purchase threshold can be set from −50% to +25% of base price under any
+policy.
 
 Every preset uses the whole capacity: a protected stockpile of 0% and a target
 stockpile of 100%. Set those two yourself if you want a floor the policy never
@@ -541,8 +557,17 @@ preset in force is grayed out, and changing any setting by hand ends it. The
 budget is set for each good and caps each week's spending; what goes unspent
 doesn't carry over. A new reserve starts every good on Manual with the Standard
 settings loaded, so switching a good to a policy works at once. The row's own
-rate buttons and Reset Rates switch goods back to Manual. Policies keep running
-while the journal entry is closed.
+rate buttons, Reset Rates and All: Manual switch goods back to Manual. Policies
+keep running while the journal entry is closed.
+
+The buttons on the Reserve Inventory's second line act on every good you have
+unlocked:
+
+| Button | What it does | When to use it |
+|---|---|---|
+| All: Stabilize | Every good to Stabilize Prices with the Standard preset. | To lean against price swings in every market you stock. |
+| Military: Stockpile | Ammunition, oil, small arms, artillery, aeroplanes and tanks to Stockpile with its preset. Grain and chemicals keep their policy. | To build a war reserve at about base price. |
+| All: Manual | Every good to Manual. Each keeps its current rate and settings. | To take back control without stopping trade; Reset Rates also sets every rate to 0. |
 
 ### Moving or losing the reserve hub
 
@@ -590,12 +615,15 @@ Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 The AI founds its reserve through Establish a Strategic Reserve: great and major
 powers take it, more readily in peacetime, and so does any country with a GDP
 above 10 million. AI reserves add silos once any good passes 75% of capacity.
-An AI reserve runs every good on Stabilize Prices with the Conservative preset:
-it buys below −20% and releases above +30%, and while prices stay low it fills
-an empty reserve in about a year.
-It follows the same rules, limits and costs as yours. It doesn't change policy
-for a war, but a war that pushes ammunition past +30% makes AI reserves release
-into the spike.
+An AI reserve runs grain and chemicals on Stabilize Prices with the
+Conservative preset: it buys below −20% and releases above +30%. Its
+ammunition, oil, small arms, artillery, aeroplanes and tanks go on Stockpile
+with the Stockpile preset while its treasury allows: it must not be borrowing
+or in default, and it needs a quarter of its gold reserve limit in hand to
+start. It then buys them at about base price in peacetime and sells into a
+war's price spike. Once it borrows, those goods go back to Stabilize Prices on
+Conservative. The AI reviews this every week. It follows the same rules,
+limits and costs as yours.
 
 ## Wartime demand for munitions
 
@@ -612,9 +640,9 @@ options](13-military.md#mobilization-options).
 The demand follows mobilization rather than war: an army mobilized for a
 diplomatic play spikes it even if no war follows, and the demand falls away as
 the army demobilizes. Where armies buy most of the ammunition, four times the
-demand can push its price to the maximum. Build munitions capacity, stock
-ammunition in the Strategic Reserve while it is cheap, or both, before you go to
-war.
+demand can push its price to the maximum. Build munitions capacity, put
+ammunition on the Strategic Reserve's Stockpile policy (it buys at about base
+price and sells into the spike), or both, before you go to war.
 
 ## New mineral deposits
 
