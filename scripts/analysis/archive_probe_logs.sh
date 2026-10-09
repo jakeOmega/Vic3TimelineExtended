@@ -10,7 +10,8 @@
 # (demographics_growth_probe.py) reads identical lines once. With SAVE_EVERY > 0 it
 # also copies every SAVE_EVERY-th new autosave.v3 (plain-text ones are ~250 MB).
 # Stop it with Ctrl-C (or kill); it never deletes anything.
-set -euo pipefail
+# No set -e: the game rotates and replaces these files at any moment, and every step retries next pass.
+set -uo pipefail
 
 OUT="${1:?usage: archive_probe_logs.sh OUT_DIR [SAVE_EVERY]}"
 SAVE_EVERY="${2:-0}"
@@ -27,7 +28,7 @@ echo "archiving $LOGS -> $OUT (autosave every ${SAVE_EVERY:-0})"
 while true; do
   for f in "$LOGS"/debug.[1-5].log; do
     [[ -f "$f" ]] || continue
-    stamp="$(stat -c %Y-%s "$f")"
+    stamp="$(stat -c %Y-%s "$f" 2>/dev/null)" || continue
     if [[ "${seen[$f]:-}" != "$stamp" ]]; then
       # a rotation can replace the file mid-copy: then retry on the next pass
       if cp "$f" "$OUT/logs/$(basename "$f" .log).$(date +%s%N).log" 2>/dev/null; then
@@ -41,7 +42,7 @@ while true; do
     last_live="$now"
   fi
   if (( SAVE_EVERY > 0 )) && [[ -f "$SAVES/autosave.v3" ]]; then
-    stamp="$(stat -c %Y "$SAVES/autosave.v3")"
+    stamp="$(stat -c %Y "$SAVES/autosave.v3" 2>/dev/null)" || stamp="${seen[autosave]:-}"
     if [[ "${seen[autosave]:-}" != "$stamp" ]]; then
       seen[autosave]="$stamp"
       saves_seen=$((saves_seen + 1))
