@@ -1808,13 +1808,14 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 
 **File:** `common/journal_entries/je_tax_code.txt`
 **Group:** `je_group_internal_affairs`
-**Game rule:** `te_tax_code_rule` (`te_tax_code_enabled`, `te_tax_code_enabled_customs`; default `te_tax_code_disabled`)
+**Game rule:** `te_tax_code_rule` (`te_tax_code_enabled`, `te_tax_code_enabled_customs`, `te_tax_code_light`; default `te_tax_code_disabled`)
 
 ### Purpose
 The Legislated Tax Code under its game rule: one enacted fiscal code per country, changed only by tax bills that interest groups commit to and that take effect on the 1st of a month. The entry is the code's home; the Budget panel's Tax Code tab is its second host, with the same panels. AI countries legislate through the same commands (package 6). Design of record: `docs/systems/tax_code_schema.md`; play-test: `docs/testing/tax-code-playtest.md`.
 
 ### Key Mechanics
-- **Activation:** `is_shown_when_inactive` holds whenever the rule is on, and `possible` once the country's taxes are under the code (`te_tax_entry_unlocked`), so the entry auto-activates after the game-start migration; nothing calls `add_journal_entry`. A decentralized country never migrates, so never gets it.
+- **Activation:** `is_shown_when_inactive` holds whenever the rule is on, full or light (`te_tax_code_on`), and `possible` once the country's taxes are under the code (`te_tax_entry_unlocked`: either code in force), so the entry auto-activates after the game-start migration; nothing calls `add_journal_entry`. A decentralized country never migrates, so never gets it.
+- **Light setting:** the vanilla taxation laws stay and bound each rate; the panels show the law, the tax level and the tax that sets it, and one row per tax the law levies (its range, rate, − and +, applied at once, and its step: `te_tax_light_widget.gui`, `te_tax_light_step_<key>_sgui`) instead of the legislated code's sections (`te_tax_show_light_sgui`). The description and reason switch with it. Mechanics: `docs/systems/tax_code_schema.md`, "Light code".
 - **Never completes, never fails:** no `complete`, `fail` or `timeout`. `can_revolution_inherit = yes`; the code itself crosses a civil war through the tax code's own outbreak copy and win repair (`te_tax_civil_war_effects.txt`), not through the entry.
 - **No scripted buttons:** every player action is a scripted GUI (`common/scripted_guis/te_tax_sguis.txt`, `te_tax_generated_sguis.txt`) whose `is_valid` is the command's own `te_tax_can_*` trigger and whose effect is the `te_tax_cmd_*` effect, so a button's tooltip and its click cannot disagree. Opening a panel writes nothing.
 - **Panels** (three widget containers, all from `gui/journal_entry_widgets/te_tax_layout_widget.gui`): the overview (`te_tax_overview_widget.gui`: code version, last and next change, bills, promises, snapshot, enacted code, history, How Tax Legislation Works), the status (`te_tax_workbench_widget.gui` and `te_tax_review_widget.gui`: draft workbench and review with estimates) and the reference (`te_tax_politics_widget.gui`: the bill under debate, interest-group cards with offers, passed bills, promises). Generated rows: `te_tax_generated_rows.gui`.
@@ -1825,4 +1826,4 @@ The Legislated Tax Code under its game rule: one enacted fiscal code per country
 Canonical country variables `te_tax_*`, listed in `docs/systems/tax_code_schema.md` "Schema" (the code, packages, records, obligations, trust, AI rows). The entry stores none of its own.
 
 ### Debug
-Console events `te_tax_debug.1` to `.8` (`events/te_tax_debug_events.txt`): the carrier re-assert, the AI step and signals, and scenario setup. Log tags: the schema doc's "Debug-line index".
+Console events `te_tax_debug.1` to `.10` (`events/te_tax_debug_events.txt`): the carrier re-assert, the AI step and signals, and scenario setup; `.9` and `.10` the light code's state and an outside tax-level move. Log tags: the schema doc's "Debug-line index".

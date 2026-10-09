@@ -22,7 +22,7 @@ OPTIONS = ("te_tax_code_disabled", "te_tax_code_enabled", "te_tax_code_enabled_c
 # Every setting but disabled: the probe harness refuses to arm under any of them.
 ENABLED_OPTIONS = ("te_tax_code_enabled", "te_tax_code_enabled_customs", "te_tax_code_light")
 # The positive gates a handler or a shared effect may open with.
-GATES = {"te_tax_code_full", "te_tax_code_light", "te_tax_code_on", "te_tax_code_in_force", "te_tax_light_in_force"}
+GATES = {"te_tax_code_full", "te_tax_code_light_on", "te_tax_code_on", "te_tax_code_in_force", "te_tax_light_in_force"}
 RATE_KEYS = (
     "tax_income_add", "tax_dividends_add", "tax_land_add",
     "tax_per_capita_add", "tax_consumption_add",
@@ -122,7 +122,7 @@ class OnActionGateSweepTest(unittest.TestCase):
     """Final review B-Minor 13: every tax-code on_action handler, and every tax-code
     effect a shared hook calls, does nothing unless the setting it serves holds,
     written positively: te_tax_code_full for the legislated code's handlers,
-    te_tax_code_light for the light code's (te_tax_light_*). Each task's tests pin
+    te_tax_code_light_on for the light code's (te_tax_light_*). Each task's tests pin
     its own hooks; this pins the invariant for the next one."""
 
     ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
@@ -136,7 +136,7 @@ class OnActionGateSweepTest(unittest.TestCase):
             with self.subTest(handler=name):
                 effect = body["effect"]
                 self.assertEqual(set(effect), {"if"}, "nothing outside the gate")
-                gate = "te_tax_code_light" if name.startswith("te_tax_light_") else "te_tax_code_full"
+                gate = "te_tax_code_light_on" if name.startswith("te_tax_light_") else "te_tax_code_full"
                 self.assertEqual(effect["if"]["limit"].get(gate), "yes")
         # Every hook this file extends runs only handlers of its own.
         for name, body in parsed.items():
@@ -181,7 +181,10 @@ class GateTriggerTest(unittest.TestCase):
             self.triggers["te_tax_code_full"],
             {"OR": {"has_game_rule": ["te_tax_code_enabled", "te_tax_code_enabled_customs"]}},
         )
-        self.assertEqual(self.triggers["te_tax_code_light"], {"has_game_rule": "te_tax_code_light"})
+        # Named apart from the te_tax_code_light option, which a call would shadow for
+        # the script argument audit (and for a reader).
+        self.assertEqual(self.triggers["te_tax_code_light_on"], {"has_game_rule": "te_tax_code_light"})
+        self.assertNotIn("te_tax_code_light", self.triggers)
         self.assertEqual(
             self.triggers["te_tax_code_on"],
             {"OR": {"has_game_rule": list(ENABLED_OPTIONS)}},
@@ -189,7 +192,7 @@ class GateTriggerTest(unittest.TestCase):
 
     def test_light_in_force_needs_the_light_setting_and_its_marker(self):
         self.assertEqual(self.triggers["te_tax_light_in_force"], {
-            "te_tax_code_light": "yes", "has_variable": "te_tax_light_on", "var:te_tax_light_on": "1",
+            "te_tax_code_light_on": "yes", "has_variable": "te_tax_light_on", "var:te_tax_light_on": "1",
         })
         # The full code's in-force trigger is never true under the light setting.
         self.assertEqual(self.triggers["te_tax_code_in_force"]["te_tax_code_full"], "yes")
@@ -218,7 +221,7 @@ class GateTriggerTest(unittest.TestCase):
                 for item in node:
                     yield from keys(item)
 
-        for gate in ("te_tax_code_full", "te_tax_code_light", "te_tax_code_on", "te_tax_customs_on"):
+        for gate in ("te_tax_code_full", "te_tax_code_light_on", "te_tax_code_on", "te_tax_customs_on"):
             with self.subTest(gate=gate):
                 self.assertFalse({"NOT", "NOR"} & set(keys(self.triggers[gate])))
 

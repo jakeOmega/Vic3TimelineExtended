@@ -470,7 +470,7 @@ class SyncTest(unittest.TestCase):
 
     def test_migration_writes_the_uniform_code_then_syncs(self):
         body = flat(block(self.text, "te_tax_light_migrate_country"))
-        self.assertIn("te_tax_code_light = yes", body)
+        self.assertIn("te_tax_code_light_on = yes", body)
         order = ["te_tax_light_gen_init = yes", "te_tax_light_gen_uniform = yes",
                  "set_variable = { name = te_tax_light_law value = te_tax_light_law_id }",
                  "set_variable = { name = te_tax_light_level value = te_tax_light_native_level }",
@@ -533,7 +533,7 @@ class HookTest(unittest.TestCase):
         for name, event in expected.items():
             body = flat(block(self.text, name))
             with self.subTest(handler=name):
-                self.assertIn("te_tax_code_light = yes", body)
+                self.assertIn("te_tax_code_light_on = yes", body)
                 self.assertIn(f"trigger_event = {{ id = {event} }}", body)
         dispatch = flat(block(self.text, "te_tax_light_monthly_dispatch"))
         self.assertLess(dispatch.index("trigger_event = { id = te_tax_light.1 }"),
@@ -552,7 +552,7 @@ class HookTest(unittest.TestCase):
             body = flat(block(text, f"te_tax_light.{n}"))
             with self.subTest(event=n):
                 self.assertIn("type = country_event hidden = yes", body)
-                self.assertIn("trigger = { te_tax_code_light = yes }", body)
+                self.assertIn("trigger = { te_tax_code_light_on = yes }", body)
                 self.assertIn(f"immediate = {{ {effect} = yes }}", body)
 
     def test_the_probe_harness_refuses_every_enabled_setting(self):

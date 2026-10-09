@@ -709,7 +709,7 @@ class IgViewTest(unittest.TestCase):
             with self.subTest(ig=ig):
                 # Under the light setting, the group's relief band (test_tax_code_light.py).
                 self.assertTrue(body.startswith(
-                    f"value = 0 if = {{ limit = {{ te_tax_code_light = yes has_variable = te_tax_light_band_{ig} }} "
+                    f"value = 0 if = {{ limit = {{ te_tax_code_light_on = yes has_variable = te_tax_light_band_{ig} }} "
                     f"value = var:te_tax_light_band_{ig} }} else_if = {{ limit = {{ te_tax_code_equivalent_graduated = yes }}"))
                 positions = [body.find(f"te_tax_code_equivalent_{short} = yes") for short, _ in EQUIVALENT]
                 self.assertEqual(positions, sorted(positions))

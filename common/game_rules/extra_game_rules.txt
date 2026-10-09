@@ -422,7 +422,7 @@ demographics_rule = {
 # once from the tax code's panel, with no bills.
 #
 # Every check is written POSITIVELY, through te_tax_code_on (any setting but
-# disabled), te_tax_code_full (the two enabled settings), te_tax_code_light and
+# disabled), te_tax_code_full (the two enabled settings), te_tax_code_light_on and
 # te_tax_customs_on (common/scripted_triggers/te_tax_triggers.txt), never as
 # NOT = { has_game_rule = te_tax_code_disabled }. A save from before this rule
 # existed has no value stored for it, and a negated check would read that as

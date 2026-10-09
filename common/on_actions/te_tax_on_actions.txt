@@ -44,8 +44,8 @@
 # Every handler checks te_tax_code_full first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
 #
-# The light code (te_tax_code_light; te_tax_light_effects.txt) has its own
-# handlers, te_tax_light_*, each gated on te_tax_code_light, on the same hooks:
+# The light code (te_tax_code_light_on; te_tax_light_effects.txt) has its own
+# handlers, te_tax_light_*, each gated on te_tax_code_light_on, on the same hooks:
 # migration after the lobby, for a formed or released country and from the
 # monthly dispatch (te_tax_light.2), the monthly processor (te_tax_light.1) and
 # a sync after a taxation law is activated (te_tax_light.3). A released country
@@ -87,7 +87,7 @@ te_tax_on_game_started = {
 te_tax_light_on_game_started = {
 	effect = {
 		if = {
-			limit = { te_tax_code_light = yes }
+			limit = { te_tax_code_light_on = yes }
 			every_country = {
 				limit = { NOT = { is_country_type = decentralized } }
 				trigger_event = { id = te_tax_light.2 }
@@ -122,7 +122,7 @@ te_tax_on_country_formed = {
 te_tax_light_on_country_formed = {
 	effect = {
 		if = {
-			limit = { te_tax_code_light = yes }
+			limit = { te_tax_code_light_on = yes }
 			trigger_event = { id = te_tax_light.2 }
 		}
 	}
@@ -183,7 +183,7 @@ te_tax_on_country_released = {
 te_tax_light_on_country_released = {
 	effect = {
 		if = {
-			limit = { te_tax_code_light = yes }
+			limit = { te_tax_code_light_on = yes }
 			scope:target ?= {
 				set_variable = { name = te_tax_light_on value = 0 }
 				trigger_event = { id = te_tax_light.2 }
@@ -272,7 +272,7 @@ te_tax_monthly_dispatch = {
 te_tax_light_monthly_dispatch = {
 	effect = {
 		if = {
-			limit = { te_tax_code_light = yes }
+			limit = { te_tax_code_light_on = yes }
 			every_country = {
 				limit = {
 					NOT = { is_country_type = decentralized }
@@ -365,7 +365,7 @@ te_tax_light_on_law_activated = {
 	effect = {
 		if = {
 			limit = {
-				te_tax_code_light = yes
+				te_tax_code_light_on = yes
 				law_type = { is_same_law_group_as = law_type:law_proportional_taxation }
 				owner = { te_tax_light_in_force = yes }
 			}

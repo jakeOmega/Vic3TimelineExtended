@@ -1,6 +1,22 @@
 # Light tax code: a fourth option on the tax code rule (design note)
 
-**Date:** 2026-10-09 · **Status:** draft for the owner's check · **Base:** `main` at 7bbf8c8
+**Date:** 2026-10-09 · **Status:** approved by the owner and built · **Base:** `main` at 7bbf8c8
+
+## Decisions (owner, 2026-10-09)
+
+- The tax level follows the heaviest tax (§1), not a weighted average: script can't read a tax's
+  base, so fixed weights would be gameable through the native goods list.
+- The AI follows vanilla's tax level (§5).
+- A reaction that pleases a group counts half (§4).
+- The view bands stay, scored from the rates (§4). As built they are scored against the code's own
+  tax level, not the middle of the law's range: a group gets +1 or +2 for the relief its members get,
+  and a code with every tax on one step gets no band. So a uniform code, which every AI code is,
+  stays exactly vanilla, and relief is what buys lasting goodwill. The weight is the group's
+  exposure times the relief in vanilla levels, not normalised over the taxes the law levies (which
+  would give a group that pays a sliver of the only relieved tax the full band).
+- The light trigger is `te_tax_code_light_on`, not `te_tax_code_light`: a trigger named like the
+  option makes the option's block read as a call (`script_argument_audit`).
+
 
 Light mode is a separate option on `te_tax_code_rule`, `te_tax_code_light`. The full mode is not
 changed. The vanilla taxation law stays enacted and sets each tax's range. Inside that range the
@@ -66,12 +82,11 @@ bounds are generated from `MIGRATION` in `gen_tax_code.py` as
 
 ## 4. Interest groups
 
-- **Standing view: vanilla's own.** The law is enacted, so the engine already gives every group
-  its `IG_APPROVAL_FROM_LAW` stance approval. The view bands (`te_tax_ig_view_<ig>_<band>`) exist
-  to reproduce that approval when the carrier displaces the law, and `te_tax_code_equivalent_*`
-  need the carrier. So in light mode they are 0 by construction. Applying them as well would count
-  the law twice. **"Keep the view bands" therefore means: unchanged in full mode, off in light
-  mode.** Please confirm.
+- **Standing view.** The law is enacted, so the engine already gives every group its
+  `IG_APPROVAL_FROM_LAW` stance approval; the law-equivalence bands (`te_tax_code_equivalent_*` need
+  the carrier) would count it twice. Instead the bands (`te_tax_ig_band_<ig>`, the same
+  `te_tax_ig_view_<ig>_p1/_p2` modifiers) carry the relief each group's members get: +1 from one
+  vanilla level of relief on a tax they pay in full, +2 from two (see Decisions).
 - **A reaction to each change.** Each step is scored per group with full mode's reasons, for that
   step alone: material `−10 × exposure × Δlevels` and ideology `stance lean × Δprogressiveness ×
   5`. The score goes into a per-group accumulator, `te_tax_lr_<ig>`. One country static per group,
@@ -93,7 +108,7 @@ bounds are generated from `MIGRATION` in `gen_tax_code.py` as
   | Consumption 15% → 35% | Trade Unions (0.8) | −8 |
   | Graduated dividends 10% → 30% | Industrialists (1.0) | −10 |
 
-- **Proposal: cuts count half.** A positive step score is halved. Raising a tax and cutting it
+- **Cuts count half (decided).** A positive step score is halved. Raising a tax and cutting it
   back then nets a cost, so the reaction can't be pumped before an election. This is a call on
   how a cut is received in the fiction, so it's yours to make.
 
@@ -126,8 +141,8 @@ Vanilla's tax level has none. The brake is the reaction: it accumulates, and cut
 ## 7. Gates (task 2)
 
 - `te_tax_code_full` takes today's body: either enabled option.
-- `te_tax_code_light` is the new option.
-- `te_tax_code_on` becomes "either". All three triggers are written positively.
+- `te_tax_code_light_on` reads the new option, `te_tax_code_light`.
+- `te_tax_code_on` becomes "any enabled setting". All three triggers are written positively.
 
 Every existing `te_tax_code_on` site moves to `te_tax_code_full` (the generator for generated
 files), so the bill machinery, AI bill loop, carrier, 130 amendments, vanilla-law gates, the

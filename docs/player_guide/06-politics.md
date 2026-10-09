@@ -130,7 +130,7 @@ policy](04-banking.md).
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
-| Legislated Tax Code | Taxation | The Legislated Tax Code game rule (off by default) | Replaces the five taxation laws: every rate is set by a tax bill. See [Taxation (experimental)](05-tax-code.md). |
+| Legislated Tax Code | Taxation | The Legislated Tax Code game rule (off by default), except under its Light Tax Code setting | Replaces the five taxation laws: every rate is set by a tax bill. See [Taxation (experimental)](05-tax-code.md). |
 
 ### Who staffs the administration
 
@@ -412,9 +412,9 @@ game: most are offered by enactment events as the price of passage, and most can
 also be asked for later, on a law already in force (see [Amendment
 petitions](#amendment-petitions)). Three
 amendments attach to base-game laws: the Spoils System, Corporate Security
-Powers and Civilian Oversight. Under the Legislated Tax Code rule the tax rates are
-amendments to the Legislated Tax Code law, and only tax bills change them (see
-[Taxation (experimental)](05-tax-code.md)).
+Powers and Civilian Oversight. Under the Legislated Tax Code rule's legislated
+settings the tax rates are amendments to the Legislated Tax Code law, and only tax
+bills change them (see [Taxation (experimental)](05-tax-code.md)).
 
 | Amendment | Attaches to | Effect |
 |---|---|---|
@@ -748,7 +748,8 @@ the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, the arable-land bonuses from
 farming breakthroughs, and under the Legislated Tax Code rule the tax code with
-its passed bills and promises, all carry over. A Civil Rights Movement, Human
+its passed bills and promises (under the Light Tax Code, its rates), all carry
+over. A Civil Rights Movement, Human
 Augmentation Debate or Mental Health Crisis journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
 journal-entry buttons, such as banking tools and climate policies, have to be

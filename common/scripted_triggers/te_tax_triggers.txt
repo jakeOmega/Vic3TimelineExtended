@@ -6,7 +6,7 @@
 # carrier law, bills, offers, promises, packages, customs) asks
 # te_tax_code_full; customs legislation asks te_tax_customs_on as well. The
 # light code (docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
-# te_tax_light_effects.txt) asks te_tax_code_light. te_tax_code_on is either
+# te_tax_light_effects.txt) asks te_tax_code_light_on. te_tax_code_on is either
 # one: what both settings share (the journal entry, the Budget tab, the greyed
 # tax-level buttons).
 #
@@ -25,7 +25,7 @@ te_tax_code_full = {
 
 # True under the light setting only: the vanilla taxation law stays and bounds
 # each rate.
-te_tax_code_light = {
+te_tax_code_light_on = {
 	has_game_rule = te_tax_code_light
 }
 
@@ -199,7 +199,7 @@ te_tax_code_in_force = {
 # te_tax_light_effects.txt). The full code's te_tax_code_in_force is never true
 # under the light setting, so nothing of the full code runs for this country.
 te_tax_light_in_force = {
-	te_tax_code_light = yes
+	te_tax_code_light_on = yes
 	has_variable = te_tax_light_on
 	var:te_tax_light_on >= 1
 }

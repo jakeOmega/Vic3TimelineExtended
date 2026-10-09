@@ -78,7 +78,7 @@ te_tax_on_uprising = {
 		# The light code: the rebels start from their own taxation law and tax
 		# level (a revived tag's marker from an earlier life is cleared first).
 		limit = {
-			te_tax_code_light = yes
+			te_tax_code_light_on = yes
 			exists = scope:target
 		}
 		scope:target = {

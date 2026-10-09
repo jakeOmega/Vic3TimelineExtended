@@ -2618,7 +2618,7 @@ def _view_values():
     ]
     for ig in IGS:
         lines += [f"te_tax_ig_band_{ig} = {{", "\tvalue = 0",
-                  f"\tif = {{ limit = {{ te_tax_code_light = yes has_variable = te_tax_light_band_{ig} }} "
+                  f"\tif = {{ limit = {{ te_tax_code_light_on = yes has_variable = te_tax_light_band_{ig} }} "
                   f"value = var:te_tax_light_band_{ig} }}"]
         for short, law in EQUIVALENT_LAWS:
             lines += ["\telse_if = {",
@@ -4453,7 +4453,7 @@ def localization():
 
 
 # ---------------------------------------------------------------------------
-# The light code (te_tax_code_light; docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
+# The light code (te_tax_code_light_on; docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
 # docs/systems/tax_code_schema.md, "Light code"). The vanilla taxation law stays enacted and
 # bounds each rate between its very-low and very-high values (MIGRATION). Each rate sits on a
 # step of its law's ladder, the lowest native level whose rate is at least the code's; the
@@ -4775,7 +4775,6 @@ def _light_react():
 
 @output(LIGHT_EFFECTS_PATH)
 def light_effects():
-    last = len(NATIVE_LEVELS) - 1
     lines = [
         HEADER,
         "# The light code's per-tax and per-group parts (docs/systems/tax_code_schema.md, \"Light",

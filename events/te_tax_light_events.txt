@@ -16,7 +16,7 @@ te_tax_light.1 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_light = yes }
+	trigger = { te_tax_code_light_on = yes }
 
 	immediate = {
 		te_tax_light_process_month = yes
@@ -31,7 +31,7 @@ te_tax_light.2 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_light = yes }
+	trigger = { te_tax_code_light_on = yes }
 
 	immediate = {
 		te_tax_light_migrate_country = yes
@@ -45,7 +45,7 @@ te_tax_light.3 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_light = yes }
+	trigger = { te_tax_code_light_on = yes }
 
 	immediate = {
 		te_tax_light_sync = yes

@@ -52,7 +52,7 @@
 te_tax_light_migrate_country = {
 	if = {
 		limit = {
-			te_tax_code_light = yes
+			te_tax_code_light_on = yes
 			OR = { NOT = { has_variable = te_tax_light_on } var:te_tax_light_on < 1 }
 		}
 		te_tax_light_gen_init = yes
