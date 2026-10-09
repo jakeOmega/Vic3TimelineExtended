@@ -83,6 +83,13 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_guis/te_tax_generated_sguis.txt",
     "gui/journal_entry_widgets/te_tax_generated_rows.gui",
     "common/static_modifiers/te_tax_generated_modifiers.txt",
+    # The light tax code's parts (te_tax_code_light), from the same generator.
+    "common/script_values/te_tax_light_generated_values.txt",
+    "common/scripted_triggers/te_tax_light_generated_triggers.txt",
+    "common/scripted_effects/te_tax_light_generated_effects.txt",
+    "common/static_modifiers/te_tax_light_generated_modifiers.txt",
+    "common/scripted_guis/te_tax_light_generated_sguis.txt",
+    "common/customizable_localization/te_tax_light_generated_custom_loc.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]

@@ -3226,6 +3226,8 @@ Two mod sites shipped this way, one of them cited in the other's comments as pro
 
 `script_argument_audit` catches both shapes and the missing-argument one (`--strict` in CI, for mod callees; a reload on a machine with the game also checks calls to vanilla's), and expands a dispatcher like `te_tax_obl_is_maintenance_$KIND$` against the kinds its callers pass. Before changing a helper's parameters, `GET /script-args/<helper>` lists every call that reaches it and what each passes (#732).
 
+Name a scripted trigger or effect apart from any game rule option. The audit reads `<name> = { … }` anywhere as a call, so a trigger `te_tax_code_light` beside the rule option `te_tax_code_light = { flag = te_tax_code_light }` made the option's block a call with an unknown argument `flag`. The engine keeps the two in separate databases, but a reader can't tell them apart either; the light tax code's trigger is `te_tax_code_light_on`.
+
 ## `ordered_scope_state` `position = N` + `check_range_bounds = no` Clamps Out-of-Range
 
 For picking distinct top-N elements:
