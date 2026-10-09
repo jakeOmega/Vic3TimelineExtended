@@ -1317,6 +1317,9 @@ Every company building needs:
    - `pm_<name>` and `pmg_<name>` in `te_production_methods_l_english.yml`
    - **`state_building_<name>_max_level_add` AND `state_building_<name>_max_level_add_desc`** in `te_modifiers_l_english.yml` — pattern: `"[GetBuildingType('building_<name>').GetName] Max Level"` for the name, `"Increases the maximum number of levels that [GetBuildingType('building_<name>').GetName] can expand to in this state"` for the desc. Without both, the prosperity tooltip shows the raw modifier key.
 6. **`ai_value = { value = te_company_flagship_ai_value }`** after `ai_nationalization_desire = 0`. Without it a flagship scores like any production building and the AI rarely builds one (`test_company_ai.py` checks; docs/systems/mod_systems.md § "Company AI").
+7. **`te_company_flagship_builder_owns_state = yes`** in both `possible` and `can_build_government`, with `can_build_private = { always = no }`. `potential` reads the state's owner, so without it a country with investment rights there can build the owner's flagship (`test_company_ai.py` checks).
+
+**Who is building: `scope:investor_country`.** A building's triggers are state-scoped, and `owner` is the state's owner, not the country constructing. During a construction check the engine saves the constructing country as `scope:investor_country` (`event_targets.log` lists it under "Event Targets Saved from Code"; vanilla's `trade_center_construction_allowed` reads it from the Trade Center's `can_build_*`). Compare `owner = scope:investor_country` to limit a building to its state's owner. Guard the comparison with `exists`: the scope is unset when nothing is being built, including script that tests the same trigger.
 
 Use `INJECT:company_name` (not `REPLACE:`) to add fields to vanilla companies without overwriting their entire definition.
 

@@ -796,6 +796,13 @@ def generate_building(building_suffix, company_id, icon_path):
 \t\t\t\t}}
 \t\t\t}}
 \t\t}}
+\t\tte_company_flagship_builder_owns_state = yes
+\t}}
+\tcan_build_government = {{
+\t\tte_company_flagship_builder_owns_state = yes
+\t}}
+\tcan_build_private = {{
+\t\talways = no
 \t}}
 }}"""
 

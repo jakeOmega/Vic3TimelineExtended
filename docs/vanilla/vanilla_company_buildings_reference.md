@@ -12,6 +12,7 @@ The mod's **company building system** gives flavored companies a unique building
 Each company building follows this pattern:
 - **Building group:** `bg_company_buildings`
 - **Potential:** Gated by `has_company = company_type:company_X` (only buildable when company is active)
+- **Builder:** the state's owner only, through government construction. `te_company_flagship_builder_owns_state` in `possible` and `can_build_government` blocks a country with investment rights there; `can_build_private = { always = no }`
 - **Ownership:** `ownership_type = self`
 - **Cost:** `construction_cost_mega_high`
 - **Production methods:** Single PMG with 1-2 PMs

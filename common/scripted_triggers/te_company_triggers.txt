@@ -13,3 +13,21 @@ te_company_is_failing = {
 	has_variable = te_company_months_failing
 	var:te_company_months_failing >= te_company_failing_months
 }
+
+# State scope, in every buildable company flagship's possible and
+# can_build_government (common/buildings/company_buildings.txt): only the
+# country that owns the state builds or expands its flagship there, so
+# investment rights abroad never reach another country's flagship. During a
+# construction check the engine saves the country building as
+# scope:investor_country (an event target "saved from code"; vanilla's
+# trade_center_construction_allowed reads it from the Trade Center's
+# can_build_*). Where nothing is being built it is unset, and this passes.
+te_company_flagship_builder_owns_state = {
+	custom_tooltip = {
+		text = building_company_own_states_tt
+		OR = {
+			NOT = { exists = scope:investor_country }
+			owner = scope:investor_country
+		}
+	}
+}
