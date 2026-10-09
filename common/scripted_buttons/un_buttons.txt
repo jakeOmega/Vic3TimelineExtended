@@ -161,7 +161,7 @@ un_request_peacekeepers_button = {
 		value = 0
 		if = { limit = { is_at_war = yes } add = 30 }
 		if = {
-			limit = { any_scope_state = { devastation > 10 } }
+			limit = { any_scope_state = { devastation > 0.1 } }
 			add = 20
 		}
 		if = {
@@ -188,7 +188,7 @@ un_request_humanitarian_aid_button = {
 			add = 30
 		}
 		if = {
-			limit = { any_scope_state = { devastation > 10 } }
+			limit = { any_scope_state = { devastation > 0.1 } }
 			add = 20
 		}
 		if = {

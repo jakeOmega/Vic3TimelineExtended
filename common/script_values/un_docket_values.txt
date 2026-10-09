@@ -35,8 +35,9 @@ un_docket_max_offers = { value = 2 }
 
 # A war of aggression reaches the docket once it has run this many months...
 un_docket_war_months = { value = 6 }
-# ...and some state of a member it attacked is devastated past this.
-un_docket_war_devastation = { value = 30 }
+# ...and some state of a member it attacked is devastated past this. The
+# devastation trigger reads 0..1, so 0.3 is 30%.
+un_docket_war_devastation = { value = 0.3 }
 
 # ---- Scores (0..100): the gravest situation wins ---------------------------------------
 

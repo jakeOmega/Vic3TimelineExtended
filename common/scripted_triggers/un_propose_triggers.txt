@@ -264,7 +264,7 @@ un_propose_peacekeepers_available = {
 	}
 	OR = {
 		is_at_war = yes
-		any_scope_state = { devastation > 5 }
+		any_scope_state = { devastation > 0.05 }
 	}
 }
 
@@ -299,7 +299,7 @@ un_propose_peacekeepers_possible = {
 	}
 	OR = {
 		is_at_war = yes
-		any_scope_state = { devastation > 5 }
+		any_scope_state = { devastation > 0.05 }
 	}
 }
 
@@ -316,7 +316,7 @@ un_propose_aid_available = {
 	any_scope_state = {
 		OR = {
 			average_sol < 8
-			devastation > 5
+			devastation > 0.05
 		}
 	}
 }
@@ -353,7 +353,7 @@ un_propose_aid_possible = {
 	any_scope_state = {
 		OR = {
 			average_sol < 8
-			devastation > 5
+			devastation > 0.05
 		}
 	}
 }
