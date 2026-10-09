@@ -3,9 +3,10 @@
 The mod changes how people spread across your country and how its states
 develop. Crowded states draw fewer migrants, homelands follow the cultures that
 actually live in a region, a state's tourism depends on what it offers visitors,
-and a government can move settlers onto an empty frontier. The state panel gains
-tiles that show most of these. Everything in this chapter is always on except
-internal resettlement, which the Internal Resettlement game rule controls (see
+a government can move settlers onto an empty frontier, and a yearly census counts
+your people by age and sex. The state panel gains tiles that show most of these.
+Everything in this chapter is always on except internal resettlement and the
+census, which the Internal Resettlement and Demographics game rules control (see
 the [Introduction](01-introduction.md)).
 
 ## State panel additions
@@ -224,6 +225,77 @@ living, ×1.5 for a capital and ×1.5 for a great power's states, halved for an
 unrecognized country. The tourism card shows the rank. The top 20 get the Cities
 bonus to tourism output, from +100% for first to +5% for twentieth; nothing else
 uses the ranking.
+
+## Demographics
+
+Every state keeps a census of its people by single year of age and by sex. It is
+taken when the game starts and again once a year, and it opens a Demographics tab
+in the Population panel, beside the base game's four, and a Demographics subtab
+on the state panel's Population section. In a new game the tab is open from the
+first day; on a save from before the census it stays gray until the census at
+the turn of the year.
+
+The census changes nothing about your population yet. Births, deaths and the
+workforce still follow the base game's rules, and the tab reports what they
+produce. The Demographics game rule has three settings: Full, the default;
+Display only, which for now behaves the same; and Disabled, which removes the
+census and both tabs. Wealth Concentration (see [Who
+inherits](06-politics.md#who-inherits)) keeps working under all three.
+
+### What the tab shows
+
+The tab covers your country as a whole. Most figures have a tooltip that explains
+them, and some break the figure down for your capital.
+
+| Section | What it shows |
+|---|---|
+| Overview | Median age, children per woman, life expectancy, dependency ratio, men per 100 women, the urban pattern, the Gini coefficient and Wealth Concentration with its target. |
+| Population pyramid | People by five-year age band, with an outline twenty years ahead. |
+| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |
+| States | Your 40 largest states, with people, median age, children per woman, men per 100 women, Gini and Wealth Concentration. |
+| History | Median age, children per woman and life expectancy by year, over 5, 20 or 100 years. |
+| How Demographics Works | A collapsed section that explains the method. |
+
+The subtab shows one state's overview, pyramid and wealth, for any state you
+open. The first count of a state comes from the age structure its own birth and
+death rates would settle into, so 1836 opens with a settled population, not a
+baby boom or a gap.
+
+### Reading the pyramid
+
+The pyramid has a row for each five years of age, from 0 to 4 at the bottom to 85
+and over at the top, with men on the left and women on the right. A wide base
+means many children; a column that narrows slowly means few births and long
+lives. Hover a row for the numbers. The pale outline behind the bars carries
+your people twenty years forward at this year's birth and death rates, five years
+at a time. It leaves out migration and holds the rates where they are, so it
+shows where today's course leads, not a forecast. Only your own country gets it.
+
+### Reading the figures
+
+Each year, the people of every age lose their dead at that age's rate, the
+newborn enter at age 0, and the war dead, people killed by events and migrants
+are taken from or added to the ages they belong to. The war dead are nearly all
+men aged 18 to 40, nineteen in twenty of them men. Children per woman follows
+wealth, then falls with literacy, child survival and city life; the means to
+plan a family grow with literacy and medicine. Life expectancy follows five
+causes of death, which standard of living, medicine, health laws and institutions
+bring down.
+
+An arrow beside a figure shows whether it rose or fell since the last census.
+Life expectancy rising is green and a rising dependency ratio is orange; the other
+figures are neutral. Arrows appear only after the census has been brought forward
+a full year twice, so in a new 1836 game the first ones come with the census at
+the end of 1838. Births and deaths per 1,000 people appear from the first full
+year.
+
+The urban pattern counts each state as one city and its urban people as everyone
+who does not work a farm, plantation, ranch, mine or other rural workplace. The
+pattern is Primate when the largest city holds 40% or more of all urban people,
+Dominant from 25%, Balanced from 10% and Dispersed below that.
+
+<!-- screenshot: the Demographics tab with the population pyramid and its twenty-year outline -->
 
 ## Internal resettlement
 

@@ -59,7 +59,7 @@ the mod.
 
 ### Game rules
 
-The mod adds eighteen game rules to the game setup screen. Each one turns a
+The mod adds nineteen game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -92,6 +92,7 @@ turn a default system off.
 | Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
+| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and a subtab on the state panel. *Display only*: the same census and panels; nothing in it changes your population yet, so for now it behaves like Full. *Disabled*: no census and no tabs. Wealth Concentration keeps working. | [States and population](08-states.md#demographics) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
