@@ -1975,6 +1975,18 @@ class TestConsole(unittest.TestCase):
             for var in set(re.findall(r"set_variable = \{ name = (te_dg_dbg_\w+)", body)):
                 self.assertIn(f"remove_variable = {var}", body, f"{name}: {var}")
 
+    def test_the_benchmark_leaves_a_census_behind(self):
+        """Its timed passes step every census a second time in one year; after the last BENCH line it
+        seeds every state with a census again, and nothing follows the seed loop."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_benchmark")
+        last_pass = body.index("TE_DEMOG_BENCH pass=3 end")
+        reseed = body.index('debug_log = "TE_DEMOG_BENCH reseed"')
+        self.assertGreater(reseed, last_pass)
+        tail = body[reseed + len('debug_log = "TE_DEMOG_BENCH reseed"'):]
+        self.assertRegex(tail, r"^\s*every_state = \{\s*limit = \{ te_demog_has_census = yes \}\s*(#[^\n]*\s*)?"
+                               r"te_demog_seed = yes\s*\}\s*$")
+        self.assertEqual(body.count("TE_DEMOG_BENCH"), 8, "start, three begin/end pairs, reseed")
+
     def test_the_census_line_waits_for_a_million_people(self):
         body = _console_blocks()[0]["te_debug_demog_census_line"]
         self.assertIn("local_var:te_dg_c_people >= 1000000", body)

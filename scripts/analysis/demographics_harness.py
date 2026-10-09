@@ -170,7 +170,9 @@ def _fmt(x):
 
 
 def _grouped(x):
-    """millions_thousands_units, as the debug log prints a large number (the probe's form)."""
+    """millions_thousands_units: the demographics probe's register form for a people count, which the
+    console's lines keep (te_debug_demog_values.txt). The debug log itself prints a large number in
+    full with |0 (the probe's own line: raw=123456789); the groups stay because both sides use them."""
     sign = "-" if x < 0 else ""
     n = int(round(abs(x)))
     return f"{sign}{n // 1_000_000}_{n // 1000 % 1000}_{n % 1000}"
@@ -201,8 +203,10 @@ def _per_mille(ring):
 def format_replay(state, year, ring_before, head, ring_after):
     """The TE_DEMOG_REPLAY lines one in-game step logs (te_debug_demog.1 option a).
 
-    The debug log abbreviates numbers of 1,000 and more, so people counts print as
-    millions_thousands_units groups and every slot as per mille of the state's people.
+    People counts print as millions_thousands_units groups (_grouped: the probe's register
+    convention, kept because the script and this parser both use it; the debug log does not
+    abbreviate large numbers, it printed raw=123456789 in full) and every slot as per mille of
+    the state's people.
     head: pop (engine, now), war, kills, mig (signed), tfr, mmr, m_inf, m_ext, m_chr,
     m_work_f, m_work_m, profile (10 shares: classes 0-4 women, then men). pop_last is the
     ring's people before the step. Then fifteen `before` and fifteen `after` lines of ten

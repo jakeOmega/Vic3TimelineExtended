@@ -4786,6 +4786,8 @@
  te_demog_cities_none:0 "#lore The game has not ranked your cities yet.#!"
  te_demog_city_row_tt:0 "#b [State.GetName]#!\nIts urban people, counted as one city: everyone outside a rural workplace, Peasants counting as rural."
  te_demog_city_row_value:0 "#v [State.MakeScope.Var('te_dg_urban').GetValue|D]#! urban people"
+ te_demog_debug_working_adults:0 "Test: Working Adults"
+ te_demog_debug_working_adults_desc:0 "The demographics test console's 60-day probe of how fast a working-adult ratio modifier takes hold in a pop's workforce share."
  te_demog_family_limitation:0 "Family Limitation"
  te_demog_family_limitation_desc:0 "Couples here have long chosen to have fewer children than their neighbours, by means older than any modern method."
  te_demog_gini_label:0 "Gini"

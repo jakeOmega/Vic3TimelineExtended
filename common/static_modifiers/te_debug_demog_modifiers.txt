@@ -5,7 +5,7 @@
 # pop's workforce share at once, or over months? (spec §14 Q11; the mod sets
 # WORKING_ADULT_RATIO_SKEW_MAXIMUM to 1,000,000.) Options f and g log the
 # capital's pops before and after.
-te_debug_demog_working_adults = { # REVIEWED 2026-10-09: console-only 60-day test modifier (te_debug_demog.1 option f); its name loc would file in te_miscellaneous_l_english.yml, kept out of this change
+te_demog_debug_working_adults = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_working_adult_ratio_add = 0.05
 }

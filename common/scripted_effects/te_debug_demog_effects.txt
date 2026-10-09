@@ -153,7 +153,9 @@ te_debug_demog_pulse_line = {
 # THIS = ROOT = the player. The cohort step in every state of the world with a census,
 # three passes; debug.log's timestamps (whole seconds) around each pass time it (spec
 # §14 Q9's late-game re-run). Each state's census year goes back a year first, so every
-# pass is a second step in the same year: every census in the world is wrong afterwards.
+# pass is a second step in the same year and leaves the census wrong (this year's newborns
+# folded into the over-150 pool); after the timed passes, untimed, every state with a census
+# is seeded again from its population now, so the save stays playable.
 te_debug_demog_benchmark = {
 	set_local_variable = { name = te_dg_dbg_n value = 0 }
 	every_state = {
@@ -172,6 +174,13 @@ te_debug_demog_benchmark = {
 	te_debug_demog_bench_pass = yes
 	debug_log = "TE_DEMOG_BENCH pass=3 end states=[THIS.Var('te_dg_dbg_states').GetValue|0]"
 	remove_variable = te_dg_dbg_states
+	# a valid census again: this year's walks have already run (the seed reads them)
+	debug_log = "TE_DEMOG_BENCH reseed"
+	every_state = {
+		limit = { te_demog_has_census = yes }
+		# the seed leaves te_dg_inflow_years as it was, which the passes' flows may have bumped
+		te_demog_seed = yes
+	}
 }
 
 # One pass of the benchmark: every state of the world with a census steps once.
@@ -223,7 +232,7 @@ te_debug_demog_war_dead = {
 # workforce share). One line per pop, largest first, its rank the order of this walk (a
 # pop variable for the line, removed after it), then the capital's totals and the
 # working-adult modifier it carries (the country's included). Option f writes these
-# lines and then adds te_debug_demog_working_adults for 60 days; option g writes them
+# lines and then adds te_demog_debug_working_adults for 60 days; option g writes them
 # again, a month or more later.
 te_debug_demog_skew_lines = {
 	set_local_variable = { name = te_dg_dbg_n value = 0 }
