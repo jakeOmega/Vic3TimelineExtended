@@ -1,6 +1,8 @@
 ﻿# Power bloc principle slots: how many a bloc has. Slot rules 3 and 4
 # (common/scripted_rules/00_scripted_rules.txt), the power bloc panel and
 # te_pb_principle_slot_free (the AI's limit) all read te_pb_principle_slot_cap.
+# The panel's locked-slot tooltip lists its sources with
+# te_pb_principle_slot_sources_sgui (common/scripted_guis/te_power_bloc_sguis.txt).
 
 # Country scope (the bloc leader): slots from the leader's technologies. None
 # under the Power Bloc Principle Slots rule's "Four" setting
@@ -19,25 +21,20 @@ te_pb_tech_principle_slots = {
 
 # Power bloc scope: how many principle slots the bloc has. Two, one more at
 # rank 5 or better with 5 members, another at rank 3 or better with 10
-# members (vanilla's slot 3 and 4 conditions, now counted), and one per slot
-# technology of the leader. The engine applies slot 4's unlock rule to every
-# slot after it, so slots can't be tied to positions; unlock_power_bloc_
-# principle_slot_3/_4 compare this count instead and the panel hides slots
-# 5-8 above it.
+# members (vanilla's slot 3 and 4 conditions, now counted:
+# te_pb_rank_5_principle_slot and te_pb_rank_3_principle_slot), and one per
+# slot technology of the leader. The engine applies slot 4's unlock rule to
+# every slot after it, so slots can't be tied to positions;
+# unlock_power_bloc_principle_slot_3/_4 compare this count instead and the
+# panel shows slots above it locked.
 te_pb_principle_slot_cap = {
 	value = 2
 	if = {
-		limit = {
-			power_bloc_rank <= 5
-			num_power_bloc_members >= 5
-		}
+		limit = { te_pb_rank_5_principle_slot = yes }
 		add = 1
 	}
 	if = {
-		limit = {
-			power_bloc_rank <= 3
-			num_power_bloc_members >= 10
-		}
+		limit = { te_pb_rank_3_principle_slot = yes }
 		add = 1
 	}
 	add = power_bloc_leader.te_pb_tech_principle_slots
@@ -51,5 +48,29 @@ te_pb_bloc_principle_slot_cap = {
 	if = {
 		limit = { is_in_power_bloc = yes }
 		add = power_bloc.te_pb_principle_slot_cap
+	}
+}
+
+# Country scope: how many principle slots a bloc can reach under the Power Bloc
+# Principle Slots game rule, 8 or 4. gui/power_bloc_panel.gui shows slots 5-8
+# (locked until the bloc's count reaches them) only when this is 8, and the
+# slot tooltips name the slot technologies only then. Checked like
+# te_pb_tech_principle_slots, so a save without a value for the rule gets 8.
+te_pb_principle_slots_max = {
+	value = 8
+	if = {
+		limit = { has_game_rule = te_principle_slots_four }
+		value = 4
+	}
+}
+
+# Country scope: the number of members of this country's bloc, as the slot
+# conditions count them (num_power_bloc_members), 0 outside one. The panel's
+# locked-slot tooltip reads it on the bloc leader.
+te_pb_bloc_member_count = {
+	value = 0
+	if = {
+		limit = { is_in_power_bloc = yes }
+		add = power_bloc.num_power_bloc_members
 	}
 }

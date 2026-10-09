@@ -46,14 +46,14 @@ The scripts in this section auto-run inside `mod_state_server.py` after every fu
 
 Run `python3 scripts/generators/gen_budget_breakdown.py` after changing its income
 or expense catalogue or adding an institution. It reads the committed vanilla
-institution snapshot and mod definitions, and writes:
+institution and modifier-type snapshots and mod definitions, and writes:
 
 | File | Owner script | Input |
 |---|---|---|
 | `common/script_values/te_budget_generated_values.txt` | `scripts/generators/gen_budget_breakdown.py` | Institution roster and budget catalogue |
 | `gui/te_budget_generated_charts.gui` | `scripts/generators/gen_budget_breakdown.py` | Same roster/catalogue and Cultural Hegemony palette |
-| `common/modifier_type_definitions/te_budget_generated_types.txt` | `scripts/generators/gen_budget_breakdown.py` | Accounting mirrors for each system's recurring monetary modifiers |
-| `localization/english/te_budget_l_english.yml` | `scripts/generators/gen_budget_breakdown.py` | Generator's labels and institution allocation tooltips |
+| `common/modifier_type_definitions/te_budget_generated_types.txt` | `scripts/generators/gen_budget_breakdown.py` | Accounting mirrors for each system's recurring monetary modifiers; each copies its native type's `decimals` and prefix from `vanilla_parsed/common/modifier_types.json` |
+| `localization/english/te_budget_l_english.yml` | `scripts/generators/gen_budget_breakdown.py` | Generator's labels, the mirrors' tooltip names ("Counted in the Budget Breakdown under …") and institution allocation tooltips |
 
 This generator runs explicitly; it is not a post-load regenerator. The localization
 organizer preserves its BUDGET family and output format.
