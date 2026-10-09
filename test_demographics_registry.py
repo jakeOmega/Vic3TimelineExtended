@@ -319,9 +319,12 @@ class _Engine:
     where they stand), variables and locals, if / else_if / else, while, triggers, and scripted
     effects with their $ARG$ substituted as text. A read of a variable or local that was never
     set fails, as does an argument the callee doesn't name (the script_argument_audit rule).
-    `fixtures` stand in for engine reads and for script values that read the owner."""
+    `fixtures` stand in for engine reads and for script values that read the owner. With
+    truncate=True every operation and every stored value is cut to five decimals, toward zero:
+    the engine's fixed point (values are i64 x 1e-5)."""
 
-    def __init__(self, fixtures, triggers=None, effects=None):
+    def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
+        self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS])
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES])
@@ -358,6 +361,11 @@ class _Engine:
     def value(self, v):
         return self.number(v) if isinstance(v, str) else self._ops(v, 0.0)
 
+    def _q(self, x):
+        if not self.truncate:
+            return x
+        return math.trunc(x * 1e5 + (1e-7 if x >= 0 else -1e-7)) / 1e5
+
     def _ops(self, items, acc):
         chain = None
         for key, _, arg in items:
@@ -389,6 +397,7 @@ class _Engine:
                 acc = math.fmod(acc, self.value(arg))
             else:
                 raise AssertionError(f"value operator {key}")
+            acc = self._q(acc)
         return acc
 
     def _branch(self, key, block, chain):
@@ -437,7 +446,7 @@ class _Engine:
             chain = None
             if key in ("set_local_variable", "set_variable"):
                 store = self.locals if key == "set_local_variable" else self.vars
-                store[_find(arg, "name")] = self.value(_find(arg, "value"))
+                store[_find(arg, "name")] = self._q(self.value(_find(arg, "value")))
             elif key in ("change_local_variable", "change_variable"):
                 store = self.locals if key == "change_local_variable" else self.vars
                 name = _find(arg, "name")
@@ -826,16 +835,16 @@ class _CountryEngine(_Engine):
     every_scope_state once per state in `states` (a dict of that state's variables, the locals
     staying shared); ordered_scope_state the best `max` of them by `order_by` (highest first,
     state_population read from the dict's own `state_population`); root = { } the country's
-    variables and capital = { } the dict given as `capital`, whatever scope is current. Variable
+    variables, whatever scope is current. Variable
     lists live in `lists` (name -> the state dicts added), saved temporary scopes in `scopes` (a
     `scope:X` value is the state dict itself). A state's `owner = { }` trigger and `owner.X` read
     the country's variables (and fixtures); `any_scope_state` tests every state in `states`."""
 
-    BLOCKS = ("every_scope_war", "every_scope_state", "ordered_scope_state", "root", "capital")
+    BLOCKS = ("every_scope_war", "every_scope_state", "ordered_scope_state", "root")
 
-    def __init__(self, wars=(), states=(), capital=None, **kwargs):
+    def __init__(self, wars=(), states=(), **kwargs):
         super().__init__(**kwargs)
-        self.wars, self.states, self.capital_vars = list(wars), list(states), capital
+        self.wars, self.states = list(wars), list(states)
         self.root_vars = self.vars
         self.lists, self.scopes = {}, {}
 
@@ -884,9 +893,6 @@ class _CountryEngine(_Engine):
         super().run(batch)
 
     def _test(self, key, op, arg):
-        if key == "exists":
-            assert arg == "capital", arg
-            return self.capital_vars is not None
         if key == "any_scope_state":
             return any(self.holds_in(state_vars, arg) for state_vars in self.states)
         if key == "owner":
@@ -903,9 +909,6 @@ class _CountryEngine(_Engine):
     def _iterate(self, key, arg):
         if key == "root":
             return self._in(self.root_vars, arg)
-        if key == "capital":
-            assert self.capital_vars is not None, "capital with no capital"
-            return self._in(self.capital_vars, arg)
         body = [i for i in arg if i[0] not in ("limit", "order_by", "max", "check_range_bounds",
                                                 "save_temporary_scope_as")]
         if key == "every_scope_war":
@@ -1172,10 +1175,12 @@ class TestCountry(unittest.TestCase):
         self.assertIn("var:state_city_size_rank", body)
         self.assertRegex(body, r"multiply = -1")
 
-    def test_squares_are_taken_in_millions(self):
-        """Values are i64 x 1e-5: the square of 10 million people is past the limit, of 10 (millions) is not."""
+    def test_squares_are_taken_in_units_of_100_000_people(self):
+        """Values are i64 x 1e-5: the square of 10 million people is past the limit, and in millions the
+        square of a state under ~3,200 urban people is under one unit (0.0032 squared); 100,000 keeps both."""
         body = _block(_text(EFFECTS), "te_demog_country_census")
-        self.assertRegex(body, r"var:te_dg_urban\s+divide = 1000000")
+        self.assertRegex(body, r"var:te_dg_urban\s+divide = 100000\s")
+        self.assertNotRegex(body, r"var:te_dg_urban\s+divide = 1000000")
         self.assertNotRegex(body, r"var:te_dg_urban\s+multiply = var:te_dg_urban")
 
     # -- the numbers, through the interpreter ---------------------------------------------------
@@ -1213,9 +1218,8 @@ class TestCountry(unittest.TestCase):
     def three(self):
         return [dict(s) for s in self._three]
 
-    def country(self, states, ai=False, capital=True, **kwargs):
-        return _CountryEngine(states=states, capital=states[0] if capital else None,
-                              fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+    def country(self, states, ai=False, fws=0.25, **kwargs):
+        return _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": fws},
                               triggers={"is_ai": ai, "te_demog_cohorts_run": True}, **kwargs)
 
     def test_figures_are_the_weighted_sums_of_the_census_states(self):
@@ -1256,12 +1260,13 @@ class TestCountry(unittest.TestCase):
         eng = self.country(states)
         eng.call("te_demog_country_census")
         v = eng.vars
-        urban = [s["te_dg_urban"] / 1e6 for s in states]
+        urban = [s["te_dg_urban"] / 1e5 for s in states]   # in units of 100,000 people
         people = sum(s["te_dg_people"] for s in states)
-        self.assertAlmostEqual(v["te_dg_urban_share"], sum(urban) * 1e6 / people, places=9)
+        self.assertAlmostEqual(v["te_dg_urban_share"], sum(urban) * 1e5 / people, places=9)
         self.assertAlmostEqual(v["te_dg_primacy"], max(urban) / sum(urban), places=9)
         self.assertAlmostEqual(v["te_dg_n_cities"], sum(urban) ** 2 / sum(u * u for u in urban), places=9)
         self.assertEqual(v["te_dg_urban_label"], 0.0, "1.6 of 1.99 million is Primate")
+        self.assertAlmostEqual(v["te_dg_urban_share"], 1_990_000 / 6_100_000, places=9)
         self.assertFalse("te_dg_cities" in v, "te_dg_cities is the list of the three largest, not a number")
 
     def test_labels_by_primacy(self):
@@ -1283,6 +1288,24 @@ class TestCountry(unittest.TestCase):
         self.assertAlmostEqual(pattern((2,) * 8)[2], 8.0)
         self.assertAlmostEqual(pattern((1, 3))[1], 0.75)
         self.assertEqual(pattern((0, 0))[0], 3.0, "no urban people: nothing to concentrate")
+
+    def test_small_states_survive_the_engines_fixed_point(self):
+        """Values are cut to five decimals after every operation. Ten states of 3,000 urban people are
+        10 equal cities, 2,000 and 1,000 are 1.8 (3000^2 / (2000^2 + 1000^2)); in millions the squares
+        were 9 and 4 and 1 units and the answers 90 and 0."""
+        def pattern(urbans):
+            states = []
+            for u in urbans:
+                s = dict(self._three[0])
+                s["te_dg_urban"] = float(u)
+                states.append(s)
+            eng = self.country(states, ai=True, truncate=True)
+            eng.call("te_demog_country_census")
+            return eng.vars["te_dg_n_cities"], eng.vars["te_dg_primacy"]
+        self.assertEqual(pattern((3000,) * 10)[0], 10.0)
+        self.assertEqual(pattern((2000, 1000))[0], 1.8)
+        self.assertAlmostEqual(pattern((2000, 1000))[1], 2 / 3, places=4)
+        self.assertAlmostEqual(pattern((50_000_000, 30_000_000))[0], 80 ** 2 / (50 ** 2 + 30 ** 2), places=4)
 
     def test_the_lists(self):
         """te_dg_states: by people, at most 40; te_dg_cities: the three largest cities by the global
@@ -1320,14 +1343,24 @@ class TestCountry(unittest.TestCase):
             ratio = v[f"te_dg_pj{sex}4"] / v[f"te_dg_cb{sex}0"]
             self.assertTrue(0.2 < ratio < 1.0, (sex, ratio))
 
-    def test_projection_without_a_capital_uses_a_default(self):
-        eng = self.country(self.three(), capital=False)
-        eng.call("te_demog_country_census")
-        self.assertIn("te_dg_pjf0", eng.vars)
+    def test_projection_reads_the_womens_work_share_from_the_states(self):
+        """Any state of the country gives the owner's share; the work multiplier is split as
+        te_demog_prepare does it, on the people-weighted average of the states' multipliers."""
+        states = self.three()
+        pm = sum(s["te_dg_people"] for s in states)
+        work = sum(s["te_dg_m_work"] * s["te_dg_people"] for s in states) / pm
+        for fws in (0.1, 0.45):
+            eng = self.country([dict(s) for s in states], fws=fws)
+            eng.call("te_demog_country_census")
+            self.assertAlmostEqual(eng.locals["te_dg_fws"], fws)
+            self.assertAlmostEqual(eng.locals["te_dg_m_work_f"], work * fws * 2, places=6)
+            self.assertAlmostEqual(eng.locals["te_dg_m_work_m"], (1 - fws) * work * 2, places=6)
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        self.assertNotIn("capital", body)
 
     def test_a_country_with_no_census_stays_pending(self):
         states = [{"te_dg_people": 5e5, "state_population": 5e5}]
-        eng = self.country(states, capital=False)
+        eng = self.country(states)
         eng.call("te_demog_country_census")
         self.assertFalse("te_dg_census_year" in eng.vars)
         self.assertFalse("te_dg_median" in eng.vars)
@@ -1363,9 +1396,47 @@ class TestCountry(unittest.TestCase):
                         s["te_dg_births"], s["te_dg_deaths"] = s["te_dg_people"] * 0.038, s["te_dg_people"] * 0.031
                 eng.call("te_demog_country_census")
                 flags.append((eng.vars["te_dg_trend_ok"], eng.vars["te_dg_stepped"]))
+                if not born:   # no births: infant mortality is the states' by people, not 0
+                    people = sum(s["te_dg_people"] for s in seeds)
+                    self.assertAlmostEqual(eng.vars["te_dg_imr"],
+                                           sum(s["te_dg_imr"] * s["te_dg_people"] for s in seeds) / people, places=6)
+                    self.assertGreater(eng.vars["te_dg_imr"], 50)
         self.assertEqual(flags, [(0.0, 0.0), (0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 1.0)])
-        self.assertEqual(eng.vars["te_dg_cbr"], 38.0)
-        self.assertEqual(eng.vars["te_dg_prev_cbr"], 38.0)
+        self.assertAlmostEqual(eng.vars["te_dg_cbr"], 38.0, places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_prev_cbr"], 38.0, places=9)
+
+    def test_imr_after_seeds_is_weighted_by_people(self):
+        """A seed writes no births, so the births-weighted infant mortality would read 0: with none
+        in the census the states' are weighted by people; with births, by births. CBR and CDR are 0
+        while te_dg_stepped is 0, and that is no figure."""
+        seeds = self.three()
+        for s in seeds:
+            s["te_dg_births"] = s["te_dg_deaths"] = s["te_dg_net_migration"] = 0.0
+            s["te_dg_stepped"] = 0.0
+        eng = self.country(seeds)
+        eng.call("te_demog_country_census")
+        by_people = sum(s["te_dg_imr"] * s["te_dg_people"] for s in seeds) / sum(s["te_dg_people"] for s in seeds)
+        self.assertGreater(by_people, 50)
+        self.assertAlmostEqual(eng.vars["te_dg_imr"], by_people, places=6)
+        self.assertEqual((eng.vars["te_dg_cbr"], eng.vars["te_dg_cdr"], eng.vars["te_dg_stepped"]), (0.0, 0.0, 0.0))
+        for s, rate in zip(seeds, (0.05, 0.03, 0.01)):
+            s["te_dg_births"] = s["te_dg_people"] * rate
+        eng.call("te_demog_country_census")
+        by_births = sum(s["te_dg_imr"] * s["te_dg_births"] for s in seeds) / sum(s["te_dg_births"] for s in seeds)
+        self.assertAlmostEqual(eng.vars["te_dg_imr"], by_births, places=6)
+        self.assertNotAlmostEqual(by_births, by_people, places=3)
+
+    def test_rates_divide_before_they_multiply(self):
+        """A birth rate is births over people times 1,000; the other order forms births x 1,000, which a
+        large state's births can carry past the engine's limit."""
+        text = _text(EFFECTS)
+        for name in ("te_demog_state_figures", "te_demog_country_census"):
+            body = _block(text, name)
+            for var in ("cbr", "cdr"):
+                line = next(l for l in body.splitlines() if f"name = te_dg_{var} " in l)
+                self.assertRegex(line, r"divide = \{[^}]*\} multiply = 1000 \}", line)
+        line = next(l for l in _block(text, "te_demog_store_figures").splitlines() if "te_dg_sex_balance" in l)
+        self.assertRegex(line, r"divide = \{[^}]*\} multiply = 100 \}", line)
 
     def test_game_start_ends_with_the_census(self):
         stubs = {"te_demog_walks": "", "te_demog_seed": "set_variable = { name = te_dg_year value = 1836 }",

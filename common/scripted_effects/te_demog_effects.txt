@@ -85,16 +85,22 @@
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share, te_dg_dependency,
 #   te_dg_sex_balance, te_dg_w1549  from those bands, as a state's (te_demog_store_figures)
 #   te_dg_tfr           the states' weighted by their women aged 15-49
-#   te_dg_e0, te_dg_e65 the states' weighted by people; te_dg_imr by births
-#   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration the sum
+#   te_dg_e0, te_dg_e65 the states' weighted by people; te_dg_imr by births (by people while the
+#                       census holds no births, as in a seed-only census, whose births are 0)
+#   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration the sum.
+#                       CBR and CDR are not real while te_dg_stepped is 0: a seed writes no births
+#                       or deaths, so they read 0. That is apart from te_dg_trend_ok (which
+#                       only says whether an arrow may be drawn): a panel shows no CBR and CDR
+#                       for te_dg_stepped = 0
 #   te_dg_urban_share   urban people over people; te_dg_primacy the largest state's urban people
 #                       over all urban people (a state is one city, spec 5.2); te_dg_n_cities the
 #                       effective number of cities, (urban)^2 over the sum of squares, both in
-#                       millions of people (values are i64 x 1e-5: 10 million people squared
-#                       would overflow); te_dg_urban_label 0 Primate (primacy 40% or more),
-#                       1 Dominant (25%), 2 Balanced (10%), 3 Dispersed. te_dg_n_cities is a
-#                       number and te_dg_cities a variable list: kept under two names in case the
-#                       engine keeps a variable and a list in one namespace.
+#                       units of 100,000 people (values are i64 x 1e-5: 10 million people squared
+#                       would overflow, and in millions the square of a state under ~3,200
+#                       urban people is under one unit); te_dg_urban_label 0 Primate (primacy
+#                       40% or more), 1 Dominant (25%), 2 Balanced (10%), 3 Dispersed.
+#                       te_dg_n_cities is a number and te_dg_cities a variable list: kept under
+#                       two names in case the engine keeps a variable and a list in one namespace.
 #   te_dg_prev_<name>   each of the figures above, as last year's (see the arrows)
 #   te_dg_pjf<b>, te_dg_pjm<b>  the player's bands twenty years ahead (te_demog_project)
 # Variable lists on the country (state scopes, drawn by the panel):
@@ -1094,8 +1100,8 @@ te_demog_state_figures = {
 	te_demog_keep_figures = yes
 	te_demog_store_figures = yes
 	# births and deaths per 1,000 people
-	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
-	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	set_local_variable = { name = te_dg_born value = var:te_dg_births }
 	te_demog_set_trend = yes
 }
@@ -1134,7 +1140,7 @@ te_demog_store_figures = {
 	# dependants per person of working age: (0-14 + 65+) / 15-64
 	set_variable = { name = te_dg_dependency value = { value = local_var:te_dg_young add = local_var:te_dg_old divide = { value = local_var:te_dg_working min = 1 } } }
 	# men per 100 women aged 20-59
-	set_variable = { name = te_dg_sex_balance value = { value = local_var:te_dg_m2059 multiply = 100 divide = { value = local_var:te_dg_w2059 min = 1 } } }
+	set_variable = { name = te_dg_sex_balance value = { value = local_var:te_dg_m2059 divide = { value = local_var:te_dg_w2059 min = 1 } multiply = 100 } }
 	set_variable = { name = te_dg_w1549 value = local_var:te_dg_w1549 }
 }
 
@@ -1160,7 +1166,8 @@ te_demog_set_trend = {
 # pending; its band sums read 0 meanwhile). Accumulators are te_dg_seeded and locals named
 # te_dg_c_*, clear of the ones te_demog_band_figures and te_demog_project use. Averages
 # weighted by people use millions of people for the weights: e0 x 12 million people could
-# pass the engine's limit.
+# pass the engine's limit. The urban squares use units of 100,000 people (0.03 for 3,000:
+# its square, 0.0009, still holds three digits). Rates divide before they multiply.
 te_demog_country_census = {
 	te_demog_reset_country_bands = yes
 	set_local_variable = { name = te_dg_seeded value = 0 }
@@ -1174,6 +1181,8 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_e0_w value = 0 }
 	set_local_variable = { name = te_dg_c_e65_w value = 0 }
 	set_local_variable = { name = te_dg_c_imr_w value = 0 }
+	set_local_variable = { name = te_dg_c_imr_p value = 0 }
+	set_local_variable = { name = te_dg_c_urban_p value = 0 }
 	set_local_variable = { name = te_dg_c_urban value = 0 }
 	set_local_variable = { name = te_dg_c_sq value = 0 }
 	set_local_variable = { name = te_dg_c_big value = 0 }
@@ -1185,8 +1194,13 @@ te_demog_country_census = {
 		limit = { te_demog_has_census = yes }
 		te_demog_add_bands_to_root = yes
 		set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people divide = 1000000 } }
-		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 1000000 } }
+		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
+		# the women's share of the workforce depends on the owner's law only: any state gives it
+		if = {
+			limit = { local_var:te_dg_seeded = 1 }
+			set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
+		}
 		change_local_variable = { name = te_dg_c_people add = var:te_dg_people }
 		change_local_variable = { name = te_dg_c_pm add = local_var:te_dg_c_s_pm }
 		change_local_variable = { name = te_dg_c_births add = var:te_dg_births }
@@ -1197,6 +1211,8 @@ te_demog_country_census = {
 		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_e65_w add = { value = var:te_dg_e65 multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_imr_w add = { value = var:te_dg_imr multiply = var:te_dg_births } }
+		change_local_variable = { name = te_dg_c_imr_p add = { value = var:te_dg_imr multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_urban_p add = var:te_dg_urban }
 		change_local_variable = { name = te_dg_c_urban add = local_var:te_dg_c_s_um }
 		change_local_variable = { name = te_dg_c_sq add = { value = local_var:te_dg_c_s_um multiply = local_var:te_dg_c_s_um } }
 		if = {
@@ -1226,15 +1242,22 @@ te_demog_country_census = {
 		}
 		te_demog_band_figures = { B = te_dg_cb }
 		te_demog_store_figures = yes
-		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births multiply = 1000 divide = { value = local_var:te_dg_c_people min = 1 } } }
-		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths multiply = 1000 divide = { value = local_var:te_dg_c_people min = 1 } } }
+		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
+		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
 		set_variable = { name = te_dg_net_migration value = local_var:te_dg_c_mig }
 		set_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 		set_variable = { name = te_dg_e0 value = { value = local_var:te_dg_c_e0_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 		set_variable = { name = te_dg_e65 value = { value = local_var:te_dg_c_e65_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
-		set_variable = { name = te_dg_imr value = { value = local_var:te_dg_c_imr_w divide = { value = local_var:te_dg_c_births min = 1 } } }
-		# the urban pattern (spec 5.1): the shares in millions of people
-		set_variable = { name = te_dg_urban_share value = { value = local_var:te_dg_c_urban divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		# by births; a census of seeds holds none (a seed writes 0), and then by people
+		if = {
+			limit = { local_var:te_dg_c_births > 0 }
+			set_variable = { name = te_dg_imr value = { value = local_var:te_dg_c_imr_w divide = { value = local_var:te_dg_c_births min = 1 } } }
+		}
+		else = {
+			set_variable = { name = te_dg_imr value = { value = local_var:te_dg_c_imr_p divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		}
+		# the urban pattern (spec 5.1): the squares in units of 100,000 people
+		set_variable = { name = te_dg_urban_share value = { value = local_var:te_dg_c_urban_p divide = { value = local_var:te_dg_c_people min = 1 } } }
 		set_variable = { name = te_dg_primacy value = { value = local_var:te_dg_c_big divide = { value = local_var:te_dg_c_urban min = 0.00001 } } }
 		set_variable = {
 			name = te_dg_n_cities
@@ -1284,11 +1307,6 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_ext value = { value = local_var:te_dg_c_ext_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_chr value = { value = local_var:te_dg_c_chr_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
-			set_local_variable = { name = te_dg_fws value = 0.1 }
-			if = {
-				limit = { exists = capital }
-				capital = { set_local_variable = { name = te_dg_fws value = te_demog_female_work_share } }
-			}
 			set_local_variable = { name = te_dg_c_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
