@@ -545,7 +545,11 @@ class TestCohortScript(unittest.TestCase):
         self.assertLess(abs(eng.vars["te_dg_median"] - s["median"]), 0.5, "median (bands vs single years)")
         women_15_49 = sum(f for a, f, _m in ring.by_age() if 15 <= a <= 49)
         self.close(eng.vars["te_dg_w1549"], women_15_49, rel=1e-4, what="women 15-49")
-        self.assertNotIn("te_dg_prev_median", eng.vars, "a first census has no previous figures")
+        self.assertFalse("te_dg_prev_median" in eng.vars, "a first census has no previous figures")
+        eng.vars["te_dg_median"] = 99.0
+        eng.call("te_demog_state_figures")
+        self.assertFalse("te_dg_prev_median" in eng.vars, "a seed's figures are no year to compare with")
+        eng.vars["te_dg_stepped"] = 1.0   # as after a step
         eng.vars["te_dg_median"] = 99.0
         eng.call("te_demog_state_figures")
         self.assertEqual(eng.vars["te_dg_prev_median"], 99.0)
@@ -800,38 +804,92 @@ class TestCohortScript(unittest.TestCase):
 
 
 class _CountryEngine(_Engine):
-    """_Engine plus the two iterators the country effects use. every_scope_war runs its body once
-    per war in `wars` (the owner's dead in it, read through te_demog_war_dead_root); every_scope_state
-    once per state in `states` (a dict of that state's variables, the locals staying shared)."""
+    """_Engine plus the iterators and scope changes the country effects use. every_scope_war runs
+    its body once per war in `wars` (the owner's dead in it, read through te_demog_war_dead_root);
+    every_scope_state once per state in `states` (a dict of that state's variables, the locals
+    staying shared); ordered_scope_state the best `max` of them by `order_by` (highest first,
+    state_population read from the dict's own `state_population`); root = { } the country's
+    variables and capital = { } the dict given as `capital`, whatever scope is current. Variable
+    lists live in `lists` (name -> the state dicts added), saved temporary scopes in `scopes`."""
 
-    def __init__(self, wars=(), states=(), **kwargs):
+    BLOCKS = ("every_scope_war", "every_scope_state", "ordered_scope_state", "root", "capital")
+
+    def __init__(self, wars=(), states=(), capital=None, **kwargs):
         super().__init__(**kwargs)
-        self.wars, self.states = list(wars), list(states)
+        self.wars, self.states, self.capital_vars = list(wars), list(states), capital
+        self.root_vars = self.vars
+        self.lists, self.scopes = {}, {}
 
     def run(self, items):
         batch = []
         for item in items:
-            if item[0] in ("every_scope_war", "every_scope_state"):
+            if item[0] in self.BLOCKS or item[0] in ("clear_variable_list", "add_to_variable_list"):
                 super().run(batch)
                 batch = []
-                self._iterate(item[0], item[2])
+                if item[0] in self.BLOCKS:
+                    self._iterate(item[0], item[2])
+                elif item[0] == "clear_variable_list":
+                    self.lists[item[2]] = []
+                else:
+                    assert self.vars is self.root_vars, "a list is added to from the country"
+                    target = _find(item[2], "target")
+                    assert target.startswith("scope:"), target
+                    self.lists.setdefault(_find(item[2], "name"), []).append(self.scopes[target[6:]])
             else:
                 batch.append(item)
         super().run(batch)
 
+    def _test(self, key, op, arg):
+        if key == "exists":
+            assert arg == "capital", arg
+            return self.capital_vars is not None
+        return super()._test(key, op, arg)
+
+    def _in(self, scope_vars, body):
+        saved, self.vars = self.vars, scope_vars
+        try:
+            self.run(body)
+        finally:
+            self.vars = saved
+
     def _iterate(self, key, arg):
-        body = [i for i in arg if i[0] != "limit"]
+        if key == "root":
+            return self._in(self.root_vars, arg)
+        if key == "capital":
+            assert self.capital_vars is not None, "capital with no capital"
+            return self._in(self.capital_vars, arg)
+        body = [i for i in arg if i[0] not in ("limit", "order_by", "max", "check_range_bounds",
+                                                "save_temporary_scope_as")]
         if key == "every_scope_war":
             for dead in self.wars:
                 self.fixtures["te_demog_war_dead_root"] = float(dead)
                 self.run(body)
             return
-        country_vars = self.vars
+        limit = next((v for k, _, v in arg if k == "limit"), [])
+        chosen = []
         for state_vars in self.states:
             self.vars = state_vars
-            if self.holds(_find(arg, "limit")):
-                self.run(body)
-        self.vars = country_vars
+            try:
+                if self.holds(limit):
+                    chosen.append(state_vars)
+            finally:
+                self.vars = self.root_vars
+        if key == "ordered_scope_state":
+            def rank(state_vars):
+                self.fixtures["state_population"] = state_vars.get("state_population", 0.0)
+                saved, self.vars = self.vars, state_vars
+                try:
+                    return self.value(_find(arg, "order_by"))
+                finally:
+                    self.vars = saved
+            chosen = sorted(chosen, key=rank, reverse=True)[:int(float(_find(arg, "max")))]
+        for state_vars in chosen:
+            if key == "ordered_scope_state":
+                self.scopes[_find(arg, "save_temporary_scope_as")] = state_vars
+            self._in(state_vars, body)
+
+
+NO_CENSUS = {"te_demog_country_census": ""}   # the war-dead tests run the yearly effect without its census
 
 
 class TestFlows(unittest.TestCase):
@@ -924,7 +982,8 @@ class TestFlows(unittest.TestCase):
     def test_the_years_dead_go_to_states_by_their_soldiers(self):
         states = self._states((300, 10000, True), (100, 30000, True), (600, 5000, False))
         states[0]["te_dg_war_in"] = 5.0   # an earlier share not yet taken is kept
-        eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True})
+        eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True},
+                             effects=NO_CENSUS)
         eng.vars.update(te_dg_war_year=1000.0)
         eng.call("te_demog_country_yearly")
         self.assertEqual(states[0]["te_dg_war_in"], 5.0 + 750.0)
@@ -942,7 +1001,8 @@ class TestFlows(unittest.TestCase):
     def test_no_dead_or_no_rule_shares_nothing(self):
         for rule, year in ((True, 0.0), (False, 500.0)):
             states = self._states((300, 10000, True))
-            eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": rule})
+            eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": rule},
+                                 effects=NO_CENSUS)
             eng.vars.update(te_dg_war_year=year)
             eng.call("te_demog_country_yearly")
             self.assertNotIn("te_dg_war_in", states[0], (rule, year))
@@ -959,3 +1019,310 @@ class TestFlows(unittest.TestCase):
             eng.vars["struck"] = 400.0
             eng.run(_parse_script(call))
             self.assertEqual(eng.vars.get("te_dg_kills_in"), want, (rule, census))
+
+
+class TestTrend(unittest.TestCase):
+    """The arrows (Task 10): a figure's last-year value is kept, and its trend drawn, only when both
+    the figure and the one before it came from a step. A seed writes 0 births and deaths, so a
+    seed's CBR and CDR are no year to compare with."""
+
+    INP = TestCohortScript.INP
+    POP = 250000.0
+
+    def stepped_engine(self):
+        """A state seeded in 1836, with what its walk gives the step's flows (no residual, no crisis)."""
+        eng = _engine_for(self.INP, 1836, self.POP)
+        eng.call("te_demog_seed")
+        eng.fixtures.update(te_demog_crisis=0.0, te_demog_family_transport=0.0)
+        eng.vars.update(te_dg_eb=0.0, te_dg_ed=0.0, te_dg_fjob_share=0.3)
+        return eng
+
+    def step(self, eng, year):
+        eng.fixtures["year"] = float(year)
+        eng.vars["te_dg_pop_last"] = eng.vars["te_dg_people"]
+        eng.call("te_demog_step")
+
+    def seen(self, eng):
+        return {k: eng.vars.get(k) for k in ("te_dg_trend_ok", "te_dg_stepped")}, \
+            {k: k in eng.vars for k in ("te_dg_prev_median", "te_dg_prev_cbr", "te_dg_prev_tfr", "te_dg_prev_e0")}
+
+    def test_state_arrows_come_from_the_second_step_on(self):
+        eng = self.stepped_engine()
+        flags, prev = self.seen(eng)
+        self.assertEqual(flags, {"te_dg_trend_ok": 0.0, "te_dg_stepped": 0.0})
+        self.assertFalse(any(prev.values()), "a seed has no last year")
+        seed_tfr, seed_e0 = eng.vars["te_dg_tfr"], eng.vars["te_dg_e0"]
+        self.step(eng, 1837)
+        flags, prev = self.seen(eng)
+        self.assertEqual(flags, {"te_dg_trend_ok": 0.0, "te_dg_stepped": 1.0}, "the year before it was a seed")
+        self.assertFalse(any(prev.values()), "the seed's zero births are not kept as last year's CBR")
+        self.assertGreater(eng.vars["te_dg_births"], 0)
+        first_cbr, first_tfr, first_e0 = eng.vars["te_dg_cbr"], eng.vars["te_dg_tfr"], eng.vars["te_dg_e0"]
+        self.step(eng, 1838)
+        flags, prev = self.seen(eng)
+        self.assertEqual(flags, {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
+        self.assertTrue(all(prev.values()))
+        self.assertEqual(eng.vars["te_dg_prev_cbr"], first_cbr)
+        self.assertEqual(eng.vars["te_dg_prev_tfr"], first_tfr)
+        self.assertEqual(eng.vars["te_dg_prev_e0"], first_e0)
+        self.assertGreater(first_cbr, 0, "the first step's CBR is real")
+        # a re-seed (a census gap, an emptied ring) starts the sequence over
+        eng.call("te_demog_seed")
+        flags, _prev = self.seen(eng)
+        self.assertEqual(flags, {"te_dg_trend_ok": 0.0, "te_dg_stepped": 0.0})
+        self.step(eng, 1839)
+        self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 0.0, "te_dg_stepped": 1.0})
+        self.assertNotEqual(seed_tfr, 0)
+        self.assertNotEqual(seed_e0, 0)
+
+    def test_prepare_keeps_last_years_tfr_and_e0_only_after_a_step(self):
+        """te_demog_prepare overwrites both, so the copy sits before it; Task 8 had none."""
+        body = _block(_text(EFFECTS), "te_demog_prepare")
+        self.assertLess(body.index("te_dg_prev_tfr"), body.index("te_demog_life_table"))
+        self.assertLess(body.index("te_dg_prev_e0"), body.index("te_demog_life_table"))
+        eng = _engine_for(self.INP, 1837, self.POP)
+        eng.vars.update(te_dg_tfr=3.3, te_dg_e0=44.0, te_dg_stepped=0.0)
+        eng.call("te_demog_prepare")
+        self.assertFalse("te_dg_prev_tfr" in eng.vars)
+        eng.vars.update(te_dg_tfr=3.3, te_dg_e0=44.0, te_dg_stepped=1.0)
+        eng.call("te_demog_prepare")
+        self.assertEqual((eng.vars["te_dg_prev_tfr"], eng.vars["te_dg_prev_e0"]), (3.3, 44.0))
+        self.assertNotEqual(eng.vars["te_dg_tfr"], 3.3)
+
+    def test_a_seed_zeroes_net_migration(self):
+        """Only a step's flows write it, and the country sums it over every state with a census."""
+        eng = _engine_for(self.INP, 1836, self.POP)
+        eng.vars["te_dg_net_migration"] = 4000.0
+        eng.call("te_demog_seed")
+        self.assertEqual(eng.vars["te_dg_net_migration"], 0.0)
+
+
+class TestCountry(unittest.TestCase):
+    def test_country_sums_skip_states_without_a_census(self):
+        """Review Focus 1."""
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        for m in re.finditer(r"every_scope_state = \{", body):
+            self.assertIn("te_demog_has_census = yes", body[m.end():m.end() + 200])
+        self.assertIn("ordered_scope_state", body)
+
+    def test_projection_for_players_only(self):
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        self.assertIn("is_ai = no", body[:body.index("te_demog_project = yes")])
+
+    def test_the_census_is_wired_where_the_brief_puts_it(self):
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_share_war_dead = yes"), yearly.index("te_demog_country_census = yes"))
+        self.assertLess(yearly.index("te_demog_cohorts_run = yes"), yearly.index("te_demog_country_census = yes"))
+        start = _block(_text(EFFECTS), "te_demog_country_game_start")
+        self.assertLess(start.rindex("te_demog_cohorts_run = yes"), start.index("te_demog_country_census = yes"))
+        self.assertGreater(start.index("te_demog_country_census = yes"), start.rindex("te_demog_seed = yes"))
+
+    def test_the_city_ranking_script_value_is_negated(self):
+        body = _block(_text(VALUES), "te_demog_neg_city_rank")
+        self.assertIn("var:state_city_size_rank", body)
+        self.assertRegex(body, r"multiply = -1")
+
+    def test_squares_are_taken_in_millions(self):
+        """Values are i64 x 1e-5: the square of 10 million people is past the limit, of 10 (millions) is not."""
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        self.assertRegex(body, r"var:te_dg_urban\s+divide = 1000000")
+        self.assertNotRegex(body, r"var:te_dg_urban\s+multiply = var:te_dg_urban")
+
+    # -- the numbers, through the interpreter ---------------------------------------------------
+
+    INPUTS = (   # (people, urban people, SoL, literacy): a big, a middling, a small state
+        (4_000_000, 1_600_000, 22, 0.55),
+        (1_500_000, 300_000, 14, 0.3),
+        (600_000, 90_000, 9, 0.1),
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        cls._three = [cls.state(*args, rank=r, migration=m)
+                      for args, r, m in zip(cls.INPUTS, (12, 3, 40), (5000.0, -1200.0, 300.0))]
+
+    @classmethod
+    def state(cls, pop, urban, sol, literacy, rank=None, births=None, deaths=None, migration=0.0):
+        """A state as a seed leaves it, with the figures a step would have given it."""
+        inp = demographics_model.Inputs(sol=sol, literacy=literacy, urban_share=urban / pop,
+                                        techs=frozenset({"medical_degrees"}),
+                                        laws=frozenset({"law_women_in_the_fields"}))
+        eng = _engine_for(inp, 1836, pop)
+        eng.vars["te_dg_urban"] = float(urban)
+        eng.call("te_demog_seed")
+        v = eng.vars
+        v["state_population"] = float(pop)
+        if rank is not None:
+            v["state_city_size_rank"] = float(rank)
+        v["te_dg_births"] = births if births is not None else pop * 0.038
+        v["te_dg_deaths"] = deaths if deaths is not None else pop * 0.031
+        v["te_dg_net_migration"] = float(migration)
+        v["te_dg_stepped"] = 1.0
+        return v
+
+    def three(self):
+        return [dict(s) for s in self._three]
+
+    def country(self, states, ai=False, capital=True, **kwargs):
+        return _CountryEngine(states=states, capital=states[0] if capital else None,
+                              fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                              triggers={"is_ai": ai, "te_demog_cohorts_run": True}, **kwargs)
+
+    def test_figures_are_the_weighted_sums_of_the_census_states(self):
+        states = self.three()
+        nope = {"te_dg_people": 9e9, "te_dg_births": 9e9, "te_dg_urban": 9e9, "state_population": 9e9}   # no te_dg_year
+        eng = self.country(states + [nope])
+        eng.call("te_demog_country_census")
+        v = eng.vars
+        people = sum(s["te_dg_people"] for s in states)
+        births, deaths = sum(s["te_dg_births"] for s in states), sum(s["te_dg_deaths"] for s in states)
+        for b in range(18):
+            for sex in "fm":
+                self.assertAlmostEqual(v[f"te_dg_cb{sex}{b}"], sum(s[f"te_dg_b{sex}{b}"] for s in states), places=6)
+        w = sum(s["te_dg_w1549"] for s in states)
+        self.assertAlmostEqual(v["te_dg_w1549"], w, places=4)
+        self.assertAlmostEqual(v["te_dg_tfr"], sum(s["te_dg_tfr"] * s["te_dg_w1549"] for s in states) / w, places=9)
+        self.assertAlmostEqual(v["te_dg_e0"], sum(s["te_dg_e0"] * s["te_dg_people"] for s in states) / people, places=6)
+        self.assertAlmostEqual(v["te_dg_e65"], sum(s["te_dg_e65"] * s["te_dg_people"] for s in states) / people,
+                               places=6)
+        self.assertAlmostEqual(v["te_dg_imr"], sum(s["te_dg_imr"] * s["te_dg_births"] for s in states) / births,
+                               places=6)
+        self.assertAlmostEqual(v["te_dg_cbr"], births * 1000 / people, places=9)
+        self.assertAlmostEqual(v["te_dg_cdr"], deaths * 1000 / people, places=9)
+        self.assertEqual(v["te_dg_net_migration"], 4100.0)
+        self.assertEqual(v["te_dg_census_year"], 1900.0)
+        # the shares and the median come from the country's bands, as a state's do
+        total = sum(v[f"te_dg_cb{sex}{b}"] for sex in "fm" for b in range(18))
+        young = sum(v[f"te_dg_cb{sex}{b}"] for sex in "fm" for b in range(3))
+        old = sum(v[f"te_dg_cb{sex}{b}"] for sex in "fm" for b in range(13, 18))
+        self.assertAlmostEqual(v["te_dg_young_share"], young / total, places=9)
+        self.assertAlmostEqual(v["te_dg_old_share"], old / total, places=9)
+        self.assertAlmostEqual(v["te_dg_working_share"], 1 - (young + old) / total, places=9)
+        self.assertAlmostEqual(v["te_dg_dependency"], (young + old) / (total - young - old), places=9)
+        self.assertTrue(15 < v["te_dg_median"] < 35)
+
+    def test_urban_pattern(self):
+        states = self.three()
+        eng = self.country(states)
+        eng.call("te_demog_country_census")
+        v = eng.vars
+        urban = [s["te_dg_urban"] / 1e6 for s in states]
+        people = sum(s["te_dg_people"] for s in states)
+        self.assertAlmostEqual(v["te_dg_urban_share"], sum(urban) * 1e6 / people, places=9)
+        self.assertAlmostEqual(v["te_dg_primacy"], max(urban) / sum(urban), places=9)
+        self.assertAlmostEqual(v["te_dg_n_cities"], sum(urban) ** 2 / sum(u * u for u in urban), places=9)
+        self.assertEqual(v["te_dg_urban_label"], 0.0, "1.6 of 1.99 million is Primate")
+        self.assertFalse("te_dg_cities" in v, "te_dg_cities is the list of the three largest, not a number")
+
+    def test_labels_by_primacy(self):
+        """Primate from 40%, Dominant from 25%, Balanced from 10%, below it Dispersed (spec 5.1);
+        the effective number of cities reads 1 for one state and n for n equal ones."""
+        def pattern(urbans):
+            states = []
+            for u in urbans:
+                s = dict(self._three[0])
+                s["te_dg_urban"] = float(u) * 100_000
+                states.append(s)
+            eng = self.country(states)
+            eng.call("te_demog_country_census")
+            return eng.vars["te_dg_urban_label"], eng.vars["te_dg_primacy"], eng.vars["te_dg_n_cities"]
+        for urbans, want in (((4, 6), 0.0), ((3, 3, 4), 0.0), ((3, 3, 3, 1), 1.0), ((1, 1, 1, 1), 1.0),
+                             ((1,) * 8, 2.0), ((1,) * 10, 2.0), ((1,) * 11, 3.0), ((7,), 0.0)):
+            self.assertEqual(pattern(urbans)[0], want, urbans)
+        self.assertAlmostEqual(pattern((5,))[2], 1.0)
+        self.assertAlmostEqual(pattern((2,) * 8)[2], 8.0)
+        self.assertAlmostEqual(pattern((1, 3))[1], 0.75)
+        self.assertEqual(pattern((0, 0))[0], 3.0, "no urban people: nothing to concentrate")
+
+    def test_the_lists(self):
+        """te_dg_states: by people, at most 40; te_dg_cities: the three largest cities by the global
+        rank, a state with no rank left out, a rank of 1 the largest."""
+        states = self.three()
+        states.append(dict(states[0], state_population=7e6))                 # the largest, with no rank
+        del states[3]["state_city_size_rank"]
+        small = [dict(states[2], state_population=float(1000 + i)) for i in range(45)]
+        eng = self.country(states + small)
+        eng.call("te_demog_country_census")
+        listed = eng.lists["te_dg_states"]
+        self.assertEqual(len(listed), 40)
+        self.assertEqual([s["state_population"] for s in listed[:4]], [7e6, 4e6, 1.5e6, 6e5])
+        self.assertEqual([s["state_population"] for s in listed[4:7]], [1044.0, 1043.0, 1042.0])
+        cities = eng.lists["te_dg_cities"]
+        self.assertEqual([s["state_city_size_rank"] for s in cities], [3.0, 12.0, 40.0])
+        eng.call("te_demog_country_census")   # a refill, not an append
+        self.assertEqual((len(eng.lists["te_dg_states"]), len(eng.lists["te_dg_cities"])), (40, 3))
+
+    def test_projection_is_the_players(self):
+        for ai in (False, True):
+            states = self.three()
+            eng = self.country(states, ai=ai)
+            eng.call("te_demog_country_census")
+            self.assertEqual("te_dg_pjf0" in eng.vars, not ai, f"ai={ai}")
+            self.assertEqual("te_dg_pjm17" in eng.vars, not ai)
+        v = eng.vars
+        eng = self.country(self.three())
+        eng.call("te_demog_country_census")
+        v = eng.vars
+        now = sum(v[f"te_dg_cb{sex}{b}"] for sex in "fm" for b in range(18))
+        ahead = sum(v[f"te_dg_pj{sex}{b}"] for sex in "fm" for b in range(18))
+        self.assertTrue(0.7 * now < ahead < 2.5 * now, (now, ahead))
+        for sex in "fm":   # four five-year steps up: the children of now are the 20-year-olds of then
+            ratio = v[f"te_dg_pj{sex}4"] / v[f"te_dg_cb{sex}0"]
+            self.assertTrue(0.2 < ratio < 1.0, (sex, ratio))
+
+    def test_projection_without_a_capital_uses_a_default(self):
+        eng = self.country(self.three(), capital=False)
+        eng.call("te_demog_country_census")
+        self.assertIn("te_dg_pjf0", eng.vars)
+
+    def test_a_country_with_no_census_stays_pending(self):
+        states = [{"te_dg_people": 5e5, "state_population": 5e5}]
+        eng = self.country(states, capital=False)
+        eng.call("te_demog_country_census")
+        self.assertFalse("te_dg_census_year" in eng.vars)
+        self.assertFalse("te_dg_median" in eng.vars)
+        self.assertFalse("te_dg_pjf0" in eng.vars)
+
+    def test_the_country_keeps_last_years_figures_after_a_step_only(self):
+        names = ("median", "young_share", "working_share", "old_share", "dependency", "sex_balance", "cbr", "cdr",
+                 "w1549", "tfr", "e0", "e65", "imr", "net_migration", "urban_share", "primacy", "n_cities",
+                 "urban_label")
+        eng = self.country(self.three())
+        eng.call("te_demog_country_census")
+        self.assertEqual((eng.vars["te_dg_trend_ok"], eng.vars["te_dg_stepped"]), (0.0, 1.0),
+                         "the first census: nothing before it")
+        self.assertFalse(any(f"te_dg_prev_{n}" in eng.vars for n in names))
+        first = {n: eng.vars[f"te_dg_{n}"] for n in names}
+        eng.call("te_demog_country_census")   # the same states a year later, say
+        self.assertEqual((eng.vars["te_dg_trend_ok"], eng.vars["te_dg_stepped"]), (1.0, 1.0))
+        self.assertEqual({n: eng.vars[f"te_dg_prev_{n}"] for n in names}, first)
+
+    def test_the_country_census_after_seeds_has_no_arrows(self):
+        """1836: the game-start census and 31 December's both read seeded states (0 births), and
+        the first stepped year's still has the seed's behind it."""
+        seeds = self.three()
+        for s in seeds:
+            s["te_dg_births"] = s["te_dg_deaths"] = s["te_dg_net_migration"] = 0.0
+            s["te_dg_stepped"] = 0.0
+        eng = self.country(seeds)
+        flags = []
+        for rounds, born in ((2, False), (1, True), (1, True), (1, True)):
+            for _ in range(rounds):
+                if born:
+                    for s in seeds:
+                        s["te_dg_births"], s["te_dg_deaths"] = s["te_dg_people"] * 0.038, s["te_dg_people"] * 0.031
+                eng.call("te_demog_country_census")
+                flags.append((eng.vars["te_dg_trend_ok"], eng.vars["te_dg_stepped"]))
+        self.assertEqual(flags, [(0.0, 0.0), (0.0, 0.0), (0.0, 1.0), (1.0, 1.0), (1.0, 1.0)])
+        self.assertEqual(eng.vars["te_dg_cbr"], 38.0)
+        self.assertEqual(eng.vars["te_dg_prev_cbr"], 38.0)
+
+    def test_game_start_ends_with_the_census(self):
+        stubs = {"te_demog_walks": "", "te_demog_seed": "set_variable = { name = te_dg_year value = 1836 }",
+                 "te_demog_country_census": "set_variable = { name = census_ran value = 1 }"}
+        for rule in (True, False):
+            states = [{}, {}]
+            eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": rule}, effects=stubs)
+            eng.call("te_demog_country_game_start")
+            self.assertEqual(eng.vars.get("census_ran"), 1.0 if rule else None, rule)
+            self.assertEqual(["te_dg_year" in s for s in states], [rule, rule])

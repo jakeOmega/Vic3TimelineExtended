@@ -113,3 +113,11 @@ te_demog_crisis = {
 	min = 0
 	max = 1
 }
+
+# State scope: the global city-size rank (1 = the biggest city, recomputed monthly into
+# state_city_size_rank by city_rank_on_action) negated, so that ordered_scope_state, which takes
+# the highest first, lists a country's biggest cities first (te_demog_country_census).
+te_demog_neg_city_rank = {
+	value = var:state_city_size_rank
+	multiply = -1
+}
