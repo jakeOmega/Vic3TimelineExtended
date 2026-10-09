@@ -1161,9 +1161,10 @@ te_demog_set_trend = {
 # THIS = a country, ROOT = the same country (the yearly pulse and the game-start event
 # both run with it, and te_demog_add_bands_to_root writes to it). The country's census
 # from its states with one: the bands, the figures from them, the rates, the urban
-# pattern, the lists the panel draws and, for the player, the outline twenty years
-# ahead. A country with no state seeded yet writes no figures and no census year (census
-# pending; its band sums read 0 meanwhile). Accumulators are te_dg_seeded and locals named
+# pattern, the lists the panel draws, for the player the outline twenty years ahead
+# and, for a tracked country, the year's history sample (te_demog_history_record). A
+# country with no state seeded yet writes no figures and no census year (census pending;
+# its band sums read 0 meanwhile). Accumulators are te_dg_seeded and locals named
 # te_dg_c_*, clear of the ones te_demog_band_figures and te_demog_project use. Averages
 # weighted by people use millions of people for the weights: e0 x 12 million people could
 # pass the engine's limit. The urban squares use units of 100,000 people (0.03 for 3,000:
@@ -1312,6 +1313,11 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
 			set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
 			te_demog_project = yes
+		}
+		# one sample a year of the figures above for the history charts (te_demog_history_effects.txt)
+		if = {
+			limit = { te_history_country_is_tracked = yes }
+			te_demog_history_record = yes
 		}
 	}
 }

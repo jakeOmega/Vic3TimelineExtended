@@ -329,7 +329,8 @@ class _Engine:
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
-        self.trigger_fixtures = dict(triggers or {})
+        # the history store (te_history_country_is_tracked) has no containers here: off unless a test says
+        self.trigger_fixtures = {"te_history_country_is_tracked": False, **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
 
@@ -1697,3 +1698,133 @@ class TestWealth(unittest.TestCase):
         v = self.war_year(states, False, 9000, shocks=4)
         self.assertNotIn("te_dg_war_shock", v)
         self.assertEqual(states[0]["te_dg_wc"], 50.0)
+
+
+HISTORY_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_history_effects.txt"
+BOM = b"\xef\xbb\xbf"
+
+
+def _walk(items):
+    """Every (key, operator, value) in a parsed script, depth first."""
+    for item in items:
+        yield item
+        if isinstance(item[2], list):
+            yield from _walk(item[2])
+
+
+class TestHistory(unittest.TestCase):
+    """Task 12: the yearly history store (te_demog_history_record), modelled on the Cultural
+    Hegemony annual store. The interpreter has no containers, so these read the script."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _text(HISTORY_EFFECTS) if HISTORY_EFFECTS.exists() else ""
+
+    def block(self, name):
+        return _block(self.text, name)
+
+    def test_file_has_one_bom_and_tabs(self):
+        raw = HISTORY_EFFECTS.read_bytes()
+        self.assertTrue(raw.startswith(BOM))
+        self.assertFalse(raw[len(BOM):].startswith(BOM), "a doubled BOM drops the whole file")
+        self.assertNotRegex(raw.decode("utf-8-sig"), r"(?m)^ +\S")
+
+    def test_the_census_calls_the_record_for_tracked_countries_only(self):
+        body = _block(_text(EFFECTS), "te_demog_country_census")
+        calls = [i for i in _walk(_parse_script(body)) if i[0] == "te_demog_history_record"]
+        self.assertEqual(len(calls), 1)
+        gates = [v for k, _, v in _walk(_parse_script(body))
+                 if k == "if" and any(i[0] == "te_demog_history_record" for i in v)]
+        self.assertEqual(len(gates), 1)
+        self.assertIn(("te_history_country_is_tracked", "=", "yes"), _find(gates[0], "limit"))
+        # at the end of the effect, once the figures are written (inside the seeded branch)
+        self.assertLess(body.index("te_demog_project = yes"), body.index("te_demog_history_record = yes"))
+        self.assertGreater(body.index("te_demog_history_record = yes"), body.rindex("te_demog_set_trend = yes"))
+
+    def census(self, tracked, states):
+        stub = {"te_demog_history_record": "set_variable = { name = hist_median value = var:te_dg_median }"}
+        eng = _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+                             triggers={"is_ai": True, "te_demog_cohorts_run": True,
+                                       "te_history_country_is_tracked": tracked}, effects=stub)
+        eng.call("te_demog_country_census")
+        return eng.vars
+
+    def test_the_record_runs_after_the_figures_are_written(self):
+        states = [TestCountry.state(4_000_000, 1_600_000, 22, 0.55, rank=1),
+                  TestCountry.state(1_500_000, 300_000, 14, 0.3, rank=2)]
+        v = self.census(True, [dict(s) for s in states])
+        self.assertGreater(v["hist_median"], 15)
+        self.assertEqual(v["hist_median"], v["te_dg_median"])
+        self.assertNotIn("hist_median", self.census(False, [dict(s) for s in states]))
+        pending = [{"te_dg_people": 5e5, "state_population": 5e5}]   # no state seeded: no census, no sample
+        self.assertNotIn("hist_median", self.census(True, pending))
+
+    def test_one_sample_a_year(self):
+        """The census runs twice in 1836 (game start, 31 December): the year is checked before a
+        container is created, and set only once the sample is stored."""
+        body = self.block("te_demog_history_record")
+        self.assertLess(body.index("te_dg_hist_year"), body.index("create_container"))
+        guard = body[:body.index("create_container")]
+        self.assertIn("var:te_dg_hist_year = te_demog_year", guard)
+        self.assertIn("NOT = { has_variable = te_dg_hist_year }", guard)
+        self.assertEqual(body.count("create_container"), 1)
+        self.assertRegex(body, r"set_variable = \{ name = te_dg_hist_year value = te_demog_year \}")
+        self.assertLess(body.index("add_to_variable_list"),
+                        body.index("set_variable = { name = te_dg_hist_year value = te_demog_year }"))
+        self.assertIn("limit = { exists = scope:te_dg_hist_new }", body)
+
+    def test_the_sample_is_a_country_owned_container_keyed_by_year(self):
+        body = self.block("te_demog_history_record")
+        self.assertIn("parent = scope:te_dg_hist_owner", body)
+        self.assertIn("save_scope_as = te_dg_hist_owner", body)
+        self.assertRegex(body, r"set_variable = \{ name = te_hist_i value = te_demog_year \}")
+        self.assertRegex(body, r"add_to_variable_list = \{ name = te_dg_hist target = scope:te_dg_hist_new \}")
+        self.assertTrue(body.lstrip().startswith("hidden_effect"), "hidden: a store, not a tooltip")
+
+    def test_this_years_container_is_refilled_every_run(self):
+        """The 31 December run overwrites the game-start sample's values, and the game-start
+        sample may lack the Gini and Wealth Concentration (te_demog_wc_national runs yearly only)."""
+        body = self.block("te_demog_history_record")
+        self.assertRegex(body, r"every_in_list = \{\s+variable = te_dg_hist\s+limit = \{ var:te_hist_i = te_demog_year \}")
+        self.assertGreater(body.index("every_in_list"), body.index("te_dg_hist_year value"))
+        copies = dict(re.findall(r"te_demog_history_copy = \{ FROM = (\w+) TO = (\w+) \}", body))
+        self.assertEqual(copies, {"te_dg_median": "te_dg_h_median", "te_dg_tfr": "te_dg_h_tfr",
+                                  "te_dg_e0": "te_dg_h_e0", "te_dg_gini": "te_dg_h_gini",
+                                  "te_inh_concentration": "te_dg_h_wc"})
+
+    def test_each_read_is_guarded_by_has_variable(self):
+        body = self.block("te_demog_history_copy")
+        self.assertRegex(body, r"limit = \{ scope:te_dg_hist_owner = \{ has_variable = \$FROM\$ \} \}")
+        self.assertIn("value = scope:te_dg_hist_owner.var:$FROM$", body)
+        self.assertIn("name = $TO$", body)
+
+    def test_the_store_holds_100_and_each_eviction_sorts_again(self):
+        prune = self.block("te_demog_history_prune")
+        self.assertRegex(prune, r"any_in_list = \{ variable = te_dg_hist count >= 101 has_tag = te_dg_hist_sample \}")
+        self.assertIn("cap 100", prune)
+        self.assertIn("order_by = te_history_sample_order", prune)
+        self.assertLess(prune.index("remove_list_variable"), prune.index("destroy_container = yes"))
+        self.assertLess(prune.index("destroy_container = yes"), prune.index("te_demog_history_sort = yes"))
+        self.assertIn("fills the hole", re.sub(r"\n#\s*", " ", self.text))   # the eviction comment (CH's)
+        self.assertIn("te_demog_history_prune = yes", self.block("te_demog_history_record"))
+
+    def test_the_sort_builds_the_copy_before_clearing_the_list(self):
+        sort = self.block("te_demog_history_sort")
+        self.assertEqual(sort.count("max = 100"), 2)
+        self.assertRegex(sort, r"any_in_list = \{ variable = te_dg_hist_tmp count >= 100 has_tag = te_dg_hist_sample \}")
+        self.assertEqual(sort.count("check_range_bounds = no"), 2)
+        self.assertLess(sort.index("add_to_variable_list = { name = te_dg_hist_tmp"),
+                        sort.index("clear_variable_list = te_dg_hist\n"))
+        self.assertEqual(sort.count("order_by = te_history_sample_order"), 2)
+        self.assertGreater(sort.rindex("clear_variable_list = te_dg_hist_tmp"), sort.rindex("add_to_variable_list"))
+
+    def test_the_order_value_is_negated_so_the_oldest_comes_first(self):
+        order = _block(_text(ROOT / "common" / "script_values" / "te_history_values.txt"), "te_history_sample_order")
+        self.assertRegex(order, r"subtract = var:te_hist_i")
+
+    def test_no_name_is_shared_with_the_other_stores(self):
+        """The Cultural Hegemony and monthly stores run in the same pulses: their lists, scratch
+        lists, saved scopes and tags must stay theirs."""
+        for stale in (r"variable = te_hist\b", r"te_hist_tmp", r"te_hist_sorter", r"te_hist_evicted", r"te_hist_moved",
+                      r"te_hist_sample\b", r"ch_model", r">= 241", r">= 240", r"max = 240"):
+            self.assertNotRegex(self.text, stale)
