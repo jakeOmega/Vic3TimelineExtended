@@ -37,3 +37,58 @@ te_demog_year = {
 	value = 0
 	add = year
 }
+
+# State scope: years since the last census step or seed (te_dg_year), 0 before the first.
+te_demog_year_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_year }
+		value = te_demog_year
+		subtract = var:te_dg_year
+	}
+}
+
+# The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
+te_demog_open_slot = {
+	value = te_demog_year
+	modulo = 150
+}
+
+# State scope: desired fertility as a factor (spec §2.3; demographics_model.fertility):
+# education x child survival x urban life. Reads this year's e0 (te_demog_life_table).
+te_demog_desired = {
+	value = 1
+	multiply = {
+		value = var:te_dg_lit
+		multiply = te_demog_k_education_weight
+		multiply = -1
+		add = 1
+	}
+	multiply = {
+		value = var:te_dg_e0
+		subtract = 30
+		divide = 50
+		min = 0
+		max = 1
+		multiply = te_demog_k_survival_weight
+		multiply = -1
+		add = 1
+	}
+	multiply = {
+		value = var:te_dg_urban_share
+		multiply = te_demog_k_urban_weight
+		multiply = -1
+		add = 1
+	}
+}
+
+# State scope: children per woman = wealth x (1 - means x (1 - desired)) (spec §2.3;
+# demographics_model.fertility).
+te_demog_tfr = {
+	value = 1
+	subtract = var:te_dg_desired
+	multiply = var:te_dg_means
+	multiply = -1
+	add = 1
+	multiply = var:te_dg_wtfr
+}

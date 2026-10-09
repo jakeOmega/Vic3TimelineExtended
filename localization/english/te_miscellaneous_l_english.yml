@@ -4782,6 +4782,8 @@
  te_decision_tt_has_capital:0 "We have a capital"
  te_decision_tt_leads_market:0 "Our [concept_market_capital] is one of our own states: the $building_space_program$ can only stand in the capital of a market we lead"
  te_decision_tt_restructure_debt:0 "Talks open with our creditors, where we choose how much of the debt to write off, or break them off. They cannot be reopened for #b a year#!."
+ te_demog_family_limitation:0 "Family Limitation"
+ te_demog_family_limitation_desc:0 "Couples here have long chosen to have fewer children than their neighbours, by means older than any modern method."
  te_direct_construction_base_modifier:0 "Base Construction"
  te_ea_bailout_appeal:0 "Hat in Hand"
  te_ea_ir_agent_in_place_modifier:0 "Agent in Place"

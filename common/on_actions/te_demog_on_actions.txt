@@ -19,3 +19,22 @@ te_demog_state_yearly_on_action = {
 		te_demog_state_yearly = yes
 	}
 }
+
+# Every 1836 state opens with a census. on_game_started has no ROOT, so each
+# country walks and seeds its states in a hidden country event
+# (te_demog_events.1); the fan-out is te_inh_on_game_started's.
+on_game_started = {
+	on_actions = {
+		te_demog_on_game_started
+	}
+}
+
+te_demog_on_game_started = {
+	effect = {
+		every_country = {
+			trigger_event = {
+				id = te_demog_events.1
+			}
+		}
+	}
+}

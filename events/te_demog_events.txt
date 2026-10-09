@@ -1,0 +1,23 @@
+﻿namespace = te_demog_events
+
+# ======================================================================
+#  DEMOGRAPHICS EVENTS
+#  Spec: docs/superpowers/specs/2026-10-08-demographics-design.md
+#  Effects: common/scripted_effects/te_demog_effects.txt.
+#
+#    1       hidden: every state's first census at game start
+# ======================================================================
+
+# ======================================================================
+#  1 – Game start (hidden)
+#  on_game_started has no ROOT, so the census is seeded here, where ROOT
+#  is the country (te_demog_on_game_started).
+# ======================================================================
+te_demog_events.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_demog_country_game_start = yes
+	}
+}
