@@ -847,6 +847,33 @@ class TestFlows(unittest.TestCase):
         on_actions = _text(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
         self.assertEqual(on_actions.count("te_demog_note_kills"), 2)   # both Violent Hostility kills
 
+    def test_crisis_reads_devastation_as_a_percentage(self):
+        """State devastation runs 0-100 (add_devastation = 10 ... capped at 100), turmoil 0-1."""
+        body = _block(_text(VALUES), "te_demog_crisis")
+        self.assertIn("add = { value = devastation divide = 100 }", body)
+        self.assertNotRegex(body, r"add = devastation\b")
+        self.assertIn("add = turmoil", body)
+
+    def test_tactical_strike_tallies_its_soldiers_in_a_local(self):
+        """Inside the pop walk change_variable writes the pop's own variable and total_population is a
+        country trigger: the tally has to be a local, in total_size, added to the state's after the walk."""
+        effects = _text(ROOT / "common" / "scripted_effects" / "extra_effects.txt")
+        body = _block(effects, "nuclear_tactical_strike")
+        start = body.index("every_scope_pop = {")
+        depth, i = 1, body.index("{", start) + 1
+        while depth:
+            depth += {"{": 1, "}": -1}.get(body[i], 0)
+            i += 1
+        walk = body[start:i]
+        self.assertIn("change_local_variable", walk)
+        self.assertIn("total_size", walk)
+        self.assertNotIn("change_variable", walk)
+        self.assertNotIn("total_population", walk)
+        after = body[i:]
+        self.assertLess(body.index("set_local_variable = { name = te_dg_ts value = 0 }"), start)
+        self.assertLess(after.index("add = local_var:te_dg_ts"), after.index("te_demog_note_kills"))
+        self.assertLess(after.index("te_demog_note_kills"), after.index("kill_population_percent_in_state"))
+
     def test_residual_ignores_noise(self):
         body = _block(_text(EFFECTS), "te_demog_flows")
         self.assertIn("te_demog_k_residual_noise_share", body)

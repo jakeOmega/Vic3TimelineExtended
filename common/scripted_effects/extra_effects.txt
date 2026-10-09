@@ -764,6 +764,11 @@ nuclear_tactical_strike = {
 		name = tactical_nuclear_strike_killed_population
 		value = nuclear_tactical_strike_civilian_killed_population
 	}
+	# The soldiers' and officers' dead are tallied in a local and added to the state's
+	# figure after the walk. The old form (change_variable inside every_scope_pop, adding
+	# total_population, a country-only trigger) wrote each pop's own variable and never
+	# reached the state, so the figure held only the civilians.
+	set_local_variable = { name = te_dg_ts value = 0 }
 	every_scope_pop = {
 		limit = {
 			OR = {
@@ -771,15 +776,16 @@ nuclear_tactical_strike = {
 				is_pop_type = officers
 			}
 		}
-		change_variable = {
-			name = tactical_nuclear_strike_killed_population
+		change_local_variable = {
+			name = te_dg_ts
 			add = {
-				value = total_population
+				value = total_size
 				multiply = 0.5
 				ceiling = yes
 			}
 		}
 	}
+	change_variable = { name = tactical_nuclear_strike_killed_population add = local_var:te_dg_ts }
 	te_demog_note_kills = { VALUE = var:tactical_nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.5

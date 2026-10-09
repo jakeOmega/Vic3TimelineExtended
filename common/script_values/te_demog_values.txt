@@ -99,11 +99,12 @@ te_demog_war_dead_root = {
 }
 
 # State scope: how much of a migration is refugees (spec §2.5): devastation,
-# turmoil and the owner being at war. The bareword reads are checked in game by
-# te_debug_demog.1 option b's census line (Owner checks).
+# turmoil and the owner being at war. Devastation runs 0-100 (turmoil 0-1), so it
+# is divided by 100. The bareword reads are checked in game by te_debug_demog.1
+# option b's census line (Owner checks).
 te_demog_crisis = {
 	value = 0
-	add = devastation
+	add = { value = devastation divide = 100 }
 	add = turmoil
 	if = {
 		limit = { owner = { is_at_war = yes } }
