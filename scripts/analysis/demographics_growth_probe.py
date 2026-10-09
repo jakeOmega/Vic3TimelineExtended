@@ -2,7 +2,8 @@
 """Read the growth probe's TE_PG lines (branch probe/demographics-growth) and fit the engine's births and deaths.
 
     demographics_growth_probe.py check  LOG [LOG ...]   # mid-run health: ticks, groups, phases, both-off, daily lines
-    demographics_growth_probe.py report LOG [LOG ...]   # the fits
+    demographics_growth_probe.py report LOG [LOG ...]   # per-country fits (noisy: see below)
+    demographics_growth_probe.py pooled LOG [LOG ...]   # one fit over all countries and windows
 
 LOG may be any mix of debug.log generations and archived copies; identical lines are read once. Only
 v=2 lines are read (the 28-day schedule); the first run's 30-day lines carry no v and are skipped.
@@ -297,10 +298,79 @@ def cmd_report(args):
     return 0
 
 
+KAPPA_MONTHLY = 12 * 28 / 365.25   # a 28-day window's share of a year's twelve monthly updates
+
+
+def pooled_fit(ws, min_pop, kind, steps):
+    """One weighted least-squares fit over every clean measured window of the given steps, all countries:
+    change = k x curve x (1 + read) + k b1 x split1 + ... (no intercept; weights 1 / curve). For births,
+    change is the births (deaths off); for deaths, minus the change (births off). The read includes the
+    probe's own step (Q5). Returns ({'k': ..., split: coefficient / k}, n, per-window factors)."""
+    if kind == "b":
+        base, read, splits = "eb", "mb", ["ebl", "ebst", "ebsv"]
+    else:
+        base, read, splits = "ed", "md", ["edlab", "edmach", "edeng", "edslv", "edst", "edsv", "edtu"]
+    data, weights, by_t = [], [], collections.defaultdict(lambda: [0.0, 0.0])
+    for lst in ws.values():
+        for w in lst:
+            if not (w["measured"] and w["clean"] and w["pop"] >= min_pop and w["ph"] in steps and w[base] > 0):
+                continue
+            y = w["change"] if kind == "b" else -w["change"]
+            row = {"y": y, "base": w[base] * (1 + w[read])}
+            row.update({k: w[k] for k in splits})
+            data.append(row)
+            weights.append(1 / w[base])
+            by_t[w["t"]][0] += y
+            by_t[w["t"]][1] += row["base"]
+    live = [k for k in splits if any(abs(r[k]) > 1e-9 for r in data)]
+    cols = ["base"] + live
+    a = [[sum(wt * r[ci] * r[cj] for wt, r in zip(weights, data)) for cj in cols] for ci in cols]
+    b = [sum(wt * r[ci] * r["y"] for wt, r in zip(weights, data)) for ci in cols]
+    sol = _solve(a, b) if data else None
+    if not sol:
+        return None, len(data), {}
+    k = sol[0]
+    out = {"k": k}
+    out.update({c: v / k for c, v in zip(cols[1:], sol[1:])})
+    return out, len(data), {t: y / x for t, (y, x) in sorted(by_t.items()) if x}
+
+
+def cmd_pooled(args):
+    rows, ticks, days, bad = parse(args.logs)
+    ws = windows(rows)
+    # Births leave out -0.9: a starving or literate pop's total can cross the floor there. Deaths keep every
+    # step: their per-pop terms add, so the small totals of -0.5 and -0.9 show them best.
+    steps_b = {p for p, x in BIRTH_STEP.items() if x >= -0.5}
+    steps_d = set(DEATH_STEP)
+    for kind, label, steps, floor_steps in (("b", "births", steps_b, {12: -0.5, 13: -0.9}),
+                                            ("d", "deaths", steps_d, {14: -0.5, 15: -0.9})):
+        fit, n, by_t = pooled_fit(ws, args.min_pop, kind, steps)
+        if not fit:
+            print(f"{label}: no data")
+            continue
+        used = ", ".join(f"{x:+.1f}" for x in sorted({(BIRTH_STEP if kind == 'b' else DEATH_STEP)[p] for p in steps}))
+        print(f"\n{label}: pooled over {n} windows (steps {used})")
+        print(f"  k = {fit['k']:.4f} a 28-day window = {fit['k'] / KAPPA_MONTHLY:.4f} x the curve's month x 12 a year"
+              f" (1 = the census's x 12 is right)")
+        names = {"ebl": "literacy (literacy_penalty predicts -0.1)", "ebst": "mild starvation", "ebsv": "severe starvation",
+                 "edlab": "employed laborers", "edmach": "employed machinists", "edeng": "employed engineers",
+                 "edslv": "employed slaves", "edst": "mild starvation", "edsv": "severe starvation", "edtu": "turmoil"}
+        for c, v in fit.items():
+            if c != "k":
+                print(f"  multiplier per unit of {names.get(c, c)}: {v:+.4f}")
+        print("  per window, change / (curve x (1 + read)):",
+              " ".join(f"{t}:{v:.3f}" for t, v in by_t.items()))
+        for p, x in floor_steps.items():
+            f2, n2, _ = pooled_fit(ws, args.min_pop, kind, {p})
+            if f2:
+                print(f"  step {x:+.1f} alone: k = {f2['k']:.4f} over {n2} windows (the floor bends it if below the fit's k)")
+    return 0
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("check", cmd_check), ("report", cmd_report)):
+    for name, fn in (("check", cmd_check), ("report", cmd_report), ("pooled", cmd_pooled)):
         sp = sub.add_parser(name)
         sp.add_argument("logs", nargs="+")
         sp.add_argument("--min-pop", type=float, default=500000, help="ignore smaller countries (default 500,000)")
