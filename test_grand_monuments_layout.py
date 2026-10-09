@@ -691,5 +691,146 @@ class LabelBudgetTest(unittest.TestCase):
         self._fits("gm_je_ov_hard_times", (480, "fontsize_large"))
 
 
+# ---- The state view's card (te_state_gm_card) ------------------------------
+STATE_GUI = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
+STATES_PANEL = os.path.join(REPO, "gui", "states_panel.gui")
+
+
+class StateCardTest(unittest.TestCase):
+    """The Grand Monument card in the state view: shown only where a monument
+    stands, its status as the journal entry's rows show it, display only but
+    for a goto to the entry on the player's own state."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(STATE_GUI)
+        cls.card = _type_body(cls.gui, "te_state_gm_card")
+        cls.flat = _squash(_strip_comments(cls.card))
+        goto = re.search(r"### OPEN THE JOURNAL ENTRY[^\n]*\n\t*widget = \{", cls.card)
+        cls.goto = _squash(_match_brace(cls.card, goto.end()))
+        cls.rest = _squash(_strip_comments(cls.card[:goto.start()]))
+
+    def test_instanced_under_the_tourism_card(self):
+        panel = _squash(_strip_comments(_read(STATES_PANEL)))
+        self.assertEqual(panel.count("te_state_gm_card = {}"), 1)
+        self.assertIn("te_state_tourism_card = {} te_state_gm_card = {}", panel)
+
+    def test_shown_only_while_a_monument_stands(self):
+        self.assertTrue(self.flat.startswith(
+            "visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), "
+            "'(CFixedPoint)0')]\""))
+
+    def test_status_icons_follow_the_code(self):
+        found = re.findall(r"gm_row_status = \{ visible = \"\[EqualTo_CFixedPoint\(State\.MakeScope\.ScriptValue"
+                           r"\('gm_status_code'\), '\(CFixedPoint\)(\d)'\)\]\" tooltip = \"(\w+)\" "
+                           r"blockoverride \"status_texture\" \{ texture = \"([^\"]+)\" \}", self.flat)
+        self.assertEqual({int(c): t for c, _, t in found}, {k: v for k, v in ICONS.items() if isinstance(k, int)})
+        # The three hidden ones take no room.
+        self.assertIn("container = { flowcontainer = { direction = horizontal ignoreinvisible = yes ", self.flat)
+        row = _squash(_type_body(_gui(), "gm_monument_row"))
+        for code, tooltip, _ in found:
+            self.assertIn(f"'(CFixedPoint){code}' )]\" tooltip = \"{tooltip}\"", row, "the row's tooltip")
+
+    def test_titles_and_lines_are_the_rows(self):
+        for key in ("gm_row_title", "gm_row_title_named", "gm_row_contest", "gm_row_inscription"):
+            self.assertIn(f'text = "{key}"', self.rest, key)
+        self.assertIn("ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0')]\" ", self.rest)
+        self.assertIn("ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1')]\" ", self.rest)
+        # The contest line only while contested, its reason on hover.
+        self.assertRegex(self.rest, r"visible = \"\[EqualTo_CFixedPoint\(State\.MakeScope\.ScriptValue"
+                                    r"\('gm_status_code'\), '\(CFixedPoint\)4'\)\]\" (?:(?!textbox = \{).)*?"
+                                    r"tooltip = \"gm_state_contest_tt\" text = \"gm_row_contest\"")
+
+    def test_zero_rows_hide(self):
+        for value, key in (("gm_state_disp_tourism", "gm_state_lbl_tourism"),
+                           ("gm_state_disp_local", "gm_state_lbl_local")):
+            self.assertRegex(self.rest, r"te_state_gm_row = \{ visible = \"\[NotEqualTo_CFixedPoint\(State\.MakeScope"
+                                        rf"\.ScriptValue\('{value}'\), '\(CFixedPoint\)0'\)\]\".*?"
+                                        rf"\"row_label\" \{{ text = \"{key}\" \}}")
+
+    def test_display_only_but_for_the_goto(self):
+        """No action and no journal entry outside the goto; the goto shows on
+        the player's own state, its gate on a parent of the datacontext."""
+        for word in ("JournalEntry", "onclick", "ScriptedGui.Execute", "GetPlayerJournalEntry"):
+            self.assertNotIn(word, self.rest, word)
+        self.assertTrue(self.goto.startswith(
+            "visible = \"[And(ObjectsEqual(State.GetOwner, GetPlayer.Self), "
+            "GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope)"
+            ".End))]\""))
+        self.assertRegex(self.goto, r"widget = \{ datacontext = \"\[GetPlayerJournalEntry\('je_grand_monuments'\)\]\""
+                                    r" size = \{ 25 25 \} button_icon_goto = \{ visible = \"\[JournalEntry\.IsActive\]\"")
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", self.goto)
+
+    def test_every_rendered_key_exists(self):
+        loc = _loc()
+        keys = set(re.findall(r'(?:text|tooltip) = "([a-z]\w*)"', self.card))
+        self.assertTrue(keys)
+        for key in keys:
+            self.assertIn(key, loc, key)
+
+    def test_columns_are_the_cards_width(self):
+        """96 status + 10 + 404 = 510, the tourism card's inner width; each
+        row is 20 icon + 4 + label + 4 + value = 404; the titles stop short of
+        the goto's 25 + 5 at the corner."""
+        row = _squash(_type_body(self.gui, "te_state_gm_row"))
+        label = int(re.search(r'"label_size" \{ size = \{ (\d+) ', row).group(1))
+        value = int(re.search(r'"value_size" \{ size = \{ (\d+) ', row).group(1))
+        self.assertEqual(20 + 4 + label + 4 + value, 404)
+        status = int(re.search(r"size = \{ (\d+) ", _type_body(_gui(), "gm_row_status")).group(1))
+        self.assertIn("spacing = 10", self.flat)
+        self.assertEqual(status + 10 + 404, 510)
+        self.assertIn("minimumsize = { 404 -1 }", self.flat)
+        self.assertIn("minimumsize = { 530 -1 }", self.flat)
+        self.assertIn('"bar_size" { size = { 380 4 } }', self.flat)
+        titles = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \} align = left\|nobaseline "
+                                             r"using = fontsize_large", self.flat)]
+        self.assertEqual(len(titles), 2)
+        for width in titles:
+            self.assertLessEqual(width + 25 + 5, 404)
+
+    def test_values_guard_their_reads(self):
+        values = _read(VALUES)
+        for name in ("gm_state_disp_tourism", "gm_state_disp_local"):
+            body = _block(values, name)
+            self.assertIsNotNone(body, name)
+            for var in set(re.findall(r"var:(\w+)", body)):
+                self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
+
+    def test_the_step_bar_follows_the_local_curve(self):
+        """The local effects step on gm_curve_steps_f5, so the bar is f = 5 and
+        its next step is gm_curve_next_f5's, read from the live level."""
+        values = _read(VALUES)
+        monthly = _squash(_block(_read(EFFECTS), "gm_state_monthly"))
+        self.assertIn("value = gm_curve_steps_f5 multiply = gm_policy_factor_local", monthly)
+        curve = _squash(_block(values, "gm_curve_next_f5"))
+        nxt = _squash(_block(values, "gm_state_disp_next_step"))
+        self.assertEqual(nxt, curve.replace("var:gm_curve_in", "gm_state_grandeur"))
+        pct = _squash(_block(values, "gm_state_disp_step_pct"))
+        self.assertEqual(pct, "value = gm_state_grandeur multiply = 2 subtract = gm_state_disp_next_step add = 5 "
+                              "divide = { value = gm_state_disp_next_step add = 5 } multiply = 100 min = 0 max = 100")
+
+
+class StateCardLabelBudgetTest(LabelBudgetTest):
+    """The card's labels and values fit their cells: every label the local
+    effect's custom localization can pick, too."""
+
+    def test_effect_rows(self):
+        row = _type_body(_read(STATE_GUI), "te_state_gm_row")
+        label = int(re.search(r'"label_max_width" \{\s*max_width = (\d+)', row).group(1))
+        value = int(re.search(r'"value_max_width" \{\s*max_width = (\d+)', row).group(1))
+        custom = _read(CUSTOM_LOC)
+        labels = set(re.findall(r"localization_key = (\w+)", _block(custom, "gm_local_effect_label")))
+        values = set(re.findall(r"localization_key = (\w+)", _block(custom, "gm_local_effect_value")))
+        self.assertTrue(labels and values)
+        for key in labels | {"gm_state_lbl_grandeur", "gm_state_lbl_tourism"}:
+            self._fits(key, (label, "fontsize_medium"))
+        for key in values | {"gm_state_val_grandeur", "gm_state_val_tourism"}:
+            self._fits(key, (value, "fontsize_medium"), "-40,000")
+
+    # The journal entry's own budgets are LabelBudgetTest's.
+    test_the_flagged_labels_are_short = test_overview_captions = test_row_status_words = None
+    test_choice_buttons = test_policy_buttons = test_naming_buttons = test_hard_times_phrase = None
+
+
 if __name__ == "__main__":
     unittest.main()

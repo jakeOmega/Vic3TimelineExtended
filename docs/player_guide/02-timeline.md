@@ -474,6 +474,13 @@ window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active, and it
 ends with an Open Journal Entry button.
 
+The state panel of a state with a Grand Monument, yours or another country's,
+shows a Grand Monument card under the tourism card: the monument's status, name
+and dedication, its grandeur with a bar toward its next step, and the Tourism
+Industry throughput and local effect it gives that state. Hover a line for its
+breakdown. The card's arrow, on your own states, opens the journal entry, where
+the buttons are.
+
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
 Upheld (a gold wreath on the stone), Heritage (a railing in front), Undedicated
