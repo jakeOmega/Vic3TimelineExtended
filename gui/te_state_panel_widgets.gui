@@ -508,6 +508,231 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### GRAND MONUMENT
+	###
+	### A full-width card under the tourism card, shown only while a Grand
+	### Monument stands in the state (gm_status_code, 0 without one), in any
+	### country's state. One per state: the building is one per state, levels
+	### uncapped. Left, its status as the journal entry's row shows it
+	### (gm_row_status, the mod's own icons with the word beneath). Right, its
+	### name and dedication (the row's gm_row_title keys), then what it does
+	### here: grandeur with a bar of the step now being filled, its Tourism
+	### Industry throughput and its dedication's local effect, each as last
+	### refreshed by gm_state_monthly (gm_state_disp_* in gm_values.txt); the
+	### local effect's name and format come from the custom localization
+	### gm_local_effect_label / _value. Under them, while contested, who wants it
+	### kept and who resents it, then the inscription (empty when none).
+	###
+	### Display only: Pull Down, Rededicate, Keep as Heritage and the names are
+	### the journal entry's, so a state of the player's own carries a goto
+	### button to the entry instead. Its gate sits on a parent of the
+	### GetPlayerJournalEntry datacontext (te_systems_window.gui's Grand
+	### Monuments tab, gotcha #29). The title column stops short of it.
+	###
+	### Columns: 96 status + 10 + 404 = 510, the tourism card's inner width.
+	### Rows: 20 icon + 4 + 290 label + 4 + 86 value = 404.
+	type te_state_gm_row = te_state_stat_row {
+		blockoverride "label_size" {
+			size = { 290 22 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 290
+		}
+		blockoverride "value_size" {
+			size = { 86 22 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 86
+		}
+	}
+
+	type te_state_gm_card = flowcontainer {
+		visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)0')]"
+		direction = vertical
+		parentanchor = hcenter
+		margin_top = 10
+
+		container = {
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				margin = { 10 8 }
+				spacing = 10
+				minimumsize = { 530 -1 }
+
+				background = {
+					using = entry_bg_simple
+				}
+
+				### STATUS — one code each (gotcha #23), as Our Monuments' rows.
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1')]"
+					tooltip = "gm_je_status_undedicated_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+					}
+				}
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2')]"
+					tooltip = "gm_je_status_upheld_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
+					}
+				}
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3')]"
+					tooltip = "gm_je_status_heritage_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
+					}
+				}
+				gm_row_status = {
+					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4')]"
+					tooltip = "gm_je_status_contested_tt"
+					blockoverride "status_texture" {
+						texture = "gfx/interface/icons/gm_icons/status_contested.dds"
+					}
+				}
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+					minimumsize = { 404 -1 }
+
+					### NAME — a typed name (v2 §3.5) prints straight from
+					### the state's gm_name, as in the journal entry's row.
+					textbox = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0')]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 374 -1 }
+						maximumsize = { 374 -1 }
+						align = left|nobaseline
+						using = fontsize_large
+						text = "gm_row_title"
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1')]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 374 -1 }
+						maximumsize = { 374 -1 }
+						align = left|nobaseline
+						using = fontsize_large
+						text = "gm_row_title_named"
+					}
+
+					### GRANDEUR and the step now being filled.
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "gm_state_grandeur_tt"
+						}
+
+						te_state_gm_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+							}
+							blockoverride "row_label" {
+								text = "gm_state_lbl_grandeur"
+							}
+							blockoverride "row_value" {
+								text = "gm_state_val_grandeur"
+							}
+						}
+						te_state_stat_bar = {
+							blockoverride "bar_size" {
+								size = { 380 4 }
+							}
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('gm_state_disp_step_pct'))]"
+							}
+						}
+					}
+
+					### IN THIS STATE — zero rows hide (before the first
+					### pulse, and the local effect while undedicated).
+					te_state_gm_row = {
+						visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_tourism'), '(CFixedPoint)0')]"
+						blockoverride "row_tooltip" {
+							tooltip = "gm_state_tourism_tt"
+						}
+						blockoverride "row_icon_texture" {
+							texture = "gfx/interface/icons/goods_icons/tourism.dds"
+						}
+						blockoverride "row_label" {
+							text = "gm_state_lbl_tourism"
+						}
+						blockoverride "row_value" {
+							text = "gm_state_val_tourism"
+						}
+					}
+
+					te_state_gm_row = {
+						visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_local'), '(CFixedPoint)0')]"
+						blockoverride "row_tooltip" {
+							tooltip = "gm_state_local_tt"
+						}
+						blockoverride "row_icon_texture" {
+							texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+						}
+						blockoverride "row_label" {
+							text = "gm_state_lbl_local"
+						}
+						blockoverride "row_value" {
+							text = "gm_state_val_local"
+						}
+					}
+
+					### CONTESTED — the reason on hover; the choices are the
+					### journal entry's.
+					textbox = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4')]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 404 -1 }
+						maximumsize = { 404 -1 }
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						tooltip = "gm_state_contest_tt"
+						text = "gm_row_contest"
+					}
+
+					textbox = {
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 404 -1 }
+						maximumsize = { 404 -1 }
+						align = left|nobaseline
+						using = fontsize_medium
+						text = "gm_row_inscription"
+					}
+				}
+			}
+
+			### OPEN THE JOURNAL ENTRY — our own state only.
+			widget = {
+				visible = "[And(ObjectsEqual(State.GetOwner, GetPlayer.Self), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
+				parentanchor = top|right
+				position = { -5 5 }
+				size = { 25 25 }
+
+				widget = {
+					datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
+					size = { 25 25 }
+
+					button_icon_goto = {
+						visible = "[JournalEntry.IsActive]"
+						size = { 25 25 }
+						tooltip = "te_window_grand_monuments_open_journal_tt"
+						onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+					}
+				}
+			}
+		}
+	}
+
 	### HOMELAND DYNAMICS
 
 	### One culture's project: its name and progress, the bar, and a warning

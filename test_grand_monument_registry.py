@@ -633,6 +633,49 @@ class LocalPulseTests(unittest.TestCase):
             self.assertIn(f"value = {n} }}", code)
 
 
+class StateCardTests(unittest.TestCase):
+    """The state view's Grand Monument card (te_state_gm_card) shows each
+    dedication's local effect: its value, its name and its format."""
+
+    def test_local_value_takes_each_dedications_step(self):
+        body = squash(block(read(VALUES), "gm_state_disp_local"))
+        self.assertIn("value = var:gm_local_steps", body)
+        for d in DEDICATIONS:
+            self.assertIn(f"limit = {{ gm_state_has_pm = {{ PM = pm_monument_{d.key} }} }} "
+                          f"multiply = gm_step_local_{d.key} }}", body, d.key)
+
+    def test_label_and_value_for_each_dedication(self):
+        """One branch per dedication in each family; dedications with the same
+        local modifier share a label and a format, and different modifiers
+        never share a label."""
+        custom, table = read(CUSTOM_LOC), loc()
+        label_of_field = {}
+        for family in ("gm_local_effect_label", "gm_local_effect_value"):
+            body = squash(block(custom, family))
+            self.assertIsNotNone(body, family)
+            by_field = {}
+            for d in DEDICATIONS:
+                m = re.search(rf"trigger = {{ gm_state_has_pm = {{ PM = pm_monument_{d.key} }} }} "
+                              rf"localization_key = (\w+)", body)
+                self.assertIsNotNone(m, (family, d.key))
+                self.assertIn(m.group(1), table, (family, d.key))
+                self.assertEqual(by_field.setdefault(d.local_field, m.group(1)), m.group(1), (family, d.key))
+            if family == "gm_local_effect_label":
+                label_of_field = by_field
+        self.assertEqual(len(set(label_of_field.values())), len(label_of_field))
+
+    def test_value_formats_follow_the_sign_and_size(self):
+        """A share prints as a percent, the pollution step as a number, and
+        a negative step has no "+" in front of it."""
+        custom, table = squash(block(read(CUSTOM_LOC), "gm_local_effect_value")), loc()
+        for d in DEDICATIONS:
+            key = re.search(rf"PM = pm_monument_{d.key} }} }} localization_key = (\w+)", custom).group(1)
+            text = table[key]
+            self.assertIn("ScriptValue('gm_state_disp_local')", text, d.key)
+            self.assertEqual("#G +[" in text, d.local_step > 0, d.key)
+            self.assertEqual("|D]" in text, abs(d.local_step) >= 1, d.key)
+
+
 # ---- Task 5: the national refresh, IG alignment, ledgers, the JE ---------------------
 
 class NationalTests(unittest.TestCase):

@@ -1445,6 +1445,10 @@ types state_panel_types
 		### was neither one tile wide nor one tile tall and broke the grid's rows.
 		te_state_tourism_card = {}
 
+		### GRAND MONUMENT (TE) — a full-width card, only while one stands in
+		### this state; its markup lives in gui/te_state_panel_widgets.gui.
+		te_state_gm_card = {}
+
 		flowcontainer = {
 			parentanchor = hcenter
 			margin = { 10 10 }

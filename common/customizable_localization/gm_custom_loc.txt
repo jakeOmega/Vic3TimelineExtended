@@ -85,6 +85,123 @@ gm_status_name = {
 	}
 }
 
+# The state view's Grand Monument card (te_state_gm_card): its dedication's
+# local effect (gm_local_<key>), named, and its value from
+# gm_state_disp_local in that modifier's own format. Read through `State`.
+gm_local_effect_label = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
+		localization_key = gm_state_lbl_loyalists
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_republic } }
+		localization_key = gm_state_lbl_loyalists
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		localization_key = gm_state_lbl_loyalists
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_leader } }
+		localization_key = gm_state_lbl_loyalists
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_religious } }
+		localization_key = gm_state_lbl_conversion
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_civic } }
+		localization_key = gm_state_lbl_loyalists
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		localization_key = gm_state_lbl_conscription
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_artistic } }
+		localization_key = gm_state_lbl_art_academy
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+		localization_key = gm_state_lbl_pollution
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_scientific } }
+		localization_key = gm_state_lbl_literacy
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_industrial } }
+		localization_key = gm_state_lbl_migration
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_athletic } }
+		localization_key = gm_state_lbl_turmoil
+	}
+	text = {
+		localization_key = gm_state_lbl_none
+	}
+}
+
+gm_local_effect_value = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_crown } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_republic } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_revolution } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_leader } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_religious } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_civic } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+		localization_key = gm_state_val_conscription
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_artistic } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+		localization_key = gm_state_val_pollution
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_scientific } }
+		localization_key = gm_state_val_literacy
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_industrial } }
+		localization_key = gm_state_val_pct
+	}
+	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_athletic } }
+		localization_key = gm_state_val_turmoil
+	}
+	text = {
+		localization_key = gm_state_val_none
+	}
+}
+
 gm_base_ig_name = {
 	type = state
 	random_valid = no
