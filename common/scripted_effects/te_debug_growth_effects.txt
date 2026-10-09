@@ -68,6 +68,12 @@ te_pg_tick = {
 	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
 	debug_log = "TE_PG_TICK t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_t
+	# a country formed since the start (a released nation, a revolution's winner) has no
+	# freeze and would take its neighbours' emigrants
+	every_country = {
+		limit = { NOT = { has_modifier = te_pg_freeze } }
+		add_modifier = { name = te_pg_freeze days = 1500 }
+	}
 	every_country = {
 		limit = { has_variable = te_pg_group }
 		te_pg_line = yes

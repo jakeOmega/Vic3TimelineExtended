@@ -118,6 +118,20 @@ class TestScheduleMatchesScript(unittest.TestCase):
                 y = sum(values[n] for n in names if n.startswith("te_pg_d_"))
                 self.assertEqual((x, y), _steps(cycle * 8 + p), (p, cycle, names))
 
+    def test_expected_phase_by_hand(self):
+        """Not derived from expected_phase: tick 0 logs -1 (te_pg_start sets it before the first switch);
+        ticks 1-3 ran block 0, ticks 4-6 block 1, ticks 25-27 block 8 (cycle 2, within 0)."""
+        for g in range(8):
+            for t in (1, 2, 3):
+                self.assertEqual(G.expected_phase(t, g), g % 8)
+            for t in (4, 5, 6):
+                self.assertEqual(G.expected_phase(t, g), (1 + g) % 8)
+            for t in (25, 26, 27):
+                self.assertEqual(G.expected_phase(t, g), 8 + g % 8)
+            self.assertEqual(G.expected_phase(48, g), 8 + (7 + g) % 8)
+        self.assertEqual([t for t in range(1, 10) if not G.measured(t)], [1, 4, 7])
+        self.assertIn("set_variable = { name = te_pg_phase value = -1 }", EFFECTS.read_text(encoding="utf-8-sig"))
+
     def test_switch_cadence(self):
         """The script switches when tick mod 3 is 0 and stops at 48; the analysis assumes both."""
         body = EFFECTS.read_text(encoding="utf-8-sig")
