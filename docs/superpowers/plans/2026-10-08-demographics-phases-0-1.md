@@ -60,7 +60,8 @@ Not in this plan, each to get its own plan once its gate passes:
 | Known kills | Nuclear strikes and Violent Hostility record their dead on the state; Internal Resettlement's moves stay in the residual until phase 3 | The kill sites already compute their dead; resettlement's programme profiles belong with phase 3's settlement work |
 | Seeding | Every state at game start (`on_game_started`, dispatched per country); any state without `te_dg_year` at its first yearly pulse (old saves, new and split states); and a state whose last step is more than a year old is re-seeded | One code path for all three; a missed year would leave a slot unfolded |
 | Ownership term (§4.2 gives no coefficient) | `40 × (private share − 0.5)`, capped ±20, over capital buildings | A starting number; calibration may change it |
-| Land tenure (§4.2 lists five laws; vanilla has nine) | Serfdom, Manorialism, Latifundias and Expanded Latifundias +15; Tenant Farmers +5; Commercialized Agriculture 0; Peasant Proprietorship and Homesteading −10; Collectivized Agriculture −20 | Great estates read like serfdom, smallholdings like homesteading |
+| Land tenure (§4.2) | Values on vanilla's five base laws: Serfdom +15, Tenant Farmers +5, Commercialized Agriculture 0, Peasant Proprietorship −10, Collectivized Agriculture −20. The four variants (`parent =`: Manorialism → Serfdom; Latifundias, Expanded Latifundias → Tenant Farmers; Homesteading → Peasant Proprietorship) take their parent's value, expanded by the generator from the laws' `parent` fields | Owner, 2026-10-08: most are variants. The spec's "Homesteading −10" is its parent's value |
+| France's early transition (§2.6) | A modifier type, `country_fertility_means_add` (script-only, registered by the mod), read by the means; a static modifier, Family Limitation (`te_demog_family_limitation`, +0.6), which France starts with through history. Any country can be given it by an event; phase 2's measures can use the same type | Owner, 2026-10-08: no country-specific mechanism; a modifier others can get. The only France-specific line is the history line that grants it |
 | Taxes on wealth | Graduated Taxation −5; with the tax code on, −20 × the enacted dividend rate (`te_tax_view_en_div_rate`); total capped −10 | The tax code has no estate setting; dividends are its tax on fortunes |
 | Urban population (§5.1 names a rate the engine lacks) | The pop walk's people whose workplace isn't in a rural building group (agriculture, plantations, ranching, extraction, both subsistence groups); pops with no workplace count rural if Peasants, else urban | No state-scope urbanisation share exists (`total_urbanization` is points) |
 | Gini scale | Computed by the harness from the 1836 Britain save (Task 4) so Britain 1836 reads 0.52 | §4.1's anchor |
@@ -133,6 +134,7 @@ Not in this plan, each to get its own plan once its gate passes:
 | `common/scripted_effects/te_demog_history_effects.txt` (new) | yearly history store | 12 |
 | `gui/pops_overview.gui` (new full override), `gui/te_demographics_widgets.gui` (new), `common/scripted_guis/te_system_tab_sguis.txt` | Demographics tab | 13 |
 | `gui/states_panel.gui` | fourth Population subtab | 14 |
+| `common/modifier_type_definitions/demographics_modifier_types.txt` (new), `common/static_modifiers/te_demog_modifiers.txt` (new), `common/history/extra_history.txt` | `country_fertility_means_add`, Family Limitation, France's start | 8 |
 | `events/te_debug_demog_events.txt` (new), `common/scripted_effects/te_debug_demog_effects.txt` (new), `scripts/analysis/demographics_observer_report.py` (new) | debug console, replay and census logs | 15 |
 | `localization/english/*.yml` | every new key | 5–15 |
 | `docs/systems/mod_systems.md`, `docs/player_guide/08-states.md`, `docs/player_guide/06-politics.md`, PDF, `docs/auto_generated_files.md`, `docs/guides/gui_modding_guide.md` (CRLF), `docs/guides/scripting_best_practices.md` | docs | 4, 16 |
@@ -163,8 +165,10 @@ place, in the spec's own style (short sentences, no "we"); add a line to the sta
   (`total_urbanization` is points); urban population is the pop walk's people whose workplace isn't in a rural
   building group, with workless Peasants rural.
 - [ ] **Step 6: Phase 1 list.** §12's phase 1 row: drop map modes; add "Internal Resettlement moves stay in the
-  migration residual until phase 3". §13: add the plan's three owner calls (cohort width; the ownership coefficient;
-  the land-tenure mapping for vanilla's nine laws).
+  migration residual until phase 3". §13: add the plan's two open owner calls (cohort width at the built cost; the
+  ownership coefficient). §4.2's land-tenure row: name the base laws and say the variants take their parent's
+  value (Homesteading is Peasant Proprietorship's variant). §2.6's France bullet: the head start is the Family
+  Limitation modifier (`country_fertility_means_add`), which France starts with and other countries can be given.
 - [ ] **Step 7: Commit.**
 
 ```bash
@@ -398,7 +402,7 @@ EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursin
 
 AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
 BRITAIN_1836 = M.Inputs(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
-FRANCE_1836 = M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_override=0.8)
+FRANCE_1836 = M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_add=P.FAMILY_LIMITATION_MEANS)
 WEST_1950 = M.Inputs(sol=25, literacy=0.9, urban_share=0.6, techs=EARLY_MEDICINE,
                      laws=frozenset({"law_private_health_insurance", "law_women_in_the_workplace"}),
                      institutions={"institution_health_system": 2, "institution_workplace_safety": 2})
@@ -422,7 +426,7 @@ class TestFertility(unittest.TestCase):
     def test_sketch_cases(self):
         for inp, expected, label in [
             (BRITAIN_1836, 5.5, "Britain 1836"),
-            (FRANCE_1836, 4.9, "France 1836 (means 0.8)"),
+            (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
             (WEST_1950, 3.1, "the West 1950"),
             (WEST_1990, 1.4, "the West 1990"),
             (INDIA_1975, 5.1, "India 1975"),
@@ -692,6 +696,20 @@ MEANS_TIERS = [               # (technology, means); the highest held applies
 ]
 MEANS_LAW_SHIFT = {"law_state_sponsored_family_planning": 0.1}
 MEANS_CAP = 0.95
+# Every other shift to the means comes through one modifier type, country_fertility_means_add
+# (common/modifier_type_definitions/demographics_modifier_types.txt), so history, events and
+# later measures can grant it to any country. Family Limitation (te_demog_family_limitation)
+# carries this much; France starts with it (§2.6: its transition began around 1800).
+FAMILY_LIMITATION_MEANS = 0.6
+
+# ---- Wealth Concentration (§4.2): land tenure, by base law -------------------------
+# Vanilla's variants (`parent = law_x`: Manorialism, Latifundias, Expanded Latifundias,
+# Homesteading) take their parent's value; the generator expands them from the laws'
+# parent fields. The spec's "Homesteading -10" is its parent, Peasant Proprietorship.
+LAND_TENURE = {
+    "law_serfdom": 15, "law_tenant_farmers": 5, "law_commercialized_agriculture": 0,
+    "law_peasant_proprietorship": -10, "law_collectivized_agriculture": -20,
+}
 
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 TECH_MULT = {
@@ -803,7 +821,7 @@ class Inputs:
     institutions: dict = field(default_factory=dict)
     crowding: bool = False
     wealth_tfr: float | None = None      # pop-weighted SoL curve from the walk
-    means_override: float | None = None  # a floor on the means (France 1836, §2.6; te_dg_means_floor)
+    means_add: float = 0.0               # modifier:country_fertility_means_add (Family Limitation 0.6)
     female_job_share: float = 0.3        # light industry + services share of the employed
     crisis: float = 0.0                  # 0..1: war, devastation, turmoil at the origin
     inflow_years: int = 0                # consecutive years of net inflow (chain migration)
@@ -910,10 +928,7 @@ def means(inp):
             tier = max(tier, value)
     access = 0.3 + 0.7 * inp.literacy
     shift = sum(v for law, v in P.MEANS_LAW_SHIFT.items() if law in inp.laws)
-    value = clamp(tier * access + shift, 0.0, P.MEANS_CAP)
-    if inp.means_override is not None:   # a floor: France's early transition (§2.6)
-        value = max(value, inp.means_override)
-    return value
+    return clamp(tier * access + shift + inp.means_add, 0.0, P.MEANS_CAP)
 
 
 def fertility(inp, e0):
@@ -1773,7 +1788,8 @@ BUY_PACKAGES = ROOT / "common" / "buy_packages" / "00_buy_packages.txt"
 SKETCH = {
     "1836 agrarian (reference)": M.Inputs(sol=8, literacy=0.2, urban_share=0.1),
     "Britain 1836": M.Inputs(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"})),
-    "France 1836 (means 0.8)": M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_override=0.8),
+    "France 1836 (Family Limitation)": M.Inputs(sol=11, literacy=0.3, urban_share=0.15,
+                                                means_add=P.FAMILY_LIMITATION_MEANS),
 }
 
 
@@ -2359,7 +2375,8 @@ then the generated effects are defined but unused.
 | `te_demog_project` | country | `var:te_dg_cbf<b>/cbm<b>`, `te_dg_m_*`, `te_dg_tfr` | `var:te_dg_pjf<b>/pjm<b>` |
 | `te_demog_debug_log_ring_before/_after` | state | `te_demog_dbg_*` | `TE_DEMOG_REPLAY` lines |
 | `te_demog_pop_engine_births/_deaths`, `te_demog_pop_wealth_tfr`, `te_demog_pop_income` | pop | | size × the curve |
-| `te_demog_mult_<cause>` (5), `te_demog_female_work_share`, `te_demog_means`, `te_demog_family_transport` | state | owner's techs, laws, institutions; `var:te_dg_sol`, `var:te_dg_lit` | |
+| `te_demog_mult_<cause>` (5), `te_demog_female_work_share`, `te_demog_means`, `te_demog_family_transport` | state | owner's techs, laws, institutions; `var:te_dg_sol`, `var:te_dg_lit`; the means also `owner.modifier:country_fertility_means_add` | |
+| `te_demog_wc_land_term` | state | owner's land-reform law (variants at their parent's value); `var:te_dg_agr_share` | |
 | `te_demog_k_*` | any | | constants from the params |
 
 - [ ] **Step 1: Write the failing test** — `test_gen_demographics.py`:
@@ -2425,6 +2442,19 @@ class TestGenerated(unittest.TestCase):
         self.assertIn("value = 475", self.values)      # 0.00475 a month x 100,000
         self.assertIn("value = 80", self.values)       # 0.00080 at SoL 35+
 
+    def test_land_tenure_variants_take_their_parents_value(self):
+        values = gen.land_tenure_values(ROOT)
+        self.assertEqual(len(values), 9)
+        self.assertEqual(values["law_manorialism"], values["law_serfdom"])
+        self.assertEqual(values["law_latifundias"], values["law_tenant_farmers"])
+        self.assertEqual(values["law_expanded_latifundias"], values["law_tenant_farmers"])
+        self.assertEqual(values["law_homesteading"], values["law_peasant_proprietorship"])
+
+    def test_means_read_the_modifier(self):
+        body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("add = owner.modifier:country_fertility_means_add", body)
+        self.assertLess(body.index("country_fertility_means_add"), body.index("max = "))
+
     def test_every_cause_has_a_multiplier(self):
         for cause in gen.CAUSES:
             self.assertIn(f"te_demog_mult_{cause} = {{", self.values)
@@ -2448,8 +2478,9 @@ Usage:
 Spec: docs/superpowers/specs/2026-10-08-demographics-design.md; plan:
 docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md (Task 6). Inputs:
 scripts/analysis/demographics_params.py (every rate, weight and table),
-common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py) and
-common/buy_packages/00_buy_packages.txt (spending per head by wealth). Not a post-load
+common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py),
+common/buy_packages/00_buy_packages.txt (spending per head by wealth) and the land-reform
+laws (vanilla_parsed/common/laws.json and common/laws/, for variants' parents). Not a post-load
 regenerator: run it after changing any of those; test_gen_demographics.py fails CI when
 the committed files are stale.
 
@@ -2463,7 +2494,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_debug_log_ring_before / _after  (Task 15's replay lines)
     common/script_values/te_demog_generated_values.txt
         per-pop engine curves, wealth TFR and income; per-state cause multipliers,
-        women's work share and the means; te_demog_k_* constants; per-slot debug shares
+        women's work share, the means and the land-tenure term; te_demog_k_* constants;
+        per-slot debug shares
 """
 
 import argparse
@@ -2473,6 +2505,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+sys.path.insert(0, str(ROOT))
 
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
@@ -2999,12 +3032,55 @@ def multipliers(o):
     o("multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }")
     for law, shift in P.MEANS_LAW_SHIFT.items():
         o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} add = {lit(shift)} }}")
+    o("# history, events and measures: Family Limitation and its kin (country_fertility_means_add)")
+    o("add = owner.modifier:country_fertility_means_add")
     o(f"max = {lit(P.MEANS_CAP)}")
-    o("# a floor set in history: France's early transition (spec 2.6)")
-    o("if = {")
-    o("limit = { owner = { has_variable = te_dg_means_floor } }")
-    o("min = owner.var:te_dg_means_floor")
+    o("min = 0")
     o("}")
+    o("")
+
+
+def land_tenure_values(root):
+    """{law: Wealth Concentration term} for every land-reform law, variants at their parent's value."""
+    import json
+    from paradox_file_parser import ParadoxFileParser
+
+    def field(body, key):
+        v = body.get(key) if isinstance(body, dict) else None
+        v = v[-1] if isinstance(v, (list, tuple)) else v
+        return v[-1] if isinstance(v, (list, tuple)) else v
+
+    laws = {}
+    data = json.loads((root / "vanilla_parsed" / "common" / "laws.json").read_text(encoding="utf-8"))
+    for name, body in data.get("data", data).items():
+        laws[name] = body[1] if isinstance(body, list) and len(body) == 2 and body[0] == "=" else body
+    for path in sorted((root / "common" / "laws").glob("*.txt")):
+        parser = ParadoxFileParser()
+        parser.parse_file(str(path), apply_directives=False)
+        for name, body in parser.data.items():
+            if ":" in name and not name.startswith("REPLACE:"):
+                continue   # INJECT: adds fields to a vanilla law; its group and parent stay vanilla's
+            laws[name.split(":")[-1]] = body[1] if isinstance(body, tuple) else body
+    out = {}
+    for name, body in sorted(laws.items()):
+        if field(body, "group") != "lawgroup_land_reform":
+            continue
+        base = field(body, "parent") or name
+        if base not in P.LAND_TENURE:
+            raise KeyError(f"{name}: no LAND_TENURE value for {base} (demographics_params.py)")
+        out[name] = P.LAND_TENURE[base]
+    return out
+
+
+def land_term(o, root):
+    o("# State scope: the land-tenure term of Wealth Concentration's target (spec 4.2), weighted by")
+    o("# the state's agrarian share. Variant laws take their parent's value.")
+    o("te_demog_wc_land_term = {")
+    o("value = 0")
+    for law, value in land_tenure_values(root).items():
+        if value:
+            o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {lit(value)} }}")
+    o("multiply = var:te_dg_agr_share")
     o("}")
     o("")
 
@@ -3054,6 +3130,7 @@ def render_values(root):
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     income(o, buy_package_costs(root))
     multipliers(o)
+    land_term(o, root)
     constants(o)
     debug_values(o)
     return o.text()
@@ -3093,12 +3170,12 @@ if __name__ == "__main__":
 - [ ] **Step 4: Generate and run the tests**
 
 Run: `python3 scripts/generators/gen_demographics.py && python3 -m unittest test_gen_demographics test_engine_literal_forms -v && python3 scripts/format_paradox_tabs.py --check common/scripted_effects/te_demog_generated_effects.txt common/script_values/te_demog_generated_values.txt && ruff check scripts/generators/gen_demographics.py test_gen_demographics.py`
-Expected: `wrote:` both files (about 3,560 and 620 lines); 8 tests OK plus the literal-form test; tabs clean;
+Expected: `wrote:` both files (about 3,560 and 630 lines); 10 tests OK plus the literal-form test; tabs clean;
 ruff clean. `python3 scripts/generators/gen_demographics.py --check` then exits 0.
 
 - [ ] **Step 5: Register it.** `docs/auto_generated_files.md` row: `common/scripted_effects/te_demog_generated_effects.txt`,
   `common/script_values/te_demog_generated_values.txt` | `scripts/generators/gen_demographics.py` |
-  `scripts/analysis/demographics_params.py`, `common/defines/extra_defines.txt`, `common/buy_packages/00_buy_packages.txt` |
+  `scripts/analysis/demographics_params.py`, `common/defines/extra_defines.txt`, `common/buy_packages/00_buy_packages.txt`, the land-reform laws (`vanilla_parsed/common/laws.json`, `common/laws/`) |
   "One-shot, not a post-load generator: run it after changing any input. The ring's sweeps, the age-group rate
   tables, the engine's growth curves, the cause multipliers and the debug replay lines; `test_gen_demographics.py`
   fails CI when the committed files are stale."
@@ -3411,7 +3488,9 @@ operations below is theirs, so `demographics_harness.py replay` can check an in-
 **Files:**
 - Modify: `common/scripted_effects/te_demog_effects.txt`, `common/script_values/te_demog_values.txt`,
   `common/on_actions/te_demog_on_actions.txt`, `test_demographics_registry.py`
-- Create: `events/te_demog_events.txt` (one hidden dispatch event)
+- Create: `events/te_demog_events.txt` (one hidden dispatch event),
+  `common/modifier_type_definitions/demographics_modifier_types.txt`, `common/static_modifiers/te_demog_modifiers.txt`
+- Modify: `common/history/extra_history.txt` (Family Limitation for France), `common/modifier_type_definitions/mod_entity_modifier_types.txt` (header list), loc
 
 **Interfaces:**
 - Consumes: Task 6's generated effects and values; Task 7's walk variables.
@@ -3450,6 +3529,14 @@ class TestStep(unittest.TestCase):
                 if entry in body:
                     gate = body.rfind("te_demog_cohorts_run = yes", 0, body.index(entry))
                     self.assertNotEqual(gate, -1, f"{caller}: {entry} before the gate")
+
+    def test_family_limitation_matches_the_params(self):
+        sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+        import demographics_params as P
+        modifiers = _text(ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt")
+        body = _block(modifiers, "te_demog_family_limitation")
+        self.assertIn(f"country_fertility_means_add = {P.FAMILY_LIMITATION_MEANS}", body)
+        self.assertIn("name = te_demog_family_limitation", _text(ROOT / "common" / "history" / "extra_history.txt"))
 
     def test_fold_writes_the_births(self):
         body = _block(_text(EFFECTS), "te_demog_fold_slot")
@@ -4090,10 +4177,46 @@ te_demog_country_game_start = {
 
   Task 10 appends the country's figures to it.
 
-  France's early fertility transition (§2.6): in `common/history/extra_history.txt`'s `GLOBAL = {` block, add
-  `c:FRA ?= { set_variable = { name = te_dg_means_floor value = 0.8 } }` with a comment naming §2.6. The generated
-  `te_demog_means` reads it as a floor (`min = owner.var:te_dg_means_floor`), so France's means start at 0.8 and
-  later technology can raise them; `demographics_model.means` treats `means_override` the same way.
+  **Family Limitation** (§2.6; owner, 2026-10-08: a modifier any country can get, no country-specific mechanism):
+  - `common/modifier_type_definitions/demographics_modifier_types.txt` (new; BOM; add it to the sibling list in
+    `mod_entity_modifier_types.txt`'s header):
+
+```
+# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §2.3).
+# The share of the gap to desired fertility a population can close, added to what
+# its technology and literacy give (te_demog_means). History, events and, from
+# phase 2, the family-policy measures grant it.
+country_fertility_means_add = {
+	color = neutral
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+```
+
+  - `common/static_modifiers/te_demog_modifiers.txt` (new; BOM):
+
+```
+# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §2.6).
+# Family limitation before modern contraception: France starts with it (history);
+# events can give it to anyone. Value from demographics_params.FAMILY_LIMITATION_MEANS.
+te_demog_family_limitation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_fertility_means_add = 0.6
+}
+```
+
+    The icon is a placeholder (no population icon exists among the mod's static modifiers); list it in the PR. A
+    registry test pins `0.6` to `FAMILY_LIMITATION_MEANS`.
+  - `common/history/extra_history.txt`, in the `GLOBAL = {` block: `c:FRA ?= { add_modifier = { name =
+    te_demog_family_limitation } }` with a comment naming §2.6 (France's transition began around 1800). It is the
+    only line in the system that names a country.
+  - Loc: `country_fertility_means_add: "Fertility Control"`, `country_fertility_means_add_desc: "How much of the gap
+    between the children families want and the children they would have without trying they can actually close."`
+    (routed to `te_modifiers_l_english.yml` by the `_add` rule); `te_demog_family_limitation: "Family Limitation"`,
+    `te_demog_family_limitation_desc: "Couples here have long chosen to have fewer children than their neighbours,
+    by means older than any modern method."`.
+  - `POST /reload`: `modifier_visibility_audit` and `loc_coverage_audit` clean for both keys.
 
 - [ ] **Step 7: Tests, generator check and reload**
 
@@ -4560,10 +4683,7 @@ te_inh_concentration_target = {
 }
 ```
 
-  State-scope terms:
-  - `te_demog_wc_land_term`: `value = 0`, then one `if` per law on `owner`: `law_serfdom`, `law_manorialism`,
-    `law_latifundias`, `law_expanded_latifundias` +15; `law_tenant_farmers` +5; `law_peasant_proprietorship`,
-    `law_homesteading` −10; `law_collectivized_agriculture` −20; then `multiply = var:te_dg_agr_share`.
+  State-scope terms (`te_demog_wc_land_term` is generated by Task 6, the variants at their parent's value):
   - `te_demog_wc_ownership_term`: `value = var:te_dg_lv_priv`, divide by `{ value = var:te_dg_lv_priv add =
     var:te_dg_lv_self add = var:te_dg_lv_ctry min = 1 }`, `subtract = 0.5`, `multiply = 40`, `min = -20`, `max = 20`;
     0 when the three sum to under 1 (`if` around it).
@@ -4875,7 +4995,7 @@ Concentration is now per state), the guide PDF, `docs/guides/scripting_best_prac
 - [ ] **Step 5: A `POST /reload` from the main checkout** on the integration branch (or a second server from this
   worktree), and read the whole `warnings` array; then the owner's deploy (CLAUDE.md "Play-testing unmerged work").
 - [ ] **Step 6: PR 2.** Body: what the census shows; the Decisions table's owner calls (cohort width, ownership
-  coefficient, land-tenure mapping, the rule's three settings); the Owner checks below; "Player guide: 08-states,
+  coefficient, the rule's three settings); the Owner checks below; "Player guide: 08-states,
   06-politics updated and rebuilt"; `Closes` lines only for issues this closes.
 
 ---
@@ -4909,7 +5029,9 @@ Concentration is now per state), the guide PDF, `docs/guides/scripting_best_prac
   from the same life table and growth factor), the workforce rule, the pension and health bill (and the owner's call
   on its money cost), conscription, the youth bulge, the Family & Reproductive Policy laws and measure buttons, the
   pension-age setting, §8.4's removals, Wealth Concentration's effects split by scope, AI weights, and the tab's
-  Family Policy section.
+  Family Policy section. The means shifts of laws and measures (State-Sponsored Family Planning's +0.1, Free
+  Contraception, Restricted Contraception) become `country_fertility_means_add` modifiers, retiring
+  `MEANS_LAW_SHIFT`.
 - **Phase 3's plan**: settlement pattern, the urban pattern's effects and Planned Capital, sex-balance effects, the
   event wave, biological age (the global rate tables become per-state, and the sweep's group lookups read biological
   age), Cultural Hegemony's fertility drift, resettlement profiles, the remaining Wealth Concentration shocks, and map
