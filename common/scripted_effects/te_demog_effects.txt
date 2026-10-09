@@ -237,8 +237,14 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_ctry value = 0 }
 	set_local_variable = { name = te_dg_w_own value = 0 }
 	every_scope_building = {
+		# level > 0 before the ownership fractions, as vanilla has it: a building
+		# whose first level is still under construction refuses them
+		# ("ownership_fraction requires the building to be built") and adds no levels
 		if = {
-			limit = { te_demog_is_capital_building = yes }
+			limit = {
+				level > 0
+				te_demog_is_capital_building = yes
+			}
 			change_local_variable = { name = te_dg_w_priv add = te_demog_building_private_levels }
 			change_local_variable = { name = te_dg_w_self add = te_demog_building_self_levels }
 			change_local_variable = { name = te_dg_w_ctry add = te_demog_building_country_levels }
@@ -284,25 +290,46 @@ te_demog_state_yearly = {
 		# residual would count it all as migrants. A seed made off this pulse
 		# (te_dg_reseed: game start, the console) is made again here, so the first
 		# step's population change and natural change cover the same year.
-		else_if = {
-			limit = {
-				OR = {
-					te_demog_year_gap > 1
-					AND = {
-						var:te_dg_raw < 1
-						state_population > 0
-					}
-					state_population > { value = var:te_dg_pop_last multiply = 1.25 }
-					state_population < { value = var:te_dg_pop_last multiply = 0.75 }
-					has_variable = te_dg_reseed
-				}
+		# The people's move is taken into locals first and the limits compare those
+		# with 0. Written as state_population > { value = var:te_dg_pop_last
+		# multiply = 1.25 }, the test held for every state with people, even 0.3%
+		# up, and its 0.75 twin for none, so every state seeded at every pulse and
+		# none ever stepped (observer tests of #830 and #833, 2026-10-09).
+		else = {
+			set_local_variable = {
+				name = te_dg_gap
+				value = { value = te_demog_year subtract = var:te_dg_year }
 			}
-			te_demog_seed = yes
-		}
-		# A year on: one step. A second pulse in the same year (gap 0) does nothing.
-		else_if = {
-			limit = { te_demog_year_gap = 1 }
-			te_demog_step = yes
+			# the people now less 1.25 and 0.75 times the last census's: above 0 and below 0
+			# are a move of more than a quarter up and down
+			set_local_variable = {
+				name = te_dg_over
+				value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 1.25 } }
+			}
+			set_local_variable = {
+				name = te_dg_under
+				value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						local_var:te_dg_gap > 1
+						AND = {
+							var:te_dg_raw < 1
+							state_population > 0
+						}
+						local_var:te_dg_over > 0
+						local_var:te_dg_under < 0
+						has_variable = te_dg_reseed
+					}
+				}
+				te_demog_seed = yes
+			}
+			# A year on: one step. A second pulse in the same year (gap 0) does nothing.
+			else_if = {
+				limit = { local_var:te_dg_gap = 1 }
+				te_demog_step = yes
+			}
 		}
 	}
 }

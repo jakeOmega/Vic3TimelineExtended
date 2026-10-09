@@ -111,6 +111,25 @@ class TestWalks(unittest.TestCase):
         hook = _block(_text(DEMOG_ON_ACTIONS), "te_demog_state_yearly_on_action")
         self.assertNotIn("te_demog_cohorts_run", hook)
 
+    def test_ownership_fractions_are_read_only_from_built_buildings(self):
+        """Observer test of #830: a building whose first level is under construction
+        logs "ownership_fraction requires the building to be built" three times a pulse."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        limit = re.search(r"limit = \{([^{}]*)\}\s*change_local_variable = \{ name = te_dg_w_priv", body)
+        self.assertIsNotNone(limit)
+        self.assertIn("level > 0", limit.group(1))
+        self.assertIn("te_demog_is_capital_building = yes", limit.group(1))
+
+    def test_the_state_subtab_gate_needs_no_player(self):
+        """Observer test of #830: an observer has no player, so a GetPlayer root logged an
+        error every frame the state panel was open. The gate reads only the rule."""
+        panel = _text(ROOT / "gui" / "states_panel.gui")
+        reads = re.findall(r"GetScriptedGui\('te_pops_demog_tab_sgui'\)\.IsShown\( GuiScope\.SetRoot\( ([\w.]+) \)", panel)
+        self.assertEqual(reads, ["State.GetOwner.MakeScope"] * 2)
+        content = _text(ROOT / "gui" / "te_demographics_widgets.gui")
+        content = content[content.index("type te_state_demog_overview"):]
+        self.assertNotIn("GetPlayer", content, "the state's sections read only the state")
+
 
 def _parse_script(text):
     """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list."""
@@ -266,10 +285,34 @@ class TestStep(unittest.TestCase):
         self.assertIn("te_demog_cohorts_run = yes", body)
         self.assertIn("te_demog_seed = yes", body)
         self.assertIn("te_demog_step = yes", body)
-        self.assertIn("te_demog_year_gap > 1", body)
-        self.assertIn("te_demog_year_gap = 1", body)
-        self.assertIn("state_population > { value = var:te_dg_pop_last multiply = 1.25 }", body)
-        self.assertIn("state_population < { value = var:te_dg_pop_last multiply = 0.75 }", body)
+        self.assertIn("local_var:te_dg_gap > 1", body)
+        self.assertIn("local_var:te_dg_gap = 1", body)
+        self.assertIn("value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 1.25 } }", body)
+        self.assertIn("value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }", body)
+
+    def test_the_branch_limits_compare_locals(self):
+        """Observer tests of #830 and #833 (2026-10-09): state_population > { value =
+        var:te_dg_pop_last multiply = 1.25 } held for every state with people, even 0.3% up, and its
+        0.75 twin for none, so every state seeded at every pulse and none stepped. The pulse takes
+        the move into locals, as people less 1.25 and 0.75 times the last census's, and its limits
+        compare those with 0."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_state_yearly"))
+        self.assertNotRegex(body, r"state_population [<>]=? \{")
+        self.assertIn("local_var:te_dg_over > 0", body)
+        self.assertIn("local_var:te_dg_under < 0", body)
+        self.assertIn("value = { value = te_demog_year subtract = var:te_dg_year }", body)
+        self.assertIn("set_variable = { name = te_dg_year value = te_demog_year }", _block(_text(EFFECTS), "te_demog_set_scale"))
+
+    def test_no_script_compares_state_population_with_a_block(self):
+        """The form above misfired in game with no log line, so nothing in the mod's script uses it:
+        compare state_population with a number, or take the difference into a local first."""
+        hits = []
+        for path in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/**/*.txt")]:
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            for m in re.finditer(r"\bstate_population\s*(?:[<>]=?|!=|=)\s*\{", text):
+                line = text.count("\n", 0, m.start()) + 1
+                hits.append(f"{path.relative_to(ROOT)}:{line}")
+        self.assertEqual(hits, [])
 
     def test_every_cohort_entry_point_is_gated(self):
         """Review Focus 5: nothing writes a cohort without te_demog_cohorts_run."""
