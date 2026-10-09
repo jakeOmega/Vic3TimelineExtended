@@ -515,12 +515,19 @@ repeal it, and the law's tooltip names it before you enact.
 
 | Distribution of Power | Amendment | Effect |
 |---|---|---|
-| Any voting franchise | Direct Democracy | Laws pass only with a political movement behind them; movements draw more support and are 50% more active, but enacting a law stirs its opponents and calms its supporters 75% less; wealth brings 25% less political strength; votes add legitimacy; +25% enactment success, one more agitator slot |
+| Any voting franchise | Direct Democracy | −10% enactment success; movements draw more support and are 50% more active, but enacting a law stirs its opponents and calms its supporters 75% less; wealth brings 25% less political strength; votes add legitimacy; one more agitator slot |
 | Single-Party State | Collective Leadership | +25% coup resistance, which its modifier list doesn't show |
 | Technocracy | Collegial Administration | Institutions change size 50% faster; decrees cost 25% more |
-| Anarchy | Free Federation | Laws pass only with a political movement behind them |
+| Anarchy | Free Federation | −10% enactment success; movements draw 50% more support; passing a law a movement backs turns 50% more of its supporters loyal; bolstering a movement costs half | <!-- style: allow ai-vocab -->
 | Oligarchy or Organic Regulation | Patrician Council | Aristocrats and capitalists gain 15% political strength |
 | Algorithmic Governance | Algorithmic Commons | Wealth brings 25% less political strength; political movements are 10% less active |
+
+Under Direct Democracy and Free Federation, a law needs a political movement
+behind it to pass at a normal pace. A movement adds its support to the
+enactment success chance of the laws it backs, so a law a large movement carries
+more than makes up the 10%, and a law no movement cares about passes slowly. If
+it has little support among the interest groups in government, it can't start
+at all.
 
 ## New government types
 
