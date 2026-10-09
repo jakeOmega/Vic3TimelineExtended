@@ -344,11 +344,11 @@ inheritance_events.5 = {
 		var:te_inh_duty_years >= 15
 	}
 
-	option = { # The state buys them
+	option = { # The state buys them: the land goes to smallholders
 		name = inheritance_events.5.a
 		custom_tooltip = {
 			text = inheritance_events.5.a.tt
-			te_inh_shift_concentration = { AMOUNT = -5 }
+			te_inh_shift_concentration = { AMOUNT = -10 }
 		}
 		add_treasury = {
 			value = yearly_gross_income
@@ -365,12 +365,12 @@ inheritance_events.5 = {
 		}
 	}
 
-	option = { # The market takes them
+	option = { # The market takes them: other fortunes buy, and the duty is paid
 		name = inheritance_events.5.b
 		default_option = yes
 		custom_tooltip = {
 			text = inheritance_events.5.b.tt
-			te_inh_shift_concentration = { AMOUNT = -5 }
+			te_inh_shift_concentration = { AMOUNT = -2 }
 		}
 		add_treasury = {
 			value = yearly_gross_income
