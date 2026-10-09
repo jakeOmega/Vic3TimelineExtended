@@ -68,7 +68,7 @@
 #
 # Nothing here sets an institution's level, a wage level or a budget: an
 # obligation records what was promised and checks what happened. Every entry
-# point checks te_tax_code_on (written positively); nothing reads ROOT.
+# point checks te_tax_code_full (written positively); nothing reads ROOT.
 # Tokens are never removed: a freed slot is _on 0. The trust tokens and the
 # slot headers are schema tokens (te_tax_gen_init_obligations).
 # ============================================================================
@@ -104,7 +104,7 @@ te_tax_obl_propose = {
 		}
 	}
 	else_if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		debug_log = "TE_TAX obl_propose_refused no bill, the same promise is already recorded or every slot is taken; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
@@ -222,7 +222,7 @@ te_tax_obl_release_one = {
 # record says what happened.
 te_tax_obl_release_pending = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_obl_release_pending_one = { N = 1 }
 		te_tax_obl_release_pending_one = { N = 2 }
 		te_tax_obl_release_pending_one = { N = 3 }
@@ -246,7 +246,7 @@ te_tax_obl_release_pending_one = {
 # lapse with it, unbreached; one history entry (kind 14) if any did.
 te_tax_obl_release_slot = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		set_local_variable = { name = te_tax_obl_released value = 0 }
 		te_tax_obl_release_bound = { N = 1 SLOT = $SLOT$ }
 		te_tax_obl_release_bound = { N = 2 SLOT = $SLOT$ }
@@ -284,7 +284,7 @@ te_tax_obl_release_bound = {
 # revision normally releases them) is released instead.
 te_tax_obl_bind = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_obl_bind_one = { N = 1 SLOT = $SLOT$ }
 		te_tax_obl_bind_one = { N = 2 SLOT = $SLOT$ }
 		te_tax_obl_bind_one = { N = 3 SLOT = $SLOT$ }
@@ -319,7 +319,7 @@ te_tax_obl_bind_one = {
 # (spec §8 step 5: "the education delivery clock starts").
 te_tax_obl_start = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_obl_start_one = { N = 1 SLOT = $SLOT$ }
 		te_tax_obl_start_one = { N = 2 SLOT = $SLOT$ }
 		te_tax_obl_start_one = { N = 3 SLOT = $SLOT$ }
@@ -371,7 +371,7 @@ te_tax_obl_start_one = {
 te_tax_obl_check_month = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 			has_variable = te_tax_now
 		}
@@ -547,7 +547,7 @@ te_tax_cmd_obl_renegotiate = {
 # dates, and the next monthly check verifies it.
 te_tax_repair_obligations_after_civil_war = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		set_local_variable = { name = te_tax_obl_released value = 0 }
 		te_tax_obl_reassess_one = { N = 1 }
 		te_tax_obl_reassess_one = { N = 2 }

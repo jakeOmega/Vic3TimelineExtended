@@ -40,7 +40,7 @@
 te_tax_sync_collection = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_law = law_type:law_te_tax_code
 			has_variable = te_tax_schema
 		}
@@ -86,7 +86,7 @@ te_tax_sync_collection = {
 	}
 	else_if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_law = law_type:law_te_tax_code
 			NOT = { has_variable = te_tax_schema }
 		}

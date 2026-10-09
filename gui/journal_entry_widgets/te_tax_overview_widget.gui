@@ -228,8 +228,8 @@ types te_tax_overview_widget_types
 					align = hcenter|nobaseline
 					using = fontsize_large
 					default_format = "#title"
-					text = "te_tax_ov_title"
-					tooltip = "te_tax_ov_title_tt"
+					text = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_ov_title', 'te_tax_ov_title' )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_ov_title_tt', 'te_tax_ov_title_tt' )]"
 				}
 				divider_clean = {
 					blockoverride "size" {
@@ -237,105 +237,117 @@ types te_tax_overview_widget_types
 					}
 				}
 
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_last_change"
-						tooltip = "te_tax_ov_last_change_tt"
-					}
-					blockoverride "row_value" {
-						text = "te_tax_ov_last_change_value"
-					}
-				}
-				te_tax_value_row = {
-					blockoverride "row_label" {
-						text = "te_tax_ov_next_change"
-						tooltip = "te_tax_ov_next_change_tt"
-					}
-					blockoverride "row_value" {
-						text = "[SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_next_change_value', 'te_tax_ov_next_change_none' )]"
-					}
-				}
-				# The economy snapshot the estimates are measured against (plan Task 14):
-				# its month, marked once out of date; the engine's aggregates at the
-				# snapshot on the hover. Shown once one has been taken.
-				te_tax_value_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_snapshot"
-						tooltip = "te_tax_ov_snapshot_tt"
-					}
-					blockoverride "row_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_ov_snapshot_value', 'te_tax_ov_snapshot_value_stale' )]"
-						tooltip = "te_tax_ov_snapshot_value_tt"
-					}
-				}
+				# The legislated code's rows; the light code's instead under the light
+				# setting (te_tax_light_widget.gui).
+				flowcontainer = {
+					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
 
-				# What is in progress: nothing, or any of a draft, a bill and up
-				# to two passed bills, each its own row.
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_no_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_bills"
-						tooltip = "te_tax_ov_bills_none_tt"
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_last_change"
+							tooltip = "te_tax_ov_last_change_tt"
+						}
+						blockoverride "row_value" {
+							text = "te_tax_ov_last_change_value"
+						}
 					}
-					blockoverride "row_value" {
-						text = "te_tax_ov_bills_none"
+					te_tax_value_row = {
+						blockoverride "row_label" {
+							text = "te_tax_ov_next_change"
+							tooltip = "te_tax_ov_next_change_tt"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_next_change_value', 'te_tax_ov_next_change_none' )]"
+						}
+					}
+					# The economy snapshot the estimates are measured against (plan Task 14):
+					# its month, marked once out of date; the engine's aggregates at the
+					# snapshot on the hover. Shown once one has been taken.
+					te_tax_value_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_snapshot"
+							tooltip = "te_tax_ov_snapshot_tt"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_ov_snapshot_value', 'te_tax_ov_snapshot_value_stale' )]"
+							tooltip = "te_tax_ov_snapshot_value_tt"
+						}
+					}
+
+					# What is in progress: nothing, or any of a draft, a bill and up
+					# to two passed bills, each its own row.
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_no_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_bills"
+							tooltip = "te_tax_ov_bills_none_tt"
+						}
+						blockoverride "row_value" {
+							text = "te_tax_ov_bills_none"
+						}
+					}
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_draft"
+							tooltip = "te_tax_ov_draft_tt"
+						}
+						blockoverride "row_value" {
+							text = "te_tax_ov_draft_value"
+						}
+					}
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_bill"
+							tooltip = "te_tax_ov_bill_tt"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left'), '(CFixedPoint)0' ), 'te_tax_ov_bill_value_debated', 'te_tax_ov_bill_value' )]"
+						}
+					}
+					# A passed bill's state: 1 awaiting, 2 held (an outside change),
+					# 3 held (its month missed).
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_package"
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_a_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_a_missed', 'te_tax_ov_package_a_awaiting' ) )]"
+						}
+					}
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_package"
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_b_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_b_missed', 'te_tax_ov_package_b_awaiting' ) )]"
+						}
+					}
+					# Promises (plan Task 12): how many bind the country and how many
+					# wait on the bill under debate; the Promises section lists them.
+					te_tax_value_row = {
+						visible = "[GetScriptedGui('te_tax_show_obligations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						blockoverride "row_label" {
+							text = "te_tax_ov_obligations"
+							tooltip = "te_tax_ov_obligations_tt"
+						}
+						blockoverride "row_value" {
+							text = "te_tax_ov_obligations_value"
+						}
 					}
 				}
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_draft"
-						tooltip = "te_tax_ov_draft_tt"
-					}
-					blockoverride "row_value" {
-						text = "te_tax_ov_draft_value"
-					}
-				}
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_bill"
-						tooltip = "te_tax_ov_bill_tt"
-					}
-					blockoverride "row_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left'), '(CFixedPoint)0' ), 'te_tax_ov_bill_value_debated', 'te_tax_ov_bill_value' )]"
-					}
-				}
-				# A passed bill's state: 1 awaiting, 2 held (an outside change),
-				# 3 held (its month missed).
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_package"
-						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
-					}
-					blockoverride "row_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_a_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_a_missed', 'te_tax_ov_package_a_awaiting' ) )]"
-					}
-				}
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_package"
-						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
-					}
-					blockoverride "row_value" {
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_b_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_b_missed', 'te_tax_ov_package_b_awaiting' ) )]"
-					}
-				}
-				# Promises (plan Task 12): how many bind the country and how many
-				# wait on the bill under debate; the Promises section lists them.
-				te_tax_value_row = {
-					visible = "[GetScriptedGui('te_tax_show_obligations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "row_label" {
-						text = "te_tax_ov_obligations"
-						tooltip = "te_tax_ov_obligations_tt"
-					}
-					blockoverride "row_value" {
-						text = "te_tax_ov_obligations_value"
-					}
+				te_tax_light_overview_rows = {
+					visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				}
 			}
 		}

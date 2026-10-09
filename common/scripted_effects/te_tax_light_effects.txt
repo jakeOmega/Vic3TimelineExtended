@@ -1,0 +1,227 @@
+﻿# ============================================================================
+# LIGHT TAX CODE (te_tax_code_rule = te_tax_code_light)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-09-tax-code-light-design.md. Schema:
+# docs/systems/tax_code_schema.md, "Light code".
+#
+# The vanilla taxation law stays enacted and bounds each rate between the rate
+# it sets at a very low and at a very high tax level. The code is five enacted
+# indices, te_tax_en_<key> (rate = index x te_tax_step_<key>, the full code's
+# own schema), which the player moves one step at a time from the tax code's
+# panel; a change applies at once. There are no bills.
+#
+# Collection. Each rate sits on a step of its law's ladder: the lowest native
+# level whose rate is at least the code's (te_tax_light_rung_<key>). The native
+# tax level is the highest of those steps (te_tax_light_level), so the base
+# game's tax-level modifiers (legitimacy, radicals, expected standard of
+# living) follow the heaviest tax, and every tax below that level carries a
+# relief static modifier, te_tax_light_relief_<key>, one step's rate below zero
+# times the steps it sits below the law's rate there (te_tax_light_rl_<key>).
+# The country collects the law's rate at the level plus the relief: the code's
+# rate. The tax-level buttons are greyed (te_tax_native_controls_sgui).
+#
+# Interest groups. Each change draws a reaction from every group, scored with
+# the full code's material and ideology reasons for that change alone
+# (te_tax_light_gen_react); a reaction that pleases a group counts half. The
+# running reaction (te_tax_lr_<ig>, +-10) is shown as te_tax_light_react_<ig>
+# and fades by 30% a month. The groups' standing view of the law is the base
+# game's own (the law is enacted); the view bands (te_tax_ig_band_<ig>) carry
+# instead the relief each group's members get, +1 or +2.
+#
+# The AI. An AI country keeps choosing its native tax level as in the base
+# game; at each sync its code follows it, every tax at the law's rate for that
+# level, and each change draws the same reactions. Its code never carries
+# relief, so a level change collects the right rates at once.
+#
+# A revolution's winner inherits every variable here and no modifier; the next
+# sync (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds
+# them back from the variables.
+#
+# Every entry point is a country effect with ROOT = the country: a country
+# event (te_tax_light.1-.3) or the player's scripted GUI (te_tax_light_step_
+# <key>_sgui), because the relief and reaction modifiers' multipliers read ROOT.
+# ============================================================================
+
+# Country scope (te_tax_light.2: every country after the lobby, a formed or
+# released country, the rebels of an uprising, and any country the monthly
+# dispatch finds unmigrated). Every tax at the active law's rate for the native
+# tax level, so the country collects what it did; then the first sync, which
+# needs te_tax_light_on. Runs once: a country holding te_tax_light_on at 1 is
+# left alone. A released or rebel country has it cleared first, so it starts from
+# its own law.
+te_tax_light_migrate_country = {
+	if = {
+		limit = {
+			te_tax_code_light_on = yes
+			OR = { NOT = { has_variable = te_tax_light_on } var:te_tax_light_on < 1 }
+		}
+		te_tax_light_gen_init = yes
+		te_tax_light_gen_reset = yes
+		te_tax_light_gen_uniform = yes
+		set_variable = { name = te_tax_light_law value = te_tax_light_law_id }
+		set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
+		set_variable = { name = te_tax_light_on value = 1 }
+		debug_log = "TE_TAX light_migrated wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_view_light_level')|0] law=[SCOPE.ScriptValue('te_tax_light_law_id')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		te_tax_light_sync = yes
+	}
+}
+
+# Country scope. Writes the native fiscal state from the code: the tax level,
+# the relief modifiers, the reaction modifiers and the view bands. Stateless:
+# every part is derived from the variables and re-applied, so a second call
+# changes nothing. In order:
+#   1. the active law changed since the last sync (on_law_activated raises
+#      te_tax_light.3; the 1st catches anything else): a player's code is
+#      clamped into the new law's range, at most the law's rate at the tax
+#      level, so the change never raises the level (te_tax_light_gen_clamp);
+#      an AI's follows the native level; no reaction, the law change's own
+#      approval covers it;
+#   2. an AI country: every tax at the law's rate for its native level, each
+#      change scored (te_tax_light_gen_uniform_scored);
+#      a player's: if the native level moved outside the code (only script can
+#      move it; the buttons are greyed), each tax moves by its law's difference
+#      between the two levels (te_tax_light_gen_shift), scored;
+#   3. each tax's step, and for a player's country the tax level they give;
+#   4. relief, reactions and bands (the view-band modifiers).
+# Every limit on the way reads a variable that persists between runs
+# (te_tax_light_gen_init creates the scratch ones), because a step button's
+# tooltip walks this without running it: a limit that reads a value set earlier
+# in the same run then sees last run's value, which decides only hidden
+# branches, never an unset one.
+te_tax_light_sync = {
+	if = {
+		limit = { te_tax_light_in_force = yes }
+		te_tax_light_gen_init = yes
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_tax_light_law }
+					NOT = { var:te_tax_light_law = te_tax_light_law_id }
+				}
+			}
+			if = {
+				limit = { is_ai = yes }
+				te_tax_light_gen_uniform = yes
+			}
+			else = {
+				te_tax_light_gen_clamp = yes
+			}
+			set_variable = { name = te_tax_light_law value = te_tax_light_law_id }
+			debug_log = "TE_TAX light_law_changed the code was carried into the new taxation law's range; law=[SCOPE.ScriptValue('te_tax_light_law_id')|0] month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		if = {
+			limit = { is_ai = yes }
+			if = {
+				limit = { NOT = { var:te_tax_light_level = te_tax_light_native_level } }
+				set_variable = { name = te_tax_light_was value = var:te_tax_light_level }
+				te_tax_light_gen_uniform_scored = yes
+				set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
+				# For an observer run: the AI's level change and the reactions it drew.
+				debug_log = "TE_TAX light_ai_level from=[SCOPE.ScriptValue('te_tax_view_light_was')|0] to=[SCOPE.ScriptValue('te_tax_view_light_level')|0]; reactions af=[SCOPE.ScriptValue('te_tax_view_light_react_armed_forces')|1] dv=[SCOPE.ScriptValue('te_tax_view_light_react_devout')|1] in=[SCOPE.ScriptValue('te_tax_view_light_react_industrialists')|1] ig=[SCOPE.ScriptValue('te_tax_view_light_react_intelligentsia')|1] lo=[SCOPE.ScriptValue('te_tax_view_light_react_landowners')|1] pb=[SCOPE.ScriptValue('te_tax_view_light_react_petty_bourgeoisie')|1] rf=[SCOPE.ScriptValue('te_tax_view_light_react_rural_folk')|1] tu=[SCOPE.ScriptValue('te_tax_view_light_react_trade_unions')|1]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+			else = {
+				# Already at its level: anything else that moved a rate (an
+				# inherited relief) is put back, scored.
+				te_tax_light_gen_uniform_scored = yes
+			}
+			te_tax_light_gen_steps = yes
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_light_law > 0
+					NOT = { var:te_tax_light_level = te_tax_light_native_level }
+				}
+				te_tax_light_gen_shift = yes
+				debug_log = "TE_TAX light_level_adopted the native tax level moved outside the code; each tax moved with it; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+			te_tax_light_gen_steps = yes
+			# A country on no vanilla taxation law levies nothing here: its level
+			# is left alone.
+			if = {
+				limit = { var:te_tax_light_law > 0 }
+				set_variable = { name = te_tax_light_level value = var:te_tax_light_tgt }
+				te_tax_light_gen_set_level = yes
+			}
+		}
+		te_tax_light_gen_relief = yes
+		te_tax_light_gen_apply_reactions = yes
+		te_tax_light_gen_bands = yes
+	}
+}
+
+# Country scope (te_tax_light.1, raised for every migrated country by the
+# global pulse on the 1st). The running reactions fade, then the sync.
+te_tax_light_process_month = {
+	if = {
+		limit = { te_tax_light_in_force = yes }
+		te_tax_light_gen_init = yes
+		te_tax_light_gen_decay = yes
+		te_tax_light_sync = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The step command (te_tax_light_step_<key>_sgui, te_tax_light_generated_sguis.txt).
+# KEY: wage, div, land, head or cons. DIR: 0 one step down, 1 one step up, 2 to
+# the law's very-low rate, 3 to its very-high rate. Runs only when
+# te_tax_light_can_step holds, which is also the button's is_valid. The
+# tooltip lines come first and read the state before the change; the change,
+# its reaction and the sync are hidden, since the panel shows their result.
+# ---------------------------------------------------------------------------
+te_tax_light_cmd_step = {
+	if = {
+		limit = { te_tax_light_can_step = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_light_step_tt_$DIR$ = { KEY = $KEY$ }
+		custom_tooltip = te_tax_lt_tt_react_$KEY$
+		hidden_effect = {
+			set_variable = { name = te_tax_light_was value = var:te_tax_en_$KEY$ }
+			te_tax_light_step_$DIR$ = { KEY = $KEY$ }
+			set_variable = { name = te_tax_light_d value = var:te_tax_en_$KEY$ }
+			change_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }
+			te_tax_light_gen_react = { KEY = $KEY$ }
+			te_tax_light_sync = yes
+			debug_log = "TE_TAX light_step wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_view_light_level')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+te_tax_light_step_0 = {
+	change_variable = { name = te_tax_en_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_en_$KEY$ min = te_tax_light_min_$KEY$ max = te_tax_light_max_$KEY$ }
+}
+
+te_tax_light_step_1 = {
+	change_variable = { name = te_tax_en_$KEY$ add = 1 }
+	clamp_variable = { name = te_tax_en_$KEY$ min = te_tax_light_min_$KEY$ max = te_tax_light_max_$KEY$ }
+}
+
+te_tax_light_step_2 = {
+	set_variable = { name = te_tax_en_$KEY$ value = te_tax_light_min_$KEY$ }
+}
+
+te_tax_light_step_3 = {
+	set_variable = { name = te_tax_en_$KEY$ value = te_tax_light_max_$KEY$ }
+}
+
+# The step's tooltip: what it does, and whether it moves the tax level
+# (te_tax_light_generated_triggers.txt, read before the change).
+te_tax_light_step_tt_0 = {
+	custom_tooltip = te_tax_lt_tt_step_down
+	if = { limit = { te_tax_light_down_lowers_$KEY$ = yes } custom_tooltip = te_tax_lt_tt_level_falls }
+}
+
+te_tax_light_step_tt_1 = {
+	custom_tooltip = te_tax_lt_tt_step_up
+	if = { limit = { te_tax_light_up_raises_$KEY$ = yes } custom_tooltip = te_tax_lt_tt_level_rises }
+}
+
+te_tax_light_step_tt_2 = {
+	custom_tooltip = te_tax_lt_tt_step_min
+	if = { limit = { te_tax_light_min_lowers_$KEY$ = yes } custom_tooltip = te_tax_lt_tt_level_falls }
+}
+
+te_tax_light_step_tt_3 = {
+	custom_tooltip = te_tax_lt_tt_step_max
+	if = { limit = { te_tax_light_max_raises_$KEY$ = yes } custom_tooltip = te_tax_lt_tt_level_rises }
+}

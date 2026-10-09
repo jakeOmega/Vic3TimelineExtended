@@ -219,7 +219,7 @@ te_demog_wc_tax_term = {
 		add = -5
 	}
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		subtract = { value = te_tax_view_en_div_rate multiply = 20 }
 	}
 	min = -10

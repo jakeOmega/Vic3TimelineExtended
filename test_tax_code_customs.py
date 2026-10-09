@@ -322,7 +322,7 @@ class RevalidationTest(unittest.TestCase):
             with self.subTest(hook=hook):
                 self.assertRegex(hooks, rf"(?m)^{hook} = \{{\s*on_actions = \{{\s*{handler}\s*\}}\s*\}}")
                 body = squash(block(hooks, handler))
-                self.assertTrue(body.startswith("effect = { if = { limit = { te_tax_code_on = yes "
+                self.assertTrue(body.startswith("effect = { if = { limit = { te_tax_code_full = yes "
                                                 "te_tax_customs_on = yes }"), body)
                 self.assertIn("trigger_event = { id = te_tax.7 days = 1 }", body)
         merge = squash(block(hooks, "te_tax_on_merge_markets"))
@@ -333,7 +333,7 @@ class RevalidationTest(unittest.TestCase):
 
     def test_the_revalidation_event(self):
         event = squash(block(read(EVENTS), "te_tax.7"))
-        for phrase in ("type = country_event", "hidden = yes", "trigger = { te_tax_code_on = yes }",
+        for phrase in ("type = country_event", "hidden = yes", "trigger = { te_tax_code_full = yes }",
                        # The records the loss leaves, right after (final review A-Minor 5).
                        "immediate = { te_tax_customs_revalidate = yes te_tax_customs_drop_records = yes }"):
             self.assertIn(phrase, event)

@@ -113,9 +113,10 @@ class TaxProbeSafetyTest(unittest.TestCase):
 
     def test_known_native_controls_keep_original_validity_and_add_gate(self):
         # The probe's lock now rides on the tax code's production gates (plan Task 9;
-        # every native site is listed in test_tax_code_bypass.py): six tax-level and
-        # consumption controls on te_tax_native_controls_sgui, the 14 tariff and
-        # subvention buttons on te_tax_native_tariff_controls_sgui.
+        # every native site is listed in test_tax_code_bypass.py): five tax-level
+        # controls on te_tax_native_controls_sgui, the consumption-tax "+" on
+        # te_tax_native_goods_controls_sgui, the 14 tariff and subvention buttons on
+        # te_tax_native_tariff_controls_sgui.
         gui = read("gui/budget_panel.gui")
         matches = [line for line in gui.splitlines() if 'enabled = "[' in line and any(
             x in line for x in ("GetPlayer.SetExport", "GetPlayer.SetImport", "GetPlayer.HasAnyTaxes", "BudgetPanel.CanTaxGoods"))]
@@ -123,7 +124,8 @@ class TaxProbeSafetyTest(unittest.TestCase):
         tariff = [line for line in matches if "GetPlayer.SetExport" in line or "GetPlayer.SetImport" in line]
         self.assertEqual(len(tariff), 14)
         for line in matches:
-            gate = "te_tax_native_tariff_controls_sgui" if line in tariff else "te_tax_native_controls_sgui"
+            gate = ("te_tax_native_tariff_controls_sgui" if line in tariff else "te_tax_native_goods_controls_sgui"
+                    if "BudgetPanel.CanTaxGoods" in line else "te_tax_native_controls_sgui")
             self.assertIn(f"GetScriptedGui('{gate}').IsValid(", line)
         self.assertNotIn("te_tp_native_controls_sgui", gui)
         sguis = read("common/scripted_guis/te_tax_native_sguis.txt")
@@ -168,7 +170,7 @@ class TaxProbeSafetyTest(unittest.TestCase):
 
     def test_arm_event_refuses_under_the_tax_code_rule(self):
         # The harness's carrier and amendments must not run beside the production
-        # system. Written inline: the te_tax_code_on trigger is defined later.
+        # system. Written inline: the te_tax_code_full trigger is defined later.
         body = _txt_block(read("events/te_debug_tax_events.txt"), "te_debug_tax.1")
         immediate = re.search(r"immediate = \{(.*)\}\s*$", body, re.S).group(1)
         guard = re.search(r"if = \{\s*limit = \{(.*?)\}\s*te_tp_arm = yes\s*\}", immediate, re.S)

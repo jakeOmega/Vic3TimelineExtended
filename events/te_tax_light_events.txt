@@ -1,0 +1,53 @@
+﻿# ============================================================================
+# LIGHT TAX CODE — internal country events
+# ============================================================================
+# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt and by
+# te_tax_on_uprising / te_tax_repair_after_civil_war
+# (common/scripted_effects/te_tax_civil_war_effects.txt). ROOT is always the
+# country the event fires on, which the relief and reaction modifiers'
+# multipliers read. Logic: common/scripted_effects/te_tax_light_effects.txt;
+# design: docs/superpowers/specs/2026-10-09-tax-code-light-design.md.
+# ============================================================================
+namespace = te_tax_light
+
+# The monthly processor: the running reactions fade, then one sync. Raised for
+# every migrated country by the global pulse on the 1st.
+te_tax_light.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		te_tax_light_process_month = yes
+	}
+}
+
+# Migration: every tax at this country's taxation law's rate for its native
+# tax level. Raised for every country after the lobby, for each new country and
+# by the monthly dispatch for any country still unmigrated. Firing it again
+# (console: event te_tax_light.2) does nothing once the country is migrated.
+te_tax_light.2 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		te_tax_light_migrate_country = yes
+	}
+}
+
+# Sync: raised a moment after a taxation law is activated (on_law_activated),
+# so it sees the new law, and for a civil war's winner. Firing it again
+# (console: event te_tax_light.3) changes nothing.
+te_tax_light.3 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		te_tax_light_sync = yes
+	}
+}

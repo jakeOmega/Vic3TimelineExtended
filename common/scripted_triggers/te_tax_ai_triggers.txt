@@ -12,7 +12,7 @@
 # the engine runs the country and it holds the carrier law. te_tax.8 re-checks
 # it, so a country a player took over since the dispatch does nothing.
 te_tax_ai_can_act = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	te_tax_code_in_force = yes
 	is_ai = yes
 	has_law = law_type:law_te_tax_code
@@ -220,7 +220,7 @@ te_tax_ai_can_enact = {
 # AI strategy's institution scores (edited_default_strategy.txt), so the native
 # AI invests in what it promised; false in every rule-off game.
 te_tax_ai_owes_institution = {
-	te_tax_code_on = yes
+	te_tax_code_full = yes
 	OR = {
 		AND = { te_tax_obl_binding = { N = 1 } var:te_tax_o1_kind = 1 var:te_tax_o1_arg = $ARG$ }
 		AND = { te_tax_obl_binding = { N = 2 } var:te_tax_o2_kind = 1 var:te_tax_o2_arg = $ARG$ }

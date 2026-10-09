@@ -254,7 +254,7 @@ te_tax_force_into = {
 te_tax_refresh_ig_views = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		te_tax_gen_ig_views = yes

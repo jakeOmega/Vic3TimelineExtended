@@ -399,7 +399,7 @@ types budget
 								name = "tutorial_highlight_add_consumption_tax"
 								size = { 35 35 }
 								onclick = "[BudgetPanel.ToggleAddConsumptionTaxMenu(PdxGuiWidget.AccessSelf)]"
-								enabled = "[And( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), BudgetPanel.CanTaxGoods )]"
+								enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), BudgetPanel.CanTaxGoods )]"
 								tooltip = "[SelectLocalization( BudgetPanel.CanTaxGoods, 'TAX_GOODS', 'NO_GOODS_TO_TAX' )]"
 							}
 						}

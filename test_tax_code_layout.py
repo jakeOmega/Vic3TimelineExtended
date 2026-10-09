@@ -38,7 +38,12 @@ REVIEW = "gui/journal_entry_widgets/te_tax_review_widget.gui"
 POLITICS = "gui/journal_entry_widgets/te_tax_politics_widget.gui"
 GEN_ROWS = "gui/journal_entry_widgets/te_tax_generated_rows.gui"
 BUDGET = "gui/budget_panel.gui"
-NEW_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS)
+LIGHT_GUI = "gui/journal_entry_widgets/te_tax_light_widget.gui"
+NEW_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS, LIGHT_GUI)
+LIGHT_SGUIS = "common/scripted_guis/te_tax_light_sguis.txt"
+LIGHT_GEN_SGUIS = "common/scripted_guis/te_tax_light_generated_sguis.txt"
+# The light setting's display gate, as the composers test it.
+LIGHT_SHOWN = "GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
 JE = "common/journal_entries/je_tax_code.txt"
 TAB_SGUIS = "common/scripted_guis/te_system_tab_sguis.txt"
 TAX_SGUIS = "common/scripted_guis/te_tax_sguis.txt"
@@ -66,7 +71,7 @@ FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed", "te_tax_wb_customs_open",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
-         "te_tax_pending_closed", "te_tax_obligations_closed"}
+         "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed", "te_tax_light_how_open"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
@@ -188,7 +193,8 @@ def value_bodies():
     """{name: body or None} for the tax code's script values; None = a constant."""
     values = {}
     for path in (DISPLAY, GEN_VALUES, SUPPORT, "common/script_values/te_tax_generated_support_values.txt",
-                 "common/script_values/te_tax_obligation_values.txt"):
+                 "common/script_values/te_tax_obligation_values.txt",
+                 "common/script_values/te_tax_light_generated_values.txt"):
         text = script(path)
         for match in re.finditer(r"(?m)^(\w+) = (\{|-?[\d.]+)", text):
             name = match.group(1)
@@ -251,8 +257,10 @@ class TabStripTest(unittest.TestCase):
 
     def test_the_native_control_gates_stay_outside_the_tab(self):
         # The 20 native-control gates (plan Task 9, test_tax_code_bypass.py) sit on
-        # vanilla's buttons, never in the Tax Code tab's MOD blocks.
-        self.assertEqual(self.text.count("te_tax_native_controls_sgui"), 6)
+        # vanilla's buttons, never in the Tax Code tab's MOD blocks: the five tax
+        # levels, the consumption-tax "+" (the goods gate) and the 14 tariffs.
+        self.assertEqual(self.text.count("te_tax_native_controls_sgui"), 5)
+        self.assertEqual(self.text.count("te_tax_native_goods_controls_sgui"), 1)
         self.assertEqual(self.text.count("te_tax_native_tariff_controls_sgui"), 14)
         self.assertNotIn("te_tp_native_controls_sgui", self.text)
         for region in self.regions:
@@ -348,8 +356,12 @@ class LayoutTest(unittest.TestCase):
         cls.all = "\n".join(gui(path) for path in NEW_GUI)
 
     def test_status_sections(self):
+        # The legislated code's sections in a wrapper hidden under the light
+        # setting, then the light code's own section, which gates itself.
         body = type_body(self.layout, "te_tax_status_sections")
-        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), STATUS)
+        self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), STATUS)
+        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), ["te_tax_light_section"])
+        self.assertIn(f'visible = "[Not( {LIGHT_SHOWN} )]"', body)
 
     def test_status_sections_carry_the_summary_after_the_workbench(self):
         body = type_body(self.layout, "te_tax_status_sections")
@@ -360,7 +372,9 @@ class LayoutTest(unittest.TestCase):
 
     def test_reference_sections_history_then_how(self):
         body = type_body(self.layout, "te_tax_reference_sections")
-        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), REFERENCE)
+        self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), REFERENCE)
+        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), ["te_tax_light_how_section"])
+        self.assertIn(f'visible = "[Not( {LIGHT_SHOWN} )]"', body)
 
     def test_the_brief_types_exist(self):
         for name in ("te_tax_overview_panel", "te_tax_enacted_table", "te_tax_how_section",
@@ -430,6 +444,7 @@ class JournalEntryTest(unittest.TestCase):
         self.assertEqual(widgets, [(LAYOUT, name, container) for name, container in ROOTS])
 
     def test_shown_only_under_the_rule_and_active_once_migrated(self):
+        # Under either code, full or light (te_tax_code_on).
         shown = brace_block(self.body, self.body.index("is_shown_when_inactive"))
         self.assertIn("te_tax_code_on = yes", shown)
         self.assertNotIn("NOT", shown)
@@ -437,9 +452,9 @@ class JournalEntryTest(unittest.TestCase):
         self.assertIn("te_tax_entry_unlocked = yes", possible)
         unlocked = block(script(TRIGGERS), "te_tax_entry_unlocked")
         self.assertRegex(unlocked, r"^\s*custom_tooltip = \{\s*text = te_tax_tt_code_in_force\s*"
-                                   r"te_tax_code_in_force = yes\s*\}\s*$")
+                                   r"OR = \{\s*te_tax_code_in_force = yes\s*te_tax_light_in_force = yes\s*\}\s*\}\s*$")
         in_force = block(script(TRIGGERS), "te_tax_code_in_force")
-        self.assertIn("te_tax_code_on = yes", in_force)
+        self.assertIn("te_tax_code_full = yes", in_force)
         self.assertIn("var:te_tax_migrated >= 1", in_force)
 
     def test_never_completes_fails_or_times_out(self):
@@ -509,7 +524,8 @@ class SguiTest(unittest.TestCase):
 
     def test_every_scripted_gui_named_by_the_panels_exists(self):
         defined = set(top_level_names(self.tab)) | set(top_level_names(self.tax)) | set(
-            top_level_names(script(GEN_SGUIS)))
+            top_level_names(script(GEN_SGUIS))) | set(top_level_names(script(LIGHT_SGUIS))) | set(
+            top_level_names(script(LIGHT_GEN_SGUIS)))
         text = "\n".join(gui(path) for path in NEW_GUI) + "\n".join(uncomment(r) for r in mod_block(raw(BUDGET)))
         for name in set(re.findall(r"GetScriptedGui\('(\w+)'\)", text)):
             with self.subTest(name=name):

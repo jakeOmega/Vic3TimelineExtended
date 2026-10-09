@@ -43,6 +43,8 @@ The first update pass (October 2026) covered the five days of English since: 2,3
 
 The second update pass (October 2026) covered 2,125 keys and 23,800 words, 51 of them stale; about 60% of the words were the experimental Tax Code. Six names were translated by hand, then three content chunks went out in parallel (one held every carbon-capture production method, one the whole Tax Code) and finished in about 15 minutes, with no line rejected. A 27-line correction chunk was applied by script. The reports and a vanilla grep turned up three terms the base game names differently (*Nachtrag* for amendment, *randständig* for marginal, *Grundbesitzer* for the Landowners group), and one older name that was wrong: Carbon Conversion Works had been *Kohleverflüssigungswerk*, "coal liquefaction works".
 
+`merge` also drops every TM entry, in every file, whose key the English no longer has. In a feature branch that translates only its own files (`prepare --files te_tax`), revert the other TM files it pruned (`git checkout -- i18n/<language>/tm/<file>.json`) so the pruning lands with a translation pass instead.
+
 Runs are resumable: whatever has merged is done, and `prepare` only offers what is still missing or stale. The merge check passes 97% of the base game's own English/German pairs unchanged; what it rejects there is vanilla German that has drifted from its English.
 
 ## Corrections from players

@@ -31,7 +31,7 @@
 te_tax_process_month = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		# Backfills tokens a newer schema added; never overwrites one.
@@ -142,7 +142,7 @@ te_tax_process_month = {
 te_tax_watchdog_month = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		te_tax_init_country = yes
@@ -206,7 +206,7 @@ te_tax_store_package = {
 te_tax_recompute_next_month = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		te_tax_gen_next_month = yes
@@ -224,7 +224,7 @@ te_tax_recompute_next_month = {
 te_tax_history_push = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		te_tax_gen_history_write = { KIND = $KIND$ SLOT = $SLOT$ INST = 0 }

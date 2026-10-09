@@ -1,9 +1,10 @@
 ﻿# ============================================================================
 # LEGISLATED TAX CODE TEST CONSOLE — fired only from the console:
-#   event te_tax_debug.1 … te_tax_debug.8
+#   event te_tax_debug.1 … te_tax_debug.10
 # The play-test runbook (docs/testing/tax-code-playtest.md) says when to use
 # each; .2-.4 drive the AI step (plan Task 22), .5-.8 set up the scenarios that
-# would otherwise take months of play (plan Task 25).
+# would otherwise take months of play (plan Task 25), .9-.10 test the light
+# code (te_tax_code_light_on; docs/systems/tax_code_schema.md, "Light code").
 # ============================================================================
 # Vic3's console has no `effect` command; `event <id>` is the way to run script
 # by hand. Nothing in the mod fires this event.
@@ -22,7 +23,7 @@ te_tax_debug.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		debug_log = "TE_TAX debug: activating Per-Capita Taxation over the tax code law; country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -44,7 +45,7 @@ te_tax_debug.2 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -81,7 +82,7 @@ te_tax_debug.3 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -100,7 +101,7 @@ te_tax_debug.4 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -125,7 +126,7 @@ te_tax_debug.5 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -191,7 +192,7 @@ te_tax_debug.6 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -211,7 +212,7 @@ te_tax_debug.7 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -231,7 +232,7 @@ te_tax_debug.8 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_on = yes }
+	trigger = { te_tax_code_full = yes }
 
 	immediate = {
 		if = {
@@ -268,3 +269,41 @@ te_tax_debug.8 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 	}
 }
 
+# te_tax_debug.9 (light code): logs the code (each tax's index, step and
+# relief, the tax level, each group's running reaction and band) and runs the
+# sync, as the 1st would without the monthly fade. Expected: one "TE_TAX
+# light_state" line; the Budget panel's receipts unchanged unless the native
+# level had moved.
+te_tax_debug.9 = { # REVIEWED 2026-10-09: console-only test event (`event te_tax_debug.9`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		te_tax_light_sync = yes
+		debug_log = "TE_TAX light_state level=[SCOPE.ScriptValue('te_tax_view_light_level')|0] law=[SCOPE.ScriptValue('te_tax_light_law_id')|0] wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0]/step [SCOPE.ScriptValue('te_tax_view_light_rung_wage')|0]/relief [SCOPE.ScriptValue('te_tax_view_light_relief_wage_rate')|3] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0]/[SCOPE.ScriptValue('te_tax_view_light_rung_div')|0]/[SCOPE.ScriptValue('te_tax_view_light_relief_div_rate')|3] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0]/[SCOPE.ScriptValue('te_tax_view_light_rung_land')|0]/[SCOPE.ScriptValue('te_tax_view_light_relief_land_rate')|3] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0]/[SCOPE.ScriptValue('te_tax_view_light_rung_head')|0]/[SCOPE.ScriptValue('te_tax_view_light_relief_head_rate')|3] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0]/[SCOPE.ScriptValue('te_tax_view_light_rung_cons')|0]/[SCOPE.ScriptValue('te_tax_view_light_relief_cons_rate')|3]; reactions af=[SCOPE.ScriptValue('te_tax_view_light_react_armed_forces')|1] dv=[SCOPE.ScriptValue('te_tax_view_light_react_devout')|1] in=[SCOPE.ScriptValue('te_tax_view_light_react_industrialists')|1] ig=[SCOPE.ScriptValue('te_tax_view_light_react_intelligentsia')|1] lo=[SCOPE.ScriptValue('te_tax_view_light_react_landowners')|1] pb=[SCOPE.ScriptValue('te_tax_view_light_react_petty_bourgeoisie')|1] rf=[SCOPE.ScriptValue('te_tax_view_light_react_rural_folk')|1] tu=[SCOPE.ScriptValue('te_tax_view_light_react_trade_unions')|1]; bands af=[SCOPE.ScriptValue('te_tax_view_light_band_armed_forces')|0] dv=[SCOPE.ScriptValue('te_tax_view_light_band_devout')|0] in=[SCOPE.ScriptValue('te_tax_view_light_band_industrialists')|0] ig=[SCOPE.ScriptValue('te_tax_view_light_band_intelligentsia')|0] lo=[SCOPE.ScriptValue('te_tax_view_light_band_landowners')|0] pb=[SCOPE.ScriptValue('te_tax_view_light_band_petty_bourgeoisie')|0] rf=[SCOPE.ScriptValue('te_tax_view_light_band_rural_folk')|0] tu=[SCOPE.ScriptValue('te_tax_view_light_band_trade_unions')|0]; date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# te_tax_debug.10 (light code): moves the native tax level one step up (from
+# very high, to very low), as an AI or a script would, without a sync. The tax
+# level buttons are greyed under the light code, so this is the only way a
+# player's country sees the case. Expected at the next sync (te_tax_debug.9 or
+# the 1st): "TE_TAX light_level_adopted", every levied tax moved with the level
+# and the interest groups' reactions to it.
+te_tax_debug.10 = { # REVIEWED 2026-10-09: console-only test event (`event te_tax_debug.10`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		if = { limit = { tax_level = very_low } set_tax_level = low }
+		else_if = { limit = { tax_level = low } set_tax_level = medium }
+		else_if = { limit = { tax_level = medium } set_tax_level = high }
+		else_if = { limit = { tax_level = high } set_tax_level = very_high }
+		else = { set_tax_level = very_low }
+		debug_log = "TE_TAX debug: moved the native tax level one step outside the code; it is adopted at the next sync; country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}

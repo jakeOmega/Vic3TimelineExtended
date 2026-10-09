@@ -131,14 +131,15 @@ class DispatchTest(unittest.TestCase):
         cls.parsed = load(ON_ACTIONS)
 
     def test_processor_hangs_off_the_global_pulse_not_the_country_pulse(self):
-        self.assertEqual(self.parsed["on_monthly_pulse"]["on_actions"], ["te_tax_monthly_dispatch"])
+        self.assertEqual(self.parsed["on_monthly_pulse"]["on_actions"],
+                         ["te_tax_monthly_dispatch", "te_tax_light_monthly_dispatch"])
         self.assertNotIn("te_tax_monthly_dispatch", self.parsed["on_monthly_pulse_country"]["on_actions"])
 
     def test_dispatch_is_gated_on_the_rule_and_reaches_migrated_countries(self):
         effect = self.parsed["te_tax_monthly_dispatch"]["effect"]
         self.assertEqual(set(effect), {"if"})
         gate = effect["if"]
-        self.assertEqual(gate["limit"], {"te_tax_code_on": "yes"})
+        self.assertEqual(gate["limit"], {"te_tax_code_full": "yes"})
         # Two fan-outs: the processor for migrated countries, then the migration
         # self-heal (te_tax.3, Task 5; test_tax_code_migration.py) for the rest.
         fan_out, self_heal = gate["every_country"]
@@ -160,7 +161,7 @@ class DispatchTest(unittest.TestCase):
         gate = self.parsed["te_tax_watchdog_on_action"]["effect"]["if"]
         self.assertEqual(gate["trigger_event"], {"id": "te_tax.2"})
         limit = block(read(ON_ACTIONS), "te_tax_watchdog_on_action")
-        for condition in ("te_tax_code_on = yes", "var:te_tax_migrated > 0",
+        for condition in ("te_tax_code_full = yes", "var:te_tax_migrated > 0",
                           "var:te_tax_last_month < te_history_month_index",
                           "var:te_tax_next_month >= 0",
                           "var:te_tax_next_month <= te_history_month_index"):
@@ -190,7 +191,7 @@ class EventTest(unittest.TestCase):
                 body = self.parsed[event]
                 self.assertEqual(body["type"], "country_event")
                 self.assertEqual(body["hidden"], "yes")
-                self.assertEqual(body["trigger"], {"te_tax_code_on": "yes"})
+                self.assertEqual(body["trigger"], {"te_tax_code_full": "yes"})
                 self.assertEqual(body["immediate"], {effect: "yes"})
 
     def test_no_ck3_only_keyword(self):
@@ -206,7 +207,7 @@ class ProcessorTest(unittest.TestCase):
 
     def test_processor_is_gated_on_the_rule_and_an_initialised_country(self):
         gate = limit_of(self.body[self.body.find("if = {") + len("if = {"):])
-        self.assertIn("te_tax_code_on = yes", gate)
+        self.assertIn("te_tax_code_full = yes", gate)
         self.assertIn("has_variable = te_tax_schema", gate)
 
     def test_now_is_read_once_before_the_guard(self):
@@ -544,7 +545,7 @@ class StoreTest(unittest.TestCase):
 
     def test_validation_needs_the_rule_a_free_slot_a_future_due_and_valid_sunsets(self):
         body = block(self.triggers, "te_tax_can_store_package")
-        for condition in ("te_tax_code_on = yes", "has_variable = te_tax_schema",
+        for condition in ("te_tax_code_full = yes", "has_variable = te_tax_schema",
                           "var:te_tax_p$SLOT$_on = 0", "has_variable = te_tax_bl_due",
                           "var:te_tax_bl_due > te_history_month_index",
                           "te_tax_gen_bill_sunsets_valid = yes"):

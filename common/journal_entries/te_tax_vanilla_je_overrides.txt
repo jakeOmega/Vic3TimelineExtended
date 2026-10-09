@@ -7,7 +7,7 @@
 # taxation could never complete. These three accept the code instead when it
 # collects what that law would (te_tax_code_counts_as_per_capita,
 # _proportional, _graduated in common/scripted_triggers/te_tax_triggers.txt):
-# the taxation OR in `complete` becomes a trigger_if on te_tax_code_on whose
+# the taxation OR in `complete` becomes a trigger_if on te_tax_code_full whose
 # OR adds the matching counts-as lines, and a trigger_else holding vanilla's
 # OR unchanged, so with the rule off the entry and its tooltip are vanilla's.
 # REPLACE: of one entry, the mod's narrowest precedent for a vanilla journal
@@ -35,7 +35,7 @@ REPLACE:je_great_reforms_bureaucratic = {
 		has_law_or_variant = law_type:law_appointed_bureaucrats
 		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
 		trigger_if = {
-			limit = { te_tax_code_on = yes }
+			limit = { te_tax_code_full = yes }
 			OR = {
 				has_law_or_variant = law_type:law_per_capita_based_taxation
 				has_law_or_variant = law_type:law_proportional_taxation
@@ -136,7 +136,7 @@ REPLACE:je_imperialism_of_promise = {
 		has_law_or_variant = law_type:law_slavery_banned
 		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
 		trigger_if = {
-			limit = { te_tax_code_on = yes }
+			limit = { te_tax_code_full = yes }
 			OR = {
 				has_law_or_variant = law_type:law_proportional_taxation
 				has_law_or_variant = law_type:law_graduated_taxation
@@ -339,7 +339,7 @@ REPLACE:je_portugal_regeneration = {
 		}
 		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
 		trigger_if = {
-			limit = { te_tax_code_on = yes }
+			limit = { te_tax_code_full = yes }
 			OR = {
 				has_law = law_type:law_per_capita_based_taxation
 				has_law = law_type:law_proportional_taxation

@@ -34,7 +34,7 @@
 #             whose new owner's code did not name it loses its relief marks
 #             and leaves the naming country's list.
 #
-# Everything is gated on te_tax_code_on, written positively. Nothing here
+# Everything is gated on te_tax_code_full, written positively. Nothing here
 # removes a schema token, reads ROOT or writes native fiscal state:
 # collection is te_tax_sync_collection's alone (te_tax_collection_effects.txt).
 # ============================================================================
@@ -54,7 +54,7 @@
 te_tax_on_uprising = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			exists = scope:target
 		}
 		if = {
@@ -72,6 +72,18 @@ te_tax_on_uprising = {
 			scope:target = {
 				trigger_event = { id = te_tax.3 }
 			}
+		}
+	}
+	else_if = {
+		# The light code: the rebels start from their own taxation law and tax
+		# level (a revived tag's marker from an earlier life is cleared first).
+		limit = {
+			te_tax_code_light_on = yes
+			exists = scope:target
+		}
+		scope:target = {
+			set_variable = { name = te_tax_light_on value = 0 }
+			trigger_event = { id = te_tax_light.2 }
 		}
 	}
 }
@@ -232,7 +244,13 @@ te_tax_repair_after_civil_war = {
 		trigger_event = { id = te_tax.6 }
 	}
 	else_if = {
-		limit = { te_tax_code_on = yes }
+		# The light code: the winner keeps its variables but no modifier, so the
+		# sync adds the relief, reactions and views back from them.
+		limit = { te_tax_light_in_force = yes }
+		trigger_event = { id = te_tax_light.3 }
+	}
+	else_if = {
+		limit = { te_tax_code_full = yes }
 		debug_log = "TE_TAX civil_war_repair_skipped nothing merged (a seceder won) or the winner has no code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
@@ -257,7 +275,7 @@ te_tax_repair_after_civil_war = {
 te_tax_init_released_country = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			exists = scope:te_tax_source
 			scope:te_tax_source = {
 				te_tax_code_in_force = yes
@@ -298,7 +316,7 @@ te_tax_init_released_country = {
 		trigger_event = { id = te_tax.6 }
 	}
 	else_if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		trigger_event = { id = te_tax.3 }
 	}
 }

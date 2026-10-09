@@ -3,7 +3,7 @@
 #
 # Vanilla 1.14.5 gives none of them a can_enact or an is_visible, so these INJECTs
 # add the fields rather than extend them. Both gates are the negation of
-# te_tax_code_on, so with the rule off they are always true and the laws behave
+# te_tax_code_full, so with the rule off they are always true and the laws behave
 # exactly as before. Each is wrapped in a custom_tooltip (final review A-Minor
 # 6), which evaluates the same, so a law tooltip that lists met conditions in a
 # rule-off game prints one plain line rather than a raw game-rule check. can_enact closes the player's law panel, the AI's enactment
@@ -16,13 +16,13 @@ INJECT:law_consumption_based_taxation = {
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 	is_visible = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 }
@@ -31,13 +31,13 @@ INJECT:law_land_based_taxation = {
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 	is_visible = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 }
@@ -46,13 +46,13 @@ INJECT:law_per_capita_based_taxation = {
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 	is_visible = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 }
@@ -61,13 +61,13 @@ INJECT:law_proportional_taxation = {
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 	is_visible = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 }
@@ -76,13 +76,13 @@ INJECT:law_graduated_taxation = {
 	can_enact = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 	is_visible = {
 		custom_tooltip = {
 			text = te_tax_tt_vanilla_law_replaced
-			NOT = { te_tax_code_on = yes }
+			NOT = { te_tax_code_full = yes }
 		}
 	}
 }

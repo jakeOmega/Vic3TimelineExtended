@@ -43,7 +43,7 @@
 te_tax_ai_update_streaks = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			has_variable = te_tax_schema
 		}
 		if = {
@@ -102,7 +102,7 @@ te_tax_ai_phase_draw = {
 te_tax_ai_dispatch = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			is_ai = yes
 			te_tax_ai_step_due = yes
 		}
@@ -143,7 +143,7 @@ te_tax_ai_dispatch = {
 te_tax_ai_step = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_ai_can_act = yes
 		}
 		if = {
@@ -173,7 +173,7 @@ te_tax_ai_step = {
 te_tax_ai_manage_packages = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_code_in_force = yes
 		}
 		if = {
@@ -215,7 +215,7 @@ te_tax_ai_manage_packages = {
 te_tax_ai_manage_promises = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_code_in_force = yes
 		}
 		if = {
@@ -297,7 +297,7 @@ te_tax_ai_manage_promises = {
 te_tax_ai_manage_bill = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_code_in_force = yes
 			te_tax_bill_active = yes
 		}
@@ -381,7 +381,7 @@ te_tax_ai_accept_offer = {
 # (te_tax_ai_introduce_and_judge).
 te_tax_ai_withdraw = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { legitimacy < te_tax_passage_legitimacy }
 			te_tax_ai_withdraw_legitimacy = yes
@@ -426,7 +426,7 @@ te_tax_ai_withdraw = {
 # Withdrawal: legitimacy below the passage line.
 te_tax_ai_withdraw_legitimacy = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_withdraw = yes }
 			te_tax_cmd_withdraw = yes
@@ -445,7 +445,7 @@ te_tax_ai_withdraw_legitimacy = {
 # Withdrawal: both package slots taken.
 te_tax_ai_withdraw_slots = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_withdraw = yes }
 			te_tax_cmd_withdraw = yes
@@ -464,7 +464,7 @@ te_tax_ai_withdraw_slots = {
 # Withdrawal: force-through short of override capacity or Authority.
 te_tax_ai_withdraw_authority = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_withdraw = yes }
 			te_tax_cmd_withdraw = yes
@@ -484,7 +484,7 @@ te_tax_ai_withdraw_authority = {
 # reason when no other applies.
 te_tax_ai_withdraw_support = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_withdraw = yes }
 			te_tax_cmd_withdraw = yes
@@ -503,7 +503,7 @@ te_tax_ai_withdraw_support = {
 # Withdrawal: open te_tax_ai_bill_patience months.
 te_tax_ai_withdraw_patience = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_withdraw = yes }
 			te_tax_cmd_withdraw = yes
@@ -537,7 +537,7 @@ te_tax_ai_withdraw_patience = {
 te_tax_ai_initiative = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_code_in_force = yes
 			NOT = { te_tax_bill_active = yes }
 			OR = {
@@ -581,7 +581,7 @@ te_tax_ai_initiative = {
 # untouched draft (te_tax_dr_eff_<key>: existing law in its due month).
 te_tax_ai_open_draft = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		if = {
 			limit = { te_tax_can_draft_discard = yes }
 			te_tax_cmd_draft_discard = yes
@@ -604,7 +604,7 @@ te_tax_ai_open_draft = {
 # cheapest when there is one, due at the draft's default, now + 3.
 te_tax_ai_build_t1 = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick2 DIR = 1 }
 	}
@@ -614,7 +614,7 @@ te_tax_ai_build_t1 = {
 # days' debate), due a month before the default, now + 2.
 te_tax_ai_build_t2 = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		if = {
@@ -628,7 +628,7 @@ te_tax_ai_build_t2 = {
 # te_tax_ai_levy_sunset months (24), so it reverts by itself.
 te_tax_ai_build_t3 = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_levy_sunset = { INST = local_var:te_tax_pick }
@@ -639,7 +639,7 @@ te_tax_ai_build_t3 = {
 # the highest pre-score.
 te_tax_ai_build_t5 = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_gen_ai_pick_cut = yes
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 0 }
 	}
@@ -648,7 +648,7 @@ te_tax_ai_build_t5 = {
 # T6, luxury goods: one or two untaxed luxuries, in the generator's order.
 te_tax_ai_build_t6 = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		te_tax_gen_ai_tax_luxury = yes
 	}
 }
@@ -664,7 +664,7 @@ te_tax_ai_build_t6 = {
 te_tax_ai_prepare_traditionalist_draft = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			te_tax_draft_active = yes
 			has_law = law_type:law_traditionalism
 		}
@@ -702,7 +702,7 @@ te_tax_ai_prepare_traditionalist_draft = {
 # too; with no bill it goes back to 0 after them.
 te_tax_ai_introduce_and_judge = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		set_variable = { name = te_tax_ai_tpl value = $TPL$ }
 		te_tax_ai_prepare_traditionalist_draft = yes
 		if = {
@@ -747,7 +747,7 @@ te_tax_ai_introduce_and_judge = {
 # te_tax_init_released_country.
 te_tax_ai_reset_bill_state = {
 	if = {
-		limit = { te_tax_code_on = yes }
+		limit = { te_tax_code_full = yes }
 		set_variable = { name = te_tax_ai_tpl value = 0 }
 		set_variable = { name = te_tax_ai_bill_month value = -1 }
 		set_variable = { name = te_tax_ai_offer_month value = -1 }
@@ -777,7 +777,7 @@ te_tax_ai_reset_bill_state = {
 te_tax_ai_log_year = {
 	if = {
 		limit = {
-			te_tax_code_on = yes
+			te_tax_code_full = yes
 			is_ai = yes
 			te_tax_ai_month_of_year = 0
 		}

@@ -112,7 +112,7 @@ class HookTest(unittest.TestCase):
 
     def test_releases_copy_or_migrate_in_the_new_country(self):
         body = block(self.tax, "te_tax_on_country_released")
-        self.assertIn("te_tax_code_on = yes", body)
+        self.assertIn("te_tax_code_full = yes", body)
         self.assertLess(body.index("save_scope_as = te_tax_source"), body.index("scope:target ?= {"))
         self.assertIn("te_tax_init_released_country = yes", body[body.index("scope:target ?= {"):])
         self.assertNotIn("trigger_event", body)
@@ -125,7 +125,7 @@ class HookTest(unittest.TestCase):
         parsed = load(TAX_ON_ACTIONS)
         self.assertEqual(parsed["on_state_owner_change"]["on_actions"], ["te_tax_on_state_owner_change"])
         effect = parsed["te_tax_on_state_owner_change"]["effect"]
-        self.assertEqual(effect, {"if": {"limit": {"te_tax_code_on": "yes"}, "te_tax_relief_follow_owner": "yes"}})
+        self.assertEqual(effect, {"if": {"limit": {"te_tax_code_full": "yes"}, "te_tax_relief_follow_owner": "yes"}})
 
 
 class OutbreakTest(unittest.TestCase):
@@ -137,7 +137,7 @@ class OutbreakTest(unittest.TestCase):
         cls.copy = block(cls.text, "te_tax_copy_code")
 
     def test_gated_on_the_rule_and_an_original_with_a_code(self):
-        self.assertRegex(self.uprising, r"^\s*if = \{\s*limit = \{\s*te_tax_code_on = yes\s+exists = scope:target\s*\}")
+        self.assertRegex(self.uprising, r"^\s*if = \{\s*limit = \{\s*te_tax_code_full = yes\s+exists = scope:target\s*\}")
         self.assertIn("te_tax_code_in_force = yes", self.uprising)
 
     def test_the_source_is_saved_before_the_copy_on_the_rebels(self):
@@ -238,7 +238,7 @@ class AdoptTest(unittest.TestCase):
         body = self.parsed["te_tax.6"]
         self.assertEqual(body["type"], "country_event")
         self.assertEqual(body["hidden"], "yes")
-        self.assertEqual(body["trigger"], {"te_tax_code_on": "yes"})
+        self.assertEqual(body["trigger"], {"te_tax_code_full": "yes"})
         self.assertEqual(body["immediate"], {"te_tax_adopt_copied_code": "yes"})
 
     def test_activates_the_carrier_only_if_absent_and_syncs_tomorrow(self):
@@ -321,13 +321,13 @@ class ReleaseTest(unittest.TestCase):
 
     def test_copies_only_from_a_parent_holding_the_carrier(self):
         guard = self.release[:self.release.index("te_tax_gen_copy_enacted = yes")]
-        self.assertIn("te_tax_code_on = yes", guard)
+        self.assertIn("te_tax_code_full = yes", guard)
         self.assertRegex(guard, r"scope:te_tax_source = \{\s*te_tax_code_in_force = yes\s+"
                                 r"has_law = law_type:law_te_tax_code\s*\}")
 
     def test_otherwise_migrates(self):
         fallback = self.release[self.release.index("else_if = {"):]
-        self.assertIn("te_tax_code_on = yes", fallback)
+        self.assertIn("te_tax_code_full = yes", fallback)
         self.assertIn("trigger_event = { id = te_tax.3 }", fallback)
 
     def test_copies_exactly_the_enacted_provisions(self):
@@ -446,7 +446,7 @@ class SafetyTest(unittest.TestCase):
 
     def test_every_entry_point_is_gated_positively(self):
         text = read(CIVIL_WAR_EFFECTS)
-        self.assertNotRegex(text, r"NOT = \{\s*te_tax_code_on")
+        self.assertNotRegex(text, r"NOT = \{\s*te_tax_code_full")
         for name in ("te_tax_on_uprising", "te_tax_repair_after_civil_war", "te_tax_init_released_country",
                      "te_tax_adopt_copied_code"):
             with self.subTest(name=name):

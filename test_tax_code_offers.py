@@ -691,13 +691,14 @@ class IgViewTest(unittest.TestCase):
                     writers.append(path.name)
                 if "te_tax_refresh_ig_views = yes" in text or "te_tax_gen_ig_views = yes" in text:
                     callers.append(path.name)
-        self.assertEqual(writers, ["te_tax_generated_effects.txt"])
+        # And the light code's band swap, from its own relief bands (test_tax_code_light.py).
+        self.assertEqual(writers, ["te_tax_generated_effects.txt", "te_tax_light_generated_effects.txt"])
         self.assertEqual(sorted(callers), ["te_tax_internal_events.txt", "te_tax_offer_effects.txt",
                                            "te_tax_schedule_effects.txt"])
 
     def test_refresh_is_gated(self):
         refresh = norm(block(read(OFFERS), "te_tax_refresh_ig_views"))
-        self.assertEqual(refresh, "if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema } "
+        self.assertEqual(refresh, "if = { limit = { te_tax_code_full = yes has_variable = te_tax_schema } "
                                   "te_tax_gen_ig_views = yes }")
 
     def test_the_band_is_the_stance_toward_the_equivalent_law(self):
@@ -727,7 +728,7 @@ class IgViewTest(unittest.TestCase):
                          f"{neg[0]} te_tax_code_counts_as_proportional = yes")
         self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_per_capita")),
                          f"{neg[0]} {neg[1]} te_tax_code_counts_as_per_capita = yes")
-        carrier = "te_tax_code_on = yes has_law = law_type:law_te_tax_code"
+        carrier = "te_tax_code_full = yes has_law = law_type:law_te_tax_code"
         self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_land_based")),
                          f"{carrier} {' '.join(neg)} has_variable = te_tax_en_land var:te_tax_en_land >= 1")
         self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_consumption_based")),

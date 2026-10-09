@@ -61,22 +61,25 @@ GUI_GUIDE = "docs/guides/gui_modding_guide.md"
 CARRIER = "law_te_tax_code"
 
 GATE = "GetScriptedGui('{}').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
-DOMESTIC_GATE = GATE.format("te_tax_native_controls_sgui")
+LEVEL_GATE = GATE.format("te_tax_native_controls_sgui")
+GOODS_GATE = GATE.format("te_tax_native_goods_controls_sgui")
 TARIFF_GATE = GATE.format("te_tax_native_tariff_controls_sgui")
 
-# Commands that change a collection: the tax level, consumption taxes (the Budget
-# panel's add menu opens the menu whose items toggle a good) and, under the
-# customs option only, tariffs and subventions.
-DOMESTIC = re.compile(r"Execute\(\s*GetPlayer\.SetTaxLevel\w+\s*\)|Execute\(\s*Goods\.ToggleTaxation\("
-                      r"|BudgetPanel\.ToggleAddConsumptionTaxMenu\(")
+# Commands that change a collection: the tax level (closed under any setting),
+# consumption taxes (the Budget panel's add menu opens the menu whose items
+# toggle a good; closed under the full settings, native under the light one)
+# and, under the customs option only, tariffs and subventions.
+LEVEL = re.compile(r"Execute\(\s*GetPlayer\.SetTaxLevel\w+\s*\)")
+GOODS = re.compile(r"Execute\(\s*Goods\.ToggleTaxation\(|BudgetPanel\.ToggleAddConsumptionTaxMenu\(")
 TARIFF = re.compile(r"Execute\(\s*GetPlayer\.Set(?:Import|Export)(?:Tariffs|Subventions)\w+\(")
 
 # Every gated site, by file: Budget's five tax levels and its "+" (add a taxed
 # good), the four Tax/Untax items of the goods right-click menus, the goods
 # panel's consumption-tax toggle (a type every goods view instantiates) and the
 # add-consumption-tax menu's item; the 14 tariff and subvention buttons.
-DOMESTIC_SITES = {"budget_panel.gui": 6, "right_click_menu.gui": 4, "goods_panel.gui": 1,
-                  "add_consumption_tax_menu.gui": 1}
+LEVEL_SITES = {"budget_panel.gui": 5}
+GOODS_SITES = {"budget_panel.gui": 1, "right_click_menu.gui": 4, "goods_panel.gui": 1,
+               "add_consumption_tax_menu.gui": 1}
 TARIFF_SITES = {"budget_panel.gui": 14}
 # The vanilla condition each gate is ANDed with.
 ORIGINAL_CONDITION = {
@@ -238,7 +241,8 @@ def logs(text):
 
 def evaluate(trigger, rule, lock):
     """Truth of a gate's is_valid for a game rule setting and the probe lock."""
-    facts = {"te_tax_code_on": rule in ("enabled", "customs"), "te_tax_customs_on": rule == "customs"}
+    facts = {"te_tax_code_on": rule in ("enabled", "customs", "light"),
+             "te_tax_code_full": rule in ("enabled", "customs"), "te_tax_customs_on": rule == "customs"}
     result = True
     for key, value in trigger.items():
         values = value if isinstance(value, list) else [value]
@@ -265,8 +269,9 @@ class GateDefinitionTest(unittest.TestCase):
     def test_file_carries_the_bom(self):
         self.assertTrue((ROOT / NATIVE_SGUIS).read_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_two_read_only_gates(self):
-        self.assertEqual(set(self.sguis), {"te_tax_native_controls_sgui", "te_tax_native_tariff_controls_sgui"})
+    def test_three_read_only_gates(self):
+        self.assertEqual(set(self.sguis), {"te_tax_native_controls_sgui", "te_tax_native_goods_controls_sgui",
+                                           "te_tax_native_tariff_controls_sgui"})
         for name, body in self.sguis.items():
             with self.subTest(name=name):
                 self.assertEqual(body["scope"], "country")
@@ -276,19 +281,28 @@ class GateDefinitionTest(unittest.TestCase):
         self.assertNotRegex(self.text, r"\b(set_variable|change_variable|remove_variable|trigger_event|"
                                        r"set_tax_level|add_taxed_goods|remove_taxed_goods|every_\w+)\b")
 
-    def test_domestic_gate_is_valid_only_with_the_rule_off_and_no_probe_lock(self):
+    def test_level_gate_is_valid_only_with_the_rule_off_and_no_probe_lock(self):
         # With the rule off it is the probe gate it replaces (NOT te_tp_lock), so a
-        # rule-off game behaves as before; under either rule option it is closed.
+        # rule-off game behaves as before; under every setting the code sets the
+        # tax level, so it is closed.
         valid = self.sguis["te_tax_native_controls_sgui"]["is_valid"]
-        for rule in ("off", "enabled", "customs"):
+        for rule in ("off", "enabled", "customs", "light"):
             for lock in (False, True):
                 with self.subTest(rule=rule, lock=lock):
                     self.assertEqual(evaluate(valid, rule, lock), rule == "off" and not lock)
 
+    def test_goods_gate_closes_only_under_the_full_settings(self):
+        # The light setting leaves the taxed goods native and usable.
+        valid = self.sguis["te_tax_native_goods_controls_sgui"]["is_valid"]
+        for rule in ("off", "enabled", "customs", "light"):
+            for lock in (False, True):
+                with self.subTest(rule=rule, lock=lock):
+                    self.assertEqual(evaluate(valid, rule, lock), rule in ("off", "light") and not lock)
+
     def test_tariff_gate_closes_only_under_the_customs_option(self):
-        # The plain rule option leaves tariffs native and usable.
+        # The plain rule option and the light one leave tariffs native and usable.
         valid = self.sguis["te_tax_native_tariff_controls_sgui"]["is_valid"]
-        for rule in ("off", "enabled", "customs"):
+        for rule in ("off", "enabled", "customs", "light"):
             for lock in (False, True):
                 with self.subTest(rule=rule, lock=lock):
                     self.assertEqual(evaluate(valid, rule, lock), rule != "customs" and not lock)
@@ -323,8 +337,11 @@ class NativeSiteTest(unittest.TestCase):
         self.assertEqual(counts, expected)
         return sites
 
-    def test_tax_level_and_consumption_taxes(self):
-        self.check(DOMESTIC, DOMESTIC_GATE, DOMESTIC_SITES)
+    def test_tax_level(self):
+        self.check(LEVEL, LEVEL_GATE, LEVEL_SITES)
+
+    def test_consumption_taxes(self):
+        self.check(GOODS, GOODS_GATE, GOODS_SITES)
 
     def test_tariffs_and_subventions(self):
         self.check(TARIFF, TARIFF_GATE, TARIFF_SITES)
@@ -337,7 +354,7 @@ class NativeSiteTest(unittest.TestCase):
         self.assertIsNotNone(match)
         opener = match.end() - 1
         self.assertEqual(enabled_of(text, opener),
-                         f"[And( {DOMESTIC_GATE}, IsValid( Goods.ToggleTaxation(GetMetaPlayer.GetPlayedOrObservedCountry) ) )]")
+                         f"[And( {GOODS_GATE}, IsValid( Goods.ToggleTaxation(GetMetaPlayer.GetPlayedOrObservedCountry) ) )]")
 
     def test_no_mod_instance_of_the_toggle_re_enables_it(self):
         for path in sorted((ROOT / "gui").rglob("*.gui")):
@@ -361,7 +378,7 @@ class InstalledVanillaTest(unittest.TestCase):
             raise unittest.SkipTest("installed game not found")
 
     def test_every_vanilla_file_with_a_native_command_is_overridden(self):
-        for pattern in (DOMESTIC, TARIFF):
+        for pattern in (LEVEL, GOODS, TARIFF):
             for path, command, _ in native_sites(pattern, self.game / "gui"):
                 with self.subTest(path=path, command=command):
                     self.assertTrue((ROOT / "gui" / path).is_file())
@@ -454,14 +471,15 @@ class ReassertHookTest(unittest.TestCase):
         cls.text = read(ON_ACTIONS)
 
     def test_hooked_on_law_activated(self):
-        self.assertEqual(self.parsed["on_law_activated"]["on_actions"], ["te_tax_on_law_activated"])
+        self.assertEqual(self.parsed["on_law_activated"]["on_actions"],
+                         ["te_tax_on_law_activated", "te_tax_light_on_law_activated"])
 
     def test_gated_on_the_rule_another_taxation_law_and_a_migrated_owner(self):
         effect = self.parsed["te_tax_on_law_activated"]["effect"]
         self.assertEqual(set(effect), {"if"})
         branch = effect["if"]
         self.assertEqual(branch["limit"], {
-            "te_tax_code_on": "yes",
+            "te_tax_code_full": "yes",
             "law_type": {"is_same_law_group_as": f"law_type:{CARRIER}"},
             "NOT": {"law_type": f"law_type:{CARRIER}"},
             "owner": {"has_variable": "te_tax_migrated", "var:te_tax_migrated": "0"},
@@ -493,13 +511,13 @@ class ReassertEventTest(unittest.TestCase):
         event = load(EVENTS)["te_tax.5"]
         self.assertEqual(event["type"], "country_event")
         self.assertEqual(event["hidden"], "yes")
-        self.assertEqual(event["trigger"], {"te_tax_code_on": "yes"})
+        self.assertEqual(event["trigger"], {"te_tax_code_full": "yes"})
         self.assertEqual(event["immediate"], {"te_tax_reassert_carrier": "yes"})
 
     def test_gated_on_a_migrated_country_off_the_carrier(self):
         self.assertEqual(set(self.parsed), {"if"})
         limit = self.parsed["if"]["limit"]
-        self.assertEqual(limit["te_tax_code_on"], "yes")
+        self.assertEqual(limit["te_tax_code_full"], "yes")
         self.assertEqual(limit["has_variable"], "te_tax_migrated")
         self.assertEqual(limit["NOT"], {"has_law": f"law_type:{CARRIER}"})
         self.assertIn("var:te_tax_migrated >= 1", self.body)
@@ -525,7 +543,7 @@ class ReassertEventTest(unittest.TestCase):
         # `event te_tax_debug.1`: the play-test of the re-assert. Nothing raises it.
         event = load("events/te_tax_debug_events.txt")["te_tax_debug.1"]
         self.assertEqual(event["hidden"], "yes")
-        self.assertEqual(event["trigger"], {"te_tax_code_on": "yes"})
+        self.assertEqual(event["trigger"], {"te_tax_code_full": "yes"})
         self.assertEqual(event["immediate"]["activate_law"], "law_type:law_per_capita_based_taxation")
         for directory in ("common", "events"):
             for path in (ROOT / directory).rglob("*.txt"):
@@ -682,7 +700,7 @@ class CulturalHegemonyTest(unittest.TestCase):
             with self.subTest(line=text.count("\n", 0, at) + 1):
                 self.assertEqual(" ".join(body.split()),
                                  "{ is_same_law_group_as = law_type:law_consumption_based_taxation "
-                                 "NOT = { te_tax_code_on = yes } }")
+                                 "NOT = { te_tax_code_full = yes } }")
                 self.assertTrue(text[:opener].rstrip().endswith("AND ="))
 
 
@@ -692,7 +710,7 @@ class SpectrumAuctionTest(unittest.TestCase):
         opener = enclosing(body, body.index("name = repeatable_events.60.a"))
         text = " ".join(body[opener:close(body, opener) + 1].split())
         self.assertIn(
-            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_code_full = yes } "
             "add_modifier = { name = te_tax_spectrum_auction days = short_modifier_time } "
             "add_modifier = { name = te_tax_spectrum_auction_proceeds days = short_modifier_time "
             "multiplier = sv_money_flow_event_small } } "
@@ -733,7 +751,7 @@ class CountsAsTest(unittest.TestCase):
         for kind in LAW_OF:
             body = self.triggers[f"te_tax_code_counts_as_{kind}"]
             with self.subTest(kind=kind):
-                self.assertEqual(body["te_tax_code_on"], "yes")
+                self.assertEqual(body["te_tax_code_full"], "yes")
                 self.assertEqual(body["has_law"], f"law_type:{CARRIER}")
 
     def test_thresholds(self):
@@ -806,7 +824,7 @@ class VanillaJournalEntryTest(unittest.TestCase):
                         self.assertIn(item, [f"law_type:{LAW_OF[kind]}" for kind in kinds])
                 ifs = mine.pop("trigger_if")
                 ifs = ifs if isinstance(ifs, list) else [ifs]
-                rule_on = [branch for branch in ifs if branch.get("limit") == {"te_tax_code_on": "yes"}]
+                rule_on = [branch for branch in ifs if branch.get("limit") == {"te_tax_code_full": "yes"}]
                 self.assertEqual(len(rule_on), 1)
                 rest_ifs = [branch for branch in ifs if branch is not rule_on[0]]
                 if rest_ifs:
@@ -833,7 +851,7 @@ class VanillaJournalEntryTest(unittest.TestCase):
         for name in PATCHED_JES:
             body = " ".join(block(text, f"REPLACE:{name}").split())
             with self.subTest(name=name):
-                at = body.find("trigger_if = { limit = { te_tax_code_on = yes }")
+                at = body.find("trigger_if = { limit = { te_tax_code_full = yes }")
                 self.assertGreater(at, 0)
                 opener = body.find("{", at)
                 after = body[close(body, opener) + 1:].lstrip()

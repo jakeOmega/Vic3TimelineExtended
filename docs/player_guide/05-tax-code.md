@@ -4,16 +4,94 @@ Under the Legislated Tax Code game rule, taxation stops being a taxation law plu
 a tax level. Each country has one tax code instead: a set of rates written into
 law. You change it by drafting a reform, introducing it as a bill, winning enough
 interest groups over and choosing the month it takes effect. The rule is
-experimental and off by default. It has three settings: *Tax Code Disabled* keeps
-base-game taxes, *Tax Code Enabled* legislates domestic taxes, and *Tax Code and
-Customs Enabled* also legislates tariffs and subsidies (see the
-[Introduction](01-introduction.md)). Choose it when you set up the campaign; it
-can't be switched later.
+experimental and off by default. It has four settings: *Tax Code Disabled* keeps
+base-game taxes, *Tax Code Enabled* legislates domestic taxes, *Tax Code and
+Customs Enabled* also legislates tariffs and subsidies, and *Light Tax Code*
+keeps the taxation laws and lets you set each tax within your law's range, at
+once and without bills (see the [Introduction](01-introduction.md)). Choose it
+when you set up the campaign; it can't be switched later.
 
 Everything happens in the Tax Code journal entry, in the Domestic Affairs group,
-and in the Budget panel's Tax Code tab. Both show the same panels. AI countries
-legislate through the same bills and the same rules (see
-[How AI countries legislate taxes](#how-ai-countries-legislate-taxes)).
+and in the Budget panel's Tax Code tab. Both show the same panels. Under the two
+legislated settings AI countries legislate through the same bills and the same
+rules (see [How AI countries legislate taxes](#how-ai-countries-legislate-taxes)).
+The next section covers the light setting; the rest of the chapter covers the
+legislated ones.
+
+## Setting taxes within your taxation law
+
+Under *Light Tax Code* the five taxation laws stay, and you enact them as in the
+base game. Your law sets a range for every tax it levies: from its rate at a Very
+Low tax level to its rate at Very High. Within that range you set each tax
+yourself on the Tax Code tab of the Budget panel, and a change applies at once.
+There are no drafts, bills, debate, offers or promises. At the start of the game
+every tax sits at your law's rate for your tax level, so you collect what the
+base game would.
+
+| Taxation law | Wage Tax | Dividend Tax | Rural Assessment | Head Tax | Consumption Tax |
+|---|---|---|---|---|---|
+| Consumption-Based Taxation | not levied | not levied | not levied | not levied | 15–35% |
+| Land-Based Taxation | not levied | not levied | 0.4–1.0 | not levied | 15–35% |
+| Per-Capita Taxation | 5–15% | not levied | 0.2–0.5 | 0.4–1.0 | 15–35% |
+| Proportional Taxation | 10–30% | 2.5–20% | not levied | not levied | 15–35% |
+| Graduated Taxation | 10–20% | 10–30% | not levied | not levied | 15–35% |
+
+Wage and dividend taxes move in 2.5% steps, the consumption tax in 5% steps, the
+rural assessment in steps of 0.025 and the head tax in steps of 0.05. Click − or
+\+ on a tax's row to move it a step; shift-click sends it to the lowest or
+highest rate your law allows. You still choose which goods carry consumption
+tax, and tariffs and subsidies work as in the base game.
+
+<!-- screenshot: the Tax Code tab under the Light Tax Code, Tax Rates open -->
+
+### The tax level under the light code
+
+Each rate sits on a step: the lowest tax level whose rate, under your law, is at
+or above it. The Step column shows it. Your tax level is the highest step among
+your taxes, and the overview shows which tax sets it. The tax level buttons on
+the Budget panel are grayed, because your rates set the level, and the level's
+legitimacy, radicalism and expected standard of living effects apply as in the
+base game. A tax below that step is still collected at its own rate.
+
+So your heaviest tax sets the political price. Under Proportional Taxation, with
+wages taxed at 25% and dividends and consumption at their Medium rates (10% and
+25%), your tax level is High and you pay High's effects. Lowering one tax costs
+revenue, and lowers the tax level only when no other tax shares its step. A
+button's tooltip says when a step would raise or lower your tax level.
+
+### How interest groups react to rate changes
+
+Each change draws a reaction from every interest group, by how much of that tax
+its members pay and by its views on taxation: a group that favors progressive
+taxation welcomes a higher wage or dividend tax, one that opposes it a higher
+consumption, rural or head tax. A reaction that pleases a group counts half as
+much as one that angers it, so raising a tax and cutting it back again still
+costs you. Reactions add up, reach at most ±10 approval and fade by about a third
+each month; they show as Resents Recent Tax Changes or Welcomes Recent Tax
+Changes. Raising one tax across its whole range costs a group that pays all of it
+about 10 approval before its views count.
+
+Groups also judge whom you spare. When the taxes a group's members pay sit below
+your tax level, by about one base-game tax level in all, the group Endorses the
+Tax Code (+1 approval), and at about two it Strongly Endorses it (+2), for as
+long as the relief lasts. Each group still judges your taxation law itself as in
+the base game.
+
+### Changing taxation law under the light code
+
+When you enact another taxation law, every rate moves into the new law's range.
+A tax the new law doesn't levy stops, and a tax it adds starts at the new law's
+rate for your current tax level, as it would in the base game. No tax ends up
+above the new law's rate for your current tax level, so a change of law never
+raises your tax level: a 20% wage tax under Proportional Taxation at Medium
+becomes 15% under Graduated Taxation. The law change's own approval changes are
+the base game's; the move adds no reaction of its own.
+
+AI countries keep choosing their tax level as in the base game, and their taxes
+follow it: every tax at their law's rate for that level. Their interest groups
+react to each change as yours do. A country released from yours, a rebel country
+and a newly formed one start from their own law and tax level; when a revolution
+ends, the winner keeps its rates.
 
 ## The Legislated Tax Code game rule
 

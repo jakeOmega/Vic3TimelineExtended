@@ -37,7 +37,9 @@ class ConsoleEventTest(unittest.TestCase):
             self.assertIn("REVIEWED", tail, event_id)
             body = block(self.text, event_id)
             self.assertIn("hidden = yes", body, event_id)
-            self.assertIn("trigger = { te_tax_code_on = yes }", body, event_id)
+            # .9 and .10 test the light code (te_tax_code_light_on); the rest the full one.
+            gate = "te_tax_code_light_on" if event_id in ("te_tax_debug.9", "te_tax_debug.10") else "te_tax_code_full"
+            self.assertIn(f"trigger = {{ {gate} = yes }}", body, event_id)
 
     def test_nothing_fires_a_console_event(self):
         pattern = re.compile(r"\bte_tax_debug\.\d+")
@@ -131,7 +133,7 @@ class AiConsoleTest(unittest.TestCase):
 
     def test_the_yearly_summary_is_ai_only_in_january_from_the_processor(self):
         effect = block(read(AI_EFFECTS), "te_tax_ai_log_year")
-        self.assertIn("te_tax_code_on = yes", effect)
+        self.assertIn("te_tax_code_full = yes", effect)
         self.assertIn("is_ai = yes", effect)
         self.assertIn("te_tax_ai_month_of_year = 0", effect)
         self.assertIn("TE_TAX ai_year", effect)

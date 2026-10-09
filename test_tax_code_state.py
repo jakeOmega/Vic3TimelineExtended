@@ -213,7 +213,7 @@ class InitTest(unittest.TestCase):
     def test_init_is_gated_on_the_rule(self):
         parsed = load(STATE)["te_tax_init_country"]
         self.assertEqual(set(parsed), {"if"})
-        self.assertEqual(parsed["if"]["limit"], {"te_tax_code_on": "yes"})
+        self.assertEqual(parsed["if"]["limit"], {"te_tax_code_full": "yes"})
 
     def test_init_calls_the_generated_instrument_and_goods_inits(self):
         self.assertIn("te_tax_gen_init_instruments = yes", self.init)
@@ -278,7 +278,7 @@ class WriterTest(unittest.TestCase):
         writer = self.parsed["te_tax_sync_collection"]
         self.assertEqual(set(writer), {"if", "else_if"})
         limit = writer["if"]["limit"]
-        self.assertEqual(limit.get("te_tax_code_on"), "yes")
+        self.assertEqual(limit.get("te_tax_code_full"), "yes")
         self.assertEqual(limit.get("has_law"), "law_type:law_te_tax_code")
         self.assertEqual(limit.get("has_variable"), "te_tax_schema")
 
@@ -329,7 +329,7 @@ class WriterTest(unittest.TestCase):
         skip = self.parsed["te_tax_sync_collection"]["else_if"]
         self.assertEqual(set(skip), {"limit", "debug_log"})
         self.assertEqual(skip["limit"], {
-            "te_tax_code_on": "yes",
+            "te_tax_code_full": "yes",
             "has_law": "law_type:law_te_tax_code",
             "NOT": {"has_variable": "te_tax_schema"},
         })
@@ -787,14 +787,18 @@ class ModifierTest(unittest.TestCase):
 
 
 class SoleWriterTest(unittest.TestCase):
-    """Only the collection writer touches a rule-on country's native fiscal state."""
+    """Only the collection writer touches a rule-on country's native fiscal state: the
+    full code's (te_tax_collection_effects.txt and its generated parts) or the light
+    code's (te_tax_light_generated_effects.txt, test_tax_code_light.py). The console's
+    te_tax_debug.10 moves the native tax level as an AI would, to test the light sync."""
 
     WRITES = re.compile(
         r"\b(add_taxed_goods|remove_taxed_goods|set_tax_level|set_import_tariff_level|set_export_tariff_level)\b"
         r"|add_amendment = \{ type = amendment_te_tax_"
         r"|(add|remove)_modifier = (\{ name = )?te_tax_relief_"
     )
-    ALLOWED = {COLLECTION, GEN_EFFECTS}
+    ALLOWED = {COLLECTION, GEN_EFFECTS, "common/scripted_effects/te_tax_light_generated_effects.txt",
+               "events/te_tax_debug_events.txt"}
 
     def test_no_other_file_writes_native_tax_state(self):
         offenders = []

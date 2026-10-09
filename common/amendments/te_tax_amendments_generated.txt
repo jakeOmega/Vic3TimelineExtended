@@ -8,7 +8,7 @@
 amendment_te_tax_wage_1 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -22,7 +22,7 @@ amendment_te_tax_wage_1 = {
 amendment_te_tax_wage_2 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -36,7 +36,7 @@ amendment_te_tax_wage_2 = {
 amendment_te_tax_wage_3 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -50,7 +50,7 @@ amendment_te_tax_wage_3 = {
 amendment_te_tax_wage_4 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -64,7 +64,7 @@ amendment_te_tax_wage_4 = {
 amendment_te_tax_wage_5 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -78,7 +78,7 @@ amendment_te_tax_wage_5 = {
 amendment_te_tax_wage_6 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -92,7 +92,7 @@ amendment_te_tax_wage_6 = {
 amendment_te_tax_wage_7 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -106,7 +106,7 @@ amendment_te_tax_wage_7 = {
 amendment_te_tax_wage_8 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -120,7 +120,7 @@ amendment_te_tax_wage_8 = {
 amendment_te_tax_wage_9 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -134,7 +134,7 @@ amendment_te_tax_wage_9 = {
 amendment_te_tax_wage_10 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -148,7 +148,7 @@ amendment_te_tax_wage_10 = {
 amendment_te_tax_wage_11 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -162,7 +162,7 @@ amendment_te_tax_wage_11 = {
 amendment_te_tax_wage_12 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -176,7 +176,7 @@ amendment_te_tax_wage_12 = {
 amendment_te_tax_wage_13 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -190,7 +190,7 @@ amendment_te_tax_wage_13 = {
 amendment_te_tax_wage_14 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -204,7 +204,7 @@ amendment_te_tax_wage_14 = {
 amendment_te_tax_wage_15 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -218,7 +218,7 @@ amendment_te_tax_wage_15 = {
 amendment_te_tax_wage_16 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -232,7 +232,7 @@ amendment_te_tax_wage_16 = {
 amendment_te_tax_wage_17 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -246,7 +246,7 @@ amendment_te_tax_wage_17 = {
 amendment_te_tax_wage_18 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -260,7 +260,7 @@ amendment_te_tax_wage_18 = {
 amendment_te_tax_wage_19 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -274,7 +274,7 @@ amendment_te_tax_wage_19 = {
 amendment_te_tax_wage_20 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -289,7 +289,7 @@ amendment_te_tax_wage_20 = {
 amendment_te_tax_div_1 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -303,7 +303,7 @@ amendment_te_tax_div_1 = {
 amendment_te_tax_div_2 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -317,7 +317,7 @@ amendment_te_tax_div_2 = {
 amendment_te_tax_div_3 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -331,7 +331,7 @@ amendment_te_tax_div_3 = {
 amendment_te_tax_div_4 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -345,7 +345,7 @@ amendment_te_tax_div_4 = {
 amendment_te_tax_div_5 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -359,7 +359,7 @@ amendment_te_tax_div_5 = {
 amendment_te_tax_div_6 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -373,7 +373,7 @@ amendment_te_tax_div_6 = {
 amendment_te_tax_div_7 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -387,7 +387,7 @@ amendment_te_tax_div_7 = {
 amendment_te_tax_div_8 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -401,7 +401,7 @@ amendment_te_tax_div_8 = {
 amendment_te_tax_div_9 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -415,7 +415,7 @@ amendment_te_tax_div_9 = {
 amendment_te_tax_div_10 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -429,7 +429,7 @@ amendment_te_tax_div_10 = {
 amendment_te_tax_div_11 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -443,7 +443,7 @@ amendment_te_tax_div_11 = {
 amendment_te_tax_div_12 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -457,7 +457,7 @@ amendment_te_tax_div_12 = {
 amendment_te_tax_div_13 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -471,7 +471,7 @@ amendment_te_tax_div_13 = {
 amendment_te_tax_div_14 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -485,7 +485,7 @@ amendment_te_tax_div_14 = {
 amendment_te_tax_div_15 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -499,7 +499,7 @@ amendment_te_tax_div_15 = {
 amendment_te_tax_div_16 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -513,7 +513,7 @@ amendment_te_tax_div_16 = {
 amendment_te_tax_div_17 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -527,7 +527,7 @@ amendment_te_tax_div_17 = {
 amendment_te_tax_div_18 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -541,7 +541,7 @@ amendment_te_tax_div_18 = {
 amendment_te_tax_div_19 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -555,7 +555,7 @@ amendment_te_tax_div_19 = {
 amendment_te_tax_div_20 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -570,7 +570,7 @@ amendment_te_tax_div_20 = {
 amendment_te_tax_land_1 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -584,7 +584,7 @@ amendment_te_tax_land_1 = {
 amendment_te_tax_land_2 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -598,7 +598,7 @@ amendment_te_tax_land_2 = {
 amendment_te_tax_land_3 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -612,7 +612,7 @@ amendment_te_tax_land_3 = {
 amendment_te_tax_land_4 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -626,7 +626,7 @@ amendment_te_tax_land_4 = {
 amendment_te_tax_land_5 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -640,7 +640,7 @@ amendment_te_tax_land_5 = {
 amendment_te_tax_land_6 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -654,7 +654,7 @@ amendment_te_tax_land_6 = {
 amendment_te_tax_land_7 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -668,7 +668,7 @@ amendment_te_tax_land_7 = {
 amendment_te_tax_land_8 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -682,7 +682,7 @@ amendment_te_tax_land_8 = {
 amendment_te_tax_land_9 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -696,7 +696,7 @@ amendment_te_tax_land_9 = {
 amendment_te_tax_land_10 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -710,7 +710,7 @@ amendment_te_tax_land_10 = {
 amendment_te_tax_land_11 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -724,7 +724,7 @@ amendment_te_tax_land_11 = {
 amendment_te_tax_land_12 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -738,7 +738,7 @@ amendment_te_tax_land_12 = {
 amendment_te_tax_land_13 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -752,7 +752,7 @@ amendment_te_tax_land_13 = {
 amendment_te_tax_land_14 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -766,7 +766,7 @@ amendment_te_tax_land_14 = {
 amendment_te_tax_land_15 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -780,7 +780,7 @@ amendment_te_tax_land_15 = {
 amendment_te_tax_land_16 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -794,7 +794,7 @@ amendment_te_tax_land_16 = {
 amendment_te_tax_land_17 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -808,7 +808,7 @@ amendment_te_tax_land_17 = {
 amendment_te_tax_land_18 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -822,7 +822,7 @@ amendment_te_tax_land_18 = {
 amendment_te_tax_land_19 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -836,7 +836,7 @@ amendment_te_tax_land_19 = {
 amendment_te_tax_land_20 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -850,7 +850,7 @@ amendment_te_tax_land_20 = {
 amendment_te_tax_land_21 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -864,7 +864,7 @@ amendment_te_tax_land_21 = {
 amendment_te_tax_land_22 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -878,7 +878,7 @@ amendment_te_tax_land_22 = {
 amendment_te_tax_land_23 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -892,7 +892,7 @@ amendment_te_tax_land_23 = {
 amendment_te_tax_land_24 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -906,7 +906,7 @@ amendment_te_tax_land_24 = {
 amendment_te_tax_land_25 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -920,7 +920,7 @@ amendment_te_tax_land_25 = {
 amendment_te_tax_land_26 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -934,7 +934,7 @@ amendment_te_tax_land_26 = {
 amendment_te_tax_land_27 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -948,7 +948,7 @@ amendment_te_tax_land_27 = {
 amendment_te_tax_land_28 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -962,7 +962,7 @@ amendment_te_tax_land_28 = {
 amendment_te_tax_land_29 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -976,7 +976,7 @@ amendment_te_tax_land_29 = {
 amendment_te_tax_land_30 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -990,7 +990,7 @@ amendment_te_tax_land_30 = {
 amendment_te_tax_land_31 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1004,7 +1004,7 @@ amendment_te_tax_land_31 = {
 amendment_te_tax_land_32 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1018,7 +1018,7 @@ amendment_te_tax_land_32 = {
 amendment_te_tax_land_33 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1032,7 +1032,7 @@ amendment_te_tax_land_33 = {
 amendment_te_tax_land_34 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1046,7 +1046,7 @@ amendment_te_tax_land_34 = {
 amendment_te_tax_land_35 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1060,7 +1060,7 @@ amendment_te_tax_land_35 = {
 amendment_te_tax_land_36 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1074,7 +1074,7 @@ amendment_te_tax_land_36 = {
 amendment_te_tax_land_37 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1088,7 +1088,7 @@ amendment_te_tax_land_37 = {
 amendment_te_tax_land_38 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1102,7 +1102,7 @@ amendment_te_tax_land_38 = {
 amendment_te_tax_land_39 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1116,7 +1116,7 @@ amendment_te_tax_land_39 = {
 amendment_te_tax_land_40 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1130,7 +1130,7 @@ amendment_te_tax_land_40 = {
 amendment_te_tax_land_41 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1144,7 +1144,7 @@ amendment_te_tax_land_41 = {
 amendment_te_tax_land_42 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1158,7 +1158,7 @@ amendment_te_tax_land_42 = {
 amendment_te_tax_land_43 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1172,7 +1172,7 @@ amendment_te_tax_land_43 = {
 amendment_te_tax_land_44 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1186,7 +1186,7 @@ amendment_te_tax_land_44 = {
 amendment_te_tax_land_45 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1200,7 +1200,7 @@ amendment_te_tax_land_45 = {
 amendment_te_tax_land_46 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1214,7 +1214,7 @@ amendment_te_tax_land_46 = {
 amendment_te_tax_land_47 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1228,7 +1228,7 @@ amendment_te_tax_land_47 = {
 amendment_te_tax_land_48 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1243,7 +1243,7 @@ amendment_te_tax_land_48 = {
 amendment_te_tax_head_1 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1257,7 +1257,7 @@ amendment_te_tax_head_1 = {
 amendment_te_tax_head_2 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1271,7 +1271,7 @@ amendment_te_tax_head_2 = {
 amendment_te_tax_head_3 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1285,7 +1285,7 @@ amendment_te_tax_head_3 = {
 amendment_te_tax_head_4 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1299,7 +1299,7 @@ amendment_te_tax_head_4 = {
 amendment_te_tax_head_5 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1313,7 +1313,7 @@ amendment_te_tax_head_5 = {
 amendment_te_tax_head_6 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1327,7 +1327,7 @@ amendment_te_tax_head_6 = {
 amendment_te_tax_head_7 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1341,7 +1341,7 @@ amendment_te_tax_head_7 = {
 amendment_te_tax_head_8 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1355,7 +1355,7 @@ amendment_te_tax_head_8 = {
 amendment_te_tax_head_9 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1369,7 +1369,7 @@ amendment_te_tax_head_9 = {
 amendment_te_tax_head_10 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1383,7 +1383,7 @@ amendment_te_tax_head_10 = {
 amendment_te_tax_head_11 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1397,7 +1397,7 @@ amendment_te_tax_head_11 = {
 amendment_te_tax_head_12 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1411,7 +1411,7 @@ amendment_te_tax_head_12 = {
 amendment_te_tax_head_13 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1425,7 +1425,7 @@ amendment_te_tax_head_13 = {
 amendment_te_tax_head_14 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1439,7 +1439,7 @@ amendment_te_tax_head_14 = {
 amendment_te_tax_head_15 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1453,7 +1453,7 @@ amendment_te_tax_head_15 = {
 amendment_te_tax_head_16 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1467,7 +1467,7 @@ amendment_te_tax_head_16 = {
 amendment_te_tax_head_17 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1481,7 +1481,7 @@ amendment_te_tax_head_17 = {
 amendment_te_tax_head_18 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1495,7 +1495,7 @@ amendment_te_tax_head_18 = {
 amendment_te_tax_head_19 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1509,7 +1509,7 @@ amendment_te_tax_head_19 = {
 amendment_te_tax_head_20 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1523,7 +1523,7 @@ amendment_te_tax_head_20 = {
 amendment_te_tax_head_21 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1537,7 +1537,7 @@ amendment_te_tax_head_21 = {
 amendment_te_tax_head_22 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1551,7 +1551,7 @@ amendment_te_tax_head_22 = {
 amendment_te_tax_head_23 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1565,7 +1565,7 @@ amendment_te_tax_head_23 = {
 amendment_te_tax_head_24 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1579,7 +1579,7 @@ amendment_te_tax_head_24 = {
 amendment_te_tax_head_25 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1593,7 +1593,7 @@ amendment_te_tax_head_25 = {
 amendment_te_tax_head_26 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1607,7 +1607,7 @@ amendment_te_tax_head_26 = {
 amendment_te_tax_head_27 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1621,7 +1621,7 @@ amendment_te_tax_head_27 = {
 amendment_te_tax_head_28 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1635,7 +1635,7 @@ amendment_te_tax_head_28 = {
 amendment_te_tax_head_29 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1649,7 +1649,7 @@ amendment_te_tax_head_29 = {
 amendment_te_tax_head_30 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1664,7 +1664,7 @@ amendment_te_tax_head_30 = {
 amendment_te_tax_cons_1 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1678,7 +1678,7 @@ amendment_te_tax_cons_1 = {
 amendment_te_tax_cons_2 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1692,7 +1692,7 @@ amendment_te_tax_cons_2 = {
 amendment_te_tax_cons_3 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1706,7 +1706,7 @@ amendment_te_tax_cons_3 = {
 amendment_te_tax_cons_4 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1720,7 +1720,7 @@ amendment_te_tax_cons_4 = {
 amendment_te_tax_cons_5 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1734,7 +1734,7 @@ amendment_te_tax_cons_5 = {
 amendment_te_tax_cons_6 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1748,7 +1748,7 @@ amendment_te_tax_cons_6 = {
 amendment_te_tax_cons_7 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1762,7 +1762,7 @@ amendment_te_tax_cons_7 = {
 amendment_te_tax_cons_8 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1776,7 +1776,7 @@ amendment_te_tax_cons_8 = {
 amendment_te_tax_cons_9 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1790,7 +1790,7 @@ amendment_te_tax_cons_9 = {
 amendment_te_tax_cons_10 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1804,7 +1804,7 @@ amendment_te_tax_cons_10 = {
 amendment_te_tax_cons_11 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
@@ -1818,7 +1818,7 @@ amendment_te_tax_cons_11 = {
 amendment_te_tax_cons_12 = {
 	parent = law_te_tax_code
 	allowed_laws = { law_te_tax_code }
-	possible = { te_tax_code_on = yes }
+	possible = { te_tax_code_full = yes }
 	can_repeal = { always = no }
 	would_sponsor = { always = no }
 	ai_will_revoke = { always = no }
