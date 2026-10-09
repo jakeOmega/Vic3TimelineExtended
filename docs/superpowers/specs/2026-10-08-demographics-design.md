@@ -591,6 +591,19 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 The first two are #822's effects, split by scope. That makes two state modifiers and two country modifiers in place of
 #822's two, each with one refresh site.
 
+**Built (phase 2, 2026-10-09).** Three state modifiers, not two: a multiplier is one variable, and the farm-state
+migration needs the score and the agrarian share, so it is its own modifier.
+- Country, from the national figure: `inh_great_fortunes` (Aristocrats and Capitalists +20% clout at full) and
+  `inh_dispersed_wealth` (Aristocrats −20%), refreshed by `te_demog_wc_national` as before.
+- State, from the state's own score: `inh_concentrated_property` ((score − 50)/50: Aristocrats' and Capitalists'
+  investment pool +10%, radicals +10%, qualifications −10%, education access −0.05), `inh_dispersed_property`
+  ((50 − score)/50: Farmers' and Shopkeepers' investment pool +10%) and `inh_land_hunger` ((score − 50)/50 × the
+  agrarian share: migration quota +20%). One refresh effect, `te_inh_refresh_wc_state_effects`, on the state's yearly
+  pulse after its drift and at game start through a hidden state event, so the multiplier resolves against the state.
+  A shift or shock made from country scope reaches them at the state's next pulse.
+- All five run under every Demographics rule setting (owner): Wealth Concentration is #822's, and the inheritance laws'
+  worth should not depend on the census rule.
+
 **Migration.** Each state starts at its country's current score, then drifts.
 
 ## 5. Where people live
@@ -975,7 +988,7 @@ from before the rule keeps the system (Grand Monuments' pattern).
 |---|---|---|
 | 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope; AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.

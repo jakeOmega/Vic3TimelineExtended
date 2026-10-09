@@ -280,14 +280,28 @@ incomes are and taxes on wealth move it from there. War losses, a lost war that
 cost you a war goal, a winning revolution of the left and a banking crash knock
 scores down at once, and devastation lowers a state's score every year it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
-houses twenty years later. Above 50, Great
-Family Fortunes strengthens the Aristocrats and Capitalists, raises their
-investment and adds radicals; below 50, Dispersed Wealth weakens the Aristocrats
-and lets Farmers and Shopkeepers invest more. Both grow with the distance from
-50. The Inheritance group's description shows the score and where it is heading,
-and the Wealth section of the [Demographics tab](08-states.md#demographics) shows
-what sets the target. With the Demographics rule set to Disabled the tab is gone,
-but Wealth Concentration still runs and the group's description still shows it.
+houses twenty years later.
+
+Your country's figure sets the political weight of great fortunes. Above 50,
+Great Family Fortunes strengthens the Aristocrats and Capitalists; below 50,
+Dispersed Wealth weakens the Aristocrats. Each state's own score does the rest
+in that state:
+
+| A state's score | Modifier | Effect at 100 or 0 |
+|---|---|---|
+| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 10% more; radicals +10%; qualifications −10%; education access −5% |
+| Above 50, in farming states | Land Hunger | Migration +20%, scaled by the state's share of Peasants and Farmers |
+| Below 50 | Dispersed Property | Farmers and Shopkeepers invest 10% more |
+
+Every effect grows with the distance from 50, so a state at 75 gets half of
+it. A state's modifiers update with its yearly count, so a war loss or an event
+that moves the scores reaches them within a year. A capital full of Financial
+Districts can carry Concentrated Property while your country as a whole sits
+below 50. The Inheritance group's description shows the score and where it is
+heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
+shows what sets the target. With the Demographics rule set to Disabled the tab
+is gone, but Wealth Concentration and all its effects still run and the group's
+description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
 Under Forced Heirship, smallholders have fewer children so the farm is not
