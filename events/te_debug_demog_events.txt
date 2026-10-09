@@ -89,7 +89,8 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 			text = te_debug_demog.1.c.tt
 			every_scope_state = {
 				te_demog_walks = yes
-				te_demog_seed = yes
+				# off the states' pulses: each seeds again at its next one
+				te_demog_seed_off_pulse = yes
 			}
 			te_demog_country_census = yes
 		}

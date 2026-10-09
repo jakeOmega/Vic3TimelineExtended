@@ -178,8 +178,9 @@ te_debug_demog_benchmark = {
 	debug_log = "TE_DEMOG_BENCH reseed"
 	every_state = {
 		limit = { te_demog_has_census = yes }
-		# the seed leaves te_dg_inflow_years as it was, which the passes' flows may have bumped
-		te_demog_seed = yes
+		# the seed leaves te_dg_inflow_years as it was, which the passes' flows may have bumped;
+		# off the states' pulses, so each seeds again at its next one
+		te_demog_seed_off_pulse = yes
 	}
 }
 

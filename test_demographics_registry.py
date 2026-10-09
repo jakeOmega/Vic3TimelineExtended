@@ -273,9 +273,10 @@ class TestStep(unittest.TestCase):
     def test_every_cohort_entry_point_is_gated(self):
         """Review Focus 5: nothing writes a cohort without te_demog_cohorts_run."""
         text = _text(EFFECTS)
-        for caller in ("te_demog_state_yearly", "te_demog_country_game_start"):
+        for caller in ("te_demog_state_yearly", "te_demog_country_game_start", "te_demog_country_monthly"):
             body = _block(text, caller)
-            for entry in ("te_demog_seed = yes", "te_demog_step = yes"):
+            for entry in ("te_demog_seed = yes", "te_demog_seed_off_pulse = yes", "te_demog_step = yes",
+                          "te_demog_share_war_dead = yes"):
                 if entry in body:
                     gate = body.rfind("te_demog_cohorts_run = yes", 0, body.index(entry))
                     self.assertNotEqual(gate, -1, f"{caller}: {entry} before the gate")
@@ -1057,7 +1058,7 @@ class TestFlows(unittest.TestCase):
             self.assertIsNotNone(re.search(rf"^\tset_local_variable = \{{\s+name = {name}\s+value", body, re.M), name)
 
     def test_each_war_adds_its_dead_to_the_year(self):
-        eng = _CountryEngine(wars=[100, 50], fixtures={})
+        eng = _CountryEngine(wars=[100, 50], fixtures={}, triggers={"te_demog_cohorts_run": False})
         for wars, want_seen, want_year in (
             ([100, 50], 150, 0),   # first run: starts from the dead already counted
             ([130, 80], 210, 60),
@@ -1078,35 +1079,51 @@ class TestFlows(unittest.TestCase):
             out.append(state)
         return out
 
-    def test_the_years_dead_go_to_states_by_their_soldiers(self):
+    def month(self, eng, wars):
+        eng.wars = wars
+        eng.call("te_demog_country_monthly")
+
+    def test_each_months_dead_go_to_states_by_their_soldiers(self):
+        """Codex review on #830: the states take the dead month by month, so a state's step (on its
+        own day) takes the dead of the same months as its population change; 31 December only
+        clears the year's total after the war shock reads it."""
         states = self._states((300, 10000, True), (100, 30000, True), (600, 5000, False))
         states[0]["te_dg_war_in"] = 5.0   # an earlier share not yet taken is kept
         eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True},
                              effects=NO_CENSUS)
-        eng.vars.update(te_dg_war_year=1000.0)
-        eng.call("te_demog_country_yearly")
-        self.assertEqual(states[0]["te_dg_war_in"], 5.0 + 750.0)
-        self.assertEqual(states[1]["te_dg_war_in"], 250.0)
+        self.month(eng, [0])          # first run: the starting count
+        self.month(eng, [600])
+        self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (5.0 + 450.0, 150.0))
+        states[0].pop("te_dg_war_in")  # state 0 steps on its pulse and takes its share
+        self.month(eng, [1000])
+        self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (300.0, 250.0))
         self.assertNotIn("te_dg_war_in", states[2], "a state with no census is skipped")
+        self.assertEqual(eng.vars["te_dg_war_year"], 1000.0)
+        eng.call("te_demog_country_yearly")
         self.assertEqual(eng.vars["te_dg_war_year"], 0.0)
+        self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (300.0, 250.0),
+                         "31 December shares nothing more")
 
     def test_a_country_without_soldiers_shares_by_people(self):
         states = self._states((0, 10000, True), (0, 30000, True))
         eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True})
-        eng.vars.update(te_dg_war_year=400.0)
-        eng.call("te_demog_share_war_dead")
+        self.month(eng, [0])
+        self.month(eng, [400])
         self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (100.0, 300.0))
 
     def test_no_dead_or_no_rule_shares_nothing(self):
-        for rule, year in ((True, 0.0), (False, 500.0)):
+        for rule, wars in ((True, [0, 0]), (False, [0, 500])):
             states = self._states((300, 10000, True))
             eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": rule},
                                  effects=NO_CENSUS)
-            eng.vars.update(te_dg_war_year=year)
+            for dead in wars:
+                self.month(eng, [dead])
+            self.assertNotIn("te_dg_war_in", states[0], (rule, wars))
+            self.assertEqual(eng.vars["te_dg_war_year"], float(wars[-1]), (rule, wars))
+            # the year's dead are cleared after the shock, so they are never shared out later
             eng.call("te_demog_country_yearly")
-            self.assertNotIn("te_dg_war_in", states[0], (rule, year))
-            # with the census off the year's dead are cleared, so they are never shared out later
-            self.assertEqual(eng.vars["te_dg_war_year"], 0.0, (rule, year))
+            self.assertEqual(eng.vars["te_dg_war_year"], 0.0, (rule, wars))
+            self.assertNotIn("te_dg_war_in", states[0], (rule, wars))
 
     def test_known_kills_add_up_and_only_where_the_census_runs(self):
         call = "te_demog_note_kills = { VALUE = var:struck }"
@@ -1218,6 +1235,41 @@ class TestTrend(unittest.TestCase):
                     self.assertGreater(eng.vars["te_dg_births"], 0)
                     self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 0.03 * people, delta=1.0)
 
+    def test_a_seed_off_the_pulse_is_made_again_at_the_pulse(self):
+        """Codex review on #830: game start and the console seed on a day that is not the state's
+        pulse, so a step at the next pulse a year on would compare 12 to 24 months of change with a
+        year's natural change. The state is marked, its first pulse seeds again (same year or not),
+        and the step comes a year after that; a seed made on the pulse is not marked."""
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": ""}
+        for pulse_year in (1836, 1837):
+            with self.subTest(pulse_year=pulse_year):
+                eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
+                eng.call("te_demog_seed_off_pulse")
+                self.assertEqual(eng.vars["te_dg_reseed"], 1.0)
+                eng.fixtures.update(te_demog_crisis=0.0, te_demog_family_transport=0.0)
+                eng.vars.update(te_dg_eb=0.0, te_dg_ed=0.0, te_dg_fjob_share=0.3)
+                eng.fixtures.update(year=float(pulse_year), state_population=self.POP * 1.02)
+                eng.call("te_demog_state_yearly")
+                self.assertNotIn("te_dg_reseed", eng.vars)
+                self.assertEqual(eng.vars["te_dg_year"], float(pulse_year))
+                self.assertEqual(eng.vars["te_dg_births"], 0.0, "seeded again, not stepped")
+                self.assertAlmostEqual(eng.vars["te_dg_pop_last"], self.POP * 1.02)
+                eng.fixtures.update(year=float(pulse_year + 1))
+                eng.call("te_demog_state_yearly")
+                self.assertGreater(eng.vars["te_dg_births"], 0, "a year on: the first step")
+        eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
+        eng.call("te_demog_seed")
+        self.assertNotIn("te_dg_reseed", eng.vars, "a seed on the pulse is not marked")
+
+    def test_off_pulse_seeds_are_marked(self):
+        """Every seed made away from the state's own pulse goes through te_demog_seed_off_pulse."""
+        self.assertIn("te_demog_seed_off_pulse = yes", _block(_text(EFFECTS), "te_demog_country_game_start"))
+        console = _text(ROOT / "events" / "te_debug_demog_events.txt")
+        self.assertIn("te_demog_seed_off_pulse = yes", console)
+        self.assertNotIn("te_demog_seed = yes", console)
+        body = _block(_text(EFFECTS), "te_demog_state_yearly")
+        self.assertIn("has_variable = te_dg_reseed", body)
+
     def test_a_seed_zeroes_net_migration(self):
         """Only a step's flows write it, and the country sums it over every state with a census."""
         eng = _engine_for(self.INP, 1836, self.POP)
@@ -1240,11 +1292,13 @@ class TestCountry(unittest.TestCase):
 
     def test_the_census_is_wired_where_the_brief_puts_it(self):
         yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
-        self.assertLess(yearly.index("te_demog_share_war_dead = yes"), yearly.index("te_demog_country_census = yes"))
+        self.assertNotIn("te_demog_share_war_dead", yearly, "the states take the war dead monthly")
         self.assertLess(yearly.index("te_demog_cohorts_run = yes"), yearly.index("te_demog_country_census = yes"))
+        monthly = _block(_text(EFFECTS), "te_demog_country_monthly")
+        self.assertLess(monthly.index("te_demog_cohorts_run = yes"), monthly.index("te_demog_share_war_dead = yes"))
         start = _block(_text(EFFECTS), "te_demog_country_game_start")
         self.assertLess(start.rindex("te_demog_cohorts_run = yes"), start.index("te_demog_country_census = yes"))
-        self.assertGreater(start.index("te_demog_country_census = yes"), start.rindex("te_demog_seed = yes"))
+        self.assertGreater(start.index("te_demog_country_census = yes"), start.rindex("te_demog_seed_off_pulse = yes"))
 
     def test_the_city_ranking_script_value_is_negated(self):
         body = _block(_text(VALUES), "te_demog_neg_city_rank")
@@ -1565,7 +1619,9 @@ class TestWealth(unittest.TestCase):
     def test_the_war_shock_and_the_war_dead_run_whatever_the_rule(self):
         yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
         self.assertLess(yearly.index("te_demog_wc_war_shock = yes"), yearly.index("te_demog_cohorts_run = yes"))
-        self.assertLess(yearly.index("te_demog_wc_war_shock = yes"), yearly.index("te_demog_share_war_dead = yes"))
+        reset = yearly.index("set_variable = { name = te_dg_war_year value = 0 }")
+        self.assertLess(yearly.index("te_demog_wc_war_shock = yes"), reset)
+        self.assertNotIn("te_demog_cohorts_run", yearly[:reset], "the reset runs whatever the rule")
 
     def test_822s_drift_only_without_a_scored_state(self):
         body = _block(_text(INH_EFFECTS), "te_inh_yearly_update")
@@ -2044,8 +2100,8 @@ class TestConsole(unittest.TestCase):
         reseed = body.index('debug_log = "TE_DEMOG_BENCH reseed"')
         self.assertGreater(reseed, last_pass)
         tail = body[reseed + len('debug_log = "TE_DEMOG_BENCH reseed"'):]
-        self.assertRegex(tail, r"^\s*every_state = \{\s*limit = \{ te_demog_has_census = yes \}\s*(#[^\n]*\s*)?"
-                               r"te_demog_seed = yes\s*\}\s*$")
+        self.assertRegex(tail, r"^\s*every_state = \{\s*limit = \{ te_demog_has_census = yes \}\s*(#[^\n]*\s*)*"
+                               r"te_demog_seed_off_pulse = yes\s*\}\s*$")
         self.assertEqual(body.count("TE_DEMOG_BENCH"), 8, "start, three begin/end pairs, reseed")
 
     def test_the_census_line_waits_for_a_million_people(self):

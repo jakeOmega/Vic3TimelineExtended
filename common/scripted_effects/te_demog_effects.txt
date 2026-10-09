@@ -56,14 +56,18 @@
 #                       te_dg_prev_<name> from the second census on
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
-#   te_dg_war_in        state: war dead the owner shared out on 31 December,
-#                       taken (and removed) by the next step
+#   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
+#                       since the state's last step, taken (and removed) by the next step,
+#                       so they cover the same months as its population change
 #   te_dg_kills_in      state: people the mod's own script killed since the last
 #                       step (te_demog_note_kills), taken and removed the same way
 #   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
 #   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
-#   te_dg_war_year      country: the year's rise in war dead, until 31 December
+#   te_dg_war_year      country: the year's rise in war dead, until 31 December (read by the
+#                       Wealth Concentration war shock; the states take theirs monthly)
+#   te_dg_reseed        state: set by a seed made off the state's own pulse (game start, the
+#                       console); its next pulse seeds again, so its first step covers a year
 #
 # The trend arrows (Task 10), on a state and on a country alike:
 #   te_dg_stepped       1 when the figures stored now came from a step (births above 0), 0 when
@@ -275,7 +279,9 @@ te_demog_state_yearly = {
 		# quarter above or below the last census's (te_dg_pop_last, written with
 		# te_dg_year): seed again. A move that size is a state merged or split,
 		# not migration (one year's natural change is under 5%), and the step's
-		# residual would count it all as migrants.
+		# residual would count it all as migrants. A seed made off this pulse
+		# (te_dg_reseed: game start, the console) is made again here, so the first
+		# step's population change and natural change cover the same year.
 		else_if = {
 			limit = {
 				OR = {
@@ -286,6 +292,7 @@ te_demog_state_yearly = {
 					}
 					state_population > { value = var:te_dg_pop_last multiply = 1.25 }
 					state_population < { value = var:te_dg_pop_last multiply = 0.75 }
+					has_variable = te_dg_reseed
 				}
 			}
 			te_demog_seed = yes
@@ -299,13 +306,14 @@ te_demog_state_yearly = {
 }
 
 # THIS = a country at game start (te_demog_events.1, where ROOT is the country): walk and
-# seed every state, then take the country's census, so 1836 opens with figures.
+# seed every state, then take the country's census, so 1836 opens with figures. The seeds
+# are off the states' pulses, so each state seeds again at its first pulse.
 te_demog_country_game_start = {
 	every_scope_state = {
 		te_demog_walks = yes
 		if = {
 			limit = { te_demog_cohorts_run = yes }
-			te_demog_seed = yes
+			te_demog_seed_off_pulse = yes
 		}
 	}
 	if = {
@@ -425,11 +433,24 @@ te_demog_lt_finish = {
 	}
 }
 
+# THIS = a state, seeded away from its own yearly pulse (game start, the console). Its
+# pulse's step compares the population change since te_dg_pop_last with a year's natural
+# change, which only matches when the census was taken on that pulse a year before; so
+# the state is marked and its next pulse seeds again (te_demog_state_yearly).
+te_demog_seed_off_pulse = {
+	te_demog_seed = yes
+	set_variable = { name = te_dg_reseed value = 1 }
+}
+
 # THIS = a state. A ring at the stable structure of the state's own rates
 # (demographics_model.seed; spec §2.6 and design rule 5): survivors of 100,000
 # births at each age, times the growth factor to the age's power, then scaled to
 # the state's population.
 te_demog_seed = {
+	if = {
+		limit = { has_variable = te_dg_reseed }
+		remove_variable = te_dg_reseed
+	}
 	te_demog_prepare = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
@@ -688,7 +709,7 @@ te_demog_no_flows = {
 # migration and migrant_profile): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out and
 # te_dg_pf<c>/te_dg_pm<c>. Every branch sets all of them; the step reads them unguarded.
 te_demog_flows = {
-	# war dead the owner shared out on 31 December (te_demog_share_war_dead)
+	# war dead the owner shared out monthly since this state's last step (te_demog_share_war_dead)
 	set_local_variable = { name = te_dg_war value = 0 }
 	if = {
 		limit = { has_variable = te_dg_war_in }
@@ -803,11 +824,14 @@ te_demog_note_kills = {
 	}
 }
 
-# THIS = a country, monthly. The dead of every war it is in, summed; the year's
-# total gains the rise. A war that ends drops out of the sum, so the change is
-# floored at zero and loses at most that month of any other war's dead. The first
-# run starts from the dead already counted, so a save that meets the mod mid-war
-# does not read the war's whole past as one year's dead.
+# THIS = a country, monthly. The dead of every war it is in, summed; the month's
+# rise goes to the year's total (the Wealth Concentration war shock reads it on
+# 31 December, whatever the rule) and, while the census runs, at once to the
+# states (te_demog_share_war_dead), so each state's step takes the dead of the
+# same months as its population change. A war that ends drops out of the sum, so
+# the change is floored at zero and loses at most that month of any other war's
+# dead. The first run starts from the dead already counted, so a save that meets
+# the mod mid-war does not read the war's whole past as one month's dead.
 te_demog_country_monthly = {
 	set_local_variable = { name = te_dg_dead value = 0 }
 	every_scope_war = {
@@ -818,65 +842,62 @@ te_demog_country_monthly = {
 		set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
 		set_variable = { name = te_dg_war_year value = 0 }
 	}
-	change_variable = {
-		name = te_dg_war_year
-		add = {
+	set_local_variable = {
+		name = te_dg_rise
+		value = {
 			value = local_var:te_dg_dead
 			subtract = var:te_dg_war_seen
 			min = 0
 		}
 	}
+	change_variable = { name = te_dg_war_year add = local_var:te_dg_rise }
 	set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
-}
-
-# THIS = a country on 31 December: the year's war dead go to its states by their
-# share of its soldiers (by people when it has none); each state's next step takes
-# its share out of its men and women aged 18-40.
-te_demog_share_war_dead = {
 	if = {
 		limit = {
-			has_variable = te_dg_war_year
-			var:te_dg_war_year > 0
+			te_demog_cohorts_run = yes
+			local_var:te_dg_rise > 0
 		}
-		set_local_variable = { name = te_dg_dead value = var:te_dg_war_year }
-		set_local_variable = { name = te_dg_sold value = 0 }
-		set_local_variable = { name = te_dg_ppl value = 0 }
-		every_scope_state = {
-			limit = { te_demog_has_census = yes }
-			change_local_variable = { name = te_dg_sold add = var:te_dg_soldiers }
-			change_local_variable = { name = te_dg_ppl add = var:te_dg_people }
+		te_demog_share_war_dead = yes
+	}
+}
+
+# THIS = a country at its monthly pulse while the census runs (te_demog_country_monthly):
+# the month's rise in war dead (local te_dg_rise) goes to its census states by their share
+# of its soldiers (by people when it has none); each state's next step takes what gathered
+# since its last step out of its men and women aged 18-40.
+te_demog_share_war_dead = {
+	set_local_variable = { name = te_dg_sold value = 0 }
+	set_local_variable = { name = te_dg_ppl value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		change_local_variable = { name = te_dg_sold add = var:te_dg_soldiers }
+		change_local_variable = { name = te_dg_ppl add = var:te_dg_people }
+	}
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		if = {
+			limit = { NOT = { has_variable = te_dg_war_in } }
+			set_variable = { name = te_dg_war_in value = 0 }
 		}
-		every_scope_state = {
-			limit = { te_demog_has_census = yes }
-			if = {
-				limit = { NOT = { has_variable = te_dg_war_in } }
-				set_variable = { name = te_dg_war_in value = 0 }
-			}
-			if = {
-				limit = { local_var:te_dg_sold >= 1 }
-				change_variable = { name = te_dg_war_in add = { value = var:te_dg_soldiers divide = { value = local_var:te_dg_sold min = 1 } multiply = local_var:te_dg_dead } }
-			}
-			else = {
-				change_variable = { name = te_dg_war_in add = { value = var:te_dg_people divide = { value = local_var:te_dg_ppl min = 1 } multiply = local_var:te_dg_dead } }
-			}
+		if = {
+			limit = { local_var:te_dg_sold >= 1 }
+			change_variable = { name = te_dg_war_in add = { value = var:te_dg_soldiers divide = { value = local_var:te_dg_sold min = 1 } multiply = local_var:te_dg_rise } }
 		}
-		set_variable = { name = te_dg_war_year value = 0 }
+		else = {
+			change_variable = { name = te_dg_war_in add = { value = var:te_dg_people divide = { value = local_var:te_dg_ppl min = 1 } multiply = local_var:te_dg_rise } }
+		}
 	}
 }
 
 # THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Task 12 adds to it.
-# The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule; then
-# they go to the states when the census runs, and are cleared when it doesn't, so dead from years
-# with the census off are never shared out later. The national Wealth Concentration, #822's
-# modifiers and the country's Gini follow from this year's state scores, whatever the rule, before
-# the census reads them.
+# The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule, and
+# then they are cleared: the states took theirs month by month while the census ran
+# (te_demog_country_monthly), and dead from months with the census off are never shared out later.
+# The national Wealth Concentration, #822's modifiers and the country's Gini follow from this
+# year's state scores, whatever the rule, before the census reads them.
 te_demog_country_yearly = {
 	te_demog_wc_war_shock = yes
 	if = {
-		limit = { te_demog_cohorts_run = yes }
-		te_demog_share_war_dead = yes
-	}
-	else_if = {
 		limit = { has_variable = te_dg_war_year }
 		set_variable = { name = te_dg_war_year value = 0 }
 	}
