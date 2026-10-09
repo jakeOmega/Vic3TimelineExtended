@@ -1,0 +1,381 @@
+﻿# ============================================================================
+# TEMPORARY GROWTH PROBE (branch probe/demographics-growth, not for main)
+# ============================================================================
+# What it measures: how the engine turns a pop's birth and death curves into
+# births and deaths, so the census's expected natural change (te_dg_eb and
+# te_dg_ed, te_demog_walks) can be made to match. Started from the console
+# (`event te_debug_growth.1`, option a), it runs by itself:
+#   - te_pg_freeze on every country: no international or internal migration,
+#     so a country's change is its births less its deaths (and war);
+#   - every country of 250,000 people or more gets a group, 0-7;
+#   - every 30 days (te_debug_growth.3 on the starting country) a tick logs one
+#     TE_PG line per such country, then every third tick switches each
+#     country's phase: phase p = (block + group) mod 8, so each block of three
+#     ticks has every phase running somewhere (a Latin square over time);
+#   - 48 ticks: two cycles of eight phases, three ticks each (about 4 years);
+#   - for the first 36 days, a TE_PG_DAY line a day for a few large countries,
+#     to show whether growth lands daily, weekly or once a month.
+# Phases (cycle 1 / cycle 2 where they differ):
+#   0 none              1 births off           2 deaths off      3 both off
+#   4 deaths off, births +0.5 / -0.5          5 deaths off, births +1.0 / -0.9
+#   6 births off, deaths +0.5 / -0.5          7 births off, deaths +1.0 / -0.9
+# A TE_PG line's ph= is the phase that ran in the 30 days before it (cycle x 8 +
+# phase; -1 before the first switch), so its change from the country's previous
+# line is that phase's. The first window after a switch is a transition.
+# scripts/analysis/demographics_growth_probe.py reads the lines.
+#
+# The walk's sums are per month, in people: te_demog_pop_engine_births and
+# _deaths are the curves x 100,000 a month (te_demog_generated_values.txt).
+# A debug_log line reads only THIS's variables, so each number is copied into
+# a te_pg_dbg_* variable of the country, printed and removed.
+# ============================================================================
+
+# THIS = ROOT = the console's country (te_debug_growth.1 option a).
+te_pg_start = {
+	set_global_variable = te_pg_started
+	set_global_variable = { name = te_pg_tick value = 0 }
+	set_global_variable = { name = te_pg_day value = 0 }
+	set_local_variable = { name = te_pg_k value = 0 }
+	every_country = {
+		add_modifier = { name = te_pg_freeze days = 1500 }
+		set_local_variable = { name = te_pg_people value = 0 }
+		every_scope_state = {
+			change_local_variable = { name = te_pg_people add = state_population }
+		}
+		if = {
+			limit = { local_var:te_pg_people >= 250000 }
+			set_variable = { name = te_pg_group value = { value = local_var:te_pg_k modulo = 8 } }
+			set_variable = { name = te_pg_phase value = -1 }
+			change_local_variable = { name = te_pg_k add = 1 }
+		}
+	}
+	set_variable = te_pg_track
+	c:CHI ?= { set_variable = te_pg_track }
+	c:GBR ?= { set_variable = te_pg_track }
+	c:RUS ?= { set_variable = te_pg_track }
+	c:FRA ?= { set_variable = te_pg_track }
+	c:USA ?= { set_variable = te_pg_track }
+	c:JAP ?= { set_variable = te_pg_track }
+	set_variable = { name = te_pg_dbg_k value = local_var:te_pg_k }
+	debug_log = "TE_PG_START countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_pg_dbg_k
+	te_pg_tick = yes
+	trigger_event = { id = te_debug_growth.2 days = 1 }
+}
+
+# THIS = the starting country, every 30 days (te_debug_growth.3) and once at the start.
+te_pg_tick = {
+	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
+	debug_log = "TE_PG_TICK t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_pg_dbg_t
+	every_country = {
+		limit = { has_variable = te_pg_group }
+		te_pg_line = yes
+	}
+	if = {
+		limit = { global_var:te_pg_tick >= 48 }
+		te_pg_finish = yes
+	}
+	else = {
+		set_local_variable = { name = te_pg_m value = { value = global_var:te_pg_tick modulo = 3 } }
+		if = {
+			limit = { local_var:te_pg_m = 0 }
+			set_local_variable = { name = te_pg_block value = { value = global_var:te_pg_tick divide = 3 floor = yes } }
+			set_local_variable = { name = te_pg_cycle value = { value = local_var:te_pg_block divide = 8 floor = yes } }
+			set_local_variable = { name = te_pg_within value = { value = local_var:te_pg_block modulo = 8 } }
+			every_country = {
+				limit = { has_variable = te_pg_group }
+				te_pg_apply_phase = yes
+			}
+		}
+		change_global_variable = { name = te_pg_tick add = 1 }
+		trigger_event = { id = te_debug_growth.3 days = 30 }
+	}
+}
+
+# THIS = a probe country; reads te_pg_cycle and te_pg_within, locals of te_pg_tick.
+te_pg_apply_phase = {
+	te_pg_clear_steps = yes
+	set_local_variable = { name = te_pg_p value = { value = local_var:te_pg_within add = var:te_pg_group modulo = 8 } }
+	set_variable = { name = te_pg_phase value = { value = local_var:te_pg_cycle multiply = 8 add = local_var:te_pg_p } }
+	if = {
+		limit = { local_var:te_pg_p = 1 }
+		add_modifier = { name = te_pg_b_off days = 95 }
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 2 }
+		add_modifier = { name = te_pg_d_off days = 95 }
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 3 }
+		add_modifier = { name = te_pg_b_off days = 95 }
+		add_modifier = { name = te_pg_d_off days = 95 }
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 4 }
+		add_modifier = { name = te_pg_d_off days = 95 }
+		if = {
+			limit = { local_var:te_pg_cycle = 0 }
+			add_modifier = { name = te_pg_b_p050 days = 95 }
+		}
+		else = {
+			add_modifier = { name = te_pg_b_m050 days = 95 }
+		}
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 5 }
+		add_modifier = { name = te_pg_d_off days = 95 }
+		if = {
+			limit = { local_var:te_pg_cycle = 0 }
+			add_modifier = { name = te_pg_b_p100 days = 95 }
+		}
+		else = {
+			add_modifier = { name = te_pg_b_m090 days = 95 }
+		}
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 6 }
+		add_modifier = { name = te_pg_b_off days = 95 }
+		if = {
+			limit = { local_var:te_pg_cycle = 0 }
+			add_modifier = { name = te_pg_d_p050 days = 95 }
+		}
+		else = {
+			add_modifier = { name = te_pg_d_m050 days = 95 }
+		}
+	}
+	else_if = {
+		limit = { local_var:te_pg_p = 7 }
+		add_modifier = { name = te_pg_b_off days = 95 }
+		if = {
+			limit = { local_var:te_pg_cycle = 0 }
+			add_modifier = { name = te_pg_d_p100 days = 95 }
+		}
+		else = {
+			add_modifier = { name = te_pg_d_m090 days = 95 }
+		}
+	}
+}
+
+# THIS = a country: removes whichever step modifiers it has (not te_pg_freeze).
+# Every probe modifier is added with a duration (95 days a step, outlasting its
+# 90-day block; 1,500 days the freeze), since has_modifier is documented for timed
+# modifiers, and so a probe that stops ticking clears itself.
+te_pg_clear_steps = {
+	if = {
+		limit = { has_modifier = te_pg_b_off }
+		remove_modifier = te_pg_b_off
+	}
+	if = {
+		limit = { has_modifier = te_pg_d_off }
+		remove_modifier = te_pg_d_off
+	}
+	if = {
+		limit = { has_modifier = te_pg_b_p050 }
+		remove_modifier = te_pg_b_p050
+	}
+	if = {
+		limit = { has_modifier = te_pg_b_p100 }
+		remove_modifier = te_pg_b_p100
+	}
+	if = {
+		limit = { has_modifier = te_pg_b_m050 }
+		remove_modifier = te_pg_b_m050
+	}
+	if = {
+		limit = { has_modifier = te_pg_b_m090 }
+		remove_modifier = te_pg_b_m090
+	}
+	if = {
+		limit = { has_modifier = te_pg_d_p050 }
+		remove_modifier = te_pg_d_p050
+	}
+	if = {
+		limit = { has_modifier = te_pg_d_p100 }
+		remove_modifier = te_pg_d_p100
+	}
+	if = {
+		limit = { has_modifier = te_pg_d_m050 }
+		remove_modifier = te_pg_d_m050
+	}
+	if = {
+		limit = { has_modifier = te_pg_d_m090 }
+		remove_modifier = te_pg_d_m090
+	}
+}
+
+# THIS = a probe country: one TE_PG line. Per month, in people:
+#   eb, ed      the curves' births and deaths (no modifiers)
+#   ebl         births x the pop's literacy (literacy_penalty: -0.1 x literacy)
+#   ebs         births x the pop's SoL (for any term linear in SoL)
+#   ebm         births x (4 - SoL) where SoL < 4 (the mod's unapplied malnourishment)
+#   ebst, ebsv  births of pops in mild and severe starvation
+#   edst, edsv  deaths of the same
+#   edlab, edmach, edeng, edslv  deaths of employed laborers, machinists, engineers,
+#               slaves (working_conditions)
+#   edtu        deaths x the state's turmoil
+#   mb, md      each state's modifier:state_birth_rate_mult and _mortality_mult,
+#               weighted by its eb and ed (the probe's own step included, Q5)
+te_pg_line = {
+	set_local_variable = { name = te_pg_pop value = 0 }
+	set_local_variable = { name = te_pg_st value = 0 }
+	set_local_variable = { name = te_pg_n value = 0 }
+	set_local_variable = { name = te_pg_eb value = 0 }
+	set_local_variable = { name = te_pg_ebl value = 0 }
+	set_local_variable = { name = te_pg_ebs value = 0 }
+	set_local_variable = { name = te_pg_ebm value = 0 }
+	set_local_variable = { name = te_pg_ebst value = 0 }
+	set_local_variable = { name = te_pg_ebsv value = 0 }
+	set_local_variable = { name = te_pg_mbw value = 0 }
+	set_local_variable = { name = te_pg_ed value = 0 }
+	set_local_variable = { name = te_pg_edst value = 0 }
+	set_local_variable = { name = te_pg_edsv value = 0 }
+	set_local_variable = { name = te_pg_edlab value = 0 }
+	set_local_variable = { name = te_pg_edmach value = 0 }
+	set_local_variable = { name = te_pg_edeng value = 0 }
+	set_local_variable = { name = te_pg_edslv value = 0 }
+	set_local_variable = { name = te_pg_edtu value = 0 }
+	set_local_variable = { name = te_pg_mdw value = 0 }
+	every_scope_state = {
+		change_local_variable = { name = te_pg_st add = 1 }
+		change_local_variable = { name = te_pg_pop add = state_population }
+		set_local_variable = { name = te_pg_s_eb value = 0 }
+		set_local_variable = { name = te_pg_s_ed value = 0 }
+		every_scope_pop = {
+			change_local_variable = { name = te_pg_n add = total_size }
+			change_local_variable = { name = te_pg_s_eb add = te_demog_pop_engine_births }
+			change_local_variable = { name = te_pg_s_ed add = te_demog_pop_engine_deaths }
+			change_local_variable = { name = te_pg_ebl add = { value = te_demog_pop_engine_births multiply = literacy_rate } }
+			change_local_variable = { name = te_pg_ebs add = { value = te_demog_pop_engine_births multiply = standard_of_living } }
+			if = {
+				limit = { standard_of_living < 4 }
+				change_local_variable = { name = te_pg_ebm add = { value = 4 subtract = standard_of_living multiply = te_demog_pop_engine_births } }
+			}
+			if = {
+				limit = { is_in_mild_starvation = yes }
+				change_local_variable = { name = te_pg_ebst add = te_demog_pop_engine_births }
+				change_local_variable = { name = te_pg_edst add = te_demog_pop_engine_deaths }
+			}
+			if = {
+				limit = { is_in_severe_starvation = yes }
+				change_local_variable = { name = te_pg_ebsv add = te_demog_pop_engine_births }
+				change_local_variable = { name = te_pg_edsv add = te_demog_pop_engine_deaths }
+			}
+			if = {
+				limit = { exists = workplace }
+				if = {
+					limit = { is_pop_type = laborers }
+					change_local_variable = { name = te_pg_edlab add = te_demog_pop_engine_deaths }
+				}
+				else_if = {
+					limit = { is_pop_type = machinists }
+					change_local_variable = { name = te_pg_edmach add = te_demog_pop_engine_deaths }
+				}
+				else_if = {
+					limit = { is_pop_type = engineers }
+					change_local_variable = { name = te_pg_edeng add = te_demog_pop_engine_deaths }
+				}
+				else_if = {
+					limit = { is_pop_type = slaves }
+					change_local_variable = { name = te_pg_edslv add = te_demog_pop_engine_deaths }
+				}
+			}
+		}
+		change_local_variable = { name = te_pg_eb add = local_var:te_pg_s_eb }
+		change_local_variable = { name = te_pg_ed add = local_var:te_pg_s_ed }
+		change_local_variable = { name = te_pg_mbw add = { value = local_var:te_pg_s_eb multiply = modifier:state_birth_rate_mult } }
+		change_local_variable = { name = te_pg_mdw add = { value = local_var:te_pg_s_ed multiply = modifier:state_mortality_mult } }
+		change_local_variable = { name = te_pg_edtu add = { value = local_var:te_pg_s_ed multiply = turmoil } }
+	}
+	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
+	set_variable = { name = te_pg_dbg_war value = 0 }
+	if = {
+		limit = { is_at_war = yes }
+		set_variable = { name = te_pg_dbg_war value = 1 }
+	}
+	set_variable = { name = te_pg_dbg_pop value = local_var:te_pg_pop }
+	set_variable = { name = te_pg_dbg_st value = local_var:te_pg_st }
+	set_variable = { name = te_pg_dbg_n value = local_var:te_pg_n }
+	set_variable = { name = te_pg_dbg_eb value = { value = local_var:te_pg_eb divide = 100000 } }
+	set_variable = { name = te_pg_dbg_ebl value = { value = local_var:te_pg_ebl divide = 100000 } }
+	set_variable = { name = te_pg_dbg_ebs value = { value = local_var:te_pg_ebs divide = 100000 } }
+	set_variable = { name = te_pg_dbg_ebm value = { value = local_var:te_pg_ebm divide = 100000 } }
+	set_variable = { name = te_pg_dbg_ebst value = { value = local_var:te_pg_ebst divide = 100000 } }
+	set_variable = { name = te_pg_dbg_ebsv value = { value = local_var:te_pg_ebsv divide = 100000 } }
+	set_variable = { name = te_pg_dbg_mb value = { value = local_var:te_pg_mbw divide = { value = local_var:te_pg_eb min = 1 } } }
+	set_variable = { name = te_pg_dbg_ed value = { value = local_var:te_pg_ed divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edst value = { value = local_var:te_pg_edst divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edsv value = { value = local_var:te_pg_edsv divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edlab value = { value = local_var:te_pg_edlab divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edmach value = { value = local_var:te_pg_edmach divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edeng value = { value = local_var:te_pg_edeng divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edslv value = { value = local_var:te_pg_edslv divide = 100000 } }
+	set_variable = { name = te_pg_dbg_edtu value = { value = local_var:te_pg_edtu divide = 100000 } }
+	set_variable = { name = te_pg_dbg_md value = { value = local_var:te_pg_mdw divide = { value = local_var:te_pg_ed min = 1 } } }
+	debug_log = "TE_PG t=[THIS.Var('te_pg_dbg_t').GetValue|0] tag=[THIS.GetCountry.GetTagName] g=[THIS.Var('te_pg_group').GetValue|0] ph=[THIS.Var('te_pg_phase').GetValue|0] st=[THIS.Var('te_pg_dbg_st').GetValue|0] war=[THIS.Var('te_pg_dbg_war').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] n=[THIS.Var('te_pg_dbg_n').GetValue|0] eb=[THIS.Var('te_pg_dbg_eb').GetValue|2] ebl=[THIS.Var('te_pg_dbg_ebl').GetValue|2] ebs=[THIS.Var('te_pg_dbg_ebs').GetValue|2] ebm=[THIS.Var('te_pg_dbg_ebm').GetValue|2] ebst=[THIS.Var('te_pg_dbg_ebst').GetValue|2] ebsv=[THIS.Var('te_pg_dbg_ebsv').GetValue|2] mb=[THIS.Var('te_pg_dbg_mb').GetValue|5] ed=[THIS.Var('te_pg_dbg_ed').GetValue|2] edst=[THIS.Var('te_pg_dbg_edst').GetValue|2] edsv=[THIS.Var('te_pg_dbg_edsv').GetValue|2] edlab=[THIS.Var('te_pg_dbg_edlab').GetValue|2] edmach=[THIS.Var('te_pg_dbg_edmach').GetValue|2] edeng=[THIS.Var('te_pg_dbg_edeng').GetValue|2] edslv=[THIS.Var('te_pg_dbg_edslv').GetValue|2] edtu=[THIS.Var('te_pg_dbg_edtu').GetValue|2] md=[THIS.Var('te_pg_dbg_md').GetValue|5]"
+	remove_variable = te_pg_dbg_t
+	remove_variable = te_pg_dbg_war
+	remove_variable = te_pg_dbg_pop
+	remove_variable = te_pg_dbg_st
+	remove_variable = te_pg_dbg_n
+	remove_variable = te_pg_dbg_eb
+	remove_variable = te_pg_dbg_ebl
+	remove_variable = te_pg_dbg_ebs
+	remove_variable = te_pg_dbg_ebm
+	remove_variable = te_pg_dbg_ebst
+	remove_variable = te_pg_dbg_ebsv
+	remove_variable = te_pg_dbg_mb
+	remove_variable = te_pg_dbg_ed
+	remove_variable = te_pg_dbg_edst
+	remove_variable = te_pg_dbg_edsv
+	remove_variable = te_pg_dbg_edlab
+	remove_variable = te_pg_dbg_edmach
+	remove_variable = te_pg_dbg_edeng
+	remove_variable = te_pg_dbg_edslv
+	remove_variable = te_pg_dbg_edtu
+	remove_variable = te_pg_dbg_md
+}
+
+# THIS = a tracked country, daily for the first 36 days (te_debug_growth.2).
+te_pg_day_line = {
+	set_local_variable = { name = te_pg_pop value = 0 }
+	every_scope_state = {
+		change_local_variable = { name = te_pg_pop add = state_population }
+	}
+	set_variable = { name = te_pg_dbg_d value = global_var:te_pg_day }
+	set_variable = { name = te_pg_dbg_pop value = local_var:te_pg_pop }
+	set_variable = { name = te_pg_dbg_ph value = -2 }
+	if = {
+		limit = { has_variable = te_pg_phase }
+		set_variable = { name = te_pg_dbg_ph value = var:te_pg_phase }
+	}
+	debug_log = "TE_PG_DAY d=[THIS.Var('te_pg_dbg_d').GetValue|0] tag=[THIS.GetCountry.GetTagName] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] ph=[THIS.Var('te_pg_dbg_ph').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_pg_dbg_d
+	remove_variable = te_pg_dbg_pop
+	remove_variable = te_pg_dbg_ph
+}
+
+# THIS = any country: at the 48th tick or from the console's abort (option b).
+te_pg_finish = {
+	set_global_variable = te_pg_done
+	every_country = {
+		if = {
+			limit = { has_modifier = te_pg_freeze }
+			remove_modifier = te_pg_freeze
+		}
+		te_pg_clear_steps = yes
+		if = {
+			limit = { has_variable = te_pg_group }
+			remove_variable = te_pg_group
+		}
+		if = {
+			limit = { has_variable = te_pg_phase }
+			remove_variable = te_pg_phase
+		}
+		if = {
+			limit = { has_variable = te_pg_track }
+			remove_variable = te_pg_track
+		}
+	}
+	debug_log = "TE_PG_DONE date=[TimeKeeper.GetCurrentDate.GetString]"
+}

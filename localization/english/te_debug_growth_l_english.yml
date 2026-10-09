@@ -1,0 +1,8 @@
+﻿l_english:
+ te_debug_growth.1.t:0 "Population Growth Probe"
+ te_debug_growth.1.desc:0 "A temporary test (branch probe/demographics-growth). Starting it freezes migration in every country, then for four years switches births and deaths off and on and steps their modifiers, country by country, writing TE_PG lines to debug.log every 30 days. Use a save you can throw away."
+ te_debug_growth.1.a:0 "Start the probe"
+ te_debug_growth.1.a.tt:0 "Freezes migration in every country and starts the 48-tick schedule from this country."
+ te_debug_growth.1.b:0 "Abort the probe"
+ te_debug_growth.1.b.tt:0 "Removes every probe modifier and stops the schedule."
+ te_debug_growth.1.z:0 "Close"

@@ -1,0 +1,104 @@
+﻿# ============================================================================
+# TEMPORARY GROWTH PROBE (branch probe/demographics-growth, not for main):
+# `event te_debug_growth.1` in the console. The schedule and the lines it writes
+# are described in common/scripted_effects/te_debug_growth_effects.txt.
+# Start it as a large country that will survive four years (the 30-day tick
+# runs on it), then type `observe`. Use a save you can throw away: it freezes
+# migration everywhere and switches births and deaths off and on.
+# ============================================================================
+namespace = te_debug_growth
+
+te_debug_growth.1 = { # REVIEWED 2026-10-09: console-only probe event (`event te_debug_growth.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_growth.1.t
+	desc = te_debug_growth.1.desc
+
+	# The option tooltips walk these effects every frame the event is open, so each
+	# does its work only under a marker the tooltip pass never sets
+	# (scripting_best_practices.md, "An Option's Tooltip Walks Its Effects").
+	option = {
+		name = te_debug_growth.1.a
+		trigger = {
+			NOT = { has_global_variable = te_pg_started }
+		}
+		custom_tooltip = {
+			text = te_debug_growth.1.a.tt
+			set_variable = te_pg_click
+			if = {
+				limit = { has_variable = te_pg_click }
+				remove_variable = te_pg_click
+				te_pg_start = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_growth.1.b
+		trigger = {
+			has_global_variable = te_pg_started
+			NOT = { has_global_variable = te_pg_done }
+		}
+		custom_tooltip = {
+			text = te_debug_growth.1.b.tt
+			set_variable = te_pg_click
+			if = {
+				limit = { has_variable = te_pg_click }
+				remove_variable = te_pg_click
+				te_pg_finish = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_growth.1.z
+		default_option = yes
+	}
+}
+
+# The daily line, for the first 36 days. ROOT = the starting country.
+te_debug_growth.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_variable = te_pg_started
+				NOT = { has_global_variable = te_pg_done }
+			}
+			change_global_variable = { name = te_pg_day add = 1 }
+			every_country = {
+				limit = { has_variable = te_pg_track }
+				te_pg_day_line = yes
+			}
+			if = {
+				limit = { global_var:te_pg_day < 36 }
+				trigger_event = { id = te_debug_growth.2 days = 1 }
+			}
+		}
+	}
+}
+
+# The 30-day tick. ROOT = the starting country.
+te_debug_growth.3 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_variable = te_pg_started
+				NOT = { has_global_variable = te_pg_done }
+			}
+			te_pg_tick = yes
+		}
+	}
+}

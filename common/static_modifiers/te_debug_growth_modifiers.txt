@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# TEMPORARY GROWTH PROBE (branch probe/demographics-growth, not for main): the
+# test modifiers. No loc on purpose, so a tooltip shows the raw key while one is
+# applied. Each is a country modifier; its state_* fields reach every state of
+# the country (docs/testing/demographics-probe-results-2026-10-08.md Q5).
+# Discrete values, not one unit modifier times a multiplier: a negative
+# multiplier is unproven.
+# ============================================================================
+
+# On every country for the whole run: no country admits immigrants (so nobody crosses a border)
+# and no state sends or takes migrants (so a state's change is its own births and deaths).
+te_pg_freeze = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_migration_restrictiveness_add = 101
+	state_migration_quota_mult = -1
+}
+
+# Births off: far below the floor at a total of -1 (phase 0's Q7).
+te_pg_b_off = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_birth_rate_mult = -5
+}
+
+# Deaths off, if mortality floors at 0 as births do (both-off phases test it).
+te_pg_d_off = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_mortality_mult = -5
+}
+
+# Birth steps: +0.5 and +1.0 fit the slope (cycle 1); -0.5 and -0.9 probe the floor (cycle 2).
+te_pg_b_p050 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_birth_rate_mult = 0.5
+}
+
+te_pg_b_p100 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_birth_rate_mult = 1
+}
+
+te_pg_b_m050 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_birth_rate_mult = -0.5
+}
+
+te_pg_b_m090 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_birth_rate_mult = -0.9
+}
+
+# Mortality steps, the same values.
+te_pg_d_p050 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_mortality_mult = 0.5
+}
+
+te_pg_d_p100 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_mortality_mult = 1
+}
+
+te_pg_d_m050 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_mortality_mult = -0.5
+}
+
+te_pg_d_m090 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_mortality_mult = -0.9
+}
