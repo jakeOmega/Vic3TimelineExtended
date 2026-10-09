@@ -7,9 +7,25 @@
   "en": "The taxes the legislature has enacted, and the bills that would change them.",
   "de": "Die Steuern, die die Legislative beschlossen hat, und die Vorlagen, die sie ändern würden."
  },
+ "je_tax_code_desc_full": {
+  "en": "The taxes the legislature has enacted, and the bills that would change them.",
+  "de": "Die von der Legislative beschlossenen Steuern und die Vorlagen, die sie ändern würden."
+ },
+ "je_tax_code_desc_light": {
+  "en": "The taxes in force, each set within the range of the taxation law.",
+  "de": "Die geltenden Steuern, jeweils innerhalb der Spanne des Steuergesetzes festgesetzt."
+ },
  "je_tax_code_reason": {
   "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups$')] commit to it, and takes effect on its [concept_tax_commencement].",
   "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] bleibt bestehen, bis eine [concept_tax_bill] ihn ändert oder er ausläuft. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald ihr genug [Concept('concept_interest_group','$concept_interest_groups$')] zusagen, und gilt ab dem Zeitpunkt ihres [Concept('concept_tax_commencement','Inkrafttretens')]."
+ },
+ "je_tax_code_reason_full": {
+  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups$')] commit to it, and takes effect on its [concept_tax_commencement].",
+  "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] gilt, bis eine [concept_tax_bill] ihn ändert oder seine Geltungsdauer endet. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald sich genügend [Concept('concept_interest_group','$concept_interest_groups$')] dafür verpflichten, und wird mit ihrem [concept_tax_commencement] wirksam."
+ },
+ "je_tax_code_reason_light": {
+  "en": "Your taxation law sets the range of every tax it levies. Within that range you set each rate in the [concept_tax_code] yourself, and a change applies at once. Your tax level follows the heaviest tax, and [Concept('concept_interest_group','$concept_interest_groups$')] react to each change.",
+  "de": "Ihr Steuergesetz bestimmt die Spanne jeder Steuer, die es erhebt. Innerhalb dieser Spanne legen Sie jeden Satz in der [concept_tax_code] selbst fest, und eine Änderung gilt sofort. Ihre Besteuerungsstufe richtet sich nach der schwersten Steuer, und [Concept('concept_interest_group','$concept_interest_groups$')] reagieren auf jede Änderung."
  },
  "je_tax_code_status_inactive": {
   "en": "The tax code takes over once this country's taxation law has been carried over into it: at the start of the game, or when the country is founded.",
@@ -50,6 +66,14 @@
  "setting_te_tax_code_enabled_desc": {
   "en": "Experimental. The five base game taxation laws can no longer be enacted. Every country holds the Legislated Tax Code instead, a law with no rates of its own, and each tax is set by an amendment to it. Tariffs and subsidies stay as in the base game. AI countries legislate through the same bills, which need the same interest-group support.",
   "de": "Experimentell. Die fünf Steuergesetze des Grundspiels können nicht mehr erlassen werden. Stattdessen gilt in jedem Land die Gesetzliche Steuerordnung, ein Gesetz ohne eigene Sätze, und jede Steuer wird durch einen Nachtrag dazu festgelegt. Zölle und Subventionen bleiben wie im Grundspiel. KI-Länder legen ihre Steuern über dieselben Vorlagen fest, die dieselbe Unterstützung der Interessengruppen brauchen."
+ },
+ "setting_te_tax_code_light": {
+  "en": "Light Tax Code",
+  "de": "Leichte Steuerordnung"
+ },
+ "setting_te_tax_code_light_desc": {
+  "en": "Experimental. The five taxation laws stay. Each sets a range for every tax it levies, from its rate at a Very Low tax level to its rate at Very High, and within that range you set each tax yourself on the Tax Code tab of the Budget panel. A change applies at once, with no bills. Your tax level follows your heaviest tax, and interest groups react to each change and favor a code that spares their members. AI countries keep choosing their tax level as in the base game, and their taxes follow it.",
+  "de": "Experimentell. Die fünf Steuergesetze bleiben bestehen. Jedes legt für jede Steuer, die es erhebt, eine Spanne fest, von seinem Satz bei der Besteuerungsstufe „Sehr niedrig“ bis zu seinem Satz bei „Sehr hoch“, und innerhalb dieser Spanne legen Sie jede Steuer selbst fest, und zwar im Reiter „Steuerordnung“ der Etat-Tafel. Eine Änderung gilt sofort, ohne Vorlagen. Ihre Besteuerungsstufe richtet sich nach Ihrer schwersten Steuer, und Interessengruppen reagieren auf jede Änderung und bevorzugen eine Ordnung, die ihre Mitglieder schont. KI-Länder wählen ihre Besteuerungsstufe weiterhin wie im Basisspiel, und ihre Steuern folgen dieser."
  },
  "te_tax_cu_changed_tt": {
   "en": "The draft changes this level from existing law in its commencement month.",
@@ -638,6 +662,182 @@
  "te_tax_inst_wage_tt": {
   "en": "Taxes the wages of employed pops. Collected as [concept_budget_income_taxes].",
   "de": "Besteuert die Löhne beschäftigter Pops. Wird als [concept_budget_income_taxes] erhoben."
+ },
+ "te_tax_lt_col_range": {
+  "en": "Range",
+  "de": "Spanne"
+ },
+ "te_tax_lt_col_range_tt": {
+  "en": "The taxation law's rate at a Very Low tax level and at Very High.",
+  "de": "Der Satz des Steuergesetzes bei der Besteuerungsstufe „Sehr niedrig“ und bei „Sehr hoch“."
+ },
+ "te_tax_lt_col_rate": {
+  "en": "Rate",
+  "de": "Satz"
+ },
+ "te_tax_lt_col_step": {
+  "en": "Step",
+  "de": "Stufe"
+ },
+ "te_tax_lt_col_step_tt": {
+  "en": "The lowest tax level whose rate under your taxation law is at or above this rate. The highest step among your taxes is your tax level.",
+  "de": "Die niedrigste Besteuerungsstufe, deren Satz nach Ihrem Steuergesetz diesem Satz entspricht oder ihn übersteigt. Die höchste Stufe unter Ihren Steuern ist Ihre Besteuerungsstufe."
+ },
+ "te_tax_lt_header": {
+  "en": "Tax Rates",
+  "de": "Steuersätze"
+ },
+ "te_tax_lt_how_ai": {
+  "en": "AI countries keep choosing their tax level as in the base game, and their taxes follow it: every tax at the law's rate for that level. Their interest groups react to each change as yours do.",
+  "de": "KI-Länder wählen ihre Besteuerungsstufe weiterhin wie im Basisspiel, und ihre Steuern folgen dieser: jede Steuer zum Satz des Gesetzes für diese Stufe. Ihre Interessengruppen reagieren auf jede Änderung wie Ihre eigenen."
+ },
+ "te_tax_lt_how_groups": {
+  "en": "Each change draws a reaction from every interest group, by how much of the tax its members pay and by its views on taxation. A reaction that pleases a group counts half as much as one that angers it. Reactions add up to at most ±10 approval and fade by about a third each month.",
+  "de": "Jede Änderung ruft bei jeder Interessengruppe eine Reaktion hervor, je nachdem, wie viel von der Steuer ihre Mitglieder zahlen und welche Haltung sie zur Besteuerung hat. Eine Reaktion, die einer Gruppe gefällt, zählt halb so viel wie eine, die sie erzürnt. Die Reaktionen summieren sich auf höchstens ±10 Zustimmung und klingen jeden Monat um etwa ein Drittel ab."
+ },
+ "te_tax_lt_how_header": {
+  "en": "How the Light Tax Code Works",
+  "de": "So funktioniert die Leichte Steuerordnung"
+ },
+ "te_tax_lt_how_law": {
+  "en": "When you enact another taxation law, every rate moves into the new law's range. A tax the new law does not levy stops, and a tax it adds starts at the new law's rate for your current tax level.",
+  "de": "Wenn Sie ein anderes Steuergesetz verabschieden, rückt jeder Satz in die Spanne des neuen Gesetzes. Eine Steuer, die das neue Gesetz nicht erhebt, endet, und eine Steuer, die es hinzufügt, beginnt mit dem Satz des neuen Gesetzes für Ihre aktuelle Besteuerungsstufe."
+ },
+ "te_tax_lt_how_level": {
+  "en": "Each rate sits on a step: the lowest tax level whose rate under your law is at or above it. Your tax level is the highest step among your taxes, and its legitimacy, radicalism and expected standard of living effects apply as in the base game. A tax below that step is collected at its own rate, so lowering a tax costs revenue but lowers the tax level only when no other tax shares its step.",
+  "de": "Jeder Satz liegt auf einer Stufe: der niedrigsten Besteuerungsstufe, deren Satz nach Ihrem Gesetz diesem Satz entspricht oder ihn übersteigt. Ihre Besteuerungsstufe ist die höchste Stufe unter Ihren Steuern, und ihre Auswirkungen auf Legitimität, Radikalismus und erwarteten Lebensstandard gelten wie im Basisspiel. Eine Steuer unterhalb dieser Stufe wird zu ihrem eigenen Satz erhoben; eine Senkung kostet also Einnahmen, senkt aber die Besteuerungsstufe nur, wenn keine andere Steuer dieselbe Stufe teilt."
+ },
+ "te_tax_lt_how_native": {
+  "en": "The tax level buttons on the Budget panel are greyed, because your rates set the tax level. You still choose which goods carry consumption tax, and tariffs and subsidies work as in the base game.",
+  "de": "Die Schaltflächen für die Besteuerungsstufe in der Etat-Tafel sind ausgegraut, weil Ihre Sätze die Besteuerungsstufe bestimmen. Welche Waren die Verbrauchssteuer tragen, wählen Sie weiterhin selbst, und Zölle und Subventionen funktionieren wie im Basisspiel."
+ },
+ "te_tax_lt_how_rates": {
+  "en": "Each tax your taxation law levies has a range, from the rate the law sets at a Very Low tax level to the rate it sets at Very High. You move each tax in steps within that range, and the change applies at once. There are no bills and no debate.",
+  "de": "Jede Steuer, die Ihr Steuergesetz erhebt, hat eine Spanne, von dem Satz, den das Gesetz bei der Besteuerungsstufe „Sehr niedrig“ festlegt, bis zu dem Satz bei „Sehr hoch“. Sie verschieben jede Steuer in Schritten innerhalb dieser Spanne, und die Änderung gilt sofort. Es gibt keine Vorlagen und keine Debatte."
+ },
+ "te_tax_lt_how_relief": {
+  "en": "Groups also judge whom you spare. A group whose members pay taxes you keep below your tax level approves of the code for as long as you do: +1 at about one tax level of relief on the taxes it pays, +2 at about two. Each group still judges your taxation law itself as in the base game.",
+  "de": "Die Gruppen beurteilen auch, wen Sie schonen. Eine Gruppe, deren Mitglieder Steuern zahlen, die Sie unter Ihrer Besteuerungsstufe halten, befürwortet die Steuerordnung, solange Sie das tun: +1 bei etwa einer Besteuerungsstufe Entlastung bei den Steuern, die sie zahlt, +2 bei etwa zwei. Jede Gruppe beurteilt Ihr Steuergesetz selbst weiterhin wie im Basisspiel."
+ },
+ "te_tax_lt_how_sub_groups": {
+  "en": "Interest Groups",
+  "de": "Interessengruppen"
+ },
+ "te_tax_lt_how_sub_level": {
+  "en": "Tax Level",
+  "de": "Besteuerungsstufe"
+ },
+ "te_tax_lt_how_sub_native": {
+  "en": "The Budget Panel and the AI",
+  "de": "Die Etat-Tafel und die KI"
+ },
+ "te_tax_lt_how_sub_rates": {
+  "en": "Rates",
+  "de": "Sätze"
+ },
+ "te_tax_lt_intro": {
+  "en": "Set each tax within the range your taxation law allows. A change applies at once.",
+  "de": "Legen Sie jede Steuer innerhalb der Spanne fest, die Ihr Steuergesetz erlaubt. Eine Änderung gilt sofort."
+ },
+ "te_tax_lt_law_other": {
+  "en": "Another law",
+  "de": "Anderes Gesetz"
+ },
+ "te_tax_lt_level_unset": {
+  "en": "Not set",
+  "de": "Nicht festgelegt"
+ },
+ "te_tax_lt_not_levied": {
+  "en": "Not levied",
+  "de": "Nicht erhoben"
+ },
+ "te_tax_lt_ov_law": {
+  "en": "Taxation Law",
+  "de": "Steuergesetz"
+ },
+ "te_tax_lt_ov_law_tt": {
+  "en": "The taxation law in force. Each tax it levies may range from the law's rate at a Very Low tax level to its rate at Very High; a tax it does not levy stays at zero. Enacting another taxation law moves every rate into the new law's range.",
+  "de": "Das geltende Steuergesetz. Jede Steuer, die es erhebt, kann sich vom Satz des Gesetzes bei der Besteuerungsstufe „Sehr niedrig“ bis zu seinem Satz bei „Sehr hoch“ bewegen; eine Steuer, die es nicht erhebt, bleibt bei null. Wird ein anderes Steuergesetz verabschiedet, rückt jeder Satz in die Spanne des neuen Gesetzes."
+ },
+ "te_tax_lt_ov_level": {
+  "en": "Tax Level",
+  "de": "Besteuerungsstufe"
+ },
+ "te_tax_lt_ov_level_tt": {
+  "en": "The highest step any of your taxes sits on. Its legitimacy, radicalism and expected standard of living effects are the base game's. A tax below that step is still collected at its own rate.",
+  "de": "Die höchste Stufe, auf der eine Ihrer Steuern liegt. Die Auswirkungen der Besteuerungsstufe auf Legitimität, Radikalismus und erwarteten Lebensstandard sind die des Basisspiels. Eine Steuer unterhalb dieser Stufe wird dennoch zu ihrem eigenen Satz erhoben."
+ },
+ "te_tax_lt_ov_setter": {
+  "en": "Set By",
+  "de": "Festgelegt durch"
+ },
+ "te_tax_lt_ov_setter_tt": {
+  "en": "A tax on the tax level's step. Lowering it lowers the tax level, unless another tax sits on the same step.",
+  "de": "Eine Steuer auf der Stufe, die Ihre Besteuerungsstufe bestimmt. Senkt man sie, sinkt die Besteuerungsstufe, es sei denn, eine andere Steuer liegt auf derselben Stufe."
+ },
+ "te_tax_lt_ov_title": {
+  "en": "Light [concept_tax_code]",
+  "de": "Leichte [concept_tax_code]"
+ },
+ "te_tax_lt_ov_title_tt": {
+  "en": "Your taxation law sets the range of each tax it levies. Within that range you set each rate, and a change applies at once.",
+  "de": "Ihr Steuergesetz legt die Spanne jeder Steuer fest, die es erhebt. Innerhalb dieser Spanne bestimmen Sie jeden Satz, und eine Änderung gilt sofort."
+ },
+ "te_tax_lt_row_cons_tt": {
+  "en": "$te_tax_inst_cons_tt$ Click − or + to move it one step, shift-click to set it to the lowest or highest rate your taxation law allows. Which goods carry it is chosen on the Budget panel, as in the base game.",
+  "de": "$te_tax_inst_cons_tt$ Mit Klick auf − oder + wird sie um einen Schritt verschoben, mit Umschalt-Klick auf den niedrigsten oder höchsten Satz gesetzt, den Ihr Steuergesetz erlaubt. Welche Waren damit besteuert werden, wird wie im Basisspiel in der Etat-Tafel gewählt."
+ },
+ "te_tax_lt_row_div_tt": {
+  "en": "$te_tax_inst_div_tt$ Click − or + to move it one step, shift-click to set it to the lowest or highest rate your taxation law allows.",
+  "de": "$te_tax_inst_div_tt$ Mit Klick auf − oder + wird sie um einen Schritt verschoben, mit Umschalt-Klick auf den niedrigsten oder höchsten Satz gesetzt, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_row_head_tt": {
+  "en": "$te_tax_inst_head_tt$ Click − or + to move it one step, shift-click to set it to the lowest or highest rate your taxation law allows.",
+  "de": "$te_tax_inst_head_tt$ Mit Klick auf − oder + wird sie um einen Schritt verschoben, mit Umschalt-Klick auf den niedrigsten oder höchsten Satz gesetzt, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_row_land_tt": {
+  "en": "$te_tax_inst_land_tt$ Click − or + to move it one step, shift-click to set it to the lowest or highest rate your taxation law allows.",
+  "de": "$te_tax_inst_land_tt$ Mit Klick auf − oder + wird sie um einen Schritt verschoben, mit Umschalt-Klick auf den niedrigsten oder höchsten Satz gesetzt, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_row_wage_tt": {
+  "en": "$te_tax_inst_wage_tt$ Click − or + to move it one step, shift-click to set it to the lowest or highest rate your taxation law allows.",
+  "de": "$te_tax_inst_wage_tt$ Mit Klick auf − oder + wird sie um einen Schritt verschoben, mit Umschalt-Klick auf den niedrigsten oder höchsten Satz gesetzt, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_tt_above_min": {
+  "en": "The tax is above the lowest rate your taxation law allows.",
+  "de": "Die Steuer liegt über dem niedrigsten Satz, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_tt_below_max": {
+  "en": "The tax is below the highest rate your taxation law allows.",
+  "de": "Die Steuer liegt unter dem höchsten Satz, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_tt_level_falls": {
+  "en": "#P Your tax level falls:#! no other tax sits on this step.",
+  "de": "#P Ihre Besteuerungsstufe sinkt:#! Keine andere Steuer liegt auf dieser Stufe."
+ },
+ "te_tax_lt_tt_level_rises": {
+  "en": "#N Your tax level rises:#! this becomes your heaviest tax.",
+  "de": "#N Ihre Besteuerungsstufe steigt:#! Dies wird Ihre schwerste Steuer."
+ },
+ "te_tax_lt_tt_levied": {
+  "en": "Your taxation law levies this tax.",
+  "de": "Ihr Steuergesetz erhebt diese Steuer."
+ },
+ "te_tax_lt_tt_step_down": {
+  "en": "Lowers this tax by one step, at once.",
+  "de": "Senkt diese Steuer sofort um einen Schritt."
+ },
+ "te_tax_lt_tt_step_max": {
+  "en": "Raises this tax to the highest rate your taxation law allows, at once.",
+  "de": "Erhöht diese Steuer sofort auf den höchsten Satz, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_tt_step_min": {
+  "en": "Lowers this tax to the lowest rate your taxation law allows, at once.",
+  "de": "Senkt diese Steuer sofort auf den niedrigsten Satz, den Ihr Steuergesetz erlaubt."
+ },
+ "te_tax_lt_tt_step_up": {
+  "en": "Raises this tax by one step, at once.",
+  "de": "Erhöht diese Steuer sofort um einen Schritt."
  },
  "te_tax_none": {
   "en": "None",
@@ -1719,6 +1919,14 @@
   "en": "Tax Code",
   "de": "Steuerordnung"
  },
+ "te_tax_tab_full_tt": {
+  "en": "The enacted tax code, the bills that would change it and its history. These are the journal entry's own panels.",
+  "de": "Die geltende Steuerordnung, die Vorlagen, die sie ändern würden, und ihr Verlauf. Dies sind die eigenen Tafeln des Journaleintrags."
+ },
+ "te_tax_tab_light_tt": {
+  "en": "The taxes in force and the range your taxation law allows each. These are the journal entry's own panels.",
+  "de": "Die geltenden Steuern und die Spanne, die Ihr Steuergesetz jeder von ihnen erlaubt. Dies sind die eigenen Tafeln des Journaleintrags."
+ },
  "te_tax_tab_locked_tt": {
   "en": "#b $je_tax_code$#!\\nNot open yet. It opens once:\\n",
   "de": "#b $je_tax_code$#!\\nNoch nicht geöffnet. Sie öffnet sich, sobald:\\n"
@@ -1864,8 +2072,8 @@
   "de": "Zieht die Vorlage zurück. Die Zusage jeder Interessengruppe und jeder Tag ihrer Beratung gehen verloren; eine später eingebrachte Vorlage beginnt von vorn. Ein offener Entwurf bleibt erhalten. Die Steuerordnung und die bereits beschlossenen Vorlagen bleiben unverändert."
  },
  "te_tax_tt_code_in_force": {
-  "en": "The legislated tax code is in force.",
-  "de": "Die Gesetzliche Steuerordnung gilt."
+  "en": "The tax code is in force.",
+  "de": "Die Steuerordnung gilt."
  },
  "te_tax_tt_counts_as_graduated": {
   "en": "The tax code taxes wages at 10% or more and dividends at least as heavily, as #b $law_graduated_taxation$#! does.",
