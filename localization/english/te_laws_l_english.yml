@@ -91,7 +91,7 @@
  law_legal_limbo:0 "Legal Limbo"
  law_legal_limbo_desc:0 "LGBTQ+ rights are neither criminalized nor protected, and authorities mostly ignore the issue. This leaves LGBTQ+ individuals vulnerable to [concept_lgbtq_rights_movement] gaps, leaving them [concept_discrimination] and mistreatment, with no legal recourse or support."
  law_limited_war:0 "Limited War"
- law_limited_war_desc:0 "War is fought for limited aims with proportionate force, sparing civilians and civilian [concept_infrastructure]. Crises are slow to become wars and the public follows the fighting from a distance, but our armies do not push deep. All nuclear strikes, strategic and tactical, are forbidden unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting."
+ law_limited_war_desc:0 "War is fought for limited aims with proportionate force, sparing civilians and civilian [concept_infrastructure]. Each [concept_war_goal] in a play we start costs twice the [Concept('concept_maneuver', '$concept_maneuvers$')], so we take less at once, and the world forgives aims that stay limited. Crises are slow to become wars and the public follows the fighting from a distance. All nuclear strikes, strategic and tactical, are forbidden unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting."
  law_linguistic_purity:0 "Linguistic Purity"
  law_linguistic_purity_desc:0 "The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity."
  law_littoral_defense:0 "Littoral Defense"

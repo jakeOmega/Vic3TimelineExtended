@@ -7,7 +7,8 @@ occupation, Humanitarian Regulations makes a trusted partner, Limited War keeps
 wars small. What these checks pin, none of which the engine would report:
 
 - every law keeps a modifier no sibling carries, so the group can't drift back
-  into one dial;
+  into one dial (Limited War's is about aims: war goals in plays it starts cost
+  more maneuvers);
 - the default law has an upside, and no law can close a ministry (the Ministry
   of War law's cap is 3, Foreign Affairs' 2);
 - the nuclear strike bans live on the laws as two registered booleans, the
@@ -125,7 +126,12 @@ class LawIdentityTests(unittest.TestCase):
     def test_signatures(self):
         self.assertLess(float(self.modifiers[WCF]["country_radicals_from_conquest_mult"]), 0)
         self.assertGreater(float(self.modifiers[HUMANITARIAN]["unit_recovery_rate_add"]), 0)
-        self.assertLess(float(self.modifiers[LIMITED]["unit_occupation_mult"]), 0)
+        # Limited War prices its aims: war goals in plays it starts cost more
+        # maneuvers, and limited aims draw less infamy.
+        self.assertGreater(
+            float(self.modifiers[LIMITED]["country_initiator_war_goal_maneuver_cost_mult"]), 0
+        )
+        self.assertLess(float(self.modifiers[LIMITED]["country_infamy_generation_mult"]), 0)
         self.assertGreater(
             float(self.modifiers[TOTAL]["military_formation_mobilization_speed_mult"]), 0
         )

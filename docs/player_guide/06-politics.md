@@ -97,7 +97,7 @@ War.
 | Traditional Rules of War | Start | A free hand. Armies lose 5% less morale and gain experience 25% faster, and nothing is forbidden. | What the other four offer |
 | War Crimes Forbidden | Wargaming | Conquest you mean to keep. 25% fewer radicals in the states you conquer and 25% less devastation. | Kill rate −0.05 |
 | Humanitarian Regulations | Nuclear Weapons | Allies and treaties. +6 diplomatic reputation, the most of any law, so other countries sign treaties with you and back your plays more readily; 10% more of your wounded survive; half the devastation. | Kill rate −0.05; no strategic nuclear strikes |
-| Limited War | Intercontinental Ballistic Missiles | Avoiding and containing war. Plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | Kill rate −0.1, occupation 20% slower, one level of Ministry of War, no nuclear strikes at all |
+| Limited War | Intercontinental Ballistic Missiles | Small wars for limited aims. You gain 25% less infamy, plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | War goals in plays you start cost twice the maneuvers, so each play takes fewer states; kill rate −0.05; no nuclear strikes at all |
 
 Patriotic, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
 Traditionalists and Theocrats Traditional Rules of War, Reformers and the Pious

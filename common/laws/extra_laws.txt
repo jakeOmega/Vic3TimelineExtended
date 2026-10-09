@@ -731,9 +731,10 @@ law_state_universal_heir = {
 #    Humanitarian R.  protection of the wounded, prisoners and civilians:
 #                     the best reputation (treaties, play support) and more
 #                     wounded saved; no strategic nuclear strikes.
-#    Limited War      proportionality: the slowest escalation, a calm home
-#                     front, the most UN Authority; slower occupation and
-#                     no nuclear strikes at all.
+#    Limited War      proportionality, limited aims: war goals in our own
+#                     plays cost twice the maneuvers, less infamy, the
+#                     slowest escalation, a calm home front, the most UN
+#                     Authority; no nuclear strikes at all.
 #  No law cuts a ministry cap by more than 1 (Ministry of War's law cap is 3,
 #  Foreign Affairs' 2), so none can close a ministry.
 #
@@ -908,9 +909,18 @@ law_limited_war = {
 
 	progressiveness = 50
 
-	# Proportionality: limited aims, limited means. Crises are slow to become
-	# wars and the public watches from a distance; armies don't push deep.
+	# Proportionality: limited aims, limited means. A war goal in a play we start
+	# costs twice the maneuvers, so one play takes fewer states, and aims kept
+	# limited draw less outrage. The aims are priced through maneuvers, not
+	# banned: gating the subjugation goals would mean REPLACE: copies of vanilla
+	# war goal types, since INJECT can't add to a `possible` block vanilla
+	# declares (read for diplomatic actions; owner's call, 2026-10-09). A cost
+	# increase can't push anything below zero; the
+	# Aggressive Coordination principles (-0.3, any tier) soften it. Crises
+	# are slow to become wars and the public watches from a distance.
 	modifier = {
+		country_initiator_war_goal_maneuver_cost_mult = 1
+		country_infamy_generation_mult = -0.25
 		country_aggressor_diplomatic_play_escalation_weekly_mult = -0.30
 		country_defender_diplomatic_play_escalation_weekly_mult = -0.30
 		# 1.14 battle war support: a professional war the public watches from a distance
@@ -918,11 +928,9 @@ law_limited_war = {
 		country_war_support_battles_decrease_mult = -0.2
 		state_pop_support_movement_anti_war_mult = -0.2
 		unit_devastation_mult = -0.75
-		unit_kill_rate_add = -0.1
-		unit_occupation_mult = -0.2
+		unit_kill_rate_add = -0.05
 		country_strategic_nuclear_strikes_forbidden_bool = yes
 		country_tactical_nuclear_strikes_forbidden_bool = yes
-		country_institution_ministry_of_war_max_investment_add = -1
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.25
 		country_diplomatic_reputation_add = 3
 		# UN authority's Policy pillar (un_redesign_design.md §0.10); members in good standing only.
