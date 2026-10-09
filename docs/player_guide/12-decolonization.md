@@ -83,7 +83,7 @@ Every section starts open except the explanations:
 |---|---|---|
 | Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. Under them is the Eligible Territories list, collapsed. |
 | International Pressure | Open | Your prestige, the condemning and supporting shares, and every great power that condemns or supports you. |
-| Colonial Programmes | Open | The three programs, each with its cost and an Enable or Disable button. |
+| Colonial Programmes | Open | The three programs, each with its costs, its level out of 3, and a minus and a plus button to lower or raise it. |
 | Decolonization | Open | How many territories are eligible, how many a Round Table could accept, and the largest; then the three decisions, each with a Review Options button. |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
 | How the Colonial Empire Works | Collapsed | The explanations. |
@@ -172,21 +172,33 @@ lists who condemns and who supports you.
 
 ## Colonial programs and decolonization decisions
 
-The Colonial Empire panels are where you act: three programs you switch on and
-off, and three ways to release colonies. The decisions panel adds the routes to
-a permanent empire.
+The Colonial Empire panels are where you act: three programs you run at a level
+from 0 to 3, and three ways to release colonies. The decisions panel adds the
+routes to a permanent empire.
 
 ### The three colonial programs
 
-Each program has an Enable and a Disable button and adds its value to the bar
-every month it runs. The values below are the base; your laws change them, and
-the program row shows your current figure with its costs.
+Each program runs at a level from 0 (off) to 3, set with the minus and plus
+buttons on its row. Level 3 is the full program and each level is a third of
+it: a third of its value to the bar every month, a third of its effects and a
+third of its running cost. The bar values below are the base at level 3; your
+laws change them, and the row shows what the program adds now and what one more
+level would add, with its costs.
 
-| Program | Requirement | Bar, per month | Costs and side effects |
+| Program | Requirement | Bar, per month at level 3 | Costs and side effects at level 3 |
 |---|---|---|---|
-| Colonial Development Investment | none | about +0.5 | One-off payment of 2% of GDP, then Colonial Development Spending, a running cost that scales with GDP. Your lower and middle strata expect a higher standard of living. Industrialists and Petite Bourgeoisie disapprove. Unincorporated states attract more migrants. |
-| Military Garrison | more than 300 authority | about +1.0 | Costs 300 authority for as long as it runs and 5 infamy when started. Infamy decays 20% slower. Small losses of bureaucracy and prestige from army projection, higher borrowing costs, weaker Intelligentsia and Trade Unions. |
-| Cultural Assimilation Programme | none | about +0.7 | One-off payment of 1% of GDP, −15% bureaucracy and 100 authority while running. Assimilation and conversion speed up, but movements radicalize more, and colonial states lose some qualifications while it runs. |
+| Colonial Development Investment | none | about +0.5 | Colonial Development Spending, a weekly cost of 5% a year of your colonies' GDP for each level, counted as at least 1% of your own GDP. Each step up also costs a one-off half a year of one level's spending. Your lower and middle strata expect a higher standard of living. Industrialists and Petite Bourgeoisie disapprove when you start it. Unincorporated states attract more migrants. |
+| Military Garrison | more than 100 authority for each step up | about +1.0 | 100 authority a level for as long as it runs, and 5 infamy when you start it. Infamy decays 20% slower. Small losses of bureaucracy and prestige from army projection, higher borrowing costs, weaker Intelligentsia and Trade Unions. |
+| Cultural Assimilation Programme | none | about +0.7 | Each step up costs a one-off quarter of a year of one Investment level's spending. −15% bureaucracy and 100 authority while running. Assimilation and conversion speed up, but movements radicalize more, and colonial states lose some qualifications while it runs. |
+
+Investment's cost follows the size of what you develop, not of your whole
+economy. If your colonies produce a tenth of your GDP, each level costs about
+0.5% of your GDP a year; a great power with a couple of small colonies pays
+little. Raise a program only while the bar can still use it: the bar's change
+is capped at about 1.67 a month, and the bar stops at 100, so a level that
+pushes the change past the cap, or adds to a full bar that is not falling, is
+paid for and does nothing. The Monthly limit row in Why Stability Is Moving
+shows how much of the change the cap is cutting off.
 
 Laws pull the programs apart. Outlawed Dissent and the harshest minority-rights
 laws strengthen the garrison, while Protected Speech and the Protection and
@@ -194,7 +206,8 @@ Affirmative Action minority-rights laws weaken it. Voting franchises strengthen
 investment. Assimilatory, Ancestral and Cultural Citizenship and the Cultural
 Assimilation minority-rights law strengthen assimilation, and Universal
 Citizenship weakens it. The program you run longest also decides how the empire
-ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)).
+ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)); a month at
+a lower level counts as a third of a month for each level.
 
 ### Releasing colonies
 
@@ -250,8 +263,9 @@ of Positive Colonial Development.
 ## How a colonial empire ends
 
 The journal entry ends in one of four ways. The event you get when the empire
-holds or collapses depends on the program you ran longest, counting only one
-that ran for more than 24 months.
+holds or collapses depends on the program you ran longest, counting a month at
+level 1 or 2 as a third or two thirds of a month, and only a program with more
+than 24 months.
 
 | Ending | Condition | Result |
 |---|---|---|
@@ -337,8 +351,15 @@ in the same strategic region, and player great powers, get a notification.
 
 ## How the AI runs its colonies
 
-The AI plays by the same rules and uses the same programs and decisions. An AI
-that isn't a great power leans strongly toward Planned Full Decolonization, more
+The AI plays by the same rules and uses the same programs and decisions. Once a
+month it reviews its programs. It lowers a program by a level when that level is
+wasted (without it, the bar's change would still reach the monthly limit, or the
+bar is full and would stay full) or when it can no longer pay for it: in
+default, or with weekly income below its expenses for Investment, and short of
+authority or bureaucracy for the other two. A program cut for cost stays down
+for a year. Otherwise, while the bar's change is below the limit, it raises one
+program a level if it can afford the step, preferring the garrison when several
+colonies are badly unaccepted. An AI that isn't a great power leans strongly toward Planned Full Decolonization, more
 so when three great powers condemn it or three of its colonies are badly
 unaccepted. AI great powers are less willing, and no AI plans full
 decolonization while two of its colonies are well accepted. In events, AI
