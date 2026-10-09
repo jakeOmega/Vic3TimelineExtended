@@ -27,6 +27,7 @@ TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_demog_triggers.txt"
 EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_effects.txt"
 INH_EFFECTS = ROOT / "common" / "scripted_effects" / "te_inheritance_effects.txt"
 INH_VALUES = ROOT / "common" / "script_values" / "te_inheritance_values.txt"
+DISPLAY_VALUES = ROOT / "common" / "script_values" / "te_demog_display_values.txt"
 INH_ON_ACTIONS = ROOT / "common" / "on_actions" / "te_inheritance_on_actions.txt"
 DEMOG_ON_ACTIONS = ROOT / "common" / "on_actions" / "te_demog_on_actions.txt"
 WEALTH_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_wealth_effects.txt"
@@ -331,7 +332,7 @@ class _Engine:
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS])
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says
@@ -566,6 +567,21 @@ class TestCohortScript(unittest.TestCase):
         for b, ages in enumerate(BANDS):
             self.close(eng.vars[f"te_dg_bf{b}"], sum(f for a, f, _m in rows if a in ages), rel=1e-4, what=f"band {b}")
             self.close(eng.vars[f"te_dg_bm{b}"], sum(m for a, _f, m in rows if a in ages), rel=1e-4, what=f"band {b}")
+
+    def test_the_pyramid_scale_is_stored_with_the_figures(self):
+        """Review on #830: the bars read te_dg_pyr_max, written once at the census, instead of a
+        script value that reads all 36 bands in every bar's range each frame."""
+        eng = _engine_for(self.INP, 1836, self.POP)
+        eng.call("te_demog_seed")
+        bands = [eng.vars[f"te_dg_b{s}{b}"] for s in "fm" for b in range(18)]
+        self.assertAlmostEqual(eng.vars["te_dg_pyr_max"], max(bands))
+        gui = _text(ROOT / "gui" / "te_demographics_widgets.gui")
+        self.assertNotIn("ScriptValue('te_demog_pyramid_max')", gui)
+        self.assertNotIn("ScriptValue('te_demog_state_pyramid_max')", gui)
+        self.assertEqual(gui.count("Var('te_dg_pyr_max').GetValue"), 40)
+        census = _block(_text(EFFECTS), "te_demog_country_census")
+        self.assertGreater(census.index("set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }"),
+                           census.index("te_demog_project = yes"), "after the outline, which shares the scale")
 
     def test_seed_figures_match_the_model(self):
         eng, ring = self.seed_both()
@@ -1284,7 +1300,19 @@ class TestCountry(unittest.TestCase):
         body = _block(_text(EFFECTS), "te_demog_country_census")
         for m in re.finditer(r"every_scope_state = \{", body):
             self.assertIn("te_demog_has_census = yes", body[m.end():m.end() + 200])
-        self.assertIn("ordered_scope_state", body)
+        self.assertIn("te_demog_country_lists = yes", body)
+        lists = _block(_text(EFFECTS), "te_demog_country_lists")
+        for m in re.finditer(r"ordered_scope_state = \{", lists):
+            self.assertIn("te_demog_has_census = yes", lists[m.end():m.end() + 200])
+
+    def test_a_revolutions_winner_gets_its_lists_back(self):
+        """Review on #830: the winner inherits te_dg_census_year but no variable list, so the
+        civil-war repair draws the lists again (behind the rule and a census) instead of leaving the
+        States table empty until 31 December."""
+        body = _block(_text(INH_EFFECTS), "inh_repair_after_civil_war")
+        call = body.index("te_demog_country_lists = yes")
+        self.assertLess(body.rindex("te_demog_cohorts_run = yes", 0, call), call)
+        self.assertLess(body.rindex("has_variable = te_dg_census_year", 0, call), call)
 
     def test_projection_for_players_only(self):
         body = _block(_text(EFFECTS), "te_demog_country_census")
@@ -1438,21 +1466,23 @@ class TestCountry(unittest.TestCase):
         self.assertAlmostEqual(pattern((50_000_000, 30_000_000))[0], 80 ** 2 / (50 ** 2 + 30 ** 2), places=4)
 
     def test_the_lists(self):
-        """te_dg_states: by people, at most 40; te_dg_cities: the three largest cities by the global
-        rank, a state with no rank or no census left out, a rank of 1 the largest. Each list is
-        cleared only once it exists."""
+        """te_dg_states: by the people the last census counted (the figure each row shows, not the
+        live population), at most 40; te_dg_cities: the three largest cities by the global rank, a
+        state with no rank or no census left out, a rank of 1 the largest. Each list is cleared
+        only once it exists."""
         states = self.three()
-        states.append(dict(states[0], state_population=7e6))                 # the largest, with no rank
+        # the largest at its census, though fewer live today; no rank
+        states.append(dict(states[0], te_dg_people=7e6, state_population=1e5))
         del states[3]["state_city_size_rank"]
-        small = [dict(states[2], state_population=float(1000 + i)) for i in range(45)]
+        small = [dict(states[2], te_dg_people=float(1000 + i), state_population=float(1000 + i)) for i in range(45)]
         split = {"state_population": 9e6, "state_city_size_rank": 1.0}        # ranked, no walk or census yet
         eng = self.country(states + small + [split])
         self.assertNotIn("te_dg_cities", eng.lists, "the first census clears no list")
         eng.call("te_demog_country_census")
         listed = eng.lists["te_dg_states"]
         self.assertEqual(len(listed), 40)
-        self.assertEqual([s["state_population"] for s in listed[:4]], [7e6, 4e6, 1.5e6, 6e5])
-        self.assertEqual([s["state_population"] for s in listed[4:7]], [1044.0, 1043.0, 1042.0])
+        self.assertEqual([s["te_dg_people"] for s in listed[:4]], [7e6, 4e6, 1.5e6, 6e5])
+        self.assertEqual([s["te_dg_people"] for s in listed[4:7]], [1044.0, 1043.0, 1042.0])
         cities = eng.lists["te_dg_cities"]
         self.assertEqual([s["state_city_size_rank"] for s in cities], [3.0, 12.0, 40.0])
         eng.call("te_demog_country_census")   # a refill, not an append
@@ -1640,6 +1670,30 @@ class TestWealth(unittest.TestCase):
         self.assertIn("amendment_perpetual_trusts", laws)
         self.assertNotIn("te_inh_title_continuity", laws, "the pin is the states' and the display's, not the law's")
 
+    def test_the_shown_target_follows_a_law_change_at_once(self):
+        """Review on #830: the stored national target is summed on 31 December, but a law or a tax
+        on wealth moves every state's target alike, so the shown target moves by the change since
+        then; continuity of title still pins it at the score."""
+        cases = (
+            # law now, tax now, pinned -> shown
+            (75.0, -5.0, False, 60.0),   # nothing changed since the refresh
+            (85.0, -5.0, False, 70.0),   # the law term rose by 10
+            (75.0, 0.0, False, 65.0),    # Graduated Taxation repealed: +5
+            (100.0, 0.0, False, 90.0),
+            (40.0, -5.0, False, 25.0),
+            (5.0, -10.0, False, 0.0),    # clamped at 0
+            (85.0, -5.0, True, 33.0),    # continuity of title: the score
+        )
+        for law, tax, pinned, shown in cases:
+            eng = _CountryEngine(fixtures={"te_inh_law_amendment_target": law, "te_demog_wc_tax_term": tax})
+            eng.values.update(_raw_blocks([INH_VALUES]))
+            eng.fixtures["te_inh_law_amendment_target"] = law
+            eng.vars.update(te_dg_wc_target=60.0, te_dg_wc_t_law=25.0, te_dg_wc_t_tax=-5.0, te_inh_concentration=33.0)
+            if pinned:
+                eng.vars["te_inh_title_continuity"] = 1.0
+            eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
+            self.assertAlmostEqual(eng.vars["shown"], shown, msg=(law, tax, pinned))
+
     def test_game_start_seeds_every_state_then_the_national_figure(self):
         body = _block(_text(INH_EFFECTS), "te_inh_game_start")
         self.assertLess(body.index("te_demog_walks = yes"), body.index("te_demog_wc_seed_state = yes"))
@@ -1664,6 +1718,8 @@ class TestWealth(unittest.TestCase):
         lost = _block(on_actions, "te_demog_lost_war")
         self.assertIn("te_demog_wc_shock = { AMOUNT = -5 }", lost)
         self.assertNotIn("te_demog_cohorts_run", lost)
+        # owner's ruling on #830: only a loser a war goal was enforced against
+        self.assertLess(lost.index("exists = scope:victim_of_wargoal"), lost.index("te_demog_wc_shock"))
         banking = _text(BANKING)
         sites = [m.end() for m in re.finditer(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", banking)]
         self.assertEqual(len(sites), 2)
@@ -1771,7 +1827,10 @@ class TestWealth(unittest.TestCase):
         wa, wb = 30 + 0.9 * 100 * 0.1, 10 + 0.1 * 100 * 0.1
         mean = lambda x, y: (x * wa + y * wb) / (wa + wb)   # noqa: E731
         self.assertAlmostEqual(v["te_inh_concentration"], mean(80, 40))
-        self.assertAlmostEqual(v["te_dg_wc_target"], mean(70, 50))
+        # each state's target is rewritten from the law and taxes as they stand (the fixture's
+        # 70 and 50 are stale), and the national target is their weighted mean
+        self.assertNotEqual((a["te_dg_wc_target"], b["te_dg_wc_target"]), (70.0, 50.0))
+        self.assertAlmostEqual(v["te_dg_wc_target"], mean(a["te_dg_wc_target"], b["te_dg_wc_target"]))
         self.assertEqual(v["applied"], v["te_inh_concentration"], "the modifiers read this year's figure")
         self.assertAlmostEqual(v["te_dg_wc_t_law"], 25.0)
         self.assertAlmostEqual(v["te_dg_wc_t_land"], 4.0)
@@ -1780,6 +1839,9 @@ class TestWealth(unittest.TestCase):
         self.assertAlmostEqual(v["te_dg_wc_t_own"], mean(own_a, own_b))
         self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(5, -5))
         self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
+        # with no state clamped, the five bars add up to the target above them
+        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "tax"))
+        self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
         self.assertIs(v["te_dg_wc_top"], a)
         self.assertIs(v["te_dg_wc_bottom"], b)
         groups = [(a[f"te_dg_n_{g}"] + b[f"te_dg_n_{g}"], a[f"te_dg_y_{g}"] + b[f"te_dg_y_{g}"]) for g in ("lo", "mi", "up")]

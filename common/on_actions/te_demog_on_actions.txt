@@ -69,7 +69,10 @@ te_demog_on_game_started = {
 
 # Root = a country on the losing side of a war, capitulations included (scope:war the war;
 # Grand Monuments' war commissions use the same hook, monument_events_on_actions.txt). A lost
-# war takes 5 from every state's Wealth Concentration (spec §4.2), whatever the rule.
+# war that cost it a war goal takes 5 from every state's Wealth Concentration (spec §4.2),
+# whatever the rule. scope:victim_of_wargoal exists only when one of the winners' war goals
+# was imposed on this country, so a co-belligerent that dropped out having given up nothing
+# is spared (owner's ruling on #830); long wars have their own shock, te_demog_wc_war_shock.
 on_lost_war = {
 	on_actions = {
 		te_demog_lost_war
@@ -78,6 +81,9 @@ on_lost_war = {
 
 te_demog_lost_war = {
 	effect = {
-		te_demog_wc_shock = { AMOUNT = -5 }
+		if = {
+			limit = { exists = scope:victim_of_wargoal }
+			te_demog_wc_shock = { AMOUNT = -5 }
+		}
 	}
 }

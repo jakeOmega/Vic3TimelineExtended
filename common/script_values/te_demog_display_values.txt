@@ -133,7 +133,9 @@ te_demog_trend_urban_share = {
 # bands (te_dg_cbf<b>, te_dg_cbm<b>) and, while the player has one, the 36 of
 # the outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>), so both share
 # one scale and neither runs off the bar. At least 1, so a bar never has an
-# empty range. `min` floors the running value: a running maximum.
+# empty range. `min` floors the running value: a running maximum. The census
+# stores it once (te_dg_pyr_max) for the panel, whose 72 bar ranges would
+# otherwise each read the 72 bands every frame.
 # ----------------------------------------------------------------------------
 te_demog_pyramid_max = {
 	value = 1
@@ -222,7 +224,8 @@ te_demog_pyramid_max = {
 # (te_dg_bf<b>, te_dg_bm<b>, people), at least 1 so a bar never has an empty
 # range. Guarded by te_dg_year, which the state's census writes together with
 # its bands. A state's pyramid has no outline (the projection is the player's
-# country's), so unlike te_demog_pyramid_max there is no second block.
+# country's), so unlike te_demog_pyramid_max there is no second block. The
+# state's census stores it once (te_dg_pyr_max, te_demog_state_figures).
 # ----------------------------------------------------------------------------
 te_demog_state_pyramid_max = {
 	value = 1

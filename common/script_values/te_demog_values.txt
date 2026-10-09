@@ -202,6 +202,23 @@ te_demog_wc_inequality_term = {
 	max = 15
 }
 
+# State scope: the people its last census counted, the States table's sort key and the
+# figure each row shows (te_demog_country_lists).
+te_demog_census_people = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_people }
+		value = var:te_dg_people
+	}
+}
+
+# Country scope: the law term, #822's law and amendments around 50 (the panel's bar and
+# te_inh_concentration_target read it live; te_demog_wc_national stores the one it summed).
+te_demog_wc_law_term = {
+	value = te_inh_law_amendment_target
+	subtract = 50
+}
+
 # Country scope: the tax term. Graduated Taxation -5; the legislated tax code's dividend
 # rate x 20 when that rule is on (a 25% dividend tax -5); at most -10 in all.
 te_demog_wc_tax_term = {

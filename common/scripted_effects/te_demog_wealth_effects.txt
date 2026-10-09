@@ -139,7 +139,8 @@ te_demog_gini_from_locals = {
 #
 # Shocks jump the scores instead of moving the targets (Scheidel's levellers):
 # a year at war with heavy dead -1, at most -10 until a year ends in peace
-# (te_demog_wc_war_shock); a lost war -5 (on_lost_war, te_demog_on_actions.txt);
+# (te_demog_wc_war_shock); a lost war that cost it a war goal -5 (on_lost_war,
+# te_demog_on_actions.txt);
 # a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
 # (banking_cycle_effects.txt); devastation, in the state hit, up to -10 a year
 # (te_demog_wc_state_yearly). Nothing here depends on the demographics rule.
@@ -277,7 +278,10 @@ te_demog_wc_civil_war_won = {
 # each state's share of the country's bureaucrats. Under one level of property
 # in all, the states weigh by people; with no people either, one each. A
 # country with no scored state keeps its own figure (#822's drift in
-# te_inh_yearly_update) and only has its modifiers put back.
+# te_inh_yearly_update) and only has its modifiers put back. Each scored
+# state's target is rewritten here too, from the law and taxes as they stand,
+# so a state that pulsed before a law change does not hold the national
+# target back until its next pulse.
 te_demog_wc_national = {
 	# the scored states: how many, their state-owned levels, bureaucrats,
 	# owned and cooperative levels, and people
@@ -345,6 +349,8 @@ te_demog_wc_national = {
 				limit = { local_var:te_dg_wc_mode = 1 }
 				set_local_variable = { name = te_dg_wc_w value = var:te_dg_walk_pop }
 			}
+			# the state's target as the law and taxes stand now, not as they stood at its pulse
+			set_variable = { name = te_dg_wc_target value = te_demog_wc_target }
 			change_local_variable = { name = te_dg_wc_wsum add = local_var:te_dg_wc_w }
 			change_local_variable = { name = te_dg_wc_s_score add = { value = var:te_dg_wc multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_target add = { value = var:te_dg_wc_target multiply = local_var:te_dg_wc_w } }
@@ -361,7 +367,7 @@ te_demog_wc_national = {
 		# every weighting sums to at least 1
 		set_variable = { name = te_inh_concentration value = { value = local_var:te_dg_wc_s_score divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
 		set_variable = { name = te_dg_wc_target value = { value = local_var:te_dg_wc_s_target divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
-		set_variable = { name = te_dg_wc_t_law value = { value = te_inh_law_amendment_target subtract = 50 } }
+		set_variable = { name = te_dg_wc_t_law value = te_demog_wc_law_term }
 		set_variable = { name = te_dg_wc_t_land value = { value = local_var:te_dg_wc_s_land divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_own value = { value = local_var:te_dg_wc_s_own divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }

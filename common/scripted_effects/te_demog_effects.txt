@@ -54,6 +54,8 @@
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
 #                       the country's TFR weight), each with last year's in
 #                       te_dg_prev_<name> from the second census on
+#   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
+#                       its outline), stored at the census for the panel's bars
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -889,6 +891,42 @@ te_demog_share_war_dead = {
 	}
 }
 
+# THIS = ROOT = a country with a census: the variable lists the panel draws, the states
+# by the people their last census counted (the figure each row shows), at most 40, and
+# the three biggest cities by the global rank (negated: ordered_scope_state takes the
+# highest first). A city needs a census too: a state split off this year has a rank before
+# its first walk, and the panel's row reads its te_dg_urban. From the country census, and
+# from the civil-war repair: a revolution's winner inherits te_dg_census_year but no list.
+te_demog_country_lists = {
+	if = {
+		limit = { has_variable_list = te_dg_states }
+		clear_variable_list = te_dg_states
+	}
+	ordered_scope_state = {
+		limit = { te_demog_has_census = yes }
+		order_by = te_demog_census_people
+		max = 40
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_states target = scope:te_dg_it } }
+	}
+	if = {
+		limit = { has_variable_list = te_dg_cities }
+		clear_variable_list = te_dg_cities
+	}
+	ordered_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			has_variable = state_city_size_rank
+		}
+		order_by = te_demog_neg_city_rank
+		max = 3
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_cities target = scope:te_dg_it } }
+	}
+}
+
 # THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Task 12 adds to it.
 # The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule, and
 # then they are cleared: the states took theirs month by month while the census ran
@@ -1153,6 +1191,8 @@ te_demog_state_figures = {
 	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	set_local_variable = { name = te_dg_born value = var:te_dg_births }
 	te_demog_set_trend = yes
+	# the state pyramid's scale, once here instead of in every bar's range each frame
+	set_variable = { name = te_dg_pyr_max value = te_demog_state_pyramid_max }
 }
 
 # THIS = a state or a country, before it stores a new set of figures: sets the local
@@ -1328,37 +1368,7 @@ te_demog_country_census = {
 		else = {
 			set_variable = { name = te_dg_urban_label value = 3 }
 		}
-		# the lists the panel draws: the states by people, the three biggest cities by the
-		# global rank (negated: ordered_scope_state takes the highest first). A city needs a
-		# census too: a state split off this year has a rank before its first walk, and the
-		# panel's row reads its te_dg_urban.
-		if = {
-			limit = { has_variable_list = te_dg_states }
-			clear_variable_list = te_dg_states
-		}
-		ordered_scope_state = {
-			limit = { te_demog_has_census = yes }
-			order_by = state_population
-			max = 40
-			check_range_bounds = no
-			save_temporary_scope_as = te_dg_it
-			root = { add_to_variable_list = { name = te_dg_states target = scope:te_dg_it } }
-		}
-		if = {
-			limit = { has_variable_list = te_dg_cities }
-			clear_variable_list = te_dg_cities
-		}
-		ordered_scope_state = {
-			limit = {
-				te_demog_has_census = yes
-				has_variable = state_city_size_rank
-			}
-			order_by = te_demog_neg_city_rank
-			max = 3
-			check_range_bounds = no
-			save_temporary_scope_as = te_dg_it
-			root = { add_to_variable_list = { name = te_dg_cities target = scope:te_dg_it } }
-		}
+		te_demog_country_lists = yes
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
 		te_demog_set_trend = yes
@@ -1374,6 +1384,8 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
 			te_demog_project = yes
 		}
+		# the pyramid's scale, once here instead of in every bar's range each frame
+		set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }
 		# one sample a year of the figures above for the history charts (te_demog_history_effects.txt)
 		if = {
 			limit = { te_history_country_is_tracked = yes }

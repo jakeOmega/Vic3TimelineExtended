@@ -262,7 +262,9 @@ te_inh_refresh_rural_effects = {
 # continues the nation: a revolution's winner takes the loser's score and
 # Posthumous Title answer. A left revolution that wins levels the great
 # fortunes (te_demog_wc_civil_war_won); then the national figure follows the
-# winner's states, which carry their scores, and the modifiers come back.
+# winner's states, which carry their scores, and the modifiers come back. The
+# census's state and city lists are variable lists, which the winner does not
+# inherit, so they are drawn again at once (te_demog_country_lists).
 inh_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -282,4 +284,11 @@ inh_repair_after_civil_war = {
 	}
 	te_demog_wc_civil_war_won = yes
 	te_demog_wc_national = yes
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			has_variable = te_dg_census_year
+		}
+		te_demog_country_lists = yes
+	}
 }

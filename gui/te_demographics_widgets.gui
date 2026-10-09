@@ -264,7 +264,7 @@ types te_demographics_widgets
 	### Blocks: "band_label" (the ages), "men_now", "women_now", "men_next",
 	### "women_next" (each a `value`), "next_visible" (the outline's gate),
 	### "men_range" and "women_range" (min and max; the country's
-	### te_demog_pyramid_max by default, so a state's pyramid overrides them),
+	### te_dg_pyr_max by default, so a state's pyramid overrides them),
 	### and "row_tooltip".
 	type te_demog_pyramid_row = flowcontainer {
 		direction = horizontal
@@ -292,7 +292,7 @@ types te_demographics_widgets
 					alwaystransparent = yes
 					color = { 0.36 0.56 0.82 0.35 }
 					block "men_range" {
-						min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') ) )]"
+						min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 						max = 0
 					}
 					block "men_next" {}
@@ -309,7 +309,7 @@ types te_demographics_widgets
 				alwaystransparent = yes
 				color = { 0.36 0.56 0.82 1.0 }
 				block "men_range" {
-					min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				block "men_now" {}
@@ -347,7 +347,7 @@ types te_demographics_widgets
 					color = { 0.82 0.42 0.44 0.35 }
 					block "women_range" {
 						min = 0
-						max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') )]"
+						max = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 					}
 					block "women_next" {}
 				}
@@ -364,7 +364,7 @@ types te_demographics_widgets
 				color = { 0.82 0.42 0.44 1.0 }
 				block "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_pyramid_max') )]"
+					max = "[FixedPointToFloat( GetPlayer.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				block "women_now" {}
 			}
@@ -861,8 +861,8 @@ types te_demographics_widgets
 	}
 
 	### The population pyramid: 18 five-year bands, 85 and over at the top, men
-	### left and women right, all on one scale (te_demog_pyramid_max, the largest
-	### band now or in the outline). The outline twenty years ahead shows while
+	### left and women right, all on one scale (te_dg_pyr_max, te_demog_pyramid_max
+	### stored at the census: the largest band now or in the outline). The outline twenty years ahead shows while
 	### the player's country has one (te_demog_outline_ready_sgui).
 	type te_demog_sec_pyramid = flowcontainer {
 		direction = vertical
@@ -1511,13 +1511,13 @@ types te_demographics_widgets
 						text = "te_demog_wc_t_law"
 					}
 					blockoverride "term_left" {
-						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue, '(CFixedPoint)0' ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_law_term'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "term_right" {
-						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue, '(CFixedPoint)0' ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_law_term'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "row_value" {
-						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_law').GetValue|+0]"
+						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_law_term')|+0]"
 					}
 				}
 				te_demog_term_row = {
@@ -1571,17 +1571,22 @@ types te_demographics_widgets
 						text = "te_demog_wc_t_tax"
 					}
 					blockoverride "term_left" {
-						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue, '(CFixedPoint)0' ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_tax_term'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "term_right" {
-						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue, '(CFixedPoint)0' ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_tax_term'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "row_value" {
-						text = "[GetPlayer.MakeScope.Var('te_dg_wc_t_tax').GetValue|+0]"
+						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_tax_term')|+0]"
 					}
 				}
 
+				te_demog_note = {
+					visible = "[GetScriptedGui('te_demog_wc_pinned_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_demog_wc_pinned_note"
+				}
 				te_demog_figure_row = {
+					visible = "[GetScriptedGui('te_demog_wc_top_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					tooltip = "te_demog_wc_top_tt"
 					blockoverride "row_label" {
 						text = "te_demog_wc_top"
@@ -1591,6 +1596,7 @@ types te_demographics_widgets
 					}
 				}
 				te_demog_figure_row = {
+					visible = "[GetScriptedGui('te_demog_wc_bottom_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					tooltip = "te_demog_wc_bottom_tt"
 					blockoverride "row_label" {
 						text = "te_demog_wc_bottom"
@@ -2380,8 +2386,8 @@ types te_demographics_widgets
 	}
 
 	### The state's pyramid: the same row as the country's, 85 and over at the
-	### top, on the state's own scale (te_demog_state_pyramid_max, the largest
-	### of its 36 bands) and without the outline (next_visible off, so the
+	### top, on the state's own scale (te_dg_pyr_max, te_demog_state_pyramid_max
+	### stored at its census: the largest of its 36 bands) and without the outline (next_visible off, so the
 	### outline bars are never drawn). The overrides of men_range and
 	### women_range reach both bars of each side.
 	type te_state_demog_pyramid = flowcontainer {
@@ -2452,12 +2458,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm17').GetValue ) )]"
@@ -2477,12 +2483,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm16').GetValue ) )]"
@@ -2502,12 +2508,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm15').GetValue ) )]"
@@ -2527,12 +2533,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm14').GetValue ) )]"
@@ -2552,12 +2558,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm13').GetValue ) )]"
@@ -2577,12 +2583,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm12').GetValue ) )]"
@@ -2602,12 +2608,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm11').GetValue ) )]"
@@ -2627,12 +2633,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm10').GetValue ) )]"
@@ -2652,12 +2658,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm9').GetValue ) )]"
@@ -2677,12 +2683,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm8').GetValue ) )]"
@@ -2702,12 +2708,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm7').GetValue ) )]"
@@ -2727,12 +2733,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm6').GetValue ) )]"
@@ -2752,12 +2758,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm5').GetValue ) )]"
@@ -2777,12 +2783,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm4').GetValue ) )]"
@@ -2802,12 +2808,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm3').GetValue ) )]"
@@ -2827,12 +2833,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm2').GetValue ) )]"
@@ -2852,12 +2858,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm1').GetValue ) )]"
@@ -2877,12 +2883,12 @@ types te_demographics_widgets
 					visible = no
 				}
 				blockoverride "men_range" {
-					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue ) )]"
 					max = 0
 				}
 				blockoverride "women_range" {
 					min = 0
-					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+					max = "[FixedPointToFloat( State.MakeScope.Var('te_dg_pyr_max').GetValue )]"
 				}
 				blockoverride "men_now" {
 					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm0').GetValue ) )]"
@@ -2979,7 +2985,7 @@ types te_demographics_widgets
 							blockoverride "background" {}
 							blockoverride "frame" {}
 							blockoverride "values" {
-								value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.Var('te_dg_wc_target').GetValue ) )]"
+								value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.ScriptValue('te_demog_wc_target') ) )]"
 								min = 0
 								max = 100
 							}
@@ -2990,7 +2996,7 @@ types te_demographics_widgets
 						blockoverride "background" {}
 						blockoverride "frame" {}
 						blockoverride "values" {
-							value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.Var('te_dg_wc_target').GetValue ) )]"
+							value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.ScriptValue('te_demog_wc_target') ) )]"
 							min = 0
 							max = 100
 						}

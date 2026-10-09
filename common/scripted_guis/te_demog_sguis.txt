@@ -10,7 +10,7 @@
 # is valid once te_dg_census_year exists, and every figure, band, list and
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
-# or does anything). The first four are country scope, rooted at the player's
+# or does anything). The first seven are country scope, rooted at the player's
 # country; the three at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14):
 # GuiScope.SetRoot( State.MakeScope ).End.
@@ -23,6 +23,45 @@
 te_demog_wealth_ready_sgui = {
 	scope = country
 	is_shown = { has_variable = te_dg_wc_target }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The most and least concentrated states (te_dg_wc_top, te_dg_wc_bottom) are
+# chosen at the national refresh. Until the next one the state can have been
+# ceded, released or merged away (destroyed: has_variable stays true), so each
+# row shows only while its state exists and is still the country's.
+te_demog_wc_top_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_wc_top
+		exists = var:te_dg_wc_top
+		var:te_dg_wc_top = { owner = ROOT }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_demog_wc_bottom_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_wc_bottom
+		exists = var:te_dg_wc_bottom
+		var:te_dg_wc_bottom = { owner = ROOT }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Continuity of title (inheritance_events.6) pins every state's target at its
+# score, so the term bars, which show the unpinned terms, no longer add up to
+# the target above them; a note under them says why.
+te_demog_wc_pinned_sgui = {
+	scope = country
+	is_shown = { has_variable = te_inh_title_continuity }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
