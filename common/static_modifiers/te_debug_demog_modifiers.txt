@@ -9,3 +9,24 @@ te_demog_debug_working_adults = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_working_adult_ratio_add = 0.05
 }
+
+# Fast mode (te_debug_demog.1 options h-k; common/scripted_effects/te_demog_fast_effects.txt).
+# Each field is +1 and the multiplier sets it. State: the engine's births and deaths at K
+# times what they would be (te_demog_fast_refresh_rates sizes each state's multiplier).
+te_demog_fast_births = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_birth_rate_mult = 1
+}
+
+te_demog_fast_deaths = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_mortality_mult = 1
+}
+
+# Country: research, technology spread and construction at K times (multiplier K - 1).
+te_demog_fast_speed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_tech_research_speed_mult = 1
+	country_tech_spread_mult = 1
+	state_construction_mult = 1
+}

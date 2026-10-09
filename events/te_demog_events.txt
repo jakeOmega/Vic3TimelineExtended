@@ -6,6 +6,8 @@
 #  Effects: common/scripted_effects/te_demog_effects.txt.
 #
 #    1       hidden: every state's first census at game start
+#    2-3     hidden: fast mode's census clock (console only): each state's
+#            step, then each country's census a day later
 # ======================================================================
 
 # ======================================================================
@@ -19,5 +21,42 @@ te_demog_events.1 = {
 
 	immediate = {
 		te_demog_country_game_start = yes
+	}
+}
+
+# ======================================================================
+#  2 – Fast mode: a state's step (hidden)
+#  The census clock's step (te_demog_clock_tick, te_demog_fast_effects.txt;
+#  started only from the console) fires this in every state, so ROOT is the
+#  state and the fast rate modifiers' multipliers read it.
+# ======================================================================
+te_demog_events.2 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		te_demog_clock_on = yes
+	}
+
+	immediate = {
+		te_demog_state_clock_step = yes
+	}
+}
+
+# ======================================================================
+#  3 – Fast mode: a country's census (hidden)
+#  A day after the clock's step, once every state has stepped; ROOT is the
+#  country (te_demog_country_census writes its bands to it).
+# ======================================================================
+te_demog_events.3 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		te_demog_clock_on = yes
+	}
+
+	immediate = {
+		te_demog_country_clock_census = yes
 	}
 }

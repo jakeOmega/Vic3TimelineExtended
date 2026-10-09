@@ -19,6 +19,11 @@ million people or more at each census, every 31 December, `key=value` pairs spli
 (te_debug_demog_census_line in common/scripted_effects/te_debug_demog_effects.txt). People
 counts are millions_thousands_units groups (demographics_harness._ungroup reads them).
 
+Lines from fast mode (te_debug_demog.1 options h-k, common/scripted_effects/te_demog_fast_effects.txt)
+carry the census clock's year, which runs ahead of the calendar; their `date` (the calendar date, in
+lines logged since fast mode) matches them to saves. Their `lag` counts the country's states not at the
+census year: above 0, the clock's step events ran after the census.
+
 Prints the world per year (people, and TFR, life expectancy and the age shares weighted by
 people), each country every --step years (the first and last year logged too), and the anchors
 of spec §2.2-§2.4 and the plan's owner checks beside the logged figures. The world is the sum of
@@ -43,7 +48,11 @@ from demographics_harness import _ungroup  # noqa: E402
 PREFIX = "TE_DEMOG_CENSUS: "
 FIELDS = ("tag", "year", "people", "median", "tfr", "e0", "e65", "imr", "cbr", "cdr", "mig", "young",
           "working", "old", "sex_balance", "gini", "wc", "primacy", "crisis", "devastation", "turmoil")
-OPTIONAL = ("mig_raw",)   # fields later lines carry: per 1,000 people, signed
+OPTIONAL = ("mig_raw", "lag")   # fields later lines carry: mig_raw per 1,000 people, signed; lag a count
+TEXT_OPTIONAL = ("date",)       # the calendar date, e.g. "January 8, 2069"
+MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December")
+MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)   # the game's year has no leap day
 GROUPED = ("people", "mig")
 WEIGHTED = ("tfr", "e0", "young", "old")   # world figures, weighted by people
 
@@ -90,7 +99,19 @@ def _parse(text):
     for k in OPTIONAL:
         if k in fields:
             out[k] = float(fields[k])
+    for k in TEXT_OPTIONAL:
+        if k in fields:
+            out[k] = fields[k]
     return out
+
+
+def calendar_year(date):
+    """A logged date ("March 2, 1841") as a year with its fraction (day of the year over 365), or None."""
+    m = re.fullmatch(r"(\w+) (\d+), (\d+)", date.strip())
+    if not m or m.group(1) not in MONTHS:
+        return None
+    month = MONTHS.index(m.group(1))
+    return int(m.group(3)) + (sum(MONTH_DAYS[:month]) + int(m.group(2)) - 1) / 365
 
 
 def read_records(lines):
@@ -161,10 +182,14 @@ def summarize(records, unresolved=(), step=25):
     for r in records:
         tags.setdefault(r["tag"], {})[r["year"]] = r
     world = _world(tags)
+    latest = [r for series in tags.values() for r in series.values()]
     return {
         "records": len(records), "unresolved": len(unresolved), "unresolved_lines": list(unresolved)[:20],
         "step": step, "tags": tags, "world": world, "rows": row_years(world, step),
         "anchors": _anchors(tags, world),
+        # None when no line carries lag (logged before it existed); a line without it counts as none
+        "lagging": ([(r["tag"], r["year"], r["lag"]) for r in latest if r.get("lag", 0) > 0]
+                    if any("lag" in r for r in latest) else None),
     }
 
 
@@ -202,6 +227,13 @@ def _print(report, tag_filter, top):
     for a in report["anchors"]:
         print(f"  {a['where']:<5} {a['year']}  {a['field']:<7} target {a['target']}; logged "
               f"{_fmt(a['logged'], 3)}{'  ' + a['verdict'] if a['verdict'] else ''}")
+    lagging = report["lagging"]
+    if lagging == []:
+        print("\nLag: every census found its states at its census year")
+    elif lagging:
+        first = ", ".join(f"{t} {y} ({lag:g})" for t, y, lag in sorted(lagging, key=lambda x: (x[1], x[0]))[:5])
+        print(f"\nLag: {len(lagging)} census line{'s' if len(lagging) > 1 else ''} counted states not at its census "
+              f"year (under fast mode's clock, step events that ran after the census): {first}")
     if report["unresolved"]:
         print(f"\nUnresolved lines: {report['unresolved']} (first {len(report['unresolved_lines'])}):")
         for line in report["unresolved_lines"][:5]:
@@ -245,15 +277,19 @@ def closed_borders_check(records, laws_by_year, tolerance=1.0):
     or deaths are off (2026-10-09: -6 per 1,000 a year before the per-pop rates; docs/testing/demographics-
     growth-probe-results-2026-10-09.md). A line archived more than once counts once (the later wins, as in
     summarize). A census of seeds only (CBR and CDR 0: a game's first census) is left out, as its residual is
-    0 by construction. Returns ({(save year, group): [record]}, verdict): True or False on the Closed Borders
-    median of mig_raw, None when none of their lines carries it."""
+    0 by construction. A line with a date meets the save nearest that calendar date (under fast mode's clock its
+    census year runs ahead of the calendar); one without, the save nearest its census year. Returns
+    ({(save year, group): [record]}, verdict): True or False on the Closed Borders median of mig_raw, None when
+    none of their lines carries it."""
     years = sorted(laws_by_year)
     latest = {(r["tag"], r["year"]): r for r in records}
     groups = {}
     for r in latest.values():
         if not r["people"] or not years or (r.get("cbr") == 0 and r.get("cdr") == 0):
             continue
-        near = min(years, key=lambda y: abs(y - r["year"]))
+        when = calendar_year(r["date"]) if "date" in r else None
+        when = r["year"] if when is None else when
+        near = min(years, key=lambda y: abs(y - when))
         law = laws_by_year[near].get(r["tag"])
         if law is None:
             continue

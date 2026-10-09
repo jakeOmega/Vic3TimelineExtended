@@ -126,6 +126,15 @@ te_debug_demog_mig_raw = {
 	divide = { value = var:te_dg_dbg_people min = 1 }
 }
 
+# Fast mode's months a step, for its TE_DEMOG_LOG line (te_demog_fast_set; 0 without the clock).
+te_debug_demog_months_per_step = {
+	value = 0
+	if = {
+		limit = { te_demog_clock_on = yes }
+		value = global_var:te_demog_months_per_step
+	}
+}
+
 # The census's people (te_demog_country_census' local te_dg_c_people, copied).
 te_debug_demog_people_g1 = {
 	value = var:te_dg_dbg_people

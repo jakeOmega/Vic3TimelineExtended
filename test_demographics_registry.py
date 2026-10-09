@@ -34,6 +34,7 @@ WEALTH_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_wealth_effects
 GENERATED_VALUES = ROOT / "common" / "script_values" / "te_demog_generated_values.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 VALUES = ROOT / "common" / "script_values" / "te_demog_values.txt"
+FAST_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -103,10 +104,22 @@ class TestWalks(unittest.TestCase):
         which missed literacy, starvation and every class, workplace and working-conditions term
         (docs/testing/demographics-growth-probe-results-2026-10-09.md)."""
         body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
-        self.assertIn("add = { value = te_demog_pop_engine_births multiply = te_demog_pop_birth_mult }", body)
-        self.assertIn("add = { value = te_demog_pop_engine_deaths multiply = te_demog_pop_death_mult }", body)
+        self.assertIn("set_local_variable = { name = te_dg_p_eb value = te_demog_pop_engine_births }", body)
+        self.assertIn("set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }", body)
+        self.assertIn("add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult }", body)
+        self.assertIn("add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult }", body)
         self.assertNotIn("modifier:state_birth_rate_mult", body)
         self.assertNotIn("modifier:state_mortality_mult", body)
+
+    def test_the_walk_expects_the_steps_months(self):
+        """A month's curves x the months the step covers: 12 on the yearly pulse, the clock's window under
+        fast mode (te_demog_step_months), never a literal 12."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        for var in ("te_dg_eb", "te_dg_ed"):
+            block = re.search(r"name = %s\s+value = \{([^{}]*)\}" % var, body)
+            self.assertIsNotNone(block, var)
+            self.assertIn("multiply = te_demog_step_months", block.group(1))
+            self.assertNotIn("multiply = 12", block.group(1))
 
     def test_inheritance_reads_the_walk(self):
         self.assertNotIn("te_inh_agrarian_share_value", _text(INH_VALUES))
@@ -291,7 +304,8 @@ class TestStep(unittest.TestCase):
         """Seed when there is no census, a gap of more than a year, an emptied ring or people more
         than 25% off the last census's; step once a year; nothing on a second pulse in the same
         year (Review Focus 3)."""
-        body = _block(_text(EFFECTS), "te_demog_state_yearly")
+        self.assertIn("te_demog_state_census = yes", _block(_text(EFFECTS), "te_demog_state_yearly"))
+        body = _block(_text(EFFECTS), "te_demog_state_census")
         self.assertIn("te_demog_cohorts_run = yes", body)
         self.assertIn("te_demog_seed = yes", body)
         self.assertIn("te_demog_step = yes", body)
@@ -306,7 +320,7 @@ class TestStep(unittest.TestCase):
         0.75 twin for none, so every state seeded at every pulse and none stepped. The pulse takes
         the move into locals, as people less 1.25 and 0.75 times the last census's, and its limits
         compare those with 0."""
-        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_state_yearly"))
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_state_census"))
         self.assertNotRegex(body, r"state_population [<>]=? \{")
         self.assertIn("local_var:te_dg_over > 0", body)
         self.assertIn("local_var:te_dg_under < 0", body)
@@ -383,16 +397,19 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS])
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
-        # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says
+        # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
+        # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
+        # ("global_var:te_demog_clock" and the like)
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
-                                 **(triggers or {})}
+                                 "te_demog_clock_on": False, **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
+        self.modifiers = {}   # add_modifier's name -> its multiplier
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -487,6 +504,8 @@ class _Engine:
             return self.holds(arg)
         if key == "has_variable":
             return arg in self.vars
+        if key == "has_modifier":
+            return arg in self.modifiers
         if key == "always":
             return arg == "yes"
         if key in self.trigger_fixtures:
@@ -520,6 +539,11 @@ class _Engine:
                 self.vars[name] = min(max(self.vars[name], lo), hi)
             elif key == "remove_variable":
                 self.vars.pop(arg, None)
+            elif key == "add_modifier":
+                self.modifiers[_find(arg, "name")] = self._q(self.value(_find(arg, "multiplier")))
+            elif key == "remove_modifier":
+                assert arg in self.modifiers, f"remove of absent modifier {arg}"
+                del self.modifiers[arg]
             elif key == "while":
                 for _ in range(int(self.value(_find(arg, "count")))):
                     self.run([i for i in arg if i[0] != "count"])
@@ -1342,7 +1366,7 @@ class TestTrend(unittest.TestCase):
         console = _text(ROOT / "events" / "te_debug_demog_events.txt")
         self.assertIn("te_demog_seed_off_pulse = yes", console)
         self.assertNotIn("te_demog_seed = yes", console)
-        body = _block(_text(EFFECTS), "te_demog_state_yearly")
+        body = _block(_text(EFFECTS), "te_demog_state_census")
         self.assertIn("has_variable = te_dg_reseed", body)
 
     def test_a_seed_zeroes_net_migration(self):
@@ -1714,8 +1738,11 @@ class TestWealth(unittest.TestCase):
         self.assertIn("multiply = 0.03", _block(_text(WEALTH_EFFECTS), "te_demog_wc_state_yearly"))
 
     def test_wealth_runs_whatever_the_rule(self):
+        """The pulse refreshes Wealth Concentration ungated; only the census it calls after checks the rule."""
         body = _block(_text(EFFECTS), "te_demog_state_yearly")
-        self.assertLess(body.index("te_demog_wc_state_yearly = yes"), body.index("te_demog_cohorts_run = yes"))
+        self.assertNotIn("te_demog_cohorts_run", body)
+        self.assertLess(body.index("te_demog_wc_state_yearly = yes"), body.index("te_demog_state_census = yes"))
+        self.assertIn("te_demog_cohorts_run = yes", _block(_text(EFFECTS), "te_demog_state_census"))
 
     def test_the_war_shock_and_the_war_dead_run_whatever_the_rule(self):
         yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
@@ -2083,7 +2110,8 @@ class TestWealthStateModifiers(unittest.TestCase):
         body = _block(_text(EFFECTS), "te_demog_state_yearly")
         refresh = body.index("te_inh_refresh_wc_state_effects = yes")
         self.assertLess(body.index("te_demog_wc_state_yearly = yes"), refresh)
-        self.assertLess(refresh, body.index("te_demog_cohorts_run = yes"), "owner's ruling: every rule setting")
+        self.assertLess(refresh, body.index("te_demog_state_census = yes"))
+        self.assertNotIn("te_demog_cohorts_run", body, "owner's ruling: every rule setting")
 
     def test_one_refresh_site_per_modifier(self):
         files = [p for d in ("common", "events") for p in (ROOT / d).rglob("*.txt")]
@@ -2461,3 +2489,150 @@ class TestConsole(unittest.TestCase):
         body = _console_blocks()[0]["te_debug_demog_census_line"]
         self.assertIn("local_var:te_dg_c_people >= 1000000", body)
         self.assertIn("name = te_dg_c_people", _block(_text(EFFECTS), "te_demog_country_census"))
+
+
+FAST_EVENTS = ROOT / "events" / "te_demog_events.txt"
+DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"
+DEBUG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_debug_demog_modifiers.txt"
+
+
+class TestFastMode(unittest.TestCase):
+    """Fast mode (te_demog_fast_effects.txt; te_debug_demog.1 options h-k, console only): the census on its own
+    clock, a step every N months for every state from the global monthly pulse, and the engine's births, deaths,
+    research and construction at K = 12 / N times."""
+
+    CLOCK = {"global_var:te_demog_clock": 1900.0, "global_var:te_demog_months_per_step": 3.0,
+             "global_var:te_demog_window_months": 3.0}
+
+    def _eng(self, clock_on, fixtures=None, effects=None, triggers=None):
+        return _Engine({"year": 1837.0, **(self.CLOCK if clock_on else {}), **(fixtures or {})},
+                       triggers={"te_demog_clock_on": clock_on, "te_demog_cohorts_run": True, **(triggers or {})},
+                       effects=effects)
+
+    def test_the_census_year_is_the_clocks_while_it_runs(self):
+        self.assertEqual(self._eng(False).value("te_demog_year"), 1837.0)
+        self.assertEqual(self._eng(True).value("te_demog_year"), 1900.0)
+
+    def test_a_step_covers_a_year_or_the_clocks_window(self):
+        self.assertEqual(self._eng(False).value("te_demog_step_months"), 12.0)
+        self.assertEqual(self._eng(True, {"global_var:te_demog_window_months": 5.0}).value("te_demog_step_months"), 5.0)
+
+    def test_k_is_twelve_months_over_the_months_a_step(self):
+        self.assertEqual(self._eng(False).value("te_demog_fast_k"), 1.0)
+        for months, k in ((3, 4.0), (2, 6.0), (1, 12.0), (12, 1.0)):
+            eng = self._eng(True, {"global_var:te_demog_months_per_step": float(months)})
+            self.assertEqual(eng.value("te_demog_fast_k"), k, months)
+            self.assertEqual(eng.value("te_demog_fast_k_minus_1"), k - 1, months)
+
+    def _refresh(self, eng, eb, eb0, ed, ed0):
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0)
+        eng.call("te_demog_fast_refresh_rates")
+
+    def test_the_rate_term_is_k_minus_1_times_the_states_own_average(self):
+        """A flat +(K - 1) would dilute the state's other terms, which the engine adds into the same (1 + total):
+        the term scales with the state's average multiplier instead, so its births and deaths run K times."""
+        eng = self._eng(True)   # K = 4
+        self._refresh(eng, eb=105.0, eb0=100.0, ed=96.0, ed0=100.0)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * 1.05)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * 0.96)
+        self.assertAlmostEqual(eng.modifiers["te_demog_fast_births"], 3 * 1.05)
+        self.assertAlmostEqual(eng.modifiers["te_demog_fast_deaths"], 3 * 0.96)
+        # births at the state's (1 + total) with the term: 1.05 + 3.15 = 4.2 = 4 x 1.05
+        self.assertAlmostEqual(1.05 + eng.vars["te_dg_fast_fb"], 4 * 1.05)
+
+    def test_the_term_is_a_fixed_point_once_applied(self):
+        """The next walk's multipliers hold the term already applied, which comes off before it is scaled."""
+        eng = self._eng(True)
+        self._refresh(eng, eb=105.0, eb0=100.0, ed=96.0, ed0=100.0)
+        fb, fd = eng.vars["te_dg_fast_fb"], eng.vars["te_dg_fast_fd"]
+        self._refresh(eng, eb=100.0 * (1.05 + fb), eb0=100.0, ed=100.0 * (0.96 + fd), ed0=100.0)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], fb)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd)
+
+    def test_a_state_with_nobody_gets_no_term(self):
+        eng = self._eng(True)
+        self._refresh(eng, eb=0.0, eb0=0.0, ed=0.0, ed0=0.0)
+        self.assertEqual(eng.vars["te_dg_fast_fb"], 0.0)
+        self.assertEqual(eng.modifiers["te_demog_fast_births"], 0.0)
+
+    def test_normal_speed_takes_the_modifiers_and_their_terms_off(self):
+        eng = self._eng(True)
+        self._refresh(eng, eb=105.0, eb0=100.0, ed=96.0, ed0=100.0)
+        eng.fixtures["global_var:te_demog_months_per_step"] = 12.0   # K = 1
+        self._refresh(eng, eb=420.0, eb0=100.0, ed=384.0, ed0=100.0)
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("te_dg_fast_fb", eng.vars)
+        self.assertNotIn("te_dg_fast_fd", eng.vars)
+
+    STUBS = {"te_demog_walks": "set_variable = { name = walked value = 1 }",
+             "te_inh_refresh_rural_effects": "set_variable = { name = rural value = 1 }",
+             "te_demog_wc_state_yearly": "set_variable = { name = wc value = 1 }",
+             "te_inh_refresh_wc_state_effects": "set_variable = { name = wc_mods value = 1 }",
+             "te_demog_fast_refresh_rates": "set_variable = { name = rates value = 1 }",
+             "te_demog_seed": "set_variable = { name = did value = 1 }",
+             "te_demog_step": "set_variable = { name = did value = 2 }"}
+
+    def test_under_the_clock_the_yearly_pulse_keeps_inheritance_and_wealth_only(self):
+        eng = self._eng(True, {"state_population": 1000.0}, effects=self.STUBS)
+        eng.vars.update(te_dg_year=1899.0, te_dg_raw=900.0, te_dg_pop_last=1000.0)
+        eng.call("te_demog_state_yearly")
+        self.assertEqual({k: eng.vars.get(k) for k in ("walked", "rural", "wc", "wc_mods", "did")},
+                         {"walked": None, "rural": 1.0, "wc": 1.0, "wc_mods": 1.0, "did": None})
+
+    def test_a_clock_step_walks_steps_and_refreshes_the_rates(self):
+        cases = [((1899.0, 1000.0), 2),   # a step on: the census steps
+                 ((1898.0, 1000.0), 1),   # a step missed (no owner at it): seed again
+                 ((1899.0, 1300.0), 1)]   # a merge or split: seed again
+        for (census, pop), want in cases:
+            eng = self._eng(True, {"state_population": pop}, effects=self.STUBS)
+            eng.vars.update(te_dg_year=census, te_dg_raw=900.0, te_dg_pop_last=1000.0)
+            eng.call("te_demog_state_clock_step")
+            self.assertEqual((eng.vars.get("walked"), eng.vars.get("did"), eng.vars.get("rates")), (1.0, want, 1.0),
+                             (census, pop))
+            self.assertIsNone(eng.vars.get("wc"), "Wealth Concentration stays on the yearly pulse")
+
+    def test_the_tick_steps_every_state_before_the_census_a_day_later(self):
+        """The clock advances before the step events, which fire at once; the census events wait a day, so every
+        state has stepped when a country sums them (the census line's lag counts any that had not)."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(FAST_EFFECTS), "te_demog_clock_tick"))
+        advance = body.index("change_global_variable = { name = te_demog_clock add = 1 }")
+        steps = body.index("trigger_event = { id = te_demog_events.2 }")
+        census = body.index("trigger_event = { id = te_demog_events.3 days = 1 }")
+        self.assertLess(advance, steps)
+        self.assertLess(steps, census)
+        self.assertIn("set_global_variable = { name = te_demog_window_months value = global_var:te_demog_clock_month }",
+                      body[:advance])
+        events = _text(FAST_EVENTS)
+        self.assertIn("te_demog_state_clock_step = yes", _block(events, "te_demog_events.2"))
+        self.assertIn("type = state_event", _block(events, "te_demog_events.2"))
+        self.assertIn("te_demog_country_clock_census = yes", _block(events, "te_demog_events.3"))
+        hook = _block(_text(DEMOG_ON_ACTIONS), "te_demog_clock_on_action")
+        self.assertIn("te_demog_clock_on = yes", hook)
+        self.assertIn("te_demog_clock_tick = yes", hook)
+
+    def test_the_31_december_census_waits_for_no_clock(self):
+        body = _block(_text(EFFECTS), "te_demog_country_yearly")
+        gate = body[body.index("limit = {", body.index("te_demog_wc_national = yes")):body.index("te_demog_country_census = yes")]
+        self.assertIn("NOT = { te_demog_clock_on = yes }", gate)
+
+    def test_the_first_switch_re_seeds_and_every_switch_is_click_only(self):
+        body = _block(_text(FAST_EFFECTS), "te_demog_fast_set")
+        first = body[body.index("NOT = { te_demog_clock_on = yes }"):body.index("set_global_variable = { name = te_demog_months_per_step")]
+        self.assertIn("set_variable = { name = te_dg_reseed value = 1 }", first)
+        console = _text(DEBUG_EVENTS)
+        for months in ("3", "2", "1", "12"):
+            call = f"te_demog_fast_set = {{ MONTHS = {months} }}"
+            self.assertEqual(console.count(call), 1, months)
+            guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                            console.index(call)]
+            self.assertIn("remove_variable = te_dg_dbg_click", guard, months)
+
+    def test_the_fast_modifiers_are_plus_one_fields(self):
+        mods = _raw_blocks([DEBUG_MODIFIERS])
+        for name, fields in (("te_demog_fast_births", {"state_birth_rate_mult"}),
+                             ("te_demog_fast_deaths", {"state_mortality_mult"}),
+                             ("te_demog_fast_speed", {"country_tech_research_speed_mult", "country_tech_spread_mult",
+                                                      "state_construction_mult"})):
+            got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
+            got.pop("icon")
+            self.assertEqual(got, dict.fromkeys(fields, "1"), name)

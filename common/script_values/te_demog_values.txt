@@ -32,10 +32,53 @@ te_demog_building_country_levels = {
 	multiply = country_ownership_fraction
 }
 
-# The current year as a value (probe: add = year gives 1836).
+# The census's year as a value (probe: add = year gives 1836). While fast mode's census clock
+# runs (te_debug_demog.1, console only) it is the clock instead: a virtual year the global
+# monthly pulse advances every te_demog_months_per_step months (te_demog_fast_effects.txt).
 te_demog_year = {
 	value = 0
 	add = year
+	if = {
+		limit = { te_demog_clock_on = yes }
+		value = global_var:te_demog_clock
+	}
+}
+
+# The months one census step covers: a calendar year, or under the clock the months since its
+# last step (te_demog_window_months, set as it advances). The walk's expected engine births and
+# deaths are a month's curves times this.
+te_demog_step_months = {
+	value = 12
+	if = {
+		limit = { te_demog_clock_on = yes }
+		value = global_var:te_demog_window_months
+	}
+}
+
+# Fast mode's speed-up K: twelve months over the months a step (4, 6 or 12; 1 at normal
+# speed and without the clock), and K - 1, the multiplier of the fast modifiers' +1 fields.
+te_demog_fast_k = {
+	value = 1
+	if = {
+		limit = { te_demog_clock_on = yes }
+		value = 12
+		divide = { value = global_var:te_demog_months_per_step min = 1 }
+	}
+}
+
+te_demog_fast_k_minus_1 = {
+	value = te_demog_fast_k
+	subtract = 1
+}
+
+# State scope: the multipliers of te_demog_fast_births and te_demog_fast_deaths, the terms
+# te_demog_fast_refresh_rates stored (state_birth_rate_mult and state_mortality_mult).
+te_demog_fast_birth_term = {
+	value = var:te_dg_fast_fb
+}
+
+te_demog_fast_death_term = {
+	value = var:te_dg_fast_fd
 }
 
 # The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
