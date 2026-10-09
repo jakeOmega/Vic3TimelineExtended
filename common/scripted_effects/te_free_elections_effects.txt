@@ -1,0 +1,32 @@
+﻿# Tradition of Free Elections under Anarchy (REPLACE:amendment_tradition_of_free_elections,
+# common/amendments/te_tradition_of_free_elections.txt, adds Anarchy to its allowed laws).
+#
+# A law's amendments leave with it when it is replaced, so vanilla's four voting
+# laws put the tradition back in their on_activate: they save themselves as
+# scope:relevant_voting_law and call inherit_free_elections_effect, which attaches
+# it when the country has established it (free_elections_var, set by
+# remove_electoral_fraud_effect and by history). This gives Anarchy the same
+# call. Two callers:
+#   te_free_elections_from_law_scope  - on_law_activated, when Anarchy arrives
+#                                       (enactment or activate_law)
+#   te_free_elections_country_pulse   - once per country, for saves in which a
+#                                       country under Anarchy already holds
+#                                       free_elections_var without the tradition
+# No standing monthly re-attach: the tradition can be repealed (vanilla
+# can_repeal), and free_elections_var outlives a repeal.
+#
+# Country scope.
+te_free_elections_inherit_under_anarchy = {
+	active_law:lawgroup_distribution_of_power ?= {
+		if = {
+			limit = {
+				type = law_type:law_anarchy
+				NOT = { has_amendment = amendment_type:amendment_tradition_of_free_elections }
+			}
+			save_scope_as = relevant_voting_law
+			owner = {
+				inherit_free_elections_effect = yes
+			}
+		}
+	}
+}
