@@ -91,11 +91,14 @@ class TestMortality(unittest.TestCase):
         self.assertTrue(72 <= t["e0"] <= 80, t)
         self.assertTrue(17 <= t["e65"] <= 23, t)
 
-    def test_women_outlive_men(self):
+    def test_women_outlive_men_by_a_calibration_gap(self):
+        # §3's anchor is about 2 years at e0 35 and 5-7 at e0 75; the starting parameters give
+        # about 5 at both. Meeting the anchor is calibration's job (the plan's 'After this
+        # plan'); this pins the starting gap so a parameter change that moves it is seen.
         for inp in (BRITAIN_1836, WEST_1990):
             qf, qm, _ = M.group_rates(inp)
             gap = M.life_table(qf)["e0"] - M.life_table(qm)["e0"]
-            self.assertTrue(1.0 <= gap <= 8.0, gap)
+            self.assertTrue(3.0 <= gap <= 6.0, gap)
 
     def test_no_deaths_lives_to_the_end_of_the_ring(self):
         self.assertAlmostEqual(M.life_table([0.0] * len(P.GROUPS))["e0"], 150.0)
@@ -153,6 +156,7 @@ class TestRing(unittest.TestCase):
         after = M.structure(ring)
         self.assertLess(abs(after["young"] - before["young"]), 0.015)
         self.assertLess(abs(after["old"] - before["old"]), 0.01)
+        self.assertLess(abs(after["men_per_100_women"] - before["men_per_100_women"]), 0.5)
 
     def test_a_birth_cohort_does_not_spread(self):
         """Extra men born in 1800 stay in one slot for 120 years, then fold into the pool."""
@@ -200,10 +204,40 @@ class TestRing(unittest.TestCase):
         M.step(twin, BRITAIN_1836, 1837)
         lost_m = sum(t[2] - r[2] for r, t in zip(ring.by_age(), twin.by_age()))
         lost_f = sum(t[1] - r[1] for r, t in zip(ring.by_age(), twin.by_age()))
-        self.assertAlmostEqual(lost_m, 9_500, delta=250)  # last year's denominators
-        self.assertAlmostEqual(lost_f, 500, delta=50)
-        old_m = sum(t[2] - r[2] for r, t in zip(ring.by_age(), twin.by_age()) if r[0] > 41)
-        self.assertAlmostEqual(old_m, 0.0, delta=1.0)
+        self.assertAlmostEqual(lost_m, 9_500, delta=5)
+        self.assertAlmostEqual(lost_f, 500, delta=5)
+        outside_m = sum(t[2] - r[2] for r, t in zip(ring.by_age(), twin.by_age())
+                        if r[0] < 19 or r[0] > 41)
+        self.assertLess(abs(outside_m), 1.0)
+
+    def _flow_pair(self, **flow):
+        ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        twin = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        M.step(ring, BRITAIN_1836, 1837, **flow)
+        M.step(twin, BRITAIN_1836, 1837)
+        return ring, twin
+
+    def test_kills_remove_exactly(self):
+        ring, twin = self._flow_pair(kills=10_000)
+        self.assertAlmostEqual(twin.people() - ring.people(), 10_000, delta=1)
+
+    def test_departures_remove_exactly(self):
+        ring, twin = self._flow_pair(migration=-20_000)
+        self.assertAlmostEqual(twin.people() - ring.people(), 20_000, delta=1)
+
+    def test_arrivals_add_exactly(self):
+        ring, twin = self._flow_pair(migration=20_000)
+        self.assertAlmostEqual(ring.people() - twin.people(), 20_000, delta=1)
+
+    def test_migrants_go_where_people_are(self):
+        inp = M.Inputs(sol=11, literacy=0.35, urban_share=0.3, crisis=1.0)
+        ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        twin = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        M.step(ring, inp, 1837, migration=20_000)
+        M.step(twin, inp, 1837)
+        gained_old = sum((r[1] + r[2]) - (t[1] + t[2])
+                         for r, t in zip(ring.by_age(), twin.by_age()) if r[0] >= 95)
+        self.assertLess(gained_old / 20_000, 0.005)
 
     def test_labour_migrants_are_young_adults(self):
         ring = M.seed(BRITAIN_1836, 1836, 1_000_000)

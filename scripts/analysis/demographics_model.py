@@ -263,8 +263,12 @@ def nrr(tfr, qf):
 
 
 def seed(inp, year, engine_pop):
-    """A ring at the stable structure of the state's own rates (§2.6, rule 5)."""
-    qf, qm, _mmr = group_rates(inp)
+    """A ring at the stable structure of the state's own rates (§2.6, rule 5).
+
+    The women's survivorship includes maternal deaths, so the seed is the step's own
+    equilibrium; nrr and life_table leave them out (a documented approximation).
+    """
+    qf, qm, mmr = group_rates(inp)
     e0 = life_table(qf)["e0"] * 0.5 + life_table(qm)["e0"] * 0.5
     tfr = fertility(inp, e0)["tfr"]
     d = growth_factor(nrr(tfr, qf))
@@ -276,7 +280,7 @@ def seed(inp, year, engine_pop):
         ring.f[k] = P.FEMALE_BIRTH_PER_100K / 100000.0 * lf * dpow
         ring.m[k] = P.MALE_BIRTH_PER_100K / 100000.0 * lm * dpow
         g = P.group_of(a)
-        lf *= 1 - qf[g] / 100000.0
+        lf *= 1 - (qf[g] + asfr_shape(a) * tfr * mmr / 100000.0) / 100000.0
         lm *= 1 - qm[g] / 100000.0
         dpow *= d
     raw = sum(ring.f) + sum(ring.m)
@@ -287,10 +291,18 @@ def seed(inp, year, engine_pop):
 
 
 def _refresh_denominators(ring):
+    """Class and 18-40 sums for next year's flows, by the age each cohort has now.
+
+    Next year's step applies the flows by rate age (a - 1), so it divides by exactly the
+    cohorts it applies them to. The age-149 cohort and the pool are left out: they are
+    folded, not flowed.
+    """
     ring.class_f = [0.0] * len(P.MIGRANT_CLASSES)
     ring.class_m = [0.0] * len(P.MIGRANT_CLASSES)
     ring.men_18_40 = ring.women_18_40 = 0.0
     for a, f, m in ring.by_age():
+        if a > N - 2:
+            continue
         c = class_of(a)
         ring.class_f[c] += f
         ring.class_m[c] += m
@@ -304,6 +316,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
 
     engine_pop None = no scaling (a pure model run). war_dead, kills and migration are
     people this year (migration net, signed); the residual noise rule is the caller's.
+    Flows (war, kills, migration) are applied by rate age to the counts before deaths.
     rates = (qf, qm, mmr, tfr, profile) replays an in-game step with the rates the game
     logged instead of recomputing them from inputs.
     """
@@ -334,6 +347,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             ring.pool_age = ((ring.pool_f + ring.pool_m) * s * (ring.pool_age + 1) + (f + m) * N) / max(
                 (ring.pool_f + ring.pool_m) * s + f + m, 1e-9)
             ring.pool_f, ring.pool_m = ring.pool_f * s + f, ring.pool_m * s + m
+            ring.pool_f *= 1 - kill
+            ring.pool_m *= 1 - kill
             ring.f[k] = ring.m[k] = 0.0
             continue
         r = a - 1
@@ -343,21 +358,22 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0
         m2 = m * (1 - qm[g] / 100000.0)
         deaths += (f - f2) + (m - m2)
-        if P.WAR_DEAD_AGES[0] <= a <= P.WAR_DEAD_AGES[1]:
-            f2 -= f2 * war_f
-            m2 -= m2 * war_m
-        f2 *= 1 - kill
-        m2 *= 1 - kill
-        c = class_of(a)
+        if P.WAR_DEAD_AGES[0] <= r <= P.WAR_DEAD_AGES[1]:
+            f2 -= f * war_f
+            m2 -= m * war_m
+        f2 -= f * kill
+        m2 -= m * kill
+        c = class_of(r)
         if migration > 0:
-            width = P.MIGRANT_CLASSES[c][1] - P.MIGRANT_CLASSES[c][0] + 1
-            f2 += migration * prof[(c, "f")] / width
-            m2 += migration * prof[(c, "m")] / width
+            if ring.class_f[c] >= 1:
+                f2 += migration * prof[(c, "f")] * f / ring.class_f[c]
+            if ring.class_m[c] >= 1:
+                m2 += migration * prof[(c, "m")] * m / ring.class_m[c]
         elif migration < 0:
-            if ring.class_f[c]:
-                f2 -= min(f2 * 0.5, -migration * prof[(c, "f")] * f / ring.class_f[c])
-            if ring.class_m[c]:
-                m2 -= min(m2 * 0.5, -migration * prof[(c, "m")] * m / ring.class_m[c])
+            if ring.class_f[c] >= 1:
+                f2 -= min(max(f2, 0.0) * 0.5, -migration * prof[(c, "f")] * f / ring.class_f[c])
+            if ring.class_m[c] >= 1:
+                m2 -= min(max(m2, 0.0) * 0.5, -migration * prof[(c, "m")] * m / ring.class_m[c])
         ring.f[k], ring.m[k] = max(f2, 0.0), max(m2, 0.0)
     # the pool: last group's rates, ages a year
     pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
