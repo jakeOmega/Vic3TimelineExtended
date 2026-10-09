@@ -102,11 +102,24 @@ te_debug_demog_replay = {
 # two bareword reads it sums as they are: devastation and turmoil, each a 0-1 share.
 # A country with no capital prints -1 for all three. mig_raw (te_debug_demog_mig_raw) is
 # the migration residual before each state's noise band, per 1,000 people:
-# demographics_observer_report.py --closed-borders reads it.
+# demographics_observer_report.py --closed-borders reads it. lag counts the country's
+# states whose census year is not the census's (0 when every state stepped first: under
+# fast mode's clock, the check that the step events ran before the census events), and
+# date is the calendar date, which the report matches to saves (under the clock the
+# census year is the clock's).
 te_debug_demog_census_line = {
 	if = {
 		limit = { local_var:te_dg_c_people >= 1000000 }
 		set_variable = { name = te_dg_dbg_people value = local_var:te_dg_c_people }
+		set_local_variable = { name = te_dg_dbg_lag value = 0 }
+		every_scope_state = {
+			limit = {
+				te_demog_has_census = yes
+				NOT = { var:te_dg_year = te_demog_year }
+			}
+			change_local_variable = { name = te_dg_dbg_lag add = 1 }
+		}
+		set_variable = { name = te_dg_dbg_lag value = local_var:te_dg_dbg_lag }
 		set_variable = { name = te_dg_dbg_mig value = var:te_dg_net_migration }
 		set_local_variable = { name = te_dg_dbg_crisis value = -1 }
 		set_local_variable = { name = te_dg_dbg_dev value = -1 }
@@ -124,23 +137,25 @@ te_debug_demog_census_line = {
 		set_variable = { name = te_dg_dbg_turmoil value = local_var:te_dg_dbg_turmoil }
 		if = {
 			limit = { var:te_dg_dbg_mig < 0 }
-			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]"
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]"
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		remove_variable = te_dg_dbg_people
 		remove_variable = te_dg_dbg_mig
 		remove_variable = te_dg_dbg_crisis
 		remove_variable = te_dg_dbg_dev
 		remove_variable = te_dg_dbg_turmoil
+		remove_variable = te_dg_dbg_lag
 	}
 }
 
-# THIS = a state at the top of its yearly pulse (te_demog_state_yearly), before the
-# seed-or-step branches read its census year. Only the player's capital writes: one
-# line a year means one step a year (a second line in a calendar year does nothing, a
-# skipped year re-seeds). An observer game has no player, so it writes none.
+# THIS = a state at the top of its yearly pulse (te_demog_state_yearly) or of a step of
+# fast mode's clock (te_demog_state_clock_step), before the seed-or-step branches read
+# its census year. Only the player's capital writes: one line a year means one step a
+# year (a second line in a calendar year does nothing, a skipped year re-seeds). An
+# observer game has no player, so it writes none.
 te_debug_demog_pulse_line = {
 	if = {
 		limit = {

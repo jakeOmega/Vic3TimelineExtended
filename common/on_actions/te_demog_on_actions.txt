@@ -34,6 +34,23 @@ te_demog_country_monthly_on_action = {
 	}
 }
 
+# No ROOT, the 1st of every calendar month. Fast mode's census clock (console only,
+# te_demog_fast_effects.txt): nothing runs unless it was started.
+on_monthly_pulse = {
+	on_actions = {
+		te_demog_clock_on_action
+	}
+}
+
+te_demog_clock_on_action = {
+	effect = {
+		if = {
+			limit = { te_demog_clock_on = yes }
+			te_demog_clock_tick = yes
+		}
+	}
+}
+
 # Root = Country, on 31 December. The war shock and Wealth Concentration's national
 # figure run whatever the rule; the census gates itself on it.
 on_yearly_pulse_country = {

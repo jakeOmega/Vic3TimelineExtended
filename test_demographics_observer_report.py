@@ -55,6 +55,23 @@ class TestRead(unittest.TestCase):
         self.assertEqual(records[0]["mig_raw"], -1.234)
         self.assertNotIn("mig_raw", records[1])
 
+    def test_lag_and_date_are_read_when_present(self):
+        """lag counts the states whose census year is not the census's; date is the calendar date (under fast
+        mode's clock the census year is the clock's, so saves are matched by date). Older lines have neither."""
+        records, unresolved = R.read_records([census("GBR", 1900, "1_0_0", "5.0", "40.0", lag="2",
+                                                     date="March 2, 1841"),
+                                              census("FRA", 1840, "1_0_0", "5.0", "40.0")])
+        self.assertEqual(unresolved, [])
+        self.assertEqual(records[0]["lag"], 2.0)
+        self.assertEqual(records[0]["date"], "March 2, 1841")
+        self.assertNotIn("lag", records[1])
+        self.assertNotIn("date", records[1])
+
+    def test_the_calendar_year_of_a_logged_date(self):
+        self.assertAlmostEqual(R.calendar_year("January 1, 1840"), 1840.0)
+        self.assertAlmostEqual(R.calendar_year("March 2, 1841"), 1841 + (31 + 28 + 1) / 365)
+        self.assertIsNone(R.calendar_year("17"))
+
     def test_a_line_with_a_bad_number_is_unresolved_too(self):
         records, unresolved = R.read_records([census("GBR", 1836, "25_x_658", "5.5", "40.0")])
         self.assertEqual(records, [])
@@ -130,6 +147,27 @@ class TestCli(unittest.TestCase):
         self.assertEqual(data["world"]["1836"]["people"], 25_925_658 + 33_000_050)
         self.assertEqual(data["unresolved"], 1)
 
+    def _run_lines(self, lines):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "debug.log"
+            path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(R.main([str(path)]), 0)
+        return out.getvalue()
+
+    def test_a_census_taken_before_its_states_stepped_is_flagged(self):
+        """Under fast mode's clock every state steps a day before the countries' census: a lag above 0 means
+        the step events ran late (te_demog_clock_tick's order)."""
+        out = self._run_lines([census("GBR", 1900, "1_0_0", "5.0", "40.0", lag="0", date="April 2, 1840"),
+                               census("FRA", 1900, "2_0_0", "5.0", "40.0", lag="3", date="April 2, 1840")])
+        self.assertIn("Lag: 1 census line counted states not at its census year", out)
+        self.assertIn("FRA 1900 (3)", out)
+        out = self._run_lines([census("GBR", 1900, "1_0_0", "5.0", "40.0", lag="0", date="April 2, 1840")])
+        self.assertIn("Lag: every census found its states at its census year", out)
+        out = self._run_lines([census("GBR", 1900, "1_0_0", "5.0", "40.0")])
+        self.assertNotIn("Lag:", out)
+
     def test_no_census_lines_exits_1(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "debug.log"
@@ -149,12 +187,14 @@ class TestTheScriptsLine(unittest.TestCase):
         self.assertEqual(len(templates), 2)
         for template in templates:
             sample = iter(range(1, 1000))
-            line = re.sub(r"\[[^\]]*\]", lambda m: "GBR" if "GetTagName" in m.group(0) else str(next(sample)),
-                          template)
+            line = re.sub(r"\[[^\]]*\]", lambda m: ("GBR" if "GetTagName" in m.group(0) else
+                                                     "January 2, 1840" if "GetCurrentDate" in m.group(0) else
+                                                     str(next(sample))), template)
             records, unresolved = R.read_records([PREFIX + line])
             self.assertEqual(unresolved, [])
             self.assertEqual(len(records), 1)
-            self.assertEqual(set(records[0]), set(R.FIELDS) | {"mig_raw"})
+            self.assertEqual(set(records[0]), set(R.FIELDS) | {"mig_raw", "lag", "date"})
+            self.assertEqual(records[0]["date"], "January 2, 1840")
             negative = " mig=-" in template or "; mig=-" in template
             self.assertEqual(records[0]["mig"] < 0, negative)
 
@@ -250,6 +290,15 @@ class TestClosedBorders(unittest.TestCase):
         groups, passed = R.closed_borders_check([seed, step], self.LAWS)
         self.assertEqual([r["year"] for r in groups[(1840, "closed")]], [1841])
         self.assertIs(passed, False)
+
+    def test_a_dated_line_meets_the_save_nearest_its_calendar_date(self):
+        """Under fast mode's clock the census year runs ahead of the calendar, so a dated line is matched by its
+        date; an undated one (logged before the field) by its census year, as before."""
+        laws = {1840: {"GBR": "law_closed_borders"}, 1850: {"GBR": "law_no_migration_controls"}}
+        fast = dict(self.rec("GBR", 1900, 1_000_000, 0, mig_raw=-0.2), date="March 2, 1841")
+        self.assertEqual(list(R.closed_borders_check([fast], laws)[0]), [(1840, "closed")])
+        undated = self.rec("GBR", 1849, 1_000_000, 0, mig_raw=-0.2)
+        self.assertEqual(list(R.closed_borders_check([undated], laws)[0]), [(1850, "open or controlled")])
 
     def test_weighted_figures(self):
         rs = [self.rec("GBR", 1840, 1_000_000, 0, mig_raw=-1.0), self.rec("SWE", 1840, 3_000_000, 6_000, mig_raw=2.0)]

@@ -9,10 +9,11 @@
 #   te_dg_lit           pop-weighted literacy, 0-1
 #   te_dg_sol           pop-weighted standard of living
 #   te_dg_wtfr          mean wealth TFR (children per woman from wealth alone)
-#   te_dg_eb, te_dg_ed  the engine's expected births and deaths over a year,
-#                       people (what the census's own totals are measured against):
-#                       each pop's curves x its own multipliers, te_demog_pop_birth_mult
-#                       and _death_mult (gen_demographics.py, engine_rate_terms)
+#   te_dg_eb, te_dg_ed  the engine's expected births and deaths over the step, people
+#                       (what the census's own totals are measured against): each pop's
+#                       curves x its own multipliers, te_demog_pop_birth_mult and
+#                       _death_mult (gen_demographics.py, engine_rate_terms), x the
+#                       step's months (te_demog_step_months: 12, or fast mode's window)
 #   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
 #                       inheritance's rural modifiers' multiplier (probe-checked,
 #                       London 0.174)
@@ -73,7 +74,12 @@
 #   te_dg_war_year      country: the year's rise in war dead, until 31 December (read by the
 #                       Wealth Concentration war shock; the states take theirs monthly)
 #   te_dg_reseed        state: set by a seed made off the state's own pulse (game start, the
-#                       console); its next pulse seeds again, so its first step covers a year
+#                       console) and by fast mode's first switch; its next pulse (or the
+#                       clock's next step) seeds again, so its first step covers a whole step
+#
+# Fast mode (te_demog_fast_effects.txt; te_debug_demog.1, console only):
+#   te_dg_fast_fb, te_dg_fast_fd  state: the multipliers of te_demog_fast_births and
+#                       te_demog_fast_deaths, applied at the clock's last step
 #
 # The trend arrows (Task 10), on a state and on a country alike:
 #   te_dg_stepped       1 when the figures stored now came from a step (births above 0), 0 when
@@ -90,7 +96,8 @@
 #   te_dg_prev_tfr, te_dg_prev_e0  a state's, copied by te_demog_prepare before it overwrites
 #                       them
 #
-# The country's census (Task 10, te_demog_country_census), every 31 December and at game start:
+# The country's census (Task 10, te_demog_country_census), every 31 December and at game start
+# (under fast mode's clock, a day after each of its steps instead):
 #   te_dg_census_year   the year of the country's last census (absent = census pending)
 #   te_dg_cbf<b>, te_dg_cbm<b>  people in band b, the sum of its states' te_dg_bf<b>, te_dg_bm<b>
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share, te_dg_dependency,
@@ -129,6 +136,8 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_wtfr value = 0 }
 	set_local_variable = { name = te_dg_w_eb value = 0 }
 	set_local_variable = { name = te_dg_w_ed value = 0 }
+	set_local_variable = { name = te_dg_w_eb0 value = 0 }
+	set_local_variable = { name = te_dg_w_ed0 value = 0 }
 	set_local_variable = { name = te_dg_w_agr value = 0 }
 	set_local_variable = { name = te_dg_w_sold value = 0 }
 	set_local_variable = { name = te_dg_w_bur value = 0 }
@@ -146,8 +155,14 @@ te_demog_walks = {
 		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
 		change_local_variable = { name = te_dg_w_sol add = te_demog_pop_sol }
 		change_local_variable = { name = te_dg_w_wtfr add = te_demog_pop_wealth_tfr }
-		change_local_variable = { name = te_dg_w_eb add = { value = te_demog_pop_engine_births multiply = te_demog_pop_birth_mult } }
-		change_local_variable = { name = te_dg_w_ed add = { value = te_demog_pop_engine_deaths multiply = te_demog_pop_death_mult } }
+		# the pop's curves once, kept bare as well (te_dg_w_eb0/_ed0): fast mode's term reads the
+		# state's average multiplier (te_demog_fast_refresh_rates)
+		set_local_variable = { name = te_dg_p_eb value = te_demog_pop_engine_births }
+		set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }
+		change_local_variable = { name = te_dg_w_eb0 add = local_var:te_dg_p_eb }
+		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
+		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
+		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
 		if = {
 			limit = { strata = upper }
 			change_local_variable = { name = te_dg_w_nup add = total_size }
@@ -205,7 +220,8 @@ te_demog_walks = {
 	set_variable = { name = te_dg_lit value = { value = local_var:te_dg_w_lit divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	set_variable = { name = te_dg_sol value = { value = local_var:te_dg_w_sol divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	set_variable = { name = te_dg_wtfr value = { value = local_var:te_dg_w_wtfr divide = { value = local_var:te_dg_w_pop min = 1 } } }
-	# the engine's births and deaths over a year: the curves are x 100,000 a month, and each pop's
+	# the engine's births and deaths over the step (a year, or under fast mode the clock's window of
+	# te_demog_step_months whole calendar months): the curves are x 100,000 a month, and each pop's
 	# multiplier (its state's modifier plus its own terms, floored at 0) was applied in the walk. A
 	# state-level 1 + modifier:state_*_mult left out literacy, starvation and every class, workplace
 	# and working-conditions term, so the residual read births 5-9% high and deaths 6% low as
@@ -214,7 +230,7 @@ te_demog_walks = {
 		name = te_dg_eb
 		value = {
 			value = local_var:te_dg_w_eb
-			multiply = 12
+			multiply = te_demog_step_months
 			divide = 100000
 		}
 	}
@@ -222,7 +238,7 @@ te_demog_walks = {
 		name = te_dg_ed
 		value = {
 			value = local_var:te_dg_w_ed
-			multiply = 12
+			multiply = te_demog_step_months
 			divide = 100000
 		}
 	}
@@ -270,18 +286,33 @@ te_demog_walks = {
 
 # THIS = a state, on its yearly pulse (a different day per state, spec §11.3).
 # The walks and Wealth Concentration run whatever the rule; the census only
-# when te_demog_cohorts_run.
+# when te_demog_cohorts_run. While fast mode's census clock runs (console only),
+# the walks and the census move to the clock's steps (te_demog_state_clock_step,
+# te_demog_fast_effects.txt) and this pulse keeps inheritance and Wealth
+# Concentration, which read the latest walk.
 te_demog_state_yearly = {
-	# the console's census log: the player's capital logs each pulse's date and census year
-	# before the branches below read them (te_debug_demog_effects.txt)
 	if = {
-		limit = { te_demog_census_log_on = yes }
-		te_debug_demog_pulse_line = yes
+		limit = { NOT = { te_demog_clock_on = yes } }
+		# the console's census log: the player's capital logs each pulse's date and census year
+		# before the branches below read them (te_debug_demog_effects.txt)
+		if = {
+			limit = { te_demog_census_log_on = yes }
+			te_debug_demog_pulse_line = yes
+		}
+		te_demog_walks = yes
 	}
-	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
 	te_demog_wc_state_yearly = yes
 	te_inh_refresh_wc_state_effects = yes
+	if = {
+		limit = { NOT = { te_demog_clock_on = yes } }
+		te_demog_state_census = yes
+	}
+}
+
+# THIS = a state, straight after its walks (its yearly pulse, or a step of fast mode's
+# clock, where te_demog_year is the clock's year): seed or step its census.
+te_demog_state_census = {
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
@@ -290,10 +321,10 @@ te_demog_state_yearly = {
 			limit = { NOT = { te_demog_has_census = yes } }
 			te_demog_seed = yes
 		}
-		# A census more than a year old, a ring emptied while the state has
-		# people (no migrant settles an empty class), or people more than a
-		# quarter above or below the last census's (te_dg_pop_last, written with
-		# te_dg_year): seed again. A move that size is a state merged or split,
+		# A census more than a year old (under fast mode's clock, a step), a ring
+		# emptied while the state has people (no migrant settles an empty class),
+		# or people more than a quarter above or below the last census's
+		# (te_dg_pop_last, written with te_dg_year): seed again. A move that size is a state merged or split,
 		# not migration (one year's natural change is under 5%), and the step's
 		# residual would count it all as migrants. A seed made off this pulse
 		# (te_dg_reseed: game start, the console) is made again here, so the first
@@ -979,8 +1010,12 @@ te_demog_country_yearly = {
 		set_variable = { name = te_dg_war_year value = 0 }
 	}
 	te_demog_wc_national = yes
+	# under fast mode's clock the census follows the clock's steps (te_demog_country_clock_census)
 	if = {
-		limit = { te_demog_cohorts_run = yes }
+		limit = {
+			te_demog_cohorts_run = yes
+			NOT = { te_demog_clock_on = yes }
+		}
 		te_demog_country_census = yes
 	}
 }

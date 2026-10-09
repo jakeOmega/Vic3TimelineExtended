@@ -14,6 +14,14 @@ te_demog_effects_run = {
 	NOT = { has_game_rule = demographics_display_only }
 }
 
+# Any scope: fast mode's census clock runs (te_debug_demog.1 options h-k, console only).
+# While it does, te_demog_year reads the clock, the global monthly pulse steps every census,
+# and the yearly state pulse keeps only inheritance and Wealth Concentration
+# (te_demog_fast_effects.txt). Once started, the clock never stops.
+te_demog_clock_on = {
+	has_global_variable = te_demog_clock
+}
+
 # State scope: the state has a census (a seeded ring).
 te_demog_has_census = {
 	has_variable = te_dg_year

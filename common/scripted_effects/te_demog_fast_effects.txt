@@ -1,0 +1,214 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — fast mode: the census clock (TEST CONSOLE ONLY)
+# (docs/superpowers/specs/2026-10-08-demographics-design.md §11.1; the console's
+# options h-k in events/te_debug_demog_events.txt)
+# ============================================================================
+# A test of a change to the census takes a game of 200 years and more, days of
+# wall-clock time. Fast mode runs demography, research and construction K times as
+# fast (K = 4, 6 or 12), so the same span of demographic time passes in a quarter,
+# a sixth or a twelfth of the game. Wars, diplomacy, laws, literacy and pop wealth
+# keep the calendar's pace, so a fast game is not a real one: it is for iterating
+# on the model, and a normal game checks the result. Nothing in normal play starts it.
+#
+# The census clock. te_demog_year reads global te_demog_clock while it exists
+# (te_demog_clock_on). The global monthly pulse (the 1st of each calendar month)
+# counts months in te_demog_clock_month; at te_demog_months_per_step it advances the
+# clock one year and steps every state's census at once, through a hidden state event
+# (te_demog_events.2, so ROOT is the state: the fast rate modifiers' multipliers read
+# it). Each country takes its census a day later (te_demog_events.3), after every state
+# has stepped. A window of whole calendar months holds exactly one of each pop's
+# monthly growth updates a month (docs/testing/demographics-growth-probe-results-
+# 2026-10-09.md), so the walk's expected births and deaths, a month's x the window's
+# months (te_demog_window_months, te_demog_step_months), cover it exactly. The states'
+# own pulses are 30-day timers (scripting_best_practices.md, "on_monthly_pulse_country
+# Is a 30-Day Timer, Not a Calendar Month"): a one-month window could hold none of them.
+#
+# Globals: te_demog_clock (the virtual year), te_demog_months_per_step (3, 2, 1, or 12
+# at normal speed), te_demog_clock_month (months since the clock's last step),
+# te_demog_window_months (the months the last step covered).
+#
+# The speed-up:
+#   births and deaths  state modifiers te_demog_fast_births and te_demog_fast_deaths
+#                      (state_birth_rate_mult and state_mortality_mult +1), sized at each
+#                      step so the state's engine births and deaths run K times
+#                      (te_demog_fast_refresh_rates)
+#   research, construction  country modifier te_demog_fast_speed (research speed,
+#                      technology spread and construction +1) x (K - 1)
+# ============================================================================
+
+# No scope: the global on_monthly_pulse (te_demog_clock_on_action), while the clock runs.
+# The step events fire before the clock's census events, which wait a day.
+te_demog_clock_tick = {
+	change_global_variable = { name = te_demog_clock_month add = 1 }
+	if = {
+		limit = { global_var:te_demog_clock_month >= global_var:te_demog_months_per_step }
+		set_global_variable = { name = te_demog_window_months value = global_var:te_demog_clock_month }
+		set_global_variable = { name = te_demog_clock_month value = 0 }
+		change_global_variable = { name = te_demog_clock add = 1 }
+		every_state = {
+			trigger_event = { id = te_demog_events.2 }
+		}
+		every_country = {
+			trigger_event = { id = te_demog_events.3 days = 1 }
+		}
+	}
+}
+
+# THIS = ROOT = a state, at a step of the clock (te_demog_events.2): the yearly pulse's
+# walks and census, then the fast rate modifiers from the same walk. The walks run
+# whatever the rule, as on the yearly pulse: inheritance and Wealth Concentration read them.
+te_demog_state_clock_step = {
+	if = {
+		limit = { te_demog_census_log_on = yes }
+		te_debug_demog_pulse_line = yes
+	}
+	te_demog_walks = yes
+	te_demog_state_census = yes
+	te_demog_fast_refresh_rates = yes
+}
+
+# THIS = ROOT = a country, a day after a step of the clock (te_demog_events.3): its census,
+# as on 31 December without the clock, and the speed modifier, which countries formed or
+# released since the switch take here.
+te_demog_country_clock_census = {
+	if = {
+		limit = { te_demog_cohorts_run = yes }
+		te_demog_country_census = yes
+	}
+	te_demog_fast_refresh_speed = yes
+}
+
+# THIS = ROOT = a state, straight after te_demog_walks in the same effect: it reads the walk's
+# locals te_dg_w_eb/_eb0 and te_dg_w_ed/_ed0 (the engine's curves x each pop's multiplier, and
+# the curves alone). The engine adds every birth and mortality modifier into one (1 + total) per
+# pop (docs/testing/demographics-growth-probe-results-2026-10-09.md), so a flat +(K - 1) would
+# dilute the others: a law's -20% births would be -5% of a 4x rate. The term is (K - 1) x the
+# state's average multiplier instead, which runs its engine births and deaths at K times what
+# they would be. The walk's multipliers already hold the term applied at the last step, so it is
+# taken off the average first. Floored at 0; a state with no people gets 0. Only the split
+# between a state's pops differs from K x each pop's own rate.
+te_demog_fast_refresh_rates = {
+	if = {
+		limit = { te_demog_fast_k > 1 }
+		set_local_variable = { name = te_dg_fast_prev_b value = 0 }
+		set_local_variable = { name = te_dg_fast_prev_d value = 0 }
+		if = {
+			limit = { has_variable = te_dg_fast_fb }
+			set_local_variable = { name = te_dg_fast_prev_b value = var:te_dg_fast_fb }
+		}
+		if = {
+			limit = { has_variable = te_dg_fast_fd }
+			set_local_variable = { name = te_dg_fast_prev_d value = var:te_dg_fast_fd }
+		}
+		set_variable = {
+			name = te_dg_fast_fb
+			value = {
+				value = local_var:te_dg_w_eb
+				divide = { value = local_var:te_dg_w_eb0 min = 0.00001 }
+				subtract = local_var:te_dg_fast_prev_b
+				min = 0
+				multiply = te_demog_fast_k_minus_1
+			}
+		}
+		set_variable = {
+			name = te_dg_fast_fd
+			value = {
+				value = local_var:te_dg_w_ed
+				divide = { value = local_var:te_dg_w_ed0 min = 0.00001 }
+				subtract = local_var:te_dg_fast_prev_d
+				min = 0
+				multiply = te_demog_fast_k_minus_1
+			}
+		}
+		# removed and re-applied, the mod's refresh pattern (docs/systems/mod_systems.md, the
+		# dynamic-modifier scaling pattern)
+		if = {
+			limit = { has_modifier = te_demog_fast_births }
+			remove_modifier = te_demog_fast_births
+		}
+		if = {
+			limit = { has_modifier = te_demog_fast_deaths }
+			remove_modifier = te_demog_fast_deaths
+		}
+		add_modifier = { name = te_demog_fast_births multiplier = te_demog_fast_birth_term }
+		add_modifier = { name = te_demog_fast_deaths multiplier = te_demog_fast_death_term }
+	}
+	else = {
+		te_demog_fast_clear_rates = yes
+	}
+}
+
+# THIS = a state: the fast rate modifiers and their stored terms off (normal speed). The terms
+# go too, or the next refresh would take a stale term off the walk's average.
+te_demog_fast_clear_rates = {
+	if = {
+		limit = { has_modifier = te_demog_fast_births }
+		remove_modifier = te_demog_fast_births
+	}
+	if = {
+		limit = { has_modifier = te_demog_fast_deaths }
+		remove_modifier = te_demog_fast_deaths
+	}
+	if = {
+		limit = { has_variable = te_dg_fast_fb }
+		remove_variable = te_dg_fast_fb
+	}
+	if = {
+		limit = { has_variable = te_dg_fast_fd }
+		remove_variable = te_dg_fast_fd
+	}
+}
+
+# THIS = a country: research, technology spread and construction at K times (each of
+# te_demog_fast_speed's fields is +1, so the multiplier K - 1 adds K - 1 to the country's
+# other terms), or the modifier off at normal speed.
+te_demog_fast_refresh_speed = {
+	if = {
+		limit = { has_modifier = te_demog_fast_speed }
+		remove_modifier = te_demog_fast_speed
+	}
+	if = {
+		limit = { te_demog_fast_k > 1 }
+		add_modifier = { name = te_demog_fast_speed multiplier = te_demog_fast_k_minus_1 }
+	}
+}
+
+# THIS = the player's country, from te_debug_demog.1 options h-k. $MONTHS$ = months a step:
+# 3 (4x), 2 (6x), 1 (12x) or 12 (normal speed).
+# - The first switch starts the clock at this year and marks every census for a re-seed at the
+#   clock's first step, the next 1st of the month: the months since a state's last yearly step
+#   are not counted, so that step's residual would be wrong. Rings and history start again.
+# - A later switch keeps the clock and the rings. The next step comes once the months since
+#   the clock's last step reach the new count; it covers all of them, at the rates the engine
+#   ran meanwhile, which the walk reads (the rate modifiers change only at a step). So it
+#   matches, except after normal speed, which takes the rate modifiers off at once: that
+#   step's window ran partly at the old speed, and its residual is off once.
+# - The speed modifier changes at once for every country.
+te_demog_fast_set = {
+	if = {
+		limit = { NOT = { te_demog_clock_on = yes } }
+		set_global_variable = { name = te_demog_clock value = te_demog_year }
+		set_global_variable = {
+			name = te_demog_clock_month
+			value = {
+				value = $MONTHS$
+				subtract = 1
+			}
+		}
+		every_state = {
+			limit = { te_demog_has_census = yes }
+			set_variable = { name = te_dg_reseed value = 1 }
+		}
+	}
+	set_global_variable = { name = te_demog_months_per_step value = $MONTHS$ }
+	every_country = {
+		te_demog_fast_refresh_speed = yes
+	}
+	if = {
+		limit = { NOT = { te_demog_fast_k > 1 } }
+		every_state = {
+			te_demog_fast_clear_rates = yes
+		}
+	}
+	debug_log = "TE_DEMOG_LOG fast mode: K=[THIS.ScriptValue('te_demog_fast_k')|0], months a step=[THIS.ScriptValue('te_debug_demog_months_per_step')|0], census year=[THIS.ScriptValue('te_demog_year')|0], date=[TimeKeeper.GetCurrentDate.GetString]"
+}
