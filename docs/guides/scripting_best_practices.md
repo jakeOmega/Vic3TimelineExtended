@@ -1818,6 +1818,24 @@ Wrap the iterator in a `custom_tooltip = { text = TT_KEY  every_X = { ... } }`. 
 
 Note that an event's `after` block runs regardless of which option the player picks, so its effects appear in EVERY option's tooltip preview. Heavy iterators placed in `after` have outsized tooltip cost — gate them with `custom_tooltip` or move per-option-specific iterators into the option body where only that option's preview is affected.
 
+## An Option's Tooltip Walks Its Effects — Put Heavy Work Behind a Click-Only Guard
+
+`custom_tooltip` replaces an option's text, not the walk behind it. While an event is open the engine renders each option's tooltip over and over, walking the option's effects with every `limit` tested against the current state and nothing written (the button case above). `te_debug_demog.1`'s benchmark option steps every census three times. Its tooltip walk wrote about 1,200 `Value of wrong type … Got value of type 'none'` lines a second to `debug.log` from inside the census step, while the event was open. That rolled `debug.log` over four times in 12 seconds, and the replay option's walk added `Failed to fetch variable` lines to `game.log` (2026-10-09). A console option that runs that much work now sets a marker first and does the work only under it:
+
+```
+custom_tooltip = {
+	text = my_option_tt
+	set_variable = my_click
+	if = {
+		limit = { has_variable = my_click }   # false in the tooltip pass, which writes nothing
+		remove_variable = my_click
+		my_heavy_effect = yes
+	}
+}
+```
+
+The guard rests on the same rule as the parameter-preview gotcha below (§ "`$D$ = 1` Is Not a Trigger"): a preview tests a `limit` against the state as it stands. It is unconfirmed in game until a relaunch shows `te_debug_demog.1` open with no `te_demog_effects.txt` lines. Use it on console and debug events. On a player event it would also hide the effects' own tooltip lines.
+
 ## Mandatory Reference Doc Consultation
 
 **Before implementing ANY game mechanic**, search the reference docs by SCOPE TYPE to discover all available tools:
@@ -1860,6 +1878,8 @@ on_entry_into_force = {
 `state_population` and `total_population` are **triggers** (comparison operators: `state_population >= 100000`, `total_population > 0`). They CANNOT be used as bare values in `weight = { add = … }` modifier blocks (e.g., `add = state_population` causes "Malformed token") or inside nested script-value sub-blocks like `divide = { value = total_population … }` (silently resolves to type `'none'`).
 
 Not every nested read fails: in a state-scope script value, `divide = { value = state_population min = 1 }` (the probe's agrarian-share value, since replaced by the census walk's `te_dg_agr_share`) gave exactly what a bareword `divide = state_population` gave (0.174 for London, demographics probe, 2026-10-08). The `total_population` case above hasn't been re-tested. Prefer the bareword form when you write new script values.
+
+**Compare `state_population` with a number or a local, never with an inline block.** The census's yearly pulse tested `state_population > { value = var:te_dg_pop_last multiply = 1.25 }`. In game it held for all 199 capitals with people, 195 of which had moved only 0.87–1.10 times last year's figure, while the twin `state_population < { value = var:te_dg_pop_last multiply = 0.75 }` held for none. That is as if the block read 0. Nothing was logged, and every state re-seeded its census every year (`TE_DEMOG_WHY` lines, observer tests of #830 and #833, 2026-10-09). Taking `state_population` less 1.25 times `var:te_dg_pop_last` into a local in the effect, and comparing the local with 0, decided right: it held only for the 4 capitals that grew by more than a quarter. Vanilla compares `state_population` only with literals. Its inline-block comparisons have a link or a `var:` on the left (`prestige >= { value = … }`, `army_size < { value = … }`), and this finding says nothing about those. `test_no_script_compares_state_population_with_a_block` keeps the form out of the mod.
 
 **Two valid uses:**
 

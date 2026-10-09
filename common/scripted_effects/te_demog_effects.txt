@@ -274,12 +274,6 @@ te_demog_state_yearly = {
 	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
 	te_demog_wc_state_yearly = yes
-	# the census log's why line: which of the branch's conditions hold, read where the
-	# branch reads them (te_debug_demog_effects.txt; temporary, PR #833)
-	if = {
-		limit = { te_demog_census_log_on = yes }
-		te_debug_demog_why_line = yes
-	}
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
@@ -296,12 +290,11 @@ te_demog_state_yearly = {
 		# residual would count it all as migrants. A seed made off this pulse
 		# (te_dg_reseed: game start, the console) is made again here, so the first
 		# step's population change and natural change cover the same year.
-		# The year's gap and the people's move are taken into locals first and the
-		# limits compare those: written as te_demog_year_gap > 1 and
-		# state_population > { value = var:te_dg_pop_last multiply = 1.25 }, this
-		# branch seeded every state at every pulse in game (observer test of #830,
-		# 2026-10-09), so no state ever stepped. The value forms below are the ones
-		# te_demog_set_scale writes te_dg_year and te_dg_people with.
+		# The people's move is taken into locals first and the limits compare those
+		# with 0. Written as state_population > { value = var:te_dg_pop_last
+		# multiply = 1.25 }, the test held for every state with people, even 0.3%
+		# up, and its 0.75 twin for none, so every state seeded at every pulse and
+		# none ever stepped (observer tests of #830 and #833, 2026-10-09).
 		else = {
 			set_local_variable = {
 				name = te_dg_gap

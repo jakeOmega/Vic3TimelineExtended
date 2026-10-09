@@ -291,56 +291,28 @@ class TestStep(unittest.TestCase):
         self.assertIn("value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }", body)
 
     def test_the_branch_limits_compare_locals(self):
-        """Observer test of #830: with te_demog_year_gap > 1 and state_population > { value =
-        var:te_dg_pop_last multiply = 1.25 } in its limits, the branch seeded every state at every
-        pulse, so none stepped (which form misfired is the census log's why line to tell). The
-        pulse takes the gap and the move into locals with the value forms te_demog_set_scale writes
-        with, and its limits compare those."""
+        """Observer tests of #830 and #833 (2026-10-09): state_population > { value =
+        var:te_dg_pop_last multiply = 1.25 } held for every state with people, even 0.3% up, and its
+        0.75 twin for none, so every state seeded at every pulse and none stepped. The pulse takes
+        the move into locals, as people less 1.25 and 0.75 times the last census's, and its limits
+        compare those with 0."""
         body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_state_yearly"))
-        self.assertNotIn("te_demog_year_gap", body)
-        self.assertNotRegex(body, r"state_population [<>] \{")
+        self.assertNotRegex(body, r"state_population [<>]=? \{")
+        self.assertIn("local_var:te_dg_over > 0", body)
+        self.assertIn("local_var:te_dg_under < 0", body)
         self.assertIn("value = { value = te_demog_year subtract = var:te_dg_year }", body)
         self.assertIn("set_variable = { name = te_dg_year value = te_demog_year }", _block(_text(EFFECTS), "te_demog_set_scale"))
 
-    def test_the_why_line_tests_both_forms(self):
-        why = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_why_line")
-        for cond in ("te_demog_year_gap > 1", "te_demog_year_gap = 1",
-                     "state_population > { value = var:te_dg_pop_last multiply = 1.25 }",
-                     "state_population < { value = var:te_dg_pop_last multiply = 0.75 }",
-                     "var:te_dg_raw < 1", "has_variable = te_dg_reseed",
-                     "local_var:te_dg_dbg_gap > 1", "local_var:te_dg_dbg_gap = 1",
-                     "local_var:te_dg_dbg_over > 0", "local_var:te_dg_dbg_under < 0"):
-            self.assertRegex(why, r"limit = \{ " + re.escape(cond) + r" \}\s*debug_log = \"TE_DEMOG_WHY ", cond)
-        self.assertNotIn("is_ai", why, "every capital writes, an observer game's too")
-        pulse = _block(_text(EFFECTS), "te_demog_state_yearly")
-        hook = re.search(r"if = \{\s*limit = \{ te_demog_census_log_on = yes \}\s*te_debug_demog_why_line = yes\s*\}", pulse)
-        self.assertIsNotNone(hook, "gated on the census log")
-        self.assertGreater(hook.start(), pulse.index("te_demog_wc_state_yearly = yes"), "after the walks, as the branch")
-        self.assertLess(hook.end(), pulse.index("limit = { te_demog_cohorts_run = yes }"), "before the branch")
-
-    def test_the_why_line_names_the_conditions_that_hold(self):
-        class Engine(_ConsoleEngine):
-            def run(self, items):   # owner = { } runs its body in place: only its tag line is in it
-                for item in items:
-                    super().run(item[2] if item[0] == "owner" else [item])
-
-        cases = [   # (people now, census year) -> the lines past the header, by their text
-            (1010.0, 1844.0, ["old: te_demog_year_gap = 1", "now: gap = 1"]),
-            (1300.0, 1844.0, ["old: te_demog_year_gap = 1", "old: state_population above",
-                              "now: gap = 1", "now: people above"]),
-            (700.0, 1842.0, ["old: te_demog_year_gap above 1", "old: state_population below",
-                             "now: gap above 1", "now: people below"]),
-        ]
-        for people, census, want in cases:
-            eng = Engine({"year": 1845.0, "state_population": people}, triggers={"is_capital": True})
-            eng.vars.update(te_dg_year=census, te_dg_pop_last=1000.0, te_dg_raw=1000.0)
-            eng.call("te_debug_demog_why_line")
-            said = [s.removeprefix("TE_DEMOG_WHY ") for s, _ in eng.logs[2:]]
-            self.assertEqual(len(said), len(want), (people, census, said))
-            for line, start in zip(said, want):
-                self.assertTrue(line.startswith(start), (people, census, said))
-            self.assertNotIn("te_dg_dbg_gap", eng.vars)
-            self.assertAlmostEqual(eng.logs[1][1]["te_dg_dbg_moved"], people / 1000.0)
+    def test_no_script_compares_state_population_with_a_block(self):
+        """The form above misfired in game with no log line, so nothing in the mod's script uses it:
+        compare state_population with a number, or take the difference into a local first."""
+        hits = []
+        for path in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/**/*.txt")]:
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            for m in re.finditer(r"\bstate_population\s*(?:[<>]=?|!=|=)\s*\{", text):
+                line = text.count("\n", 0, m.start()) + 1
+                hits.append(f"{path.relative_to(ROOT)}:{line}")
+        self.assertEqual(hits, [])
 
     def test_every_cohort_entry_point_is_gated(self):
         """Review Focus 5: nothing writes a cohort without te_demog_cohorts_run."""

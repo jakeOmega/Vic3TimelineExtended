@@ -38,19 +38,6 @@ te_demog_year = {
 	add = year
 }
 
-# State scope: years since the last census step or seed (te_dg_year), 0 before the first.
-# Read only by the census log's why line (te_debug_demog_why_line), which tests the form
-# te_demog_state_yearly compared it in before the observer test of #830; the pulse itself
-# takes the gap into a local.
-te_demog_year_gap = {
-	value = 0
-	if = {
-		limit = { has_variable = te_dg_year }
-		value = te_demog_year
-		subtract = var:te_dg_year
-	}
-}
-
 # The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
 te_demog_open_slot = {
 	value = te_demog_year

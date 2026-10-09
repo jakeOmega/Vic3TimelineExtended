@@ -25,6 +25,14 @@
 #        the states' pending dead (TE_DEMOG_WARDEAD)
 #   f/g  skew check (spec §14 Q11): f logs the capital's pops (TE_DEMOG_SKEW) and adds
 #        a 60-day +0.05 working-adult ratio modifier; g logs them again a month later
+#
+# An option's tooltip walks its effects each time the open event renders it, testing
+# the limits and writing nothing. Options a, c, d and e walk a census step, the walks
+# or every state and war, and their tooltips wrote about 1,200 error lines a second
+# while the event was open (2026-10-09). Each sets te_dg_dbg_click and does its work
+# only under has_variable = te_dg_dbg_click: the tooltip pass never sets it, so it
+# skips the work (docs/guides/scripting_best_practices.md, "An Option's Tooltip Walks
+# Its Effects").
 # ============================================================================
 namespace = te_debug_demog
 
@@ -51,7 +59,12 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 		custom_tooltip = {
 			text = te_debug_demog.1.a.tt
-			capital = { te_debug_demog_replay = yes }
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				capital = { te_debug_demog_replay = yes }
+			}
 		}
 	}
 
@@ -87,12 +100,17 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 		custom_tooltip = {
 			text = te_debug_demog.1.c.tt
-			every_scope_state = {
-				te_demog_walks = yes
-				# off the states' pulses: each seeds again at its next one
-				te_demog_seed_off_pulse = yes
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				every_scope_state = {
+					te_demog_walks = yes
+					# off the states' pulses: each seeds again at its next one
+					te_demog_seed_off_pulse = yes
+				}
+				te_demog_country_census = yes
 			}
-			te_demog_country_census = yes
 		}
 	}
 
@@ -104,7 +122,12 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 		custom_tooltip = {
 			text = te_debug_demog.1.d.tt
-			te_debug_demog_benchmark = yes
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_benchmark = yes
+			}
 		}
 	}
 
@@ -113,7 +136,12 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		name = te_debug_demog.1.e
 		custom_tooltip = {
 			text = te_debug_demog.1.e.tt
-			te_debug_demog_war_dead = yes
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_war_dead = yes
+			}
 		}
 	}
 
