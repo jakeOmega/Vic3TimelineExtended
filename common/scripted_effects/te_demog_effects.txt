@@ -10,7 +10,9 @@
 #   te_dg_sol           pop-weighted standard of living
 #   te_dg_wtfr          mean wealth TFR (children per woman from wealth alone)
 #   te_dg_eb, te_dg_ed  the engine's expected births and deaths over a year,
-#                       people (what the census's own totals are measured against)
+#                       people (what the census's own totals are measured against):
+#                       each pop's curves x its own multipliers, te_demog_pop_birth_mult
+#                       and _death_mult (gen_demographics.py, engine_rate_terms)
 #   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
 #                       inheritance's rural modifiers' multiplier (probe-checked,
 #                       London 0.174)
@@ -141,8 +143,8 @@ te_demog_walks = {
 		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
 		change_local_variable = { name = te_dg_w_sol add = te_demog_pop_sol }
 		change_local_variable = { name = te_dg_w_wtfr add = te_demog_pop_wealth_tfr }
-		change_local_variable = { name = te_dg_w_eb add = te_demog_pop_engine_births }
-		change_local_variable = { name = te_dg_w_ed add = te_demog_pop_engine_deaths }
+		change_local_variable = { name = te_dg_w_eb add = { value = te_demog_pop_engine_births multiply = te_demog_pop_birth_mult } }
+		change_local_variable = { name = te_dg_w_ed add = { value = te_demog_pop_engine_deaths multiply = te_demog_pop_death_mult } }
 		if = {
 			limit = { strata = upper }
 			change_local_variable = { name = te_dg_w_nup add = total_size }
@@ -200,14 +202,17 @@ te_demog_walks = {
 	set_variable = { name = te_dg_lit value = { value = local_var:te_dg_w_lit divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	set_variable = { name = te_dg_sol value = { value = local_var:te_dg_w_sol divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	set_variable = { name = te_dg_wtfr value = { value = local_var:te_dg_w_wtfr divide = { value = local_var:te_dg_w_pop min = 1 } } }
-	# the engine's births and deaths over a year: the curves are x 100,000 a month
+	# the engine's births and deaths over a year: the curves are x 100,000 a month, and each pop's
+	# multiplier (its state's modifier plus its own terms, floored at 0) was applied in the walk. A
+	# state-level 1 + modifier:state_*_mult left out literacy, starvation and every class, workplace
+	# and working-conditions term, so the residual read births 5-9% high and deaths 6% low as
+	# emigration everywhere (docs/testing/demographics-growth-probe-results-2026-10-09.md).
 	set_variable = {
 		name = te_dg_eb
 		value = {
 			value = local_var:te_dg_w_eb
 			multiply = 12
 			divide = 100000
-			multiply = { value = 1 add = modifier:state_birth_rate_mult min = 0 }
 		}
 	}
 	set_variable = {
@@ -216,7 +221,6 @@ te_demog_walks = {
 			value = local_var:te_dg_w_ed
 			multiply = 12
 			divide = 100000
-			multiply = { value = 1 add = modifier:state_mortality_mult min = 0 }
 		}
 	}
 	set_variable = { name = te_dg_agr_share value = { value = local_var:te_dg_w_agr divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }

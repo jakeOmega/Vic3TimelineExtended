@@ -519,6 +519,215 @@ def engine_curves(o, d):
                     (P.WEALTH_TFR_HIGH_SOL, P.WEALTH_TFR_HIGH)])
 
 
+# ---- the engine's own birth and death multipliers, per pop ----------------------------
+# The migration residual is a state's population change less the engine's births and deaths,
+# so the census must expect what the engine does. The growth probe (branch
+# probe/demographics-growth; docs/testing/demographics-growth-probe-results-2026-10-09.md)
+# found the engine builds each pop's multiplier from one total, floored at 0 per pop, and that
+# a state's modifier:state_*_mult read holds only the state-wide part:
+#   births: + literacy_penalty x the pop's literacy, + the starvation penalties
+#   deaths: + its class's state_<type>_mortality_mult, its workplace's building_<type>_ and
+#           building_group_<group>[_<type>]_mortality_mult, working_conditions by workplace
+#           group, the starvation penalties, and non-homeland mortality.
+# Only registered modifier types are read: modifiers.log lists ~1,100 mortality keys, but an
+# unregistered one cannot be set by anything and reads as 'none' on every pop.
+
+def _field(body, key):
+    v = body.get(key) if isinstance(body, dict) else None
+    v = v[-1] if isinstance(v, (list, tuple)) else v
+    return v[-1] if isinstance(v, (list, tuple)) else v
+
+
+def _snapshot(root, name):
+    import json
+    data = json.loads((root / "vanilla_parsed" / "common" / f"{name}.json").read_text(encoding="utf-8"))
+    data = data.get("data", data)
+    return {k: (v[1] if isinstance(v, list) and len(v) == 2 and v[0] == "=" else v) for k, v in data.items()}
+
+
+def _mod_entries(root, sub):
+    """{name: (directive, body)} for the mod's common/<sub>/ files; directive is '', 'REPLACE' or 'INJECT'."""
+    from paradox_file_parser import ParadoxFileParser
+    out = {}
+    for path in sorted((root / "common" / sub).glob("*.txt")):
+        parser = ParadoxFileParser()
+        parser.parse_file(str(path), apply_directives=False)
+        for name, body in parser.data.items():
+            directive, _, key = name.rpartition(":")
+            out[key] = (directive, body[1] if isinstance(body, tuple) else body)
+    return out
+
+
+def registered_modifier_types(root):
+    return set(_snapshot(root, "modifier_types")) | set(_mod_entries(root, "modifier_type_definitions"))
+
+
+def static_modifier(root, name):
+    """{key: value} of a static modifier's *_mult fields, vanilla's with the mod's REPLACE or INJECT (a plain
+    redefinition of a vanilla name is a dropped duplicate)."""
+    vanilla = _snapshot(root, "modifiers")
+    body = dict(vanilla.get(name, {}))
+    directive, mod_body = _mod_entries(root, "static_modifiers").get(name, ("", None))
+    if mod_body is not None and (directive == "REPLACE" or (not directive and name not in vanilla)):
+        body = dict(mod_body)
+    elif mod_body is not None and directive == "INJECT":
+        body.update(mod_body)
+    return {k: float(_field(body, k)) for k in body if k.endswith("_mult")}
+
+
+def building_group_parents(root):
+    parents = {g: _field(b, "parent_group") for g, b in _snapshot(root, "building_groups").items()}
+    for key, (directive, body) in _mod_entries(root, "building_groups").items():
+        if directive == "INJECT":
+            if _field(body, "parent_group"):
+                parents[key] = _field(body, "parent_group")
+        elif directive == "REPLACE" or key not in parents:
+            parents[key] = _field(body, "parent_group")
+    return parents
+
+
+def _group_gate(group, parents):
+    """A building-scope trigger: the building is in the group or any of its descendants."""
+    groups, frontier = [group], [group]
+    while frontier:
+        current = frontier.pop()
+        kids = sorted(k for k, p in parents.items() if p == current)
+        groups += kids
+        frontier += kids
+    if len(groups) == 1:
+        return f"is_building_group = {group}"
+    return "OR = { " + " ".join(f"is_building_group = {g}" for g in groups) + " }"
+
+
+def _starvation_buckets():
+    """[(lower food security, scale)] for mild starvation, top step first; the scale at each step's middle."""
+    hi, lo = P.FOOD_SECURITY_STARVATION_THRESHOLD, P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+    out, top = [], hi
+    while top - P.STARVATION_BUCKET >= lo - 1e-9:
+        lower = round(top - P.STARVATION_BUCKET, 5)
+        mid = (top + lower) / 2
+        out.append((lower, min((hi - mid) * P.STARVATION_EFFECTS_SCALING_FACTOR,
+                               (hi - lo) * P.STARVATION_EFFECTS_SCALING_FACTOR)))
+        top = lower
+    return out
+
+
+def _starvation(o, key, mild, severe):
+    o("if = {")
+    o("limit = { is_in_severe_starvation = yes }")
+    o(f"add = {lit(severe[key])}")
+    o("}")
+    o("else_if = {")
+    o("limit = { is_in_mild_starvation = yes }")
+    buckets = _starvation_buckets()
+    for i, (lower, scale) in enumerate(buckets):
+        if i == len(buckets) - 1:
+            o(f"else = {{ add = {lit(mild[key] * scale)} }}")
+        else:
+            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(mild[key] * scale)} }}")
+    o("}")
+
+
+def engine_rate_terms(o, root):
+    reg = registered_modifier_types(root)
+    literacy = static_modifier(root, "literacy_penalty")["state_birth_rate_mult"]
+    mild, severe = static_modifier(root, "starvation_penalty"), static_modifier(root, "severe_starvation_penalty")
+    conditions = static_modifier(root, "working_conditions")
+    parents = building_group_parents(root)
+    types = sorted(_snapshot(root, "pop_types"))
+    pairs = {}   # (group, pop type or None) -> what applies: registered keys and the working_conditions value
+    for key in sorted(reg):
+        m = re.fullmatch(r"building_group_(\w+?)_mortality_mult", key)
+        if not m:
+            continue
+        group, ptype = m.group(1), None
+        for t in types:
+            if group.endswith("_" + t):
+                group, ptype = group[: -len(t) - 1], t
+        if group in parents:
+            pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["read"] = True
+    for key, value in conditions.items():
+        m = re.fullmatch(r"building_group_(\w+?)_mortality_mult", key)
+        group, ptype = m.group(1), None
+        for t in types:
+            if group.endswith("_" + t):
+                group, ptype = group[: -len(t) - 1], t
+        pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["table"] = value
+
+    o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
+    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties, floored at 0.")
+    o("# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).")
+    o("te_demog_pop_birth_mult = {")
+    o("value = 1")
+    o("add = state.modifier:state_birth_rate_mult")
+    o(f"add = {{ value = literacy_rate multiply = {lit(literacy)} }}")
+    _starvation(o, "state_birth_rate_mult", mild, severe)
+    o("min = 0")
+    o("}")
+    o("")
+    o("# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult")
+    o("# + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions")
+    o("# (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)")
+    o("# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
+    o("# left out: their scaling is unknown and the probe measured both at about 0.")
+    o("te_demog_pop_death_mult = {")
+    o("value = 1")
+    o("add = state.modifier:state_mortality_mult")
+    first = True
+    for t in types:
+        groups = sorted({g for (g, pt) in pairs if pt in (None, t)})
+        own = [f"add = state.modifier:state_{t}_mortality_mult"] if f"state_{t}_mortality_mult" in reg else []
+        work = [f"add = workplace.modifier:building_{t}_mortality_mult"] if f"building_{t}_mortality_mult" in reg else []
+        gated = []
+        for g in groups:
+            adds = []
+            for pt in (None, t):
+                term = pairs.get((g, pt))
+                if not term:
+                    continue
+                if term["read"]:
+                    adds.append(f"add = workplace.modifier:building_group_{g}{'_' + pt if pt else ''}_mortality_mult")
+                if term["table"]:
+                    adds.append(f"add = {lit(term['table'])}")
+            if adds:
+                gated.append((g, adds))
+        if not (own or work or gated):
+            continue
+        o(f"{'if' if first else 'else_if'} = {{")
+        first = False
+        o(f"limit = {{ is_pop_type = {t} }}")
+        for line in own:
+            o(line)
+        if work or gated:
+            o("if = {")
+            o("limit = {")
+            o("is_employed = yes")
+            o("exists = workplace")
+            o("}")
+            for line in work:
+                o(line)
+            for g, adds in gated:
+                o("if = {")
+                o(f"limit = {{ workplace = {{ {_group_gate(g, parents)} }} }}")
+                for line in adds:
+                    o(line)
+                o("}")
+            o("}")
+        o("}")
+    _starvation(o, "state_mortality_mult", mild, severe)
+    if "state_non_homeland_mortality_mult" in reg:
+        o("if = {")
+        o("limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }")
+        o("add = state.modifier:state_non_homeland_mortality_mult")
+        o("}")
+    o("min = 0")
+    o("}")
+    o("")
+    read = set(re.findall(r"modifier:(\w+)", "\n".join(o.lines)))
+    unregistered = sorted(read - reg)
+    assert not unregistered, f"unregistered modifier types read: {unregistered}"
+
+
 def buy_package_costs(root):
     import re
     text = (root / BUY_PACKAGES).read_text(encoding="utf-8-sig")
@@ -716,6 +925,7 @@ def render_values(root):
     o(HEADER.rstrip("\n"))
     o("")
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
+    engine_rate_terms(o, root)
     income(o, buy_package_costs(root))
     multipliers(o, max_institution_investment(root))
     land_term(o, root)

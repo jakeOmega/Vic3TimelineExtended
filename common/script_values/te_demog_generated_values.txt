@@ -66,6 +66,1182 @@ te_demog_pop_wealth_tfr = {
 	}
 }
 
+# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
+# + -0.1 x its literacy (literacy_penalty) + the starvation penalties, floored at 0.
+# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).
+te_demog_pop_birth_mult = {
+	value = 1
+	add = state.modifier:state_birth_rate_mult
+	add = { value = literacy_rate multiply = -0.1 }
+	if = {
+		limit = { is_in_severe_starvation = yes }
+		add = -0.9
+	}
+	else_if = {
+		limit = { is_in_mild_starvation = yes }
+		if = { limit = { food_security >= 0.35 } add = -0.04375 }
+		else_if = { limit = { food_security >= 0.3 } add = -0.13125 }
+		else_if = { limit = { food_security >= 0.25 } add = -0.21875 }
+		else = { add = -0.30625 }
+	}
+	min = 0
+}
+
+# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult
+# + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions
+# (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)
+# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
+# left out: their scaling is unknown and the probe measured both at about 0.
+te_demog_pop_death_mult = {
+	value = 1
+	add = state.modifier:state_mortality_mult
+	if = {
+		limit = { is_pop_type = academics }
+		add = state.modifier:state_academics_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_academics_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = aristocrats }
+		add = state.modifier:state_aristocrats_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = bureaucrats }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = capitalists }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = clergymen }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = clerks }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = engineers }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_engineers_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+				add = workplace.modifier:building_group_bg_fishing_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_heavy_industry_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+				add = workplace.modifier:building_group_bg_infrastructure_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+				add = workplace.modifier:building_group_bg_logging_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+				add = workplace.modifier:building_group_bg_manufacturing_engineers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_military_industry_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+				add = workplace.modifier:building_group_bg_mining_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+				add = workplace.modifier:building_group_bg_oil_extraction_engineers_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = farmers }
+		add = state.modifier:state_farmers_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+				add = workplace.modifier:building_group_bg_agriculture_farmers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+				add = workplace.modifier:building_group_bg_plantations_farmers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+				add = workplace.modifier:building_group_bg_ranching_farmers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = laborers }
+		add = state.modifier:state_laborers_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_laborers_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+				add = workplace.modifier:building_group_bg_agriculture_laborers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_construction } }
+				add = workplace.modifier:building_group_bg_construction_laborers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+				add = workplace.modifier:building_group_bg_fishing_laborers_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_heavy_industry_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+				add = workplace.modifier:building_group_bg_infrastructure_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_light_industry is_building_group = bg_ship_construction } } }
+				add = workplace.modifier:building_group_bg_light_industry_laborers_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+				add = workplace.modifier:building_group_bg_logging_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+				add = workplace.modifier:building_group_bg_manufacturing_laborers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_military_industry_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+				add = workplace.modifier:building_group_bg_mining_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+				add = workplace.modifier:building_group_bg_oil_extraction_laborers_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+				add = workplace.modifier:building_group_bg_plantations_laborers_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+				add = workplace.modifier:building_group_bg_ranching_laborers_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+				add = workplace.modifier:building_group_bg_rubber_laborers_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+				add = workplace.modifier:building_group_bg_whaling_laborers_mortality_mult
+				add = 0.1
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = machinists }
+		add = state.modifier:state_machinists_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_machinists_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+				add = workplace.modifier:building_group_bg_fishing_machinists_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_heavy_industry_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+				add = workplace.modifier:building_group_bg_infrastructure_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_light_industry is_building_group = bg_ship_construction } } }
+				add = workplace.modifier:building_group_bg_light_industry_machinists_mortality_mult
+				add = 0.02
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+				add = workplace.modifier:building_group_bg_logging_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+				add = workplace.modifier:building_group_bg_manufacturing_machinists_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+				add = workplace.modifier:building_group_bg_military_industry_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+				add = workplace.modifier:building_group_bg_mining_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+				add = workplace.modifier:building_group_bg_oil_extraction_machinists_mortality_mult
+				add = 0.05
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+				add = workplace.modifier:building_group_bg_whaling_machinists_mortality_mult
+				add = 0.05
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = officers }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = peasants }
+		add = state.modifier:state_peasants_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = shopkeepers }
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = slaves }
+		add = state.modifier:state_slaves_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_slaves_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+				add = workplace.modifier:building_group_bg_logging_slaves_mortality_mult
+				add = 0.2
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+				add = workplace.modifier:building_group_bg_mining_slaves_mortality_mult
+				add = 0.2
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+				add = workplace.modifier:building_group_bg_plantations_slaves_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+				add = workplace.modifier:building_group_bg_rubber_slaves_mortality_mult
+				add = 0.1
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	else_if = {
+		limit = { is_pop_type = soldiers }
+		add = state.modifier:state_soldiers_mortality_mult
+		if = {
+			limit = {
+				is_employed = yes
+				exists = workplace
+			}
+			add = workplace.modifier:building_soldiers_mortality_mult
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_fishing } }
+				add = workplace.modifier:building_group_bg_fishing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_government is_building_group = bg_bureaucracy is_building_group = bg_monuments is_building_group = bg_skyscraper is_building_group = bg_technology is_building_group = bg_resettlement } } }
+				add = workplace.modifier:building_group_bg_government_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_heavy_industry is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_heavy_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_infrastructure is_building_group = bg_canals is_building_group = bg_private_infrastructure is_building_group = bg_public_infrastructure is_building_group = bg_company_buildings is_building_group = bg_trade } } }
+				add = workplace.modifier:building_group_bg_infrastructure_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_logging } }
+				add = workplace.modifier:building_group_bg_logging_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_manufacturing is_building_group = bg_heavy_industry is_building_group = bg_light_industry is_building_group = bg_military_industry is_building_group = bg_ship_construction is_building_group = bg_construction is_building_group = bg_high_tech is_building_group = bg_biotechnology is_building_group = bg_exotic } } }
+				add = workplace.modifier:building_group_bg_manufacturing_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_military_industry } }
+				add = workplace.modifier:building_group_bg_military_industry_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_mining is_building_group = bg_discoverable_mining } } }
+				add = workplace.modifier:building_group_bg_mining_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_oil_extraction } }
+				add = workplace.modifier:building_group_bg_oil_extraction_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_plantations } }
+				add = workplace.modifier:building_group_bg_plantations_mortality_mult
+			}
+			if = {
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				add = workplace.modifier:building_group_bg_ranching_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_rubber } }
+				add = workplace.modifier:building_group_bg_rubber_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_service } }
+				add = workplace.modifier:building_group_bg_service_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_whaling } }
+				add = workplace.modifier:building_group_bg_whaling_mortality_mult
+			}
+		}
+	}
+	if = {
+		limit = { is_in_severe_starvation = yes }
+		add = 1
+	}
+	else_if = {
+		limit = { is_in_mild_starvation = yes }
+		if = { limit = { food_security >= 0.35 } add = 0.0375 }
+		else_if = { limit = { food_security >= 0.3 } add = 0.1125 }
+		else_if = { limit = { food_security >= 0.25 } add = 0.1875 }
+		else = { add = 0.2625 }
+	}
+	if = {
+		limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }
+		add = state.modifier:state_non_homeland_mortality_mult
+	}
+	min = 0
+}
+
 # Pop scope: spending per head at this pop's wealth (buy packages / 100, capped at wealth
 # 60), the stand-in for income in the Gini (spec 4.1), x size.
 te_demog_pop_income = {
