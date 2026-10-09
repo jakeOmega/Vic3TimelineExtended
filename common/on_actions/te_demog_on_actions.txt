@@ -20,6 +20,33 @@ te_demog_state_yearly_on_action = {
 	}
 }
 
+# Root = Country, monthly. Not gated by the rule: the war-shock work (Task 11) reads
+# the same running total of the owner's war dead.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_demog_country_monthly_on_action
+	}
+}
+
+te_demog_country_monthly_on_action = {
+	effect = {
+		te_demog_country_monthly = yes
+	}
+}
+
+# Root = Country, on 31 December. The effect gates itself on the rule.
+on_yearly_pulse_country = {
+	on_actions = {
+		te_demog_country_yearly_on_action
+	}
+}
+
+te_demog_country_yearly_on_action = {
+	effect = {
+		te_demog_country_yearly = yes
+	}
+}
+
 # Every 1836 state opens with a census. on_game_started has no ROOT, so each
 # country walks and seeds its states in a hidden country event
 # (te_demog_events.1); the fan-out is te_inh_on_game_started's.

@@ -54,6 +54,16 @@
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
 #                       the country's TFR weight), each with last year's in
 #                       te_dg_prev_<name> from the second census on
+#
+# Flows (Task 9), the people the engine moves and kills (spec §2.5):
+#   te_dg_war_in        state: war dead the owner shared out on 31 December,
+#                       taken (and removed) by the next step
+#   te_dg_kills_in      state: people the mod's own script killed since the last
+#                       step (te_demog_note_kills), taken and removed the same way
+#   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
+#   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
+#   te_dg_war_year      country: the year's rise in war dead, until 31 December
 # ============================================================================
 
 # THIS = a state, on its yearly pulse. One pop walk and one building walk fill
@@ -373,6 +383,15 @@ te_demog_seed = {
 	set_local_variable = { name = te_dg_dpow value = 1 }
 	te_demog_reset_accumulators = yes
 	te_demog_no_flows = yes
+	# the seed counts the people as they are now: war dead and kills noted before it are in them already
+	if = {
+		limit = { has_variable = te_dg_war_in }
+		remove_variable = te_dg_war_in
+	}
+	if = {
+		limit = { has_variable = te_dg_kills_in }
+		remove_variable = te_dg_kills_in
+	}
 	set_variable = { name = te_dg_pf value = 0 }
 	set_variable = { name = te_dg_pm value = 0 }
 	set_variable = { name = te_dg_pa value = 150 }
@@ -573,7 +592,7 @@ te_demog_set_scale = {
 }
 
 # No war dead, kills or migrants this sweep (demographics_model.step with
-# war_dead, kills and migration 0): the seed, and the step until Task 9.
+# war_dead, kills and migration 0): the seed's, which never flows.
 te_demog_no_flows = {
 	set_local_variable = { name = te_dg_war_ff value = 0 }
 	set_local_variable = { name = te_dg_war_fm value = 0 }
@@ -592,10 +611,193 @@ te_demog_no_flows = {
 	set_local_variable = { name = te_dg_pm4 value = 0 }
 }
 
-# THIS = a state, at the start of its step: the flow locals (demographics_model.step's
-# war_dead, kills, migration and profile). Task 9 replaces the body.
+# THIS = a state, at the start of its step (after te_demog_prepare, which sets
+# te_dg_fws). Sets the step's flow locals (demographics_model.step's war_dead, kills,
+# migration and migrant_profile): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out and
+# te_dg_pf<c>/te_dg_pm<c>. Every branch sets all of them; the step reads them unguarded.
 te_demog_flows = {
-	te_demog_no_flows = yes
+	# war dead the owner shared out on 31 December (te_demog_share_war_dead)
+	set_local_variable = { name = te_dg_war value = 0 }
+	if = {
+		limit = { has_variable = te_dg_war_in }
+		set_local_variable = { name = te_dg_war value = var:te_dg_war_in }
+		remove_variable = te_dg_war_in
+	}
+	set_local_variable = {
+		name = te_dg_war_fm
+		value = { value = local_var:te_dg_war multiply = te_demog_k_war_male_share divide = { value = var:te_dg_m1840 min = 1 } max = 0.5 }
+	}
+	set_local_variable = {
+		name = te_dg_war_ff
+		value = {
+			value = 1
+			subtract = te_demog_k_war_male_share
+			multiply = local_var:te_dg_war
+			divide = { value = var:te_dg_f1840 min = 1 }
+			max = 0.5
+		}
+	}
+	# the mod's own kills since the last step (te_demog_note_kills)
+	set_local_variable = { name = te_dg_kills value = 0 }
+	if = {
+		limit = { has_variable = te_dg_kills_in }
+		set_local_variable = { name = te_dg_kills value = var:te_dg_kills_in }
+		remove_variable = te_dg_kills_in
+	}
+	set_local_variable = { name = te_dg_kill value = { value = local_var:te_dg_kills divide = { value = var:te_dg_people min = 1 } max = 0.9 } }
+	# the residual: the change less the engine's own births and deaths, war dead and kills
+	set_local_variable = {
+		name = te_dg_mig
+		value = {
+			value = state_population
+			subtract = var:te_dg_pop_last
+			subtract = var:te_dg_eb
+			add = var:te_dg_ed
+			add = local_var:te_dg_war
+			add = local_var:te_dg_kills
+		}
+	}
+	# a residual inside the noise band is model error, not migration
+	set_local_variable = { name = te_dg_noise value = { value = var:te_dg_people multiply = te_demog_k_residual_noise_share } }
+	set_local_variable = { name = te_dg_neg_noise value = { value = local_var:te_dg_noise multiply = -1 } }
+	if = {
+		limit = {
+			local_var:te_dg_mig < local_var:te_dg_noise
+			local_var:te_dg_mig > local_var:te_dg_neg_noise
+		}
+		set_local_variable = { name = te_dg_mig value = 0 }
+	}
+	set_variable = { name = te_dg_net_migration value = local_var:te_dg_mig }
+	set_local_variable = { name = te_dg_mig_in value = { value = local_var:te_dg_mig min = 0 } }
+	set_local_variable = { name = te_dg_mig_out value = { value = local_var:te_dg_mig multiply = -1 min = 0 } }
+	if = {
+		limit = { NOT = { has_variable = te_dg_inflow_years } }
+		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+	# the profile (demographics_model.migrant_profile)
+	set_local_variable = { name = te_dg_refugee value = te_demog_crisis }
+	set_local_variable = { name = te_dg_rights value = { value = local_var:te_dg_fws divide = { value = te_demog_k_full_female_work_share min = 0.01 } } }
+	set_local_variable = {
+		name = te_dg_family
+		value = {
+			value = te_demog_k_family_base
+			add = te_demog_family_transport
+			add = { value = local_var:te_dg_rights multiply = te_demog_k_family_rights_weight }
+			add = { value = var:te_dg_inflow_years multiply = te_demog_k_chain_step max = te_demog_k_chain_cap }
+			max = { value = 1 subtract = local_var:te_dg_refugee }
+			min = 0
+		}
+	}
+	set_local_variable = { name = te_dg_labour value = { value = 1 subtract = local_var:te_dg_family subtract = local_var:te_dg_refugee min = 0 } }
+	set_local_variable = {
+		name = te_dg_labour_f
+		value = {
+			value = te_demog_k_labour_female_max
+			subtract = te_demog_k_labour_female_min
+			multiply = var:te_dg_fjob_share
+			multiply = local_var:te_dg_rights
+			add = te_demog_k_labour_female_min
+			min = te_demog_k_labour_female_min
+			max = te_demog_k_labour_female_max
+		}
+	}
+	te_demog_set_profile = yes
+	# chain migration: consecutive years of net inflow, counted after the profile
+	# read last year's count (the model's inp.inflow_years)
+	if = {
+		limit = { local_var:te_dg_mig > 0 }
+		change_variable = { name = te_dg_inflow_years add = 1 }
+	}
+	else = {
+		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+}
+
+# THIS = a state: people the mod's own script killed here, of every age and both
+# sexes (spec §2.5 "Known kills"); the next step takes them out of the cohorts
+# instead of reading them as emigrants. Only a state with a census is told: a
+# state the seed has not reached yet will count them in its population anyway.
+te_demog_note_kills = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			te_demog_has_census = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = te_dg_kills_in } }
+			set_variable = { name = te_dg_kills_in value = 0 }
+		}
+		change_variable = { name = te_dg_kills_in add = $VALUE$ }
+	}
+}
+
+# THIS = a country, monthly. The dead of every war it is in, summed; the year's
+# total gains the rise. A war that ends drops out of the sum, so the change is
+# floored at zero and loses at most that month of any other war's dead. The first
+# run starts from the dead already counted, so a save that meets the mod mid-war
+# does not read the war's whole past as one year's dead.
+te_demog_country_monthly = {
+	set_local_variable = { name = te_dg_dead value = 0 }
+	every_scope_war = {
+		change_local_variable = { name = te_dg_dead add = te_demog_war_dead_root }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_dg_war_seen } }
+		set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
+		set_variable = { name = te_dg_war_year value = 0 }
+	}
+	change_variable = {
+		name = te_dg_war_year
+		add = {
+			value = local_var:te_dg_dead
+			subtract = var:te_dg_war_seen
+			min = 0
+		}
+	}
+	set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
+}
+
+# THIS = a country on 31 December: the year's war dead go to its states by their
+# share of its soldiers (by people when it has none); each state's next step takes
+# its share out of its men and women aged 18-40.
+te_demog_share_war_dead = {
+	if = {
+		limit = {
+			has_variable = te_dg_war_year
+			var:te_dg_war_year > 0
+		}
+		set_local_variable = { name = te_dg_dead value = var:te_dg_war_year }
+		set_local_variable = { name = te_dg_sold value = 0 }
+		set_local_variable = { name = te_dg_ppl value = 0 }
+		every_scope_state = {
+			limit = { te_demog_has_census = yes }
+			change_local_variable = { name = te_dg_sold add = var:te_dg_soldiers }
+			change_local_variable = { name = te_dg_ppl add = var:te_dg_people }
+		}
+		every_scope_state = {
+			limit = { te_demog_has_census = yes }
+			if = {
+				limit = { NOT = { has_variable = te_dg_war_in } }
+				set_variable = { name = te_dg_war_in value = 0 }
+			}
+			if = {
+				limit = { local_var:te_dg_sold >= 1 }
+				change_variable = { name = te_dg_war_in add = { value = var:te_dg_soldiers divide = { value = local_var:te_dg_sold min = 1 } multiply = local_var:te_dg_dead } }
+			}
+			else = {
+				change_variable = { name = te_dg_war_in add = { value = var:te_dg_people divide = { value = local_var:te_dg_ppl min = 1 } multiply = local_var:te_dg_dead } }
+			}
+		}
+		set_variable = { name = te_dg_war_year value = 0 }
+	}
+}
+
+# THIS = a country on 31 December (the yearly country pulse). Tasks 10-12 add to it.
+te_demog_country_yearly = {
+	if = {
+		limit = { te_demog_cohorts_run = yes }
+		te_demog_share_war_dead = yes
+	}
 }
 
 # THIS = a state, once a year. Ages the ring one year (spec §2.1; demographics_model.step).

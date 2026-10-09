@@ -92,3 +92,23 @@ te_demog_tfr = {
 	add = 1
 	multiply = var:te_dg_wtfr
 }
+
+# War scope, on the owner's pulse: the owner's dead in this war so far (probe Q4).
+te_demog_war_dead_root = {
+	value = "num_country_dead(root)"
+}
+
+# State scope: how much of a migration is refugees (spec §2.5): devastation,
+# turmoil and the owner being at war. The bareword reads are checked in game by
+# te_debug_demog.1 option b's census line (Owner checks).
+te_demog_crisis = {
+	value = 0
+	add = devastation
+	add = turmoil
+	if = {
+		limit = { owner = { is_at_war = yes } }
+		add = te_demog_k_crisis_at_war
+	}
+	min = 0
+	max = 1
+}

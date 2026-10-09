@@ -1613,6 +1613,13 @@ violent_hostility_on_action = {
 							}
 						}
 						scope:curr_state = {
+							set_local_variable = { name = te_dg_vh value = 0 }
+							every_scope_pop = {
+								limit = { culture = scope:curr_culture }
+								change_local_variable = { name = te_dg_vh add = total_size }
+							}
+							change_local_variable = { name = te_dg_vh multiply = 0.1 }
+							te_demog_note_kills = { VALUE = local_var:te_dg_vh }
 							kill_population_percent_in_state = {
 								culture = PREV
 								percent = 0.1
@@ -1669,6 +1676,13 @@ violent_hostility_on_action = {
 							}
 						}
 						scope:curr_state = {
+							set_local_variable = { name = te_dg_vh value = 0 }
+							every_scope_pop = {
+								limit = { culture = scope:curr_culture }
+								change_local_variable = { name = te_dg_vh add = total_size }
+							}
+							change_local_variable = { name = te_dg_vh multiply = 0.02 }
+							te_demog_note_kills = { VALUE = local_var:te_dg_vh }
 							kill_population_percent_in_state = {
 								culture = PREV
 								percent = 0.02

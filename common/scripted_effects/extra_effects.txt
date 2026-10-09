@@ -496,6 +496,7 @@ nuclear_industrial_strike = {
 		name = nuclear_strike_killed_population
 		value = nuclear_industrial_strike_killed_population
 	}
+	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.1
 	}
@@ -779,6 +780,7 @@ nuclear_tactical_strike = {
 			}
 		}
 	}
+	te_demog_note_kills = { VALUE = var:tactical_nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.5
 		pop_type = soldiers

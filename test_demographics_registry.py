@@ -4,6 +4,7 @@ Static checks on the script: the rule's settings and wrappers, guarded divisions
 pulse wiring, the gates around every cohort entry point. Later tasks add tests here.
 """
 
+import dataclasses
 import itertools
 import math
 import random
@@ -560,10 +561,16 @@ class TestCohortScript(unittest.TestCase):
 
     # -- the step -------------------------------------------------------------------------------
 
-    def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None):
+    def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
+                  flows=None):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
-        people in the two oldest cohorts and in the pool. Flows are fed to the script through a
-        te_demog_flows built from the model's own formulas (Task 9 computes them in game).
+        people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
+        stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
+        model's own formulas (it tests the step alone); flows= runs the script's own te_demog_flows
+        from the state's variables, against the same flows given to the model. flows is a dict:
+          eb, ed (the engine's births and deaths), migration (the residual before the noise rule),
+          crisis, fjob_share, techs (added to INP's), and the optional pending war (te_dg_war_in),
+          kills (te_dg_kills_in) and inflow_years, left out = the variable doesn't exist.
         empty_from: nobody from that age up (the slots hold no variable; the pool keeps its people),
         the ring of the game's first decades, when the open slot is empty at the fold."""
         ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
@@ -582,9 +589,23 @@ class TestCohortScript(unittest.TestCase):
         ring.total = ring.people()
         before = (list(ring.f), list(ring.m))
         pop = ring.total * 1.004
-        flows = None
+        inp = self.INP
+        fixtures = {}
+        if flows is not None:
+            stub_flows = False
+            inp = dataclasses.replace(
+                self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
+                inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
+            war_dead, kills = flows.get("war") or 0.0, flows.get("kills") or 0.0
+            # the residual the script reads, and what the model is told: a residual inside the noise band is none
+            pop = ring.total + flows["eb"] - flows["ed"] - war_dead - kills + flows["migration"]
+            migration = 0.0 if abs(flows["migration"]) < P.RESIDUAL_NOISE_SHARE * ring.total else flows["migration"]
+            fixtures = {"te_demog_crisis": flows["crisis"],
+                        "te_demog_family_transport": sum(v for tech, v in P.FAMILY_TRANSPORT_TECHS.items()
+                                                         if tech in inp.techs)}
+        stub = None
         if stub_flows:
-            prof = demographics_model.migrant_profile(self.INP)
+            prof = demographics_model.migrant_profile(inp)
             locals_ = {
                 "te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.women_18_40),
                 "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.men_18_40),
@@ -594,9 +615,10 @@ class TestCohortScript(unittest.TestCase):
             }
             for c in range(len(P.MIGRANT_CLASSES)):
                 locals_[f"te_dg_pf{c}"], locals_[f"te_dg_pm{c}"] = prof[(c, "f")], prof[(c, "m")]
-            flows = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}"
-                                                 for k, v in locals_.items())}
-        eng = _engine_for(self.INP, self.YEAR + 1, pop, effects=flows)
+            stub = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}"
+                                                for k, v in locals_.items())}
+        eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub)
+        eng.fixtures.update(fixtures)
         for k in range(P.RING_YEARS):
             if before[0][k] or before[1][k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
@@ -605,8 +627,15 @@ class TestCohortScript(unittest.TestCase):
                         te_dg_f1840=ring.women_18_40, te_dg_m1840=ring.men_18_40)
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
+        if flows is not None:
+            eng.vars.update(te_dg_pop_last=ring.total, te_dg_eb=flows["eb"], te_dg_ed=flows["ed"],
+                            te_dg_fjob_share=flows["fjob_share"])
+            for name, key in (("te_dg_war_in", "war"), ("te_dg_kills_in", "kills"),
+                              ("te_dg_inflow_years", "inflow_years")):
+                if flows.get(key) is not None:
+                    eng.vars[name] = float(flows[key])
         eng.call("te_demog_step")
-        figures = demographics_model.step(ring, self.INP, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
+        figures = demographics_model.step(ring, inp, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
                                           kills=kills, migration=migration)
         return eng, ring, figures, pop
 
@@ -645,8 +674,11 @@ class TestCohortScript(unittest.TestCase):
             self.close(eng.vars[f"te_dg_bm{b}"], sum(m for a, _f, m in rows if a in ages), what=f"band {b} men")
 
     def test_step_without_flows(self):
-        """The script's own te_demog_flows (no flows until Task 9)."""
-        self.check_step(*self.step_both(stub_flows=False))
+        """The script's own te_demog_flows with nothing to flow: no pending dead, a residual of 0."""
+        eng, *rest = self.step_both(flows=dict(eb=0.0, ed=0.0, crisis=0.0, fjob_share=0.3, migration=0.0))
+        self.check_step(eng, *rest)
+        self.assertEqual(eng.vars["te_dg_net_migration"], 0.0)
+        self.assertEqual(eng.vars["te_dg_inflow_years"], 0.0)
 
     def test_step_with_war_kills_and_immigration(self):
         self.check_step(*self.step_both(war_dead=900.0, kills=1500.0, migration=4000.0))
@@ -667,6 +699,81 @@ class TestCohortScript(unittest.TestCase):
         """Departures over half a cohort's survivors stop at half (demographics_model.step)."""
         eng, ring, figures, pop = self.step_both(migration=-0.45 * self.POP)
         self.check_step(eng, ring, figures, pop)
+
+    # -- the script's own flows (te_demog_flows) ------------------------------------------------
+
+    def check_flows(self, eng, flows, want_inflow_years):
+        """The flow locals te_demog_flows set equal the model's war shares, kill share, migrant
+        split and profile, and it consumed what was pending."""
+        inp = dataclasses.replace(
+            self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
+            inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
+        prof = demographics_model.migrant_profile(inp)
+        for c in range(len(P.MIGRANT_CLASSES)):
+            self.close(eng.locals[f"te_dg_pf{c}"], prof[(c, "f")], rel=1e-9, what=f"profile, class {c} women")
+            self.close(eng.locals[f"te_dg_pm{c}"], prof[(c, "m")], rel=1e-9, what=f"profile, class {c} men")
+        self.close(sum(eng.locals[f"te_dg_p{s}{c}"] for s in "fm" for c in range(len(P.MIGRANT_CLASSES))), 1.0,
+                   what="the profile sums to 1")
+        for name in ("te_dg_war_in", "te_dg_kills_in"):
+            self.assertNotIn(name, eng.vars, f"{name} is taken once")
+        self.assertEqual(eng.vars["te_dg_inflow_years"], want_inflow_years)
+
+    def test_flows_for_immigration_with_war_dead_and_kills(self):
+        flows = dict(eb=2500.0, ed=2100.0, migration=4000.0, crisis=0.2, fjob_share=0.4, war=900.0, kills=1500.0,
+                     inflow_years=12, techs=frozenset({"railways", "paddle_steamer"}))   # past chain migration's cap
+        eng, ring, figures, pop = self.step_both(flows=flows)
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=13)
+        self.close(eng.vars["te_dg_net_migration"], 4000.0, what="net migration")
+        self.assertGreater(eng.locals["te_dg_mig_in"], 0)
+        self.assertEqual(eng.locals["te_dg_mig_out"], 0)
+
+    def test_flows_for_emigration(self):
+        flows = dict(eb=2500.0, ed=2100.0, migration=-6000.0, crisis=0.35, fjob_share=0.1, war=300.0, inflow_years=5)
+        eng, ring, figures, pop = self.step_both(flows=flows)
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=0)
+        self.close(eng.vars["te_dg_net_migration"], -6000.0, what="net migration")
+        self.assertEqual(eng.locals["te_dg_mig_in"], 0)
+        self.assertGreater(eng.locals["te_dg_mig_out"], 0)
+
+    def test_flows_ignore_a_residual_inside_the_noise_band(self):
+        """0.2% of the people is model error: no migrants, and the inflow streak ends."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=0.002 * self.POP, crisis=0.0, fjob_share=0.3, inflow_years=4)
+        eng, ring, figures, pop = self.step_both(flows=flows)
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=0)
+        self.assertEqual(eng.vars["te_dg_net_migration"], 0.0)
+        flows["migration"] = 0.004 * self.POP
+        eng, ring, figures, pop = self.step_both(flows=flows)
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=5)
+        self.assertGreater(eng.vars["te_dg_net_migration"], 0)
+
+    def test_flows_with_a_first_year_state_and_a_full_crisis(self):
+        """No pending dead or kills, no streak variable yet; refugees take the whole profile."""
+        flows = dict(eb=2500.0, ed=2100.0, migration=3000.0, crisis=1.0, fjob_share=0.3)
+        eng, ring, figures, pop = self.step_both(flows=flows)
+        self.check_step(eng, ring, figures, pop)
+        self.check_flows(eng, flows, want_inflow_years=1)
+        self.close(eng.locals["te_dg_labour"], 0.0, what="labour migrants")
+        self.close(eng.locals["te_dg_family"], 0.0, what="families")
+
+    def test_flows_hit_the_caps(self):
+        """The war share stops at half a cohort, the kill share at 0.9."""
+        war, kills = 5.0 * self.POP, 0.95 * self.POP
+        flows = dict(eb=0.0, ed=0.0, migration=war + kills, crisis=0.0, fjob_share=0.3, war=war, kills=kills)
+        eng, *_rest = self.step_both(flows=flows)
+        self.assertEqual(eng.locals["te_dg_war_fm"], 0.5)
+        self.assertEqual(eng.locals["te_dg_war_ff"], 0.5)
+        self.assertEqual(eng.locals["te_dg_kill"], 0.9)
+
+    def test_a_seed_drops_the_flows_pending_before_it(self):
+        eng = _engine_for(self.INP, self.YEAR, self.POP)
+        eng.vars.update(te_dg_war_in=500.0, te_dg_kills_in=80.0)
+        eng.call("te_demog_seed")
+        self.assertNotIn("te_dg_war_in", eng.vars)
+        self.assertNotIn("te_dg_kills_in", eng.vars)
 
     # -- the orchestrator -----------------------------------------------------------------------
 
@@ -690,3 +797,138 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars.update(te_dg_year=float(census), te_dg_raw=raw)
             eng.call("te_demog_state_yearly")
             self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, rule))
+
+
+class _CountryEngine(_Engine):
+    """_Engine plus the two iterators the country effects use. every_scope_war runs its body once
+    per war in `wars` (the owner's dead in it, read through te_demog_war_dead_root); every_scope_state
+    once per state in `states` (a dict of that state's variables, the locals staying shared)."""
+
+    def __init__(self, wars=(), states=(), **kwargs):
+        super().__init__(**kwargs)
+        self.wars, self.states = list(wars), list(states)
+
+    def run(self, items):
+        batch = []
+        for item in items:
+            if item[0] in ("every_scope_war", "every_scope_state"):
+                super().run(batch)
+                batch = []
+                self._iterate(item[0], item[2])
+            else:
+                batch.append(item)
+        super().run(batch)
+
+    def _iterate(self, key, arg):
+        body = [i for i in arg if i[0] != "limit"]
+        if key == "every_scope_war":
+            for dead in self.wars:
+                self.fixtures["te_demog_war_dead_root"] = float(dead)
+                self.run(body)
+            return
+        country_vars = self.vars
+        for state_vars in self.states:
+            self.vars = state_vars
+            if self.holds(_find(arg, "limit")):
+                self.run(body)
+        self.vars = country_vars
+
+
+class TestFlows(unittest.TestCase):
+    def test_finished_war_never_returns_its_dead(self):
+        """Review Focus 4: the monthly change in summed war dead is floored at zero."""
+        body = _block(_text(EFFECTS), "te_demog_country_monthly")
+        self.assertRegex(body, r"subtract = var:te_dg_war_seen\s+min = 0")
+
+    def test_kill_sites_record_their_dead(self):
+        effects = _text(ROOT / "common" / "scripted_effects" / "extra_effects.txt")
+        for name in ("nuclear_industrial_strike", "nuclear_tactical_strike"):
+            self.assertIn("te_demog_note_kills", _block(effects, name), name)
+        on_actions = _text(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
+        self.assertEqual(on_actions.count("te_demog_note_kills"), 2)   # both Violent Hostility kills
+
+    def test_residual_ignores_noise(self):
+        body = _block(_text(EFFECTS), "te_demog_flows")
+        self.assertIn("te_demog_k_residual_noise_share", body)
+
+    def test_country_pulses_are_hooked(self):
+        text = _text(DEMOG_ON_ACTIONS)
+        self.assertRegex(_block(text, "on_monthly_pulse_country"), r"te_demog_country_monthly_on_action")
+        self.assertRegex(_block(text, "on_yearly_pulse_country"), r"te_demog_country_yearly_on_action")
+        monthly = _block(text, "te_demog_country_monthly_on_action")
+        self.assertIn("te_demog_country_monthly = yes", monthly)
+        self.assertNotIn("te_demog_cohorts_run", monthly)   # Task 11's war shock reads the same total
+        self.assertIn("te_demog_country_yearly = yes", _block(text, "te_demog_country_yearly_on_action"))
+        self.assertIn("te_demog_cohorts_run = yes", _block(_text(EFFECTS), "te_demog_country_yearly"))
+
+    def test_flows_set_every_local_the_step_reads(self):
+        """Whatever the branch, te_demog_flows leaves the locals te_demog_no_flows names: each is set
+        at its top level (one tab), not inside an if."""
+        flows = _block(_text(EFFECTS), "te_demog_flows")
+        body = flows + _block(_text(GENERATED_EFFECTS), "te_demog_set_profile")
+        self.assertRegex(flows, r"(?m)^\tte_demog_set_profile = yes$", "the profile is set unconditionally")
+        names = re.findall(r"name = (te_dg_\w+) value", _block(_text(EFFECTS), "te_demog_no_flows"))
+        self.assertEqual(len(names), 15)
+        for name in names:
+            self.assertIsNotNone(re.search(rf"^\tset_local_variable = \{{\s+name = {name}\s+value", body, re.M), name)
+
+    def test_each_war_adds_its_dead_to_the_year(self):
+        eng = _CountryEngine(wars=[100, 50], fixtures={})
+        for wars, want_seen, want_year in (
+            ([100, 50], 150, 0),   # first run: starts from the dead already counted
+            ([130, 80], 210, 60),
+            ([130], 130, 60),      # a war ended: the sum fell, nothing is returned or subtracted
+            ([140], 140, 70),
+            ([], 0, 70),           # peace
+        ):
+            eng.wars = wars
+            eng.call("te_demog_country_monthly")
+            self.assertEqual((eng.vars["te_dg_war_seen"], eng.vars["te_dg_war_year"]), (want_seen, want_year), wars)
+
+    def _states(self, *soldiers_people_census):
+        out = []
+        for soldiers, people, census in soldiers_people_census:
+            state = {"te_dg_soldiers": float(soldiers), "te_dg_people": float(people)}
+            if census:
+                state["te_dg_year"] = 1836.0
+            out.append(state)
+        return out
+
+    def test_the_years_dead_go_to_states_by_their_soldiers(self):
+        states = self._states((300, 10000, True), (100, 30000, True), (600, 5000, False))
+        states[0]["te_dg_war_in"] = 5.0   # an earlier share not yet taken is kept
+        eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True})
+        eng.vars.update(te_dg_war_year=1000.0)
+        eng.call("te_demog_country_yearly")
+        self.assertEqual(states[0]["te_dg_war_in"], 5.0 + 750.0)
+        self.assertEqual(states[1]["te_dg_war_in"], 250.0)
+        self.assertNotIn("te_dg_war_in", states[2], "a state with no census is skipped")
+        self.assertEqual(eng.vars["te_dg_war_year"], 0.0)
+
+    def test_a_country_without_soldiers_shares_by_people(self):
+        states = self._states((0, 10000, True), (0, 30000, True))
+        eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True})
+        eng.vars.update(te_dg_war_year=400.0)
+        eng.call("te_demog_share_war_dead")
+        self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (100.0, 300.0))
+
+    def test_no_dead_or_no_rule_shares_nothing(self):
+        for rule, year in ((True, 0.0), (False, 500.0)):
+            states = self._states((300, 10000, True))
+            eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": rule})
+            eng.vars.update(te_dg_war_year=year)
+            eng.call("te_demog_country_yearly")
+            self.assertNotIn("te_dg_war_in", states[0], (rule, year))
+            self.assertEqual(eng.vars["te_dg_war_year"], year)
+
+    def test_known_kills_add_up_and_only_where_the_census_runs(self):
+        call = "te_demog_note_kills = { VALUE = var:struck }"
+        for rule, census, want in ((True, True, 700.0), (True, False, None), (False, True, None)):
+            eng = _Engine({}, triggers={"te_demog_cohorts_run": rule})
+            eng.vars["struck"] = 300.0
+            if census:
+                eng.vars["te_dg_year"] = 1836.0
+            eng.run(_parse_script(call))
+            eng.vars["struck"] = 400.0
+            eng.run(_parse_script(call))
+            self.assertEqual(eng.vars.get("te_dg_kills_in"), want, (rule, census))
