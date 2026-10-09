@@ -83,8 +83,11 @@ te_tax_light_migrate_country = {
 #      between the two levels (te_tax_light_gen_shift), scored;
 #   3. each tax's step, and for a player's country the tax level they give;
 #   4. relief, reactions and bands (the view-band modifiers).
-# Every limit on the way reads a persistent variable, never one set earlier in
-# the same run: a step button's tooltip walks this without running it.
+# Every limit on the way reads a variable that persists between runs
+# (te_tax_light_gen_init creates the scratch ones), because a step button's
+# tooltip walks this without running it: a limit that reads a value set earlier
+# in the same run then sees last run's value, which decides only hidden
+# branches, never an unset one.
 te_tax_light_sync = {
 	if = {
 		limit = { te_tax_light_in_force = yes }
