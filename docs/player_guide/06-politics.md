@@ -88,8 +88,8 @@ Traditional Vassalage strengthens the aristocrats and costs authority.
 ### The rules of war
 
 Each Rules of War law is best at one thing, so the choice follows what you are
-doing, not how far you have researched. Every country starts on Traditional
-Rules of War.
+doing rather than your research. Every country starts on Traditional Rules of
+War.
 
 | Law | From | Best for | What you give up |
 |---|---|---|---|
