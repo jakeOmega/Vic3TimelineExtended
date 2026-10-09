@@ -638,12 +638,14 @@ social_tensions_events.7 = {
 			has_modifier = war_crime_tribunal_modifier
 			has_modifier = war_crime_reform_modifier
 		}
-		# Humanitarian regulations prevent war crimes
-		NOT = { has_law = law_type:law_humanitarian_regulations }
-		# More likely with total war doctrine
-		OR = {
-			has_law = law_type:law_total_war
-			has_law = law_type:law_traditional_rules_of_war
+		# Humanitarian Regulations and Limited War keep standing oversight of the
+		# troops. Under War Crimes Forbidden a massacre is still possible; it is
+		# then a crime with individual responsibility, so prosecution (b) is the
+		# law's answer. Before 2026-10-09 the event needed Total War or
+		# Traditional while option c needed a humane law, so c never appeared.
+		NOR = {
+			has_law = law_type:law_humanitarian_regulations
+			has_law = law_type:law_limited_war
 		}
 	}
 
@@ -676,17 +678,17 @@ social_tensions_events.7 = {
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_war_crimes_forbidden } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
 		}
 	}
 
 	option = { # Overhaul military doctrine
 		name = social_tensions_events.7.c
+		# A doctrine to overhaul: the soldier's code or the codified laws of war.
+		# Total War has no restraint to reform.
 		trigger = {
 			OR = {
+				has_law = law_type:law_traditional_rules_of_war
 				has_law = law_type:law_war_crimes_forbidden
-				has_law = law_type:law_humanitarian_regulations
-				has_law = law_type:law_limited_war
 			}
 		}
 		highlighted_option = yes
@@ -696,7 +698,7 @@ social_tensions_events.7 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
 			base = 3
-			modifier = { trigger = { has_law = law_type:law_humanitarian_regulations } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_war_crimes_forbidden } add = 3 }
 		}
 	}
 }
