@@ -1764,7 +1764,7 @@ Currently 34 GUI files at the top of `gui/`: 26 full-file replacements of vanill
 | `te_budget_breakdown.gui` | (additive, type library) | The Budget Breakdown tab's layout, shared category rows and collapsed explanation |
 | `te_budget_generated_charts.gui` | (additive, generated type library) | Budget income/expense pies, stacked bars and category lists; regenerate with `scripts/generators/gen_budget_breakdown.py` |
 | `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |
-| `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card |
+| `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card, the Grand Monument card (only where one stands; it instances the journal entry's `gm_row_status`) |
 | `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Budget, Diplomacy and Market panels) |
 | `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, with a tab each for the Space Race, the Colonial Empire and Grand Monuments (the entries' composers under `GetPlayerJournalEntry`), and its launcher, a small sidebar button under Map List. Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
@@ -1808,7 +1808,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 
 **The state view uses the same idiom, from its own type library.** `gui/te_state_panel_widgets.gui` holds the types; `states_panel.gui`, a full-file override re-merged every vanilla patch, holds only instances.
 - Rows root on `State.MakeScope.ScriptValue(...)`: the JE widgets' `JournalEntry.GetCountry.MakeScope` doesn't exist in the state view.
-- The status grid is a `wrap_count = 2` flowcontainer of 260 px `state_panel_status_item_small` tiles (10 + 70 icon + 10 + 160 text + 10), and it pairs items by count, not by width. Anything added to it must be exactly one tile, or sit outside it; the tourism card is a 530 px sibling above the grid.
+- The status grid is a `wrap_count = 2` flowcontainer of 260 px `state_panel_status_item_small` tiles (10 + 70 icon + 10 + 160 text + 10), and it pairs items by count, not by width. Anything added to it must be exactly one tile, or sit outside it; the tourism card is a 530 px sibling above the grid, and the Grand Monument card another under it.
 - Put extra readings in a tile's `extra_widget` block as `te_state_tile_row`s (96 px label + 60 px value), not as `\n`-stacked lines in the name loc.
 
 ## GUI 3-way merge across vanilla patches

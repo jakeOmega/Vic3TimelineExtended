@@ -202,6 +202,116 @@ gm_state_can_rename = {
 	}
 }
 
+# ---- The state view's Grand Monument card (te_state_gm_card) -----------------
+# State scope. The card shows from the day the building stands, before the
+# first monthly pulse has written gm_local_steps, so every read is guarded.
+
+# Where this monument's own next step completes, on the curve of its local
+# effects (first step 5: gm_curve_steps_f5 in gm_state_monthly). The ends of
+# gm_curve_next_f5, read from the live level rather than var:gm_curve_in, which
+# only the monthly pulse writes (test_grand_monuments_layout.StateCardTest
+# pins the two lists equal).
+gm_state_disp_next_step = {
+	value = 1275
+	if = { limit = { gm_state_grandeur < 635 } value = 635 }
+	if = { limit = { gm_state_grandeur < 315 } value = 315 }
+	if = { limit = { gm_state_grandeur < 155 } value = 155 }
+	if = { limit = { gm_state_grandeur < 75 } value = 75 }
+	if = { limit = { gm_state_grandeur < 35 } value = 35 }
+	if = { limit = { gm_state_grandeur < 15 } value = 15 }
+	if = { limit = { gm_state_grandeur < 5 } value = 5 }
+}
+
+# The card's step bar, 0-100: (2G - N + 5) / (N + 5), as the journal entry's
+# gm_disp_frac_* with f = 5. Full past the curve's last step.
+gm_state_disp_step_pct = {
+	value = gm_state_grandeur
+	multiply = 2
+	subtract = gm_state_disp_next_step
+	add = 5
+	divide = {
+		value = gm_state_disp_next_step
+		add = 5
+	}
+	multiply = 100
+	min = 0
+	max = 100
+}
+
+# Its Tourism Industry throughput here (gm_local_tourism), as last refreshed.
+gm_state_disp_tourism = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_local_tourism_steps }
+		value = var:gm_local_tourism_steps
+		multiply = gm_step_tourism
+	}
+}
+
+# Its dedication's own effect here (gm_local_<key>): the steps it was last
+# refreshed with times that dedication's step. 0 while undedicated.
+gm_state_disp_local = {
+	value = 0
+	if = {
+		limit = {
+			gm_state_is_dedicated = yes
+			has_variable = gm_local_steps
+		}
+		value = var:gm_local_steps
+		if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_crown } }
+			multiply = gm_step_local_crown
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_republic } }
+			multiply = gm_step_local_republic
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_revolution } }
+			multiply = gm_step_local_revolution
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_leader } }
+			multiply = gm_step_local_leader
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_religious } }
+			multiply = gm_step_local_religious
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_civic } }
+			multiply = gm_step_local_civic
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_war_memorial } }
+			multiply = gm_step_local_war_memorial
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_artistic } }
+			multiply = gm_step_local_artistic
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_naturalist } }
+			multiply = gm_step_local_naturalist
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_scientific } }
+			multiply = gm_step_local_scientific
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_industrial } }
+			multiply = gm_step_local_industrial
+		}
+		else_if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_athletic } }
+			multiply = gm_step_local_athletic
+		}
+		else = {
+			value = 0
+		}
+	}
+}
+
 # ---- The monument policy (v2 §5; gm_policy_effects.txt) -------------------------
 # Factors on the per-step values (§5). Country scope: the steps of standing
 # grandeur (prestige and cultural pull) and of regime and Leader grandeur
