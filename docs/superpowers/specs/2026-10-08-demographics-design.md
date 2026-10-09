@@ -855,6 +855,10 @@ nothing is counted twice:
 
 Vanilla's modifiers stay as inputs, as do the mod's modifiers for women's and children's work.
 
+The model's own law, technology and institution terms (its cause multipliers, means tiers and Wealth Concentration law
+terms) become registered modifier types the census reads, so each shows on its law or technology: owner, 2026-10-09;
+design in `2026-10-09-demographics-modifier-types-design.md`.
+
 ## 9. Events and milestones
 
 Each fires when the model crosses a threshold, at most once a generation per country. Candidates for the first wave:
@@ -994,7 +998,7 @@ from before the rule keeps the system (Grand Monuments' pattern).
 |---|---|---|
 | 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.
@@ -1019,6 +1023,10 @@ to be sane.
   Proposal: an expense modifier (`country_expenses_add`) refreshed yearly with a multiplier from the national 65+
   population, the mod's "Expense Scaling with GDP" pattern (`scripting_best_practices.md`), sized in the harness. The
   owner decides whether ageing costs money as well as bureaucracy.
+- **Fertility without ageing (§1, "Ages past 95").** Fertility reads biological age, and Immortality holds it near 35,
+  so an immortal woman takes the age-35 rate every year for good and her lifetime births have no limit (the owner's
+  question, 2026-10-09). A cap per woman, or a term that falls as a cohort's children reach the family size it
+  wants, would bound it. Phase 3's to design.
 
 ## 14. Engine checks (run 2026-10-08)
 
