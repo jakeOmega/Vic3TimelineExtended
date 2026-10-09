@@ -214,10 +214,8 @@ per level, and from the era 7 technology Mainframe Computers. Once active, the
 entry stays open even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
-"Covert: ..." with the operation's name. Everything else is in the journal
-entry.
-
-The same panels appear as a Covert tab in the Military panel, and a change made
+"Covert: ..." with the operation's name. Everything else is on the Covert tab
+of the Military panel, which shows the journal entry's own panels: a change made
 in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. It ends with an Open Journal Entry button.
 

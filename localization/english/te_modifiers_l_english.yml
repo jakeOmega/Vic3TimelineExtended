@@ -582,7 +582,7 @@
  state_arable_land_mult:0 "Arable Land"
  state_arable_land_mult_desc:0 "A multiplier for the amount of [concept_arable_land] in this [concept_state]."
  state_atmospheric_carbon_capture_add:0 "Atmospheric Carbon Removal"
- state_atmospheric_carbon_capture_add_desc:0 "Carbon taken out of the atmosphere at this location by removal-only methods, such as Direct Air Capture at Carbon Conversion Works. It is the Carbon Captured figure in the Global Warming journal entry, and is subtracted from the market total after policy reductions."
+ state_atmospheric_carbon_capture_add_desc:0 "Carbon taken out of the atmosphere at this location by removal-only methods, such as Direct Air Capture at Carbon Conversion Works. It is the Carbon Captured figure on the Climate tab of the Market panel, and is subtracted from the market total after policy reductions."
  state_building_afghan_nassaji_kabul_mills_max_level_add:0 "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level"
  state_building_afghan_nassaji_kabul_mills_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] can expand to in this state"
  state_building_airbus_lagardere_plant_max_level_add:0 "[GetBuildingType('building_airbus_lagardere_plant').GetName] Max Level"
