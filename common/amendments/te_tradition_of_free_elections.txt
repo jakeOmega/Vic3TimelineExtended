@@ -1,0 +1,117 @@
+﻿# Tradition of Free Elections: Anarchy counts as an electoral law.
+#
+# Anarchy holds elections. Its election campaigns run and vanilla's electoral
+# fraud event (caciquismo.2, events/iberia_events/ip4_election_rigging.txt) fires
+# under it, and its "free elections" option adds progress toward this tradition
+# (free_elections_add_tt). Vanilla never let the tradition attach to Anarchy, so
+# that progress could not pay off, and enacting Anarchy dropped a tradition the
+# country already held. The mod treats Anarchy as electoral elsewhere too (the
+# campaign finance and Elected Bureaucrats laws, modern_election_events.8).
+#
+# Two changes, each marked # TE:
+#   - law_anarchy is an allowed law, so vanilla's remove_electoral_fraud_effect
+#     can attach the tradition to it at 5/5 progress, and an interest group can
+#     sponsor it when Anarchy is enacted;
+#   - the tradition no longer lowers the chance of enacting Anarchy.
+# The re-attach on enacting Anarchy, which vanilla's four voting laws do in their
+# on_activate (inherit_free_elections_effect), is te_free_elections_from_law_scope
+# (common/on_actions/extra_on_actions.txt), not an edit of law_anarchy: a REPLACE
+# of the law would drop the mod's three INJECTs into it, and whether an INJECTed
+# second on_activate block runs, merges or is rejected is unread.
+#
+# A REPLACE rather than an INJECT: an INJECT cannot remove the Anarchy line, and
+# whether amendments sum an INJECTed modifier block, as laws do, is unread.
+# Everything else is vanilla 00_amendments_historical_04.txt, copied byte for
+# byte from the installed game. Vanilla version copied: 1.14.5 (2026-10-09).
+# Re-diff on every Vic3 patch (docs/guides/vanilla_patch_runbook.md sweeps every
+# REPLACE target); test_free_elections_anarchy.py fails when the committed
+# vanilla_parsed/ snapshot drifts from this copy.
+
+REPLACE:amendment_tradition_of_free_elections = {
+
+	parent = law_universal_suffrage
+
+	allowed_laws = {
+		law_oligarchy
+		law_landed_voting
+		law_wealth_voting
+		law_census_voting
+		law_universal_suffrage
+		law_anarchy # TE: Anarchy holds elections
+	}
+
+	modifier = {
+		country_forbid_electoral_fraud_bool = yes
+		country_legitimacy_base_add = 10
+		country_enactment_success_chance_law_autocracy_add = -0.10
+		country_enactment_success_chance_law_oligarchy_add = -0.10
+		country_enactment_success_chance_law_technocracy_add = -0.10
+		# TE: vanilla's country_enactment_success_chance_law_anarchy_add = -0.10 removed
+		# Intended that there is no defence against Single Party State
+	}
+
+	possible = {
+		always = yes # Handled by special logic
+	}
+
+	can_repeal = {
+		OR = {
+			AND = {
+				custom_tooltip = {
+					text = ruler_wants_dictatorship_tt
+					ruler = {
+						OR = {
+							law_enactment_stance = {
+								law = law_type:law_autocracy
+								value > 0
+							}
+							law_enactment_stance = {
+								law = law_type:law_technocracy
+								value > 0
+							}
+							law_enactment_stance = {
+								law = law_type:law_single_party_state
+								value > 0
+							}
+						}
+					}
+				}
+				custom_tooltip = {
+					text = any_government_ig_wants_dictatorship_tt
+					any_interest_group = {
+						is_powerful = yes
+						is_in_government = yes
+						OR = {
+							law_enactment_stance = {
+								law = law_type:law_autocracy
+								value > 0
+							}
+							law_enactment_stance = {
+								law = law_type:law_technocracy
+								value > 0
+							}
+							law_enactment_stance = {
+								law = law_type:law_single_party_state
+								value > 0
+							}
+						}
+					}
+				}
+				legitimacy >= legitimacy_to_repeal_amendment
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	would_sponsor = {
+		AND = {
+			exists = scope:approval
+			scope:approval > 0
+		}
+	}
+
+	amendment_activism_multiplier = 0.25
+}

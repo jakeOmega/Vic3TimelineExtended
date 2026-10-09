@@ -232,14 +232,14 @@ class DisplayValueTest(unittest.TestCase):
                 self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
 
     def test_markers_follow_the_policies_that_use_them(self):
-        """Target while the policy can buy (1, 3); protected while it can sell (2, 3)."""
+        """Target while the policy can buy (1, 3, 4); protected while it can sell (2, 3, 4)."""
         for g in _goods():
             target = self._value(f"st_res_{g}_disp_target")
             self.assertRegex(target, r"^\s*value = 100")
-            self.assertEqual(sorted(re.findall(rf"var:st_res_{g}_policy = (\d)", target)), ["1", "3"], g)
+            self.assertEqual(sorted(re.findall(rf"var:st_res_{g}_policy = (\d)", target)), ["1", "3", "4"], g)
             floor = self._value(f"st_res_{g}_disp_floor")
             self.assertRegex(floor, r"^\s*value = 0")
-            self.assertEqual(sorted(re.findall(rf"var:st_res_{g}_policy = (\d)", floor)), ["2", "3"], g)
+            self.assertEqual(sorted(re.findall(rf"var:st_res_{g}_policy = (\d)", floor)), ["2", "3", "4"], g)
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -325,6 +325,77 @@ class SharedButtonsTest(unittest.TestCase):
         self.assertIn("Concatenate( ScriptedGui.IsValidTooltip(", button)
         self.assertIn("Localize( 'te_tt_break' )", button)
         self.assertIn("ScriptedGui.ExecuteTooltip(", button)
+
+
+class PolicyRowTest(unittest.TestCase):
+    """All: Stabilize, Military: Stockpile and All: Manual: a row of panel buttons under
+    the step. Scripted GUIs only, because the entry binds scripted buttons when it
+    activates, so a running entry would never show a new one."""
+    EFFECTS = {"st_res_all_stabilize_sgui": "st_res_all_goods_stabilize_effect",
+               "st_res_military_stockpile_sgui": "st_res_military_goods_stockpile_effect",
+               "st_res_all_manual_sgui": "st_res_all_goods_manual_effect"}
+    LABELS = {"st_res_all_stabilize_sgui": "st_res_panel_all_stabilize",
+              "st_res_military_stockpile_sgui": "st_res_panel_military_stockpile",
+              "st_res_all_manual_sgui": "st_res_panel_all_manual"}
+
+    def test_each_runs_its_effect_greyed_without_a_hub(self):
+        sguis = _read(SGUIS)
+        loc = _loc()
+        for sgui, effect in self.EFFECTS.items():
+            body = _body(sguis, rf"(?m)^{sgui} = \{{")
+            run = _body(body, r"effect = \{")
+            self.assertIn(f"{effect} = yes", _body(run, r"hidden_effect = \{"), sgui)
+            tt = re.search(r"custom_tooltip = (\w+)", run).group(1)
+            self.assertIn(tt, loc, sgui)
+            self.assertIn("always = no", _body(body, r"ai_is_valid = \{"), sgui)
+            self.assertIn('text = "st_res_hub_built_possible"', _body(body, r"(?<!ai_)is_valid = \{"), sgui)
+
+    def test_the_row_sits_under_the_step_row(self):
+        inventory = _type_body(_read(WIDGET), "te_st_res_sec_inventory")
+        reset = inventory.index("GetScriptedGui('st_res_reset_rates_sgui')")
+        headings = inventory.index('"je_strategic_reserve_inv_col_good"')
+        for sgui, label in self.LABELS.items():
+            at = inventory.index(f"GetScriptedGui('{sgui}')")
+            self.assertTrue(reset < at < headings, f"{sgui} is not in the row under the step")
+            self.assertIn(f'text = "{label}"', inventory[at:at + 300], sgui)
+        for button in _instances(inventory, "st_res_shared_button"):
+            label = re.search(r"max_width = (\d+)", button).group(1)
+            size = re.search(r"size = \{ (\d+) 26 \}", button).group(1)
+            self.assertEqual(int(size) - 8, int(label), "a label's max_width is its button less 8")
+
+    def test_the_journal_entry_binds_no_new_button(self):
+        names = re.findall(r"(?m)^\tscripted_button = (\w+)", _strip_comments(_read(JE)))
+        self.assertEqual(sorted(names), ["st_res_cycle_step_size_button", "st_res_reset_rates_button"])
+
+
+class PolicyOpTest(unittest.TestCase):
+    """The policy panel's op codes: every op the widget sends has a branch in both the
+    is_valid and the effect of every good's policy scripted GUI, and nothing else does."""
+
+    def test_widget_and_scripted_guis_agree(self):
+        panel = _type_body(_read(WIDGET), "widget_je_st_res_policy_panel")
+        sent = set(int(n) for n in re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", panel))
+        self.assertTrue({0, 1, 2, 3, 4, 10, 11, 12, 13} <= sent)
+        sguis = _strip_comments(_read(SGUIS))
+        for g in _goods():
+            body = _body(sguis, rf"(?m)^st_res_policy_{g}_sgui = \{{")
+            valid = set(int(n) for n in re.findall(r"scope:op = (\d+)", _body(body, r"(?<!ai_)is_valid = \{")))
+            effect = set(int(n) for n in re.findall(r"scope:op = (\d+)", _body(body, r"\n\teffect = \{")))
+            self.assertEqual(valid, sent, g)
+            self.assertEqual(effect, sent, g)
+
+    def test_the_selector_is_five_buttons_in_two_rows(self):
+        panel = _type_body(_read(WIDGET), "widget_je_st_res_policy_panel")
+        labels = re.findall(r'text = "st_res_policy_short_(\w+)"', panel)
+        self.assertEqual(labels, ["manual", "buy_cheap", "release_high", "stabilize", "stockpile"])
+        presets = re.findall(r'text = "st_res_preset_(\w+)"', panel)
+        self.assertEqual(presets, ["conservative", "standard", "aggressive", "stockpile"])
+        # Five 110px buttons cannot share the 450px row: three, then two, then the
+        # four presets (4 x 110 + 3 x 3 = 449).
+        rows = [_body(panel[m.start():], r"flowcontainer = \{")
+                for m in re.finditer(r"flowcontainer = \{\s*direction = horizontal", panel)]
+        self.assertEqual([len(re.findall(r"widget_je_st_res_policy_choice = \{", r)) for r in rows], [3, 2, 4])
+        self.assertIn("size = { 110 26 }", _type_body(_read(WIDGET), "widget_je_st_res_policy_choice"))
 
 
 class HistoryTest(unittest.TestCase):
@@ -423,8 +494,12 @@ STATIC_CELLS = (
        ("st_res_hist_title", 484, "large", ())]
     + [(f"st_res_row_label_{k}", 170, "medium", ()) for k in
        ("stored", "rate", "last", "decay", "price", "policy")]
-    + [(f"st_res_policy_short_{k}", 102, "small", ()) for k in ("manual", "buy_cheap", "release_high", "stabilize")]
-    + [(f"st_res_preset_{k}", 102, "small", ()) for k in ("conservative", "standard", "aggressive")]
+    + [(f"st_res_policy_short_{k}", 102, "small", ()) for k in
+       ("manual", "buy_cheap", "release_high", "stabilize", "stockpile")]
+    + [(f"st_res_preset_{k}", 102, "small", ()) for k in ("conservative", "standard", "aggressive", "stockpile")]
+    + [("st_res_panel_all_stabilize", 114, "small", ()),
+       ("st_res_panel_military_stockpile", 154, "small", ()),
+       ("st_res_panel_all_manual", 114, "small", ())]
     + [(f"st_res_policy_label_{k}", 300, "small", ()) for k in
        ("buy_thr", "sell_thr", "max_flow", "floor_pct", "ceil_pct", "budget", "price_memory", "ramp")]
     + [(f"st_res_policy_panel_{k}_header", 450, "small", ()) for k in ("policy", "preset", "settings")]
@@ -441,7 +516,8 @@ DYNAMIC_CELLS = [
 # The longest names the policy value cell (270, medium) and the stepper value
 # cells (90, small) can show.
 LONGEST_POLICY_NAME_KEYS = ("st_res_policy_manual", "st_res_policy_buy_cheap",
-                            "st_res_policy_release_high", "st_res_policy_stabilize")
+                            "st_res_policy_release_high", "st_res_policy_stabilize",
+                            "st_res_policy_stockpile")
 LONGEST_STEPPER_VALUE = "9,999,999"  # the weekly budget's ceiling grows with the hub
 
 

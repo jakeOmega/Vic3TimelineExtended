@@ -85,6 +85,25 @@ st_res_reserve_filling_up = {
 }
 
 # ============================================================================
+# AI reserve stance — country scope, st_res_ai_review_policies_effect
+# ============================================================================
+# True while the AI can afford to stockpile its military goods: not in
+# default, not borrowing, and either already stockpiling or holding at least
+# st_res_ai_stockpile_min_reserves of its gold reserves' limit. The two gates
+# differ on purpose: starting needs money in hand, carrying on only needs no
+# borrowing, so a treasury near the line does not flip the stance weekly.
+# War is not tested here: the Stockpile policy itself releases at war
+# (st_res_policy_evaluate_good_effect).
+st_res_ai_wants_stockpile = {
+	in_default = no
+	taking_loans = no
+	OR = {
+		var:st_res_ai_stance ?= 1
+		scaled_gold_reserves >= st_res_ai_stockpile_min_reserves
+	}
+}
+
+# ============================================================================
 # Hub capture — state scope, from st_res_on_state_owner_change
 # (common/on_actions/st_res_on_actions.txt)
 # ============================================================================

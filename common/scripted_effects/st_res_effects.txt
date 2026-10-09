@@ -148,6 +148,10 @@ st_res_reset_vars_effect = {
 		limit = { has_variable = st_res_policy_ai_stabilized }
 		remove_variable = st_res_policy_ai_stabilized
 	}
+	if = {
+		limit = { has_variable = st_res_ai_stance }
+		remove_variable = st_res_ai_stance
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -642,6 +646,9 @@ st_res_weekly_update_effect = {
 	# One-shot, AI-only. Guarded internally, so this costs a `has_variable`
 	# check for a human player and for any AI that has already been seeded.
 	st_res_ai_seed_policies_effect = yes
+	# AI-only, weekly: Stockpile or Stabilize for the military goods, as the
+	# treasury allows. Rewrites settings only when the stance changes.
+	st_res_ai_review_policies_effect = yes
 
 	if = {
 		limit = {
@@ -783,6 +790,90 @@ st_res_reset_rates_effect = {
 	st_res_clamp_stockpiles_effect = yes
 }
 
+# ---------------- POLICIES FOR ALL GOODS ----------------
+# The inventory's row of policy buttons (st_res_all_stabilize_sgui,
+# st_res_military_stockpile_sgui, st_res_all_manual_sgui). Each acts on every
+# good the country has unlocked, the goods its table shows, and re-decides
+# them on the click, then runs the shared refresh tail once, the shape of
+# st_res_reset_rates_effect.
+#
+# "Military" is the six goods the AI once kept on Buy When Cheap and now
+# stockpiles (st_res_ai_review_policies_effect): ammunition, oil, small arms,
+# artillery, aeroplanes and tanks. Oil is in because armies and fleets run on
+# it; grain and chemicals are not.
+st_res_all_goods_stabilize_effect = {
+	st_res_init_effect = yes
+	st_res_refresh_hub_cache_effect = yes
+	st_res_bulk_policy_good_base = { GOOD = grain       POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = ammunition  POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = oil         POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = small_arms  POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = artillery   POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = aeroplanes  POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = tanks       POLICY = 3 PRESET = standard }
+	st_res_bulk_policy_good_base = { GOOD = fertilizer  POLICY = 3 PRESET = standard }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+st_res_military_goods_stockpile_effect = {
+	st_res_init_effect = yes
+	st_res_refresh_hub_cache_effect = yes
+	st_res_bulk_policy_good_base = { GOOD = ammunition  POLICY = 4 PRESET = stockpile }
+	st_res_bulk_policy_good_base = { GOOD = oil         POLICY = 4 PRESET = stockpile }
+	st_res_bulk_policy_good_base = { GOOD = small_arms  POLICY = 4 PRESET = stockpile }
+	st_res_bulk_policy_good_base = { GOOD = artillery   POLICY = 4 PRESET = stockpile }
+	st_res_bulk_policy_good_base = { GOOD = aeroplanes  POLICY = 4 PRESET = stockpile }
+	st_res_bulk_policy_good_base = { GOOD = tanks       POLICY = 4 PRESET = stockpile }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+# Manual leaves every setting and each good's current rate as they are, like
+# choosing Manual in a good's own panel; Reset Reserve Rates is the button
+# that also stops every good.
+st_res_all_goods_manual_effect = {
+	st_res_init_effect = yes
+	st_res_refresh_hub_cache_effect = yes
+	st_res_bulk_manual_good_base = { GOOD = grain }
+	st_res_bulk_manual_good_base = { GOOD = ammunition }
+	st_res_bulk_manual_good_base = { GOOD = oil }
+	st_res_bulk_manual_good_base = { GOOD = small_arms }
+	st_res_bulk_manual_good_base = { GOOD = artillery }
+	st_res_bulk_manual_good_base = { GOOD = aeroplanes }
+	st_res_bulk_manual_good_base = { GOOD = tanks }
+	st_res_bulk_manual_good_base = { GOOD = fertilizer }
+	st_res_refresh_hub_flow_effect = yes
+	st_res_clamp_stockpiles_effect = yes
+}
+
+# Parameters: GOOD; POLICY (1-4); PRESET, the preset effect's middle word
+# (conservative | standard | aggressive | stockpile). Unlocked goods only.
+st_res_bulk_policy_good_base = {
+	if = {
+		limit = { st_res_$GOOD$_unlocked_trigger = yes }
+		st_res_set_good_policy_base = { GOOD = $GOOD$ POLICY = $POLICY$ PRESET = $PRESET$ }
+		st_res_policy_evaluate_good_effect = { GOOD = $GOOD$ }
+	}
+}
+
+# Parameter: GOOD. Unlocked goods only.
+st_res_bulk_manual_good_base = {
+	if = {
+		limit = { st_res_$GOOD$_unlocked_trigger = yes }
+		st_res_switch_to_manual_base = { GOOD = $GOOD$ }
+	}
+}
+
+# One good to a policy and a preset, in that order, so the preset's write of
+# the engagement latch is the last. Shared by the all-goods buttons and the
+# AI (st_res_ai_review_policies_effect). Parameters as
+# st_res_bulk_policy_good_base; no unlock test.
+st_res_set_good_policy_base = {
+	st_res_policy_select_base = { GOOD = $GOOD$ POLICY = $POLICY$ }
+	st_res_apply_preset_$PRESET$_base = { GOOD = $GOOD$ }
+}
+
 # --- Per-good rate adjustment bases ----------------------------------------
 # Each rate button calls the matching st_res_<dir>_<good>_rate_effect wrapper
 # (kept as a named entry point — buttons reference effect names directly).
@@ -877,6 +968,21 @@ st_res_apply_sell_profit_effect = {
 #   1 = Buy When Cheap           — buys below the purchase threshold only
 #   2 = Release When Expensive   — sells above the release threshold only
 #   3 = Stabilize Prices         — both sides
+#   4 = Stockpile                — buys at or below the purchase threshold, at
+#                                  full flow (the ramp is not applied to
+#                                  purchases), and releases above the release
+#                                  threshold only at war; in peacetime only
+#                                  above st_res_policy_stockpile_peace_release.
+#                                  Selecting it loads the Stockpile preset.
+#
+# Why a fifth policy rather than a positive purchase threshold on Buy When
+# Cheap or Stabilize Prices: a good you want in hand for a war is worth
+# buying at about base price, but the ramp sells the reserve short there (a
+# price 5 points under a threshold of 0 buys a quarter of the flow on a
+# 20-point ramp), and Stabilize Prices would sell the stock into the first
+# peacetime spike. Both are rules about how a lane responds, not settings, so
+# they need their own code. The purchase threshold's range does go up to
+# st_res_policy_buy_thr_ceiling for every policy, so a stockpile can be tuned.
 #
 # Engagement latch (st_res_<good>_engaged), the hysteresis state:
 #   0 = idle | 1 = engaged buying | 2 = engaged releasing
@@ -913,6 +1019,8 @@ st_res_apply_sell_profit_effect = {
 #   7 = Paused — weekly budget spent
 #   8 = Paused — hub understaffed
 #   9 = Paused — no Strategic Reserve Hub
+#  10 = Holding — Stockpile at peace, the price above the release threshold
+#       but not above st_res_policy_stockpile_peace_release
 #
 # st_res_policy_evaluate_good_effect is the ONLY writer of both
 # st_res_<good>_policy_status and st_res_<good>_engaged, in the same spirit as
@@ -922,8 +1030,8 @@ st_res_apply_sell_profit_effect = {
 # --------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------
-# Presets. THESE THREE EFFECTS ARE THE TUNING TABLE — the twenty-four preset
-# numbers below exist nowhere else in the mod. Everything else about the
+# Presets. THESE FOUR EFFECTS ARE THE TUNING TABLE — the fixed preset numbers
+# below exist nowhere else in the mod. Everything else about the
 # policies (step sizes, hysteresis bands, stepper bounds) lives in the
 # `st_res_policy_*` constants at the bottom of
 # common/script_values/st_res_script_values.txt.
@@ -955,16 +1063,19 @@ st_res_apply_sell_profit_effect = {
 # go on following the country until the player sets them by hand
 # (st_res_preset_follow_magnitudes_base below).
 #
-# The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
+# The four presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
 # ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
 # non-overlap rule the steppers are gated on.
 #
 # Each preset also records itself in st_res_<good>_preset (1 Conservative,
-# 2 Standard, 3 Aggressive), the same codes as the follow markers below. It
-# means "applied, and no setting changed by hand since": any stepper click
-# removes it (st_res_policy_set_by_hand_base), while choosing a policy, the
-# row controls and the weekly magnitude refresh leave it alone because they
-# change none of the preset's settings. Its only reader is
+# 2 Standard, 3 Aggressive, 4 Stockpile), the same codes as the follow
+# markers below. It means "applied, and no setting changed by hand since":
+# any stepper click removes it (st_res_policy_set_by_hand_base), while
+# choosing a policy, the row controls and the weekly magnitude refresh leave
+# it alone because they change none of the preset's settings. The one
+# exception is choosing Stockpile, which loads the Stockpile preset: the
+# other presets' purchase thresholds sit below base price, where a stockpile
+# would hardly ever buy. Its only reader is
 # st_res_policy_<good>_sgui, which disables the button of the preset in force,
 # as it disables the button of the policy in force. A save from before the
 # marker has none until the player applies a preset, so no preset button
@@ -1022,6 +1133,32 @@ st_res_apply_preset_aggressive_base = {
 	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 2 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 5 }
+	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
+	# must re-test against the new band instead of the old stop threshold.
+	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+# The Stockpile policy's preset, loaded whenever a good is switched to it
+# (st_res_policy_<good>_sgui op 4, the all-goods buttons, the AI) and
+# available as a fourth preset button. It buys at or below +5% (a good worth
+# having for a war is worth buying at about base price) and, at war, releases
+# above +20%, the nearest the release threshold may sit (st_res_policy_min_gap
+# above the purchase threshold). The ramp shapes only the release side: the
+# Stockpile policy buys at full flow.
+st_res_apply_preset_stockpile_base = {
+	set_variable = { name = st_res_$GOOD$_preset value = 4 }
+	set_variable = { name = st_res_$GOOD$_buy_thr value = 5 }
+	set_variable = { name = st_res_$GOOD$_sell_thr value = 20 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 4
+		FLOW_PCT = st_res_preset_stockpile_flow_pct
+		BUDGET_PCT = st_res_preset_stockpile_budget_pct
+	}
+	set_variable = { name = st_res_$GOOD$_price_memory value = 4 }
+	set_variable = { name = st_res_$GOOD$_ramp value = 10 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
@@ -1101,8 +1238,12 @@ st_res_refresh_preset_magnitudes_effect = {
 			limit = { var:st_res_$GOOD$_auto_max_flow = 2 }
 			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_flow_pct }
 		}
-		else = {
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_max_flow = 3 }
 			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_flow_pct }
+		}
+		else = {
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_stockpile_flow_pct }
 		}
 	}
 	if = {
@@ -1115,8 +1256,12 @@ st_res_refresh_preset_magnitudes_effect = {
 			limit = { var:st_res_$GOOD$_auto_budget = 2 }
 			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_budget_pct }
 		}
-		else = {
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_budget = 3 }
 			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_budget_pct }
+		}
+		else = {
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_stockpile_budget_pct }
 		}
 	}
 }
@@ -1145,7 +1290,7 @@ st_res_switch_to_manual_base = {
 
 # --------------------------------------------------------------------------
 # st_res_policy_select_base — switch one good to a policy.
-# Parameters: GOOD, POLICY (0-3).
+# Parameters: GOOD, POLICY (0-4). Stockpile's callers load its preset too.
 # Always clears the engagement latch: carrying "engaged buying" from Buy When
 # Cheap into Stabilize Prices would apply the wrong stop threshold on the first
 # tick after the switch.
@@ -1388,15 +1533,31 @@ st_res_policy_evaluate_good_effect = {
 		# threshold instead of the start one. With a ramp the response is
 		# continuous — the flow is already near zero at the threshold — so
 		# there is no on/off edge to debounce and the bands are not applied.
+		# Stockpile buys at full flow whatever the ramp, so its purchases
+		# always take the band.
 		set_local_variable = { name = st_res_policy_buy_at value = var:st_res_$GOOD$_buy_thr }
 		if = {
 			limit = {
 				var:st_res_$GOOD$_engaged = 1
-				var:st_res_$GOOD$_ramp <= 0
+				OR = {
+					var:st_res_$GOOD$_ramp <= 0
+					var:st_res_$GOOD$_policy = 4
+				}
 			}
 			change_local_variable = { name = st_res_policy_buy_at add = st_res_policy_buy_band }
 		}
 		set_local_variable = { name = st_res_policy_sell_at value = var:st_res_$GOOD$_sell_thr }
+		# Stockpile keeps its stock for a war: in peacetime it releases only
+		# above st_res_policy_stockpile_peace_release, or the release
+		# threshold if that is higher.
+		if = {
+			limit = {
+				var:st_res_$GOOD$_policy = 4
+				is_at_war = no
+				local_var:st_res_policy_sell_at < st_res_policy_stockpile_peace_release
+			}
+			set_local_variable = { name = st_res_policy_sell_at value = st_res_policy_stockpile_peace_release }
+		}
 		if = {
 			limit = {
 				var:st_res_$GOOD$_engaged = 2
@@ -1439,6 +1600,12 @@ st_res_policy_evaluate_good_effect = {
 				}
 			}
 		}
+		# Stockpile is not throttled near its purchase threshold: it buys
+		# at full flow toward the target, as near base price as it is set.
+		if = {
+			limit = { var:st_res_$GOOD$_policy = 4 }
+			set_local_variable = { name = st_res_policy_buy_frac value = 1 }
+		}
 
 		# --- Decision -----------------------------------------------------
 		set_local_variable = { name = st_res_policy_target value = 0 }
@@ -1446,13 +1613,22 @@ st_res_policy_evaluate_good_effect = {
 		set_local_variable = { name = st_res_policy_next_status value = 4 }
 
 		if = {
-			# BUY side — Buy When Cheap and Stabilize Prices.
+			# BUY side — Buy When Cheap and Stabilize Prices below the
+			# threshold, Stockpile at or below it.
 			limit = {
 				OR = {
-					var:st_res_$GOOD$_policy = 1
-					var:st_res_$GOOD$_policy = 3
+					AND = {
+						OR = {
+							var:st_res_$GOOD$_policy = 1
+							var:st_res_$GOOD$_policy = 3
+						}
+						local_var:st_res_policy_price < local_var:st_res_policy_buy_at
+					}
+					AND = {
+						var:st_res_$GOOD$_policy = 4
+						local_var:st_res_policy_price <= local_var:st_res_policy_buy_at
+					}
 				}
-				local_var:st_res_policy_price < local_var:st_res_policy_buy_at
 			}
 			if = {
 				limit = { local_var:st_res_policy_room <= 0 }
@@ -1493,7 +1669,8 @@ st_res_policy_evaluate_good_effect = {
 			}
 		}
 		else_if = {
-			# RELEASE side — Release When Expensive and Stabilize Prices.
+			# RELEASE side — Release When Expensive, Stabilize Prices and
+			# Stockpile (whose sell_at the peacetime rule above raised).
 			# Reachable only when the buy side did not fire, and the two bands
 			# are held apart by st_res_policy_min_gap, so the sides can never
 			# both be true for the same price.
@@ -1501,6 +1678,7 @@ st_res_policy_evaluate_good_effect = {
 				OR = {
 					var:st_res_$GOOD$_policy = 2
 					var:st_res_$GOOD$_policy = 3
+					var:st_res_$GOOD$_policy = 4
 				}
 				local_var:st_res_policy_price > local_var:st_res_policy_sell_at
 			}
@@ -1523,6 +1701,19 @@ st_res_policy_evaluate_good_effect = {
 				set_local_variable = { name = st_res_policy_next_engaged value = 2 }
 				set_local_variable = { name = st_res_policy_next_status value = 3 }
 			}
+		}
+		# A stockpile at peace with the price past its own release threshold
+		# but short of the peacetime one is holding for a war, not waiting:
+		# say so, or the row would claim the price "has not crossed a
+		# trigger threshold" while it plainly has.
+		if = {
+			limit = {
+				local_var:st_res_policy_next_status = 4
+				var:st_res_$GOOD$_policy = 4
+				is_at_war = no
+				local_var:st_res_policy_price > var:st_res_$GOOD$_sell_thr
+			}
+			set_local_variable = { name = st_res_policy_next_status value = 10 }
 		}
 
 		# An understaffed hub trades nothing whatever the rate says, so the
@@ -1565,8 +1756,9 @@ st_res_policy_apply_good_effect = {
 # they simply never moved a rate and the reserve sat empty forever.
 #
 # st_res_ai_seed_good_effect hands an AI country the Conservative preset once,
-# on Stabilize Prices for every good, and from then on the AI runs through
-# st_res_policy_evaluate_good_effect —
+# on Stabilize Prices for every good; st_res_ai_review_policies_effect (below)
+# then moves its six military goods to Stockpile, and back, as its treasury
+# allows. From then on the AI runs through st_res_policy_evaluate_good_effect —
 # the same evaluator, the same thresholds, the same clamps and the same costs
 # as a human on the same preset. There is no AI-only shortcut anywhere.
 #
@@ -1655,5 +1847,70 @@ st_res_ai_seed_policies_effect = {
 		st_res_ai_stabilize_good_effect = { GOOD = aeroplanes }
 		st_res_ai_stabilize_good_effect = { GOOD = tanks }
 		st_res_ai_stabilize_good_effect = { GOOD = fertilizer }
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_ai_review_policies_effect — the AI's military goods, reviewed every
+# week. Country scope; weekly pulse only, after st_res_ai_seed_policies_effect.
+#
+# While the AI can afford to (st_res_ai_wants_stockpile: no default, no loans,
+# and a quarter of its gold reserves' limit in hand to start), its six military
+# goods run the Stockpile policy on the Stockpile preset: buy at or near base
+# price in peace, release into a war's price spike. When it cannot, they go
+# back to Stabilize Prices on Conservative, where seeding put them. Grain and
+# chemicals stay on Stabilize Prices throughout. The goods are the six of
+# st_res_military_goods_stockpile_effect; a locked good is set too, so it is
+# ready the week it unlocks (the evaluator treats it as Manual until then).
+#
+# The stance is stored (st_res_ai_stance: 1 Stockpile, 2 Stabilize; absent
+# reads as 2, which is what seeding sets), and the goods are rewritten only
+# when it changes, so a settled AI costs a trigger and a comparison a week.
+# A save from before the review has no stance, so its AI reserves move to
+# Stockpile on their first pulse if they can afford it: that is the
+# migration. st_res_reset_vars_effect removes the stance with the seeding
+# markers, so a rebuilt hub is seeded and reviewed afresh.
+#
+# War is the policy's business, not this effect's: a stockpile releases above
+# its release threshold at war (st_res_policy_evaluate_good_effect), so
+# switching to Release When Expensive or Stabilize Prices on war start would
+# only move the release later (Conservative releases above +30%, Stockpile
+# above +20%). A war that empties the treasury still ends the stance through
+# st_res_ai_wants_stockpile, once the AI borrows.
+# --------------------------------------------------------------------------
+st_res_ai_review_policies_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_variable = st_res_policy_ai_seeded
+		}
+		if = {
+			limit = {
+				st_res_ai_wants_stockpile = yes
+				NOT = { var:st_res_ai_stance ?= 1 }
+			}
+			set_variable = { name = st_res_ai_stance value = 1 }
+			st_res_set_good_policy_base = { GOOD = ammunition  POLICY = 4 PRESET = stockpile }
+			st_res_set_good_policy_base = { GOOD = oil         POLICY = 4 PRESET = stockpile }
+			st_res_set_good_policy_base = { GOOD = small_arms  POLICY = 4 PRESET = stockpile }
+			st_res_set_good_policy_base = { GOOD = artillery   POLICY = 4 PRESET = stockpile }
+			st_res_set_good_policy_base = { GOOD = aeroplanes  POLICY = 4 PRESET = stockpile }
+			st_res_set_good_policy_base = { GOOD = tanks       POLICY = 4 PRESET = stockpile }
+			debug_log = "TE_ST_RES: AI reserve stockpiles its military goods"
+		}
+		else_if = {
+			limit = {
+				st_res_ai_wants_stockpile = no
+				var:st_res_ai_stance ?= 1
+			}
+			set_variable = { name = st_res_ai_stance value = 2 }
+			st_res_set_good_policy_base = { GOOD = ammunition  POLICY = 3 PRESET = conservative }
+			st_res_set_good_policy_base = { GOOD = oil         POLICY = 3 PRESET = conservative }
+			st_res_set_good_policy_base = { GOOD = small_arms  POLICY = 3 PRESET = conservative }
+			st_res_set_good_policy_base = { GOOD = artillery   POLICY = 3 PRESET = conservative }
+			st_res_set_good_policy_base = { GOOD = aeroplanes  POLICY = 3 PRESET = conservative }
+			st_res_set_good_policy_base = { GOOD = tanks       POLICY = 3 PRESET = conservative }
+			debug_log = "TE_ST_RES: AI reserve can no longer afford to stockpile; military goods back to Stabilize Prices"
+		}
 	}
 }
