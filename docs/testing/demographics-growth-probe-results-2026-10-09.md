@@ -102,9 +102,9 @@ country size; small countries account for most of the spread. Dependents are not
   of it gives `'none'` and logs `Value of wrong type … Got value of type 'none'` on every pop, every time it
   runs. That flooded runs 4 and 5 at tick 0.
 - Nothing can set an unregistered key, so it is 0 everywhere. Read registered keys only.
-- Every registered key the probe read had a 0.00001 carrier behind it, so whether a registered key that
-  nothing sets reads 0 or `'none'` as a value is unconfirmed. Vanilla reads such keys in triggers
-  (`modifier:building_training_rate_mult < 0`). The census fix's first launch settles it.
+- A registered key that nothing sets reads **0**. The probe's reads all had a 0.00001 carrier behind them,
+  so the census fix's first launch settled it: the new census read the same keys for every pop at the start
+  of an 1836 game and logged no `Value of wrong type` lines.
 
 **What a building's modifier read sees.** The capital's buildings read 0 for
 `building_group_bg_*_laborers_mortality_mult` where the `working_conditions` table gives 0.05–0.1. So the

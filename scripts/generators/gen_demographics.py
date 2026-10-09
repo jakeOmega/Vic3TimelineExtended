@@ -530,7 +530,8 @@ def engine_curves(o, d):
 #           building_group_<group>[_<type>]_mortality_mult, working_conditions by workplace
 #           group, the starvation penalties, and non-homeland mortality.
 # Only registered modifier types are read: modifiers.log lists ~1,100 mortality keys, but an
-# unregistered one cannot be set by anything and reads as 'none' on every pop.
+# unregistered one cannot be set by anything and reads as 'none' on every pop. A registered one
+# that nothing sets reads 0 (the first launch: no 'Value of wrong type' at the game-start walk).
 
 def _field(body, key):
     v = body.get(key) if isinstance(body, dict) else None
