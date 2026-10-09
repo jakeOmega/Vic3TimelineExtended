@@ -4981,6 +4981,12 @@
  te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
  te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
  te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
+ te_debug_colonial_empire.3.a:0 "Re-read the colonies' GDP and re-apply the programmes"
+ te_debug_colonial_empire.3.b:0 "Run the AI's programme review on us"
+ te_debug_colonial_empire.3.c:0 "Stop all three programmes"
+ te_debug_colonial_empire.3.d:0 "Console-only. The figures behind the colonial programmes, as script reads them now.\n\nColonies' yearly [concept_gdp]: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_development_gdp')|D] (the monthly cache Investment costs a share of; never counted below 1% of ours). Base: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_dev_cost_base')|D] a year.\nOne Investment level: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_cost')|D] a week. At level #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#!: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D] a week. One-off a step: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D] (Assimilation @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]).\nLevels: Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#!, Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#!.\nChange before the cap: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_uncapped_display')|=+2]#!. The AI's ceiling: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_ai_programme_ceiling')|2]#!."
+ te_debug_colonial_empire.3.f:0 "The colonial office has its ledgers open."
+ te_debug_colonial_empire.3.t:0 "TEST: Programme Costs and the AI Review"
 
 #
 # TE_DEBUG_COVERT

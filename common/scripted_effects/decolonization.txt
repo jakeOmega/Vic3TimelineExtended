@@ -745,11 +745,11 @@ colonial_empire_je_cleanup_effect = {
 		remove_variable = colonial_territory_primary_share
 	}
 
-	# Country-scope policy modifiers from the three policy buttons. If any
-	# button was active at end-of-JE, its modifier persisted after the JE
-	# vanished; clear them so the country reverts to neutral. The Invest
-	# program also has a dedicated budget-expense modifier refreshed each
-	# pulse — clear it alongside the policy modifier or it would linger.
+	# Country-scope modifiers of the three programmes. A programme running at
+	# end-of-JE keeps its modifier after the JE vanishes; clear them so the
+	# country reverts to neutral. The Invest programme also has a dedicated
+	# budget-expense line refreshed each pulse — clear it alongside the
+	# programme modifier or it would linger.
 	# Each is guarded: the journal panel renders on_complete / on_fail (and so
 	# this effect) as tooltips every frame, and an unguarded remove_modifier of
 	# a modifier the scope lacks logs "Timed modifier ... not found" each time
@@ -759,11 +759,18 @@ colonial_empire_je_cleanup_effect = {
 	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
 	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
 	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
-	# And their records (decol_sync_programmes), or a revolution's winner, or a
-	# later run of the entry, would be handed the programmes back.
-	remove_variable = colonial_development_investment_modifier_held
-	remove_variable = colonial_military_garrison_modifier_held
-	remove_variable = colonial_cultural_assimilation_modifier_held
+	# And their levels, which are their records (decol_sync_programmes), or a
+	# revolution's winner, or a later run of the entry, would be handed the
+	# programmes back. Then the two cost caches: the expense line that read
+	# colonial_invest_cost_week is gone (above). The on/off records saves made
+	# before the levels may still hold (<modifier>_held) are inert and left
+	# alone: nothing sets them any more, so a remove_variable here would log
+	# "used but never set".
+	remove_variable = colonial_invest_level
+	remove_variable = colonial_garrison_level
+	remove_variable = colonial_assim_level
+	remove_variable = colonial_invest_cost_week
+	remove_variable = colonial_dev_colonial_gdp
 
 	# Civil-rights movement radicalism modifiers reapplied each pulse while
 	# the JE was active. Remove from any civil-rights movement.
@@ -891,33 +898,40 @@ decol_sync_permanent_modifiers = {
 	decol_sync_permanent_modifier = { MODIFIER = mandate_system_modifier RECORD = mandate_system_taken }
 }
 
-# One running programme, both ways, as decol_sync_permanent_modifier but with no
-# duration (a programme stands until removed). Only while the entry runs: the
-# programme effects and the entry's end keep the record in step with the
-# modifier. Country scope.
-decol_sync_programme = {
+# The running programmes, after a revolution or on a save from before levels.
+# A programme's level variable (colonial_invest_level, colonial_garrison_level,
+# colonial_assim_level) is its record: a revolution's winner inherits the
+# variables but not the modifiers, and colonial_programmes_refresh_modifiers
+# rebuilds the modifiers from the levels. A save from before the levels
+# (2026-10) holds the modifier of a running programme but no level; that
+# programme ran at full strength, so it becomes the top level, and from then on
+# costs the new weekly amount. Only while the entry runs: the steps and the
+# entry's end keep the levels and the modifiers in step. Country scope.
+decol_migrate_programme = {
 	if = {
 		limit = {
+			NOT = { has_variable = $LEVEL$ }
 			has_modifier = $MODIFIER$
-			NOT = { has_variable = $MODIFIER$_held }
 		}
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	else_if = {
-		limit = {
-			has_variable = $MODIFIER$_held
-			NOT = { has_modifier = $MODIFIER$ }
-		}
-		add_modifier = { name = $MODIFIER$ }
+		set_variable = { name = $LEVEL$ value = colonial_programme_max_level }
 	}
 }
 
+decol_migrate_programmes = {
+	decol_migrate_programme = { MODIFIER = colonial_development_investment_modifier LEVEL = colonial_invest_level }
+	decol_migrate_programme = { MODIFIER = colonial_military_garrison_modifier LEVEL = colonial_garrison_level }
+	decol_migrate_programme = { MODIFIER = colonial_cultural_assimilation_modifier LEVEL = colonial_assim_level }
+}
+
+# The civil-war repair's half. The entry's monthly pulse runs the migration at
+# its top and its one refresh later, after the AI's review, so it does not
+# call this: a second refresh in the same block would re-add modifiers the
+# first had just added.
 decol_sync_programmes = {
 	if = {
 		limit = { has_journal_entry = je_colonial_empire }
-		decol_sync_programme = { MODIFIER = colonial_development_investment_modifier }
-		decol_sync_programme = { MODIFIER = colonial_military_garrison_modifier }
-		decol_sync_programme = { MODIFIER = colonial_cultural_assimilation_modifier }
+		decol_migrate_programmes = yes
+		colonial_programmes_refresh_modifiers = yes
 	}
 }
 
@@ -980,16 +994,17 @@ impose_neocolonial_investment_trade_treaty = {
 }
 
 # ============================================================================
-# COLONIAL EMPIRE — BUTTON ACTIONS (shared by the JE buttons and the widget)
+# COLONIAL EMPIRE — ACTIONS (shared by the AI and the widget)
 #
-# One effect per scripted button's `effect` block, extracted verbatim so the
-# vanilla button grid (AI-only now) and the journal-entry widget run exactly
-# the same script. The button's `effect` and the sgui's `effect` both call the
-# effect below.
+# One effect per control, so the AI and the journal-entry widget run exactly
+# the same script. The decision effects are also each scripted button's
+# `effect` (the button grid only the AI sees); the programme steps are the
+# widget's steppers and the AI's monthly programme review
+# (colonial_ai_review_programmes, below).
 #
 # SCOPE: country.
 #
-# EDITING RULE: change the action here, never in the button and never in the
+# EDITING RULE: change the action here, never in a button and never in the
 # sgui. Every one of these ends with colonial_empire_refresh_display so the
 # widget's snapshot variables react to the click rather than waiting a month.
 #
@@ -998,99 +1013,339 @@ impose_neocolonial_investment_trade_treaty = {
 # is open; see the note on colonial_empire_effect_release_territory.
 # ============================================================================
 
-colonial_empire_effect_invest = {
-	custom_tooltip = {
-		text = "CE_INVEST_IN_DEVELOPMENT_DESC"
-		add_modifier = { name = colonial_development_investment_modifier }
-	}
-	# The record a revolution's winner inherits (decol_sync_programmes)
-	set_variable = { name = colonial_development_investment_modifier_held value = yes }
-	# Seed the GDP-scaled expense modifier so the budget line shows up
-	# immediately on activation; the JE monthly pulse refreshes it from
-	# here on, keeping the multiplier in sync with current GDP.
-	add_modifier = {
-		name = colonial_development_investment_expense_modifier
-		multiplier = colonial_invest_monthly_expense
-	}
-	# Program startup cost — a one-shot treasury hit so enabling the
-	# program isn't a free toggle. Parallels the Cultural Assimilation
-	# startup cost; the two read as the same flavor of cost.
-	add_treasury = colonial_invest_startup_cost
-	# IG disapproval (vs. the previous mechanical IG strength erosion).
-	# Industrialists wanted capital at home; the PB resents the diversion.
-	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-	ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+# ---------------------------------------------------------------------------
+# THE THREE PROGRAMMES, ONE LEVEL AT A TIME
+#
+# Each programme runs at a level from 0 to colonial_programme_max_level (3);
+# PROGRAMME LEVELS and PROGRAMME COSTS in colonial_empire_values.txt hold the
+# numbers. Each step has a core (colonial_programme_<programme>_up / _down:
+# what the step pays and the level change) and a player effect
+# (colonial_empire_effect_<programme>_up / _down: the core, then the refresh),
+# which the widget's stepper calls through colonial_empire_policy_sgui. The
+# AI's monthly review calls the cores and the entry's pulse refreshes after it,
+# so every effect block refreshes the modifiers exactly once (whether a
+# modifier added earlier in the same block can be removed again is unproven).
+#
+# What is paid once, and when:
+#   * the one-off treasury payments (Investment, Assimilation): every step up;
+#   * the Industrialists' and Petite Bourgeoisie's disapproval (Investment) and
+#     the +5 infamy (Garrison): only the step from 0 to 1, the decision to start
+#     the programme at all, so stepping up does not stack them.
+# The checks that decide them run BEFORE the level changes, so the step's
+# tooltip shows them too (the tooltip is drawn from the unchanged state).
+#
+# Everything else (the programme's modifier, the expense line) follows the
+# level through colonial_programmes_refresh_modifiers.
+# ---------------------------------------------------------------------------
 
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
+colonial_programme_invest_up = {
+	# The cost base, so the step charges this month's colonies rather than the
+	# last pulse's.
+	hidden_effect = {
+		colonial_programmes_refresh_cost_base = yes
+	}
+	if = {
+		limit = { colonial_invest_level_value < 1 }
+		# Starting the programme: the Industrialists wanted the capital at home
+		# and the Petite Bourgeoisie resent the diversion.
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+	custom_tooltip = {
+		text = CE_INVEST_UP_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_invest_level } }
+			set_variable = { name = colonial_invest_level value = 0 }
+		}
+		change_variable = { name = colonial_invest_level add = 1 }
+		clamp_variable = { name = colonial_invest_level min = 0 max = colonial_programme_max_level }
+	}
+	add_treasury = colonial_invest_step_cost
 }
 
-colonial_empire_effect_remove_invest = {
+colonial_programme_invest_down = {
 	custom_tooltip = {
-		text = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
-		remove_modifier = colonial_development_investment_modifier
+		text = CE_INVEST_DOWN_TT
+		change_variable = { name = colonial_invest_level subtract = 1 }
+		clamp_variable = { name = colonial_invest_level min = 0 max = colonial_programme_max_level }
 	}
-	remove_variable = colonial_development_investment_modifier_held
-	# Drop the budget-line expense too; the JE pulse stops refreshing
-	# it once the policy modifier is gone, but the active copy needs
-	# explicit cleanup or it would linger out a full duration.
-	remove_modifier = colonial_development_investment_expense_modifier
-
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
 }
 
-colonial_empire_effect_garrison = {
-	custom_tooltip = {
-		text = "CE_MILITARY_GARRISON_DESC"
-		add_modifier = { name = colonial_military_garrison_modifier }
+colonial_programme_garrison_up = {
+	if = {
+		limit = { colonial_garrison_level_value < 1 }
+		# Starting the garrison. The infamy lingers: the programme slows infamy
+		# decay, and a sustained Iron-Fist run draws great-power condemners.
+		change_infamy = 5
 	}
-	# The record a revolution's winner inherits (decol_sync_programmes)
-	set_variable = { name = colonial_military_garrison_modifier_held value = yes }
-	# Infamy compounds with repeated cycles — a sustained Iron-Fist run
-	# accumulates infamy that itself draws GP condemners (existing -0.6/mo
-	# bar drain per condemner, escalating at tier 4 and 6).
-	change_infamy = 5
-
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
+	custom_tooltip = {
+		text = CE_GARRISON_UP_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_garrison_level } }
+			set_variable = { name = colonial_garrison_level value = 0 }
+		}
+		change_variable = { name = colonial_garrison_level add = 1 }
+		clamp_variable = { name = colonial_garrison_level min = 0 max = colonial_programme_max_level }
+	}
 }
 
-colonial_empire_effect_remove_garrison = {
+colonial_programme_garrison_down = {
 	custom_tooltip = {
-		text = "CE_REMOVE_MILITARY_GARRISON_DESC"
-		remove_modifier = colonial_military_garrison_modifier
+		text = CE_GARRISON_DOWN_TT
+		change_variable = { name = colonial_garrison_level subtract = 1 }
+		clamp_variable = { name = colonial_garrison_level min = 0 max = colonial_programme_max_level }
 	}
-	remove_variable = colonial_military_garrison_modifier_held
-
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
 }
 
-colonial_empire_effect_assimilation = {
-	custom_tooltip = {
-		text = "CE_CULTURAL_ASSIMILATION_DESC"
-		add_modifier = { name = colonial_cultural_assimilation_modifier }
+colonial_programme_assimilation_up = {
+	hidden_effect = {
+		colonial_programmes_refresh_cost_base = yes
 	}
-	# The record a revolution's winner inherits (decol_sync_programmes)
-	set_variable = { name = colonial_cultural_assimilation_modifier_held value = yes }
-	# Program startup cost — parallel to Development Investment, so the
-	# two activation costs read as the same flavor of "fund the program."
-	add_treasury = colonial_assimilate_startup_cost
-
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
+	custom_tooltip = {
+		text = CE_ASSIMILATION_UP_TT
+		if = {
+			limit = { NOT = { has_variable = colonial_assim_level } }
+			set_variable = { name = colonial_assim_level value = 0 }
+		}
+		change_variable = { name = colonial_assim_level add = 1 }
+		clamp_variable = { name = colonial_assim_level min = 0 max = colonial_programme_max_level }
+	}
+	add_treasury = colonial_assim_step_cost
 }
 
-colonial_empire_effect_remove_assimilation = {
+colonial_programme_assimilation_down = {
 	custom_tooltip = {
-		text = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
-		remove_modifier = colonial_cultural_assimilation_modifier
+		text = CE_ASSIMILATION_DOWN_TT
+		change_variable = { name = colonial_assim_level subtract = 1 }
+		clamp_variable = { name = colonial_assim_level min = 0 max = colonial_programme_max_level }
 	}
-	remove_variable = colonial_cultural_assimilation_modifier_held
+}
 
-	# Refresh the widget's snapshot variables now rather than next month.
-	colonial_empire_refresh_display = yes
+# What follows a player's step: the modifiers at the new level and the widget's
+# snapshot. Hidden: the widget draws the step's tooltip every frame through
+# ScriptedGui.ExecuteTooltip, and these walk states.
+colonial_programme_after_step = {
+	hidden_effect = {
+		colonial_programmes_refresh_modifiers = yes
+		colonial_empire_refresh_display = yes
+	}
+}
+
+colonial_empire_effect_invest_up = {
+	colonial_programme_invest_up = yes
+	colonial_programme_after_step = yes
+}
+
+colonial_empire_effect_invest_down = {
+	colonial_programme_invest_down = yes
+	colonial_programme_after_step = yes
+}
+
+colonial_empire_effect_garrison_up = {
+	colonial_programme_garrison_up = yes
+	colonial_programme_after_step = yes
+}
+
+colonial_empire_effect_garrison_down = {
+	colonial_programme_garrison_down = yes
+	colonial_programme_after_step = yes
+}
+
+colonial_empire_effect_assimilation_up = {
+	colonial_programme_assimilation_up = yes
+	colonial_programme_after_step = yes
+}
+
+colonial_empire_effect_assimilation_down = {
+	colonial_programme_assimilation_down = yes
+	colonial_programme_after_step = yes
+}
+
+# Caches the yearly GDP of our overseas colonial states, which Investment's
+# cost is a share of (colonial_dev_cost_base). The sum walks every state, so it
+# runs once a month from the entry's pulse and on each step up, never per frame.
+# Country scope.
+colonial_programmes_refresh_cost_base = {
+	set_variable = { name = colonial_dev_colonial_gdp value = colonial_development_gdp }
+}
+
+# One programme's modifier at its level: removed, then added back at a third,
+# two thirds or all of its values. Literal multipliers, so the stored
+# multiplier never has to re-read a variable (scripting_best_practices.md,
+# "Variables backing add_modifier { multiplier = ... }"). The ladder's top is
+# colonial_programme_max_level. Country scope.
+colonial_programme_apply_modifier = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		remove_modifier = $MODIFIER$
+	}
+	if = {
+		limit = { $LEVEL_VALUE$ >= 3 }
+		add_modifier = { name = $MODIFIER$ }
+	}
+	else_if = {
+		limit = { $LEVEL_VALUE$ >= 2 }
+		add_modifier = { name = $MODIFIER$ multiplier = 0.667 }
+	}
+	else_if = {
+		limit = { $LEVEL_VALUE$ >= 1 }
+		add_modifier = { name = $MODIFIER$ multiplier = 0.333 }
+	}
+}
+
+# THE one refresh site for the three programme modifiers and Investment's
+# expense line: a player's step (colonial_programme_after_step), the entry's
+# monthly pulse (after the AI's review) and the civil-war repair
+# (decol_sync_programmes) call it, once per effect block. Country scope, with ROOT the same
+# country (the expense multiplier is read against ROOT): the pulse, the widget's
+# scripted GUI and te_civil_war_on_won all qualify.
+#
+# The expense line (country_expenses_add = 1) is re-added at this week's cost,
+# copied into var:colonial_invest_cost_week first so the stored multiplier is a
+# flat variable. That variable is never removed while the line runs; the
+# entry's cleanup removes the line before it.
+colonial_programmes_refresh_modifiers = {
+	colonial_programme_apply_modifier = { MODIFIER = colonial_development_investment_modifier LEVEL_VALUE = colonial_invest_level_value }
+	colonial_programme_apply_modifier = { MODIFIER = colonial_military_garrison_modifier LEVEL_VALUE = colonial_garrison_level_value }
+	colonial_programme_apply_modifier = { MODIFIER = colonial_cultural_assimilation_modifier LEVEL_VALUE = colonial_assim_level_value }
+
+	if = {
+		limit = { has_modifier = colonial_development_investment_expense_modifier }
+		remove_modifier = colonial_development_investment_expense_modifier
+	}
+	if = {
+		limit = { colonial_invest_level_value >= 1 }
+		set_variable = { name = colonial_invest_cost_week value = colonial_invest_weekly_cost }
+		add_modifier = {
+			name = colonial_development_investment_expense_modifier
+			multiplier = var:colonial_invest_cost_week
+		}
+	}
+}
+
+# Cultural Assimilation's disruption on the colonial states it works in, at the
+# programme's level: every overseas colonial state of ours and every
+# culturally distinct, unintegrated state of a qualifying colonial subject.
+# Two months long and re-applied by the entry's monthly pulse, so it sticks
+# while the programme runs and runs out when it ends. MULT is a literal (the
+# multiplier of a modifier added in another scope's iteration resolves against
+# ROOT, so a variable read here would be the wrong country's on a later tick).
+# Country scope.
+colonial_assim_disrupt_colonies = {
+	every_scope_state = {
+		limit = { is_overseas_colonial_state = yes }
+		if = {
+			limit = { has_modifier = colonial_assimilation_disruption_modifier }
+			remove_modifier = colonial_assimilation_disruption_modifier
+		}
+		add_modifier = {
+			name = colonial_assimilation_disruption_modifier
+			months = 2
+			multiplier = $MULT$
+		}
+	}
+	every_subject_or_below = {
+		limit = { is_qualifying_colonial_subject = yes }
+		every_scope_state = {
+			limit = { is_unintegrated_culturally_distinct_state = yes }
+			if = {
+				limit = { has_modifier = colonial_assimilation_disruption_modifier }
+				remove_modifier = colonial_assimilation_disruption_modifier
+			}
+			add_modifier = {
+				name = colonial_assimilation_disruption_modifier
+				months = 2
+				multiplier = $MULT$
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# AI PROGRAMME REVIEW — once a month, from the entry's pulse, AI only.
+#
+# Deterministic stepping toward the level that is worth paying for, in the
+# shape of covert_ai_manage_priorities; the AI has no programme buttons.
+#
+# 1. Lower. Each running programme drops one level when its top level is
+#    wasted (the change without it still reaches colonial_ai_programme_ceiling:
+#    the monthly cap, or 0 at a full bar), when a level adds nothing, when
+#    the colonies are gone, or when it is unaffordable (colonial_ai_should_lower_*).
+#    One programme at a time, each re-reading the change, so the three never
+#    all drop for the same surplus. A cut for cost holds that programme off
+#    for a year (colonial_ai_hold_*).
+# 2. Raise, only if nothing was lowered: while the change is under the
+#    ceiling, one programme goes up a level, picked by weight among those the
+#    country can carry (colonial_ai_*_raise_weight).
+#
+# The two rules leave a dead band one level wide (raise below the ceiling,
+# lower only when a level's worth above it), so the review does not flip a
+# programme back and forth. It reads the same O(1) projected change the widget
+# shows (colonial_stability_drift_uncapped_display), and steps through the
+# same step cores as the widget, so the AI pays what a player pays. The cores
+# change the levels only; the caller (the entry's monthly pulse) refreshes the
+# modifiers once, after the review.
+# Country scope (is_ai = yes; the caller guards it).
+# ---------------------------------------------------------------------------
+colonial_ai_review_programmes = {
+	if = {
+		limit = { colonial_ai_should_lower_invest = yes }
+		if = {
+			limit = { colonial_ai_invest_unaffordable = yes }
+			set_variable = { name = colonial_ai_hold_invest value = yes months = 12 }
+		}
+		colonial_programme_invest_down = yes
+		set_local_variable = { name = colonial_ai_lowered value = yes }
+	}
+	if = {
+		limit = { colonial_ai_should_lower_assim = yes }
+		if = {
+			limit = { colonial_ai_assim_unaffordable = yes }
+			set_variable = { name = colonial_ai_hold_assim value = yes months = 12 }
+		}
+		colonial_programme_assimilation_down = yes
+		set_local_variable = { name = colonial_ai_lowered value = yes }
+	}
+	if = {
+		limit = { colonial_ai_should_lower_garrison = yes }
+		if = {
+			limit = { colonial_ai_garrison_unaffordable = yes }
+			set_variable = { name = colonial_ai_hold_garrison value = yes months = 12 }
+		}
+		colonial_programme_garrison_down = yes
+		set_local_variable = { name = colonial_ai_lowered value = yes }
+	}
+
+	if = {
+		limit = {
+			NOT = { has_local_variable = colonial_ai_lowered }
+			OR = {
+				colonial_ai_invest_raise_weight > 0
+				colonial_ai_garrison_raise_weight > 0
+				colonial_ai_assim_raise_weight > 0
+			}
+		}
+		random_list = {
+			0 = {
+				modifier = {
+					add = colonial_ai_invest_raise_weight
+				}
+				colonial_programme_invest_up = yes
+			}
+			0 = {
+				modifier = {
+					add = colonial_ai_garrison_raise_weight
+				}
+				colonial_programme_garrison_up = yes
+			}
+			0 = {
+				modifier = {
+					add = colonial_ai_assim_raise_weight
+				}
+				colonial_programme_assimilation_up = yes
+			}
+		}
+	}
 }
 
 colonial_empire_effect_release_territory = {

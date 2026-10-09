@@ -71,17 +71,13 @@
 		container = "custom_widget_container_3"
 	}
 
-	# Scripted buttons - policies the player/AI can toggle.
-	# Every one of these now carries `is_ai = yes` in its `visible`, so the
-	# vanilla grid shows a human nothing; they remain the AI's only path into the
-	# system (its `ai_chance` blocks). See the header comment in
+	# Scripted buttons - the three decolonization decisions.
+	# Every one of these carries `is_ai = yes` in its `visible`, so the vanilla
+	# grid shows a human nothing; they remain the AI's only path into the
+	# decisions (its `ai_chance` blocks). See the header comment in
 	# common/scripted_buttons/colonial_empire_buttons.txt before touching them.
-	scripted_button = ce_invest_in_development
-	scripted_button = ce_remove_invest_in_development
-	scripted_button = ce_military_garrison
-	scripted_button = ce_remove_military_garrison
-	scripted_button = ce_cultural_assimilation
-	scripted_button = ce_remove_cultural_assimilation
+	# The three programmes have no buttons: the AI steps them in the monthly
+	# pulse (colonial_ai_review_programmes), a player through the widget.
 	scripted_button = ce_release_colonial_territory
 	scripted_button = ce_round_table_conference
 	scripted_button = ce_planned_decolonization
@@ -307,21 +303,23 @@
 
 	on_monthly_pulse = {
 		effect = {
-			# --- Programmes a revolution's winner lost ---
-			# A civil war's winner inherits the programme records but not the
-			# modifiers; put back any programme whose record we hold, and record
-			# any programme enabled before the records existed (decolonization.txt,
-			# decol_sync_programmes). A modifier added here is not visible to
-			# has_modifier later in this block, but a variable set here is, so
-			# every programme test below reads the record
-			# (<modifier>_held), which the programme effects keep in step with
-			# the modifier: a programme restored this month is counted, and
-			# Invest pays its expense, this month.
-			decol_sync_programmes = yes
+			# --- Programmes from a save made before the levels ---
+			# A save from before the programme levels (2026-10) holds the
+			# modifier of each programme it ran but no level; it becomes the top
+			# level (decol_migrate_programmes, decolonization.txt). Every
+			# programme test below reads the level (colonial_*_level_value),
+			# which is visible at once where a modifier added in this block
+			# would not be. A revolution's winner inherits the levels and gets
+			# the modifiers back from the one refresh further down (and at once
+			# from te_civil_war_on_won, through decol_sync_programmes).
+			decol_migrate_programmes = yes
 
 			# --- Path-dependence tracking ---
-			# Count months each policy is active. Read at on_complete / on_fail
-			# to choose the appropriate resolution event.
+			# Count months each programme runs, weighted by its level: a month
+			# at the top level counts 1 (as a month of the old on/off programme
+			# did), a month at level 1 a third. Read at on_complete / on_fail
+			# to choose the appropriate resolution event, so a cheap low level
+			# cannot steer the ending as fast as the full programme.
 			if = {
 				limit = { NOT = { has_variable = colonial_invest_months } }
 				set_variable = { name = colonial_invest_months value = 0 }
@@ -346,16 +344,16 @@
 			}
 			change_variable = { name = colonial_je_total_months add = 1 }
 			if = {
-				limit = { has_variable = colonial_development_investment_modifier_held }
-				change_variable = { name = colonial_invest_months add = 1 }
+				limit = { colonial_invest_level_value >= 1 }
+				change_variable = { name = colonial_invest_months add = colonial_invest_strength }
 			}
 			if = {
-				limit = { has_variable = colonial_military_garrison_modifier_held }
-				change_variable = { name = colonial_garrison_months add = 1 }
+				limit = { colonial_garrison_level_value >= 1 }
+				change_variable = { name = colonial_garrison_months add = colonial_garrison_strength }
 			}
 			if = {
-				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
-				change_variable = { name = colonial_assimilate_months add = 1 }
+				limit = { colonial_assim_level_value >= 1 }
+				change_variable = { name = colonial_assimilate_months add = colonial_assim_strength }
 			}
 
 			# --- Solidified-band sustained-time counter ---
@@ -390,22 +388,21 @@
 				set_variable = { name = colonial_at_100_months value = 0 }
 			}
 
-			# --- GDP-scaled monthly expense while Invest is active ---
-			# Refreshes the dedicated expense modifier (country_expenses_add
-			# = 1, scaled here by ~0.5% of GDP) so it shows up as a budget
-			# line item rather than a silent treasury debit. A 1960 UK GDP
-			# of ~£700M means roughly £3.5M/month; substantial but not
-			# bankrupting. The modifier is removed by the policy's remove
-			# button (ce_remove_invest_in_development); the per-pulse
-			# re-application keeps the multiplier in sync with current GDP.
+			# --- Programme costs, the AI's review, the modifiers ---
+			# The colonies' GDP that Investment's weekly cost is a share of, cached
+			# once a month (colonial_programmes_refresh_cost_base). Then an AI
+			# reviews its three programmes' levels against the bar and its budget,
+			# reading the widget's projected change (its three iterating groups
+			# from last month's snapshot). Then the one refresh re-applies each
+			# programme's modifier at its level and Investment's expense line at
+			# this week's cost, so the line follows the colonies' GDP; the steps
+			# refresh it too, at once.
+			colonial_programmes_refresh_cost_base = yes
 			if = {
-				limit = { has_variable = colonial_development_investment_modifier_held }
-				remove_modifier = colonial_development_investment_expense_modifier
-				add_modifier = {
-					name = colonial_development_investment_expense_modifier
-					multiplier = colonial_invest_monthly_expense
-				}
+				limit = { is_ai = yes }
+				colonial_ai_review_programmes = yes
 			}
+			colonial_programmes_refresh_modifiers = yes
 
 			# The pressuring-great-powers leaderboard used to be built here, into
 			# seven colonial_condemner_rank_N slot variables read by the
@@ -417,32 +414,24 @@
 			# #11 records as rendering blank in this mod.
 
 			# --- State-side assimilation disruption reapplication ---
-			# While the country has the assimilation modifier, every overseas
-			# colonial state takes a recurring -5% goods output / -10% pop
-			# qualifications hit. Forced cultural conversion stalls the local
-			# economy. 2-month duration; reapplied each pulse so it sticks
-			# while the policy is on, decays naturally when it ends.
+			# While Cultural Assimilation runs, every overseas colonial state,
+			# and every unintegrated colonial state of a qualifying subject,
+			# takes a recurring goods-output / qualifications hit at the
+			# programme's level (a third of it a level). Forced cultural
+			# conversion stalls the local economy. 2-month duration; reapplied
+			# each pulse so it sticks while the programme runs, runs out when it
+			# ends.
 			if = {
-				limit = { has_variable = colonial_cultural_assimilation_modifier_held }
-				every_scope_state = {
-					limit = { is_overseas_colonial_state = yes }
-					add_modifier = {
-						name = colonial_assimilation_disruption_modifier
-						months = 2
-					}
-				}
-				# Subject-state branch: cultural assimilation policy also
-				# disrupts qualifying subjects' colonial states.
-				every_subject_or_below = {
-					limit = { is_qualifying_colonial_subject = yes }
-					every_scope_state = {
-						limit = { is_unintegrated_culturally_distinct_state = yes }
-						add_modifier = {
-							name = colonial_assimilation_disruption_modifier
-							months = 2
-						}
-					}
-				}
+				limit = { colonial_assim_level_value >= 3 }
+				colonial_assim_disrupt_colonies = { MULT = 1 }
+			}
+			else_if = {
+				limit = { colonial_assim_level_value >= 2 }
+				colonial_assim_disrupt_colonies = { MULT = 0.667 }
+			}
+			else_if = {
+				limit = { colonial_assim_level_value >= 1 }
+				colonial_assim_disrupt_colonies = { MULT = 0.333 }
 			}
 
 			# Phase modifiers based on current bar value (five status bands)
