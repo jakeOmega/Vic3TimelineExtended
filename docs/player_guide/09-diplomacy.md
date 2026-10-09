@@ -284,9 +284,12 @@ the leader has researched adds a slot: Intergovernmental Organizations (era 6),
 Containerization (era 8), Globalization (era 9) and Universal Digital Identity
 (era 11). The slots are counted, not tied to positions, so a small bloc whose
 leader has two of the technologies fills its third and fourth slots with them.
-The panel shows only the slots the bloc has; hover a locked one to see the count.
+The panel shows all eight slots from the start and locks the ones above the
+bloc's count. Hover a locked slot to see the count it needs, the count the bloc
+has, and a tick or a cross for each rank condition and each slot technology.
 The Power Bloc Principle Slots game rule is Up to Eight by default; set to Four,
-the technologies add nothing and a bloc keeps the base game's two to four slots.
+the technologies add nothing, a bloc keeps the base game's two to four slots and
+the panel shows four.
 
 A filled slot stays filled if the count drops, when the bloc loses rank or a
 leader without the technologies takes over, but the bloc can't add a principle
