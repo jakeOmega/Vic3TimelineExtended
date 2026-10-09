@@ -24,15 +24,17 @@
 # 31 December, so a container is created only when te_dg_hist_year is not the
 # current year, and te_dg_hist_year is set once the container is stored. The
 # figures are copied on every run: the 31 December run overwrites the game-start
-# sample, and it is the first run to see the Gini and Wealth Concentration
-# (te_demog_wc_national runs from the yearly pulse only), so the game-start
-# sample may lack te_dg_h_gini and te_dg_h_wc until then. A figure the country
-# does not hold yet is left unset, never written as 0: a chart reads an unset
-# value as "no data".
+# sample. The Gini and Wealth Concentration come from te_demog_wc_national,
+# which runs on the yearly pulse and at game start (te_inh_game_start, in
+# inheritance_events.1); the two game-start events run in either order, so the
+# game-start sample may lack te_dg_h_gini and te_dg_h_wc until 31 December. A
+# figure the country does not hold yet is left unset, never written as 0: a
+# chart reads an unset value as "no data".
 #
-# A revolution's winner inherits te_dg_hist_year but not the list, so in the
-# year it wins it finds no container to fill and records nothing; its chart
-# starts again the next year.
+# A revolution's winner inherits te_dg_hist_year but not the list, so a
+# country with no list creates a container whatever its year says: its chart
+# starts again with the year it wins. The refill reads the list only once it
+# exists.
 #
 # Scope: country, and only from te_demog_country_census (where THIS is the
 # country). Everything is in hidden_effect: this is a store, not a tooltip.
@@ -46,6 +48,7 @@ te_demog_history_record = {
 				OR = {
 					NOT = { has_variable = te_dg_hist_year }
 					NOT = { var:te_dg_hist_year = te_demog_year }
+					NOT = { has_variable_list = te_dg_hist }
 				}
 			}
 			create_container = {
@@ -65,14 +68,17 @@ te_demog_history_record = {
 			}
 		}
 		# This year's container, wherever the list keeps it: fill it, or refill it.
-		every_in_list = {
-			variable = te_dg_hist
-			limit = { var:te_hist_i = te_demog_year }
-			te_demog_history_copy = { FROM = te_dg_median TO = te_dg_h_median }
-			te_demog_history_copy = { FROM = te_dg_tfr TO = te_dg_h_tfr }
-			te_demog_history_copy = { FROM = te_dg_e0 TO = te_dg_h_e0 }
-			te_demog_history_copy = { FROM = te_dg_gini TO = te_dg_h_gini }
-			te_demog_history_copy = { FROM = te_inh_concentration TO = te_dg_h_wc }
+		if = {
+			limit = { has_variable_list = te_dg_hist }
+			every_in_list = {
+				variable = te_dg_hist
+				limit = { var:te_hist_i = te_demog_year }
+				te_demog_history_copy = { FROM = te_dg_median TO = te_dg_h_median }
+				te_demog_history_copy = { FROM = te_dg_tfr TO = te_dg_h_tfr }
+				te_demog_history_copy = { FROM = te_dg_e0 TO = te_dg_h_e0 }
+				te_demog_history_copy = { FROM = te_dg_gini TO = te_dg_h_gini }
+				te_demog_history_copy = { FROM = te_inh_concentration TO = te_dg_h_wc }
+			}
 		}
 	}
 }

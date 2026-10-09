@@ -258,14 +258,17 @@ class TestStateGini(unittest.TestCase):
 
 class TestStep(unittest.TestCase):
     def test_orchestrator_branches(self):
-        """Seed when there is no census, a gap of more than a year or an emptied ring;
-        step once a year; nothing on a second pulse in the same year (Review Focus 3)."""
+        """Seed when there is no census, a gap of more than a year, an emptied ring or people more
+        than 25% off the last census's; step once a year; nothing on a second pulse in the same
+        year (Review Focus 3)."""
         body = _block(_text(EFFECTS), "te_demog_state_yearly")
         self.assertIn("te_demog_cohorts_run = yes", body)
         self.assertIn("te_demog_seed = yes", body)
         self.assertIn("te_demog_step = yes", body)
         self.assertIn("te_demog_year_gap > 1", body)
         self.assertIn("te_demog_year_gap = 1", body)
+        self.assertIn("state_population > { value = var:te_dg_pop_last multiply = 1.25 }", body)
+        self.assertIn("state_population < { value = var:te_dg_pop_last multiply = 0.75 }", body)
 
     def test_every_cohort_entry_point_is_gated(self):
         """Review Focus 5: nothing writes a cohort without te_demog_cohorts_run."""
@@ -845,22 +848,28 @@ class TestCohortScript(unittest.TestCase):
         stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
                  "te_demog_seed": "set_variable = { name = did value = 1 }",
                  "te_demog_step": "set_variable = { name = did value = 2 }"}
-        cases = [   # (census year, raw, people, rule on) -> seed 1, step 2, nothing None
-            ((None, None, 1000.0, True), 1),
-            ((1836, 900.0, 1000.0, True), 2),
-            ((1837, 900.0, 1000.0, True), None),
-            ((1834, 900.0, 1000.0, True), 1),
-            ((1836, 0.5, 1000.0, True), 1),
-            ((1836, 0.5, 0.0, True), 2),
-            ((None, None, 1000.0, False), None),
+        cases = [   # (census year, raw, people, people at the census, rule on) -> seed 1, step 2, nothing None
+            ((None, None, 1000.0, None, True), 1),
+            ((1836, 900.0, 1000.0, 1000.0, True), 2),
+            ((1837, 900.0, 1000.0, 1000.0, True), None),
+            ((1834, 900.0, 1000.0, 1000.0, True), 1),
+            ((1836, 0.5, 1000.0, 1000.0, True), 1),
+            ((1836, 0.5, 0.0, 0.0, True), 2),
+            ((None, None, 1000.0, None, False), None),
+            # a state merged or split: people more than a quarter off the last census's
+            ((1836, 900.0, 1251.0, 1000.0, True), 1),
+            ((1836, 900.0, 749.0, 1000.0, True), 1),
+            ((1836, 900.0, 1250.0, 1000.0, True), 2),
+            ((1836, 900.0, 750.0, 1000.0, True), 2),
+            ((1837, 900.0, 1400.0, 1000.0, True), 1),
         ]
-        for (census, raw, pop, rule), want in cases:
+        for (census, raw, pop, pop_last, rule), want in cases:
             eng = _Engine({"year": 1837.0, "state_population": pop}, triggers={"te_demog_cohorts_run": rule},
                           effects=stubs)
             if census is not None:
-                eng.vars.update(te_dg_year=float(census), te_dg_raw=raw)
+                eng.vars.update(te_dg_year=float(census), te_dg_raw=raw, te_dg_pop_last=pop_last)
             eng.call("te_demog_state_yearly")
-            self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, rule))
+            self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, pop_last, rule))
 
 
 class _CountryEngine(_Engine):
@@ -929,6 +938,9 @@ class _CountryEngine(_Engine):
     def _test(self, key, op, arg):
         if key == "any_scope_state":
             return any(self.holds_in(state_vars, arg) for state_vars in self.states)
+        if key == "has_variable_list":
+            assert self.vars is self.root_vars, "a list is kept on the country"
+            return arg in self.lists
         if key == "owner":
             return self.holds_in(self.root_vars, arg)
         return super()._test(key, op, arg)
@@ -1177,6 +1189,35 @@ class TestTrend(unittest.TestCase):
         self.assertEqual((eng.vars["te_dg_prev_tfr"], eng.vars["te_dg_prev_e0"]), (3.3, 44.0))
         self.assertNotEqual(eng.vars["te_dg_tfr"], 3.3)
 
+    def test_a_population_jump_reseeds(self):
+        """A state merged or split moves its people by far more than a year's natural change. Over 25%
+        since the last census the state's pulse seeds again (no migrants, the arrows start over)
+        instead of stepping and counting the move as migration; a 3% rise is a year's step."""
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": ""}
+        for growth, reseeded in ((1.4, True), (0.6, True), (1.03, False)):
+            with self.subTest(growth=growth):
+                eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
+                eng.call("te_demog_seed")
+                eng.fixtures.update(te_demog_crisis=0.0, te_demog_family_transport=0.0)
+                eng.vars.update(te_dg_eb=0.0, te_dg_ed=0.0, te_dg_fjob_share=0.3)
+                self.step(eng, 1837)
+                self.step(eng, 1838)
+                self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
+                people = eng.vars["te_dg_people"]
+                eng.fixtures.update(year=1839.0, state_population=people * growth)
+                eng.call("te_demog_state_yearly")
+                self.assertEqual(eng.vars["te_dg_year"], 1839.0)
+                self.assertAlmostEqual(eng.vars["te_dg_people"], people * growth)
+                self.assertAlmostEqual(eng.vars["te_dg_pop_last"], people * growth)
+                if reseeded:
+                    self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 0.0, "te_dg_stepped": 0.0})
+                    self.assertEqual(eng.vars["te_dg_births"], 0.0)
+                    self.assertEqual(eng.vars["te_dg_net_migration"], 0.0, "no migrants")
+                else:
+                    self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
+                    self.assertGreater(eng.vars["te_dg_births"], 0)
+                    self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 0.03 * people, delta=1.0)
+
     def test_a_seed_zeroes_net_migration(self):
         """Only a step's flows write it, and the country sums it over every state with a census."""
         eng = _engine_for(self.INP, 1836, self.POP)
@@ -1344,12 +1385,15 @@ class TestCountry(unittest.TestCase):
 
     def test_the_lists(self):
         """te_dg_states: by people, at most 40; te_dg_cities: the three largest cities by the global
-        rank, a state with no rank left out, a rank of 1 the largest."""
+        rank, a state with no rank or no census left out, a rank of 1 the largest. Each list is
+        cleared only once it exists."""
         states = self.three()
         states.append(dict(states[0], state_population=7e6))                 # the largest, with no rank
         del states[3]["state_city_size_rank"]
         small = [dict(states[2], state_population=float(1000 + i)) for i in range(45)]
-        eng = self.country(states + small)
+        split = {"state_population": 9e6, "state_city_size_rank": 1.0}        # ranked, no walk or census yet
+        eng = self.country(states + small + [split])
+        self.assertNotIn("te_dg_cities", eng.lists, "the first census clears no list")
         eng.call("te_demog_country_census")
         listed = eng.lists["te_dg_states"]
         self.assertEqual(len(listed), 40)
@@ -1827,6 +1871,21 @@ class TestHistory(unittest.TestCase):
         guard = body[:body.index("create_container")]
         self.assertIn("var:te_dg_hist_year = te_demog_year", guard)
         self.assertIn("NOT = { has_variable = te_dg_hist_year }", guard)
+
+    def test_a_revolutions_winner_starts_a_list_in_the_year_it_wins(self):
+        """The winner inherits te_dg_hist_year but not the list (best practices, container rule 4):
+        a country with no list creates a container whatever its year says, and the refill reads the
+        list only once it exists. The interpreter has no containers or lists, so this pins the text."""
+        body = self.block("te_demog_history_record")
+        guard = _find(_find(_parse_script(body), "hidden_effect"), "if")
+        either = _find(_find(guard, "limit"), "OR")
+        self.assertIn(("NOT", "=", [("has_variable_list", "=", "te_dg_hist")]), either)
+        self.assertEqual(len(either), 3)
+        refills = [v for k, _, v in _walk(_parse_script(body))
+                   if k == "if" and any(i[0] == "every_in_list" for i in v)]
+        self.assertEqual(len(refills), 1)
+        self.assertEqual(_find(refills[0], "limit"), [("has_variable_list", "=", "te_dg_hist")])
+        self.assertEqual(body.count("every_in_list"), 1)
         self.assertEqual(body.count("create_container"), 1)
         self.assertRegex(body, r"set_variable = \{ name = te_dg_hist_year value = te_demog_year \}")
         self.assertLess(body.index("add_to_variable_list"),
@@ -1842,8 +1901,9 @@ class TestHistory(unittest.TestCase):
         self.assertTrue(body.lstrip().startswith("hidden_effect"), "hidden: a store, not a tooltip")
 
     def test_this_years_container_is_refilled_every_run(self):
-        """The 31 December run overwrites the game-start sample's values, and the game-start
-        sample may lack the Gini and Wealth Concentration (te_demog_wc_national runs yearly only)."""
+        """The 31 December run overwrites the game-start sample's values. The game-start sample may
+        lack the Gini and Wealth Concentration: te_demog_wc_national runs on the yearly pulse and from
+        te_inh_game_start, and the two game-start events run in either order."""
         body = self.block("te_demog_history_record")
         self.assertRegex(body, r"every_in_list = \{\s+variable = te_dg_hist\s+limit = \{ var:te_hist_i = te_demog_year \}")
         self.assertGreater(body.index("every_in_list"), body.index("te_dg_hist_year value"))

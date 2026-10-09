@@ -74,8 +74,9 @@
 #                       in the first step's after it, true from the second step on. A panel
 #                       draws an arrow only while it is 1. The prev copies are made only after
 #                       a step, so none is ever a seed's. A state re-seeded (a census gap, an
-#                       emptied ring) starts again; so does a country whose states are all
-#                       fresh seeds, but not one that takes a new state in.
+#                       emptied ring, its people moving more than 25% in a year) starts again;
+#                       so does a country whose states are all fresh seeds, but not one that
+#                       takes a new state in.
 #   te_dg_prev_tfr, te_dg_prev_e0  a state's, copied by te_demog_prepare before it overwrites
 #                       them
 #
@@ -105,7 +106,7 @@
 #   te_dg_pjf<b>, te_dg_pjm<b>  the player's bands twenty years ahead (te_demog_project)
 # Variable lists on the country (state scopes, drawn by the panel):
 #   te_dg_states        its states with a census, the largest by people first, at most 40
-#   te_dg_cities        its three states of the largest cities, by state_city_size_rank
+#   te_dg_cities        its three census states of the largest cities, by state_city_size_rank
 # ============================================================================
 
 # THIS = a state, on its yearly pulse. One pop walk and one building walk fill
@@ -269,8 +270,12 @@ te_demog_state_yearly = {
 			limit = { NOT = { te_demog_has_census = yes } }
 			te_demog_seed = yes
 		}
-		# A census more than a year old, or a ring emptied while the state has
-		# people (no migrant settles an empty class): seed again.
+		# A census more than a year old, a ring emptied while the state has
+		# people (no migrant settles an empty class), or people more than a
+		# quarter above or below the last census's (te_dg_pop_last, written with
+		# te_dg_year): seed again. A move that size is a state merged or split,
+		# not migration (one year's natural change is under 5%), and the step's
+		# residual would count it all as migrants.
 		else_if = {
 			limit = {
 				OR = {
@@ -279,6 +284,8 @@ te_demog_state_yearly = {
 						var:te_dg_raw < 1
 						state_population > 0
 					}
+					state_population > { value = var:te_dg_pop_last multiply = 1.25 }
+					state_population < { value = var:te_dg_pop_last multiply = 0.75 }
 				}
 			}
 			te_demog_seed = yes
@@ -1301,8 +1308,13 @@ te_demog_country_census = {
 			set_variable = { name = te_dg_urban_label value = 3 }
 		}
 		# the lists the panel draws: the states by people, the three biggest cities by the
-		# global rank (negated: ordered_scope_state takes the highest first)
-		clear_variable_list = te_dg_states
+		# global rank (negated: ordered_scope_state takes the highest first). A city needs a
+		# census too: a state split off this year has a rank before its first walk, and the
+		# panel's row reads its te_dg_urban.
+		if = {
+			limit = { has_variable_list = te_dg_states }
+			clear_variable_list = te_dg_states
+		}
 		ordered_scope_state = {
 			limit = { te_demog_has_census = yes }
 			order_by = state_population
@@ -1311,9 +1323,15 @@ te_demog_country_census = {
 			save_temporary_scope_as = te_dg_it
 			root = { add_to_variable_list = { name = te_dg_states target = scope:te_dg_it } }
 		}
-		clear_variable_list = te_dg_cities
+		if = {
+			limit = { has_variable_list = te_dg_cities }
+			clear_variable_list = te_dg_cities
+		}
 		ordered_scope_state = {
-			limit = { has_variable = state_city_size_rank }
+			limit = {
+				te_demog_has_census = yes
+				has_variable = state_city_size_rank
+			}
 			order_by = te_demog_neg_city_rank
 			max = 3
 			check_range_bounds = no
