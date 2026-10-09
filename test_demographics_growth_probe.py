@@ -197,6 +197,22 @@ class TestScheduleMatchesScript(unittest.TestCase):
         self.assertEqual([t for t in range(1, 10) if not G.measured(t)], [1, 4, 7])
         self.assertIn("set_variable = { name = te_pg_phase value = -1 }", EFFECTS.read_text(encoding="utf-8-sig"))
 
+    def test_every_read_key_has_a_carrier(self):
+        """A modifier key with no source anywhere reads as 'none' and logs per read (the first v3 run: 12,000 a
+        tick), so te_pg_keys carries every key the probe reads."""
+        carrier = (ROOT / "common" / "static_modifiers" / "te_debug_growth_keys_generated.txt").read_text(encoding="utf-8-sig")
+        carried = set(re.findall(r"^\t(\w+) = 0\.00001$", carrier, re.M))
+        read = set()
+        for f in (EFFECTS, ROOT / "common" / "scripted_effects" / "te_debug_growth_reads_generated.txt"):
+            body = re.sub(r"#[^\n]*", "", f.read_text(encoding="utf-8-sig"))
+            read |= set(re.findall(r"modifier:(\w+)", body))
+        exempt = {"state_birth_rate_mult", "state_mortality_mult"}   # every state has a source
+        self.assertEqual(sorted(read - carried - exempt), [])
+        body = EFFECTS.read_text(encoding="utf-8-sig")
+        self.assertIn("add_modifier = { name = te_pg_keys days = 1500 }", body)
+        start = body[body.index("te_pg_start = {"):body.index("te_pg_canary = {")]
+        self.assertNotIn("te_pg_tick = yes", start, "the first reads wait a day for te_pg_keys")
+
     def test_switch_cadence(self):
         """The script switches when tick mod 3 is 0 and stops at 48; the analysis assumes both."""
         body = EFFECTS.read_text(encoding="utf-8-sig")

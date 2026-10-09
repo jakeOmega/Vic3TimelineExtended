@@ -40,12 +40,12 @@
 # THIS = ROOT = the console's country (te_debug_growth.1 option a).
 te_pg_start = {
 	set_global_variable = te_pg_started
-	save_scope_as = te_pg_root
 	set_global_variable = { name = te_pg_tick value = 0 }
 	set_global_variable = { name = te_pg_day value = 0 }
 	set_local_variable = { name = te_pg_k value = 0 }
 	every_country = {
 		add_modifier = { name = te_pg_freeze days = 1500 }
+		add_modifier = { name = te_pg_keys days = 1500 }
 		set_local_variable = { name = te_pg_people value = 0 }
 		every_scope_state = {
 			change_local_variable = { name = te_pg_people add = state_population }
@@ -76,12 +76,13 @@ te_pg_start = {
 	set_variable = { name = te_pg_dbg_k value = local_var:te_pg_k }
 	debug_log = "TE_PG_START v=3 countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_k
-	te_pg_canary = yes
-	te_pg_tick = yes
+	# the first tick and the canary wait a day: a modifier added in an effect is not read back
+	# within it (CLAUDE.md), and te_pg_keys must be in place before the first reads
+	trigger_event = { id = te_debug_growth.3 days = 1 }
 	trigger_event = { id = te_debug_growth.2 days = 1 }
 }
 
-# THIS = the starting country, once at the start: the deaths reads in its capital and a few of
+# THIS = ROOT = the starting country, at the first tick (a day after the start): the deaths reads in its capital and a few of
 # its buildings, so a read that fails or reads 0 shows at the first check (TE_PG_CANARY lines).
 te_pg_canary = {
 	capital = {
@@ -94,7 +95,7 @@ te_pg_canary = {
 		set_variable = { name = te_pg_dbg_g value = modifier:state_mortality_wealth_mult }
 		set_variable = { name = te_pg_dbg_h value = 0 }
 		if = {
-			limit = { is_homeland_of_country_cultures = scope:te_pg_root }
+			limit = { is_homeland_of_country_cultures = root }
 			set_variable = { name = te_pg_dbg_h value = 1 }
 		}
 		debug_log = "TE_PG_CANARY v=3 state mortality=[THIS.Var('te_pg_dbg_a').GetValue|4] laborers=[THIS.Var('te_pg_dbg_b').GetValue|4] peasants=[THIS.Var('te_pg_dbg_c').GetValue|4] farmers=[THIS.Var('te_pg_dbg_d').GetValue|4] non_homeland=[THIS.Var('te_pg_dbg_e').GetValue|4] turmoil_mult=[THIS.Var('te_pg_dbg_f').GetValue|4] wealth_mult=[THIS.Var('te_pg_dbg_g').GetValue|4] homeland=[THIS.Var('te_pg_dbg_h').GetValue|0]"
@@ -144,8 +145,12 @@ te_pg_canary = {
 	}
 }
 
-# THIS = the starting country, every 28 days (te_debug_growth.3) and once at the start.
+# THIS = the starting country, every 28 days from a day after the start (te_debug_growth.3).
 te_pg_tick = {
+	if = {
+		limit = { global_var:te_pg_tick = 0 }
+		te_pg_canary = yes
+	}
 	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
 	debug_log = "TE_PG_TICK v=3 t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_t
@@ -154,6 +159,7 @@ te_pg_tick = {
 	every_country = {
 		limit = { NOT = { has_modifier = te_pg_freeze } }
 		add_modifier = { name = te_pg_freeze days = 1500 }
+		add_modifier = { name = te_pg_keys days = 1500 }
 	}
 	every_country = {
 		limit = { has_variable = te_pg_group }
@@ -518,6 +524,10 @@ te_pg_finish = {
 		if = {
 			limit = { has_modifier = te_pg_freeze }
 			remove_modifier = te_pg_freeze
+		}
+		if = {
+			limit = { has_modifier = te_pg_keys }
+			remove_modifier = te_pg_keys
 		}
 		te_pg_clear_steps = yes
 		if = {
