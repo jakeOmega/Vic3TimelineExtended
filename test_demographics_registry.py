@@ -111,6 +111,25 @@ class TestWalks(unittest.TestCase):
         hook = _block(_text(DEMOG_ON_ACTIONS), "te_demog_state_yearly_on_action")
         self.assertNotIn("te_demog_cohorts_run", hook)
 
+    def test_ownership_fractions_are_read_only_from_built_buildings(self):
+        """Observer test of #830: a building whose first level is under construction
+        logs "ownership_fraction requires the building to be built" three times a pulse."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        limit = re.search(r"limit = \{([^{}]*)\}\s*change_local_variable = \{ name = te_dg_w_priv", body)
+        self.assertIsNotNone(limit)
+        self.assertIn("level > 0", limit.group(1))
+        self.assertIn("te_demog_is_capital_building = yes", limit.group(1))
+
+    def test_the_state_subtab_gate_needs_no_player(self):
+        """Observer test of #830: an observer has no player, so a GetPlayer root logged an
+        error every frame the state panel was open. The gate reads only the rule."""
+        panel = _text(ROOT / "gui" / "states_panel.gui")
+        reads = re.findall(r"GetScriptedGui\('te_pops_demog_tab_sgui'\)\.IsShown\( GuiScope\.SetRoot\( ([\w.]+) \)", panel)
+        self.assertEqual(reads, ["State.GetOwner.MakeScope"] * 2)
+        content = _text(ROOT / "gui" / "te_demographics_widgets.gui")
+        content = content[content.index("type te_state_demog_overview"):]
+        self.assertNotIn("GetPlayer", content, "the state's sections read only the state")
+
 
 def _parse_script(text):
     """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list."""

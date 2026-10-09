@@ -237,8 +237,14 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_ctry value = 0 }
 	set_local_variable = { name = te_dg_w_own value = 0 }
 	every_scope_building = {
+		# level > 0 before the ownership fractions, as vanilla has it: a building
+		# whose first level is still under construction refuses them
+		# ("ownership_fraction requires the building to be built") and adds no levels
 		if = {
-			limit = { te_demog_is_capital_building = yes }
+			limit = {
+				level > 0
+				te_demog_is_capital_building = yes
+			}
 			change_local_variable = { name = te_dg_w_priv add = te_demog_building_private_levels }
 			change_local_variable = { name = te_dg_w_self add = te_demog_building_self_levels }
 			change_local_variable = { name = te_dg_w_ctry add = te_demog_building_country_levels }

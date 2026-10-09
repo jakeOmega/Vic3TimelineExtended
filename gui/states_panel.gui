@@ -2616,10 +2616,13 @@ types state_panel_types
 				### census (te_pops_demog_tab_sgui, the rule alone, the same gate as the
 				### Population panel's Demographics tab); while the rule hides it the
 				### other three keep 135 px each and the strip ends early, which is
-				### accepted rather than swapping the layout.
+				### accepted rather than swapping the layout. The gate is rooted at the
+				### state's owner, not GetPlayer: it reads only the rule, and an observer has
+				### no player, so a GetPlayer root logged an error every frame the panel was
+				### open. The content reads only the state, so it works for observers too.
 				widget = {
 					size = { 135 40 }
-					visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( State.GetOwner.MakeScope ).End )]"
 
 					background = {
 						visible = "[GetVariableSystem.HasValue('population_subtab', 'te_demog')]"
@@ -3225,7 +3228,7 @@ types state_panel_types
 		### under a subtab that is no longer on the strip. Inside, a state with no
 		### census reads "Census pending" (te_demog_state_census_sgui).
 		flowcontainer = {
-			visible = "[And( GetVariableSystem.HasValue('population_subtab', 'te_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[And( GetVariableSystem.HasValue('population_subtab', 'te_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( State.GetOwner.MakeScope ).End ) )]"
 			parentanchor = hcenter
 			direction = vertical
 
