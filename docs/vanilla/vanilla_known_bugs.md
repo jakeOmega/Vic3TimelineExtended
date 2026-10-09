@@ -186,6 +186,7 @@ Maybe a define macro is missing
 Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from `extra_defines.txt` still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from `extra_defines.txt`.)
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors)
 
 ```
 Error: set_only_legal_party_from_ig effect [ Invalid target interestgroup ]
@@ -211,6 +212,7 @@ Error: Event target link 'market' returned an invalid object
 Vanilla railroad-vehicle graphics definition reads `market` in a scope where it's not bound. Surfaces in routine map-rendering ticks. Vanilla bug.
 
 ### `common/scripted_effects/00_victoria_ip4_scripted_effects.txt:449` — bad-state checks on coup IGs
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `abandon_revolution` and `remove_ruling_interest_group` errors)
 
 ```
 Error: abandon_revolution effect [ InterestGroup's country doesn't have a valid growing revolution ]

@@ -464,6 +464,11 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
 | Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
 
+The mod also changes one base-game amendment. Anarchy holds elections, so the
+Tradition of Free Elections attaches to it as to the voting laws. Keeping
+elections free under Anarchy builds toward the tradition, enacting Anarchy keeps
+one you already hold, and the tradition no longer makes Anarchy harder to enact.
+
 ### Amendment petitions
 
 Once a law has passed, an interest group can still ask you to amend it when your
