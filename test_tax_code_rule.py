@@ -1,9 +1,11 @@
-"""The legislated tax code's game rule, gate triggers, carrier law and vanilla-law gates.
+"""The tax code's game rule, gate triggers, carrier law and vanilla-law gates.
 
 Structural checks on the committed script (no game install needed). Under the
-rule the five vanilla taxation laws cannot be enacted and `law_te_tax_code`
-carries one generated amendment per instrument (see test_tax_code_generated.py).
-With the rule off every one of these edits has to be inert.
+two full settings the five vanilla taxation laws cannot be enacted and
+`law_te_tax_code` carries one generated amendment per instrument (see
+test_tax_code_generated.py); under the light setting the vanilla laws stay
+(test_tax_code_light.py). With the rule off every one of these edits has to be
+inert.
 """
 
 import json
@@ -16,7 +18,11 @@ from paradox_file_parser import ParadoxFileParser
 ROOT = Path(__file__).resolve().parent
 
 RULE = "te_tax_code_rule"
-OPTIONS = ("te_tax_code_disabled", "te_tax_code_enabled", "te_tax_code_enabled_customs")
+OPTIONS = ("te_tax_code_disabled", "te_tax_code_enabled", "te_tax_code_enabled_customs", "te_tax_code_light")
+# Every setting but disabled: the probe harness refuses to arm under any of them.
+ENABLED_OPTIONS = ("te_tax_code_enabled", "te_tax_code_enabled_customs", "te_tax_code_light")
+# The positive gates a handler or a shared effect may open with.
+GATES = {"te_tax_code_full", "te_tax_code_light", "te_tax_code_on", "te_tax_code_in_force", "te_tax_light_in_force"}
 RATE_KEYS = (
     "tax_income_add", "tax_dividends_add", "tax_land_add",
     "tax_per_capita_add", "tax_consumption_add",
@@ -55,7 +61,7 @@ class GameRuleTest(unittest.TestCase):
     def setUp(self):
         self.rules = load("common/game_rules/extra_game_rules.txt")
 
-    def test_rule_has_the_three_options_and_defaults_to_disabled(self):
+    def test_rule_has_the_four_options_and_defaults_to_disabled(self):
         rule = self.rules[RULE]
         self.assertEqual(rule["default"], "te_tax_code_disabled")
         self.assertEqual({key for key in rule if key != "default"}, set(OPTIONS))
@@ -100,6 +106,10 @@ class RuleLocTest(unittest.TestCase):
                 self.assertTrue(text.startswith("Experimental. "), text)
                 self.assertIn("AI countries legislate", text)
         self.assertIn("tariffs and subsidies are set by legislation", self.loc["setting_te_tax_code_enabled_customs_desc"])
+        light = self.loc["setting_te_tax_code_light_desc"]
+        self.assertTrue(light.startswith("Experimental. "), light)
+        for phrase in ("taxation laws stay", "no bills", "AI countries keep choosing their tax level"):
+            self.assertIn(phrase, light)
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         row = next(line for line in readme.splitlines() if line.startswith(f"| `{RULE}` |"))
         self.assertIn("their tariffs still follow the base game's trade decisions",
@@ -110,9 +120,10 @@ class RuleLocTest(unittest.TestCase):
 
 class OnActionGateSweepTest(unittest.TestCase):
     """Final review B-Minor 13: every tax-code on_action handler, and every tax-code
-    effect a shared hook calls, does nothing unless te_tax_code_on holds, written
-    positively. Each task's tests pin its own hooks; this pins the invariant for the
-    next one."""
+    effect a shared hook calls, does nothing unless the setting it serves holds,
+    written positively: te_tax_code_full for the legislated code's handlers,
+    te_tax_code_light for the light code's (te_tax_light_*). Each task's tests pin
+    its own hooks; this pins the invariant for the next one."""
 
     ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
 
@@ -125,7 +136,8 @@ class OnActionGateSweepTest(unittest.TestCase):
             with self.subTest(handler=name):
                 effect = body["effect"]
                 self.assertEqual(set(effect), {"if"}, "nothing outside the gate")
-                self.assertEqual(effect["if"]["limit"].get("te_tax_code_on"), "yes")
+                gate = "te_tax_code_light" if name.startswith("te_tax_light_") else "te_tax_code_full"
+                self.assertEqual(effect["if"]["limit"].get(gate), "yes")
         # Every hook this file extends runs only handlers of its own.
         for name, body in parsed.items():
             if isinstance(body, dict) and "on_actions" in body:
@@ -141,29 +153,52 @@ class OnActionGateSweepTest(unittest.TestCase):
         effects = load("common/scripted_effects/te_tax_civil_war_effects.txt")
         # te_tax_code_in_force holds only under the rule (its first line).
         in_force = load("common/scripted_triggers/te_tax_triggers.txt")["te_tax_code_in_force"]
-        self.assertEqual(in_force["te_tax_code_on"], "yes")
-        gates = {"te_tax_code_on", "te_tax_code_in_force"}
+        self.assertEqual(in_force["te_tax_code_full"], "yes")
         for name in called:
             with self.subTest(effect=name):
                 self.assertLessEqual(set(effects[name]), {"if", "else_if"}, "nothing outside the gate")
                 for branch in ("if", "else_if"):
-                    if branch in effects[name]:
-                        limit = effects[name][branch]["limit"]
-                        self.assertTrue(any(limit.get(gate) == "yes" for gate in gates), (branch, limit))
+                    blocks = effects[name].get(branch, [])
+                    for block in blocks if isinstance(blocks, list) else [blocks]:
+                        limit = block["limit"]
+                        self.assertTrue(any(limit.get(gate) == "yes" for gate in GATES), (branch, limit))
+        # Both effects carry a light branch: the rebels migrate from their own law,
+        # and the winner syncs (te_tax_light.2, te_tax_light.3).
+        text = (ROOT / "common/scripted_effects/te_tax_civil_war_effects.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("trigger_event = { id = te_tax_light.2 }", text)
+        self.assertIn("trigger_event = { id = te_tax_light.3 }", text)
 
 
 class GateTriggerTest(unittest.TestCase):
     def setUp(self):
         self.triggers = load("common/scripted_triggers/te_tax_triggers.txt")
 
-    def test_tax_code_on_is_two_positive_rule_checks(self):
+    def test_the_three_rule_gates_are_positive_rule_checks(self):
         # Positive on purpose: a save from before the rule existed has no value
         # for it, and a NOT = { has_game_rule = ...disabled } would turn the
         # system on in such a save and migrate it.
         self.assertEqual(
-            self.triggers["te_tax_code_on"],
+            self.triggers["te_tax_code_full"],
             {"OR": {"has_game_rule": ["te_tax_code_enabled", "te_tax_code_enabled_customs"]}},
         )
+        self.assertEqual(self.triggers["te_tax_code_light"], {"has_game_rule": "te_tax_code_light"})
+        self.assertEqual(
+            self.triggers["te_tax_code_on"],
+            {"OR": {"has_game_rule": list(ENABLED_OPTIONS)}},
+        )
+
+    def test_light_in_force_needs_the_light_setting_and_its_marker(self):
+        self.assertEqual(self.triggers["te_tax_light_in_force"], {
+            "te_tax_code_light": "yes", "has_variable": "te_tax_light_on", "var:te_tax_light_on": "1",
+        })
+        # The full code's in-force trigger is never true under the light setting.
+        self.assertEqual(self.triggers["te_tax_code_in_force"]["te_tax_code_full"], "yes")
+
+    def test_the_entry_opens_under_either_code(self):
+        self.assertEqual(self.triggers["te_tax_entry_unlocked"], {"custom_tooltip": {
+            "text": "te_tax_tt_code_in_force",
+            "OR": {"te_tax_code_in_force": "yes", "te_tax_light_in_force": "yes"},
+        }})
 
     def test_customs_on_is_the_customs_setting_only(self):
         self.assertEqual(
@@ -171,7 +206,7 @@ class GateTriggerTest(unittest.TestCase):
             {"has_game_rule": "te_tax_code_enabled_customs"},
         )
 
-    def test_the_two_gates_contain_no_negation(self):
+    def test_the_gates_contain_no_negation(self):
         # Scoped to the two gate triggers: later tasks add ordinary triggers to
         # this file, and an "instrument is unset" check is a NOT by nature.
         def keys(node):
@@ -183,7 +218,7 @@ class GateTriggerTest(unittest.TestCase):
                 for item in node:
                     yield from keys(item)
 
-        for gate in ("te_tax_code_on", "te_tax_customs_on"):
+        for gate in ("te_tax_code_full", "te_tax_code_light", "te_tax_code_on", "te_tax_customs_on"):
             with self.subTest(gate=gate):
                 self.assertFalse({"NOT", "NOR"} & set(keys(self.triggers[gate])))
 
@@ -201,7 +236,7 @@ class CarrierLawTest(unittest.TestCase):
 
     def test_visible_only_under_the_rule_and_never_enactable_by_a_player(self):
         # Installed by activate_law only (Task 5), which ignores can_enact.
-        self.assertEqual(self.law["is_visible"], {"te_tax_code_on": "yes"})
+        self.assertEqual(self.law["is_visible"], {"te_tax_code_full": "yes"})
         self.assertEqual(self.law["can_enact"], {"always": "no"})
         self.assertEqual(self.law["ai_will_do"], {"always": "no"})
 
@@ -234,7 +269,7 @@ class VanillaLawGateTest(unittest.TestCase):
     def test_each_gets_exactly_the_two_negated_gates(self):
         # In a custom_tooltip (final review A-Minor 6): it evaluates the same, so a
         # rule-off game is unchanged, and a tooltip prints one plain line.
-        gate = {"custom_tooltip": {"text": "te_tax_tt_vanilla_law_replaced", "NOT": {"te_tax_code_on": "yes"}}}
+        gate = {"custom_tooltip": {"text": "te_tax_tt_vanilla_law_replaced", "NOT": {"te_tax_code_full": "yes"}}}
         for law in VANILLA_TAX_LAWS:
             with self.subTest(law=law):
                 self.assertEqual(

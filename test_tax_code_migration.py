@@ -298,10 +298,10 @@ class MigrationEffectTest(unittest.TestCase):
 
     def test_gated_on_the_rule_and_on_not_yet_migrated(self):
         self.assertEqual(set(self.parsed), {"if"})
-        self.assertIn("te_tax_code_on = yes", self.limit)
+        self.assertIn("te_tax_code_full = yes", self.limit)
         # NOT = { var:te_tax_migrated >= 1 }, safe when the variable is absent.
         self.assertIn("OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }", self.limit)
-        self.assertNotRegex(self.limit, r"NOT = \{ te_tax_code_on")
+        self.assertNotRegex(self.limit, r"NOT = \{ te_tax_code_full")
 
     def test_steps_run_in_order(self):
         order = [
@@ -407,7 +407,7 @@ class EventTest(unittest.TestCase):
                 body = self.parsed[event]
                 self.assertEqual(body["type"], "country_event")
                 self.assertEqual(body["hidden"], "yes")
-                self.assertEqual(body["trigger"], {"te_tax_code_on": "yes"})
+                self.assertEqual(body["trigger"], {"te_tax_code_full": "yes"})
                 immediate = dict(body["immediate"])
                 # te_tax.4 logs each post-migration sync (Task 10), and then refreshes
                 # the interest groups' views of the code (Task 13 fix round 1) and
@@ -451,7 +451,7 @@ class HookTest(unittest.TestCase):
     def gated(self, handler):
         effect = self.parsed[handler]["effect"]
         self.assertEqual(set(effect), {"if"})
-        self.assertEqual(effect["if"]["limit"], {"te_tax_code_on": "yes"})
+        self.assertEqual(effect["if"]["limit"], {"te_tax_code_full": "yes"})
         return effect["if"]
 
     def gated_with_source(self, handler):
@@ -464,7 +464,8 @@ class HookTest(unittest.TestCase):
         # on_game_started fires while players are still in the lobby, where the
         # rule can still change (scripting_best_practices.md, "Convert what
         # history placed after the lobby").
-        self.assertEqual(self.parsed["on_game_started_after_lobby"]["on_actions"], ["te_tax_on_game_started"])
+        self.assertEqual(self.parsed["on_game_started_after_lobby"]["on_actions"],
+                         ["te_tax_on_game_started", "te_tax_light_on_game_started"])
         self.assertNotIn("on_game_started", self.parsed)
         gate = self.gated("te_tax_on_game_started")
         # Not a decentralized country (final review A-Minor 1): it has no events.
@@ -472,7 +473,8 @@ class HookTest(unittest.TestCase):
                                                  "trigger_event": {"id": "te_tax.3"}})
 
     def test_a_formed_country_migrates_itself(self):
-        self.assertEqual(self.parsed["on_country_formed"]["on_actions"], ["te_tax_on_country_formed"])
+        self.assertEqual(self.parsed["on_country_formed"]["on_actions"],
+                         ["te_tax_on_country_formed", "te_tax_light_on_country_formed"])
         gate = self.gated("te_tax_on_country_formed")
         self.assertEqual(gate["trigger_event"], {"id": "te_tax.3"})
 
@@ -482,7 +484,8 @@ class HookTest(unittest.TestCase):
         for hook in ("on_country_released_as_independent", "on_country_released_as_own_subject",
                      "on_country_released_as_overlord_subject", "on_country_released_as_company_subject"):
             with self.subTest(hook=hook):
-                self.assertEqual(self.parsed[hook]["on_actions"], ["te_tax_on_country_released"])
+                self.assertEqual(self.parsed[hook]["on_actions"],
+                             ["te_tax_on_country_released", "te_tax_light_on_country_released"])
         gate = self.gated_with_source("te_tax_on_country_released")
         self.assertEqual(gate["scope:target"], {"te_tax_init_released_country": "yes"})
         self.assertIn("scope:target ?= {", block(self.text, "te_tax_on_country_released"))
@@ -503,8 +506,8 @@ class HookTest(unittest.TestCase):
                       " ".join(limit_of(heal[heal.find("{") + 1:]).split()))
 
     def test_every_gate_is_positive(self):
-        self.assertNotRegex(self.text, r"NOT = \{\s*te_tax_code_on")
-        self.assertNotRegex(read(MIGRATION), r"NOT = \{\s*te_tax_code_on")
+        self.assertNotRegex(self.text, r"NOT = \{\s*te_tax_code_full")
+        self.assertNotRegex(read(MIGRATION), r"NOT = \{\s*te_tax_code_full")
 
 
 class FormatTest(unittest.TestCase):

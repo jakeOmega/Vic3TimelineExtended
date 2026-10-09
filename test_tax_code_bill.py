@@ -606,7 +606,7 @@ class PassageTriggerTest(unittest.TestCase):
 
     def test_code_in_force_needs_the_rule_and_a_migrated_code(self):
         body = block(self.triggers, "te_tax_code_in_force")
-        for condition in ("te_tax_code_on = yes", "has_variable = te_tax_schema", "var:te_tax_migrated >= 1"):
+        for condition in ("te_tax_code_full = yes", "has_variable = te_tax_schema", "var:te_tax_migrated >= 1"):
             self.assertIn(condition, body)
 
     def test_bill_currency_compares_external_versions(self):
@@ -867,7 +867,7 @@ class RefreshWiringTest(unittest.TestCase):
 
     def test_refresh_is_gated_and_never_reachable_from_a_gui(self):
         body = block(read(BILL), "te_tax_refresh_support")
-        self.assertIn("te_tax_code_on = yes", body)
+        self.assertIn("te_tax_code_full = yes", body)
         self.assertIn("te_tax_bill_active = yes", body)
         self.assertIn("te_tax_gen_refresh_support = yes", body)
         for directory, pattern in (("gui", "*.gui"), ("common/scripted_guis", "*.txt")):

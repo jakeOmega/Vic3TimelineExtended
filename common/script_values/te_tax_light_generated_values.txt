@@ -825,134 +825,138 @@ te_tax_light_rlv_trade_unions = {
 
 # Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0
 # when absent.
-te_tax_light_view_on = {
+te_tax_view_light_on = {
 	value = 0
 	if = { limit = { te_tax_light_in_force = yes } value = 1 }
 }
-te_tax_light_view_level = {
+te_tax_view_light_level = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_level } value = var:te_tax_light_level }
 }
-te_tax_light_view_law = { value = te_tax_light_law_id }
-te_tax_light_view_levied_wage = {
-	value = 0
-	if = { limit = { te_tax_light_levies_wage = yes } value = 1 }
+te_tax_view_light_law = { value = te_tax_light_law_id }
+te_tax_view_light_was = {
+	value = -1
+	if = { limit = { has_variable = te_tax_light_was } value = var:te_tax_light_was }
 }
-te_tax_light_view_rung_wage = {
+te_tax_view_light_levied_wage = {
+	value = 0
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_wage = yes } value = 1 }
+}
+te_tax_view_light_rung_wage = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_rg_wage } value = var:te_tax_light_rg_wage }
 }
-te_tax_light_view_sets_wage = {
+te_tax_view_light_sets_wage = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rg_wage has_variable = te_tax_light_level var:te_tax_light_rg_wage = var:te_tax_light_level } value = 1 }
 }
-te_tax_light_view_min_wage_rate = { value = te_tax_light_min_wage multiply = te_tax_step_wage }
-te_tax_light_view_max_wage_rate = { value = te_tax_light_max_wage multiply = te_tax_step_wage }
-te_tax_light_view_relief_wage_rate = {
+te_tax_view_light_min_wage_rate = { value = te_tax_light_min_wage multiply = te_tax_step_wage }
+te_tax_view_light_max_wage_rate = { value = te_tax_light_max_wage multiply = te_tax_step_wage }
+te_tax_view_light_relief_wage_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_wage } value = var:te_tax_light_rl_wage multiply = te_tax_step_wage }
 }
-te_tax_light_view_levied_div = {
+te_tax_view_light_levied_div = {
 	value = 0
-	if = { limit = { te_tax_light_levies_div = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_div = yes } value = 1 }
 }
-te_tax_light_view_rung_div = {
+te_tax_view_light_rung_div = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_rg_div } value = var:te_tax_light_rg_div }
 }
-te_tax_light_view_sets_div = {
+te_tax_view_light_sets_div = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rg_div has_variable = te_tax_light_level var:te_tax_light_rg_div = var:te_tax_light_level } value = 1 }
 }
-te_tax_light_view_min_div_rate = { value = te_tax_light_min_div multiply = te_tax_step_div }
-te_tax_light_view_max_div_rate = { value = te_tax_light_max_div multiply = te_tax_step_div }
-te_tax_light_view_relief_div_rate = {
+te_tax_view_light_min_div_rate = { value = te_tax_light_min_div multiply = te_tax_step_div }
+te_tax_view_light_max_div_rate = { value = te_tax_light_max_div multiply = te_tax_step_div }
+te_tax_view_light_relief_div_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_div } value = var:te_tax_light_rl_div multiply = te_tax_step_div }
 }
-te_tax_light_view_levied_land = {
+te_tax_view_light_levied_land = {
 	value = 0
-	if = { limit = { te_tax_light_levies_land = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_land = yes } value = 1 }
 }
-te_tax_light_view_rung_land = {
+te_tax_view_light_rung_land = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_rg_land } value = var:te_tax_light_rg_land }
 }
-te_tax_light_view_sets_land = {
+te_tax_view_light_sets_land = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rg_land has_variable = te_tax_light_level var:te_tax_light_rg_land = var:te_tax_light_level } value = 1 }
 }
-te_tax_light_view_min_land_rate = { value = te_tax_light_min_land multiply = te_tax_step_land }
-te_tax_light_view_max_land_rate = { value = te_tax_light_max_land multiply = te_tax_step_land }
-te_tax_light_view_relief_land_rate = {
+te_tax_view_light_min_land_rate = { value = te_tax_light_min_land multiply = te_tax_step_land }
+te_tax_view_light_max_land_rate = { value = te_tax_light_max_land multiply = te_tax_step_land }
+te_tax_view_light_relief_land_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_land } value = var:te_tax_light_rl_land multiply = te_tax_step_land }
 }
-te_tax_light_view_levied_head = {
+te_tax_view_light_levied_head = {
 	value = 0
-	if = { limit = { te_tax_light_levies_head = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_head = yes } value = 1 }
 }
-te_tax_light_view_rung_head = {
+te_tax_view_light_rung_head = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_rg_head } value = var:te_tax_light_rg_head }
 }
-te_tax_light_view_sets_head = {
+te_tax_view_light_sets_head = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rg_head has_variable = te_tax_light_level var:te_tax_light_rg_head = var:te_tax_light_level } value = 1 }
 }
-te_tax_light_view_min_head_rate = { value = te_tax_light_min_head multiply = te_tax_step_head }
-te_tax_light_view_max_head_rate = { value = te_tax_light_max_head multiply = te_tax_step_head }
-te_tax_light_view_relief_head_rate = {
+te_tax_view_light_min_head_rate = { value = te_tax_light_min_head multiply = te_tax_step_head }
+te_tax_view_light_max_head_rate = { value = te_tax_light_max_head multiply = te_tax_step_head }
+te_tax_view_light_relief_head_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_head } value = var:te_tax_light_rl_head multiply = te_tax_step_head }
 }
-te_tax_light_view_levied_cons = {
+te_tax_view_light_levied_cons = {
 	value = 0
-	if = { limit = { te_tax_light_levies_cons = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_cons = yes } value = 1 }
 }
-te_tax_light_view_rung_cons = {
+te_tax_view_light_rung_cons = {
 	value = -1
 	if = { limit = { has_variable = te_tax_light_rg_cons } value = var:te_tax_light_rg_cons }
 }
-te_tax_light_view_sets_cons = {
+te_tax_view_light_sets_cons = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rg_cons has_variable = te_tax_light_level var:te_tax_light_rg_cons = var:te_tax_light_level } value = 1 }
 }
-te_tax_light_view_min_cons_rate = { value = te_tax_light_min_cons multiply = te_tax_step_cons }
-te_tax_light_view_max_cons_rate = { value = te_tax_light_max_cons multiply = te_tax_step_cons }
-te_tax_light_view_relief_cons_rate = {
+te_tax_view_light_min_cons_rate = { value = te_tax_light_min_cons multiply = te_tax_step_cons }
+te_tax_view_light_max_cons_rate = { value = te_tax_light_max_cons multiply = te_tax_step_cons }
+te_tax_view_light_relief_cons_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_cons } value = var:te_tax_light_rl_cons multiply = te_tax_step_cons }
 }
-te_tax_light_view_react_armed_forces = {
+te_tax_view_light_react_armed_forces = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_armed_forces } value = var:te_tax_lr_armed_forces }
 }
-te_tax_light_view_react_devout = {
+te_tax_view_light_react_devout = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_devout } value = var:te_tax_lr_devout }
 }
-te_tax_light_view_react_industrialists = {
+te_tax_view_light_react_industrialists = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_industrialists } value = var:te_tax_lr_industrialists }
 }
-te_tax_light_view_react_intelligentsia = {
+te_tax_view_light_react_intelligentsia = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_intelligentsia } value = var:te_tax_lr_intelligentsia }
 }
-te_tax_light_view_react_landowners = {
+te_tax_view_light_react_landowners = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_landowners } value = var:te_tax_lr_landowners }
 }
-te_tax_light_view_react_petty_bourgeoisie = {
+te_tax_view_light_react_petty_bourgeoisie = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_petty_bourgeoisie } value = var:te_tax_lr_petty_bourgeoisie }
 }
-te_tax_light_view_react_rural_folk = {
+te_tax_view_light_react_rural_folk = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_rural_folk } value = var:te_tax_lr_rural_folk }
 }
-te_tax_light_view_react_trade_unions = {
+te_tax_view_light_react_trade_unions = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_trade_unions } value = var:te_tax_lr_trade_unions }
 }

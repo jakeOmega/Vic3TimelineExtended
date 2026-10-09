@@ -13,7 +13,7 @@
 ###   te_tax_light_how_section    collapsed: How the Light Tax Code Works
 ###
 ### Every number is a guarded view of the player's code,
-### GetPlayer.MakeScope.ScriptValue('te_tax_light_view_*' / 'te_tax_view_en_*'),
+### GetPlayer.MakeScope.ScriptValue('te_tax_view_light_*' / 'te_tax_view_en_*'),
 ### and every name a customizable localization
 ### (te_tax_light_generated_custom_loc.txt), so nothing here copies a value from
 ### script. Rows are at most 480 wide inside a 520 panel (style guide rule 8).
@@ -155,7 +155,7 @@ types te_tax_light_widget_types
 				te_tax_light_head = {}
 
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_wage'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_wage'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_wage_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_wage"
@@ -173,7 +173,7 @@ types te_tax_light_widget_types
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_div'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_div'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_div_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_div"
@@ -191,7 +191,7 @@ types te_tax_light_widget_types
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_land'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_land'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_land_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_land"
@@ -209,7 +209,7 @@ types te_tax_light_widget_types
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_head'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_head'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_head_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_head"
@@ -227,7 +227,7 @@ types te_tax_light_widget_types
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_cons'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_cons'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_cons_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_cons"

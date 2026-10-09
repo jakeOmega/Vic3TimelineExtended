@@ -45,9 +45,9 @@
 # Country scope (te_tax_light.2: every country after the lobby, a formed or
 # released country, the rebels of an uprising, and any country the monthly
 # dispatch finds unmigrated). Every tax at the active law's rate for the native
-# tax level, so the country collects what it did; then the first sync. Runs
-# once: te_tax_light_on is written last, and a country holding it at 1 is left
-# alone. A released or rebel country has it cleared first, so it starts from
+# tax level, so the country collects what it did; then the first sync, which
+# needs te_tax_light_on. Runs once: a country holding te_tax_light_on at 1 is
+# left alone. A released or rebel country has it cleared first, so it starts from
 # its own law.
 te_tax_light_migrate_country = {
 	if = {
@@ -60,7 +60,7 @@ te_tax_light_migrate_country = {
 		set_variable = { name = te_tax_light_law value = te_tax_light_law_id }
 		set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
 		set_variable = { name = te_tax_light_on value = 1 }
-		debug_log = "TE_TAX light_migrated wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_light_view_level')|0] law=[SCOPE.ScriptValue('te_tax_light_law_id')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		debug_log = "TE_TAX light_migrated wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_view_light_level')|0] law=[SCOPE.ScriptValue('te_tax_light_law_id')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		te_tax_light_sync = yes
 	}
 }
@@ -104,8 +104,19 @@ te_tax_light_sync = {
 		}
 		if = {
 			limit = { is_ai = yes }
-			te_tax_light_gen_uniform_scored = yes
-			set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
+			if = {
+				limit = { NOT = { var:te_tax_light_level = te_tax_light_native_level } }
+				set_variable = { name = te_tax_light_was value = var:te_tax_light_level }
+				te_tax_light_gen_uniform_scored = yes
+				set_variable = { name = te_tax_light_level value = te_tax_light_native_level }
+				# For an observer run: the AI's level change and the reactions it drew.
+				debug_log = "TE_TAX light_ai_level from=[SCOPE.ScriptValue('te_tax_view_light_was')|0] to=[SCOPE.ScriptValue('te_tax_view_light_level')|0]; reactions af=[SCOPE.ScriptValue('te_tax_view_light_react_armed_forces')|1] dv=[SCOPE.ScriptValue('te_tax_view_light_react_devout')|1] in=[SCOPE.ScriptValue('te_tax_view_light_react_industrialists')|1] ig=[SCOPE.ScriptValue('te_tax_view_light_react_intelligentsia')|1] lo=[SCOPE.ScriptValue('te_tax_view_light_react_landowners')|1] pb=[SCOPE.ScriptValue('te_tax_view_light_react_petty_bourgeoisie')|1] rf=[SCOPE.ScriptValue('te_tax_view_light_react_rural_folk')|1] tu=[SCOPE.ScriptValue('te_tax_view_light_react_trade_unions')|1]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+			else = {
+				# Already at its level: anything else that moved a rate (an
+				# inherited relief) is put back, scored.
+				te_tax_light_gen_uniform_scored = yes
+			}
 			te_tax_light_gen_steps = yes
 		}
 		else = {
@@ -164,7 +175,7 @@ te_tax_light_cmd_step = {
 			change_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }
 			te_tax_light_gen_react = { KEY = $KEY$ }
 			te_tax_light_sync = yes
-			debug_log = "TE_TAX light_step wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_light_view_level')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			debug_log = "TE_TAX light_step wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_view_light_level')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }

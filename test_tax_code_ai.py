@@ -150,8 +150,10 @@ TRANSITION_LOGGED = {
     "te_tax_repair_obligations_after_civil_war": "the civil-war repair reassesses the winner's promises",
 }
 # Files whose is_ai reads predate the AI layer (te_tax_detect_drift's and the
-# customs adoption's first-time-only logging for AI countries), with counts.
-PRE_EXISTING_IS_AI = {"te_tax_collection_effects.txt": 3}
+# customs adoption's first-time-only logging for AI countries), with counts, and
+# the light code's sync, whose AI countries follow their native tax level
+# (te_tax_light_effects.txt: the law change and the level, test_tax_code_light.py).
+PRE_EXISTING_IS_AI = {"te_tax_collection_effects.txt": 3, "te_tax_light_effects.txt": 2}
 PLAYER_LOG_GATE = re.compile(r'if = \{ limit = \{ is_ai = no \} debug_log = "[^"]*" \}')
 # Generated effects whose whole body is an is_ai branch between two literal
 # debug_log lines (Task 19): the deadline line, written for every country,
@@ -347,7 +349,7 @@ class AiTokenTest(unittest.TestCase):
             self.assertIn(f"set_variable = {{ name = {name} value = 0 }}", release)
     def test_the_reset_zeroes_the_bill_state_and_keeps_streaks(self):
         reset = block(read(AI_EFFECTS), "te_tax_ai_reset_bill_state")
-        self.assertIn("te_tax_code_on = yes", limit_of(reset[reset.index("if = {") + len("if = {"):]))
+        self.assertIn("te_tax_code_full = yes", limit_of(reset[reset.index("if = {") + len("if = {"):]))
         writes = dict(re.findall(r"set_variable = \{ name = (\w+) value = (-?\d+) \}", reset))
         self.assertEqual(writes, RESET)
         for kept in ("te_tax_ai_def_streak", "te_tax_ai_sur_streak", "te_tax_ai_phase", "te_tax_ai_next_month"):
@@ -410,7 +412,7 @@ class AiTriggerTest(unittest.TestCase):
 
     def test_can_act_needs_the_rule_the_code_the_ai_and_the_carrier(self):
         self.assertEqual(self.body("te_tax_ai_can_act"),
-                         "te_tax_code_on = yes te_tax_code_in_force = yes is_ai = yes "
+                         "te_tax_code_full = yes te_tax_code_in_force = yes is_ai = yes "
                          "has_law = law_type:law_te_tax_code")
 
     def test_emergency_is_default_heavy_debt_or_looming_bankruptcy(self):
@@ -465,7 +467,7 @@ class AiStreakTest(unittest.TestCase):
         cls.update = flat(block(cls.text, "te_tax_ai_update_streaks"))
 
     def test_streaks_run_for_every_migrated_country(self):
-        self.assertTrue(self.update.startswith("if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema }"))
+        self.assertTrue(self.update.startswith("if = { limit = { te_tax_code_full = yes has_variable = te_tax_schema }"))
         self.assertNotIn("is_ai", self.update)
 
     def test_the_deficit_streak_counts_recorded_deficits_and_resets(self):
@@ -518,7 +520,7 @@ class AiDispatchTest(unittest.TestCase):
 
     def test_dispatch_is_ai_only_and_uses_literal_bucket_days(self):
         self.assertTrue(self.dispatch.startswith(
-            "if = { limit = { te_tax_code_on = yes is_ai = yes te_tax_ai_step_due = yes }"))
+            "if = { limit = { te_tax_code_full = yes is_ai = yes te_tax_ai_step_due = yes }"))
         days = set(re.findall(r"id = te_tax\.8 days = (\d+)", self.dispatch))
         self.assertEqual(days, {"1", "5", "12", "19", "26"})
         self.assertEqual(self.dispatch.count("trigger_event"), 5)
@@ -573,7 +575,7 @@ class AiDispatchTest(unittest.TestCase):
 
     def test_the_step_manages_packages_then_promises_when_the_ai_can_act(self):
         step = flat(block(self.ai, "te_tax_ai_step"))
-        self.assertTrue(step.startswith("if = { limit = { te_tax_code_on = yes te_tax_ai_can_act = yes } "), step[:90])
+        self.assertTrue(step.startswith("if = { limit = { te_tax_code_full = yes te_tax_ai_can_act = yes } "), step[:90])
         packages = step.index("te_tax_ai_manage_packages = yes")
         promises = step.index("te_tax_ai_manage_promises = yes")
         self.assertLess(packages, promises)
@@ -616,7 +618,7 @@ class AiLogTest(unittest.TestCase):
 
 class AiGateTest(unittest.TestCase):
     def test_every_ai_trigger_and_effect_entry_starts_from_the_rule(self):
-        self.assertIn("te_tax_code_on = yes", block(read(AI_TRIGGERS), "te_tax_ai_can_act"))
+        self.assertIn("te_tax_code_full = yes", block(read(AI_TRIGGERS), "te_tax_ai_can_act"))
         effects_text = read(AI_EFFECTS)
         for name in ("te_tax_ai_update_streaks", "te_tax_ai_dispatch", "te_tax_ai_step", "te_tax_ai_reset_bill_state",
                      "te_tax_ai_manage_packages", "te_tax_ai_manage_promises", "te_tax_ai_manage_bill",
@@ -624,10 +626,10 @@ class AiGateTest(unittest.TestCase):
                      *INITIATIVE_EFFECTS):
             with self.subTest(name=name):
                 head = flat(block(effects_text, name))[:120]
-                self.assertRegex(head, r"^if = \{ limit = \{ te_tax_code_on = yes")
+                self.assertRegex(head, r"^if = \{ limit = \{ te_tax_code_full = yes")
         for path in AI_FILES:
             with self.subTest(path=path):
-                self.assertNotRegex(read(path), r"NOT = \{\s*te_tax_code_on")
+                self.assertNotRegex(read(path), r"NOT = \{\s*te_tax_code_full")
 
     def test_no_native_setter_in_the_ai_layer(self):
         for path in AI_FILES:
@@ -747,7 +749,7 @@ class AiPromiseTest(unittest.TestCase):
 
     def test_packages_resolve_slot_a_then_b_each_through_its_commands(self):
         body = flat(block(self.ai, "te_tax_ai_manage_packages"))
-        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes } "))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes } "))
         for slot in ("a", "b"):
             with self.subTest(slot=slot):
                 self.assertIn(f"if = {{ limit = {{ te_tax_can_package_reschedule = {{ SLOT = {slot} }} }} "
@@ -809,7 +811,7 @@ class AiPromiseTest(unittest.TestCase):
 
     def test_one_promise_a_step_in_slot_order(self):
         body = flat(block(self.ai, "te_tax_ai_manage_promises"))
-        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes } "))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes } "))
         for n in gen.OBLIGATION_SLOTS:
             opener = "if" if n == 1 else "else_if"
             with self.subTest(slot=n):
@@ -971,7 +973,7 @@ class InstitutionHookTest(unittest.TestCase):
         self.assertIn("te_tax_ai_owes_institution = { ARG = 1 }", text)
         self.assertIn("te_tax_ai_owes_institution = { ARG = 2 }", text)
         owes = block(read(AI_TRIGGERS), "te_tax_ai_owes_institution")
-        self.assertIn("te_tax_code_on = yes", owes)
+        self.assertIn("te_tax_code_full = yes", owes)
         for o in (1, 2, 3, 4):
             self.assertIn(f"var:te_tax_o{o}_kind = 1", owes)
 
@@ -986,7 +988,7 @@ class InstitutionHookTest(unittest.TestCase):
         body = flat(block(read(AI_TRIGGERS), "te_tax_ai_owes_institution"))
         slots = " ".join(f"AND = {{ te_tax_obl_binding = {{ N = {o} }} var:te_tax_o{o}_kind = 1 "
                          f"var:te_tax_o{o}_arg = $ARG$ }}" for o in gen.OBLIGATION_SLOTS)
-        self.assertEqual(body, f"te_tax_code_on = yes OR = {{ {slots} }}")
+        self.assertEqual(body, f"te_tax_code_full = yes OR = {{ {slots} }}")
         binding = flat(block(read(OBL_TRIGGERS), "te_tax_obl_binding"))
         self.assertEqual(binding, "has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = { "
                                   "var:te_tax_o$N$_state = 7 var:te_tax_o$N$_state = 2 var:te_tax_o$N$_state = 3 }")
@@ -1184,7 +1186,7 @@ class AiBillTest(unittest.TestCase):
     def test_the_manager_is_the_rule_chain_exactly(self):
         cooldown = "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }"
         self.assertEqual(flat(self.manage), (
-            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes te_tax_bill_active = yes } "
+            "if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes te_tax_bill_active = yes } "
             # A bill the AI did not introduce (a player's, after a tag switch): its patience starts now.
             "if = { limit = { var:te_tax_ai_bill_month < 0 } "
             "set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now } } "
@@ -1312,7 +1314,7 @@ class AiBillTest(unittest.TestCase):
 
     def test_the_withdrawal_reason_follows_the_rule(self):
         self.assertEqual(flat(block(self.ai, "te_tax_ai_withdraw")), (
-            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_code_full = yes } "
             "if = { limit = { legitimacy < te_tax_passage_legitimacy } te_tax_ai_withdraw_legitimacy = yes } "
             "else_if = { limit = { NOT = { OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } } } "
             "te_tax_ai_withdraw_slots = yes } "
@@ -1327,7 +1329,7 @@ class AiBillTest(unittest.TestCase):
         for reason in WITHDRAW_REASONS:
             with self.subTest(reason=reason):
                 self.assertEqual(flat(block(self.ai, f"te_tax_ai_withdraw_{reason}")), (
-                    "if = { limit = { te_tax_code_on = yes } if = { limit = { te_tax_can_withdraw = yes } "
+                    "if = { limit = { te_tax_code_full = yes } if = { limit = { te_tax_can_withdraw = yes } "
                     "te_tax_cmd_withdraw = yes "
                     "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal } "
                     f"te_tax_ai_log_withdrawn_{reason} = yes "
@@ -1612,7 +1614,7 @@ class AiInitiativeTest(unittest.TestCase):
         # Before the managers, so a bill the step withdraws later in the same run starts the new episode.
         step = flat(block(self.ai, "te_tax_ai_step"))
         self.assertTrue(step.startswith(
-            "if = { limit = { te_tax_code_on = yes te_tax_ai_can_act = yes } "
+            "if = { limit = { te_tax_code_full = yes te_tax_ai_can_act = yes } "
             "if = { limit = { te_tax_ai_need_ended = yes } set_variable = { name = te_tax_ai_noviable value = 0 } } "
             "te_tax_ai_manage_packages = yes"), step[:200])
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_need_ended")),
@@ -1697,7 +1699,7 @@ class AiInitiativeTest(unittest.TestCase):
             f"te_tax_ai_build_t{n} = yes te_tax_ai_introduce_and_judge = {{ TPL = {n} }} }}"
             for i, n in enumerate(TEMPLATE_ORDER))
         self.assertEqual(flat(block(self.ai, "te_tax_ai_initiative")), (
-            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } "
+            "if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } "
             "OR = { te_tax_ai_template_2_applies = yes te_tax_ai_template_1_applies = yes "
             "te_tax_ai_template_5_applies = yes } } "
             "te_tax_ai_open_draft = yes te_tax_gen_ai_pick_raise = yes "
@@ -1711,7 +1713,7 @@ class AiInitiativeTest(unittest.TestCase):
 
     def test_a_fresh_draft_discards_a_stale_one_first(self):
         self.assertEqual(flat(block(self.ai, "te_tax_ai_open_draft")), (
-            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_code_full = yes } "
             "if = { limit = { te_tax_can_draft_discard = yes } te_tax_cmd_draft_discard = yes } "
             "if = { limit = { te_tax_can_draft_new = yes } te_tax_cmd_draft_new = yes } }"))
 
@@ -1730,7 +1732,7 @@ class AiInitiativeTest(unittest.TestCase):
         for n, body in builds.items():
             with self.subTest(template=n):
                 self.assertEqual(flat(block(self.ai, f"te_tax_ai_build_t{n}")),
-                                 f"if = {{ limit = {{ te_tax_code_on = yes }} {body} }}")
+                                 f"if = {{ limit = {{ te_tax_code_full = yes }} {body} }}")
 
     def test_template_conditions_follow_spec_2_5(self):
         bodies = {
@@ -1769,7 +1771,7 @@ class AiInitiativeTest(unittest.TestCase):
         body = block(self.ai, "te_tax_ai_prepare_traditionalist_draft")
         gate = limit_of(body[body.index("if = {") + len("if = {"):])
         self.assertEqual(flat(gate),
-                         "te_tax_code_on = yes te_tax_draft_active = yes has_law = law_type:law_traditionalism")
+                         "te_tax_code_full = yes te_tax_draft_active = yes has_law = law_type:law_traditionalism")
         for key in ("wage", "div"):
             self.assertIn(flat(f"if = {{ limit = {{ te_tax_dr_eff_{key} > 0 }} if = {{ limit = {{ "
                                f"te_tax_can_draft_step = {{ KEY = {key} DIR = 2 }} }} "
@@ -1795,7 +1797,7 @@ class AiInitiativeTest(unittest.TestCase):
 
                     def holds(condition):
                         key, op, value = condition
-                        flags = {"te_tax_code_on": rule_on, "te_tax_draft_active": draft_open,
+                        flags = {"te_tax_code_full": rule_on, "te_tax_draft_active": draft_open,
                                  "has_law": traditionalist}
                         if key in flags:
                             return flags[key]
@@ -1830,7 +1832,7 @@ class AiInitiativeTest(unittest.TestCase):
 
     def test_introduce_and_judge(self):
         self.assertEqual(flat(block(self.ai, "te_tax_ai_introduce_and_judge")), (
-            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_code_full = yes } "
             # Set before the introduction, so a refused draft's lines name the template (review minor 1).
             "set_variable = { name = te_tax_ai_tpl value = $TPL$ } "
             "te_tax_ai_prepare_traditionalist_draft = yes "

@@ -4648,29 +4648,31 @@ def _light_values():
         lines.append("}")
     lines += ["", "# Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0",
               "# when absent."]
-    lines += ["te_tax_light_view_on = {", "\tvalue = 0",
+    lines += ["te_tax_view_light_on = {", "\tvalue = 0",
               "\tif = { limit = { te_tax_light_in_force = yes } value = 1 }", "}",
-              "te_tax_light_view_level = {", "\tvalue = -1",
+              "te_tax_view_light_level = {", "\tvalue = -1",
               "\tif = { limit = { has_variable = te_tax_light_level } value = var:te_tax_light_level }", "}",
-              "te_tax_light_view_law = { value = te_tax_light_law_id }"]
+              "te_tax_view_light_law = { value = te_tax_light_law_id }",
+              "te_tax_view_light_was = {", "\tvalue = -1",
+              "\tif = { limit = { has_variable = te_tax_light_was } value = var:te_tax_light_was }", "}"]
     for instrument in INSTRUMENTS:
         key = instrument.key
         lines += [
-            f"te_tax_light_view_levied_{key} = {{", "\tvalue = 0",
-            f"\tif = {{ limit = {{ te_tax_light_levies_{key} = yes }} value = 1 }}", "}",
-            f"te_tax_light_view_rung_{key} = {{", "\tvalue = -1",
+            f"te_tax_view_light_levied_{key} = {{", "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_variable = te_tax_light_on te_tax_light_levies_{key} = yes }} value = 1 }}", "}",
+            f"te_tax_view_light_rung_{key} = {{", "\tvalue = -1",
             f"\tif = {{ limit = {{ has_variable = te_tax_light_rg_{key} }} value = var:te_tax_light_rg_{key} }}", "}",
-            f"te_tax_light_view_sets_{key} = {{", "\tvalue = 0",
+            f"te_tax_view_light_sets_{key} = {{", "\tvalue = 0",
             f"\tif = {{ limit = {{ has_variable = te_tax_light_rg_{key} has_variable = te_tax_light_level "
             f"var:te_tax_light_rg_{key} = var:te_tax_light_level }} value = 1 }}", "}",
-            f"te_tax_light_view_min_{key}_rate = {{ value = te_tax_light_min_{key} multiply = te_tax_step_{key} }}",
-            f"te_tax_light_view_max_{key}_rate = {{ value = te_tax_light_max_{key} multiply = te_tax_step_{key} }}",
-            f"te_tax_light_view_relief_{key}_rate = {{", "\tvalue = 0",
+            f"te_tax_view_light_min_{key}_rate = {{ value = te_tax_light_min_{key} multiply = te_tax_step_{key} }}",
+            f"te_tax_view_light_max_{key}_rate = {{ value = te_tax_light_max_{key} multiply = te_tax_step_{key} }}",
+            f"te_tax_view_light_relief_{key}_rate = {{", "\tvalue = 0",
             f"\tif = {{ limit = {{ has_variable = te_tax_light_rl_{key} }} value = var:te_tax_light_rl_{key} "
             f"multiply = te_tax_step_{key} }}", "}",
         ]
     for ig in IGS:
-        lines += [f"te_tax_light_view_react_{ig} = {{", "\tvalue = 0",
+        lines += [f"te_tax_view_light_react_{ig} = {{", "\tvalue = 0",
                   f"\tif = {{ limit = {{ has_variable = te_tax_lr_{ig} }} value = var:te_tax_lr_{ig} }}", "}"]
     return lines
 
@@ -5024,21 +5026,21 @@ def light_custom_localization():
         return out
 
     levels = [(n, f"tax_level_{level}") for n, level in enumerate(NATIVE_LEVELS)]
-    lines += entry("te_tax_lt_level", [(f"te_tax_light_view_level = {n}", key) for n, key in levels],
+    lines += entry("te_tax_lt_level", [(f"te_tax_view_light_level = {n}", key) for n, key in levels],
                    "te_tax_lt_level_unset")
     for instrument in INSTRUMENTS:
         lines += entry(f"te_tax_lt_rung_{instrument.key}",
-                       [(f"te_tax_light_view_rung_{instrument.key} = {n}", key) for n, key in levels],
+                       [(f"te_tax_view_light_rung_{instrument.key} = {n}", key) for n, key in levels],
                        "te_tax_lt_not_levied")
-    lines += entry("te_tax_lt_law", [(f"te_tax_light_view_law = {n}", law) for n, law in light_laws()],
+    lines += entry("te_tax_lt_law", [(f"te_tax_view_light_law = {n}", law) for n, law in light_laws()],
                    "te_tax_lt_law_other")
     ladders = light_ladders()
     for instrument in INSTRUMENTS:
         lines += entry(f"te_tax_lt_range_{instrument.key}",
-                       [(f"te_tax_light_view_law = {n}", f"te_tax_lt_range_{instrument.key}_{n}")
+                       [(f"te_tax_view_light_law = {n}", f"te_tax_lt_range_{instrument.key}_{n}")
                         for n, law in light_laws() if ladders[law][instrument.key][-1]],
                        "te_tax_lt_not_levied")
-    lines += entry("te_tax_lt_setter", [(f"te_tax_light_view_sets_{i.key} = 1", f"te_tax_inst_{i.key}")
+    lines += entry("te_tax_lt_setter", [(f"te_tax_view_light_sets_{i.key} = 1", f"te_tax_inst_{i.key}")
                                         for i in INSTRUMENTS], "te_tax_none")
     return _txt("\n".join(lines) + "\n")
 

@@ -689,7 +689,7 @@ class FiscalRecordTest(unittest.TestCase):
 
     def test_the_record_writes_each_field_both_ways(self):
         body = norm(block(self.snapshot, "te_tax_record_fiscal_month"))
-        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema }"))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_full = yes has_variable = te_tax_schema }"))
         for name, test in self.RECORD.items():
             with self.subTest(name=name):
                 self.assertIn(f"if = {{ limit = {{ {test} }} set_variable = {{ name = {name} value = 1 }} }} "

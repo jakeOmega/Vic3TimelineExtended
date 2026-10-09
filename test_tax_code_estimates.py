@@ -135,9 +135,9 @@ class SnapshotEffectTest(unittest.TestCase):
         cls.flat = norm(cls.body)
 
     def test_effect_is_gated_on_the_rule_and_an_initialised_country(self):
-        self.assertTrue(self.flat.startswith("if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema }"),
+        self.assertTrue(self.flat.startswith("if = { limit = { te_tax_code_full = yes has_variable = te_tax_schema }"),
                         self.flat[:120])
-        self.assertEqual(self.flat.count("if = { limit = { te_tax_code_on = yes"), 1)
+        self.assertEqual(self.flat.count("if = { limit = { te_tax_code_full = yes"), 1)
 
     def test_writes_every_field_of_the_brief_and_each_rate_in_force(self):
         for name, source in SNAP_FIELDS.items():

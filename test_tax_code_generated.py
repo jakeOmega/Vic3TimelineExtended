@@ -166,7 +166,7 @@ class AmendmentTest(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertEqual(body["parent"], "law_te_tax_code")
                 self.assertEqual(body["allowed_laws"], ["law_te_tax_code"])
-                self.assertEqual(body["possible"], {"te_tax_code_on": "yes"})
+                self.assertEqual(body["possible"], {"te_tax_code_full": "yes"})
                 for field in ("would_sponsor", "can_repeal", "ai_will_revoke"):
                     self.assertEqual(body[field], {"always": "no"})
                 self.assertEqual(
@@ -180,7 +180,7 @@ class AmendmentTest(unittest.TestCase):
             "amendment_te_tax_wage_3 = {\n"
             "\tparent = law_te_tax_code\n"
             "\tallowed_laws = { law_te_tax_code }\n"
-            "\tpossible = { te_tax_code_on = yes }\n"
+            "\tpossible = { te_tax_code_full = yes }\n"
             "\tcan_repeal = { always = no }\n"
             "\twould_sponsor = { always = no }\n"
             "\tai_will_revoke = { always = no }\n"
@@ -264,7 +264,10 @@ class LocTest(unittest.TestCase):
         task13 = {f"te_tax_ig_view_{ig}_{band}{suffix}" for ig in gen.IGS for band, _ in gen.VIEW_BANDS
                   for suffix in ("", "_desc")}
         task13 |= {f"te_tax{tt}_offer_untax_{good}" for good in gen.staple_order() for tt in ("", "_tt")}
-        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments} | task13)
+        # And the light code's relief and reaction modifiers, steps' reaction lines and ranges
+        # (test_tax_code_light.py).
+        light = set(gen.light_localization())
+        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments} | task13 | light)
 
     def test_names_and_descs(self):
         loc = read_loc(ROOT / LOC)
