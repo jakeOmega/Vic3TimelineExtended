@@ -329,8 +329,10 @@ class _Engine:
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
-        # the history store (te_history_country_is_tracked) has no containers here: off unless a test says
-        self.trigger_fixtures = {"te_history_country_is_tracked": False, **(triggers or {})}
+        # the history store (te_history_country_is_tracked) has no containers here, and the console's
+        # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says
+        self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
+                                 **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
 
@@ -473,7 +475,7 @@ class _Engine:
         self.run(_parse_script(f"{effect} = yes"))
 
 
-def _engine_for(inp, year, pop, effects=None):
+def _engine_for(inp, year, pop, effects=None, engine=None):
     """A state with the census on, the walk's sums set from `inp`, and the owner's multipliers
     (script values that read the owner's techs and laws) taken from the model."""
     mult = demographics_model.cause_multipliers(inp)
@@ -488,7 +490,7 @@ def _engine_for(inp, year, pop, effects=None):
         "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
     }
-    eng = _Engine(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
+    eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
                     te_dg_wtfr=demographics_model.wealth_tfr(inp.sol))
     return eng
@@ -593,7 +595,7 @@ class TestCohortScript(unittest.TestCase):
     # -- the step -------------------------------------------------------------------------------
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
-                  flows=None):
+                  flows=None, entry="te_demog_step", engine=None):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -648,7 +650,7 @@ class TestCohortScript(unittest.TestCase):
                 locals_[f"te_dg_pf{c}"], locals_[f"te_dg_pm{c}"] = prof[(c, "f")], prof[(c, "m")]
             stub = {"te_demog_flows": "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}"
                                                 for k, v in locals_.items())}
-        eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub)
+        eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub, engine=engine)
         eng.fixtures.update(fixtures)
         for k in range(P.RING_YEARS):
             if before[0][k] or before[1][k]:
@@ -665,7 +667,7 @@ class TestCohortScript(unittest.TestCase):
                               ("te_dg_inflow_years", "inflow_years")):
                 if flows.get(key) is not None:
                     eng.vars[name] = float(flows[key])
-        eng.call("te_demog_step")
+        eng.call(entry)
         figures = demographics_model.step(ring, inp, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
                                           kills=kills, migration=migration)
         return eng, ring, figures, pop
@@ -716,6 +718,37 @@ class TestCohortScript(unittest.TestCase):
 
     def test_step_with_war_kills_and_emigration(self):
         self.check_step(*self.step_both(war_dead=300.0, kills=200.0, migration=-6000.0))
+
+    def test_console_replay_is_the_step_with_its_lines_between(self):
+        """te_debug_demog.1 option a (te_debug_demog_replay) runs the step's two halves apart and logs
+        between them. It must leave the state as te_demog_step does; log the head with the flows the
+        sweep then used, and the ring before the sweep rewrote te_dg_people and te_dg_scale; and remove
+        its te_dg_dbg_ copies. A wrong local name in its copies reads an unset local and fails here."""
+        for migration, sign in ((-6000.0, " mig=-["), (5000.0, " mig=[")):
+            with self.subTest(migration=migration):
+                flows = dict(eb=1200.0, ed=900.0, crisis=0.05, fjob_share=0.3, migration=migration, war=400.0,
+                             kills=30.0)
+                ref, _ring, _figures, pop = self.step_both(flows=flows)
+                eng, *_ = self.step_both(flows=flows, entry="te_debug_demog_replay", engine=_ConsoleEngine)
+                self.assertEqual(set(eng.vars), set(ref.vars), "the console's copies are all removed")
+                for name, want in ref.vars.items():
+                    self.close(eng.vars[name], want, what=name)
+                self.assertEqual([line[:20] for line, _ in eng.logs],
+                                 ["TE_DEMOG_REPLAY head", "RING_BEFORE", "RING_AFTER"])
+                head, at_head = eng.logs[0]
+                self.assertIn(sign, head)
+                self.close(at_head["te_dg_dbg_war"], 400.0, what="war dead")
+                self.close(at_head["te_dg_dbg_kills"], 30.0, what="kills")
+                self.close(at_head["te_dg_dbg_mig"], migration, what="migration")
+                for mine, theirs in (("tfr", "te_dg_tfr"), ("mmr", "te_dg_m_mat"), ("m_inf", "te_dg_m_inf"),
+                                     ("m_ext", "te_dg_m_ext"), ("m_chr", "te_dg_m_chr")):
+                    self.close(at_head[f"te_dg_dbg_{mine}"], ref.vars[theirs], what=mine)
+                self.close(sum(at_head[f"te_dg_dbg_p{s}{c}"] for s in "fm" for c in range(len(P.MIGRANT_CLASSES))),
+                           1.0, rel=1e-6, what="profile")
+                before, after = eng.logs[1][1], eng.logs[2][1]
+                self.assertEqual(before["te_dg_scale"], 1.03, "the before ring is logged before the sweep")
+                self.close(after["te_dg_people"], pop, what="people after")
+                self.close(after["te_dg_scale"], ref.vars["te_dg_scale"], what="scale after")
 
     def test_step_with_an_empty_open_slot_and_old_ages(self):
         """Nobody aged 90 and over: empty slots are skipped while the trackers advance, and the
@@ -1854,3 +1887,95 @@ class TestHistory(unittest.TestCase):
         for stale in (r"variable = te_hist\b", r"te_hist_tmp", r"te_hist_sorter", r"te_hist_evicted", r"te_hist_moved",
                       r"te_hist_sample\b", r"ch_model", r">= 241", r">= 240", r"max = 240"):
             self.assertNotRegex(self.text, stale)
+
+
+# -- the console (te_debug_demog.1, Task 15) -------------------------------------------------------
+
+CONSOLE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
+
+
+def _console_blocks():
+    """te_debug_demog_effects.txt's effects as _raw_blocks gives them, each debug_log string swapped
+    for a token (_parse_script splits on spaces and `=`): (blocks, {token: the string})."""
+    strings = {}
+
+    def token(m):
+        key = f"LOG{len(strings)}"
+        strings[key] = m.group(1)
+        return f"debug_log = {key}"
+
+    text = re.sub(r"#[^\n]*", "", re.sub(r'debug_log = "([^"]*)"', token, _text(CONSOLE_EFFECTS)))
+    blocks = {}
+    for m in re.finditer(r"^([\w.]+) = \{", text, re.M):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            i += 1
+        blocks[m.group(1)] = text[m.end():i - 1]
+    return blocks, strings
+
+
+class _ConsoleEngine(_Engine):
+    """_Engine plus the console's effects. A debug_log is a no-op that records (its string, the
+    variables as they stood); the generated ring lines are one debug_log each, RING_BEFORE and
+    RING_AFTER."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        blocks, self.strings = _console_blocks()
+        self.effects.update(blocks)
+        self.effects["te_demog_debug_log_ring_before"] = "debug_log = RING_BEFORE"
+        self.effects["te_demog_debug_log_ring_after"] = "debug_log = RING_AFTER"
+        self.logs = []
+
+    def run(self, items):
+        segment = []
+        for item in items:
+            if item[0] != "debug_log":
+                segment.append(item)
+                continue
+            super().run(segment)
+            segment = []
+            self.logs.append((self.strings.get(item[2], item[2]), dict(self.vars)))
+        super().run(segment)
+
+
+class TestConsole(unittest.TestCase):
+    def test_step_is_its_two_halves(self):
+        """Option a logs between te_demog_step_begin and te_demog_step_run, so the step must be exactly
+        the two, with the rates and flows in the first half and none of them in the second."""
+        text = _text(EFFECTS)
+        self.assertEqual(_block(text, "te_demog_step").split(),
+                         ["te_demog_step_begin", "=", "yes", "te_demog_step_run", "=", "yes"])
+        begin = _block(text, "te_demog_step_begin")
+        self.assertLess(begin.index("te_demog_prepare = yes"), begin.index("te_demog_flows = yes"))
+        run = _block(text, "te_demog_step_run")
+        for name in ("te_demog_prepare", "te_demog_flows"):
+            self.assertNotIn(name, run)
+        self.assertIn("te_demog_sweep = yes", run)
+
+    def test_the_census_log_hooks_are_gated(self):
+        text = _text(EFFECTS)
+        for caller, line in (("te_demog_state_yearly", "te_debug_demog_pulse_line"),
+                             ("te_demog_country_census", "te_debug_demog_census_line")):
+            self.assertRegex(_block(text, caller),
+                             rf"if = \{{\s*limit = \{{ te_demog_census_log_on = yes \}}\s*{line} = yes\s*\}}", caller)
+        self.assertIn("has_global_variable = te_demog_census_log", _block(_text(TRIGGERS), "te_demog_census_log_on"))
+
+    def test_only_the_console_sets_the_census_log(self):
+        setters = [p for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
+                   if "set_global_variable = te_demog_census_log" in _text(p)]
+        self.assertEqual([p.name for p in setters], ["te_debug_demog_events.txt"])
+
+    def test_every_debug_copy_is_removed(self):
+        """A line renders when it runs; the te_dg_dbg_ variables only carry its numbers and must not
+        stay in the save."""
+        blocks, _ = _console_blocks()
+        for name, body in blocks.items():
+            for var in set(re.findall(r"set_variable = \{ name = (te_dg_dbg_\w+)", body)):
+                self.assertIn(f"remove_variable = {var}", body, f"{name}: {var}")
+
+    def test_the_census_line_waits_for_a_million_people(self):
+        body = _console_blocks()[0]["te_debug_demog_census_line"]
+        self.assertIn("local_var:te_dg_c_people >= 1000000", body)
+        self.assertIn("name = te_dg_c_people", _block(_text(EFFECTS), "te_demog_country_census"))

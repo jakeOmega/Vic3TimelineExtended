@@ -5029,6 +5029,29 @@
  te_debug_covert.6.t:0 "Covert Test Console: Technology Theft"
 
 #
+# TE_DEBUG_DEMOG
+#
+ te_debug_demog.1.a:0 "Replay: step our capital's census a year and log it"
+ te_debug_demog.1.a.tt:0 "Steps our capital's census one year now and writes every number of the step to debug.log on TE_DEMOG_REPLAY lines; scripts/analysis/demographics_harness.py replay checks them against the model. The census year goes back by one first, so a second run in the same year steps it again and moves this year's newborns into the over-150 pool. Re-seed afterwards with option c, or use a save you can throw away."
+ te_debug_demog.1.b:0 "Start the census log"
+ te_debug_demog.1.b.tt:0 "Every 31 December each country of a million people or more writes a TE_DEMOG_CENSUS line to debug.log, which scripts/analysis/demographics_observer_report.py reads, and our capital writes a TE_DEMOG_PULSE line at each of its yearly pulses. The log stays on until stopped, in saves too. debug.log rolls over at 512 KB: copy the lines out as they appear."
+ te_debug_demog.1.b_off:0 "Stop the census log"
+ te_debug_demog.1.c:0 "Re-seed our census from today's population"
+ te_debug_demog.1.c.tt:0 "Every state of ours starts its census again at its own equilibrium, as at game start, and our census is taken at once. Undoes what a replay or the benchmark did to our states."
+ te_debug_demog.1.d:0 "Benchmark: step every census in the world three times"
+ te_debug_demog.1.d.tt:0 "Runs the yearly cohort step in every state of the world that has a census, three passes, between TE_DEMOG_BENCH lines in debug.log, whose timestamps time each pass. Every census in the world is wrong afterwards: use a save you can throw away."
+ te_debug_demog.1.desc:0 "Console-only tools for checking the demographic census against its Python model. Nothing in the mod fires this event. Every option writes to debug.log.\n\nThe replay and the benchmark step a census a second time in the same year, which leaves it wrong: use a save you can throw away, or re-seed our census afterwards."
+ te_debug_demog.1.e:0 "Log our war dead"
+ te_debug_demog.1.e.tt:0 "Writes TE_DEMOG_WARDEAD lines to debug.log: our dead in each of our wars, the running tally the monthly pulse keeps, and the dead each of our states' next census step will take."
+ te_debug_demog.1.f:0 "Skew check: log our capital's pops and add the test modifier"
+ te_debug_demog.1.f.tt:0 "Writes a TE_DEMOG_SKEW line to debug.log for each pop of our capital, with its size, workforce and dependents, and the capital's totals; then gives the capital +0.05 working-adult ratio for 60 days. Log them again a month later with the next option to see how far the pops moved."
+ te_debug_demog.1.flavor:0 "'How many of them are there now, Registrar?'\n\n'As of this morning, sir, or as of the census?'"
+ te_debug_demog.1.g:0 "Skew check: log our capital's pops again"
+ te_debug_demog.1.g.tt:0 "Writes the same TE_DEMOG_SKEW lines as the skew check's first part, to compare with them."
+ te_debug_demog.1.t:0 "Demographics Test Console"
+ te_debug_demog.1.z:0 "Close"
+
+#
 # TE_DEBUG_DETERRENCE
 #
  te_debug_deterrence.1.a:0 "Arm us with ten warheads and initialise the posture"

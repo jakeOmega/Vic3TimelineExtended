@@ -252,6 +252,12 @@ te_demog_walks = {
 # The walks and Wealth Concentration run whatever the rule; the census only
 # when te_demog_cohorts_run.
 te_demog_state_yearly = {
+	# the console's census log: the player's capital logs each pulse's date and census year
+	# before the branches below read them (te_debug_demog_effects.txt)
+	if = {
+		limit = { te_demog_census_log_on = yes }
+		te_debug_demog_pulse_line = yes
+	}
 	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
 	te_demog_wc_state_yearly = yes
@@ -874,10 +880,25 @@ te_demog_country_yearly = {
 	}
 }
 
-# THIS = a state, once a year. Ages the ring one year (spec §2.1; demographics_model.step).
+# THIS = a state, once a year. Ages the ring one year (spec §2.1; demographics_model.step):
+# the year's rates and flows, then the sweep. te_debug_demog.1 option a runs the two halves
+# apart, so its replay line logs the flows the sweep is about to use.
 te_demog_step = {
+	te_demog_step_begin = yes
+	te_demog_step_run = yes
+}
+
+# The step's first half: the year's rates into locals (te_demog_prepare), then the flows,
+# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows).
+te_demog_step_begin = {
 	te_demog_prepare = yes
 	te_demog_flows = yes
+}
+
+# The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
+# then the year's totals and the scale. Run it straight after te_demog_step_begin, in the
+# same effect (the locals don't outlive it).
+te_demog_step_run = {
 	set_local_variable = { name = te_dg_open value = te_demog_open_slot }
 	set_local_variable = { name = te_dg_s value = var:te_dg_scale }
 	set_local_variable = { name = te_dg_age value = 1 }
@@ -1318,6 +1339,11 @@ te_demog_country_census = {
 		if = {
 			limit = { te_history_country_is_tracked = yes }
 			te_demog_history_record = yes
+		}
+		# the console's census log: one TE_DEMOG_CENSUS line (te_debug_demog_effects.txt)
+		if = {
+			limit = { te_demog_census_log_on = yes }
+			te_debug_demog_census_line = yes
 		}
 	}
 }

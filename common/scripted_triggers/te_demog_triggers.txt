@@ -19,6 +19,13 @@ te_demog_has_census = {
 	has_variable = te_dg_year
 }
 
+# Any scope: the census log is on (te_debug_demog.1 option b, console only). While it is,
+# the country census writes a TE_DEMOG_CENSUS line and the player's capital a
+# TE_DEMOG_PULSE line (te_debug_demog_effects.txt).
+te_demog_census_log_on = {
+	has_global_variable = te_demog_census_log
+}
+
 # Building scope: capital in §4.2's sense. The ownership buildings own themselves,
 # Subsistence Farms read private and government buildings read state-owned, so all
 # three are left out (docs/testing/demographics-probe-results-2026-10-08.md, Q2).
