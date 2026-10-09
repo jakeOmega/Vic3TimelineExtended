@@ -906,6 +906,7 @@ class TestCohortScript(unittest.TestCase):
 
     def test_orchestrator_dispatch(self):
         stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
+                 "te_inh_refresh_wc_state_effects": "",
                  "te_demog_seed": "set_variable = { name = did value = 1 }",
                  "te_demog_step": "set_variable = { name = did value = 2 }"}
         cases = [   # (census year, raw, people, people at the census, rule on) -> seed 1, step 2, nothing None
@@ -1269,7 +1270,8 @@ class TestTrend(unittest.TestCase):
         """A state merged or split moves its people by far more than a year's natural change. Over 25%
         since the last census the state's pulse seeds again (no migrants, the arrows start over)
         instead of stepping and counting the move as migration; a 3% rise is a year's step."""
-        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": ""}
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
+                 "te_inh_refresh_wc_state_effects": ""}
         for growth, reseeded in ((1.4, True), (0.6, True), (1.03, False)):
             with self.subTest(growth=growth):
                 eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
@@ -1299,7 +1301,8 @@ class TestTrend(unittest.TestCase):
         pulse, so a step at the next pulse a year on would compare 12 to 24 months of change with a
         year's natural change. The state is marked, its first pulse seeds again (same year or not),
         and the step comes a year after that; a seed made on the pulse is not marked."""
-        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": ""}
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
+                 "te_inh_refresh_wc_state_effects": ""}
         for pulse_year in (1836, 1837):
             with self.subTest(pulse_year=pulse_year):
                 eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
@@ -1963,6 +1966,138 @@ class TestWealth(unittest.TestCase):
         v = self.war_year(states, False, 9000, shocks=4)
         self.assertNotIn("te_dg_war_shock", v)
         self.assertEqual(states[0]["te_dg_wc"], 50.0)
+
+
+INH_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers.txt"
+INH_EVENTS = ROOT / "events" / "inheritance_events.txt"
+STATE_WC_MODIFIERS = ("inh_concentrated_property", "inh_dispersed_property", "inh_land_hunger")
+STATE_WC_MULTS = ("te_inh_wc_high_mult", "te_inh_wc_low_mult", "te_inh_land_hunger_mult")
+
+
+class _StateModifierEngine(_Engine):
+    """A state's modifiers as {name: multiplier}, for the Wealth Concentration state modifiers."""
+
+    def __init__(self, **kwargs):
+        super().__init__(fixtures={}, **kwargs)
+        self.effects.update(_raw_blocks([INH_EFFECTS]))
+        self.values.update(_raw_blocks([INH_VALUES]))
+        self.modifiers = {}
+
+    def _test(self, key, op, arg):
+        if key == "has_modifier":
+            return arg in self.modifiers
+        return super()._test(key, op, arg)
+
+    def run(self, items):
+        rest = []
+        for item in items:
+            key, _, arg = item
+            if key == "remove_modifier":
+                self._flush(rest)
+                rest = []
+                assert arg in self.modifiers, f"remove of absent modifier {arg}"
+                del self.modifiers[arg]
+            elif key == "add_modifier":
+                self._flush(rest)
+                rest = []
+                name = _find(arg, "name")
+                assert name not in self.modifiers, f"{name} added twice"
+                self.modifiers[name] = self.value(_find(arg, "multiplier"))
+            else:
+                rest.append(item)
+        self._flush(rest)
+
+    def _flush(self, items):
+        if items:
+            super().run(items)
+
+
+class TestWealthStateModifiers(unittest.TestCase):
+    """Spec 4.2's split (phase 2): two country modifiers from the national figure, three state
+    modifiers from each state's own score, each with one refresh site."""
+
+    def refresh(self, wc, agr, before=()):
+        eng = _StateModifierEngine()
+        eng.vars.update(te_dg_wc=float(wc), te_dg_agr_share=float(agr))
+        eng.modifiers.update({name: 0.5 for name in before})
+        eng.call("te_inh_refresh_wc_state_effects")
+        return eng
+
+    def test_the_state_modifiers_follow_the_states_own_score(self):
+        cases = (
+            # score, agrarian share -> concentrated, dispersed, land hunger
+            (80, 0.5, 0.6, None, 0.3),
+            (100, 1.0, 1.0, None, 1.0),
+            (100, 0.0, 1.0, None, None),   # a city: no land hunger
+            (50, 0.8, None, None, None),
+            (50.4, 0.8, None, None, None),  # under 0.01: not applied
+            (20, 0.8, None, 0.6, None),
+            (0, 0.3, None, 1.0, None),
+        )
+        for wc, agr, high, low, hunger in cases:
+            eng = self.refresh(wc, agr, before=STATE_WC_MODIFIERS)
+            got = tuple(eng.modifiers.get(n) for n in STATE_WC_MODIFIERS)
+            for g, want in zip(got, (high, low, hunger)):
+                if want is None:
+                    self.assertIsNone(g, (wc, agr))
+                else:
+                    self.assertAlmostEqual(g, want, msg=(wc, agr))
+            for name in STATE_WC_MULTS:
+                self.assertIn(name, eng.vars, "the multipliers stay set, even at 0")
+
+    def test_a_state_with_no_score_yet_loses_stale_modifiers(self):
+        eng = _StateModifierEngine()
+        eng.modifiers.update({name: 0.5 for name in STATE_WC_MODIFIERS})
+        eng.call("te_inh_refresh_wc_state_effects")
+        self.assertEqual(eng.modifiers, {})
+
+    def test_the_refresh_reads_this_years_score_whatever_the_rule(self):
+        body = _block(_text(EFFECTS), "te_demog_state_yearly")
+        refresh = body.index("te_inh_refresh_wc_state_effects = yes")
+        self.assertLess(body.index("te_demog_wc_state_yearly = yes"), refresh)
+        self.assertLess(refresh, body.index("te_demog_cohorts_run = yes"), "owner's ruling: every rule setting")
+
+    def test_one_refresh_site_per_modifier(self):
+        files = [p for d in ("common", "events") for p in (ROOT / d).rglob("*.txt")]
+        adds = {}
+        calls = []
+        for path in files:
+            for name, body in _raw_blocks([path]).items():
+                for m in re.finditer(r"add_modifier = \{\s*name = (inh_\w+)", body):
+                    adds.setdefault(m.group(1), set()).add(name)
+                calls += [name] * body.count("te_inh_refresh_wc_state_effects = yes")
+        for name in STATE_WC_MODIFIERS:
+            self.assertEqual(adds.get(name), {"te_inh_refresh_wc_state_effects"}, name)
+        for name in ("inh_great_fortunes", "inh_dispersed_wealth"):
+            self.assertEqual(adds.get(name), {"te_inh_apply_concentration_modifiers"}, name)
+        self.assertEqual(sorted(calls), ["inheritance_events.8", "te_demog_state_yearly"])
+
+    def test_the_modifiers_split_by_scope(self):
+        mods = _raw_blocks([INH_MODIFIERS])
+        for name, prefixes in (("inh_great_fortunes", ("country_",)), ("inh_dispersed_wealth", ("country_",)),
+                               *((n, ("state_",)) for n in STATE_WC_MODIFIERS)):
+            fields = re.findall(r"^\s*(\w+) = ", mods[name], re.M)
+            fields = [f for f in fields if f != "icon"]
+            self.assertTrue(fields, name)
+            for f in fields:
+                self.assertTrue(f.startswith(prefixes), f"{name}: {f}")
+
+    def test_the_multipliers_are_never_removed(self):
+        """modifier_multiplier_var_audit's rule: a modifier's multiplier is re-read after it is applied."""
+        for path in [p for d in ("common", "events") for p in (ROOT / d).rglob("*.txt")]:
+            text = _text(path)
+            for name in STATE_WC_MULTS:
+                self.assertNotRegex(text, rf"remove_variable = (\{{ name = )?{name}\b", path.name)
+
+    def test_game_start_refreshes_every_state_from_its_own_scope(self):
+        events = _raw_blocks([INH_EVENTS])
+        start = events["inheritance_events.1"]
+        self.assertLess(start.index("te_inh_game_start = yes"), start.index("id = inheritance_events.8"))
+        self.assertIn("every_scope_state", start)
+        state = events["inheritance_events.8"]
+        self.assertIn("type = state_event", state)
+        self.assertIn("hidden = yes", state)
+        self.assertIn("te_inh_refresh_wc_state_effects = yes", state)
 
 
 HISTORY_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_history_effects.txt"
