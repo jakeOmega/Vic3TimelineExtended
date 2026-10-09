@@ -216,3 +216,53 @@ te_demog_pyramid_max = {
 		min = var:te_dg_pjm17
 	}
 }
+
+# ----------------------------------------------------------------------------
+# The state pyramid's scale, state scope: the largest of the state's 36 bands
+# (te_dg_bf<b>, te_dg_bm<b>, people), at least 1 so a bar never has an empty
+# range. Guarded by te_dg_year, which the state's census writes together with
+# its bands. A state's pyramid has no outline (the projection is the player's
+# country's), so unlike te_demog_pyramid_max there is no second block.
+# ----------------------------------------------------------------------------
+te_demog_state_pyramid_max = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_year }
+		min = var:te_dg_bf0
+		min = var:te_dg_bm0
+		min = var:te_dg_bf1
+		min = var:te_dg_bm1
+		min = var:te_dg_bf2
+		min = var:te_dg_bm2
+		min = var:te_dg_bf3
+		min = var:te_dg_bm3
+		min = var:te_dg_bf4
+		min = var:te_dg_bm4
+		min = var:te_dg_bf5
+		min = var:te_dg_bm5
+		min = var:te_dg_bf6
+		min = var:te_dg_bm6
+		min = var:te_dg_bf7
+		min = var:te_dg_bm7
+		min = var:te_dg_bf8
+		min = var:te_dg_bm8
+		min = var:te_dg_bf9
+		min = var:te_dg_bm9
+		min = var:te_dg_bf10
+		min = var:te_dg_bm10
+		min = var:te_dg_bf11
+		min = var:te_dg_bm11
+		min = var:te_dg_bf12
+		min = var:te_dg_bm12
+		min = var:te_dg_bf13
+		min = var:te_dg_bm13
+		min = var:te_dg_bf14
+		min = var:te_dg_bm14
+		min = var:te_dg_bf15
+		min = var:te_dg_bm15
+		min = var:te_dg_bf16
+		min = var:te_dg_bm16
+		min = var:te_dg_bf17
+		min = var:te_dg_bm17
+	}
+}

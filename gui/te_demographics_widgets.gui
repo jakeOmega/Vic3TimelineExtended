@@ -20,6 +20,9 @@
 ###                             expectancy by census year
 ###   te_demog_sec_how          collapsed: How Demographics Works
 ###
+### The state panel's Demographics subtab (plan Task 14) composes the same
+### blocks into te_state_demog_content, at the end of this file.
+###
 ### EDITING RULES
 ### * No Scope in GUI can ask whether a variable exists, and reading a missing
 ###   one logs every frame (gui_modding_guide.md gotchas #14 and #23). Every
@@ -2205,5 +2208,922 @@ types te_demographics_widgets
 		}
 
 		te_demog_sec_how = {}
+	}
+
+	### ======================================================================
+	### THE STATE PANEL'S DEMOGRAPHICS SUBTAB (plan Task 14)
+	### ======================================================================
+	###
+	### The state's own census, as a fourth subtab of the state panel's
+	### Population tab (gui/states_panel.gui instances te_state_demog_content
+	### once). It reuses the building blocks and the pyramid row above, with the
+	### state's figures: State.MakeScope.Var(...), never the player's. A state
+	### has no outline twenty years ahead (the projection is the player's
+	### country's), so its pyramid has none, and no history (nothing keeps one
+	### per state). Every read sits under a state-scope gate
+	### (te_demog_state_census_sgui, _wealth_sgui and _stepped_sgui in
+	### common/scripted_guis/te_demog_sguis.txt, each called with
+	### GuiScope.SetRoot( State.MakeScope ).End): a state with no census shows
+	### "Census pending". Do not reuse te_demog_sec_wealth here: its strata
+	### cells need the Population panel's PopsOverviewPanel context.
+	###
+	### Sections: te_state_demog_overview (the figures), te_state_demog_pyramid,
+	### te_state_demog_wealth (the Gini, Wealth Concentration and its target) and
+	### te_state_demog_how (collapsed). Three flags of this subtab's own, so
+	### collapsing the Population panel's sections leaves these alone:
+	### te_demog_st_pyr_closed and te_demog_st_wealth_closed (open by default)
+	### and te_demog_st_how_open (collapsed by default).
+
+	### The state's figures. The Gini and Wealth Concentration are in the Wealth
+	### section; net migration and the births and deaths in the hovers need a
+	### stepped census (a seed's flows are 0).
+	type te_state_demog_overview = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_demog_panel = {
+			te_demog_text = {
+				default_format = "#tooltippable"
+				text = "te_demog_st_census"
+				tooltip = "te_demog_st_census_tt"
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_median_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_median"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_median_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_tfr_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_tfr"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_tfr_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_e0_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_e0"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_e0_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_good_up = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_dependency_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_dependency"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_dependency_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_good_down = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_sex_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_sex"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_sex_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_mig_tt"
+				blockoverride "row_label" {
+					text = "te_demog_st_mig"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_mig_value', 'te_demog_st_next' )]"
+				}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_urban_tt"
+				blockoverride "row_label" {
+					text = "te_demog_st_urban"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_urban_value"
+				}
+			}
+		}
+	}
+
+	### The state's pyramid: the same row as the country's, 85 and over at the
+	### top, on the state's own scale (te_demog_state_pyramid_max, the largest
+	### of its 36 bands) and without the outline (next_visible off, so the
+	### outline bars are never drawn). The overrides of men_range and
+	### women_range reach both bars of each side.
+	type te_state_demog_pyramid = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_pyramid"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_pyr_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_pyr_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_pyr_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_pyr_closed'))]"
+
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 12
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 196 -1 }
+					maximumsize = { 196 -1 }
+					align = right|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_men"
+				}
+				textbox = {
+					autoresize = yes
+					minimumsize = { 64 -1 }
+					maximumsize = { 64 -1 }
+					align = hcenter|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_age"
+				}
+				textbox = {
+					autoresize = yes
+					minimumsize = { 196 -1 }
+					maximumsize = { 196 -1 }
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#title"
+					text = "te_demog_pyr_women"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_17"
+				}
+				blockoverride "band_label" {
+					raw_text = "85+"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm17').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf17').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_16"
+				}
+				blockoverride "band_label" {
+					raw_text = "80–84"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm16').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf16').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_15"
+				}
+				blockoverride "band_label" {
+					raw_text = "75–79"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm15').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf15').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_14"
+				}
+				blockoverride "band_label" {
+					raw_text = "70–74"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm14').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf14').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_13"
+				}
+				blockoverride "band_label" {
+					raw_text = "65–69"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm13').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf13').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_12"
+				}
+				blockoverride "band_label" {
+					raw_text = "60–64"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm12').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf12').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_11"
+				}
+				blockoverride "band_label" {
+					raw_text = "55–59"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm11').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf11').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_10"
+				}
+				blockoverride "band_label" {
+					raw_text = "50–54"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm10').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf10').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_9"
+				}
+				blockoverride "band_label" {
+					raw_text = "45–49"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm9').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf9').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_8"
+				}
+				blockoverride "band_label" {
+					raw_text = "40–44"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm8').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf8').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_7"
+				}
+				blockoverride "band_label" {
+					raw_text = "35–39"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm7').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf7').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_6"
+				}
+				blockoverride "band_label" {
+					raw_text = "30–34"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm6').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf6').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_5"
+				}
+				blockoverride "band_label" {
+					raw_text = "25–29"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm5').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf5').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_4"
+				}
+				blockoverride "band_label" {
+					raw_text = "20–24"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm4').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf4').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_3"
+				}
+				blockoverride "band_label" {
+					raw_text = "15–19"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm3').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf3').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_2"
+				}
+				blockoverride "band_label" {
+					raw_text = "10–14"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm2').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf2').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_1"
+				}
+				blockoverride "band_label" {
+					raw_text = "5–9"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm1').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf1').GetValue )]"
+				}
+			}
+			te_demog_pyramid_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "te_demog_st_pyr_tt_0"
+				}
+				blockoverride "band_label" {
+					raw_text = "0–4"
+				}
+				blockoverride "next_visible" {
+					visible = no
+				}
+				blockoverride "men_range" {
+					min = "[Negate_float( FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') ) )]"
+					max = 0
+				}
+				blockoverride "women_range" {
+					min = 0
+					max = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_state_pyramid_max') )]"
+				}
+				blockoverride "men_now" {
+					value = "[Negate_float( FixedPointToFloat( State.MakeScope.Var('te_dg_bm0').GetValue ) )]"
+				}
+				blockoverride "women_now" {
+					value = "[FixedPointToFloat( State.MakeScope.Var('te_dg_bf0').GetValue )]"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_st_pyr_legend"
+			}
+		}
+	}
+
+	### The state's Gini, then its Wealth Concentration as a bar heading for its
+	### target in the country tab's layers (te_demog_sec_wealth): a background; a
+	### pale segment to the higher of score and target; the solid fill to the
+	### lower; a thin line at 50. Pale = neutral (rule 5). The score and its
+	### target exist once the state has been scored (te_demog_state_wealth_sgui);
+	### until then one line.
+	type te_state_demog_wealth = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_wealth"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_wealth_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_wealth_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_wealth_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_wealth_closed'))]"
+
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_gini_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_gini"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_gini_value"
+				}
+			}
+
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+				text = "te_demog_st_wealth_pending"
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_wc_tt"
+					blockoverride "row_label" {
+						text = "te_demog_ov_wc"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_wc_value"
+					}
+				}
+
+				widget = {
+					size = { 480 18 }
+					tooltip = "te_demog_wc_bar_tt"
+
+					default_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "values" {
+							value = 0
+							min = 0
+							max = 1
+						}
+					}
+					widget = {
+						size = { 100% 100% }
+						alpha = 0.4
+
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.Var('te_dg_wc_target').GetValue ) )]"
+								min = 0
+								max = 100
+							}
+						}
+					}
+					default_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "background" {}
+						blockoverride "frame" {}
+						blockoverride "values" {
+							value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.Var('te_dg_wc').GetValue, State.MakeScope.Var('te_dg_wc_target').GetValue ) )]"
+							min = 0
+							max = 100
+						}
+					}
+					icon = {
+						size = { 3 24 }
+						parentanchor = center
+						texture = "gfx/interface/backgrounds/white.dds"
+						color = { 0.96 0.90 0.72 0.95 }
+						tooltip = "te_demog_wc_line_tt"
+					}
+				}
+			}
+		}
+	}
+
+	### How Demographics Works on the state panel: the country tab's topics that
+	### apply to one state (the outline and the national urban pattern do not),
+	### from the same loc, collapsed by default (its own flag, te_demog_st_how_open).
+	type te_state_demog_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_how"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_how_open')]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[GetVariableSystem.Exists('te_demog_st_how_open')]"
+
+			te_demog_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_census"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_census"
+			}
+			te_demog_note = {
+				text = "te_demog_how_applied"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_fertility"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_fertility"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_mortality"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_mortality"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_migration"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_migration"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_wealth"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_gini"
+			}
+			te_demog_note = {
+				text = "te_demog_how_wc"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_sources"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_sources"
+			}
+		}
+	}
+
+	### The subtab: the sections in their one order, at a fixed 520 (rule 8). A
+	### state with no census shows "Census pending" and the collapsed
+	### explanation. The system has no journal entry, so no Open Journal Entry
+	### button (rule 9).
+	type te_state_demog_content = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 10
+		minimumsize = { 520 -1 }
+		maximumsize = { 520 -1 }
+
+		te_demog_panel = {
+			visible = "[Not( GetScriptedGui('te_demog_state_census_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+
+			te_demog_text = {
+				text = "te_demog_st_pending"
+			}
+		}
+
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_demog_state_census_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 10
+
+			te_state_demog_overview = {}
+			te_state_demog_pyramid = {}
+			te_state_demog_wealth = {}
+		}
+
+		te_state_demog_how = {}
 	}
 }
