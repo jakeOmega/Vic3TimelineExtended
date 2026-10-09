@@ -46,7 +46,8 @@ Not in this plan, each to get its own plan once its gate passes:
 
 | Decision | Choice | Why |
 |---|---|---|
-| Cohort width (§1, §13) | One-year cohorts, a ring of 150; `COHORT_WIDTH = 1` in `demographics_params.py` | The spec's decision rule picked them (§1 "Result"); the owner hasn't confirmed the save cost (§13). Only width 1 is built; the model asserts it |
+| Cohort width (§1, §13) | One-year cohorts, a ring of 150; `COHORT_WIDTH = 1` in `demographics_params.py` | The spec's decision rule picked them (§1 "Result"); the owner hasn't confirmed the save cost (§13). Only width 1 is built; the model asserts it. **Cost as built:** about 110 occupied slots a state in 1836 (220 cohort variables) plus about 125 other census variables (walks, figures, bands, classes), so about 345 a state: at the probe's 61–85 bytes a variable, about 26 MB of an 1836 plain-text save (§13's 11–15 MB counted the cohorts alone). The step costs about the probe's 100-occupied figure, 0.75 s a world-year spread over the year |
+| Empty slots (§1: "slots above about 95 hold nobody and are skipped") | The seed writes no slot whose survivorship is under 1 in 100,000 births, and the step removes a cohort that falls under half a person | Otherwise the seed fills all 150 slots with near-zero values and every slot runs at the all-occupied cost. The Python model keeps those slots; the difference is under one person a slot, below the replay's 0.05‰ threshold |
 | Cohort storage (§3 says "shares") | **People, not shares** | The engine stores values in units of 1e-5 (`scripting_best_practices.md` § five decimals). A one-year cohort of 90-year-olds is a share near 1e-5, so its deaths would round away. The probe benchmarked people counts (same save cost) |
 | Equilibrium seed (§2.6) | The state's own life table times a growth factor read from a one-dimensional table by net reproduction rate | A lookup by fertility and life expectancy for 150 slots and both sexes runs to thousands of literals; the state's life table is computed anyway for the panel, so only the growth factor needs a table (39 knots) |
 | Game rule (§11.4) | `demographics_rule`: `demographics_full` (default), `demographics_display_only`, `demographics_disabled`; wrappers `te_demog_cohorts_run` and `te_demog_effects_run` | The mod's convention is `X_disabled`, tested negatively (`scripting_best_practices.md:4626`); no rule anywhere ends in `_off`. In phase 1 Full and Display only behave the same: nothing is applied yet |
@@ -2093,7 +2094,7 @@ this worktree on another port (CLAUDE.md, worktrees) or, at the end, from the ma
 | `on_game_started` | none → a hidden country event per country (`te_demog_events.1`, the #822 dispatch pattern) | walk + Wealth Concentration seed for every state; if `te_demog_cohorts_run`: seed every state's ring, then the country's figures |
 | `on_yearly_pulse_state` (spread over the year, a different day per state) | state | `te_demog_state_yearly`: walks → inheritance's rural modifiers → Wealth Concentration drift → (cohorts run) seed, skip or step → the state's figures |
 | `on_monthly_pulse_country` | country | war-dead snapshot, whatever the rule (Wealth Concentration's war shock reads it) |
-| `on_yearly_pulse_country` (31 December) | country | war shock; national Wealth Concentration, the national Gini and #822's modifiers (through `te_inh_yearly_update`); (cohorts run) war dead shared out to states, country sums, lists, urban pattern, projection, history sample |
+| `on_yearly_pulse_country` (31 December) | country | `te_demog_country_yearly`, in this order: war shock; national Wealth Concentration, the national Gini and #822's modifiers (`te_demog_wc_national`); (cohorts run) war dead shared out to states, country sums, lists, urban pattern, projection, history sample. `te_inh_yearly_update` (inheritance's own entry) keeps the drift only for a country with no scored state |
 
 `te_inheritance_on_actions.txt:50-60`'s own `on_yearly_pulse_state` hook is removed in Task 7; the demographics
 orchestrator calls `te_inh_refresh_rural_effects` after its walk, so the agrarian share it reads is this year's.
@@ -3455,6 +3456,11 @@ class TestStep(unittest.TestCase):
         self.assertIn("name = te_dg_f$S$", body)
         self.assertIn("local_var:te_dg_births", body)
 
+    def test_empty_ages_stay_empty(self):
+        text = _text(EFFECTS)
+        self.assertIn("remove_variable = te_dg_f$S$", _block(text, "te_demog_seed_slot"))
+        self.assertIn("remove_variable = te_dg_f$S$", _block(text, "te_demog_age_slot"))
+
     def test_slot_skips_empty_slots_but_keeps_counting_ages(self):
         body = _block(_text(EFFECTS), "te_demog_slot")
         self.assertIn("has_variable = te_dg_f$S$", body)
@@ -3668,17 +3674,32 @@ te_demog_seed_p2 = {
 }
 
 # Age local_var:te_dg_age (0-149) in slot $S$: survivors x growth factor^age.
+# An age fewer than 1 in 100,000 newborns reach stays empty (and a re-seed
+# clears it), so empty slots are skipped by the step (spec §1).
 te_demog_seed_slot = {
 	te_demog_age_boundaries = yes
-	set_variable = {
-		name = te_dg_f$S$
-		value = { value = local_var:te_dg_lsf multiply = local_var:te_dg_dpow multiply = te_demog_k_female_births_per_100k divide = 100000 }
+	if = {
+		limit = {
+			OR = {
+				local_var:te_dg_lsf >= 1
+				local_var:te_dg_lsm >= 1
+			}
+		}
+		set_variable = {
+			name = te_dg_f$S$
+			value = { value = local_var:te_dg_lsf multiply = local_var:te_dg_dpow multiply = te_demog_k_female_births_per_100k divide = 100000 }
+		}
+		set_variable = {
+			name = te_dg_m$S$
+			value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+		}
+		te_demog_accumulate_slot = { S = $S$ }
 	}
-	set_variable = {
-		name = te_dg_m$S$
-		value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+	else_if = {
+		limit = { has_variable = te_dg_f$S$ }
+		remove_variable = te_dg_f$S$
+		remove_variable = te_dg_m$S$
 	}
-	te_demog_accumulate_slot = { S = $S$ }
 	if = {
 		limit = { local_var:te_dg_age = local_var:te_dg_next_group }
 		change_local_variable = { name = te_dg_g add = 1 }
@@ -3936,9 +3957,17 @@ te_demog_age_slot = {
 			subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_mig_frac_m max = { value = local_var:te_dg_m2 multiply = 0.5 } }
 		}
 	}
-	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_f2 min = 0 } }
-	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_m2 min = 0 } }
-	te_demog_accumulate_slot = { S = $S$ }
+	# a cohort under half a person is dropped, so the slot is skipped until it reopens
+	if = {
+		limit = { local_var:te_dg_f2 < 0.5 local_var:te_dg_m2 < 0.5 }
+		remove_variable = te_dg_f$S$
+		remove_variable = te_dg_m$S$
+	}
+	else = {
+		set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_f2 min = 0 } }
+		set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_m2 min = 0 } }
+		te_demog_accumulate_slot = { S = $S$ }
+	}
 }
 
 # Age 150: the slot's people join the pool, which ages and dies at the last
@@ -4479,7 +4508,10 @@ WEALTH = ROOT / "common" / "scripted_effects" / "te_demog_wealth_effects.txt"
 
 class TestWealth(unittest.TestCase):
     def test_national_figure_is_derived(self):
-        self.assertIn("te_demog_wc_national = yes", _block(_text(INH), "te_inh_yearly_update"))
+        """One effect on 31 December: the national figure, then the census reads it."""
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_wc_national = yes"), yearly.index("te_demog_country_census = yes"))
+        self.assertNotIn("te_demog_wc_national", _block(_text(INH), "te_inh_yearly_update"))
         self.assertIn("te_demog_wc_national = yes", _block(_text(INH), "te_inh_shift_concentration"))
         self.assertIn("te_demog_wc_national = yes", _block(_text(INH), "inh_repair_after_civil_war"))
 
@@ -4604,9 +4636,11 @@ te_demog_wc_shock = {
   `te_demog_neg_wc`), and end with **the one** `te_inh_apply_concentration_modifiers = yes`.
 
 - [ ] **Step 4: #822's effects.**
-  - `te_inh_yearly_update` (`:38-49`): when any owned state has `te_dg_wc`, `te_demog_wc_national = yes` replaces
-    the drift (and its `te_inh_apply_concentration_modifiers` call, since the national effect makes it); a
-    country with no scored state keeps the old branch. `te_inh_tidy_amendments` and `te_inh_count_duty_years` stay.
+  - `te_inh_yearly_update` (`:38-49`): its drift and `te_inh_apply_concentration_modifiers` call run only for a
+    country with no scored state (`NOT = { any_scope_state = { has_variable = te_dg_wc } }`); every other country's
+    national figure comes from `te_demog_country_yearly`, which calls `te_demog_wc_national` (Step 6), because the
+    order between two files' `on_yearly_pulse_country` entries is undefined and the census must read this year's
+    figure. `te_inh_tidy_amendments` and `te_inh_count_duty_years` stay.
   - `te_inh_game_start` (`:53-56`): `every_scope_state = { te_demog_walks = yes te_demog_wc_seed_state = yes }`, then
     `te_demog_wc_national = yes` in place of its own set-and-apply.
   - `te_inh_shift_concentration` (`:98-110`): keep the guard, then `every_scope_state = { limit = { has_variable =
@@ -4633,9 +4667,11 @@ te_demog_wc_shock = {
     (`banking_cycle_effects.txt:1630` and `:1799`, country scope): `te_demog_wc_shock = { AMOUNT = -5 }`.
   - **Devastation:** in `te_demog_wc_state_yearly` (above).
 
-- [ ] **Step 6: Wire the state side.** `te_demog_state_yearly`: after `te_inh_refresh_rural_effects = yes`, add
-  `te_demog_wc_state_yearly = yes` (before the census branch). The national figure is computed on 31 December by
-  `te_inh_yearly_update`, which already runs then.
+- [ ] **Step 6: Wire it.** `te_demog_state_yearly`: after `te_inh_refresh_rural_effects = yes`, add
+  `te_demog_wc_state_yearly = yes` (before the census branch). `te_demog_country_yearly`: after the war shock and
+  before the gated census, `te_demog_wc_national = yes`, whatever the rule. So on 31 December the national figure,
+  #822's modifiers, the national Gini, the census and the history sample all come from this year's state scores,
+  in one effect.
 
 - [ ] **Step 7: Tests and reload**
 
@@ -4666,14 +4702,17 @@ git commit -m "Wealth Concentration per state: targets, drift, shocks; the natio
   `te_dg_h_wc`; sorted oldest first.
 
 - [ ] **Step 1: Failing test:** the registry test asserts `te_demog_history_record` exists, is called from
-  `te_demog_country_census` behind `te_history_country_is_tracked = yes`, and caps at 100 (`te_dg_hist` and `100`
-  in its prune).
+  `te_demog_country_census` behind `te_history_country_is_tracked = yes`, caps at 100 (`te_dg_hist` and `100` in
+  its prune), and checks `te_dg_hist_year` before adding a container (one sample a year).
 - [ ] **Step 2: Write it** by copying the Cultural Hegemony store's three helpers and changing: the store is the
   country (not a global container), the list `te_dg_hist`, five variables, the cap 100. Keep CH's sort (it negates
   the order value because `ordered_*` sorts descending) and its eviction comment (`remove_list_variable` fills the
   hole with the last element, so every eviction re-sorts).
 - [ ] **Step 3:** Call it at the end of `te_demog_country_census` inside `if = { limit = { te_history_country_is_tracked
-  = yes } … }`, once a year (the yearly country pulse).
+  = yes } … }`. The census runs twice in 1836 (game start and 31 December), so the record is skipped when
+  `var:te_dg_hist_year` already equals `te_demog_year`, and sets `te_dg_hist_year` when it records; the 31 December
+  run then overwrites that year's container's values instead of adding a second sample (find it as the list's last
+  entry, which the sort keeps newest-last).
 - [ ] **Step 4:** Run the registry test; reload; commit `"Demographics: yearly history samples for tracked countries"`.
 
 ### Task 13: The Demographics tab in the Population panel
