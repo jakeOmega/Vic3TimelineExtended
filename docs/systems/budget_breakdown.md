@@ -74,12 +74,29 @@ Hover a row for the engine's applied modifier sources and amounts.
 Each contributing static modifier has a `script_only` accounting field with
 the same coefficient as its native `country_expenses_add` or
 `country_tax_income_add`. The engine applies the same multiplier, stacking,
-duration and decay to both fields. These fields have no economic effect. Their
-localized descriptions clarify that the value is already charged/credited;
-they also appear in the source modifier's ordinary tooltip. The panel reads
-their current sums, then subtracts them from Additional Expenses/Income once.
-Only the unattributed remainder appears in Other Additional Expenses/Income.
-No live formula is reevaluated to guess what a timed modifier currently charges.
+duration and decay to both fields. These fields have no economic effect. The
+panel reads their current sums, then subtracts them from Additional
+Expenses/Income once. Only the unattributed remainder appears in Other
+Additional Expenses/Income. No live formula is reevaluated to guess what a
+timed modifier currently charges.
+
+The copy field also appears in the source modifier's ordinary tooltip, beside
+the native line, so every cost or income modifier shows its amount twice. No
+modifier-type key hides a field (vanilla's
+`common/modifier_type_definitions/modifier_types.md` documents them all, and
+`boolean = yes`, the one display that drops the number, accepts only `yes`).
+The generator therefore makes the second line read as a label: it is named
+"Counted in the Budget Breakdown under <system>", its description says the
+native line (Government Expenses or Tax Income) already includes the amount,
+and it is printed with the native type's `decimals` and prefix, so both lines
+show the same figure. It stays `color = neutral`, so it is not tinted red or
+green like the native line.
+
+Reading each system's cost from its own script values instead would drop the
+copy fields but cannot follow every source: 24 of the 38 are timed event
+modifiers, 19 of them decaying, whose multiplier (mostly an event-size value
+scaled to the economy) is fixed when applied, so no script value holds what
+they charge now.
 
 Only money in the weekly budget is included. One-time `add_treasury` payments
 and costs in innovation, influence or other resources are excluded. For example,
@@ -142,7 +159,8 @@ and last week's balance.
 
 `scripts/generators/gen_budget_breakdown.py` contains the income/expense
 catalogue and discovers every institution from the committed vanilla snapshot
-and mod definitions. Run it explicitly after editing the catalogue or adding an
+and mod definitions, and takes the money types' display format from the same
+snapshot. Run it explicitly after editing the catalogue or adding an
 institution. It writes `te_budget_generated_values.txt`,
 `te_budget_generated_charts.gui`, `te_budget_generated_types.txt` and
 `te_budget_l_english.yml`. Localization's
@@ -224,3 +242,8 @@ Engine rendering and accounting still require an in-game check:
    tooltips against Additional Expenses, including JE-owned modifiers, decaying
    charges, refunds and removal. On an existing save, verify modifier-definition
    changes are picked up; otherwise let the owning system refresh its modifier.
+9. Hover a source modifier (Colonial Development Spending, a banking charge, a
+   UN grant). Its Government Expenses or Tax Income line and its "Counted in
+   the Budget Breakdown under …" line must show the same figure, the second
+   untinted. Then hover that system's Breakdown row and check the source list
+   from `GetDescFor` reads sensibly under the row's own header.
