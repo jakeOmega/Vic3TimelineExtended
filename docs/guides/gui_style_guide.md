@@ -95,6 +95,7 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 - *(play-test, 2026-09-30)* **System tabs in vanilla panels, and in the mod's own window, carry no icon**, as vanilla's tabs don't; the tab's place after vanilla's and its greyed-until-unlocked checklist mark it as the mod's.
 - The tab reads the entry through `GetPlayerJournalEntry('<key>')` (gotcha #29) and ends with an **"Open Journal Entry"** button, placed below everything else.
 - **Build each section as a type**, so the journal entry and the tab compose the same pieces. The journal entry stays and may shrink to a stub once the tab carries everything.
+- *(owner, 2026-10-09)* **Send players to the tab, not the journal entry.** Where a system has both, text that tells the player where to look or act (a tooltip, an event, a concept, a notification, a goto) names the tab: "on the UN tab of the Diplomacy panel", "the Grand Monuments tab of the Timeline Extended window". A goto into the Timeline Extended window sets `te_systems_window_tab`, then `com_open_window` (the state view's Grand Monument card). Text about the entry itself, such as when it opens, the modifiers it carries or its goal, still names the entry, and the tab's own Open Journal Entry button stays.
 
 ### 10. Placeholder art is fine
 

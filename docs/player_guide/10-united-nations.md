@@ -402,7 +402,7 @@ a member holding warheads that did not vote stays outside the nuclear ban.
 ### Tabling UN business
 
 You table the seven topics above, and the nine the reformed charter opens, from
-the Propose a Resolution rows or the journal entry's buttons, and any convention
+the Propose a Resolution rows or the UN tab's buttons, and any convention
 from those rows. The rows sit under
 the General Assembly while no resolution is in session. Each gives the topic,
 whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
