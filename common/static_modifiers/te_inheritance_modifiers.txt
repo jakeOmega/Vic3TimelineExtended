@@ -7,27 +7,57 @@
 # ======================================================================
 
 # ----------------------------------------------------------------------
-#  The concentration score (country). Unit values; the yearly country
-#  pulse applies one of the two with a multiplier of 0-1 read from a
-#  country variable (te_inh_great_fortunes_mult, te_inh_dispersed_mult).
+#  Wealth Concentration (demographics spec §4.2). Unit values, applied
+#  with a multiplier of 0-1 read from a variable.
+#  Country pair: the national figure, refreshed by te_demog_wc_national
+#  (te_inh_apply_concentration_modifiers), multipliers
+#  te_inh_great_fortunes_mult and te_inh_dispersed_mult. Political capture
+#  is national: a few great fortunes buy influence beyond their own state.
+#  State three: the state's own score (te_dg_wc), refreshed on the state's
+#  yearly pulse (te_inh_refresh_wc_state_effects), multipliers
+#  te_inh_wc_high_mult, te_inh_wc_low_mult and te_inh_land_hunger_mult.
+#  Saving, mobility, radicals and the rural exodus happen where the
+#  property is.
 # ----------------------------------------------------------------------
 
-# Score above 50: multiplier (score - 50) / 50.
+# National score above 50: multiplier (score - 50) / 50.
 inh_great_fortunes = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_aristocrats_pol_str_mult = 0.2
 	country_capitalists_pol_str_mult = 0.2
-	state_aristocrats_investment_pool_efficiency_mult = 0.1
-	state_capitalists_investment_pool_efficiency_mult = 0.1
-	state_radicals_from_political_movements_mult = 0.1
 }
 
-# Score below 50: multiplier (50 - score) / 50.
+# National score below 50: multiplier (50 - score) / 50.
 inh_dispersed_wealth = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_aristocrats_pol_str_mult = -0.2
+}
+
+# State score above 50: multiplier (score - 50) / 50. The great houses
+# save and invest; the rest find the ladder short and resent it.
+inh_concentrated_property = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_aristocrats_investment_pool_efficiency_mult = 0.1
+	state_capitalists_investment_pool_efficiency_mult = 0.1
+	state_radicals_from_political_movements_mult = 0.1
+	state_pop_qualifications_mult = -0.1
+	state_education_access_add = -0.05
+}
+
+# State score below 50: multiplier (50 - score) / 50. Many small owners
+# do the saving.
+inh_dispersed_property = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_farmers_investment_pool_efficiency_mult = 0.1
 	state_shopkeepers_investment_pool_efficiency_mult = 0.1
+}
+
+# State score above 50 in farming country: multiplier (score - 50) / 50
+# times the agrarian share. Great estates leave the young no land of their
+# own, and they leave (southern Italy's emigrants).
+inh_land_hunger = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_quota_mult = 0.2
 }
 
 # ----------------------------------------------------------------------

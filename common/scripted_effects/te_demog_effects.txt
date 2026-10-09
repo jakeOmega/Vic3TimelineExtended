@@ -278,6 +278,7 @@ te_demog_state_yearly = {
 	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
 	te_demog_wc_state_yearly = yes
+	te_inh_refresh_wc_state_effects = yes
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw

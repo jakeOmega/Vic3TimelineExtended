@@ -178,7 +178,9 @@ One country variable, `te_inh_concentration`, 0–100: how much of the nation's 
   generation. A republic that abolishes entail in 1848 still has great houses in 1870.
 - **Start**: each 1836 country starts at its law's target, so nothing drifts at game start.
 - **Effects** come from the score through the dynamic-modifier pattern, refreshed in one place (the country's yearly
-  pulse; the multiplier is a country variable, so a country pulse is correct):
+  pulse; the multiplier is a country variable, so a country pulse is correct). *Since demographics phase 2 the clout
+  stays here and the rest acts per state, from each state's own score (demographics spec §4.2, "Built").* As
+  first shipped:
   - `inh_great_fortunes`, multiplier (score − 50) / 50 above 50: Aristocrats' and Capitalists' clout up
     (`country_aristocrats_pol_str_mult`, `country_capitalists_pol_str_mult`), their investment-pool efficiency up,
     radicals from movements up.
