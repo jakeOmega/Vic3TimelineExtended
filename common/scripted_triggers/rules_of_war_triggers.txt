@@ -1,0 +1,17 @@
+﻿# Rules of War (lawgroup_rules_of_war, common/laws/extra_laws.txt).
+
+# A war worth a war footing: Total War's AI weight. Country scope. At war with
+# a major or great power, or in a war whose goals would annex or subjugate us
+# (nd_fighting_for_existence). A colonial skirmish or a war on a minor never
+# moves the AI to Total War, so it doesn't churn the law every war.
+te_row_serious_war = {
+	is_at_war = yes
+	save_temporary_scope_as = te_row_self
+	OR = {
+		any_country = {
+			has_war_with = scope:te_row_self
+			country_rank >= rank_value:major_power
+		}
+		nd_fighting_for_existence = yes
+	}
+}

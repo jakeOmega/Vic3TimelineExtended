@@ -75,7 +75,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Inheritance Laws | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation, State as Universal Heir, Possession by Use | Who inherits an estate: the concentration of wealth, and birth rates and migration on the land. See [Who inherits](#who-inherits). |
 | Electoral Finance | No Campaign Finance Laws, Unregulated Donations, Donation Limits, Publicly Funded Elections | Money in elections. The first is only for countries without a voting franchise; the other three need one. |
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
-| Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | Devastation, casualties, war support and diplomatic standing. |
+| Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Privacy Rights | Intrusive Surveillance System, Minimal Privacy Protection, Moderate Data Privacy, Strong Privacy Rights | Surveillance against technology spread and tourism. Intrusive Surveillance System needs Social Media or Automated Surveillance. |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
 
@@ -85,18 +85,40 @@ capacity by 10%. Devolved Administration cuts the bureaucracy cost of
 institutions by 20%, slows assimilation and resists separatism and coups.
 Traditional Vassalage strengthens the aristocrats and costs authority.
 
-Total War (from Bombing Aircraft) doubles devastation and cuts the war-support
-loss from casualties by three quarters, at a cost of 20 diplomatic reputation
-and a stronger anti-war movement. The humane end, up to Limited War (from
-Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
-diplomatic-play escalation, adds reputation and lowers your Ministry of War's
-cap. Humanitarian Regulations and Limited War also restrict nuclear strikes; see
-[Strategic and tactical strike
-actions](14-nuclear.md#strategic-and-tactical-strike-actions). The Rules of War
-laws also count toward UN Authority: Total War −2, War Crimes Forbidden +0.5,
+### The rules of war
+
+Each Rules of War law is best at one thing, so the choice follows what you are
+doing rather than your research. Every country starts on Traditional Rules of
+War.
+
+| Law | From | Best for | What you give up |
+|---|---|---|---|
+| Total War | Chemical Warfare | A war you must win. Kill rate +0.1, double devastation (it drains the enemy's war support but ruins land you mean to keep), casualties cost half the usual war support, and armies mobilize 25% faster. | 10 diplomatic reputation, a stronger anti-war movement, 25% faster escalation in every play you are part of, one level of Ministry of Foreign Affairs |
+| Traditional Rules of War | Start | A free hand. Armies lose 5% less morale and gain experience 25% faster, and nothing is forbidden. | What the other four offer |
+| War Crimes Forbidden | Wargaming | Conquest you mean to keep. 25% fewer radicals in the states you conquer and 25% less devastation. | Kill rate −0.05 |
+| Humanitarian Regulations | Nuclear Weapons | Allies and treaties. +6 diplomatic reputation, the most of any law, so other countries sign treaties with you and back your plays more readily; 10% more of your wounded survive; half the devastation. | Kill rate −0.05; no strategic nuclear strikes |
+| Limited War | Intercontinental Ballistic Missiles | Small wars for limited aims. You gain 25% less infamy, plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | War goals in plays you start cost twice the maneuvers, so each play takes fewer states; kill rate −0.05; no nuclear strikes at all |
+
+Patriotic, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
+Traditionalists and Theocrats Traditional Rules of War, Reformers and the Pious
+War Crimes Forbidden, Liberals, Market Liberals and Humanitarians both
+Humanitarian Regulations and Limited War, and Pacifists and Anarchists Limited
+War.
+
+Humanitarian Regulations and Limited War show their ban in the law's tooltip, as
+Strategic Nuclear Strikes Forbidden and Tactical Nuclear Strikes Forbidden. The
+ban lifts once you or a country you protect has been struck, or when an enemy's
+war goal would annex or subjugate you; see [Strategic and tactical strike
+actions](14-nuclear.md#strategic-and-tactical-strike-actions). The laws also
+count toward UN Authority: Total War −2, War Crimes Forbidden +0.5,
 Humanitarian Regulations +1 and Limited War +1.5 on the UN Authority Target. A
 positive figure counts only while you are a UN member not undermining it; see
 [What counts toward Policy](10-united-nations.md#what-counts-toward-policy).
+
+A change of law takes the usual enactment time, so moving to Total War when a
+war breaks out costs months and holds up your other laws. The AI moves to Total
+War in a war against a major or great power, or one whose war goals would annex
+or subjugate it, and back to another law once it is at peace.
 
 ### Economic law groups
 

@@ -7,7 +7,7 @@
 # PLAYER-FACING SURFACE: the colonial stability widget
 # (gui/journal_entry_widgets/colonial_empire_widget.gui). Every button below
 # carries `is_ai = yes` in its `visible`, so the vanilla button grid shows
-# nothing to a human: the buttons exist for the AI, which picks policies and
+# nothing to a human: the buttons exist for the AI, which picks its
 # decolonization decisions through their `ai_chance`. Do not remove them, and do
 # not drop the is_ai line without restoring a player surface.
 #
@@ -17,192 +17,13 @@
 # in common/scripted_guis/colonial_empire_sguis.txt call as well -- so the AI's
 # grid and the player's widget can never drift apart. Change a gate or an action
 # in the helper, never here.
+#
+# The three colonial programmes have no buttons. They run at levels, and the
+# AI steps them in the entry's monthly pulse (colonial_ai_review_programmes,
+# decolonization.txt), which checks that a level is neither wasted nor beyond
+# the budget. Six AI-only enable/disable buttons did this until 2026-10; their
+# weights are the review's (colonial_ai_*_raise_weight).
 # ----------------------------------------------------------------------------
-
-# ------ Invest in Colonial Development ------
-ce_invest_in_development = {
-	name = "CE_INVEST_IN_DEVELOPMENT"
-	desc = "CE_INVEST_IN_DEVELOPMENT_DESC"
-
-	visible = {
-		is_ai = yes
-		NOT = { has_modifier = colonial_development_investment_modifier }
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_state_count >= 1 }
-			add = 30
-		}
-		if = {
-			limit = { colonial_low_acceptance_count >= 2 }
-			add = 20
-		}
-		if = {
-			limit = { country_rank >= rank_value:great_power }
-			add = 10
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_invest = yes
-	}
-
-	effect = {
-		colonial_empire_effect_invest = yes
-	}
-}
-
-ce_remove_invest_in_development = {
-	name = "CE_REMOVE_INVEST_IN_DEVELOPMENT"
-	desc = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
-
-	visible = {
-		is_ai = yes
-		has_modifier = colonial_development_investment_modifier
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_state_count = 0 }
-			add = 50
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_remove_invest = yes
-	}
-
-	effect = {
-		colonial_empire_effect_remove_invest = yes
-	}
-}
-
-# ------ Military Garrison ------
-ce_military_garrison = {
-	name = "CE_MILITARY_GARRISON"
-	desc = "CE_MILITARY_GARRISON_DESC"
-
-	visible = {
-		is_ai = yes
-		NOT = { has_modifier = colonial_military_garrison_modifier }
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_low_acceptance_count >= 2 }
-			add = 40
-		}
-		if = {
-			limit = { colonial_low_acceptance_count >= 4 }
-			add = 20
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_garrison = yes
-	}
-
-	effect = {
-		colonial_empire_effect_garrison = yes
-	}
-}
-
-ce_remove_military_garrison = {
-	name = "CE_REMOVE_MILITARY_GARRISON"
-	desc = "CE_REMOVE_MILITARY_GARRISON_DESC"
-
-	visible = {
-		is_ai = yes
-		has_modifier = colonial_military_garrison_modifier
-	}
-
-	# Also withdrawn while authority is in deficit: the garrison costs 300.
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_low_acceptance_count = 0 }
-			add = 30
-		}
-		if = {
-			limit = { authority < 0 }
-			add = te_ai_authority_deficit_repeal_weight
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_remove_garrison = yes
-	}
-
-	effect = {
-		colonial_empire_effect_remove_garrison = yes
-	}
-}
-
-# ------ Cultural Assimilation Program ------
-ce_cultural_assimilation = {
-	name = "CE_CULTURAL_ASSIMILATION"
-	desc = "CE_CULTURAL_ASSIMILATION_DESC"
-
-	visible = {
-		is_ai = yes
-		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
-	}
-
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_state_count >= 1 }
-			add = 20
-		}
-		if = {
-			limit = { colonial_high_acceptance_count >= 1 }
-			add = 15
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_assimilation = yes
-	}
-
-	effect = {
-		colonial_empire_effect_assimilation = yes
-	}
-}
-
-ce_remove_cultural_assimilation = {
-	name = "CE_REMOVE_CULTURAL_ASSIMILATION"
-	desc = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
-
-	visible = {
-		is_ai = yes
-		has_modifier = colonial_cultural_assimilation_modifier
-	}
-
-	# Also ended while authority is in deficit: the programme costs 100.
-	ai_chance = {
-		value = 0
-		if = {
-			limit = { colonial_state_count = 0 }
-			add = 30
-		}
-		if = {
-			limit = { authority < 0 }
-			add = te_ai_authority_deficit_repeal_weight
-		}
-	}
-
-	possible = {
-		colonial_empire_possible_remove_assimilation = yes
-	}
-
-	effect = {
-		colonial_empire_effect_remove_assimilation = yes
-	}
-}
 
 # ------ Release Colonial Territory (one region at a time) ------
 ce_release_colonial_territory = {

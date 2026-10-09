@@ -465,7 +465,7 @@ REPLACE:ideology_liberal = {
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
 		law_war_crimes_forbidden = neutral
-		law_humanitarian_regulations = approve
+		law_humanitarian_regulations = strongly_approve
 		law_limited_war = strongly_approve
 		law_total_war = strongly_disapprove
 	}
@@ -650,7 +650,7 @@ REPLACE:ideology_liberal_modern = {
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
 		law_war_crimes_forbidden = neutral
-		law_humanitarian_regulations = approve
+		law_humanitarian_regulations = strongly_approve
 		law_limited_war = strongly_approve
 		law_total_war = strongly_disapprove
 	}
@@ -814,7 +814,7 @@ REPLACE:ideology_market_liberal = {
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
 		law_war_crimes_forbidden = neutral
-		law_humanitarian_regulations = approve
+		law_humanitarian_regulations = strongly_approve
 		law_limited_war = strongly_approve
 		law_total_war = strongly_disapprove
 	}
@@ -1348,7 +1348,7 @@ REPLACE:ideology_traditionalist = {
 		law_penal_labor_camps = approve
 	}
 	lawgroup_rules_of_war = {
-		law_traditional_rules_of_war = approve
+		law_traditional_rules_of_war = strongly_approve
 		law_war_crimes_forbidden = neutral
 		law_humanitarian_regulations = disapprove
 		law_limited_war = disapprove
@@ -7144,7 +7144,7 @@ REPLACE:ideology_humanitarian = {
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
 		law_war_crimes_forbidden = neutral
-		law_humanitarian_regulations = approve
+		law_humanitarian_regulations = strongly_approve
 		law_limited_war = strongly_approve
 		law_total_war = strongly_disapprove
 	}
@@ -7911,7 +7911,7 @@ REPLACE:ideology_theocrat = {
 		law_ministry_of_religion = strongly_approve
 	}
 	lawgroup_rules_of_war = {
-		law_traditional_rules_of_war = approve
+		law_traditional_rules_of_war = strongly_approve
 		law_war_crimes_forbidden = neutral
 		law_humanitarian_regulations = disapprove
 		law_limited_war = disapprove

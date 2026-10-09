@@ -464,8 +464,10 @@ state you pick.
 
 A strike ordered through these actions or a crisis event also needs your
 doctrine to allow it, no non-use pledge with the target, and forces that are not
-Recessed. The Rules of War block lifts once you or a country you cover has been
-struck, or when an enemy's war goal would annex or subjugate you. Give the
+Recessed. The law's tooltip lists its ban as Strategic Nuclear Strikes Forbidden
+or Tactical Nuclear Strikes Forbidden, and the ban lifts once you or a country
+you cover has been struck, or when an enemy's war goal would annex or subjugate
+you. Give the
 launch order, the government's answer to an unconfirmed early warning, passes
 the same tests; only launches nobody ordered skip them (see [Nuclear incidents
 and accidents](#nuclear-incidents-and-accidents)).

@@ -1250,7 +1250,7 @@
  extra_law_events.10.d:0 "Harrowing accounts of battlefield atrocities have reached the newspapers, shocking the public conscience. Photographs of civilian suffering and descriptions of indiscriminate bombardment have galvanized support for the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation."
  extra_law_events.10.f:0 "\"I have seen things in the field that I shall carry to my grave. If the purpose of war is to defend civilization, then we must not abandon civilization in its prosecution. There must be lines that even the victorious dare not cross.\""
  extra_law_events.10.t:0 "Reports from the Front"
- extra_law_events.11.a:0 "Overrule the generals - this is a matter of [concept_power_bloc_principle]."
+ extra_law_events.11.a:0 "Overrule the generals - this is a matter of principle."
  extra_law_events.11.b:0 "Accommodate their concerns to keep them on side."
  extra_law_events.11.d:0 "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a memorandum to the government protesting the proposed [SCOPE.sLaw('current_law_scope').GetName]. They argue that binding the hands of commanders in wartime will cost more lives than it saves."
  extra_law_events.11.f:0 "\"With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price.\""
@@ -4981,6 +4981,12 @@
  te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
  te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
  te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
+ te_debug_colonial_empire.3.a:0 "Re-read the colonies' GDP and re-apply the programmes"
+ te_debug_colonial_empire.3.b:0 "Run the AI's programme review on us"
+ te_debug_colonial_empire.3.c:0 "Stop all three programmes"
+ te_debug_colonial_empire.3.d:0 "Console-only. The figures behind the colonial programmes, as script reads them now.\n\nColonies' yearly [concept_gdp]: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_development_gdp')|D] (the monthly cache Investment costs a share of; never counted below 1% of ours). Base: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_dev_cost_base')|D] a year.\nOne Investment level: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_cost')|D] a week. At level #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#!: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D] a week. One-off a step: @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D] (Assimilation @money![ROOT.GetCountry.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]).\nLevels: Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#!, Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#!.\nChange before the cap: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_uncapped_display')|=+2]#!. The AI's ceiling: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_ai_programme_ceiling')|2]#!."
+ te_debug_colonial_empire.3.f:0 "The colonial office has its ledgers open."
+ te_debug_colonial_empire.3.t:0 "TEST: Programme Costs and the AI Review"
 
 #
 # TE_DEBUG_COVERT
