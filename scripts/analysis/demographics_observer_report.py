@@ -187,8 +187,8 @@ def summarize(records, unresolved=(), step=25):
         "records": len(records), "unresolved": len(unresolved), "unresolved_lines": list(unresolved)[:20],
         "step": step, "tags": tags, "world": world, "rows": row_years(world, step),
         "anchors": _anchors(tags, world),
-        # None when no line carries lag (logged before it existed)
-        "lagging": ([(r["tag"], r["year"], r["lag"]) for r in latest if r["lag"] > 0]
+        # None when no line carries lag (logged before it existed); a line without it counts as none
+        "lagging": ([(r["tag"], r["year"], r["lag"]) for r in latest if r.get("lag", 0) > 0]
                     if any("lag" in r for r in latest) else None),
     }
 

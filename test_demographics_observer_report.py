@@ -167,6 +167,10 @@ class TestCli(unittest.TestCase):
         self.assertIn("Lag: every census found its states at its census year", out)
         out = self._run_lines([census("GBR", 1900, "1_0_0", "5.0", "40.0")])
         self.assertNotIn("Lag:", out)
+        # an archive mixing lines from before the field with later ones (a gate run's logs beside a fast run's)
+        out = self._run_lines([census("GBR", 1880, "1_0_0", "5.0", "40.0"),
+                               census("FRA", 1900, "2_0_0", "5.0", "40.0", lag="3", date="April 2, 1840")])
+        self.assertIn("Lag: 1 census line counted states not at its census year", out)
 
     def test_no_census_lines_exits_1(self):
         with tempfile.TemporaryDirectory() as tmp:
