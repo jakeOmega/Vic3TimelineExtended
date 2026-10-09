@@ -28,8 +28,8 @@
 # phase; -1 before the first switch), so its change from the country's previous
 # line is that phase's. The first window after a switch is a transition.
 # scripts/analysis/demographics_growth_probe.py reads the lines. Every line carries its
-# version: v=4 adds the deaths reads (te_debug_growth_reads_generated.txt) with te_pg_keys;
-# v=3 was the same without it (aborted at tick 0, a flood of 'none' reads); v=2 lines are
+# version: v=5 adds the deaths reads (te_debug_growth_reads_generated.txt), registered keys only,
+# with te_pg_keys; v=3 and v=4 read unregistered keys too and flooded at tick 0; v=2 lines are
 # the 1836 and 1949 runs', and the first 30-day run's lines carry none.
 #
 # The walk's sums are per month, in people: te_demog_pop_engine_births and
@@ -75,7 +75,7 @@ te_pg_start = {
 		}
 	}
 	set_variable = { name = te_pg_dbg_k value = local_var:te_pg_k }
-	debug_log = "TE_PG_START v=4 countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_START v=5 countries=[THIS.Var('te_pg_dbg_k').GetValue|0] root=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_k
 	# the first tick and the canary wait a day: a modifier added in an effect is not read back
 	# within it (CLAUDE.md), and te_pg_keys must be in place before the first reads
@@ -99,7 +99,7 @@ te_pg_canary = {
 			limit = { is_homeland_of_country_cultures = root }
 			set_variable = { name = te_pg_dbg_h value = 1 }
 		}
-		debug_log = "TE_PG_CANARY v=4 state mortality=[THIS.Var('te_pg_dbg_a').GetValue|4] laborers=[THIS.Var('te_pg_dbg_b').GetValue|4] peasants=[THIS.Var('te_pg_dbg_c').GetValue|4] farmers=[THIS.Var('te_pg_dbg_d').GetValue|4] non_homeland=[THIS.Var('te_pg_dbg_e').GetValue|4] turmoil_mult=[THIS.Var('te_pg_dbg_f').GetValue|4] wealth_mult=[THIS.Var('te_pg_dbg_g').GetValue|4] homeland=[THIS.Var('te_pg_dbg_h').GetValue|0]"
+		debug_log = "TE_PG_CANARY v=5 state mortality=[THIS.Var('te_pg_dbg_a').GetValue|4] laborers=[THIS.Var('te_pg_dbg_b').GetValue|4] peasants=[THIS.Var('te_pg_dbg_c').GetValue|4] farmers=[THIS.Var('te_pg_dbg_d').GetValue|4] non_homeland=[THIS.Var('te_pg_dbg_e').GetValue|4] turmoil_mult=[THIS.Var('te_pg_dbg_f').GetValue|4] wealth_mult=[THIS.Var('te_pg_dbg_g').GetValue|4] homeland=[THIS.Var('te_pg_dbg_h').GetValue|0]"
 		remove_variable = te_pg_dbg_a
 		remove_variable = te_pg_dbg_b
 		remove_variable = te_pg_dbg_c
@@ -124,7 +124,7 @@ te_pg_canary = {
 				set_variable = { name = te_pg_dbg_b value = local_var:te_pg_c_labtab }
 				set_variable = { name = te_pg_dbg_c value = local_var:te_pg_c_pea }
 				set_variable = { name = te_pg_dbg_d value = local_var:te_pg_c_bld }
-				debug_log = "TE_PG_CANARY v=4 building group_reads_laborers=[THIS.Var('te_pg_dbg_a').GetValue|4] table_laborers=[THIS.Var('te_pg_dbg_b').GetValue|4] group_reads_peasants=[THIS.Var('te_pg_dbg_c').GetValue|4] building_laborers=[THIS.Var('te_pg_dbg_d').GetValue|4]"
+				debug_log = "TE_PG_CANARY v=5 building group_reads_laborers=[THIS.Var('te_pg_dbg_a').GetValue|4] table_laborers=[THIS.Var('te_pg_dbg_b').GetValue|4] group_reads_peasants=[THIS.Var('te_pg_dbg_c').GetValue|4] building_laborers=[THIS.Var('te_pg_dbg_d').GetValue|4]"
 				remove_variable = te_pg_dbg_a
 				remove_variable = te_pg_dbg_b
 				remove_variable = te_pg_dbg_c
@@ -139,7 +139,7 @@ te_pg_canary = {
 		set_variable = { name = te_pg_dbg_a value = local_var:te_pg_c_dn }
 		set_variable = { name = te_pg_dbg_b value = local_var:te_pg_c_sz }
 		set_variable = { name = te_pg_dbg_c value = local_var:te_pg_c_w }
-		debug_log = "TE_PG_CANARY v=4 pop dependents=[THIS.Var('te_pg_dbg_a').GetValue|0] size=[THIS.Var('te_pg_dbg_b').GetValue|0] wealth=[THIS.Var('te_pg_dbg_c').GetValue|0]"
+		debug_log = "TE_PG_CANARY v=5 pop dependents=[THIS.Var('te_pg_dbg_a').GetValue|0] size=[THIS.Var('te_pg_dbg_b').GetValue|0] wealth=[THIS.Var('te_pg_dbg_c').GetValue|0]"
 		remove_variable = te_pg_dbg_a
 		remove_variable = te_pg_dbg_b
 		remove_variable = te_pg_dbg_c
@@ -153,7 +153,7 @@ te_pg_tick = {
 		te_pg_canary = yes
 	}
 	set_variable = { name = te_pg_dbg_t value = global_var:te_pg_tick }
-	debug_log = "TE_PG_TICK v=4 t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_TICK v=5 t=[THIS.Var('te_pg_dbg_t').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_t
 	# a country formed since the start (a released nation, a revolution's winner) has no
 	# freeze and would take its neighbours' emigrants
@@ -446,7 +446,7 @@ te_pg_line = {
 	set_variable = { name = te_pg_dbg_edtum value = { value = local_var:te_pg_edtum divide = 100000 } }
 	set_variable = { name = te_pg_dbg_kills value = local_var:te_pg_kills }
 	set_variable = { name = te_pg_dbg_warin value = local_var:te_pg_warin }
-	debug_log = "TE_PG v=4 t=[THIS.Var('te_pg_dbg_t').GetValue|0] tag=[THIS.GetCountry.GetTagName] g=[THIS.Var('te_pg_group').GetValue|0] ph=[THIS.Var('te_pg_phase').GetValue|0] st=[THIS.Var('te_pg_dbg_st').GetValue|0] war=[THIS.Var('te_pg_dbg_war').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] n=[THIS.Var('te_pg_dbg_n').GetValue|0] eb=[THIS.Var('te_pg_dbg_eb').GetValue|2] ebl=[THIS.Var('te_pg_dbg_ebl').GetValue|2] ebs=[THIS.Var('te_pg_dbg_ebs').GetValue|2] ebm=[THIS.Var('te_pg_dbg_ebm').GetValue|2] ebst=[THIS.Var('te_pg_dbg_ebst').GetValue|2] ebsv=[THIS.Var('te_pg_dbg_ebsv').GetValue|2] mb=[THIS.Var('te_pg_dbg_mb').GetValue|5] ed=[THIS.Var('te_pg_dbg_ed').GetValue|2] edst=[THIS.Var('te_pg_dbg_edst').GetValue|2] edsv=[THIS.Var('te_pg_dbg_edsv').GetValue|2] edlab=[THIS.Var('te_pg_dbg_edlab').GetValue|2] edmach=[THIS.Var('te_pg_dbg_edmach').GetValue|2] edeng=[THIS.Var('te_pg_dbg_edeng').GetValue|2] edslv=[THIS.Var('te_pg_dbg_edslv').GetValue|2] edtu=[THIS.Var('te_pg_dbg_edtu').GetValue|2] md=[THIS.Var('te_pg_dbg_md').GetValue|5] eddn=[THIS.Var('te_pg_dbg_eddn').GetValue|2] edw=[THIS.Var('te_pg_dbg_edw').GetValue|2] edcls=[THIS.Var('te_pg_dbg_edcls').GetValue|2] edemp=[THIS.Var('te_pg_dbg_edemp').GetValue|2] edbld=[THIS.Var('te_pg_dbg_edbld').GetValue|2] edbg=[THIS.Var('te_pg_dbg_edbg').GetValue|2] edwc=[THIS.Var('te_pg_dbg_edwc').GetValue|2] ednh0=[THIS.Var('te_pg_dbg_ednh0').GetValue|2] ednh=[THIS.Var('te_pg_dbg_ednh').GetValue|2] edtum=[THIS.Var('te_pg_dbg_edtum').GetValue|2] kills=[THIS.Var('te_pg_dbg_kills').GetValue|0] warin=[THIS.Var('te_pg_dbg_warin').GetValue|0]"
+	debug_log = "TE_PG v=5 t=[THIS.Var('te_pg_dbg_t').GetValue|0] tag=[THIS.GetCountry.GetTagName] g=[THIS.Var('te_pg_group').GetValue|0] ph=[THIS.Var('te_pg_phase').GetValue|0] st=[THIS.Var('te_pg_dbg_st').GetValue|0] war=[THIS.Var('te_pg_dbg_war').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] n=[THIS.Var('te_pg_dbg_n').GetValue|0] eb=[THIS.Var('te_pg_dbg_eb').GetValue|2] ebl=[THIS.Var('te_pg_dbg_ebl').GetValue|2] ebs=[THIS.Var('te_pg_dbg_ebs').GetValue|2] ebm=[THIS.Var('te_pg_dbg_ebm').GetValue|2] ebst=[THIS.Var('te_pg_dbg_ebst').GetValue|2] ebsv=[THIS.Var('te_pg_dbg_ebsv').GetValue|2] mb=[THIS.Var('te_pg_dbg_mb').GetValue|5] ed=[THIS.Var('te_pg_dbg_ed').GetValue|2] edst=[THIS.Var('te_pg_dbg_edst').GetValue|2] edsv=[THIS.Var('te_pg_dbg_edsv').GetValue|2] edlab=[THIS.Var('te_pg_dbg_edlab').GetValue|2] edmach=[THIS.Var('te_pg_dbg_edmach').GetValue|2] edeng=[THIS.Var('te_pg_dbg_edeng').GetValue|2] edslv=[THIS.Var('te_pg_dbg_edslv').GetValue|2] edtu=[THIS.Var('te_pg_dbg_edtu').GetValue|2] md=[THIS.Var('te_pg_dbg_md').GetValue|5] eddn=[THIS.Var('te_pg_dbg_eddn').GetValue|2] edw=[THIS.Var('te_pg_dbg_edw').GetValue|2] edcls=[THIS.Var('te_pg_dbg_edcls').GetValue|2] edemp=[THIS.Var('te_pg_dbg_edemp').GetValue|2] edbld=[THIS.Var('te_pg_dbg_edbld').GetValue|2] edbg=[THIS.Var('te_pg_dbg_edbg').GetValue|2] edwc=[THIS.Var('te_pg_dbg_edwc').GetValue|2] ednh0=[THIS.Var('te_pg_dbg_ednh0').GetValue|2] ednh=[THIS.Var('te_pg_dbg_ednh').GetValue|2] edtum=[THIS.Var('te_pg_dbg_edtum').GetValue|2] kills=[THIS.Var('te_pg_dbg_kills').GetValue|0] warin=[THIS.Var('te_pg_dbg_warin').GetValue|0]"
 	remove_variable = te_pg_dbg_t
 	remove_variable = te_pg_dbg_war
 	remove_variable = te_pg_dbg_pop
@@ -495,7 +495,7 @@ te_pg_day_line = {
 		limit = { has_variable = te_pg_phase }
 		set_variable = { name = te_pg_dbg_ph value = var:te_pg_phase }
 	}
-	debug_log = "TE_PG_DAY v=4 d=[THIS.Var('te_pg_dbg_d').GetValue|0] tag=[THIS.GetCountry.GetTagName] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] ph=[THIS.Var('te_pg_dbg_ph').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_PG_DAY v=5 d=[THIS.Var('te_pg_dbg_d').GetValue|0] tag=[THIS.GetCountry.GetTagName] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] ph=[THIS.Var('te_pg_dbg_ph').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	remove_variable = te_pg_dbg_d
 	remove_variable = te_pg_dbg_pop
 	remove_variable = te_pg_dbg_ph
@@ -511,7 +511,7 @@ te_pg_state_line = {
 		}
 		set_variable = { name = te_pg_dbg_d value = global_var:te_pg_day }
 		set_variable = { name = te_pg_dbg_pop value = state_population }
-		debug_log = "TE_PG_ST v=4 d=[THIS.Var('te_pg_dbg_d').GetValue|0] sid=[THIS.Var('te_pg_sid').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] prev=[THIS.Var('te_pg_spop').GetValue|0]"
+		debug_log = "TE_PG_ST v=5 d=[THIS.Var('te_pg_dbg_d').GetValue|0] sid=[THIS.Var('te_pg_sid').GetValue|0] pop=[THIS.Var('te_pg_dbg_pop').GetValue|0] prev=[THIS.Var('te_pg_spop').GetValue|0]"
 		set_variable = { name = te_pg_spop value = state_population }
 		remove_variable = te_pg_dbg_d
 		remove_variable = te_pg_dbg_pop

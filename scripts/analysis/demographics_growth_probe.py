@@ -4,7 +4,7 @@
     demographics_growth_probe.py check  LOG [LOG ...]   # mid-run health: ticks, groups, phases, both-off, daily lines
     demographics_growth_probe.py report LOG [LOG ...]   # per-country fits (noisy: see below)
     demographics_growth_probe.py pooled LOG [LOG ...]   # one fit over all countries and windows
-    demographics_growth_probe.py deaths --version 4 LOG [LOG ...]   # v4: do the mortality reads close the gap?
+    demographics_growth_probe.py deaths --version 5 LOG [LOG ...]   # v5: do the mortality reads close the gap?
 
 LOG may be any mix of debug.log generations and archived copies; identical lines are read once. Only
 v=2 lines are read (the 28-day schedule); the first run's 30-day lines carry no v and are skipped.
