@@ -29,13 +29,15 @@ while true; do
     [[ -f "$f" ]] || continue
     stamp="$(stat -c %Y-%s "$f")"
     if [[ "${seen[$f]:-}" != "$stamp" ]]; then
-      seen[$f]="$stamp"
-      cp "$f" "$OUT/logs/$(basename "$f" .log).$(date +%s%N).log"
+      # a rotation can replace the file mid-copy: then retry on the next pass
+      if cp "$f" "$OUT/logs/$(basename "$f" .log).$(date +%s%N).log" 2>/dev/null; then
+        seen[$f]="$stamp"
+      fi
     fi
   done
   now="$(date +%s)"
   if (( now - last_live >= 60 )) && [[ -f "$LOGS/debug.log" ]]; then
-    cp "$LOGS/debug.log" "$OUT/logs/debug.live.$(date +%s%N).log"
+    cp "$LOGS/debug.log" "$OUT/logs/debug.live.$(date +%s%N).log" 2>/dev/null || true
     last_live="$now"
   fi
   if (( SAVE_EVERY > 0 )) && [[ -f "$SAVES/autosave.v3" ]]; then
@@ -45,7 +47,7 @@ while true; do
       saves_seen=$((saves_seen + 1))
       if (( (saves_seen - 1) % SAVE_EVERY == 0 )); then
         sleep 5   # let the game finish writing it
-        cp "$SAVES/autosave.v3" "$OUT/saves/autosave.$(date +%s).v3"
+        cp "$SAVES/autosave.v3" "$OUT/saves/autosave.$(date +%s).v3" 2>/dev/null || true
       fi
     fi
   fi
