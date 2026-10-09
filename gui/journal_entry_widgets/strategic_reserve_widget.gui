@@ -9,7 +9,9 @@
 ### Cycle Step Size and Reset Reserve Rates are buttons in the inventory,
 ### beside the adjustment step; the journal entry's scripted buttons that did
 ### the same carry `is_ai = yes`, so the vanilla grid below is empty for a
-### player.
+### player. Under them, All: Stabilize, Military: Stockpile and All: Manual
+### set every shown good's policy; they are scripted GUIs only, since the
+### entry binds scripted buttons when it activates.
 ###
 ### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
 ### inventory is open until closed (st_res_inventory_closed). How the
@@ -94,12 +96,13 @@
 ### st_res_policy_<good>_sgui, parameterized by a single 'op' saved scope.
 ### Both files carry the op-code table; keep them in sync:
 ###
-###   0-3   select policy   Manual / Buy When Cheap / Release When Expensive /
-###                         Stabilize Prices. The four buttons use the SHORT
-###                         labels (st_res_policy_short_*) so they fit the
-###                         110px button; the expanded figures and the
-###                         tooltips carry the full names.
-###   10-12 apply preset    Conservative / Standard / Aggressive
+###   0-4   select policy   Manual / Buy When Cheap / Release When Expensive /
+###                         Stabilize Prices / Stockpile (4 also loads the
+###                         Stockpile preset). The five buttons, in two rows,
+###                         use the SHORT labels (st_res_policy_short_*) so
+###                         they fit the 110px button; the expanded figures
+###                         and the tooltips carry the full names.
+###   10-13 apply preset    Conservative / Standard / Aggressive / Stockpile
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
 ###   22/23 release threshold   - / +      28/29 target stockpile    - / +
 ###   24/25 maximum weekly flow - / +      30/31 weekly budget       - / +
@@ -468,43 +471,63 @@ types strategic_reserve_widget_types
 			elide = right
 		}
 
-		### Policy selector — ops 0-3. The button for the policy already in
+		### Policy selector — ops 0-4. The button for the policy already in
 		### force is disabled by is_valid, which doubles as the "you are here"
-		### indicator.
+		### indicator. Five 110px buttons do not fit 450, so they sit in two
+		### rows: the one-sided policies, then the two that buy and sell.
 		flowcontainer = {
-			direction = horizontal
+			direction = vertical
 			spacing = 3
 
-			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_short_manual" }
-				blockoverride "choice_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					tooltip = "st_res_policy_manual_tooltip"
+			flowcontainer = {
+				direction = horizontal
+				spacing = 3
+
+				widget_je_st_res_policy_choice = {
+					blockoverride "choice_label" { text = "st_res_policy_short_manual" }
+					blockoverride "choice_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+						tooltip = "st_res_policy_manual_tooltip"
+					}
+				}
+				widget_je_st_res_policy_choice = {
+					blockoverride "choice_label" { text = "st_res_policy_short_buy_cheap" }
+					blockoverride "choice_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "st_res_policy_buy_cheap_tooltip"
+					}
+				}
+				widget_je_st_res_policy_choice = {
+					blockoverride "choice_label" { text = "st_res_policy_short_release_high" }
+					blockoverride "choice_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "st_res_policy_release_high_tooltip"
+					}
 				}
 			}
-			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_short_buy_cheap" }
-				blockoverride "choice_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "st_res_policy_buy_cheap_tooltip"
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 3
+
+				widget_je_st_res_policy_choice = {
+					blockoverride "choice_label" { text = "st_res_policy_short_stabilize" }
+					blockoverride "choice_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						tooltip = "st_res_policy_stabilize_tooltip"
+					}
 				}
-			}
-			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_short_release_high" }
-				blockoverride "choice_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "st_res_policy_release_high_tooltip"
-				}
-			}
-			widget_je_st_res_policy_choice = {
-				blockoverride "choice_label" { text = "st_res_policy_short_stabilize" }
-				blockoverride "choice_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					tooltip = "st_res_policy_stabilize_tooltip"
+				widget_je_st_res_policy_choice = {
+					blockoverride "choice_label" { text = "st_res_policy_short_stockpile" }
+					blockoverride "choice_action" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						tooltip = "st_res_policy_stockpile_tooltip"
+					}
 				}
 			}
 		}
@@ -520,9 +543,10 @@ types strategic_reserve_widget_types
 			elide = right
 		}
 
-		### Presets — ops 10-12. Each fills all eight settings at once. The
+		### Presets — ops 10-13. Each fills all eight settings at once. The
 		### button of the preset in force is disabled by is_valid, like the
 		### policy selector's, until a stepper changes a setting by hand.
+		### Four 110px buttons and three 3px gaps: 449 of 450.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 3
@@ -549,6 +573,14 @@ types strategic_reserve_widget_types
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 					tooltip = "st_res_preset_aggressive_tooltip"
+				}
+			}
+			widget_je_st_res_policy_choice = {
+				blockoverride "choice_label" { text = "st_res_preset_stockpile" }
+				blockoverride "choice_action" {
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+					tooltip = "st_res_preset_stockpile_tooltip"
 				}
 			}
 		}
@@ -1138,6 +1170,41 @@ types strategic_reserve_widget_types
 					blockoverride "button_label" {
 						max_width = 102
 						text = "st_res_panel_reset_rates"
+					}
+				}
+			}
+
+			### Policies for all goods: the policy, and the preset with it,
+			### of every good in the table. 122 + 162 + 122 and two 4px gaps,
+			### 414 of 496. st_res_all_stabilize_sgui,
+			### st_res_military_stockpile_sgui and st_res_all_manual_sgui; each
+			### tooltip opens with the full name and the goods it sets.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+
+				st_res_shared_button = {
+					datacontext = "[GetScriptedGui('st_res_all_stabilize_sgui')]"
+					size = { 122 26 }
+					blockoverride "button_label" {
+						max_width = 114
+						text = "st_res_panel_all_stabilize"
+					}
+				}
+				st_res_shared_button = {
+					datacontext = "[GetScriptedGui('st_res_military_stockpile_sgui')]"
+					size = { 162 26 }
+					blockoverride "button_label" {
+						max_width = 154
+						text = "st_res_panel_military_stockpile"
+					}
+				}
+				st_res_shared_button = {
+					datacontext = "[GetScriptedGui('st_res_all_manual_sgui')]"
+					size = { 122 26 }
+					blockoverride "button_label" {
+						max_width = 114
+						text = "st_res_panel_all_manual"
 					}
 				}
 			}

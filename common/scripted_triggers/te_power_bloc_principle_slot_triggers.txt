@@ -37,3 +37,16 @@ te_pb_principle_slot_free = {
 		}
 	}
 }
+
+# Power bloc scope: the base game's slot 3 and slot 4 conditions, each worth a
+# slot in te_pb_principle_slot_cap. te_pb_principle_slot_sources_sgui lists them
+# in the panel's locked-slot tooltip.
+te_pb_rank_5_principle_slot = {
+	power_bloc_rank <= 5
+	num_power_bloc_members >= 5
+}
+
+te_pb_rank_3_principle_slot = {
+	power_bloc_rank <= 3
+	num_power_bloc_members >= 10
+}

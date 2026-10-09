@@ -855,10 +855,11 @@ st_res_fertilizer_reason_text = {
 # `st_res_<good>_policy_text`        -> reads st_res_<good>_policy, written by
 #                                       st_res_policy_select_base /
 #                                       st_res_switch_to_manual_base /
+#                                       st_res_set_good_policy_base /
 #                                       st_res_ai_seed_good_effect.
 #                                       0 Manual | 1 Buy When Cheap |
 #                                       2 Release When Expensive |
-#                                       3 Stabilize Prices
+#                                       3 Stabilize Prices | 4 Stockpile
 # `st_res_<good>_policy_reason_text` -> reads st_res_<good>_policy_status, whose
 #                                       single derivation site is
 #                                       st_res_policy_evaluate_good_effect.
@@ -866,7 +867,8 @@ st_res_fertilizer_reason_text = {
 #                                       limited) | 3 Releasing | 4 Waiting |
 #                                       5 Target stockpile | 6 Protected
 #                                       stockpile | 7 Budget spent |
-#                                       8 Understaffed | 9 No hub
+#                                       8 Understaffed | 9 No hub |
+#                                       10 Holding (Stockpile at peace)
 #
 # Same `has_variable` guard on every branch and for the same reason: these are
 # evaluated for countries that never opened the journal entry, and a save from
@@ -900,6 +902,13 @@ st_res_grain_policy_text = {
 		localization_key = st_res_policy_stabilize
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_grain_policy
+			var:st_res_grain_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_policy_manual
 	}
@@ -929,6 +938,13 @@ st_res_ammunition_policy_text = {
 			var:st_res_ammunition_policy = 3
 		}
 		localization_key = st_res_policy_stabilize
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_policy
+			var:st_res_ammunition_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
 	}
 	text = {
 		trigger = { always = yes }
@@ -962,6 +978,13 @@ st_res_oil_policy_text = {
 		localization_key = st_res_policy_stabilize
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_oil_policy
+			var:st_res_oil_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_policy_manual
 	}
@@ -991,6 +1014,13 @@ st_res_small_arms_policy_text = {
 			var:st_res_small_arms_policy = 3
 		}
 		localization_key = st_res_policy_stabilize
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_policy
+			var:st_res_small_arms_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
 	}
 	text = {
 		trigger = { always = yes }
@@ -1024,6 +1054,13 @@ st_res_artillery_policy_text = {
 		localization_key = st_res_policy_stabilize
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_artillery_policy
+			var:st_res_artillery_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_policy_manual
 	}
@@ -1053,6 +1090,13 @@ st_res_aeroplanes_policy_text = {
 			var:st_res_aeroplanes_policy = 3
 		}
 		localization_key = st_res_policy_stabilize
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_policy
+			var:st_res_aeroplanes_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
 	}
 	text = {
 		trigger = { always = yes }
@@ -1086,6 +1130,13 @@ st_res_tanks_policy_text = {
 		localization_key = st_res_policy_stabilize
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_tanks_policy
+			var:st_res_tanks_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_policy_manual
 	}
@@ -1117,6 +1168,13 @@ st_res_fertilizer_policy_text = {
 		localization_key = st_res_policy_stabilize
 	}
 	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy
+			var:st_res_fertilizer_policy = 4
+		}
+		localization_key = st_res_policy_stockpile
+	}
+	text = {
 		trigger = { always = yes }
 		localization_key = st_res_policy_manual
 	}
@@ -1126,6 +1184,13 @@ st_res_grain_policy_reason_text = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			has_variable = st_res_grain_policy_status
+			var:st_res_grain_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
 	text = {
 		trigger = {
 			has_variable = st_res_grain_policy_status
@@ -1202,6 +1267,13 @@ st_res_ammunition_policy_reason_text = {
 	text = {
 		trigger = {
 			has_variable = st_res_ammunition_policy_status
+			var:st_res_ammunition_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_ammunition_policy_status
 			var:st_res_ammunition_policy_status = 9
 		}
 		localization_key = st_res_policy_reason_no_hub
@@ -1272,6 +1344,13 @@ st_res_oil_policy_reason_text = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			has_variable = st_res_oil_policy_status
+			var:st_res_oil_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
 	text = {
 		trigger = {
 			has_variable = st_res_oil_policy_status
@@ -1348,6 +1427,13 @@ st_res_small_arms_policy_reason_text = {
 	text = {
 		trigger = {
 			has_variable = st_res_small_arms_policy_status
+			var:st_res_small_arms_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_small_arms_policy_status
 			var:st_res_small_arms_policy_status = 9
 		}
 		localization_key = st_res_policy_reason_no_hub
@@ -1418,6 +1504,13 @@ st_res_artillery_policy_reason_text = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			has_variable = st_res_artillery_policy_status
+			var:st_res_artillery_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
 	text = {
 		trigger = {
 			has_variable = st_res_artillery_policy_status
@@ -1494,6 +1587,13 @@ st_res_aeroplanes_policy_reason_text = {
 	text = {
 		trigger = {
 			has_variable = st_res_aeroplanes_policy_status
+			var:st_res_aeroplanes_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_aeroplanes_policy_status
 			var:st_res_aeroplanes_policy_status = 9
 		}
 		localization_key = st_res_policy_reason_no_hub
@@ -1567,6 +1667,13 @@ st_res_tanks_policy_reason_text = {
 	text = {
 		trigger = {
 			has_variable = st_res_tanks_policy_status
+			var:st_res_tanks_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_tanks_policy_status
 			var:st_res_tanks_policy_status = 9
 		}
 		localization_key = st_res_policy_reason_no_hub
@@ -1637,6 +1744,13 @@ st_res_fertilizer_policy_reason_text = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 10
+		}
+		localization_key = st_res_policy_reason_holding
+	}
 	text = {
 		trigger = {
 			has_variable = st_res_fertilizer_policy_status

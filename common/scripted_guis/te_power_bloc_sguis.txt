@@ -24,3 +24,56 @@ te_pb_remove_principle_sgui = {
 		}
 	}
 }
+
+# The sources of a bloc's principle slots (te_pb_principle_slot_cap), as a
+# checklist. Never run: the locked principle slots' tooltips in
+# gui/power_bloc_panel.gui (te_pb_locked_slot_<N>_tt) render is_valid with
+# IsValidTooltip, rooted on the bloc leader, so each source shows a tick or a
+# cross. The base two slots are in the tooltip's own text. Under the Power Bloc
+# Principle Slots game rule's Four setting the technologies add no slot
+# (te_pb_tech_principle_slots), so they are left off.
+te_pb_principle_slot_sources_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = te_pb_slot_source_rank_5_tt
+			power_bloc ?= { te_pb_rank_5_principle_slot = yes }
+		}
+		custom_tooltip = {
+			text = te_pb_slot_source_rank_3_tt
+			power_bloc ?= { te_pb_rank_3_principle_slot = yes }
+		}
+		trigger_if = {
+			limit = {
+				NOT = { has_game_rule = te_principle_slots_four }
+			}
+			custom_tooltip = {
+				text = te_pb_slot_source_intergovernmental_organizations_tt
+				has_technology_researched = intergovernmental_organizations
+			}
+			custom_tooltip = {
+				text = te_pb_slot_source_containerization_tt
+				has_technology_researched = containerization
+			}
+			custom_tooltip = {
+				text = te_pb_slot_source_globalization_tt
+				has_technology_researched = globalization
+			}
+			custom_tooltip = {
+				text = te_pb_slot_source_universal_digital_identity_tt
+				has_technology_researched = universal_digital_identity
+			}
+		}
+	}
+
+	effect = { }
+}
