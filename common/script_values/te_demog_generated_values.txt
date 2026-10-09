@@ -362,21 +362,6 @@ te_demog_k_full_female_work_share = { value = 0.48 }
 te_demog_k_chain_step = { value = 0.02 }
 te_demog_k_chain_cap = { value = 0.2 }
 te_demog_k_crisis_at_war = { value = 0.3 }
-te_demog_k_labour_0 = { value = 0 }
-te_demog_k_labour_1 = { value = 0.05 }
-te_demog_k_labour_2 = { value = 0.9 }
-te_demog_k_labour_3 = { value = 0.05 }
-te_demog_k_labour_4 = { value = 0 }
-te_demog_k_family_0 = { value = 0.35 }
-te_demog_k_family_1 = { value = 0.05 }
-te_demog_k_family_2 = { value = 0.35 }
-te_demog_k_family_3 = { value = 0.22 }
-te_demog_k_family_4 = { value = 0.03 }
-te_demog_k_refugee_0 = { value = 0.27 }
-te_demog_k_refugee_1 = { value = 0.05 }
-te_demog_k_refugee_2 = { value = 0.3 }
-te_demog_k_refugee_3 = { value = 0.25 }
-te_demog_k_refugee_4 = { value = 0.13 }
 # State scope: the family share's transport term (owner technology).
 te_demog_family_transport = {
 	value = 0

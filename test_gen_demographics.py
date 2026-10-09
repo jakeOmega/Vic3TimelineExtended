@@ -26,6 +26,11 @@ class TestGenerated(unittest.TestCase):
         for rel, text in self.outputs.items():
             self.assertEqual((ROOT / rel).read_text(encoding="utf-8-sig"), text, str(rel))
 
+    def test_committed_bytes_are_current(self):
+        # regenerate() compares bytes, so this also pins the one UTF-8 BOM the text comparison above strips.
+        result = gen.regenerate(dry_run=True)
+        self.assertFalse(result["changed"], result["changed_files"])
+
     def test_tabs_already_formatted(self):
         for rel, text in self.outputs.items():
             self.assertEqual(format_text(text), text, str(rel))
