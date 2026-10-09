@@ -190,7 +190,7 @@ unlock_power_bloc_principle_slot_3 = {
 
 # If you ever change these conditions, remember to update the loc-key: TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION
 # TE: as slot 3; also opens slots 5-8 for the engine, and the panel shows those
-# only up to te_pb_principle_slot_cap.
+# locked above te_pb_principle_slot_cap.
 unlock_power_bloc_principle_slot_4 = {
 	hidden_trigger = {
 		has_dlc_feature = power_bloc_features
