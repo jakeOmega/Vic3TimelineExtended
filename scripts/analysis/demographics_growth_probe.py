@@ -57,11 +57,11 @@ def measured(t):
     return t >= 1 and (t - 1) % 3 != 0
 
 
-_YEAR = re.compile(r"TE_PG_(?:TICK|DAY|START) v=2 .*date=\w+ \d+, (\d{4})")
+_YEAR = re.compile(r"TE_PG_(?:TICK|DAY|START|DONE)(?: v=2)? .*date=\w+ \d+, (\d{4})")
 
 
 def _file_years(path):
-    """The years of the probe dates a log file mentions (tick, day and start lines)."""
+    """The years of the probe dates a log file mentions (tick, day, start and done lines)."""
     with open(path, encoding="utf-8", errors="replace") as fh:
         return {int(m.group(1)) for m in map(_YEAR.search, fh) if m}
 
