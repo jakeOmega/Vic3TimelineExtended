@@ -1628,6 +1628,9 @@ banking_contagion_crash_check = {
 		# carries banking_crisis_wave_hit, only these carry _crashed. The Great
 		# Depression event (minor_events_timelineextended.8) reads it (#428).
 		set_variable = { name = banking_crisis_wave_crashed value = 1 }
+		# Bond fortunes vanish in a crash: every state's Wealth Concentration
+		# falls 5 (demographics spec §4.2). ROOT is the country (event .7).
+		te_demog_wc_shock = { AMOUNT = -5 }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
 		# Crash severity = target's own bubble pressure (scaled as for an origin
@@ -1797,6 +1800,9 @@ banking_crisis_wave_init = {
 	# Mark this country as part of the wave: reached, and crashed.
 	set_variable = { name = banking_crisis_wave_hit value = 1 }
 	set_variable = { name = banking_crisis_wave_crashed value = 1 }
+	# Bond fortunes vanish in a crash: every state's Wealth Concentration falls
+	# 5 (demographics spec §4.2). ROOT is the country (je_banking_cycle's pulse).
+	te_demog_wc_shock = { AMOUNT = -5 }
 }
 
 # Increment wave tracking when a contagion crash triggers in a target country.

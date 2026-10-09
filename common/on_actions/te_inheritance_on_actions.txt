@@ -26,8 +26,10 @@ te_inh_on_game_started = {
 	}
 }
 
-# Root = Country. The score drifts and its modifiers follow, once a year;
-# then the generation events and Posthumous Title each roll.
+# Root = Country. The yearly upkeep (the score's own drift only for a
+# country with no scored state: te_demog_country_yearly refreshes every
+# other country's from its states); then the generation events and
+# Posthumous Title each roll.
 on_yearly_pulse_country = {
 	on_actions = {
 		te_inh_yearly_on_action

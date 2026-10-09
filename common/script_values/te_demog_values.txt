@@ -121,3 +121,90 @@ te_demog_neg_city_rank = {
 	value = var:state_city_size_rank
 	multiply = -1
 }
+
+# ============================================================================
+# Wealth Concentration (spec 4.2; plan Task 11). Each state's score, te_dg_wc (0-100),
+# drifts 3% a year toward its own target, a sum of terms around 50. The land term,
+# te_demog_wc_land_term, is generated (te_demog_generated_values.txt). The proposals are
+# the Decisions table's, starting points for the balance pass.
+# ============================================================================
+
+# State scope: the target. #822's law and amendments (0-100, centred on 50), land tenure
+# by the state's agrarian share, who holds the state's capital, the state's income
+# inequality and the country's taxes on wealth, clamped 0-100. Continuity of title
+# (inheritance_events.6) pins it at the state's score: nobody's estate passes on.
+te_demog_wc_target = {
+	value = owner.te_inh_law_amendment_target
+	add = te_demog_wc_land_term
+	add = te_demog_wc_ownership_term
+	add = te_demog_wc_inequality_term
+	add = owner.te_demog_wc_tax_term
+	min = 0
+	max = 100
+	if = {
+		limit = {
+			owner = { has_variable = te_inh_title_continuity }
+			has_variable = te_dg_wc
+		}
+		value = var:te_dg_wc
+	}
+}
+
+# State scope: the walk's capital levels, in private, cooperative and state hands.
+te_demog_wc_capital_levels = {
+	value = var:te_dg_lv_priv
+	add = var:te_dg_lv_self
+	add = var:te_dg_lv_ctry
+}
+
+# State scope: the ownership term. The private share of the state's capital against
+# cooperative and state ownership, centred on half: all private +20, none -20. 0 for a
+# state with under one level of capital.
+te_demog_wc_ownership_term = {
+	value = 0
+	if = {
+		limit = { te_demog_wc_capital_levels >= 1 }
+		value = var:te_dg_lv_priv
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+		subtract = 0.5
+		multiply = 40
+		min = -20
+		max = 20
+	}
+}
+
+# State scope: the inequality term. The rich save more, so fortunes grow from unequal
+# incomes: +0.5 x (the state's Gini - 0.40) x 100, capped at 15 either way.
+te_demog_wc_inequality_term = {
+	value = var:te_dg_gini
+	subtract = 0.4
+	multiply = 50
+	min = -15
+	max = 15
+}
+
+# Country scope: the tax term. Graduated Taxation -5; the legislated tax code's dividend
+# rate x 20 when that rule is on (a 25% dividend tax -5); at most -10 in all.
+te_demog_wc_tax_term = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_graduated_taxation }
+		add = -5
+	}
+	if = {
+		limit = { te_tax_code_on = yes }
+		subtract = { value = te_tax_view_en_div_rate multiply = 20 }
+	}
+	min = -10
+}
+
+# State scope: the score, and the score negated, so that ordered_scope_state (highest
+# first) finds a country's most and least concentrated states (te_demog_wc_national).
+te_demog_state_wc = {
+	value = var:te_dg_wc
+}
+
+te_demog_neg_wc = {
+	value = var:te_dg_wc
+	multiply = -1
+}

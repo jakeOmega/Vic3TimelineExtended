@@ -7,11 +7,14 @@
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 #
 #  Variables (country):
-#    te_inh_concentration        0-100, the wealth-concentration score.
-#                                Set at game start (inheritance_events.1)
-#                                and, on a save from before the redesign,
-#                                at the country's first yearly pulse, both
-#                                at its target, so nothing drifts at first.
+#    te_inh_concentration        0-100, the wealth-concentration score: the
+#                                states' Wealth Concentration (te_dg_wc)
+#                                weighted by where property is held, set by
+#                                te_demog_wc_national
+#                                (te_demog_wealth_effects.txt). A country
+#                                with no scored state keeps its own: set at
+#                                its target by its first yearly pulse, then
+#                                drifting 3% a year (te_inh_yearly_update).
 #    te_inh_great_fortunes_mult  multipliers the two score modifiers read;
 #    te_inh_dispersed_mult       never removed (a modifier's multiplier is
 #                                re-read after it is applied)
@@ -29,30 +32,52 @@
 #
 #  Revolutions: the score is a variable, so a revolution's winner keeps the
 #  loser's when it held none of its own; inh_repair_after_civil_war copies
-#  it over the winner's own and puts the modifiers back
-#  (scripting_best_practices.md § "What a Civil War's Winner Inherits").
+#  it over the winner's own, then the national figure follows the winner's
+#  states and puts the modifiers back (scripting_best_practices.md § "What a
+#  Civil War's Winner Inherits").
 # ======================================================================
 
 # Country scope; ROOT must be the country, since add_modifier's multiplier
-# resolves against ROOT. Called from on_yearly_pulse_country.
+# resolves against ROOT. Called from on_yearly_pulse_country. Only a country
+# with no scored state drifts here: every other country's national figure
+# comes from te_demog_country_yearly (te_demog_wc_national) on the same pulse,
+# since the order of two files' on_yearly_pulse_country entries is undefined
+# and the census must read this year's figure. Such a country falls back to
+# its law's target, not to a national target left from the states it held.
 te_inh_yearly_update = {
 	if = {
-		limit = { NOT = { has_variable = te_inh_concentration } }
-		set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
-	}
-	else = {
-		set_variable = { name = te_inh_concentration value = te_inh_concentration_next }
+		limit = { NOT = { any_scope_state = { has_variable = te_dg_wc } } }
+		if = {
+			limit = { has_variable = te_dg_wc_target }
+			remove_variable = te_dg_wc_target
+		}
+		if = {
+			limit = { NOT = { has_variable = te_inh_concentration } }
+			set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
+		}
+		else = {
+			set_variable = { name = te_inh_concentration value = te_inh_concentration_next }
+		}
+		te_inh_apply_concentration_modifiers = yes
 	}
 	te_inh_tidy_amendments = yes
 	te_inh_count_duty_years = yes
-	te_inh_apply_concentration_modifiers = yes
 }
 
 # Country scope; ROOT the country (inheritance_events.1 at game start).
-# Every 1836 country starts at its law's target.
+# Every 1836 state starts at its own target, so nothing drifts at first; the
+# national figure is their weighted average. The demographics game-start
+# event (te_demog_events.1) walks the states too, and either may run first:
+# a state it has walked is not walked again.
 te_inh_game_start = {
-	set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
-	te_inh_apply_concentration_modifiers = yes
+	every_scope_state = {
+		if = {
+			limit = { NOT = { has_variable = te_dg_walk_pop } }
+			te_demog_walks = yes
+		}
+		te_demog_wc_seed_state = yes
+	}
+	te_demog_wc_national = yes
 }
 
 # Country scope; ROOT the country. The two score modifiers, from the
@@ -92,22 +117,34 @@ te_inh_apply_concentration_modifiers = {
 	}
 }
 
-# Country scope. Event options move the score by AMOUNT (negative to lower
-# it), clamped to 0-100. The modifiers follow at the next yearly pulse.
+# Country scope; ROOT the country (the inheritance events' options). Event
+# options move the score by AMOUNT (negative to lower it): every scored
+# state's, clamped to 0-100, and the national figure follows; a country with
+# no scored state moves its own. The modifiers follow at once (the national
+# effect applies them).
 te_inh_shift_concentration = {
 	if = {
 		limit = { NOT = { has_variable = te_inh_concentration } }
 		set_variable = { name = te_inh_concentration value = te_inh_concentration_target }
 	}
-	change_variable = {
-		name = te_inh_concentration
-		add = $AMOUNT$
+	every_scope_state = {
+		limit = { has_variable = te_dg_wc }
+		change_variable = { name = te_dg_wc add = $AMOUNT$ }
+		clamp_variable = { name = te_dg_wc min = 0 max = 100 }
 	}
-	clamp_variable = {
-		name = te_inh_concentration
-		min = 0
-		max = 100
+	if = {
+		limit = { NOT = { any_scope_state = { has_variable = te_dg_wc } } }
+		change_variable = {
+			name = te_inh_concentration
+			add = $AMOUNT$
+		}
+		clamp_variable = {
+			name = te_inh_concentration
+			min = 0
+			max = 100
+		}
 	}
+	te_demog_wc_national = yes
 }
 
 # Country scope. The Birthright Endowment levies the duty itself, so it
@@ -223,7 +260,9 @@ te_inh_refresh_rural_effects = {
 
 # Country scope; ROOT the winner (te_civil_war_on_won). The winner
 # continues the nation: a revolution's winner takes the loser's score and
-# Posthumous Title answer, and gets the modifiers back.
+# Posthumous Title answer. A left revolution that wins levels the great
+# fortunes (te_demog_wc_civil_war_won); then the national figure follows the
+# winner's states, which carry their scores, and the modifiers come back.
 inh_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -241,8 +280,6 @@ inh_repair_after_civil_war = {
 			set_variable = te_inh_title_continuity
 		}
 	}
-	if = {
-		limit = { has_variable = te_inh_concentration }
-		te_inh_apply_concentration_modifiers = yes
-	}
+	te_demog_wc_civil_war_won = yes
+	te_demog_wc_national = yes
 }

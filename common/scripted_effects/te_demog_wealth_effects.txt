@@ -1,12 +1,27 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — wealth and the Gini
 # (docs/superpowers/specs/2026-10-08-demographics-design.md §4;
-# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Task 7, Task 11 extends)
+# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Tasks 7 and 11)
 # ============================================================================
 
 # THIS = a state; reads the strata sums te_demog_walks wrote a line earlier.
-# Writes var:te_dg_gini, the Gini the panel shows (spec §4.1): the three strata
-# as groups, each equal inside, mirroring demographics_model.grouped_gini.
+# Writes var:te_dg_gini, the Gini the panel shows (spec §4.1), with the formula
+# it shares with the country (te_demog_gini_from_locals).
+te_demog_state_gini = {
+	set_local_variable = { name = te_dg_g_n1 value = var:te_dg_n_lo }
+	set_local_variable = { name = te_dg_g_y1 value = var:te_dg_y_lo }
+	set_local_variable = { name = te_dg_g_n2 value = var:te_dg_n_mi }
+	set_local_variable = { name = te_dg_g_y2 value = var:te_dg_y_mi }
+	set_local_variable = { name = te_dg_g_n3 value = var:te_dg_n_up }
+	set_local_variable = { name = te_dg_g_y3 value = var:te_dg_y_up }
+	te_demog_gini_from_locals = yes
+}
+
+# THIS = a state or a country, with the people and income of its lower, middle
+# and upper strata in the locals te_dg_g_n1-3 and te_dg_g_y1-3 (a country's
+# summed over its states, so its Gini is taken over all their groups, not
+# averaged: spec §4.1). Writes var:te_dg_gini on THIS: the three strata as
+# groups, each equal inside, mirroring demographics_model.grouped_gini.
 #
 # With the groups ordered 1, 2, 3 by income per head, p_k their share of people
 # and S_k their running share of income (S_3 = 1):
@@ -20,13 +35,7 @@
 # nothing. With no people or no income the Gini is 0, as in grouped_gini.
 # Every sum is turned into a share before it is multiplied, so nothing in
 # here is larger than people or income itself.
-te_demog_state_gini = {
-	set_local_variable = { name = te_dg_g_n1 value = var:te_dg_n_lo }
-	set_local_variable = { name = te_dg_g_y1 value = var:te_dg_y_lo }
-	set_local_variable = { name = te_dg_g_n2 value = var:te_dg_n_mi }
-	set_local_variable = { name = te_dg_g_y2 value = var:te_dg_y_mi }
-	set_local_variable = { name = te_dg_g_n3 value = var:te_dg_n_up }
-	set_local_variable = { name = te_dg_g_y3 value = var:te_dg_y_up }
+te_demog_gini_from_locals = {
 	set_local_variable = { name = te_dg_g_h1 value = { value = local_var:te_dg_g_y1 divide = { value = local_var:te_dg_g_n1 min = 1 } } }
 	set_local_variable = { name = te_dg_g_h2 value = { value = local_var:te_dg_g_y2 divide = { value = local_var:te_dg_g_n2 min = 1 } } }
 	set_local_variable = { name = te_dg_g_h3 value = { value = local_var:te_dg_g_y3 divide = { value = local_var:te_dg_g_n3 min = 1 } } }
@@ -100,5 +109,267 @@ te_demog_state_gini = {
 			min = 0
 			max = 0.9
 		}
+	}
+}
+
+# ============================================================================
+# Wealth Concentration (spec §4.2): how much of a state's property belongs to a
+# few great fortunes rather than to many owners, 0-100, kept per state.
+#
+# State variables:
+#   te_dg_wc            the score; drifts 3% a year toward te_dg_wc_target and
+#                       takes the shocks below
+#   te_dg_wc_target     its target (te_demog_wc_target, te_demog_values.txt), as
+#                       of the state's last yearly pulse
+# Country variables (te_demog_wc_national, the one refresh site):
+#   te_inh_concentration  the national figure: the states' scores weighted by
+#                       where property is held. #822's name, so its loc,
+#                       tooltips and two modifiers keep reading it
+#   te_dg_wc_target     the states' targets, weighted the same way
+#   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
+#   te_dg_wc_t_tax      the target's terms, signed around 50 and weighted the
+#                       same way, so they add up to the target (the panel's bars)
+#   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
+#   te_dg_gini          the Gini over all the states' strata
+#   te_dg_war_shock     the war shocks taken since the country was last at peace
+#                       on 31 December
+#
+# Shocks jump the scores instead of moving the targets (Scheidel's levellers):
+# a year at war with heavy dead -1, at most -10 until a year ends in peace
+# (te_demog_wc_war_shock); a lost war -5 (on_lost_war, te_demog_on_actions.txt);
+# a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
+# (banking_cycle_effects.txt); devastation, in the state hit, up to -10 a year
+# (te_demog_wc_state_yearly). Nothing here depends on the demographics rule.
+# ============================================================================
+
+# THIS = a state at game start, after its walk (te_inh_game_start): the score
+# starts at its own target, so nothing drifts in 1836.
+te_demog_wc_seed_state = {
+	set_variable = { name = te_dg_wc value = te_demog_wc_target }
+	set_variable = { name = te_dg_wc_target value = var:te_dg_wc }
+}
+
+# THIS = a state, on its yearly pulse after the walk (te_demog_state_yearly). A
+# state without a score (an old save, a state new to the game) starts at its
+# owner's current figure; otherwise it closes 3% of the gap to its target.
+# Devastation destroys local capital: a fully devastated state (100) loses 10.
+te_demog_wc_state_yearly = {
+	set_variable = { name = te_dg_wc_target value = te_demog_wc_target }
+	if = {
+		limit = { NOT = { has_variable = te_dg_wc } }
+		if = {
+			limit = { owner = { has_variable = te_inh_concentration } }
+			set_variable = { name = te_dg_wc value = owner.var:te_inh_concentration }
+		}
+		else = {
+			set_variable = { name = te_dg_wc value = var:te_dg_wc_target }
+		}
+	}
+	else = {
+		change_variable = {
+			name = te_dg_wc
+			add = { value = var:te_dg_wc_target subtract = var:te_dg_wc multiply = 0.03 }
+		}
+	}
+	if = {
+		limit = { devastation > 0 }
+		change_variable = { name = te_dg_wc add = { value = devastation multiply = -0.1 } }
+	}
+	clamp_variable = { name = te_dg_wc min = 0 max = 100 }
+}
+
+# THIS = a country: every scored state's score jumps by $AMOUNT$, clamped to
+# 0-100. The national figure is the caller's to refresh.
+te_demog_wc_jump = {
+	every_scope_state = {
+		limit = { has_variable = te_dg_wc }
+		change_variable = { name = te_dg_wc add = $AMOUNT$ }
+		clamp_variable = { name = te_dg_wc min = 0 max = 100 }
+	}
+}
+
+# THIS = ROOT = a country (te_inh_apply_concentration_modifiers needs ROOT to
+# be it): a shock to every state's score, then the national figure and #822's
+# modifiers follow at once.
+te_demog_wc_shock = {
+	te_demog_wc_jump = { AMOUNT = $AMOUNT$ }
+	te_demog_wc_national = yes
+}
+
+# THIS = a country on 31 December (te_demog_country_yearly, before the year's
+# war dead are shared out or cleared), whatever the rule. A year at war whose
+# dead (te_dg_war_year, the monthly snapshot's) pass 0.2% of the people levels
+# every state by 1: mass mobilisation. At most 10 such years count until a
+# 31 December finds the country at peace. 31 December's national figure follows.
+te_demog_wc_war_shock = {
+	if = {
+		limit = { is_at_war = yes }
+		if = {
+			limit = { NOT = { has_variable = te_dg_war_shock } }
+			set_variable = { name = te_dg_war_shock value = 0 }
+		}
+		set_local_variable = { name = te_dg_wc_war_floor value = { value = total_population multiply = 0.002 } }
+		if = {
+			limit = {
+				has_variable = te_dg_war_year
+				var:te_dg_war_year > local_var:te_dg_wc_war_floor
+				var:te_dg_war_shock < 10
+			}
+			te_demog_wc_jump = { AMOUNT = -1 }
+			change_variable = { name = te_dg_war_shock add = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_war_shock }
+		remove_variable = te_dg_war_shock
+	}
+}
+
+# THIS = ROOT = the winner of a civil war, from inh_repair_after_civil_war (in
+# te_civil_war_on_won, between te_civil_war_resolve_sides and
+# te_civil_war_clear). A left revolution that wins levels the great fortunes:
+# -20 to every state. It reads te_cw_rebels_won, not te_cw_origin:
+# te_civil_war_clear removes te_cw_origin, the order of two files'
+# on_civil_war_won entries is undefined, and a loyalist winner can carry the
+# rebels' te_cw_origin after the merge. The caller's national figure follows.
+te_demog_wc_civil_war_won = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			OR = {
+				has_law = law_type:law_council_republic
+				any_interest_group = {
+					is_in_government = yes
+					is_interest_group_type = ig_trade_unions
+				}
+			}
+		}
+		te_demog_wc_jump = { AMOUNT = -20 }
+	}
+}
+
+# THIS = ROOT = a country (te_inh_apply_concentration_modifiers needs ROOT to
+# be it). The one refresh site of the national figure and #822's modifiers:
+# 31 December (te_demog_country_yearly, before the census reads it), game
+# start, the inheritance events' shifts, the shocks and the civil-war repair.
+#
+# The states weigh by where property is held (spec §4.2): each level of an
+# ownership building (te_dg_lv_own) and of self-owned capital (te_dg_lv_self)
+# counts 1, and the country's state-owned levels count a tenth, shared out by
+# each state's share of the country's bureaucrats. Under one level of property
+# in all, the states weigh by people; with no people either, one each. A
+# country with no scored state keeps its own figure (#822's drift in
+# te_inh_yearly_update) and only has its modifiers put back.
+te_demog_wc_national = {
+	# the scored states: how many, their state-owned levels, bureaucrats,
+	# owned and cooperative levels, and people
+	set_local_variable = { name = te_dg_wc_n value = 0 }
+	set_local_variable = { name = te_dg_wc_ctry value = 0 }
+	set_local_variable = { name = te_dg_wc_bur value = 0 }
+	set_local_variable = { name = te_dg_wc_held value = 0 }
+	set_local_variable = { name = te_dg_wc_ppl value = 0 }
+	every_scope_state = {
+		limit = { has_variable = te_dg_wc }
+		change_local_variable = { name = te_dg_wc_n add = 1 }
+		change_local_variable = { name = te_dg_wc_ctry add = var:te_dg_lv_ctry }
+		change_local_variable = { name = te_dg_wc_bur add = var:te_dg_bureaucrats }
+		change_local_variable = { name = te_dg_wc_held add = { value = var:te_dg_lv_own add = var:te_dg_lv_self } }
+		change_local_variable = { name = te_dg_wc_ppl add = var:te_dg_walk_pop }
+	}
+	if = {
+		limit = { local_var:te_dg_wc_n > 0 }
+		# the weighting: 0 by property, 1 by people, 2 one each
+		set_local_variable = { name = te_dg_wc_total value = local_var:te_dg_wc_held }
+		if = {
+			limit = { local_var:te_dg_wc_bur >= 1 }
+			change_local_variable = { name = te_dg_wc_total add = { value = local_var:te_dg_wc_ctry multiply = 0.1 } }
+		}
+		set_local_variable = { name = te_dg_wc_mode value = 0 }
+		if = {
+			limit = { local_var:te_dg_wc_total < 1 }
+			set_local_variable = { name = te_dg_wc_mode value = 1 }
+			if = {
+				limit = { local_var:te_dg_wc_ppl < 1 }
+				set_local_variable = { name = te_dg_wc_mode value = 2 }
+			}
+		}
+		# the weighted sums, and the strata summed for the country's Gini
+		set_local_variable = { name = te_dg_wc_wsum value = 0 }
+		set_local_variable = { name = te_dg_wc_s_score value = 0 }
+		set_local_variable = { name = te_dg_wc_s_target value = 0 }
+		set_local_variable = { name = te_dg_wc_s_land value = 0 }
+		set_local_variable = { name = te_dg_wc_s_own value = 0 }
+		set_local_variable = { name = te_dg_wc_s_ineq value = 0 }
+		set_local_variable = { name = te_dg_g_n1 value = 0 }
+		set_local_variable = { name = te_dg_g_y1 value = 0 }
+		set_local_variable = { name = te_dg_g_n2 value = 0 }
+		set_local_variable = { name = te_dg_g_y2 value = 0 }
+		set_local_variable = { name = te_dg_g_n3 value = 0 }
+		set_local_variable = { name = te_dg_g_y3 value = 0 }
+		every_scope_state = {
+			limit = { has_variable = te_dg_wc }
+			set_local_variable = { name = te_dg_wc_w value = 1 }
+			if = {
+				limit = { local_var:te_dg_wc_mode = 0 }
+				set_local_variable = {
+					name = te_dg_wc_w
+					value = {
+						value = var:te_dg_bureaucrats
+						divide = { value = local_var:te_dg_wc_bur min = 1 }
+						multiply = local_var:te_dg_wc_ctry
+						multiply = 0.1
+						add = var:te_dg_lv_own
+						add = var:te_dg_lv_self
+					}
+				}
+			}
+			else_if = {
+				limit = { local_var:te_dg_wc_mode = 1 }
+				set_local_variable = { name = te_dg_wc_w value = var:te_dg_walk_pop }
+			}
+			change_local_variable = { name = te_dg_wc_wsum add = local_var:te_dg_wc_w }
+			change_local_variable = { name = te_dg_wc_s_score add = { value = var:te_dg_wc multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_wc_s_target add = { value = var:te_dg_wc_target multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_wc_s_land add = { value = te_demog_wc_land_term multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_wc_s_own add = { value = te_demog_wc_ownership_term multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_wc_s_ineq add = { value = te_demog_wc_inequality_term multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_g_n1 add = var:te_dg_n_lo }
+			change_local_variable = { name = te_dg_g_y1 add = var:te_dg_y_lo }
+			change_local_variable = { name = te_dg_g_n2 add = var:te_dg_n_mi }
+			change_local_variable = { name = te_dg_g_y2 add = var:te_dg_y_mi }
+			change_local_variable = { name = te_dg_g_n3 add = var:te_dg_n_up }
+			change_local_variable = { name = te_dg_g_y3 add = var:te_dg_y_up }
+		}
+		# every weighting sums to at least 1
+		set_variable = { name = te_inh_concentration value = { value = local_var:te_dg_wc_s_score divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
+		set_variable = { name = te_dg_wc_target value = { value = local_var:te_dg_wc_s_target divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
+		set_variable = { name = te_dg_wc_t_law value = { value = te_inh_law_amendment_target subtract = 50 } }
+		set_variable = { name = te_dg_wc_t_land value = { value = local_var:te_dg_wc_s_land divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
+		set_variable = { name = te_dg_wc_t_own value = { value = local_var:te_dg_wc_s_own divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
+		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
+		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
+		te_demog_gini_from_locals = yes
+		# the most and least concentrated states, for the panel
+		ordered_scope_state = {
+			limit = { has_variable = te_dg_wc }
+			order_by = te_demog_state_wc
+			max = 1
+			check_range_bounds = no
+			save_temporary_scope_as = te_dg_wc_it
+			root = { set_variable = { name = te_dg_wc_top value = scope:te_dg_wc_it } }
+		}
+		ordered_scope_state = {
+			limit = { has_variable = te_dg_wc }
+			order_by = te_demog_neg_wc
+			max = 1
+			check_range_bounds = no
+			save_temporary_scope_as = te_dg_wc_it
+			root = { set_variable = { name = te_dg_wc_bottom value = scope:te_dg_wc_it } }
+		}
+	}
+	if = {
+		limit = { has_variable = te_inh_concentration }
+		te_inh_apply_concentration_modifiers = yes
 	}
 }

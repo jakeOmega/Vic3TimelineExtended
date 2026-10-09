@@ -204,7 +204,13 @@ class TestStateGini(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.effect = _find(_parse_script(_text(WEALTH_EFFECTS)), "te_demog_state_gini")
+        # the state's effect loads its strata into locals and calls the formula the country shares
+        # (te_demog_gini_from_locals): the call is spliced in, so the interpreter runs `if` only
+        blocks = _parse_script(_text(WEALTH_EFFECTS))
+        helper = _find(blocks, "te_demog_gini_from_locals")
+        cls.effect = [part for item in _find(blocks, "te_demog_state_gini")
+                      for part in (helper if item == ("te_demog_gini_from_locals", "=", "yes") else [item])]
+        assert len(cls.effect) > len(helper), "te_demog_state_gini calls te_demog_gini_from_locals"
         constants = {k: float(_find(v, "value")) for k, _, v in _parse_script(_text(GENERATED_VALUES))
                      if k in ("te_demog_k_gini_floor", "te_demog_k_gini_scale")}
         cls.constants = constants
@@ -242,6 +248,12 @@ class TestStateGini(unittest.TestCase):
 
     def test_one_stratum_is_equal(self):
         self.assertAlmostEqual(self.shown([(0, 0), (500, 1234), (0, 0)]), self.constants["te_demog_k_gini_floor"])
+
+    def test_state_and_country_share_one_formula(self):
+        text = _text(WEALTH_EFFECTS)
+        for caller in ("te_demog_state_gini", "te_demog_wc_national"):
+            self.assertIn("te_demog_gini_from_locals = yes", _block(text, caller), caller)
+        self.assertIn("name = te_dg_gini", _block(text, "te_demog_gini_from_locals"))
 
 
 class TestStep(unittest.TestCase):
@@ -310,7 +322,7 @@ class _Engine:
     `fixtures` stand in for engine reads and for script values that read the owner."""
 
     def __init__(self, fixtures, triggers=None, effects=None):
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS])
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
@@ -431,6 +443,11 @@ class _Engine:
                 name = _find(arg, "name")
                 assert name in store, f"change of unset {name}"
                 store[name] = self._ops([i for i in arg if i[0] != "name"], store[name])
+            elif key == "clamp_variable":
+                name = _find(arg, "name")
+                assert name in self.vars, f"clamp of unset {name}"
+                lo, hi = self.value(_find(arg, "min")), self.value(_find(arg, "max"))
+                self.vars[name] = min(max(self.vars[name], lo), hi)
             elif key == "remove_variable":
                 self.vars.pop(arg, None)
             elif key == "while":
@@ -782,7 +799,7 @@ class TestCohortScript(unittest.TestCase):
     # -- the orchestrator -----------------------------------------------------------------------
 
     def test_orchestrator_dispatch(self):
-        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "",
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
                  "te_demog_seed": "set_variable = { name = did value = 1 }",
                  "te_demog_step": "set_variable = { name = did value = 2 }"}
         cases = [   # (census year, raw, people, rule on) -> seed 1, step 2, nothing None
@@ -810,7 +827,9 @@ class _CountryEngine(_Engine):
     staying shared); ordered_scope_state the best `max` of them by `order_by` (highest first,
     state_population read from the dict's own `state_population`); root = { } the country's
     variables and capital = { } the dict given as `capital`, whatever scope is current. Variable
-    lists live in `lists` (name -> the state dicts added), saved temporary scopes in `scopes`."""
+    lists live in `lists` (name -> the state dicts added), saved temporary scopes in `scopes` (a
+    `scope:X` value is the state dict itself). A state's `owner = { }` trigger and `owner.X` read
+    the country's variables (and fixtures); `any_scope_state` tests every state in `states`."""
 
     BLOCKS = ("every_scope_war", "every_scope_state", "ordered_scope_state", "root", "capital")
 
@@ -819,6 +838,31 @@ class _CountryEngine(_Engine):
         self.wars, self.states, self.capital_vars = list(wars), list(states), capital
         self.root_vars = self.vars
         self.lists, self.scopes = {}, {}
+
+    def number(self, tok):
+        if tok.startswith("scope:"):
+            return self.scopes[tok[6:]]
+        if tok.startswith("owner."):
+            saved, self.vars = self.vars, self.root_vars
+            try:
+                return self.number(tok[6:])
+            finally:
+                self.vars = saved
+        return super().number(tok)
+
+    def holds_in(self, scope_vars, items):
+        saved, self.vars = self.vars, scope_vars
+        try:
+            return self.holds(items)
+        finally:
+            self.vars = saved
+
+    def value_in(self, scope_vars, name):
+        saved, self.vars = self.vars, scope_vars
+        try:
+            return self.value(name)
+        finally:
+            self.vars = saved
 
     def run(self, items):
         batch = []
@@ -843,6 +887,10 @@ class _CountryEngine(_Engine):
         if key == "exists":
             assert arg == "capital", arg
             return self.capital_vars is not None
+        if key == "any_scope_state":
+            return any(self.holds_in(state_vars, arg) for state_vars in self.states)
+        if key == "owner":
+            return self.holds_in(self.root_vars, arg)
         return super()._test(key, op, arg)
 
     def _in(self, scope_vars, body):
@@ -889,7 +937,8 @@ class _CountryEngine(_Engine):
             self._in(state_vars, body)
 
 
-NO_CENSUS = {"te_demog_country_census": ""}   # the war-dead tests run the yearly effect without its census
+# the war-dead tests run the yearly effect without its census and Wealth Concentration (TestWealth's)
+NO_CENSUS = {"te_demog_country_census": "", "te_demog_wc_war_shock": "", "te_demog_wc_national": ""}
 
 
 class TestFlows(unittest.TestCase):
@@ -1006,7 +1055,8 @@ class TestFlows(unittest.TestCase):
             eng.vars.update(te_dg_war_year=year)
             eng.call("te_demog_country_yearly")
             self.assertNotIn("te_dg_war_in", states[0], (rule, year))
-            self.assertEqual(eng.vars["te_dg_war_year"], year)
+            # with the census off the year's dead are cleared, so they are never shared out later
+            self.assertEqual(eng.vars["te_dg_war_year"], 0.0, (rule, year))
 
     def test_known_kills_add_up_and_only_where_the_census_runs(self):
         call = "te_demog_note_kills = { VALUE = var:struck }"
@@ -1326,3 +1376,253 @@ class TestCountry(unittest.TestCase):
             eng.call("te_demog_country_game_start")
             self.assertEqual(eng.vars.get("census_ran"), 1.0 if rule else None, rule)
             self.assertEqual(["te_dg_year" in s for s in states], [rule, rule])
+
+
+BANKING = ROOT / "common" / "scripted_effects" / "banking_cycle_effects.txt"
+CIVIL_WAR_ON_ACTIONS = ROOT / "common" / "on_actions" / "te_civil_war_on_actions.txt"
+APPLIED = {"te_inh_apply_concentration_modifiers": "set_variable = { name = applied value = var:te_inh_concentration }"}
+
+
+class TestWealth(unittest.TestCase):
+    """Wealth Concentration per state (Task 11; spec 4.2): each state's score drifts to its own
+    target and takes the shocks; the country's figure, te_inh_concentration, is the states'
+    average weighted by where property is held, and drives #822's two modifiers."""
+
+    # -- the wiring ---------------------------------------------------------------------------------
+
+    def test_national_figure_is_derived(self):
+        """One effect on 31 December: the national figure, then the census reads it."""
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_wc_national = yes"), yearly.index("te_demog_country_census = yes"))
+        self.assertNotIn("te_demog_wc_national", _block(_text(INH_EFFECTS), "te_inh_yearly_update"))
+        self.assertIn("te_demog_wc_national = yes", _block(_text(INH_EFFECTS), "te_inh_shift_concentration"))
+        self.assertIn("te_demog_wc_national = yes", _block(_text(INH_EFFECTS), "inh_repair_after_civil_war"))
+
+    def test_shifts_reach_every_state(self):
+        self.assertIn("every_scope_state", _block(_text(INH_EFFECTS), "te_inh_shift_concentration"))
+
+    def test_one_refresh_site_for_the_modifiers(self):
+        text = _text(WEALTH_EFFECTS)
+        self.assertEqual(text.count("te_inh_apply_concentration_modifiers = yes"), 1)
+
+    def test_drift_three_percent(self):
+        self.assertIn("multiply = 0.03", _block(_text(WEALTH_EFFECTS), "te_demog_wc_state_yearly"))
+
+    def test_wealth_runs_whatever_the_rule(self):
+        body = _block(_text(EFFECTS), "te_demog_state_yearly")
+        self.assertLess(body.index("te_demog_wc_state_yearly = yes"), body.index("te_demog_cohorts_run = yes"))
+
+    def test_the_war_shock_and_the_war_dead_run_whatever_the_rule(self):
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_wc_war_shock = yes"), yearly.index("te_demog_cohorts_run = yes"))
+        self.assertLess(yearly.index("te_demog_wc_war_shock = yes"), yearly.index("te_demog_share_war_dead = yes"))
+
+    def test_822s_drift_only_without_a_scored_state(self):
+        body = _block(_text(INH_EFFECTS), "te_inh_yearly_update")
+        guard = body.index("NOT = { any_scope_state = { has_variable = te_dg_wc } }")
+        self.assertLess(guard, body.index("te_inh_concentration_next"))
+        self.assertLess(guard, body.index("te_inh_apply_concentration_modifiers = yes"))
+        for call in ("te_inh_tidy_amendments = yes", "te_inh_count_duty_years = yes"):
+            self.assertRegex(body, rf"(?m)^\t{call}$", "every country, scored or not")
+
+    def test_822s_target_follows_the_states(self):
+        text = _text(INH_VALUES)
+        body = _block(text, "te_inh_concentration_target")
+        self.assertIn("value = te_inh_law_amendment_target", body)
+        self.assertIn("value = var:te_dg_wc_target", body)
+        laws = _block(text, "te_inh_law_amendment_target")
+        self.assertIn("amendment_perpetual_trusts", laws)
+        self.assertNotIn("te_inh_title_continuity", laws, "the pin is the states' and the display's, not the law's")
+
+    def test_game_start_seeds_every_state_then_the_national_figure(self):
+        body = _block(_text(INH_EFFECTS), "te_inh_game_start")
+        self.assertLess(body.index("te_demog_walks = yes"), body.index("te_demog_wc_seed_state = yes"))
+        self.assertLess(body.index("te_demog_wc_seed_state = yes"), body.index("te_demog_wc_national = yes"))
+        self.assertNotIn("name = te_inh_concentration", body)
+
+    def test_every_change_to_a_score_ends_clamped(self):
+        for path in (WEALTH_EFFECTS, INH_EFFECTS):
+            for name, body in _raw_blocks([path]).items():
+                ops = re.findall(r"(change|clamp)_variable = \{\s*name = te_dg_wc\b", body)
+                if ops:
+                    self.assertEqual(ops[-1], "clamp", name)
+
+    def test_devastation_is_a_percentage(self):
+        """State devastation runs 0-100: a fully devastated state loses 10 points a year."""
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_state_yearly")
+        self.assertIn("add = { value = devastation multiply = -0.1 }", body)
+
+    def test_the_shocks_are_wired(self):
+        on_actions = _text(DEMOG_ON_ACTIONS)
+        self.assertIn("te_demog_lost_war", _block(on_actions, "on_lost_war"))
+        lost = _block(on_actions, "te_demog_lost_war")
+        self.assertIn("te_demog_wc_shock = { AMOUNT = -5 }", lost)
+        self.assertNotIn("te_demog_cohorts_run", lost)
+        banking = _text(BANKING)
+        sites = [m.end() for m in re.finditer(r"set_variable = \{ name = banking_crisis_wave_crashed value = 1 \}", banking)]
+        self.assertEqual(len(sites), 2)
+        for end in sites:
+            self.assertIn("te_demog_wc_shock = { AMOUNT = -5 }", banking[end:end + 300])
+
+    def test_a_won_left_revolution_reads_the_resolved_sides(self):
+        """The repair runs between te_civil_war_resolve_sides and te_civil_war_clear (which removes
+        te_cw_origin; a loyalist winner can carry the rebels' te_cw_origin), so it reads
+        te_cw_rebels_won, and the national figure follows the shock."""
+        civil = _block(_text(WEALTH_EFFECTS), "te_demog_wc_civil_war_won")
+        self.assertIn("var:te_cw_rebels_won = 1", civil)
+        self.assertIn("AMOUNT = -20", civil)
+        self.assertNotIn("te_cw_origin", civil)
+        repair = _block(_text(INH_EFFECTS), "inh_repair_after_civil_war")
+        self.assertLess(repair.index("te_demog_wc_civil_war_won = yes"), repair.index("te_demog_wc_national = yes"))
+        self.assertIn("inh_repair_after_civil_war = yes", _block(_text(CIVIL_WAR_ON_ACTIONS), "te_civil_war_on_won"))
+
+    # -- a state's score and target, through the interpreter --------------------------------------------
+
+    def state_year(self, state, owner=None, devastation=0.0, target=60.0):
+        eng = _CountryEngine(states=[state], fixtures={"te_demog_wc_target": target, "devastation": devastation})
+        eng.vars.update(owner or {})
+        eng._in(state, _parse_script("te_demog_wc_state_yearly = yes"))
+        return state
+
+    def test_a_state_closes_three_percent_of_the_gap(self):
+        self.assertAlmostEqual(self.state_year({"te_dg_wc": 40.0})["te_dg_wc"], 40.6)
+        self.assertAlmostEqual(self.state_year({"te_dg_wc": 80.0}, target=20.0)["te_dg_wc"], 78.2)
+        self.assertEqual(self.state_year({"te_dg_wc": 40.0})["te_dg_wc_target"], 60.0)
+
+    def test_devastation_destroys_local_capital(self):
+        self.assertAlmostEqual(self.state_year({"te_dg_wc": 40.0}, devastation=50.0)["te_dg_wc"], 35.6)
+        self.assertEqual(self.state_year({"te_dg_wc": 3.0}, devastation=100.0, target=0.0)["te_dg_wc"], 0.0)
+
+    def test_a_state_without_a_score_starts_at_its_owners_figure(self):
+        self.assertEqual(self.state_year({}, owner={"te_inh_concentration": 72.0})["te_dg_wc"], 72.0)
+        self.assertEqual(self.state_year({})["te_dg_wc"], 60.0, "an owner with no figure: the state's target")
+
+    def test_the_seed_starts_a_state_at_its_target(self):
+        state = {}
+        eng = _CountryEngine(states=[state], fixtures={"te_demog_wc_target": 55.0})
+        eng._in(state, _parse_script("te_demog_wc_seed_state = yes"))
+        self.assertEqual((state["te_dg_wc"], state["te_dg_wc_target"]), (55.0, 55.0))
+
+    def target(self, state, owner=None, law=80.0, land=6.0, tax=-5.0):
+        eng = _CountryEngine(states=[state], fixtures={"te_inh_law_amendment_target": law,
+                                                       "te_demog_wc_land_term": land, "te_demog_wc_tax_term": tax})
+        eng.vars.update(owner or {})
+        return eng.value_in(state, "te_demog_wc_target")
+
+    def test_the_target_sums_its_terms(self):
+        state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
+        # law 80, land 6, ownership (30/40 - 0.5) x 40 = 10, inequality (0.5 - 0.4) x 50 = 5, taxes -5
+        self.assertAlmostEqual(self.target(state), 96.0)
+        self.assertEqual(self.target(state, law=100.0), 100.0)
+        self.assertEqual(self.target(state, law=0.0, land=-20.0), 0.0)
+
+    def test_the_ownership_and_inequality_terms_are_capped(self):
+        private = {"te_dg_lv_priv": 50.0, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.9}
+        self.assertAlmostEqual(self.target(private, law=50.0, land=0.0, tax=0.0), 50 + 20 + 15)
+        state_owned = {"te_dg_lv_priv": 0.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 45.0, "te_dg_gini": 0.0}
+        self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 15)
+        no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.4}
+        self.assertAlmostEqual(self.target(no_capital, law=50.0, land=0.0, tax=0.0), 50.0, msg="no capital: no term")
+
+    def test_continuity_of_title_pins_the_target_at_the_score(self):
+        state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5,
+                 "te_dg_wc": 33.0}
+        self.assertEqual(self.target(state, owner={"te_inh_title_continuity": 1.0}), 33.0)
+        self.assertAlmostEqual(self.target(state), 96.0)
+
+    # -- the national figure, through the interpreter ------------------------------------------------
+
+    @staticmethod
+    def scored(wc, target, own=0.0, coop=0.0, ctry=0.0, bur=0.0, pop=1e6, gini=0.4, priv=10.0,
+               groups=((900, 1350), (90, 270), (10, 150))):
+        state = {"te_dg_wc": float(wc), "te_dg_wc_target": float(target), "te_dg_lv_own": float(own),
+                 "te_dg_lv_self": float(coop), "te_dg_lv_ctry": float(ctry), "te_dg_lv_priv": float(priv),
+                 "te_dg_bureaucrats": float(bur), "te_dg_walk_pop": float(pop), "te_dg_gini": float(gini)}
+        for name, (n, y) in zip(("lo", "mi", "up"), groups):
+            state[f"te_dg_n_{name}"], state[f"te_dg_y_{name}"] = float(n), float(y)
+        return state
+
+    @staticmethod
+    def national(states, **country):
+        eng = _CountryEngine(states=states, effects=APPLIED,
+                             fixtures={"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
+                                       "te_demog_wc_tax_term": -5.0})
+        eng.vars.update(country)
+        eng.call("te_demog_wc_national")
+        return eng.vars
+
+    def test_the_national_figure_weighs_states_by_property(self):
+        a = self.scored(80, 70, own=30, ctry=40, bur=900, gini=0.5, groups=((900e3, 1.2e6), (90e3, 3e5), (1e4, 2e5)))
+        b = self.scored(40, 50, coop=10, ctry=60, bur=100, gini=0.3, groups=((500e3, 6e5), (40e3, 9e4), (2e3, 3e4)))
+        c = {"te_dg_walk_pop": 9e9, "te_dg_lv_own": 9e9}   # no score: left out
+        v = self.national([a, b, c])
+        # 100 state-owned levels where 1,000 bureaucrats work: a holds 900 of them, b 100
+        wa, wb = 30 + 0.9 * 100 * 0.1, 10 + 0.1 * 100 * 0.1
+        mean = lambda x, y: (x * wa + y * wb) / (wa + wb)   # noqa: E731
+        self.assertAlmostEqual(v["te_inh_concentration"], mean(80, 40))
+        self.assertAlmostEqual(v["te_dg_wc_target"], mean(70, 50))
+        self.assertEqual(v["applied"], v["te_inh_concentration"], "the modifiers read this year's figure")
+        self.assertAlmostEqual(v["te_dg_wc_t_law"], 25.0)
+        self.assertAlmostEqual(v["te_dg_wc_t_land"], 4.0)
+        self.assertAlmostEqual(v["te_dg_wc_t_own"], mean((10 / 50 - 0.5) * 40, (10 / 80 - 0.5) * 40))
+        self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(5, -5))
+        self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
+        self.assertIs(v["te_dg_wc_top"], a)
+        self.assertIs(v["te_dg_wc_bottom"], b)
+        groups = [(a[f"te_dg_n_{g}"] + b[f"te_dg_n_{g}"], a[f"te_dg_y_{g}"] + b[f"te_dg_y_{g}"]) for g in ("lo", "mi", "up")]
+        expected = demographics_model.shown_gini(demographics_model.grouped_gini(groups))
+        self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed groups")
+
+    def test_without_property_the_states_weigh_by_people(self):
+        v = self.national([self.scored(80, 70, pop=2e6), self.scored(40, 50, pop=1e6, ctry=30)])
+        self.assertAlmostEqual(v["te_inh_concentration"], (80 * 2 + 40) / 3, msg="state-owned levels, no bureaucrats")
+        v = self.national([self.scored(80, 70, pop=0), self.scored(40, 50, pop=0)])
+        self.assertAlmostEqual(v["te_inh_concentration"], 60.0, msg="no people either: one each")
+
+    def test_a_country_with_no_scored_state_keeps_its_own_figure(self):
+        v = self.national([{"te_dg_walk_pop": 1e5}], te_inh_concentration=63.0)
+        self.assertEqual((v["te_inh_concentration"], v["applied"]), (63.0, 63.0))
+        for name in ("te_dg_wc_target", "te_dg_gini", "te_dg_wc_top", "te_dg_wc_t_law"):
+            self.assertNotIn(name, v)
+        self.assertNotIn("applied", self.national([]), "no figure: no modifiers")
+
+    def test_a_shock_moves_every_score_then_the_national_figure(self):
+        a, b = self.scored(80, 70, own=10), self.scored(3, 50, own=10)
+        eng = _CountryEngine(states=[a, b, {}], effects=APPLIED,
+                             fixtures={"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
+                                       "te_demog_wc_tax_term": -5.0})
+        eng.run(_parse_script("te_demog_wc_shock = { AMOUNT = -5 }"))
+        self.assertEqual((a["te_dg_wc"], b["te_dg_wc"]), (75.0, 0.0))
+        self.assertAlmostEqual(eng.vars["te_inh_concentration"], 37.5)
+
+    # -- the war shock on 31 December -----------------------------------------------------------------
+
+    def war_year(self, states, at_war, dead, shocks=None, rule=False):
+        eng = _CountryEngine(states=states, fixtures={"total_population": 1e6},
+                             triggers={"te_demog_cohorts_run": rule, "is_at_war": at_war},
+                             effects={"te_demog_wc_national": "", "te_demog_country_census": ""})
+        eng.vars["te_dg_war_year"] = float(dead)
+        if shocks is not None:
+            eng.vars["te_dg_war_shock"] = float(shocks)
+        eng.call("te_demog_country_yearly")
+        return eng.vars
+
+    def test_a_year_of_heavy_war_dead_lowers_every_score(self):
+        states = [{"te_dg_wc": 50.0}, {"te_dg_wc": 0.5}, {}]
+        v = self.war_year(states, True, 2500)   # 0.25% of a million
+        self.assertEqual([s.get("te_dg_wc") for s in states], [49.0, 0.0, None])
+        self.assertEqual(v["te_dg_war_shock"], 1.0)
+        self.assertEqual(v["te_dg_war_year"], 0.0, "the census is off: the dead are cleared after the shock")
+
+    def test_light_war_dead_or_ten_shocks_already_do_nothing(self):
+        for dead, shocks in ((1500, None), (2500, 10)):
+            states = [{"te_dg_wc": 50.0}]
+            v = self.war_year(states, True, dead, shocks)
+            self.assertEqual(states[0]["te_dg_wc"], 50.0, (dead, shocks))
+            self.assertEqual(v["te_dg_war_shock"], 0.0 if shocks is None else 10.0)
+
+    def test_peace_ends_the_count(self):
+        states = [{"te_dg_wc": 50.0}]
+        v = self.war_year(states, False, 9000, shocks=4)
+        self.assertNotIn("te_dg_war_shock", v)
+        self.assertEqual(states[0]["te_dg_wc"], 50.0)

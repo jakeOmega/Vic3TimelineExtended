@@ -244,10 +244,11 @@ te_demog_walks = {
 
 # THIS = a state, on its yearly pulse (a different day per state, spec §11.3).
 # The walks and Wealth Concentration run whatever the rule; the census only
-# when te_demog_cohorts_run. Task 11 adds its calls here.
+# when te_demog_cohorts_run.
 te_demog_state_yearly = {
 	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
+	te_demog_wc_state_yearly = yes
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
@@ -844,11 +845,25 @@ te_demog_share_war_dead = {
 	}
 }
 
-# THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Tasks 11-12 add to it.
+# THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Task 12 adds to it.
+# The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule; then
+# they go to the states when the census runs, and are cleared when it doesn't, so dead from years
+# with the census off are never shared out later. The national Wealth Concentration, #822's
+# modifiers and the country's Gini follow from this year's state scores, whatever the rule, before
+# the census reads them.
 te_demog_country_yearly = {
+	te_demog_wc_war_shock = yes
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		te_demog_share_war_dead = yes
+	}
+	else_if = {
+		limit = { has_variable = te_dg_war_year }
+		set_variable = { name = te_dg_war_year value = 0 }
+	}
+	te_demog_wc_national = yes
+	if = {
+		limit = { te_demog_cohorts_run = yes }
 		te_demog_country_census = yes
 	}
 }

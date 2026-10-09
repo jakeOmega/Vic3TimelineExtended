@@ -34,7 +34,8 @@ te_demog_country_monthly_on_action = {
 	}
 }
 
-# Root = Country, on 31 December. The effect gates itself on the rule.
+# Root = Country, on 31 December. The war shock and Wealth Concentration's national
+# figure run whatever the rule; the census gates itself on it.
 on_yearly_pulse_country = {
 	on_actions = {
 		te_demog_country_yearly_on_action
@@ -63,5 +64,20 @@ te_demog_on_game_started = {
 				id = te_demog_events.1
 			}
 		}
+	}
+}
+
+# Root = a country on the losing side of a war, capitulations included (scope:war the war;
+# Grand Monuments' war commissions use the same hook, monument_events_on_actions.txt). A lost
+# war takes 5 from every state's Wealth Concentration (spec §4.2), whatever the rule.
+on_lost_war = {
+	on_actions = {
+		te_demog_lost_war
+	}
+}
+
+te_demog_lost_war = {
+	effect = {
+		te_demog_wc_shock = { AMOUNT = -5 }
 	}
 }

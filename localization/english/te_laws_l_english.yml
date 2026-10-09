@@ -313,7 +313,7 @@
  lawgroup_human_augmentation:0 "Human Augmentation"
  lawgroup_human_augmentation_desc:0 "The extent to which [concept_human_augmentation_system] rights and regulations, through genetics, mechanical augmentation, or other means, are recognized and managed in society."
  lawgroup_inheritance:0 "Inheritance Laws"
- lawgroup_inheritance_desc:0 "Who inherits an estate. The law in force, with its amendments, sets the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
+ lawgroup_inheritance_desc:0 "Who inherits an estate. The law in force and its amendments move the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
  lawgroup_intellectual_property:0 "Intellectual Property"
  lawgroup_intellectual_property_desc:0 "The extent to which the creation, use, and distribution of intellectual property are regulated and protected in society."
  lawgroup_internet_governance:0 "Internet Governance"
