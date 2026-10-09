@@ -254,4 +254,10 @@ GLOBAL = {
 	# and every country of 1836 marked as standing at the start
 	# (gm_commission_effects.txt).
 	gm_com_seed = yes
+	# Demographics §2.6: France's fertility transition began around 1800, before
+	# any modern method, so it starts with Family Limitation (any country can be
+	# given it). The only line in the demographics system that names a country.
+	c:FRA ?= {
+		add_modifier = { name = te_demog_family_limitation }
+	}
 }

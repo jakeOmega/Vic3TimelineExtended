@@ -255,7 +255,7 @@ The Inheritance group decides who inherits an estate. Interest groups judge
 the inheritance law in force for as long as it stands, so a group that dislikes
 yours loses approval the whole time.
 
-| Law | Available | Wealth Concentration target | Also |
+| Law | Available | Law's Wealth Concentration target | Also |
 |---|---|---|---|
 | Primogeniture & Entail | From the start | 80 | In farming states, birth rate and migration up; tax capacity −10% |
 | Customary Inheritance | From the start | 50 | Nothing |
@@ -272,13 +272,22 @@ Ownership, else to Forced Heirship if you have Egalitarianism, else to
 Customary Inheritance; Possession by Use falls the same way.
 
 **Wealth Concentration** measures, from 0 to 100, how much of your wealth sits
-in great family fortunes. It moves 3% of the way to the law's target each
-year, so a new law takes about a generation to show: a country that abolishes
-entail still has great houses twenty years later. Above 50, Great Family
-Fortunes strengthens the Aristocrats and Capitalists, raises their investment
-and adds radicals; below 50, Dispersed Wealth weakens the Aristocrats and lets
-Farmers and Shopkeepers invest more. Both grow with the distance from 50. The
-Inheritance group's description shows the score and where it is heading.
+in great family fortunes. Each state keeps its own score, which moves 3% of the
+way to its own target each year, and your country's figure is the states'
+average, weighted by where property is held. The law and its amendments set where
+a state's target starts. Land tenure, who owns the state's capital, how unequal
+incomes are and taxes on wealth move it from there. War losses, a lost war that
+cost you a war goal, a winning revolution of the left and a banking crash knock
+scores down at once, and devastation lowers a state's score every year it lasts. A new law therefore takes
+about a generation to show: a country that abolishes entail still has great
+houses twenty years later. Above 50, Great
+Family Fortunes strengthens the Aristocrats and Capitalists, raises their
+investment and adds radicals; below 50, Dispersed Wealth weakens the Aristocrats
+and lets Farmers and Shopkeepers invest more. Both grow with the distance from
+50. The Inheritance group's description shows the score and where it is heading,
+and the Wealth section of the [Demographics tab](08-states.md#demographics) shows
+what sets the target. With the Demographics rule set to Disabled the tab is gone,
+but Wealth Concentration still runs and the group's description still shows it.
 
 The farming effects follow the share of Peasants and Farmers in each state.
 Under Forced Heirship, smallholders have fewer children so the farm is not

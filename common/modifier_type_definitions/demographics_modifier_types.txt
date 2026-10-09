@@ -1,0 +1,12 @@
+﻿# demographics_modifier_types.txt
+#
+# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §2.3).
+# The share of the gap to desired fertility a population can close, added to what
+# its technology and literacy give (te_demog_means). History, events and, from
+# phase 2, the family-policy measures grant it.
+country_fertility_means_add = {
+	color = neutral
+	percent = no
+	decimals = 2
+	script_only = yes
+}

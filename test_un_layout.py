@@ -578,7 +578,8 @@ class TabUnlockTooltipTest(unittest.TestCase):
         # then says te_system_tab_met_tt.
         pat = re.compile(r"GetScriptedGui\('([a-z_]+_tab_unlock_sgui)'\)\.IsValidTooltip\(")
         found = 0
-        for name in ("budget_panel.gui", "culture_panel.gui", "diplomatic_overview.gui", "panel_military.gui"):
+        for name in ("budget_panel.gui", "culture_panel.gui", "diplomatic_overview.gui", "panel_military.gui",
+                     "pops_overview.gui"):
             text = _read(os.path.join(REPO, "gui", name))
             for line in text.splitlines():
                 for sgui in pat.findall(line):
@@ -587,9 +588,9 @@ class TabUnlockTooltipTest(unittest.TestCase):
                         self.assertIn("GetScriptedGui('%s').IsValid(" % sgui, line)
                         self.assertIn("'te_system_tab_met_tt'", line)
                         self.assertLess(line.index("'te_system_tab_met_tt'"), line.index(".IsValidTooltip("))
-        # Banking, Tax Code, Hegemony, UN, Nuclear, Covert, and the Banking
-        # tab's monetary readout note (#805)
-        self.assertEqual(found, 7)
+        # Banking, Tax Code, Hegemony, UN, Nuclear, Covert, Demographics, and
+        # the Banking tab's monetary readout note (#805)
+        self.assertEqual(found, 8)
 
     def test_no_bare_or(self):
         for name in UNLOCK_TRIGGERS:

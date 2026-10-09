@@ -67,6 +67,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/power_bloc_principles/te_principle_slot_gates_generated.txt",
     "common/scripted_effects/te_pb_remove_principle_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",
+    "common/scripted_effects/te_demog_generated_effects.txt",
+    "common/script_values/te_demog_generated_values.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",
@@ -131,6 +133,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/scripted_buttons/un_buttons.txt": "input to gen_un_button_descs.py — button bodies hand-authored; generator only reads each button's modifiers to produce te_un_button_effects_l_english.yml",
     "common/script_values/covert_warfare_script_values.txt": "input to gen_covert_tech_theft.py (theft share, phase/priority multipliers) — hand-authored",
     "common/technology/eras/00_eras.txt": "input to gen_covert_tech_theft.py (era technology costs) — hand-authored",
+    "common/defines/extra_defines.txt": "input to gen_demographics.py (the engine's growth curves) — hand-authored defines, not generator output",
     "common/static_modifiers/extra_modifiers.txt": "input to gen_un_button_descs.py — modifier defs hand-authored; generator reads them to produce the UN_*_EFFECTS loc, never writes here",
 }
 

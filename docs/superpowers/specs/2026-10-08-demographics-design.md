@@ -9,6 +9,9 @@
 > The plan for phases 0 and 1 is `docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md`. Its research
 > corrected the places where this draft assumed something the code doesn't have (rule names, map modes, sorted lists,
 > cohort storage, urban population, land tenure and France's start); each is fixed in place.
+> Phase 0 (the model, its harness and these corrections) is built in PR 1 (#828); phase 1 (the census, both panels,
+> per-state Wealth Concentration and the rule) is built in PR 2 (branch `demographics-phase1`). It applies nothing to
+> population yet: what waits for phases 2 and 3 is listed in `docs/systems/mod_systems.md` § Demographics.
 > Numbers are starting proposals for the calibration harness (§12), not decisions.
 
 ## Context
@@ -985,8 +988,10 @@ to be sane.
 - **Cohort width, at the cost as built:** the benchmark found one-year cohorts cheap (§1), so the rule gives one-year
   cohorts. The plan builds them with about 345 variables a state, about 26 MB of an 1836 plain-text save; the 11–15 MB
   counted the cohorts alone. For the owner to confirm at that figure.
-- **The ownership coefficient (§4.2):** the table gives the ownership term no value. The plan starts it at
-  40 × (the private share of capital levels − 0.5), capped ±20. For the owner to confirm, or for calibration to change.
+- **The ownership coefficient (§4.2):** the table gives the ownership term no value. As built it is
+  40 × (the private share of capital levels − 0.9), capped ±20, centred on the 1836 reference: almost all 1836 capital
+  is private, so the plan's centre of 0.5 put every country near +20 on day one and switched Great Family Fortunes on
+  where #822 opened at 50. For the owner to confirm, or for calibration to change.
 - **The ring to about age 150:** cheap. Filling the top 50 of 150 slots added about 0.25 s a world-year, and an empty
   slot costs one variable check.
 - **The pensions' money cost (§7).** Vanilla's Old Age Pension charges the treasury nothing for the old (§14 Q6).

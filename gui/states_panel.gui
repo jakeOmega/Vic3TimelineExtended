@@ -2521,7 +2521,8 @@ types state_panel_types
 
 				### Statistics subtab
 				widget = {
-					size = { 170 40 }
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
+					size = { 135 40 }
 
 					background = {
 						visible = "[GetVariableSystem.HasValue('population_subtab', 'statistics')]"
@@ -2550,7 +2551,8 @@ types state_panel_types
 
 				### Pop List subtab
 				widget = {
-					size = { 170 40 }
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
+					size = { 135 40 }
 
 					background = {
 						visible = "[GetVariableSystem.HasValue('population_subtab', 'pop_list')]"
@@ -2579,7 +2581,8 @@ types state_panel_types
 
 				### Characters subtab
 				widget = {
-					size = { 170 40 }
+					### MOD: Demographics subtab (te_demog): 170 to 135, so four subtabs fit the 540 px strip ###
+					size = { 135 40 }
 
 					background = {
 						visible = "[GetVariableSystem.HasValue('population_subtab', 'characters')]"
@@ -2605,6 +2608,44 @@ types state_panel_types
 						using = highlighted_square_selection
 					}
 				}
+
+				### MOD: Demographics subtab (te_demog) ###
+				### A fourth subtab, the state's own census (te_state_demog_content in
+				### gui/te_demographics_widgets.gui). The three above shrink from 170 to
+				### 135 px to make room. It shows while the demographics rule runs the
+				### census (te_pops_demog_tab_sgui, the rule alone, the same gate as the
+				### Population panel's Demographics tab); while the rule hides it the
+				### other three keep 135 px each and the strip ends early, which is
+				### accepted rather than swapping the layout.
+				widget = {
+					size = { 135 40 }
+					visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+					background = {
+						visible = "[GetVariableSystem.HasValue('population_subtab', 'te_demog')]"
+						using = paper_bg
+					}
+
+					button = {
+						visible = "[Not(GetVariableSystem.HasValue('population_subtab', 'te_demog'))]"
+						size = { 100% 100% }
+						using = default_button
+						onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+					}
+
+					textbox = {
+						size = { 95% 100% }
+						using = elide_fontsize_min
+						align = hcenter|nobaseline
+						text = "te_demog_subtab"
+					}
+
+					icon = {
+						visible = "[GetVariableSystem.HasValue('population_subtab', 'te_demog')]"
+						using = highlighted_square_selection
+					}
+				}
+				### END MOD ###
 			}
 		}
 
@@ -3176,6 +3217,21 @@ types state_panel_types
 				}
 			}
 		}
+
+		### MOD: Demographics subtab (te_demog) ###
+		### The state's census. Shown while the subtab is selected and the rule runs
+		### the census: population_subtab is a per-client variable that outlives a
+		### save, so a second save with the rule off must not show this content
+		### under a subtab that is no longer on the strip. Inside, a state with no
+		### census reads "Census pending" (te_demog_state_census_sgui).
+		flowcontainer = {
+			visible = "[And( GetVariableSystem.HasValue('population_subtab', 'te_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			parentanchor = hcenter
+			direction = vertical
+
+			te_state_demog_content = {}
+		}
+		### END MOD ###
 	}
 
 	type state_panel_status_item = flowcontainer {

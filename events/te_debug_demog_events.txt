@@ -1,0 +1,154 @@
+﻿# ============================================================================
+# DEMOGRAPHICS TEST CONSOLE — fired only from the console: `event te_debug_demog.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. Every option writes
+# to debug.log; the effects are in common/scripted_effects/te_debug_demog_effects.txt.
+# debug.log rolls over at 512 KB: copy the lines out as they appear
+# (docs/guides/scripting_best_practices.md, "Runtime Debugging with debug_log").
+#
+# What each option is for:
+#   a    replay: step the capital's census one year now and log it (TE_DEMOG_REPLAY);
+#        `scripts/analysis/demographics_harness.py replay debug.log` checks it against
+#        the model. A second run in the same year steps again (the census year goes
+#        back by one first) and folds this year's newborns into the over-150 pool:
+#        use a save you can throw away, or re-seed after (c)
+#   b    start or stop the census log: each 31 December a TE_DEMOG_CENSUS: line per
+#        country of a million people or more (scripts/analysis/
+#        demographics_observer_report.py reads them), and a TE_DEMOG_PULSE line at the
+#        player's capital's yearly state pulse (one step per calendar year?)
+#   c    re-seed this country's census from today's population, then take its census
+#   d    benchmark (spec §14 Q9's late-game re-run): every state's step in the world,
+#        three passes, between TE_DEMOG_BENCH lines; then, untimed, every census is
+#        seeded again (the passes leave them wrong)
+#   e    war dead (spec §14 Q4): the player's dead in each war, its monthly tally and
+#        the states' pending dead (TE_DEMOG_WARDEAD)
+#   f/g  skew check (spec §14 Q11): f logs the capital's pops (TE_DEMOG_SKEW) and adds
+#        a 60-day +0.05 working-adult ratio modifier; g logs them again a month later
+# ============================================================================
+namespace = te_debug_demog
+
+te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_debug_demog.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_demog.1.t
+	desc = te_debug_demog.1.desc
+	flavor = te_debug_demog.1.flavor
+
+	# ---- a: replay ----------------------------------------------------------
+	option = {
+		name = te_debug_demog.1.a
+		trigger = {
+			te_demog_cohorts_run = yes
+			capital ?= { te_demog_has_census = yes }
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.a.tt
+			capital = { te_debug_demog_replay = yes }
+		}
+	}
+
+	# ---- b: the census log --------------------------------------------------
+	option = {
+		name = te_debug_demog.1.b
+		trigger = {
+			NOT = { has_global_variable = te_demog_census_log }
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.b.tt
+			set_global_variable = te_demog_census_log
+			debug_log = "TE_DEMOG_LOG census log on, date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+
+	option = {
+		name = te_debug_demog.1.b_off
+		trigger = {
+			has_global_variable = te_demog_census_log
+		}
+		remove_global_variable = te_demog_census_log
+		debug_log = "TE_DEMOG_LOG census log off, date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+
+	# ---- c: re-seed ---------------------------------------------------------
+	# The walks first, as at game start (te_demog_country_game_start), so each seed
+	# reads this year's literacy, urban share and wealth.
+	option = {
+		name = te_debug_demog.1.c
+		trigger = {
+			te_demog_cohorts_run = yes
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.c.tt
+			every_scope_state = {
+				te_demog_walks = yes
+				# off the states' pulses: each seeds again at its next one
+				te_demog_seed_off_pulse = yes
+			}
+			te_demog_country_census = yes
+		}
+	}
+
+	# ---- d: benchmark -------------------------------------------------------
+	option = {
+		name = te_debug_demog.1.d
+		trigger = {
+			te_demog_cohorts_run = yes
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.d.tt
+			te_debug_demog_benchmark = yes
+		}
+	}
+
+	# ---- e: war dead --------------------------------------------------------
+	option = {
+		name = te_debug_demog.1.e
+		custom_tooltip = {
+			text = te_debug_demog.1.e.tt
+			te_debug_demog_war_dead = yes
+		}
+	}
+
+	# ---- f and g: the skew check --------------------------------------------
+	option = {
+		name = te_debug_demog.1.f
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.f.tt
+			capital = {
+				debug_log = "TE_DEMOG_SKEW f: before the test modifier"
+				te_debug_demog_skew_lines = yes
+				add_modifier = { name = te_demog_debug_working_adults days = 60 }
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_demog.1.g
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.g.tt
+			capital = {
+				debug_log = "TE_DEMOG_SKEW g: later"
+				te_debug_demog_skew_lines = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_demog.1.z
+		default_option = yes
+	}
+}

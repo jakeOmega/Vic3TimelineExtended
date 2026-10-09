@@ -1,0 +1,260 @@
+﻿# ============================================================================
+# DEMOGRAPHICS TEST CONSOLE — effects for `event te_debug_demog.1`
+# (events/te_debug_demog_events.txt; spec docs/superpowers/specs/2026-10-08-demographics-design.md)
+# ============================================================================
+# Console only, apart from the census log's two hooks in te_demog_effects.txt, which
+# run only while global_var:te_demog_census_log is set (te_demog_census_log_on).
+# Every line goes to debug.log; the lines and what reads them:
+#   TE_DEMOG_REPLAY head/before/after  option a: one step of the capital's census.
+#                       demographics_harness.py replay steps the model from the
+#                       before lines and compares the after lines; format_replay
+#                       defines the format, and test_demographics_harness.py checks
+#                       the head line below against it
+#   TE_DEMOG_CENSUS:    option b's log: one line per country of a million people or
+#                       more at each census (31 December), `key=value` pairs split by
+#                       `;` (demographics_observer_report.py reads them)
+#   TE_DEMOG_PULSE      option b's log: the player's capital at each yearly state pulse,
+#                       its census year before the pulse reads it (one step per year?)
+#   TE_DEMOG_BENCH      option d: the cohort step in every state of the world, three
+#                       passes, timed by debug.log's one-second timestamps
+#   TE_DEMOG_WARDEAD    option e: the player's dead in each of its wars, its monthly
+#                       tally, and each state's dead still to be taken
+#   TE_DEMOG_SKEW       options f and g: the capital's pops' workforce and dependents
+#
+# A debug_log line reads only variables and script values of THIS (locals don't reach
+# it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
+# variables of the scope that logs it and removed after the line: a line renders when
+# it runs. People counts print as millions_thousands_units groups
+# (te_debug_demog_values.txt); a signed count is printed from its absolute value
+# with the sign written by the line, so each such line has two variants.
+# ============================================================================
+
+# ---- a: replay ----------------------------------------------------------------
+# THIS = the capital, with a census and the rule on (the option checks both). The
+# step's two halves run apart: te_demog_step_begin sets the year's rates and takes
+# the flows (removing te_dg_war_in and te_dg_kills_in), the head line prints those,
+# then the ring before, the sweep (te_demog_step_run), the ring after. The ring lines
+# read te_dg_people and te_dg_scale, which the sweep rewrites, so the before lines
+# must come first. A step reads the ring as last year's; te_dg_year goes back to last
+# year first, so the census reads as a state about to step does. Run twice in one
+# year, the second step ages this year's newborns as if they were 150 (both here and
+# in the model, so the replay still matches): use a save you can throw away, or
+# re-seed afterwards (option c).
+te_debug_demog_replay = {
+	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
+	te_demog_step_begin = yes
+	set_variable = { name = te_dg_dbg_war value = local_var:te_dg_war }
+	set_variable = { name = te_dg_dbg_kills value = local_var:te_dg_kills }
+	set_variable = { name = te_dg_dbg_mig value = local_var:te_dg_mig }
+	set_variable = { name = te_dg_dbg_tfr value = local_var:te_dg_tfr }
+	set_variable = { name = te_dg_dbg_mmr value = local_var:te_dg_mmr }
+	set_variable = { name = te_dg_dbg_m_inf value = local_var:te_dg_m_inf }
+	set_variable = { name = te_dg_dbg_m_ext value = local_var:te_dg_m_ext }
+	set_variable = { name = te_dg_dbg_m_chr value = local_var:te_dg_m_chr }
+	set_variable = { name = te_dg_dbg_m_work_f value = local_var:te_dg_m_work_f }
+	set_variable = { name = te_dg_dbg_m_work_m value = local_var:te_dg_m_work_m }
+	set_variable = { name = te_dg_dbg_pf0 value = local_var:te_dg_pf0 }
+	set_variable = { name = te_dg_dbg_pf1 value = local_var:te_dg_pf1 }
+	set_variable = { name = te_dg_dbg_pf2 value = local_var:te_dg_pf2 }
+	set_variable = { name = te_dg_dbg_pf3 value = local_var:te_dg_pf3 }
+	set_variable = { name = te_dg_dbg_pf4 value = local_var:te_dg_pf4 }
+	set_variable = { name = te_dg_dbg_pm0 value = local_var:te_dg_pm0 }
+	set_variable = { name = te_dg_dbg_pm1 value = local_var:te_dg_pm1 }
+	set_variable = { name = te_dg_dbg_pm2 value = local_var:te_dg_pm2 }
+	set_variable = { name = te_dg_dbg_pm3 value = local_var:te_dg_pm3 }
+	set_variable = { name = te_dg_dbg_pm4 value = local_var:te_dg_pm4 }
+	if = {
+		limit = { var:te_dg_dbg_mig < 0 }
+		debug_log = "TE_DEMOG_REPLAY head state=capital year=[THIS.ScriptValue('te_demog_year')|0] pop_last=[THIS.ScriptValue('te_debug_demog_pop_last_g1')|0]_[THIS.ScriptValue('te_debug_demog_pop_last_g2')|0]_[THIS.ScriptValue('te_debug_demog_pop_last_g3')|0] pop=[THIS.ScriptValue('te_debug_demog_pop_g1')|0]_[THIS.ScriptValue('te_debug_demog_pop_g2')|0]_[THIS.ScriptValue('te_debug_demog_pop_g3')|0] war=[THIS.ScriptValue('te_debug_demog_war_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_g3')|0] kills=[THIS.ScriptValue('te_debug_demog_kills_g1')|0]_[THIS.ScriptValue('te_debug_demog_kills_g2')|0]_[THIS.ScriptValue('te_debug_demog_kills_g3')|0] mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0] tfr=[THIS.Var('te_dg_dbg_tfr').GetValue|5] mmr=[THIS.Var('te_dg_dbg_mmr').GetValue|5] m_inf=[THIS.Var('te_dg_dbg_m_inf').GetValue|5] m_ext=[THIS.Var('te_dg_dbg_m_ext').GetValue|5] m_chr=[THIS.Var('te_dg_dbg_m_chr').GetValue|5] m_work_f=[THIS.Var('te_dg_dbg_m_work_f').GetValue|5] m_work_m=[THIS.Var('te_dg_dbg_m_work_m').GetValue|5] profile=[THIS.Var('te_dg_dbg_pf0').GetValue|5],[THIS.Var('te_dg_dbg_pf1').GetValue|5],[THIS.Var('te_dg_dbg_pf2').GetValue|5],[THIS.Var('te_dg_dbg_pf3').GetValue|5],[THIS.Var('te_dg_dbg_pf4').GetValue|5],[THIS.Var('te_dg_dbg_pm0').GetValue|5],[THIS.Var('te_dg_dbg_pm1').GetValue|5],[THIS.Var('te_dg_dbg_pm2').GetValue|5],[THIS.Var('te_dg_dbg_pm3').GetValue|5],[THIS.Var('te_dg_dbg_pm4').GetValue|5]"
+	}
+	else = {
+		debug_log = "TE_DEMOG_REPLAY head state=capital year=[THIS.ScriptValue('te_demog_year')|0] pop_last=[THIS.ScriptValue('te_debug_demog_pop_last_g1')|0]_[THIS.ScriptValue('te_debug_demog_pop_last_g2')|0]_[THIS.ScriptValue('te_debug_demog_pop_last_g3')|0] pop=[THIS.ScriptValue('te_debug_demog_pop_g1')|0]_[THIS.ScriptValue('te_debug_demog_pop_g2')|0]_[THIS.ScriptValue('te_debug_demog_pop_g3')|0] war=[THIS.ScriptValue('te_debug_demog_war_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_g3')|0] kills=[THIS.ScriptValue('te_debug_demog_kills_g1')|0]_[THIS.ScriptValue('te_debug_demog_kills_g2')|0]_[THIS.ScriptValue('te_debug_demog_kills_g3')|0] mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0] tfr=[THIS.Var('te_dg_dbg_tfr').GetValue|5] mmr=[THIS.Var('te_dg_dbg_mmr').GetValue|5] m_inf=[THIS.Var('te_dg_dbg_m_inf').GetValue|5] m_ext=[THIS.Var('te_dg_dbg_m_ext').GetValue|5] m_chr=[THIS.Var('te_dg_dbg_m_chr').GetValue|5] m_work_f=[THIS.Var('te_dg_dbg_m_work_f').GetValue|5] m_work_m=[THIS.Var('te_dg_dbg_m_work_m').GetValue|5] profile=[THIS.Var('te_dg_dbg_pf0').GetValue|5],[THIS.Var('te_dg_dbg_pf1').GetValue|5],[THIS.Var('te_dg_dbg_pf2').GetValue|5],[THIS.Var('te_dg_dbg_pf3').GetValue|5],[THIS.Var('te_dg_dbg_pf4').GetValue|5],[THIS.Var('te_dg_dbg_pm0').GetValue|5],[THIS.Var('te_dg_dbg_pm1').GetValue|5],[THIS.Var('te_dg_dbg_pm2').GetValue|5],[THIS.Var('te_dg_dbg_pm3').GetValue|5],[THIS.Var('te_dg_dbg_pm4').GetValue|5]"
+	}
+	te_demog_debug_log_ring_before = yes
+	te_demog_step_run = yes
+	te_demog_debug_log_ring_after = yes
+	remove_variable = te_dg_dbg_war
+	remove_variable = te_dg_dbg_kills
+	remove_variable = te_dg_dbg_mig
+	remove_variable = te_dg_dbg_tfr
+	remove_variable = te_dg_dbg_mmr
+	remove_variable = te_dg_dbg_m_inf
+	remove_variable = te_dg_dbg_m_ext
+	remove_variable = te_dg_dbg_m_chr
+	remove_variable = te_dg_dbg_m_work_f
+	remove_variable = te_dg_dbg_m_work_m
+	remove_variable = te_dg_dbg_pf0
+	remove_variable = te_dg_dbg_pf1
+	remove_variable = te_dg_dbg_pf2
+	remove_variable = te_dg_dbg_pf3
+	remove_variable = te_dg_dbg_pf4
+	remove_variable = te_dg_dbg_pm0
+	remove_variable = te_dg_dbg_pm1
+	remove_variable = te_dg_dbg_pm2
+	remove_variable = te_dg_dbg_pm3
+	remove_variable = te_dg_dbg_pm4
+}
+
+# ---- b: the census log -----------------------------------------------------------
+# THIS = ROOT = a country, from the end of te_demog_country_census, which has just
+# stored the figures this line prints; reads its local te_dg_c_people. A country under
+# a million people writes nothing. crisis is the capital's te_demog_crisis, beside the
+# two bareword reads it sums as they are: devastation and turmoil, each a 0-1 share.
+# A country with no capital prints -1 for all three.
+te_debug_demog_census_line = {
+	if = {
+		limit = { local_var:te_dg_c_people >= 1000000 }
+		set_variable = { name = te_dg_dbg_people value = local_var:te_dg_c_people }
+		set_variable = { name = te_dg_dbg_mig value = var:te_dg_net_migration }
+		set_local_variable = { name = te_dg_dbg_crisis value = -1 }
+		set_local_variable = { name = te_dg_dbg_dev value = -1 }
+		set_local_variable = { name = te_dg_dbg_turmoil value = -1 }
+		if = {
+			limit = { exists = capital }
+			capital = {
+				set_local_variable = { name = te_dg_dbg_crisis value = te_demog_crisis }
+				set_local_variable = { name = te_dg_dbg_dev value = devastation }
+				set_local_variable = { name = te_dg_dbg_turmoil value = turmoil }
+			}
+		}
+		set_variable = { name = te_dg_dbg_crisis value = local_var:te_dg_dbg_crisis }
+		set_variable = { name = te_dg_dbg_dev value = local_var:te_dg_dbg_dev }
+		set_variable = { name = te_dg_dbg_turmoil value = local_var:te_dg_dbg_turmoil }
+		if = {
+			limit = { var:te_dg_dbg_mig < 0 }
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]"
+		}
+		else = {
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]"
+		}
+		remove_variable = te_dg_dbg_people
+		remove_variable = te_dg_dbg_mig
+		remove_variable = te_dg_dbg_crisis
+		remove_variable = te_dg_dbg_dev
+		remove_variable = te_dg_dbg_turmoil
+	}
+}
+
+# THIS = a state at the top of its yearly pulse (te_demog_state_yearly), before the
+# seed-or-step branches read its census year. Only the player's capital writes: one
+# line a year means one step a year (a second line in a calendar year does nothing, a
+# skipped year re-seeds). An observer game has no player, so it writes none.
+te_debug_demog_pulse_line = {
+	if = {
+		limit = {
+			is_capital = yes
+			owner = { is_ai = no }
+		}
+		debug_log = "TE_DEMOG_PULSE state=capital year=[THIS.ScriptValue('te_demog_year')|0] te_dg_year=[THIS.ScriptValue('te_debug_demog_census_year')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# ---- d: benchmark ----------------------------------------------------------------
+# THIS = ROOT = the player. The cohort step in every state of the world with a census,
+# three passes; debug.log's timestamps (whole seconds) around each pass time it (spec
+# §14 Q9's late-game re-run). Each state's census year goes back a year first, so every
+# pass is a second step in the same year and leaves the census wrong (this year's newborns
+# folded into the over-150 pool); after the timed passes, untimed, every state with a census
+# is seeded again from its population now, so the save stays playable.
+te_debug_demog_benchmark = {
+	set_local_variable = { name = te_dg_dbg_n value = 0 }
+	every_state = {
+		limit = { te_demog_has_census = yes }
+		change_local_variable = { name = te_dg_dbg_n add = 1 }
+	}
+	set_variable = { name = te_dg_dbg_states value = local_var:te_dg_dbg_n }
+	debug_log = "TE_DEMOG_BENCH start states=[THIS.Var('te_dg_dbg_states').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_BENCH pass=1 begin"
+	te_debug_demog_bench_pass = yes
+	debug_log = "TE_DEMOG_BENCH pass=1 end"
+	debug_log = "TE_DEMOG_BENCH pass=2 begin"
+	te_debug_demog_bench_pass = yes
+	debug_log = "TE_DEMOG_BENCH pass=2 end"
+	debug_log = "TE_DEMOG_BENCH pass=3 begin"
+	te_debug_demog_bench_pass = yes
+	debug_log = "TE_DEMOG_BENCH pass=3 end states=[THIS.Var('te_dg_dbg_states').GetValue|0]"
+	remove_variable = te_dg_dbg_states
+	# a valid census again: this year's walks have already run (the seed reads them)
+	debug_log = "TE_DEMOG_BENCH reseed"
+	every_state = {
+		limit = { te_demog_has_census = yes }
+		# the seed leaves te_dg_inflow_years as it was, which the passes' flows may have bumped;
+		# off the states' pulses, so each seeds again at its next one
+		te_demog_seed_off_pulse = yes
+	}
+}
+
+# One pass of the benchmark: every state of the world with a census steps once.
+te_debug_demog_bench_pass = {
+	every_state = {
+		limit = { te_demog_has_census = yes }
+		set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
+		te_demog_step = yes
+	}
+}
+
+# ---- e: war dead -----------------------------------------------------------------
+# THIS = ROOT = the player (spec §14 Q4). A country line: its wars, its dead in all of
+# them at the last monthly pulse (te_dg_war_seen) and this year's so far (te_dg_war_year);
+# then a line per war with its dead in that war (num_country_dead, read in the war and
+# copied to the player) and all sides' dead, the war named by debug_log_scopes; then a line
+# per state holding dead its next step will take (te_dg_war_in), the state named the same
+# way. The next monthly pulse adds the war lines' dead less war_seen to war_year; 31
+# December shares war_year out to the states.
+te_debug_demog_war_dead = {
+	set_local_variable = { name = te_dg_dbg_n value = 0 }
+	every_scope_war = {
+		change_local_variable = { name = te_dg_dbg_n add = 1 }
+	}
+	set_variable = { name = te_dg_dbg_wars value = local_var:te_dg_dbg_n }
+	debug_log = "TE_DEMOG_WARDEAD country wars=[THIS.Var('te_dg_dbg_wars').GetValue|0] war_seen=[THIS.ScriptValue('te_debug_demog_war_seen_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_seen_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_seen_g3')|0] war_year=[THIS.ScriptValue('te_debug_demog_war_year_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_year_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_year_g3')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_dg_dbg_wars
+	every_scope_war = {
+		set_local_variable = { name = te_dg_dbg_dead value = te_demog_war_dead_root }
+		set_local_variable = { name = te_dg_dbg_all value = num_dead }
+		root = {
+			set_variable = { name = te_dg_dbg_dead value = local_var:te_dg_dbg_dead }
+			set_variable = { name = te_dg_dbg_all value = local_var:te_dg_dbg_all }
+			debug_log = "TE_DEMOG_WARDEAD war dead=[THIS.ScriptValue('te_debug_demog_dead_g1')|0]_[THIS.ScriptValue('te_debug_demog_dead_g2')|0]_[THIS.ScriptValue('te_debug_demog_dead_g3')|0] all_sides=[THIS.Var('te_dg_dbg_all').GetValue|0] war_seen=[THIS.ScriptValue('te_debug_demog_war_seen_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_seen_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_seen_g3')|0] war_year=[THIS.ScriptValue('te_debug_demog_war_year_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_year_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_year_g3')|0]"
+			remove_variable = te_dg_dbg_dead
+			remove_variable = te_dg_dbg_all
+		}
+		debug_log_scopes = yes
+	}
+	every_scope_state = {
+		limit = { has_variable = te_dg_war_in }
+		debug_log = "TE_DEMOG_WARDEAD state war_in=[THIS.ScriptValue('te_debug_demog_war_in_g1')|0]_[THIS.ScriptValue('te_debug_demog_war_in_g2')|0]_[THIS.ScriptValue('te_debug_demog_war_in_g3')|0] soldiers=[THIS.Var('te_dg_soldiers').GetValue|0] people=[THIS.ScriptValue('te_debug_demog_pop_g1')|0]_[THIS.ScriptValue('te_debug_demog_pop_g2')|0]_[THIS.ScriptValue('te_debug_demog_pop_g3')|0]"
+		debug_log_scopes = yes
+	}
+}
+
+# ---- f and g: the skew check ---------------------------------------------------
+# THIS = the capital (spec §14 Q11: how fast a working-adult ratio modifier moves a pop's
+# workforce share). One line per pop, largest first, its rank the order of this walk (a
+# pop variable for the line, removed after it), then the capital's totals and the
+# working-adult modifier it carries (the country's included). Option f writes these
+# lines and then adds te_demog_debug_working_adults for 60 days; option g writes them
+# again, a month or more later.
+te_debug_demog_skew_lines = {
+	set_local_variable = { name = te_dg_dbg_n value = 0 }
+	set_local_variable = { name = te_dg_dbg_wf value = 0 }
+	set_local_variable = { name = te_dg_dbg_size value = 0 }
+	ordered_scope_pop = {
+		order_by = total_size
+		max = 1000
+		check_range_bounds = no
+		change_local_variable = { name = te_dg_dbg_n add = 1 }
+		change_local_variable = { name = te_dg_dbg_wf add = te_debug_demog_pop_workforce }
+		change_local_variable = { name = te_dg_dbg_size add = total_size }
+		set_variable = { name = te_dg_dbg_rank value = local_var:te_dg_dbg_n }
+		debug_log = "TE_DEMOG_SKEW pop rank=[THIS.Var('te_dg_dbg_rank').GetValue|0] size=[THIS.ScriptValue('te_debug_demog_pop_size')|0] workforce=[THIS.ScriptValue('te_debug_demog_pop_workforce')|0] dependents=[THIS.ScriptValue('te_debug_demog_pop_dependents')|0] share=[THIS.ScriptValue('te_debug_demog_pop_work_share')|5]"
+		remove_variable = te_dg_dbg_rank
+	}
+	set_variable = { name = te_dg_dbg_n value = local_var:te_dg_dbg_n }
+	set_variable = { name = te_dg_dbg_wf value = local_var:te_dg_dbg_wf }
+	set_variable = { name = te_dg_dbg_size value = local_var:te_dg_dbg_size }
+	debug_log = "TE_DEMOG_SKEW capital pops=[THIS.Var('te_dg_dbg_n').GetValue|0] size=[THIS.Var('te_dg_dbg_size').GetValue|0] workforce=[THIS.Var('te_dg_dbg_wf').GetValue|0] share=[THIS.ScriptValue('te_debug_demog_capital_work_share')|5] ratio_modifier=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|5] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_dg_dbg_n
+	remove_variable = te_dg_dbg_wf
+	remove_variable = te_dg_dbg_size
+}

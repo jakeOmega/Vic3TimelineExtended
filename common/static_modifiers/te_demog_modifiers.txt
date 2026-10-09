@@ -1,0 +1,7 @@
+﻿# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §2.6).
+# Family limitation before modern contraception: France starts with it (history);
+# events can give it to anyone. Value from demographics_params.FAMILY_LIMITATION_MEANS.
+te_demog_family_limitation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_fertility_means_add = 0.6
+}

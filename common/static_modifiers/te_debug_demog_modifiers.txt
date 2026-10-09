@@ -1,0 +1,11 @@
+﻿# Demographics TEST CONSOLE ONLY (`event te_debug_demog.1`, option f).
+# Nothing in normal play applies this.
+
+# Sixty days on the player's capital: does a working-adult ratio modifier move a
+# pop's workforce share at once, or over months? (spec §14 Q11; the mod sets
+# WORKING_ADULT_RATIO_SKEW_MAXIMUM to 1,000,000.) Options f and g log the
+# capital's pops before and after.
+te_demog_debug_working_adults = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_working_adult_ratio_add = 0.05
+}

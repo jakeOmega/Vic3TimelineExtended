@@ -5,7 +5,8 @@
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 # ======================================================================
 
-# Every 1836 country starts at its law's target. on_game_started has no
+# Every 1836 state starts at its own target, and the country's figure is
+# their weighted average (te_inh_game_start). on_game_started has no
 # ROOT, and add_modifier's multiplier resolves against ROOT, so the work
 # runs in a hidden country event (scripting_best_practices.md
 # § "add_modifier { multiplier = var:X } Resolves Against ROOT"); the
@@ -26,8 +27,10 @@ te_inh_on_game_started = {
 	}
 }
 
-# Root = Country. The score drifts and its modifiers follow, once a year;
-# then the generation events and Posthumous Title each roll.
+# Root = Country. The yearly upkeep (the score's own drift only for a
+# country with no scored state: te_demog_country_yearly refreshes every
+# other country's from its states); then the generation events and
+# Posthumous Title each roll.
 on_yearly_pulse_country = {
 	on_actions = {
 		te_inh_yearly_on_action
@@ -45,19 +48,8 @@ te_inh_yearly_on_action = {
 	}
 }
 
-# Root = State. The rural-scaled birth and migration modifiers: a state
-# pulse, because their multiplier is the state's own agrarian share.
-on_yearly_pulse_state = {
-	on_actions = {
-		te_inh_state_yearly_on_action
-	}
-}
-
-te_inh_state_yearly_on_action = {
-	effect = {
-		te_inh_refresh_rural_effects = yes
-	}
-}
+# The rural-scaled birth and migration modifiers refresh from te_demog_state_yearly
+# (te_demog_on_actions.txt), after the walk that sets the agrarian share they scale by.
 
 # Generation events: each rolls 10% a year once its law has been held for a
 # generation (te_inh_generation_due), with a 25-year cooldown of its own.

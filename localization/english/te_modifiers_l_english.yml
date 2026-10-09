@@ -87,6 +87,8 @@
  country_enactment_success_chance_law_ministry_of_war_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"
  country_enactment_success_chance_law_national_bank_add:0 "[concept_enactment_success] chance for [GetLawType('law_national_bank').GetName]"
  country_enactment_success_chance_law_national_bank_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"
+ country_fertility_means_add:0 "Fertility Control"
+ country_fertility_means_add_desc:0 "How much of the gap between the children families want and the children they would have without trying they can actually close."
  country_finance_momentum_monthly_add:0 "Monthly [concept_banking_momentum]"
  country_finance_momentum_monthly_add_desc:0 "An increase or decrease to the [concept_banking_momentum] of the [concept_banking_cycle], affecting the direction and speed of the change of financial conditions over time."
  country_finance_value_monthly_add:0 "Monthly Financial Cycle Value"

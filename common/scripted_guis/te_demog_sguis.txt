@@ -1,0 +1,155 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — display gates for the Population panel's Demographics tab
+# (gui/te_demographics_widgets.gui; plan Task 13)
+# ============================================================================
+# A .gui read of a variable that does not exist logs "Failed to fetch variable"
+# every frame (gui_modding_guide.md gotchas #14 and #23), and no Scope in GUI
+# can ask whether a variable exists. So each family of figures the census
+# writes together is shown only under a gate that asks script. The tab's own
+# pair (te_system_tab_sguis.txt) covers the census: te_pops_demog_tab_unlock_sgui
+# is valid once te_dg_census_year exists, and every figure, band, list and
+# label the country census writes exists with it. These cover the rest. Each
+# reads only its root (is_shown only: none changes anything, so none is valid
+# or does anything). The first seven are country scope, rooted at the player's
+# country; the three at the end are state scope, rooted at the state the panel
+# shows (the state panel's Demographics subtab, plan Task 14):
+# GuiScope.SetRoot( State.MakeScope ).End.
+# ============================================================================
+
+# Wealth Concentration's national figures and the country's Gini: written
+# together by te_demog_wc_national once a state has a score (te_dg_wc_target,
+# te_dg_wc_t_*, te_dg_gini, te_dg_wc_top, te_dg_wc_bottom). A game-start census
+# can come before them.
+te_demog_wealth_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_wc_target }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The most and least concentrated states (te_dg_wc_top, te_dg_wc_bottom) are
+# chosen at the national refresh. Until the next one the state can have been
+# ceded, released or merged away (destroyed: has_variable stays true), so each
+# row shows only while its state exists and is still the country's.
+te_demog_wc_top_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_wc_top
+		exists = var:te_dg_wc_top
+		var:te_dg_wc_top = { owner = ROOT }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_demog_wc_bottom_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_wc_bottom
+		exists = var:te_dg_wc_bottom
+		var:te_dg_wc_bottom = { owner = ROOT }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Continuity of title (inheritance_events.6) pins every state's target at its
+# score, so the term bars, which show the unpinned terms, no longer add up to
+# the target above them; a note under them says why.
+te_demog_wc_pinned_sgui = {
+	scope = country
+	is_shown = { has_variable = te_inh_title_continuity }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The outline twenty years ahead (te_dg_pjf<b>, te_dg_pjm<b>): written for the
+# player's country at its census (te_demog_project), so it is missing for a
+# country the player took over since its last census.
+te_demog_outline_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_pjf0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The capital's own census, for the tooltips that break children per woman
+# and life expectancy into their terms from the capital's figures.
+te_demog_capital_census_sgui = {
+	scope = country
+	is_shown = {
+		capital ?= { te_demog_has_census = yes }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Births and deaths per 1,000 people are real only when the figures came from
+# a step: a seed writes no births or deaths (te_dg_stepped, te_demog_set_trend).
+te_demog_stepped_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_stepped
+		var:te_dg_stepped > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ----------------------------------------------------------------------------
+# State scope: the state panel's Demographics subtab.
+# ----------------------------------------------------------------------------
+
+# The state has a census. te_dg_year is written by te_demog_set_scale, then the
+# state's figures (te_demog_state_figures ends by writing te_dg_stepped), so
+# with both every band and figure the subtab reads exists; the walk's Gini and
+# urban share are written before any census. The subtab shows "Census pending"
+# for a state without (a state new to the game, or split off since the last
+# yearly pulse, or one the rule had not reached).
+te_demog_state_census_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_cohorts_run = yes
+		te_demog_has_census = yes
+		has_variable = te_dg_stepped
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's Wealth Concentration score and its target: te_demog_wc_state_yearly
+# writes the target first and the score on the same pass, and the game-start seed
+# (te_demog_wc_seed_state) both, so a census can come before them only by an
+# ordering the script does not promise.
+te_demog_state_wealth_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_wc
+		has_variable = te_dg_wc_target
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's last census came from a step, so its births, deaths and net
+# migration are a year's. A seed writes none: its CBR and CDR read 0 and its
+# net migration 0 (te_demog_set_trend).
+te_demog_state_stepped_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_stepped
+		var:te_dg_stepped > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

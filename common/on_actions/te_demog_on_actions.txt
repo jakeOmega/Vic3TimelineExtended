@@ -1,0 +1,89 @@
+﻿# ======================================================================
+#  DEMOGRAPHICS — on actions
+#  Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §11.3
+#  Plan: docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md
+#  Effects: common/scripted_effects/te_demog_effects.txt.
+# ======================================================================
+
+# Root = State, a different day per state across the year. Runs whatever the
+# rule is: the walks feed inheritance and Wealth Concentration even with the
+# census off, and the orchestrator gates the census itself.
+on_yearly_pulse_state = {
+	on_actions = {
+		te_demog_state_yearly_on_action
+	}
+}
+
+te_demog_state_yearly_on_action = {
+	effect = {
+		te_demog_state_yearly = yes
+	}
+}
+
+# Root = Country, monthly. Not gated by the rule: the war-shock work (Task 11) reads
+# the same running total of the owner's war dead.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_demog_country_monthly_on_action
+	}
+}
+
+te_demog_country_monthly_on_action = {
+	effect = {
+		te_demog_country_monthly = yes
+	}
+}
+
+# Root = Country, on 31 December. The war shock and Wealth Concentration's national
+# figure run whatever the rule; the census gates itself on it.
+on_yearly_pulse_country = {
+	on_actions = {
+		te_demog_country_yearly_on_action
+	}
+}
+
+te_demog_country_yearly_on_action = {
+	effect = {
+		te_demog_country_yearly = yes
+	}
+}
+
+# Every 1836 state opens with a census. on_game_started has no ROOT, so each
+# country walks and seeds its states in a hidden country event
+# (te_demog_events.1); the fan-out is te_inh_on_game_started's.
+on_game_started = {
+	on_actions = {
+		te_demog_on_game_started
+	}
+}
+
+te_demog_on_game_started = {
+	effect = {
+		every_country = {
+			trigger_event = {
+				id = te_demog_events.1
+			}
+		}
+	}
+}
+
+# Root = a country on the losing side of a war, capitulations included (scope:war the war;
+# Grand Monuments' war commissions use the same hook, monument_events_on_actions.txt). A lost
+# war that cost it a war goal takes 5 from every state's Wealth Concentration (spec §4.2),
+# whatever the rule. scope:victim_of_wargoal exists only when one of the winners' war goals
+# was imposed on this country, so a co-belligerent that dropped out having given up nothing
+# is spared (owner's ruling on #830); long wars have their own shock, te_demog_wc_war_shock.
+on_lost_war = {
+	on_actions = {
+		te_demog_lost_war
+	}
+}
+
+te_demog_lost_war = {
+	effect = {
+		if = {
+			limit = { exists = scope:victim_of_wargoal }
+			te_demog_wc_shock = { AMOUNT = -5 }
+		}
+	}
+}

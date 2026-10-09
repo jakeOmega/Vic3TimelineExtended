@@ -17,6 +17,9 @@ import demographics_model as M  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
+CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
+GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
+LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
 
 
 class TestHarness(unittest.TestCase):
@@ -75,13 +78,11 @@ class TestHarness(unittest.TestCase):
         self.assertEqual(H._ungroup("0_0_500.5"), 500.5)
         self.assertEqual(H._ungroup("1_2_3.25"), 1_002_003.25)
 
-    def _step_lines(self, pop=2_000_000, pop_after=2_010_000, war=500, mig=-3000, logged_mmr=True,
-                    drop_after=False):
-        """The 31 lines of one in-game step: the model stepped from its own seed.
+    def _step(self, pop=2_000_000, pop_after=2_010_000, war=500, kills=0, mig=-3000, logged_mmr=True):
+        """(before, head, after) of one in-game step: the model stepped from its own seed.
 
         logged_mmr False steps the "after" ring with no maternal deaths while the head still logs
-        the real rate, so the lines describe a script that skipped them. drop_after writes the
-        after cohorts under half a person as 0, as the game drops them.
+        the real rate, so the lines describe a script that skipped them.
         """
         inp = M.Inputs(sol=11, literacy=0.35, urban_share=0.3)
         before = M.seed(inp, 1836, pop)
@@ -91,11 +92,20 @@ class TestHarness(unittest.TestCase):
         work_f, work_m = M.work_split(inp, mult["work"])
         tfr = M.fertility(inp, 40)["tfr"]
         prof = M.migrant_profile(inp)
-        M.step(after, inp, 1837, engine_pop=pop_after, war_dead=war, migration=mig,
+        M.step(after, inp, 1837, engine_pop=pop_after, war_dead=war, kills=kills, migration=mig,
                rates=(qf, qm, mmr if logged_mmr else 0.0, tfr, prof))
-        head = {"pop": pop_after, "war": war, "kills": 0, "mig": mig, "tfr": tfr, "mmr": mmr,
+        head = {"pop": pop_after, "war": war, "kills": kills, "mig": mig, "tfr": tfr, "mmr": mmr,
                 "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
                 "m_work_f": work_f, "m_work_m": work_m, "profile": prof}
+        return before, head, after
+
+    def _step_lines(self, pop=2_000_000, pop_after=2_010_000, war=500, mig=-3000, logged_mmr=True,
+                    drop_after=False):
+        """The 31 lines of one in-game step: the model stepped from its own seed.
+
+        drop_after writes the after cohorts under half a person as 0, as the game drops them.
+        """
+        before, head, after = self._step(pop, pop_after, war, 0, mig, logged_mmr)
         lines = H.format_replay("TEST", 1837, before, head, after)
         return self._drop_small_cohorts(lines, pop_after) if drop_after else lines
 
@@ -264,3 +274,120 @@ class TestHarness(unittest.TestCase):
         code, out, _err = self._cli("seed", str(SLICE), "--tag", "GBR")
         self.assertEqual(code, 0)
         self.assertIn(f"(wealth {c.wealth_tfr:.2f} x factor", out)
+
+
+def _debug_logs(path, effect):
+    """The debug_log strings of a top-level scripted effect, in order."""
+    text = Path(path).read_text(encoding="utf-8-sig")
+    m = re.search(rf"^{effect} = \{{", text, re.M)
+    assert m, f"{effect} not in {path}"
+    depth, i = 1, m.end()
+    while depth:
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return re.findall(r'debug_log = "([^"]*)"', text[m.end():i])
+
+
+def _render(template, resolve):
+    """The line the game writes: each [..] template replaced by what resolve(inside) returns."""
+    return re.sub(r"\[([^\]]*)\]", lambda m: resolve(m.group(1)), template)
+
+
+def _game_number(x, places):
+    """A value as the debug log prints it with |N: fixed decimals, or an integer for |0."""
+    return f"{x:.{places}f}" if places else str(int(x))
+
+
+class TestConsoleReplayLines(unittest.TestCase):
+    """te_debug_demog.1 option a's lines, rendered from the script's own debug_log templates with a
+    model step's numbers (as the game would print them), must parse, check and replay: a field
+    renamed or dropped in te_debug_demog_effects.txt, or in the generated ring lines, fails here."""
+
+    step = TestHarness._step
+
+    @staticmethod
+    def _heads():
+        heads = _debug_logs(CONSOLE, "te_debug_demog_replay")
+        assert len(heads) == 2, heads
+        negative = [h for h in heads if " mig=-[" in h]
+        other = [h for h in heads if " mig=[" in h]
+        assert len(negative) == 1 and len(other) == 1, heads
+        assert negative[0].replace(" mig=-[", " mig=[") == other[0], "the two heads differ beyond the sign"
+        return negative[0], other[0]
+
+    @staticmethod
+    def _head_resolver(year, people, rates, profile):
+        def resolve(inside):
+            if inside == "THIS.ScriptValue('te_demog_year')|0":
+                return str(year)
+            m = re.fullmatch(r"THIS\.ScriptValue\('te_debug_demog_(\w+)_g([123])'\)\|0", inside)
+            if m:   # the script values: abs, divide, floor, modulo
+                n = int(abs(people[m.group(1)]))
+                return str((n // 1_000_000, n // 1000 % 1000, n % 1000)[int(m.group(2)) - 1])
+            m = re.fullmatch(r"THIS\.Var\('te_dg_dbg_(\w+)'\)\.GetValue\|(\d)", inside)
+            if m and m.group(1) in rates:
+                return _game_number(rates[m.group(1)], int(m.group(2)))
+            m = re.fullmatch(r"THIS\.Var\('te_dg_dbg_p([fm])(\d)'\)\.GetValue\|(\d)", inside)
+            if m:
+                return _game_number(profile[(int(m.group(2)), m.group(1))], int(m.group(3)))
+            raise AssertionError(f"head template the test can't read: [{inside}]")
+        return resolve
+
+    @staticmethod
+    def _ring_resolver(ring):
+        f, m, (pf, pm) = H._per_mille(ring)
+        slots = {"f": f, "m": m}
+
+        def resolve(inside):
+            hit = re.fullmatch(r"THIS\.ScriptValue\('te_demog_dbg_([fm])(\d+)'\)\|(\d)", inside)
+            if hit:
+                return _game_number(slots[hit.group(1)][int(hit.group(2))], int(hit.group(3)))
+            hit = re.fullmatch(r"THIS\.ScriptValue\('te_demog_dbg_pool_([fm])'\)\|(\d)", inside)
+            if hit:
+                return _game_number(pf if hit.group(1) == "f" else pm, int(hit.group(2)))
+            hit = re.fullmatch(r"THIS\.Var\('te_dg_pa'\)\.GetValue\|(\d)", inside)
+            if hit:
+                return _game_number(ring.pool_age, int(hit.group(1)))
+            raise AssertionError(f"ring template the test can't read: [{inside}]")
+        return resolve
+
+    def _console_lines(self, mig, kills):
+        before, head, after = self.step(war=500, kills=kills, mig=mig)
+        negative, other = self._heads()
+        people = {"pop_last": before.people(), "pop": head["pop"], "war": head["war"], "kills": head["kills"],
+                  "mig": head["mig"]}
+        rates = {k: head[k] for k in H.HEAD_RATES}
+        head_line = _render(negative if mig < 0 else other,
+                            self._head_resolver(1837, people, rates, head["profile"]))
+        lines = [head_line]
+        for when, ring in (("before", before), ("after", after)):
+            templates = _debug_logs(GENERATED_EFFECTS, f"te_demog_debug_log_ring_{when}")
+            lines += [_render(t, self._ring_resolver(ring)) for t in templates]
+        return [LOG_PREFIX + x for x in lines]
+
+    def test_the_consoles_lines_replay(self):
+        for mig, kills in ((-3000, 0), (4000, 250)):
+            with self.subTest(mig=mig):
+                lines = self._console_lines(mig, kills)
+                self.assertEqual(len(lines), 31)
+                self.assertFalse([x for x in lines if "[" in x[len(LOG_PREFIX):]], "an unresolved template")
+                blocks = H.parse_replay(lines)
+                self.assertEqual(len(blocks), 1)
+                block = blocks[0]
+                self.assertEqual(block["head"]["state"], "capital")
+                self.assertEqual(set(block["head"]), {"state", "year", *H.HEAD_PEOPLE, *H.HEAD_RATES, "profile"})
+                self.assertEqual(H._ungroup(block["head"]["mig"]), mig)
+                self.assertEqual(H._ungroup(block["head"]["kills"]), kills)
+                self.assertIsNone(H.check_block(block))
+                self.assertLess(H.replay_block(block), H.DEFAULT_TOLERANCE)
+
+    def test_the_cli_reads_the_consoles_lines(self):
+        lines = self._console_lines(-3000, 0)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "debug.log"
+            path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                code = H.main(["replay", str(path)])
+        self.assertEqual(code, 0, out.getvalue())
+        self.assertIn("capital 1837: worst slot error", out.getvalue())

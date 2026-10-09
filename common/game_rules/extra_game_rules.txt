@@ -390,6 +390,28 @@ grand_monuments_rule = {
 	}
 }
 
+# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §11.4).
+# Full runs the cohort model and, from phase 2, applies its effects; Display only
+# runs the cohorts and the panel but applies only the equilibrium's births and
+# deaths; Disabled runs neither. In phase 1 nothing is applied, so Full and Display
+# only behave the same. Every check is written negatively (te_demog_cohorts_run,
+# te_demog_effects_run) so a save from before the rule keeps the system.
+demographics_rule = {
+	default = demographics_full
+
+	demographics_full = {
+		flag = demographics_full
+	}
+
+	demographics_display_only = {
+		flag = demographics_display_only
+	}
+
+	demographics_disabled = {
+		flag = demographics_disabled
+	}
+}
+
 # Legislated tax code (docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md).
 # Off by default: with it off, taxes work exactly as in the base game. The two
 # enabled settings replace the five vanilla taxation laws with one carrier law,

@@ -21,6 +21,7 @@
 #   megastructure_progress_modifier_types.txt
 #   banking_cycle_modifier_types.txt
 #   sol_expectations_modifier_types.txt
+#   demographics_modifier_types.txt
 #   (plus existing covert_warfare_, cultural_hegemony_, movement_, st_res_,
 #    tech_gate_modifier_types.txt)
 #

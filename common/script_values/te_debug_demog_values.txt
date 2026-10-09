@@ -1,0 +1,297 @@
+﻿# ============================================================================
+# DEMOGRAPHICS TEST CONSOLE — script values for te_debug_demog.1's debug_log lines
+# (events/te_debug_demog_events.txt; common/scripted_effects/te_debug_demog_effects.txt)
+# ============================================================================
+# Console only: nothing else reads these. Each line reads its numbers through
+# [THIS.ScriptValue('x')|N] or [THIS.Var('x').GetValue|N], the forms that print the
+# current scope's value (docs/guides/scripting_best_practices.md, "debug_log
+# Loc-String Templating Limitations"). A people count prints as three groups,
+# millions_thousands_units, each under 1000 (te_debug_demog_<name>_g1/_g2/_g3, the
+# demographics probe's register form): 2_803_898 is 2,803,898 and a group drops its
+# leading zeros (0_490_84 is 490,084). scripts/analysis/demographics_harness.py
+# (_ungroup) reads them back. A signed count goes through its absolute value; the
+# line writes the sign itself.
+# ============================================================================
+
+# ---- The replay head (option a): THIS = the capital ------------------------
+
+# The ring's people before the step: the population at the last census.
+te_debug_demog_pop_last_g1 = {
+	value = var:te_dg_people
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_pop_last_g2 = {
+	value = var:te_dg_people
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_pop_last_g3 = {
+	value = var:te_dg_people
+	modulo = 1000
+	floor = yes
+}
+
+# The state's population now.
+te_debug_demog_pop_g1 = {
+	value = state_population
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_pop_g2 = {
+	value = state_population
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_pop_g3 = {
+	value = state_population
+	modulo = 1000
+	floor = yes
+}
+
+# The war dead the step takes (te_demog_flows' local te_dg_war, copied).
+te_debug_demog_war_g1 = {
+	value = var:te_dg_dbg_war
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_war_g2 = {
+	value = var:te_dg_dbg_war
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_war_g3 = {
+	value = var:te_dg_dbg_war
+	modulo = 1000
+	floor = yes
+}
+
+# The known kills the step takes (te_demog_flows' local te_dg_kills, copied).
+te_debug_demog_kills_g1 = {
+	value = var:te_dg_dbg_kills
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_kills_g2 = {
+	value = var:te_dg_dbg_kills
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_kills_g3 = {
+	value = var:te_dg_dbg_kills
+	modulo = 1000
+	floor = yes
+}
+
+# The net migration the step applies (the residual after the noise band; signed),
+# as its absolute value. A state copies it from te_demog_flows' local te_dg_mig, a
+# country from its census's te_dg_net_migration.
+te_debug_demog_mig_abs = {
+	value = var:te_dg_dbg_mig
+	if = {
+		limit = { var:te_dg_dbg_mig < 0 }
+		multiply = -1
+	}
+}
+
+# Its groups.
+te_debug_demog_mig_g1 = {
+	value = te_debug_demog_mig_abs
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_mig_g2 = {
+	value = te_debug_demog_mig_abs
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_mig_g3 = {
+	value = te_debug_demog_mig_abs
+	modulo = 1000
+	floor = yes
+}
+
+# ---- The census line (option b): THIS = a country -------------------------
+
+# The census's people (te_demog_country_census' local te_dg_c_people, copied).
+te_debug_demog_people_g1 = {
+	value = var:te_dg_dbg_people
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_people_g2 = {
+	value = var:te_dg_dbg_people
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_people_g3 = {
+	value = var:te_dg_dbg_people
+	modulo = 1000
+	floor = yes
+}
+
+# The country's Gini (te_demog_wc_national); -1 before its first.
+te_debug_demog_gini = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_gini }
+		value = var:te_dg_gini
+	}
+}
+
+# The national Wealth Concentration, 0-100; -1 before its first.
+te_debug_demog_wc = {
+	value = -1
+	if = {
+		limit = { has_variable = te_inh_concentration }
+		value = var:te_inh_concentration
+	}
+}
+
+# ---- War dead (option e) ----------------------------------------------------
+
+# THIS = the player: its dead in one war (num_country_dead, copied from the war).
+te_debug_demog_dead_g1 = {
+	value = var:te_dg_dbg_dead
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_dead_g2 = {
+	value = var:te_dg_dbg_dead
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_dead_g3 = {
+	value = var:te_dg_dbg_dead
+	modulo = 1000
+	floor = yes
+}
+
+# THIS = the player: its dead in all its wars at the last monthly pulse; 0 before the first.
+te_debug_demog_war_seen_raw = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_war_seen }
+		value = var:te_dg_war_seen
+	}
+}
+
+# Its groups.
+te_debug_demog_war_seen_g1 = {
+	value = te_debug_demog_war_seen_raw
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_war_seen_g2 = {
+	value = te_debug_demog_war_seen_raw
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_war_seen_g3 = {
+	value = te_debug_demog_war_seen_raw
+	modulo = 1000
+	floor = yes
+}
+
+# THIS = the player: this year's war dead so far, until 31 December; 0 before the first pulse.
+te_debug_demog_war_year_raw = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_war_year }
+		value = var:te_dg_war_year
+	}
+}
+
+# Its groups.
+te_debug_demog_war_year_g1 = {
+	value = te_debug_demog_war_year_raw
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_war_year_g2 = {
+	value = te_debug_demog_war_year_raw
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_war_year_g3 = {
+	value = te_debug_demog_war_year_raw
+	modulo = 1000
+	floor = yes
+}
+
+# THIS = a state: the war dead its next step takes; 0 when none are pending.
+te_debug_demog_war_in_raw = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_war_in }
+		value = var:te_dg_war_in
+	}
+}
+
+# Its groups.
+te_debug_demog_war_in_g1 = {
+	value = te_debug_demog_war_in_raw
+	divide = 1000000
+	floor = yes
+}
+te_debug_demog_war_in_g2 = {
+	value = te_debug_demog_war_in_raw
+	divide = 1000
+	floor = yes
+	modulo = 1000
+}
+te_debug_demog_war_in_g3 = {
+	value = te_debug_demog_war_in_raw
+	modulo = 1000
+	floor = yes
+}
+
+# ---- The pulse line (option b's log): THIS = the player's capital -----------
+
+# The census year the pulse is about to step from; -1 before the first seed.
+te_debug_demog_census_year = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_year }
+		value = var:te_dg_year
+	}
+}
+
+# ---- The skew check (options f and g) ----------------------------------------
+# THIS = a pop of the capital: its size, workforce and dependents (the bareword
+# workforce and dependents reads; total_size is the check on them) and its
+# workforce share.
+te_debug_demog_pop_size = {
+	value = total_size
+}
+te_debug_demog_pop_workforce = {
+	value = workforce
+}
+te_debug_demog_pop_dependents = {
+	value = dependents
+}
+te_debug_demog_pop_work_share = {
+	value = workforce
+	divide = { value = total_size min = 1 }
+}
+
+# THIS = the capital: the working-adult ratio modifier it carries, the country's
+# included (a state read includes the country's modifiers: probe Q5).
+te_debug_demog_working_ratio_mod = {
+	value = modifier:state_working_adult_ratio_add
+}
+
+# THIS = the capital, after option f's or g's walk: its workforce share.
+te_debug_demog_capital_work_share = {
+	value = var:te_dg_dbg_wf
+	divide = { value = var:te_dg_dbg_size min = 1 }
+}

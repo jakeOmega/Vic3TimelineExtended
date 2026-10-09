@@ -1,0 +1,1400 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the yearly state effects
+# (docs/superpowers/specs/2026-10-08-demographics-design.md;
+# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Tasks 7-12)
+#
+# State variables the walk writes, every year, whatever the rule (Tasks 8-11
+# add theirs below as they land):
+#   te_dg_walk_pop      people in the state, as the pops sum
+#   te_dg_lit           pop-weighted literacy, 0-1
+#   te_dg_sol           pop-weighted standard of living
+#   te_dg_wtfr          mean wealth TFR (children per woman from wealth alone)
+#   te_dg_eb, te_dg_ed  the engine's expected births and deaths over a year,
+#                       people (what the census's own totals are measured against)
+#   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
+#                       inheritance's rural modifiers' multiplier (probe-checked,
+#                       London 0.174)
+#   te_dg_soldiers      Soldiers + Officers, people
+#   te_dg_bureaucrats   Bureaucrats, people
+#   te_dg_urban         people not at a rural workplace
+#   te_dg_urban_share   te_dg_urban over te_dg_walk_pop
+#   te_dg_fjob_share    share of employed people at a workplace that draws
+#                       women (light industry, services, urban facilities)
+#   te_dg_n_lo/_mi/_up  people by strata (lower, middle, upper)
+#   te_dg_y_lo/_mi/_up  income by strata, the Gini's stand-in (people x income per head)
+#   te_dg_gini          the state's shown Gini, 0-0.9 (te_demog_state_gini)
+#   te_dg_lv_priv       building levels held privately (capital buildings)
+#   te_dg_lv_self       building levels held by their own workers (cooperatives)
+#   te_dg_lv_ctry       building levels held by the state
+#   te_dg_lv_own        levels of the ownership buildings (manor houses, financial
+#                       districts, company headquarters), Wealth Concentration's input
+#
+# The census (Task 8: te_demog_seed, te_demog_step), when te_demog_cohorts_run:
+#   te_dg_f<k>, te_dg_m<k>  women and men in ring slot k (0-149, the birth year
+#                       mod 150), before te_dg_scale; a slot nobody holds has no
+#                       variable and the step skips it
+#   te_dg_pf, te_dg_pm  the pool (ages 150 and over), before te_dg_scale
+#   te_dg_pa            the pool's mean age
+#   te_dg_scale         the ring to the engine's population, applied to the
+#                       cohorts at the next step (lazily)
+#   te_dg_raw           the ring's total before te_dg_scale
+#   te_dg_people, te_dg_pop_last  the state's population at the census
+#   te_dg_year          the census's year (te_demog_has_census)
+#   te_dg_bf<b>, te_dg_bm<b>  people in band b (0-4 ... 80-84, 85+)
+#   te_dg_cf<c>, te_dg_cm<c>  people in migrant class c by age 0-148 (0-14,
+#                       15-17, 18-35, 36-59, 60-148): next step's flow shares
+#   te_dg_f1840, te_dg_m1840  women and men aged 18-40: next step's war shares
+#   te_dg_births, te_dg_deaths  this year's, people (0 after a seed)
+#   te_dg_e0, te_dg_e0f, te_dg_e0m, te_dg_e65, te_dg_imr  the life table (IMR per 1,000)
+#   te_dg_tfr, te_dg_means, te_dg_desired  fertility (spec §2.3)
+#   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
+#                       te_dg_m_mat maternal deaths per 100,000 births
+#   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
+#   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
+#                       the panel's figures (te_dg_w1549, women aged 15-49, is
+#                       the country's TFR weight), each with last year's in
+#                       te_dg_prev_<name> from the second census on
+#   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
+#                       its outline), stored at the census for the panel's bars
+#
+# Flows (Task 9), the people the engine moves and kills (spec §2.5):
+#   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
+#                       since the state's last step, taken (and removed) by the next step,
+#                       so they cover the same months as its population change
+#   te_dg_kills_in      state: people the mod's own script killed since the last
+#                       step (te_demog_note_kills), taken and removed the same way
+#   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
+#   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
+#   te_dg_war_year      country: the year's rise in war dead, until 31 December (read by the
+#                       Wealth Concentration war shock; the states take theirs monthly)
+#   te_dg_reseed        state: set by a seed made off the state's own pulse (game start, the
+#                       console); its next pulse seeds again, so its first step covers a year
+#
+# The trend arrows (Task 10), on a state and on a country alike:
+#   te_dg_stepped       1 when the figures stored now came from a step (births above 0), 0 when
+#                       a seed wrote them: a seed writes 0 births and deaths, so its CBR and CDR
+#                       are no year to compare with
+#   te_dg_trend_ok      1 when te_dg_prev_<name> holds last year's figure from a step and the
+#                       figure stored now is a step's as well: false in a seed's census year and
+#                       in the first step's after it, true from the second step on. A panel
+#                       draws an arrow only while it is 1. The prev copies are made only after
+#                       a step, so none is ever a seed's. A state re-seeded (a census gap, an
+#                       emptied ring, its people moving more than 25% in a year) starts again;
+#                       so does a country whose states are all fresh seeds, but not one that
+#                       takes a new state in.
+#   te_dg_prev_tfr, te_dg_prev_e0  a state's, copied by te_demog_prepare before it overwrites
+#                       them
+#
+# The country's census (Task 10, te_demog_country_census), every 31 December and at game start:
+#   te_dg_census_year   the year of the country's last census (absent = census pending)
+#   te_dg_cbf<b>, te_dg_cbm<b>  people in band b, the sum of its states' te_dg_bf<b>, te_dg_bm<b>
+#   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share, te_dg_dependency,
+#   te_dg_sex_balance, te_dg_w1549  from those bands, as a state's (te_demog_store_figures)
+#   te_dg_tfr           the states' weighted by their women aged 15-49
+#   te_dg_e0, te_dg_e65 the states' weighted by people; te_dg_imr by births (by people while the
+#                       census holds no births, as in a seed-only census, whose births are 0)
+#   te_dg_cbr, te_dg_cdr  births and deaths per 1,000 people; te_dg_net_migration the sum.
+#                       CBR and CDR are not real while te_dg_stepped is 0: a seed writes no births
+#                       or deaths, so they read 0. That is apart from te_dg_trend_ok (which
+#                       only says whether an arrow may be drawn): a panel shows no CBR and CDR
+#                       for te_dg_stepped = 0
+#   te_dg_urban_share   urban people over people; te_dg_primacy the largest state's urban people
+#                       over all urban people (a state is one city, spec 5.2); te_dg_n_cities the
+#                       effective number of cities, (urban)^2 over the sum of squares, both in
+#                       units of 100,000 people (values are i64 x 1e-5: 10 million people squared
+#                       would overflow, and in millions the square of a state under ~3,200
+#                       urban people is under one unit); te_dg_urban_label 0 Primate (primacy
+#                       40% or more), 1 Dominant (25%), 2 Balanced (10%), 3 Dispersed.
+#                       te_dg_n_cities is a number and te_dg_cities a variable list: kept under
+#                       two names in case the engine keeps a variable and a list in one namespace.
+#   te_dg_prev_<name>   each of the figures above, as last year's (see the arrows)
+#   te_dg_pjf<b>, te_dg_pjm<b>  the player's bands twenty years ahead (te_demog_project)
+# Variable lists on the country (state scopes, drawn by the panel):
+#   te_dg_states        its states with a census, the largest by people first, at most 40
+#   te_dg_cities        its three census states of the largest cities, by state_city_size_rank
+# ============================================================================
+
+# THIS = a state, on its yearly pulse. One pop walk and one building walk fill
+# every sum the census, Wealth Concentration and inheritance need (spec §11.3).
+te_demog_walks = {
+	set_local_variable = { name = te_dg_w_pop value = 0 }
+	set_local_variable = { name = te_dg_w_lit value = 0 }
+	set_local_variable = { name = te_dg_w_sol value = 0 }
+	set_local_variable = { name = te_dg_w_wtfr value = 0 }
+	set_local_variable = { name = te_dg_w_eb value = 0 }
+	set_local_variable = { name = te_dg_w_ed value = 0 }
+	set_local_variable = { name = te_dg_w_agr value = 0 }
+	set_local_variable = { name = te_dg_w_sold value = 0 }
+	set_local_variable = { name = te_dg_w_bur value = 0 }
+	set_local_variable = { name = te_dg_w_rural value = 0 }
+	set_local_variable = { name = te_dg_w_fjob value = 0 }
+	set_local_variable = { name = te_dg_w_emp value = 0 }
+	set_local_variable = { name = te_dg_w_nlo value = 0 }
+	set_local_variable = { name = te_dg_w_nmi value = 0 }
+	set_local_variable = { name = te_dg_w_nup value = 0 }
+	set_local_variable = { name = te_dg_w_ylo value = 0 }
+	set_local_variable = { name = te_dg_w_ymi value = 0 }
+	set_local_variable = { name = te_dg_w_yup value = 0 }
+	every_scope_pop = {
+		change_local_variable = { name = te_dg_w_pop add = total_size }
+		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
+		change_local_variable = { name = te_dg_w_sol add = te_demog_pop_sol }
+		change_local_variable = { name = te_dg_w_wtfr add = te_demog_pop_wealth_tfr }
+		change_local_variable = { name = te_dg_w_eb add = te_demog_pop_engine_births }
+		change_local_variable = { name = te_dg_w_ed add = te_demog_pop_engine_deaths }
+		if = {
+			limit = { strata = upper }
+			change_local_variable = { name = te_dg_w_nup add = total_size }
+			change_local_variable = { name = te_dg_w_yup add = te_demog_pop_income }
+		}
+		else_if = {
+			limit = { strata = middle }
+			change_local_variable = { name = te_dg_w_nmi add = total_size }
+			change_local_variable = { name = te_dg_w_ymi add = te_demog_pop_income }
+		}
+		else = {
+			change_local_variable = { name = te_dg_w_nlo add = total_size }
+			change_local_variable = { name = te_dg_w_ylo add = te_demog_pop_income }
+		}
+		if = {
+			limit = {
+				OR = {
+					is_pop_type = peasants
+					is_pop_type = farmers
+				}
+			}
+			change_local_variable = { name = te_dg_w_agr add = total_size }
+		}
+		if = {
+			limit = {
+				OR = {
+					is_pop_type = soldiers
+					is_pop_type = officers
+				}
+			}
+			change_local_variable = { name = te_dg_w_sold add = total_size }
+		}
+		if = {
+			limit = { is_pop_type = bureaucrats }
+			change_local_variable = { name = te_dg_w_bur add = total_size }
+		}
+		if = {
+			limit = { exists = workplace }
+			change_local_variable = { name = te_dg_w_emp add = total_size }
+			if = {
+				limit = { workplace = { te_demog_rural_workplace = yes } }
+				change_local_variable = { name = te_dg_w_rural add = total_size }
+			}
+			if = {
+				limit = { workplace = { te_demog_female_job_workplace = yes } }
+				change_local_variable = { name = te_dg_w_fjob add = total_size }
+			}
+		}
+		else_if = {
+			limit = { is_pop_type = peasants }
+			change_local_variable = { name = te_dg_w_rural add = total_size }
+		}
+	}
+	set_variable = { name = te_dg_walk_pop value = local_var:te_dg_w_pop }
+	set_variable = { name = te_dg_lit value = { value = local_var:te_dg_w_lit divide = { value = local_var:te_dg_w_pop min = 1 } } }
+	set_variable = { name = te_dg_sol value = { value = local_var:te_dg_w_sol divide = { value = local_var:te_dg_w_pop min = 1 } } }
+	set_variable = { name = te_dg_wtfr value = { value = local_var:te_dg_w_wtfr divide = { value = local_var:te_dg_w_pop min = 1 } } }
+	# the engine's births and deaths over a year: the curves are x 100,000 a month
+	set_variable = {
+		name = te_dg_eb
+		value = {
+			value = local_var:te_dg_w_eb
+			multiply = 12
+			divide = 100000
+			multiply = { value = 1 add = modifier:state_birth_rate_mult min = 0 }
+		}
+	}
+	set_variable = {
+		name = te_dg_ed
+		value = {
+			value = local_var:te_dg_w_ed
+			multiply = 12
+			divide = 100000
+			multiply = { value = 1 add = modifier:state_mortality_mult min = 0 }
+		}
+	}
+	set_variable = { name = te_dg_agr_share value = { value = local_var:te_dg_w_agr divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
+	set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }
+	set_variable = { name = te_dg_bureaucrats value = local_var:te_dg_w_bur }
+	set_variable = { name = te_dg_urban value = { value = local_var:te_dg_w_pop subtract = local_var:te_dg_w_rural min = 0 } }
+	set_variable = { name = te_dg_urban_share value = { value = var:te_dg_urban divide = { value = local_var:te_dg_w_pop min = 1 } } }
+	set_variable = { name = te_dg_fjob_share value = { value = local_var:te_dg_w_fjob divide = { value = local_var:te_dg_w_emp min = 1 } } }
+	set_variable = { name = te_dg_n_lo value = local_var:te_dg_w_nlo }
+	set_variable = { name = te_dg_n_mi value = local_var:te_dg_w_nmi }
+	set_variable = { name = te_dg_n_up value = local_var:te_dg_w_nup }
+	set_variable = { name = te_dg_y_lo value = local_var:te_dg_w_ylo }
+	set_variable = { name = te_dg_y_mi value = local_var:te_dg_w_ymi }
+	set_variable = { name = te_dg_y_up value = local_var:te_dg_w_yup }
+	# buildings: capital in private, cooperative and state hands; ownership levels
+	set_local_variable = { name = te_dg_w_priv value = 0 }
+	set_local_variable = { name = te_dg_w_self value = 0 }
+	set_local_variable = { name = te_dg_w_ctry value = 0 }
+	set_local_variable = { name = te_dg_w_own value = 0 }
+	every_scope_building = {
+		if = {
+			limit = { te_demog_is_capital_building = yes }
+			change_local_variable = { name = te_dg_w_priv add = te_demog_building_private_levels }
+			change_local_variable = { name = te_dg_w_self add = te_demog_building_self_levels }
+			change_local_variable = { name = te_dg_w_ctry add = te_demog_building_country_levels }
+		}
+		else_if = {
+			limit = { te_demog_is_ownership_building = yes }
+			change_local_variable = { name = te_dg_w_own add = level }
+		}
+	}
+	set_variable = { name = te_dg_lv_priv value = local_var:te_dg_w_priv }
+	set_variable = { name = te_dg_lv_self value = local_var:te_dg_w_self }
+	set_variable = { name = te_dg_lv_ctry value = local_var:te_dg_w_ctry }
+	set_variable = { name = te_dg_lv_own value = local_var:te_dg_w_own }
+	te_demog_state_gini = yes
+}
+
+# THIS = a state, on its yearly pulse (a different day per state, spec §11.3).
+# The walks and Wealth Concentration run whatever the rule; the census only
+# when te_demog_cohorts_run.
+te_demog_state_yearly = {
+	# the console's census log: the player's capital logs each pulse's date and census year
+	# before the branches below read them (te_debug_demog_effects.txt)
+	if = {
+		limit = { te_demog_census_log_on = yes }
+		te_debug_demog_pulse_line = yes
+	}
+	te_demog_walks = yes
+	te_inh_refresh_rural_effects = yes
+	te_demog_wc_state_yearly = yes
+	if = {
+		limit = { te_demog_cohorts_run = yes }
+		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
+		# together, so the branches below never read a missing variable.
+		if = {
+			limit = { NOT = { te_demog_has_census = yes } }
+			te_demog_seed = yes
+		}
+		# A census more than a year old, a ring emptied while the state has
+		# people (no migrant settles an empty class), or people more than a
+		# quarter above or below the last census's (te_dg_pop_last, written with
+		# te_dg_year): seed again. A move that size is a state merged or split,
+		# not migration (one year's natural change is under 5%), and the step's
+		# residual would count it all as migrants. A seed made off this pulse
+		# (te_dg_reseed: game start, the console) is made again here, so the first
+		# step's population change and natural change cover the same year.
+		else_if = {
+			limit = {
+				OR = {
+					te_demog_year_gap > 1
+					AND = {
+						var:te_dg_raw < 1
+						state_population > 0
+					}
+					state_population > { value = var:te_dg_pop_last multiply = 1.25 }
+					state_population < { value = var:te_dg_pop_last multiply = 0.75 }
+					has_variable = te_dg_reseed
+				}
+			}
+			te_demog_seed = yes
+		}
+		# A year on: one step. A second pulse in the same year (gap 0) does nothing.
+		else_if = {
+			limit = { te_demog_year_gap = 1 }
+			te_demog_step = yes
+		}
+	}
+}
+
+# THIS = a country at game start (te_demog_events.1, where ROOT is the country): walk and
+# seed every state, then take the country's census, so 1836 opens with figures. The seeds
+# are off the states' pulses, so each state seeds again at its first pulse.
+te_demog_country_game_start = {
+	every_scope_state = {
+		te_demog_walks = yes
+		if = {
+			limit = { te_demog_cohorts_run = yes }
+			te_demog_seed_off_pulse = yes
+		}
+	}
+	if = {
+		limit = { te_demog_cohorts_run = yes }
+		te_demog_country_census = yes
+	}
+}
+
+# ============================================================================
+# The census: the ring's seed and its yearly step (spec §1, §2). Each effect
+# below is the twin of demographics_model (scripts/analysis/demographics_model.py),
+# in its order of operations, so a logged in-game step replays there
+# (demographics_harness.py replay). test_demographics_registry.TestCohortScript
+# runs this file against the model.
+# ============================================================================
+
+# THIS = a state. The year's rates (demographics_model.group_rates, life_table,
+# fertility): the cause multipliers into locals (generated values), the life
+# table, then fertility, which reads this year's e0.
+te_demog_prepare = {
+	# last year's children per woman and life expectancy for the trend arrows, before this year's
+	# overwrite them; the figures stored now are a step's only when te_dg_stepped says so
+	if = {
+		limit = { has_variable = te_dg_stepped }
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			set_variable = { name = te_dg_prev_tfr value = var:te_dg_tfr }
+			set_variable = { name = te_dg_prev_e0 value = var:te_dg_e0 }
+		}
+	}
+	set_local_variable = { name = te_dg_m_inf value = te_demog_mult_infection }
+	set_local_variable = { name = te_dg_m_ext value = te_demog_mult_external }
+	set_local_variable = { name = te_dg_m_chr value = te_demog_mult_chronic }
+	set_local_variable = { name = te_dg_mmr value = te_demog_mult_maternal }
+	set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
+	# demographics_model.work_split: the work multiplier x 2 x each sex's share
+	set_local_variable = { name = te_dg_m_work_f value = { value = te_demog_mult_work multiply = local_var:te_dg_fws multiply = 2 } }
+	set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = te_demog_mult_work multiply = 2 } }
+	set_variable = { name = te_dg_m_inf value = local_var:te_dg_m_inf }
+	set_variable = { name = te_dg_m_ext value = local_var:te_dg_m_ext }
+	set_variable = { name = te_dg_m_chr value = local_var:te_dg_m_chr }
+	set_variable = { name = te_dg_m_mat value = local_var:te_dg_mmr }
+	set_variable = { name = te_dg_m_work value = te_demog_mult_work }
+	te_demog_life_table = yes
+	set_variable = { name = te_dg_means value = te_demog_means }
+	set_variable = { name = te_dg_desired value = te_demog_desired }
+	set_variable = { name = te_dg_tfr value = te_demog_tfr }
+	set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
+}
+
+# One age group of the life table for both sexes ($N$ years wide; $FERTILE$ adds
+# the group to the net reproduction rate's sum). demographics_model.life_table, nrr.
+te_demog_lt_group = {
+	te_demog_lt_sex = { SEX = f N = $N$ FERTILE = $FERTILE$ }
+	te_demog_lt_sex = { SEX = m N = $N$ FERTILE = no }
+}
+
+# demographics_model.life_table's loop body for one sex: te_dg_l<SEX> = survivors
+# (radix 100,000), te_dg_py<SEX> = person-years so far, te_dg_q<SEX> the group's
+# yearly death probability per 100,000 (te_demog_enter_group).
+te_demog_lt_sex = {
+	set_local_variable = { name = te_dg_q value = { value = local_var:te_dg_q$SEX$ divide = 100000 } }
+	set_local_variable = { name = te_dg_p value = { value = 1 subtract = local_var:te_dg_q } }
+	set_local_variable = { name = te_dg_pn value = 1 }
+	while = {
+		count = $N$
+		change_local_variable = { name = te_dg_pn multiply = local_var:te_dg_p }
+	}
+	# survivors summed over the group's single years: l x (1 - p^n) / q, or l x n
+	set_local_variable = { name = te_dg_lsum value = { value = local_var:te_dg_l$SEX$ multiply = $N$ } }
+	if = {
+		limit = { local_var:te_dg_q > 0 }
+		set_local_variable = {
+			name = te_dg_lsum
+			value = {
+				value = 1
+				subtract = local_var:te_dg_pn
+				divide = { value = local_var:te_dg_q min = 0.00001 }
+				multiply = local_var:te_dg_l$SEX$
+			}
+		}
+	}
+	# person-years count each year at mid-year: the sum x (1 - q / 2)
+	change_local_variable = {
+		name = te_dg_py$SEX$
+		add = { value = local_var:te_dg_q multiply = -0.5 add = 1 multiply = local_var:te_dg_lsum }
+	}
+	# demographics_model.nrr: survivors to each childbearing age x its share of births
+	if = {
+		limit = { always = $FERTILE$ }
+		change_local_variable = { name = te_dg_nrr_sum add = { value = local_var:te_dg_lsum multiply = local_var:te_dg_asfr } }
+	}
+	change_local_variable = { name = te_dg_l$SEX$ multiply = local_var:te_dg_pn }
+}
+
+# After the last group (demographics_model.life_table's return): e0, e65 (radix
+# 100,000), each the mean of the two sexes.
+te_demog_lt_finish = {
+	set_variable = { name = te_dg_e0f value = { value = local_var:te_dg_pyf divide = 100000 } }
+	set_variable = { name = te_dg_e0m value = { value = local_var:te_dg_pym divide = 100000 } }
+	set_variable = { name = te_dg_e0 value = { value = var:te_dg_e0f add = var:te_dg_e0m multiply = 0.5 } }
+	set_variable = {
+		name = te_dg_e65
+		value = {
+			value = {
+				value = local_var:te_dg_pyf
+				subtract = local_var:te_dg_py65f
+				divide = { value = local_var:te_dg_l65f min = 1 }
+			}
+			add = {
+				value = local_var:te_dg_pym
+				subtract = local_var:te_dg_py65m
+				divide = { value = local_var:te_dg_l65m min = 1 }
+			}
+			multiply = 0.5
+		}
+	}
+}
+
+# THIS = a state, seeded away from its own yearly pulse (game start, the console). Its
+# pulse's step compares the population change since te_dg_pop_last with a year's natural
+# change, which only matches when the census was taken on that pulse a year before; so
+# the state is marked and its next pulse seeds again (te_demog_state_yearly).
+te_demog_seed_off_pulse = {
+	te_demog_seed = yes
+	set_variable = { name = te_dg_reseed value = 1 }
+}
+
+# THIS = a state. A ring at the stable structure of the state's own rates
+# (demographics_model.seed; spec §2.6 and design rule 5): survivors of 100,000
+# births at each age, times the growth factor to the age's power, then scaled to
+# the state's population.
+te_demog_seed = {
+	if = {
+		limit = { has_variable = te_dg_reseed }
+		remove_variable = te_dg_reseed
+	}
+	te_demog_prepare = yes
+	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
+	set_local_variable = {
+		name = te_dg_nrr
+		value = {
+			value = local_var:te_dg_nrr_sum
+			divide = 100000
+			divide = 100000
+			multiply = local_var:te_dg_tfr
+			multiply = te_demog_k_female_births_per_100k
+			divide = 100000
+		}
+	}
+	te_demog_set_growth_factor = yes
+	set_local_variable = { name = te_dg_open value = te_demog_open_slot }
+	set_local_variable = { name = te_dg_age value = 0 }
+	set_local_variable = { name = te_dg_g value = 0 }
+	te_demog_enter_group = yes
+	set_local_variable = { name = te_dg_lsf value = 100000 }
+	set_local_variable = { name = te_dg_lsm value = 100000 }
+	set_local_variable = { name = te_dg_dpow value = 1 }
+	te_demog_reset_accumulators = yes
+	te_demog_no_flows = yes
+	# the seed counts the people as they are now: war dead and kills noted before it are in them already
+	if = {
+		limit = { has_variable = te_dg_war_in }
+		remove_variable = te_dg_war_in
+	}
+	if = {
+		limit = { has_variable = te_dg_kills_in }
+		remove_variable = te_dg_kills_in
+	}
+	# no migration yet (only a step's flows write it): the country's census sums it over every state with a census
+	set_variable = { name = te_dg_net_migration value = 0 }
+	set_variable = { name = te_dg_pf value = 0 }
+	set_variable = { name = te_dg_pm value = 0 }
+	set_variable = { name = te_dg_pa value = 150 }
+	te_demog_seed_sweep = yes
+	te_demog_close_accumulators = yes
+	# the raw ring (radix 100,000) to people: two-step multiply keeps small states precise
+	set_local_variable = {
+		name = te_dg_norm_e5
+		value = { value = state_population multiply = 100000 divide = { value = local_var:te_dg_raw min = 1 } }
+	}
+	te_demog_normalize_slots = yes
+	te_demog_normalize_bands = yes
+	set_local_variable = { name = te_dg_raw value = state_population }
+	set_variable = { name = te_dg_births value = 0 }
+	set_variable = { name = te_dg_deaths value = 0 }
+	te_demog_set_scale = yes
+}
+
+# The seed's sweep (te_demog_seed_sweep), pass 1: slots open .. 0, ages 0 .. open.
+te_demog_seed_p1 = {
+	if = {
+		limit = { NOT = { local_var:te_dg_open < $S$ } }
+		te_demog_seed_slot = { S = $S$ }
+	}
+}
+
+# Pass 2: slots 149 .. open + 1, ages open + 1 .. 149.
+te_demog_seed_p2 = {
+	if = {
+		limit = { local_var:te_dg_open < $S$ }
+		te_demog_seed_slot = { S = $S$ }
+	}
+}
+
+# demographics_model.seed's loop body. Age local_var:te_dg_age (0-149) in slot $S$:
+# survivors x growth factor^age. An age fewer than 1 in 100,000 newborns reach
+# stays empty (and a re-seed clears it), so the step skips the slot (spec §1).
+# The group is the age's own (the seed writes the people of age a, then survives
+# the year at a); the step's is the rate age.
+te_demog_seed_slot = {
+	te_demog_age_boundaries = yes
+	if = {
+		limit = {
+			OR = {
+				local_var:te_dg_lsf >= 1
+				local_var:te_dg_lsm >= 1
+			}
+		}
+		set_variable = {
+			name = te_dg_f$S$
+			value = { value = local_var:te_dg_lsf multiply = local_var:te_dg_dpow multiply = te_demog_k_female_births_per_100k divide = 100000 }
+		}
+		set_variable = {
+			name = te_dg_m$S$
+			value = { value = local_var:te_dg_lsm multiply = local_var:te_dg_dpow multiply = te_demog_k_male_births_per_100k divide = 100000 }
+		}
+		te_demog_accumulate_slot = { S = $S$ }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_f$S$ }
+		remove_variable = te_dg_f$S$
+		remove_variable = te_dg_m$S$
+	}
+	if = {
+		limit = { local_var:te_dg_age = local_var:te_dg_next_group }
+		change_local_variable = { name = te_dg_g add = 1 }
+		te_demog_enter_group = yes
+	}
+	# women die of the group's causes and in childbirth (demographics_model.seed's decrement)
+	change_local_variable = {
+		name = te_dg_lsf
+		multiply = {
+			value = local_var:te_dg_asfr
+			multiply = local_var:te_dg_tfr
+			multiply = local_var:te_dg_mmr
+			divide = 100000
+			add = local_var:te_dg_qf
+			divide = 100000
+			multiply = -1
+			add = 1
+		}
+	}
+	change_local_variable = { name = te_dg_lsm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	change_local_variable = { name = te_dg_dpow multiply = local_var:te_dg_d }
+	change_local_variable = { name = te_dg_age add = 1 }
+}
+
+# Zero the running sums before a sweep (demographics_model.step's births and deaths;
+# the raw total; _refresh_denominators' class and 18-40 sums; the bands 0-4 ...
+# 80-84 and 85+, demographics_model.structure's rows). Accumulation classes start
+# at ages 15, 18, 36 and 60.
+te_demog_reset_accumulators = {
+	set_local_variable = { name = te_dg_band value = 0 }
+	set_local_variable = { name = te_dg_next_band value = 5 }
+	set_local_variable = { name = te_dg_acc_bf value = 0 }
+	set_local_variable = { name = te_dg_acc_bm value = 0 }
+	set_local_variable = { name = te_dg_cls value = 0 }
+	set_local_variable = { name = te_dg_next_class value = 15 }
+	set_local_variable = { name = te_dg_acc_cf value = 0 }
+	set_local_variable = { name = te_dg_acc_cm value = 0 }
+	set_local_variable = { name = te_dg_acc_f1840 value = 0 }
+	set_local_variable = { name = te_dg_acc_m1840 value = 0 }
+	set_local_variable = { name = te_dg_raw value = 0 }
+	set_local_variable = { name = te_dg_births value = 0 }
+	set_local_variable = { name = te_dg_deaths value = 0 }
+}
+
+# Before the people of local_var:te_dg_age are added: close the band or the
+# accumulation class that ended at the previous age (by the age after the step,
+# demographics_model._refresh_denominators). The class the flows apply to is the
+# rate age's, tracked apart in te_demog_slot.
+te_demog_age_boundaries = {
+	if = {
+		limit = { local_var:te_dg_age = local_var:te_dg_next_band }
+		te_demog_flush_band = yes
+		change_local_variable = { name = te_dg_band add = 1 }
+		set_local_variable = { name = te_dg_acc_bf value = 0 }
+		set_local_variable = { name = te_dg_acc_bm value = 0 }
+		change_local_variable = { name = te_dg_next_band add = 5 }
+		if = {
+			limit = { local_var:te_dg_band >= 17 }
+			set_local_variable = { name = te_dg_next_band value = 999 }
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_age = local_var:te_dg_next_class }
+		te_demog_flush_class = yes
+		change_local_variable = { name = te_dg_cls add = 1 }
+		set_local_variable = { name = te_dg_acc_cf value = 0 }
+		set_local_variable = { name = te_dg_acc_cm value = 0 }
+		if = {
+			limit = { local_var:te_dg_cls = 1 }
+			set_local_variable = { name = te_dg_next_class value = 18 }
+		}
+		else_if = {
+			limit = { local_var:te_dg_cls = 2 }
+			set_local_variable = { name = te_dg_next_class value = 36 }
+		}
+		else_if = {
+			limit = { local_var:te_dg_cls = 3 }
+			set_local_variable = { name = te_dg_next_class value = 60 }
+		}
+		else = {
+			set_local_variable = { name = te_dg_next_class value = 999 }
+		}
+	}
+}
+
+# Slot $S$'s stored people into the running sums: the raw total and the bands at
+# every age; the class and 18-40 sums only to age 148, since the age-149 cohort
+# folds next year instead of flowing (demographics_model._refresh_denominators).
+te_demog_accumulate_slot = {
+	change_local_variable = { name = te_dg_raw add = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ } }
+	change_local_variable = { name = te_dg_acc_bf add = var:te_dg_f$S$ }
+	change_local_variable = { name = te_dg_acc_bm add = var:te_dg_m$S$ }
+	if = {
+		limit = { local_var:te_dg_age <= 148 }
+		change_local_variable = { name = te_dg_acc_cf add = var:te_dg_f$S$ }
+		change_local_variable = { name = te_dg_acc_cm add = var:te_dg_m$S$ }
+		if = {
+			limit = {
+				local_var:te_dg_age >= 18
+				local_var:te_dg_age <= 40
+			}
+			change_local_variable = { name = te_dg_acc_f1840 add = var:te_dg_f$S$ }
+			change_local_variable = { name = te_dg_acc_m1840 add = var:te_dg_m$S$ }
+		}
+	}
+}
+
+# After a sweep: the pool goes to 85+ and the raw total (not to a class: it
+# folds, it doesn't flow; demographics_model._refresh_denominators), then the last
+# band and class close.
+te_demog_close_accumulators = {
+	change_local_variable = { name = te_dg_acc_bf add = var:te_dg_pf }
+	change_local_variable = { name = te_dg_acc_bm add = var:te_dg_pm }
+	change_local_variable = { name = te_dg_raw add = { value = var:te_dg_pf add = var:te_dg_pm } }
+	te_demog_flush_band = yes
+	te_demog_flush_class = yes
+	set_variable = { name = te_dg_f1840 value = local_var:te_dg_acc_f1840 }
+	set_variable = { name = te_dg_m1840 value = local_var:te_dg_acc_m1840 }
+}
+
+# The ring to the engine's population (demographics_model.step's and seed's
+# scale): the factor applies to the cohorts at the next sweep (lazily) and to the
+# bands, classes and 18-40 sums now.
+te_demog_set_scale = {
+	set_variable = { name = te_dg_raw value = local_var:te_dg_raw }
+	set_local_variable = { name = te_dg_new_scale value = { value = state_population divide = { value = local_var:te_dg_raw min = 1 } } }
+	set_variable = { name = te_dg_scale value = local_var:te_dg_new_scale }
+	te_demog_scale_bands = yes
+	change_variable = { name = te_dg_f1840 multiply = local_var:te_dg_new_scale }
+	change_variable = { name = te_dg_m1840 multiply = local_var:te_dg_new_scale }
+	set_variable = { name = te_dg_people value = state_population }
+	set_variable = { name = te_dg_pop_last value = state_population }
+	set_variable = { name = te_dg_year value = te_demog_year }
+	te_demog_state_figures = yes
+}
+
+# No war dead, kills or migrants this sweep (demographics_model.step with
+# war_dead, kills and migration 0): the seed's, which never flows.
+te_demog_no_flows = {
+	set_local_variable = { name = te_dg_war_ff value = 0 }
+	set_local_variable = { name = te_dg_war_fm value = 0 }
+	set_local_variable = { name = te_dg_kill value = 0 }
+	set_local_variable = { name = te_dg_mig_in value = 0 }
+	set_local_variable = { name = te_dg_mig_out value = 0 }
+	set_local_variable = { name = te_dg_pf0 value = 0 }
+	set_local_variable = { name = te_dg_pf1 value = 0 }
+	set_local_variable = { name = te_dg_pf2 value = 0 }
+	set_local_variable = { name = te_dg_pf3 value = 0 }
+	set_local_variable = { name = te_dg_pf4 value = 0 }
+	set_local_variable = { name = te_dg_pm0 value = 0 }
+	set_local_variable = { name = te_dg_pm1 value = 0 }
+	set_local_variable = { name = te_dg_pm2 value = 0 }
+	set_local_variable = { name = te_dg_pm3 value = 0 }
+	set_local_variable = { name = te_dg_pm4 value = 0 }
+}
+
+# THIS = a state, at the start of its step (after te_demog_prepare, which sets
+# te_dg_fws). Sets the step's flow locals (demographics_model.step's war_dead, kills,
+# migration and migrant_profile): te_dg_war_ff/_fm, te_dg_kill, te_dg_mig_in/_out and
+# te_dg_pf<c>/te_dg_pm<c>. Every branch sets all of them; the step reads them unguarded.
+te_demog_flows = {
+	# war dead the owner shared out monthly since this state's last step (te_demog_share_war_dead)
+	set_local_variable = { name = te_dg_war value = 0 }
+	if = {
+		limit = { has_variable = te_dg_war_in }
+		set_local_variable = { name = te_dg_war value = var:te_dg_war_in }
+		remove_variable = te_dg_war_in
+	}
+	set_local_variable = {
+		name = te_dg_war_fm
+		value = { value = local_var:te_dg_war multiply = te_demog_k_war_male_share divide = { value = var:te_dg_m1840 min = 1 } max = 0.5 }
+	}
+	set_local_variable = {
+		name = te_dg_war_ff
+		value = {
+			value = 1
+			subtract = te_demog_k_war_male_share
+			multiply = local_var:te_dg_war
+			divide = { value = var:te_dg_f1840 min = 1 }
+			max = 0.5
+		}
+	}
+	# the mod's own kills since the last step (te_demog_note_kills)
+	set_local_variable = { name = te_dg_kills value = 0 }
+	if = {
+		limit = { has_variable = te_dg_kills_in }
+		set_local_variable = { name = te_dg_kills value = var:te_dg_kills_in }
+		remove_variable = te_dg_kills_in
+	}
+	set_local_variable = { name = te_dg_kill value = { value = local_var:te_dg_kills divide = { value = var:te_dg_people min = 1 } max = 0.9 } }
+	# the residual: the change less the engine's own births and deaths, war dead and kills
+	set_local_variable = {
+		name = te_dg_mig
+		value = {
+			value = state_population
+			subtract = var:te_dg_pop_last
+			subtract = var:te_dg_eb
+			add = var:te_dg_ed
+			add = local_var:te_dg_war
+			add = local_var:te_dg_kills
+		}
+	}
+	# a residual inside the noise band is model error, not migration
+	set_local_variable = { name = te_dg_noise value = { value = var:te_dg_people multiply = te_demog_k_residual_noise_share } }
+	set_local_variable = { name = te_dg_neg_noise value = { value = local_var:te_dg_noise multiply = -1 } }
+	if = {
+		limit = {
+			local_var:te_dg_mig < local_var:te_dg_noise
+			local_var:te_dg_mig > local_var:te_dg_neg_noise
+		}
+		set_local_variable = { name = te_dg_mig value = 0 }
+	}
+	set_variable = { name = te_dg_net_migration value = local_var:te_dg_mig }
+	set_local_variable = { name = te_dg_mig_in value = { value = local_var:te_dg_mig min = 0 } }
+	set_local_variable = { name = te_dg_mig_out value = { value = local_var:te_dg_mig multiply = -1 min = 0 } }
+	if = {
+		limit = { NOT = { has_variable = te_dg_inflow_years } }
+		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+	# the profile (demographics_model.migrant_profile)
+	set_local_variable = { name = te_dg_refugee value = te_demog_crisis }
+	set_local_variable = { name = te_dg_rights value = { value = local_var:te_dg_fws divide = { value = te_demog_k_full_female_work_share min = 0.01 } } }
+	set_local_variable = {
+		name = te_dg_family
+		value = {
+			value = te_demog_k_family_base
+			add = te_demog_family_transport
+			add = { value = local_var:te_dg_rights multiply = te_demog_k_family_rights_weight }
+			add = { value = var:te_dg_inflow_years multiply = te_demog_k_chain_step max = te_demog_k_chain_cap }
+			max = { value = 1 subtract = local_var:te_dg_refugee }
+			min = 0
+		}
+	}
+	set_local_variable = { name = te_dg_labour value = { value = 1 subtract = local_var:te_dg_family subtract = local_var:te_dg_refugee min = 0 } }
+	set_local_variable = {
+		name = te_dg_labour_f
+		value = {
+			value = te_demog_k_labour_female_max
+			subtract = te_demog_k_labour_female_min
+			multiply = var:te_dg_fjob_share
+			multiply = local_var:te_dg_rights
+			add = te_demog_k_labour_female_min
+			min = te_demog_k_labour_female_min
+			max = te_demog_k_labour_female_max
+		}
+	}
+	te_demog_set_profile = yes
+	# chain migration: consecutive years of net inflow, counted after the profile
+	# read last year's count (the model's inp.inflow_years)
+	if = {
+		limit = { local_var:te_dg_mig > 0 }
+		change_variable = { name = te_dg_inflow_years add = 1 }
+	}
+	else = {
+		set_variable = { name = te_dg_inflow_years value = 0 }
+	}
+}
+
+# THIS = a state: people the mod's own script killed here, of every age and both
+# sexes (spec §2.5 "Known kills"); the next step takes them out of the cohorts
+# instead of reading them as emigrants. Only a state with a census is told: a
+# state the seed has not reached yet will count them in its population anyway.
+te_demog_note_kills = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			te_demog_has_census = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = te_dg_kills_in } }
+			set_variable = { name = te_dg_kills_in value = 0 }
+		}
+		change_variable = { name = te_dg_kills_in add = $VALUE$ }
+	}
+}
+
+# THIS = a country, monthly. The dead of every war it is in, summed; the month's
+# rise goes to the year's total (the Wealth Concentration war shock reads it on
+# 31 December, whatever the rule) and, while the census runs, at once to the
+# states (te_demog_share_war_dead), so each state's step takes the dead of the
+# same months as its population change. A war that ends drops out of the sum, so
+# the change is floored at zero and loses at most that month of any other war's
+# dead. The first run starts from the dead already counted, so a save that meets
+# the mod mid-war does not read the war's whole past as one month's dead.
+te_demog_country_monthly = {
+	set_local_variable = { name = te_dg_dead value = 0 }
+	every_scope_war = {
+		change_local_variable = { name = te_dg_dead add = te_demog_war_dead_root }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_dg_war_seen } }
+		set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
+		set_variable = { name = te_dg_war_year value = 0 }
+	}
+	set_local_variable = {
+		name = te_dg_rise
+		value = {
+			value = local_var:te_dg_dead
+			subtract = var:te_dg_war_seen
+			min = 0
+		}
+	}
+	change_variable = { name = te_dg_war_year add = local_var:te_dg_rise }
+	set_variable = { name = te_dg_war_seen value = local_var:te_dg_dead }
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			local_var:te_dg_rise > 0
+		}
+		te_demog_share_war_dead = yes
+	}
+}
+
+# THIS = a country at its monthly pulse while the census runs (te_demog_country_monthly):
+# the month's rise in war dead (local te_dg_rise) goes to its census states by their share
+# of its soldiers (by people when it has none); each state's next step takes what gathered
+# since its last step out of its men and women aged 18-40.
+te_demog_share_war_dead = {
+	set_local_variable = { name = te_dg_sold value = 0 }
+	set_local_variable = { name = te_dg_ppl value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		change_local_variable = { name = te_dg_sold add = var:te_dg_soldiers }
+		change_local_variable = { name = te_dg_ppl add = var:te_dg_people }
+	}
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		if = {
+			limit = { NOT = { has_variable = te_dg_war_in } }
+			set_variable = { name = te_dg_war_in value = 0 }
+		}
+		if = {
+			limit = { local_var:te_dg_sold >= 1 }
+			change_variable = { name = te_dg_war_in add = { value = var:te_dg_soldiers divide = { value = local_var:te_dg_sold min = 1 } multiply = local_var:te_dg_rise } }
+		}
+		else = {
+			change_variable = { name = te_dg_war_in add = { value = var:te_dg_people divide = { value = local_var:te_dg_ppl min = 1 } multiply = local_var:te_dg_rise } }
+		}
+	}
+}
+
+# THIS = ROOT = a country with a census: the variable lists the panel draws, the states
+# by the people their last census counted (the figure each row shows), at most 40, and
+# the three biggest cities by the global rank (negated: ordered_scope_state takes the
+# highest first). A city needs a census too: a state split off this year has a rank before
+# its first walk, and the panel's row reads its te_dg_urban. From the country census, and
+# from the civil-war repair: a revolution's winner inherits te_dg_census_year but no list.
+te_demog_country_lists = {
+	if = {
+		limit = { has_variable_list = te_dg_states }
+		clear_variable_list = te_dg_states
+	}
+	ordered_scope_state = {
+		limit = { te_demog_has_census = yes }
+		order_by = te_demog_census_people
+		max = 40
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_states target = scope:te_dg_it } }
+	}
+	if = {
+		limit = { has_variable_list = te_dg_cities }
+		clear_variable_list = te_dg_cities
+	}
+	ordered_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			has_variable = state_city_size_rank
+		}
+		order_by = te_demog_neg_city_rank
+		max = 3
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_cities target = scope:te_dg_it } }
+	}
+}
+
+# THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Task 12 adds to it.
+# The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule, and
+# then they are cleared: the states took theirs month by month while the census ran
+# (te_demog_country_monthly), and dead from months with the census off are never shared out later.
+# The national Wealth Concentration, #822's modifiers and the country's Gini follow from this
+# year's state scores, whatever the rule, before the census reads them.
+te_demog_country_yearly = {
+	te_demog_wc_war_shock = yes
+	if = {
+		limit = { has_variable = te_dg_war_year }
+		set_variable = { name = te_dg_war_year value = 0 }
+	}
+	te_demog_wc_national = yes
+	if = {
+		limit = { te_demog_cohorts_run = yes }
+		te_demog_country_census = yes
+	}
+}
+
+# THIS = a state, once a year. Ages the ring one year (spec §2.1; demographics_model.step):
+# the year's rates and flows, then the sweep. te_debug_demog.1 option a runs the two halves
+# apart, so its replay line logs the flows the sweep is about to use.
+te_demog_step = {
+	te_demog_step_begin = yes
+	te_demog_step_run = yes
+}
+
+# The step's first half: the year's rates into locals (te_demog_prepare), then the flows,
+# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows).
+te_demog_step_begin = {
+	te_demog_prepare = yes
+	te_demog_flows = yes
+}
+
+# The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
+# then the year's totals and the scale. Run it straight after te_demog_step_begin, in the
+# same effect (the locals don't outlive it).
+te_demog_step_run = {
+	set_local_variable = { name = te_dg_open value = te_demog_open_slot }
+	set_local_variable = { name = te_dg_s value = var:te_dg_scale }
+	set_local_variable = { name = te_dg_age value = 1 }
+	set_local_variable = { name = te_dg_r value = 0 }
+	set_local_variable = { name = te_dg_g value = 0 }
+	te_demog_enter_group = yes
+	te_demog_reset_accumulators = yes
+	# the flows' migrant class follows the rate age (class_of(r)), apart from the
+	# accumulation classes, which follow the age after the step
+	set_local_variable = { name = te_dg_acls value = 0 }
+	set_local_variable = { name = te_dg_next_aclass value = 15 }
+	te_demog_enter_class = yes
+	te_demog_sweep = yes
+	te_demog_step_finish = yes
+}
+
+# The step's sweep (te_demog_sweep), pass 1: slots open - 1 .. 0, ages 1 .. open.
+te_demog_slot_p1 = {
+	if = {
+		limit = { local_var:te_dg_open > $S$ }
+		te_demog_slot = { S = $S$ }
+	}
+}
+
+# Pass 2: slots 149 .. open, ages open + 1 .. 150 (the open slot last).
+te_demog_slot_p2 = {
+	if = {
+		limit = { NOT = { local_var:te_dg_open > $S$ } }
+		te_demog_slot = { S = $S$ }
+	}
+}
+
+# demographics_model.step's loop over a = 1 .. 150. The people now aged
+# local_var:te_dg_age lived through rate age te_dg_r (a - 1) this year: its group's
+# rates and its migrant class. Boundaries and rate trackers advance at every
+# slot; only an occupied slot is aged.
+te_demog_slot = {
+	te_demog_age_boundaries = yes
+	if = {
+		limit = { local_var:te_dg_r = local_var:te_dg_next_group }
+		change_local_variable = { name = te_dg_g add = 1 }
+		te_demog_enter_group = yes
+	}
+	if = {
+		limit = { local_var:te_dg_r = local_var:te_dg_next_aclass }
+		change_local_variable = { name = te_dg_acls add = 1 }
+		if = {
+			limit = { local_var:te_dg_acls = 1 }
+			set_local_variable = { name = te_dg_next_aclass value = 18 }
+		}
+		else_if = {
+			limit = { local_var:te_dg_acls = 2 }
+			set_local_variable = { name = te_dg_next_aclass value = 36 }
+		}
+		else_if = {
+			limit = { local_var:te_dg_acls = 3 }
+			set_local_variable = { name = te_dg_next_aclass value = 60 }
+		}
+		else = {
+			set_local_variable = { name = te_dg_next_aclass value = 999 }
+		}
+		te_demog_enter_class = yes
+	}
+	if = {
+		limit = { local_var:te_dg_age = 150 }
+		te_demog_fold_slot = { S = $S$ }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_f$S$ }
+		te_demog_age_slot = { S = $S$ }
+	}
+	change_local_variable = { name = te_dg_age add = 1 }
+	change_local_variable = { name = te_dg_r add = 1 }
+}
+
+# demographics_model.step's body for a < 150: one cohort through the year.
+te_demog_age_slot = {
+	set_local_variable = { name = te_dg_f value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_s } }
+	set_local_variable = { name = te_dg_m value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
+	# births from these women (rate ages 15-49 carry a non-zero te_dg_asfr)
+	set_local_variable = {
+		name = te_dg_b
+		value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 multiply = local_var:te_dg_tfr }
+	}
+	change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
+	# deaths, and maternal deaths per birth
+	set_local_variable = {
+		name = te_dg_f2
+		value = {
+			value = local_var:te_dg_qf
+			divide = 100000
+			multiply = -1
+			add = 1
+			multiply = local_var:te_dg_f
+			subtract = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 }
+		}
+	}
+	set_local_variable = {
+		name = te_dg_m2
+		value = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 multiply = local_var:te_dg_m }
+	}
+	change_local_variable = {
+		name = te_dg_deaths
+		add = { value = local_var:te_dg_f add = local_var:te_dg_m subtract = local_var:te_dg_f2 subtract = local_var:te_dg_m2 }
+	}
+	# war dead: rate ages 18-40, from the counts before deaths
+	if = {
+		limit = {
+			local_var:te_dg_r >= 18
+			local_var:te_dg_r <= 40
+		}
+		change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_war_ff } }
+		change_local_variable = { name = te_dg_m2 subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_war_fm } }
+	}
+	# known kills: every age, from the counts before deaths
+	change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_kill } }
+	change_local_variable = { name = te_dg_m2 subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_kill } }
+	# migration: arrivals and departures in proportion to the cohort's share of its class
+	change_local_variable = { name = te_dg_f2 add = { value = local_var:te_dg_f multiply = local_var:te_dg_mig_gain_f } }
+	change_local_variable = { name = te_dg_m2 add = { value = local_var:te_dg_m multiply = local_var:te_dg_mig_gain_m } }
+	if = {
+		limit = { local_var:te_dg_mig_frac_f > 0 }
+		change_local_variable = {
+			name = te_dg_f2
+			subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_mig_frac_f max = { value = local_var:te_dg_f2 min = 0 multiply = 0.5 } }
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_mig_frac_m > 0 }
+		change_local_variable = {
+			name = te_dg_m2
+			subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_mig_frac_m max = { value = local_var:te_dg_m2 min = 0 multiply = 0.5 } }
+		}
+	}
+	# a cohort under half a person is dropped, so the slot is skipped until it reopens
+	if = {
+		limit = {
+			local_var:te_dg_f2 < 0.5
+			local_var:te_dg_m2 < 0.5
+		}
+		remove_variable = te_dg_f$S$
+		remove_variable = te_dg_m$S$
+	}
+	else = {
+		set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_f2 min = 0 } }
+		set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_m2 min = 0 } }
+		te_demog_accumulate_slot = { S = $S$ }
+	}
+}
+
+# demographics_model.step's a == 150 and its pool lines. Age 150: the slot's people
+# join the pool, which ages, loses the year's kills and dies at the last group's
+# rates; the slot takes this year's births (it is the sweep's last).
+te_demog_fold_slot = {
+	set_local_variable = { name = te_dg_pool value = { value = var:te_dg_pf add = var:te_dg_pm multiply = local_var:te_dg_s } }
+	set_local_variable = { name = te_dg_old value = 0 }
+	if = {
+		limit = { has_variable = te_dg_f$S$ }
+		set_local_variable = { name = te_dg_old value = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
+		change_variable = { name = te_dg_pf multiply = local_var:te_dg_s }
+		change_variable = { name = te_dg_pf add = { value = var:te_dg_f$S$ multiply = local_var:te_dg_s } }
+		change_variable = { name = te_dg_pm multiply = local_var:te_dg_s }
+		change_variable = { name = te_dg_pm add = { value = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
+	}
+	else = {
+		change_variable = { name = te_dg_pf multiply = local_var:te_dg_s }
+		change_variable = { name = te_dg_pm multiply = local_var:te_dg_s }
+	}
+	set_variable = {
+		name = te_dg_pa
+		value = {
+			value = var:te_dg_pa
+			add = 1
+			multiply = local_var:te_dg_pool
+			add = { value = local_var:te_dg_old multiply = 150 }
+			divide = { value = local_var:te_dg_pool add = local_var:te_dg_old min = 0.00001 }
+		}
+	}
+	# known kills take the same share of the pool
+	change_variable = { name = te_dg_pf multiply = { value = 1 subtract = local_var:te_dg_kill } }
+	change_variable = { name = te_dg_pm multiply = { value = 1 subtract = local_var:te_dg_kill } }
+	change_local_variable = {
+		name = te_dg_deaths
+		add = {
+			value = var:te_dg_pf
+			multiply = local_var:te_dg_qf
+			add = { value = var:te_dg_pm multiply = local_var:te_dg_qm }
+			divide = 100000
+		}
+	}
+	change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
+	change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
+	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
+	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+}
+
+# After the sweep (demographics_model.step's tail): newborns into band 0 and
+# class 0, the year's totals, then the scale. te_dg_births and te_dg_deaths are
+# people this year (the cohorts were scaled to last year's population first).
+te_demog_step_finish = {
+	te_demog_close_accumulators = yes
+	set_local_variable = { name = te_dg_bf_new value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
+	set_local_variable = { name = te_dg_bm_new value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+	change_variable = { name = te_dg_bf0 add = local_var:te_dg_bf_new }
+	change_variable = { name = te_dg_bm0 add = local_var:te_dg_bm_new }
+	change_variable = { name = te_dg_cf0 add = local_var:te_dg_bf_new }
+	change_variable = { name = te_dg_cm0 add = local_var:te_dg_bm_new }
+	change_local_variable = { name = te_dg_raw add = local_var:te_dg_births }
+	set_variable = { name = te_dg_births value = local_var:te_dg_births }
+	set_variable = { name = te_dg_deaths value = local_var:te_dg_deaths }
+	te_demog_set_scale = yes
+}
+
+# THIS = a state, after its census (demographics_model.structure, by band): the
+# panel's figures. Last year's value of each goes to te_dg_prev_<name> first, for the
+# trend arrows, when it came from a step (te_demog_keep_figures); the births the step
+# wrote mark this pass as a step's (te_demog_set_trend).
+te_demog_state_figures = {
+	te_demog_band_figures = { B = te_dg_b }
+	te_demog_keep_figures = yes
+	te_demog_store_figures = yes
+	# births and deaths per 1,000 people
+	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	set_local_variable = { name = te_dg_born value = var:te_dg_births }
+	te_demog_set_trend = yes
+	# the state pyramid's scale, once here instead of in every bar's range each frame
+	set_variable = { name = te_dg_pyr_max value = te_demog_state_pyramid_max }
+}
+
+# THIS = a state or a country, before it stores a new set of figures: sets the local
+# te_dg_was (1 when the figures stored now came from a step) and, then, copies the
+# figures a state and a country share to te_dg_prev_<name>. After a seed there is no
+# year to compare with: its births and deaths are 0 and its CBR and CDR with them.
+te_demog_keep_figures = {
+	set_local_variable = { name = te_dg_was value = 0 }
+	if = {
+		limit = { has_variable = te_dg_stepped }
+		set_local_variable = { name = te_dg_was value = var:te_dg_stepped }
+	}
+	if = {
+		limit = { local_var:te_dg_was > 0 }
+		set_variable = { name = te_dg_prev_median value = var:te_dg_median }
+		set_variable = { name = te_dg_prev_young_share value = var:te_dg_young_share }
+		set_variable = { name = te_dg_prev_working_share value = var:te_dg_working_share }
+		set_variable = { name = te_dg_prev_old_share value = var:te_dg_old_share }
+		set_variable = { name = te_dg_prev_dependency value = var:te_dg_dependency }
+		set_variable = { name = te_dg_prev_sex_balance value = var:te_dg_sex_balance }
+		set_variable = { name = te_dg_prev_cbr value = var:te_dg_cbr }
+		set_variable = { name = te_dg_prev_cdr value = var:te_dg_cdr }
+		set_variable = { name = te_dg_prev_w1549 value = var:te_dg_w1549 }
+	}
+}
+
+# THIS = a state or a country, after te_demog_band_figures: the figures from the bands,
+# shares of all the people, the dependency ratio and the sex balance.
+te_demog_store_figures = {
+	set_variable = { name = te_dg_median value = local_var:te_dg_median }
+	set_variable = { name = te_dg_young_share value = { value = local_var:te_dg_young divide = { value = local_var:te_dg_total min = 1 } } }
+	set_variable = { name = te_dg_working_share value = { value = local_var:te_dg_working divide = { value = local_var:te_dg_total min = 1 } } }
+	set_variable = { name = te_dg_old_share value = { value = local_var:te_dg_old divide = { value = local_var:te_dg_total min = 1 } } }
+	# dependants per person of working age: (0-14 + 65+) / 15-64
+	set_variable = { name = te_dg_dependency value = { value = local_var:te_dg_young add = local_var:te_dg_old divide = { value = local_var:te_dg_working min = 1 } } }
+	# men per 100 women aged 20-59
+	set_variable = { name = te_dg_sex_balance value = { value = local_var:te_dg_m2059 divide = { value = local_var:te_dg_w2059 min = 1 } multiply = 100 } }
+	set_variable = { name = te_dg_w1549 value = local_var:te_dg_w1549 }
+}
+
+# THIS = a state or a country, after its figures are stored, with the births behind them
+# in the local te_dg_born. Births above 0 mean a step; a seed's are 0. Reads te_dg_was
+# from te_demog_keep_figures. The trend is drawn only when the figures stored now and
+# the ones kept came from steps, so it starts with the second step after a seed.
+te_demog_set_trend = {
+	set_local_variable = { name = te_dg_now value = 0 }
+	if = {
+		limit = { local_var:te_dg_born > 0 }
+		set_local_variable = { name = te_dg_now value = 1 }
+	}
+	set_variable = { name = te_dg_trend_ok value = { value = local_var:te_dg_was multiply = local_var:te_dg_now } }
+	set_variable = { name = te_dg_stepped value = local_var:te_dg_now }
+}
+
+# THIS = a country, ROOT = the same country (the yearly pulse and the game-start event
+# both run with it, and te_demog_add_bands_to_root writes to it). The country's census
+# from its states with one: the bands, the figures from them, the rates, the urban
+# pattern, the lists the panel draws, for the player the outline twenty years ahead
+# and, for a tracked country, the year's history sample (te_demog_history_record). A
+# country with no state seeded yet writes no figures and no census year (census pending;
+# its band sums read 0 meanwhile). Accumulators are te_dg_seeded and locals named
+# te_dg_c_*, clear of the ones te_demog_band_figures and te_demog_project use. Averages
+# weighted by people use millions of people for the weights: e0 x 12 million people could
+# pass the engine's limit. The urban squares use units of 100,000 people (0.03 for 3,000:
+# its square, 0.0009, still holds three digits). Rates divide before they multiply.
+te_demog_country_census = {
+	te_demog_reset_country_bands = yes
+	set_local_variable = { name = te_dg_seeded value = 0 }
+	set_local_variable = { name = te_dg_c_people value = 0 }
+	set_local_variable = { name = te_dg_c_pm value = 0 }
+	set_local_variable = { name = te_dg_c_births value = 0 }
+	set_local_variable = { name = te_dg_c_deaths value = 0 }
+	set_local_variable = { name = te_dg_c_mig value = 0 }
+	set_local_variable = { name = te_dg_c_tfr_w value = 0 }
+	set_local_variable = { name = te_dg_c_women value = 0 }
+	set_local_variable = { name = te_dg_c_e0_w value = 0 }
+	set_local_variable = { name = te_dg_c_e65_w value = 0 }
+	set_local_variable = { name = te_dg_c_imr_w value = 0 }
+	set_local_variable = { name = te_dg_c_imr_p value = 0 }
+	set_local_variable = { name = te_dg_c_urban_p value = 0 }
+	set_local_variable = { name = te_dg_c_urban value = 0 }
+	set_local_variable = { name = te_dg_c_sq value = 0 }
+	set_local_variable = { name = te_dg_c_big value = 0 }
+	set_local_variable = { name = te_dg_c_inf_w value = 0 }
+	set_local_variable = { name = te_dg_c_ext_w value = 0 }
+	set_local_variable = { name = te_dg_c_chr_w value = 0 }
+	set_local_variable = { name = te_dg_c_work_w value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		te_demog_add_bands_to_root = yes
+		set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people divide = 1000000 } }
+		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
+		change_local_variable = { name = te_dg_seeded add = 1 }
+		# the women's share of the workforce depends on the owner's law only: any state gives it
+		if = {
+			limit = { local_var:te_dg_seeded = 1 }
+			set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
+		}
+		change_local_variable = { name = te_dg_c_people add = var:te_dg_people }
+		change_local_variable = { name = te_dg_c_pm add = local_var:te_dg_c_s_pm }
+		change_local_variable = { name = te_dg_c_births add = var:te_dg_births }
+		change_local_variable = { name = te_dg_c_deaths add = var:te_dg_deaths }
+		change_local_variable = { name = te_dg_c_mig add = var:te_dg_net_migration }
+		change_local_variable = { name = te_dg_c_tfr_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
+		change_local_variable = { name = te_dg_c_women add = var:te_dg_w1549 }
+		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_e65_w add = { value = var:te_dg_e65 multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_imr_w add = { value = var:te_dg_imr multiply = var:te_dg_births } }
+		change_local_variable = { name = te_dg_c_imr_p add = { value = var:te_dg_imr multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_urban_p add = var:te_dg_urban }
+		change_local_variable = { name = te_dg_c_urban add = local_var:te_dg_c_s_um }
+		change_local_variable = { name = te_dg_c_sq add = { value = local_var:te_dg_c_s_um multiply = local_var:te_dg_c_s_um } }
+		if = {
+			limit = { local_var:te_dg_c_s_um > local_var:te_dg_c_big }
+			set_local_variable = { name = te_dg_c_big value = local_var:te_dg_c_s_um }
+		}
+		change_local_variable = { name = te_dg_c_inf_w add = { value = var:te_dg_m_inf multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_ext_w add = { value = var:te_dg_m_ext multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_chr_w add = { value = var:te_dg_m_chr multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_work_w add = { value = var:te_dg_m_work multiply = local_var:te_dg_c_s_pm } }
+	}
+	if = {
+		limit = { local_var:te_dg_seeded > 0 }
+		# last year's figures, when they came from a step (te_demog_keep_figures)
+		te_demog_keep_figures = yes
+		if = {
+			limit = { local_var:te_dg_was > 0 }
+			set_variable = { name = te_dg_prev_tfr value = var:te_dg_tfr }
+			set_variable = { name = te_dg_prev_e0 value = var:te_dg_e0 }
+			set_variable = { name = te_dg_prev_e65 value = var:te_dg_e65 }
+			set_variable = { name = te_dg_prev_imr value = var:te_dg_imr }
+			set_variable = { name = te_dg_prev_net_migration value = var:te_dg_net_migration }
+			set_variable = { name = te_dg_prev_urban_share value = var:te_dg_urban_share }
+			set_variable = { name = te_dg_prev_primacy value = var:te_dg_primacy }
+			set_variable = { name = te_dg_prev_n_cities value = var:te_dg_n_cities }
+			set_variable = { name = te_dg_prev_urban_label value = var:te_dg_urban_label }
+		}
+		te_demog_band_figures = { B = te_dg_cb }
+		te_demog_store_figures = yes
+		set_variable = { name = te_dg_cbr value = { value = local_var:te_dg_c_births divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
+		set_variable = { name = te_dg_cdr value = { value = local_var:te_dg_c_deaths divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 } }
+		set_variable = { name = te_dg_net_migration value = local_var:te_dg_c_mig }
+		set_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_w divide = { value = local_var:te_dg_c_women min = 1 } } }
+		set_variable = { name = te_dg_e0 value = { value = local_var:te_dg_c_e0_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_e65 value = { value = local_var:te_dg_c_e65_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		# by births; a census of seeds holds none (a seed writes 0), and then by people
+		if = {
+			limit = { local_var:te_dg_c_births > 0 }
+			set_variable = { name = te_dg_imr value = { value = local_var:te_dg_c_imr_w divide = { value = local_var:te_dg_c_births min = 1 } } }
+		}
+		else = {
+			set_variable = { name = te_dg_imr value = { value = local_var:te_dg_c_imr_p divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+		}
+		# the urban pattern (spec 5.1): the squares in units of 100,000 people
+		set_variable = { name = te_dg_urban_share value = { value = local_var:te_dg_c_urban_p divide = { value = local_var:te_dg_c_people min = 1 } } }
+		set_variable = { name = te_dg_primacy value = { value = local_var:te_dg_c_big divide = { value = local_var:te_dg_c_urban min = 0.00001 } } }
+		set_variable = {
+			name = te_dg_n_cities
+			value = { value = local_var:te_dg_c_urban multiply = local_var:te_dg_c_urban divide = { value = local_var:te_dg_c_sq min = 0.00001 } }
+		}
+		if = {
+			limit = { var:te_dg_primacy >= 0.4 }
+			set_variable = { name = te_dg_urban_label value = 0 }
+		}
+		else_if = {
+			limit = { var:te_dg_primacy >= 0.25 }
+			set_variable = { name = te_dg_urban_label value = 1 }
+		}
+		else_if = {
+			limit = { var:te_dg_primacy >= 0.1 }
+			set_variable = { name = te_dg_urban_label value = 2 }
+		}
+		else = {
+			set_variable = { name = te_dg_urban_label value = 3 }
+		}
+		te_demog_country_lists = yes
+		set_variable = { name = te_dg_census_year value = te_demog_year }
+		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
+		te_demog_set_trend = yes
+		# the player's outline twenty years ahead, on the country's average rates
+		if = {
+			limit = { is_ai = no }
+			set_local_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+			set_local_variable = { name = te_dg_m_ext value = { value = local_var:te_dg_c_ext_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+			set_local_variable = { name = te_dg_m_chr value = { value = local_var:te_dg_c_chr_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+			set_local_variable = { name = te_dg_c_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
+			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
+			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
+			set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
+			te_demog_project = yes
+		}
+		# the pyramid's scale, once here instead of in every bar's range each frame
+		set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }
+		# one sample a year of the figures above for the history charts (te_demog_history_effects.txt)
+		if = {
+			limit = { te_history_country_is_tracked = yes }
+			te_demog_history_record = yes
+		}
+		# the console's census log: one TE_DEMOG_CENSUS line (te_debug_demog_effects.txt)
+		if = {
+			limit = { te_demog_census_log_on = yes }
+			te_debug_demog_census_line = yes
+		}
+	}
+}

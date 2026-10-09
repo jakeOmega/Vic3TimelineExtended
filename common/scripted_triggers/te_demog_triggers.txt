@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — gates and building classes
+# (docs/superpowers/specs/2026-10-08-demographics-design.md; plan Task 5)
+# ============================================================================
+
+# The cohort model, the panel and the history run unless the rule is Disabled.
+te_demog_cohorts_run = {
+	NOT = { has_game_rule = demographics_disabled }
+}
+
+# The model's effects (phase 2) apply only under Full.
+te_demog_effects_run = {
+	te_demog_cohorts_run = yes
+	NOT = { has_game_rule = demographics_display_only }
+}
+
+# State scope: the state has a census (a seeded ring).
+te_demog_has_census = {
+	has_variable = te_dg_year
+}
+
+# Any scope: the census log is on (te_debug_demog.1 option b, console only). While it is,
+# the country census writes a TE_DEMOG_CENSUS line and the player's capital a
+# TE_DEMOG_PULSE line (te_debug_demog_effects.txt).
+te_demog_census_log_on = {
+	has_global_variable = te_demog_census_log
+}
+
+# Building scope: capital in §4.2's sense. The ownership buildings own themselves,
+# Subsistence Farms read private and government buildings read state-owned, so all
+# three are left out (docs/testing/demographics-probe-results-2026-10-08.md, Q2).
+te_demog_is_capital_building = {
+	NOR = {
+		te_demog_is_ownership_building = yes
+		is_building_group = bg_subsistence_agriculture
+		is_building_group = bg_subsistence_ranching
+		is_government_funded = yes
+	}
+}
+
+# Building scope: where great fortunes are held (§4.2's weights).
+te_demog_is_ownership_building = {
+	OR = {
+		is_building_type = building_manor_house
+		is_building_type = building_financial_district
+		is_building_type = building_company_headquarter
+		is_building_type = building_company_regional_headquarter
+	}
+}
+
+# Building scope: a rural workplace, for urban population (§5.1; plan Decisions).
+te_demog_rural_workplace = {
+	OR = {
+		is_building_group = bg_agriculture
+		is_building_group = bg_plantations
+		is_building_group = bg_ranching
+		is_building_group = bg_extraction
+		is_building_group = bg_subsistence_agriculture
+		is_building_group = bg_subsistence_ranching
+	}
+}
+
+# Building scope: work that drew women as labour migrants (§2.5).
+te_demog_female_job_workplace = {
+	OR = {
+		is_building_group = bg_light_industry
+		is_building_group = bg_service
+		is_building_group = bg_urban_facilities
+	}
+}

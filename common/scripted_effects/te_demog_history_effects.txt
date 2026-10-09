@@ -1,0 +1,159 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the yearly history store
+# (docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md, Task 12)
+# ============================================================================
+# One sample container per calendar year for each tracked country
+# (te_history_country_is_tracked), at most 100, kept in the country's variable
+# list te_dg_hist oldest first. The Demographics panel's history charts draw
+# it with GetList. It follows the Cultural Hegemony annual store
+# (te_history_cultural_hegemony_effects.txt) and the country-owned monthly store
+# (te_history_effects.txt), with the differences below.
+#
+# DATA MODEL
+#   container  tag te_dg_hist_sample, parent the recording country (the engine
+#              culls it when the country stops existing)
+#   te_hist_i  the year. The chart template reads this name, and
+#              te_history_sample_order negates it, so the shared eviction order
+#              works on a year as it does on a month index
+#   te_dg_h_median, te_dg_h_tfr, te_dg_h_e0, te_dg_h_gini, te_dg_h_wc
+#              median age, children per woman, life expectancy at birth, Gini
+#              and national Wealth Concentration as the census left them
+#   country    te_dg_hist (the list), te_dg_hist_year (the year last recorded)
+#
+# ONE SAMPLE A YEAR. The census runs twice in 1836, at game start and on
+# 31 December, so a container is created only when te_dg_hist_year is not the
+# current year, and te_dg_hist_year is set once the container is stored. The
+# figures are copied on every run: the 31 December run overwrites the game-start
+# sample. The Gini and Wealth Concentration come from te_demog_wc_national,
+# which runs on the yearly pulse and at game start (te_inh_game_start, in
+# inheritance_events.1); the two game-start events run in either order, so the
+# game-start sample may lack te_dg_h_gini and te_dg_h_wc until 31 December. A
+# figure the country does not hold yet is left unset, never written as 0: a
+# chart reads an unset value as "no data".
+#
+# A revolution's winner inherits te_dg_hist_year but not the list, so a
+# country with no list creates a container whatever its year says: its chart
+# starts again with the year it wins. The refill reads the list only once it
+# exists.
+#
+# Scope: country, and only from te_demog_country_census (where THIS is the
+# country). Everything is in hidden_effect: this is a store, not a tooltip.
+# ============================================================================
+
+te_demog_history_record = {
+	hidden_effect = {
+		save_scope_as = te_dg_hist_owner
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_dg_hist_year }
+					NOT = { var:te_dg_hist_year = te_demog_year }
+					NOT = { has_variable_list = te_dg_hist }
+				}
+			}
+			create_container = {
+				tags = { te_dg_hist_sample }
+				parent = scope:te_dg_hist_owner
+				save_scope_as = te_dg_hist_new
+			}
+			if = {
+				limit = { exists = scope:te_dg_hist_new }
+				scope:te_dg_hist_new = {
+					set_variable = { name = te_hist_i value = te_demog_year }
+				}
+				add_to_variable_list = { name = te_dg_hist target = scope:te_dg_hist_new }
+				te_demog_history_prune = yes
+				# Commit the guard only after the sample has been stored.
+				set_variable = { name = te_dg_hist_year value = te_demog_year }
+			}
+		}
+		# This year's container, wherever the list keeps it: fill it, or refill it.
+		if = {
+			limit = { has_variable_list = te_dg_hist }
+			every_in_list = {
+				variable = te_dg_hist
+				limit = { var:te_hist_i = te_demog_year }
+				te_demog_history_copy = { FROM = te_dg_median TO = te_dg_h_median }
+				te_demog_history_copy = { FROM = te_dg_tfr TO = te_dg_h_tfr }
+				te_demog_history_copy = { FROM = te_dg_e0 TO = te_dg_h_e0 }
+				te_demog_history_copy = { FROM = te_dg_gini TO = te_dg_h_gini }
+				te_demog_history_copy = { FROM = te_inh_concentration TO = te_dg_h_wc }
+			}
+		}
+	}
+}
+
+# Scope: a sample container, with scope:te_dg_hist_owner the country. Copies one
+# country variable into the sample when the country holds it.
+te_demog_history_copy = {
+	if = {
+		limit = { scope:te_dg_hist_owner = { has_variable = $FROM$ } }
+		set_variable = { name = $TO$ value = scope:te_dg_hist_owner.var:$FROM$ }
+	}
+}
+
+# Scope: country. Evict the oldest sample once the list is over the cap (cap 100,
+# so 101 trips it). `order_by`, not raw list position, so eviction is right
+# whatever order the engine keeps the list in. `remove_list_variable` fills the
+# hole with the list's LAST element, which breaks the oldest-first order, so
+# every eviction sorts again.
+te_demog_history_prune = {
+	if = {
+		limit = { any_in_list = { variable = te_dg_hist count >= 101 has_tag = te_dg_hist_sample } } # cap 100 + 1
+		ordered_in_list = {
+			variable = te_dg_hist
+			position = 0
+			order_by = te_history_sample_order
+			save_scope_as = te_dg_hist_evicted
+		}
+		if = {
+			limit = { exists = scope:te_dg_hist_evicted }
+			remove_list_variable = { name = te_dg_hist target = scope:te_dg_hist_evicted }
+			scope:te_dg_hist_evicted = { destroy_container = yes }
+			te_demog_history_sort = yes
+		}
+	}
+}
+
+# Scope: country, called only from the pruner, with te_dg_hist at exactly the cap
+# (which is why the completeness gate can be count >= 100). Build and verify the
+# sorted copy before clearing the live list, so a short iterator cannot orphan
+# every retained container. te_history_sample_order is negated because
+# `ordered_*` sorts highest first: the oldest year comes out first.
+te_demog_history_sort = {
+	save_scope_as = te_dg_hist_sorter
+	if = {
+		limit = { has_variable_list = te_dg_hist_tmp }
+		clear_variable_list = te_dg_hist_tmp
+	}
+	ordered_in_list = {
+		variable = te_dg_hist
+		order_by = te_history_sample_order
+		min = 0
+		max = 100
+		check_range_bounds = no
+		save_scope_as = te_dg_hist_moved
+		scope:te_dg_hist_sorter = {
+			add_to_variable_list = { name = te_dg_hist_tmp target = scope:te_dg_hist_moved }
+		}
+	}
+	if = {
+		limit = { any_in_list = { variable = te_dg_hist_tmp count >= 100 has_tag = te_dg_hist_sample } }
+		clear_variable_list = te_dg_hist
+		ordered_in_list = {
+			variable = te_dg_hist_tmp
+			order_by = te_history_sample_order
+			min = 0
+			max = 100
+			check_range_bounds = no
+			save_scope_as = te_dg_hist_moved
+			scope:te_dg_hist_sorter = {
+				add_to_variable_list = { name = te_dg_hist target = scope:te_dg_hist_moved }
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = te_dg_hist_tmp }
+		clear_variable_list = te_dg_hist_tmp
+	}
+}

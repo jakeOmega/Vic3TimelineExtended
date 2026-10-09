@@ -188,7 +188,9 @@ class Script:
                     self.tools.discard(tool)
             elif key == 'add_modifier':
                 self.tools.add(self.field(val, 'name').removeprefix('banking_'))
-            elif key == 'te_history_record_banking_marker':
+            elif key in ('te_history_record_banking_marker', 'te_demog_wc_shock'):
+                # other systems' calls (the history chart, Wealth Concentration's crash shock):
+                # no banking state
                 continue
             elif key == 'custom_tooltip':
                 # Records the line the tooltip would draw; a block still runs.
