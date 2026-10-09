@@ -45,19 +45,8 @@ te_inh_yearly_on_action = {
 	}
 }
 
-# Root = State. The rural-scaled birth and migration modifiers: a state
-# pulse, because their multiplier is the state's own agrarian share.
-on_yearly_pulse_state = {
-	on_actions = {
-		te_inh_state_yearly_on_action
-	}
-}
-
-te_inh_state_yearly_on_action = {
-	effect = {
-		te_inh_refresh_rural_effects = yes
-	}
-}
+# The rural-scaled birth and migration modifiers refresh from te_demog_state_yearly
+# (te_demog_on_actions.txt), after the walk that sets the agrarian share they scale by.
 
 # Generation events: each rolls 10% a year once its law has been held for a
 # generation (te_inh_generation_due), with a 25-year cooldown of its own.

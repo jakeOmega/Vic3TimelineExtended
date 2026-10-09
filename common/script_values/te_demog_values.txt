@@ -1,0 +1,39 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — script values the yearly walks read
+# (docs/superpowers/specs/2026-10-08-demographics-design.md §11.3;
+# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Task 7)
+# ============================================================================
+
+# Pop scope: literacy x size, SoL x size (the walk's sums).
+te_demog_pop_literate = {
+	value = literacy_rate
+	multiply = total_size
+}
+
+te_demog_pop_sol = {
+	value = standard_of_living
+	multiply = total_size
+}
+
+# Building scope: levels in private, cooperative (self-owned) and state hands
+# (bareword fractions read as values: docs/testing/demographics-probe-results-2026-10-08.md Q2).
+te_demog_building_private_levels = {
+	value = level
+	multiply = private_ownership_fraction
+}
+
+te_demog_building_self_levels = {
+	value = level
+	multiply = self_ownership_fraction
+}
+
+te_demog_building_country_levels = {
+	value = level
+	multiply = country_ownership_fraction
+}
+
+# The current year as a value (probe: add = year gives 1836).
+te_demog_year = {
+	value = 0
+	add = year
+}

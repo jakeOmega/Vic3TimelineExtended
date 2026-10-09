@@ -1,0 +1,21 @@
+﻿# ======================================================================
+#  DEMOGRAPHICS — on actions
+#  Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §11.3
+#  Plan: docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md
+#  Effects: common/scripted_effects/te_demog_effects.txt.
+# ======================================================================
+
+# Root = State, a different day per state across the year. Runs whatever the
+# rule is: the walks feed inheritance and Wealth Concentration even with the
+# census off, and the orchestrator gates the census itself.
+on_yearly_pulse_state = {
+	on_actions = {
+		te_demog_state_yearly_on_action
+	}
+}
+
+te_demog_state_yearly_on_action = {
+	effect = {
+		te_demog_state_yearly = yes
+	}
+}

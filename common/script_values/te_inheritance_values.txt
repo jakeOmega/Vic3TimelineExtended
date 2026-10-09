@@ -125,28 +125,3 @@ te_inh_concentration_display = {
 		value = var:te_inh_concentration
 	}
 }
-
-# ----------------------------------------------------------------------
-#  Rural share (state scope)
-#  Peasants plus Farmers as a share of the state's population, 0-1: the
-#  multiplier of the rural-scaled birth and migration modifiers. The pop
-#  walk is colonial_territory_primary_share_value's.
-# ----------------------------------------------------------------------
-te_inh_agrarian_share_value = {
-	value = 0
-	every_scope_pop = {
-		limit = {
-			OR = {
-				is_pop_type = peasants
-				is_pop_type = farmers
-			}
-		}
-		add = total_size
-	}
-	divide = {
-		value = state_population
-		min = 1
-	}
-	min = 0
-	max = 1
-}

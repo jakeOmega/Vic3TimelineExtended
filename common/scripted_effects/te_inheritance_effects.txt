@@ -169,9 +169,10 @@ te_inh_count_duty_years = {
 	}
 }
 
-# State scope; ROOT the state (on_yearly_pulse_state), since the
-# multiplier resolves against ROOT. One refresh site for the three rural
-# modifiers. Undivided Farm Succession switches Forced Heirship's off.
+# State scope; ROOT the state (te_demog_state_yearly, on the state's yearly
+# pulse, after the walk that sets te_dg_agr_share), since the multiplier
+# resolves against ROOT. One refresh site for the three rural modifiers.
+# Undivided Farm Succession switches Forced Heirship's off.
 te_inh_refresh_rural_effects = {
 	if = {
 		limit = { has_modifier = inh_forced_heirship_rural }
@@ -195,7 +196,7 @@ te_inh_refresh_rural_effects = {
 				}
 			}
 		}
-		set_variable = { name = te_inh_agrarian_share value = te_inh_agrarian_share_value }
+		set_variable = { name = te_inh_agrarian_share value = var:te_dg_agr_share }
 		if = {
 			limit = { owner = { te_inh_has_undivided_farms = yes } }
 			add_modifier = {
