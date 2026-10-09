@@ -1,5 +1,8 @@
 """Pop growth model: birthrate, mortality, and growth rate as functions of Standard of Living.
 
+The curve constants are read from the mod's defines (`common/defines/extra_defines.txt`, the
+"Pop Growth Constants" block), so this model follows the engine's curves when they are retuned.
+
 Usage:
     python pop_growth.py              # Print text table of rates at each SoL
     python pop_growth.py --plot       # Show matplotlib chart
@@ -8,93 +11,106 @@ Usage:
 
 Functions are importable:
     from pop_growth import calculate_birthrate, calculate_mortality
+    from pop_growth import read_defines, monthly_birthrate, monthly_mortality  # per-month curves
 """
 
 import argparse
+import re
+from dataclasses import dataclass
+from pathlib import Path
 
-# ── Pop Growth Constants (from game defines) ──────────────────────────────────
-MIN_BIRTHRATE = 0.00080 * 12
-MAX_BIRTHRATE = 0.00475 * 12
-MIN_MORTALITY = 0.00100 * 12
-MAX_MORTALITY = 0.00600 * 12
+# ── Pop Growth Constants (from the mod's defines) ─────────────────────────────
+DEFINES = Path(__file__).resolve().parents[2] / "common" / "defines" / "extra_defines.txt"
+_NAMES = {
+    "min_birthrate": "min_birthrate", "max_birthrate": "max_birthrate",
+    "min_mortality": "min_mortality", "max_mortality": "max_mortality",
+    "equilibrium_sol": "pop_growth_equilibrium_sol", "transition_sol": "pop_growth_transition_sol",
+    "max_sol": "pop_growth_max_sol", "stable_sol": "pop_growth_stable_sol",
+    "transition_birthrate_mult": "transition_birthrate_mult",
+    "max_growth_mortality_mult": "max_growth_mortality_mult",
+}
 
-POP_GROWTH_EQUILIBRIUM_SOL = 4
-POP_GROWTH_TRANSITION_SOL = 11
-POP_GROWTH_MAX_SOL = 18
-POP_GROWTH_STABLE_SOL = 35
 
-TRANSITION_BIRTHRATE_MULT = 1
-MAX_GROWTH_MORTALITY_MULT = 0.4
+@dataclass(frozen=True)
+class GrowthDefines:
+    min_birthrate: float
+    max_birthrate: float
+    min_mortality: float
+    max_mortality: float
+    equilibrium_sol: float
+    transition_sol: float
+    max_sol: float
+    stable_sol: float
+    transition_birthrate_mult: float
+    max_growth_mortality_mult: float
 
-# ── Derived Values ────────────────────────────────────────────────────────────
-_birthrate_at_transition = MAX_BIRTHRATE * TRANSITION_BIRTHRATE_MULT
-_rate_at_equilibrium = (
-    POP_GROWTH_EQUILIBRIUM_SOL
-    * ((_birthrate_at_transition - MAX_BIRTHRATE) / POP_GROWTH_TRANSITION_SOL)
-    + MAX_BIRTHRATE
-)
 
-_mortality_starving_slope = (
-    _rate_at_equilibrium - MAX_MORTALITY
-) / POP_GROWTH_EQUILIBRIUM_SOL
-_birthrate_pretransition_slope = (
-    _birthrate_at_transition - _rate_at_equilibrium
-) / POP_GROWTH_TRANSITION_SOL
-
-_birthrate_at_growth_max = (POP_GROWTH_MAX_SOL - POP_GROWTH_TRANSITION_SOL) * (
-    (MIN_BIRTHRATE - _birthrate_at_transition)
-    / (POP_GROWTH_STABLE_SOL - POP_GROWTH_TRANSITION_SOL)
-) + _birthrate_at_transition
-_mortality_at_growth_max = _birthrate_at_growth_max * MAX_GROWTH_MORTALITY_MULT
-_mortality_eq_to_max_slope = (
-    _mortality_at_growth_max - _rate_at_equilibrium
-) / (POP_GROWTH_MAX_SOL - POP_GROWTH_EQUILIBRIUM_SOL)
-_mortality_eq_to_max_intercept = (
-    -_mortality_eq_to_max_slope * POP_GROWTH_EQUILIBRIUM_SOL
-    + _rate_at_equilibrium
-)
-
-_birthrate_transition_slope = (MIN_BIRTHRATE - _birthrate_at_transition) / (
-    POP_GROWTH_STABLE_SOL - POP_GROWTH_TRANSITION_SOL
-)
-_birthrate_transition_intercept = (
-    -_birthrate_transition_slope * POP_GROWTH_STABLE_SOL + MIN_BIRTHRATE
-)
-
-_mortality_max_to_stable_slope = (MIN_MORTALITY - _mortality_at_growth_max) / (
-    POP_GROWTH_STABLE_SOL - POP_GROWTH_MAX_SOL
-)
-_mortality_max_to_stable_intercept = (
-    -_mortality_max_to_stable_slope * POP_GROWTH_STABLE_SOL + MIN_MORTALITY
-)
+def read_defines(path=DEFINES):
+    """The @-variables of the pop growth block, monthly rates as written."""
+    text = Path(path).read_text(encoding="utf-8-sig")
+    values = {}
+    for field_name, var in _NAMES.items():
+        m = re.search(rf"^@{var}\s*=\s*([-0-9.]+)", text, re.MULTILINE)
+        if not m:
+            raise KeyError(f"@{var} not found in {path}")
+        values[field_name] = float(m.group(1))
+    return GrowthDefines(**values)
 
 
 # ── Core Functions ────────────────────────────────────────────────────────────
+# The derived slopes and intercepts are the defines file's own formulas
+# ("Pop Growth Derived values" in extra_defines.txt).
+
+def _rate_at_equilibrium(d, at_transition):
+    return d.equilibrium_sol * ((at_transition - d.max_birthrate) / d.transition_sol) + d.max_birthrate
+
+
+def monthly_birthrate(sol, d, malnourishment=False):
+    """Base birthrate per month at a Standard of Living.
+
+    `malnourishment=True` applies this module's approximation of starvation below the
+    equilibrium SoL; the define curve alone is the default.
+    """
+    at_transition = d.max_birthrate * d.transition_birthrate_mult
+    if sol <= d.transition_sol:
+        pre_slope = (at_transition - _rate_at_equilibrium(d, at_transition)) / d.transition_sol
+        rate = d.max_birthrate + pre_slope * sol
+        if malnourishment and sol < d.equilibrium_sol:
+            rate *= 1 - 0.1 * (d.equilibrium_sol - sol)
+        return rate
+    if sol >= d.stable_sol:
+        return d.min_birthrate
+    slope = (d.min_birthrate - at_transition) / (d.stable_sol - d.transition_sol)
+    return d.min_birthrate + slope * (sol - d.stable_sol)
+
+
+def monthly_mortality(sol, d):
+    """Base mortality per month at a Standard of Living."""
+    at_transition = d.max_birthrate * d.transition_birthrate_mult
+    at_eq = _rate_at_equilibrium(d, at_transition)
+    birth_at_max = (d.max_sol - d.transition_sol) * (
+        (d.min_birthrate - at_transition) / (d.stable_sol - d.transition_sol)) + at_transition
+    mort_at_max = birth_at_max * d.max_growth_mortality_mult
+    if sol <= d.equilibrium_sol:
+        return d.max_mortality + (at_eq - d.max_mortality) / d.equilibrium_sol * sol
+    if sol <= d.max_sol:
+        return at_eq + (mort_at_max - at_eq) / (d.max_sol - d.equilibrium_sol) * (sol - d.equilibrium_sol)
+    if sol < d.stable_sol:
+        return mort_at_max + (d.min_mortality - mort_at_max) / (d.stable_sol - d.max_sol) * (sol - d.max_sol)
+    return d.min_mortality
+
+
+_DEFAULT = read_defines()
+
 
 def calculate_mortality(sol: float) -> float:
     """Calculate annual mortality rate for a given Standard of Living."""
-    if sol < POP_GROWTH_EQUILIBRIUM_SOL:
-        return sol * _mortality_starving_slope + MAX_MORTALITY
-    elif sol < POP_GROWTH_MAX_SOL:
-        return sol * _mortality_eq_to_max_slope + _mortality_eq_to_max_intercept
-    elif sol < POP_GROWTH_STABLE_SOL:
-        return sol * _mortality_max_to_stable_slope + _mortality_max_to_stable_intercept
-    else:
-        return MIN_MORTALITY
+    return monthly_mortality(sol, _DEFAULT) * 12
 
 
 def calculate_birthrate(sol: float) -> float:
     """Calculate annual birthrate for a given Standard of Living."""
-    if sol < POP_GROWTH_EQUILIBRIUM_SOL:
-        return (sol * _birthrate_pretransition_slope + MAX_BIRTHRATE) * (
-            1 - 0.1 * (POP_GROWTH_EQUILIBRIUM_SOL - sol)
-        )
-    elif sol < POP_GROWTH_TRANSITION_SOL:
-        return sol * _birthrate_pretransition_slope + MAX_BIRTHRATE
-    elif sol < POP_GROWTH_STABLE_SOL:
-        return sol * _birthrate_transition_slope + _birthrate_transition_intercept
-    else:
-        return MIN_BIRTHRATE
+    return monthly_birthrate(sol, _DEFAULT, malnourishment=True) * 12
 
 
 def calculate_growth_rate(sol: float, birth_mult: float = 1.0, mort_mult: float = 1.0) -> float:
@@ -130,16 +146,16 @@ def print_table(sol_min: int = 1, sol_max: int = 40, birth_mult: float = 1.0, mo
 def print_key_thresholds(birth_mult: float = 1.0, mort_mult: float = 1.0):
     """Print rates at the key SoL thresholds defined in game constants."""
     thresholds = [
-        ("Equilibrium", POP_GROWTH_EQUILIBRIUM_SOL),
-        ("Transition", POP_GROWTH_TRANSITION_SOL),
-        ("Max Growth", POP_GROWTH_MAX_SOL),
-        ("Stable", POP_GROWTH_STABLE_SOL),
+        ("Equilibrium", _DEFAULT.equilibrium_sol),
+        ("Transition", _DEFAULT.transition_sol),
+        ("Max Growth", _DEFAULT.max_sol),
+        ("Stable", _DEFAULT.stable_sol),
     ]
     print("\nKey Thresholds:")
     print(f"  {'Phase':<14} {'SoL':>4}  {'Birth':>8}  {'Death':>8}  {'Net':>8}")
     for name, sol in thresholds:
         r = rates_at_sol(sol, birth_mult, mort_mult)
-        print(f"  {name:<14} {sol:>4}  {r['birthrate']:>8.5f}  {r['mortality']:>8.5f}  {r['growth_rate']:>+8.5f}")
+        print(f"  {name:<14} {sol:>4g}  {r['birthrate']:>8.5f}  {r['mortality']:>8.5f}  {r['growth_rate']:>+8.5f}")
 
     # Find peak growth SoL
     best_sol, best_growth = 1, -999
@@ -170,8 +186,8 @@ def plot(sol_min: float = 1, sol_max: float = 40, birth_mult: float = 1.0, mort_
     plt.plot(sol_range, growth_rates, label="Growth Rate", color="green")
     plt.axhline(y=0, color="gray", linestyle=":", alpha=0.5)
 
-    for name, sol in [("Equil", POP_GROWTH_EQUILIBRIUM_SOL), ("Trans", POP_GROWTH_TRANSITION_SOL),
-                       ("MaxGr", POP_GROWTH_MAX_SOL), ("Stable", POP_GROWTH_STABLE_SOL)]:
+    for name, sol in [("Equil", _DEFAULT.equilibrium_sol), ("Trans", _DEFAULT.transition_sol),
+                       ("MaxGr", _DEFAULT.max_sol), ("Stable", _DEFAULT.stable_sol)]:
         plt.axvline(x=sol, color="gray", linestyle="--", alpha=0.3)
         plt.annotate(name, (sol, plt.ylim()[1] * 0.95), fontsize=8, ha="center")
 

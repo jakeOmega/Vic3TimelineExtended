@@ -1,0 +1,3756 @@
+SAV0100demographics-test-slice
+meta_data={
+	version="1.14.5"
+}
+pops={
+	database={
+55={
+	type=laborers
+	workforce=42983
+	dependents=100290
+	location=5
+	num_literate=859
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+61={
+	type=laborers
+	workforce=8520
+	dependents=19880
+	location=5
+	num_literate=170
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+87={
+	type=laborers
+	workforce=3901
+	dependents=9103
+	location=433
+	num_literate=78
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+93={
+	type=laborers
+	workforce=2400
+	dependents=5600
+	location=434
+	num_literate=48
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+99={
+	type=laborers
+	workforce=1320
+	dependents=3080
+	location=435
+	num_literate=26
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+107={
+	type=laborers
+	workforce=15720
+	dependents=36680
+	location=436
+	num_literate=314
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+123={
+	type=soldiers
+	workforce=7500
+	dependents=17500
+	location=437
+	num_literate=150
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+138={
+	type=soldiers
+	workforce=1950
+	dependents=4550
+	location=438
+	num_literate=39
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+152={
+	type=soldiers
+	workforce=5400
+	dependents=12600
+	location=439
+	num_literate=108
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+170={
+	type=soldiers
+	workforce=100
+	dependents=234
+	location=1096
+	num_literate=2
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+845={
+	type=laborers
+	workforce=3
+	dependents=9
+	location=474
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+2114={
+	type=slaves
+	workforce=1
+	dependents=2
+	location=772
+	wealth=7
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+2800={
+	type=laborers
+	workforce=8750
+	dependents=26250
+	location=413
+	num_literate=175
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+3296={
+	type=laborers
+	workforce=26000
+	dependents=78000
+	location=411
+	num_literate=520
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+4074={
+	type=laborers
+	workforce=1
+	dependents=2
+	location=496
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+8988={
+	type=capitalists
+	workforce=7950
+	dependents=18550
+	location=5
+	num_literate=6837
+	wealth=43
+	previous_quality_of_life=43
+	social_class=upper_class
+}
+8991={
+	type=capitalists
+	workforce=170
+	dependents=397
+	location=5
+	num_literate=170
+	wealth=60
+	previous_quality_of_life=60
+	social_class=upper_class
+}
+8994={
+	type=bureaucrats
+	workforce=1950
+	dependents=4550
+	location=5
+	num_literate=1599
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+8997={
+	type=academics
+	workforce=85
+	dependents=198
+	location=5
+	num_literate=61
+	wealth=11
+	previous_quality_of_life=11
+	social_class=middle_class
+}
+9000={
+	type=clergymen
+	workforce=17100
+	dependents=39901
+	location=5
+	num_literate=17100
+	wealth=29
+	previous_quality_of_life=29
+	social_class=middle_class
+}
+9003={
+	type=engineers
+	workforce=1250
+	dependents=2916
+	location=5
+	num_literate=512
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+9006={
+	type=shopkeepers
+	workforce=15000
+	dependents=35001
+	location=5
+	num_literate=2400
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+9009={
+	type=shopkeepers
+	workforce=11200
+	dependents=26134
+	location=5
+	num_literate=6048
+	wealth=27
+	previous_quality_of_life=27
+	social_class=middle_class
+}
+9012={
+	type=officers
+	workforce=800
+	dependents=1866
+	location=5
+	num_literate=304
+	wealth=19
+	previous_quality_of_life=19
+	social_class=middle_class
+}
+9015={
+	type=farmers
+	workforce=22500
+	dependents=52502
+	location=5
+	num_literate=4050
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+9018={
+	type=clergymen
+	workforce=1250
+	dependents=2916
+	location=5
+	num_literate=975
+	wealth=14
+	previous_quality_of_life=14
+	social_class=middle_class
+}
+9021={
+	type=clerks
+	workforce=9000
+	dependents=21001
+	location=5
+	num_literate=3510
+	wealth=7
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+9024={
+	type=machinists
+	workforce=2500
+	dependents=5833
+	location=5
+	num_literate=500
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+9027={
+	type=machinists
+	workforce=15000
+	dependents=35001
+	location=5
+	num_literate=900
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+9030={
+	type=clerks
+	workforce=600
+	dependents=1400
+	location=5
+	num_literate=246
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+9033={
+	type=clerks
+	workforce=100
+	dependents=233
+	location=5
+	num_literate=31
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+9036={
+	type=laborers
+	workforce=3000
+	dependents=7000
+	location=5
+	num_literate=240
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+9039={
+	type=laborers
+	workforce=52000
+	dependents=121333
+	location=5
+	num_literate=4160
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+9042={
+	type=laborers
+	workforce=37500
+	dependents=87500
+	location=5
+	num_literate=3000
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+9045={
+	type=laborers
+	workforce=1000
+	dependents=2333
+	location=5
+	num_literate=120
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+9048={
+	type=clerks
+	workforce=5000
+	dependents=11666
+	location=5
+	num_literate=2050
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+9051={
+	type=soldiers
+	workforce=1800
+	dependents=4200
+	location=5
+	num_literate=288
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+9054={
+	type=peasants
+	workforce=100000
+	dependents=233333
+	location=5
+	num_literate=20000
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+9057={
+	type=academics
+	workforce=100
+	dependents=233
+	location=6
+	num_literate=72
+	wealth=11
+	previous_quality_of_life=11
+	social_class=middle_class
+}
+9060={
+	type=shopkeepers
+	workforce=1000
+	dependents=2333
+	location=6
+	num_literate=160
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+9063={
+	type=shopkeepers
+	workforce=2000
+	dependents=4666
+	location=6
+	num_literate=560
+	wealth=14
+	previous_quality_of_life=14
+	social_class=middle_class
+}
+9066={
+	type=engineers
+	workforce=6250
+	dependents=14584
+	location=6
+	num_literate=3187
+	wealth=13
+	previous_quality_of_life=13
+	social_class=middle_class
+}
+9069={
+	type=engineers
+	workforce=500
+	dependents=1166
+	location=6
+	num_literate=275
+	wealth=15
+	previous_quality_of_life=15
+	social_class=middle_class
+}
+9072={
+	type=clergymen
+	workforce=10
+	dependents=24
+	location=6
+	num_literate=9
+	wealth=23
+	previous_quality_of_life=23
+	social_class=middle_class
+}
+9075={
+	type=officers
+	workforce=950
+	dependents=2216
+	location=6
+	num_literate=380
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+9078={
+	type=farmers
+	workforce=3000
+	dependents=7000
+	location=6
+	num_literate=720
+	wealth=12
+	previous_quality_of_life=12
+	social_class=middle_class
+}
+9081={
+	type=clerks
+	workforce=200
+	dependents=466
+	location=6
+	num_literate=66
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+9084={
+	type=machinists
+	workforce=1050
+	dependents=2450
+	location=6
+	num_literate=189
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+9087={
+	type=machinists
+	workforce=12500
+	dependents=29168
+	location=6
+	num_literate=1750
+	wealth=7
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+9090={
+	type=clerks
+	workforce=900
+	dependents=2100
+	location=6
+	num_literate=387
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+9093={
+	type=clerks
+	workforce=800
+	dependents=1866
+	location=6
+	num_literate=344
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+9096={
+	type=laborers
+	workforce=14550
+	dependents=33950
+	location=6
+	num_literate=1746
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+9099={
+	type=laborers
+	workforce=143750
+	dependents=335416
+	location=6
+	num_literate=11500
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+9102={
+	type=laborers
+	workforce=11250
+	dependents=26250
+	location=6
+	num_literate=1350
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+9105={
+	type=laborers
+	workforce=2800
+	dependents=6533
+	location=6
+	num_literate=336
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+9108={
+	type=soldiers
+	workforce=9000
+	dependents=21000
+	location=6
+	num_literate=1620
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+9111={
+	type=peasants
+	workforce=25138
+	dependents=58656
+	location=6
+	num_literate=5027
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+10636={
+	type=shopkeepers
+	workforce=1000
+	dependents=2333
+	location=114
+	num_literate=400
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+10639={
+	type=laborers
+	workforce=8000
+	dependents=18670
+	location=114
+	num_literate=1760
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+10642={
+	type=peasants
+	workforce=2394
+	dependents=5586
+	location=114
+	num_literate=383
+	wealth=8
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+10657={
+	type=bureaucrats
+	workforce=10
+	dependents=23
+	location=116
+	num_literate=8
+	wealth=16
+	previous_quality_of_life=15
+	social_class=middle_class
+}
+10660={
+	type=laborers
+	workforce=70
+	dependents=164
+	location=116
+	num_literate=8
+	wealth=6
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+11876={
+	type=aristocrats
+	workforce=14
+	dependents=35
+	location=215
+	wealth=1
+	previous_quality_of_life=1
+	social_class=upper_class
+}
+11879={
+	type=clergymen
+	workforce=100
+	dependents=233
+	location=215
+	num_literate=58
+	wealth=4
+	previous_quality_of_life=2
+	social_class=middle_class
+}
+11882={
+	type=peasants
+	workforce=613
+	dependents=1433
+	location=215
+	num_literate=134
+	wealth=11
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+12065={
+	type=bureaucrats
+	workforce=4
+	dependents=13
+	location=232
+	num_literate=3
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+12068={
+	type=farmers
+	workforce=271
+	dependents=813
+	location=232
+	num_literate=21
+	wealth=4
+	previous_quality_of_life=2
+	social_class=middle_class
+}
+12071={
+	type=laborers
+	workforce=255
+	dependents=766
+	location=232
+	num_literate=10
+	wealth=2
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+12664={
+	type=shopkeepers
+	workforce=124
+	dependents=289
+	location=287
+	num_literate=22
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+12667={
+	type=farmers
+	workforce=2017
+	dependents=4706
+	location=287
+	num_literate=282
+	wealth=7
+	previous_quality_of_life=7
+	social_class=middle_class
+}
+12670={
+	type=laborers
+	workforce=25031
+	dependents=58407
+	location=287
+	num_literate=1501
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+13545={
+	type=aristocrats
+	workforce=50
+	dependents=116
+	location=349
+	num_literate=30
+	wealth=30
+	previous_quality_of_life=30
+	social_class=upper_class
+}
+13548={
+	type=clerks
+	workforce=20
+	dependents=46
+	location=349
+	num_literate=9
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+14051={
+	type=aristocrats
+	workforce=2
+	dependents=6
+	location=399
+	wealth=19
+	previous_quality_of_life=22
+	social_class=upper_class
+}
+14054={
+	type=farmers
+	workforce=10
+	dependents=30
+	location=399
+	num_literate=1
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+14057={
+	type=clerks
+	workforce=200
+	dependents=600
+	location=399
+	num_literate=82
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14060={
+	type=laborers
+	workforce=10
+	dependents=30
+	location=399
+	wealth=2
+	previous_quality_of_life=2
+	social_class=lower_class
+}
+14072={
+	type=farmers
+	workforce=1000
+	dependents=3000
+	location=402
+	num_literate=100
+	wealth=5
+	previous_quality_of_life=3
+	social_class=middle_class
+}
+14075={
+	type=laborers
+	workforce=4000
+	dependents=12000
+	location=402
+	num_literate=160
+	wealth=2
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14116={
+	type=aristocrats
+	workforce=41
+	dependents=95
+	location=410
+	wealth=1
+	previous_quality_of_life=1
+	social_class=upper_class
+}
+14119={
+	type=clergymen
+	workforce=23
+	dependents=54
+	location=410
+	num_literate=15
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+14122={
+	type=farmers
+	workforce=626
+	dependents=1462
+	location=410
+	num_literate=75
+	wealth=6
+	previous_quality_of_life=4
+	social_class=middle_class
+}
+14125={
+	type=clerks
+	workforce=20
+	dependents=46
+	location=410
+	num_literate=8
+	wealth=8
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14128={
+	type=aristocrats
+	workforce=100
+	dependents=300
+	location=411
+	num_literate=64
+	wealth=32
+	previous_quality_of_life=33
+	social_class=upper_class
+}
+14131={
+	type=clerks
+	workforce=20
+	dependents=60
+	location=411
+	num_literate=7
+	wealth=7
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14143={
+	type=aristocrats
+	workforce=100
+	dependents=300
+	location=413
+	num_literate=66
+	wealth=33
+	previous_quality_of_life=36
+	social_class=upper_class
+}
+14146={
+	type=farmers
+	workforce=689
+	dependents=2067
+	location=413
+	num_literate=82
+	wealth=6
+	previous_quality_of_life=6
+	social_class=middle_class
+}
+14149={
+	type=laborers
+	workforce=4000
+	dependents=12000
+	location=413
+	num_literate=160
+	wealth=2
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14173={
+	type=aristocrats
+	workforce=200
+	dependents=600
+	location=417
+	num_literate=136
+	wealth=34
+	previous_quality_of_life=37
+	social_class=upper_class
+}
+14176={
+	type=farmers
+	workforce=1489
+	dependents=4467
+	location=417
+	num_literate=178
+	wealth=6
+	previous_quality_of_life=6
+	social_class=middle_class
+}
+14179={
+	type=clerks
+	workforce=20
+	dependents=60
+	location=417
+	num_literate=8
+	wealth=9
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+14182={
+	type=laborers
+	workforce=70
+	dependents=210
+	location=417
+	num_literate=9
+	wealth=7
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14185={
+	type=peasants
+	workforce=22000
+	dependents=66000
+	location=417
+	num_literate=3080
+	wealth=7
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14270={
+	type=capitalists
+	workforce=150
+	dependents=350
+	location=430
+	num_literate=147
+	wealth=49
+	previous_quality_of_life=49
+	social_class=upper_class
+}
+14273={
+	type=shopkeepers
+	workforce=2315
+	dependents=5401
+	location=430
+	num_literate=648
+	wealth=14
+	previous_quality_of_life=14
+	social_class=middle_class
+}
+14276={
+	type=shopkeepers
+	workforce=2000
+	dependents=4666
+	location=430
+	num_literate=560
+	wealth=14
+	previous_quality_of_life=14
+	social_class=middle_class
+}
+14279={
+	type=clergymen
+	workforce=10
+	dependents=24
+	location=430
+	num_literate=9
+	wealth=23
+	previous_quality_of_life=23
+	social_class=middle_class
+}
+14282={
+	type=officers
+	workforce=500
+	dependents=1166
+	location=430
+	num_literate=190
+	wealth=19
+	previous_quality_of_life=19
+	social_class=middle_class
+}
+14285={
+	type=machinists
+	workforce=2500
+	dependents=5833
+	location=430
+	num_literate=400
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14288={
+	type=machinists
+	workforce=1500
+	dependents=3500
+	location=430
+	num_literate=330
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+14291={
+	type=laborers
+	workforce=20000
+	dependents=46673
+	location=430
+	num_literate=2000
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14294={
+	type=laborers
+	workforce=14459
+	dependents=33739
+	location=430
+	num_literate=1445
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14297={
+	type=soldiers
+	workforce=1800
+	dependents=4200
+	location=430
+	num_literate=288
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14300={
+	type=capitalists
+	workforce=1450
+	dependents=3383
+	location=431
+	num_literate=1363
+	wealth=47
+	previous_quality_of_life=47
+	social_class=upper_class
+}
+14303={
+	type=bureaucrats
+	workforce=1300
+	dependents=3033
+	location=431
+	num_literate=1118
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14306={
+	type=shopkeepers
+	workforce=580
+	dependents=1353
+	location=431
+	num_literate=336
+	wealth=29
+	previous_quality_of_life=29
+	social_class=middle_class
+}
+14309={
+	type=shopkeepers
+	workforce=4000
+	dependents=9333
+	location=431
+	num_literate=720
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+14312={
+	type=engineers
+	workforce=1500
+	dependents=3500
+	location=431
+	num_literate=645
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+14315={
+	type=shopkeepers
+	workforce=10000
+	dependents=23334
+	location=431
+	num_literate=3600
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14318={
+	type=clergymen
+	workforce=3100
+	dependents=7233
+	location=431
+	num_literate=2914
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+14321={
+	type=officers
+	workforce=1000
+	dependents=2333
+	location=431
+	num_literate=400
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+14324={
+	type=farmers
+	workforce=12000
+	dependents=28001
+	location=431
+	num_literate=2400
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14327={
+	type=clerks
+	workforce=2400
+	dependents=5600
+	location=431
+	num_literate=792
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14330={
+	type=clerks
+	workforce=1300
+	dependents=3033
+	location=431
+	num_literate=533
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14333={
+	type=machinists
+	workforce=6000
+	dependents=14000
+	location=431
+	num_literate=480
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14336={
+	type=machinists
+	workforce=2000
+	dependents=4666
+	location=431
+	num_literate=400
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+14339={
+	type=machinists
+	workforce=1200
+	dependents=2800
+	location=431
+	num_literate=192
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14342={
+	type=laborers
+	workforce=52500
+	dependents=122505
+	location=431
+	num_literate=4200
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14345={
+	type=laborers
+	workforce=28000
+	dependents=65336
+	location=431
+	num_literate=560
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14348={
+	type=laborers
+	workforce=23000
+	dependents=53666
+	location=431
+	num_literate=3220
+	wealth=7
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+14351={
+	type=laborers
+	workforce=2000
+	dependents=4666
+	location=431
+	num_literate=200
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14354={
+	type=clerks
+	workforce=2500
+	dependents=5833
+	location=431
+	num_literate=1025
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14357={
+	type=peasants
+	workforce=83511
+	dependents=194856
+	location=431
+	num_literate=16702
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+14360={
+	type=capitalists
+	workforce=150
+	dependents=350
+	location=432
+	num_literate=126
+	wealth=42
+	previous_quality_of_life=42
+	social_class=upper_class
+}
+14363={
+	type=shopkeepers
+	workforce=1500
+	dependents=3500
+	location=432
+	num_literate=570
+	wealth=19
+	previous_quality_of_life=19
+	social_class=middle_class
+}
+14366={
+	type=shopkeepers
+	workforce=2000
+	dependents=4666
+	location=432
+	num_literate=720
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14369={
+	type=machinists
+	workforce=1500
+	dependents=3500
+	location=432
+	num_literate=360
+	wealth=12
+	previous_quality_of_life=12
+	social_class=lower_class
+}
+14372={
+	type=machinists
+	workforce=2000
+	dependents=4666
+	location=432
+	num_literate=480
+	wealth=12
+	previous_quality_of_life=12
+	social_class=lower_class
+}
+14375={
+	type=laborers
+	workforce=16000
+	dependents=37335
+	location=432
+	num_literate=2880
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14378={
+	type=peasants
+	workforce=71253
+	dependents=166257
+	location=432
+	num_literate=12825
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14381={
+	type=aristocrats
+	workforce=3600
+	dependents=8399
+	location=433
+	num_literate=2520
+	wealth=35
+	previous_quality_of_life=35
+	social_class=upper_class
+}
+14384={
+	type=shopkeepers
+	workforce=600
+	dependents=1400
+	location=433
+	num_literate=108
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+14387={
+	type=shopkeepers
+	workforce=11000
+	dependents=25667
+	location=433
+	num_literate=2200
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14390={
+	type=shopkeepers
+	workforce=5000
+	dependents=11667
+	location=433
+	num_literate=1000
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14393={
+	type=engineers
+	workforce=500
+	dependents=1166
+	location=433
+	num_literate=225
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14396={
+	type=shopkeepers
+	workforce=4000
+	dependents=9333
+	location=433
+	num_literate=1200
+	wealth=15
+	previous_quality_of_life=15
+	social_class=middle_class
+}
+14399={
+	type=shopkeepers
+	workforce=2000
+	dependents=4666
+	location=433
+	num_literate=640
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+14402={
+	type=officers
+	workforce=1000
+	dependents=2333
+	location=433
+	num_literate=420
+	wealth=21
+	previous_quality_of_life=21
+	social_class=middle_class
+}
+14405={
+	type=farmers
+	workforce=15000
+	dependents=35001
+	location=433
+	num_literate=3600
+	wealth=12
+	previous_quality_of_life=12
+	social_class=middle_class
+}
+14408={
+	type=clerks
+	workforce=2400
+	dependents=5600
+	location=433
+	num_literate=744
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+14411={
+	type=machinists
+	workforce=11000
+	dependents=25667
+	location=433
+	num_literate=880
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14414={
+	type=machinists
+	workforce=2000
+	dependents=4666
+	location=433
+	num_literate=160
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14417={
+	type=machinists
+	workforce=2000
+	dependents=4666
+	location=433
+	num_literate=360
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14420={
+	type=machinists
+	workforce=600
+	dependents=1400
+	location=433
+	num_literate=108
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14423={
+	type=laborers
+	workforce=12000
+	dependents=28001
+	location=433
+	num_literate=720
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+14426={
+	type=laborers
+	workforce=16250
+	dependents=37916
+	location=433
+	num_literate=325
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14429={
+	type=laborers
+	workforce=46000
+	dependents=107338
+	location=433
+	num_literate=4600
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14432={
+	type=laborers
+	workforce=18750
+	dependents=43750
+	location=433
+	num_literate=2250
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14435={
+	type=laborers
+	workforce=42250
+	dependents=98583
+	location=433
+	num_literate=3380
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14438={
+	type=soldiers
+	workforce=6650
+	dependents=15516
+	location=433
+	num_literate=1197
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14441={
+	type=aristocrats
+	workforce=1750
+	dependents=4083
+	location=434
+	num_literate=1365
+	wealth=39
+	previous_quality_of_life=39
+	social_class=upper_class
+}
+14444={
+	type=engineers
+	workforce=3750
+	dependents=8750
+	location=434
+	num_literate=1687
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14447={
+	type=shopkeepers
+	workforce=2250
+	dependents=5250
+	location=434
+	num_literate=720
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+14450={
+	type=shopkeepers
+	workforce=500
+	dependents=1166
+	location=434
+	num_literate=250
+	wealth=25
+	previous_quality_of_life=25
+	social_class=middle_class
+}
+14453={
+	type=clergymen
+	workforce=3500
+	dependents=8166
+	location=434
+	num_literate=3290
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+14456={
+	type=shopkeepers
+	workforce=500
+	dependents=1166
+	location=434
+	num_literate=140
+	wealth=14
+	previous_quality_of_life=14
+	social_class=middle_class
+}
+14459={
+	type=officers
+	workforce=400
+	dependents=933
+	location=434
+	num_literate=168
+	wealth=21
+	previous_quality_of_life=21
+	social_class=middle_class
+}
+14462={
+	type=academics
+	workforce=1250
+	dependents=2916
+	location=434
+	num_literate=1075
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14465={
+	type=clergymen
+	workforce=500
+	dependents=1166
+	location=434
+	num_literate=410
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+14468={
+	type=clerks
+	workforce=340
+	dependents=793
+	location=434
+	num_literate=112
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14471={
+	type=machinists
+	workforce=500
+	dependents=1166
+	location=434
+	num_literate=190
+	wealth=19
+	previous_quality_of_life=19
+	social_class=lower_class
+}
+14474={
+	type=machinists
+	workforce=1500
+	dependents=3500
+	location=434
+	num_literate=600
+	wealth=20
+	previous_quality_of_life=20
+	social_class=lower_class
+}
+14477={
+	type=clerks
+	workforce=800
+	dependents=1866
+	location=434
+	num_literate=344
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14480={
+	type=laborers
+	workforce=48750
+	dependents=113755
+	location=434
+	num_literate=975
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14483={
+	type=laborers
+	workforce=5750
+	dependents=13416
+	location=434
+	num_literate=1725
+	wealth=15
+	previous_quality_of_life=15
+	social_class=lower_class
+}
+14486={
+	type=laborers
+	workforce=11250
+	dependents=26250
+	location=434
+	num_literate=2025
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14489={
+	type=laborers
+	workforce=2800
+	dependents=6533
+	location=434
+	num_literate=336
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14492={
+	type=clerks
+	workforce=1000
+	dependents=2333
+	location=434
+	num_literate=430
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14495={
+	type=soldiers
+	workforce=6650
+	dependents=15516
+	location=434
+	num_literate=1197
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14498={
+	type=capitalists
+	workforce=650
+	dependents=1516
+	location=435
+	num_literate=572
+	wealth=44
+	previous_quality_of_life=44
+	social_class=upper_class
+}
+14501={
+	type=bureaucrats
+	workforce=400
+	dependents=933
+	location=435
+	num_literate=344
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14504={
+	type=engineers
+	workforce=3000
+	dependents=7000
+	location=435
+	num_literate=1830
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14507={
+	type=engineers
+	workforce=2250
+	dependents=5250
+	location=435
+	num_literate=967
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+14510={
+	type=engineers
+	workforce=500
+	dependents=1166
+	location=435
+	num_literate=275
+	wealth=15
+	previous_quality_of_life=15
+	social_class=middle_class
+}
+14513={
+	type=clergymen
+	workforce=1050
+	dependents=2450
+	location=435
+	num_literate=987
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+14516={
+	type=officers
+	workforce=200
+	dependents=466
+	location=435
+	num_literate=80
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+14519={
+	type=farmers
+	workforce=3000
+	dependents=7000
+	location=435
+	num_literate=600
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14522={
+	type=clerks
+	workforce=2400
+	dependents=5600
+	location=435
+	num_literate=792
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14525={
+	type=machinists
+	workforce=500
+	dependents=1166
+	location=435
+	num_literate=80
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14528={
+	type=machinists
+	workforce=1000
+	dependents=2333
+	location=435
+	num_literate=180
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14531={
+	type=clerks
+	workforce=10500
+	dependents=24501
+	location=435
+	num_literate=5985
+	wealth=16
+	previous_quality_of_life=16
+	social_class=lower_class
+}
+14534={
+	type=laborers
+	workforce=31500
+	dependents=73503
+	location=435
+	num_literate=630
+	wealth=1
+	previous_quality_of_life=1
+	social_class=lower_class
+}
+14537={
+	type=laborers
+	workforce=11500
+	dependents=26834
+	location=435
+	num_literate=1380
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14540={
+	type=laborers
+	workforce=22750
+	dependents=53085
+	location=435
+	num_literate=5460
+	wealth=12
+	previous_quality_of_life=12
+	social_class=lower_class
+}
+14543={
+	type=soldiers
+	workforce=1800
+	dependents=4200
+	location=435
+	num_literate=288
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14546={
+	type=capitalists
+	workforce=650
+	dependents=1516
+	location=436
+	num_literate=546
+	wealth=42
+	previous_quality_of_life=42
+	social_class=upper_class
+}
+14549={
+	type=bureaucrats
+	workforce=650
+	dependents=1516
+	location=436
+	num_literate=559
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14552={
+	type=shopkeepers
+	workforce=260
+	dependents=606
+	location=436
+	num_literate=119
+	wealth=23
+	previous_quality_of_life=23
+	social_class=middle_class
+}
+14555={
+	type=shopkeepers
+	workforce=1000
+	dependents=2333
+	location=436
+	num_literate=400
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+14558={
+	type=clergymen
+	workforce=5700
+	dependents=13299
+	location=436
+	num_literate=4788
+	wealth=17
+	previous_quality_of_life=17
+	social_class=middle_class
+}
+14561={
+	type=shopkeepers
+	workforce=500
+	dependents=1166
+	location=436
+	num_literate=200
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+14564={
+	type=officers
+	workforce=250
+	dependents=583
+	location=436
+	num_literate=100
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+14567={
+	type=farmers
+	workforce=7500
+	dependents=17500
+	location=436
+	num_literate=1650
+	wealth=11
+	previous_quality_of_life=11
+	social_class=middle_class
+}
+14570={
+	type=clergymen
+	workforce=500
+	dependents=1166
+	location=436
+	num_literate=400
+	wealth=15
+	previous_quality_of_life=15
+	social_class=middle_class
+}
+14573={
+	type=clerks
+	workforce=650
+	dependents=1516
+	location=436
+	num_literate=279
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14576={
+	type=machinists
+	workforce=2000
+	dependents=4666
+	location=436
+	num_literate=360
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14579={
+	type=machinists
+	workforce=250
+	dependents=583
+	location=436
+	num_literate=95
+	wealth=19
+	previous_quality_of_life=19
+	social_class=lower_class
+}
+14582={
+	type=machinists
+	workforce=300
+	dependents=700
+	location=436
+	num_literate=54
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14585={
+	type=clerks
+	workforce=6000
+	dependents=14000
+	location=436
+	num_literate=3420
+	wealth=16
+	previous_quality_of_life=16
+	social_class=lower_class
+}
+14588={
+	type=laborers
+	workforce=16000
+	dependents=37335
+	location=436
+	num_literate=1920
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14591={
+	type=laborers
+	workforce=12500
+	dependents=29168
+	location=436
+	num_literate=1250
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14594={
+	type=laborers
+	workforce=500
+	dependents=1166
+	location=436
+	num_literate=60
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14597={
+	type=laborers
+	workforce=13000
+	dependents=30334
+	location=436
+	num_literate=3120
+	wealth=12
+	previous_quality_of_life=12
+	social_class=lower_class
+}
+14600={
+	type=soldiers
+	workforce=4750
+	dependents=11083
+	location=436
+	num_literate=855
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14603={
+	type=peasants
+	workforce=18189
+	dependents=42441
+	location=436
+	num_literate=3637
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+14606={
+	type=academics
+	workforce=20
+	dependents=46
+	location=437
+	num_literate=14
+	wealth=12
+	previous_quality_of_life=12
+	social_class=middle_class
+}
+14609={
+	type=shopkeepers
+	workforce=1000
+	dependents=2333
+	location=437
+	num_literate=200
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+14612={
+	type=farmers
+	workforce=2000
+	dependents=4666
+	location=437
+	num_literate=320
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+14615={
+	type=machinists
+	workforce=500
+	dependents=1166
+	location=437
+	num_literate=70
+	wealth=7
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+14618={
+	type=clerks
+	workforce=200
+	dependents=466
+	location=437
+	num_literate=94
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+14621={
+	type=laborers
+	workforce=12000
+	dependents=28001
+	location=437
+	num_literate=1200
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+14624={
+	type=soldiers
+	workforce=5400
+	dependents=12600
+	location=437
+	num_literate=1188
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+14627={
+	type=peasants
+	workforce=51997
+	dependents=121331
+	location=437
+	num_literate=9359
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14630={
+	type=bureaucrats
+	workforce=100
+	dependents=233
+	location=438
+	num_literate=88
+	wealth=19
+	previous_quality_of_life=19
+	social_class=middle_class
+}
+14633={
+	type=farmers
+	workforce=4500
+	dependents=10501
+	location=438
+	num_literate=720
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+14636={
+	type=laborers
+	workforce=700
+	dependents=1633
+	location=438
+	num_literate=112
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14639={
+	type=peasants
+	workforce=10
+	dependents=24
+	location=438
+	num_literate=1
+	wealth=9
+	previous_quality_of_life=9
+	social_class=lower_class
+}
+14642={
+	type=capitalists
+	workforce=250
+	dependents=583
+	location=439
+	num_literate=215
+	wealth=43
+	previous_quality_of_life=43
+	social_class=upper_class
+}
+14645={
+	type=bureaucrats
+	workforce=200
+	dependents=466
+	location=439
+	num_literate=172
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14648={
+	type=shopkeepers
+	workforce=100
+	dependents=233
+	location=439
+	num_literate=52
+	wealth=26
+	previous_quality_of_life=26
+	social_class=middle_class
+}
+14651={
+	type=clergymen
+	workforce=10
+	dependents=24
+	location=439
+	num_literate=9
+	wealth=23
+	previous_quality_of_life=23
+	social_class=middle_class
+}
+14654={
+	type=academics
+	workforce=250
+	dependents=583
+	location=439
+	num_literate=215
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+14657={
+	type=clerks
+	workforce=800
+	dependents=1866
+	location=439
+	num_literate=296
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+14660={
+	type=clerks
+	workforce=400
+	dependents=933
+	location=439
+	num_literate=188
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+14663={
+	type=laborers
+	workforce=16000
+	dependents=37340
+	location=439
+	num_literate=1280
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14666={
+	type=laborers
+	workforce=71
+	dependents=166
+	location=439
+	num_literate=5
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+14669={
+	type=laborers
+	workforce=3250
+	dependents=7584
+	location=439
+	num_literate=910
+	wealth=14
+	previous_quality_of_life=14
+	social_class=lower_class
+}
+14672={
+	type=soldiers
+	workforce=3600
+	dependents=8400
+	location=439
+	num_literate=648
+	wealth=9
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+14675={
+	type=peasants
+	workforce=449990
+	dependents=1050015
+	location=439
+	num_literate=80998
+	wealth=9
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+15298={
+	type=academics
+	workforce=10
+	dependents=30
+	location=460
+	num_literate=8
+	wealth=11
+	previous_quality_of_life=11
+	social_class=middle_class
+}
+15301={
+	type=clergymen
+	workforce=4500
+	dependents=13500
+	location=460
+	num_literate=4314
+	wealth=17
+	previous_quality_of_life=17
+	social_class=middle_class
+}
+15304={
+	type=clergymen
+	workforce=150
+	dependents=450
+	location=460
+	num_literate=150
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+15307={
+	type=bureaucrats
+	workforce=750
+	dependents=2250
+	location=460
+	num_literate=734
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+15310={
+	type=farmers
+	workforce=2000
+	dependents=6000
+	location=460
+	num_literate=517
+	wealth=7
+	previous_quality_of_life=7
+	social_class=middle_class
+}
+15313={
+	type=clergymen
+	workforce=500
+	dependents=1500
+	location=460
+	num_literate=469
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+15316={
+	type=laborers
+	workforce=12000
+	dependents=36001
+	location=460
+	num_literate=4065
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+15319={
+	type=laborers
+	workforce=8000
+	dependents=24001
+	location=460
+	num_literate=1750
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+15322={
+	type=laborers
+	workforce=3500
+	dependents=10500
+	location=460
+	num_literate=1325
+	wealth=13
+	previous_quality_of_life=13
+	social_class=lower_class
+}
+15325={
+	type=soldiers
+	workforce=5820
+	dependents=17460
+	location=460
+	num_literate=1855
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15328={
+	type=aristocrats
+	workforce=1100
+	dependents=3300
+	location=461
+	num_literate=966
+	wealth=38
+	previous_quality_of_life=41
+	social_class=upper_class
+}
+15331={
+	type=academics
+	workforce=60
+	dependents=180
+	location=461
+	num_literate=49
+	wealth=10
+	previous_quality_of_life=10
+	social_class=middle_class
+}
+15334={
+	type=shopkeepers
+	workforce=2000
+	dependents=6000
+	location=461
+	num_literate=557
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+15337={
+	type=shopkeepers
+	workforce=1000
+	dependents=3000
+	location=461
+	num_literate=558
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+15340={
+	type=shopkeepers
+	workforce=1000
+	dependents=3000
+	location=461
+	num_literate=278
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+15343={
+	type=shopkeepers
+	workforce=1200
+	dependents=3600
+	location=461
+	num_literate=670
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+15346={
+	type=officers
+	workforce=360
+	dependents=1080
+	location=461
+	num_literate=186
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+15349={
+	type=farmers
+	workforce=2000
+	dependents=6000
+	location=461
+	num_literate=557
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+15352={
+	type=clerks
+	workforce=8000
+	dependents=24000
+	location=461
+	num_literate=3750
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+15355={
+	type=machinists
+	workforce=1500
+	dependents=4500
+	location=461
+	num_literate=328
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+15358={
+	type=clerks
+	workforce=3000
+	dependents=9000
+	location=461
+	num_literate=2066
+	wealth=16
+	previous_quality_of_life=16
+	social_class=lower_class
+}
+15361={
+	type=laborers
+	workforce=4800
+	dependents=14400
+	location=461
+	num_literate=954
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+15364={
+	type=laborers
+	workforce=13500
+	dependents=40500
+	location=461
+	num_literate=4573
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+15367={
+	type=laborers
+	workforce=7000
+	dependents=21000
+	location=461
+	num_literate=1391
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+15370={
+	type=clerks
+	workforce=1500
+	dependents=4500
+	location=461
+	num_literate=853
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15373={
+	type=soldiers
+	workforce=11640
+	dependents=34920
+	location=461
+	num_literate=3710
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15376={
+	type=clergymen
+	workforce=1600
+	dependents=4800
+	location=462
+	num_literate=1600
+	wealth=20
+	previous_quality_of_life=20
+	social_class=middle_class
+}
+15379={
+	type=officers
+	workforce=90
+	dependents=270
+	location=462
+	num_literate=44
+	wealth=19
+	previous_quality_of_life=19
+	social_class=middle_class
+}
+15382={
+	type=farmers
+	workforce=1000
+	dependents=3000
+	location=462
+	num_literate=298
+	wealth=9
+	previous_quality_of_life=9
+	social_class=middle_class
+}
+15385={
+	type=laborers
+	workforce=4000
+	dependents=12000
+	location=462
+	num_literate=875
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+15388={
+	type=laborers
+	workforce=12000
+	dependents=36000
+	location=462
+	num_literate=2625
+	wealth=5
+	previous_quality_of_life=5
+	social_class=lower_class
+}
+15391={
+	type=soldiers
+	workforce=2910
+	dependents=8730
+	location=462
+	num_literate=927
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15394={
+	type=bureaucrats
+	workforce=10
+	dependents=30
+	location=463
+	num_literate=9
+	wealth=17
+	previous_quality_of_life=17
+	social_class=middle_class
+}
+15397={
+	type=farmers
+	workforce=846
+	dependents=2538
+	location=463
+	num_literate=235
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+15400={
+	type=clerks
+	workforce=20
+	dependents=60
+	location=463
+	num_literate=11
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15403={
+	type=laborers
+	workforce=3808
+	dependents=11424
+	location=463
+	num_literate=1213
+	wealth=10
+	previous_quality_of_life=10
+	social_class=lower_class
+}
+15406={
+	type=aristocrats
+	workforce=87
+	dependents=348
+	location=464
+	num_literate=73
+	wealth=42
+	previous_quality_of_life=45
+	social_class=upper_class
+}
+15409={
+	type=shopkeepers
+	workforce=113
+	dependents=339
+	location=464
+	num_literate=27
+	wealth=12
+	previous_quality_of_life=12
+	social_class=middle_class
+}
+15412={
+	type=farmers
+	workforce=875
+	dependents=2625
+	location=464
+	num_literate=315
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+15415={
+	type=laborers
+	workforce=5842
+	dependents=17527
+	location=464
+	num_literate=1402
+	wealth=12
+	previous_quality_of_life=12
+	social_class=lower_class
+}
+15418={
+	type=clergymen
+	workforce=600
+	dependents=1800
+	location=465
+	num_literate=600
+	wealth=22
+	previous_quality_of_life=22
+	social_class=middle_class
+}
+15421={
+	type=farmers
+	workforce=1000
+	dependents=3000
+	location=465
+	num_literate=278
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+15424={
+	type=laborers
+	workforce=7000
+	dependents=21000
+	location=465
+	num_literate=1671
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+15427={
+	type=laborers
+	workforce=70
+	dependents=210
+	location=465
+	num_literate=19
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+15464={
+	type=bureaucrats
+	workforce=200
+	dependents=467
+	location=468
+	num_literate=164
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+15467={
+	type=clerks
+	workforce=400
+	dependents=933
+	location=468
+	num_literate=164
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+15470={
+	type=laborers
+	workforce=10
+	dependents=24
+	location=468
+	num_literate=1
+	wealth=5
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+15473={
+	type=soldiers
+	workforce=123
+	dependents=287
+	location=468
+	num_literate=19
+	wealth=8
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+15623={
+	type=academics
+	workforce=10
+	dependents=30
+	location=474
+	num_literate=8
+	wealth=11
+	previous_quality_of_life=11
+	social_class=middle_class
+}
+15626={
+	type=clergymen
+	workforce=5200
+	dependents=15600
+	location=474
+	num_literate=4881
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+15629={
+	type=bureaucrats
+	workforce=750
+	dependents=2250
+	location=474
+	num_literate=734
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+15632={
+	type=clergymen
+	workforce=250
+	dependents=750
+	location=474
+	num_literate=234
+	wealth=16
+	previous_quality_of_life=16
+	social_class=middle_class
+}
+15635={
+	type=laborers
+	workforce=9000
+	dependents=27001
+	location=474
+	num_literate=3048
+	wealth=11
+	previous_quality_of_life=11
+	social_class=lower_class
+}
+15638={
+	type=laborers
+	workforce=6500
+	dependents=19500
+	location=474
+	num_literate=1291
+	wealth=4
+	previous_quality_of_life=4
+	social_class=lower_class
+}
+15641={
+	type=peasants
+	workforce=252145
+	dependents=756435
+	location=474
+	num_literate=70285
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+16101={
+	type=bureaucrats
+	workforce=10
+	dependents=23
+	location=489
+	num_literate=8
+	wealth=17
+	previous_quality_of_life=17
+	social_class=middle_class
+}
+16104={
+	type=farmers
+	workforce=1000
+	dependents=2333
+	location=489
+	num_literate=160
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+16107={
+	type=laborers
+	workforce=3720
+	dependents=8680
+	location=489
+	num_literate=223
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+16110={
+	type=peasants
+	workforce=15030
+	dependents=35072
+	location=489
+	num_literate=2404
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+16113={
+	type=clergymen
+	workforce=100
+	dependents=233
+	location=490
+	num_literate=86
+	wealth=18
+	previous_quality_of_life=18
+	social_class=middle_class
+}
+16116={
+	type=laborers
+	workforce=70
+	dependents=163
+	location=490
+	num_literate=11
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+16119={
+	type=peasants
+	workforce=3705
+	dependents=8647
+	location=490
+	num_literate=592
+	wealth=8
+	previous_quality_of_life=8
+	social_class=lower_class
+}
+16142={
+	type=clergymen
+	workforce=700
+	dependents=1633
+	location=493
+	num_literate=700
+	wealth=29
+	previous_quality_of_life=29
+	social_class=middle_class
+}
+16145={
+	type=farmers
+	workforce=2000
+	dependents=4667
+	location=493
+	num_literate=320
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+16148={
+	type=laborers
+	workforce=18669
+	dependents=43563
+	location=493
+	num_literate=1120
+	wealth=3
+	previous_quality_of_life=3
+	social_class=lower_class
+}
+16151={
+	type=laborers
+	workforce=70
+	dependents=163
+	location=493
+	num_literate=9
+	wealth=7
+	previous_quality_of_life=7
+	social_class=lower_class
+}
+16168={
+	type=capitalists
+	workforce=100
+	dependents=233
+	location=496
+	num_literate=2
+	wealth=1
+	previous_quality_of_life=1
+	social_class=upper_class
+}
+16171={
+	type=bureaucrats
+	workforce=10
+	dependents=23
+	location=496
+	num_literate=8
+	wealth=17
+	previous_quality_of_life=17
+	social_class=middle_class
+}
+16174={
+	type=clergymen
+	workforce=800
+	dependents=1867
+	location=496
+	num_literate=800
+	wealth=31
+	previous_quality_of_life=31
+	social_class=middle_class
+}
+16177={
+	type=farmers
+	workforce=942
+	dependents=2199
+	location=496
+	num_literate=150
+	wealth=8
+	previous_quality_of_life=8
+	social_class=middle_class
+}
+16180={
+	type=clerks
+	workforce=40
+	dependents=93
+	location=496
+	num_literate=14
+	wealth=6
+	previous_quality_of_life=6
+	social_class=lower_class
+}
+	}
+}
+country_manager={
+	database={
+1={
+	definition="GBR"
+}
+30={
+	definition="POR"
+}
+	}
+}
+states={
+	database={
+5={
+	country=1
+}
+6={
+	country=1
+}
+114={
+	country=1
+}
+116={
+	country=1
+}
+215={
+	country=1
+}
+232={
+	country=30
+}
+287={
+	country=1
+}
+349={
+	country=1
+}
+399={
+	country=30
+}
+402={
+	country=30
+}
+410={
+	country=1
+}
+411={
+	country=30
+}
+413={
+	country=30
+}
+417={
+	country=30
+}
+430={
+	country=1
+}
+431={
+	country=1
+}
+432={
+	country=1
+}
+433={
+	country=1
+}
+434={
+	country=1
+}
+435={
+	country=1
+}
+436={
+	country=1
+}
+437={
+	country=1
+}
+438={
+	country=1
+}
+439={
+	country=1
+}
+460={
+	country=30
+}
+461={
+	country=30
+}
+462={
+	country=30
+}
+463={
+	country=30
+}
+464={
+	country=30
+}
+465={
+	country=30
+}
+468={
+	country=1
+}
+474={
+	country=30
+}
+489={
+	country=1
+}
+490={
+	country=1
+}
+493={
+	country=1
+}
+496={
+	country=1
+}
+535={
+	country=30
+}
+546={
+	country=30
+}
+600={
+	country=30
+}
+604={
+	country=1
+}
+748={
+	country=30
+}
+772={
+	country=30
+}
+923={
+	country=30
+}
+1081={
+	country=1
+}
+1096={
+	country=1
+}
+	}
+}
+laws={
+	database={
+1={
+	law=law_monarchy
+	country=1
+	active=yes
+}
+19={
+	law=law_wealth_voting
+	country=1
+	active=yes
+}
+27={
+	law=law_national_supremacy
+	country=1
+	active=yes
+}
+34={
+	law=law_freedom_of_conscience
+	country=1
+	active=yes
+}
+39={
+	law=law_appointed_bureaucrats
+	country=1
+	active=yes
+}
+46={
+	law=law_professional_army
+	country=1
+	active=yes
+}
+52={
+	law=law_professional_navy
+	country=1
+	active=yes
+}
+56={
+	law=law_no_home_affairs
+	country=1
+	active=yes
+}
+63={
+	law=law_agrarianism
+	country=1
+	active=yes
+}
+70={
+	law=law_protectionism
+	country=1
+	active=yes
+}
+77={
+	law=law_per_capita_based_taxation
+	country=1
+	active=yes
+}
+84={
+	law=law_tenant_farmers
+	country=1
+	active=yes
+}
+93={
+	law=law_colonial_resettlement
+	country=1
+	active=yes
+}
+98={
+	law=law_dedicated_police
+	country=1
+	active=yes
+}
+101={
+	law=law_no_schools
+	country=1
+	active=yes
+}
+107={
+	law=law_charitable_health_system
+	country=1
+	active=yes
+}
+112={
+	law=law_right_of_assembly
+	country=1
+	active=yes
+}
+114={
+	law=law_no_workers_rights
+	country=1
+	active=yes
+}
+117={
+	law=law_child_labor_allowed
+	country=1
+	active=yes
+}
+122={
+	law=law_women_own_property
+	country=1
+	active=yes
+}
+128={
+	law=law_poor_laws
+	country=1
+	active=yes
+}
+134={
+	law=law_migration_controls
+	country=1
+	active=yes
+}
+136={
+	law=law_slavery_banned
+	country=1
+	active=yes
+}
+143={
+	law=law_anti_strike_laws
+	country=1
+	active=yes
+}
+148={
+	law=law_minimal_privacy_protection
+	country=1
+	active=yes
+}
+151={
+	law=law_primogeniture
+	country=1
+	active=yes
+}
+158={
+	law=law_traditional_rules_of_war
+	country=1
+	active=yes
+}
+164={
+	law=law_traditional_ip_protection
+	country=1
+	active=yes
+}
+169={
+	law=law_gold_standard
+	country=1
+	active=yes
+}
+174={
+	law=law_informal_government_secrecy
+	country=1
+	active=yes
+}
+180={
+	law=law_minority_rights_discrimination
+	country=1
+	active=yes
+}
+185={
+	law=law_punishment_focused_criminal_justice
+	country=1
+	active=yes
+}
+188={
+	law=law_active_persecution
+	country=1
+	active=yes
+}
+193={
+	law=law_no_augmentation
+	country=1
+	active=yes
+}
+200={
+	law=law_unitary_state
+	country=1
+	active=yes
+}
+204={
+	law=law_unregulated_donations
+	country=1
+	active=yes
+}
+209={
+	law=law_universal_banking_light_prudence
+	country=1
+	active=yes
+}
+214={
+	law=law_traditional_heredity
+	country=1
+	active=yes
+}
+219={
+	law=law_no_internet_policy
+	country=1
+	active=yes
+}
+223={
+	law=law_traditional_family_structure
+	country=1
+	active=yes
+}
+228={
+	law=law_local_vernacular
+	country=1
+	active=yes
+}
+235={
+	law=law_freedom_of_contract
+	country=1
+	active=yes
+}
+241={
+	law=law_ministry_of_foreign_affairs
+	country=1
+	active=yes
+}
+243={
+	law=law_ministry_of_war
+	country=1
+	active=yes
+}
+244={
+	law=law_no_ministry_of_intelligence_and_security
+	country=1
+	active=yes
+}
+246={
+	law=law_no_ministry_of_commerce
+	country=1
+	active=yes
+}
+249={
+	law=law_national_bank
+	country=1
+	active=yes
+}
+250={
+	law=law_no_ministry_of_the_environment
+	country=1
+	active=yes
+}
+252={
+	law=law_unrestricted_extraction
+	country=1
+	active=yes
+}
+255={
+	law=law_no_ministry_of_culture
+	country=1
+	active=yes
+}
+257={
+	law=law_no_ministry_of_labor
+	country=1
+	active=yes
+}
+260={
+	law=law_no_ministry_of_refugee_affairs
+	country=1
+	active=yes
+}
+262={
+	law=law_no_ministry_of_propaganda
+	country=1
+	active=yes
+}
+264={
+	law=law_no_ministry_of_science
+	country=1
+	active=yes
+}
+266={
+	law=law_no_ministry_of_thought_control
+	country=1
+	active=yes
+}
+268={
+	law=law_no_ministry_of_consumer_protection
+	country=1
+	active=yes
+}
+270={
+	law=law_no_ministry_of_urban_planning
+	country=1
+	active=yes
+}
+272={
+	law=law_no_ministry_of_religion
+	country=1
+	active=yes
+}
+274={
+	law=law_no_ministry_of_international_aid
+	country=1
+	active=yes
+}
+3592={
+	law=law_monarchy
+	country=30
+	active=yes
+}
+3606={
+	law=law_oligarchy
+	country=30
+	active=yes
+}
+3618={
+	law=law_national_supremacy
+	country=30
+	active=yes
+}
+3625={
+	law=law_freedom_of_conscience
+	country=30
+	active=yes
+}
+3630={
+	law=law_appointed_bureaucrats
+	country=30
+	active=yes
+}
+3637={
+	law=law_professional_army
+	country=30
+	active=yes
+}
+3644={
+	law=law_diplomatic_navy
+	country=30
+	active=yes
+}
+3648={
+	law=law_national_guard
+	country=30
+	active=yes
+}
+3653={
+	law=law_interventionism
+	country=30
+	active=yes
+}
+3660={
+	law=law_mercantilism
+	country=30
+	active=yes
+}
+3667={
+	law=law_land_based_taxation
+	country=30
+	active=yes
+}
+3676={
+	law=law_latifundias
+	country=30
+	active=yes
+}
+3685={
+	law=law_colonial_exploitation
+	country=30
+	active=yes
+}
+3687={
+	law=law_no_police
+	country=30
+	active=yes
+}
+3696={
+	law=law_public_schools
+	country=30
+	active=yes
+}
+3698={
+	law=law_charitable_health_system
+	country=30
+	active=yes
+}
+3702={
+	law=law_censorship
+	country=30
+	active=yes
+}
+3705={
+	law=law_no_workers_rights
+	country=30
+	active=yes
+}
+3708={
+	law=law_child_labor_allowed
+	country=30
+	active=yes
+}
+3711={
+	law=law_no_womens_rights
+	country=30
+	active=yes
+}
+3719={
+	law=law_poor_laws
+	country=30
+	active=yes
+}
+3725={
+	law=law_migration_controls
+	country=30
+	active=yes
+}
+3728={
+	law=law_colonial_slavery
+	country=30
+	active=yes
+}
+3733={
+	law=law_combination_acts
+	country=30
+	active=yes
+}
+3739={
+	law=law_minimal_privacy_protection
+	country=30
+	active=yes
+}
+3743={
+	law=law_partible
+	country=30
+	active=yes
+}
+3749={
+	law=law_traditional_rules_of_war
+	country=30
+	active=yes
+}
+3753={
+	law=law_no_ip_protection
+	country=30
+	active=yes
+}
+3759={
+	law=law_commodity_money
+	country=30
+	active=yes
+}
+3765={
+	law=law_informal_government_secrecy
+	country=30
+	active=yes
+}
+3771={
+	law=law_minority_rights_discrimination
+	country=30
+	active=yes
+}
+3776={
+	law=law_punishment_focused_criminal_justice
+	country=30
+	active=yes
+}
+3779={
+	law=law_active_persecution
+	country=30
+	active=yes
+}
+3784={
+	law=law_no_augmentation
+	country=30
+	active=yes
+}
+3791={
+	law=law_unitary_state
+	country=30
+	active=yes
+}
+3794={
+	law=law_no_campaign_finance_laws
+	country=30
+	active=yes
+}
+3798={
+	law=law_unregulated_banking
+	country=30
+	active=yes
+}
+3805={
+	law=law_traditional_heredity
+	country=30
+	active=yes
+}
+3810={
+	law=law_no_internet_policy
+	country=30
+	active=yes
+}
+3814={
+	law=law_traditional_family_structure
+	country=30
+	active=yes
+}
+3819={
+	law=law_local_vernacular
+	country=30
+	active=yes
+}
+3826={
+	law=law_freedom_of_contract
+	country=30
+	active=yes
+}
+3831={
+	law=law_no_ministry_of_foreign_affairs
+	country=30
+	active=yes
+}
+3833={
+	law=law_no_ministry_of_war
+	country=30
+	active=yes
+}
+3835={
+	law=law_no_ministry_of_intelligence_and_security
+	country=30
+	active=yes
+}
+3837={
+	law=law_no_ministry_of_commerce
+	country=30
+	active=yes
+}
+3839={
+	law=law_no_national_bank
+	country=30
+	active=yes
+}
+3841={
+	law=law_no_ministry_of_the_environment
+	country=30
+	active=yes
+}
+3843={
+	law=law_unrestricted_extraction
+	country=30
+	active=yes
+}
+3846={
+	law=law_no_ministry_of_culture
+	country=30
+	active=yes
+}
+3848={
+	law=law_no_ministry_of_labor
+	country=30
+	active=yes
+}
+3851={
+	law=law_no_ministry_of_refugee_affairs
+	country=30
+	active=yes
+}
+3853={
+	law=law_no_ministry_of_propaganda
+	country=30
+	active=yes
+}
+3855={
+	law=law_no_ministry_of_science
+	country=30
+	active=yes
+}
+3857={
+	law=law_no_ministry_of_thought_control
+	country=30
+	active=yes
+}
+3859={
+	law=law_no_ministry_of_consumer_protection
+	country=30
+	active=yes
+}
+3861={
+	law=law_no_ministry_of_urban_planning
+	country=30
+	active=yes
+}
+3863={
+	law=law_no_ministry_of_religion
+	country=30
+	active=yes
+}
+3865={
+	law=law_no_ministry_of_international_aid
+	country=30
+	active=yes
+}
+	}
+}
+technology={
+	database={
+107={
+	country=1
+	acquired_technologies={ enclosure manufacturies shaft_mining cotton_gin lathe distillation steelworking prospecting standing_army navigation drydocks mandatory_service gunsmithing artillery military_drill napoleonic_warfare admiralty army_reserves line_infantry paddle_steamer urbanization urban_planning rationalism tech_bureaucracy currency_standards democracy romanticism international_trade centralization banking academia colonization international_relations law_enforcement stock_exchange medical_degrees mass_communication empiricism railways intensive_agriculture mechanical_tools atmospheric_engine screw_frigate general_staff percussion_cap power_of_the_purse dialectics central_archives central_banking egalitarianism corporate_charters labor_movement joint_stock_companies }
+}
+267={
+	country=30
+	acquired_technologies={ enclosure manufacturies shaft_mining distillation steelworking prospecting cotton_gin military_drill standing_army navigation gunsmithing admiralty artillery drydocks mandatory_service army_reserves line_infantry urbanization rationalism tech_bureaucracy democracy romanticism academia international_trade international_relations centralization currency_standards colonization urban_planning law_enforcement medical_degrees atmospheric_engine empiricism napoleonic_warfare stock_exchange mass_communication }
+}
+	}
+}
