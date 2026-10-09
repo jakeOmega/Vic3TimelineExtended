@@ -140,6 +140,22 @@ te_demog_mult_infection = {
 	if = { limit = { owner = { has_law = law_type:law_private_health_insurance } } multiply = 0.85 }
 	if = { limit = { owner = { has_law = law_type:law_public_health_insurance } } multiply = 0.75 }
 	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } }
+		multiply = 0.63025
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } }
+		multiply = 0.66342
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } }
+		multiply = 0.69834
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } }
+		multiply = 0.73509
+	}
+	else_if = {
 		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } }
 		multiply = 0.77378
 	}
@@ -178,6 +194,22 @@ te_demog_mult_work = {
 	value = 1
 	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } multiply = 1.1 }
 	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 9 } } }
+		multiply = 0.23162
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 8 } } }
+		multiply = 0.27249
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 7 } } }
+		multiply = 0.32058
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 6 } } }
+		multiply = 0.37715
+	}
+	else_if = {
 		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 5 } } }
 		multiply = 0.44371
 	}
@@ -207,6 +239,22 @@ te_demog_mult_external = {
 	if = { limit = { owner = { has_law = law_type:law_dedicated_police } } multiply = 0.9 }
 	if = { limit = { owner = { has_law = law_type:law_militarized_police } } multiply = 0.9 }
 	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } }
+		multiply = 0.38742
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } }
+		multiply = 0.43047
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } }
+		multiply = 0.4783
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } }
+		multiply = 0.53144
+	}
+	else_if = {
 		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } }
 		multiply = 0.59049
 	}
@@ -228,7 +276,8 @@ te_demog_mult_external = {
 	}
 }
 
-# State scope: the maternal cause's multiplier (demographics_model.cause_multipliers).
+# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
+# times the cause's multiplier (demographics_model.cause_multipliers, group_rates).
 te_demog_mult_maternal = {
 	value = 1
 	if = { limit = { owner = { has_technology_researched = modern_nursing } } multiply = 0.5 }
@@ -337,306 +386,306 @@ te_demog_family_transport = {
 }
 
 # State scope: each slot as per mille of the state's people, for the replay lines (Task 15).
-te_demog_dbg_f0 = { value = 0 if = { limit = { has_variable = te_dg_f0 } value = var:te_dg_f0 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f1 = { value = 0 if = { limit = { has_variable = te_dg_f1 } value = var:te_dg_f1 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f2 = { value = 0 if = { limit = { has_variable = te_dg_f2 } value = var:te_dg_f2 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f3 = { value = 0 if = { limit = { has_variable = te_dg_f3 } value = var:te_dg_f3 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f4 = { value = 0 if = { limit = { has_variable = te_dg_f4 } value = var:te_dg_f4 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f5 = { value = 0 if = { limit = { has_variable = te_dg_f5 } value = var:te_dg_f5 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f6 = { value = 0 if = { limit = { has_variable = te_dg_f6 } value = var:te_dg_f6 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f7 = { value = 0 if = { limit = { has_variable = te_dg_f7 } value = var:te_dg_f7 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f8 = { value = 0 if = { limit = { has_variable = te_dg_f8 } value = var:te_dg_f8 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f9 = { value = 0 if = { limit = { has_variable = te_dg_f9 } value = var:te_dg_f9 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f10 = { value = 0 if = { limit = { has_variable = te_dg_f10 } value = var:te_dg_f10 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f11 = { value = 0 if = { limit = { has_variable = te_dg_f11 } value = var:te_dg_f11 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f12 = { value = 0 if = { limit = { has_variable = te_dg_f12 } value = var:te_dg_f12 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f13 = { value = 0 if = { limit = { has_variable = te_dg_f13 } value = var:te_dg_f13 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f14 = { value = 0 if = { limit = { has_variable = te_dg_f14 } value = var:te_dg_f14 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f15 = { value = 0 if = { limit = { has_variable = te_dg_f15 } value = var:te_dg_f15 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f16 = { value = 0 if = { limit = { has_variable = te_dg_f16 } value = var:te_dg_f16 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f17 = { value = 0 if = { limit = { has_variable = te_dg_f17 } value = var:te_dg_f17 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f18 = { value = 0 if = { limit = { has_variable = te_dg_f18 } value = var:te_dg_f18 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f19 = { value = 0 if = { limit = { has_variable = te_dg_f19 } value = var:te_dg_f19 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f20 = { value = 0 if = { limit = { has_variable = te_dg_f20 } value = var:te_dg_f20 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f21 = { value = 0 if = { limit = { has_variable = te_dg_f21 } value = var:te_dg_f21 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f22 = { value = 0 if = { limit = { has_variable = te_dg_f22 } value = var:te_dg_f22 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f23 = { value = 0 if = { limit = { has_variable = te_dg_f23 } value = var:te_dg_f23 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f24 = { value = 0 if = { limit = { has_variable = te_dg_f24 } value = var:te_dg_f24 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f25 = { value = 0 if = { limit = { has_variable = te_dg_f25 } value = var:te_dg_f25 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f26 = { value = 0 if = { limit = { has_variable = te_dg_f26 } value = var:te_dg_f26 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f27 = { value = 0 if = { limit = { has_variable = te_dg_f27 } value = var:te_dg_f27 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f28 = { value = 0 if = { limit = { has_variable = te_dg_f28 } value = var:te_dg_f28 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f29 = { value = 0 if = { limit = { has_variable = te_dg_f29 } value = var:te_dg_f29 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f30 = { value = 0 if = { limit = { has_variable = te_dg_f30 } value = var:te_dg_f30 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f31 = { value = 0 if = { limit = { has_variable = te_dg_f31 } value = var:te_dg_f31 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f32 = { value = 0 if = { limit = { has_variable = te_dg_f32 } value = var:te_dg_f32 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f33 = { value = 0 if = { limit = { has_variable = te_dg_f33 } value = var:te_dg_f33 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f34 = { value = 0 if = { limit = { has_variable = te_dg_f34 } value = var:te_dg_f34 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f35 = { value = 0 if = { limit = { has_variable = te_dg_f35 } value = var:te_dg_f35 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f36 = { value = 0 if = { limit = { has_variable = te_dg_f36 } value = var:te_dg_f36 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f37 = { value = 0 if = { limit = { has_variable = te_dg_f37 } value = var:te_dg_f37 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f38 = { value = 0 if = { limit = { has_variable = te_dg_f38 } value = var:te_dg_f38 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f39 = { value = 0 if = { limit = { has_variable = te_dg_f39 } value = var:te_dg_f39 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f40 = { value = 0 if = { limit = { has_variable = te_dg_f40 } value = var:te_dg_f40 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f41 = { value = 0 if = { limit = { has_variable = te_dg_f41 } value = var:te_dg_f41 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f42 = { value = 0 if = { limit = { has_variable = te_dg_f42 } value = var:te_dg_f42 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f43 = { value = 0 if = { limit = { has_variable = te_dg_f43 } value = var:te_dg_f43 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f44 = { value = 0 if = { limit = { has_variable = te_dg_f44 } value = var:te_dg_f44 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f45 = { value = 0 if = { limit = { has_variable = te_dg_f45 } value = var:te_dg_f45 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f46 = { value = 0 if = { limit = { has_variable = te_dg_f46 } value = var:te_dg_f46 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f47 = { value = 0 if = { limit = { has_variable = te_dg_f47 } value = var:te_dg_f47 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f48 = { value = 0 if = { limit = { has_variable = te_dg_f48 } value = var:te_dg_f48 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f49 = { value = 0 if = { limit = { has_variable = te_dg_f49 } value = var:te_dg_f49 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f50 = { value = 0 if = { limit = { has_variable = te_dg_f50 } value = var:te_dg_f50 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f51 = { value = 0 if = { limit = { has_variable = te_dg_f51 } value = var:te_dg_f51 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f52 = { value = 0 if = { limit = { has_variable = te_dg_f52 } value = var:te_dg_f52 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f53 = { value = 0 if = { limit = { has_variable = te_dg_f53 } value = var:te_dg_f53 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f54 = { value = 0 if = { limit = { has_variable = te_dg_f54 } value = var:te_dg_f54 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f55 = { value = 0 if = { limit = { has_variable = te_dg_f55 } value = var:te_dg_f55 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f56 = { value = 0 if = { limit = { has_variable = te_dg_f56 } value = var:te_dg_f56 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f57 = { value = 0 if = { limit = { has_variable = te_dg_f57 } value = var:te_dg_f57 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f58 = { value = 0 if = { limit = { has_variable = te_dg_f58 } value = var:te_dg_f58 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f59 = { value = 0 if = { limit = { has_variable = te_dg_f59 } value = var:te_dg_f59 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f60 = { value = 0 if = { limit = { has_variable = te_dg_f60 } value = var:te_dg_f60 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f61 = { value = 0 if = { limit = { has_variable = te_dg_f61 } value = var:te_dg_f61 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f62 = { value = 0 if = { limit = { has_variable = te_dg_f62 } value = var:te_dg_f62 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f63 = { value = 0 if = { limit = { has_variable = te_dg_f63 } value = var:te_dg_f63 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f64 = { value = 0 if = { limit = { has_variable = te_dg_f64 } value = var:te_dg_f64 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f65 = { value = 0 if = { limit = { has_variable = te_dg_f65 } value = var:te_dg_f65 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f66 = { value = 0 if = { limit = { has_variable = te_dg_f66 } value = var:te_dg_f66 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f67 = { value = 0 if = { limit = { has_variable = te_dg_f67 } value = var:te_dg_f67 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f68 = { value = 0 if = { limit = { has_variable = te_dg_f68 } value = var:te_dg_f68 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f69 = { value = 0 if = { limit = { has_variable = te_dg_f69 } value = var:te_dg_f69 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f70 = { value = 0 if = { limit = { has_variable = te_dg_f70 } value = var:te_dg_f70 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f71 = { value = 0 if = { limit = { has_variable = te_dg_f71 } value = var:te_dg_f71 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f72 = { value = 0 if = { limit = { has_variable = te_dg_f72 } value = var:te_dg_f72 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f73 = { value = 0 if = { limit = { has_variable = te_dg_f73 } value = var:te_dg_f73 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f74 = { value = 0 if = { limit = { has_variable = te_dg_f74 } value = var:te_dg_f74 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f75 = { value = 0 if = { limit = { has_variable = te_dg_f75 } value = var:te_dg_f75 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f76 = { value = 0 if = { limit = { has_variable = te_dg_f76 } value = var:te_dg_f76 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f77 = { value = 0 if = { limit = { has_variable = te_dg_f77 } value = var:te_dg_f77 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f78 = { value = 0 if = { limit = { has_variable = te_dg_f78 } value = var:te_dg_f78 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f79 = { value = 0 if = { limit = { has_variable = te_dg_f79 } value = var:te_dg_f79 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f80 = { value = 0 if = { limit = { has_variable = te_dg_f80 } value = var:te_dg_f80 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f81 = { value = 0 if = { limit = { has_variable = te_dg_f81 } value = var:te_dg_f81 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f82 = { value = 0 if = { limit = { has_variable = te_dg_f82 } value = var:te_dg_f82 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f83 = { value = 0 if = { limit = { has_variable = te_dg_f83 } value = var:te_dg_f83 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f84 = { value = 0 if = { limit = { has_variable = te_dg_f84 } value = var:te_dg_f84 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f85 = { value = 0 if = { limit = { has_variable = te_dg_f85 } value = var:te_dg_f85 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f86 = { value = 0 if = { limit = { has_variable = te_dg_f86 } value = var:te_dg_f86 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f87 = { value = 0 if = { limit = { has_variable = te_dg_f87 } value = var:te_dg_f87 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f88 = { value = 0 if = { limit = { has_variable = te_dg_f88 } value = var:te_dg_f88 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f89 = { value = 0 if = { limit = { has_variable = te_dg_f89 } value = var:te_dg_f89 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f90 = { value = 0 if = { limit = { has_variable = te_dg_f90 } value = var:te_dg_f90 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f91 = { value = 0 if = { limit = { has_variable = te_dg_f91 } value = var:te_dg_f91 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f92 = { value = 0 if = { limit = { has_variable = te_dg_f92 } value = var:te_dg_f92 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f93 = { value = 0 if = { limit = { has_variable = te_dg_f93 } value = var:te_dg_f93 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f94 = { value = 0 if = { limit = { has_variable = te_dg_f94 } value = var:te_dg_f94 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f95 = { value = 0 if = { limit = { has_variable = te_dg_f95 } value = var:te_dg_f95 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f96 = { value = 0 if = { limit = { has_variable = te_dg_f96 } value = var:te_dg_f96 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f97 = { value = 0 if = { limit = { has_variable = te_dg_f97 } value = var:te_dg_f97 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f98 = { value = 0 if = { limit = { has_variable = te_dg_f98 } value = var:te_dg_f98 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f99 = { value = 0 if = { limit = { has_variable = te_dg_f99 } value = var:te_dg_f99 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f100 = { value = 0 if = { limit = { has_variable = te_dg_f100 } value = var:te_dg_f100 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f101 = { value = 0 if = { limit = { has_variable = te_dg_f101 } value = var:te_dg_f101 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f102 = { value = 0 if = { limit = { has_variable = te_dg_f102 } value = var:te_dg_f102 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f103 = { value = 0 if = { limit = { has_variable = te_dg_f103 } value = var:te_dg_f103 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f104 = { value = 0 if = { limit = { has_variable = te_dg_f104 } value = var:te_dg_f104 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f105 = { value = 0 if = { limit = { has_variable = te_dg_f105 } value = var:te_dg_f105 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f106 = { value = 0 if = { limit = { has_variable = te_dg_f106 } value = var:te_dg_f106 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f107 = { value = 0 if = { limit = { has_variable = te_dg_f107 } value = var:te_dg_f107 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f108 = { value = 0 if = { limit = { has_variable = te_dg_f108 } value = var:te_dg_f108 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f109 = { value = 0 if = { limit = { has_variable = te_dg_f109 } value = var:te_dg_f109 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f110 = { value = 0 if = { limit = { has_variable = te_dg_f110 } value = var:te_dg_f110 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f111 = { value = 0 if = { limit = { has_variable = te_dg_f111 } value = var:te_dg_f111 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f112 = { value = 0 if = { limit = { has_variable = te_dg_f112 } value = var:te_dg_f112 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f113 = { value = 0 if = { limit = { has_variable = te_dg_f113 } value = var:te_dg_f113 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f114 = { value = 0 if = { limit = { has_variable = te_dg_f114 } value = var:te_dg_f114 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f115 = { value = 0 if = { limit = { has_variable = te_dg_f115 } value = var:te_dg_f115 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f116 = { value = 0 if = { limit = { has_variable = te_dg_f116 } value = var:te_dg_f116 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f117 = { value = 0 if = { limit = { has_variable = te_dg_f117 } value = var:te_dg_f117 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f118 = { value = 0 if = { limit = { has_variable = te_dg_f118 } value = var:te_dg_f118 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f119 = { value = 0 if = { limit = { has_variable = te_dg_f119 } value = var:te_dg_f119 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f120 = { value = 0 if = { limit = { has_variable = te_dg_f120 } value = var:te_dg_f120 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f121 = { value = 0 if = { limit = { has_variable = te_dg_f121 } value = var:te_dg_f121 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f122 = { value = 0 if = { limit = { has_variable = te_dg_f122 } value = var:te_dg_f122 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f123 = { value = 0 if = { limit = { has_variable = te_dg_f123 } value = var:te_dg_f123 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f124 = { value = 0 if = { limit = { has_variable = te_dg_f124 } value = var:te_dg_f124 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f125 = { value = 0 if = { limit = { has_variable = te_dg_f125 } value = var:te_dg_f125 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f126 = { value = 0 if = { limit = { has_variable = te_dg_f126 } value = var:te_dg_f126 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f127 = { value = 0 if = { limit = { has_variable = te_dg_f127 } value = var:te_dg_f127 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f128 = { value = 0 if = { limit = { has_variable = te_dg_f128 } value = var:te_dg_f128 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f129 = { value = 0 if = { limit = { has_variable = te_dg_f129 } value = var:te_dg_f129 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f130 = { value = 0 if = { limit = { has_variable = te_dg_f130 } value = var:te_dg_f130 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f131 = { value = 0 if = { limit = { has_variable = te_dg_f131 } value = var:te_dg_f131 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f132 = { value = 0 if = { limit = { has_variable = te_dg_f132 } value = var:te_dg_f132 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f133 = { value = 0 if = { limit = { has_variable = te_dg_f133 } value = var:te_dg_f133 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f134 = { value = 0 if = { limit = { has_variable = te_dg_f134 } value = var:te_dg_f134 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f135 = { value = 0 if = { limit = { has_variable = te_dg_f135 } value = var:te_dg_f135 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f136 = { value = 0 if = { limit = { has_variable = te_dg_f136 } value = var:te_dg_f136 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f137 = { value = 0 if = { limit = { has_variable = te_dg_f137 } value = var:te_dg_f137 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f138 = { value = 0 if = { limit = { has_variable = te_dg_f138 } value = var:te_dg_f138 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f139 = { value = 0 if = { limit = { has_variable = te_dg_f139 } value = var:te_dg_f139 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f140 = { value = 0 if = { limit = { has_variable = te_dg_f140 } value = var:te_dg_f140 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f141 = { value = 0 if = { limit = { has_variable = te_dg_f141 } value = var:te_dg_f141 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f142 = { value = 0 if = { limit = { has_variable = te_dg_f142 } value = var:te_dg_f142 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f143 = { value = 0 if = { limit = { has_variable = te_dg_f143 } value = var:te_dg_f143 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f144 = { value = 0 if = { limit = { has_variable = te_dg_f144 } value = var:te_dg_f144 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f145 = { value = 0 if = { limit = { has_variable = te_dg_f145 } value = var:te_dg_f145 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f146 = { value = 0 if = { limit = { has_variable = te_dg_f146 } value = var:te_dg_f146 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f147 = { value = 0 if = { limit = { has_variable = te_dg_f147 } value = var:te_dg_f147 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f148 = { value = 0 if = { limit = { has_variable = te_dg_f148 } value = var:te_dg_f148 multiply = te_demog_dbg_unit } }
-te_demog_dbg_f149 = { value = 0 if = { limit = { has_variable = te_dg_f149 } value = var:te_dg_f149 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m0 = { value = 0 if = { limit = { has_variable = te_dg_m0 } value = var:te_dg_m0 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m1 = { value = 0 if = { limit = { has_variable = te_dg_m1 } value = var:te_dg_m1 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m2 = { value = 0 if = { limit = { has_variable = te_dg_m2 } value = var:te_dg_m2 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m3 = { value = 0 if = { limit = { has_variable = te_dg_m3 } value = var:te_dg_m3 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m4 = { value = 0 if = { limit = { has_variable = te_dg_m4 } value = var:te_dg_m4 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m5 = { value = 0 if = { limit = { has_variable = te_dg_m5 } value = var:te_dg_m5 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m6 = { value = 0 if = { limit = { has_variable = te_dg_m6 } value = var:te_dg_m6 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m7 = { value = 0 if = { limit = { has_variable = te_dg_m7 } value = var:te_dg_m7 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m8 = { value = 0 if = { limit = { has_variable = te_dg_m8 } value = var:te_dg_m8 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m9 = { value = 0 if = { limit = { has_variable = te_dg_m9 } value = var:te_dg_m9 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m10 = { value = 0 if = { limit = { has_variable = te_dg_m10 } value = var:te_dg_m10 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m11 = { value = 0 if = { limit = { has_variable = te_dg_m11 } value = var:te_dg_m11 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m12 = { value = 0 if = { limit = { has_variable = te_dg_m12 } value = var:te_dg_m12 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m13 = { value = 0 if = { limit = { has_variable = te_dg_m13 } value = var:te_dg_m13 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m14 = { value = 0 if = { limit = { has_variable = te_dg_m14 } value = var:te_dg_m14 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m15 = { value = 0 if = { limit = { has_variable = te_dg_m15 } value = var:te_dg_m15 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m16 = { value = 0 if = { limit = { has_variable = te_dg_m16 } value = var:te_dg_m16 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m17 = { value = 0 if = { limit = { has_variable = te_dg_m17 } value = var:te_dg_m17 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m18 = { value = 0 if = { limit = { has_variable = te_dg_m18 } value = var:te_dg_m18 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m19 = { value = 0 if = { limit = { has_variable = te_dg_m19 } value = var:te_dg_m19 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m20 = { value = 0 if = { limit = { has_variable = te_dg_m20 } value = var:te_dg_m20 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m21 = { value = 0 if = { limit = { has_variable = te_dg_m21 } value = var:te_dg_m21 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m22 = { value = 0 if = { limit = { has_variable = te_dg_m22 } value = var:te_dg_m22 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m23 = { value = 0 if = { limit = { has_variable = te_dg_m23 } value = var:te_dg_m23 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m24 = { value = 0 if = { limit = { has_variable = te_dg_m24 } value = var:te_dg_m24 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m25 = { value = 0 if = { limit = { has_variable = te_dg_m25 } value = var:te_dg_m25 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m26 = { value = 0 if = { limit = { has_variable = te_dg_m26 } value = var:te_dg_m26 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m27 = { value = 0 if = { limit = { has_variable = te_dg_m27 } value = var:te_dg_m27 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m28 = { value = 0 if = { limit = { has_variable = te_dg_m28 } value = var:te_dg_m28 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m29 = { value = 0 if = { limit = { has_variable = te_dg_m29 } value = var:te_dg_m29 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m30 = { value = 0 if = { limit = { has_variable = te_dg_m30 } value = var:te_dg_m30 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m31 = { value = 0 if = { limit = { has_variable = te_dg_m31 } value = var:te_dg_m31 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m32 = { value = 0 if = { limit = { has_variable = te_dg_m32 } value = var:te_dg_m32 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m33 = { value = 0 if = { limit = { has_variable = te_dg_m33 } value = var:te_dg_m33 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m34 = { value = 0 if = { limit = { has_variable = te_dg_m34 } value = var:te_dg_m34 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m35 = { value = 0 if = { limit = { has_variable = te_dg_m35 } value = var:te_dg_m35 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m36 = { value = 0 if = { limit = { has_variable = te_dg_m36 } value = var:te_dg_m36 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m37 = { value = 0 if = { limit = { has_variable = te_dg_m37 } value = var:te_dg_m37 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m38 = { value = 0 if = { limit = { has_variable = te_dg_m38 } value = var:te_dg_m38 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m39 = { value = 0 if = { limit = { has_variable = te_dg_m39 } value = var:te_dg_m39 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m40 = { value = 0 if = { limit = { has_variable = te_dg_m40 } value = var:te_dg_m40 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m41 = { value = 0 if = { limit = { has_variable = te_dg_m41 } value = var:te_dg_m41 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m42 = { value = 0 if = { limit = { has_variable = te_dg_m42 } value = var:te_dg_m42 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m43 = { value = 0 if = { limit = { has_variable = te_dg_m43 } value = var:te_dg_m43 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m44 = { value = 0 if = { limit = { has_variable = te_dg_m44 } value = var:te_dg_m44 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m45 = { value = 0 if = { limit = { has_variable = te_dg_m45 } value = var:te_dg_m45 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m46 = { value = 0 if = { limit = { has_variable = te_dg_m46 } value = var:te_dg_m46 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m47 = { value = 0 if = { limit = { has_variable = te_dg_m47 } value = var:te_dg_m47 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m48 = { value = 0 if = { limit = { has_variable = te_dg_m48 } value = var:te_dg_m48 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m49 = { value = 0 if = { limit = { has_variable = te_dg_m49 } value = var:te_dg_m49 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m50 = { value = 0 if = { limit = { has_variable = te_dg_m50 } value = var:te_dg_m50 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m51 = { value = 0 if = { limit = { has_variable = te_dg_m51 } value = var:te_dg_m51 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m52 = { value = 0 if = { limit = { has_variable = te_dg_m52 } value = var:te_dg_m52 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m53 = { value = 0 if = { limit = { has_variable = te_dg_m53 } value = var:te_dg_m53 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m54 = { value = 0 if = { limit = { has_variable = te_dg_m54 } value = var:te_dg_m54 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m55 = { value = 0 if = { limit = { has_variable = te_dg_m55 } value = var:te_dg_m55 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m56 = { value = 0 if = { limit = { has_variable = te_dg_m56 } value = var:te_dg_m56 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m57 = { value = 0 if = { limit = { has_variable = te_dg_m57 } value = var:te_dg_m57 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m58 = { value = 0 if = { limit = { has_variable = te_dg_m58 } value = var:te_dg_m58 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m59 = { value = 0 if = { limit = { has_variable = te_dg_m59 } value = var:te_dg_m59 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m60 = { value = 0 if = { limit = { has_variable = te_dg_m60 } value = var:te_dg_m60 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m61 = { value = 0 if = { limit = { has_variable = te_dg_m61 } value = var:te_dg_m61 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m62 = { value = 0 if = { limit = { has_variable = te_dg_m62 } value = var:te_dg_m62 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m63 = { value = 0 if = { limit = { has_variable = te_dg_m63 } value = var:te_dg_m63 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m64 = { value = 0 if = { limit = { has_variable = te_dg_m64 } value = var:te_dg_m64 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m65 = { value = 0 if = { limit = { has_variable = te_dg_m65 } value = var:te_dg_m65 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m66 = { value = 0 if = { limit = { has_variable = te_dg_m66 } value = var:te_dg_m66 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m67 = { value = 0 if = { limit = { has_variable = te_dg_m67 } value = var:te_dg_m67 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m68 = { value = 0 if = { limit = { has_variable = te_dg_m68 } value = var:te_dg_m68 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m69 = { value = 0 if = { limit = { has_variable = te_dg_m69 } value = var:te_dg_m69 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m70 = { value = 0 if = { limit = { has_variable = te_dg_m70 } value = var:te_dg_m70 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m71 = { value = 0 if = { limit = { has_variable = te_dg_m71 } value = var:te_dg_m71 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m72 = { value = 0 if = { limit = { has_variable = te_dg_m72 } value = var:te_dg_m72 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m73 = { value = 0 if = { limit = { has_variable = te_dg_m73 } value = var:te_dg_m73 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m74 = { value = 0 if = { limit = { has_variable = te_dg_m74 } value = var:te_dg_m74 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m75 = { value = 0 if = { limit = { has_variable = te_dg_m75 } value = var:te_dg_m75 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m76 = { value = 0 if = { limit = { has_variable = te_dg_m76 } value = var:te_dg_m76 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m77 = { value = 0 if = { limit = { has_variable = te_dg_m77 } value = var:te_dg_m77 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m78 = { value = 0 if = { limit = { has_variable = te_dg_m78 } value = var:te_dg_m78 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m79 = { value = 0 if = { limit = { has_variable = te_dg_m79 } value = var:te_dg_m79 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m80 = { value = 0 if = { limit = { has_variable = te_dg_m80 } value = var:te_dg_m80 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m81 = { value = 0 if = { limit = { has_variable = te_dg_m81 } value = var:te_dg_m81 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m82 = { value = 0 if = { limit = { has_variable = te_dg_m82 } value = var:te_dg_m82 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m83 = { value = 0 if = { limit = { has_variable = te_dg_m83 } value = var:te_dg_m83 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m84 = { value = 0 if = { limit = { has_variable = te_dg_m84 } value = var:te_dg_m84 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m85 = { value = 0 if = { limit = { has_variable = te_dg_m85 } value = var:te_dg_m85 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m86 = { value = 0 if = { limit = { has_variable = te_dg_m86 } value = var:te_dg_m86 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m87 = { value = 0 if = { limit = { has_variable = te_dg_m87 } value = var:te_dg_m87 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m88 = { value = 0 if = { limit = { has_variable = te_dg_m88 } value = var:te_dg_m88 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m89 = { value = 0 if = { limit = { has_variable = te_dg_m89 } value = var:te_dg_m89 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m90 = { value = 0 if = { limit = { has_variable = te_dg_m90 } value = var:te_dg_m90 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m91 = { value = 0 if = { limit = { has_variable = te_dg_m91 } value = var:te_dg_m91 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m92 = { value = 0 if = { limit = { has_variable = te_dg_m92 } value = var:te_dg_m92 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m93 = { value = 0 if = { limit = { has_variable = te_dg_m93 } value = var:te_dg_m93 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m94 = { value = 0 if = { limit = { has_variable = te_dg_m94 } value = var:te_dg_m94 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m95 = { value = 0 if = { limit = { has_variable = te_dg_m95 } value = var:te_dg_m95 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m96 = { value = 0 if = { limit = { has_variable = te_dg_m96 } value = var:te_dg_m96 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m97 = { value = 0 if = { limit = { has_variable = te_dg_m97 } value = var:te_dg_m97 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m98 = { value = 0 if = { limit = { has_variable = te_dg_m98 } value = var:te_dg_m98 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m99 = { value = 0 if = { limit = { has_variable = te_dg_m99 } value = var:te_dg_m99 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m100 = { value = 0 if = { limit = { has_variable = te_dg_m100 } value = var:te_dg_m100 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m101 = { value = 0 if = { limit = { has_variable = te_dg_m101 } value = var:te_dg_m101 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m102 = { value = 0 if = { limit = { has_variable = te_dg_m102 } value = var:te_dg_m102 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m103 = { value = 0 if = { limit = { has_variable = te_dg_m103 } value = var:te_dg_m103 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m104 = { value = 0 if = { limit = { has_variable = te_dg_m104 } value = var:te_dg_m104 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m105 = { value = 0 if = { limit = { has_variable = te_dg_m105 } value = var:te_dg_m105 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m106 = { value = 0 if = { limit = { has_variable = te_dg_m106 } value = var:te_dg_m106 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m107 = { value = 0 if = { limit = { has_variable = te_dg_m107 } value = var:te_dg_m107 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m108 = { value = 0 if = { limit = { has_variable = te_dg_m108 } value = var:te_dg_m108 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m109 = { value = 0 if = { limit = { has_variable = te_dg_m109 } value = var:te_dg_m109 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m110 = { value = 0 if = { limit = { has_variable = te_dg_m110 } value = var:te_dg_m110 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m111 = { value = 0 if = { limit = { has_variable = te_dg_m111 } value = var:te_dg_m111 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m112 = { value = 0 if = { limit = { has_variable = te_dg_m112 } value = var:te_dg_m112 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m113 = { value = 0 if = { limit = { has_variable = te_dg_m113 } value = var:te_dg_m113 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m114 = { value = 0 if = { limit = { has_variable = te_dg_m114 } value = var:te_dg_m114 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m115 = { value = 0 if = { limit = { has_variable = te_dg_m115 } value = var:te_dg_m115 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m116 = { value = 0 if = { limit = { has_variable = te_dg_m116 } value = var:te_dg_m116 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m117 = { value = 0 if = { limit = { has_variable = te_dg_m117 } value = var:te_dg_m117 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m118 = { value = 0 if = { limit = { has_variable = te_dg_m118 } value = var:te_dg_m118 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m119 = { value = 0 if = { limit = { has_variable = te_dg_m119 } value = var:te_dg_m119 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m120 = { value = 0 if = { limit = { has_variable = te_dg_m120 } value = var:te_dg_m120 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m121 = { value = 0 if = { limit = { has_variable = te_dg_m121 } value = var:te_dg_m121 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m122 = { value = 0 if = { limit = { has_variable = te_dg_m122 } value = var:te_dg_m122 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m123 = { value = 0 if = { limit = { has_variable = te_dg_m123 } value = var:te_dg_m123 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m124 = { value = 0 if = { limit = { has_variable = te_dg_m124 } value = var:te_dg_m124 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m125 = { value = 0 if = { limit = { has_variable = te_dg_m125 } value = var:te_dg_m125 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m126 = { value = 0 if = { limit = { has_variable = te_dg_m126 } value = var:te_dg_m126 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m127 = { value = 0 if = { limit = { has_variable = te_dg_m127 } value = var:te_dg_m127 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m128 = { value = 0 if = { limit = { has_variable = te_dg_m128 } value = var:te_dg_m128 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m129 = { value = 0 if = { limit = { has_variable = te_dg_m129 } value = var:te_dg_m129 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m130 = { value = 0 if = { limit = { has_variable = te_dg_m130 } value = var:te_dg_m130 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m131 = { value = 0 if = { limit = { has_variable = te_dg_m131 } value = var:te_dg_m131 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m132 = { value = 0 if = { limit = { has_variable = te_dg_m132 } value = var:te_dg_m132 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m133 = { value = 0 if = { limit = { has_variable = te_dg_m133 } value = var:te_dg_m133 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m134 = { value = 0 if = { limit = { has_variable = te_dg_m134 } value = var:te_dg_m134 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m135 = { value = 0 if = { limit = { has_variable = te_dg_m135 } value = var:te_dg_m135 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m136 = { value = 0 if = { limit = { has_variable = te_dg_m136 } value = var:te_dg_m136 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m137 = { value = 0 if = { limit = { has_variable = te_dg_m137 } value = var:te_dg_m137 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m138 = { value = 0 if = { limit = { has_variable = te_dg_m138 } value = var:te_dg_m138 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m139 = { value = 0 if = { limit = { has_variable = te_dg_m139 } value = var:te_dg_m139 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m140 = { value = 0 if = { limit = { has_variable = te_dg_m140 } value = var:te_dg_m140 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m141 = { value = 0 if = { limit = { has_variable = te_dg_m141 } value = var:te_dg_m141 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m142 = { value = 0 if = { limit = { has_variable = te_dg_m142 } value = var:te_dg_m142 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m143 = { value = 0 if = { limit = { has_variable = te_dg_m143 } value = var:te_dg_m143 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m144 = { value = 0 if = { limit = { has_variable = te_dg_m144 } value = var:te_dg_m144 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m145 = { value = 0 if = { limit = { has_variable = te_dg_m145 } value = var:te_dg_m145 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m146 = { value = 0 if = { limit = { has_variable = te_dg_m146 } value = var:te_dg_m146 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m147 = { value = 0 if = { limit = { has_variable = te_dg_m147 } value = var:te_dg_m147 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m148 = { value = 0 if = { limit = { has_variable = te_dg_m148 } value = var:te_dg_m148 multiply = te_demog_dbg_unit } }
-te_demog_dbg_m149 = { value = 0 if = { limit = { has_variable = te_dg_m149 } value = var:te_dg_m149 multiply = te_demog_dbg_unit } }
-te_demog_dbg_pool_f = { value = var:te_dg_pf multiply = te_demog_dbg_unit }
-te_demog_dbg_pool_m = { value = var:te_dg_pm multiply = te_demog_dbg_unit }
-te_demog_dbg_unit = { value = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } }
+# One sequential block each, so the scale and the people are not rounded on their own.
+te_demog_dbg_f0 = { value = 0 if = { limit = { has_variable = te_dg_f0 } value = var:te_dg_f0 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f1 = { value = 0 if = { limit = { has_variable = te_dg_f1 } value = var:te_dg_f1 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f2 = { value = 0 if = { limit = { has_variable = te_dg_f2 } value = var:te_dg_f2 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f3 = { value = 0 if = { limit = { has_variable = te_dg_f3 } value = var:te_dg_f3 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f4 = { value = 0 if = { limit = { has_variable = te_dg_f4 } value = var:te_dg_f4 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f5 = { value = 0 if = { limit = { has_variable = te_dg_f5 } value = var:te_dg_f5 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f6 = { value = 0 if = { limit = { has_variable = te_dg_f6 } value = var:te_dg_f6 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f7 = { value = 0 if = { limit = { has_variable = te_dg_f7 } value = var:te_dg_f7 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f8 = { value = 0 if = { limit = { has_variable = te_dg_f8 } value = var:te_dg_f8 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f9 = { value = 0 if = { limit = { has_variable = te_dg_f9 } value = var:te_dg_f9 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f10 = { value = 0 if = { limit = { has_variable = te_dg_f10 } value = var:te_dg_f10 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f11 = { value = 0 if = { limit = { has_variable = te_dg_f11 } value = var:te_dg_f11 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f12 = { value = 0 if = { limit = { has_variable = te_dg_f12 } value = var:te_dg_f12 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f13 = { value = 0 if = { limit = { has_variable = te_dg_f13 } value = var:te_dg_f13 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f14 = { value = 0 if = { limit = { has_variable = te_dg_f14 } value = var:te_dg_f14 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f15 = { value = 0 if = { limit = { has_variable = te_dg_f15 } value = var:te_dg_f15 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f16 = { value = 0 if = { limit = { has_variable = te_dg_f16 } value = var:te_dg_f16 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f17 = { value = 0 if = { limit = { has_variable = te_dg_f17 } value = var:te_dg_f17 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f18 = { value = 0 if = { limit = { has_variable = te_dg_f18 } value = var:te_dg_f18 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f19 = { value = 0 if = { limit = { has_variable = te_dg_f19 } value = var:te_dg_f19 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f20 = { value = 0 if = { limit = { has_variable = te_dg_f20 } value = var:te_dg_f20 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f21 = { value = 0 if = { limit = { has_variable = te_dg_f21 } value = var:te_dg_f21 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f22 = { value = 0 if = { limit = { has_variable = te_dg_f22 } value = var:te_dg_f22 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f23 = { value = 0 if = { limit = { has_variable = te_dg_f23 } value = var:te_dg_f23 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f24 = { value = 0 if = { limit = { has_variable = te_dg_f24 } value = var:te_dg_f24 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f25 = { value = 0 if = { limit = { has_variable = te_dg_f25 } value = var:te_dg_f25 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f26 = { value = 0 if = { limit = { has_variable = te_dg_f26 } value = var:te_dg_f26 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f27 = { value = 0 if = { limit = { has_variable = te_dg_f27 } value = var:te_dg_f27 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f28 = { value = 0 if = { limit = { has_variable = te_dg_f28 } value = var:te_dg_f28 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f29 = { value = 0 if = { limit = { has_variable = te_dg_f29 } value = var:te_dg_f29 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f30 = { value = 0 if = { limit = { has_variable = te_dg_f30 } value = var:te_dg_f30 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f31 = { value = 0 if = { limit = { has_variable = te_dg_f31 } value = var:te_dg_f31 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f32 = { value = 0 if = { limit = { has_variable = te_dg_f32 } value = var:te_dg_f32 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f33 = { value = 0 if = { limit = { has_variable = te_dg_f33 } value = var:te_dg_f33 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f34 = { value = 0 if = { limit = { has_variable = te_dg_f34 } value = var:te_dg_f34 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f35 = { value = 0 if = { limit = { has_variable = te_dg_f35 } value = var:te_dg_f35 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f36 = { value = 0 if = { limit = { has_variable = te_dg_f36 } value = var:te_dg_f36 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f37 = { value = 0 if = { limit = { has_variable = te_dg_f37 } value = var:te_dg_f37 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f38 = { value = 0 if = { limit = { has_variable = te_dg_f38 } value = var:te_dg_f38 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f39 = { value = 0 if = { limit = { has_variable = te_dg_f39 } value = var:te_dg_f39 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f40 = { value = 0 if = { limit = { has_variable = te_dg_f40 } value = var:te_dg_f40 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f41 = { value = 0 if = { limit = { has_variable = te_dg_f41 } value = var:te_dg_f41 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f42 = { value = 0 if = { limit = { has_variable = te_dg_f42 } value = var:te_dg_f42 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f43 = { value = 0 if = { limit = { has_variable = te_dg_f43 } value = var:te_dg_f43 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f44 = { value = 0 if = { limit = { has_variable = te_dg_f44 } value = var:te_dg_f44 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f45 = { value = 0 if = { limit = { has_variable = te_dg_f45 } value = var:te_dg_f45 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f46 = { value = 0 if = { limit = { has_variable = te_dg_f46 } value = var:te_dg_f46 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f47 = { value = 0 if = { limit = { has_variable = te_dg_f47 } value = var:te_dg_f47 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f48 = { value = 0 if = { limit = { has_variable = te_dg_f48 } value = var:te_dg_f48 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f49 = { value = 0 if = { limit = { has_variable = te_dg_f49 } value = var:te_dg_f49 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f50 = { value = 0 if = { limit = { has_variable = te_dg_f50 } value = var:te_dg_f50 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f51 = { value = 0 if = { limit = { has_variable = te_dg_f51 } value = var:te_dg_f51 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f52 = { value = 0 if = { limit = { has_variable = te_dg_f52 } value = var:te_dg_f52 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f53 = { value = 0 if = { limit = { has_variable = te_dg_f53 } value = var:te_dg_f53 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f54 = { value = 0 if = { limit = { has_variable = te_dg_f54 } value = var:te_dg_f54 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f55 = { value = 0 if = { limit = { has_variable = te_dg_f55 } value = var:te_dg_f55 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f56 = { value = 0 if = { limit = { has_variable = te_dg_f56 } value = var:te_dg_f56 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f57 = { value = 0 if = { limit = { has_variable = te_dg_f57 } value = var:te_dg_f57 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f58 = { value = 0 if = { limit = { has_variable = te_dg_f58 } value = var:te_dg_f58 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f59 = { value = 0 if = { limit = { has_variable = te_dg_f59 } value = var:te_dg_f59 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f60 = { value = 0 if = { limit = { has_variable = te_dg_f60 } value = var:te_dg_f60 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f61 = { value = 0 if = { limit = { has_variable = te_dg_f61 } value = var:te_dg_f61 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f62 = { value = 0 if = { limit = { has_variable = te_dg_f62 } value = var:te_dg_f62 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f63 = { value = 0 if = { limit = { has_variable = te_dg_f63 } value = var:te_dg_f63 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f64 = { value = 0 if = { limit = { has_variable = te_dg_f64 } value = var:te_dg_f64 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f65 = { value = 0 if = { limit = { has_variable = te_dg_f65 } value = var:te_dg_f65 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f66 = { value = 0 if = { limit = { has_variable = te_dg_f66 } value = var:te_dg_f66 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f67 = { value = 0 if = { limit = { has_variable = te_dg_f67 } value = var:te_dg_f67 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f68 = { value = 0 if = { limit = { has_variable = te_dg_f68 } value = var:te_dg_f68 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f69 = { value = 0 if = { limit = { has_variable = te_dg_f69 } value = var:te_dg_f69 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f70 = { value = 0 if = { limit = { has_variable = te_dg_f70 } value = var:te_dg_f70 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f71 = { value = 0 if = { limit = { has_variable = te_dg_f71 } value = var:te_dg_f71 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f72 = { value = 0 if = { limit = { has_variable = te_dg_f72 } value = var:te_dg_f72 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f73 = { value = 0 if = { limit = { has_variable = te_dg_f73 } value = var:te_dg_f73 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f74 = { value = 0 if = { limit = { has_variable = te_dg_f74 } value = var:te_dg_f74 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f75 = { value = 0 if = { limit = { has_variable = te_dg_f75 } value = var:te_dg_f75 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f76 = { value = 0 if = { limit = { has_variable = te_dg_f76 } value = var:te_dg_f76 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f77 = { value = 0 if = { limit = { has_variable = te_dg_f77 } value = var:te_dg_f77 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f78 = { value = 0 if = { limit = { has_variable = te_dg_f78 } value = var:te_dg_f78 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f79 = { value = 0 if = { limit = { has_variable = te_dg_f79 } value = var:te_dg_f79 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f80 = { value = 0 if = { limit = { has_variable = te_dg_f80 } value = var:te_dg_f80 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f81 = { value = 0 if = { limit = { has_variable = te_dg_f81 } value = var:te_dg_f81 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f82 = { value = 0 if = { limit = { has_variable = te_dg_f82 } value = var:te_dg_f82 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f83 = { value = 0 if = { limit = { has_variable = te_dg_f83 } value = var:te_dg_f83 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f84 = { value = 0 if = { limit = { has_variable = te_dg_f84 } value = var:te_dg_f84 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f85 = { value = 0 if = { limit = { has_variable = te_dg_f85 } value = var:te_dg_f85 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f86 = { value = 0 if = { limit = { has_variable = te_dg_f86 } value = var:te_dg_f86 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f87 = { value = 0 if = { limit = { has_variable = te_dg_f87 } value = var:te_dg_f87 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f88 = { value = 0 if = { limit = { has_variable = te_dg_f88 } value = var:te_dg_f88 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f89 = { value = 0 if = { limit = { has_variable = te_dg_f89 } value = var:te_dg_f89 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f90 = { value = 0 if = { limit = { has_variable = te_dg_f90 } value = var:te_dg_f90 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f91 = { value = 0 if = { limit = { has_variable = te_dg_f91 } value = var:te_dg_f91 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f92 = { value = 0 if = { limit = { has_variable = te_dg_f92 } value = var:te_dg_f92 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f93 = { value = 0 if = { limit = { has_variable = te_dg_f93 } value = var:te_dg_f93 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f94 = { value = 0 if = { limit = { has_variable = te_dg_f94 } value = var:te_dg_f94 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f95 = { value = 0 if = { limit = { has_variable = te_dg_f95 } value = var:te_dg_f95 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f96 = { value = 0 if = { limit = { has_variable = te_dg_f96 } value = var:te_dg_f96 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f97 = { value = 0 if = { limit = { has_variable = te_dg_f97 } value = var:te_dg_f97 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f98 = { value = 0 if = { limit = { has_variable = te_dg_f98 } value = var:te_dg_f98 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f99 = { value = 0 if = { limit = { has_variable = te_dg_f99 } value = var:te_dg_f99 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f100 = { value = 0 if = { limit = { has_variable = te_dg_f100 } value = var:te_dg_f100 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f101 = { value = 0 if = { limit = { has_variable = te_dg_f101 } value = var:te_dg_f101 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f102 = { value = 0 if = { limit = { has_variable = te_dg_f102 } value = var:te_dg_f102 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f103 = { value = 0 if = { limit = { has_variable = te_dg_f103 } value = var:te_dg_f103 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f104 = { value = 0 if = { limit = { has_variable = te_dg_f104 } value = var:te_dg_f104 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f105 = { value = 0 if = { limit = { has_variable = te_dg_f105 } value = var:te_dg_f105 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f106 = { value = 0 if = { limit = { has_variable = te_dg_f106 } value = var:te_dg_f106 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f107 = { value = 0 if = { limit = { has_variable = te_dg_f107 } value = var:te_dg_f107 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f108 = { value = 0 if = { limit = { has_variable = te_dg_f108 } value = var:te_dg_f108 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f109 = { value = 0 if = { limit = { has_variable = te_dg_f109 } value = var:te_dg_f109 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f110 = { value = 0 if = { limit = { has_variable = te_dg_f110 } value = var:te_dg_f110 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f111 = { value = 0 if = { limit = { has_variable = te_dg_f111 } value = var:te_dg_f111 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f112 = { value = 0 if = { limit = { has_variable = te_dg_f112 } value = var:te_dg_f112 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f113 = { value = 0 if = { limit = { has_variable = te_dg_f113 } value = var:te_dg_f113 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f114 = { value = 0 if = { limit = { has_variable = te_dg_f114 } value = var:te_dg_f114 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f115 = { value = 0 if = { limit = { has_variable = te_dg_f115 } value = var:te_dg_f115 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f116 = { value = 0 if = { limit = { has_variable = te_dg_f116 } value = var:te_dg_f116 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f117 = { value = 0 if = { limit = { has_variable = te_dg_f117 } value = var:te_dg_f117 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f118 = { value = 0 if = { limit = { has_variable = te_dg_f118 } value = var:te_dg_f118 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f119 = { value = 0 if = { limit = { has_variable = te_dg_f119 } value = var:te_dg_f119 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f120 = { value = 0 if = { limit = { has_variable = te_dg_f120 } value = var:te_dg_f120 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f121 = { value = 0 if = { limit = { has_variable = te_dg_f121 } value = var:te_dg_f121 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f122 = { value = 0 if = { limit = { has_variable = te_dg_f122 } value = var:te_dg_f122 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f123 = { value = 0 if = { limit = { has_variable = te_dg_f123 } value = var:te_dg_f123 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f124 = { value = 0 if = { limit = { has_variable = te_dg_f124 } value = var:te_dg_f124 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f125 = { value = 0 if = { limit = { has_variable = te_dg_f125 } value = var:te_dg_f125 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f126 = { value = 0 if = { limit = { has_variable = te_dg_f126 } value = var:te_dg_f126 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f127 = { value = 0 if = { limit = { has_variable = te_dg_f127 } value = var:te_dg_f127 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f128 = { value = 0 if = { limit = { has_variable = te_dg_f128 } value = var:te_dg_f128 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f129 = { value = 0 if = { limit = { has_variable = te_dg_f129 } value = var:te_dg_f129 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f130 = { value = 0 if = { limit = { has_variable = te_dg_f130 } value = var:te_dg_f130 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f131 = { value = 0 if = { limit = { has_variable = te_dg_f131 } value = var:te_dg_f131 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f132 = { value = 0 if = { limit = { has_variable = te_dg_f132 } value = var:te_dg_f132 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f133 = { value = 0 if = { limit = { has_variable = te_dg_f133 } value = var:te_dg_f133 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f134 = { value = 0 if = { limit = { has_variable = te_dg_f134 } value = var:te_dg_f134 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f135 = { value = 0 if = { limit = { has_variable = te_dg_f135 } value = var:te_dg_f135 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f136 = { value = 0 if = { limit = { has_variable = te_dg_f136 } value = var:te_dg_f136 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f137 = { value = 0 if = { limit = { has_variable = te_dg_f137 } value = var:te_dg_f137 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f138 = { value = 0 if = { limit = { has_variable = te_dg_f138 } value = var:te_dg_f138 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f139 = { value = 0 if = { limit = { has_variable = te_dg_f139 } value = var:te_dg_f139 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f140 = { value = 0 if = { limit = { has_variable = te_dg_f140 } value = var:te_dg_f140 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f141 = { value = 0 if = { limit = { has_variable = te_dg_f141 } value = var:te_dg_f141 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f142 = { value = 0 if = { limit = { has_variable = te_dg_f142 } value = var:te_dg_f142 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f143 = { value = 0 if = { limit = { has_variable = te_dg_f143 } value = var:te_dg_f143 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f144 = { value = 0 if = { limit = { has_variable = te_dg_f144 } value = var:te_dg_f144 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f145 = { value = 0 if = { limit = { has_variable = te_dg_f145 } value = var:te_dg_f145 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f146 = { value = 0 if = { limit = { has_variable = te_dg_f146 } value = var:te_dg_f146 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f147 = { value = 0 if = { limit = { has_variable = te_dg_f147 } value = var:te_dg_f147 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f148 = { value = 0 if = { limit = { has_variable = te_dg_f148 } value = var:te_dg_f148 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_f149 = { value = 0 if = { limit = { has_variable = te_dg_f149 } value = var:te_dg_f149 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m0 = { value = 0 if = { limit = { has_variable = te_dg_m0 } value = var:te_dg_m0 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m1 = { value = 0 if = { limit = { has_variable = te_dg_m1 } value = var:te_dg_m1 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m2 = { value = 0 if = { limit = { has_variable = te_dg_m2 } value = var:te_dg_m2 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m3 = { value = 0 if = { limit = { has_variable = te_dg_m3 } value = var:te_dg_m3 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m4 = { value = 0 if = { limit = { has_variable = te_dg_m4 } value = var:te_dg_m4 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m5 = { value = 0 if = { limit = { has_variable = te_dg_m5 } value = var:te_dg_m5 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m6 = { value = 0 if = { limit = { has_variable = te_dg_m6 } value = var:te_dg_m6 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m7 = { value = 0 if = { limit = { has_variable = te_dg_m7 } value = var:te_dg_m7 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m8 = { value = 0 if = { limit = { has_variable = te_dg_m8 } value = var:te_dg_m8 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m9 = { value = 0 if = { limit = { has_variable = te_dg_m9 } value = var:te_dg_m9 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m10 = { value = 0 if = { limit = { has_variable = te_dg_m10 } value = var:te_dg_m10 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m11 = { value = 0 if = { limit = { has_variable = te_dg_m11 } value = var:te_dg_m11 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m12 = { value = 0 if = { limit = { has_variable = te_dg_m12 } value = var:te_dg_m12 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m13 = { value = 0 if = { limit = { has_variable = te_dg_m13 } value = var:te_dg_m13 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m14 = { value = 0 if = { limit = { has_variable = te_dg_m14 } value = var:te_dg_m14 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m15 = { value = 0 if = { limit = { has_variable = te_dg_m15 } value = var:te_dg_m15 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m16 = { value = 0 if = { limit = { has_variable = te_dg_m16 } value = var:te_dg_m16 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m17 = { value = 0 if = { limit = { has_variable = te_dg_m17 } value = var:te_dg_m17 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m18 = { value = 0 if = { limit = { has_variable = te_dg_m18 } value = var:te_dg_m18 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m19 = { value = 0 if = { limit = { has_variable = te_dg_m19 } value = var:te_dg_m19 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m20 = { value = 0 if = { limit = { has_variable = te_dg_m20 } value = var:te_dg_m20 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m21 = { value = 0 if = { limit = { has_variable = te_dg_m21 } value = var:te_dg_m21 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m22 = { value = 0 if = { limit = { has_variable = te_dg_m22 } value = var:te_dg_m22 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m23 = { value = 0 if = { limit = { has_variable = te_dg_m23 } value = var:te_dg_m23 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m24 = { value = 0 if = { limit = { has_variable = te_dg_m24 } value = var:te_dg_m24 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m25 = { value = 0 if = { limit = { has_variable = te_dg_m25 } value = var:te_dg_m25 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m26 = { value = 0 if = { limit = { has_variable = te_dg_m26 } value = var:te_dg_m26 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m27 = { value = 0 if = { limit = { has_variable = te_dg_m27 } value = var:te_dg_m27 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m28 = { value = 0 if = { limit = { has_variable = te_dg_m28 } value = var:te_dg_m28 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m29 = { value = 0 if = { limit = { has_variable = te_dg_m29 } value = var:te_dg_m29 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m30 = { value = 0 if = { limit = { has_variable = te_dg_m30 } value = var:te_dg_m30 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m31 = { value = 0 if = { limit = { has_variable = te_dg_m31 } value = var:te_dg_m31 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m32 = { value = 0 if = { limit = { has_variable = te_dg_m32 } value = var:te_dg_m32 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m33 = { value = 0 if = { limit = { has_variable = te_dg_m33 } value = var:te_dg_m33 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m34 = { value = 0 if = { limit = { has_variable = te_dg_m34 } value = var:te_dg_m34 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m35 = { value = 0 if = { limit = { has_variable = te_dg_m35 } value = var:te_dg_m35 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m36 = { value = 0 if = { limit = { has_variable = te_dg_m36 } value = var:te_dg_m36 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m37 = { value = 0 if = { limit = { has_variable = te_dg_m37 } value = var:te_dg_m37 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m38 = { value = 0 if = { limit = { has_variable = te_dg_m38 } value = var:te_dg_m38 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m39 = { value = 0 if = { limit = { has_variable = te_dg_m39 } value = var:te_dg_m39 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m40 = { value = 0 if = { limit = { has_variable = te_dg_m40 } value = var:te_dg_m40 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m41 = { value = 0 if = { limit = { has_variable = te_dg_m41 } value = var:te_dg_m41 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m42 = { value = 0 if = { limit = { has_variable = te_dg_m42 } value = var:te_dg_m42 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m43 = { value = 0 if = { limit = { has_variable = te_dg_m43 } value = var:te_dg_m43 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m44 = { value = 0 if = { limit = { has_variable = te_dg_m44 } value = var:te_dg_m44 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m45 = { value = 0 if = { limit = { has_variable = te_dg_m45 } value = var:te_dg_m45 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m46 = { value = 0 if = { limit = { has_variable = te_dg_m46 } value = var:te_dg_m46 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m47 = { value = 0 if = { limit = { has_variable = te_dg_m47 } value = var:te_dg_m47 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m48 = { value = 0 if = { limit = { has_variable = te_dg_m48 } value = var:te_dg_m48 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m49 = { value = 0 if = { limit = { has_variable = te_dg_m49 } value = var:te_dg_m49 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m50 = { value = 0 if = { limit = { has_variable = te_dg_m50 } value = var:te_dg_m50 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m51 = { value = 0 if = { limit = { has_variable = te_dg_m51 } value = var:te_dg_m51 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m52 = { value = 0 if = { limit = { has_variable = te_dg_m52 } value = var:te_dg_m52 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m53 = { value = 0 if = { limit = { has_variable = te_dg_m53 } value = var:te_dg_m53 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m54 = { value = 0 if = { limit = { has_variable = te_dg_m54 } value = var:te_dg_m54 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m55 = { value = 0 if = { limit = { has_variable = te_dg_m55 } value = var:te_dg_m55 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m56 = { value = 0 if = { limit = { has_variable = te_dg_m56 } value = var:te_dg_m56 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m57 = { value = 0 if = { limit = { has_variable = te_dg_m57 } value = var:te_dg_m57 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m58 = { value = 0 if = { limit = { has_variable = te_dg_m58 } value = var:te_dg_m58 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m59 = { value = 0 if = { limit = { has_variable = te_dg_m59 } value = var:te_dg_m59 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m60 = { value = 0 if = { limit = { has_variable = te_dg_m60 } value = var:te_dg_m60 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m61 = { value = 0 if = { limit = { has_variable = te_dg_m61 } value = var:te_dg_m61 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m62 = { value = 0 if = { limit = { has_variable = te_dg_m62 } value = var:te_dg_m62 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m63 = { value = 0 if = { limit = { has_variable = te_dg_m63 } value = var:te_dg_m63 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m64 = { value = 0 if = { limit = { has_variable = te_dg_m64 } value = var:te_dg_m64 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m65 = { value = 0 if = { limit = { has_variable = te_dg_m65 } value = var:te_dg_m65 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m66 = { value = 0 if = { limit = { has_variable = te_dg_m66 } value = var:te_dg_m66 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m67 = { value = 0 if = { limit = { has_variable = te_dg_m67 } value = var:te_dg_m67 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m68 = { value = 0 if = { limit = { has_variable = te_dg_m68 } value = var:te_dg_m68 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m69 = { value = 0 if = { limit = { has_variable = te_dg_m69 } value = var:te_dg_m69 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m70 = { value = 0 if = { limit = { has_variable = te_dg_m70 } value = var:te_dg_m70 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m71 = { value = 0 if = { limit = { has_variable = te_dg_m71 } value = var:te_dg_m71 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m72 = { value = 0 if = { limit = { has_variable = te_dg_m72 } value = var:te_dg_m72 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m73 = { value = 0 if = { limit = { has_variable = te_dg_m73 } value = var:te_dg_m73 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m74 = { value = 0 if = { limit = { has_variable = te_dg_m74 } value = var:te_dg_m74 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m75 = { value = 0 if = { limit = { has_variable = te_dg_m75 } value = var:te_dg_m75 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m76 = { value = 0 if = { limit = { has_variable = te_dg_m76 } value = var:te_dg_m76 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m77 = { value = 0 if = { limit = { has_variable = te_dg_m77 } value = var:te_dg_m77 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m78 = { value = 0 if = { limit = { has_variable = te_dg_m78 } value = var:te_dg_m78 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m79 = { value = 0 if = { limit = { has_variable = te_dg_m79 } value = var:te_dg_m79 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m80 = { value = 0 if = { limit = { has_variable = te_dg_m80 } value = var:te_dg_m80 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m81 = { value = 0 if = { limit = { has_variable = te_dg_m81 } value = var:te_dg_m81 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m82 = { value = 0 if = { limit = { has_variable = te_dg_m82 } value = var:te_dg_m82 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m83 = { value = 0 if = { limit = { has_variable = te_dg_m83 } value = var:te_dg_m83 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m84 = { value = 0 if = { limit = { has_variable = te_dg_m84 } value = var:te_dg_m84 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m85 = { value = 0 if = { limit = { has_variable = te_dg_m85 } value = var:te_dg_m85 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m86 = { value = 0 if = { limit = { has_variable = te_dg_m86 } value = var:te_dg_m86 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m87 = { value = 0 if = { limit = { has_variable = te_dg_m87 } value = var:te_dg_m87 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m88 = { value = 0 if = { limit = { has_variable = te_dg_m88 } value = var:te_dg_m88 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m89 = { value = 0 if = { limit = { has_variable = te_dg_m89 } value = var:te_dg_m89 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m90 = { value = 0 if = { limit = { has_variable = te_dg_m90 } value = var:te_dg_m90 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m91 = { value = 0 if = { limit = { has_variable = te_dg_m91 } value = var:te_dg_m91 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m92 = { value = 0 if = { limit = { has_variable = te_dg_m92 } value = var:te_dg_m92 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m93 = { value = 0 if = { limit = { has_variable = te_dg_m93 } value = var:te_dg_m93 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m94 = { value = 0 if = { limit = { has_variable = te_dg_m94 } value = var:te_dg_m94 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m95 = { value = 0 if = { limit = { has_variable = te_dg_m95 } value = var:te_dg_m95 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m96 = { value = 0 if = { limit = { has_variable = te_dg_m96 } value = var:te_dg_m96 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m97 = { value = 0 if = { limit = { has_variable = te_dg_m97 } value = var:te_dg_m97 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m98 = { value = 0 if = { limit = { has_variable = te_dg_m98 } value = var:te_dg_m98 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m99 = { value = 0 if = { limit = { has_variable = te_dg_m99 } value = var:te_dg_m99 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m100 = { value = 0 if = { limit = { has_variable = te_dg_m100 } value = var:te_dg_m100 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m101 = { value = 0 if = { limit = { has_variable = te_dg_m101 } value = var:te_dg_m101 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m102 = { value = 0 if = { limit = { has_variable = te_dg_m102 } value = var:te_dg_m102 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m103 = { value = 0 if = { limit = { has_variable = te_dg_m103 } value = var:te_dg_m103 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m104 = { value = 0 if = { limit = { has_variable = te_dg_m104 } value = var:te_dg_m104 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m105 = { value = 0 if = { limit = { has_variable = te_dg_m105 } value = var:te_dg_m105 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m106 = { value = 0 if = { limit = { has_variable = te_dg_m106 } value = var:te_dg_m106 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m107 = { value = 0 if = { limit = { has_variable = te_dg_m107 } value = var:te_dg_m107 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m108 = { value = 0 if = { limit = { has_variable = te_dg_m108 } value = var:te_dg_m108 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m109 = { value = 0 if = { limit = { has_variable = te_dg_m109 } value = var:te_dg_m109 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m110 = { value = 0 if = { limit = { has_variable = te_dg_m110 } value = var:te_dg_m110 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m111 = { value = 0 if = { limit = { has_variable = te_dg_m111 } value = var:te_dg_m111 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m112 = { value = 0 if = { limit = { has_variable = te_dg_m112 } value = var:te_dg_m112 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m113 = { value = 0 if = { limit = { has_variable = te_dg_m113 } value = var:te_dg_m113 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m114 = { value = 0 if = { limit = { has_variable = te_dg_m114 } value = var:te_dg_m114 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m115 = { value = 0 if = { limit = { has_variable = te_dg_m115 } value = var:te_dg_m115 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m116 = { value = 0 if = { limit = { has_variable = te_dg_m116 } value = var:te_dg_m116 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m117 = { value = 0 if = { limit = { has_variable = te_dg_m117 } value = var:te_dg_m117 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m118 = { value = 0 if = { limit = { has_variable = te_dg_m118 } value = var:te_dg_m118 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m119 = { value = 0 if = { limit = { has_variable = te_dg_m119 } value = var:te_dg_m119 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m120 = { value = 0 if = { limit = { has_variable = te_dg_m120 } value = var:te_dg_m120 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m121 = { value = 0 if = { limit = { has_variable = te_dg_m121 } value = var:te_dg_m121 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m122 = { value = 0 if = { limit = { has_variable = te_dg_m122 } value = var:te_dg_m122 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m123 = { value = 0 if = { limit = { has_variable = te_dg_m123 } value = var:te_dg_m123 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m124 = { value = 0 if = { limit = { has_variable = te_dg_m124 } value = var:te_dg_m124 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m125 = { value = 0 if = { limit = { has_variable = te_dg_m125 } value = var:te_dg_m125 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m126 = { value = 0 if = { limit = { has_variable = te_dg_m126 } value = var:te_dg_m126 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m127 = { value = 0 if = { limit = { has_variable = te_dg_m127 } value = var:te_dg_m127 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m128 = { value = 0 if = { limit = { has_variable = te_dg_m128 } value = var:te_dg_m128 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m129 = { value = 0 if = { limit = { has_variable = te_dg_m129 } value = var:te_dg_m129 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m130 = { value = 0 if = { limit = { has_variable = te_dg_m130 } value = var:te_dg_m130 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m131 = { value = 0 if = { limit = { has_variable = te_dg_m131 } value = var:te_dg_m131 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m132 = { value = 0 if = { limit = { has_variable = te_dg_m132 } value = var:te_dg_m132 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m133 = { value = 0 if = { limit = { has_variable = te_dg_m133 } value = var:te_dg_m133 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m134 = { value = 0 if = { limit = { has_variable = te_dg_m134 } value = var:te_dg_m134 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m135 = { value = 0 if = { limit = { has_variable = te_dg_m135 } value = var:te_dg_m135 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m136 = { value = 0 if = { limit = { has_variable = te_dg_m136 } value = var:te_dg_m136 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m137 = { value = 0 if = { limit = { has_variable = te_dg_m137 } value = var:te_dg_m137 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m138 = { value = 0 if = { limit = { has_variable = te_dg_m138 } value = var:te_dg_m138 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m139 = { value = 0 if = { limit = { has_variable = te_dg_m139 } value = var:te_dg_m139 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m140 = { value = 0 if = { limit = { has_variable = te_dg_m140 } value = var:te_dg_m140 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m141 = { value = 0 if = { limit = { has_variable = te_dg_m141 } value = var:te_dg_m141 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m142 = { value = 0 if = { limit = { has_variable = te_dg_m142 } value = var:te_dg_m142 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m143 = { value = 0 if = { limit = { has_variable = te_dg_m143 } value = var:te_dg_m143 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m144 = { value = 0 if = { limit = { has_variable = te_dg_m144 } value = var:te_dg_m144 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m145 = { value = 0 if = { limit = { has_variable = te_dg_m145 } value = var:te_dg_m145 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m146 = { value = 0 if = { limit = { has_variable = te_dg_m146 } value = var:te_dg_m146 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m147 = { value = 0 if = { limit = { has_variable = te_dg_m147 } value = var:te_dg_m147 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m148 = { value = 0 if = { limit = { has_variable = te_dg_m148 } value = var:te_dg_m148 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_m149 = { value = 0 if = { limit = { has_variable = te_dg_m149 } value = var:te_dg_m149 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_pool_f = { value = 0 if = { limit = { has_variable = te_dg_pf } value = var:te_dg_pf multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+te_demog_dbg_pool_m = { value = 0 if = { limit = { has_variable = te_dg_pm } value = var:te_dg_pm multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }

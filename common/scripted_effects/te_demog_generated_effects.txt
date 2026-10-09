@@ -2204,6 +2204,1611 @@ te_demog_enter_class = {
 	}
 }
 
+# THIS = a state, seed only. local_var:te_dg_norm_e5 = population x 100,000 / the raw ring's total.
+# Turns every slot of the raw ring (radix 100,000) into people: x te_dg_norm_e5, then / 100000.
+te_demog_normalize_slots = {
+	if = {
+		limit = { has_variable = te_dg_f0 }
+		change_variable = { name = te_dg_f0 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f0 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m0 }
+		change_variable = { name = te_dg_m0 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m0 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f1 }
+		change_variable = { name = te_dg_f1 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f1 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m1 }
+		change_variable = { name = te_dg_m1 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m1 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f2 }
+		change_variable = { name = te_dg_f2 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f2 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m2 }
+		change_variable = { name = te_dg_m2 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m2 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f3 }
+		change_variable = { name = te_dg_f3 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f3 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m3 }
+		change_variable = { name = te_dg_m3 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m3 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f4 }
+		change_variable = { name = te_dg_f4 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f4 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m4 }
+		change_variable = { name = te_dg_m4 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m4 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f5 }
+		change_variable = { name = te_dg_f5 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f5 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m5 }
+		change_variable = { name = te_dg_m5 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m5 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f6 }
+		change_variable = { name = te_dg_f6 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f6 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m6 }
+		change_variable = { name = te_dg_m6 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m6 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f7 }
+		change_variable = { name = te_dg_f7 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f7 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m7 }
+		change_variable = { name = te_dg_m7 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m7 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f8 }
+		change_variable = { name = te_dg_f8 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f8 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m8 }
+		change_variable = { name = te_dg_m8 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m8 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f9 }
+		change_variable = { name = te_dg_f9 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f9 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m9 }
+		change_variable = { name = te_dg_m9 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m9 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f10 }
+		change_variable = { name = te_dg_f10 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f10 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m10 }
+		change_variable = { name = te_dg_m10 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m10 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f11 }
+		change_variable = { name = te_dg_f11 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f11 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m11 }
+		change_variable = { name = te_dg_m11 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m11 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f12 }
+		change_variable = { name = te_dg_f12 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f12 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m12 }
+		change_variable = { name = te_dg_m12 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m12 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f13 }
+		change_variable = { name = te_dg_f13 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f13 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m13 }
+		change_variable = { name = te_dg_m13 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m13 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f14 }
+		change_variable = { name = te_dg_f14 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f14 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m14 }
+		change_variable = { name = te_dg_m14 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m14 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f15 }
+		change_variable = { name = te_dg_f15 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f15 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m15 }
+		change_variable = { name = te_dg_m15 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m15 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f16 }
+		change_variable = { name = te_dg_f16 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f16 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m16 }
+		change_variable = { name = te_dg_m16 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m16 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f17 }
+		change_variable = { name = te_dg_f17 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f17 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m17 }
+		change_variable = { name = te_dg_m17 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m17 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f18 }
+		change_variable = { name = te_dg_f18 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f18 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m18 }
+		change_variable = { name = te_dg_m18 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m18 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f19 }
+		change_variable = { name = te_dg_f19 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f19 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m19 }
+		change_variable = { name = te_dg_m19 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m19 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f20 }
+		change_variable = { name = te_dg_f20 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f20 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m20 }
+		change_variable = { name = te_dg_m20 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m20 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f21 }
+		change_variable = { name = te_dg_f21 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f21 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m21 }
+		change_variable = { name = te_dg_m21 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m21 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f22 }
+		change_variable = { name = te_dg_f22 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f22 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m22 }
+		change_variable = { name = te_dg_m22 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m22 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f23 }
+		change_variable = { name = te_dg_f23 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f23 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m23 }
+		change_variable = { name = te_dg_m23 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m23 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f24 }
+		change_variable = { name = te_dg_f24 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f24 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m24 }
+		change_variable = { name = te_dg_m24 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m24 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f25 }
+		change_variable = { name = te_dg_f25 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f25 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m25 }
+		change_variable = { name = te_dg_m25 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m25 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f26 }
+		change_variable = { name = te_dg_f26 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f26 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m26 }
+		change_variable = { name = te_dg_m26 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m26 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f27 }
+		change_variable = { name = te_dg_f27 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f27 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m27 }
+		change_variable = { name = te_dg_m27 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m27 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f28 }
+		change_variable = { name = te_dg_f28 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f28 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m28 }
+		change_variable = { name = te_dg_m28 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m28 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f29 }
+		change_variable = { name = te_dg_f29 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f29 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m29 }
+		change_variable = { name = te_dg_m29 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m29 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f30 }
+		change_variable = { name = te_dg_f30 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f30 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m30 }
+		change_variable = { name = te_dg_m30 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m30 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f31 }
+		change_variable = { name = te_dg_f31 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f31 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m31 }
+		change_variable = { name = te_dg_m31 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m31 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f32 }
+		change_variable = { name = te_dg_f32 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f32 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m32 }
+		change_variable = { name = te_dg_m32 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m32 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f33 }
+		change_variable = { name = te_dg_f33 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f33 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m33 }
+		change_variable = { name = te_dg_m33 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m33 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f34 }
+		change_variable = { name = te_dg_f34 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f34 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m34 }
+		change_variable = { name = te_dg_m34 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m34 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f35 }
+		change_variable = { name = te_dg_f35 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f35 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m35 }
+		change_variable = { name = te_dg_m35 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m35 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f36 }
+		change_variable = { name = te_dg_f36 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f36 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m36 }
+		change_variable = { name = te_dg_m36 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m36 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f37 }
+		change_variable = { name = te_dg_f37 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f37 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m37 }
+		change_variable = { name = te_dg_m37 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m37 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f38 }
+		change_variable = { name = te_dg_f38 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f38 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m38 }
+		change_variable = { name = te_dg_m38 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m38 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f39 }
+		change_variable = { name = te_dg_f39 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f39 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m39 }
+		change_variable = { name = te_dg_m39 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m39 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f40 }
+		change_variable = { name = te_dg_f40 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f40 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m40 }
+		change_variable = { name = te_dg_m40 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m40 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f41 }
+		change_variable = { name = te_dg_f41 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f41 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m41 }
+		change_variable = { name = te_dg_m41 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m41 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f42 }
+		change_variable = { name = te_dg_f42 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f42 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m42 }
+		change_variable = { name = te_dg_m42 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m42 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f43 }
+		change_variable = { name = te_dg_f43 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f43 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m43 }
+		change_variable = { name = te_dg_m43 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m43 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f44 }
+		change_variable = { name = te_dg_f44 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f44 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m44 }
+		change_variable = { name = te_dg_m44 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m44 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f45 }
+		change_variable = { name = te_dg_f45 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f45 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m45 }
+		change_variable = { name = te_dg_m45 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m45 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f46 }
+		change_variable = { name = te_dg_f46 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f46 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m46 }
+		change_variable = { name = te_dg_m46 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m46 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f47 }
+		change_variable = { name = te_dg_f47 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f47 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m47 }
+		change_variable = { name = te_dg_m47 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m47 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f48 }
+		change_variable = { name = te_dg_f48 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f48 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m48 }
+		change_variable = { name = te_dg_m48 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m48 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f49 }
+		change_variable = { name = te_dg_f49 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f49 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m49 }
+		change_variable = { name = te_dg_m49 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m49 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f50 }
+		change_variable = { name = te_dg_f50 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f50 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m50 }
+		change_variable = { name = te_dg_m50 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m50 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f51 }
+		change_variable = { name = te_dg_f51 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f51 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m51 }
+		change_variable = { name = te_dg_m51 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m51 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f52 }
+		change_variable = { name = te_dg_f52 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f52 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m52 }
+		change_variable = { name = te_dg_m52 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m52 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f53 }
+		change_variable = { name = te_dg_f53 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f53 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m53 }
+		change_variable = { name = te_dg_m53 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m53 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f54 }
+		change_variable = { name = te_dg_f54 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f54 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m54 }
+		change_variable = { name = te_dg_m54 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m54 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f55 }
+		change_variable = { name = te_dg_f55 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f55 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m55 }
+		change_variable = { name = te_dg_m55 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m55 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f56 }
+		change_variable = { name = te_dg_f56 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f56 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m56 }
+		change_variable = { name = te_dg_m56 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m56 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f57 }
+		change_variable = { name = te_dg_f57 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f57 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m57 }
+		change_variable = { name = te_dg_m57 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m57 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f58 }
+		change_variable = { name = te_dg_f58 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f58 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m58 }
+		change_variable = { name = te_dg_m58 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m58 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f59 }
+		change_variable = { name = te_dg_f59 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f59 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m59 }
+		change_variable = { name = te_dg_m59 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m59 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f60 }
+		change_variable = { name = te_dg_f60 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f60 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m60 }
+		change_variable = { name = te_dg_m60 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m60 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f61 }
+		change_variable = { name = te_dg_f61 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f61 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m61 }
+		change_variable = { name = te_dg_m61 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m61 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f62 }
+		change_variable = { name = te_dg_f62 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f62 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m62 }
+		change_variable = { name = te_dg_m62 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m62 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f63 }
+		change_variable = { name = te_dg_f63 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f63 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m63 }
+		change_variable = { name = te_dg_m63 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m63 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f64 }
+		change_variable = { name = te_dg_f64 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f64 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m64 }
+		change_variable = { name = te_dg_m64 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m64 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f65 }
+		change_variable = { name = te_dg_f65 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f65 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m65 }
+		change_variable = { name = te_dg_m65 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m65 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f66 }
+		change_variable = { name = te_dg_f66 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f66 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m66 }
+		change_variable = { name = te_dg_m66 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m66 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f67 }
+		change_variable = { name = te_dg_f67 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f67 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m67 }
+		change_variable = { name = te_dg_m67 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m67 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f68 }
+		change_variable = { name = te_dg_f68 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f68 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m68 }
+		change_variable = { name = te_dg_m68 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m68 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f69 }
+		change_variable = { name = te_dg_f69 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f69 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m69 }
+		change_variable = { name = te_dg_m69 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m69 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f70 }
+		change_variable = { name = te_dg_f70 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f70 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m70 }
+		change_variable = { name = te_dg_m70 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m70 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f71 }
+		change_variable = { name = te_dg_f71 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f71 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m71 }
+		change_variable = { name = te_dg_m71 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m71 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f72 }
+		change_variable = { name = te_dg_f72 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f72 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m72 }
+		change_variable = { name = te_dg_m72 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m72 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f73 }
+		change_variable = { name = te_dg_f73 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f73 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m73 }
+		change_variable = { name = te_dg_m73 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m73 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f74 }
+		change_variable = { name = te_dg_f74 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f74 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m74 }
+		change_variable = { name = te_dg_m74 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m74 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f75 }
+		change_variable = { name = te_dg_f75 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f75 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m75 }
+		change_variable = { name = te_dg_m75 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m75 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f76 }
+		change_variable = { name = te_dg_f76 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f76 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m76 }
+		change_variable = { name = te_dg_m76 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m76 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f77 }
+		change_variable = { name = te_dg_f77 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f77 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m77 }
+		change_variable = { name = te_dg_m77 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m77 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f78 }
+		change_variable = { name = te_dg_f78 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f78 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m78 }
+		change_variable = { name = te_dg_m78 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m78 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f79 }
+		change_variable = { name = te_dg_f79 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f79 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m79 }
+		change_variable = { name = te_dg_m79 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m79 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f80 }
+		change_variable = { name = te_dg_f80 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f80 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m80 }
+		change_variable = { name = te_dg_m80 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m80 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f81 }
+		change_variable = { name = te_dg_f81 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f81 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m81 }
+		change_variable = { name = te_dg_m81 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m81 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f82 }
+		change_variable = { name = te_dg_f82 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f82 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m82 }
+		change_variable = { name = te_dg_m82 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m82 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f83 }
+		change_variable = { name = te_dg_f83 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f83 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m83 }
+		change_variable = { name = te_dg_m83 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m83 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f84 }
+		change_variable = { name = te_dg_f84 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f84 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m84 }
+		change_variable = { name = te_dg_m84 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m84 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f85 }
+		change_variable = { name = te_dg_f85 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f85 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m85 }
+		change_variable = { name = te_dg_m85 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m85 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f86 }
+		change_variable = { name = te_dg_f86 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f86 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m86 }
+		change_variable = { name = te_dg_m86 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m86 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f87 }
+		change_variable = { name = te_dg_f87 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f87 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m87 }
+		change_variable = { name = te_dg_m87 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m87 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f88 }
+		change_variable = { name = te_dg_f88 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f88 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m88 }
+		change_variable = { name = te_dg_m88 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m88 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f89 }
+		change_variable = { name = te_dg_f89 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f89 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m89 }
+		change_variable = { name = te_dg_m89 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m89 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f90 }
+		change_variable = { name = te_dg_f90 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f90 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m90 }
+		change_variable = { name = te_dg_m90 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m90 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f91 }
+		change_variable = { name = te_dg_f91 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f91 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m91 }
+		change_variable = { name = te_dg_m91 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m91 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f92 }
+		change_variable = { name = te_dg_f92 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f92 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m92 }
+		change_variable = { name = te_dg_m92 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m92 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f93 }
+		change_variable = { name = te_dg_f93 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f93 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m93 }
+		change_variable = { name = te_dg_m93 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m93 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f94 }
+		change_variable = { name = te_dg_f94 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f94 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m94 }
+		change_variable = { name = te_dg_m94 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m94 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f95 }
+		change_variable = { name = te_dg_f95 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f95 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m95 }
+		change_variable = { name = te_dg_m95 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m95 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f96 }
+		change_variable = { name = te_dg_f96 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f96 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m96 }
+		change_variable = { name = te_dg_m96 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m96 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f97 }
+		change_variable = { name = te_dg_f97 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f97 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m97 }
+		change_variable = { name = te_dg_m97 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m97 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f98 }
+		change_variable = { name = te_dg_f98 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f98 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m98 }
+		change_variable = { name = te_dg_m98 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m98 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f99 }
+		change_variable = { name = te_dg_f99 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f99 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m99 }
+		change_variable = { name = te_dg_m99 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m99 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f100 }
+		change_variable = { name = te_dg_f100 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f100 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m100 }
+		change_variable = { name = te_dg_m100 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m100 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f101 }
+		change_variable = { name = te_dg_f101 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f101 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m101 }
+		change_variable = { name = te_dg_m101 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m101 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f102 }
+		change_variable = { name = te_dg_f102 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f102 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m102 }
+		change_variable = { name = te_dg_m102 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m102 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f103 }
+		change_variable = { name = te_dg_f103 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f103 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m103 }
+		change_variable = { name = te_dg_m103 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m103 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f104 }
+		change_variable = { name = te_dg_f104 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f104 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m104 }
+		change_variable = { name = te_dg_m104 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m104 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f105 }
+		change_variable = { name = te_dg_f105 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f105 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m105 }
+		change_variable = { name = te_dg_m105 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m105 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f106 }
+		change_variable = { name = te_dg_f106 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f106 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m106 }
+		change_variable = { name = te_dg_m106 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m106 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f107 }
+		change_variable = { name = te_dg_f107 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f107 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m107 }
+		change_variable = { name = te_dg_m107 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m107 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f108 }
+		change_variable = { name = te_dg_f108 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f108 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m108 }
+		change_variable = { name = te_dg_m108 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m108 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f109 }
+		change_variable = { name = te_dg_f109 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f109 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m109 }
+		change_variable = { name = te_dg_m109 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m109 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f110 }
+		change_variable = { name = te_dg_f110 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f110 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m110 }
+		change_variable = { name = te_dg_m110 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m110 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f111 }
+		change_variable = { name = te_dg_f111 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f111 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m111 }
+		change_variable = { name = te_dg_m111 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m111 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f112 }
+		change_variable = { name = te_dg_f112 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f112 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m112 }
+		change_variable = { name = te_dg_m112 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m112 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f113 }
+		change_variable = { name = te_dg_f113 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f113 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m113 }
+		change_variable = { name = te_dg_m113 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m113 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f114 }
+		change_variable = { name = te_dg_f114 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f114 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m114 }
+		change_variable = { name = te_dg_m114 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m114 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f115 }
+		change_variable = { name = te_dg_f115 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f115 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m115 }
+		change_variable = { name = te_dg_m115 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m115 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f116 }
+		change_variable = { name = te_dg_f116 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f116 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m116 }
+		change_variable = { name = te_dg_m116 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m116 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f117 }
+		change_variable = { name = te_dg_f117 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f117 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m117 }
+		change_variable = { name = te_dg_m117 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m117 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f118 }
+		change_variable = { name = te_dg_f118 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f118 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m118 }
+		change_variable = { name = te_dg_m118 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m118 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f119 }
+		change_variable = { name = te_dg_f119 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f119 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m119 }
+		change_variable = { name = te_dg_m119 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m119 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f120 }
+		change_variable = { name = te_dg_f120 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f120 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m120 }
+		change_variable = { name = te_dg_m120 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m120 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f121 }
+		change_variable = { name = te_dg_f121 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f121 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m121 }
+		change_variable = { name = te_dg_m121 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m121 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f122 }
+		change_variable = { name = te_dg_f122 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f122 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m122 }
+		change_variable = { name = te_dg_m122 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m122 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f123 }
+		change_variable = { name = te_dg_f123 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f123 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m123 }
+		change_variable = { name = te_dg_m123 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m123 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f124 }
+		change_variable = { name = te_dg_f124 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f124 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m124 }
+		change_variable = { name = te_dg_m124 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m124 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f125 }
+		change_variable = { name = te_dg_f125 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f125 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m125 }
+		change_variable = { name = te_dg_m125 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m125 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f126 }
+		change_variable = { name = te_dg_f126 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f126 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m126 }
+		change_variable = { name = te_dg_m126 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m126 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f127 }
+		change_variable = { name = te_dg_f127 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f127 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m127 }
+		change_variable = { name = te_dg_m127 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m127 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f128 }
+		change_variable = { name = te_dg_f128 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f128 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m128 }
+		change_variable = { name = te_dg_m128 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m128 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f129 }
+		change_variable = { name = te_dg_f129 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f129 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m129 }
+		change_variable = { name = te_dg_m129 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m129 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f130 }
+		change_variable = { name = te_dg_f130 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f130 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m130 }
+		change_variable = { name = te_dg_m130 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m130 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f131 }
+		change_variable = { name = te_dg_f131 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f131 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m131 }
+		change_variable = { name = te_dg_m131 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m131 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f132 }
+		change_variable = { name = te_dg_f132 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f132 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m132 }
+		change_variable = { name = te_dg_m132 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m132 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f133 }
+		change_variable = { name = te_dg_f133 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f133 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m133 }
+		change_variable = { name = te_dg_m133 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m133 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f134 }
+		change_variable = { name = te_dg_f134 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f134 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m134 }
+		change_variable = { name = te_dg_m134 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m134 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f135 }
+		change_variable = { name = te_dg_f135 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f135 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m135 }
+		change_variable = { name = te_dg_m135 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m135 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f136 }
+		change_variable = { name = te_dg_f136 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f136 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m136 }
+		change_variable = { name = te_dg_m136 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m136 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f137 }
+		change_variable = { name = te_dg_f137 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f137 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m137 }
+		change_variable = { name = te_dg_m137 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m137 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f138 }
+		change_variable = { name = te_dg_f138 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f138 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m138 }
+		change_variable = { name = te_dg_m138 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m138 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f139 }
+		change_variable = { name = te_dg_f139 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f139 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m139 }
+		change_variable = { name = te_dg_m139 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m139 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f140 }
+		change_variable = { name = te_dg_f140 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f140 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m140 }
+		change_variable = { name = te_dg_m140 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m140 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f141 }
+		change_variable = { name = te_dg_f141 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f141 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m141 }
+		change_variable = { name = te_dg_m141 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m141 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f142 }
+		change_variable = { name = te_dg_f142 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f142 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m142 }
+		change_variable = { name = te_dg_m142 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m142 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f143 }
+		change_variable = { name = te_dg_f143 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f143 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m143 }
+		change_variable = { name = te_dg_m143 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m143 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f144 }
+		change_variable = { name = te_dg_f144 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f144 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m144 }
+		change_variable = { name = te_dg_m144 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m144 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f145 }
+		change_variable = { name = te_dg_f145 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f145 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m145 }
+		change_variable = { name = te_dg_m145 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m145 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f146 }
+		change_variable = { name = te_dg_f146 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f146 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m146 }
+		change_variable = { name = te_dg_m146 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m146 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f147 }
+		change_variable = { name = te_dg_f147 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f147 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m147 }
+		change_variable = { name = te_dg_m147 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m147 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f148 }
+		change_variable = { name = te_dg_f148 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f148 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m148 }
+		change_variable = { name = te_dg_m148 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m148 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f149 }
+		change_variable = { name = te_dg_f149 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f149 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m149 }
+		change_variable = { name = te_dg_m149 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m149 divide = 100000 }
+	}
+}
+
+# THIS = a state, seed only. The same two steps on the bands, the class sums and the 18-40 sums.
+te_demog_normalize_bands = {
+	change_variable = { name = te_dg_bf0 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf0 divide = 100000 }
+	change_variable = { name = te_dg_bm0 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm0 divide = 100000 }
+	change_variable = { name = te_dg_bf1 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf1 divide = 100000 }
+	change_variable = { name = te_dg_bm1 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm1 divide = 100000 }
+	change_variable = { name = te_dg_bf2 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf2 divide = 100000 }
+	change_variable = { name = te_dg_bm2 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm2 divide = 100000 }
+	change_variable = { name = te_dg_bf3 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf3 divide = 100000 }
+	change_variable = { name = te_dg_bm3 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm3 divide = 100000 }
+	change_variable = { name = te_dg_bf4 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf4 divide = 100000 }
+	change_variable = { name = te_dg_bm4 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm4 divide = 100000 }
+	change_variable = { name = te_dg_bf5 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf5 divide = 100000 }
+	change_variable = { name = te_dg_bm5 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm5 divide = 100000 }
+	change_variable = { name = te_dg_bf6 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf6 divide = 100000 }
+	change_variable = { name = te_dg_bm6 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm6 divide = 100000 }
+	change_variable = { name = te_dg_bf7 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf7 divide = 100000 }
+	change_variable = { name = te_dg_bm7 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm7 divide = 100000 }
+	change_variable = { name = te_dg_bf8 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf8 divide = 100000 }
+	change_variable = { name = te_dg_bm8 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm8 divide = 100000 }
+	change_variable = { name = te_dg_bf9 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf9 divide = 100000 }
+	change_variable = { name = te_dg_bm9 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm9 divide = 100000 }
+	change_variable = { name = te_dg_bf10 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf10 divide = 100000 }
+	change_variable = { name = te_dg_bm10 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm10 divide = 100000 }
+	change_variable = { name = te_dg_bf11 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf11 divide = 100000 }
+	change_variable = { name = te_dg_bm11 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm11 divide = 100000 }
+	change_variable = { name = te_dg_bf12 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf12 divide = 100000 }
+	change_variable = { name = te_dg_bm12 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm12 divide = 100000 }
+	change_variable = { name = te_dg_bf13 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf13 divide = 100000 }
+	change_variable = { name = te_dg_bm13 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm13 divide = 100000 }
+	change_variable = { name = te_dg_bf14 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf14 divide = 100000 }
+	change_variable = { name = te_dg_bm14 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm14 divide = 100000 }
+	change_variable = { name = te_dg_bf15 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf15 divide = 100000 }
+	change_variable = { name = te_dg_bm15 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm15 divide = 100000 }
+	change_variable = { name = te_dg_bf16 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf16 divide = 100000 }
+	change_variable = { name = te_dg_bm16 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm16 divide = 100000 }
+	change_variable = { name = te_dg_bf17 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bf17 divide = 100000 }
+	change_variable = { name = te_dg_bm17 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_bm17 divide = 100000 }
+	change_variable = { name = te_dg_cf0 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cf0 divide = 100000 }
+	change_variable = { name = te_dg_cm0 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cm0 divide = 100000 }
+	change_variable = { name = te_dg_cf1 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cf1 divide = 100000 }
+	change_variable = { name = te_dg_cm1 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cm1 divide = 100000 }
+	change_variable = { name = te_dg_cf2 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cf2 divide = 100000 }
+	change_variable = { name = te_dg_cm2 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cm2 divide = 100000 }
+	change_variable = { name = te_dg_cf3 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cf3 divide = 100000 }
+	change_variable = { name = te_dg_cm3 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cm3 divide = 100000 }
+	change_variable = { name = te_dg_cf4 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cf4 divide = 100000 }
+	change_variable = { name = te_dg_cm4 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_cm4 divide = 100000 }
+	change_variable = { name = te_dg_f1840 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_f1840 divide = 100000 }
+	change_variable = { name = te_dg_m1840 multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_m1840 divide = 100000 }
+}
+
 # THIS = a state. The life table over the age groups in order (demographics_model.life_table),
 # plus the NRR's survival-weighted fertility sum. Needs te_dg_m_* (te_demog_prepare).
 te_demog_life_table = {

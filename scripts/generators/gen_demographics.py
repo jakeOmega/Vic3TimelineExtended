@@ -8,7 +8,8 @@ Usage:
 Spec: docs/superpowers/specs/2026-10-08-demographics-design.md; plan:
 docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md (Task 6). Inputs:
 scripts/analysis/demographics_params.py (every rate, weight and table),
-common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py),
+common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py, and
+MAX_INSTITUTION_INVESTMENT, the top of the institution chains),
 common/buy_packages/00_buy_packages.txt (spending per head by wealth) and the land-reform
 laws (vanilla_parsed/common/laws.json and common/laws/, for variants' parents). Not a post-load
 regenerator: run it after changing any of those; test_gen_demographics.py fails CI when
@@ -22,16 +23,24 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_enter_class                    a migrant class's gain and loss shares (reads te_dg_acls,
                                                 te_dg_mig_in/_out, te_dg_pf<c>/pm<c>, var:te_dg_cf<c>/cm<c>;
                                                 writes te_dg_mig_gain_f/_m, te_dg_mig_frac_f/_m)
+        te_demog_normalize_slots, te_demog_normalize_bands
+                                                the seed's raw ring (radix 100,000) to people: each value
+                                                x local_var:te_dg_norm_e5, then / 100000 (two steps keep a
+                                                small state precise); slots, then bands, class sums, 18-40 sums
         te_demog_life_table, te_demog_set_growth_factor
         te_demog_add_bands_to_root, te_demog_reset_country_bands, te_demog_scale_bands
+        te_demog_set_profile                    the migrant profile per class and sex
+        te_demog_band_figures                   total, young, working, old, women 15-49, 20-59 sums, median
+        te_demog_project                        the bands twenty years ahead (a display outline)
         te_demog_debug_log_ring_before / _after  (Task 15's replay lines)
     common/script_values/te_demog_generated_values.txt
-        per-pop engine curves, wealth TFR and income; per-state cause multipliers,
-        women's work share, the means and the land-tenure term; te_demog_k_* constants;
-        per-slot debug shares
+        per-pop engine curves, wealth TFR and income; per-state cause multipliers (institution
+        chains up to the defines' MAX_INSTITUTION_INVESTMENT), women's work share, the means and
+        the land-tenure term; te_demog_k_* constants; per-slot debug shares
 """
 
 import argparse
+import re
 import sys
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
@@ -206,6 +215,34 @@ def bands_and_classes(o):
             o("}")
             o("}")
     tree(o, "te_dg_acls", 0, len(P.MIGRANT_CLASSES) - 1, leaf)
+    o("}")
+    o("")
+
+
+def normalizers(o):
+    """The seed's raw ring (survivorship radix 100,000) to people, in two multiplies so a small state keeps its digits."""
+    two_step = ("change_variable = {{ name = {v} multiply = local_var:te_dg_norm_e5 }}",
+                "change_variable = {{ name = {v} divide = 100000 }}")
+    o("# THIS = a state, seed only. local_var:te_dg_norm_e5 = population x 100,000 / the raw ring's total.")
+    o("# Turns every slot of the raw ring (radix 100,000) into people: x te_dg_norm_e5, then / 100000.")
+    o("te_demog_normalize_slots = {")
+    for k in range(N):
+        for s in ("f", "m"):
+            o("if = {")
+            o(f"limit = {{ has_variable = te_dg_{s}{k} }}")
+            for step in two_step:
+                o(step.format(v=f"te_dg_{s}{k}"))
+            o("}")
+    o("}")
+    o("")
+    o("# THIS = a state, seed only. The same two steps on the bands, the class sums and the 18-40 sums.")
+    o("te_demog_normalize_bands = {")
+    names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in ("f", "m")]
+    names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in ("f", "m")]
+    names += ["te_dg_f1840", "te_dg_m1840"]
+    for name in names:
+        for step in two_step:
+            o(step.format(v=name))
     o("}")
     o("")
 
@@ -426,6 +463,7 @@ def render_effects():
     sweeps(o)
     enter_group(o)
     bands_and_classes(o)
+    normalizers(o)
     life_table(o)
     growth_factor(o)
     country_bands(o)
@@ -509,9 +547,22 @@ def income(o, costs):
     o("")
 
 
-def multipliers(o):
+def max_institution_investment(root):
+    """NPolitics MAX_INSTITUTION_INVESTMENT from the mod's defines: the top level an institution can reach."""
+    path = root / "common" / "defines" / "extra_defines.txt"
+    m = re.search(r"^\s*MAX_INSTITUTION_INVESTMENT\s*=\s*(\d+)", path.read_text(encoding="utf-8-sig"), re.M)
+    if not m:
+        raise KeyError(f"MAX_INSTITUTION_INVESTMENT not found in {path}")
+    return int(m.group(1))
+
+
+def multipliers(o, max_level):
     for cause in CAUSES:
-        o(f"# State scope: the {cause} cause's multiplier (demographics_model.cause_multipliers).")
+        if cause == "maternal":
+            o("# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate")
+            o("# times the cause's multiplier (demographics_model.cause_multipliers, group_rates).")
+        else:
+            o(f"# State scope: the {cause} cause's multiplier (demographics_model.cause_multipliers).")
         o(f"te_demog_mult_{cause} = {{")
         o("value = 1")
         for tech, m in P.TECH_MULT.get(cause, {}).items():
@@ -519,8 +570,8 @@ def multipliers(o):
         for law, m in P.LAW_MULT.get(cause, {}).items():
             o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} multiply = {lit(m)} }}")
         for inst, m in P.INSTITUTION_MULT.get(cause, {}).items():
-            for level in range(5, 0, -1):
-                kw = "if" if level == 5 else "else_if"
+            for level in range(max_level, 0, -1):
+                kw = "if" if level == max_level else "else_if"
                 o(f"{kw} = {{")
                 o(f"limit = {{ owner = {{ institution_investment_level = {{ institution = {inst} value >= {level} }} }} }}")
                 o(f"multiply = {lit(m ** level)}")
@@ -647,13 +698,15 @@ def constants(o):
 
 def debug_values(o):
     o("# State scope: each slot as per mille of the state's people, for the replay lines (Task 15).")
+    o("# One sequential block each, so the scale and the people are not rounded on their own.")
+    share = "multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 }"
     for s in ("f", "m"):
         for k in range(N):
             o(f"te_demog_dbg_{s}{k} = {{ value = 0 if = {{ limit = {{ has_variable = te_dg_{s}{k} }} "
-              f"value = var:te_dg_{s}{k} multiply = te_demog_dbg_unit }} }}")
-    o("te_demog_dbg_pool_f = { value = var:te_dg_pf multiply = te_demog_dbg_unit }")
-    o("te_demog_dbg_pool_m = { value = var:te_dg_pm multiply = te_demog_dbg_unit }")
-    o("te_demog_dbg_unit = { value = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } }")
+              f"value = var:te_dg_{s}{k} {share} }} }}")
+    for s in ("f", "m"):
+        o(f"te_demog_dbg_pool_{s} = {{ value = 0 if = {{ limit = {{ has_variable = te_dg_p{s} }} "
+          f"value = var:te_dg_p{s} {share} }} }}")
     o("")
 
 
@@ -663,7 +716,7 @@ def render_values(root):
     o("")
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     income(o, buy_package_costs(root))
-    multipliers(o)
+    multipliers(o, max_institution_investment(root))
     land_term(o, root)
     constants(o)
     debug_values(o)

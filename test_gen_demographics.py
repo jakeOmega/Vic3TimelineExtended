@@ -83,3 +83,61 @@ class TestGenerated(unittest.TestCase):
         for sex in "fm":
             self.assertEqual(body.count(f"name = te_dg_mig_gain_{sex}\n"), len(P.MIGRANT_CLASSES))
             self.assertEqual(body.count(f"name = te_dg_mig_frac_{sex}\n"), len(P.MIGRANT_CLASSES))
+
+    def test_institution_chain_reaches_the_defines_maximum(self):
+        top = gen.max_institution_investment(ROOT)
+        self.assertEqual(top, 9)
+        body = self.values.split("te_demog_mult_infection = {", 1)[1].split("\n}\n", 1)[0]
+        pattern = (r"(if|else_if) = \{\nlimit = \{ owner = \{ institution_investment_level = \{ "
+                   r"institution = institution_health_system value >= (\d+) \} \} \}\nmultiply = ([\d.]+)\n")
+        chain = [(kw, int(level), value)
+                 for kw, level, value in re.findall(pattern, re.sub(r"\t", "", body))]
+        self.assertEqual([level for _kw, level, _v in chain], list(range(top, 0, -1)))
+        self.assertEqual(chain[0][0], "if")
+        self.assertTrue(all(kw == "else_if" for kw, _l, _v in chain[1:]))
+        for _kw, level, value in chain:
+            self.assertEqual(value, gen.lit(0.95 ** level), level)
+        self.assertEqual(chain[0][2], gen.lit(0.95 ** 9))
+
+    def test_missing_institution_maximum_raises(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            defines = Path(tmp) / "common" / "defines"
+            defines.mkdir(parents=True)
+            (defines / "extra_defines.txt").write_text("NPolitics = {\n}\n", encoding="utf-8")
+            with self.assertRaises(KeyError):
+                gen.max_institution_investment(Path(tmp))
+
+    def test_replay_values_are_one_sequential_block(self):
+        self.assertNotIn("te_demog_dbg_unit", self.values)
+        share = "multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 }"
+        for s in "fm":
+            for k in range(P.RING_YEARS):
+                self.assertIn(f"te_demog_dbg_{s}{k} = {{ value = 0 if = {{ limit = {{ has_variable = te_dg_{s}{k} }} "
+                              f"value = var:te_dg_{s}{k} {share} }} }}", self.values)
+            self.assertIn(f"te_demog_dbg_pool_{s} = {{ value = 0 if = {{ limit = {{ has_variable = te_dg_p{s} }} "
+                          f"value = var:te_dg_p{s} {share} }} }}", self.values)
+
+    def test_normalize_slots_touches_every_slot_in_two_steps(self):
+        body = self.effects.split("te_demog_normalize_slots = {", 1)[1].split("\n}\n", 1)[0]
+        for s in "fm":
+            for k in range(P.RING_YEARS):
+                name = f"te_dg_{s}{k}"
+                self.assertIn(f"limit = {{ has_variable = {name} }}", body)
+                self.assertEqual(body.count(f"change_variable = {{ name = {name} multiply = local_var:te_dg_norm_e5 }}"), 1)
+                self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1)
+                self.assertLess(body.index(f"name = {name} multiply"), body.index(f"name = {name} divide"))
+
+    def test_normalize_bands_covers_bands_classes_and_war_sums(self):
+        body = self.effects.split("te_demog_normalize_bands = {", 1)[1].split("\n}\n", 1)[0]
+        names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in "fm"]
+        names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in "fm"]
+        names += ["te_dg_f1840", "te_dg_m1840"]
+        for name in names:
+            self.assertEqual(body.count(f"change_variable = {{ name = {name} multiply = local_var:te_dg_norm_e5 }}"), 1, name)
+            self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1, name)
+        self.assertEqual(body.count("change_variable"), 2 * len(names))
+
+    def test_maternal_comment_says_it_is_a_rate(self):
+        head = self.values.split("te_demog_mult_maternal = {", 1)[0].rsplit("\n\n", 1)[-1]
+        self.assertIn("maternal deaths per 100,000 births", head)

@@ -113,7 +113,7 @@ LAW_MULT = {
     "external": {"law_local_police": 0.95, "law_dedicated_police": 0.9, "law_militarized_police": 0.9},
     "work": {"law_child_labor_allowed": 1.1},
 }
-# Per institution level (0-5), compounding: mult ** level.
+# Per institution level (0 to the defines' MAX_INSTITUTION_INVESTMENT), compounding: mult ** level.
 INSTITUTION_MULT = {
     "infection": {"institution_health_system": 0.95},
     "work": {"institution_workplace_safety": 0.85},
