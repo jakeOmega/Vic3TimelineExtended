@@ -202,6 +202,8 @@ States occupied during war or damaged by events accumulate **devastation**. The 
   - The built-in `state_region_devastation` static modifier carries `state_devastation_decay_mult = 3.0`, scaled by the state's current devastation level — high-devastation states naturally decay faster than mildly-devastated ones (a self-correcting feedback that prevents states staying devastated indefinitely).
   - **`state_devastation_decay_mult` is a registered modifier** (added in 1.13 — see `common/modifier_type_definitions/00_modifier_types.txt`). External modifiers can speed or slow decay: e.g. the *Brutal Anti-Bandit Campaigns* event modifier sets it to −1 (stops decay outright). Mod content can grant decay-speedup as a reward, or decay-penalty as a flavor cost.
 
+**Scale:** the `devastation` trigger reads a 0–1 fraction (vanilla thresholds are `0.1`, `0.2`, `0.5`), while `add_devastation` / `set_devastation` take percentage points (`= 25` is 25%). See `docs/guides/scripting_best_practices.md` § "Devastation: The Trigger Reads 0–1, `add_devastation` Takes Percent".
+
 Each point of devastation linearly cuts: infrastructure, construction efficiency, migration attraction, building throughput, and *adds* to pop mortality. Heavy occupation can compound to multi-points-per-week throughput loss + significant mortality.
 
 **Since 1.14 devastation also drains war support**: the country's population-weighted `average_devastation` (a new trigger) is a war support change source (`NWar|WAR_SUPPORT_CHANGE_DEVASTATION_FACTOR`), so devastation-tuning defines now shift war length too.

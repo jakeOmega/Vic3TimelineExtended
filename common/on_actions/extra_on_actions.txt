@@ -1621,7 +1621,7 @@ violent_hostility_on_action = {
 								culture = PREV
 								value = 1.0
 							}
-							state_region = { add_devastation = 0.25 }
+							state_region = { add_devastation = 25 } # percent: the effect takes 0..100, the trigger reads 0..1
 							trigger_mass_migration = {
 								POP_RATIO = 0.8
 							}
@@ -1677,7 +1677,7 @@ violent_hostility_on_action = {
 								culture = PREV
 								value = 0.25
 							}
-							state_region = { add_devastation = 0.1 }
+							state_region = { add_devastation = 10 }
 							trigger_mass_migration = {
 								POP_RATIO = 0.5
 							}
