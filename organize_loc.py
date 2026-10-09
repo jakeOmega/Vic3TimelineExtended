@@ -584,6 +584,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # before every substring rule so the whole family stays in one file.
     if key.startswith("gm_"):
         return "MISCELLANEOUS"
+    # Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md). Every
+    # loc key the system adds starts te_demog_, so its panel, tooltips and figures stay
+    # in one file even when a key ends in _add or _desc. Rule keys (rule_/setting_)
+    # and te_debug_demog.* event keys keep their own routing.
+    if key.startswith("te_demog_"):
+        return "MISCELLANEOUS"
     # Tax-code engine probes (docs/testing/tax-code-probes.md), a temporary
     # harness kept in te_debug_tax_l_english.yml until it is removed. Tested
     # before the `law_` and `_add` rules, which would take the carrier law and

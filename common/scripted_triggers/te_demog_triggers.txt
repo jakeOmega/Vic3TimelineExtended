@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — gates and building classes
+# (docs/superpowers/specs/2026-10-08-demographics-design.md; plan Task 5)
+# ============================================================================
+
+# The cohort model, the panel and the history run unless the rule is Disabled.
+te_demog_cohorts_run = {
+	NOT = { has_game_rule = demographics_disabled }
+}
+
+# The model's effects (phase 2) apply only under Full.
+te_demog_effects_run = {
+	te_demog_cohorts_run = yes
+	NOT = { has_game_rule = demographics_display_only }
+}
+
+# State scope: the state has a census (a seeded ring).
+te_demog_has_census = {
+	has_variable = te_dg_year
+}
+
+# Building scope: capital in §4.2's sense. The ownership buildings own themselves,
+# Subsistence Farms read private and government buildings read state-owned, so all
+# three are left out (docs/testing/demographics-probe-results-2026-10-08.md, Q2).
+te_demog_is_capital_building = {
+	NOR = {
+		te_demog_is_ownership_building = yes
+		is_building_group = bg_subsistence_agriculture
+		is_building_group = bg_subsistence_ranching
+		is_government_funded = yes
+	}
+}
+
+# Building scope: where great fortunes are held (§4.2's weights).
+te_demog_is_ownership_building = {
+	OR = {
+		is_building_type = building_manor_house
+		is_building_type = building_financial_district
+		is_building_type = building_company_headquarter
+		is_building_type = building_company_regional_headquarter
+	}
+}
+
+# Building scope: a rural workplace, for urban population (§5.1; plan Decisions).
+te_demog_rural_workplace = {
+	OR = {
+		is_building_group = bg_agriculture
+		is_building_group = bg_plantations
+		is_building_group = bg_ranching
+		is_building_group = bg_extraction
+		is_building_group = bg_subsistence_agriculture
+		is_building_group = bg_subsistence_ranching
+	}
+}
+
+# Building scope: work that drew women as labour migrants (§2.5).
+te_demog_female_job_workplace = {
+	OR = {
+		is_building_group = bg_light_industry
+		is_building_group = bg_service
+		is_building_group = bg_urban_facilities
+	}
+}
