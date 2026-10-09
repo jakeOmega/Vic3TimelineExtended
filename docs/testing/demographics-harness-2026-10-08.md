@@ -11,8 +11,9 @@ game: the §2.2/§2.3 sketch, the §4.1 Gini anchor and a country seeded from a 
 built and wait for their input (below).
 
 **Read the numbers with these limits:**
-- **One save, 1836 only.** The inputs are each country's start: SoL, literacy, urban share, laws and technology. No
-  institutions are read, so a country's Family Limitation and similar measures are not in the seeded figures.
+- **One save, 1836 only.** The inputs are each country's start: SoL, literacy, urban share, laws and technology. The
+  reader reads neither institutions nor modifiers, and the 1836 save predates Family Limitation (a modifier PR 2 adds),
+  so no country's seeded figures include it.
 - **Seeded figures are the model's equilibrium for those inputs,** not a measurement of the save's own age structure
   (a pop record carries no age).
 - **The Q10 natural-change check has not run.** It needs two plain-text saves a month apart, which the owner makes
@@ -72,15 +73,17 @@ python3 scripts/analysis/demographics_harness.py seed "$S" --tag GBR
 
 ```
 GBR: pop 25,951,647 SoL 8.4 literacy 0.19 urban 0.48
-  TFR 5.91 (wealth 6.16 x factor 0.96; means 0.17)
+  TFR 5.78 (wealth 6.03 x factor 0.96; means 0.17)
   e0 women 42.9 men 38.7; IMR 161 per 1000
-  0-14 41% 15-64 55% 65+ 4.2% median 19.4
+  0-14 41% 15-64 55% 65+ 4.4% median 19.7
 ```
 
 This is §2.3's fertility formula and §2.4's life table at Britain's own start inputs, then the state's equilibrium
 structure that §2.6 uses as a starting value. The save has Britain at SoL 8.4, literacy 0.19 and an urban share of
-0.48, not the sketch's 11, 0.35 and 0.3. The lower SoL raises the wealth term from the sketch's 5.90 to 6.16, so
-fertility is 5.91 against the sketch's 5.57. Means are 0.17: the traditional 0.4 times access, 0.3 + 0.7 × 0.19.
+0.48, not the sketch's 11, 0.35 and 0.3. The wealth term is the SoL curve averaged over Britain's pops, each at its own
+SoL and weighted by size, as the game computes it: 6.03, above the sketch's 5.90 because SoL is lower. It is 0.13 below
+the 6.16 that the curve gives at the mean SoL, since the curve is flat under SoL 8 and falls above it, so the spread of
+pops around the mean can only lower the average. Fertility is 5.78 against the sketch's 5.57. Means are 0.17: the traditional 0.4 times access, 0.3 + 0.7 × 0.19.
 Life expectancy at birth is 42.9 for women and 38.7 for men. The two averaged, 40.8, sit above the sketch's 39.6.
 Changing one sketch input at a time to the save's value: its technology adds 2.2 years (`medical_degrees` is the only
 one of its 53 that the model reads for mortality; the sketch holds none), its laws add 1.0 (Charitable Health System
@@ -95,19 +98,19 @@ python3 scripts/analysis/demographics_harness.py seed "$S" --tag CHI
 
 ```
 CHI: pop 366,405,617 SoL 8.2 literacy 0.13 urban 0.10
-  TFR 6.06 (wealth 6.18 x factor 0.98; means 0.16)
+  TFR 6.04 (wealth 6.16 x factor 0.98; means 0.16)
   e0 women 39.3 men 34.5; IMR 192 per 1000
-  0-14 41% 15-64 55% 65+ 4.3% median 19.5
+  0-14 41% 15-64 55% 65+ 4.3% median 19.6
 ```
 
 The same checks for the largest country. Lower literacy and a mostly rural population leave the fertility factor near
-1, so TFR is 6.06, about the wealth term itself. Mortality is higher than Britain's (infant mortality 192 per 1,000,
+1, so TFR is 6.04, about the wealth term itself (6.16). Mortality is higher than Britain's (infant mortality 192 per 1,000,
 life expectancy 39.3 and 34.5), and SoL is not the reason: the two countries' SoL differ by 0.2, and giving China
 Britain's moves its average life expectancy from 36.9 to 37.0. Technology and laws are. With Britain's technology
 (`medical_degrees`) China reaches 39.2 and infant mortality 173; with Britain's laws (Charitable Health System alone
 adds 1.1), 38.1 and 183; with Britain's literacy, 37.3 and 189; with SoL, literacy, technology and laws all Britain's,
 40.8 and 161, which is Britain's own. The age
-structure is close to Britain's (41% / 55% / 4.3%).
+structure is close to Britain's (41% / 55% / 4.3% against 41% / 55% / 4.4%).
 
 ## `inputs`
 
@@ -122,7 +125,9 @@ CHI pop=366,405,617 states=43 sol=8.2 literacy=0.13 urban=0.10 laws=59 techs=24
 
 This is the reader behind `gini` and `seed`: each country's start inputs, as `demographics_save_inputs.py` reads them
 from the save's pops, states, laws and technology sections. SoL is the people-weighted figure over the country's
-pops, literacy is literate over workforce, and urban share is the people outside peasant, farmer and slave pops. These two lines are what the two `seed` runs above start from.
+pops, literacy is literate over workforce, and urban share is the people outside peasant, farmer and slave pops. `seed` also takes the wealth term as the SoL curve
+averaged over the pops, weighted by size, which `inputs` does not print. These two lines are what the two `seed` runs
+above start from.
 
 ## Not yet run
 

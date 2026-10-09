@@ -136,13 +136,14 @@ FEMALE_WORK_SHARE_DEFAULT = 0.1
 WAR_DEAD_MALE_SHARE = 0.95
 WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
-# Age classes for migrant profiles: (first age, last age) by step age.
+# Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
-# Density per class for each kind; women's share separately.
+# Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee
+# kinds split evenly between women and men; the labour kind's split is the LABOUR_FEMALE_SHARE range.
 MIGRANT_PROFILE = {
     "labour": {"weights": [0.0, 0.05, 0.9, 0.05, 0.0]},
-    "family": {"weights": [0.35, 0.05, 0.35, 0.22, 0.03], "female_share": 0.5},
-    "refugee": {"weights": [0.27, 0.05, 0.3, 0.25, 0.13], "female_share": 0.5},
+    "family": {"weights": [0.35, 0.05, 0.35, 0.22, 0.03]},
+    "refugee": {"weights": [0.27, 0.05, 0.3, 0.25, 0.13]},
 }
 LABOUR_FEMALE_SHARE_MIN, LABOUR_FEMALE_SHARE_MAX = 0.1, 0.6
 FAMILY_TRANSPORT_TECHS = {"paddle_steamer": 0.1, "railways": 0.1, "combustion_engine": 0.15}

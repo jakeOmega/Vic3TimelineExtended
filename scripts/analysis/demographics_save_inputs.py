@@ -6,7 +6,8 @@ Usage:
     demographics_save_inputs.py slice SAVE --tag GBR [--tag POR] [--max-pops 300] -o OUT
 
 A plain-text save is what the game writes in debug mode (it starts `SAV0…` and then
-`meta_data={`). Binary saves aren't read here; `save_country_probe.py` covers those for
+`meta_data={`). Binary saves aren't read here (read_sections raises NotPlainText, and the
+commands print the message and exit 1); `save_country_probe.py` covers those for
 variables and laws but not pops. Spec: docs/superpowers/specs/2026-10-08-demographics-design.md
 §11.1 (the harness is driven by SoL, literacy, technology and law read from saves).
 
@@ -29,6 +30,8 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import demographics_model as M
+
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
              "social_class"),
@@ -50,8 +53,31 @@ STRATA_OF_CLASS = {
 _RECORD = re.compile(r"^(\d+)=\{\s*$")
 
 
+class NotPlainText(ValueError):
+    """The file is not a plain-text save (a binary or zipped one, or not a save at all)."""
+
+
+def check_plain_text(path):
+    """Raise NotPlainText unless the save's second line is `meta_data={`.
+
+    A plain-text save is `SAV0…` on line 1 and `meta_data={` on line 2. A binary or zipped
+    save has binary bytes there, and scanning it for sections finds none, so without this
+    check it reads as an empty save and the commands print plausible zeros.
+    """
+    with open(path, "rb") as fh:
+        fh.readline(256)
+        second = fh.readline(64).rstrip(b"\r\n")
+    if second != b"meta_data={":
+        raise NotPlainText(f"{path} is not a plain-text save (its second line is not `meta_data={{`); "
+                           "save in debug mode for plain text, or unzip/convert it first")
+
+
 def read_sections(path, wanted=tuple(SECTIONS)):
-    """{section: {record_id: {field: raw string}}} for the wanted sections."""
+    """{section: {record_id: {field: raw string}}} for the wanted sections.
+
+    Raises NotPlainText (a ValueError) naming the file when it isn't a plain-text save.
+    """
+    check_plain_text(path)
     out = {name: {} for name in wanted}
     section = None
     depth = 0
@@ -105,6 +131,7 @@ class CountryInputs:
     tag: str
     population: float = 0.0
     sol_x_size: float = 0.0
+    wealth_tfr_x_size: float = 0.0       # sum of the wealth curve at each pop's SoL x its size
     literate: float = 0.0
     workforce: float = 0.0
     wealth_x_size: float = 0.0
@@ -119,6 +146,11 @@ class CountryInputs:
     @property
     def sol(self):
         return self.sol_x_size / self.population if self.population else 0.0
+
+    @property
+    def wealth_tfr(self):
+        """The pop-weighted wealth term (Inputs.wealth_tfr), not the curve at the mean SoL; None for no people."""
+        return self.wealth_tfr_x_size / self.population if self.population else None
 
     @property
     def literacy(self):
@@ -161,6 +193,7 @@ def country_inputs(sections):
         wealth = _num(rec.get("wealth"))
         c.population += size
         c.sol_x_size += sol * size
+        c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
         c.literate += _num(rec.get("num_literate"))
         c.workforce += _num(rec.get("workforce"))
         c.wealth_x_size += wealth * size
@@ -221,7 +254,11 @@ def main(argv=None):
     sl.add_argument("--max-pops", type=int, default=300)
     sl.add_argument("-o", "--out", required=True)
     args = ap.parse_args(argv)
-    sections = read_sections(args.save)
+    try:
+        sections = read_sections(args.save)
+    except NotPlainText as e:
+        print(e, file=sys.stderr)
+        return 1
     if args.cmd == "slice":
         print(write_slice(sections, set(args.tag), args.max_pops, args.out))
         return 0

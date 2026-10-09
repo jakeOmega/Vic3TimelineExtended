@@ -244,11 +244,15 @@ def shown_gini(grouped):
     return clamp(P.GINI_FLOOR + P.GINI_SCALE * grouped, 0.0, 0.9)
 
 
+NRR_TABLE_MIN, NRR_TABLE_MAX = 0.2, 4.0   # the generated table's first and last knots
+
+
 def growth_factor(nrr):
     """d = e^-r from the net reproduction rate, via r = ln(NRR) / T (T = 29 years).
 
     The script reads d from a generated table of this function (gen_demographics.py).
     """
+    nrr = clamp(nrr, NRR_TABLE_MIN, NRR_TABLE_MAX)   # the table's knots end here, and 0 has no power
     return nrr ** (-1.0 / 29.0)
 
 
