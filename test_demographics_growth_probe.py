@@ -98,6 +98,16 @@ class TestAnalysis(unittest.TestCase):
         self.assertNotEqual(rows[("T00", 1)]["pop"], 1.0)
         self.assertEqual(bad, [])
 
+    def test_min_year_skips_an_earlier_runs_files(self):
+        early = self.tmp.name + ".1836"
+        Path(early).write_text("[x]: TE_PG_TICK v=2 t=1 date=January 29, 1836\n"
+                               "[x]: TE_PG v=2 t=1 tag=T00 g=0 ph=0 st=3 war=0 pop=1 n=1 eb=1 ebl=0 ebs=0 ebm=0 ebst=0 "
+                               "ebsv=0 mb=0 ed=1 edst=0 edsv=0 edlab=0 edmach=0 edeng=0 edslv=0 edtu=0 md=0\n",
+                               encoding="utf-8")
+        rows, ticks, _, _ = G.parse([early, self.tmp.name], min_year=1900)
+        self.assertNotEqual(rows[("T00", 1)]["pop"], 1.0)
+        self.assertNotIn(1, ticks)
+
     def test_check_and_report_run(self):
         self.assertEqual(G.main(["check", self.tmp.name]), 0)
         self.assertEqual(G.main(["report", self.tmp.name]), 0)
