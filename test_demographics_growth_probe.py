@@ -113,6 +113,52 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(G.main(["report", self.tmp.name]), 0)
 
 
+def _synthetic_v3(path, countries=48, seed=11):
+    """v3 lines whose deaths include every read: ed (1 + md + Y) + cls + bld + bg + nh + tum + w + severe."""
+    rnd = random.Random(seed)
+    lines = []
+    for i in range(countries):
+        tag, g = f"V{i:02d}", i % 8
+        pop = rnd.uniform(1e6, 5e7)
+        eb, ed = pop * 0.0045, pop * 0.0040
+        md = rnd.uniform(-0.05, 0.1)
+        parts = {k: ed * rnd.uniform(0, 0.06) for k in ("edcls", "edbld", "edbg", "ednh", "edtum", "edw", "edsv")}
+        parts["edwc"] = parts["edbg"] * 0.8
+        for t in range(G.TICKS + 1):
+            ph = -1 if t == 0 else G.expected_phase(t, g)
+            y_now = 0.0
+            if t:
+                x, y = _steps(ph)
+                y_now = y
+                births = eb * max(0.0, 1 + 0.05 + x)
+                deaths = (ed * max(0.0, 1 + md + y) + sum(v for k, v in parts.items() if k != "edwc")) if y > -5 else 0.0
+                pop += (births - deaths) * G.KAPPA_MONTHLY
+            md_read = md + y_now   # the state read includes the probe's own step (Q5)
+            extra = " ".join(f"{k}={v:.2f}" for k, v in parts.items() if k != "edsv")
+            lines.append(f"[x]: TE_PG v=3 t={t} tag={tag} g={g} ph={ph} st=3 war=0 pop={pop:.2f} n={pop:.0f} eb={eb:.2f} "
+                         f"ebl=0 ebs=0 ebm=0 ebst=0 ebsv=0 mb=0.05 ed={ed:.2f} edst=0 edsv={parts['edsv']:.2f} edlab=0 "
+                         f"edmach=0 edeng=0 edslv=0 edtu=0 md={md_read:.5f} eddn={ed * 0.7:.2f} edemp={ed * 0.5:.2f} {extra} "
+                         f"ednh0=0 kills=0 warin=0")
+    Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+class TestDeathsV3(unittest.TestCase):
+    def test_the_reads_close_the_gap(self):
+        tmp = tempfile.NamedTemporaryFile("w", suffix=".log", delete=False)
+        tmp.close()
+        _synthetic_v3(tmp.name)
+        rows, _, _, bad = G.parse([tmp.name], version=3)
+        self.assertEqual(bad, [])
+        self.assertEqual(G.parse([tmp.name])[0], {})   # v2 readers skip v3 lines
+        self.assertEqual(G.main(["deaths", "--version", "3", tmp.name]), 0)
+        ws = G.windows(rows)
+        sel = [w for lst in ws.values() for w in lst if w["measured"] and w["ph"] in (1, 9, 6, 7)]
+        got = sum(-w["change"] for w in sel)
+        want = sum((w["ed"] * (1 + w["md"]) + sum(w[k] for k in G.DEATH_PARTS) + w["edsv"]) * G.KAPPA_MONTHLY
+                   for w in sel)
+        self.assertAlmostEqual(got / want, 1.0, places=3)
+
+
 class TestScheduleMatchesScript(unittest.TestCase):
     def test_phase_table(self):
         """te_pg_apply_phase adds, for each phase and cycle, the steps the analysis assumes."""

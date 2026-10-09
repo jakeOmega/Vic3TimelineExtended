@@ -4,6 +4,7 @@
     demographics_growth_probe.py check  LOG [LOG ...]   # mid-run health: ticks, groups, phases, both-off, daily lines
     demographics_growth_probe.py report LOG [LOG ...]   # per-country fits (noisy: see below)
     demographics_growth_probe.py pooled LOG [LOG ...]   # one fit over all countries and windows
+    demographics_growth_probe.py deaths --version 3 LOG [LOG ...]   # v3: do the mortality reads close the gap?
 
 LOG may be any mix of debug.log generations and archived copies; identical lines are read once. Only
 v=2 lines are read (the 28-day schedule); the first run's 30-day lines carry no v and are skipped.
@@ -40,10 +41,11 @@ SLOPE_X = (0.0, 0.5, 1.0)   # the steps the slopes are fitted from; -0.5 and -0.
 TICKS = 48
 NUM = ("t", "g", "ph", "st", "war", "pop", "n", "eb", "ebl", "ebs", "ebm", "ebst", "ebsv", "mb",
        "ed", "edst", "edsv", "edlab", "edmach", "edeng", "edslv", "edtu", "md")
-_LINE = re.compile(r"TE_PG v=2 (t=.*)$")
-_TICK = re.compile(r"TE_PG_TICK v=2 t=(-?\d+) date=(.*)$")
-_DAY = re.compile(r"TE_PG_DAY v=2 d=(\d+) tag=(\S+) pop=(-?[\d.]+) ph=(-?\d+) date=(.*)$")
-_ST = re.compile(r"TE_PG_ST v=2 d=(\d+) sid=(\d+) pop=(-?[\d.]+) prev=(-?[\d.]+)")
+NUM_V3 = ("eddn", "edw", "edcls", "edemp", "edbld", "edbg", "edwc", "ednh0", "ednh", "edtum", "kills", "warin")
+_LINE = re.compile(r"TE_PG v=(\d) (t=.*)$")
+_TICK = re.compile(r"TE_PG_TICK v=(\d) t=(-?\d+) date=(.*)$")
+_DAY = re.compile(r"TE_PG_DAY v=(\d) d=(\d+) tag=(\S+) pop=(-?[\d.]+) ph=(-?\d+) date=(.*)$")
+_ST = re.compile(r"TE_PG_ST v=(\d) d=(\d+) sid=(\d+) pop=(-?[\d.]+) prev=(-?[\d.]+)")
 
 
 def expected_phase(t, group):
@@ -57,7 +59,7 @@ def measured(t):
     return t >= 1 and (t - 1) % 3 != 0
 
 
-_YEAR = re.compile(r"TE_PG_(?:TICK|DAY|START|DONE)(?: v=2)? .*date=\w+ \d+, (\d{4})")
+_YEAR = re.compile(r"TE_PG_(?:TICK|DAY|START|DONE)(?: v=\d)? .*date=\w+ \d+, (\d{4})")
 
 
 def _file_years(path):
@@ -66,7 +68,7 @@ def _file_years(path):
         return {int(m.group(1)) for m in map(_YEAR.search, fh) if m}
 
 
-def parse(paths, min_year=0):
+def parse(paths, min_year=0, version=2):
     """Read the probe's lines. With min_year, a file that dates any probe line before that year is
     skipped whole: one debug.log is one game session, so an earlier run's file holds only its lines."""
     rows, ticks, days, bad = {}, {}, {}, []
@@ -83,25 +85,33 @@ def parse(paths, min_year=0):
                 seen.add(line)
                 m = _TICK.search(line)
                 if m:
-                    ticks[int(m.group(1))] = m.group(2).strip()
+                    if int(m.group(1)) == version:
+                        ticks[int(m.group(2))] = m.group(3).strip()
                     continue
                 m = _DAY.search(line)
                 if m:
-                    days[(m.group(2), int(m.group(1)))] = (float(m.group(3)), int(m.group(4)), m.group(5).strip())
+                    if int(m.group(1)) == version:
+                        days[(m.group(3), int(m.group(2)))] = (float(m.group(4)), int(m.group(5)), m.group(6).strip())
                     continue
                 m = _ST.search(line)
                 if m:
-                    states[int(m.group(2))][int(m.group(1))] = float(m.group(3)) - float(m.group(4))
+                    if int(m.group(1)) == version:
+                        states[int(m.group(3))][int(m.group(2))] = float(m.group(4)) - float(m.group(5))
                     continue
                 m = _LINE.search(line)
-                if not m:
+                if not m or int(m.group(1)) != version:
                     continue
-                fields = dict(kv.split("=", 1) for kv in m.group(1).split() if "=" in kv)
+                fields = dict(kv.split("=", 1) for kv in m.group(2).split() if "=" in kv)
                 try:
                     rec = {k: float(fields[k]) for k in NUM}
                 except (KeyError, ValueError):
                     bad.append(line[-200:])
                     continue
+                for k in NUM_V3:
+                    try:
+                        rec[k] = float(fields.get(k, 0))
+                    except ValueError:
+                        rec[k] = 0.0
                 rec["tag"] = fields.get("tag", "?")
                 rows[(rec["tag"], int(rec["t"]))] = rec
     parse.states = states
@@ -115,7 +125,8 @@ def windows(rows):
         prev = rows.get((tag, t - 1))
         if prev is None or t < 1:
             continue
-        w = {k: (prev[k] + r[k]) / 2 for k in NUM if k not in ("t", "g", "ph", "st", "war", "pop")}
+        w = {k: (prev[k] + r[k]) / 2 for k in NUM + NUM_V3 if k not in ("t", "g", "ph", "st", "war", "pop", "kills", "warin")}
+        w["kills"] = max(0.0, r["kills"] - prev["kills"])
         w.update(tag=tag, t=t, g=int(r["g"]), ph=int(r["ph"]), change=r["pop"] - prev["pop"], pop=prev["pop"],
                  clean=prev["war"] == 0 and r["war"] == 0 and prev["st"] == r["st"],
                  measured=measured(t))
@@ -195,7 +206,7 @@ def fit_country(ph):
 
 
 def cmd_check(args):
-    rows, ticks, days, bad = parse(args.logs, args.min_year)
+    rows, ticks, days, bad = parse(args.logs, args.min_year, args.version)
     print(f"{len(rows)} TE_PG lines, {len(ticks)} tick headers, {len(days)} daily lines, {len(bad)} unreadable")
     for b in bad[:5]:
         print("  unreadable:", b)
@@ -247,7 +258,7 @@ def cmd_check(args):
 
 
 def cmd_report(args):
-    rows, ticks, days, bad = parse(args.logs, args.min_year)
+    rows, ticks, days, bad = parse(args.logs, args.min_year, args.version)
     ws = windows(rows)
     pm = phase_means(ws, args.min_pop)
     print(f"{len(rows)} lines, {len(pm)} countries with measured windows (>= {args.min_pop:,.0f} people)")
@@ -349,7 +360,7 @@ def pooled_fit(ws, min_pop, kind, steps):
 
 
 def cmd_pooled(args):
-    rows, ticks, days, bad = parse(args.logs, args.min_year)
+    rows, ticks, days, bad = parse(args.logs, args.min_year, args.version)
     ws = windows(rows)
     # Births leave out -0.9: a starving or literate pop's total can cross the floor there. Deaths keep every
     # step: their per-pop terms add, so the small totals of -0.5 and -0.9 show them best.
@@ -380,14 +391,59 @@ def cmd_pooled(args):
     return 0
 
 
+DEATH_PARTS = ("edcls", "edbld", "edbg", "ednh", "edtum", "edw")   # v3: curve deaths x each read (people a month)
+
+
+def cmd_deaths(args):
+    """v3: do the reads close the gap? deaths = k x (ed (1 + md) + every read), with k = 12 a year if complete."""
+    rows, ticks, days, bad = parse(args.logs, args.min_year, args.version)
+    ws = windows(rows)
+    steps = {p for p, x in DEATH_STEP.items() if x >= -0.5}
+    sel = [w for lst in ws.values() for w in lst
+           if w["measured"] and w["clean"] and w["pop"] >= args.min_pop and w["ph"] in steps and w["ed"] > 0]
+    print(f"{len(sel)} death windows (births off, steps -0.5 to +1.0)")
+    if not sel:
+        return 1
+    tot_ed = sum(w["ed"] for w in sel)
+    print("each read as a share of the curve's deaths (curve-weighted): " + "  ".join(
+        f"{k} {sum(w[k] for w in sel) / tot_ed:+.4f}" for k in DEATH_PARTS + ("edwc", "edsv", "edst", "eddn", "edemp")))
+
+    def fit(cols, base):
+        data = [dict(y=-w["change"], base=base(w), **{c: w[c] for c in cols}) for w in sel]
+        wts = [1 / w["ed"] for w in sel]
+        names = ["base"] + list(cols)
+        a = [[sum(wt * r[i] * r[j] for wt, r in zip(wts, data)) for j in names] for i in names]
+        b = [sum(wt * r[i] * r["y"] for wt, r in zip(wts, data)) for i in names]
+        sol = _solve(a, b)
+        return dict(zip(names, sol)) if sol else None
+
+    plain = fit((), lambda w: w["ed"] * (1 + w["md"]))
+    full = fit((), lambda w: w["ed"] * (1 + w["md"]) + sum(w[k] for k in DEATH_PARTS) + w["edsv"])
+    table = fit((), lambda w: w["ed"] * (1 + w["md"]) + w["edcls"] + w["edbld"] + w["edwc"] + w["ednh"] + w["edtum"]
+                + w["edw"] + w["edsv"])
+    free = fit(DEATH_PARTS + ("edwc", "edst", "edsv", "eddn"), lambda w: w["ed"] * (1 + w["md"]))
+    for label, f in (("census (curve x (1 + state read))", plain), ("+ every read + severe starvation", full),
+                     ("same, working conditions from the table", table)):
+        if f:
+            print(f"  {label:42} k = {f['base'] / KAPPA_MONTHLY:.4f}  (1 = complete)")
+    if free:
+        k = free["base"]
+        print(f"  free fit: k = {k / KAPPA_MONTHLY:.4f}; each read's coefficient relative to k (1 = the read is the engine's): "
+              + "  ".join(f"{c} {v / k:+.3f}" for c, v in free.items() if c != "base"))
+    kills = sum(w["kills"] for w in sel)
+    print(f"  recorded kills in these windows: {kills:,.0f} ({kills / max(1, sum(-w['change'] for w in sel)):.4%} of deaths)")
+    return 0
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("check", cmd_check), ("report", cmd_report), ("pooled", cmd_pooled)):
+    for name, fn in (("check", cmd_check), ("report", cmd_report), ("pooled", cmd_pooled), ("deaths", cmd_deaths)):
         sp = sub.add_parser(name)
         sp.add_argument("logs", nargs="+")
         sp.add_argument("--min-pop", type=float, default=500000, help="ignore smaller countries (default 500,000)")
         sp.add_argument("--verbose", type=int, default=0, help="list the N largest countries' fits")
+        sp.add_argument("--version", type=int, default=2, help="the probe's line version to read (default 2)")
         sp.add_argument("--min-year", type=int, default=0,
                         help="skip a log file that dates any probe line before this year (an earlier run's)")
         sp.set_defaults(fn=fn)
