@@ -450,7 +450,7 @@ class BudgetWiringTests(unittest.TestCase):
         definitions = {key: block for key, _, block in entries(definitions)}
         assigned = set()
         for side, groups in gen.SOURCES.items():
-            native = "country_expenses_add" if side == "expense" else "country_tax_income_add"
+            native = gen.NATIVE[side]
             for key, (_, names) in groups.items():
                 mirror = gen.source_type(side, key)
                 self.assertEqual(dict((k, v) for k, _, v in entries(definitions[mirror]))["script_only"], "yes")
@@ -463,6 +463,28 @@ class BudgetWiringTests(unittest.TestCase):
         # must deliberately join a source category rather than silently lumping.
         monetary = {key for key, block in modifiers.items() if "country_expenses_add" in block or "country_tax_income_add" in block}
         self.assertEqual(monetary - assigned, {"cheaty"})
+
+    def test_mirror_lines_read_as_breakdown_labels(self):
+        # A source modifier's tooltip lists the mirror beside its native field,
+        # and no modifier-type key hides it. So the mirror prints the native
+        # line's figure in the same format and is named as a label: the playtest
+        # read "£+11570607.7 Government Expenses" over "£+11570607.74 Colonial
+        # Development: Weekly Expenses" as a second charge.
+        parser = ParadoxFileParser()
+        definitions = parser.parse_object(parser.tokenize("{" + gen.generated_source_types() + "}"))[0]
+        definitions = {key: dict((k, v) for k, _, v in entries(block)) for key, _, block in entries(definitions)}
+        vanilla = json.loads((ROOT / "vanilla_parsed/common/modifier_types.json").read_text())
+        loc = (ROOT / "localization/english/te_budget_l_english.yml").read_text(encoding="utf-8-sig")
+        for side, groups in gen.SOURCES.items():
+            native = {k: v[1] for k, v in vanilla[gen.NATIVE[side]][1].items()}
+            for key, (label, _) in groups.items():
+                mirror = gen.source_type(side, key)
+                self.assertEqual(definitions[mirror]["decimals"], native["decimals"], mirror)
+                self.assertEqual(definitions[mirror]["prefix"], native["prefix"], mirror)
+                self.assertEqual(definitions[mirror]["color"], "neutral", mirror)
+                self.assertIn(f' {mirror}:0 "Counted in the Budget Breakdown under {label}"\n', loc)
+                desc = re.search(rf'^ {mirror}_desc:0 "(.*)"$', loc, re.M).group(1)
+                self.assertIn(f"${gen.NATIVE[side]}$ line already includes this amount", desc)
 
     def test_source_rows_show_the_applied_source_breakdown(self):
         for side in ("income", "expense"):
