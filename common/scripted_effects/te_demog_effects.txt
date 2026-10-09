@@ -274,6 +274,12 @@ te_demog_state_yearly = {
 	te_demog_walks = yes
 	te_inh_refresh_rural_effects = yes
 	te_demog_wc_state_yearly = yes
+	# the census log's why line: which of the branch's conditions hold, read where the
+	# branch reads them (te_debug_demog_effects.txt; temporary, PR #833)
+	if = {
+		limit = { te_demog_census_log_on = yes }
+		te_debug_demog_why_line = yes
+	}
 	if = {
 		limit = { te_demog_cohorts_run = yes }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw

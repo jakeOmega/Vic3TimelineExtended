@@ -312,7 +312,11 @@ class TestStep(unittest.TestCase):
                      "local_var:te_dg_dbg_over > 0", "local_var:te_dg_dbg_under < 0"):
             self.assertRegex(why, r"limit = \{ " + re.escape(cond) + r" \}\s*debug_log = \"TE_DEMOG_WHY ", cond)
         self.assertNotIn("is_ai", why, "every capital writes, an observer game's too")
-        self.assertIn("te_debug_demog_why_line = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_pulse_line"))
+        pulse = _block(_text(EFFECTS), "te_demog_state_yearly")
+        hook = re.search(r"if = \{\s*limit = \{ te_demog_census_log_on = yes \}\s*te_debug_demog_why_line = yes\s*\}", pulse)
+        self.assertIsNotNone(hook, "gated on the census log")
+        self.assertGreater(hook.start(), pulse.index("te_demog_wc_state_yearly = yes"), "after the walks, as the branch")
+        self.assertLess(hook.end(), pulse.index("limit = { te_demog_cohorts_run = yes }"), "before the branch")
 
     def test_the_why_line_names_the_conditions_that_hold(self):
         class Engine(_ConsoleEngine):

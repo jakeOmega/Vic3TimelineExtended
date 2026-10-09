@@ -148,18 +148,19 @@ te_debug_demog_pulse_line = {
 		}
 		debug_log = "TE_DEMOG_PULSE state=capital year=[THIS.ScriptValue('te_demog_year')|0] te_dg_year=[THIS.ScriptValue('te_debug_demog_census_year')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
-	te_debug_demog_why_line = yes
 }
 
-# THIS = a state at the top of its yearly pulse, after the pulse line: for every
-# country's capital with a census (an observer game's too), which of the seed-or-step
-# branch's conditions hold. In the observer test of #830 (2026-10-09) every state
-# seeded at every pulse and none stepped, though its census was a year old and its
-# people within a quarter of the last census's. Each condition is tested twice, in the
-# form te_demog_state_yearly used then ("old") and in the local form it uses now
-# ("now"), and writes its own line only when it holds, so the answer is which lines
-# appear: a census a year old with people within a quarter should write only the two
-# "gap = 1" lines.
+# THIS = a state on its yearly pulse, after the walks, just before the seed-or-step
+# branch reads its census (te_demog_state_yearly): for every country's capital with a
+# census (an observer game's too), which of the branch's conditions hold. In the
+# observer test of #830 (2026-10-09) every state seeded at every pulse and none
+# stepped, though its census was a year old and its people within a quarter of the
+# last census's. Each condition is tested twice, in the form te_demog_state_yearly
+# used then ("old") and in the local form it uses now ("now"), and writes its own line
+# only when it holds, so the answer is which lines appear: a census a year old with
+# people within a quarter should write only the two "gap = 1" lines. Temporary: it
+# comes out once a run has named the old form that misfired (PR #833), since its lines
+# crowd the census log's TE_DEMOG_CENSUS lines out of debug.log on a long run.
 te_debug_demog_why_line = {
 	if = {
 		limit = {
