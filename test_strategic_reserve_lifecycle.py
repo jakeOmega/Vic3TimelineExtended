@@ -113,7 +113,7 @@ class NothingTradesWithoutHubTests(unittest.TestCase):
 
     def test_every_control_greys_without_a_hub(self):
         names = re.findall(r"(?m)^(st_res_\w+_sgui)\s*=\s*\{", SGUIS)
-        self.assertEqual(len(names), 18)
+        self.assertEqual(len(names), 21)
         for name in names:
             with self.subTest(sgui=name):
                 valid = _block(_block(SGUIS, name), "is_valid", top_level=False)
