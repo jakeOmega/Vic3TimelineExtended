@@ -59,6 +59,10 @@ So:
   modifier, technology or concept comes from `localization/english/`, spelled
   and capitalised as the game shows it. Never write a script key
   (`je_banking_cycle`, `law_post-scarcity`) or a file path.
+- **Send the reader to the tab.** Where a system has both a journal entry and
+  a tab, say where to look or act by the tab ("on the UN tab of the Diplomacy
+  panel"), as the game's own text does. The section that introduces the system
+  still says that the two show the same panels.
 - **Count things yourself.** The repository README and the Steam description
   disagree with each other and with the files on several counts. If you give a
   number of laws, milestones or buttons, count it from `common/`.

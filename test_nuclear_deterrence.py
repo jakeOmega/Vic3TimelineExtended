@@ -1025,11 +1025,11 @@ class TestReviewFixes(unittest.TestCase):
     def test_ft_reason_2_names_both_doctrines(self):
         self.assertIn("Warfighting", loc_value("nd_ft_reason_2"))
 
-    def test_preview_header_is_pinned_and_points_to_the_journal(self):
+    def test_preview_header_is_pinned_and_points_to_the_tab(self):
         self.assertRegex(block(self.values, "nd_yp_base_value"), r"value = 30\b")
         header = loc_value("nd_tt_open_factors_header")
         self.assertIn("30", header)
-        self.assertIn("journal entry", header)
+        self.assertIn("#v Nuclear#! tab of the Military panel", header)
 
 
 STANCES = ["strongly_disapprove", "disapprove", "neutral", "approve", "strongly_approve", "count"]

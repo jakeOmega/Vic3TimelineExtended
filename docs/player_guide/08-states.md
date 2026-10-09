@@ -27,7 +27,7 @@ tooltip breaks the numbers down.
 | Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
-| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Monuments journal entry; see [The extended timeline](02-timeline.md#grand-monuments). |
+| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 
 ## Migration crowding
 

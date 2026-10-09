@@ -694,19 +694,21 @@ class LabelBudgetTest(unittest.TestCase):
 # ---- The state view's card (te_state_gm_card) ------------------------------
 STATE_GUI = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 STATES_PANEL = os.path.join(REPO, "gui", "states_panel.gui")
+WINDOW = os.path.join(REPO, "gui", "te_systems_window.gui")
 
 
 class StateCardTest(unittest.TestCase):
     """The Grand Monument card in the state view: shown only where a monument
     stands, its status as the journal entry's rows show it, display only but
-    for a goto to the entry on the player's own state."""
+    for a goto to the Timeline Extended window's tab on the player's own
+    state."""
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(STATE_GUI)
         cls.card = _type_body(cls.gui, "te_state_gm_card")
         cls.flat = _squash(_strip_comments(cls.card))
-        goto = re.search(r"### OPEN THE JOURNAL ENTRY[^\n]*\n\t*widget = \{", cls.card)
+        goto = re.search(r"### OPEN THE WINDOW'S TAB[^\n]*\n(?:\t*###[^\n]*\n)*\t*widget = \{", cls.card)
         cls.goto = _squash(_match_brace(cls.card, goto.end()))
         cls.rest = _squash(_strip_comments(cls.card[:goto.start()]))
 
@@ -750,16 +752,29 @@ class StateCardTest(unittest.TestCase):
 
     def test_display_only_but_for_the_goto(self):
         """No action and no journal entry outside the goto; the goto shows on
-        the player's own state, its gate on a parent of the datacontext."""
+        the player's own state while the window's tab is open, and opens the
+        window on that tab, not the journal."""
         for word in ("JournalEntry", "onclick", "ScriptedGui.Execute", "GetPlayerJournalEntry"):
             self.assertNotIn(word, self.rest, word)
         self.assertTrue(self.goto.startswith(
             "visible = \"[And(ObjectsEqual(State.GetOwner, GetPlayer.Self), "
             "GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope)"
             ".End))]\""))
-        self.assertRegex(self.goto, r"widget = \{ datacontext = \"\[GetPlayerJournalEntry\('je_grand_monuments'\)\]\""
-                                    r" size = \{ 25 25 \} button_icon_goto = \{ visible = \"\[JournalEntry\.IsActive\]\"")
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", self.goto)
+        for word in ("JournalEntry", "InformationPanelBar", "datacontext"):
+            self.assertNotIn(word, self.goto, word)
+        self.assertRegex(self.goto, r"button_icon_goto = \{ size = \{ 25 25 \} tooltip = \"gm_state_open_window_tt\" "
+                                    r"onclick = \"\[GetVariableSystem\.Set\('te_systems_window_tab', 'grand_monuments'\)\]\" "
+                                    r"onclick = \"\[GetVariableSystem\.Set\('com_open_window', 'te_systems_window'\)\]\" \}")
+
+    def test_the_goto_sets_what_the_window_reads(self):
+        """The goto's two values are the ones the window's Grand Monuments tab
+        sets and its root shows on, and its gate is the tab content's own."""
+        window = _squash(_read(WINDOW))
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]\"", window)
+        self.assertIn("GetVariableSystem.HasValue('com_open_window', 'te_systems_window')", window)
+        self.assertIn("GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments')", window)
+        tab = re.search(r'name = "te_systems_window_grand_monuments_tab"(.*?)datacontext', window).group(1)
+        self.assertIn("GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown", tab)
 
     def test_every_rendered_key_exists(self):
         loc = _loc()

@@ -666,7 +666,7 @@
  notification_un_crisis_closed_notice_desc:0 "UN authority has climbed back above 20. The United Nations is no longer in crisis."
  notification_un_crisis_closed_notice_name:0 "The UN Crisis Has Passed"
  notification_un_crisis_closed_notice_tooltip:0 "#header $notification_un_crisis_closed_notice_name$#!\n$notification_un_crisis_closed_notice_desc$"
- notification_un_crisis_opened_notice_desc:0 "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The journal entry shows the clock and who could save it."
+ notification_un_crisis_opened_notice_desc:0 "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it."
  notification_un_crisis_opened_notice_name:0 "The United Nations in Crisis"
  notification_un_crisis_opened_notice_tooltip:0 "#header $notification_un_crisis_opened_notice_name$#!\n$notification_un_crisis_opened_notice_desc$"
  notification_un_dev_fund_contribution_lapsed_notice_desc:0 "Our contribution to UN development programs has ended: no [concept_un_development_fund] stands to pay its grants, so the money reached no one. We can contribute again once the [concept_un_general_assembly] founds the Fund."
