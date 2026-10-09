@@ -37,15 +37,26 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
-		te_tax_enacted_table = {}
-		te_tax_workbench_section = {}
-		block "draft_summary" {
-			te_tax_draft_summary = {}
+		# The legislated code's sections, hidden under the light setting.
+		flowcontainer = {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_tax_enacted_table = {}
+			te_tax_workbench_section = {}
+			block "draft_summary" {
+				te_tax_draft_summary = {}
+			}
+			te_tax_review_section = {}
+			te_tax_politics_section = {}
+			te_tax_pending_section = {}
+			te_tax_obligations_section = {}
 		}
-		te_tax_review_section = {}
-		te_tax_politics_section = {}
-		te_tax_pending_section = {}
-		te_tax_obligations_section = {}
+		# The light code's rates (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_section = {}
 	}
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,
@@ -190,8 +201,19 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
-		te_tax_history_section = {}
-		te_tax_how_section = {}
+		# The legislated code's history and explanation, hidden under the light
+		# setting, which keeps no history.
+		flowcontainer = {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_tax_history_section = {}
+			te_tax_how_section = {}
+		}
+		te_tax_light_how_section = {}
 	}
 }
 

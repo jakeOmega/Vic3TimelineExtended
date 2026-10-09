@@ -607,9 +607,10 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # name, description and status keys (`je_tax_code*`) file here too, ahead of
     # the `je_` rule. Generator-owned `te_tax_` families (plan Task 13): the
     # interest groups' view bands and the staple offers' lines; and the light
-    # code's relief and reaction modifiers and its steps' reaction lines.
+    # code's relief and reaction modifiers, its steps' reaction lines and its
+    # rows' per-law ranges.
     if key.startswith(("amendment_te_tax_", "te_tax_ig_view_", "te_tax_offer_untax_", "te_tax_tt_offer_untax_",
-                       "te_tax_light_relief_", "te_tax_light_react_", "te_tax_lt_tt_react_")):
+                       "te_tax_light_relief_", "te_tax_light_react_", "te_tax_lt_tt_react_", "te_tax_lt_range_")):
         return "TAX_GENERATED"
     if key.startswith(("te_tax_", "rule_te_tax_", "setting_te_tax_", "law_te_tax_code", "je_tax_code")):
         return "TAX"

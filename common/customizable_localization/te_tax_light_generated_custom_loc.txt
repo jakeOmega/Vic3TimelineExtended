@@ -206,6 +206,103 @@ te_tax_lt_law = {
 	}
 }
 
+te_tax_lt_range_wage = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_light_view_law = 3 }
+		localization_key = te_tax_lt_range_wage_3
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 4 }
+		localization_key = te_tax_lt_range_wage_4
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 5 }
+		localization_key = te_tax_lt_range_wage_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_not_levied
+	}
+}
+
+te_tax_lt_range_div = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_light_view_law = 4 }
+		localization_key = te_tax_lt_range_div_4
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 5 }
+		localization_key = te_tax_lt_range_div_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_not_levied
+	}
+}
+
+te_tax_lt_range_land = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_light_view_law = 2 }
+		localization_key = te_tax_lt_range_land_2
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 3 }
+		localization_key = te_tax_lt_range_land_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_not_levied
+	}
+}
+
+te_tax_lt_range_head = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_light_view_law = 3 }
+		localization_key = te_tax_lt_range_head_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_not_levied
+	}
+}
+
+te_tax_lt_range_cons = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_light_view_law = 1 }
+		localization_key = te_tax_lt_range_cons_1
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 2 }
+		localization_key = te_tax_lt_range_cons_2
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 3 }
+		localization_key = te_tax_lt_range_cons_3
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 4 }
+		localization_key = te_tax_lt_range_cons_4
+	}
+	text = {
+		trigger = { te_tax_light_view_law = 5 }
+		localization_key = te_tax_lt_range_cons_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_tax_lt_not_levied
+	}
+}
+
 te_tax_lt_setter = {
 	type = country
 	random_valid = no

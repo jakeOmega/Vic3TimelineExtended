@@ -1,0 +1,325 @@
+﻿### Light Tax Code — the panels (docs/superpowers/specs/2026-10-09-tax-code-light-design.md;
+### docs/systems/tax_code_schema.md, "Light code"). The layout
+### (te_tax_layout_widget.gui) and the overview (te_tax_overview_widget.gui)
+### show these instead of the legislated code's sections when the country is
+### under the light setting (te_tax_show_light_sgui), in both hosts: the
+### journal entry and the Budget panel's Tax Code tab.
+###
+###   te_tax_light_overview_rows  the taxation law, the tax level and the tax
+###                               that sets it (inside the overview panel)
+###   te_tax_light_section        open: one row per tax the law levies, its
+###                               range, its rate, − and + (applied at once),
+###                               and the step it sits on
+###   te_tax_light_how_section    collapsed: How the Light Tax Code Works
+###
+### Every number is a guarded view of the player's code,
+### GetPlayer.MakeScope.ScriptValue('te_tax_light_view_*' / 'te_tax_view_en_*'),
+### and every name a customizable localization
+### (te_tax_light_generated_custom_loc.txt), so nothing here copies a value from
+### script. Rows are at most 480 wide inside a 520 panel (style guide rule 8).
+
+types te_tax_light_widget_types
+{
+	### The overview's light rows: the law, the tax level and what sets it.
+	type te_tax_light_overview_rows = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_tax_value_row = {
+			blockoverride "row_label" {
+				text = "te_tax_lt_ov_law"
+				tooltip = "te_tax_lt_ov_law_tt"
+			}
+			blockoverride "row_value" {
+				text = "[GetPlayer.GetCustom('te_tax_lt_law')]"
+			}
+		}
+		te_tax_value_row = {
+			blockoverride "row_label" {
+				text = "te_tax_lt_ov_level"
+				tooltip = "te_tax_lt_ov_level_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_lt_ov_level_value"
+			}
+		}
+		te_tax_value_row = {
+			blockoverride "row_label" {
+				text = "te_tax_lt_ov_setter"
+				tooltip = "te_tax_lt_ov_setter_tt"
+			}
+			blockoverride "row_value" {
+				text = "[GetPlayer.GetCustom('te_tax_lt_setter')]"
+			}
+		}
+	}
+
+	### The rows' column heads, in te_tax_instrument_row's cells.
+	### 4 + 146 + 4 + 70 + 4 + 18 + 4 + 70 + 4 + 26 + 4 + 26 + 4 + 80 + 4 = 468.
+	type te_tax_light_head = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 146 20 }
+		}
+		widget = {
+			size = { 70 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 70
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "te_tax_lt_col_range"
+				tooltip = "te_tax_lt_col_range_tt"
+			}
+		}
+		widget = {
+			size = { 18 20 }
+		}
+		widget = {
+			size = { 70 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 70
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				text = "te_tax_lt_col_rate"
+			}
+		}
+		widget = {
+			size = { 56 20 }
+		}
+		widget = {
+			size = { 80 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 80
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "te_tax_lt_col_step"
+				tooltip = "te_tax_lt_col_step_tt"
+			}
+		}
+	}
+
+	### The rates, open by default: a row per tax the law levies (a tax it does
+	### not levy has no row). The buttons run te_tax_light_step_<key>_sgui: click
+	### a step (op 0 down, 1 up), shift-click to the law's lowest or highest rate
+	### (2, 3). te_tax_instrument_row's right-click (op 4) has no light meaning,
+	### so the handler does nothing with it.
+	type te_tax_light_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_lt_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_light_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_tax_light_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_light_closed'))]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_tax_light_closed'))]"
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_tax_text = {
+					text = "te_tax_lt_intro"
+				}
+				te_tax_light_head = {}
+
+				te_tax_instrument_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_wage'), '(CFixedPoint)0' )]"
+					datacontext = "[GetScriptedGui('te_tax_light_step_wage_sgui')]"
+					blockoverride "row_label" {
+						text = "te_tax_inst_wage"
+						tooltip = "te_tax_lt_row_wage_tt"
+					}
+					blockoverride "row_law" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_range_wage')]"
+					}
+					blockoverride "row_arrow" {}
+					blockoverride "row_draft" {
+						text = "te_tax_en_rate_wage"
+					}
+					blockoverride "row_delta" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_rung_wage')]"
+					}
+				}
+				te_tax_instrument_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_div'), '(CFixedPoint)0' )]"
+					datacontext = "[GetScriptedGui('te_tax_light_step_div_sgui')]"
+					blockoverride "row_label" {
+						text = "te_tax_inst_div"
+						tooltip = "te_tax_lt_row_div_tt"
+					}
+					blockoverride "row_law" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_range_div')]"
+					}
+					blockoverride "row_arrow" {}
+					blockoverride "row_draft" {
+						text = "te_tax_en_rate_div"
+					}
+					blockoverride "row_delta" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_rung_div')]"
+					}
+				}
+				te_tax_instrument_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_land'), '(CFixedPoint)0' )]"
+					datacontext = "[GetScriptedGui('te_tax_light_step_land_sgui')]"
+					blockoverride "row_label" {
+						text = "te_tax_inst_land"
+						tooltip = "te_tax_lt_row_land_tt"
+					}
+					blockoverride "row_law" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_range_land')]"
+					}
+					blockoverride "row_arrow" {}
+					blockoverride "row_draft" {
+						text = "te_tax_en_rate_land"
+					}
+					blockoverride "row_delta" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_rung_land')]"
+					}
+				}
+				te_tax_instrument_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_head'), '(CFixedPoint)0' )]"
+					datacontext = "[GetScriptedGui('te_tax_light_step_head_sgui')]"
+					blockoverride "row_label" {
+						text = "te_tax_inst_head"
+						tooltip = "te_tax_lt_row_head_tt"
+					}
+					blockoverride "row_law" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_range_head')]"
+					}
+					blockoverride "row_arrow" {}
+					blockoverride "row_draft" {
+						text = "te_tax_en_rate_head"
+					}
+					blockoverride "row_delta" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_rung_head')]"
+					}
+				}
+				te_tax_instrument_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_light_view_levied_cons'), '(CFixedPoint)0' )]"
+					datacontext = "[GetScriptedGui('te_tax_light_step_cons_sgui')]"
+					blockoverride "row_label" {
+						text = "te_tax_inst_cons"
+						tooltip = "te_tax_lt_row_cons_tt"
+					}
+					blockoverride "row_law" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_range_cons')]"
+					}
+					blockoverride "row_arrow" {}
+					blockoverride "row_draft" {
+						text = "te_tax_en_rate_cons"
+					}
+					blockoverride "row_delta" {
+						text = "[GetPlayer.GetCustom('te_tax_lt_rung_cons')]"
+					}
+				}
+			}
+		}
+	}
+
+	### "How the Light Tax Code Works": every explanation, collapsed by default,
+	### one heading per topic (style guide rule 1).
+	type te_tax_light_how_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_lt_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_light_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_light_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_tax_light_how_open')]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[GetVariableSystem.Exists('te_tax_light_how_open')]"
+
+			te_tax_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_rates"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_rates"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_law"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_level"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_level"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_groups"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_groups"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_relief"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_native"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_native"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_ai"
+			}
+		}
+	}
+}

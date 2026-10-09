@@ -5032,9 +5032,24 @@ def light_custom_localization():
                        "te_tax_lt_not_levied")
     lines += entry("te_tax_lt_law", [(f"te_tax_light_view_law = {n}", law) for n, law in light_laws()],
                    "te_tax_lt_law_other")
+    ladders = light_ladders()
+    for instrument in INSTRUMENTS:
+        lines += entry(f"te_tax_lt_range_{instrument.key}",
+                       [(f"te_tax_light_view_law = {n}", f"te_tax_lt_range_{instrument.key}_{n}")
+                        for n, law in light_laws() if ladders[law][instrument.key][-1]],
+                       "te_tax_lt_not_levied")
     lines += entry("te_tax_lt_setter", [(f"te_tax_light_view_sets_{i.key} = 1", f"te_tax_inst_{i.key}")
                                         for i in INSTRUMENTS], "te_tax_none")
     return _txt("\n".join(lines) + "\n")
+
+
+def light_range_text(instrument, ladder):
+    """A law's range for one tax as the rows print it: 10–30% for a rate, 0.4–1 with the money
+    icon for an amount, as the rows' rate cell prints it (te_tax_en_rate_<key>)."""
+    low, high = rate(instrument, ladder[0]), rate(instrument, ladder[-1])
+    if instrument.percent:
+        return f"#v {fmt(low * 100)}–{fmt(high * 100)}%#!"
+    return f"@money!#v {fmt(low)}–{fmt(high)}#!"
 
 
 def light_localization():
@@ -5052,6 +5067,12 @@ def light_localization():
         entries[f"te_tax_lt_tt_react_{instrument.key}"] = (
             f'0 "{who}Each interest group reacts by how much of this tax its members pay and by its views on '
             'taxation; a reaction that pleases a group counts half. Reactions fade over about six months."')
+    ladders = light_ladders()
+    for instrument in INSTRUMENTS:
+        for n, law in light_laws():
+            ladder = ladders[law][instrument.key]
+            if ladder[-1]:
+                entries[f"te_tax_lt_range_{instrument.key}_{n}"] = f'0 "{light_range_text(instrument, ladder)}"'
     for ig in IGS:
         for sign, text in (("pos", "Welcomes Recent Tax Changes"), ("neg", "Resents Recent Tax Changes")):
             key = f"te_tax_light_react_{ig}_{sign}"

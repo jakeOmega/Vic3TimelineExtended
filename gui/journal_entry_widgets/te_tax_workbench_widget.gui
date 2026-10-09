@@ -116,7 +116,9 @@ types te_tax_workbench_widget_types
 	}
 
 	### One tax: its name, its rate under existing law in the commencement
-	### month, the draft's rate, the steppers and the change. The instance sets
+	### month, the draft's rate, the steppers and the change. The light code's
+	### rows (te_tax_light_widget.gui) reuse it with the law's range, the rate,
+	### an empty "row_arrow" and the step the rate sits on. The instance sets
 	### datacontext = GetScriptedGui('te_tax_step_<key>_sgui'); the buttons
 	### address it by op alone. Same cells as te_tax_instrument_head. The
 	### rates are at most "@money!1.50" or "12.5%", the change "@money!+0.15".
@@ -158,7 +160,9 @@ types te_tax_workbench_widget_types
 				autoresize = yes
 				align = center|nobaseline
 				using = fontsize_medium
-				text = "te_tax_wb_arrow"
+				block "row_arrow" {
+					text = "te_tax_wb_arrow"
+				}
 			}
 		}
 		widget = {

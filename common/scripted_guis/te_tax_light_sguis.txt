@@ -1,0 +1,17 @@
+﻿# ============================================================================
+# LIGHT TAX CODE — display gate (docs/systems/tax_code_schema.md, "Light code")
+# ============================================================================
+# te_tax_show_light_sgui: the country's light code is in force. The overview
+# (te_tax_overview_widget.gui) and the layout (te_tax_layout_widget.gui) show
+# the light panels (te_tax_light_widget.gui) while it holds and the legislated
+# code's sections while it does not. Read-only. The step handlers are
+# generated: te_tax_light_generated_sguis.txt.
+# ============================================================================
+
+te_tax_show_light_sgui = {
+	scope = country
+	is_shown = { te_tax_light_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
