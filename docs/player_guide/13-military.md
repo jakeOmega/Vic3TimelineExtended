@@ -224,15 +224,16 @@ Laws and technologies also change how far battles move war support.
 | Source | Victories | Defeats |
 |---|---|---|
 | Total War law | +25% | +25% |
-| Limited War law | −10% | −10% |
+| Limited War law | −20% | −20% |
 | Ministry of Propaganda Established law | +15% | −15% |
 | Unregulated Internet / Net Neutrality laws | +20% / +15% | +20% / +15% |
 | State-Controlled Internet law | −10% | −20% |
 | State Secrets / Freedom of Information / Open Government laws | −5% / +5% / +10% | the same |
 | Television Broadcasting / Satellite Communications / Social Media technologies | +10% / +5% / +15% | +15% / +10% / +20% |
 
-Total War and Limited War belong to the Rules of War law group; see [Government,
-laws and characters](06-politics.md).
+Total War and Limited War belong to the Rules of War law group; see [The rules
+of war](06-politics.md#the-rules-of-war). Total War also halves the war support
+that casualties cost.
 
 ## Ammunition and mobilization
 

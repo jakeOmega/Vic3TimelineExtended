@@ -2081,6 +2081,10 @@ ai_chance = {
 ```
 This ensures repressive governments pick repressive options, liberal governments pick liberal options, etc.
 
+## Law AI: `ai_enact_weight_modifier` Weighs, `ai_will_do` Vetoes
+
+A law has two AI fields, and they are not interchangeable (vanilla `game/common/laws/readme.md`). `ai_enact_weight_modifier` is a script value added to the AI's base weight for enacting the law; the base comes from strategy and movement backing and "usually ranges in the low hundreds, so +100 would be fairly significant and +1000 very significant". Root is the AI country, `scope:law` the law. `ai_will_do` is a trigger, and false is a hard veto: vanilla writes `ai_will_do = { always = no }` so the AI never returns to Peasant Levies. Even a huge weight can't pass a law that lacks government or movement support (the readme). To have the AI move with a situation (a war footing), weight the situational law up while the situation holds and weight its alternatives up once it ends, or the AI ratchets onto it ([An Adopt Weight With No Repeal Counterweight Is a Ratchet](#an-adopt-weight-with-no-repeal-counterweight-is-a-ratchet--every-ai-ends-up-holding-it)). The Rules of War laws are the example: Total War +200 in a serious war (`te_row_serious_war`), −100 at peace, and the other four +150 while a country at peace still holds it.
+
 ## Pop Scope Properties
 
 - **`total_size`** — valid pop scope accessor for the total size (headcount) of a pop. Found in `event_targets.log`. Used in vanilla events (e.g., `max = scope:relevant_pop.total_size`). Use this when you need the population of a specific pop in script values.
