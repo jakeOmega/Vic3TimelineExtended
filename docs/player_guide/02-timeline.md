@@ -315,7 +315,9 @@ A flagship building works like this:
 
 - You can build it only while you have the company, and only while the company's
 prosperity bonus is active, because that bonus supplies its level cap of one.
-- Only the government can build it, at 5,000 construction.
+- Only the government can build it, at 5,000 construction, and only in your own
+states. Investment rights in another country don't let you build or expand its
+flagships.
 - You can have each flagship in only one state.
 - Most are highly profitable at base prices, and each gives its state modifiers
 that fit the company, such as extra Highway levels and migration pull from the

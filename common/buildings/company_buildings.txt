@@ -24,7 +24,18 @@
 #				owner = { NOT = { any_scope_state = { any_scope_building = { is_building_type = X } } } }
 #			}
 #		}
+#		te_company_flagship_builder_owns_state = yes
 #	}
+#	can_build_government = { te_company_flagship_builder_owns_state = yes }
+#	can_build_private = { always = no }
+#
+# Only the state's owner builds or expands a flagship: a country with
+# investment rights can't put up another country's flagship in its states.
+# te_company_flagship_builder_owns_state (te_company_triggers.txt) compares the
+# owner with scope:investor_country, which the engine saves during a
+# construction check. Vanilla reads that scope from the Trade Center's
+# can_build_*; it sits in possible as well so the rule holds on any path that
+# checks only one of the two.
 #
 # `has_building` is an engine lookup, so `potential`, which the build list and
 # the AI construction planner ask for every state, costs almost nothing. It
@@ -62,6 +73,9 @@ building_volkswagen_autostadt = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -101,6 +115,7 @@ building_volkswagen_autostadt = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -120,6 +135,9 @@ building_toyota_kaikan_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -159,6 +177,7 @@ building_toyota_kaikan_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -178,6 +197,9 @@ building_samsung_digital_city = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -217,6 +239,7 @@ building_samsung_digital_city = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -236,6 +259,9 @@ building_hp_labs = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -275,6 +301,7 @@ building_hp_labs = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -294,6 +321,9 @@ building_sony_pictures_studios = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -333,6 +363,7 @@ building_sony_pictures_studios = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -352,6 +383,9 @@ building_ikea_almhult_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -391,6 +425,7 @@ building_ikea_almhult_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -410,6 +445,9 @@ building_intel_ronler_acres = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -449,6 +487,7 @@ building_intel_ronler_acres = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -468,6 +507,9 @@ building_microsoft_redmond_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -507,6 +549,7 @@ building_microsoft_redmond_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -526,6 +569,9 @@ building_apple_park = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -565,6 +611,7 @@ building_apple_park = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -584,6 +631,9 @@ building_tsmc_fab_18 = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -623,6 +673,7 @@ building_tsmc_fab_18 = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -642,6 +693,9 @@ building_huawei_ox_horn_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -681,6 +735,7 @@ building_huawei_ox_horn_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -700,6 +755,9 @@ building_amazon_fulfillment_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -739,6 +797,7 @@ building_amazon_fulfillment_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -758,6 +817,9 @@ building_nvidia_endeavor_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -797,6 +859,7 @@ building_nvidia_endeavor_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -816,6 +879,9 @@ building_googleplex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -855,6 +921,7 @@ building_googleplex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -874,6 +941,9 @@ building_netflix_animation_studios = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -913,6 +983,7 @@ building_netflix_animation_studios = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -932,6 +1003,9 @@ building_spacex_starbase = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -971,6 +1045,7 @@ building_spacex_starbase = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -990,6 +1065,9 @@ building_bytedance_data_fortress = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1029,6 +1107,7 @@ building_bytedance_data_fortress = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1048,6 +1127,9 @@ building_openai_research_lab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1087,6 +1169,7 @@ building_openai_research_lab = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1106,6 +1189,9 @@ building_catl_gigafactory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1145,6 +1231,7 @@ building_catl_gigafactory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1164,6 +1251,9 @@ building_boston_dynamics_ai_institute = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1203,6 +1293,7 @@ building_boston_dynamics_ai_institute = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1222,6 +1313,9 @@ building_asml_veldhoven_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1261,6 +1355,7 @@ building_asml_veldhoven_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1280,6 +1375,9 @@ building_lockheed_skunk_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1319,6 +1417,7 @@ building_lockheed_skunk_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1338,6 +1437,9 @@ building_bae_samlesbury_aerodrome = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1377,6 +1479,7 @@ building_bae_samlesbury_aerodrome = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1396,6 +1499,9 @@ building_roscosmos_vostochny_cosmodrome = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1435,6 +1541,7 @@ building_roscosmos_vostochny_cosmodrome = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1454,6 +1561,9 @@ building_airbus_lagardere_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1493,6 +1603,7 @@ building_airbus_lagardere_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1512,6 +1623,9 @@ building_dassault_merignac_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1551,6 +1665,7 @@ building_dassault_merignac_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1570,6 +1685,9 @@ building_hyundai_ulsan_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1609,6 +1727,7 @@ building_hyundai_ulsan_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1628,6 +1747,9 @@ building_sap_headquarters = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1667,6 +1789,7 @@ building_sap_headquarters = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1686,6 +1809,9 @@ building_tencent_seafront_towers = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1725,6 +1851,7 @@ building_tencent_seafront_towers = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1744,6 +1871,9 @@ building_alibaba_cainiao_park = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1783,6 +1913,7 @@ building_alibaba_cainiao_park = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1802,6 +1933,9 @@ building_nintendo_development_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1841,6 +1975,7 @@ building_nintendo_development_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1860,6 +1995,9 @@ building_gazprom_lakhta_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1899,6 +2037,7 @@ building_gazprom_lakhta_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1918,6 +2057,9 @@ building_saudi_aramco_abqaiq_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -1957,6 +2099,7 @@ building_saudi_aramco_abqaiq_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -1976,6 +2119,9 @@ building_petrobras_cenpes_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2015,6 +2161,7 @@ building_petrobras_cenpes_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2034,6 +2181,9 @@ building_rosatom_mayak_association = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2073,6 +2223,7 @@ building_rosatom_mayak_association = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2092,6 +2243,9 @@ building_oracle_cloud_data_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2131,6 +2285,7 @@ building_oracle_cloud_data_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2150,6 +2305,9 @@ building_softbank_vision_fund_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2189,6 +2347,7 @@ building_softbank_vision_fund_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2208,6 +2367,9 @@ building_roche_tower = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2247,6 +2409,7 @@ building_roche_tower = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2266,6 +2429,9 @@ building_pfizer_rd_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2305,6 +2471,7 @@ building_pfizer_rd_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2324,6 +2491,9 @@ building_vale_carajas_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2363,6 +2533,7 @@ building_vale_carajas_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2382,6 +2553,9 @@ building_disney_world = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2421,6 +2595,7 @@ building_disney_world = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2440,6 +2615,9 @@ building_universal_studios_hollywood = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2479,6 +2657,7 @@ building_universal_studios_hollywood = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2498,6 +2677,9 @@ building_verizon_building = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2537,6 +2719,7 @@ building_verizon_building = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2556,6 +2739,9 @@ building_reliance_jamnagar_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2595,6 +2781,7 @@ building_reliance_jamnagar_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2614,6 +2801,9 @@ building_fanuc_forest = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2653,6 +2843,7 @@ building_fanuc_forest = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2672,6 +2863,9 @@ building_eni_palazzo = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2711,6 +2905,7 @@ building_eni_palazzo = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2730,6 +2925,9 @@ building_ferrari_maranello_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2769,6 +2967,7 @@ building_ferrari_maranello_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2788,6 +2987,9 @@ building_blackberry_rim_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2827,6 +3029,7 @@ building_blackberry_rim_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2846,6 +3049,9 @@ building_shopify_fulfillment_hub = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2885,6 +3091,7 @@ building_shopify_fulfillment_hub = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2907,6 +3114,9 @@ building_bhp_mount_whaleback_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -2946,6 +3156,7 @@ building_bhp_mount_whaleback_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -2965,6 +3176,9 @@ building_cochlear_global_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3004,6 +3218,7 @@ building_cochlear_global_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3025,6 +3240,9 @@ building_infosys_mysore_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3064,6 +3282,7 @@ building_infosys_mysore_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3083,6 +3302,9 @@ building_jsw_vijayanagar_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3122,6 +3344,7 @@ building_jsw_vijayanagar_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3145,6 +3368,9 @@ building_generic_rd_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3186,6 +3412,7 @@ building_generic_rd_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3205,6 +3432,9 @@ building_generic_logistics_hub = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3246,6 +3476,7 @@ building_generic_logistics_hub = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3292,6 +3523,9 @@ building_generic_industrial_zone = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3333,6 +3567,7 @@ building_generic_industrial_zone = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3424,6 +3659,9 @@ building_generic_materials_lab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3465,6 +3703,7 @@ building_generic_materials_lab = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3484,6 +3723,9 @@ building_generic_robotics_institute = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3525,6 +3767,7 @@ building_generic_robotics_institute = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3568,6 +3811,9 @@ building_generic_data_fortress = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3609,6 +3855,7 @@ building_generic_data_fortress = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3652,6 +3899,9 @@ building_generic_media_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3693,6 +3943,7 @@ building_generic_media_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3713,6 +3964,9 @@ building_generic_power_hub = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3754,6 +4008,7 @@ building_generic_power_hub = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3821,6 +4076,9 @@ building_generic_proving_grounds = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3862,6 +4120,7 @@ building_generic_proving_grounds = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -3881,6 +4140,9 @@ building_generic_resource_depository = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -3922,6 +4184,7 @@ building_generic_resource_depository = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4017,6 +4280,9 @@ building_krupp_essen_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4056,6 +4322,7 @@ building_krupp_essen_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4075,6 +4342,9 @@ building_standard_oil_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4114,6 +4384,7 @@ building_standard_oil_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4134,6 +4405,9 @@ building_carnegie_homestead_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4173,6 +4447,7 @@ building_carnegie_homestead_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4192,6 +4467,9 @@ building_ford_rouge_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4231,6 +4509,7 @@ building_ford_rouge_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4250,6 +4529,9 @@ building_eic_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4289,6 +4571,7 @@ building_eic_trading_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4313,6 +4596,9 @@ building_schneider_le_creusot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4352,6 +4638,7 @@ building_schneider_le_creusot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4371,6 +4658,9 @@ building_putilov_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4410,6 +4700,7 @@ building_putilov_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4429,6 +4720,9 @@ building_mitsubishi_nagasaki_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4468,6 +4762,7 @@ building_mitsubishi_nagasaki_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4488,6 +4783,9 @@ building_tata_jamshedpur_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4527,6 +4825,7 @@ building_tata_jamshedpur_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4546,6 +4845,9 @@ building_siemens_erlangen_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4585,6 +4887,7 @@ building_siemens_erlangen_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4608,6 +4911,9 @@ building_de_beers_sorting_office = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4647,6 +4953,7 @@ building_de_beers_sorting_office = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4666,6 +4973,9 @@ building_nobel_baku_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4705,6 +5015,7 @@ building_nobel_baku_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4724,6 +5035,9 @@ building_ge_schenectady_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4763,6 +5077,7 @@ building_ge_schenectady_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4786,6 +5101,9 @@ building_mitsui_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4825,6 +5143,7 @@ building_mitsui_trading_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4844,6 +5163,9 @@ building_fiat_lingotto_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4883,6 +5205,7 @@ building_fiat_lingotto_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4906,6 +5229,9 @@ building_generic_granary_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -4948,6 +5274,7 @@ building_generic_granary_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -4967,6 +5294,9 @@ building_generic_textile_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5009,6 +5339,7 @@ building_generic_textile_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5028,6 +5359,9 @@ building_generic_cold_storage = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5069,6 +5403,7 @@ building_generic_cold_storage = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5088,6 +5423,9 @@ building_generic_paper_mill_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5129,6 +5467,7 @@ building_generic_paper_mill_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5149,6 +5488,9 @@ building_generic_foundry_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5190,6 +5532,7 @@ building_generic_foundry_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5209,6 +5552,9 @@ building_generic_machine_shop = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5250,6 +5596,7 @@ building_generic_machine_shop = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5269,6 +5616,9 @@ building_generic_chem_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5310,6 +5660,7 @@ building_generic_chem_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5329,6 +5680,9 @@ building_generic_tank_farm = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5370,6 +5724,7 @@ building_generic_tank_farm = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5389,6 +5744,9 @@ building_generic_ordnance_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5430,6 +5788,7 @@ building_generic_ordnance_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5449,6 +5808,9 @@ building_generic_motor_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5490,6 +5852,7 @@ building_generic_motor_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5509,6 +5872,9 @@ building_generic_dry_dock = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5550,6 +5916,7 @@ building_generic_dry_dock = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5569,6 +5936,9 @@ building_generic_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5610,6 +5980,7 @@ building_generic_arsenal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5629,6 +6000,9 @@ building_generic_fish_market = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5670,6 +6044,7 @@ building_generic_fish_market = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5693,6 +6068,9 @@ building_generic_colonial_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5734,6 +6112,7 @@ building_generic_colonial_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5752,6 +6131,9 @@ building_generic_export_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5793,6 +6175,7 @@ building_generic_export_warehouse = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5811,6 +6194,9 @@ building_generic_electronics_lab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5852,6 +6238,7 @@ building_generic_electronics_lab = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5870,6 +6257,9 @@ building_generic_assay_office = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5911,6 +6301,7 @@ building_generic_assay_office = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5929,6 +6320,9 @@ building_generic_ore_processing = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -5970,6 +6364,7 @@ building_generic_ore_processing = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -5989,6 +6384,9 @@ building_generic_mineral_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6030,6 +6428,7 @@ building_generic_mineral_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6048,6 +6447,9 @@ building_generic_silk_exchange = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6089,6 +6491,7 @@ building_generic_silk_exchange = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6107,6 +6510,9 @@ building_generic_vintner_hall = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6148,6 +6554,7 @@ building_generic_vintner_hall = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6167,6 +6574,9 @@ building_generic_furniture_showroom = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6208,6 +6618,7 @@ building_generic_furniture_showroom = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6227,6 +6638,9 @@ building_generic_lumber_yard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6268,6 +6682,7 @@ building_generic_lumber_yard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6287,6 +6702,9 @@ building_generic_dye_fiber_park = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6328,6 +6746,7 @@ building_generic_dye_fiber_park = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6350,6 +6769,9 @@ building_aker_oslo_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6389,6 +6811,7 @@ building_aker_oslo_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6407,6 +6830,9 @@ building_allatini_thessaloniki_flour_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6446,6 +6872,7 @@ building_allatini_thessaloniki_flour_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6465,6 +6892,9 @@ building_altos_hornos_baracaldo_furnaces = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6504,6 +6934,7 @@ building_altos_hornos_baracaldo_furnaces = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6522,6 +6953,9 @@ building_anglo_persian_abadan_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6561,6 +6995,7 @@ building_anglo_persian_abadan_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6579,6 +7014,9 @@ building_anglo_sicilian_licata_wharf = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6618,6 +7056,7 @@ building_anglo_sicilian_licata_wharf = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6636,6 +7075,9 @@ building_ansaldo_sestri_ponente_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6675,6 +7117,7 @@ building_ansaldo_sestri_ponente_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6693,6 +7136,9 @@ building_ap_moller_copenhagen_wharf = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6732,6 +7178,7 @@ building_ap_moller_copenhagen_wharf = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6750,6 +7197,9 @@ building_argentinian_wine_mendoza_bodega = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6789,6 +7239,7 @@ building_argentinian_wine_mendoza_bodega = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6807,6 +7258,9 @@ building_armstrong_elswick_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6846,6 +7300,7 @@ building_armstrong_elswick_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6864,6 +7319,9 @@ building_assam_company_nazira_tea_estate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6903,6 +7361,7 @@ building_assam_company_nazira_tea_estate = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6921,6 +7380,9 @@ building_b_grimm_bangkok_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -6960,6 +7422,7 @@ building_b_grimm_bangkok_warehouse = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -6978,6 +7441,9 @@ building_bacardi_santiago_distillery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7017,6 +7483,7 @@ building_bacardi_santiago_distillery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7036,6 +7503,9 @@ building_basf_ludwigshafen_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7075,6 +7545,7 @@ building_basf_ludwigshafen_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7093,6 +7564,9 @@ building_basileiades_piraeus_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7132,6 +7606,7 @@ building_basileiades_piraeus_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7150,6 +7625,9 @@ building_bengal_coal_raniganj_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7189,6 +7667,7 @@ building_bengal_coal_raniganj_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7208,6 +7687,9 @@ building_bolckow_eston_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7247,6 +7729,7 @@ building_bolckow_eston_ironworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7265,6 +7748,9 @@ building_bombay_burmah_rangoon_timber_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7304,6 +7790,7 @@ building_bombay_burmah_rangoon_timber_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7322,6 +7809,9 @@ building_bombay_dyeing_spring_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7361,6 +7851,7 @@ building_bombay_dyeing_spring_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7379,6 +7870,9 @@ building_bunge_born_buenos_aires_grain_silo = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7418,6 +7912,7 @@ building_bunge_born_buenos_aires_grain_silo = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7437,6 +7932,9 @@ building_calcutta_electric_victoria_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7476,6 +7974,7 @@ building_calcutta_electric_victoria_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7494,6 +7993,9 @@ building_caribbean_petroleum_maracaibo_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7533,6 +8035,7 @@ building_caribbean_petroleum_maracaibo_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7551,6 +8054,9 @@ building_ccci_leopoldville_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7590,6 +8096,7 @@ building_ccci_leopoldville_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7608,6 +8115,9 @@ building_cfr_bucharest_railway_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7647,6 +8157,7 @@ building_cfr_bucharest_railway_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7665,6 +8176,9 @@ building_cgv_haut_brion_estate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7704,6 +8218,7 @@ building_cgv_haut_brion_estate = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7723,6 +8238,9 @@ building_chr_hansen_copenhagen_laboratory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7762,6 +8280,7 @@ building_chr_hansen_copenhagen_laboratory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7780,6 +8299,9 @@ building_colt_hartford_armory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7819,6 +8341,7 @@ building_colt_hartford_armory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7837,6 +8360,9 @@ building_sansinena_avellaneda_frigorifico = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7876,6 +8402,7 @@ building_sansinena_avellaneda_frigorifico = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7894,6 +8421,9 @@ building_cordoba_railway_alta_gracia_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7933,6 +8463,7 @@ building_cordoba_railway_alta_gracia_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -7951,6 +8482,9 @@ building_csfa_sicilian_sulfur_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -7990,6 +8524,7 @@ building_csfa_sicilian_sulfur_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8008,6 +8543,9 @@ building_afghan_nassaji_kabul_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8047,6 +8585,7 @@ building_afghan_nassaji_kabul_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8065,6 +8604,9 @@ building_sassoon_bombay_docks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8104,6 +8646,7 @@ building_sassoon_bombay_docks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8122,6 +8665,9 @@ building_dmc_mulhouse_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8161,6 +8707,7 @@ building_dmc_mulhouse_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8179,6 +8726,9 @@ building_douro_wine_lodge = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8218,6 +8768,7 @@ building_douro_wine_lodge = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8237,6 +8788,9 @@ building_duro_la_felguera_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8276,6 +8830,7 @@ building_duro_la_felguera_steelworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8295,6 +8850,9 @@ building_eea_dock_sud_power_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8334,6 +8892,7 @@ building_eea_dock_sud_power_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8352,6 +8911,9 @@ building_egyptian_rail_cairo_central = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8391,6 +8953,7 @@ building_egyptian_rail_cairo_central = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8409,6 +8972,9 @@ building_el_aguila_tampico_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8448,6 +9014,7 @@ building_el_aguila_tampico_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8467,6 +9034,9 @@ building_electricidad_caracas_power_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8506,6 +9076,7 @@ building_electricidad_caracas_power_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8524,6 +9095,9 @@ building_elso_budapesti_steam_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8563,6 +9137,7 @@ building_elso_budapesti_steam_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8581,6 +9156,9 @@ building_ericsson_telefonplan = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8620,6 +9198,7 @@ building_ericsson_telefonplan = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8638,6 +9217,9 @@ building_erste_brunner_maschinenwerk = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8677,6 +9259,7 @@ building_erste_brunner_maschinenwerk = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8695,6 +9278,9 @@ building_espana_industrial_sants_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8734,6 +9320,7 @@ building_espana_industrial_sants_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8752,6 +9339,9 @@ building_estaleiro_maua_niteroi_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8791,6 +9381,7 @@ building_estaleiro_maua_niteroi_dockyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8809,6 +9400,9 @@ building_estanifera_llallagua_tin_concentrator = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8848,6 +9442,7 @@ building_estanifera_llallagua_tin_concentrator = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8866,6 +9461,9 @@ building_famae_santiago_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8905,6 +9503,7 @@ building_famae_santiago_arsenal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8923,6 +9522,9 @@ building_fcm_la_seyne_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -8962,6 +9564,7 @@ building_fcm_la_seyne_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -8980,6 +9583,9 @@ building_foochow_mawei_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9019,6 +9625,7 @@ building_foochow_mawei_dockyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9037,6 +9644,9 @@ building_franco_belge_raismes_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9076,6 +9686,7 @@ building_franco_belge_raismes_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9095,6 +9706,9 @@ building_fundicao_ipanema_sorocaba_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9134,6 +9748,7 @@ building_fundicao_ipanema_sorocaba_foundry = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9153,6 +9768,9 @@ building_fundidora_monterrey_blast_furnace = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9192,6 +9810,7 @@ building_fundidora_monterrey_blast_furnace = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9210,6 +9829,9 @@ building_galician_boryslaw_oil_field = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9249,6 +9871,7 @@ building_galician_boryslaw_oil_field = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9267,6 +9890,9 @@ building_thonet_bystrice_bentwood_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9306,6 +9932,7 @@ building_thonet_bystrice_bentwood_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9324,6 +9951,9 @@ building_getzner_bludenz_textile_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9363,6 +9993,7 @@ building_getzner_bludenz_textile_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9381,6 +10012,9 @@ building_gotaverken_gothenburg_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9420,6 +10054,7 @@ building_gotaverken_gothenburg_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9438,6 +10073,9 @@ building_gran_azucarera_aranjuez_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9477,6 +10115,7 @@ building_gran_azucarera_aranjuez_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9495,6 +10134,9 @@ building_great_indian_railway_jamalpur_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9534,6 +10176,7 @@ building_great_indian_railway_jamalpur_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9552,6 +10195,9 @@ building_guinness_st_james_gate_brewery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9591,6 +10237,7 @@ building_guinness_st_james_gate_brewery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9609,6 +10256,9 @@ building_gwr_swindon_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9648,6 +10298,7 @@ building_gwr_swindon_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9667,6 +10318,9 @@ building_hanseong_jeongi_gwanghwamun_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9706,6 +10360,7 @@ building_hanseong_jeongi_gwanghwamun_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9724,6 +10379,9 @@ building_hanyang_arsenal_iron_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9763,6 +10421,7 @@ building_hanyang_arsenal_iron_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9781,6 +10440,9 @@ building_hbc_york_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9820,6 +10482,7 @@ building_hbc_york_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9838,6 +10501,9 @@ building_hispano_suiza_barcelona_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9877,6 +10543,7 @@ building_hispano_suiza_barcelona_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9896,6 +10563,9 @@ building_ilva_bagnoli_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9935,6 +10605,7 @@ building_ilva_bagnoli_steelworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -9953,6 +10624,9 @@ building_imperial_arsenal_golden_horn = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -9992,6 +10666,7 @@ building_imperial_arsenal_golden_horn = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10010,6 +10685,9 @@ building_ethiopian_railway_dire_dawa_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10049,6 +10727,7 @@ building_ethiopian_railway_dire_dawa_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10067,6 +10746,9 @@ building_imperial_tobacco_wills_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10106,6 +10788,7 @@ building_imperial_tobacco_wills_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10125,6 +10808,9 @@ building_ingolstadt_power_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10164,6 +10850,7 @@ building_ingolstadt_power_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10182,6 +10869,9 @@ building_iranian_state_railway_veresk_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10221,6 +10911,7 @@ building_iranian_state_railway_veresk_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10239,6 +10930,9 @@ building_izhevsk_arms_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10278,6 +10972,7 @@ building_izhevsk_arms_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10296,6 +10991,9 @@ building_coats_ferguslie_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10335,6 +11033,7 @@ building_coats_ferguslie_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10353,6 +11052,9 @@ building_klein_galician_paper_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10392,6 +11094,7 @@ building_klein_galician_paper_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10410,6 +11113,9 @@ building_jiangnan_nanjing_brocade_hall = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10449,6 +11155,7 @@ building_jiangnan_nanjing_brocade_hall = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10467,6 +11174,9 @@ building_jingdezhen_imperial_kiln = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10506,6 +11216,7 @@ building_jingdezhen_imperial_kiln = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10524,6 +11235,9 @@ building_john_brown_clydebank_yard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10563,6 +11277,7 @@ building_john_brown_clydebank_yard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10582,6 +11297,9 @@ building_cockerill_seraing_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10621,6 +11339,7 @@ building_cockerill_seraing_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10639,6 +11358,9 @@ building_john_holt_lagos_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10678,6 +11400,7 @@ building_john_holt_lagos_trading_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10697,6 +11420,9 @@ building_hughes_yuzovka_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10736,6 +11462,7 @@ building_hughes_yuzovka_steelworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10754,6 +11481,9 @@ building_kablin_zarate_paper_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10793,6 +11523,7 @@ building_kablin_zarate_paper_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10811,6 +11542,9 @@ building_kaiping_tangshan_colliery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10850,6 +11584,7 @@ building_kaiping_tangshan_colliery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10868,6 +11603,9 @@ building_kinkozan_kiyomizu_kiln = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10907,6 +11645,7 @@ building_kinkozan_kiyomizu_kiln = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10925,6 +11664,9 @@ building_kirgizian_copper_smelter = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -10964,6 +11706,7 @@ building_kirgizian_copper_smelter = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -10982,6 +11725,9 @@ building_klanicko_belgrade_slaughterhouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11021,6 +11767,7 @@ building_klanicko_belgrade_slaughterhouse = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11039,6 +11786,9 @@ building_meissen_porcelain_manufactory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11078,6 +11828,7 @@ building_meissen_porcelain_manufactory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11096,6 +11847,9 @@ building_kouppas_piraeus_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11135,6 +11889,7 @@ building_kouppas_piraeus_foundry = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11153,6 +11908,9 @@ building_la_rosada_buenos_aires_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11192,6 +11950,7 @@ building_la_rosada_buenos_aires_arsenal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11210,6 +11969,9 @@ building_lanfang_pontianak_kongsi_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11249,6 +12011,7 @@ building_lanfang_pontianak_kongsi_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11267,6 +12030,9 @@ building_lee_wilson_plantation_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11306,6 +12072,7 @@ building_lee_wilson_plantation_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11325,6 +12092,9 @@ building_lilpop_warsaw_metalworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11364,6 +12134,7 @@ building_lilpop_warsaw_metalworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11382,6 +12153,9 @@ building_lkab_kiruna_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11421,6 +12195,7 @@ building_lkab_kiruna_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11439,6 +12214,9 @@ building_moser_karlsbad_glass_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11478,6 +12256,7 @@ building_moser_karlsbad_glass_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11496,6 +12275,9 @@ building_madura_mills_madurai_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11535,6 +12317,7 @@ building_madura_mills_madurai_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11553,6 +12336,9 @@ building_worth_rue_de_la_paix_atelier = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11592,6 +12378,7 @@ building_worth_rue_de_la_paix_atelier = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11610,6 +12397,9 @@ building_manfred_weiss_csepel_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11649,6 +12439,7 @@ building_manfred_weiss_csepel_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11667,6 +12458,9 @@ building_mantero_como_silk_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11706,6 +12500,7 @@ building_mantero_como_silk_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11724,6 +12519,9 @@ building_mantetsu_dalian_railway_hub = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11763,6 +12561,7 @@ building_mantetsu_dalian_railway_hub = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11781,6 +12580,9 @@ building_maple_tottenham_court_showroom = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11820,6 +12622,7 @@ building_maple_tottenham_court_showroom = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11838,6 +12641,9 @@ building_massey_harris_toronto_implement_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11877,6 +12683,7 @@ building_massey_harris_toronto_implement_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11895,6 +12702,9 @@ building_gavrilovic_petrinja_meatworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11934,6 +12744,7 @@ building_gavrilovic_petrinja_meatworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -11952,6 +12763,9 @@ building_mav_budapest_locomotive_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -11991,6 +12805,7 @@ building_mav_budapest_locomotive_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12009,6 +12824,9 @@ building_anzin_colliery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12048,6 +12866,7 @@ building_anzin_colliery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12066,6 +12885,9 @@ building_misr_mahalla_textile_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12105,6 +12927,7 @@ building_misr_mahalla_textile_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12123,6 +12946,9 @@ building_moscow_irrigation_cotton_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12162,6 +12988,7 @@ building_moscow_irrigation_cotton_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12180,6 +13007,9 @@ building_mozambique_company_beira_concession = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12219,6 +13049,7 @@ building_mozambique_company_beira_concession = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12237,6 +13068,9 @@ building_nam_dinh_textile_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12276,6 +13110,7 @@ building_nam_dinh_textile_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12294,6 +13129,9 @@ building_nioc_masjed_soleyman_field = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12333,6 +13171,7 @@ building_nioc_masjed_soleyman_field = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12351,6 +13190,9 @@ building_nederlandse_petroleum_pangkalan_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12390,6 +13232,7 @@ building_nederlandse_petroleum_pangkalan_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12408,6 +13251,9 @@ building_portalis_lyon_silk_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12447,6 +13293,7 @@ building_portalis_lyon_silk_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12465,6 +13312,9 @@ building_nokia_cable_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12504,6 +13354,7 @@ building_nokia_cable_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12523,6 +13374,9 @@ building_norsk_hydro_rjukan_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12562,6 +13416,7 @@ building_norsk_hydro_rjukan_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12581,6 +13436,9 @@ building_alpine_donawitz_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12620,6 +13478,7 @@ building_alpine_donawitz_steelworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12638,6 +13497,9 @@ building_oevg_steyr_arms_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12677,6 +13539,7 @@ building_oevg_steyr_arms_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12695,6 +13558,9 @@ building_ocp_khouribga_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12734,6 +13600,7 @@ building_ocp_khouribga_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12752,6 +13619,9 @@ building_ong_lung_sheng_tea_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12791,6 +13661,7 @@ building_ong_lung_sheng_tea_warehouse = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12809,6 +13680,9 @@ building_opium_ghazipur_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12848,6 +13722,7 @@ building_opium_ghazipur_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12866,6 +13741,9 @@ building_orient_express_sirkeci_terminal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12905,6 +13783,7 @@ building_orient_express_sirkeci_terminal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12923,6 +13802,9 @@ building_oriental_dev_kunsan_granary = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -12962,6 +13844,7 @@ building_oriental_dev_kunsan_granary = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -12980,6 +13863,9 @@ building_tobacco_regie_cibali_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13019,6 +13905,7 @@ building_tobacco_regie_cibali_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13037,6 +13924,9 @@ building_panama_company_culebra_cut = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13076,6 +13966,7 @@ building_panama_company_culebra_cut = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13094,6 +13985,9 @@ building_paradox_kvarnholmen_studio = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13133,6 +14027,7 @@ building_paradox_kvarnholmen_studio = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13151,6 +14046,9 @@ building_pedro_domecq_jerez_bodega = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13190,6 +14088,7 @@ building_pedro_domecq_jerez_bodega = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13208,6 +14107,9 @@ building_pernambuco_recife_cotton_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13247,6 +14149,7 @@ building_pernambuco_recife_cotton_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13265,6 +14168,9 @@ building_perskhlopok_cotton_combines = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13304,6 +14210,7 @@ building_perskhlopok_cotton_combines = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13322,6 +14229,9 @@ building_persshelk_silk_reeling_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13361,6 +14271,7 @@ building_persshelk_silk_reeling_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13379,6 +14290,9 @@ building_peruvian_amazon_iquitos_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13418,6 +14332,7 @@ building_peruvian_amazon_iquitos_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13436,6 +14351,9 @@ building_philips_eindhoven_natlab = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13475,6 +14393,7 @@ building_philips_eindhoven_natlab = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13493,6 +14412,9 @@ building_prussian_railway_directorate = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13532,6 +14454,7 @@ building_prussian_railway_directorate = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13550,6 +14473,9 @@ building_ralli_odessa_grain_elevator = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13589,6 +14515,7 @@ building_ralli_odessa_grain_elevator = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13607,6 +14534,9 @@ building_rheinmetall_unterluss_proving_ground = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13646,6 +14576,7 @@ building_rheinmetall_unterluss_proving_ground = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13664,6 +14595,9 @@ building_ricordi_galleria_vittorio_emanuele = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13703,6 +14637,7 @@ building_ricordi_galleria_vittorio_emanuele = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13721,6 +14656,9 @@ building_rodriguez_arguelles_havana_tobacco_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13760,6 +14698,7 @@ building_rodriguez_arguelles_havana_tobacco_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13778,6 +14717,9 @@ building_romanian_star_ploiesti_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13817,6 +14759,7 @@ building_romanian_star_ploiesti_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13835,6 +14778,9 @@ building_rossi_sao_leopoldo_arms_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13874,6 +14820,7 @@ building_rossi_sao_leopoldo_arms_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13892,6 +14839,9 @@ building_rac_sitka_trading_post = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13931,6 +14881,7 @@ building_rac_sitka_trading_post = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -13949,6 +14900,9 @@ building_saint_etienne_arms_manufactory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -13988,6 +14942,7 @@ building_saint_etienne_arms_manufactory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14006,6 +14961,9 @@ building_san_miguel_manila_brewery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14045,6 +15003,7 @@ building_san_miguel_manila_brewery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14063,6 +15022,9 @@ building_sao_paulo_railway_paranapiacaba_workshop = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14102,6 +15064,7 @@ building_sao_paulo_railway_paranapiacaba_workshop = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14120,6 +15083,9 @@ building_morozov_orekhovo_zuevo_mills = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14159,6 +15125,7 @@ building_morozov_orekhovo_zuevo_mills = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14177,6 +15144,9 @@ building_schichau_elbing_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14216,6 +15186,7 @@ building_schichau_elbing_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14234,6 +15205,9 @@ building_secn_ferrol_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14273,6 +15247,7 @@ building_secn_ferrol_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14291,6 +15266,9 @@ building_sherkat_shemali_cotton_gin = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14330,6 +15308,7 @@ building_sherkat_shemali_cotton_gin = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14348,6 +15327,9 @@ building_sherkate_eslamiya_isfahan_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14387,6 +15369,7 @@ building_sherkate_eslamiya_isfahan_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14405,6 +15388,9 @@ building_skoda_pilsen_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14444,6 +15430,7 @@ building_skoda_pilsen_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14462,6 +15449,9 @@ building_mokta_el_hadid_beni_saf_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14501,6 +15491,7 @@ building_mokta_el_hadid_beni_saf_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14519,6 +15510,9 @@ building_stf_fiume_torpedo_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14558,6 +15552,7 @@ building_stf_fiume_torpedo_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14576,6 +15571,9 @@ building_steel_brothers_syriam_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14615,6 +15613,7 @@ building_steel_brothers_syriam_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14633,6 +15632,9 @@ building_stt_haskoy_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14672,6 +15674,7 @@ building_stt_haskoy_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14690,6 +15693,9 @@ building_sudamericana_valparaiso_pier = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14729,6 +15735,7 @@ building_sudamericana_valparaiso_pier = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14747,6 +15754,9 @@ building_suez_company_ismailia_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14786,6 +15796,7 @@ building_suez_company_ismailia_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14804,6 +15815,9 @@ building_sunhwaguk_seoul_tobacco_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14843,6 +15857,7 @@ building_sunhwaguk_seoul_tobacco_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14861,6 +15876,9 @@ building_tashkent_railroad_workshops = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14900,6 +15918,7 @@ building_tashkent_railroad_workshops = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14918,6 +15937,9 @@ building_trubia_cannon_foundry = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -14957,6 +15979,7 @@ building_trubia_cannon_foundry = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -14975,6 +15998,9 @@ building_turkish_petroleum_kirkuk_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15014,6 +16040,7 @@ building_turkish_petroleum_kirkuk_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15033,6 +16060,9 @@ building_uniao_fabril_barreiro_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15072,6 +16102,7 @@ building_uniao_fabril_barreiro_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15090,6 +16121,9 @@ building_united_fruit_great_white_fleet_terminal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15129,6 +16163,7 @@ building_united_fruit_great_white_fleet_terminal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15147,6 +16182,9 @@ building_united_tobacco_moscow_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15186,6 +16224,7 @@ building_united_tobacco_moscow_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15204,6 +16243,9 @@ building_ursus_warsaw_tractor_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15243,6 +16285,7 @@ building_ursus_warsaw_tractor_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15261,6 +16304,9 @@ building_vodka_monopoly_warehouse = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15300,6 +16346,7 @@ building_vodka_monopoly_warehouse = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15318,6 +16365,9 @@ building_wadia_bombay_dockyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15357,6 +16407,7 @@ building_wadia_bombay_dockyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15375,6 +16426,9 @@ building_west_ural_oil_depot = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15414,6 +16468,7 @@ building_west_ural_oil_depot = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15432,6 +16487,9 @@ building_cramp_philadelphia_shipyard = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15471,6 +16529,7 @@ building_cramp_philadelphia_shipyard = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15490,6 +16549,9 @@ building_sandford_newcastle_natal_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15529,6 +16591,7 @@ building_sandford_newcastle_natal_ironworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15548,6 +16611,9 @@ building_witkowitzer_ostrava_ironworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15587,6 +16653,7 @@ building_witkowitzer_ostrava_ironworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15605,6 +16672,9 @@ building_ynchausti_manila_trading_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15644,6 +16714,7 @@ building_ynchausti_manila_trading_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15662,6 +16733,9 @@ building_zastava_kragujevac_arsenal = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15701,6 +16775,7 @@ building_zastava_kragujevac_arsenal = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15720,6 +16795,9 @@ building_megastructure_consortium_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15759,6 +16837,7 @@ building_megastructure_consortium_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15778,6 +16857,9 @@ building_axiom_space_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15817,6 +16899,7 @@ building_axiom_space_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15836,6 +16919,9 @@ building_neurovault_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15875,6 +16961,7 @@ building_neurovault_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15894,6 +16981,9 @@ building_tycho_manufacturing_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15933,6 +17023,7 @@ building_tycho_manufacturing_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -15952,6 +17043,9 @@ building_tessier_ashpool_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -15991,6 +17085,7 @@ building_tessier_ashpool_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16010,6 +17105,9 @@ building_hanka_precision_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16049,6 +17147,7 @@ building_hanka_precision_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16068,6 +17167,9 @@ building_yoyodyne_propulsion_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16107,6 +17209,7 @@ building_yoyodyne_propulsion_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16126,6 +17229,9 @@ building_rekal_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16165,6 +17271,7 @@ building_rekal_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16184,6 +17291,9 @@ building_dupont_experimental_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16223,6 +17333,7 @@ building_dupont_experimental_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16242,6 +17353,9 @@ building_ig_farben_buna_werke = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16281,6 +17395,7 @@ building_ig_farben_buna_werke = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16300,6 +17415,9 @@ building_shell_pernis_refinery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16339,6 +17457,7 @@ building_shell_pernis_refinery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16358,6 +17477,9 @@ building_jsr_yokkaichi_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16397,6 +17519,7 @@ building_jsr_yokkaichi_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16416,6 +17539,9 @@ building_sibur_tobolsk_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16455,6 +17581,7 @@ building_sibur_tobolsk_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16473,6 +17600,9 @@ building_rolls_royce_derby_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16512,6 +17642,7 @@ building_rolls_royce_derby_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16530,6 +17661,9 @@ building_bp_refinery_complex = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16569,6 +17703,7 @@ building_bp_refinery_complex = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16587,6 +17722,9 @@ building_bayer_leverkusen_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16626,6 +17764,7 @@ building_bayer_leverkusen_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16645,6 +17784,9 @@ building_thyssen_steelworks = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16684,6 +17826,7 @@ building_thyssen_steelworks = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16702,6 +17845,9 @@ building_boeing_everett_factory = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16741,6 +17887,7 @@ building_boeing_everett_factory = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16759,6 +17906,9 @@ building_renault_billancourt_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16798,6 +17948,7 @@ building_renault_billancourt_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16816,6 +17967,9 @@ building_michelin_clermont_ferrand = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16855,6 +18009,7 @@ building_michelin_clermont_ferrand = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16873,6 +18028,9 @@ building_pirelli_bicocca_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16912,6 +18070,7 @@ building_pirelli_bicocca_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16930,6 +18089,9 @@ building_jardine_princeps_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -16969,6 +18131,7 @@ building_jardine_princeps_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -16988,6 +18151,9 @@ building_sumitomo_besshi_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17027,6 +18193,7 @@ building_sumitomo_besshi_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17051,6 +18218,9 @@ building_yasuda_atosanupuri_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17090,6 +18260,7 @@ building_yasuda_atosanupuri_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17109,6 +18280,9 @@ building_tokyo_electric_asakusa_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17148,6 +18322,7 @@ building_tokyo_electric_asakusa_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17166,6 +18341,9 @@ building_guthrie_singapore_agency = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17205,6 +18383,7 @@ building_guthrie_singapore_agency = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17223,6 +18402,9 @@ building_sfct_hon_gai_collieries = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17262,6 +18444,7 @@ building_sfct_hon_gai_collieries = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17281,6 +18464,9 @@ building_bhp_broken_hill_mine = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17320,6 +18506,7 @@ building_bhp_broken_hill_mine = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17338,6 +18525,9 @@ building_ramirez_vila_real_cannery = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17377,6 +18567,7 @@ building_ramirez_vila_real_cannery = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17395,6 +18586,9 @@ building_ocmc_unsan_gold_mines = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17434,6 +18628,7 @@ building_ocmc_unsan_gold_mines = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17453,6 +18648,9 @@ building_siam_electric_wat_liab_station = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17492,6 +18690,7 @@ building_siam_electric_wat_liab_station = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17510,6 +18709,9 @@ building_ferranti_hollinwood_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17549,6 +18751,7 @@ building_ferranti_hollinwood_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17568,6 +18771,9 @@ building_van_vlissingen_oostenburg_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17607,6 +18813,7 @@ building_van_vlissingen_oostenburg_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17626,6 +18833,9 @@ building_mfo_oerlikon_works = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17665,6 +18875,7 @@ building_mfo_oerlikon_works = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17684,6 +18895,9 @@ building_markwald_bangkok_rice_mill = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17723,6 +18937,7 @@ building_markwald_bangkok_rice_mill = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17741,6 +18956,9 @@ building_nhm_factorij_batavia = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17780,6 +18998,7 @@ building_nhm_factorij_batavia = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17798,6 +19017,9 @@ building_white_star_albion_house = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17837,6 +19059,7 @@ building_white_star_albion_house = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17855,6 +19078,9 @@ building_noda_shoyu_goyogura = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17894,6 +19120,7 @@ building_noda_shoyu_goyogura = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17913,6 +19140,9 @@ building_genentech_dna_way_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -17952,6 +19182,7 @@ building_genentech_dna_way_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -17971,6 +19202,9 @@ building_monsanto_chesterfield_center = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18010,6 +19244,7 @@ building_monsanto_chesterfield_center = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18029,6 +19264,9 @@ building_novo_nordisk_kalundborg_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18068,6 +19306,7 @@ building_novo_nordisk_kalundborg_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18087,6 +19326,9 @@ building_ajinomoto_kawasaki_plant = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18126,6 +19368,7 @@ building_ajinomoto_kawasaki_plant = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18145,6 +19388,9 @@ building_biocon_park = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18184,6 +19430,7 @@ building_biocon_park = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18203,6 +19450,9 @@ building_bgi_national_genebank = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18242,6 +19492,7 @@ building_bgi_national_genebank = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18261,6 +19512,9 @@ building_biontech_mainz_campus = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18300,6 +19554,7 @@ building_biontech_mainz_campus = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }
 
@@ -18319,6 +19574,9 @@ building_rosen_association_hq = {
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
 	can_build_private = {
 		always = no
 	}
@@ -18358,5 +19616,6 @@ building_rosen_association_hq = {
 				}
 			}
 		}
+		te_company_flagship_builder_owns_state = yes
 	}
 }

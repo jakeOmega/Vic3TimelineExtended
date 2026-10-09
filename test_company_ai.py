@@ -7,6 +7,8 @@
   below vanilla's flavored 3 (common/script_values/te_company_ai_values.txt).
 - A buildable company flagship with no `ai_value` scores like any production
   building, and the AI built 13 for 319 companies in a 2029 observer save.
+- A flagship without `te_company_flagship_builder_owns_state` can be built by
+  a foreign country with investment rights in the owner's states.
 """
 from pathlib import Path
 import re
@@ -66,6 +68,20 @@ class CompanyAiTests(unittest.TestCase):
             checked += 1
             if field(block, "ai_value") is None:
                 missing.append(name)
+        self.assertGreater(checked, 300)
+        self.assertEqual(missing, [])
+
+    def test_every_buildable_flagship_is_built_by_the_state_owner_only(self):
+        # Investment rights abroad must not reach another country's flagship.
+        missing, checked = [], 0
+        for name, _, block in entries(parse(FLAGSHIPS)):
+            potential = field(block, "potential")
+            if potential is not None and field(potential, "always") == "no":
+                continue  # retired, kept so old saves load
+            checked += 1
+            for trigger in ("possible", "can_build_government"):
+                if field(field(block, trigger) or {}, "te_company_flagship_builder_owns_state") != "yes":
+                    missing.append(f"{name}: {trigger}")
         self.assertGreater(checked, 300)
         self.assertEqual(missing, [])
 

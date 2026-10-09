@@ -100,6 +100,7 @@
  building_cockerill_seraing_works:0 "Cockerill Seraing Works"
  building_colt_hartford_armory:0 "Colt Hartford Armory"
  building_company_one_site_tt:0 "No other state of ours has this building, standing or [concept_under_construction]"
+ building_company_own_states_tt:0 "Built in our own states only, never through [concept_foreign_investment]"
  building_consciousness_network:0 "Consciousness Network"
  building_consciousness_network_construction_site:0 "Consciousness Network Construction Site"
  building_copper_mine:0 "Copper Mine"
