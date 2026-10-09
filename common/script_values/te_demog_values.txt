@@ -64,8 +64,10 @@ te_demog_desired = {
 }
 
 # State scope: desired fertility's three factors, each 1 at its reference and lower as
-# the input grows. Named so the Demographics panel's children-per-woman tooltip shows
-# the capital's (gui/te_demographics_widgets.gui) from the census's own formula.
+# the input grows. Named so the children-per-woman tooltips show them from the
+# census's own formula: the capital's on the Population panel's Demographics tab
+# (te_demog_ov_tfr_capital) and a state's on its Demographics subtab
+# (te_demog_st_tfr_terms).
 # Literacy:
 te_demog_tfr_education = {
 	value = var:te_dg_lit
@@ -111,12 +113,13 @@ te_demog_war_dead_root = {
 }
 
 # State scope: how much of a migration is refugees (spec §2.5): devastation,
-# turmoil and the owner being at war. Devastation runs 0-100 (turmoil 0-1), so it
-# is divided by 100. The bareword reads are checked in game by te_debug_demog.1
-# option b's census line (Owner checks).
+# turmoil and the owner being at war. A state's devastation reads as a 0-1 share,
+# as turmoil does (vanilla compares devastation > 0.1, >= 0.5), though
+# add_devastation takes points. The bareword reads are checked in game by
+# te_debug_demog.1 option b's census line (Owner checks).
 te_demog_crisis = {
 	value = 0
-	add = { value = devastation divide = 100 }
+	add = devastation
 	add = turmoil
 	if = {
 		limit = { owner = { is_at_war = yes } }

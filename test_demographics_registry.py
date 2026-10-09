@@ -991,11 +991,12 @@ class TestFlows(unittest.TestCase):
         on_actions = _text(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
         self.assertEqual(on_actions.count("te_demog_note_kills"), 2)   # both Violent Hostility kills
 
-    def test_crisis_reads_devastation_as_a_percentage(self):
-        """State devastation runs 0-100 (add_devastation = 10 ... capped at 100), turmoil 0-1."""
+    def test_crisis_adds_devastation_as_a_share(self):
+        """A state's devastation reads as a 0-1 share, as turmoil does (vanilla compares
+        devastation > 0.1, >= 0.5; add_devastation takes points), so both are added as they are."""
         body = _block(_text(VALUES), "te_demog_crisis")
-        self.assertIn("add = { value = devastation divide = 100 }", body)
-        self.assertNotRegex(body, r"add = devastation\b")
+        self.assertRegex(body, r"add = devastation\b")
+        self.assertNotIn("divide = 100", body)
         self.assertIn("add = turmoil", body)
 
     def test_tactical_strike_tallies_its_soldiers_in_a_local(self):
@@ -1552,10 +1553,10 @@ class TestWealth(unittest.TestCase):
                 if ops:
                     self.assertEqual(ops[-1], "clamp", name)
 
-    def test_devastation_is_a_percentage(self):
-        """State devastation runs 0-100: a fully devastated state loses 10 points a year."""
+    def test_devastation_is_a_share(self):
+        """A state's devastation reads as a 0-1 share: a fully devastated state (1) loses 10 points a year."""
         body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_state_yearly")
-        self.assertIn("add = { value = devastation multiply = -0.1 }", body)
+        self.assertIn("add = { value = devastation multiply = -10 }", body)
 
     def test_the_shocks_are_wired(self):
         on_actions = _text(DEMOG_ON_ACTIONS)
@@ -1595,8 +1596,8 @@ class TestWealth(unittest.TestCase):
         self.assertEqual(self.state_year({"te_dg_wc": 40.0})["te_dg_wc_target"], 60.0)
 
     def test_devastation_destroys_local_capital(self):
-        self.assertAlmostEqual(self.state_year({"te_dg_wc": 40.0}, devastation=50.0)["te_dg_wc"], 35.6)
-        self.assertEqual(self.state_year({"te_dg_wc": 3.0}, devastation=100.0, target=0.0)["te_dg_wc"], 0.0)
+        self.assertAlmostEqual(self.state_year({"te_dg_wc": 40.0}, devastation=0.5)["te_dg_wc"], 35.6)
+        self.assertEqual(self.state_year({"te_dg_wc": 3.0}, devastation=1.0, target=0.0)["te_dg_wc"], 0.0)
 
     def test_a_state_without_a_score_starts_at_its_owners_figure(self):
         self.assertEqual(self.state_year({}, owner={"te_inh_concentration": 72.0})["te_dg_wc"], 72.0)

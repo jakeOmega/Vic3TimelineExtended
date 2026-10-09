@@ -99,8 +99,8 @@ te_debug_demog_replay = {
 # THIS = ROOT = a country, from the end of te_demog_country_census, which has just
 # stored the figures this line prints; reads its local te_dg_c_people. A country under
 # a million people writes nothing. crisis is the capital's te_demog_crisis, beside the
-# two bareword reads it sums: devastation (0-100, so crisis takes a hundredth of it)
-# and turmoil (0-1). A country with no capital prints -1 for all three.
+# two bareword reads it sums as they are: devastation and turmoil, each a 0-1 share.
+# A country with no capital prints -1 for all three.
 te_debug_demog_census_line = {
 	if = {
 		limit = { local_var:te_dg_c_people >= 1000000 }

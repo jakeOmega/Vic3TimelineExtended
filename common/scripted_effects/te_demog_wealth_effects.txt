@@ -155,7 +155,8 @@ te_demog_wc_seed_state = {
 # THIS = a state, on its yearly pulse after the walk (te_demog_state_yearly). A
 # state without a score (an old save, a state new to the game) starts at its
 # owner's current figure; otherwise it closes 3% of the gap to its target.
-# Devastation destroys local capital: a fully devastated state (100) loses 10.
+# Devastation destroys local capital: the read is a 0-1 share, so a fully
+# devastated state (1) loses 10 a year.
 te_demog_wc_state_yearly = {
 	set_variable = { name = te_dg_wc_target value = te_demog_wc_target }
 	if = {
@@ -176,7 +177,7 @@ te_demog_wc_state_yearly = {
 	}
 	if = {
 		limit = { devastation > 0 }
-		change_variable = { name = te_dg_wc add = { value = devastation multiply = -0.1 } }
+		change_variable = { name = te_dg_wc add = { value = devastation multiply = -10 } }
 	}
 	clamp_variable = { name = te_dg_wc min = 0 max = 100 }
 }
