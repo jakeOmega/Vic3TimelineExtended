@@ -153,3 +153,82 @@ class TestTheScriptsLine(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+SAVE = """SAV0100tiny
+meta_data={
+\tdate=1840.1.1
+\tversion="1.14.5"
+}
+country_manager={
+\tdatabase={
+1={
+\tdefinition="GBR"
+}
+2={
+\tdefinition="FRA"
+}
+\t}
+}
+laws={
+\tdatabase={
+0={
+\tlaw=law_closed_borders
+\tcountry=1
+\tactive=yes
+}
+1={
+\tlaw=law_no_migration_controls
+\tcountry=2
+\tactive=yes
+}
+2={
+\tlaw=law_migration_controls
+\tcountry=1
+}
+\t}
+}
+"""
+
+
+class TestClosedBorders(unittest.TestCase):
+    """Under Closed Borders nothing migrates across the border, so the census's migration there is the error in
+    the births and deaths it expects the engine to produce (the phase 1 gate run's check)."""
+
+    def _save(self, tmp):
+        path = Path(tmp) / "autosave.v3"
+        path.write_text(SAVE, encoding="utf-8")
+        return path
+
+    def test_reads_the_year_and_each_countrys_active_migration_law(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._save(tmp)
+            self.assertEqual(R.save_year(path), 1840)
+            self.assertEqual(R.migration_laws([path]), {1840: {"GBR": "law_closed_borders",
+                                                               "FRA": "law_no_migration_controls"}})
+
+    def test_the_closed_median_passes_within_the_band(self):
+        records = [{"tag": "GBR", "year": 1839, "people": 1_000_000, "mig": -500},     # -0.5 per 1,000
+                   {"tag": "GBR", "year": 1841, "people": 1_000_000, "mig": 300},
+                   {"tag": "FRA", "year": 1840, "people": 2_000_000, "mig": -20_000},   # real emigration
+                   {"tag": "XXX", "year": 1840, "people": 2_000_000, "mig": -20_000}]   # no law in the save
+        groups, passed = R.closed_borders_check(records, {1840: {"GBR": "law_closed_borders",
+                                                                 "FRA": "law_no_migration_controls"}})
+        self.assertTrue(passed)
+        self.assertEqual(sorted(groups[(1840, "closed")]), [-0.5, 0.3])
+        self.assertEqual(groups[(1840, "open or controlled")], [-10.0])
+        bad = [{"tag": "GBR", "year": 1840, "people": 1_000_000, "mig": -6_000}]   # the pre-fix -6 per 1,000
+        self.assertFalse(R.closed_borders_check(bad, {1840: {"GBR": "law_closed_borders"}})[1])
+
+    def test_cli(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            save = self._save(tmp)
+            log = Path(tmp) / "debug.log"
+            log.write_text("\n".join([census("GBR", 1840, "1_0_0", "5.000", "40.00", mig="-0_0_200"),
+                                      census("FRA", 1840, "2_0_0", "4.000", "40.00", mig="-0_20_0")]) + "\n",
+                           encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(R.main([str(log), "--closed-borders", str(save)]), 0)
+        self.assertIn("Closed Borders overall: median -0.20 per 1,000", out.getvalue())
+        self.assertIn("PASS", out.getvalue())

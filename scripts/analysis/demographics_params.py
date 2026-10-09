@@ -136,6 +136,15 @@ FEMALE_WORK_SHARE_DEFAULT = 0.1
 WAR_DEAD_MALE_SHARE = 0.95
 WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
+# The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone):
+# below the first threshold a pop is in mild starvation and starvation_penalty applies scaled by
+# (threshold - food security) x the factor, at most (0.4 - 0.2) x 2.5 = 0.5; below the second,
+# severe_starvation_penalty applies in full. The expected births and deaths that the migration
+# residual is measured against read these (gen_demographics.py, engine_rate_terms).
+FOOD_SECURITY_STARVATION_THRESHOLD = 0.4
+FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD = 0.2
+STARVATION_EFFECTS_SCALING_FACTOR = 2.5
+STARVATION_BUCKET = 0.05   # mild starvation is read in food-security steps this wide, at each step's middle
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee
