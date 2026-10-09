@@ -172,7 +172,7 @@ extra escalation.
 |---|---|
 | Fourteen technologies of eras 6–12, mostly military, from Bombing Aircraft and Mass Media to Orbital Weapon Platforms | +0.5 to +2 a week each in plays you start; three also add 10% |
 | Total War (Rules of War law) | +25% in plays you start and plays against you |
-| War Crimes Forbidden, Humanitarian Regulations, Limited War (Rules of War laws) | −10%, −20%, −30% in plays you start and plays against you |
+| War Crimes Forbidden, Humanitarian Regulations, Limited War (Rules of War laws) | −10%, −10%, −30% in plays you start and plays against you |
 | Vassalization V and Aggressive Coordination V principles | +0.5 and +1 a week in plays you start |
 | Defensive Cooperation V principle | −20% in plays against you |
 | UN membership, a Security Council seat, permanent membership | Small reductions; see [The United Nations](10-united-nations.md) |

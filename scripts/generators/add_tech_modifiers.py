@@ -305,8 +305,9 @@ BUTTON_TECH_MODIFIERS = {
 BUTTON_SPECIFIC_MAP = [
     # UN buttons
     ('common/scripted_buttons/un_buttons.txt', 'un_join_button', 'intergovernmental_organizations', 'country_can_join_united_nations_bool'),
-    # Colonial empire buttons
-    ('common/scripted_buttons/colonial_empire_buttons.txt', 'ce_cultural_assimilation', 'decolonization', 'country_can_use_cultural_assimilation_bool'),
+    # (Colonial empire: Cultural Assimilation's gate reads
+    # country_can_use_cultural_assimilation_bool in colonial_empire_possible_assimilation_up,
+    # colonial_empire_triggers.txt; the programme has had no button since 2026-10.)
     # Banking buttons
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_open_market_ops', 'keynesian_economics', 'country_can_use_open_market_ops_bool'),
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_countercyclical_buffer', 'international_exchange_standards', 'country_can_use_countercyclical_buffer_bool'),

@@ -2123,8 +2123,11 @@ foreign_property_protected_modifier = {
 # COLONIAL EMPIRE JOURNAL ENTRY MODIFIERS
 # ============================================================================
 
-# Toggle policies (permanent while active, applied via scripted buttons).
-# Each is the right pick in different circumstances:
+# The three programmes. Each runs at a level from 0 to 3 (colonial_empire_values.txt,
+# PROGRAMME LEVELS); the values below are the FULL programme, level 3, and
+# colonial_programmes_refresh_modifiers (decolonization.txt) applies each at a
+# third, two thirds or all of them. Each is the right pick in different
+# circumstances:
 #   - Invest: slow bar push, but pays for itself in economic terms. Right when
 #     stability is OK and you want to grow the empire long-term.
 #   - Garrison: fast bar push, but burns prestige and projection. Right when
@@ -2134,9 +2137,9 @@ foreign_property_protected_modifier = {
 #     resistance grows.
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	# Ongoing monthly expense is carried by colonial_development_investment_expense_modifier
-	# (re-applied each JE pulse with a GDP-scaled multiplier) so it shows up
-	# in the budget line rather than being a silent treasury debit.
+	# The weekly upkeep is carried by colonial_development_investment_expense_modifier
+	# (re-applied each JE pulse at a share of the colonies' GDP per level) so it
+	# shows up in the budget line rather than being a silent treasury debit.
 	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
 	state_middle_strata_expected_sol_add = 1
@@ -2145,15 +2148,18 @@ colonial_development_investment_modifier = {
 	# populate the colonies, not to boost migration into the metropole.
 	state_migration_pull_unincorporated_mult = 0.15
 	building_group_bg_extraction_throughput_add = 0.02
-	# IG anger is handled via ig_approval_effect on the activation button —
-	# the policy is one IGs *react to*, not one that mechanically erodes them.
+	# IG anger is handled via ig_approval_effect when the programme starts
+	# (colonial_programme_invest_up) — the policy is one IGs *react to*, not one
+	# that mechanically erodes them.
 }
 
 # Per-pulse-refreshed expense modifier for the Development Investment program.
-# Held isolated (country_expenses_add only) so the JE pulse can re-apply it
-# with a GDP-scaled multiplier without rescaling the other policy effects.
-# Surfaces in the country's budget panel as a line item — players can see
-# what the program is actually costing them.
+# Held isolated (country_expenses_add only) so the refresh can re-apply it with
+# the weekly cost as its multiplier without rescaling the other policy effects:
+# country_expenses_add is a WEEKLY amount, so the multiplier is
+# colonial_invest_weekly_cost (a share of the colonies' yearly GDP per level,
+# over 52). Surfaces in the country's budget panel as a line item — players can
+# see what the program is actually costing them.
 colonial_development_investment_expense_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -2162,8 +2168,9 @@ colonial_development_investment_expense_modifier = {
 
 colonial_military_garrison_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	# Primary cost: ongoing Authority drain. Cruel/regressive laws supply the
-	# Authority that makes Garrison sustainable; liberal AIs run dry quickly.
+	# Primary cost: ongoing Authority drain, 100 a level. Cruel/regressive laws
+	# supply the Authority that makes Garrison sustainable; liberal AIs run dry
+	# quickly.
 	country_authority_cost_add = 300
 	country_prestige_from_army_power_projection_mult = -0.10
 	country_bureaucracy_mult = -0.03
@@ -2174,7 +2181,7 @@ colonial_military_garrison_modifier = {
 	interest_group_ig_trade_unions_pol_str_mult = -0.03
 	# International standing is expressed through suppressed infamy decay —
 	# every infamy hit the country has taken (and will take, e.g. wars, the
-	# +5 spike on activation) lingers longer while the garrison is on. The
+	# +5 spike on starting it) lingers longer while the garrison is on. The
 	# old flat prestige penalty was too small to matter and is dropped.
 	country_infamy_decay_mult = -0.20
 }
@@ -2195,9 +2202,10 @@ colonial_cultural_assimilation_modifier = {
 }
 
 # State-side modifier reapplied to every overseas colonial state while the
-# country has colonial_cultural_assimilation_modifier active. Represents the
-# disruption to the local economy when teachers are forced to teach the
-# metropole's curriculum and bureaucrats process language conversion.
+# country runs Cultural Assimilation, at the programme's level (a third of these
+# values a level; colonial_assim_disrupt_colonies, decolonization.txt).
+# Represents the disruption to the local economy when teachers are forced to
+# teach the metropole's curriculum and bureaucrats process language conversion.
 # Reapplication wiring lives in je_colonial_empire on_monthly_pulse.
 colonial_assimilation_disruption_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -3482,7 +3490,7 @@ un_vote_failure_penalty = {
 #
 # Scale, deliberately modest against what the mod already grants:
 #   country_diplomatic_reputation_add — law_war_crimes_forbidden +2,
-#     law_humanitarian_regulations +4, law_limited_war +6, law_total_war -20,
+#     law_humanitarian_regulations +6, law_limited_war +3, law_total_war -10,
 #     principle_multilateral_institutions +5 per level, mandate_system_modifier
 #     +5. A top-tier +4 is one good law, not a new pillar.
 #   country_infamy_decay_mult — un_condemnation_leader_modifier +0.15,

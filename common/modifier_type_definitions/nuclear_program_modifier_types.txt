@@ -58,3 +58,27 @@ state_nuclear_weapon_defense_chance_add = {
 	percent = yes
 	script_only = yes
 }
+
+# The Rules of War strike bans (2026-10-09): Humanitarian Regulations carries the
+# strategic ban, Limited War both. They show in the law tooltip, and
+# nd_war_law_permits_strategic_strike / _tactical_strike read them, so a ban
+# granted anywhere else (a treaty, an event) would bind the same way, lifted by
+# the same nd_war_law_exception. ai_value 0: the AI's choice of law is weighed
+# by the laws' own ai_enact_weight_modifier.
+country_strategic_nuclear_strikes_forbidden_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_tactical_nuclear_strikes_forbidden_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
