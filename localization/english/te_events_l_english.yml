@@ -1250,7 +1250,7 @@
  extra_law_events.10.d:0 "Harrowing accounts of battlefield atrocities have reached the newspapers, shocking the public conscience. Photographs of civilian suffering and descriptions of indiscriminate bombardment have galvanized support for the proposed [SCOPE.sLaw('current_law_scope').GetName] legislation."
  extra_law_events.10.f:0 "\"I have seen things in the field that I shall carry to my grave. If the purpose of war is to defend civilization, then we must not abandon civilization in its prosecution. There must be lines that even the victorious dare not cross.\""
  extra_law_events.10.t:0 "Reports from the Front"
- extra_law_events.11.a:0 "Overrule the generals - this is a matter of [concept_power_bloc_principle]."
+ extra_law_events.11.a:0 "Overrule the generals - this is a matter of principle."
  extra_law_events.11.b:0 "Accommodate their concerns to keep them on side."
  extra_law_events.11.d:0 "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have submitted a memorandum to the government protesting the proposed [SCOPE.sLaw('current_law_scope').GetName]. They argue that binding the hands of commanders in wartime will cost more lives than it saves."
  extra_law_events.11.f:0 "\"With the greatest respect, gentlemen of the legislature have never held a field command. War is not a gentleman's game. If you tie our hands with these regulations, the enemy will not reciprocate, and it is our soldiers - not yours - who will pay the price.\""
