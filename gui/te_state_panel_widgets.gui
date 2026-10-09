@@ -525,9 +525,9 @@ types te_state_panel_widget_types
 	###
 	### Display only: Pull Down, Rededicate, Keep as Heritage and the names are
 	### the journal entry's, so a state of the player's own carries a goto
-	### button to the entry instead. Its gate sits on a parent of the
-	### GetPlayerJournalEntry datacontext (te_systems_window.gui's Grand
-	### Monuments tab, gotcha #29). The title column stops short of it.
+	### button instead, to the Grand Monuments tab of the Timeline Extended
+	### window (te_systems_window.gui), which shows the entry's own panels. The
+	### title column stops short of it.
 	###
 	### Columns: 96 status + 10 + 404 = 510, the tourism card's inner width.
 	### Rows: 20 icon + 4 + 290 label + 4 + 86 value = 404.
@@ -711,23 +711,22 @@ types te_state_panel_widget_types
 				}
 			}
 
-			### OPEN THE JOURNAL ENTRY — our own state only.
+			### OPEN THE WINDOW'S TAB — our own state only, while the tab is
+			### open (te_window_grand_monuments_tab_sgui, the gate the tab's own
+			### content reads). One click does what the tab strip and the
+			### launcher do: choose the tab, then open the window, whose root's
+			### _show closes this panel as any vanilla goto would.
 			widget = {
 				visible = "[And(ObjectsEqual(State.GetOwner, GetPlayer.Self), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End))]"
 				parentanchor = top|right
 				position = { -5 5 }
 				size = { 25 25 }
 
-				widget = {
-					datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
+				button_icon_goto = {
 					size = { 25 25 }
-
-					button_icon_goto = {
-						visible = "[JournalEntry.IsActive]"
-						size = { 25 25 }
-						tooltip = "te_window_grand_monuments_open_journal_tt"
-						onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-					}
+					tooltip = "gm_state_open_window_tt"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]"
+					onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
 				}
 			}
 		}

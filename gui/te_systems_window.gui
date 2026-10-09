@@ -20,6 +20,10 @@
 ###       open, otherwise the first open tab (the te_systems_window_*_selected
 ###       templates below; test_te_systems_window.py checks them against every
 ###       case).
+### Set from outside this file too: the state view's Grand Monument card
+### (te_state_gm_card in te_state_panel_widgets.gui) sets the tab to
+### grand_monuments, then opens the window. Renaming either value breaks it
+### (StateCardTest in test_grand_monuments_layout.py).
 ###
 ### PANEL STACK. A scripted widget is not in the engine's panel stack, so the
 ### window does it by hand (§3.6): opening it closes any vanilla side panel and

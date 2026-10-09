@@ -2785,6 +2785,7 @@
  gm_state_lbl_tourism:0 "$building_tourism_industry_throughput_add$"
  gm_state_lbl_turmoil:0 "$state_turmoil_effects_mult$"
  gm_state_local_tt:0 "#b [State.GetCustom('gm_local_effect_label')]#! [State.GetCustom('gm_local_effect_value')]\nWhat its dedication, #v [State.GetCustom('gm_dedication_name')]#!, does in this state, whatever the monument's status. It grows with each step of its [concept_grandeur]. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies it by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!."
+ gm_state_open_window_tt:0 "Opens the $te_window_tab_grand_monuments$ tab of the $te_systems_window_title$ window."
  gm_state_tourism_tt:0 "#b $building_tourism_industry_throughput_add$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_tourism')|%0]#!\nVisitors come to see it, whatever it honours: #G +[State.MakeScope.ScriptValue('gm_step_tourism')|%0]#! for each step of its [concept_grandeur]. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies that by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism')|1]#!.\nThe tourism card above does not count it among its monuments; it is in the card's #bold All modifiers#! line."
  gm_state_val_conscription:0 "#G +[State.MakeScope.ScriptValue('gm_state_disp_local')|%1]#!"
  gm_state_val_grandeur:0 "#v [State.MakeScope.ScriptValue('gm_state_grandeur')|0]#!"
