@@ -98,6 +98,16 @@ class TestWalks(unittest.TestCase):
         self.assertEqual(body.count("every_scope_pop"), 1)
         self.assertEqual(body.count("every_scope_building"), 1)
 
+    def test_the_walk_expects_each_pops_own_rates(self):
+        """Each pop's curves x its own multiplier, floored per pop; no state-level 1 + modifier:state_*_mult,
+        which missed literacy, starvation and every class, workplace and working-conditions term
+        (docs/testing/demographics-growth-probe-results-2026-10-09.md)."""
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        self.assertIn("add = { value = te_demog_pop_engine_births multiply = te_demog_pop_birth_mult }", body)
+        self.assertIn("add = { value = te_demog_pop_engine_deaths multiply = te_demog_pop_death_mult }", body)
+        self.assertNotIn("modifier:state_birth_rate_mult", body)
+        self.assertNotIn("modifier:state_mortality_mult", body)
+
     def test_inheritance_reads_the_walk(self):
         self.assertNotIn("te_inh_agrarian_share_value", _text(INH_VALUES))
         self.assertIn("value = var:te_dg_agr_share", _block(_text(INH_EFFECTS), "te_inh_refresh_rural_effects"))

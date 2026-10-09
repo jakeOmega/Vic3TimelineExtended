@@ -412,6 +412,11 @@ The engine moves and kills people; the model sees only the result. Each year:
    - Resettlement records its arrivals and departures, with its programme's profile.
    - Violent Hostility's kills come from all ages.
 3. **The residual**: the population change, less natural change, less (1) and (2). This is mostly migration.
+   - Natural change here is the engine's: each pop's growth curves × the multiplier the engine applies to it. That
+     multiplier is the state's modifier read plus per-pop terms the read leaves out: literacy and starvation for births;
+     class, workplace, working conditions and starvation for deaths. Each is floored at 0 per pop
+     (`docs/testing/demographics-growth-probe-results-2026-10-09.md`). With the state read alone, every country
+     read about 0.6% a year as emigrants.
    - A gain arrives with the destination's migrant profile, and a loss leaves with the origin's (below).
    - The profile is worked out each year from the state and its country, not from the calendar.
    - A residual under 0.3% of the population is treated as model error and spread over all cohorts. Otherwise the

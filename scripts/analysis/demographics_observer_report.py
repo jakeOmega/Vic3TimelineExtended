@@ -2,7 +2,12 @@
 """Summarize TE_DEMOG_CENSUS lines from an observer game's debug.log (demographics spec §11.1).
 
 Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_LOGS ...]
-           [--step 25] [--tag GBR ...] [--top N] [--json]
+           [--step 25] [--tag GBR ...] [--top N] [--json] [--closed-borders SAVE [SAVE ...]]
+
+--closed-borders reads the migration law of each country from plain-text saves (debug mode writes
+them) and prints net migration per 1,000 for Closed Borders countries against the rest. Under Closed
+Borders nothing migrates across the border, so their median should be about 0: the check that the
+census expects the engine's own births and deaths (phase 1's gate run).
 
 The lines come from `event te_debug_demog.1` option b (the census log): one per country of a
 million people or more at each census, every 31 December, `key=value` pairs split by `;`
@@ -20,6 +25,8 @@ skipped. debug.log rolls over at 512 KB: an observer run must copy the lines out
 
 import argparse
 import json
+import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -191,6 +198,73 @@ def _print(report, tag_filter, top):
             print(f"  {line}")
 
 
+CLOSED = "law_closed_borders"
+MIGRATION_LAWS = (CLOSED, "law_migration_controls", "law_no_migration_controls")
+
+
+def save_year(path):
+    """The in-game year of a plain-text save (its meta date)."""
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        head = fh.read(4000)
+    m = re.search(r"date=(\d+)\.", head)
+    if not m:
+        raise ValueError(f"{path}: no date in the first 4,000 bytes (not a plain-text save?)")
+    return int(m.group(1))
+
+
+def migration_laws(saves):
+    """{save year: {tag: active migration law}} from plain-text saves."""
+    import demographics_save_inputs as S
+    out = {}
+    for path in saves:
+        sec = S.read_sections(str(path), ("country_manager", "laws"))
+        tags = {cid: r.get("definition", "").strip('"') for cid, r in sec["country_manager"].items()}
+        laws = {}
+        for r in sec["laws"].values():
+            if r.get("active") == "yes" and r.get("law") in MIGRATION_LAWS:
+                laws[tags.get(r.get("country"), "?")] = r.get("law")
+        out[save_year(path)] = laws
+    return out
+
+
+def closed_borders_check(records, laws_by_year, tolerance=1.0):
+    """Net migration per 1,000 for countries under Closed Borders (vanilla: no migration in or out) against
+    the rest, by the save nearest each census year. The census's migration is a residual: the population
+    change less the births and deaths it expects the engine to produce. Under Closed Borders the true value
+    is about 0 (moves between a country's own states cancel), so a median off 0 means the expected births or
+    deaths are off (2026-10-09: -6 per 1,000 a year before the per-pop rates; docs/testing/demographics-growth-probe-
+    results-2026-10-09.md). Returns ({(save year, group): [per 1,000]}, passed)."""
+    years = sorted(laws_by_year)
+    groups = {}
+    for r in records:
+        if not r["people"] or not years:
+            continue
+        near = min(years, key=lambda y: abs(y - r["year"]))
+        law = laws_by_year[near].get(r["tag"])
+        if law is None:
+            continue
+        key = (near, "closed" if law == CLOSED else "open or controlled")
+        groups.setdefault(key, []).append(r["mig"] / r["people"] * 1000)
+    closed = [v for (y, g), vs in groups.items() if g == "closed" for v in vs]
+    passed = bool(closed) and abs(statistics.median(closed)) <= tolerance
+    return groups, passed
+
+
+def _print_closed(groups, passed, tolerance):
+    print("\nNet migration per 1,000 a year by migration law (nearest save):")
+    for (year, group) in sorted(groups):
+        vs = groups[(year, group)]
+        neg = sum(1 for v in vs if v < 0)
+        print(f"  {year}  {group:20} n={len(vs):4d}  median {statistics.median(vs):+6.2f}  "
+              f"mean {statistics.mean(vs):+6.2f}  negative {neg}/{len(vs)}")
+    closed = [v for (y, g), vs in groups.items() if g == "closed" for v in vs]
+    if closed:
+        print(f"  Closed Borders overall: median {statistics.median(closed):+.2f} per 1,000 over {len(closed)} "
+              f"country-years: {'PASS' if passed else 'FAIL'} (within +/-{tolerance:g} of 0)")
+    else:
+        print("  no Closed Borders country-years matched a save")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("logs", type=Path, nargs="+")
@@ -198,6 +272,10 @@ def main(argv=None):
     parser.add_argument("--tag", action="append", default=[], help="show only these countries (repeatable)")
     parser.add_argument("--top", type=int, default=0, help="show only the N largest countries")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--closed-borders", type=Path, nargs="+", metavar="SAVE",
+                        help="plain-text saves: compare Closed Borders countries' migration with the rest")
+    parser.add_argument("--tolerance", type=float, default=1.0,
+                        help="the Closed Borders median's pass band, per 1,000 a year (default 1)")
     args = parser.parse_args(argv)
     records, unresolved = [], []
     for path in args.logs:
@@ -213,6 +291,9 @@ def main(argv=None):
         print(json.dumps(report, indent=2))
     else:
         _print(report, set(args.tag), args.top)
+    if args.closed_borders:
+        groups, passed = closed_borders_check(records, migration_laws(args.closed_borders), args.tolerance)
+        _print_closed(groups, passed, args.tolerance)
     return 0
 
 

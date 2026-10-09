@@ -146,3 +146,75 @@ class TestGenerated(unittest.TestCase):
     def test_maternal_comment_says_it_is_a_rate(self):
         head = self.values.split("te_demog_mult_maternal = {", 1)[0].rsplit("\n\n", 1)[-1]
         self.assertIn("maternal deaths per 100,000 births", head)
+
+
+class TestEngineRateTerms(unittest.TestCase):
+    """The expected births and deaths the migration residual is measured against: each pop's curves x the
+    engine's own multiplier for it (docs/testing/demographics-growth-probe-results-2026-10-09.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        values = gen.plan_outputs()[gen.VALUES]
+        cls.birth = values.split("te_demog_pop_birth_mult = {", 1)[1].split("\n}\n", 1)[0]
+        cls.death = values.split("te_demog_pop_death_mult = {", 1)[1].split("\n}\n", 1)[0]
+        cls.registered = gen.registered_modifier_types(ROOT)
+
+    def test_only_registered_modifier_types_are_read(self):
+        """An unregistered key (modifiers.log lists ~1,100 mortality keys, 72 are registered) reads as 'none'
+        on every pop: the growth probe's v3 and v4 runs flooded debug.log that way."""
+        for body in (self.birth, self.death):
+            read = set(re.findall(r"modifier:(\w+)", body))
+            self.assertTrue(read)
+            self.assertEqual(sorted(read - self.registered), [])
+
+    def test_births_take_the_literacy_penalty_and_starvation(self):
+        literacy = gen.static_modifier(ROOT, "literacy_penalty")["state_birth_rate_mult"]
+        self.assertEqual(literacy, -0.1)   # the mod's REPLACE:literacy_penalty, as vanilla's
+        self.assertIn(f"add = {{ value = literacy_rate multiply = {gen.lit(literacy)} }}", self.birth)
+        self.assertIn("add = state.modifier:state_birth_rate_mult", self.birth)
+        self.assertRegex(self.birth, r"is_in_severe_starvation = yes \}\s*add = -0\.9")
+        self.assertNotIn("malnourishment", self.birth)   # the mod's own static modifier; nothing applies it
+
+    def test_each_multiplier_is_floored_per_pop(self):
+        for body in (self.birth, self.death):
+            self.assertTrue(body.rstrip().endswith("min = 0"))
+
+    def test_mild_starvation_scales_with_food_security(self):
+        """starvation_penalty x (0.4 - food security) x 2.5, at most 0.5 (vanilla's comment), read in 0.05 steps."""
+        buckets = gen._starvation_buckets()
+        self.assertEqual([round(lo, 2) for lo, _ in buckets], [0.35, 0.3, 0.25, 0.2])
+        self.assertEqual([round(s, 4) for _, s in buckets], [0.0625, 0.1875, 0.3125, 0.4375])
+        mild = gen.static_modifier(ROOT, "starvation_penalty")
+        self.assertIn(f"food_security >= 0.35 }} add = {gen.lit(mild['state_mortality_mult'] * 0.0625)} }}", self.death)
+
+    def test_working_conditions_reach_the_mods_construction_sector(self):
+        """REPLACE:bg_construction re-parents construction under heavy industry, so its laborers take heavy
+        industry's working_conditions (0.1) as well as their own group's reads."""
+        laborers = self.death.split("is_pop_type = laborers }", 1)[1].split("is_pop_type = machinists }", 1)[0]
+        heavy = re.search(r"limit = \{ workplace = \{ OR = \{ is_building_group = bg_heavy_industry ([^}]*)\} \} \}"
+                          r"(.*?)\n\t*\}", laborers, re.S)
+        self.assertIsNotNone(heavy)
+        self.assertIn("is_building_group = bg_construction", heavy.group(1))
+        self.assertIn("add = 0.1", heavy.group(2))
+        mining = re.search(r"limit = \{ workplace = \{ (?:OR = \{ )?is_building_group = bg_mining\b.*?\n(.*?)\n\t*\}", laborers, re.S)
+        self.assertIn("add = 0.1", mining.group(1))
+
+    def test_every_working_conditions_row_is_applied(self):
+        rows = gen.static_modifier(ROOT, "working_conditions")
+        self.assertEqual(len(rows), 31)
+        for key, value in rows.items():
+            group, ptype = re.fullmatch(r"building_group_(bg_\w+?)_(laborers|machinists|engineers|slaves)_mortality_mult",
+                                        key).groups()
+            branch = self.death.split(f"is_pop_type = {ptype} }}", 1)[1].split("is_pop_type = ", 1)[0]
+            gate = re.search(rf"limit = \{{ workplace = \{{ (?:OR = \{{ )?is_building_group = {group}\b.*?\n(.*?)\n\t*\}}",
+                             branch, re.S)
+            self.assertIsNotNone(gate, key)
+            self.assertIn(f"add = {gen.lit(value)}", gate.group(1), key)
+
+    def test_class_and_workplace_reads(self):
+        laborers = self.death.split("is_pop_type = laborers }", 1)[1].split("is_pop_type = machinists }", 1)[0]
+        self.assertIn("add = state.modifier:state_laborers_mortality_mult", laborers)       # child labor laws
+        self.assertIn("add = workplace.modifier:building_laborers_mortality_mult", laborers)  # production methods
+        self.assertIn("exists = workplace", laborers)
+        self.assertNotIn("state_mortality_turmoil_mult", self.death)   # scaling unknown, measured about 0
+        self.assertNotIn("state_mortality_wealth_mult", self.death)
