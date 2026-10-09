@@ -79,11 +79,13 @@ GBR: pop 25,951,647 SoL 8.4 literacy 0.19 urban 0.48
 
 This is §2.3's fertility formula and §2.4's life table at Britain's own start inputs, then the state's equilibrium
 structure that §2.6 uses as a starting value. The save has Britain at SoL 8.4, literacy 0.19 and an urban share of
-0.48, not the sketch's 11, 0.35 and 0.3; the lower SoL and schooling leave more of the wealth term (6.16) standing, so
+0.48, not the sketch's 11, 0.35 and 0.3. The lower SoL raises the wealth term from the sketch's 5.90 to 6.16, so
 fertility is 5.91 against the sketch's 5.57. Means are 0.17: the traditional 0.4 times access, 0.3 + 0.7 × 0.19.
-Life expectancy at birth is 42.9 for women and 38.7 for men. The two averaged, 40.8, sit a little above the sketch's
-39.6 because the save's Britain holds 53 technologies, medical degrees among them, and the sketch's inputs hold none.
-Nothing here checks the age structure against the engine; only the §14 Q10 saves can.
+Life expectancy at birth is 42.9 for women and 38.7 for men. The two averaged, 40.8, sit above the sketch's 39.6.
+Changing one sketch input at a time to the save's value: its technology adds 2.2 years (`medical_degrees` is the only
+one of its 53 that the model reads for mortality; the sketch holds none), its laws add 1.0 (Charitable Health System
+alone adds 1.1), and its lower SoL and literacy take about 2.1 off. Nothing here checks the age structure against the
+engine; only the §14 Q10 saves can.
 
 ## `seed CHI`
 
@@ -100,9 +102,12 @@ CHI: pop 366,405,617 SoL 8.2 literacy 0.13 urban 0.10
 
 The same checks for the largest country. Lower literacy and a mostly rural population leave the fertility factor near
 1, so TFR is 6.06, about the wealth term itself. Mortality is higher than Britain's (infant mortality 192 per 1,000,
-life expectancy 39.3 and 34.5), because SoL is lower. The age structure is close to
-Britain's (41% / 55% / 4.3%): at these inputs both sit near the same equilibrium, and the difference between them is
-in mortality.
+life expectancy 39.3 and 34.5), and SoL is not the reason: the two countries' SoL differ by 0.2, and giving China
+Britain's moves its average life expectancy from 36.9 to 37.0. Technology and laws are. With Britain's technology
+(`medical_degrees`) China reaches 39.2 and infant mortality 173; with Britain's laws (Charitable Health System alone
+adds 1.1), 38.1 and 183; with Britain's literacy, 37.3 and 189; with SoL, literacy, technology and laws all Britain's,
+40.8 and 161, which is Britain's own. The age
+structure is close to Britain's (41% / 55% / 4.3%).
 
 ## `inputs`
 

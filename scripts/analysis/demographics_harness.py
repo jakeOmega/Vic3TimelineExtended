@@ -160,9 +160,17 @@ def _grouped(x):
     return f"{sign}{n // 1_000_000}_{n // 1000 % 1000}_{n % 1000}"
 
 
+def _group_part(text):
+    """One group of a grouped number: an int, or a float when the units part carries a fraction."""
+    if not text:
+        return 0
+    return float(text) if "." in text else int(text)
+
+
 def _ungroup(text):
+    """The number a grouped one stands for; a fractional units part (`0_0_500.5`) is kept."""
     sign = -1 if text.startswith("-") else 1
-    parts = [int(p or 0) for p in text.lstrip("-").split("_")]
+    parts = [_group_part(p) for p in text.lstrip("-").split("_")]
     while len(parts) < 3:
         parts.insert(0, 0)
     return sign * (parts[0] * 1_000_000 + parts[1] * 1000 + parts[2])
@@ -200,7 +208,11 @@ def format_replay(state, year, ring_before, head, ring_after):
 
 
 def parse_replay(lines):
-    """[{'head': {...}, 'before': {...}, 'after': {...}}] from TE_DEMOG_REPLAY lines."""
+    """[{'head': {...}, 'before': {...}, 'after': {...}, 'errors': [...]}] from TE_DEMOG_REPLAY lines.
+
+    A line that can't be read doesn't stop the parse: it is noted in the block's `errors`,
+    and check_block reports the block as malformed.
+    """
     blocks, cur = [], None
     for line in lines:
         hit = _REPLAY.search(line)
@@ -209,17 +221,58 @@ def parse_replay(lines):
         kind, rest = hit.group(1), hit.group(2)
         fields = dict(kv.split("=", 1) for kv in rest.split() if "=" in kv)
         if kind == "head":
-            cur = {"head": fields, "before": {"f": {}, "m": {}}, "after": {"f": {}, "m": {}}}
+            cur = {"head": fields, "before": {"f": {}, "m": {}}, "after": {"f": {}, "m": {}}, "errors": []}
             blocks.append(cur)
         elif cur is not None and kind in ("before", "after"):
-            first = int(fields["from"])
-            for sex in ("f", "m"):
-                for i, v in enumerate(fields[sex].split(",")):
-                    cur[kind][sex][first + i] = float(v or 0)
-            if "pool_f" in fields:
-                cur[kind]["pool"] = (float(fields["pool_f"] or 0), float(fields["pool_m"] or 0),
-                                     float(fields["pool_age"] or 150))
+            try:
+                first = int(fields["from"])
+                for sex in ("f", "m"):
+                    for i, v in enumerate(fields[sex].split(",")):
+                        cur[kind][sex][first + i] = float(v or 0)
+                if "pool_f" in fields:
+                    cur[kind]["pool"] = (float(fields["pool_f"] or 0), float(fields["pool_m"] or 0),
+                                         float(fields["pool_age"] or 150))
+            except (KeyError, ValueError) as e:
+                cur["errors"].append(f"unreadable {kind} line (from={fields.get('from', '?')}): {type(e).__name__} {e}")
     return blocks
+
+
+def check_block(b):
+    """None for a block replay_block can run; otherwise why not, as `malformed: …` or `incomplete: …`.
+
+    A complete block has every head field, all RING_YEARS slots of each sex in both `before`
+    and `after`, and the pool (slot-0 line) in both. replay_block compares only the slots it
+    is given, so without this a log cut short would pass.
+    """
+    if b.get("errors"):
+        return "malformed: " + b["errors"][0]
+    h = b["head"]
+    missing = [k for k in ("year",) + HEAD_PEOPLE + HEAD_RATES + ("profile",) if k not in h]
+    if missing:
+        return "malformed: head lacks " + ", ".join(missing)
+    try:
+        int(h["year"])
+        for k in HEAD_PEOPLE:
+            _ungroup(h[k])
+        for k in HEAD_RATES:
+            float(h[k])
+        shares = [float(x) for x in h["profile"].split(",")]
+    except ValueError as e:
+        return f"malformed: head value unreadable ({e})"
+    want = 2 * len(P.MIGRANT_CLASSES)
+    if len(shares) != want:
+        return f"malformed: profile has {len(shares)} shares, expected {want}"
+    gaps = []
+    for when in ("before", "after"):
+        for sex, who in (("f", "women"), ("m", "men")):
+            slots = b[when][sex]
+            if any(not 0 <= k < P.RING_YEARS for k in slots):
+                return f"malformed: {when} {who} has a slot outside 0-{P.RING_YEARS - 1}"
+            if len(slots) < P.RING_YEARS:
+                gaps.append(f"{when} {who} {len(slots)} of {P.RING_YEARS} slots")
+        if "pool" not in b[when]:
+            gaps.append(f"{when} pool missing")
+    return "incomplete: " + "; ".join(gaps) if gaps else None
 
 
 def replay_block(b):
@@ -260,10 +313,20 @@ def cmd_replay(args):
         return 1
     bad = 0
     for b in blocks:
-        worst = replay_block(b)
+        label = f"{b['head'].get('state', '?')} {b['head'].get('year', '?')}"
+        problem, worst = check_block(b), 0.0
+        if problem is None:
+            try:
+                worst = replay_block(b)
+            except (ArithmeticError, KeyError, IndexError, TypeError, ValueError) as e:
+                problem = f"malformed: {type(e).__name__} {e}"
+        if problem:
+            bad += 1
+            print(f"{label}: MISMATCH ({problem})")
+            continue
         flag = "OK" if worst <= args.tolerance else "MISMATCH"
         bad += flag != "OK"
-        print(f"{b['head'].get('state', '?')} {b['head']['year']}: worst slot error {worst:.2%} {flag}")
+        print(f"{label}: worst slot error {worst:.2%} {flag}")
     return 1 if bad else 0
 
 
