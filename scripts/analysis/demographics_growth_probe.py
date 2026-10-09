@@ -4,7 +4,7 @@
     demographics_growth_probe.py check  LOG [LOG ...]   # mid-run health: ticks, groups, phases, both-off, daily lines
     demographics_growth_probe.py report LOG [LOG ...]   # per-country fits (noisy: see below)
     demographics_growth_probe.py pooled LOG [LOG ...]   # one fit over all countries and windows
-    demographics_growth_probe.py deaths --version 3 LOG [LOG ...]   # v3: do the mortality reads close the gap?
+    demographics_growth_probe.py deaths --version 4 LOG [LOG ...]   # v4: do the mortality reads close the gap?
 
 LOG may be any mix of debug.log generations and archived copies; identical lines are read once. Only
 v=2 lines are read (the 28-day schedule); the first run's 30-day lines carry no v and are skipped.
@@ -395,7 +395,7 @@ DEATH_PARTS = ("edcls", "edbld", "edbg", "ednh", "edtum", "edw")   # v3: curve d
 
 
 def cmd_deaths(args):
-    """v3: do the reads close the gap? deaths = k x (ed (1 + md) + every read), with k = 12 a year if complete."""
+    """v3/v4: do the reads close the gap? deaths = k x (ed (1 + md) + every read), with k = 12 a year if complete."""
     rows, ticks, days, bad = parse(args.logs, args.min_year, args.version)
     ws = windows(rows)
     steps = {p for p, x in DEATH_STEP.items() if x >= -0.5}
