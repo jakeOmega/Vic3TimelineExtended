@@ -1573,15 +1573,19 @@ types power_bloc_panel_types
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)2'))))]"
 							}
 
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_3_tt"
+							}
+
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
 							}
 						}
 
-						# Slot 5: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
+						# Slot 5: shown under the Up to Eight slot rule (te_pb_principle_slots_max), locked above the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)4' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4')))]"
 
 							blockoverride "te_new_slot_visible" {
 								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4'))]"
@@ -1595,15 +1599,19 @@ types power_bloc_panel_types
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)4'))))]"
 							}
 
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_5_tt"
+							}
+
 							blockoverride "tooltip_alignment" {
 								using = tooltip_se
 							}
 						}
 
-						# Slot 7: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
+						# Slot 7: shown under the Up to Eight slot rule (te_pb_principle_slots_max), locked above the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)6' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)6')))]"
 
 							blockoverride "te_new_slot_visible" {
 								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6'))]"
@@ -1615,6 +1623,10 @@ types power_bloc_panel_types
 
 							blockoverride "te_locked_slot_visible" {
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)6'))))]"
+							}
+
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_7_tt"
 							}
 
 							blockoverride "tooltip_alignment" {
@@ -1677,12 +1689,16 @@ types power_bloc_panel_types
 							blockoverride "te_locked_slot_visible" {
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)3'))))]"
 							}
+
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_4_tt"
+							}
 						}
 
-						# Slot 6: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
+						# Slot 6: shown under the Up to Eight slot rule (te_pb_principle_slots_max), locked above the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)5' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)5')))]"
 
 							blockoverride "te_new_slot_visible" {
 								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5'))]"
@@ -1695,12 +1711,16 @@ types power_bloc_panel_types
 							blockoverride "te_locked_slot_visible" {
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)5'))))]"
 							}
+
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_6_tt"
+							}
 						}
 
-						# Slot 8: shown up to the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
+						# Slot 8: shown under the Up to Eight slot rule (te_pb_principle_slots_max), locked above the bloc's slot count (te_pb_bloc_principle_slot_cap); the engine opens slots 5-8 with slot 4's rule
 						principle_slot = {
 							datacontext = "[PowerBlocPanel.GetPrincipleSlot( '(int32)7' )]"
-							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7')))]"
+							visible = "[Or(PowerBlocPrincipleSlot.IsActive, And(HasDlcFeature('power_bloc_features'), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)7')))]"
 
 							blockoverride "te_new_slot_visible" {
 								visible = "[And(And(And(PowerBloc.IsLeader(GetPlayer.Self), PowerBlocPrincipleSlot.IsNext), PowerBlocPrincipleSlot.IsUnlocked), GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7'))]"
@@ -1712,6 +1732,10 @@ types power_bloc_panel_types
 
 							blockoverride "te_locked_slot_visible" {
 								visible = "[And(Not(PowerBlocPrincipleSlot.IsActive), Or(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(GreaterThan_CFixedPoint(PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap'), '(CFixedPoint)7'))))]"
+							}
+
+							blockoverride "te_locked_slot_tooltip" {
+								tooltip = "te_pb_locked_slot_8_tt"
 							}
 						}
 						
@@ -3172,9 +3196,18 @@ types power_bloc_panel_types
 		}
 
 		# LOCKED PRINCIPLE SLOT
+		# Slots 3-8 override te_locked_slot_tooltip with te_pb_locked_slot_<N>_tt:
+		# vanilla's tooltip prints the slot's unlock rule, and slots 5-8 have slot
+		# 4's, so it can't say what opens them
 		locked_principle_slot = {
 			block "te_locked_slot_visible" {
 				visible = "[And(Not(PowerBlocPrincipleSlot.IsUnlocked), Not(PowerBlocPrincipleSlot.IsActive))]"
+			}
+
+			blockoverride "slot_tooltip" {
+				block "te_locked_slot_tooltip" {
+					tooltip = "TOOLTIP_LOCKED_PRINCIPLE_SLOT"
+				}
 			}
 		}
 	}
