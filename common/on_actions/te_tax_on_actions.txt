@@ -44,6 +44,13 @@
 # Every handler checks te_tax_code_full first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
 #
+# The light code (te_tax_code_light; te_tax_light_effects.txt) has its own
+# handlers, te_tax_light_*, each gated on te_tax_code_light, on the same hooks:
+# migration after the lobby, for a formed or released country and from the
+# monthly dispatch (te_tax_light.2), the monthly processor (te_tax_light.1) and
+# a sync after a taxation law is activated (te_tax_light.3). A released country
+# starts from its own law, so its marker is cleared first.
+#
 # Decentralized countries are left out of the three fan-outs (final review
 # A-Minor 1; extra_on_actions.txt's global-warming pulse does the same): their
 # type has no events, economy or politics, so te_tax.3 would never migrate
@@ -61,6 +68,7 @@
 on_game_started_after_lobby = {
 	on_actions = {
 		te_tax_on_game_started
+		te_tax_light_on_game_started
 	}
 }
 
@@ -76,6 +84,18 @@ te_tax_on_game_started = {
 	}
 }
 
+te_tax_light_on_game_started = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light = yes }
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = te_tax_light.2 }
+			}
+		}
+	}
+}
+
 # ----------------------------------------------------------------------------
 # New countries
 # ----------------------------------------------------------------------------
@@ -86,6 +106,7 @@ te_tax_on_game_started = {
 on_country_formed = {
 	on_actions = {
 		te_tax_on_country_formed
+		te_tax_light_on_country_formed
 	}
 }
 
@@ -94,6 +115,15 @@ te_tax_on_country_formed = {
 		if = {
 			limit = { te_tax_code_full = yes }
 			trigger_event = { id = te_tax.3 }
+		}
+	}
+}
+
+te_tax_light_on_country_formed = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light = yes }
+			trigger_event = { id = te_tax_light.2 }
 		}
 	}
 }
@@ -110,24 +140,28 @@ te_tax_on_country_formed = {
 on_country_released_as_independent = {
 	on_actions = {
 		te_tax_on_country_released
+		te_tax_light_on_country_released
 	}
 }
 
 on_country_released_as_own_subject = {
 	on_actions = {
 		te_tax_on_country_released
+		te_tax_light_on_country_released
 	}
 }
 
 on_country_released_as_overlord_subject = {
 	on_actions = {
 		te_tax_on_country_released
+		te_tax_light_on_country_released
 	}
 }
 
 on_country_released_as_company_subject = {
 	on_actions = {
 		te_tax_on_country_released
+		te_tax_light_on_country_released
 	}
 }
 
@@ -138,6 +172,21 @@ te_tax_on_country_released = {
 			save_scope_as = te_tax_source
 			scope:target ?= {
 				te_tax_init_released_country = yes
+			}
+		}
+	}
+}
+
+# A released country starts from its own taxation law and tax level: a revived
+# tag's marker from an earlier life is cleared, and te_tax_light.2 migrates it
+# as its own ROOT.
+te_tax_light_on_country_released = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light = yes }
+			scope:target ?= {
+				set_variable = { name = te_tax_light_on value = 0 }
+				trigger_event = { id = te_tax_light.2 }
 			}
 		}
 	}
@@ -178,6 +227,7 @@ te_tax_on_state_owner_change = {
 on_monthly_pulse = {
 	on_actions = {
 		te_tax_monthly_dispatch
+		te_tax_light_monthly_dispatch
 	}
 }
 
@@ -212,6 +262,30 @@ te_tax_monthly_dispatch = {
 					OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
 				}
 				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# Global scope (no ROOT). Migrated countries get this month's processor
+# (te_tax_light.1); one no hook migrated migrates now.
+te_tax_light_monthly_dispatch = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light = yes }
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					te_tax_light_in_force = yes
+				}
+				trigger_event = { id = te_tax_light.1 }
+			}
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					NOT = { te_tax_light_in_force = yes }
+				}
+				trigger_event = { id = te_tax_light.2 }
 			}
 		}
 	}
@@ -260,6 +334,7 @@ te_tax_watchdog_on_action = {
 on_law_activated = {
 	on_actions = {
 		te_tax_on_law_activated
+		te_tax_light_on_law_activated
 	}
 }
 
@@ -277,6 +352,25 @@ te_tax_on_law_activated = {
 			}
 			owner = {
 				trigger_event = { id = te_tax.5 }
+			}
+		}
+	}
+}
+
+# Light code: a taxation law activated in a migrated country, enacted or set by
+# script. The sync is dispatched as te_tax_light.3, a country event, so it sees
+# the new law and runs with the country as ROOT; it clamps the code into the
+# new law's range (te_tax_light_sync, step 1).
+te_tax_light_on_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_light = yes
+				law_type = { is_same_law_group_as = law_type:law_proportional_taxation }
+				owner = { te_tax_light_in_force = yes }
+			}
+			owner = {
+				trigger_event = { id = te_tax_light.3 }
 			}
 		}
 	}

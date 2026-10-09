@@ -74,6 +74,18 @@ te_tax_on_uprising = {
 			}
 		}
 	}
+	else_if = {
+		# The light code: the rebels start from their own taxation law and tax
+		# level (a revived tag's marker from an earlier life is cleared first).
+		limit = {
+			te_tax_code_light = yes
+			exists = scope:target
+		}
+		scope:target = {
+			set_variable = { name = te_tax_light_on value = 0 }
+			trigger_event = { id = te_tax_light.2 }
+		}
+	}
 }
 
 # The uprising's scope; scope:te_tax_source = the original. Every country token
@@ -230,6 +242,12 @@ te_tax_repair_after_civil_war = {
 		te_tax_history_push = { KIND = 7 SLOT = none }
 		debug_log = "TE_TAX civil_war_repair the winner's code applies across the reunited country; bill and draft closed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		trigger_event = { id = te_tax.6 }
+	}
+	else_if = {
+		# The light code: the winner keeps its variables but no modifier, so the
+		# sync adds the relief, reactions and views back from them.
+		limit = { te_tax_light_in_force = yes }
+		trigger_event = { id = te_tax_light.3 }
 	}
 	else_if = {
 		limit = { te_tax_code_full = yes }

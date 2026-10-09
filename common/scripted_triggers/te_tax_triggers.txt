@@ -220,6 +220,41 @@ te_tax_entry_unlocked = {
 	}
 }
 
+# The light code's step (te_tax_light_cmd_step, te_tax_light_effects.txt; the
+# rows' buttons, te_tax_light_step_<key>_sgui). KEY: wage, div, land, head or
+# cons. DIR: 0 one step down, 1 one step up, 2 to the law's very-low rate, 3 to
+# its very-high rate. One custom_tooltip line per condition, the variable on
+# the left of each comparison.
+te_tax_light_can_step = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_light_in_force = yes }
+	custom_tooltip = { text = te_tax_lt_tt_levied te_tax_light_levies_$KEY$ = yes }
+	te_tax_light_can_step_$DIR$ = { KEY = $KEY$ }
+}
+
+te_tax_light_can_step_0 = {
+	custom_tooltip = {
+		text = te_tax_lt_tt_above_min
+		has_variable = te_tax_en_$KEY$
+		var:te_tax_en_$KEY$ > te_tax_light_min_$KEY$
+	}
+}
+
+te_tax_light_can_step_1 = {
+	custom_tooltip = {
+		text = te_tax_lt_tt_below_max
+		has_variable = te_tax_en_$KEY$
+		var:te_tax_en_$KEY$ < te_tax_light_max_$KEY$
+	}
+}
+
+te_tax_light_can_step_2 = {
+	te_tax_light_can_step_0 = { KEY = $KEY$ }
+}
+
+te_tax_light_can_step_3 = {
+	te_tax_light_can_step_1 = { KEY = $KEY$ }
+}
+
 # A draft is open (its payload exists exactly while it is).
 te_tax_draft_active = {
 	has_variable = te_tax_dr_on
