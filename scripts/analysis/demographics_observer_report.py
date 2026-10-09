@@ -6,8 +6,13 @@ Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_
 
 --closed-borders reads the migration law of each country from plain-text saves (debug mode writes
 them) and prints net migration per 1,000 for Closed Borders countries against the rest. Under Closed
-Borders nothing migrates across the border, so their median should be about 0: the check that the
-census expects the engine's own births and deaths (phase 1's gate run).
+Borders nothing migrates across the border, so the median of their mig_raw should be about 0: the
+check that the census expects the engine's own births and deaths (phase 1's gate run). mig_raw is the
+residual before each state's noise band (a residual under RESIDUAL_NOISE_SHARE of a state's people,
+3 per 1,000, is set to 0 before the country sums it). The floored mig can't decide the check: its
+median sits at 0 whatever the error below 3 per 1,000, and moves between a country's own states don't
+cancel in it (a state's small loss is zeroed, a city's gain kept). Lines logged before mig_raw existed
+leave the check undecided; the floored figures are still printed, weighted by people.
 
 The lines come from `event te_debug_demog.1` option b (the census log): one per country of a
 million people or more at each census, every 31 December, `key=value` pairs split by `;`
@@ -32,11 +37,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import demographics_params as P  # noqa: E402
 from demographics_harness import _ungroup  # noqa: E402
 
 PREFIX = "TE_DEMOG_CENSUS: "
 FIELDS = ("tag", "year", "people", "median", "tfr", "e0", "e65", "imr", "cbr", "cdr", "mig", "young",
           "working", "old", "sex_balance", "gini", "wc", "primacy", "crisis", "devastation", "turmoil")
+OPTIONAL = ("mig_raw",)   # fields later lines carry: per 1,000 people, signed
 GROUPED = ("people", "mig")
 WEIGHTED = ("tfr", "e0", "young", "old")   # world figures, weighted by people
 
@@ -80,6 +87,9 @@ def _parse(text):
         raise ValueError("empty tag")
     for k in FIELDS[2:]:
         out[k] = _ungroup(fields[k]) if k in GROUPED else float(fields[k])
+    for k in OPTIONAL:
+        if k in fields:
+            out[k] = float(fields[k])
     return out
 
 
@@ -228,41 +238,73 @@ def migration_laws(saves):
 
 
 def closed_borders_check(records, laws_by_year, tolerance=1.0):
-    """Net migration per 1,000 for countries under Closed Borders (vanilla: no migration in or out) against
-    the rest, by the save nearest each census year. The census's migration is a residual: the population
-    change less the births and deaths it expects the engine to produce. Under Closed Borders the true value
-    is about 0 (moves between a country's own states cancel), so a median off 0 means the expected births or
-    deaths are off (2026-10-09: -6 per 1,000 a year before the per-pop rates; docs/testing/demographics-growth-probe-
-    results-2026-10-09.md). Returns ({(save year, group): [per 1,000]}, passed)."""
+    """Census lines for countries under Closed Borders (vanilla: no migration in or out) against the rest,
+    by the save nearest each census year. The census's migration is a residual: the population change less
+    the births and deaths it expects the engine to produce. Under Closed Borders the true value is about 0
+    (moves between a country's own states cancel in mig_raw), so a median off 0 means the expected births
+    or deaths are off (2026-10-09: -6 per 1,000 a year before the per-pop rates; docs/testing/demographics-
+    growth-probe-results-2026-10-09.md). A line archived more than once counts once (the later wins, as in
+    summarize). A census of seeds only (CBR and CDR 0: a game's first census) is left out, as its residual is
+    0 by construction. Returns ({(save year, group): [record]}, verdict): True or False on the Closed Borders
+    median of mig_raw, None when none of their lines carries it."""
     years = sorted(laws_by_year)
+    latest = {(r["tag"], r["year"]): r for r in records}
     groups = {}
-    for r in records:
-        if not r["people"] or not years:
+    for r in latest.values():
+        if not r["people"] or not years or (r.get("cbr") == 0 and r.get("cdr") == 0):
             continue
         near = min(years, key=lambda y: abs(y - r["year"]))
         law = laws_by_year[near].get(r["tag"])
         if law is None:
             continue
-        key = (near, "closed" if law == CLOSED else "open or controlled")
-        groups.setdefault(key, []).append(r["mig"] / r["people"] * 1000)
-    closed = [v for (y, g), vs in groups.items() if g == "closed" for v in vs]
-    passed = bool(closed) and abs(statistics.median(closed)) <= tolerance
-    return groups, passed
+        groups.setdefault((near, "closed" if law == CLOSED else "open or controlled"), []).append(r)
+    closed = [r for (y, g), rs in groups.items() if g == "closed" for r in rs]
+    raw = [r["mig_raw"] for r in closed if "mig_raw" in r]
+    verdict = abs(statistics.median(raw)) <= tolerance if raw else None
+    return groups, verdict
 
 
-def _print_closed(groups, passed, tolerance):
-    print("\nNet migration per 1,000 a year by migration law (nearest save):")
+def migration_stats(records):
+    """Per 1,000 a year over the records: the floored migration weighted by people and its signs (+/0/-),
+    and, over the lines that carry it, mig_raw's median and its mean weighted by people."""
+    people = sum(r["people"] for r in records)
+    raw = [r for r in records if "mig_raw" in r]
+    raw_people = sum(r["people"] for r in raw)
+    return {
+        "n": len(records),
+        "weighted": sum(r["mig"] for r in records) / people * 1000 if people else 0.0,
+        "positive": sum(1 for r in records if r["mig"] > 0),
+        "zero": sum(1 for r in records if r["mig"] == 0),
+        "negative": sum(1 for r in records if r["mig"] < 0),
+        "raw_n": len(raw),
+        "raw_median": statistics.median(r["mig_raw"] for r in raw) if raw else None,
+        "raw_weighted": sum(r["mig_raw"] * r["people"] for r in raw) / raw_people if raw_people else None,
+    }
+
+
+def _print_closed(groups, verdict, tolerance):
+    band = P.RESIDUAL_NOISE_SHARE * 1000
+    print("\nNet migration per 1,000 a year by migration law (nearest save). Floored: each state's residual under "
+          f"{band:g} per 1,000 reads 0; raw: before that.")
     for (year, group) in sorted(groups):
-        vs = groups[(year, group)]
-        neg = sum(1 for v in vs if v < 0)
-        print(f"  {year}  {group:20} n={len(vs):4d}  median {statistics.median(vs):+6.2f}  "
-              f"mean {statistics.mean(vs):+6.2f}  negative {neg}/{len(vs)}")
-    closed = [v for (y, g), vs in groups.items() if g == "closed" for v in vs]
-    if closed:
-        print(f"  Closed Borders overall: median {statistics.median(closed):+.2f} per 1,000 over {len(closed)} "
-              f"country-years: {'PASS' if passed else 'FAIL'} (within +/-{tolerance:g} of 0)")
-    else:
+        st = migration_stats(groups[(year, group)])
+        raw = (f"  raw median {st['raw_median']:+6.2f} weighted {st['raw_weighted']:+6.2f}"
+               if st["raw_n"] else "  raw -")
+        print(f"  {year}  {group:20} n={st['n']:4d}  floored weighted {st['weighted']:+6.2f}  "
+              f"+/0/- {st['positive']}/{st['zero']}/{st['negative']}{raw}")
+    closed = [r for (y, g), rs in groups.items() if g == "closed" for r in rs]
+    if not closed:
         print("  no Closed Borders country-years matched a save")
+        return
+    st = migration_stats(closed)
+    if verdict is None:
+        print(f"  Closed Borders overall: {st['n']} country-years, floored weighted {st['weighted']:+.2f} per 1,000. "
+              f"UNDECIDED: no line carries mig_raw (logged before it existed), and the floored median sits at 0 "
+              f"whatever the error below {band:g} per 1,000.")
+        return
+    print(f"  Closed Borders overall: median {st['raw_median']:+.2f} per 1,000 before the noise band over "
+          f"{st['raw_n']} country-years (weighted {st['raw_weighted']:+.2f}): "
+          f"{'PASS' if verdict else 'FAIL'} (within +/-{tolerance:g} of 0)")
 
 
 def main(argv=None):
@@ -275,7 +317,7 @@ def main(argv=None):
     parser.add_argument("--closed-borders", type=Path, nargs="+", metavar="SAVE",
                         help="plain-text saves: compare Closed Borders countries' migration with the rest")
     parser.add_argument("--tolerance", type=float, default=1.0,
-                        help="the Closed Borders median's pass band, per 1,000 a year (default 1)")
+                        help="the Closed Borders mig_raw median's pass band, per 1,000 a year (default 1)")
     args = parser.parse_args(argv)
     records, unresolved = [], []
     for path in args.logs:
@@ -292,8 +334,8 @@ def main(argv=None):
     else:
         _print(report, set(args.tag), args.top)
     if args.closed_borders:
-        groups, passed = closed_borders_check(records, migration_laws(args.closed_borders), args.tolerance)
-        _print_closed(groups, passed, args.tolerance)
+        groups, verdict = closed_borders_check(records, migration_laws(args.closed_borders), args.tolerance)
+        _print_closed(groups, verdict, args.tolerance)
     return 0
 
 

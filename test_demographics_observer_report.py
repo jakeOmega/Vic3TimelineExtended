@@ -47,6 +47,14 @@ class TestRead(unittest.TestCase):
         self.assertEqual(len(unresolved), 1)
         self.assertIn("PRU", unresolved[0])
 
+    def test_mig_raw_is_read_when_present(self):
+        """Per 1,000 people and signed; lines logged before it existed have none."""
+        records, unresolved = R.read_records([census("GBR", 1840, "1_0_0", "5.0", "40.0", mig_raw="-1.234"),
+                                              census("FRA", 1840, "1_0_0", "5.0", "40.0")])
+        self.assertEqual(unresolved, [])
+        self.assertEqual(records[0]["mig_raw"], -1.234)
+        self.assertNotIn("mig_raw", records[1])
+
     def test_a_line_with_a_bad_number_is_unresolved_too(self):
         records, unresolved = R.read_records([census("GBR", 1836, "25_x_658", "5.5", "40.0")])
         self.assertEqual(records, [])
@@ -146,13 +154,9 @@ class TestTheScriptsLine(unittest.TestCase):
             records, unresolved = R.read_records([PREFIX + line])
             self.assertEqual(unresolved, [])
             self.assertEqual(len(records), 1)
-            self.assertEqual(set(records[0]), set(R.FIELDS))
+            self.assertEqual(set(records[0]), set(R.FIELDS) | {"mig_raw"})
             negative = " mig=-" in template or "; mig=-" in template
             self.assertEqual(records[0]["mig"] < 0, negative)
-
-
-if __name__ == "__main__":
-    unittest.main()
 
 
 SAVE = """SAV0100tiny
@@ -207,28 +211,79 @@ class TestClosedBorders(unittest.TestCase):
             self.assertEqual(R.migration_laws([path]), {1840: {"GBR": "law_closed_borders",
                                                                "FRA": "law_no_migration_controls"}})
 
-    def test_the_closed_median_passes_within_the_band(self):
-        records = [{"tag": "GBR", "year": 1839, "people": 1_000_000, "mig": -500},     # -0.5 per 1,000
-                   {"tag": "GBR", "year": 1841, "people": 1_000_000, "mig": 300},
-                   {"tag": "FRA", "year": 1840, "people": 2_000_000, "mig": -20_000},   # real emigration
-                   {"tag": "XXX", "year": 1840, "people": 2_000_000, "mig": -20_000}]   # no law in the save
-        groups, passed = R.closed_borders_check(records, {1840: {"GBR": "law_closed_borders",
-                                                                 "FRA": "law_no_migration_controls"}})
-        self.assertTrue(passed)
-        self.assertEqual(sorted(groups[(1840, "closed")]), [-0.5, 0.3])
-        self.assertEqual(groups[(1840, "open or controlled")], [-10.0])
-        bad = [{"tag": "GBR", "year": 1840, "people": 1_000_000, "mig": -6_000}]   # the pre-fix -6 per 1,000
-        self.assertFalse(R.closed_borders_check(bad, {1840: {"GBR": "law_closed_borders"}})[1])
+    LAWS = {1840: {"GBR": "law_closed_borders", "SWE": "law_closed_borders", "FRA": "law_no_migration_controls"}}
+
+    @staticmethod
+    def rec(tag, year, people, mig, mig_raw=None):
+        r = {"tag": tag, "year": year, "people": people, "mig": mig}
+        if mig_raw is not None:
+            r["mig_raw"] = mig_raw
+        return r
+
+    def test_the_gate_reads_the_closed_median_of_the_residual_before_the_band(self):
+        records = [self.rec("GBR", 1839, 1_000_000, 0, mig_raw=-0.5),     # inside the band: mig floored to 0
+                   self.rec("GBR", 1841, 1_000_000, 0, mig_raw=0.3),
+                   self.rec("FRA", 1840, 2_000_000, -20_000, mig_raw=-10.0),   # real emigration
+                   self.rec("XXX", 1840, 2_000_000, -20_000, mig_raw=-10.0)]   # no law in the save
+        groups, passed = R.closed_borders_check(records, self.LAWS)
+        self.assertIs(passed, True)
+        self.assertEqual(sorted(r["mig_raw"] for r in groups[(1840, "closed")]), [-0.5, 0.3])
+        self.assertEqual([r["tag"] for r in groups[(1840, "open or controlled")]], ["FRA"])
+        bad = [self.rec("GBR", 1840, 1_000_000, -6_000, mig_raw=-6.0)]   # the pre-fix -6 per 1,000
+        self.assertIs(R.closed_borders_check(bad, self.LAWS)[1], False)
+
+    def test_without_mig_raw_the_gate_is_undecided(self):
+        """The floored figure can't fail: under 3 per 1,000 every state reads 0, so the median sits at 0."""
+        records = [self.rec("GBR", 1840, 1_000_000, 0), self.rec("SWE", 1840, 1_000_000, 0)]
+        self.assertIsNone(R.closed_borders_check(records, self.LAWS)[1])
+
+    def test_a_line_archived_twice_counts_once(self):
+        """An observer run's archive holds the same line in several snapshots of debug.log."""
+        one = self.rec("GBR", 1840, 1_000_000, 0, mig_raw=-0.5)
+        groups, _ = R.closed_borders_check([one, dict(one), dict(one, mig_raw=-0.4)], self.LAWS)
+        self.assertEqual([r["mig_raw"] for r in groups[(1840, "closed")]], [-0.4])   # the later line wins
+
+    def test_a_census_of_seeds_is_left_out(self):
+        """A game's first census only seeds, so its residual is 0 by construction (CBR and CDR read 0)."""
+        seed = dict(self.rec("GBR", 1840, 1_000_000, 0, mig_raw=0.0), cbr=0.0, cdr=0.0)
+        step = dict(self.rec("GBR", 1841, 1_000_000, 0, mig_raw=-2.0), cbr=38.0, cdr=0.0)
+        groups, passed = R.closed_borders_check([seed, step], self.LAWS)
+        self.assertEqual([r["year"] for r in groups[(1840, "closed")]], [1841])
+        self.assertIs(passed, False)
+
+    def test_weighted_figures(self):
+        rs = [self.rec("GBR", 1840, 1_000_000, 0, mig_raw=-1.0), self.rec("SWE", 1840, 3_000_000, 6_000, mig_raw=2.0)]
+        stats = R.migration_stats(rs)
+        self.assertEqual(stats["n"], 2)
+        self.assertAlmostEqual(stats["weighted"], 1.5)       # 6,000 over 4 million
+        self.assertAlmostEqual(stats["raw_weighted"], 1.25)  # (-1 x 1 + 2 x 3) / 4
+        self.assertAlmostEqual(stats["raw_median"], 0.5)
+        self.assertEqual((stats["positive"], stats["zero"], stats["negative"]), (1, 1, 0))
 
     def test_cli(self):
         with tempfile.TemporaryDirectory() as tmp:
             save = self._save(tmp)
             log = Path(tmp) / "debug.log"
-            log.write_text("\n".join([census("GBR", 1840, "1_0_0", "5.000", "40.00", mig="-0_0_200"),
-                                      census("FRA", 1840, "2_0_0", "4.000", "40.00", mig="-0_20_0")]) + "\n",
-                           encoding="utf-8")
+            line = census("GBR", 1840, "1_0_0", "5.000", "40.00", mig="0_0_0", mig_raw="-0.200")
+            log.write_text("\n".join([line, line, census("FRA", 1840, "2_0_0", "4.000", "40.00", mig="-0_20_0",
+                                                           mig_raw="-10.000")]) + "\n", encoding="utf-8")
             out = io.StringIO()
             with redirect_stdout(out):
                 self.assertEqual(R.main([str(log), "--closed-borders", str(save)]), 0)
-        self.assertIn("Closed Borders overall: median -0.20 per 1,000", out.getvalue())
+        self.assertIn("Closed Borders overall: median -0.20 per 1,000 before the noise band", out.getvalue())
+        self.assertIn("over 1 country-years", out.getvalue())
         self.assertIn("PASS", out.getvalue())
+
+    def test_cli_without_mig_raw(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            save = self._save(tmp)
+            log = Path(tmp) / "debug.log"
+            log.write_text(census("GBR", 1840, "1_0_0", "5.000", "40.00") + "\n", encoding="utf-8")
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(R.main([str(log), "--closed-borders", str(save)]), 0)
+        self.assertIn("UNDECIDED", out.getvalue())
+        self.assertNotIn("PASS", out.getvalue())
+
+if __name__ == "__main__":
+    unittest.main()

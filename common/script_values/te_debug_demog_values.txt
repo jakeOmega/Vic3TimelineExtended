@@ -118,6 +118,14 @@ te_debug_demog_mig_g3 = {
 
 # ---- The census line (option b): THIS = a country -------------------------
 
+# Net migration before each state's noise band (te_demog_country_census' te_dg_mig_raw),
+# per 1,000 people and signed. Multiplied before it divides, to keep five decimals.
+te_debug_demog_mig_raw = {
+	value = var:te_dg_mig_raw
+	multiply = 1000
+	divide = { value = var:te_dg_dbg_people min = 1 }
+}
+
 # The census's people (te_demog_country_census' local te_dg_c_people, copied).
 te_debug_demog_people_g1 = {
 	value = var:te_dg_dbg_people
