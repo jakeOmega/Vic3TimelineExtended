@@ -220,6 +220,14 @@ class TestStateGini(unittest.TestCase):
         for call in ("te_demog_gini_band_init = yes", "te_demog_gini_band_add = yes", "te_demog_gini_band_store = yes"):
             self.assertIn(call, walk)
         self.assertNotIn("strata = upper", walk)
+        start = walk.index("every_scope_pop = {") + len("every_scope_pop = {")
+        depth, i = 1, start
+        while depth:
+            depth += {"{": 1, "}": -1}.get(walk[i], 0)
+            i += 1
+        pops = walk[start:i - 1]
+        self.assertIn("te_demog_gini_band_add = yes", pops, "each pop adds itself, inside the pop loop")
+        self.assertNotIn("te_demog_gini_band_store = yes", pops)
 
 
 class TestStep(unittest.TestCase):
@@ -1850,9 +1858,9 @@ class TestWealth(unittest.TestCase):
 
     def test_the_national_figure_weighs_states_by_property(self):
         a = self.scored(80, 70, own=30, ctry=40, bur=900, gini=0.5, priv=400,
-                        bands={2: (900e3, 1.2e6), 6: (90e3, 3e5), 12: (1e4, 2e5)})
+                        bands={k: (1e5 / k + k, (1e5 / k + k) * 3 * k) for k in range(1, P.GINI_BANDS + 1)})
         b = self.scored(40, 50, coop=10, ctry=60, bur=100, gini=0.3, priv=200,
-                        bands={2: (500e3, 6e5), 6: (40e3, 9e4), 12: (2e3, 3e4)})
+                        bands={k: (7e4 / k + 2 * k, (7e4 / k + 2 * k) * (2.5 * k + 1)) for k in range(1, P.GINI_BANDS + 1)})
         c = {"te_dg_walk_pop": 9e9, "te_dg_lv_own": 9e9}   # no score: left out
         v = self.national([a, b, c])
         # 100 state-owned levels where 1,000 bureaucrats work: a holds 900 of them, b 100
@@ -1892,6 +1900,14 @@ class TestWealth(unittest.TestCase):
         v = self.national([old, new])
         want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 1.2e6), (1e4, 2e5)]))
         self.assertAlmostEqual(v["te_dg_gini"], want, places=9)
+
+    def test_a_country_whose_states_have_no_bands_keeps_its_gini(self):
+        # an old save, before any of its states' pulses: no band sums, so no new figure (not 0.00)
+        old = self.scored(60, 55, bands={})
+        for k in range(1, P.GINI_BANDS + 1):
+            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        v = self.national([old], te_dg_gini=0.42)
+        self.assertEqual(v["te_dg_gini"], 0.42)
 
     def test_the_bureaucrat_share_multiplies_before_it_divides(self):
         """A state with a tiny share of the bureaucrats keeps its precision: values are i64 x 1e-5."""
@@ -2695,6 +2711,26 @@ class TestGiniBands(unittest.TestCase):
         bands = {2: (3.2e8, 3.2e8 * 2.0), 6: (6e7, 6e7 * 9.0), 12: (2e7, 2e7 * 300.0), 14: (1e6, 1e6 * 945.0)}
         want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
         self.assertAlmostEqual(self.gini(bands, truncate=True), want, places=3)
+
+    def test_store_keeps_every_band_and_removes_an_old_saves_sums(self):
+        eng = _Engine({})
+        bands = {k: (100.0 * k + 7, (100.0 * k + 7) * (k * k + 1)) for k in range(1, P.GINI_BANDS + 1)}
+        for k, (n, y) in bands.items():
+            eng.locals[f"te_dg_w_gn{k}"], eng.locals[f"te_dg_w_gy{k}"] = n, y
+        old = ("te_dg_n_lo", "te_dg_n_mi", "te_dg_n_up", "te_dg_y_lo", "te_dg_y_mi", "te_dg_y_up")
+        eng.vars.update({name: 1.0 for name in old})
+        eng.call("te_demog_gini_band_store")
+        for k, (n, y) in bands.items():
+            self.assertEqual((eng.vars[f"te_dg_gn{k}"], eng.vars[f"te_dg_gy{k}"]), (n, y), k)
+        for name in old:
+            self.assertNotIn(name, eng.vars)
+        eng.locals.clear()
+        eng.call("te_demog_state_gini")
+        want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+        self.assertAlmostEqual(eng.vars["te_dg_gini"], want, places=9)
+
+    def test_the_figure_is_at_most_09(self):
+        self.assertEqual(self.gini({1: (99, 0.0001), 14: (1, 1000)}), 0.9)
 
     def test_the_constants_of_the_old_map_are_gone(self):
         self.assertNotIn("te_demog_k_gini", _text(GENERATED_VALUES))

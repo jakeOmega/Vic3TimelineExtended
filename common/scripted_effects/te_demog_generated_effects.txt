@@ -4474,7 +4474,7 @@ te_demog_gini_band_init = {
 
 # THIS = a pop in the walk: its people and stand-in income into its wealth band. The knots are
 # each band's top (1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60; above 60 income is capped), split in
-# halves, so a pop takes four tests.
+# halves, so a pop takes at most four tests.
 te_demog_gini_band_add = {
 	if = {
 		limit = { wealth > 30 }

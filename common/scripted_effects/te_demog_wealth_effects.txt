@@ -225,6 +225,7 @@ te_demog_wc_national = {
 		set_local_variable = { name = te_dg_wc_s_own value = 0 }
 		set_local_variable = { name = te_dg_wc_s_ineq value = 0 }
 		te_demog_gini_band_zero = yes
+		set_local_variable = { name = te_dg_g_states value = 0 }
 		every_scope_state = {
 			limit = { has_variable = te_dg_wc }
 			set_local_variable = { name = te_dg_wc_w value = 1 }
@@ -258,6 +259,7 @@ te_demog_wc_national = {
 			if = {
 				limit = { has_variable = te_dg_gn1 }
 				te_demog_gini_band_add_state = yes
+				change_local_variable = { name = te_dg_g_states add = 1 }
 			}
 		}
 		# every weighting sums to at least 1
@@ -269,7 +271,12 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
 		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
-		te_demog_gini_from_locals = yes
+		# only when a state has bands: after loading an old save, before any state's pulse, the
+		# country keeps its last figure rather than showing 0
+		if = {
+			limit = { local_var:te_dg_g_states > 0 }
+			te_demog_gini_from_locals = yes
+		}
 		# the most and least concentrated states, for the panel
 		ordered_scope_state = {
 			limit = { has_variable = te_dg_wc }

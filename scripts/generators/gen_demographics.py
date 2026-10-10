@@ -487,7 +487,7 @@ def gini_bands(o):
 
     o("# THIS = a pop in the walk: its people and stand-in income into its wealth band. The knots are")
     o(f"# each band's top ({', '.join(map(str, knots))}; above {knots[-1]} income is capped), split in")
-    o("# halves, so a pop takes four tests.")
+    o("# halves, so a pop takes at most four tests.")
     o("te_demog_gini_band_add = {")
     chain(1, n)
     o("}")
