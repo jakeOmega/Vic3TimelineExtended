@@ -62,6 +62,11 @@ The last three columns are points of world growth a year, reported and not appli
 - **The starving slope below SoL 4** (owner ruling: the poverty term replaces it) cost 0.04 points in 1837 and 0.17 in
   1887, as the plan's §1 measured (China 0.023 and 0.244).
 
+**Legal Limbo is on top inside the gate.** The plan's §3 (a) placed the LGBTQ rights laws after era 6, but Legal Limbo
+(−0.05 births) is held from 1836 by France, Brazil, Turkey, Spain, the Two Sicilies, Belgium and the Netherlands. With
+no census term it stays on top, and costs Turkey about 0.3 points of growth a year in every gate save (0.28–0.39) and
+France about 0.30 in 1837–1847, at the bare curve's weight (final review m1; the owner's to re-confirm).
+
 **Why China shrinks in 1887.** Its census rate is +0.23% a year, already carrying the poverty term. Added on top,
 mild starvation takes 1.57 births off and adds 1.60 deaths per 1,000: 23.8% of China's people sit below food security
 0.4, and none below 0.2. Austria shows the same mechanism more strongly (18% mild and 7% severe starvation: census
@@ -80,7 +85,7 @@ per-save tables are `predict`'s output.
 |---|---|---|
 | P1 | Are devastation's and pollution's mortality lines inside `modifier:state_mortality_mult`? | **Yes, both (owner, in game, 2026-10-10).** Alentejo: "State Region Devastation +11%", Ministry of Health −2%, total +9%, against option m's logged +0.091. Yorkshire: "Pollution Impact +8%", Ministry of Health −14%, total −5%, against −0.046. The mod's +0.05 pollution line adds to vanilla's (owner). The plan's §1 (E14, E15) records it |
 | P2 | Do the absorptions leave no line behind in the law, tech and institution tooltips? | **To do (owner, in game).** Offline, `TestEngineRateLines` holds every line to net zero or to `ENGINE_LINES_ON_TOP` |
-| P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital after its second yearly pulse |
+| P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
 | P4 | Does a state keep its census modifiers through a change of owner? | **To do:** `predict SAVE --check-modifiers` on a fast-run save taken after a war or a civil war |
 | P5 | Turmoil's scaling (conditional) | Only if the fast run shows a residual tied to turmoil |
 

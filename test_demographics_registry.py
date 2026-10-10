@@ -3024,6 +3024,32 @@ class TestConsole(unittest.TestCase):
         self.assertIn("te_demog_rate_births_applied", body)
         self.assertIn("te_demog_rate_deaths_applied", body)
 
+    def test_census_line_weights_the_phase2_fields_by_people(self):
+        """Final review I4: the census line's terms in force and on-top scales are people-weighted means over the
+        country's census states, and clamped is the share of its people in clamped states (the in-game gate's
+        instrument). Runs the line's own phase-2 lines, from its first local to the war flag, at country scope."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_census_line")
+        part = body[body.index("set_local_variable = { name = te_dg_dbg_w value = 0 }"):
+                    body.index("set_variable = { name = te_dg_dbg_mig")]
+        states = [{"te_dg_year": 1850.0, "te_dg_people": 3e6, "te_dg_mb": -0.4, "te_dg_md": 0.2, "test_census_on": 1.0,
+                   "te_dg_bz": 0.1, "te_dg_dz": 0.3, "te_dg_rate_clamped": 1.0},
+                  {"te_dg_year": 1850.0, "te_dg_people": 1e6, "te_dg_mb": -0.2, "te_dg_md": -0.1,   # modifier lost
+                   "te_dg_bz": 0.5, "te_dg_dz": -0.1, "te_dg_rate_clamped": 0.0},
+                  {"te_dg_people": 9e6, "te_dg_mb": 9.0, "te_dg_bz": 9.0}]                          # no census
+        eng = _CountryEngine(states=states, fixtures={}, triggers={"is_at_war": True}, effects={"te_test_line": part})
+        # the applied terms read has_modifier, which the test engine keeps per engine: a state flag stands in for it
+        applied = "value = 0 if = {{ limit = {{ has_variable = test_census_on }} value = var:{} }}"
+        eng.values["te_demog_rate_births_applied"] = applied.format("te_dg_mb")
+        eng.values["te_demog_rate_deaths_applied"] = applied.format("te_dg_md")
+        eng.call("te_test_line")
+        v = eng.vars
+        self.assertAlmostEqual(v["te_dg_dbg_mb"], -0.4 * 3 / 4)
+        self.assertAlmostEqual(v["te_dg_dbg_md"], 0.2 * 3 / 4)
+        self.assertAlmostEqual(v["te_dg_dbg_bz"], (0.1 * 3 + 0.5 * 1) / 4)
+        self.assertAlmostEqual(v["te_dg_dbg_dz"], (0.3 * 3 - 0.1 * 1) / 4)
+        self.assertAlmostEqual(v["te_dg_dbg_cl"], 3 / 4)
+        self.assertEqual(v["te_dg_dbg_war"], 1.0)
+
     def test_option_m_logs_the_shock_terms_click_only(self):
         console = _text(DEBUG_EVENTS)
         call = "te_debug_demog_shock_lines = yes"
@@ -3160,11 +3186,14 @@ class TestFastMode(unittest.TestCase):
 
     def test_fast_and_census_terms_reach_a_joint_fixed_point(self):
         eng = self._eng_full()
+        # the walk's averages (1.05, 0.98) hold terms on top of +0.05 and -0.02: state-level ones, so the read has them
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.05, "modifier:state_mortality_mult": -0.02})
         self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
         mb, fb = eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"]
         md, fd = eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]
         # the next walk sees both terms applied, and so does the state read; nothing else changed
-        eng.fixtures.update({"modifier:state_birth_rate_mult": mb + fb, "modifier:state_mortality_mult": md + fd})
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.05 + mb + fb,
+                             "modifier:state_mortality_mult": -0.02 + md + fd})
         self._both(eng, eb=(1.05 + mb + fb) * 475e3, eb0=475e3, ed=(0.98 + md + fd) * 430e3, ed0=430e3)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], fb, places=5)

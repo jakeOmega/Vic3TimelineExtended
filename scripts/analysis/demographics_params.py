@@ -144,7 +144,10 @@ MEANS_ACCESS_BASE = 0.3
 # country_<cause>_treatment_add, at most its cap. The values of both live on their carriers in
 # the game files (demographics_modifiers.py); calibrated with `demographics_harness.py medicine`.
 BASE_ACCESS = 0.4
-TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}   # chronic 0.85: phase 2 step 4 (augmentation)
+# chronic 0.85: phase 2 step 4 (augmentation; the modifier-types design note). Headroom: it binds nowhere today, since
+# the most chronic treatment reachable is 0.80 (telemedicine 0.2, personalized_medicine 0.2, modern_pharmaceuticals 0.3,
+# Medical Augmentation Only 0.10), within the old 0.8 (final review m6, batch 3 m3).
+TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}
 # Every other law, technology or institution term is 1 + its types' sum, at least this.
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
