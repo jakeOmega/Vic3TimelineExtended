@@ -12,6 +12,8 @@
 
 ## Owner rulings this plan builds on
 
+- **Feminism carries contraception too** (2026-10-10): birth control was a feminist cause. It is era 3 like vulcanization, so it spreads the line across the production and society trees, not over time; no anchor separates the two, so the fit sets their sum and splits it.
+- **France's Family Limitation stays a static modifier in this stage**, renamed only. Replacing it with a general mechanism (a national practice that starts from history, drifts toward conditions and spreads from neighbours) is phase 3's, recorded in the parent spec's open questions in Task 6 (owner, 2026-10-10: avoid country-specific mechanics).
 - The six calls of the modifier-types spec (2026-10-09), in particular call 3: **the means tiers add.** Researching the techs out of order gives a different means than today's highest-tier rule (the three techs are on no common prerequisite chain).
 - **Every type is `state_*`**, read with `modifier:` in state scope; states inherit country modifiers, so a tech's, a law's or a country static modifier's line reaches every state (2026-10-10, stage 1). The country/state split is not to come back, so the existing `country_fertility_means_add` is renamed here.
 - Values are recalibrated in the harness, not transcribed (spec, Decision 1).
@@ -20,7 +22,7 @@
 
 | Type | Loc name | What it is | Carriers (starting value; Task 4 refits the techs) |
 |---|---|---|---|
-| `state_contraception_add` (new) | Contraception | the methods families have to limit births, added to the traditional 0.4; the census scales the sum by literacy | `vulcanization` +0.15 (INJECT, base game), `contraceptive_pill` +0.25 (mod, era 7, in place), `modern_pharmaceuticals` +0.10 (mod, era 8, in place) |
+| `state_contraception_add` (new) | Contraception | the methods families have to limit births, added to the traditional 0.4; the census scales the sum by literacy | `vulcanization` +0.15 (INJECT, base game), `contraceptive_pill` +0.25 (mod, era 7, in place), `modern_pharmaceuticals` +0.10 (mod, era 8, in place); Task 4 adds `feminism` (base game, era 3, INJECT: the will to use the methods, where vulcanization is the methods; owner, 2026-10-10) |
 | `state_fertility_means_add` (renamed from `country_fertility_means_add`) | Fertility Control | a direct shift to the means, not scaled by literacy | `law_state_sponsored_family_planning` +0.10 (mod law, in place); the static modifier `te_demog_family_limitation` +0.6 (France's history; any event can grant it) |
 
 The starting values are today's cumulative tiers (0.4 → 0.55 → 0.8 → 0.9) as increments, so in research order the census gives exactly today's means until Task 4 refits them.
@@ -41,7 +43,7 @@ Measured on 2026-10-10 against main 526e370f (scratch grid, desired-fertility we
 | West 1990 | 1.47 | 1.47 | about 1.7 |
 | India 1975 | 5.34 | 5.29 | about 5.2 |
 
-Britain 1900 is the drift: stage 1 brought its life expectancy from 54.8 to a historical 46.1, which weakened the child-survival term. The 1836 rows can't move without changing the 1836 census, which no carrier reaches (no country starts with vulcanization, era 3), so the refit leaves them.
+Britain 1900 is the drift: stage 1 brought its life expectancy from 54.8 to a historical 46.1, which weakened the child-survival term. The 1836 rows can't move without changing the 1836 census, which no carrier reaches (no country starts with vulcanization or feminism, both era 3), so the refit leaves them.
 
 ## Global Constraints
 
@@ -367,7 +369,8 @@ and the `Inputs.means_add` comment: `# static modifiers' state_fertility_means_a
 
 **Files:**
 - Modify: `scripts/analysis/demographics_harness.py` (`fertility` command, `FERTILITY_SCENARIOS`)
-- Modify: the three techs' lines (Task 2's files) to the fitted values
+- Modify: the three techs' lines (Task 2's files) to the fitted values, and add `INJECT:feminism` to `te_demog_tech_injections.txt`
+- Modify: `test_demographics_modifiers.py` (`test_contraception_sits_on_the_three_means_techs` becomes `..._the_four_means_techs`, with `feminism`)
 - Test: `test_demographics_harness.py`, `test_demographics_model.py` (`test_sketch_cases` gains Britain 1900)
 
 **Interfaces:**
@@ -398,11 +401,11 @@ and the `Inputs.means_add` comment: `# static modifiers' state_fertility_means_a
 
 ```python
 BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
-                        techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization"}),
+                        techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization", "feminism"}),
                         laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
 ```
 
-Its `WEST_1950` holds vulcanization, so its 3.1 drops to the fitted figure (about 2.6 at the table's tiers); `INDIA_1975` (vulcanization and the Pill) moves a little. Update both after Step 4, keeping `delta=0.3`.
+Its `WEST_1950` and `INDIA_1975` gain `feminism` (and `MODERN` too, beside `vulcanization`). `WEST_1950` holds vulcanization, so its 3.1 drops to the fitted figure (about 2.6 at the table's tiers); `INDIA_1975` (vulcanization and the Pill) moves a little. Update both after Step 4, keeping `delta=0.3`.
 
 - [ ] **Step 2: Run to see them fail.** `$PY -m unittest test_demographics_harness test_demographics_model.TestFertility 2>&1 | grep -E '^(FAIL|ERROR|OK|Ran)'`. Expected: an unknown `fertility` command; Britain 1900 at 4.27 against 3.6.
 
@@ -413,7 +416,7 @@ Its `WEST_1950` holds vulcanization, so its 3.1 drops to the fitted figure (abou
 # (label, inputs, (low, high)): §2.3's sketch table and history. The 1836 rows hold no means tech, so
 # only the traditional means and literacy reach them; France's engine cut from Forced Heirship is
 # not in the model, so its band is wide.
-MEANS_TECHS = {"vulcanization"}
+MEANS_TECHS = {"vulcanization", "feminism"}
 FERTILITY_SCENARIOS = [
     ("1836 agrarian (reference)", dict(sol=8, literacy=0.2, urban_share=0.1), (4.8, 6.2)),
     ("Britain 1836", dict(sol=11, literacy=0.35, urban_share=0.3, techs=MED_1836, laws={CHS},
@@ -453,7 +456,17 @@ def cmd_fertility(_args):
 
 `MED_1990` already holds `modern_pharmaceuticals`. Register it in `main`: `sub.add_parser("fertility").set_defaults(fn=cmd_fertility)`, and add the usage line `demographics_harness.py fertility                   # children per woman with the game files' values` to the docstring. If `scenario_inputs` rejects `means_add`, it already passes `**kw` to `M.Inputs`, which has the field.
 
-- [ ] **Step 4: Fit.** A scratch script (not committed) varies the three techs' lines in steps of 0.05, subject to the traditional 0.4 plus all three ≤ 1.0, with the traditional means and the desired-fertility weights fixed (they move the 1836 census). It patches the carriers in memory (`DM.Carrier(..., value=x)`), and ranks the candidates first by total distance outside the bands, then by the sum of squared distances to the history column of this plan's fit table (Britain 1900 3.5, West 1950 2.9, West 1990 1.7, India 1975 5.2; the 1836 rows don't move). Expected to land near vulcanization +0.35, Pill +0.10, modern pharmaceuticals +0.05 (tiers 0.75 / 0.85 / 0.9). Write the winner into the three carriers. If no candidate meets every band, stop and report: raising the survival weight is the next lever and it changes the 1836 census, which is an owner call.
+- [ ] **Step 4: Fit.** First add the feminism carrier (`te_demog_tech_injections.txt`, beside vulcanization's, with a comment naming the owner's ruling):
+
+```
+INJECT:feminism = {
+	modifier = {
+		state_contraception_add = 0.15
+	}
+}
+```
+
+A scratch script (not committed) then varies the era-3 sum (vulcanization + feminism), the Pill's and modern pharmaceuticals' lines in steps of 0.05, subject to the traditional 0.4 plus all four ≤ 1.0, with the traditional means and the desired-fertility weights fixed (they move the 1836 census). It patches the carriers in memory (`DM.Carrier(..., value=x)`), and ranks the candidates first by total distance outside the bands, then by the sum of squared distances to the history column of this plan's fit table (Britain 1900 3.5, West 1950 2.9, West 1990 1.7, India 1975 5.2; the 1836 rows don't move). Expected to land near an era-3 sum of +0.35, Pill +0.10, modern pharmaceuticals +0.05 (tiers 0.75 / 0.85 / 0.9). Split the era-3 sum as evenly as 0.05 steps allow, vulcanization taking the odd step (+0.20 and +0.15 at 0.35). Write the winner into the four carriers. If no candidate meets every band, stop and report: raising the survival weight is the next lever and it changes the 1836 census, which is an owner call.
 
 - [ ] **Step 5: Run.** `$PY scripts/analysis/demographics_harness.py fertility` (exit 0), `$PY scripts/analysis/demographics_harness.py medicine` (exit 0; the means don't touch mortality, so this must be unchanged), then the five demographics test files. Update `test_sketch_cases`' West 1950 and West 1990 expectations to the fitted figures (`delta=0.3`).
 
@@ -475,13 +488,13 @@ Built by the controller.
 
 **Files:**
 - Modify: `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md` (status line; the table's two fertility rows with the `state_` names and carriers; a "Stage 2 fit" paragraph with the fitted values and the before/after table; out-of-order research)
-- Modify: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.3 (the means table: values now on the carriers, the tiers add; point to the modifier-types spec)
+- Modify: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.3 (the means table: values now on the carriers, the tiers add, feminism; point to the modifier-types spec) and §13 (two open questions: Family Limitation as a general practice — starts from history, drifts toward conditions such as Forced Heirship × the agrarian share, literacy and the church law, spreads from neighbours; the Forced Heirship rural birth cut telling the same story twice — and, for phase 2, whether the panel's children per woman should include the engine's other birth modifiers, which it reads no part of today)
 - Modify: `docs/systems/mod_systems.md` (the `country_fertility_means_add` paragraph → `state_fertility_means_add` and `state_contraception_add`, carriers, the rule)
 - Modify: `docs/guides/python_tools.md` (the harness row: ten commands, `fertility`)
 - Modify: `docs/player_guide/08-states.md`, then rebuild the PDF
 - Modify: `docs/testing/demographics-fast-run-2026-10-09.md`? No: the fit goes in the spec; the testing doc is stage 1's run.
 
-- [ ] **Step 1:** The edits above. The guide's sentence "the means to plan a family grow with literacy and medicine" becomes: "the means to plan a family grow with literacy and with contraception: Vulcanization, the Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and State-Sponsored Family Planning adds more, whoever can read. Their tooltips show each line." Keep the guide's depth: no values.
+- [ ] **Step 1:** The edits above. The guide's sentence "the means to plan a family grow with literacy and medicine" becomes: "the means to plan a family grow with literacy and with contraception: Vulcanization, Feminism, the Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and State-Sponsored Family Planning adds more, whoever can read. Their tooltips show each line." Keep the guide's depth: no values.
 - [ ] **Step 2:** `python3 scripts/analysis/check_player_guide_style.py --strict docs/player_guide/08-states.md`, then `$PY scripts/build_player_guide.py`, then `$PY scripts/build_player_guide.py --check`. Check the CRLF docs aren't touched (`grep -c $'\r$'`).
 - [ ] **Step 3:** Commit the docs, chapter and PDF together. Message: "Demographics stage 2: docs, spec and player guide".
 
@@ -492,11 +505,11 @@ Built by the controller.
 - [ ] **Step 3: Whole-branch review:** one fresh reviewer (script and Python), read-only, severity-ranked; fix, then the reviewer's final verdict.
 - [ ] **Step 4: Push and open a draft PR** to `main` (`gh pr create --draft --base main`). Body: what changed, the fit table, Review Focus, the owner calls (below), a "Player guide" line naming `08-states.md`, and the in-game checks:
   1. The first launch shows no error naming `state_contraception_add`, `state_fertility_means_add` or `te_demog_generated_values.txt`.
-  2. Vulcanization's, the Contraceptive Pill's, Modern Pharmaceuticals' and State-Sponsored Family Planning's tooltips show their line; France's state modifier breakdown shows Fertility Control +60%.
+  2. Vulcanization's, Feminism's, the Contraceptive Pill's, Modern Pharmaceuticals' and State-Sponsored Family Planning's tooltips show their line; France's state modifier breakdown shows Fertility Control +60%.
   3. `event te_debug_demog.1` option l as France at the start: `fmeans=0.600` and `contra=0.000` in both lines, `means` equal to 0.4 × (0.3 + 0.7 × the capital's literacy) + 0.6.
   4. France's and Britain's children per woman on the Demographics tab at the start match a pre-stage game (the means did not change in 1836).
   Then write the PR body to a file before returning, as CLAUDE.md asks.
 
 **Owner calls for the PR body:**
-1. Before the Pill, vulcanization is the only means tech, and the fit puts most of the 19th-century fall on it (about +0.35). A broader carrier (an era-4 or era-5 social technology for the spread of birth-control knowledge) would spread it; not built.
+1. Before the Pill, vulcanization and feminism (both era 3) carry the 19th-century fall between them (about +0.35). The split is a judgment; no anchor separates them. A later carrier (era 4 or 5) would spread the fall over time; none fits well enough to propose.
 2. The fit leaves the 1836 rows: Britain 5.57 against about 5, France 4.9 against 3.8 (the engine's Forced Heirship cut comes on top in game). Bringing them down needs the traditional means or the desired-fertility weights, which changes the 1836 census: phase 2's calibration.
