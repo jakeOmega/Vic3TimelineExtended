@@ -495,10 +495,17 @@ state. The stock is the #822 score.
 - **The measure.** A Gini coefficient from the state's pops. Pop income can't be read in script, but `wealth` can. A
   generator turns the wealth level into spending per head using the pop-needs curve from `pop_needs_curves`, as a
   proxy for income.
-  - **Grouped form: wealth bands** (2026-10-10). Pops are grouped into 14 bands at the stand-in's knots (wealth 1 or
-    less, 2–5, 6–10, …, 56–60, 61 or more), each band's share of people and of income. Income rises with wealth, so the
+  - **Grouped form: wealth bands** (2026-10-10). Pops are grouped into 41 bands at the stand-in's knots (wealth 1 or
+    less, 2–5, 6–10, …, 191–195, 196 or more), each band's share of people and of income. Income rises with wealth, so the
     bands are in income order and need no sort. One pop walk fills all the sums (§14 Q1). The first build grouped by
     the three strata, which hides the spread inside each, most of all inside the lower stratum.
+  - **Across the whole wealth range** (2026-10-10, later). The stand-in runs uncapped to the top wealth level (200,
+    the mod's `NUM_WEALTH_LEVELS`). The first wealth-band build held it flat from 60 and had 14 bands, the last one 61
+    or more. The packages rise 1.7–1.9× every five levels from 25 to 110 (946 a head at 60, 99,648 at 99, 9.5×10^8
+    at 200), so a few rich pops held much of a country's income and the panel read low (Colombia 1953: 0.71 against
+    0.81 pop by pop), and with most people above 60 it would read the 0.30 floor. Five-wide bands to the top keep the
+    same miss at mean wealth 80 as in 1836 (about −0.01 shown). Income is summed in units of 100,000 (people ÷ 100,000
+    × spending per head, the division first) so that the largest country at the top level fits script's fixed point.
   - **Not the engine's `wealth_share`:** it has no value form (rejected at load), and it measures political strength
     from wealth, not wealth. Britain's aristocrats pass `value > 0.2` while holding 2.8% of the country's pop wealth ×
     size.

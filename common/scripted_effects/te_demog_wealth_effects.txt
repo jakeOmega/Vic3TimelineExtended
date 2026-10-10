@@ -255,12 +255,10 @@ te_demog_wc_national = {
 			change_local_variable = { name = te_dg_wc_s_land add = { value = te_demog_wc_land_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_own add = { value = te_demog_wc_ownership_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_ineq add = { value = te_demog_wc_inequality_term multiply = local_var:te_dg_wc_w } }
-			# a state from an old save has no bands until its own pulse (the old strata sums)
-			if = {
-				limit = { has_variable = te_dg_gn1 }
-				te_demog_gini_band_add_state = yes
-				change_local_variable = { name = te_dg_g_states add = 1 }
-			}
+			# the state's wealth bands, if they follow the current layout; it counts itself in
+			# te_dg_g_states. A state from an older save (strata sums, or the 14 bands to 61+)
+			# adds nothing until its own pulse stores new ones (generated)
+			te_demog_gini_band_add_state = yes
 		}
 		# every weighting sums to at least 1
 		set_variable = { name = te_inh_concentration value = { value = local_var:te_dg_wc_s_score divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
@@ -271,8 +269,8 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
 		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
-		# only when a state has bands: after loading an old save, before any state's pulse, the
-		# country keeps its last figure rather than showing 0
+		# only when a state has current bands: after loading an old save, before any state's pulse,
+		# the country keeps its last figure rather than showing 0
 		if = {
 			limit = { local_var:te_dg_g_states > 0 }
 			te_demog_gini_from_locals = yes

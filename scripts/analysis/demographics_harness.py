@@ -4,7 +4,7 @@
 Usage:
     demographics_harness.py sketch                      # §2.2/§2.3's cases from the model
     demographics_harness.py inputs SAVE [--tag GBR]     # per-country inputs read from a save
-    demographics_harness.py gini SAVE [--tag GBR]       # the panel's Gini, the bands' and pop by pop
+    demographics_harness.py gini SAVE [--tag GBR] [--shift N]   # the panel's Gini, the bands' and pop by pop
     demographics_harness.py seed SAVE --tag GBR         # the seeded structure and life figures
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
@@ -62,7 +62,9 @@ def buy_package_costs(path=BUY_PACKAGES):
 
 
 def income_proxy(wealth, costs):
-    w = min(max(int(wealth), 1), P.INCOME_WEALTH_CAP)
+    """Spending per head at a pop's wealth, the package's own figure at each level (no line between
+    knots), uncapped up to the top level: each pop as its own group, the Gini's reference."""
+    w = min(max(int(wealth), 1), P.GINI_TOP_WEALTH)
     return costs[w]
 
 
@@ -92,8 +94,9 @@ def cmd_sketch(_args):
     return 0
 
 
-def country_pops(sections, tag, costs):
-    """[(people, wealth, strata, income)] for one country's pops, from raw pop records."""
+def country_pops(sections, tag, costs, shift=0):
+    """[(people, wealth, strata, income)] for one country's pops, from raw pop records; `shift` adds
+    that many wealth levels to every pop (between 0 and the top level), a synthetic late game."""
     tags = {cid: r.get("definition", "").strip('"') for cid, r in sections["country_manager"].items()}
     owner = {sid: r.get("country") for sid, r in sections["states"].items()}
     out = []
@@ -103,7 +106,7 @@ def country_pops(sections, tag, costs):
         size = S._num(r.get("workforce")) + S._num(r.get("dependents"))
         if size <= 0:
             continue
-        wealth = S._num(r.get("wealth"), 1)
+        wealth = min(max(S._num(r.get("wealth"), 1) + shift, 0), P.GINI_TOP_WEALTH)
         strata = S.STRATA_OF_CLASS.get(r.get("social_class"), "lower")
         out.append((size, wealth, strata, size * income_proxy(wealth, costs)))
     return out
@@ -120,14 +123,17 @@ def grouped_by(pops, key):
 
 def cmd_gini(args):
     """The panel's Gini per country (§4.1: 1 - X (1 - the wealth bands' Gini)), then the bands' own figure,
-    each pop as its own group and the three strata the census used before 2026-10-10 (all computed)."""
+    each pop as its own group and the three strata the census used before 2026-10-10 (all computed).
+    --shift N makes every pop N wealth levels richer: a late game no save has yet."""
     sections = S.read_sections(args.save)
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
     tags = args.tag or sorted(inputs, key=lambda t: -inputs[t].population)[:15]
+    if args.shift:
+        print(f"every pop {args.shift:+d} wealth levels (between 0 and {P.GINI_TOP_WEALTH})")
     out = 0
     for t in tags:
-        pops = country_pops(sections, t, costs)
+        pops = country_pops(sections, t, costs, shift=args.shift)
         if not pops:
             print(f"no pops for {t} in {args.save}", file=sys.stderr)
             out = 1
@@ -872,6 +878,7 @@ def main(argv=None):
     p = sub.add_parser("gini")
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])
+    p.add_argument("--shift", type=int, default=0, help="add this many wealth levels to every pop")
     p.set_defaults(fn=cmd_gini)
     p = sub.add_parser("seed")
     p.add_argument("save")
