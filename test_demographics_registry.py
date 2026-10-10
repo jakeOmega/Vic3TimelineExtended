@@ -3032,8 +3032,62 @@ class TestFastMode(unittest.TestCase):
             self.assertEqual(eng.value("te_demog_fast_k_minus_1"), k - 1, months)
 
     def _refresh(self, eng, eb, eb0, ed, ed0):
-        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0)
+        # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_rate_prev_b=0.0,
+                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
+
+    # -- phase 2 step 4: fast mode composes with the census's term M -------------------------------
+
+    def _both(self, eng, eb, eb0, ed, ed0):
+        """A clock step's two refreshes, as te_demog_state_clock_step runs them."""
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebl=0.0)
+        eng.call("te_demog_rates_refresh")
+        eng.call("te_demog_fast_refresh_rates")
+
+    def _eng_full(self):
+        eng = self._eng(True, {"state_population": 1000.0, "modifier:state_birth_rate_mult": 0.0,
+                               "modifier:state_mortality_mult": 0.0},
+                        triggers={"te_demog_effects_run": True})
+        eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=36.0, te_dg_cdr_model=24.0)
+        return eng
+
+    def test_fast_mode_scales_the_census_target(self):
+        """K = 4: the engine runs 4 x (1 + on top + M) on average, M being the census's term."""
+        eng = self._eng_full()
+        # bare 475 a month per person; the walk's average multiplier 1.05 (terms on top +0.05)
+        self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
+        mb = eng.vars["te_dg_mb"]
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+
+    def test_fast_mode_reads_the_new_term_from_the_refresh(self):
+        """In game, has_modifier can't see the census modifier the refresh just added in the same effect.
+        Hide it from the fast refresh and the term must still come through, from the refresh's locals."""
+        eng = self._eng_full()
+        eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
+                          te_dg_w_ebl=0.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
+        mb = eng.vars["te_dg_mb"]
+        eng.modifiers.clear()
+        eng.call("te_demog_fast_refresh_rates")
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+        body = _block(_text(FAST_EFFECTS), "te_demog_fast_refresh_rates")
+        self.assertIn("add = local_var:te_dg_rate_new_b", body)
+        self.assertNotIn("te_demog_rate_births_applied", body)
+
+    def test_fast_and_census_terms_reach_a_joint_fixed_point(self):
+        eng = self._eng_full()
+        self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
+        mb, fb = eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"]
+        md, fd = eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]
+        # the next walk sees both terms applied, and so does the state read; nothing else changed
+        eng.fixtures.update({"modifier:state_birth_rate_mult": mb + fb, "modifier:state_mortality_mult": md + fd})
+        self._both(eng, eb=(1.05 + mb + fb) * 475e3, eb0=475e3, ed=(0.98 + md + fd) * 430e3, ed0=430e3)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], fb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd, places=5)
 
     def test_the_rate_term_is_k_minus_1_times_the_states_own_average(self):
         """A flat +(K - 1) would dilute the state's other terms, which the engine adds into the same (1 + total):
