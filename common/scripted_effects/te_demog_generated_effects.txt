@@ -5454,7 +5454,7 @@ te_demog_gini_band_load = {
 	}
 }
 
-# THIS = a country, before its states add their bands.
+# THIS = a country before its states add their bands, or a state before it loads its own.
 te_demog_gini_band_zero = {
 	set_local_variable = { name = te_dg_g_n1 value = 0 }
 	set_local_variable = { name = te_dg_g_y1 value = 0 }

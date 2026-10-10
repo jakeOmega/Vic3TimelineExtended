@@ -574,7 +574,7 @@ def gini_bands(o, pieces):
         o("}")
     o("}")
     o("")
-    o("# THIS = a country, before its states add their bands.")
+    o("# THIS = a country before its states add their bands, or a state before it loads its own.")
     o("te_demog_gini_band_zero = {")
     for k in range(1, n + 1):
         o(f"set_local_variable = {{ name = te_dg_g_n{k} value = 0 }}")

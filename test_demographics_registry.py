@@ -2979,8 +2979,11 @@ class TestGiniBands(unittest.TestCase):
         self.assertLess(y, (2 ** 63 - 1) / 1e5)
 
     def test_a_small_poor_state_keeps_its_precision(self):
-        """The census's smallest unit of income is 1 a pop (1e-5 of the unit), so tiny pops at wealth 1
-        lose up to two-thirds of their income: a state of a few hundred poor people still reads right."""
+        """The census's smallest step of income is 1 a pop (1e-5 of the unit), cut toward zero: a pop of
+        one person at wealth 3 (1.86) keeps 1, 46% less, and no pop is cut to 0 (wealth 1 is 1.51 a head).
+        The cut takes more from poorer pops, so a small state usually reads slightly high: this one by
+        0.0002. Across the 3,903 states of the 1836, 1887, 1953 and fast-run saves the largest miss is
+        0.0021; only a state made of one-person pops goes further, 0.02-0.045 high (review of #867)."""
         pops = [(3 + 7 * i, i % 9) for i in range(40)] + [(12, 30), (2, 55)]
         self.assertAlmostEqual(self.through_the_script(pops, True), self.by_the_model(pops), delta=0.002)
 
@@ -3028,15 +3031,43 @@ class TestGiniBands(unittest.TestCase):
         self.assertIn(f"var:te_dg_gini_layout = {P.GINI_LAYOUT}", add)
 
     def test_every_band_read_is_guarded_by_has_variable(self):
-        """A state stores only the bands it has people in, so every read of one asks first."""
-        text = _text(GENERATED_EFFECTS)
-        for name in ("te_demog_gini_band_load", "te_demog_gini_band_add_state"):
-            body = _block(text, name)
-            for k in range(1, P.GINI_BANDS + 1):
-                for s in "ny":
-                    read = f"var:te_dg_g{s}{k} "
-                    self.assertIn(read, body.replace("}", " }"), (name, k))
-                self.assertIn(f"has_variable = te_dg_gn{k} ", body.replace("}", " }"), (name, k))
+        """A state stores only the bands it has people in, so every read of one sits inside an if or
+        else_if whose limit asks has_variable for that band (an else, or a guard on another band, is
+        no guard). Walks every scripted effect and script value of the census, not only the two readers."""
+        band = re.compile(r"var:te_dg_g([ny])(\d+)")
+
+        def reads(items, guards):
+            for key, _, arg in items:
+                if band.fullmatch(key):
+                    yield key, guards
+                if isinstance(arg, str):
+                    if band.fullmatch(arg):
+                        yield arg, guards
+                    continue
+                inner = guards
+                if key in ("if", "else_if"):
+                    inner = guards | {v for k, _, v in _find_all(arg, "limit") if k == "has_variable"}
+                    yield from reads(_find_all(arg, "limit"), guards)
+                    arg = [i for i in arg if i[0] != "limit"]
+                yield from reads(arg, inner)
+
+        def _find_all(items, key):
+            return [x for k, _, v in items if k == key for x in v]
+
+        found = {}
+        for path in DEMOG_FILES:
+            for name, _, body in _parse_script(_text(path)):
+                if not isinstance(body, list):
+                    continue
+                for read, guards in reads(body, frozenset()):
+                    want = "te_dg_gn" + band.fullmatch(read).group(2)
+                    self.assertIn(want, guards, f"{path.name}: {name} reads {read} outside has_variable = {want}")
+                    found.setdefault(name, set()).add(read)
+        every = {f"var:te_dg_g{s}{k}" for k in range(1, P.GINI_BANDS + 1) for s in "ny"}
+        self.assertEqual(found.get("te_demog_gini_band_load"), every)
+        self.assertEqual(found.get("te_demog_gini_band_add_state"), every)
+        self.assertEqual(set(found), {"te_demog_gini_band_load", "te_demog_gini_band_add_state"},
+                         "no other reader of the stored bands")
 
     def test_a_near_total_inequality_shows_near_1_without_a_cap(self):
         bands = {1: (99, 0.0001), P.GINI_BANDS: (1, 1000)}
