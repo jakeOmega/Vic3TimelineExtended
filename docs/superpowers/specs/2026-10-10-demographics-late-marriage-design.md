@@ -402,6 +402,8 @@ Each year, on the state pulse, after the walk and before the fertility term:
     women's work = 0.3 × women's job share × women's work share ÷ 0.48
     share += 0.025 × (target − share) + 0.005 × (neighbours' mean − share)
 
+The neighbour term arrives in phase 3 (§4.3, §5.3); phase 2 builds the rest.
+
 - **The start value is part of the target.** It is the custom, and it holds while conditions are 1836's. Without it
   the target would drift every state toward what its conditions say from the first year, and the game's conditions
   can't tell Denmark from Russia.
