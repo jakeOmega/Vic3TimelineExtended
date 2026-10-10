@@ -20,9 +20,10 @@
 # te_demog_wc_national once a state has a score (te_dg_wc_target,
 # te_inh_concentration, te_dg_wc_t_*, te_dg_wc_top, te_dg_wc_bottom). A game-start
 # census can come before them. The country's Gini is NOT one of them: the same
-# call writes it only when a scored state also has wealth bands (te_dg_gn1), so a
-# country can hold the target and no Gini (a save from before the bands, a state
-# scored before its first walk). The Gini has its own gate below.
+# call writes it only when a scored state also has wealth bands in the current
+# layout (te_dg_gini_layout), so a country can hold the target and no Gini (a save
+# from before the bands, a state scored before its first walk). The Gini has its
+# own gate below.
 te_demog_wealth_ready_sgui = {
 	scope = country
 	is_shown = { has_variable = te_dg_wc_target }

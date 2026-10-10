@@ -4470,138 +4470,769 @@ te_demog_gini_band_init = {
 	set_local_variable = { name = te_dg_w_gy13 value = 0 }
 	set_local_variable = { name = te_dg_w_gn14 value = 0 }
 	set_local_variable = { name = te_dg_w_gy14 value = 0 }
+	set_local_variable = { name = te_dg_w_gn15 value = 0 }
+	set_local_variable = { name = te_dg_w_gy15 value = 0 }
+	set_local_variable = { name = te_dg_w_gn16 value = 0 }
+	set_local_variable = { name = te_dg_w_gy16 value = 0 }
+	set_local_variable = { name = te_dg_w_gn17 value = 0 }
+	set_local_variable = { name = te_dg_w_gy17 value = 0 }
+	set_local_variable = { name = te_dg_w_gn18 value = 0 }
+	set_local_variable = { name = te_dg_w_gy18 value = 0 }
+	set_local_variable = { name = te_dg_w_gn19 value = 0 }
+	set_local_variable = { name = te_dg_w_gy19 value = 0 }
+	set_local_variable = { name = te_dg_w_gn20 value = 0 }
+	set_local_variable = { name = te_dg_w_gy20 value = 0 }
+	set_local_variable = { name = te_dg_w_gn21 value = 0 }
+	set_local_variable = { name = te_dg_w_gy21 value = 0 }
+	set_local_variable = { name = te_dg_w_gn22 value = 0 }
+	set_local_variable = { name = te_dg_w_gy22 value = 0 }
+	set_local_variable = { name = te_dg_w_gn23 value = 0 }
+	set_local_variable = { name = te_dg_w_gy23 value = 0 }
+	set_local_variable = { name = te_dg_w_gn24 value = 0 }
+	set_local_variable = { name = te_dg_w_gy24 value = 0 }
+	set_local_variable = { name = te_dg_w_gn25 value = 0 }
+	set_local_variable = { name = te_dg_w_gy25 value = 0 }
+	set_local_variable = { name = te_dg_w_gn26 value = 0 }
+	set_local_variable = { name = te_dg_w_gy26 value = 0 }
+	set_local_variable = { name = te_dg_w_gn27 value = 0 }
+	set_local_variable = { name = te_dg_w_gy27 value = 0 }
+	set_local_variable = { name = te_dg_w_gn28 value = 0 }
+	set_local_variable = { name = te_dg_w_gy28 value = 0 }
+	set_local_variable = { name = te_dg_w_gn29 value = 0 }
+	set_local_variable = { name = te_dg_w_gy29 value = 0 }
+	set_local_variable = { name = te_dg_w_gn30 value = 0 }
+	set_local_variable = { name = te_dg_w_gy30 value = 0 }
+	set_local_variable = { name = te_dg_w_gn31 value = 0 }
+	set_local_variable = { name = te_dg_w_gy31 value = 0 }
+	set_local_variable = { name = te_dg_w_gn32 value = 0 }
+	set_local_variable = { name = te_dg_w_gy32 value = 0 }
+	set_local_variable = { name = te_dg_w_gn33 value = 0 }
+	set_local_variable = { name = te_dg_w_gy33 value = 0 }
+	set_local_variable = { name = te_dg_w_gn34 value = 0 }
+	set_local_variable = { name = te_dg_w_gy34 value = 0 }
+	set_local_variable = { name = te_dg_w_gn35 value = 0 }
+	set_local_variable = { name = te_dg_w_gy35 value = 0 }
+	set_local_variable = { name = te_dg_w_gn36 value = 0 }
+	set_local_variable = { name = te_dg_w_gy36 value = 0 }
+	set_local_variable = { name = te_dg_w_gn37 value = 0 }
+	set_local_variable = { name = te_dg_w_gy37 value = 0 }
+	set_local_variable = { name = te_dg_w_gn38 value = 0 }
+	set_local_variable = { name = te_dg_w_gy38 value = 0 }
+	set_local_variable = { name = te_dg_w_gn39 value = 0 }
+	set_local_variable = { name = te_dg_w_gy39 value = 0 }
+	set_local_variable = { name = te_dg_w_gn40 value = 0 }
+	set_local_variable = { name = te_dg_w_gy40 value = 0 }
+	set_local_variable = { name = te_dg_w_gn41 value = 0 }
+	set_local_variable = { name = te_dg_w_gy41 value = 0 }
 }
 
-# THIS = a pop in the walk: its people and stand-in income into its wealth band. The knots are
-# each band's top (1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60; above 60 income is capped), split in
-# halves, so a pop takes at most four tests.
+# THIS = a pop in the walk: its people and its income into its wealth band. The knots are each
+# band's top (1, then every fifth level to 195; the last band runs to the top level, 200),
+# split in halves, so a pop takes five or six tests. The leaf computes the income: spending per
+# head (buy package / 100), linear across the band, uncapped. It is summed in units of 100,000:
+# the people divide first (exact), so the largest country at the top level fits the fixed point
+# (i64 x 1e-5); the smallest step is 1 of spending per pop.
 te_demog_gini_band_add = {
 	if = {
-		limit = { wealth > 30 }
+		limit = { wealth > 100 }
 		if = {
-			limit = { wealth > 50 }
+			limit = { wealth > 150 }
 			if = {
-				limit = { wealth > 60 }
-				change_local_variable = { name = te_dg_w_gn14 add = total_size }
-				change_local_variable = { name = te_dg_w_gy14 add = te_demog_pop_income }
+				limit = { wealth > 175 }
+				if = {
+					limit = { wealth > 190 }
+					if = {
+						limit = { wealth > 195 }
+						change_local_variable = { name = te_dg_w_gn41 add = total_size }
+						change_local_variable = { name = te_dg_w_gy41 add = { value = total_size divide = 100000 multiply = { value = wealth max = 200 subtract = 195 multiply = 54543667.118 add = 682033739.68 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn40 add = total_size }
+						change_local_variable = { name = te_dg_w_gy40 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 190 multiply = 39794137.81 add = 483063050.63 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { wealth > 185 }
+						change_local_variable = { name = te_dg_w_gn39 add = total_size }
+						change_local_variable = { name = te_dg_w_gy39 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 185 multiply = 28797833.162 add = 339073884.82 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 180 }
+							change_local_variable = { name = te_dg_w_gn38 add = total_size }
+							change_local_variable = { name = te_dg_w_gy38 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 180 multiply = 20662449.292 add = 235761638.36 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn37 add = total_size }
+							change_local_variable = { name = te_dg_w_gy37 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 175 multiply = 14692176.806 add = 162300754.33 } } }
+						}
+					}
+				}
 			}
 			else = {
 				if = {
-					limit = { wealth > 55 }
-					change_local_variable = { name = te_dg_w_gn13 add = total_size }
-					change_local_variable = { name = te_dg_w_gy13 add = te_demog_pop_income }
+					limit = { wealth > 165 }
+					if = {
+						limit = { wealth > 170 }
+						change_local_variable = { name = te_dg_w_gn36 add = total_size }
+						change_local_variable = { name = te_dg_w_gy36 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 170 multiply = 10348044.494 add = 110560531.86 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn35 add = total_size }
+						change_local_variable = { name = te_dg_w_gy35 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 165 multiply = 7215501.42 add = 74483024.76 } } }
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn12 add = total_size }
-					change_local_variable = { name = te_dg_w_gy12 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 160 }
+						change_local_variable = { name = te_dg_w_gn34 add = total_size }
+						change_local_variable = { name = te_dg_w_gy34 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 160 multiply = 4978062.158 add = 49592713.97 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 155 }
+							change_local_variable = { name = te_dg_w_gn33 add = total_size }
+							change_local_variable = { name = te_dg_w_gy33 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 155 multiply = 3396006.83 add = 32612679.82 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn32 add = total_size }
+							change_local_variable = { name = te_dg_w_gy32 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 150 multiply = 2289272.902 add = 21166315.31 } } }
+						}
+					}
 				}
 			}
 		}
 		else = {
 			if = {
-				limit = { wealth > 40 }
+				limit = { wealth > 125 }
 				if = {
-					limit = { wealth > 45 }
-					change_local_variable = { name = te_dg_w_gn11 add = total_size }
-					change_local_variable = { name = te_dg_w_gy11 add = te_demog_pop_income }
+					limit = { wealth > 140 }
+					if = {
+						limit = { wealth > 145 }
+						change_local_variable = { name = te_dg_w_gn31 add = total_size }
+						change_local_variable = { name = te_dg_w_gy31 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 145 multiply = 1523804.05 add = 13547295.06 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn30 add = total_size }
+						change_local_variable = { name = te_dg_w_gy30 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 140 multiply = 1000733.276 add = 8543628.68 } } }
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn10 add = total_size }
-					change_local_variable = { name = te_dg_w_gy10 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 135 }
+						change_local_variable = { name = te_dg_w_gn29 add = total_size }
+						change_local_variable = { name = te_dg_w_gy29 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 135 multiply = 647875.724 add = 5304250.06 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 130 }
+							change_local_variable = { name = te_dg_w_gn28 add = total_size }
+							change_local_variable = { name = te_dg_w_gy28 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 130 multiply = 413090.552 add = 3238797.3 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn27 add = total_size }
+							change_local_variable = { name = te_dg_w_gy27 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 125 multiply = 259145.368 add = 1943070.46 } } }
+						}
+					}
 				}
 			}
 			else = {
 				if = {
-					limit = { wealth > 35 }
-					change_local_variable = { name = te_dg_w_gn9 add = total_size }
-					change_local_variable = { name = te_dg_w_gy9 add = te_demog_pop_income }
+					limit = { wealth > 115 }
+					if = {
+						limit = { wealth > 120 }
+						change_local_variable = { name = te_dg_w_gn26 add = total_size }
+						change_local_variable = { name = te_dg_w_gy26 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 120 multiply = 159778.706 add = 1144176.93 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn25 add = total_size }
+						change_local_variable = { name = te_dg_w_gy25 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 115 multiply = 96710.632 add = 660623.77 } } }
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn8 add = total_size }
-					change_local_variable = { name = te_dg_w_gy8 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 110 }
+						change_local_variable = { name = te_dg_w_gn24 add = total_size }
+						change_local_variable = { name = te_dg_w_gy24 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 110 multiply = 57396.722 add = 373640.16 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 105 }
+							change_local_variable = { name = te_dg_w_gn23 add = total_size }
+							change_local_variable = { name = te_dg_w_gy23 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 105 multiply = 33359.616 add = 206842.08 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn22 add = total_size }
+							change_local_variable = { name = te_dg_w_gy22 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 100 multiply = 18964.678 add = 112018.69 } } }
+						}
+					}
 				}
 			}
 		}
 	}
 	else = {
 		if = {
-			limit = { wealth > 15 }
+			limit = { wealth > 50 }
 			if = {
-				limit = { wealth > 25 }
-				change_local_variable = { name = te_dg_w_gn7 add = total_size }
-				change_local_variable = { name = te_dg_w_gy7 add = te_demog_pop_income }
+				limit = { wealth > 75 }
+				if = {
+					limit = { wealth > 90 }
+					if = {
+						limit = { wealth > 95 }
+						change_local_variable = { name = te_dg_w_gn21 add = total_size }
+						change_local_variable = { name = te_dg_w_gy21 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 95 multiply = 10597.228 add = 59032.55 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn20 add = total_size }
+						change_local_variable = { name = te_dg_w_gy20 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 90 multiply = 5598.412 add = 31040.49 } } }
+					}
+				}
+				else = {
+					if = {
+						limit = { wealth > 85 }
+						change_local_variable = { name = te_dg_w_gn19 add = total_size }
+						change_local_variable = { name = te_dg_w_gy19 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 85 multiply = 2893.148 add = 16574.75 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 80 }
+							change_local_variable = { name = te_dg_w_gn18 add = total_size }
+							change_local_variable = { name = te_dg_w_gy18 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 80 multiply = 1513.13 add = 9009.1 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn17 add = total_size }
+							change_local_variable = { name = te_dg_w_gy17 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 75 multiply = 803.314 add = 4992.53 } } }
+						}
+					}
+				}
 			}
 			else = {
 				if = {
-					limit = { wealth > 20 }
-					change_local_variable = { name = te_dg_w_gn6 add = total_size }
-					change_local_variable = { name = te_dg_w_gy6 add = te_demog_pop_income }
+					limit = { wealth > 65 }
+					if = {
+						limit = { wealth > 70 }
+						change_local_variable = { name = te_dg_w_gn16 add = total_size }
+						change_local_variable = { name = te_dg_w_gy16 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 70 multiply = 432.616 add = 2829.45 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn15 add = total_size }
+						change_local_variable = { name = te_dg_w_gy15 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 65 multiply = 239.564 add = 1631.63 } } }
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn5 add = total_size }
-					change_local_variable = { name = te_dg_w_gy5 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 60 }
+						change_local_variable = { name = te_dg_w_gn14 add = total_size }
+						change_local_variable = { name = te_dg_w_gy14 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 60 multiply = 137.208 add = 945.59 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 55 }
+							change_local_variable = { name = te_dg_w_gn13 add = total_size }
+							change_local_variable = { name = te_dg_w_gy13 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 55 multiply = 79.69 add = 547.14 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn12 add = total_size }
+							change_local_variable = { name = te_dg_w_gy12 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 50 multiply = 46.19 add = 316.19 } } }
+						}
+					}
 				}
 			}
 		}
 		else = {
 			if = {
-				limit = { wealth > 5 }
+				limit = { wealth > 25 }
 				if = {
-					limit = { wealth > 10 }
-					change_local_variable = { name = te_dg_w_gn4 add = total_size }
-					change_local_variable = { name = te_dg_w_gy4 add = te_demog_pop_income }
+					limit = { wealth > 40 }
+					if = {
+						limit = { wealth > 45 }
+						change_local_variable = { name = te_dg_w_gn11 add = total_size }
+						change_local_variable = { name = te_dg_w_gy11 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 45 multiply = 27.164 add = 180.37 } } }
+					}
+					else = {
+						change_local_variable = { name = te_dg_w_gn10 add = total_size }
+						change_local_variable = { name = te_dg_w_gy10 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 40 multiply = 15.946 add = 100.64 } } }
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn3 add = total_size }
-					change_local_variable = { name = te_dg_w_gy3 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 35 }
+						change_local_variable = { name = te_dg_w_gn9 add = total_size }
+						change_local_variable = { name = te_dg_w_gy9 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 35 multiply = 9.24 add = 54.44 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 30 }
+							change_local_variable = { name = te_dg_w_gn8 add = total_size }
+							change_local_variable = { name = te_dg_w_gy8 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 30 multiply = 5.074 add = 29.07 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn7 add = total_size }
+							change_local_variable = { name = te_dg_w_gy7 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 25 multiply = 2.602 add = 16.06 } } }
+						}
+					}
 				}
 			}
 			else = {
 				if = {
-					limit = { wealth > 1 }
-					change_local_variable = { name = te_dg_w_gn2 add = total_size }
-					change_local_variable = { name = te_dg_w_gy2 add = te_demog_pop_income }
+					limit = { wealth > 10 }
+					if = {
+						limit = { wealth > 20 }
+						change_local_variable = { name = te_dg_w_gn6 add = total_size }
+						change_local_variable = { name = te_dg_w_gy6 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 20 multiply = 1.326 add = 9.43 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 15 }
+							change_local_variable = { name = te_dg_w_gn5 add = total_size }
+							change_local_variable = { name = te_dg_w_gy5 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 15 multiply = 0.714 add = 5.86 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn4 add = total_size }
+							change_local_variable = { name = te_dg_w_gy4 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 10 multiply = 0.448 add = 3.62 } } }
+						}
+					}
 				}
 				else = {
-					change_local_variable = { name = te_dg_w_gn1 add = total_size }
-					change_local_variable = { name = te_dg_w_gy1 add = te_demog_pop_income }
+					if = {
+						limit = { wealth > 5 }
+						change_local_variable = { name = te_dg_w_gn3 add = total_size }
+						change_local_variable = { name = te_dg_w_gy3 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 5 multiply = 0.282 add = 2.21 } } }
+					}
+					else = {
+						if = {
+							limit = { wealth > 1 }
+							change_local_variable = { name = te_dg_w_gn2 add = total_size }
+							change_local_variable = { name = te_dg_w_gy2 add = { value = total_size divide = 100000 multiply = { value = wealth subtract = 1 multiply = 0.175 add = 1.51 } } }
+						}
+						else = {
+							change_local_variable = { name = te_dg_w_gn1 add = total_size }
+							change_local_variable = { name = te_dg_w_gy1 add = { value = total_size divide = 100000 multiply = 1.51 } }
+						}
+					}
 				}
 			}
 		}
 	}
 }
 
-# THIS = a state, after its walk: keep the bands for the country's sum. An old save's strata
-# sums (before the wealth bands, 2026-10-10) are removed.
+# THIS = a state, after its walk: keep the bands that have people, for the country's sum, and
+# remove the rest (save size), with the layout they follow (te_dg_gini_layout = 2, the
+# country adds no other). Overwrites or removes every band an older layout stored, and an old
+# save's strata sums (before the wealth bands, 2026-10-10).
 te_demog_gini_band_store = {
-	set_variable = { name = te_dg_gn1 value = local_var:te_dg_w_gn1 }
-	set_variable = { name = te_dg_gy1 value = local_var:te_dg_w_gy1 }
-	set_variable = { name = te_dg_gn2 value = local_var:te_dg_w_gn2 }
-	set_variable = { name = te_dg_gy2 value = local_var:te_dg_w_gy2 }
-	set_variable = { name = te_dg_gn3 value = local_var:te_dg_w_gn3 }
-	set_variable = { name = te_dg_gy3 value = local_var:te_dg_w_gy3 }
-	set_variable = { name = te_dg_gn4 value = local_var:te_dg_w_gn4 }
-	set_variable = { name = te_dg_gy4 value = local_var:te_dg_w_gy4 }
-	set_variable = { name = te_dg_gn5 value = local_var:te_dg_w_gn5 }
-	set_variable = { name = te_dg_gy5 value = local_var:te_dg_w_gy5 }
-	set_variable = { name = te_dg_gn6 value = local_var:te_dg_w_gn6 }
-	set_variable = { name = te_dg_gy6 value = local_var:te_dg_w_gy6 }
-	set_variable = { name = te_dg_gn7 value = local_var:te_dg_w_gn7 }
-	set_variable = { name = te_dg_gy7 value = local_var:te_dg_w_gy7 }
-	set_variable = { name = te_dg_gn8 value = local_var:te_dg_w_gn8 }
-	set_variable = { name = te_dg_gy8 value = local_var:te_dg_w_gy8 }
-	set_variable = { name = te_dg_gn9 value = local_var:te_dg_w_gn9 }
-	set_variable = { name = te_dg_gy9 value = local_var:te_dg_w_gy9 }
-	set_variable = { name = te_dg_gn10 value = local_var:te_dg_w_gn10 }
-	set_variable = { name = te_dg_gy10 value = local_var:te_dg_w_gy10 }
-	set_variable = { name = te_dg_gn11 value = local_var:te_dg_w_gn11 }
-	set_variable = { name = te_dg_gy11 value = local_var:te_dg_w_gy11 }
-	set_variable = { name = te_dg_gn12 value = local_var:te_dg_w_gn12 }
-	set_variable = { name = te_dg_gy12 value = local_var:te_dg_w_gy12 }
-	set_variable = { name = te_dg_gn13 value = local_var:te_dg_w_gn13 }
-	set_variable = { name = te_dg_gy13 value = local_var:te_dg_w_gy13 }
-	set_variable = { name = te_dg_gn14 value = local_var:te_dg_w_gn14 }
-	set_variable = { name = te_dg_gy14 value = local_var:te_dg_w_gy14 }
+	set_variable = { name = te_dg_gini_layout value = 2 }
+	if = {
+		limit = { local_var:te_dg_w_gn1 > 0 }
+		set_variable = { name = te_dg_gn1 value = local_var:te_dg_w_gn1 }
+		set_variable = { name = te_dg_gy1 value = local_var:te_dg_w_gy1 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn1 }
+		remove_variable = te_dg_gn1
+		remove_variable = te_dg_gy1
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn2 > 0 }
+		set_variable = { name = te_dg_gn2 value = local_var:te_dg_w_gn2 }
+		set_variable = { name = te_dg_gy2 value = local_var:te_dg_w_gy2 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn2 }
+		remove_variable = te_dg_gn2
+		remove_variable = te_dg_gy2
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn3 > 0 }
+		set_variable = { name = te_dg_gn3 value = local_var:te_dg_w_gn3 }
+		set_variable = { name = te_dg_gy3 value = local_var:te_dg_w_gy3 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn3 }
+		remove_variable = te_dg_gn3
+		remove_variable = te_dg_gy3
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn4 > 0 }
+		set_variable = { name = te_dg_gn4 value = local_var:te_dg_w_gn4 }
+		set_variable = { name = te_dg_gy4 value = local_var:te_dg_w_gy4 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn4 }
+		remove_variable = te_dg_gn4
+		remove_variable = te_dg_gy4
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn5 > 0 }
+		set_variable = { name = te_dg_gn5 value = local_var:te_dg_w_gn5 }
+		set_variable = { name = te_dg_gy5 value = local_var:te_dg_w_gy5 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn5 }
+		remove_variable = te_dg_gn5
+		remove_variable = te_dg_gy5
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn6 > 0 }
+		set_variable = { name = te_dg_gn6 value = local_var:te_dg_w_gn6 }
+		set_variable = { name = te_dg_gy6 value = local_var:te_dg_w_gy6 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn6 }
+		remove_variable = te_dg_gn6
+		remove_variable = te_dg_gy6
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn7 > 0 }
+		set_variable = { name = te_dg_gn7 value = local_var:te_dg_w_gn7 }
+		set_variable = { name = te_dg_gy7 value = local_var:te_dg_w_gy7 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn7 }
+		remove_variable = te_dg_gn7
+		remove_variable = te_dg_gy7
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn8 > 0 }
+		set_variable = { name = te_dg_gn8 value = local_var:te_dg_w_gn8 }
+		set_variable = { name = te_dg_gy8 value = local_var:te_dg_w_gy8 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn8 }
+		remove_variable = te_dg_gn8
+		remove_variable = te_dg_gy8
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn9 > 0 }
+		set_variable = { name = te_dg_gn9 value = local_var:te_dg_w_gn9 }
+		set_variable = { name = te_dg_gy9 value = local_var:te_dg_w_gy9 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn9 }
+		remove_variable = te_dg_gn9
+		remove_variable = te_dg_gy9
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn10 > 0 }
+		set_variable = { name = te_dg_gn10 value = local_var:te_dg_w_gn10 }
+		set_variable = { name = te_dg_gy10 value = local_var:te_dg_w_gy10 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn10 }
+		remove_variable = te_dg_gn10
+		remove_variable = te_dg_gy10
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn11 > 0 }
+		set_variable = { name = te_dg_gn11 value = local_var:te_dg_w_gn11 }
+		set_variable = { name = te_dg_gy11 value = local_var:te_dg_w_gy11 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn11 }
+		remove_variable = te_dg_gn11
+		remove_variable = te_dg_gy11
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn12 > 0 }
+		set_variable = { name = te_dg_gn12 value = local_var:te_dg_w_gn12 }
+		set_variable = { name = te_dg_gy12 value = local_var:te_dg_w_gy12 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn12 }
+		remove_variable = te_dg_gn12
+		remove_variable = te_dg_gy12
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn13 > 0 }
+		set_variable = { name = te_dg_gn13 value = local_var:te_dg_w_gn13 }
+		set_variable = { name = te_dg_gy13 value = local_var:te_dg_w_gy13 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn13 }
+		remove_variable = te_dg_gn13
+		remove_variable = te_dg_gy13
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn14 > 0 }
+		set_variable = { name = te_dg_gn14 value = local_var:te_dg_w_gn14 }
+		set_variable = { name = te_dg_gy14 value = local_var:te_dg_w_gy14 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn14 }
+		remove_variable = te_dg_gn14
+		remove_variable = te_dg_gy14
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn15 > 0 }
+		set_variable = { name = te_dg_gn15 value = local_var:te_dg_w_gn15 }
+		set_variable = { name = te_dg_gy15 value = local_var:te_dg_w_gy15 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn15 }
+		remove_variable = te_dg_gn15
+		remove_variable = te_dg_gy15
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn16 > 0 }
+		set_variable = { name = te_dg_gn16 value = local_var:te_dg_w_gn16 }
+		set_variable = { name = te_dg_gy16 value = local_var:te_dg_w_gy16 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn16 }
+		remove_variable = te_dg_gn16
+		remove_variable = te_dg_gy16
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn17 > 0 }
+		set_variable = { name = te_dg_gn17 value = local_var:te_dg_w_gn17 }
+		set_variable = { name = te_dg_gy17 value = local_var:te_dg_w_gy17 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn17 }
+		remove_variable = te_dg_gn17
+		remove_variable = te_dg_gy17
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn18 > 0 }
+		set_variable = { name = te_dg_gn18 value = local_var:te_dg_w_gn18 }
+		set_variable = { name = te_dg_gy18 value = local_var:te_dg_w_gy18 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn18 }
+		remove_variable = te_dg_gn18
+		remove_variable = te_dg_gy18
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn19 > 0 }
+		set_variable = { name = te_dg_gn19 value = local_var:te_dg_w_gn19 }
+		set_variable = { name = te_dg_gy19 value = local_var:te_dg_w_gy19 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn19 }
+		remove_variable = te_dg_gn19
+		remove_variable = te_dg_gy19
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn20 > 0 }
+		set_variable = { name = te_dg_gn20 value = local_var:te_dg_w_gn20 }
+		set_variable = { name = te_dg_gy20 value = local_var:te_dg_w_gy20 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn20 }
+		remove_variable = te_dg_gn20
+		remove_variable = te_dg_gy20
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn21 > 0 }
+		set_variable = { name = te_dg_gn21 value = local_var:te_dg_w_gn21 }
+		set_variable = { name = te_dg_gy21 value = local_var:te_dg_w_gy21 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn21 }
+		remove_variable = te_dg_gn21
+		remove_variable = te_dg_gy21
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn22 > 0 }
+		set_variable = { name = te_dg_gn22 value = local_var:te_dg_w_gn22 }
+		set_variable = { name = te_dg_gy22 value = local_var:te_dg_w_gy22 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn22 }
+		remove_variable = te_dg_gn22
+		remove_variable = te_dg_gy22
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn23 > 0 }
+		set_variable = { name = te_dg_gn23 value = local_var:te_dg_w_gn23 }
+		set_variable = { name = te_dg_gy23 value = local_var:te_dg_w_gy23 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn23 }
+		remove_variable = te_dg_gn23
+		remove_variable = te_dg_gy23
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn24 > 0 }
+		set_variable = { name = te_dg_gn24 value = local_var:te_dg_w_gn24 }
+		set_variable = { name = te_dg_gy24 value = local_var:te_dg_w_gy24 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn24 }
+		remove_variable = te_dg_gn24
+		remove_variable = te_dg_gy24
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn25 > 0 }
+		set_variable = { name = te_dg_gn25 value = local_var:te_dg_w_gn25 }
+		set_variable = { name = te_dg_gy25 value = local_var:te_dg_w_gy25 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn25 }
+		remove_variable = te_dg_gn25
+		remove_variable = te_dg_gy25
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn26 > 0 }
+		set_variable = { name = te_dg_gn26 value = local_var:te_dg_w_gn26 }
+		set_variable = { name = te_dg_gy26 value = local_var:te_dg_w_gy26 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn26 }
+		remove_variable = te_dg_gn26
+		remove_variable = te_dg_gy26
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn27 > 0 }
+		set_variable = { name = te_dg_gn27 value = local_var:te_dg_w_gn27 }
+		set_variable = { name = te_dg_gy27 value = local_var:te_dg_w_gy27 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn27 }
+		remove_variable = te_dg_gn27
+		remove_variable = te_dg_gy27
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn28 > 0 }
+		set_variable = { name = te_dg_gn28 value = local_var:te_dg_w_gn28 }
+		set_variable = { name = te_dg_gy28 value = local_var:te_dg_w_gy28 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn28 }
+		remove_variable = te_dg_gn28
+		remove_variable = te_dg_gy28
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn29 > 0 }
+		set_variable = { name = te_dg_gn29 value = local_var:te_dg_w_gn29 }
+		set_variable = { name = te_dg_gy29 value = local_var:te_dg_w_gy29 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn29 }
+		remove_variable = te_dg_gn29
+		remove_variable = te_dg_gy29
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn30 > 0 }
+		set_variable = { name = te_dg_gn30 value = local_var:te_dg_w_gn30 }
+		set_variable = { name = te_dg_gy30 value = local_var:te_dg_w_gy30 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn30 }
+		remove_variable = te_dg_gn30
+		remove_variable = te_dg_gy30
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn31 > 0 }
+		set_variable = { name = te_dg_gn31 value = local_var:te_dg_w_gn31 }
+		set_variable = { name = te_dg_gy31 value = local_var:te_dg_w_gy31 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn31 }
+		remove_variable = te_dg_gn31
+		remove_variable = te_dg_gy31
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn32 > 0 }
+		set_variable = { name = te_dg_gn32 value = local_var:te_dg_w_gn32 }
+		set_variable = { name = te_dg_gy32 value = local_var:te_dg_w_gy32 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn32 }
+		remove_variable = te_dg_gn32
+		remove_variable = te_dg_gy32
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn33 > 0 }
+		set_variable = { name = te_dg_gn33 value = local_var:te_dg_w_gn33 }
+		set_variable = { name = te_dg_gy33 value = local_var:te_dg_w_gy33 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn33 }
+		remove_variable = te_dg_gn33
+		remove_variable = te_dg_gy33
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn34 > 0 }
+		set_variable = { name = te_dg_gn34 value = local_var:te_dg_w_gn34 }
+		set_variable = { name = te_dg_gy34 value = local_var:te_dg_w_gy34 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn34 }
+		remove_variable = te_dg_gn34
+		remove_variable = te_dg_gy34
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn35 > 0 }
+		set_variable = { name = te_dg_gn35 value = local_var:te_dg_w_gn35 }
+		set_variable = { name = te_dg_gy35 value = local_var:te_dg_w_gy35 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn35 }
+		remove_variable = te_dg_gn35
+		remove_variable = te_dg_gy35
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn36 > 0 }
+		set_variable = { name = te_dg_gn36 value = local_var:te_dg_w_gn36 }
+		set_variable = { name = te_dg_gy36 value = local_var:te_dg_w_gy36 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn36 }
+		remove_variable = te_dg_gn36
+		remove_variable = te_dg_gy36
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn37 > 0 }
+		set_variable = { name = te_dg_gn37 value = local_var:te_dg_w_gn37 }
+		set_variable = { name = te_dg_gy37 value = local_var:te_dg_w_gy37 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn37 }
+		remove_variable = te_dg_gn37
+		remove_variable = te_dg_gy37
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn38 > 0 }
+		set_variable = { name = te_dg_gn38 value = local_var:te_dg_w_gn38 }
+		set_variable = { name = te_dg_gy38 value = local_var:te_dg_w_gy38 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn38 }
+		remove_variable = te_dg_gn38
+		remove_variable = te_dg_gy38
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn39 > 0 }
+		set_variable = { name = te_dg_gn39 value = local_var:te_dg_w_gn39 }
+		set_variable = { name = te_dg_gy39 value = local_var:te_dg_w_gy39 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn39 }
+		remove_variable = te_dg_gn39
+		remove_variable = te_dg_gy39
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn40 > 0 }
+		set_variable = { name = te_dg_gn40 value = local_var:te_dg_w_gn40 }
+		set_variable = { name = te_dg_gy40 value = local_var:te_dg_w_gy40 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn40 }
+		remove_variable = te_dg_gn40
+		remove_variable = te_dg_gy40
+	}
+	if = {
+		limit = { local_var:te_dg_w_gn41 > 0 }
+		set_variable = { name = te_dg_gn41 value = local_var:te_dg_w_gn41 }
+		set_variable = { name = te_dg_gy41 value = local_var:te_dg_w_gy41 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_gn41 }
+		remove_variable = te_dg_gn41
+		remove_variable = te_dg_gy41
+	}
 	if = {
 		limit = { has_variable = te_dg_n_lo }
 		remove_variable = te_dg_n_lo
@@ -4613,36 +5244,214 @@ te_demog_gini_band_store = {
 	}
 }
 
-# THIS = a state: its bands into the formula's locals.
+# THIS = a state, after its store: its bands into the formula's locals (0 where none is stored).
 te_demog_gini_band_load = {
-	set_local_variable = { name = te_dg_g_n1 value = var:te_dg_gn1 }
-	set_local_variable = { name = te_dg_g_y1 value = var:te_dg_gy1 }
-	set_local_variable = { name = te_dg_g_n2 value = var:te_dg_gn2 }
-	set_local_variable = { name = te_dg_g_y2 value = var:te_dg_gy2 }
-	set_local_variable = { name = te_dg_g_n3 value = var:te_dg_gn3 }
-	set_local_variable = { name = te_dg_g_y3 value = var:te_dg_gy3 }
-	set_local_variable = { name = te_dg_g_n4 value = var:te_dg_gn4 }
-	set_local_variable = { name = te_dg_g_y4 value = var:te_dg_gy4 }
-	set_local_variable = { name = te_dg_g_n5 value = var:te_dg_gn5 }
-	set_local_variable = { name = te_dg_g_y5 value = var:te_dg_gy5 }
-	set_local_variable = { name = te_dg_g_n6 value = var:te_dg_gn6 }
-	set_local_variable = { name = te_dg_g_y6 value = var:te_dg_gy6 }
-	set_local_variable = { name = te_dg_g_n7 value = var:te_dg_gn7 }
-	set_local_variable = { name = te_dg_g_y7 value = var:te_dg_gy7 }
-	set_local_variable = { name = te_dg_g_n8 value = var:te_dg_gn8 }
-	set_local_variable = { name = te_dg_g_y8 value = var:te_dg_gy8 }
-	set_local_variable = { name = te_dg_g_n9 value = var:te_dg_gn9 }
-	set_local_variable = { name = te_dg_g_y9 value = var:te_dg_gy9 }
-	set_local_variable = { name = te_dg_g_n10 value = var:te_dg_gn10 }
-	set_local_variable = { name = te_dg_g_y10 value = var:te_dg_gy10 }
-	set_local_variable = { name = te_dg_g_n11 value = var:te_dg_gn11 }
-	set_local_variable = { name = te_dg_g_y11 value = var:te_dg_gy11 }
-	set_local_variable = { name = te_dg_g_n12 value = var:te_dg_gn12 }
-	set_local_variable = { name = te_dg_g_y12 value = var:te_dg_gy12 }
-	set_local_variable = { name = te_dg_g_n13 value = var:te_dg_gn13 }
-	set_local_variable = { name = te_dg_g_y13 value = var:te_dg_gy13 }
-	set_local_variable = { name = te_dg_g_n14 value = var:te_dg_gn14 }
-	set_local_variable = { name = te_dg_g_y14 value = var:te_dg_gy14 }
+	te_demog_gini_band_zero = yes
+	if = {
+		limit = { has_variable = te_dg_gn1 }
+		set_local_variable = { name = te_dg_g_n1 value = var:te_dg_gn1 }
+		set_local_variable = { name = te_dg_g_y1 value = var:te_dg_gy1 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn2 }
+		set_local_variable = { name = te_dg_g_n2 value = var:te_dg_gn2 }
+		set_local_variable = { name = te_dg_g_y2 value = var:te_dg_gy2 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn3 }
+		set_local_variable = { name = te_dg_g_n3 value = var:te_dg_gn3 }
+		set_local_variable = { name = te_dg_g_y3 value = var:te_dg_gy3 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn4 }
+		set_local_variable = { name = te_dg_g_n4 value = var:te_dg_gn4 }
+		set_local_variable = { name = te_dg_g_y4 value = var:te_dg_gy4 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn5 }
+		set_local_variable = { name = te_dg_g_n5 value = var:te_dg_gn5 }
+		set_local_variable = { name = te_dg_g_y5 value = var:te_dg_gy5 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn6 }
+		set_local_variable = { name = te_dg_g_n6 value = var:te_dg_gn6 }
+		set_local_variable = { name = te_dg_g_y6 value = var:te_dg_gy6 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn7 }
+		set_local_variable = { name = te_dg_g_n7 value = var:te_dg_gn7 }
+		set_local_variable = { name = te_dg_g_y7 value = var:te_dg_gy7 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn8 }
+		set_local_variable = { name = te_dg_g_n8 value = var:te_dg_gn8 }
+		set_local_variable = { name = te_dg_g_y8 value = var:te_dg_gy8 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn9 }
+		set_local_variable = { name = te_dg_g_n9 value = var:te_dg_gn9 }
+		set_local_variable = { name = te_dg_g_y9 value = var:te_dg_gy9 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn10 }
+		set_local_variable = { name = te_dg_g_n10 value = var:te_dg_gn10 }
+		set_local_variable = { name = te_dg_g_y10 value = var:te_dg_gy10 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn11 }
+		set_local_variable = { name = te_dg_g_n11 value = var:te_dg_gn11 }
+		set_local_variable = { name = te_dg_g_y11 value = var:te_dg_gy11 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn12 }
+		set_local_variable = { name = te_dg_g_n12 value = var:te_dg_gn12 }
+		set_local_variable = { name = te_dg_g_y12 value = var:te_dg_gy12 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn13 }
+		set_local_variable = { name = te_dg_g_n13 value = var:te_dg_gn13 }
+		set_local_variable = { name = te_dg_g_y13 value = var:te_dg_gy13 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn14 }
+		set_local_variable = { name = te_dg_g_n14 value = var:te_dg_gn14 }
+		set_local_variable = { name = te_dg_g_y14 value = var:te_dg_gy14 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn15 }
+		set_local_variable = { name = te_dg_g_n15 value = var:te_dg_gn15 }
+		set_local_variable = { name = te_dg_g_y15 value = var:te_dg_gy15 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn16 }
+		set_local_variable = { name = te_dg_g_n16 value = var:te_dg_gn16 }
+		set_local_variable = { name = te_dg_g_y16 value = var:te_dg_gy16 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn17 }
+		set_local_variable = { name = te_dg_g_n17 value = var:te_dg_gn17 }
+		set_local_variable = { name = te_dg_g_y17 value = var:te_dg_gy17 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn18 }
+		set_local_variable = { name = te_dg_g_n18 value = var:te_dg_gn18 }
+		set_local_variable = { name = te_dg_g_y18 value = var:te_dg_gy18 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn19 }
+		set_local_variable = { name = te_dg_g_n19 value = var:te_dg_gn19 }
+		set_local_variable = { name = te_dg_g_y19 value = var:te_dg_gy19 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn20 }
+		set_local_variable = { name = te_dg_g_n20 value = var:te_dg_gn20 }
+		set_local_variable = { name = te_dg_g_y20 value = var:te_dg_gy20 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn21 }
+		set_local_variable = { name = te_dg_g_n21 value = var:te_dg_gn21 }
+		set_local_variable = { name = te_dg_g_y21 value = var:te_dg_gy21 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn22 }
+		set_local_variable = { name = te_dg_g_n22 value = var:te_dg_gn22 }
+		set_local_variable = { name = te_dg_g_y22 value = var:te_dg_gy22 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn23 }
+		set_local_variable = { name = te_dg_g_n23 value = var:te_dg_gn23 }
+		set_local_variable = { name = te_dg_g_y23 value = var:te_dg_gy23 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn24 }
+		set_local_variable = { name = te_dg_g_n24 value = var:te_dg_gn24 }
+		set_local_variable = { name = te_dg_g_y24 value = var:te_dg_gy24 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn25 }
+		set_local_variable = { name = te_dg_g_n25 value = var:te_dg_gn25 }
+		set_local_variable = { name = te_dg_g_y25 value = var:te_dg_gy25 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn26 }
+		set_local_variable = { name = te_dg_g_n26 value = var:te_dg_gn26 }
+		set_local_variable = { name = te_dg_g_y26 value = var:te_dg_gy26 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn27 }
+		set_local_variable = { name = te_dg_g_n27 value = var:te_dg_gn27 }
+		set_local_variable = { name = te_dg_g_y27 value = var:te_dg_gy27 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn28 }
+		set_local_variable = { name = te_dg_g_n28 value = var:te_dg_gn28 }
+		set_local_variable = { name = te_dg_g_y28 value = var:te_dg_gy28 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn29 }
+		set_local_variable = { name = te_dg_g_n29 value = var:te_dg_gn29 }
+		set_local_variable = { name = te_dg_g_y29 value = var:te_dg_gy29 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn30 }
+		set_local_variable = { name = te_dg_g_n30 value = var:te_dg_gn30 }
+		set_local_variable = { name = te_dg_g_y30 value = var:te_dg_gy30 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn31 }
+		set_local_variable = { name = te_dg_g_n31 value = var:te_dg_gn31 }
+		set_local_variable = { name = te_dg_g_y31 value = var:te_dg_gy31 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn32 }
+		set_local_variable = { name = te_dg_g_n32 value = var:te_dg_gn32 }
+		set_local_variable = { name = te_dg_g_y32 value = var:te_dg_gy32 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn33 }
+		set_local_variable = { name = te_dg_g_n33 value = var:te_dg_gn33 }
+		set_local_variable = { name = te_dg_g_y33 value = var:te_dg_gy33 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn34 }
+		set_local_variable = { name = te_dg_g_n34 value = var:te_dg_gn34 }
+		set_local_variable = { name = te_dg_g_y34 value = var:te_dg_gy34 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn35 }
+		set_local_variable = { name = te_dg_g_n35 value = var:te_dg_gn35 }
+		set_local_variable = { name = te_dg_g_y35 value = var:te_dg_gy35 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn36 }
+		set_local_variable = { name = te_dg_g_n36 value = var:te_dg_gn36 }
+		set_local_variable = { name = te_dg_g_y36 value = var:te_dg_gy36 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn37 }
+		set_local_variable = { name = te_dg_g_n37 value = var:te_dg_gn37 }
+		set_local_variable = { name = te_dg_g_y37 value = var:te_dg_gy37 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn38 }
+		set_local_variable = { name = te_dg_g_n38 value = var:te_dg_gn38 }
+		set_local_variable = { name = te_dg_g_y38 value = var:te_dg_gy38 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn39 }
+		set_local_variable = { name = te_dg_g_n39 value = var:te_dg_gn39 }
+		set_local_variable = { name = te_dg_g_y39 value = var:te_dg_gy39 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn40 }
+		set_local_variable = { name = te_dg_g_n40 value = var:te_dg_gn40 }
+		set_local_variable = { name = te_dg_g_y40 value = var:te_dg_gy40 }
+	}
+	if = {
+		limit = { has_variable = te_dg_gn41 }
+		set_local_variable = { name = te_dg_g_n41 value = var:te_dg_gn41 }
+		set_local_variable = { name = te_dg_g_y41 value = var:te_dg_gy41 }
+	}
 }
 
 # THIS = a country, before its states add their bands.
@@ -4675,47 +5484,289 @@ te_demog_gini_band_zero = {
 	set_local_variable = { name = te_dg_g_y13 value = 0 }
 	set_local_variable = { name = te_dg_g_n14 value = 0 }
 	set_local_variable = { name = te_dg_g_y14 value = 0 }
+	set_local_variable = { name = te_dg_g_n15 value = 0 }
+	set_local_variable = { name = te_dg_g_y15 value = 0 }
+	set_local_variable = { name = te_dg_g_n16 value = 0 }
+	set_local_variable = { name = te_dg_g_y16 value = 0 }
+	set_local_variable = { name = te_dg_g_n17 value = 0 }
+	set_local_variable = { name = te_dg_g_y17 value = 0 }
+	set_local_variable = { name = te_dg_g_n18 value = 0 }
+	set_local_variable = { name = te_dg_g_y18 value = 0 }
+	set_local_variable = { name = te_dg_g_n19 value = 0 }
+	set_local_variable = { name = te_dg_g_y19 value = 0 }
+	set_local_variable = { name = te_dg_g_n20 value = 0 }
+	set_local_variable = { name = te_dg_g_y20 value = 0 }
+	set_local_variable = { name = te_dg_g_n21 value = 0 }
+	set_local_variable = { name = te_dg_g_y21 value = 0 }
+	set_local_variable = { name = te_dg_g_n22 value = 0 }
+	set_local_variable = { name = te_dg_g_y22 value = 0 }
+	set_local_variable = { name = te_dg_g_n23 value = 0 }
+	set_local_variable = { name = te_dg_g_y23 value = 0 }
+	set_local_variable = { name = te_dg_g_n24 value = 0 }
+	set_local_variable = { name = te_dg_g_y24 value = 0 }
+	set_local_variable = { name = te_dg_g_n25 value = 0 }
+	set_local_variable = { name = te_dg_g_y25 value = 0 }
+	set_local_variable = { name = te_dg_g_n26 value = 0 }
+	set_local_variable = { name = te_dg_g_y26 value = 0 }
+	set_local_variable = { name = te_dg_g_n27 value = 0 }
+	set_local_variable = { name = te_dg_g_y27 value = 0 }
+	set_local_variable = { name = te_dg_g_n28 value = 0 }
+	set_local_variable = { name = te_dg_g_y28 value = 0 }
+	set_local_variable = { name = te_dg_g_n29 value = 0 }
+	set_local_variable = { name = te_dg_g_y29 value = 0 }
+	set_local_variable = { name = te_dg_g_n30 value = 0 }
+	set_local_variable = { name = te_dg_g_y30 value = 0 }
+	set_local_variable = { name = te_dg_g_n31 value = 0 }
+	set_local_variable = { name = te_dg_g_y31 value = 0 }
+	set_local_variable = { name = te_dg_g_n32 value = 0 }
+	set_local_variable = { name = te_dg_g_y32 value = 0 }
+	set_local_variable = { name = te_dg_g_n33 value = 0 }
+	set_local_variable = { name = te_dg_g_y33 value = 0 }
+	set_local_variable = { name = te_dg_g_n34 value = 0 }
+	set_local_variable = { name = te_dg_g_y34 value = 0 }
+	set_local_variable = { name = te_dg_g_n35 value = 0 }
+	set_local_variable = { name = te_dg_g_y35 value = 0 }
+	set_local_variable = { name = te_dg_g_n36 value = 0 }
+	set_local_variable = { name = te_dg_g_y36 value = 0 }
+	set_local_variable = { name = te_dg_g_n37 value = 0 }
+	set_local_variable = { name = te_dg_g_y37 value = 0 }
+	set_local_variable = { name = te_dg_g_n38 value = 0 }
+	set_local_variable = { name = te_dg_g_y38 value = 0 }
+	set_local_variable = { name = te_dg_g_n39 value = 0 }
+	set_local_variable = { name = te_dg_g_y39 value = 0 }
+	set_local_variable = { name = te_dg_g_n40 value = 0 }
+	set_local_variable = { name = te_dg_g_y40 value = 0 }
+	set_local_variable = { name = te_dg_g_n41 value = 0 }
+	set_local_variable = { name = te_dg_g_y41 value = 0 }
 }
 
-# THIS = a state in its country's loop: add its bands (the caller checks it has them).
+# THIS = a state in its country's loop: add its bands if they follow this layout, and count it in
+# local_var:te_dg_g_states (the caller sets it to 0). A state from an older save (14 bands to 61+,
+# capped income in other units, or strata sums) adds nothing until its own walk stores new ones.
 te_demog_gini_band_add_state = {
-	change_local_variable = { name = te_dg_g_n1 add = var:te_dg_gn1 }
-	change_local_variable = { name = te_dg_g_y1 add = var:te_dg_gy1 }
-	change_local_variable = { name = te_dg_g_n2 add = var:te_dg_gn2 }
-	change_local_variable = { name = te_dg_g_y2 add = var:te_dg_gy2 }
-	change_local_variable = { name = te_dg_g_n3 add = var:te_dg_gn3 }
-	change_local_variable = { name = te_dg_g_y3 add = var:te_dg_gy3 }
-	change_local_variable = { name = te_dg_g_n4 add = var:te_dg_gn4 }
-	change_local_variable = { name = te_dg_g_y4 add = var:te_dg_gy4 }
-	change_local_variable = { name = te_dg_g_n5 add = var:te_dg_gn5 }
-	change_local_variable = { name = te_dg_g_y5 add = var:te_dg_gy5 }
-	change_local_variable = { name = te_dg_g_n6 add = var:te_dg_gn6 }
-	change_local_variable = { name = te_dg_g_y6 add = var:te_dg_gy6 }
-	change_local_variable = { name = te_dg_g_n7 add = var:te_dg_gn7 }
-	change_local_variable = { name = te_dg_g_y7 add = var:te_dg_gy7 }
-	change_local_variable = { name = te_dg_g_n8 add = var:te_dg_gn8 }
-	change_local_variable = { name = te_dg_g_y8 add = var:te_dg_gy8 }
-	change_local_variable = { name = te_dg_g_n9 add = var:te_dg_gn9 }
-	change_local_variable = { name = te_dg_g_y9 add = var:te_dg_gy9 }
-	change_local_variable = { name = te_dg_g_n10 add = var:te_dg_gn10 }
-	change_local_variable = { name = te_dg_g_y10 add = var:te_dg_gy10 }
-	change_local_variable = { name = te_dg_g_n11 add = var:te_dg_gn11 }
-	change_local_variable = { name = te_dg_g_y11 add = var:te_dg_gy11 }
-	change_local_variable = { name = te_dg_g_n12 add = var:te_dg_gn12 }
-	change_local_variable = { name = te_dg_g_y12 add = var:te_dg_gy12 }
-	change_local_variable = { name = te_dg_g_n13 add = var:te_dg_gn13 }
-	change_local_variable = { name = te_dg_g_y13 add = var:te_dg_gy13 }
-	change_local_variable = { name = te_dg_g_n14 add = var:te_dg_gn14 }
-	change_local_variable = { name = te_dg_g_y14 add = var:te_dg_gy14 }
+	if = {
+		limit = { has_variable = te_dg_gini_layout }
+		if = {
+			limit = { var:te_dg_gini_layout = 2 }
+			change_local_variable = { name = te_dg_g_states add = 1 }
+			if = {
+				limit = { has_variable = te_dg_gn1 }
+				change_local_variable = { name = te_dg_g_n1 add = var:te_dg_gn1 }
+				change_local_variable = { name = te_dg_g_y1 add = var:te_dg_gy1 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn2 }
+				change_local_variable = { name = te_dg_g_n2 add = var:te_dg_gn2 }
+				change_local_variable = { name = te_dg_g_y2 add = var:te_dg_gy2 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn3 }
+				change_local_variable = { name = te_dg_g_n3 add = var:te_dg_gn3 }
+				change_local_variable = { name = te_dg_g_y3 add = var:te_dg_gy3 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn4 }
+				change_local_variable = { name = te_dg_g_n4 add = var:te_dg_gn4 }
+				change_local_variable = { name = te_dg_g_y4 add = var:te_dg_gy4 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn5 }
+				change_local_variable = { name = te_dg_g_n5 add = var:te_dg_gn5 }
+				change_local_variable = { name = te_dg_g_y5 add = var:te_dg_gy5 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn6 }
+				change_local_variable = { name = te_dg_g_n6 add = var:te_dg_gn6 }
+				change_local_variable = { name = te_dg_g_y6 add = var:te_dg_gy6 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn7 }
+				change_local_variable = { name = te_dg_g_n7 add = var:te_dg_gn7 }
+				change_local_variable = { name = te_dg_g_y7 add = var:te_dg_gy7 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn8 }
+				change_local_variable = { name = te_dg_g_n8 add = var:te_dg_gn8 }
+				change_local_variable = { name = te_dg_g_y8 add = var:te_dg_gy8 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn9 }
+				change_local_variable = { name = te_dg_g_n9 add = var:te_dg_gn9 }
+				change_local_variable = { name = te_dg_g_y9 add = var:te_dg_gy9 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn10 }
+				change_local_variable = { name = te_dg_g_n10 add = var:te_dg_gn10 }
+				change_local_variable = { name = te_dg_g_y10 add = var:te_dg_gy10 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn11 }
+				change_local_variable = { name = te_dg_g_n11 add = var:te_dg_gn11 }
+				change_local_variable = { name = te_dg_g_y11 add = var:te_dg_gy11 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn12 }
+				change_local_variable = { name = te_dg_g_n12 add = var:te_dg_gn12 }
+				change_local_variable = { name = te_dg_g_y12 add = var:te_dg_gy12 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn13 }
+				change_local_variable = { name = te_dg_g_n13 add = var:te_dg_gn13 }
+				change_local_variable = { name = te_dg_g_y13 add = var:te_dg_gy13 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn14 }
+				change_local_variable = { name = te_dg_g_n14 add = var:te_dg_gn14 }
+				change_local_variable = { name = te_dg_g_y14 add = var:te_dg_gy14 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn15 }
+				change_local_variable = { name = te_dg_g_n15 add = var:te_dg_gn15 }
+				change_local_variable = { name = te_dg_g_y15 add = var:te_dg_gy15 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn16 }
+				change_local_variable = { name = te_dg_g_n16 add = var:te_dg_gn16 }
+				change_local_variable = { name = te_dg_g_y16 add = var:te_dg_gy16 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn17 }
+				change_local_variable = { name = te_dg_g_n17 add = var:te_dg_gn17 }
+				change_local_variable = { name = te_dg_g_y17 add = var:te_dg_gy17 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn18 }
+				change_local_variable = { name = te_dg_g_n18 add = var:te_dg_gn18 }
+				change_local_variable = { name = te_dg_g_y18 add = var:te_dg_gy18 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn19 }
+				change_local_variable = { name = te_dg_g_n19 add = var:te_dg_gn19 }
+				change_local_variable = { name = te_dg_g_y19 add = var:te_dg_gy19 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn20 }
+				change_local_variable = { name = te_dg_g_n20 add = var:te_dg_gn20 }
+				change_local_variable = { name = te_dg_g_y20 add = var:te_dg_gy20 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn21 }
+				change_local_variable = { name = te_dg_g_n21 add = var:te_dg_gn21 }
+				change_local_variable = { name = te_dg_g_y21 add = var:te_dg_gy21 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn22 }
+				change_local_variable = { name = te_dg_g_n22 add = var:te_dg_gn22 }
+				change_local_variable = { name = te_dg_g_y22 add = var:te_dg_gy22 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn23 }
+				change_local_variable = { name = te_dg_g_n23 add = var:te_dg_gn23 }
+				change_local_variable = { name = te_dg_g_y23 add = var:te_dg_gy23 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn24 }
+				change_local_variable = { name = te_dg_g_n24 add = var:te_dg_gn24 }
+				change_local_variable = { name = te_dg_g_y24 add = var:te_dg_gy24 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn25 }
+				change_local_variable = { name = te_dg_g_n25 add = var:te_dg_gn25 }
+				change_local_variable = { name = te_dg_g_y25 add = var:te_dg_gy25 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn26 }
+				change_local_variable = { name = te_dg_g_n26 add = var:te_dg_gn26 }
+				change_local_variable = { name = te_dg_g_y26 add = var:te_dg_gy26 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn27 }
+				change_local_variable = { name = te_dg_g_n27 add = var:te_dg_gn27 }
+				change_local_variable = { name = te_dg_g_y27 add = var:te_dg_gy27 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn28 }
+				change_local_variable = { name = te_dg_g_n28 add = var:te_dg_gn28 }
+				change_local_variable = { name = te_dg_g_y28 add = var:te_dg_gy28 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn29 }
+				change_local_variable = { name = te_dg_g_n29 add = var:te_dg_gn29 }
+				change_local_variable = { name = te_dg_g_y29 add = var:te_dg_gy29 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn30 }
+				change_local_variable = { name = te_dg_g_n30 add = var:te_dg_gn30 }
+				change_local_variable = { name = te_dg_g_y30 add = var:te_dg_gy30 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn31 }
+				change_local_variable = { name = te_dg_g_n31 add = var:te_dg_gn31 }
+				change_local_variable = { name = te_dg_g_y31 add = var:te_dg_gy31 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn32 }
+				change_local_variable = { name = te_dg_g_n32 add = var:te_dg_gn32 }
+				change_local_variable = { name = te_dg_g_y32 add = var:te_dg_gy32 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn33 }
+				change_local_variable = { name = te_dg_g_n33 add = var:te_dg_gn33 }
+				change_local_variable = { name = te_dg_g_y33 add = var:te_dg_gy33 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn34 }
+				change_local_variable = { name = te_dg_g_n34 add = var:te_dg_gn34 }
+				change_local_variable = { name = te_dg_g_y34 add = var:te_dg_gy34 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn35 }
+				change_local_variable = { name = te_dg_g_n35 add = var:te_dg_gn35 }
+				change_local_variable = { name = te_dg_g_y35 add = var:te_dg_gy35 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn36 }
+				change_local_variable = { name = te_dg_g_n36 add = var:te_dg_gn36 }
+				change_local_variable = { name = te_dg_g_y36 add = var:te_dg_gy36 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn37 }
+				change_local_variable = { name = te_dg_g_n37 add = var:te_dg_gn37 }
+				change_local_variable = { name = te_dg_g_y37 add = var:te_dg_gy37 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn38 }
+				change_local_variable = { name = te_dg_g_n38 add = var:te_dg_gn38 }
+				change_local_variable = { name = te_dg_g_y38 add = var:te_dg_gy38 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn39 }
+				change_local_variable = { name = te_dg_g_n39 add = var:te_dg_gn39 }
+				change_local_variable = { name = te_dg_g_y39 add = var:te_dg_gy39 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn40 }
+				change_local_variable = { name = te_dg_g_n40 add = var:te_dg_gn40 }
+				change_local_variable = { name = te_dg_g_y40 add = var:te_dg_gy40 }
+			}
+			if = {
+				limit = { has_variable = te_dg_gn41 }
+				change_local_variable = { name = te_dg_g_n41 add = var:te_dg_gn41 }
+				change_local_variable = { name = te_dg_g_y41 add = var:te_dg_gy41 }
+			}
+		}
+	}
 }
 
 # THIS = a state or a country, with its bands in te_dg_g_n<k> and te_dg_g_y<k> (a country's summed
 # over its states, so its Gini is taken over all their people, not averaged). The bands are in
 # income order, so G = 1 - sum p_k (S_k + S_k-1), with p_k a band's share of people and S_k the
-# running share of income. Each sum becomes a share before it multiplies (values are i64 x 1e-5).
-# With no people or no income the computed Gini is 0. Writes var:te_dg_gini, the panel's figure:
-# 1 - 0.7 x (1 - G), the equality the bands show scaled down for the spread
-# inside them (spec 4.1; owner, 2026-10-10), so it reads like historians' estimates.
+# running share of income. Values are i64 x 1e-5: each S_k is the income so far over the total, cut
+# once, and the people multiply it before the one division by all people, so no share of a few
+# people is cut to 0. Empty bands are skipped. With no people or no income the computed Gini is 0.
+# Writes var:te_dg_gini, the panel's figure: 1 - 0.7 x (1 - G), the equality the bands show
+# scaled down for the spread inside them (spec 4.1; owner, 2026-10-10), so it reads like historians'
+# estimates.
 te_demog_gini_from_locals = {
 	set_local_variable = { name = te_dg_g_pop value = 0 }
 	set_local_variable = { name = te_dg_g_inc value = 0 }
@@ -4747,70 +5798,357 @@ te_demog_gini_from_locals = {
 	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y13 }
 	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n14 }
 	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y14 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n15 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y15 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n16 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y16 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n17 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y17 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n18 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y18 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n19 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y19 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n20 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y20 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n21 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y21 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n22 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y22 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n23 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y23 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n24 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y24 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n25 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y25 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n26 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y26 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n27 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y27 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n28 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y28 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n29 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y29 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n30 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y30 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n31 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y31 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n32 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y32 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n33 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y33 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n34 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y34 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n35 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y35 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n36 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y36 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n37 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y37 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n38 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y38 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n39 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y39 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n40 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y40 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n41 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y41 }
 	set_local_variable = { name = te_dg_g_gini value = 0 }
 	if = {
 		limit = {
 			local_var:te_dg_g_pop > 0
 			local_var:te_dg_g_inc > 0
 		}
-		set_local_variable = { name = te_dg_g_gini value = 1 }
+		set_local_variable = { name = te_dg_g_c value = 0 }
 		set_local_variable = { name = te_dg_g_s value = 0 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y1 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n1 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y2 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n2 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y3 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n3 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y4 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n4 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y5 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n5 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y6 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n6 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y7 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n7 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y8 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n8 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y9 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n9 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y10 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n10 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y11 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n11 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y12 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n12 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y13 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n13 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y14 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
-		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n14 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
-		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_a value = 0 }
+		if = {
+			limit = { local_var:te_dg_g_n1 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y1 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n1 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n2 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y2 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n2 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n3 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y3 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n3 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n4 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y4 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n4 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n5 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y5 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n5 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n6 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y6 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n6 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n7 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y7 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n7 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n8 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y8 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n8 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n9 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y9 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n9 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n10 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y10 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n10 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n11 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y11 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n11 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n12 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y12 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n12 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n13 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y13 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n13 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n14 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y14 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n14 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n15 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y15 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n15 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n16 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y16 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n16 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n17 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y17 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n17 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n18 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y18 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n18 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n19 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y19 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n19 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n20 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y20 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n20 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n21 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y21 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n21 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n22 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y22 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n22 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n23 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y23 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n23 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n24 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y24 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n24 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n25 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y25 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n25 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n26 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y26 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n26 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n27 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y27 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n27 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n28 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y28 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n28 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n29 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y29 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n29 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n30 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y30 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n30 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n31 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y31 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n31 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n32 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y32 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n32 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n33 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y33 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n33 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n34 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y34 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n34 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n35 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y35 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n35 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n36 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y36 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n36 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n37 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y37 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n37 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n38 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y38 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n38 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n39 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y39 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n39 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n40 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y40 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n40 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		if = {
+			limit = { local_var:te_dg_g_n41 > 0 }
+			change_local_variable = { name = te_dg_g_c add = local_var:te_dg_g_y41 }
+			set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_c divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
+			change_local_variable = { name = te_dg_g_a add = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s multiply = local_var:te_dg_g_n41 } }
+			set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		}
+		set_local_variable = { name = te_dg_g_gini value = { value = 1 subtract = { value = local_var:te_dg_g_a divide = { value = local_var:te_dg_g_pop min = 1 } } } }
 	}
 	set_variable = { name = te_dg_gini value = { value = local_var:te_dg_g_gini multiply = 0.7 add = 0.3 min = 0 max = 1 } }
 }

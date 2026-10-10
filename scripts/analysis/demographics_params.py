@@ -200,18 +200,36 @@ CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
 CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, before devastation and turmoil
 
 # ---- Income inequality (§4.1) -----------------------------------------------------
-# Spending per head stands in for income: the buy package cost at the pop's wealth,
-# capped at INCOME_WEALTH_CAP (the mod's packages grow exponentially past it). The owner
-# confirmed it tracks the engine's income (Britain 1836: aristocrats 139x laborers a head in
-# the engine, 115x in the stand-in).
-INCOME_WEALTH_CAP = 60
-# The Gini groups pops by wealth band: the stand-in's knots are each band's top (wealth 1 or
-# less, 2-5, 6-10, ..., 56-60, 61 or more). Income rises with wealth, so the bands are in income
-# order and the grouped Gini needs no sort. The panel shows it as it is, the game's own
-# distribution, not history's (owner, 2026-10-10): against each pop as its own group, mean
-# -0.014, R^2 0.98 (docs/testing/demographics-gini-check-2026-10-10.md).
-GINI_BAND_KNOTS = (1, *range(5, INCOME_WEALTH_CAP + 1, 5))
+# Spending per head stands in for income: the buy package cost at the pop's wealth / 100, linear
+# between GINI_INCOME_KNOTS. The owner confirmed it tracks the engine's income (Britain 1836:
+# aristocrats 139x laborers a head in the engine, 115x in the stand-in). It runs uncapped to the
+# top wealth level, the mod's NUM_WEALTH_LEVELS (common/defines/extra_defines.txt; the generator
+# checks it): until 2026-10-10 it was flat from wealth 60, where the packages are 946 a head, and the
+# last band held everyone above. In a 1953 save the 0.1% of the USA's people above 60 held 16% of
+# its income, and the panel read 0.708 against 0.723 pop by pop; in a fast run with wealth up to 109,
+# Germany read 0.65 against 0.77 (docs/testing/demographics-gini-check-2026-10-10.md, high wealth).
+GINI_TOP_WEALTH = 200
+# The Gini groups pops by wealth band, five levels wide all the way up: wealth 1 or less, 2-5, 6-10,
+# ..., 191-195, 196 or more. The stand-in's pieces are the bands, so a band's income comes from one
+# line and the bands are in income order: the grouped Gini needs no sort. The panel shows it as it
+# is, the game's own distribution, not history's (owner, 2026-10-10): against each pop as its own
+# group, mean -0.014, R^2 0.98 at 1836-1953. A five-wide band's richest level spends 1.3-1.7x its
+# poorest at every height, so the bands miss about as much at mean wealth 80 as in 1836: -0.004 to
+# -0.012 shown on average, at worst -0.036 for a country, in saves shifted or stretched to mean
+# wealth 50-80 (docs/testing/demographics-gini-check-2026-10-10.md, high wealth).
+GINI_BAND_KNOTS = (1, *range(5, GINI_TOP_WEALTH, 5))
 GINI_BANDS = len(GINI_BAND_KNOTS) + 1
+GINI_INCOME_KNOTS = (*GINI_BAND_KNOTS, GINI_TOP_WEALTH)
+# The census sums income in units of GINI_INCOME_UNIT: each pop adds people / GINI_INCOME_UNIT x
+# spending per head. Script values are i64 x 1e-5 (at most about 9.2e13): wealth 200 is 9.5e8 a head,
+# so a country of 1e9 people there would be 9.5e17 in plain units, and 9.5e12 in these. The people
+# divide first, which is exact; the smallest step is then 1 of spending per pop (1e-5 of the unit).
+GINI_INCOME_UNIT = 100000
+GINI_MAX_PEOPLE = 4e9     # one country, all at the top level, fits twice over (fast run: UNA 1.16e9, world 6.9e9)
+# The layout a state's stored bands follow (te_dg_gini_layout). The country adds only states that
+# carry this one, so a save's older bands are never summed with these. Bump it whenever the bands,
+# the stand-in or the units change: 1 was the 14 bands to 61+, before the marker.
+GINI_LAYOUT = 2
 # The panel shows 1 - GINI_SHOWN_EQUALITY x (1 - the computed Gini) (owner, 2026-10-10): the census
 # counts everyone in a pop (or band) as earning alike, so it sees only part of the spread historians'
 # estimates hold; the equality it sees is scaled down, and total inequality stays at 1. Fitted to the
