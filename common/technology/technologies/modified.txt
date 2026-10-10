@@ -84,6 +84,8 @@ INJECT:mass_surveillance = {
 INJECT:pharmaceuticals = {
 	modifier = {
 		country_pharmaceuticals_pb_principles_bool = yes
+		# the census's medicine (demographics modifier types, stage 1; te_demog_tech_injections.txt has the rest)
+		country_infection_treatment_add = 0.07
 	}
 }
 

@@ -61,14 +61,24 @@ Access × treatment fixes both: treatment comes from the techs, and access from 
 
 | Scenario | Old: e0 / IMR / e65 / MMR | Now: e0 / IMR / e65 / MMR | Bands |
 |---|---|---|---|
-| Britain 1836 (Charitable, level 1) | 43.8 / 140 / 12.8 / 570 | 39.8 / 169 / 12.5 / 670 | IMR 150–250, e0 35–43, e65 10–14 |
-| Britain 1900 (Charitable, level 2) | 53.5 / 77 / 13.6 / 285 | 45.9 / 126 / – / – | IMR 120–170 (real ~150), e0 44–52 (real ~47) |
-| West 1950 (Public, level 3) | 68.2 / 17 / 16.9 / 67 | 62.1 / 32 / 14.5 / 129 | IMR 20–55 (UK 31), e0 60–71, e65 12–16 (UK 13.9), MMR 30–150 (UK ~87) |
-| West 1990 (Public, level 4) | 75.0 / 10 / 20.5 / 34 | 73.4 / 5.7 / 18.7 / 6.7 | IMR ≤ 12 (UK 7.9), e0 72–80, e65 15–20 |
-| Rich today (Public, level 5) | 76.8 / 9.7 / 21.5 / 34 | 77.5 / 5.6 / 21.7 / 6.7 | IMR ≤ 6, e0 77–84, e65 18–23, MMR ≤ 15 |
-| India 1975 (Charitable, level 1) | 59.6 / 38 / 13.8 / 114 | 47.2 / 113 / – / – | IMR 110–150 (real ~130), e0 46–56 (real ~50) |
+| Britain 1836 (Charitable, level 1) | 43.8 / 140 / 12.8 / 570 | 39.8 / 170 / 12.5 / 670 | IMR 150–250, e0 35–43, e65 10–14 |
+| Britain 1900 (Charitable, level 4) | 54.8 / 69 / 13.7 / 285 | 46.1 / 125 / – / – | IMR 120–170 (real ~150), e0 44–52 (real ~47) |
+| West 1950 (Public, level 5) | 68.5 / 15 / 17.0 / 67 | 62.9 / 28 / 14.6 / 97 | IMR 20–55 (UK 31), e0 60–71, e65 12–16 (UK 13.9), MMR 30–150 (UK ~87) |
+| West 1990 (Public, level 6) | 75.3 / 9.3 / 20.6 / 34 | 73.4 / 5.7 / 18.7 / 6.7 | IMR ≤ 12 (UK 7.9), e0 72–80, e65 15–20 |
+| Rich today (Public, level 8) | 77.1 / 8.4 / 21.6 / 34 | 77.5 / 5.6 / 21.7 / 6.7 | IMR ≤ 6, e0 77–84, e65 18–23, MMR ≤ 15 |
+| India 1975 (Charitable, level 1) | 59.6 / 38 / 13.8 / 114 | 47.0 / 114 / – / – | IMR 110–150 (real ~130), e0 46–56 (real ~50) |
 | Medicine to era 8, no health system | 62.9 / 34 / 16.0 / 67 | 48.2 / 111 / – / – | IMR 70–130, e0 48–60 |
-| Public Health Insurance before antibiotics, gain in e0 | +8.3 | +1.8 | 0.5–3 (the spec's stage-1 gate) |
+| Public Health Insurance at level 3 before antibiotics, gain in e0 | +8.3 | +1.2 | 0.5–3 (the spec's stage-1 gate) |
+
+**Ministry of Health levels.** The top level comes from technology alone. The base game's medical_degrees, pharmaceuticals, quinine, malaria_prevention and antibiotics give the first five; the mod's modern_pharmaceuticals, mrna_therapeutics, telemedicine and personalized_medicine give the next four. A country that invests fully can reach:
+- level 1 in 1836;
+- 4–5 by 1900;
+- 5 by 1950;
+- 6 at era 8;
+- 8 at era 10;
+- 9 at era 11.
+
+The scenarios sit near those tops.
 
 **The fit:**
 
@@ -85,7 +95,10 @@ Access × treatment fixes both: treatment comes from the techs, and access from 
 | personalized_medicine (11) | | | 0.20 |
 | Cap | 0.95 | 0.99 | 0.80 |
 
-- **Access:** a base of 0.4, plus 0.04 a Health System level under Charitable, 0.10 under Private and 0.15 under Public, up to 1.
+- **Access:** a base of 0.4, plus 0.03 a Ministry of Health level under Charitable, 0.06 under Private and 0.10 under Public, up to 1.
+  - Public reaches full access at level 6, era 8's top. West 1990's anchors need that: infant mortality about 8 and maternal deaths about 10 a 100,000 can't be reached at access 0.85.
+  - Private reaches 0.94 at level 9, and Charitable 0.67, so their extra levels keep adding access.
+  - Levels 7–9 under Public add nothing to access; their other per-level effects (the base game's mortality cut, standard of living) are unchanged.
 - **The other terms:**
   - combustion engine +0.3 external;
   - Local, Dedicated and Militarized Police −0.05, −0.1 and −0.1 external;
@@ -116,23 +129,22 @@ The values are this fit's; the figures are medians (years, countries).
 | gate 1837 | +0.0 / +0.5 (5) | – |
 | gate 1847 | +0.0 / +0.3 (10) | – |
 | gate 1857 | +0.0 / +0.1 (16) | – |
-| gate 1867 | +0.1 / +0.6 (19) | +0.3 / +0.6 (3) |
-| gate 1877 | +0.1 / +0.6 (31) | +0.9 / +1.1 (7) |
-| gate 1887 | +0.2 / +0.5 (32) | +0.6 / +1.2 (9) |
-| fast 1845 (census year ~1944) | +0.2 / +0.2 (9) | +0.6 / +0.7 (8) |
-| fast 1850 (~2004) | +0.8 / +2.1 (11) | +3.1 / +6.0 (9) |
-| fast 1855 (~2064) | +1.0 / +1.3 (43) | +4.1 / +6.1 (12) |
-| fast 1860 (~2124) | +1.1 / +1.4 (42) | +4.4 / +4.4 (11) |
+| gate 1867 | +0.1 / +0.6 (19) | +0.2 / +0.5 (3) |
+| gate 1877 | +0.1 / +0.5 (31) | +0.6 / +0.9 (7) |
+| gate 1887 | +0.1 / +0.5 (32) | +0.4 / +1.0 (9) |
+| fast 1845 (census year ~1944) | +0.1 / +0.2 (9) | +0.4 / +0.5 (8) |
+| fast 1850 (~2004) | +0.6 / +1.6 (11) | +2.1 / +4.3 (9) |
+| fast 1855 (~2064) | +0.8 / +1.0 (43) | +2.7 / +4.1 (12) |
+| fast 1860 (~2124) | +0.8 / +1.1 (42) | +2.9 / +3.1 (11) |
 
 - **The gate passes on both measures.** The spec's gate is "within about 3 years of their peers' life expectancy at the same standard of living": the peer gap.
-  - **Peer gap:** the median by save for Public Health Insurance is +0.6 to +1.2. The level-3 adopters range from +1.2 to +3.4; the top is BEL in 1887, against three peers.
-  - **The law's own effect:** +0.3 to +0.9 by save. Every level-3 adopter (GBR, SAR, SWE, BEL in 1887) gains +1.7.
+  - **Peer gap:** the median by save for Public Health Insurance is +0.5 to +1.0. The level-3 adopters range from +0.8 to +2.8; the top is BEL in 1887, against three peers.
+  - **The law's own effect:** +0.2 to +0.6 by save. Every level-3 adopter (GBR, SAR, SWE, BEL in 1887) gains +1.1 to +1.2.
   - **Before:** the old tables' census lines had the 1870s adopters at e0 54–56 against peers' 43.
 - **The gate's first condition is not met as written.** "A fresh 1836 census is unchanged where no carrier applies" holds for a state with no carrier, which `TestMedicine.test_no_carrier_is_exactly_the_base` pins. But most 1836 countries hold `medical_degrees`, so their census moves: infection ×0.99 at base access, where the old table gave ×0.9.
 - **Once medicine exists, access matters a lot.**
-  - In the fast run's late saves, Public Health Insurance at level 4 or 5 gives 13 to 21 years (BEL, NBS, PEU); at level 1 it gives 3–4.
+  - In the fast run's late saves, Public Health Insurance at level 4 gives 8 to 11 years over the same country with no health law (BEL, NBS, PEU), and PEU at level 5 gives 17; at level 1 it gives 2–4.
   - Universal care against none at the same low income is about Sri Lanka or Kerala against Pakistan in the 1970s, 10–15 years.
-  - Whether the full gap should be that large is an owner call (the PR body).
 
 ## Reproduce
 

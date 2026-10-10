@@ -458,6 +458,10 @@ MED_TODAY = MED_1990 | {"telemedicine"}
 CHS, PHI = "law_charitable_health_system", "law_public_health_insurance"
 HEALTH = "institution_health_system"
 
+# The Ministry of Health's top level comes from technology alone (medical_degrees, pharmaceuticals,
+# quinine, malaria_prevention, antibiotics in the base game; modern_pharmaceuticals, mrna_therapeutics,
+# telemedicine, personalized_medicine in the mod): 1 in 1836, 4-5 by 1900, 5 by 1950, 6 at era 8, 8 at
+# era 10 and 9 at era 11. The scenarios put a country that invests fully near its era's top.
 # (label, inputs, {figure: (low, high)}): §2.4's anchors and the history behind them. Figures:
 # e0 and e65 in years, imr per 1,000 births, mmr maternal deaths per 100,000 births.
 MEDICINE_SCENARIOS = [
@@ -465,22 +469,22 @@ MEDICINE_SCENARIOS = [
                           institutions={HEALTH: 1}),
      {"imr": (150, 250), "e0": (35, 43), "e65": (10, 14), "mmr": (400, 1000)}),
     ("Britain 1900", dict(sol=16, literacy=0.75, urban_share=0.6, techs=MED_1900, laws={CHS},
-                          institutions={HEALTH: 2}),
+                          institutions={HEALTH: 4}),
      {"imr": (120, 170), "e0": (44, 52)}),
     ("West 1950", dict(sol=25, literacy=0.95, urban_share=0.65, techs=MED_1950,
                        laws={PHI, "law_dedicated_police", "law_regulatory_bodies"},
-                       institutions={HEALTH: 3, "institution_workplace_safety": 2}),
+                       institutions={HEALTH: 5, "institution_workplace_safety": 2}),
      # e0 from 60: the model's deaths at 20-50 run three to four times Britain's in 1950 (the
      # base schedules, phase 2's calibration; e65 already meets Britain's 13.9), not medicine
      {"imr": (20, 55), "e0": (60, 71), "e65": (12, 16), "mmr": (30, 150)}),
     ("West 1990", dict(sol=38, literacy=0.98, urban_share=0.75, techs=MED_1990,
                        laws={PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"},
-                       institutions={HEALTH: 4, "institution_workplace_safety": 4,
+                       institutions={HEALTH: 6, "institution_workplace_safety": 4,
                                      "institution_ministry_of_consumer_protection": 3}),
      {"imr": (0, 12), "e0": (72, 80), "e65": (15, 20), "mmr": (0, 25)}),
     ("Rich today", dict(sol=40, literacy=0.99, urban_share=0.8, techs=MED_TODAY,
                         laws={PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"},
-                        institutions={HEALTH: 5, "institution_workplace_safety": 5,
+                        institutions={HEALTH: 8, "institution_workplace_safety": 5,
                                       "institution_ministry_of_consumer_protection": 4}),
      {"imr": (0, 6), "e0": (77, 84), "e65": (18, 23), "mmr": (0, 15)}),
     ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950, laws={CHS},

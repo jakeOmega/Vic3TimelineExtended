@@ -37,13 +37,14 @@ EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursin
 AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
 BRITAIN_1836 = scenario(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
 FRANCE_1836 = M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_add=P.FAMILY_LIMITATION_MEANS)
+# Ministry of Health levels near each era's top, which technology alone sets (5 by 1950, 6 at era 8).
 WEST_1950 = scenario(sol=25, literacy=0.9, urban_share=0.6, techs=EARLY_MEDICINE,
                      laws=frozenset({"law_private_health_insurance", "law_women_in_the_workplace"}),
-                     institutions={"institution_health_system": 2, "institution_workplace_safety": 2})
+                     institutions={"institution_health_system": 5, "institution_workplace_safety": 2})
 WEST_1990 = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage",
                                      "law_old_age_pension", "law_dedicated_police"}),
-                     institutions={"institution_health_system": 4, "institution_workplace_safety": 4,
+                     institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
                                    "institution_ministry_of_consumer_protection": 3})
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
@@ -98,7 +99,7 @@ class TestMortality(unittest.TestCase):
 
     def test_rich_country_today(self):
         # §2.4's anchor is an infant mortality under 5 per 1,000 today; WEST_1990 (medicine to
-        # era 8, Public Health Insurance at level 4) gives about 6, Britain's 1990 figure was 7.9.
+        # era 8, Public Health Insurance at level 6, era 8's top) gives about 6; Britain's 1990 was 7.9.
         # Calibrated in the modifier-types stage 1 (demographics_harness.py medicine).
         t = self.table(WEST_1990)
         self.assertLess(t["q0_per_1000"], 8)
