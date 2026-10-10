@@ -1100,7 +1100,10 @@ un_vote.2 = {
 						un_standing_suspend = { DAYS = 1825 }
 					}
 				}
-				change_relations = { country = scope:un_vote_target value = -25 }
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+					change_relations = { country = scope:un_vote_target value = -25 }
+				}
 				# The overview's Security Council flags (un_overview_display_effects.txt).
 				un_p5_display_refresh = yes
 			}
@@ -1120,7 +1123,7 @@ un_vote.2 = {
 			custom_tooltip = un_vote_expulsion_failed_tt
 			un_ledger_entry = { PILLAR = credibility POINTS = -1 REASON = 13 }
 			if = {
-				limit = { exists = scope:un_vote_target }
+				limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
 				change_relations = { country = scope:un_vote_target value = -15 }
 			}
 		}
@@ -1167,7 +1170,10 @@ un_vote.2 = {
 				}
 				if = {
 					limit = { exists = scope:un_vote_target }
-					change_relations = { country = scope:un_vote_target value = -30 }
+					if = {
+						limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+						change_relations = { country = scope:un_vote_target value = -30 }
+					}
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
@@ -1220,7 +1226,10 @@ un_vote.2 = {
 				}
 				if = {
 					limit = { exists = scope:un_vote_target }
-					change_relations = { country = scope:un_vote_target value = -10 }
+					if = {
+						limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+						change_relations = { country = scope:un_vote_target value = -10 }
+					}
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
@@ -1635,7 +1644,10 @@ un_vote.2 = {
 							}
 						}
 					}
-					change_relations = { country = scope:un_vote_target value = -30 }
+					if = {
+						limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+						change_relations = { country = scope:un_vote_target value = -30 }
+					}
 				}
 			}
 			else_if = {
@@ -1659,7 +1671,10 @@ un_vote.2 = {
 							}
 						}
 					}
-					change_relations = { country = scope:un_vote_target value = -10 }
+					if = {
+						limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+						change_relations = { country = scope:un_vote_target value = -10 }
+					}
 				}
 			}
 
@@ -2144,7 +2159,7 @@ un_vote.3 = {
 
 		# Diplomatic penalties for defying the international community
 		if = {
-			limit = { exists = scope:un_vote_proposer }
+			limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 			change_relations = { country = scope:un_vote_proposer value = -20 }
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}

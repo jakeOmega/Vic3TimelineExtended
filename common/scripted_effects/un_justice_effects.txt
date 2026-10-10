@@ -531,7 +531,10 @@ un_arms_embargo_on_carried = {
 					}
 				}
 			}
-			change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations_vetoed }
+			if = {
+				limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+				change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations_vetoed }
+			}
 		}
 	}
 	else = {
@@ -556,7 +559,10 @@ un_arms_embargo_on_carried = {
 					}
 				}
 			}
-			change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations }
+			if = {
+				limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+				change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations }
+			}
 		}
 	}
 }
@@ -712,7 +718,10 @@ un_credentials_on_carried = {
 				}
 			}
 		}
-		change_relations = { country = scope:un_vote_target value = un_credentials_relations }
+		if = {
+			limit = { un_vote_relations_reachable = { WHO = scope:un_vote_target } }
+			change_relations = { country = scope:un_vote_target value = un_credentials_relations }
+		}
 	}
 	else = {
 		custom_tooltip = un_vote_credentials_moot_tt
