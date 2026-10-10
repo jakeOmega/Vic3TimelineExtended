@@ -247,15 +247,19 @@
 			}
 
 			# Radicalism adjustments based on climate policy availability/activation
-			# For each policy: -0.1 if active, +0.1 if the matching button is possible but not active
+			# For each policy: -0.1 if active, +0.1 if the country could adopt it but
+			# hasn't. "Could adopt" is the policy's own adoption test
+			# (gw_possible_*, global_warming_triggers.txt), so a policy still waiting
+			# on its technology, its warming threshold or the authority it costs
+			# stirs no one; has_journal_entry first, since those tests read the entry.
 			if = { # Carbon tax
 				limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = carbon_tax_modifier } }
 				add = { value = -0.1 desc = "POLICY_ACTIVE_CARBON_TAX" }
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 0.5
-					gw_is_market_leader = yes
+					has_journal_entry = je_global_warming
+					gw_possible_carbon_tax = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_CARBON_TAX" }
 			}
@@ -266,8 +270,8 @@
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 0.5
-					gw_is_market_leader = yes
+					has_journal_entry = je_global_warming
+					gw_possible_renewable_investment = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_RENEWABLE_INVESTMENT" }
 			}
@@ -278,8 +282,8 @@
 			}
 			else_if = {
 				limit = {
-					produced_authority > 250
-					temperature_anomaly_display >= 0.5
+					has_journal_entry = je_global_warming
+					gw_possible_climate_adaptation = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_CLIMATE_ADAPTATION" }
 			}
@@ -290,9 +294,8 @@
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 0.5
-					gw_is_market_leader = yes
-					produced_authority > 200
+					has_journal_entry = je_global_warming
+					gw_possible_emission_standards = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
 			}
@@ -308,8 +311,8 @@
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 0.5
-					produced_authority > 100
+					has_journal_entry = je_global_warming
+					gw_possible_reforestation = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_REFORESTATION_SUBSIDIES" }
 			}
@@ -320,8 +323,8 @@
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 0.5
-					produced_authority > 150
+					has_journal_entry = je_global_warming
+					gw_possible_public_transit = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_PUBLIC_TRANSIT" }
 			}
@@ -332,8 +335,8 @@
 			}
 			else_if = {
 				limit = {
-					temperature_anomaly_display >= 1.0
-					produced_authority > 200
+					has_journal_entry = je_global_warming
+					gw_possible_fossil_fuel_divestment = yes
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_FOSSIL_FUEL_DIVESTMENT" }
 			}

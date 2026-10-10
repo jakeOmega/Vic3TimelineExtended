@@ -17,6 +17,18 @@ maintenance never overwrite those choices. Treaty article 109 binds only its
 source, including a market member; its forced seven and authority waiver are
 unchanged.
 
+A policy that relies on something a country has to be able to build needs that
+technology to adopt: Renewable Investment and Green Building Codes need Clean
+Energy Technologies (era 9: renewable plants; heat pumps and efficient homes for
+the 60% household cut), Emission Standards Pollution Control (era 7), Public
+Transit Modern Urban Planning (era 7: Multimodal Transit), Carbon Removal Support
+Carbon Capture and Storage (era 10). Carbon Tax, Climate Adaptation,
+Reforestation Subsidies, Fossil-Fuel Divestment and Fossil-Fuel Tariffs are
+fiscal or administrative and stay ungated. Repeal never needs a technology, and
+a policy adopted before its gate existed (an older save) stays in force until
+repealed. Treaty 109 binds only a source with the forced policies' technologies;
+it overrides their warming thresholds, not their means.
+
 Fossil-Fuel Tariffs adds 0.10 to the four native coal/oil import/export tariff
 rate modifiers, scaled by the selected level: +2.5 percentage points at Low,
 +5 at High and +10 at Maximum. None still collects no tariffs. All four need
