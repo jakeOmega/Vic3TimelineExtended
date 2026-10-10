@@ -2535,6 +2535,20 @@ class TestConsole(unittest.TestCase):
         self.assertIn("local_var:te_dg_c_people >= 1000000", body)
         self.assertIn("name = te_dg_c_people", _block(_text(EFFECTS), "te_demog_country_census"))
 
+    def test_option_m_logs_the_shock_terms_click_only(self):
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_shock_lines = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_shock_lines")
+        for read in ("modifier:state_mortality_mult", "modifier:state_birth_rate_mult", "value = devastation",
+                     "value = turmoil", "value = state_region.pollution_amount", "debug_log_scopes = yes"):
+            self.assertIn(read, body)
+        for name in ("te_dg_dbg_read_d", "te_dg_dbg_read_b", "te_dg_dbg_dev", "te_dg_dbg_turmoil", "te_dg_dbg_poll"):
+            self.assertIn(f"remove_variable = {name}", body)
+
 
 FAST_EVENTS = ROOT / "events" / "te_demog_events.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"

@@ -20,6 +20,11 @@
 #   TE_DEMOG_WARDEAD    option e: the player's dead in each of its wars, its monthly
 #                       tally, and each state's dead still to be taken
 #   TE_DEMOG_SKEW       options f and g: the capital's pops' workforce and dependents
+#   TE_DEMOG_MODS       option l: the census's modifier types as the capital and an
+#                       unincorporated state read them
+#   TE_DEMOG_SHOCK:     option m (probe P1): every devastated or polluted state's
+#                       mortality and birth reads, devastation, turmoil and pollution,
+#                       each line followed by the state's scope
 #
 # A debug_log line reads only variables and script values of THIS (locals don't reach
 # it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
@@ -299,4 +304,34 @@ te_debug_demog_modifier_reads = {
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
 	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- m: the shock terms (phase 2 step 4, probe P1) ------------------------------
+# Every state in the world with devastation, or in a state region with pollution: its
+# mortality and birth reads beside devastation and turmoil (0-1 shares) and its region's
+# pollution, then the scope (state names don't render in debug_log). Run it with fast mode
+# off and before phase 2, so no term of the census's own is in the reads. Hover a logged
+# state's mortality in game: if the tooltip's total is the logged mort, devastation's and
+# pollution's lines are in modifier:state_mortality_mult.
+te_debug_demog_shock_lines = {
+	every_state = {
+		limit = {
+			OR = {
+				devastation > 0.01
+				state_region = { pollution_amount > 10 }
+			}
+		}
+		set_variable = { name = te_dg_dbg_read_d value = modifier:state_mortality_mult }
+		set_variable = { name = te_dg_dbg_read_b value = modifier:state_birth_rate_mult }
+		set_variable = { name = te_dg_dbg_dev value = devastation }
+		set_variable = { name = te_dg_dbg_turmoil value = turmoil }
+		set_variable = { name = te_dg_dbg_poll value = state_region.pollution_amount }
+		debug_log = "TE_DEMOG_SHOCK: mort=[THIS.Var('te_dg_dbg_read_d').GetValue|3]; birth=[THIS.Var('te_dg_dbg_read_b').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; pollution=[THIS.Var('te_dg_dbg_poll').GetValue|1]; date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		remove_variable = te_dg_dbg_read_d
+		remove_variable = te_dg_dbg_read_b
+		remove_variable = te_dg_dbg_dev
+		remove_variable = te_dg_dbg_turmoil
+		remove_variable = te_dg_dbg_poll
+	}
 }
