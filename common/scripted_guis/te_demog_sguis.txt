@@ -37,7 +37,10 @@ te_demog_wc_top_sgui = {
 	is_shown = {
 		has_variable = te_dg_wc_top
 		exists = var:te_dg_wc_top
-		var:te_dg_wc_top = { owner = ROOT }
+		var:te_dg_wc_top = {
+			exists = owner
+			owner = ROOT
+		}
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -49,7 +52,10 @@ te_demog_wc_bottom_sgui = {
 	is_shown = {
 		has_variable = te_dg_wc_bottom
 		exists = var:te_dg_wc_bottom
-		var:te_dg_wc_bottom = { owner = ROOT }
+		var:te_dg_wc_bottom = {
+			exists = owner
+			owner = ROOT
+		}
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
