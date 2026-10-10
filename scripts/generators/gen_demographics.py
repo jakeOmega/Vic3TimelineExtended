@@ -760,11 +760,6 @@ def income(o, costs):
     o("")
 
 
-def _read(t):
-    """A modifier type as the census reads it in state scope: a country type through the owner."""
-    return f"owner.modifier:{t}" if t.startswith("country_") else f"modifier:{t}"
-
-
 def multipliers(o):
     for cause in CAUSES:
         if cause == "maternal":
@@ -777,15 +772,15 @@ def multipliers(o):
         if cause in P.MEDICINE_CAUSES:
             o("# medicine: 1 - access x treatment (demographics modifier types, Decision 1)")
             o("subtract = {")
-            o(f"value = {_read(P.ACCESS_TYPE)}")
+            o(f"value = modifier:{P.ACCESS_TYPE}")
             o(f"add = {lit(P.BASE_ACCESS)}")
             o("min = 0")
             o("max = 1")
-            o(f"multiply = {{ value = {_read(P.TREATMENT_TYPE[cause])} min = 0 "
+            o(f"multiply = {{ value = modifier:{P.TREATMENT_TYPE[cause]} min = 0 "
               f"max = {lit(P.TREATMENT_CAP[cause])} }}")
             o("}")
         if cause in P.MORTALITY_TYPES:
-            adds = " ".join(f"add = {_read(t)}" for t in P.MORTALITY_TYPES[cause])
+            adds = " ".join(f"add = modifier:{t}" for t in P.MORTALITY_TYPES[cause])
             o(f"multiply = {{ value = 1 {adds} min = {lit(P.MORTALITY_MULT_FLOOR)} }}")
         if cause == "infection":
             o("multiply = {")

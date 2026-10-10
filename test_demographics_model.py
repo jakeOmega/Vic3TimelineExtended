@@ -178,7 +178,7 @@ class TestMedicine(unittest.TestCase):
         self.assertAlmostEqual(M.medicine(M.Inputs(mods=mods), "chronic"), 1 - P.TREATMENT_CAP["chronic"])
 
     def test_plain_terms_are_floored(self):
-        inp = M.Inputs(mods={"state_work_mortality_mult": -0.9, "country_work_mortality_mult": 0.1})
+        inp = M.Inputs(mods={"state_work_mortality_mult": -0.9})
         self.assertEqual(M.plain_multiplier(inp, "work"), P.MORTALITY_MULT_FLOOR)
         self.assertEqual(M.cause_multipliers(inp)["work"], P.MORTALITY_MULT_FLOOR)
 

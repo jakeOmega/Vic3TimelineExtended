@@ -6,7 +6,7 @@ modifier totals. load_carriers() reads every carrier from a narrow ModState (tec
 laws and institutions; vanilla from the committed vanilla_parsed/ snapshot, so no game is
 needed). totals() sums what one state reads, given its owner's techs, laws and institution
 investment levels:
-    a technology's or law's `modifier`      country types, every state
+    a technology's or law's `modifier`      every state the country owns (states inherit it)
     a law's `institution_modifier`          per level of the law's institution, incorporated states
     an institution's own `modifier`         per level, incorporated states
 """

@@ -481,7 +481,7 @@ antibiotic_mass_production = {
 
 	modifier = {
 		# the census's medicine (demographics modifier types, stage 1)
-		country_infection_treatment_add = 0.11
+		state_infection_treatment_add = 0.11
 		state_mortality_mult = -0.05
 		state_birth_rate_mult = 0.05
 	}

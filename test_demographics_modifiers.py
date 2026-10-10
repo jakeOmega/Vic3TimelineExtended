@@ -16,8 +16,8 @@ C = DM.Carrier
 
 class TestTotals(unittest.TestCase):
     CARRIERS = [
-        C("technology", "antibiotics", "country_infection_treatment_add", 0.26),
-        C("law", "law_child_labor_allowed", "country_work_mortality_mult", 0.1),
+        C("technology", "antibiotics", "state_infection_treatment_add", 0.26),
+        C("law", "law_child_labor_allowed", "state_work_mortality_mult", 0.1),
         C("law_institution", "law_public_health_insurance", "state_health_care_access_add", 0.12,
           "institution_health_system"),
         C("institution", "institution_ministry_of_consumer_protection", "state_external_mortality_mult", -0.08,
@@ -32,8 +32,8 @@ class TestTotals(unittest.TestCase):
 
     def test_techs_and_laws_count_everywhere(self):
         t = DM.totals(self.CARRIERS, techs={"antibiotics"}, laws={"law_child_labor_allowed"}, incorporated=False)
-        self.assertAlmostEqual(t["country_infection_treatment_add"], 0.26)
-        self.assertAlmostEqual(t["country_work_mortality_mult"], 0.1)
+        self.assertAlmostEqual(t["state_infection_treatment_add"], 0.26)
+        self.assertAlmostEqual(t["state_work_mortality_mult"], 0.1)
 
     def test_institution_lines_scale_by_level_in_incorporated_states(self):
         t = DM.totals(self.CARRIERS, laws={"law_public_health_insurance"}, institutions=self.LEVELS)
@@ -61,12 +61,15 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         for name in P.DEMOG_MORTALITY_TYPES:
             self.assertIn(name, carried, name)
 
-    def test_country_types_only_in_country_blocks_and_state_types_only_per_level(self):
+    def test_each_type_sits_where_its_design_puts_it(self):
+        # access only per Ministry of Health level (incorporated states); treatment only on techs
+        allowed = {P.ACCESS_TYPE: {"law_institution"},
+                   **{t: {"technology"} for t in P.TREATMENT_TYPE.values()},
+                   "state_external_mortality_mult": {"technology", "law", "institution"},
+                   "state_work_mortality_mult": {"law", "law_institution"},
+                   "state_chronic_mortality_mult": {"law"}}
         for c in self.carriers:
-            if c.type.startswith("country_"):
-                self.assertIn(c.kind, ("technology", "law"), c)
-            else:
-                self.assertIn(c.kind, ("law_institution", "institution"), c)
+            self.assertIn(c.kind, allowed[c.type], c)
 
     def test_health_laws_carry_access_on_the_health_institution(self):
         access = {c.key: c for c in self.carriers if c.type == P.ACCESS_TYPE}

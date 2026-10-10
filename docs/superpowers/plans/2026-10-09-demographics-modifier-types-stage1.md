@@ -12,6 +12,9 @@
 
 ## Owner rulings this plan builds on
 
+> **Superseded on 2026-10-10.** The owner ruled that every type is `state_*`: states inherit country modifiers, and the prefix is convention. So the six `country_*` names below became `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` and `state_chronic_mortality_mult`. External and work deaths each became one type, `state_external_mortality_mult` and `state_work_mortality_mult`, that techs, laws and institutions all carry. The census reads all seven with `modifier:`, not `owner.modifier:`. The code blocks below show the plan as written; the spec's "Ruling: every type in state scope" has the result.
+
+
 - 2026-10-09: all six of the spec's owner calls are accepted as recommended.
 - 2026-10-09: build stage 1 up to a draft PR, with no merge and no deploy.
 - **A deviation from the spec's names, for the PR body.** Treatment and the flat law and tech terms become **`country_*`** types, carried by techs' and laws' `modifier` and read in state scope as `owner.modifier:`. Only the per-level institution terms are **`state_*`** types, carried in `institution_modifier` or an institution's own `modifier`.

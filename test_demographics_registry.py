@@ -2665,13 +2665,12 @@ class TestModifierTypes(unittest.TestCase):
         for name in P.DEMOG_MORTALITY_TYPES:
             self.assertNotIn(name, engine, name)
 
-    def test_scope_follows_the_prefix(self):
-        self.assertEqual(len(set(P.DEMOG_MORTALITY_TYPES)), 9)
+    def test_seven_state_types(self):
+        # one type per term, read in state scope; a tech's or law's line reaches the state because
+        # states inherit country modifiers (owner, 2026-10-10)
+        self.assertEqual(len(set(P.DEMOG_MORTALITY_TYPES)), 7)
         for name in P.DEMOG_MORTALITY_TYPES:
-            self.assertTrue(name.startswith(("country_", "state_")), name)
-        self.assertTrue(P.ACCESS_TYPE.startswith("state_"))
-        for name in P.TREATMENT_TYPE.values():
-            self.assertTrue(name.startswith("country_"), name)
+            self.assertTrue(name.startswith("state_"), name)
 
 
 class TestCauseMultipliersScript(unittest.TestCase):
@@ -2682,10 +2681,10 @@ class TestCauseMultipliersScript(unittest.TestCase):
         {},
         {P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 0.9, P.TREATMENT_TYPE["chronic"]: 0.59},
         {P.ACCESS_TYPE: 0.6, P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 2.0,
-         P.TREATMENT_TYPE["chronic"]: 0.3, "country_chronic_mortality_mult": -0.05},
+         P.TREATMENT_TYPE["chronic"]: 0.3, "state_chronic_mortality_mult": -0.05},
         {P.ACCESS_TYPE: 1.5, P.TREATMENT_TYPE["infection"]: 0.3},
-        {"state_work_mortality_mult": -0.9, "country_work_mortality_mult": 0.1,
-         "country_external_mortality_mult": 0.3, "state_external_mortality_mult": -0.4},
+        {"state_work_mortality_mult": -0.9, "state_external_mortality_mult": -0.1},
+        {"state_work_mortality_mult": 0.1, "state_external_mortality_mult": 0.3, "state_chronic_mortality_mult": -0.9},
     ]
 
     def test_script_matches_the_model(self):
@@ -2693,8 +2692,7 @@ class TestCauseMultipliersScript(unittest.TestCase):
             for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
                 inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
                 want = demographics_model.cause_multipliers(inp)
-                fixtures = {("owner.modifier:" if t.startswith("country_") else "modifier:") + t: mods.get(t, 0.0)
-                            for t in P.DEMOG_MORTALITY_TYPES}
+                fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}
                 eng = _Engine(fixtures)
                 eng.vars.update(te_dg_sol=float(sol), te_dg_lit=float(lit))
                 for cause in ("infection", "work", "external", "chronic"):

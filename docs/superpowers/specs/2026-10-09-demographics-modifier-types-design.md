@@ -20,9 +20,9 @@ institution term, and could become a type in stage 3.
 
 | Today (params, or script) | Becomes (provisional name, scope) | Carrier | Stage |
 |---|---|---|---|
-| `TECH_MULT` infection, maternal, chronic: the medical techs | `country_infection_treatment_add`, `country_maternal_treatment_add`, `country_chronic_treatment_add` | the techs' `modifier` (INJECT on the base game's, in place on the mod's) | 1 |
+| `TECH_MULT` infection, maternal, chronic: the medical techs | `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` | the techs' `modifier` (INJECT on the base game's, in place on the mod's) | 1 |
 | `LAW_MULT` health laws; `INSTITUTION_MULT` health system (0.95 a level) | `state_health_care_access_add` | the three health laws' `institution_modifier` (per level) | 1 |
-| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `country_external_mortality_mult`, `country_work_mortality_mult`, `country_chronic_mortality_mult` (laws and tech); `state_work_mortality_mult`, `state_external_mortality_mult` (institutions) | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
+| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
 | `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `country_contraception_add`: the tier, which the model scales by literacy | the techs' `modifier` | 2 |
 | `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `country_fertility_means_add` (exists) | the law's `modifier` | 2 |
 | `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
@@ -33,15 +33,13 @@ institution term, and could become a type in stage 3.
 The tax code's dividend term stays in script: it is a rate, not a law. Women's-rights work share gets its own type:
 vanilla's `state_working_adult_ratio_add` on Women in the Workplace is a different quantity.
 
-## Ruling: the country/state split (stage 1, 2026-10-09)
+## Ruling: every type in state scope (owner, 2026-10-10)
 
-The provisional names put every mortality type in state scope. Built, the types follow their carriers' scope:
-- Treatment and the flat law and tech terms are `country_*` types. Techs' and laws' `modifier` blocks carry them, and the census reads them in state scope as `owner.modifier:`, the path `country_fertility_means_add` already proves.
-- Only the per-level institution terms are `state_*` types: health-care access, Workplace Safety and Consumer Protection. A law's `institution_modifier` or an institution's own `modifier` carries them, so they reach incorporated states only.
-
-A mod `state_*` type in a country `modifier` block (check a) is never relied on. If it failed, every treatment would read 0 and nothing would log it.
-
-The cost is where the lines show: a tech's on the country's modifier breakdown, access and the institution terms on the state's. Work and external sum one country type and one state type inside one `(1 + total)`, so within a cause sources still add.
+All seven types are `state_*`, one for each term, and the census reads each with `modifier:` in state scope.
+- **Carriers by kind.** A tech's or law's `modifier` carries treatment, and the police, pension and child-labour terms. It reaches every state the country owns, because states inherit country modifiers, the way a law's `state_education_access_add` reaches its states. A law's `institution_modifier` or an institution's own `modifier` carries access, Workplace Safety and Consumer Protection, per investment level and in incorporated states only.
+- **The prefix is convention.** The engine doesn't read it.
+- **Every source shows in one place:** the state's modifier breakdown.
+- **What it replaced.** The first build split the types (`country_*` read through the owner, as a hedge on check a) and was reverted before merge. Option l of the probe confirms that the inherited lines read in the state.
 
 ## Decision 1: how the terms combine
 

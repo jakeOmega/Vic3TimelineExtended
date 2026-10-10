@@ -104,16 +104,14 @@ class TestGenerated(unittest.TestCase):
         for cause in P.MEDICINE_CAUSES:
             body = self._cause(cause)
             self.assertIn(f"value = modifier:{P.ACCESS_TYPE}", body, cause)
-            self.assertIn(f"value = owner.modifier:{P.TREATMENT_TYPE[cause]}", body, cause)
+            self.assertIn(f"value = modifier:{P.TREATMENT_TYPE[cause]}", body, cause)
         for cause in set(gen.CAUSES) - set(P.MEDICINE_CAUSES):
             self.assertNotIn(P.ACCESS_TYPE, self._cause(cause), cause)
 
-    def test_country_types_are_read_through_the_owner_and_state_types_are_not(self):
+    def test_every_type_is_read_in_state_scope(self):
         for name in P.DEMOG_MORTALITY_TYPES:
-            if name.startswith("country_"):
-                self.assertNotRegex(self.values, rf"(?<!owner\.)modifier:{name}\b", name)
-            else:
-                self.assertNotIn(f"owner.modifier:{name}", self.values, name)
+            self.assertIn(f"modifier:{name}", self.values, name)
+            self.assertNotIn(f"owner.modifier:{name}", self.values, name)
 
     def test_replay_values_are_one_sequential_block(self):
         self.assertNotIn("te_demog_dbg_unit", self.values)
