@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** The census's Gini measures the game's own income distribution: pops are grouped by wealth band, not by stratum, and the panel shows the grouped figure with no map. Wealth Concentration's inequality term is re-centred so its balance stays where #843 left it.
+**Goal:** The census's Gini measures the game's own income distribution: pops are grouped by wealth band, not by stratum, and the panel shows the grouped figure with no map. Wealth Concentration's inequality term is set afresh on the new figures: +30 × (Gini − 0.15), at most +15.
 
 **Architecture:** The yearly pop walk adds each pop's people and stand-in income to one of 14 wealth bands (the income knots: wealth 1 or less, 2–5, 6–10, …, 56–60, 61 or more) instead of one of three strata. Each state stores its 28 sums, and the country adds its states' sums. One generated formula takes the Gini over the 14 ordered bands. Bands follow income because the stand-in rises with wealth, so the formula needs no sort, unlike today's three strata. The panel shows that figure, clamped to 0–0.9. `GINI_FLOOR` (0.30, chosen) and `GINI_SCALE` (0.85, fitted to a historical 0.52) go.
 
@@ -14,7 +14,7 @@
 
 - The Gini should measure the game's distribution, not history's. The stand-in income (spending per head at the pop's wealth) is right: in Britain 1836, aristocrats earn about 139× laborers per head in the engine; the stand-in gives 115×.
 - Wealth bands with no map, if they are not expensive. Per pop they add one short chain of wealth comparisons to a walk that already makes dozens of reads; the Gini needs no sort; each state keeps 28 sums instead of 6.
-- Wealth Concentration moves with it, as a follow-up to stage 2.
+- Wealth Concentration moves with it, as a follow-up to stage 2: evaluated fresh, not fitted to the old values; 30 × (Gini − 0.15), a shallow bottom, rounded for players.
 
 ## The evidence (the offline check)
 
@@ -22,17 +22,22 @@
 - The 14 wealth bands reproduce the pop-by-pop Gini with no map: mean −0.014, R² 0.98, worst miss 0.045 for countries; mean −0.008, R² 0.99 for states.
 - The script's country figure sums its states' groups and then takes one Gini, and the check mirrored that; it matched the game's logged figures to a mean difference of 0.0004.
 
-## Wealth Concentration's inequality term
+## Wealth Concentration's inequality term (owner, 2026-10-10)
 
-Today: +50 × (the state's Gini − 0.40), capped ±15. On the new figures it would fall about 11 points in the median state. Fitting the old term on the check's 10,105 state-saves gives +32 × (Gini − 0.155):
+Today: +50 × (the state's Gini − 0.40), capped ±15. The owner asked for a fresh evaluation, not a fit to the old values
+(the system is unreleased). The new term is **+30 × (Gini − 0.15), capped at +15**, rounded for players: +3 points
+for every 0.1 of Gini above 0.15.
 
-| Term, across states | Today | New, unchanged formula | New, 32 × (G − 0.155) |
-|---|---|---|---|
-| 10th / 50th / 90th percentile | −3.3 / −0.2 / +6.3 | −15 / −12.3 / −2.7 | −3.5 / 0.0 / +6.1 |
-| at the +15 cap | 153 | 42 | 85 |
-| per-state change, 10th / 50th / 90th percentile | | | −1.3 / −0.3 / +1.9 |
+- **Centre 0.15**, on 1836's measured median state (0.15–0.16, people-weighted), as the ownership term is centred on
+  1836's measured private share. The 1836 world starts near 0 on this term; the differences come from play.
+- **The cap at a Gini of 0.65**, Britain's industrial peak in the runs (0.63–0.65 in 1877–1887), the most unequal
+  great power they produce.
+- **A shallow bottom:** a Gini is at least 0, so the term is at least −4.5. Equal incomes stop fortunes growing but
+  don't break existing ones up; that is the inheritance laws' and the taxes' work (their own terms).
 
-The floor is the same as today's: the old figure was at least 0.30, so the term was at least −5; the new figure is at least 0, so the term is at least −4.96. This is a balance call; the owner can choose another centre.
+| Gini (state or country) | 1836 median 0.16 | France 1836 0.19 | Britain 1836 0.35 | Median 1887 0.24 | Median 1950 0.28 | Russia 1950 0.40 | France 1950 0.55 | Britain 1877 0.65 | 0 |
+|---|---|---|---|---|---|---|---|---|---|
+| Term | +0.3 | +1.2 | +6 | +2.7 | +3.9 | +7.5 | +12 | +15 | −4.5 |
 
 ## Global Constraints
 
@@ -320,26 +325,26 @@ And in the walk text test: the walk calls the three generated effects and no lon
 - Modify: `common/script_values/te_demog_values.txt` (`te_demog_wc_inequality_term`), `localization/english/te_miscellaneous_l_english.yml` (`te_demog_wc_t_ineq_tt`)
 - Test: `test_demographics_registry.py` (the target tests at ~1873–1897 and the national test's `mean(5, -5)`)
 
-- [ ] **Step 1: Failing tests.** Update the expectations: `(0.5 − 0.155) × 32 = 11.04` in `test_the_target_sums_its_terms` (target 96.04, and 86.04 with econ −10); in the caps test, `two_thirds` takes Gini 0.155 for "no term", `state_owned` (Gini 0) gives 50 − 20 − 4.96; the national test's inequality bar is `mean(11.04, 4.64)`.
+- [ ] **Step 1: Failing tests.** Update the expectations: `(0.5 − 0.15) × 30 = 10.5` in `test_the_target_sums_its_terms` (target 95.5, and 85.5 with econ −10); in the caps test, `two_thirds` takes Gini 0.15 for "no term", `state_owned` (Gini 0) gives 50 − 20 − 4.5; the national test's inequality bar is `mean(10.5, 4.5)`.
 - [ ] **Step 2:** run them; expected failures.
 - [ ] **Step 3:** the term:
 
 ```
 # State scope: the inequality term. The rich save more, so fortunes grow from unequal
-# incomes: +32 x (the state's Gini - 0.155), capped at 15 either way (at least -4.96, since a
-# Gini is at least 0). Re-centred with the wealth-band Gini (2026-10-10) so the term keeps
-# #843's balance: fitted on the old term across 10,105 state-saves, its spread is unchanged
-# (10th/50th/90th percentile -3.5/0.0/+6.1, today -3.3/-0.2/+6.3).
+# incomes: +30 x (the state's Gini - 0.15), so +3 for every 0.1 above 0.15, at most 15 (from a
+# Gini of 0.65, Britain's industrial peak in the observer runs) and at least -4.5 (a Gini is at
+# least 0: equal incomes stop fortunes growing, the inheritance laws and taxes break them up).
+# Centred on 1836's measured median state with the wealth-band Gini (owner, 2026-10-10).
 te_demog_wc_inequality_term = {
 	value = var:te_dg_gini
-	subtract = 0.155
-	multiply = 32
+	subtract = 0.15
+	multiply = 30
 	min = -15
 	max = 15
 }
 ```
 
-and the tooltip: `"#b Income Inequality#!\nThe rich save more, so unequal incomes build fortunes: 0 for a state whose Gini is about 0.16, +5 for 0.31, +10 for 0.47, at most 15."`
+and the tooltip: `"#b Income Inequality#!\nThe rich save more, so unequal incomes build fortunes: +3 for every 0.1 of the state's Gini above 0.15, at most +15 (a Gini of 0.65); below 0.15 it takes up to 4.5 off."`
 - [ ] **Step 4:** tests, loc check, commit "Demographics: Wealth Concentration's inequality term re-centred for the wealth-band Gini".
 
 ### Task 5: The harness and the observer report
@@ -372,4 +377,4 @@ Built by the controller.
   2. A new 1836 game: Britain's Gini on the Demographics tab about 0.36, France about 0.20; Wealth Concentration's Income Inequality bar near 0 for most countries, as before.
   3. An old save loads; on 31 December the country Gini is computed (states not yet pulsed are left out that year); a pulsed state has no `te_dg_n_lo`.
   4. No visible slowdown at the yearly pulses in a large late-game save.
-  Owner call: the inequality term's re-centring (32 × (G − 0.155)), or another centre.
+  The inequality term is the owner's (30 × (G − 0.15), 2026-10-10).
