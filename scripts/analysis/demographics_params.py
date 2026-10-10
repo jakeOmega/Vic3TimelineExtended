@@ -206,12 +206,9 @@ STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vani
 STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
 # Phase 2 step 4 (plan §3 (a)): carriers whose birth or mortality lines stay on top of the census's term.
-# Every other law, technology or institution line nets to zero (Tasks 6 and 8). The women's-rights laws leave
-# this list in Task 8, once Task 7's natural-fertility term carries their effect.
+# Every other law, technology or institution line nets to zero (Tasks 6 and 8). The women's-rights laws left
+# this list in Task 8: Task 7's natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
-    # women's rights: on top until the census's term exists (owner, 2026-10-10)
-    "law_no_womens_rights", "law_women_in_the_fields", "law_women_in_the_workplace", "law_womens_suffrage",
-    "law_protected_class",
     # the family-policy laws §8.1 has yet to re-express as census terms
     "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
     # late-era lines with no census term; revisit with step 6

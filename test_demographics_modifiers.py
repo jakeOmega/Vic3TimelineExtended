@@ -154,6 +154,14 @@ class TestEngineRateLines(unittest.TestCase):
         live = {k[1] for k, v in self.lines.items() if abs(v) > 1e-9 and RATE_FIELDS.match(k[3])}
         self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - live), [])
 
+    def test_womens_rights_birth_lines_are_absorbed(self):
+        """Task 8: vanilla's women's-rights birth lines (and Protected Class's) net to zero, now that the census's
+        natural-fertility term carries them (Task 7)."""
+        for law in ("law_no_womens_rights", "law_women_in_the_fields", "law_women_in_the_workplace",
+                    "law_womens_suffrage", "law_protected_class"):
+            self.assertAlmostEqual(self.lines.get(("law", law, "modifier", "state_birth_rate_mult"), 0.0), 0.0, msg=law)
+            self.assertNotIn(law, P.ENGINE_LINES_ON_TOP)
+
     def test_augmentation_moves_to_flat_chronic_treatment(self):
         """The design note's values as totals: flat lines (kind 'law'), not per level (an institution_modifier
         line at +0.10 would give +0.50 at level 5)."""
