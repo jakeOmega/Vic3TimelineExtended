@@ -1276,18 +1276,20 @@ class TestTrend(unittest.TestCase):
 
     def test_fast_mode_skips_wealth_concentration_for_a_state_not_yet_walked(self):
         """Fast mode moves the walk to the clock's steps, but the yearly pulse still updates Wealth
-        Concentration, which reads the walk's sums. A state that appears between steps (a colony, a
+        Concentration and inheritance's rural modifiers, which read the walk's sums. A state that appears between steps (a colony, a
         split) had none: 'Value of wrong type' at te_demog_wealth_effects.txt:64 and te_demog_values.txt,
         a few lines a game year in the 2026-10-10 fast run. It waits for its first walk."""
-        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_inh_refresh_wc_state_effects": "",
-                 "te_demog_state_census": "", "te_demog_wc_state_yearly": "set_variable = { name = wc_ran value = 1 }"}
+        stubs = {"te_demog_walks": "", "te_inh_refresh_wc_state_effects": "", "te_demog_state_census": "",
+                 "te_demog_wc_state_yearly": "set_variable = { name = wc_ran value = 1 }",
+                 "te_inh_refresh_rural_effects": "set_variable = { name = rural_ran value = 1 }"}
         for walked in (False, True):
             with self.subTest(walked=walked):
                 eng = _Engine({}, triggers={"te_demog_clock_on": True}, effects=stubs)
                 if walked:
                     eng.vars["te_dg_walk_pop"] = 1000.0
                 eng.call("te_demog_state_yearly")
-                self.assertEqual("wc_ran" in eng.vars, walked)
+                # inheritance's rural modifiers read the walk's agrarian share (te_inheritance_effects.txt:251/258)
+                self.assertEqual(("wc_ran" in eng.vars, "rural_ran" in eng.vars), (walked, walked))
 
     def test_a_seed_off_the_pulse_is_made_again_at_the_pulse(self):
         """Codex review on #830: game start and the console seed on a day that is not the state's
