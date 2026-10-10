@@ -169,6 +169,14 @@ class TestEngineRateLines(unittest.TestCase):
             self.assertAlmostEqual(carried.get(law, 0.0), value, msg=law)
             self.assertAlmostEqual(P.NATURAL_FERTILITY_BY_LAW.get(law, 0.0), value, msg=law)
 
+    def test_line_totals_take_a_countrys_flat_lines(self):
+        lines = {("law", "law_a", "modifier", "state_birth_rate_mult"): 0.05,
+                 ("law", "law_b", "modifier", "state_birth_rate_mult"): -0.1,
+                 ("technology", "tech_a", "modifier", "state_mortality_mult"): -0.05,
+                 ("law", "law_a", "institution_modifier", "state_mortality_mult"): 0.5}   # per level: left out
+        self.assertEqual(DM.engine_line_totals(lines, laws={"law_a"}, techs={"tech_a"}),
+                         {"state_birth_rate_mult": 0.05, "state_mortality_mult": -0.05})
+
     def test_womens_rights_birth_lines_are_absorbed(self):
         """Task 8: vanilla's women's-rights birth lines (and Protected Class's) net to zero, now that the census's
         natural-fertility term carries them (Task 7)."""

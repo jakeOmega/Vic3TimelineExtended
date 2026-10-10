@@ -37,7 +37,7 @@ import demographics_model as M
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
              "social_class"),
-    "states": ("country", "incorporation"),
+    "states": ("country", "incorporation", "devastation"),
     "country_manager": ("definition",),
     "laws": ("law", "country", "active"),
     "technology": ("country", "acquired_technologies"),
@@ -45,6 +45,8 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
+# a pop's food security: the value inside its food_security={ } block (phase 2 step 4, predict)
+_FOOD_SECURITY = re.compile(r"^\t\tvalue=([-0-9.]+)$")
 # a country's or a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }),
 # read as [name, multiplier] pairs inside that block only
 _TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
@@ -94,6 +96,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
     record_id = None
     record = None
     in_timed = False   # inside the current record's timed_modifiers block
+    in_food = False    # inside the current pop's food_security block
     with open(path, encoding="utf-8", errors="replace") as fh:
         for line in fh:
             if section is None:
@@ -108,7 +111,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
             if record is None:
                 m = _RECORD.match(line)
                 if m and depth == 2:
-                    record_id, record, in_timed = m.group(1), {}, False
+                    record_id, record, in_timed, in_food = m.group(1), {}, False, False
                     depth += 1
                     continue
                 depth += opened - closed
@@ -123,6 +126,9 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                 m = _SOCIAL_CLASS.match(line.rstrip("\n"))
                 if m:
                     record["social_class"] = m.group(1)
+                m = _FOOD_SECURITY.match(line.rstrip("\n")) if in_food else None
+                if m:
+                    record["food_security"] = m.group(1)
             elif in_timed:
                 # only inside the record's own timed_modifiers block: a country's budget trends carry multiplier=
                 # lines and its timed_enactment_modifiers modifier= lines at the same depth
@@ -135,9 +141,11 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                         record["timed_modifiers"][-1][1] = float(m.group(1))
             if depth == 3 and section in ("country_manager", "states") and line.startswith("\ttimed_modifiers={"):
                 in_timed = True
+            if depth == 3 and section == "pops" and line.startswith("\tfood_security={"):
+                in_food = True
             depth += opened - closed
             if depth <= 3:   # back at the record's own fields (an empty block opens and closes on one line)
-                in_timed = False
+                in_timed = in_food = False
             if depth == 2:
                 out[section][record_id] = record
                 record = None

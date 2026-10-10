@@ -2,6 +2,7 @@
 
 import copy
 import io
+import json
 import math
 import re
 import sys
@@ -23,6 +24,68 @@ ANCHORS = ROOT / "test_fixtures" / "demographics" / "history_anchors.csv"
 CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
+
+
+class TestPredict(unittest.TestCase):
+    D = H.G.read_defines()
+
+    def test_a_fed_state_runs_at_the_census_rates_plus_nothing(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], cbr=40.0, cdr=30.0, d=self.D)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_literacy_is_netted(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.5, 0.8)], cbr=40.0, cdr=30.0, d=self.D)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+
+    def test_terms_on_top_add_at_the_bare_curves_weight(self):
+        # severe starvation (births -0.9, deaths +1.0), devastation 0.2 and a law's -0.1 births, all on top
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], cbr=40.0, cdr=30.0, d=self.D, on_top_b=-0.1, on_top_d=0.2)
+        bare_b = 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12
+        bare_d = 1e6 * H.G.monthly_mortality(9.0, self.D) * 12
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * (1.0 + 0.2), delta=1.0)
+        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 + bare_b * (-0.9 - 0.1)), delta=1.0)
+
+    def test_the_slope_is_reported_not_applied(self):
+        pops = [H.Pop(1e6, 1.0, 0.0, 0.8)]
+        out = H.predict_state(pops, 40.0, 30.0, self.D)
+        slope = 1e6 * (H.G.monthly_mortality(1.0, self.D) - H.G.monthly_mortality(4.0, self.D)) * 12
+        self.assertAlmostEqual(out["slope_deaths"], slope, delta=1.0)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_absorbed_child_labour_is_reported_not_applied(self):
+        pops = [H.Pop(1e6, 9.0, 0.0, 0.8, on_top_d=0.0, absorbed_d=0.05)]
+        out = H.predict_state(pops, 40.0, 30.0, self.D)
+        self.assertAlmostEqual(out["absorbed_child_labour_deaths"],
+                               1e6 * H.G.monthly_mortality(9.0, self.D) * 12 * 0.05, delta=1.0)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_absorbed_womens_rights_births_are_reported_not_applied(self):
+        """Batch 4 review m8: No Women's Rights' +0.05 sat on top until Task 8 absorbed it; predict reports the births
+        it took away (at the bare curve's weight), so the gate can tell it from calibration error."""
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 40.0, 30.0, self.D, absorbed_b=0.05)
+        self.assertAlmostEqual(out["absorbed_wr_births"], 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12 * 0.05,
+                               delta=1.0)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+
+    def test_predict_on_the_slice(self):
+        """The command end to end on the test slice (Britain and Portugal, 1836; the slice has no game_date)."""
+        out = io.StringIO()
+        with redirect_stdout(out):
+            code = H.main(["predict", str(SLICE), "--year", "1836", "--json"])
+        data = json.loads(out.getvalue())
+        world = data["saves"][SLICE.name]["world"]
+        self.assertGreater(world["people"], 0)
+        self.assertGreater(world["child_labour_points"], 0)     # both hold Child Labor Allowed
+        self.assertLess(world["womens_rights_points"], 0)       # Portugal's No Women's Rights (Britain: Own Property)
+        # the slice's pops carry no food security (fed) and their laws no line on top: the engine runs the census
+        self.assertAlmostEqual(world["growth"], world["census_growth"], places=6)
+        self.assertEqual(code, 0 if data["in_band"] and not data["saves"][SLICE.name]["shrinking"] else 1)
+
+    def test_multiple_chains_the_saves_rates(self):
+        # 1% a year from 1837 to 1887, then 0.5% to 1900
+        self.assertAlmostEqual(H.predicted_multiple([(1837, 1.0), (1887, 0.5)], 1900),
+                               math.exp(0.01 * 50 + 0.005 * 13), places=9)
 
 
 class TestHarness(unittest.TestCase):

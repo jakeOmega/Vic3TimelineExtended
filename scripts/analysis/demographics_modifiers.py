@@ -161,3 +161,15 @@ def engine_rate_lines(root=ROOT, mod=True):
                         del out[k]
                 add(kind, key, body)
     return out
+
+
+def engine_line_totals(lines, laws=(), techs=()):
+    """{field: total} of the flat `modifier` lines (engine_rate_lines' keys) a country's laws and techs carry.
+    Per-level law lines are left out: after phase 2 step 4 none of the birth or mortality ones is live
+    (the health laws' are absorbed), and predict says so if one ever is."""
+    laws, techs = set(laws), set(techs)
+    out = {}
+    for (kind, key, block, field), value in lines.items():
+        if block == "modifier" and ((kind == "law" and key in laws) or (kind == "technology" and key in techs)):
+            out[field] = out.get(field, 0.0) + value
+    return {k: v for k, v in out.items() if v}
