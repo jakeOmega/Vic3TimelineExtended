@@ -22,12 +22,13 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 - Infection ×(1 + 0.5 × clamp((9 − SoL) / 4, 0, 1)), state by state, with each state's crowding term as the save
   holds it: world life expectancy 31–32 (from 34.5–36.6), world growth about 1.05% a year (from 1.45%), China +0.7% by
   1887. Every medicine and fertility anchor stays in its band as defined, though they barely test the term. The West
-  pays, mostly through crowding: Britain 1837 34 (history 41), Denmark 33 (41).
+  pays: Britain 1837 34 (history 41; 38 with neither term), mostly through crowding, and Denmark 33 (41; 39), about
+  equally through both.
 - `demographics_harness.py history SAVE... --anchors CSV` and `scripts/analysis/fetch_history_anchors.py`.
 - **The crowding term.** The census's ×1.15 on infection in a state carrying `migration_crowding` covers 91% of the
   world's people, three-quarters of them in states under 20% urban, because Migration Crowding goes on any state above
   its floor density at any multiplier. The first fit left it out (×2 then); the harness now reads it from saves, and its
-  figures match the fast-mode run's census exactly.
+  figures match the fast-mode run's census at its next step exactly.
 - **Owner calls:**
   - the strength. ×1.5 at SoL 5 is built; ×1.75–×2 bring world growth to history's 0.6–0.85% but slow China to +0.2%
     or shrink it by the 1880s in the gate game;
