@@ -64,7 +64,7 @@
    - Task 5's `test_fast_and_census_terms_reach_a_joint_fixed_point` pins the fixed point.
 4. **The rule switched from Full to Display only mid-game.** The modifiers and terms come off at the state's next step, and that step takes no on-top scales.
    - Pinned by Task 4's `test_display_only_clears_the_rates` and Task 3's `test_no_on_top_scales_outside_full`.
-5. **Terms added on top that already push a state past −0.8** (a famine, a plague event): M never pushes further down, and never above `RATE_TERM_MAX`.
+5. **Terms added on top that already push a state's read past −0.8** (a plague event, a decree or another state modifier; starvation is per pop and never enters the state read): M never pushes further down, and never above `RATE_TERM_MAX`.
    - Pinned by Task 2's `test_the_clamp_never_pushes_past_the_terms_on_top` and Task 4's `test_script_clamps_like_the_model`.
 
 ## 1. The engine's arithmetic, from evidence
@@ -88,9 +88,9 @@ Each claim is **verified**, with its source, or **needs an in-game probe** (§4 
 |  | · Charitable Health System −0.03 mortality a level of its institution, Public Health Insurance −0.05 a level (`institution_modifier`); Private Health Insurance −0.002 `state_mortality_wealth_mult` a level | | |
 |  | · Child Labor Allowed +0.05 for laborers, machinists, farmers and peasants; Restricted Child Labor +0.02 for laborers, farmers and peasants (`modifier`) | | |
 |  | · women's rights' births: No Women's Rights +0.05, Women in the Fields −0.10 (a variant of No Women's Rights with its own block), Women Own Property none, Women in the Workplace −0.05, Women's Suffrage −0.05 | | |
-| E13 | An `INJECT` into a vanilla law's `modifier` or `institution_modifier` **sums** with vanilla's lines, an institution line applying per level. Several INJECT blocks on one law in different files all apply | verified | `docs/guides/scripting_best_practices.md` § "CONFIRMED: an `INJECT:` block sums" (2026-09-20 laws; 2026-10-10 `institution_modifier`, Public Health Insurance read in game). Several blocks: `law_women_in_the_fields` is INJECTed in `extra_laws.txt:89` and in `sol_expectations_vanilla_injections.txt:17` (an inverse INJECT already); `law_no_womens_rights` in `extra_laws.txt:94` and `common/ideologies/modified.txt`. On the health laws, `modified_health_system.txt` already cancels vanilla's `state_pollution_reduction_health_mult` (drugs phase 2) |
+| E13 | An `INJECT` into a vanilla law's `modifier` or `institution_modifier` **sums** with vanilla's lines, an institution line applying per level. Several INJECT blocks on one law in different files all apply | verified; the same-field cancel inside `institution_modifier` owner-verified in game (2026-10-10) | `docs/guides/scripting_best_practices.md` § "CONFIRMED: an `INJECT:` block sums" (2026-09-20 laws; 2026-10-10 `institution_modifier`, Public Health Insurance read in game). Several blocks: `law_women_in_the_fields` is INJECTed in `extra_laws.txt:89` and in `sol_expectations_vanilla_injections.txt:17` (an inverse INJECT already); `law_no_womens_rights` in `extra_laws.txt:94` and `common/ideologies/modified.txt`. On the health laws, `modified_health_system.txt` already cancels vanilla's `state_pollution_reduction_health_mult` (since 69f372fe, 2025-12; drugs phase 2 only added the opium lines beside it). The owner confirmed on 2026-10-10 that such a same-field cancel works in game |
 | E14 | Devastation: `state_region_devastation` carries `state_mortality_mult = 1.0`, scaled by the devastation level (vanilla's comment). Script reads `devastation` as a 0–1 share | the line and the read: verified (`00_code_static_modifiers.txt:731-740`; `te_debug_demog_census_line` prints it). **Whether it is in `modifier:state_mortality_mult`, and how it scales: needs P1** | |
-| E15 | Pollution: `state_region_pollution_health` carries `state_mortality_mult = 0.5` × the pollution impact, less `state_pollution_reduction_health_mult`. The mod INJECTs another +0.05 | the lines: verified (`00_code_static_modifiers.txt:742-748`; `extra_modifiers.txt:341-347`). **Whether it is in the read, and whether the INJECTed +0.05 sums inside a code-scaled modifier: needs P1** | |
+| E15 | Pollution: `state_region_pollution_health` carries `state_mortality_mult = 0.5` × the pollution impact, less `state_pollution_reduction_health_mult`. The mod INJECTs another +0.05 | the lines: verified (`00_code_static_modifiers.txt:742-748`; `extra_modifiers.txt:341-347`). The INJECTed +0.05 **sums** with vanilla's line inside the code-scaled modifier: verified (owner, 2026-10-10). **Whether it is in the read: needs P1** | |
 | E16 | Turmoil: the `state_turmoil*` modifiers carry no mortality. Turmoil's deaths come from `state_mortality_turmoil_mult` "per Turmoil" (Militarized Police +0.004 a level, events) | the lines: verified (`00_code_static_modifiers.txt:776-798`; `docs/engine/modifiers_summary.txt:7411`). Its scaling is **unknown**, measured at about 0 (growth probe "Open"). It is added on top by construction; a probe only if the gate run shows an unexplained residual in turmoil states (P5) | |
 | E17 | `low_pop_state` (+0.5 births, scaled by how far the state is under `LOW_POP_THRESHOLD`, 5,000 per arable land) and `unemployment_birth_penalty_state` (mod −0.1 × unemployment, vanilla −0.4) are state modifiers | the lines: verified (`00_code_static_modifiers.txt:695-705`, `00_defines.txt:1549`; the mod's `REPLACE`s in `extra_modifiers.txt:291,323`). In the read: assumed as for every state modifier (E5); P1 logs the birth read beside them | |
 | E18 | `working_conditions` is scaled by `building_working_conditions_mult` (Workplace Safety −0.2 a level) | the line: verified (`vanilla_parsed` institutions). The census adds the table's value unscaled (`gen_demographics.engine_rate_terms`): a known gap in the residual, not in M | |
@@ -166,7 +166,7 @@ M never reads a term added on top. The engine applies O whatever its scaling, de
 ### The clamp
 
 - **The floor:** `other + M ≥ RATE_TOTAL_MIN = −0.8`, where other = the state read − M_prev − F_prev. Q7 and the growth probe measured linearity down to −0.9; less literacy's −0.1 at full literacy, that keeps a literate, fed pop inside the measured range (E9–E10).
-- **When the terms on top alone are past −0.8** (a famine, a plague event), the floor is 0: M never pushes a state further down than they do.
+- **When the terms on top alone are past −0.8** (a plague event, a decree or another state modifier), the floor is 0: M never pushes a state further down than they do. Starvation is per pop (E7), so it never enters the state read: a starving pop under a negative M floors at 0, the per-pop floor below.
 - **The ceiling:** `M ≤ RATE_TERM_MAX = +3.0`.
   - Linearity holds far above +1.0 (E10), so this only guards a nonsense target.
   - A state whose model deaths are four times its bare curve's is past anything the census produces in normal play.
@@ -188,6 +188,7 @@ M never reads a term added on top. The engine applies O whatever its scaling, de
 - **Seeds:** a seed writes 0 births (`te_dg_stepped = 0`), so the refresh skips it and M stays as it was.
   - An 1836 state runs on the curves until its first step, its second yearly pulse (the first re-seeds, `te_dg_reseed`). So does a re-seeded state with no M yet.
   - Storing an equilibrium rate at the seed would start M a pulse earlier. Step 5 needs that figure for Display only and Disabled, and builds it there.
+  - **A seed clears the target** (batch 1 review, Q1; built with Task 3's fixes): it removes `te_dg_cbr_model` / `te_dg_cdr_model`, zeroes `te_dg_bz` / `te_dg_dz` and sets `te_dg_tfr_model` to the seed's TFR. The old target is another state's (a merge or split) or years stale (a census gap). Kept, it would scale the first step after the seed by the ratio of the old rate to today's: about ±25% of births across SoL 5↔15, and −37% after years under Disabled. That step takes no on-top scales instead. Pinned by `test_a_seed_clears_the_target_and_the_scales`.
 - **Old saves:** M arrives at each state's next step. That step takes no on-top scales, since `te_dg_cbr_model` is absent.
 - **Rule switches:** `te_demog_rates_clear` leaves `te_dg_cbr_model`. After a switch from Display only back to Full, M applies at once from the last step's rate, which is harmless.
 
@@ -218,6 +219,7 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 - **What the panel shows:**
   - CBR, CDR and children per woman are the realized ones. That answers §13's question: "the panel should show what actually happens".
   - Life expectancy, e65 and infant mortality stay the census's life table at its own rates ("before famine, war and disasters", which the tab's explanation says).
+  - **The player's twenty-year projection** runs on the model's own rates too (batch 1 review, I1). Its mortality is the states' unscaled `te_dg_m_*`. Its children per woman is `te_dg_tfr_model`, weighted by women aged 15–49 as `te_dg_tfr` is, falling back to `te_dg_tfr` for a state with none. On the realized TFR it ran about 30% hot before M existed, and after M a famine year would skew it for twenty years. Pinned by `test_projection_runs_on_the_models_own_tfr`.
 - **The ring follows the engine only up to the model's year-on-year change.**
   - bz is this window's engine events over the *last* step's model rate, applied to *this* step's rate. So the ring's births differ from the engine's by how much the model moved in a year.
   - The scale pass absorbs that as it does today.
@@ -347,7 +349,7 @@ The slope acts per pop and the poverty term on the state's mean SoL, so a destit
 
 | Probe | Question | Design | Blocks |
 |---|---|---|---|
-| **P1** | Are devastation's and pollution's mortality lines in `modifier:state_mortality_mult`, and as what share? Does the mod's INJECTed +0.05 on pollution sum? | Console option m (Task 1), on today's build with no M and fast mode off. Every state in the world with devastation or a polluted region logs its mortality and birth reads, devastation, turmoil and pollution, with `debug_log_scopes = yes` to name it. Load the 1887 gate save (5 devastated states), fire option m, and hover each logged state's mortality in game. If the tooltip's total is the logged `mort`, the lines are in the read | Nothing in M. It decides whether the residual and the clamp's "other" see these deaths. If they don't, a follow-up adds `devastation` per pop to `te_demog_pop_death_mult` |
+| **P1** | Are devastation's and pollution's mortality lines in `modifier:state_mortality_mult`, and as what share? (The mod's INJECTed +0.05 on pollution sums: owner, 2026-10-10, E15.) | Console option m (Task 1), on today's build with no M and fast mode off. Every state in the world with devastation or a polluted region logs its mortality and birth reads, devastation, turmoil and pollution, with `debug_log_scopes = yes` to name it. Load the 1887 gate save (5 devastated states), fire option m, and hover each logged state's mortality in game. If the tooltip's total is the logged `mort`, the lines are in the read | Nothing in M. It decides whether the residual and the clamp's "other" see these deaths. If they don't, a follow-up adds `devastation` per pop to `te_demog_pop_death_mult` |
 | **P2** | Do the absorptions leave no line behind? | After Tasks 6 and 8, read in the law and tech panels: Charitable Health System, Private Health Insurance, Public Health Insurance, Child Labor Allowed, Restricted Child Labor, No Women's Rights, Women in the Fields (a variant: its own block must net to nothing), Women in the Workplace, Women's Suffrage, Protected Class, the Contraceptive Pill, Modern Vaccines, Antibiotic Mass Production, State-Sponsored Family Planning, the Ministry of Consumer Protection and the four augmentation laws. None should list a mortality or birth-rate line; a cancelled line disappears from its tooltip, the monetary precedent. Option l's log of the capital's reads should drop by the old lines | Confirms Tasks 6 and 8 (shape verified, E13) |
 | **P3** | Does the engine hit the target in game? Is M's fixed point stable? | Option n (Task 4) logs the capital's M, F, targets, on-top scales and reads. The census line (Task 9) carries `m_b`, `m_d`, `bz`, `dz` and `clamped`. In the gate's fast-mode run, `bz` and `dz` measure each country's gap between the engine and the target. They should sit at the share of the terms on top (a few per cent) and not drift | The gate (Task 12) |
 | **P4** | Does a state keep its census modifiers through a change of owner? | Offline: `demographics_harness.py predict SAVE --check-modifiers` (Task 10) lists states whose `te_dg_mb` is not 0 but whose `timed_modifiers` lack the matching census modifier. Run it on a fast-run save taken after a war or a civil war | Nothing: the `has_modifier` guard (Review Focus 2) and the next step's refresh cover a loss. The answer goes in the results doc |
@@ -545,7 +547,8 @@ class TestRateTerm(unittest.TestCase):
         self.assertTrue(clamped)
 
     def test_the_clamp_never_pushes_past_the_terms_on_top(self):
-        """A famine or a plague already past -0.8: M may not push further down."""
+        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
+        not push further down."""
         m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
         self.assertEqual(m, 0.0)
         self.assertTrue(clamped)
@@ -1851,7 +1854,7 @@ In `modified_health_system.txt`, inside each existing `institution_modifier`:
 - `law_private_health_insurance`: `state_mortality_wealth_mult = 0.002`;
 - `law_public_health_insurance`: `state_mortality_mult = 0.05`.
 
-Add one header line: "state_mortality_mult / state_mortality_wealth_mult: vanilla's lines cancelled; the census's access × treatment absorbs them (demographics phase 2 step 4)". These are the same three blocks that already cancel vanilla's `state_pollution_reduction_health_mult` (drugs phase 2), so the cancel shape is live on these exact entities (E13).
+Add one header line: "state_mortality_mult / state_mortality_wealth_mult: vanilla's lines cancelled; the census's access × treatment absorbs them (demographics phase 2 step 4)". These are the same three blocks that already cancel vanilla's `state_pollution_reduction_health_mult` (since 69f372fe, 2025-12), so the cancel shape is live on these exact entities, and the owner has confirmed it in game (E13).
 
 In `te_demog_law_injections.txt`:
 

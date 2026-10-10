@@ -34,6 +34,7 @@ GENERATED_VALUES = ROOT / "common" / "script_values" / "te_demog_generated_value
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 VALUES = ROOT / "common" / "script_values" / "te_demog_values.txt"
 FAST_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"
+RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -331,16 +332,17 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS])
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
         # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
-        # ("global_var:te_demog_clock" and the like)
+        # ("global_var:te_demog_clock" and the like), and the rule's Full (te_demog_effects_run): off unless a
+        # test says (the real trigger reads has_game_rule, which _Engine doesn't know)
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
-                                 "te_demog_clock_on": False, **(triggers or {})}
+                                 "te_demog_clock_on": False, "te_demog_effects_run": False, **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
@@ -627,7 +629,7 @@ class TestCohortScript(unittest.TestCase):
     # -- the step -------------------------------------------------------------------------------
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
-                  flows=None, entry="te_demog_step", engine=None):
+                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -637,7 +639,10 @@ class TestCohortScript(unittest.TestCase):
           crisis, fjob_share, techs (added to INP's), and the optional pending war (te_dg_war_in),
           kills (te_dg_kills_in) and inflow_years, left out = the variable doesn't exist.
         empty_from: nobody from that age up (the slots hold no variable; the pool keeps its people),
-        the ring of the game's first decades, when the open slot is empty at the fold."""
+        the ring of the game's first decades, when the open slot is empty at the fold.
+        on_top = (births, deaths): the share by which the engine's expected events over the window ran
+        above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
+        alone the step takes those as its on-top scales."""
         ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
         ring.m = [x * ring.scale / scale for x in ring.m]
@@ -684,6 +689,18 @@ class TestCohortScript(unittest.TestCase):
                                                 for k, v in locals_.items())}
         eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub, engine=engine)
         eng.fixtures.update(fixtures)
+        bz = dz = 0.0
+        if full:
+            eng.trigger_fixtures["te_demog_effects_run"] = True
+        if on_top is not None:
+            assert flows is None, "the on-top scales and the script's own flows both write te_dg_eb"
+            # the model's rates M aimed at, and the engine's expected events over the window at today's people
+            want_b, want_d = 40.0 * pop / 1000, 30.0 * pop / 1000
+            eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
+                            te_dg_eb=want_b * (1 + on_top[0]), te_dg_ed=want_d * (1 + on_top[1]))
+            if full:
+                bz = demographics_model.on_top_scale(want_b * (1 + on_top[0]), want_b)
+                dz = demographics_model.on_top_scale(want_d * (1 + on_top[1]), want_d)
         for k in range(P.RING_YEARS):
             if before[0][k] or before[1][k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
@@ -701,7 +718,7 @@ class TestCohortScript(unittest.TestCase):
                     eng.vars[name] = float(flows[key])
         eng.call(entry)
         figures = demographics_model.step(ring, inp, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
-                                          kills=kills, migration=migration)
+                                          kills=kills, migration=migration, births_scale=bz, deaths_scale=dz)
         return eng, ring, figures, pop
 
     def check_step(self, eng, ring, figures, pop):
@@ -903,6 +920,378 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars.update(te_dg_year=float(census), te_dg_raw=raw, te_dg_pop_last=pop_last)
             eng.call("te_demog_state_yearly")
             self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, pop_last, rule))
+
+    # -- phase 2 step 4: the on-top scales (te_demog_on_top_scales) -----------------------------
+
+    def test_step_with_on_top_scales_matches_the_model(self):
+        eng, ring, figures, pop = self.step_both(on_top=(0.05, 0.12), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertAlmostEqual(eng.vars["te_dg_bz"], 0.05, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_dz"], 0.12, places=5)
+        self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        self.close(eng.vars["te_dg_tfr"], figures["tfr_shown"], what="tfr shown")
+        self.close(eng.vars["te_dg_tfr_model"], figures["tfr"], what="tfr model")
+        # the events the scales were measured against, kept for option n (bz = eb / eb_target - 1, clamped)
+        self.close(eng.vars["te_dg_eb_target"], 40.0 * pop / 1000, what="eb target")
+        self.close(eng.vars["te_dg_ed_target"], 30.0 * pop / 1000, what="ed target")
+
+    def test_no_on_top_scales_outside_full(self):
+        eng, ring, figures, pop = self.step_both(on_top=(0.05, 0.12), full=False)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+
+    def test_no_target_no_scales(self):
+        """An old save, or the first step after phase 2 arrives: no te_dg_cbr_model yet."""
+        eng, ring, figures, pop = self.step_both(full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+        self.assertEqual((eng.vars["te_dg_eb_target"], eng.vars["te_dg_ed_target"]), (0.0, 0.0))
+
+    def test_on_top_scales_are_clamped(self):
+        eng, ring, figures, pop = self.step_both(on_top=(9.0, -0.99), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_bz"], P.ON_TOP_SCALE_MAX)
+        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MIN)
+
+    def test_a_seed_clears_the_target_and_the_scales(self):
+        """A seed (a merge, a split, a census gap) starts the census's target over: the model's rates from before it
+        are another state's or years stale, and would scale the next step's births and deaths by their ratio to
+        today's. Without them that step takes no on-top scales (test_no_target_no_scales). The seed's children per
+        woman is the model's own, so te_dg_tfr_model is set for the projection."""
+        eng = _engine_for(self.INP, self.YEAR, self.POP)
+        eng.vars.update(te_dg_cbr_model=25.0, te_dg_cdr_model=20.0, te_dg_bz=0.3, te_dg_dz=-0.2, te_dg_tfr_model=9.0,
+                        te_dg_eb_target=900.0, te_dg_ed_target=800.0)
+        eng.call("te_demog_seed")
+        self.assertNotIn("te_dg_cbr_model", eng.vars)
+        self.assertNotIn("te_dg_cdr_model", eng.vars)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+        self.assertEqual((eng.vars["te_dg_eb_target"], eng.vars["te_dg_ed_target"]), (0.0, 0.0))
+        self.assertEqual(eng.vars["te_dg_tfr_model"], eng.vars["te_dg_tfr"])
+
+    def test_step_near_the_deaths_scales_ceiling_matches_the_model(self):
+        """dz at its ceiling (+4) pushes the old-age groups' rates past 100,000: the script scales the cause
+        multipliers before its cap, and so does the twin (demographics_model.step)."""
+        eng, ring, figures, pop = self.step_both(on_top=(0.0, 9.0), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MAX)
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        qf, qm, _mmr = demographics_model.group_rates(self.INP)
+        capped = sum(q * (1 + P.ON_TOP_SCALE_MAX) >= 100000.0 for q in qf + qm)
+        self.assertGreater(capped, 0, "the test must reach the cap")
+
+    def test_the_replay_logs_the_scaled_rates(self):
+        """te_debug_demog_replay logs the locals after te_demog_step_begin, so the scales are in the head's tfr
+        and multipliers and the harness's replay needs no new field."""
+        body = _block(_text(EFFECTS), "te_demog_step_begin")
+        self.assertLess(body.index("te_demog_prepare = yes"), body.index("te_demog_on_top_scales = yes"))
+        self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
+
+
+class TestRatesScript(unittest.TestCase):
+    """te_demog_rates_refresh (te_demog_rate_effects.txt) against demographics_model.rate_term."""
+
+    POP = 1_000_000.0
+
+    def _eng(self, full=True, stepped=1.0, cbr=38.0, cdr=31.0, eb0=475.0 * 1_000_000, ed0=430.0 * 1_000_000,
+             ebl=0.2 * 475.0 * 1_000_000, read_b=0.05, read_d=0.04):
+        eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": read_b,
+                       "modifier:state_mortality_mult": read_d},
+                      triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
+        eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebl=ebl, te_dg_w_eb=eb0, te_dg_w_ed=ed0)
+        eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
+        return eng
+
+    def _want(self, cbr, cdr, eb0, ed0, ebl, other_b, other_d):
+        mb, _ = demographics_model.rate_term(cbr * self.POP * 100 / 12, eb0,
+                                             absorbed=P.LITERACY_BIRTH_PENALTY * ebl, other=other_b)
+        md, _ = demographics_model.rate_term(cdr * self.POP * 100 / 12, ed0, other=other_d)
+        return mb, md
+
+    def test_script_matches_the_model(self):
+        eng = self._eng()
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(38.0, 31.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        # births down, deaths down: one modifier of each pair, multiplier |M|
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_births_down"], -mb, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_deaths_down"], -md, places=5)
+        self.assertNotIn("te_demog_census_births_up", eng.modifiers)
+
+    def test_script_clamps_like_the_model(self):
+        eng = self._eng(cbr=2.0, cdr=400.0, read_b=-0.5)
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(2.0, 400.0, 475e6, 430e6, 0.2 * 475e6, -0.5, 0.04)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+
+    def test_script_never_pushes_past_the_terms_on_top(self):
+        """Review Focus 5: the terms on top in the state read alone already past -0.8 (a plague event, a decree, an
+        event modifier; starvation is per pop and never enters the read). M stays at 0, as
+        demographics_model.rate_term's does, and an M of 0 takes neither modifier of the pair."""
+        eng = self._eng(cbr=2.0, read_b=-1.2)
+        eng.call("te_demog_rates_refresh")
+        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, 0.2 * 475e6, -1.2, 0.04)
+        self.assertEqual(mb, 0.0)
+        self.assertEqual(eng.vars["te_dg_mb"], 0.0)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+        self.assertNotIn("te_demog_census_births_up", eng.modifiers)
+        self.assertNotIn("te_demog_census_births_down", eng.modifiers)
+
+    def test_the_prior_term_comes_off_the_read(self):
+        """The state read holds last step's M: the clamp's 'other' takes it off."""
+        eng = self._eng(cbr=2.0, read_b=-0.5)
+        eng.modifiers["te_demog_census_births_down"] = 0.3
+        eng.vars["te_dg_mb"] = -0.3
+        eng.call("te_demog_rates_refresh")
+        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, 0.2 * 475e6, -0.2, 0.04)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.locals["te_dg_rate_prev_b"], -0.3)
+
+    def test_the_refresh_leaves_its_terms_in_locals(self):
+        """Fast mode runs next in the same effect, where has_modifier can't see this refresh's add or remove:
+        the refresh leaves the terms in force as locals (the M it set, 0 when it clears, the prior when it skips)."""
+        eng = self._eng()
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual((eng.locals["te_dg_rate_new_b"], eng.locals["te_dg_rate_new_d"]),
+                         (eng.vars["te_dg_mb"], eng.vars["te_dg_md"]))
+        eng = self._eng(full=False)
+        eng.modifiers["te_demog_census_births_down"] = 0.2
+        eng.vars["te_dg_mb"] = -0.2
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual((eng.locals["te_dg_rate_new_b"], eng.locals["te_dg_rate_new_d"]), (0, 0))
+        eng = self._eng(stepped=0.0)
+        eng.modifiers.update(te_demog_census_births_down=0.2, te_demog_census_deaths_up=0.1)
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1)
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual((eng.locals["te_dg_rate_new_b"], eng.locals["te_dg_rate_new_d"]), (-0.2, 0.1))
+
+    def test_the_prior_term_needs_the_modifier(self):
+        """A state that lost its modifier (a change of owner, an old save) keeps te_dg_mb: no phantom term."""
+        eng = self._eng()
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=0.2)
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual((eng.locals["te_dg_rate_prev_b"], eng.locals["te_dg_rate_prev_d"]), (0.0, 0.0))
+
+    def test_a_seed_leaves_the_rates_alone(self):
+        eng = self._eng(stepped=0.0, cbr=0.0, cdr=0.0)
+        eng.modifiers["te_demog_census_births_down"] = 0.2
+        eng.vars["te_dg_mb"] = -0.2
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual(eng.vars["te_dg_mb"], -0.2)
+        self.assertEqual(eng.modifiers, {"te_demog_census_births_down": 0.2})
+
+    def test_a_fresh_seed_gets_no_term(self):
+        eng = self._eng(stepped=0.0, cbr=0.0, cdr=0.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertNotIn("te_dg_mb", eng.vars)
+        self.assertEqual(eng.modifiers, {})
+
+    def test_nobody_gets_no_term(self):
+        eng = self._eng(eb0=0.0, ed0=0.0, ebl=0.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertNotIn("te_dg_mb", eng.vars)
+
+    def test_display_only_clears_the_rates(self):
+        eng = self._eng(full=False)
+        eng.modifiers.update(te_demog_census_births_down=0.2, te_demog_census_deaths_up=0.1)
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1, te_dg_rate_clamped=1.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("te_dg_mb", eng.vars)
+        self.assertNotIn("te_dg_md", eng.vars)
+        self.assertNotIn("te_dg_rate_clamped", eng.vars, "the census line counts clamped states (Task 9)")
+
+    def test_one_refresh_site(self):
+        """Only te_demog_rates_apply adds or removes the census's modifiers, and only the two state-ROOT
+        orchestrators call the refresh: the multiplier resolves against ROOT."""
+        texts = {p: _text(p) for p in DEMOG_FILES}
+        for name in ("te_demog_census_births_up", "te_demog_census_births_down", "te_demog_census_deaths_up",
+                     "te_demog_census_deaths_down"):
+            adders = [p.name for p, t in texts.items() if f"name = {name}" in t]
+            self.assertEqual(adders, ["te_demog_rate_effects.txt"], name)
+        callers = sorted(p.name for p, t in texts.items() if "te_demog_rates_refresh = yes" in t)
+        self.assertEqual(callers, ["te_demog_effects.txt", "te_demog_fast_effects.txt"])
+        self.assertIn("te_demog_rates_refresh = yes", _block(_text(EFFECTS), "te_demog_state_yearly"))
+        self.assertIn("te_demog_rates_refresh = yes", _block(_text(FAST_EFFECTS), "te_demog_state_clock_step"))
+        self.assertNotIn("te_demog_rates_refresh", _text(CONSOLE_EFFECTS))
+
+    def test_the_refresh_comes_after_the_census_and_before_fast_mode(self):
+        body = _block(_text(FAST_EFFECTS), "te_demog_state_clock_step")
+        self.assertLess(body.index("te_demog_state_census = yes"), body.index("te_demog_rates_refresh = yes"))
+        self.assertLess(body.index("te_demog_rates_refresh = yes"), body.index("te_demog_fast_refresh_rates = yes"))
+        yearly = _block(_text(EFFECTS), "te_demog_state_yearly")
+        self.assertLess(yearly.index("te_demog_state_census = yes"), yearly.index("te_demog_rates_refresh = yes"))
+
+    def test_the_walk_sums_bare_births_by_literacy(self):
+        body = _block(_text(EFFECTS), "te_demog_walks")
+        self.assertIn("set_local_variable = { name = te_dg_w_ebl value = 0 }", body)
+        self.assertIn("change_local_variable = { name = te_dg_w_ebl add = { value = local_var:te_dg_p_eb "
+                      "multiply = literacy_rate } }", body)
+
+    # -- batch 2 review (I1): the deaths half, fast mode, the up side, a change of sign ----------
+
+    def test_the_deaths_floor_matches_the_model(self):
+        """The deaths half of the clamp's floor: the state read alone past -0.8 leaves M_d at 0 with no modifier; a
+        prior deaths term comes off the read before the floor is set."""
+        eng = self._eng(cdr=2.0, read_d=-1.2)
+        eng.call("te_demog_rates_refresh")
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, 0.2 * 475e6, 0.05, -1.2)
+        self.assertEqual(md, 0.0)
+        self.assertEqual(eng.vars["te_dg_md"], 0.0)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+        self.assertFalse({"te_demog_census_deaths_up", "te_demog_census_deaths_down"} & set(eng.modifiers))
+        eng = self._eng(cdr=2.0, read_d=-0.5)
+        eng.modifiers["te_demog_census_deaths_down"] = 0.3
+        eng.vars["te_dg_md"] = -0.3
+        eng.call("te_demog_rates_refresh")
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, 0.2 * 475e6, 0.05, -0.2)
+        self.assertAlmostEqual(md, -0.6)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertAlmostEqual(eng.locals["te_dg_rate_prev_d"], -0.3)
+
+    def test_fast_modes_terms_come_off_the_read(self):
+        """Fast mode's +1 modifiers sit in the state read at (K - 1) x the average: both floors take them off, so
+        'other' is the read less the census's and fast mode's own terms. Only a binding floor shows it."""
+        eng = self._eng(cbr=2.0, cdr=2.0, read_b=2.5, read_d=2.5)
+        eng.modifiers.update(te_demog_fast_births=3.0, te_demog_fast_deaths=3.0)
+        eng.vars.update(te_dg_fast_fb=3.0, te_dg_fast_fd=3.0)
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(2.0, 2.0, 475e6, 430e6, 0.2 * 475e6, -0.5, -0.5)
+        self.assertAlmostEqual(mb, -0.3)
+        self.assertAlmostEqual(md, -0.3)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+
+    def test_a_change_of_sign_swaps_the_pair(self):
+        """M moving across 0 takes the old modifier off and puts the other side on at |M|, both kinds and both ways."""
+        eng = self._eng(cbr=80.0, cdr=31.0, read_b=-0.25, read_d=0.24)
+        eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_up=0.2)
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=0.2)
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(80.0, 31.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        self.assertTrue(mb > 0 > md, (mb, md))
+        self.assertEqual(set(eng.modifiers), {"te_demog_census_births_up", "te_demog_census_deaths_down"})
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_births_up"], mb, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_deaths_down"], -md, places=5)
+        eng = self._eng(cbr=38.0, cdr=80.0, read_b=0.35, read_d=-0.26)
+        eng.modifiers.update(te_demog_census_births_up=0.3, te_demog_census_deaths_down=0.3)
+        eng.vars.update(te_dg_mb=0.3, te_dg_md=-0.3)
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(38.0, 80.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        self.assertTrue(mb < 0 < md, (mb, md))
+        self.assertEqual(set(eng.modifiers), {"te_demog_census_births_down", "te_demog_census_deaths_up"})
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_births_down"], -mb, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_deaths_up"], md, places=5)
+
+    def test_an_m_of_zero_takes_no_modifier(self):
+        # cdr 51.6 at a million people is 4.3e8 a month x 100,000: the bare deaths exactly
+        eng = self._eng(cdr=51.6)
+        eng.call("te_demog_rates_refresh")
+        self.assertEqual(eng.vars["te_dg_md"], 0.0)
+        self.assertFalse({"te_demog_census_deaths_up", "te_demog_census_deaths_down"} & set(eng.modifiers))
+
+    def test_the_ceiling_alone_sets_the_flag(self):
+        eng = self._eng(cdr=400.0)
+        eng.call("te_demog_rates_refresh")
+        mb, _ = self._want(38.0, 400.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        self.assertGreater(mb, P.RATE_TOTAL_MIN - 0.05, "births unclamped")
+        self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+
+    # -- batch 2 review (m1, m5): the real seed path, and who calls the orchestrators ------------
+
+    def _pulse(self, refresh=None):
+        """A state through te_demog_state_yearly under Full, its walks stubbed with fixed sums (TestCohortScript's
+        inputs); refresh replaces te_demog_rates_refresh's text (for the guards' checks)."""
+        pop = TestCohortScript.POP
+        eb0, ed0 = 475.0 * pop, 400.0 * pop
+        walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
+            ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebl", 0.35 * eb0), ("te_dg_w_eb", eb0),
+            ("te_dg_w_ed", ed0)))
+        walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
+            ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
+        stubs = {"te_demog_walks": walk, "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
+                 "te_inh_refresh_wc_state_effects": "", "te_demog_flows": "te_demog_no_flows = yes"}
+        eng = _engine_for(TestCohortScript.INP, 1836, pop, effects=stubs)
+        eng.trigger_fixtures["te_demog_effects_run"] = True
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.02, "modifier:state_mortality_mult": 0.01})
+        if refresh is not None:
+            eng.effects["te_demog_rates_refresh"] = refresh
+        return eng
+
+    def test_a_reseed_on_the_pulse_leaves_m_alone(self):
+        """The real seed path (batch 2 review, m1): a step sets M; a re-seed on the pulse (te_dg_reseed) removes the
+        model's rates (te_demog_seed), and the refresh then leaves M, its modifiers and the locals fast mode reads as
+        they were. Either of its seed guards (te_dg_stepped above 0; the model's rates present) is enough alone; with
+        neither it would read a target the seed removed or no step wrote (in game, 0: births at about a fifth for a
+        year)."""
+        body = _raw_blocks([RATE_EFFECTS])["te_demog_rates_refresh"]
+        stepped = "limit = { var:te_dg_stepped > 0 }"
+        cases = {"as written": body,
+                 "no model-rate guards": re.sub(r"has_variable = te_dg_c[bd]r_model\s*", "", body),
+                 "no stepped guard": body.replace(stepped, "limit = { always = yes }")}
+        self.assertNotEqual(len(set(cases.values())), 1, "the guards' text moved")
+        for label, refresh in cases.items():
+            with self.subTest(label):
+                eng = self._pulse(refresh)
+                eng.call("te_demog_state_yearly")            # 1836: no census, a seed
+                self.assertEqual(eng.vars["te_dg_stepped"], 0)
+                self.assertNotIn("te_dg_mb", eng.vars)
+                self.assertEqual(eng.modifiers, {})
+                eng.fixtures["year"] = 1837.0
+                eng.call("te_demog_state_yearly")            # 1837: a step, and M
+                mb, md, mods = eng.vars["te_dg_mb"], eng.vars["te_dg_md"], dict(eng.modifiers)
+                self.assertTrue(mods)
+                eng.fixtures["year"] = 1838.0
+                eng.vars["te_dg_reseed"] = 1.0
+                eng.call("te_demog_state_yearly")            # 1838: a re-seed on the pulse
+                self.assertEqual(eng.vars["te_dg_stepped"], 0)
+                self.assertNotIn("te_dg_cbr_model", eng.vars)
+                self.assertEqual((eng.vars["te_dg_mb"], eng.vars["te_dg_md"], eng.modifiers), (mb, md, mods))
+                self.assertEqual((eng.locals["te_dg_rate_new_b"], eng.locals["te_dg_rate_new_d"]), (mb, md))
+        # with neither, the very first seed's refresh reads a target no step has written
+        eng = self._pulse(cases["no model-rate guards"].replace(stepped, "limit = { always = yes }"))
+        with self.assertRaisesRegex(AssertionError, "te_dg_cbr_model"):
+            eng.call("te_demog_state_yearly")
+
+    def test_the_orchestrators_run_with_root_the_state(self):
+        """The census's multipliers resolve against ROOT (batch 2 review, m5): the two effects that call the refresh
+        are reached only from the yearly state pulse and fast mode's state event, te_demog_events.2."""
+        files = [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
+        texts = {p: _text(p) for p in files}
+        for call, where in (("te_demog_state_yearly = yes", "te_demog_on_actions.txt"),
+                            ("te_demog_state_clock_step = yes", "te_demog_events.txt")):
+            sites = [(p.name, t.count(call)) for p, t in texts.items() if call in t]
+            self.assertEqual(sites, [(where, 1)], call)
+        on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
+        self.assertIn("te_demog_state_yearly = yes", _block(on_actions, "te_demog_state_yearly_on_action"))
+        self.assertIn("te_demog_state_yearly_on_action", _block(on_actions, "on_yearly_pulse_state"))
+        clock = _block(_text(FAST_EVENTS), "te_demog_events.2")
+        self.assertIn("type = state_event", clock)
+        self.assertIn("te_demog_state_clock_step = yes", clock)
+
+    def test_the_census_modifiers_are_hidden(self):
+        """Owner, 2026-10-10: the census's modifiers don't show in a state's modifier list. They take the mod's
+        invisible icon for bookkeeping modifiers (modifier_system.dds, 4x4 and transparent, as tourism and migration
+        crowding do), which the list's filter (#872) keys on. Their names still head the birth and mortality
+        breakdowns."""
+        mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"])
+        for name in ("te_demog_census_births_up", "te_demog_census_births_down", "te_demog_census_deaths_up",
+                     "te_demog_census_deaths_down"):
+            self.assertIn("icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds", mods[name], name)
+
+    def test_the_census_modifiers_are_fixed_sign_unit_fields(self):
+        mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"])
+        for name, field, value in (("te_demog_census_births_up", "state_birth_rate_mult", "1"),
+                                   ("te_demog_census_births_down", "state_birth_rate_mult", "-1"),
+                                   ("te_demog_census_deaths_up", "state_mortality_mult", "1"),
+                                   ("te_demog_census_deaths_down", "state_mortality_mult", "-1")):
+            got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
+            got.pop("icon")
+            self.assertEqual(got, {field: value}, name)
 
 
 class _CountryEngine(_Engine):
@@ -1562,6 +1951,25 @@ class TestCountry(unittest.TestCase):
         for sex in "fm":   # four five-year steps up: the children of now are the 20-year-olds of then
             ratio = v[f"te_dg_pj{sex}4"] / v[f"te_dg_cb{sex}0"]
             self.assertTrue(0.2 < ratio < 1.0, (sex, ratio))
+
+    def test_projection_runs_on_the_models_own_tfr(self):
+        """Phase 2 step 4: a state's te_dg_tfr is the realized figure (the model's x (1 + bz)) while the projection's
+        mortality is the model's own (te_dg_m_*, unscaled), so the outline takes te_dg_tfr_model, weighted by
+        women aged 15-49 as te_dg_tfr is. A state with none (an old save's, before its next step) gives its
+        te_dg_tfr. The country's shown TFR stays the realized one."""
+        states = self.three()
+        for s, bz in zip(states, (0.3, -0.2)):
+            s["te_dg_tfr_model"] = s["te_dg_tfr"]
+            s["te_dg_tfr"] *= 1 + bz
+        states[2].pop("te_dg_tfr_model", None)
+        eng = self.country(states)
+        eng.call("te_demog_country_census")
+        w = sum(s["te_dg_w1549"] for s in states)
+        shown = sum(s["te_dg_tfr"] * s["te_dg_w1549"] for s in states) / w
+        model = sum(s.get("te_dg_tfr_model", s["te_dg_tfr"]) * s["te_dg_w1549"] for s in states) / w
+        self.assertGreater(abs(shown - model), 0.1, "the case must tell the two apart")
+        self.assertAlmostEqual(eng.vars["te_dg_tfr"], shown, places=6)
+        self.assertAlmostEqual(eng.locals["te_dg_tfr"], model, places=6)
 
     def test_projection_reads_the_womens_work_share_from_the_states(self):
         """Any state of the country gives the owner's share; the work multiplier is split as
@@ -2565,6 +2973,30 @@ class TestConsole(unittest.TestCase):
         for name in ("te_dg_dbg_read_d", "te_dg_dbg_read_b", "te_dg_dbg_dev", "te_dg_dbg_turmoil", "te_dg_dbg_poll"):
             self.assertIn(f"remove_variable = {name}", body)
 
+    def test_option_n_logs_the_rates_click_only(self):
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_rate_lines = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_rate_lines")
+        copies = set(re.findall(r"(?:set_variable = \{ name = |TO = )(te_dg_dbg_\w+)", body))
+        self.assertTrue(copies)
+        for var in copies:
+            self.assertIn(f"remove_variable = {var}", body, var)
+        line = re.search(r'debug_log = "(TE_DEMOG_RATES:[^"]*)"', body).group(1)
+        read = re.findall(r"Var\('(\w+)'\)", line)
+        self.assertTrue(read)
+        self.assertEqual([v for v in read if not v.startswith("te_dg_dbg_")], [], "raw census variables in the line")
+        # what re-derives bz and dz from the line: the events the step's scales compared eb and ed against
+        for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
+                           ("ed_target", "te_dg_ed_target")):
+            self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
+            self.assertIn(var, body, var)
+        self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
+                                                              console.index(call)])
+
 
 FAST_EVENTS = ROOT / "events" / "te_demog_events.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"
@@ -2600,8 +3032,79 @@ class TestFastMode(unittest.TestCase):
             self.assertEqual(eng.value("te_demog_fast_k_minus_1"), k - 1, months)
 
     def _refresh(self, eng, eb, eb0, ed, ed0):
-        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0)
+        # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_rate_prev_b=0.0,
+                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
+
+    # -- phase 2 step 4: fast mode composes with the census's term M -------------------------------
+
+    def _both(self, eng, eb, eb0, ed, ed0):
+        """A clock step's two refreshes, as te_demog_state_clock_step runs them."""
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebl=0.0)
+        eng.call("te_demog_rates_refresh")
+        eng.call("te_demog_fast_refresh_rates")
+
+    def _eng_full(self):
+        eng = self._eng(True, {"state_population": 1000.0, "modifier:state_birth_rate_mult": 0.0,
+                               "modifier:state_mortality_mult": 0.0},
+                        triggers={"te_demog_effects_run": True})
+        eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=36.0, te_dg_cdr_model=24.0)
+        return eng
+
+    def test_fast_mode_scales_the_census_target(self):
+        """K = 4: the engine runs 4 x (1 + on top + M) on average, M being the census's term."""
+        eng = self._eng_full()
+        # bare 475 a month per person; the walk's average multiplier 1.05 (terms on top +0.05)
+        self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
+        mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * (0.98 + md), places=5)
+
+    def test_fast_mode_reads_the_new_term_from_the_refresh(self):
+        """In game, has_modifier can't see the census modifier the refresh just added in the same effect.
+        Hide it from the fast refresh and the term must still come through, from the refresh's locals."""
+        eng = self._eng_full()
+        eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
+                          te_dg_w_ebl=0.0)
+        eng.call("te_demog_rates_refresh")
+        self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
+        mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
+        eng.modifiers.clear()
+        eng.call("te_demog_fast_refresh_rates")
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * (0.98 + md), places=5)
+        body = _block(_text(FAST_EFFECTS), "te_demog_fast_refresh_rates")
+        for kind, short in (("births", "b"), ("deaths", "d")):
+            self.assertIn(f"add = local_var:te_dg_rate_new_{short}", body)
+            self.assertNotIn(f"te_demog_rate_{kind}_applied", body)
+
+    def test_fast_modes_term_is_clipped_at_zero(self):
+        """The walk's average can sit below the census's term's reach: per-pop terms (severe starvation on much of a
+        state's births) are outside the refresh's clamp. Fast mode's term is clipped at 0 after the census's terms are
+        in, so it is never applied with a negative multiplier (Global Constraints)."""
+        eng = self._eng_full()
+        # the model's births and deaths half of bare: M = -0.5 each, against a walk average of 0.3
+        eng.vars.update(te_dg_cbr_model=28.5, te_dg_cdr_model=25.8)
+        self._both(eng, eb=0.3 * 475e3, eb0=475e3, ed=0.3 * 430e3, ed0=430e3)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], -0.5, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], -0.5, places=5)
+        for var, mod in (("te_dg_fast_fb", "te_demog_fast_births"), ("te_dg_fast_fd", "te_demog_fast_deaths")):
+            self.assertEqual(eng.vars[var], 0.0)
+            self.assertEqual(eng.modifiers[mod], 0.0)
+
+    def test_fast_and_census_terms_reach_a_joint_fixed_point(self):
+        eng = self._eng_full()
+        self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
+        mb, fb = eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"]
+        md, fd = eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]
+        # the next walk sees both terms applied, and so does the state read; nothing else changed
+        eng.fixtures.update({"modifier:state_birth_rate_mult": mb + fb, "modifier:state_mortality_mult": md + fd})
+        self._both(eng, eb=(1.05 + mb + fb) * 475e3, eb0=475e3, ed=(0.98 + md + fd) * 430e3, ed0=430e3)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], fb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd, places=5)
 
     def test_the_rate_term_is_k_minus_1_times_the_states_own_average(self):
         """A flat +(K - 1) would dilute the state's other terms, which the engine adds into the same (1 + total):
@@ -2644,6 +3147,7 @@ class TestFastMode(unittest.TestCase):
              "te_demog_wc_state_yearly": "set_variable = { name = wc value = 1 }",
              "te_inh_refresh_wc_state_effects": "set_variable = { name = wc_mods value = 1 }",
              "te_demog_fast_refresh_rates": "set_variable = { name = rates value = 1 }",
+             "te_demog_rates_refresh": "set_variable = { name = census_rates value = 1 }",
              "te_demog_seed": "set_variable = { name = did value = 1 }",
              "te_demog_step": "set_variable = { name = did value = 2 }"}
 
@@ -2665,6 +3169,7 @@ class TestFastMode(unittest.TestCase):
             eng.call("te_demog_state_clock_step")
             self.assertEqual((eng.vars.get("walked"), eng.vars.get("did"), eng.vars.get("rates")), (1.0, want, 1.0),
                              (census, pop))
+            self.assertEqual(eng.vars.get("census_rates"), 1.0, "the census's terms are refreshed at each clock step")
             self.assertIsNone(eng.vars.get("wc"), "Wealth Concentration stays on the yearly pulse")
 
     def test_the_tick_steps_every_state_before_the_census_a_day_later(self):

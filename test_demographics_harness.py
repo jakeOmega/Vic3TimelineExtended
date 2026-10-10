@@ -41,6 +41,17 @@ class TestHarness(unittest.TestCase):
             self.assertIn(label, out.getvalue())
         self.assertNotIn(" OUT", out.getvalue())
 
+    def test_augmentation_reaches_only_as_far_as_access(self):
+        """Phase 2 step 4 (owner: it doesn't help you that artificial hearts exist if you don't have access to them):
+        augmentation's chronic treatment acts through health-care access, so with no health system (access at its
+        base) Unrestricted Augmentation gives less than that base's share of what it gives Rich today (access 1).
+        Its old flat -5% mortality reached every state alike."""
+        rows = dict(H.medicine_rows())
+        poor = rows["Unrestricted Augmentation, no health system"]["gap"][0]
+        rich = rows["Unrestricted Augmentation, Rich today"]["gap"][0]
+        self.assertGreater(poor, 0)
+        self.assertLess(poor, H.P.BASE_ACCESS * rich)
+
     def test_fertility_anchors_hold(self):
         out = io.StringIO()
         with redirect_stdout(out):

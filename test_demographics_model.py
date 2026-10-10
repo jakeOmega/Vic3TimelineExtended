@@ -414,6 +414,97 @@ class TestRing(unittest.TestCase):
         self.assertGreater(prime / 20_000, 0.5)
 
 
+class TestRateTerm(unittest.TestCase):
+    """demographics_model.rate_term: the census's births or deaths modifier for one state (phase 2 step 4)."""
+
+    def test_no_other_term_gives_the_model(self):
+        m, clamped = M.rate_term(target=80.0, bare=100.0)
+        self.assertAlmostEqual(m, -0.2)
+        self.assertFalse(clamped)
+        self.assertAlmostEqual(100.0 * (1 + m), 80.0)
+
+    def test_terms_on_top_add_at_the_bare_curves_weight(self):
+        """The engine adds every term (growth probe): with M on, a pop's events are bare x (1 + M + O).
+        The state's then come to the model's plus bare x O."""
+        m, _ = M.rate_term(target=80.0, bare=100.0)
+        on_top = 0.3
+        self.assertAlmostEqual(100.0 * (1 + m + on_top), 80.0 + 100.0 * on_top)
+
+    def test_absorbed_terms_are_netted(self):
+        # literacy's -0.1 x a bare-weighted literacy of 0.4: the absorbed sum is -0.1 x 40 over bare 100
+        m, _ = M.rate_term(target=80.0, bare=100.0, absorbed=P.LITERACY_BIRTH_PENALTY * 40.0)
+        self.assertAlmostEqual(100.0 * (1 + m) + P.LITERACY_BIRTH_PENALTY * 40.0, 80.0)
+
+    def test_the_clamp_keeps_the_state_total_in_the_measured_range(self):
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=0.1)
+        self.assertAlmostEqual(m, P.RATE_TOTAL_MIN - 0.1)
+        self.assertTrue(clamped)
+        m, clamped = M.rate_term(target=600.0, bare=100.0)
+        self.assertEqual(m, P.RATE_TERM_MAX)
+        self.assertTrue(clamped)
+
+    def test_the_clamp_never_pushes_past_the_terms_on_top(self):
+        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
+        not push further down."""
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
+        self.assertEqual(m, 0.0)
+        self.assertTrue(clamped)
+
+    def test_nobody_gets_no_term(self):
+        self.assertEqual(M.rate_term(target=0.0, bare=0.0), (0.0, False))
+
+    def test_the_bounds(self):
+        self.assertEqual(P.RATE_TOTAL_MIN, -0.8)   # -0.9 measured, less literacy's -0.1
+        self.assertEqual(P.RATE_TERM_MAX, 3.0)     # a guard: linearity holds far above (the 12x fast run)
+
+
+class TestOnTopScales(unittest.TestCase):
+    """The census's ring follows the engine: the step scales its rates by how far the engine ran from the target."""
+
+    def test_scale_is_engine_over_target(self):
+        self.assertAlmostEqual(M.on_top_scale(engine=105.0, target=100.0), 0.05)
+        self.assertEqual(M.on_top_scale(engine=50.0, target=0.0), 0.0)
+        self.assertEqual(M.on_top_scale(engine=1.0, target=100.0), P.ON_TOP_SCALE_MIN)
+        self.assertEqual(M.on_top_scale(engine=1000.0, target=100.0), P.ON_TOP_SCALE_MAX)
+
+    def test_scaled_step_gives_back_the_models_own_events(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        plain, scaled = M.seed(inp, 1836, 1e6), M.seed(inp, 1836, 1e6)
+        a = M.step(plain, inp, 1837)
+        b = M.step(scaled, inp, 1837, births_scale=0.1, deaths_scale=0.2)
+        self.assertAlmostEqual(b["births"], a["births"] * 1.1, places=6)
+        self.assertAlmostEqual(b["births_model"], a["births"], places=6)
+        self.assertAlmostEqual(b["deaths_model"], a["deaths"], delta=a["deaths"] * 1e-9)
+        self.assertGreater(b["deaths"], a["deaths"] * 1.19)
+
+    def test_no_scale_is_the_old_step(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        ring = M.seed(inp, 1836, 1e6)
+        out = M.step(ring, inp, 1837)
+        self.assertEqual(out["births_model"], out["births"])
+        self.assertEqual(out["deaths_model"], out["deaths"])
+
+    def test_life_table_and_tfr_stay_the_models(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        a = M.step(M.seed(inp, 1836, 1e6), inp, 1837)
+        b = M.step(M.seed(inp, 1836, 1e6), inp, 1837, births_scale=0.3, deaths_scale=0.5)
+        self.assertEqual((a["e0"], a["tfr"]), (b["e0"], b["tfr"]))
+        self.assertAlmostEqual(b["tfr_shown"], a["tfr"] * 1.3)
+        # infant mortality is the life table's too, as the script's te_dg_imr (set before the scales)
+        self.assertEqual(a["q0_per_1000"], b["q0_per_1000"])
+
+    def test_crude_rates_of_the_stable_population(self):
+        cbr, cdr = M.model_crude_rates(M.Inputs(sol=9.0, literacy=0.2))
+        self.assertTrue(20 < cbr < 60 and 15 < cdr < 50, (cbr, cdr))
+
+    def test_starvation_terms_follow_the_engine(self):
+        self.assertEqual(M.starvation_terms(0.5), (0.0, 0.0))
+        self.assertEqual(M.starvation_terms(0.1), (-0.9, 1.0))
+        b, d = M.starvation_terms(0.3)   # (0.4 - 0.3) x 2.5 = 0.25 of the mild penalty
+        self.assertAlmostEqual(b, -0.7 * 0.25)
+        self.assertAlmostEqual(d, 0.6 * 0.25)
+
+
 class TestGrowthFactor(unittest.TestCase):
     """d = NRR^(-1/29): the generated script's table spans NRR 0.2 to 4.0 and clamps there."""
 

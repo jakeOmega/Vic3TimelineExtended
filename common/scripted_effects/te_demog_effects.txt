@@ -62,6 +62,9 @@
 #                       te_dg_prev_<name> from the second census on
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
 #                       its outline), stored at the census for the panel's bars
+#   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz, te_dg_eb_target,
+#   te_dg_ed_target     phase 2 step 4, te_demog_rate_effects.txt: the model's own rates, the
+#                       step's on-top scales and the target they were measured against
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -141,6 +144,7 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_ed value = 0 }
 	set_local_variable = { name = te_dg_w_eb0 value = 0 }
 	set_local_variable = { name = te_dg_w_ed0 value = 0 }
+	set_local_variable = { name = te_dg_w_ebl value = 0 }
 	set_local_variable = { name = te_dg_w_agr value = 0 }
 	set_local_variable = { name = te_dg_w_sold value = 0 }
 	set_local_variable = { name = te_dg_w_bur value = 0 }
@@ -159,6 +163,8 @@ te_demog_walks = {
 		set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }
 		change_local_variable = { name = te_dg_w_eb0 add = local_var:te_dg_p_eb }
 		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
+		# bare births by literacy: the absorbed literacy_penalty, which the census's births term nets out
+		change_local_variable = { name = te_dg_w_ebl add = { value = local_var:te_dg_p_eb multiply = literacy_rate } }
 		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
 		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
 		# the Gini's wealth band (spec 4.1; generated)
@@ -294,6 +300,7 @@ te_demog_state_yearly = {
 	if = {
 		limit = { NOT = { te_demog_clock_on = yes } }
 		te_demog_state_census = yes
+		te_demog_rates_refresh = yes
 	}
 }
 
@@ -556,6 +563,23 @@ te_demog_seed = {
 	set_local_variable = { name = te_dg_raw value = state_population }
 	set_variable = { name = te_dg_births value = 0 }
 	set_variable = { name = te_dg_deaths value = 0 }
+	# phase 2 step 4 (te_demog_rate_effects.txt): a seed starts the census's target over. The model's
+	# rates from before it are another state's (a merge, a split) or years stale (a census gap), and would
+	# scale the next step's births and deaths by their ratio to today's; without them that step takes no
+	# on-top scales. The seed's children per woman is the model's own (the projection reads it).
+	if = {
+		limit = { has_variable = te_dg_cbr_model }
+		remove_variable = te_dg_cbr_model
+	}
+	if = {
+		limit = { has_variable = te_dg_cdr_model }
+		remove_variable = te_dg_cdr_model
+	}
+	set_variable = { name = te_dg_bz value = 0 }
+	set_variable = { name = te_dg_dz value = 0 }
+	set_variable = { name = te_dg_eb_target value = 0 }
+	set_variable = { name = te_dg_ed_target value = 0 }
+	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
 }
 
@@ -646,6 +670,7 @@ te_demog_reset_accumulators = {
 	set_local_variable = { name = te_dg_raw value = 0 }
 	set_local_variable = { name = te_dg_births value = 0 }
 	set_local_variable = { name = te_dg_deaths value = 0 }
+	set_local_variable = { name = te_dg_mat value = 0 }
 }
 
 # Before the people of local_var:te_dg_age are added: close the band or the
@@ -1016,10 +1041,12 @@ te_demog_step = {
 }
 
 # The step's first half: the year's rates into locals (te_demog_prepare), then the flows,
-# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows).
+# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
+# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4).
 te_demog_step_begin = {
 	te_demog_prepare = yes
 	te_demog_flows = yes
+	te_demog_on_top_scales = yes
 }
 
 # The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
@@ -1111,6 +1138,7 @@ te_demog_age_slot = {
 		value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 multiply = local_var:te_dg_tfr }
 	}
 	change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
+	change_local_variable = { name = te_dg_mat add = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 } }
 	# deaths, and maternal deaths per birth
 	set_local_variable = {
 		name = te_dg_f2
@@ -1236,6 +1264,29 @@ te_demog_step_finish = {
 	change_local_variable = { name = te_dg_raw add = local_var:te_dg_births }
 	set_variable = { name = te_dg_births value = local_var:te_dg_births }
 	set_variable = { name = te_dg_deaths value = local_var:te_dg_deaths }
+	# the model's own rates without the on-top scales: what the census's births and deaths modifiers aim at
+	# next (te_demog_rates_refresh). Births: / (1 + bz). Deaths: the cause deaths / (1 + dz), the maternal
+	# deaths (which follow the births) / (1 + bz).
+	set_variable = {
+		name = te_dg_cbr_model
+		value = {
+			value = local_var:te_dg_births
+			divide = { value = local_var:te_dg_bz add = 1 min = 0.1 }
+			multiply = 1000
+			divide = { value = state_population min = 1 }
+		}
+	}
+	set_variable = {
+		name = te_dg_cdr_model
+		value = {
+			value = local_var:te_dg_deaths
+			subtract = local_var:te_dg_mat
+			divide = { value = local_var:te_dg_dz add = 1 min = 0.1 }
+			add = { value = local_var:te_dg_mat divide = { value = local_var:te_dg_bz add = 1 min = 0.1 } }
+			multiply = 1000
+			divide = { value = state_population min = 1 }
+		}
+	}
 	te_demog_set_scale = yes
 }
 
@@ -1329,6 +1380,7 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_mig value = 0 }
 	set_local_variable = { name = te_dg_c_mig_raw value = 0 }
 	set_local_variable = { name = te_dg_c_tfr_w value = 0 }
+	set_local_variable = { name = te_dg_c_tfr_model_w value = 0 }
 	set_local_variable = { name = te_dg_c_women value = 0 }
 	set_local_variable = { name = te_dg_c_e0_w value = 0 }
 	set_local_variable = { name = te_dg_c_e65_w value = 0 }
@@ -1364,6 +1416,15 @@ te_demog_country_census = {
 			change_local_variable = { name = te_dg_c_mig_raw add = var:te_dg_mig_raw }
 		}
 		change_local_variable = { name = te_dg_c_tfr_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
+		# the projection's: the model's own children per woman (phase 2 step 4), the shown one where a state
+		# has none yet (an old save's, before its next step)
+		if = {
+			limit = { has_variable = te_dg_tfr_model }
+			change_local_variable = { name = te_dg_c_tfr_model_w add = { value = var:te_dg_tfr_model multiply = var:te_dg_w1549 } }
+		}
+		else = {
+			change_local_variable = { name = te_dg_c_tfr_model_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
+		}
 		change_local_variable = { name = te_dg_c_women add = var:te_dg_w1549 }
 		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_e65_w add = { value = var:te_dg_e65 multiply = local_var:te_dg_c_s_pm } }
@@ -1440,7 +1501,9 @@ te_demog_country_census = {
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
 		te_demog_set_trend = yes
-		# the player's outline twenty years ahead, on the country's average rates
+		# the player's outline twenty years ahead, on the country's average rates: the model's own, the
+		# mortality (te_dg_m_*, unscaled) and the children per woman (te_dg_tfr_model) alike, so the outline is
+		# the census's before famine, war and disasters, as its life table is (phase 2 step 4)
 		if = {
 			limit = { is_ai = no }
 			set_local_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
@@ -1449,7 +1512,7 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_c_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
-			set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
+			set_local_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_model_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 			te_demog_project = yes
 		}
 		# the pyramid's scale, once here instead of in every bar's range each frame

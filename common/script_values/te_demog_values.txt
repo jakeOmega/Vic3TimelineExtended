@@ -81,6 +81,61 @@ te_demog_fast_death_term = {
 	value = var:te_dg_fast_fd
 }
 
+# State scope: the census's births and deaths terms in force (phase 2 step 4,
+# te_demog_rate_effects.txt): M while its modifier is on, else 0. Read through has_modifier,
+# so a state that lost its modifier (a change of owner, an old save) but still has te_dg_mb
+# subtracts nothing that isn't there. Only for reads a tick or more after the refresh (the next
+# refresh's prior term, the census line): inside the refresh's own effect has_modifier can't see
+# its add or remove, so fast mode reads the refresh's locals instead.
+te_demog_rate_births_applied = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_census_births_up
+				has_modifier = te_demog_census_births_down
+			}
+		}
+		value = var:te_dg_mb
+	}
+}
+
+te_demog_rate_deaths_applied = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_census_deaths_up
+				has_modifier = te_demog_census_deaths_down
+			}
+		}
+		value = var:te_dg_md
+	}
+}
+
+# The multipliers of the fixed-sign pairs: |M| on the side M is on.
+te_demog_rate_births_up = { value = var:te_dg_mb min = 0 }
+te_demog_rate_births_down = { value = var:te_dg_mb multiply = -1 min = 0 }
+te_demog_rate_deaths_up = { value = var:te_dg_md min = 0 }
+te_demog_rate_deaths_down = { value = var:te_dg_md multiply = -1 min = 0 }
+
+# Fast mode's terms in force, the same way (te_demog_fast_effects.txt).
+te_demog_fast_births_applied = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_fast_births }
+		value = var:te_dg_fast_fb
+	}
+}
+
+te_demog_fast_deaths_applied = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_fast_deaths }
+		value = var:te_dg_fast_fd
+	}
+}
+
 # The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
 te_demog_open_slot = {
 	value = te_demog_year

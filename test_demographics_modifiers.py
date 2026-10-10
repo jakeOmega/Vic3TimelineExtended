@@ -1,5 +1,6 @@
 """scripts/analysis/demographics_modifiers.py: carriers from the game files and a state's totals."""
 
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -62,9 +63,11 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             self.assertIn(name, carried, name)
 
     def test_each_type_sits_where_its_design_puts_it(self):
-        # access only per Ministry of Health level (incorporated states); treatment only on techs
+        # access only per Ministry of Health level (incorporated states); treatment on techs, and chronic treatment
+        # also as the augmentation laws' flat lines (phase 2 step 4)
         allowed = {P.ACCESS_TYPE: {"law_institution"},
                    **{t: {"technology"} for t in P.TREATMENT_TYPE.values()},
+                   P.TREATMENT_TYPE["chronic"]: {"technology", "law"},
                    "state_external_mortality_mult": {"technology", "law", "institution"},
                    "state_work_mortality_mult": {"law", "law_institution"},
                    "state_chronic_mortality_mult": {"law"},
@@ -92,11 +95,70 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         lines = {c.key: c.value for c in self.carriers if c.type == P.MEANS_SHIFT_TYPE}
         self.assertEqual(lines, {"law_state_sponsored_family_planning": 0.1})
 
+    AUGMENTATION = {"law_medical_augmentation_only", "law_unrestricted_augmentation",
+                    "law_regulated_augmentation_market", "law_mandatory_augmentation"}
+
     def test_every_treatment_carrier_is_a_technology(self):
+        """Apart from the augmentation laws' flat chronic treatment (phase 2 step 4, their old mortality lines)."""
         for c in self.carriers:
             if c.type in P.TREATMENT_TYPE.values():
-                self.assertEqual(c.kind, "technology", c)
+                if c.kind == "law":
+                    self.assertEqual(c.type, P.TREATMENT_TYPE["chronic"], c)
+                    self.assertIn(c.key, self.AUGMENTATION, c)
+                else:
+                    self.assertEqual(c.kind, "technology", c)
                 self.assertGreater(c.value, 0, c)
+
+
+RATE_FIELDS = re.compile(r"^state_(birth_rate|mortality|mortality_wealth|\w+_mortality)_mult$")
+
+
+class TestEngineRateLines(unittest.TestCase):
+    """Phase 2 step 4: every birth or mortality line a law, technology or institution carries either nets to
+    nothing (absorbed by the census: §8.4, the inverse INJECTs) or belongs to a carrier added on top."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lines = DM.engine_rate_lines()
+        cls.vanilla = DM.engine_rate_lines(mod=False)
+
+    def test_every_line_is_absorbed_or_on_top(self):
+        # the census's own script-only types (state_work_mortality_mult and the like) are inputs, not engine lines
+        live = {k: v for k, v in self.lines.items()
+                if abs(v) > 1e-9 and RATE_FIELDS.match(k[3]) and k[3] not in P.DEMOG_TYPES}
+        unexpected = sorted(k for k in live if k[1] not in P.ENGINE_LINES_ON_TOP)
+        self.assertEqual(unexpected, [], "a birth or mortality line the census neither absorbs nor adds on top")
+
+    def test_the_vanilla_lines_the_census_absorbs_net_to_zero(self):
+        for law, block, field in (("law_charitable_health_system", "institution_modifier", "state_mortality_mult"),
+                                  ("law_public_health_insurance", "institution_modifier", "state_mortality_mult"),
+                                  ("law_private_health_insurance", "institution_modifier", "state_mortality_wealth_mult"),
+                                  ("law_child_labor_allowed", "modifier", "state_laborers_mortality_mult"),
+                                  ("law_child_labor_allowed", "modifier", "state_machinists_mortality_mult"),
+                                  ("law_child_labor_allowed", "modifier", "state_farmers_mortality_mult"),
+                                  ("law_child_labor_allowed", "modifier", "state_peasants_mortality_mult"),
+                                  ("law_restricted_child_labor", "modifier", "state_laborers_mortality_mult"),
+                                  ("law_restricted_child_labor", "modifier", "state_farmers_mortality_mult"),
+                                  ("law_restricted_child_labor", "modifier", "state_peasants_mortality_mult")):
+            self.assertNotEqual(self.vanilla.get(("law", law, block, field), 0.0), 0.0, msg=(law, field))
+            self.assertAlmostEqual(self.lines.get(("law", law, block, field), 0.0), 0.0, msg=(law, field))
+
+    def test_the_on_top_carriers_keep_their_lines(self):
+        """Each carrier the census adds on top still carries a live birth or mortality line: a cancel or a deletion
+        that nets one to zero while it is still listed would take its effect away unseen (Task 8 edits the list)."""
+        live = {k[1] for k, v in self.lines.items() if abs(v) > 1e-9 and RATE_FIELDS.match(k[3])}
+        self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - live), [])
+
+    def test_augmentation_moves_to_flat_chronic_treatment(self):
+        """The design note's values as totals: flat lines (kind 'law'), not per level (an institution_modifier
+        line at +0.10 would give +0.50 at level 5)."""
+        chronic = {(c.key, c.kind): c.value for c in DM.load_carriers() if c.type == "state_chronic_treatment_add"}
+        self.assertEqual(chronic.get(("law_medical_augmentation_only", "law")), 0.10)
+        self.assertEqual(chronic.get(("law_unrestricted_augmentation", "law")), 0.05)
+        self.assertEqual(chronic.get(("law_regulated_augmentation_market", "law")), 0.05)
+        self.assertEqual(chronic.get(("law_mandatory_augmentation", "law")), 0.05)   # owner, 2026-10-10
+        self.assertFalse(any(kind == "law_institution" and "augmentation" in key for key, kind in chronic))
+        self.assertEqual(P.TREATMENT_CAP["chronic"], 0.85)
 
 
 if __name__ == "__main__":

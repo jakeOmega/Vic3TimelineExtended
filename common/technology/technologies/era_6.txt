@@ -427,8 +427,6 @@ modern_vaccines = {
 	modifier = {
 		# the census's medicine (demographics modifier types, stage 1)
 		state_infection_treatment_add = 0.25
-		state_mortality_mult = -0.05
-		state_birth_rate_mult = 0.05
 		country_modern_vaccines_pb_principles_bool = yes
 	}
 

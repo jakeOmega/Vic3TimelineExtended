@@ -817,6 +817,12 @@ def _starvation(o, key, mild, severe):
 def engine_rate_terms(o, root):
     reg = registered_modifier_types(root)
     literacy = static_modifier(root, "literacy_penalty")["state_birth_rate_mult"]
+    # the census's births term nets literacy's line out (phase 2 step 4), so it reads the engine's own value
+    o("# The literacy penalty's state_birth_rate_mult (literacy_penalty): te_demog_rates_refresh nets it out of")
+    o("# the census's births term (phase 2 step 4).")
+    o(f"te_demog_k_literacy_birth_penalty = {{ value = {lit(literacy)} }}")
+    o("")
+    assert literacy == P.LITERACY_BIRTH_PENALTY, "literacy_penalty changed: update LITERACY_BIRTH_PENALTY"
     mild, severe = static_modifier(root, "starvation_penalty"), static_modifier(root, "severe_starvation_penalty")
     conditions = static_modifier(root, "working_conditions")
     parents = building_group_parents(root)
@@ -1066,6 +1072,9 @@ def constants(o):
         "family_base": P.FAMILY_BASE, "family_rights_weight": P.FAMILY_RIGHTS_WEIGHT,
         "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
+        "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
+        "rate_total_min": P.RATE_TOTAL_MIN,
+        "rate_term_max": P.RATE_TERM_MAX,
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")

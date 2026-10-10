@@ -55,7 +55,8 @@ te_demog_clock_tick = {
 }
 
 # THIS = ROOT = a state, at a step of the clock (te_demog_events.2): the yearly pulse's
-# walks and census, then the fast rate modifiers from the same walk. The walks run
+# walks and census, the census's births and deaths terms (te_demog_rates_refresh, phase 2
+# step 4), then the fast rate modifiers from the same walk. The walks run
 # whatever the rule, as on the yearly pulse: inheritance and Wealth Concentration read them.
 te_demog_state_clock_step = {
 	if = {
@@ -64,6 +65,7 @@ te_demog_state_clock_step = {
 	}
 	te_demog_walks = yes
 	te_demog_state_census = yes
+	te_demog_rates_refresh = yes
 	te_demog_fast_refresh_rates = yes
 }
 
@@ -87,6 +89,12 @@ te_demog_country_clock_census = {
 # they would be. The walk's multipliers already hold the term applied at the last step, so it is
 # taken off the average first. Floored at 0; a state with no people gets 0. Only the split
 # between a state's pops differs from K x each pop's own rate.
+# Phase 2 step 4: the walk's average also holds the census's term from the last step
+# (te_dg_rate_prev_b/_d). It comes off too, and the census's new term (te_dg_rate_new_b/_d) goes
+# in, so the engine runs K x (the census's target plus the terms on top) (plan §2, "Fast mode's
+# xK"). Both census terms are te_demog_rates_refresh's locals, never has_modifier, which can't see
+# the refresh's add or remove in this same effect (plan E22): te_demog_rates_refresh must run
+# first, in the same effect (te_demog_state_clock_step).
 te_demog_fast_refresh_rates = {
 	if = {
 		limit = { te_demog_fast_k > 1 }
@@ -106,6 +114,8 @@ te_demog_fast_refresh_rates = {
 				value = local_var:te_dg_w_eb
 				divide = { value = local_var:te_dg_w_eb0 min = 0.00001 }
 				subtract = local_var:te_dg_fast_prev_b
+				subtract = local_var:te_dg_rate_prev_b
+				add = local_var:te_dg_rate_new_b
 				min = 0
 				multiply = te_demog_fast_k_minus_1
 			}
@@ -116,6 +126,8 @@ te_demog_fast_refresh_rates = {
 				value = local_var:te_dg_w_ed
 				divide = { value = local_var:te_dg_w_ed0 min = 0.00001 }
 				subtract = local_var:te_dg_fast_prev_d
+				subtract = local_var:te_dg_rate_prev_d
+				add = local_var:te_dg_rate_new_d
 				min = 0
 				multiply = te_demog_fast_k_minus_1
 			}

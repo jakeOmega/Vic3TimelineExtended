@@ -1,0 +1,256 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the census sets the engine's births and deaths (phase 2 step 4)
+# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2
+# ============================================================================
+# The engine gives every pop curve x max(0, 1 + total) births and deaths, adding every
+# term (docs/testing/demographics-growth-probe-results-2026-10-09.md). The census's term M
+# (te_demog_rates_refresh) makes a state's events the model's plus the terms added on top of
+# the census, and the census's next step scales its own rates to what the engine did
+# (te_demog_on_top_scales), so the ring places the births and deaths added on top by age:
+# newborns, and deaths by the model's own age pattern (owner, 2026-10-10).
+#
+# State variables:
+#   te_dg_mb, te_dg_md  M for births and deaths (signed), behind the te_demog_census_* pair
+#   te_dg_rate_clamped  1 when the last refresh clamped either term
+#   te_dg_bz, te_dg_dz  the scales the last step used (te_dg_eb or te_dg_ed over the target,
+#                       less 1)
+#   te_dg_eb_target, te_dg_ed_target  that target: the births and deaths the model's rates gave
+#                       at the step's population (0 when the step took no scales), kept for
+#                       console option n, whose line re-derives bz and dz from them
+#   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model  the model's own rates (per 1,000 a year;
+#                       children per woman): the step's events without the on-top scales
+# The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
+# bare births and deaths a month x 100,000; te_dg_w_ebl, bare births weighted by literacy.
+# ============================================================================
+
+# THIS = a state at the start of its step, straight after te_demog_prepare and te_demog_flows:
+# the year's rates scaled by how far the engine's expected births and deaths over the window
+# (te_dg_eb, te_dg_ed, from this step's walk) ran from the model's rates that M aimed at, at
+# today's population. Under Full only, and only once a step has stored the model's rates.
+te_demog_on_top_scales = {
+	set_local_variable = { name = te_dg_bz value = 0 }
+	set_local_variable = { name = te_dg_dz value = 0 }
+	set_variable = { name = te_dg_eb_target value = 0 }
+	set_variable = { name = te_dg_ed_target value = 0 }
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_cbr_model
+			has_variable = te_dg_cdr_model
+		}
+		set_variable = { name = te_dg_eb_target value = { value = var:te_dg_cbr_model multiply = state_population divide = 1000 } }
+		set_variable = { name = te_dg_ed_target value = { value = var:te_dg_cdr_model multiply = state_population divide = 1000 } }
+		if = {
+			limit = { var:te_dg_cbr_model > 0 }
+			set_local_variable = {
+				name = te_dg_bz
+				value = {
+					value = var:te_dg_eb
+					multiply = 1000
+					divide = { value = var:te_dg_cbr_model multiply = state_population min = 1 }
+					subtract = 1
+					min = te_demog_k_on_top_scale_min
+					max = te_demog_k_on_top_scale_max
+				}
+			}
+		}
+		if = {
+			limit = { var:te_dg_cdr_model > 0 }
+			set_local_variable = {
+				name = te_dg_dz
+				value = {
+					value = var:te_dg_ed
+					multiply = 1000
+					divide = { value = var:te_dg_cdr_model multiply = state_population min = 1 }
+					subtract = 1
+					min = te_demog_k_on_top_scale_min
+					max = te_demog_k_on_top_scale_max
+				}
+			}
+		}
+	}
+	set_variable = { name = te_dg_bz value = local_var:te_dg_bz }
+	set_variable = { name = te_dg_dz value = local_var:te_dg_dz }
+	# the model's children per woman before the scale, then the year's rates with it
+	set_variable = { name = te_dg_tfr_model value = local_var:te_dg_tfr }
+	change_local_variable = { name = te_dg_tfr multiply = { value = local_var:te_dg_bz add = 1 } }
+	set_variable = { name = te_dg_tfr value = local_var:te_dg_tfr }
+	change_local_variable = { name = te_dg_m_inf multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_ext multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_chr multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_work_f multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_work_m multiply = { value = local_var:te_dg_dz add = 1 } }
+}
+
+# THIS = ROOT = a state, straight after te_demog_state_census in the effect that ran its walks (its
+# yearly pulse, or a step of fast mode's clock): the census's births and deaths terms.
+#   M_b = target_b / bare_b - 1 - literacy_penalty x bare_b-by-literacy / bare_b
+#   M_d = target_d / bare_d - 1
+# target = the model's rate (te_dg_cbr_model, per 1,000 a year) x today's people, a month x 100,000,
+# the walk's units (te_dg_w_eb0, te_dg_w_ed0). Clamped: the state read without the census's and
+# fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_min, M is never
+# below 0 when other alone is past that, and M is at most te_demog_k_rate_term_max.
+# Always leaves two pairs of locals for fast mode, which runs next in the same effect:
+#   te_dg_rate_prev_b/_d  the terms the walk's window ran with (read through has_modifier
+#                         before anything here touches the modifiers)
+#   te_dg_rate_new_b/_d   the terms in force after this refresh: the M it set, 0 when it
+#                         clears, the prior terms when it skips. A later read in this effect
+#                         takes these, never has_modifier: add_modifier and remove_modifier are
+#                         invisible inside the effect that made them (scripting_best_practices.md)
+# A seed (te_dg_stepped 0, and no te_dg_cbr_model: te_demog_seed removes it) leaves the terms as
+# they are.
+te_demog_rates_refresh = {
+	set_local_variable = { name = te_dg_rate_prev_b value = te_demog_rate_births_applied }
+	set_local_variable = { name = te_dg_rate_prev_d value = te_demog_rate_deaths_applied }
+	set_local_variable = { name = te_dg_rate_new_b value = local_var:te_dg_rate_prev_b }
+	set_local_variable = { name = te_dg_rate_new_d value = local_var:te_dg_rate_prev_d }
+	if = {
+		limit = { NOT = { te_demog_effects_run = yes } }
+		te_demog_rates_clear = yes
+		set_local_variable = { name = te_dg_rate_new_b value = 0 }
+		set_local_variable = { name = te_dg_rate_new_d value = 0 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_stepped
+			has_variable = te_dg_cbr_model
+			has_variable = te_dg_cdr_model
+			local_var:te_dg_w_eb0 > 0
+			local_var:te_dg_w_ed0 > 0
+		}
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			set_local_variable = { name = te_dg_rate_clamped value = 0 }
+			# births
+			set_local_variable = {
+				name = te_dg_rate_m
+				value = {
+					value = var:te_dg_cbr_model
+					multiply = state_population
+					multiply = 100
+					divide = 12
+					divide = { value = local_var:te_dg_w_eb0 min = 1 }
+					subtract = 1
+					subtract = {
+						value = local_var:te_dg_w_ebl
+						multiply = te_demog_k_literacy_birth_penalty
+						divide = { value = local_var:te_dg_w_eb0 min = 1 }
+					}
+				}
+			}
+			set_local_variable = {
+				name = te_dg_rate_lo
+				value = {
+					value = te_demog_k_rate_total_min
+					subtract = modifier:state_birth_rate_mult
+					add = local_var:te_dg_rate_prev_b
+					add = te_demog_fast_births_applied
+					max = 0
+				}
+			}
+			te_demog_rate_clamp = yes
+			set_variable = { name = te_dg_mb value = local_var:te_dg_rate_m }
+			# deaths
+			set_local_variable = {
+				name = te_dg_rate_m
+				value = {
+					value = var:te_dg_cdr_model
+					multiply = state_population
+					multiply = 100
+					divide = 12
+					divide = { value = local_var:te_dg_w_ed0 min = 1 }
+					subtract = 1
+				}
+			}
+			set_local_variable = {
+				name = te_dg_rate_lo
+				value = {
+					value = te_demog_k_rate_total_min
+					subtract = modifier:state_mortality_mult
+					add = local_var:te_dg_rate_prev_d
+					add = te_demog_fast_deaths_applied
+					max = 0
+				}
+			}
+			te_demog_rate_clamp = yes
+			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
+			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
+			te_demog_rates_apply = yes
+			set_local_variable = { name = te_dg_rate_new_b value = var:te_dg_mb }
+			set_local_variable = { name = te_dg_rate_new_d value = var:te_dg_md }
+		}
+	}
+}
+
+# local te_dg_rate_m into local_var:te_dg_rate_lo .. te_demog_k_rate_term_max, noting a clamp.
+te_demog_rate_clamp = {
+	if = {
+		limit = { local_var:te_dg_rate_m < local_var:te_dg_rate_lo }
+		set_local_variable = { name = te_dg_rate_m value = local_var:te_dg_rate_lo }
+		set_local_variable = { name = te_dg_rate_clamped value = 1 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_rate_m > te_demog_k_rate_term_max }
+		set_local_variable = { name = te_dg_rate_m value = te_demog_k_rate_term_max }
+		set_local_variable = { name = te_dg_rate_clamped value = 1 }
+	}
+}
+
+# THIS = ROOT = a state: the one refresh site of te_demog_census_*. Removed and re-applied
+# (docs/systems/mod_systems.md, the dynamic-modifier scaling pattern); one of each pair at most.
+te_demog_rates_apply = {
+	te_demog_rates_remove = yes
+	if = {
+		limit = { var:te_dg_mb > 0 }
+		add_modifier = { name = te_demog_census_births_up multiplier = te_demog_rate_births_up }
+	}
+	else_if = {
+		limit = { var:te_dg_mb < 0 }
+		add_modifier = { name = te_demog_census_births_down multiplier = te_demog_rate_births_down }
+	}
+	if = {
+		limit = { var:te_dg_md > 0 }
+		add_modifier = { name = te_demog_census_deaths_up multiplier = te_demog_rate_deaths_up }
+	}
+	else_if = {
+		limit = { var:te_dg_md < 0 }
+		add_modifier = { name = te_demog_census_deaths_down multiplier = te_demog_rate_deaths_down }
+	}
+}
+
+te_demog_rates_remove = {
+	if = {
+		limit = { has_modifier = te_demog_census_births_up }
+		remove_modifier = te_demog_census_births_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_births_down }
+		remove_modifier = te_demog_census_births_down
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_deaths_up }
+		remove_modifier = te_demog_census_deaths_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_deaths_down }
+		remove_modifier = te_demog_census_deaths_down
+	}
+}
+
+# THIS = a state: the census's terms off (Display only, Disabled), with their variables, so the
+# next walk takes nothing off its average and the next step no on-top scale.
+te_demog_rates_clear = {
+	te_demog_rates_remove = yes
+	if = {
+		limit = { has_variable = te_dg_mb }
+		remove_variable = te_dg_mb
+	}
+	if = {
+		limit = { has_variable = te_dg_md }
+		remove_variable = te_dg_md
+	}
+	if = {
+		limit = { has_variable = te_dg_rate_clamped }
+		remove_variable = te_dg_rate_clamped
+	}
+}

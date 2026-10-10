@@ -160,6 +160,13 @@ class TestGenerated(unittest.TestCase):
         head = self.values.split("te_demog_mult_maternal = {", 1)[0].rsplit("\n\n", 1)[-1]
         self.assertIn("maternal deaths per 100,000 births", head)
 
+    def test_phase2_constants_match_the_params(self):
+        for name, value in (("on_top_scale_min", P.ON_TOP_SCALE_MIN), ("on_top_scale_max", P.ON_TOP_SCALE_MAX),
+                            ("rate_total_min", P.RATE_TOTAL_MIN),
+                            ("rate_term_max", P.RATE_TERM_MAX),
+                            ("literacy_birth_penalty", P.LITERACY_BIRTH_PENALTY)):
+            self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(value)} }}", self.values, name)
+
 
 class TestEngineRateTerms(unittest.TestCase):
     """The expected births and deaths the migration residual is measured against: each pop's curves x the
