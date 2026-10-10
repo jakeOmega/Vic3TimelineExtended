@@ -156,6 +156,8 @@ recalibration.
 
 ## Not decided here
 
+- **The human augmentation laws (owner, 2026-10-10).** Medical Augmentation Only also links the Ministry of Health, but it gets no access line: access is how many people reach care, and the health law sets that. All four augmentation laws already cut engine mortality: Unrestricted −5% flat; Medical Only, Regulated Market and Mandatory −2% a level of their institutions. When phase 2 moves engine mortality into the census, they become census lines together, as chronic treatment, which reaches only as far as access does. A starting point: Medical Augmentation Only +0.10, Unrestricted and Regulated Market +0.05, with the chronic cap raised from 0.8 to about 0.85. Giving Medical Only alone a line now would make it the census's best choice without anyone deciding so.
+
 - **Phase 2's double counting.** Once the model drives the engine's deaths (§8.4), vanilla's own Public Health
   Insurance mortality cut and the mod's medical techs' flat cuts count twice. §8.4 already removes the mod's. Vanilla's
   would need an inverse INJECT (the monetary pattern). That is phase 2's call.
