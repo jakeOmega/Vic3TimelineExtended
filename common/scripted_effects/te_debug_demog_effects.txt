@@ -127,6 +127,42 @@ te_debug_demog_census_line = {
 			change_local_variable = { name = te_dg_dbg_lag add = 1 }
 		}
 		set_variable = { name = te_dg_dbg_lag value = local_var:te_dg_dbg_lag }
+		# phase 2 step 4: the census's terms in force and the on-top scales, weighted by people over the
+		# census states, the share of people in clamped states, and war (the gate's peacetime runs)
+		set_local_variable = { name = te_dg_dbg_w value = 0 }
+		set_local_variable = { name = te_dg_dbg_mb value = 0 }
+		set_local_variable = { name = te_dg_dbg_md value = 0 }
+		set_local_variable = { name = te_dg_dbg_bz value = 0 }
+		set_local_variable = { name = te_dg_dbg_dz value = 0 }
+		set_local_variable = { name = te_dg_dbg_cl value = 0 }
+		every_scope_state = {
+			limit = { te_demog_has_census = yes }
+			change_local_variable = { name = te_dg_dbg_w add = var:te_dg_people }
+			change_local_variable = { name = te_dg_dbg_mb add = { value = te_demog_rate_births_applied multiply = var:te_dg_people } }
+			change_local_variable = { name = te_dg_dbg_md add = { value = te_demog_rate_deaths_applied multiply = var:te_dg_people } }
+			if = {
+				limit = { has_variable = te_dg_bz }
+				change_local_variable = { name = te_dg_dbg_bz add = { value = var:te_dg_bz multiply = var:te_dg_people } }
+				change_local_variable = { name = te_dg_dbg_dz add = { value = var:te_dg_dz multiply = var:te_dg_people } }
+			}
+			if = {
+				limit = {
+					has_variable = te_dg_rate_clamped
+					var:te_dg_rate_clamped > 0
+				}
+				change_local_variable = { name = te_dg_dbg_cl add = var:te_dg_people }
+			}
+		}
+		set_variable = { name = te_dg_dbg_mb value = { value = local_var:te_dg_dbg_mb divide = { value = local_var:te_dg_dbg_w min = 1 } } }
+		set_variable = { name = te_dg_dbg_md value = { value = local_var:te_dg_dbg_md divide = { value = local_var:te_dg_dbg_w min = 1 } } }
+		set_variable = { name = te_dg_dbg_bz value = { value = local_var:te_dg_dbg_bz divide = { value = local_var:te_dg_dbg_w min = 1 } } }
+		set_variable = { name = te_dg_dbg_dz value = { value = local_var:te_dg_dbg_dz divide = { value = local_var:te_dg_dbg_w min = 1 } } }
+		set_variable = { name = te_dg_dbg_cl value = { value = local_var:te_dg_dbg_cl divide = { value = local_var:te_dg_dbg_w min = 1 } } }
+		set_variable = { name = te_dg_dbg_war value = 0 }
+		if = {
+			limit = { is_at_war = yes }
+			set_variable = { name = te_dg_dbg_war value = 1 }
+		}
 		set_variable = { name = te_dg_dbg_mig value = var:te_dg_net_migration }
 		set_local_variable = { name = te_dg_dbg_crisis value = -1 }
 		set_local_variable = { name = te_dg_dbg_dev value = -1 }
@@ -144,10 +180,10 @@ te_debug_demog_census_line = {
 		set_variable = { name = te_dg_dbg_turmoil value = local_var:te_dg_dbg_turmoil }
 		if = {
 			limit = { var:te_dg_dbg_mig < 0 }
-			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=-[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; m_b=[THIS.Var('te_dg_dbg_mb').GetValue|3]; m_d=[THIS.Var('te_dg_dbg_md').GetValue|3]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|3]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|3]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|3]; war=[THIS.Var('te_dg_dbg_war').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_CENSUS: tag=[THIS.GetCountry.GetTagName]; year=[THIS.Var('te_dg_census_year').GetValue|0]; people=[THIS.ScriptValue('te_debug_demog_people_g1')|0]_[THIS.ScriptValue('te_debug_demog_people_g2')|0]_[THIS.ScriptValue('te_debug_demog_people_g3')|0]; median=[THIS.Var('te_dg_median').GetValue|2]; tfr=[THIS.Var('te_dg_tfr').GetValue|3]; e0=[THIS.Var('te_dg_e0').GetValue|2]; e65=[THIS.Var('te_dg_e65').GetValue|2]; imr=[THIS.Var('te_dg_imr').GetValue|2]; cbr=[THIS.Var('te_dg_cbr').GetValue|2]; cdr=[THIS.Var('te_dg_cdr').GetValue|2]; mig=[THIS.ScriptValue('te_debug_demog_mig_g1')|0]_[THIS.ScriptValue('te_debug_demog_mig_g2')|0]_[THIS.ScriptValue('te_debug_demog_mig_g3')|0]; mig_raw=[THIS.ScriptValue('te_debug_demog_mig_raw')|3]; young=[THIS.Var('te_dg_young_share').GetValue|4]; working=[THIS.Var('te_dg_working_share').GetValue|4]; old=[THIS.Var('te_dg_old_share').GetValue|4]; sex_balance=[THIS.Var('te_dg_sex_balance').GetValue|2]; gini=[THIS.ScriptValue('te_debug_demog_gini')|3]; wc=[THIS.ScriptValue('te_debug_demog_wc')|2]; primacy=[THIS.Var('te_dg_primacy').GetValue|3]; crisis=[THIS.Var('te_dg_dbg_crisis').GetValue|3]; devastation=[THIS.Var('te_dg_dbg_dev').GetValue|3]; turmoil=[THIS.Var('te_dg_dbg_turmoil').GetValue|3]; lag=[THIS.Var('te_dg_dbg_lag').GetValue|0]; m_b=[THIS.Var('te_dg_dbg_mb').GetValue|3]; m_d=[THIS.Var('te_dg_dbg_md').GetValue|3]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|3]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|3]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|3]; war=[THIS.Var('te_dg_dbg_war').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		remove_variable = te_dg_dbg_people
 		remove_variable = te_dg_dbg_mig
@@ -155,6 +191,12 @@ te_debug_demog_census_line = {
 		remove_variable = te_dg_dbg_dev
 		remove_variable = te_dg_dbg_turmoil
 		remove_variable = te_dg_dbg_lag
+		remove_variable = te_dg_dbg_mb
+		remove_variable = te_dg_dbg_md
+		remove_variable = te_dg_dbg_bz
+		remove_variable = te_dg_dbg_dz
+		remove_variable = te_dg_dbg_cl
+		remove_variable = te_dg_dbg_war
 	}
 }
 

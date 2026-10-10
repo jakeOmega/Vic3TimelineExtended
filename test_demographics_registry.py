@@ -3009,6 +3009,21 @@ class TestConsole(unittest.TestCase):
         self.assertIn("local_var:te_dg_c_people >= 1000000", body)
         self.assertIn("name = te_dg_c_people", _block(_text(EFFECTS), "te_demog_country_census"))
 
+    def test_census_line_carries_the_phase2_fields(self):
+        """Phase 2 step 4, Task 9: both variants of the census line carry the census's terms in force and the
+        on-top scales (people-weighted over the country's census states), the clamped share and the war flag,
+        each read from a te_dg_dbg_ copy the line removes after it."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_census_line")
+        lines = re.findall(r'debug_log = "(TE_DEMOG_CENSUS:[^"]*)"', body)
+        self.assertEqual(len(lines), 2)
+        for line in lines:
+            for field in ("m_b", "m_d", "bz", "dz", "clamped", "war"):
+                self.assertRegex(line, rf"; {field}=\[THIS\.Var\('te_dg_dbg_\w+'\)\.GetValue\|\d\]", field)
+        for var in set(re.findall(r"set_variable = \{ name = (te_dg_dbg_\w+)", body)):
+            self.assertIn(f"remove_variable = {var}", body, var)
+        self.assertIn("te_demog_rate_births_applied", body)
+        self.assertIn("te_demog_rate_deaths_applied", body)
+
     def test_option_m_logs_the_shock_terms_click_only(self):
         console = _text(DEBUG_EVENTS)
         call = "te_debug_demog_shock_lines = yes"
