@@ -312,3 +312,190 @@ te_debug_demog_capital_work_share = {
 	value = var:te_dg_dbg_wf
 	divide = { value = var:te_dg_dbg_size min = 1 }
 }
+
+# ---- The mortality modifier types (option l): THIS = a state ---------------
+# Each of the census's mortality types as the state reads it (its own and its owner's
+# lines, which states inherit), the owner's institution levels that scale the per-level lines, and the five cause
+# multipliers built from them (maternal as deaths per 100,000 births; infection and chronic
+# read -1 until the state has its census inputs).
+te_debug_demog_is_capital = {
+	value = 0
+	if = {
+		limit = { is_capital = yes }
+		value = 1
+	}
+}
+te_debug_demog_incorporated = {
+	value = 0
+	if = {
+		limit = { is_incorporated = yes }
+		value = 1
+	}
+}
+# The owner's Health System level.
+te_debug_demog_level_health = {
+	value = 0
+	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } }
+		value = 9
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } }
+		value = 8
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } }
+		value = 7
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } }
+		value = 6
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } }
+		value = 5
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } }
+		value = 4
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } }
+		value = 3
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } }
+		value = 2
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } }
+		value = 1
+	}
+}
+# The owner's Workplace Safety level.
+te_debug_demog_level_workplace = {
+	value = 0
+	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 9 } } }
+		value = 9
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 8 } } }
+		value = 8
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 7 } } }
+		value = 7
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 6 } } }
+		value = 6
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 5 } } }
+		value = 5
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 4 } } }
+		value = 4
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 3 } } }
+		value = 3
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 2 } } }
+		value = 2
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 1 } } }
+		value = 1
+	}
+}
+# The owner's Ministry of Consumer Protection level.
+te_debug_demog_level_consumer = {
+	value = 0
+	if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } }
+		value = 9
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } }
+		value = 8
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } }
+		value = 7
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } }
+		value = 6
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } }
+		value = 5
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } }
+		value = 4
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } }
+		value = 3
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } }
+		value = 2
+	}
+	else_if = {
+		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } }
+		value = 1
+	}
+}
+te_debug_demog_mod_access = {
+	value = modifier:state_health_care_access_add
+}
+te_debug_demog_mod_treat_inf = {
+	value = modifier:state_infection_treatment_add
+}
+te_debug_demog_mod_treat_mat = {
+	value = modifier:state_maternal_treatment_add
+}
+te_debug_demog_mod_treat_chr = {
+	value = modifier:state_chronic_treatment_add
+}
+te_debug_demog_mod_ext = {
+	value = modifier:state_external_mortality_mult
+}
+te_debug_demog_mod_work = {
+	value = modifier:state_work_mortality_mult
+}
+te_debug_demog_mod_chr = {
+	value = modifier:state_chronic_mortality_mult
+}
+te_debug_demog_mult_infection = {
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_sol
+			has_variable = te_dg_lit
+		}
+		value = te_demog_mult_infection
+	}
+}
+te_debug_demog_mult_maternal = {
+	value = te_demog_mult_maternal
+}
+te_debug_demog_mult_chronic = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_sol }
+		value = te_demog_mult_chronic
+	}
+}
+te_debug_demog_mult_external = {
+	value = te_demog_mult_external
+}
+te_debug_demog_mult_work = {
+	value = te_demog_mult_work
+}

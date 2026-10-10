@@ -89,29 +89,29 @@ class TestGenerated(unittest.TestCase):
             self.assertEqual(body.count(f"name = te_dg_mig_gain_{sex}\n"), len(P.MIGRANT_CLASSES))
             self.assertEqual(body.count(f"name = te_dg_mig_frac_{sex}\n"), len(P.MIGRANT_CLASSES))
 
-    def test_institution_chain_reaches_the_defines_maximum(self):
-        top = gen.max_institution_investment(ROOT)
-        self.assertEqual(top, 9)
-        body = self.values.split("te_demog_mult_infection = {", 1)[1].split("\n}\n", 1)[0]
-        pattern = (r"(if|else_if) = \{\nlimit = \{ owner = \{ institution_investment_level = \{ "
-                   r"institution = institution_health_system value >= (\d+) \} \} \}\nmultiply = ([\d.]+)\n")
-        chain = [(kw, int(level), value)
-                 for kw, level, value in re.findall(pattern, re.sub(r"\t", "", body))]
-        self.assertEqual([level for _kw, level, _v in chain], list(range(top, 0, -1)))
-        self.assertEqual(chain[0][0], "if")
-        self.assertTrue(all(kw == "else_if" for kw, _l, _v in chain[1:]))
-        for _kw, level, value in chain:
-            self.assertEqual(value, gen.lit(0.95 ** level), level)
-        self.assertEqual(chain[0][2], gen.lit(0.95 ** 9))
+    def _cause(self, cause):
+        return self.values.split(f"te_demog_mult_{cause} = {{", 1)[1].split("\n}\n", 1)[0]
 
-    def test_missing_institution_maximum_raises(self):
-        import tempfile
-        with tempfile.TemporaryDirectory() as tmp:
-            defines = Path(tmp) / "common" / "defines"
-            defines.mkdir(parents=True)
-            (defines / "extra_defines.txt").write_text("NPolitics = {\n}\n", encoding="utf-8")
-            with self.assertRaises(KeyError):
-                gen.max_institution_investment(Path(tmp))
+    def test_causes_read_the_types_not_the_owners_techs_or_laws(self):
+        for cause in gen.CAUSES:
+            body = self._cause(cause)
+            self.assertNotIn("has_technology_researched", body, cause)
+            self.assertNotIn("has_law", body, cause)
+            self.assertNotIn("institution = institution_health_system", body, cause)
+            self.assertNotIn("institution = institution_workplace_safety", body, cause)
+
+    def test_medicine_reads_access_and_the_causes_treatment(self):
+        for cause in P.MEDICINE_CAUSES:
+            body = self._cause(cause)
+            self.assertIn(f"value = modifier:{P.ACCESS_TYPE}", body, cause)
+            self.assertIn(f"value = modifier:{P.TREATMENT_TYPE[cause]}", body, cause)
+        for cause in set(gen.CAUSES) - set(P.MEDICINE_CAUSES):
+            self.assertNotIn(P.ACCESS_TYPE, self._cause(cause), cause)
+
+    def test_every_type_is_read_in_state_scope(self):
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertIn(f"modifier:{name}", self.values, name)
+            self.assertNotIn(f"owner.modifier:{name}", self.values, name)
 
     def test_replay_values_are_one_sequential_block(self):
         self.assertNotIn("te_demog_dbg_unit", self.values)

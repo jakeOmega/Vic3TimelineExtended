@@ -29,6 +29,44 @@ class TestHarness(unittest.TestCase):
             self.assertEqual(H.main(["sketch"]), 0)
         self.assertIn("Britain 1836", out.getvalue())
 
+    def test_medicine_anchors_hold(self):
+        # every scenario of `medicine` is inside its band with the game files' values
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["medicine"]), 0, out.getvalue())
+        for label, _kw, _targets in H.MEDICINE_SCENARIOS:
+            self.assertIn(label, out.getvalue())
+        self.assertNotIn(" OUT", out.getvalue())
+
+    def test_adopters_on_the_slice(self):
+        # Britain holds Charitable Health System in 1836; Portugal has none
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["adopters", str(SLICE)]), 0)
+        self.assertIn("law_charitable_health_system", out.getvalue())
+        self.assertIn("GBR", out.getvalue())
+
+    def test_adopter_rows_isolate_the_law_and_take_a_true_median(self):
+        med = {"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines"}
+
+        def country(tag, laws=(), level=0, sol=12.0):
+            c = S.CountryInputs(tag, population=1000.0, sol_x_size=sol * 1000, literate=400.0, workforce=1000.0,
+                                incorporated_people=1000.0)
+            c.techs, c.laws = set(med), set(laws)
+            c.institutions = {"institution_health_system": level} if level else {}
+            return c
+
+        inputs = {"PHI": country("PHI", {"law_public_health_insurance"}, 4),
+                  "AAA": country("AAA", sol=11.0), "BBB": country("BBB", sol=13.0)}
+        rows = H.adopter_rows(inputs, H.DM.load_carriers())
+        self.assertEqual(len(rows), 1)
+        law, tag, _sol, _lit, inc, level, e0, own, median, n = rows[0]
+        self.assertEqual((law, tag, level, n), ("law_public_health_insurance", "PHI", 4, 2))
+        self.assertEqual(inc, 1.0)
+        self.assertGreater(e0, own)                     # the law and its level add years
+        peers = [H.life(H.inputs_for(inputs[t]))["e0"] for t in ("AAA", "BBB")]
+        self.assertAlmostEqual(median, sum(peers) / 2)  # two peers: the mean of both, not the upper
+
     def test_buy_package_costs_rise_with_wealth(self):
         costs = H.buy_package_costs()
         self.assertEqual(len(costs), 200)

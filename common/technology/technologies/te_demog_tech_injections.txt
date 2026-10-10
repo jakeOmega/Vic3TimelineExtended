@@ -1,0 +1,33 @@
+﻿# Demographics: the base game's medical techs' treatment lines, and the motor age's road deaths.
+# Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
+# Read only by the census (te_demog_mult_*); the engine never applies these types. The values
+# are calibrated with `scripts/analysis/demographics_harness.py medicine`
+# (docs/testing/demographics-fast-run-2026-10-09.md). The mod's own medical techs carry their
+# lines in their own definitions (era_6.txt to era_11.txt). pharmaceuticals' line sits in its
+# existing INJECT in modified.txt, so the tech keeps one INJECT.
+
+INJECT:medical_degrees = {
+	modifier = {
+		state_infection_treatment_add = 0.03
+	}
+}
+
+INJECT:modern_nursing = {
+	modifier = {
+		state_infection_treatment_add = 0.08
+		state_maternal_treatment_add = 0.35
+	}
+}
+
+INJECT:antibiotics = {
+	modifier = {
+		state_infection_treatment_add = 0.4
+		state_maternal_treatment_add = 0.6
+	}
+}
+
+INJECT:combustion_engine = {
+	modifier = {
+		state_external_mortality_mult = 0.3
+	}
+}

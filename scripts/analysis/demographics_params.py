@@ -94,31 +94,38 @@ LAND_TENURE = {
     "law_peasant_proprietorship": -10, "law_collectivized_agriculture": -20,
 }
 
+# ---- Mortality inputs as modifier types (modifier-types design, stage 1) -----------
+# Laws, technology and institutions reach the census's causes of death only through these
+# registered state types (common/modifier_type_definitions/demographics_modifier_types.txt);
+# their values sit on their carriers in the game files, and demographics_modifiers.py resolves a
+# state's totals. A tech's or law's modifier reaches every state the country owns (states inherit
+# country modifiers); a law's institution_modifier or an institution's own modifier is per
+# investment level and reaches incorporated states only. The census reads each with modifier:.
+ACCESS_TYPE = "state_health_care_access_add"
+MEDICINE_CAUSES = ("infection", "maternal", "chronic")
+TREATMENT_TYPE = {cause: f"state_{cause}_treatment_add" for cause in MEDICINE_CAUSES}
+# The plain per-cause multipliers: 1 + the cause's type, floored.
+MORTALITY_TYPES = {
+    "external": ("state_external_mortality_mult",),
+    "work": ("state_work_mortality_mult",),
+    "chronic": ("state_chronic_mortality_mult",),
+}
+DEMOG_MORTALITY_TYPES = (
+    ACCESS_TYPE, *TREATMENT_TYPE.values(),
+    *MORTALITY_TYPES["external"], *MORTALITY_TYPES["work"], *MORTALITY_TYPES["chronic"],
+)
+
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
-TECH_MULT = {
-    "infection": {"medical_degrees": 0.9, "pharmaceuticals": 0.85, "modern_nursing": 0.85,
-                  "antibiotics": 0.6, "modern_vaccines": 0.6, "antibiotic_mass_production": 0.8},
-    "external": {"combustion_engine": 1.3},
-    "maternal": {"modern_nursing": 0.5, "antibiotics": 0.4, "modern_pharmaceuticals": 0.5},
-    "chronic": {"modern_pharmaceuticals": 0.75, "telemedicine": 0.9, "personalized_medicine": 0.6},
-    "work": {},
-}
-LAW_MULT = {
-    "infection": {"law_charitable_health_system": 0.95, "law_private_health_insurance": 0.85,
-                  "law_public_health_insurance": 0.75},
-    "maternal": {"law_charitable_health_system": 0.85, "law_private_health_insurance": 0.6,
-                 "law_public_health_insurance": 0.5},
-    "chronic": {"law_private_health_insurance": 0.85, "law_public_health_insurance": 0.75,
-                "law_old_age_pension": 0.95},
-    "external": {"law_local_police": 0.95, "law_dedicated_police": 0.9, "law_militarized_police": 0.9},
-    "work": {"law_child_labor_allowed": 1.1},
-}
-# Per institution level (0 to the defines' MAX_INSTITUTION_INVESTMENT), compounding: mult ** level.
-INSTITUTION_MULT = {
-    "infection": {"institution_health_system": 0.95},
-    "work": {"institution_workplace_safety": 0.85},
-    "external": {"institution_ministry_of_consumer_protection": 0.9},
-}
+# Medicine for infection, maternal and chronic deaths is 1 - access x treatment (the
+# modifier-types design, Decision 1). Access is how much of the population a state's medicine
+# reaches: this base (markets and charity, everywhere, colonies and 1836 too) plus
+# state_health_care_access_add, at most 1. Treatment is the cause's
+# country_<cause>_treatment_add, at most its cap. The values of both live on their carriers in
+# the game files (demographics_modifiers.py); calibrated with `demographics_harness.py medicine`.
+BASE_ACCESS = 0.4
+TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.8}
+# Every other law, technology or institution term is 1 + its types' sum, at least this.
+MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
 SOL_CHRONIC_AT_HIGH = 0.85

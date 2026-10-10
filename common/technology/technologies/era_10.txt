@@ -324,6 +324,8 @@ telemedicine = {
 	}
 
 	modifier = {
+		# the census's medicine (demographics modifier types, stage 1)
+		state_chronic_treatment_add = 0.2
 		country_institution_health_system_max_investment_add = 1
 		country_voting_power_mult = 0.2
 	}

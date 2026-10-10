@@ -2636,3 +2636,69 @@ class TestFastMode(unittest.TestCase):
             got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
             got.pop("icon")
             self.assertEqual(got, dict.fromkeys(fields, "1"), name)
+
+
+TYPES_FILE = ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt"
+MODIFIERS_LOC = ROOT / "localization" / "english" / "te_modifiers_l_english.yml"
+ENGINE_MODIFIERS = ROOT / "docs" / "engine" / "modifiers_summary.txt"
+
+
+class TestModifierTypes(unittest.TestCase):
+    """Stage 1 of the modifier-types design: every mortality input is a registered, named type."""
+
+    def test_every_type_is_registered_script_only(self):
+        text = _text(TYPES_FILE)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            body = _block(text, name)
+            self.assertIn("script_only = yes", body, name)
+            self.assertRegex(body, r"decimals = \d", name)
+
+    def test_every_type_has_a_name_and_a_description(self):
+        loc = _text(MODIFIERS_LOC)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
+            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"", name)
+
+    def test_no_type_is_an_engine_modifier(self):
+        engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        self.assertIn("state_mortality_mult", engine)   # the list is the one this reads
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertNotIn(name, engine, name)
+
+    def test_seven_state_types(self):
+        # one type per term, read in state scope; a tech's or law's line reaches the state because
+        # states inherit country modifiers (owner, 2026-10-10)
+        self.assertEqual(len(set(P.DEMOG_MORTALITY_TYPES)), 7)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertTrue(name.startswith("state_"), name)
+
+
+class TestCauseMultipliersScript(unittest.TestCase):
+    """te_demog_mult_<cause> (generated) against demographics_model.cause_multipliers, with the
+    modifier types' reads as fixtures: the caps, the floor and the order of the clamps."""
+
+    CASES = [
+        {},
+        {P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 0.9, P.TREATMENT_TYPE["chronic"]: 0.59},
+        {P.ACCESS_TYPE: 0.6, P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 2.0,
+         P.TREATMENT_TYPE["chronic"]: 0.3, "state_chronic_mortality_mult": -0.05},
+        {P.ACCESS_TYPE: 1.5, P.TREATMENT_TYPE["infection"]: 0.3},
+        {"state_work_mortality_mult": -0.9, "state_external_mortality_mult": -0.1},
+        {"state_work_mortality_mult": 0.1, "state_external_mortality_mult": 0.3, "state_chronic_mortality_mult": -0.9},
+    ]
+
+    def test_script_matches_the_model(self):
+        for mods in self.CASES:
+            for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
+                inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
+                want = demographics_model.cause_multipliers(inp)
+                fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}
+                eng = _Engine(fixtures)
+                eng.vars.update(te_dg_sol=float(sol), te_dg_lit=float(lit))
+                for cause in ("infection", "work", "external", "chronic"):
+                    with self.subTest(mods=mods, sol=sol, cause=cause):
+                        got = eng.value(eng._tree(eng.values, f"te_demog_mult_{cause}"))
+                        self.assertAlmostEqual(got, want[cause], places=9)
+                with self.subTest(mods=mods, sol=sol, cause="maternal"):
+                    got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
+                    self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)

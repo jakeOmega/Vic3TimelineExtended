@@ -1306,50 +1306,13 @@ te_demog_pop_income = {
 # State scope: the infection cause's multiplier (demographics_model.cause_multipliers).
 te_demog_mult_infection = {
 	value = 1
-	if = { limit = { owner = { has_technology_researched = medical_degrees } } multiply = 0.9 }
-	if = { limit = { owner = { has_technology_researched = pharmaceuticals } } multiply = 0.85 }
-	if = { limit = { owner = { has_technology_researched = modern_nursing } } multiply = 0.85 }
-	if = { limit = { owner = { has_technology_researched = antibiotics } } multiply = 0.6 }
-	if = { limit = { owner = { has_technology_researched = modern_vaccines } } multiply = 0.6 }
-	if = { limit = { owner = { has_technology_researched = antibiotic_mass_production } } multiply = 0.8 }
-	if = { limit = { owner = { has_law = law_type:law_charitable_health_system } } multiply = 0.95 }
-	if = { limit = { owner = { has_law = law_type:law_private_health_insurance } } multiply = 0.85 }
-	if = { limit = { owner = { has_law = law_type:law_public_health_insurance } } multiply = 0.75 }
-	if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } }
-		multiply = 0.63025
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } }
-		multiply = 0.66342
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } }
-		multiply = 0.69834
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } }
-		multiply = 0.73509
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } }
-		multiply = 0.77378
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } }
-		multiply = 0.81451
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } }
-		multiply = 0.85737
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } }
-		multiply = 0.9025
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } }
-		multiply = 0.95
+	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
+	subtract = {
+		value = modifier:state_health_care_access_add
+		add = 0.4
+		min = 0
+		max = 1
+		multiply = { value = modifier:state_infection_treatment_add min = 0 max = 0.95 }
 	}
 	multiply = {
 		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
@@ -1368,112 +1331,42 @@ te_demog_mult_infection = {
 # State scope: the work cause's multiplier (demographics_model.cause_multipliers).
 te_demog_mult_work = {
 	value = 1
-	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } multiply = 1.1 }
-	if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 9 } } }
-		multiply = 0.23162
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 8 } } }
-		multiply = 0.27249
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 7 } } }
-		multiply = 0.32058
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 6 } } }
-		multiply = 0.37715
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 5 } } }
-		multiply = 0.44371
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 4 } } }
-		multiply = 0.52201
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 3 } } }
-		multiply = 0.61412
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 2 } } }
-		multiply = 0.7225
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_workplace_safety value >= 1 } } }
-		multiply = 0.85
-	}
+	multiply = { value = 1 add = modifier:state_work_mortality_mult min = 0.2 }
 }
 
 # State scope: the external cause's multiplier (demographics_model.cause_multipliers).
 te_demog_mult_external = {
 	value = 1
-	if = { limit = { owner = { has_technology_researched = combustion_engine } } multiply = 1.3 }
-	if = { limit = { owner = { has_law = law_type:law_local_police } } multiply = 0.95 }
-	if = { limit = { owner = { has_law = law_type:law_dedicated_police } } multiply = 0.9 }
-	if = { limit = { owner = { has_law = law_type:law_militarized_police } } multiply = 0.9 }
-	if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } }
-		multiply = 0.38742
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } }
-		multiply = 0.43047
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } }
-		multiply = 0.4783
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } }
-		multiply = 0.53144
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } }
-		multiply = 0.59049
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } }
-		multiply = 0.6561
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } }
-		multiply = 0.729
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } }
-		multiply = 0.81
-	}
-	else_if = {
-		limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } }
-		multiply = 0.9
-	}
+	multiply = { value = 1 add = modifier:state_external_mortality_mult min = 0.2 }
 }
 
 # State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
 # times the cause's multiplier (demographics_model.cause_multipliers, group_rates).
 te_demog_mult_maternal = {
 	value = 1
-	if = { limit = { owner = { has_technology_researched = modern_nursing } } multiply = 0.5 }
-	if = { limit = { owner = { has_technology_researched = antibiotics } } multiply = 0.4 }
-	if = { limit = { owner = { has_technology_researched = modern_pharmaceuticals } } multiply = 0.5 }
-	if = { limit = { owner = { has_law = law_type:law_charitable_health_system } } multiply = 0.85 }
-	if = { limit = { owner = { has_law = law_type:law_private_health_insurance } } multiply = 0.6 }
-	if = { limit = { owner = { has_law = law_type:law_public_health_insurance } } multiply = 0.5 }
+	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
+	subtract = {
+		value = modifier:state_health_care_access_add
+		add = 0.4
+		min = 0
+		max = 1
+		multiply = { value = modifier:state_maternal_treatment_add min = 0 max = 0.99 }
+	}
 	multiply = 670
 }
 
 # State scope: the chronic cause's multiplier (demographics_model.cause_multipliers).
 te_demog_mult_chronic = {
 	value = 1
-	if = { limit = { owner = { has_technology_researched = modern_pharmaceuticals } } multiply = 0.75 }
-	if = { limit = { owner = { has_technology_researched = telemedicine } } multiply = 0.9 }
-	if = { limit = { owner = { has_technology_researched = personalized_medicine } } multiply = 0.6 }
-	if = { limit = { owner = { has_law = law_type:law_private_health_insurance } } multiply = 0.85 }
-	if = { limit = { owner = { has_law = law_type:law_public_health_insurance } } multiply = 0.75 }
-	if = { limit = { owner = { has_law = law_type:law_old_age_pension } } multiply = 0.95 }
+	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
+	subtract = {
+		value = modifier:state_health_care_access_add
+		add = 0.4
+		min = 0
+		max = 1
+		multiply = { value = modifier:state_chronic_treatment_add min = 0 max = 0.8 }
+	}
+	multiply = { value = 1 add = modifier:state_chronic_mortality_mult min = 0.2 }
 	multiply = {
 		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
 		multiply = -0.15 add = 1

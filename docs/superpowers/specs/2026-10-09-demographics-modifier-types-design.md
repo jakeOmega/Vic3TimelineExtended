@@ -1,6 +1,6 @@
 # Demographics: the model's law, technology and institution inputs as modifier types — design
 
-Status: draft for the owner's review, 2026-10-09. Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
+Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
 §4.2, §8.4). Built after fast mode (#848), which is the in-game loop for the recalibration below.
 
 ## The rule
@@ -20,9 +20,9 @@ institution term, and could become a type in stage 3.
 
 | Today (params, or script) | Becomes (provisional name, scope) | Carrier | Stage |
 |---|---|---|---|
-| `TECH_MULT` infection, maternal, chronic: the medical techs | `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` | the techs' `modifier` (INJECT) | 1 |
+| `TECH_MULT` infection, maternal, chronic: the medical techs | `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` | the techs' `modifier` (INJECT on the base game's, in place on the mod's) | 1 |
 | `LAW_MULT` health laws; `INSTITUTION_MULT` health system (0.95 a level) | `state_health_care_access_add` | the three health laws' `institution_modifier` (per level) | 1 |
-| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' `modifier`, the tech's `modifier`, each institution's per-level modifier (its own `modifier`, or its laws' `institution_modifier`: check b) | 1 |
+| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
 | `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `country_contraception_add`: the tier, which the model scales by literacy | the techs' `modifier` | 2 |
 | `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `country_fertility_means_add` (exists) | the law's `modifier` | 2 |
 | `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
@@ -32,6 +32,14 @@ institution term, and could become a type in stage 3.
 
 The tax code's dividend term stays in script: it is a rate, not a law. Women's-rights work share gets its own type:
 vanilla's `state_working_adult_ratio_add` on Women in the Workplace is a different quantity.
+
+## Ruling: every type in state scope (owner, 2026-10-10)
+
+All seven types are `state_*`, one for each term, and the census reads each with `modifier:` in state scope.
+- **Carriers by kind.** A tech's or law's `modifier` carries treatment, and the police, pension and child-labour terms. It reaches every state the country owns, because states inherit country modifiers, the way a law's `state_education_access_add` reaches its states. A law's `institution_modifier` or an institution's own `modifier` carries access, Workplace Safety and Consumer Protection, per investment level and in incorporated states only.
+- **The prefix is convention.** The engine doesn't read it.
+- **Every source shows in one place:** the state's modifier breakdown.
+- **What it replaced.** The first build split the types (`country_*` read through the owner, as a hedge on check a) and was reverted before merge. Option l of the probe confirms that the inherited lines read in the state.
 
 ## Decision 1: how the terms combine
 
@@ -85,9 +93,22 @@ Python file. But a modder editing the law can't change the value there, and a se
 
 - **A tech's `modifier` (INJECT).** Proven by `te_monetary_tech_injections.txt`: the finance techs' injected lines
   were read in game on 2026-09-20 (monetary design §17; `scripting_best_practices.md` § INJECT).
-- **A law's `institution_modifier` (INJECT).** Proven by `common/laws/modified_health_system.txt` (drugs phase 2) on
-  the same three health laws. Vanilla's Public Health Insurance block already carries `state_mortality_mult` −0.05 a
-  level. The new line sits beside it and doesn't replace it.
+- **A law's `institution_modifier` (INJECT).** Used by `common/laws/modified_health_system.txt` (drugs phase 2) on
+  the same three health laws, but not yet read in game: `scripting_best_practices.md` confirms summing INJECTs for
+  `modifier` blocks on ranks, techs and laws, not for `institution_modifier` (stage 1's review). Vanilla's Public Health
+  Insurance block already carries `state_mortality_mult` −0.05 a level. The new line sits beside it and shouldn't
+  replace it. The stage-1 probe (`te_debug_demog.1` option l) reads the access line, and two tooltips tell whether
+  the blocks sum:
+  - Worker Protections should show vanilla's minimum wage line beside the new work line.
+  - The three health laws' pollution line should vanish, since drugs phase 2's lines cancel vanilla's (+0.1
+    against −0.1 for Charitable and Private, +0.15 against −0.15 for Public).
+
+  If the blocks replace each other instead (last wins), Worker Protections loses its minimum wage line, and the health
+  laws show a +10% or +15% pollution-reduction line (the mod's value alone). The access line shows either way, since it
+  sits in the mod's block. The probe's `access=` read in the capital is what proves the census can read it. The fallback
+  is the census's old `institution_investment_level` ladder in script, which loses the tooltip line. Last-wins would
+  also mean drugs phase 2 already dropped vanilla's own health-law lines (Public Health Insurance's
+  `state_mortality_mult` −0.05 a level).
 - **A law's `modifier` (INJECT).** Used throughout the mod.
 - **New types** go in `demographics_modifier_types.txt`:
   - `script_only = yes` (the engine never consumes them; they still render in tooltips);
@@ -105,6 +126,12 @@ d. A registered type with no source reads 0. Already confirmed in #834.
 e. Whether an amendment can carry a `modifier` block, for #822's amendment terms. If not, they stay in script.
 
 A probe in the style of #824 answers a–c and e in one short game.
+
+**Results (2026-10-10, `te_debug_demog.1` option l, a 1955 save at Ministry of Health and Workplace Safety level 5):**
+- **a and b pass.** In the capital and in an unincorporated state, the techs' and laws' lines read the same (treatment 0.83 infection and 0.95 maternal; external +0.2). Access read 0.5 in the capital (0.10 × 5) and 0 in the other state; Workplace Safety read −0.5 and 0. The composed figures matched the model: maternal 97.15 and 415.40 a 100,000 births.
+- **c passes.** The owner confirmed the tech and health-care lines in game.
+- **The logs are clean.** Neither carries an error from the types or the generated values.
+- **e is not run;** it belongs to stage 3.
 
 ## Stages
 
@@ -128,6 +155,8 @@ recalibration.
 - A fast-mode run (#848) shows the same in game.
 
 ## Not decided here
+
+- **The human augmentation laws (owner, 2026-10-10).** Medical Augmentation Only also links the Ministry of Health, but it gets no access line: access is how many people reach care, and the health law sets that. All four augmentation laws already cut engine mortality: Unrestricted −5% flat; Medical Only, Regulated Market and Mandatory −2% a level of their institutions. When phase 2 moves engine mortality into the census, they become census lines together, as chronic treatment, which reaches only as far as access does. A starting point: Medical Augmentation Only +0.10, Unrestricted and Regulated Market +0.05, with the chronic cap raised from 0.8 to about 0.85. Giving Medical Only alone a line now would make it the census's best choice without anyone deciding so.
 
 - **Phase 2's double counting.** Once the model drives the engine's deaths (§8.4), vanilla's own Public Health
   Insurance mortality cut and the mod's medical techs' flat cuts count twice. §8.4 already removes the mod's. Vanilla's

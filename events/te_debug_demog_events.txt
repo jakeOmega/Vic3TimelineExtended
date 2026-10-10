@@ -235,6 +235,18 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		}
 	}
 
+	# ---- l: the mortality modifier types -----------------------------------
+	option = {
+		name = te_debug_demog.1.l
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.l.tt
+			te_debug_demog_modifier_reads = yes
+		}
+	}
+
 	option = {
 		name = te_debug_demog.1.z
 		default_option = yes

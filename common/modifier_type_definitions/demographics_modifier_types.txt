@@ -10,3 +10,52 @@ country_fertility_means_add = {
 	decimals = 2
 	script_only = yes
 }
+
+# Mortality: stage 1 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Read only by the census (te_demog_mult_*, with modifier: in state scope); the engine never
+# applies them. Medicine is 1 - access x treatment; every other term is 1 + its type, floored.
+# Techs' and laws' modifier blocks reach every state the country owns; a law's institution_modifier
+# or an institution's own modifier is per investment level and reaches incorporated states only.
+# Values are on the carriers (scripts/analysis/demographics_modifiers.py).
+state_health_care_access_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_infection_treatment_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_maternal_treatment_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_chronic_treatment_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_external_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_work_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_chronic_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
