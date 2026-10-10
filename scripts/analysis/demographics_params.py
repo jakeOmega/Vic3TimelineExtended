@@ -141,7 +141,7 @@ MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
 # Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x2 at SoL 5 and below.
-# Most of the 1836 world sits at SoL 6-9, where the high-SoL term above is flat, so without this the
+# Most of the 1836 world sits at SoL 6-9, and the high-SoL term above is flat below SoL 8, so without this the
 # census gave China, India and Mexico Britain's life expectancy and the world +1.7% a year against
 # history's 0.4-0.8%. Fitted against Clio Infra's life expectancy and Maddison's population on the gate
 # run's 1837, 1857 and 1887 saves, keeping every medicine and fertility anchor in its band; the

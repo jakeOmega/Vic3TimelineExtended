@@ -7,9 +7,12 @@ with history's anchors, and adds the one change the comparison calls for.
 
 ## Data and method
 
-- **The model's figures** come from each country's own inputs in a save: SoL, literacy, urban share, techs, laws and
-  institution levels (`demographics_harness.inputs_for`). They are the census's steady rates, not the engine's
-  population changes.
+- **The model's figures** come from each state's own inputs in a save: SoL, literacy, urban share and incorporation,
+  with the owner's techs, laws and institution levels. A country's figure is its states' weighted by people, as the
+  census builds it (`demographics_save_inputs.state_inputs`, `demographics_harness.country_figures`). The poverty
+  term bends at SoL 9, and Western countries have states on both sides of it, so the country's mean SoL would hide
+  what its poor and rich states do. The fit itself was found on country means, then re-run state by state (the
+  tables below). They are the census's steady rates, not the engine's population changes.
 - **The saves** are the gate run's at 1837, 1857 and 1887 (a normal-speed observer game from 1836) and the owner's
   late game at 1949.
 - **History's anchors** are from Clio Infra (https://clio-infra.eu): life expectancy at birth, infant mortality, and
@@ -30,16 +33,16 @@ with history's anchors, and adds the one change the comparison calls for.
 
 | Save | World e0 (countries of 1M or more) | World growth | Children per woman |
 |---|---|---|---|
-| 1837 | 37.4 | +1.69% a year | 5.95 |
-| 1857 | 38.5 | +1.70% | 5.83 |
+| 1837 | 37.5 | +1.69% a year | 5.95 |
+| 1857 | 38.6 | +1.70% | 5.83 |
 | 1887 | 39.4 | +1.71% | 5.73 |
-| 1949 | 47.5 | +1.42% | 4.59 |
+| 1949 | 47.4 | +1.40% | 4.59 |
 
 History: world life expectancy about 28.5 in 1820 and 30 in 1870 (Riley). World population grew about 0.4% a year
 from 1820 to 1870 and 0.8% from 1870 to 1913 (Maddison), and life expectancy was about 46–48 around 1950.
 
-- **The census gave every country nearly the same rates.** In 1837 life expectancy ran 36.6–39.8 from China to France,
-  and growth +1.6% to +1.7% everywhere.
+- **The census gave every country nearly the same rates.** In 1837 life expectancy ran about 37–40 in every large
+  country, from Iran and China to France, and growth +1.6% to +1.7% everywhere.
 - **The West was about right; everyone else lived too long.** Britain, France and Belgium were within about two years
   of history. In the 1880s and 1890s the model gave India 38 (history 24), Mexico 42 (23), Spain 42 (30), Brazil 41
   (29) and Japan 42 (37).
@@ -69,20 +72,32 @@ Spain 0.80, Brazil 0.83 and Japan 0.94. The state's mean SoL already carries mos
 **Infection deaths ×(1 + clamp((9 − SoL) / 4, 0, 1)):** ×1 at SoL 9 and above, rising to ×2 at SoL 5 and below. It
 applies on the state's mean SoL, in `demographics_model.poverty_infection` and the generated `te_demog_mult_infection`.
 
-| Option (every anchor in band) | World e0, 1837/1857/1887 | World growth | China 1837 / 1887 | India 1887 | Japan 1887 | Britain 1837 / 1887 |
-|---|---|---|---|---|---|---|
-| **×2 at SoL 5 (built)** | 30.6 / 31.8 / 32.3 | +1.02 / +1.07 / +1.01% | 28 (+0.8%) / 24 (+0.3%) | 35 (+1.5%) | 31 (+0.8%) | 38 / 45 |
-| ×2.25 at SoL 5 | 29.2 / 30.4 / 30.8 | +0.85 / +0.90 / +0.82% | 26 (+0.6%) / 22 (−0.1%) | 35 (+1.4%) | 29 (+0.6%) | 38 / 45 |
-| ×2.5 at SoL 5 | 27.8 / 29.0 / 29.5 | +0.67 / +0.73 / +0.63% | 24 (+0.3%) / 19 (−0.5%) | 34 (+1.3%) | 27 (+0.3%) | 38 / 45 |
-| ×3 at SoL 4 | 27.3 / 28.5 / 29.0 | +0.60 / +0.66 / +0.55% | 23 (+0.2%) / 18 (−0.6%) | 34 (+1.3%) | 26 (+0.2%) | 38 / 45 |
+| Option (every anchor in band; state by state) | World e0, 1837/1857/1887 | World growth | China 1837 / 1887 | India 1887 | Japan 1887 | Britain 1837 / 1887 | Denmark 1837 / 1887 |
+|---|---|---|---|---|---|---|---|
+| None (before) | 37.5 / 38.6 / 39.4 | +1.69 / +1.70 / +1.71% | 37 (+1.7%) / 38 (+1.8%) | 38 (+1.7%) | 42 (+1.7%) | 38 / 45 | 39 / 40 |
+| **×2 at SoL 5 (built)** | 30.6 / 31.7 / 32.1 | +1.01 / +1.03 / +0.98% | 28 (+0.8%) / 24 (+0.3%) | 35 (+1.4%) | 31 (+0.8%) | 36 / 45 | 33 / 37 |
+| ×2.25 at SoL 5 | 29.2 / 30.2 / 30.6 | +0.82 / +0.86 / +0.79% | 26 (+0.6%) / 22 (−0.1%) | 34 (+1.4%) | 29 (+0.5%) | 35 / 45 | 32 / 36 |
+| ×2.5 at SoL 5 | 27.8 / 28.9 / 29.3 | +0.64 / +0.67 / +0.59% | 24 (+0.3%) / 19 (−0.5%) | 34 (+1.3%) | 27 (+0.3%) | 35 / 45 | 31 / 35 |
+| ×3 at SoL 4 | 27.3 / 28.4 / 28.8 | +0.56 / +0.60 / +0.50% | 23 (+0.2%) / 18 (−0.6%) | 33 (+1.2%) | 26 (+0.2%) | 35 / 45 | 30 / 35 |
+
+History: Britain 41 (1838) and 45 (1887); Denmark 41 and 49; India 24 (1891); Japan 37 (1885); China's growth about
++0.3% and Japan's +0.85%.
 
 - **Why ×2 at SoL 5.** World life expectancy is near history's, and China (SoL 6.0 by 1887 in that game) and Japan
-  grow as history's did (+0.3% and +0.85%).
+  grow as history's did (+0.3% and +0.8%).
+- **What it costs the West.** Britain 1837 reads 36 against history's 41, and Denmark, the one smaller Western
+  country with anchors at all three dates, falls from 39 to 33 in 1837 (history 41). Every 1837 life-expectancy
+  anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line. Chile 1887 reads 24
+  against history's 29. The Netherlands reads far below history in 1887 (26 against 45), but it shrank in that game.
 - **Why not steeper.** A steeper term brings world growth down to history's 0.4–0.8%, but only by making China, a
   quarter of the world, shrink. Once phase 2 drives the engine, that would be a country losing people every year.
 - **What's left.** World growth stays about 1.0% a year. The rest of the gap is India, which grows +1.5% against
   history's +0.8%, the West's fertility, and whatever the engine's own deaths add on top in phase 2: starvation,
   devastation, turmoil. Those are the plan's next steps.
-- **1949 is barely touched:** world e0 47.0, growth +1.38% a year, against about 47 and 1.8% in history.
-- **The anchors that hold:** every one of the medicine scenarios (`demographics_harness.py medicine`) and the fertility
-  scenarios (`fertility`). Those scenarios sit at SoL 9 or above, apart from the agrarian reference at SoL 8.
+- **1949 is barely touched:** world e0 46.7, growth +1.35% a year, against about 47 and 1.8% in history.
+- **The anchors hold, but barely test the term.** Every one of the medicine scenarios (`demographics_harness.py
+  medicine`) and the fertility scenarios (`fertility`) stays in band. But they sit at SoL 9 or above (India 1975 exactly
+  at the bend), apart from the agrarian reference at SoL 8 (6.08 children per woman against a band of 4.8–6.2). So
+  "in band" says little about the term itself: the history check is its real test.
+- **Some mapped countries have no anchors:** Clio Infra has "South Korea" and "North Korea", not Korea; Russia has no
+  population series before 1920; Turkey has no life expectancy or infant mortality. `history` names them on stderr.

@@ -19,8 +19,9 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 ## Step 1 (built): poverty and the history check
 
-- Infection ×(1 + clamp((9 − SoL) / 4, 0, 1)): world life expectancy 31–32 (from 37–39), world growth about 1.0% a year
-  (from 1.7%), China +0.3% by 1887. Every medicine and fertility anchor stays in its band.
+- Infection ×(1 + clamp((9 − SoL) / 4, 0, 1)), state by state: world life expectancy 31–32 (from 37–39), world growth
+  about 1.0% a year (from 1.7%), China +0.3% by 1887. Every medicine and fertility anchor stays in its band, though they
+  barely test the term. The West pays a little: Britain 1837 36 (history 41), Denmark 33 (41).
 - `demographics_harness.py history SAVE... --anchors CSV` and `scripts/analysis/fetch_history_anchors.py`.
 - **Owner call:** the strength. ×2 at SoL 5 is built; ×2.25–×3 bring world growth to history's 0.6–0.85% but make China
   shrink by the 1880s in the gate game (the table in the results doc).
@@ -49,23 +50,37 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 ## Step 4: how the census sets the engine's births and deaths
 
-- **The formula.** The engine's per-pop rate is the curve × (1 + the sum of its terms): additive, measured by the
-  growth probe (#834). So the census's own modifier has to be **M = (the model's events − the engine's events before
-  M) ÷ the bare curves' events**, not the spec's ratio − 1, which is right only when no other term applies. The walk
-  already sums the pieces: `te_dg_eb` and `te_dg_ed` are stored, and the bare curves are the walk's locals
-  `te_dg_w_eb0` and `te_dg_w_ed0`, which fast mode already reads.
-- **The clamp:** the engine stops births at a total near −1 (probe: −0.9 holds, −3 stops), so M ≥ −0.9 less the other
-  terms.
-- **What stays engine-side.** These multiply on top of the census, as the spec says: starvation, devastation, turmoil,
-  pollution, events. Everything the census now models moves into it, through §8.4's removals:
+- **The engine adds its terms.** A pop's rate is its bare SoL curve × (1 + the sum of its terms), as the growth probe
+  measured (#834). So the census's own modifier M adds to that sum, and the pop's events become
+  bare × (1 + T + M). Summed over pops: E = E_T + M × E_bare.
+- **The target:** the model's events, plus the terms meant to stay on top, weighted by the bare curve as the engine
+  weights them: target = model + Σ bare × K, where K is the kept terms (starvation, devastation, turmoil, pollution,
+  events).
+- **So M = (model − Σ bare × (1 + T − K)) ÷ E_bare.** In words: the model's events, less what the engine would do
+  with every term except the kept ones, over the bare curve's events.
+  - The spec's "model ÷ engine − 1" is right only when no other term applies.
+  - Using the walk's `te_dg_ed` (which already holds the starvation penalties and every per-pop term) for the
+    engine's events would cancel the kept terms too.
+  - So the walk needs one more sum: the kept terms' events, Σ bare × K, as its own local. `te_dg_eb` and `te_dg_ed`
+    are stored, and the bare curves are the walk's locals `te_dg_w_eb0` and `te_dg_w_ed0`, which fast mode already
+    reads.
+- **The bare curve's starving slope.** Below SoL 4 the engine's mortality curve climbs steeply
+  (`extra_defines.txt`), and M nets the bare curve out. So the model's poverty term, ×2 at SoL 5 and below, would
+  replace that slope. Either keep the slope by adding it to K (the starving pop's extra over its curve at SoL 5), or
+  let the model's term stand in for it.
+- **The clamp:** the engine stops births at a total near −1 (probe: −0.9 holds, −3 stops), so M ≥ −0.9 less the
+  other terms.
+- **Everything the census now models moves into it**, through §8.4's removals:
   - the mod's flat birth and mortality lines on techs and laws (the Pill's −0.10 births, the family-policy laws, the
     medical techs' flat cuts);
   - vanilla Public Health Insurance's −0.05 a level mortality, by an inverse INJECT (the monetary pattern);
   - the augmentation laws, as chronic treatment (modifier-types spec, "Not decided here").
 - **Cadence:** yearly from the state pulse, or monthly under fast mode's clock. Rates move within a month of a change
   (probe), so a year's lag is fine.
-- **Owner calls:** the list of what stays engine-side, and whether starvation's deaths should fall on the young and
-  old (the model's age pattern) or stay flat.
+- **Owner calls:**
+  - the list of kept terms (K);
+  - whether the engine's starving slope below SoL 4 stays (in K) or the poverty term replaces it;
+  - whether starvation's deaths should fall on the young and old (the model's age pattern) or stay flat.
 
 ## Step 5: the defines
 

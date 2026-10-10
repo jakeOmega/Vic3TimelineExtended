@@ -178,6 +178,52 @@ def is_incorporated(state_record):
     return _num(state_record.get("incorporation")) >= 1
 
 
+def _add_pop(c, rec, size, incorporated):
+    """One pop's people, SoL, literacy, wealth and class into a country's or a state's sums."""
+    sol = _num(rec.get("previous_quality_of_life"))
+    wealth = _num(rec.get("wealth"))
+    c.population += size
+    if incorporated:
+        c.incorporated_people += size
+    c.sol_x_size += sol * size
+    c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
+    c.literate += _num(rec.get("num_literate"))
+    c.workforce += _num(rec.get("workforce"))
+    c.wealth_x_size += wealth * size
+    if rec.get("type") in RURAL_TYPES:
+        c.rural += size
+    s = STRATA_OF_CLASS.get(rec.get("social_class"), "lower")
+    c.strata_people[s] += size
+    c.strata_wealth[s] += wealth * size
+    c.sol_bins[min(int(sol // 5) * 5, 40)] += size
+
+
+def state_inputs(sections):
+    """{tag: [(state id, CountryInputs of that state's own pops, incorporated)]}. The census works state
+    by state, so a curve that bends (the poverty term at SoL 9) needs each state's own SoL and literacy;
+    laws, techs and institutions are the owner's (country_inputs)."""
+    countries = country_inputs(sections)
+    tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
+    owner_of_state = {sid: rec.get("country") for sid, rec in sections["states"].items()}
+    incorporated = {sid for sid, rec in sections["states"].items() if is_incorporated(rec)}
+    per = {}
+    for rec in sections["pops"].values():
+        size = _num(rec.get("workforce")) + _num(rec.get("dependents"))
+        sid = rec.get("location")
+        tag = tags.get(owner_of_state.get(sid))
+        if size <= 0 or not tag:
+            continue
+        if (tag, sid) not in per:
+            per[(tag, sid)] = CountryInputs(tag, states=1)
+        _add_pop(per[(tag, sid)], rec, size, sid in incorporated)
+    out = {}
+    for (tag, sid), st in per.items():
+        c = countries[tag]
+        st.laws, st.techs, st.institutions = c.laws, c.techs, c.institutions
+        out.setdefault(tag, []).append((sid, st, sid in incorporated))
+    return out
+
+
 def country_inputs(sections):
     """{tag: CountryInputs} from read_sections()'s output."""
     tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
@@ -204,22 +250,7 @@ def country_inputs(sections):
         c = get(owner_of_state.get(rec.get("location")))
         if not c:
             continue
-        sol = _num(rec.get("previous_quality_of_life"))
-        wealth = _num(rec.get("wealth"))
-        c.population += size
-        if rec.get("location") in incorporated:
-            c.incorporated_people += size
-        c.sol_x_size += sol * size
-        c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
-        c.literate += _num(rec.get("num_literate"))
-        c.workforce += _num(rec.get("workforce"))
-        c.wealth_x_size += wealth * size
-        if rec.get("type") in RURAL_TYPES:
-            c.rural += size
-        s = STRATA_OF_CLASS.get(rec.get("social_class"), "lower")
-        c.strata_people[s] += size
-        c.strata_wealth[s] += wealth * size
-        c.sol_bins[min(int(sol // 5) * 5, 40)] += size
+        _add_pop(c, rec, size, rec.get("location") in incorporated)
     for rec in sections["laws"].values():
         if rec.get("active") == "yes":
             c = get(rec.get("country"))

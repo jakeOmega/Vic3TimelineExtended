@@ -2,12 +2,13 @@
 """Fetch history anchors for the demographics calibration from Clio Infra.
 
 Usage:
-    fetch_history_anchors.py OUT.csv [--from DIR]
+    fetch_history_anchors.py OUT.csv [--from DIR | --download-dir DIR]
 
 Downloads Clio Infra's country tables (life expectancy at birth, total population,
 infant mortality, income inequality: the "Compact" spreadsheets) and writes one long CSV,
 `measure,country,year,value`, for `demographics_harness.py history --anchors OUT.csv`.
-With --from DIR it reads spreadsheets already downloaded there instead. The data stay
+Downloads go to --download-dir (a temporary directory by default, so nothing lands in the
+repo); with --from DIR it reads spreadsheets already downloaded there instead. The data stay
 outside the repo (Clio Infra, https://clio-infra.eu; each dataset's page names its authors
 and sources; income inequality is van Zanden et al. 2014). The spreadsheets are read with the
 standard library (an .xlsx is a zip of XML), so nothing beyond Python is needed.
@@ -16,7 +17,11 @@ standard library (an .xlsx is a zip of XML), so nothing beyond Python is needed.
 import argparse
 import csv
 import re
+import shutil
 import sys
+import tempfile
+import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
@@ -44,14 +49,20 @@ def read_xlsx(path):
         for row in ET.fromstring(z.read(sheet)).iter(f"{_NS}row"):
             cells = {}
             for c in row.iter(f"{_NS}c"):
-                v = c.find(f"{_NS}v")
-                if v is None:
+                ref = c.get("r")
+                if ref is None:
                     continue
-                letters = re.match(r"[A-Z]+", c.get("r")).group(0)
+                if c.get("t") == "inlineStr":
+                    text = "".join(t.text or "" for t in c.iter(f"{_NS}t"))
+                else:
+                    v = c.find(f"{_NS}v")
+                    if v is None:
+                        continue
+                    text = shared[int(v.text)] if c.get("t") == "s" else v.text
                 col = 0
-                for ch in letters:
+                for ch in re.match(r"[A-Z]+", ref).group(0):
                     col = col * 26 + ord(ch) - 64
-                cells[col - 1] = shared[int(v.text)] if c.get("t") == "s" else v.text
+                cells[col - 1] = text
             if cells:
                 rows.append([cells.get(i) for i in range(max(cells) + 1)])
         return rows
@@ -73,16 +84,23 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("out")
     ap.add_argument("--from", dest="src", help="a directory holding the spreadsheets already downloaded")
+    ap.add_argument("--download-dir", help="where downloads go (default: a temporary directory)")
     args = ap.parse_args(argv)
     out = []
+    downloads = None if args.src else Path(args.download_dir or tempfile.mkdtemp(prefix="history-anchors-"))
     for measure, name in SOURCES.items():
         if args.src:
             path = Path(args.src) / name.replace("(", "").replace(")", "")
             if not path.exists():
                 path = Path(args.src) / name
         else:
-            path = Path(args.out).with_name(name.replace("(", "").replace(")", ""))
-            urllib.request.urlretrieve(BASE + urllib.request.quote(name), path)
+            path = downloads / name.replace("(", "").replace(")", "")
+            try:
+                with urllib.request.urlopen(BASE + urllib.parse.quote(name), timeout=60) as resp, open(path, "wb") as fh:
+                    shutil.copyfileobj(resp, fh)
+            except (urllib.error.URLError, OSError) as e:
+                print(f"cannot download {BASE + name}: {e}", file=sys.stderr)
+                return 1
         out.extend(long_rows(measure, read_xlsx(path)))
     with open(args.out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)

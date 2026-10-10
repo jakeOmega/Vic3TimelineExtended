@@ -145,6 +145,25 @@ class TestTinySave(unittest.TestCase):
         self.assertEqual(c.incorporated_people, 400)
         self.assertAlmostEqual(c.incorporated_share, 0.8)
 
+    def test_state_inputs_split_the_country_by_state(self):
+        # the census works state by state: each state's own pops, the owner's laws, techs and institutions
+        text = TINY.replace("8={\n\ttype=peasants\n\tlocation=1\n",
+                            "9={\n\ttype=peasants\n\tworkforce=60\n\tdependents=40\n\tlocation=2\n}\n"
+                            "8={\n\ttype=peasants\n\tlocation=1\n", 1)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            states = S.state_inputs(S.read_sections(fh.name))["TST"]
+        finally:
+            Path(fh.name).unlink()
+        by_id = {sid: (st, inc) for sid, st, inc in states}
+        self.assertEqual(set(by_id), {"1", "2"})
+        self.assertEqual((by_id["1"][0].population, by_id["2"][0].population), (400, 100))
+        self.assertEqual((by_id["1"][1], by_id["2"][1]), (True, False), "state 2 is still incorporating")
+        for st, _ in by_id.values():
+            self.assertEqual(st.laws, {"law_serfdom"})
+            self.assertEqual(st.institutions, {"institution_health_system": 3})
+
     def test_empty_pop_is_skipped(self):
         c = S.country_inputs(self.sections)["TST"]
         self.assertEqual(c.rural, 0)
