@@ -143,9 +143,11 @@ class TestEngineRateLines(unittest.TestCase):
             self.assertNotEqual(self.vanilla.get(("law", law, block, field), 0.0), 0.0, msg=(law, field))
             self.assertAlmostEqual(self.lines.get(("law", law, block, field), 0.0), 0.0, msg=(law, field))
 
-    def test_the_on_top_carriers_exist(self):
-        carriers = {k[1] for k in self.lines}
-        self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - carriers), [])
+    def test_the_on_top_carriers_keep_their_lines(self):
+        """Each carrier the census adds on top still carries a live birth or mortality line: a cancel or a deletion
+        that nets one to zero while it is still listed would take its effect away unseen (Task 8 edits the list)."""
+        live = {k[1] for k, v in self.lines.items() if abs(v) > 1e-9 and RATE_FIELDS.match(k[3])}
+        self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - live), [])
 
     def test_augmentation_moves_to_flat_chronic_treatment(self):
         """The design note's values as totals: flat lines (kind 'law'), not per level (an institution_modifier

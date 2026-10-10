@@ -3057,8 +3057,9 @@ class TestFastMode(unittest.TestCase):
         eng = self._eng_full()
         # bare 475 a month per person; the walk's average multiplier 1.05 (terms on top +0.05)
         self._both(eng, eb=1.05 * 475e3, eb0=475e3, ed=0.98 * 430e3, ed0=430e3)
-        mb = eng.vars["te_dg_mb"]
+        mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
         self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * (0.98 + md), places=5)
 
     def test_fast_mode_reads_the_new_term_from_the_refresh(self):
         """In game, has_modifier can't see the census modifier the refresh just added in the same effect.
@@ -3068,13 +3069,29 @@ class TestFastMode(unittest.TestCase):
                           te_dg_w_ebl=0.0)
         eng.call("te_demog_rates_refresh")
         self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
-        mb = eng.vars["te_dg_mb"]
+        mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
         eng.modifiers.clear()
         eng.call("te_demog_fast_refresh_rates")
         self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], 3 * (1.05 + mb), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * (0.98 + md), places=5)
         body = _block(_text(FAST_EFFECTS), "te_demog_fast_refresh_rates")
-        self.assertIn("add = local_var:te_dg_rate_new_b", body)
-        self.assertNotIn("te_demog_rate_births_applied", body)
+        for kind, short in (("births", "b"), ("deaths", "d")):
+            self.assertIn(f"add = local_var:te_dg_rate_new_{short}", body)
+            self.assertNotIn(f"te_demog_rate_{kind}_applied", body)
+
+    def test_fast_modes_term_is_clipped_at_zero(self):
+        """The walk's average can sit below the census's term's reach: per-pop terms (severe starvation on much of a
+        state's births) are outside the refresh's clamp. Fast mode's term is clipped at 0 after the census's terms are
+        in, so it is never applied with a negative multiplier (Global Constraints)."""
+        eng = self._eng_full()
+        # the model's births and deaths half of bare: M = -0.5 each, against a walk average of 0.3
+        eng.vars.update(te_dg_cbr_model=28.5, te_dg_cdr_model=25.8)
+        self._both(eng, eb=0.3 * 475e3, eb0=475e3, ed=0.3 * 430e3, ed0=430e3)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], -0.5, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], -0.5, places=5)
+        for var, mod in (("te_dg_fast_fb", "te_demog_fast_births"), ("te_dg_fast_fd", "te_demog_fast_deaths")):
+            self.assertEqual(eng.vars[var], 0.0)
+            self.assertEqual(eng.modifiers[mod], 0.0)
 
     def test_fast_and_census_terms_reach_a_joint_fixed_point(self):
         eng = self._eng_full()
