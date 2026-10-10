@@ -140,9 +140,27 @@ TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.8}
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
+# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below.
+# Most of the 1836 world sits at SoL 6-9, and the high-SoL term above is flat below SoL 8, so without this the
+# census gave China, India and Mexico Britain's life expectancy and the world +1.4% a year against
+# history's 0.4-0.8%. Fitted against Clio Infra's life expectancy and Maddison's population on the gate
+# run's 1837, 1857 and 1887 saves, with each state's crowding term as the save holds it (continuous, below): the
+# strength at which China (SoL 6 by 1887 in that game) grows as Maddison's China did in peacetime, about +0.3-0.4%
+# a year (1820-1840, 1870-1910). x2 would shrink it (docs/testing/demographics-history-check-2026-10-10.md).
+POVERTY_INFECTION_SOL = 9          # x1 at and above
+POVERTY_INFECTION_FLOOR_SOL = 5    # POVERTY_INFECTION_AT_FLOOR at and below
+POVERTY_INFECTION_AT_FLOOR = 1.75
 SOL_CHRONIC_AT_HIGH = 0.85
 LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x literacy)
-CROWDING_INFECTION_MULT = 1.15    # migration_crowding active and no urban planning institution
+# Crowding (owner, 2026-10-10: a function of how crowded the state is, not a switch): infection rises by the
+# state's migration penalty from crowding. migration_crowding takes state_migration_pull_mult -0.1 a unit of its
+# multiplier (extra_modifiers.txt), which is 4.5 r^2 below ten times the floor density and linear above
+# (migration_crowding_mult, r the state's place between the floor and ten times it). So a state just past the
+# floor adds almost nothing, the 1837 median crowded person +4%, a state at ten times the floor +45%. The Ministry
+# of Urban Planning and Urban Engineering (sewerage, steel frames) lower it through the crowding itself.
+MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of multiplier (a test pins it)
+CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
+CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the floor density (a guess)
 
 # Women's share of the workforce by women's-rights law, for splitting work deaths (§2.4).
 FEMALE_WORK_SHARE = {

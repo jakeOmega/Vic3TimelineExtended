@@ -2709,7 +2709,7 @@ class TestCauseMultipliersScript(unittest.TestCase):
 
     def test_script_matches_the_model(self):
         for mods in self.CASES:
-            for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
+            for sol, lit in ((3, 0.1), (6.5, 0.2), (8, 0.0), (20, 0.5), (40, 1.0)):
                 inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
                 want = demographics_model.cause_multipliers(inp)
                 fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}
@@ -2722,6 +2722,60 @@ class TestCauseMultipliersScript(unittest.TestCase):
                 with self.subTest(mods=mods, sol=sol, cause="maternal"):
                     got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
                     self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+
+    def test_crowding_matches_the_model(self):
+        # the census reads the multiplier the crowding refresh applied (migration_crowding_mult_applied), the
+        # harness the modifier's multiplier in the save: the same yearly figure. Slight (-3.8% attraction), 10x
+        # density (-45%), past the cap, and a state the refresh has not reached (no modifier, no variable)
+        for mult in (0.378, 4.5, 14.5, None):
+            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if mult is not None:
+                eng.modifiers["migration_crowding"] = mult
+                eng.vars["migration_crowding_mult_applied"] = mult
+            crowding = 0.0 if mult is None else P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+            want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3,
+                                                                                  crowding=crowding))
+            with self.subTest(mult=mult):
+                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
+                self.assertAlmostEqual(got, want["infection"], places=9)
+
+    def test_crowding_needs_both_the_modifier_and_the_stored_multiplier(self):
+        # a save from before the stored multiplier: the modifier without the variable, until the state's next yearly
+        # refresh (677 of 874 states in the 1949 save), must read no term rather than an unset var:; and a variable
+        # outliving its modifier must not count (review I1)
+        want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3))["infection"]
+        for label, modifier, variable in (("modifier only", True, False), ("variable only", False, True)):
+            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if modifier:
+                eng.modifiers["migration_crowding"] = 1.5
+            if variable:
+                eng.vars["migration_crowding_mult_applied"] = 1.5
+            with self.subTest(label):
+                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
+                self.assertAlmostEqual(got, want, places=9)
+
+    def test_crowdings_pull_per_multiplier_is_the_modifiers(self):
+        # "infection rises by the share attraction falls" holds only while the two agree: a retuned
+        # migration_crowding would otherwise leave the census reading the old figure
+        body = _raw_blocks([ROOT / "common" / "static_modifiers" / "extra_modifiers.txt"])["migration_crowding"]
+        pull = float(re.search(r"state_migration_pull_mult = (-?[0-9.]+)", body).group(1))
+        self.assertAlmostEqual(P.MIGRATION_CROWDING_PULL_PER_MULT, -pull)
+
+    def test_the_crowding_refresh_stores_the_multiplier_it_applies(self):
+        refresh = _raw_blocks([ROOT / "common" / "scripted_effects" / "extra_effects.txt"])
+        refresh = {"te_update_migration_crowding_modifier": refresh["te_update_migration_crowding_modifier"]}
+        eng = _Engine({"migration_crowding_mult": 0.378}, effects=refresh)
+        eng.modifiers["migration_crowding"] = 0.2
+        eng.vars["migration_crowding_mult_applied"] = 0.2
+        eng.call("te_update_migration_crowding_modifier")
+        self.assertEqual(eng.modifiers, {"migration_crowding": 0.378})
+        self.assertEqual(eng.vars["migration_crowding_mult_applied"], 0.378)
+        eng.fixtures["migration_crowding_mult"] = 0.0
+        eng.call("te_update_migration_crowding_modifier")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("migration_crowding_mult_applied", eng.vars)
 
 
 class TestMeansScript(unittest.TestCase):
