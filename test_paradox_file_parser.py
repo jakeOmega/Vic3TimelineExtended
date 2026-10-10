@@ -482,6 +482,110 @@ class ParserSemanticsTests(unittest.TestCase):
             "law_c": ("=", {"w": [(">", "1"), ("<", "9")]}),
         })
 
+    # -- INJECT into a script-value field -----------------------------------
+    IG_VANILLA = (
+        "ig_x = {\n"
+        "\tcolor = { 1 2 3 }\n"
+        "\tfemale_agitator_chance = {\n"
+        "\t\tvalue = 0.01\n"
+        "\t\tif = { limit = { a = yes } add = 0.02 }\n"
+        "\t}\n"
+        "}\n"
+    )
+    # ig_feminism.py's shape: vanilla's lines restated, then the mod's branch.
+    IG_INJECT = (
+        "INJECT:ig_x = {\n"
+        "\tfemale_agitator_chance = {\n"
+        "\t\tvalue = 0.01\n"
+        "\t\tif = { limit = { a = yes } add = 0.02 }\n"
+        "\t\tif = { limit = { b = yes } add = 0.1 }\n"
+        "\t}\n"
+        "}\n"
+    )
+
+    def _agitator_chance(self, *texts, mod_state_flow):
+        """Parse `texts` as consecutive files: through parse_file alone, or
+        the way ModState loads a mod file (apply_directives=False, then
+        merge_data). Returns ig_x's female_agitator_chance."""
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = ParadoxFileParser()
+            parser.parse_file(self._write(tmp, "0.txt", texts[0]))
+            for i, text in enumerate(texts[1:], 1):
+                path = self._write(tmp, f"{i}.txt", text)
+                if mod_state_flow:
+                    mod = ParadoxFileParser()
+                    mod.parse_file(path, apply_directives=False)
+                    parser.merge_data(mod.data)
+                else:
+                    parser.parse_file(path)
+        return parser.data["ig_x"][1]["female_agitator_chance"]
+
+    def test_inject_replaces_a_script_value_field(self):
+        """An injected script value replaces the field (read in game,
+        2026-10-10). Merged, the parser summed the restated `value` to 0.02
+        and dropped the restated branch as a duplicate."""
+        expected = ("=", {
+            "value": ("=", "0.01"),
+            "if": [
+                ("=", {"limit": ("=", {"a": ("=", "yes")}), "add": ("=", "0.02")}),
+                ("=", {"limit": ("=", {"b": ("=", "yes")}), "add": ("=", "0.1")}),
+            ],
+        })
+        for mod_state_flow in (False, True):
+            with self.subTest(mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, self.IG_INJECT, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+
+    def test_later_inject_of_a_script_value_field_wins(self):
+        """The in-game read itself: a later INJECT setting `value = 0` over
+        an earlier one setting `value = 1` gave 0, in separate files or one."""
+        first = "INJECT:ig_x = { female_agitator_chance = { value = 1 } }\n"
+        second = "INJECT:ig_x = { female_agitator_chance = { value = 0 } }\n"
+        expected = ("=", {"value": ("=", "0")})
+        for mod_state_flow in (False, True):
+            with self.subTest(files=2, mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, first, second, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+            with self.subTest(files=1, mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, first + second, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+
+    def test_inject_replaces_only_an_entitys_script_value_fields(self):
+        """Only an entity's script-value fields are replaced. A modifier
+        block's lines still sum (confirmed in game), and so do a script
+        value's own steps, whose blocks carry `value =` lines too."""
+        vanilla = (
+            "law_a = { modifier = { x_add = 0.5 } ai_will_do = { value = 10 } }\n"
+            "sv_a = { add = { value = 100 desc = A } }\n"
+        )
+        mod = (
+            "INJECT:law_a = { modifier = { x_add = -0.5 } ai_will_do = { value = 3 } }\n"
+            "INJECT:sv_a = { add = { value = 5 desc = B } }\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = ParadoxFileParser()
+            parser.parse_file(self._write(tmp, "vanilla.txt", vanilla))
+            parser.parse_file(self._write(tmp, "mod.txt", mod))
+        self.assertEqual(parser.data["law_a"], ("=", {
+            "modifier": ("=", {"x_add": ("=", "0.0")}),
+            "ai_will_do": ("=", {"value": ("=", "3")}),
+        }))
+        self.assertEqual(parser.data["sv_a"], ("=", {
+            "add": ("=", {"value": ("=", "105"), "desc": ("=", "B")}),
+        }))
+
     # -- localization ---------------------------------------------------------
     def test_parse_loc_line_reads_escaped_quotes_whole(self):
         """The old rule cut at the second `"`, so a value with `\"` read back

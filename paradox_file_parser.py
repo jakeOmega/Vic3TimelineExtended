@@ -14,6 +14,14 @@ INDENT_SIZE = 4
 conditional_tokens = ["=", "<", ">", "<=", ">=", "!=", "?=", "=="]
 _CONDITIONAL_TOKENS = frozenset(conditional_tokens)
 directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
+# A script value's own steps, whose blocks can carry a `value =` line too. An
+# INJECT into a script value (common/script_values) adds steps rather than
+# naming fields, so these keys are never script-value fields
+# (see _is_script_value_field).
+_SCRIPT_VALUE_STEPS = frozenset((
+    "value", "add", "subtract", "multiply", "divide", "modulo", "min", "max",
+    "if", "else_if", "else",
+))
 
 
 class ParadoxFileParser:
@@ -306,7 +314,9 @@ class ParadoxFileParser:
                 if raw_key in merged:
                     directive, _ = self._split_directive(raw_key)
                     if directive == "INJECT":
-                        merged[raw_key] = self._inject_value(merged[raw_key], value)
+                        merged[raw_key] = self._inject_value(
+                            merged[raw_key], value, entity=True
+                        )
                         if raw_key not in injected:
                             injected.append(raw_key)
                         continue
@@ -342,7 +352,9 @@ class ParadoxFileParser:
         for raw_key, raw_value in new_data.items():
             directive, key = self._split_directive(raw_key)
             if directive == "INJECT" and key in self.data:
-                self.data[key] = self._inject_value(self.data[key], raw_value)
+                self.data[key] = self._inject_value(
+                    self.data[key], raw_value, entity=True
+                )
             else:
                 # Plain keys, REPLACE:/REPLACE_OR_CREATE:, and an INJECT: with
                 # nothing to inject into all store the new value as is.
@@ -373,13 +385,20 @@ class ParadoxFileParser:
                 return prefix[:-1], key[len(prefix) :]
         return None, key
 
-    def _inject_value(self, base_value, injected_value):
+    def _inject_value(self, base_value, injected_value, entity=False):
+        """Merge `injected_value` into `base_value` the way an INJECT does.
+
+        `entity` is true when the two are a whole entity and the INJECT block
+        aimed at it, so their keys are the entity's fields. A script-value
+        field there is replaced (see _is_script_value_field). Every other
+        field merges: lists append, and numbers sum as a modifier block's
+        lines do."""
         if isinstance(base_value, tuple) and isinstance(injected_value, tuple):
             base_operator = base_value[0]
             base_right = base_value[1]
             base_tail = base_value[2:] if len(base_value) > 2 else ()
             injected_right = injected_value[1]
-            merged_right = self._inject_value(base_right, injected_right)
+            merged_right = self._inject_value(base_right, injected_right, entity)
             return (base_operator, merged_right, *base_tail)
 
         if isinstance(base_value, dict) and isinstance(injected_value, dict):
@@ -393,11 +412,14 @@ class ParadoxFileParser:
                         merged[key] = self._inject_value(merged[key], injected_child)
                     else:
                         merged[key] = injected_child
+                elif key not in merged:
+                    merged[key] = injected_child
+                elif entity and self._is_script_value_field(
+                    key, merged[key], injected_child
+                ):
+                    merged[key] = injected_child
                 else:
-                    if key in merged:
-                        merged[key] = self._inject_value(merged[key], injected_child)
-                    else:
-                        merged[key] = injected_child
+                    merged[key] = self._inject_value(merged[key], injected_child)
             return merged
 
         if isinstance(base_value, list) and isinstance(injected_value, list):
@@ -426,6 +448,10 @@ class ParadoxFileParser:
                     merged[matched_index][key] = self._inject_value(
                         existing_value, injected_child
                     )
+                elif entity and self._is_script_value_field(
+                    key, existing_value, injected_child
+                ):
+                    merged[matched_index][key] = injected_child
                 else:
                     merged[matched_index][key] = self._inject_value(
                         existing_value, injected_child
@@ -438,6 +464,39 @@ class ParadoxFileParser:
             return str(summed)
 
         return injected_value
+
+    @staticmethod
+    def _is_script_value_field(key, base_value, injected_value):
+        """True when an INJECT's field `key` is a script value: a block with
+        a `value =` line on either side (a weight, a chance, an `ai_*`), and
+        `key` is not one of a script value's own steps.
+
+        The engine reads such a field once, so an injected copy replaces the
+        one already there (read in game, 2026-10-10: a later INJECTed
+        `female_commander_chance = { value = 0 }` overrode an earlier
+        `value = 1`). Merged instead, the two `value` lines summed and the
+        branches the INJECT restates from vanilla were dropped as
+        duplicates. A bare number still sums, as a static modifier's
+        flat key does."""
+        if key in _SCRIPT_VALUE_STEPS:
+            return False
+        return any(
+            ParadoxFileParser._has_value_line(side)
+            for side in (base_value, injected_value)
+        )
+
+    @staticmethod
+    def _has_value_line(value):
+        if isinstance(value, tuple) and len(value) >= 2:
+            value = value[1]
+        if isinstance(value, dict):
+            return "value" in value
+        # A block with a repeated key, not yet normalized: one dict per entry.
+        if isinstance(value, list) and value and all(
+            isinstance(item, dict) and len(item) == 1 for item in value
+        ):
+            return any("value" in item for item in value)
+        return False
 
     def _normalize_data(self, data):
         if isinstance(data, dict):
