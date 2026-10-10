@@ -5,7 +5,6 @@ pulse wiring, the gates around every cohort entry point. Later tasks add tests h
 """
 
 import dataclasses
-import itertools
 import math
 import random
 import re
@@ -183,120 +182,44 @@ def _find(items, key):
     return next(v for k, _, v in items if k == key)
 
 
-class _Interp:
-    """Just enough of the engine to run te_demog_state_gini: locals, variables, if, value blocks."""
-
-    def __init__(self, variables, constants):
-        self.vars, self.locals, self.constants = dict(variables), {}, constants
-
-    def number(self, tok):
-        if tok.startswith("local_var:"):
-            return self.locals[tok[10:]]
-        if tok.startswith("var:"):
-            return self.vars[tok[4:]]
-        if tok in self.constants:
-            return self.constants[tok]
-        return float(tok)
-
-    def value(self, v):
-        if isinstance(v, str):
-            return self.number(v)
-        acc = 0.0
-        lo, hi = None, None
-        for k, _, arg in v:
-            if k == "value":
-                acc = self.value(arg)
-            elif k == "add":
-                acc += self.value(arg)
-            elif k == "subtract":
-                acc -= self.value(arg)
-            elif k == "multiply":
-                acc *= self.value(arg)
-            elif k == "divide":
-                acc /= self.value(arg)
-            elif k == "min":
-                lo = self.value(arg)
-            elif k == "max":
-                hi = self.value(arg)
-            else:
-                raise AssertionError(f"value operator {k}")
-        if lo is not None:
-            acc = max(acc, lo)
-        if hi is not None:
-            acc = min(acc, hi)
-        return acc
-
-    def holds(self, limit):
-        ops = {">": float.__gt__, ">=": float.__ge__, "<": float.__lt__, "<=": float.__le__}
-        return all(ops[op](self.number(k), self.number(v)) for k, op, v in limit)
-
-    def run(self, items):
-        for key, _, val in items:
-            if key == "if":
-                if self.holds(_find(val, "limit")):
-                    self.run([i for i in val if i[0] != "limit"])
-            elif key in ("set_local_variable", "set_variable"):
-                target = self.locals if key == "set_local_variable" else self.vars
-                target[_find(val, "name")] = self.value(_find(val, "value"))
-            else:
-                raise AssertionError(f"effect {key}")
-
-
 class TestStateGini(unittest.TestCase):
-    """te_demog_state_gini against demographics_model.grouped_gini, run through a mini interpreter."""
+    """te_demog_state_gini (the state's wealth bands into the generated formula) against the model."""
 
-    @classmethod
-    def setUpClass(cls):
-        # the state's effect loads its strata into locals and calls the formula the country shares
-        # (te_demog_gini_from_locals): the call is spliced in, so the interpreter runs `if` only
-        blocks = _parse_script(_text(WEALTH_EFFECTS))
-        helper = _find(blocks, "te_demog_gini_from_locals")
-        cls.effect = [part for item in _find(blocks, "te_demog_state_gini")
-                      for part in (helper if item == ("te_demog_gini_from_locals", "=", "yes") else [item])]
-        assert len(cls.effect) > len(helper), "te_demog_state_gini calls te_demog_gini_from_locals"
-        constants = {k: float(_find(v, "value")) for k, _, v in _parse_script(_text(GENERATED_VALUES))
-                     if k in ("te_demog_k_gini_floor", "te_demog_k_gini_scale")}
-        cls.constants = constants
-
-    def shown(self, groups):
-        names = ("lo", "mi", "up")
-        variables = {}
-        for name, (n, y) in zip(names, groups):
-            variables[f"te_dg_n_{name}"], variables[f"te_dg_y_{name}"] = float(n), float(y)
-        interp = _Interp(variables, self.constants)
-        interp.run(self.effect)
-        return interp.vars["te_dg_gini"]
-
-    def test_matches_the_model_in_every_order(self):
-        # (people, income) for lower, middle, upper: in order, and each other order of per-head incomes
-        base = [(900, 1800), (300, 1500), (40, 900)]
-        for perm in itertools.permutations(base):
-            expected = demographics_model.shown_gini(demographics_model.grouped_gini(list(perm)))
-            self.assertAlmostEqual(self.shown(perm), expected, places=9, msg=str(perm))
+    def shown(self, bands):
+        eng = _Engine({})
+        for k in range(1, P.GINI_BANDS + 1):
+            n, y = bands.get(k, (0.0, 0.0))
+            eng.vars[f"te_dg_gn{k}"], eng.vars[f"te_dg_gy{k}"] = float(n), float(y)
+        eng.call("te_demog_state_gini")
+        return eng.vars["te_dg_gini"]
 
     def test_matches_the_model_on_random_states(self):
         rng = random.Random(7)
-        for _ in range(300):
-            groups = []
-            for _ in range(3):
+        for _ in range(200):
+            bands, per_head = {}, 0.0
+            for k in range(1, P.GINI_BANDS + 1):
+                per_head += rng.uniform(0.0, 40.0)
                 n = rng.choice([0, rng.randint(1, 50000)])
-                groups.append((n, n * rng.uniform(0, 40)))
-            expected = demographics_model.shown_gini(demographics_model.grouped_gini(groups))
-            self.assertAlmostEqual(self.shown(groups), expected, places=9, msg=str(groups))
+                bands[k] = (n, n * per_head)
+            expected = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+            self.assertAlmostEqual(self.shown(bands), expected, places=9, msg=str(bands))
 
-    def test_no_people_or_no_income_is_the_floor(self):
-        floor = self.constants["te_demog_k_gini_floor"]
-        self.assertAlmostEqual(self.shown([(0, 0), (0, 0), (0, 0)]), floor)
-        self.assertAlmostEqual(self.shown([(10, 0), (5, 0), (1, 0)]), floor)
+    def test_no_people_or_no_income_is_zero(self):
+        self.assertEqual(self.shown({}), 0.0)
+        self.assertEqual(self.shown({1: (10, 0), 4: (5, 0)}), 0.0)
 
-    def test_one_stratum_is_equal(self):
-        self.assertAlmostEqual(self.shown([(0, 0), (500, 1234), (0, 0)]), self.constants["te_demog_k_gini_floor"])
-
-    def test_state_and_country_share_one_formula(self):
+    def test_state_and_country_share_one_generated_formula(self):
         text = _text(WEALTH_EFFECTS)
         for caller in ("te_demog_state_gini", "te_demog_wc_national"):
             self.assertIn("te_demog_gini_from_locals = yes", _block(text, caller), caller)
-        self.assertIn("name = te_dg_gini", _block(text, "te_demog_gini_from_locals"))
+        self.assertNotIn("te_demog_gini_from_locals = {", text, "the formula is generated, not hand-written")
+        self.assertIn("name = te_dg_gini", _block(_text(GENERATED_EFFECTS), "te_demog_gini_from_locals"))
+
+    def test_the_walk_sums_wealth_bands_not_strata(self):
+        walk = _block(_text(EFFECTS), "te_demog_walks")
+        for call in ("te_demog_gini_band_init = yes", "te_demog_gini_band_add = yes", "te_demog_gini_band_store = yes"):
+            self.assertIn(call, walk)
+        self.assertNotIn("strata = upper", walk)
 
 
 class TestStep(unittest.TestCase):
@@ -1899,12 +1822,14 @@ class TestWealth(unittest.TestCase):
 
     @staticmethod
     def scored(wc, target, own=0.0, coop=0.0, ctry=0.0, bur=0.0, pop=1e6, gini=0.4, priv=10.0,
-               groups=((900, 1350), (90, 270), (10, 150))):
+               bands=None):
         state = {"te_dg_wc": float(wc), "te_dg_wc_target": float(target), "te_dg_lv_own": float(own),
                  "te_dg_lv_self": float(coop), "te_dg_lv_ctry": float(ctry), "te_dg_lv_priv": float(priv),
                  "te_dg_bureaucrats": float(bur), "te_dg_walk_pop": float(pop), "te_dg_gini": float(gini)}
-        for name, (n, y) in zip(("lo", "mi", "up"), groups):
-            state[f"te_dg_n_{name}"], state[f"te_dg_y_{name}"] = float(n), float(y)
+        bands = {1: (900, 1350), 5: (90, 270), 10: (10, 150)} if bands is None else bands
+        for k in range(1, P.GINI_BANDS + 1):
+            n, y = bands.get(k, (0.0, 0.0))
+            state[f"te_dg_gn{k}"], state[f"te_dg_gy{k}"] = float(n), float(y)
         return state
 
     @staticmethod
@@ -1918,9 +1843,9 @@ class TestWealth(unittest.TestCase):
 
     def test_the_national_figure_weighs_states_by_property(self):
         a = self.scored(80, 70, own=30, ctry=40, bur=900, gini=0.5, priv=400,
-                        groups=((900e3, 1.2e6), (90e3, 3e5), (1e4, 2e5)))
+                        bands={2: (900e3, 1.2e6), 6: (90e3, 3e5), 12: (1e4, 2e5)})
         b = self.scored(40, 50, coop=10, ctry=60, bur=100, gini=0.3, priv=200,
-                        groups=((500e3, 6e5), (40e3, 9e4), (2e3, 3e4)))
+                        bands={2: (500e3, 6e5), 6: (40e3, 9e4), 12: (2e3, 3e4)})
         c = {"te_dg_walk_pop": 9e9, "te_dg_lv_own": 9e9}   # no score: left out
         v = self.national([a, b, c])
         # 100 state-owned levels where 1,000 bureaucrats work: a holds 900 of them, b 100
@@ -1945,9 +1870,21 @@ class TestWealth(unittest.TestCase):
         self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
         self.assertIs(v["te_dg_wc_top"], a)
         self.assertIs(v["te_dg_wc_bottom"], b)
-        groups = [(a[f"te_dg_n_{g}"] + b[f"te_dg_n_{g}"], a[f"te_dg_y_{g}"] + b[f"te_dg_y_{g}"]) for g in ("lo", "mi", "up")]
-        expected = demographics_model.shown_gini(demographics_model.grouped_gini(groups))
-        self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed groups")
+        bands = [(a[f"te_dg_gn{k}"] + b[f"te_dg_gn{k}"], a[f"te_dg_gy{k}"] + b[f"te_dg_gy{k}"])
+                 for k in range(1, P.GINI_BANDS + 1)]
+        expected = demographics_model.shown_gini(demographics_model.grouped_gini(bands))
+        self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed bands")
+
+    def test_a_state_from_an_old_save_adds_no_bands(self):
+        # Review Focus 1: before its own pulse a state has only the old strata sums
+        old = self.scored(60, 55, bands={})
+        for k in range(1, P.GINI_BANDS + 1):
+            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        old.update(te_dg_n_lo=900.0, te_dg_y_lo=1350.0)
+        new = self.scored(40, 50, bands={2: (900e3, 1.2e6), 9: (1e4, 2e5)})
+        v = self.national([old, new])
+        want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 1.2e6), (1e4, 2e5)]))
+        self.assertAlmostEqual(v["te_dg_gini"], want, places=9)
 
     def test_the_bureaucrat_share_multiplies_before_it_divides(self):
         """A state with a tiny share of the bureaucrats keeps its precision: values are i64 x 1e-5."""
@@ -2702,3 +2639,55 @@ class TestCauseMultipliersScript(unittest.TestCase):
                 with self.subTest(mods=mods, sol=sol, cause="maternal"):
                     got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
                     self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+
+
+class TestGiniBands(unittest.TestCase):
+    """The generated wealth-band effects (§4.1, wealth bands): each pop's band, and the formula."""
+
+    def band_of(self, wealth):
+        eng = _Engine({"wealth": float(wealth), "total_size": 10.0, "te_demog_pop_income": 3.0})
+        eng.call("te_demog_gini_band_init")
+        eng.call("te_demog_gini_band_add")
+        hit = [k for k in range(1, P.GINI_BANDS + 1) if eng.locals[f"te_dg_w_gn{k}"]]
+        self.assertEqual(len(hit), 1, wealth)
+        self.assertEqual(eng.locals[f"te_dg_w_gy{hit[0]}"], 3.0)
+        return hit[0]
+
+    def test_every_wealth_lands_in_the_models_band(self):
+        # Review Focus 2
+        for wealth in range(0, 100):
+            self.assertEqual(self.band_of(wealth), demographics_model.wealth_band(wealth), wealth)
+
+    def gini(self, bands, truncate=False):
+        eng = _Engine({}, truncate=truncate)
+        for k in range(1, P.GINI_BANDS + 1):
+            n, y = bands.get(k, (0.0, 0.0))
+            eng.locals[f"te_dg_g_n{k}"], eng.locals[f"te_dg_g_y{k}"] = float(n), float(y)
+        eng.call("te_demog_gini_from_locals")
+        return eng.vars["te_dg_gini"]
+
+    def test_the_formula_matches_the_model(self):
+        rng = random.Random(11)
+        for _ in range(200):
+            bands, per_head = {}, 0.0
+            for k in range(1, P.GINI_BANDS + 1):
+                per_head += rng.uniform(0.0, 30.0)          # bands follow income
+                n = rng.choice([0, rng.randint(1, 200000)])
+                bands[k] = (n, n * per_head)
+            want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+            self.assertAlmostEqual(self.gini(bands), want, places=9)
+
+    def test_nobody_or_no_income_or_one_band_is_zero(self):
+        # Review Focus 3 and 4
+        self.assertEqual(self.gini({}), 0.0)
+        self.assertEqual(self.gini({1: (500, 0), 2: (20, 0)}), 0.0)
+        self.assertAlmostEqual(self.gini({7: (1000, 4321)}), 0.0, places=9)
+
+    def test_a_china_sized_country_keeps_its_precision(self):
+        # Review Focus 5: 4e8 people at up to ~950 a head, with the engine's fixed point
+        bands = {2: (3.2e8, 3.2e8 * 2.0), 6: (6e7, 6e7 * 9.0), 12: (2e7, 2e7 * 300.0), 14: (1e6, 1e6 * 945.0)}
+        want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+        self.assertAlmostEqual(self.gini(bands, truncate=True), want, places=3)
+
+    def test_the_constants_of_the_old_map_are_gone(self):
+        self.assertNotIn("te_demog_k_gini", _text(GENERATED_VALUES))

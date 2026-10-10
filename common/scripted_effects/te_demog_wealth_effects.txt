@@ -4,112 +4,13 @@
 # docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Tasks 7 and 11)
 # ============================================================================
 
-# THIS = a state; reads the strata sums te_demog_walks wrote a line earlier.
+# THIS = a state; reads the wealth-band sums te_demog_walks wrote a line earlier.
 # Writes var:te_dg_gini, the Gini the panel shows (spec §4.1), with the formula
-# it shares with the country (te_demog_gini_from_locals).
+# it shares with the country (te_demog_gini_from_locals, generated: the bands are
+# in income order, so it needs no sort, and the panel shows it with no map).
 te_demog_state_gini = {
-	set_local_variable = { name = te_dg_g_n1 value = var:te_dg_n_lo }
-	set_local_variable = { name = te_dg_g_y1 value = var:te_dg_y_lo }
-	set_local_variable = { name = te_dg_g_n2 value = var:te_dg_n_mi }
-	set_local_variable = { name = te_dg_g_y2 value = var:te_dg_y_mi }
-	set_local_variable = { name = te_dg_g_n3 value = var:te_dg_n_up }
-	set_local_variable = { name = te_dg_g_y3 value = var:te_dg_y_up }
+	te_demog_gini_band_load = yes
 	te_demog_gini_from_locals = yes
-}
-
-# THIS = a state or a country, with the people and income of its lower, middle
-# and upper strata in the locals te_dg_g_n1-3 and te_dg_g_y1-3 (a country's
-# summed over its states, so its Gini is taken over all their groups, not
-# averaged: spec §4.1). Writes var:te_dg_gini on THIS: the three strata as
-# groups, each equal inside, mirroring demographics_model.grouped_gini.
-#
-# With the groups ordered 1, 2, 3 by income per head, p_k their share of people
-# and S_k their running share of income (S_3 = 1):
-#     G = 1 - sum p_k (S_k + S_k-1) = 1 - p1 S1 - p2 (S2 + S1) - p3 (1 + S2)
-# and the panel shows k_floor + k_scale x G, clamped 0-0.9.
-#
-# Lower < middle < upper by income per head is usual but not guaranteed, and a
-# mis-ordered pair undercounts G (it can go negative), so the groups are put
-# in order first: three compare-and-swaps on the slots, then one formula. A
-# group with no people has no income either, sorts to the bottom and adds
-# nothing. With no people or no income the Gini is 0, as in grouped_gini.
-# Every sum is turned into a share before it is multiplied, so nothing in
-# here is larger than people or income itself.
-te_demog_gini_from_locals = {
-	set_local_variable = { name = te_dg_g_h1 value = { value = local_var:te_dg_g_y1 divide = { value = local_var:te_dg_g_n1 min = 1 } } }
-	set_local_variable = { name = te_dg_g_h2 value = { value = local_var:te_dg_g_y2 divide = { value = local_var:te_dg_g_n2 min = 1 } } }
-	set_local_variable = { name = te_dg_g_h3 value = { value = local_var:te_dg_g_y3 divide = { value = local_var:te_dg_g_n3 min = 1 } } }
-	# the sorting network: 1-2, 2-3, 1-2 leaves slot 1 the poorest per head
-	if = {
-		limit = { local_var:te_dg_g_h1 > local_var:te_dg_g_h2 }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_n1 }
-		set_local_variable = { name = te_dg_g_n1 value = local_var:te_dg_g_n2 }
-		set_local_variable = { name = te_dg_g_n2 value = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_y1 }
-		set_local_variable = { name = te_dg_g_y1 value = local_var:te_dg_g_y2 }
-		set_local_variable = { name = te_dg_g_y2 value = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_h1 }
-		set_local_variable = { name = te_dg_g_h1 value = local_var:te_dg_g_h2 }
-		set_local_variable = { name = te_dg_g_h2 value = local_var:te_dg_g_t }
-	}
-	if = {
-		limit = { local_var:te_dg_g_h2 > local_var:te_dg_g_h3 }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_n2 }
-		set_local_variable = { name = te_dg_g_n2 value = local_var:te_dg_g_n3 }
-		set_local_variable = { name = te_dg_g_n3 value = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_y2 }
-		set_local_variable = { name = te_dg_g_y2 value = local_var:te_dg_g_y3 }
-		set_local_variable = { name = te_dg_g_y3 value = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_h2 }
-		set_local_variable = { name = te_dg_g_h2 value = local_var:te_dg_g_h3 }
-		set_local_variable = { name = te_dg_g_h3 value = local_var:te_dg_g_t }
-	}
-	if = {
-		limit = { local_var:te_dg_g_h1 > local_var:te_dg_g_h2 }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_n1 }
-		set_local_variable = { name = te_dg_g_n1 value = local_var:te_dg_g_n2 }
-		set_local_variable = { name = te_dg_g_n2 value = local_var:te_dg_g_t }
-		set_local_variable = { name = te_dg_g_t value = local_var:te_dg_g_y1 }
-		set_local_variable = { name = te_dg_g_y1 value = local_var:te_dg_g_y2 }
-		set_local_variable = { name = te_dg_g_y2 value = local_var:te_dg_g_t }
-	}
-	set_local_variable = { name = te_dg_g_pop value = { value = local_var:te_dg_g_n1 add = local_var:te_dg_g_n2 add = local_var:te_dg_g_n3 } }
-	set_local_variable = { name = te_dg_g_inc value = { value = local_var:te_dg_g_y1 add = local_var:te_dg_g_y2 add = local_var:te_dg_g_y3 } }
-	set_local_variable = { name = te_dg_g_gini value = 0 }
-	if = {
-		limit = {
-			local_var:te_dg_g_pop > 0
-			local_var:te_dg_g_inc > 0
-		}
-		set_local_variable = { name = te_dg_g_p1 value = { value = local_var:te_dg_g_n1 divide = { value = local_var:te_dg_g_pop min = 1 } } }
-		set_local_variable = { name = te_dg_g_p2 value = { value = local_var:te_dg_g_n2 divide = { value = local_var:te_dg_g_pop min = 1 } } }
-		set_local_variable = { name = te_dg_g_p3 value = { value = local_var:te_dg_g_n3 divide = { value = local_var:te_dg_g_pop min = 1 } } }
-		set_local_variable = { name = te_dg_g_s1 value = { value = local_var:te_dg_g_y1 divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
-		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y1 add = local_var:te_dg_g_y2 divide = { value = local_var:te_dg_g_inc min = 0.00001 } } }
-		# the three terms of the sum: p1 S1, p2 (S2 + S1), p3 (1 + S2)
-		set_local_variable = { name = te_dg_g_t1 value = { value = local_var:te_dg_g_p1 multiply = local_var:te_dg_g_s1 } }
-		set_local_variable = { name = te_dg_g_t2 value = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s1 multiply = local_var:te_dg_g_p2 } }
-		set_local_variable = { name = te_dg_g_t3 value = { value = 1 add = local_var:te_dg_g_s2 multiply = local_var:te_dg_g_p3 } }
-		set_local_variable = {
-			name = te_dg_g_gini
-			value = {
-				value = 1
-				subtract = local_var:te_dg_g_t1
-				subtract = local_var:te_dg_g_t2
-				subtract = local_var:te_dg_g_t3
-			}
-		}
-	}
-	set_variable = {
-		name = te_dg_gini
-		value = {
-			value = local_var:te_dg_g_gini
-			multiply = te_demog_k_gini_scale
-			add = te_demog_k_gini_floor
-			min = 0
-			max = 0.9
-		}
-	}
 }
 
 # ============================================================================
@@ -134,7 +35,7 @@ te_demog_gini_from_locals = {
 #                       weighted the same way, so they add up to the target (the
 #                       panel's bars)
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
-#   te_dg_gini          the Gini over all the states' strata
+#   te_dg_gini          the Gini over all the states' wealth bands
 #   te_dg_war_shock     the war shocks taken since the country was last at peace
 #                       on 31 December
 #
@@ -316,19 +217,14 @@ te_demog_wc_national = {
 				set_local_variable = { name = te_dg_wc_mode value = 2 }
 			}
 		}
-		# the weighted sums, and the strata summed for the country's Gini
+		# the weighted sums, and the wealth bands summed for the country's Gini
 		set_local_variable = { name = te_dg_wc_wsum value = 0 }
 		set_local_variable = { name = te_dg_wc_s_score value = 0 }
 		set_local_variable = { name = te_dg_wc_s_target value = 0 }
 		set_local_variable = { name = te_dg_wc_s_land value = 0 }
 		set_local_variable = { name = te_dg_wc_s_own value = 0 }
 		set_local_variable = { name = te_dg_wc_s_ineq value = 0 }
-		set_local_variable = { name = te_dg_g_n1 value = 0 }
-		set_local_variable = { name = te_dg_g_y1 value = 0 }
-		set_local_variable = { name = te_dg_g_n2 value = 0 }
-		set_local_variable = { name = te_dg_g_y2 value = 0 }
-		set_local_variable = { name = te_dg_g_n3 value = 0 }
-		set_local_variable = { name = te_dg_g_y3 value = 0 }
+		te_demog_gini_band_zero = yes
 		every_scope_state = {
 			limit = { has_variable = te_dg_wc }
 			set_local_variable = { name = te_dg_wc_w value = 1 }
@@ -358,12 +254,11 @@ te_demog_wc_national = {
 			change_local_variable = { name = te_dg_wc_s_land add = { value = te_demog_wc_land_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_own add = { value = te_demog_wc_ownership_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_ineq add = { value = te_demog_wc_inequality_term multiply = local_var:te_dg_wc_w } }
-			change_local_variable = { name = te_dg_g_n1 add = var:te_dg_n_lo }
-			change_local_variable = { name = te_dg_g_y1 add = var:te_dg_y_lo }
-			change_local_variable = { name = te_dg_g_n2 add = var:te_dg_n_mi }
-			change_local_variable = { name = te_dg_g_y2 add = var:te_dg_y_mi }
-			change_local_variable = { name = te_dg_g_n3 add = var:te_dg_n_up }
-			change_local_variable = { name = te_dg_g_y3 add = var:te_dg_y_up }
+			# a state from an old save has no bands until its own pulse (the old strata sums)
+			if = {
+				limit = { has_variable = te_dg_gn1 }
+				te_demog_gini_band_add_state = yes
+			}
 		}
 		# every weighting sums to at least 1
 		set_variable = { name = te_inh_concentration value = { value = local_var:te_dg_wc_s_score divide = { value = local_var:te_dg_wc_wsum min = 1 } min = 0 max = 100 } }
