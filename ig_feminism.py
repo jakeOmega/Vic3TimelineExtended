@@ -151,7 +151,7 @@ law_heavy = {
 input_directory = os.path.join(base_game_path, "game", "common", "interest_groups")
 output_directory = os.path.join(mod_path, "common", "interest_groups")
 # 00_armed_forces.txt is held out while the INJECT probe runs
-# (common/interest_groups/zz_te_ig_inject_probe.txt): the probe needs vanilla's
+# (common/interest_groups/zz_te_ig_inject_probe_*.txt): the probe needs vanilla's
 # own file to load. Its profile, to restore: balanced, at 0.3 commander,
 # 0.4 politician and 0.5 agitator.
 modifications = {

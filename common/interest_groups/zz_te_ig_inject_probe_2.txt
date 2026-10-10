@@ -1,0 +1,12 @@
+﻿# ============================================================================
+# INJECT PROBE, part 2 of 2: interest groups (temporary, do not merge)
+# ============================================================================
+# Loads after zz_te_ig_inject_probe_1.txt, which injects value = 1 into the
+# same field. How to read the result: the header of part 1.
+# ============================================================================
+
+INJECT:ig_armed_forces = {
+	female_commander_chance = {
+		value = 0
+	}
+}

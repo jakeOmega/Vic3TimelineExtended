@@ -1,0 +1,28 @@
+﻿# ============================================================================
+# INJECT PROBE, part 1 of 2: interest groups (temporary, do not merge)
+# ============================================================================
+# Test 1 (read 2026-10-10): does an INJECT reach a field vanilla's interest
+# group already declares? Vanilla's Armed Forces have
+# female_commander_chance = { value = 0.0 }; with this file alone, all four
+# recruited Armed Forces generals were women, so it does.
+#
+# Test 2 (this file plus zz_te_ig_inject_probe_2.txt, which loads after it):
+# does a later injected script value replace the earlier one or add to it?
+# This file injects 1 and part 2 injects 0, so Armed Forces generals are:
+#   all women: the blocks add up (1 + 0). An INJECT for a field vanilla sets
+#     above 0 carries only the mod's branches.
+#   all men: the later block wins (0). An INJECT restates vanilla's whole
+#     field, its value = line included, then adds the mod's branches.
+# Generals in other groups are the control. Also search debug.log and
+# error.log for zz_te_ig_inject_probe and ig_armed_forces.
+#
+# Vanilla's own 00_armed_forces.txt must load, so the mod's generated copy is
+# removed and ig_feminism.py holds that file out while this probe exists. The
+# zz_ prefix sorts this file after the vanilla file it injects into.
+# ============================================================================
+
+INJECT:ig_armed_forces = {
+	female_commander_chance = {
+		value = 1
+	}
+}
