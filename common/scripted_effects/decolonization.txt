@@ -305,6 +305,16 @@ form_decolonized_country = { # scope (THIS) is capital state of new country
 	# fall back to largest non-owner-primary pop; last-resort use any culture
 	# present in the state. This makes the call deterministic even when the
 	# indigenous homeland culture has been displaced (a common Round Table case).
+	# A saved scope lasts until the whole effect chain ends, and .201 / .204
+	# (up to three) and .401.a (one per marked state) call this more than once
+	# in one option. Uncleared, a capital with no homeland culture found the
+	# last country's culture set, skipped both fallbacks, and formed with it.
+	# Only this scope is saved conditionally; the capital and the parent are
+	# saved afresh on every call above.
+	if = {
+		limit = { exists = scope:new_country_culture }
+		clear_saved_scope = new_country_culture
+	}
 	random_scope_culture = {
 		limit = { has_homeland = scope:new_country_capital }
 		save_scope_as = new_country_culture
