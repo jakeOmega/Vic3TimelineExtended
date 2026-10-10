@@ -162,8 +162,9 @@ The means to plan a family = (0.4 + `state_contraception_add`, at most 1) × (0.
 historical 46.1, which weakened the child-survival term: Britain 1900 read 4.27 children per woman against about 3.5.
 `demographics_harness.py fertility` checks seven scenarios against §2.3's bands. The fit varied the era-3 pair's sum,
 the Pill and modern pharmaceuticals in 0.05 steps, with the traditional 0.4 and the desired-fertility weights fixed, so
-the 1836 census is unchanged (no country starts with an era-3 tech). It ranked by distance outside the bands, then by
-the squared distance to history (Britain 1900 3.5, the West 1950 2.9 and 1990 1.7, India 1975 5.2).
+the 1836 census is unchanged (no country starts with an era-3 tech). Every means tech keeps a line of at least 0.05, so
+each shows one in its tooltip. It ranked by distance outside the bands, then by the squared distance to history
+(Britain 1900 3.5, the West 1950 2.9 and 1990 1.7, India 1975 5.2).
 
 | Carrier | Contraception |
 |---|---|
@@ -183,7 +184,10 @@ the squared distance to history (Britain 1900 3.5, the West 1950 2.9 and 1990 1.
 
 - **The tiers add**, so research order matters. The Pill without vulcanization or feminism gives 0.4 + 0.05.
 - **The Pill's line is small.** The West reached 2.5–3 children per woman before it, so the fit puts the transition's
-  means on the era-3 pair. A Pill line of +0.10 fits almost as well (West 1990 1.47).
+  means on the era-3 pair. What the anchors fix is two sums: the era-3 pair's (0.35) and the Pill's and modern
+  pharmaceuticals' (0.05–0.10); how each sum splits is a judgment. With the 0.05 floor, a Pill line of +0.10 fits
+  almost as well (West 1990 1.47); without it, the Pill +0.10 and modern pharmaceuticals 0 fit slightly better (West
+  1990 1.59), at the cost of a means tech with no line.
 - **The 1836 rows stay high.** Lowering them needs the traditional means or the desired-fertility weights, which moves
   every 1836 census: phase 2's calibration (owner, 2026-10-10).
 
