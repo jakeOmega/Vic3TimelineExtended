@@ -285,6 +285,7 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
   - **Academics (intelligentsia):** Generally support progressive, scientific, or diplomatic approaches.
   - **Lower strata (workers/peasants):** React to standard-of-living impacts; oppose austerity; approve of relief spending.
 - For IG leader ideology changes (`set_ideology`), always pair with some cost — these are powerful effects.
+- **Find a stance's party or IG from law stances, not from who governs.** An option that takes a side on an issue ("Champion equal rights", "Secure our borders") must reward the party or IG that holds that side. A random governing party, or a random opposition party, holds no particular view. Fifteen `modern_election_events` did this and cast a multiculturalist government as the defender of tradition. For party momentum, call `me_save_issue_parties = { ISSUE = <issue> FOR = <scope> AGAINST = <scope> }` (`common/scripted_effects/me_election_issue_effects.txt`), defining a new issue's laws in `common/script_values/me_election_issue_values.txt`. For a single IG, select with `law_stance` (the `opposing_ig` pattern in `extra_law_events.txt`). Government membership still fits options about the incumbent's own record: taking credit for a boom, or defending its own surveillance program.
 
 ### Modifier Design
 - **Modifiers in `common/static_modifiers/extra_modifiers.txt`** — every new modifier needs an `icon`, gameplay fields, and two loc keys.

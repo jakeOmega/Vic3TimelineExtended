@@ -1,0 +1,41 @@
+﻿# Modern election events: the parties on each side of a campaign issue.
+#
+# An event that asks the country to take a side on an issue (equal rights,
+# refugees, tariffs, ...) gives momentum to the party that holds that side. The
+# side comes from the law stances of each party's interest groups
+# (me_ig_<ISSUE>_lean, weighted by clout and summed per party in
+# me_py_<ISSUE>_support; common/script_values/me_election_issue_values.txt),
+# never from who is in government. These events used to give one side to a
+# random governing party and the other to a random opposition party, which cast
+# a multiculturalist government as the defender of tradition and its
+# ethno-nationalist opposition as the champion of equal rights.
+#
+# Saves scope:$FOR$, the party most for the issue, and scope:$AGAINST$, the
+# party most against it. Either stays unset when no party leans that way, so
+# callers guard each with exists. The two are never the same party.
+#
+# Country scope.
+me_save_issue_parties = {
+	if = {
+		limit = {
+			any_active_party = { me_py_$ISSUE$_support > 0 }
+		}
+		ordered_active_party = {
+			limit = { me_py_$ISSUE$_support > 0 }
+			order_by = me_py_$ISSUE$_support
+			position = 0
+			save_scope_as = $FOR$
+		}
+	}
+	if = {
+		limit = {
+			any_active_party = { me_py_$ISSUE$_support < 0 }
+		}
+		ordered_active_party = {
+			limit = { me_py_$ISSUE$_support < 0 }
+			order_by = me_py_$ISSUE$_opposition
+			position = 0
+			save_scope_as = $AGAINST$
+		}
+	}
+}

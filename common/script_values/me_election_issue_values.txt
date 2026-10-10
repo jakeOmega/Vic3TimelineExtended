@@ -1,0 +1,555 @@
+﻿# ============================================================================
+# MODERN ELECTION ISSUES
+# Which party owns each side of an issue a modern election event raises.
+# Read by me_save_issue_parties (common/scripted_effects/me_election_issue_effects.txt).
+#
+# me_ig_<issue>_lean (interest group): the group's law stances on the issue,
+#   +2 strongly approve / +1 approve / -1 disapprove / -2 strongly disapprove
+#   for each law on the issue's side, the reverse for each law against it.
+#   law_stance reads the group's ideologies (its leader's included) and
+#   ignores which law is in force.
+# me_py_<issue>_support (party): its members' leans weighted by clout and
+#   summed. Positive: the party is for the issue; negative: against it.
+# me_py_<issue>_opposition (party): the same, negated, so ordered_active_party
+#   (which sorts descending) can find the party most against it.
+# ============================================================================
+
+# modern_election_events.16 (A Question of Equality): equal rights for minorities.
+me_ig_equality_lean = {
+	value = 0
+	# law_multicultural (for)
+	if = { limit = { law_stance = { law = law_type:law_multicultural value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value < neutral } } add = -1 }
+	# law_minority_rights_protection (for)
+	if = { limit = { law_stance = { law = law_type:law_minority_rights_protection value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_protection value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_protection value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_protection value < neutral } } add = -1 }
+	# law_minority_rights_affirmative_action (for)
+	if = { limit = { law_stance = { law = law_type:law_minority_rights_affirmative_action value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_affirmative_action value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_affirmative_action value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_affirmative_action value < neutral } } add = -1 }
+	# law_ethnostate (against)
+	if = { limit = { law_stance = { law = law_type:law_ethnostate value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ethnostate value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_ethnostate value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ethnostate value < neutral } } add = 1 }
+	# law_racial_segregation (against)
+	if = { limit = { law_stance = { law = law_type:law_racial_segregation value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_racial_segregation value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_racial_segregation value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_racial_segregation value < neutral } } add = 1 }
+	# law_minority_rights_discrimination (against)
+	if = { limit = { law_stance = { law = law_type:law_minority_rights_discrimination value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_discrimination value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_discrimination value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_minority_rights_discrimination value < neutral } } add = 1 }
+}
+
+me_py_equality_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_equality_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_equality_opposition = {
+	value = 0
+	subtract = me_py_equality_support
+}
+
+# modern_election_events.27 (Shores of the Displaced): taking in refugees.
+me_ig_migration_lean = {
+	value = 0
+	# law_ministry_of_refugee_affairs (for)
+	if = { limit = { law_stance = { law = law_type:law_ministry_of_refugee_affairs value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_refugee_affairs value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_refugee_affairs value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_refugee_affairs value < neutral } } add = -1 }
+	# law_no_migration_controls (for)
+	if = { limit = { law_stance = { law = law_type:law_no_migration_controls value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_migration_controls value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_migration_controls value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_migration_controls value < neutral } } add = -1 }
+	# law_multicultural (for)
+	if = { limit = { law_stance = { law = law_type:law_multicultural value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_multicultural value < neutral } } add = -1 }
+	# law_no_ministry_of_refugee_affairs (against)
+	if = { limit = { law_stance = { law = law_type:law_no_ministry_of_refugee_affairs value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_refugee_affairs value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_refugee_affairs value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_refugee_affairs value < neutral } } add = 1 }
+	# law_closed_borders (against)
+	if = { limit = { law_stance = { law = law_type:law_closed_borders value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_closed_borders value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_closed_borders value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_closed_borders value < neutral } } add = 1 }
+	# law_migration_controls (against)
+	if = { limit = { law_stance = { law = law_type:law_migration_controls value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_migration_controls value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_migration_controls value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_migration_controls value < neutral } } add = 1 }
+}
+
+me_py_migration_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_migration_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_migration_opposition = {
+	value = 0
+	subtract = me_py_migration_support
+}
+
+# modern_election_events.3 (Scorched Ballots) and .21 (Toxic Legacy): environmental protection.
+me_ig_environment_lean = {
+	value = 0
+	# law_ministry_of_the_environment (for)
+	if = { limit = { law_stance = { law = law_type:law_ministry_of_the_environment value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_the_environment value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_the_environment value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ministry_of_the_environment value < neutral } } add = -1 }
+	# law_managed_fossil_phaseout (for)
+	if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < neutral } } add = -1 }
+	# law_fossil_expansion_moratorium (for)
+	if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < neutral } } add = -1 }
+	# law_no_ministry_of_the_environment (against)
+	if = { limit = { law_stance = { law = law_type:law_no_ministry_of_the_environment value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_the_environment value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_the_environment value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_the_environment value < neutral } } add = 1 }
+	# law_unrestricted_extraction (against)
+	if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < neutral } } add = 1 }
+}
+
+me_py_environment_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_environment_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_environment_opposition = {
+	value = 0
+	subtract = me_py_environment_support
+}
+
+# modern_election_events.14 (Red Menace): the socialist left, the red scare's target.
+me_ig_socialism_lean = {
+	value = 0
+	# law_command_economy (for)
+	if = { limit = { law_stance = { law = law_type:law_command_economy value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_command_economy value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_command_economy value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_command_economy value < neutral } } add = -1 }
+	# law_cooperative_ownership (for)
+	if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < neutral } } add = -1 }
+	# law_council_republic (for)
+	if = { limit = { law_stance = { law = law_type:law_council_republic value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_council_republic value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_council_republic value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_council_republic value < neutral } } add = -1 }
+	# law_laissez_faire (against)
+	if = { limit = { law_stance = { law = law_type:law_laissez_faire value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < neutral } } add = 1 }
+}
+
+me_py_socialism_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_socialism_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_socialism_opposition = {
+	value = 0
+	subtract = me_py_socialism_support
+}
+
+# modern_election_events.24 (Rally 'Round the Flag): civil liberties against a security crackdown.
+me_ig_civil_liberties_lean = {
+	value = 0
+	# law_guaranteed_liberties (for)
+	if = { limit = { law_stance = { law = law_type:law_guaranteed_liberties value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_guaranteed_liberties value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_guaranteed_liberties value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_guaranteed_liberties value < neutral } } add = -1 }
+	# law_protected_speech (for)
+	if = { limit = { law_stance = { law = law_type:law_protected_speech value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_speech value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_speech value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_speech value < neutral } } add = -1 }
+	# law_secret_police (against)
+	if = { limit = { law_stance = { law = law_type:law_secret_police value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_secret_police value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_secret_police value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_secret_police value < neutral } } add = 1 }
+	# law_militarized_police (against)
+	if = { limit = { law_stance = { law = law_type:law_militarized_police value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_militarized_police value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_militarized_police value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_militarized_police value < neutral } } add = 1 }
+	# law_outlawed_dissent (against)
+	if = { limit = { law_stance = { law = law_type:law_outlawed_dissent value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_outlawed_dissent value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_outlawed_dissent value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_outlawed_dissent value < neutral } } add = 1 }
+}
+
+me_py_civil_liberties_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_civil_liberties_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_civil_liberties_opposition = {
+	value = 0
+	subtract = me_py_civil_liberties_support
+}
+
+# modern_election_events.20 (A Woman's Place): women's rights.
+me_ig_womens_rights_lean = {
+	value = 0
+	# law_womens_suffrage (for)
+	if = { limit = { law_stance = { law = law_type:law_womens_suffrage value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_womens_suffrage value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_womens_suffrage value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_womens_suffrage value < neutral } } add = -1 }
+	# law_protected_class (for)
+	if = { limit = { law_stance = { law = law_type:law_protected_class value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_class value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_class value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protected_class value < neutral } } add = -1 }
+	# law_no_womens_rights (against)
+	if = { limit = { law_stance = { law = law_type:law_no_womens_rights value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_womens_rights value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_womens_rights value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_womens_rights value < neutral } } add = 1 }
+}
+
+me_py_womens_rights_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_womens_rights_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_womens_rights_opposition = {
+	value = 0
+	subtract = me_py_womens_rights_support
+}
+
+# modern_election_events.23 (The Genome Question): genetic research.
+me_ig_genetics_lean = {
+	value = 0
+	# law_open_source_genetics (for)
+	if = { limit = { law_stance = { law = law_type:law_open_source_genetics value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_open_source_genetics value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_open_source_genetics value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_open_source_genetics value < neutral } } add = -1 }
+	# law_corporate_genetic_licensing (for)
+	if = { limit = { law_stance = { law = law_type:law_corporate_genetic_licensing value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_corporate_genetic_licensing value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_corporate_genetic_licensing value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_corporate_genetic_licensing value < neutral } } add = -1 }
+	# law_ban_on_genetic_modification (against)
+	if = { limit = { law_stance = { law = law_type:law_ban_on_genetic_modification value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ban_on_genetic_modification value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_ban_on_genetic_modification value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_ban_on_genetic_modification value < neutral } } add = 1 }
+}
+
+me_py_genetics_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_genetics_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_genetics_opposition = {
+	value = 0
+	subtract = me_py_genetics_support
+}
+
+# modern_election_events.26 (Trade War Rhetoric): tariffs against free trade.
+me_ig_protectionism_lean = {
+	value = 0
+	# law_protectionism (for)
+	if = { limit = { law_stance = { law = law_type:law_protectionism value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protectionism value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_protectionism value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_protectionism value < neutral } } add = -1 }
+	# law_free_trade (against)
+	if = { limit = { law_stance = { law = law_type:law_free_trade value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_free_trade value < neutral } } add = 1 }
+}
+
+me_py_protectionism_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_protectionism_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_protectionism_opposition = {
+	value = 0
+	subtract = me_py_protectionism_support
+}
+
+# modern_election_events.29 (Free Money?): a universal basic income.
+me_ig_welfare_lean = {
+	value = 0
+	# law_universal_basic_income (for)
+	if = { limit = { law_stance = { law = law_type:law_universal_basic_income value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_basic_income value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_basic_income value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_basic_income value < neutral } } add = -1 }
+	# law_old_age_pension (for)
+	if = { limit = { law_stance = { law = law_type:law_old_age_pension value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_old_age_pension value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_old_age_pension value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_old_age_pension value < neutral } } add = -1 }
+	# law_no_social_security (against)
+	if = { limit = { law_stance = { law = law_type:law_no_social_security value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_social_security value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_social_security value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_no_social_security value < neutral } } add = 1 }
+	# law_poor_laws (against)
+	if = { limit = { law_stance = { law = law_type:law_poor_laws value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_poor_laws value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_poor_laws value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_poor_laws value < neutral } } add = 1 }
+}
+
+me_py_welfare_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_welfare_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_welfare_opposition = {
+	value = 0
+	subtract = me_py_welfare_support
+}
+
+# modern_election_events.31 (Designer Candidate): human enhancement.
+me_ig_augmentation_lean = {
+	value = 0
+	# law_unrestricted_augmentation (for)
+	if = { limit = { law_stance = { law = law_type:law_unrestricted_augmentation value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_augmentation value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_augmentation value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_unrestricted_augmentation value < neutral } } add = -1 }
+	# law_regulated_augmentation_market (for)
+	if = { limit = { law_stance = { law = law_type:law_regulated_augmentation_market value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_regulated_augmentation_market value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_regulated_augmentation_market value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_regulated_augmentation_market value < neutral } } add = -1 }
+	# law_human_purity (against)
+	if = { limit = { law_stance = { law = law_type:law_human_purity value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_human_purity value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_human_purity value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_human_purity value < neutral } } add = 1 }
+}
+
+me_py_augmentation_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_augmentation_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_augmentation_opposition = {
+	value = 0
+	subtract = me_py_augmentation_support
+}
+
+# modern_election_events.32 (One Small Vote for Man): widening the franchise.
+me_ig_suffrage_lean = {
+	value = 0
+	# law_universal_suffrage (for)
+	if = { limit = { law_stance = { law = law_type:law_universal_suffrage value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_suffrage value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_suffrage value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_universal_suffrage value < neutral } } add = -1 }
+	# law_landed_voting (against)
+	if = { limit = { law_stance = { law = law_type:law_landed_voting value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_landed_voting value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_landed_voting value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_landed_voting value < neutral } } add = 1 }
+	# law_wealth_voting (against)
+	if = { limit = { law_stance = { law = law_type:law_wealth_voting value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_wealth_voting value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_wealth_voting value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_wealth_voting value < neutral } } add = 1 }
+}
+
+me_py_suffrage_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_suffrage_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_suffrage_opposition = {
+	value = 0
+	subtract = me_py_suffrage_support
+}
+
+# modern_election_events.33 (Thought Made Manifest): direct democracy.
+me_ig_direct_democracy_lean = {
+	value = 0
+	# law_direct_democracy (for)
+	if = { limit = { law_stance = { law = law_type:law_direct_democracy value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_direct_democracy value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_direct_democracy value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_direct_democracy value < neutral } } add = -1 }
+}
+
+me_py_direct_democracy_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_direct_democracy_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_direct_democracy_opposition = {
+	value = 0
+	subtract = me_py_direct_democracy_support
+}
+
+# modern_election_events.34 (Harvest of Votes): industrial against traditional agriculture.
+me_ig_synthetic_food_lean = {
+	value = 0
+	# law_commercialized_agriculture (for)
+	if = { limit = { law_stance = { law = law_type:law_commercialized_agriculture value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_commercialized_agriculture value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_commercialized_agriculture value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_commercialized_agriculture value < neutral } } add = -1 }
+	# law_agrarianism (against)
+	if = { limit = { law_stance = { law = law_type:law_agrarianism value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_agrarianism value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < neutral } } add = 1 }
+	# law_traditionalism (against)
+	if = { limit = { law_stance = { law = law_type:law_traditionalism value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_traditionalism value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < neutral } } add = 1 }
+}
+
+me_py_synthetic_food_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_synthetic_food_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_synthetic_food_opposition = {
+	value = 0
+	subtract = me_py_synthetic_food_support
+}
+
+# modern_election_events.35 (The Autonomous Question): protecting workers against automation.
+me_ig_worker_protection_lean = {
+	value = 0
+	# law_worker_protections (for)
+	if = { limit = { law_stance = { law = law_type:law_worker_protections value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_worker_protections value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < neutral } } add = -1 }
+	# law_pro_labor_ministry_of_labor (for)
+	if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > approve } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > neutral } } add = 1 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < disapprove } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < neutral } } add = -1 }
+	# law_pro_capital_ministry_of_labor (against)
+	if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < neutral } } add = 1 }
+	# law_laissez_faire (against)
+	if = { limit = { law_stance = { law = law_type:law_laissez_faire value > approve } } add = -2 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value > neutral } } add = -1 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < disapprove } } add = 2 }
+	else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < neutral } } add = 1 }
+}
+
+me_py_worker_protection_support = {
+	value = 0
+	every_member = {
+		add = {
+			value = me_ig_worker_protection_lean
+			multiply = ig_clout
+		}
+	}
+}
+
+me_py_worker_protection_opposition = {
+	value = 0
+	subtract = me_py_worker_protection_support
+}
