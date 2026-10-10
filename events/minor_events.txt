@@ -567,8 +567,11 @@ minor_events_timelineextended.7 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	# contagion_crash is set by this event's immediate, but the engine reads the
-	# title when banking_cycle_spread_contagion queues the event, before then:
-	# a country never hit before has no value yet. Hence has_variable.
+	# title when banking_cycle_spread_contagion queues the event, before then,
+	# so nothing is set yet: hence has_variable, and `after` removes the value
+	# so a later wave does not read this one's. If the engine also keeps that
+	# early title, a crash shows the plain title (the roll stays at fire time:
+	# #428's undecided window between reached and decided depends on it).
 	title = {
 		first_valid = {
 			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 } desc = minor_events_timelineextended.7.t_cascade }
@@ -795,6 +798,10 @@ minor_events_timelineextended.7 = {
 			banking_crisis_wave_check_great_depression = yes
 		}
 		banking_cycle_post_event_refresh = yes
+		# The outcome is this event's alone. The next wave's contagion event
+		# reads its title when it is queued, before its immediate rolls again,
+		# so a value left here titled that event with this wave's outcome.
+		remove_variable = contagion_crash
 	}
 }
 

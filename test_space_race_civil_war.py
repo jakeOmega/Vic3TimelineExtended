@@ -206,6 +206,11 @@ class CostModifierTests(unittest.TestCase):
         check = _definition(TRIGGERS, "sr_cost_modifiers_missing_base")
         self.assertIn("sr_milestone_billed_$MILESTONE$ = yes", check)
         entry = _block(check, "je:je_space_race_$MILESTONE$ ?")
+        # Either modifier missing is enough (OR, not AND): one can go
+        # without the other, for instance when a funding click lands while
+        # the entry cannot be found.
+        self.assertTrue(entry.strip().startswith("OR = {"), entry)
+        self.assertEqual(entry.count("AND = {"), 2)
         for modifier, multiplier in pairs:
             with self.subTest(modifier=modifier):
                 # Missing only where the multiplier is not zero, so a zero

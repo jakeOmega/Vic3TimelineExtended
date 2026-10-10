@@ -813,7 +813,7 @@ un_vote_standing_request_contribution = {
 	}
 	if = {
 		limit = {
-			exists = scope:un_vote_proposer
+			un_vote_relations_reachable = { WHO = scope:un_vote_proposer }
 			NOT = { THIS = scope:un_vote_proposer }
 		}
 		change_relations = { country = scope:un_vote_proposer value = un_standing_delivery_relations }
