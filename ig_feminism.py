@@ -150,12 +150,11 @@ law_heavy = {
 
 input_directory = os.path.join(base_game_path, "game", "common", "interest_groups")
 output_directory = os.path.join(mod_path, "common", "interest_groups")
+# 00_armed_forces.txt is held out while the INJECT probe runs
+# (common/interest_groups/zz_te_ig_inject_probe.txt): the probe needs vanilla's
+# own file to load. Its profile, to restore: balanced, at 0.3 commander,
+# 0.4 politician and 0.5 agitator.
 modifications = {
-    "00_armed_forces.txt": {
-        "female_commander_chance": normalize_values(balanced, 0.3),
-        "female_politician_chance": normalize_values(balanced, 0.4),
-        "female_agitator_chance": normalize_values(balanced, 0.5),
-    },
     "00_devout.txt": {
         "female_commander_chance": normalize_values(law_heavy, 0.1),
         "female_politician_chance": normalize_values(law_heavy, 0.3),
