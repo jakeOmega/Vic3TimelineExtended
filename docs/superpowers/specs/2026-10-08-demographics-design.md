@@ -1049,7 +1049,8 @@ to be sane.
   inheritance (Forced Heirship × the agrarian share), literacy, the church law. It also closes part of the gap to its
   neighbours', as the decline spread from France to Wallonia, Switzerland and Catalonia. Forced Heirship's rural
   birth cut (`inh_forced_heirship_rural`, −15% × the agrarian share) tells the same story, so the two should be
-  folded together when this is built.
+  folded together when this is built. Late Marriage and Birth Spacing, two practices on the same machinery, per
+  state: `2026-10-10-demographics-late-marriage-design.md`.
 - **What the panel's children per woman shows once phase 2 applies the births (owner's question, 2026-10-10).** The
   census's figure starts from the standard-of-living curve and reads no engine birth modifier: Forced Heirship,
   literacy's −0.1, the Pill's and the family-policy laws' flat lines. The engine's births take them all, so France
