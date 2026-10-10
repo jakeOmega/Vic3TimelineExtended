@@ -1075,6 +1075,7 @@ def constants(o):
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
         "rate_total_min": P.RATE_TOTAL_MIN,
         "rate_term_max": P.RATE_TERM_MAX,
+        "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")

@@ -508,6 +508,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None):
         "te_demog_mult_maternal": mult["maternal"] * P.MATERNAL_PER_100K_BIRTHS,
         "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
+        f"modifier:{P.NATURAL_FERTILITY_TYPE}": inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0),
     }
     eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
@@ -1292,6 +1293,35 @@ class TestRatesScript(unittest.TestCase):
             got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
             got.pop("icon")
             self.assertEqual(got, {field: value}, name)
+
+
+class TestNaturalFertilityScript(unittest.TestCase):
+    """te_demog_tfr with the natural-fertility read, against demographics_model.fertility."""
+
+    def test_script_matches_the_model(self):
+        for natural in (-5.0, -0.15, 0.0, 0.1):
+            inp = demographics_model.Inputs(sol=9.0, literacy=0.3, urban_share=0.2,
+                                            mods={P.NATURAL_FERTILITY_TYPE: natural})
+            fert = demographics_model.fertility(inp, 35.0)
+            eng = _Engine({f"modifier:{P.NATURAL_FERTILITY_TYPE}": natural})
+            eng.vars.update(te_dg_wtfr=fert["wealth"], te_dg_means=fert["means"],
+                            te_dg_desired=fert["education"] * fert["survival"] * fert["urban"])
+            with self.subTest(natural=natural):
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr")), fert["tfr"], places=9)
+
+    def test_the_tfr_tooltips_list_natural_fertility_and_the_births_on_top(self):
+        """The headline beside the terms is te_dg_tfr, the model's figure x (1 + bz): the terms list women's legal
+        standing and the births added on top of the census (batch 1 review, I2), so they account for it."""
+        loc = _text(MISC_LOC)
+        for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            for value in ("te_demog_tfr_natural", "te_demog_tfr_on_top"):
+                self.assertIn(f"ScriptValue('{value}')", line, (key, value))
+        for bz, want in ((None, 1.0), (0.3, 1.3), (-0.2, 0.8)):
+            eng = _Engine({})
+            if bz is not None:
+                eng.vars["te_dg_bz"] = bz
+            self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr_on_top")), want)
 
 
 class _CountryEngine(_Engine):

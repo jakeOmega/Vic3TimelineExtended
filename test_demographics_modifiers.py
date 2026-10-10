@@ -71,7 +71,8 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    "state_external_mortality_mult": {"technology", "law", "institution"},
                    "state_work_mortality_mult": {"law", "law_institution"},
                    "state_chronic_mortality_mult": {"law"},
-                   P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"}}
+                   P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
+                   P.NATURAL_FERTILITY_TYPE: {"law"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -94,6 +95,10 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
     def test_family_planning_law_shifts_the_means(self):
         lines = {c.key: c.value for c in self.carriers if c.type == P.MEANS_SHIFT_TYPE}
         self.assertEqual(lines, {"law_state_sponsored_family_planning": 0.1})
+
+    def test_womens_rights_carry_the_natural_fertility_term(self):
+        lines = {c.key: c.value for c in DM.load_carriers() if c.type == P.NATURAL_FERTILITY_TYPE}
+        self.assertEqual(lines, {k: v for k, v in P.NATURAL_FERTILITY_BY_LAW.items() if v})
 
     AUGMENTATION = {"law_medical_augmentation_only", "law_unrestricted_augmentation",
                     "law_regulated_augmentation_market", "law_mandatory_augmentation"}

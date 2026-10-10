@@ -118,7 +118,16 @@ DEMOG_MORTALITY_TYPES = (
 # modifier:, their values on their carriers (demographics_modifiers.py).
 CONTRACEPTION_TYPE = "state_contraception_add"
 MEANS_SHIFT_TYPE = "state_fertility_means_add"
-DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE)
+# Natural fertility (phase 2 step 4, Task 7): women's legal status before modern contraception, through who
+# marries and when. Multiplies the wealth term before the means. Its carriers are the women's-rights laws,
+# re-centred on No Women's Rights so step 2's fit (83% of the 1837 world) is unchanged (owner call (d), 2026-10-10).
+NATURAL_FERTILITY_TYPE = "state_natural_fertility_mult"
+NATURAL_FERTILITY_FLOOR = 0.2
+NATURAL_FERTILITY_BY_LAW = {
+    "law_no_womens_rights": 0.0, "law_women_in_the_fields": -0.15, "law_women_own_property": -0.05,
+    "law_women_in_the_workplace": -0.10, "law_womens_suffrage": -0.10, "law_protected_class": -0.15,
+}
+DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY_TYPE)
 DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within

@@ -184,7 +184,26 @@ te_demog_tfr_urban = {
 	add = 1
 }
 
-# State scope: children per woman = wealth x (1 - means x (1 - desired)) (spec §2.3;
+# Natural fertility, from women's legal standing (state_natural_fertility_mult on the women's-rights laws;
+# phase 2 step 4): 1 + the read, at least the floor.
+te_demog_tfr_natural = {
+	value = modifier:state_natural_fertility_mult
+	add = 1
+	min = te_demog_k_natural_fertility_floor
+}
+
+# Births added on top of the census (phase 2 step 4): the scale this year's children per woman took from
+# what the engine did over the window (te_dg_bz, te_demog_on_top_scales), 1 when it took none. Only the
+# tooltips read it: te_dg_tfr is the model's figure x this.
+te_demog_tfr_on_top = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_bz }
+		add = var:te_dg_bz
+	}
+}
+
+# State scope: children per woman = wealth x natural x (1 - means x (1 - desired)) (spec §2.3;
 # demographics_model.fertility).
 te_demog_tfr = {
 	value = 1
@@ -193,6 +212,7 @@ te_demog_tfr = {
 	multiply = -1
 	add = 1
 	multiply = var:te_dg_wtfr
+	multiply = te_demog_tfr_natural
 }
 
 # War scope, on the owner's pulse: the owner's dead in this war so far (probe Q4).

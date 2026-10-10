@@ -158,15 +158,17 @@ def means(inp):
 
 
 def fertility(inp, e0):
-    """Children per woman and its terms (§2.3)."""
+    """Children per woman and its terms (§2.3): wealth x natural x (1 - means x (1 - desired)). Natural fertility
+    is women's legal standing (phase 2 step 4, Task 7), 1 + its type, at least NATURAL_FERTILITY_FLOOR."""
     wealth = inp.wealth_tfr if inp.wealth_tfr is not None else wealth_tfr(inp.sol)
+    natural = max(P.NATURAL_FERTILITY_FLOOR, 1 + inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0))
     education = 1 - P.EDUCATION_WEIGHT * inp.literacy
     survival = 1 - P.SURVIVAL_WEIGHT * clamp((e0 - 30) / 50, 0.0, 1.0)
     urban = 1 - P.URBAN_WEIGHT * inp.urban_share
     desired = education * survival * urban
     mn = means(inp)
     factor = 1 - mn * (1 - desired)
-    return {"tfr": wealth * factor, "wealth": wealth, "education": education,
+    return {"tfr": wealth * natural * factor, "wealth": wealth, "natural": natural, "education": education,
             "survival": survival, "urban": urban, "means": mn, "factor": factor}
 
 

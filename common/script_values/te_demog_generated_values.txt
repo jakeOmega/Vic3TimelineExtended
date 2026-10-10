@@ -1389,6 +1389,7 @@ te_demog_k_on_top_scale_min = { value = -0.9 }
 te_demog_k_on_top_scale_max = { value = 4 }
 te_demog_k_rate_total_min = { value = -0.8 }
 te_demog_k_rate_term_max = { value = 3 }
+te_demog_k_natural_fertility_floor = { value = 0.2 }
 # State scope: the family share's transport term (owner technology).
 te_demog_family_transport = {
 	value = 0

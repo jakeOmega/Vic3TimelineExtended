@@ -78,17 +78,25 @@ INJECT:law_closed_borders = {
 INJECT:law_womens_suffrage = {
 	modifier = {
 		country_cultural_pull_mult = 0.03
+		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_women_in_the_workplace = {
 	modifier = {
 		country_cultural_pull_mult = 0.01
+		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
-# law_women_own_property: deliberate neutral (no modifier)
+# law_women_own_property: neutral for cultural pull; the census's natural fertility is a separate axis
+INJECT:law_women_own_property = {
+	modifier = {
+		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
+	}
+}
 INJECT:law_women_in_the_fields = {
 	modifier = {
 		country_cultural_pull_mult = -0.01
+		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_no_womens_rights = {
@@ -4135,6 +4143,7 @@ law_protected_class = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_working_adult_ratio_add = 0.2
 		state_birth_rate_mult = -0.1
+		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 		state_dependent_political_participation_add = 0.5
 	}
 }

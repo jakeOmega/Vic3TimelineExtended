@@ -53,7 +53,7 @@ BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
                         laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
 AGED_TODAY = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                       laws=frozenset({"law_public_health_insurance", "law_womens_suffrage", "law_old_age_pension",
-                                      "law_dedicated_police", "law_state_sponsored_family_planning"}),
+                                      "law_dedicated_police"}),
                       institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
                                     "institution_ministry_of_consumer_protection": 3})
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
@@ -73,7 +73,9 @@ class TestFertility(unittest.TestCase):
             (BRITAIN_1836, 5.5, "Britain 1836"),
             (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
             (BRITAIN_1900, 3.85, "Britain 1900"),
-            (WEST_1950, 2.8, "the West 1950"),
+            # 2.8 before the women's-rights term; with Women in the Workplace's -0.10 (Task 7) 2.5, nearer the West's
+            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10)
+            (WEST_1950, 2.5, "the West 1950"),
             (WEST_1990, 1.6, "the West 1990"),
             (INDIA_1975, 5.3, "India 1975"),
         ]:
@@ -281,9 +283,10 @@ class TestStructure(unittest.TestCase):
         self.assertTrue(0.008 <= last["growth"] <= 0.02, last["growth"])
 
     def test_aged(self):
-        # §2.2's aged row (about 1.3 children per woman). The West in 1990 alone now gives about 1.6, as
-        # history did (stage 2's fit), so the case adds State-Sponsored Family Planning. At 1.3 the stable
-        # rate is about ln(0.65) / 30 = -1.4% a year; the sketch's -0.9 to -1.2% came from four bands.
+        # §2.2's aged row (about 1.3 children per woman). The West in 1990 gives about 1.4 with Women's Suffrage's
+        # natural-fertility term (phase 2 step 4, Task 7; State-Sponsored Family Planning, which the case added
+        # to reach 1.3 before it, would now take it to 1.2). At 1.3-1.4 the stable rate is about
+        # ln(0.68) / 30 = -1.3% a year; the sketch's -0.9 to -1.2% came from four bands.
         ring, last = M.run_constant(AGED_TODAY, years=300)
         s = M.structure(ring)
         self.assertTrue(0.09 <= s["young"] <= 0.14, s)
@@ -503,6 +506,26 @@ class TestOnTopScales(unittest.TestCase):
         b, d = M.starvation_terms(0.3)   # (0.4 - 0.3) x 2.5 = 0.25 of the mild penalty
         self.assertAlmostEqual(b, -0.7 * 0.25)
         self.assertAlmostEqual(d, 0.6 * 0.25)
+
+
+class TestNaturalFertility(unittest.TestCase):
+    """The women's-rights term (phase 2 step 4, Task 7): natural fertility before the means."""
+
+    def test_it_scales_children_per_woman_before_the_means(self):
+        base = M.Inputs(sol=9.0, literacy=0.3)
+        lower = M.Inputs(sol=9.0, literacy=0.3, mods={P.NATURAL_FERTILITY_TYPE: -0.1})
+        a, b = M.fertility(base, 35.0), M.fertility(lower, 35.0)
+        self.assertAlmostEqual(b["tfr"], a["tfr"] * 0.9)
+        self.assertAlmostEqual(b["natural"], 0.9)
+        self.assertEqual((a["means"], a["factor"]), (b["means"], b["factor"]))
+
+    def test_it_is_floored(self):
+        inp = M.Inputs(sol=9.0, mods={P.NATURAL_FERTILITY_TYPE: -5.0})
+        self.assertEqual(M.fertility(inp, 35.0)["natural"], P.NATURAL_FERTILITY_FLOOR)
+
+    def test_no_womens_rights_is_the_reference(self):
+        """Re-centred on No Women's Rights, where 83% of the 1837 world sat, so step 2's fit is unchanged."""
+        self.assertEqual(P.NATURAL_FERTILITY_BY_LAW.get("law_no_womens_rights", 0.0), 0.0)
 
 
 class TestGrowthFactor(unittest.TestCase):

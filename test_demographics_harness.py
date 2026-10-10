@@ -52,6 +52,10 @@ class TestHarness(unittest.TestCase):
         self.assertGreater(poor, 0)
         self.assertLess(poor, H.P.BASE_ACCESS * rich)
 
+    def test_no_womens_rights_leaves_the_reference_alone(self):
+        rows = {r[0]: r[1] for r in H.fertility_rows()}
+        self.assertAlmostEqual(rows["1836 agrarian, No Women's Rights"], rows["1836 agrarian (reference)"], places=9)
+
     def test_fertility_anchors_hold(self):
         out = io.StringIO()
         with redirect_stdout(out):

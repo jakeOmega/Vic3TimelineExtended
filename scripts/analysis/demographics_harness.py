@@ -593,6 +593,19 @@ FERTILITY_SCENARIOS = [
     ("West 1990", dict(sol=38, literacy=0.98, urban_share=0.75,
                        techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"}, laws={PHI},
                        institutions={HEALTH: 6}), (1.4, 2.0)),
+    # The women's-rights term (phase 2 step 4, Task 7): Western scenarios with the law their countries held, banded
+    # by Gapminder's Western range that year (the tfr anchors, 2026-10-10): 1900 France 2.80 to Germany 4.93; 1950
+    # Austria 1.87 to the Netherlands 3.10; 1990 Italy 1.30 to Sweden 2.14.
+    ("1836 agrarian, No Women's Rights", dict(sol=8, literacy=0.2, urban_share=0.1,
+                                              laws={"law_no_womens_rights"}), (4.8, 6.2)),
+    ("Britain 1900, Women Own Property", dict(sol=16, literacy=0.75, urban_share=0.6, techs=MED_1900 | MEANS_TECHS,
+                                              laws={CHS, "law_women_own_property"}, institutions={HEALTH: 4}),
+     (2.8, 4.9)),
+    ("West 1950, Women's Suffrage", dict(sol=25, literacy=0.95, urban_share=0.65, techs=MED_1950 | MEANS_TECHS,
+                                         laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 5}), (1.9, 3.1)),
+    ("West 1990, Women's Suffrage", dict(sol=38, literacy=0.98, urban_share=0.75,
+                                         techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"},
+                                         laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 6}), (1.3, 2.2)),
     ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950 | MEANS_TECHS | {"contraceptive_pill"},
                         laws={CHS}, institutions={HEALTH: 1}), (4.7, 5.8)),
 ]
