@@ -63,6 +63,17 @@ INJECT:law_appointed_bureaucrats = {
 	}
 }
 
+# Collective Governance (law_direct_democracy) allows Anarchy, and Anarchy
+# needs Cooperative Ownership, which vanilla unlocks only with Council Republic
+# or Corporate State. Without this the pair could never hold: the law
+# consistency walk replaced Cooperative Ownership, then Anarchy, then the laws
+# that need either (Collectivized Agriculture, Possession by Use).
+INJECT:law_cooperative_ownership = {
+	unlocking_laws = {
+		law_direct_democracy
+	}
+}
+
 REPLACE:law_subjecthood = {
 	group = lawgroup_citizenship
 
