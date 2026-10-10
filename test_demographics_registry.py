@@ -1274,12 +1274,14 @@ class TestRatesScript(unittest.TestCase):
         self.assertIn("te_demog_state_clock_step = yes", clock)
 
     def test_the_census_modifiers_are_hidden(self):
-        """Owner, 2026-10-10: the census's modifiers don't show in a state's modifier list (vanilla's transparent icon;
-        the list's filter is a GUI change of its own). Their names still head the birth and mortality breakdowns."""
+        """Owner, 2026-10-10: the census's modifiers don't show in a state's modifier list. They take the mod's
+        invisible icon for bookkeeping modifiers (modifier_system.dds, 4x4 and transparent, as tourism and migration
+        crowding do), which the list's filter (#872) keys on. Their names still head the birth and mortality
+        breakdowns."""
         mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"])
         for name in ("te_demog_census_births_up", "te_demog_census_births_down", "te_demog_census_deaths_up",
                      "te_demog_census_deaths_down"):
-            self.assertIn("icon = gfx/interface/icons/generic_icons/transparent.dds", mods[name], name)
+            self.assertIn("icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds", mods[name], name)
 
     def test_the_census_modifiers_are_fixed_sign_unit_fields(self):
         mods = _raw_blocks([ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt"])

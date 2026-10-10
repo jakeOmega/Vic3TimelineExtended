@@ -7,25 +7,26 @@ te_demog_family_limitation = {
 }
 
 # Phase 2 step 4 (te_demog_rate_effects.txt): the census sets each state's births and deaths.
-# One of each pair at a time, multiplier |M| (no negative multiplier: fixed-sign pairs). Vanilla's
-# transparent icon: they stay out of a state's modifier list (owner, 2026-10-10) and show only by
-# name in its birth-rate and mortality breakdowns.
+# One of each pair at a time, multiplier |M| (no negative multiplier: fixed-sign pairs). The mod's
+# invisible icon for bookkeeping modifiers (modifier_system.dds, as tourism and migration crowding):
+# they stay out of a state's modifier list (owner, 2026-10-10) and show only by name in its
+# birth-rate and mortality breakdowns.
 te_demog_census_births_up = {
-	icon = gfx/interface/icons/generic_icons/transparent.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_birth_rate_mult = 1
 }
 
 te_demog_census_births_down = {
-	icon = gfx/interface/icons/generic_icons/transparent.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_birth_rate_mult = -1
 }
 
 te_demog_census_deaths_up = {
-	icon = gfx/interface/icons/generic_icons/transparent.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_mortality_mult = 1
 }
 
 te_demog_census_deaths_down = {
-	icon = gfx/interface/icons/generic_icons/transparent.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_mortality_mult = -1
 }
