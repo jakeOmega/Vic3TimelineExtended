@@ -1019,6 +1019,16 @@ class _CountryEngine(_Engine):
 NO_CENSUS = {"te_demog_country_census": "", "te_demog_wc_war_shock": "", "te_demog_wc_national": ""}
 
 
+class TestConcentrationRows(unittest.TestCase):
+    def test_the_rows_check_the_states_owner_exists(self):
+        """A state the national refresh chose can lose its owner before the next refresh: 'Event target
+        link owner returned an invalid object' at te_demog_sguis.txt, read every frame the panel is open."""
+        text = _text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt")
+        for sgui, var in (("te_demog_wc_top_sgui", "te_dg_wc_top"), ("te_demog_wc_bottom_sgui", "te_dg_wc_bottom")):
+            shown = _block(text, sgui)
+            self.assertRegex(shown, rf"var:{var} = {{\s*exists = owner\s*owner = ROOT\s*}}", sgui)
+
+
 class TestFlows(unittest.TestCase):
     def test_finished_war_never_returns_its_dead(self):
         """Review Focus 4: the monthly change in summed war dead is floored at zero."""
@@ -1263,6 +1273,21 @@ class TestTrend(unittest.TestCase):
                     self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
                     self.assertGreater(eng.vars["te_dg_births"], 0)
                     self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 0.03 * people, delta=1.0)
+
+    def test_fast_mode_skips_wealth_concentration_for_a_state_not_yet_walked(self):
+        """Fast mode moves the walk to the clock's steps, but the yearly pulse still updates Wealth
+        Concentration, which reads the walk's sums. A state that appears between steps (a colony, a
+        split) had none: 'Value of wrong type' at te_demog_wealth_effects.txt:64 and te_demog_values.txt,
+        a few lines a game year in the 2026-10-10 fast run. It waits for its first walk."""
+        stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_inh_refresh_wc_state_effects": "",
+                 "te_demog_state_census": "", "te_demog_wc_state_yearly": "set_variable = { name = wc_ran value = 1 }"}
+        for walked in (False, True):
+            with self.subTest(walked=walked):
+                eng = _Engine({}, triggers={"te_demog_clock_on": True}, effects=stubs)
+                if walked:
+                    eng.vars["te_dg_walk_pop"] = 1000.0
+                eng.call("te_demog_state_yearly")
+                self.assertEqual("wc_ran" in eng.vars, walked)
 
     def test_a_seed_off_the_pulse_is_made_again_at_the_pulse(self):
         """Codex review on #830: game start and the console seed on a day that is not the state's
@@ -2535,7 +2560,8 @@ class TestFastMode(unittest.TestCase):
 
     def test_under_the_clock_the_yearly_pulse_keeps_inheritance_and_wealth_only(self):
         eng = self._eng(True, {"state_population": 1000.0}, effects=self.STUBS)
-        eng.vars.update(te_dg_year=1899.0, te_dg_raw=900.0, te_dg_pop_last=1000.0)
+        # a state with a census was walked at a clock step (te_dg_walk_pop)
+        eng.vars.update(te_dg_year=1899.0, te_dg_raw=900.0, te_dg_pop_last=1000.0, te_dg_walk_pop=1000.0)
         eng.call("te_demog_state_yearly")
         self.assertEqual({k: eng.vars.get(k) for k in ("walked", "rural", "wc", "wc_mods", "did")},
                          {"walked": None, "rural": 1.0, "wc": 1.0, "wc_mods": 1.0, "did": None})

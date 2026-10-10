@@ -280,7 +280,12 @@ te_demog_state_yearly = {
 		te_demog_walks = yes
 	}
 	te_inh_refresh_rural_effects = yes
-	te_demog_wc_state_yearly = yes
+	# Wealth Concentration reads the walk's sums. Under fast mode the walk moves to the clock's steps,
+	# and a state that appears between them (a colony, a split) has none until its first: it waits.
+	if = {
+		limit = { has_variable = te_dg_walk_pop }
+		te_demog_wc_state_yearly = yes
+	}
 	te_inh_refresh_wc_state_effects = yes
 	if = {
 		limit = { NOT = { te_demog_clock_on = yes } }
