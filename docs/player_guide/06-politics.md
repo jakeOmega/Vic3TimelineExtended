@@ -15,6 +15,18 @@ The new law groups sit beside the base game's in the laws panel. Sixteen of them
 are ministries, covered in [Ministries](#ministries). The other nineteen are
 grouped here by theme, and ten further laws join base-game law groups.
 
+Many laws need another law in force, and some can't stand beside one. Anarchy
+needs Cooperative Ownership, for example, and Cooperative Ownership needs a
+Council Republic, Corporate State or Collective Governance. The base game checks
+this only when you enact a law. The mod checks again whenever a law changes and
+once a month: a law left without what it needs, or beside a law that rules it
+out, is replaced at once by the nearest law in its group that you can hold. Each
+replacement can set off more, but the law you enacted stays. Its tooltip doesn't
+list these replacements, so before you change your Governance Principles or
+Economic System, check which of your laws depend on them. An anarchist Council
+Republic that enacts a Presidential Republic loses Cooperative Ownership, and
+with it Anarchy, Collectivized Agriculture and Possession by Use.
+
 ### Rights and society laws
 
 | Law group | Laws | What it governs |
