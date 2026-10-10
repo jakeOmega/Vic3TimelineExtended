@@ -124,6 +124,10 @@ class TestMeans(unittest.TestCase):
         # Review Focus 4: a tier above 1 counts as 1
         self.assertAlmostEqual(M.means(self.inp(0.0, {P.CONTRACEPTION_TYPE: 5.0})), self.access(0.0))
 
+    def test_a_negative_contraception_total_floors_the_tier(self):
+        # the tier never goes below 0, as the script's nested block clamps it
+        self.assertAlmostEqual(M.means(self.inp(0.0, {P.CONTRACEPTION_TYPE: -1.0, P.MEANS_SHIFT_TYPE: 0.5})), 0.5)
+
     def test_a_negative_shift_floors_at_zero(self):
         # Review Focus 3: a pronatalist measure never makes the fertility factor exceed 1
         self.assertEqual(M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: -2.0})), 0.0)

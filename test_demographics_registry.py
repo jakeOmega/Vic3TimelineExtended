@@ -2733,3 +2733,25 @@ class TestCauseMultipliersScript(unittest.TestCase):
                 with self.subTest(mods=mods, sol=sol, cause="maternal"):
                     got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
                     self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+
+
+class TestMeansScript(unittest.TestCase):
+    """te_demog_means (generated) against demographics_model.means, with the fertility types' reads as
+    fixtures: the tier's clamp before literacy, the shift after it, the cap and the floor (stage 2's
+    Review Focus 1, 3 and 4). In game the one read of state_fertility_means_add carries both the laws'
+    lines (mods) and static modifiers such as Family Limitation (means_add)."""
+
+    def test_script_matches_the_model(self):
+        for contra in (-1.0, 0.0, 0.2, 0.45, 0.65, 2.0):
+            for shift in (-2.0, -0.2, 0.0, 0.1, 1.0):
+                for static in (0.0, P.FAMILY_LIMITATION_MEANS):
+                    for lit in (0.0, 0.35, 1.0):
+                        inp = demographics_model.Inputs(
+                            literacy=lit, mods={P.CONTRACEPTION_TYPE: contra, P.MEANS_SHIFT_TYPE: shift},
+                            means_add=static)
+                        eng = _Engine({f"modifier:{P.CONTRACEPTION_TYPE}": contra,
+                                       f"modifier:{P.MEANS_SHIFT_TYPE}": shift + static})
+                        eng.vars["te_dg_lit"] = lit
+                        with self.subTest(contra=contra, shift=shift, static=static, lit=lit):
+                            got = eng.value(eng._tree(eng.values, "te_demog_means"))
+                            self.assertAlmostEqual(got, demographics_model.means(inp), places=9)
