@@ -4,6 +4,8 @@
 # modifier reaches every state the country owns; the Workplace Safety lines (institution_modifier)
 # are per level of the institution and reach incorporated states only. The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt.
+# Phase 2 step 4: the child-labour blocks also carry inverse lines that cancel vanilla's class
+# mortality lines. Those the engine does apply; the census's work term absorbs what they did.
 
 INJECT:law_local_police = {
 	modifier = {
