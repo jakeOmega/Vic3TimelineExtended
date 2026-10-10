@@ -74,10 +74,6 @@ WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
 SURVIVAL_WEIGHT = 0.4         # desired x (1 - 0.4 x (e0 - 30) / 50), clamped 0..1
 URBAN_WEIGHT = 0.2            # desired x (1 - 0.2 x urban share)
-MEANS_TIERS = [               # (technology, means); the highest held applies
-    (None, 0.4), ("vulcanization", 0.55), ("contraceptive_pill", 0.8), ("modern_pharmaceuticals", 0.9),
-]
-MEANS_LAW_SHIFT = {"law_state_sponsored_family_planning": 0.1}
 MEANS_CAP = 0.95
 # Every other shift to the means comes through one modifier type, state_fertility_means_add
 # (common/modifier_type_definitions/demographics_modifier_types.txt), so history, events and

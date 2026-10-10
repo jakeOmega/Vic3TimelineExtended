@@ -75,12 +75,50 @@ class TestFertility(unittest.TestCase):
         self.assertAlmostEqual(M.wealth_tfr(35), 3.5)
         self.assertAlmostEqual(M.wealth_tfr(60), 3.5)
 
-    def test_means_capped(self):
-        rich = M.Inputs(literacy=1.0, techs=MODERN, laws=frozenset({"law_state_sponsored_family_planning"}))
-        self.assertLessEqual(M.means(rich), P.MEANS_CAP)
-
     def test_asfr_shape_sums_to_one(self):
         self.assertAlmostEqual(sum(M.asfr_shape(r) for r in range(100)), 100000.0)
+
+
+class TestMeans(unittest.TestCase):
+    """The means to plan a family from the fertility types (modifier-types design, stage 2)."""
+
+    def inp(self, literacy=0.5, mods=None, means_add=0.0):
+        return M.Inputs(literacy=literacy, mods=dict(mods or {}), means_add=means_add)
+
+    def access(self, literacy):
+        return P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * literacy
+
+    def test_no_carrier_is_the_traditional_means(self):
+        # Review Focus 1: every 1836 country but France
+        self.assertAlmostEqual(M.means(self.inp(0.35)), P.TRADITIONAL_MEANS * self.access(0.35))
+
+    def test_techs_add_in_any_order(self):
+        # Review Focus 2: the Pill without vulcanization is the base plus the Pill's own line
+        pill_only = DM.totals(CARRIERS, techs={"contraceptive_pill"})
+        both = DM.totals(CARRIERS, techs={"vulcanization", "contraceptive_pill"})
+        pill = {c.key: c.value for c in CARRIERS if c.type == P.CONTRACEPTION_TYPE}["contraceptive_pill"]
+        self.assertAlmostEqual(M.means(self.inp(1.0, pill_only)), P.TRADITIONAL_MEANS + pill)
+        self.assertGreater(M.means(self.inp(1.0, both)), M.means(self.inp(1.0, pill_only)))
+
+    def test_the_shift_is_not_scaled_by_literacy(self):
+        low = M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: 0.1}))
+        self.assertAlmostEqual(low, P.TRADITIONAL_MEANS * self.access(0.0) + 0.1)
+
+    def test_static_and_law_shifts_add(self):
+        both = M.means(self.inp(0.3, {P.MEANS_SHIFT_TYPE: 0.1}, means_add=P.FAMILY_LIMITATION_MEANS))
+        self.assertAlmostEqual(both, min(P.TRADITIONAL_MEANS * self.access(0.3) + 0.1 + P.FAMILY_LIMITATION_MEANS,
+                                         P.MEANS_CAP))
+
+    def test_the_tier_is_clamped_before_literacy(self):
+        # Review Focus 4: a tier above 1 counts as 1
+        self.assertAlmostEqual(M.means(self.inp(0.0, {P.CONTRACEPTION_TYPE: 5.0})), self.access(0.0))
+
+    def test_a_negative_shift_floors_at_zero(self):
+        # Review Focus 3: a pronatalist measure never makes the fertility factor exceed 1
+        self.assertEqual(M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: -2.0})), 0.0)
+
+    def test_cap(self):
+        self.assertEqual(M.means(self.inp(1.0, {P.CONTRACEPTION_TYPE: 1.0, P.MEANS_SHIFT_TYPE: 1.0})), P.MEANS_CAP)
 
 
 class TestMortality(unittest.TestCase):

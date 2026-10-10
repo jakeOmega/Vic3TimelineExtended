@@ -142,13 +142,11 @@ def life_table(q):
 
 
 def means(inp):
-    tier = 0.0
-    for tech, value in P.MEANS_TIERS:
-        if tech is None or tech in inp.techs:
-            tier = max(tier, value)
-    access = 0.3 + 0.7 * inp.literacy
-    shift = sum(v for law, v in P.MEANS_LAW_SHIFT.items() if law in inp.laws)
-    return clamp(tier * access + shift + inp.means_add, 0.0, P.MEANS_CAP)
+    """The share of the gap to desired fertility a population can close (§2.3; stage 2's types)."""
+    tier = clamp(P.TRADITIONAL_MEANS + inp.mods.get(P.CONTRACEPTION_TYPE, 0.0), 0.0, 1.0)
+    access = P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * inp.literacy
+    shift = inp.mods.get(P.MEANS_SHIFT_TYPE, 0.0) + inp.means_add
+    return clamp(tier * access + shift, 0.0, P.MEANS_CAP)
 
 
 def fertility(inp, e0):

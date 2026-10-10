@@ -93,6 +93,18 @@ class TestGenerated(unittest.TestCase):
     def _cause(self, cause):
         return self.values.split(f"te_demog_mult_{cause} = {{", 1)[1].split("\n}\n", 1)[0]
 
+    def test_means_read_the_types_not_techs_or_laws(self):
+        body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("has_technology_researched", body)
+        self.assertNotIn("has_law", body)
+        # the tier is clamped inside its own block, before literacy multiplies it
+        tier = body.split("value = {", 1)[1].split("}", 1)[0]
+        self.assertIn(f"value = modifier:{P.CONTRACEPTION_TYPE}", tier)
+        self.assertIn(f"add = {gen.lit(P.TRADITIONAL_MEANS)}", tier)
+        self.assertIn("min = 0", tier)
+        self.assertIn("max = 1", tier)
+        self.assertLess(body.index("multiply = { value = var:te_dg_lit"), body.index(f"modifier:{P.MEANS_SHIFT_TYPE}"))
+
     def test_causes_read_the_types_not_the_owners_techs_or_laws(self):
         for cause in gen.CAUSES:
             body = self._cause(cause)
