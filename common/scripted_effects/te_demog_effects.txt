@@ -559,6 +559,21 @@ te_demog_seed = {
 	set_local_variable = { name = te_dg_raw value = state_population }
 	set_variable = { name = te_dg_births value = 0 }
 	set_variable = { name = te_dg_deaths value = 0 }
+	# phase 2 step 4 (te_demog_rate_effects.txt): a seed starts the census's target over. The model's
+	# rates from before it are another state's (a merge, a split) or years stale (a census gap), and would
+	# scale the next step's births and deaths by their ratio to today's; without them that step takes no
+	# on-top scales. The seed's children per woman is the model's own (the projection reads it).
+	if = {
+		limit = { has_variable = te_dg_cbr_model }
+		remove_variable = te_dg_cbr_model
+	}
+	if = {
+		limit = { has_variable = te_dg_cdr_model }
+		remove_variable = te_dg_cdr_model
+	}
+	set_variable = { name = te_dg_bz value = 0 }
+	set_variable = { name = te_dg_dz value = 0 }
+	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
 }
 
@@ -1359,6 +1374,7 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_mig value = 0 }
 	set_local_variable = { name = te_dg_c_mig_raw value = 0 }
 	set_local_variable = { name = te_dg_c_tfr_w value = 0 }
+	set_local_variable = { name = te_dg_c_tfr_model_w value = 0 }
 	set_local_variable = { name = te_dg_c_women value = 0 }
 	set_local_variable = { name = te_dg_c_e0_w value = 0 }
 	set_local_variable = { name = te_dg_c_e65_w value = 0 }
@@ -1394,6 +1410,15 @@ te_demog_country_census = {
 			change_local_variable = { name = te_dg_c_mig_raw add = var:te_dg_mig_raw }
 		}
 		change_local_variable = { name = te_dg_c_tfr_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
+		# the projection's: the model's own children per woman (phase 2 step 4), the shown one where a state
+		# has none yet (an old save's, before its next step)
+		if = {
+			limit = { has_variable = te_dg_tfr_model }
+			change_local_variable = { name = te_dg_c_tfr_model_w add = { value = var:te_dg_tfr_model multiply = var:te_dg_w1549 } }
+		}
+		else = {
+			change_local_variable = { name = te_dg_c_tfr_model_w add = { value = var:te_dg_tfr multiply = var:te_dg_w1549 } }
+		}
 		change_local_variable = { name = te_dg_c_women add = var:te_dg_w1549 }
 		change_local_variable = { name = te_dg_c_e0_w add = { value = var:te_dg_e0 multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_e65_w add = { value = var:te_dg_e65 multiply = local_var:te_dg_c_s_pm } }
@@ -1470,7 +1495,9 @@ te_demog_country_census = {
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }
 		te_demog_set_trend = yes
-		# the player's outline twenty years ahead, on the country's average rates
+		# the player's outline twenty years ahead, on the country's average rates: the model's own, the
+		# mortality (te_dg_m_*, unscaled) and the children per woman (te_dg_tfr_model) alike, so the outline is
+		# the census's before famine, war and disasters, as its life table is (phase 2 step 4)
 		if = {
 			limit = { is_ai = no }
 			set_local_variable = { name = te_dg_m_inf value = { value = local_var:te_dg_c_inf_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
@@ -1479,7 +1506,7 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_c_work value = { value = local_var:te_dg_c_work_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
-			set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
+			set_local_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_model_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 			te_demog_project = yes
 		}
 		# the pyramid's scale, once here instead of in every bar's range each frame

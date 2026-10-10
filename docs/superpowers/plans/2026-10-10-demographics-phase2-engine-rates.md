@@ -188,6 +188,7 @@ M never reads a term added on top. The engine applies O whatever its scaling, de
 - **Seeds:** a seed writes 0 births (`te_dg_stepped = 0`), so the refresh skips it and M stays as it was.
   - An 1836 state runs on the curves until its first step, its second yearly pulse (the first re-seeds, `te_dg_reseed`). So does a re-seeded state with no M yet.
   - Storing an equilibrium rate at the seed would start M a pulse earlier. Step 5 needs that figure for Display only and Disabled, and builds it there.
+  - **A seed clears the target** (batch 1 review, Q1; built with Task 3's fixes): it removes `te_dg_cbr_model` / `te_dg_cdr_model`, zeroes `te_dg_bz` / `te_dg_dz` and sets `te_dg_tfr_model` to the seed's TFR. The old target is another state's (a merge or split) or years stale (a census gap). Kept, it would scale the first step after the seed by the ratio of the old rate to today's: about ±25% of births across SoL 5↔15, and −37% after years under Disabled. That step takes no on-top scales instead. Pinned by `test_a_seed_clears_the_target_and_the_scales`.
 - **Old saves:** M arrives at each state's next step. That step takes no on-top scales, since `te_dg_cbr_model` is absent.
 - **Rule switches:** `te_demog_rates_clear` leaves `te_dg_cbr_model`. After a switch from Display only back to Full, M applies at once from the last step's rate, which is harmless.
 
@@ -218,6 +219,7 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 - **What the panel shows:**
   - CBR, CDR and children per woman are the realized ones. That answers §13's question: "the panel should show what actually happens".
   - Life expectancy, e65 and infant mortality stay the census's life table at its own rates ("before famine, war and disasters", which the tab's explanation says).
+  - **The player's twenty-year projection** runs on the model's own rates too (batch 1 review, I1). Its mortality is the states' unscaled `te_dg_m_*`. Its children per woman is `te_dg_tfr_model`, weighted by women aged 15–49 as `te_dg_tfr` is, falling back to `te_dg_tfr` for a state with none. On the realized TFR it ran about 30% hot before M existed, and after M a famine year would skew it for twenty years. Pinned by `test_projection_runs_on_the_models_own_tfr`.
 - **The ring follows the engine only up to the model's year-on-year change.**
   - bz is this window's engine events over the *last* step's model rate, applied to *this* step's rate. So the ring's births differ from the engine's by how much the model moved in a year.
   - The scale pass absorbs that as it does today.

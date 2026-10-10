@@ -950,6 +950,30 @@ class TestCohortScript(unittest.TestCase):
         self.assertEqual(eng.vars["te_dg_bz"], P.ON_TOP_SCALE_MAX)
         self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MIN)
 
+    def test_a_seed_clears_the_target_and_the_scales(self):
+        """A seed (a merge, a split, a census gap) starts the census's target over: the model's rates from before it
+        are another state's or years stale, and would scale the next step's births and deaths by their ratio to
+        today's. Without them that step takes no on-top scales (test_no_target_no_scales). The seed's children per
+        woman is the model's own, so te_dg_tfr_model is set for the projection."""
+        eng = _engine_for(self.INP, self.YEAR, self.POP)
+        eng.vars.update(te_dg_cbr_model=25.0, te_dg_cdr_model=20.0, te_dg_bz=0.3, te_dg_dz=-0.2, te_dg_tfr_model=9.0)
+        eng.call("te_demog_seed")
+        self.assertNotIn("te_dg_cbr_model", eng.vars)
+        self.assertNotIn("te_dg_cdr_model", eng.vars)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+        self.assertEqual(eng.vars["te_dg_tfr_model"], eng.vars["te_dg_tfr"])
+
+    def test_step_near_the_deaths_scales_ceiling_matches_the_model(self):
+        """dz at its ceiling (+4) pushes the old-age groups' rates past 100,000: the script scales the cause
+        multipliers before its cap, and so does the twin (demographics_model.step)."""
+        eng, ring, figures, pop = self.step_both(on_top=(0.0, 9.0), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MAX)
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        qf, qm, _mmr = demographics_model.group_rates(self.INP)
+        capped = sum(q * (1 + P.ON_TOP_SCALE_MAX) >= 100000.0 for q in qf + qm)
+        self.assertGreater(capped, 0, "the test must reach the cap")
+
     def test_the_replay_logs_the_scaled_rates(self):
         """te_debug_demog_replay logs the locals after te_demog_step_begin, so the scales are in the head's tfr
         and multipliers and the harness's replay needs no new field."""
@@ -1615,6 +1639,25 @@ class TestCountry(unittest.TestCase):
         for sex in "fm":   # four five-year steps up: the children of now are the 20-year-olds of then
             ratio = v[f"te_dg_pj{sex}4"] / v[f"te_dg_cb{sex}0"]
             self.assertTrue(0.2 < ratio < 1.0, (sex, ratio))
+
+    def test_projection_runs_on_the_models_own_tfr(self):
+        """Phase 2 step 4: a state's te_dg_tfr is the realized figure (the model's x (1 + bz)) while the projection's
+        mortality is the model's own (te_dg_m_*, unscaled), so the outline takes te_dg_tfr_model, weighted by
+        women aged 15-49 as te_dg_tfr is. A state with none (an old save's, before its next step) gives its
+        te_dg_tfr. The country's shown TFR stays the realized one."""
+        states = self.three()
+        for s, bz in zip(states, (0.3, -0.2)):
+            s["te_dg_tfr_model"] = s["te_dg_tfr"]
+            s["te_dg_tfr"] *= 1 + bz
+        states[2].pop("te_dg_tfr_model", None)
+        eng = self.country(states)
+        eng.call("te_demog_country_census")
+        w = sum(s["te_dg_w1549"] for s in states)
+        shown = sum(s["te_dg_tfr"] * s["te_dg_w1549"] for s in states) / w
+        model = sum(s.get("te_dg_tfr_model", s["te_dg_tfr"]) * s["te_dg_w1549"] for s in states) / w
+        self.assertGreater(abs(shown - model), 0.1, "the case must tell the two apart")
+        self.assertAlmostEqual(eng.vars["te_dg_tfr"], shown, places=6)
+        self.assertAlmostEqual(eng.locals["te_dg_tfr"], model, places=6)
 
     def test_projection_reads_the_womens_work_share_from_the_states(self):
         """Any state of the country gives the owner's share; the work multiplier is split as
