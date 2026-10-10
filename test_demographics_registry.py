@@ -2685,6 +2685,17 @@ class TestModifierTypes(unittest.TestCase):
                 if path.is_file() and path.suffix in (".txt", ".yml", ".py", ".gui"):
                     self.assertNotIn(old, path.read_text(encoding="utf-8-sig", errors="ignore"), str(path))
 
+    def test_option_l_logs_the_fertility_types(self):
+        # the stage-2 in-game check: what each state reads for contraception and fertility control
+        values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
+        self.assertIn(f"value = modifier:{P.CONTRACEPTION_TYPE}", _block(values, "te_debug_demog_mod_contra"))
+        self.assertIn(f"value = modifier:{P.MEANS_SHIFT_TYPE}", _block(values, "te_debug_demog_mod_fmeans"))
+        self.assertIn("value = te_demog_means", _block(values, "te_debug_demog_means"))
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_mods_line")
+        for key, sv in (("contra", "te_debug_demog_mod_contra"), ("fmeans", "te_debug_demog_mod_fmeans"),
+                        ("means", "te_debug_demog_means")):
+            self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
+
     def test_seven_state_types(self):
         # one type per term, read in state scope; a tech's or law's line reaches the state because
         # states inherit country modifiers (owner, 2026-10-10)
