@@ -1096,5 +1096,76 @@ class LocHygieneTest(unittest.TestCase):
                                         and m.group(1).count("[") == 1, m.group(1))
 
 
+class LiberationContagionTest(unittest.TestCase):
+    """2026-10-10 report: ~20 Colonial Crisis modifiers at once. Every country
+    form_decolonized_country creates runs apply_decolonization_path, which hands
+    the other empires a 12-month Colonial Crisis, and Planned Full Decolonization
+    (decolonization_events.401.a, the AI's ce_planned_decolonization) forms one
+    country per eligible state in a single effect. A same-name add_modifier
+    stacks, so each empire must take one copy at a time, guarded by a variable
+    the loop's next pass can read at once."""
+
+    def setUp(self):
+        self.path = _strip_comments(_block(_read(DECOLONIZATION), "apply_decolonization_path"))
+
+    def _contagion_blocks(self):
+        blocks = []
+        for m in re.finditer(r"every_country = \{", self.path):
+            a, b = _span(self.path, m.end() - 1)
+            if "colonial_stability_negative_event" in self.path[a:b]:
+                blocks.append(self.path[a + 1:b])
+        return blocks
+
+    def test_the_crisis_is_handed_out_once_and_only_by_the_guarded_walk(self):
+        self.assertEqual(len(re.findall(r"colonial_stability_negative_event", self.path)), 1)
+        self.assertEqual(len(self._contagion_blocks()), 1)
+
+    def test_an_empire_holds_one_contagion_at_a_time(self):
+        body = self._contagion_blocks()[0]
+        a, b = _span(body, body.index("limit = {") + len("limit = {") - 1)
+        self.assertRegex(body[a:b], r"NOT = \{ has_variable = decol_liberation_contagion \}")
+        guard = re.search(r"set_variable = \{ name = decol_liberation_contagion months = (\d+) \}", body)
+        crisis = re.search(r"name = colonial_stability_negative_event\s+months = (\d+)", body)
+        self.assertTrue(guard and crisis, body)
+        self.assertEqual(guard.group(1), crisis.group(1))
+
+
+class DecolonizedCultureScopeTest(unittest.TestCase):
+    """A saved scope lasts until the whole effect chain ends, and decolonization
+    events .201 / .204 (up to three) and .401.a (one per marked state) call
+    form_decolonized_country more than once in one option. The culture is saved
+    only when a branch finds one, so a capital with no homeland culture found
+    the previous country's still set, skipped both fallbacks and formed with it."""
+
+    # Saved by the helper's first two statements on every call, and read after
+    # the create (the helper's tail, apply_decolonization_path), so never cleared.
+    FRESH = ("new_country_capital", "decolonizing_parent")
+
+    @classmethod
+    def setUpClass(cls):
+        decol = _read(DECOLONIZATION)
+        cls.helper = _strip_comments(_block(decol, "form_decolonized_country"))
+        cls.legacy = _strip_comments(_block(decol, "apply_decolonization_path"))
+
+    def test_the_capital_and_parent_are_saved_on_every_call(self):
+        self.assertRegex(self.helper, r"\A\s*save_scope_as = new_country_capital\s+"
+                                      r"owner = \{ save_scope_as = decolonizing_parent \}")
+        for name in self.FRESH:
+            with self.subTest(scope=name):
+                self.assertNotIn(f"clear_saved_scope = {name}", self.helper + self.legacy)
+
+    def test_every_other_tested_scope_is_cleared_before_its_first_use(self):
+        tested = set(re.findall(r"exists = scope:(\w+)", self.helper + self.legacy)) - set(self.FRESH)
+        self.assertIn("new_country_culture", tested)
+        for name in tested:
+            with self.subTest(scope=name):
+                clear = re.search(rf"if = \{{\s*limit = \{{ exists = scope:{name} \}}\s*"
+                                  rf"clear_saved_scope = {name}\s*\}}", self.helper)
+                self.assertIsNotNone(clear, f"form_decolonized_country never clears scope:{name}")
+                first = re.search(rf"\b{name}\b", self.helper).start()
+                self.assertTrue(clear.start() <= first < clear.end(),
+                                f"scope:{name} is used before the clear")
+
+
 if __name__ == "__main__":
     unittest.main()
