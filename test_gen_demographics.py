@@ -73,8 +73,9 @@ class TestGenerated(unittest.TestCase):
 
     def test_means_read_the_modifier(self):
         body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn("add = owner.modifier:country_fertility_means_add", body)
-        self.assertLess(body.index("country_fertility_means_add"), body.index("max = "))
+        self.assertIn(f"add = modifier:{P.MEANS_SHIFT_TYPE}", body)
+        self.assertNotIn("owner.modifier:", body)
+        self.assertLess(body.index(P.MEANS_SHIFT_TYPE), body.index("max = 0.95"))
 
     def test_every_cause_has_a_multiplier(self):
         for cause in gen.CAUSES:

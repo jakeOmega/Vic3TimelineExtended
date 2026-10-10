@@ -823,8 +823,8 @@ def multipliers(o):
     o("multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }")
     for law, shift in P.MEANS_LAW_SHIFT.items():
         o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} add = {lit(shift)} }}")
-    o("# history, events and measures: Family Limitation and its kin (country_fertility_means_add)")
-    o("add = owner.modifier:country_fertility_means_add")
+    o(f"# laws, history, events and measures: Family Limitation and its kin ({P.MEANS_SHIFT_TYPE})")
+    o(f"add = modifier:{P.MEANS_SHIFT_TYPE}")
     o(f"max = {lit(P.MEANS_CAP)}")
     o("min = 0")
     o("}")

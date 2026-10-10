@@ -352,7 +352,7 @@ class TestStep(unittest.TestCase):
     def test_family_limitation_matches_the_params(self):
         modifiers = _text(ROOT / "common" / "static_modifiers" / "te_demog_modifiers.txt")
         body = _block(modifiers, "te_demog_family_limitation")
-        self.assertIn(f"country_fertility_means_add = {P.FAMILY_LIMITATION_MEANS}", body)
+        self.assertIn(f"{P.MEANS_SHIFT_TYPE} = {P.FAMILY_LIMITATION_MEANS}", body)
         self.assertIn("name = te_demog_family_limitation", _text(ROOT / "common" / "history" / "extra_history.txt"))
 
     def test_fold_writes_the_births(self):
@@ -2664,6 +2664,26 @@ class TestModifierTypes(unittest.TestCase):
         self.assertIn("state_mortality_mult", engine)   # the list is the one this reads
         for name in P.DEMOG_MORTALITY_TYPES:
             self.assertNotIn(name, engine, name)
+
+    def test_fertility_types_are_registered_named_and_new(self):
+        text, loc = _text(TYPES_FILE), _text(MODIFIERS_LOC)
+        engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        for name in P.DEMOG_FERTILITY_TYPES:
+            self.assertTrue(name.startswith("state_"), name)
+            body = _block(text, name)
+            self.assertIn("script_only = yes", body, name)
+            self.assertRegex(body, r"decimals = \d", name)
+            self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
+            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"", name)
+            self.assertNotIn(name, engine, name)
+
+    def test_the_old_country_means_type_is_gone(self):
+        # Review Focus 5: the rename leaves no reader, carrier, loc key or param behind
+        old = "country_fertility_means_add"
+        for sub in ("common", "localization", "scripts", "events", "gui"):
+            for path in (ROOT / sub).rglob("*"):
+                if path.is_file() and path.suffix in (".txt", ".yml", ".py", ".gui"):
+                    self.assertNotIn(old, path.read_text(encoding="utf-8-sig", errors="ignore"), str(path))
 
     def test_seven_state_types(self):
         # one type per term, read in state scope; a tech's or law's line reaches the state because

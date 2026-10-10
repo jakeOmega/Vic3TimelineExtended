@@ -33,7 +33,7 @@ class Inputs:
     institutions: dict = field(default_factory=dict)
     crowding: bool = False
     wealth_tfr: float | None = None      # pop-weighted SoL curve from the walk
-    means_add: float = 0.0               # modifier:country_fertility_means_add (Family Limitation 0.6)
+    means_add: float = 0.0               # static modifiers' state_fertility_means_add (Family Limitation 0.6); laws' lines come through mods
     female_job_share: float = 0.3        # light industry + services share of the employed
     crisis: float = 0.0                  # 0..1: war, devastation, turmoil at the origin
     inflow_years: int = 0                # consecutive years of net inflow (chain migration)
