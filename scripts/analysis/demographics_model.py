@@ -37,6 +37,7 @@ class Inputs:
     female_job_share: float = 0.3        # light industry + services share of the employed
     crisis: float = 0.0                  # 0..1: war, devastation, turmoil at the origin
     inflow_years: int = 0                # consecutive years of net inflow (chain migration)
+    mods: dict = field(default_factory=dict)   # {modifier type: total} the state reads (demographics_modifiers.totals)
 
 
 def clamp(x, lo, hi):
@@ -60,20 +61,27 @@ def female_work_share(inp):
     return P.FEMALE_WORK_SHARE_DEFAULT
 
 
+def medicine(inp, cause):
+    """1 - access x treatment for one of P.MEDICINE_CAUSES (modifier-types design, Decision 1)."""
+    access = clamp(P.BASE_ACCESS + inp.mods.get(P.ACCESS_TYPE, 0.0), 0.0, 1.0)
+    treatment = clamp(inp.mods.get(P.TREATMENT_TYPE[cause], 0.0), 0.0, P.TREATMENT_CAP[cause])
+    return 1 - access * treatment
+
+
+def plain_multiplier(inp, cause):
+    """1 + the cause's types' sum (P.MORTALITY_TYPES), at least P.MORTALITY_MULT_FLOOR."""
+    return max(P.MORTALITY_MULT_FLOOR, 1 + sum(inp.mods.get(t, 0.0) for t in P.MORTALITY_TYPES.get(cause, ())))
+
+
 def cause_multipliers(inp):
-    """One multiplier per cause from the state's inputs; 1.0 at the base (§2.4)."""
+    """One multiplier per cause from the state's inputs; 1.0 at the base (§2.4). Laws,
+    technology and institutions arrive as modifier totals (inp.mods); the script's
+    te_demog_mult_<cause> computes the same, in the same order."""
     mult = {c: 1.0 for c in ("infection", "work", "external", "maternal", "chronic")}
-    for cause, techs in P.TECH_MULT.items():
-        for tech, m in techs.items():
-            if tech in inp.techs:
-                mult[cause] *= m
-    for cause, laws in P.LAW_MULT.items():
-        for law, m in laws.items():
-            if law in inp.laws:
-                mult[cause] *= m
-    for cause, insts in P.INSTITUTION_MULT.items():
-        for inst, m in insts.items():
-            mult[cause] *= m ** inp.institutions.get(inst, 0)
+    for cause in P.MEDICINE_CAUSES:
+        mult[cause] *= medicine(inp, cause)
+    for cause in P.MORTALITY_TYPES:
+        mult[cause] *= plain_multiplier(inp, cause)
     mult["infection"] *= lerp_sol(inp.sol, 1.0, P.SOL_INFECTION_AT_HIGH)
     mult["infection"] *= 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
     if inp.crowding and inp.institutions.get("institution_ministry_of_urban_planning", 0) == 0:

@@ -14,7 +14,18 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
+
+CARRIERS = DM.load_carriers()
+
+
+def scenario(**kw):
+    """Inputs whose modifier totals come from the game files' carriers for its techs, laws and
+    institutions (an incorporated state)."""
+    inp = M.Inputs(**kw)
+    inp.mods = DM.totals(CARRIERS, inp.techs, inp.laws, inp.institutions)
+    return inp
 
 MODERN = frozenset({
     "medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
@@ -24,17 +35,17 @@ MODERN = frozenset({
 EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization"})
 
 AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
-BRITAIN_1836 = M.Inputs(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
+BRITAIN_1836 = scenario(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
 FRANCE_1836 = M.Inputs(sol=11, literacy=0.3, urban_share=0.15, means_add=P.FAMILY_LIMITATION_MEANS)
-WEST_1950 = M.Inputs(sol=25, literacy=0.9, urban_share=0.6, techs=EARLY_MEDICINE,
+WEST_1950 = scenario(sol=25, literacy=0.9, urban_share=0.6, techs=EARLY_MEDICINE,
                      laws=frozenset({"law_private_health_insurance", "law_women_in_the_workplace"}),
                      institutions={"institution_health_system": 2, "institution_workplace_safety": 2})
-WEST_1990 = M.Inputs(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
+WEST_1990 = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage",
                                      "law_old_age_pension", "law_dedicated_police"}),
                      institutions={"institution_health_system": 4, "institution_workplace_safety": 4,
                                    "institution_ministry_of_consumer_protection": 3})
-INDIA_1975 = M.Inputs(sol=9, literacy=0.35, urban_share=0.2,
+INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
                       laws=frozenset({"law_charitable_health_system"}))
 
@@ -111,6 +122,48 @@ class TestMortality(unittest.TestCase):
         after = M.group_rates(M.Inputs(laws=frozenset({"law_women_in_the_workplace"})))[0]
         g = P.group_of(30)
         self.assertGreater(after[g], before[g])
+
+
+class TestMedicine(unittest.TestCase):
+    """The modifier-types design's Decision 1: medicine is 1 - access x treatment; the other
+    law, technology and institution terms are 1 + their types' sum, floored."""
+
+    def test_no_carrier_is_exactly_the_base(self):
+        # a fresh 1836 state with no medical tech, health law or institution: medicine is 1
+        inp = M.Inputs(sol=11, literacy=0.35)
+        m = M.cause_multipliers(inp)
+        self.assertEqual(m["maternal"], 1.0)
+        self.assertEqual(m["work"], 1.0)
+        self.assertEqual(m["external"], 1.0)
+        self.assertAlmostEqual(m["infection"], M.lerp_sol(11, 1.0, P.SOL_INFECTION_AT_HIGH)
+                               * (1 - P.LITERACY_INFECTION_WEIGHT * 0.35))
+        self.assertAlmostEqual(m["chronic"], M.lerp_sol(11, 1.0, P.SOL_CHRONIC_AT_HIGH))
+
+    def test_treatment_reaches_only_as_far_as_access(self):
+        mods = {P.TREATMENT_TYPE["infection"]: 0.8}
+        self.assertAlmostEqual(M.medicine(M.Inputs(mods=mods), "infection"), 1 - P.BASE_ACCESS * 0.8)
+        self.assertAlmostEqual(M.medicine(M.Inputs(mods={**mods, P.ACCESS_TYPE: 1.0}), "infection"), 1 - 0.8)
+
+    def test_access_without_treatment_does_nothing(self):
+        self.assertEqual(M.medicine(M.Inputs(mods={P.ACCESS_TYPE: 0.6}), "maternal"), 1.0)
+
+    def test_caps_hold(self):
+        mods = {P.ACCESS_TYPE: 5.0, P.TREATMENT_TYPE["chronic"]: 5.0}
+        self.assertAlmostEqual(M.medicine(M.Inputs(mods=mods), "chronic"), 1 - P.TREATMENT_CAP["chronic"])
+
+    def test_plain_terms_are_floored(self):
+        inp = M.Inputs(mods={"state_work_mortality_mult": -0.9, "country_work_mortality_mult": 0.1})
+        self.assertEqual(M.plain_multiplier(inp, "work"), P.MORTALITY_MULT_FLOOR)
+        self.assertEqual(M.cause_multipliers(inp)["work"], P.MORTALITY_MULT_FLOOR)
+
+    def test_an_unincorporated_state_gets_the_base_access_only(self):
+        laws, levels = {"law_public_health_insurance"}, {"institution_health_system": 5}
+        techs = {"medical_degrees", "pharmaceuticals", "antibiotics"}
+        home = M.Inputs(mods=DM.totals(CARRIERS, techs, laws, levels))
+        colony = M.Inputs(mods=DM.totals(CARRIERS, techs, laws, levels, incorporated=False))
+        self.assertLess(M.medicine(home, "infection"), M.medicine(colony, "infection"))
+        treatment = colony.mods[P.TREATMENT_TYPE["infection"]]
+        self.assertAlmostEqual(M.medicine(colony, "infection"), 1 - P.BASE_ACCESS * treatment)
 
 
 class TestStructure(unittest.TestCase):

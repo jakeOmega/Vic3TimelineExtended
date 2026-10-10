@@ -8,8 +8,7 @@ Usage:
 Spec: docs/superpowers/specs/2026-10-08-demographics-design.md; plan:
 docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md (Task 6). Inputs:
 scripts/analysis/demographics_params.py (every rate, weight and table),
-common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py, and
-MAX_INSTITUTION_INVESTMENT, the top of the institution chains),
+common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py),
 common/buy_packages/00_buy_packages.txt (spending per head by wealth) and the land-reform
 laws (vanilla_parsed/common/laws.json and common/laws/, for variants' parents). Not a post-load
 regenerator: run it after changing any of those; test_gen_demographics.py fails CI when
@@ -34,8 +33,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_project                        the bands twenty years ahead (a display outline)
         te_demog_debug_log_ring_before / _after  (Task 15's replay lines)
     common/script_values/te_demog_generated_values.txt
-        per-pop engine curves, wealth TFR and income; per-state cause multipliers (institution
-        chains up to the defines' MAX_INSTITUTION_INVESTMENT), women's work share, the means and
+        per-pop engine curves, wealth TFR and income; per-state cause multipliers (reads of the
+        demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
         the land-tenure term; te_demog_k_* constants; per-slot debug shares
 """
 
@@ -761,16 +760,12 @@ def income(o, costs):
     o("")
 
 
-def max_institution_investment(root):
-    """NPolitics MAX_INSTITUTION_INVESTMENT from the mod's defines: the top level an institution can reach."""
-    path = root / "common" / "defines" / "extra_defines.txt"
-    m = re.search(r"^\s*MAX_INSTITUTION_INVESTMENT\s*=\s*(\d+)", path.read_text(encoding="utf-8-sig"), re.M)
-    if not m:
-        raise KeyError(f"MAX_INSTITUTION_INVESTMENT not found in {path}")
-    return int(m.group(1))
+def _read(t):
+    """A modifier type as the census reads it in state scope: a country type through the owner."""
+    return f"owner.modifier:{t}" if t.startswith("country_") else f"modifier:{t}"
 
 
-def multipliers(o, max_level):
+def multipliers(o):
     for cause in CAUSES:
         if cause == "maternal":
             o("# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate")
@@ -779,17 +774,19 @@ def multipliers(o, max_level):
             o(f"# State scope: the {cause} cause's multiplier (demographics_model.cause_multipliers).")
         o(f"te_demog_mult_{cause} = {{")
         o("value = 1")
-        for tech, m in P.TECH_MULT.get(cause, {}).items():
-            o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {tech} }} }} multiply = {lit(m)} }}")
-        for law, m in P.LAW_MULT.get(cause, {}).items():
-            o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} multiply = {lit(m)} }}")
-        for inst, m in P.INSTITUTION_MULT.get(cause, {}).items():
-            for level in range(max_level, 0, -1):
-                kw = "if" if level == max_level else "else_if"
-                o(f"{kw} = {{")
-                o(f"limit = {{ owner = {{ institution_investment_level = {{ institution = {inst} value >= {level} }} }} }}")
-                o(f"multiply = {lit(m ** level)}")
-                o("}")
+        if cause in P.MEDICINE_CAUSES:
+            o("# medicine: 1 - access x treatment (demographics modifier types, Decision 1)")
+            o("subtract = {")
+            o(f"value = {_read(P.ACCESS_TYPE)}")
+            o(f"add = {lit(P.BASE_ACCESS)}")
+            o("min = 0")
+            o("max = 1")
+            o(f"multiply = {{ value = {_read(P.TREATMENT_TYPE[cause])} min = 0 "
+              f"max = {lit(P.TREATMENT_CAP[cause])} }}")
+            o("}")
+        if cause in P.MORTALITY_TYPES:
+            adds = " ".join(f"add = {_read(t)}" for t in P.MORTALITY_TYPES[cause])
+            o(f"multiply = {{ value = 1 {adds} min = {lit(P.MORTALITY_MULT_FLOOR)} }}")
         if cause == "infection":
             o("multiply = {")
             o(f"value = var:te_dg_sol subtract = {P.WEALTH_TFR_LOW_SOL} "
@@ -928,7 +925,7 @@ def render_values(root):
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     engine_rate_terms(o, root)
     income(o, buy_package_costs(root))
-    multipliers(o, max_institution_investment(root))
+    multipliers(o)
     land_term(o, root)
     constants(o)
     debug_values(o)

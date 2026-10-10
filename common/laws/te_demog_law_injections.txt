@@ -1,0 +1,48 @@
+﻿# Demographics: law terms for the census's causes of death.
+# Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
+# Read only by the census (te_demog_mult_*); the engine never applies these types. The country
+# lines (modifier) count in every state. The Workplace Safety lines (institution_modifier) are
+# per level of the institution and count in incorporated states only. The health laws' access
+# lines sit inside their existing blocks in modified_health_system.txt.
+
+INJECT:law_local_police = {
+	modifier = {
+		country_external_mortality_mult = -0.05
+	}
+}
+
+INJECT:law_dedicated_police = {
+	modifier = {
+		country_external_mortality_mult = -0.1
+	}
+}
+
+INJECT:law_militarized_police = {
+	modifier = {
+		country_external_mortality_mult = -0.1
+	}
+}
+
+INJECT:law_child_labor_allowed = {
+	modifier = {
+		country_work_mortality_mult = 0.1
+	}
+}
+
+INJECT:law_old_age_pension = {
+	modifier = {
+		country_chronic_mortality_mult = -0.05
+	}
+}
+
+INJECT:law_regulatory_bodies = {
+	institution_modifier = {
+		state_work_mortality_mult = -0.1
+	}
+}
+
+INJECT:law_worker_protections = {
+	institution_modifier = {
+		state_work_mortality_mult = -0.1
+	}
+}

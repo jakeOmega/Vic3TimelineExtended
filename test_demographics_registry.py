@@ -2672,3 +2672,35 @@ class TestModifierTypes(unittest.TestCase):
         self.assertTrue(P.ACCESS_TYPE.startswith("state_"))
         for name in P.TREATMENT_TYPE.values():
             self.assertTrue(name.startswith("country_"), name)
+
+
+class TestCauseMultipliersScript(unittest.TestCase):
+    """te_demog_mult_<cause> (generated) against demographics_model.cause_multipliers, with the
+    modifier types' reads as fixtures: the caps, the floor and the order of the clamps."""
+
+    CASES = [
+        {},
+        {P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 0.9, P.TREATMENT_TYPE["chronic"]: 0.59},
+        {P.ACCESS_TYPE: 0.6, P.TREATMENT_TYPE["infection"]: 0.81, P.TREATMENT_TYPE["maternal"]: 2.0,
+         P.TREATMENT_TYPE["chronic"]: 0.3, "country_chronic_mortality_mult": -0.05},
+        {P.ACCESS_TYPE: 1.5, P.TREATMENT_TYPE["infection"]: 0.3},
+        {"state_work_mortality_mult": -0.9, "country_work_mortality_mult": 0.1,
+         "country_external_mortality_mult": 0.3, "state_external_mortality_mult": -0.4},
+    ]
+
+    def test_script_matches_the_model(self):
+        for mods in self.CASES:
+            for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
+                inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
+                want = demographics_model.cause_multipliers(inp)
+                fixtures = {("owner.modifier:" if t.startswith("country_") else "modifier:") + t: mods.get(t, 0.0)
+                            for t in P.DEMOG_MORTALITY_TYPES}
+                eng = _Engine(fixtures)
+                eng.vars.update(te_dg_sol=float(sol), te_dg_lit=float(lit))
+                for cause in ("infection", "work", "external", "chronic"):
+                    with self.subTest(mods=mods, sol=sol, cause=cause):
+                        got = eng.value(eng._tree(eng.values, f"te_demog_mult_{cause}"))
+                        self.assertAlmostEqual(got, want[cause], places=9)
+                with self.subTest(mods=mods, sol=sol, cause="maternal"):
+                    got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
+                    self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)

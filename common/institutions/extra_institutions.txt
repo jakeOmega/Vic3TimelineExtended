@@ -157,6 +157,8 @@ institution_ministry_of_consumer_protection = {
 	modifier = {
 		goods_input_construction_mult = 0.05
 		state_mortality_mult = -0.01
+		# the census's deaths from violence and accidents, per level (demographics modifier types, stage 1)
+		state_external_mortality_mult = -0.08
 		country_production_tech_research_speed_mult = 0.05
 		state_standard_of_living_add = 0.5
 		# Drug regulation shrinks opium plantations (drugs phase 2 § 3)

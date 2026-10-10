@@ -65,6 +65,9 @@ modern_pharmaceuticals = {
 	category = society
 
 	modifier = {
+		# the census's medicine (demographics modifier types, stage 1)
+		country_maternal_treatment_add = 0.1
+		country_chronic_treatment_add = 0.25
 		country_weekly_innovation_max_add = 50
 		country_institution_health_system_max_investment_add = 1
 		country_institution_ministry_of_international_aid_max_investment_add = 1
