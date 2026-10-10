@@ -2,6 +2,7 @@
 
 import copy
 import io
+import math
 import re
 import sys
 import tempfile
@@ -18,6 +19,7 @@ import demographics_modifiers as DM  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
+ANCHORS = ROOT / "test_fixtures" / "demographics" / "history_anchors.csv"
 CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
@@ -54,6 +56,97 @@ class TestHarness(unittest.TestCase):
         _ring, last = M.run_constant(inp, years=200)
         row = next(r for r in H.fertility_rows() if r[0] == label)
         self.assertAlmostEqual(row[1], last["tfr"], places=2)
+
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_history_on_the_slice(self):
+        # the model's figures for Britain beside the anchors nearest the save's year
+        code, out, err = self._cli("history", str(SLICE), "--anchors", str(ANCHORS), "--year", "1836")
+        self.assertEqual(code, 0, err)
+        line = next(l for l in out.splitlines() if l.startswith("GBR"))
+        self.assertRegex(line, r"model e0 \d+\.\d")
+        self.assertIn("history e0 41 (1838)", line)
+        self.assertIn("imr 153", line)
+        self.assertIn("tfr 5.1", line, "Gapminder's children per woman beside the model's")
+        self.assertRegex(line, r"people \+0\.8\d%")       # 1820-1850, the benchmarks around 1836
+        self.assertRegex(out, r"world .* e0 \d+\.\d")
+
+    def test_history_takes_each_states_own_rates(self):
+        """The census works state by state, and the poverty term bends at SoL 9: a country with states either
+        side of it gets the people-weighted mean of their own rates, not the rates at its mean SoL (#855's review)."""
+        carriers = DM.load_carriers()
+
+        def state(sol, people):
+            c = S.CountryInputs("TST")
+            c.population, c.sol_x_size, c.wealth_tfr_x_size = people, sol * people, M.wealth_tfr(sol) * people
+            c.workforce, c.literate = people / 2, people / 10
+            return c
+
+        states = [("1", state(5.0, 1000.0), True), ("2", state(13.0, 1000.0), True)]
+        got = H.country_figures(states, carriers)
+        each = [H.model_figures(H.inputs_for(s, carriers, incorporated=inc)) for _, s, inc in states]
+        for k in ("e0", "imr", "tfr", "r"):
+            self.assertAlmostEqual(got[k], (each[0][k] + each[1][k]) / 2, msg=k)
+        whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
+        self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
+
+    def test_inputs_carry_a_static_means_shift(self):
+        c = S.CountryInputs("TST", population=100.0, sol_x_size=1000.0, workforce=50.0, literate=10.0)
+        c.means_add = 0.6
+        self.assertEqual(H.inputs_for(c, DM.load_carriers()).means_add, 0.6)
+
+    def test_history_prints_the_fertility_anchor(self):
+        a = H.read_anchors(ANCHORS)
+        self.assertEqual(H.nearest(a["tfr"]["United Kingdom"], 1836, 5), (1836, 5.1))
+
+    def test_inputs_for_passes_a_states_crowding(self):
+        """migration_crowding sits on 91% of the 1837 world's people; the history check left it out (2026-10-10)."""
+        c = S.CountryInputs("TST")
+        c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 8000.0, M.wealth_tfr(8.0) * 1000.0
+        c.workforce, c.literate = 500.0, 100.0
+        plain = H.inputs_for(c)
+        c.crowding = 0.2   # a 20% migration penalty
+        crowded = H.inputs_for(c)
+        self.assertEqual(plain.crowding, 0.0)
+        self.assertEqual(crowded.crowding, 0.2)
+        self.assertLess(H.model_figures(crowded)["e0"], H.model_figures(plain)["e0"] - 1)
+
+    def test_save_year_reads_game_date_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "a.v3"
+            p.write_text('SAV0100x\nmeta_data={\n\tversion="1.14.5"\n\tgame_date=1887.1.1\n}\n', encoding="utf-8")
+            self.assertEqual(H.save_year(p), 1887)
+            p.write_text("SAV0100x\nmeta_data={\n\tdate=1.1.1\n}\n", encoding="utf-8")
+            self.assertIsNone(H.save_year(p), "an ironman save's date= is not the game's year")
+
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_history_prefers_the_saves_own_date_and_reports_its_errors(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dated = Path(tmp) / "dated.v3"
+            dated.write_text(SLICE.read_text(encoding="utf-8").replace("meta_data={\n", "meta_data={\n\tgame_date=1850.1.1\n", 1),
+                             encoding="utf-8")
+            code, out, _err = self._cli("history", str(dated), "--anchors", str(ANCHORS), "--year", "1836")
+            self.assertEqual(code, 0)
+            self.assertIn("(1850)", out, "--year only fills in a save with no game_date")
+        code, out, err = self._cli("history", str(SLICE), "--anchors", str(ANCHORS))
+        self.assertEqual(code, 1)
+        self.assertIn("--year", err)
+        code, out, err = self._cli("history", str(SLICE), "--anchors", "/nonexistent/anchors.csv", "--year", "1836")
+        self.assertEqual(code, 1)
+        self.assertIn("anchors.csv", err)
+        code, out, err = self._cli("history", str(SLICE), "--anchors", str(ANCHORS), "--year", "1836")
+        self.assertIn("Portugal: no anchors", err)
+
+    def test_growth_around_skips_a_zero_benchmark(self):
+        self.assertIsNone(H.growth_around({1820: 0.0, 1850: 10.0}, 1836))
+        self.assertIsNone(H.growth_around({1820: 10.0, 1850: 0.0}, 1836))
+
+    def test_history_anchors_round_trip(self):
+        a = H.read_anchors(ANCHORS)
+        self.assertEqual(a["e0"]["United Kingdom"][1838], 41.0)
+        self.assertEqual(H.nearest(a["e0"]["United Kingdom"], 1836, 15), (1838, 41.0))
+        self.assertIsNone(H.nearest(a["e0"]["United Kingdom"], 1870, 15))
+        self.assertAlmostEqual(H.growth_around(a["population"]["United Kingdom"], 1860), 100 * math.log(31400 / 27181) / 20)
+        self.assertIsNone(H.growth_around(a["population"]["United Kingdom"], 1900))
 
     def test_adopters_on_the_slice(self):
         # Britain holds Charitable Health System in 1836; Portugal has none
@@ -319,7 +412,7 @@ class TestHarness(unittest.TestCase):
             path = Path(tmp) / "autosave.v3"
             path.write_bytes(b"SAV0103\n\xffU\x01\x00PK\x03\x04\x00\x00")
             for argv in (("gini", str(path)), ("seed", str(path), "--tag", "GBR"), ("inputs", str(path)),
-                         ("natural-change", str(path), str(path))):
+                         ("natural-change", str(path), str(path)), ("history", str(path), "--anchors", str(ANCHORS))):
                 with self.subTest(argv[0]):
                     code, out, err = self._cli(*argv)
                     self.assertEqual(code, 1, out)
@@ -583,3 +676,111 @@ class TestWealthConcentrationReader(unittest.TestCase):
         bad.write_bytes(b"SAV010000\x00\x01binary")
         with redirect_stderr(io.StringIO()):
             self.assertEqual(H.main(["wc", str(bad)]), 1)
+
+
+class TestFidelity(unittest.TestCase):
+    """`fidelity SAVE`: the model's cause multipliers on the census's own SoL and literacy (te_dg_sol, te_dg_lit)
+    against the ones the census stored (te_dg_m_*). A term the harness can't read shows as a mismatch: the
+    crowding term did, on 91% of the world's people (2026-10-10)."""
+
+    CROWD_MULT = 1.5   # the crowded state's migration_crowding multiplier: a -15% pull, so infection x1.15
+    GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
+
+    def setUp(self):
+        from test_demographics_save_inputs import TINY
+        self.tiny = TINY
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        for p in self.tmp.iterdir():
+            p.unlink()
+        self.tmp.rmdir()
+
+    def game_multipliers(self, poverty_floor=None):
+        """The census's stored multipliers for state 1 in game, where it carries migration_crowding: infection,
+        and maternal as deaths per 100,000 births. poverty_floor: the build's poverty term, if not this branch's."""
+        st = S.state_inputs(S.read_sections(self.save(False, 1.0)))["TST"][0][1]
+        inp = H.inputs_for(st, DM.load_carriers())
+        kept = H.P.POVERTY_INFECTION_AT_FLOOR
+        if poverty_floor is not None:
+            H.P.POVERTY_INFECTION_AT_FLOOR = poverty_floor
+        try:
+            mult = M.cause_multipliers(M.Inputs(sol=self.GAME_SOL, literacy=self.GAME_LIT,
+                                                institutions=inp.institutions, mods=inp.mods))
+        finally:
+            H.P.POVERTY_INFECTION_AT_FLOOR = kept
+        crowding = 1 + H.P.MIGRATION_CROWDING_PULL_PER_MULT * self.CROWD_MULT
+        return mult["infection"] * crowding, mult["maternal"] * H.P.MATERNAL_PER_100K_BIRTHS
+
+    def game_infection(self, poverty_floor=None):
+        return self.game_multipliers(poverty_floor)[0]
+
+    def save(self, crowded, m_inf, m_mat=None):
+        def var(name, value):
+            return (f"\t\t\t\tflag={name}\n\t\t\t\tdata={{\n\t\t\t\t\ttype=value\n"
+                    f"\t\t\t\t\tidentity={round(value * 1e5)}\n\t\t\t\t}}\n")
+        block = "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(
+            var(n, v) for n, v in (("te_dg_sol", self.GAME_SOL), ("te_dg_lit", self.GAME_LIT), ("te_dg_m_inf", m_inf),
+                                   ("te_dg_m_mat", m_mat)) if v is not None
+        ) + "\t\t\t} }\n\t}\n"
+        if crowded:
+            block += ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=5\n\t\t\t\tmodifier=migration_crowding\n"
+                      f"\t\t\t\tmultiplier={self.CROWD_MULT}\n\t\t\t}} }}\n\t}}\n")
+        state = "1={\n\tcountry=3\n\tincorporation=1\n"
+        text = self.tiny.replace(state + "}", state + block + "}", 1)
+        self.assertNotEqual(text, self.tiny)
+        path = self.tmp / f"s{int(crowded)}_{m_inf:.5f}.v3"
+        path.write_text(text, encoding="utf-8")
+        return str(path)
+
+    def test_a_crowded_state_matches(self):
+        rows = H.fidelity_rows(self.save(True, *self.game_multipliers()), DM.load_carriers())
+        (_tag, sid, _people, pairs, _sol, _lit), = rows
+        self.assertEqual(sid, "1")
+        for cause in ("infection", "maternal"):   # maternal is stored per 100,000 births
+            game, model = pairs[cause]
+            self.assertAlmostEqual(game / model, 1.0, places=4, msg=cause)
+
+    def test_a_save_from_another_build_takes_its_poverty_floor(self):
+        # a save from main (no poverty term) reads as off everywhere below SoL 9 unless fidelity is told (review I2)
+        path = self.save(True, self.game_infection(poverty_floor=1.0))
+        kept = H.P.POVERTY_INFECTION_AT_FLOOR
+        for argv, code in ((["fidelity", path], 1), (["fidelity", path, "--poverty-floor", "1"], 0)):
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                self.assertEqual(H.main(argv), code, out.getvalue() + err.getvalue())
+            self.assertEqual(H.P.POVERTY_INFECTION_AT_FLOOR, kept, "the branch's own value comes back")
+        self.assertIn("poverty", out.getvalue())
+
+    def test_an_unknown_tag_is_named(self):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            self.assertEqual(H.main(["fidelity", self.save(True, self.game_infection()), "--tag", "XXX"]), 1)
+        self.assertIn("XXX", err.getvalue())
+
+    def test_a_term_the_harness_cant_see_shows(self):
+        # the same stored multiplier, but the save no longer shows the modifier the census applied
+        rows = H.fidelity_rows(self.save(False, self.game_infection()), DM.load_carriers())
+        game, model = rows[0][3]["infection"]
+        self.assertAlmostEqual(game / model, 1.15, places=3)
+
+    def test_the_save_readers_sol_beside_the_walks(self):
+        rows = H.fidelity_rows(self.save(True, self.game_infection()), DM.load_carriers())
+        self.assertEqual(rows[0][4], (28.0, self.GAME_SOL))
+        self.assertEqual(rows[0][5], (0.5, self.GAME_LIT))
+
+    def test_cli_exits_1_on_a_mismatch(self):
+        for crowded, code in ((True, 0), (False, 1)):
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                got = H.main(["fidelity", self.save(crowded, self.game_infection())])
+            self.assertEqual(got, code, out.getvalue() + err.getvalue())
+            self.assertIn("infection", out.getvalue())
+
+    def test_cli_says_when_no_state_was_walked(self):
+        path = self.tmp / "plain.v3"
+        path.write_text(self.tiny, encoding="utf-8")
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            self.assertEqual(H.main(["fidelity", str(path)]), 1)
+        self.assertIn("te_dg_m_inf", err.getvalue())

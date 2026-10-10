@@ -2650,12 +2650,9 @@
  modern_election_events.8.f:0 "\"We inherited the mess. We'll clean it up our way.\"\n\n\"My parents say politics doesn't change anything. I'm going to prove them wrong.\"\n\n\"They keep building a world we don't want to live in and then act surprised when we push back.\""
  modern_election_events.8.t:0 "Generation Next"
  modern_election_events.9.a:0 "Press the advantage ruthlessly."
- modern_election_events.9.a.tt:0 "The opposing party's rival gains significant momentum while the gaffing party's campaign is severely damaged."
  modern_election_events.9.b:0 "Take the high road."
- modern_election_events.9.b.tt:0 "The gaffe fades from the news cycle naturally. The gaffing party loses a small amount of momentum."
  modern_election_events.9.c:0 "Spin it into something relatable."
- modern_election_events.9.c.tt:0 "The gaffe is reframed as an endearing, human moment. The gaffing party recovers some momentum."
- modern_election_events.9.d:0 "During a live broadcast, a prominent candidate has committed a spectacular verbal blunder. The clip has already been replayed thousands of times, spawning memes and merciless commentary. What might once have been a forgotten slip has become, in the age of instant replay, a defining moment of the campaign."
+ modern_election_events.9.d:0 "During a live broadcast, a prominent candidate of the [SCOPE.sParty('gaffe_party').GetName] has committed a spectacular verbal blunder. The clip has already been replayed thousands of times, spawning memes and merciless commentary. What might once have been a forgotten slip has become, in the age of instant replay, a defining moment of the campaign."
  modern_election_events.9.f:0 "\"Did they really say that? On camera? With the microphone on?\"\n\n\"Play it again. Slower this time.\"\n\n\"In the old days, a gaffe died with the evening news. Now it lives forever, and it brings friends.\""
  modern_election_events.9.t:0 "Foot in Mouth"
 

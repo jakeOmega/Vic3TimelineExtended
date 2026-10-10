@@ -28,7 +28,9 @@
 ###   one logs every frame (gui_modding_guide.md gotchas #14 and #23). Every
 ###   figure is read under a gate that asks script: the census
 ###   (te_pops_demog_tab_unlock_sgui's IsValid, te_dg_census_year), Wealth
-###   Concentration's national figures (te_demog_wealth_ready_sgui), the outline
+###   Concentration's national figures (te_demog_wealth_ready_sgui), the country's
+###   Gini (te_demog_gini_ready_sgui: written under a narrower condition than
+###   the national figures, so it has its own gate), the outline
 ###   (te_demog_outline_ready_sgui), the capital's census
 ###   (te_demog_capital_census_sgui) and a stepped census for births and deaths
 ###   (te_demog_stepped_sgui); common/scripted_guis/te_demog_sguis.txt. A loc key
@@ -823,7 +825,7 @@ types te_demographics_widgets
 					text = "te_demog_ov_gini"
 				}
 				blockoverride "row_value" {
-					text = "[SelectLocalization( GetScriptedGui('te_demog_wealth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_gini_value', 'te_demog_ov_pending' )]"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_gini_value', 'te_demog_ov_pending' )]"
 				}
 			}
 			te_demog_figure_row = {
@@ -1351,6 +1353,8 @@ types te_demographics_widgets
 	### target, the target's five terms as pillars, and the most and least
 	### concentrated states. Wealth Concentration's national figures exist once
 	### a state has a score (te_demog_wealth_ready_sgui); until then one line.
+	### The Gini cell has its own gate (te_demog_gini_ready_sgui) and shows a
+	### dash until the country has a Gini.
 	type te_demog_sec_wealth = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1401,7 +1405,7 @@ types te_demographics_widgets
 							text = "te_demog_gini_label"
 						}
 						blockoverride "cell_value" {
-							text = "te_demog_gini_value"
+							text = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_gini_value', 'te_demog_gini_pending' )]"
 						}
 					}
 					te_demog_wealth_cell = {

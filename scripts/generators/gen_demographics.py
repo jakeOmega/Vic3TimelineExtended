@@ -896,14 +896,27 @@ def multipliers(o):
               f"divide = {P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL} min = 0 max = 1")
             o(f"multiply = {lit(P.SOL_INFECTION_AT_HIGH - 1)} add = 1")
             o("}")
+            o(f"# poverty: x1 at SoL {P.POVERTY_INFECTION_SOL} and above, x{lit(P.POVERTY_INFECTION_AT_FLOOR)} at "
+              f"SoL {P.POVERTY_INFECTION_FLOOR_SOL} and below (demographics_model.poverty_infection)")
+            o("multiply = {")
+            o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_sol "
+              f"divide = {P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL} min = 0 max = 1")
+            o(f"multiply = {lit(P.POVERTY_INFECTION_AT_FLOOR - 1)} add = 1")
+            o("}")
             o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1 }}")
+            o(f"# crowding: + its migration penalty, at most +{lit(P.CROWDING_INFECTION_MAX)} "
+              "(demographics_model.cause_multipliers), from the")
+            o("# multiplier the crowding refresh applied (te_update_migration_crowding_modifier), as the save holds it")
             o("if = {")
             o("limit = {")
             o("has_modifier = migration_crowding")
-            o("owner = { NOT = { institution_investment_level = { institution = institution_ministry_of_urban_planning "
-              "value >= 1 } } }")
+            o("has_variable = migration_crowding_mult_applied")
             o("}")
-            o(f"multiply = {lit(P.CROWDING_INFECTION_MULT)}")
+            o("multiply = {")
+            o("value = var:migration_crowding_mult_applied "
+              f"multiply = {lit(P.MIGRATION_CROWDING_PULL_PER_MULT * P.CROWDING_INFECTION_PER_PULL)}")
+            o(f"max = {lit(P.CROWDING_INFECTION_MAX)} add = 1")
+            o("}")
             o("}")
         if cause == "chronic":
             o("multiply = {")

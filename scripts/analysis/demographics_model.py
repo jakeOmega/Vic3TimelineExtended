@@ -31,7 +31,7 @@ class Inputs:
     techs: frozenset = frozenset()
     laws: frozenset = frozenset()
     institutions: dict = field(default_factory=dict)
-    crowding: bool = False
+    crowding: float = 0.0                # migration penalty from crowding: 0.1 x migration_crowding's multiplier
     wealth_tfr: float | None = None      # pop-weighted SoL curve from the walk
     means_add: float = 0.0               # static modifiers' state_fertility_means_add (Family Limitation 0.6); laws' lines come through mods
     female_job_share: float = 0.3        # light industry + services share of the employed
@@ -83,11 +83,19 @@ def cause_multipliers(inp):
     for cause in P.MORTALITY_TYPES:
         mult[cause] *= plain_multiplier(inp, cause)
     mult["infection"] *= lerp_sol(inp.sol, 1.0, P.SOL_INFECTION_AT_HIGH)
+    mult["infection"] *= poverty_infection(inp.sol)
     mult["infection"] *= 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
-    if inp.crowding and inp.institutions.get("institution_ministry_of_urban_planning", 0) == 0:
-        mult["infection"] *= P.CROWDING_INFECTION_MULT
+    mult["infection"] *= 1 + min(P.CROWDING_INFECTION_PER_PULL * inp.crowding, P.CROWDING_INFECTION_MAX)
     mult["chronic"] *= lerp_sol(inp.sol, 1.0, P.SOL_CHRONIC_AT_HIGH)
     return mult
+
+
+def poverty_infection(sol):
+    """Infection's poverty term: x1 at POVERTY_INFECTION_SOL and above, rising linearly to
+    POVERTY_INFECTION_AT_FLOOR at POVERTY_INFECTION_FLOOR_SOL and below (phase 2 calibration)."""
+    span = P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL
+    t = clamp((P.POVERTY_INFECTION_SOL - sol) / span, 0.0, 1.0)
+    return 1 + (P.POVERTY_INFECTION_AT_FLOOR - 1) * t
 
 
 def rates_from_multipliers(mult, work_f, work_m):
