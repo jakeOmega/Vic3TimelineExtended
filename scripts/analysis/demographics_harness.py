@@ -13,6 +13,7 @@ Usage:
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
+    demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -777,6 +778,73 @@ def cmd_adopters(args):
     return 0
 
 
+# ---- fidelity: the harness against the census's own figures ------------------------------------------------
+# (cause, the census's state variable, its scale): each state's walk stores its cause multipliers, maternal as
+# deaths per 100,000 births (te_demog_effects.txt).
+FIDELITY_CAUSES = (("infection", "te_dg_m_inf", 1.0), ("chronic", "te_dg_m_chr", 1.0),
+                   ("external", "te_dg_m_ext", 1.0), ("work", "te_dg_m_work", 1.0),
+                   ("maternal", "te_dg_m_mat", P.MATERNAL_PER_100K_BIRTHS))
+FIDELITY_VARS = ("te_dg_sol", "te_dg_lit") + tuple(var for _c, var, _s in FIDELITY_CAUSES)
+
+
+def fidelity_rows(path, carriers=None, tags=()):
+    """[(tag, state id, people, {cause: (census, model)}, (SoL: save, walk), (literacy: save, walk))] for each state
+    the census has walked. The model runs on the walk's own SoL and literacy (te_dg_sol, te_dg_lit) with the save's
+    techs, laws, institutions and crowding, so a cause that differs is a term the harness doesn't read (the crowding
+    term was one, 2026-10-10) or an input that changed after the state's last step (a new tech or law)."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    _countries, walked = S.read_variables(path, (), FIDELITY_VARS)
+    rows = []
+    for tag, states in S.state_inputs(S.read_sections(path)).items():
+        if tags and tag not in tags:
+            continue
+        for sid, st, inc in states:
+            got = walked.get(sid, {}).get("vars", {})
+            if "te_dg_m_inf" not in got or st.population <= 0:
+                continue
+            inp = dataclasses.replace(inputs_for(st, carriers, incorporated=inc),
+                                      sol=got.get("te_dg_sol", st.sol), literacy=got.get("te_dg_lit", st.literacy))
+            model = M.cause_multipliers(inp)
+            pairs = {cause: (got[var] / scale, model[cause]) for cause, var, scale in FIDELITY_CAUSES if var in got}
+            rows.append((tag, sid, st.population, pairs, (st.sol, got.get("te_dg_sol")),
+                         (st.literacy, got.get("te_dg_lit"))))
+    return rows
+
+
+def _num_or_dash(v, spec):
+    return "-" if v is None else format(v, spec)
+
+
+def cmd_fidelity(args):
+    rows = fidelity_rows(args.save, tags=set(args.tag))
+    if not rows:
+        print(f"{args.save}: no state the census has walked (no te_dg_m_inf)", file=sys.stderr)
+        return 1
+    people = sum(r[2] for r in rows)
+    print(f"{len(rows)} states the census has walked, {people / 1e6:,.1f}M people. A cause is off where the census's "
+          f"multiplier is more than {args.tolerance:.0%} from the model's on the walk's own SoL and literacy.")
+    out = 0
+    for cause, _var, _scale in FIDELITY_CAUSES:
+        ratios = [(g / m if m else math.inf, r) for r in rows for c, (g, m) in r[3].items() if c == cause]
+        off = [(x, r) for x, r in ratios if abs(x - 1) > args.tolerance]
+        share = sum(r[2] for _x, r in off) / people
+        worst = max(off, key=lambda xr: abs(xr[0] - 1), default=None)
+        tail = f"; worst {worst[1][0]} state {worst[1][1]}, census / model {worst[0]:.3f}" if worst else ""
+        print(f"  {cause:10s} off in {len(off)} of {len(ratios)} states ({share:.0%} of people){tail}")
+        out |= bool(off)
+    sol = sorted(abs(s - w) for r in rows for s, w in [r[4]] if w is not None)
+    lit = sorted(abs(s - w) for r in rows for s, w in [r[5]] if w is not None)
+    if sol and lit:
+        print(f"  the save's pops against the walk: SoL median difference {statistics.median(sol):.2f} "
+              f"(largest {sol[-1]:.2f}), literacy {statistics.median(lit):.3f} (largest {lit[-1]:.3f})")
+    if args.tag:
+        for tag, sid, pop, pairs, (s_sol, w_sol), (s_lit, w_lit) in rows:
+            print(f"  {tag} {sid:>5} {pop / 1e6:6.2f}M  SoL {s_sol:5.2f}/{_num_or_dash(w_sol, '5.2f')}  "
+                  f"literacy {s_lit:.3f}/{_num_or_dash(w_lit, '.3f')}  "
+                  + "  ".join(f"{c} {g:.3f}/{m:.3f}" for c, (g, m) in pairs.items()))
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -817,6 +885,11 @@ def main(argv=None):
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)
+    p = sub.add_parser("fidelity")
+    p.add_argument("save")
+    p.add_argument("--tag", action="append", default=[])
+    p.add_argument("--tolerance", type=float, default=0.02, help="census / model beyond 1 +/- this is off (0.02)")
+    p.set_defaults(fn=cmd_fidelity)
     args = ap.parse_args(argv)
     try:
         return args.fn(args)

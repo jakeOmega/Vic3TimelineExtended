@@ -676,3 +676,79 @@ class TestWealthConcentrationReader(unittest.TestCase):
         bad.write_bytes(b"SAV010000\x00\x01binary")
         with redirect_stderr(io.StringIO()):
             self.assertEqual(H.main(["wc", str(bad)]), 1)
+
+
+class TestFidelity(unittest.TestCase):
+    """`fidelity SAVE`: the model's cause multipliers on the census's own SoL and literacy (te_dg_sol, te_dg_lit)
+    against the ones the census stored (te_dg_m_*). A term the harness can't read shows as a mismatch: the
+    crowding term did, on 91% of the world's people (2026-10-10)."""
+
+    GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
+
+    def setUp(self):
+        from test_demographics_save_inputs import TINY
+        self.tiny = TINY
+        self.tmp = Path(tempfile.mkdtemp())
+
+    def tearDown(self):
+        for p in self.tmp.iterdir():
+            p.unlink()
+        self.tmp.rmdir()
+
+    def game_infection(self):
+        """The census's stored infection multiplier for state 1 in game, where it carries migration_crowding."""
+        st = S.state_inputs(S.read_sections(self.save(False, 1.0)))["TST"][0][1]
+        inp = H.inputs_for(st, DM.load_carriers())
+        plain = M.cause_multipliers(M.Inputs(sol=self.GAME_SOL, literacy=self.GAME_LIT, institutions=inp.institutions,
+                                             mods=inp.mods))["infection"]
+        return plain * 1.15
+
+    def save(self, crowded, m_inf):
+        def var(name, value):
+            return (f"\t\t\t\tflag={name}\n\t\t\t\tdata={{\n\t\t\t\t\ttype=value\n"
+                    f"\t\t\t\t\tidentity={round(value * 1e5)}\n\t\t\t\t}}\n")
+        block = "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(
+            var(n, v) for n, v in (("te_dg_sol", self.GAME_SOL), ("te_dg_lit", self.GAME_LIT), ("te_dg_m_inf", m_inf))
+        ) + "\t\t\t} }\n\t}\n"
+        if crowded:
+            block += ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=5\n\t\t\t\tmodifier=migration_crowding\n"
+                      "\t\t\t\tmultiplier=0.04356\n\t\t\t} }\n\t}\n")
+        text = self.tiny.replace("1={\n\tcountry=3\n\tincorporation=1\n}", "1={\n\tcountry=3\n\tincorporation=1\n" + block + "}", 1)
+        self.assertNotEqual(text, self.tiny)
+        path = self.tmp / f"s{int(crowded)}_{m_inf:.5f}.v3"
+        path.write_text(text, encoding="utf-8")
+        return str(path)
+
+    def test_a_crowded_state_matches(self):
+        rows = H.fidelity_rows(self.save(True, self.game_infection()), DM.load_carriers())
+        (_tag, sid, _people, pairs, _sol, _lit), = rows
+        self.assertEqual(sid, "1")
+        game, model = pairs["infection"]
+        self.assertAlmostEqual(game / model, 1.0, places=4)
+
+    def test_a_term_the_harness_cant_see_shows(self):
+        # the same stored multiplier, but the save no longer shows the modifier the census applied
+        rows = H.fidelity_rows(self.save(False, self.game_infection()), DM.load_carriers())
+        game, model = rows[0][3]["infection"]
+        self.assertAlmostEqual(game / model, 1.15, places=3)
+
+    def test_the_save_readers_sol_beside_the_walks(self):
+        rows = H.fidelity_rows(self.save(True, self.game_infection()), DM.load_carriers())
+        self.assertEqual(rows[0][4], (28.0, self.GAME_SOL))
+        self.assertEqual(rows[0][5], (0.5, self.GAME_LIT))
+
+    def test_cli_exits_1_on_a_mismatch(self):
+        for crowded, code in ((True, 0), (False, 1)):
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                got = H.main(["fidelity", self.save(crowded, self.game_infection())])
+            self.assertEqual(got, code, out.getvalue() + err.getvalue())
+            self.assertIn("infection", out.getvalue())
+
+    def test_cli_says_when_no_state_was_walked(self):
+        path = self.tmp / "plain.v3"
+        path.write_text(self.tiny, encoding="utf-8")
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            self.assertEqual(H.main(["fidelity", str(path)]), 1)
+        self.assertIn("te_dg_m_inf", err.getvalue())

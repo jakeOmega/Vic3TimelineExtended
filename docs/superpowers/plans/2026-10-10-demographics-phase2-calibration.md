@@ -35,6 +35,15 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
     A city term moves the fitting strength up by about a quarter (the results doc's table);
   - if it stays near-universal, stage 1's medicine fit needs redoing with it on: four of its anchors fall out of band.
 
+- **`demographics_harness.py fidelity SAVE` checks the harness against the census** before a fit: the model's cause
+  multipliers on each walked state's own SoL and literacy against the ones the census stored. Run it on a save from
+  the build being fitted. On the 4x fast run (main, 2026-10-10), with the poverty term off as that build had it:
+  - 1837: only infection, in 13% of people, at exactly 1/1.15: states whose first Migration Crowding pulse came after
+    their last step (timing, not a gap);
+  - 1872: work off in 5% of people (Peru's states read 0.62–0.86 in the census against the model's 0.60) and maternal
+    in 4% (Britain's home states 0.439 against 0.430; states still incorporating 0.47 against 0.62, so the census sees
+    part of an institution's lines there and the harness none). Open: which state-level effect moves Peru's work line.
+
 ## Step 2: fertility against history
 
 **Tooling (built, the second PR).**
