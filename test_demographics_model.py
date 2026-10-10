@@ -145,12 +145,13 @@ class TestMortality(unittest.TestCase):
         return {k: (f[k] + m[k]) / 2 for k in f}
 
     def test_poverty_raises_infection_below_sol_9(self):
-        # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x2 at SoL 5 and below
+        # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x1.5 at SoL 5 and below (the
+        # strength refitted with the census's crowding term counted)
         self.assertEqual(M.poverty_infection(9), 1.0)
         self.assertEqual(M.poverty_infection(15), 1.0)
-        self.assertAlmostEqual(M.poverty_infection(7), 1.5)
-        self.assertEqual(M.poverty_infection(5), 2.0)
-        self.assertEqual(M.poverty_infection(1), 2.0)
+        self.assertAlmostEqual(M.poverty_infection(7), 1.25)
+        self.assertEqual(M.poverty_infection(5), 1.5)
+        self.assertEqual(M.poverty_infection(1), 1.5)
         # SoL 8 and 4 share the high-SoL term (x1), so the cause multipliers differ by the poverty term alone
         ratio = (M.cause_multipliers(M.Inputs(sol=4))["infection"] / M.cause_multipliers(M.Inputs(sol=8))["infection"])
         self.assertAlmostEqual(ratio, M.poverty_infection(4) / M.poverty_infection(8))

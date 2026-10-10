@@ -1318,10 +1318,10 @@ te_demog_mult_infection = {
 		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
 		multiply = -0.4 add = 1
 	}
-	# poverty: x1 at SoL 9 and above, x2 at SoL 5 and below (demographics_model.poverty_infection)
+	# poverty: x1 at SoL 9 and above, x1.5 at SoL 5 and below (demographics_model.poverty_infection)
 	multiply = {
 		value = 9 subtract = var:te_dg_sol divide = 4 min = 0 max = 1
-		multiply = 1 add = 1
+		multiply = 0.5 add = 1
 	}
 	multiply = { value = var:te_dg_lit multiply = -0.3 add = 1 }
 	if = {

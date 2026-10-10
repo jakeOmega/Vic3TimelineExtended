@@ -185,6 +185,28 @@ class TestTinySave(unittest.TestCase):
             self.assertAlmostEqual(st.means_add, c.means_add)
         self.assertEqual(S.country_inputs(self.sections)["TST"].means_add, 0.0)
 
+    def test_a_state_with_migration_crowding_is_crowded(self):
+        # the census multiplies infection deaths by 1.15 in a state carrying migration_crowding, at any
+        # multiplier (te_demog_mult_infection); the save lists it among the state's timed modifiers
+        text = TINY.replace("8={\n\ttype=peasants\n\tlocation=1\n",
+                            "9={\n\ttype=peasants\n\tworkforce=60\n\tdependents=40\n\tlocation=2\n}\n"
+                            "8={\n\ttype=peasants\n\tlocation=1\n", 1)
+        text = text.replace("\tincorporation=0.4\n}",
+                            "\tincorporation=0.4\n\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=4\n"
+                            "\t\t\t\tmodifier=tourism_output\n\t\t\t\tmultiplier=2\n\t\t\t} {\n\t\t\t\tid=5\n"
+                            "\t\t\t\tmodifier=migration_crowding\n\t\t\t\tmultiplier=0.04356\n"
+                            "\t\t\t\tstart_date=1836.12.30\n\t\t\t} }\n\t\tnext_id=6\n\t}\n}", 1)
+        self.assertIn("modifier=migration_crowding", text)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            states = S.state_inputs(S.read_sections(fh.name))["TST"]
+        finally:
+            Path(fh.name).unlink()
+        by_id = {sid: st for sid, st, _inc in states}
+        self.assertTrue(by_id["2"].crowding)
+        self.assertFalse(by_id["1"].crowding)
+
     def test_empty_pop_is_skipped(self):
         c = S.country_inputs(self.sections)["TST"]
         self.assertEqual(c.rural, 0)

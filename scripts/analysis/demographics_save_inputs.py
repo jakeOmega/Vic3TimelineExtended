@@ -45,7 +45,8 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
-# a country's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }), depth 5 and in
+# a country's or a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }),
+# depth 5 and in
 _TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
 _TIMED_MULTIPLIER = re.compile(r"^\t+multiplier=(-?[0-9.]+)$")
 # static modifiers that carry state_fertility_means_add, by their value (the census reads them in game;
@@ -129,6 +130,10 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                     m = _TIMED_MULTIPLIER.match(line.rstrip("\n"))
                     if m and record.get("timed_modifiers"):
                         record["timed_modifiers"][-1][1] = float(m.group(1))
+            elif depth >= 5 and section == "states":
+                m = _TIMED_MODIFIER.match(line.rstrip("\n"))
+                if m:
+                    record.setdefault("timed_modifiers", []).append(m.group(1))
             depth += opened - closed
             if depth == 2:
                 out[section][record_id] = record
@@ -162,6 +167,7 @@ class CountryInputs:
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
     means_add: float = 0.0                              # static modifiers' state_fertility_means_add
+    crowding: bool = False   # a state's: it carries migration_crowding (state_inputs); a country's stays False
 
     @property
     def sol(self):
@@ -235,6 +241,7 @@ def state_inputs(sections):
     for (tag, sid), st in per.items():
         c = countries[tag]
         st.laws, st.techs, st.institutions, st.means_add = c.laws, c.techs, c.institutions, c.means_add
+        st.crowding = "migration_crowding" in sections["states"].get(sid, {}).get("timed_modifiers", ())
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 
