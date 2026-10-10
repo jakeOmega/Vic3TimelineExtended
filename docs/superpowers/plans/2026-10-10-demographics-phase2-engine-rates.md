@@ -1605,6 +1605,7 @@ git commit -m "Demographics phase 2 step 4: the census's births and deaths terms
         eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
                           te_dg_w_ebl=0.0)
         eng.call("te_demog_rates_refresh")
+        self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
         mb = eng.vars["te_dg_mb"]
         eng.modifiers.clear()
         eng.call("te_demog_fast_refresh_rates")
@@ -2114,9 +2115,10 @@ Add to the existing women's-rights INJECT blocks (lines 78–98):
 - `law_women_in_the_workplace`: `state_natural_fertility_mult = -0.1`;
 - `law_women_in_the_fields`: `state_natural_fertility_mult = -0.15`.
 
-Replace the comment `# law_women_own_property: deliberate neutral (no modifier)` with a block:
+`extra_laws.txt:88`'s comment, `# law_women_own_property: deliberate neutral (no modifier)`, records a decision about cultural pull. The census's natural fertility is a separate axis, and on vanilla's own ladder Own Property sits 0.05 below No Women's Rights, which is where the re-centred term puts it. So reword the comment and add a block after it:
 
 ```
+# law_women_own_property: neutral for cultural pull; the census's natural fertility is a separate axis
 INJECT:law_women_own_property = {
 	modifier = {
 		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
@@ -2405,7 +2407,7 @@ Uses #857's `state_inputs`, `save_year` and timed-modifier reader.
         lines = {("law", "law_a", "modifier", "state_birth_rate_mult"): 0.05,
                  ("law", "law_b", "modifier", "state_birth_rate_mult"): -0.1,
                  ("technology", "tech_a", "modifier", "state_mortality_mult"): -0.05,
-                 ("law", "law_a", "institution_modifier", "state_mortality_mult"): 0.0}
+                 ("law", "law_a", "institution_modifier", "state_mortality_mult"): 0.5}   # per level: left out
         self.assertEqual(DM.engine_line_totals(lines, laws={"law_a"}, techs={"tech_a"}),
                          {"state_birth_rate_mult": 0.05, "state_mortality_mult": -0.05})
 ```
