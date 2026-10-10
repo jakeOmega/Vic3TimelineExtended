@@ -1937,6 +1937,23 @@ class TestWealth(unittest.TestCase):
         v = self.national([old], te_dg_gini=0.42)
         self.assertEqual(v["te_dg_gini"], 0.42)
 
+    def test_scored_states_without_bands_give_a_target_but_no_gini(self):
+        """The national figure writes the Gini only from states that have wealth bands, but the
+        target (the panel's old gate) from any scored state. A country whose scored states have
+        no bands yet (a save from before the bands, a state scored before its first walk) thus has
+        the one and not the other, and a panel that reads the Gini under the target's gate
+        shows 0.00 (a missing variable reads 0). The panel gates the Gini on te_dg_gini itself."""
+        old = self.scored(60, 55, bands={})
+        for k in range(1, P.GINI_BANDS + 1):
+            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        v = self.national([old])
+        self.assertIn("te_dg_wc_target", v, "the target is written: the old gate is open")
+        self.assertIn("te_inh_concentration", v)
+        self.assertNotIn("te_dg_gini", v, "no state has bands, so there is no Gini to show")
+        # once one state has bands the same call writes the Gini beside the target
+        new = self.scored(40, 50, bands={2: (900e3, 1.2e6), 9: (1e4, 2e5)})
+        self.assertIn("te_dg_gini", self.national([old, new]))
+
     def test_the_bureaucrat_share_multiplies_before_it_divides(self):
         """A state with a tiny share of the bureaucrats keeps its precision: values are i64 x 1e-5."""
         body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_national")
@@ -2015,6 +2032,46 @@ INH_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers
 INH_EVENTS = ROOT / "events" / "inheritance_events.txt"
 STATE_WC_MODIFIERS = ("inh_concentrated_property", "inh_dispersed_property", "inh_land_hunger")
 STATE_WC_MULTS = ("te_inh_wc_high_mult", "te_inh_wc_low_mult", "te_inh_land_hunger_mult")
+
+
+SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
+MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
+
+
+class TestGiniGate(unittest.TestCase):
+    """The panel reads the country's Gini (te_dg_gini) only under a gate on that variable. It used
+    to read it under te_demog_wealth_ready_sgui, which asks for te_dg_wc_target, written under a
+    wider condition (any scored state, not any state with wealth bands): with the target and no
+    Gini, a .gui read of the missing variable showed 0.00, which reads as perfect equality."""
+
+    def test_the_gini_gate_asks_for_the_gini(self):
+        gate = _block(_text(SGUIS), "te_demog_gini_ready_sgui")
+        self.assertRegex(gate, r"scope = country\b")
+        shown = re.search(r"is_shown = \{([^{}]*)\}", gate)
+        self.assertIsNotNone(shown)
+        self.assertEqual(shown.group(1).split(), ["has_variable", "=", "te_dg_gini"])
+        # the Wealth Concentration gate is unchanged: it still asks for the target
+        wealth = re.search(r"is_shown = \{([^{}]*)\}", _block(_text(SGUIS), "te_demog_wealth_ready_sgui"))
+        self.assertEqual(wealth.group(1).split(), ["has_variable", "=", "te_dg_wc_target"])
+
+    def test_every_country_gini_the_gui_shows_is_picked_by_the_gini_gate(self):
+        gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
+        # the loc keys that read the country's Gini
+        keys = re.findall(r'^ (\w+):0 "[^"\n]*GetPlayer\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
+        self.assertEqual(sorted(keys), ["te_demog_gini_value", "te_demog_ov_gini_value"])
+        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
+        for key in keys:
+            uses = [m.start() for m in re.finditer(rf"['\"]{key}['\"]", gui)]
+            self.assertTrue(uses, f"{key} is not used")
+            for at in uses:
+                line = gui[gui.rfind("\n", 0, at) + 1:gui.index("\n", at)]
+                self.assertRegex(line, rf"SelectLocalization\( {gate}, '{key}', '\w+' \)", f"{key} is shown bare: {line.strip()}")
+
+    def test_the_gini_cell_has_a_pending_text(self):
+        gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
+        pending = re.search(r"GetScriptedGui\('te_demog_gini_ready_sgui'\)[^\n]*'te_demog_gini_value', '(\w+)'", gui)
+        self.assertIsNotNone(pending)
+        self.assertRegex(loc, rf"(?m)^ {pending.group(1)}:0 \"", "the pending key has a loc entry")
 
 
 class _StateModifierEngine(_Engine):
