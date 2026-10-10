@@ -71,8 +71,8 @@ def inputs_for(c, carriers=None, incorporated=True):
 
     The modifier totals come from the game files' carriers (demographics_modifiers) for the
     owner's techs, laws and institution levels. The wealth term is the pop-weighted curve,
-    as the game computes it, not the curve at the mean SoL. Crowding (the state carries
-    migration_crowding) is a state's; a whole country's is off, so `seed` and `adopters` leave it out.
+    as the game computes it, not the curve at the mean SoL. Crowding (the state's migration penalty
+    from migration_crowding) is a state's; a whole country's is 0, so `seed` and `adopters` leave it out.
     """
     carriers = DM.load_carriers() if carriers is None else carriers
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)

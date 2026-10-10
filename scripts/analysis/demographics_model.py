@@ -31,7 +31,7 @@ class Inputs:
     techs: frozenset = frozenset()
     laws: frozenset = frozenset()
     institutions: dict = field(default_factory=dict)
-    crowding: bool = False
+    crowding: float = 0.0                # migration penalty from crowding: 0.1 x migration_crowding's multiplier
     wealth_tfr: float | None = None      # pop-weighted SoL curve from the walk
     means_add: float = 0.0               # static modifiers' state_fertility_means_add (Family Limitation 0.6); laws' lines come through mods
     female_job_share: float = 0.3        # light industry + services share of the employed
@@ -85,8 +85,7 @@ def cause_multipliers(inp):
     mult["infection"] *= lerp_sol(inp.sol, 1.0, P.SOL_INFECTION_AT_HIGH)
     mult["infection"] *= poverty_infection(inp.sol)
     mult["infection"] *= 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
-    if inp.crowding and inp.institutions.get("institution_ministry_of_urban_planning", 0) == 0:
-        mult["infection"] *= P.CROWDING_INFECTION_MULT
+    mult["infection"] *= 1 + min(P.CROWDING_INFECTION_PER_PULL * inp.crowding, P.CROWDING_INFECTION_MAX)
     mult["chronic"] *= lerp_sol(inp.sol, 1.0, P.SOL_CHRONIC_AT_HIGH)
     return mult
 

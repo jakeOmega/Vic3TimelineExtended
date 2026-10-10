@@ -94,10 +94,10 @@ class TestHarness(unittest.TestCase):
         c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 8000.0, M.wealth_tfr(8.0) * 1000.0
         c.workforce, c.literate = 500.0, 100.0
         plain = H.inputs_for(c)
-        c.crowding = True
+        c.crowding = 0.2   # a 20% migration penalty
         crowded = H.inputs_for(c)
-        self.assertFalse(plain.crowding)
-        self.assertTrue(crowded.crowding)
+        self.assertEqual(plain.crowding, 0.0)
+        self.assertEqual(crowded.crowding, 0.2)
         self.assertLess(H.model_figures(crowded)["e0"], H.model_figures(plain)["e0"] - 1)
 
     def test_save_year_reads_game_date_only(self):

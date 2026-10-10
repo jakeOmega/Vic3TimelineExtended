@@ -45,8 +45,10 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
-# a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }), depth 5 and in
+# a country's or a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }),
+# read as [name, multiplier] pairs inside that block only
 _TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
+_TIMED_MULTIPLIER = re.compile(r"^\t+multiplier=(-?[0-9.]+)$")
 # social class -> strata, from game/common/social_classes/*.txt (1.14.5). Not in the
 # vanilla_parsed/ snapshot; an unknown class counts as lower.
 STRATA_OF_CLASS = {
@@ -88,6 +90,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
     depth = 0
     record_id = None
     record = None
+    in_timed = False   # inside the current record's timed_modifiers block
     with open(path, encoding="utf-8", errors="replace") as fh:
         for line in fh:
             if section is None:
@@ -102,7 +105,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
             if record is None:
                 m = _RECORD.match(line)
                 if m and depth == 2:
-                    record_id, record = m.group(1), {}
+                    record_id, record, in_timed = m.group(1), {}, False
                     depth += 1
                     continue
                 depth += opened - closed
@@ -117,11 +120,21 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                 m = _SOCIAL_CLASS.match(line.rstrip("\n"))
                 if m:
                     record["social_class"] = m.group(1)
-            elif depth >= 5 and section == "states":
+            elif in_timed:
+                # only inside the record's own timed_modifiers block: a country's budget trends carry multiplier=
+                # lines and its timed_enactment_modifiers modifier= lines at the same depth
                 m = _TIMED_MODIFIER.match(line.rstrip("\n"))
                 if m:
-                    record.setdefault("timed_modifiers", []).append(m.group(1))
+                    record.setdefault("timed_modifiers", []).append([m.group(1), 1.0])
+                else:
+                    m = _TIMED_MULTIPLIER.match(line.rstrip("\n"))
+                    if m and record.get("timed_modifiers"):
+                        record["timed_modifiers"][-1][1] = float(m.group(1))
+            if depth == 3 and section in ("country_manager", "states") and line.startswith("\ttimed_modifiers={"):
+                in_timed = True
             depth += opened - closed
+            if depth <= 3:   # back at the record's own fields (an empty block opens and closes on one line)
+                in_timed = False
             if depth == 2:
                 out[section][record_id] = record
                 record = None
@@ -153,7 +166,7 @@ class CountryInputs:
     institutions: dict = field(default_factory=dict)   # institution -> investment level
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
-    crowding: bool = False   # a state's: it carries migration_crowding (state_inputs); a country's stays False
+    crowding: float = 0.0    # a state's migration penalty from crowding (state_inputs); a country's stays 0
 
     @property
     def sol(self):
@@ -227,7 +240,9 @@ def state_inputs(sections):
     for (tag, sid), st in per.items():
         c = countries[tag]
         st.laws, st.techs, st.institutions = c.laws, c.techs, c.institutions
-        st.crowding = "migration_crowding" in sections["states"].get(sid, {}).get("timed_modifiers", ())
+        st.crowding = sum(M.P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+                          for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
+                          if name == "migration_crowding")
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 

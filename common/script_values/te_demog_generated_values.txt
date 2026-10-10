@@ -1318,18 +1318,23 @@ te_demog_mult_infection = {
 		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
 		multiply = -0.4 add = 1
 	}
-	# poverty: x1 at SoL 9 and above, x1.5 at SoL 5 and below (demographics_model.poverty_infection)
+	# poverty: x1 at SoL 9 and above, x1.75 at SoL 5 and below (demographics_model.poverty_infection)
 	multiply = {
 		value = 9 subtract = var:te_dg_sol divide = 4 min = 0 max = 1
-		multiply = 0.5 add = 1
+		multiply = 0.75 add = 1
 	}
 	multiply = { value = var:te_dg_lit multiply = -0.3 add = 1 }
+	# crowding: + its migration penalty, at most +0.5 (demographics_model.cause_multipliers), from the
+	# multiplier the crowding refresh applied (te_update_migration_crowding_modifier), as the save holds it
 	if = {
 		limit = {
 			has_modifier = migration_crowding
-			owner = { NOT = { institution_investment_level = { institution = institution_ministry_of_urban_planning value >= 1 } } }
+			has_variable = migration_crowding_mult_applied
 		}
-		multiply = 1.15
+		multiply = {
+			value = var:migration_crowding_mult_applied multiply = 0.1
+			max = 0.5 add = 1
+		}
 	}
 }
 

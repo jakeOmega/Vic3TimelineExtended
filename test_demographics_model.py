@@ -145,16 +145,29 @@ class TestMortality(unittest.TestCase):
         return {k: (f[k] + m[k]) / 2 for k in f}
 
     def test_poverty_raises_infection_below_sol_9(self):
-        # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x1.5 at SoL 5 and below (the
-        # strength refitted with the census's crowding term counted)
+        # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x1.75 at SoL 5 and below (the
+        # strength refitted with the census's continuous crowding term counted)
         self.assertEqual(M.poverty_infection(9), 1.0)
         self.assertEqual(M.poverty_infection(15), 1.0)
-        self.assertAlmostEqual(M.poverty_infection(7), 1.25)
-        self.assertEqual(M.poverty_infection(5), 1.5)
-        self.assertEqual(M.poverty_infection(1), 1.5)
+        self.assertAlmostEqual(M.poverty_infection(7), 1.375)
+        self.assertEqual(M.poverty_infection(5), 1.75)
+        self.assertEqual(M.poverty_infection(1), 1.75)
         # SoL 8 and 4 share the high-SoL term (x1), so the cause multipliers differ by the poverty term alone
         ratio = (M.cause_multipliers(M.Inputs(sol=4))["infection"] / M.cause_multipliers(M.Inputs(sol=8))["infection"])
         self.assertAlmostEqual(ratio, M.poverty_infection(4) / M.poverty_infection(8))
+
+    def test_crowding_raises_infection_by_its_migration_penalty(self):
+        # owner, 2026-10-10: a function of how crowded the state is, not a switch. Infection rises by the same share
+        # migration attraction falls (Inputs.crowding: 0.1 x migration_crowding's multiplier), at most +50%
+        def infection(**kw):
+            return M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, **kw))["infection"]
+        plain = infection()
+        self.assertAlmostEqual(infection(crowding=0.038) / plain, 1.038)
+        self.assertAlmostEqual(infection(crowding=0.45) / plain, 1.45)
+        self.assertAlmostEqual(infection(crowding=1.45) / plain, 1 + P.CROWDING_INFECTION_MAX)
+        # the Ministry of Urban Planning works through crowding itself (+10% tolerance a level), not as a gate
+        ministry = {"institution_ministry_of_urban_planning": 3}
+        self.assertAlmostEqual(infection(crowding=0.1, institutions=ministry), infection(crowding=0.1))
 
     def test_1836_europe(self):
         t = self.table(BRITAIN_1836)
