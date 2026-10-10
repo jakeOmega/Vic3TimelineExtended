@@ -2961,6 +2961,7 @@ When the field you want to extend is a vanilla *trigger block* (e.g. you want to
 - **Nested `institution_modifier = { }` on LAWS** (2026-10-10, demographics stage 1). An INJECTed line in a vanilla health law's existing `institution_modifier` (`common/laws/modified_health_system.txt`, `state_health_care_access_add = 0.1`) read 0.5 in the capital at Ministry of Health level 5, and 0 in an unincorporated state. The same held for an `institution_modifier` INJECTed on Worker Protections, which already has one (Workplace Safety: −0.5 at level 5). The probe shows the injected line applies per level. The owner checked the Public Health Insurance institution in game: the INJECT worked there, beside vanilla's own lines in that block. Worker Protections is the same shape (a vanilla law whose `institution_modifier` already has lines, plus an INJECTed one), so it needs no separate read.
 - **A FLAT KEY inside a static modifier** (2026-09-20) — `INJECT:base_values` with `country_loan_interest_rate_add = -0.2` against vanilla's `+0.2` removes the "Base Value" line from the budget interest tooltip entirely, and day-one rates are the country-specific ones the mod computes. That was §17 check 2's day-one tell, and it also retro-validates the other live instance of the same shape, `state_expected_sol_from_literacy = -5` against vanilla's `+5` (shipped since April), plus every bureaucracy / authority / innovation contribution the mod has put through `INJECT:base_values`.
 - **A flat key inside a static modifier the engine scales** (owner, 2026-10-10, demographics phase 2). `INJECT:state_region_pollution_health` in `common/static_modifiers/extra_modifiers.txt` adds `state_mortality_mult = 0.05` to vanilla's `0.5`, and the two sum, as an INJECT into an unscaled static modifier does. Whether that line reaches `modifier:state_mortality_mult` is a separate question (probe P1, console option m).
+- **A same-field cancel inside `institution_modifier`** (owner, 2026-10-10, demographics phase 2 step 4). An INJECT that adds the negative of a field the law's own `institution_modifier` already carries nets it to zero at every level: `modified_health_system.txt` cancels vanilla's health-law mortality lines this way (`state_mortality_mult = 0.03` against Charitable Health System's −0.03 a level), as it has cancelled `state_pollution_reduction_health_mult` since 69f372fe (2025-12).
 
 So §17 checks 1–4 are all closed, and the mod's *summing* assumption — including `common/laws/sol_expectations_vanilla_injections.txt`, e.g. `law_industry_banned`: `state_expected_sol_mult = 0.1` against vanilla's −0.1 — is confirmed rather than assumed. Note that `common/static_modifiers` is **not** on the 1.12 digest's INJECT-capable type list (`~/src/Modding-Digests/1.12.0/inject_types.md`: `common/country_ranks`, `common/laws`, `common/technology`, `common/institutions`, `common/company_types`, `common/production_methods`) and it sums anyway — the list is incomplete, not authoritative about what merges.
 
@@ -3839,10 +3840,13 @@ need to find a different forward-link or accept the leaf.
 
 Some modifiers are summed across multiple techs to reach a deliberate
 end-game total. Examples found in this codebase:
-- `state_mortality_mult` totals exactly −0.40 across `modern_vaccines`
-  (era_6) + `antibiotic_mass_production` (era_7) + `mental_health_awareness`
-  (era_10) + `biological_immortality` (era_12) + `mind_backups` (era_12),
-  designed so mortality hits zero with brain uploading.
+- `state_mortality_mult` on the techs was once a −0.40 budget ending at brain
+  uploading. Demographics phase 2 step 4 retired that: `modern_vaccines`' and
+  `antibiotic_mass_production`'s lines came off, because the census's treatment
+  terms (`state_<cause>_treatment_add`) now carry medicine. The three left on top
+  (`mental_health_awareness`, `biological_immortality`, `mind_backups`) total
+  −0.30, and that is no target to restore. Add medicine as census treatment, not
+  as `state_mortality_mult` (`docs/systems/mod_systems.md` § Demographics).
 - `country_weekly_innovation_max_add` is the research-pool budget across the
   entire late-era tree; per-tech values are tuned together.
 - `country_institution_<X>_max_investment_add` totals reach a target max
