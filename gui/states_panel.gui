@@ -1229,10 +1229,11 @@ types state_panel_types
 			}
 
 			### TIMED MODIFIERS
-			# A modifier with the mod's blank icon (timed_modifier_icons/modifier_system.dds)
-			# is bookkeeping: it is left out of the row and takes no slot. Its effect still
-			# shows in the Modifiers tab and in the breakdown tooltips. Same rule in the
-			# condensed view below; test_hidden_state_modifiers.py keeps the two in step.
+			# The mod's bookkeeping modifiers (blank icon, timed_modifier_icons/modifier_system.dds)
+			# are left out of the row by name and take no slot: GetName against Localize of the
+			# modifier's own key, so any language matches. Its icon can't be compared (gotcha #40).
+			# The condensed view below lists the same names; test_hidden_state_modifiers.py
+			# keeps both rows in step with the static modifiers that carry the blank icon.
 			flowcontainer = {
 				parentanchor = bottom|right
 				widgetanchor = bottom|right
@@ -1244,7 +1245,7 @@ types state_panel_types
 
 				item = {
 					icon = {
-						visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
+						visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))]"
 						size = { 30 30 }
 						tooltip = "[TimedModifier.GetTooltip]"
 						using = tooltip_se
@@ -3680,10 +3681,10 @@ types state_panel_types
 				}
 
 				### TIMED MODIFIERS
-				# Blank-icon modifiers are hidden, as in the full view's row above. The box
-				# fades out when every modifier the state carries is a hidden one: vanilla
-				# fades it on an empty list, and the hidden ones (tourism and pollution on
-				# every state) would otherwise leave an empty frame on every row.
+				# Blank-icon modifiers are left out by name, as in the full view's row above. The
+				# box fades out when every modifier the state carries is a blank-icon one:
+				# vanilla fades it on an empty list, and the blank ones (tourism and pollution
+				# on every state) would otherwise leave an empty frame on every row.
 				# gui_state_hidden_modifier_count counts them (gui_chart_script_values.txt).
 				overlappingitembox = {
 					datamodel = "[State.GetTimedModifiers]"
@@ -3698,7 +3699,7 @@ types state_panel_types
 
 					item = {
 						widget = {
-							visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
+							visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))]"
 							size = { 30 30 }
 							icon = {
 								tooltip = "[TimedModifier.GetTooltip]"

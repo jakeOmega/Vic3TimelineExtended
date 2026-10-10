@@ -3467,7 +3467,7 @@ decolonization_events.51 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_anti_colonialist_leader } } }
+				trigger = { ig:ig_intelligentsia ?= { leader ?= { has_ideology = ideology:ideology_anti_colonialist_leader } } }
 				add = 4
 			}
 		}

@@ -545,11 +545,16 @@ sr_clear_milestone_cost_modifiers_base = {
 # gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
 # its programme actually running). Multiplier names interpolate from
 # $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
-# all 8 tokens). Country scope.
+# all 8 tokens). Country scope. ?= because each milestone entry's immediate
+# sets sr_active_<X> and then runs sr_recalculate_cost, and when a
+# revolution's winner inherits the entry that immediate runs before je: can
+# find it ("Failed to scope to journal entry by tag", Spain's moon landing in
+# the 2026-10-10 observer run). The monthly pulse then puts them back
+# (sr_cost_modifiers_missing, space_race_on_actions.txt).
 sr_apply_milestone_cost_modifiers_base = {
 	if = {
 		limit = { sr_milestone_billed_$MILESTONE$ = yes }
-		je:je_space_race_$MILESTONE$ = {
+		je:je_space_race_$MILESTONE$ ?= {
 			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
 			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
 		}
@@ -1539,6 +1544,12 @@ sr_record_probe_result = {
 #   - sr_commercial_space_dividend (country): from the variables
 #     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
 #     re-applies it every month anyway (end of this file).
+#   - sr_space_program_cost / sr_funding_progress (entry): from sr_funding_<m>
+#     and the approach variables, by sr_recalculate_cost, which every
+#     `immediate` runs and the monthly pulse runs when an entry lacks one
+#     (sr_cost_modifiers_missing). The `immediate` alone was not enough: an
+#     inherited entry's `immediate` could not find its own entry by `je:`
+#     (Spain's moon landing, 2026-10-10 observer run).
 #
 # Country modifiers come back in sr_repair_after_civil_war, which the shared
 # civil-war hook runs for the winner (te_civil_war_on_won in
@@ -1552,8 +1563,7 @@ sr_record_probe_result = {
 #
 # Not rebuilt: timed modifiers (the completion events' themed rewards, the
 # failure penalties, sr_temporary_safety_review), whose remaining time is
-# recorded nowhere; and the cost and funding modifiers, which
-# sr_recalculate_cost derives from the variables in every `immediate`.
+# recorded nowhere.
 
 # Country scope. The milestone's reward, when the milestone is complete and
 # neither reward modifier is on the country. sr_apply_milestone_reward_base adds
