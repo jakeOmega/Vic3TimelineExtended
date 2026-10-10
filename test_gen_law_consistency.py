@@ -305,5 +305,56 @@ class VanillaInputTest(unittest.TestCase):
                 self.assertEqual(gen.load_vanilla(mod_state), {"laws": {}, "ideologies": {}})
 
 
+def _can_hold(law_id, held, laws):
+    """Whether `law_id` can be held beside `held` (group -> law), following the
+    chain of laws it needs as the consistency walk checks it. Each law needs
+    one law from a single list, so the chain has no branches to merge."""
+    law = laws[law_id]
+    if law["group"] in held:
+        return held[law["group"]] == law_id
+    if any(d in held.values() for d in law["disallowing_laws"]):
+        return False
+    if any(law_id in laws[h]["disallowing_laws"] for h in held.values()):
+        return False
+    held = {**held, law["group"]: law_id}
+    needs = [n for n in gen.held_unlocking_laws(law, laws) if n in laws]
+    return not needs or any(_can_hold(n, held, laws) for n in needs)
+
+
+class PrerequisiteHoldableTest(unittest.TestCase):
+    """A law's every `unlocking_laws` entry can be held beside it.
+
+    Otherwise the law can be enacted from that prerequisite but never kept
+    with it, and the consistency walk takes the prerequisite (and whatever
+    needs it) away the moment the law passes, with no preview. Collective
+    Governance allowed Anarchy, which needs Cooperative Ownership, which
+    vanilla unlocks only with Council Republic or Corporate State: an
+    anarchist Council Republic that enacted it lost Cooperative Ownership,
+    Anarchy, Collectivized Agriculture and Possession by Use
+    (`common/laws/modified.txt` now adds it to Cooperative Ownership's list).
+    """
+
+    def test_every_prerequisite_can_be_held(self):
+        laws = gen.parse_laws(vanilla_parsed.load().data["Laws"])
+        for law_id, law in laws.items():
+            if law_id in gen.CARRIER_LAW_DENYLIST:
+                continue
+            for need in gen.held_unlocking_laws(law, laws):
+                if need in laws:
+                    with self.subTest(law=law_id, needs=need):
+                        self.assertTrue(_can_hold(need, {law["group"]: law_id}, laws))
+
+    def test_chain_is_followed(self):
+        laws = {
+            "law_head": _law(0, group="lawgroup_a", unlocking_laws=["law_mid"]),
+            "law_rival": _law(1, group="lawgroup_a"),
+            "law_mid": _law(2, group="lawgroup_b", unlocking_laws=["law_base"]),
+            "law_base": _law(3, group="lawgroup_c", unlocking_laws=["law_rival"]),
+        }
+        self.assertFalse(_can_hold("law_mid", {"lawgroup_a": "law_head"}, laws))
+        laws["law_base"]["unlocking_laws"].append("law_head")
+        self.assertTrue(_can_hold("law_mid", {"lawgroup_a": "law_head"}, laws))
+
+
 if __name__ == "__main__":
     unittest.main()

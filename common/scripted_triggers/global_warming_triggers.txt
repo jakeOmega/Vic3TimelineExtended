@@ -20,6 +20,20 @@
 #
 # Every country controls its own nine national policies. Market leadership
 # gates only fossil-fuel tariffs; members can see their leader's tariff status.
+#
+# TECHNOLOGY GATES. A policy that relies on something a country has to be able
+# to build needs the technology that unlocks it; fiscal and administrative
+# measures (Carbon Tax, Climate Adaptation, Reforestation Subsidies, Fossil-Fuel
+# Divestment, Fossil-Fuel Tariffs) need none.
+#   Renewable Investment   clean_energy_technologies   Renewable Energy Plant
+#   Green Building Codes   clean_energy_technologies   heat pumps, efficient homes
+#   Emission Standards     pollution_control           pollution abatement
+#   Public Transit         modern_urban_planning       Multimodal Transit
+#   Carbon Removal Support carbon_capture_and_storage  Carbon Conversion Works
+# `has_technology_researched` stays unwrapped so the tooltip names the
+# technology itself. Treaty 109 checks the forced policies' technologies through
+# gw_has_emissions_treaty_technologies below; test_gw_policy_tech_gates.py fails
+# if that list and these gates drift apart.
 
 # ---------------------------------------------------------------------------
 # "Is this policy in force for this country?" — the single definition, used by
@@ -73,6 +87,16 @@ gw_bound_by_emissions_treaty = {
 	has_variable = has_emissions_reduction_treaty
 }
 
+# Can this country carry out every policy treaty 109 would force on it? The
+# treaty supplies the political will, so it ignores the warming thresholds, but
+# not the means: each forced policy's technology gate from its gw_possible_*
+# above. Read by the treaty's `possible` (ROOT is the source) and `can_ratify`.
+gw_has_emissions_treaty_technologies = {
+	has_technology_researched = clean_energy_technologies	# Renewable Investment, Green Building Codes
+	has_technology_researched = pollution_control	# Emission Standards
+	has_technology_researched = modern_urban_planning	# Public Transit
+}
+
 # Countries with a positive annual snapshot rank independently of leadership.
 gw_is_ranked_emitter = {
 	has_variable = gw_disp_country_emis
@@ -110,8 +134,9 @@ gw_entry_unlocked = {
 
 
 # ---------------------------------------------------------------------------
-# Adopt / repeal eligibility. Bodies extracted verbatim from the scripted
-# buttons' `possible` blocks; only custom_tooltip phrasing has been added.
+# Adopt / repeal eligibility. Bodies began as the scripted buttons' `possible`
+# blocks, with custom_tooltip phrasing added; the technology gates (header)
+# came later.
 # ---------------------------------------------------------------------------
 gw_possible_carbon_tax = {
 	custom_tooltip = {
@@ -144,6 +169,7 @@ gw_possible_renewable_investment = {
 		text = gw_cond_warming_mild
 		temperature_anomaly_display >= 0.5
 	}
+	has_technology_researched = clean_energy_technologies
 }
 
 gw_possible_remove_renewable_investment = {
@@ -185,6 +211,7 @@ gw_possible_emission_standards = {
 		text = gw_cond_warming_mild
 		temperature_anomaly_display >= 0.5
 	}
+	has_technology_researched = pollution_control
 	produced_authority > 200
 }
 
@@ -231,6 +258,7 @@ gw_possible_public_transit = {
 		text = gw_cond_warming_mild
 		temperature_anomaly_display >= 0.5
 	}
+	has_technology_researched = modern_urban_planning
 	produced_authority > 150
 }
 
@@ -277,6 +305,7 @@ gw_possible_green_building_codes = {
 		text = gw_cond_warming_mild
 		temperature_anomaly_display >= 0.5
 	}
+	has_technology_researched = clean_energy_technologies
 	produced_authority > 100
 }
 

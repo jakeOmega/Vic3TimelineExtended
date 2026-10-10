@@ -230,7 +230,19 @@ repeal its own policies independently.
 There are ten policies. Nine are national, open to every country. Only
 Fossil-Fuel Tariffs is market-wide and controlled by the market leader. Every
 policy needs 0.5 °C of warming, except Fossil-Fuel Divestment, which needs 1.0 °C.
-Carbon Removal Support also needs Carbon Capture and Storage.
+A policy that depends on something you must be able to build also needs the
+technology for it:
+
+| Policy | Technology |
+|---|---|
+| Renewable Investment | Clean Energy Technologies, era 9 |
+| Green Building Codes | Clean Energy Technologies, era 9 |
+| Emission Standards | Pollution Control, era 7 |
+| Public Transit | Modern Urban Planning, era 7 |
+| Carbon Removal Support | Carbon Capture and Storage, era 10 |
+
+Carbon Tax, Climate Adaptation, Reforestation Subsidies, Fossil-Fuel Divestment
+and Fossil-Fuel Tariffs need no technology.
 
 National policies stay with a country when it changes market, and the leader's
 adoption or repeal changes only its own country. Most policies carry an
@@ -254,7 +266,7 @@ fuels.
 | Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
-| Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. Needs Carbon Capture and Storage. |
+| Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. |
 | Public Transit | National | 150 | Personal Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
 | Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%; household emissions −15%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%; household emissions −60%. |
@@ -296,8 +308,8 @@ but counts against Climate Adaptation and Reforestation Subsidies;
 Carbon Tax and Fossil-Fuel Divestment.
 
 The AI adopts a policy once the will reaches the threshold, if it has the
-authority, and repeals it only once the will falls 15 points below the
-threshold, or while its authority is negative. Between the two it leaves the
+authority and the policy's technology, and repeals it only once the will falls
+15 points below the threshold, or while its authority is negative. Between the two it leaves the
 policy alone, so an election doesn't flip policies back and forth.
 
 | Policy | Threshold |
@@ -398,8 +410,11 @@ Enforce Emissions Reduction forces its source country to maintain seven
 national policies: Carbon Tax, Renewable Investment, Emission Standards,
 Reforestation, Public Transit, Fossil-Fuel Divestment and Green Building Codes.
 It appears past 0.1 °C and can be signed from 0.5 °C with Intergovernmental
-Organizations, including against a market member. It can be a war goal or a
-requested or offered treaty article. Climate Adaptation, Carbon Removal Support
+Organizations, including against a market member. The source must have
+researched the technologies those policies need: Clean Energy Technologies,
+Pollution Control and Modern Urban Planning. Below 1.0 °C it still forces
+Fossil-Fuel Divestment. It can be a war goal or a requested or offered treaty
+article. Climate Adaptation, Carbon Removal Support
 and Fossil-Fuel Tariffs are not forced; the first and last remain freely
 revocable, while the existing treaty lock also bars repealing removal support
 if the bound country chooses to adopt it.

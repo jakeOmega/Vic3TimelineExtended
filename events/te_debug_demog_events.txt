@@ -29,6 +29,10 @@
 #        at 4x (h), 6x (i) or 12x (j), for iterating on the model; k goes back to normal
 #        speed. A test tool, never for play: the first switch re-seeds every census, and
 #        the census year then runs on its own clock. Fire it on day 1, then `observe`.
+#   l    the census's mortality and fertility modifier types as the capital and an
+#        unincorporated state read them (TE_DEMOG_MODS)
+#   m    the shock terms (probe P1): every devastated or polluted state's reads
+#        (TE_DEMOG_SHOCK)
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -244,6 +248,20 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		custom_tooltip = {
 			text = te_debug_demog.1.l.tt
 			te_debug_demog_modifier_reads = yes
+		}
+	}
+
+	# ---- m: the shock terms (probe P1) -------------------------------------
+	option = {
+		name = te_debug_demog.1.m
+		custom_tooltip = {
+			text = te_debug_demog.1.m.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_shock_lines = yes
+			}
 		}
 	}
 

@@ -23,8 +23,11 @@
 #   te_dg_urban_share   te_dg_urban over te_dg_walk_pop
 #   te_dg_fjob_share    share of employed people at a workplace that draws
 #                       women (light industry, services, urban facilities)
-#   te_dg_gn<k>, te_dg_gy<k>  people and income (the Gini's stand-in: people x income per head)
-#                       by wealth band, k = 1..14 (te_demog_gini_band_store, generated)
+#   te_dg_gn<k>, te_dg_gy<k>  people and income by wealth band, k = 1..41, stored only for
+#                       the bands with people: ask has_variable = te_dg_gn<k> before a read.
+#                       Income is the Gini's stand-in (people x spending per head) in units
+#                       of 100,000 (GINI_INCOME_UNIT). te_dg_gini_layout marks the layout
+#                       they follow (te_demog_gini_band_store, generated)
 #   te_dg_gini          the state's shown Gini, 0.3-1 (te_demog_state_gini)
 #   te_dg_lv_priv       building levels held privately (capital buildings)
 #   te_dg_lv_self       building levels held by their own workers (cooperatives)

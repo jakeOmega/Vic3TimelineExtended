@@ -541,6 +541,8 @@ The 8 climate pairs:
 
 Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_triggers/global_warming_triggers.txt`) and its `effect` in `gw_effect_<button>` (`common/scripted_effects/global_warming_effects.txt`); the widget's scripted GUIs call the same helpers. **Change a policy's eligibility or effect in the helper, never in the button and never in the scripted GUI.** Every button carries `is_ai = yes` in its `visible`, so the grid shows a human nothing — but the declarations must stay, because `ai_chance` is the AI's only route into the system.
 
+Four policies also need a technology, because they rely on something a country has to be able to build: Renewable Investment and Green Building Codes `clean_energy_technologies`, Emission Standards `pollution_control`, Public Transit `modern_urban_planning`. Carbon Removal Support already needed `carbon_capture_and_storage`. The gate is an unwrapped `has_technology_researched` in `gw_possible_<policy>`, so the button's tooltip names the technology, and the AI's buttons and the Environmental Movement's "could adopt" radicalism (`new_ideological_movements.txt`) read the same helper. Treaty 109 checks the forced policies' technologies through `gw_has_emissions_treaty_technologies`; `test_gw_policy_tech_gates.py` holds the table.
+
 3 policies are market-wide (carbon tax, renewable investment, emission standards) and are applied by the leader to **every member's** journal entry; 5 are national.
 
 **How the AI chooses.** Every button's `ai_chance` reads `common/script_values/global_warming_ai_values.txt`, which gives each country a climate will per policy. Each will has two parts:
@@ -550,7 +552,7 @@ Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_trigg
 
 The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
 
-Each policy has one threshold on its will. The AI adopts at or above it, and only with the authority the policy costs to spare. It repeals only once the will is `gw_ai_repeal_band` (15) below the threshold, or while authority is negative. Between the two, neither button scores. The thresholds, from cheapest to hardest, are adaptation 25, reforestation 30, renewables 35, transit 40, green building codes and emission standards 45, carbon tax 55 and divestment 70.
+Each policy has one threshold on its will. The AI adopts at or above it, and only with the authority the policy costs to spare and its technology (`possible`). It repeals only once the will is `gw_ai_repeal_band` (15) below the threshold, or while authority is negative. Between the two, neither button scores. The thresholds, from cheapest to hardest, are adaptation 25, reforestation 30, renewables 35, transit 40, green building codes and emission standards 45, carbon tax 55 and divestment 70.
 
 The band must stay wider than any yes/no signal that flips on its own (industrialists, at elections; at most 12). Heavier weights sit only on laws or on continuous signals, which is why the fossil signal is continuous rather than a cut-off.
 

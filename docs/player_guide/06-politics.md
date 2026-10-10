@@ -522,7 +522,8 @@ executive power: a body of equals governs, and its chair is first among equals.
 It unlocks with Political Agitation and needs one of these Distribution of Power
 laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
 Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or
-Algorithmic Governance. Under it you have 15% less authority and laws pass 10% more slowly, but broad
+Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
+it as to a Council Republic. Under it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
 

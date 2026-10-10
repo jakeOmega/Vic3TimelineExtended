@@ -181,7 +181,10 @@ class TestHarness(unittest.TestCase):
         costs = H.buy_package_costs()
         self.assertEqual(len(costs), 200)
         self.assertLess(costs[1], costs[20])
-        self.assertEqual(H.income_proxy(150, costs), costs[60])
+        # uncapped up to the top level (2026-10-10, high wealth): the cap at 60 lumped late fortunes together
+        self.assertEqual(H.income_proxy(150, costs), costs[150])
+        self.assertEqual(H.income_proxy(250, costs), costs[200])
+        self.assertEqual(H.income_proxy(0, costs), costs[1])
 
     def test_replay_round_trip(self):
         inp = M.Inputs(sol=11, literacy=0.35, urban_share=0.3)
@@ -400,6 +403,20 @@ class TestHarness(unittest.TestCase):
         self.assertLessEqual(bands, pops + 1e-9, "a coarser grouping never raises the Gini")
         self.assertLess(pops - bands, 0.05)
         self.assertLessEqual(strata, pops + 1e-9)
+
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_gini_shift_moves_every_pop_up_the_wealth_levels(self):
+        """--shift N: a synthetic late game, each pop N levels richer (capped at the top level)."""
+        def figures(*extra):
+            code, out, _err = self._cli("gini", str(SLICE), "--tag", "GBR", *extra)
+            self.assertEqual(code, 0)
+            m = re.search(r"^GBR\s+shown (\d\.\d+)\s+bands (\d\.\d+)\s+pop by pop (\d\.\d+)", out, re.M)
+            self.assertIsNotNone(m, out)
+            return [float(x) for x in m.groups()]
+        self.assertEqual(figures("--shift", "0"), figures())
+        _shown, bands, pops = figures("--shift", "45")
+        self.assertLessEqual(bands, pops + 1e-9)
+        self.assertLess(pops - bands, 0.05, "the bands still track pop by pop with most people above 50")
 
     @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
     def test_gini_exits_1_when_a_tag_has_no_pops(self):

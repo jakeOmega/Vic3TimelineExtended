@@ -352,8 +352,8 @@
   "de": "Begrenzter Krieg"
  },
  "law_limited_war_desc": {
-  "en": "Strict restrictions on means and methods of warfare, with a focus on minimizing civilian casualties and damage to civilian [concept_infrastructure]. Prohibits the use of certain weapons and tactics, and emphasizes the [concept_power_bloc_principle] of proportionality in the use of force.",
-  "de": "Strenge Beschränkungen der Mittel und Methoden der Kriegsführung, mit dem Ziel, zivile Opfer und Schäden an ziviler [concept_infrastructure] zu minimieren. Verbietet den Einsatz bestimmter Waffen und Taktiken und betont das [concept_power_bloc_principle] der Verhältnismäßigkeit beim Einsatz von Gewalt."
+  "en": "War is fought for limited aims with proportionate force, sparing civilians and civilian [concept_infrastructure]. Crises are slow to become wars, and the public follows the fighting from a distance. No nuclear strike, strategic or tactical, may be ordered except in answer to one or to save the nation.",
+  "de": "Krieg wird für begrenzte Ziele mit verhältnismäßiger Gewalt geführt, unter Schonung von Zivilisten und ziviler [concept_infrastructure]. Krisen werden nur langsam zu Kriegen, und die Öffentlichkeit verfolgt die Kämpfe aus der Ferne. Kein Nuklearschlag, ob strategisch oder taktisch, darf befohlen werden, außer als Antwort auf einen solchen oder zur Rettung der Nation."
  },
  "law_linguistic_purity": {
   "en": "Linguistic Purity",

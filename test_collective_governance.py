@@ -366,6 +366,17 @@ class LawTests(unittest.TestCase):
                 self.assertTrue(key in loc, f"no loc for {key}")
 
 
+class CooperativeOwnershipTests(unittest.TestCase):
+    """Anarchy needs Cooperative Ownership, which vanilla unlocks only with
+    Council Republic or Corporate State, so the law must unlock it too or
+    Free Federation can't hold. The general check is
+    test_gen_law_consistency.PrerequisiteHoldableTest."""
+
+    def test_cooperative_ownership_accepts_the_law(self):
+        body = _block(_read(_path("common", "laws", "modified.txt")), "law_cooperative_ownership")
+        self.assertEqual(_inner(body, "unlocking_laws").split(), ["law_direct_democracy"])
+
+
 GOVERNMENTS = _path("common", "government_types", "timeline_extended_governments.txt")
 
 Gov = namedtuple("Gov", "key trigger extra_law name male female transfer")

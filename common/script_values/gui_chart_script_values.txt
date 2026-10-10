@@ -105,3 +105,51 @@ te_tp_exports_to_current = {
 te_tp_imports_from_current = {
 	value = "market_imports(scope:tp_current_market)"
 }
+
+# ============================================================================
+# HIDDEN STATE MODIFIERS (state scope, GUI-only)
+# ============================================================================
+
+# How many of the state's modifiers the state panel hides. gui/states_panel.gui
+# leaves out of both modifier rows every modifier with the mod's blank icon
+# (gfx/interface/icons/timed_modifier_icons/modifier_system.dds), and fades the
+# condensed view's box when the state carries no other: when its modifier count
+# is not above this. A GUI can tell a modifier only by its icon, so the box needs
+# the hidden ones named here: one term per static modifier with that icon.
+# test_hidden_state_modifiers.py fails when such a modifier has no term.
+# Used by: State.MakeScope.ScriptValue('gui_state_hidden_modifier_count')
+gui_state_hidden_modifier_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = pollution_generation_mult_effect }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = tourism_output }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = tourism_throughput }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = migration_crowding }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = free_port_state_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = free_port_tariff_import_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = free_port_tariff_export_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_map_mode_overlay }
+		add = 1
+	}
+}
