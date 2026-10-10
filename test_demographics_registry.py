@@ -1021,6 +1021,18 @@ class TestRatesScript(unittest.TestCase):
         self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
 
+    def test_script_never_pushes_past_the_terms_on_top(self):
+        """Review Focus 5: the terms on top alone already past -0.8 (a famine, a plague event). M stays at 0, as
+        demographics_model.rate_term's does, and an M of 0 takes neither modifier of the pair."""
+        eng = self._eng(cbr=2.0, read_b=-1.2)
+        eng.call("te_demog_rates_refresh")
+        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, 0.2 * 475e6, -1.2, 0.04)
+        self.assertEqual(mb, 0.0)
+        self.assertEqual(eng.vars["te_dg_mb"], 0.0)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+        self.assertNotIn("te_demog_census_births_up", eng.modifiers)
+        self.assertNotIn("te_demog_census_births_down", eng.modifiers)
+
     def test_the_prior_term_comes_off_the_read(self):
         """The state read holds last step's M: the clamp's 'other' takes it off."""
         eng = self._eng(cbr=2.0, read_b=-0.5)
