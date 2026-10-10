@@ -80,8 +80,10 @@ groups exclude each other. Cooptation is limited only by its law requirement.
 The discriminatory minority laws are Violent Hostility, Ghettoization, Cultural
 Assimilation and Discrimination. Cooptation stops pushing the bar after 12
 months in total for the whole struggle; switching it off and on doesn't restart
-the count, and its other effects stay. The exact figures are in [Civil rights
-policy effects](18-appendix-social-movements.md#civil-rights-policy-effects).
+the count, and its other effects stay. Each button's tooltip lists the modifier
+it applies, its monthly push on the bar and the ending its months count toward;
+the figures are also in [Civil rights policy
+effects](18-appendix-social-movements.md#civil-rights-policy-effects).
 
 ### Civil rights events
 

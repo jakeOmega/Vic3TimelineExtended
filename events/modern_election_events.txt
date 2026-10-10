@@ -215,23 +215,9 @@ modern_election_events.3 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
-		if = {
-			limit = {
-				any_active_party = { is_party_type = green_party }
-			}
-			random_active_party = {
-				limit = { is_party_type = green_party }
-				save_scope_as = green_scope
-			}
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = environment FOR = climate_party AGAINST = growth_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -240,12 +226,8 @@ modern_election_events.3 = {
 		name = modern_election_events.3.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:green_scope }
-			scope:green_scope = { add_momentum = momentum_large }
-		}
-		if = {
-			limit = { NOT = { exists = scope:green_scope } exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:climate_party }
+			scope:climate_party = { add_momentum = momentum_large }
 		}
 		add_modifier = { name = me_climate_pledge_modifier days = normal_modifier_time }
 		ai_chance = {
@@ -258,12 +240,12 @@ modern_election_events.3 = {
 	option = { # Double down on economic growth
 		name = modern_election_events.3.b
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:growth_party }
+			scope:growth_party = { add_momentum = momentum_medium }
 		}
 		if = {
-			limit = { exists = scope:green_scope }
-			scope:green_scope = { add_momentum = momentum_medium_decrease }
+			limit = { exists = scope:climate_party }
+			scope:climate_party = { add_momentum = momentum_medium_decrease }
 		}
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
@@ -276,12 +258,12 @@ modern_election_events.3 = {
 	option = { # Form a bipartisan climate task force
 		name = modern_election_events.3.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:climate_party }
+			scope:climate_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:growth_party }
+			scope:growth_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -810,6 +792,14 @@ modern_election_events.9 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = television_broadcasting
+		any_interest_group = {
+			has_party = yes
+			is_in_government = yes
+		}
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
 	}
 
 	immediate = {
@@ -822,10 +812,18 @@ modern_election_events.9 = {
 			limit = { has_party = yes is_in_government = no }
 			party = { save_scope_as = opp_party }
 		}
-		# Randomly determine which side gaffes
+		# Randomly determine which side gaffes. Saved scopes, not local variables:
+		# saved scopes persist into the options and the loc, so the options render
+		# their momentum natively and the description names the party.
 		random_list = {
-			50 = { set_local_variable = govt_gaffe }
-			50 = { set_local_variable = opp_gaffe }
+			50 = {
+				scope:govt_party = { save_scope_as = gaffe_party }
+				scope:opp_party = { save_scope_as = rival_party }
+			}
+			50 = {
+				scope:opp_party = { save_scope_as = gaffe_party }
+				scope:govt_party = { save_scope_as = rival_party }
+			}
 		}
 	}
 
@@ -834,30 +832,13 @@ modern_election_events.9 = {
 	option = { # Capitalize ruthlessly
 		name = modern_election_events.9.a
 		default_option = yes
-		custom_tooltip = {
-			text = modern_election_events.9.a.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe }
-				if = {
-					limit = { exists = scope:opp_party }
-					scope:opp_party = { add_momentum = momentum_large }
-				}
-				if = {
-					limit = { exists = scope:govt_party }
-					scope:govt_party = { add_momentum = momentum_large_decrease }
-				}
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe }
-				if = {
-					limit = { exists = scope:govt_party }
-					scope:govt_party = { add_momentum = momentum_large }
-				}
-				if = {
-					limit = { exists = scope:opp_party }
-					scope:opp_party = { add_momentum = momentum_large_decrease }
-				}
-			}
+		if = {
+			limit = { exists = scope:rival_party }
+			scope:rival_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_large_decrease }
 		}
 		add_radicals = { value = small_radicals }
 		ai_chance = {
@@ -869,16 +850,9 @@ modern_election_events.9 = {
 	option = { # Take the high road
 		name = modern_election_events.9.b
 		add_loyalists = { value = small_radicals }
-		custom_tooltip = {
-			text = modern_election_events.9.b.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_small_decrease }
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_small_decrease }
-			}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_small_decrease }
 		}
 		ai_chance = {
 			base = 3
@@ -888,16 +862,9 @@ modern_election_events.9 = {
 
 	option = { # Spin it into a relatable moment
 		name = modern_election_events.9.c
-		custom_tooltip = {
-			text = modern_election_events.9.c.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_small }
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_small }
-			}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_small }
 		}
 		add_modifier = { name = me_media_savvy_modifier days = short_modifier_time }
 		ai_chance = {
@@ -1299,14 +1266,9 @@ modern_election_events.14 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = socialism FOR = left_party AGAINST = anticommunist_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -1315,8 +1277,8 @@ modern_election_events.14 = {
 		name = modern_election_events.14.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_large }
+			limit = { exists = scope:anticommunist_party }
+			scope:anticommunist_party = { add_momentum = momentum_large }
 		}
 		add_modifier = { name = me_anti_communist_campaign_modifier days = normal_modifier_time }
 		add_radicals = { value = small_radicals }
@@ -1330,8 +1292,8 @@ modern_election_events.14 = {
 	option = { # Defend civil liberties
 		name = modern_election_events.14.b
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:left_party }
+			scope:left_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -1344,12 +1306,12 @@ modern_election_events.14 = {
 	option = { # Propose a bipartisan anti-extremism commission
 		name = modern_election_events.14.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:left_party }
+			scope:left_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:anticommunist_party }
+			scope:anticommunist_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals strata = middle }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -1498,14 +1460,9 @@ modern_election_events.16 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = equality FOR = equality_party AGAINST = tradition_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -1514,8 +1471,8 @@ modern_election_events.16 = {
 		name = modern_election_events.16.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:equality_party }
+			scope:equality_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_equal_rights_platform_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -1530,8 +1487,8 @@ modern_election_events.16 = {
 	option = { # Defend traditions and the status quo
 		name = modern_election_events.16.b
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:tradition_party }
+			scope:tradition_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -1546,12 +1503,12 @@ modern_election_events.16 = {
 	option = { # Propose gradual, measured reform
 		name = modern_election_events.16.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:equality_party }
+			scope:equality_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:tradition_party }
+			scope:tradition_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		add_radicals = { value = very_small_radicals strata = middle }
@@ -1787,11 +1744,6 @@ modern_election_events.19 = {
 			limit = { has_party = yes is_in_government = no }
 			party = { save_scope_as = opp_party }
 		}
-		# Determine who wins the debate
-		random_list = {
-			50 = { set_local_variable = govt_wins_debate }
-			50 = { set_local_variable = opp_wins_debate }
-		}
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -1799,26 +1751,26 @@ modern_election_events.19 = {
 	option = { # Go on the offensive with policy attacks
 		name = modern_election_events.19.a
 		default_option = yes
-		if = {
-			limit = { has_local_variable = govt_wins_debate }
-			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_large }
+		random_list = { # Who wins the debate
+			50 = {
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_medium_decrease }
+				}
 			}
-			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_medium_decrease }
-			}
-		}
-		if = {
-			limit = { has_local_variable = opp_wins_debate }
-			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_large }
-			}
-			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_medium_decrease }
+			50 = {
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_medium_decrease }
+				}
 			}
 		}
 		ai_chance = {
@@ -1893,14 +1845,9 @@ modern_election_events.20 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = womens_rights FOR = womens_rights_party AGAINST = traditional_values_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -1909,8 +1856,8 @@ modern_election_events.20 = {
 		name = modern_election_events.20.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:womens_rights_party }
+			scope:womens_rights_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -1925,8 +1872,8 @@ modern_election_events.20 = {
 	option = { # Appeal to traditional values
 		name = modern_election_events.20.b
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:traditional_values_party }
+			scope:traditional_values_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
@@ -1948,12 +1895,8 @@ modern_election_events.20 = {
 			}
 		}
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
-		}
-		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:womens_rights_party }
+			scope:womens_rights_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = medium_radicals }
 		ai_chance = {
@@ -1993,14 +1936,9 @@ modern_election_events.21 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = environment FOR = cleanup_party AGAINST = jobs_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2009,8 +1947,8 @@ modern_election_events.21 = {
 		name = modern_election_events.21.a
 		default_option = yes
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:cleanup_party }
+			scope:cleanup_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_pollution_cleanup_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2024,8 +1962,8 @@ modern_election_events.21 = {
 	option = { # Defend jobs over the environment
 		name = modern_election_events.21.b
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:jobs_party }
+			scope:jobs_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_radicals = { value = small_radicals strata = middle }
@@ -2039,12 +1977,12 @@ modern_election_events.21 = {
 	option = { # Invest in green technology
 		name = modern_election_events.21.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:cleanup_party }
+			scope:cleanup_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:jobs_party }
+			scope:jobs_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2175,14 +2113,9 @@ modern_election_events.23 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = genetics FOR = biotech_party AGAINST = moratorium_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2190,8 +2123,8 @@ modern_election_events.23 = {
 	option = { # Endorse genetic research wholeheartedly
 		name = modern_election_events.23.a
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:biotech_party }
+			scope:biotech_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2205,8 +2138,8 @@ modern_election_events.23 = {
 	option = { # Call for an outright moratorium
 		name = modern_election_events.23.b
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:moratorium_party }
+			scope:moratorium_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
@@ -2222,12 +2155,12 @@ modern_election_events.23 = {
 		default_option = yes
 		add_modifier = { name = me_genetics_ethics_commission_modifier days = normal_modifier_time }
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:biotech_party }
+			scope:biotech_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:moratorium_party }
+			scope:moratorium_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = {
@@ -2266,14 +2199,9 @@ modern_election_events.24 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = civil_liberties FOR = liberty_party AGAINST = security_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2281,8 +2209,8 @@ modern_election_events.24 = {
 	option = { # Demand a security crackdown
 		name = modern_election_events.24.a
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_large }
+			limit = { exists = scope:security_party }
+			scope:security_party = { add_momentum = momentum_large }
 		}
 		add_modifier = { name = me_security_crackdown_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -2298,8 +2226,8 @@ modern_election_events.24 = {
 	option = { # Warn against eroding civil liberties
 		name = modern_election_events.24.b
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:liberty_party }
+			scope:liberty_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
@@ -2314,12 +2242,12 @@ modern_election_events.24 = {
 		name = modern_election_events.24.c
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:security_party }
+			scope:security_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:liberty_party }
+			scope:liberty_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2454,14 +2382,9 @@ modern_election_events.26 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = protectionism FOR = tariff_party AGAINST = free_trade_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2469,8 +2392,8 @@ modern_election_events.26 = {
 	option = { # Promise tariffs and protectionism
 		name = modern_election_events.26.a
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:tariff_party }
+			scope:tariff_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_petty_bourgeoisie MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -2485,8 +2408,8 @@ modern_election_events.26 = {
 		name = modern_election_events.26.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:free_trade_party }
+			scope:free_trade_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2500,12 +2423,12 @@ modern_election_events.26 = {
 	option = { # Propose fair trade reforms
 		name = modern_election_events.26.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:tariff_party }
+			scope:tariff_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:free_trade_party }
+			scope:free_trade_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2551,14 +2474,9 @@ modern_election_events.27 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = migration FOR = refugee_party AGAINST = border_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2566,8 +2484,8 @@ modern_election_events.27 = {
 	option = { # Welcome refugees with open arms
 		name = modern_election_events.27.a
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:refugee_party }
+			scope:refugee_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_open_borders_campaign_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -2584,8 +2502,8 @@ modern_election_events.27 = {
 		name = modern_election_events.27.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:border_party }
+			scope:border_party = { add_momentum = momentum_medium }
 		}
 		add_modifier = { name = me_border_security_campaign_modifier days = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -2601,12 +2519,12 @@ modern_election_events.27 = {
 	option = { # Invest in climate solutions at the source
 		name = modern_election_events.27.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:refugee_party }
+			scope:refugee_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:border_party }
+			scope:border_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals }
 		ai_chance = {
@@ -2732,14 +2650,9 @@ modern_election_events.29 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = welfare FOR = ubi_party AGAINST = austerity_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2747,8 +2660,8 @@ modern_election_events.29 = {
 	option = { # Campaign on universal basic income
 		name = modern_election_events.29.a
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_large }
+			limit = { exists = scope:ubi_party }
+			scope:ubi_party = { add_momentum = momentum_large }
 		}
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2764,8 +2677,8 @@ modern_election_events.29 = {
 		name = modern_election_events.29.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:austerity_party }
+			scope:austerity_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ai_chance = {
@@ -2778,12 +2691,12 @@ modern_election_events.29 = {
 	option = { # Propose a limited pilot program
 		name = modern_election_events.29.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:ubi_party }
+			scope:ubi_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:austerity_party }
+			scope:austerity_party = { add_momentum = momentum_small }
 		}
 		add_loyalists = { value = small_radicals }
 		add_radicals = { value = very_small_radicals strata = upper }
@@ -2908,14 +2821,9 @@ modern_election_events.31 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = augmentation FOR = enhancement_party AGAINST = purity_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -2923,8 +2831,8 @@ modern_election_events.31 = {
 	option = { # Embrace human enhancement as progress
 		name = modern_election_events.31.a
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:enhancement_party }
+			scope:enhancement_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -2941,8 +2849,8 @@ modern_election_events.31 = {
 		name = modern_election_events.31.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:purity_party }
+			scope:purity_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		add_loyalists = { value = small_radicals }
@@ -2958,12 +2866,12 @@ modern_election_events.31 = {
 		name = modern_election_events.31.c
 		add_modifier = { name = me_genetics_ethics_commission_modifier days = normal_modifier_time }
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:enhancement_party }
+			scope:enhancement_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:purity_party }
+			scope:purity_party = { add_momentum = momentum_small }
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ai_chance = {
@@ -3020,14 +2928,9 @@ modern_election_events.32 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = suffrage FOR = representation_party AGAINST = homeworld_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -3036,8 +2939,8 @@ modern_election_events.32 = {
 		name = modern_election_events.32.a
 		add_modifier = { name = me_colonial_representation_modifier days = normal_modifier_time }
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:representation_party }
+			scope:representation_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -3050,8 +2953,8 @@ modern_election_events.32 = {
 	option = { # They left our soil — no representation
 		name = modern_election_events.32.b
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:homeworld_party }
+			scope:homeworld_party = { add_momentum = momentum_medium }
 		}
 		add_radicals = { value = small_radicals }
 		ai_chance = {
@@ -3065,12 +2968,12 @@ modern_election_events.32 = {
 		name = modern_election_events.32.c
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:representation_party }
+			scope:representation_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:homeworld_party }
+			scope:homeworld_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals }
 		ai_chance = {
@@ -3111,14 +3014,9 @@ modern_election_events.33 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = direct_democracy FOR = neural_democracy_party AGAINST = traditional_elections_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -3127,8 +3025,8 @@ modern_election_events.33 = {
 		name = modern_election_events.33.a
 		add_modifier = { name = me_neural_democracy_modifier days = normal_modifier_time }
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_large }
+			limit = { exists = scope:neural_democracy_party }
+			scope:neural_democracy_party = { add_momentum = momentum_large }
 		}
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = {
@@ -3143,8 +3041,8 @@ modern_election_events.33 = {
 		name = modern_election_events.33.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:traditional_elections_party }
+			scope:traditional_elections_party = { add_momentum = momentum_medium }
 		}
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
@@ -3158,12 +3056,12 @@ modern_election_events.33 = {
 	option = { # Propose voluntary neural polling as a supplement
 		name = modern_election_events.33.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:neural_democracy_party }
+			scope:neural_democracy_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:traditional_elections_party }
+			scope:traditional_elections_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = upper }
 		ai_chance = {
@@ -3202,14 +3100,9 @@ modern_election_events.34 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = synthetic_food FOR = synthetic_food_party AGAINST = farming_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -3217,8 +3110,8 @@ modern_election_events.34 = {
 	option = { # Champion synthetic agriculture as the future
 		name = modern_election_events.34.a
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:synthetic_food_party }
+			scope:synthetic_food_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -3233,8 +3126,8 @@ modern_election_events.34 = {
 		name = modern_election_events.34.b
 		default_option = yes
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:farming_party }
+			scope:farming_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -3250,12 +3143,12 @@ modern_election_events.34 = {
 	option = { # Promise coexistence of both approaches
 		name = modern_election_events.34.c
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:synthetic_food_party }
+			scope:synthetic_food_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:farming_party }
+			scope:farming_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = middle }
 		ai_chance = {
@@ -3294,14 +3187,9 @@ modern_election_events.35 = {
 
 	immediate = {
 		set_variable = { name = election_event_cooldown months = election_event_cooldown_months }
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = yes }
-			party = { save_scope_as = govt_party }
-		}
-		random_interest_group = {
-			limit = { has_party = yes is_in_government = no }
-			party = { save_scope_as = opp_party }
-		}
+		# Each side's party comes from its interest groups' law stances,
+		# not from who governs (me_election_issue_effects.txt).
+		me_save_issue_parties = { ISSUE = worker_protection FOR = labor_party AGAINST = automation_party }
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -3309,8 +3197,8 @@ modern_election_events.35 = {
 	option = { # Accelerate automation for prosperity
 		name = modern_election_events.35.a
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:automation_party }
+			scope:automation_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -3325,8 +3213,8 @@ modern_election_events.35 = {
 	option = { # Protect human workers at all costs
 		name = modern_election_events.35.b
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_medium }
+			limit = { exists = scope:labor_party }
+			scope:labor_party = { add_momentum = momentum_medium }
 		}
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
@@ -3342,12 +3230,12 @@ modern_election_events.35 = {
 		name = modern_election_events.35.c
 		default_option = yes
 		if = {
-			limit = { exists = scope:govt_party }
-			scope:govt_party = { add_momentum = momentum_small }
+			limit = { exists = scope:labor_party }
+			scope:labor_party = { add_momentum = momentum_small }
 		}
 		if = {
-			limit = { exists = scope:opp_party }
-			scope:opp_party = { add_momentum = momentum_small }
+			limit = { exists = scope:automation_party }
+			scope:automation_party = { add_momentum = momentum_small }
 		}
 		add_radicals = { value = very_small_radicals strata = middle }
 		ai_chance = {
