@@ -144,6 +144,7 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_ed value = 0 }
 	set_local_variable = { name = te_dg_w_eb0 value = 0 }
 	set_local_variable = { name = te_dg_w_ed0 value = 0 }
+	set_local_variable = { name = te_dg_w_ebl value = 0 }
 	set_local_variable = { name = te_dg_w_agr value = 0 }
 	set_local_variable = { name = te_dg_w_sold value = 0 }
 	set_local_variable = { name = te_dg_w_bur value = 0 }
@@ -162,6 +163,8 @@ te_demog_walks = {
 		set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }
 		change_local_variable = { name = te_dg_w_eb0 add = local_var:te_dg_p_eb }
 		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
+		# bare births by literacy: the absorbed literacy_penalty, which the census's births term nets out
+		change_local_variable = { name = te_dg_w_ebl add = { value = local_var:te_dg_p_eb multiply = literacy_rate } }
 		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
 		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
 		# the Gini's wealth band (spec 4.1; generated)
@@ -297,6 +300,7 @@ te_demog_state_yearly = {
 	if = {
 		limit = { NOT = { te_demog_clock_on = yes } }
 		te_demog_state_census = yes
+		te_demog_rates_refresh = yes
 	}
 }
 

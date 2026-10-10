@@ -55,7 +55,8 @@ te_demog_clock_tick = {
 }
 
 # THIS = ROOT = a state, at a step of the clock (te_demog_events.2): the yearly pulse's
-# walks and census, then the fast rate modifiers from the same walk. The walks run
+# walks and census, the census's births and deaths terms (te_demog_rates_refresh, phase 2
+# step 4), then the fast rate modifiers from the same walk. The walks run
 # whatever the rule, as on the yearly pulse: inheritance and Wealth Concentration read them.
 te_demog_state_clock_step = {
 	if = {
@@ -64,6 +65,7 @@ te_demog_state_clock_step = {
 	}
 	te_demog_walks = yes
 	te_demog_state_census = yes
+	te_demog_rates_refresh = yes
 	te_demog_fast_refresh_rates = yes
 }
 

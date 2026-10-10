@@ -33,6 +33,8 @@
 #        unincorporated state read them (TE_DEMOG_MODS)
 #   m    the shock terms (probe P1): every devastated or polluted state's reads
 #        (TE_DEMOG_SHOCK)
+#   n    the census's rates (probe P3): the capital's births and deaths terms, the
+#        on-top scales of its last step and its reads (TE_DEMOG_RATES)
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -261,6 +263,23 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 				limit = { has_variable = te_dg_dbg_click }
 				remove_variable = te_dg_dbg_click
 				te_debug_demog_shock_lines = yes
+			}
+		}
+	}
+
+	# ---- n: the census's rates (probe P3) -----------------------------------
+	option = {
+		name = te_debug_demog.1.n
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.n.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				capital = { te_debug_demog_rate_lines = yes }
 			}
 		}
 	}

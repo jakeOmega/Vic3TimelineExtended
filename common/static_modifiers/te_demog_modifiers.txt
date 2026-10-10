@@ -5,3 +5,25 @@ te_demog_family_limitation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_fertility_means_add = 0.6
 }
+
+# Phase 2 step 4 (te_demog_rate_effects.txt): the census sets each state's births and deaths.
+# One of each pair at a time, multiplier |M| (no negative multiplier: fixed-sign pairs).
+te_demog_census_births_up = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_birth_rate_mult = 1
+}
+
+te_demog_census_births_down = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_birth_rate_mult = -1
+}
+
+te_demog_census_deaths_up = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_mortality_mult = 1
+}
+
+te_demog_census_deaths_down = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_mortality_mult = -1
+}

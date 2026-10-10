@@ -25,6 +25,8 @@
 #   TE_DEMOG_SHOCK:     option m (probe P1): every devastated or polluted state's
 #                       mortality and birth reads, devastation, turmoil and pollution,
 #                       each line followed by the state's scope
+#   TE_DEMOG_RATES:     option n (probe P3): the capital's census terms, the terms in
+#                       force, its last step's on-top scales and the reads
 #
 # A debug_log line reads only variables and script values of THIS (locals don't reach
 # it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
@@ -333,5 +335,52 @@ te_debug_demog_shock_lines = {
 		remove_variable = te_dg_dbg_dev
 		remove_variable = te_dg_dbg_turmoil
 		remove_variable = te_dg_dbg_poll
+	}
+}
+
+# ---- n: the census's rates (phase 2 step 4, probe P3) -----------------------------
+# THIS = the capital: its census terms, the terms in force, the on-top scales of its last step,
+# the model's rates and the engine's expected events over the last window, the reads. Every
+# variable is copied through a guard: a capital that hasn't stepped under Full has none of them.
+te_debug_demog_rate_lines = {
+	te_debug_demog_rate_copy = { FROM = te_dg_mb TO = te_dg_dbg_mb }
+	te_debug_demog_rate_copy = { FROM = te_dg_md TO = te_dg_dbg_md }
+	te_debug_demog_rate_copy = { FROM = te_dg_bz TO = te_dg_dbg_bz }
+	te_debug_demog_rate_copy = { FROM = te_dg_dz TO = te_dg_dbg_dz }
+	te_debug_demog_rate_copy = { FROM = te_dg_cbr_model TO = te_dg_dbg_cbrm }
+	te_debug_demog_rate_copy = { FROM = te_dg_cdr_model TO = te_dg_dbg_cdrm }
+	te_debug_demog_rate_copy = { FROM = te_dg_eb TO = te_dg_dbg_eb }
+	te_debug_demog_rate_copy = { FROM = te_dg_ed TO = te_dg_dbg_ed }
+	te_debug_demog_rate_copy = { FROM = te_dg_rate_clamped TO = te_dg_dbg_cl }
+	set_variable = { name = te_dg_dbg_ab value = te_demog_rate_births_applied }
+	set_variable = { name = te_dg_dbg_ad value = te_demog_rate_deaths_applied }
+	set_variable = { name = te_dg_dbg_fb value = te_demog_fast_births_applied }
+	set_variable = { name = te_dg_dbg_fd value = te_demog_fast_deaths_applied }
+	set_variable = { name = te_dg_dbg_read_b value = modifier:state_birth_rate_mult }
+	set_variable = { name = te_dg_dbg_read_d value = modifier:state_mortality_mult }
+	debug_log = "TE_DEMOG_RATES: mb=[THIS.Var('te_dg_dbg_mb').GetValue|4]; md=[THIS.Var('te_dg_dbg_md').GetValue|4]; applied_b=[THIS.Var('te_dg_dbg_ab').GetValue|4]; applied_d=[THIS.Var('te_dg_dbg_ad').GetValue|4]; fast_b=[THIS.Var('te_dg_dbg_fb').GetValue|4]; fast_d=[THIS.Var('te_dg_dbg_fd').GetValue|4]; read_b=[THIS.Var('te_dg_dbg_read_b').GetValue|4]; read_d=[THIS.Var('te_dg_dbg_read_d').GetValue|4]; bz=[THIS.Var('te_dg_dbg_bz').GetValue|4]; dz=[THIS.Var('te_dg_dbg_dz').GetValue|4]; cbr_model=[THIS.Var('te_dg_dbg_cbrm').GetValue|3]; cdr_model=[THIS.Var('te_dg_dbg_cdrm').GetValue|3]; eb=[THIS.Var('te_dg_dbg_eb').GetValue|0]; ed=[THIS.Var('te_dg_dbg_ed').GetValue|0]; clamped=[THIS.Var('te_dg_dbg_cl').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_dg_dbg_mb
+	remove_variable = te_dg_dbg_md
+	remove_variable = te_dg_dbg_bz
+	remove_variable = te_dg_dbg_dz
+	remove_variable = te_dg_dbg_cbrm
+	remove_variable = te_dg_dbg_cdrm
+	remove_variable = te_dg_dbg_eb
+	remove_variable = te_dg_dbg_ed
+	remove_variable = te_dg_dbg_cl
+	remove_variable = te_dg_dbg_ab
+	remove_variable = te_dg_dbg_ad
+	remove_variable = te_dg_dbg_fb
+	remove_variable = te_dg_dbg_fd
+	remove_variable = te_dg_dbg_read_b
+	remove_variable = te_dg_dbg_read_d
+}
+
+# THIS = the capital: $TO$ = $FROM$, or 0 when the census never wrote it (option n).
+te_debug_demog_rate_copy = {
+	set_variable = { name = $TO$ value = 0 }
+	if = {
+		limit = { has_variable = $FROM$ }
+		set_variable = { name = $TO$ value = var:$FROM$ }
 	}
 }
