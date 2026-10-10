@@ -16,10 +16,12 @@ Layout, as written by 1.14.5 (checked on an 1836 save, 2026-10-08): top-level se
 each record's own fields one tab in. The fields read:
     pops             type, location (state id), workforce, dependents, num_literate, wealth,
                      previous_quality_of_life (the pop's standard of living last week)
-    states           country (owner id)
+    states           country (owner id), incorporation (1 once incorporated; a fraction while
+                     incorporating; absent in an unincorporated state)
     country_manager  definition (the tag, quoted)
     laws             law, country, active (yes on the law in force)
     technology       country, acquired_technologies={ … }
+    institutions     institution, investment (its level), country
 A pop with no workforce or dependents field is empty (size 0).
 """
 
@@ -35,10 +37,11 @@ import demographics_model as M
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
              "social_class"),
-    "states": ("country",),
+    "states": ("country", "incorporation"),
     "country_manager": ("definition",),
     "laws": ("law", "country", "active"),
     "technology": ("country", "acquired_technologies"),
+    "institutions": ("institution", "investment", "country"),
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
@@ -141,6 +144,8 @@ class CountryInputs:
     sol_bins: dict = field(default_factory=lambda: defaultdict(float))
     laws: set = field(default_factory=set)
     techs: set = field(default_factory=set)
+    institutions: dict = field(default_factory=dict)   # institution -> investment level
+    incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
 
     @property
@@ -157,6 +162,10 @@ class CountryInputs:
         return self.literate / self.workforce if self.workforce else 0.0
 
     @property
+    def incorporated_share(self):
+        return self.incorporated_people / self.population if self.population else 0.0
+
+    @property
     def urban_share(self):
         return 1 - self.rural / self.population if self.population else 0.0
 
@@ -164,10 +173,16 @@ class CountryInputs:
 RURAL_TYPES = {"peasants", "farmers", "slaves"}
 
 
+def is_incorporated(state_record):
+    """A state counts as incorporated once its incorporation reaches 1 (institution modifiers apply there)."""
+    return _num(state_record.get("incorporation")) >= 1
+
+
 def country_inputs(sections):
     """{tag: CountryInputs} from read_sections()'s output."""
     tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
     owner_of_state = {sid: rec.get("country") for sid, rec in sections["states"].items()}
+    incorporated = {sid for sid, rec in sections["states"].items() if is_incorporated(rec)}
     out = {}
 
     def get(cid):
@@ -192,6 +207,8 @@ def country_inputs(sections):
         sol = _num(rec.get("previous_quality_of_life"))
         wealth = _num(rec.get("wealth"))
         c.population += size
+        if rec.get("location") in incorporated:
+            c.incorporated_people += size
         c.sol_x_size += sol * size
         c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
         c.literate += _num(rec.get("num_literate"))
@@ -212,6 +229,10 @@ def country_inputs(sections):
         c = get(rec.get("country"))
         if c:
             c.techs.update(rec.get("acquired_technologies", "").strip("{} ").split())
+    for rec in sections.get("institutions", {}).values():
+        c = get(rec.get("country"))
+        if c and rec.get("institution"):
+            c.institutions[rec["institution"]] = int(_num(rec.get("investment")))
     return out
 
 
@@ -294,6 +315,7 @@ def write_slice(sections, tags, max_pops, out_path):
         "states": {sid: rec for sid, rec in sections["states"].items() if sid in states},
         "laws": {i: r for i, r in sections["laws"].items() if r.get("country") in ids and r.get("active") == "yes"},
         "technology": {i: r for i, r in sections["technology"].items() if r.get("country") in ids},
+        "institutions": {i: r for i, r in sections.get("institutions", {}).items() if r.get("country") in ids},
         "pops": {},
     }
     candidates = [(pid, rec) for pid, rec in sections["pops"].items()
@@ -301,7 +323,7 @@ def write_slice(sections, tags, max_pops, out_path):
     stride = max(1, len(candidates) // max_pops)
     keep["pops"] = dict(candidates[::stride][:max_pops])
     lines = ["SAV0100demographics-test-slice", "meta_data={", '\tversion="1.14.5"', "}"]
-    for name in ("pops", "country_manager", "states", "laws", "technology"):
+    for name in ("pops", "country_manager", "states", "laws", "technology", "institutions"):
         lines += [f"{name}={{", "\tdatabase={"]
         for rid, rec in keep[name].items():
             lines.append(f"{rid}={{")

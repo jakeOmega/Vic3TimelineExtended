@@ -29,6 +29,23 @@ class TestHarness(unittest.TestCase):
             self.assertEqual(H.main(["sketch"]), 0)
         self.assertIn("Britain 1836", out.getvalue())
 
+    def test_medicine_anchors_hold(self):
+        # every scenario of `medicine` is inside its band with the game files' values
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["medicine"]), 0, out.getvalue())
+        for label, _kw, _targets in H.MEDICINE_SCENARIOS:
+            self.assertIn(label, out.getvalue())
+        self.assertNotIn(" OUT", out.getvalue())
+
+    def test_adopters_on_the_slice(self):
+        # Britain holds Charitable Health System in 1836; Portugal has none
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["adopters", str(SLICE)]), 0)
+        self.assertIn("law_charitable_health_system", out.getvalue())
+        self.assertIn("GBR", out.getvalue())
+
     def test_buy_package_costs_rise_with_wealth(self):
         costs = H.buy_package_costs()
         self.assertEqual(len(costs), 200)

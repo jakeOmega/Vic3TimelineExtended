@@ -9,6 +9,8 @@ Usage:
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
     demographics_harness.py wc SAVE [--tag GBR] [--top 30]  # Wealth Concentration as the game holds it
+    demographics_harness.py medicine                    # mortality anchors with the game files' values
+    demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -27,6 +29,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 import pop_growth as G  # noqa: E402
@@ -57,14 +60,18 @@ def income_proxy(wealth, costs):
     return costs[w]
 
 
-def inputs_for(c):
-    """Model inputs for a save's country.
+def inputs_for(c, carriers=None):
+    """Model inputs for a save's country, as its incorporated states see them.
 
-    No institutions or modifiers: the reader doesn't read them. The wealth term is the
-    pop-weighted curve, as the game computes it, not the curve at the mean SoL.
+    The modifier totals come from the game files' carriers (demographics_modifiers) for the
+    country's techs, laws and institution levels. The wealth term is the pop-weighted curve,
+    as the game computes it, not the curve at the mean SoL.
     """
-    return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share,
-                    techs=frozenset(c.techs), laws=frozenset(c.laws), wealth_tfr=c.wealth_tfr)
+    carriers = DM.load_carriers() if carriers is None else carriers
+    mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=True)
+    return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
+                    laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
+                    mods=mods)
 
 
 def cmd_sketch(_args):
@@ -437,6 +444,133 @@ def cmd_wc(args):
     return 0
 
 
+# ---- medicine: mortality anchors (modifier-types design, stage 1) -----------------------
+# The medical techs by when the West held them (eras: medical_degrees 1, pharmaceuticals 2,
+# modern_nursing 3, antibiotics 5, modern_vaccines 6, antibiotic_mass_production 7,
+# modern_pharmaceuticals 8, telemedicine 10).
+MED_1836 = frozenset({"medical_degrees"})
+MED_1900 = MED_1836 | {"pharmaceuticals", "modern_nursing"}
+MED_1950 = MED_1900 | {"antibiotics", "modern_vaccines", "combustion_engine"}
+MED_1990 = MED_1950 | {"antibiotic_mass_production", "modern_pharmaceuticals"}
+MED_TODAY = MED_1990 | {"telemedicine"}
+CHS, PHI = "law_charitable_health_system", "law_public_health_insurance"
+HEALTH = "institution_health_system"
+
+# (label, inputs, {figure: (low, high)}): §2.4's anchors and the history behind them. Figures:
+# e0 and e65 in years, imr per 1,000 births, mmr maternal deaths per 100,000 births.
+MEDICINE_SCENARIOS = [
+    ("Britain 1836", dict(sol=11, literacy=0.35, urban_share=0.3, techs=MED_1836, laws={CHS},
+                          institutions={HEALTH: 1}),
+     {"imr": (150, 250), "e0": (35, 43), "e65": (10, 14), "mmr": (400, 1000)}),
+    ("Britain 1900", dict(sol=16, literacy=0.75, urban_share=0.6, techs=MED_1900, laws={CHS},
+                          institutions={HEALTH: 2}),
+     {"imr": (120, 170), "e0": (44, 52)}),
+    ("West 1950", dict(sol=25, literacy=0.95, urban_share=0.65, techs=MED_1950,
+                       laws={PHI, "law_dedicated_police", "law_regulatory_bodies"},
+                       institutions={HEALTH: 3, "institution_workplace_safety": 2}),
+     # e0 from 60: the model's deaths at 20-50 run three to four times Britain's in 1950 (the
+     # base schedules, phase 2's calibration; e65 already meets Britain's 13.9), not medicine
+     {"imr": (20, 55), "e0": (60, 71), "e65": (12, 16), "mmr": (30, 150)}),
+    ("West 1990", dict(sol=38, literacy=0.98, urban_share=0.75, techs=MED_1990,
+                       laws={PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"},
+                       institutions={HEALTH: 4, "institution_workplace_safety": 4,
+                                     "institution_ministry_of_consumer_protection": 3}),
+     {"imr": (0, 12), "e0": (72, 80), "e65": (15, 20), "mmr": (0, 25)}),
+    ("Rich today", dict(sol=40, literacy=0.99, urban_share=0.8, techs=MED_TODAY,
+                        laws={PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"},
+                        institutions={HEALTH: 5, "institution_workplace_safety": 5,
+                                      "institution_ministry_of_consumer_protection": 4}),
+     {"imr": (0, 6), "e0": (77, 84), "e65": (18, 23), "mmr": (0, 15)}),
+    ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950, laws={CHS},
+                        institutions={HEALTH: 1}),
+     {"imr": (110, 150), "e0": (46, 56)}),
+    ("Medicine, no health system", dict(sol=10, literacy=0.3, urban_share=0.15, techs=MED_1990),
+     {"imr": (70, 130), "e0": (48, 60)}),
+]
+# (label, with the law, without it, (low, high) for the gain in e0): a health law before modern
+# medicine, at the same SoL and literacy (the spec's stage-1 gate: within about 3 years).
+MEDICINE_GAPS = [
+    ("Public Health Insurance before antibiotics", dict(sol=12, literacy=0.4, techs=MED_1900, laws={PHI},
+                                                         institutions={HEALTH: 3}),
+     dict(sol=12, literacy=0.4, techs=MED_1900), (0.5, 3.0)),
+]
+
+
+def life(inp):
+    """{e0, e65, imr, mmr}: both sexes' mean, infant deaths per 1,000, maternal per 100,000 births."""
+    qf, qm, mmr = M.group_rates(inp)
+    f, m = M.life_table(qf), M.life_table(qm)
+    return {"e0": (f["e0"] + m["e0"]) / 2, "e65": (f["e65"] + m["e65"]) / 2,
+            "imr": (qf[0] + qm[0]) / 200, "mmr": mmr}
+
+
+def scenario_inputs(carriers, techs=frozenset(), laws=frozenset(), institutions=None, **kw):
+    institutions = institutions or {}
+    return M.Inputs(techs=frozenset(techs), laws=frozenset(laws), institutions=dict(institutions),
+                    mods=DM.totals(carriers, techs, laws, institutions), **kw)
+
+
+def medicine_rows(carriers=None):
+    """[(label, {figure: (value, low, high)})] for MEDICINE_SCENARIOS, then the gaps as 'gap' rows."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, kw, targets in MEDICINE_SCENARIOS:
+        got = life(scenario_inputs(carriers, **kw))
+        rows.append((label, {k: (got[k], lo, hi) for k, (lo, hi) in targets.items()}))
+    for label, with_law, without, (lo, hi) in MEDICINE_GAPS:
+        gap = life(scenario_inputs(carriers, **with_law))["e0"] - life(scenario_inputs(carriers, **without))["e0"]
+        rows.append((label, {"gap": (gap, lo, hi)}))
+    return rows
+
+
+def cmd_medicine(_args):
+    out = 0
+    for label, figures in medicine_rows():
+        parts = []
+        for k, (v, lo, hi) in figures.items():
+            ok = lo <= v <= hi
+            out |= not ok
+            parts.append(f"{k} {v:6.1f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}")
+        print(f"{label:44s} " + "  ".join(parts))
+    return out
+
+
+def adopter_rows(inputs, carriers, sol_band=1.5, lit_band=0.1):
+    """[(law, tag, sol, literacy, health level, e0, peers' median e0, peer count)] for every country
+    with a health law, against countries with none within the SoL and literacy bands."""
+    laws = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
+    e0 = {t: life(inputs_for(c, carriers))["e0"] for t, c in inputs.items() if c.population > 0}
+    none = [t for t, c in inputs.items() if t in e0 and not (c.laws & set(laws))]
+    rows = []
+    for tag, c in inputs.items():
+        held = c.laws & set(laws)
+        if tag not in e0 or not held:
+            continue
+        peers = sorted(e0[t] for t in none if abs(inputs[t].sol - c.sol) <= sol_band
+                       and abs(inputs[t].literacy - c.literacy) <= lit_band)
+        median = peers[len(peers) // 2] if peers else None
+        rows.append((min(held), tag, c.sol, c.literacy, c.institutions.get(HEALTH, 0), e0[tag], median, len(peers)))
+    return sorted(rows)
+
+
+def cmd_adopters(args):
+    carriers = DM.load_carriers()
+    for path in args.saves:
+        inputs = S.country_inputs(S.read_sections(path))
+        print(path)
+        gaps = {}
+        for law, tag, sol, lit, level, e0, median, n in adopter_rows(inputs, carriers):
+            gap = "" if median is None else f"{e0 - median:+5.1f}"
+            print(f"  {law:32s} {tag:4s} SoL {sol:5.1f} lit {lit:4.2f} level {level}  e0 {e0:5.1f}  "
+                  f"peers {'-' if median is None else f'{median:5.1f}'} (n={n})  gap {gap}")
+            if median is not None:
+                gaps.setdefault(law, []).append(e0 - median)
+        for law, g in sorted(gaps.items()):
+            g.sort()
+            print(f"  median gap {law}: {g[len(g) // 2]:+.1f} years over {len(g)} countries")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -469,6 +603,10 @@ def main(argv=None):
     p.add_argument("--tag", action="append", default=[])
     p.add_argument("--top", type=int, default=30)
     p.set_defaults(fn=cmd_wc)
+    sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
+    p = sub.add_parser("adopters")
+    p.add_argument("saves", nargs="+")
+    p.set_defaults(fn=cmd_adopters)
     args = ap.parse_args(argv)
     try:
         return args.fn(args)

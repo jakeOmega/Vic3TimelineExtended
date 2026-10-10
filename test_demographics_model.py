@@ -97,13 +97,38 @@ class TestMortality(unittest.TestCase):
         self.assertTrue(10 <= t["e65"] <= 14, t)
 
     def test_rich_country_today(self):
-        # §2.4's anchor is an infant mortality under 5 per 1,000; the starting parameters give
-        # about 10 (10.2 for WEST_1990), so this pins the bound they meet. Meeting the anchor is
-        # calibration's job (the plan's 'After this plan').
+        # §2.4's anchor is an infant mortality under 5 per 1,000 today; WEST_1990 (medicine to
+        # era 8, Public Health Insurance at level 4) gives about 6, Britain's 1990 figure was 7.9.
+        # Calibrated in the modifier-types stage 1 (demographics_harness.py medicine).
         t = self.table(WEST_1990)
-        self.assertLess(t["q0_per_1000"], 15)
+        self.assertLess(t["q0_per_1000"], 8)
         self.assertTrue(72 <= t["e0"] <= 80, t)
         self.assertTrue(17 <= t["e65"] <= 23, t)
+
+    def test_india_1975(self):
+        # India in 1975: infant mortality about 130, life expectancy about 50. Medicine reaches
+        # only as far as a Charitable Health System at level 1 lets it.
+        t = self.table(scenario(sol=9, literacy=0.35, urban_share=0.2, techs=EARLY_MEDICINE | {"modern_vaccines"},
+                                laws=frozenset({"law_charitable_health_system"}),
+                                institutions={"institution_health_system": 1}))
+        self.assertTrue(100 <= t["q0_per_1000"] <= 160, t)
+        self.assertTrue(44 <= t["e0"] <= 58, t)
+
+    def test_medicine_without_a_health_system(self):
+        # the fast run's case: every medical tech of the late twentieth century, no health law,
+        # a poor country. Poor countries with imported medicine in 1980: infant mortality 100-120.
+        t = self.table(scenario(sol=10, literacy=0.3, urban_share=0.15, techs=MODERN))
+        self.assertTrue(70 <= t["q0_per_1000"] <= 130, t)
+
+    def test_early_public_health_insurance_gap(self):
+        # the modifier-types spec's stage-1 gate: a health law before modern medicine, at the same
+        # standard of living and literacy, adds at most about 3 years (the old tables gave 8.3)
+        early = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing"})
+        with_law = self.table(scenario(sol=12, literacy=0.4, techs=early,
+                                       laws=frozenset({"law_public_health_insurance"}),
+                                       institutions={"institution_health_system": 3}))
+        without = self.table(scenario(sol=12, literacy=0.4, techs=early))
+        self.assertTrue(0.5 <= with_law["e0"] - without["e0"] <= 3.0, (with_law, without))
 
     def test_women_outlive_men_by_a_calibration_gap(self):
         # §3's anchor is about 2 years at e0 35 and 5-7 at e0 75; the starting parameters give

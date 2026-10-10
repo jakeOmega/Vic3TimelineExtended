@@ -8,27 +8,27 @@
 
 INJECT:medical_degrees = {
 	modifier = {
-		country_infection_treatment_add = 0.1
+		country_infection_treatment_add = 0.03
 	}
 }
 
 INJECT:pharmaceuticals = {
 	modifier = {
-		country_infection_treatment_add = 0.14
+		country_infection_treatment_add = 0.07
 	}
 }
 
 INJECT:modern_nursing = {
 	modifier = {
-		country_infection_treatment_add = 0.11
-		country_maternal_treatment_add = 0.5
+		country_infection_treatment_add = 0.08
+		country_maternal_treatment_add = 0.35
 	}
 }
 
 INJECT:antibiotics = {
 	modifier = {
-		country_infection_treatment_add = 0.26
-		country_maternal_treatment_add = 0.3
+		country_infection_treatment_add = 0.4
+		country_maternal_treatment_add = 0.6
 	}
 }
 

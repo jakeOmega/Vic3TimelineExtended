@@ -58,6 +58,21 @@ states={
 \tdatabase={
 1={
 \tcountry=3
+\tincorporation=1
+}
+2={
+\tcountry=3
+\tincorporation=0.4
+}
+\t}
+}
+institutions={
+\tdatabase={
+16777220={
+\tinstitution=institution_health_system
+\tinvestment=3
+\tgrowth=0.6205
+\tcountry=3
 }
 \t}
 }
@@ -108,6 +123,27 @@ class TestTinySave(unittest.TestCase):
         self.assertEqual(c.laws, {"law_serfdom"})
         self.assertEqual(c.techs, {"enclosure", "railways"})
         self.assertEqual(dict(c.strata_people), {"upper": 400})
+
+    def test_institutions_and_incorporation(self):
+        c = S.country_inputs(self.sections)["TST"]
+        self.assertEqual(c.institutions, {"institution_health_system": 3})
+        self.assertEqual(c.incorporated_people, 400)
+        self.assertAlmostEqual(c.incorporated_share, 1.0)
+
+    def test_a_state_still_incorporating_is_not_incorporated(self):
+        text = TINY.replace("8={\n\ttype=peasants\n\tlocation=1\n",
+                            "9={\n\ttype=peasants\n\tworkforce=60\n\tdependents=40\n\tlocation=2\n}\n"
+                            "8={\n\ttype=peasants\n\tlocation=1\n", 1)
+        self.assertNotEqual(text, TINY)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            c = S.country_inputs(S.read_sections(fh.name))["TST"]
+        finally:
+            Path(fh.name).unlink()
+        self.assertEqual(c.population, 500)
+        self.assertEqual(c.incorporated_people, 400)
+        self.assertAlmostEqual(c.incorporated_share, 0.8)
 
     def test_empty_pop_is_skipped(self):
         c = S.country_inputs(self.sections)["TST"]
