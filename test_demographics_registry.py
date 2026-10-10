@@ -34,6 +34,7 @@ GENERATED_VALUES = ROOT / "common" / "script_values" / "te_demog_generated_value
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 VALUES = ROOT / "common" / "script_values" / "te_demog_values.txt"
 FAST_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"
+RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -328,16 +329,17 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS])
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
         # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
-        # ("global_var:te_demog_clock" and the like)
+        # ("global_var:te_demog_clock" and the like), and the rule's Full (te_demog_effects_run): off unless a
+        # test says (the real trigger reads has_game_rule, which _Engine doesn't know)
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
-                                 "te_demog_clock_on": False, **(triggers or {})}
+                                 "te_demog_clock_on": False, "te_demog_effects_run": False, **(triggers or {})}
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
@@ -623,7 +625,7 @@ class TestCohortScript(unittest.TestCase):
     # -- the step -------------------------------------------------------------------------------
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
-                  flows=None, entry="te_demog_step", engine=None):
+                  flows=None, entry="te_demog_step", engine=None, on_top=None, full=False):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -633,7 +635,10 @@ class TestCohortScript(unittest.TestCase):
           crisis, fjob_share, techs (added to INP's), and the optional pending war (te_dg_war_in),
           kills (te_dg_kills_in) and inflow_years, left out = the variable doesn't exist.
         empty_from: nobody from that age up (the slots hold no variable; the pool keeps its people),
-        the ring of the game's first decades, when the open slot is empty at the fold."""
+        the ring of the game's first decades, when the open slot is empty at the fold.
+        on_top = (births, deaths): the share by which the engine's expected events over the window ran
+        above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
+        alone the step takes those as its on-top scales."""
         ring = demographics_model.seed(self.INP, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
         ring.m = [x * ring.scale / scale for x in ring.m]
@@ -680,6 +685,18 @@ class TestCohortScript(unittest.TestCase):
                                                 for k, v in locals_.items())}
         eng = _engine_for(inp, self.YEAR + 1, pop, effects=stub, engine=engine)
         eng.fixtures.update(fixtures)
+        bz = dz = 0.0
+        if full:
+            eng.trigger_fixtures["te_demog_effects_run"] = True
+        if on_top is not None:
+            assert flows is None, "the on-top scales and the script's own flows both write te_dg_eb"
+            # the model's rates M aimed at, and the engine's expected events over the window at today's people
+            want_b, want_d = 40.0 * pop / 1000, 30.0 * pop / 1000
+            eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
+                            te_dg_eb=want_b * (1 + on_top[0]), te_dg_ed=want_d * (1 + on_top[1]))
+            if full:
+                bz = demographics_model.on_top_scale(want_b * (1 + on_top[0]), want_b)
+                dz = demographics_model.on_top_scale(want_d * (1 + on_top[1]), want_d)
         for k in range(P.RING_YEARS):
             if before[0][k] or before[1][k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
@@ -697,7 +714,7 @@ class TestCohortScript(unittest.TestCase):
                     eng.vars[name] = float(flows[key])
         eng.call(entry)
         figures = demographics_model.step(ring, inp, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
-                                          kills=kills, migration=migration)
+                                          kills=kills, migration=migration, births_scale=bz, deaths_scale=dz)
         return eng, ring, figures, pop
 
     def check_step(self, eng, ring, figures, pop):
@@ -899,6 +916,42 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars.update(te_dg_year=float(census), te_dg_raw=raw, te_dg_pop_last=pop_last)
             eng.call("te_demog_state_yearly")
             self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, pop_last, rule))
+
+    # -- phase 2 step 4: the on-top scales (te_demog_on_top_scales) -----------------------------
+
+    def test_step_with_on_top_scales_matches_the_model(self):
+        eng, ring, figures, pop = self.step_both(on_top=(0.05, 0.12), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertAlmostEqual(eng.vars["te_dg_bz"], 0.05, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_dz"], 0.12, places=5)
+        self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        self.close(eng.vars["te_dg_tfr"], figures["tfr_shown"], what="tfr shown")
+        self.close(eng.vars["te_dg_tfr_model"], figures["tfr"], what="tfr model")
+
+    def test_no_on_top_scales_outside_full(self):
+        eng, ring, figures, pop = self.step_both(on_top=(0.05, 0.12), full=False)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+
+    def test_no_target_no_scales(self):
+        """An old save, or the first step after phase 2 arrives: no te_dg_cbr_model yet."""
+        eng, ring, figures, pop = self.step_both(full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
+
+    def test_on_top_scales_are_clamped(self):
+        eng, ring, figures, pop = self.step_both(on_top=(9.0, -0.99), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_bz"], P.ON_TOP_SCALE_MAX)
+        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MIN)
+
+    def test_the_replay_logs_the_scaled_rates(self):
+        """te_debug_demog_replay logs the locals after te_demog_step_begin, so the scales are in the head's tfr
+        and multipliers and the harness's replay needs no new field."""
+        body = _block(_text(EFFECTS), "te_demog_step_begin")
+        self.assertLess(body.index("te_demog_prepare = yes"), body.index("te_demog_on_top_scales = yes"))
+        self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
 
 
 class _CountryEngine(_Engine):

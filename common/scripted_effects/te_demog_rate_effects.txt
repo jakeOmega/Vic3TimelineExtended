@@ -1,0 +1,74 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the census sets the engine's births and deaths (phase 2 step 4)
+# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2
+# ============================================================================
+# The engine gives every pop curve x max(0, 1 + total) births and deaths, adding every
+# term (docs/testing/demographics-growth-probe-results-2026-10-09.md). The census's term M
+# (te_demog_rates_refresh) makes a state's events the model's plus the terms added on top of
+# the census, and the census's next step scales its own rates to what the engine did
+# (te_demog_on_top_scales), so the ring places the births and deaths added on top by age:
+# newborns, and deaths by the model's own age pattern (owner, 2026-10-10).
+#
+# State variables:
+#   te_dg_mb, te_dg_md  M for births and deaths (signed), behind the te_demog_census_* pair
+#   te_dg_rate_clamped  1 when the last refresh clamped either term
+#   te_dg_bz, te_dg_dz  the scales the last step used (te_dg_eb or te_dg_ed over the target,
+#                       less 1)
+#   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model  the model's own rates (per 1,000 a year;
+#                       children per woman): the step's events without the on-top scales
+# ============================================================================
+
+# THIS = a state at the start of its step, straight after te_demog_prepare and te_demog_flows:
+# the year's rates scaled by how far the engine's expected births and deaths over the window
+# (te_dg_eb, te_dg_ed, from this step's walk) ran from the model's rates that M aimed at, at
+# today's population. Under Full only, and only once a step has stored the model's rates.
+te_demog_on_top_scales = {
+	set_local_variable = { name = te_dg_bz value = 0 }
+	set_local_variable = { name = te_dg_dz value = 0 }
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_cbr_model
+			has_variable = te_dg_cdr_model
+		}
+		if = {
+			limit = { var:te_dg_cbr_model > 0 }
+			set_local_variable = {
+				name = te_dg_bz
+				value = {
+					value = var:te_dg_eb
+					multiply = 1000
+					divide = { value = var:te_dg_cbr_model multiply = state_population min = 1 }
+					subtract = 1
+					min = te_demog_k_on_top_scale_min
+					max = te_demog_k_on_top_scale_max
+				}
+			}
+		}
+		if = {
+			limit = { var:te_dg_cdr_model > 0 }
+			set_local_variable = {
+				name = te_dg_dz
+				value = {
+					value = var:te_dg_ed
+					multiply = 1000
+					divide = { value = var:te_dg_cdr_model multiply = state_population min = 1 }
+					subtract = 1
+					min = te_demog_k_on_top_scale_min
+					max = te_demog_k_on_top_scale_max
+				}
+			}
+		}
+	}
+	set_variable = { name = te_dg_bz value = local_var:te_dg_bz }
+	set_variable = { name = te_dg_dz value = local_var:te_dg_dz }
+	# the model's children per woman before the scale, then the year's rates with it
+	set_variable = { name = te_dg_tfr_model value = local_var:te_dg_tfr }
+	change_local_variable = { name = te_dg_tfr multiply = { value = local_var:te_dg_bz add = 1 } }
+	set_variable = { name = te_dg_tfr value = local_var:te_dg_tfr }
+	change_local_variable = { name = te_dg_m_inf multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_ext multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_chr multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_work_f multiply = { value = local_var:te_dg_dz add = 1 } }
+	change_local_variable = { name = te_dg_m_work_m multiply = { value = local_var:te_dg_dz add = 1 } }
+}
