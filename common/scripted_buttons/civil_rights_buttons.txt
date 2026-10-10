@@ -11,6 +11,15 @@
 # together with it: a revolution's winner inherits variables but no modifiers,
 # and cr_sync_policy_mirrors (civil_rights_effects.txt) rebuilds the policies from
 # the mirrors. Keep the two in step in any new button.
+#
+# Tooltips: the human surface is vanilla's journal-entry button grid, whose
+# tooltip prints `desc` and then the effect tooltip. So add_modifier /
+# remove_modifier stay bare (the engine lists the modifier's lines), and each
+# effect adds a cr_btn_*_tt line for what the modifier can't show: the monthly
+# Movement Support push (the policy lines of civil_rights_support_bar in
+# extra_progress_bars.txt; test_civil_rights_buttons checks the figures match),
+# the ending its months count toward (je_civil_rights on_complete / on_fail),
+# and the buttons it hides. `if` branches render only when their limit holds.
 # ============================================================================
 
 # ------ Grassroots Organizing (pro) ------
@@ -49,10 +58,14 @@ cr_grassroots_organizing = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_GRASSROOTS_ORGANIZING_DESC"
-			add_modifier = { name = cr_grassroots_modifier }
+		add_modifier = { name = cr_grassroots_modifier }
+		custom_tooltip = cr_btn_grassroots_push_tt
+		custom_tooltip = cr_btn_grassroots_ending_tt
+		if = {
+			limit = { has_discriminatory_minority_law = yes }
+			custom_tooltip = cr_btn_hollow_victory_tt
 		}
+		custom_tooltip = cr_btn_excludes_crackdowns_tt
 		set_variable = cr_policy_grassroots
 	}
 }
@@ -68,10 +81,9 @@ cr_remove_grassroots_organizing = {
 	possible = { has_modifier = cr_grassroots_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC"
-			remove_modifier = cr_grassroots_modifier
-		}
+		remove_modifier = cr_grassroots_modifier
+		custom_tooltip = cr_btn_grassroots_stop_tt
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_grassroots } remove_variable = cr_policy_grassroots }
 	}
 }
@@ -116,10 +128,20 @@ cr_federal_protection = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_FEDERAL_PROTECTION_DESC"
-			add_modifier = { name = cr_federal_protection_modifier }
+		add_modifier = { name = cr_federal_protection_modifier }
+		custom_tooltip = cr_btn_federal_push_tt
+		custom_tooltip = cr_btn_federal_ending_tt
+		# The 75 milestone fires once (je_civil_rights' tier-75 block), so the
+		# line goes once it has.
+		if = {
+			limit = { NOT = { has_variable = cr_tier_75_seen } }
+			custom_tooltip = cr_btn_federal_commission_tt
 		}
+		if = {
+			limit = { has_discriminatory_minority_law = yes }
+			custom_tooltip = cr_btn_hollow_victory_tt
+		}
+		custom_tooltip = cr_btn_excludes_crackdowns_tt
 		set_variable = cr_policy_federal
 	}
 }
@@ -135,10 +157,9 @@ cr_remove_federal_protection = {
 	possible = { has_modifier = cr_federal_protection_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_FEDERAL_PROTECTION_DESC"
-			remove_modifier = cr_federal_protection_modifier
-		}
+		remove_modifier = cr_federal_protection_modifier
+		custom_tooltip = cr_btn_federal_stop_tt
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_federal } remove_variable = cr_policy_federal }
 	}
 }
@@ -169,10 +190,14 @@ cr_gradualist_accommodation = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_GRADUALIST_ACCOMMODATION_DESC"
-			add_modifier = { name = cr_gradualist_modifier }
+		add_modifier = { name = cr_gradualist_modifier }
+		custom_tooltip = cr_btn_gradualist_push_tt
+		custom_tooltip = cr_btn_gradualist_ending_tt
+		if = {
+			limit = { has_discriminatory_minority_law = yes }
+			custom_tooltip = cr_btn_hollow_victory_tt
 		}
+		custom_tooltip = cr_btn_excludes_crackdowns_tt
 		set_variable = cr_policy_gradualist
 	}
 }
@@ -188,10 +213,9 @@ cr_remove_gradualist_accommodation = {
 	possible = { has_modifier = cr_gradualist_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC"
-			remove_modifier = cr_gradualist_modifier
-		}
+		remove_modifier = cr_gradualist_modifier
+		custom_tooltip = cr_btn_gradualist_stop_tt
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_gradualist } remove_variable = cr_policy_gradualist }
 	}
 }
@@ -231,9 +255,26 @@ cr_cooptation_token_reform = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_COOPTATION_TOKEN_REFORM_DESC"
-			add_modifier = { name = cr_cooptation_modifier }
+		add_modifier = { name = cr_cooptation_modifier }
+		# The bar's push stops once cr_cooptation_expired is on, which the JE's
+		# monthly pulse adds at 12 months; the months-left value covers the
+		# days between the 12th month and that pulse.
+		if = {
+			limit = {
+				OR = {
+					has_modifier = cr_cooptation_expired
+					cr_cooptation_months_left <= 0
+				}
+			}
+			custom_tooltip = cr_btn_cooptation_push_spent_tt
+		}
+		else = {
+			custom_tooltip = cr_btn_cooptation_push_tt
+		}
+		custom_tooltip = cr_btn_cooptation_ending_tt
+		if = {
+			limit = { has_discriminatory_minority_law = yes }
+			custom_tooltip = cr_btn_hollow_victory_tt
 		}
 		set_variable = cr_policy_cooptation
 	}
@@ -250,16 +291,21 @@ cr_remove_cooptation_token_reform = {
 	possible = { has_modifier = cr_cooptation_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
-			remove_modifier = cr_cooptation_modifier
-			# cr_cooptation_expired stays: the 12-month window does not reset
-			# (cr_cooptation_months keeps counting across restarts and also picks
-			# the Coopted Reform ending). Removing the marker here let a restart
-			# past 12 months take the +0.15 push again until the next monthly
-			# pulse re-added it. cr_je_cleanup_effect clears it when the run ends,
-			# so the next run starts without it.
+		remove_modifier = cr_cooptation_modifier
+		# cr_cooptation_expired stays: the 12-month window does not reset
+		# (cr_cooptation_months keeps counting across restarts and also picks
+		# the Coopted Reform ending). Removing the marker here let a restart
+		# past 12 months take the +0.15 push again until the next monthly
+		# pulse re-added it. cr_je_cleanup_effect clears it when the run ends,
+		# so the next run starts without it.
+		if = {
+			limit = {
+				NOT = { has_modifier = cr_cooptation_expired }
+				cr_cooptation_months_left > 0
+			}
+			custom_tooltip = cr_btn_cooptation_stop_tt
 		}
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
 	}
 }
@@ -296,10 +342,10 @@ cr_suppression_crackdown = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_SUPPRESSION_CRACKDOWN_DESC"
-			add_modifier = { name = cr_suppression_modifier }
-		}
+		add_modifier = { name = cr_suppression_modifier }
+		custom_tooltip = cr_btn_suppression_push_tt
+		custom_tooltip = cr_btn_crackdown_ending_tt
+		custom_tooltip = cr_btn_excludes_pro_tt
 		set_variable = cr_policy_suppression
 	}
 }
@@ -315,10 +361,9 @@ cr_remove_suppression_crackdown = {
 	possible = { has_modifier = cr_suppression_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC"
-			remove_modifier = cr_suppression_modifier
-		}
+		remove_modifier = cr_suppression_modifier
+		custom_tooltip = cr_btn_suppression_stop_tt
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_suppression } remove_variable = cr_policy_suppression }
 	}
 }
@@ -356,10 +401,10 @@ cr_segregationist_consolidation = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_SEGREGATIONIST_CONSOLIDATION_DESC"
-			add_modifier = { name = cr_segregationist_modifier }
-		}
+		add_modifier = { name = cr_segregationist_modifier }
+		custom_tooltip = cr_btn_segregationist_push_tt
+		custom_tooltip = cr_btn_crackdown_ending_tt
+		custom_tooltip = cr_btn_excludes_pro_tt
 		set_variable = cr_policy_segregationist
 	}
 }
@@ -375,10 +420,9 @@ cr_remove_segregationist_consolidation = {
 	possible = { has_modifier = cr_segregationist_modifier }
 
 	effect = {
-		custom_tooltip = {
-			text = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC"
-			remove_modifier = cr_segregationist_modifier
-		}
+		remove_modifier = cr_segregationist_modifier
+		custom_tooltip = cr_btn_segregationist_stop_tt
+		custom_tooltip = cr_btn_months_kept_tt
 		if = { limit = { has_variable = cr_policy_segregationist } remove_variable = cr_policy_segregationist }
 	}
 }

@@ -3610,6 +3610,7 @@ The engine auto-generates tooltip text for some effect-block contents and stays 
 **Repo examples:**
 - `gen_un_button_descs.py` — the loc-splice pattern. Walks each in-scope UN button's effect block to collect `add_modifier`/`remove_modifier` calls and `change_variable un_authority` deltas, looks up modifier values in `extra_modifiers.txt`, emits `UN_*_EFFECTS` loc keys. The hand-written `UN_*_DESC` keys reference `$..._EFFECTS$` to splice the auto-generated mechanical text into the narrative preamble.
 - `gen_pb_principle_unlock_descs.py` — sibling generator for `country_*_pb_principles_bool_desc` keys. Same parse-source-and-emit-loc shape.
+- `civil_rights_buttons.txt` — fix 1 on a vanilla button grid (had the antipattern until 2026-10). The modifiers render bare; one `cr_btn_*_tt` line each states what lives elsewhere: the monthly push from `civil_rights_support_bar`, the ending's month thresholds from `je_civil_rights`, and the buttons it hides. Lines that apply only sometimes (cooptation's spent window, a hollow-victory warning) sit in an `if`, which renders only while its limit holds. Those figures are hand-typed, so `test_civil_rights_buttons.py` reads them back from the script and fails on drift. A victory ending's name is a nested tooltip (`#tooltippable;tooltip:[GetPlayer.GetTooltipTag],<key>`) whose body is `[GetStaticModifier('<reward>').GetDesc]`.
 
 ## `organize_loc.py` Will Reroute Auto-Gen Loc Files Without a Categorize Rule
 
