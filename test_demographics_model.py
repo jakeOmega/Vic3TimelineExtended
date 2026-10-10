@@ -51,11 +51,9 @@ BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
                         techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization",
                                          "feminism"}),
                         laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
-AGED_TODAY = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
-                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage", "law_old_age_pension",
-                                      "law_dedicated_police"}),
-                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
-                                    "institution_ministry_of_consumer_protection": 3})
+# §2.2's aged row is the West in 1990 itself since Task 7: Women's Suffrage's natural-fertility term takes it to about
+# 1.4 children per woman (the case added State-Sponsored Family Planning only to reach 1.3 before that term).
+AGED_TODAY = WEST_1990
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
                       laws=frozenset({"law_charitable_health_system"}))
@@ -76,7 +74,7 @@ class TestFertility(unittest.TestCase):
             # 2.8 before the women's-rights term; with Women in the Workplace's -0.10 (Task 7) 2.5, nearer the West's
             # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10)
             (WEST_1950, 2.5, "the West 1950"),
-            (WEST_1990, 1.6, "the West 1990"),
+            (WEST_1990, 1.4, "the West 1990"),   # 1.6 before Women's Suffrage's natural-fertility term (Task 7)
             (INDIA_1975, 5.3, "India 1975"),
         ]:
             with self.subTest(label):

@@ -1305,9 +1305,29 @@ class TestNaturalFertilityScript(unittest.TestCase):
             fert = demographics_model.fertility(inp, 35.0)
             eng = _Engine({f"modifier:{P.NATURAL_FERTILITY_TYPE}": natural})
             eng.vars.update(te_dg_wtfr=fert["wealth"], te_dg_means=fert["means"],
-                            te_dg_desired=fert["education"] * fert["survival"] * fert["urban"])
+                            te_dg_desired=fert["education"] * fert["survival"] * fert["urban"],
+                            te_dg_natural=eng.value(eng._tree(eng.values, "te_demog_tfr_natural")))
             with self.subTest(natural=natural):
+                self.assertAlmostEqual(eng.vars["te_dg_natural"], fert["natural"], places=9)
                 self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr")), fert["tfr"], places=9)
+
+    def test_the_natural_term_is_the_steps(self):
+        """Batch 4 review m5: te_demog_prepare stores the natural term (te_dg_natural) beside the means, and
+        te_demog_tfr and the tooltips read the stored figure. A women's-rights law change between two steps then
+        moves neither the headline nor its terms until the next step, so the terms keep accounting for it."""
+        inp = demographics_model.Inputs(sol=9.0, literacy=0.3, urban_share=0.2,
+                                        mods={P.NATURAL_FERTILITY_TYPE: -0.1})
+        eng = _engine_for(inp, 1837, 100000.0)
+        eng.call("te_demog_prepare")
+        self.assertAlmostEqual(eng.vars["te_dg_natural"], 0.9)
+        tfr = eng.vars["te_dg_tfr"]
+        eng.fixtures[f"modifier:{P.NATURAL_FERTILITY_TYPE}"] = 0.0   # the law changes before the next step
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr")), tfr)
+        loc = _text(MISC_LOC)
+        for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            self.assertIn("Var('te_dg_natural')", line, key)
+            self.assertNotIn("te_demog_tfr_natural", line, key)
 
     def test_the_tfr_tooltips_list_natural_fertility_and_the_births_on_top(self):
         """The headline beside the terms is te_dg_tfr, the model's figure x (1 + bz): the terms list women's legal
@@ -1315,8 +1335,8 @@ class TestNaturalFertilityScript(unittest.TestCase):
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
             line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
-            for value in ("te_demog_tfr_natural", "te_demog_tfr_on_top"):
-                self.assertIn(f"ScriptValue('{value}')", line, (key, value))
+            self.assertIn("Var('te_dg_natural')", line, key)
+            self.assertIn("ScriptValue('te_demog_tfr_on_top')", line, key)
         for bz, want in ((None, 1.0), (0.3, 1.3), (-0.2, 0.8)):
             eng = _Engine({})
             if bz is not None:
@@ -3284,6 +3304,8 @@ class TestModifierTypes(unittest.TestCase):
             body = _block(text, name)
             self.assertIn("script_only = yes", body, name)
             self.assertRegex(body, r"decimals = \d", name)
+            # with decimals = 0 and no percent, 0.05 to 0.15 would render as 0 on every carrier's tooltip
+            self.assertIn("percent = yes", body, name)
             self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
             self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"", name)
             self.assertNotIn(name, engine, name)

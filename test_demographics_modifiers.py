@@ -154,6 +154,21 @@ class TestEngineRateLines(unittest.TestCase):
         live = {k[1] for k, v in self.lines.items() if abs(v) > 1e-9 and RATE_FIELDS.match(k[3])}
         self.assertEqual(sorted(P.ENGINE_LINES_ON_TOP - live), [])
 
+    def test_the_natural_fertility_sizes_follow_the_owners_rule(self):
+        """Owner call (d), 2026-10-10: each women's-rights law's natural fertility is vanilla's own birth line
+        re-centred on No Women's Rights (its +0.05 is the reference), so a vanilla patch that moves a line moves the
+        term with it. Women Own Property has no vanilla line (0 - 0.05); Protected Class's own -0.10 is gone (Task 8),
+        so it is the literal -0.10 - 0.05. Pinned to the rule, not to NATURAL_FERTILITY_BY_LAW alone."""
+        ref = self.vanilla[("law", "law_no_womens_rights", "modifier", "state_birth_rate_mult")]
+        want = {law: self.vanilla.get(("law", law, "modifier", "state_birth_rate_mult"), 0.0) - ref
+                for law in ("law_no_womens_rights", "law_women_in_the_fields", "law_women_own_property",
+                            "law_women_in_the_workplace", "law_womens_suffrage")}
+        want["law_protected_class"] = -0.10 - ref
+        carried = {c.key: c.value for c in DM.load_carriers() if c.type == P.NATURAL_FERTILITY_TYPE}
+        for law, value in want.items():
+            self.assertAlmostEqual(carried.get(law, 0.0), value, msg=law)
+            self.assertAlmostEqual(P.NATURAL_FERTILITY_BY_LAW.get(law, 0.0), value, msg=law)
+
     def test_womens_rights_birth_lines_are_absorbed(self):
         """Task 8: vanilla's women's-rights birth lines (and Protected Class's) net to zero, now that the census's
         natural-fertility term carries them (Task 7)."""

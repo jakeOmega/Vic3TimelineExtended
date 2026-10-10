@@ -52,7 +52,8 @@
 #   te_dg_f1840, te_dg_m1840  women and men aged 18-40: next step's war shares
 #   te_dg_births, te_dg_deaths  this year's, people (0 after a seed)
 #   te_dg_e0, te_dg_e0f, te_dg_e0m, te_dg_e65, te_dg_imr  the life table (IMR per 1,000)
-#   te_dg_tfr, te_dg_means, te_dg_desired  fertility (spec §2.3)
+#   te_dg_tfr, te_dg_means, te_dg_desired, te_dg_natural  fertility (spec §2.3; te_dg_natural is
+#                       women's legal standing, phase 2 step 4)
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
@@ -422,6 +423,8 @@ te_demog_prepare = {
 	te_demog_life_table = yes
 	set_variable = { name = te_dg_means value = te_demog_means }
 	set_variable = { name = te_dg_desired value = te_demog_desired }
+	# women's legal standing, stored with the step's other terms so the tooltips match te_dg_tfr until the next step
+	set_variable = { name = te_dg_natural value = te_demog_tfr_natural }
 	set_variable = { name = te_dg_tfr value = te_demog_tfr }
 	set_local_variable = { name = te_dg_tfr value = var:te_dg_tfr }
 }
