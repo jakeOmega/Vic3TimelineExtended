@@ -72,8 +72,8 @@ def inputs_for(c, carriers=None, incorporated=True):
 
     The modifier totals come from the game files' carriers (demographics_modifiers) for the
     owner's techs, laws and institution levels. The wealth term is the pop-weighted curve,
-    as the game computes it, not the curve at the mean SoL. Crowding (the state carries
-    migration_crowding) is a state's; a whole country's is off, so `seed` and `adopters` leave it out.
+    as the game computes it, not the curve at the mean SoL. Crowding (the state's migration penalty
+    from migration_crowding) is a state's; a whole country's is 0, so `seed` and `adopters` leave it out.
     """
     carriers = DM.load_carriers() if carriers is None else carriers
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
@@ -837,6 +837,8 @@ def _fidelity(args):
     print(f"The model has the poverty term at x{P.POVERTY_INFECTION_AT_FLOOR:g} (SoL {P.POVERTY_INFECTION_FLOOR_SOL}); "
           f"a save from a build with another shows it as off below SoL {P.POVERTY_INFECTION_SOL} "
           f"(--poverty-floor 1 for one from before the poverty term).")
+    print("Crowding is the continuous term (infection + the state's migration penalty); a save from main's x1.15 switch "
+          "shows crowded states' infection as off.")
     out = 0
     for cause, _var, _scale in FIDELITY_CAUSES:
         ratios = [(g / m if m else math.inf, r) for r in rows for c, (g, m) in r[3].items() if c == cause]

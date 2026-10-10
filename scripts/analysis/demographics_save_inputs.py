@@ -170,7 +170,7 @@ class CountryInputs:
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
     means_add: float = 0.0                              # static modifiers' state_fertility_means_add
-    crowding: bool = False   # a state's: it carries migration_crowding (state_inputs); a country's stays False
+    crowding: float = 0.0    # a state's migration penalty from crowding (state_inputs); a country's stays 0
 
     @property
     def sol(self):
@@ -244,8 +244,9 @@ def state_inputs(sections):
     for (tag, sid), st in per.items():
         c = countries[tag]
         st.laws, st.techs, st.institutions, st.means_add = c.laws, c.techs, c.institutions, c.means_add
-        st.crowding = any(name == "migration_crowding"
-                          for name, _mult in sections["states"].get(sid, {}).get("timed_modifiers", ()))
+        st.crowding = sum(M.P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+                          for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
+                          if name == "migration_crowding")
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 

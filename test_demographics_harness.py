@@ -104,10 +104,10 @@ class TestHarness(unittest.TestCase):
         c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 8000.0, M.wealth_tfr(8.0) * 1000.0
         c.workforce, c.literate = 500.0, 100.0
         plain = H.inputs_for(c)
-        c.crowding = True
+        c.crowding = 0.2   # a 20% migration penalty
         crowded = H.inputs_for(c)
-        self.assertFalse(plain.crowding)
-        self.assertTrue(crowded.crowding)
+        self.assertEqual(plain.crowding, 0.0)
+        self.assertEqual(crowded.crowding, 0.2)
         self.assertLess(H.model_figures(crowded)["e0"], H.model_figures(plain)["e0"] - 1)
 
     def test_save_year_reads_game_date_only(self):
@@ -683,6 +683,7 @@ class TestFidelity(unittest.TestCase):
     against the ones the census stored (te_dg_m_*). A term the harness can't read shows as a mismatch: the
     crowding term did, on 91% of the world's people (2026-10-10)."""
 
+    CROWD_MULT = 1.5   # the crowded state's migration_crowding multiplier: a -15% pull, so infection x1.15
     GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
 
     def setUp(self):
@@ -708,7 +709,8 @@ class TestFidelity(unittest.TestCase):
                                                 institutions=inp.institutions, mods=inp.mods))
         finally:
             H.P.POVERTY_INFECTION_AT_FLOOR = kept
-        return mult["infection"] * 1.15, mult["maternal"] * H.P.MATERNAL_PER_100K_BIRTHS
+        crowding = 1 + H.P.MIGRATION_CROWDING_PULL_PER_MULT * self.CROWD_MULT
+        return mult["infection"] * crowding, mult["maternal"] * H.P.MATERNAL_PER_100K_BIRTHS
 
     def game_infection(self, poverty_floor=None):
         return self.game_multipliers(poverty_floor)[0]
@@ -723,7 +725,7 @@ class TestFidelity(unittest.TestCase):
         ) + "\t\t\t} }\n\t}\n"
         if crowded:
             block += ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=5\n\t\t\t\tmodifier=migration_crowding\n"
-                      "\t\t\t\tmultiplier=0.04356\n\t\t\t} }\n\t}\n")
+                      f"\t\t\t\tmultiplier={self.CROWD_MULT}\n\t\t\t}} }}\n\t}}\n")
         state = "1={\n\tcountry=3\n\tincorporation=1\n"
         text = self.tiny.replace(state + "}", state + block + "}", 1)
         self.assertNotEqual(text, self.tiny)

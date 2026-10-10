@@ -13,8 +13,8 @@ laws and techs). `country_fertility_means_add` already worked this way (now `sta
 
 The model keeps reading the state's own conditions directly: standard of living, literacy, urban share, its own life
 expectancy, and its constants. Laws and techs don't set those. Crowding stays in the model for now: vanilla's
-`migration_crowding` is a state condition. The urban planning institution's all-or-nothing exemption from it is an
-institution term, and could become a type in stage 3.
+`migration_crowding` is a state condition. Since 2026-10-10 infection rises by the state's migration penalty from it,
+and the urban planning institution acts through crowding tolerance rather than an exemption, so no type is needed.
 
 ## What changes
 

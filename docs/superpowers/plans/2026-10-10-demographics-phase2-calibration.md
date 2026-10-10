@@ -19,22 +19,25 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 ## Step 1 (built): poverty and the history check
 
-- Infection ×(1 + 0.5 × clamp((9 − SoL) / 4, 0, 1)), state by state, with each state's crowding term as the save
-  holds it: world life expectancy 31–32 (from 34.5–36.6), world growth about 1.05% a year (from 1.45%), China +0.7% by
-  1887. Every medicine and fertility anchor stays in its band as defined, though they barely test the term. The West
-  pays: Britain 1837 34 (history 41; 38 with neither term), mostly through crowding, and Denmark 33 (41; 39), about
-  equally through both.
+- Infection ×(1 + 0.75 × clamp((9 − SoL) / 4, 0, 1)), state by state, with each state's crowding term as the save
+  holds it: world life expectancy 31–32 (from 34.5–36.6), world growth about +1.0–1.1% a year (from 1.45%), China
+  +0.3% by 1887, Maddison's peacetime pace. Every medicine and fertility anchor stays in its band as defined, though
+  they barely test the term. The West pays: Britain 1837 36 (history 41; 38 with neither term) and Denmark 34 (41; 39).
 - `demographics_harness.py history SAVE... --anchors CSV` and `scripts/analysis/fetch_history_anchors.py`.
-- **The crowding term.** The census's ×1.15 on infection in a state carrying `migration_crowding` covers 91% of the
-  world's people, three-quarters of them in states under 20% urban, because Migration Crowding goes on any state above
-  its floor density at any multiplier. The first fit left it out (×2 then); the harness now reads it from saves, and its
-  figures match the fast-mode run's census at its next step exactly.
+- **The crowding term.** Main's census multiplies infection by 1.15 in any state carrying `migration_crowding`, a
+  switch that covers 91% of the world's people at any multiplier. The first fit left it out (×2 then); the harness now
+  reads it from saves, and its figures match the fast-mode run's census at its next step exactly. Owner, 2026-10-10:
+  a function of how crowded the state is, not a switch. Infection now rises by the state's migration penalty from
+  crowding (0.1 × the multiplier the crowding refresh applied, at most +50%), and the Ministry of Urban Planning works
+  through the crowding instead of exempting the state. That is +3% on infection in 1837 on average, +11% by 1949.
 - **Owner calls:**
-  - the strength. ×1.5 at SoL 5 is built; ×1.75–×2 bring world growth to history's 0.6–0.85% but slow China to +0.2%
-    or shrink it by the 1880s in the gate game;
-  - whether crowding stays near-universal or becomes a city term (multiplier 0.1 or more, or urban share 0.2 or more).
-    A city term moves the fitting strength up by about a quarter (the results doc's table);
-  - if it stays near-universal, stage 1's medicine fit needs redoing with it on: four of its anchors fall out of band.
+  - the strength. ×1.75 at SoL 5 is built (with c = 1); ×2 brings world growth to history's band but shrinks China
+    by the 1880s in the gate game;
+  - c, the share of the migration penalty infection rises by: 1 is built, 2 fits with ×1.5 (the results doc's table);
+  - the Ministry of Urban Planning: it used to exempt a state from crowding's deaths entirely, and now lowers them
+    through its +10% tolerance a level (China's +5% becomes +4% at level 1 and +1.6% at level 5);
+  - stage 1's medicine fit was made with crowding off. At the world's mean penalty of 1887 (0.07), India 1975 and
+    "medicine, no health system" fall 0.2–1 year under their bands; refit them or accept it.
 
 - **`demographics_harness.py fidelity SAVE` checks the harness against the census** before a fit: the model's cause
   multipliers on each walked state's own SoL and literacy against the ones the census stored. Run it on a save from
@@ -54,19 +57,20 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 - The harness reads France's Family Limitation from a save: a country's timed modifiers, in
   `demographics_save_inputs.STATIC_MEANS_ADD`.
 
-**What it shows** (gate run, state by state, with the poverty term and crowding): the model's children per woman run
+**What it shows** (gate run, state by state, with the poverty term at ×1.75 and continuous crowding; within 0.1 of
+the first revision's): the model's children per woman run
 4.3–6.1; history's run 3.2–7.1.
 
 | Too high (model − history) | 1837 | 1887 | Too low | 1837 | 1887 |
 |---|---|---|---|---|---|
-| Denmark | +1.7 | +1.4 | Persia | −1.0 | −1.1 |
+| Denmark | +1.7 | +1.3 | Persia | −1.0 | −1.2 |
 | Portugal | +1.4 | +1.4 | Turkey | −0.9 | −1.3 |
-| Japan | +1.2 | +1.4 | Mexico | −0.8 | −1.3 |
-| France (with Family Limitation) | +1.2 | +1.2 | Peru | – | −1.3 |
+| Japan | +1.3 | +1.4 | Mexico | −0.8 | −1.3 |
+| France (with Family Limitation) | +1.1 | +1.1 | Peru | – | −1.3 |
 | Sweden | +1.1 | +0.8 | Russia | −1.0 | −0.7 |
-| Britain | +1.0 | +0.3 | Argentina | −0.9 | −0.4 |
+| Britain | +1.0 | +0.2 | Argentina | −0.9 | −0.4 |
 
-China +0.6 and +0.5, India +0.0 and +0.1, Egypt +0.0 and −0.3. The world average is about right (5.96 and 5.75).
+China +0.6 and +0.5, India +0.0 and +0.1, Egypt +0.0 and −0.3. The world average is about right (5.95 and 5.74).
 
 **Why the inputs can't close it.** The spread comes mostly from marriage:
 - late marriage and lifelong celibacy in north-western Europe (the "European marriage pattern", west of a line from
@@ -124,7 +128,7 @@ Before the owner's call, the fit can still:
     are stored, and the bare curves are the walk's locals `te_dg_w_eb0` and `te_dg_w_ed0`, which fast mode already
     reads.
 - **The bare curve's starving slope.** Below SoL 4 the engine's mortality curve climbs steeply
-  (`extra_defines.txt`), and M nets the bare curve out. So the model's poverty term, ×1.5 at SoL 5 and below, would
+  (`extra_defines.txt`), and M nets the bare curve out. So the model's poverty term, ×1.75 at SoL 5 and below, would
   replace that slope. Either keep the slope by adding it to K (the starving pop's extra over its curve at SoL 5), or
   let the model's term stand in for it.
 - **The clamp:** the engine stops births at a total near −1 (probe: −0.9 holds, −3 stops), so M ≥ −0.9 less the

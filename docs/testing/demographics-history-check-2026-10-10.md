@@ -13,9 +13,9 @@ with history's anchors, and adds the one change the comparison calls for.
   term bends at SoL 9, and Western countries have states on both sides of it, so the country's mean SoL would hide
   what its poor and rich states do. The fit itself was found on country means, then re-run state by state (the
   tables below). They are the census's steady rates, not the engine's population changes.
-- **Crowding is read from the save too:** a state carrying `migration_crowding` has its infection deaths ×1.15 in
-  the census, as in game. The first version of this check left it out (below, "The crowding term"); every figure
-  here counts it.
+- **Crowding is read from the save too:** a state's infection deaths rise by its migration penalty from crowding,
+  0.1 × the `migration_crowding` multiplier the save holds (below, "The crowding term"). The first version of this
+  check left crowding out; every figure here counts it.
 - **The saves** are the gate run's at 1837, 1857 and 1887 (a normal-speed observer game from 1836) and the owner's
   late game at 1949.
 - **History's anchors** are from Clio Infra (https://clio-infra.eu): life expectancy at birth, infant mortality, and
@@ -32,7 +32,7 @@ with history's anchors, and adds the one change the comparison calls for.
 
 ## What the comparison found
 
-**Before (main 85a23d47, crowding counted):**
+**Before (main 85a23d47, with its ×1.15 crowding switch):**
 
 | Save | World e0 (countries of 1M or more) | World growth | Children per woman |
 |---|---|---|---|
@@ -75,72 +75,78 @@ Spain 0.80, Brazil 0.83 and Japan 0.94. The state's mean SoL already carries mos
 
 ## The crowding term
 
-The census multiplies infection deaths by 1.15 in a state carrying `migration_crowding` with no Ministry of Urban
-Planning (`te_demog_mult_infection`; the parent spec's "crowding in cities before sanitation"). The first version of
+**As main has it, a switch.** The census multiplies infection deaths by 1.15 in a state carrying `migration_crowding`
+with no Ministry of Urban Planning (the parent spec's "crowding in cities before sanitation"). The first version of
 this check left it out, because the harness never read the modifier from a save. The 4x fast-mode run found the gap:
 at its first step after 1 January 1837 (census year 1841 in fast mode's log) the census read China 33.6, Britain 34.9
 and France 36.2, where the harness gave 36.8, 38.0 and 39.3 on the 1 January save. With each state's crowding read
 from the save, the harness gives 33.6, 34.9 and 36.2. The save's own figures sit 0.3–0.7 years higher: some states
 had taken their last step before Migration Crowding's first yearly pulse reached them.
 
-- **It covers nearly everyone.** Migration Crowding goes on any state above its floor density (10,000 people per unit
-  of arable land), at any multiplier, and the census's term is all or nothing. 91% of the world's people lived in such
-  states in the 1837 and 1857 saves: China, India and Japan 100%, Britain and France 98%, Russia 83–85%, the USA
-  19–29%. In 1837 three-quarters of them were in states under 20% urban, and 30% in states whose crowding multiplier
-  was under 0.1.
-- **So it acts as a near-universal ×1.15 on infection,** about three years of life expectancy, rather than a city
-  penalty. It lowered world life expectancy from 37.5 to 34.5 in 1837 and growth from +1.69% to +1.43%.
+Migration Crowding goes on any state above its floor density (10,000 people per unit of arable land), at any
+multiplier, so the switch covered 91% of the world's people in the 1837 and 1857 saves: China, India and Japan 100%,
+Britain and France 98%, Russia 83–85%, the USA 19–29%. It acted as a near-universal ×1.15, about three years of
+life expectancy, and a state crossing the floor by one person jumped.
+
+**Now a function of how crowded the state is (owner, 2026-10-10).** Infection deaths rise by the share migration
+attraction falls: 0.1 × the multiplier the crowding refresh applied (`migration_crowding` is
+`state_migration_pull_mult` −0.1 a unit), at most +50%. That multiplier is 4.5 r² below ten times the floor density
+and linear above it (`migration_crowding_mult`; r is the state's place between the floor and ten times it). The
+Ministry of Urban Planning no longer exempts a state: it raises crowding tolerance 10% a level, and Urban Engineering
+(Urbanization, Urban Planning, Modern Sewerage, Steel Frame Buildings, Elevator) raises the threshold, so both lower
+deaths through the crowding itself.
+
+- **In 1837 most crowding is slight.** The median crowded person's state has a −3.8% migration penalty (r 0.29), and
+  nobody lives past r 0.5 except in Britain's densest state (0.60). People-weighted r: China 0.34, Japan 0.32, India
+  0.29, Britain 0.23, France 0.12, Russia 0.06, the USA 0.03.
+- **So the term is small at first and grows with population.** The world's people-weighted penalty is 0.030 in the
+  1837 save, 0.046 in 1857, 0.066 in 1887 and 0.111 in 1949: +3% on infection at the start, near the old ×1.15 by the
+  1950s, and more in dense states unless Urban Engineering keeps up.
+- **c = 1** (deaths rise by the same share attraction falls) is a choice, not a fit; it needs no fitting and reads
+  plainly. c = 2 is in the strength table below.
+- **The census reads a stored figure.** `te_update_migration_crowding_modifier` keeps the multiplier it applies in
+  `migration_crowding_mult_applied`, and the census reads that: `migration_crowding_mult` reads `ROOT.owner`, and the
+  census also runs with ROOT a country (game start, the console). The harness reads the same figure, the modifier's
+  multiplier in the save.
 
 ## The poverty term
 
-**Infection deaths ×(1 + 0.5 × clamp((9 − SoL) / 4, 0, 1)):** ×1 at SoL 9 and above, rising to ×1.5 at SoL 5 and
+**Infection deaths ×(1 + 0.75 × clamp((9 − SoL) / 4, 0, 1)):** ×1 at SoL 9 and above, rising to ×1.75 at SoL 5 and
 below. It applies on the state's mean SoL, in `demographics_model.poverty_infection` and the generated
 `te_demog_mult_infection`.
 
-| Strength at SoL 5 (state by state, crowding counted) | World e0, 1837/1857/1887 | World growth | China 1837 / 1887 | India 1887 | Japan 1887 | Britain 1837 / 1887 | Denmark 1837 / 1887 | World 1949 |
+| Crowding c, strength at SoL 5 (state by state) | World e0, 1837/1857/1887 | World growth | China 1837 / 1887 | India 1887 | Japan 1887 | Britain 1837 / 1887 | Denmark 1837 / 1887 | World 1949 |
 |---|---|---|---|---|---|---|---|---|
-| None (before) | 34.5 / 35.6 / 36.6 | +1.43 / +1.46 / +1.48% | 34 (+1.4%) / 35 (+1.5%) | 35 (+1.4%) | 39 (+1.5%) | 35 / 43 | 36 / 38 | 45.3, +1.26% |
-| ×1.25 | 32.5 / 33.6 / 34.4 | +1.24 / +1.27 / +1.28% | 31 (+1.2%) / 31 (+1.1%) | 34 (+1.4%) | 36 (+1.2%) | 34 / 43 | 34 / 37 | 45.1, +1.25% |
-| **×1.5 (built)** | 30.6 / 31.7 / 32.4 | +1.04 / +1.08 / +1.06% | 29 (+0.9%) / 27 (+0.7%) | 34 (+1.3%) | 33 (+1.0%) | 34 / 43 | 33 / 36 | 44.9, +1.23% |
-| ×1.75 | 28.9 / 30.0 / 30.6 | +0.84 / +0.87 / +0.84% | 26 (+0.6%) / 24 (+0.2%) | 33 (+1.2%) | 30 (+0.7%) | 33 / 43 | 31 / 35 | 44.7, +1.22% |
-| ×2 | 27.4 / 28.5 / 29.0 | +0.63 / +0.67 / +0.62% | 24 (+0.3%) / 21 (−0.2%) | 32 (+1.1%) | 28 (+0.4%) | 33 / 43 | 30 / 34 | 44.6, +1.20% |
+| Main: the ×1.15 switch, no poverty term | 34.5 / 35.6 / 36.6 | +1.43 / +1.46 / +1.48% | 34 (+1.4%) / 35 (+1.5%) | 35 (+1.4%) | 39 (+1.5%) | 35 / 43 | 36 / 38 | 45.3, +1.26% |
+| The switch, ×1.5 (this PR's first revision) | 30.6 / 31.7 / 32.3 | +1.04 / +1.08 / +1.06% | 29 (+0.9%) / 27 (+0.7%) | 34 (+1.3%) | 33 (+1.0%) | 34 / 43 | 33 / 36 | 44.7, +1.22% |
+| c = 1, no poverty term | 36.7 / 37.5 / 38.0 | +1.63 / +1.62 / +1.59% | 36 (+1.6%) / 35 (+1.5%) | 37 (+1.6%) | 40 (+1.6%) | 37 / 44 | 39 / 40 | 45.8, +1.30% |
+| c = 1, ×1.25 | 34.8 / 35.5 / 35.8 | +1.46 / +1.45 / +1.40% | 33 (+1.4%) / 31 (+1.1%) | 36 (+1.5%) | 37 (+1.3%) | 37 / 44 | 37 / 39 | 45.6, +1.28% |
+| c = 1, ×1.5 | 33.0 / 33.7 / 33.9 | +1.28 / +1.27 / +1.20% | 31 (+1.1%) / 28 (+0.7%) | 35 (+1.4%) | 34 (+1.1%) | 36 / 44 | 35 / 38 | 45.4, +1.27% |
+| **c = 1, ×1.75 (built)** | 31.4 / 32.1 / 32.1 | +1.10 / +1.08 / +0.99% | 29 (+0.9%) / 24 (+0.3%) | 34 (+1.4%) | 31 (+0.8%) | 36 / 44 | 34 / 37 | 45.2, +1.26% |
+| c = 1, ×2 | 29.8 / 30.5 / 30.5 | +0.91 / +0.90 / +0.77% | 27 (+0.6%) / 21 (−0.1%) | 34 (+1.3%) | 29 (+0.5%) | 35 / 44 | 33 / 37 | 45.1, +1.24% |
+| c = 2, ×1.5 | 32.3 / 32.7 / 32.4 | +1.20 / +1.16 / +1.03% | 30 (+1.0%) / 25 (+0.4%) | 34 (+1.3%) | 32 (+0.9%) | 35 / 43 | 35 / 38 | 44.0, +1.17% |
+| c = 2, ×1.75 | 30.6 / 31.0 / 30.7 | +1.01 / +0.96 / +0.80% | 27 (+0.8%) / 22 (−0.1%) | 33 (+1.2%) | 29 (+0.6%) | 35 / 43 | 34 / 37 | 43.8, +1.16% |
 
 History: world life expectancy about 29–31 from 1820 to 1870 and about 47 in 1950; Britain 41 (1838) and 45 (1887);
-Denmark 41 and 49; India 24 (1891); Japan 37 (1885); China's growth about +0.3% and Japan's +0.85%.
+Denmark 41 and 49; India 24 (1891); Japan 37 (1885). Maddison's China: 381M in 1820, 412M in 1840 and 1850, 358M in
+1870 after the Taiping and other rebellions and famine, then 380M in 1890 and 423M in 1910: about +0.4% a year in
+peacetime (1820–1840, 1870–1910), +0.3% in the 1880s. Japan's growth about +0.85%.
 
-- **Why ×1.5.** World life expectancy is in history's band (30.6 in 1837, 31.7 in 1857), and China (SoL 6.0 by 1887
-  in that game) still grows, +0.7%. These are the world figures the first fit reached at ×2 without crowding
-  (30.6 / 31.7 / 32.1, +1.0% a year).
-- **Why not steeper.** ×1.75 brings world growth to +0.85% and ×2 to +0.63%, inside history's band, but China slows to
-  +0.2% at ×1.75 and shrinks at ×2 (−0.2% by 1887, life expectancy 21). Once phase 2 drives the engine, that would be a
-  quarter of the world losing people every year. Japan falls to 28–30 against history's 37.
-- **What it costs the West.** Britain 1837 reads 34 against history's 41: 38 with neither term, 35 with crowding
-  alone, so it pays mostly through crowding. Denmark, the one smaller Western country with anchors at all three
-  dates, pays about equally through both: 39 with neither, 36 with crowding, 33 with both (history 41). Every 1837
-  life-expectancy anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line.
-- **What's left.** World growth stays about 1.05% a year. The rest of the gap is India, which grows +1.3% against
+- **Why ×1.75 with c = 1.** China (SoL 6.0 by 1887 in that game) grows +0.3% a year in 1887, Maddison's peacetime
+  pace; history's fall in the 1850s and 1860s came from wars, which the game runs as wars. World life expectancy is
+  31–32, a year above history's band. The continuous term gives back the switch's crowding cost wherever crowding is
+  slight, so the poverty term that fits moves up a quarter, from ×1.5.
+- **Why not steeper.** ×2 brings world growth to +0.8–0.9%, inside history's band, but China shrinks (−0.1% by 1887,
+  life expectancy 21). Once phase 2 drives the engine, that would be a quarter of the world losing people every year.
+- **c = 2** puts more of the weight on the dense states: at ×1.5 it gives China +0.4% and much the same world as
+  c = 1 at ×1.75. c = 1 is kept because it reads plainly (the same share as the migration penalty) and isn't fitted.
+- **What it costs the West.** Britain 1837 reads 36 against history's 41 (38 with neither term, 37 with crowding
+  alone), and Denmark 34 (41; 39 with neither). Both gain about two years on the switch. Every 1837 life-expectancy
+  anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line.
+- **What's left.** World growth stays about +1.0–1.1% a year. The rest of the gap is India, which grows +1.4% against
   history's +0.8%, the West's fertility, and whatever the engine's own deaths add on top in phase 2: starvation,
   devastation, turmoil. Those are the plan's next steps.
-- **1949 is barely touched:** world e0 44.9, growth +1.23% a year, against about 47 and 1.8% in history. Crowding
-  costs about two of those years.
-
-### If crowding meant cities (owner call)
-
-The term as built is a near-universal one. Two narrower readings, each with the poverty strength refitted:
-
-| Crowding counted where | Poverty strength | World e0, 1837/1857/1887 | World growth | China 1887 | Britain 1837 / 1887 |
-|---|---|---|---|---|---|
-| Any multiplier (built) | ×1.5 | 30.6 / 31.7 / 32.4 | +1.04 / +1.08 / +1.06% | 27 (+0.7%) | 34 / 43 |
-| Multiplier 0.1 or more | ×1.5 | 31.5 / 32.5 / 33.0 | +1.12 / +1.15 / +1.11% | 27 (+0.7%) | 35 / 44 |
-| Multiplier 0.1 or more | ×1.75 | 29.8 / 30.8 / 31.2 | +0.92 / +0.95 / +0.89% | 24 (+0.2%) | 35 / 44 |
-| Urban share 0.2 or more | ×1.75 | 31.4 / 31.2 / 31.2 | +1.11 / +1.00 / +0.90% | 24 (+0.2%) | 34 / 43 |
-| Urban share 0.2 or more | ×2 | 29.8 / 29.7 / 29.6 | +0.92 / +0.80 / +0.67% | 21 (−0.2%) | 34 / 43 |
-
-- Narrowing crowding gives back about one year of world life expectancy, so the poverty strength that fits moves up
-  by about a quarter.
-- The urban gate uses the harness's urban share, which runs above the census's own (`te_dg_urban_share`: one of
-  Britain's states reads 0.50 in the harness and 0.36 in game), so the census would gate fewer states than this table.
-- China's states pass the urban gate by 1887 in this table, so China's figure is the same as with crowding as built.
+- **1949 is barely touched:** world e0 45.2, growth +1.26% a year, against about 47 and 1.8% in history.
 
 ## The anchors
 
@@ -148,11 +154,10 @@ The term as built is a near-universal one. Two narrower readings, each with the 
   (`demographics_harness.py medicine`) and the fertility scenarios (`fertility`) stays in band. But they sit at SoL 9 or
   above (India 1975 exactly at the bend), apart from the agrarian reference at SoL 8 (6.08 children per woman against a
   band of 4.8–6.2). So "in band" says little about the poverty term: the history check is its real test.
-- **They leave crowding off.** With it on, as the game would give 1900 Britain or 1975 India, four anchors fall out
-  of band: Britain 1900's life expectancy (43.4 against 44–52), India 1975's (44.5 against 46–56), "medicine, no health
-  system" (45.8 against 48–60) and today's infant mortality (6.4 against 0–6). Stage 1's medicine fit was made without
-  the term too. If crowding stays as built, stage 1 needs refitting; if it becomes a city term, most of those
-  scenarios' people would fall outside it.
+- **They leave crowding off.** Stage 1's medicine fit was made without the term. Given every scenario the world's
+  mean penalty of 1887 (0.07), India 1975 (45.8 against 46–56) and "medicine, no health system" (47.0 against 48–60)
+  fall just under their bands; at 1949's (0.11) today's infant mortality does too (6.2 against 0–6). Britain 1900 stays
+  in (44.8 against 44–52). With the old switch four fell out, Britain 1900 among them (43.4).
 - **Some mapped countries have no anchors:** Clio Infra has "South Korea" and "North Korea", not Korea; Russia has no
   population series before 1920; Turkey has no life expectancy or infant mortality. `history` names them on stderr.
 - **The Netherlands** reads far below history in 1887 (30 against 45), but it shrank in that game.
