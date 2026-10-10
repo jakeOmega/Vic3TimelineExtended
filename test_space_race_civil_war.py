@@ -50,6 +50,14 @@ def _block(text, name, start=0):
     return text[m.end():_close(text, m.end() - 1)]
 
 
+def _definition(text, name):
+    """The body of the top-level ``name = { ... }`` definition (not a call)."""
+    m = re.compile(r"(?m)^" + re.escape(name) + r" = \{").search(text)
+    if m is None:
+        raise AssertionError(f"{name} not defined")
+    return text[m.end():_close(text, m.end() - 1)]
+
+
 def _if_limits_around(body, pos):
     """The limit text of every ``if``/``else_if`` whose block encloses ``pos``."""
     limits = []
@@ -167,6 +175,50 @@ class ImmediateTests(unittest.TestCase):
         self.assertIn("is_revolutionary = no", _block(entry, "is_shown_when_inactive"))
         # Not in `possible`: an inherited running entry re-checks it.
         self.assertNotIn("is_revolutionary", _block(entry, "possible"))
+
+
+class CostModifierTests(unittest.TestCase):
+    """The cost and funding modifiers come back for a revolution's winner.
+
+    sr_recalculate_cost puts them on every billed entry, and each entry's
+    `immediate` runs it. But when Spain's rebels won in the 2026-10-10
+    observer run, the inherited moon-landing entry's `immediate` could not
+    find its own entry by `je:` ("Failed to scope to journal entry by tag"),
+    so the winner ran the programme with neither modifier. The monthly pulse
+    now recalculates when a billed entry lacks one it should carry.
+    """
+
+    def test_applying_skips_an_entry_it_cannot_find(self):
+        body = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
+        self.assertIn("je:je_space_race_$MILESTONE$ ?= {", body)
+
+    def test_every_entry_is_checked(self):
+        body = _definition(TRIGGERS, "sr_cost_modifiers_missing")
+        self.assertEqual(re.findall(r"sr_cost_modifiers_missing_base = \{ MILESTONE = (\w+) \}", body),
+                         list(ENTRIES))
+        self.assertTrue(body.strip().startswith("OR = {"))
+
+    def test_the_check_matches_what_is_applied(self):
+        applied = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
+        pairs = re.findall(r"name = (\w+)\s+multiplier = (\S+)", applied)
+        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_level"),
+                                                ("sr_space_program_cost", "sr_$MILESTONE$_cost")]))
+        check = _definition(TRIGGERS, "sr_cost_modifiers_missing_base")
+        self.assertIn("sr_milestone_billed_$MILESTONE$ = yes", check)
+        entry = _block(check, "je:je_space_race_$MILESTONE$ ?")
+        for modifier, multiplier in pairs:
+            with self.subTest(modifier=modifier):
+                # Missing only where the multiplier is not zero, so a zero
+                # funding or cost does not set off a recalculation every month.
+                self.assertRegex(entry, r"AND = \{\s*" + re.escape(multiplier) + r" > 0\s*"
+                                 r"NOT = \{ has_modifier = " + modifier + r" \}\s*\}")
+
+    def test_the_monthly_pulse_recalculates_when_one_is_missing(self):
+        monthly = _block(ON_ACTIONS, "space_race_on_action")
+        m = re.search(r"limit = \{ sr_cost_modifiers_missing = yes \}\s*sr_recalculate_cost = yes", monthly)
+        self.assertIsNotNone(m)
+        limits = _if_limits_around(monthly, m.end() - 1)
+        self.assertEqual(limits[0], " sr_space_race_participant = yes ")
 
 
 class RewardTests(unittest.TestCase):

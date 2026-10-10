@@ -171,6 +171,43 @@ sr_milestone_billed_mars_landing = { has_variable = sr_active_mars_landing }
 sr_milestone_billed_interstellar_probe = { has_variable = sr_active_interstellar_probe }
 sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
 
+# Whether a billed milestone's entry lacks a cost or funding modifier
+# sr_apply_milestone_cost_modifiers_base would give it: a revolution's winner,
+# whose inherited entry re-ran `immediate` before `je:` could find it (Spain's
+# moon landing, 2026-10-10 observer run), so neither modifier went on. The
+# monthly pulse (space_race_on_action) then runs sr_recalculate_cost. A modifier
+# whose multiplier is 0 (funding cut to 0) does not count as missing, so it
+# cannot set off a recalculation every month. The multipliers read the country
+# through `owner`, so they hold in the entry's scope. Country scope.
+sr_cost_modifiers_missing_base = {
+	sr_milestone_billed_$MILESTONE$ = yes
+	je:je_space_race_$MILESTONE$ ?= {
+		OR = {
+			AND = {
+				sr_$MILESTONE$_cost > 0
+				NOT = { has_modifier = sr_space_program_cost }
+			}
+			AND = {
+				sr_funding_$MILESTONE$_level > 0
+				NOT = { has_modifier = sr_funding_progress }
+			}
+		}
+	}
+}
+
+sr_cost_modifiers_missing = {
+	OR = {
+		sr_cost_modifiers_missing_base = { MILESTONE = suborbital }
+		sr_cost_modifiers_missing_base = { MILESTONE = orbital }
+		sr_cost_modifiers_missing_base = { MILESTONE = moon_landing }
+		sr_cost_modifiers_missing_base = { MILESTONE = probe }
+		sr_cost_modifiers_missing_base = { MILESTONE = moon_base }
+		sr_cost_modifiers_missing_base = { MILESTONE = mars_landing }
+		sr_cost_modifiers_missing_base = { MILESTONE = interstellar_probe }
+		sr_cost_modifiers_missing_base = { MILESTONE = solar_colonization }
+	}
+}
+
 # A rival on milestone $MILESTONE$, seen from ROOT: another country running it
 # and actually moving it (sr_ai_should_participate — an AI outside the top
 # three can hold sr_active_<m> and never tick). The Rivals list, its estimate

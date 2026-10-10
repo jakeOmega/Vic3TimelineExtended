@@ -132,9 +132,10 @@ retain law Legal Limbo
 retain law Intrusive Surveillance System
 retain law Total War
 retain law State Secrets
+retain law Penal Labor Camps
 ```
 
-Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, …), and init-order transients for the three lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
+Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 73 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
 
 ### `guitexturehandler.h:155` — strategic-reserve silo missing UI texture (unresolved)
 - source: `guitexturehandler.h:155`
@@ -187,9 +188,15 @@ Variable 'tp_4_imp_rel' is used but is never set
 Variable 'tp_4_exp_rel' is used but is never set
 Variable 'tp_5_imp_rel' is used but is never set
 Variable 'tp_5_exp_rel' is used but is never set
+Variable 'te_dg_n_lo' is used but is never set
+Variable 'te_dg_n_mi' is used but is never set
+Variable 'te_dg_n_up' is used but is never set
+Variable 'te_dg_y_lo' is used but is never set
+Variable 'te_dg_y_mi' is used but is never set
+Variable 'te_dg_y_up' is used but is never set
 ```
 
-`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) remove variables an older save may still hold and nothing sets any more. The validator reports each read once per launch. The signatures name all twenty-five variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
+`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) and the demographics Gini store (`te_demog_gini_band_store` in `te_demog_generated_effects.txt`, written by gen_demographics.py: the six strata sums `te_dg_<n|y>_<lo|mi|up>` from before the wealth bands, #854) remove variables an older save may still hold and nothing sets any more. The validator reports each read once per launch. The signatures name all thirty-one variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
 
 ### `jomini_eventmanager.cpp:376` — `un_vote.5` kept for events queued in older saves
 - source: `jomini_eventmanager.cpp:376`

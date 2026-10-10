@@ -2144,7 +2144,7 @@ un_vote.3 = {
 
 		# Diplomatic penalties for defying the international community
 		if = {
-			limit = { exists = scope:un_vote_proposer }
+			limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 			change_relations = { country = scope:un_vote_proposer value = -20 }
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}

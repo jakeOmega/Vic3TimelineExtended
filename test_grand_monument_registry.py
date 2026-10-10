@@ -424,9 +424,10 @@ class BuildingTests(unittest.TestCase):
 
     def test_ai_avoids_hard_times_and_war(self):
         ai = squash(block(read(BUILDING), "ai_value"))
-        self.assertIn("owner = { gm_country_hard_times = yes } } add = -100", ai)
-        self.assertIn("owner = { is_at_war = yes } } add = -100", ai)
-        self.assertIn("owner = { government_legitimacy < 40 } } add = 25", ai)
+        # owner ?= : the AI can ask while a state's owner is briefly invalid.
+        self.assertIn("owner ?= { gm_country_hard_times = yes } } add = -100", ai)
+        self.assertIn("owner ?= { is_at_war = yes } } add = -100", ai)
+        self.assertIn("owner ?= { government_legitimacy < 40 } } add = 25", ai)
 
     def test_hard_times(self):
         body = squash(block(read(TRIGGERS), "gm_country_hard_times"))

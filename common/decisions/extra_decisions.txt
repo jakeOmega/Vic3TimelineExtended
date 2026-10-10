@@ -1,5 +1,11 @@
 ﻿adopt_local_culture = {
+	# A country that has lost its last state but is still at war stays in the
+	# game: the NOT below is true for it (it has no states), and its old
+	# capital still resolves, so the AI took this every month while
+	# add/remove_primary_culture refused it ("non existing country"; AHU and
+	# GRE, 2026-10-10 observer run).
 	is_shown = {
+		is_country_alive = yes
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
