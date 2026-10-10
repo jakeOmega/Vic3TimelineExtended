@@ -337,7 +337,56 @@ def _refresh_denominators(ring):
             ring.women_18_40 += f
 
 
-def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.0, rates=None):
+def rate_term(target, bare, absorbed=0.0, other=0.0):
+    """The census's births or deaths modifier for one state (phase 2 step 4). Returns (M, clamped).
+
+    The engine gives each pop bare x max(0, 1 + its terms + M) (growth probe), so over a state M adds
+    M x bare. M = target / bare - 1 - absorbed / bare makes the engine's events the model's (target)
+    plus every term added on top, at the bare curve's weight. All three are in the same units (the walk's:
+    events a month x 100,000). `other` is the state read without the census's and fast mode's
+    terms: other + M stays at or above RATE_TOTAL_MIN, M never goes below 0 when other alone is
+    past it, and M stays at or below RATE_TERM_MAX.
+    """
+    if bare <= 0:
+        return 0.0, False
+    m = target / bare - 1 - absorbed / bare
+    lo = min(0.0, P.RATE_TOTAL_MIN - other)
+    if m < lo:
+        return lo, True
+    if m > P.RATE_TERM_MAX:
+        return P.RATE_TERM_MAX, True
+    return m, False
+
+
+def on_top_scale(engine, target):
+    """How far the engine's births or deaths over a step ran from the model's target, as a scale for the
+    step's rates: engine / target - 1, clamped to ON_TOP_SCALE_MIN..ON_TOP_SCALE_MAX; 0 with no target."""
+    if target <= 0:
+        return 0.0
+    return clamp(engine / target - 1, P.ON_TOP_SCALE_MIN, P.ON_TOP_SCALE_MAX)
+
+
+def starvation_terms(food_security):
+    """(births, deaths) the engine adds for a pop at this food security (vanilla code static modifiers)."""
+    if food_security < P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD:
+        return P.STARVATION_SEVERE["births"], P.STARVATION_SEVERE["deaths"]
+    if food_security < P.FOOD_SECURITY_STARVATION_THRESHOLD:
+        s = min((P.FOOD_SECURITY_STARVATION_THRESHOLD - food_security) * P.STARVATION_EFFECTS_SCALING_FACTOR,
+                P.STARVATION_MILD_CAP)
+        return P.STARVATION_MILD["births"] * s, P.STARVATION_MILD["deaths"] * s
+    return 0.0, 0.0
+
+
+def model_crude_rates(inp, year=1836):
+    """(births, deaths) per 1,000 a year of the stable population of the state's inputs: the census's
+    own rates for a state with no census in the save (demographics_harness.py predict)."""
+    ring = seed(inp, year, 100000.0)
+    out = step(ring, inp, year + 1)
+    return out["births_model"] / 100.0, out["deaths_model"] / 100.0
+
+
+def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.0, rates=None,
+         births_scale=0.0, deaths_scale=0.0):
     """One yearly step (§2.1), in the script's order. Returns the year's figures.
 
     engine_pop None = no scaling (a pure model run). war_dead, kills and migration are
@@ -345,6 +394,10 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     Flows (war, kills, migration) are applied by rate age to the counts before deaths.
     rates = (qf, qm, mmr, tfr, profile) replays an in-game step with the rates the game
     logged instead of recomputing them from inputs.
+    births_scale and deaths_scale (phase 2 step 4, the script's te_dg_bz / te_dg_dz) scale the
+    year's children per woman and the cause multipliers, so the ring places the events the engine
+    added on top of the model: newborns, and deaths by the model's age pattern. The life table,
+    "tfr" and the *_model totals stay the model's own; "tfr_shown" is the scaled one.
     """
     assert ring.year is not None and year == ring.year + 1, "one step per year"
     if rates is None:
@@ -359,6 +412,19 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         lt_f, lt_m = life_table(qf), life_table(qm)
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = {"tfr": tfr}
+    tfr_model = tfr
+    q0_model = (qf[0] + qm[0]) / 200.0   # the life table's infant mortality, before the scales
+    tfr = tfr * (1 + births_scale)
+    if deaths_scale:
+        if rates is None:
+            mult = cause_multipliers(inp)
+            work_f, work_m = work_split(inp, mult["work"])
+            k = 1 + deaths_scale
+            qf, qm = rates_from_multipliers({c: v * k for c, v in mult.items()}, work_f * k, work_m * k)
+        else:
+            qf = [min(100000.0, q * (1 + deaths_scale)) for q in qf]
+            qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
+    maternal = 0.0
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.men_18_40, 0, 0.5) if ring.men_18_40 else 0.0
     war_f = clamp(war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.women_18_40, 0, 0.5) if ring.women_18_40 else 0.0
@@ -381,6 +447,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         g = P.group_of(r)
         b = f * asfr_shape(r) / 100000.0 * tfr
         births += b
+        maternal += b * mmr / 100000.0
         f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0
         m2 = m * (1 - qm[g] / 100000.0)
         deaths += (f - f2) + (m - m2)
@@ -413,9 +480,12 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     ring.scale = (engine_pop / raw) if (engine_pop is not None and raw > 0) else 1.0
     _refresh_denominators(ring)
     ring.total = ring.people()
-    return {"births": births, "deaths": deaths, "tfr": tfr, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
-            "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": (qf[0] + qm[0]) / 200.0,
-            "fertility": fert, "raw": raw}
+    return {"births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
+            "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
+            "fertility": fert, "raw": raw,
+            "tfr_shown": tfr, "maternal": maternal,
+            "births_model": births / (1 + births_scale),
+            "deaths_model": (deaths - maternal) / (1 + deaths_scale) + maternal / (1 + births_scale)}
 
 
 def structure(ring):

@@ -182,6 +182,20 @@ FOOD_SECURITY_STARVATION_THRESHOLD = 0.4
 FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD = 0.2
 STARVATION_EFFECTS_SCALING_FACTOR = 2.5
 STARVATION_BUCKET = 0.05   # mild starvation is read in food-security steps this wide, at each step's middle
+
+# ---- phase 2 step 4: the census sets the engine's births and deaths --------------------------
+# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
+# into one (1 + total) per pop, linear from -0.9 (growth probe) to far above +1.0 (the 12x fast run), floored
+# at 0. Owner, 2026-10-10: the poverty term replaces the curve's starving slope below SoL 4, and deaths added
+# on top fall by the model's age pattern (the step's deaths scale).
+RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above this (-0.9 less literacy's -0.1)
+RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
+ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
+ON_TOP_SCALE_MAX = 4.0
+LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
+STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
+STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
+STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee
