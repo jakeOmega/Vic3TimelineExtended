@@ -263,9 +263,9 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 | `literacy_penalty`, −0.1 × literacy (per pop) | engine code | fitted −0.101 (E7) | education's term | **absorbed**, netted in M |
 | The health laws: Charitable −0.03 a level, Public −0.05 a level, Private −0.002 wealth mortality a level | vanilla laws (E12) | 5% of people under one in 1837, 15% in 1887 | access × treatment, fitted to the medicine anchors | **absorbed**, by inverse INJECT (E13) |
 | Child labour's class lines, +0.05 / +0.02 | vanilla laws (E12) | Child Labor Allowed covers 97–100% of people. Its +0.05 falls on classes holding 91% of people: about 0.22 points of world growth a year, and +4.1% of curve deaths in 1949 (E8) | work +0.1 under Child Labor Allowed, on ages 15–64 only: +0.09 deaths per 1,000 at 1836 inputs (+0.28% of deaths), **about a twenty-fifth of vanilla's** | **absorbed: owner ruling, 2026-10-10.** Vanilla's lines are probably far too high, so the census's smaller term is the intended size. `predict` and the gate report what absorbing them adds to world growth (Tasks 10, 12) |
-| Women's rights' birth lines: No Women's Rights +0.05, Women in the Fields −0.10, Women in the Workplace −0.05, Women's Suffrage −0.05, the mod's Protected Class −0.10 | vanilla laws (E12); `extra_laws.txt:4138` | No Women's Rights covers 83% of people in 1837 | **none yet**: `demographics_model.fertility` reads no women's-rights law | **added on top until Task 7 builds the census's term, then absorbed in Task 8** (owner ruling, 2026-10-10). The term's size is owner call (d) |
+| Women's rights' birth lines: No Women's Rights +0.05, Women in the Fields −0.10, Women in the Workplace −0.05, Women's Suffrage −0.05, the mod's Protected Class −0.10 | vanilla laws (E12); `extra_laws.txt:4138` | No Women's Rights covers 83% of people in 1837 | **none yet**: `demographics_model.fertility` reads no women's-rights law | **added on top until Task 7 builds the census's term, then absorbed in Task 8** (owner ruling, 2026-10-10). The term's size: owner call (d), decided |
 | The mod's flat lines that already have a census term: the Pill −0.10 births (contraception +0.05); State-Sponsored Family Planning −0.05 births (Fertility Control +0.1); `modern_vaccines` and `antibiotic_mass_production` −0.05 deaths and +0.05 births each (infection treatment 0.25 and 0.11); the Ministry of Consumer Protection −0.01 a level (external −0.08 a level) | mod | — | yes | **absorbed**, removed at source (§8.4) |
-| The augmentation laws: Unrestricted −0.05 flat; Medical Only, Regulated Market and Mandatory −0.02 a level of their institutions | mod | −0.02 a level is −10% at level 5 and −16% at level 8 | chronic treatment (modifier-types design, "Not decided here") | **absorbed**, as flat chronic-treatment lines that match the design note's totals: Medical Only +0.10, Unrestricted and Regulated Market +0.05, chronic cap 0.80 → 0.85. Mandatory has no value in the note: recommend +0.05 (owner to confirm). Task 6's medicine scenarios bound them |
+| The augmentation laws: Unrestricted −0.05 flat; Medical Only, Regulated Market and Mandatory −0.02 a level of their institutions | mod | −0.02 a level is −10% at level 5 and −16% at level 8 | chronic treatment (modifier-types design, "Not decided here") | **absorbed**, as flat chronic-treatment lines that match the design note's totals: Medical Only +0.10, Unrestricted and Regulated Market +0.05, chronic cap 0.80 → 0.85. Mandatory has no value in the note: +0.05 (owner, 2026-10-10). Task 6's medicine scenarios bound them |
 | The other family-policy laws: Pro-Natalist Subsidies +0.10, Population Control Measures −0.10, Communal Child Rearing −0.20 births | mod | — | none yet: §8.1's desired-fertility terms and measures aren't built | **added on top until §8.1** gives them census terms (owner-approved) |
 | `second_wave_feminism` −0.025 and `sexual_revolution` −0.025 births | mod techs | small; eras 7–8 | none: neither is a means carrier | **added on top** for now |
 | The LGBTQ rights laws (Legal Limbo −0.05; Basic Protections, Comprehensive Rights, Full Equality −0.10 births); State Eugenics +0.10 births; `mental_health_awareness` −0.05, `biological_immortality` −0.20, `mind_backups` −0.05 deaths | mod | era 6 and later, outside the 1836–1900 gate | none (immortality is phase 3's) | **added on top**; revisit with step 6's post-1900 schedules |
@@ -302,7 +302,10 @@ The slope acts per pop and the poverty term on the state's mean SoL, so a destit
 - A per-term split would need three walk sums: starvation and disease by the pattern, devastation through the kills channel, pollution on chronic causes. It waits until the panel shows an artefact.
 - Births added on top have no choice to make: they are newborns.
 
-### (d) The size of the census's women's-rights fertility term (owner call; Task 7)
+### (d) The size of the census's women's-rights fertility term (Task 7; decided)
+
+**Owner, 2026-10-10: the recommendation below, vanilla's lines re-centred on No Women's Rights.**
+
 
 - **The carrier.** A new script-only type, `state_natural_fertility_mult`, on the women's-rights laws. It multiplies the wealth term, natural fertility, before the means: `tfr = wealth × (1 + natural) × (1 − means × (1 − desired))`.
 - **Why natural fertility and not the means.** The means term is the share of the gap to desired fertility a population can close. In 1836 that is about 0.4 × (0.3 + 0.7 × 0.2) ≈ 0.18, and the gap is small, so a means shift barely moves 1836 births. +0.1 changes children per woman by about 1.5%. Vanilla's lines move births by 5–15% in any year.
@@ -1742,7 +1745,7 @@ class TestEngineRateLines(unittest.TestCase):
         self.assertEqual(chronic.get(("law_medical_augmentation_only", "law")), 0.10)
         self.assertEqual(chronic.get(("law_unrestricted_augmentation", "law")), 0.05)
         self.assertEqual(chronic.get(("law_regulated_augmentation_market", "law")), 0.05)
-        self.assertEqual(chronic.get(("law_mandatory_augmentation", "law")), 0.05)   # owner to confirm (§3 (a))
+        self.assertEqual(chronic.get(("law_mandatory_augmentation", "law")), 0.05)   # owner, 2026-10-10
         self.assertFalse(any(kind == "law_institution" and "augmentation" in key for key, kind in chronic))
         self.assertEqual(P.TREATMENT_CAP["chronic"], 0.85)
 ```
@@ -1941,7 +1944,7 @@ git commit -m "Demographics phase 2 step 4: the census absorbs the health, child
 
 ### Task 7: The census's women's-rights fertility term
 
-The census gets a term of the vanilla lines' size before Task 8 absorbs them (owner, 2026-10-10). Its size is owner call (d) (§3); the task builds the recommendation.
+The census gets a term of the vanilla lines' size before Task 8 absorbs them (owner, 2026-10-10). Its size is owner call (d) (§3), decided: the recommendation.
 
 **Files:**
 - Modify: `common/modifier_type_definitions/demographics_modifier_types.txt` (`state_natural_fertility_mult`)
@@ -2051,7 +2054,7 @@ Expected: FAIL, `AttributeError: … has no attribute 'NATURAL_FERTILITY_TYPE'`.
 ```python
 # Natural fertility (phase 2 step 4, Task 7): women's legal status before modern contraception, through who
 # marries and when. Multiplies the wealth term before the means. Its carriers are the women's-rights laws,
-# re-centred on No Women's Rights so step 2's fit (83% of the 1837 world) is unchanged; values: owner call (d).
+# re-centred on No Women's Rights so step 2's fit (83% of the 1837 world) is unchanged (owner call (d), 2026-10-10).
 NATURAL_FERTILITY_TYPE = "state_natural_fertility_mult"
 NATURAL_FERTILITY_FLOOR = 0.2
 NATURAL_FERTILITY_BY_LAW = {
