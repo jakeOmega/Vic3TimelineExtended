@@ -11,6 +11,7 @@ Usage:
     demographics_harness.py wc SAVE [--tag GBR] [--top 30]  # Wealth Concentration as the game holds it
     demographics_harness.py medicine                    # mortality anchors with the game files' values
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
+    demographics_harness.py fertility                   # children per woman with the game files' values
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -541,6 +542,48 @@ def cmd_medicine(_args):
     return out
 
 
+# ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
+# (label, inputs, (low, high)): §2.3's sketch table and history. The 1836 rows hold no means tech, so
+# only the traditional means and literacy reach them; France's engine cut from Forced Heirship is
+# not in the model, so its band is wide.
+MEANS_TECHS = {"vulcanization", "feminism"}
+FERTILITY_SCENARIOS = [
+    ("1836 agrarian (reference)", dict(sol=8, literacy=0.2, urban_share=0.1), (4.8, 6.2)),
+    ("Britain 1836", dict(sol=11, literacy=0.35, urban_share=0.3, techs=MED_1836, laws={CHS},
+                          institutions={HEALTH: 1}), (4.5, 5.8)),
+    ("France 1836 (Family Limitation)", dict(sol=11, literacy=0.3, urban_share=0.15, techs=MED_1836,
+                                             means_add=P.FAMILY_LIMITATION_MEANS), (3.4, 5.0)),
+    ("Britain 1900", dict(sol=16, literacy=0.75, urban_share=0.6, techs=MED_1900 | MEANS_TECHS, laws={CHS},
+                          institutions={HEALTH: 4}), (3.2, 4.0)),
+    ("West 1950", dict(sol=25, literacy=0.95, urban_share=0.65, techs=MED_1950 | MEANS_TECHS, laws={PHI},
+                       institutions={HEALTH: 5}), (2.3, 3.5)),
+    ("West 1990", dict(sol=38, literacy=0.98, urban_share=0.75,
+                       techs=MED_1990 | MEANS_TECHS | {"contraceptive_pill"}, laws={PHI},
+                       institutions={HEALTH: 6}), (1.4, 2.0)),
+    ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950 | MEANS_TECHS | {"contraceptive_pill"},
+                        laws={CHS}, institutions={HEALTH: 1}), (4.7, 5.8)),
+]
+
+
+def fertility_rows(carriers=None):
+    """[(label, children per woman, low, high)] for FERTILITY_SCENARIOS, with the game files' values."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, kw, (lo, hi) in FERTILITY_SCENARIOS:
+        inp = scenario_inputs(carriers, **kw)
+        rows.append((label, M.fertility(inp, life(inp)["e0"])["tfr"], lo, hi))
+    return rows
+
+
+def cmd_fertility(_args):
+    out = 0
+    for label, tfr, lo, hi in fertility_rows():
+        ok = lo <= tfr <= hi
+        out |= not ok
+        print(f"{label:34s} children per woman {tfr:4.2f} [{lo:g}-{hi:g}]{'' if ok else ' OUT'}")
+    return out
+
+
 HEALTH_LAWS = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
 
 
@@ -625,6 +668,7 @@ def main(argv=None):
     p.add_argument("--top", type=int, default=30)
     p.set_defaults(fn=cmd_wc)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
+    sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)

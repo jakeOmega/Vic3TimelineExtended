@@ -455,6 +455,16 @@ te_debug_demog_level_consumer = {
 te_debug_demog_mod_access = {
 	value = modifier:state_health_care_access_add
 }
+# Stage 2's fertility types and the means built from them (te_demog_means).
+te_debug_demog_mod_contra = {
+	value = modifier:state_contraception_add
+}
+te_debug_demog_mod_fmeans = {
+	value = modifier:state_fertility_means_add
+}
+te_debug_demog_means = {
+	value = te_demog_means
+}
 te_debug_demog_mod_treat_inf = {
 	value = modifier:state_infection_treatment_add
 }

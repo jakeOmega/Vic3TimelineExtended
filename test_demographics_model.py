@@ -29,10 +29,11 @@ def scenario(**kw):
 
 MODERN = frozenset({
     "medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
-    "antibiotic_mass_production", "vulcanization", "contraceptive_pill", "modern_pharmaceuticals",
+    "antibiotic_mass_production", "vulcanization", "feminism", "contraceptive_pill", "modern_pharmaceuticals",
     "combustion_engine",
 })
-EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization"})
+EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization",
+                            "feminism"})
 
 AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
 BRITAIN_1836 = scenario(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
@@ -46,6 +47,15 @@ WEST_1990 = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                                      "law_old_age_pension", "law_dedicated_police"}),
                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
                                    "institution_ministry_of_consumer_protection": 3})
+BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
+                        techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization",
+                                         "feminism"}),
+                        laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
+AGED_TODAY = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
+                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage", "law_old_age_pension",
+                                      "law_dedicated_police", "law_state_sponsored_family_planning"}),
+                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
+                                    "institution_ministry_of_consumer_protection": 3})
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
                       laws=frozenset({"law_charitable_health_system"}))
@@ -62,9 +72,10 @@ class TestFertility(unittest.TestCase):
         for inp, expected, label in [
             (BRITAIN_1836, 5.5, "Britain 1836"),
             (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
-            (WEST_1950, 3.1, "the West 1950"),
-            (WEST_1990, 1.4, "the West 1990"),
-            (INDIA_1975, 5.1, "India 1975"),
+            (BRITAIN_1900, 3.85, "Britain 1900"),
+            (WEST_1950, 2.8, "the West 1950"),
+            (WEST_1990, 1.6, "the West 1990"),
+            (INDIA_1975, 5.3, "India 1975"),
         ]:
             with self.subTest(label):
                 self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
@@ -75,12 +86,54 @@ class TestFertility(unittest.TestCase):
         self.assertAlmostEqual(M.wealth_tfr(35), 3.5)
         self.assertAlmostEqual(M.wealth_tfr(60), 3.5)
 
-    def test_means_capped(self):
-        rich = M.Inputs(literacy=1.0, techs=MODERN, laws=frozenset({"law_state_sponsored_family_planning"}))
-        self.assertLessEqual(M.means(rich), P.MEANS_CAP)
-
     def test_asfr_shape_sums_to_one(self):
         self.assertAlmostEqual(sum(M.asfr_shape(r) for r in range(100)), 100000.0)
+
+
+class TestMeans(unittest.TestCase):
+    """The means to plan a family from the fertility types (modifier-types design, stage 2)."""
+
+    def inp(self, literacy=0.5, mods=None, means_add=0.0):
+        return M.Inputs(literacy=literacy, mods=dict(mods or {}), means_add=means_add)
+
+    def access(self, literacy):
+        return P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * literacy
+
+    def test_no_carrier_is_the_traditional_means(self):
+        # Review Focus 1: every 1836 country but France
+        self.assertAlmostEqual(M.means(self.inp(0.35)), P.TRADITIONAL_MEANS * self.access(0.35))
+
+    def test_techs_add_in_any_order(self):
+        # Review Focus 2: the Pill without vulcanization is the base plus the Pill's own line
+        pill_only = DM.totals(CARRIERS, techs={"contraceptive_pill"})
+        both = DM.totals(CARRIERS, techs={"vulcanization", "contraceptive_pill"})
+        pill = {c.key: c.value for c in CARRIERS if c.type == P.CONTRACEPTION_TYPE}["contraceptive_pill"]
+        self.assertAlmostEqual(M.means(self.inp(1.0, pill_only)), P.TRADITIONAL_MEANS + pill)
+        self.assertGreater(M.means(self.inp(1.0, both)), M.means(self.inp(1.0, pill_only)))
+
+    def test_the_shift_is_not_scaled_by_literacy(self):
+        low = M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: 0.1}))
+        self.assertAlmostEqual(low, P.TRADITIONAL_MEANS * self.access(0.0) + 0.1)
+
+    def test_static_and_law_shifts_add(self):
+        both = M.means(self.inp(0.3, {P.MEANS_SHIFT_TYPE: 0.1}, means_add=P.FAMILY_LIMITATION_MEANS))
+        self.assertAlmostEqual(both, min(P.TRADITIONAL_MEANS * self.access(0.3) + 0.1 + P.FAMILY_LIMITATION_MEANS,
+                                         P.MEANS_CAP))
+
+    def test_the_tier_is_clamped_before_literacy(self):
+        # Review Focus 4: a tier above 1 counts as 1
+        self.assertAlmostEqual(M.means(self.inp(0.0, {P.CONTRACEPTION_TYPE: 5.0})), self.access(0.0))
+
+    def test_a_negative_contraception_total_floors_the_tier(self):
+        # the tier never goes below 0, as the script's nested block clamps it
+        self.assertAlmostEqual(M.means(self.inp(0.0, {P.CONTRACEPTION_TYPE: -1.0, P.MEANS_SHIFT_TYPE: 0.5})), 0.5)
+
+    def test_a_negative_shift_floors_at_zero(self):
+        # Review Focus 3: a pronatalist measure never makes the fertility factor exceed 1
+        self.assertEqual(M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: -2.0})), 0.0)
+
+    def test_cap(self):
+        self.assertEqual(M.means(self.inp(1.0, {P.CONTRACEPTION_TYPE: 1.0, P.MEANS_SHIFT_TYPE: 1.0})), P.MEANS_CAP)
 
 
 class TestMortality(unittest.TestCase):
@@ -203,11 +256,14 @@ class TestStructure(unittest.TestCase):
         self.assertTrue(0.008 <= last["growth"] <= 0.02, last["growth"])
 
     def test_aged(self):
-        ring, last = M.run_constant(WEST_1990, years=300)
+        # §2.2's aged row (about 1.3 children per woman). The West in 1990 alone now gives about 1.6, as
+        # history did (stage 2's fit), so the case adds State-Sponsored Family Planning. At 1.3 the stable
+        # rate is about ln(0.65) / 30 = -1.4% a year; the sketch's -0.9 to -1.2% came from four bands.
+        ring, last = M.run_constant(AGED_TODAY, years=300)
         s = M.structure(ring)
         self.assertTrue(0.09 <= s["young"] <= 0.14, s)
         self.assertTrue(0.28 <= s["old"] <= 0.38, s)
-        self.assertTrue(-0.015 <= last["growth"] <= -0.008, last["growth"])
+        self.assertTrue(-0.017 <= last["growth"] <= -0.008, last["growth"])
 
     def test_dividend_window(self):
         ring, _ = M.run_constant(AGRARIAN_1836, years=300)

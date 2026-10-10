@@ -1,13 +1,20 @@
 ﻿# demographics_modifier_types.txt
 #
-# Demographics (docs/superpowers/specs/2026-10-08-demographics-design.md §2.3).
-# The share of the gap to desired fertility a population can close, added to what
-# its technology and literacy give (te_demog_means). History, events and, from
-# phase 2, the family-policy measures grant it.
-country_fertility_means_add = {
+# Fertility: stage 2 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Read only by the census (te_demog_means, with modifier: in state scope). The means to plan a
+# family = (0.4 + contraception, at most 1) x (0.3 + 0.7 x literacy) + the fertility-control
+# shift, at most 0.95. Contraception sits on the techs; the shift on laws, history (Family
+# Limitation) and events. Values are on the carriers (scripts/analysis/demographics_modifiers.py).
+state_contraception_add = {
 	color = neutral
-	percent = no
-	decimals = 2
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_fertility_means_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
 	script_only = yes
 }
 

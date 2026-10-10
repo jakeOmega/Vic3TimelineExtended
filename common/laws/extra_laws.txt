@@ -2704,6 +2704,7 @@ law_state_sponsored_family_planning = {
 	unlocking_technologies = { second_wave_feminism }
 
 	modifier = {
+		state_fertility_means_add = 0.1	# the census's means (demographics modifier types, stage 2)
 		state_birth_rate_mult = -0.05
 		state_working_adult_ratio_add = 0.05
 		state_education_access_add = 0.05

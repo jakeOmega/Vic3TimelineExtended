@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
@@ -37,6 +38,22 @@ class TestHarness(unittest.TestCase):
         for label, _kw, _targets in H.MEDICINE_SCENARIOS:
             self.assertIn(label, out.getvalue())
         self.assertNotIn(" OUT", out.getvalue())
+
+    def test_fertility_anchors_hold(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["fertility"]), 0, out.getvalue())
+        for label, _kw, _band in H.FERTILITY_SCENARIOS:
+            self.assertIn(label, out.getvalue())
+        self.assertNotIn(" OUT", out.getvalue())
+
+    def test_fertility_rows_match_the_models_steady_state(self):
+        # the command's shortcut (fertility at the scenario's own e0) is what a constant run settles on
+        label, kw, _band = H.FERTILITY_SCENARIOS[1]
+        inp = H.scenario_inputs(DM.load_carriers(), **kw)
+        _ring, last = M.run_constant(inp, years=200)
+        row = next(r for r in H.fertility_rows() if r[0] == label)
+        self.assertAlmostEqual(row[1], last["tfr"], places=2)
 
     def test_adopters_on_the_slice(self):
         # Britain holds Charitable Health System in 1836; Portugal has none
