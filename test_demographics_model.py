@@ -546,8 +546,22 @@ class TestInequality(unittest.TestCase):
         self.assertAlmostEqual(M.shown_gini(0.95), 0.965, msg="no 0.9 cap")
 
     def test_wealth_bands_follow_the_income_knots(self):
-        # Review Focus 2: each wealth lands in one band; the knots are each band's top
-        cases = {0: 1, 1: 1, 2: 2, 5: 2, 6: 3, 10: 3, 11: 4, 55: 12, 56: 13, 60: 13, 61: 14, 99: 14}
+        # Review Focus 2: each wealth lands in one band; the knots are each band's top. Five levels
+        # wide all the way up (2026-10-10, high wealth): the last band, 196 or more, ends at the top level
+        cases = {0: 1, 1: 1, 2: 2, 5: 2, 6: 3, 10: 3, 11: 4, 55: 12, 56: 13, 60: 13, 61: 14, 65: 14,
+                 66: 15, 99: 21, 100: 21, 101: 22, 195: 40, 196: 41, 200: 41}
         for wealth, band in cases.items():
             self.assertEqual(M.wealth_band(wealth), band, wealth)
         self.assertEqual(P.GINI_BANDS, len(P.GINI_BAND_KNOTS) + 1)
+        self.assertEqual(P.GINI_BANDS, 41)
+        self.assertEqual(P.GINI_TOP_WEALTH, 200, "the mod's NUM_WEALTH_LEVELS")
+        self.assertEqual(P.GINI_INCOME_KNOTS, (*P.GINI_BAND_KNOTS, P.GINI_TOP_WEALTH))
+
+    def test_the_income_stand_in_is_linear_between_knots_and_uncapped(self):
+        costs = {w: 100.0 * w * w for w in range(1, P.GINI_TOP_WEALTH + 1)}   # convex, like the packages
+        for knot in P.GINI_INCOME_KNOTS:
+            self.assertAlmostEqual(M.stand_in_income(knot, costs), costs[knot] / 100, msg=knot)
+        self.assertEqual(M.stand_in_income(0, costs), costs[1] / 100, "flat below wealth 1")
+        self.assertAlmostEqual(M.stand_in_income(63, costs), (3 * costs[65] + 2 * costs[60]) / 500)
+        self.assertGreater(M.stand_in_income(61, costs), M.stand_in_income(60, costs), "no cap at 60")
+        self.assertEqual(M.stand_in_income(250, costs), costs[200] / 100, "the top level bounds it")

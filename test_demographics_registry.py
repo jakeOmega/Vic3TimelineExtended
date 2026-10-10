@@ -318,6 +318,9 @@ def _raw_blocks(paths):
     return out
 
 
+FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in units of 1e-5
+
+
 class _Engine:
     """Enough of the engine to run the census: value blocks applied in order (min and max clamp
     where they stand), variables and locals, if / else_if / else, while, triggers, and scripted
@@ -325,7 +328,7 @@ class _Engine:
     set fails, as does an argument the callee doesn't name (the script_argument_audit rule).
     `fixtures` stand in for engine reads and for script values that read the owner. With
     truncate=True every operation and every stored value is cut to five decimals, toward zero:
-    the engine's fixed point (values are i64 x 1e-5)."""
+    the engine's fixed point (values are i64 x 1e-5), and a value past FIXED_MAX fails."""
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
@@ -375,6 +378,7 @@ class _Engine:
     def _q(self, x):
         if not self.truncate:
             return x
+        assert abs(x) <= FIXED_MAX, f"fixed-point overflow: {x:.4g}"
         return math.trunc(x * 1e5 + (1e-7 if x >= 0 else -1e-7)) / 1e5
 
     def _ops(self, items, acc):
@@ -1918,14 +1922,17 @@ class TestWealth(unittest.TestCase):
 
     @staticmethod
     def scored(wc, target, own=0.0, coop=0.0, ctry=0.0, bur=0.0, pop=1e6, gini=0.4, priv=10.0,
-               bands=None):
+               bands=None, layout=P.GINI_LAYOUT):
+        """A scored state; its walk stored the bands it has people in, under `layout` (None: a state
+        from a save before the layout marker, which has no te_dg_gini_layout)."""
         state = {"te_dg_wc": float(wc), "te_dg_wc_target": float(target), "te_dg_lv_own": float(own),
                  "te_dg_lv_self": float(coop), "te_dg_lv_ctry": float(ctry), "te_dg_lv_priv": float(priv),
                  "te_dg_bureaucrats": float(bur), "te_dg_walk_pop": float(pop), "te_dg_gini": float(gini)}
         bands = {1: (900, 1350), 5: (90, 270), 10: (10, 150)} if bands is None else bands
-        for k in range(1, P.GINI_BANDS + 1):
-            n, y = bands.get(k, (0.0, 0.0))
+        for k, (n, y) in bands.items():
             state[f"te_dg_gn{k}"], state[f"te_dg_gy{k}"] = float(n), float(y)
+        if layout is not None:
+            state["te_dg_gini_layout"] = float(layout)
         return state
 
     @staticmethod
@@ -1966,29 +1973,40 @@ class TestWealth(unittest.TestCase):
         self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
         self.assertIs(v["te_dg_wc_top"], a)
         self.assertIs(v["te_dg_wc_bottom"], b)
-        bands = [(a[f"te_dg_gn{k}"] + b[f"te_dg_gn{k}"], a[f"te_dg_gy{k}"] + b[f"te_dg_gy{k}"])
+        bands = [(a.get(f"te_dg_gn{k}", 0) + b.get(f"te_dg_gn{k}", 0), a.get(f"te_dg_gy{k}", 0) + b.get(f"te_dg_gy{k}", 0))
                  for k in range(1, P.GINI_BANDS + 1)]
         expected = demographics_model.shown_gini(demographics_model.grouped_gini(bands))
         self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed bands")
 
     def test_a_state_from_an_old_save_adds_no_bands(self):
         # Review Focus 1: before its own pulse a state has only the old strata sums
-        old = self.scored(60, 55, bands={})
-        for k in range(1, P.GINI_BANDS + 1):
-            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        old = self.scored(60, 55, bands={}, layout=None)
         old.update(te_dg_n_lo=900.0, te_dg_y_lo=1350.0)
-        new = self.scored(40, 50, bands={2: (900e3, 1.2e6), 9: (1e4, 2e5)})
+        new = self.scored(40, 50, bands={2: (900e3, 12.0), 9: (1e4, 2.0)})
         v = self.national([old, new])
-        want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 1.2e6), (1e4, 2e5)]))
+        want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 12.0), (1e4, 2.0)]))
         self.assertAlmostEqual(v["te_dg_gini"], want, places=9)
+
+    def test_a_state_with_the_old_fourteen_bands_adds_none(self):
+        """A save from before the layout marker (2026-10-10): 14 bands, the last one 61 or more, income
+        capped at 60 and summed in other units. Until its own pulse such a state adds nothing (its band 14
+        is not the new band 14, and it has no 15th), so no sum mixes the two layouts."""
+        fourteen = {k: (1e4 * k, 1e4 * k * 9.0 * k) for k in range(1, 15)}
+        old = self.scored(60, 55, bands=fourteen, layout=None)
+        new = self.scored(40, 50, bands={2: (900e3, 12.0), 30: (1e3, 9e3)})
+        v = self.national([old, new])
+        want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 12.0), (1e3, 9e3)]))
+        self.assertAlmostEqual(v["te_dg_gini"], want, places=9)
+        # a marker of another layout is skipped the same way
+        self.assertNotIn("te_dg_gini", self.national([self.scored(60, 55, bands=fourteen, layout=1)]))
 
     def test_a_country_whose_states_have_no_bands_keeps_its_gini(self):
         # an old save, before any of its states' pulses: no band sums, so no new figure (not 0.00)
-        old = self.scored(60, 55, bands={})
-        for k in range(1, P.GINI_BANDS + 1):
-            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        old = self.scored(60, 55, bands={}, layout=None)
         v = self.national([old], te_dg_gini=0.42)
         self.assertEqual(v["te_dg_gini"], 0.42)
+        old14 = self.scored(60, 55, bands={k: (10.0, 20.0 * k) for k in range(1, 15)}, layout=None)
+        self.assertEqual(self.national([old14], te_dg_gini=0.42)["te_dg_gini"], 0.42)
 
     def test_scored_states_without_bands_give_a_target_but_no_gini(self):
         """The national figure writes the Gini only from states that have wealth bands, but the
@@ -1996,15 +2014,13 @@ class TestWealth(unittest.TestCase):
         no bands yet (a save from before the bands, a state scored before its first walk) thus has
         the one and not the other, and a panel that reads the Gini under the target's gate
         shows 0.00 (a missing variable reads 0). The panel gates the Gini on te_dg_gini itself."""
-        old = self.scored(60, 55, bands={})
-        for k in range(1, P.GINI_BANDS + 1):
-            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        old = self.scored(60, 55, bands={}, layout=None)
         v = self.national([old])
         self.assertIn("te_dg_wc_target", v, "the target is written: the old gate is open")
         self.assertIn("te_inh_concentration", v)
         self.assertNotIn("te_dg_gini", v, "no state has bands, so there is no Gini to show")
         # once one state has bands the same call writes the Gini beside the target
-        new = self.scored(40, 50, bands={2: (900e3, 1.2e6), 9: (1e4, 2e5)})
+        new = self.scored(40, 50, bands={2: (900e3, 12.0), 9: (1e4, 2.0)})
         self.assertIn("te_dg_gini", self.national([old, new]))
 
     def test_the_bureaucrat_share_multiplies_before_it_divides(self):
@@ -2911,21 +2927,55 @@ class TestMeansScript(unittest.TestCase):
 
 
 class TestGiniBands(unittest.TestCase):
-    """The generated wealth-band effects (§4.1, wealth bands): each pop's band, and the formula."""
+    """The generated wealth-band effects (§4.1, wealth bands): each pop's band and income, the
+    store, and the formula. Since 2026-10-10 (high wealth) the bands run five levels wide to the top
+    level, income is uncapped and summed in units of P.GINI_INCOME_UNIT, and a state stores only the
+    bands it has people in, beside its layout (te_dg_gini_layout)."""
 
-    def band_of(self, wealth):
-        eng = _Engine({"wealth": float(wealth), "total_size": 10.0, "te_demog_pop_income": 3.0})
+    @classmethod
+    def setUpClass(cls):
+        import demographics_harness
+        cls.costs = demographics_harness.buy_package_costs()
+
+    def walk(self, pops, truncate=False):
+        """[(people, wealth)] through the walk's sums: {band: (people, income)} for the bands hit."""
+        eng = _Engine({}, truncate=truncate)
         eng.call("te_demog_gini_band_init")
-        eng.call("te_demog_gini_band_add")
-        hit = [k for k in range(1, P.GINI_BANDS + 1) if eng.locals[f"te_dg_w_gn{k}"]]
-        self.assertEqual(len(hit), 1, wealth)
-        self.assertEqual(eng.locals[f"te_dg_w_gy{hit[0]}"], 3.0)
-        return hit[0]
+        for size, wealth in pops:
+            eng.fixtures.update(total_size=float(size), wealth=float(wealth))
+            eng.call("te_demog_gini_band_add")
+        return {k: (eng.locals[f"te_dg_w_gn{k}"], eng.locals[f"te_dg_w_gy{k}"])
+                for k in range(1, P.GINI_BANDS + 1) if eng.locals[f"te_dg_w_gn{k}"]}
+
+    def income(self, size, wealth):
+        """the stand-in's income for a pop, in the census's units"""
+        return size * demographics_model.stand_in_income(wealth, self.costs) / P.GINI_INCOME_UNIT
 
     def test_every_wealth_lands_in_the_models_band(self):
-        # Review Focus 2
-        for wealth in range(0, 100):
-            self.assertEqual(self.band_of(wealth), demographics_model.wealth_band(wealth), wealth)
+        # Review Focus 2, over every level the mod's packages have (NUM_WEALTH_LEVELS = 200)
+        for wealth in range(0, P.GINI_TOP_WEALTH + 1):
+            hit = self.walk([(10, wealth)])
+            self.assertEqual(list(hit), [demographics_model.wealth_band(wealth)], wealth)
+
+    def test_each_pop_adds_the_stand_in_income_in_its_units(self):
+        for wealth in range(0, P.GINI_TOP_WEALTH + 1):
+            (n, y), = self.walk([(37, wealth)]).values()
+            self.assertEqual(n, 37.0)
+            self.assertAlmostEqual(y / self.income(37, wealth), 1.0, places=6, msg=str(wealth))
+
+    def test_income_is_not_capped_at_60(self):
+        # the cap counted a wealth-109 pop as wealth 60, a 400th of its spending
+        per_head = {w: self.walk([(1e5, w)])[demographics_model.wealth_band(w)][1] for w in (60, 61, 100, 150, 200)}
+        self.assertGreater(per_head[61], per_head[60])
+        self.assertAlmostEqual(per_head[100] / per_head[60], self.costs[100] / self.costs[60], places=4)
+        self.assertAlmostEqual(per_head[200] * P.GINI_INCOME_UNIT / 1e5, self.costs[200] / 100, places=2)
+        # a wealth above the top level (none exists) is held at the top level's spending
+        self.assertEqual(self.walk([(1e5, 260)])[P.GINI_BANDS][1], per_head[200])
+
+    def test_the_old_income_value_is_gone(self):
+        # the leaf of the band tree computes the income: no second chain of wealth tests per pop
+        for path in DEMOG_FILES:
+            self.assertNotIn("te_demog_pop_income", _text(path), path.name)
 
     def gini(self, bands, truncate=False):
         eng = _Engine({}, truncate=truncate)
@@ -2953,22 +3003,73 @@ class TestGiniBands(unittest.TestCase):
         self.assertAlmostEqual(self.gini({1: (500, 0), 2: (20, 0)}), floor, places=9)
         self.assertAlmostEqual(self.gini({7: (1000, 4321)}), floor, places=9)
 
-    def test_a_china_sized_country_keeps_its_precision(self):
-        # Review Focus 5: 4e8 people at up to ~950 a head, with the engine's fixed point
-        bands = {2: (3.2e8, 3.2e8 * 2.0), 6: (6e7, 6e7 * 9.0), 12: (2e7, 2e7 * 300.0), 14: (1e6, 1e6 * 945.0)}
-        want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
-        self.assertAlmostEqual(self.gini(bands, truncate=True), want, places=3)
+    def through_the_script(self, pops, truncate):
+        """[(people, wealth)] walked, then the formula over the bands it filled: the shown Gini"""
+        return self.gini(self.walk(pops, truncate=truncate), truncate=truncate)
 
-    def test_store_keeps_every_band_and_removes_an_old_saves_sums(self):
+    def by_the_model(self, pops):
+        bands = {}
+        for size, wealth in pops:
+            k = demographics_model.wealth_band(wealth)
+            n, y = bands.get(k, (0.0, 0.0))
+            bands[k] = (n + size, y + self.income(size, wealth))
+        return demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+
+    def test_a_china_sized_country_keeps_its_precision(self):
+        # Review Focus 5: 4e8 people, most of them poor, with the engine's fixed point
+        pops = [(3.2e8, 3), (6e7, 9), (2e7, 45), (1e6, 60), (2e5, 90)]
+        self.assertAlmostEqual(self.through_the_script(pops, True), self.by_the_model(pops), places=4)
+
+    def test_the_largest_country_at_the_top_level_fits_the_fixed_point(self):
+        """Values are i64 x 1e-5, at most about 9.2e13 (_Engine asserts it under truncate). The fast run's
+        whole world, 6.9e9 people, at wealth 200 (9.5e8 a head) in one country sums to 6.6e13 units. Each
+        pop's people divide by the unit before they multiply: 1e9 x 9.5e8 would be 9.5e17."""
+        pops = [(1.16e9, 200)] * 5 + [(1.1e9, 1)]
+        got = self.through_the_script(pops, True)
+        self.assertAlmostEqual(got, self.by_the_model(pops), places=4)
+        y = self.walk([(6.9e9, 200)], truncate=True)[P.GINI_BANDS][1]
+        self.assertAlmostEqual(y / self.income(6.9e9, 200), 1.0, places=6)
+        self.assertLess(y, (2 ** 63 - 1) / 1e5)
+
+    def test_a_small_poor_state_keeps_its_precision(self):
+        """The census's smallest step of income is 1 a pop (1e-5 of the unit), cut toward zero: a pop of
+        one person at wealth 3 (1.86) keeps 1, 46% less, and no pop is cut to 0 (wealth 1 is 1.51 a head).
+        The cut takes more from poorer pops, so a small state usually reads slightly high: this one by
+        0.0002. Across the 3,903 states of the 1836, 1887, 1953 and fast-run saves the largest miss is
+        0.0021; only a state made of one-person pops goes further, 0.02-0.045 high (review of #867)."""
+        pops = [(3 + 7 * i, i % 9) for i in range(40)] + [(12, 30), (2, 55)]
+        self.assertAlmostEqual(self.through_the_script(pops, True), self.by_the_model(pops), delta=0.002)
+
+    def test_an_1836_state_reads_as_before(self):
+        """Below wealth 60 the bands and the stand-in's pieces are the old ones: only the units change,
+        and a share does not depend on them."""
+        pops = [(250_000, 2), (120_000, 4), (40_000, 7), (9_000, 13), (3_000, 22), (800, 38), (120, 47)]
+        old = {}
+        for n, w in pops:
+            k = demographics_model.wealth_band(w)
+            a, b = old.get(k, (0.0, 0.0))
+            old[k] = (a + n, b + n * demographics_model.stand_in_income(w, self.costs))   # old units
+        want = demographics_model.shown_gini(demographics_model.grouped_gini(list(old.values())))
+        self.assertAlmostEqual(self.through_the_script(pops, True), want, delta=0.0005)
+
+    def test_the_store_keeps_the_bands_with_people_and_marks_the_layout(self):
         eng = _Engine({})
-        bands = {k: (100.0 * k + 7, (100.0 * k + 7) * (k * k + 1)) for k in range(1, P.GINI_BANDS + 1)}
+        bands = {2: (9e5, 1.4), 3: (2e5, 0.5), 13: (4e3, 0.37), 30: (12.0, 0.5)}
+        eng.call("te_demog_gini_band_init")
         for k, (n, y) in bands.items():
             eng.locals[f"te_dg_w_gn{k}"], eng.locals[f"te_dg_w_gy{k}"] = n, y
+        # a save from before: 14 bands, every one stored, and the strata sums before them
         old = ("te_dg_n_lo", "te_dg_n_mi", "te_dg_n_up", "te_dg_y_lo", "te_dg_y_mi", "te_dg_y_up")
         eng.vars.update({name: 1.0 for name in old})
+        eng.vars.update({f"te_dg_g{s}{k}": 5.0 for k in range(1, 15) for s in "ny"})
         eng.call("te_demog_gini_band_store")
-        for k, (n, y) in bands.items():
-            self.assertEqual((eng.vars[f"te_dg_gn{k}"], eng.vars[f"te_dg_gy{k}"]), (n, y), k)
+        self.assertEqual(eng.vars["te_dg_gini_layout"], P.GINI_LAYOUT)
+        for k in range(1, P.GINI_BANDS + 1):
+            if k in bands:
+                self.assertEqual((eng.vars[f"te_dg_gn{k}"], eng.vars[f"te_dg_gy{k}"]), bands[k], k)
+            else:
+                self.assertNotIn(f"te_dg_gn{k}", eng.vars, "an empty band is not stored: save size")
+                self.assertNotIn(f"te_dg_gy{k}", eng.vars)
         for name in old:
             self.assertNotIn(name, eng.vars)
         eng.locals.clear()
@@ -2976,8 +3077,53 @@ class TestGiniBands(unittest.TestCase):
         want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
         self.assertAlmostEqual(eng.vars["te_dg_gini"], want, places=9)
 
+    def test_the_layout_marker_is_the_params(self):
+        store = _block(_text(GENERATED_EFFECTS), "te_demog_gini_band_store")
+        self.assertIn(f"set_variable = {{ name = te_dg_gini_layout value = {P.GINI_LAYOUT} }}", store)
+        add = _block(_text(GENERATED_EFFECTS), "te_demog_gini_band_add_state")
+        self.assertIn(f"var:te_dg_gini_layout = {P.GINI_LAYOUT}", add)
+
+    def test_every_band_read_is_guarded_by_has_variable(self):
+        """A state stores only the bands it has people in, so every read of one sits inside an if or
+        else_if whose limit asks has_variable for that band (an else, or a guard on another band, is
+        no guard). Walks every scripted effect and script value of the census, not only the two readers."""
+        band = re.compile(r"var:te_dg_g([ny])(\d+)")
+
+        def reads(items, guards):
+            for key, _, arg in items:
+                if band.fullmatch(key):
+                    yield key, guards
+                if isinstance(arg, str):
+                    if band.fullmatch(arg):
+                        yield arg, guards
+                    continue
+                inner = guards
+                if key in ("if", "else_if"):
+                    inner = guards | {v for k, _, v in _find_all(arg, "limit") if k == "has_variable"}
+                    yield from reads(_find_all(arg, "limit"), guards)
+                    arg = [i for i in arg if i[0] != "limit"]
+                yield from reads(arg, inner)
+
+        def _find_all(items, key):
+            return [x for k, _, v in items if k == key for x in v]
+
+        found = {}
+        for path in DEMOG_FILES:
+            for name, _, body in _parse_script(_text(path)):
+                if not isinstance(body, list):
+                    continue
+                for read, guards in reads(body, frozenset()):
+                    want = "te_dg_gn" + band.fullmatch(read).group(2)
+                    self.assertIn(want, guards, f"{path.name}: {name} reads {read} outside has_variable = {want}")
+                    found.setdefault(name, set()).add(read)
+        every = {f"var:te_dg_g{s}{k}" for k in range(1, P.GINI_BANDS + 1) for s in "ny"}
+        self.assertEqual(found.get("te_demog_gini_band_load"), every)
+        self.assertEqual(found.get("te_demog_gini_band_add_state"), every)
+        self.assertEqual(set(found), {"te_demog_gini_band_load", "te_demog_gini_band_add_state"},
+                         "no other reader of the stored bands")
+
     def test_a_near_total_inequality_shows_near_1_without_a_cap(self):
-        bands = {1: (99, 0.0001), 14: (1, 1000)}
+        bands = {1: (99, 0.0001), P.GINI_BANDS: (1, 1000)}
         want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
         self.assertGreater(want, 0.98)
         self.assertAlmostEqual(self.gini(bands), want, places=9)

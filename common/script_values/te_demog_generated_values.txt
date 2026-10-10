@@ -1246,67 +1246,6 @@ te_demog_pop_death_mult = {
 	min = 0
 }
 
-# Pop scope: spending per head at this pop's wealth (buy packages / 100, capped at wealth
-# 60), the stand-in for income in the Gini (spec 4.1), x size.
-te_demog_pop_income = {
-	value = total_size
-	multiply = {
-		value = 1.51
-		if = {
-			limit = { wealth > 1 }
-			value = { value = wealth subtract = 1 multiply = 0.175 add = 1.51 }
-		}
-		if = {
-			limit = { wealth > 5 }
-			value = { value = wealth subtract = 5 multiply = 0.282 add = 2.21 }
-		}
-		if = {
-			limit = { wealth > 10 }
-			value = { value = wealth subtract = 10 multiply = 0.448 add = 3.62 }
-		}
-		if = {
-			limit = { wealth > 15 }
-			value = { value = wealth subtract = 15 multiply = 0.714 add = 5.86 }
-		}
-		if = {
-			limit = { wealth > 20 }
-			value = { value = wealth subtract = 20 multiply = 1.326 add = 9.43 }
-		}
-		if = {
-			limit = { wealth > 25 }
-			value = { value = wealth subtract = 25 multiply = 2.602 add = 16.06 }
-		}
-		if = {
-			limit = { wealth > 30 }
-			value = { value = wealth subtract = 30 multiply = 5.074 add = 29.07 }
-		}
-		if = {
-			limit = { wealth > 35 }
-			value = { value = wealth subtract = 35 multiply = 9.24 add = 54.44 }
-		}
-		if = {
-			limit = { wealth > 40 }
-			value = { value = wealth subtract = 40 multiply = 15.946 add = 100.64 }
-		}
-		if = {
-			limit = { wealth > 45 }
-			value = { value = wealth subtract = 45 multiply = 27.164 add = 180.37 }
-		}
-		if = {
-			limit = { wealth > 50 }
-			value = { value = wealth subtract = 50 multiply = 46.19 add = 316.19 }
-		}
-		if = {
-			limit = { wealth > 55 }
-			value = { value = wealth subtract = 55 multiply = 79.69 add = 547.14 }
-		}
-		if = {
-			limit = { wealth >= 60 }
-			value = 945.59
-		}
-	}
-}
-
 # State scope: the infection cause's multiplier (demographics_model.cause_multipliers).
 te_demog_mult_infection = {
 	value = 1

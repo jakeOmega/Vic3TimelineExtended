@@ -104,3 +104,68 @@ X = 0.7. Wealth Concentration's term reads the shown figure: +40 × (shown − 0
 - 1836–1887 is one game and 1949–1953 another, so the fits describe this data, not every game.
 - In the late game only two countries and 27 states carry census variables (demographics arrived mid-game), so it
   couldn't be checked against the game's own values there.
+
+## High wealth (later on 2026-10-10)
+
+The first wealth-band build held the stand-in flat from wealth 60 and put everyone above it in one band, 61 or more.
+The mod's packages keep growing to the top level, 200 (`NUM_WEALTH_LEVELS`): 946 a head at 60, 9,009 at 80, 99,648 at
+99, 9.5×10^8 at 200, 1.4–1.9× every five levels. A few rich pops then hold much of a country's income, and a game
+whose people mostly sit above 60 reads the 0.30 floor. The build now has 41 bands, five levels wide to 195 and then 196
+or more, with the stand-in uncapped (`GINI_TOP_WEALTH`, `GINI_INCOME_KNOTS` in `demographics_params.py`).
+
+- **Data.** The 1836 save, the gate run's 1887, the late game's 1953 (mean wealth 12.5, maximum 84) and a fast-mode
+  save with technology far ahead (1912.1.1, `vic3te-demog-fast4x-2026-10-10`, maximum 109). No save has most people
+  above 50, so synthetic ones move every pop's wealth: up by 40, 45, 70 or 72 levels (spread kept in levels), or
+  stretched 1.5× around the mean and moved to mean 50 or 80 (each level's people spread over the stretched levels).
+- **The reference** is each pop as its own group at the packages' own spending at its level, uncapped (the harness's
+  `income_proxy`). The census's straight lines between knots stay within 0.007 of it. Countries of 1M people or more,
+  shown figures (the computed gap × 0.7):
+
+| Distribution | Mean wealth | Before: mean gap, worst | After: mean gap, worst | Named countries, shown before → after (pop by pop) |
+|---|---|---|---|---|
+| 1836 | 8.1 | −0.011, −0.032 | −0.011, −0.032 | Britain 0.543 → 0.543 (0.553) |
+| 1887 | 7.8 | −0.011, −0.027 | −0.010, −0.026 | Britain 0.739 → 0.739 (0.743) |
+| 1953 | 12.5 | −0.016, −0.102 | −0.008, −0.025 | USA 0.708 → 0.718 (0.723); Colombia 0.711 → 0.802 (0.807) |
+| Fast run, 1912 | 12.6 | −0.047, −0.230 | −0.004, −0.022 | UNA 0.660 → 0.794 (0.797); Germany 0.652 → 0.766 (0.769) |
+| 1953 +40 levels | 52.5 | −0.138, −0.367 | −0.009, −0.027 | USA 0.465 → 0.758 (0.763) |
+| 1953 +70 levels | 82.5 | −0.281, −0.538 | −0.011, −0.029 | USA 0.300 → 0.772 (0.779); China 0.300 → 0.599 (0.605) |
+| Fast run +40 | 52.6 | −0.209, −0.498 | −0.005, −0.024 | UNA 0.470 → 0.835 (0.839) |
+| Fast run +70 | 82.6 | −0.389, −0.580 | −0.007, −0.027 | Germany 0.300 → 0.783 (0.791) |
+| 1953 stretched, mean 50 | 50.0 | −0.297, −0.483 | −0.006, −0.027 | |
+| 1953 stretched, mean 80 | 80.0 | −0.476, −0.679 | −0.007, −0.027 | |
+| 1836 +72 levels | 80.1 | −0.182, −0.375 | −0.012, −0.033 | |
+
+- **The 1836 check holds.** Over the 1836, gate-run and late saves (812 country-saves), computed figure against pop by
+  pop: before, both capped, mean −0.016, worst −0.046, R² 0.970; after, both uncapped, −0.016, −0.046, 0.973 (this
+  rerun uses the packages' own spending for the reference and has one late save fewer, so it reads −0.016 where the
+  table above has −0.014). The 1836 save's figures don't move, so `GINI_SHOWN_EQUALITY` stays 0.7. The one
+  exception is Bikaner (BIK, 381,000 people), whose 72 people above wealth 60 (at most 63) lift it from 0.374 to
+  0.386 shown (pop by pop 0.388): the new figure is the right one.
+- **States** of 100,000 people or more: after, mean −0.002 to −0.010 and worst −0.02 to −0.06 in every case; before,
+  worst −0.17 in 1953 and −0.37 in the fast run.
+- **Wider bands at the top** (ten levels above 100: 31 bands) do as well while their income still follows five-level
+  pieces, but in the leaf a band's income is one line, and a ten-level line overshoots the packages by up to 17%.
+- **Fixed point.** Income is summed in units of 100,000: a pop adds people ÷ 100,000 × spending per head, the division
+  first (exact for whole people). A country of 4×10^9 people all at wealth 200 sums to 3.8×10^13 units, half the
+  ceiling of about 9.2×10^13 (the generator asserts it). The registry interpreter, which now fails any value past the
+  ceiling, runs the fast run's whole world (6.9×10^9 people) at wealth 200 in one pop, and a China of 4×10^8, within
+  10^-5 of the model. Real pops from the 1953 and fast-run saves through the generated script match the model's bands
+  to 10^-5. The interpreter checks results, not the raw intermediates of a multiply or divide, which pass 64 bits for
+  big countries. The game handles those: in the fast-run save the country Ginis the old code wrote match the old
+  formula (UNA 0.6595 against 0.6602, France 0.7973 against 0.7976) though its last division's raw intermediate
+  reached 9.4×10^19, and the new formula's intermediates are smaller for the same pops (UNA 2.1×10^18).
+- **Small states.** The smallest step is 1 of spending per pop, cut toward zero: a pop of one person at wealth 3 (1.86)
+  keeps 1, 46% less, and no pop is cut to 0. The cut takes more from poorer pops, so a small state usually reads
+  slightly high. Across the 3,903 states of the 1836, 1887, 1953 and fast-run saves the largest miss is 0.0021; 300
+  random states of 3–30 pops miss by −0.006 to +0.004; only a state made of one-person pops goes further, 0.02–0.045
+  high (twenty at wealth 1 and one at 40: 0.850 against 0.805), and no save has one.
+- **Cost.** Each pop took four tree tests to find its band, then `te_demog_pop_income` made 13 more `wealth` tests and
+  evaluated a line per knot below the pop's wealth (2.7–3.6 on average, 12 above 55). It now takes five or six tree
+  tests (5.5–5.7 on average) and one line, in the band's leaf: about 11.3 fewer tests and 1.7–2.6 fewer lines a pop. A
+  state stores only the bands it has people in, beside the layout marker: 5 to 11 bands on average in these saves (up
+  to 18 in one state, 24 stretched), so 12,000–20,000 variables a game against 24,000–32,000 before (28 a state) and
+  72,000–95,000 had all 41 been kept. A variable takes about 86 bytes in a plain-text save. Per state, the walk sets
+  82 locals (28 before), and the store, the formula and the country's sum each make one test per band.
+- **Old saves.** A state from a save before this change has 14 bands in other units and no `te_dg_gini_layout`. The
+  country adds only states with the current layout, so until such a state's own pulse its country's Gini is taken over
+  the states that have walked since, and with none of them the country keeps its last figure.
