@@ -198,7 +198,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   health can re-run after a timeout/fail (low).
 
 ### F5. Space-race rewards are lost for good, and an active milestone's progress is reset (H1 + H4). HIGH (#464)
-- **FIXED (#464).** Milestone rewards come back in `sr_repair_after_civil_war`, which the shared hook `te_civil_war_on_won` runs for the winner. Probe results are recorded and re-added. Choice, approach and colony-specialisation modifiers (the 68 `sr_colony_*` and `sr_solar_system_trade`, which this report missed) are rebuilt from their variables by the entries' `immediate` and a monthly self-heal. The milestone `immediate` sets are guarded, with the goal pinned by `goal_add_value`. Also fixed, all missed above: `je_space_race_interstellar_results` restarting its 132-month transit, the choice events firing a second time, and a finished solar colonization re-opening.
+- **FIXED (#464).** Milestone rewards come back in `sr_repair_after_civil_war`, which the shared hook `te_civil_war_on_won` runs for the winner. Probe results are recorded and re-added. Choice, approach and colony-specialisation modifiers (the 68 `sr_colony_*` and `sr_solar_system_trade`, which this report missed) are rebuilt from their variables by the entries' `immediate` and a monthly self-heal. The milestone `immediate` sets are guarded, with the goal pinned by `goal_add_value`. Also fixed, all missed above: `je_space_race_interstellar_results` restarting its 132-month transit, the choice events firing a second time, and a finished solar colonization re-opening. The cost and funding modifiers, first listed as re-derived by `immediate` (below), needed a monthly backstop too: fixed in PR #864.
 - Rewards: `common/scripted_effects/space_race_effects.txt:404-412` adds `sr_first_<m>` / `sr_<m>` as
   permanent COUNTRY modifiers on completion. The inherited `sr_completed_<m>` then blocks the JE forever
   (`je_space_race.txt:29-34`).
@@ -392,7 +392,9 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
 - **UN dues, membership benefits, NPT, conventions** once membership is restored: single stateless refresh
   sites (`je_united_nations.txt:360-455`, `un_dues_country_monthly_update`). Back at +2w.
 - **Space race cost/funding modifiers**: stripped and re-applied from `sr_active_<m>`
-  (`space_race_effects.txt:533-554`).
+  (`space_race_effects.txt:533-554`). **Correction (2026-10-10 observer run):** the inherited entry's
+  `immediate` could not find its own entry by `je:` (Spain's moon landing), so neither modifier went on.
+  The monthly pulse now recalculates when a billed entry lacks one (`sr_cost_modifiers_missing`, PR #864).
 - **Strategic reserve init**: every variable is guarded (`st_res_effects.txt:40-104`), so the E3 re-run of
   `immediate` is harmless. (Stock loss: F11.)
 - **je_colonial_empire, je_space_race_\***: re-entry is blocked by inherited completion

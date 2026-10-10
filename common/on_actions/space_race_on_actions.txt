@@ -76,6 +76,12 @@ space_race_on_action = {
 				}
 				sr_recalculate_cost = yes
 			}
+			# A revolution's winner whose inherited entry lost its cost and
+			# funding modifiers (sr_cost_modifiers_missing): put them back.
+			else_if = {
+				limit = { sr_cost_modifiers_missing = yes }
+				sr_recalculate_cost = yes
+			}
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }
