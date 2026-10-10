@@ -414,7 +414,7 @@ class TestMigrantProfile(unittest.TestCase):
 
 
 class TestInequality(unittest.TestCase):
-    """§4.1: the grouped Gini and its map to the panel's figure."""
+    """§4.1: the grouped Gini over wealth bands, and the panel's figure."""
 
     def test_equal_groups(self):
         self.assertAlmostEqual(M.grouped_gini([(10, 100), (10, 100)]), 0.0)
@@ -422,7 +422,17 @@ class TestInequality(unittest.TestCase):
     def test_one_group_owns_everything(self):
         self.assertGreater(M.grouped_gini([(99, 0.0001), (1, 1000)]), 0.98)
 
-    def test_britain_1836_anchor(self):
-        # Britain's strata in the 1836 save (people, spending per head at capped wealth)
-        groups = [(23.65e6, 23.65e6 * 314), (2.08e6, 2.08e6 * 685), (0.22e6, 0.22e6 * 9759)]
-        self.assertAlmostEqual(M.shown_gini(M.grouped_gini(groups)), 0.52, delta=0.02)
+    def test_the_panel_scales_down_the_equality_it_sees(self):
+        # owner, 2026-10-10: shown = 1 - X (1 - computed), X fitted to historians' 1836 estimates
+        self.assertEqual(P.GINI_SHOWN_EQUALITY, 0.7)
+        self.assertAlmostEqual(M.shown_gini(0.0), 0.3)
+        self.assertAlmostEqual(M.shown_gini(0.35), 0.545)
+        self.assertAlmostEqual(M.shown_gini(1.0), 1.0)
+        self.assertAlmostEqual(M.shown_gini(0.95), 0.965, msg="no 0.9 cap")
+
+    def test_wealth_bands_follow_the_income_knots(self):
+        # Review Focus 2: each wealth lands in one band; the knots are each band's top
+        cases = {0: 1, 1: 1, 2: 2, 5: 2, 6: 3, 10: 3, 11: 4, 55: 12, 56: 13, 60: 13, 61: 14, 99: 14}
+        for wealth, band in cases.items():
+            self.assertEqual(M.wealth_band(wealth), band, wealth)
+        self.assertEqual(P.GINI_BANDS, len(P.GINI_BAND_KNOTS) + 1)

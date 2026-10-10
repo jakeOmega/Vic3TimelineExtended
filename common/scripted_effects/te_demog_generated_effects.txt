@@ -4440,6 +4440,381 @@ te_demog_scale_bands = {
 	change_variable = { name = te_dg_cm4 multiply = local_var:te_dg_new_scale }
 }
 
+# THIS = a state, before its pop walk: the Gini's wealth-band sums (spec 4.1).
+te_demog_gini_band_init = {
+	set_local_variable = { name = te_dg_w_gn1 value = 0 }
+	set_local_variable = { name = te_dg_w_gy1 value = 0 }
+	set_local_variable = { name = te_dg_w_gn2 value = 0 }
+	set_local_variable = { name = te_dg_w_gy2 value = 0 }
+	set_local_variable = { name = te_dg_w_gn3 value = 0 }
+	set_local_variable = { name = te_dg_w_gy3 value = 0 }
+	set_local_variable = { name = te_dg_w_gn4 value = 0 }
+	set_local_variable = { name = te_dg_w_gy4 value = 0 }
+	set_local_variable = { name = te_dg_w_gn5 value = 0 }
+	set_local_variable = { name = te_dg_w_gy5 value = 0 }
+	set_local_variable = { name = te_dg_w_gn6 value = 0 }
+	set_local_variable = { name = te_dg_w_gy6 value = 0 }
+	set_local_variable = { name = te_dg_w_gn7 value = 0 }
+	set_local_variable = { name = te_dg_w_gy7 value = 0 }
+	set_local_variable = { name = te_dg_w_gn8 value = 0 }
+	set_local_variable = { name = te_dg_w_gy8 value = 0 }
+	set_local_variable = { name = te_dg_w_gn9 value = 0 }
+	set_local_variable = { name = te_dg_w_gy9 value = 0 }
+	set_local_variable = { name = te_dg_w_gn10 value = 0 }
+	set_local_variable = { name = te_dg_w_gy10 value = 0 }
+	set_local_variable = { name = te_dg_w_gn11 value = 0 }
+	set_local_variable = { name = te_dg_w_gy11 value = 0 }
+	set_local_variable = { name = te_dg_w_gn12 value = 0 }
+	set_local_variable = { name = te_dg_w_gy12 value = 0 }
+	set_local_variable = { name = te_dg_w_gn13 value = 0 }
+	set_local_variable = { name = te_dg_w_gy13 value = 0 }
+	set_local_variable = { name = te_dg_w_gn14 value = 0 }
+	set_local_variable = { name = te_dg_w_gy14 value = 0 }
+}
+
+# THIS = a pop in the walk: its people and stand-in income into its wealth band. The knots are
+# each band's top (1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60; above 60 income is capped), split in
+# halves, so a pop takes at most four tests.
+te_demog_gini_band_add = {
+	if = {
+		limit = { wealth > 30 }
+		if = {
+			limit = { wealth > 50 }
+			if = {
+				limit = { wealth > 60 }
+				change_local_variable = { name = te_dg_w_gn14 add = total_size }
+				change_local_variable = { name = te_dg_w_gy14 add = te_demog_pop_income }
+			}
+			else = {
+				if = {
+					limit = { wealth > 55 }
+					change_local_variable = { name = te_dg_w_gn13 add = total_size }
+					change_local_variable = { name = te_dg_w_gy13 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn12 add = total_size }
+					change_local_variable = { name = te_dg_w_gy12 add = te_demog_pop_income }
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { wealth > 40 }
+				if = {
+					limit = { wealth > 45 }
+					change_local_variable = { name = te_dg_w_gn11 add = total_size }
+					change_local_variable = { name = te_dg_w_gy11 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn10 add = total_size }
+					change_local_variable = { name = te_dg_w_gy10 add = te_demog_pop_income }
+				}
+			}
+			else = {
+				if = {
+					limit = { wealth > 35 }
+					change_local_variable = { name = te_dg_w_gn9 add = total_size }
+					change_local_variable = { name = te_dg_w_gy9 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn8 add = total_size }
+					change_local_variable = { name = te_dg_w_gy8 add = te_demog_pop_income }
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { wealth > 15 }
+			if = {
+				limit = { wealth > 25 }
+				change_local_variable = { name = te_dg_w_gn7 add = total_size }
+				change_local_variable = { name = te_dg_w_gy7 add = te_demog_pop_income }
+			}
+			else = {
+				if = {
+					limit = { wealth > 20 }
+					change_local_variable = { name = te_dg_w_gn6 add = total_size }
+					change_local_variable = { name = te_dg_w_gy6 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn5 add = total_size }
+					change_local_variable = { name = te_dg_w_gy5 add = te_demog_pop_income }
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { wealth > 5 }
+				if = {
+					limit = { wealth > 10 }
+					change_local_variable = { name = te_dg_w_gn4 add = total_size }
+					change_local_variable = { name = te_dg_w_gy4 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn3 add = total_size }
+					change_local_variable = { name = te_dg_w_gy3 add = te_demog_pop_income }
+				}
+			}
+			else = {
+				if = {
+					limit = { wealth > 1 }
+					change_local_variable = { name = te_dg_w_gn2 add = total_size }
+					change_local_variable = { name = te_dg_w_gy2 add = te_demog_pop_income }
+				}
+				else = {
+					change_local_variable = { name = te_dg_w_gn1 add = total_size }
+					change_local_variable = { name = te_dg_w_gy1 add = te_demog_pop_income }
+				}
+			}
+		}
+	}
+}
+
+# THIS = a state, after its walk: keep the bands for the country's sum. An old save's strata
+# sums (before the wealth bands, 2026-10-10) are removed.
+te_demog_gini_band_store = {
+	set_variable = { name = te_dg_gn1 value = local_var:te_dg_w_gn1 }
+	set_variable = { name = te_dg_gy1 value = local_var:te_dg_w_gy1 }
+	set_variable = { name = te_dg_gn2 value = local_var:te_dg_w_gn2 }
+	set_variable = { name = te_dg_gy2 value = local_var:te_dg_w_gy2 }
+	set_variable = { name = te_dg_gn3 value = local_var:te_dg_w_gn3 }
+	set_variable = { name = te_dg_gy3 value = local_var:te_dg_w_gy3 }
+	set_variable = { name = te_dg_gn4 value = local_var:te_dg_w_gn4 }
+	set_variable = { name = te_dg_gy4 value = local_var:te_dg_w_gy4 }
+	set_variable = { name = te_dg_gn5 value = local_var:te_dg_w_gn5 }
+	set_variable = { name = te_dg_gy5 value = local_var:te_dg_w_gy5 }
+	set_variable = { name = te_dg_gn6 value = local_var:te_dg_w_gn6 }
+	set_variable = { name = te_dg_gy6 value = local_var:te_dg_w_gy6 }
+	set_variable = { name = te_dg_gn7 value = local_var:te_dg_w_gn7 }
+	set_variable = { name = te_dg_gy7 value = local_var:te_dg_w_gy7 }
+	set_variable = { name = te_dg_gn8 value = local_var:te_dg_w_gn8 }
+	set_variable = { name = te_dg_gy8 value = local_var:te_dg_w_gy8 }
+	set_variable = { name = te_dg_gn9 value = local_var:te_dg_w_gn9 }
+	set_variable = { name = te_dg_gy9 value = local_var:te_dg_w_gy9 }
+	set_variable = { name = te_dg_gn10 value = local_var:te_dg_w_gn10 }
+	set_variable = { name = te_dg_gy10 value = local_var:te_dg_w_gy10 }
+	set_variable = { name = te_dg_gn11 value = local_var:te_dg_w_gn11 }
+	set_variable = { name = te_dg_gy11 value = local_var:te_dg_w_gy11 }
+	set_variable = { name = te_dg_gn12 value = local_var:te_dg_w_gn12 }
+	set_variable = { name = te_dg_gy12 value = local_var:te_dg_w_gy12 }
+	set_variable = { name = te_dg_gn13 value = local_var:te_dg_w_gn13 }
+	set_variable = { name = te_dg_gy13 value = local_var:te_dg_w_gy13 }
+	set_variable = { name = te_dg_gn14 value = local_var:te_dg_w_gn14 }
+	set_variable = { name = te_dg_gy14 value = local_var:te_dg_w_gy14 }
+	if = {
+		limit = { has_variable = te_dg_n_lo }
+		remove_variable = te_dg_n_lo
+		remove_variable = te_dg_n_mi
+		remove_variable = te_dg_n_up
+		remove_variable = te_dg_y_lo
+		remove_variable = te_dg_y_mi
+		remove_variable = te_dg_y_up
+	}
+}
+
+# THIS = a state: its bands into the formula's locals.
+te_demog_gini_band_load = {
+	set_local_variable = { name = te_dg_g_n1 value = var:te_dg_gn1 }
+	set_local_variable = { name = te_dg_g_y1 value = var:te_dg_gy1 }
+	set_local_variable = { name = te_dg_g_n2 value = var:te_dg_gn2 }
+	set_local_variable = { name = te_dg_g_y2 value = var:te_dg_gy2 }
+	set_local_variable = { name = te_dg_g_n3 value = var:te_dg_gn3 }
+	set_local_variable = { name = te_dg_g_y3 value = var:te_dg_gy3 }
+	set_local_variable = { name = te_dg_g_n4 value = var:te_dg_gn4 }
+	set_local_variable = { name = te_dg_g_y4 value = var:te_dg_gy4 }
+	set_local_variable = { name = te_dg_g_n5 value = var:te_dg_gn5 }
+	set_local_variable = { name = te_dg_g_y5 value = var:te_dg_gy5 }
+	set_local_variable = { name = te_dg_g_n6 value = var:te_dg_gn6 }
+	set_local_variable = { name = te_dg_g_y6 value = var:te_dg_gy6 }
+	set_local_variable = { name = te_dg_g_n7 value = var:te_dg_gn7 }
+	set_local_variable = { name = te_dg_g_y7 value = var:te_dg_gy7 }
+	set_local_variable = { name = te_dg_g_n8 value = var:te_dg_gn8 }
+	set_local_variable = { name = te_dg_g_y8 value = var:te_dg_gy8 }
+	set_local_variable = { name = te_dg_g_n9 value = var:te_dg_gn9 }
+	set_local_variable = { name = te_dg_g_y9 value = var:te_dg_gy9 }
+	set_local_variable = { name = te_dg_g_n10 value = var:te_dg_gn10 }
+	set_local_variable = { name = te_dg_g_y10 value = var:te_dg_gy10 }
+	set_local_variable = { name = te_dg_g_n11 value = var:te_dg_gn11 }
+	set_local_variable = { name = te_dg_g_y11 value = var:te_dg_gy11 }
+	set_local_variable = { name = te_dg_g_n12 value = var:te_dg_gn12 }
+	set_local_variable = { name = te_dg_g_y12 value = var:te_dg_gy12 }
+	set_local_variable = { name = te_dg_g_n13 value = var:te_dg_gn13 }
+	set_local_variable = { name = te_dg_g_y13 value = var:te_dg_gy13 }
+	set_local_variable = { name = te_dg_g_n14 value = var:te_dg_gn14 }
+	set_local_variable = { name = te_dg_g_y14 value = var:te_dg_gy14 }
+}
+
+# THIS = a country, before its states add their bands.
+te_demog_gini_band_zero = {
+	set_local_variable = { name = te_dg_g_n1 value = 0 }
+	set_local_variable = { name = te_dg_g_y1 value = 0 }
+	set_local_variable = { name = te_dg_g_n2 value = 0 }
+	set_local_variable = { name = te_dg_g_y2 value = 0 }
+	set_local_variable = { name = te_dg_g_n3 value = 0 }
+	set_local_variable = { name = te_dg_g_y3 value = 0 }
+	set_local_variable = { name = te_dg_g_n4 value = 0 }
+	set_local_variable = { name = te_dg_g_y4 value = 0 }
+	set_local_variable = { name = te_dg_g_n5 value = 0 }
+	set_local_variable = { name = te_dg_g_y5 value = 0 }
+	set_local_variable = { name = te_dg_g_n6 value = 0 }
+	set_local_variable = { name = te_dg_g_y6 value = 0 }
+	set_local_variable = { name = te_dg_g_n7 value = 0 }
+	set_local_variable = { name = te_dg_g_y7 value = 0 }
+	set_local_variable = { name = te_dg_g_n8 value = 0 }
+	set_local_variable = { name = te_dg_g_y8 value = 0 }
+	set_local_variable = { name = te_dg_g_n9 value = 0 }
+	set_local_variable = { name = te_dg_g_y9 value = 0 }
+	set_local_variable = { name = te_dg_g_n10 value = 0 }
+	set_local_variable = { name = te_dg_g_y10 value = 0 }
+	set_local_variable = { name = te_dg_g_n11 value = 0 }
+	set_local_variable = { name = te_dg_g_y11 value = 0 }
+	set_local_variable = { name = te_dg_g_n12 value = 0 }
+	set_local_variable = { name = te_dg_g_y12 value = 0 }
+	set_local_variable = { name = te_dg_g_n13 value = 0 }
+	set_local_variable = { name = te_dg_g_y13 value = 0 }
+	set_local_variable = { name = te_dg_g_n14 value = 0 }
+	set_local_variable = { name = te_dg_g_y14 value = 0 }
+}
+
+# THIS = a state in its country's loop: add its bands (the caller checks it has them).
+te_demog_gini_band_add_state = {
+	change_local_variable = { name = te_dg_g_n1 add = var:te_dg_gn1 }
+	change_local_variable = { name = te_dg_g_y1 add = var:te_dg_gy1 }
+	change_local_variable = { name = te_dg_g_n2 add = var:te_dg_gn2 }
+	change_local_variable = { name = te_dg_g_y2 add = var:te_dg_gy2 }
+	change_local_variable = { name = te_dg_g_n3 add = var:te_dg_gn3 }
+	change_local_variable = { name = te_dg_g_y3 add = var:te_dg_gy3 }
+	change_local_variable = { name = te_dg_g_n4 add = var:te_dg_gn4 }
+	change_local_variable = { name = te_dg_g_y4 add = var:te_dg_gy4 }
+	change_local_variable = { name = te_dg_g_n5 add = var:te_dg_gn5 }
+	change_local_variable = { name = te_dg_g_y5 add = var:te_dg_gy5 }
+	change_local_variable = { name = te_dg_g_n6 add = var:te_dg_gn6 }
+	change_local_variable = { name = te_dg_g_y6 add = var:te_dg_gy6 }
+	change_local_variable = { name = te_dg_g_n7 add = var:te_dg_gn7 }
+	change_local_variable = { name = te_dg_g_y7 add = var:te_dg_gy7 }
+	change_local_variable = { name = te_dg_g_n8 add = var:te_dg_gn8 }
+	change_local_variable = { name = te_dg_g_y8 add = var:te_dg_gy8 }
+	change_local_variable = { name = te_dg_g_n9 add = var:te_dg_gn9 }
+	change_local_variable = { name = te_dg_g_y9 add = var:te_dg_gy9 }
+	change_local_variable = { name = te_dg_g_n10 add = var:te_dg_gn10 }
+	change_local_variable = { name = te_dg_g_y10 add = var:te_dg_gy10 }
+	change_local_variable = { name = te_dg_g_n11 add = var:te_dg_gn11 }
+	change_local_variable = { name = te_dg_g_y11 add = var:te_dg_gy11 }
+	change_local_variable = { name = te_dg_g_n12 add = var:te_dg_gn12 }
+	change_local_variable = { name = te_dg_g_y12 add = var:te_dg_gy12 }
+	change_local_variable = { name = te_dg_g_n13 add = var:te_dg_gn13 }
+	change_local_variable = { name = te_dg_g_y13 add = var:te_dg_gy13 }
+	change_local_variable = { name = te_dg_g_n14 add = var:te_dg_gn14 }
+	change_local_variable = { name = te_dg_g_y14 add = var:te_dg_gy14 }
+}
+
+# THIS = a state or a country, with its bands in te_dg_g_n<k> and te_dg_g_y<k> (a country's summed
+# over its states, so its Gini is taken over all their people, not averaged). The bands are in
+# income order, so G = 1 - sum p_k (S_k + S_k-1), with p_k a band's share of people and S_k the
+# running share of income. Each sum becomes a share before it multiplies (values are i64 x 1e-5).
+# With no people or no income the computed Gini is 0. Writes var:te_dg_gini, the panel's figure:
+# 1 - 0.7 x (1 - G), the equality the bands show scaled down for the spread
+# inside them (spec 4.1; owner, 2026-10-10), so it reads like historians' estimates.
+te_demog_gini_from_locals = {
+	set_local_variable = { name = te_dg_g_pop value = 0 }
+	set_local_variable = { name = te_dg_g_inc value = 0 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n1 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y1 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n2 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y2 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n3 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y3 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n4 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y4 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n5 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y5 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n6 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y6 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n7 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y7 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n8 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y8 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n9 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y9 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n10 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y10 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n11 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y11 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n12 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y12 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n13 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y13 }
+	change_local_variable = { name = te_dg_g_pop add = local_var:te_dg_g_n14 }
+	change_local_variable = { name = te_dg_g_inc add = local_var:te_dg_g_y14 }
+	set_local_variable = { name = te_dg_g_gini value = 0 }
+	if = {
+		limit = {
+			local_var:te_dg_g_pop > 0
+			local_var:te_dg_g_inc > 0
+		}
+		set_local_variable = { name = te_dg_g_gini value = 1 }
+		set_local_variable = { name = te_dg_g_s value = 0 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y1 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n1 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y2 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n2 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y3 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n3 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y4 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n4 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y5 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n5 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y6 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n6 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y7 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n7 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y8 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n8 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y9 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n9 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y10 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n10 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y11 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n11 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y12 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n12 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y13 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n13 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+		set_local_variable = { name = te_dg_g_s2 value = { value = local_var:te_dg_g_y14 divide = { value = local_var:te_dg_g_inc min = 0.00001 } add = local_var:te_dg_g_s } }
+		set_local_variable = { name = te_dg_g_t value = { value = local_var:te_dg_g_n14 divide = { value = local_var:te_dg_g_pop min = 1 } multiply = { value = local_var:te_dg_g_s2 add = local_var:te_dg_g_s } } }
+		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
+		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
+	}
+	set_variable = { name = te_dg_gini value = { value = local_var:te_dg_g_gini multiply = 0.7 add = 0.3 min = 0 max = 1 } }
+}
+
 # THIS = a state. The migrant profile (demographics_model.migrant_profile): from the kinds'
 # weights te_dg_labour, te_dg_family, te_dg_refugee and labour's women's share
 # te_dg_labour_f, each class's share for women (te_dg_pf<c>) and men (te_dg_pm<c>).

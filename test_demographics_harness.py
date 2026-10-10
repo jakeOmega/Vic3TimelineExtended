@@ -294,19 +294,25 @@ class TestHarness(unittest.TestCase):
 
     @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
     def test_gini_on_the_slice(self):
+        # the panel's figure (wealth bands, no map) beside each pop as its own group and the old strata
         code, out, _err = self._cli("gini", str(SLICE), "--tag", "GBR")
         self.assertEqual(code, 0)
-        self.assertIn("GINI_SCALE for GBR = 0.52:", out)
-        grouped = re.search(r"^GBR grouped (\d\.\d+)", out, re.M)
-        self.assertIsNotNone(grouped, out)
-        self.assertGreater(float(grouped.group(1)), 0)
+        self.assertNotIn("GINI_SCALE", out)
+        m = re.search(r"^GBR\s+shown (\d\.\d+)\s+bands (\d\.\d+)\s+pop by pop (\d\.\d+)\s+strata (\d\.\d+)",
+                      out, re.M)
+        self.assertIsNotNone(m, out)
+        shown, bands, pops, strata = (float(x) for x in m.groups())
+        self.assertAlmostEqual(shown, 1 - 0.7 * (1 - bands), delta=0.001)   # both printed to 3 places
+        self.assertGreater(bands, 0)
+        self.assertLessEqual(bands, pops + 1e-9, "a coarser grouping never raises the Gini")
+        self.assertLess(pops - bands, 0.05)
+        self.assertLessEqual(strata, pops + 1e-9)
 
     @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
-    def test_gini_exits_1_when_the_anchor_tag_has_no_pops(self):
-        code, out, err = self._cli("gini", str(SLICE), "--tag", "GBR", "--anchor-tag", "XXX")
+    def test_gini_exits_1_when_a_tag_has_no_pops(self):
+        code, out, err = self._cli("gini", str(SLICE), "--tag", "XXX")
         self.assertEqual(code, 1, out)
         self.assertIn("XXX", err)
-        self.assertNotIn("GINI_SCALE", out)
 
     def test_save_commands_exit_1_on_a_non_plain_text_save(self):
         with tempfile.TemporaryDirectory() as tmp:

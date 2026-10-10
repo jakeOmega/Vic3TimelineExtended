@@ -57,6 +57,8 @@ USA grouped 0.193 shown 0.46
 CHI grouped 0.123 shown 0.40
 ```
 
+**Superseded 2026-10-10:** the census now takes the Gini over 14 wealth bands with no map, and `gini` prints that figure beside each pop as its own group (`docs/testing/demographics-gini-check-2026-10-10.md`). The run below is the first build's.
+
 This is §4.1's Gini. Each pop's income is the buy package at its wealth (capped at wealth 60, as
 `INCOME_WEALTH_CAP` says), summed per stratum and per country; the grouped Gini over lower, middle and upper strata
 is then scaled so Great Britain reads 0.52, inside §4.1's 0.5–0.55 anchor for the 1830s. The scale that does it is 0.85,
