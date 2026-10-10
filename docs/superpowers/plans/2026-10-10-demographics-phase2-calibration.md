@@ -76,6 +76,15 @@ Before the owner's call, the fit can still:
   2. The engine's starvation, which phase 2 keeps (step 4).
   3. A disease-environment term from state traits. The malaria traits cover only sub-Saharan Africa and Indonesia;
      a broader one would mean new traits, an owner call.
+- **Checked (2026-10-10):** the base game has no disease-environment input to use.
+  - `disease_outbreak`'s trigger, `is_vulnerable_to_disease_outbreak`, is `always = yes`, so every state qualifies.
+  - The outbreak changes only throughput and peasants' consumption, not deaths.
+  - Two harvest conditions add `state_mortality_mult` +0.05 each; the engine keeps those on top in phase 2.
+  - The malaria traits are the only geographic disease input, and they cover sub-Saharan Africa and Indonesia only.
+- **So the options are:**
+  - a new geographic term (the tropics' and the monsoon belt's infection, which quinine, malaria prevention and
+    sanitation techs switch off), an owner call;
+  - leaving India's gap to the engine's starvation and the wars of phase 2's runs, and measuring what is left.
 - **Gate:** India's growth from the census plus the engine's own deaths within about 0.3% a year of history's.
 
 ## Step 4: how the census sets the engine's births and deaths
