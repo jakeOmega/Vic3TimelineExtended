@@ -810,6 +810,14 @@ modern_election_events.9 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = television_broadcasting
+		any_interest_group = {
+			has_party = yes
+			is_in_government = yes
+		}
+		any_interest_group = {
+			has_party = yes
+			is_in_government = no
+		}
 	}
 
 	immediate = {
@@ -822,10 +830,18 @@ modern_election_events.9 = {
 			limit = { has_party = yes is_in_government = no }
 			party = { save_scope_as = opp_party }
 		}
-		# Randomly determine which side gaffes
+		# Randomly determine which side gaffes. Saved scopes, not local variables:
+		# saved scopes persist into the options and the loc, so the options render
+		# their momentum natively and the description names the party.
 		random_list = {
-			50 = { set_local_variable = govt_gaffe }
-			50 = { set_local_variable = opp_gaffe }
+			50 = {
+				scope:govt_party = { save_scope_as = gaffe_party }
+				scope:opp_party = { save_scope_as = rival_party }
+			}
+			50 = {
+				scope:opp_party = { save_scope_as = gaffe_party }
+				scope:govt_party = { save_scope_as = rival_party }
+			}
 		}
 	}
 
@@ -834,30 +850,13 @@ modern_election_events.9 = {
 	option = { # Capitalize ruthlessly
 		name = modern_election_events.9.a
 		default_option = yes
-		custom_tooltip = {
-			text = modern_election_events.9.a.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe }
-				if = {
-					limit = { exists = scope:opp_party }
-					scope:opp_party = { add_momentum = momentum_large }
-				}
-				if = {
-					limit = { exists = scope:govt_party }
-					scope:govt_party = { add_momentum = momentum_large_decrease }
-				}
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe }
-				if = {
-					limit = { exists = scope:govt_party }
-					scope:govt_party = { add_momentum = momentum_large }
-				}
-				if = {
-					limit = { exists = scope:opp_party }
-					scope:opp_party = { add_momentum = momentum_large_decrease }
-				}
-			}
+		if = {
+			limit = { exists = scope:rival_party }
+			scope:rival_party = { add_momentum = momentum_large }
+		}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_large_decrease }
 		}
 		add_radicals = { value = small_radicals }
 		ai_chance = {
@@ -869,16 +868,9 @@ modern_election_events.9 = {
 	option = { # Take the high road
 		name = modern_election_events.9.b
 		add_loyalists = { value = small_radicals }
-		custom_tooltip = {
-			text = modern_election_events.9.b.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_small_decrease }
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_small_decrease }
-			}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_small_decrease }
 		}
 		ai_chance = {
 			base = 3
@@ -888,16 +880,9 @@ modern_election_events.9 = {
 
 	option = { # Spin it into a relatable moment
 		name = modern_election_events.9.c
-		custom_tooltip = {
-			text = modern_election_events.9.c.tt
-			if = {
-				limit = { has_local_variable = govt_gaffe exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_small }
-			}
-			if = {
-				limit = { has_local_variable = opp_gaffe exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_small }
-			}
+		if = {
+			limit = { exists = scope:gaffe_party }
+			scope:gaffe_party = { add_momentum = momentum_small }
 		}
 		add_modifier = { name = me_media_savvy_modifier days = short_modifier_time }
 		ai_chance = {
@@ -1787,11 +1772,6 @@ modern_election_events.19 = {
 			limit = { has_party = yes is_in_government = no }
 			party = { save_scope_as = opp_party }
 		}
-		# Determine who wins the debate
-		random_list = {
-			50 = { set_local_variable = govt_wins_debate }
-			50 = { set_local_variable = opp_wins_debate }
-		}
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
@@ -1799,26 +1779,26 @@ modern_election_events.19 = {
 	option = { # Go on the offensive with policy attacks
 		name = modern_election_events.19.a
 		default_option = yes
-		if = {
-			limit = { has_local_variable = govt_wins_debate }
-			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_large }
+		random_list = { # Who wins the debate
+			50 = {
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_medium_decrease }
+				}
 			}
-			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_medium_decrease }
-			}
-		}
-		if = {
-			limit = { has_local_variable = opp_wins_debate }
-			if = {
-				limit = { exists = scope:opp_party }
-				scope:opp_party = { add_momentum = momentum_large }
-			}
-			if = {
-				limit = { exists = scope:govt_party }
-				scope:govt_party = { add_momentum = momentum_medium_decrease }
+			50 = {
+				if = {
+					limit = { exists = scope:opp_party }
+					scope:opp_party = { add_momentum = momentum_large }
+				}
+				if = {
+					limit = { exists = scope:govt_party }
+					scope:govt_party = { add_momentum = momentum_medium_decrease }
+				}
 			}
 		}
 		ai_chance = {
