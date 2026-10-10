@@ -8,7 +8,8 @@ that ships without the census runs this on its release branch, never on main:
 
     git switch -c release/<version> origin/main
     python3 scripts/release/comment_out_census_inputs.py
-    git commit -am "Release <version>: the census's inputs commented out"
+    git add common/    # stage by path; it edits only common/
+    git commit -m "Release <version>: the census's inputs commented out"
 
 It comments out, keeping each line's text after a `# RELEASE: ` prefix:
 1. every line that sets one of the types (`<type> = <value>`; the census's own
@@ -21,10 +22,12 @@ It comments out, keeping each line's text after a `# RELEASE: ` prefix:
    goes, since the census can't run correctly without its inputs (owner, 2026-10-10:
    the release offers no way to turn it on).
 
-A second run changes nothing. --check lists what it would change and writes nothing.
+A second run changes nothing. --check lists what it would change and writes nothing. It refuses
+to write on the main branch.
 test_release_census_inputs.py runs it on a copy of the tree.
 """
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -151,6 +154,10 @@ def run(root, check=False):
 def main(argv):
     check = "--check" in argv
     root = Path.cwd()
+    branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=root,
+                            capture_output=True, text=True).stdout.strip()
+    if branch == "main" and not check:
+        sys.exit("On main: this is for a release branch only (git switch -c release/<version> origin/main).")
     changed = run(root, check)
     total = 0
     for path, (old, new) in changed.items():

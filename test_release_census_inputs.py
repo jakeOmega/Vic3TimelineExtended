@@ -117,6 +117,35 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             self.assertEqual([_code(line).strip() for line in body.split("\n") if _code(line).strip()],
                              ["always = no"], gate)
 
+    def _entries(self, text):
+        """{name: body} of the top-level `name = { ... }` entries in the code-only text."""
+        code = "\n".join(_code(line) for line in text.split("\n"))
+        out, depth, start = {}, 0, None
+        for m in re.finditer(r"[{}]", code):
+            if m.group() == "{":
+                if depth == 0:
+                    start = m.start()
+                depth += 1
+            else:
+                depth -= 1
+                if depth == 0:
+                    name = re.search(r"(\S+)\s*=\s*$", code[:start]).group(1)
+                    out[name] = code[start:m.end()]
+        return out
+
+    def test_it_leaves_every_other_rule_and_trigger_alone(self):
+        # only demographics_rule goes from the rules file, and only the two gates change in the
+        # triggers file: the walks feeding Wealth Concentration call the others
+        for rel, keep_out in (("common/game_rules/extra_game_rules.txt", {"demographics_rule"}),
+                              ("common/scripted_triggers/te_demog_triggers.txt", set(self.script.GATES))):
+            before = self._entries(self.before[self.root / rel].decode("utf-8-sig"))
+            after = self._entries(self._text(rel))
+            with self.subTest(rel=rel):
+                self.assertTrue(keep_out <= set(before))
+                for name, body in before.items():
+                    if name not in keep_out:
+                        self.assertEqual(after.get(name), body, name)
+
     def test_the_rule_is_gone(self):
         text = self._text("common/game_rules/extra_game_rules.txt")
         self.assertNotRegex("\n".join(_code(line) for line in text.split("\n")), r"demographics_")
