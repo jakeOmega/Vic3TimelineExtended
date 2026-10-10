@@ -64,7 +64,7 @@ Each claim is **verified** (with its source) or **needs an in-game probe** (§4 
 | E21 | A permanent `add_modifier` is saved in the state's `timed_modifiers` block with its multiplier | verified | #857's `demographics_save_inputs` reads `migration_crowding` there |
 | E22 | Whether a state's modifiers survive a change of owner (conquest, secession, a civil war's transfer) | **needs a check** (P4, offline from a save, no console probe) | state variables stay with the state (spec §2.6); modifiers unread |
 
-**Measured from the gate run's saves for this plan** (normal-speed observer game, `/mnt/d/vic3te-data/vic3te-demog-gate-data/saves/`, read with `demographics_save_inputs.read_sections` and `pop_growth`'s curves; the scripts are reproduced in Task 8 as `predict`'s `--slope` report):
+**Measured from the gate run's saves for this plan** (normal-speed observer game, `/mnt/d/vic3te-data/vic3te-demog-gate-data/saves/`, read with `demographics_save_inputs.read_sections` and `pop_growth`'s curves; the scripts are reproduced in Task 8 as `predict --keep-slope`):
 
 | Save | People below SoL 4 (below SoL 2) | The slope's extra deaths | Their cost to growth | No Women's Rights | Child Labor Allowed | A health law |
 |---|---|---|---|---|---|---|
@@ -169,7 +169,7 @@ dz = (te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1) × KEPT_DEA
 
 ### (a) Which terms stay on top (K)
 
-The principle recommended: **standing law and technology lines that model what the census models are replaced; shocks, local conditions and player actions are kept.** The census is fitted to history with laws and techs as inputs (#855, #857); a standing line on top shifts every country it covers, permanently.
+The principle recommended: **standing law and technology lines that model what the census models are replaced; shocks, local conditions and player actions are kept; a line the census has no term for yet stays until it has one** (no lever is removed without its replacement). The census is fitted to history with laws and techs as inputs (#855, #857); a standing line on top shifts every country it covers, permanently.
 
 | Term | Kind | Size (evidence) | The census models it? | Recommendation |
 |---|---|---|---|---|
@@ -177,11 +177,12 @@ The principle recommended: **standing law and technology lines that model what t
 | `literacy_penalty` −0.1 × literacy (per pop) | engine code | fitted −0.101 (E7) | yes: education's term | **replaced**, netted in M (R_p) |
 | Health laws: Charitable −0.03 a level, Public −0.05 a level, Private −0.002 wealth mortality a level | vanilla laws (E13) | 5% of people under one in 1837, 16% in 1887 | yes: access × treatment | **replaced**, inverse INJECT (the calibration plan's route; shape verified, E14) |
 | Child-labour class lines +0.05 / +0.02 | vanilla laws (E13) | +4.1% of curve deaths in 1949 (E8); Child Labor Allowed over 97–100% of people | yes: work +0.1 under Child Labor Allowed | **replaced**, inverse INJECT |
-| Women's rights' birth lines +0.05 / −0.10 / −0.05 / −0.05 | vanilla laws (E13) | No Women's Rights over 83% of people in 1837: kept, +0.05 × bare births 5.6% a year ≈ +0.28 points of births a year on a census that already runs world growth +1.0% against history's 0.4–0.8% | no term; the fertility fit (#857) is against history without it | **owner call; recommend replaced** (inverse INJECT) |
-| The mod's flat lines §8.4 names: the Pill −0.10 births; the family-policy laws (Pro-Natalist Subsidies +0.10, State-Sponsored Family Planning −0.05, Population Control Measures −0.10, Communal Child Rearing −0.20); `modern_vaccines` and `antibiotic_mass_production` −0.05 deaths and +0.05 births each; the Ministry of Consumer Protection −0.01 a level | mod | — | yes (means tiers, desired fertility, medicine, external causes) | **replaced**, removed at source (§8.4) |
+| Women's rights' birth lines, the whole group: No Women's Rights +0.05, Women in the Fields −0.10 (a variant of No Women's Rights with its own line), Women in the Workplace −0.05, Women's Suffrage −0.05, the mod's Protected Class −0.10. Women Own Property has none | vanilla laws (E13); `extra_laws.txt:4138` | No Women's Rights over 83% of people in 1837: kept, +0.05 × bare births 5.6% a year ≈ +0.28 points of births a year on a census that already runs world growth +1.0% against history's 0.4–0.8% | no term; the fertility fit (#857) is against history without it | **owner call; recommend replaced**: inverse INJECT on each vanilla law (a variant's own block too), Protected Class's line removed |
+| The mod's flat lines that already have a census term: the Pill −0.10 births (contraception +0.05); State-Sponsored Family Planning −0.05 births (Fertility Control +0.1); `modern_vaccines` and `antibiotic_mass_production` −0.05 deaths and +0.05 births each (infection treatment 0.25 and 0.11); the Ministry of Consumer Protection −0.01 a level (external −0.08 a level) | mod | — | yes | **replaced**, removed at source (§8.4) |
+| The other family-policy laws: Pro-Natalist Subsidies +0.10, Population Control Measures −0.10, Communal Child Rearing −0.20 births | mod | — | not yet: §8.1's desired-fertility terms and measures aren't built | **kept until §8.1** gives them census terms. §8.4 removes them, but removing them in step 4 would leave those laws with no effect on births |
 | The augmentation laws (Unrestricted −0.05; Medical Only, Regulated Market, Mandatory −0.02 a level) | mod | — | becomes chronic treatment (modifier-types design, "Not decided here") | **replaced**: Medical Only +0.10, Unrestricted and Regulated Market +0.05 chronic treatment, cap 0.80 → 0.85 (that note's starting point). Mandatory has no starting value there: recommend +0.05, owner to confirm |
-| `second_wave_feminism` −0.025 and `sexual_revolution` −0.025 births | mod techs | small | the means tiers carry the transition | owner call; recommend replaced (removed) |
-| The rights laws (Legal Limbo −0.05; Basic Protections, Comprehensive Rights, Full Equality, Protected Class −0.10 births), State Eugenics +0.10 births, `mental_health_awareness` −0.05, `biological_immortality` −0.20, `mind_backups` −0.05 deaths | mod | era 6 and later, outside the 1836–1900 gate | no (immortality is phase 3's) | **kept for now**; revisit with step 6's post-1900 schedules |
+| `second_wave_feminism` −0.025 and `sexual_revolution` −0.025 births | mod techs | small; era 7–8 | no: neither is a means carrier | **kept for now** (owner call: a contraception line on each would move them into the census) |
+| The LGBTQ rights laws (Legal Limbo −0.05; Basic Protections, Comprehensive Rights, Full Equality −0.10 births), State Eugenics +0.10 births, `mental_health_awareness` −0.05, `biological_immortality` −0.20, `mind_backups` −0.05 deaths | mod | era 6 and later, outside the 1836–1900 gate | no (immortality is phase 3's) | **kept for now**; revisit with step 6's post-1900 schedules |
 | The Natalism Initiative decree +0.5 births | mod decree | large, temporary | §8.1's measures replace it later | **kept** (a player action) |
 | Starvation (births −0.7 × scale / −0.9; deaths +0.6 × scale / +1.0), per pop | engine code | +0.1–0.3% of deaths in 1949 | no | **kept**; its age pattern is call (c) |
 | Devastation +1.0 × level | engine code | E15 | no | **kept** |
@@ -617,55 +618,53 @@ git commit -m "Demographics phase 2 step 4: the model's rate term, kept scales a
 In `test_demographics_registry.py`:
 - Add `RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt"` beside `FAST_EFFECTS`.
 - Add `RATE_EFFECTS` to the list in `_Engine.__init__`: `_raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS])`.
-- Then add, after `TestCohortScript`:
+- Extend `TestCohortScript.step_both` with two keyword arguments, `kept=None` and `full=False`. It already builds the before-state on both sides and stubs `te_demog_flows`, so the step's own residual and flows stay out of the comparison. Right after `eng.fixtures.update(fixtures)`:
 
 ```python
-class TestKeptScalesScript(TestCohortScript):
-    """te_demog_kept_scales and the step's model totals (phase 2 step 4) against demographics_model.step."""
+        bz = dz = 0.0
+        if full:
+            eng.trigger_fixtures["te_demog_effects_run"] = True
+        if kept is not None:
+            assert flows is None, "kept scales and the script's own flows both write te_dg_eb"
+            # the model's rates M aimed at, and the engine's expected events over the window at today's people
+            want_b, want_d = 40.0 * pop / 1000, 30.0 * pop / 1000
+            eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
+                            te_dg_eb=want_b * (1 + kept[0]), te_dg_ed=want_d * (1 + kept[1]))
+            if full:
+                bz = demographics_model.kept_scale(want_b * (1 + kept[0]), want_b)
+                dz = demographics_model.kept_scale(want_d * (1 + kept[1]), want_d) * P.KEPT_DEATHS_BY_AGE
+```
 
-    def _stepped(self, bz_target, dz_target, full=True):
-        eng, ring = self.seed_both()
-        pop = self.POP
-        # the model's own rates M aimed at, and the engine's expected events over the window
-        eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
-                        te_dg_eb=40.0 * pop / 1000 * (1 + bz_target), te_dg_ed=30.0 * pop / 1000 * (1 + dz_target))
-        eng.trigger_fixtures["te_demog_effects_run"] = full
-        return eng, ring
+  Then pass `births_scale=bz, deaths_scale=dz` to its `demographics_model.step(...)` call.
+- Add to `TestCohortScript`:
 
-    def test_scales_are_the_engines_events_over_the_target(self):
-        eng, _ = self._stepped(0.05, 0.12)
-        eng.call("te_demog_step")
-        self.assertAlmostEqual(eng.vars["te_dg_bz"], 0.05, places=5)
-        self.assertAlmostEqual(eng.vars["te_dg_dz"], 0.12 * P.KEPT_DEATHS_BY_AGE, places=5)
+```python
+    # -- phase 2 step 4: the kept scales (te_demog_kept_scales) ---------------------------------
 
     def test_step_with_kept_scales_matches_the_model(self):
-        eng, ring = self._stepped(0.05, 0.12)
-        eng.call("te_demog_step")
-        out = demographics_model.step(ring, self.INP, self.YEAR + 1, engine_pop=self.POP,
-                                      births_scale=0.05, deaths_scale=0.12 * P.KEPT_DEATHS_BY_AGE)
-        self.close(eng.vars["te_dg_births"], out["births"], what="births")
-        self.close(eng.vars["te_dg_deaths"], out["deaths"], what="deaths")
-        self.close(eng.vars["te_dg_cbr_model"], out["births_model"] * 1000 / self.POP, what="cbr_model")
-        self.close(eng.vars["te_dg_cdr_model"], out["deaths_model"] * 1000 / self.POP, what="cdr_model")
-        self.close(eng.vars["te_dg_tfr"], out["tfr_shown"], what="tfr shown")
-        self.close(eng.vars["te_dg_tfr_model"], out["tfr"], what="tfr model")
+        eng, ring, figures, pop = self.step_both(kept=(0.05, 0.12), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertAlmostEqual(eng.vars["te_dg_bz"], 0.05, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_dz"], 0.12 * P.KEPT_DEATHS_BY_AGE, places=5)
+        self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        self.close(eng.vars["te_dg_tfr"], figures["tfr_shown"], what="tfr shown")
+        self.close(eng.vars["te_dg_tfr_model"], figures["tfr"], what="tfr model")
 
     def test_no_kept_scales_outside_full(self):
-        eng, _ = self._stepped(0.05, 0.12, full=False)
-        eng.call("te_demog_step")
+        eng, ring, figures, pop = self.step_both(kept=(0.05, 0.12), full=False)
+        self.check_step(eng, ring, figures, pop)
         self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
 
     def test_no_target_no_scales(self):
-        """An old save or the first step after phase 2 arrives: no te_dg_cbr_model yet."""
-        eng, _ = self.seed_both()
-        eng.vars.update(te_dg_eb=1.0, te_dg_ed=1.0)
-        eng.trigger_fixtures["te_demog_effects_run"] = True
-        eng.call("te_demog_step")
+        """An old save, or the first step after phase 2 arrives: no te_dg_cbr_model yet."""
+        eng, ring, figures, pop = self.step_both(full=True)
+        self.check_step(eng, ring, figures, pop)
         self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
 
-    def test_scales_are_clamped(self):
-        eng, _ = self._stepped(9.0, -0.99)
-        eng.call("te_demog_step")
+    def test_kept_scales_are_clamped(self):
+        eng, ring, figures, pop = self.step_both(kept=(9.0, -0.99), full=True)
+        self.check_step(eng, ring, figures, pop)
         self.assertEqual(eng.vars["te_dg_bz"], P.KEPT_SCALE_MAX)
         self.assertEqual(eng.vars["te_dg_dz"], P.KEPT_SCALE_MIN * P.KEPT_DEATHS_BY_AGE)
 
@@ -676,8 +675,6 @@ class TestKeptScalesScript(TestCohortScript):
         self.assertLess(body.index("te_demog_prepare = yes"), body.index("te_demog_kept_scales = yes"))
         self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
 ```
-
-`seed_both` and `close` are `TestCohortScript`'s. The subclass inherits its tests too; to avoid running them twice, take the two helpers into a mixin (`_CohortHelpers`) that both classes use. The diff is mechanical: move `INP`, `YEAR`, `POP`, `close` and `seed_both` into the mixin.
 
 In `test_gen_demographics.py`, in `TestGenerated` (its `setUpClass` holds the generated values as `cls.values`; the generator is imported as `gen`):
 
@@ -692,8 +689,8 @@ In `test_gen_demographics.py`, in `TestGenerated` (its `setUpClass` holds the ge
 
 - [ ] **Step 2: Run them to see them fail**
 
-Run: `.venv/bin/python -m unittest test_demographics_registry.TestKeptScalesScript test_gen_demographics`
-Expected: FAIL. The `_raw_blocks` file is missing, then `KeyError: 'te_dg_bz'`; the generator test fails on `te_demog_k_kept_scale_min`.
+Run: `.venv/bin/python -m unittest test_demographics_registry.TestCohortScript test_gen_demographics`
+Expected: FAIL. The new file is missing (`_raw_blocks` raises on the path), then `KeyError: 'te_dg_bz'`; the generator test fails on `te_demog_k_kept_scale_min`.
 
 - [ ] **Step 3: Generate the constants**
 
@@ -1384,10 +1381,13 @@ te_debug_demog_rate_lines = {
 ```
 
 - **Option n in `te_debug_demog_events.txt`:** the click-guard pattern of option m, with `trigger = { exists = capital }` and `capital = { te_debug_demog_rate_lines = yes }` inside the guard.
-- **Loc keys:** `te_debug_demog.1.n` = "Census rates: log our capital's births and deaths terms" and `.n.tt`, in option l's register:
-  - what each field is;
-  - that read_b less applied_b less fast_b is the kept state-level terms;
-  - that eb against cbr_model × people / 1,000 is the step's births scale.
+- **Loc keys** (`te_events_l_english.yml`, beside option m's):
+
+```yaml
+ te_debug_demog.1.n:0 "Census rates: log our capital's births and deaths terms"
+ te_debug_demog.1.n.tt:0 "Writes a TE_DEMOG_RATES line to debug.log for our capital. mb and md are the census's births and deaths terms; applied_b and applied_d are the ones in force (0 when the modifier is off); fast_b and fast_d are fast mode's. read_b and read_d are the state's whole birth and mortality totals: read less applied less fast is what the base game and events add on top. cbr_model and cdr_model are the census's own rates per 1,000 people; eb and ed are the births and deaths the engine was expected to produce over the last year. eb against cbr_model × people / 1,000 gives bz, the scale the census applied to its own births at its last step, and dz the same for deaths. clamped is 1 when a term hit its limit."
+```
+
 - **Test** (`TestConsole`): `test_option_n_logs_the_rates_click_only`, the same shape as option m's. It asserts the call is click-guarded and that every `te_dg_dbg_*` the effect sets is removed.
 
 - [ ] **Step 10: Run everything and the audits**
@@ -1511,8 +1511,9 @@ Built to the recommendations in §3 (a). Each owner ruling changes one row of `P
 **Files:**
 - Modify: `common/laws/modified_health_system.txt` (inverse lines inside the three existing `institution_modifier` INJECTs)
 - Modify: `common/laws/te_demog_law_injections.txt` (child labour inside the existing `INJECT:law_child_labor_allowed`; new INJECTs for `law_restricted_child_labor` and the four women's-rights laws)
-- Modify: `common/laws/extra_laws.txt` (remove the family-policy laws' birth lines; the augmentation laws' mortality lines become chronic treatment)
-- Modify: `common/technology/technologies/era_6.txt`, `era_7.txt` (remove `modern_vaccines`', `antibiotic_mass_production`'s, `contraceptive_pill`'s and `second_wave_feminism`'s lines), `era_8.txt` (`sexual_revolution`)
+- Modify: `common/laws/extra_laws.txt` (remove State-Sponsored Family Planning's and Protected Class's birth lines; the augmentation laws' mortality lines become chronic treatment)
+- Modify: `common/technology/technologies/era_6.txt`, `era_7.txt` (remove `modern_vaccines`', `antibiotic_mass_production`'s and `contraceptive_pill`'s lines)
+- Modify: `localization/english/te_miscellaneous_l_english.yml` (the three augmentation laws' institution tooltips, which state the old −2% mortality a level)
 - Modify: `common/institutions/extra_institutions.txt` (Consumer Protection's −0.01)
 - Modify: `scripts/analysis/demographics_params.py` (`TREATMENT_CAP["chronic"] = 0.85`; the line tables), `scripts/analysis/demographics_modifiers.py` (`engine_rate_lines`)
 - Test: `test_demographics_modifiers.py` (new class `TestEngineRateLines`), `test_demographics_harness.py` (the medicine scenarios stay in band)
@@ -1550,7 +1551,10 @@ class TestEngineRateLines(unittest.TestCase):
                                   ("law_child_labor_allowed", "modifier", "state_peasants_mortality_mult"),
                                   ("law_restricted_child_labor", "modifier", "state_laborers_mortality_mult"),
                                   ("law_no_womens_rights", "modifier", "state_birth_rate_mult"),
-                                  ("law_women_in_the_fields", "modifier", "state_birth_rate_mult")):
+                                  ("law_women_in_the_fields", "modifier", "state_birth_rate_mult"),
+                                  ("law_women_in_the_workplace", "modifier", "state_birth_rate_mult"),
+                                  ("law_womens_suffrage", "modifier", "state_birth_rate_mult"),
+                                  ("law_protected_class", "modifier", "state_birth_rate_mult")):
             self.assertAlmostEqual(self.lines.get(("law", law, block, field), 0.0), 0.0, msg=(law, field))
 
     def test_the_kept_carriers_exist(self):
@@ -1582,9 +1586,12 @@ In `demographics_params.py`:
 # Phase 2 step 4, owner call (a): carriers whose birth or mortality lines stay on top of the census's term
 # (plan §3). Every other law, technology or institution line nets to zero (Task 6's removals and INJECTs).
 ENGINE_LINES_KEPT = frozenset({
+    # the family-policy laws §8.1 has yet to re-express as census terms
+    "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
+    # late-era lines with no census term; revisit with step 6
     "law_legal_limbo", "law_basic_protections", "law_comprehensive_rights", "law_full_equality_and_protection",
-    "law_protected_class", "law_state_eugenics_program", "mental_health_awareness", "biological_immortality",
-    "mind_backups",
+    "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution", "mental_health_awareness",
+    "biological_immortality", "mind_backups",
 })
 ```
 
@@ -1644,6 +1651,8 @@ In `modified_health_system.txt`, inside each existing `institution_modifier`:
 
 Add one header line: "state_mortality_mult / state_mortality_wealth_mult: vanilla's lines cancelled; the census's access × treatment replaces them (demographics phase 2 step 4)".
 
+These are the same three INJECT blocks that already cancel vanilla's `state_pollution_reduction_health_mult` (drugs phase 2: +0.1, +0.1, +0.15 against vanilla's −0.1, −0.1, −0.15). The cancel shape is live on these exact entities, not only verified elsewhere.
+
 In `te_demog_law_injections.txt`:
 
 ```
@@ -1698,10 +1707,13 @@ Before adding a new `INJECT:` for a law, check that no other mod file INJECTs it
 - [ ] **Step 5: §8.4's removals and augmentation's chronic lines**
 
 Delete these lines (each with its comment, if it has one of its own):
-- `extra_laws.txt:2693, 2708, 2722, 2736` (the family-policy laws' `state_birth_rate_mult`);
+- `extra_laws.txt:2708` (State-Sponsored Family Planning's `state_birth_rate_mult`; its Fertility Control +0.1 stays);
+- `extra_laws.txt:4138` (Protected Class's `state_birth_rate_mult`, with the women's-rights row of call (a));
 - `era_6.txt:430-431` (`modern_vaccines`) and `era_7.txt:485-486` (`antibiotic_mass_production`): `state_mortality_mult` and `state_birth_rate_mult`;
-- `era_7.txt:505` (`contraceptive_pill`), `era_7.txt:530` (`second_wave_feminism`) and `era_8.txt:283` (`sexual_revolution`);
+- `era_7.txt:505` (`contraceptive_pill`);
 - `extra_institutions.txt:159` (Consumer Protection).
+
+Pro-Natalist Subsidies, Population Control Measures and Communal Child Rearing keep their birth lines (`ENGINE_LINES_KEPT`) until §8.1 gives them census terms.
 
 In the four augmentation laws (`extra_laws.txt:1684, 1727, 1766, 1802`):
 - Replace `state_mortality_mult` with `state_chronic_treatment_add`: +0.10 for Medical Only, +0.05 for the other three.
@@ -1710,6 +1722,19 @@ In the four augmentation laws (`extra_laws.txt:1684, 1727, 1766, 1802`):
 Set `TREATMENT_CAP["chronic"] = 0.85` in `demographics_params.py` and regenerate (`gen_demographics.py`).
 
 Before deleting, re-read each line number against the file (`sed -n '<n>p'`): the numbers are main 85a23d47's.
+
+**Prose that states the removed figures** (memory: loc promises the code doesn't deliver):
+- `LAW_MEDICAL_AUGMENTATION_ONLY_INSTITUTION_MODIFIER_TT`, `LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT` and `LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT` (`te_miscellaneous_l_english.yml:460-465`) each list `#g -2%#! $state_mortality_mult$` a level. Replace that line with the chronic treatment line: `#g +5%#! $state_chronic_treatment_add$`, or +10% for Medical Only.
+- Then sweep for the rest:
+
+```bash
+git grep -n -i "birth\|mortality" -- localization/english/ | grep -i "pill\|family_planning\|vaccine\|antibiotic_mass\|consumer_protection\|augmentation\|protected_class\|womens_rights\|women_in_the\|health_system\|health_insurance\|child_labor"
+grep -n -i "pill\|family planning\|vaccin\|antibiotic\|consumer protection\|protected class\|health insurance\|child labo" docs/player_guide/*.md | grep -i "birth\|mortal\|death\|%"
+```
+
+- Every hit that states a removed or cancelled line is fixed in this task. 2026-10-10's sweep found only the three tooltips, plus two player-guide lines that stay true:
+  - `06-politics.md:25`: the family-policy laws move birth rates. They still do: three keep their lines, and State-Sponsored Family Planning works through Fertility Control.
+  - `06-politics.md:428`: Consumer Protection lowers mortality. It still does, through the census's external causes.
 
 - [ ] **Step 6: Run the carriers, medicine and fertility checks**
 
@@ -1728,7 +1753,7 @@ Expected:
 - [ ] **Step 7: Commit**
 
 ```bash
-git add common/laws/modified_health_system.txt common/laws/te_demog_law_injections.txt common/laws/extra_laws.txt common/technology/technologies/era_6.txt common/technology/technologies/era_7.txt common/technology/technologies/era_8.txt common/institutions/extra_institutions.txt common/script_values/te_demog_generated_values.txt scripts/analysis/demographics_params.py scripts/analysis/demographics_modifiers.py test_demographics_modifiers.py
+git add common/laws/modified_health_system.txt common/laws/te_demog_law_injections.txt common/laws/extra_laws.txt common/technology/technologies/era_6.txt common/technology/technologies/era_7.txt common/institutions/extra_institutions.txt localization/english/te_miscellaneous_l_english.yml common/script_values/te_demog_generated_values.txt scripts/analysis/demographics_params.py scripts/analysis/demographics_modifiers.py test_demographics_modifiers.py
 git commit -m "Demographics phase 2 step 4: the lines the census replaces come off (spec 8.4, vanilla's health, child-labour and women's-rights lines)"
 ```
 
@@ -1895,7 +1920,7 @@ Uses #857's `state_inputs`, `save_year` and timed-modifier reader.
 - Produces:
   - `predict_state(pops, cbr, cdr, devastation, d, keep_slope=False) -> dict` with `people`, `births`, `deaths`, `target_births`, `target_deaths`, `kept_deaths`, `m_b`, `m_d`, `clamped`, `slope_deaths`. `pops` is a list of `(size, sol, literacy, food_security)`; the rates are per 1,000.
   - `predicted_multiple(points, to_year) -> float`.
-  - CLI: `demographics_harness.py predict SAVE... [--keep-slope] [--to-year 1900] [--check-modifiers] [--json]`.
+  - CLI: `demographics_harness.py predict SAVE... [--census-rates] [--keep-slope] [--to-year 1900] [--check-modifiers] [--json]`.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -2009,10 +2034,10 @@ def predicted_multiple(points, to_year):
 `cmd_predict`, for each save:
 1. **Read** `S.read_sections(path)`, `S.read_variables(path, (), ("te_dg_cbr_model", "te_dg_cdr_model", "te_dg_cbr", "te_dg_cdr", "te_dg_mb", "te_dg_md"))` and `save_year`.
 2. **Group the pops** by state, as `(size, SoL, num_literate / size, food_security or 1.0)`.
-3. **Take each state's census rates:**
-   - `te_dg_cbr_model`/`te_dg_cdr_model` where present (a phase-2 save);
-   - else `te_dg_cbr`/`te_dg_cdr` (a phase-1 save: the census's figures are the model's);
-   - else `M.model_crude_rates(inputs_for(st, carriers, incorporated=inc))` (#857's `state_inputs`).
+3. **Take each state's census rates from the current model:** `M.model_crude_rates(inputs_for(st, carriers, incorporated=inc))`, with #857's `state_inputs` (each state's own SoL, literacy, urban share, crowding and incorporation).
+   - These are the stable-population rates of the model as it stands now, which is also what #857's `history` reasons from, so the two commands agree.
+   - **Not the save's own census rates by default.** A save's `te_dg_cbr`/`te_dg_cdr` were written by the build that made it. The gate saves predate #855, so their rates are the old ×1.15-switch model without the poverty term, and the offline gate would run against stale calibration.
+   - `--census-rates` reads the save's stored rates instead (`te_dg_cbr_model`/`te_dg_cdr_model`, else `te_dg_cbr`/`te_dg_cdr`), for a save from the build under test. It also takes the ring's real age structure, where the default takes the stable one.
 4. **Sum by owner tag;** print the world line.
 5. **Print each country of 20M or more:** people, census growth, predicted growth, kept deaths per 1,000, clamped. Flag those whose predicted growth is below 0.
 6. **`--keep-slope`:** also prints the slope's cost. This is the reproducible version of §1's table.
@@ -2124,6 +2149,7 @@ Expected: `OK`, no ruff findings, no audit failures. `predict` on the six gate s
 .venv/bin/python scripts/analysis/demographics_observer_report.py LOGS... --closed-borders SAVES...
 .venv/bin/python scripts/analysis/demographics_harness.py replay LOG_WITH_OPTION_A_BLOCKS
 .venv/bin/python scripts/analysis/demographics_harness.py predict SAVE_AFTER_A_WAR --check-modifiers
+.venv/bin/python scripts/analysis/demographics_harness.py predict --census-rates FAST_RUN_SAVES...
 ```
 
 **The gate:**
