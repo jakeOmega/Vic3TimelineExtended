@@ -24,18 +24,20 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
   +0.3% by 1887, Maddison's peacetime pace. Every medicine and fertility anchor stays in its band as defined, though
   they barely test the term. The West pays: Britain 1837 36 (history 41; 38 with neither term) and Denmark 34 (41; 39).
 - `demographics_harness.py history SAVE... --anchors CSV` and `scripts/analysis/fetch_history_anchors.py`.
-- **The crowding term.** Main's census multiplies infection by 1.15 in any state carrying `migration_crowding`, a
-  switch that covers 91% of the world's people at any multiplier. The first fit left it out (×2 then); the harness now
-  reads it from saves, and its figures match the fast-mode run's census at its next step exactly. Owner, 2026-10-10:
-  a function of how crowded the state is, not a switch. Infection now rises by the state's migration penalty from
+- **The crowding term.** Main's census multiplies infection by 1.15 in any state carrying `migration_crowding` (unless
+  its owner has a Ministry of Urban Planning), a switch that covers 91% of the world's people at any multiplier. The
+  first fit left it out (×2 then); the harness now reads it from saves, and with main's switch its figures matched the
+  fast-mode run's census at its next step exactly (the continuous term hasn't run in game yet). Owner, 2026-10-10: a
+  function of how crowded the state is, not a switch. Infection now rises by the state's migration penalty from
   crowding (0.1 × the multiplier the crowding refresh applied, at most +50%), and the Ministry of Urban Planning works
   through the crowding instead of exempting the state. That is +3% on infection in 1837 on average, +11% by 1949.
-- **Owner calls:**
+- **Owner calls, all approved as built (2026-10-10):**
   - the strength. ×1.75 at SoL 5 is built (with c = 1); ×2 brings world growth to history's band but shrinks China
     by the 1880s in the gate game;
   - c, the share of the migration penalty infection rises by: 1 is built, 2 fits with ×1.5 (the results doc's table);
   - the Ministry of Urban Planning: it used to exempt a state from crowding's deaths entirely, and now lowers them
-    through its +10% tolerance a level (China's +5% becomes +4% at level 1 and +1.6% at level 5);
+    through its +10% tolerance a level (a state at China's mean density: +5.2% becomes +4.0% at level 1 and +1.6% at
+    level 5);
   - stage 1's medicine fit was made with crowding off. At the world's mean penalty of 1887 (0.07), India 1975 and
     "medicine, no health system" fall 0.2–1 year under their bands; refit them or accept it.
 
