@@ -152,4 +152,20 @@ gui_state_hidden_modifier_count = {
 		limit = { has_modifier = te_map_mode_overlay }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_demog_census_births_up }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_births_down }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_deaths_up }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_deaths_down }
+		add = 1
+	}
 }
