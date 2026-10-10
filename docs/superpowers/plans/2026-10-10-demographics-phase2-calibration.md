@@ -132,7 +132,12 @@ census's world medians by SoL band (§2.3's table is the starting point).
 - West 1950 reads 60–63 against about 66–69 (the medicine scenarios' band starts at 60 for this reason). Young adults'
   chronic and external base rates are 1836's.
 - World growth in 1949 reads +1.4% against history's +1.8%.
-- Fit against Clio Infra's life expectancy for 1900–1990 on the late game's saves.
+- Fit against Clio Infra's life expectancy for 1900–1990. **Not on the owner's 1949 save** (checked 2026-10-10): that
+  game diverged too far from history for per-country anchors. France holds 229M people after the French Commune's
+  conquests, Britain sits at SoL 15 with life expectancy 49, and Japan at SoL 5.8 with 35. Use the medicine
+  scenarios' assumed inputs for the West, and a normal-speed observer run to 1950 for the world line. Fast mode
+  doesn't speed standard of living or literacy, so its 20th century is a poor 19th-century society with modern
+  medicine.
 
 ## The gate
 
