@@ -1312,7 +1312,7 @@
  state_monthly_loyalists_add:0 "Monthly [Concept('concept_loyalist','$concept_loyalists$')]"
  state_monthly_loyalists_add_desc:0 "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists$')] each month, in incorporated [Concept('concept_state','$concept_states$')] only."
  state_natural_fertility_mult:0 "Natural Fertility"
- state_natural_fertility_mult_desc:0 "How many children women have before any family planning, through who marries and how young. Women's legal standing moves it: where they can own property, work and vote, marriage comes later. Used by the census on the Demographics tab."
+ state_natural_fertility_mult_desc:0 "How many children women have before any family planning, through who marries and how young. Women's legal standing and their work move it: where women work the fields, own property, hold jobs or vote, they marry later. Used by the census on the Demographics tab."
  state_nuclear_weapon_defense_chance_add:0 "[concept_nuclear_strike] Defense Chance"
  state_nuclear_weapon_defense_chance_add_desc:0 "The chance of successfully defending a [Concept('concept_state','$concept_state$')] against a [concept_nuclear_strike]."
  state_pollution_generation_mult:0 "Generated [concept_pollution_system]"

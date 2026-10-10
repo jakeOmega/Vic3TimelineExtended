@@ -15,6 +15,9 @@
 # help, matching the in-fiction reception of "cultural projection".
 # Mod-added laws (lawgroup_right_to_information, lawgroup_LGBTQ_rights) are
 # edited directly further down in this file rather than via INJECT.
+# The rights-of-women INJECTs also carry the demographics census's lines (phase 2
+# step 4): its natural fertility (state_natural_fertility_mult) and the inverse
+# lines that cancel vanilla's state_birth_rate_mult, which the census absorbs.
 # ============================================================================
 
 # ---- lawgroup_trade_policy ----
@@ -75,6 +78,7 @@ INJECT:law_closed_borders = {
 }
 
 # ---- lawgroup_rights_of_women ----
+# cultural pull, the census's natural fertility and the cancels of vanilla's birth lines (demographics phase 2 step 4)
 INJECT:law_womens_suffrage = {
 	modifier = {
 		country_cultural_pull_mult = 0.03

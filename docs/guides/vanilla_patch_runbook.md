@@ -249,6 +249,20 @@ grep -n 'autonomy_level\|^subject_type' "$BG/common/subject_types/"*.txt
 
 The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). All three cancels rest on INJECT blocks summing with vanilla's, which is confirmed in game for every shape the mod uses (ranks and techs 2026-09-19, laws and flat keys 2026-09-20); see `scripting_best_practices.md` § INJECT.
 
+**Demographics phase 2 step 4 cancels the vanilla birth and mortality lines the census absorbs** (`docs/systems/mod_systems.md` § Demographics → The census's births and deaths; plan `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`). The census carries their effect through its own terms, so each vanilla line is cancelled by an exact inverse INJECT. `test_demographics_modifiers.TestEngineRateLines` reads `vanilla_parsed/` against the mod and fails when a line no longer nets to zero, and `test_the_natural_fertility_sizes_follow_the_owners_rule` fails when a women's-rights line moves without the census's natural-fertility term following it; refresh the snapshot first (`python3 vanilla_parsed.py build`).
+
+| Vanilla (under `$BG/game/`, 1.14.5) | Value the mod assumes | Mod side | If vanilla changes it |
+|---|---|---|---|
+| `common/laws/01_health_system.txt` — `law_charitable_health_system` `institution_modifier` :41, `law_private_health_insurance` :90, `law_public_health_insurance` :117 | `state_mortality_mult = -0.03` a level; `state_mortality_wealth_mult = -0.002` a level; `state_mortality_mult = -0.05` a level | the inverse lines inside the three existing `institution_modifier` INJECTs in `common/laws/modified_health_system.txt` | a residual mortality line a level of the Ministry of Health, counted on top of the census's access × treatment; a **new** health law's line is not cancelled at all |
+| `common/laws/02_childrens_rights.txt` — `law_child_labor_allowed` :13–16, `law_restricted_child_labor` :50–52 | laborers, machinists, farmers and peasants `+0.05`; laborers, farmers and peasants `+0.02` (`state_<type>_mortality_mult`) | the inverse lines in `INJECT:law_child_labor_allowed` and `INJECT:law_restricted_child_labor`, `common/laws/te_demog_law_injections.txt` | a residual class mortality line on top of the census's work term (owner: vanilla's are far too high) |
+| `common/laws/02_rights_of_women.txt` — `law_no_womens_rights` :22, `law_women_in_the_fields` :62 (a variant with its own block), `law_women_in_the_workplace` :143, `law_womens_suffrage` :194 | `state_birth_rate_mult` +0.05, −0.10, −0.05, −0.05 | the inverse lines in the women's-rights INJECTs, `common/laws/extra_laws.txt` (`# ---- lawgroup_rights_of_women ----`); the census's `state_natural_fertility_mult` there is vanilla's line re-centred on No Women's Rights | a residual birth line on top of the census's natural fertility, and the natural term no longer re-centred on vanilla's ladder (`NATURAL_FERTILITY_BY_LAW`) |
+
+```bash
+grep -n 'state_mortality_mult\|state_mortality_wealth_mult' "$BG/common/laws/01_health_system.txt"
+grep -n '_mortality_mult' "$BG/common/laws/02_childrens_rights.txt"
+grep -n 'state_birth_rate_mult' "$BG/common/laws/02_rights_of_women.txt"
+```
+
 **Power bloc principle slots copy two vanilla texts whole.** `common/scripted_rules/00_scripted_rules.txt` is a full copy of vanilla's file (`scripted_rules` is not an `INJECT`/`REPLACE` type), with slot rules 3 and 4 rewritten and marked `# TE:`; `REPLACE:principle_freedom_of_movement_1` in `extra_power_bloc_principles.txt` is vanilla's principle plus one line. When a patch touches either (`git diff vanilla_parsed/common/principles.json`, the digest's file list for `00_scripted_rules.txt`), re-copy it and re-apply the mod's lines, then re-run `gen_pb_principle_slots.py`. A new vanilla principle needs nothing by hand: the generator gives it the limit, and `test_pb_principle_slots.py` fails until it has.
 
 ## 7. Special-case: combat units / ship types

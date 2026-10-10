@@ -6,6 +6,8 @@
 # lines sit inside their existing blocks in modified_health_system.txt.
 # Phase 2 step 4: the child-labour blocks also carry inverse lines that cancel vanilla's class
 # mortality lines. Those the engine does apply; the census's work term absorbs what they did.
+# The women's-rights laws' natural fertility and the cancels of their birth lines sit in their
+# existing INJECTs in extra_laws.txt (# ---- lawgroup_rights_of_women ----).
 
 INJECT:law_local_police = {
 	modifier = {

@@ -25,6 +25,7 @@ and the urban planning institution acts through crowding tolerance rather than a
 | `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
 | `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `state_contraception_add`: added to the traditional 0.4, the sum scaled by literacy | the techs' `modifier`, with feminism added (owner, 2026-10-10) | 2 |
 | `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `state_fertility_means_add` (`country_fertility_means_add` renamed) | the law's `modifier`; Family Limitation's static modifier | 2 |
+| vanilla's women's-rights birth lines (engine, until phase 2 step 4) | `state_natural_fertility_mult`: multiplies the wealth term before the means, floored at 0.2 | the women's-rights laws' `modifier` (INJECT on the base game's, in place on Protected Class), at vanilla's lines re-centred on No Women's Rights (owner call (d), 2026-10-10) | phase 2 step 4 |
 | `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
 | `FAMILY_TRANSPORT_TECHS` | `country_family_migration_add` | the three techs' `modifier` | 3 |
 | `LAND_TENURE` (× the state's agrarian share) | `country_land_concentration_add` | the land reform laws, each variant with its own line (as the generator expands them today) | 3 |
@@ -35,7 +36,7 @@ vanilla's `state_working_adult_ratio_add` on Women in the Workplace is a differe
 
 ## Ruling: every type in state scope (owner, 2026-10-10)
 
-All seven types are `state_*`, one for each term, and the census reads each with `modifier:` in state scope.
+All eight types are `state_*`, one for each term (seven from stages 1–2, and phase 2 step 4's natural fertility), and the census reads each with `modifier:` in state scope.
 - **Carriers by kind.** A tech's or law's `modifier` carries treatment, and the police, pension and child-labour terms. It reaches every state the country owns, because states inherit country modifiers, the way a law's `state_education_access_add` reaches its states. A law's `institution_modifier` or an institution's own `modifier` carries access, Workplace Safety and Consumer Protection, per investment level and in incorporated states only.
 - **The prefix is convention.** The engine doesn't read it.
 - **Every source shows in one place:** the state's modifier breakdown.
@@ -193,11 +194,12 @@ each shows one in its tooltip. It ranked by distance outside the bands, then by 
 
 ## Not decided here
 
-- **The human augmentation laws (owner, 2026-10-10).** Medical Augmentation Only also links the Ministry of Health, but it gets no access line: access is how many people reach care, and the health law sets that. All four augmentation laws already cut engine mortality: Unrestricted −5% flat; Medical Only, Regulated Market and Mandatory −2% a level of their institutions. When phase 2 moves engine mortality into the census, they become census lines together, as chronic treatment, which reaches only as far as access does. A starting point: Medical Augmentation Only +0.10, Unrestricted and Regulated Market +0.05, with the chronic cap raised from 0.8 to about 0.85. Giving Medical Only alone a line now would make it the census's best choice without anyone deciding so.
+- **The human augmentation laws (owner, 2026-10-10). Decided in phase 2 step 4.** Medical Augmentation Only also links the Ministry of Health, but it gets no access line: access is how many people reach care, and the health law sets that. The four laws' engine mortality (Unrestricted −5% flat; Medical Only, Regulated Market and Mandatory −2% a level of their institutions) became census lines together, as **flat** chronic treatment in each law's `modifier`, which reaches only as far as access does: Medical Augmentation Only +0.10, Unrestricted, Regulated Market and Mandatory +0.05 (Mandatory's value: owner, 2026-10-10), with the chronic cap raised from 0.8 to 0.85. Flat, not per level: +0.10 a level would reach the cap at Ministry of Health level 5. On Rich today's inputs the lines give +2.4, +1.1 and +1.1 years of life expectancy, near the old lines' effect; with no health system Unrestricted gives +0.1 (`demographics_harness.py medicine`).
 
-- **Phase 2's double counting.** Once the model drives the engine's deaths (§8.4), vanilla's own Public Health
-  Insurance mortality cut and the mod's medical techs' flat cuts count twice. §8.4 already removes the mod's. Vanilla's
-  would need an inverse INJECT (the monetary pattern). That is phase 2's call.
+- **Phase 2's double counting. Decided in phase 2 step 4:** the mod's flat cuts come off (§8.4), and vanilla's health
+  laws' mortality lines are cancelled by inverse INJECTs inside their existing `institution_modifier` blocks
+  (`modified_health_system.txt`; the same-field cancel was confirmed in game, owner, 2026-10-10), as are child labour's
+  class lines and the women's-rights birth lines (`docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`).
 - **Save compatibility.** A game saved before a stage reads the new modifiers on load, and its rates move once at the
   next step. No migration.
 
