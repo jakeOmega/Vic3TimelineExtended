@@ -94,6 +94,27 @@ LAND_TENURE = {
     "law_peasant_proprietorship": -10, "law_collectivized_agriculture": -20,
 }
 
+# ---- Mortality inputs as modifier types (modifier-types design, stage 1) -----------
+# Laws, technology and institutions reach the census's causes of death only through these
+# registered types (common/modifier_type_definitions/demographics_modifier_types.txt); their
+# values sit on their carriers in the game files, and demographics_modifiers.py resolves a
+# state's totals. Country types are carried by techs' and laws' modifier blocks and read
+# through the owner; state types by a law's institution_modifier or an institution's own
+# modifier, per investment level, in incorporated states only.
+ACCESS_TYPE = "state_health_care_access_add"
+MEDICINE_CAUSES = ("infection", "maternal", "chronic")
+TREATMENT_TYPE = {cause: f"country_{cause}_treatment_add" for cause in MEDICINE_CAUSES}
+# The plain per-cause multipliers: each cause sums its types inside one (1 + total).
+MORTALITY_TYPES = {
+    "external": ("country_external_mortality_mult", "state_external_mortality_mult"),
+    "work": ("country_work_mortality_mult", "state_work_mortality_mult"),
+    "chronic": ("country_chronic_mortality_mult",),
+}
+DEMOG_MORTALITY_TYPES = (
+    ACCESS_TYPE, *TREATMENT_TYPE.values(),
+    *MORTALITY_TYPES["external"], *MORTALITY_TYPES["work"], *MORTALITY_TYPES["chronic"],
+)
+
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 TECH_MULT = {
     "infection": {"medical_degrees": 0.9, "pharmaceuticals": 0.85, "modern_nursing": 0.85,

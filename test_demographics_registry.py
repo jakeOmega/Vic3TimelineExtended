@@ -2636,3 +2636,39 @@ class TestFastMode(unittest.TestCase):
             got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
             got.pop("icon")
             self.assertEqual(got, dict.fromkeys(fields, "1"), name)
+
+
+TYPES_FILE = ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt"
+MODIFIERS_LOC = ROOT / "localization" / "english" / "te_modifiers_l_english.yml"
+ENGINE_MODIFIERS = ROOT / "docs" / "engine" / "modifiers_summary.txt"
+
+
+class TestModifierTypes(unittest.TestCase):
+    """Stage 1 of the modifier-types design: every mortality input is a registered, named type."""
+
+    def test_every_type_is_registered_script_only(self):
+        text = _text(TYPES_FILE)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            body = _block(text, name)
+            self.assertIn("script_only = yes", body, name)
+            self.assertRegex(body, r"decimals = \d", name)
+
+    def test_every_type_has_a_name_and_a_description(self):
+        loc = _text(MODIFIERS_LOC)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
+            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"", name)
+
+    def test_no_type_is_an_engine_modifier(self):
+        engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        self.assertIn("state_mortality_mult", engine)   # the list is the one this reads
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertNotIn(name, engine, name)
+
+    def test_scope_follows_the_prefix(self):
+        self.assertEqual(len(set(P.DEMOG_MORTALITY_TYPES)), 9)
+        for name in P.DEMOG_MORTALITY_TYPES:
+            self.assertTrue(name.startswith(("country_", "state_")), name)
+        self.assertTrue(P.ACCESS_TYPE.startswith("state_"))
+        for name in P.TREATMENT_TYPE.values():
+            self.assertTrue(name.startswith("country_"), name)
