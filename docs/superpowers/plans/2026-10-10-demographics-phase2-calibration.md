@@ -19,12 +19,21 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 ## Step 1 (built): poverty and the history check
 
-- Infection ×(1 + clamp((9 − SoL) / 4, 0, 1)), state by state: world life expectancy 31–32 (from 37–39), world growth
-  about 1.0% a year (from 1.7%), China +0.3% by 1887. Every medicine and fertility anchor stays in its band, though they
-  barely test the term. The West pays a little: Britain 1837 36 (history 41), Denmark 33 (41).
+- Infection ×(1 + 0.5 × clamp((9 − SoL) / 4, 0, 1)), state by state, with each state's crowding term as the save
+  holds it: world life expectancy 31–32 (from 34.5–36.6), world growth about 1.05% a year (from 1.45%), China +0.7% by
+  1887. Every medicine and fertility anchor stays in its band as defined, though they barely test the term. The West
+  pays, mostly through crowding: Britain 1837 34 (history 41), Denmark 33 (41).
 - `demographics_harness.py history SAVE... --anchors CSV` and `scripts/analysis/fetch_history_anchors.py`.
-- **Owner call:** the strength. ×2 at SoL 5 is built; ×2.25–×3 bring world growth to history's 0.6–0.85% but make China
-  shrink by the 1880s in the gate game (the table in the results doc).
+- **The crowding term.** The census's ×1.15 on infection in a state carrying `migration_crowding` covers 91% of the
+  world's people, three-quarters of them in states under 20% urban, because Migration Crowding goes on any state above
+  its floor density at any multiplier. The first fit left it out (×2 then); the harness now reads it from saves, and its
+  figures match the fast-mode run's census exactly.
+- **Owner calls:**
+  - the strength. ×1.5 at SoL 5 is built; ×1.75–×2 bring world growth to history's 0.6–0.85% but slow China to +0.2%
+    or shrink it by the 1880s in the gate game;
+  - whether crowding stays near-universal or becomes a city term (multiplier 0.1 or more, or urban share 0.2 or more).
+    A city term moves the fitting strength up by about a quarter (the results doc's table);
+  - if it stays near-universal, stage 1's medicine fit needs redoing with it on: four of its anchors fall out of band.
 
 ## Step 2: fertility against history
 
@@ -38,7 +47,7 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 ## Step 3: the gap the game's inputs can't see (India, the tropics)
 
-- India grows +1.5% a year in the model against +0.8% in history, at life expectancy 35 against 24. Nothing in its
+- India grows +1.3% a year in the model against +0.8% in history, at life expectancy 34 against 24. Nothing in its
   inputs (SoL 8.4, literacy 0.19) separates it from Russia or Spain.
 - **To look at, in this order:**
   1. The base game's harvest conditions, `disease_outbreak` among them, which `pharmaceuticals` reduces. If they raise
@@ -65,7 +74,7 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
     are stored, and the bare curves are the walk's locals `te_dg_w_eb0` and `te_dg_w_ed0`, which fast mode already
     reads.
 - **The bare curve's starving slope.** Below SoL 4 the engine's mortality curve climbs steeply
-  (`extra_defines.txt`), and M nets the bare curve out. So the model's poverty term, ×2 at SoL 5 and below, would
+  (`extra_defines.txt`), and M nets the bare curve out. So the model's poverty term, ×1.5 at SoL 5 and below, would
   replace that slope. Either keep the slope by adding it to K (the starving pop's extra over its curve at SoL 5), or
   let the model's term stand in for it.
 - **The clamp:** the engine stops births at a total near −1 (probe: −0.9 holds, −3 stops), so M ≥ −0.9 less the
