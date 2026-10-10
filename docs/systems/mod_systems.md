@@ -1003,8 +1003,9 @@ Key gotchas:
 ### Enforce Emissions Reduction Treaty
 
 - **Article key:** `enforce_emissions_reduction` in `common/treaty_articles/109_enforce_emissions_reduction.txt`.
-- **Purpose:** Forces a **market leader** to maintain all major greenhouse-gas mitigation policies while the treaty is active.
-- **Visibility and targeting:** Only visible once warming is active (`temperature_anomaly_display > 0.1`), and only targetable if `scope:other_country` is a market leader (`market_capital.owner = scope:other_country`).
+- **Purpose:** Forces its source country, market leader or member, to maintain seven national greenhouse-gas mitigation policies while the treaty is active.
+- **Visibility and targeting:** Only visible once warming is active (`temperature_anomaly_display > 0.1`); signable from 0.5 °C against a source holding the climate journal entry.
+- **Technology gate:** the source must have researched every technology the forced policies need (`gw_has_emissions_treaty_technologies`: `clean_energy_technologies`, `pollution_control`, `modern_urban_planning`), checked in `possible` (ROOT is the source) and again in `can_ratify` through `scope:source_country`. The treaty overrides the policies' warming thresholds (it forces Fossil-Fuel Divestment below 1.0 °C) but not their technology gates, so it never installs, say, Renewable Investment in a country that cannot build renewable plants. `test_gw_policy_tech_gates.py` keeps the list equal to the gates of the policies `non_fulfillment` names.
 - **Enforcement mechanism:**
   - `on_entry_into_force` applies market-wide mitigation modifiers (`carbon_tax_modifier`, `renewable_investment_modifier`, `emission_standards_modifier`) and country-level mitigation modifiers (`reforestation_subsidies_modifier`, `public_transit_modifier`, `fossil_fuel_divestment_modifier`, `green_building_codes_modifier`) to the source country context.
   - Sets country variable `has_emissions_reduction_treaty` used by GW scripted buttons.
