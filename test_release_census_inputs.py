@@ -1,0 +1,143 @@
+"""scripts/release/comment_out_census_inputs.py: a release build with the census off.
+
+The census reads nine script-only modifier types from techs, laws, institutions and a
+static modifier; their lines render on those tooltips although the engine never applies
+them. A release that ships without the census runs the script on its release branch
+(never on main). The test runs it on a copy of common/ and events/ and checks the build
+it leaves: no line sets a census type, nothing else is touched, the files still parse,
+the gates read always = no and the rule is gone.
+"""
+import importlib.util
+import re
+import shutil
+import tempfile
+import unittest
+from pathlib import Path
+
+from paradox_file_parser import ParadoxFileParser
+
+REPO = Path(__file__).resolve().parent
+SCRIPT = REPO / "scripts" / "release" / "comment_out_census_inputs.py"
+TAG = "# RELEASE: "
+
+
+def _load():
+    spec = importlib.util.spec_from_file_location("comment_out_census_inputs", SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _code(line):
+    return line.split("#", 1)[0]
+
+
+class ReleaseCensusInputsTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.script = _load()
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.root = Path(cls.tmp.name)
+        for part in ("common", "events"):
+            shutil.copytree(REPO / part, cls.root / part)
+        cls.before = {p: p.read_bytes() for p in cls.root.rglob("*.txt")}
+        cls.script.run(cls.root, check=False)
+        cls.after = {p: p.read_bytes() for p in cls.root.rglob("*.txt")}
+        cls.changed = sorted(p for p in cls.before if cls.before[p] != cls.after[p])
+        cls.types = re.findall(r"^(\w+) = \{", (REPO / cls.script.TYPES_FILE).read_text(encoding="utf-8-sig"), re.M)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def _text(self, rel):
+        return (self.root / rel).read_text(encoding="utf-8-sig")
+
+    def test_no_line_sets_a_census_type(self):
+        carrier = re.compile(rf"^\s*({'|'.join(self.types)})\s*=")
+        for path in self.root.joinpath("common").rglob("*.txt"):
+            if "modifier_type_definitions" in path.parts:
+                continue
+            for n, line in enumerate(path.read_text(encoding="utf-8-sig").split("\n"), 1):
+                self.assertNotRegex(_code(line), carrier, f"{path.relative_to(self.root)}:{n}")
+
+    def test_it_found_the_carriers(self):
+        # the nine types sit on 30 lines today; #869 adds more, never fewer
+        tagged = sum(
+            1 for p in self.changed for line in p.read_text(encoding="utf-8-sig").split("\n")
+            if line.startswith(TAG) and re.match(rf"\s*({'|'.join(self.types)})\s*=", line[len(TAG):]))
+        self.assertGreaterEqual(tagged, 30)
+
+    def test_it_only_comments_lines_out(self):
+        # every changed line is the old line behind the tag, except the gates' always = no
+        for path in self.changed:
+            old = self.before[path].decode("utf-8-sig").split("\n")
+            new = self.after[path].decode("utf-8-sig").split("\n")
+            rest = [line[len(TAG):] if line.startswith(TAG) else line for line in new]
+            rest = [line for line in rest if line.strip() != "always = no"]
+            self.assertEqual(rest, old, path.relative_to(self.root))
+
+    def test_what_else_it_comments_is_dead_with_the_census(self):
+        # outside the census's lines: the entries they leave empty, Family Limitation's
+        # application, the gates' old bodies and the rule
+        census = re.compile(rf"^\s*({'|'.join(self.types)})\s*=")
+        whole_entries = {"common/laws/te_demog_law_injections.txt",
+                         "common/technology/technologies/te_demog_tech_injections.txt"}
+        for path in self.changed:
+            rel = path.relative_to(self.root).as_posix()
+            for line in path.read_text(encoding="utf-8-sig").split("\n"):
+                if not line.startswith(TAG):
+                    continue
+                body = line[len(TAG):]
+                with self.subTest(rel=rel, line=body.strip()):
+                    if census.match(body) or rel in whole_entries:
+                        continue
+                    if rel == "common/history/extra_history.txt":
+                        self.assertIn("add_modifier = { name = te_demog_family_limitation }", body)
+                    else:
+                        self.assertIn(rel, {"common/scripted_triggers/te_demog_triggers.txt",
+                                            "common/game_rules/extra_game_rules.txt"})
+
+    def test_the_injection_files_are_inert(self):
+        for rel in ("common/laws/te_demog_law_injections.txt",
+                    "common/technology/technologies/te_demog_tech_injections.txt"):
+            code = [_code(line).strip() for line in self._text(rel).split("\n")]
+            self.assertFalse([c for c in code if c], rel)
+
+    def test_family_limitation_is_never_applied(self):
+        # its only effect line is a census type, so applied it would show on France doing nothing
+        for path in [*self.root.joinpath("common").rglob("*.txt"), *self.root.joinpath("events").rglob("*.txt")]:
+            code = "\n".join(_code(line) for line in path.read_text(encoding="utf-8-sig").split("\n"))
+            self.assertNotRegex(code, r"name\s*=\s*te_demog_family_limitation\b", path.relative_to(self.root))
+
+    def test_the_gates_read_always_no(self):
+        text = self._text("common/scripted_triggers/te_demog_triggers.txt")
+        for gate in ("te_demog_cohorts_run", "te_demog_effects_run"):
+            body = re.search(rf"^{gate} = \{{(.*?)^\}}", text, re.M | re.S).group(1)
+            self.assertEqual([_code(line).strip() for line in body.split("\n") if _code(line).strip()],
+                             ["always = no"], gate)
+
+    def test_the_rule_is_gone(self):
+        text = self._text("common/game_rules/extra_game_rules.txt")
+        self.assertNotRegex("\n".join(_code(line) for line in text.split("\n")), r"demographics_")
+
+    def test_every_changed_file_still_parses_with_its_bom(self):
+        parser = ParadoxFileParser()
+        for path in self.changed:
+            with self.subTest(path=path.relative_to(self.root)):
+                self.assertEqual(self.after[path].startswith(b"\xef\xbb\xbf"),
+                                 self.before[path].startswith(b"\xef\xbb\xbf"))
+                self.assertFalse(self.after[path].startswith(b"\xef\xbb\xbf\xef\xbb\xbf"))
+                text = path.read_text(encoding="utf-8-sig")
+                code = "\n".join(_code(line) for line in text.split("\n"))
+                self.assertEqual(code.count("{"), code.count("}"))
+                parser.parse_object(parser.tokenize("{" + text + "}"))
+
+    def test_a_second_run_changes_nothing(self):
+        self.script.run(self.root, check=False)
+        again = {p: p.read_bytes() for p in self.root.rglob("*.txt")}
+        self.assertEqual([p for p in again if again[p] != self.after[p]], [])
+
+
+if __name__ == "__main__":
+    unittest.main()

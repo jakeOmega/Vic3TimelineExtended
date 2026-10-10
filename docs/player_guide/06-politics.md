@@ -324,9 +324,9 @@ that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
 heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
-shows what sets the target. With the Demographics rule set to Disabled the tab
-is gone, but Wealth Concentration and all its effects still run and the group's
-description still shows the score.
+shows what sets the target. With the Demographics rule set to Disabled, the
+default, the tab is gone, but Wealth Concentration and all its effects still run
+and the group's description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
 Under Forced Heirship, smallholders have fewer children so the farm is not

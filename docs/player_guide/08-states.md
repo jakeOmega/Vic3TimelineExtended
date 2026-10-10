@@ -230,17 +230,20 @@ uses the ranking.
 
 ## Demographics
 
-Every state keeps a census of its people by single year of age and by sex. It is
-taken when the game starts and again once a year, and it opens a Demographics tab
-in the Population panel, beside the base game's four, and a Demographics subtab
-on the state panel's Population section. In a new game the tab is open from the
-first day; on a save from before the census it stays gray until the census at
-the turn of the year.
+The census is experimental and off by default. To try it, set the Demographics
+(Experimental) game rule to Full or Display only when you start a new game; a
+save from an earlier version of the mod keeps it off.
+
+With it on, every state keeps a census of its people by single year of age and
+by sex. It is taken when the game starts and again once a year, and it opens a
+Demographics tab in the Population panel, beside the base game's four, and a
+Demographics subtab on the state panel's Population section. The tab is open
+from the first day.
 
 The census changes nothing about your population yet. Births, deaths and the
 workforce still follow the base game's rules, and the tab reports what they
-produce. The Demographics game rule has three settings: Full, the default;
-Display only, which for now behaves the same; and Disabled, which removes the
+produce. The Demographics game rule has three settings: Full; Display only,
+which for now behaves the same; and Disabled, the default, which removes the
 census and both tabs. Wealth Concentration and its effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
