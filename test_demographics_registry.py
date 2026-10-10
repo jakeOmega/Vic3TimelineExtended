@@ -1097,11 +1097,12 @@ class TestRatesScript(unittest.TestCase):
     def test_display_only_clears_the_rates(self):
         eng = self._eng(full=False)
         eng.modifiers.update(te_demog_census_births_down=0.2, te_demog_census_deaths_up=0.1)
-        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1)
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1, te_dg_rate_clamped=1.0)
         eng.call("te_demog_rates_refresh")
         self.assertEqual(eng.modifiers, {})
         self.assertNotIn("te_dg_mb", eng.vars)
         self.assertNotIn("te_dg_md", eng.vars)
+        self.assertNotIn("te_dg_rate_clamped", eng.vars, "the census line counts clamped states (Task 9)")
 
     def test_one_refresh_site(self):
         """Only te_demog_rates_apply adds or removes the census's modifiers, and only the two state-ROOT
