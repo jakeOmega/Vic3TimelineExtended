@@ -62,9 +62,9 @@
 #                       te_dg_prev_<name> from the second census on
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
 #                       its outline), stored at the census for the panel's bars
-#   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz
-#                       phase 2 step 4, te_demog_rate_effects.txt: the model's own rates and the
-#                       step's on-top scales
+#   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz, te_dg_eb_target,
+#   te_dg_ed_target     phase 2 step 4, te_demog_rate_effects.txt: the model's own rates, the
+#                       step's on-top scales and the target they were measured against
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -577,6 +577,8 @@ te_demog_seed = {
 	}
 	set_variable = { name = te_dg_bz value = 0 }
 	set_variable = { name = te_dg_dz value = 0 }
+	set_variable = { name = te_dg_eb_target value = 0 }
+	set_variable = { name = te_dg_ed_target value = 0 }
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
 }

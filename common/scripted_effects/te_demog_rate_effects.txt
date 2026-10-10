@@ -14,6 +14,9 @@
 #   te_dg_rate_clamped  1 when the last refresh clamped either term
 #   te_dg_bz, te_dg_dz  the scales the last step used (te_dg_eb or te_dg_ed over the target,
 #                       less 1)
+#   te_dg_eb_target, te_dg_ed_target  that target: the births and deaths the model's rates gave
+#                       at the step's population (0 when the step took no scales), kept for
+#                       console option n, whose line re-derives bz and dz from them
 #   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model  the model's own rates (per 1,000 a year;
 #                       children per woman): the step's events without the on-top scales
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
@@ -27,12 +30,16 @@
 te_demog_on_top_scales = {
 	set_local_variable = { name = te_dg_bz value = 0 }
 	set_local_variable = { name = te_dg_dz value = 0 }
+	set_variable = { name = te_dg_eb_target value = 0 }
+	set_variable = { name = te_dg_ed_target value = 0 }
 	if = {
 		limit = {
 			te_demog_effects_run = yes
 			has_variable = te_dg_cbr_model
 			has_variable = te_dg_cdr_model
 		}
+		set_variable = { name = te_dg_eb_target value = { value = var:te_dg_cbr_model multiply = state_population divide = 1000 } }
+		set_variable = { name = te_dg_ed_target value = { value = var:te_dg_cdr_model multiply = state_population divide = 1000 } }
 		if = {
 			limit = { var:te_dg_cbr_model > 0 }
 			set_local_variable = {

@@ -444,7 +444,8 @@ class TestRateTerm(unittest.TestCase):
         self.assertTrue(clamped)
 
     def test_the_clamp_never_pushes_past_the_terms_on_top(self):
-        """A famine or a plague already past -0.8: M may not push further down."""
+        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
+        not push further down."""
         m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
         self.assertEqual(m, 0.0)
         self.assertTrue(clamped)

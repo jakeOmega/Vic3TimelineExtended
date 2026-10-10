@@ -272,6 +272,7 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 		name = te_debug_demog.1.n
 		trigger = {
 			exists = capital
+			te_demog_cohorts_run = yes
 		}
 		custom_tooltip = {
 			text = te_debug_demog.1.n.tt

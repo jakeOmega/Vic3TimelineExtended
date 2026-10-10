@@ -64,7 +64,7 @@
    - Task 5's `test_fast_and_census_terms_reach_a_joint_fixed_point` pins the fixed point.
 4. **The rule switched from Full to Display only mid-game.** The modifiers and terms come off at the state's next step, and that step takes no on-top scales.
    - Pinned by Task 4's `test_display_only_clears_the_rates` and Task 3's `test_no_on_top_scales_outside_full`.
-5. **Terms added on top that already push a state past −0.8** (a famine, a plague event): M never pushes further down, and never above `RATE_TERM_MAX`.
+5. **Terms added on top that already push a state's read past −0.8** (a plague event, a decree or another state modifier; starvation is per pop and never enters the state read): M never pushes further down, and never above `RATE_TERM_MAX`.
    - Pinned by Task 2's `test_the_clamp_never_pushes_past_the_terms_on_top` and Task 4's `test_script_clamps_like_the_model`.
 
 ## 1. The engine's arithmetic, from evidence
@@ -166,7 +166,7 @@ M never reads a term added on top. The engine applies O whatever its scaling, de
 ### The clamp
 
 - **The floor:** `other + M ≥ RATE_TOTAL_MIN = −0.8`, where other = the state read − M_prev − F_prev. Q7 and the growth probe measured linearity down to −0.9; less literacy's −0.1 at full literacy, that keeps a literate, fed pop inside the measured range (E9–E10).
-- **When the terms on top alone are past −0.8** (a famine, a plague event), the floor is 0: M never pushes a state further down than they do.
+- **When the terms on top alone are past −0.8** (a plague event, a decree or another state modifier), the floor is 0: M never pushes a state further down than they do. Starvation is per pop (E7), so it never enters the state read: a starving pop under a negative M floors at 0, the per-pop floor below.
 - **The ceiling:** `M ≤ RATE_TERM_MAX = +3.0`.
   - Linearity holds far above +1.0 (E10), so this only guards a nonsense target.
   - A state whose model deaths are four times its bare curve's is past anything the census produces in normal play.
@@ -547,7 +547,8 @@ class TestRateTerm(unittest.TestCase):
         self.assertTrue(clamped)
 
     def test_the_clamp_never_pushes_past_the_terms_on_top(self):
-        """A famine or a plague already past -0.8: M may not push further down."""
+        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
+        not push further down."""
         m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
         self.assertEqual(m, 0.0)
         self.assertTrue(clamped)
