@@ -506,13 +506,19 @@ state. The stock is the #822 score.
   - **Not the engine's `wealth_share`:** it has no value form (rejected at load), and it measures political strength
     from wealth, not wealth. Britain's aristocrats pass `value > 0.2` while holding 2.8% of the country's pop wealth ×
     size.
-  - **No map: the game's own distribution, not history's** (owner, 2026-10-10). The panel shows the grouped Gini
-    as it is. The first build showed 0.30 + 0.85 × the strata Gini, scaled so Britain 1836 read a historical 0.52.
-    The check of 2026-10-10 (`docs/testing/demographics-gini-check-2026-10-10.md`, 14 saves, 1836–1953) found that
-    map 0.19 above the game's pop-by-pop Gini on average, and the wealth bands within 0.014 of it with no map
-    (R² 0.98). Britain 1836 is about 0.35 on its own distribution; Britain 1877, the most unequal great power in
-    the runs, 0.65. History's figures (Britain 0.5–0.55 in the 1830s, Lindert and Williamson; the Nordic countries
-    0.25–0.3 today, South Africa about 0.63) are context, not anchors.
+  - **The computed figure is the game's own distribution** (owner, 2026-10-10). The first build showed
+    0.30 + 0.85 × the strata Gini, scaled so Britain 1836 read a historical 0.52. The check of 2026-10-10
+    (`docs/testing/demographics-gini-check-2026-10-10.md`, 14 saves, 1836–1953) found that map 0.19 above the game's
+    pop-by-pop Gini on average, and the wealth bands within 0.014 of it (R² 0.98). Britain 1836 computes to about
+    0.35; Britain 1877, the most unequal great power in the runs, 0.65.
+  - **The shown figure reads like historians' estimates** (owner, 2026-10-10): 1 − 0.7 × (1 − the computed Gini).
+    A pop counts everyone in it as earning alike, so the census sees only part of the spread historians' estimates
+    hold; it scales down the equality it sees, and total inequality stays at 1. X = 0.7 is fitted to van Zanden et
+    al.'s income Ginis (2014, published by Clio Infra) for 1820 and 1850, interpolated to 1836, over 23 countries:
+    0.685 weighting each equally, 0.711 by people. Britain 1836 shows about 0.55 (estimate 0.51); single countries
+    miss by up to about 0.15 (France shows 0.43 against 0.57), since the estimates are noisy and the game's 1836
+    countries are more alike than history's. After 1836 the game's industrial Ginis climb faster than history's
+    (Britain shows 0.76 by 1877 against an estimate of 0.49): a question for the economy's balance, not the measure.
 - **The country** figure is the population-weighted Gini over all states' groups, not an average of state Ginis. The
   tab can show it beside the engine's own average income per stratum (`PopsOverviewPanel`), which the GUI can read.
 - **Effects, light on purpose.** Vanilla already turns wealth into clout. Inequality mainly feeds the stock (§4.2) and
@@ -576,7 +582,7 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 | Inheritance law and amendments | national | today's targets re-centred on 50: Primogeniture +30, Testation +10, Customary 0, Forced Heirship −25, State Heir and Possession −50; amendments as now | how fortunes pass between generations; #822 unchanged in effect |
 | Land tenure (vanilla land reform laws) | national law × the state's agrarian share | Values sit on vanilla's five base laws: Serfdom +15, Tenant Farmers +5, Commercialized Agriculture 0, Peasant Proprietorship −10, Collectivized Agriculture −20. The four variants (`parent =`) take their parent's value: Manorialism Serfdom's; Latifundias and Expanded Latifundias Tenant Farmers'; Homesteading Peasant Proprietorship's | land was most of the wealth in 1836, and it matters where the land is |
 | Ownership | state | the share of the state's building levels in private hands, against cooperative and state levels: 40 × (share − 0.65), capped ±20 (§13) | who holds the capital |
-| Income inequality | state | +30 × (the state's Gini − 0.15), at most +15 (from 0.65), at least −4.5 (owner, 2026-10-10: centred on 1836's median state, capped at Britain's industrial peak, a shallow bottom) | fortunes grow from unequal flows: the rich save more; equal incomes stop them growing, and the inheritance laws and taxes break them up |
+| Income inequality | state | +40 × (the state's shown Gini − 0.40), at most +15 (from 0.775), at least −4 (owner, 2026-10-10; 28 × (computed − 0.143): centred on 1836's median state, capped near Britain's industrial peak, a shallow bottom) | fortunes grow from unequal flows: the rich save more; equal incomes stop them growing, and the inheritance laws and taxes break them up |
 | Taxes on wealth | national | Graduated Taxation −5; the tax code's dividend and estate settings when that rule is on | |
 | Economic laws (owner, 2026-10-09) | national | Laissez-Faire +10, Extraction Economy +5, Interventionism −5; Guilds and Chartered Monopolies and Freedom of Contract +5, Antitrust Enforcement (`law_trust_busting`) and Regulated Utilities −5; others 0; capped ±15 | how freely capital compounds and combines: top-decile wealth shares rose to about 1910 under laissez-faire and fell to the 1970s under regulation, which the other terms alone ran backwards |
 | Return on capital against growth (later phase) | national | from the banking system's policy rate against GDP growth | Piketty's r > g; only where the banking system runs |

@@ -248,8 +248,8 @@ def grouped_gini(groups):
 
 
 def shown_gini(grouped):
-    """The panel's Gini: the grouped figure over wealth bands (§4.1), clamped."""
-    return clamp(grouped, 0.0, 0.9)
+    """The panel's Gini (§4.1): the equality the bands show, scaled down for the spread inside them."""
+    return clamp(1 - P.GINI_SHOWN_EQUALITY * (1 - grouped), 0.0, 1.0)
 
 
 def wealth_band(wealth):

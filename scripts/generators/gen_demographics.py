@@ -534,7 +534,9 @@ def gini_bands(o):
     o("# over its states, so its Gini is taken over all their people, not averaged). The bands are in")
     o("# income order, so G = 1 - sum p_k (S_k + S_k-1), with p_k a band's share of people and S_k the")
     o("# running share of income. Each sum becomes a share before it multiplies (values are i64 x 1e-5).")
-    o("# With no people or no income the Gini is 0. Writes var:te_dg_gini, the panel's figure, 0-0.9.")
+    o("# With no people or no income the computed Gini is 0. Writes var:te_dg_gini, the panel's figure:")
+    o(f"# 1 - {lit(P.GINI_SHOWN_EQUALITY)} x (1 - G), the equality the bands show scaled down for the spread")
+    o("# inside them (spec 4.1; owner, 2026-10-10), so it reads like historians' estimates.")
     o("te_demog_gini_from_locals = {")
     o("set_local_variable = { name = te_dg_g_pop value = 0 }")
     o("set_local_variable = { name = te_dg_g_inc value = 0 }")
@@ -558,7 +560,8 @@ def gini_bands(o):
         o("change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }")
         o("set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }")
     o("}")
-    o("set_variable = { name = te_dg_gini value = { value = local_var:te_dg_g_gini min = 0 max = 0.9 } }")
+    o(f"set_variable = {{ name = te_dg_gini value = {{ value = local_var:te_dg_g_gini "
+      f"multiply = {lit(P.GINI_SHOWN_EQUALITY)} add = {lit(1 - P.GINI_SHOWN_EQUALITY)} min = 0 max = 1 }} }}")
     o("}")
     o("")
 

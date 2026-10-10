@@ -4713,7 +4713,9 @@ te_demog_gini_band_add_state = {
 # over its states, so its Gini is taken over all their people, not averaged). The bands are in
 # income order, so G = 1 - sum p_k (S_k + S_k-1), with p_k a band's share of people and S_k the
 # running share of income. Each sum becomes a share before it multiplies (values are i64 x 1e-5).
-# With no people or no income the Gini is 0. Writes var:te_dg_gini, the panel's figure, 0-0.9.
+# With no people or no income the computed Gini is 0. Writes var:te_dg_gini, the panel's figure:
+# 1 - 0.7 x (1 - G), the equality the bands show scaled down for the spread
+# inside them (spec 4.1; owner, 2026-10-10), so it reads like historians' estimates.
 te_demog_gini_from_locals = {
 	set_local_variable = { name = te_dg_g_pop value = 0 }
 	set_local_variable = { name = te_dg_g_inc value = 0 }
@@ -4810,7 +4812,7 @@ te_demog_gini_from_locals = {
 		change_local_variable = { name = te_dg_g_gini subtract = local_var:te_dg_g_t }
 		set_local_variable = { name = te_dg_g_s value = local_var:te_dg_g_s2 }
 	}
-	set_variable = { name = te_dg_gini value = { value = local_var:te_dg_g_gini min = 0 max = 0.9 } }
+	set_variable = { name = te_dg_gini value = { value = local_var:te_dg_g_gini multiply = 0.7 add = 0.3 min = 0 max = 1 } }
 }
 
 # THIS = a state. The migrant profile (demographics_model.migrant_profile): from the kinds'

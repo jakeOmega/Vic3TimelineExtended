@@ -281,9 +281,11 @@ class TestHarness(unittest.TestCase):
         code, out, _err = self._cli("gini", str(SLICE), "--tag", "GBR")
         self.assertEqual(code, 0)
         self.assertNotIn("GINI_SCALE", out)
-        m = re.search(r"^GBR\s+bands (\d\.\d+)\s+pop by pop (\d\.\d+)\s+strata (\d\.\d+)", out, re.M)
+        m = re.search(r"^GBR\s+shown (\d\.\d+)\s+bands (\d\.\d+)\s+pop by pop (\d\.\d+)\s+strata (\d\.\d+)",
+                      out, re.M)
         self.assertIsNotNone(m, out)
-        bands, pops, strata = (float(x) for x in m.groups())
+        shown, bands, pops, strata = (float(x) for x in m.groups())
+        self.assertAlmostEqual(shown, 1 - 0.7 * (1 - bands), delta=0.001)   # both printed to 3 places
         self.assertGreater(bands, 0)
         self.assertLessEqual(bands, pops + 1e-9, "a coarser grouping never raises the Gini")
         self.assertLess(pops - bands, 0.05)

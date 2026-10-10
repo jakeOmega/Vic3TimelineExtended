@@ -182,6 +182,12 @@ INCOME_WEALTH_CAP = 60
 # -0.014, R^2 0.98 (docs/testing/demographics-gini-check-2026-10-10.md).
 GINI_BAND_KNOTS = (1, *range(5, INCOME_WEALTH_CAP + 1, 5))
 GINI_BANDS = len(GINI_BAND_KNOTS) + 1
+# The panel shows 1 - GINI_SHOWN_EQUALITY x (1 - the computed Gini) (owner, 2026-10-10): the census
+# counts everyone in a pop (or band) as earning alike, so it sees only part of the spread historians'
+# estimates hold; the equality it sees is scaled down, and total inequality stays at 1. Fitted to the
+# income Ginis of van Zanden et al. (2014, Clio Infra), 1820 and 1850 interpolated to 1836, over 23
+# countries against the 1836 save's band Gini: 0.685 weighting each equally, 0.711 by people.
+GINI_SHOWN_EQUALITY = 0.7
 
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5

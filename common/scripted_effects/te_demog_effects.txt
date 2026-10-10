@@ -25,7 +25,7 @@
 #                       women (light industry, services, urban facilities)
 #   te_dg_gn<k>, te_dg_gy<k>  people and income (the Gini's stand-in: people x income per head)
 #                       by wealth band, k = 1..14 (te_demog_gini_band_store, generated)
-#   te_dg_gini          the state's shown Gini, 0-0.9 (te_demog_state_gini)
+#   te_dg_gini          the state's shown Gini, 0.3-1 (te_demog_state_gini)
 #   te_dg_lv_priv       building levels held privately (capital buildings)
 #   te_dg_lv_self       building levels held by their own workers (cooperatives)
 #   te_dg_lv_ctry       building levels held by the state

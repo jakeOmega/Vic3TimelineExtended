@@ -378,3 +378,11 @@ Built by the controller.
   3. An old save loads; on 31 December the country Gini is computed (states not yet pulsed are left out that year); a pulsed state has no `te_dg_n_lo`.
   4. No visible slowdown at the yearly pulses in a large late-game save.
   The inequality term is the owner's (30 × (G − 0.15), 2026-10-10).
+
+## Owner addendum (2026-10-10): the shown figure
+
+After the build, the owner asked for the panel to read like historians' estimates: shown = 1 − X × (1 − computed),
+X fitted to the start of the game. X = 0.7 (fitted 0.685 equally weighted, 0.711 by people, on 23 countries' 1836
+estimates from van Zanden et al. 2014; `docs/testing/demographics-gini-check-2026-10-10.md`). The 0.9 cap goes (the
+shown figure tops out at 1); Wealth Concentration's term reads the shown figure, +40 × (shown − 0.40), capped at +15,
+at least −4 (= 28 × (computed − 0.143)). Britain 1836 shows about 0.55.

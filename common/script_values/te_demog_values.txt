@@ -226,15 +226,16 @@ te_demog_wc_ownership_term = {
 	}
 }
 
-# State scope: the inequality term. The rich save more, so fortunes grow from unequal
-# incomes: +30 x (the state's Gini - 0.15), so +3 for every 0.1 above 0.15, at most 15 (from a
-# Gini of 0.65, Britain's industrial peak in the observer runs) and at least -4.5 (a Gini is at
-# least 0: equal incomes stop fortunes growing; the inheritance laws and taxes break them up).
-# Centred on 1836's measured median state, with the wealth-band Gini (owner, 2026-10-10).
+# State scope: the inequality term, on the Gini the panel shows (owner, 2026-10-10). The rich
+# save more, so fortunes grow from unequal incomes: +40 x (the state's Gini - 0.40), so +4 for
+# every 0.1 above 0.40, at most 15 (from 0.775) and at least -4 (the shown Gini is at least 0.30:
+# equal incomes stop fortunes growing; the inheritance laws and taxes break them up). On the
+# computed figure that is 28 x (G - 0.143): centred on 1836's median state, capped near Britain's
+# industrial peak in the observer runs.
 te_demog_wc_inequality_term = {
 	value = var:te_dg_gini
-	subtract = 0.15
-	multiply = 30
+	subtract = 0.4
+	multiply = 40
 	min = -15
 	max = 15
 }

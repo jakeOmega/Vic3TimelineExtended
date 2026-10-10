@@ -366,10 +366,13 @@ class TestInequality(unittest.TestCase):
     def test_one_group_owns_everything(self):
         self.assertGreater(M.grouped_gini([(99, 0.0001), (1, 1000)]), 0.98)
 
-    def test_the_panel_shows_the_grouped_figure(self):
-        self.assertEqual(M.shown_gini(0.36), 0.36)
-        self.assertEqual(M.shown_gini(0.95), 0.9)
-        self.assertEqual(M.shown_gini(-0.01), 0.0)
+    def test_the_panel_scales_down_the_equality_it_sees(self):
+        # owner, 2026-10-10: shown = 1 - X (1 - computed), X fitted to historians' 1836 estimates
+        self.assertEqual(P.GINI_SHOWN_EQUALITY, 0.7)
+        self.assertAlmostEqual(M.shown_gini(0.0), 0.3)
+        self.assertAlmostEqual(M.shown_gini(0.35), 0.545)
+        self.assertAlmostEqual(M.shown_gini(1.0), 1.0)
+        self.assertAlmostEqual(M.shown_gini(0.95), 0.965, msg="no 0.9 cap")
 
     def test_wealth_bands_follow_the_income_knots(self):
         # Review Focus 2: each wealth lands in one band; the knots are each band's top

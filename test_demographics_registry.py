@@ -204,9 +204,9 @@ class TestStateGini(unittest.TestCase):
             expected = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
             self.assertAlmostEqual(self.shown(bands), expected, places=9, msg=str(bands))
 
-    def test_no_people_or_no_income_is_zero(self):
-        self.assertEqual(self.shown({}), 0.0)
-        self.assertEqual(self.shown({1: (10, 0), 4: (5, 0)}), 0.0)
+    def test_no_people_or_no_income_shows_the_floor(self):
+        self.assertAlmostEqual(self.shown({}), 1 - P.GINI_SHOWN_EQUALITY, places=9)
+        self.assertAlmostEqual(self.shown({1: (10, 0), 4: (5, 0)}), 1 - P.GINI_SHOWN_EQUALITY, places=9)
 
     def test_state_and_country_share_one_generated_formula(self):
         text = _text(WEALTH_EFFECTS)
@@ -1803,15 +1803,16 @@ class TestWealth(unittest.TestCase):
 
     def test_the_target_sums_its_terms(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
-        # law 80, land 6, ownership (30/40 - 0.65) x 40 = 4, inequality (0.5 - 0.15) x 30 = 10.5, taxes -5
-        self.assertAlmostEqual(self.target(state), 95.5)
-        self.assertAlmostEqual(self.target(state, econ=-10.0), 85.5, msg="the economic laws add in")
+        # law 80, land 6, ownership (30/40 - 0.65) x 40 = 4, inequality (0.5 - 0.40) x 40 = 4, taxes -5
+        self.assertAlmostEqual(self.target(state), 89.0)
+        self.assertAlmostEqual(self.target(state, econ=-10.0), 79.0, msg="the economic laws add in")
         self.assertEqual(self.target(state, law=100.0, land=15.0), 100.0)
         self.assertEqual(self.target(state, law=0.0, land=-20.0), 0.0)
 
-    def test_the_inequality_term_is_three_points_a_tenth_above_015(self):
-        # owner, 2026-10-10: +30 x (Gini - 0.15), at most +15 (from 0.65); rounded for players
-        for gini, term in ((0.15, 0.0), (0.25, 3.0), (0.35, 6.0), (0.65, 15.0), (0.8, 15.0), (0.0, -4.5)):
+    def test_the_inequality_term_is_four_points_a_tenth_above_040(self):
+        # owner, 2026-10-10: on the shown Gini, +40 x (Gini - 0.40), at most +15 (from 0.775); the shown
+        # figure is at least 0.30, so at least -4 (= 28 x (computed - 0.143), close to 30 x (computed - 0.15))
+        for gini, term in ((0.4, 0.0), (0.5, 4.0), (0.6, 8.0), (0.775, 15.0), (0.9, 15.0), (0.3, -4.0)):
             state = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": gini}
             self.assertAlmostEqual(self.target(state, law=50.0, land=0.0, tax=0.0), 50 + term, msg=str(gini))
 
@@ -1819,19 +1820,19 @@ class TestWealth(unittest.TestCase):
         private = {"te_dg_lv_priv": 50.0, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.9}
         # centred on 1836's measured 0.65 private: all private is +14, the most the term can add
         self.assertAlmostEqual(self.target(private, law=50.0, land=0.0, tax=0.0), 50 + 14 + 15)
-        two_thirds = {"te_dg_lv_priv": 65.0, "te_dg_lv_self": 30.0, "te_dg_lv_ctry": 5.0, "te_dg_gini": 0.15}
+        two_thirds = {"te_dg_lv_priv": 65.0, "te_dg_lv_self": 30.0, "te_dg_lv_ctry": 5.0, "te_dg_gini": 0.4}
         self.assertAlmostEqual(self.target(two_thirds, law=50.0, land=0.0, tax=0.0), 50.0, msg="1836's mix: no term")
-        state_owned = {"te_dg_lv_priv": 0.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 45.0, "te_dg_gini": 0.0}
-        # a Gini is at least 0, so the inequality term is at least -4.5 (owner: a shallow bottom)
-        self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 4.5)
-        no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.15}
+        state_owned = {"te_dg_lv_priv": 0.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 45.0, "te_dg_gini": 0.3}
+        # the shown Gini is at least 0.30, so the inequality term is at least -4 (owner: a shallow bottom)
+        self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 4)
+        no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.4}
         self.assertAlmostEqual(self.target(no_capital, law=50.0, land=0.0, tax=0.0), 50.0, msg="no capital: no term")
 
     def test_continuity_of_title_pins_the_target_at_the_score(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5,
                  "te_dg_wc": 33.0}
         self.assertEqual(self.target(state, owner={"te_inh_title_continuity": 1.0}), 33.0)
-        self.assertAlmostEqual(self.target(state), 95.5)
+        self.assertAlmostEqual(self.target(state), 89.0)
 
     # -- the national figure, through the interpreter ------------------------------------------------
 
@@ -1877,7 +1878,7 @@ class TestWealth(unittest.TestCase):
         own_a, own_b = (400 / 440 - 0.65) * 40, (200 / 270 - 0.65) * 40   # +10.36 and +3.63: inside the caps
         self.assertTrue(-20 < own_b < own_a < 20)
         self.assertAlmostEqual(v["te_dg_wc_t_own"], mean(own_a, own_b))
-        self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(10.5, 4.5))
+        self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(4, -4))
         self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
         self.assertAlmostEqual(v["te_dg_wc_t_econ"], 5.0)
         # with no state clamped, the six bars add up to the target above them
@@ -2700,11 +2701,12 @@ class TestGiniBands(unittest.TestCase):
             want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
             self.assertAlmostEqual(self.gini(bands), want, places=9)
 
-    def test_nobody_or_no_income_or_one_band_is_zero(self):
-        # Review Focus 3 and 4
-        self.assertEqual(self.gini({}), 0.0)
-        self.assertEqual(self.gini({1: (500, 0), 2: (20, 0)}), 0.0)
-        self.assertAlmostEqual(self.gini({7: (1000, 4321)}), 0.0, places=9)
+    def test_nobody_or_no_income_or_one_band_shows_the_floor(self):
+        # Review Focus 3 and 4: a computed Gini of 0, shown as 1 - X
+        floor = 1 - P.GINI_SHOWN_EQUALITY
+        self.assertAlmostEqual(self.gini({}), floor, places=9)
+        self.assertAlmostEqual(self.gini({1: (500, 0), 2: (20, 0)}), floor, places=9)
+        self.assertAlmostEqual(self.gini({7: (1000, 4321)}), floor, places=9)
 
     def test_a_china_sized_country_keeps_its_precision(self):
         # Review Focus 5: 4e8 people at up to ~950 a head, with the engine's fixed point
@@ -2729,8 +2731,11 @@ class TestGiniBands(unittest.TestCase):
         want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
         self.assertAlmostEqual(eng.vars["te_dg_gini"], want, places=9)
 
-    def test_the_figure_is_at_most_09(self):
-        self.assertEqual(self.gini({1: (99, 0.0001), 14: (1, 1000)}), 0.9)
+    def test_a_near_total_inequality_shows_near_1_without_a_cap(self):
+        bands = {1: (99, 0.0001), 14: (1, 1000)}
+        want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
+        self.assertGreater(want, 0.98)
+        self.assertAlmostEqual(self.gini(bands), want, places=9)
 
     def test_the_constants_of_the_old_map_are_gone(self):
         self.assertNotIn("te_demog_k_gini", _text(GENERATED_VALUES))

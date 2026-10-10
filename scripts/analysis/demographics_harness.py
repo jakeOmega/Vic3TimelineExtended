@@ -4,7 +4,7 @@
 Usage:
     demographics_harness.py sketch                      # §2.2/§2.3's cases from the model
     demographics_harness.py inputs SAVE [--tag GBR]     # per-country inputs read from a save
-    demographics_harness.py gini SAVE [--tag GBR]       # the panel's Gini (wealth bands) beside pop by pop
+    demographics_harness.py gini SAVE [--tag GBR]       # the panel's Gini, the bands' and pop by pop
     demographics_harness.py seed SAVE --tag GBR         # the seeded structure and life figures
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
@@ -113,8 +113,8 @@ def grouped_by(pops, key):
 
 
 def cmd_gini(args):
-    """The panel's Gini (wealth bands, no map: §4.1) per country, beside each pop as its own group
-    and the three strata the census used before 2026-10-10 (unmapped)."""
+    """The panel's Gini per country (§4.1: 1 - X (1 - the wealth bands' Gini)), then the bands' own figure,
+    each pop as its own group and the three strata the census used before 2026-10-10 (all computed)."""
     sections = S.read_sections(args.save)
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
@@ -126,10 +126,10 @@ def cmd_gini(args):
             print(f"no pops for {t} in {args.save}", file=sys.stderr)
             out = 1
             continue
-        bands = M.shown_gini(M.grouped_gini(grouped_by(pops, lambda p: M.wealth_band(p[1]))))
+        bands = M.grouped_gini(grouped_by(pops, lambda p: M.wealth_band(p[1])))
         each = M.grouped_gini([(p[0], p[3]) for p in pops])
         strata = M.grouped_gini(grouped_by(pops, lambda p: p[2]))
-        print(f"{t:4s} bands {bands:.3f}  pop by pop {each:.3f}  strata {strata:.3f}")
+        print(f"{t:4s} shown {M.shown_gini(bands):.3f}  bands {bands:.3f}  pop by pop {each:.3f}  strata {strata:.3f}")
     return out
 
 
