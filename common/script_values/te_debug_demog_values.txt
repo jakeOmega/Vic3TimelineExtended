@@ -316,7 +316,8 @@ te_debug_demog_capital_work_share = {
 # ---- The mortality modifier types (option l): THIS = a state ---------------
 # Each of the census's mortality types as the state reads it (country types through its
 # owner), the owner's institution levels that scale the state types, and the five cause
-# multipliers built from them (-1 until the state has its census inputs).
+# multipliers built from them (maternal as deaths per 100,000 births; infection and chronic
+# read -1 until the state has its census inputs).
 te_debug_demog_is_capital = {
 	value = 0
 	if = {
@@ -489,42 +490,18 @@ te_debug_demog_mult_infection = {
 	}
 }
 te_debug_demog_mult_maternal = {
-	value = -1
-	if = {
-		limit = {
-			has_variable = te_dg_sol
-			has_variable = te_dg_lit
-		}
-		value = te_demog_mult_maternal
-	}
+	value = te_demog_mult_maternal
 }
 te_debug_demog_mult_chronic = {
 	value = -1
 	if = {
-		limit = {
-			has_variable = te_dg_sol
-			has_variable = te_dg_lit
-		}
+		limit = { has_variable = te_dg_sol }
 		value = te_demog_mult_chronic
 	}
 }
 te_debug_demog_mult_external = {
-	value = -1
-	if = {
-		limit = {
-			has_variable = te_dg_sol
-			has_variable = te_dg_lit
-		}
-		value = te_demog_mult_external
-	}
+	value = te_demog_mult_external
 }
 te_debug_demog_mult_work = {
-	value = -1
-	if = {
-		limit = {
-			has_variable = te_dg_sol
-			has_variable = te_dg_lit
-		}
-		value = te_demog_mult_work
-	}
+	value = te_demog_mult_work
 }

@@ -12,7 +12,7 @@ variables and laws but not pops. Spec: docs/superpowers/specs/2026-10-08-demogra
 §11.1 (the harness is driven by SoL, literacy, technology and law read from saves).
 
 Layout, as written by 1.14.5 (checked on an 1836 save, 2026-10-08): top-level sections
-`pops={ database={ <id>={ … } … } }`, `states=`, `country_manager=`, `laws=`, `technology=`,
+`pops={ database={ <id>={ … } … } }`, `states=`, `country_manager=`, `laws=`, `technology=`, `institutions=`,
 each record's own fields one tab in. The fields read:
     pops             type, location (state id), workforce, dependents, num_literate, wealth,
                      previous_quality_of_life (the pop's standard of living last week)

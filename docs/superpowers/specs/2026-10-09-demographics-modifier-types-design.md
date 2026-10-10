@@ -102,8 +102,8 @@ Python file. But a modder editing the law can't change the value there, and a se
   replace it. The stage-1 probe (`te_debug_demog.1` option l) reads the access line, and two tooltips tell whether
   the blocks sum:
   - Worker Protections should show vanilla's minimum wage line beside the new work line.
-  - Charitable and Private Health Insurance's pollution line should vanish, since drugs phase 2's +0.1 cancels
-    vanilla's −0.1.
+  - The three health laws' pollution line should vanish, since drugs phase 2's lines cancel vanilla's (+0.1
+    against −0.1 for Charitable and Private, +0.15 against −0.15 for Public).
 
   If the blocks don't sum, the fallback is the census's old `institution_investment_level` ladder in script, which
   loses the tooltip line.

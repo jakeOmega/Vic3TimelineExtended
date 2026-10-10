@@ -22,7 +22,9 @@ run's yearly saves and belongs to phase 2's plan.
 """
 
 import argparse
+import dataclasses
 import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -535,21 +537,32 @@ def cmd_medicine(_args):
     return out
 
 
+HEALTH_LAWS = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
+
+
+def without_health_law(c):
+    """A copy of a save's country with no health law and no Health System level."""
+    return dataclasses.replace(c, laws=set(c.laws) - set(HEALTH_LAWS),
+                               institutions={k: v for k, v in c.institutions.items() if k != HEALTH})
+
+
 def adopter_rows(inputs, carriers, sol_band=1.5, lit_band=0.1):
-    """[(law, tag, sol, literacy, health level, e0, peers' median e0, peer count)] for every country
-    with a health law, against countries with none within the SoL and literacy bands."""
-    laws = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
+    """One row per country with a health law: (law, tag, sol, literacy, incorporated share, health level,
+    e0, e0 without the law and its level, peers' median e0 or None, peer count). Peers are countries
+    with no health law within the SoL and literacy bands; e0 is the model's for incorporated states."""
     e0 = {t: life(inputs_for(c, carriers))["e0"] for t, c in inputs.items() if c.population > 0}
-    none = [t for t, c in inputs.items() if t in e0 and not (c.laws & set(laws))]
+    none = [t for t, c in inputs.items() if t in e0 and not (c.laws & set(HEALTH_LAWS))]
     rows = []
     for tag, c in inputs.items():
-        held = c.laws & set(laws)
+        held = c.laws & set(HEALTH_LAWS)
         if tag not in e0 or not held:
             continue
-        peers = sorted(e0[t] for t in none if abs(inputs[t].sol - c.sol) <= sol_band
-                       and abs(inputs[t].literacy - c.literacy) <= lit_band)
-        median = peers[len(peers) // 2] if peers else None
-        rows.append((min(held), tag, c.sol, c.literacy, c.institutions.get(HEALTH, 0), e0[tag], median, len(peers)))
+        own = life(inputs_for(without_health_law(c), carriers))["e0"]
+        peers = [e0[t] for t in none if abs(inputs[t].sol - c.sol) <= sol_band
+                 and abs(inputs[t].literacy - c.literacy) <= lit_band]
+        median = statistics.median(peers) if peers else None
+        rows.append((min(held), tag, c.sol, c.literacy, c.incorporated_share, c.institutions.get(HEALTH, 0),
+                     e0[tag], own, median, len(peers)))
     return sorted(rows)
 
 
@@ -558,16 +571,20 @@ def cmd_adopters(args):
     for path in args.saves:
         inputs = S.country_inputs(S.read_sections(path))
         print(path)
-        gaps = {}
-        for law, tag, sol, lit, level, e0, median, n in adopter_rows(inputs, carriers):
-            gap = "" if median is None else f"{e0 - median:+5.1f}"
-            print(f"  {law:32s} {tag:4s} SoL {sol:5.1f} lit {lit:4.2f} level {level}  e0 {e0:5.1f}  "
-                  f"peers {'-' if median is None else f'{median:5.1f}'} (n={n})  gap {gap}")
+        effects, gaps = {}, {}
+        for law, tag, sol, lit, inc, level, e0, own, median, n in adopter_rows(inputs, carriers):
+            gap = "-" if median is None else f"{e0 - median:+5.1f}"
+            print(f"  {law:32s} {tag:4s} SoL {sol:5.1f} lit {lit:4.2f} incorporated {inc:4.2f} level {level}  "
+                  f"e0 {e0:5.1f}  law's effect {e0 - own:+5.1f}  "
+                  f"peers {'-' if median is None else f'{median:5.1f}'} (n={n}) gap {gap}")
+            effects.setdefault(law, []).append(e0 - own)
             if median is not None:
                 gaps.setdefault(law, []).append(e0 - median)
-        for law, g in sorted(gaps.items()):
-            g.sort()
-            print(f"  median gap {law}: {g[len(g) // 2]:+.1f} years over {len(g)} countries")
+        for law in sorted(effects):
+            g = gaps.get(law, [])
+            print(f"  {law}: the law's own effect, median {statistics.median(effects[law]):+.1f} years over "
+                  f"{len(effects[law])} countries; the gap to peers, median "
+                  f"{'-' if not g else f'{statistics.median(g):+.1f}'} over {len(g)}")
     return 0
 
 

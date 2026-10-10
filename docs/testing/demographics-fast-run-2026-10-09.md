@@ -103,25 +103,34 @@ Access × treatment fixes both: treatment comes from the techs, and access from 
 - **West 1950's e0 band starts at 60, not 64, and the cause is not medicine.** At West 1950's inputs the model's deaths at ages 25–45 are 5.2–8.7 per 1,000 a year, against Britain's 1.2–4.5 in 1950; at 65 and 75 they match. Young adults' chronic and external base schedules don't fall before 1970. They are 1836 rates that phase 2's base-schedule calibration should revisit.
 - **Every 1836 country with `medical_degrees` moves a little.** That is most of them. Infection at a base access of 0.4 is ×0.99, where the old table gave ×0.9. Britain's 1836 IMR goes from 140 to 169.
 
-## Health-law adopters against their peers (stage 1's gate)
+## Health-law adopters (stage 1's gate)
 
-`demographics_harness.py adopters SAVE...` takes each country with a health law in a save and compares the model's e0 for its incorporated states with the median of countries with no health law within ±1.5 standard of living and ±0.1 literacy. The figures come from the save's own inputs, not the census lines, because Public Health Insurance also raises standard of living. The values are this fit's.
+`demographics_harness.py adopters SAVE...` takes each country with a health law in a save. It gives the model's e0 for the country's incorporated states, read from the save's own inputs (the census line has no standard of living, and Public Health Insurance also raises it). It compares that e0 two ways:
+- **The law's own effect:** the same country without its health law and Health System level. This is the gate's measure.
+- **The gap to peers:** the median of countries with no health law within ±1.5 standard of living and ±0.1 literacy. That gap also carries the peers' other differences (techs, urban share, other laws), and some adopters have no peer close enough (GBR and SAR in 1887).
 
-| Save | Charitable: median gain (countries) | Public: median gain (countries) |
+The values are this fit's; the figures are medians (years, countries).
+
+| Save | Charitable: own effect / peer gap | Public: own effect / peer gap |
 |---|---|---|
-| gate 1837 | +0.5 (5) | – |
-| gate 1847 | +0.3 (10) | – |
-| gate 1857 | +0.1 (16) | – |
-| gate 1867 | +0.5 (19) | +0.6 (3) |
-| gate 1877 | +0.6 (31) | +1.2 (6) |
-| gate 1887 | +0.6 (32) | +1.2 (7; largest BEL +3.4 at level 3) |
-| fast 1845 (census ~1937) | +0.2 (9) | +0.8 (8) |
-| fast 1850 (census ~1997) | +2.1 (11) | +6.0 (9) |
-| fast 1855 (census ~2057) | +1.3 (43) | +7.9 (12) |
-| fast 1860 (census ~2117) | +1.4 (42) | +4.4 (11) |
+| gate 1837 | +0.0 / +0.5 (5) | – |
+| gate 1847 | +0.0 / +0.3 (10) | – |
+| gate 1857 | +0.0 / +0.1 (16) | – |
+| gate 1867 | +0.1 / +0.6 (19) | +0.3 / +0.6 (3) |
+| gate 1877 | +0.1 / +0.6 (31) | +0.9 / +1.1 (7) |
+| gate 1887 | +0.2 / +0.5 (32) | +0.6 / +1.2 (9) |
+| fast 1845 (census year ~1944) | +0.2 / +0.2 (9) | +0.6 / +0.7 (8) |
+| fast 1850 (~2004) | +0.8 / +2.1 (11) | +3.1 / +6.0 (9) |
+| fast 1855 (~2064) | +1.0 / +1.3 (43) | +4.1 / +6.1 (12) |
+| fast 1860 (~2124) | +1.1 / +1.4 (42) | +4.4 / +4.4 (11) |
 
-- **The gate passes.** The 1860s–80s adopters of the normal-speed run gain 0.6–1.2 years at their standard of living. The old tables' census lines gave e0 54–56 against peers' 43.
-- **Once medicine exists, access matters a lot.** In the fast run's late saves, Public Health Insurance at level 4 gives 15–17 years over no system (BEL, PEU, NBS); at level 1 it gives 3–4. Universal care against none at the same low income is about Sri Lanka or Kerala against Pakistan in the 1970s, 10–15 years. Whether the full gap should be that large is an owner call (the PR body).
+- **The gate passes.**
+  - The normal-speed run's adopters gain 0.3–0.9 years from Public Health Insurance (median by save), and every one at level 3 (GBR, SAR, SWE, BEL in 1887) gains +1.7, inside the spec's about 3.
+  - The old tables' census lines had the 1870s adopters at e0 54–56 against peers' 43.
+- **Once medicine exists, access matters a lot.**
+  - In the fast run's late saves, Public Health Insurance at level 4 or 5 gives 13 to 21 years (BEL, NBS, PEU); at level 1 it gives 3–4.
+  - Universal care against none at the same low income is about Sri Lanka or Kerala against Pakistan in the 1970s, 10–15 years.
+  - Whether the full gap should be that large is an owner call (the PR body).
 
 ## Reproduce
 
