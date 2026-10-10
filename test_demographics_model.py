@@ -29,10 +29,11 @@ def scenario(**kw):
 
 MODERN = frozenset({
     "medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "modern_vaccines",
-    "antibiotic_mass_production", "vulcanization", "contraceptive_pill", "modern_pharmaceuticals",
+    "antibiotic_mass_production", "vulcanization", "feminism", "contraceptive_pill", "modern_pharmaceuticals",
     "combustion_engine",
 })
-EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization"})
+EARLY_MEDICINE = frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "antibiotics", "vulcanization",
+                            "feminism"})
 
 AGRARIAN_1836 = M.Inputs(sol=8, literacy=0.2, urban_share=0.1)
 BRITAIN_1836 = scenario(sol=11, literacy=0.35, urban_share=0.3, laws=frozenset({"law_no_womens_rights"}))
@@ -46,6 +47,15 @@ WEST_1990 = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
                                      "law_old_age_pension", "law_dedicated_police"}),
                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
                                    "institution_ministry_of_consumer_protection": 3})
+BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
+                        techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization",
+                                         "feminism"}),
+                        laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
+AGED_TODAY = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
+                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage", "law_old_age_pension",
+                                      "law_dedicated_police", "law_state_sponsored_family_planning"}),
+                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
+                                    "institution_ministry_of_consumer_protection": 3})
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
                       laws=frozenset({"law_charitable_health_system"}))
@@ -62,9 +72,10 @@ class TestFertility(unittest.TestCase):
         for inp, expected, label in [
             (BRITAIN_1836, 5.5, "Britain 1836"),
             (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
-            (WEST_1950, 3.1, "the West 1950"),
-            (WEST_1990, 1.4, "the West 1990"),
-            (INDIA_1975, 5.1, "India 1975"),
+            (BRITAIN_1900, 3.85, "Britain 1900"),
+            (WEST_1950, 2.8, "the West 1950"),
+            (WEST_1990, 1.6, "the West 1990"),
+            (INDIA_1975, 5.3, "India 1975"),
         ]:
             with self.subTest(label):
                 self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
@@ -241,11 +252,14 @@ class TestStructure(unittest.TestCase):
         self.assertTrue(0.008 <= last["growth"] <= 0.02, last["growth"])
 
     def test_aged(self):
-        ring, last = M.run_constant(WEST_1990, years=300)
+        # §2.2's aged row (about 1.3 children per woman). The West in 1990 alone now gives about 1.6, as
+        # history did (stage 2's fit), so the case adds State-Sponsored Family Planning. At 1.3 the stable
+        # rate is about ln(0.65) / 30 = -1.4% a year; the sketch's -0.9 to -1.2% came from four bands.
+        ring, last = M.run_constant(AGED_TODAY, years=300)
         s = M.structure(ring)
         self.assertTrue(0.09 <= s["young"] <= 0.14, s)
         self.assertTrue(0.28 <= s["old"] <= 0.38, s)
-        self.assertTrue(-0.015 <= last["growth"] <= -0.008, last["growth"])
+        self.assertTrue(-0.017 <= last["growth"] <= -0.008, last["growth"])
 
     def test_dividend_window(self):
         ring, _ = M.run_constant(AGRARIAN_1836, years=300)

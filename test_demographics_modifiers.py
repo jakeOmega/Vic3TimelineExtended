@@ -81,11 +81,11 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         self.assertLess(access["law_charitable_health_system"].value, access["law_private_health_insurance"].value)
         self.assertLess(access["law_private_health_insurance"].value, access["law_public_health_insurance"].value)
 
-    def test_contraception_sits_on_the_three_means_techs(self):
+    def test_contraception_sits_on_the_four_means_techs(self):
         lines = {c.key: c.value for c in self.carriers if c.type == P.CONTRACEPTION_TYPE}
-        self.assertEqual(set(lines), {"vulcanization", "contraceptive_pill", "modern_pharmaceuticals"})
+        self.assertEqual(set(lines), {"vulcanization", "feminism", "contraceptive_pill", "modern_pharmaceuticals"})
         self.assertTrue(all(v > 0 for v in lines.values()), lines)
-        # all three together keep the tier at or below 1
+        # all four together keep the tier at or below 1
         self.assertLessEqual(P.TRADITIONAL_MEANS + sum(lines.values()), 1.0)
 
     def test_family_planning_law_shifts_the_means(self):

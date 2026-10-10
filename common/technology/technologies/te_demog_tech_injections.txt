@@ -37,6 +37,15 @@ INJECT:combustion_engine = {
 # modern_pharmaceuticals carry theirs in era_7.txt and era_8.txt.
 INJECT:vulcanization = {
 	modifier = {
+		state_contraception_add = 0.2
+	}
+}
+
+# Feminism: the will to use the methods, where vulcanization is the methods (owner,
+# 2026-10-10: birth control was a feminist cause). Both are era 3; no anchor separates
+# them, so the fit sets their sum and splits it.
+INJECT:feminism = {
+	modifier = {
 		state_contraception_add = 0.15
 	}
 }
