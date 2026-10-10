@@ -59,14 +59,6 @@ range directive used, but no randomization is available! Might be in a trigger r
 
 Multiple naval conditions use `intensity = { fixed_range = { min = X max = Y } }` (line 210 = `naval_condition_squall`/similar, line 263 = a later condition). The engine evaluates these in a context it doesn't consider randomized. Vanilla bug, same root cause across all `fixed_range` uses in this file. **9+ occurrences per session.**
 
-### `common/treaty_articles/05_transfer_money.txt:149` — Div/0 in `inherent_accept_score`
-
-```
-Div/0 near common/treaty_articles/05_transfer_money.txt:149
-```
-
-Vanilla's `inherent_accept_score` script value contains `divide = scope:article.input_quantity` calls gated by `if = { limit = { exists = scope:article.input_quantity } }`, but the engine evaluates the full script-value tree before applying the `if` gate (same family as the `command_values.txt:373` bug above). Mod also adds `divide = gdp` tier blocks in the same script value, which may amplify the count when source/target country has near-zero GDP. Reports the line of the containing `inherent_accept_score = { ... }` block, not the actual divide line. **160 occurrences** in a single 1.13 mod session.
-
 ### `events/iberia_events/ip4_coup_events.txt:562` — Div/0 in `add_radicals` divisor
 
 ```
@@ -743,7 +735,7 @@ Error setting properties for '' (widget)
 Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
 ### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
-- reviewed: helper anchor, signature cannot match a mod call (the mod reads only `support_separatism_radicalism` from 00_diplomacy_values, and that value reads no capital)
+- reviewed: helper anchor, signature cannot match a mod call (the mod reads only the numeric interest_tier_effect_* constants from 00_diplomacy_values, which read no capital, region or market; its override of leverage_threshold_to_invite lives in the mod's own script values)
 
 ```
 Event target link 'capital' returned an invalid object
