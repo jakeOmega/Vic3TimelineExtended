@@ -5,7 +5,10 @@ The gate of phase 2 step 4: the census sets the engine's births and deaths
 offline half, run on this date, and leaves room for the in-game half, which needs the owner.
 
 **Status: the offline gate fails on one country.** The world multiple passes, but `predict` puts China's growth below 0
-in the 1887 save. Per the plan, the fix is calibration (the calibration plan's steps 1–3, 5–6), not step 4's
+in the 1887 save. `predict` flags any single save in which a 20M+ country shrinks, a stricter proxy for the gate's
+criterion (ten census years running outside wars), which needs the fast run's yearly census lines: the saves are a
+decade apart, and China is +0.05% in 1877 and −0.09% in 1887, so the ten-year rule is neither met nor refuted
+offline. The flag is a warning sign, not a measured gate miss. Per the plan, the fix is calibration (the calibration plan's steps 1–3, 5–6), not step 4's
 arithmetic, so this stops here and reports. The in-game probes and the fast-mode run are still to do.
 
 **Release precondition (owner, 2026-10-10):** steps 4 and 5 ship together. A passing gate would not make step 4
@@ -82,6 +85,8 @@ per-save tables are `predict`'s output.
 | P5 | Turmoil's scaling (conditional) | Only if the fast run shows a residual tied to turmoil |
 
 ## Still to run (owner)
+
+This list is the canonical checklist; the PR body repeats it.
 
 1. **P2 and P3** on a throwaway save, deployed per CLAUDE.md "Play-testing unmerged work".
 2. **The fast-mode gate run:** a new 1836 game, observed, census log on (option b), fast mode at 4× (option h) on day
