@@ -1084,6 +1084,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1182,6 +1183,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1280,6 +1282,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1378,6 +1381,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1476,6 +1480,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1494,6 +1499,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				NOR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				has_law = law_type:law_serfdom
 				has_law = law_type:law_women_in_the_fields
@@ -1634,6 +1640,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				OR = {
 					has_law = law_type:law_council_republic
 					has_law = law_type:law_corporate_state
+					has_law = law_type:law_direct_democracy
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
