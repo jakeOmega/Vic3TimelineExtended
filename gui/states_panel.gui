@@ -1229,11 +1229,10 @@ types state_panel_types
 			}
 
 			### TIMED MODIFIERS
-			# A modifier whose icon is blank (generic_icons/transparent.dds or the mod's
-			# timed_modifier_icons/modifier_system.dds) is the mod's bookkeeping: it is
-			# left out of the row and takes no slot. Its effect still shows in the
-			# Modifiers tab and in the breakdown tooltips. Same rule in the condensed
-			# view below; test_hidden_state_modifiers.py keeps the two in step.
+			# A modifier with the mod's blank icon (timed_modifier_icons/modifier_system.dds)
+			# is bookkeeping: it is left out of the row and takes no slot. Its effect still
+			# shows in the Modifiers tab and in the breakdown tooltips. Same rule in the
+			# condensed view below; test_hidden_state_modifiers.py keeps the two in step.
 			flowcontainer = {
 				parentanchor = bottom|right
 				widgetanchor = bottom|right
@@ -1245,7 +1244,7 @@ types state_panel_types
 
 				item = {
 					icon = {
-						visible = "[Not(Or(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/generic_icons/transparent.dds'), EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds')))]"
+						visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
 						size = { 30 30 }
 						tooltip = "[TimedModifier.GetTooltip]"
 						using = tooltip_se
@@ -3699,7 +3698,7 @@ types state_panel_types
 
 					item = {
 						widget = {
-							visible = "[Not(Or(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/generic_icons/transparent.dds'), EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds')))]"
+							visible = "[Not(EqualTo_string(TimedModifier.GetIcon, 'gfx/interface/icons/timed_modifier_icons/modifier_system.dds'))]"
 							size = { 30 30 }
 							icon = {
 								tooltip = "[TimedModifier.GetTooltip]"

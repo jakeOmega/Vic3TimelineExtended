@@ -2,18 +2,18 @@
 
 Some state modifiers are the mod's bookkeeping, refreshed by script each month
 or step: tourism, pollution, migration crowding, the free port's tariffs, and
-the demographics census's corrections to birth and death rates. They carry a
-blank icon, which on its own still leaves an empty slot in the state panel's
-row of modifier icons. A GUI cannot read a timed modifier's key (`TimedModifier`
-has GetName, GetIcon, GetTooltip and the like, but no GetKey), so
-gui/states_panel.gui tells these apart by icon: an item whose icon is one of
+the demographics census's corrections to birth and death rates. They carry the
+mod's blank icon, which on its own still leaves an empty slot in the state
+panel's row of modifier icons. A GUI cannot read a timed modifier's key
+(`TimedModifier` has GetName, GetIcon, GetTooltip and the like, but no GetKey),
+so gui/states_panel.gui tells these apart by icon: an item whose icon is one of
 HIDDEN_ICONS is `visible = no` in a container that ignores invisible items.
 
 The condensed view's box fades out when the state carries nothing else, which
 needs a count of the hidden modifiers the GUI cannot make itself:
 gui_state_hidden_modifier_count (common/script_values/gui_chart_script_values.txt)
-names each blank-icon static modifier with a has_modifier term. This test fails
-when a static modifier takes a blank icon without a term there, so that box
+names each static modifier with a hidden icon by a has_modifier term. This test
+fails when a static modifier takes that icon without a term there, so that box
 never shows an empty frame for it.
 """
 import os
@@ -29,9 +29,10 @@ COUNT_FILE = os.path.join(REPO, "common", "script_values", "gui_chart_script_val
 COUNT = "gui_state_hidden_modifier_count"
 
 # A modifier with one of these icons is left out of the state panel's rows.
+# The mod's one invisible modifier icon (4x4, alpha 0); give it to a modifier
+# to hide it, and add the modifier's term to gui_state_hidden_modifier_count.
 HIDDEN_ICONS = (
-    "gfx/interface/icons/generic_icons/transparent.dds",  # vanilla, 50x50, alpha 0
-    "gfx/interface/icons/timed_modifier_icons/modifier_system.dds",  # the mod's, 4x4, alpha 0
+    "gfx/interface/icons/timed_modifier_icons/modifier_system.dds",
 )
 
 DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
@@ -39,7 +40,7 @@ DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
 
 def _hidden_test(icons):
     """`EqualTo_string(TimedModifier.GetIcon, '<icon>')` for each icon, joined
-    by nested two-argument `Or`."""
+    by nested two-argument `Or` when there is more than one."""
     tests = [f"EqualTo_string(TimedModifier.GetIcon, '{icon}')" for icon in icons]
     expr = tests[-1]
     for test in reversed(tests[:-1]):
@@ -218,7 +219,7 @@ class HiddenStateModifierTest(unittest.TestCase):
         blank = _blank_icon_modifiers()
         self.assertTrue(blank)
         missing = sorted(blank - set(terms))
-        self.assertFalse(missing, f"blank-icon static modifiers with no has_modifier term in {COUNT} ({os.path.relpath(COUNT_FILE, REPO)}): {missing}")
+        self.assertFalse(missing, f"static modifiers with a hidden icon and no has_modifier term in {COUNT} ({os.path.relpath(COUNT_FILE, REPO)}): {missing}")
         extra = sorted(set(terms) - blank)
         self.assertFalse(extra, f"{COUNT} counts modifiers the state panel shows (icon not in HIDDEN_ICONS): {extra}")
         self.assertEqual(set(terms.values()), {"1"})
