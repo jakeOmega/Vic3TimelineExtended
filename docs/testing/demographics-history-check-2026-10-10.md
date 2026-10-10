@@ -59,8 +59,8 @@ from 1820 to 1870 and 0.8% from 1870 to 1913 (Maddison), and life expectancy was
 
 ## Levers tried
 
-Found before crowding was counted: each lever's levels sit about three years higher than they would now, but the
-comparisons between them hold.
+Found before crowding was counted, so each lever's figures sit higher than they would now: about a year in 1837 with
+the continuous term (three with main's switch). The comparisons between them hold.
 
 | Lever | Result |
 |---|---|
@@ -105,9 +105,11 @@ deaths through the crowding itself.
 - **c = 1** (deaths rise by the same share attraction falls) is a choice, not a fit; it needs no fitting and reads
   plainly. c = 2 is in the strength table below.
 - **The census reads a stored figure.** `te_update_migration_crowding_modifier` keeps the multiplier it applies in
-  `migration_crowding_mult_applied`, and the census reads that: `migration_crowding_mult` reads `ROOT.owner`, and the
-  census also runs with ROOT a country (game start, the console). The harness reads the same figure, the modifier's
-  multiplier in the save.
+  `migration_crowding_mult_applied`, and the census reads that: the year's figure, which the harness reads too (the
+  modifier's multiplier in the save), at fast mode's steps between refreshes as well. The live
+  `migration_crowding_mult` reads `ROOT.owner`, and the console's benchmark steps every state with ROOT the player's
+  country. A state from an older save carries the modifier without the variable and reads no term until its next
+  yearly refresh.
 
 ## The poverty term
 
@@ -135,14 +137,14 @@ peacetime (1820–1840, 1870–1910), +0.3% in the 1880s. Japan's growth about +
 - **Why ×1.75 with c = 1.** China (SoL 6.0 by 1887 in that game) grows +0.3% a year in 1887, Maddison's peacetime
   pace; history's fall in the 1850s and 1860s came from wars, which the game runs as wars. World life expectancy is
   31–32, a year above history's band. The continuous term gives back the switch's crowding cost wherever crowding is
-  slight, so the poverty term that fits moves up a quarter, from ×1.5.
+  slight, so the poverty term that fits moves from ×1.5 to ×1.75.
 - **Why not steeper.** ×2 brings world growth to +0.8–0.9%, inside history's band, but China shrinks (−0.1% by 1887,
   life expectancy 21). Once phase 2 drives the engine, that would be a quarter of the world losing people every year.
 - **c = 2** puts more of the weight on the dense states: at ×1.5 it gives China +0.4% and much the same world as
   c = 1 at ×1.75. c = 1 is kept because it reads plainly (the same share as the migration penalty) and isn't fitted.
 - **What it costs the West.** Britain 1837 reads 36 against history's 41 (38 with neither term, 37 with crowding
-  alone), and Denmark 34 (41; 39 with neither). Both gain about two years on the switch. Every 1837 life-expectancy
-  anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line.
+  alone), and Denmark 34 (41; 39 with neither). Britain gains two years on the switch, Denmark one. Every 1837
+  life-expectancy anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line.
 - **What's left.** World growth stays about +1.0–1.1% a year. The rest of the gap is India, which grows +1.4% against
   history's +0.8%, the West's fertility, and whatever the engine's own deaths add on top in phase 2: starvation,
   devastation, turmoil. Those are the plan's next steps.
@@ -152,7 +154,7 @@ peacetime (1820–1840, 1870–1910), +0.3% in the 1880s. Japan's growth about +
 
 - **The anchors hold as defined, but barely test the term.** Every one of the medicine scenarios
   (`demographics_harness.py medicine`) and the fertility scenarios (`fertility`) stays in band. But they sit at SoL 9 or
-  above (India 1975 exactly at the bend), apart from the agrarian reference at SoL 8 (6.08 children per woman against a
+  above (India 1975 exactly at the bend), apart from the agrarian reference at SoL 8 (6.07 children per woman against a
   band of 4.8–6.2). So "in band" says little about the poverty term: the history check is its real test.
 - **They leave crowding off.** Stage 1's medicine fit was made without the term. Given every scenario the world's
   mean penalty of 1887 (0.07), India 1975 (45.8 against 46–56) and "medicine, no health system" (47.0 against 48–60)

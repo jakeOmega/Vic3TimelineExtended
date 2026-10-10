@@ -1191,8 +1191,10 @@ te_update_tourism_modifier = {
 
 # Refreshes the migration_crowding modifier. The census reads the multiplier it applied
 # (migration_crowding_mult_applied): infection deaths rise by the same share migration
-# attraction falls (te_demog_mult_infection). Stored, because migration_crowding_mult reads
-# ROOT.owner, and the census also runs with ROOT a country (game start, the console).
+# attraction falls (te_demog_mult_infection). Stored, so the census reads the year's figure,
+# the one the save holds, at fast mode's steps between refreshes too, and whatever ROOT is:
+# migration_crowding_mult reads ROOT.owner, and the console's benchmark (te_debug_demog.1 d)
+# steps every state with ROOT the player's country.
 te_update_migration_crowding_modifier = {
 	remove_modifier = migration_crowding
 	if = {

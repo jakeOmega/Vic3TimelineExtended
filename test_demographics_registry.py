@@ -2712,6 +2712,22 @@ class TestCauseMultipliersScript(unittest.TestCase):
                 got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
                 self.assertAlmostEqual(got, want["infection"], places=9)
 
+    def test_crowding_needs_both_the_modifier_and_the_stored_multiplier(self):
+        # a save from before the stored multiplier: the modifier without the variable, until the state's next yearly
+        # refresh (677 of 874 states in the 1949 save), must read no term rather than an unset var:; and a variable
+        # outliving its modifier must not count (review I1)
+        want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3))["infection"]
+        for label, modifier, variable in (("modifier only", True, False), ("variable only", False, True)):
+            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if modifier:
+                eng.modifiers["migration_crowding"] = 1.5
+            if variable:
+                eng.vars["migration_crowding_mult_applied"] = 1.5
+            with self.subTest(label):
+                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
+                self.assertAlmostEqual(got, want, places=9)
+
     def test_crowdings_pull_per_multiplier_is_the_modifiers(self):
         # "infection rises by the share attraction falls" holds only while the two agree: a retuned
         # migration_crowding would otherwise leave the census reading the old figure
