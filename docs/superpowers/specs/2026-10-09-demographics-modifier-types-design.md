@@ -95,9 +95,18 @@ Python file. But a modder editing the law can't change the value there, and a se
 
 - **A tech's `modifier` (INJECT).** Proven by `te_monetary_tech_injections.txt`: the finance techs' injected lines
   were read in game on 2026-09-20 (monetary design §17; `scripting_best_practices.md` § INJECT).
-- **A law's `institution_modifier` (INJECT).** Proven by `common/laws/modified_health_system.txt` (drugs phase 2) on
-  the same three health laws. Vanilla's Public Health Insurance block already carries `state_mortality_mult` −0.05 a
-  level. The new line sits beside it and doesn't replace it.
+- **A law's `institution_modifier` (INJECT).** Used by `common/laws/modified_health_system.txt` (drugs phase 2) on
+  the same three health laws, but not yet read in game: `scripting_best_practices.md` confirms summing INJECTs for
+  `modifier` blocks on ranks, techs and laws, not for `institution_modifier` (stage 1's review). Vanilla's Public Health
+  Insurance block already carries `state_mortality_mult` −0.05 a level. The new line sits beside it and shouldn't
+  replace it. The stage-1 probe (`te_debug_demog.1` option l) reads the access line, and two tooltips tell whether
+  the blocks sum:
+  - Worker Protections should show vanilla's minimum wage line beside the new work line.
+  - Charitable and Private Health Insurance's pollution line should vanish, since drugs phase 2's +0.1 cancels
+    vanilla's −0.1.
+
+  If the blocks don't sum, the fallback is the census's old `institution_investment_level` ladder in script, which
+  loses the tooltip line.
 - **A law's `modifier` (INJECT).** Used throughout the mod.
 - **New types** go in `demographics_modifier_types.txt`:
   - `script_only = yes` (the engine never consumes them; they still render in tooltips);
