@@ -283,7 +283,13 @@ are taken from or added to the ages they belong to. The war dead are people aged
 falls with literacy, child survival and city life; the means to
 plan a family grow with literacy and medicine. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
-bring down.
+bring down. Medicine saves lives only as far as health care reaches. Markets and
+charity give some care everywhere; a health law adds more with each level of the
+Ministry of Health, in incorporated states only. So a Public Health Insurance
+law does little before antibiotics, and medicine without a health system
+reaches less than half the people. The medical technologies and the health,
+policing, pension and labor laws show what they do to each cause in their
+tooltips.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other

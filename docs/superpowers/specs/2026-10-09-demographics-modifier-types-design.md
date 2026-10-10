@@ -1,6 +1,6 @@
 # Demographics: the model's law, technology and institution inputs as modifier types — design
 
-Status: draft for the owner's review, 2026-10-09. Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
+Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
 §4.2, §8.4). Built after fast mode (#848), which is the in-game loop for the recalibration below.
 
 ## The rule
@@ -20,9 +20,9 @@ institution term, and could become a type in stage 3.
 
 | Today (params, or script) | Becomes (provisional name, scope) | Carrier | Stage |
 |---|---|---|---|
-| `TECH_MULT` infection, maternal, chronic: the medical techs | `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` | the techs' `modifier` (INJECT) | 1 |
+| `TECH_MULT` infection, maternal, chronic: the medical techs | `country_infection_treatment_add`, `country_maternal_treatment_add`, `country_chronic_treatment_add` | the techs' `modifier` (INJECT on the base game's, in place on the mod's) | 1 |
 | `LAW_MULT` health laws; `INSTITUTION_MULT` health system (0.95 a level) | `state_health_care_access_add` | the three health laws' `institution_modifier` (per level) | 1 |
-| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' `modifier`, the tech's `modifier`, each institution's per-level modifier (its own `modifier`, or its laws' `institution_modifier`: check b) | 1 |
+| `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `country_external_mortality_mult`, `country_work_mortality_mult`, `country_chronic_mortality_mult` (laws and tech); `state_work_mortality_mult`, `state_external_mortality_mult` (institutions) | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
 | `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `country_contraception_add`: the tier, which the model scales by literacy | the techs' `modifier` | 2 |
 | `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `country_fertility_means_add` (exists) | the law's `modifier` | 2 |
 | `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
@@ -32,6 +32,16 @@ institution term, and could become a type in stage 3.
 
 The tax code's dividend term stays in script: it is a rate, not a law. Women's-rights work share gets its own type:
 vanilla's `state_working_adult_ratio_add` on Women in the Workplace is a different quantity.
+
+## Ruling: the country/state split (stage 1, 2026-10-09)
+
+The provisional names put every mortality type in state scope. Built, the types follow their carriers' scope:
+- Treatment and the flat law and tech terms are `country_*` types. Techs' and laws' `modifier` blocks carry them, and the census reads them in state scope as `owner.modifier:`, the path `country_fertility_means_add` already proves.
+- Only the per-level institution terms are `state_*` types: health-care access, Workplace Safety and Consumer Protection. A law's `institution_modifier` or an institution's own `modifier` carries them, so they reach incorporated states only.
+
+A mod `state_*` type in a country `modifier` block (check a) is never relied on. If it failed, every treatment would read 0 and nothing would log it.
+
+The cost is where the lines show: a tech's on the country's modifier breakdown, access and the institution terms on the state's. Work and external sum one country type and one state type inside one `(1 + total)`, so within a cause sources still add.
 
 ## Decision 1: how the terms combine
 
