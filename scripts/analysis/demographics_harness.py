@@ -481,6 +481,10 @@ HEALTH = "institution_health_system"
 # quinine, malaria_prevention, antibiotics in the base game; modern_pharmaceuticals, mrna_therapeutics,
 # telemedicine, personalized_medicine in the mod): 1 in 1836, 4-5 by 1900, 5 by 1950, 6 at era 8, 8 at
 # era 10 and 9 at era 11. The scenarios put a country that invests fully near its era's top.
+RICH_TODAY = dict(sol=40, literacy=0.99, urban_share=0.8, techs=MED_TODAY,
+                  laws=frozenset({PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"}),
+                  institutions={HEALTH: 8, "institution_workplace_safety": 5,
+                                "institution_ministry_of_consumer_protection": 4})
 # (label, inputs, {figure: (low, high)}): §2.4's anchors and the history behind them. Figures:
 # e0 and e65 in years, imr per 1,000 births, mmr maternal deaths per 100,000 births.
 MEDICINE_SCENARIOS = [
@@ -501,11 +505,7 @@ MEDICINE_SCENARIOS = [
                        institutions={HEALTH: 6, "institution_workplace_safety": 4,
                                      "institution_ministry_of_consumer_protection": 3}),
      {"imr": (0, 12), "e0": (72, 80), "e65": (15, 20), "mmr": (0, 25)}),
-    ("Rich today", dict(sol=40, literacy=0.99, urban_share=0.8, techs=MED_TODAY,
-                        laws={PHI, "law_old_age_pension", "law_dedicated_police", "law_worker_protections"},
-                        institutions={HEALTH: 8, "institution_workplace_safety": 5,
-                                      "institution_ministry_of_consumer_protection": 4}),
-     {"imr": (0, 6), "e0": (77, 84), "e65": (18, 23), "mmr": (0, 15)}),
+    ("Rich today", RICH_TODAY, {"imr": (0, 6), "e0": (77, 84), "e65": (18, 23), "mmr": (0, 15)}),
     ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, techs=MED_1950, laws={CHS},
                         institutions={HEALTH: 1}),
      {"imr": (110, 150), "e0": (46, 56)}),
@@ -518,6 +518,16 @@ MEDICINE_GAPS = [
     ("Public Health Insurance before antibiotics", dict(sol=12, literacy=0.4, techs=MED_1900, laws={PHI},
                                                          institutions={HEALTH: 3}),
      dict(sol=12, literacy=0.4, techs=MED_1900), (0.5, 3.0)),
+    # Augmentation as chronic treatment (phase 2 step 4). The old engine lines on Rich today's inputs: Medical
+    # Only's -2% a level at Ministry of Health level 8 gave about +2.8 years, Unrestricted's flat -5% about +0.8,
+    # Regulated Market's -2% a level at Consumer Protection level 4 about +1.4 (model, every cause scaled). The
+    # bands keep the new lines near those sizes and catch a per-level line (+0.10 a level is +14 years).
+    ("Medical Augmentation Only, Rich today", dict(RICH_TODAY, laws=RICH_TODAY["laws"] | {"law_medical_augmentation_only"}),
+     RICH_TODAY, (1.5, 3.5)),
+    ("Unrestricted Augmentation, Rich today", dict(RICH_TODAY, laws=RICH_TODAY["laws"] | {"law_unrestricted_augmentation"}),
+     RICH_TODAY, (0.5, 2.0)),
+    ("Regulated Augmentation Market, Rich today",
+     dict(RICH_TODAY, laws=RICH_TODAY["laws"] | {"law_regulated_augmentation_market"}), RICH_TODAY, (0.5, 2.0)),
 ]
 
 

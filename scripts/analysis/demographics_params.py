@@ -135,7 +135,7 @@ MEANS_ACCESS_BASE = 0.3
 # country_<cause>_treatment_add, at most its cap. The values of both live on their carriers in
 # the game files (demographics_modifiers.py); calibrated with `demographics_harness.py medicine`.
 BASE_ACCESS = 0.4
-TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.8}
+TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}   # chronic 0.85: phase 2 step 4 (augmentation)
 # Every other law, technology or institution term is 1 + its types' sum, at least this.
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
@@ -196,6 +196,20 @@ LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mo
 STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
 STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
+# Phase 2 step 4 (plan §3 (a)): carriers whose birth or mortality lines stay on top of the census's term.
+# Every other law, technology or institution line nets to zero (Tasks 6 and 8). The women's-rights laws leave
+# this list in Task 8, once Task 7's natural-fertility term carries their effect.
+ENGINE_LINES_ON_TOP = frozenset({
+    # women's rights: on top until the census's term exists (owner, 2026-10-10)
+    "law_no_womens_rights", "law_women_in_the_fields", "law_women_in_the_workplace", "law_womens_suffrage",
+    "law_protected_class",
+    # the family-policy laws §8.1 has yet to re-express as census terms
+    "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
+    # late-era lines with no census term; revisit with step 6
+    "law_legal_limbo", "law_basic_protections", "law_comprehensive_rights", "law_full_equality_and_protection",
+    "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution", "mental_health_awareness",
+    "biological_immortality", "mind_backups",
+})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee

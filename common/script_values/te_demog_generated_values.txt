@@ -1317,7 +1317,7 @@ te_demog_mult_chronic = {
 		add = 0.4
 		min = 0
 		max = 1
-		multiply = { value = modifier:state_chronic_treatment_add min = 0 max = 0.8 }
+		multiply = { value = modifier:state_chronic_treatment_add min = 0 max = 0.85 }
 	}
 	multiply = { value = 1 add = modifier:state_chronic_mortality_mult min = 0.2 }
 	multiply = {

@@ -108,3 +108,56 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
         elif c.kind == "institution" and incorporated:
             out[c.type] += c.value * levels.get(c.key, 0)
     return out
+
+
+def engine_rate_lines(root=ROOT, mod=True):
+    """{(kind, key, block, field): net value} for every `*_mult` line in a law's `modifier` or
+    `institution_modifier`, a technology's or an institution's `modifier`. Vanilla's and (with mod) the
+    mod's are summed as the engine sums an INJECT (scripting_best_practices.md § INJECT); a mod REPLACE
+    drops vanilla's. kind: law, technology, institution. Phase 2 step 4: which birth and mortality lines
+    the census absorbs (they net to zero) and which stay on top (P.ENGINE_LINES_ON_TOP)."""
+    from paradox_file_parser import ParadoxFileParser
+
+    files = {"law": ("laws", "laws"), "technology": ("technologies", "technology/technologies"),
+             "institution": ("institutions", "institutions")}
+    out = {}
+
+    def w(v):
+        """A value without its ("=", ...) wrapper: a tuple from the parser, a list from vanilla_parsed's JSON."""
+        return v[1] if isinstance(v, (list, tuple)) and len(v) == 2 and v[0] == "=" else v
+
+    def each(v):
+        """A block or value that appears once, or each of its copies when the entity repeats it (vanilla's
+        concrete_dockyards has two `modifier` blocks): the engine applies every copy, so they sum."""
+        v = w(v)
+        if isinstance(v, list):
+            return [w(x) for x in v]
+        return [] if v is None else [v]
+
+    def add(kind, key, body):
+        body = w(body)
+        if not isinstance(body, dict):
+            return
+        for block in ("modifier", "institution_modifier"):
+            for lines in each(body.get(block)):
+                for field, value in (lines if isinstance(lines, dict) else {}).items():
+                    if field.endswith("_mult"):
+                        k = (kind, key, block, field)
+                        out[k] = out.get(k, 0.0) + sum(float(x) for x in each(value))
+
+    for kind, (snap, sub) in files.items():
+        vanilla = json.loads((Path(root) / "vanilla_parsed" / "common" / f"{snap}.json").read_text(encoding="utf-8"))
+        for key, body in vanilla.get("data", vanilla).items():
+            add(kind, key, body)
+        if not mod:
+            continue
+        for path in sorted((Path(root) / "common" / sub).glob("*.txt")):
+            parser = ParadoxFileParser()
+            parser.parse_file(str(path), apply_directives=False)
+            for name, body in parser.data.items():
+                directive, _, key = name.rpartition(":")
+                if directive == "REPLACE":
+                    for k in [k for k in out if k[0] == kind and k[1] == key]:
+                        del out[k]
+                add(kind, key, body)
+    return out

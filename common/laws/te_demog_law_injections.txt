@@ -26,6 +26,21 @@ INJECT:law_militarized_police = {
 INJECT:law_child_labor_allowed = {
 	modifier = {
 		state_work_mortality_mult = 0.1
+		# vanilla's class lines cancelled: the census's work term absorbs them (owner, 2026-10-10: vanilla's
+		# lines are probably far too high; the census's term, about a twenty-fifth of them, is the intended size)
+		state_laborers_mortality_mult = -0.05
+		state_machinists_mortality_mult = -0.05
+		state_farmers_mortality_mult = -0.05
+		state_peasants_mortality_mult = -0.05
+	}
+}
+
+INJECT:law_restricted_child_labor = {
+	modifier = {
+		# vanilla's class lines cancelled, as Child Labor Allowed's (demographics phase 2 step 4)
+		state_laborers_mortality_mult = -0.02
+		state_farmers_mortality_mult = -0.02
+		state_peasants_mortality_mult = -0.02
 	}
 }
 
