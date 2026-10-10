@@ -2720,7 +2720,7 @@ class TestCauseMultipliersScript(unittest.TestCase):
 
     def test_script_matches_the_model(self):
         for mods in self.CASES:
-            for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
+            for sol, lit in ((3, 0.1), (6.5, 0.2), (8, 0.0), (20, 0.5), (40, 1.0)):
                 inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
                 want = demographics_model.cause_multipliers(inp)
                 fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}

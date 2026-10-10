@@ -788,6 +788,13 @@ def multipliers(o):
               f"divide = {P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL} min = 0 max = 1")
             o(f"multiply = {lit(P.SOL_INFECTION_AT_HIGH - 1)} add = 1")
             o("}")
+            o(f"# poverty: x1 at SoL {P.POVERTY_INFECTION_SOL} and above, x{lit(P.POVERTY_INFECTION_AT_FLOOR)} at "
+              f"SoL {P.POVERTY_INFECTION_FLOOR_SOL} and below (demographics_model.poverty_infection)")
+            o("multiply = {")
+            o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_sol "
+              f"divide = {P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL} min = 0 max = 1")
+            o(f"multiply = {lit(P.POVERTY_INFECTION_AT_FLOOR - 1)} add = 1")
+            o("}")
             o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1 }}")
             o("if = {")
             o("limit = {")

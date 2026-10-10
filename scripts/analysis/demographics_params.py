@@ -140,6 +140,16 @@ TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.8}
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
+# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x2 at SoL 5 and below.
+# Most of the 1836 world sits at SoL 6-9, where the high-SoL term above is flat, so without this the
+# census gave China, India and Mexico Britain's life expectancy and the world +1.7% a year against
+# history's 0.4-0.8%. Fitted against Clio Infra's life expectancy and Maddison's population on the gate
+# run's 1837, 1857 and 1887 saves, keeping every medicine and fertility anchor in its band; the
+# gentlest of the fits that bring world life expectancy to history's (about 31 here), so China (SoL 6
+# by 1887 in that game) still grows (docs/testing/demographics-history-check-2026-10-10.md).
+POVERTY_INFECTION_SOL = 9          # x1 at and above
+POVERTY_INFECTION_FLOOR_SOL = 5    # POVERTY_INFECTION_AT_FLOOR at and below
+POVERTY_INFECTION_AT_FLOOR = 2.0
 SOL_CHRONIC_AT_HIGH = 0.85
 LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x literacy)
 CROWDING_INFECTION_MULT = 1.15    # migration_crowding active and no urban planning institution

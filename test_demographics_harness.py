@@ -2,6 +2,7 @@
 
 import copy
 import io
+import math
 import re
 import sys
 import tempfile
@@ -18,6 +19,7 @@ import demographics_modifiers as DM  # noqa: E402
 import demographics_save_inputs as S  # noqa: E402
 
 SLICE = ROOT / "test_fixtures" / "demographics" / "gb_1836_slice.v3"
+ANCHORS = ROOT / "test_fixtures" / "demographics" / "history_anchors.csv"
 CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
@@ -54,6 +56,26 @@ class TestHarness(unittest.TestCase):
         _ring, last = M.run_constant(inp, years=200)
         row = next(r for r in H.fertility_rows() if r[0] == label)
         self.assertAlmostEqual(row[1], last["tfr"], places=2)
+
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_history_on_the_slice(self):
+        # the model's figures for Britain beside the anchors nearest the save's year
+        code, out, err = self._cli("history", str(SLICE), "--anchors", str(ANCHORS), "--year", "1836")
+        self.assertEqual(code, 0, err)
+        line = next(l for l in out.splitlines() if l.startswith("GBR"))
+        self.assertRegex(line, r"model e0 \d+\.\d")
+        self.assertIn("history e0 41 (1838)", line)
+        self.assertIn("imr 153", line)
+        self.assertRegex(line, r"people \+0\.8\d%")       # 1820-1850, the benchmarks around 1836
+        self.assertRegex(out, r"world .* e0 \d+\.\d")
+
+    def test_history_anchors_round_trip(self):
+        a = H.read_anchors(ANCHORS)
+        self.assertEqual(a["e0"]["United Kingdom"][1838], 41.0)
+        self.assertEqual(H.nearest(a["e0"]["United Kingdom"], 1836, 15), (1838, 41.0))
+        self.assertIsNone(H.nearest(a["e0"]["United Kingdom"], 1870, 15))
+        self.assertAlmostEqual(H.growth_around(a["population"]["United Kingdom"], 1860), 100 * math.log(31400 / 27181) / 20)
+        self.assertIsNone(H.growth_around(a["population"]["United Kingdom"], 1900))
 
     def test_adopters_on_the_slice(self):
         # Britain holds Charitable Health System in 1836; Portugal has none

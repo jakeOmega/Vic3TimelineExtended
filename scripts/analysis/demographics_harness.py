@@ -12,6 +12,7 @@ Usage:
     demographics_harness.py medicine                    # mortality anchors with the game files' values
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
+    demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -24,6 +25,7 @@ run's yearly saves and belongs to phase 2's plan.
 
 import argparse
 import dataclasses
+import math
 import re
 import statistics
 import sys
@@ -584,6 +586,112 @@ def cmd_fertility(_args):
     return out
 
 
+
+# ---- history: the model against history's anchors (phase 2 calibration) -----------------------
+# The anchors are a CSV `measure,country,year,value` (scripts/analysis/fetch_history_anchors.py
+# writes it from Clio Infra; the data stay outside the repo). Countries are matched to the game's
+# tags through HISTORY_TAGS, each country's tags in order of preference: the first one in the save
+# is used (Italy is Sardinia-Piedmont until it forms; India is the East India Company, then India).
+HISTORY_TAGS = {
+    "United Kingdom": ("GBR",), "France": ("FRA",), "United States": ("USA",), "China": ("CHI",),
+    "India": ("BHT", "BIC"), "Japan": ("JAP",), "Russia": ("RUS",), "Germany": ("GER", "PRU"),
+    "Austria": ("AUS",), "Spain": ("SPA",), "Turkey": ("TUR",), "Egypt": ("EGY",), "Mexico": ("MEX",),
+    "Brazil": ("BRZ",), "Sweden": ("SWE",), "Netherlands": ("NET",), "Belgium": ("BEL",),
+    "Portugal": ("POR",), "Denmark": ("DEN",), "Iran": ("PER",), "Korea": ("KOR",), "Italy": ("ITA", "SAR"),
+    "Argentina": ("ARG",), "Chile": ("CHL",), "Peru": ("PEU",),
+}
+
+
+def read_anchors(path):
+    """{measure: {country: {year: value}}} from fetch_history_anchors.py's CSV."""
+    import csv
+    out = {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            out.setdefault(r["measure"], {}).setdefault(r["country"], {})[int(r["year"])] = float(r["value"])
+    return out
+
+
+def nearest(series, year, span):
+    """(year, value) of the anchor closest to `year` within `span` years, or None."""
+    best = None
+    for y, v in series.items():
+        if abs(y - year) <= span and (best is None or abs(y - year) < abs(best[0] - year)):
+            best = (y, v)
+    return best
+
+
+def growth_around(series, year, span=30):
+    """% a year between the nearest benchmarks before and after `year` (at most `span` years each way)."""
+    before = [y for y in series if year - span <= y <= year]
+    after = [y for y in series if year < y <= year + span]
+    if not before or not after:
+        return None
+    y0, y1 = max(before), min(after)
+    return 100 * math.log(series[y1] / series[y0]) / (y1 - y0) if series[y0] > 0 else None
+
+
+def save_year(path):
+    """The save's year, from `game_date=` in its meta_data block (plain-text saves)."""
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for _ in range(40):
+            line = fh.readline()
+            m = re.match(r"\s*(?:game_)?date=\"?(\d+)\.", line)
+            if m:
+                return int(m.group(1))
+    return None
+
+
+def model_figures(inp):
+    """{e0, imr, tfr, r}: the model's steady rates for a country's inputs (r in % a year)."""
+    qf, qm, _ = M.group_rates(inp)
+    e0 = (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2
+    tfr = M.fertility(inp, e0)["tfr"]
+    r = 100 * math.log(max(M.nrr(tfr, qf), 1e-9)) / 29
+    return {"e0": e0, "imr": (qf[0] + qm[0]) / 200, "tfr": tfr, "r": r}
+
+
+def history_rows(sections, year, anchors, carriers=None):
+    """[(country, tag, model figures, anchors)] for each HISTORY_TAGS country in the save, and the
+    world line: the model's figures over every country of 1M people or more, weighted by people."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    inputs = S.country_inputs(sections)
+    rows = []
+    for country, tags in HISTORY_TAGS.items():
+        tag = next((t for t in tags if t in inputs and inputs[t].population > 0), None)
+        if tag is None:
+            continue
+        got = model_figures(inputs_for(inputs[tag], carriers))
+        hist = {"e0": nearest(anchors.get("e0", {}).get(country, {}), year, 15),
+                "imr": nearest(anchors.get("imr", {}).get(country, {}), year, 15),
+                "growth": growth_around(anchors.get("population", {}).get(country, {}), year)}
+        rows.append((country, tag, inputs[tag].population, got, hist))
+    big = [(c.population, model_figures(inputs_for(c, carriers))) for c in inputs.values() if c.population >= 1e6]
+    tot = sum(p for p, _ in big) or 1
+    world = {k: sum(p * f[k] for p, f in big) / tot for k in ("e0", "imr", "tfr", "r")}
+    return rows, world
+
+
+def cmd_history(args):
+    anchors = read_anchors(args.anchors)
+    carriers = DM.load_carriers()
+    for path in args.save:
+        year = args.year or save_year(path)
+        if year is None:
+            print(f"{path}: no game_date in its meta_data", file=sys.stderr)
+            return 1
+        rows, world = history_rows(S.read_sections(path), year, anchors, carriers)
+        print(f"== {Path(path).name} ({year}): world (countries of 1M or more) e0 {world['e0']:.1f}  "
+              f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year")
+        for country, tag, people, got, hist in sorted(rows, key=lambda r: -r[2]):
+            e = f"{hist['e0'][1]:.0f} ({hist['e0'][0]})" if hist["e0"] else "-"
+            m = f"{hist['imr'][1]:.0f}" if hist["imr"] else "-"
+            g = f"{hist['growth']:+.2f}%" if hist["growth"] is not None else "-"
+            print(f"{tag:4s} {country:15s} {people / 1e6:6.1f}M  model e0 {got['e0']:4.1f} imr {got['imr']:4.0f} "
+                  f"tfr {got['tfr']:.2f} growth {got['r']:+.2f}%   history e0 {e:10s} imr {m:4s} people {g}")
+    return 0
+
+
 HEALTH_LAWS = ("law_charitable_health_system", "law_private_health_insurance", "law_public_health_insurance")
 
 
@@ -669,6 +777,11 @@ def main(argv=None):
     p.set_defaults(fn=cmd_wc)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
+    p = sub.add_parser("history")
+    p.add_argument("save", nargs="+")
+    p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_history)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)

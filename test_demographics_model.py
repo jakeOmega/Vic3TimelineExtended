@@ -144,6 +144,17 @@ class TestMortality(unittest.TestCase):
         f, m = M.life_table(qf), M.life_table(qm)
         return {k: (f[k] + m[k]) / 2 for k in f}
 
+    def test_poverty_raises_infection_below_sol_9(self):
+        # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x2 at SoL 5 and below
+        self.assertEqual(M.poverty_infection(9), 1.0)
+        self.assertEqual(M.poverty_infection(15), 1.0)
+        self.assertAlmostEqual(M.poverty_infection(7), 1.5)
+        self.assertEqual(M.poverty_infection(5), 2.0)
+        self.assertEqual(M.poverty_infection(1), 2.0)
+        # SoL 8 and 4 share the high-SoL term (x1), so the cause multipliers differ by the poverty term alone
+        ratio = (M.cause_multipliers(M.Inputs(sol=4))["infection"] / M.cause_multipliers(M.Inputs(sol=8))["infection"])
+        self.assertAlmostEqual(ratio, M.poverty_infection(4) / M.poverty_infection(8))
+
     def test_1836_europe(self):
         t = self.table(BRITAIN_1836)
         self.assertTrue(150 <= t["q0_per_1000"] <= 250, t)
