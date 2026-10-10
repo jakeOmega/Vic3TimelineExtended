@@ -27,7 +27,7 @@ class TestTotals(unittest.TestCase):
 
     def test_nothing_held_is_all_zero(self):
         t = DM.totals(self.CARRIERS)
-        self.assertEqual(set(t), set(P.DEMOG_MORTALITY_TYPES))
+        self.assertEqual(set(t), set(P.DEMOG_TYPES))
         self.assertEqual(set(t.values()), {0.0})
 
     def test_techs_and_laws_count_everywhere(self):
@@ -58,7 +58,7 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_every_type_has_a_carrier(self):
         carried = {c.type for c in self.carriers}
-        for name in P.DEMOG_MORTALITY_TYPES:
+        for name in P.DEMOG_TYPES:
             self.assertIn(name, carried, name)
 
     def test_each_type_sits_where_its_design_puts_it(self):
@@ -67,7 +67,8 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    **{t: {"technology"} for t in P.TREATMENT_TYPE.values()},
                    "state_external_mortality_mult": {"technology", "law", "institution"},
                    "state_work_mortality_mult": {"law", "law_institution"},
-                   "state_chronic_mortality_mult": {"law"}}
+                   "state_chronic_mortality_mult": {"law"},
+                   P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -79,6 +80,17 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             self.assertEqual(c.institution, "institution_health_system")
         self.assertLess(access["law_charitable_health_system"].value, access["law_private_health_insurance"].value)
         self.assertLess(access["law_private_health_insurance"].value, access["law_public_health_insurance"].value)
+
+    def test_contraception_sits_on_the_three_means_techs(self):
+        lines = {c.key: c.value for c in self.carriers if c.type == P.CONTRACEPTION_TYPE}
+        self.assertEqual(set(lines), {"vulcanization", "contraceptive_pill", "modern_pharmaceuticals"})
+        self.assertTrue(all(v > 0 for v in lines.values()), lines)
+        # all three together keep the tier at or below 1
+        self.assertLessEqual(P.TRADITIONAL_MEANS + sum(lines.values()), 1.0)
+
+    def test_family_planning_law_shifts_the_means(self):
+        lines = {c.key: c.value for c in self.carriers if c.type == P.MEANS_SHIFT_TYPE}
+        self.assertEqual(lines, {"law_state_sponsored_family_planning": 0.1})
 
     def test_every_treatment_carrier_is_a_technology(self):
         for c in self.carriers:

@@ -497,6 +497,7 @@ contraceptive_pill = {
 	category = society
 
 	modifier = {
+		state_contraception_add = 0.25	# the census's means (demographics modifier types, stage 2)
 		state_dependent_wage_mult = 0.35
 		state_working_adult_ratio_add = 0.05
 		state_pop_qualifications_mult = 0.05
