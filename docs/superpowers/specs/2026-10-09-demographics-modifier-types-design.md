@@ -127,6 +127,12 @@ e. Whether an amendment can carry a `modifier` block, for #822's amendment terms
 
 A probe in the style of #824 answers a–c and e in one short game.
 
+**Results (2026-10-10, `te_debug_demog.1` option l, a 1955 save at Ministry of Health and Workplace Safety level 5):**
+- **a and b pass.** In the capital and in an unincorporated state, the techs' and laws' lines read the same (treatment 0.83 infection and 0.95 maternal; external +0.2). Access read 0.5 in the capital (0.10 × 5) and 0 in the other state; Workplace Safety read −0.5 and 0. The composed figures matched the model: maternal 97.15 and 415.40 a 100,000 births.
+- **c passes.** The owner confirmed the tech and health-care lines in game.
+- **The logs are clean.** Neither carries an error from the types or the generated values.
+- **e is not run;** it belongs to stage 3.
+
 ## Stages
 
 1. **Mortality**: medicine (access × treatment) and the other causes. This replaces `TECH_MULT`, `LAW_MULT` and

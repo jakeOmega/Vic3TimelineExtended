@@ -146,6 +146,23 @@ The values are this fit's; the figures are medians (years, countries).
   - In the fast run's late saves, Public Health Insurance at level 4 gives 8 to 11 years over the same country with no health law (BEL, NBS, PEU), and PEU at level 5 gives 17; at level 1 it gives 2–4.
   - Universal care against none at the same low income is about Sri Lanka or Kerala against Pakistan in the 1970s, 10–15 years.
 
+## In-game probe (2026-10-10)
+
+`event te_debug_demog.1`, option l, in a 1955 save. The owner's country has Public Health Insurance, Ministry of Health level 5, Workplace Safety level 5 and no Consumer Protection.
+
+| Line | access | treat_inf | treat_mat | ext | work | mult_mat | mult_work |
+|---|---|---|---|---|---|---|---|
+| capital (incorporated) | 0.500 | 0.830 | 0.950 | 0.200 | −0.500 | 97.15 | 0.5000 |
+| an unincorporated state | 0.000 | 0.830 | 0.950 | 0.200 | 0.000 | 415.40 | 1.0000 |
+
+- **Every figure is what the carriers give:**
+  - access 0.10 × 5;
+  - infection treatment 0.03 + 0.07 + 0.08 + 0.40 + 0.25;
+  - external: the combustion engine's +0.3 and a police law's −0.1;
+  - work: Workplace Safety −0.1 × 5;
+  - maternal 670 × (1 − 0.9 × 0.95) and 670 × (1 − 0.4 × 0.95).
+- **The logs are clean.** Nothing in them comes from the types or the generated values. The only repeated error is vanilla's known `command_values.txt:373`.
+
 ## Reproduce
 
 ```bash
