@@ -301,17 +301,13 @@ means" view of the fertility transition.
 - **Child survival**: desired × (1 − 0.4 × (life expectancy − 30) ÷ 50), clamped. Parents stop insuring against child
   deaths a generation after the deaths stop. Life expectancy comes from §2.4.
 - **Urban life**: desired × (1 − 0.2 × the urbanisation rate). Children cost more and earn less in a city.
-- **Technology: the means.** The share of the gap a population can close:
-
-  | Source | Means |
-  |---|---|
-  | Traditional methods (start) | 0.4 |
-  | `vulcanization` (era 3: rubber condoms) | 0.55 |
-  | `contraceptive_pill` (era 7) | 0.8 |
-  | `modern_pharmaceuticals` (era 8: long-acting methods) | 0.9 |
-
+- **Technology: the means.** The share of the gap a population can close: traditional methods (0.4, everyone)
+  plus each means tech's `state_contraception_add`, at most 1. The techs' lines add, so research order matters:
+  `vulcanization` (era 3, rubber condoms), `feminism` (era 3), `contraceptive_pill` (era 7) and
+  `modern_pharmaceuticals` (era 8, long-acting methods). The values sit on the techs, fitted in the modifier-types
+  spec's stage 2 (0.4 / 0.75 / 0.80 / 0.85 in research order).
   - **Access** multiplies the means: 0.3 + 0.7 × literacy.
-  - **Laws and measures** shift it (§8.1). The cap is 0.95.
+  - **Laws and measures** shift it (§8.1) through `state_fertility_means_add`, after literacy. The cap is 0.95.
 - **The fertility factor** = 1 − means × (1 − desired).
 
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
@@ -452,7 +448,7 @@ None of it is scripted by date.
 - **1836.** Each state starts at the equilibrium of its own inputs, taken from a lookup by fertility and life
   expectancy that a generator writes. Historical overrides:
   - France starts with fertility well below its neighbours'. Its transition began around 1800. The head start is a
-    modifier, Family Limitation (`country_fertility_means_add`, +0.6), which France starts with and other countries can
+    modifier, Family Limitation (`state_fertility_means_add`, +0.6), which France starts with and other countries can
     be given. #822's Forced Heirship already pushes the same way.
   - The US frontier states start young and male.
 - **A state with no variables** (a new state, a split state region, an old save) starts at its equilibrium. A split
@@ -1039,7 +1035,27 @@ to be sane.
 - **Fertility without ageing (§1, "Ages past 95").** Fertility reads biological age, and Immortality holds it near 35,
   so an immortal woman takes the age-35 rate every year for good and her lifetime births have no limit (the owner's
   question, 2026-10-09). A cap per woman, or a term that falls as a cohort's children reach the family size it
-  wants, would bound it. Phase 3's to design.
+  wants, would bound it. Phase 3's to design. Proposal (2026-10-10): each cohort of women keeps its children so far,
+  and its birth rate falls toward the unplanned rate (1 − the means) as that count nears the family size it wants.
+  Lifetime births stay finite over any span that matters, with a slow trickle over centuries, and a higher wanted
+  size (a pronatalist policy) brings a second family. With almost no deaths, any births mean growth without limit,
+  so Population Control and the wanted family size are the late game's brake, not biology. About 150 variables a
+  state, from era 11 only.
+- **Family Limitation as a general practice, not France's (owner, 2026-10-10: avoid country-specific mechanics).**
+  Today it is a static modifier that history gives France for good. Proposal for phase 3, beside Cultural
+  Hegemony's fertility drift (the same spreading machinery): a national practice stored as a number, shown as one
+  "Family Limitation" line scaled by it. History still sets its start (France 0.6, as it sets France's Forced
+  Heirship). Each year it drifts toward a target from conditions the game has: smallholders under partible
+  inheritance (Forced Heirship × the agrarian share), literacy, the church law. It also closes part of the gap to its
+  neighbours', as the decline spread from France to Wallonia, Switzerland and Catalonia. Forced Heirship's rural
+  birth cut (`inh_forced_heirship_rural`, −15% × the agrarian share) tells the same story, so the two should be
+  folded together when this is built.
+- **What the panel's children per woman shows once phase 2 applies the births (owner's question, 2026-10-10).** The
+  census's figure starts from the standard-of-living curve and reads no engine birth modifier: Forced Heirship,
+  literacy's −0.1, the Pill's and the family-policy laws' flat lines. The engine's births take them all, so France
+  shows about 4.8 while its births run a tenth or more lower. When phase 2 makes the census set births, those modifiers
+  multiply on top. The panel should then show what actually happens, the model's figure times the read-through
+  modifiers.
 
 ## 14. Engine checks (run 2026-10-08)
 

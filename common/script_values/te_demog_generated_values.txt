@@ -1384,16 +1384,19 @@ te_demog_female_work_share = {
 	if = { limit = { owner = { has_law = law_type:law_protected_class } } value = 0.48 }
 }
 
-# State scope: the share of the gap to desired fertility a population can close (spec 2.3).
+# State scope: the share of the gap to desired fertility a population can close (spec 2.3;
+# demographics modifier types, stage 2): traditional methods plus the techs' contraception,
+# at most 1, scaled by literacy, plus the fertility-control shift.
 te_demog_means = {
-	value = 0.4
-	if = { limit = { owner = { has_technology_researched = vulcanization } } value = 0.55 }
-	if = { limit = { owner = { has_technology_researched = contraceptive_pill } } value = 0.8 }
-	if = { limit = { owner = { has_technology_researched = modern_pharmaceuticals } } value = 0.9 }
+	value = {
+		value = modifier:state_contraception_add
+		add = 0.4
+		min = 0
+		max = 1
+	}
 	multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }
-	if = { limit = { owner = { has_law = law_type:law_state_sponsored_family_planning } } add = 0.1 }
-	# history, events and measures: Family Limitation and its kin (country_fertility_means_add)
-	add = owner.modifier:country_fertility_means_add
+	# laws, history, events and measures: Family Limitation and its kin (state_fertility_means_add)
+	add = modifier:state_fertility_means_add
 	max = 0.95
 	min = 0
 }

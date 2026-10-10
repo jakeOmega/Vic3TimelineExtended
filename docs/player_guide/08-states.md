@@ -280,8 +280,11 @@ Each year, the people of every age lose their dead at that age's rate, the
 newborn enter at age 0, and the war dead, people killed by events and migrants
 are taken from or added to the ages they belong to. The war dead are people aged
 18 to 40, nineteen in twenty of them men. Children per woman follows wealth, then
-falls with literacy, child survival and city life; the means to
-plan a family grow with literacy and medicine. Life expectancy follows five
+falls with literacy, child survival and city life. The means to plan a family
+grow with literacy and with contraception: Vulcanization, Feminism, the
+Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
+State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
+each line. Life expectancy follows five
 causes of death, which standard of living, medicine, health laws and institutions
 bring down. Medicine saves lives only as far as health care reaches. Markets and
 charity give some care everywhere; a health law adds more with each level of the

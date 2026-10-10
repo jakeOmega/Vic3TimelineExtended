@@ -74,12 +74,8 @@ WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
 SURVIVAL_WEIGHT = 0.4         # desired x (1 - 0.4 x (e0 - 30) / 50), clamped 0..1
 URBAN_WEIGHT = 0.2            # desired x (1 - 0.2 x urban share)
-MEANS_TIERS = [               # (technology, means); the highest held applies
-    (None, 0.4), ("vulcanization", 0.55), ("contraceptive_pill", 0.8), ("modern_pharmaceuticals", 0.9),
-]
-MEANS_LAW_SHIFT = {"law_state_sponsored_family_planning": 0.1}
 MEANS_CAP = 0.95
-# Every other shift to the means comes through one modifier type, country_fertility_means_add
+# Every other shift to the means comes through one modifier type, state_fertility_means_add
 # (common/modifier_type_definitions/demographics_modifier_types.txt), so history, events and
 # later measures can grant it to any country. Family Limitation (te_demog_family_limitation)
 # carries this much; France starts with it (§2.6: its transition began around 1800).
@@ -114,6 +110,22 @@ DEMOG_MORTALITY_TYPES = (
     ACCESS_TYPE, *TREATMENT_TYPE.values(),
     *MORTALITY_TYPES["external"], *MORTALITY_TYPES["work"], *MORTALITY_TYPES["chronic"],
 )
+
+# ---- Fertility inputs as modifier types (modifier-types design, stage 2) -----------
+# Contraception: the methods families have, added to TRADITIONAL_MEANS (the techs' lines add, so
+# research order matters); the census scales the sum by literacy. The means shift: laws, history
+# (Family Limitation), events and measures, added after literacy. Both are state types read with
+# modifier:, their values on their carriers (demographics_modifiers.py).
+CONTRACEPTION_TYPE = "state_contraception_add"
+MEANS_SHIFT_TYPE = "state_fertility_means_add"
+DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE)
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
+# The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
+# (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
+# 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
+# vulcanization is 0.4 + the Pill's line). Values on the carriers: demographics_modifiers.py.
+TRADITIONAL_MEANS = 0.4
+MEANS_ACCESS_BASE = 0.3
 
 # ---- Cause multipliers from state inputs (§2.4) -----------------------------------
 # Medicine for infection, maternal and chronic deaths is 1 - access x treatment (the

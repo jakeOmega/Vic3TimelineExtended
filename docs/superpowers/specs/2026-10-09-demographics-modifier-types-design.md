@@ -1,6 +1,6 @@
 # Demographics: the model's law, technology and institution inputs as modifier types — design
 
-Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
+Status: the owner accepted all six owner calls as recommended on 2026-10-09. Stage 1 (mortality) is built (plan `docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`, fit and evidence in `docs/testing/demographics-fast-run-2026-10-09.md`) with the country/state split below. Stage 2 (fertility) is built (plan `docs/superpowers/plans/2026-10-10-demographics-modifier-types-stage2.md`, fit below). Parent spec: `2026-10-08-demographics-design.md` (§2.3–§2.5,
 §4.2, §8.4). Built after fast mode (#848), which is the in-game loop for the recalibration below.
 
 ## The rule
@@ -9,7 +9,7 @@ Every input to the census that a law, a technology or an institution changes is 
 reads with `modifier:`. Hard-coded tables in `demographics_params.py` are proof-of-concept only (owner, 2026-10-09). A
 modifier type is legible: the law's or technology's tooltip shows its line, and the state's modifier breakdown names
 every source (`scripting_best_practices.md`, "script_only" modifiers for a system that depends on a combination of
-laws and techs). `country_fertility_means_add` already works this way.
+laws and techs). `country_fertility_means_add` already worked this way (now `state_fertility_means_add`, stage 2).
 
 The model keeps reading the state's own conditions directly: standard of living, literacy, urban share, its own life
 expectancy, and its constants. Laws and techs don't set those. Crowding stays in the model for now: vanilla's
@@ -23,8 +23,8 @@ institution term, and could become a type in stage 3.
 | `TECH_MULT` infection, maternal, chronic: the medical techs | `state_infection_treatment_add`, `state_maternal_treatment_add`, `state_chronic_treatment_add` | the techs' `modifier` (INJECT on the base game's, in place on the mod's) | 1 |
 | `LAW_MULT` health laws; `INSTITUTION_MULT` health system (0.95 a level) | `state_health_care_access_add` | the three health laws' `institution_modifier` (per level) | 1 |
 | `LAW_MULT` police (external), child labour (work), Old Age Pension (chronic); `TECH_MULT` combustion engine (external); `INSTITUTION_MULT` workplace safety (work), consumer protection (external) | `state_external_mortality_mult`, `state_work_mortality_mult`, `state_chronic_mortality_mult` | the laws' and the tech's `modifier`; Workplace Safety on Regulatory Bodies' and Worker Protections' `institution_modifier`, Consumer Protection on its institution's own `modifier` (check b) | 1 |
-| `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `country_contraception_add`: the tier, which the model scales by literacy | the techs' `modifier` | 2 |
-| `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `country_fertility_means_add` (exists) | the law's `modifier` | 2 |
+| `MEANS_TIERS` (vulcanization, the Pill, modern pharmaceuticals) | `state_contraception_add`: added to the traditional 0.4, the sum scaled by literacy | the techs' `modifier`, with feminism added (owner, 2026-10-10) | 2 |
+| `MEANS_LAW_SHIFT` (State-Sponsored Family Planning +0.1) | `state_fertility_means_add` (`country_fertility_means_add` renamed) | the law's `modifier`; Family Limitation's static modifier | 2 |
 | `FEMALE_WORK_SHARE` by women's-rights law | `country_female_work_share_add` (the model's 0.1 plus the law's line) | the six laws' `modifier` | 3 |
 | `FAMILY_TRANSPORT_TECHS` | `country_family_migration_add` | the three techs' `modifier` | 3 |
 | `LAND_TENURE` (× the state's agrarian share) | `country_land_concentration_add` | the land reform laws, each variant with its own line (as the generator expands them today) | 3 |
@@ -138,7 +138,8 @@ A probe in the style of #824 answers a–c and e in one short game.
 1. **Mortality**: medicine (access × treatment) and the other causes. This replaces `TECH_MULT`, `LAW_MULT` and
    `INSTITUTION_MULT`. The gate run's largest defect is here: Public Health Insurance in the 1860s gives the adopters
    a life expectancy of 54–56 by 1876 while their peers stay around 43.
-2. **Fertility**: the contraception tiers and the family-planning law's means.
+2. **Fertility**: the contraception tiers and the family-planning law's means. Built (2026-10-10); see "Stage 2's fit"
+   below.
 3. **The rest**: Wealth Concentration's law terms, the female work share, family migration. Wealth Concentration's
    terms already show as bars in the panel, and #842/#843 have just retuned them, so this stage gains the least.
 
@@ -153,6 +154,42 @@ recalibration.
   by 1876 today).
 - §2.4's anchors still hold for Britain in 1900 and 1950.
 - A fast-mode run (#848) shows the same in game.
+
+## Stage 2's fit (2026-10-10)
+
+The means to plan a family = (0.4 + `state_contraception_add`, at most 1) × (0.3 + 0.7 × literacy) +
+`state_fertility_means_add`, at most 0.95. Stage 1's fit brought Britain's 1900 life expectancy from 54.8 to a
+historical 46.1, which weakened the child-survival term: Britain 1900 read 4.27 children per woman against about 3.5.
+`demographics_harness.py fertility` checks seven scenarios against §2.3's bands. The fit varied the era-3 pair's sum,
+the Pill and modern pharmaceuticals in 0.05 steps, with the traditional 0.4 and the desired-fertility weights fixed, so
+the 1836 census is unchanged (no country starts with an era-3 tech). Every means tech keeps a line of at least 0.05, so
+each shows one in its tooltip. It ranked by distance outside the bands, then by the squared distance to history
+(Britain 1900 3.5, the West 1950 2.9 and 1990 1.7, India 1975 5.2).
+
+| Carrier | Contraception |
+|---|---|
+| `vulcanization` (era 3, the methods) | +0.20 |
+| `feminism` (era 3, the will to use them; owner, 2026-10-10) | +0.15 |
+| `contraceptive_pill` (era 7) | +0.05 |
+| `modern_pharmaceuticals` (era 8) | +0.05 |
+| State-Sponsored Family Planning (Fertility Control) | +0.10 |
+
+| Children per woman | Before | After | History |
+|---|---|---|---|
+| Britain 1900 | 4.27 | 3.85 | about 3.5 |
+| West 1950 | 3.07 | 2.55 | 2.5 (Europe) to 3.5 (US) |
+| West 1990 | 1.47 | 1.59 | about 1.7 |
+| India 1975 | 5.34 | 5.34 | about 5.2 |
+| 1836 rows (reference, Britain, France) | 6.03, 5.57, 4.90 | unchanged | about 5.2, 5, 3.8 |
+
+- **The tiers add**, so research order matters. The Pill without vulcanization or feminism gives 0.4 + 0.05.
+- **The Pill's line is small.** The West reached 2.5–3 children per woman before it, so the fit puts the transition's
+  means on the era-3 pair. What the anchors fix is two sums: the era-3 pair's (0.35) and the Pill's and modern
+  pharmaceuticals' (0.05–0.10); how each sum splits is a judgment. With the 0.05 floor, a Pill line of +0.10 fits
+  almost as well (West 1990 1.47); without it, the Pill +0.10 and modern pharmaceuticals 0 fit slightly better (West
+  1990 1.59), at the cost of a means tech with no line.
+- **The 1836 rows stay high.** Lowering them needs the traditional means or the desired-fertility weights, which moves
+  every 1836 census: phase 2's calibration (owner, 2026-10-10).
 
 ## Not decided here
 

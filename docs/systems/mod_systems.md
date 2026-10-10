@@ -1440,7 +1440,7 @@ The Gini is the grouped Gini over 14 wealth bands at the income stand-in's knots
 
 ### Family Limitation
 
-`country_fertility_means_add` (`demographics_modifier_types.txt`, script-only) is the one way to shift the means to plan a family: history, events and phase 2's measures grant it. `te_demog_family_limitation` carries +0.6 (`FAMILY_LIMITATION_MEANS`), and `extra_history.txt` gives it to France, whose fertility transition began about 1800 (§2.6). That is the only line in the system that names a country. Phase 2 turns the means shifts of laws and measures (`MEANS_LAW_SHIFT`) into this modifier type.
+The means to plan a family come from two script-only state types (`demographics_modifier_types.txt`; modifier-types spec, stage 2), read with `modifier:` in `te_demog_means`: (0.4 + `state_contraception_add`, at most 1) × (0.3 + 0.7 × literacy) + `state_fertility_means_add`, at most 0.95. **Contraception** sits on the means techs and adds, so research order matters: vulcanization +0.20 and feminism +0.15 (INJECTs in `te_demog_tech_injections.txt`), the Contraceptive Pill +0.05 (`era_7.txt`) and Modern Pharmaceuticals +0.05 (`era_8.txt`), fitted with `demographics_harness.py fertility`. **Fertility Control** (`state_fertility_means_add`, formerly `country_fertility_means_add`) is the shift literacy doesn't scale: State-Sponsored Family Planning +0.1, and history, events and phase 2's measures. `te_demog_family_limitation` carries +0.6 (`FAMILY_LIMITATION_MEANS`), and `extra_history.txt` gives it to France, whose fertility transition began about 1800 (§2.6). That is the only line in the system that names a country; the parent spec's §13 proposes a general practice in its place (phase 3).
 
 ### Generator and harness
 

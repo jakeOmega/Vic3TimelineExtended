@@ -276,12 +276,12 @@ te_debug_demog_skew_lines = {
 	remove_variable = te_dg_dbg_size
 }
 
-# ---- l: the mortality modifier types ---------------------------------------------
+# ---- l: the census's modifier types (mortality, stage 1; fertility, stage 2) ------
 # THIS = ROOT = the player. One TE_DEMOG_MODS line for the capital and one for a state we
 # own that is not incorporated, if any (docs/superpowers/specs/2026-10-09-demographics-
 # modifier-types-design.md, engine checks a-c). Treatment and the techs' and laws' lines read the
 # same in both states; access and the per-level lines are each line times its level in the
-# capital and 0 in the other state.
+# capital and 0 in the other state. Contraception and fertility control read the same in both.
 te_debug_demog_modifier_reads = {
 	capital = { te_debug_demog_mods_line = yes }
 	if = {
@@ -298,5 +298,5 @@ te_debug_demog_modifier_reads = {
 
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
-	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }

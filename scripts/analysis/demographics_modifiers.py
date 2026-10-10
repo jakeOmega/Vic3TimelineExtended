@@ -1,4 +1,4 @@
-"""The demographics modifier types' totals, resolved from the game files.
+"""The demographics modifier types' totals (mortality and fertility), resolved from the game files.
 
 Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
 the values sit beside the techs, laws and institutions that carry them, and the model takes
@@ -70,7 +70,7 @@ def _lines(block, types):
             yield k, float(_u(v))
 
 
-def load_carriers(root=ROOT, types=P.DEMOG_MORTALITY_TYPES):
+def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     """Every line that carries one of `types`, from techs, laws and institutions."""
     types = set(types)
     ms = _state(root)
@@ -91,7 +91,7 @@ def load_carriers(root=ROOT, types=P.DEMOG_MORTALITY_TYPES):
     return out
 
 
-def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_MORTALITY_TYPES):
+def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES):
     """{type: total} that one state reads: its owner's techs and laws and, in an incorporated
     state, each institution line times the owner's investment level in that institution."""
     techs, laws, levels = set(techs), set(laws), institutions or {}
