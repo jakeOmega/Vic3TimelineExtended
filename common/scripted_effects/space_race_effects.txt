@@ -545,11 +545,16 @@ sr_clear_milestone_cost_modifiers_base = {
 # gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
 # its programme actually running). Multiplier names interpolate from
 # $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
-# all 8 tokens). Country scope.
+# all 8 tokens). Country scope. ?= because each milestone entry's immediate
+# sets sr_active_<X> and then runs sr_recalculate_cost, and when a
+# revolution's winner inherits the entry that immediate runs before je: can
+# find it ("Failed to scope to journal entry by tag", Spain's moon landing in
+# the 2026-10-10 observer run). Its modifiers then wait for the next
+# sr_recalculate_cost.
 sr_apply_milestone_cost_modifiers_base = {
 	if = {
 		limit = { sr_milestone_billed_$MILESTONE$ = yes }
-		je:je_space_race_$MILESTONE$ = {
+		je:je_space_race_$MILESTONE$ ?= {
 			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
 			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
 		}

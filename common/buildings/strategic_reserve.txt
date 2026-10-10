@@ -138,12 +138,13 @@ building_strategic_reserve_silo = {
 	# flat value with no such signal would have the AI raise silos without
 	# end, since, unlike a bureaucracy or a barracks, nothing in code tells
 	# it how much storage it needs. A war drains the reserve, so the value
-	# falls on its own while one is on.
+	# falls on its own while one is on. owner ?= : the AI can ask while a
+	# state's owner is briefly invalid.
 	ai_value = {
 		value = 0
 		if = {
 			limit = {
-				owner = {
+				owner ?= {
 					any_scope_building = {
 						is_building_type = building_strategic_reserve_hub
 					}

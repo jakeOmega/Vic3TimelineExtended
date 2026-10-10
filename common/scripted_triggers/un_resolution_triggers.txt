@@ -141,6 +141,19 @@ un_vote_can_cast_ballot = {
 	}
 }
 
+# Whether a ballot's change_relations and diplomatic catalyst toward WHO (the
+# proposer or the target) go ahead: both countries must still hold a state. A
+# country that loses its last state stays in the game while its war lasts,
+# and the catalyst sets vanilla's AI strategies reading its capital
+# (02_diplomatic_strategies, ai_has_systemic_befriend_reason), which is gone:
+# "Event target link 'capital' returned an invalid object" (2026-10-10
+# observer run). The vote itself is still recorded.
+# Scope: the voting country. WHO: a country scope, possibly unset.
+un_vote_relations_reachable = {
+	is_country_alive = yes
+	$WHO$ ?= { is_country_alive = yes }
+}
+
 # The same question asked of the OPEN resolution rather than of a saved scope.
 # A scripted GUI's is_shown / is_valid cannot save a scope, so the chamber's
 # vote controls have to reach global_var:un_active_resolution directly.

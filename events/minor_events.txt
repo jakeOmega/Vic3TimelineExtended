@@ -566,18 +566,21 @@ minor_events_timelineextended.7 = {
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
+	# contagion_crash is set by this event's immediate, but the engine reads the
+	# title when banking_cycle_spread_contagion queues the event, before then:
+	# a country never hit before has no value yet. Hence has_variable.
 	title = {
 		first_valid = {
-			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.t_cascade }
+			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 } desc = minor_events_timelineextended.7.t_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.t_severe }
 			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.t }
 		}
 	}
 	desc = {
 		first_valid = {
-			triggered_desc = { trigger = { var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_cascade_systemic }
-			triggered_desc = { trigger = { var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_cascade_severe }
-			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.d_cascade }
+			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_cascade_systemic }
+			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_cascade_severe }
+			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 } desc = minor_events_timelineextended.7.d_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } } desc = minor_events_timelineextended.7.d_systemic }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.d_panic }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 40 } } desc = minor_events_timelineextended.7.d_crash }
@@ -586,7 +589,7 @@ minor_events_timelineextended.7 = {
 	}
 	flavor = {
 		first_valid = {
-			triggered_desc = { trigger = { var:contagion_crash > 0 } desc = minor_events_timelineextended.7.f_cascade }
+			triggered_desc = { trigger = { has_variable = contagion_crash var:contagion_crash > 0 } desc = minor_events_timelineextended.7.f_cascade }
 			triggered_desc = { trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } } desc = minor_events_timelineextended.7.f_severe }
 			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.7.f }
 		}

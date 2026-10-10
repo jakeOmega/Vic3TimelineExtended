@@ -188,7 +188,7 @@ un_vote_cast_yes = {
 			# Small reconciliation gesture toward proposer (less than the standard
 			# +15 that other voters give — the proposer just tried to condemn us)
 			if = {
-				limit = { exists = scope:un_vote_proposer }
+				limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 				change_relations = { country = scope:un_vote_proposer value = 10 }
 				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
 			}
@@ -215,7 +215,7 @@ un_vote_cast_yes = {
 
 			# Relations boost with proposer + diplomatic catalyst
 			if = {
-				limit = { exists = scope:un_vote_proposer }
+				limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 				change_relations = { country = scope:un_vote_proposer value = 15 }
 				create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_proposer }
 			}
@@ -232,7 +232,7 @@ un_vote_cast_yes = {
 			# Skip when voter == target (the branch above handles that case).
 			if = {
 				limit = {
-					exists = scope:un_vote_target
+					un_vote_relations_reachable = { WHO = scope:un_vote_target }
 					NOT = { scope:un_vote_target ?= this }
 					scope:un_resolution ?= { un_resolution_accuses_target = yes }
 				}
@@ -298,7 +298,7 @@ un_vote_cast_no = {
 
 		# Relations damage with proposer + negative diplomatic catalyst
 		if = {
-			limit = { exists = scope:un_vote_proposer }
+			limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 			change_relations = { country = scope:un_vote_proposer value = -15 }
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
@@ -309,7 +309,7 @@ un_vote_cast_no = {
 		# Skip when voter == target — self-loop relations / catalyst is a no-op.
 		if = {
 			limit = {
-				exists = scope:un_vote_target
+				un_vote_relations_reachable = { WHO = scope:un_vote_target }
 				NOT = { scope:un_vote_target ?= this }
 				scope:un_resolution ?= { un_resolution_accuses_target = yes }
 			}
@@ -426,7 +426,7 @@ un_vote_cast_veto = {
 
 		# Relations damage with proposer
 		if = {
-			limit = { exists = scope:un_vote_proposer }
+			limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
 			change_relations = { country = scope:un_vote_proposer value = -25 }
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
@@ -435,7 +435,7 @@ un_vote_cast_veto = {
 		# accuses it (un_resolution_accuses_target).
 		if = {
 			limit = {
-				exists = scope:un_vote_target
+				un_vote_relations_reachable = { WHO = scope:un_vote_target }
 				NOT = { scope:un_vote_target ?= this }
 				scope:un_resolution ?= { un_resolution_accuses_target = yes }
 			}

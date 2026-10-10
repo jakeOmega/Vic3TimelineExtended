@@ -630,9 +630,13 @@ modern_election_events.7 = {
 		ig:ig_industrialists = {
 			party = { save_scope_as = corp_party }
 		}
-		# Anti-corporate opposition coalesces around trade unions
-		ig:ig_trade_unions = {
-			party = { save_scope_as = labor_party }
+		# Anti-corporate opposition coalesces around trade unions, when they
+		# have a party (the trigger checks only the industrialists')
+		ig:ig_trade_unions ?= {
+			if = {
+				limit = { has_party = yes }
+				party = { save_scope_as = labor_party }
+			}
 		}
 	}
 
