@@ -10,15 +10,17 @@
 # tax code's rule, te_tax_triggers.txt, for the same reason). The only reads of
 # the rule; everything else calls these two.
 te_demog_cohorts_run = {
-	OR = {
-		has_game_rule = demographics_full
-		has_game_rule = demographics_display_only
-	}
+	# RELEASE: 	OR = {
+	# RELEASE: 		has_game_rule = demographics_full
+	# RELEASE: 		has_game_rule = demographics_display_only
+	# RELEASE: 	}
+	always = no
 }
 
 # The model's effects (phase 2) apply only under Full.
 te_demog_effects_run = {
-	has_game_rule = demographics_full
+	# RELEASE: 	has_game_rule = demographics_full
+	always = no
 }
 
 # Any scope: fast mode's census clock runs (te_debug_demog.1 options h-k, console only).

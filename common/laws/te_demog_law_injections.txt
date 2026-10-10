@@ -5,44 +5,44 @@
 # are per level of the institution and reach incorporated states only. The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt.
 
-INJECT:law_local_police = {
-	modifier = {
-		state_external_mortality_mult = -0.05
-	}
-}
+# RELEASE: INJECT:law_local_police = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.05
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_dedicated_police = {
-	modifier = {
-		state_external_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_dedicated_police = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_militarized_police = {
-	modifier = {
-		state_external_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_militarized_police = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_external_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_child_labor_allowed = {
-	modifier = {
-		state_work_mortality_mult = 0.1
-	}
-}
+# RELEASE: INJECT:law_child_labor_allowed = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_work_mortality_mult = 0.1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_old_age_pension = {
-	modifier = {
-		state_chronic_mortality_mult = -0.05
-	}
-}
+# RELEASE: INJECT:law_old_age_pension = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_chronic_mortality_mult = -0.05
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_regulatory_bodies = {
-	institution_modifier = {
-		state_work_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_regulatory_bodies = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_work_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:law_worker_protections = {
-	institution_modifier = {
-		state_work_mortality_mult = -0.1
-	}
-}
+# RELEASE: INJECT:law_worker_protections = {
+# RELEASE: 	institution_modifier = {
+# RELEASE: 		state_work_mortality_mult = -0.1
+# RELEASE: 	}
+# RELEASE: }

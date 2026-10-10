@@ -6,46 +6,46 @@
 # lines in their own definitions (era_6.txt to era_11.txt). pharmaceuticals' line sits in its
 # existing INJECT in modified.txt, so the tech keeps one INJECT.
 
-INJECT:medical_degrees = {
-	modifier = {
-		state_infection_treatment_add = 0.03
-	}
-}
+# RELEASE: INJECT:medical_degrees = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_infection_treatment_add = 0.03
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:modern_nursing = {
-	modifier = {
-		state_infection_treatment_add = 0.08
-		state_maternal_treatment_add = 0.35
-	}
-}
+# RELEASE: INJECT:modern_nursing = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_infection_treatment_add = 0.08
+# RELEASE: 		state_maternal_treatment_add = 0.35
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:antibiotics = {
-	modifier = {
-		state_infection_treatment_add = 0.4
-		state_maternal_treatment_add = 0.6
-	}
-}
+# RELEASE: INJECT:antibiotics = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_infection_treatment_add = 0.4
+# RELEASE: 		state_maternal_treatment_add = 0.6
+# RELEASE: 	}
+# RELEASE: }
 
-INJECT:combustion_engine = {
-	modifier = {
-		state_external_mortality_mult = 0.3
-	}
-}
+# RELEASE: INJECT:combustion_engine = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_external_mortality_mult = 0.3
+# RELEASE: 	}
+# RELEASE: }
 
 # Stage 2 (fertility): rubber condoms. The census adds each means tech's line to the
 # traditional 0.4 (demographics_harness.py fertility). contraceptive_pill and
 # modern_pharmaceuticals carry theirs in era_7.txt and era_8.txt.
-INJECT:vulcanization = {
-	modifier = {
-		state_contraception_add = 0.2
-	}
-}
+# RELEASE: INJECT:vulcanization = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_contraception_add = 0.2
+# RELEASE: 	}
+# RELEASE: }
 
 # Feminism: the will to use the methods, where vulcanization is the methods (owner,
 # 2026-10-10: birth control was a feminist cause). Both are era 3; no anchor separates
 # them, so the fit sets their sum and splits it.
-INJECT:feminism = {
-	modifier = {
-		state_contraception_add = 0.15
-	}
-}
+# RELEASE: INJECT:feminism = {
+# RELEASE: 	modifier = {
+# RELEASE: 		state_contraception_add = 0.15
+# RELEASE: 	}
+# RELEASE: }
