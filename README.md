@@ -166,7 +166,7 @@ Plus:
 - **Cultural acceptance** — extended yearly cultural-acceptance accumulation tied to homeland status and policies.
 - **Tourism** — per-state tourism modifier scaled by city ranks, ports, transit, art production, parks, and monuments. ~3000 lines of state-region script values in `common/script_values/tourism.txt`. Re-applied via `on_yearly_pulse_state`.
 - **City rank tiering** — city tier updates monthly, used in tourism and cultural displays.
-- **Pop ideology / IG-feminism** — `apply_ideologies.py` regenerates `common/ideologies/modified.txt` from `ideology_modifications.py`; `ig_feminism.py` rewrites the 8 `common/interest_groups/00_*.txt` files to add or adjust female leader/commander/agitator probability.
+- **Pop ideology / IG-feminism** — `apply_ideologies.py` regenerates `common/ideologies/modified.txt` from `ideology_modifications.py`; `ig_feminism.py` regenerates `common/interest_groups/zz_te_ig_female_chance.txt`, which INJECTs higher female commander/politician/agitator chances into vanilla's interest groups.
 
 ### Military & defense
 
@@ -237,7 +237,7 @@ A few directories are owned by **generators** — never hand-edit:
 
 - `common/buy_packages/00_buy_packages.txt` ← `pop_needs_curves.py`
 - `common/ideologies/modified.txt` ← `apply_ideologies.py` (input: `ideology_modifications.py`)
-- `common/interest_groups/00_*.txt` ← `ig_feminism.py`
+- `common/interest_groups/zz_te_ig_female_chance.txt` ← `ig_feminism.py`
 - `common/scripted_effects/extra_law_consistency_generated.txt` ← `gen_law_consistency.py`
 - `localization/english/te_*_l_english.yml` ← `organize_loc.py` (categorization)
 - `localization/english/te_un_button_effects_l_english.yml` ← `gen_un_button_descs.py` (effect descs)

@@ -51,7 +51,7 @@ SCAN_ROOTS = ["common", "events", "gui", "localization/english", "map_data", "gf
 # the entries the drift check diffs against `docs/auto_generated_files.md`.
 EXCLUDED_REGISTRY_GLOBS = [
     "common/ideologies/modified.txt",
-    "common/interest_groups/00_*.txt",
+    "common/interest_groups/zz_te_ig_female_chance.txt",
     "common/buy_packages/00_buy_packages.txt",
     "common/script_values/auto_combat_unit_market_costs.txt",
     "common/script_values/household_emissions_generated_values.txt",
@@ -131,6 +131,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/goods/*.txt": "input to pm_costs.py — vanilla goods data, not generator output",
     "common/pop_needs/*.txt": "input to gen_tax_code.py (consumption-goods catalog) — hand-authored pop needs, not generator output",
     "common/ideologies/*.txt": "input to apply_ideologies.py — vanilla ideology data (modified.txt is the actual output)",
+    "common/interest_groups/*.txt": "input to ig_feminism.py — vanilla interest groups (zz_te_ig_female_chance.txt is the actual output)",
     "common/strategic_regions/*.txt": "input to gen_formable_regions.py — vanilla data, not generator output",
     "common/company_types/*.txt": "input to gen_company_building_cleanup.py — hand-authored company definitions",
     "common/modifier_type_definitions/tech_gate_modifier_types.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored modifier defs",

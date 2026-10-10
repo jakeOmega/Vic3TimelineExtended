@@ -24,7 +24,7 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 |---|---|
 | `pop_needs_curves` | `common/buy_packages/00_buy_packages.txt` |
 | `apply_ideologies` | `common/ideologies/modified.txt` |
-| `ig_feminism` | `common/interest_groups/00_*.txt` |
+| `ig_feminism` | `common/interest_groups/zz_te_ig_female_chance.txt` |
 | `pm_costs` | cost-comment headers in `common/production_methods/extra_pms.txt` & `unique_pms.txt` and in the `upkeep_modifier` blocks of `common/combat_unit_types/extra_combat_units.txt` & `common/mobilization_options/extra_mobilization_options.txt`; `common/script_values/auto_combat_unit_market_costs.txt`; the `Cost at …` suffixes in `localization/english/te_combat_units_l_english.yml`; `docs/engine/commented_vanilla_pms.txt`; `docs/engine/commented_vanilla_military_units.txt` |
 | `resources` | `map_data/state_regions/*.txt` |
 | `gen_pb_principle_unlock_descs` | `*_pb_principles_bool_desc` keys in `localization/english/te_power_bloc_unlocks_l_english.yml` |
@@ -260,7 +260,7 @@ Notes:
 | Script | Purpose | Run |
 |--------|---------|-----|
 | `resources.py` | Injects resource deposits into state region files from `deposits_config.json`. **Auto-runs on every server reload.** | `python resources.py` (`--table` for dry run) |
-| `ig_feminism.py` | Adjusts female leader/commander probability in IG files. **Auto-runs on every server reload.** | `python ig_feminism.py` |
+| `ig_feminism.py` | Raises each interest group's chance of female commanders, politicians and agitators with the mod's equality laws and social techs, as `INJECT`s that restate vanilla's fields. **Auto-runs on every server reload.** | `python ig_feminism.py` |
 | `scripts/image_pipeline/event_image_prompts.py` | The prompt registry: each mod event picture's FLUX prompt and the events that show it. Entries with no `.dds` yet are *pending* (their events keep interim art). `--validate` compares the registry with the event files — duplicates, listed events that are gone or hidden, and drift (a listed event showing another picture) are errors; pending images and unlisted events are reported. `test_event_image_registry.py` runs the same check in CI. | `python3 scripts/image_pipeline/event_image_prompts.py --validate` |
 | `scripts/image_pipeline/generate_event_images.py` | 3-phase pipeline: generate with FLUX.1-schnell, convert to DDS, point the listed events at the picture. Skips any image whose `.dds` exists; phase 3 wires only images whose `.dds` exists, never rewrites an event that already shows its picture, and never touches conditional art. Review new pictures between `--phase convert` and `--phase update`. Refuses to run without `gfx/event_pictures` (a sparse worktree), where every picture would look missing. | `python3 scripts/image_pipeline/generate_event_images.py --only <key> --phase generate` |
 | `scripts/image_pipeline/event_image_inventory.py` | What art each mod event declares (plain texture, video, conditional, none), read straight from `events/`; shared by the two scripts above and the test. | Library (import) |

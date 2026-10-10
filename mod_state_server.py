@@ -6214,9 +6214,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     "header_marker": True,
                 },
                 {
-                    "pattern": "common/interest_groups/00_*.txt",
+                    "pattern": "common/interest_groups/zz_te_ig_female_chance.txt",
                     "owner": "ig_feminism.py",
-                    "input": "mod state",
+                    "input": "profiles in ig_feminism.py + vanilla interest groups",
                     "header_marker": True,
                 },
                 {
