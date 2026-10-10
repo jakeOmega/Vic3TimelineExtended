@@ -1,20 +1,20 @@
-"""The state panel leaves the mod's blank-icon modifiers out of its modifier rows.
+"""The state panel's modifier rows and the mod's blank-icon modifiers.
 
 Some state modifiers are the mod's bookkeeping, refreshed by script each month
 or step: tourism, pollution, migration crowding, the free port's tariffs, and
 the demographics census's corrections to birth and death rates. They carry the
-mod's blank icon, which on its own still leaves an empty slot in the state
-panel's row of modifier icons. A GUI cannot read a timed modifier's key
-(`TimedModifier` has GetName, GetIcon, GetTooltip and the like, but no GetKey),
-so gui/states_panel.gui tells these apart by icon: an item whose icon is one of
-HIDDEN_ICONS is `visible = no` in a container that ignores invisible items.
+mod's blank icon, modifier_system.dds, and still take an empty slot in the
+state panel's rows. A GUI cannot leave them out: `TimedModifier` has no GetKey
+(GetName and GetDesc are localized), and comparing its icon,
+`EqualTo_string(TimedModifier.GetIcon, '<path>')`, fails at runtime with
+"FetchData failed" on every frame the row is drawn (2026-10-10: 13,690 lines in
+minutes, from both rows; GetIcon is not a string). No row may try it.
 
 The condensed view's box fades out when the state carries nothing else, which
-needs a count of the hidden modifiers the GUI cannot make itself:
+needs a count of the blank-icon modifiers the GUI cannot make itself:
 gui_state_hidden_modifier_count (common/script_values/gui_chart_script_values.txt)
-names each static modifier with a hidden icon by a has_modifier term. This test
-fails when a static modifier takes that icon without a term there, so that box
-never shows an empty frame for it.
+names each static modifier with that icon by a has_modifier term. This test
+fails when a static modifier takes that icon without a term there.
 """
 import os
 import re
@@ -28,27 +28,13 @@ STATIC_MODIFIERS = os.path.join(REPO, "common", "static_modifiers")
 COUNT_FILE = os.path.join(REPO, "common", "script_values", "gui_chart_script_values.txt")
 COUNT = "gui_state_hidden_modifier_count"
 
-# A modifier with one of these icons is left out of the state panel's rows.
-# The mod's one invisible modifier icon (4x4, alpha 0); give it to a modifier
-# to hide it, and add the modifier's term to gui_state_hidden_modifier_count.
+# The mod's one invisible modifier icon (4x4, alpha 0): a bookkeeping modifier
+# carries it and gets a term in gui_state_hidden_modifier_count.
 HIDDEN_ICONS = (
     "gfx/interface/icons/timed_modifier_icons/modifier_system.dds",
 )
 
 DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
-
-
-def _hidden_test(icons):
-    """`EqualTo_string(TimedModifier.GetIcon, '<icon>')` for each icon, joined
-    by nested two-argument `Or` when there is more than one."""
-    tests = [f"EqualTo_string(TimedModifier.GetIcon, '{icon}')" for icon in icons]
-    expr = tests[-1]
-    for test in reversed(tests[:-1]):
-        expr = f"Or({test}, {expr})"
-    return expr
-
-
-VISIBLE = f'visible = "[Not({_hidden_test(HIDDEN_ICONS)})]"'
 
 
 def _strip_comments(text):
@@ -188,22 +174,17 @@ class HiddenStateModifierTest(unittest.TestCase):
         where = [site["where"].split(":")[0] for site in self.sites]
         self.assertGreaterEqual(where.count("gui/states_panel.gui"), 2, self.sites)
 
-    def test_every_row_hides_the_blank_icons(self):
-        for site in self.sites:
-            with self.subTest(site=site["where"]):
-                self.assertIn(VISIBLE, site["item"])
-                self.assertEqual(site["item"].count("visible ="), 1, "one visible per item (gotcha #17)")
-
-    def test_hidden_items_take_no_space(self):
-        # flowcontainer, hbox and vbox lay out invisible children unless told
-        # not to; vanilla's building_details_panel.gui hides overlappingitembox
-        # items with visible alone (the formation's mobilization options).
-        for site in self.sites:
-            with self.subTest(site=site["where"]):
-                if site["container"] in ("flowcontainer", "hbox", "vbox"):
-                    self.assertRegex(site["own"], r"\bignoreinvisible\s*=\s*yes\b")
-                else:
-                    self.assertEqual(site["container"], "overlappingitembox")
+    def test_no_gui_compares_a_modifiers_icon_as_a_string(self):
+        # GetIcon is not a string: EqualTo_string on it fails every frame (#872's filter, removed)
+        for root, _, files in os.walk(GUI):
+            for fn in sorted(files):
+                if fn.endswith(".gui"):
+                    path = os.path.join(root, fn)
+                    with open(path, encoding="utf-8-sig") as f:
+                        text = _strip_comments(f.read())
+                    lines = [text.count("\n", 0, m.start()) + 1
+                             for m in re.finditer(r"EqualTo_string\(\s*TimedModifier\.GetIcon", text)]
+                    self.assertFalse(lines, f"{os.path.relpath(path, REPO)} compares TimedModifier.GetIcon at lines {lines}")
 
     def test_no_row_treats_hidden_modifiers_as_content(self):
         # An emptiness test on the raw list counts the hidden modifiers too,
