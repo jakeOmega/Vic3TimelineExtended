@@ -266,6 +266,22 @@ def wealth_band(wealth):
     return P.GINI_BANDS
 
 
+def stand_in_income(wealth, costs):
+    """§4.1's income per head at a pop's wealth: the buy package's cost / 100, linear between
+    GINI_INCOME_KNOTS, flat below the first, held at the top wealth level's above it. `costs` is
+    {wealth: package cost} (demographics_harness.buy_package_costs). The census adds people /
+    GINI_INCOME_UNIT times this (te_demog_gini_band_add)."""
+    knots = P.GINI_INCOME_KNOTS
+    w = min(wealth, P.GINI_TOP_WEALTH)
+    if w <= knots[0]:
+        return costs[knots[0]] / 100
+    for x0, x1 in zip(knots, knots[1:]):
+        if w <= x1:
+            y0, y1 = costs[x0] / 100, costs[x1] / 100
+            return y0 + (w - x0) * (y1 - y0) / (x1 - x0)
+    raise AssertionError("unreachable: the last knot is the top wealth level")
+
+
 NRR_TABLE_MIN, NRR_TABLE_MAX = 0.2, 4.0   # the generated table's first and last knots
 
 

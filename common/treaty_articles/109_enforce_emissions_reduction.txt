@@ -4,6 +4,7 @@
 # policies (carbon tax, renewable investment, emission standards,
 # reforestation, public transit, fossil fuel divestment, green
 # building codes) and imposes additional fossil fuel restrictions.
+# The source must have the technologies those policies need.
 # Can be enforced via war or offered as a paid deal (giftable).
 # Historical: Paris Agreement enforcement mechanisms, climate
 # sanctions, carbon border adjustment mechanisms, green conditionality
@@ -77,6 +78,14 @@ enforce_emissions_reduction = {
 		# The policies live on the climate journal entry, and the authority
 		# waiver above assumes they are there to be waived
 		has_journal_entry = je_global_warming
+		# The treaty may force a policy before warming would make the source
+		# adopt it, but not before the source can carry it out: Renewable
+		# Investment with no renewable plants to build, say. The forced
+		# policies' technology gates (global_warming_triggers.txt).
+		custom_tooltip = {
+			text = gw_treaty_source_has_technologies_tt
+			gw_has_emissions_treaty_technologies = yes
+		}
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
 		}
@@ -86,6 +95,11 @@ enforce_emissions_reduction = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = enforce_emissions_reduction }
+		}
+		# `possible`'s technology test again, with the side fixed explicitly.
+		custom_tooltip = {
+			text = gw_treaty_source_has_technologies_tt
+			scope:source_country = { gw_has_emissions_treaty_technologies = yes }
 		}
 	}
 
