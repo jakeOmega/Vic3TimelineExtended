@@ -88,6 +88,18 @@ class TestHarness(unittest.TestCase):
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
 
+    def test_inputs_for_passes_a_states_crowding(self):
+        """migration_crowding sits on 91% of the 1837 world's people; the history check left it out (2026-10-10)."""
+        c = S.CountryInputs("TST")
+        c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 8000.0, M.wealth_tfr(8.0) * 1000.0
+        c.workforce, c.literate = 500.0, 100.0
+        plain = H.inputs_for(c)
+        c.crowding = True
+        crowded = H.inputs_for(c)
+        self.assertFalse(plain.crowding)
+        self.assertTrue(crowded.crowding)
+        self.assertLess(H.model_figures(crowded)["e0"], H.model_figures(plain)["e0"] - 1)
+
     def test_save_year_reads_game_date_only(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "a.v3"

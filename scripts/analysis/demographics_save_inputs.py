@@ -45,6 +45,8 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
+# a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }), depth 5 and in
+_TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
 # social class -> strata, from game/common/social_classes/*.txt (1.14.5). Not in the
 # vanilla_parsed/ snapshot; an unknown class counts as lower.
 STRATA_OF_CLASS = {
@@ -115,6 +117,10 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                 m = _SOCIAL_CLASS.match(line.rstrip("\n"))
                 if m:
                     record["social_class"] = m.group(1)
+            elif depth >= 5 and section == "states":
+                m = _TIMED_MODIFIER.match(line.rstrip("\n"))
+                if m:
+                    record.setdefault("timed_modifiers", []).append(m.group(1))
             depth += opened - closed
             if depth == 2:
                 out[section][record_id] = record
@@ -147,6 +153,7 @@ class CountryInputs:
     institutions: dict = field(default_factory=dict)   # institution -> investment level
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
+    crowding: bool = False   # a state's: it carries migration_crowding (state_inputs); a country's stays False
 
     @property
     def sol(self):
@@ -220,6 +227,7 @@ def state_inputs(sections):
     for (tag, sid), st in per.items():
         c = countries[tag]
         st.laws, st.techs, st.institutions = c.laws, c.techs, c.institutions
+        st.crowding = "migration_crowding" in sections["states"].get(sid, {}).get("timed_modifiers", ())
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 
