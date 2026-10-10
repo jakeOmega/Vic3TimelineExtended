@@ -528,6 +528,11 @@ MEDICINE_GAPS = [
      RICH_TODAY, (0.5, 2.0)),
     ("Regulated Augmentation Market, Rich today",
      dict(RICH_TODAY, laws=RICH_TODAY["laws"] | {"law_regulated_augmentation_market"}), RICH_TODAY, (0.5, 2.0)),
+    # Augmentation reaches only as far as health-care access does (owner, 2026-10-10): with no health system the same
+    # law gives a fraction of Rich today's gain, where its old flat -5% mortality reached every state alike.
+    ("Unrestricted Augmentation, no health system",
+     dict(sol=10, literacy=0.3, urban_share=0.15, techs=MED_1990, laws={"law_unrestricted_augmentation"}),
+     dict(sol=10, literacy=0.3, urban_share=0.15, techs=MED_1990), (0.0, 0.4)),
 ]
 
 
