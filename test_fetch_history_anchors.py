@@ -55,6 +55,21 @@ class TestReader(unittest.TestCase):
         self.assertIn("e0,e0,1820,40.5", lines)
         self.assertEqual(len(lines), 1 + 2 * len(F.SOURCES))
 
+    def test_gapminder_fertility_joins_as_tfr_by_country_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for measure, name in F.SOURCES.items():
+                tiny_xlsx(Path(tmp) / name.replace("(", "").replace(")", ""), country=measure)
+            (Path(tmp) / F.GAPMINDER_TFR).write_text(
+                "country,year,children_per_woman_total_fertility\ngbr,1836,5.1\ngbr,1837,5.05\nzzz,1836,7\n", encoding="utf-8")
+            (Path(tmp) / F.GAPMINDER_GEO).write_text("country,name\ngbr,United Kingdom\n", encoding="utf-8")
+            out = Path(tmp) / "anchors.csv"
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(F.main([str(out), "--from", tmp]), 0)
+            lines = out.read_text(encoding="utf-8").splitlines()
+        self.assertIn("tfr,United Kingdom,1836,5.1", lines)
+        self.assertIn("tfr,United Kingdom,1837,5.05", lines)
+        self.assertIn("tfr,zzz,1836,7.0", lines, "a code with no name keeps its code")
+
     def test_a_failed_download_exits_1_without_a_traceback(self):
         with tempfile.TemporaryDirectory() as tmp, \
                 mock.patch.object(F.urllib.request, "urlopen", side_effect=urllib.error.URLError("offline")):

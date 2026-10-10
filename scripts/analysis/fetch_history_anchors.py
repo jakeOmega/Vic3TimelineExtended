@@ -5,7 +5,8 @@ Usage:
     fetch_history_anchors.py OUT.csv [--from DIR | --download-dir DIR]
 
 Downloads Clio Infra's country tables (life expectancy at birth, total population,
-infant mortality, income inequality: the "Compact" spreadsheets) and writes one long CSV,
+infant mortality, income inequality: the "Compact" spreadsheets) and Gapminder's children per
+woman (GAPMINDER_FILES, the `tfr` measure), and writes one long CSV,
 `measure,country,year,value`, for `demographics_harness.py history --anchors OUT.csv`.
 Downloads go to --download-dir (a temporary directory by default, so nothing lands in the
 repo); with --from DIR it reads spreadsheets already downloaded there instead. The data stay
@@ -34,6 +35,13 @@ SOURCES = {
     "imr": "InfantMortality_Compact.xlsx",
     "gini": "IncomeInequality_Compact.xlsx",
 }
+# Children per woman from Gapminder (open-numbers/ddf--gapminder--fertility_rate on GitHub), by country code,
+# with the codes' names; written as the `tfr` measure under the country's name.
+GAPMINDER_BASE = "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--fertility_rate/master/"
+GAPMINDER_TFR = "gapminder-children_per_woman.csv"
+GAPMINDER_GEO = "gapminder-geo-country.csv"
+GAPMINDER_FILES = {GAPMINDER_TFR: "ddf--datapoints--children_per_woman_total_fertility--by--country--year.csv",
+                   GAPMINDER_GEO: "ddf--entities--geo--country.csv"}
 _NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 
 
@@ -80,6 +88,20 @@ def long_rows(measure, rows):
                 yield measure, r[1], years[i], float(v)
 
 
+def gapminder_rows(tfr_path, geo_path):
+    """("tfr", country name, year, children per woman) from Gapminder's country-year file and its names."""
+    with open(geo_path, newline="", encoding="utf-8") as fh:
+        names = {r["country"]: r["name"] for r in csv.DictReader(fh)}
+    with open(tfr_path, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            yield "tfr", names.get(r["country"], r["country"]), int(r["year"]), float(r["children_per_woman_total_fertility"])
+
+
+def _download(url, path):
+    with urllib.request.urlopen(url, timeout=60) as resp, open(path, "wb") as fh:
+        shutil.copyfileobj(resp, fh)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("out")
@@ -96,12 +118,23 @@ def main(argv=None):
         else:
             path = downloads / name.replace("(", "").replace(")", "")
             try:
-                with urllib.request.urlopen(BASE + urllib.parse.quote(name), timeout=60) as resp, open(path, "wb") as fh:
-                    shutil.copyfileobj(resp, fh)
+                _download(BASE + urllib.parse.quote(name), path)
             except (urllib.error.URLError, OSError) as e:
                 print(f"cannot download {BASE + name}: {e}", file=sys.stderr)
                 return 1
         out.extend(long_rows(measure, read_xlsx(path)))
+    folder = Path(args.src) if args.src else downloads
+    if not args.src:
+        for local, remote in GAPMINDER_FILES.items():
+            try:
+                _download(GAPMINDER_BASE + remote, folder / local)
+            except (urllib.error.URLError, OSError) as e:
+                print(f"cannot download {GAPMINDER_BASE + remote}: {e}", file=sys.stderr)
+                return 1
+    if (folder / GAPMINDER_TFR).exists() and (folder / GAPMINDER_GEO).exists():
+        out.extend(gapminder_rows(folder / GAPMINDER_TFR, folder / GAPMINDER_GEO))
+    elif args.src:
+        print(f"no {GAPMINDER_TFR} and {GAPMINDER_GEO} in {args.src}: no children-per-woman anchors", file=sys.stderr)
     with open(args.out, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(("measure", "country", "year", "value"))

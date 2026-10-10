@@ -41,15 +41,56 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
   - stage 1's medicine fit was made with crowding off. At the world's mean penalty of 1887 (0.07), India 1975 and
     "medicine, no health system" fall 0.2–1 year under their bands; refit them or accept it.
 
+- **`demographics_harness.py fidelity SAVE` checks the harness against the census** before a fit: the model's cause
+  multipliers on each walked state's own SoL and literacy against the ones the census stored. Run it on a save from
+  the build being fitted, or tell it that build's poverty term: `--poverty-floor 1` for a save from main, which has
+  none. On the 4x fast run (main, 2026-10-10), `fidelity SAVE --poverty-floor 1`:
+  - 1837: only infection, in 13% of people, at exactly 1/1.15: states whose first Migration Crowding pulse came after
+    their last step (timing, not a gap);
+  - 1872: work off in 5% of people (Peru's states read 0.62–0.86 in the census against the model's 0.60) and maternal
+    in 4% (Britain's home states 0.439 against 0.430; states still incorporating 0.47 against 0.62, so the census sees
+    part of an institution's lines there and the harness none). Open: which state-level effect moves Peru's work line.
+
 ## Step 2: fertility against history
 
-- **Anchors:** Clio Infra has no fertility series. Add Gapminder's children per woman (from 1800, CC BY 4.0) to
-  `fetch_history_anchors.py` as a `tfr` measure, and print it in `history`.
-- **The harness gap:** read France's Family Limitation from a save (the country's `te_demog_family_limitation`
-  modifier), so the model's France in `history`, `seed` and `adopters` matches the game's.
-- **Fit:** the wealth curve's ends and the education, survival and urban weights, against the saves' inputs and
-  history's children per woman, keeping the `fertility` scenarios in band. The West reads high today (Britain 5.8 in
-  1837 against about 4.8–5 in the 1840s).
+**Tooling (built, the second PR).**
+- `fetch_history_anchors.py` adds Gapminder's children per woman (open-numbers' `ddf--gapminder--fertility_rate`, from
+  1800) as the `tfr` measure, and `history` prints it beside the model's.
+- The harness reads France's Family Limitation from a save: a country's timed modifiers, in
+  `demographics_save_inputs.STATIC_MEANS_ADD`.
+
+**What it shows** (gate run, state by state, with the poverty term at ×1.75 and continuous crowding; within 0.1 of
+the first revision's): the model's children per woman run
+4.3–6.1; history's run 3.2–7.1.
+
+| Too high (model − history) | 1837 | 1887 | Too low | 1837 | 1887 |
+|---|---|---|---|---|---|
+| Denmark | +1.7 | +1.3 | Persia | −1.0 | −1.2 |
+| Portugal | +1.4 | +1.4 | Turkey | −0.9 | −1.3 |
+| Japan | +1.3 | +1.4 | Mexico | −0.8 | −1.3 |
+| France (with Family Limitation) | +1.1 | +1.1 | Peru | – | −1.3 |
+| Sweden | +1.1 | +0.8 | Russia | −1.0 | −0.7 |
+| Britain | +1.0 | +0.2 | Argentina | −0.9 | −0.4 |
+
+China +0.6 and +0.5, India +0.0 and +0.1, Egypt +0.0 and −0.3. The world average is about right (5.95 and 5.74).
+
+**Why the inputs can't close it.** The spread comes mostly from marriage:
+- late marriage and lifelong celibacy in north-western Europe (the "European marriage pattern", west of a line from
+  Trieste to St Petersburg);
+- Tokugawa Japan's small families;
+- early and universal marriage in the Middle East, Russia and Latin America.
+
+The game carries none of this. SoL and literacy don't line up with it either: Japan and Persia share SoL 6.6, and
+history has them at 4.5 against 7.1.
+
+**Owner call (design, not fitting):**
+- a regional marriage regime, as Family Limitation is for France but general: a starting practice that drifts and
+  spreads (§13's proposal);
+- or accept the compressed spread and fit only the world level and the wealth curve's ceiling.
+
+Before the owner's call, the fit can still:
+- raise the wealth curve's ceiling for the poorest (history's high-fertility societies reach 7, the model 6.2);
+- check the education weight against the West's decline after 1870 (Britain 1887 is within 0.3 already).
 
 ## Step 3: the gap the game's inputs can't see (India, the tropics)
 
@@ -61,6 +102,15 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
   2. The engine's starvation, which phase 2 keeps (step 4).
   3. A disease-environment term from state traits. The malaria traits cover only sub-Saharan Africa and Indonesia;
      a broader one would mean new traits, an owner call.
+- **Checked (2026-10-10):** the base game has no disease-environment input to use.
+  - `disease_outbreak`'s trigger, `is_vulnerable_to_disease_outbreak`, is `always = yes`, so every state qualifies.
+  - The outbreak changes only throughput and peasants' consumption, not deaths.
+  - Two harvest conditions add `state_mortality_mult` +0.05 each; the engine keeps those on top in phase 2.
+  - The malaria traits are the only geographic disease input, and they cover sub-Saharan Africa and Indonesia only.
+- **So the options are:**
+  - a new geographic term (the tropics' and the monsoon belt's infection, which quinine, malaria prevention and
+    sanitation techs switch off), an owner call;
+  - leaving India's gap to the engine's starvation and the wars of phase 2's runs, and measuring what is left.
 - **Gate:** India's growth from the census plus the engine's own deaths within about 0.3% a year of history's.
 
 ## Step 4: how the census sets the engine's births and deaths
@@ -108,7 +158,12 @@ census's world medians by SoL band (§2.3's table is the starting point).
 - West 1950 reads 60–63 against about 66–69 (the medicine scenarios' band starts at 60 for this reason). Young adults'
   chronic and external base rates are 1836's.
 - World growth in 1949 reads +1.4% against history's +1.8%.
-- Fit against Clio Infra's life expectancy for 1900–1990 on the late game's saves.
+- Fit against Clio Infra's life expectancy for 1900–1990. **Not on the owner's 1949 save** (checked 2026-10-10): that
+  game diverged too far from history for per-country anchors. France holds 229M people after the French Commune's
+  conquests, Britain sits at SoL 15 with life expectancy 49, and Japan at SoL 5.8 with 35. Use the medicine
+  scenarios' assumed inputs for the West, and a normal-speed observer run to 1950 for the world line. Fast mode
+  doesn't speed standard of living or literacy, so its 20th century is a poor 19th-century society with modern
+  medicine.
 
 ## The gate
 

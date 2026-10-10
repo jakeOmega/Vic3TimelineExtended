@@ -49,6 +49,9 @@ _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
 # read as [name, multiplier] pairs inside that block only
 _TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
 _TIMED_MULTIPLIER = re.compile(r"^\t+multiplier=(-?[0-9.]+)$")
+# static modifiers that carry state_fertility_means_add, by their value (the census reads them in game;
+# the harness, from a save): te_demog_modifiers.txt
+STATIC_MEANS_ADD = {"te_demog_family_limitation": M.P.FAMILY_LIMITATION_MEANS}
 # social class -> strata, from game/common/social_classes/*.txt (1.14.5). Not in the
 # vanilla_parsed/ snapshot; an unknown class counts as lower.
 STRATA_OF_CLASS = {
@@ -166,6 +169,7 @@ class CountryInputs:
     institutions: dict = field(default_factory=dict)   # institution -> investment level
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
+    means_add: float = 0.0                              # static modifiers' state_fertility_means_add
     crowding: float = 0.0    # a state's migration penalty from crowding (state_inputs); a country's stays 0
 
     @property
@@ -239,7 +243,7 @@ def state_inputs(sections):
     out = {}
     for (tag, sid), st in per.items():
         c = countries[tag]
-        st.laws, st.techs, st.institutions = c.laws, c.techs, c.institutions
+        st.laws, st.techs, st.institutions, st.means_add = c.laws, c.techs, c.institutions, c.means_add
         st.crowding = sum(M.P.MIGRATION_CROWDING_PULL_PER_MULT * mult
                           for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
                           if name == "migration_crowding")
@@ -274,6 +278,10 @@ def country_inputs(sections):
         if not c:
             continue
         _add_pop(c, rec, size, rec.get("location") in incorporated)
+    for cid, rec in sections["country_manager"].items():
+        c = get(cid)
+        if c:
+            c.means_add = sum(STATIC_MEANS_ADD.get(name, 0.0) * mult for name, mult in rec.get("timed_modifiers", []))
     for rec in sections["laws"].values():
         if rec.get("active") == "yes":
             c = get(rec.get("country"))
