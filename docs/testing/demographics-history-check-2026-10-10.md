@@ -78,8 +78,10 @@ Spain 0.80, Brazil 0.83 and Japan 0.94. The state's mean SoL already carries mos
 The census multiplies infection deaths by 1.15 in a state carrying `migration_crowding` with no Ministry of Urban
 Planning (`te_demog_mult_infection`; the parent spec's "crowding in cities before sanitation"). The first version of
 this check left it out, because the harness never read the modifier from a save. The 4x fast-mode run found the gap:
-on 1 January 1837 its census read China 33.6, Britain 34.9 and France 36.2, where the harness gave 36.8, 38.0 and 39.3
-for the same save. With each state's crowding read from the save, the harness gives the census's figures exactly.
+at its first step after 1 January 1837 (census year 1841 in fast mode's log) the census read China 33.6, Britain 34.9
+and France 36.2, where the harness gave 36.8, 38.0 and 39.3 on the 1 January save. With each state's crowding read
+from the save, the harness gives 33.6, 34.9 and 36.2. The save's own figures sit 0.3–0.7 years higher: some states
+had taken their last step before Migration Crowding's first yearly pulse reached them.
 
 - **It covers nearly everyone.** Migration Crowding goes on any state above its floor density (10,000 people per unit
   of arable land), at any multiplier, and the census's term is all or nothing. 91% of the world's people lived in such
@@ -112,8 +114,9 @@ Denmark 41 and 49; India 24 (1891); Japan 37 (1885); China's growth about +0.3% 
 - **Why not steeper.** ×1.75 brings world growth to +0.85% and ×2 to +0.63%, inside history's band, but China slows to
   +0.2% at ×1.75 and shrinks at ×2 (−0.2% by 1887, life expectancy 21). Once phase 2 drives the engine, that would be a
   quarter of the world losing people every year. Japan falls to 28–30 against history's 37.
-- **What it costs the West.** Mostly crowding, not poverty. Britain 1837 reads 34 against history's 41 (36 with
-  neither term), and Denmark, the one smaller Western country with anchors at all three dates, 33 (41). Every 1837
+- **What it costs the West.** Britain 1837 reads 34 against history's 41: 38 with neither term, 35 with crowding
+  alone, so it pays mostly through crowding. Denmark, the one smaller Western country with anchors at all three
+  dates, pays about equally through both: 39 with neither, 36 with crowding, 33 with both (history 41). Every 1837
   life-expectancy anchor is Western, so the gain rests on the 1880s non-Western anchors and the world line.
 - **What's left.** World growth stays about 1.05% a year. The rest of the gap is India, which grows +1.3% against
   history's +0.8%, the West's fertility, and whatever the engine's own deaths add on top in phase 2: starvation,
