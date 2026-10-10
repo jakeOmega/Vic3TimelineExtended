@@ -1,20 +1,22 @@
-"""The state panel's modifier rows and the mod's blank-icon modifiers.
+"""The state panel leaves the mod's bookkeeping modifiers out of its modifier rows.
 
 Some state modifiers are the mod's bookkeeping, refreshed by script each month
 or step: tourism, pollution, migration crowding, the free port's tariffs, and
 the demographics census's corrections to birth and death rates. They carry the
-mod's blank icon, modifier_system.dds, and still take an empty slot in the
-state panel's rows. A GUI cannot leave them out: `TimedModifier` has no GetKey
-(GetName and GetDesc are localized), and comparing its icon,
-`EqualTo_string(TimedModifier.GetIcon, '<path>')`, fails at runtime with
-"FetchData failed" on every frame the row is drawn (2026-10-10: 13,690 lines in
-minutes, from both rows; GetIcon is not a string). No row may try it.
+mod's blank icon, modifier_system.dds. A GUI can't read a timed modifier's key
+(`TimedModifier` has no GetKey), and its icon can't be compared:
+`EqualTo_string(TimedModifier.GetIcon, ...)` fails at runtime with "FetchData
+failed" on every frame (GetIcon returns an unregistered texture type; 13,690
+lines in minutes, 2026-10-10). Its name can: GetName returns a CString, and the
+global Localize('<key>') renders the modifier's own name in the same language,
+so `EqualTo_string(TimedModifier.GetName, Localize('<key>'))` picks it out in
+any language. Each row's item is `visible = no` for every blank-icon modifier,
+in a container that ignores invisible items.
 
 The condensed view's box fades out when the state carries nothing else, which
-needs a count of the blank-icon modifiers the GUI cannot make itself:
-gui_state_hidden_modifier_count (common/script_values/gui_chart_script_values.txt)
-names each static modifier with that icon by a has_modifier term. This test
-fails when a static modifier takes that icon without a term there.
+needs a count the GUI can't make itself: gui_state_hidden_modifier_count
+(common/script_values/gui_chart_script_values.txt) names each blank-icon static
+modifier by a has_modifier term.
 """
 import os
 import re
@@ -173,6 +175,27 @@ class HiddenStateModifierTest(unittest.TestCase):
         # The full view's row over the state's picture and the condensed view's box.
         where = [site["where"].split(":")[0] for site in self.sites]
         self.assertGreaterEqual(where.count("gui/states_panel.gui"), 2, self.sites)
+
+    def test_every_row_hides_every_blank_icon_modifier_by_name(self):
+        blank = _blank_icon_modifiers()
+        self.assertTrue(blank)
+        for site in self.sites:
+            with self.subTest(site=site["where"]):
+                visible = re.findall(r'visible\s*=\s*"([^"]*)"', site["item"])
+                self.assertEqual(len(visible), 1, "one visible per item (gotcha #17)")
+                named = set(re.findall(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)", visible[0]))
+                self.assertEqual(named, blank, "the row's name filter must list exactly the blank-icon modifiers")
+                self.assertTrue(visible[0].startswith("[Not("))
+
+    def test_hidden_items_take_no_space(self):
+        # flowcontainer, hbox and vbox lay out invisible children unless told not to; an
+        # overlappingitembox hides an item on visible alone (vanilla's mobilization options)
+        for site in self.sites:
+            with self.subTest(site=site["where"]):
+                if site["container"] in ("flowcontainer", "hbox", "vbox"):
+                    self.assertRegex(site["own"], r"\bignoreinvisible\s*=\s*yes\b")
+                else:
+                    self.assertEqual(site["container"], "overlappingitembox")
 
     def test_no_gui_compares_a_modifiers_icon_as_a_string(self):
         # GetIcon is not a string: EqualTo_string on it fails every frame (#872's filter, removed)
