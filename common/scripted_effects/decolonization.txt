@@ -20,8 +20,9 @@
 #      Iron Fist parent → −75 (hostile).
 #
 # At the end, also applies a 12-month "liberation contagion" -1.0/mo bar
-# drain to every other country running the colonial-empire JE. Produces
-# the historical wave pattern: India 1947 → Burma, Ceylon, Indonesia.
+# drain to every other country running the colonial-empire JE, one copy at a
+# time per empire (decol_liberation_contagion). Produces the historical wave
+# pattern: India 1947 → Burma, Ceylon, Indonesia.
 # Last, it sends the new country the Nationalization Question (.15).
 apply_decolonization_path = {
 	save_scope_as = decolonized_new_country
@@ -145,12 +146,22 @@ apply_decolonization_path = {
 	# Liberation contagion: every other country running the colonial-empire JE
 	# feels a 12-month -1.0/mo drain on its stability bar. Independence
 	# elsewhere accelerates the next wave.
+	# One copy per empire at a time. This runs once per country formed, and
+	# Planned Full Decolonization (decolonization_events.401.a, which the AI
+	# takes through ce_planned_decolonization) forms one for every eligible
+	# state in a single effect, so an unguarded add stacked a copy per new
+	# country: one AI liquidation gave every other empire ~20 Colonial Crisis
+	# modifiers, -20 a month on a 0-100 bar (2026-10-10 report). The timed
+	# variable is readable at once by the loop's next pass, which a
+	# has_modifier guard may not be.
 	every_country = {
 		limit = {
 			has_journal_entry = je_colonial_empire
 			NOT = { this = scope:decolonizing_parent }
 			NOT = { this = scope:decolonized_new_country }
+			NOT = { has_variable = decol_liberation_contagion }
 		}
+		set_variable = { name = decol_liberation_contagion months = 12 }
 		add_modifier = {
 			name = colonial_stability_negative_event
 			months = 12

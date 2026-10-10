@@ -603,6 +603,10 @@ set_variable = { name = prior_shield value = var:new_multiplier }  # remember fo
 
 **Corollary for cross-country reads:** When reading a partner country's `modifier:X` via scope chains (e.g., `PREV.modifier:country_covert_defense_economic_add`), the partner's own shield/contribution is also baked in. You must subtract the partner's stored prior value (`PREV.var:prior_shield`) to get their base value too.
 
+## A Same-Name `add_modifier` Stacks, Once Per Pass of the Caller's Loop
+
+`add_modifier` with a name the scope already holds adds another copy, with its own timer, and every copy counts in full (UNA's `unification_prestige`, below; 20 Colonial Crises in one 2026-10-10 game). So a helper that hands a modifier to bystanders (`every_country = { … add_modifier … }`) multiplies by the number of times its caller's loop runs it. `apply_decolonization_path` runs once per country `form_decolonized_country` creates, and Planned Full Decolonization creates one per eligible state in a single effect, so one AI liquidation gave every other colonial empire ~20 copies of a −1/month drain. Guard a bystander modifier that must not stack with a timed variable set beside it (`NOT = { has_variable = x }` in the limit, then `set_variable = { name = x months = N }`), which the loop's next pass reads at once. Whether `has_modifier` sees an `add_modifier` made earlier in the same effect is unverified (see the section above). Mod example: `decol_liberation_contagion` in `decolonization.txt`.
+
 ## `ig:` Accessor Requires Country Scope
 
 - `ig:<ig_id>` (e.g., `ig:ig_devout`) only works from **country scope**. Using it from state scope returns 'none' silently.

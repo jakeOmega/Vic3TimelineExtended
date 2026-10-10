@@ -231,6 +231,8 @@ release grants Peaceful Decolonization, a decaying +15% prestige, +50 influence
 and −200 authority (five years, or ten after Planned Full Decolonization). Each
 new country also shakes every other empire: all other countries running the
 Colonial Empire entry take a year of Colonial Crisis, −1 stability a month.
+An empire carries one such year at a time: new countries formed before it runs
+out add nothing to it.
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject

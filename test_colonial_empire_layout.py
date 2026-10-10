@@ -1096,6 +1096,40 @@ class LocHygieneTest(unittest.TestCase):
                                         and m.group(1).count("[") == 1, m.group(1))
 
 
+class LiberationContagionTest(unittest.TestCase):
+    """2026-10-10 report: ~20 Colonial Crisis modifiers at once. Every country
+    form_decolonized_country creates runs apply_decolonization_path, which hands
+    the other empires a 12-month Colonial Crisis, and Planned Full Decolonization
+    (decolonization_events.401.a, the AI's ce_planned_decolonization) forms one
+    country per eligible state in a single effect. A same-name add_modifier
+    stacks, so each empire must take one copy at a time, guarded by a variable
+    the loop's next pass can read at once."""
+
+    def setUp(self):
+        self.path = _strip_comments(_block(_read(DECOLONIZATION), "apply_decolonization_path"))
+
+    def _contagion_blocks(self):
+        blocks = []
+        for m in re.finditer(r"every_country = \{", self.path):
+            a, b = _span(self.path, m.end() - 1)
+            if "colonial_stability_negative_event" in self.path[a:b]:
+                blocks.append(self.path[a + 1:b])
+        return blocks
+
+    def test_the_crisis_is_handed_out_once_and_only_by_the_guarded_walk(self):
+        self.assertEqual(len(re.findall(r"colonial_stability_negative_event", self.path)), 1)
+        self.assertEqual(len(self._contagion_blocks()), 1)
+
+    def test_an_empire_holds_one_contagion_at_a_time(self):
+        body = self._contagion_blocks()[0]
+        a, b = _span(body, body.index("limit = {") + len("limit = {") - 1)
+        self.assertRegex(body[a:b], r"NOT = \{ has_variable = decol_liberation_contagion \}")
+        guard = re.search(r"set_variable = \{ name = decol_liberation_contagion months = (\d+) \}", body)
+        crisis = re.search(r"name = colonial_stability_negative_event\s+months = (\d+)", body)
+        self.assertTrue(guard and crisis, body)
+        self.assertEqual(guard.group(1), crisis.group(1))
+
+
 class DecolonizedCultureScopeTest(unittest.TestCase):
     """A saved scope lasts until the whole effect chain ends, and decolonization
     events .201 / .204 (up to three) and .401.a (one per marked state) call
