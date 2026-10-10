@@ -70,7 +70,7 @@ ANCHORS = (
     ("GBR", 1836, "e0", "about 40 (owner check 3)", None, None),
     ("GBR", 1836, "median", "about 20 (owner check 3)", None, None),
     ("GBR", 1836, "imr", "150-250 per 1,000 (§2.4, Europe 1836)", 150, 250),
-    ("GBR", 1836, "gini", "about 0.36, the game's own (wealth bands, 2026-10-10)", 0.3, 0.45),
+    ("GBR", 1836, "gini", "about 0.35, the game's own (wealth bands, 2026-10-10)", 0.3, 0.45),
     ("FRA", 1836, "tfr", "about 3.8 real, 4.9 sketched (§2.3)", None, None),
     ("GBR", 1900, "tfr", "about 3.5 real, 3.9 sketched (§2.3)", None, None),
     ("GBR", 1900, "e65", "about 10 (§2.4)", None, None),
