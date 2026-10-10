@@ -105,8 +105,12 @@ Python file. But a modder editing the law can't change the value there, and a se
   - The three health laws' pollution line should vanish, since drugs phase 2's lines cancel vanilla's (+0.1
     against −0.1 for Charitable and Private, +0.15 against −0.15 for Public).
 
-  If the blocks don't sum, the fallback is the census's old `institution_investment_level` ladder in script, which
-  loses the tooltip line.
+  If the blocks replace each other instead (last wins), Worker Protections loses its minimum wage line, and the health
+  laws show a +10% or +15% pollution-reduction line (the mod's value alone). The access line shows either way, since it
+  sits in the mod's block. The probe's `access=` read in the capital is what proves the census can read it. The fallback
+  is the census's old `institution_investment_level` ladder in script, which loses the tooltip line. Last-wins would
+  also mean drugs phase 2 already dropped vanilla's own health-law lines (Public Health Insurance's
+  `state_mortality_mult` −0.05 a level).
 - **A law's `modifier` (INJECT).** Used throughout the mod.
 - **New types** go in `demographics_modifier_types.txt`:
   - `script_only = yes` (the engine never consumes them; they still render in tooltips);

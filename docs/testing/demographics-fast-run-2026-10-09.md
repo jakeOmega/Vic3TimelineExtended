@@ -124,9 +124,11 @@ The values are this fit's; the figures are medians (years, countries).
 | fast 1855 (~2064) | +1.0 / +1.3 (43) | +4.1 / +6.1 (12) |
 | fast 1860 (~2124) | +1.1 / +1.4 (42) | +4.4 / +4.4 (11) |
 
-- **The gate passes.**
-  - The normal-speed run's adopters gain 0.3–0.9 years from Public Health Insurance (median by save), and every one at level 3 (GBR, SAR, SWE, BEL in 1887) gains +1.7, inside the spec's about 3.
-  - The old tables' census lines had the 1870s adopters at e0 54–56 against peers' 43.
+- **The gate passes on both measures.** The spec's gate is "within about 3 years of their peers' life expectancy at the same standard of living": the peer gap.
+  - **Peer gap:** the median by save for Public Health Insurance is +0.6 to +1.2. The level-3 adopters range from +1.2 to +3.4; the top is BEL in 1887, against three peers.
+  - **The law's own effect:** +0.3 to +0.9 by save. Every level-3 adopter (GBR, SAR, SWE, BEL in 1887) gains +1.7.
+  - **Before:** the old tables' census lines had the 1870s adopters at e0 54–56 against peers' 43.
+- **The gate's first condition is not met as written.** "A fresh 1836 census is unchanged where no carrier applies" holds for a state with no carrier, which `TestMedicine.test_no_carrier_is_exactly_the_base` pins. But most 1836 countries hold `medical_degrees`, so their census moves: infection ×0.99 at base access, where the old table gave ×0.9.
 - **Once medicine exists, access matters a lot.**
   - In the fast run's late saves, Public Health Insurance at level 4 or 5 gives 13 to 21 years (BEL, NBS, PEU); at level 1 it gives 3–4.
   - Universal care against none at the same low income is about Sri Lanka or Kerala against Pakistan in the 1970s, 10–15 years.
