@@ -146,6 +146,12 @@
 			request
 		}
 
+		# Every divisor here is floored at 1. A country that has lost its last
+		# state has a GDP of 0, and an article can be priced before its
+		# quantity is set; the bare divides logged 6,510 "Div/0 near ...:149"
+		# lines in the 2026-10-10 observer run (the engine names this block's
+		# opening line, not the divide). The floor changes nothing for a GDP
+		# or a quantity of 1 or more.
 		inherent_accept_score = {
 			value = 0
 
@@ -231,7 +237,7 @@
 
 							add = {
 								value = net_fixed_income
-								divide = scope:article.input_quantity
+								divide = { value = scope:article.input_quantity min = 1 }
 								multiply = -1
 								max = 0.2
 							}
@@ -246,7 +252,7 @@
 
 							subtract = {
 								value = net_fixed_income
-								divide = scope:article.input_quantity
+								divide = { value = scope:article.input_quantity min = 1 }
 								max = 0.2
 							}
 						}
@@ -298,14 +304,14 @@
 						# Tier 1: Full rate (up to 50 acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							max = 50
 						}
 						# Tier 2: Half rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 50
 							min = 0
@@ -315,7 +321,7 @@
 						# Tier 3: Quarter rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 100
 							min = 0
@@ -325,7 +331,7 @@
 						# Tier 4: 10% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 150
 							min = 0
@@ -335,7 +341,7 @@
 						# Tier 5: 5% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 200
 							min = 0
@@ -345,7 +351,7 @@
 						# Tier 6: 2.5% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 250
 							min = 0
@@ -355,7 +361,7 @@
 						# Tier 7: 1% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 300
 							min = 0
@@ -365,7 +371,7 @@
 						# Tier 8: 0.5% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 350
 							min = 0
@@ -375,7 +381,7 @@
 						# Tier 9: 0.25% rate (up to 50 more acceptance)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 400
 							min = 0
@@ -385,7 +391,7 @@
 						# Tier 10: 0.1% rate (no cap)
 						add = {
 							value = scope:article.input_quantity
-							divide = gdp
+							divide = { value = gdp min = 1 }
 							multiply = 100000
 							subtract = 450
 							min = 0
@@ -434,7 +440,7 @@
 
 							add = {
 								value = net_fixed_income
-								divide = scope:article.input_quantity
+								divide = { value = scope:article.input_quantity min = 1 }
 								multiply = -1
 								max = 0.2
 							}
@@ -449,7 +455,7 @@
 
 							subtract = {
 								value = net_fixed_income
-								divide = scope:article.input_quantity
+								divide = { value = scope:article.input_quantity min = 1 }
 								max = 0.2
 							}
 						}

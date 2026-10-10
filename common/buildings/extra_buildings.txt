@@ -1229,8 +1229,9 @@ building_state_youth_centers = {
 	city_type = city
 	has_max_level = yes
 
+	# owner ?= : the engine can ask while a state's owner is briefly invalid.
 	potential = {
-		owner = {
+		owner ?= {
 			OR = {
 				has_law = law_type:law_pro_natalist_subsidies
 				has_law = law_type:law_state_sponsored_family_planning

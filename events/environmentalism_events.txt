@@ -390,7 +390,7 @@ environmentalism_events.6 = {
 			base = 2
 			modifier = {
 				trigger = {
-					ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_environmentalists } }
+					ig:ig_intelligentsia ?= { leader ?= { has_ideology = ideology:ideology_environmentalists } }
 				}
 				add = 2
 			}
