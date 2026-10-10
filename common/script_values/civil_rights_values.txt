@@ -18,3 +18,17 @@ cr_low_acceptance_count = {
 		add = 1
 	}
 }
+
+# Months of the 12 for which Cooptation / Token Reform still pushes Movement
+# Support this struggle. cr_cooptation_months counts the months it has run and
+# does not reset when the policy is switched off; at 12 the JE's monthly pulse
+# adds cr_cooptation_expired, which ends the push (civil_rights_support_bar).
+# Read by the cooptation buttons' tooltips.
+cr_cooptation_months_left = {
+	value = 12
+	if = {
+		limit = { has_variable = cr_cooptation_months }
+		subtract = var:cr_cooptation_months
+	}
+	min = 0
+}
