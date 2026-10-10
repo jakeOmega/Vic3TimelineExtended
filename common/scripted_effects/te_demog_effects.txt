@@ -23,9 +23,9 @@
 #   te_dg_urban_share   te_dg_urban over te_dg_walk_pop
 #   te_dg_fjob_share    share of employed people at a workplace that draws
 #                       women (light industry, services, urban facilities)
-#   te_dg_n_lo/_mi/_up  people by strata (lower, middle, upper)
-#   te_dg_y_lo/_mi/_up  income by strata, the Gini's stand-in (people x income per head)
-#   te_dg_gini          the state's shown Gini, 0-0.9 (te_demog_state_gini)
+#   te_dg_gn<k>, te_dg_gy<k>  people and income (the Gini's stand-in: people x income per head)
+#                       by wealth band, k = 1..14 (te_demog_gini_band_store, generated)
+#   te_dg_gini          the state's shown Gini, 0.3-1 (te_demog_state_gini)
 #   te_dg_lv_priv       building levels held privately (capital buildings)
 #   te_dg_lv_self       building levels held by their own workers (cooperatives)
 #   te_dg_lv_ctry       building levels held by the state
@@ -144,12 +144,7 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_rural value = 0 }
 	set_local_variable = { name = te_dg_w_fjob value = 0 }
 	set_local_variable = { name = te_dg_w_emp value = 0 }
-	set_local_variable = { name = te_dg_w_nlo value = 0 }
-	set_local_variable = { name = te_dg_w_nmi value = 0 }
-	set_local_variable = { name = te_dg_w_nup value = 0 }
-	set_local_variable = { name = te_dg_w_ylo value = 0 }
-	set_local_variable = { name = te_dg_w_ymi value = 0 }
-	set_local_variable = { name = te_dg_w_yup value = 0 }
+	te_demog_gini_band_init = yes
 	every_scope_pop = {
 		change_local_variable = { name = te_dg_w_pop add = total_size }
 		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
@@ -163,20 +158,8 @@ te_demog_walks = {
 		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
 		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
 		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
-		if = {
-			limit = { strata = upper }
-			change_local_variable = { name = te_dg_w_nup add = total_size }
-			change_local_variable = { name = te_dg_w_yup add = te_demog_pop_income }
-		}
-		else_if = {
-			limit = { strata = middle }
-			change_local_variable = { name = te_dg_w_nmi add = total_size }
-			change_local_variable = { name = te_dg_w_ymi add = te_demog_pop_income }
-		}
-		else = {
-			change_local_variable = { name = te_dg_w_nlo add = total_size }
-			change_local_variable = { name = te_dg_w_ylo add = te_demog_pop_income }
-		}
+		# the Gini's wealth band (spec 4.1; generated)
+		te_demog_gini_band_add = yes
 		if = {
 			limit = {
 				OR = {
@@ -248,12 +231,7 @@ te_demog_walks = {
 	set_variable = { name = te_dg_urban value = { value = local_var:te_dg_w_pop subtract = local_var:te_dg_w_rural min = 0 } }
 	set_variable = { name = te_dg_urban_share value = { value = var:te_dg_urban divide = { value = local_var:te_dg_w_pop min = 1 } } }
 	set_variable = { name = te_dg_fjob_share value = { value = local_var:te_dg_w_fjob divide = { value = local_var:te_dg_w_emp min = 1 } } }
-	set_variable = { name = te_dg_n_lo value = local_var:te_dg_w_nlo }
-	set_variable = { name = te_dg_n_mi value = local_var:te_dg_w_nmi }
-	set_variable = { name = te_dg_n_up value = local_var:te_dg_w_nup }
-	set_variable = { name = te_dg_y_lo value = local_var:te_dg_w_ylo }
-	set_variable = { name = te_dg_y_mi value = local_var:te_dg_w_ymi }
-	set_variable = { name = te_dg_y_up value = local_var:te_dg_w_yup }
+	te_demog_gini_band_store = yes
 	# buildings: capital in private, cooperative and state hands; ownership levels
 	set_local_variable = { name = te_dg_w_priv value = 0 }
 	set_local_variable = { name = te_dg_w_self value = 0 }

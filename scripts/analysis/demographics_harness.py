@@ -4,7 +4,7 @@
 Usage:
     demographics_harness.py sketch                      # §2.2/§2.3's cases from the model
     demographics_harness.py inputs SAVE [--tag GBR]     # per-country inputs read from a save
-    demographics_harness.py gini SAVE [--anchor-tag GBR --anchor 0.52]
+    demographics_harness.py gini SAVE [--tag GBR]       # the panel's Gini, the bands' and pop by pop
     demographics_harness.py seed SAVE --tag GBR         # the seeded structure and life figures
     demographics_harness.py natural-change OLD NEW      # §14 Q10: world change vs the SoL curves
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
@@ -89,44 +89,51 @@ def cmd_sketch(_args):
     return 0
 
 
-def country_groups(sections, tag, costs):
-    """[(people, income)] by strata for one country, from raw pop records."""
+def country_pops(sections, tag, costs):
+    """[(people, wealth, strata, income)] for one country's pops, from raw pop records."""
     tags = {cid: r.get("definition", "").strip('"') for cid, r in sections["country_manager"].items()}
     owner = {sid: r.get("country") for sid, r in sections["states"].items()}
-    acc = {}
+    out = []
     for r in sections["pops"].values():
         if tags.get(owner.get(r.get("location"))) != tag:
             continue
         size = S._num(r.get("workforce")) + S._num(r.get("dependents"))
         if size <= 0:
             continue
+        wealth = S._num(r.get("wealth"), 1)
         strata = S.STRATA_OF_CLASS.get(r.get("social_class"), "lower")
-        n, y = acc.get(strata, (0.0, 0.0))
-        acc[strata] = (n + size, y + size * income_proxy(S._num(r.get("wealth"), 1), costs))
+        out.append((size, wealth, strata, size * income_proxy(wealth, costs)))
+    return out
+
+
+def grouped_by(pops, key):
+    """[(people, income)] summed over the pops sharing key(pop)."""
+    acc = {}
+    for pop in pops:
+        n, y = acc.get(key(pop), (0.0, 0.0))
+        acc[key(pop)] = (n + pop[0], y + pop[3])
     return list(acc.values())
 
 
 def cmd_gini(args):
+    """The panel's Gini per country (§4.1: 1 - X (1 - the wealth bands' Gini)), then the bands' own figure,
+    each pop as its own group and the three strata the census used before 2026-10-10 (all computed)."""
     sections = S.read_sections(args.save)
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
     tags = args.tag or sorted(inputs, key=lambda t: -inputs[t].population)[:15]
-    groups = {t: country_groups(sections, t, costs) for t in set(tags) | {args.anchor_tag}}
-    if not groups[args.anchor_tag]:
-        print(f"no pops for anchor tag {args.anchor_tag} in {args.save}", file=sys.stderr)
-        return 1
-    grouped = {t: M.grouped_gini(g) for t, g in groups.items()}
-    anchor = grouped[args.anchor_tag]
-    if anchor <= 0:
-        print(f"anchor tag {args.anchor_tag} has a grouped Gini of 0 (one stratum or equal incomes): "
-              "no scale reaches the anchor", file=sys.stderr)
-        return 1
-    scale = (args.anchor - P.GINI_FLOOR) / anchor
-    print(f"GINI_SCALE for {args.anchor_tag} = {args.anchor}: {scale:.2f} (params: {P.GINI_SCALE})")
+    out = 0
     for t in tags:
-        shown = M.clamp(P.GINI_FLOOR + scale * grouped[t], 0, 0.9)
-        print(f"{t} grouped {grouped[t]:.3f} shown {shown:.2f}")
-    return 0
+        pops = country_pops(sections, t, costs)
+        if not pops:
+            print(f"no pops for {t} in {args.save}", file=sys.stderr)
+            out = 1
+            continue
+        bands = M.grouped_gini(grouped_by(pops, lambda p: M.wealth_band(p[1])))
+        each = M.grouped_gini([(p[0], p[3]) for p in pops])
+        strata = M.grouped_gini(grouped_by(pops, lambda p: p[2]))
+        print(f"{t:4s} shown {M.shown_gini(bands):.3f}  bands {bands:.3f}  pop by pop {each:.3f}  strata {strata:.3f}")
+    return out
 
 
 def cmd_inputs(args):
@@ -754,8 +761,6 @@ def main(argv=None):
     p = sub.add_parser("gini")
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])
-    p.add_argument("--anchor-tag", default="GBR")
-    p.add_argument("--anchor", type=float, default=0.52)
     p.set_defaults(fn=cmd_gini)
     p = sub.add_parser("seed")
     p.add_argument("save")

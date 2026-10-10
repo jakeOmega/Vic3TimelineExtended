@@ -193,12 +193,23 @@ CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, 
 
 # ---- Income inequality (§4.1) -----------------------------------------------------
 # Spending per head stands in for income: the buy package cost at the pop's wealth,
-# capped at INCOME_WEALTH_CAP (the mod's packages grow exponentially past it). The
-# panel shows GINI_FLOOR + GINI_SCALE x the grouped Gini over the three strata; the
-# harness's `gini` command sets GINI_SCALE so Britain 1836 reads 0.52.
+# capped at INCOME_WEALTH_CAP (the mod's packages grow exponentially past it). The owner
+# confirmed it tracks the engine's income (Britain 1836: aristocrats 139x laborers a head in
+# the engine, 115x in the stand-in).
 INCOME_WEALTH_CAP = 60
-GINI_FLOOR = 0.30
-GINI_SCALE = 0.85
+# The Gini groups pops by wealth band: the stand-in's knots are each band's top (wealth 1 or
+# less, 2-5, 6-10, ..., 56-60, 61 or more). Income rises with wealth, so the bands are in income
+# order and the grouped Gini needs no sort. The panel shows it as it is, the game's own
+# distribution, not history's (owner, 2026-10-10): against each pop as its own group, mean
+# -0.014, R^2 0.98 (docs/testing/demographics-gini-check-2026-10-10.md).
+GINI_BAND_KNOTS = (1, *range(5, INCOME_WEALTH_CAP + 1, 5))
+GINI_BANDS = len(GINI_BAND_KNOTS) + 1
+# The panel shows 1 - GINI_SHOWN_EQUALITY x (1 - the computed Gini) (owner, 2026-10-10): the census
+# counts everyone in a pop (or band) as earning alike, so it sees only part of the spread historians'
+# estimates hold; the equality it sees is scaled down, and total inequality stays at 1. Fitted to the
+# income Ginis of van Zanden et al. (2014, Clio Infra), 1820 and 1850 interpolated to 1836, over 23
+# countries against the 1836 save's band Gini: 0.685 weighting each equally, 0.711 by people.
+GINI_SHOWN_EQUALITY = 0.7
 
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5

@@ -1429,8 +1429,6 @@ te_demog_k_survival_weight = { value = 0.4 }
 te_demog_k_urban_weight = { value = 0.2 }
 te_demog_k_war_male_share = { value = 0.95 }
 te_demog_k_residual_noise_share = { value = 0.003 }
-te_demog_k_gini_floor = { value = 0.3 }
-te_demog_k_gini_scale = { value = 0.85 }
 te_demog_k_labour_female_min = { value = 0.1 }
 te_demog_k_labour_female_max = { value = 0.6 }
 te_demog_k_family_base = { value = 0.2 }

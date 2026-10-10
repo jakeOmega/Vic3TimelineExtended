@@ -255,8 +255,16 @@ def grouped_gini(groups):
 
 
 def shown_gini(grouped):
-    """The panel's Gini: an affine map of the grouped Gini (§4.1's anchors)."""
-    return clamp(P.GINI_FLOOR + P.GINI_SCALE * grouped, 0.0, 0.9)
+    """The panel's Gini (§4.1): the equality the bands show, scaled down for the spread inside them."""
+    return clamp(1 - P.GINI_SHOWN_EQUALITY * (1 - grouped), 0.0, 1.0)
+
+
+def wealth_band(wealth):
+    """The Gini's band (1..GINI_BANDS) for a pop's wealth: the first knot at or above it."""
+    for i, knot in enumerate(P.GINI_BAND_KNOTS, start=1):
+        if wealth <= knot:
+            return i
+    return P.GINI_BANDS
 
 
 NRR_TABLE_MIN, NRR_TABLE_MAX = 0.2, 4.0   # the generated table's first and last knots
