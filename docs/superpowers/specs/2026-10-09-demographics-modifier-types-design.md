@@ -9,7 +9,7 @@ Every input to the census that a law, a technology or an institution changes is 
 reads with `modifier:`. Hard-coded tables in `demographics_params.py` are proof-of-concept only (owner, 2026-10-09). A
 modifier type is legible: the law's or technology's tooltip shows its line, and the state's modifier breakdown names
 every source (`scripting_best_practices.md`, "script_only" modifiers for a system that depends on a combination of
-laws and techs). `country_fertility_means_add` already works this way.
+laws and techs). `country_fertility_means_add` already worked this way (now `state_fertility_means_add`, stage 2).
 
 The model keeps reading the state's own conditions directly: standard of living, literacy, urban share, its own life
 expectancy, and its constants. Laws and techs don't set those. Crowding stays in the model for now: vanilla's
