@@ -1795,28 +1795,35 @@ class TestWealth(unittest.TestCase):
 
     def test_the_target_sums_its_terms(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
-        # law 80, land 6, ownership (30/40 - 0.65) x 40 = 4, inequality (0.5 - 0.4) x 50 = 5, taxes -5
-        self.assertAlmostEqual(self.target(state), 90.0)
-        self.assertAlmostEqual(self.target(state, econ=-10.0), 80.0, msg="the economic laws add in")
+        # law 80, land 6, ownership (30/40 - 0.65) x 40 = 4, inequality (0.5 - 0.15) x 30 = 10.5, taxes -5
+        self.assertAlmostEqual(self.target(state), 95.5)
+        self.assertAlmostEqual(self.target(state, econ=-10.0), 85.5, msg="the economic laws add in")
         self.assertEqual(self.target(state, law=100.0, land=15.0), 100.0)
         self.assertEqual(self.target(state, law=0.0, land=-20.0), 0.0)
+
+    def test_the_inequality_term_is_three_points_a_tenth_above_015(self):
+        # owner, 2026-10-10: +30 x (Gini - 0.15), at most +15 (from 0.65); rounded for players
+        for gini, term in ((0.15, 0.0), (0.25, 3.0), (0.35, 6.0), (0.65, 15.0), (0.8, 15.0), (0.0, -4.5)):
+            state = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": gini}
+            self.assertAlmostEqual(self.target(state, law=50.0, land=0.0, tax=0.0), 50 + term, msg=str(gini))
 
     def test_the_ownership_and_inequality_terms_are_capped(self):
         private = {"te_dg_lv_priv": 50.0, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.9}
         # centred on 1836's measured 0.65 private: all private is +14, the most the term can add
         self.assertAlmostEqual(self.target(private, law=50.0, land=0.0, tax=0.0), 50 + 14 + 15)
-        two_thirds = {"te_dg_lv_priv": 65.0, "te_dg_lv_self": 30.0, "te_dg_lv_ctry": 5.0, "te_dg_gini": 0.4}
+        two_thirds = {"te_dg_lv_priv": 65.0, "te_dg_lv_self": 30.0, "te_dg_lv_ctry": 5.0, "te_dg_gini": 0.15}
         self.assertAlmostEqual(self.target(two_thirds, law=50.0, land=0.0, tax=0.0), 50.0, msg="1836's mix: no term")
         state_owned = {"te_dg_lv_priv": 0.0, "te_dg_lv_self": 5.0, "te_dg_lv_ctry": 45.0, "te_dg_gini": 0.0}
-        self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 15)
-        no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.4}
+        # a Gini is at least 0, so the inequality term is at least -4.5 (owner: a shallow bottom)
+        self.assertAlmostEqual(self.target(state_owned, law=50.0, land=0.0, tax=0.0), 50 - 20 - 4.5)
+        no_capital = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.15}
         self.assertAlmostEqual(self.target(no_capital, law=50.0, land=0.0, tax=0.0), 50.0, msg="no capital: no term")
 
     def test_continuity_of_title_pins_the_target_at_the_score(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5,
                  "te_dg_wc": 33.0}
         self.assertEqual(self.target(state, owner={"te_inh_title_continuity": 1.0}), 33.0)
-        self.assertAlmostEqual(self.target(state), 90.0)
+        self.assertAlmostEqual(self.target(state), 95.5)
 
     # -- the national figure, through the interpreter ------------------------------------------------
 
@@ -1862,7 +1869,7 @@ class TestWealth(unittest.TestCase):
         own_a, own_b = (400 / 440 - 0.65) * 40, (200 / 270 - 0.65) * 40   # +10.36 and +3.63: inside the caps
         self.assertTrue(-20 < own_b < own_a < 20)
         self.assertAlmostEqual(v["te_dg_wc_t_own"], mean(own_a, own_b))
-        self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(5, -5))
+        self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(10.5, 4.5))
         self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
         self.assertAlmostEqual(v["te_dg_wc_t_econ"], 5.0)
         # with no state clamped, the six bars add up to the target above them

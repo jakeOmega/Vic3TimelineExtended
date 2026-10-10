@@ -5054,7 +5054,7 @@
  te_demog_wc_t_econ:0 "Economic Laws"
  te_demog_wc_t_econ_tt:0 "#b Economic Laws#!\nHow freely capital compounds and combines: $law_laissez_faire$ +10, $law_extraction_economy$ +5 and $law_interventionism$ −5; $law_guilds_chartered_monopolies$ and $law_freedom_of_contract$ +5, $law_trust_busting$ and $law_regulated_utilities$ −5. The other economic laws add nothing."
  te_demog_wc_t_ineq:0 "Income Inequality"
- te_demog_wc_t_ineq_tt:0 "#b Income Inequality#!\nThe rich save more, so unequal incomes build fortunes: +5 for a state whose Gini is 0.50, −5 for 0.30, at most 15 either way."
+ te_demog_wc_t_ineq_tt:0 "#b Income Inequality#!\nThe rich save more, so unequal incomes build fortunes: +3 for every 0.1 of the state's Gini above 0.15, at most +15 (a Gini of 0.65). Below 0.15 it takes up to 4.5 off."
  te_demog_wc_t_land:0 "Land Tenure"
  te_demog_wc_t_land_tt:0 "#b Land Tenure#!\n$law_serfdom$ +15, $law_tenant_farmers$ +5, $law_commercialized_agriculture$ 0, $law_peasant_proprietorship$ −10 and $law_collectivized_agriculture$ −20, a variant law taking its parent's value, each scaled by a state's share of $peasants$ and $farmers$. Averaged over the states as the score is."
  te_demog_wc_t_law:0 "Inheritance Law"
