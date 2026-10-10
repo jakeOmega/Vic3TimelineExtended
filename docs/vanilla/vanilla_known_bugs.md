@@ -742,7 +742,7 @@ Error setting properties for '' (widget)
 
 Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
-### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88`, `common/ai_strategies/01_admin_strategies.txt:51` and `events/technology_events.txt:28` — a country with no states read through its capital
+### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
 - reviewed: helper anchor, signature cannot match a mod call (the mod reads only `support_separatism_radicalism` from 00_diplomacy_values, and that value reads no capital)
 
 ```
@@ -751,7 +751,7 @@ Event target link 'region' returned an invalid object
 Event target link 'market' returned an invalid object
 ```
 
-A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in an admin AI strategy (`capital.region`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines.
+A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. The vanilla AI strategies read capitals the same way (common/ai_strategies/01_admin_strategies.txt:51, and the default strategy through common/scripted_triggers/00_scripted_triggers.txt:1065), but they are left out on purpose: a mod effect that sets off an AI evaluation, such as a diplomatic catalyst, reaches the same frames with the same message, and an entry here would hide it (the UN ballots, 2026-10-10; #863).
 
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
