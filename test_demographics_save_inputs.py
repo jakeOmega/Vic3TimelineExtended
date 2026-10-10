@@ -207,6 +207,40 @@ class TestTinySave(unittest.TestCase):
         self.assertTrue(by_id["2"].crowding)
         self.assertFalse(by_id["1"].crowding)
 
+    def test_timed_modifiers_are_read_only_inside_their_own_block(self):
+        # a country's budget trends carry multiplier= lines and its enactment modifiers modifier= lines at the same
+        # depth; neither may touch the timed modifiers, whatever order the save writes the blocks in (review M2)
+        block = ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=1\n\t\t\t\tmodifier=te_demog_family_limitation\n"
+                 "\t\t\t\tmultiplier=0.5\n\t\t\t} }\n\t}\n"
+                 "\ttimed_enactment_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=2\n"
+                 "\t\t\t\tmodifier=te_demog_family_limitation\n\t\t\t} }\n\t}\n"
+                 "\tbudget2={\n\t\tmoney_trend={\n\t\t\tyearly_comp={\n\t\t\t\tmultiplier=9\n\t\t\t}\n\t\t}\n\t}\n")
+        text = TINY.replace('3={\n\tdefinition="TST"\n', '3={\n\tdefinition="TST"\n' + block, 1)
+        self.assertNotEqual(text, TINY)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            sections = S.read_sections(fh.name)
+        finally:
+            Path(fh.name).unlink()
+        self.assertEqual(sections["country_manager"]["3"]["timed_modifiers"], [["te_demog_family_limitation", 0.5]])
+        self.assertAlmostEqual(S.country_inputs(sections)["TST"].means_add, 0.5 * M.P.FAMILY_LIMITATION_MEANS)
+
+    def test_a_states_timed_modifiers_are_pairs_like_a_countrys(self):
+        # one shape for both (review M3)
+        text = TINY.replace("\tincorporation=0.4\n}",
+                            "\tincorporation=0.4\n\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=4\n"
+                            "\t\t\t\tmodifier=tourism_output\n\t\t\t\tmultiplier=2\n\t\t\t} {\n\t\t\t\tid=5\n"
+                            "\t\t\t\tmodifier=migration_crowding\n\t\t\t\tmultiplier=0.04356\n\t\t\t} }\n\t}\n}", 1)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            sections = S.read_sections(fh.name)
+        finally:
+            Path(fh.name).unlink()
+        self.assertEqual(sections["states"]["2"]["timed_modifiers"],
+                         [["tourism_output", 2.0], ["migration_crowding", 0.04356]])
+
     def test_empty_pop_is_skipped(self):
         c = S.country_inputs(self.sections)["TST"]
         self.assertEqual(c.rural, 0)

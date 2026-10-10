@@ -38,7 +38,8 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 
 - **`demographics_harness.py fidelity SAVE` checks the harness against the census** before a fit: the model's cause
   multipliers on each walked state's own SoL and literacy against the ones the census stored. Run it on a save from
-  the build being fitted. On the 4x fast run (main, 2026-10-10), with the poverty term off as that build had it:
+  the build being fitted, or tell it that build's poverty term: `--poverty-floor 1` for a save from main, which has
+  none. On the 4x fast run (main, 2026-10-10), `fidelity SAVE --poverty-floor 1`:
   - 1837: only infection, in 13% of people, at exactly 1/1.15: states whose first Migration Crowding pulse came after
     their last step (timing, not a gap);
   - 1872: work off in 5% of people (Peru's states read 0.62–0.86 in the census against the model's 0.60) and maternal
@@ -53,8 +54,8 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 - The harness reads France's Family Limitation from a save: a country's timed modifiers, in
   `demographics_save_inputs.STATIC_MEANS_ADD`.
 
-**What it shows** (gate run, state by state, with the poverty term and crowding): the model's children per woman run 4.3–6.1;
-history's run 3.2–7.1.
+**What it shows** (gate run, state by state, with the poverty term and crowding): the model's children per woman run
+4.3–6.1; history's run 3.2–7.1.
 
 | Too high (model − history) | 1837 | 1887 | Too low | 1837 | 1887 |
 |---|---|---|---|---|---|

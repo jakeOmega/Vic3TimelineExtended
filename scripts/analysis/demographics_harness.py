@@ -816,13 +816,27 @@ def _num_or_dash(v, spec):
 
 
 def cmd_fidelity(args):
+    kept = P.POVERTY_INFECTION_AT_FLOOR
+    if args.poverty_floor is not None:
+        P.POVERTY_INFECTION_AT_FLOOR = args.poverty_floor
+    try:
+        return _fidelity(args)
+    finally:
+        P.POVERTY_INFECTION_AT_FLOOR = kept
+
+
+def _fidelity(args):
     rows = fidelity_rows(args.save, tags=set(args.tag))
     if not rows:
-        print(f"{args.save}: no state the census has walked (no te_dg_m_inf)", file=sys.stderr)
+        which = f" in {', '.join(sorted(args.tag))}" if args.tag else ""
+        print(f"{args.save}: no state the census has walked{which} (no te_dg_m_inf)", file=sys.stderr)
         return 1
     people = sum(r[2] for r in rows)
     print(f"{len(rows)} states the census has walked, {people / 1e6:,.1f}M people. A cause is off where the census's "
           f"multiplier is more than {args.tolerance:.0%} from the model's on the walk's own SoL and literacy.")
+    print(f"The model has the poverty term at x{P.POVERTY_INFECTION_AT_FLOOR:g} (SoL {P.POVERTY_INFECTION_FLOOR_SOL}); "
+          f"a save from a build with another shows it as off below SoL {P.POVERTY_INFECTION_SOL} "
+          f"(--poverty-floor 1 for one from before the poverty term).")
     out = 0
     for cause, _var, _scale in FIDELITY_CAUSES:
         ratios = [(g / m if m else math.inf, r) for r in rows for c, (g, m) in r[3].items() if c == cause]
@@ -889,6 +903,7 @@ def main(argv=None):
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])
     p.add_argument("--tolerance", type=float, default=0.02, help="census / model beyond 1 +/- this is off (0.02)")
+    p.add_argument("--poverty-floor", type=float, help="the save's build's poverty term at SoL 5 (1: none, as main)")
     p.set_defaults(fn=cmd_fidelity)
     args = ap.parse_args(argv)
     try:
