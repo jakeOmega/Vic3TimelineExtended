@@ -43,19 +43,19 @@ is unreleased, so the bar for merging is low as long as each step is tested befo
 - The harness reads France's Family Limitation from a save: a country's timed modifiers, in
   `demographics_save_inputs.STATIC_MEANS_ADD`.
 
-**What it shows** (gate run, state by state, with the poverty term): the model's children per woman run 4.3–6.1;
+**What it shows** (gate run, state by state, with the poverty term and crowding): the model's children per woman run 4.3–6.1;
 history's run 3.2–7.1.
 
 | Too high (model − history) | 1837 | 1887 | Too low | 1837 | 1887 |
 |---|---|---|---|---|---|
-| Denmark | +1.7 | +1.4 | Persia | −1.0 | −1.2 |
+| Denmark | +1.7 | +1.4 | Persia | −1.0 | −1.1 |
 | Portugal | +1.4 | +1.4 | Turkey | −0.9 | −1.3 |
-| Japan | +1.3 | +1.4 | Mexico | −0.8 | −1.3 |
-| France (with Family Limitation) | +1.1 | +1.1 | Peru | – | −1.3 |
+| Japan | +1.2 | +1.4 | Mexico | −0.8 | −1.3 |
+| France (with Family Limitation) | +1.2 | +1.2 | Peru | – | −1.3 |
 | Sweden | +1.1 | +0.8 | Russia | −1.0 | −0.7 |
-| Britain | +1.0 | +0.2 | Argentina | −0.9 | −0.4 |
+| Britain | +1.0 | +0.3 | Argentina | −0.9 | −0.4 |
 
-China +0.6 and +0.5, India +0.0 and +0.1, Egypt +0.0 and −0.3. The world average is about right (5.95 and 5.74).
+China +0.6 and +0.5, India +0.0 and +0.1, Egypt +0.0 and −0.3. The world average is about right (5.96 and 5.75).
 
 **Why the inputs can't close it.** The spread comes mostly from marriage:
 - late marriage and lifelong celibacy in north-western Europe (the "European marriage pattern", west of a line from
@@ -73,7 +73,7 @@ history has them at 4.5 against 7.1.
 
 Before the owner's call, the fit can still:
 - raise the wealth curve's ceiling for the poorest (history's high-fertility societies reach 7, the model 6.2);
-- check the education weight against the West's decline after 1870 (Britain 1887 is within 0.2 already).
+- check the education weight against the West's decline after 1870 (Britain 1887 is within 0.3 already).
 
 ## Step 3: the gap the game's inputs can't see (India, the tropics)
 
