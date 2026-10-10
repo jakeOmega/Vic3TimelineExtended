@@ -66,6 +66,7 @@ class TestHarness(unittest.TestCase):
         self.assertRegex(line, r"model e0 \d+\.\d")
         self.assertIn("history e0 41 (1838)", line)
         self.assertIn("imr 153", line)
+        self.assertIn("tfr 5.1", line, "Gapminder's children per woman beside the model's")
         self.assertRegex(line, r"people \+0\.8\d%")       # 1820-1850, the benchmarks around 1836
         self.assertRegex(out, r"world .* e0 \d+\.\d")
 
@@ -87,6 +88,15 @@ class TestHarness(unittest.TestCase):
             self.assertAlmostEqual(got[k], (each[0][k] + each[1][k]) / 2, msg=k)
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
+
+    def test_inputs_carry_a_static_means_shift(self):
+        c = S.CountryInputs("TST", population=100.0, sol_x_size=1000.0, workforce=50.0, literate=10.0)
+        c.means_add = 0.6
+        self.assertEqual(H.inputs_for(c, DM.load_carriers()).means_add, 0.6)
+
+    def test_history_prints_the_fertility_anchor(self):
+        a = H.read_anchors(ANCHORS)
+        self.assertEqual(H.nearest(a["tfr"]["United Kingdom"], 1836, 5), (1836, 5.1))
 
     def test_save_year_reads_game_date_only(self):
         with tempfile.TemporaryDirectory() as tmp:

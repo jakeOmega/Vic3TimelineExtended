@@ -164,6 +164,27 @@ class TestTinySave(unittest.TestCase):
             self.assertEqual(st.laws, {"law_serfdom"})
             self.assertEqual(st.institutions, {"institution_health_system": 3})
 
+    def test_family_limitation_is_read_from_the_countrys_timed_modifiers(self):
+        # the census reads it through state_fertility_means_add; the harness needs it from the save (#852's
+        # deferred minor: France read from a save had 0.6 less means than in game)
+        block = ("\ttimed_modifiers={\n\t\tmodifiers={ {\n\t\t\t\tid=1\n\t\t\t\tmodifier=te_demog_family_limitation\n"
+                 "\t\t\t\tstart_date=1836.1.1\n\t\t\t} {\n\t\t\t\tid=2\n\t\t\t\tmodifier=te_demog_family_limitation\n"
+                 "\t\t\t\tmultiplier=0.5\n\t\t\t\tstart_date=1836.1.1\n\t\t\t} }\n\t}\n")
+        text = TINY.replace('3={\n\tdefinition="TST"\n', '3={\n\tdefinition="TST"\n' + block, 1)
+        self.assertNotEqual(text, TINY)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            sections = S.read_sections(fh.name)
+            c = S.country_inputs(sections)["TST"]
+            states = S.state_inputs(sections)["TST"]
+        finally:
+            Path(fh.name).unlink()
+        self.assertAlmostEqual(c.means_add, 1.5 * M.P.FAMILY_LIMITATION_MEANS, msg="each copy at its multiplier")
+        for _sid, st, _inc in states:
+            self.assertAlmostEqual(st.means_add, c.means_add)
+        self.assertEqual(S.country_inputs(self.sections)["TST"].means_add, 0.0)
+
     def test_empty_pop_is_skipped(self):
         c = S.country_inputs(self.sections)["TST"]
         self.assertEqual(c.rural, 0)

@@ -77,7 +77,7 @@ def inputs_for(c, carriers=None, incorporated=True):
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
-                    mods=mods)
+                    mods=mods, means_add=c.means_add)
 
 
 def cmd_sketch(_args):
@@ -683,10 +683,11 @@ def history_rows(sections, year, anchors, carriers=None):
         tag = next((t for t in tags if people.get(t, 0) > 0), None)
         if tag is None:
             continue
-        if not any(country in anchors.get(m, {}) for m in ("e0", "imr", "population")):
+        if not any(country in anchors.get(m, {}) for m in ("e0", "imr", "population", "tfr")):
             bare.append(country)
         hist = {"e0": nearest(anchors.get("e0", {}).get(country, {}), year, 15),
                 "imr": nearest(anchors.get("imr", {}).get(country, {}), year, 15),
+                "tfr": nearest(anchors.get("tfr", {}).get(country, {}), year, 5),
                 "growth": growth_around(anchors.get("population", {}).get(country, {}), year)}
         rows.append((country, tag, people[tag], country_figures(states[tag], carriers), hist))
     big = [(people[t], country_figures(sts, carriers)) for t, sts in states.items() if people[t] >= 1e6]
@@ -718,8 +719,9 @@ def cmd_history(args):
             e = f"{hist['e0'][1]:.0f} ({hist['e0'][0]})" if hist["e0"] else "-"
             m = f"{hist['imr'][1]:.0f}" if hist["imr"] else "-"
             g = f"{hist['growth']:+.2f}%" if hist["growth"] is not None else "-"
+            t = f"{hist['tfr'][1]:.1f}" if hist["tfr"] else "-"
             print(f"{tag:4s} {country:15s} {people / 1e6:6.1f}M  model e0 {got['e0']:4.1f} imr {got['imr']:4.0f} "
-                  f"tfr {got['tfr']:.2f} growth {got['r']:+.2f}%   history e0 {e:10s} imr {m:4s} people {g}")
+                  f"tfr {got['tfr']:.2f} growth {got['r']:+.2f}%   history e0 {e:10s} imr {m:4s} tfr {t:4s} people {g}")
     return 0
 
 

@@ -45,6 +45,12 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
+# a country's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }), depth 5 and in
+_TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
+_TIMED_MULTIPLIER = re.compile(r"^\t+multiplier=(-?[0-9.]+)$")
+# static modifiers that carry state_fertility_means_add, by their value (the census reads them in game;
+# the harness, from a save): te_demog_modifiers.txt
+STATIC_MEANS_ADD = {"te_demog_family_limitation": M.P.FAMILY_LIMITATION_MEANS}
 # social class -> strata, from game/common/social_classes/*.txt (1.14.5). Not in the
 # vanilla_parsed/ snapshot; an unknown class counts as lower.
 STRATA_OF_CLASS = {
@@ -115,6 +121,14 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                 m = _SOCIAL_CLASS.match(line.rstrip("\n"))
                 if m:
                     record["social_class"] = m.group(1)
+            elif depth >= 5 and section == "country_manager":
+                m = _TIMED_MODIFIER.match(line.rstrip("\n"))
+                if m:
+                    record.setdefault("timed_modifiers", []).append([m.group(1), 1.0])
+                else:
+                    m = _TIMED_MULTIPLIER.match(line.rstrip("\n"))
+                    if m and record.get("timed_modifiers"):
+                        record["timed_modifiers"][-1][1] = float(m.group(1))
             depth += opened - closed
             if depth == 2:
                 out[section][record_id] = record
@@ -147,6 +161,7 @@ class CountryInputs:
     institutions: dict = field(default_factory=dict)   # institution -> investment level
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
+    means_add: float = 0.0                              # static modifiers' state_fertility_means_add
 
     @property
     def sol(self):
@@ -219,7 +234,7 @@ def state_inputs(sections):
     out = {}
     for (tag, sid), st in per.items():
         c = countries[tag]
-        st.laws, st.techs, st.institutions = c.laws, c.techs, c.institutions
+        st.laws, st.techs, st.institutions, st.means_add = c.laws, c.techs, c.institutions, c.means_add
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
     return out
 
@@ -251,6 +266,10 @@ def country_inputs(sections):
         if not c:
             continue
         _add_pop(c, rec, size, rec.get("location") in incorporated)
+    for cid, rec in sections["country_manager"].items():
+        c = get(cid)
+        if c:
+            c.means_add = sum(STATIC_MEANS_ADD.get(name, 0.0) * mult for name, mult in rec.get("timed_modifiers", []))
     for rec in sections["laws"].values():
         if rec.get("active") == "yes":
             c = get(rec.get("country"))
