@@ -10,19 +10,34 @@
 # is valid once te_dg_census_year exists, and every figure, band, list and
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
-# or does anything). The first seven are country scope, rooted at the player's
+# or does anything). The first eight are country scope, rooted at the player's
 # country; the three at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14):
 # GuiScope.SetRoot( State.MakeScope ).End.
 # ============================================================================
 
-# Wealth Concentration's national figures and the country's Gini: written
-# together by te_demog_wc_national once a state has a score (te_dg_wc_target,
-# te_dg_wc_t_*, te_dg_gini, te_dg_wc_top, te_dg_wc_bottom). A game-start census
-# can come before them.
+# Wealth Concentration's national figures: written together by
+# te_demog_wc_national once a state has a score (te_dg_wc_target,
+# te_inh_concentration, te_dg_wc_t_*, te_dg_wc_top, te_dg_wc_bottom). A game-start
+# census can come before them. The country's Gini is NOT one of them: the same
+# call writes it only when a scored state also has wealth bands (te_dg_gn1), so a
+# country can hold the target and no Gini (a save from before the bands, a state
+# scored before its first walk). The Gini has its own gate below.
 te_demog_wealth_ready_sgui = {
 	scope = country
 	is_shown = { has_variable = te_dg_wc_target }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The country's Gini (te_dg_gini, te_demog_wc_national). A .gui read of a variable
+# the country lacks shows 0, and 0.00 reads as perfect equality, so every place the
+# panel shows the country's Gini picks it under this gate and shows a pending text
+# otherwise. Written once and never removed, so the figure does not flicker.
+te_demog_gini_ready_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_gini }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -37,7 +52,10 @@ te_demog_wc_top_sgui = {
 	is_shown = {
 		has_variable = te_dg_wc_top
 		exists = var:te_dg_wc_top
-		var:te_dg_wc_top = { owner = ROOT }
+		var:te_dg_wc_top = {
+			exists = owner
+			owner = ROOT
+		}
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -49,7 +67,10 @@ te_demog_wc_bottom_sgui = {
 	is_shown = {
 		has_variable = te_dg_wc_bottom
 		exists = var:te_dg_wc_bottom
-		var:te_dg_wc_bottom = { owner = ROOT }
+		var:te_dg_wc_bottom = {
+			exists = owner
+			owner = ROOT
+		}
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

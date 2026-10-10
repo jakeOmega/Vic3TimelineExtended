@@ -1019,6 +1019,16 @@ class _CountryEngine(_Engine):
 NO_CENSUS = {"te_demog_country_census": "", "te_demog_wc_war_shock": "", "te_demog_wc_national": ""}
 
 
+class TestConcentrationRows(unittest.TestCase):
+    def test_the_rows_check_the_states_owner_exists(self):
+        """A state the national refresh chose can lose its owner before the next refresh: 'Event target
+        link owner returned an invalid object' at te_demog_sguis.txt, read every frame the panel is open."""
+        text = _text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt")
+        for sgui, var in (("te_demog_wc_top_sgui", "te_dg_wc_top"), ("te_demog_wc_bottom_sgui", "te_dg_wc_bottom")):
+            shown = _block(text, sgui)
+            self.assertRegex(shown, rf"var:{var} = {{\s*exists = owner\s*owner = ROOT\s*}}", sgui)
+
+
 class TestFlows(unittest.TestCase):
     def test_finished_war_never_returns_its_dead(self):
         """Review Focus 4: the monthly change in summed war dead is floored at zero."""
@@ -1263,6 +1273,23 @@ class TestTrend(unittest.TestCase):
                     self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
                     self.assertGreater(eng.vars["te_dg_births"], 0)
                     self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 0.03 * people, delta=1.0)
+
+    def test_fast_mode_skips_wealth_concentration_for_a_state_not_yet_walked(self):
+        """Fast mode moves the walk to the clock's steps, but the yearly pulse still updates Wealth
+        Concentration and inheritance's rural modifiers, which read the walk's sums. A state that appears between steps (a colony, a
+        split) had none: 'Value of wrong type' at te_demog_wealth_effects.txt:64 and te_demog_values.txt,
+        a few lines a game year in the 2026-10-10 fast run. It waits for its first walk."""
+        stubs = {"te_demog_walks": "", "te_inh_refresh_wc_state_effects": "", "te_demog_state_census": "",
+                 "te_demog_wc_state_yearly": "set_variable = { name = wc_ran value = 1 }",
+                 "te_inh_refresh_rural_effects": "set_variable = { name = rural_ran value = 1 }"}
+        for walked in (False, True):
+            with self.subTest(walked=walked):
+                eng = _Engine({}, triggers={"te_demog_clock_on": True}, effects=stubs)
+                if walked:
+                    eng.vars["te_dg_walk_pop"] = 1000.0
+                eng.call("te_demog_state_yearly")
+                # inheritance's rural modifiers read the walk's agrarian share (te_inheritance_effects.txt:251/258)
+                self.assertEqual(("wc_ran" in eng.vars, "rural_ran" in eng.vars), (walked, walked))
 
     def test_a_seed_off_the_pulse_is_made_again_at_the_pulse(self):
         """Codex review on #830: game start and the console seed on a day that is not the state's
@@ -1910,6 +1937,23 @@ class TestWealth(unittest.TestCase):
         v = self.national([old], te_dg_gini=0.42)
         self.assertEqual(v["te_dg_gini"], 0.42)
 
+    def test_scored_states_without_bands_give_a_target_but_no_gini(self):
+        """The national figure writes the Gini only from states that have wealth bands, but the
+        target (the panel's old gate) from any scored state. A country whose scored states have
+        no bands yet (a save from before the bands, a state scored before its first walk) thus has
+        the one and not the other, and a panel that reads the Gini under the target's gate
+        shows 0.00 (a missing variable reads 0). The panel gates the Gini on te_dg_gini itself."""
+        old = self.scored(60, 55, bands={})
+        for k in range(1, P.GINI_BANDS + 1):
+            del old[f"te_dg_gn{k}"], old[f"te_dg_gy{k}"]
+        v = self.national([old])
+        self.assertIn("te_dg_wc_target", v, "the target is written: the old gate is open")
+        self.assertIn("te_inh_concentration", v)
+        self.assertNotIn("te_dg_gini", v, "no state has bands, so there is no Gini to show")
+        # once one state has bands the same call writes the Gini beside the target
+        new = self.scored(40, 50, bands={2: (900e3, 1.2e6), 9: (1e4, 2e5)})
+        self.assertIn("te_dg_gini", self.national([old, new]))
+
     def test_the_bureaucrat_share_multiplies_before_it_divides(self):
         """A state with a tiny share of the bureaucrats keeps its precision: values are i64 x 1e-5."""
         body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_national")
@@ -1988,6 +2032,46 @@ INH_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_inheritance_modifiers
 INH_EVENTS = ROOT / "events" / "inheritance_events.txt"
 STATE_WC_MODIFIERS = ("inh_concentrated_property", "inh_dispersed_property", "inh_land_hunger")
 STATE_WC_MULTS = ("te_inh_wc_high_mult", "te_inh_wc_low_mult", "te_inh_land_hunger_mult")
+
+
+SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
+MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
+
+
+class TestGiniGate(unittest.TestCase):
+    """The panel reads the country's Gini (te_dg_gini) only under a gate on that variable. It used
+    to read it under te_demog_wealth_ready_sgui, which asks for te_dg_wc_target, written under a
+    wider condition (any scored state, not any state with wealth bands): with the target and no
+    Gini, a .gui read of the missing variable showed 0.00, which reads as perfect equality."""
+
+    def test_the_gini_gate_asks_for_the_gini(self):
+        gate = _block(_text(SGUIS), "te_demog_gini_ready_sgui")
+        self.assertRegex(gate, r"scope = country\b")
+        shown = re.search(r"is_shown = \{([^{}]*)\}", gate)
+        self.assertIsNotNone(shown)
+        self.assertEqual(shown.group(1).split(), ["has_variable", "=", "te_dg_gini"])
+        # the Wealth Concentration gate is unchanged: it still asks for the target
+        wealth = re.search(r"is_shown = \{([^{}]*)\}", _block(_text(SGUIS), "te_demog_wealth_ready_sgui"))
+        self.assertEqual(wealth.group(1).split(), ["has_variable", "=", "te_dg_wc_target"])
+
+    def test_every_country_gini_the_gui_shows_is_picked_by_the_gini_gate(self):
+        gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
+        # the loc keys that read the country's Gini
+        keys = re.findall(r'^ (\w+):0 "[^"\n]*GetPlayer\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
+        self.assertEqual(sorted(keys), ["te_demog_gini_value", "te_demog_ov_gini_value"])
+        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
+        for key in keys:
+            uses = [m.start() for m in re.finditer(rf"['\"]{key}['\"]", gui)]
+            self.assertTrue(uses, f"{key} is not used")
+            for at in uses:
+                line = gui[gui.rfind("\n", 0, at) + 1:gui.index("\n", at)]
+                self.assertRegex(line, rf"SelectLocalization\( {gate}, '{key}', '\w+' \)", f"{key} is shown bare: {line.strip()}")
+
+    def test_the_gini_cell_has_a_pending_text(self):
+        gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
+        pending = re.search(r"GetScriptedGui\('te_demog_gini_ready_sgui'\)[^\n]*'te_demog_gini_value', '(\w+)'", gui)
+        self.assertIsNotNone(pending)
+        self.assertRegex(loc, rf"(?m)^ {pending.group(1)}:0 \"", "the pending key has a loc entry")
 
 
 class _StateModifierEngine(_Engine):
@@ -2535,7 +2619,8 @@ class TestFastMode(unittest.TestCase):
 
     def test_under_the_clock_the_yearly_pulse_keeps_inheritance_and_wealth_only(self):
         eng = self._eng(True, {"state_population": 1000.0}, effects=self.STUBS)
-        eng.vars.update(te_dg_year=1899.0, te_dg_raw=900.0, te_dg_pop_last=1000.0)
+        # a state with a census was walked at a clock step (te_dg_walk_pop)
+        eng.vars.update(te_dg_year=1899.0, te_dg_raw=900.0, te_dg_pop_last=1000.0, te_dg_walk_pop=1000.0)
         eng.call("te_demog_state_yearly")
         self.assertEqual({k: eng.vars.get(k) for k in ("walked", "rural", "wc", "wc_mods", "did")},
                          {"walked": None, "rural": 1.0, "wc": 1.0, "wc_mods": 1.0, "did": None})
@@ -2681,7 +2766,7 @@ class TestCauseMultipliersScript(unittest.TestCase):
 
     def test_script_matches_the_model(self):
         for mods in self.CASES:
-            for sol, lit in ((8, 0.0), (20, 0.5), (40, 1.0)):
+            for sol, lit in ((3, 0.1), (6.5, 0.2), (8, 0.0), (20, 0.5), (40, 1.0)):
                 inp = demographics_model.Inputs(sol=sol, literacy=lit, mods=dict(mods))
                 want = demographics_model.cause_multipliers(inp)
                 fixtures = {f"modifier:{t}": mods.get(t, 0.0) for t in P.DEMOG_MORTALITY_TYPES}
@@ -2694,6 +2779,60 @@ class TestCauseMultipliersScript(unittest.TestCase):
                 with self.subTest(mods=mods, sol=sol, cause="maternal"):
                     got = eng.value(eng._tree(eng.values, "te_demog_mult_maternal"))
                     self.assertAlmostEqual(got, want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+
+    def test_crowding_matches_the_model(self):
+        # the census reads the multiplier the crowding refresh applied (migration_crowding_mult_applied), the
+        # harness the modifier's multiplier in the save: the same yearly figure. Slight (-3.8% attraction), 10x
+        # density (-45%), past the cap, and a state the refresh has not reached (no modifier, no variable)
+        for mult in (0.378, 4.5, 14.5, None):
+            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if mult is not None:
+                eng.modifiers["migration_crowding"] = mult
+                eng.vars["migration_crowding_mult_applied"] = mult
+            crowding = 0.0 if mult is None else P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+            want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3,
+                                                                                  crowding=crowding))
+            with self.subTest(mult=mult):
+                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
+                self.assertAlmostEqual(got, want["infection"], places=9)
+
+    def test_crowding_needs_both_the_modifier_and_the_stored_multiplier(self):
+        # a save from before the stored multiplier: the modifier without the variable, until the state's next yearly
+        # refresh (677 of 874 states in the 1949 save), must read no term rather than an unset var:; and a variable
+        # outliving its modifier must not count (review I1)
+        want = demographics_model.cause_multipliers(demographics_model.Inputs(sol=12, literacy=0.3))["infection"]
+        for label, modifier, variable in (("modifier only", True, False), ("variable only", False, True)):
+            eng = _Engine({f"modifier:{t}": 0.0 for t in P.DEMOG_MORTALITY_TYPES})
+            eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)
+            if modifier:
+                eng.modifiers["migration_crowding"] = 1.5
+            if variable:
+                eng.vars["migration_crowding_mult_applied"] = 1.5
+            with self.subTest(label):
+                got = eng.value(eng._tree(eng.values, "te_demog_mult_infection"))
+                self.assertAlmostEqual(got, want, places=9)
+
+    def test_crowdings_pull_per_multiplier_is_the_modifiers(self):
+        # "infection rises by the share attraction falls" holds only while the two agree: a retuned
+        # migration_crowding would otherwise leave the census reading the old figure
+        body = _raw_blocks([ROOT / "common" / "static_modifiers" / "extra_modifiers.txt"])["migration_crowding"]
+        pull = float(re.search(r"state_migration_pull_mult = (-?[0-9.]+)", body).group(1))
+        self.assertAlmostEqual(P.MIGRATION_CROWDING_PULL_PER_MULT, -pull)
+
+    def test_the_crowding_refresh_stores_the_multiplier_it_applies(self):
+        refresh = _raw_blocks([ROOT / "common" / "scripted_effects" / "extra_effects.txt"])
+        refresh = {"te_update_migration_crowding_modifier": refresh["te_update_migration_crowding_modifier"]}
+        eng = _Engine({"migration_crowding_mult": 0.378}, effects=refresh)
+        eng.modifiers["migration_crowding"] = 0.2
+        eng.vars["migration_crowding_mult_applied"] = 0.2
+        eng.call("te_update_migration_crowding_modifier")
+        self.assertEqual(eng.modifiers, {"migration_crowding": 0.378})
+        self.assertEqual(eng.vars["migration_crowding_mult_applied"], 0.378)
+        eng.fixtures["migration_crowding_mult"] = 0.0
+        eng.call("te_update_migration_crowding_modifier")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("migration_crowding_mult_applied", eng.vars)
 
 
 class TestMeansScript(unittest.TestCase):

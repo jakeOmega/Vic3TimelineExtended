@@ -45,6 +45,13 @@ SECTIONS = {
 }
 _FIELD = re.compile(r"^\t([a-z_]+)=(.*)$")
 _SOCIAL_CLASS = re.compile(r"^\t\tsocial_class=([a-z_]+)$")
+# a country's or a state's timed modifiers (timed_modifiers={ modifiers={ { modifier=... multiplier=... } } }),
+# read as [name, multiplier] pairs inside that block only
+_TIMED_MODIFIER = re.compile(r"^\t+modifier=([A-Za-z0-9_]+)$")
+_TIMED_MULTIPLIER = re.compile(r"^\t+multiplier=(-?[0-9.]+)$")
+# static modifiers that carry state_fertility_means_add, by their value (the census reads them in game;
+# the harness, from a save): te_demog_modifiers.txt
+STATIC_MEANS_ADD = {"te_demog_family_limitation": M.P.FAMILY_LIMITATION_MEANS}
 # social class -> strata, from game/common/social_classes/*.txt (1.14.5). Not in the
 # vanilla_parsed/ snapshot; an unknown class counts as lower.
 STRATA_OF_CLASS = {
@@ -86,6 +93,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
     depth = 0
     record_id = None
     record = None
+    in_timed = False   # inside the current record's timed_modifiers block
     with open(path, encoding="utf-8", errors="replace") as fh:
         for line in fh:
             if section is None:
@@ -100,7 +108,7 @@ def read_sections(path, wanted=tuple(SECTIONS)):
             if record is None:
                 m = _RECORD.match(line)
                 if m and depth == 2:
-                    record_id, record = m.group(1), {}
+                    record_id, record, in_timed = m.group(1), {}, False
                     depth += 1
                     continue
                 depth += opened - closed
@@ -115,7 +123,21 @@ def read_sections(path, wanted=tuple(SECTIONS)):
                 m = _SOCIAL_CLASS.match(line.rstrip("\n"))
                 if m:
                     record["social_class"] = m.group(1)
+            elif in_timed:
+                # only inside the record's own timed_modifiers block: a country's budget trends carry multiplier=
+                # lines and its timed_enactment_modifiers modifier= lines at the same depth
+                m = _TIMED_MODIFIER.match(line.rstrip("\n"))
+                if m:
+                    record.setdefault("timed_modifiers", []).append([m.group(1), 1.0])
+                else:
+                    m = _TIMED_MULTIPLIER.match(line.rstrip("\n"))
+                    if m and record.get("timed_modifiers"):
+                        record["timed_modifiers"][-1][1] = float(m.group(1))
+            if depth == 3 and section in ("country_manager", "states") and line.startswith("\ttimed_modifiers={"):
+                in_timed = True
             depth += opened - closed
+            if depth <= 3:   # back at the record's own fields (an empty block opens and closes on one line)
+                in_timed = False
             if depth == 2:
                 out[section][record_id] = record
                 record = None
@@ -147,6 +169,8 @@ class CountryInputs:
     institutions: dict = field(default_factory=dict)   # institution -> investment level
     incorporated_people: float = 0.0                   # people in its incorporated states
     states: int = 0
+    means_add: float = 0.0                              # static modifiers' state_fertility_means_add
+    crowding: float = 0.0    # a state's migration penalty from crowding (state_inputs); a country's stays 0
 
     @property
     def sol(self):
@@ -178,6 +202,55 @@ def is_incorporated(state_record):
     return _num(state_record.get("incorporation")) >= 1
 
 
+def _add_pop(c, rec, size, incorporated):
+    """One pop's people, SoL, literacy, wealth and class into a country's or a state's sums."""
+    sol = _num(rec.get("previous_quality_of_life"))
+    wealth = _num(rec.get("wealth"))
+    c.population += size
+    if incorporated:
+        c.incorporated_people += size
+    c.sol_x_size += sol * size
+    c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
+    c.literate += _num(rec.get("num_literate"))
+    c.workforce += _num(rec.get("workforce"))
+    c.wealth_x_size += wealth * size
+    if rec.get("type") in RURAL_TYPES:
+        c.rural += size
+    s = STRATA_OF_CLASS.get(rec.get("social_class"), "lower")
+    c.strata_people[s] += size
+    c.strata_wealth[s] += wealth * size
+    c.sol_bins[min(int(sol // 5) * 5, 40)] += size
+
+
+def state_inputs(sections):
+    """{tag: [(state id, CountryInputs of that state's own pops, incorporated)]}. The census works state
+    by state, so a curve that bends (the poverty term at SoL 9) needs each state's own SoL and literacy;
+    laws, techs and institutions are the owner's (country_inputs)."""
+    countries = country_inputs(sections)
+    tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
+    owner_of_state = {sid: rec.get("country") for sid, rec in sections["states"].items()}
+    incorporated = {sid for sid, rec in sections["states"].items() if is_incorporated(rec)}
+    per = {}
+    for rec in sections["pops"].values():
+        size = _num(rec.get("workforce")) + _num(rec.get("dependents"))
+        sid = rec.get("location")
+        tag = tags.get(owner_of_state.get(sid))
+        if size <= 0 or not tag:
+            continue
+        if (tag, sid) not in per:
+            per[(tag, sid)] = CountryInputs(tag, states=1)
+        _add_pop(per[(tag, sid)], rec, size, sid in incorporated)
+    out = {}
+    for (tag, sid), st in per.items():
+        c = countries[tag]
+        st.laws, st.techs, st.institutions, st.means_add = c.laws, c.techs, c.institutions, c.means_add
+        st.crowding = sum(M.P.MIGRATION_CROWDING_PULL_PER_MULT * mult
+                          for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
+                          if name == "migration_crowding")
+        out.setdefault(tag, []).append((sid, st, sid in incorporated))
+    return out
+
+
 def country_inputs(sections):
     """{tag: CountryInputs} from read_sections()'s output."""
     tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
@@ -204,22 +277,11 @@ def country_inputs(sections):
         c = get(owner_of_state.get(rec.get("location")))
         if not c:
             continue
-        sol = _num(rec.get("previous_quality_of_life"))
-        wealth = _num(rec.get("wealth"))
-        c.population += size
-        if rec.get("location") in incorporated:
-            c.incorporated_people += size
-        c.sol_x_size += sol * size
-        c.wealth_tfr_x_size += M.wealth_tfr(sol) * size
-        c.literate += _num(rec.get("num_literate"))
-        c.workforce += _num(rec.get("workforce"))
-        c.wealth_x_size += wealth * size
-        if rec.get("type") in RURAL_TYPES:
-            c.rural += size
-        s = STRATA_OF_CLASS.get(rec.get("social_class"), "lower")
-        c.strata_people[s] += size
-        c.strata_wealth[s] += wealth * size
-        c.sol_bins[min(int(sol // 5) * 5, 40)] += size
+        _add_pop(c, rec, size, rec.get("location") in incorporated)
+    for cid, rec in sections["country_manager"].items():
+        c = get(cid)
+        if c:
+            c.means_add = sum(STATIC_MEANS_ADD.get(name, 0.0) * mult for name, mult in rec.get("timed_modifiers", []))
     for rec in sections["laws"].values():
         if rec.get("active") == "yes":
             c = get(rec.get("country"))
