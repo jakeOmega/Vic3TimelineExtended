@@ -35,7 +35,7 @@ for every 0.1 of Gini above 0.15.
 - **A shallow bottom:** a Gini is at least 0, so the term is at least −4.5. Equal incomes stop fortunes growing but
   don't break existing ones up; that is the inheritance laws' and the taxes' work (their own terms).
 
-| Gini (state or country) | 1836 median 0.16 | France 1836 0.19 | Britain 1836 0.35 | Median 1887 0.24 | Median 1950 0.28 | Russia 1950 0.40 | France 1950 0.55 | Britain 1877 0.65 | 0 |
+| Gini (state or country) | 1836 median 0.15–0.16 | France 1836 0.19 | Britain 1836 0.35 | Median 1887 0.24 | Median 1953 0.28 | Russia 1953 0.40 | France 1953 0.55 | Britain 1877 0.65 | 0 |
 |---|---|---|---|---|---|---|---|---|---|
 | Term | +0.3 | +1.2 | +6 | +2.7 | +3.9 | +7.5 | +12 | +15 | −4.5 |
 

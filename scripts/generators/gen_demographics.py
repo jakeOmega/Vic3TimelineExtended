@@ -28,6 +28,10 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
                                                 small state precise); slots, then bands, class sums, 18-40 sums
         te_demog_life_table, te_demog_set_growth_factor
         te_demog_add_bands_to_root, te_demog_reset_country_bands, te_demog_scale_bands
+        te_demog_gini_band_init, _add, _store, _load, _zero, _add_state
+                                                the Gini's 14 wealth bands: the walk's sums, a state's
+                                                store, the country's sum (spec 4.1)
+        te_demog_gini_from_locals               the Gini over the bands in order, the panel's figure
         te_demog_set_profile                    the migrant profile per class and sex
         te_demog_band_figures                   total, young, working, old, women 15-49, 20-59 sums, median
         te_demog_project                        the bands twenty years ahead (a display outline)

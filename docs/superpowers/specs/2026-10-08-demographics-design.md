@@ -517,7 +517,8 @@ state. The stock is the #822 score.
   tab can show it beside the engine's own average income per stratum (`PopsOverviewPanel`), which the GUI can read.
 - **Effects, light on purpose.** Vanilla already turns wealth into clout. Inequality mainly feeds the stock (§4.2) and
   the panel, plus two small effects:
-  - relative deprivation: lower-strata radicals rise with the Gini above about 0.45;
+  - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
+    scale: set it afresh on the wealth-band figure when this is built);
   - an input to crime for the policing laws.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)

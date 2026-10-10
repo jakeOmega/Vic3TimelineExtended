@@ -48,12 +48,12 @@ chosen as the low end of real-world Ginis. The owner's ruling is that the figure
 
 ## The game's Gini by band
 
-| | 1836 | 1887 | 1950 |
+| | 1836–1837 | 1887 | 1953 |
 |---|---|---|---|
-| Median state, by people | 0.16 | 0.24 | 0.28 |
-| Countries | Britain 0.35, France 0.19, USA 0.27, China 0.14 | Britain 0.63, Belgium 0.54, France 0.30 | USA 0.58, France 0.55, Japan 0.48, Russia 0.40, China 0.34 |
+| Median state, by people | 0.15–0.16 (the 1836 save 0.147, the 1837 save 0.155) | 0.24 | 0.28 |
+| Countries | Britain 0.35, France 0.19, USA 0.27, China 0.14 (1836) | Britain 0.63, Belgium 0.54, France 0.30 | USA 0.58, France 0.55, Japan 0.48, Russia 0.40, China 0.34 (the 1949 save: USA 0.55, Japan 0.46, China 0.27) |
 
-The most unequal 1% of state-saves reach 0.72–0.79. These figures set Wealth Concentration's inequality term, which the
+Weighted by people, the most unequal 1% of state-saves reach 0.72–0.79; unweighted, the 99th percentile is 0.61–0.63. These figures set Wealth Concentration's inequality term, which the
 owner chose on 2026-10-10: +30 × (Gini − 0.15), at most +15. The centre is 1836's median state, and the cap is reached
 at 0.65, Britain's industrial peak in these runs.
 
