@@ -2770,6 +2770,6 @@ git commit -m "Demographics phase 2 step 4: probes and gate results"
   - **Switching back to normal speed** takes F off at once, as today; the census's term stays.
 - **The 1836 start.** Every state runs on the curves until its first step, its second yearly pulse. Until step 5 retunes the curves, that first year's growth is the engine's, about 1% a year (spec §2.3's probe).
 - **Terms on top, weighted by the bare curve until step 5** (§2). In 1836 they are about 1.5 times as strong against realized events as in vanilla, and late in the game weaker. Pro-Natalist Subsidies, the Natalism decree and famines are the visible cases.
-- **A modifier tooltip line per state.** "Demographic Profile" shows in every state's birth and death rates.
+- **A modifier tooltip line per state.** "Census: Births" and "Census: Deaths" show in every state's birth and death rate breakdowns (the modifiers carry the mod's blank icon, so the state panel's modifier list hides them; #872, #874).
   - The number is often −20% to −50% against the curves, which may alarm a player until step 5 brings the curves to the census's medians.
   - The loc says what sets it.
