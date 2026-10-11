@@ -81,8 +81,10 @@ class TestFertility(unittest.TestCase):
                 self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
 
     def test_wealth_term_endpoints(self):
-        self.assertAlmostEqual(M.wealth_tfr(0), 6.2)
-        self.assertAlmostEqual(M.wealth_tfr(8), 6.2)
+        # 6.0 at SoL 8 and below (owner, 2026-10-10, phase 2 step 4's gate: the model's children per woman sat above
+        # Gapminder's almost everywhere at 6.2, and the world multiple at x1.78)
+        self.assertAlmostEqual(M.wealth_tfr(0), 6.0)
+        self.assertAlmostEqual(M.wealth_tfr(8), 6.0)
         self.assertAlmostEqual(M.wealth_tfr(35), 3.5)
         self.assertAlmostEqual(M.wealth_tfr(60), 3.5)
 

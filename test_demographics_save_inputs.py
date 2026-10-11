@@ -297,8 +297,8 @@ class TestWealthTerm(unittest.TestCase):
         self.assertAlmostEqual(c.sol, 18)                       # (28 x 400 + 0 x 200 + 16 x 200) / 800
         by_pop = (M.wealth_tfr(28) * 400 + M.wealth_tfr(0) * 200 + M.wealth_tfr(16) * 200) / 800
         self.assertAlmostEqual(c.wealth_tfr, by_pop)
-        self.assertAlmostEqual(c.wealth_tfr, 5.0)
-        self.assertLess(c.wealth_tfr, M.wealth_tfr(c.sol) - 0.1)   # the curve at the mean, 5.2, is higher
+        self.assertAlmostEqual(c.wealth_tfr, 4.889, places=3)   # WEALTH_TFR_LOW 6.0 (was 5.0 at 6.2)
+        self.assertLess(c.wealth_tfr, M.wealth_tfr(c.sol) - 0.1)   # the curve at the mean, 5.07, is higher
 
     def test_one_pop_is_the_curve_at_its_sol(self):
         c = self.inputs(TINY)

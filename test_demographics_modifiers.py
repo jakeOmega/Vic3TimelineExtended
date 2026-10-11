@@ -211,9 +211,9 @@ class TestEngineRateLines(unittest.TestCase):
         self.assertEqual(len(got), len(self.absorbed), "one carrier per line")
 
     def test_every_restored_line_but_wealth_mortality_is_absorbed(self):
-        """Ruling (owner amendment, A): Private Health Insurance's state_mortality_wealth_mult stays on top. Its scaling
-        "per Wealth" is unknown and the growth probe measured wealth mortality at about 0 ("Open"), so M can't net it
-        out; the plan's §3 (a) had it absorbed by an inverse INJECT, which the amendment retires."""
+        """Owner, 2026-10-10: Private Health Insurance's state_mortality_wealth_mult stays on top for now. Its per-pop
+        scaling ("per Wealth") waits on probe P6, so M doesn't net it out; the plan's §3 (a) had it absorbed by an
+        inverse INJECT, which the amendment retires. Absorbing it per pop under Full is proposed (results doc)."""
         absorbed = {(c.key, c.type) for c in self.absorbed}
         for (kind, key, block, field) in RESTORED:
             self.assertEqual((key, field) in absorbed, field != "state_mortality_wealth_mult", key)

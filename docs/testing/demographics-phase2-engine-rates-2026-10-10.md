@@ -4,18 +4,16 @@ The gate of phase 2 step 4: the census sets the engine's births and deaths
 (plan `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`, Task 12; PR #869). This records the
 offline half, run on this date, and leaves room for the in-game half, which needs the owner.
 
-**Status: the offline gate fails on the world multiple (×1.78 against ×1.3–×1.7); no 20M+ country shrinks.** This is
-the second run, after the owner's amendment of 2026-10-10 (the census cancels what it absorbs through M, under Full only,
-and absorbs mild starvation; #881 took the LGBTQ+ Rights laws' birth lines away). With mild starvation absorbed, the
-engine runs within 0.1 per 1,000 of the census in every save, so the multiple is now the census's own: its rates alone
-chain to ×1.80. China no longer shrinks (+0.23% in 1887, +0.26% in 1877). Per the plan, the fix is calibration, and a
-retune is the owner's call, so this stops here and reports candidate parameters (below, "The multiple"). The first
-run (before the amendment) passed the multiple at ×1.66 and failed on China at −0.09% in 1887. The in-game probes and
-the fast-mode run are still to do.
+**Status: the offline gate passes after the owner's retune (`WEALTH_TFR_LOW` 6.2 → 6.0, 2026-10-10): ×1.66, and no
+20M+ country shrinks (China +0.12% in 1887, its lowest).** This is the third run. The first (before the owner's
+amendment) passed the multiple at ×1.66 and failed on China at −0.09% in 1887. The second, after the amendment (the
+census cancels what it absorbs through M, under Full only, and absorbs mild starvation; #881 took the LGBTQ+ Rights
+laws' birth lines away), put the engine within 0.1 per 1,000 of the census in every save, so the multiple became the
+census's own: ×1.78, a fail, with China at +0.23%. The owner chose the first of two candidates (below, "The
+multiple"). The in-game probes and the fast-mode run are still to do.
 
 **Release precondition (owner, 2026-10-10, amended):** nothing changes outside Full. Step 4 edits no carrier; step 5's
-retune of the global defines would change every game, so it can't ship while the rule defaults to Disabled (an open
-question).
+retune of the global defines is dropped (owner, 2026-10-10).
 
 ## The build, the saves and the tools
 
@@ -40,24 +38,37 @@ question).
 
 | Check | Threshold | Result |
 |---|---|---|
-| World multiple, 1837–1900 | ×1.3–×1.7 | **×1.78, fail** (the census's own rates: ×1.80) |
-| No 20M+ country predicted to shrink | none | **pass:** China +0.23% a year in 1887, its lowest |
+| World multiple, 1837–1900 | ×1.3–×1.7 | **×1.66, pass** (×1.78 before the retune) |
+| No 20M+ country predicted to shrink | none | **pass:** China +0.12% a year in 1887, its lowest (+0.23% before) |
 | Share of people in clamped states | under 1% | 0.0% in every save |
 | The unittest suite, `ruff`, tabs, `organize_loc --check`, `gen_demographics.py --check`, the CI audits | all clean | see the PR |
-| Medicine scenarios (`medicine`) | each in its band | all in band |
-| Fertility scenarios (`fertility`) | each in its band | all in band |
+| Medicine scenarios (`medicine`) | each in its band | all in band, before and after the retune |
+| Fertility scenarios (`fertility`) | each in its band | all in band, before and after (the 1836 agrarian reference 5.87 in [4.8–6.2]) |
 
-**The world, save by save** (% a year; the terms on top in births and deaths per 1,000; the absorbed groups in points of
-world growth a year, what absorbing each adds against leaving it on top):
+**Before and after the retune** (`WEALTH_TFR_LOW` 6.2 → 6.0; predicted world growth and China's, % a year):
+
+| Save | World, 6.2 | World, 6.0 | China, 6.2 | China, 6.0 |
+|---|---|---|---|---|
+| 1837 | +0.93 | +0.82 | +0.79 | +0.68 |
+| 1847 | +1.07 | +0.96 | +0.96 | +0.85 |
+| 1857 | +0.94 | +0.83 | +0.60 | +0.49 |
+| 1867 | +0.92 | +0.81 | +0.43 | +0.33 |
+| 1877 | +0.82 | +0.71 | +0.26 | +0.16 |
+| 1887 | +0.83 | +0.73 | +0.23 | +0.12 |
+| Multiple to 1900 | ×1.78 | ×1.66 | | |
+
+**The world, save by save, as retuned** (% a year; the terms on top in births and deaths per 1,000; the absorbed groups
+in points of world growth a year, what absorbing each adds against leaving it on top; the retune leaves the groups'
+figures as they were):
 
 | Save | People | Census | Predicted | On top: births | On top: deaths | Child labour | Women's rights | Health laws | Mild starvation | Starving slope |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1837 | 1,031M | +0.95 | +0.93 | −0.09 | +0.17 | +0.217 | −0.234 | −0.004 | +0.020 | 0.036 |
-| 1847 | 1,133M | +1.07 | +1.07 | −0.02 | +0.04 | +0.212 | −0.234 | −0.005 | +0.031 | 0.069 |
-| 1857 | 1,244M | +0.94 | +0.94 | −0.02 | +0.07 | +0.216 | −0.235 | −0.006 | +0.086 | 0.112 |
-| 1867 | 1,365M | +0.92 | +0.92 | −0.00 | +0.02 | +0.215 | −0.234 | −0.013 | +0.096 | 0.132 |
-| 1877 | 1,458M | +0.86 | +0.82 | −0.14 | +0.26 | +0.214 | −0.234 | −0.027 | +0.154 | 0.157 |
-| 1887 | 1,542M | +0.86 | +0.83 | −0.08 | +0.14 | +0.213 | −0.232 | −0.040 | +0.184 | 0.174 |
+| 1837 | 1,031M | +0.85 | +0.82 | −0.09 | +0.17 | +0.217 | −0.234 | −0.004 | +0.020 | 0.036 |
+| 1847 | 1,133M | +0.97 | +0.96 | −0.02 | +0.04 | +0.212 | −0.234 | −0.005 | +0.031 | 0.069 |
+| 1857 | 1,244M | +0.84 | +0.83 | −0.02 | +0.07 | +0.216 | −0.235 | −0.006 | +0.086 | 0.112 |
+| 1867 | 1,365M | +0.82 | +0.81 | −0.00 | +0.02 | +0.215 | −0.234 | −0.013 | +0.096 | 0.132 |
+| 1877 | 1,458M | +0.75 | +0.71 | −0.14 | +0.26 | +0.214 | −0.234 | −0.027 | +0.154 | 0.157 |
+| 1887 | 1,542M | +0.75 | +0.73 | −0.07 | +0.14 | +0.213 | −0.232 | −0.040 | +0.184 | 0.174 |
 
 - **Child labour's class lines** (owner ruling: absorbed at the census's smaller work term) would take 0.21–0.22 points
   a year off world growth on top.
@@ -72,14 +83,14 @@ world growth a year, what absorbing each adds against leaving it on top):
 - **What stays on top** is now small: severe starvation (Austria: 7% of its people, census +1.33%, predicted +0.55%),
   devastation, and the late-era lines.
 
-**Countries of 20M or more in 1887** (% a year, census and predicted): China +0.23, +0.23; British India +1.26,
-+1.26; Russia +1.08, +1.08; the USA +1.59, +1.59; Japan +0.71, +0.71; France +0.60, +0.59; Turkey +1.39, +1.39;
-Britain +0.90, +0.89; Austria +1.33, +0.55; New Granada +1.42, +1.42; Mexico +1.52, +1.52; Korea +0.62, +0.62. The full
-per-save tables are `predict`'s output.
+**Countries of 20M or more in 1887, as retuned** (% a year, census and predicted): China +0.12, +0.12; British India
++1.15, +1.15; Russia +0.97, +0.97; the USA +1.49, +1.49; Japan +0.61, +0.61; France +0.50, +0.49; Turkey +1.29,
++1.29; Britain +0.81, +0.80; Austria +1.23, +0.45; New Granada +1.32, +1.32; Mexico +1.42, +1.41; Korea +0.51, +0.51.
+The full per-save tables are `predict`'s output.
 
-### The multiple: candidate parameters (the owner's call; nothing retuned)
+### The multiple: candidate parameters (owner's decision, 2026-10-10: `WEALTH_TFR_LOW` 6.0)
 
-The census's own rates give the world +0.95 to +1.07% a year to 1867 and +0.86% after, against history's 0.4% (1820–1870)
+Before the retune, the census's own rates gave the world +0.95 to +1.07% a year to 1867 and +0.86% after, against history's 0.4% (1820–1870)
 and 0.8% (1870–1913, Maddison). Two candidates, each run through `predict` on the same six saves with every other
 parameter as built (`demographics_harness.py history` gives the life expectancy and children per woman beside
 Clio Infra's and Gapminder's; `medicine` and `fertility` check the step-1 fit's anchor bands). **The trade:** China,
@@ -89,10 +100,39 @@ world band against the China anchor the poverty term was fitted to.
 | Change | World multiple | China 1877 / 1887 | Any 20M+ shrinking | Anchor bands (`medicine`, `fertility`) | Evidence and cost |
 |---|---|---|---|---|---|
 | As built | ×1.78 | +0.26 / +0.23% | none | all in | — |
-| **`WEALTH_TFR_LOW` 6.2 → 6.0** (children per woman from wealth at SoL 8 and below) | **×1.66** | +0.16 / +0.12% | none | **all in** | The model's children per woman sit above Gapminder's almost everywhere: 1837 China 6.09 (Gapminder 5.5), Japan 5.75 (4.5), Britain 5.50 (4.8), France 4.45 (3.6); 1887 Japan 5.43 (4.0), the USA 5.60 (4.4), France 4.10 (3.2). At 6.0 each moves 0.1–0.2 toward Gapminder's; India (5.87 against 5.8) and Russia (5.57 against 6.6) move away. Life expectancy doesn't change |
+| **`WEALTH_TFR_LOW` 6.2 → 6.0** (children per woman from wealth at SoL 8 and below): **chosen (owner)** | **×1.66** | +0.16 / +0.12% | none | **all in** | The model's children per woman sit above Gapminder's almost everywhere: 1837 China 6.09 (Gapminder 5.5), Japan 5.75 (4.5), Britain 5.50 (4.8), France 4.45 (3.6); 1887 Japan 5.43 (4.0), the USA 5.60 (4.4), France 4.10 (3.2). At 6.0 each moves 0.1–0.2 toward Gapminder's; India (5.87 against 5.8) and Russia (5.57 against 6.6) move away. Life expectancy doesn't change |
 | **`POVERTY_INFECTION_SOL` 9 → 10** (the poverty term starts at SoL 10) | ×1.62 | +0.16 / +0.15% | none | **one out:** India 1975's life expectancy 44.5 against [46–56] | Aims at the gap the history check left: India grows +1.36% against history's +0.84% (its 1887 life expectancy 34 against 24), and goes to 32. But it costs the West: Britain's 1837 life expectancy drops from 35.6 to 33.8 (history 41), already the check's weakest anchor |
 | `POVERTY_INFECTION_AT_FLOOR` 1.75 → 1.9 (rejected) | ×1.66 | +0.03 / −0.03% | China, 1887 | not run | the history check's own table: steeper poverty takes China below Maddison's +0.3% first |
 | `POVERTY_INFECTION_AT_FLOOR` → 2.0 (rejected) | ×1.58 | −0.13 / −0.20% | China, 1877 and 1887 | not run | the same |
+
+### Private Health Insurance's wealth mortality (owner, 2026-10-10: stays on top for now)
+
+The law's `institution_modifier` carries `state_mortality_wealth_mult` −0.002 a level of the Ministry of Health. The
+engine describes it as "an increase or decrease to pop mortality per Wealth", so it scales by each pop's own wealth, and
+nothing floors the mortality multiplier above the engine's own 0. At level 5 it is −1% a wealth point, −50% at wealth
+50, and the mod raises the institution's levels with techs, up to `MAX_INSTITUTION_INVESTMENT` 9 (−1.8% a point, the
+floor at wealth 56). The census leaves it on top: M can't net out a term whose scaling isn't confirmed.
+
+**Measured on the owner's 1949 save** (`french commune_1949_07_20.v3`) with the description's semantics: each pop's
+mortality × (1 + wealth × the field + its other terms), in incorporated states. The other terms are taken as 0, so the
+shares are of the bare curves' deaths, and the engine's floor caps a pop's loss at its whole bare deaths. The 1954–1976
+saves are compressed binary and couldn't be read.
+- **Nobody holds it in 1949.** 140 countries (1,401M people) have no health system, 47 Charitable Health System
+  (447M), 33 Public Health Insurance (677M), none Private Health Insurance. It removes no deaths in this save.
+- **If every country with a Ministry of Health held it at its own level** (79 countries, 884M people in incorporated
+  states): 2.7% of the world's bare deaths and 8.1% of those states'.
+  - By country: France (level 5, mean wealth 22.7) 20.8%; Uruguay 19.1%, Portugal 17.2%, Spain 16.4% (level 5);
+    Prussia (level 4) 10.9%; Britain 7.6% and the USA 5.6% (level 3).
+  - The five richest states, all French (mean wealth 26.5–28.0): 23.5% to 25.9% of their deaths.
+  - The pops: wealth p10 8, p50 12, p90 27, p99 40, max 78. The largest single term is −0.78 (capitalists at wealth
+    78, Colombia, level 5); 454 pops (1.55M people) pass −50%; none reaches the floor at level 5.
+- **So it is material wherever a rich country adopts it** (the owner's test: over 5% of a rich state's deaths, or a pop
+  past −50%). Nothing is built. Two proposals, for the owner:
+  1. **Absorb it per pop in the walk under Full**, as mild starvation is: the generator emits the field (the law's line
+     × the Ministry of Health's level, incorporated states) as a state value read once into a local, and
+     `te_demog_absorbed_walk_pop` adds wealth × field to the pop's absorbed deaths, so M nets it and the census's
+     access × treatment carries the law. Outside Full it stays vanilla's.
+  2. **Probe P6 first** (below), to confirm the per-pop semantics before building.
 
 ## The probes
 
@@ -103,6 +143,7 @@ world band against the China anchor the poverty term was fitted to.
 | P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
 | P4 | Does a state keep its census modifiers through a change of owner? | **To do:** `predict SAVE --check-modifiers` on a fast-run save taken after a war or a civil war |
 | P5 | Turmoil's scaling (conditional) | Only if the fast run shows a residual tied to turmoil |
+| P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **To do (owner, in game), before building its absorption.** In a debug-mode test game, give a rich country Private Health Insurance with the Ministry of Health at level 5. In one incorporated state, open the mortality breakdown of a rich pop (wealth 40 or more) and of a poor one (about 10): under the description's semantics the line reads about −40% and −10% (wealth × −0.002 × 5). The same value on both means it scales by something else, such as the state's mean wealth or a define |
 
 ## Still to run (owner)
 
@@ -119,3 +160,4 @@ This list is the canonical checklist; the PR body repeats it.
    Europe's share rising to 1900 and Asia's falling.
 5. **For this doc:** the census line's `bz` and `dz` by country and decade, which measure the size of the births and
    deaths added on top.
+6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).

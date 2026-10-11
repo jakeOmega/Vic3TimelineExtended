@@ -69,7 +69,12 @@ MATERNAL_PER_100K_BIRTHS = 670
 # Age-specific shape over rate ages 15-49 by five-year group, per 100k, summing to
 # 100,000 over the 35 single years (each single year takes its group's value / 5).
 ASFR_SHAPE_BY_GROUP = {15: 6000, 20: 22000, 25: 25000, 30: 21000, 35: 15000, 40: 8500, 45: 2500}
-WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.2, 8      # children per woman at SoL 8 or below
+# Children per woman from wealth alone at SoL 8 or below. 6.0 since 2026-10-10 (owner, phase 2 step 4's gate; was 6.2):
+# the model's children per woman sat above Gapminder's almost everywhere (1837: China 6.09 against 5.5, Japan 5.75
+# against 4.5, Britain 5.50 against 4.8, France 4.45 against 3.6), and the world multiple 1837-1900 at x1.78.
+# At 6.0: x1.66, China +0.12% a year in 1887, every medicine and fertility anchor in band
+# (docs/testing/demographics-phase2-engine-rates-2026-10-10.md, "The multiple").
+WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.0, 8
 WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL 35+
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
 SURVIVAL_WEIGHT = 0.4         # desired x (1 - 0.4 x (e0 - 30) / 50), clamped 0..1
@@ -221,9 +226,11 @@ ENGINE_LINES_ON_TOP = frozenset({
     "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
     "mental_health_awareness", "biological_immortality", "mind_backups",
 })
-# Fields whose lines stay on top wherever they sit: wealth mortality's scaling "per Wealth" is unknown and the
-# growth probe measured it at about 0 ("Open"), so M can't net it out. Private Health Insurance's -0.002 a level
-# is its main source (ruling, owner amendment A, 2026-10-10; the plan's §3 (a) had it cancelled by INJECT).
+# Fields whose lines stay on top wherever they sit: wealth mortality's per-pop scaling ("per Wealth") waits on probe P6,
+# so M doesn't net it out yet. Private Health Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top
+# for now). Nobody holds the law in the owner's 1949 save; had the rich health-law countries held it at their own
+# level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
+# as mild starvation, is proposed.
 ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]

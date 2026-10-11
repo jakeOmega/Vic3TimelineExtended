@@ -50,14 +50,14 @@ te_demog_pop_engine_deaths = {
 te_demog_pop_wealth_tfr = {
 	value = total_size
 	multiply = {
-		value = 6.2
+		value = 6
 		if = {
 			limit = { standard_of_living > 0 }
-			value = { value = standard_of_living subtract = 0 multiply = 0 add = 6.2 }
+			value = { value = standard_of_living subtract = 0 multiply = 0 add = 6 }
 		}
 		if = {
 			limit = { standard_of_living > 8 }
-			value = { value = standard_of_living subtract = 8 multiply = -0.1 add = 6.2 }
+			value = { value = standard_of_living subtract = 8 multiply = -0.09259 add = 6 }
 		}
 		if = {
 			limit = { standard_of_living >= 35 }

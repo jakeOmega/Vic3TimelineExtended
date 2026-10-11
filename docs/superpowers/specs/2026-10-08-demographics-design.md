@@ -1021,6 +1021,12 @@ states: the one-year cohort step 0.75–1.0 s in total, the pop walk and the bui
 
 **Demographics: Full / Display only / Disabled.**
 
+> **Superseded (owner, 2026-10-10).** The defines aren't retuned (phase 2's step 5 is dropped: it would change every
+> game, and can't ship while the rule defaults to Disabled), so Display only and Disabled apply no births or deaths
+> modifiers and play as the base game does; only Full's census sets births and deaths, through its term M. The rule
+> defaults to Disabled, and its checks are positive (#876): a save from before the rule reads as Disabled. The design
+> below is kept for the record.
+
 The retuned defines can't be switched by a game rule. Without the model's fertility and mortality terms, rich states
 would keep about 3.5 children per woman and grow without limit. So **Disabled** still applies the fertility and
 mortality terms, but against the *equilibrium* structure for the state's rates, taken from the same lookup that seeds
@@ -1048,9 +1054,9 @@ from before the rule keeps the system (Grand Monuments' pattern).
 
 | Phase | Contents | Gate |
 |---|---|---|
-| 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
+| 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines (dropped since: phase 2's step 5), the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full, and the retuned defines can't ship while the rule defaults to Disabled, an open question); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full; the retuned defines, step 5, are dropped); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the births and deaths modifiers (the retuned defines dropped, owner, 2026-10-10); workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.
