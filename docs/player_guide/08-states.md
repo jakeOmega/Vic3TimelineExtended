@@ -247,8 +247,8 @@ Under the Demographics (Experimental) rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
 of death, described below. While it does, it takes over what the health, child
 labor and women's rights laws, the family-planning and medical technologies and
-mild hunger do to births and deaths: their tooltips still list those lines, but
-the census's own terms carry them. The base game's other effects on births and
+mild starvation do to births and deaths: their tooltips still list those lines,
+but the census cancels them and carries their effect in its own terms. The base game's other effects on births and
 deaths still apply on top: severe starvation, devastation, pollution, events,
 decrees, and the family-policy laws the census doesn't model yet. A state's birth
 rate and mortality tooltips show the census's part as Census: Births and Census:
