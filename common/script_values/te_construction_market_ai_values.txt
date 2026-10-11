@@ -78,3 +78,73 @@
 		value = 0
 	}
 }
+
+# ai_value of the Construction Sector in a market game (building_construction_sector,
+# common/buildings/te_construction_market_site.txt). Scope: the state the AI is
+# considering building in.
+#
+# A production building scores its ai_value plus profit terms, and in play the AI
+# underbuilt the sector: its scoring doesn't seem to credit how cheap a level is.
+# A level costs construction_cost_very_low (100 points) against 600 to 800 for the
+# base game's factories and 2,000 to 5,000 for the mod's heavy industry, so while
+# its margin is positive it returns far more per point spent than anything else
+# the AI could build. TE_CONSTRUCTION_SECTOR_AI_VALUE_BASE makes up for that; an
+# ordinary factory scores 1,000 and Tooling Workshops 2,000.
+#
+# The need for more sectors is read from the construction good's price in the
+# state's market, not from the queue. The government's purchase and the
+# investors' are both divided by the price, so a queue lengthens as the price
+# rises and already follows it, and a count of queued levels also follows the
+# country's size. Linear in the price premium: the base at base price, up
+# TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_PRICIER per 100% above it (about 15,000 at
+# the ceiling, above the base game's monuments at 10,000), down
+# TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_CHEAPER per 100% below it (about 1,000, an
+# ordinary factory, at the floor). Which of market_goods_pricier and
+# market_goods_cheaper is clamped at 0 is undocumented, so each is floored at 0
+# (scripting_best_practices.md, "Is it signed below base price?").
+TE_CONSTRUCTION_SECTOR_AI_VALUE_BASE = 5000
+TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_PRICIER = 10000
+TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_CHEAPER = 4000
+
+te_construction_sector_ai_value = {
+	value = TE_CONSTRUCTION_SECTOR_AI_VALUE_BASE
+	add = {
+		value = 0
+		market = {
+			mg:construction = {
+				add = market_goods_pricier
+			}
+		}
+		min = 0
+		multiply = TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_PRICIER
+	}
+	subtract = {
+		value = 0
+		market = {
+			mg:construction = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+		multiply = TE_CONSTRUCTION_SECTOR_AI_VALUE_PER_CHEAPER
+	}
+	# At war: deprioritize construction expansion (focus existing capacity on war effort)
+	if = {
+		limit = {
+			owner ?= {
+				is_at_war = yes
+			}
+		}
+		subtract = 500
+	}
+	# Active banking-cycle stress: don't add construction during a financial crunch
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = bubble_pressure
+				var:bubble_pressure >= 60
+			}
+		}
+		subtract = 500
+	}
+}
