@@ -344,10 +344,14 @@ This list is the canonical checklist; the PR body repeats it.
    - **Disabled:** on day 1 a pop's mortality tooltip in the capital lists Laws and Institutions at the Ministry of
      Health's value, and laborers' tooltips show child labour's line. A law's tooltip reads as before. Enacting Women in
      the Workplace changes the birth-rate line that day. A conquered state shows its new owner's lines the day it
-     changes hands.
+     changes hands. Researching a technology with a moved line (one of the era 7 to 12 medical ones, by console)
+     changes the line that day.
+   - **Full → Disabled mid-game** (owner: rules can change mid-game): within a month every state's Census: Births and
+     Census: Deaths are gone and Laws and Institutions is back; no state shows both.
    - **Full:** after the capital's first census step, the Laws and Institutions lines are gone. Census: Births and
      Census: Deaths are present, and option n's `q_b`, `q_d` and `w` are 0 in 1837.
    - **Private Health Insurance under Full** (debug: enact it, Ministry of Health level 5): Census: Deaths by Wealth on a
      rich pop's tooltip reads about wealth × −0.005 × the census's share (`tb_d` in option n).
-   - **`debug.log`:** no error from `te_demog_line_*`, `te_demog_events.4` or `te_demog_engine_line_injections.txt`.
+   - **`debug.log`:** no error from `te_demog_line_*`, `te_demog_events.4`, `te_demog_lines_law_on_action` or
+     `te_demog_engine_line_injections.txt`; in particular no scope error on a law's enactment.
 8. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.
