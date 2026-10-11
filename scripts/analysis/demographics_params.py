@@ -210,6 +210,32 @@ RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measure
 ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
 ON_TOP_SCALE_MAX = 4.0
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
+# Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
+# mortality lines on laws, technologies and institutions move to script-only types, one per field and family
+# (demographics_engine_line_types.txt). The mod re-applies both families while the census doesn't set a state's births
+# and deaths (te_demog_lines_refresh); under Full the census models the absorbed family and applies the on-top one.
+ENGINE_LINE_FIELDS = ("state_birth_rate_mult", "state_mortality_mult", "state_farmers_mortality_mult",
+                      "state_laborers_mortality_mult", "state_machinists_mortality_mult",
+                      "state_peasants_mortality_mult", "state_mortality_wealth_mult")
+ENGINE_LINE_SHORT = {"state_birth_rate_mult": "births", "state_mortality_mult": "deaths",
+                     "state_farmers_mortality_mult": "farmers_deaths", "state_laborers_mortality_mult": "laborers_deaths",
+                     "state_machinists_mortality_mult": "machinists_deaths",
+                     "state_peasants_mortality_mult": "peasants_deaths",
+                     "state_mortality_wealth_mult": "wealth_deaths"}
+ENGINE_LINE_TYPES = {
+    ("absorbed", "state_birth_rate_mult"): "state_demog_absorbed_birth_rate_mult",
+    ("absorbed", "state_mortality_mult"): "state_demog_absorbed_mortality_mult",
+    ("absorbed", "state_farmers_mortality_mult"): "state_demog_absorbed_farmers_mortality_mult",
+    ("absorbed", "state_laborers_mortality_mult"): "state_demog_absorbed_laborers_mortality_mult",
+    ("absorbed", "state_machinists_mortality_mult"): "state_demog_absorbed_machinists_mortality_mult",
+    ("absorbed", "state_peasants_mortality_mult"): "state_demog_absorbed_peasants_mortality_mult",
+    ("ontop", "state_birth_rate_mult"): "state_demog_ontop_birth_rate_mult",
+    ("ontop", "state_mortality_mult"): "state_demog_ontop_mortality_mult",
+    ("ontop", "state_mortality_wealth_mult"): "state_demog_ontop_mortality_wealth_mult",
+}
+# Private Health Insurance's wealth line under Full (owner, 2026-10-11, option b): at the census's rate, at least this a
+# wealth level, so a wealth-99 pop dies at no less than half the census's rate.
+WEALTH_LINE_FLOOR = -0.005
 STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
 STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
@@ -220,10 +246,12 @@ STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor:
 POLLUTION_HEALTH_MORTALITY = 0.55
 POLLUTION_MAX = 255
 # Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
-# of the census's term. Every other law, technology or institution line is absorbed: it stays on its carrier, and
-# under Full the census's term M cancels it in each state it reaches (demographics_modifiers.absorbed_carriers,
-# te_demog_absorbed_* in the generated values). The women's-rights laws left this list in Task 8: Task 7's
-# natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
+# of the census's term: their lines sit on the on-top family's script-only types (state_demog_ontop_*), which under
+# Full the census adds at its rate. Every other law, technology or institution line is on the absorbed family's
+# (state_demog_absorbed_*), which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11).
+# Hand-kept, not derived: TestEngineRateLines.test_the_families_match_the_on_top_lists pins it to the carriers'
+# types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
+# (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
     # the family-policy laws §8.1 has yet to re-express as census terms
     "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",

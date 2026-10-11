@@ -90,15 +90,16 @@ te_demog_on_top_scales = {
 
 # THIS = ROOT = a state, straight after te_demog_state_census in the effect that ran its walks (its
 # yearly pulse, or a step of fast mode's clock): the census's births and deaths terms.
-#   M = target / bare - 1 - replaced / bare - on_top x (1 - target / bare)
+#   M = target / bare - 1 - replaced / bare - on_top x (1 - target / bare) + q x target / bare
+# q: the moved lines' on-top family (the engine-lines plan, 2026-10-11), script-only, which the census adds at its rate.
 # on_top: the state-level lines left on top (the read less the census's and fast mode's terms and
-# the state's absorbed lines, floored at te_demog_k_rate_total_min), so each acts on the census's
+# the moved lines' pairs, floored at te_demog_k_rate_total_min), so each acts on the census's
 # rate (owner, 2026-10-11); a pop's own lines on top stay on its bare curve.
-# replaced: what the census absorbs (owner amendment, 2026-10-10), at each pop's bare curves. The
-# law, technology and institution lines it takes over (te_demog_absorbed_*, generated: health,
-# child labour, women's rights and the rest) stay on their carriers and in the state read, so
-# nothing changes outside Full; here M cancels them. Per pop: literacy's -0.1 and mild
-# starvation's terms. Severe starvation and every other term stay on top.
+# replaced: what the census absorbs per pop (owner amendment, 2026-10-10), at each pop's bare
+# curves: literacy's -0.1 and mild starvation's terms. The laws', technologies' and institutions'
+# lines are script-only (the engine-lines plan), so under Full the engine never applies the absorbed
+# family and nothing needs netting; outside Full their pairs re-apply them. Severe starvation and
+# every other term stay on top.
 # target = the model's rate (te_dg_cbr_model, per 1,000 a year) x today's people, a month x 100,000,
 # the walk's units (te_dg_w_eb0, te_dg_w_ed0). Clamped: the state read without the census's and
 # fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_min, M is never
@@ -117,6 +118,9 @@ te_demog_rates_refresh = {
 	set_local_variable = { name = te_dg_rate_prev_d value = te_demog_rate_deaths_applied }
 	set_local_variable = { name = te_dg_rate_new_b value = local_var:te_dg_rate_prev_b }
 	set_local_variable = { name = te_dg_rate_new_d value = local_var:te_dg_rate_prev_d }
+	# the moved lines' pairs this refresh clears (fast mode takes them off the walk's average): 0 unless it does
+	set_local_variable = { name = te_dg_rate_lines_b value = 0 }
+	set_local_variable = { name = te_dg_rate_lines_d value = 0 }
 	if = {
 		limit = { NOT = { te_demog_effects_run = yes } }
 		te_demog_rates_clear = yes
@@ -146,17 +150,19 @@ te_demog_rates_refresh = {
 				}
 			}
 			# the state-level lines left on top (pollution, devastation, global warming, events): the read
-			# without the census's and fast mode's terms and the state's absorbed lines
+			# without the census's and fast mode's terms and the moved lines' pair, which this step clears
 			set_local_variable = {
 				name = te_dg_rate_os
 				value = {
 					value = modifier:state_birth_rate_mult
 					subtract = local_var:te_dg_rate_prev_b
 					subtract = te_demog_fast_births_applied
-					subtract = local_var:te_dg_w_sab
+					subtract = te_demog_line_births_applied
 					min = te_demog_k_rate_total_min
 				}
 			}
+			# the moved lines' on-top family (the engine-lines plan): script-only, so the census adds it at its rate
+			set_local_variable = { name = te_dg_rate_q value = modifier:state_demog_ontop_birth_rate_mult }
 			set_local_variable = {
 				name = te_dg_rate_m
 				value = {
@@ -171,6 +177,10 @@ te_demog_rates_refresh = {
 						subtract = local_var:te_dg_rate_tb
 						multiply = local_var:te_dg_rate_os
 					}
+					add = {
+						value = local_var:te_dg_rate_q
+						multiply = local_var:te_dg_rate_tb
+					}
 				}
 			}
 			set_local_variable = {
@@ -180,6 +190,7 @@ te_demog_rates_refresh = {
 					subtract = modifier:state_birth_rate_mult
 					add = local_var:te_dg_rate_prev_b
 					add = te_demog_fast_births_applied
+					add = te_demog_line_births_applied
 					max = 0
 				}
 			}
@@ -187,6 +198,7 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_mb value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_b value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_b value = local_var:te_dg_rate_os }
+			set_variable = { name = te_dg_q_b value = local_var:te_dg_rate_q }
 			# deaths
 			set_local_variable = {
 				name = te_dg_rate_tb
@@ -199,17 +211,19 @@ te_demog_rates_refresh = {
 				}
 			}
 			# the state-level lines left on top (pollution, devastation, global warming, events): the read
-			# without the census's and fast mode's terms and the state's absorbed lines
+			# without the census's and fast mode's terms and the moved lines' pair, which this step clears
 			set_local_variable = {
 				name = te_dg_rate_os
 				value = {
 					value = modifier:state_mortality_mult
 					subtract = local_var:te_dg_rate_prev_d
 					subtract = te_demog_fast_deaths_applied
-					subtract = local_var:te_dg_w_sad
+					subtract = te_demog_line_deaths_applied
 					min = te_demog_k_rate_total_min
 				}
 			}
+			# the moved lines' on-top family (the engine-lines plan): script-only, so the census adds it at its rate
+			set_local_variable = { name = te_dg_rate_q value = modifier:state_demog_ontop_mortality_mult }
 			set_local_variable = {
 				name = te_dg_rate_m
 				value = {
@@ -224,6 +238,10 @@ te_demog_rates_refresh = {
 						subtract = local_var:te_dg_rate_tb
 						multiply = local_var:te_dg_rate_os
 					}
+					add = {
+						value = local_var:te_dg_rate_q
+						multiply = local_var:te_dg_rate_tb
+					}
 				}
 			}
 			set_local_variable = {
@@ -233,6 +251,7 @@ te_demog_rates_refresh = {
 					subtract = modifier:state_mortality_mult
 					add = local_var:te_dg_rate_prev_d
 					add = te_demog_fast_deaths_applied
+					add = te_demog_line_deaths_applied
 					max = 0
 				}
 			}
@@ -240,6 +259,22 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
+			set_variable = { name = te_dg_q_d value = local_var:te_dg_rate_q }
+			# Private Health Insurance's wealth line (the on-top family's wealth field; owner, 2026-10-11, option b):
+			# at the census's share of the bare curve, at least te_demog_k_wealth_line_floor a wealth level first
+			set_variable = {
+				name = te_dg_w
+				value = {
+					value = modifier:state_demog_ontop_mortality_wealth_mult
+					min = te_demog_k_wealth_line_floor
+					multiply = var:te_dg_tb_d
+				}
+			}
+			# the census takes over: the moved lines' pairs come off (te_demog_lines_apply no longer holds), and fast
+			# mode, next in this effect, takes what they were adding off the walk's average
+			set_local_variable = { name = te_dg_rate_lines_b value = te_demog_line_births_applied }
+			set_local_variable = { name = te_dg_rate_lines_d value = te_demog_line_deaths_applied }
+			te_demog_lines_clear = yes
 			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
 			set_variable = { name = te_dg_rep_b value = { value = local_var:te_dg_w_ebr divide = { value = local_var:te_dg_w_eb0 min = 1 } } }
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
@@ -284,6 +319,14 @@ te_demog_rates_apply = {
 		limit = { var:te_dg_md < 0 }
 		add_modifier = { name = te_demog_census_deaths_down multiplier = te_demog_rate_deaths_down }
 	}
+	if = {
+		limit = { var:te_dg_w > 0 }
+		add_modifier = { name = te_demog_census_wealth_up multiplier = te_demog_rate_wealth_up }
+	}
+	else_if = {
+		limit = { var:te_dg_w < 0 }
+		add_modifier = { name = te_demog_census_wealth_down multiplier = te_demog_rate_wealth_down }
+	}
 }
 
 te_demog_rates_remove = {
@@ -302,6 +345,14 @@ te_demog_rates_remove = {
 	if = {
 		limit = { has_modifier = te_demog_census_deaths_down }
 		remove_modifier = te_demog_census_deaths_down
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_wealth_up }
+		remove_modifier = te_demog_census_wealth_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_wealth_down }
+		remove_modifier = te_demog_census_wealth_down
 	}
 }
 
@@ -344,5 +395,17 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_os_d }
 		remove_variable = te_dg_os_d
+	}
+	if = {
+		limit = { has_variable = te_dg_q_b }
+		remove_variable = te_dg_q_b
+	}
+	if = {
+		limit = { has_variable = te_dg_q_d }
+		remove_variable = te_dg_q_d
+	}
+	if = {
+		limit = { has_variable = te_dg_w }
+		remove_variable = te_dg_w
 	}
 }

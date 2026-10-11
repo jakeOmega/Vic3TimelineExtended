@@ -378,6 +378,155 @@ class ModOnlyFilterTests(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
+# Principles cluster per principle group
+# ---------------------------------------------------------------------------
+class PrincipleGroupTests(unittest.TestCase):
+    def setUp(self):
+        self.original_ms = None
+
+    def tearDown(self):
+        if self.original_ms is not None:
+            srv.ms = self.original_ms
+
+    def test_tiers_of_one_group_share_without_flagging(self):
+        # Vanilla's convention: every tier of a group uses the group's icon.
+        mod = {
+            "Principles": {
+                "principle_x_1": _entity(icon="gfx/p/x.dds"),
+                "principle_x_2": _entity(icon="gfx/p/x.dds"),
+                "principle_x_3": _entity(icon="gfx/p/x.dds"),
+            },
+            "Principle Groups": {
+                "principle_group_x": _entity(levels=["principle_x_1", "principle_x_2",
+                                                     "principle_x_3"]),
+            },
+        }
+        self.original_ms = _install_fake_ms(mod)
+        report = srv._find_duplicate_images(allowlist={}, types=["Principles"])
+        self.assertEqual(report["flagged"], [])
+
+    def test_two_groups_on_one_icon_flag_by_group(self):
+        mod = {
+            "Principles": {
+                "principle_x_1": _entity(icon="gfx/p/x.dds"),
+                "principle_x_2": _entity(icon="gfx/p/x.dds"),
+                "principle_y_1": _entity(icon="gfx/p/x.dds"),
+            },
+            "Principle Groups": {
+                "principle_group_x": _entity(levels=["principle_x_1", "principle_x_2"]),
+                "principle_group_y": _entity(levels=["principle_y_1"]),
+            },
+        }
+        self.original_ms = _install_fake_ms(mod)
+        report = srv._find_duplicate_images(allowlist={}, types=["Principles"])
+        self.assertEqual(len(report["flagged"]), 1)
+        self.assertEqual(report["flagged"][0]["entities"],
+                         ["principle_group_x", "principle_group_y"])
+
+    def test_mod_tiers_on_vanilla_groups_icon_are_not_mod_side(self):
+        # The mod adds tier 4 to a vanilla group, on the group's own icon, and
+        # vanilla already shares that icon with another group: still vanilla's.
+        tiers = {
+            "principle_x_1": _entity(icon="gfx/p/shared.dds"),
+            "principle_z_1": _entity(icon="gfx/p/shared.dds"),
+        }
+        groups = {
+            "principle_group_x": _entity(levels=["principle_x_1"]),
+            "principle_group_z": _entity(levels=["principle_z_1"]),
+        }
+        mod = {
+            "Principles": {**tiers, "principle_x_4": _entity(icon="gfx/p/shared.dds")},
+            "Principle Groups": {
+                **groups,
+                "principle_group_x": _entity(levels=["principle_x_1", "principle_x_4"]),
+            },
+        }
+        base = {"Principles": tiers, "Principle Groups": groups}
+        self.original_ms = _install_fake_ms(mod, base=base)
+        report = srv._find_duplicate_images(allowlist={}, types=["Principles"])
+        self.assertEqual(report["flagged"], [])
+
+    def test_vanilla_tiers_left_out_of_a_replaced_group_stay_in_it(self):
+        # A group REPLACEd with renamed `_mod` tiers: the vanilla tiers are in no
+        # mod group any more, and must not cluster against the group.
+        tiers = {"principle_s_1": _entity(icon="gfx/p/s.dds")}
+        mod = {
+            "Principles": {**tiers, "principle_s_1_mod": _entity(icon="gfx/p/s.dds")},
+            "Principle Groups": {"principle_group_s": _entity(levels=["principle_s_1_mod"])},
+        }
+        base = {"Principles": tiers,
+                "Principle Groups": {"principle_group_s": _entity(levels=["principle_s_1"])}}
+        self.original_ms = _install_fake_ms(mod, base=base)
+        report = srv._find_duplicate_images(allowlist={}, types=["Principles"])
+        self.assertEqual(report["flagged"], [])
+
+
+class ModSideAndStaleAllowlistTests(unittest.TestCase):
+    def setUp(self):
+        self.original_ms = None
+
+    def tearDown(self):
+        if self.original_ms is not None:
+            srv.ms = self.original_ms
+
+    def test_mod_changing_a_vanilla_icon_is_mod_side(self):
+        # A REPLACE that moves a vanilla law onto another law's icon flags,
+        # though no entity in the cluster is mod-added.
+        base = {"Laws": {
+            "law_a": _entity(icon="gfx/l/a.dds"),
+            "law_b": _entity(icon="gfx/l/b.dds"),
+        }}
+        mod = {"Laws": {
+            "law_a": _entity(icon="gfx/l/a.dds"),
+            "law_b": _entity(icon="gfx/l/a.dds"),
+        }}
+        self.original_ms = _install_fake_ms(mod, base=base)
+        report = srv._find_duplicate_images(allowlist={})
+        self.assertEqual(report["summary"]["flagged"], 1)
+
+    def test_entry_matching_no_cluster_is_stale(self):
+        mod = {"Buildings": {
+            "building_a": _entity(icon="gfx/icons/a.dds"),
+            "building_b": _entity(icon="gfx/icons/b.dds"),
+        }}
+        self.original_ms = _install_fake_ms(mod)
+        allowlist = {"Buildings": {
+            (frozenset({"gfx/icons/a.dds"}),
+             frozenset({"building_a", "building_b"})): "they used to share",
+        }}
+        report = srv._find_duplicate_images(allowlist=allowlist)
+        self.assertEqual(report["summary"]["stale_allowlist"], 1)
+        self.assertEqual(report["stale_allowlist"][0]["entities"],
+                         ["building_a", "building_b"])
+        self.assertEqual(report["stale_allowlist"][0]["reason"], "they used to share")
+        text = srv._render_duplicate_images_text(report)
+        self.assertIn("STALE ALLOWLIST ENTRIES (1)", text)
+
+    def test_vanilla_only_allowlisted_cluster_is_not_stale(self):
+        # Filtered out of the mod-only output, but it still matches its entry.
+        both = {
+            "vanilla_a": _entity(icon="gfx/icons/v.dds"),
+            "vanilla_b": _entity(icon="gfx/icons/v.dds"),
+        }
+        self.original_ms = _install_fake_ms({"Buildings": dict(both)},
+                                            base={"Buildings": dict(both)})
+        allowlist = {"Buildings": {
+            (frozenset({"gfx/icons/v.dds"}),
+             frozenset({"vanilla_a", "vanilla_b"})): "vanilla's own share",
+        }}
+        report = srv._find_duplicate_images(allowlist=allowlist)
+        self.assertEqual(report["summary"]["stale_allowlist"], 0)
+
+    def test_unscanned_type_entries_are_not_stale(self):
+        self.original_ms = _install_fake_ms({"Buildings": {}})
+        allowlist = {"Laws": {
+            (frozenset({"gfx/l.dds"}), frozenset({"law_a", "law_b"})): "x",
+        }}
+        report = srv._find_duplicate_images(allowlist=allowlist, types=["Buildings"])
+        self.assertEqual(report["stale_allowlist"], [])
+
+
+# ---------------------------------------------------------------------------
 # Allowlist YAML loader (tests the file-IO helper, not the report builder)
 # ---------------------------------------------------------------------------
 class AllowlistLoaderTests(unittest.TestCase):
@@ -420,6 +569,23 @@ class AllowlistLoaderTests(unittest.TestCase):
         self.assertIn(content_key, bldg_entries)
         self.assertEqual(bldg_entries[content_key], "identical art")
 
+    def test_slugs_cover_every_scanned_type(self):
+        for entity_type, _field in srv._IMAGE_FIELDS_BY_TYPE:
+            slug = entity_type.lower().replace(" ", "_")
+            self.assertEqual(srv._ALLOWLIST_TYPE_SLUGS[slug], entity_type)
+
+    def test_committed_allowlist_loads(self):
+        # Every section of the real file maps to a scanned type: an unknown
+        # slug is silently dropped by the loader.
+        import yaml
+        with open(srv._IMAGE_ALLOWLIST_PATH, encoding="utf-8") as f:
+            raw = yaml.safe_load(f)
+        for slug in raw:
+            self.assertIn(slug, srv._ALLOWLIST_TYPE_SLUGS)
+        loaded = srv._load_image_allowlist()
+        self.assertEqual(sum(len(v) for v in loaded.values()),
+                         sum(len(v) for v in raw.values()))
+
     def test_missing_file_returns_empty(self):
         allowlist = srv._load_image_allowlist("/nonexistent/path/to/allowlist.yml")
         self.assertEqual(allowlist, {})
@@ -442,15 +608,21 @@ class VanillaSanityTest(unittest.TestCase):
     two agrarian laws) are tolerated; thousands means the tool is broken."""
 
     THRESHOLD_PER_TYPE = 10
+    # Vanilla's ideology and IG-trait variants share their base's icon
+    # (papal_paternalistic on paternalistic.dds): 34 and 23 clusters on 1.14.5.
+    # The scan still suits them, since the default mod-only mode flags only a
+    # cluster with a mod entity, and the allowlist carries the mod's own variants.
+    THRESHOLD_OVERRIDES = {"Ideologies": 45, "Interest Group Traits": 30}
 
     @classmethod
     def setUpClass(cls):
         # Build a minimal vanilla-only ModState restricted to the entity types
         # we scan for duplicates. Pass empty mod dict so mod_parsers == vanilla.
         from mod_state import ModState
+        # Principle Groups too: principles cluster per group.
         base_dirs = {
             etype: srv.base_game_paths[etype]
-            for etype, _ in srv._IMAGE_FIELDS_BY_TYPE
+            for etype in [t for t, _ in srv._IMAGE_FIELDS_BY_TYPE] + ["Principle Groups"]
             if etype in srv.base_game_paths
         }
         if not all(os.path.isdir(p) for p in base_dirs.values()):
@@ -472,10 +644,11 @@ class VanillaSanityTest(unittest.TestCase):
         for cluster in report["flagged"]:
             per_type[cluster["entity_type"]] = per_type.get(cluster["entity_type"], 0) + 1
         for etype, count in per_type.items():
+            threshold = self.THRESHOLD_OVERRIDES.get(etype, self.THRESHOLD_PER_TYPE)
             self.assertLess(
-                count, self.THRESHOLD_PER_TYPE,
+                count, threshold,
                 f"Vanilla scan produced {count} flagged image clusters for "
-                f"{etype} — over threshold ({self.THRESHOLD_PER_TYPE}). "
+                f"{etype} — over threshold ({threshold}). "
                 f"This usually means the tool is reading the wrong field for "
                 f"this entity type. Full report: {per_type}"
             )

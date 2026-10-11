@@ -1,0 +1,69 @@
+﻿# The engine's birth and mortality lines on vanilla's laws, moved to script-only types (owner, 2026-10-11;
+# docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md). Each field is cancelled by its
+# negative, which the engine sums to 0 and the tooltip drops, and its family's type carries the value at the same
+# scaling; te_demog_lines_refresh re-applies it while the census doesn't set the state's births and deaths. A
+# release keeps this file (scripts/release/comment_out_census_inputs.py doesn't read it).
+INJECT:law_charitable_health_system = {
+	institution_modifier = {
+		state_mortality_mult = 0.03
+		state_demog_absorbed_mortality_mult = -0.03
+	}
+}
+INJECT:law_child_labor_allowed = {
+	modifier = {
+		state_farmers_mortality_mult = -0.05
+		state_laborers_mortality_mult = -0.05
+		state_machinists_mortality_mult = -0.05
+		state_peasants_mortality_mult = -0.05
+		state_demog_absorbed_farmers_mortality_mult = 0.05
+		state_demog_absorbed_laborers_mortality_mult = 0.05
+		state_demog_absorbed_machinists_mortality_mult = 0.05
+		state_demog_absorbed_peasants_mortality_mult = 0.05
+	}
+}
+INJECT:law_no_womens_rights = {
+	modifier = {
+		state_birth_rate_mult = -0.05
+		state_demog_absorbed_birth_rate_mult = 0.05
+	}
+}
+INJECT:law_private_health_insurance = {
+	institution_modifier = {
+		state_mortality_wealth_mult = 0.002
+		state_demog_ontop_mortality_wealth_mult = -0.002
+	}
+}
+INJECT:law_public_health_insurance = {
+	institution_modifier = {
+		state_mortality_mult = 0.05
+		state_demog_absorbed_mortality_mult = -0.05
+	}
+}
+INJECT:law_restricted_child_labor = {
+	modifier = {
+		state_farmers_mortality_mult = -0.02
+		state_laborers_mortality_mult = -0.02
+		state_peasants_mortality_mult = -0.02
+		state_demog_absorbed_farmers_mortality_mult = 0.02
+		state_demog_absorbed_laborers_mortality_mult = 0.02
+		state_demog_absorbed_peasants_mortality_mult = 0.02
+	}
+}
+INJECT:law_women_in_the_fields = {
+	modifier = {
+		state_birth_rate_mult = 0.1
+		state_demog_absorbed_birth_rate_mult = -0.1
+	}
+}
+INJECT:law_women_in_the_workplace = {
+	modifier = {
+		state_birth_rate_mult = 0.05
+		state_demog_absorbed_birth_rate_mult = -0.05
+	}
+}
+INJECT:law_womens_suffrage = {
+	modifier = {
+		state_birth_rate_mult = 0.05
+		state_demog_absorbed_birth_rate_mult = -0.05
+	}
+}

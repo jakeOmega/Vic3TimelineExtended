@@ -278,7 +278,7 @@ biological_immortality = {
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_company_throughput_bonus_add = 0.25
-		state_mortality_mult = -0.2
+		state_demog_ontop_mortality_mult = -0.2
 		character_health_add = 100
 		state_arable_land_mult = 0.25
 	}
@@ -351,7 +351,7 @@ mind_backups = {
 	modifier = {
 		building_economy_of_scale_level_cap_add = 10
 		country_max_weekly_construction_progress_add = 50
-		state_mortality_mult = -0.05
+		state_demog_ontop_mortality_mult = -0.05
 		character_health_add = 10000
 		state_literacy_growth_add = 0.0001
 	}

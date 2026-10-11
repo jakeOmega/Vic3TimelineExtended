@@ -36,6 +36,10 @@ GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_e
 VALUES = ROOT / "common" / "script_values" / "te_demog_values.txt"
 FAST_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"
 RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt"
+# the engine's moved birth and mortality lines (the engine-lines plan, 2026-10-11; generated)
+LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_line_effects_generated.txt"
+LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_line_values_generated.txt"
+LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_line_modifiers_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -340,9 +344,9 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS])
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -354,6 +358,7 @@ class _Engine:
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
+        self.removed = []     # remove_modifier's names, in order
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -489,6 +494,7 @@ class _Engine:
             elif key == "remove_modifier":
                 assert arg in self.modifiers, f"remove of absent modifier {arg}"
                 del self.modifiers[arg]
+                self.removed.append(arg)
             elif key == "while":
                 for _ in range(int(self.value(_find(arg, "count")))):
                     self.run([i for i in arg if i[0] != "count"])
@@ -997,6 +1003,245 @@ class TestCohortScript(unittest.TestCase):
         self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
 
 
+class TestEngineLineTypes(unittest.TestCase):
+    """Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): every engine birth
+    and mortality line on a law, tech or institution is carried on a script-only type, named like the vanilla field it
+    replaces, with vanilla's format and ai_value."""
+
+    TYPES = ROOT / "common" / "modifier_type_definitions" / "demographics_engine_line_types.txt"
+
+    def _vanilla_types(self):
+        import json
+        data = json.loads((ROOT / "vanilla_parsed" / "common" / "modifier_types.json").read_text(encoding="utf-8"))
+        return data.get("data", data)
+
+    def test_each_type_is_script_only_with_vanillas_format(self):
+        blocks = _raw_blocks([self.TYPES])
+        vanilla = self._vanilla_types()
+        self.assertEqual(set(blocks), set(P.ENGINE_LINE_TYPES.values()))
+        for (family, field), name in P.ENGINE_LINE_TYPES.items():
+            self.assertIn(family, ("absorbed", "ontop"))
+            self.assertIn(field, P.ENGINE_LINE_FIELDS)
+            body = blocks[name]
+            self.assertIn("script_only = yes", body, name)
+            for key in ("decimals", "color", "percent"):
+                want = vanilla[field][1][key][1]
+                self.assertRegex(body, rf"\b{key} = {re.escape(str(want))}\b", f"{name}: {key}")
+            self.assertRegex(body, r"ai_value = 0\b", name)
+
+    def test_every_field_has_a_short_name(self):
+        self.assertEqual(set(P.ENGINE_LINE_SHORT), set(P.ENGINE_LINE_FIELDS))
+        self.assertEqual(len(set(P.ENGINE_LINE_SHORT.values())), len(P.ENGINE_LINE_FIELDS))
+
+    def test_names_splice_the_vanilla_fields(self):
+        loc = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
+        for (family, field), name in P.ENGINE_LINE_TYPES.items():
+            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$"', name)
+            # vanilla's descriptions end without a full stop ("How many children are born each year"). A release ships
+            # these types with no Demographics rule (final review m2), so the description names no rule or setting.
+            desc = re.search(rf'\n {name}_desc:0 "(.*)"', loc).group(1)
+            self.assertTrue(desc.startswith(f"${field}_desc$. Where the demographic census sets"), name)
+            self.assertNotRegex(desc, r"\b(rule|Full|setting)\b", name)
+
+
+class TestEngineLinesMoved(unittest.TestCase):
+    """Owner, 2026-10-11: no law, technology or institution applies an engine birth or mortality line; each line the
+    census read before sits on its family's type at its old value (the plan's table)."""
+
+    MOVED = {
+        ("institution", "institution_ministry_of_consumer_protection", "modifier", "state_mortality_mult"): ("absorbed", -0.01),
+        ("law", "law_charitable_health_system", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.03),
+        ("law", "law_child_labor_allowed", "modifier", "state_farmers_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_laborers_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_machinists_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_communal_child_rearing", "modifier", "state_birth_rate_mult"): ("ontop", -0.2),
+        ("law", "law_full_equality_and_protection", "modifier", "state_birth_rate_mult"): ("ontop", -0.01),
+        ("law", "law_mandatory_augmentation", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_medical_augmentation_only", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_no_womens_rights", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("ontop", -0.1),
+        ("law", "law_private_health_insurance", "institution_modifier", "state_mortality_wealth_mult"): ("ontop", -0.002),
+        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_protected_class", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("law", "law_public_health_insurance", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("law", "law_regulated_augmentation_market", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_farmers_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_laborers_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_state_eugenics_program", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_state_sponsored_family_planning", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("law", "law_unrestricted_augmentation", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("law", "law_women_in_the_fields", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("law", "law_women_in_the_workplace", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("law", "law_womens_suffrage", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("technology", "antibiotic_mass_production", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("technology", "antibiotic_mass_production", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("ontop", -0.2),
+        ("technology", "contraceptive_pill", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("ontop", -0.05),
+        ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("ontop", -0.05),
+        ("technology", "modern_vaccines", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("technology", "modern_vaccines", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "second_wave_feminism", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
+        ("technology", "sexual_revolution", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lines = DM.engine_rate_lines()
+
+    def test_no_carrier_applies_an_engine_birth_or_mortality_line(self):
+        live = {k: v for k, v in self.lines.items() if abs(v) > 1e-9 and DM.is_engine_rate_field(k[3])}
+        self.assertEqual(live, {}, "move each to its type (docs/superpowers/plans/2026-10-11-...)")
+
+    def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
+        got = DM.engine_lines()
+        self.assertEqual(set(got), set(self.MOVED))
+        for k, (family, value) in self.MOVED.items():
+            self.assertEqual(got[k][0], family, k)
+            self.assertAlmostEqual(got[k][1], value, places=6, msg=k)
+
+    def test_the_types_are_not_engine_fields(self):
+        for name in P.ENGINE_LINE_TYPES.values():
+            self.assertFalse(DM.is_engine_rate_field(name), name)
+
+
+class TestLinesScript(unittest.TestCase):
+    """te_demog_lines_refresh (owner, 2026-10-11; the engine-lines plan, Task 4): the moved lines reach a state while
+    the census doesn't set its births and deaths, at the two families' sum, by a fixed-sign pair per field."""
+
+    def _eng(self, sums, full=False, census_term=False, held=None):
+        """census_term: a census step has set M (te_dg_mb, with this build's te_dg_q_b), its deaths pair in force;
+        "stale" is a step from a save made before this build (no te_dg_q_b)."""
+        fixtures = {f"modifier:{name}": sums.get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
+        if census_term:
+            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3)
+            eng.modifiers["te_demog_census_deaths_down"] = 0.3
+            if census_term != "stale":
+                eng.vars.update(te_dg_q_b=0.0, te_dg_q_d=0.0)
+        for short, m in (held or {}).items():
+            eng.vars[f"te_dg_ln_{short}"] = m
+            eng.modifiers[f"te_demog_line_{short}_{'up' if m > 0 else 'down'}"] = abs(m)
+        return eng
+
+    def lines(self, eng):
+        return {k: v for k, v in eng.modifiers.items() if k.startswith("te_demog_line_")}
+
+    def test_off_applies_the_families_sum(self):
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03, "state_demog_ontop_mortality_mult": -0.05,
+                         "state_demog_absorbed_birth_rate_mult": 0.05, "state_demog_ontop_mortality_wealth_mult": -0.01,
+                         "state_demog_absorbed_laborers_mortality_mult": 0.05})
+        eng.call("te_demog_lines_refresh")
+        got = self.lines(eng)
+        self.assertEqual(set(got), {"te_demog_line_deaths_down", "te_demog_line_births_up",
+                                    "te_demog_line_wealth_deaths_down", "te_demog_line_laborers_deaths_up"})
+        for name, want in (("te_demog_line_deaths_down", 0.08), ("te_demog_line_births_up", 0.05),
+                           ("te_demog_line_wealth_deaths_down", 0.01), ("te_demog_line_laborers_deaths_up", 0.05)):
+            self.assertAlmostEqual(got[name], want, msg=name)
+        self.assertAlmostEqual(eng.vars["te_dg_ln_deaths"], -0.08)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_line_deaths_applied")), -0.08)
+
+    def test_the_pairs_carry_the_engine_fields(self):
+        mods = _raw_blocks([LINE_MODIFIERS])
+        for field, short in P.ENGINE_LINE_SHORT.items():
+            self.assertRegex(mods[f"te_demog_line_{short}_up"], rf"\b{field} = 1\b", short)
+            self.assertRegex(mods[f"te_demog_line_{short}_down"], rf"\b{field} = -1\b", short)
+        self.assertEqual(len(mods), 2 * len(P.ENGINE_LINE_FIELDS))
+        # organize_loc files te_demog_* keys in te_miscellaneous_l_english.yml, beside the census's own pairs
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        for name in mods:
+            self.assertIn(f" {name}:", loc, name)
+            self.assertIn(f" {name}_desc:", loc, name)
+
+    def test_pairs_follow_the_census_term(self):
+        """Review Focus 1: the pairs and the census's term are never both in force, and the pairs come back whenever
+        the census's term is gone (Display only or Disabled clear te_dg_mb; a rule switched mid-game)."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True)
+        eng.call("te_demog_lines_refresh")
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Full, no census step yet: vanilla's lines stay")
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True, census_term=True,
+                        held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {}, "Full with the census's term: the pairs come off")
+        self.assertNotIn("te_dg_ln_deaths", eng.vars)
+        # review I2: a rule switched off Full takes the census's term off at the next refresh, not the state's next
+        # yearly step, so the pairs don't count the moved lines a second time on top of it
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=False, census_term=True)
+        eng.call("te_demog_lines_refresh")
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Disabled after Full: the pairs apply")
+        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers, "Disabled after Full: the census's term is off")
+        self.assertNotIn("te_dg_mb", eng.vars)
+
+    def test_a_term_saved_before_this_build_comes_off(self):
+        """Review M2: a Full save from before the moved lines has a census term built for vanilla's lines (no
+        te_dg_q_b). The refresh takes it off so the pairs carry the state until its next step sets M afresh."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True, census_term="stale")
+        eng.call("te_demog_lines_refresh")
+        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers)
+        self.assertNotIn("te_dg_mb", eng.vars)
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers)
+
+    def test_unchanged_sums_are_left_alone(self):
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(eng.removed, [], "a refresh with nothing changed removes no modifier")
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.05}, held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(eng.removed, ["te_demog_line_deaths_down"])
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_deaths_down"], 0.05)
+
+    def test_a_lost_pair_comes_back(self):
+        """Final review m6: a state holding the stored sum without its pair (a save quirk, a state that copied the
+        variable but not the modifier) gets the pair back at the next refresh, not when the sum next changes."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03})
+        eng.vars["te_dg_ln_deaths"] = -0.03
+        eng.call("te_demog_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_deaths_down"], 0.03)
+
+    def test_a_sum_back_at_zero_leaves_no_pair(self):
+        eng = self._eng({}, held={"births": 0.05})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {})
+        self.assertEqual(eng.vars["te_dg_ln_births"], 0)
+
+    def test_unincorporated_state_gets_no_institution_lines(self):
+        """Review Focus 2: the engine reads an institution line as 0 in an unincorporated state, so the sum is the
+        laws' and techs' alone, as vanilla applies them."""
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": 0.05})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(set(self.lines(eng)), {"te_demog_line_births_up"})
+
+    def test_refresh_runs_where_the_inputs_change(self):
+        """Owner, 2026-10-11: the pairs follow a new game, a law, a technology, a change of owner, incorporation and a
+        new state at once, with the monthly pulse as the fallback. Every caller has ROOT = the state: the state
+        on-actions call it directly, the others through the hidden state event te_demog_events.4."""
+        on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
+        hooks = {"on_monthly_pulse_state": "te_demog_lines_on_action", "on_state_owner_change": "te_demog_lines_on_action",
+                 "on_state_incorporation": "te_demog_lines_on_action", "on_state_created": "te_demog_lines_on_action",
+                 "on_law_activated": "te_demog_lines_law_on_action",
+                 "on_acquired_technology": "te_demog_lines_country_on_action",
+                 "on_game_started_after_lobby": "te_demog_lines_world_on_action"}
+        for hook, name in hooks.items():
+            self.assertRegex(on_actions, rf"\n{hook} = \{{\s*on_actions = \{{[^}}]*\b{name}\b", hook)
+        dispatch = r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}"
+        # review I1: on_law_activated's ROOT is the law, so its states are the owner's; on_acquired_technology's
+        # ROOT is the country. Both wait for the game to start: history's laws and techs are the world hook's.
+        law = _block(on_actions, "te_demog_lines_law_on_action")
+        self.assertRegex(law, r"owner = \{\s*" + dispatch)
+        country = _block(on_actions, "te_demog_lines_country_on_action")
+        self.assertRegex(country, r"limit = \{ has_game_started = yes \}\s*" + dispatch)
+        self.assertIn("limit = { has_game_started = yes }", law)
+        self.assertIn("trigger_event = { id = te_demog_events.4 }", _block(on_actions, "te_demog_lines_world_on_action"))
+        event = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.4")
+        self.assertIn("type = state_event", event)
+        self.assertIn("te_demog_lines_refresh = yes", event)
+        callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
+                         if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
+        self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
+
+
 class TestPollutionLine(unittest.TestCase):
     """predict's Pollution Impact line (owner, 2026-10-11): vanilla's code static modifier plus the mod's INJECT."""
 
@@ -1019,47 +1264,81 @@ class TestRatesScript(unittest.TestCase):
     EBR = P.LITERACY_BIRTH_PENALTY * 0.2 * 475e6
 
     def _eng(self, full=True, stepped=1.0, cbr=38.0, cdr=31.0, eb0=475.0 * 1_000_000, ed0=430.0 * 1_000_000,
-             ebr=EBR, edr=0.0, read_b=0.05, read_d=0.04, sab=0.0, sad=0.0):
+             ebr=EBR, edr=0.0, read_b=0.05, read_d=0.04, ontop=None):
+        # the moved lines' families (the engine-lines plan): 0 unless a test says
+        families = {f"modifier:{name}": (ontop or {}).get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
         eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": read_b,
-                       "modifier:state_mortality_mult": read_d},
+                       "modifier:state_mortality_mult": read_d, **families},
                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
-        # te_dg_w_sab/_sad: the state's absorbed lines, which the walk reads once under Full (te_demog_absorbed_walk_init)
         eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=ebr, te_dg_w_edr=edr, te_dg_w_eb=eb0,
-                          te_dg_w_ed=ed0, te_dg_w_sab=sab, te_dg_w_sad=sad)
+                          te_dg_w_ed=ed0)
         eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
         return eng
 
-    def _want(self, cbr, cdr, eb0, ed0, ebr, other_b, other_d, edr=0.0, sab=0.0, sad=0.0):
+    def _want(self, cbr, cdr, eb0, ed0, ebr, other_b, other_d, edr=0.0, added_b=0.0, added_d=0.0):
         """rate_term's M for the script's inputs: the state-level lines on top are the read without the census's and
-        fast mode's terms (other) less the state's absorbed lines (owner, 2026-10-11)."""
+        fast mode's terms and the moved lines' pairs (other); the on-top family is what the census adds (added)."""
         mb, _ = demographics_model.rate_term(cbr * self.POP * 100 / 12, eb0, absorbed=ebr, other=other_b,
-                                             on_top=other_b - sab)
+                                             on_top=other_b, added=added_b)
         md, _ = demographics_model.rate_term(cdr * self.POP * 100 / 12, ed0, absorbed=edr, other=other_d,
-                                             on_top=other_d - sad)
+                                             on_top=other_d, added=added_d)
         return mb, md
 
     def test_state_level_lines_on_top_act_on_the_census_rate(self):
-        """Owner, 2026-10-11: West Bengal's Pollution Impact (+0.32) with last step's M (-0.3) and fast mode's term
-        (+2.0) in the read, and a state-level absorbed law line (+0.05, in the walk's replaced sum as well). The
-        engine's deaths come to the census's x 1.32, and its births to the census's less the on-top -0.01."""
+        """Owner, 2026-10-11: West Bengal's Pollution Impact (+0.32) and the Midlands' Cadet Sons (+0.046 births) with
+        last step's M (-0.3) and fast mode's term (+2.0) in the read. The engine's deaths come to the census's x 1.32
+        and its births to the census's x 1.046."""
         ed0, eb0 = 430e6, 475e6
-        edr, ebr = 0.05 * ed0, self.EBR + 0.02 * eb0
-        eng = self._eng(read_d=-0.3 + 2.0 + 0.32 + 0.05, sad=0.05, edr=edr, read_b=2.0 - 0.01 + 0.02, sab=0.02,
-                        ebr=ebr)
+        eng = self._eng(read_d=-0.3 + 2.0 + 0.32, read_b=2.0 + 0.046)
         eng.modifiers.update(te_demog_census_deaths_down=0.3, te_demog_fast_deaths=1.0, te_demog_fast_births=1.0)
         eng.vars.update(te_dg_md=-0.3, te_dg_fast_fd=2.0, te_dg_fast_fb=2.0)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(38.0, 31.0, eb0, ed0, ebr, 0.01, 0.37, edr=edr, sab=0.02, sad=0.05)
+        mb, md = self._want(38.0, 31.0, eb0, ed0, self.EBR, 0.046, 0.32)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         target_d, target_b = 31.0 * self.POP * 100 / 12, 38.0 * self.POP * 100 / 12
-        self.assertAlmostEqual(ed0 * (1 + eng.vars["te_dg_md"] + 0.32) + edr, target_d * 1.32, delta=target_d * 1e-5)
-        self.assertAlmostEqual(eb0 * (1 + eng.vars["te_dg_mb"] - 0.01) + ebr, target_b * 0.99, delta=target_b * 1e-5)
-        # kept for console option n, whose line then checks the term: M = tb - 1 - rep - os x (1 - tb)
+        self.assertAlmostEqual(ed0 * (1 + eng.vars["te_dg_md"] + 0.32), target_d * 1.32, delta=target_d * 1e-5)
+        self.assertAlmostEqual(eb0 * (1 + eng.vars["te_dg_mb"] + 0.046) + self.EBR, target_b * 1.046, delta=target_b * 1e-5)
+        # kept for console option n, whose line then checks the term: M = tb - 1 - rep - os x (1 - tb) + q x tb
         self.assertAlmostEqual(eng.vars["te_dg_os_d"], 0.32, places=5)
-        self.assertAlmostEqual(eng.vars["te_dg_os_b"], -0.01, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_os_b"], 0.046, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_tb_d"], target_d / ed0, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_tb_b"], target_b / eb0, places=5)
+
+    def test_full_applies_the_on_top_family_and_clears_the_pairs(self):
+        """The engine-lines plan, Task 5: on the first Full step the moved lines' pairs are in the read and are cleared
+        in the same effect; M carries the on-top family at the census's rate, and Private Health Insurance's wealth
+        line goes on the census's own pair at its share of the bare curve, floored (owner, option b)."""
+        ed0 = 430e6
+        eng = self._eng(read_d=-0.08 + 0.32, ontop={"state_demog_ontop_mortality_mult": -0.05,
+                                                     "state_demog_absorbed_mortality_mult": -0.03,
+                                                     "state_demog_ontop_mortality_wealth_mult": -0.01})
+        eng.modifiers["te_demog_line_deaths_down"] = 0.08
+        eng.vars["te_dg_ln_deaths"] = -0.08
+        eng.call("te_demog_rates_refresh")
+        target = 31.0 * self.POP * 100 / 12
+        _, md = self._want(38.0, 31.0, 475e6, ed0, self.EBR, 0.05, 0.32, added_d=-0.05)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertAlmostEqual(ed0 * (1 + md + 0.32), target * (1 + 0.32 - 0.05), delta=target * 1e-5)
+        self.assertNotIn("te_demog_line_deaths_down", eng.modifiers)
+        self.assertNotIn("te_dg_ln_deaths", eng.vars)
+        self.assertAlmostEqual(eng.vars["te_dg_q_d"], -0.05, places=5)
+        tb = target / ed0
+        self.assertAlmostEqual(eng.vars["te_dg_w"], P.WEALTH_LINE_FLOOR * tb, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_wealth_down"], -P.WEALTH_LINE_FLOOR * tb, places=5)
+        # above the floor it is the line itself, at the census's share
+        eng = self._eng(ontop={"state_demog_ontop_mortality_wealth_mult": -0.002})
+        eng.call("te_demog_rates_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_w"], -0.002 * tb, places=5)
+
+    def test_outside_full_the_wealth_pair_goes(self):
+        eng = self._eng(full=False)
+        eng.modifiers["te_demog_census_wealth_down"] = 0.003
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=-0.3, te_dg_w=-0.003, te_dg_q_b=0.0, te_dg_q_d=-0.05)
+        eng.call("te_demog_rates_refresh")
+        self.assertNotIn("te_demog_census_wealth_down", eng.modifiers)
+        for var in ("te_dg_w", "te_dg_q_b", "te_dg_q_d"):
+            self.assertNotIn(var, eng.vars)
 
     def test_script_matches_the_model(self):
         eng = self._eng()
@@ -1289,14 +1568,15 @@ class TestRatesScript(unittest.TestCase):
         eb0, ed0 = 475.0 * pop, 400.0 * pop
         walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebr", P.LITERACY_BIRTH_PENALTY * 0.35 * eb0), ("te_dg_w_edr", 0.0), ("te_dg_w_eb", eb0),
-            ("te_dg_w_ed", ed0), ("te_dg_w_sab", 0.0), ("te_dg_w_sad", 0.0)))
+            ("te_dg_w_ed", ed0)))
         walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
         stubs = {"te_demog_walks": walk, "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
                  "te_inh_refresh_wc_state_effects": "", "te_demog_flows": "te_demog_no_flows = yes"}
         eng = _engine_for(TestCohortScript.INP, 1836, pop, effects=stubs)
         eng.trigger_fixtures["te_demog_effects_run"] = True
-        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.02, "modifier:state_mortality_mult": 0.01})
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.02, "modifier:state_mortality_mult": 0.01,
+                             **{f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()}})
         if refresh is not None:
             eng.effects["te_demog_rates_refresh"] = refresh
         return eng
@@ -1400,11 +1680,9 @@ class _OwnerEngine(_Engine):
 
 
 class TestAbsorbedScript(unittest.TestCase):
-    """Owner amendment A and B (2026-10-10): the generated walk sums carry every line the census absorbs, as the
-    engine applies it, so M cancels it under Full. Each pop adds its bare curves x (the state's absorbed lines + its
-    class's + literacy's -0.1 and mild starvation's, per pop) to te_dg_w_ebr / te_dg_w_edr. Checked against
-    demographics_modifiers.totals over DM.absorbed_carriers, carrier by carrier, so a line the generator drops
-    fails."""
+    """The walk's replaced sums (te_dg_w_ebr / te_dg_w_edr), which M nets out under Full: each pop's bare curves x the
+    terms the engine still applies per pop and the census models (literacy's -0.1, mild starvation's). Since 2026-10-11
+    (the engine-lines plan) the laws', techs' and institutions' lines are script-only and need no netting."""
 
     P_EB, P_ED = 500.0, 400.0
 
@@ -1438,52 +1716,6 @@ class TestAbsorbedScript(unittest.TestCase):
         levels = {c.institution: level} if c.institution else {}
         return laws, techs, levels
 
-    def test_institution_lines_scale_with_the_states_institution_impact(self):
-        """The engine scales an institution's lines by the state's Impact of Institutions (the probe session,
-        2026-10-11: the Midlands' Ministry of Health read "A multiplier of 0.94", Local Vernacular's -0.05 and its
-        obstinance's -1.0 x 1%). The census cancels them at that size, and at none in a fully obstinate state; a
-        law's or tech's own line is not scaled."""
-        health = next(c for c in self.absorbed if c.key == "law_charitable_health_system")
-        levels = {"institution_health_system": 3}
-        for add in (-0.06, -1.2, 0.1):
-            with self.subTest(add=add):
-                _b, d = self._run(laws={"law_charitable_health_system"}, levels=levels, impact=add)
-                t = DM.totals([health], laws={"law_charitable_health_system"}, institutions=levels,
-                              types={health.type}, institution_impact=max(0.0, 1 + add))
-                self.assertAlmostEqual(d, t["state_mortality_mult"], places=5)
-                self.assertAlmostEqual(d, health.value * 3 * max(0.0, 1 + add), places=5)
-        own = next(c for c in self.absorbed if c.kind == "institution")
-        for add in (-0.06, -1.2):
-            with self.subTest(institution=own.key, add=add):
-                _b, d = self._run(levels={own.institution: 2}, impact=add)
-                self.assertAlmostEqual(d, own.value * 2 * max(0.0, 1 + add), places=5)
-        flat = next(c for c in self.absorbed if c.kind == "law" and c.type == "state_birth_rate_mult")
-        b0, _ = self._run(laws={flat.key})
-        b1, _ = self._run(laws={flat.key}, impact=-0.5)
-        self.assertAlmostEqual(b0, b1)
-
-    def test_the_absorbed_set_is_what_the_amendment_names(self):
-        kinds = {c.kind for c in self.absorbed}
-        self.assertEqual(kinds, {"law", "law_institution", "technology", "institution"})
-        self.assertTrue({c.type for c in self.absorbed} >= {"state_birth_rate_mult", "state_mortality_mult",
-                                                            "state_laborers_mortality_mult"})
-
-    def test_every_absorbed_line_reaches_the_walk(self):
-        for c in self.absorbed:
-            m = re.fullmatch(r"state_(\w+)_mortality_mult", c.type)
-            pop_type = m.group(1) if m else "clerks"
-            laws, techs, levels = self._held(c)
-            with self.subTest(carrier=c):
-                got = self._run(laws, techs, levels, pop_type=pop_type)
-                want = self._want(laws, techs, levels, pop_type=pop_type)
-                self.assertAlmostEqual(got[0], want[0], places=9)
-                self.assertAlmostEqual(got[1], want[1], places=9)
-                # the carrier's own share is in it: without it the sums differ by its value (x the level of 3)
-                rest = self._want(laws, techs, levels, pop_type=pop_type, carriers=[x for x in self.absorbed if x != c])
-                kind = 0 if c.type == "state_birth_rate_mult" else 1
-                share = c.value * (3 if c.kind in ("law_institution", "institution") else 1)
-                self.assertAlmostEqual(want[kind] - rest[kind], share, places=9)
-
     def test_a_carrier_not_held_takes_nothing(self):
         self.assertEqual(self._run(), (0.0, 0.0))
 
@@ -1495,24 +1727,6 @@ class TestAbsorbedScript(unittest.TestCase):
         self.assertEqual(self._run(laws, pop_type="laborers", food=0.3, literacy=0.5, full=False), (0.0, 0.0))
         pop = _block(_text(GENERATED_EFFECTS), "te_demog_absorbed_walk_pop")
         self.assertTrue(pop.lstrip().startswith("if = {\n\t\tlimit = { local_var:te_dg_w_rep > 0 }"), pop[:80])
-
-    def test_per_level_lines_reach_incorporated_states_only(self):
-        laws = {c.key for c in self.absorbed if c.kind == "law_institution"}
-        levels = {c.institution: 5 for c in self.absorbed if c.institution}
-        inc = self._run(laws, (), levels)
-        unc = self._run(laws, (), levels, incorporated=False)
-        for got, want in zip(inc, self._want(laws, (), levels)):
-            self.assertAlmostEqual(got, want, places=9)
-        self.assertAlmostEqual(unc[1], 0.0)
-        self.assertLess(inc[1], -0.2)   # Charitable and Public at 5: -0.4 alone
-
-    def test_the_class_lines_reach_their_class_only(self):
-        laws = {"law_child_labor_allowed"}
-        self.assertAlmostEqual(self._run(laws, pop_type="laborers")[1], 0.05)
-        self.assertAlmostEqual(self._run(laws, pop_type="machinists")[1], 0.05)
-        self.assertAlmostEqual(self._run(laws, pop_type="clerks")[1], 0.0)
-        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="machinists")[1], 0.0)
-        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="peasants")[1], 0.02)
 
     def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
         """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
@@ -1528,13 +1742,18 @@ class TestAbsorbedScript(unittest.TestCase):
             self.assertAlmostEqual(b, ref_b, delta=0.7 * 0.0625 * 1.01, msg=food)
         self.assertEqual(self._run(food=0.1), (0.0, 0.0))
 
-    def test_the_pop_curves_weight_each_term(self):
-        """A state's absorbed lines and a pop's own add once each, at that pop's bare curves."""
-        laws = {"law_child_labor_allowed", "law_women_in_the_fields"}
-        b, d = self._run(laws, pop_type="laborers", food=0.32, literacy=0.5)
-        self.assertAlmostEqual(b, -0.1 + P.LITERACY_BIRTH_PENALTY * 0.5 + P.STARVATION_MILD["births"] * 0.1875)
-        self.assertAlmostEqual(d, 0.05 + P.STARVATION_MILD["deaths"] * 0.1875)
-
+    def test_the_walk_nets_only_the_per_pop_engine_terms(self):
+        """Owner, 2026-10-11 (the engine-lines plan): the laws', techs' and institutions' lines are script-only, so
+        under Full the engine no longer applies them and the walk has nothing of theirs to net. It nets what the engine
+        still applies per pop: literacy's -0.1 and mild starvation's terms, at that pop's bare curves."""
+        laws = {"law_child_labor_allowed", "law_women_in_the_fields", "law_charitable_health_system"}
+        b, d = self._run(laws, levels={"institution_health_system": 3}, pop_type="laborers", food=0.32, literacy=0.5)
+        self.assertAlmostEqual(b, P.LITERACY_BIRTH_PENALTY * 0.5 + P.STARVATION_MILD["births"] * 0.1875)
+        self.assertAlmostEqual(d, P.STARVATION_MILD["deaths"] * 0.1875)
+        eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0}, triggers={"te_demog_effects_run": True})
+        eng.call("te_demog_absorbed_walk_init")
+        for gone in ("te_dg_w_sab", "te_dg_w_sad", "te_dg_w_ac_laborers"):
+            self.assertNotIn(gone, eng.locals)
 
 class TestNaturalFertilityScript(unittest.TestCase):
     """te_demog_tfr with the natural-fertility read, against demographics_model.fertility."""
@@ -3351,7 +3570,8 @@ class TestConsole(unittest.TestCase):
         # and the absorbed lines' share M took out (owner amendment A, B): mb = target / bare - 1 - rep_b
         for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
                            ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d"),
-                           ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d")):
+                           ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d"),
+                           ("q_b", "te_dg_q_b"), ("q_d", "te_dg_q_d"), ("w", "te_dg_w")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
@@ -3394,7 +3614,8 @@ class TestFastMode(unittest.TestCase):
     def _refresh(self, eng, eb, eb0, ed, ed0):
         # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_rate_prev_b=0.0,
-                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0)
+                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0,
+                          te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
 
     # -- phase 2 step 4: fast mode composes with the census's term M -------------------------------
@@ -3411,8 +3632,7 @@ class TestFastMode(unittest.TestCase):
                                "modifier:state_mortality_mult": 0.0},
                         triggers={"te_demog_effects_run": True})
         eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=36.0, te_dg_cdr_model=24.0)
-        # the state's absorbed lines, which the walk reads once under Full (te_demog_absorbed_walk_init)
-        eng.locals.update(te_dg_w_sab=0.0, te_dg_w_sad=0.0)
+        eng.fixtures.update({f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()})
         return eng
 
     def test_fast_mode_scales_the_census_target(self):
@@ -3472,9 +3692,21 @@ class TestFastMode(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd, places=5)
 
+    def test_first_full_step_takes_the_pairs_off_fast_modes_average(self):
+        """The engine-lines plan, Review Focus 5: on the first Full step the walk's average still holds the moved lines'
+        pairs, which the refresh clears; fast mode's term subtracts them, so the engine runs K x the census's rate."""
+        eng = self._eng_full()
+        eng.modifiers["te_demog_line_deaths_down"] = 0.08
+        eng.vars["te_dg_ln_deaths"] = -0.08
+        eng.fixtures["modifier:state_mortality_mult"] = -0.08
+        self._both(eng, eb=475e3, eb0=475e3, ed=0.92 * 430e3, ed0=430e3)
+        td = 24.0 * 1000.0 * 100 / 12 / 430e3
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * td, places=5)
+        self.assertNotIn("te_demog_line_deaths_down", eng.modifiers)
+
     def test_fast_mode_composes_with_the_absorbed_lines(self):
-        """Owner amendment A (final review 2, m5): a state carrying absorbed lines A (in the walk's average, the state
-        read and the replaced sums) and state-level terms on top O. Since 2026-10-11 (owner) O acts on the census's
+        """Owner amendment A (final review 2, m5): a state carrying absorbed per-pop terms A (literacy, mild
+        starvation: in the walk's average and the replaced sums, not the state read) and state-level terms on top O. Since 2026-10-11 (owner) O acts on the census's
         rate: at K = 4, M = T/B - 1 - A - O x (1 - T/B), F = 3 x T/B x (1 + O), so the engine runs
         1 + M + F + O + A = 4 x T/B x (1 + O): fast mode scales the census and what's on top, never what M cancels.
         The next clock step, with both terms applied, returns the same M and F."""
@@ -3484,11 +3716,11 @@ class TestFastMode(unittest.TestCase):
         tb, td = 36.0 * 1000.0 * 100 / 12 / eb0, 24.0 * 1000.0 * 100 / 12 / ed0
 
         def step(mb, fb, md, fd):
-            eng.fixtures.update({"modifier:state_birth_rate_mult": o_b + a_b + mb + fb,
-                                 "modifier:state_mortality_mult": o_d + a_d + md + fd})
+            eng.fixtures.update({"modifier:state_birth_rate_mult": o_b + mb + fb,
+                                 "modifier:state_mortality_mult": o_d + md + fd})
             eng.locals.update(te_dg_w_eb=(1 + o_b + a_b + mb + fb) * eb0, te_dg_w_eb0=eb0,
                               te_dg_w_ed=(1 + o_d + a_d + md + fd) * ed0, te_dg_w_ed0=ed0,
-                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0, te_dg_w_sab=a_b, te_dg_w_sad=a_d)
+                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0)
             eng.call("te_demog_rates_refresh")
             eng.call("te_demog_fast_refresh_rates")
             return eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"], eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]

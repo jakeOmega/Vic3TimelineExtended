@@ -60,3 +60,17 @@ te_demog_events.3 = {
 		te_demog_country_clock_census = yes
 	}
 }
+
+# ======================================================================
+#  4 – The engine's moved birth and mortality lines (hidden)
+#  Fired in each state by the law, technology and global hooks (te_demog_on_actions.txt: a law's
+#  activation, a technology, a new game), so ROOT is the state, as te_demog_lines_refresh's multipliers need.
+# ======================================================================
+te_demog_events.4 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		te_demog_lines_refresh = yes
+	}
+}

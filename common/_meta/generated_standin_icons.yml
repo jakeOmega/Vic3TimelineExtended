@@ -1,0 +1,16 @@
+# Icon paths a generator wrote as a stand-in for real art. /placeholder-icons
+# reports an icon matching one of these globs as `generated_standin` instead of
+# `unique_mod` or `shared_mod`. See docs/guides/python_tools.md.
+#
+# Each entry: `pattern` (an fnmatch glob over the Paradox-relative path,
+# case-sensitive), the `generator` that writes the files, and a `reason`.
+#
+# scripts/image_pipeline/gen_placeholder_company_icons.py draws "PLACEHOLDER"
+# company cards into company_icons/historical_company_icons/<stem>.dds. Its
+# ICONS list has been empty since icon batch 3 (#813) replaced all eighteen
+# cards, so no glob covers them. When a new company gets a card, add its path
+# here, and remove it again once the company has a logo.
+
+- pattern: gfx/interface/icons/production_method_icons/cat_*.dds
+  generator: scripts/image_pipeline/gen_batch_pm_icons.py
+  reason: category glyphs for production methods with no art of their own

@@ -75,6 +75,7 @@ Each row: current placeholder | three vanilla neighbours ‖ two generated candi
    - Add Treaty Articles, Diplomatic Actions, Power Bloc Principles (clustered per principle group), Institutions, Ideologies, Mobilization Options, IG traits and Character Traits to its strict types.
    - Triage `common/_meta/duplicate_image_allowlist.yml` first. 83 entries still carry the placeholder reason "existing reuse - verify intent". One of them hides the 13 decrees on `decree_road_maintenance.dds`. The `mass_communication.dds` tech cluster is flagged today only because its entry's entity list went stale. An entry that is really a placeholder comes off the allowlist and onto the work list.
    - The pipeline reads the list through `ModState` directly, not HTTP.
+   - **Built (issue #550, 2026-10-11).** `/duplicate-images` scans all of these, principles per group, and returns `stale_allowlist` for entries that match no cluster. The triage found all 28 remaining "verify intent" entries stale (every technology involved had its own icon by then) and deleted them; the by-design shares (custom-religion variants, the `"use"` picks, the carriers) carry real reasons. `/placeholder-icons` now answers the work-list question across types: every mod-set icon as `missing`, `generated_standin`, `borrowed_vanilla`, `shared_mod` or `unique_mod`.
 2. **Prompt registry.** `icon_prompts.py`, next to `event_image_prompts.py`:
    - `CATEGORIES` per category: folder, size, layout, style template, DDS format, output folder.
    - `ICONS`: entity key → subject phrase, plus the accepted seed once reviewed, so reruns are deterministic.
@@ -332,7 +333,7 @@ The system-panel style pass (#573–#583) drew about 120 icons and ten pies with
 
 ## Mod placeholders audit (2026-10-02)
 
-The batches so far replaced entities that borrowed a **vanilla** icon. This audit looked for the other kind: an icon the mod made that several entities share, or a placeholder the mod drew itself. `/duplicate-images` could not answer it. It scans six types, each on its own, and its allowlist entries reading "existing reuse - verify intent" hid most of what follows. Issue #550 proposes the tooling to fix this.
+The batches so far replaced entities that borrowed a **vanilla** icon. This audit looked for the other kind: an icon the mod made that several entities share, or a placeholder the mod drew itself. `/duplicate-images` could not answer it. It scans six types, each on its own, and its allowlist entries reading "existing reuse - verify intent" hid most of what follows. Issue #550 proposed the tooling to fix this; `/placeholder-icons` and the wider `/duplicate-images` now answer it.
 
 A scratch scan read every depth-1 `icon =` / `texture =` gfx path in vanilla's and the mod's `common/`. It grouped the ~15,000 references by the MD5 of the resolved file, across all types at once, and kept the groups that hold a mod-added entity. The install was 1.14.5, fresh against `vanilla_parsed/`.
 

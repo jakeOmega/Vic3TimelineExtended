@@ -118,8 +118,9 @@ def engine_rate_lines(root=ROOT, mod=True):
     """{(kind, key, block, field): net value} for every `*_mult` line in a law's `modifier` or
     `institution_modifier`, a technology's or an institution's `modifier`. Vanilla's and (with mod) the
     mod's are summed as the engine sums an INJECT (scripting_best_practices.md § INJECT); a mod REPLACE
-    drops vanilla's. kind: law, technology, institution. Phase 2 step 4: which birth and mortality lines
-    the census absorbs (they net to zero) and which stay on top (P.ENGINE_LINES_ON_TOP)."""
+    drops vanilla's. kind: law, technology, institution. Since the engine-lines plan (2026-10-11) a moved
+    line's engine field nets to zero here (its INJECT's cancel) and its value is under its script-only type
+    (engine_lines() reads those back)."""
     from paradox_file_parser import ParadoxFileParser
 
     files = {"law": ("laws", "laws"), "technology": ("technologies", "technology/technologies"),
@@ -174,14 +175,47 @@ def is_engine_rate_field(field):
     """A field the engine applies to births or deaths: the state's birth or mortality multiplier, a class's
     mortality or wealth mortality. The census's own script-only types (state_work_mortality_mult and the like)
     are inputs, not engine lines."""
-    return bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+    return (bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+            and field not in P.ENGINE_LINE_TYPES.values())
+
+
+def engine_lines(root=ROOT):
+    """{(kind, key, block, engine field): (family, value)}: the engine's birth and mortality lines moved to script-only
+    types (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md), read back
+    from the carriers. engine_rate_lines already sums every *_mult line, vanilla's and the mod's, so a type's line is
+    found under its own name and mapped back to the field it replaces."""
+    back = {name: fam_field for fam_field, name in P.ENGINE_LINE_TYPES.items()}
+    out = {}
+    for (kind, key, block, field), value in engine_rate_lines(root).items():
+        if field in back and abs(value) > 1e-9:
+            family, engine_field = back[field]
+            out[(kind, key, block, engine_field)] = (family, value)
+    return out
+
+
+def line_carriers(root=ROOT):
+    """engine_lines() as Carriers typed by their family's script-only type (owner, 2026-10-11), with the scaling kinds
+    the engine applies: a law's institution_modifier line is law_institution (per level of the law's institution,
+    incorporated states), an institution's own line institution (per its level), the rest flat. totals() over these
+    gives a state's families as the engine sums them (at full Impact of Institutions)."""
+    institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    out = []
+    for (kind, key, block, field), (family, value) in sorted(engine_lines(root).items()):
+        name = P.ENGINE_LINE_TYPES[(family, field)]
+        if kind == "law" and block == "institution_modifier":
+            out.append(Carrier("law_institution", key, name, value, institution.get(key)))
+        elif kind == "institution":
+            out.append(Carrier("institution", key, name, value, key))
+        else:
+            out.append(Carrier(kind, key, name, value))
+    return out
 
 
 def absorbed_carriers(root=ROOT, lines=None):
-    """Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines on laws, technologies
-    and institutions that the census absorbs, as Carriers (`type` is the engine field). Under Full the census's
-    term M cancels each one in the state it reaches (te_demog_absorbed_*, generated); no carrier is edited, so
-    nothing changes outside Full. Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    """Phase 2 step 4 (owner amendment, 2026-10-10): any engine birth or mortality line still live on a law,
+    technology or institution that the census would absorb, as Carriers (`type` is the engine field). Since the
+    engine-lines plan (2026-10-11) every such line sits on a script-only type, so this returns [] (the walk nets
+    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
     P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
     institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
     institution's own line is institution (per its level, incorporated states), the rest are flat."""

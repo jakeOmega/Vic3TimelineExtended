@@ -104,3 +104,88 @@ te_demog_lost_war = {
 		}
 	}
 }
+
+# The engine's moved birth and mortality lines (owner, 2026-10-11; the engine-lines plan, Task 4): refreshed where their
+# inputs change, and every month for institution levels, which have no on-action, and old saves.
+# ROOT must be the state (the pairs' multipliers resolve against it): the state hooks call the refresh, the law,
+# technology and global ones fire te_demog_events.4 in each state. That event runs the refresh with ROOT = the state, so
+# the "pulse-only" note in extra_on_actions.txt (script values evaluated in a law's or country's scope chain) doesn't
+# apply: these hooks only dispatch.
+on_monthly_pulse_state = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_owner_change = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_incorporation = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_created = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_law_activated = {
+	on_actions = {
+		te_demog_lines_law_on_action
+	}
+}
+on_acquired_technology = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_game_started_after_lobby = {
+	on_actions = {
+		te_demog_lines_world_on_action
+	}
+}
+
+# THIS = ROOT = a state.
+te_demog_lines_on_action = {
+	effect = {
+		te_demog_lines_refresh = yes
+	}
+}
+
+# ROOT = the law just activated (an enactment, or a law script set; vanilla's note on the hook), so the states are its
+# owner's. Not before the game starts: history's laws are te_demog_lines_world_on_action's, once the rule is settled.
+te_demog_lines_law_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_started = yes }
+			owner = {
+				every_scope_state = {
+					trigger_event = { id = te_demog_events.4 }
+				}
+			}
+		}
+	}
+}
+
+# ROOT = a country that acquired a technology: each of its states, as its own ROOT. Not before the game starts, as above.
+te_demog_lines_country_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_started = yes }
+			every_scope_state = {
+				trigger_event = { id = te_demog_events.4 }
+			}
+		}
+	}
+}
+
+# No ROOT (after the lobby, so the rule is settled): every state, as its own ROOT.
+te_demog_lines_world_on_action = {
+	effect = {
+		every_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
+	}
+}

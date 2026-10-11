@@ -221,7 +221,7 @@ The Clausewitz engine reads only these top-level entries (everything else stays 
 
 The `common/` directory is the bulk of the mod. Highlights of less-obvious subdirectories:
 
-- `common/_meta/` — repo-side metadata: `modifier_patterns.yml` (catalog seed for the mod-state-server's pattern engine), `duplicate_image_allowlist.yml` (allowlist for the `/duplicate-images` validator).
+- `common/_meta/` — repo-side metadata: `modifier_patterns.yml` (catalog seed for the mod-state-server's pattern engine), `duplicate_image_allowlist.yml` (allowlist for the `/duplicate-images` validator), `generated_standin_icons.yml` (generator stand-in icon globs for `/placeholder-icons`).
 - `common/script_values/` — keep big systems' math in their own files (`tourism.txt`, `colonial_empire_values.txt`, `un_script_values.txt`, `world_war_values.txt`, `dp_escalation_script_values.txt`, `te_construction_market_*.txt`, `space_race_values.txt`, `cultural_hegemony_script_values.txt`, `covert_warfare_script_values.txt`, `st_res_script_values.txt`, `gui_chart_script_values.txt`); the catch-all is `extra_script_values.txt`.
 - `common/scripted_effects/` and `common/scripted_triggers/` — same per-system split. Cross-cut helpers live in `extra_effects.txt`, `ig_approval_effects.txt`, `build_effects.txt`, etc.
 - `common/scripted_buttons/` — per-system button files (banking, colonial empire, covert warfare, cultural hegemony, global warming, heir education, nuclear program, space race, strategic reserve, UN, world war) plus a catch-all `timeline_extended_scripted_buttons.txt` (central-bank `cb_*` tools and the custom-religion wizard).

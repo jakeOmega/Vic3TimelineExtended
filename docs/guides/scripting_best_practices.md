@@ -3849,13 +3849,17 @@ end-game total. Examples found in this codebase:
 - `state_mortality_mult` totals exactly −0.40 across `modern_vaccines`
   (era_6) + `antibiotic_mass_production` (era_7) + `mental_health_awareness`
   (era_10) + `biological_immortality` (era_12) + `mind_backups` (era_12),
-  designed so mortality hits zero with brain uploading. Under the Demographics
-  rule's Full setting the census cancels the two medical techs' lines (its
-  treatment terms, `state_<cause>_treatment_add`, carry medicine) and the other
-  three stay on top; outside Full all five apply. New medicine goes in as census
-  treatment; a `state_mortality_mult` line on a tech is absorbed automatically
-  (`demographics_modifiers.absorbed_carriers`) unless its tech is listed on top
-  (`docs/systems/mod_systems.md` § Demographics).
+  designed so mortality hits zero with brain uploading. All five sit on the
+  census's script-only types, which apply as `state_mortality_mult` outside the
+  Demographics rule's Full setting: the two medical techs' on
+  `state_demog_absorbed_mortality_mult` (under Full the census's treatment
+  terms, `state_<cause>_treatment_add`, carry medicine instead), the other three
+  on `state_demog_ontop_mortality_mult` (under Full at the census's rate). New
+  medicine goes in as census treatment. A tech, law or institution must not
+  carry an engine birth or mortality field directly: put the line on a
+  `state_demog_*` type (`demographics_engine_line_types.txt`), or
+  `TestEngineLinesMoved` fails CI (`docs/systems/mod_systems.md` § Demographics
+  → The moved lines).
 - `country_weekly_innovation_max_add` is the research-pool budget across the
   entire late-era tree; per-tech values are tuned together.
 - `country_institution_<X>_max_investment_add` totals reach a target max

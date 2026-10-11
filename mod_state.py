@@ -158,6 +158,9 @@ VANILLA_COMMON_DIRS = {
     "Principles": "power_bloc_principles",
     "Principle Groups": "power_bloc_principle_groups",
     "Amendments": "amendments",
+    "Interest Group Traits": "interest_group_traits",
+    "Harvest Condition Types": "harvest_condition_types",
+    "Power Bloc Identities": "power_bloc_identities",
     # Vocabularies the engine needs but the loader didn't include before:
     "Cultures": "cultures",
     "Country Ranks": "country_ranks",
