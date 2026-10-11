@@ -4,7 +4,7 @@ import sys
 import tempfile
 import unittest
 
-from mod_state import ModState, parse_loc_line, split_loc_line
+from mod_state import ModState, parse_loc_line, parser_for, split_loc_line
 from paradox_file_parser import ParadoxFileParser
 
 
@@ -481,6 +481,173 @@ class ParserSemanticsTests(unittest.TestCase):
             "law_b": ("=", {"y": ("=", "2")}),
             "law_c": ("=", {"w": [(">", "1"), ("<", "9")]}),
         })
+
+    # -- INJECT into a script-value field -----------------------------------
+    IG_VANILLA = (
+        "ig_x = {\n"
+        "\tcolor = { 1 2 3 }\n"
+        "\tfemale_agitator_chance = {\n"
+        "\t\tvalue = 0.01\n"
+        "\t\tif = { limit = { a = yes } add = 0.02 }\n"
+        "\t}\n"
+        "}\n"
+    )
+    # ig_feminism.py's shape: vanilla's lines restated, then the mod's branch.
+    IG_INJECT = (
+        "INJECT:ig_x = {\n"
+        "\tfemale_agitator_chance = {\n"
+        "\t\tvalue = 0.01\n"
+        "\t\tif = { limit = { a = yes } add = 0.02 }\n"
+        "\t\tif = { limit = { b = yes } add = 0.1 }\n"
+        "\t}\n"
+        "}\n"
+    )
+
+    def _merged(self, *texts, mod_state_flow, script_values=False):
+        """Parse `texts` as consecutive files: through parse_file alone, or
+        the way ModState loads a mod file (apply_directives=False, then
+        merge_data). Returns the merged data."""
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = ParadoxFileParser(script_values=script_values)
+            parser.parse_file(self._write(tmp, "0.txt", texts[0]))
+            for i, text in enumerate(texts[1:], 1):
+                path = self._write(tmp, f"{i}.txt", text)
+                if mod_state_flow:
+                    mod = ParadoxFileParser(script_values=script_values)
+                    mod.parse_file(path, apply_directives=False)
+                    parser.merge_data(mod.data)
+                else:
+                    parser.parse_file(path)
+        return parser.data
+
+    def _agitator_chance(self, *texts, mod_state_flow):
+        data = self._merged(*texts, mod_state_flow=mod_state_flow)
+        return data["ig_x"][1]["female_agitator_chance"]
+
+    def test_inject_replaces_a_script_value_field(self):
+        """An injected script value replaces the field (read in game,
+        2026-10-10). Merged, the parser summed the restated `value` to 0.02
+        and dropped the restated branch as a duplicate."""
+        expected = ("=", {
+            "value": ("=", "0.01"),
+            "if": [
+                ("=", {"limit": ("=", {"a": ("=", "yes")}), "add": ("=", "0.02")}),
+                ("=", {"limit": ("=", {"b": ("=", "yes")}), "add": ("=", "0.1")}),
+            ],
+        })
+        for mod_state_flow in (False, True):
+            with self.subTest(mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, self.IG_INJECT, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+
+    def test_later_inject_of_a_script_value_field_wins(self):
+        """The in-game read itself: a later INJECT setting `value = 0` over
+        an earlier one setting `value = 1` gave 0, in separate files or one."""
+        first = "INJECT:ig_x = { female_agitator_chance = { value = 1 } }\n"
+        second = "INJECT:ig_x = { female_agitator_chance = { value = 0 } }\n"
+        expected = ("=", {"value": ("=", "0")})
+        for mod_state_flow in (False, True):
+            with self.subTest(files=2, mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, first, second, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+            with self.subTest(files=1, mod_state_flow=mod_state_flow):
+                self.assertEqual(
+                    self._agitator_chance(
+                        self.IG_VANILLA, first + second, mod_state_flow=mod_state_flow
+                    ),
+                    expected,
+                )
+
+    def test_inject_still_sums_a_modifier_block(self):
+        """Only a script-value field is replaced: a modifier block's lines
+        still sum (confirmed in game), beside a replaced `ai_will_do`."""
+        data = self._merged(
+            "law_a = { modifier = { x_add = 0.5 } ai_will_do = { value = 10 } }\n",
+            "INJECT:law_a = { modifier = { x_add = -0.5 } ai_will_do = { value = 3 } }\n",
+            mod_state_flow=True,
+        )
+        self.assertEqual(data["law_a"], ("=", {
+            "modifier": ("=", {"x_add": ("=", "0.0")}),
+            "ai_will_do": ("=", {"value": ("=", "3")}),
+        }))
+
+    # -- INJECT into a script value -------------------------------------------
+    SV_VANILLA = (
+        "sv_x = {\n"
+        "\tvalue = 1\n"
+        "\tmultiply = 2\n"
+        "\tmultiply = 3\n"
+        "\tif = { limit = { a = yes } add = 2 }\n"
+        "\telse_if = { limit = { b = yes } add = 3 }\n"
+        "}\n"
+    )
+    SV_INJECT = (
+        "INJECT:sv_x = {\n"
+        "\tvalue = 5\n"
+        "\tmultiply = 4\n"
+        "\tif = { limit = { c = yes } add = 4 }\n"
+        "\tif = { limit = { c = yes } add = 4 }\n"
+        "\tadd = { value = 6 desc = X }\n"
+        "}\n"
+    )
+
+    @staticmethod
+    def _branch(flag, amount):
+        return ("=", {"limit": ("=", {flag: ("=", "yes")}), "add": ("=", amount)})
+
+    def test_inject_into_a_script_value_appends_its_steps(self):
+        """A script value runs every step in turn, an INJECT's after the
+        entity's own, so each repeated step is appended: one onto one
+        (`value`), several onto one (`if`), one onto several (`multiply`),
+        identical steps both kept. Merged, `value` summed to 6, a single
+        injected `if` fused into vanilla's (ai_power_bloc_identity_score)
+        and several replaced it (war_support_from_journal_entries)."""
+        expected = ("=", {
+            "value": [("=", "1"), ("=", "5")],
+            "multiply": [("=", "2"), ("=", "3"), ("=", "4")],
+            "if": [self._branch("a", "2"), self._branch("c", "4"), self._branch("c", "4")],
+            "else_if": self._branch("b", "3"),
+            "add": ("=", {"value": ("=", "6"), "desc": ("=", "X")}),
+        })
+        for mod_state_flow in (False, True):
+            with self.subTest(mod_state_flow=mod_state_flow):
+                data = self._merged(
+                    self.SV_VANILLA, self.SV_INJECT,
+                    mod_state_flow=mod_state_flow, script_values=True,
+                )
+                self.assertEqual(data["sv_x"], expected)
+
+    def test_mod_state_appends_script_value_steps(self):
+        """ModState gives Script Values the step rule on a full load, on
+        reload_mod, and in parse_mod_file's fold of a file that injects the
+        same script value twice. Other types keep the field rule."""
+        with tempfile.TemporaryDirectory() as tmp:
+            vanilla_dir = os.path.join(tmp, "vanilla")
+            mod_dir = os.path.join(tmp, "mod")
+            os.makedirs(vanilla_dir)
+            os.makedirs(mod_dir)
+            self._write(vanilla_dir, "values.txt", "sv_x = { if = { limit = { a = yes } add = 2 } }\n")
+            self._write(mod_dir, "zz_values.txt", (
+                "INJECT:sv_x = { if = { limit = { c = yes } add = 4 } }\n"
+                "INJECT:sv_x = { if = { limit = { d = yes } add = 5 } }\n"
+            ))
+            expected = ("=", {"if": [
+                self._branch("a", "2"), self._branch("c", "4"), self._branch("d", "5"),
+            ]})
+            ms = ModState({"Script Values": vanilla_dir}, {"Script Values": mod_dir})
+            self.assertEqual(ms.get_data("Script Values")["sv_x"], expected)
+            ms.reload_mod({"Script Values": mod_dir})
+            self.assertEqual(ms.get_data("Script Values")["sv_x"], expected)
+        self.assertTrue(parser_for("Script Values").script_values)
+        self.assertFalse(parser_for("Interest Groups").script_values)
 
     # -- localization ---------------------------------------------------------
     def test_parse_loc_line_reads_escaped_quotes_whole(self):
