@@ -3,19 +3,22 @@
 Some state modifiers are the mod's bookkeeping, refreshed by script each month
 or step: tourism, pollution, migration crowding, the free port's tariffs, and
 the demographics census's corrections to birth and death rates. They carry the
-mod's blank icon, modifier_system.dds. A GUI can't read a timed modifier's key
+mod's blank icon, modifier_system.dds. Others are shown by a card of their own
+in the state panel and keep their icon: a Grand Monument's tourism and local
+effect (gm_local_*), which its card lists. Both kinds are hidden from the rows.
+A GUI can't read a timed modifier's key
 (`TimedModifier` has no GetKey), and its icon can't be compared:
 `EqualTo_string(TimedModifier.GetIcon, ...)` fails at runtime with "FetchData
 failed" on every frame (GetIcon returns an unregistered texture type; 13,690
 lines in minutes, 2026-10-10). Its name can: GetName returns a CString, and the
 global Localize('<key>') renders the modifier's own name in the same language,
 so `EqualTo_string(TimedModifier.GetName, Localize('<key>'))` picks it out in
-any language. Each row's item is `visible = no` for every blank-icon modifier,
-in a container that ignores invisible items.
+any language. Each row's item is `visible = no` for every hidden modifier, in a
+container that ignores invisible items.
 
 The condensed view's box fades out when the state carries nothing else, which
 needs a count the GUI can't make itself: gui_state_hidden_modifier_count
-(common/script_values/gui_chart_script_values.txt) names each blank-icon static
+(common/script_values/gui_chart_script_values.txt) names each hidden static
 modifier by a has_modifier term.
 """
 import os
@@ -34,6 +37,16 @@ COUNT = "gui_state_hidden_modifier_count"
 # carries it and gets a term in gui_state_hidden_modifier_count.
 HIDDEN_ICONS = (
     "gfx/interface/icons/timed_modifier_icons/modifier_system.dds",
+)
+
+# State modifiers a card in the state panel already shows, hidden from the rows
+# with their own icons kept for the Modifiers tab and the tooltips. The Grand
+# Monument card (te_state_gm_card, gui/te_state_panel_widgets.gui) shows the
+# Tourism Industry throughput and the dedication's local effect the monument
+# gives its state: gm_local_tourism and gm_local_<dedication>
+# (common/static_modifiers/gm_modifiers.txt), so a new dedication is hidden too.
+SHOWN_ON_A_CARD_PREFIXES = (
+    "gm_local_",
 )
 
 DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
@@ -140,8 +153,9 @@ def _parse(path):
         return parser.parse_object(parser.tokenize("{" + f.read() + "}"))[0]
 
 
-def _blank_icon_modifiers():
-    names = set()
+def _static_modifiers():
+    """{name: [icon, ...]} for every static modifier the mod defines."""
+    found = {}
     for fn in sorted(os.listdir(STATIC_MODIFIERS)):
         if not fn.endswith(".txt"):
             continue
@@ -149,9 +163,16 @@ def _blank_icon_modifiers():
             if not isinstance(block, (dict, list)):
                 continue
             icons = [value for k, _, value in _entries(block) if k == "icon"]
-            if any(icon in HIDDEN_ICONS for icon in icons):
-                names.add(key.split(":", 1)[-1])
-    return names
+            found[key.split(":", 1)[-1]] = icons
+    return found
+
+
+def _hidden_modifiers():
+    """The static modifiers both rows leave out: the blank-icon ones and the
+    ones a card already shows."""
+    return {name for name, icons in _static_modifiers().items()
+            if any(icon in HIDDEN_ICONS for icon in icons)
+            or name.startswith(SHOWN_ON_A_CARD_PREFIXES)}
 
 
 def _count_terms():
@@ -176,15 +197,26 @@ class HiddenStateModifierTest(unittest.TestCase):
         where = [site["where"].split(":")[0] for site in self.sites]
         self.assertGreaterEqual(where.count("gui/states_panel.gui"), 2, self.sites)
 
-    def test_every_row_hides_every_blank_icon_modifier_by_name(self):
-        blank = _blank_icon_modifiers()
-        self.assertTrue(blank)
+    def test_card_modifiers_are_found(self):
+        # A renamed prefix would quietly stop hiding the card's modifiers.
+        hidden = _hidden_modifiers()
+        for prefix in SHOWN_ON_A_CARD_PREFIXES:
+            with self.subTest(prefix=prefix):
+                self.assertTrue([name for name in hidden if name.startswith(prefix)])
+        self.assertIn("gm_local_tourism", hidden)
+
+    def test_every_row_hides_every_hidden_modifier_by_name(self):
+        hidden = _hidden_modifiers()
+        self.assertTrue(hidden)
         for site in self.sites:
             with self.subTest(site=site["where"]):
                 visible = re.findall(r'visible\s*=\s*"([^"]*)"', site["item"])
                 self.assertEqual(len(visible), 1, "one visible per item (gotcha #17)")
                 named = set(re.findall(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)", visible[0]))
-                self.assertEqual(named, blank, "the row's name filter must list exactly the blank-icon modifiers")
+                missing = sorted(hidden - named)
+                self.assertFalse(missing, f"the row's name filter leaves these hidden modifiers showing: {missing}")
+                extra = sorted(named - hidden)
+                self.assertFalse(extra, f"the row's name filter hides modifiers with neither the blank icon nor a card prefix: {extra}")
                 self.assertTrue(visible[0].startswith("[Not("))
 
     def test_hidden_items_take_no_space(self):
@@ -218,14 +250,14 @@ class HiddenStateModifierTest(unittest.TestCase):
                 if "alpha" in site["own"]:
                     self.assertIn(f"ScriptValue('{COUNT}')", site["own"])
 
-    def test_count_names_every_blank_icon_modifier(self):
+    def test_count_names_every_hidden_modifier(self):
         terms = _count_terms()
-        blank = _blank_icon_modifiers()
-        self.assertTrue(blank)
-        missing = sorted(blank - set(terms))
-        self.assertFalse(missing, f"static modifiers with a hidden icon and no has_modifier term in {COUNT} ({os.path.relpath(COUNT_FILE, REPO)}): {missing}")
-        extra = sorted(set(terms) - blank)
-        self.assertFalse(extra, f"{COUNT} counts modifiers the state panel shows (icon not in HIDDEN_ICONS): {extra}")
+        hidden = _hidden_modifiers()
+        self.assertTrue(hidden)
+        missing = sorted(hidden - set(terms))
+        self.assertFalse(missing, f"hidden static modifiers with no has_modifier term in {COUNT} ({os.path.relpath(COUNT_FILE, REPO)}): {missing}")
+        extra = sorted(set(terms) - hidden)
+        self.assertFalse(extra, f"{COUNT} counts modifiers the state panel shows (icon not in HIDDEN_ICONS, name not in SHOWN_ON_A_CARD_PREFIXES): {extra}")
         self.assertEqual(set(terms.values()), {"1"})
 
 
