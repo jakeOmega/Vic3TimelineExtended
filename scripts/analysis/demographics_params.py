@@ -213,6 +213,12 @@ LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mo
 STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
 STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
+# Pollution Impact's mortality line (vanilla code static modifier state_region_pollution_health's 0.5 plus the mod's
+# INJECTed 0.05), at full pollution: predict takes it x the region's pollution / POLLUTION_MAX (vanilla define).
+# An approximation (2026-10-11): the engine's impact isn't pollution / 255 exactly. Yorkshire at 49.4 showed +8%
+# (this gives +11%), West Bengal at about 167-176 showed +32% (+36% to +38%). The census reads the real line.
+POLLUTION_HEALTH_MORTALITY = 0.55
+POLLUTION_MAX = 255
 # Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
 # of the census's term. Every other law, technology or institution line is absorbed: it stays on its carrier, and
 # under Full the census's term M cancels it in each state it reaches (demographics_modifiers.absorbed_carriers,

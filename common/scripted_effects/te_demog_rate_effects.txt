@@ -5,7 +5,8 @@
 # The engine gives every pop curve x max(0, 1 + total) births and deaths, adding every
 # term (docs/testing/demographics-growth-probe-results-2026-10-09.md). The census's term M
 # (te_demog_rates_refresh) makes a state's events the model's plus the terms added on top of
-# the census, and the census's next step scales its own rates to what the engine did
+# the census: a state-level one (in the state read) acting on the census's rate, a pop's own on
+# its bare curve (owner, 2026-10-11), and the census's next step scales its own rates to what the engine did
 # (te_demog_on_top_scales), so the ring places the births and deaths added on top by age:
 # newborns, and deaths by the model's own age pattern (owner, 2026-10-10).
 #
@@ -130,17 +131,40 @@ te_demog_rates_refresh = {
 			set_local_variable = { name = te_dg_rate_clamped value = 0 }
 			# births
 			set_local_variable = {
-				name = te_dg_rate_m
+				name = te_dg_rate_tb
 				value = {
 					value = var:te_dg_cbr_model
 					multiply = state_population
 					multiply = 100
 					divide = 12
 					divide = { value = local_var:te_dg_w_eb0 min = 1 }
+				}
+			}
+			# the state-level lines left on top (pollution, devastation, global warming, events): the read
+			# without the census's and fast mode's terms and the state's absorbed lines
+			set_local_variable = {
+				name = te_dg_rate_os
+				value = {
+					value = modifier:state_birth_rate_mult
+					subtract = local_var:te_dg_rate_prev_b
+					subtract = te_demog_fast_births_applied
+					subtract = local_var:te_dg_w_sab
+					min = te_demog_k_rate_total_min
+				}
+			}
+			set_local_variable = {
+				name = te_dg_rate_m
+				value = {
+					value = local_var:te_dg_rate_tb
 					subtract = 1
 					subtract = {
 						value = local_var:te_dg_w_ebr
 						divide = { value = local_var:te_dg_w_eb0 min = 1 }
+					}
+					subtract = {
+						value = 1
+						subtract = local_var:te_dg_rate_tb
+						multiply = local_var:te_dg_rate_os
 					}
 				}
 			}
@@ -158,17 +182,40 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_mb value = local_var:te_dg_rate_m }
 			# deaths
 			set_local_variable = {
-				name = te_dg_rate_m
+				name = te_dg_rate_tb
 				value = {
 					value = var:te_dg_cdr_model
 					multiply = state_population
 					multiply = 100
 					divide = 12
 					divide = { value = local_var:te_dg_w_ed0 min = 1 }
+				}
+			}
+			# the state-level lines left on top (pollution, devastation, global warming, events): the read
+			# without the census's and fast mode's terms and the state's absorbed lines
+			set_local_variable = {
+				name = te_dg_rate_os
+				value = {
+					value = modifier:state_mortality_mult
+					subtract = local_var:te_dg_rate_prev_d
+					subtract = te_demog_fast_deaths_applied
+					subtract = local_var:te_dg_w_sad
+					min = te_demog_k_rate_total_min
+				}
+			}
+			set_local_variable = {
+				name = te_dg_rate_m
+				value = {
+					value = local_var:te_dg_rate_tb
 					subtract = 1
 					subtract = {
 						value = local_var:te_dg_w_edr
 						divide = { value = local_var:te_dg_w_ed0 min = 1 }
+					}
+					subtract = {
+						value = 1
+						subtract = local_var:te_dg_rate_tb
+						multiply = local_var:te_dg_rate_os
 					}
 				}
 			}

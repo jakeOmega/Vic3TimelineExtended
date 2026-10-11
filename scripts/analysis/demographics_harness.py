@@ -795,8 +795,9 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, absorbed_b=0.0,
     institution lines the census takes over, institution lines x level in incorporated states), split by report
     group in `groups` ({group: (births, deaths)}). Each pop gets bare x max(0, 1 + M + every term): the absorbed
     ones (those lines, its class's absorbed line, literacy's -0.1, mild starvation's) are live in the engine and M
-    nets them out; the terms on top (its class's line on top, severe starvation) stay. Terms on top a save doesn't
-    hold are left out: pollution, turmoil, events, low_pop_state, unemployment, workplace mortality (about +2% of
+    nets them out; the terms on top (its class's line on top, severe starvation) stay, and M scales the state-level
+    ones (on_top_b, on_top_d) to the census's rate (owner, 2026-10-11; demographics_model.rate_term). Terms on top a save doesn't
+    hold are left out: turmoil, events, low_pop_state, unemployment, workplace mortality (about +2% of
     deaths in 1949, growth probe), wealth mortality (scaling unknown). The script reads mild starvation in 0.05
     steps of food security; this takes it exact. Reported: the starving slope below SoL 4 (absorbed: owner,
     2026-10-10) and each absorbed group's events at the bare curves, what it would have done on top."""
@@ -815,8 +816,8 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, absorbed_b=0.0,
     rep_b = sum(b * (absorbed_b + P.LITERACY_BIRTH_PENALTY * p.literacy + mb) for p, b, _x, _sb, _sd, mb, _md in terms)
     rep_d = sum(x * (absorbed_d + p.absorbed_d + md) for p, _b, x, _sb, _sd, _mb, md in terms)
     target_b, target_d = cbr / 1000 * people, cdr / 1000 * people
-    m_b, cb = M.rate_term(target_b, bare_b, absorbed=rep_b, other=on_top_b + absorbed_b)
-    m_d, cd = M.rate_term(target_d, bare_d, absorbed=rep_d, other=on_top_d + absorbed_d)
+    m_b, cb = M.rate_term(target_b, bare_b, absorbed=rep_b, other=on_top_b + absorbed_b, on_top=on_top_b)
+    m_d, cd = M.rate_term(target_d, bare_d, absorbed=rep_d, other=on_top_d + absorbed_d, on_top=on_top_d)
     births = deaths = 0.0
     for p, b, x, sev_b, sev_d, mb, md in terms:
         births += b * max(0.0, 1 + m_b + on_top_b + absorbed_b + P.LITERACY_BIRTH_PENALTY * p.literacy + mb + sev_b)
@@ -832,6 +833,12 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, absorbed_b=0.0,
         gb, gd = (groups or {}).get(g, (0.0, 0.0))
         out[f"absorbed_{g}_births"], out[f"absorbed_{g}_deaths"] = bare_b * gb, bare_d * gd
     return out
+
+
+def pollution_mortality(pollution):
+    """Pollution Impact's mortality line at a region's pollution (0 to POLLUTION_MAX): an approximation of the
+    engine's (P.POLLUTION_HEALTH_MORTALITY)."""
+    return P.POLLUTION_HEALTH_MORTALITY * pollution / P.POLLUTION_MAX
 
 
 def predicted_multiple(points, to_year):
@@ -875,6 +882,7 @@ def predict_save(path, lines, absorbed, carriers, d, census_rates=False, check_m
     countries = S.country_inputs(sections)
     tags = {cid: rec.get("definition", "").strip('"') for cid, rec in sections["country_manager"].items()}
     owner = {sid: tags.get(rec.get("country")) for sid, rec in sections["states"].items()}
+    pollution = S.state_pollution(sections)
     svars = {}
     if census_rates or check_modifiers:
         _c, st_vars = S.read_variables(path, (), ("te_dg_cbr_model", "te_dg_cdr_model", "te_dg_cbr", "te_dg_cdr",
@@ -917,7 +925,8 @@ def predict_save(path, lines, absorbed, carriers, d, census_rates=False, check_m
                 cbr, cdr = M.model_crude_rates(inputs_for(st, carriers, incorporated=inc))
             devastation = S._num(sections["states"].get(sid, {}).get("devastation")) / 100
             out = predict_state(state_pops, cbr, cdr, d, on_top_b=flat.get("state_birth_rate_mult", 0.0),
-                                on_top_d=flat.get("state_mortality_mult", 0.0) + devastation,
+                                on_top_d=flat.get("state_mortality_mult", 0.0) + devastation
+                                + pollution_mortality(pollution.get(sid, 0.0)),
                                 absorbed_b=held.get("state_birth_rate_mult", 0.0),
                                 absorbed_d=held.get("state_mortality_mult", 0.0), groups=groups)
             out["clamped_people"] = out["people"] if out["clamped"] else 0.0

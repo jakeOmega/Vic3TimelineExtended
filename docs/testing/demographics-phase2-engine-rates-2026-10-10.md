@@ -207,6 +207,50 @@ calendar 1900, which is not the gate's multiple.
 These calendar years are the 1860s and 1870s. India's real life expectancy then was in the mid-20s, and its people grew
 only slowly through the famines. Hindustan's and Carnatic's figures sit near that. Bengal's are the ones that look wrong.
 
+## Bengal and the lines on top (2026-10-11)
+
+**Why Bengal lost people past census 1900.** No war and no devastation: the census line logs neither, and the saves
+agree.
+
+- **Severe starvation:** 4.7% of Bengal's people starved severely in 1872. That was 9.3% in East Bengal and 3.4% in
+  Bihar, while every other 20M+ country was near 0%. In 1888, Punjab's share was 30%.
+- **Pollution:** the owner's tooltip for West Bengal in about 1888 read:
+  - Pollution Impact +32%;
+  - "+225% from Poshchim Bongo", the census's and fast mode's terms (the save: −41% and +277%);
+  - Bengal's −8%, from the technologies the census absorbs and global warming's line;
+  - +5% from child labour (absorbed);
+  - a ruthless executive's +10% for some buildings' workers (a workplace line, on top).
+- **How the engine weighed them:** it adds every line to its bare curve, which the census had cut to about 59% there.
+  So the +32% came to +54% of the census's deaths, and a severely starving pop died at about three times the
+  census's rate. Poorer states cut further and amplified more: about 2.5× in East Bengal. Across 875 states in 1872,
+  states with no severe starvation ran 9% above the census, those with 0–2% of people starving severely 51% above,
+  and those with 2–10% 64% above.
+
+**The change (owner, 2026-10-11).** A state-level line left on top now acts on the census's rate: M also takes off
+O_s × (1 − target / bare) (plan §2, "Amended 2026-10-11"). A pop's own line stays at its bare curve's weight. The
+owner first agreed to scale severe starvation too, but one state-wide M can't scale a pop's line without moving
+its neighbours' rates: in Punjab it would have cut the deaths of the 70% who were eating. So starving pops still
+die at about three times the census's rate. Taming famines further would be a separate decision: absorbing severe
+starvation per pop at a chosen size, as mild starvation is.
+
+**What `predict` says, now with Pollution Impact read from each save's region pollution** (an approximation, about
+a quarter high: `P.POLLUTION_HEALTH_MORTALITY`):
+
+| The six normal-speed gate saves, 1837–1887 | Multiple to 1900 | 20M+ countries shrinking |
+|---|---|---|
+| Before (no pollution in `predict`, lines on top at the bare curve's weight) | ×1.663 | none |
+| Pollution, at the bare curve's weight | ×1.628 | none |
+| Pollution, acting on the census's rate (this change) | ×1.642 | none |
+
+| Fast-run save, with the census's stored rates | Bengal, before | Bengal, after | Its deaths on top, per 1,000 |
+|---|---|---|---|
+| 1872 | −0.15% a year | +0.36% | 12.8 → 7.7 |
+| 1889 | +0.42% | +0.92% | 7.5 → 3.4 |
+
+Satara still shrinks in the 1872 save, from emigration, which `predict` doesn't model. At normal speed the change moves
+the 19th century little; the fast run's Bengal was extreme because fast mode's 4× population meets a calendar-1870s
+economy.
+
 ## The probes
 
 | Probe | Question | Answer |
@@ -232,6 +276,6 @@ This list is the canonical checklist; the PR body repeats it.
 4. **The owner's calls on the fast run (2026-10-11):**
    - Europe's flat share: accepted.
    - `--phase2`'s run check now stops at `--to-year`.
-   - Bengal's deaths on top past 1900: to investigate. The census line logs no war year and no devastation for it.
+   - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
 6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).
