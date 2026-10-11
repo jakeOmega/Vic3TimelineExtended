@@ -118,6 +118,7 @@ VANILLA_COMMON_DIRS = {
     "PM Groups": "production_method_groups",
     "PMs": "production_methods",
     "Ideologies": "ideologies",
+    "Political Movements": "political_movements",
     "Battle Conditions": "battle_conditions",
     "Buy Packages": "buy_packages",
     "Character Interactions": "character_interactions",

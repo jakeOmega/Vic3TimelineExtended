@@ -86,75 +86,99 @@ te_demog_absorbed_deaths = {
 	value = 0
 	if = {
 		limit = { is_incorporated = yes }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.01 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.01 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.01 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.01 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = {
 		limit = { is_incorporated = yes owner = { has_law = law_type:law_charitable_health_system } }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.03 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.03 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.03 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.03 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = {
 		limit = { is_incorporated = yes owner = { has_law = law_type:law_mandatory_augmentation } }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 1 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 2 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 3 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 4 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 5 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 6 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 7 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 8 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 9 } } } add = -0.02 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 1 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 2 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 3 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 4 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 5 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 6 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 7 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 8 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 9 } } } add = -0.02 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = {
 		limit = { is_incorporated = yes owner = { has_law = law_type:law_medical_augmentation_only } }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.02 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.02 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = {
 		limit = { is_incorporated = yes owner = { has_law = law_type:law_public_health_insurance } }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.05 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.05 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.05 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.05 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = {
 		limit = { is_incorporated = yes owner = { has_law = law_type:law_regulated_augmentation_market } }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.02 }
-		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.02 }
+		add = {
+			value = 0
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.02 }
+			if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.02 }
+			multiply = te_demog_institution_impact
+		}
 	}
 	if = { limit = { owner = { has_law = law_type:law_unrestricted_augmentation } } add = -0.05 }
 	if = { limit = { owner = { has_technology_researched = antibiotic_mass_production } } add = -0.05 }

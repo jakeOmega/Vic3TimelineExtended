@@ -207,31 +207,126 @@ calendar 1900, which is not the gate's multiple.
 These calendar years are the 1860s and 1870s. India's real life expectancy then was in the mid-20s, and its people grew
 only slowly through the famines. Hindustan's and Carnatic's figures sit near that. Bengal's are the ones that look wrong.
 
+## Bengal and the lines on top (2026-10-11)
+
+**Why Bengal lost people past census 1900.** No war and no devastation: the census line logs neither, and the saves
+agree.
+
+- **Severe starvation:** 4.7% of Bengal's people starved severely in 1872. That was 9.3% in East Bengal and 3.4% in
+  Bihar, while every other 20M+ country was near 0%. In 1888, Punjab's share was 30%.
+- **Pollution:** the owner's tooltip for West Bengal in about 1888 read:
+  - Pollution Impact +32%;
+  - "+225% from Poshchim Bongo", the census's and fast mode's terms (the save: −41% and +277%);
+  - Bengal's −8%, from the technologies the census absorbs and global warming's line;
+  - +5% from child labour (absorbed);
+  - a ruthless executive's +10% for some buildings' workers (a workplace line, on top).
+- **How the engine weighed them:** it adds every line to its bare curve, which the census had cut to about 59% there.
+  So the +32% came to +54% of the census's deaths, and a severely starving pop died at about three times the
+  census's rate. Poorer states cut further and amplified more: about 2.5× in East Bengal. Across 875 states in 1872,
+  states with no severe starvation ran 9% above the census, those with 0–2% of people starving severely 51% above,
+  and those with 2–10% 64% above.
+
+**The change (owner, 2026-10-11).** A state-level line left on top now acts on the census's rate: M also takes off
+O_s × (1 − target / bare) (plan §2, "Amended 2026-10-11"). A pop's own line stays at its bare curve's weight. The
+owner first agreed to scale severe starvation too, but one state-wide M can't scale a pop's line without moving
+its neighbours' rates: in Punjab it would have cut the deaths of the 70% who were eating. So starving pops still
+die at about three times the census's rate. Taming famines further would be a separate decision: absorbing severe
+starvation per pop at a chosen size, as mild starvation is.
+
+**What `predict` says, now with Pollution Impact read from each save's region pollution** (an approximation, about
+a quarter high: `P.POLLUTION_HEALTH_MORTALITY`):
+
+| The six normal-speed gate saves, 1837–1887 | Multiple to 1900 | 20M+ countries shrinking |
+|---|---|---|
+| Before (no pollution in `predict`, lines on top at the bare curve's weight) | ×1.663 | none |
+| Pollution, at the bare curve's weight | ×1.628 | none |
+| Pollution, acting on the census's rate (this change) | ×1.642 | none |
+
+| Fast-run save, with the census's stored rates | Bengal, before | Bengal, after | Its deaths on top, per 1,000 |
+|---|---|---|---|
+| 1872 | −0.15% a year | +0.36% | 12.8 → 7.7 |
+| 1889 | +0.42% | +0.92% | 7.5 → 3.4 |
+
+Satara still shrinks in the 1872 save, from emigration, which `predict` doesn't model. At normal speed the change moves
+the 19th century little; the fast run's Bengal was extreme because fast mode's 4× population meets a calendar-1870s
+economy.
+
+## The in-game session (owner, 2026-10-11)
+
+A new 1836 game as Britain on Full, with #885 deployed. A revolt took London, so the capital is the Midlands. The
+console's lines are in `debug.log`.
+
+- **P3, the first step (6 January 1838).** M is in force: births −0.3204, deaths −0.4034. The step-to-step scales
+  and the target are 0, as a first step's are. The logged inputs reproduce both terms exactly:
+  `tb − 1 − rep − os × (1 − tb)` gives 0.6766 − 1 + 0.0178 − 0.0459 × 0.3234 = −0.3204 and 0.6175 − 1 − 0.0154 −
+  0.0145 × 0.3825 = −0.4034.
+- **P2, the tooltips.** Births match exactly: Census: Births −32.0% and Cadet Sons Leave the Land +4.6% (the
+  Midlands' one state-level birth line, on top) make −27.4%. A pop's mortality tooltip lists:
+  - Standard of Living (the bare curve);
+  - "+5% from Great Britain", its class's child labour line, absorbed per pop;
+  - Pollution Impact +0%;
+  - Ministry of Health −2%;
+  - "−40% from Midlands", the census's term.
+
+  Britain carries no law or technology birth line in 1838. No error from the census code.
+- **Impact of Institutions (finding, fixed in the follow-up).** The Ministry of Health's line read "A multiplier of
+  0.94": the engine scales an institution's lines by the state's Impact of Institutions (`state_institution_impact_add`:
+  Local Vernacular −0.05, obstinance −1.0 × its share). The census cancelled them at full size, so in a fully
+  obstinate state at Ministry of Health level 5 it would have taken off 15% the engine never applied. The absorbed
+  institution lines now take `te_demog_institution_impact`. The Ministry of War's per-institution country modifier
+  (`country_institution_impact_institution_ministry_of_war_mult`, a mod law and a production method) is not handled:
+  how it combines with the state's is unverified, and it touches only Mandatory Augmentation's line. The impact's sources:
+  Local Vernacular −0.05, Devolution −0.05, Ubiquitous Translation +0.10, the Consciousness Network method +0.10,
+  and obstinance −1.0 × its share. The floor at 0 is unverified: full obstinance with Local Vernacular reaches
+  −1.05, so the census would differ by at most about 0.5 points if the engine doesn't clamp. Console option l now
+  logs `impact=`; the Midlands should read 0.940. The offline tools assume impact 1. `predict`'s growth is
+  unaffected, since an absorbed line cancels on both sides. Its absorbed-group points and the clamp's bound are off
+  in low-impact states, and so is `fidelity`'s comparison of the census's institution-carried inputs, which the game
+  reads already scaled.
+- **P3, the second step (29 January 1839).** The terms move little: births −0.3214, deaths −0.4216, following
+  the bare curve's 3% rise. Births on top `bz` +0.044 match Cadet Sons' +4.6%. Deaths on top `dz` +0.117:
+  - +0.008 is the state-level lines;
+  - about 5% of the bare curve is each pop's own lines (workplace mortality for laborers and machinists, severe
+    starvation for 0.4% of people), which stay at the bare curve's weight. That is about +8% of the census's rate;
+  - about 3% is the base rate moving between yearly steps.
+
+  So P3's "a few per cent" holds for births and for agrarian states, not for an industrial state's deaths.
+- **P6.** Private Health Insurance's mortality line is proportional to each pop's wealth (owner). Absorbing it per
+  pop under Full can be built.
+- **The replay.** Three capitals: the Midlands (2.55M people, children per woman 5.0, infection ×0.38), a poor one
+  (0.79M, 5.9, ×1.39) and one between (2.58M, 5.3, ×0.90). The worst slot error is 0.00% in each, against the 0.1%
+  tolerance.
+- **Option d's benchmark** (the 1887 gate save, 838 states; the rule switched mid-game; one-second timestamps):
+  | Setting | Walk, three passes | Step, three passes |
+  |---|---|---|
+  | Display only (`full=0`) | about 2 s | about 8 s |
+  | Full (`full=1`) | about 3 s | about 8 s |
+
+  The absorbed sums cost at most about 0.3 s a world-year, spread over the year's state pulses. Final review 2's m6
+  (folding the absorbed terms into the pop multipliers) stays deferred.
+
 ## The probes
 
 | Probe | Question | Answer |
 |---|---|---|
 | P1 | Are devastation's and pollution's mortality lines inside `modifier:state_mortality_mult`? | **Yes, both (owner, in game, 2026-10-10).** Alentejo: "State Region Devastation +11%", Ministry of Health −2%, total +9%, against option m's logged +0.091. Yorkshire: "Pollution Impact +8%", Ministry of Health −14%, total −5%, against −0.046. The mod's +0.05 pollution line adds to vanilla's (owner). The plan's §1 (E14, E15) records it |
-| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **To do (owner, in game):** option n on the capital under Full. `rep_b` and `rep_d` are the absorbed share of the bare curves, each plus any mild starvation: with No Women's Rights about +0.05 − 0.1 × literacy; for a Women in the Fields holder (a variant of No Women's Rights) about −0.10 − 0.1 × literacy, and its capital's birth-rate tooltip lists only its own −10%, not No Women's Rights' +5% as well; with Charitable Health System at Ministry of Health level N about −0.03 × N in deaths. The capital's birth and mortality tooltips list the laws' lines beside Census: Births / Deaths. `debug.log` carries no error from `te_demog_absorbed_*` (the generated `institution_investment_level` ladders, `has_technology_researched`, `is_in_mild_starvation` in pop scope). Offline, `TestEngineRateLines` pins every line to main and `TestAbsorbedScript` runs the script against `DM.totals` |
-| P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
+| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **Yes (owner, in game, 2026-10-11; "The in-game session" above).** Births match the tooltip exactly; the Ministry of Health's line shows beside Census: Deaths. It also found the institution-impact gap (#889) |
+| P3 | Does the engine hit the target? Is M's fixed point stable? | **Yes (2026-10-11; above).** The logged inputs reproduce M exactly at the first step, and the terms move little at the second. `bz` matches the state-level birth line; `dz` adds each pop's own lines at the bare curve's weight |
 | P4 | Does a state keep its census modifiers through a change of owner? | **Yes (fast-mode run, 2026-10-11).** `predict --check-modifiers` finds no state missing its modifiers on the 1866, 1876 and 1882 saves, after the East India Company broke up and several revolutions |
 | P5 | Turmoil's scaling (conditional) | **Not needed:** in the fast run, turmoil barely tracks the deaths on top (r = +0.06 with `dz`) |
-| P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **To do (owner, in game), before building its absorption.** In a debug-mode test game, give a rich country Private Health Insurance with the Ministry of Health at level 5. In one incorporated state, open the mortality breakdown of a rich pop (wealth 40 or more) and of a poor one (about 10): under the description's semantics the line reads about −40% and −10% (wealth × −0.002 × 5). The same value on both means it scales by something else, such as the state's mean wealth or a define |
+| P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **Yes (owner, in game, 2026-10-11):** the line is proportional to each pop's wealth |
 
 ## Still to run (owner)
 
 This list is the canonical checklist; the PR body repeats it.
 
-1. **P2 and P3** on a throwaway save, deployed per CLAUDE.md "Play-testing unmerged work". In the same session, **option d's
-   benchmark on the 1887 gate save under Full and under Disabled**, recorded here: the plan's Risks asks for the walk's
-   cost, and if it grew, the absorbed literacy and starvation terms fold into the pop multipliers' own evaluation (final
-   review 2, m6, deferred).
+1. **Done: P2, P3, P6, the replay and option d's benchmark** (2026-10-11, above).
 2. **Done: the fast-mode gate run** (2026-10-11, above). It passes inside its window, census 1837–1900.
-3. **The replay:** `demographics_harness.py replay` on option a's blocks from three states at different SoL. The fast
-   run logged none.
+3. **Done: the replay** (above).
 4. **The owner's calls on the fast run (2026-10-11):**
    - Europe's flat share: accepted.
    - `--phase2`'s run check now stops at `--to-year`.
-   - Bengal's deaths on top past 1900: to investigate. The census line logs no war year and no devastation for it.
+   - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
-6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).
+6. **Done: P6** (above). Then absorbing Private Health Insurance's wealth mortality per pop under Full (owner, 2026-10-10: on top for now; P6 says it can be built).
+7. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.
