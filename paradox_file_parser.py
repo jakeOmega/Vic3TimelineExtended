@@ -17,8 +17,14 @@ directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
 
 
 class ParadoxFileParser:
-    def __init__(self):
+    def __init__(self, script_values=False):
+        """`script_values`: the entities are script values
+        (common/script_values), whose keys are steps rather than fields, so
+        an INJECT appends its steps to the entity's (see _inject_entity).
+        ModState sets it for that entity type; nothing else merges INJECTs
+        across files."""
         self.data = {}
+        self.script_values = script_values
 
     def tokenize(self, text):
         # Typed-literal forms: rgb{ R G B }, hsv{ H S V }, hsv360{ H S V },
@@ -306,7 +312,7 @@ class ParadoxFileParser:
                 if raw_key in merged:
                     directive, _ = self._split_directive(raw_key)
                     if directive == "INJECT":
-                        merged[raw_key] = self._inject_value(merged[raw_key], value)
+                        merged[raw_key] = self._inject_entity(merged[raw_key], value)
                         if raw_key not in injected:
                             injected.append(raw_key)
                         continue
@@ -342,7 +348,7 @@ class ParadoxFileParser:
         for raw_key, raw_value in new_data.items():
             directive, key = self._split_directive(raw_key)
             if directive == "INJECT" and key in self.data:
-                self.data[key] = self._inject_value(self.data[key], raw_value)
+                self.data[key] = self._inject_entity(self.data[key], raw_value)
             else:
                 # Plain keys, REPLACE:/REPLACE_OR_CREATE:, and an INJECT: with
                 # nothing to inject into all store the new value as is.
@@ -373,13 +379,68 @@ class ParadoxFileParser:
                 return prefix[:-1], key[len(prefix) :]
         return None, key
 
-    def _inject_value(self, base_value, injected_value):
+    def _inject_entity(self, base_value, injected_value):
+        """Apply an INJECT block to the entity it names.
+
+        The engine appends the block's keys to the entity, and each entity
+        type reads a repeated key its own way: modifier blocks sum, a
+        script-value field is read once (the later copy replaces it), and a
+        script value runs every step in turn. A script value therefore keeps
+        its own steps and gains the block's after them (_append_steps). Any
+        other entity merges, with its script-value fields replaced
+        (_inject_value with entity=True)."""
+        if self.script_values:
+            return self._append_steps(base_value, injected_value)
+        return self._inject_value(base_value, injected_value, entity=True)
+
+    def _append_steps(self, base_value, injected_value):
+        """INJECT into a script value: every step the block repeats from the
+        entity runs after the entity's own, so it is appended as another
+        entry, never merged, summed or dropped as a duplicate (identical
+        steps both run). `REPLACE:`/`INJECT:` keys inside the block keep
+        their usual meaning.
+
+        The AST keeps order only among entries of one key, so a step's place
+        relative to steps of other keys is lost: an `if` the INJECT adds
+        after vanilla's `else_if` chain reads as `if = [vanilla's, the
+        INJECT's]` beside that chain."""
+        base = self._normalize_fully(base_value)
+        injected = self._normalize_fully(injected_value)
+        if not (
+            isinstance(base, tuple) and isinstance(base[1], dict)
+            and isinstance(injected, tuple) and isinstance(injected[1], dict)
+        ):
+            # A one-line script value (`x = 0.5`) has no steps to add to.
+            return self._inject_value(base_value, injected_value)
+        merged = dict(base[1])  # _normalize_fully built it fresh
+        for raw_key, injected_child in injected[1].items():
+            directive, key = self._split_directive(raw_key)
+            if directive in ("REPLACE", "REPLACE_OR_CREATE") or key not in merged:
+                merged[key] = injected_child
+            elif directive == "INJECT":
+                merged[key] = self._inject_value(merged[key], injected_child)
+            else:
+                # A bare list here is a repeated key's entries (see parse_object).
+                merged[key] = [
+                    *(merged[key] if isinstance(merged[key], list) else [merged[key]]),
+                    *(injected_child if isinstance(injected_child, list) else [injected_child]),
+                ]
+        return (base[0], merged, *base[2:])
+
+    def _inject_value(self, base_value, injected_value, entity=False):
+        """Merge `injected_value` into `base_value` the way an INJECT does.
+
+        `entity` is true when the two are a whole entity and the INJECT block
+        aimed at it, so their keys are the entity's fields. A script-value
+        field there is replaced (see _is_script_value_field). Every other
+        field merges: lists append, and numbers sum as a modifier block's
+        lines do."""
         if isinstance(base_value, tuple) and isinstance(injected_value, tuple):
             base_operator = base_value[0]
             base_right = base_value[1]
             base_tail = base_value[2:] if len(base_value) > 2 else ()
             injected_right = injected_value[1]
-            merged_right = self._inject_value(base_right, injected_right)
+            merged_right = self._inject_value(base_right, injected_right, entity)
             return (base_operator, merged_right, *base_tail)
 
         if isinstance(base_value, dict) and isinstance(injected_value, dict):
@@ -393,11 +454,12 @@ class ParadoxFileParser:
                         merged[key] = self._inject_value(merged[key], injected_child)
                     else:
                         merged[key] = injected_child
+                elif key not in merged:
+                    merged[key] = injected_child
+                elif entity and self._is_script_value_field(merged[key], injected_child):
+                    merged[key] = injected_child
                 else:
-                    if key in merged:
-                        merged[key] = self._inject_value(merged[key], injected_child)
-                    else:
-                        merged[key] = injected_child
+                    merged[key] = self._inject_value(merged[key], injected_child)
             return merged
 
         if isinstance(base_value, list) and isinstance(injected_value, list):
@@ -426,6 +488,8 @@ class ParadoxFileParser:
                     merged[matched_index][key] = self._inject_value(
                         existing_value, injected_child
                     )
+                elif entity and self._is_script_value_field(existing_value, injected_child):
+                    merged[matched_index][key] = injected_child
                 else:
                     merged[matched_index][key] = self._inject_value(
                         existing_value, injected_child
@@ -438,6 +502,37 @@ class ParadoxFileParser:
             return str(summed)
 
         return injected_value
+
+    @staticmethod
+    def _is_script_value_field(base_value, injected_value):
+        """True when an INJECT's field is a script value: a block with a
+        `value =` line on either side (a weight, a chance, an `ai_*`).
+
+        The engine reads such a field once, so an injected copy replaces the
+        one already there (read in game, 2026-10-10: a later INJECTed
+        `female_commander_chance = { value = 0 }` overrode an earlier
+        `value = 1`). Merged instead, the two `value` lines summed and the
+        branches the INJECT restates from vanilla were dropped as
+        duplicates. A bare number still sums, as a static modifier's
+        flat key does. Only an entity's fields are tested: inside a script
+        value the same keys are steps (see _append_steps)."""
+        return any(
+            ParadoxFileParser._has_value_line(side)
+            for side in (base_value, injected_value)
+        )
+
+    @staticmethod
+    def _has_value_line(value):
+        if isinstance(value, tuple) and len(value) >= 2:
+            value = value[1]
+        if isinstance(value, dict):
+            return "value" in value
+        # A block with a repeated key, not yet normalized: one dict per entry.
+        if isinstance(value, list) and value and all(
+            isinstance(item, dict) and len(item) == 1 for item in value
+        ):
+            return any("value" in item for item in value)
+        return False
 
     def _normalize_data(self, data):
         if isinstance(data, dict):
