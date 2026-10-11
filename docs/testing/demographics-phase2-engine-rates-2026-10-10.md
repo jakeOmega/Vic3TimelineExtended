@@ -82,15 +82,17 @@ per-save tables are `predict`'s output.
 The census's own rates give the world +0.95 to +1.07% a year to 1867 and +0.86% after, against history's 0.4% (1820–1870)
 and 0.8% (1870–1913, Maddison). Two candidates, each run through `predict` on the same six saves with every other
 parameter as built (`demographics_harness.py history` gives the life expectancy and children per woman beside
-Clio Infra's and Gapminder's):
+Clio Infra's and Gapminder's; `medicine` and `fertility` check the step-1 fit's anchor bands). **The trade:** China,
+already below Maddison's peacetime +0.3% at +0.23% in 1887, falls further under both, so the owner is weighing the
+world band against the China anchor the poverty term was fitted to.
 
-| Change | World multiple | China 1877 / 1887 | Any 20M+ shrinking | Evidence and cost |
-|---|---|---|---|---|
-| As built | ×1.78 | +0.26 / +0.23% | none | — |
-| **`WEALTH_TFR_LOW` 6.2 → 6.0** (children per woman from wealth at SoL 8 and below) | **×1.66** | +0.16 / +0.12% | none | The model's children per woman sit above Gapminder's almost everywhere: 1837 China 6.09 (Gapminder 5.5), Japan 5.75 (4.5), Britain 5.50 (4.8), France 4.45 (3.6); 1887 Japan 5.43 (4.0), the USA 5.60 (4.4), France 4.10 (3.2). At 6.0 each moves 0.1–0.2 toward Gapminder's; India (5.87 against 5.8) and Russia (5.57 against 6.6) move away. Life expectancy doesn't change |
-| **`POVERTY_INFECTION_SOL` 9 → 10** (the poverty term starts at SoL 10) | ×1.62 | +0.16 / +0.15% | none | Aims at the gap the history check left: India grows +1.36% against history's +0.84% (its 1887 life expectancy 34 against 24), and goes to 32. But it costs the West: Britain's 1837 life expectancy drops from 35.6 to 33.8 (history 41), already the check's weakest anchor |
-| `POVERTY_INFECTION_AT_FLOOR` 1.75 → 1.9 (rejected) | ×1.66 | +0.03 / −0.03% | China, 1887 | the history check's own table: steeper poverty takes China below Maddison's +0.3% first |
-| `POVERTY_INFECTION_AT_FLOOR` → 2.0 (rejected) | ×1.58 | −0.13 / −0.20% | China, 1877 and 1887 | the same |
+| Change | World multiple | China 1877 / 1887 | Any 20M+ shrinking | Anchor bands (`medicine`, `fertility`) | Evidence and cost |
+|---|---|---|---|---|---|
+| As built | ×1.78 | +0.26 / +0.23% | none | all in | — |
+| **`WEALTH_TFR_LOW` 6.2 → 6.0** (children per woman from wealth at SoL 8 and below) | **×1.66** | +0.16 / +0.12% | none | **all in** | The model's children per woman sit above Gapminder's almost everywhere: 1837 China 6.09 (Gapminder 5.5), Japan 5.75 (4.5), Britain 5.50 (4.8), France 4.45 (3.6); 1887 Japan 5.43 (4.0), the USA 5.60 (4.4), France 4.10 (3.2). At 6.0 each moves 0.1–0.2 toward Gapminder's; India (5.87 against 5.8) and Russia (5.57 against 6.6) move away. Life expectancy doesn't change |
+| **`POVERTY_INFECTION_SOL` 9 → 10** (the poverty term starts at SoL 10) | ×1.62 | +0.16 / +0.15% | none | **one out:** India 1975's life expectancy 44.5 against [46–56] | Aims at the gap the history check left: India grows +1.36% against history's +0.84% (its 1887 life expectancy 34 against 24), and goes to 32. But it costs the West: Britain's 1837 life expectancy drops from 35.6 to 33.8 (history 41), already the check's weakest anchor |
+| `POVERTY_INFECTION_AT_FLOOR` 1.75 → 1.9 (rejected) | ×1.66 | +0.03 / −0.03% | China, 1887 | not run | the history check's own table: steeper poverty takes China below Maddison's +0.3% first |
+| `POVERTY_INFECTION_AT_FLOOR` → 2.0 (rejected) | ×1.58 | −0.13 / −0.20% | China, 1877 and 1887 | not run | the same |
 
 ## The probes
 

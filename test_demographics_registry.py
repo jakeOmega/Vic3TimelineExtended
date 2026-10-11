@@ -1367,11 +1367,12 @@ class TestAbsorbedScript(unittest.TestCase):
     def setUpClass(cls):
         cls.absorbed = DM.absorbed_carriers()
 
-    def _run(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", food=1.0, literacy=0.0):
+    def _run(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", food=1.0, literacy=0.0,
+             full=True):
         eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food}, laws=laws, techs=techs, levels=levels,
                            pop_type=pop_type,
                            triggers={"is_incorporated": incorporated, "is_in_severe_starvation": food < 0.2,
-                                     "is_in_mild_starvation": 0.2 <= food < 0.4})
+                                     "is_in_mild_starvation": 0.2 <= food < 0.4, "te_demog_effects_run": full})
         eng.call("te_demog_absorbed_walk_init")
         eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED)
         eng.call("te_demog_absorbed_walk_pop")
@@ -1415,6 +1416,15 @@ class TestAbsorbedScript(unittest.TestCase):
 
     def test_a_carrier_not_held_takes_nothing(self):
         self.assertEqual(self._run(), (0.0, 0.0))
+
+    def test_outside_full_the_walk_sums_nothing(self):
+        """The pop walk runs under every setting (inheritance owns it), but only Full's refresh reads the replaced
+        sums: outside Full the walk skips them, so the default setting pays nothing per pop."""
+        laws = {"law_child_labor_allowed", "law_women_in_the_fields"}
+        self.assertNotEqual(self._run(laws, pop_type="laborers", food=0.3, literacy=0.5), (0.0, 0.0))
+        self.assertEqual(self._run(laws, pop_type="laborers", food=0.3, literacy=0.5, full=False), (0.0, 0.0))
+        pop = _block(_text(GENERATED_EFFECTS), "te_demog_absorbed_walk_pop")
+        self.assertTrue(pop.lstrip().startswith("if = {\n\t\tlimit = { local_var:te_dg_w_rep > 0 }"), pop[:80])
 
     def test_per_level_lines_reach_incorporated_states_only(self):
         laws = {c.key for c in self.absorbed if c.kind == "law_institution"}

@@ -7,7 +7,7 @@
 **Architecture:**
 - **The engine's arithmetic.** It gives every pop `bare × max(0, 1 + total)` births and deaths, where `bare` is the SoL curve and `total` adds every term (the growth probe).
 - **The census's term M** is set so the engine's events become the model's events plus the terms added on top, at the bare curve's weight.
-- **What M nets out.** The lines the census absorbs come off their carriers (§8.4's removals, inverse INJECTs on vanilla laws), so M has only the bare curve and one absorbed per-pop term (literacy) to net out.
+- **What M nets out (amended 2026-10-10, see the Amendment).** The lines the census absorbs stay on their carriers, and under Full M nets each one out where the engine applies it, together with the per-pop terms it absorbs (literacy, mild starvation). Before the amendment they came off their carriers (§8.4's removals, inverse INJECTs on vanilla laws) and M netted literacy alone.
 - **How M is applied:** a fixed-sign pair of static modifiers refreshed at each census step. Fast mode's ×K composes with it.
 - **The census's own accounting.** Its next step scales its own births and deaths to the engine's, so the pyramid places by age the events added on top.
 
@@ -25,7 +25,7 @@
 - `te_demog_generated_values.txt` is regenerated, never merged by hand.
 
 **Words.** A term is either:
-- **absorbed (by the census):** its line comes off its carrier or is netted out of M, and the census's own term carries the effect; or
+- **absorbed (by the census):** its line is netted out of M under Full (amended 2026-10-10: it no longer comes off its carrier), and the census's own term carries the effect; or
 - **added on top (of the census):** the engine still applies it, on top of the census's rates.
 
 ## Amendment (owner decisions, 2026-10-10): nothing changes outside Full
@@ -66,7 +66,8 @@ disagree, this section wins.
   after A and B, stop and report the numbers and candidate parameters; don't retune.
   - **Result (2026-10-10):** ×1.78, the census's own rates (×1.80 alone); no 20M+ country shrinks (China +0.23% in
     1887). Candidates and their evidence: `docs/testing/demographics-phase2-engine-rates-2026-10-10.md`, "The
-    multiple". Waiting on the owner.
+    multiple" (`WEALTH_TFR_LOW` 6.0: ×1.66, China +0.12%, every anchor band in; `POVERTY_INFECTION_SOL` 10: ×1.62,
+    China +0.15%, India 1975 out of band). Waiting on the owner.
 
 ## Global Constraints
 
@@ -159,25 +160,23 @@ total_p = M + F + O_s + O_p + A_s + A_p
 - M is the census's term (this plan); F is fast mode's term.
 - O are the terms **added on top**: `_s` in the state read, `_p` per pop.
 - A are the terms **absorbed**.
-- After Tasks 6 and 8, A_s = 0: every absorbed state-level line is off its carrier. A_p is literacy only (births).
+- As built (amended 2026-10-10): A_s is the absorbed law, tech and institution lines, which stay on their carriers; A_p is literacy and mild starvation (births), and the class lines and mild starvation (deaths). Before the amendment Tasks 6 and 8 took A_s to 0 and A_p was literacy only.
 
-With no pop at the floor, a state's events a month are `Σ bare_p × (1 + M + F + O_s + O_p + A_p)`. The census wants, at K = 1 (no fast mode), `T + Σ bare_p × (O_s + O_p)`, where T is the model's events. So
+With no pop at the floor, a state's events a month are `Σ bare_p × (1 + M + F + O_s + O_p + A_s + A_p)`. The census wants, at K = 1 (no fast mode), `T + Σ bare_p × (O_s + O_p)`, where T is the model's events. So
 
 ```
-M = T / B − 1 − Σ bare_p × A_p / B,        B = Σ bare_p
+M = T / B − 1 − Σ bare_p × (A_s + A_p) / B,        B = Σ bare_p
 ```
 
-- **Births:** `M_b = T_b / B_b − 1 − literacy_penalty × Σ(bare_b × literacy) / B_b`. The generator reads literacy_penalty (−0.1) from the static modifier.
-- **Deaths:** `M_d = T_d / B_d − 1`.
+- **As built (amended 2026-10-10):** the walk sums the replaced term, `Σ bare_p × (A_s + A_p)`, as `te_dg_w_ebr` (births) and `te_dg_w_edr` (deaths), from the generated `te_demog_absorbed_walk_init` and `_pop`. Before the amendment it was `M_b = T_b / B_b − 1 − literacy_penalty × Σ(bare_b × literacy) / B_b` and `M_d = T_d / B_d − 1`, with the walk local `te_dg_w_ebl`.
 - **Units:** the walk's.
   - B is `te_dg_w_eb0` / `te_dg_w_ed0`: events a month × 100,000.
   - `T = te_dg_cbr_model × state_population × 100 / 12`: the model's rate per 1,000 a year, at today's population.
-  - `Σ(bare_b × literacy)` is a new walk local, `te_dg_w_ebl`.
 - **Why not the spec's ratio, or a plain netting:**
   - The spec's `M = model ÷ E_T − 1` (E_T being the engine's events before M) gives `E_T + (model/E_T − 1) × B`. That equals the model only when no other term applies.
   - Netting everything, `M = (model − E_T) / B`, gives exactly the model and cancels the terms added on top.
   - This formula keeps them, at the weight the engine itself gives them: a famine adds the deaths vanilla's famine adds.
-  - It is the calibration plan's `M = (model − Σ bare × (1 + T − K)) / B` once A_s = 0.
+  - It is the calibration plan's `M = (model − Σ bare × (1 + T − K)) / B`, with the absorbed terms netted.
 - **Terms on top add at the bare curve's weight, not the model's.** The alternative, `T × (1 + Ō)`, scales them by the model's rate. The two differ by the ratio B/T, and agree once step 5 retunes the curves to the census's medians. Additive is what the engine does natively, and needs no reading of O.
 - **Until step 5, that weight changes their size against realized events.**
   - **1836:** bare births are 57 per 1,000 against the model's 38–44, so a term on top is about 1.5 times as strong against realized births as in vanilla.
@@ -268,21 +267,8 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 
 - **Full:** M and the on-top scales.
 - **Display only and Disabled:** no M and no on-top scales. The refresh clears them, so a mid-game switch takes effect at each state's next step.
-- **The removals and INJECTs of Tasks 6 and 8 are static and apply under every setting.** Until step 5 gives Display only and Disabled their equilibrium rates (§11.4), those settings lose the absorbed lines with nothing in their place:
-  - vanilla's health-law mortality cuts;
-  - child labour's class deaths;
-  - women's rights' birth lines (after Task 8);
-  - the mod's flat lines.
-- **The default is accepted with a precondition** (owner, 2026-10-10): the census is unreleased and ships only when the owner judges it ready, and **steps 4 and 5 ship together**. This is recorded in the Global Constraints, Task 11 (`mod_systems.md` § Demographics and the calibration plan) and Task 12's gate. The repo has no release checklist doc; `git grep -il 'release checklist\|before release' docs` finds none.
-- **The fallback if step 5 slips: a rule-gated restore.**
-  - One static modifier per absorbed vanilla carrier, about eight: the three health laws, the two child-labour laws, and the women's-rights laws after Task 8. Each carries vanilla's line and is applied only outside Full.
-  - It is refreshed from the country's yearly pulse (ROOT = the country, `owner = { has_law }`), with `multiplier` = the institution level for the per-level health lines, and re-applied on a law change through `on_law_activated`.
-  - **Against:** each restore shows as its own modifier rather than on its law, and step 5 deletes it all.
-- **Also weighed:**
-  - Cancelling inside M under Full only, with no INJECTs. M would read the absorbed state lines and the per-pop class terms, and the law tooltips would list effects the census silently cancels.
-  - A Full-only cancel by modifier. This keeps Display only and Disabled vanilla for good, but the default setting's tooltips still list the cancelled lines.
-
-  Both are rejected (memory: loc promises the code doesn't deliver).
+- **As built (owner amendment, 2026-10-10): nothing changes outside Full.** The absorbed lines stay on their carriers and only M cancels them, so Display only and Disabled play as `main` does. The owner accepted the cost the first build had rejected this option for: under Full, the law and tech tooltips list lines the census cancels, and the census's own text (the rule's description, "How Demographics Works", the guide) says so.
+- **Superseded (kept for the record).** The first build's removals and INJECTs (Tasks 6 and 8) were static and applied under every setting, so Display only and Disabled lost the absorbed lines until step 5. That needed the precondition "steps 4 and 5 ship together" and a rule-gated restore as the fallback (one static modifier per absorbed vanilla carrier, applied outside Full). It also weighed and rejected the option now built, cancelling inside M under Full only, and a Full-only cancel by modifier, because the tooltips would list effects the census cancels. The amendment retires all of it; step 5's retune of the global defines is now an open question while the rule defaults to Disabled.
 
 ## 3. Owner rulings and owner calls
 
@@ -295,12 +281,13 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 
   The census is fitted to history with laws and techs as inputs (#855, #857), so a standing line on top shifts every country it covers, permanently.
 - **The exception:** child labour, absorbed by owner ruling at a smaller size.
+- **How "absorbed" is carried out (amended 2026-10-10):** every absorbed line stays on its carrier and M cancels it under Full only. Where a row below says "by inverse INJECT" or "removed at source", that was the first build, which the amendment retired.
 
 | Term | Kind | Size (evidence) | The census's own term | Ruling or recommendation |
 |---|---|---|---|---|
 | The SoL curves | engine | the base | the wealth term, poverty, nutrition | absorbed: M nets out the bare curve by construction |
 | `literacy_penalty`, −0.1 × literacy (per pop) | engine code | fitted −0.101 (E7) | education's term | **absorbed**, netted in M |
-| The health laws: Charitable −0.03 a level, Public −0.05 a level, Private −0.002 wealth mortality a level | vanilla laws (E12) | 5% of people under one in 1837, 15% in 1887 | access × treatment, fitted to the medicine anchors | **absorbed**, by inverse INJECT (E13) |
+| The health laws: Charitable −0.03 a level, Public −0.05 a level, Private −0.002 wealth mortality a level | vanilla laws (E12) | 5% of people under one in 1837, 15% in 1887 | access × treatment, fitted to the medicine anchors | **absorbed**, by inverse INJECT (E13); amended: by M under Full. Private's wealth line stays on top (ruling: its scaling is unknown, measured ≈ 0) |
 | Child labour's class lines, +0.05 / +0.02 | vanilla laws (E12) | Child Labor Allowed covers 97–100% of people. Its +0.05 falls on classes holding 91% of people: about 0.22 points of world growth a year, and +4.1% of curve deaths in 1949 (E8) | work +0.1 under Child Labor Allowed, on ages 15–64 only: +0.09 deaths per 1,000 at 1836 inputs (+0.28% of deaths), **about a twenty-fifth of vanilla's** | **absorbed: owner ruling, 2026-10-10.** Vanilla's lines are probably far too high, so the census's smaller term is the intended size. `predict` and the gate report what absorbing them adds to world growth (Tasks 10, 12) |
 | Women's rights' birth lines: No Women's Rights +0.05, Women in the Fields −0.10, Women in the Workplace −0.05, Women's Suffrage −0.05, the mod's Protected Class −0.10 | vanilla laws (E12); `extra_laws.txt:4138` | No Women's Rights covers 83% of people in 1837 | **none yet**: `demographics_model.fertility` reads no women's-rights law | **added on top until Task 7 builds the census's term, then absorbed in Task 8** (owner ruling, 2026-10-10). The term's size: owner call (d), decided |
 | The mod's flat lines that already have a census term: the Pill −0.10 births (contraception +0.05); State-Sponsored Family Planning −0.05 births (Fertility Control +0.1); `modern_vaccines` and `antibiotic_mass_production` −0.05 deaths and +0.05 births each (infection treatment 0.25 and 0.11); the Ministry of Consumer Protection −0.01 a level (external −0.08 a level) | mod | — | yes | **absorbed**, removed at source (§8.4) |
@@ -309,7 +296,7 @@ dz = te_dg_ed / (te_dg_cdr_model × state_population / 1000) − 1        (−0.
 | `second_wave_feminism` −0.025 and `sexual_revolution` −0.025 births | mod techs | small; eras 7–8 | none: neither is a means carrier | **added on top** for now |
 | Full Equality and Protection −0.01 births (#881, owner, 2026-10-10: the other LGBTQ+ Rights laws carry no birth line); State Eugenics +0.10 births; `mental_health_awareness` −0.05, `biological_immortality` −0.20, `mind_backups` −0.05 deaths | mod | era 6 and later, outside the 1836–1900 gate | none (immortality is phase 3's) | **added on top** (no census term); revisit with step 6's post-1900 schedules |
 | The Natalism Initiative decree, +0.5 births | mod decree | large, temporary | §8.1's measures replace it later | **added on top** (a player action) |
-| Starvation: births −0.7 × scale / −0.9; deaths +0.6 × scale / +1.0 (per pop) | engine code | +0.1–0.3% of deaths in 1949 | none | **added on top**; its deaths by the model's age pattern (c) |
+| Starvation: births −0.7 × scale / −0.9; deaths +0.6 × scale / +1.0 (per pop) | engine code | +0.1–0.3% of deaths in 1949 | the poverty term (mild) | mild: **absorbed** (owner amendment B, 2026-10-10: the poverty term was fitted without it); severe: **added on top**, its deaths by the model's age pattern (c) |
 | Devastation, +1.0 × level | engine code | E14 | none | **added on top** |
 | Pollution, +0.5 × impact (+0.05 mod) | engine code | E15 | none (spec: read through) | **added on top** |
 | Turmoil (`state_mortality_turmoil_mult` per turmoil); wealth mortality | engine | ≈ 0 (E16) | none | **added on top** by construction (unreadable) |
@@ -408,9 +395,10 @@ The slope acts per pop and the poverty term on the state's mean SoL, so a destit
 | `common/script_values/te_demog_values.txt` | modify | `te_demog_rate_*` and `te_demog_fast_*_applied`; `te_demog_tfr` takes natural fertility |
 | `common/static_modifiers/te_demog_modifiers.txt` | modify | the four census modifiers |
 | `common/modifier_type_definitions/demographics_modifier_types.txt` | modify | `state_natural_fertility_mult` |
-| `common/laws/modified_health_system.txt`, `common/laws/te_demog_law_injections.txt` | modify | the inverse INJECTs on the health and child-labour laws |
-| `common/laws/extra_laws.txt` | modify | §8.4's removals, augmentation's chronic lines, the women's-rights terms (Task 7) and the inverse INJECTs of their birth lines (Task 8, in the existing blocks at `extra_laws.txt:78-98`) |
-| `common/technology/technologies/era_6.txt`, `era_7.txt`, `common/institutions/extra_institutions.txt` | modify | §8.4's removals |
+| `common/laws/modified_health_system.txt`, `common/laws/te_demog_law_injections.txt` | modify | the inverse INJECTs on the health and child-labour laws (amended: undone; `te_demog_law_injections.txt` keeps Women Own Property's natural fertility) |
+| `common/laws/extra_laws.txt` | modify | §8.4's removals, augmentation's chronic lines, the women's-rights terms (Task 7) and the inverse INJECTs of their birth lines (Task 8, in the existing blocks at `extra_laws.txt:78-98`) (amended: the removals and INJECTs undone; the census-only lines stay) |
+| `common/technology/technologies/era_6.txt`, `era_7.txt`, `common/institutions/extra_institutions.txt` | modify | §8.4's removals (amended: undone, so unchanged against `main`) |
+| `scripts/generators/gen_demographics.py`, generated values and effects | modify | (amended) `te_demog_absorbed_*` and the walk's `te_demog_absorbed_walk_init` / `_pop` from `demographics_modifiers.absorbed_carriers` |
 | `scripts/analysis/demographics_modifiers.py` | modify | `engine_rate_lines()`: every birth and mortality line on a law, tech or institution, vanilla's and the mod's summed |
 | `common/scripted_effects/te_debug_demog_effects.txt`, `events/te_debug_demog_events.txt` | modify | options m and n; the census line's new fields |
 | `scripts/analysis/demographics_observer_report.py` | modify | `--phase2` |
@@ -1717,6 +1705,8 @@ git commit -m "Demographics phase 2 step 4: fast mode scales the census's target
 
 ### Task 6: The census absorbs the lines it already models
 
+> **Superseded in part by the Amendment (owner, 2026-10-10).** The removals and inverse INJECTs below were built and then undone; the census now cancels these lines through M under Full only. The augmentation laws' chronic-treatment lines stay. Kept as the record of what was built first.
+
 Health, child labour (owner ruling), §8.4's mod lines that have a census term, and the augmentation laws. Women's rights wait for Tasks 7–8.
 
 **Files:**
@@ -2202,6 +2192,8 @@ git commit -m "Demographics phase 2 step 4: a natural-fertility term on the wome
 
 ### Task 8: The census absorbs the women's-rights birth lines
 
+> **Superseded by the Amendment (owner, 2026-10-10).** The inverse INJECTs below were built and then undone; M cancels these lines under Full only.
+
 Only after Task 7: the census's term now carries what the lines did.
 
 **Files:**
@@ -2643,6 +2635,8 @@ git commit -m "Demographics harness: predict, the engine's growth once the censu
 
 ### Task 11: Docs and the player guide
 
+> **The release-precondition text below is superseded by the Amendment (owner, 2026-10-10):** the docs now say "nothing changes outside Full", and that under Full the census cancels the absorbed lines its tooltips still list.
+
 **Files:**
 - Modify: `docs/systems/mod_systems.md` § Demographics:
   - "Phase 1 applies nothing" becomes the phase-2 step 4 paragraph.
@@ -2756,7 +2750,7 @@ If `predict` fails the gate, stop and report. The fix is calibration (steps 1–
 - the clamped share under 1% of the world's people, or the states named;
 - regional shares moving the right way: Europe up to 1900, Asia's share falling.
 
-**The release precondition:** this gate passing does not make step 4 releasable alone. Steps 4 and 5 ship together (Global Constraints).
+**The release precondition (amended 2026-10-10):** nothing changes outside Full (Global Constraints). It was "steps 4 and 5 ship together"; step 5's retune of the global defines is now an open question while the rule defaults to Disabled.
 
 - [ ] **Step 4: Write the results doc** (`docs/testing/demographics-phase2-engine-rates-<date>.md`)
   - the build, and the saves' and logs' location;
@@ -2782,13 +2776,13 @@ git commit -m "Demographics phase 2 step 4: probes and gate results"
   - No new walk or iterator. Saves gain about eight variables a state, about 0.4 MB.
   - **Check:** option d's benchmark before and after, on the 1887 gate save.
 - **Old saves.**
-  - **What arrives when:** the absorptions load with the save. M arrives at each state's next step, and the on-top scales a step after that, once `te_dg_cbr_model` exists. So for up to a year a state runs on the curves without the absorbed lines, much as a fresh 1836 state does.
-  - **A one-time residual artefact.** The window up to the state's next pulse ran partly at the old rates (before load), but the walk's snapshot (`te_dg_eb`/`te_dg_ed`) reads the new ones. So each state misreads that gap as migration once. Public Health Insurance at level 5 (−0.25 mortality) makes it about 0.25 × bare deaths × the share of the window before the load. This is the same shape as fast mode's documented switch artefact.
+  - **What arrives when (amended 2026-10-10):** nothing changes on load; the absorbed lines stay on their carriers. Under Full, M arrives at each state's next step, and the on-top scales a step after that, once `te_dg_cbr_model` exists. So for up to a year a state runs as `main` does, with the absorbed lines live and no M.
+  - **No residual artefact on load (amended).** The first build's static removals changed the rates at load, which the walk misread as migration once; with nothing changed on load there is no such gap.
   - No migration code. A save from before the census itself seeds as today.
 - **The game rule.**
   - M applies under Full only; Display only and Disabled clear the terms at each state's next step.
-  - The static absorptions change those two settings until step 5 gives them equilibrium rates. Hence the release precondition: steps 4 and 5 ship together. §2's rule-gated restore is the fallback.
-  - Every check is written negatively, so a save from before the rule keeps Full.
+  - Amended 2026-10-10: nothing changes outside Full, since M alone cancels the absorbed lines. The first build's static absorptions, the "steps 4 and 5 ship together" precondition and the rule-gated restore are retired.
+  - Every check is written positively (#876), so a save from before the rule reads as Disabled.
 - **Migration.**
   - **The residual stays consistent.** The walk's expected events read the state read with M in it (E5, E6), so the residual is still the population change less the engine's natural change.
   - **Indirect effects only.** M changes how many people the engine adds, and so crowding, unemployment and migration pull, but only through the population.
