@@ -1926,5 +1926,70 @@ class ClientErrorReportingTests(unittest.TestCase):
 
 
 
+class MovementEndpointTests(unittest.TestCase):
+    """GET /movements and /movement-stances through do_GET (#838), on the
+    test_movement_stances fixture."""
+
+    def setUp(self):
+        from test_movement_stances import _state
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        for name, value in (("ms", _state(tmp.name)), ("mod_path", tmp.name)):
+            patch = mock.patch.object(mss, name, value)
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_movement_list_and_detail(self):
+        status, body = self.get("/movements")
+        self.assertEqual(status, 200)
+        rows = {r["id"]: r for r in body}
+        self.assertEqual(rows["movement_modernizer"]["alternate_ideologies"], ["ideology_modern_2"])
+        status, body = self.get("/movements/movement_pacifist")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["tech_gate"], ["anti_war_movement", "pacifism"])
+        self.assertIn("raw", body)
+        self.assertEqual(self.get("/movements/movement_nope")[0], 404)
+
+    def test_stances_by_lawgroup_and_by_law_agree(self):
+        status, by_group = self.get("/movement-stances?lawgroup=lawgroup_rules_of_war")
+        self.assertEqual(status, 200)
+        status, by_law = self.get("/movement-stances?law=law_total_war")
+        self.assertEqual(status, 200)
+        self.assertEqual(by_group, by_law)
+        self.assertEqual(by_group["unbacked_laws"], ["law_carrier", "law_humane_war"])
+
+    def test_comparative_mode(self):
+        status, body = self.get(
+            "/movement-stances?lawgroup=lawgroup_rules_of_war&mode=comparative&current=law_total_war")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["current"], "law_total_war")
+        self.assertTrue(all("backs" in r for r in body["movements"]))
+
+    def test_bad_requests(self):
+        for path, status in (
+            ("/movement-stances", 400),
+            ("/movement-stances?lawgroup=lawgroup_rules_of_war&law=law_total_war", 400),
+            ("/movement-stances?lawgroup=lawgroup_rules_of_war&mode=comparative", 400),
+            ("/movement-stances?lawgroup=lawgroup_rules_of_war&mode=other&current=law_total_war", 400),
+            ("/movement-stances?lawgroup=lawgroup_rules_of_war&current=law_privacy_a", 400),
+            ("/movement-stances?lawgroup=lawgroup_nope", 404),
+            ("/movement-stances?law=law_nope", 404),
+            ("/movement-stances/other", 404),
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self.get(path)[0], status)
+
+    def test_gaps(self):
+        status, body = self.get("/movement-stances/gaps")
+        self.assertEqual(status, 200)
+        self.assertEqual([r["lawgroup"] for r in body["lawgroups_without_stance"]],
+                         ["lawgroup_privacy"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.14.5",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "4627473117c4f6ad",
- "built_at": "2026-09-30T14:55:42+00:00",
+ "parser_fingerprint": "c3ff1dde2637b88a",
+ "built_at": "2026-10-11T18:29:43+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -34,6 +34,11 @@
    "dir": "game/common/ideologies",
    "file": "common/ideologies.json",
    "entities": 172
+  },
+  "Political Movements": {
+   "dir": "game/common/political_movements",
+   "file": "common/political_movements.json",
+   "entities": 39
   },
   "Battle Conditions": {
    "dir": "game/common/battle_conditions",
@@ -1867,6 +1872,34 @@
   "game/common/modifier_type_definitions/99_todo_sort_into_other_files.txt": {
    "size": 47477,
    "sha256": "f3412884c57274f20dec983592c44d9d2550e658fd4e7e7fd8b2cabf3a18ec17"
+  },
+  "game/common/political_movements/00_ideological_movements.txt": {
+   "size": 144121,
+   "sha256": "834a1b97f09c65b9b64eafdaffe4ee68965aaac262066140793a482eefd23a6b"
+  },
+  "game/common/political_movements/01_religious_movements.txt": {
+   "size": 17071,
+   "sha256": "21dcebf54b735e2c5f5e55d1157d6ae17046e91adc0093f484f707e0c223bd19"
+  },
+  "game/common/political_movements/02_cultural_movement.txt": {
+   "size": 32181,
+   "sha256": "68261588b76b5a20822b33771bf16595087e31ac52f3262ae107e8bf77b594ad"
+  },
+  "game/common/political_movements/03_pan_national_movements.txt": {
+   "size": 41533,
+   "sha256": "871d649c0f47b9612a725e8514e1259de2a9c225442afeff2be838e00bf3c335"
+  },
+  "game/common/political_movements/04_country_specific_ideological_movements.txt": {
+   "size": 48556,
+   "sha256": "503590cec446a8016e09f65b491e7d529af97fadd76ee98c32d85d7c9baaafc6"
+  },
+  "game/common/political_movements/04_national_movements.txt": {
+   "size": 13398,
+   "sha256": "ac2f24d16fcc170edcfc92f44f94e404f59acb6265a69d5fff1526cc39167447"
+  },
+  "game/common/political_movements/05_slave_revolt_movements.txt": {
+   "size": 9637,
+   "sha256": "903ca4c58fcbc0a4eded9e0e710ffbf55b27c60fa80ec56d36dca3b4045b0918"
   },
   "game/common/pop_needs/00_pop_needs.txt": {
    "size": 6696,
