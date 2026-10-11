@@ -118,6 +118,9 @@ te_demog_rate_births_up = { value = var:te_dg_mb min = 0 }
 te_demog_rate_births_down = { value = var:te_dg_mb multiply = -1 min = 0 }
 te_demog_rate_deaths_up = { value = var:te_dg_md min = 0 }
 te_demog_rate_deaths_down = { value = var:te_dg_md multiply = -1 min = 0 }
+# Private Health Insurance's wealth line under Full, the census's own pair (the engine-lines plan, Task 5)
+te_demog_rate_wealth_up = { value = var:te_dg_w min = 0 }
+te_demog_rate_wealth_down = { value = var:te_dg_w multiply = -1 min = 0 }
 
 # Fast mode's terms in force, the same way (te_demog_fast_effects.txt).
 te_demog_fast_births_applied = {
@@ -131,8 +134,8 @@ te_demog_fast_births_applied = {
 # State scope: the state's Impact of Institutions, which the engine scales each institution's lines by
 # (Local Vernacular and Devolution -0.05, Ubiquitous Translation and the Consciousness Network method
 # +0.10, obstinance -1.0 x its share; the probe session, 2026-10-11, read "A multiplier of
-# 0.94" on the Midlands' Ministry of Health). The absorbed institution lines take it (te_demog_absorbed_*,
-# generated), so the census cancels them at the size the engine applies them.
+# 0.94" on the Midlands' Ministry of Health). The engine scales the moved lines' script-only types by it as it
+# did the fields; the census's console log (option l) reads it.
 te_demog_institution_impact = {
 	value = 1
 	add = modifier:state_institution_impact_add

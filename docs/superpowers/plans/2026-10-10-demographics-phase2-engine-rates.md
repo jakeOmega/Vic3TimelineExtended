@@ -174,6 +174,12 @@ With no pop at the floor, a state's events a month are `Σ bare_p × (1 + M + F 
 M = T / B − 1 − Σ bare_p × (A_s + A_p) / B,        B = Σ bare_p
 ```
 
+- **Amended 2026-10-11 (2), owner: the laws', technologies' and institutions' lines are script-only**
+  (`docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md`). A_s is now 0: the engine no longer
+  applies those lines under Full, so M nets only the per-pop terms (literacy, mild starvation). The lines the census
+  doesn't model (the on-top family, Q) are script-only too, and M adds them at its rate:
+  `M = T/B − 1 − R/B − O_s × (1 − T/B) + Q × T/B`. O_s excludes the moved lines' pairs. Outside Full, or before a
+  state's first step, the pairs re-apply the lines.
 - **Amended 2026-10-11 (owner): the state-level terms on top act on the census's rate.** The census wants
   `T × (1 + O_s) + Σ bare_p × O_p`, so M also takes off `O_s × (1 − T / B)`. O_s is the state read less M, F and
   A_s (the walk's `te_dg_w_sab` / `te_dg_w_sad`), floored at `RATE_TOTAL_MIN`. A pop's own O_p (severe starvation,

@@ -30,6 +30,11 @@ tooltip breaks the numbers down.
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
 | Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 
+In every version of the mod, the birth and death effects of laws, technologies
+and institutions appear in the birth rate and mortality tooltips of a state and
+its pops as Laws and Institutions lines, one for each kind of effect rather than
+one for each law. Each law's or technology's own tooltip still lists its effect.
+
 ## Migration crowding
 
 Every state has a crowding threshold of 10,000 people for each unit of its
@@ -245,20 +250,19 @@ from the first day.
 
 Under the Demographics (Experimental) rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
-of death, described below. While it does, it takes over what the child labor and
-women's rights laws, most of the health laws' effects, the Contraceptive Pill,
-State-Sponsored Family Planning, vaccines and antibiotics and mild starvation do
-to births and deaths: their tooltips still list those lines, but the census
-cancels them and carries their effect in its own terms. The base game's other
-effects on births and deaths still apply on top: Private Health Insurance's
-mortality cut for the wealthy, the late medical technologies, severe starvation,
-devastation, pollution, events, decrees, and the family-policy laws the census
-doesn't model yet. An effect on the whole state, such as pollution or a decree,
-moves its births or deaths by its own percentage of the census's rate, as its
-tooltip line reads; an effect on some of its people, such as severe starvation,
-applies to their rate in the base game. A state's birth
-rate and mortality tooltips show the census's part as Census: Births and Census:
-Deaths. The workforce still follows the base game's rules.
+of death, described below. From its first step in a state, the Laws and
+Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
+rates: those of the child labor and women's rights laws, the health laws, the
+Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
+and mild starvation. The rest, such as the family-policy laws and the late
+medical technologies, it applies at its own rate, as it does an effect on the
+whole state, such as pollution, devastation or a decree. Either way, a new law
+or technology takes effect at the state's next census step, up to a year later.
+An effect on some of a state's people, such as severe starvation, applies to
+their rate in the base game. Private Health Insurance's cut for the wealthy
+works at the census's rate, and no pop's deaths fall below half of it. A state's
+birth rate and mortality tooltips show the census's part as Census: Births and
+Census: Deaths. The workforce still follows the base game's rules.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,

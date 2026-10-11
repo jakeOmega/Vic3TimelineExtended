@@ -115,6 +115,7 @@ te_demog_fast_refresh_rates = {
 				divide = { value = local_var:te_dg_w_eb0 min = 0.00001 }
 				subtract = local_var:te_dg_fast_prev_b
 				subtract = local_var:te_dg_rate_prev_b
+				subtract = local_var:te_dg_rate_lines_b
 				add = local_var:te_dg_rate_new_b
 				min = 0
 				multiply = te_demog_fast_k_minus_1
@@ -127,6 +128,7 @@ te_demog_fast_refresh_rates = {
 				divide = { value = local_var:te_dg_w_ed0 min = 0.00001 }
 				subtract = local_var:te_dg_fast_prev_d
 				subtract = local_var:te_dg_rate_prev_d
+				subtract = local_var:te_dg_rate_lines_d
 				add = local_var:te_dg_rate_new_d
 				min = 0
 				multiply = te_demog_fast_k_minus_1

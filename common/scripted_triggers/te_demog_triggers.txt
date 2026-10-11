@@ -83,3 +83,13 @@ te_demog_female_job_workplace = {
 		is_building_group = bg_urban_facilities
 	}
 }
+
+# THIS = a state: the engine's moved birth and mortality lines (te_demog_lines_refresh; owner, 2026-10-11) apply
+# unless the census sets this state's births and deaths: Full, and its term in force (te_dg_mb, which a census step
+# sets and Display only or Disabled clear). So under Full a state keeps vanilla's lines until its first census step.
+te_demog_lines_apply = {
+	OR = {
+		NOT = { te_demog_effects_run = yes }
+		NOT = { has_variable = te_dg_mb }
+	}
+}

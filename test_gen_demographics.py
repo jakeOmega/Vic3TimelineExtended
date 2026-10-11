@@ -168,15 +168,15 @@ class TestGenerated(unittest.TestCase):
 
     def test_the_absorbed_terms_follow_the_engine(self):
         """Owner amendment A and B (2026-10-10): literacy's penalty from literacy_penalty, mild starvation's in the
-        engine's steps and severe starvation's left out, and institution lines up to the mod's highest level."""
+        engine's steps and severe starvation's left out."""
         pop_b = self.values.split("te_demog_pop_absorbed_births = {", 1)[1].split("\n}\n", 1)[0]
         self.assertIn(f"value = literacy_rate\n\tmultiply = {gen.lit(P.LITERACY_BIRTH_PENALTY)}", pop_b)
         self.assertIn("is_in_severe_starvation = no", pop_b)
         self.assertNotIn("-0.9", pop_b)
-        self.assertEqual(gen.max_institution_level(ROOT), 9)   # MAX_INSTITUTION_INVESTMENT, extra_defines.txt
-        deaths = self.values.split("te_demog_absorbed_deaths = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn("institution = institution_health_system value >= 9 }", deaths)
-        self.assertNotIn("value >= 10 }", deaths)
+        # the laws', techs' and institutions' lines are script-only (the engine-lines plan, 2026-10-11): no state or
+        # class ladder is generated any more
+        for gone in ("te_demog_absorbed_births = {", "te_demog_absorbed_deaths = {", "te_demog_absorbed_laborers_deaths = {"):
+            self.assertNotIn(gone, self.values)
 
 
 class TestEngineRateTerms(unittest.TestCase):

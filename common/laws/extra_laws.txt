@@ -17,7 +17,7 @@
 # edited directly further down in this file rather than via INJECT.
 # The rights-of-women INJECTs also carry the demographics census's natural
 # fertility (state_natural_fertility_mult, phase 2 step 4). Vanilla's birth lines
-# stay: under the census's Full setting its own term cancels them (owner, 2026-10-10).
+# sit on the census's script-only types (te_demog_engine_line_injections.txt).
 # ============================================================================
 
 # ---- lawgroup_trade_policy ----
@@ -1650,7 +1650,7 @@ law_full_equality_and_protection = {
 	modifier = {
 		state_standard_of_living_add = 3
 		country_bureaucracy_investment_cost_factor_mult = 0.2
-		state_birth_rate_mult = -0.01 # a token: the research finds little effect (test_lgbtq_rights_laws.py)
+		state_demog_ontop_birth_rate_mult = -0.01 # a token: the research finds little effect (test_lgbtq_rights_laws.py)
 		country_cultural_hegemony_art_mult = 0.05
 	}
 }
@@ -1686,7 +1686,7 @@ law_unrestricted_augmentation = {
 		state_lower_strata_standard_of_living_add = -1
 		state_upper_strata_standard_of_living_add = 5
 		state_radicals_from_political_movements_mult = 0.2
-		state_mortality_mult = -0.05
+		state_demog_absorbed_mortality_mult = -0.05
 		state_chronic_treatment_add = 0.05	# the census's chronic treatment (demographics phase 2 step 4)
 		country_sol_expectations_target_add = 2
 		country_tech_research_speed_mult = 0.2
@@ -1730,7 +1730,7 @@ law_medical_augmentation_only = {
 
 	institution = institution_health_system
 	institution_modifier = {
-		state_mortality_mult = -0.02
+		state_demog_absorbed_mortality_mult = -0.02
 		state_standard_of_living_add = 0.25
 		country_tech_research_speed_mult = 0.01
 	}
@@ -1771,7 +1771,7 @@ law_regulated_augmentation_market = {
 	}
 	institution = institution_ministry_of_consumer_protection
 	institution_modifier = {
-		state_mortality_mult = -0.02
+		state_demog_absorbed_mortality_mult = -0.02
 		country_tech_research_speed_mult = 0.03
 	}
 
@@ -1808,7 +1808,7 @@ law_mandatory_augmentation = {
 	institution = institution_ministry_of_war
 	institution_modifier = {
 		building_group_bg_military_standard_of_living_add = -1
-		state_mortality_mult = -0.02
+		state_demog_absorbed_mortality_mult = -0.02
 		unit_defense_mult = 0.02
 		unit_offense_mult = 0.02
 		country_military_tech_research_speed_mult = 0.1
@@ -2699,7 +2699,7 @@ law_pro_natalist_subsidies = {
 
 	modifier = {
 		state_welfare_payments_mult = 0.10
-		state_birth_rate_mult = 0.10
+		state_demog_ontop_birth_rate_mult = 0.10
 		state_dependent_wage_mult = -0.1
 		state_working_adult_ratio_add = -0.05
 	}
@@ -2714,7 +2714,7 @@ law_state_sponsored_family_planning = {
 
 	modifier = {
 		state_fertility_means_add = 0.1	# the census's means (demographics modifier types, stage 2)
-		state_birth_rate_mult = -0.05
+		state_demog_absorbed_birth_rate_mult = -0.05
 		state_working_adult_ratio_add = 0.05
 		state_education_access_add = 0.05
 	}
@@ -2728,7 +2728,7 @@ law_population_control_measures = {
 	unlocking_technologies = { mass_surveillance }
 
 	modifier = {
-		state_birth_rate_mult = -0.1
+		state_demog_ontop_birth_rate_mult = -0.1
 		country_authority_add = 150
 		state_radicals_and_loyalists_from_sol_change_mult = 1.0
 	}
@@ -2742,7 +2742,7 @@ law_communal_child_rearing = {
 	unlocking_technologies = { anarchism }
 
 	modifier = {
-		state_birth_rate_mult = -0.2
+		state_demog_ontop_birth_rate_mult = -0.2
 		state_working_adult_ratio_add = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 	}
@@ -3085,7 +3085,7 @@ law_state_eugenics_program = {
 	modifier = {
 		country_authority_add = 150
 		state_working_adult_ratio_add = 0.05
-		state_birth_rate_mult = 0.1
+		state_demog_ontop_birth_rate_mult = 0.1
 	}
 }
 
@@ -4144,7 +4144,7 @@ law_protected_class = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_working_adult_ratio_add = 0.2
-		state_birth_rate_mult = -0.1
+		state_demog_absorbed_birth_rate_mult = -0.1
 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 		state_dependent_political_participation_add = 0.5
 	}
