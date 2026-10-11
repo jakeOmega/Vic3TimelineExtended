@@ -275,7 +275,14 @@ console's lines are in `debug.log`.
   obstinate state at Ministry of Health level 5 it would have taken off 15% the engine never applied. The absorbed
   institution lines now take `te_demog_institution_impact`. The Ministry of War's per-institution country modifier
   (`country_institution_impact_institution_ministry_of_war_mult`, a mod law and a production method) is not handled:
-  how it combines with the state's is unverified, and it touches only Mandatory Augmentation's line.
+  how it combines with the state's is unverified, and it touches only Mandatory Augmentation's line. The impact's sources:
+  Local Vernacular −0.05, Devolution −0.05, Ubiquitous Translation +0.10, the Consciousness Network method +0.10,
+  and obstinance −1.0 × its share. The floor at 0 is unverified: full obstinance with Local Vernacular reaches
+  −1.05, so the census would differ by at most about 0.5 points if the engine doesn't clamp. Console option l now
+  logs `impact=`; the Midlands should read 0.940. The offline tools assume impact 1. `predict`'s growth is
+  unaffected, since an absorbed line cancels on both sides. Its absorbed-group points and the clamp's bound are off
+  in low-impact states, and so is `fidelity`'s comparison of the census's institution-carried inputs, which the game
+  reads already scaled.
 - **P3, the second step (29 January 1839).** The terms move little: births −0.3214, deaths −0.4216, following
   the bare curve's 3% rise. Births on top `bz` +0.044 match Cadet Sons' +4.6%. Deaths on top `dz` +0.117:
   - +0.008 is the state-level lines;
@@ -303,11 +310,11 @@ console's lines are in `debug.log`.
 | Probe | Question | Answer |
 |---|---|---|
 | P1 | Are devastation's and pollution's mortality lines inside `modifier:state_mortality_mult`? | **Yes, both (owner, in game, 2026-10-10).** Alentejo: "State Region Devastation +11%", Ministry of Health −2%, total +9%, against option m's logged +0.091. Yorkshire: "Pollution Impact +8%", Ministry of Health −14%, total −5%, against −0.046. The mod's +0.05 pollution line adds to vanilla's (owner). The plan's §1 (E14, E15) records it |
-| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **To do (owner, in game):** option n on the capital under Full. `rep_b` and `rep_d` are the absorbed share of the bare curves, each plus any mild starvation: with No Women's Rights about +0.05 − 0.1 × literacy; for a Women in the Fields holder (a variant of No Women's Rights) about −0.10 − 0.1 × literacy, and its capital's birth-rate tooltip lists only its own −10%, not No Women's Rights' +5% as well; with Charitable Health System at Ministry of Health level N about −0.03 × N in deaths. The capital's birth and mortality tooltips list the laws' lines beside Census: Births / Deaths. `debug.log` carries no error from `te_demog_absorbed_*` (the generated `institution_investment_level` ladders, `has_technology_researched`, `is_in_mild_starvation` in pop scope). Offline, `TestEngineRateLines` pins every line to main and `TestAbsorbedScript` runs the script against `DM.totals` |
-| P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
+| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **Yes (owner, in game, 2026-10-11; "The in-game session" above).** Births match the tooltip exactly; the Ministry of Health's line shows beside Census: Deaths. It also found the institution-impact gap (#889) |
+| P3 | Does the engine hit the target? Is M's fixed point stable? | **Yes (2026-10-11; above).** The logged inputs reproduce M exactly at the first step, and the terms move little at the second. `bz` matches the state-level birth line; `dz` adds each pop's own lines at the bare curve's weight |
 | P4 | Does a state keep its census modifiers through a change of owner? | **Yes (fast-mode run, 2026-10-11).** `predict --check-modifiers` finds no state missing its modifiers on the 1866, 1876 and 1882 saves, after the East India Company broke up and several revolutions |
 | P5 | Turmoil's scaling (conditional) | **Not needed:** in the fast run, turmoil barely tracks the deaths on top (r = +0.06 with `dz`) |
-| P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **To do (owner, in game), before building its absorption.** In a debug-mode test game, give a rich country Private Health Insurance with the Ministry of Health at level 5. In one incorporated state, open the mortality breakdown of a rich pop (wealth 40 or more) and of a poor one (about 10): under the description's semantics the line reads about −40% and −10% (wealth × −0.002 × 5). The same value on both means it scales by something else, such as the state's mean wealth or a define |
+| P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **Yes (owner, in game, 2026-10-11):** the line is proportional to each pop's wealth |
 
 ## Still to run (owner)
 

@@ -1452,6 +1452,11 @@ class TestAbsorbedScript(unittest.TestCase):
                               types={health.type}, institution_impact=max(0.0, 1 + add))
                 self.assertAlmostEqual(d, t["state_mortality_mult"], places=5)
                 self.assertAlmostEqual(d, health.value * 3 * max(0.0, 1 + add), places=5)
+        own = next(c for c in self.absorbed if c.kind == "institution")
+        for add in (-0.06, -1.2):
+            with self.subTest(institution=own.key, add=add):
+                _b, d = self._run(levels={own.institution: 2}, impact=add)
+                self.assertAlmostEqual(d, own.value * 2 * max(0.0, 1 + add), places=5)
         flat = next(c for c in self.absorbed if c.kind == "law" and c.type == "state_birth_rate_mult")
         b0, _ = self._run(laws={flat.key})
         b1, _ = self._run(laws={flat.key}, impact=-0.5)
@@ -3671,6 +3676,12 @@ class TestModifierTypes(unittest.TestCase):
         for key, sv in (("contra", "te_debug_demog_mod_contra"), ("fmeans", "te_debug_demog_mod_fmeans"),
                         ("means", "te_debug_demog_means")):
             self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
+
+    def test_option_l_logs_the_institution_impact(self):
+        # the in-game check of #889: the Midlands read "A multiplier of 0.94" on its Ministry of Health, so its line
+        # should log impact=0.940 (Local Vernacular's -0.05, obstinance's share)
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_mods_line")
+        self.assertIn(" impact=[THIS.ScriptValue('te_demog_institution_impact')|3]", line)
 
     def test_seven_state_types(self):
         # one type per term, read in state scope; a tech's or law's line reaches the state because
