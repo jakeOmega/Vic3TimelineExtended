@@ -1589,7 +1589,6 @@ law_legal_limbo = {
 
 	modifier = {
 		state_standard_of_living_add = 0.5
-		state_birth_rate_mult = -0.05
 		country_cultural_hegemony_art_mult = -0.02
 	}
 }
@@ -1608,7 +1607,6 @@ law_basic_protections = {
 	modifier = {
 		state_standard_of_living_add = 1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
-		state_birth_rate_mult = -0.1
 	}
 }
 
@@ -1626,7 +1624,6 @@ law_comprehensive_rights = {
 	modifier = {
 		state_standard_of_living_add = 2
 		country_bureaucracy_investment_cost_factor_mult = 0.1
-		state_birth_rate_mult = -0.1
 		country_cultural_hegemony_art_mult = 0.03
 	}
 }
@@ -1645,7 +1642,7 @@ law_full_equality_and_protection = {
 	modifier = {
 		state_standard_of_living_add = 3
 		country_bureaucracy_investment_cost_factor_mult = 0.2
-		state_birth_rate_mult = -0.1
+		state_birth_rate_mult = -0.01 # a token: the research finds little effect (test_lgbtq_rights_laws.py)
 		country_cultural_hegemony_art_mult = 0.05
 	}
 }
