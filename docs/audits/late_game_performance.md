@@ -134,7 +134,9 @@ All are exact: they change no result unless a line says otherwise.
    any covert pact or `iw_ops`.
 4. **Interest-group overrides** (`common/interest_groups/00_*.txt`,
    regenerated): 8% of script time. Diff the hot lines against vanilla to see
-   whether the mod added cost.
+   whether the mod added cost. (Since 2026-10-10 the mod no longer copies
+   these files: `zz_te_ig_female_chance.txt` INJECTs only the three
+   `female_*_chance` fields, so the rest of that cost is vanilla's own.)
 5. **UN propose buttons.** Still 2.9%. Mandate and court-referral cases walk
    every state in the world. The exact pre-gates (`number_of_claims`,
    `has_claim`) are unproven, so the only clear option is a monthly cache,

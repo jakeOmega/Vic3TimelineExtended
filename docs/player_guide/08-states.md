@@ -5,9 +5,10 @@ develop. Crowded states draw fewer migrants, homelands follow the cultures that
 actually live in a region, a state's tourism depends on what it offers visitors,
 a government can move settlers onto an empty frontier, and a yearly census counts
 your people by age and sex. The state panel gains tiles that show most of these.
-Everything in this chapter is always on except internal resettlement and the
-census, which the Internal Resettlement and Demographics game rules control (see
-the [Introduction](01-introduction.md)).
+Everything in this chapter is always on except internal resettlement, which the
+Internal Resettlement game rule controls (see the
+[Introduction](01-introduction.md)), and the census, which is experimental and
+not yet in released versions (see [Demographics](#demographics)).
 
 ## State panel additions
 
@@ -230,26 +231,33 @@ uses the ranking.
 
 ## Demographics
 
-Every state keeps a census of its people by single year of age and by sex. It is
-taken when the game starts and again once a year, and it opens a Demographics tab
-in the Population panel, beside the base game's four, and a Demographics subtab
-on the state panel's Population section. In a new game the tab is open from the
-first day; on a save from before the census it stays gray until the census at
-the turn of the year.
+The census is experimental, and released versions of the mod leave it out. A
+development build offers it as the Demographics (Experimental) game rule, off by
+default: set it to Full or Display only when you start a new game. A save from
+an earlier version keeps it off. The rest of this section describes the census
+with the rule on.
 
-Under the Demographics game rule's default setting, Full, the census sets each
+With it on, every state keeps a census of its people by single year of age and
+by sex. It is taken when the game starts and again once a year, and it opens a
+Demographics tab in the Population panel, beside the base game's four, and a
+Demographics subtab on the state panel's Population section. The tab is open
+from the first day.
+
+Under the Demographics (Experimental) rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
-of death, described below. The base game's other effects on births and deaths
-still apply on top: starvation, devastation, pollution, events, decrees, and the
-family-policy laws the census doesn't model yet. A state's birth rate and
-mortality tooltips show the census's part as Census: Births and Census: Deaths.
-The workforce still follows the base game's rules.
+of death, described below. While it does, it takes over what the health, child
+labor and women's rights laws, the family-planning and medical technologies and
+mild hunger do to births and deaths: their tooltips still list those lines, but
+the census's own terms carry them. The base game's other effects on births and
+deaths still apply on top: severe starvation, devastation, pollution, events,
+decrees, and the family-policy laws the census doesn't model yet. A state's birth
+rate and mortality tooltips show the census's part as Census: Births and Census:
+Deaths. The workforce still follows the base game's rules.
 
-Display only keeps the tabs but leaves births and deaths to the base game's
-curves, and Disabled also removes the census and both tabs. Under these two
-settings the health, child labor and women's rights laws no longer change
-births or deaths, because the census carries those effects. Wealth
-Concentration and its effects on each state (see
+Display only keeps the tabs and changes nothing: births, deaths and the workforce
+follow the base game's rules, and the tab reports what they produce. Disabled,
+the default, also removes the census and both tabs. Wealth Concentration and its
+effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
 ### What the tab shows

@@ -4115,6 +4115,10 @@
   "en": "Eugenics Programs",
   "de": "Eugenik-Programme"
  },
+ "pm_expeditionary_logistics": {
+  "en": "Expeditionary Logistics",
+  "de": "Expeditionslogistik"
+ },
  "pm_extreme_bandwidth": {
   "en": "Extreme Bandwidth",
   "de": "Extreme Bandbreite"
@@ -4482,6 +4486,10 @@
  "pm_global_ports": {
   "en": "Global Ports",
   "de": "Globale Häfen"
+ },
+ "pm_gm_name_carrier_anchor": {
+  "en": "Monument Name Placeholder",
+  "de": "Platzhalter für Monumentnamen"
  },
  "pm_googleplex": {
   "en": "The Googleplex",
@@ -5483,6 +5491,10 @@
   "en": "Networked Small Arms",
   "de": "Vernetzte Handfeuerwaffen"
  },
+ "pm_neural_grafting": {
+  "en": "Neural Grafting",
+  "de": "Neuronale Transplantation"
+ },
  "pm_neural_lace_communications": {
   "en": "Neural Lace Communications",
   "de": "Neural-Lace-Kommunikation"
@@ -5895,6 +5907,10 @@
   "en": "OEWG Steyr Arms Works",
   "de": "OEWG-Waffenwerke Steyr"
  },
+ "pm_officer_academies": {
+  "en": "Officer Academies",
+  "de": "Offiziersakademien"
+ },
  "pm_offshore_rigs": {
   "en": "Offshore Rigs",
   "de": "Offshore-Bohrinseln"
@@ -6054,6 +6070,10 @@
  "pm_pirelli_bicocca_plant": {
   "en": "Pirelli Bicocca Plant",
   "de": "Pirelli-Werk Bicocca"
+ },
+ "pm_political_commissars": {
+  "en": "Political Commissars",
+  "de": "Politkommissare"
  },
  "pm_polyester": {
   "en": "Polyester Production",
@@ -6242,6 +6262,10 @@
  "pm_renault_billancourt_plant": {
   "en": "Renault Billancourt Plant",
   "de": "Renault-Werk Billancourt"
+ },
+ "pm_reserve_cadre": {
+  "en": "Reserve Cadre",
+  "de": "Reservekader"
  },
  "pm_resettlement_airlift": {
   "en": "Airlift",
@@ -8274,6 +8298,10 @@
  "pmg_glassworks_fume_ventilation": {
   "en": "Fume Ventilation",
   "de": "Rauchgasabsaugung"
+ },
+ "pmg_gm_name_carrier_anchor": {
+  "en": "Monument Name Placeholder",
+  "de": "Platzhalter für Monumentnamen"
  },
  "pmg_googleplex": {
   "en": "The Googleplex",

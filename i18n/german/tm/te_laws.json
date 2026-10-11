@@ -320,8 +320,8 @@
   "de": "Humanitäre Vorschriften"
  },
  "law_humanitarian_regulations_desc": {
-  "en": "Comprehensive protections for civilians, POWs, and wounded/sick soldiers. Emphasizes humane treatment and respect for human rights during armed conflicts.",
-  "de": "Umfassender Schutz für Zivilisten, Kriegsgefangene sowie verwundete und kranke Soldaten. Betont die menschliche Behandlung und die Achtung der Menschenrechte während bewaffneter Konflikte."
+  "en": "Comprehensive protections for civilians, prisoners of war and the wounded and sick of both sides. A nation that keeps them is trusted to keep its other promises, and more of its own wounded come home. Strategic nuclear strikes are forbidden unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
+  "de": "Umfassender Schutz für Zivilisten, Kriegsgefangene sowie die Verwundeten und Kranken beider Seiten. Einer Nation, die ihn einhält, traut man zu, auch ihre anderen Versprechen zu halten, und mehr ihrer eigenen Verwundeten kehren heim. Strategische Nuklearschläge sind verboten, es sei denn, wir oder ein Land, das wir schützen, wurden getroffen, oder uns droht in einem Krieg, den wir führen, die Annexion oder Unterwerfung."
  },
  "law_informal_government_secrecy": {
   "en": "Informal Government Secrecy",
@@ -867,6 +867,14 @@
   "en": "The state contracts private firms to wage its wars. Operations abroad gain plausible deniability and the home front tolerates protracted conflicts, but contractors are expensive, line-combat performance suffers, and reliance on mercenaries draws international suspicion.",
   "de": "Der Staat beauftragt private Firmen mit der Kriegsführung. Operationen im Ausland gewinnen glaubhafte Abstreitbarkeit, und die Heimatfront toleriert langwierige Konflikte, doch Vertragsfirmen sind teuer, die reguläre Kampfkraft leidet, und die Abhängigkeit von Söldnern weckt internationales Misstrauen."
  },
+ "law_private_policing": {
+  "en": "Private Policing",
+  "de": "Privatpolizei"
+ },
+ "law_private_policing_desc": {
+  "en": "Licensed private firms carry out most ordinary police work, hired and directed by property owners, businesses and residents' associations, while a smaller public force backs them up. Wealthy districts are well guarded and poor ones are left to fend for themselves.",
+  "de": "Lizenzierte Privatfirmen erledigen den Großteil der gewöhnlichen Polizeiarbeit, beauftragt und angeleitet von Grundbesitzern, Unternehmen und Anwohnervereinigungen, während eine kleinere staatliche Truppe sie unterstützt. Wohlhabende Viertel sind gut bewacht, arme sind auf sich allein gestellt."
+ },
  "law_pro_capital_ministry_of_labor": {
   "en": "Pro-Capital Ministry of Labor Established",
   "de": "Kapitalfreundliches Arbeitsministerium eingerichtet"
@@ -1040,8 +1048,8 @@
   "de": "Totaler Krieg"
  },
  "law_total_war_desc": {
-  "en": "No restrictions on warfare, with all available resources and population mobilized. Civilians and civilian [concept_infrastructure] are considered legitimate targets.",
-  "de": "Keine Beschränkungen der Kriegsführung; alle verfügbaren Ressourcen und die gesamte Bevölkerung werden mobilisiert. Zivilisten und zivile [concept_infrastructure] gelten als legitime Ziele."
+  "en": "No restrictions on warfare. The whole population and economy are mobilized, and enemy civilians and civilian [concept_infrastructure] are legitimate targets. Our armies hit harder and lay waste to what they occupy, and the home front shrugs off its losses, but the world sees a nation that answers to no rules.",
+  "de": "Keine Beschränkungen der Kriegsführung. Die gesamte Bevölkerung und Wirtschaft werden mobilisiert, und feindliche Zivilisten und zivile [concept_infrastructure] sind legitime Ziele. Unsere Armeen schlagen härter zu und verwüsten, was sie besetzen, und die Heimatfront steckt ihre Verluste weg, doch die Welt sieht eine Nation, die sich keinen Regeln beugt."
  },
  "law_traditional_family_structure": {
   "en": "Traditional Family Structure",
@@ -1072,8 +1080,8 @@
   "de": "Traditionelle Kriegsregeln"
  },
  "law_traditional_rules_of_war_desc": {
-  "en": "Warfare is conducted according to customary [concept_rules_of_war_system] and [Concept('concept_power_bloc_principle', 'principles')], such as chivalry and just war theory. Limited protections for civilians and wounded soldiers.",
-  "de": "Die Kriegsführung folgt gewohnheitsrechtlichen [concept_rules_of_war_system] und [Concept('concept_power_bloc_principle', 'Prinzipien')] wie Rittertugend und der Lehre vom gerechten Krieg. Begrenzter Schutz für Zivilisten und verwundete Soldaten."
+  "en": "War is the business of armies and is fought by custom: chivalry, just war theory and the soldier's code of honor. Nothing is forbidden and nothing is promised to other nations, and an officer corps raised on the code holds steady under fire and learns fast.",
+  "de": "Krieg ist das Geschäft der Armeen und wird nach Brauch geführt: Rittertugend, die Lehre vom gerechten Krieg und der Ehrenkodex des Soldaten. Nichts ist verboten, und anderen Nationen wird nichts versprochen, und ein am Kodex erzogenes Offizierskorps hält unter Feuer die Stellung und lernt schnell."
  },
  "law_trust_busting": {
   "en": "Antitrust Enforcement",
@@ -1160,8 +1168,8 @@
   "de": "Kriegsverbrechen verboten"
  },
  "law_war_crimes_forbidden_desc": {
-  "en": "Codification of laws and customs of war, including treatment of POWs and prohibition of certain weapons. Establishes the concept of war crimes and individual responsibility for violations.",
-  "de": "Kodifizierung der Gesetze und Gebräuche des Krieges, einschließlich der Behandlung von Kriegsgefangenen und des Verbots bestimmter Waffen. Begründet das Konzept der Kriegsverbrechen und der individuellen Verantwortung für Verstöße."
+  "en": "The laws and customs of war are codified, from the treatment of prisoners to the conduct of a military occupation, and their violation becomes a war crime with individual responsibility. Territory taken under these rules is held with less damage and less bitterness.",
+  "de": "Die Gesetze und Gebräuche des Krieges sind kodifiziert, von der Behandlung von Gefangenen bis zur Führung einer militärischen Besetzung, und ihre Verletzung wird zum Kriegsverbrechen mit individueller Verantwortung. Gebiete, die unter diesen Regeln genommen werden, lassen sich mit weniger Schaden und weniger Bitterkeit halten."
  },
  "lawgroup_LGBTQ_rights": {
   "en": "LGBTQ+ Rights",
@@ -1232,8 +1240,8 @@
   "de": "Erbrecht"
  },
  "lawgroup_inheritance_desc": {
-  "en": "Who inherits an estate. The law in force, with its amendments, sets the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
-  "de": "Wer einen Nachlass erbt. Das geltende Gesetz bestimmt mit seinen Nachträgen das Ziel, dem sich die [concept_inheritance_concentration] nähert: derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, auf dem Weg zu #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
+  "en": "Who inherits an estate. The law in force and its amendments move the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
+  "de": "Wer einen Nachlass erbt. Das geltende Gesetz und seine Nachträge verschieben das Ziel, dem sich die [concept_inheritance_concentration] nähert: derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, auf dem Weg zu #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
  },
  "lawgroup_intellectual_property": {
   "en": "Intellectual Property",

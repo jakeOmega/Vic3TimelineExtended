@@ -3,15 +3,22 @@
 # (docs/superpowers/specs/2026-10-08-demographics-design.md; plan Task 5)
 # ============================================================================
 
-# The cohort model, the panel and the history run unless the rule is Disabled.
+# The cohort model, the panel and the history run under Full and Display only.
+# Both gates name the settings that run, never NOT = { ... demographics_disabled }:
+# a save from before the rule existed has no value stored for it, and a negated
+# check would read that as on and start the census in a running campaign (the
+# tax code's rule, te_tax_triggers.txt, for the same reason). The only reads of
+# the rule; everything else calls these two.
 te_demog_cohorts_run = {
-	NOT = { has_game_rule = demographics_disabled }
+	OR = {
+		has_game_rule = demographics_full
+		has_game_rule = demographics_display_only
+	}
 }
 
 # The model's effects (phase 2) apply only under Full.
 te_demog_effects_run = {
-	te_demog_cohorts_run = yes
-	NOT = { has_game_rule = demographics_display_only }
+	has_game_rule = demographics_full
 }
 
 # Any scope: fast mode's census clock runs (te_debug_demog.1 options h-k, console only).

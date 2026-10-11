@@ -7,6 +7,14 @@
   "en": "Arms Race Pressure",
   "de": "Druck durch Wettrüsten"
  },
+ "notification_banking_eliq_wound_down_notice_desc": {
+  "en": "The banking cycle has held at Stable or above for 12 months, and the banks no longer borrow from the lender of last resort. The Emergency Liquidity Program has closed, and 1% of GDP has come back to the treasury. If another crisis comes, it can be opened again, and its announcement will steady the market once more.",
+  "de": "Der Bankenzyklus liegt seit 12 Monaten auf „Stabil“ oder besser, und die Banken leihen sich nichts mehr beim Kreditgeber letzter Instanz. Das Notliquiditätsprogramm ist beendet, und 1% des BIP sind in die Staatskasse zurückgeflossen. Sollte eine weitere Krise kommen, kann es erneut eröffnet werden, und seine Ankündigung wird den Markt wieder beruhigen."
+ },
+ "notification_banking_eliq_wound_down_notice_name": {
+  "en": "Emergency Liquidity Wound Down",
+  "de": "Notliquidität abgewickelt"
+ },
  "notification_colonial_ceasefire_granted_notice_desc": {
   "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
   "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat mit unserer Unabhängigkeitsbewegung einen Waffenstillstand vereinbart und uns die Unabhängigkeit gewährt. Wir sind frei."
@@ -150,6 +158,30 @@
  "notification_former_colony_ties_welcomed_notice_name": {
   "en": "Closer Ties Welcomed",
   "de": "Engere Beziehungen begrüßt"
+ },
+ "notification_gm_com_fulfilled_notice_desc": {
+  "en": "The monument we were asked for is raised. The group that asked for it is pleased, and the promise kept lends us standing.",
+  "de": "Das Monument, das von uns verlangt wurde, ist errichtet. Die Gruppe, die es verlangt hatte, ist zufrieden, und das gehaltene Versprechen verleiht uns Ansehen."
+ },
+ "notification_gm_com_fulfilled_notice_name": {
+  "en": "A Commission Met",
+  "de": "Auftrag erfüllt"
+ },
+ "notification_gm_com_lapsed_notice_desc": {
+  "en": "The monument we were asked for can no longer be raised as asked. No one blames us for it.",
+  "de": "Das Monument, das von uns verlangt wurde, kann nicht mehr wie verlangt errichtet werden. Niemand macht uns dafür einen Vorwurf."
+ },
+ "notification_gm_com_lapsed_notice_name": {
+  "en": "A Commission Lapses",
+  "de": "Auftrag verfallen"
+ },
+ "notification_gm_com_missed_notice_desc": {
+  "en": "The time we were given for the monument has run out. The group that asked for it resents it.",
+  "de": "Die uns für das Monument gewährte Frist ist abgelaufen. Die Gruppe, die es verlangt hatte, nimmt uns das übel."
+ },
+ "notification_gm_com_missed_notice_name": {
+  "en": "A Commission Missed",
+  "de": "Auftrag versäumt"
  },
  "notification_gm_vanity_backlash_notice_desc": {
   "en": "A new level of a Grand Monument opened while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
@@ -1615,6 +1647,22 @@
   "en": "Foreign Assets Nationalized",
   "de": "Ausländische Vermögenswerte verstaatlicht"
  },
+ "notification_nd_crisis_ultimatum_issued_desc": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has issued [SCOPE.sCountry('nd_target').GetName] a public nuclear ultimatum. It will reach them within two or three weeks, and the deadline runs from then. A $nuclear_guarantee$ for [SCOPE.sCountry('nd_target').GetNameNoFlag] from an armed country lowers the pressure on it to concede.",
+  "de": "[SCOPE.sCountry('nd_issuer').GetAltName('NOM')|U] hat [SCOPE.sCountry('nd_target').GetAltName('DAT')] ein öffentliches nukleares Ultimatum gestellt. Es wird dort innerhalb von zwei bis drei Wochen eintreffen, und die Frist läuft ab diesem Zeitpunkt. Eine $nuclear_guarantee$ für [SCOPE.sCountry('nd_target').GetAltNameNoFlag('AKK')] von einem nuklear bewaffneten Land senkt den Druck, nachzugeben."
+ },
+ "notification_nd_crisis_ultimatum_issued_name": {
+  "en": "A Nuclear Ultimatum",
+  "de": "Ein nukleares Ultimatum"
+ },
+ "notification_nd_crisis_warning_reported_desc": {
+  "en": "Our intelligence services report that [SCOPE.sCountry('nd_issuer').GetName] has sent [SCOPE.sCountry('nd_target').GetName] a private nuclear warning. It will reach them within two or three weeks. A $nuclear_guarantee$ for [SCOPE.sCountry('nd_target').GetNameNoFlag] from an armed country lowers the pressure on it to concede.",
+  "de": "Unsere Nachrichtendienste melden, dass [SCOPE.sCountry('nd_issuer').GetAltName('NOM')] [SCOPE.sCountry('nd_target').GetAltName('DAT')] eine private nukleare Warnung übermittelt hat. Sie wird dort innerhalb von zwei bis drei Wochen eintreffen. Eine $nuclear_guarantee$ für [SCOPE.sCountry('nd_target').GetAltNameNoFlag('AKK')] von einem nuklear bewaffneten Land senkt den Druck, nachzugeben."
+ },
+ "notification_nd_crisis_warning_reported_name": {
+  "en": "A Nuclear Warning, Reported",
+  "de": "Nukleare Warnung gemeldet"
+ },
  "notification_nd_doctrine_bound_by_law_desc": {
   "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
   "de": "Der #bold Verzicht auf den Ersteinsatz#!-[concept_amendment] ist in Kraft und bindet unsere nukleare Doktrin: Wir sind nun auf #v Kein Erstschlag#! festgelegt. Diese Änderung ging vom Gesetz aus, nicht von unserer Regierung, daher läuft die Wartezeit, bevor wir erneut eine Doktrin wählen dürfen, seit unserer eigenen letzten Wahl. Die Aufgabe von Kein Erstschlag widerruft die Erklärung und streicht den Nachtrag aus unseren Gesetzen."
@@ -1622,6 +1670,14 @@
  "notification_nd_doctrine_bound_by_law_name": {
   "en": "Doctrine Bound by Law",
   "de": "Doktrin gesetzlich gebunden"
+ },
+ "notification_nd_exchange_war_failed_desc": {
+  "en": "Two weeks after a government refused to stand down from the nuclear exchange, the war it asked for has still not begun. The exchange is over: neither side may now answer it with nuclear weapons outside a war.",
+  "de": "Zwei Wochen nachdem eine Regierung sich geweigert hat, sich aus dem nuklearen Schlagabtausch zurückzuziehen, hat der von ihr verlangte Krieg noch immer nicht begonnen. Der Schlagabtausch ist vorbei: Keine Seite darf ihn nun außerhalb eines Krieges mit Nuklearwaffen beantworten."
+ },
+ "notification_nd_exchange_war_failed_name": {
+  "en": "No War After the Exchange",
+  "de": "Kein Krieg nach dem Schlagabtausch"
  },
  "notification_rt_coal_retired_notice_desc": {
   "en": "Our retirement programme has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid to its owners.",
@@ -1744,8 +1800,8 @@
   "de": "Die UN-Krise ist vorüber"
  },
  "notification_un_crisis_opened_notice_desc": {
-  "en": "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The journal entry shows the clock and who could save it.",
-  "de": "Die UN-Autorität ist unter 10 gefallen. Die Organisation befindet sich in der Krise, bis sie wieder über 20 steigt – und sollte die Welt sie ganz aufgeben, wird sie sich auflösen. Der Journaleintrag zeigt die Uhr und wer sie retten könnte."
+  "en": "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it.",
+  "de": "Die UN-Autorität ist unter 10 gefallen. Die Organisation befindet sich in der Krise, bis sie wieder über 20 steigt – und sollte die Welt sie ganz aufgeben, wird sie sich auflösen. Der Reiter „UN“ der Diplomatietafel zeigt die Uhr und wer sie retten könnte."
  },
  "notification_un_crisis_opened_notice_name": {
   "en": "The United Nations in Crisis",
@@ -1936,16 +1992,24 @@
   "de": "Unsere UN-Vertretung ist ausgesetzt"
  },
  "notification_un_tariff_retaliation_received_desc": {
-  "en": "A rival has imposed unilateral tariffs on our trade. Our merchants are scrambling to find alternative markets.",
-  "de": "Ein Rivale hat einseitige Zölle auf unseren Handel verhängt. Unsere Kaufleute suchen hastig nach alternativen Märkten."
+  "en": "The United Nations took up the [concept_embargo] between us and [SCOPE.sCountry('un_tariff_imposer').GetName] as a trade dispute and offered [SCOPE.sCountry('un_tariff_imposer').GetName] arbitration. It refused and has imposed unilateral tariffs on our goods instead. #bold $un_tariff_retaliation_modifier$#! lowers our [concept_trade_advantage] by #N 3%#! and slows the improvement of our relations by #N 5%#!, fading over #v 5 years#!, and our [concept_relations] with [SCOPE.sCountry('un_tariff_imposer').GetName] fall by #N 15#!.",
+  "de": "Die Vereinten Nationen nahmen das [concept_embargo] zwischen uns und [SCOPE.sCountry('un_tariff_imposer').GetAltName('DAT')] als Handelsstreit auf und boten [SCOPE.sCountry('un_tariff_imposer').GetAltName('DAT')] ein Schiedsverfahren an. Das Land lehnte ab und hat stattdessen einseitige Zölle auf unsere Waren verhängt. #bold $un_tariff_retaliation_modifier$#! senkt unseren [concept_trade_advantage] um #N 3%#! und verlangsamt die Verbesserung unserer Beziehungen um #N 5%#!, wobei dies über #v 5 Jahre#! abklingt, und unsere [concept_relations] mit [SCOPE.sCountry('un_tariff_imposer').GetAltName('DAT')] sinken um #N 15#!."
  },
  "notification_un_tariff_retaliation_received_name": {
-  "en": "Tariff Retaliation",
-  "de": "Zollvergeltung"
+  "en": "Tariffs Imposed on Us",
+  "de": "Zölle gegen uns verhängt"
+ },
+ "notification_un_trade_arbitration_received_desc": {
+  "en": "The United Nations took up the [concept_embargo] between us and [SCOPE.sCountry('un_trade_arbitration_requester').GetName] as a trade dispute and offered [SCOPE.sCountry('un_trade_arbitration_requester').GetName] arbitration, which it has accepted rather than escalate. Our [concept_relations] with [SCOPE.sCountry('un_trade_arbitration_requester').GetName] rise by #P 5#!.",
+  "de": "Die Vereinten Nationen nahmen das [concept_embargo] zwischen uns und [SCOPE.sCountry('un_trade_arbitration_requester').GetAltName('DAT')] als Handelsstreit auf und boten [SCOPE.sCountry('un_trade_arbitration_requester').GetAltName('DAT')] ein Schiedsverfahren an, das dieses Land angenommen hat, statt zu eskalieren. Unsere [concept_relations] mit [SCOPE.sCountry('un_trade_arbitration_requester').GetAltName('DAT')] steigen um #P 5#!."
+ },
+ "notification_un_trade_arbitration_received_name": {
+  "en": "Dispute Sent to Arbitration",
+  "de": "Streit ins Schiedsverfahren verwiesen"
  },
  "notification_un_trade_deal_received_desc": {
-  "en": "[SCOPE.sCountry('un_trade_concession_offerer').GetName] has offered us trade concessions to settle our trade dispute outside the UN framework, and our merchants are already profiting from them.",
-  "de": "[SCOPE.sCountry('un_trade_concession_offerer').GetAltName('NOM')|U] hat uns Handelszugeständnisse angeboten, um unseren Handelsstreit außerhalb des UN-Rahmens beizulegen, und unsere Kaufleute profitieren bereits davon."
+  "en": "The United Nations took up the [concept_embargo] between us and [SCOPE.sCountry('un_trade_concession_offerer').GetName] as a trade dispute, and [SCOPE.sCountry('un_trade_concession_offerer').GetName] has offered us trade concessions to settle it outside the United Nations. #bold $un_trade_deal_bilateral_modifier$#! raises our [concept_trade_advantage] by #P 2%#! and the impact of our [GetInstitutionType('institution_ministry_of_commerce').GetName] by #P 5%#!, fading over #v 5 years#!, and our [concept_relations] with [SCOPE.sCountry('un_trade_concession_offerer').GetName] rise by #P 15#!.",
+  "de": "Die Vereinten Nationen nahmen das [concept_embargo] zwischen uns und [SCOPE.sCountry('un_trade_concession_offerer').GetAltName('DAT')] als Handelsstreit auf, und [SCOPE.sCountry('un_trade_concession_offerer').GetAltName('NOM')] hat uns Handelszugeständnisse angeboten, um ihn außerhalb der Vereinten Nationen beizulegen. #bold $un_trade_deal_bilateral_modifier$#! steigert unseren [concept_trade_advantage] um #P 2%#! und die Wirkung von unserem [GetInstitutionType('institution_ministry_of_commerce').GetName] um #P 5%#!, wobei dies über #v 5 Jahre#! abklingt, und unsere [concept_relations] mit [SCOPE.sCountry('un_trade_concession_offerer').GetAltName('DAT')] steigen um #P 15#!."
  },
  "notification_un_trade_deal_received_name": {
   "en": "Trade Concessions Offered",

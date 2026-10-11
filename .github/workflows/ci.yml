@@ -97,9 +97,9 @@ jobs:
         # `**` has gitignore semantics — zero or more directories — so both
         # pathspecs stay recursive as the tree grows subdirectories.
         #
-        # The three exclusion pathspecs cover 10 files, each wholly rewritten by a
+        # The two exclusion pathspecs cover 2 files, each wholly rewritten by a
         # POST /reload generator that emits the unformatted text verbatim
-        # (apply_ideologies.py, ig_feminism.py, gen_law_consistency.py), so
+        # (apply_ideologies.py, gen_law_consistency.py), so
         # normalizing them would be undone by the next reload. See PR #272 for the
         # per-file rationale.
         run: |
@@ -107,7 +107,6 @@ jobs:
             ':(glob)common/**/*.txt' \
             ':(glob)events/**/*.txt' \
             ':!:common/ideologies/modified.txt' \
-            ':!:common/interest_groups/00_*.txt' \
             ':!:common/scripted_effects/extra_law_consistency_generated.txt')
           if [ "${#files[@]}" -eq 0 ]; then
             # Never pass an empty argv to the formatter: it would check nothing

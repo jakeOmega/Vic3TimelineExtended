@@ -1,4 +1,12 @@
 {
+ "country_academy_trained_battalions_add": {
+  "en": "Academy-Trained Battalions",
+  "de": "An Akademien ausgebildete Bataillone"
+ },
+ "country_academy_trained_battalions_add_desc": {
+  "en": "Battalions whose barracks train under $pm_officer_academies$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_officer_academies_standing$, which strengthens the $ig_armed_forces$.",
+  "de": "Bataillone, deren Kasernen unter $pm_officer_academies$ ausbilden. Eine unterbesetzte Kaserne zählt weniger. Jeden Monat skaliert ihr Anteil an Ihren regulären Bataillonen $te_officer_academies_standing$, was die $ig_armed_forces$ stärkt."
+ },
  "country_aggressor_diplomatic_play_escalation_weekly_add": {
   "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated",
   "de": "Wöchentliche Eskalation in von Ihnen eingeleiteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"
@@ -110,6 +118,14 @@
  "country_colonial_stability_drift_add_desc": {
   "en": "Per-month drift on the [concept_colonial_stability] bar contributed by laws and other persistent sources. Always-on (independent of policy buttons). Each contributing law shows its individual contribution in its own tooltip.",
   "de": "Monatliche Drift auf der Leiste für [concept_colonial_stability], die Gesetze und andere dauerhafte Quellen beisteuern. Dauerhaft wirksam (unabhängig von Politik-Schaltflächen). Jedes beitragende Gesetz zeigt seinen eigenen Beitrag im jeweiligen Tooltip."
+ },
+ "country_commissar_battalions_add": {
+  "en": "Battalions with Commissars",
+  "de": "Bataillone mit Kommissaren"
+ },
+ "country_commissar_battalions_add_desc": {
+  "en": "Battalions whose barracks train under $pm_political_commissars$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_political_commissars_indoctrination$, which draws pops to the interest groups in government.",
+  "de": "Bataillone, deren Kasernen unter $pm_political_commissars$ ausbilden. Eine unterbesetzte Kaserne zählt weniger. Jeden Monat skaliert ihr Anteil an Ihren regulären Bataillonen $te_political_commissars_indoctrination$, was Pops zu den Interessengruppen in der Regierung hinzieht."
  },
  "country_covert_defense_economic_add": {
   "en": "Economic Covert Defense",
@@ -1164,56 +1180,64 @@
   "de": "Unterwerfungsstärke (Kulturell)"
  },
  "country_subjugation_cultural_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading a Cultural bloc and you share at least one primary culture with the target.",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Kulturblock anführen und mit dem Ziel mindestens eine Hauptkultur teilen."
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Cultural bloc and you share at least one primary culture with the target.",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie einen Kulturblock anführen und mit dem Ziel mindestens eine Hauptkultur teilen."
  },
  "country_subjugation_ideological_strength_add": {
   "en": "Subjugation Strength (Ideological)",
   "de": "Unterwerfungsstärke (Ideologisch)"
  },
  "country_subjugation_ideological_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading an Ideological Union and the target shares your governance [concept_power_bloc_principle] (the same Power Structure law).",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Ideologieunion anführen und das Ziel Ihr [concept_power_bloc_principle] der Regierungsführung teilt (dasselbe Machtgefüge-Gesetz)."
+  "en": "Bonus to your [concept_subjugation_strength] when leading an Ideological Union and the target shares your governance [concept_power_bloc_principle] (the same Power Structure law).",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie eine Ideologieunion anführen und das Ziel Ihr [concept_power_bloc_principle] der Regierungsführung teilt (dasselbe Machtgefüge-Gesetz)."
  },
  "country_subjugation_military_strength_add": {
   "en": "Subjugation Strength (Military)",
   "de": "Unterwerfungsstärke (Militärisch)"
  },
  "country_subjugation_military_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading a Military Treaty Organization and your standing army is at least five times the target's.",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Militärvertragsorganisation anführen und Ihr stehendes Heer mindestens fünfmal so groß ist wie das des Ziels."
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Military Treaty Organization and your standing army is at least five times the target's.",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie eine Militärvertragsorganisation anführen und Ihr stehendes Heer mindestens fünfmal so groß ist wie das des Ziels."
  },
  "country_subjugation_religious_strength_add": {
   "en": "Subjugation Strength (Religious)",
   "de": "Unterwerfungsstärke (Religiös)"
  },
  "country_subjugation_religious_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading a Religious bloc and the target shares your [concept_state_religion].",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Religiösen Block anführen und das Ziel Ihre [concept_state_religion] teilt."
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Religious bloc and the target shares your [concept_state_religion].",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie einen Religiösen Block anführen und das Ziel Ihre [concept_state_religion] teilt."
  },
  "country_subjugation_sovereign_strength_add": {
   "en": "Subjugation Strength (Sovereign Empire)",
   "de": "Unterwerfungsstärke (Souveränes Großreich)"
  },
  "country_subjugation_sovereign_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading a Sovereign Empire bloc. Applies against any target regardless of religion, culture, government, or economic profile.",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie einen Block als Souveränes Großreich anführen. Gilt gegen jedes Ziel, unabhängig von Religion, Kultur, Regierungsform oder Wirtschaftsprofil."
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Sovereign Empire bloc. Applies against any target regardless of religion, culture, government, or economic profile.",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie einen Block als Souveränes Großreich anführen. Gilt gegen jedes Ziel, unabhängig von Religion, Kultur, Regierungsform oder Wirtschaftsprofil."
  },
  "country_subjugation_strength_add": {
   "en": "Subjugation Strength",
   "de": "Unterwerfungsstärke"
  },
  "country_subjugation_strength_add_desc": {
-  "en": "A flat bonus to your Subjugation Strength against any target. Subjugating a fellow [Concept('concept_power_bloc_member', 'bloc member')] requires a score of at least #V 1.0#! — the score's base is your [concept_prestige] divided by the target's, then divided by 20, so without bonuses you need a 20:1 prestige lead.",
-  "de": "Ein fester Bonus auf Ihre Unterwerfungsstärke gegen jedes Ziel. Die Unterwerfung eines anderen [Concept('concept_power_bloc_member', 'Blockmitglieds')] erfordert einen Wert von mindestens #V 1,0#! — die Basis des Werts ist Ihr [concept_prestige] geteilt durch das des Ziels, anschließend geteilt durch 20, sodass Sie ohne Boni einen Prestigevorsprung von 20:1 benötigen."
+  "en": "A flat bonus to your [concept_subjugation_strength] against any target.",
+  "de": "Ein fester Bonus auf Ihre [concept_subjugation_strength] gegen jedes Ziel."
  },
  "country_subjugation_trade_strength_add": {
   "en": "Subjugation Strength (Trade)",
   "de": "Unterwerfungsstärke (Handel)"
  },
  "country_subjugation_trade_strength_add_desc": {
-  "en": "Bonus to your Subjugation Strength when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5).",
-  "de": "Bonus auf Ihre Unterwerfungsstärke, wenn Sie eine Handelsliga anführen und die [concept_economic_dependence] des Ziels von Ihnen mindestens #b Abhängig#! ist (Stufe 3 von 5)."
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5).",
+  "de": "Bonus auf Ihre [concept_subjugation_strength], wenn Sie eine Handelsliga anführen und die [concept_economic_dependence] des Ziels von Ihnen mindestens #b Abhängig#! ist (Stufe 3 von 5)."
+ },
+ "country_te_pb_principle_slots_add": {
+  "en": "Extra [concept_power_bloc_principle] Slots",
+  "de": "Zusätzliche Plätze für [Concept('concept_power_bloc_principle', 'Prinzipien')]"
+ },
+ "country_te_pb_principle_slots_add_desc": {
+  "en": "Adds this many [concept_power_bloc_principle] slots to a [concept_power_bloc] this country leads, up to #v 8#! in all. The $rule_te_principle_slots_rule$ game rule's $setting_te_principle_slots_four$ setting turns these slots off.",
+  "de": "Fügt einem [concept_power_bloc], den dieses Land anführt, so viele Plätze für [Concept('concept_power_bloc_principle', 'Prinzipien')] hinzu, bis zu #v 8#! insgesamt. Die Einstellung $setting_te_principle_slots_four$ der Spielregel $rule_te_principle_slots_rule$ schaltet diese Plätze ab."
  },
  "country_un_authority_target_add": {
   "en": "UN Authority Target",
@@ -1222,6 +1246,22 @@
  "country_un_authority_target_add_desc": {
   "en": "Added to the target that [concept_un_authority] moves toward, multiplied by this country's weight in world affairs: its share of world [concept_prestige] against a typical [concept_great_power]'s (×1), up to ×5. A superpower counts several times over and a micro-state hardly at all. It counts in full, for or against, while this country is a UN member that is not undermining the organisation. Outside the UN, or while undermining it, only a negative total counts: good policies then offset this country's bad ones and add nothing more. Summed over every country and held to −25 to +25 from all sources together, as the Policy line of the target. A negative value pulls authority down.",
   "de": "Wird zu dem Ziel addiert, auf das sich die [concept_un_authority] zubewegt, multipliziert mit dem Gewicht dieses Landes in den Weltangelegenheiten: sein Anteil am weltweiten [concept_prestige] im Vergleich zu dem einer typischen [concept_great_power] (×1), bis zu ×5. Eine Supermacht zählt mehrfach, ein Kleinststaat kaum. Es zählt in vollem Umfang, dafür oder dagegen, solange dieses Land ein UN-Mitglied ist, das die Organisation nicht untergräbt. Außerhalb der UN oder solange es sie untergräbt, zählt nur eine negative Summe: Gute Politik gleicht dann die schlechte dieses Landes aus und bringt nichts weiter. Über alle Länder summiert und über alle Quellen zusammen auf −25 bis +25 begrenzt, als Zeile „Politik“ des Ziels. Ein negativer Wert zieht die Autorität nach unten."
+ },
+ "country_un_lobbying_fund_recipients_mult": {
+  "en": "UN Lobbying Effectiveness with Aid Recipients",
+  "de": "Wirksamkeit der UN-Lobbyarbeit bei Hilfsempfängern"
+ },
+ "country_un_lobbying_fund_recipients_mult_desc": {
+  "en": "As UN Lobbying Effectiveness, but only with the members the [concept_un_development_fund] pays a grant.",
+  "de": "Wie die Wirksamkeit der UN-Lobbyarbeit, aber nur bei den Mitgliedern, denen der [concept_un_development_fund] einen Zuschuss zahlt."
+ },
+ "country_un_lobbying_mult": {
+  "en": "UN Lobbying Effectiveness",
+  "de": "Wirksamkeit der UN-Lobbyarbeit"
+ },
+ "country_un_lobbying_mult_desc": {
+  "en": "How well this country lobbies the [concept_un_general_assembly]. Its campaigns move a member's vote this much faster and further, and a member weighing a vote commitment it asks for counts the same share in its favour: +20 for every 25%.",
+  "de": "Wie gut dieses Land bei der [concept_un_general_assembly] lobbyiert. Seine Kampagnen bewegen die Stimme eines Mitglieds um so viel schneller und weiter, und ein Mitglied, das eine von ihm erbetene Stimmzusage abwägt, rechnet denselben Anteil zu seinen Gunsten: +20 für je 25%."
  },
  "country_wage_pressure_add": {
   "en": "Wage Pressure on Prices",
@@ -1240,12 +1280,12 @@
   "de": "Eine direkte wöchentliche Änderung des [concept_investment_pool]s."
  },
  "country_weekly_investment_pool_mult": {
-  "en": "Weekly [concept_investment_pool]",
-  "de": "Wöchentlicher [concept_investment_pool]"
+  "en": "Weekly [concept_investment_pool] Income",
+  "de": "Wöchentliche Einnahmen des [concept_investment_pool]"
  },
  "country_weekly_investment_pool_mult_desc": {
-  "en": "A percentage change to the [concept_investment_pool] each week.",
-  "de": "Eine prozentuale Änderung des [concept_investment_pool]s jede Woche."
+  "en": "A share of the [concept_investment_pool]'s weekly income, added to the pool each week, or taken from it when negative.",
+  "de": "Ein Anteil an den wöchentlichen Einnahmen des [concept_investment_pool], der jede Woche dem Fonds hinzugefügt oder, wenn negativ, ihm entnommen wird."
  },
  "goods_input_advanced_materials_add": {
   "en": "@advanced_materials! $advanced_materials$ Input",
@@ -1883,6 +1923,30 @@
   "en": "A bonus or penalty to the amount of @wood! $wood$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @wood! $wood$ von Gebäuden produziert wird"
  },
+ "goods_trade_advantage_aeroplanes_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('aeroplanes').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('aeroplanes').GetName]"
+ },
+ "goods_trade_advantage_aeroplanes_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('aeroplanes').GetName].",
+  "de": "Eine Erhöhung oder Senkung des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('aeroplanes').GetName]."
+ },
+ "goods_trade_advantage_ammunition_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('ammunition').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('ammunition').GetName]"
+ },
+ "goods_trade_advantage_ammunition_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('ammunition').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('ammunition').GetName]."
+ },
+ "goods_trade_advantage_artillery_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('artillery').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('artillery').GetName]"
+ },
+ "goods_trade_advantage_artillery_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('artillery').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('artillery').GetName]."
+ },
  "goods_trade_advantage_digital_assets_mult": {
   "en": "[concept_trade_advantage] for [GetGoods('digital_assets').GetName]",
   "de": "[concept_trade_advantage] für [GetGoods('digital_assets').GetName]"
@@ -1899,6 +1963,38 @@
   "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('fine_art').GetName].",
   "de": "Erhöht oder verringert den gesamten [concept_trade_advantage] für [GetGoods('fine_art').GetName]."
  },
+ "goods_trade_advantage_ironclads_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('ironclads').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('ironclads').GetName]"
+ },
+ "goods_trade_advantage_ironclads_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('ironclads').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('ironclads').GetName]."
+ },
+ "goods_trade_advantage_manowars_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('manowars').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('manowars').GetName]"
+ },
+ "goods_trade_advantage_manowars_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('manowars').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('manowars').GetName]."
+ },
+ "goods_trade_advantage_small_arms_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('small_arms').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('small_arms').GetName]"
+ },
+ "goods_trade_advantage_small_arms_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('small_arms').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('small_arms').GetName]."
+ },
+ "goods_trade_advantage_tanks_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('tanks').GetName]",
+  "de": "[concept_trade_advantage] für [GetGoods('tanks').GetName]"
+ },
+ "goods_trade_advantage_tanks_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('tanks').GetName].",
+  "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('tanks').GetName]."
+ },
  "state_arable_land_mult": {
   "en": "Arable Land",
   "de": "Ackerland"
@@ -1912,8 +2008,8 @@
   "de": "CO2-Entnahme aus der Atmosphäre"
  },
  "state_atmospheric_carbon_capture_add_desc": {
-  "en": "Carbon taken out of the atmosphere at this location by removal-only methods. Subtracted from the market total after policy reductions.",
-  "de": "Kohlenstoff, der an diesem Standort durch reine Entnahmemethoden der Atmosphäre entzogen wird. Wird nach den Senkungen durch die Politik von der Marktsumme abgezogen."
+  "en": "Carbon taken out of the atmosphere at this location by removal-only methods, such as Direct Air Capture at Carbon Conversion Works. It is the Carbon Captured figure on the Climate tab of the Market panel, and is subtracted from the market total after policy reductions.",
+  "de": "Kohlenstoff, der an diesem Standort durch reine Entnahmemethoden der Atmosphäre entzogen wird, etwa durch Direktabscheidung aus der Luft in Kohlenstoffumwandlungswerken. Das ist der Wert „Abgeschiedener Kohlenstoff“ auf dem Reiter „Klima“ der Markttafel und wird nach den Senkungen durch die Politik von der Marktsumme abgezogen."
  },
  "state_building_afghan_nassaji_kabul_mills_max_level_add": {
   "en": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level",
@@ -4547,6 +4643,30 @@
   "en": "Increases the maximum number of levels that [GetBuildingType('building_zastava_kragujevac_arsenal').GetName] can expand to in this state",
   "de": "Erhöht die maximale Anzahl an Stufen, auf die [GetBuildingType('building_zastava_kragujevac_arsenal').GetName] in diesem Staat ausgebaut werden kann"
  },
+ "state_chronic_mortality_mult": {
+  "en": "Deaths from Chronic Disease",
+  "de": "Todesfälle durch chronische Krankheiten"
+ },
+ "state_chronic_mortality_mult_desc": {
+  "en": "Deaths from the diseases of age, which poverty in old age makes more common. Used by the census on the Demographics tab.",
+  "de": "Todesfälle durch Alterskrankheiten, die Armut im Alter noch häufiger macht. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
+ "state_chronic_treatment_add": {
+  "en": "Treatment of Chronic Disease",
+  "de": "Behandlung chronischer Krankheiten"
+ },
+ "state_chronic_treatment_add_desc": {
+  "en": "The share of deaths from the diseases of age that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
+  "de": "Der Anteil der Todesfälle durch Alterskrankheiten, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
+ "state_contraception_add": {
+  "en": "Contraception",
+  "de": "Verhütung"
+ },
+ "state_contraception_add_desc": {
+  "en": "The methods families have to space or limit births, beyond the traditional ones everyone has. How much of it people use depends on how many can read. Used by the census on the Demographics tab.",
+  "de": "Die Mittel, mit denen Familien Geburten zeitlich abstimmen oder begrenzen können, über die überlieferten hinaus, die jeder kennt. Wie viel davon genutzt wird, hängt davon ab, wie viele Menschen lesen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
  "state_custom_religion_animist_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_animist$",
   "de": "[concept_sol]-Modifikator für $custom_religion_animist$"
@@ -4602,6 +4722,22 @@
  "state_custom_religion_muslim_standard_of_living_add_desc": {
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
   "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
+ },
+ "state_external_mortality_mult": {
+  "en": "Deaths from Violence and Accidents",
+  "de": "Todesfälle durch Gewalt und Unfälle"
+ },
+ "state_external_mortality_mult_desc": {
+  "en": "Deaths from violence, traffic and everyday accidents, mostly of young men. Used by the census on the Demographics tab.",
+  "de": "Todesfälle durch Gewalt, Verkehrs- und Alltagsunfälle, meist junger Männer. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
+ "state_fertility_means_add": {
+  "en": "Fertility Control",
+  "de": "Geburtenkontrolle"
+ },
+ "state_fertility_means_add_desc": {
+  "en": "How much more of the gap between the children families want and the children they would have without trying they can close, whatever they can read: programs, clinics and custom. Used by the census on the Demographics tab.",
+  "de": "Wie viel mehr von der Lücke zwischen den Kindern, die Familien sich wünschen, und den Kindern, die sie ohne eigenes Zutun bekämen, geschlossen werden kann, unabhängig von der Lesefähigkeit: durch Programme, Kliniken und Brauchtum. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
  },
  "state_fortification_level_add_desc": {
   "en": "The [concept_fortification_level] of this state, determined by the [concept_fortification_system]. Higher values unlock stronger defensive [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
@@ -4687,6 +4823,14 @@
   "en": "An increase or decrease to the impact of [GetHarvestConditionType('torrential_rains').GetName].",
   "de": "Eine Erhöhung oder Verringerung der Auswirkung von [GetHarvestConditionType('torrential_rains').GetName]."
  },
+ "state_health_care_access_add": {
+  "en": "Health Care Access",
+  "de": "Zugang zur Gesundheitsversorgung"
+ },
+ "state_health_care_access_add_desc": {
+  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, and a health law adds more with each level of its institution. Used by the census on the Demographics tab.",
+  "de": "Wie viele Menschen einen Arzt, eine Krankenschwester oder ein Krankenhaus erreichen können. Medizin rettet nur so weit Leben, wie sie ankommt. Märkte und Wohltätigkeit schaffen überall etwas Zugang, und ein Gesundheitsgesetz fügt mit jeder Stufe seiner Institution mehr hinzu. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
  "state_homeland_change_speed_mult": {
   "en": "[concept_homeland] Change Speed",
   "de": "[concept_homeland]-Änderungsrate"
@@ -4719,6 +4863,14 @@
   "en": "The percentage of a state's population below which a non-primary culture's [concept_homeland] is removed. Higher values make it easier to lose homelands. Modified per-state by [Concept('concept_decree', 'decrees')] and buildings.",
   "de": "Der Bevölkerungsanteil, unter dem das [concept_homeland] einer nicht-primären Kultur entfernt wird. Höhere Werte erleichtern den Verlust von Heimatgebieten. Wird pro Staat durch [Concept('concept_decree', 'Erlasse')] und Gebäude verändert."
  },
+ "state_infection_treatment_add": {
+  "en": "Treatment of Infection",
+  "de": "Behandlung von Infektionen"
+ },
+ "state_infection_treatment_add_desc": {
+  "en": "The share of deaths from infection and hunger that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
+  "de": "Der Anteil der Todesfälle durch Infektionen und Hunger, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
  "state_infrastructure_from_aeroplanes_consumption_add": {
   "en": "[concept_infrastructure] from [concept_pop] [GetGoods('aeroplanes').GetName] Consumption",
   "de": "[concept_infrastructure] aus [concept_pop]-[GetGoods('aeroplanes').GetName]-Verbrauch"
@@ -4735,13 +4887,21 @@
   "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there",
   "de": "Die Menge an [concept_state]-[concept_infrastructure], die für jede von den dort lebenden [Concept('concept_pop', '$concept_pops$')] verbrauchte Einheit [GetGoods('transportation').GetName] hinzugefügt wird"
  },
+ "state_maternal_treatment_add": {
+  "en": "Treatment in Childbirth",
+  "de": "Behandlung bei der Geburt"
+ },
+ "state_maternal_treatment_add_desc": {
+  "en": "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
+  "de": "Der Anteil der Todesfälle von Müttern bei der Geburt, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+ },
  "state_migration_crowding_density_mult": {
   "en": "[concept_migration_crowding] Tolerance",
   "de": "[concept_migration_crowding]-Toleranz"
  },
  "state_migration_crowding_density_mult_desc": {
-  "en": "Increases the population density a state can sustain before [concept_migration_crowding] reduces [concept_migration_pull]. Improved by urban planning, [concept_infrastructure], and modern transportation.",
-  "de": "Erhöht die Bevölkerungsdichte, die ein Staat tragen kann, bevor [concept_migration_crowding] [concept_migration_pull] verringert. Wird durch Stadtplanung, [concept_infrastructure] und moderne Transportmittel verbessert."
+  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation.",
+  "de": "Multipliziert die Bevölkerung, die ein Staat aufnehmen kann, bevor [concept_migration_crowding] [concept_migration_pull] verringert: sowohl den Anteil, den sein [concept_arable_land] zulässt, als auch den Anteil, den seine [concept_urban_engineering] hinzufügt. Wird durch Stadtplanung, [concept_infrastructure] und moderne Transportmittel verbessert."
  },
  "state_min_cultural_acceptance_delta_add": {
   "en": "Minimum Local Acceptance",
@@ -4799,6 +4959,14 @@
   "en": "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$.",
   "de": "Eine Erhöhung oder Verringerung des Anteils der [Concept('concept_pop', 'Bevölkerungsgruppen')], die sich von $movement_transhumanist_name$ angezogen fühlen."
  },
+ "state_reserve_battalions_add": {
+  "en": "Reserve Battalions",
+  "de": "Reservebataillone"
+ },
+ "state_reserve_battalions_add_desc": {
+  "en": "[concept_reserve_battalions] trained in this state's barracks. An understaffed barracks counts for less. Each one adds the conscription rate and the [Concept('concept_conscription_center', 'conscription-center')] limit for one more conscript battalion, even past the limit set by your [GetLawGroup('lawgroup_army_model').GetName] law.",
+  "de": "In den Kasernen dieses Staates ausgebildete [concept_reserve_battalions]. Eine unterbesetzte Kaserne zählt weniger. Jedes Bataillon erhöht die Einberufungsrate und die Grenze des [Concept('concept_conscription_center', 'Einberufungszentrums')] um ein weiteres Einberufenen-Bataillon, selbst über die Grenze hinaus, die das eigene Gesetz aus „[GetLawGroup('lawgroup_army_model').GetName]“ setzt."
+ },
  "state_resettlement_recruits_add": {
   "en": "Recruited for resettlement last month",
   "de": "Im letzten Monat für die Umsiedlung angeworben"
@@ -4822,6 +4990,14 @@
  "state_war_support_monthly_add_desc": {
   "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive$')] share of the national population. Displayed in event tooltips as 'From Events'.",
   "de": "Zusätzliche [concept_war_support], die jeden Monat gewonnen wird, skaliert nach dem Anteil [Concept('concept_state','$concept_state_possessive$')] an der nationalen Bevölkerung. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
+ },
+ "state_work_mortality_mult": {
+  "en": "Deaths at Work",
+  "de": "Todesfälle bei der Arbeit"
+ },
+ "state_work_mortality_mult_desc": {
+  "en": "Deaths in mines, mills and workshops, shared between women and men by their part of the workforce. Used by the census on the Demographics tab.",
+  "de": "Todesfälle in Minen, Mühlen und Werkstätten, nach ihrem jeweiligen Anteil an den Beschäftigten auf Frauen und Männer verteilt. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
  },
  "state_yearly_cultural_acceptance_add": {
   "en": "Annual Cultural Acceptance",

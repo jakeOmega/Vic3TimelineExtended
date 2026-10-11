@@ -55,22 +55,29 @@ def _block(text, name):
 
 
 class TestRule(unittest.TestCase):
-    def test_three_settings_default_full(self):
+    def test_three_settings_default_disabled(self):
+        # Off by default until the census is ready to ship (owner, 2026-10-10)
         body = _block(_text(RULES), "demographics_rule")
-        self.assertIn("default = demographics_full", body)
+        self.assertIn("default = demographics_disabled", body)
         for setting in ("demographics_full", "demographics_display_only", "demographics_disabled"):
             self.assertIn(f"{setting} = {{", body)
 
-    def test_wrappers_test_negatively(self):
+    def test_wrappers_test_positively(self):
+        # Positive on purpose, as the tax code's: a save from before the rule existed has
+        # no value for it, and NOT = { has_game_rule = demographics_disabled } would start
+        # the census in a running campaign.
         text = _text(TRIGGERS)
-        self.assertIn("NOT = { has_game_rule = demographics_disabled }", _block(text, "te_demog_cohorts_run"))
+        cohorts = _block(text, "te_demog_cohorts_run")
+        self.assertRegex(cohorts, r"OR = \{\s*has_game_rule = demographics_full\s*has_game_rule = demographics_display_only\s*\}")
         effects = _block(text, "te_demog_effects_run")
-        self.assertIn("te_demog_cohorts_run = yes", effects)
-        self.assertIn("NOT = { has_game_rule = demographics_display_only }", effects)
+        self.assertRegex(effects, r"^\s*has_game_rule = demographics_full\s*$")
 
-    def test_nothing_tests_full(self):
+    def test_only_the_wrappers_read_the_rule(self):
         for path in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]:
-            self.assertNotIn("has_game_rule = demographics_full", _text(path), str(path))
+            if path == TRIGGERS:
+                continue
+            self.assertNotRegex(_text(path), r"has_game_rule = demographics_", str(path))
+        self.assertNotRegex(_text(TRIGGERS), r"NOT = \{ has_game_rule = demographics_")
 
 
 class TestDivisions(unittest.TestCase):
