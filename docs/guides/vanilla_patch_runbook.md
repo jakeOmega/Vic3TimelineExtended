@@ -268,6 +268,8 @@ grep -n 'STARVATION' "$BG/common/defines/00_defines.txt"
 
 **Power bloc principle slots copy two vanilla texts whole.** `common/scripted_rules/00_scripted_rules.txt` is a full copy of vanilla's file (`scripted_rules` is not an `INJECT`/`REPLACE` type), with slot rules 3 and 4 rewritten and marked `# TE:`; `REPLACE:principle_freedom_of_movement_1` in `extra_power_bloc_principles.txt` is vanilla's principle plus one line. When a patch touches either (`git diff vanilla_parsed/common/principles.json`, the digest's file list for `00_scripted_rules.txt`), re-copy it and re-apply the mod's lines, then re-run `gen_pb_principle_slots.py`. A new vanilla principle needs nothing by hand: the generator gives it the limit, and `test_pb_principle_slots.py` fails until it has.
 
+**Power bloc names: the AI's catch-alls are a fixed list.** The AI names a bloc at random from every name whose trigger passes, so `extra_power_bloc_names.txt` re-declares vanilla's names that pass for any country (`always = yes`, or only an identity exclusion) as `REPLACE:` with `is_ai = no`. A name vanilla adds with such a trigger lands back in every AI pool. When a patch touches `common/power_bloc_names/00_power_bloc_names.txt`, look for new near-unconditional entries, add each to that block, and add it to `CATCH_ALLS` in `test_power_bloc_names.py`.
+
 ## 7. Special-case: combat units / ship types
 
 Patches sometimes add new entity TYPES (1.13 added `ship_types/`, replacing the old `combat_unit_types` naval section). The migration is not a rename — it's a system replacement. Strip the old entries first to make the mod load, then port the entries to the new framework as a follow-up.
