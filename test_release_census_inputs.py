@@ -61,6 +61,26 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             for n, line in enumerate(path.read_text(encoding="utf-8-sig").split("\n"), 1):
                 self.assertNotRegex(_code(line), carrier, f"{path.relative_to(self.root)}:{n}")
 
+    def test_the_moved_engine_lines_ship(self):
+        """Owner, 2026-10-11 (the engine-lines plan, Task 7): a release has no Demographics rule, so the laws',
+        technologies' and institutions' birth and mortality lines reach the states through the moved lines' pairs.
+        The script leaves their types, the vanilla laws' INJECTs, the pairs, their refresh and its hooks alone, and
+        every carrier's moved line stays live."""
+        for rel in ("common/modifier_type_definitions/demographics_engine_line_types.txt",
+                    "common/laws/te_demog_engine_line_injections.txt",
+                    "common/static_modifiers/te_demog_line_modifiers_generated.txt",
+                    "common/script_values/te_demog_line_values_generated.txt",
+                    "common/scripted_effects/te_demog_line_effects_generated.txt",
+                    "common/on_actions/te_demog_on_actions.txt"):
+            self.assertNotIn(self.root / rel, self.changed, rel)
+        for path in self.changed:
+            for line in path.read_text(encoding="utf-8-sig").split("\n"):
+                self.assertFalse(line.startswith(TAG) and "state_demog_" in line, f"{path}: {line}")
+        # the switch: no rule, so te_demog_effects_run reads always = no and te_demog_lines_apply holds everywhere
+        triggers = self._text("common/scripted_triggers/te_demog_triggers.txt")
+        self.assertIn("te_demog_lines_apply = {", triggers)
+        self.assertNotIn(TAG + "te_demog_lines_apply", triggers)
+
     def test_it_found_the_carriers(self):
         # the nine types sit on 30 lines today; #869 adds more, never fewer
         tagged = sum(
