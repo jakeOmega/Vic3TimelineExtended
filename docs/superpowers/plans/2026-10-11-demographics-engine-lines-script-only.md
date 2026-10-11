@@ -49,9 +49,18 @@ the generator `scripts/generators/gen_demographics.py`, unittest with the repo's
   carries this effect in its own rates" (absorbed) or "...applies it at the census's rate" (on top). The re-applied pair
   is named "Laws and Institutions" in a state's breakdown. The census's own pair stays "Census: Births" / "Census:
   Deaths".
-- **Timing.** The monthly state pulse re-applies a pair only when its sum changed, so a new law, technology or
-  institution level reaches the states within a month. On a new game the first pulse comes a month in. A loaded old
-  save gets the INJECT cancels at once and the pairs at its first monthly pulse.
+- **Timing (owner, 2026-10-11: refresh where the game says something changed).** `te_demog_lines_refresh` runs where
+  the inputs change:
+  - **on a new game**, after the lobby, in every state;
+  - **on a law's activation** (`on_law_activated`, which fires for enactments and for laws script sets), in each of the
+    country's states;
+  - **on a change of owner** (`on_state_owner_change`) and **on incorporation** (`on_state_incorporation`), in that state;
+  - **every month** (`on_monthly_pulse_state`), the fallback for technologies and institution levels, which have no
+    on-action, and for old saves.
+
+  A pair is touched only when its sum changed. The country-scope hooks fire the hidden state event `te_demog_events.4`
+  in each state, so ROOT is the state, as the multiplier needs. A loaded old save gets the INJECT cancels at once and
+  the pairs at its first monthly pulse.
 - **The switch to the census.** The pulse applies the pairs unless the census is setting the state's rates
   (`te_demog_effects_run` and the state has `te_dg_mb`). The census's refresh clears them in the same effect that first
   sets M. So under Full a state keeps vanilla's lines until its first census step, the step reads them in the walk as it
@@ -64,18 +73,20 @@ the generator `scripts/generators/gen_demographics.py`, unittest with the repo's
   `state_mortality_wealth_mult` = the line × the census's share of the bare curve (`te_dg_tb_d`), floored at
   `P.WEALTH_LINE_FLOOR` (−0.005: the richest pop, wealth 99, then dies at no less than half the census's rate).
 
-## Owner decisions needed
+## Owner decisions (2026-10-11)
 
-1. **Private Health Insurance's wealth line under Full.** The plan builds (b), the recommendation; (a) and (c) change
-   one constant or one branch of Task 6.
+1. **Private Health Insurance's wealth line under Full: (b)** (owner: "Sounds good"). The alternatives, for the record:
    - (a) At the census's rate, no floor. A wealth-99 pop at Ministry of Health level 5 then dies at about 1% of the
      census's rate (the owner's worry, 2026-10-10).
    - (b) At the census's rate, floored at −0.005 a wealth level. No pop dies at less than half the census's rate;
      levels above about 2.5 add nothing for the very richest.
    - (c) Not applied: the census's health-care access (+0.06 a level for Private Health Insurance) carries the law, and
      wealth inequality in mortality comes only from the bare curve.
-2. **The month's lag** after a law, technology or institution change, and on a new game's first month. Accept it, or
-   add a refresh on law enactment as a follow-up.
+2. **No month's lag** on a new game or after a law change or a change of owner (owner: "I'd prefer this... we do
+   something similar on law changes for law inconsistency"). The refresh hooks are in Design, "Timing", and Task 4.
+   Technologies and institution levels have no on-action, so they keep the monthly pulse.
+3. **Execution:** native, with a fresh review of Tasks 4 and 5 (the risky script) and a fresh whole-branch review at the
+   end (owner: "Sounds good!").
 
 ## Global Constraints
 
@@ -96,9 +107,8 @@ the generator `scripts/generators/gen_demographics.py`, unittest with the repo's
    never neither for more than a month (Task 4 `test_pairs_follow_the_census_term`).
 2. **An unincorporated state.** Institution lines read 0 there, so its pairs carry only law and technology lines, as
    vanilla does (Task 4 `test_unincorporated_state_gets_no_institution_lines`).
-3. **A state that changes owner.** The pairs follow the new owner's laws at the next monthly pulse. Vanilla switches at
-   once, so up to a month of the old owner's lines is the accepted lag (owner decision 2). No test; listed for the
-   in-game check.
+3. **A state that changes owner, or a country that changes a law.** The pairs follow at once, as vanilla's lines would
+   (Task 4 `test_refresh_runs_where_the_inputs_change`).
 4. **A vanilla patch adds a birth or mortality line to a law or technology.** CI fails until it is moved (Task 2
    `test_no_carrier_applies_an_engine_birth_or_mortality_line`, run against the rebuilt `vanilla_parsed/`).
 5. **Fast mode on the first Full step.** The walk's average multiplier still holds the pairs the refresh is clearing, so
@@ -549,6 +559,7 @@ INJECT:law_womens_suffrage = {
   `common/script_values/te_demog_line_values_generated.txt`, `common/scripted_effects/te_demog_line_effects_generated.txt`
 - Modify: `common/scripted_triggers/te_demog_triggers.txt` (`te_demog_lines_apply`)
 - Modify: `common/on_actions/te_demog_on_actions.txt`
+- Modify: `events/te_demog_events.txt` (`te_demog_events.4`)
 - Modify: `localization/english/te_modifiers_l_english.yml` (the pairs' names)
 - Modify: `docs/auto_generated_files.md` (three rows)
 - Test: `test_demographics_registry.py` (new `class TestLinesScript`)
@@ -611,11 +622,22 @@ class TestLinesScript(unittest.TestCase):
         eng.call("te_demog_lines_refresh")
         self.assertEqual({k for k in eng.modifiers if k.startswith("te_demog_line_")}, {"te_demog_line_births_up"})
 
-    def test_monthly_state_pulse_is_the_one_refresh_site(self):
+    def test_refresh_runs_where_the_inputs_change(self):
+        """Owner, 2026-10-11: the pairs follow a new game, a law, a change of owner and incorporation at once, with the
+        monthly pulse as the fallback. Every caller has ROOT = the state: the state on-actions call it directly, the
+        country and global ones through the hidden state event te_demog_events.4."""
         on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
-        self.assertRegex(on_actions, r"on_monthly_pulse_state = \{\s*on_actions = \{\s*te_demog_lines_on_action")
-        callers = [p for p in ROOT.glob("common/**/*.txt") if "te_demog_lines_refresh = yes" in _text(p)]
-        self.assertEqual(sorted(p.name for p in callers), ["te_demog_on_actions.txt"])
+        for hook in ("on_monthly_pulse_state", "on_state_owner_change", "on_state_incorporation",
+                     "on_law_activated", "on_game_started_after_lobby"):
+            self.assertRegex(on_actions, rf"{hook} = \{{\s*on_actions = \{{\s*te_demog_lines_", hook)
+        for name in ("te_demog_lines_country_on_action", "te_demog_lines_world_on_action"):
+            self.assertIn("trigger_event = { id = te_demog_events.4 }", _block(on_actions, name), name)
+        event = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.4")
+        self.assertIn("type = state_event", event)
+        self.assertIn("te_demog_lines_refresh = yes", event)
+        callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
+                         if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
+        self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
 ```
 
   `eng.removed` is the interpreter's record of `remove_modifier` calls. If `_Engine` has none, add it: a list
@@ -736,22 +758,85 @@ te_demog_lines_clear = {
   The generator also writes the loc keys `te_demog_line_<short>_up` / `_down` = "Laws and Institutions" and `_desc` =
   "The birth and death effects of this state's laws, technologies and institutions." into the loc file, if absent.
 
-- [ ] **Step 5: The on-action**, in `te_demog_on_actions.txt`:
+- [ ] **Step 5: The hooks.** In `te_demog_on_actions.txt`:
 
 ```
+# The engine's moved birth and mortality lines (owner, 2026-10-11): refreshed where their inputs change, and every
+# month for technologies and institution levels, which have no on-action. ROOT must be the state (the multiplier
+# resolves against it): the state hooks call the refresh, the others fire te_demog_events.4 in each state.
 on_monthly_pulse_state = {
 	on_actions = {
 		te_demog_lines_on_action
 	}
 }
+on_state_owner_change = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_incorporation = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_law_activated = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_game_started_after_lobby = {
+	on_actions = {
+		te_demog_lines_world_on_action
+	}
+}
 
-# THIS = ROOT = a state: the engine's moved birth and mortality lines (owner, 2026-10-11).
+# THIS = ROOT = a state.
 te_demog_lines_on_action = {
 	effect = {
 		te_demog_lines_refresh = yes
 	}
 }
+
+# ROOT = a country whose law changed: each of its states, as its own ROOT.
+te_demog_lines_country_on_action = {
+	effect = {
+		every_scope_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
+	}
+}
+
+# No ROOT (after the lobby, so the rule is settled): every state, as its own ROOT.
+te_demog_lines_world_on_action = {
+	effect = {
+		every_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
+	}
+}
 ```
+
+  And in `events/te_demog_events.txt`:
+
+```
+# ======================================================================
+#  4 – The engine's moved birth and mortality lines (hidden)
+#  Fired in each state by the country and global hooks (te_demog_on_actions.txt), so ROOT is the
+#  state, as te_demog_lines_refresh's multipliers need.
+# ======================================================================
+te_demog_events.4 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		te_demog_lines_refresh = yes
+	}
+}
+```
+
+  Check `on_state_owner_change` and `on_state_incorporation` run with ROOT = the state. Vanilla's comment above
+  `on_state_incorporation` says so, and `on_state_owner_change`'s vanilla effect reads `owner` and `state_region`.
+  Confirm in game with the Task 8 checklist.
 
 - [ ] **Step 6: Generate and run.** `.venv/bin/python scripts/generators/gen_demographics.py`; then
   `test_demographics_registry.TestLinesScript`, `test_gen_demographics`, the tab check and `organize_loc --check`.
@@ -1026,11 +1111,13 @@ def line_carriers(root=ROOT):
      "Laws and Institutions" at the Ministry of Health's value (−3% × the institution impact) and the child labour line
      on laborers. A law's tooltip reads as before. Enacting Women in the Workplace changes the birth-rate line within a
      month.
-  2. **Full:** after the capital's first census step, the Laws and Institutions lines are gone, "Census: Births" and
+  2. **At once:** on a new game, the capital's tooltip has the Laws and Institutions lines on day 1. Enacting a law
+     changes them that day. A conquered state shows its new owner's lines the day it changes hands.
+  3. **Full:** after the capital's first census step, the Laws and Institutions lines are gone, "Census: Births" and
      "Census: Deaths" are present, and option n's `q_b`, `q_d`, `w` are 0 in 1837.
-  3. **A Private Health Insurance country under Full** (debug: enact it, Ministry of Health level 5): "Census: Deaths by
+  4. **A Private Health Insurance country under Full** (debug: enact it, Ministry of Health level 5): "Census: Deaths by
      Wealth" appears on a rich pop's tooltip at about wealth × max(−0.01, −0.005) × the census's share.
-  4. **`debug.log`:** no error from `te_demog_line_*` or `te_demog_engine_line_injections.txt`.
+  5. **`debug.log`:** no error from `te_demog_line_*` or `te_demog_engine_line_injections.txt`.
 
 - [ ] **Step 5: Run the whole suite and the checks:**
   - `.venv/bin/python -m unittest discover -s . -p 'test_*.py'` (read the summary with `grep -E '^(Ran |OK|FAILED)'`);
