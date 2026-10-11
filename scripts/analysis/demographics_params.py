@@ -214,10 +214,10 @@ STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor:
 ENGINE_LINES_ON_TOP = frozenset({
     # the family-policy laws §8.1 has yet to re-express as census terms
     "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
-    # late-era lines with no census term; revisit with step 6
-    "law_legal_limbo", "law_basic_protections", "law_comprehensive_rights", "law_full_equality_and_protection",
-    "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution", "mental_health_awareness",
-    "biological_immortality", "mind_backups",
+    # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
+    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10)
+    "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
+    "mental_health_awareness", "biological_immortality", "mind_backups",
 })
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]

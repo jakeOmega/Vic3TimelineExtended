@@ -62,11 +62,6 @@ The last three columns are points of world growth a year, reported and not appli
 - **The starving slope below SoL 4** (owner ruling: the poverty term replaces it) cost 0.04 points in 1837 and 0.17 in
   1887, as the plan's §1 measured (China 0.023 and 0.244).
 
-**Legal Limbo is on top inside the gate.** The plan's §3 (a) placed the LGBTQ rights laws after era 6, but Legal Limbo
-(−0.05 births) is held from 1836 by France, Brazil, Turkey, Spain, the Two Sicilies, Belgium and the Netherlands. With
-no census term it stays on top, and costs Turkey about 0.3 points of growth a year in every gate save (0.28–0.39) and
-France about 0.30 in 1837–1847, at the bare curve's weight (final review m1; the owner's to re-confirm).
-
 **Why China shrinks in 1887.** Its census rate is +0.23% a year, already carrying the poverty term. Added on top,
 mild starvation takes 1.57 births off and adds 1.60 deaths per 1,000: 23.8% of China's people sit below food security
 0.4, and none below 0.2. Austria shows the same mechanism more strongly (18% mild and 7% severe starvation: census
