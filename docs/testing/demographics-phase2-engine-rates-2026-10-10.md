@@ -162,7 +162,7 @@ saves are compressed binary and couldn't be read.
 | Closed Borders `mig_raw` median | within ±1 per 1,000 | **−0.09 (−0.13 weighted by people), pass,** over 6,457 country-years (saves 1840, 1845, 1850, 1852) |
 | P4: census modifiers through a change of owner | none missing | **Pass.** `predict --check-modifiers` finds none missing on the 1866, 1876 and 1882 saves, after the East India Company broke up and several revolutions. In 1882, 983 states carry `te_dg_mb`, and 983 each carry the births and deaths modifiers |
 | The replay exact | exact | **Not run:** the run logged no option a blocks |
-| Europe's share rising to 1900, Asia's falling | the right direction | **Partly.** East Asia 44.1% to 40.0%, Asia as a whole 65.3% to 62.1%, North America 3.1% to 5.5%. Europe stays flat (23.3% to 23.2%); Europe and North America together go from 26.4% to 28.7%, as emigration carried Europe's growth |
+| Europe's share rising to 1900, Asia's falling | the right direction | **Partly, accepted.** East Asia 44.1% to 40.0%, Asia as a whole 65.3% to 62.1%, North America 3.1% to 5.5%. Europe stays flat (23.3% to 23.2%); Europe and North America together go from 26.4% to 28.7%, as emigration carried Europe's growth. **Accepted (owner, 2026-10-11):** tuning it would mean tuning migration, beyond the census's scope |
 | Errors | none from the census | **None:** 45,869 distinct lines across every generation, 255 outside the two registries, none in a census file |
 
 The regional shares count each save's pops by the continent of their state's strategic region. The continents come from
@@ -192,8 +192,8 @@ East India, Bengal, Carnatic, Hindustan, Satara, Patiala and Hyderabad.
 - **A likely reading, not proven:** the lines left on top are a share of the engine's bare rate. As the census cuts
   deaths further (M toward −0.6), the same lines become a larger share of a smaller target.
 
-**The four countries that lose people past 1900** all came out of the East India Company's break-up. `--phase2` exits
-1 on them because its run check doesn't stop at `--to-year`. `predict` exits 1 on the 1866 save for two of them,
+**The four countries that lose people past 1900** all came out of the East India Company's break-up. `--phase2` exited
+1 on them because its run check didn't stop at `--to-year`. It does now (owner, 2026-10-11), and the run passes it. `predict` exits 1 on the 1866 save for two of them,
 Hindustan (−0.14% a year) and Satara (−0.16%). Its "world multiple 1882–1900 ×1.46" projects calendar 1882 to
 calendar 1900, which is not the gate's multiple.
 
@@ -229,9 +229,9 @@ This list is the canonical checklist; the PR body repeats it.
 2. **Done: the fast-mode gate run** (2026-10-11, above). It passes inside its window, census 1837–1900.
 3. **The replay:** `demographics_harness.py replay` on option a's blocks from three states at different SoL. The fast
    run logged none.
-4. **The owner's calls on the fast run:**
-   - Europe's flat share.
-   - Bengal's deaths on top past 1900.
-   - Whether `--phase2`'s run check should stop at `--to-year`.
+4. **The owner's calls on the fast run (2026-10-11):**
+   - Europe's flat share: accepted.
+   - `--phase2`'s run check now stops at `--to-year`.
+   - Bengal's deaths on top past 1900: to investigate. The census line logs no war year and no devastation for it.
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
 6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).

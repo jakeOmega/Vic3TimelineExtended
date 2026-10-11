@@ -363,6 +363,19 @@ class TestPhase2(unittest.TestCase):
         # twelve censuses, eleven losses: the tenth loss in a row (1837-1846) is reported once
         self.assertEqual(out["shrinking"], [("BIG", 1837, 1846)])
 
+    def test_a_run_after_the_gate_year_is_not_checked(self):
+        # fast mode logs census years far past the gate's end (owner, 2026-10-11: the run check stops there too)
+        recs = [self.rec("BIG", 1950 + i, 30e6 - i * 0.1e6) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [])
+
+    def test_a_run_counts_only_its_losses_up_to_the_gate_year(self):
+        # losses 1895-1900 (six) inside the window, the rest after it
+        recs = [self.rec("BIG", 1894 + i, 30e6 - i * 0.1e6) for i in range(17)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [])
+        # ending in the gate year still counts
+        recs = [self.rec("BIG", 1889 + i, 30e6 - i * 0.1e6) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [("BIG", 1890, 1899)])
+
     def test_a_war_year_breaks_the_run(self):
         recs = [self.rec("BIG", 1836 + i, 30e6 - i * 0.1e6, war=1.0 if i == 5 else 0.0) for i in range(12)]
         self.assertEqual(R.phase2_check(recs)["shrinking"], [])

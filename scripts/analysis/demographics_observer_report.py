@@ -7,7 +7,7 @@ Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_
 
 --phase2 checks phase 2's gate (demographics phase 2 step 4, plan Task 12): the world's people from the
 first census year to --to-year within x1.3-x1.7, no country of 20M or more losing people ten census years
-running with no war year among them, and the share of people in states whose census term was clamped
+running with no war year among them by --to-year, and the share of people in states whose census term was clamped
 (flagged above 1%). It exits 1 when the gate fails. From phase 2 step 4 a line's tfr, cbr and cdr are
 the realized figures (the census follows the engine's events), not the model's own: the anchors' TFR
 bands judge what the engine did.
@@ -119,7 +119,7 @@ def _parse(text):
 def phase2_check(records, to_year=1900, big=20e6, run=10):
     """The calibration plan's in-game gate for phase 2 (plan 2026-10-10 engine rates, Task 12):
     the world's people from the first census year to `to_year` (within x1.3-x1.7), countries of `big`
-    people or more that lost people `run` census years running with no war year among them, and the
+    people or more that lost people `run` census years running with no war year among them, up to `to_year`, and the
     share of the world's people in clamped states (above 1%, the clamp is holding M back: the results doc
     names where)."""
     tags = {}
@@ -134,7 +134,7 @@ def phase2_check(records, to_year=1900, big=20e6, run=10):
     multiple = world[to_year] / world[first] if first is not None and to_year in world and world[first] else None
     shrinking = []
     for tag, series in sorted(tags.items()):
-        ys = sorted(series)
+        ys = [y for y in sorted(series) if y <= to_year]   # fast mode logs far past the gate's window
         streak = []
         for a, b in zip(ys, ys[1:]):
             r0, r1 = series[a], series[b]
