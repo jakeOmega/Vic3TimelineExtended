@@ -177,6 +177,9 @@ mod_paths = {
     "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
     "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
     "Amendments": os.path.join(_MOD_COMMON, "amendments"),
+    "Interest Group Traits": os.path.join(_MOD_COMMON, "interest_group_traits"),
+    "Harvest Condition Types": os.path.join(_MOD_COMMON, "harvest_condition_types"),
+    "Power Bloc Identities": os.path.join(_MOD_COMMON, "power_bloc_identities"),
     "Events": os.path.join(mod_path, "events"),
     # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
     # listed so the mod can override them in future).

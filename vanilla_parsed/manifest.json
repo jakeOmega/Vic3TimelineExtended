@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.14.5",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "4627473117c4f6ad",
- "built_at": "2026-09-30T14:55:42+00:00",
+ "parser_fingerprint": "c3ff1dde2637b88a",
+ "built_at": "2026-10-11T18:32:12+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -229,6 +229,21 @@
    "dir": "game/common/amendments",
    "file": "common/amendments.json",
    "entities": 67
+  },
+  "Interest Group Traits": {
+   "dir": "game/common/interest_group_traits",
+   "file": "common/interest_group_traits.json",
+   "entities": 99
+  },
+  "Harvest Condition Types": {
+   "dir": "game/common/harvest_condition_types",
+   "file": "common/harvest_condition_types.json",
+   "entities": 22
+  },
+  "Power Bloc Identities": {
+   "dir": "game/common/power_bloc_identities",
+   "file": "common/power_bloc_identities.json",
+   "entities": 6
   },
   "Cultures": {
    "dir": "game/common/cultures",
@@ -912,6 +927,14 @@
    "size": 4951,
    "sha256": "c796c1712e5b177fc046f42fa60a76dfd2feb480ec8ee3612f817ee43a03825f"
   },
+  "game/common/harvest_condition_types/00_harvest_condition_types.txt": {
+   "size": 21429,
+   "sha256": "d230a6a1159baf608c90b352c8ab69f61c4a55c58adf7ec48f17d5331d8f4450"
+  },
+  "game/common/harvest_condition_types/01_sea_harvest_condition_types.txt": {
+   "size": 9288,
+   "sha256": "969fbaff6bcab60484dc4007132946408a493cf61fdeb6c75323d6b2726af9f2"
+  },
   "game/common/ideologies/00_ig_ideologies.txt": {
    "size": 25550,
    "sha256": "4c8bc020d2d1060795e5a615b850736b731a31193862399363ec2e1829639b05"
@@ -939,6 +962,38 @@
   "game/common/institutions/00_institutions.txt": {
    "size": 1635,
    "sha256": "9d3b8474e2e99a34cd23cc38343253b850d0b2991a0f9418c85577c68c8ece2b"
+  },
+  "game/common/interest_group_traits/00_armed_forces_traits.txt": {
+   "size": 2605,
+   "sha256": "bed777385bd782a7ab636c0aacfab067176dde8dab3f877c5d4557a97ecbeddf"
+  },
+  "game/common/interest_group_traits/00_devout_traits.txt": {
+   "size": 3094,
+   "sha256": "da36d7713ea97de2a22d203c09ab5a5c7c942a1e59d072b863517a29a1a2488c"
+  },
+  "game/common/interest_group_traits/00_industrialists_traits.txt": {
+   "size": 2394,
+   "sha256": "b55cb02b34904fdf7151b2921ac05f571e711e03042fbbe78887ea02f725909b"
+  },
+  "game/common/interest_group_traits/00_intelligentsia_traits.txt": {
+   "size": 2038,
+   "sha256": "98df6f35178bbbb4e78aaeb8b5c202adbcfc654ad4a37d18cfabbfee9a95db60"
+  },
+  "game/common/interest_group_traits/00_landed_interest_traits.txt": {
+   "size": 2956,
+   "sha256": "4c6521d925e6e9cb8ed0f072c78a6d6043b9e46b56314945c74cbfb9d7aecc97"
+  },
+  "game/common/interest_group_traits/00_petty_bourgeoisie_traits.txt": {
+   "size": 3093,
+   "sha256": "4e36712cb49e334b4da1dc1fd21dfb6e1fe1cb26f77137c7bad3586d84384716"
+  },
+  "game/common/interest_group_traits/00_rural_folk_traits.txt": {
+   "size": 2558,
+   "sha256": "27bf0ad6f293dbce8e569cd29b733a3b8d92d3b3112d98abd9903be7b430f8a0"
+  },
+  "game/common/interest_group_traits/00_trade_unions_traits.txt": {
+   "size": 763,
+   "sha256": "27ccd5268a08fa1da455172f63b39a5678a8056a781ccb359b19e0c4fab1dbd2"
   },
   "game/common/interest_groups/00_armed_forces.txt": {
    "size": 13001,
@@ -1931,6 +1986,10 @@
   "game/common/pop_types/soldiers.txt": {
    "size": 1061,
    "sha256": "a40f9a31933336d8eb49f6f685919c01afd7e523b6e8433c5d00735658099b12"
+  },
+  "game/common/power_bloc_identities/00_power_bloc_identities.txt": {
+   "size": 24817,
+   "sha256": "3979e78c666d681a749a42bdf95e4eaf787b9709163cd6475b16d075476afe9b"
   },
   "game/common/power_bloc_principle_groups/00_power_bloc_principle_groups.txt": {
    "size": 4344,
