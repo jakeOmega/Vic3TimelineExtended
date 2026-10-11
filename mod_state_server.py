@@ -3162,8 +3162,10 @@ def _render_duplicate_images_text(report: dict, *, include_allowlisted: bool = F
 _SHARED_BY_DESIGN_ICON_FIELDS: list[tuple[str, str]] = [
     ("Battle Conditions",          "icon"),
     ("Buildings",                  "background"),
+    ("Character Interactions",     "icon"),
     ("Combat Unit Groups",         "icon"),
     ("Company Types",              "background"),
+    ("Cultures",                   "seal_and_signature_texture"),
     ("Diplomatic Plays",           "texture"),
     ("Events",                     "icon"),
     ("Game Concepts",              "texture"),
@@ -3175,9 +3177,12 @@ _SHARED_BY_DESIGN_ICON_FIELDS: list[tuple[str, str]] = [
     ("Modifiers",                  "icon"),
     ("PM Groups",                  "texture"),
     ("PMs",                        "texture"),
+    ("Pop Types",                  "texture"),
     ("Power Bloc Identities",      "background"),
     ("Principles",                 "background"),
     ("Religions",                  "icon"),
+    ("Ship Groups",                "icon"),
+    ("Ship Modification Slots",    "icon"),
     ("Ship Modifications",         "icon"),
     ("Ship Types",                 "icon"),
     ("Ship Types",                 "profile_texture"),
@@ -3277,6 +3282,7 @@ def _find_placeholder_icons(*, types: list[str] | None = None,
                             statuses: list[str] | None = None,
                             include_shared_by_design: bool = False,
                             standin_patterns: list[str] | None = None,
+                            allowlist: dict | None = None,
                             origin=None, hasher=None,
                             vanilla_gfx: bool | None = None) -> dict:
     """Classify every mod-set image across entity types (GET /placeholder-icons).
@@ -3298,7 +3304,9 @@ def _find_placeholder_icons(*, types: list[str] | None = None,
     type as `Type:key`), `shared_count` all of them. Mod files are
     compared by content (`hasher`), vanilla files by path. A company flagship
     on its own company's logo (_flagships_on_company_logo) is left out, and
-    doesn't make the company's logo count as shared.
+    doesn't make the company's logo count as shared. An entry the
+    /duplicate-images allowlist covers (its entity and path in one entry)
+    carries that entry's reason as `allowlisted`: a reviewed share, not work.
 
     `types` / `statuses` filter the `entities` list; the summary counts every
     status of the filtered types. `origin(rel_path)` → ("mod" | "vanilla",
@@ -3313,6 +3321,12 @@ def _find_placeholder_icons(*, types: list[str] | None = None,
         hasher = _image_content_hash
     if vanilla_gfx is None:
         vanilla_gfx = os.path.isdir(os.path.join(base_game_path, "game", "gfx"))
+    if allowlist is None:
+        allowlist = _load_image_allowlist()
+    reviewed = {(entity_type, key, image): reason
+                for entity_type, entries in allowlist.items()
+                for (images, keys), reason in entries.items()
+                for key in keys for image in images}
 
     fields = ([(et, f, False) for et, f in _IMAGE_FIELDS_BY_TYPE]
               + [(et, f, True) for et, f in _SHARED_BY_DESIGN_ICON_FIELDS])
@@ -3403,6 +3417,9 @@ def _find_placeholder_icons(*, types: list[str] | None = None,
         }
         if rec["members"] != [rec["key"]]:
             entry["members"] = sorted(rec["members"])
+        reason = reviewed.get((entity_type, rec["key"], rec["image"]))
+        if reason and status not in ("missing", "unresolved"):
+            entry["allowlisted"] = reason
         entities.append(entry)
 
     order = {s: i for i, s in enumerate(_PLACEHOLDER_STATUSES)}
@@ -3454,6 +3471,8 @@ def _render_placeholder_icons_text(report: dict, *, list_unique: bool = False) -
             out.append(f"  [{e['entity_type']}] {e['key']}{field}  {e['path']}{where}")
             if e.get("members"):
                 out.append(f"      principles: {', '.join(e['members'])}")
+            if e.get("allowlisted"):
+                out.append(f"      allowlisted: {e['allowlisted']}")
             if e.get("shared_with"):
                 more = e.get("shared_count", 0) - len(e["shared_with"])
                 tail = f" and {more} more" if more > 0 else ""

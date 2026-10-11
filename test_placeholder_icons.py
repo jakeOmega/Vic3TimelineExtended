@@ -39,6 +39,7 @@ def _hasher(path):
 
 def _run(**kwargs):
     kwargs.setdefault("standin_patterns", ["gfx/pm/cat_*.dds"])
+    kwargs.setdefault("allowlist", {})
     kwargs.setdefault("origin", _origin)
     kwargs.setdefault("hasher", _hasher)
     kwargs.setdefault("vanilla_gfx", True)
@@ -121,6 +122,23 @@ class StatusTests(_FakeMSCase):
         self.assertNotIn("Decrees:decree_a", entry["shared_with"])
         text = srv._render_placeholder_icons_text(_run())
         self.assertIn("and 5 more", text)
+
+    def test_allowlisted_share_carries_its_reason(self):
+        self.install({"Laws": {
+            "law_reviewed": _entity(icon="gfx/law/vanilla.dds"),
+            "law_open": _entity(icon="gfx/law/a.dds"),
+        }})
+        allowlist = {"Laws": {
+            (frozenset({"gfx/law/vanilla.dds"}),
+             frozenset({"law_reviewed", "law_vanilla"})): "a deliberate pick",
+        }}
+        report = _run(allowlist=allowlist)
+        entries = _by_key(report)
+        self.assertEqual(entries[("Laws", "law_reviewed", "icon")]["allowlisted"],
+                         "a deliberate pick")
+        self.assertNotIn("allowlisted", entries[("Laws", "law_open", "icon")])
+        self.assertIn("allowlisted: a deliberate pick",
+                      srv._render_placeholder_icons_text(report))
 
     def test_generated_standin_takes_precedence(self):
         self.install({"Laws": {
