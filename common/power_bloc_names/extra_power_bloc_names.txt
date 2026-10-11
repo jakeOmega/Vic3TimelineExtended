@@ -31,6 +31,143 @@ cultural_concord = {
 	}
 }
 
+## generic military treaty organization power bloc names
+# Vanilla has none: its catch-all names below covered this identity, and the AI
+# no longer draws those, so an AI country no specific name fits picks from these.
+concert_of_arms = {
+	trigger = {
+		scope:selected_identity = identity:identity_military_treaty_organization
+	}
+}
+
+allied_war_council = {
+	trigger = {
+		scope:selected_identity = identity:identity_military_treaty_organization
+	}
+}
+
+mutual_assistance_pact = {
+	trigger = {
+		scope:selected_identity = identity:identity_military_treaty_organization
+	}
+}
+
+## historical names any bloc can take
+# These replace, for the AI, vanilla's catch-all names (end of file): at least
+# as many names open to any country, each borrowed from a real treaty,
+# congress or league of the period.
+concert_of_powers = { # the Concert of Europe, 1815
+	trigger = {
+		always = yes
+	}
+}
+
+congress_system = { # the congresses of 1815-1822
+	trigger = {
+		always = yes
+	}
+}
+
+treaty_of_perpetual_friendship = {
+	trigger = {
+		always = yes
+	}
+}
+
+treaty_of_guarantee = { # London, 1839
+	trigger = {
+		always = yes
+	}
+}
+
+reinsurance_treaty = { # Germany and Russia, 1887
+	trigger = {
+		always = yes
+	}
+}
+
+associated_powers = { # the United States in 1917
+	trigger = {
+		always = yes
+	}
+}
+
+covenant_of_nations = { # the League of Nations' Covenant, 1919
+	trigger = {
+		always = yes
+	}
+}
+
+conference_of_ambassadors = { # Paris, 1920
+	trigger = {
+		always = yes
+	}
+}
+
+league_of_perpetual_peace = { # Kant, 1795
+	trigger = {
+		always = yes
+	}
+}
+
+perpetual_union = { # the Articles of Confederation, 1777
+	trigger = {
+		always = yes
+	}
+}
+
+treaty_of_commerce_and_navigation = {
+	trigger = {
+		always = yes
+	}
+}
+
+league_of_peace_and_freedom = { # Geneva, 1867
+	trigger = {
+		always = yes
+	}
+}
+
+league_of_armed_neutrality = { # 1780 and 1800
+	trigger = {
+		is_at_war = no
+	}
+}
+
+little_entente = { # Czechoslovakia, Romania and Yugoslavia, 1920
+	trigger = {
+		country_rank < rank_value:great_power
+	}
+}
+
+# Named for the alliances the founder brings: one ally, two, three, four or more.
+dual_alliance = { # 1879
+	trigger = {
+		any_scope_ally = { count >= 1 }
+		NOT = { any_scope_ally = { count >= 2 } }
+	}
+}
+
+triple_alliance = { # 1882
+	trigger = {
+		any_scope_ally = { count >= 2 }
+		NOT = { any_scope_ally = { count >= 3 } }
+	}
+}
+
+quadruple_alliance = { # 1815
+	trigger = {
+		any_scope_ally = { count >= 3 }
+		NOT = { any_scope_ally = { count >= 4 } }
+	}
+}
+
+quintuple_alliance = { # 1818
+	trigger = {
+		any_scope_ally = { count >= 4 }
+	}
+}
+
 # big cultural power bloc names
 germanic_union = {
 	trigger = {
@@ -204,6 +341,93 @@ european_union = {
 			capital.region = sr:region_balkans
 			capital.region = sr:region_eastern_europe
 			capital.region = sr:region_russia
+		}
+	}
+}
+
+##### vanilla's catch-all names: the player's, not the AI's #####
+# An AI bloc's name is drawn at random from every name whose trigger passes;
+# there is no weight. These pass for nearly every country, so they took 18 of
+# 22 AI-formed blocs sampled from saves. The player keeps them (the formation
+# panel's randomize button draws from the same list); the AI draws instead from
+# the historical names near the top of this file, its identity's names and the
+# country, region, culture and ideology ones. Each keeps vanilla's own
+# conditions.
+REPLACE:great_alliance = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:grand_coalition = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:council_of_nations = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:universal_league = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:steadfast_union = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:glorious_union = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:unity_league = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:supreme_alliance = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:coalition_of_states = {
+	trigger = {
+		is_ai = no
+	}
+}
+
+REPLACE:united_front = {
+	trigger = {
+		is_ai = no
+		NOT = { scope:selected_identity = identity:identity_religious }
+	}
+}
+
+REPLACE:joint_front = {
+	trigger = {
+		is_ai = no
+		NOT = { scope:selected_identity = identity:identity_religious }
+	}
+}
+
+# The AI keeps Imperial Circle for a monarchy's Sovereign Empire.
+REPLACE:imperial_circle = {
+	trigger = {
+		coa_monarchy_trigger = yes
+		OR = {
+			is_ai = no
+			scope:selected_identity = identity:identity_sovereign_empire
 		}
 	}
 }

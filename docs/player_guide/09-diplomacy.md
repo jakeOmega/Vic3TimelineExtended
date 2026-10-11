@@ -369,8 +369,14 @@ Several principles give your bloc an article, action or decree.
 
 A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
 a year: +3 per unspent mandate, up to +12. Example new bloc names include the
-Global Accord for a Diplomatic Framework and the Anglosphere for a cultural
-bloc.
+Global Accord for a Diplomatic Framework, the Anglosphere for a cultural bloc
+and the Concert of Arms for a Military Treaty. Any bloc can take a name from a
+real treaty or league, such as the Congress System or the Reinsurance Treaty,
+and a founder with allies can name a Dual, Triple, Quadruple or Quintuple
+Alliance after them. An AI country never gives its bloc one of the base game's
+names that fit any country, such as the Grand Coalition or the United Front; it
+picks from these, its bloc identity's names and those tied to its own region,
+culture or government. You can still choose those names for your own bloc.
 
 Joining a bloc gets easier with technology. In the base game a leader needs a
 Leverage Advantage of 200 over a country to invite it, and the same to accept
