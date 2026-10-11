@@ -255,12 +255,13 @@ rates: those of the child labor and women's rights laws, the health laws, the
 Contraceptive Pill, State-Sponsored Family Planning, vaccines and antibiotics,
 and mild starvation. The rest, such as the family-policy laws and the late
 medical technologies, it applies at its own rate, as it does an effect on the
-whole state, such as pollution, devastation or a decree. An effect on some of a
-state's people, such as severe starvation, applies to their rate in the base
-game. Private Health Insurance's cut for the wealthy works at the census's rate,
-and no pop's deaths fall below half of it. A state's birth rate and mortality
-tooltips show the census's part as Census: Births and Census: Deaths. The
-workforce still follows the base game's rules.
+whole state, such as pollution, devastation or a decree. Either way, a new law
+or technology takes effect at the state's next census step, up to a year later.
+An effect on some of a state's people, such as severe starvation, applies to
+their rate in the base game. Private Health Insurance's cut for the wealthy
+works at the census's rate, and no pop's deaths fall below half of it. A state's
+birth rate and mortality tooltips show the census's part as Census: Births and
+Census: Deaths. The workforce still follows the base game's rules.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,

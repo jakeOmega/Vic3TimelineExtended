@@ -1109,10 +1109,15 @@ class TestLinesScript(unittest.TestCase):
     the census doesn't set its births and deaths, at the two families' sum, by a fixed-sign pair per field."""
 
     def _eng(self, sums, full=False, census_term=False, held=None):
+        """census_term: a census step has set M (te_dg_mb, with this build's te_dg_q_b), its deaths pair in force;
+        "stale" is a step from a save made before this build (no te_dg_q_b)."""
         fixtures = {f"modifier:{name}": sums.get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
         eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
         if census_term:
-            eng.vars["te_dg_mb"] = -0.3
+            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3)
+            eng.modifiers["te_demog_census_deaths_down"] = 0.3
+            if census_term != "stale":
+                eng.vars.update(te_dg_q_b=0.0, te_dg_q_d=0.0)
         for short, m in (held or {}).items():
             eng.vars[f"te_dg_ln_{short}"] = m
             eng.modifiers[f"te_demog_line_{short}_{'up' if m > 0 else 'down'}"] = abs(m)
@@ -1158,9 +1163,22 @@ class TestLinesScript(unittest.TestCase):
         eng.call("te_demog_lines_refresh")
         self.assertEqual(self.lines(eng), {}, "Full with the census's term: the pairs come off")
         self.assertNotIn("te_dg_ln_deaths", eng.vars)
+        # review I2: a rule switched off Full takes the census's term off at the next refresh, not the state's next
+        # yearly step, so the pairs don't count the moved lines a second time on top of it
         eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=False, census_term=True)
         eng.call("te_demog_lines_refresh")
-        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Disabled with a stale census term: the pairs apply")
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Disabled after Full: the pairs apply")
+        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers, "Disabled after Full: the census's term is off")
+        self.assertNotIn("te_dg_mb", eng.vars)
+
+    def test_a_term_saved_before_this_build_comes_off(self):
+        """Review M2: a Full save from before the moved lines has a census term built for vanilla's lines (no
+        te_dg_q_b). The refresh takes it off so the pairs carry the state until its next step sets M afresh."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True, census_term="stale")
+        eng.call("te_demog_lines_refresh")
+        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers)
+        self.assertNotIn("te_dg_mb", eng.vars)
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers)
 
     def test_unchanged_sums_are_left_alone(self):
         eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, held={"deaths": -0.03})
@@ -1185,15 +1203,26 @@ class TestLinesScript(unittest.TestCase):
         self.assertEqual(set(self.lines(eng)), {"te_demog_line_births_up"})
 
     def test_refresh_runs_where_the_inputs_change(self):
-        """Owner, 2026-10-11: the pairs follow a new game, a law, a change of owner and incorporation at once, with the
-        monthly pulse as the fallback. Every caller has ROOT = the state: the state on-actions call it directly, the
-        country and global ones through the hidden state event te_demog_events.4."""
+        """Owner, 2026-10-11: the pairs follow a new game, a law, a technology, a change of owner, incorporation and a
+        new state at once, with the monthly pulse as the fallback. Every caller has ROOT = the state: the state
+        on-actions call it directly, the others through the hidden state event te_demog_events.4."""
         on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
-        for hook in ("on_monthly_pulse_state", "on_state_owner_change", "on_state_incorporation",
-                     "on_law_activated", "on_game_started_after_lobby"):
-            self.assertRegex(on_actions, rf"{hook} = \{{\s*on_actions = \{{\s*te_demog_lines_", hook)
-        for name in ("te_demog_lines_country_on_action", "te_demog_lines_world_on_action"):
-            self.assertIn("trigger_event = { id = te_demog_events.4 }", _block(on_actions, name), name)
+        hooks = {"on_monthly_pulse_state": "te_demog_lines_on_action", "on_state_owner_change": "te_demog_lines_on_action",
+                 "on_state_incorporation": "te_demog_lines_on_action", "on_state_created": "te_demog_lines_on_action",
+                 "on_law_activated": "te_demog_lines_law_on_action",
+                 "on_acquired_technology": "te_demog_lines_country_on_action",
+                 "on_game_started_after_lobby": "te_demog_lines_world_on_action"}
+        for hook, name in hooks.items():
+            self.assertRegex(on_actions, rf"\n{hook} = \{{\s*on_actions = \{{[^}}]*\b{name}\b", hook)
+        dispatch = r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}"
+        # review I1: on_law_activated's ROOT is the law, so its states are the owner's; on_acquired_technology's
+        # ROOT is the country. Both wait for the game to start: history's laws and techs are the world hook's.
+        law = _block(on_actions, "te_demog_lines_law_on_action")
+        self.assertRegex(law, r"owner = \{\s*" + dispatch)
+        country = _block(on_actions, "te_demog_lines_country_on_action")
+        self.assertRegex(country, r"limit = \{ has_game_started = yes \}\s*" + dispatch)
+        self.assertIn("limit = { has_game_started = yes }", law)
+        self.assertIn("trigger_event = { id = te_demog_events.4 }", _block(on_actions, "te_demog_lines_world_on_action"))
         event = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.4")
         self.assertIn("type = state_event", event)
         self.assertIn("te_demog_lines_refresh = yes", event)

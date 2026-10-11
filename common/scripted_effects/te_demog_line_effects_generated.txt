@@ -5,10 +5,23 @@
 # (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): a fixed-sign
 # pair per field (P.ENGINE_LINE_FIELDS), re-applied at the two families' sum while te_demog_lines_apply holds.
 # A release keeps these files (scripts/release/comment_out_census_inputs.py doesn't read them).
-# THIS = ROOT = a state (its monthly pulse, owner change and incorporation; te_demog_events.4 for a new game and
-# a law's activation): each field's pair at the families' sum while te_demog_lines_apply holds, touched only when
-# the sum changed; otherwise (the census sets the state's births and deaths) every pair off.
+# THIS = ROOT = a state (its monthly pulse, owner change, incorporation and creation; te_demog_events.4 for a new
+# game, a law's activation and a technology): each field's pair at the families' sum while te_demog_lines_apply
+# holds, touched only when the sum changed; otherwise (the census sets the state's births and deaths) every pair off.
+# First, a census term that is no longer the census's comes off now, not at the state's next yearly step, so it and
+# the pairs are never both in force: one a rule switched off Full left, or one from a save made before the moved
+# lines (no te_dg_q_b, which this build's step always sets with it).
 te_demog_lines_refresh = {
+	if = {
+		limit = {
+			has_variable = te_dg_mb
+			OR = {
+				NOT = { te_demog_effects_run = yes }
+				NOT = { has_variable = te_dg_q_b }
+			}
+		}
+		te_demog_rates_clear = yes
+	}
 	if = {
 		limit = { te_demog_lines_apply = yes }
 		set_local_variable = { name = te_dg_ln_new value = te_demog_line_births }
