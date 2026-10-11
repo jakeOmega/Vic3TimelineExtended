@@ -55,7 +55,6 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT))
 
 import demographics_model as M  # noqa: E402
-import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 import pop_growth as G  # noqa: E402
 
@@ -816,59 +815,6 @@ def _starvation(o, key, mild, severe):
     o("}")
 
 
-def max_institution_level(root):
-    """The highest institution investment level (MAX_INSTITUTION_INVESTMENT: the mod's define, else vanilla's 5)."""
-    m = re.search(r"^\s*MAX_INSTITUTION_INVESTMENT\s*=\s*(\d+)", (root / DEFINES).read_text(encoding="utf-8-sig"), re.M)
-    return int(m.group(1)) if m else 5
-
-
-_ABSORBED = {}
-
-
-def absorbed(root):
-    """DM.absorbed_carriers for this tree, read once per run."""
-    key = str(root)
-    if key not in _ABSORBED:
-        _ABSORBED[key] = DM.absorbed_carriers(root)
-    return _ABSORBED[key]
-
-
-def absorbed_classes(root):
-    """{pop type: [carriers]} of the absorbed class mortality lines (state_<type>_mortality_mult)."""
-    types = set(_snapshot(root, "pop_types"))
-    out = {}
-    for c in absorbed(root):
-        m = re.fullmatch(r"state_(\w+)_mortality_mult", c.type)
-        if m and m.group(1) in types:
-            out.setdefault(m.group(1), []).append(c)
-    return dict(sorted(out.items()))
-
-
-def _carrier_adds(o, carriers, top):
-    """State scope: add each carrier's value where the engine applies it. A tech's or law's line reaches every
-    state the owner holds; a law's institution_modifier line and an institution's own line, one value a level of
-    the institution, incorporated states only (MAX_INSTITUTION_INVESTMENT levels at most), scaled as the engine
-    scales it by the state's Impact of Institutions (te_demog_institution_impact)."""
-    for c in carriers:
-        v = lit(c.value)
-        if c.kind == "technology":
-            o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {c.key} }} }} add = {v} }}")
-        elif c.kind == "law":
-            o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{c.key} }} }} add = {v} }}")
-        else:
-            gate = f" owner = {{ has_law = law_type:{c.key} }}" if c.kind == "law_institution" else ""
-            o("if = {")
-            o(f"limit = {{ is_incorporated = yes{gate} }}")
-            o("add = {")
-            o("value = 0")
-            for n in range(1, top + 1):
-                o(f"if = {{ limit = {{ owner = {{ institution_investment_level = {{ institution = {c.institution} "
-                  f"value >= {n} }} }} }} add = {v} }}")
-            o("multiply = te_demog_institution_impact")
-            o("}")
-            o("}")
-
-
 def _mild_starvation(o, key, mild):
     """Pop scope: mild starvation's term, read in food-security steps (severe starvation's is left out)."""
     o("if = {")
@@ -886,25 +832,13 @@ def _mild_starvation(o, key, mild):
 
 
 def absorbed_terms(o, root, literacy, mild):
-    """Phase 2 step 4 (owner amendment, 2026-10-10): what the census absorbs, which te_demog_rates_refresh takes
-    out of its terms M under Full. The walk weights each by the pop's bare curves (te_demog_absorbed_walk_*)."""
-    carriers, top = absorbed(root), max_institution_level(root)
-    o("# Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines the census absorbs")
-    o("# (demographics_modifiers.absorbed_carriers). They stay on their laws, technologies and institutions, so")
-    o("# nothing changes outside Full; under Full te_demog_rates_refresh takes them out of the census's terms M,")
-    o("# through the walk's sums (te_demog_absorbed_walk_init and _pop). State scope: what the state reads.")
-    for kind, field in (("births", "state_birth_rate_mult"), ("deaths", "state_mortality_mult")):
-        o(f"te_demog_absorbed_{kind} = {{")
-        o("value = 0")
-        _carrier_adds(o, [c for c in carriers if c.type == field], top)
-        o("}")
-    for t, cs in absorbed_classes(root).items():
-        o(f"te_demog_absorbed_{t}_deaths = {{")
-        o("value = 0")
-        _carrier_adds(o, cs, top)
-        o("}")
+    """What the census absorbs per pop (phase 2 step 4, owner amendment B), which te_demog_rates_refresh takes out of
+    its terms M under Full through the walk's sums: literacy's term and mild starvation's. The laws', technologies'
+    and institutions' birth and mortality lines are script-only since 2026-10-11 (the engine-lines plan), so the engine
+    never applies them under Full and there is nothing of theirs to net."""
     o("# Pop scope: the terms the census absorbs per pop: literacy's (literacy_penalty) and mild starvation's")
-    o("# (starvation_penalty). Severe starvation stays on top (owner amendment B).")
+    o("# (starvation_penalty). Severe starvation stays on top (owner amendment B). The laws', technologies' and")
+    o("# institutions' lines are script-only (owner, 2026-10-11), so the census has none of theirs to net.")
     o("te_demog_pop_absorbed_births = {")
     o("value = literacy_rate")
     o(f"multiply = {lit(literacy)}")
@@ -915,17 +849,12 @@ def absorbed_terms(o, root, literacy, mild):
     _mild_starvation(o, "state_mortality_mult", mild)
     o("}")
     o("")
-    left = {c.type for c in carriers} - {"state_birth_rate_mult", "state_mortality_mult"} - {
-        f"state_{t}_mortality_mult" for t in absorbed_classes(root)}
-    assert not left, f"absorbed lines on fields the census has no sum for: {sorted(left)}"
 
 
 def absorbed_walk(o, root):
-    """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed."""
-    classes = list(absorbed_classes(root))
-    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0. Under Full only (the")
-    o("# refresh reads them nowhere else) the state's absorbed lines (te_demog_absorbed_*, generated values) are read")
-    o("# once, the classes' among them, and te_dg_w_rep turns the per-pop sums on.")
+    """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed per pop."""
+    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0; under Full only (the")
+    o("# refresh reads them nowhere else) te_dg_w_rep turns the per-pop sums on.")
     o("te_demog_absorbed_walk_init = {")
     o("set_local_variable = { name = te_dg_w_ebr value = 0 }")
     o("set_local_variable = { name = te_dg_w_edr value = 0 }")
@@ -933,10 +862,6 @@ def absorbed_walk(o, root):
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
     o("set_local_variable = { name = te_dg_w_rep value = 1 }")
-    o("set_local_variable = { name = te_dg_w_sab value = te_demog_absorbed_births }")
-    o("set_local_variable = { name = te_dg_w_sad value = te_demog_absorbed_deaths }")
-    for t in classes:
-        o(f"set_local_variable = {{ name = te_dg_w_ac_{t} value = te_demog_absorbed_{t}_deaths }}")
     o("}")
     o("}")
     o("")
@@ -945,13 +870,8 @@ def absorbed_walk(o, root):
     o("te_demog_absorbed_walk_pop = {")
     o("if = {")
     o("limit = { local_var:te_dg_w_rep > 0 }")
-    o("set_local_variable = { name = te_dg_p_ab value = { value = local_var:te_dg_w_sab add = te_demog_pop_absorbed_births } }")
-    o("set_local_variable = { name = te_dg_p_ad value = { value = local_var:te_dg_w_sad add = te_demog_pop_absorbed_deaths } }")
-    for i, t in enumerate(classes):
-        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
-          f"change_local_variable = {{ name = te_dg_p_ad add = local_var:te_dg_w_ac_{t} }} }}")
-    o("change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = local_var:te_dg_p_ab } }")
-    o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_ad } }")
+    o("change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }")
+    o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }")
     o("}")
     o("}")
     o("")

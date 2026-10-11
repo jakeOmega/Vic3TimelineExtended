@@ -1501,11 +1501,9 @@ class _OwnerEngine(_Engine):
 
 
 class TestAbsorbedScript(unittest.TestCase):
-    """Owner amendment A and B (2026-10-10): the generated walk sums carry every line the census absorbs, as the
-    engine applies it, so M cancels it under Full. Each pop adds its bare curves x (the state's absorbed lines + its
-    class's + literacy's -0.1 and mild starvation's, per pop) to te_dg_w_ebr / te_dg_w_edr. Checked against
-    demographics_modifiers.totals over DM.absorbed_carriers, carrier by carrier, so a line the generator drops
-    fails."""
+    """The walk's replaced sums (te_dg_w_ebr / te_dg_w_edr), which M nets out under Full: each pop's bare curves x the
+    terms the engine still applies per pop and the census models (literacy's -0.1, mild starvation's). Since 2026-10-11
+    (the engine-lines plan) the laws', techs' and institutions' lines are script-only and need no netting."""
 
     P_EB, P_ED = 500.0, 400.0
 
@@ -1539,52 +1537,6 @@ class TestAbsorbedScript(unittest.TestCase):
         levels = {c.institution: level} if c.institution else {}
         return laws, techs, levels
 
-    def test_institution_lines_scale_with_the_states_institution_impact(self):
-        """The engine scales an institution's lines by the state's Impact of Institutions (the probe session,
-        2026-10-11: the Midlands' Ministry of Health read "A multiplier of 0.94", Local Vernacular's -0.05 and its
-        obstinance's -1.0 x 1%). The census cancels them at that size, and at none in a fully obstinate state; a
-        law's or tech's own line is not scaled."""
-        health = next(c for c in self.absorbed if c.key == "law_charitable_health_system")
-        levels = {"institution_health_system": 3}
-        for add in (-0.06, -1.2, 0.1):
-            with self.subTest(add=add):
-                _b, d = self._run(laws={"law_charitable_health_system"}, levels=levels, impact=add)
-                t = DM.totals([health], laws={"law_charitable_health_system"}, institutions=levels,
-                              types={health.type}, institution_impact=max(0.0, 1 + add))
-                self.assertAlmostEqual(d, t["state_mortality_mult"], places=5)
-                self.assertAlmostEqual(d, health.value * 3 * max(0.0, 1 + add), places=5)
-        own = next(c for c in self.absorbed if c.kind == "institution")
-        for add in (-0.06, -1.2):
-            with self.subTest(institution=own.key, add=add):
-                _b, d = self._run(levels={own.institution: 2}, impact=add)
-                self.assertAlmostEqual(d, own.value * 2 * max(0.0, 1 + add), places=5)
-        flat = next(c for c in self.absorbed if c.kind == "law" and c.type == "state_birth_rate_mult")
-        b0, _ = self._run(laws={flat.key})
-        b1, _ = self._run(laws={flat.key}, impact=-0.5)
-        self.assertAlmostEqual(b0, b1)
-
-    def test_the_absorbed_set_is_what_the_amendment_names(self):
-        kinds = {c.kind for c in self.absorbed}
-        self.assertEqual(kinds, {"law", "law_institution", "technology", "institution"})
-        self.assertTrue({c.type for c in self.absorbed} >= {"state_birth_rate_mult", "state_mortality_mult",
-                                                            "state_laborers_mortality_mult"})
-
-    def test_every_absorbed_line_reaches_the_walk(self):
-        for c in self.absorbed:
-            m = re.fullmatch(r"state_(\w+)_mortality_mult", c.type)
-            pop_type = m.group(1) if m else "clerks"
-            laws, techs, levels = self._held(c)
-            with self.subTest(carrier=c):
-                got = self._run(laws, techs, levels, pop_type=pop_type)
-                want = self._want(laws, techs, levels, pop_type=pop_type)
-                self.assertAlmostEqual(got[0], want[0], places=9)
-                self.assertAlmostEqual(got[1], want[1], places=9)
-                # the carrier's own share is in it: without it the sums differ by its value (x the level of 3)
-                rest = self._want(laws, techs, levels, pop_type=pop_type, carriers=[x for x in self.absorbed if x != c])
-                kind = 0 if c.type == "state_birth_rate_mult" else 1
-                share = c.value * (3 if c.kind in ("law_institution", "institution") else 1)
-                self.assertAlmostEqual(want[kind] - rest[kind], share, places=9)
-
     def test_a_carrier_not_held_takes_nothing(self):
         self.assertEqual(self._run(), (0.0, 0.0))
 
@@ -1596,24 +1548,6 @@ class TestAbsorbedScript(unittest.TestCase):
         self.assertEqual(self._run(laws, pop_type="laborers", food=0.3, literacy=0.5, full=False), (0.0, 0.0))
         pop = _block(_text(GENERATED_EFFECTS), "te_demog_absorbed_walk_pop")
         self.assertTrue(pop.lstrip().startswith("if = {\n\t\tlimit = { local_var:te_dg_w_rep > 0 }"), pop[:80])
-
-    def test_per_level_lines_reach_incorporated_states_only(self):
-        laws = {c.key for c in self.absorbed if c.kind == "law_institution"}
-        levels = {c.institution: 5 for c in self.absorbed if c.institution}
-        inc = self._run(laws, (), levels)
-        unc = self._run(laws, (), levels, incorporated=False)
-        for got, want in zip(inc, self._want(laws, (), levels)):
-            self.assertAlmostEqual(got, want, places=9)
-        self.assertAlmostEqual(unc[1], 0.0)
-        self.assertLess(inc[1], -0.2)   # Charitable and Public at 5: -0.4 alone
-
-    def test_the_class_lines_reach_their_class_only(self):
-        laws = {"law_child_labor_allowed"}
-        self.assertAlmostEqual(self._run(laws, pop_type="laborers")[1], 0.05)
-        self.assertAlmostEqual(self._run(laws, pop_type="machinists")[1], 0.05)
-        self.assertAlmostEqual(self._run(laws, pop_type="clerks")[1], 0.0)
-        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="machinists")[1], 0.0)
-        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="peasants")[1], 0.02)
 
     def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
         """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
@@ -1629,13 +1563,18 @@ class TestAbsorbedScript(unittest.TestCase):
             self.assertAlmostEqual(b, ref_b, delta=0.7 * 0.0625 * 1.01, msg=food)
         self.assertEqual(self._run(food=0.1), (0.0, 0.0))
 
-    def test_the_pop_curves_weight_each_term(self):
-        """A state's absorbed lines and a pop's own add once each, at that pop's bare curves."""
-        laws = {"law_child_labor_allowed", "law_women_in_the_fields"}
-        b, d = self._run(laws, pop_type="laborers", food=0.32, literacy=0.5)
-        self.assertAlmostEqual(b, -0.1 + P.LITERACY_BIRTH_PENALTY * 0.5 + P.STARVATION_MILD["births"] * 0.1875)
-        self.assertAlmostEqual(d, 0.05 + P.STARVATION_MILD["deaths"] * 0.1875)
-
+    def test_the_walk_nets_only_the_per_pop_engine_terms(self):
+        """Owner, 2026-10-11 (the engine-lines plan): the laws', techs' and institutions' lines are script-only, so
+        under Full the engine no longer applies them and the walk has nothing of theirs to net. It nets what the engine
+        still applies per pop: literacy's -0.1 and mild starvation's terms, at that pop's bare curves."""
+        laws = {"law_child_labor_allowed", "law_women_in_the_fields", "law_charitable_health_system"}
+        b, d = self._run(laws, levels={"institution_health_system": 3}, pop_type="laborers", food=0.32, literacy=0.5)
+        self.assertAlmostEqual(b, P.LITERACY_BIRTH_PENALTY * 0.5 + P.STARVATION_MILD["births"] * 0.1875)
+        self.assertAlmostEqual(d, P.STARVATION_MILD["deaths"] * 0.1875)
+        eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0}, triggers={"te_demog_effects_run": True})
+        eng.call("te_demog_absorbed_walk_init")
+        for gone in ("te_dg_w_sab", "te_dg_w_sad", "te_dg_w_ac_laborers"):
+            self.assertNotIn(gone, eng.locals)
 
 class TestNaturalFertilityScript(unittest.TestCase):
     """te_demog_tfr with the natural-fertility read, against demographics_model.fertility."""
