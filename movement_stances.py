@@ -11,10 +11,10 @@ in its own body: seven vanilla movements do, the modernizer stepping from
 integralist), so each ideology it can switch to counts as one it can hold.
 A `set_core_ideology` in some other file (a scripted effect) is not seen.
 
-Why it matters: the Direct Democracy and Free Federation amendments carry
-`country_must_have_movement_to_enact_laws_bool`, so under them a law passes
-only with a movement behind it. A law no movement rates `approve` or better
-can then never be enacted.
+Why it matters: a law a movement backs gets that movement's support as
+enactment success, and under the Direct Democracy and Free Federation
+amendments a law no movement backs pays a flat -10% success (#841; they
+used to block it outright with `country_must_have_movement_to_enact_laws_bool`).
 
 The functions take merged {name: parsed body} dicts (`ModState.get_data`), so
 the server endpoints (`/movements`, `/movement-stances`) and the CLI share
