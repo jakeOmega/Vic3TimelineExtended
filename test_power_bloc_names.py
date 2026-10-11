@@ -4,18 +4,24 @@ An entry in common/power_bloc_names takes only a `trigger`; there is no weight.
 The AI draws its bloc's name at random from every name whose trigger passes, so
 a name that passes for every country crowds out the specific ones. The mod
 re-declares vanilla's catch-all names as `REPLACE:` with `is_ai = no`, gives the
-AI at least as many names of its own that any bloc can take, and gives every
-identity at least one name the AI can always draw.
+AI at least as many names of its own that any bloc can take, names from the
+founder's capital city (generated), and gives every identity at least one name
+the AI can always draw.
 
 Run: /home/jakef/src/Vic3TimelineExtended/.venv/bin/python test_power_bloc_names.py
 """
 
 import os
+from collections import Counter
 import re
+import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "scripts" / "generators"))
+import gen_capital_bloc_names as gen  # noqa: E402
+
 NAMES = ROOT / "common" / "power_bloc_names" / "extra_power_bloc_names.txt"
 LOC = ROOT / "localization" / "english"
 
@@ -55,6 +61,7 @@ class PowerBlocNamesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mod = entries(NAMES.read_text(encoding="utf-8-sig"))
+        cls.generated = entries(gen.NAMES_FILE.read_text(encoding="utf-8-sig"))
 
     def test_catch_alls_are_player_only(self):
         for key in sorted(CATCH_ALLS):
@@ -90,13 +97,30 @@ class PowerBlocNamesTest(unittest.TestCase):
             with self.subTest(identity=identity):
                 self.assertTrue(pool.get(identity), f"no name the AI can always draw for {identity}")
 
+    def test_capital_names_generated_and_in_sync(self):
+        self.assertEqual(gen.main(["--check"]), 0, "run scripts/generators/gen_capital_bloc_names.py")
+        states = gen.city_states()
+        self.assertGreater(len(states), 600)
+        for family in gen.FAMILIES:
+            with self.subTest(family=family):
+                keys = {k for k in self.generated if k.startswith(f"te_pb_name_{family}_")}
+                self.assertEqual(len(keys), len(states) - len(gen.SKIP[family]))
+        for key, (replace, body) in self.generated.items():
+            state = key.split("_", 4)[4]
+            self.assertFalse(replace)
+            self.assertEqual(body, f"trigger = {{ capital = {{ state_region = s:{state} }} }}", key)
+
     def test_mod_names_have_loc(self):
-        text = "\n".join(p.read_text(encoding="utf-8-sig") for p in sorted(LOC.rglob("*_l_english.yml")))
-        for key, (replace, _) in sorted(self.mod.items()):
+        counts = Counter(
+            m.group(1)
+            for p in sorted(LOC.rglob("*_l_english.yml"))
+            for m in re.finditer(r'^ ([^\s:#]+):\d* ?"', p.read_text(encoding="utf-8-sig"), re.M)
+        )
+        for key, (replace, _) in sorted({**self.mod, **self.generated}.items()):
             if replace:
                 continue
             with self.subTest(key=key):
-                self.assertEqual(len(re.findall(rf"^ {re.escape(key)}:0? ?\"", text, re.M)), 1)
+                self.assertEqual(counts[key], 1)
 
 
 if __name__ == "__main__":

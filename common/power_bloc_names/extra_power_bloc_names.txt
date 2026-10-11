@@ -53,46 +53,12 @@ mutual_assistance_pact = {
 }
 
 ## historical names any bloc can take
-# These replace, for the AI, vanilla's catch-all names (end of file): at least
-# as many names open to any country, each borrowed from a real treaty,
-# congress or league of the period.
-concert_of_powers = { # the Concert of Europe, 1815
-	trigger = {
-		always = yes
-	}
-}
-
+# For the AI, these replace vanilla's catch-all names (end of file): as many
+# names open to any country, each the name of a standing body, league or union
+# of the period. A bloc is its leader and its structure, not its members, so
+# none counts or describes them. Names from the founder's capital city ("Berlin
+# Pact", "League of Vienna") are in te_capital_power_bloc_names_generated.txt.
 congress_system = { # the congresses of 1815-1822
-	trigger = {
-		always = yes
-	}
-}
-
-treaty_of_perpetual_friendship = {
-	trigger = {
-		always = yes
-	}
-}
-
-treaty_of_guarantee = { # London, 1839
-	trigger = {
-		always = yes
-	}
-}
-
-reinsurance_treaty = { # Germany and Russia, 1887
-	trigger = {
-		always = yes
-	}
-}
-
-associated_powers = { # the United States in 1917
-	trigger = {
-		always = yes
-	}
-}
-
-covenant_of_nations = { # the League of Nations' Covenant, 1919
 	trigger = {
 		always = yes
 	}
@@ -116,13 +82,43 @@ perpetual_union = { # the Articles of Confederation, 1777
 	}
 }
 
-treaty_of_commerce_and_navigation = {
+league_of_peace_and_freedom = { # Geneva, 1867
 	trigger = {
 		always = yes
 	}
 }
 
-league_of_peace_and_freedom = { # Geneva, 1867
+permanent_council = { # the Little Entente's, 1933
+	trigger = {
+		always = yes
+	}
+}
+
+supreme_council = { # the Allies', 1919
+	trigger = {
+		always = yes
+	}
+}
+
+central_commission = { # for navigation on the Rhine, 1815
+	trigger = {
+		always = yes
+	}
+}
+
+international_bureau = { # the Universal Postal Union's, 1874
+	trigger = {
+		always = yes
+	}
+}
+
+federal_council = { # Switzerland, 1848
+	trigger = {
+		always = yes
+	}
+}
+
+high_commission = { # the Rhineland, 1919
 	trigger = {
 		always = yes
 	}
@@ -131,40 +127,6 @@ league_of_peace_and_freedom = { # Geneva, 1867
 league_of_armed_neutrality = { # 1780 and 1800
 	trigger = {
 		is_at_war = no
-	}
-}
-
-little_entente = { # Czechoslovakia, Romania and Yugoslavia, 1920
-	trigger = {
-		country_rank < rank_value:great_power
-	}
-}
-
-# Named for the alliances the founder brings: one ally, two, three, four or more.
-dual_alliance = { # 1879
-	trigger = {
-		any_scope_ally = { count >= 1 }
-		NOT = { any_scope_ally = { count >= 2 } }
-	}
-}
-
-triple_alliance = { # 1882
-	trigger = {
-		any_scope_ally = { count >= 2 }
-		NOT = { any_scope_ally = { count >= 3 } }
-	}
-}
-
-quadruple_alliance = { # 1815
-	trigger = {
-		any_scope_ally = { count >= 3 }
-		NOT = { any_scope_ally = { count >= 4 } }
-	}
-}
-
-quintuple_alliance = { # 1818
-	trigger = {
-		any_scope_ally = { count >= 4 }
 	}
 }
 
@@ -347,12 +309,13 @@ european_union = {
 
 ##### vanilla's catch-all names: the player's, not the AI's #####
 # An AI bloc's name is drawn at random from every name whose trigger passes;
-# there is no weight. These pass for nearly every country, so they took 18 of
-# 22 AI-formed blocs sampled from saves. The player keeps them (the formation
-# panel's randomize button draws from the same list); the AI draws instead from
-# the historical names near the top of this file, its identity's names and the
-# country, region, culture and ideology ones. Each keeps vanilla's own
-# conditions.
+# there is no weight. The draw happens at formation and again whenever the
+# leader changes, from the new leader's names. These pass for nearly every
+# country, so they took 18 of 22 blocs sampled from saves. The player keeps them
+# (the formation panel's randomize button draws from the same list); the AI
+# draws instead from the historical names near the top of this file, its
+# capital city's names, its identity's names and the country, region, culture
+# and ideology ones. Each keeps vanilla's own conditions.
 REPLACE:great_alliance = {
 	trigger = {
 		is_ai = no
