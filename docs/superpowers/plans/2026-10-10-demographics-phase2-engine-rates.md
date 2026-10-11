@@ -28,6 +28,43 @@
 - **absorbed (by the census):** its line comes off its carrier or is netted out of M, and the census's own term carries the effect; or
 - **added on top (of the census):** the engine still applies it, on top of the census's rates.
 
+## Amendment (owner decisions, 2026-10-10): nothing changes outside Full
+
+The owner decided #869's open questions after the final review. They replace parts of the plan below; where the two
+disagree, this section wins.
+
+- **The rule defaults to Disabled** (#876, on main): its gates are positive (`te_demog_cohorts_run` is Full or Display
+  only, `te_demog_effects_run` is Full), and `scripts/release/comment_out_census_inputs.py` builds a release without
+  the census.
+- **A. The absorbed lines are cancelled only under Full, by M, with no static edits** (replaces Tasks 6 and 8's
+  mechanism):
+  - **Every static change to an engine rate line is undone**, so any setting other than Full plays exactly as main
+    does: the inverse INJECTs on the health laws, child labour and the women's-rights laws are gone, and every line
+    the branch deleted (§8.4's flat lines, Protected Class's birth line, the augmentation laws' mortality) is back.
+  - **The census-only script types stay** (`state_natural_fertility_mult`, the augmentation laws' chronic treatment
+    and the rest). They do nothing outside the census, and the release script comments them out; each is defined in
+    `demographics_modifier_types.txt`, where the script reads its list.
+  - **Under Full, M's replaced term carries each absorbed line's contribution in the state:** law and tech state
+    lines directly; institution lines × the investment level, in incorporated states only, as the engine applies
+    them; per-pop class lines (child labour) per pop, weighted by each pop's bare curve, read in the walk. M =
+    model ÷ bare − 1 − replaced ÷ bare, as before; replaced grows. Off settings have no M, so nothing is cancelled
+    there.
+  - **Accepted cost (owner):** under Full, the law and tech tooltips list lines the census cancels. The census's own
+    text ("How Demographics Works", the rule's description, the guide) says the census takes them over while it is
+    on.
+- **B. Starvation:** mild starvation (the code static modifier `starvation_penalty`, scaled per pop by its food
+  security) is absorbed into M under Full, per pop in the walk; severe starvation (`severe_starvation_penalty`) stays
+  on top. In the final review's `predict` decomposition mild starvation came to −1.57 births and +1.60 deaths per
+  1,000 in China (1887).
+- **C. The LGBTQ+ Rights laws** lose their birth lines on main (#881: Legal Limbo, Basic Protections and
+  Anti-Discrimination Laws none; Full Equality and Protection −0.01); the on-top list follows.
+- **The release precondition changes:** "steps 4 and 5 ship together" becomes **"nothing changes outside Full"**.
+  The rule-gated restore fallback (§2, "The game rule") is obsolete.
+- **Open question (for later):** step 5's retune of the global defines would change every game, census on or off, so
+  it can't ship while the rule defaults to Disabled.
+- **Retunes are the owner's:** if `predict` on the gate saves leaves ×1.3–×1.7 or shows a 20M+ country shrinking
+  after A and B, stop and report the numbers and candidate parameters; don't retune.
+
 ## Global Constraints
 
 - **Game version:** Victoria 3 1.14.5. Vanilla facts are from `vanilla_parsed/` and the 1.14.5 install at `/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game`.
@@ -47,10 +84,7 @@
   - world population 1836–1900 within ×1.3–×1.7;
   - no country of 20M or more losing people for ten years running outside wars;
   - the census's replay (`demographics_harness.py replay`) exact.
-- **Release precondition (owner, 2026-10-10): steps 4 and 5 ship together.**
-  - **Why:** Task 6's and Task 8's removals and INJECTs apply under every setting of the Demographics rule. Display only and Disabled get their equilibrium rates only in step 5 (spec §11.4).
-  - **The rule:** no public release may contain step 4 without step 5.
-  - **The fallback if step 5 slips:** §2's rule-gated restore.
+- **Release precondition (owner, 2026-10-10, amended): nothing changes outside Full.** (It was "steps 4 and 5 ship together", when Tasks 6 and 8 took lines off their carriers under every setting; the amendment above moved the absorption into M, so the rule-gated restore fallback is obsolete.)
 
 ## Review Focus
 
