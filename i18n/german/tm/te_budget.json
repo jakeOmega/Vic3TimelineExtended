@@ -1,0 +1,442 @@
+{
+ "country_te_budget_expense_banking_add": {
+  "en": "Counted in the Budget Breakdown under Banking",
+  "de": "In der Etat-Aufschlüsselung unter Bankwesen erfasst"
+ },
+ "country_te_budget_expense_banking_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Banking.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Bankwesen aufführen kann."
+ },
+ "country_te_budget_expense_colonial_add": {
+  "en": "Counted in the Budget Breakdown under Colonial Development",
+  "de": "In der Etat-Aufschlüsselung unter Koloniale Entwicklung erfasst"
+ },
+ "country_te_budget_expense_colonial_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Colonial Development.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Koloniale Entwicklung aufführen kann."
+ },
+ "country_te_budget_expense_covert_add": {
+  "en": "Counted in the Budget Breakdown under Covert Actions",
+  "de": "In der Etat-Aufschlüsselung unter Verdeckte Aktionen erfasst"
+ },
+ "country_te_budget_expense_covert_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Covert Actions.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Verdeckte Aktionen aufführen kann."
+ },
+ "country_te_budget_expense_culture_add": {
+  "en": "Counted in the Budget Breakdown under Cultural Hegemony",
+  "de": "In der Etat-Aufschlüsselung unter Kulturelle Hegemonie erfasst"
+ },
+ "country_te_budget_expense_culture_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Cultural Hegemony.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Kulturelle Hegemonie aufführen kann."
+ },
+ "country_te_budget_expense_drugs_add": {
+  "en": "Counted in the Budget Breakdown under Drug Shortage Response",
+  "de": "In der Etat-Aufschlüsselung unter Reaktion auf Drogenknappheit erfasst"
+ },
+ "country_te_budget_expense_drugs_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Reaktion auf Drogenknappheit aufführen kann."
+ },
+ "country_te_budget_expense_nuclear_add": {
+  "en": "Counted in the Budget Breakdown under Nuclear Program",
+  "de": "In der Etat-Aufschlüsselung unter Nuklearprogramm erfasst"
+ },
+ "country_te_budget_expense_nuclear_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Program.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Nuklearprogramm aufführen kann."
+ },
+ "country_te_budget_expense_nuclear_taboo_add": {
+  "en": "Counted in the Budget Breakdown under Nuclear Civil Defence",
+  "de": "In der Etat-Aufschlüsselung unter Nuklearer Zivilschutz erfasst"
+ },
+ "country_te_budget_expense_nuclear_taboo_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Civil Defence.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Nuklearer Zivilschutz aufführen kann."
+ },
+ "country_te_budget_expense_space_add": {
+  "en": "Counted in the Budget Breakdown under Space Race",
+  "de": "In der Etat-Aufschlüsselung unter Wettlauf ins All erfasst"
+ },
+ "country_te_budget_expense_space_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Space Race.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Wettlauf ins All aufführen kann."
+ },
+ "country_te_budget_expense_un_add": {
+  "en": "Counted in the Budget Breakdown under United Nations",
+  "de": "In der Etat-Aufschlüsselung unter Vereinte Nationen erfasst"
+ },
+ "country_te_budget_expense_un_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Vereinte Nationen aufführen kann."
+ },
+ "country_te_budget_income_reserve_add": {
+  "en": "Counted in the Budget Breakdown under Strategic Reserve Sales",
+  "de": "In der Etat-Aufschlüsselung unter Verkäufe der Strategischen Reserve erfasst"
+ },
+ "country_te_budget_income_reserve_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Strategic Reserve Sales.",
+  "de": "Keine zweite Zahlung: Die Zeile $country_tax_income_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Verkäufe der Strategischen Reserve aufführen kann."
+ },
+ "country_te_budget_income_tax_code_add": {
+  "en": "Counted in the Budget Breakdown under Spectrum Auctions",
+  "de": "In der Etat-Aufschlüsselung unter Frequenzversteigerungen erfasst"
+ },
+ "country_te_budget_income_tax_code_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Spectrum Auctions.",
+  "de": "Keine zweite Zahlung: Die Zeile $country_tax_income_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Frequenzversteigerungen aufführen kann."
+ },
+ "country_te_budget_income_un_add": {
+  "en": "Counted in the Budget Breakdown under United Nations",
+  "de": "In der Etat-Aufschlüsselung unter Vereinte Nationen erfasst"
+ },
+ "country_te_budget_income_un_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "de": "Keine zweite Zahlung: Die Zeile $country_tax_income_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Vereinte Nationen aufführen kann."
+ },
+ "country_te_budget_income_war_tax_add": {
+  "en": "Counted in the Budget Breakdown under War Profit Tax",
+  "de": "In der Etat-Aufschlüsselung unter Kriegsgewinnsteuer erfasst"
+ },
+ "country_te_budget_income_war_tax_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under War Profit Tax.",
+  "de": "Keine zweite Zahlung: Die Zeile $country_tax_income_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Kriegsgewinnsteuer aufführen kann."
+ },
+ "te_budget_chart_additional_expense": {
+  "en": "Other Additional Expenses",
+  "de": "Übrige zusätzliche Ausgaben"
+ },
+ "te_budget_chart_additional_income": {
+  "en": "Other Additional Income",
+  "de": "Übriges zusätzliches Einkommen"
+ },
+ "te_budget_chart_administration": {
+  "en": "General Administration",
+  "de": "Allgemeine Verwaltung"
+ },
+ "te_budget_chart_administration_group": {
+  "en": "Administration",
+  "de": "Verwaltung"
+ },
+ "te_budget_chart_army": {
+  "en": "Army",
+  "de": "Armee"
+ },
+ "te_budget_chart_civil": {
+  "en": "Other Civil Buildings",
+  "de": "Übrige Zivilgebäude"
+ },
+ "te_budget_chart_diplomacy_expense": {
+  "en": "Diplomatic Payments",
+  "de": "Diplomatische Zahlungen"
+ },
+ "te_budget_chart_diplomacy_income": {
+  "en": "Diplomatic Income",
+  "de": "Diplomatische Einnahmen"
+ },
+ "te_budget_chart_expand_tt": {
+  "en": "Expand or collapse this breakdown. The pie groups collapsed categories and separates expanded categories into their visible parts.",
+  "de": "Diese Aufschlüsselung auf- oder zuklappen. Das Tortendiagramm fasst zugeklappte Kategorien zusammen und teilt aufgeklappte Kategorien in ihre sichtbaren Teile auf."
+ },
+ "te_budget_chart_expense": {
+  "en": "Weekly Expenses",
+  "de": "Wöchentliche Ausgaben"
+ },
+ "te_budget_chart_group_tt": {
+  "en": "This total includes the indented rows below it. Expand to see its components as separate pie slices. Shares count positive component amounts; refunds remain signed, so expansion never changes the denominator. A zero net group can still contain costs and refunds.",
+  "de": "Diese Summe umfasst die eingerückten Zeilen darunter. Aufklappen, um ihre Bestandteile als einzelne Tortenstücke zu sehen. Die Anteile zählen die positiven Beträge der Bestandteile; Erstattungen behalten ihr Vorzeichen, sodass das Aufklappen den Nenner nie verändert. Eine Gruppe mit Nettosumme null kann dennoch Kosten und Erstattungen enthalten."
+ },
+ "te_budget_chart_how": {
+  "en": "How the Breakdown Works",
+  "de": "So funktioniert die Aufschlüsselung"
+ },
+ "te_budget_chart_how_text": {
+  "en": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Programme Costs as part of Space Race.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total. The Space Program's cost is capped at what that total holds after administration.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages plus Materials and Support. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods. Materials and Support includes branch goods plus the full operating deficits of logistics centres and naval fortifications. Their own wages and upkeep are separate from barracks, conscription and naval administration costs covered by the branch forecast. Support upkeep combines wages, goods and slave upkeep. Navy also includes warship construction and maintenance. Other Military Costs reconciles remaining upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
+  "de": "#b Verteilung der Verwaltung#!\\nDie Regierungsverwaltung erzeugt Bürokratie und Steuerkapazität statt Waren für den Verkauf. Ihr wöchentliches Betriebsdefizit sind die Kosten für ihre Gehälter und ihre Warenzufuhr, einschließlich eines etwaigen Sklavenunterhalts. Universitäten, Häfen und andere Zivilgebäude bleiben unter Übrige Zivilgebäude, mit Ausnahme des Raumfahrtprogramms: Sein wöchentliches Betriebsdefizit, bestehend aus Gehältern und Startkapazität, erscheint unter Programmkosten als Teil des Wettlaufs ins All.\\n\\nDer den Institutionen zugeteilte Anteil ergibt sich aus ihrem aktuellen Bürokratieverbrauch geteilt durch die gesamte erzeugte Bürokratie, begrenzt auf 100%. Jede Institution erhält diesen Pool im Verhältnis zu ihrer aktuellen Stufe, auch Institutionen mit verringerten Bürokratiekosten. Noch in Umsetzung befindliche Zielstufen zählen nicht. Die Allgemeine Verwaltung erhält den Rest, einschließlich ungenutzter Kapazität und nicht institutionsbezogenem Bürokratieverbrauch. Ohne Produktion oder ohne Institutionsstufen verbleiben alle Verwaltungskosten dort.\\n\\nDer Etat sagt die Gehälter voraus, während Verwaltungsgebäude ihre jüngste Wochenbilanz melden. Die Zuteilung ist auf die Gesamtsumme der zivilen Gehälter, Waren und des Sklavenunterhalts der Regierung begrenzt, sodass eine Gehaltsänderung nicht mehr als diese Summe zuteilen kann. Die Kosten des Raumfahrtprogramms sind auf das begrenzt, was diese Summe nach der Verwaltung noch enthält.\\n\\n#b Diagramme und Beträge#!\\nDie Summen der Einnahmen und Ausgaben schließen die Investitionsfonds-Übertragung aus. Bauwaren schließen diese Übertragung ebenfalls aus; sie finanziert den Privatbau. Das Militär umfasst Gehälter von Armee und Marine, Waren, Sklavenunterhalt, Kriegsschiffbau und Kriegsschiffunterhalt. Die Schifffahrt umfasst Versorgungsschiffe und Hafenverbindungen.\\n\\n#b Journalsysteme#!\\nBankwesen, Verdeckte Aktionen, Kulturelle Hegemonie, die Vereinten Nationen und andere Systeme haben eigene Zeilen. Fahren Sie über eine Zeile, um ihre aktuell angewandten Quellen zu sehen. Ihre Beträge werden einmal aus den Zusätzlichen Ausgaben oder dem Zusätzlichen Einkommen herausgerechnet; nur der nicht zugeordnete Rest bleibt dort. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Ressourcenkosten liegen außerhalb des wöchentlichen Etats.\\n\\nGruppen starten zugeklappt. Klicken Sie auf den Pfeil, um Steuern, Verwaltung, Militär, Schifffahrt, Programmkosten oder diplomatische Ströme aufzuklappen. Armee und Marine klappen jeweils zu Gehälter sowie Material und Unterstützung auf. Die Zeilen sind innerhalb jeder Gruppe nach Betrag von groß nach klein geordnet. Zugeklappte Gruppen haben ein Tortenstück; aufgeklappte Gruppen geben ihren sichtbaren Teilen eigene Stücke. Die Militärgehälter ergeben sich aus der Gesamtprognose jeder Teilstreitkraft abzüglich ihrer Waren. Material und Unterstützung umfasst die Waren der Teilstreitkraft sowie die vollen Betriebsdefizite der Logistikzentren und Marinebefestigungen. Deren eigene Gehälter und ihr Unterhalt sind von den Kosten für Kasernen, Einberufung und Marineverwaltung getrennt, die die Prognose der Teilstreitkraft abdeckt. Der Unterstützungsunterhalt fasst Gehälter, Waren und Sklavenunterhalt zusammen. Die Marine umfasst außerdem Kriegsschiffbau und -unterhalt. Übrige Militärkosten gleichen den restlichen Unterhalt und Prognoseabweichungen aus. Die Kategoriefarben bleiben in den Diagrammen und der Liste gleich. Bei vielen Institutionen wiederholt sich die Palette; anhand von Namen und Prozentwerten lässt sich jede Kategorie erkennen. Negative Anpassungen mit Vorzeichen erscheinen in der Liste mit einem Diagrammanteil von null. Die Diagramme sind leer, wenn es keine positiven Beträge gibt."
+ },
+ "te_budget_chart_income": {
+  "en": "Weekly Income",
+  "de": "Wöchentliche Einnahmen"
+ },
+ "te_budget_chart_institution_colonial_affairs_tt": {
+  "en": "#b $institution_colonial_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_colonial_affairs$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_health_system_tt": {
+  "en": "#b $institution_health_system$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_health_system')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_health_system$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_health_system')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_home_affairs_tt": {
+  "en": "#b $institution_home_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_home_affairs$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_migration_controls_tt": {
+  "en": "#b $institution_migration_controls$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_migration_controls$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_commerce_tt": {
+  "en": "#b $institution_ministry_of_commerce$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_commerce$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_consumer_protection_tt": {
+  "en": "#b $institution_ministry_of_consumer_protection$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_consumer_protection$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_culture_tt": {
+  "en": "#b $institution_ministry_of_culture$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_culture$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_foreign_affairs_tt": {
+  "en": "#b $institution_ministry_of_foreign_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_foreign_affairs$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_intelligence_and_security_tt": {
+  "en": "#b $institution_ministry_of_intelligence_and_security$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_intelligence_and_security$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_international_aid_tt": {
+  "en": "#b $institution_ministry_of_international_aid$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_international_aid$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_labor_tt": {
+  "en": "#b $institution_ministry_of_labor$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_labor$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_propaganda_tt": {
+  "en": "#b $institution_ministry_of_propaganda$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_propaganda$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_refugee_affairs_tt": {
+  "en": "#b $institution_ministry_of_refugee_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_refugee_affairs$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_religion_tt": {
+  "en": "#b $institution_ministry_of_religion$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_religion$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_science_tt": {
+  "en": "#b $institution_ministry_of_science$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_science$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_the_environment_tt": {
+  "en": "#b $institution_ministry_of_the_environment$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_the_environment$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_thought_control_tt": {
+  "en": "#b $institution_ministry_of_thought_control$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_thought_control$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_urban_planning_tt": {
+  "en": "#b $institution_ministry_of_urban_planning$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_urban_planning$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_ministry_of_war_tt": {
+  "en": "#b $institution_ministry_of_war$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_ministry_of_war$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_national_bank_tt": {
+  "en": "#b $institution_national_bank$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_national_bank$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_police_tt": {
+  "en": "#b $institution_police$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_police')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_police$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_police')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_schools_tt": {
+  "en": "#b $institution_schools$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_schools')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_schools$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_schools')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_social_security_tt": {
+  "en": "#b $institution_social_security$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_social_security')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_social_security$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_social_security')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_institution_workplace_safety_tt": {
+  "en": "#b $institution_workplace_safety$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "de": "#b $institution_workplace_safety$#!\\nAktuelle Stufe: [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0]\\nVerwaltungskosten: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nErzeugte Bürokratie: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nBürokratieverbrauch der Institutionen: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitutionspool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nGesamtstufen der Institutionen: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nZugeteilte Kosten: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]\\n\\nVerwaltungskosten × Bürokratieverbrauch der Institutionen ÷ erzeugte Bürokratie, begrenzt auf die Verwaltungskosten; danach Institutionspool × aktuelle Stufe ÷ Gesamtstufen der Institutionen."
+ },
+ "te_budget_chart_materials": {
+  "en": "Materials and Support",
+  "de": "Material und Unterstützung"
+ },
+ "te_budget_chart_materials_tt": {
+  "en": "Materials and Support includes branch goods plus full logistics-centre and naval-fortification upkeep, combining their wages, goods and any slave upkeep. Barracks, conscription and naval administration stay in the native branch amounts and are not added again. Navy also includes warship construction and maintenance. Weekly operating balances can differ from wage forecasts; Other Military Costs reconciles the difference.",
+  "de": "Material und Unterstützung umfasst die Waren der Teilstreitkraft sowie den vollen Unterhalt von Logistikzentren und Marinebefestigungen, der deren Gehälter, Waren und etwaigen Sklavenunterhalt zusammenfasst. Kasernen, Einberufung und Marineverwaltung bleiben in den ursprünglichen Beträgen der Teilstreitkraft und werden nicht erneut hinzugerechnet. Die Marine umfasst außerdem Kriegsschiffbau und -unterhalt. Die wöchentlichen Betriebssalden können von den Gehaltsprognosen abweichen; Übrige Militärkosten gleichen die Differenz aus."
+ },
+ "te_budget_chart_military": {
+  "en": "Military",
+  "de": "Militär"
+ },
+ "te_budget_chart_military_adjustment": {
+  "en": "Other Military Costs",
+  "de": "Übrige Militärkosten"
+ },
+ "te_budget_chart_navy": {
+  "en": "Navy",
+  "de": "Marine"
+ },
+ "te_budget_chart_no_expense": {
+  "en": "No positive expenses this week.",
+  "de": "Diese Woche keine positiven Ausgaben."
+ },
+ "te_budget_chart_no_income": {
+  "en": "No positive income this week.",
+  "de": "Diese Woche keine positiven Einnahmen."
+ },
+ "te_budget_chart_other_expense": {
+  "en": "Other Expenses",
+  "de": "Übrige Ausgaben"
+ },
+ "te_budget_chart_other_income": {
+  "en": "Other Income",
+  "de": "Übrige Einnahmen"
+ },
+ "te_budget_chart_pie_tt": {
+  "en": "Each color matches a row below. Collapsed groups form one slice; expanded groups use their visible children. Pies show shares of positive component amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
+  "de": "Jede Farbe entspricht einer Zeile darunter. Zugeklappte Gruppen bilden ein Tortenstück; aufgeklappte Gruppen verwenden ihre sichtbaren Untereinträge. Die Tortendiagramme zeigen Anteile der positiven Beträge der Bestandteile; Anpassungen mit Vorzeichen bleiben in der Liste. Die wöchentlichen Kopfzeilen enthalten diese Anpassungen und schließen die Investitionsfonds-Übertragung aus."
+ },
+ "te_budget_chart_port_connections": {
+  "en": "Port Connections",
+  "de": "Hafenverbindungen"
+ },
+ "te_budget_chart_programmes": {
+  "en": "Programme Costs",
+  "de": "Programmkosten"
+ },
+ "te_budget_chart_row_tt": {
+  "en": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration, and the Space Program, which is under Programme Costs. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
+  "de": "Wöchentlicher Betrag und Anteil der positiven Beträge. Übrige Zivilgebäude schließt die Verwaltungskosten aus, die den Institutionen und der Allgemeinen Verwaltung zugeteilt sind, sowie das Raumfahrtprogramm, das unter Programmkosten steht. Übrige Einnahmen und Übrige Ausgaben gleichen die aufgeführten Beträge mit den öffentlichen Etat-Summen ab, nachdem die Investitionsfonds-Übertragung ausgeschlossen wurde; sie enthalten befristete Ströme und nicht kategorisierte Posten."
+ },
+ "te_budget_chart_shipping": {
+  "en": "Shipping and Connections",
+  "de": "Schifffahrt und Verbindungen"
+ },
+ "te_budget_chart_source_expense_banking": {
+  "en": "Banking",
+  "de": "Bankwesen"
+ },
+ "te_budget_chart_source_expense_banking_tt": {
+  "en": "#b Banking#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Bankwesen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_colonial": {
+  "en": "Colonial Development",
+  "de": "Koloniale Entwicklung"
+ },
+ "te_budget_chart_source_expense_colonial_tt": {
+  "en": "#b Colonial Development#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Koloniale Entwicklung#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_covert": {
+  "en": "Covert Actions",
+  "de": "Verdeckte Aktionen"
+ },
+ "te_budget_chart_source_expense_covert_tt": {
+  "en": "#b Covert Actions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Verdeckte Aktionen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_culture": {
+  "en": "Cultural Hegemony",
+  "de": "Kulturelle Hegemonie"
+ },
+ "te_budget_chart_source_expense_culture_tt": {
+  "en": "#b Cultural Hegemony#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Kulturelle Hegemonie#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_drugs": {
+  "en": "Drug Shortage Response",
+  "de": "Reaktion auf Drogenknappheit"
+ },
+ "te_budget_chart_source_expense_drugs_tt": {
+  "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Reaktion auf Drogenknappheit#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_nuclear": {
+  "en": "Nuclear Program",
+  "de": "Nuklearprogramm"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo": {
+  "en": "Nuclear Civil Defence",
+  "de": "Nuklearer Zivilschutz"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo_tt": {
+  "en": "#b Nuclear Civil Defence#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Nuklearer Zivilschutz#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_nuclear_tt": {
+  "en": "#b Nuclear Program#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Nuklearprogramm#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_space": {
+  "en": "Space Race",
+  "de": "Wettlauf ins All"
+ },
+ "te_budget_chart_source_expense_space_tt": {
+  "en": "#b Space Race#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nSpace Program: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nThe Space Program's wages and input goods, moved here from Other Civil Buildings.\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Wettlauf ins All#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nRaumfahrtprogramm: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nGehälter und Warenzufuhr des Raumfahrtprogramms, aus den Übrigen Zivilgebäuden hierher verschoben.\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_un": {
+  "en": "United Nations",
+  "de": "Vereinte Nationen"
+ },
+ "te_budget_chart_source_expense_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Vereinte Nationen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_income_reserve": {
+  "en": "Strategic Reserve Sales",
+  "de": "Verkäufe der Strategischen Reserve"
+ },
+ "te_budget_chart_source_income_reserve_tt": {
+  "en": "#b Strategic Reserve Sales#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Verkäufe der Strategischen Reserve#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_income_tax_code": {
+  "en": "Spectrum Auctions",
+  "de": "Frequenzversteigerungen"
+ },
+ "te_budget_chart_source_income_tax_code_tt": {
+  "en": "#b Spectrum Auctions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Frequenzversteigerungen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_income_un": {
+  "en": "United Nations",
+  "de": "Vereinte Nationen"
+ },
+ "te_budget_chart_source_income_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Vereinte Nationen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_income_war_tax": {
+  "en": "War Profit Tax",
+  "de": "Kriegsgewinnsteuer"
+ },
+ "te_budget_chart_source_income_war_tax_tt": {
+  "en": "#b War Profit Tax#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Kriegsgewinnsteuer#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_supply_construction": {
+  "en": "Supply Ship Construction",
+  "de": "Versorgungsschiffbau"
+ },
+ "te_budget_chart_supply_maintenance": {
+  "en": "Supply Ship Maintenance",
+  "de": "Versorgungsschiffunterhalt"
+ },
+ "te_budget_chart_tab": {
+  "en": "Breakdown",
+  "de": "Aufschlüsselung"
+ },
+ "te_budget_chart_tab_tt": {
+  "en": "Weekly public income and expenses as pies and itemized amounts. Government Administration costs are allocated among your institutions.",
+  "de": "Wöchentliche öffentliche Einnahmen und Ausgaben als Tortendiagramme und Einzelbeträge. Die Kosten der Regierungsverwaltung werden auf Ihre Institutionen verteilt."
+ },
+ "te_budget_chart_taxes": {
+  "en": "Taxes",
+  "de": "Steuern"
+ },
+ "te_budget_chart_wages": {
+  "en": "Wages",
+  "de": "Gehälter"
+ }
+}
