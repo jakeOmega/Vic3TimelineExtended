@@ -5999,8 +5999,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             or loc string sets with AddScope; open_issues.md L14). Once tagged,
             an entry's vanilla_bug_ref.kind tells us which mode applies.
             """
-            tag_vanilla_bugs(entries, vb_by_basename, vb_by_source)
-            tag_vanilla_bugs(entries, mn_by_basename, mn_by_source)
+            # mod_root: a `- stack: vanilla only` entry skips stacks with a mod frame (#863).
+            tag_vanilla_bugs(entries, vb_by_basename, vb_by_source, mod_root=mod_path)
+            tag_vanilla_bugs(entries, mn_by_basename, mn_by_source, mod_root=mod_path)
             tag_gui_injected_scopes(entries, gui_injected_scope_names([
                 os.path.join(mod_path, "gui"),
                 os.path.join(mod_path, "localization", "english"),

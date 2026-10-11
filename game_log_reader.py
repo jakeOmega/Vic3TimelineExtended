@@ -387,6 +387,24 @@ _TRACKED_REF_RE = re.compile(r"^\s*-\s*tracked:\s*`([^`]+)`\s*$")
 # the note doesn't add an anchor. `- reviewed: helper anchor, ...` clears
 # helper_anchor_warnings for that entry.
 _REVIEWED_REF_RE = re.compile(r"^\s*-\s*reviewed:\s*(.+?)\s*$")
+# `- stack: vanilla only` (#863): the entry tags an error only when no frame
+# of its stack is a mod file (a path in `files` that exists in the mod). An
+# anchor on a vanilla file mod script can reach (an AI strategy, a diplomatic
+# catalyst, a vanilla on_action) otherwise tags the mod's errors through it.
+_STACK_REF_RE = re.compile(r"^\s*-\s*stack:\s*(.+?)\s*$")
+STACK_VANILLA_ONLY = "vanilla only"
+# A signature line that is only a file path (`common/x/y.txt:12`, `y.txt:12`,
+# `Script location: common/x/y.txt`) matches every error whose message names
+# that file at ANY line, once _normalize_for_signature_match folds `:NNN`.
+# error.log lists the whole script stack, so it tags each error that passes
+# through the file, mod-caused ones included: the STATE_HAWAII entry's
+# `00_default_strategy.txt:2382` hid 42 mod lines (#864, #873). Message text
+# that names a path (`Div/0 near <path>`) still matches only that message.
+_BARE_PATH_SIGNATURE_RE = re.compile(
+    r"^(?:script location:\s*)?`?[A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml|dds|asset|info)"
+    r"(?::[0-9][0-9,\s-]*)?`?$",
+    re.IGNORECASE,
+)
 
 # Map ## section header substring (case-insensitive) -> kind label. Sections not
 # matched default to "vanilla". A ref's kind drives validation policy and the
@@ -400,11 +418,12 @@ _SECTION_KIND_RULES: tuple[tuple[str, str], ...] = (
 
 class VanillaBugRef:
     __slots__ = ("title", "file_basenames", "source_anchors", "signatures", "anchor", "kind",
-                 "tracked_issue", "reviewed")
+                 "tracked_issue", "reviewed", "vanilla_stack_only")
 
     def __init__(self, title: str, file_basenames: list[str], source_anchors: list[str],
                  signatures: list[str], anchor: str, kind: str = "vanilla",
-                 tracked_issue: str | None = None, reviewed: list[str] | None = None):
+                 tracked_issue: str | None = None, reviewed: list[str] | None = None,
+                 vanilla_stack_only: bool = False):
         self.title = title
         self.file_basenames = file_basenames
         # Exact-match against entry.source. Empty for legacy path-anchored entries.
@@ -419,6 +438,8 @@ class VanillaBugRef:
         self.tracked_issue = tracked_issue
         # `- reviewed:` notes from the entry body (see _REVIEWED_REF_RE).
         self.reviewed = list(reviewed or [])
+        # `- stack: vanilla only` (see _STACK_REF_RE): skip errors with a mod frame.
+        self.vanilla_stack_only = vanilla_stack_only
 
     def to_dict(self) -> dict:
         d: dict = {
@@ -428,6 +449,8 @@ class VanillaBugRef:
         }
         if self.tracked_issue:
             d["tracked_issue"] = self.tracked_issue
+        if self.vanilla_stack_only:
+            d["stack"] = STACK_VANILLA_ONLY
         return d
 
 
@@ -504,6 +527,8 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
          Eliminates accidental signature-only rules at parse time.
       2. mod_low_priority refs must specify a `- tracked:` cross-reference, and its
          #anchor fragment (if any) must resolve in docs/audits/open_issues.md.
+      3. No signature may be only a file path (_BARE_PATH_SIGNATURE_RE): warned,
+         not rejected, since the entry still has its message lines (#873).
     """
     warnings: list[str] = []
     if not ref.file_basenames and not ref.source_anchors:
@@ -512,6 +537,14 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
             "(would match every log entry)"
         )
         return warnings
+    for sig in ref.signatures:
+        if _BARE_PATH_SIGNATURE_RE.match(sig.strip()):
+            warnings.append(
+                f"vanilla_known_bugs.md: '{ref.title}' signature `{sig}` is only a file path, so "
+                "it matches every error whose stack passes through that file at any line, "
+                "mod-caused ones included; match the message text instead (the heading's path "
+                "already restricts the file) (#873)"
+            )
     if ref.kind == "mod_low_priority":
         if not ref.tracked_issue:
             warnings.append(
@@ -637,6 +670,7 @@ def load_vanilla_bug_registry(
         body_sources: list[str] = []
         tracked_issue: str | None = None
         reviewed: list[str] = []
+        stack_only = False
         captured_block = False
         j = i + 1
         while j < len(lines):
@@ -674,6 +708,17 @@ def load_vanilla_bug_registry(
                 reviewed.append(rv.group(1))
                 j += 1
                 continue
+            st = _STACK_REF_RE.match(nxt)
+            if st:
+                if st.group(1).strip("`").lower() == STACK_VANILLA_ONLY:
+                    stack_only = True
+                else:
+                    warnings.append(
+                        f"{os.path.basename(doc_path)}: '{title}' has `- stack: {st.group(1)}`; "
+                        f"the only value is `- stack: {STACK_VANILLA_ONLY}`"
+                    )
+                j += 1
+                continue
             body_paths.extend(_PATH_REF_RE.findall(nxt))
             j += 1
         all_paths = paths + body_paths
@@ -687,6 +732,7 @@ def load_vanilla_bug_registry(
             kind=current_section_kind,
             tracked_issue=tracked_issue,
             reviewed=reviewed,
+            vanilla_stack_only=stack_only,
         )
         ref_warnings = _validate_ref(ref, known_anchors)
         if ref_warnings:
@@ -735,9 +781,9 @@ def load_mod_noise_registry(doc_path: str) -> tuple[
 # hid five mis-signed mod event options that way (PR #729).
 HELPER_ANCHOR_REVIEWED = "helper anchor"
 HELPER_ANCHOR_ADVICE = (
-    "anchor on the vanilla caller (bottom of the stack) or narrow the signature to "
-    "the vanilla case; if it already cannot match a mod call, add "
-    "`- reviewed: helper anchor, signature cannot match a mod call (<why>)`"
+    "anchor on the vanilla caller (bottom of the stack), narrow the signature to "
+    "the vanilla case, or add `- stack: vanilla only`; if it already cannot match a "
+    "mod call, add `- reviewed: helper anchor, signature cannot match a mod call (<why>)`"
 )
 # Uses listed per helper in a warning; the count covers the rest.
 _HELPER_USES_SHOWN = 5
@@ -830,7 +876,9 @@ def helper_anchor_warnings(
          "helper_file", "mod_uses": {definition: ["<rel>:<line>", ...]},
          "advice", "detail"}
 
-    An entry carrying `- reviewed: helper anchor, ...` is skipped. Returns []
+    An entry carrying `- reviewed: helper anchor, ...` is skipped, and so is a
+    `- stack: vanilla only` entry (#863): an error raised through a mod call
+    has that mod file in its stack, which such an entry never tags. Returns []
     without vanilla game files.
     """
     if not vanilla_game:
@@ -839,7 +887,8 @@ def helper_anchor_warnings(
 
     hits: list[tuple[VanillaBugRef, str, str, list[str]]] = []
     for ref in refs:
-        if any(r.lower().startswith(HELPER_ANCHOR_REVIEWED) for r in ref.reviewed):
+        if ref.vanilla_stack_only or any(
+                r.lower().startswith(HELPER_ANCHOR_REVIEWED) for r in ref.reviewed):
             continue
         for basename in ref.file_basenames:
             for kind in DEFINITION_DIRS:
@@ -887,10 +936,35 @@ def _normalize_for_signature_match(s: str) -> str:
     return _LINE_NUM_RE.sub(":N", s.lower())
 
 
+def mod_frame_test(mod_root: str | None):
+    """A predicate on an entry's `files`: true when any of them is a mod
+    file (the path exists under `mod_root`). Existence is checked once per
+    path and memoized for the predicate's life, so build one per tagging
+    pass to see the tree as it is now. Without a `mod_root` every stack
+    counts as having a mod frame, so a `- stack: vanilla only` entry tags
+    nothing rather than everything.
+    """
+    if not mod_root:
+        return lambda files: True
+    memo: dict[str, bool] = {}
+
+    def has_mod_frame(files) -> bool:
+        for f in files:
+            hit = memo.get(f)
+            if hit is None:
+                hit = memo[f] = os.path.isfile(os.path.join(mod_root, f))
+            if hit:
+                return True
+        return False
+
+    return has_mod_frame
+
+
 def tag_vanilla_bugs(
     entries: list[LogEntry],
     by_basename: dict[str, list[VanillaBugRef]],
     by_source: dict[str, list[VanillaBugRef]] | None = None,
+    mod_root: str | None = None,
 ) -> None:
     """Mutate entries: set `vanilla_bug_ref` on each that matches a registered vanilla bug.
 
@@ -904,10 +978,15 @@ def tag_vanilla_bugs(
     purely on anchor; non-empty = ANY signature must appear (case-insensitive,
     normalized) in the message. Path-anchored wins over source-anchored when
     both are present, preserving legacy behavior.
+
+    A ref carrying `- stack: vanilla only` matches only an entry with no mod
+    frame: no path in `files` exists under `mod_root` (#863). Pass the mod's
+    root; without it such refs match nothing (see mod_frame_test).
     """
     if not by_basename and not by_source:
         return
     by_source = by_source or {}
+    has_mod_frame = mod_frame_test(mod_root)
     # Pre-normalize signatures once across both indexes.
     sig_cache: dict[int, list[str]] = {}
     for index in (by_basename, by_source):
@@ -922,14 +1001,25 @@ def tag_vanilla_bugs(
         if e.vanilla_bug_ref is not None:
             continue
         norm_msg = _normalize_for_signature_match(e.message)
+        mod_frame: list[bool] = []  # computed on first need
+
+        def matches(ref: VanillaBugRef) -> bool:
+            sigs = sig_cache.get(id(ref), [])
+            if sigs and not any(s in norm_msg for s in sigs):
+                return False
+            if ref.vanilla_stack_only:
+                if not mod_frame:
+                    mod_frame.append(has_mod_frame(e.files))
+                return not mod_frame[0]
+            return True
+
         matched: VanillaBugRef | None = None
         # Stage 1: path-anchored
         if e.files:
             for f in e.files:
                 base = pathlib.Path(f).name
                 for ref in by_basename.get(base, ()):
-                    sigs = sig_cache.get(id(ref), [])
-                    if not sigs or any(s in norm_msg for s in sigs):
+                    if matches(ref):
                         matched = ref
                         break
                 if matched:
@@ -937,8 +1027,7 @@ def tag_vanilla_bugs(
         # Stage 2: source-anchored (only if path-anchored didn't match)
         if matched is None and e.source and by_source:
             for ref in by_source.get(e.source, ()):
-                sigs = sig_cache.get(id(ref), [])
-                if not sigs or any(s in norm_msg for s in sigs):
+                if matches(ref):
                     matched = ref
                     break
         if matched:
