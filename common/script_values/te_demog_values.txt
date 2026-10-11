@@ -193,6 +193,16 @@ te_demog_tfr_natural = {
 	min = te_demog_k_natural_fertility_floor
 }
 
+# State scope, for the TFR tooltips: the natural term the census's last step used (te_dg_natural), or the live one
+# for a census state from an older save that hasn't stepped since (final review 2, m7: it read x0.00 until then).
+te_demog_natural_shown = {
+	value = te_demog_tfr_natural
+	if = {
+		limit = { has_variable = te_dg_natural }
+		value = var:te_dg_natural
+	}
+}
+
 # Births added on top of the census (phase 2 step 4): the scale this year's children per woman took from
 # what the engine did over the window (te_dg_bz, te_demog_on_top_scales), 1 when it took none. Only the
 # tooltips read it: te_dg_tfr is the model's figure x this.

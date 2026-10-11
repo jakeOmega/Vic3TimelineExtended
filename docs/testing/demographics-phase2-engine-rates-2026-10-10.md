@@ -12,7 +12,7 @@ laws' birth lines away), put the engine within 0.1 per 1,000 of the census in ev
 census's own: ×1.78, a fail, with China at +0.23%. The owner chose the first of two candidates (below, "The
 multiple"). The in-game probes and the fast-mode run are still to do.
 
-**Release precondition (owner, 2026-10-10, amended):** nothing changes outside Full. Step 4 edits no carrier; step 5's
+**Release precondition (owner, 2026-10-10, amended):** nothing changes outside Full. Step 4 edits no engine birth or mortality line; step 5's
 retune of the global defines is dropped (owner, 2026-10-10).
 
 ## The build, the saves and the tools
@@ -80,8 +80,9 @@ figures as they were):
   0.18 in 1887 (births −0.91, deaths +0.93 per 1,000 world-wide; China 0.32 points, India 0.25, Austria 0.33).
 - **The starving slope below SoL 4** (owner ruling: the poverty term replaces it) cost 0.04 points in 1837 and 0.17 in
   1887, as the plan's §1 measured.
-- **What stays on top** is now small: severe starvation (Austria: 7% of its people, census +1.33%, predicted +0.55%),
-  devastation, and the late-era lines.
+- **What stays on top** is now small: severe starvation, devastation and the late-era lines. Where it shows: Austria 1887
+  (census +1.23%, predicted +0.45%; 7% of its people in severe starvation) and Russia 1877 (+1.00%, +0.61%; 3.3% in
+  severe starvation, and devastation adding 0.6 deaths per 1,000).
 
 **Countries of 20M or more in 1887, as retuned** (% a year, census and predicted): China +0.12, +0.12; British India
 +1.15, +1.15; Russia +0.97, +0.97; the USA +1.49, +1.49; Japan +0.61, +0.61; France +0.50, +0.49; Turkey +1.29,
@@ -139,7 +140,7 @@ saves are compressed binary and couldn't be read.
 | Probe | Question | Answer |
 |---|---|---|
 | P1 | Are devastation's and pollution's mortality lines inside `modifier:state_mortality_mult`? | **Yes, both (owner, in game, 2026-10-10).** Alentejo: "State Region Devastation +11%", Ministry of Health −2%, total +9%, against option m's logged +0.091. Yorkshire: "Pollution Impact +8%", Ministry of Health −14%, total −5%, against −0.046. The mod's +0.05 pollution line adds to vanilla's (owner). The plan's §1 (E14, E15) records it |
-| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **To do (owner, in game):** option n on the capital under Full. `rep_b` and `rep_d` are the absorbed share of the bare curves: with No Women's Rights about +0.05 − 0.1 × literacy, and with Charitable Health System at Ministry of Health level N about −0.03 × N in deaths. The capital's birth and mortality tooltips list the laws' lines beside Census: Births / Deaths. `debug.log` carries no error from `te_demog_absorbed_*` (the generated `institution_investment_level` ladders, `has_technology_researched`, `is_in_mild_starvation` in pop scope). Offline, `TestEngineRateLines` pins every line to main and `TestAbsorbedScript` runs the script against `DM.totals` |
+| P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **To do (owner, in game):** option n on the capital under Full. `rep_b` and `rep_d` are the absorbed share of the bare curves, each plus any mild starvation: with No Women's Rights about +0.05 − 0.1 × literacy; for a Women in the Fields holder (a variant of No Women's Rights) about −0.10 − 0.1 × literacy, and its capital's birth-rate tooltip lists only its own −10%, not No Women's Rights' +5% as well; with Charitable Health System at Ministry of Health level N about −0.03 × N in deaths. The capital's birth and mortality tooltips list the laws' lines beside Census: Births / Deaths. `debug.log` carries no error from `te_demog_absorbed_*` (the generated `institution_investment_level` ladders, `has_technology_researched`, `is_in_mild_starvation` in pop scope). Offline, `TestEngineRateLines` pins every line to main and `TestAbsorbedScript` runs the script against `DM.totals` |
 | P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
 | P4 | Does a state keep its census modifiers through a change of owner? | **To do:** `predict SAVE --check-modifiers` on a fast-run save taken after a war or a civil war |
 | P5 | Turmoil's scaling (conditional) | Only if the fast run shows a residual tied to turmoil |
@@ -149,7 +150,10 @@ saves are compressed binary and couldn't be read.
 
 This list is the canonical checklist; the PR body repeats it.
 
-1. **P2 and P3** on a throwaway save, deployed per CLAUDE.md "Play-testing unmerged work".
+1. **P2 and P3** on a throwaway save, deployed per CLAUDE.md "Play-testing unmerged work". In the same session, **option d's
+   benchmark on the 1887 gate save under Full and under Disabled**, recorded here: the plan's Risks asks for the walk's
+   cost, and if it grew, the absorbed literacy and starvation terms fold into the pop multipliers' own evaluation (final
+   review 2, m6, deferred).
 2. **The fast-mode gate run:** a new 1836 game, observed, census log on (option b), fast mode at 4× (option h) on day
    1, to census year 1950 or later; every `debug.log` generation archived and yearly autosaves on D:.
 3. **Then:** `demographics_observer_report.py LOGS... --phase2` and `--closed-borders SAVES...`; `demographics_harness.py

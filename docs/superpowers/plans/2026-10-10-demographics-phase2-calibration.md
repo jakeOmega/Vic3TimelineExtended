@@ -7,7 +7,7 @@ engine then follows are the census's and sane. Step 1 is built (this PR); the re
 Evidence for step 1: `docs/testing/demographics-history-check-2026-10-10.md`. Owner context (2026-10-10): the system
 is unreleased, so the bar for merging is low as long as each step is tested before the next public release, and
 nothing changes outside the rule's Full setting (owner, 2026-10-10: step 4 cancels what it absorbs through M, under
-Full only, and edits no carrier). Step 5, the retune of the global defines, is dropped (owner, 2026-10-10). Fast mode
+Full only, and edits no engine birth or mortality line). Step 5, the retune of the global defines, is dropped (owner, 2026-10-10). Fast mode
 (#848) is the in-game loop.
 
 ## Targets
@@ -125,6 +125,7 @@ Before the owner's call, the fit can still:
 **Built:** `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (PR #869), with the owner's rulings
 of 2026-10-10:
 - **(a) What the census absorbs:** standing law and technology lines it models at matching size (the health laws,
+  except Private Health Insurance's wealth mortality, on top for now pending probe P6 (owner, 2026-10-10);
   §8.4's mod lines, the augmentation laws as flat chronic treatment, the women's-rights birth lines once its
   natural-fertility term carries them), child labour's class lines at its smaller work term (vanilla's are probably
   far too high), and mild starvation (amended: the poverty term was fitted without it). Every line stays on its

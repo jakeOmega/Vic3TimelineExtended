@@ -1494,10 +1494,12 @@ class TestNaturalFertilityScript(unittest.TestCase):
         tfr = eng.vars["te_dg_tfr"]
         eng.fixtures[f"modifier:{P.NATURAL_FERTILITY_TYPE}"] = 0.0   # the law changes before the next step
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr")), tfr)
+        # the tooltips' term is the stored one too (te_demog_natural_shown, the live term only before any step)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.9)
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
             line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
-            self.assertIn("Var('te_dg_natural')", line, key)
+            self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
             self.assertNotIn("te_demog_tfr_natural", line, key)
 
     def test_the_tfr_tooltips_list_natural_fertility_and_the_births_on_top(self):
@@ -1506,13 +1508,23 @@ class TestNaturalFertilityScript(unittest.TestCase):
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
             line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
-            self.assertIn("Var('te_dg_natural')", line, key)
+            self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
+            self.assertNotIn("Var('te_dg_natural')", line, key)
             self.assertIn("ScriptValue('te_demog_tfr_on_top')", line, key)
         for bz, want in ((None, 1.0), (0.3, 1.3), (-0.2, 0.8)):
             eng = _Engine({})
             if bz is not None:
                 eng.vars["te_dg_bz"] = bz
             self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr_on_top")), want)
+
+    def test_women_s_legal_standing_shows_the_live_term_until_a_step_stores_one(self):
+        """Final review 2, m7: a census state from an older save has no te_dg_natural until its next step, and the
+        tooltip read ×0.00 beside a headline that isn't 0. It shows the stored term the step used, else the live one."""
+        live = {f"modifier:{P.NATURAL_FERTILITY_TYPE}": -0.1}
+        eng = _Engine(live)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.9)
+        eng.vars["te_dg_natural"] = 0.85
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.85)
 
 
 class _CountryEngine(_Engine):
@@ -3372,6 +3384,37 @@ class TestFastMode(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_fast_fb"], fb, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd, places=5)
+
+    def test_fast_mode_composes_with_the_absorbed_lines(self):
+        """Owner amendment A (final review 2, m5): a state carrying absorbed lines A (in the walk's average, the state
+        read and the replaced sums) and terms on top O. At K = 4, M = T/B - 1 - A, F = 3 x (T/B + O), so the engine
+        runs 1 + M + F + O + A = 4 x (T/B + O): fast mode scales the census and what's on top, never what M cancels.
+        The next clock step, with both terms applied, returns the same M and F."""
+        eng = self._eng_full()
+        eb0, ed0 = 475e3, 430e3
+        a_b, a_d, o_b, o_d = -0.12, -0.20, 0.05, -0.02
+        tb, td = 36.0 * 1000.0 * 100 / 12 / eb0, 24.0 * 1000.0 * 100 / 12 / ed0
+
+        def step(mb, fb, md, fd):
+            eng.fixtures.update({"modifier:state_birth_rate_mult": o_b + a_b + mb + fb,
+                                 "modifier:state_mortality_mult": o_d + a_d + md + fd})
+            eng.locals.update(te_dg_w_eb=(1 + o_b + a_b + mb + fb) * eb0, te_dg_w_eb0=eb0,
+                              te_dg_w_ed=(1 + o_d + a_d + md + fd) * ed0, te_dg_w_ed0=ed0,
+                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0)
+            eng.call("te_demog_rates_refresh")
+            eng.call("te_demog_fast_refresh_rates")
+            return eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"], eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]
+
+        mb, fb, md, fd = step(0.0, 0.0, 0.0, 0.0)
+        self.assertAlmostEqual(mb, tb - 1 - a_b, places=5)
+        self.assertAlmostEqual(md, td - 1 - a_d, places=5)
+        self.assertAlmostEqual(fb, 3 * (tb + o_b), places=5)
+        self.assertAlmostEqual(fd, 3 * (td + o_d), places=5)
+        self.assertAlmostEqual(1 + mb + fb + o_b + a_b, 4 * (tb + o_b), places=5)
+        self.assertAlmostEqual(1 + md + fd + o_d + a_d, 4 * (td + o_d), places=5)
+        again = step(mb, fb, md, fd)
+        for got, want in zip(again, (mb, fb, md, fd)):
+            self.assertAlmostEqual(got, want, places=5)
 
     def test_the_rate_term_is_k_minus_1_times_the_states_own_average(self):
         """A flat +(K - 1) would dilute the state's other terms, which the engine adds into the same (1 + total):

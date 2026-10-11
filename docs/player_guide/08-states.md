@@ -245,12 +245,15 @@ from the first day.
 
 Under the Demographics (Experimental) rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
-of death, described below. While it does, it takes over what the health, child
-labor and women's rights laws, the family-planning and medical technologies and
-mild starvation do to births and deaths: their tooltips still list those lines,
-but the census cancels them and carries their effect in its own terms. The base game's other effects on births and
-deaths still apply on top: severe starvation, devastation, pollution, events,
-decrees, and the family-policy laws the census doesn't model yet. A state's birth
+of death, described below. While it does, it takes over what the child labor and
+women's rights laws, most of the health laws' effects, the Contraceptive Pill,
+State-Sponsored Family Planning, vaccines and antibiotics and mild starvation do
+to births and deaths: their tooltips still list those lines, but the census
+cancels them and carries their effect in its own terms. The base game's other
+effects on births and deaths still apply on top: Private Health Insurance's
+mortality cut for the wealthy, the late medical technologies, severe starvation,
+devastation, pollution, events, decrees, and the family-policy laws the census
+doesn't model yet. A state's birth
 rate and mortality tooltips show the census's part as Census: Births and Census:
 Deaths. The workforce still follows the base game's rules.
 
@@ -296,11 +299,11 @@ Each year, the people of every age lose their dead at that age's rate, the
 newborn enter at age 0, and the war dead, people killed by events and migrants
 are taken from or added to the ages they belong to. The war dead are people aged
 18 to 40, nineteen in twenty of them men. Children per woman follows wealth and
-women's legal standing (the more rights the Rights of Women laws give women, the
-later they marry and the fewer children they have), then falls with literacy,
-child survival and city life. The figure shown is what births came to that year,
-so decrees, famine and other effects on births count in it; its tooltip lists
-them as births added on top of the census. The means to plan a family
+women's legal standing (where women work the fields, own property, hold jobs or
+vote, they marry later and have fewer children), then falls with literacy, child
+survival and city life. Under Full, the figure shown is what births came to that
+year, so decrees, famine and other effects on births count in it; its tooltip
+lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
 Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show

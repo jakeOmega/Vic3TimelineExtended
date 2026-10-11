@@ -392,7 +392,8 @@ the bare curve's − 1 − the deaths the census absorbs ÷ the bare deaths, so 
 every term added on top, at the bare curve's weight (the growth probe). The engine's own mortality modifiers (severe
 starvation, devastation, pollution, turmoil, workplace mortality, events) stay and add on top; devastation's and
 pollution's are inside the state's read (probe P1). Absorbed, and cancelled by M under Full only: mild starvation (per
-pop), vanilla's health laws' and child labour's lines, and §8.4's. The census's next step scales its own rates to what the
+pop), vanilla's health laws' and child labour's lines (but not Private Health Insurance's wealth mortality, which stays
+on top for now: owner, 2026-10-10, pending probe P6), and §8.4's. The census's next step scales its own rates to what the
 engine did, so the ring places the deaths added on top by the model's own age pattern, young and old (owner,
 2026-10-10: one scale on every cause; a per-term split, devastation on everyone and pollution on chronic causes, waits
 until the panel shows an artefact). The share of old people therefore
@@ -900,7 +901,8 @@ Still to come:
 
 Vanilla's modifiers stay as inputs, with three exceptions the census absorbs (step 4; their lines stay, and M cancels
 them under Full only):
-- the health laws' mortality, absorbed by access × treatment;
+- the health laws' mortality, absorbed by access × treatment (Private Health Insurance's wealth mortality stays on top for
+  now: owner, 2026-10-10, pending probe P6);
 - child labour's class lines, absorbed at the census's smaller work term (owner, 2026-10-10: vanilla's are probably
   far too high);
 - the women's-rights birth lines, absorbed once the census's natural-fertility term (§2.3) carries them.
