@@ -104,3 +104,58 @@ te_demog_lost_war = {
 		}
 	}
 }
+
+# The engine's moved birth and mortality lines (owner, 2026-10-11; the engine-lines plan, Task 4): refreshed where their
+# inputs change, and every month for technologies and institution levels, which have no on-action, and old saves.
+# ROOT must be the state (the pairs' multipliers resolve against it): the state hooks call the refresh, the country
+# and global ones fire te_demog_events.4 in each state.
+on_monthly_pulse_state = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_owner_change = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_state_incorporation = {
+	on_actions = {
+		te_demog_lines_on_action
+	}
+}
+on_law_activated = {
+	on_actions = {
+		te_demog_lines_country_on_action
+	}
+}
+on_game_started_after_lobby = {
+	on_actions = {
+		te_demog_lines_world_on_action
+	}
+}
+
+# THIS = ROOT = a state.
+te_demog_lines_on_action = {
+	effect = {
+		te_demog_lines_refresh = yes
+	}
+}
+
+# ROOT = a country whose law changed (an enactment, or a law script set): each of its states, as its own ROOT.
+te_demog_lines_country_on_action = {
+	effect = {
+		every_scope_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
+	}
+}
+
+# No ROOT (after the lobby, so the rule is settled): every state, as its own ROOT.
+te_demog_lines_world_on_action = {
+	effect = {
+		every_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
+	}
+}

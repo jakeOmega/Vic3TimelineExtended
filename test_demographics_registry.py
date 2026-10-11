@@ -36,6 +36,10 @@ GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_e
 VALUES = ROOT / "common" / "script_values" / "te_demog_values.txt"
 FAST_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"
 RATE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt"
+# the engine's moved birth and mortality lines (the engine-lines plan, 2026-10-11; generated)
+LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_line_effects_generated.txt"
+LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_line_values_generated.txt"
+LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_line_modifiers_generated.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -340,9 +344,9 @@ class _Engine:
 
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
-        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS])
+        self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS])
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -354,6 +358,7 @@ class _Engine:
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
+        self.removed = []     # remove_modifier's names, in order
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -489,6 +494,7 @@ class _Engine:
             elif key == "remove_modifier":
                 assert arg in self.modifiers, f"remove of absent modifier {arg}"
                 del self.modifiers[arg]
+                self.removed.append(arg)
             elif key == "while":
                 for _ in range(int(self.value(_find(arg, "count")))):
                     self.run([i for i in arg if i[0] != "count"])
@@ -1096,6 +1102,104 @@ class TestEngineLinesMoved(unittest.TestCase):
     def test_the_types_are_not_engine_fields(self):
         for name in P.ENGINE_LINE_TYPES.values():
             self.assertFalse(DM.is_engine_rate_field(name), name)
+
+
+class TestLinesScript(unittest.TestCase):
+    """te_demog_lines_refresh (owner, 2026-10-11; the engine-lines plan, Task 4): the moved lines reach a state while
+    the census doesn't set its births and deaths, at the two families' sum, by a fixed-sign pair per field."""
+
+    def _eng(self, sums, full=False, census_term=False, held=None):
+        fixtures = {f"modifier:{name}": sums.get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
+        if census_term:
+            eng.vars["te_dg_mb"] = -0.3
+        for short, m in (held or {}).items():
+            eng.vars[f"te_dg_ln_{short}"] = m
+            eng.modifiers[f"te_demog_line_{short}_{'up' if m > 0 else 'down'}"] = abs(m)
+        return eng
+
+    def lines(self, eng):
+        return {k: v for k, v in eng.modifiers.items() if k.startswith("te_demog_line_")}
+
+    def test_off_applies_the_families_sum(self):
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03, "state_demog_ontop_mortality_mult": -0.05,
+                         "state_demog_absorbed_birth_rate_mult": 0.05, "state_demog_ontop_mortality_wealth_mult": -0.01,
+                         "state_demog_absorbed_laborers_mortality_mult": 0.05})
+        eng.call("te_demog_lines_refresh")
+        got = self.lines(eng)
+        self.assertEqual(set(got), {"te_demog_line_deaths_down", "te_demog_line_births_up",
+                                    "te_demog_line_wealth_deaths_down", "te_demog_line_laborers_deaths_up"})
+        for name, want in (("te_demog_line_deaths_down", 0.08), ("te_demog_line_births_up", 0.05),
+                           ("te_demog_line_wealth_deaths_down", 0.01), ("te_demog_line_laborers_deaths_up", 0.05)):
+            self.assertAlmostEqual(got[name], want, msg=name)
+        self.assertAlmostEqual(eng.vars["te_dg_ln_deaths"], -0.08)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_line_deaths_applied")), -0.08)
+
+    def test_the_pairs_carry_the_engine_fields(self):
+        mods = _raw_blocks([LINE_MODIFIERS])
+        for field, short in P.ENGINE_LINE_SHORT.items():
+            self.assertRegex(mods[f"te_demog_line_{short}_up"], rf"\b{field} = 1\b", short)
+            self.assertRegex(mods[f"te_demog_line_{short}_down"], rf"\b{field} = -1\b", short)
+        self.assertEqual(len(mods), 2 * len(P.ENGINE_LINE_FIELDS))
+        # organize_loc files te_demog_* keys in te_miscellaneous_l_english.yml, beside the census's own pairs
+        loc = "".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*.yml")))
+        for name in mods:
+            self.assertIn(f" {name}:", loc, name)
+            self.assertIn(f" {name}_desc:", loc, name)
+
+    def test_pairs_follow_the_census_term(self):
+        """Review Focus 1: the pairs and the census's term are never both in force, and the pairs come back whenever
+        the census's term is gone (Display only or Disabled clear te_dg_mb; a rule switched mid-game)."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True)
+        eng.call("te_demog_lines_refresh")
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Full, no census step yet: vanilla's lines stay")
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True, census_term=True,
+                        held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {}, "Full with the census's term: the pairs come off")
+        self.assertNotIn("te_dg_ln_deaths", eng.vars)
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=False, census_term=True)
+        eng.call("te_demog_lines_refresh")
+        self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Disabled with a stale census term: the pairs apply")
+
+    def test_unchanged_sums_are_left_alone(self):
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(eng.removed, [], "a refresh with nothing changed removes no modifier")
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.05}, held={"deaths": -0.03})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(eng.removed, ["te_demog_line_deaths_down"])
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_deaths_down"], 0.05)
+
+    def test_a_sum_back_at_zero_leaves_no_pair(self):
+        eng = self._eng({}, held={"births": 0.05})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(self.lines(eng), {})
+        self.assertEqual(eng.vars["te_dg_ln_births"], 0)
+
+    def test_unincorporated_state_gets_no_institution_lines(self):
+        """Review Focus 2: the engine reads an institution line as 0 in an unincorporated state, so the sum is the
+        laws' and techs' alone, as vanilla applies them."""
+        eng = self._eng({"state_demog_absorbed_birth_rate_mult": 0.05})
+        eng.call("te_demog_lines_refresh")
+        self.assertEqual(set(self.lines(eng)), {"te_demog_line_births_up"})
+
+    def test_refresh_runs_where_the_inputs_change(self):
+        """Owner, 2026-10-11: the pairs follow a new game, a law, a change of owner and incorporation at once, with the
+        monthly pulse as the fallback. Every caller has ROOT = the state: the state on-actions call it directly, the
+        country and global ones through the hidden state event te_demog_events.4."""
+        on_actions = _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt")
+        for hook in ("on_monthly_pulse_state", "on_state_owner_change", "on_state_incorporation",
+                     "on_law_activated", "on_game_started_after_lobby"):
+            self.assertRegex(on_actions, rf"{hook} = \{{\s*on_actions = \{{\s*te_demog_lines_", hook)
+        for name in ("te_demog_lines_country_on_action", "te_demog_lines_world_on_action"):
+            self.assertIn("trigger_event = { id = te_demog_events.4 }", _block(on_actions, name), name)
+        event = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.4")
+        self.assertIn("type = state_event", event)
+        self.assertIn("te_demog_lines_refresh = yes", event)
+        callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
+                         if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
+        self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
 
 
 class TestPollutionLine(unittest.TestCase):
