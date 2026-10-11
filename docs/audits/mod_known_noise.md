@@ -15,7 +15,7 @@ The query parameter is `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`
 
 ## Format
 
-Same as `vanilla_known_bugs.md` — `### \`anchor\` — title` heading, optional `- source: \`<token>\``, mandatory `- tracked: \`docs/audits/open_issues.md#anchor\``, optional `- reviewed: helper anchor, signature cannot match a mod call (<why>)`, fenced code block of signature substrings. The helper-anchor check covers this file too.
+Same as `vanilla_known_bugs.md` — `### \`anchor\` — title` heading, optional `- source: \`<token>\``, mandatory `- tracked: \`docs/audits/open_issues.md#anchor\``, optional `- reviewed: helper anchor, signature cannot match a mod call (<why>)`, optional `- stack: vanilla only`, fenced code block of signature substrings (message text, never a bare file path: the loader warns on a path-only line, #873). The helper-anchor check covers this file too.
 
 The `#anchor` must be the **GitHub** slug of the target `### ` heading in `open_issues.md`: lowercase, delete every character that is not a word char / hyphen / space (so `_` survives but `.`, `:`, backticks and parens vanish outright — they are *not* turned into dashes), then space → `-`; repeated headings get a `-N` suffix. Line-number fragments like `#L8` do **not** resolve on GitHub. `POST /validate/registries` re-checks every anchor in milliseconds.
 
@@ -46,10 +46,10 @@ Mod's scrollable `FancyTooltipWidgetType` uses `scrollbar_vertical = { using = v
 - tracked: `docs/audits/open_issues.md#l9-mod-dds-dimensions-historical-company-icons`
 
 ```
-gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds
-gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds
-gfx/interface/icons/company_icons/historical_company_icons/american_google.dds
-gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds
+Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds'
+Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds'
+Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/american_google.dds'
+Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds'
 ```
 
 Block-compressed (BC1/BC3) DDS textures need multiple-of-4 width and height; these four mod-side historical-company icons fail that constraint and emit edge-artifact warnings once per file at load. Visual-only — engine still loads the texture. Fix requires re-export through the image pipeline; tracked at `docs/audits/open_issues.md#l9-mod-dds-dimensions-historical-company-icons`.

@@ -30,6 +30,8 @@ from game_log_reader import (
     gui_injected_scope_names,
     tag_gui_injected_scopes,
     helper_anchor_warnings,
+    mod_frame_test,
+    mod_only_anchor_warnings,
     mod_uses,
 )
 
@@ -685,6 +687,143 @@ shared signature substring here
             self.assertEqual(entry.vanilla_bug_ref["kind"], "vanilla")  # path-anchored, default kind
 
 
+class StackVanillaOnlyTests(unittest.TestCase):
+    """`- stack: vanilla only` (#863) and the bare-path signature warning (#873)."""
+
+    STACK = (
+        "Script system error!\n  Error: Event target link 'capital' returned an unset scope\n"
+        "  Script location: common/scripted_triggers/00_scripted_triggers.txt:1065 <- {frames}"
+        "common/ai_strategies/00_default_strategy.txt:6513"
+    )
+
+    def _registry(self, tmp: str, extra_lines: str = "") -> str:
+        os.makedirs(os.path.join(tmp, "docs", "audits"), exist_ok=True)
+        with open(os.path.join(tmp, "docs", "audits", "open_issues.md"), "w", encoding="utf-8") as f:
+            f.write("")
+        os.makedirs(os.path.join(tmp, "docs", "vanilla"), exist_ok=True)
+        path = os.path.join(tmp, "docs", "vanilla", "vanilla_known_bugs.md")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(
+                "## Script errors observed\n\n"
+                "### `common/ai_strategies/00_default_strategy.txt` — AI reads a stateless capital\n"
+                f"{extra_lines}\n"
+                "```\nEvent target link 'capital' returned an unset scope\n```\n"
+            )
+        _vanilla_bug_cache.clear()
+        return path
+
+    def _mod(self, tmp: str) -> str:
+        mod = os.path.join(tmp, "mod")
+        os.makedirs(os.path.join(mod, "common", "on_actions"))
+        with open(os.path.join(mod, "common", "on_actions", "un_on_actions.txt"), "w", encoding="utf-8") as f:
+            f.write("")
+        return mod
+
+    def _entries(self):
+        engine_only = LogEntry("00:00:01", "jomini_script_system.cpp:304", self.STACK.format(frames=""))
+        mod_caused = LogEntry("00:00:02", "jomini_script_system.cpp:304", self.STACK.format(
+            frames="common/on_actions/un_on_actions.txt:88 <- "))
+        return engine_only, mod_caused
+
+    def test_vanilla_only_stack_is_tagged_and_a_mod_frame_is_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, by_basename, by_source, warnings = load_vanilla_bug_registry(
+                self._registry(tmp, "- stack: vanilla only\n"))
+            self.assertEqual(warnings, [])
+            self.assertTrue(refs[0].vanilla_stack_only)
+            engine_only, mod_caused = self._entries()
+            self.assertIn("common/on_actions/un_on_actions.txt", mod_caused.files)
+            tag_vanilla_bugs([engine_only, mod_caused], by_basename, by_source, mod_root=self._mod(tmp))
+            self.assertEqual(engine_only.vanilla_bug_ref["stack"], "vanilla only")
+            self.assertIsNone(mod_caused.vanilla_bug_ref)
+
+    def test_without_the_line_both_are_tagged_as_before(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, by_basename, by_source, _ = load_vanilla_bug_registry(self._registry(tmp))
+            self.assertFalse(refs[0].vanilla_stack_only)
+            engine_only, mod_caused = self._entries()
+            tag_vanilla_bugs([engine_only, mod_caused], by_basename, by_source, mod_root=self._mod(tmp))
+            self.assertIsNotNone(engine_only.vanilla_bug_ref)
+            self.assertIsNotNone(mod_caused.vanilla_bug_ref)
+            self.assertNotIn("stack", engine_only.vanilla_bug_ref)
+
+    def test_without_a_mod_root_a_vanilla_only_entry_tags_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, by_basename, by_source, _ = load_vanilla_bug_registry(
+                self._registry(tmp, "- stack: vanilla only\n"))
+            engine_only, mod_caused = self._entries()
+            tag_vanilla_bugs([engine_only, mod_caused], by_basename, by_source)
+            self.assertIsNone(engine_only.vanilla_bug_ref)
+            self.assertIsNone(mod_caused.vanilla_bug_ref)
+
+    def test_unknown_stack_value_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, _, _, warnings = load_vanilla_bug_registry(self._registry(tmp, "- stack: engine\n"))
+            self.assertFalse(refs[0].vanilla_stack_only)
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("- stack: vanilla only", warnings[0])
+
+    def test_bare_path_signatures_warn_and_message_text_does_not(self):
+        bare = [
+            "common/ai_strategies/00_default_strategy.txt:2382",
+            "00_default_strategy.txt:2382",
+            "royal_wedding.txt:112",
+            "Script location: common/script_values/00_infamy_values.txt",
+            "common/journal_entries/00_east_indies.txt",
+            "`gui/companies_panel.gui:1`",
+        ]
+        fine = [
+            "Div/0 near common/treaty_articles/05_transfer_money.txt:149",
+            "Value of wrong type in 'common/script_values/command_values.txt:373'. Got value of type 'none'",
+            "Event target link 'capital' returned an unset scope",
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._registry(tmp)
+            with open(path, "a", encoding="utf-8") as f:
+                f.write("\n### `common/foo.txt` — mixed signatures\n\n```\n"
+                        + "\n".join(bare + fine) + "\n```\n")
+            _vanilla_bug_cache.clear()
+            _, _, _, warnings = load_vanilla_bug_registry(path)
+        flagged = [w for w in warnings if "is only a file path" in w]
+        self.assertEqual(len(flagged), len(bare))
+        for sig in bare:
+            self.assertTrue(any(f"`{sig}`" in w for w in flagged), sig)
+
+    def test_entry_with_no_signature_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._registry(tmp)
+            with open(path, "a", encoding="utf-8") as f:
+                f.write("\n### `common/foo.txt` — no block\n\nProse only.\n")
+            _vanilla_bug_cache.clear()
+            _, _, _, warnings = load_vanilla_bug_registry(path)
+        self.assertEqual(len([w for w in warnings if "has no signature" in w]), 1)
+
+    def test_sibling_that_can_match_a_stack_only_message_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._registry(tmp, "- stack: vanilla only\n")
+            with open(path, "a", encoding="utf-8") as f:
+                f.write("\n### `common/ai_strategies/00_default_strategy.txt:5065` — sibling\n\n"
+                        "```\nError: Event target link 'capital' returned an unset scope\n```\n"
+                        "\n### `common/ai_strategies/00_default_strategy.txt:7` — unrelated\n\n"
+                        "```\nSomething else entirely\n```\n")
+            _vanilla_bug_cache.clear()
+            _, _, _, warnings = load_vanilla_bug_registry(path)
+        shadow = [w for w in warnings if "can match the same message" in w]
+        self.assertEqual(len(shadow), 1)
+        self.assertIn("'sibling'", shadow[0])
+
+    def test_mod_frame_with_a_leading_slash_still_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mod = self._mod(tmp)
+            self.assertTrue(mod_frame_test(mod)(["/common/on_actions/un_on_actions.txt"]))
+
+    def test_live_mod_noise_registry_is_warning_free(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        _, _, _, warnings = load_mod_noise_registry(os.path.join(root, "docs", "audits", "mod_known_noise.md"))
+        self.assertEqual(warnings, [])
+
+
 class GitHubHeadingSlugTests(unittest.TestCase):
     """`_github_slug` must reproduce GitHub's heading-anchor rule exactly —
     a self-consistent but wrong rule made broken `- tracked:` links validate."""
@@ -938,6 +1077,44 @@ Error
         self.assertIn("anchor on the vanilla caller", w["advice"])
         self.assertIn("appeasement change on a lobby", w["detail"])
 
+    def test_vanilla_only_stack_entry_is_skipped(self):
+        # #863: an error through the mod's call has the mod file in its stack,
+        # which a `- stack: vanilla only` entry never tags.
+        with tempfile.TemporaryDirectory() as tmp:
+            self.REGISTRY = HelperAnchorTests.REGISTRY.replace(
+                "appeasement change on a lobby\n", "appeasement change on a lobby\n- stack: vanilla only\n")
+            refs, mod, game = self._setup(tmp, {
+                "events/a.txt": "a.1 = { option = { add_lobby_appeasement = { AMOUNT = 1 } } }\n",
+            })
+            self.assertTrue(refs[0].vanilla_stack_only)
+            self.assertEqual(helper_anchor_warnings(refs, mod, game), [])
+
+    def test_vanilla_only_stack_entry_still_warns_for_a_gui_use(self):
+        # A .gui reading the helper leaves no frame in the error's stack.
+        with tempfile.TemporaryDirectory() as tmp:
+            self.REGISTRY = HelperAnchorTests.REGISTRY.replace(
+                "appeasement change on a lobby\n", "appeasement change on a lobby\n- stack: vanilla only\n")
+            refs, mod, game = self._setup(tmp, {
+                "gui/panel.gui": "text = \"[ScriptValue('add_lobby_appeasement')]\"\n",
+            })
+            out = helper_anchor_warnings(refs, mod, game)
+        self.assertEqual([w["mod_uses"] for w in out], [{"add_lobby_appeasement": ["gui/panel.gui:1"]}])
+
+    def test_mod_only_anchor_warns_unless_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            refs, mod, game = self._setup(tmp, {"common/ideologies/modified.txt": ""})
+            doc = os.path.join(tmp, "docs", "vanilla", "vanilla_known_bugs.md")
+            with open(doc, "a", encoding="utf-8") as f:
+                f.write("\n### `common/ideologies/modified.txt` — replayed vanilla\n\n```\nError\n```\n"
+                        "\n### `common/ideologies/modified.txt:2` — reviewed replay\n"
+                        "- reviewed: mod anchor, the mod replays vanilla here\n\n```\nError\n```\n")
+            _vanilla_bug_cache.clear()
+            refs, _, _, _ = load_vanilla_bug_registry(doc)
+            out = mod_only_anchor_warnings(refs, mod, game)
+        self.assertEqual([(w["kind"], w["entry"], w["anchors"]) for w in out],
+                         [("mod_only_anchor", "replayed vanilla", ["modified.txt"])])
+        self.assertEqual(mod_only_anchor_warnings(refs, mod, None), [])
+
     def test_comments_and_definitions_are_not_uses(self):
         with tempfile.TemporaryDirectory() as tmp:
             refs, mod, game = self._setup(tmp, {
@@ -989,7 +1166,7 @@ Error
             os.utime(path, (time.time() + 10, time.time() + 10))
             self.assertEqual(mod_uses(tmp, names), {"y": ["events/a.txt:1"]})
 
-    def test_live_registry_reviewed_lines_name_the_helper_anchor(self):
+    def test_live_registry_reviewed_lines_name_their_check(self):
         root = os.path.dirname(os.path.abspath(__file__))
         _vanilla_bug_cache.clear()
         refs, _, _, warnings = load_vanilla_bug_registry(os.path.join(root, "docs", "vanilla", "vanilla_known_bugs.md"))
@@ -998,7 +1175,8 @@ Error
         self.assertTrue(reviewed)
         for r in reviewed:
             for note in r.reviewed:
-                self.assertTrue(note.startswith("helper anchor, signature cannot match a mod call ("), note)
+                self.assertTrue(note.startswith(("helper anchor, signature cannot match a mod call (",
+                                                 "mod anchor, ")), note)
 
 
 if __name__ == "__main__":
