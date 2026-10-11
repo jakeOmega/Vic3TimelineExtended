@@ -66,6 +66,16 @@ states={
 }
 \t}
 }
+state_region_manager={
+\tdatabase={
+0={
+\ttemplate=STATE_TEST
+\tarable_land=40
+\tpollution=127.5
+\ttraits={ state_trait_natural_harbors }
+}
+\t}
+}
 institutions={
 \tdatabase={
 16777220={
@@ -123,6 +133,17 @@ class TestTinySave(unittest.TestCase):
         self.assertEqual(c.laws, {"law_serfdom"})
         self.assertEqual(c.techs, {"enclosure", "railways"})
         self.assertEqual(dict(c.strata_people), {"upper": 400})
+
+    def test_state_pollution(self):
+        """Each state's region's pollution (0 to POLLUTION_MAX), for predict's Pollution Impact line (owner,
+        2026-10-11). A state with no region in the save has none."""
+        self.assertEqual(S.state_pollution(self.sections), {})
+        text = TINY.replace("\tcountry=3\n\tincorporation=1\n}", "\tcountry=3\n\tincorporation=1\n\tregion=\"STATE_TEST\"\n}", 1)
+        self.assertIn('region="STATE_TEST"', text)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "polluted.v3"
+            path.write_text(text, encoding="utf-8")
+            self.assertEqual(S.state_pollution(S.read_sections(str(path))), {"1": 127.5})
 
     def test_institutions_and_incorporation(self):
         c = S.country_inputs(self.sections)["TST"]

@@ -38,13 +38,49 @@ class TestPredict(unittest.TestCase):
         out = H.predict_state([H.Pop(1e6, 9.0, 0.5, 0.8)], cbr=40.0, cdr=30.0, d=self.D)
         self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
 
-    def test_terms_on_top_add_at_the_bare_curves_weight(self):
-        # severe starvation (births -0.9, deaths +1.0), devastation 0.2 and a law's -0.1 births, all on top
+    def test_terms_on_top(self):
+        """Severe starvation (births -0.9, deaths +1.0) is a pop's own line, at the bare curve's weight; devastation's
+        0.2 and a law's -0.1 births are state-level, and act on the census's rate (owner, 2026-10-11)."""
         out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], cbr=40.0, cdr=30.0, d=self.D, on_top_b=-0.1, on_top_d=0.2)
         bare_b = 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12
         bare_d = 1e6 * H.G.monthly_mortality(9.0, self.D) * 12
-        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * (1.0 + 0.2), delta=1.0)
-        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 + bare_b * (-0.9 - 0.1)), delta=1.0)
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 * 1.2 + bare_d * 1.0, delta=1.0)
+        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 * 0.9 - bare_b * 0.9), delta=1.0)
+
+    def test_pollution_mortality(self):
+        """Pollution Impact's mortality line at a region's pollution: half the maximum gives half the line."""
+        self.assertAlmostEqual(H.pollution_mortality(H.P.POLLUTION_MAX / 2), H.P.POLLUTION_HEALTH_MORTALITY / 2)
+        self.assertEqual(H.pollution_mortality(0.0), 0.0)
+
+    def test_predict_save_adds_pollution_to_deaths_only(self):
+        """predict_save passes each state its region's Pollution Impact line among the deaths on top, never births."""
+        from test_demographics_save_inputs import TINY
+        text = TINY.replace("\tcountry=3\n\tincorporation=1\n}", "\tcountry=3\n\tincorporation=1\n\tregion=\"STATE_TEST\"\n}", 1)
+        self.assertIn('region="STATE_TEST"', text)
+        seen = []
+        real = H.predict_state
+
+        def spy(pops, cbr, cdr, d, **kw):
+            seen.append(kw)
+            return real(pops, cbr, cdr, d, **kw)
+
+        lines = H.DM.engine_rate_lines()
+        with tempfile.TemporaryDirectory() as tmp:
+            for pollution, path in ((127.5, Path(tmp) / "polluted.v3"), (0.0, Path(tmp) / "clean.v3")):
+                path.write_text(text.replace("pollution=127.5", f"pollution={pollution}"), encoding="utf-8")
+                H.predict_state = spy
+                try:
+                    H.predict_save(str(path), lines, H.DM.absorbed_carriers(lines=lines), H.DM.load_carriers(), self.D)
+                finally:
+                    H.predict_state = real
+        polluted, clean = seen
+        self.assertAlmostEqual(polluted["on_top_d"] - clean["on_top_d"], H.pollution_mortality(127.5))
+        self.assertEqual(polluted["on_top_b"], clean["on_top_b"])
+
+    def test_state_level_terms_on_top_act_on_the_census_rate(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], cbr=40.0, cdr=30.0, d=self.D, on_top_d=0.32)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0 * 1.32, places=6)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
 
     def test_the_slope_is_reported_not_applied(self):
         pops = [H.Pop(1e6, 1.0, 0.0, 0.8)]

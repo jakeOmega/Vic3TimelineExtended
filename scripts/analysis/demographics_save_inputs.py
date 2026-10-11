@@ -37,7 +37,8 @@ import demographics_model as M
 SECTIONS = {
     "pops": ("type", "location", "workforce", "dependents", "num_literate", "wealth", "previous_quality_of_life",
              "social_class"),
-    "states": ("country", "incorporation", "devastation"),
+    "states": ("country", "incorporation", "devastation", "region"),
+    "state_region_manager": ("template", "pollution"),
     "country_manager": ("definition",),
     "laws": ("law", "country", "active"),
     "technology": ("country", "acquired_technologies"),
@@ -256,6 +257,18 @@ def state_inputs(sections):
                           for name, mult in sections["states"].get(sid, {}).get("timed_modifiers", ())
                           if name == "migration_crowding")
         out.setdefault(tag, []).append((sid, st, sid in incorporated))
+    return out
+
+
+def state_pollution(sections):
+    """{state id: its state region's pollution, 0 to POLLUTION_MAX} for the states whose region the save names
+    (predict's Pollution Impact line, owner 2026-10-11). Pollution is region-wide: split states share it."""
+    by_region = {rec.get("template"): _num(rec.get("pollution")) for rec in sections.get("state_region_manager", {}).values()}
+    out = {}
+    for sid, rec in sections.get("states", {}).items():
+        region = rec.get("region", "").strip('"')
+        if region in by_region:
+            out[sid] = by_region[region]
     return out
 
 
