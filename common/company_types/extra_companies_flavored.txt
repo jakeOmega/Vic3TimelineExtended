@@ -1789,7 +1789,6 @@ company_airbus = {
 		building_airbus_lagardere_plant
 	}
 	extension_building_types = {
-		building_aerospace_industry
 		building_software_industry
 		building_space_elevator
 		building_space_mine
