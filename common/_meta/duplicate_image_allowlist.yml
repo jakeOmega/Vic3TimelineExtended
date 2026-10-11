@@ -44,281 +44,161 @@ buildings:
   - building_synthetics_plant
   - building_synthetics_plant_silk
   reason: Synthetic Clothes Industries is a synthetics-plant variant; vanilla's art fits, kept in the building icon review (2026-09-27)
-technologies:
-- image: gfx/interface/icons/invention_icons/aniline.dds
+- image: gfx/interface/icons/building_icons/building_grand_monument.dds
   entities:
-  - aniline
-  - bergius_process
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/artillery.dds
+  - building_gm_name_carrier_anchor
+  - building_grand_monument
+  reason: the name carrier's anchor is never built or shown (common/buildings/gm_name_carrier.txt); reviewed 2026-10-11
+diplomatic_actions:
+- image: gfx/interface/icons/diplomatic_action_icons/change_culture.dds
   entities:
-  - artillery
-  - motorized_artillery
-  - rocketry
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/battleship_tech.dds
+  - colonial_culture_change
+  - da_change_culture
+  reason: a deliberate "use" pick in icon_prompts.py, vanilla's culture crest in place of the religion crest it borrowed; reviewed 2026-10-11
+- image: gfx/interface/icons/diplomatic_action_icons/force_culture.dds
   entities:
-  - battleship_tech
-  - naval_fire_control_systems
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/bolt_action_rifles.dds
+  - add_power_bloc_culture
+  - force_cultural_acceptance
+  - force_cultural_adoption
+  reason: a deliberate "use" pick in icon_prompts.py, vanilla's culture crest in place of the religion crest it borrowed; reviewed 2026-10-11
+ideologies:
+- image: gfx/interface/icons/ideology_icons/authoritarian.dds
   entities:
-  - bolt_action_rifles
-  - semiautomatic_rifle
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/central_planning.dds
+  - ideology_custom_religion_imperial_cult_economy
+  - ideology_custom_religion_imperial_cult_society
+  - ideology_custom_religion_totalitarian_society
+  - ideology_military_absolutist
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/colonialist.dds
   entities:
-  - central_planning
-  - modern_management_techniques
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/chemical_bleaching.dds
+  - ideology_colonialist
+  - ideology_custom_religion_imperialist_outlook
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/corporatist.dds
   entities:
-  - chemical_bleaching
-  - modern_chemical_processes
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/combustion_engine.dds
+  - ideology_corporatist
+  - ideology_corporatist_movement
+  - ideology_custom_religion_corporate_governance
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/egalitarian.dds
   entities:
-  - combustion_engine
-  - modern_automotive_technology
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/electrical_capacitors.dds
+  - ideology_custom_religion_inclusive_society
+  - ideology_egalitarian
+  - ideology_egalitarian_modern
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- images:
+  - gfx/interface/icons/ideology_icons/ibadi_shura.dds
+  - gfx/interface/icons/ideology_icons/traditionalist.dds
   entities:
-  - electrical_capacitors
-  - fluorescent_lamps
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/electrical_generation.dds
+  - ideology_custom_religion_traditionalist_economy
+  - ideology_custom_religion_traditionalist_society
+  - ideology_ibadi_shura
+  - ideology_traditionalist_minoritarian_movement
+  - ideology_traditionalist_movement
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/isolationist.dds
   entities:
-  - electrical_generation
-  - personal_appliances
-  - rural_electrification
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/film.dds
+  - ideology_custom_religion_isolationist_outlook
+  - ideology_custom_religion_pacifist_outlook
+  - ideology_isolationist
+  - ideology_meiji_restorationist_movement_shojoi
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/jingoist.dds
   entities:
-  - animation
-  - film
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/intensive_agriculture.dds
+  - ideology_custom_religion_militarist_outlook
+  - ideology_jingoist
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/laissez_faire.dds
   entities:
-  - advanced_agricultural_statistics
-  - intensive_agriculture
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/macroeconomics.dds
+  - ideology_custom_religion_free_market_economy
+  - ideology_laissez_faire
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/meritocratic.dds
   entities:
-  - keynesian_economics
-  - macroeconomics
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/mass_communication.dds
+  - ideology_custom_religion_meritocratic_society
+  - ideology_meritocratic
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/moralist.dds
   entities:
-  - ICBMs
-  - LGBTQ_rights_movement
-  - abyssal_plain_mining
-  - additive_manufacturing
-  - advanced_assembly_lines
-  - advanced_body_armor
-  - advanced_materials_armor
-  - advanced_nanofabrication
-  - advanced_structural_engineering
-  - advanced_submarine_technology
-  - advanced_workflow_optimization
-  - anti_sub_warfare
-  - anti_war_movement
-  - antibiotic_mass_production
-  - antimatter_production
-  - artificial_intelligence
-  - asteroid_mining
-  - augmented_reality_warfare
-  - automated_surveillance
-  - autonomous_vehicles
-  - barcodes_and_scanners
-  - bioenhanced_soldiers
-  - biohacking_and_human_augmentation
-  - biological_immortality
-  - biotechnology
-  - brain_computer_interfaces
-  - cellular_networks
-  - civil_rights_movement
-  - clean_energy_technologies
-  - cloud_computing
-  - compact_fusion_reactors
-  - computer_aided_design
-  - computer_networks
-  - computing_machines
-  - containerization
-  - contraceptive_pill
-  - cyber_warfare
-  - cybersecurity
-  - decline_of_organized_religion
-  - digital_education
-  - digital_entertainment
-  - digital_telecommunications
-  - directed_energy_defenses
-  - directed_energy_weapons
-  - e-commerce
-  - early_nanotechnology
-  - electronic_warfare
-  - environmental_movement
-  - fiber_optics
-  - fusion_batteries
-  - fusion_power
-  - gene_splicing
-  - generative_ai
-  - genetic_engineering
-  - globalization
-  - green_revolution
-  - guided_missiles
-  - hydraulic_fracturing
-  - hypersonic_weapons
-  - inertial_navigation_systems
-  - infrared_night_vision
-  - integrated_circuits
-  - jadc2
-  - jet_engine_technology
-  - knowledge_economy
-  - lab-grown_food
-  - laser_technology
-  - machine_learning
-  - mainframe_computers
-  - mass_communication
-  - mass_media
-  - mental_health_awareness
-  - microprocessor
-  - military_grade_cybersecurity
-  - mind_backups
-  - missile_defense_systems
-  - modern_material_science
-  - modern_pharmaceuticals
-  - modern_urban_planning
-  - molecular_assemblers
-  - network_centric_warfare
-  - neural_lace
-  - nuclear_energy
-  - orbital_manufacturing
-  - orbital_weapon_platforms
-  - personal_computers
-  - personalized_medicine
-  - photocopiers
-  - plastic_mass_production
-  - pollution_control
-  - pop_culture
-  - post-scarcity_economy
-  - precision_guided_munitions
-  - predictive_logistics
-  - programmable_matter
-  - quantum_communications
-  - quantum_computing
-  - quantum_materials
-  - rapid_deployment_forces
-  - recon_satellites
-  - reusable_rocketry
-  - robotics
-  - satellite_communications
-  - second_wave_feminism
-  - sexual_revolution
-  - smart_grids
-  - social_justice_movements
-  - social_media
-  - space_based_solar_power
-  - space_colonization
-  - space_elevator
-  - space_exploration
-  - space_militarization
-  - stealth_technology
-  - supersonic_aircraft
-  - supply_chain_management
-  - swarm_technology
-  - synthetic_biology
-  - tactical_nuclear_weapons
-  - telemedicine
-  - telepathic_communities
-  - television
-  - television_broadcasting
-  - terrorism_and_anti_terrorism
-  - transistors
-  - universal_basic_income
-  - unmanned_aerial_vehicles
-  - video_games
-  - virtual_reality
-  - wireless_internet
-  - world_wide_web
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/mass_propaganda.dds
+  - ideology_custom_religion_theocratic_economy
+  - ideology_custom_religion_theocratic_governance
+  - ideology_custom_religion_theocratic_outlook
+  - ideology_custom_religion_theocratic_society
+  - ideology_heavenly_kingdom_theocratic
+  - ideology_montenegrin_moralist
+  - ideology_moralist
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/pious.dds
   entities:
-  - marketing_research
-  - mass_propaganda
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/mass_surveillance.dds
+  - ideology_custom_religion_imperial_cult_governance
+  - ideology_pious
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/protectionism.dds
   entities:
-  - cryptography
-  - mass_surveillance
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/mechanical_tools.dds
+  - ideology_custom_religion_socialist_economy
+  - ideology_interventionist
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/republican.dds
   entities:
-  - mechanical_tools
-  - modern_tools
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/military_aviation.dds
+  - ideology_custom_religion_republican_governance
+  - ideology_liberal_republican_movement
+  - ideology_republican
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/royalist.dds
   entities:
-  - advanced_military_aircraft
-  - bombing_aircraft
-  - commercial_aviation
-  - military_aviation
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/military_drill.dds
+  - ideology_absolutist_movement
+  - ideology_custom_religion_aristocratic_governance
+  - ideology_royalist_movement
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/slaver.dds
   entities:
-  - combined_arms
-  - military_drill
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/modern_financial_instruments.dds
+  - ideology_custom_religion_exploitative_outlook
+  - ideology_pro_slavery
+  - ideology_pro_slavery_colonial
+  - ideology_pro_slavery_colonial_movement
+  - ideology_pro_slavery_movement
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/socialist.dds
   entities:
-  - consumer_credit
-  - modern_financial_instruments
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/multilateral_alliances.dds
+  - ideology_custom_religion_social_democratic_economy
+  - ideology_socialist
+  - ideology_socialist_movement
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+- image: gfx/interface/icons/ideology_icons/technocratic.dds
   entities:
-  - intergovernmental_organizations
-  - multilateral_alliances
-  - nuclear_weapons
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/pharmaceuticals.dds
+  - ideology_custom_religion_technocratic_governance
+  - ideology_technocratic
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+interest_group_traits:
+- image: gfx/interface/icons/ig_trait_icons/be_fruitful_and_multiply.dds
   entities:
-  - modern_vaccines
-  - pharmaceuticals
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/plastics.dds
+  - ig_trait_asceticism
+  - ig_trait_be_fruitful_and_multiply
+  - ig_trait_custom_religion_traditionalist_loyal
+  - ig_trait_da_wat
+  - ig_trait_heavenly_sovereign
+  - ig_trait_kar_seva
+  - ig_trait_the_best_revenge
+  - ig_trait_westernisation
+  reason: custom-religion trait variant keeps its base trait's icon, as vanilla's traits share; reviewed 2026-10-11
+- image: gfx/interface/icons/ig_trait_icons/divine_right.dds
   entities:
-  - modern_materials
-  - plastics
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/radio.dds
+  - ig_trait_custom_religion_traditionalist_happy
+  - ig_trait_divine_right
+  - ig_trait_mecelle
+  - ig_trait_secular_shrine_theory
+  - ig_trait_sharia
+  - ig_trait_yeshivot
+  reason: custom-religion trait variant keeps its base trait's icon, as vanilla's traits share; reviewed 2026-10-11
+- image: gfx/interface/icons/ig_trait_icons/pious_fiction.dds
   entities:
-  - radar
-  - radio
-  - sonar
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/rubber.dds
+  - ig_trait_custom_religion_traditionalist_unhappy
+  - ig_trait_haibutsu_kishaku
+  - ig_trait_pious_fiction
+  reason: custom-religion trait variant keeps its base trait's icon, as vanilla's traits share; reviewed 2026-10-11
+laws:
+- image: gfx/interface/icons/law_icons/proportional_taxation.dds
   entities:
-  - isoprene
-  - rubber_mastication
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/sea_lane_strategies.dds
-  entities:
-  - naval_convoy_defense
-  - sea_lane_strategies
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/steel_frame_buildings.dds
-  entities:
-  - modern_skyscrapers
-  - steel_frame_buildings
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/steelworking.dds
-  entities:
-  - aluminum_mass_production
-  - stainless_steel_mass_production
-  - steelworking
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/invention_icons/urban_planning.dds
-  entities:
-  - art_deco_architecture
-  - public_works_programs
-  - urban_planning
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
+  - law_proportional_taxation
+  - law_te_probe_carrier
+  reason: temporary tax-code engine probe, inert outside te_debug_tax.1 (common/laws/zz_te_debug_tax_carrier.txt); delete with the probe; reviewed 2026-10-11
