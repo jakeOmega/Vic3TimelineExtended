@@ -15,6 +15,18 @@
   "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
   "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] der neuen Stufe#!\\n#v @money!$VAL|K+=$#! Voraussichtliche [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n(ohne [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
  },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_3_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 3#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "de": "Verfügbar, sobald Ihr [concept_power_bloc] #v 3#! [concept_power_bloc_principle]-Slots hat. Er beginnt mit #v 2#! und erhält #v 1#! bei [concept_power_bloc_rank] #v ##5#! oder besser mit mindestens #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] und #v 1#! weiteren bei Rang #v ##3#! oder besser mit mindestens #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 4#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "de": "Verfügbar, sobald Ihr [concept_power_bloc] #v 4#! [concept_power_bloc_principle]-Slots hat. Er beginnt mit #v 2#! und erhält #v 1#! bei [concept_power_bloc_rank] #v ##5#! oder besser mit mindestens #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] und #v 1#! weiteren bei Rang #v ##3#! oder besser mit mindestens #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_DURING_FORMATION": {
+  "en": "More [concept_power_bloc_principle] slots will become available as your [concept_power_bloc] achieves a higher [concept_power_bloc_rank] and acquires more [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "de": "Weitere [concept_power_bloc_principle]-Slots werden verfügbar, sobald Ihr [concept_power_bloc] einen höheren [concept_power_bloc_rank] erreicht und mehr [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')] gewinnt.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
  "academics_desc": {
   "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
   "de": "Forscher, Ärzte, Anwälte und andere gebildete Fachleute, insbesondere jene, die an akademischen Institutionen studieren und lehren. Politisch stehen sie an der Spitze der Intellektuellen."
@@ -66,6 +78,10 @@
  "concept_harvest_conditions": {
   "en": "Local Conditions",
   "de": "Lokale Bedingungen"
+ },
+ "concept_power_bloc_principle_group_desc": {
+  "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')] that support the same theme.",
+  "de": "Gruppen aus fünf Stufen von [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')], die dasselbe Thema unterstützen."
  },
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
@@ -283,6 +299,10 @@
   "en": "Ministry of Public Safety",
   "de": "Ministerium für öffentliche Sicherheit"
  },
+ "institution_police_desc": {
+  "en": "The public agencies that police the country or, under [GetLawType('law_private_policing').GetName], license the private firms that do and back them up.",
+  "de": "Die öffentlichen Behörden, die im Land für Ordnung sorgen oder unter [GetLawType('law_private_policing').GetName] die privaten Firmen, die dies tun, lizenzieren und unterstützen."
+ },
  "institution_schools": {
   "en": "Ministry of Education",
   "de": "Bildungsministerium"
@@ -299,6 +319,10 @@
   "en": "The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.",
   "de": "Der Staat steht allen offen, die bereit sind, in der nationalen Identität aufzugehen. Einbürgerung ist ein Prozess kultureller Anpassung, der die Aufgabe fremder Traditionen verlangt."
  },
+ "law_dedicated_police_desc": {
+  "en": "A national police force of career officers with standardized training and a professional chain of command, paid from the national budget and answerable to the government.",
+  "de": "Eine nationale Polizei aus Berufsbeamten mit einheitlicher Ausbildung und professioneller Befehlskette, bezahlt aus dem Staatshaushalt und der Regierung rechenschaftspflichtig."
+ },
  "law_ethnostate": {
   "en": "Ancestral Citizenship",
   "de": "Angestammte Bürgerschaft"
@@ -306,6 +330,14 @@
  "law_ethnostate_desc": {
   "en": "Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.",
   "de": "Die Staatsbürgerschaft ist ein unveränderliches Merkmal, das sich vom „Recht des Blutes“ ableitet. Nur wer der eigentlichen Ahnenlinie entstammt, gilt als rechtmäßiges Mitglied der Nation."
+ },
+ "law_local_police_desc": {
+  "en": "Towns and counties raise their own constables and watchmen, paid from local rates and overseen by magistrates and local notables. The force is public, but local elites decide what it does.",
+  "de": "Städte und Grafschaften stellen eigene Konstabler und Wächter auf, bezahlt aus lokalen Abgaben und beaufsichtigt von Magistraten und örtlichen Honoratioren. Die Truppe ist öffentlich, doch die lokalen Eliten entscheiden, was sie tut."
+ },
+ "law_militarized_police_desc": {
+  "en": "A national police organized along military lines, with military ranks, equipment and training. It answers to the government as an instrument of its will, which it carries out more effectively and more violently.",
+  "de": "Eine nationale Polizei nach militärischem Vorbild, mit militärischen Rängen, Ausrüstung und Ausbildung. Sie untersteht der Regierung als Werkzeug ihres Willens, den sie wirksamer und gewaltsamer durchsetzt."
  },
  "law_multicultural": {
   "en": "Universal Citizenship",
@@ -323,6 +355,10 @@
   "en": "Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.",
   "de": "Die Zugehörigkeit zur Nation bestimmt sich nach der Treue zu ihrem prägenden Geist. Die Staatsbürgerschaft bleibt jenen vorbehalten, die Sprache, Traditionen und Erbe der dominanten Kultur teilen."
  },
+ "law_no_police_desc": {
+  "en": "No structured police force exists. Communities, landlords and, in the last resort, the army keep what order there is.",
+  "de": "Es gibt keine geregelte Polizei. Gemeinden, Grundherren und im äußersten Fall die Armee halten die Ordnung aufrecht, die es gibt."
+ },
  "law_racial_segregation": {
   "en": "Racialized Citizenship",
   "de": "Rassifizierte Bürgerschaft"
@@ -338,6 +374,10 @@
  "law_subjecthood_desc": {
   "en": "The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.",
   "de": "Der Staat definiert sein Volk in erster Linie als Untertanen eines Souveräns. Die rechtliche Identität ist an lokale Tradition und Gemeinschaftstreue gebunden, nicht an einen zentralisierten nationalen Status."
+ },
+ "lawgroup_policing_desc": {
+  "en": "Who provides ordinary law enforcement, who pays for it, and to whom it answers.",
+  "de": "Wer für die gewöhnliche Polizeiarbeit sorgt, wer sie bezahlt und wem sie untersteht."
  },
  "lead": {
   "en": "Conductive and Base Metals",
@@ -395,6 +435,10 @@
   "en": "Potent Formulations",
   "de": "Hochwirksame Präparate"
  },
+ "prestige_good_radiola_radios": {
+  "en": "Precision Wireless Gear",
+  "de": "Präzisionsfunkgeräte"
+ },
  "principle_advanced_research_1_desc": {
   "en": "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states.",
   "de": "Der Block fördert eine Klasse von Ingenieuren und Wissenschaftlern und zieht damit die Intelligenzija zu den Mitgliedstaaten."
@@ -414,6 +458,10 @@
  "second_rate_citizen": {
   "en": "Provisional Acceptance",
   "de": "Vorläufige Akzeptanz"
+ },
+ "state_building_construction_sector_max_level_add_desc": {
+  "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",
+  "de": "Jeder Punkt lässt einen [concept_state] #v 1.000#! mehr Menschen aufnehmen, bevor [concept_migration_crowding] die [concept_migration_pull] senkt, wie wenig [concept_arable_land] er auch hat. Die $state_migration_crowding_density_mult$ des Staates vervielfacht diese Menschen ebenso wie seine Fläche."
  },
  "stockpile_navy_requirement_coal_add": {
   "en": "Navy @coal! $coal$ Consumption",

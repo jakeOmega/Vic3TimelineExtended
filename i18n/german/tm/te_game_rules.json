@@ -19,6 +19,10 @@
   "en": "Decolonization",
   "de": "Dekolonisierung"
  },
+ "rule_demographics_rule": {
+  "en": "Demographics (Experimental)",
+  "de": "Demografie (experimentell)"
+ },
  "rule_free_market_construction_rule": {
   "en": "Free Market Construction",
   "de": "Freie Marktbauwirtschaft"
@@ -50,6 +54,10 @@
  "rule_space_race_rule": {
   "en": "Space Race",
   "de": "Wettlauf ins All"
+ },
+ "rule_te_principle_slots_rule": {
+  "en": "Power Bloc Principle Slots",
+  "de": "Prinzipienplätze des Machtblocks"
  },
  "rule_united_nations_rule": {
   "en": "United Nations",
@@ -151,6 +159,30 @@
   "en": "The colonial empire [concept_journal_entry] is active. Nations with overseas colonies face [concept_decolonization_system] pressures, [concept_colonial_stability] tracking, and related events after researching decolonization technology.",
   "de": "Der Kolonialreich-[concept_journal_entry] ist aktiv. Nationen mit Überseekolonien sehen sich nach der Erforschung der Dekolonisierungstechnologie dem Druck der [concept_decolonization_system], der Erfassung der [concept_colonial_stability] und zugehörigen Ereignissen gegenüber."
  },
+ "setting_demographics_disabled": {
+  "en": "Disabled",
+  "de": "Deaktiviert"
+ },
+ "setting_demographics_disabled_desc": {
+  "en": "No census and no Demographics panel. Wealth Concentration still works.",
+  "de": "Keine Volkszählung und keine Demografie-Tafel. Die Vermögenskonzentration funktioniert weiterhin."
+ },
+ "setting_demographics_display_only": {
+  "en": "Display only",
+  "de": "Nur Anzeige"
+ },
+ "setting_demographics_display_only_desc": {
+  "en": "Experimental. The census and its panel, without its effects on the population.",
+  "de": "Experimentell. Die Volkszählung und ihre Tafel, ohne ihre Auswirkungen auf die Bevölkerung."
+ },
+ "setting_demographics_full": {
+  "en": "Full",
+  "de": "Vollständig"
+ },
+ "setting_demographics_full_desc": {
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel. From a later version it also shapes births, deaths and the workforce.",
+  "de": "Experimentell. Jeder Staat führt eine Volkszählung seiner Bevölkerung nach Alter und Geschlecht, die auf der Demografie-Tafel angezeigt wird. Ab einer späteren Version beeinflusst sie auch Geburten, Todesfälle und die Arbeitskräfte."
+ },
  "setting_free_market_construction_disabled": {
   "en": "Free Market Construction Disabled",
   "de": "Freie Marktbauwirtschaft deaktiviert"
@@ -166,6 +198,14 @@
  "setting_free_market_construction_enabled_desc": {
   "en": "[concept_construction] is a tradeable good. $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and much more while they retool after switching production methods. The private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
   "de": "[concept_construction] ist ein handelbares Gut. $building_construction_sector$-Gebäude verkaufen es auf dem Markt, die Regierung kauft die Menge, die Sie jede Woche im Baupanel festlegen, und Investoren kaufen für private Projekte aus dem [concept_investment_pool]. Industrie und Infrastruktur verbrauchen etwas Bau als Unterhalt und deutlich mehr, während sie nach einem Wechsel der Produktionsmethode umgerüstet werden. Der private Anteil am Bau folgt den beiden Käufen statt Ihrem wirtschaftspolitischen Gesetz. Siehe [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_ai_retooling": {
+  "en": "Free Market Construction without AI Retooling Costs",
+  "de": "Freie Marktbauwirtschaft ohne Umrüstkosten für die KI"
+ },
+ "setting_free_market_construction_no_ai_retooling_desc": {
+  "en": "As Free Market Construction Enabled, but AI countries pay no retooling costs: switching production methods does not raise the construction their buildings use as maintenance. Player countries still pay normal retooling costs. Industry and infrastructure in every country still use construction as maintenance, and the construction market and private share work as in the enabled setting. See [concept_te_construction_market].",
+  "de": "Wie „Freie Marktbauwirtschaft aktiviert“, doch KI-Länder zahlen keine Umrüstkosten: Der Wechsel der Produktionsmethoden erhöht nicht die Baukapazität, die ihre Gebäude als Unterhalt verbrauchen. Spielerländer zahlen weiterhin normale Umrüstkosten. Industrie und Infrastruktur verbrauchen in jedem Land weiterhin Baukapazität als Unterhalt, und der Baumarkt und der private Anteil funktionieren wie in der aktivierten Einstellung. Siehe [concept_te_construction_market]."
  },
  "setting_free_market_construction_no_maintenance": {
   "en": "Free Market Construction without Maintenance",
@@ -302,6 +342,22 @@
  "setting_space_race_enabled_desc": {
   "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed.",
   "de": "Die Journaleinträge des [concept_space_race] sind aktiv. [Concept('concept_great_power', 'Großmächte')] und [Concept('concept_major_power', 'Mittelmächte')] konkurrieren in einem meilensteinbasierten Fortschritt vom suborbitalen Flug bis zu interstellaren Sonden, wobei die Finanzierungsstufe die Fortschrittsgeschwindigkeit beeinflusst."
+ },
+ "setting_te_principle_slots_eight": {
+  "en": "Up to Eight",
+  "de": "Bis zu acht"
+ },
+ "setting_te_principle_slots_eight_desc": {
+  "en": "A [concept_power_bloc] can hold up to #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]. On top of the base game's slots from [concept_power_bloc_rank] and members, each of $intergovernmental_organizations$, $containerization$, $globalization$ and $universal_digital_identity$ the leader has researched adds a slot.",
+  "de": "Ein [concept_power_bloc] kann bis zu #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')] halten. Zusätzlich zu den Plätzen des Basisspiels durch [concept_power_bloc_rank] und Mitglieder fügt jede der Technologien $intergovernmental_organizations$, $containerization$, $globalization$ und $universal_digital_identity$, die der Anführer erforscht hat, einen Platz hinzu."
+ },
+ "setting_te_principle_slots_four": {
+  "en": "Four (Base Game)",
+  "de": "Vier (Basisspiel)"
+ },
+ "setting_te_principle_slots_four_desc": {
+  "en": "A [concept_power_bloc] holds up to #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')], opened by [concept_power_bloc_rank] and members as in the base game. Technologies add no slots.",
+  "de": "Ein [concept_power_bloc] hält bis zu #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')], die wie im Basisspiel durch [concept_power_bloc_rank] und Mitglieder freigeschaltet werden. Technologien fügen keine Plätze hinzu."
  },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",
