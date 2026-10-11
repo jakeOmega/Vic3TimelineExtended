@@ -5042,7 +5042,7 @@
  te_debug_demog.1.c:0 "Re-seed our census from today's population"
  te_debug_demog.1.c.tt:0 "Every state of ours starts its census again at its own equilibrium, as at game start, and our census is taken at once. Undoes what a second replay in one year did to our capital."
  te_debug_demog.1.d:0 "Benchmark: step every census in the world three times"
- te_debug_demog.1.d.tt:0 "Runs the yearly cohort step in every state of the world that has a census, three passes, between TE_DEMOG_BENCH lines in debug.log, whose timestamps time each pass. The passes leave each census wrong, so afterwards every one is seeded again from today's population."
+ te_debug_demog.1.d.tt:0 "Walks every state of the world that has a census three times, then runs its yearly cohort step three times, each pass between TE_DEMOG_BENCH lines in debug.log, whose timestamps time it. The start line says whether the walk summed what the census absorbs (full=1, the Full setting). The passes leave each census wrong, so afterwards every one is seeded again from today's population."
  te_debug_demog.1.desc:0 "Console-only tools for checking the demographic census against its Python model. Nothing in the mod fires this event. Every option writes to debug.log.\n\nA second replay in the same year steps our capital's census twice in one year, which leaves it wrong: re-seed our census afterwards. The benchmark does the same to every census in the world, then seeds them all again itself."
  te_debug_demog.1.e:0 "Log our war dead"
  te_debug_demog.1.e.tt:0 "Writes TE_DEMOG_WARDEAD lines to debug.log: our dead in each of our wars, the running tally the monthly pulse keeps, and the dead each of our states' next census step will take."

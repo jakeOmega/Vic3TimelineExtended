@@ -426,12 +426,37 @@ class TestRateTerm(unittest.TestCase):
         self.assertFalse(clamped)
         self.assertAlmostEqual(100.0 * (1 + m), 80.0)
 
-    def test_terms_on_top_add_at_the_bare_curves_weight(self):
+    def test_pop_level_terms_on_top_add_at_the_bare_curves_weight(self):
         """The engine adds every term (growth probe): with M on, a pop's events are bare x (1 + M + O).
-        The state's then come to the model's plus bare x O."""
+        A pop's own term on top (severe starvation, a workplace line) isn't passed to rate_term: one state-wide M
+        can't scale it without moving the other pops' rates, so the state's come to the model's plus bare x O."""
         m, _ = M.rate_term(target=80.0, bare=100.0)
         on_top = 0.3
         self.assertAlmostEqual(100.0 * (1 + m + on_top), 80.0 + 100.0 * on_top)
+
+    def test_state_level_terms_on_top_act_on_the_census_rate(self):
+        """Owner, 2026-10-11: a state-level line left on top (pollution, devastation, global warming, an event)
+        acts on the census's rate, as its tooltip reads, not on the engine's bare curve. Every pop then gets
+        bare x (target / bare) x (1 + O_s): exact per pop, since the line and M are both state-wide."""
+        target, o_s = 60.0, 0.3
+        m, clamped = M.rate_term(target=target, bare=100.0, on_top=o_s)
+        self.assertFalse(clamped)
+        for bare_p in (70.0, 30.0):
+            self.assertAlmostEqual(bare_p * (1 + m + o_s), bare_p * target / 100.0 * (1 + o_s))
+        self.assertAlmostEqual(100.0 * (1 + m + o_s), target * (1 + o_s))
+
+    def test_state_level_terms_on_top_with_absorbed_terms(self):
+        absorbed = -0.05 * 100.0
+        m, _ = M.rate_term(target=60.0, bare=100.0, absorbed=absorbed, on_top=-0.2)
+        self.assertAlmostEqual(100.0 * (1 + m - 0.2) + absorbed, 60.0 * 0.8)
+
+    def test_west_bengal_pollution(self):
+        """The fast-mode run's West Bengal, about 1888 (owner's tooltip): the census at about 59% of the bare
+        curve and Pollution Impact +32%. Added to the bare curve, the line was +54% of the census's deaths."""
+        m_old, _ = M.rate_term(target=59.0, bare=100.0)
+        self.assertAlmostEqual(100.0 * (1 + m_old + 0.32) / 59.0 - 1, 0.32 / 0.59)
+        m, _ = M.rate_term(target=59.0, bare=100.0, on_top=0.32)
+        self.assertAlmostEqual(100.0 * (1 + m + 0.32) / 59.0 - 1, 0.32)
 
     def test_absorbed_terms_are_netted(self):
         # literacy's -0.1 x a bare-weighted literacy of 0.4: the absorbed sum is -0.1 x 40 over bare 100

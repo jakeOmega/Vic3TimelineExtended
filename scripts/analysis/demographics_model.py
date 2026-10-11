@@ -355,19 +355,24 @@ def _refresh_denominators(ring):
             ring.women_18_40 += f
 
 
-def rate_term(target, bare, absorbed=0.0, other=0.0):
+def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0):
     """The census's births or deaths modifier for one state (phase 2 step 4). Returns (M, clamped).
 
     The engine gives each pop bare x max(0, 1 + its terms + M) (growth probe), so over a state M adds
     M x bare. M = target / bare - 1 - absorbed / bare makes the engine's events the model's (target)
     plus every term added on top, at the bare curve's weight. All three are in the same units (the walk's:
-    events a month x 100,000). `other` is the state read without the census's and fast mode's
+    events a month x 100,000). `on_top` is the state-level lines left on top (pollution, devastation, global
+    warming, events): taking on_top x (1 - target / bare) off M as well makes each of them act on the census's
+    rate, as its tooltip reads (owner, 2026-10-11), exactly for every pop. A pop's own lines on top (severe
+    starvation, workplace lines) stay at the bare curve's weight: one state-wide M can't scale them without
+    moving the other pops' rates. A line past RATE_TOTAL_MIN scales as RATE_TOTAL_MIN: the engine's rate can't
+    go lower. `other` is the state read without the census's and fast mode's
     terms: other + M stays at or above RATE_TOTAL_MIN, M never goes below 0 when other alone is
     past it, and M stays at or below RATE_TERM_MAX.
     """
     if bare <= 0:
         return 0.0, False
-    m = target / bare - 1 - absorbed / bare
+    m = target / bare - 1 - absorbed / bare - max(on_top, P.RATE_TOTAL_MIN) * (1 - target / bare)
     lo = min(0.0, P.RATE_TOTAL_MIN - other)
     if m < lo:
         return lo, True
