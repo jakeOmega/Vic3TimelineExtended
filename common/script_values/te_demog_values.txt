@@ -118,6 +118,9 @@ te_demog_rate_births_up = { value = var:te_dg_mb min = 0 }
 te_demog_rate_births_down = { value = var:te_dg_mb multiply = -1 min = 0 }
 te_demog_rate_deaths_up = { value = var:te_dg_md min = 0 }
 te_demog_rate_deaths_down = { value = var:te_dg_md multiply = -1 min = 0 }
+# Private Health Insurance's wealth line under Full, the census's own pair (the engine-lines plan, Task 5)
+te_demog_rate_wealth_up = { value = var:te_dg_w min = 0 }
+te_demog_rate_wealth_down = { value = var:te_dg_w multiply = -1 min = 0 }
 
 # Fast mode's terms in force, the same way (te_demog_fast_effects.txt).
 te_demog_fast_births_applied = {

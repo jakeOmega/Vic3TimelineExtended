@@ -30,3 +30,13 @@ te_demog_census_deaths_down = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_mortality_mult = -1
 }
+# Private Health Insurance's wealth line (state_mortality_wealth_mult, by each pop's wealth) under Full: the census applies
+# it at its share of the bare curve, floored (the engine-lines plan, Task 5; owner, 2026-10-11, option b).
+te_demog_census_wealth_up = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_mortality_wealth_mult = 1
+}
+te_demog_census_wealth_down = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_mortality_wealth_mult = -1
+}

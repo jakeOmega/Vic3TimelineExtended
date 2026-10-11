@@ -1224,47 +1224,81 @@ class TestRatesScript(unittest.TestCase):
     EBR = P.LITERACY_BIRTH_PENALTY * 0.2 * 475e6
 
     def _eng(self, full=True, stepped=1.0, cbr=38.0, cdr=31.0, eb0=475.0 * 1_000_000, ed0=430.0 * 1_000_000,
-             ebr=EBR, edr=0.0, read_b=0.05, read_d=0.04, sab=0.0, sad=0.0):
+             ebr=EBR, edr=0.0, read_b=0.05, read_d=0.04, ontop=None):
+        # the moved lines' families (the engine-lines plan): 0 unless a test says
+        families = {f"modifier:{name}": (ontop or {}).get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
         eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": read_b,
-                       "modifier:state_mortality_mult": read_d},
+                       "modifier:state_mortality_mult": read_d, **families},
                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
-        # te_dg_w_sab/_sad: the state's absorbed lines, which the walk reads once under Full (te_demog_absorbed_walk_init)
         eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=ebr, te_dg_w_edr=edr, te_dg_w_eb=eb0,
-                          te_dg_w_ed=ed0, te_dg_w_sab=sab, te_dg_w_sad=sad)
+                          te_dg_w_ed=ed0)
         eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
         return eng
 
-    def _want(self, cbr, cdr, eb0, ed0, ebr, other_b, other_d, edr=0.0, sab=0.0, sad=0.0):
+    def _want(self, cbr, cdr, eb0, ed0, ebr, other_b, other_d, edr=0.0, added_b=0.0, added_d=0.0):
         """rate_term's M for the script's inputs: the state-level lines on top are the read without the census's and
-        fast mode's terms (other) less the state's absorbed lines (owner, 2026-10-11)."""
+        fast mode's terms and the moved lines' pairs (other); the on-top family is what the census adds (added)."""
         mb, _ = demographics_model.rate_term(cbr * self.POP * 100 / 12, eb0, absorbed=ebr, other=other_b,
-                                             on_top=other_b - sab)
+                                             on_top=other_b, added=added_b)
         md, _ = demographics_model.rate_term(cdr * self.POP * 100 / 12, ed0, absorbed=edr, other=other_d,
-                                             on_top=other_d - sad)
+                                             on_top=other_d, added=added_d)
         return mb, md
 
     def test_state_level_lines_on_top_act_on_the_census_rate(self):
-        """Owner, 2026-10-11: West Bengal's Pollution Impact (+0.32) with last step's M (-0.3) and fast mode's term
-        (+2.0) in the read, and a state-level absorbed law line (+0.05, in the walk's replaced sum as well). The
-        engine's deaths come to the census's x 1.32, and its births to the census's less the on-top -0.01."""
+        """Owner, 2026-10-11: West Bengal's Pollution Impact (+0.32) and the Midlands' Cadet Sons (+0.046 births) with
+        last step's M (-0.3) and fast mode's term (+2.0) in the read. The engine's deaths come to the census's x 1.32
+        and its births to the census's x 1.046."""
         ed0, eb0 = 430e6, 475e6
-        edr, ebr = 0.05 * ed0, self.EBR + 0.02 * eb0
-        eng = self._eng(read_d=-0.3 + 2.0 + 0.32 + 0.05, sad=0.05, edr=edr, read_b=2.0 - 0.01 + 0.02, sab=0.02,
-                        ebr=ebr)
+        eng = self._eng(read_d=-0.3 + 2.0 + 0.32, read_b=2.0 + 0.046)
         eng.modifiers.update(te_demog_census_deaths_down=0.3, te_demog_fast_deaths=1.0, te_demog_fast_births=1.0)
         eng.vars.update(te_dg_md=-0.3, te_dg_fast_fd=2.0, te_dg_fast_fb=2.0)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(38.0, 31.0, eb0, ed0, ebr, 0.01, 0.37, edr=edr, sab=0.02, sad=0.05)
+        mb, md = self._want(38.0, 31.0, eb0, ed0, self.EBR, 0.046, 0.32)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         target_d, target_b = 31.0 * self.POP * 100 / 12, 38.0 * self.POP * 100 / 12
-        self.assertAlmostEqual(ed0 * (1 + eng.vars["te_dg_md"] + 0.32) + edr, target_d * 1.32, delta=target_d * 1e-5)
-        self.assertAlmostEqual(eb0 * (1 + eng.vars["te_dg_mb"] - 0.01) + ebr, target_b * 0.99, delta=target_b * 1e-5)
-        # kept for console option n, whose line then checks the term: M = tb - 1 - rep - os x (1 - tb)
+        self.assertAlmostEqual(ed0 * (1 + eng.vars["te_dg_md"] + 0.32), target_d * 1.32, delta=target_d * 1e-5)
+        self.assertAlmostEqual(eb0 * (1 + eng.vars["te_dg_mb"] + 0.046) + self.EBR, target_b * 1.046, delta=target_b * 1e-5)
+        # kept for console option n, whose line then checks the term: M = tb - 1 - rep - os x (1 - tb) + q x tb
         self.assertAlmostEqual(eng.vars["te_dg_os_d"], 0.32, places=5)
-        self.assertAlmostEqual(eng.vars["te_dg_os_b"], -0.01, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_os_b"], 0.046, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_tb_d"], target_d / ed0, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_tb_b"], target_b / eb0, places=5)
+
+    def test_full_applies_the_on_top_family_and_clears_the_pairs(self):
+        """The engine-lines plan, Task 5: on the first Full step the moved lines' pairs are in the read and are cleared
+        in the same effect; M carries the on-top family at the census's rate, and Private Health Insurance's wealth
+        line goes on the census's own pair at its share of the bare curve, floored (owner, option b)."""
+        ed0 = 430e6
+        eng = self._eng(read_d=-0.08 + 0.32, ontop={"state_demog_ontop_mortality_mult": -0.05,
+                                                     "state_demog_absorbed_mortality_mult": -0.03,
+                                                     "state_demog_ontop_mortality_wealth_mult": -0.01})
+        eng.modifiers["te_demog_line_deaths_down"] = 0.08
+        eng.vars["te_dg_ln_deaths"] = -0.08
+        eng.call("te_demog_rates_refresh")
+        target = 31.0 * self.POP * 100 / 12
+        _, md = self._want(38.0, 31.0, 475e6, ed0, self.EBR, 0.05, 0.32, added_d=-0.05)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertAlmostEqual(ed0 * (1 + md + 0.32), target * (1 + 0.32 - 0.05), delta=target * 1e-5)
+        self.assertNotIn("te_demog_line_deaths_down", eng.modifiers)
+        self.assertNotIn("te_dg_ln_deaths", eng.vars)
+        self.assertAlmostEqual(eng.vars["te_dg_q_d"], -0.05, places=5)
+        tb = target / ed0
+        self.assertAlmostEqual(eng.vars["te_dg_w"], P.WEALTH_LINE_FLOOR * tb, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_wealth_down"], -P.WEALTH_LINE_FLOOR * tb, places=5)
+        # above the floor it is the line itself, at the census's share
+        eng = self._eng(ontop={"state_demog_ontop_mortality_wealth_mult": -0.002})
+        eng.call("te_demog_rates_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_w"], -0.002 * tb, places=5)
+
+    def test_outside_full_the_wealth_pair_goes(self):
+        eng = self._eng(full=False)
+        eng.modifiers["te_demog_census_wealth_down"] = 0.003
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=-0.3, te_dg_w=-0.003, te_dg_q_b=0.0, te_dg_q_d=-0.05)
+        eng.call("te_demog_rates_refresh")
+        self.assertNotIn("te_demog_census_wealth_down", eng.modifiers)
+        for var in ("te_dg_w", "te_dg_q_b", "te_dg_q_d"):
+            self.assertNotIn(var, eng.vars)
 
     def test_script_matches_the_model(self):
         eng = self._eng()
@@ -1494,14 +1528,15 @@ class TestRatesScript(unittest.TestCase):
         eb0, ed0 = 475.0 * pop, 400.0 * pop
         walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebr", P.LITERACY_BIRTH_PENALTY * 0.35 * eb0), ("te_dg_w_edr", 0.0), ("te_dg_w_eb", eb0),
-            ("te_dg_w_ed", ed0), ("te_dg_w_sab", 0.0), ("te_dg_w_sad", 0.0)))
+            ("te_dg_w_ed", ed0)))
         walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
         stubs = {"te_demog_walks": walk, "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
                  "te_inh_refresh_wc_state_effects": "", "te_demog_flows": "te_demog_no_flows = yes"}
         eng = _engine_for(TestCohortScript.INP, 1836, pop, effects=stubs)
         eng.trigger_fixtures["te_demog_effects_run"] = True
-        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.02, "modifier:state_mortality_mult": 0.01})
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.02, "modifier:state_mortality_mult": 0.01,
+                             **{f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()}})
         if refresh is not None:
             eng.effects["te_demog_rates_refresh"] = refresh
         return eng
@@ -3495,7 +3530,8 @@ class TestConsole(unittest.TestCase):
         # and the absorbed lines' share M took out (owner amendment A, B): mb = target / bare - 1 - rep_b
         for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
                            ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d"),
-                           ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d")):
+                           ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d"),
+                           ("q_b", "te_dg_q_b"), ("q_d", "te_dg_q_d"), ("w", "te_dg_w")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
@@ -3538,7 +3574,8 @@ class TestFastMode(unittest.TestCase):
     def _refresh(self, eng, eb, eb0, ed, ed0):
         # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_rate_prev_b=0.0,
-                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0)
+                          te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0,
+                          te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
 
     # -- phase 2 step 4: fast mode composes with the census's term M -------------------------------
@@ -3555,8 +3592,7 @@ class TestFastMode(unittest.TestCase):
                                "modifier:state_mortality_mult": 0.0},
                         triggers={"te_demog_effects_run": True})
         eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=36.0, te_dg_cdr_model=24.0)
-        # the state's absorbed lines, which the walk reads once under Full (te_demog_absorbed_walk_init)
-        eng.locals.update(te_dg_w_sab=0.0, te_dg_w_sad=0.0)
+        eng.fixtures.update({f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()})
         return eng
 
     def test_fast_mode_scales_the_census_target(self):
@@ -3616,9 +3652,21 @@ class TestFastMode(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], fd, places=5)
 
+    def test_first_full_step_takes_the_pairs_off_fast_modes_average(self):
+        """The engine-lines plan, Review Focus 5: on the first Full step the walk's average still holds the moved lines'
+        pairs, which the refresh clears; fast mode's term subtracts them, so the engine runs K x the census's rate."""
+        eng = self._eng_full()
+        eng.modifiers["te_demog_line_deaths_down"] = 0.08
+        eng.vars["te_dg_ln_deaths"] = -0.08
+        eng.fixtures["modifier:state_mortality_mult"] = -0.08
+        self._both(eng, eb=475e3, eb0=475e3, ed=0.92 * 430e3, ed0=430e3)
+        td = 24.0 * 1000.0 * 100 / 12 / 430e3
+        self.assertAlmostEqual(eng.vars["te_dg_fast_fd"], 3 * td, places=5)
+        self.assertNotIn("te_demog_line_deaths_down", eng.modifiers)
+
     def test_fast_mode_composes_with_the_absorbed_lines(self):
-        """Owner amendment A (final review 2, m5): a state carrying absorbed lines A (in the walk's average, the state
-        read and the replaced sums) and state-level terms on top O. Since 2026-10-11 (owner) O acts on the census's
+        """Owner amendment A (final review 2, m5): a state carrying absorbed per-pop terms A (literacy, mild
+        starvation: in the walk's average and the replaced sums, not the state read) and state-level terms on top O. Since 2026-10-11 (owner) O acts on the census's
         rate: at K = 4, M = T/B - 1 - A - O x (1 - T/B), F = 3 x T/B x (1 + O), so the engine runs
         1 + M + F + O + A = 4 x T/B x (1 + O): fast mode scales the census and what's on top, never what M cancels.
         The next clock step, with both terms applied, returns the same M and F."""
@@ -3628,11 +3676,11 @@ class TestFastMode(unittest.TestCase):
         tb, td = 36.0 * 1000.0 * 100 / 12 / eb0, 24.0 * 1000.0 * 100 / 12 / ed0
 
         def step(mb, fb, md, fd):
-            eng.fixtures.update({"modifier:state_birth_rate_mult": o_b + a_b + mb + fb,
-                                 "modifier:state_mortality_mult": o_d + a_d + md + fd})
+            eng.fixtures.update({"modifier:state_birth_rate_mult": o_b + mb + fb,
+                                 "modifier:state_mortality_mult": o_d + md + fd})
             eng.locals.update(te_dg_w_eb=(1 + o_b + a_b + mb + fb) * eb0, te_dg_w_eb0=eb0,
                               te_dg_w_ed=(1 + o_d + a_d + md + fd) * ed0, te_dg_w_ed0=ed0,
-                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0, te_dg_w_sab=a_b, te_dg_w_sad=a_d)
+                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0)
             eng.call("te_demog_rates_refresh")
             eng.call("te_demog_fast_refresh_rates")
             return eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"], eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]

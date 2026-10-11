@@ -450,6 +450,14 @@ class TestRateTerm(unittest.TestCase):
         m, _ = M.rate_term(target=60.0, bare=100.0, absorbed=absorbed, on_top=-0.2)
         self.assertAlmostEqual(100.0 * (1 + m - 0.2) + absorbed, 60.0 * 0.8)
 
+    def test_the_census_applies_the_on_top_family_at_its_rate(self):
+        """Owner, 2026-10-11 (the engine-lines plan): a moved on-top line (a family-policy law, a late tech) is
+        script-only, so under Full the census applies it: every pop gets bare x (target / bare) x (1 + Q)."""
+        m, _ = M.rate_term(target=60.0, bare=100.0, added=0.10)
+        self.assertAlmostEqual(100.0 * (1 + m), 60.0 * 1.10)
+        m, _ = M.rate_term(target=60.0, bare=100.0, on_top=0.3, added=0.10)
+        self.assertAlmostEqual(100.0 * (1 + m + 0.3), 60.0 * (1 + 0.3 + 0.10))
+
     def test_west_bengal_pollution(self):
         """The fast-mode run's West Bengal, about 1888 (owner's tooltip): the census at about 59% of the bare
         curve and Pollution Impact +32%. Added to the bare curve, the line was +54% of the census's deaths."""
