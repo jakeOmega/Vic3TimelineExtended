@@ -39,8 +39,10 @@ class LgbtqRightsBirthLinesTest(unittest.TestCase):
     def test_birth_lines(self):
         for law, expected in EXPECTED_BIRTH_LINE.items():
             with self.subTest(law=law):
+                # the line sits on its script-only type since 2026-10-11 (the engine-lines plan); the field itself is gone
                 lines = [v for k, block in _entries(self.laws[law]) if k == "modifier"
-                         for kk, v in _entries(block) if kk == "state_birth_rate_mult"]
+                         for kk, v in _entries(block)
+                         if kk in ("state_birth_rate_mult", "state_demog_ontop_birth_rate_mult")]
                 self.assertEqual(lines, [] if expected is None else [expected])
 
 

@@ -1035,6 +1035,69 @@ class TestEngineLineTypes(unittest.TestCase):
             self.assertIn(f' {name}_desc:0 "${field}_desc$. Under the Demographics rule', loc, name)
 
 
+class TestEngineLinesMoved(unittest.TestCase):
+    """Owner, 2026-10-11: no law, technology or institution applies an engine birth or mortality line; each line the
+    census read before sits on its family's type at its old value (the plan's table)."""
+
+    MOVED = {
+        ("institution", "institution_ministry_of_consumer_protection", "modifier", "state_mortality_mult"): ("absorbed", -0.01),
+        ("law", "law_charitable_health_system", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.03),
+        ("law", "law_child_labor_allowed", "modifier", "state_farmers_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_laborers_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_machinists_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_child_labor_allowed", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.05),
+        ("law", "law_communal_child_rearing", "modifier", "state_birth_rate_mult"): ("ontop", -0.2),
+        ("law", "law_full_equality_and_protection", "modifier", "state_birth_rate_mult"): ("ontop", -0.01),
+        ("law", "law_mandatory_augmentation", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_medical_augmentation_only", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_no_womens_rights", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("ontop", -0.1),
+        ("law", "law_private_health_insurance", "institution_modifier", "state_mortality_wealth_mult"): ("ontop", -0.002),
+        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_protected_class", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("law", "law_public_health_insurance", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("law", "law_regulated_augmentation_market", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_farmers_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_laborers_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_restricted_child_labor", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.02),
+        ("law", "law_state_eugenics_program", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_state_sponsored_family_planning", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("law", "law_unrestricted_augmentation", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("law", "law_women_in_the_fields", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("law", "law_women_in_the_workplace", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("law", "law_womens_suffrage", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
+        ("technology", "antibiotic_mass_production", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("technology", "antibiotic_mass_production", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("ontop", -0.2),
+        ("technology", "contraceptive_pill", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
+        ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("ontop", -0.05),
+        ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("ontop", -0.05),
+        ("technology", "modern_vaccines", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
+        ("technology", "modern_vaccines", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "second_wave_feminism", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
+        ("technology", "sexual_revolution", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lines = DM.engine_rate_lines()
+
+    def test_no_carrier_applies_an_engine_birth_or_mortality_line(self):
+        live = {k: v for k, v in self.lines.items() if abs(v) > 1e-9 and DM.is_engine_rate_field(k[3])}
+        self.assertEqual(live, {}, "move each to its type (docs/superpowers/plans/2026-10-11-...)")
+
+    def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
+        got = DM.engine_lines()
+        self.assertEqual(set(got), set(self.MOVED))
+        for k, (family, value) in self.MOVED.items():
+            self.assertEqual(got[k][0], family, k)
+            self.assertAlmostEqual(got[k][1], value, places=6, msg=k)
+
+    def test_the_types_are_not_engine_fields(self):
+        for name in P.ENGINE_LINE_TYPES.values():
+            self.assertFalse(DM.is_engine_rate_field(name), name)
+
+
 class TestPollutionLine(unittest.TestCase):
     """predict's Pollution Impact line (owner, 2026-10-11): vanilla's code static modifier plus the mod's INJECT."""
 

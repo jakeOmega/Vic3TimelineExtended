@@ -174,7 +174,40 @@ def is_engine_rate_field(field):
     """A field the engine applies to births or deaths: the state's birth or mortality multiplier, a class's
     mortality or wealth mortality. The census's own script-only types (state_work_mortality_mult and the like)
     are inputs, not engine lines."""
-    return bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+    return (bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+            and field not in P.ENGINE_LINE_TYPES.values())
+
+
+def engine_lines(root=ROOT):
+    """{(kind, key, block, engine field): (family, value)}: the engine's birth and mortality lines moved to script-only
+    types (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md), read back
+    from the carriers. engine_rate_lines already sums every *_mult line, vanilla's and the mod's, so a type's line is
+    found under its own name and mapped back to the field it replaces."""
+    back = {name: fam_field for fam_field, name in P.ENGINE_LINE_TYPES.items()}
+    out = {}
+    for (kind, key, block, field), value in engine_rate_lines(root).items():
+        if field in back and abs(value) > 1e-9:
+            family, engine_field = back[field]
+            out[(kind, key, block, engine_field)] = (family, value)
+    return out
+
+
+def line_carriers(root=ROOT):
+    """engine_lines() as Carriers typed by their family's script-only type (owner, 2026-10-11), with the scaling kinds
+    the engine applies: a law's institution_modifier line is law_institution (per level of the law's institution,
+    incorporated states), an institution's own line institution (per its level), the rest flat. totals() over these
+    gives a state's families as the engine sums them (at full Impact of Institutions)."""
+    institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    out = []
+    for (kind, key, block, field), (family, value) in sorted(engine_lines(root).items()):
+        name = P.ENGINE_LINE_TYPES[(family, field)]
+        if kind == "law" and block == "institution_modifier":
+            out.append(Carrier("law_institution", key, name, value, institution.get(key)))
+        elif kind == "institution":
+            out.append(Carrier("institution", key, name, value, key))
+        else:
+            out.append(Carrier(kind, key, name, value))
+    return out
 
 
 def absorbed_carriers(root=ROOT, lines=None):
