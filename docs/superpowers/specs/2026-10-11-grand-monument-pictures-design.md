@@ -147,9 +147,9 @@ Two of the additions fix a mismatch: the skin's name promised a form that none o
 
 ### 3.4 Showing it
 
-**One type, used twice.** `gm_picture`, a type in `grand_monuments_widget.gui`, lists every picture once: an `icon` per code, each `visible` on `EqualTo_CFixedPoint( State.MakeScope.Var('gm_picture_code').GetValue, '(CFixedPoint)<code>' )`. The size comes from a blockoverride.
+**One type, used twice.** `gm_picture`, a type in `grand_monuments_widget.gui`, lists every picture once: an `icon` per code, each `visible` on `EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), '(CFixedPoint)<code>' )`. `gm_disp_picture_code` (`gm_values.txt`) only reads the stored code, or gives 1 (draped) while there is none. A raw `Var(…).GetValue` inside a `visible` comparison is unproven in this repo; a script value there is the status icons' proven form. The instance sets its size, and each icon fills it at 100%.
 
-This is the pattern the row's four status icons already use, and it reads one stored number per widget. Building the path from script (`Concatenate`) was rejected, because vanilla never builds a texture path that way, so it is unproven in game. Computing the number in a script value was also rejected, because it would run an 80-branch chain per widget per frame.
+This is the pattern the row's four status icons already use, and each widget reads one stored number. Building the path from script (`Concatenate`) was rejected, because vanilla never builds a texture path that way, so it is unproven in game. Computing the number in a script value was also rejected, because it would run an 80-branch chain per widget per frame.
 
 **The journal entry row.** The picture fills the row's 96 px left column. The status icon shrinks to a badge over its top-left corner, and the status word stays under the picture.
 
