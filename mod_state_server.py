@@ -9200,12 +9200,15 @@ def _collect_registry_warnings() -> list[dict]:
     scripted effect, trigger or script value file the mod calls adds a
     `kind: "helper_anchor_mod_calls"` warning with its `entry`, `anchor`,
     `helper_file`, `mod_uses` and `advice` beside the `{label, detail}` pair.
-    It needs the vanilla game files and is skipped without them
+    And the mod-only anchor check (#873): a vanilla entry anchored on a file
+    only the mod has adds `kind: "mod_only_anchor"` with its `anchors`. Both
+    need the vanilla game files and are skipped without them
     (`_helper_anchor_check_state`)."""
     warnings: list[dict] = []
     try:
         from game_log_reader import (
             helper_anchor_warnings as _helper_anchor_warnings,
+            mod_only_anchor_warnings as _mod_only_anchor_warnings,
             load_vanilla_bug_registry as _load_vbr,
             load_mod_noise_registry as _load_mnr,
         )
@@ -9221,6 +9224,7 @@ def _collect_registry_warnings() -> list[dict]:
         _vanilla_game = vanilla_game_dir()
         warnings += _helper_anchor_warnings(_vbr_refs, mod_path, _vanilla_game, "vanilla_bug_registry")
         warnings += _helper_anchor_warnings(_mnr_refs, mod_path, _vanilla_game, "mod_noise_registry")
+        warnings += _mod_only_anchor_warnings(_vbr_refs, mod_path, _vanilla_game, "vanilla_bug_registry")
     except Exception as _exc:  # noqa: BLE001
         logger.warning(f"known-noise registry warning collection failed: {_exc}")
     return warnings

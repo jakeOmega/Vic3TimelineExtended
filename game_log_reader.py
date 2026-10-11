@@ -529,6 +529,8 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
          #anchor fragment (if any) must resolve in docs/audits/open_issues.md.
       3. No signature may be only a file path (_BARE_PATH_SIGNATURE_RE): warned,
          not rejected, since the entry still has its message lines (#873).
+      4. An entry with no signature at all matches every error through its
+         anchors (with a `- source:`, every line from that cpp source): warned.
     """
     warnings: list[str] = []
     if not ref.file_basenames and not ref.source_anchors:
@@ -537,6 +539,12 @@ def _validate_ref(ref: VanillaBugRef, known_open_issue_anchors: set[str]) -> lis
             "(would match every log entry)"
         )
         return warnings
+    if not ref.signatures:
+        warnings.append(
+            f"vanilla_known_bugs.md: '{ref.title}' has no signature, so it matches every error "
+            "through its anchors (with a `- source:`, every line from that source); give it "
+            "the message text (#873)"
+        )
     for sig in ref.signatures:
         if _BARE_PATH_SIGNATURE_RE.match(sig.strip()):
             warnings.append(
@@ -743,6 +751,7 @@ def load_vanilla_bug_registry(
                 continue
         refs.append(ref)
         i += 1
+    warnings.extend(_stack_shadow_warnings(refs, os.path.basename(doc_path)))
     by_basename: dict[str, list[VanillaBugRef]] = defaultdict(list)
     by_source: dict[str, list[VanillaBugRef]] = defaultdict(list)
     for r in refs:
@@ -753,6 +762,38 @@ def load_vanilla_bug_registry(
     by_basename_d, by_source_d = dict(by_basename), dict(by_source)
     _vanilla_bug_cache[cache_key] = (stamp, refs, by_basename_d, by_source_d, warnings)
     return refs, by_basename_d, by_source_d, warnings
+
+
+def _stack_shadow_warnings(refs: list[VanillaBugRef], doc_name: str) -> list[str]:
+    """Warn when an entry without `- stack: vanilla only` shares an anchor
+    with one that has it and can match the same message (one's signature
+    contains the other's, or it has none). tag_vanilla_bugs takes the first
+    entry that matches, so the other entry tags the mod-framed lines the
+    stack-only one declines (#863)."""
+    def overlap(a: VanillaBugRef, b: VanillaBugRef) -> bool:
+        if not a.signatures or not b.signatures:
+            return True
+        sa = [_normalize_for_signature_match(x) for x in a.signatures]
+        sb = [_normalize_for_signature_match(x) for x in b.signatures]
+        return any(x in y or y in x for x in sa for y in sb)
+
+    out: list[str] = []
+    for guard in refs:
+        if not guard.vanilla_stack_only:
+            continue
+        for other in refs:
+            if other is guard or other.vanilla_stack_only:
+                continue
+            shared = (set(guard.file_basenames) & set(other.file_basenames)) | (
+                set(guard.source_anchors) & set(other.source_anchors))
+            if shared and overlap(guard, other):
+                out.append(
+                    f"{doc_name}: '{other.title}' shares {', '.join(sorted(shared))} with "
+                    f"'{guard.title}' and can match the same message, so it tags the "
+                    "mod-framed lines `- stack: vanilla only` leaves out; give it the line "
+                    "too or narrow its signature (#863)"
+                )
+    return out
 
 
 def load_mod_noise_registry(doc_path: str) -> tuple[
@@ -780,6 +821,8 @@ def load_mod_noise_registry(doc_path: str) -> tuple[
 # `change_appeasement` entry, anchored on vanilla's 00_lobby_effects.txt,
 # hid five mis-signed mod event options that way (PR #729).
 HELPER_ANCHOR_REVIEWED = "helper anchor"
+# `- reviewed: mod anchor, <why>` clears mod_only_anchor_warnings (#873).
+MOD_ANCHOR_REVIEWED = "mod anchor"
 HELPER_ANCHOR_ADVICE = (
     "anchor on the vanilla caller (bottom of the stack), narrow the signature to "
     "the vanilla case, or add `- stack: vanilla only`; if it already cannot match a "
@@ -876,10 +919,11 @@ def helper_anchor_warnings(
          "helper_file", "mod_uses": {definition: ["<rel>:<line>", ...]},
          "advice", "detail"}
 
-    An entry carrying `- reviewed: helper anchor, ...` is skipped, and so is a
-    `- stack: vanilla only` entry (#863): an error raised through a mod call
-    has that mod file in its stack, which such an entry never tags. Returns []
-    without vanilla game files.
+    An entry carrying `- reviewed: helper anchor, ...` is skipped. A
+    `- stack: vanilla only` entry (#863) is judged on the mod's `gui/` uses
+    alone: an error raised through a script call has the calling mod file in
+    its stack, which such an entry never tags, but a .gui reading a script
+    value leaves no frame. Returns [] without vanilla game files.
     """
     if not vanilla_game:
         return []
@@ -887,8 +931,7 @@ def helper_anchor_warnings(
 
     hits: list[tuple[VanillaBugRef, str, str, list[str]]] = []
     for ref in refs:
-        if ref.vanilla_stack_only or any(
-                r.lower().startswith(HELPER_ANCHOR_REVIEWED) for r in ref.reviewed):
+        if any(r.lower().startswith(HELPER_ANCHOR_REVIEWED) for r in ref.reviewed):
             continue
         for basename in ref.file_basenames:
             for kind in DEFINITION_DIRS:
@@ -906,6 +949,8 @@ def helper_anchor_warnings(
     warnings: list[dict] = []
     for ref, basename, rel, names in hits:
         used = {n: uses[n] for n in names if uses.get(n)}
+        if ref.vanilla_stack_only:
+            used = {n: v for n, v in ((n, [u for u in v if u.startswith("gui/")]) for n, v in used.items()) if v}
         if not used:
             continue
         total = sum(len(v) for v in used.values())
@@ -925,6 +970,64 @@ def helper_anchor_warnings(
             ),
         })
     return warnings
+
+
+# {vanilla_game: frozenset of file names}: vanilla doesn't change while a
+# process runs.
+_vanilla_basenames_cache: dict = {}
+_ANCHOR_TREES = ("common", "events", "gui")
+
+
+def _tree_basenames(root: str) -> set[str]:
+    names: set[str] = set()
+    for sub in _ANCHOR_TREES:
+        for _dirpath, _dirs, files in os.walk(os.path.join(root, sub)):
+            names.update(files)
+    return names
+
+
+def mod_only_anchor_warnings(
+    refs: list[VanillaBugRef],
+    mod_root: str,
+    vanilla_game: str | None,
+    label: str = "vanilla_bug_registry",
+) -> list[dict]:
+    """Warn for each vanilla entry anchored on a file name only the mod has
+    (under `common/`, `events/` or `gui/`): the anchor tags the mod's own
+    errors in that file as vanilla. A backticked mod path in an entry's body
+    does it as easily as a heading (#873). `mod_low_priority` entries are
+    anchored on mod files by design and skipped, and so is an entry carrying
+    `- reviewed: mod anchor, <why>` (a mod file that replays vanilla content,
+    such as the generated ideologies). Returns [] without vanilla game files.
+
+        {"label", "kind": "mod_only_anchor", "entry", "anchors", "detail"}
+    """
+    if not vanilla_game:
+        return []
+    vanilla = _vanilla_basenames_cache.get(vanilla_game)
+    if vanilla is None:
+        vanilla = _vanilla_basenames_cache[vanilla_game] = frozenset(_tree_basenames(vanilla_game))
+    mod = _tree_basenames(mod_root)
+    out: list[dict] = []
+    for ref in refs:
+        if ref.kind == "mod_low_priority" or any(
+                r.lower().startswith(MOD_ANCHOR_REVIEWED) for r in ref.reviewed):
+            continue
+        bad = sorted(b for b in ref.file_basenames if b in mod and b not in vanilla)
+        if bad:
+            out.append({
+                "label": label,
+                "kind": "mod_only_anchor",
+                "entry": ref.title,
+                "anchors": bad,
+                "detail": (
+                    f"'{ref.title}' is anchored on {', '.join(bad)}, which only the mod has, so "
+                    "it tags the mod's own errors there as vanilla. Write the path without "
+                    "backticks, move the entry to docs/audits/mod_known_noise.md, or, when the "
+                    "mod file replays vanilla content, add `- reviewed: mod anchor, <why>`."
+                ),
+            })
+    return out
 
 
 _LINE_NUM_RE = re.compile(r":\d+")
@@ -952,7 +1055,7 @@ def mod_frame_test(mod_root: str | None):
         for f in files:
             hit = memo.get(f)
             if hit is None:
-                hit = memo[f] = os.path.isfile(os.path.join(mod_root, f))
+                hit = memo[f] = os.path.isfile(os.path.join(mod_root, f.lstrip("/")))
             if hit:
                 return True
         return False

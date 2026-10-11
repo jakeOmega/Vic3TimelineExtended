@@ -17,8 +17,10 @@ diff doesn't show that; tagging real logs with both versions does.
                                 (default origin/main) and in the working tree,
                                 and list per entry the lines each gains or
                                 loses, and how many of them have a mod frame.
-                                Exit 1 when the working tree newly tags a line
-                                whose stack holds a mod frame.
+                                Exit 1 when the working tree tags a line REF
+                                left visible and whose stack holds a mod frame
+                                (a line moving between two entries doesn't
+                                count).
     modframed CORPUS            List, per entry of the working-tree registries,
                                 the lines it tags whose stack holds a mod frame:
                                 candidates for `- stack: vanilla only` (#863),
@@ -156,9 +158,10 @@ def cmd_diff(args) -> int:
           f"({len(rows)} distinct lines)")
     _print_group("LOST", result["lost"], "new", args.show)
     _print_group("GAINED", result["gained"], "old", args.show)
-    hidden = sum(f["count"] for flips in result["gained"].values() for f in flips if f["mod_frame"])
+    hidden = sum(f["count"] for flips in result["gained"].values() for f in flips
+                 if f["mod_frame"] and f["old"] is None)
     if hidden:
-        print(f"\n{hidden} newly tagged lines have a mod frame in their stack.")
+        print(f"\n{hidden} lines {args.base} left visible are now tagged with a mod frame in their stack.")
     return 1 if hidden else 0
 
 
