@@ -1055,6 +1055,11 @@ class TestRatesScript(unittest.TestCase):
         target_d, target_b = 31.0 * self.POP * 100 / 12, 38.0 * self.POP * 100 / 12
         self.assertAlmostEqual(ed0 * (1 + eng.vars["te_dg_md"] + 0.32) + edr, target_d * 1.32, delta=target_d * 1e-5)
         self.assertAlmostEqual(eb0 * (1 + eng.vars["te_dg_mb"] - 0.01) + ebr, target_b * 0.99, delta=target_b * 1e-5)
+        # kept for console option n, whose line then checks the term: M = tb - 1 - rep - os x (1 - tb)
+        self.assertAlmostEqual(eng.vars["te_dg_os_d"], 0.32, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_os_b"], -0.01, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_tb_d"], target_d / ed0, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_tb_b"], target_b / eb0, places=5)
 
     def test_script_matches_the_model(self):
         eng = self._eng()
@@ -1163,9 +1168,12 @@ class TestRatesScript(unittest.TestCase):
     def test_display_only_clears_the_rates(self):
         eng = self._eng(full=False)
         eng.modifiers.update(te_demog_census_births_down=0.2, te_demog_census_deaths_up=0.1)
-        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1, te_dg_rate_clamped=1.0)
+        eng.vars.update(te_dg_mb=-0.2, te_dg_md=0.1, te_dg_rate_clamped=1.0, te_dg_os_b=0.1, te_dg_os_d=0.2,
+                        te_dg_tb_b=0.8, te_dg_tb_d=0.6)
         eng.call("te_demog_rates_refresh")
         self.assertEqual(eng.modifiers, {})
+        for var in ("te_dg_os_b", "te_dg_os_d", "te_dg_tb_b", "te_dg_tb_d"):
+            self.assertNotIn(var, eng.vars)
         self.assertNotIn("te_dg_mb", eng.vars)
         self.assertNotIn("te_dg_md", eng.vars)
         self.assertNotIn("te_dg_rate_clamped", eng.vars, "the census line counts clamped states (Task 9)")
@@ -3303,7 +3311,8 @@ class TestConsole(unittest.TestCase):
         # what re-derives bz and dz from the line: the events the step's scales compared eb and ed against
         # and the absorbed lines' share M took out (owner amendment A, B): mb = target / bare - 1 - rep_b
         for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
-                           ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d")):
+                           ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d"),
+                           ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):

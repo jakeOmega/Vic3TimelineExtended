@@ -20,6 +20,8 @@
 #                       console option n, whose line re-derives bz and dz from them
 #   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model  the model's own rates (per 1,000 a year;
 #                       children per woman): the step's events without the on-top scales
+#   te_dg_tb_b, te_dg_tb_d  the target over the bare curve (console option n)
+#   te_dg_os_b, te_dg_os_d  the state-level lines on top M scaled to the census's rate (option n)
 #   te_dg_rep_b, te_dg_rep_d  the replaced sums over the bare curves: the absorbed lines' share
 #                       that M took out (console option n)
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
@@ -88,7 +90,10 @@ te_demog_on_top_scales = {
 
 # THIS = ROOT = a state, straight after te_demog_state_census in the effect that ran its walks (its
 # yearly pulse, or a step of fast mode's clock): the census's births and deaths terms.
-#   M = target / bare - 1 - replaced / bare
+#   M = target / bare - 1 - replaced / bare - on_top x (1 - target / bare)
+# on_top: the state-level lines left on top (the read less the census's and fast mode's terms and
+# the state's absorbed lines, floored at te_demog_k_rate_total_min), so each acts on the census's
+# rate (owner, 2026-10-11); a pop's own lines on top stay on its bare curve.
 # replaced: what the census absorbs (owner amendment, 2026-10-10), at each pop's bare curves. The
 # law, technology and institution lines it takes over (te_demog_absorbed_*, generated: health,
 # child labour, women's rights and the rest) stay on their carriers and in the state read, so
@@ -180,6 +185,8 @@ te_demog_rates_refresh = {
 			}
 			te_demog_rate_clamp = yes
 			set_variable = { name = te_dg_mb value = local_var:te_dg_rate_m }
+			set_variable = { name = te_dg_tb_b value = local_var:te_dg_rate_tb }
+			set_variable = { name = te_dg_os_b value = local_var:te_dg_rate_os }
 			# deaths
 			set_local_variable = {
 				name = te_dg_rate_tb
@@ -231,6 +238,8 @@ te_demog_rates_refresh = {
 			}
 			te_demog_rate_clamp = yes
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
+			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
+			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
 			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
 			set_variable = { name = te_dg_rep_b value = { value = local_var:te_dg_w_ebr divide = { value = local_var:te_dg_w_eb0 min = 1 } } }
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
@@ -319,5 +328,21 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_rep_d }
 		remove_variable = te_dg_rep_d
+	}
+	if = {
+		limit = { has_variable = te_dg_tb_b }
+		remove_variable = te_dg_tb_b
+	}
+	if = {
+		limit = { has_variable = te_dg_tb_d }
+		remove_variable = te_dg_tb_d
+	}
+	if = {
+		limit = { has_variable = te_dg_os_b }
+		remove_variable = te_dg_os_b
+	}
+	if = {
+		limit = { has_variable = te_dg_os_d }
+		remove_variable = te_dg_os_d
 	}
 }

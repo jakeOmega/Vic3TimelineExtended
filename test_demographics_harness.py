@@ -52,6 +52,31 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(H.pollution_mortality(H.P.POLLUTION_MAX / 2), H.P.POLLUTION_HEALTH_MORTALITY / 2)
         self.assertEqual(H.pollution_mortality(0.0), 0.0)
 
+    def test_predict_save_adds_pollution_to_deaths_only(self):
+        """predict_save passes each state its region's Pollution Impact line among the deaths on top, never births."""
+        from test_demographics_save_inputs import TINY
+        text = TINY.replace("\tcountry=3\n\tincorporation=1\n}", "\tcountry=3\n\tincorporation=1\n\tregion=\"STATE_TEST\"\n}", 1)
+        self.assertIn('region="STATE_TEST"', text)
+        seen = []
+        real = H.predict_state
+
+        def spy(pops, cbr, cdr, d, **kw):
+            seen.append(kw)
+            return real(pops, cbr, cdr, d, **kw)
+
+        lines = H.DM.engine_rate_lines()
+        with tempfile.TemporaryDirectory() as tmp:
+            for pollution, path in ((127.5, Path(tmp) / "polluted.v3"), (0.0, Path(tmp) / "clean.v3")):
+                path.write_text(text.replace("pollution=127.5", f"pollution={pollution}"), encoding="utf-8")
+                H.predict_state = spy
+                try:
+                    H.predict_save(str(path), lines, H.DM.absorbed_carriers(lines=lines), H.DM.load_carriers(), self.D)
+                finally:
+                    H.predict_state = real
+        polluted, clean = seen
+        self.assertAlmostEqual(polluted["on_top_d"] - clean["on_top_d"], H.pollution_mortality(127.5))
+        self.assertEqual(polluted["on_top_b"], clean["on_top_b"])
+
     def test_state_level_terms_on_top_act_on_the_census_rate(self):
         out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], cbr=40.0, cdr=30.0, d=self.D, on_top_d=0.32)
         self.assertAlmostEqual(out["deaths"] / 1e3, 30.0 * 1.32, places=6)

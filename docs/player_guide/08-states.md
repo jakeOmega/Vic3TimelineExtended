@@ -256,7 +256,7 @@ devastation, pollution, events, decrees, and the family-policy laws the census
 doesn't model yet. An effect on the whole state, such as pollution or a decree,
 moves its births or deaths by its own percentage of the census's rate, as its
 tooltip line reads; an effect on some of its people, such as severe starvation,
-applies to theirs. A state's birth
+applies to their rate in the base game. A state's birth
 rate and mortality tooltips show the census's part as Census: Births and Census:
 Deaths. The workforce still follows the base game's rules.
 
