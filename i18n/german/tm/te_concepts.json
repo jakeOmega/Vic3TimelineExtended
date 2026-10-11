@@ -107,6 +107,10 @@
   "en": "from having an interventionist economy",
   "de": "durch eine interventionistische Wirtschaft"
  },
+ "AI_ISOLATIONIST": {
+  "en": "from isolationist trade policy",
+  "de": "durch isolationistische Handelspolitik"
+ },
  "AI_IS_ALLY": {
   "en": "from being allied",
   "de": "durch ein Bündnis"
@@ -211,6 +215,10 @@
   "en": "from having tolerant religious laws",
   "de": "durch tolerante Religionsgesetze"
  },
+ "AI_TOTAL_WAR": {
+  "en": "from having adopted total war",
+  "de": "durch das Gesetz „Totaler Krieg“"
+ },
  "AI_WARY_ATTITUDE": {
   "en": "from wary relations",
   "de": "durch misstrauische Beziehungen"
@@ -275,10 +283,6 @@
   "en": "Inter-Sectoral Coordination Protocol",
   "de": "Protokoll zur sektorübergreifenden Koordination"
  },
- "CE_CULTURAL_ASSIMILATION": {
-  "en": "Cultural Assimilation Program",
-  "de": "Programm zur Kulturellen Assimilierung"
- },
  "CE_DISTRIBUTION_UPGRADE": {
   "en": "Central Distribution Upgrade",
   "de": "Ausbau der zentralen Verteilung"
@@ -287,10 +291,6 @@
   "en": "Emergency Resource Allocation",
   "de": "Notfall-Ressourcenzuteilung"
  },
- "CE_MILITARY_GARRISON": {
-  "en": "Deploy Military Garrison",
-  "de": "Militärgarnison entsenden"
- },
  "CE_PLANNED_DECOLONIZATION": {
   "en": "Planned Full Decolonization",
   "de": "Geplante vollständige Dekolonisierung"
@@ -298,6 +298,10 @@
  "CE_PLAN_REVISION": {
   "en": "Emergency Plan Revision",
   "de": "Notfall-Planrevision"
+ },
+ "CE_PROGRAMME_RUNNING": {
+  "en": "Running, at level 1 or more",
+  "de": "Läuft, auf Stufe 1 oder höher"
  },
  "CE_STRATEGIC_STOCKPILE": {
   "en": "Strategic Material Stockpile",
@@ -535,9 +539,25 @@
   "en": "High Literacy",
   "de": "Hohe Alphabetisierung"
  },
+ "LAW_HUMAN_PURITY": {
+  "en": "Has enacted $law_human_purity$",
+  "de": "Hat $law_human_purity$ verabschiedet"
+ },
+ "LAW_REGULATED_AUGMENTATION": {
+  "en": "Has enacted $law_regulated_augmentation_market$",
+  "de": "Hat $law_regulated_augmentation_market$ verabschiedet"
+ },
+ "LAW_UNRESTRICTED_AUGMENTATION": {
+  "en": "Has enacted $law_unrestricted_augmentation$",
+  "de": "Hat $law_unrestricted_augmentation$ verabschiedet"
+ },
  "MINORITY_RIGHTS_VIOLATED": {
   "en": "Minority Rights Violated",
   "de": "Minderheitenrechte verletzt"
+ },
+ "POLLUTED_STATE": {
+  "en": "State [concept_pollution_system]",
+  "de": "[concept_pollution_system] des Staates"
  },
  "POP_HIGH_POLLUTION": {
   "en": "High Local Pollution",
@@ -743,6 +763,14 @@
   "en": "Propose Sanctions",
   "de": "Sanktionen vorschlagen"
  },
+ "UN_RAISE_DEVELOPMENT": {
+  "en": "Raise Development Contribution",
+  "de": "Entwicklungsbeitrag erhöhen"
+ },
+ "UN_REDUCE_DEVELOPMENT": {
+  "en": "Reduce Development Contribution",
+  "de": "Entwicklungsbeitrag senken"
+ },
  "UN_REQUEST_AID": {
   "en": "Request Humanitarian Aid",
   "de": "Humanitäre Hilfe anfordern"
@@ -875,6 +903,26 @@
   "en": "An alternative service program for conscientious objectors has reduced military manpower but eased social tensions.",
   "de": "Ein Zivildienstprogramm für Kriegsdienstverweigerer hat die militärische Personalstärke verringert, aber soziale Spannungen gemildert."
  },
+ "amendment_birthright_endowment": {
+  "en": "Birthright Endowment",
+  "de": "Grunderbe"
+ },
+ "amendment_birthright_endowment_desc": {
+  "en": "An [concept_amendment] in which a duty on estates pays every young adult a capital stake, as Thomas Paine proposed in 1797. It levies the duty itself, so it replaces Estate Duties. Since the duty is set to pay the stakes, it lowers the target of the [concept_inheritance_concentration] by #v 20#!, less than Estate Duties.",
+  "de": "Ein [concept_amendment], bei dem eine Abgabe auf Nachlässe jedem jungen Erwachsenen ein Startkapital auszahlt, wie Thomas Paine es 1797 vorschlug. Er erhebt die Abgabe selbst und ersetzt daher die Nachlassabgaben. Da die Abgabe darauf ausgelegt ist, die Startkapitale zu finanzieren, senkt er das Ziel der [concept_inheritance_concentration] um #v 20#!, weniger als die Nachlassabgaben."
+ },
+ "amendment_cb_dual_mandate_desc": {
+  "en": "An [concept_amendment] making the independent central bank answer for jobs as well as prices, as the Federal Reserve has since 1978. The bank moves to the $banking_dash_mon_mandate_dual$ 12 months after the act passes, and leans against booms and slumps as they come. On a convertible gold standard it defends the peg instead.",
+  "de": "Ein [concept_amendment], der die unabhängige Zentralbank für Beschäftigung ebenso wie für Preise verantwortlich macht, wie es die Federal Reserve seit 1978 ist. 12 Monate nach Inkrafttreten des Gesetzes stellt die Bank auf $banking_dash_mon_mandate_dual$ um und steuert gegen Booms und Einbrüche, wie sie kommen. Bei einem konvertiblen Goldstandard verteidigt sie stattdessen die Bindung."
+ },
+ "amendment_cb_inflation_targeting_desc": {
+  "en": "An [concept_amendment] giving the independent central bank a narrow mandate: it answers for prices alone, as the Bundesbank did. The bank moves to $banking_dash_mon_mandate_inflation$ 12 months after the act passes, and lenders come to believe it more than any other rule. On a convertible gold standard it defends the peg instead.",
+  "de": "Ein [concept_amendment], der der unabhängigen Zentralbank ein enges Mandat gibt: Sie ist allein für die Preise verantwortlich, wie es die Bundesbank war. 12 Monate nach Inkrafttreten des Gesetzes stellt die Bank auf $banking_dash_mon_mandate_inflation$ um, und Kreditgeber vertrauen ihr mehr als jeder anderen Regel. Bei einem konvertiblen Goldstandard verteidigt sie stattdessen die Bindung."
+ },
+ "amendment_civilian_police_oversight_desc": {
+  "en": "An [concept_amendment] creating civilian review boards that hear complaints against police officers and licensed security firms, and can discipline them. Grievances get a hearing before they become a movement, but officers now answer to the public as well as to their superiors.",
+  "de": "Ein [concept_amendment], der zivile Prüfgremien schafft, die Beschwerden gegen Polizisten und lizenzierte Sicherheitsfirmen anhören und sie disziplinieren können. Missstände werden gehört, bevor sie zu einer Bewegung werden, doch die Beamten sind nun ebenso der Öffentlichkeit wie ihren Vorgesetzten Rechenschaft schuldig."
+ },
  "amendment_collective_administration": {
   "en": "Collegial Administration",
   "de": "Kollegiale Verwaltung"
@@ -896,16 +944,16 @@
   "de": "Direkte Demokratie"
  },
  "amendment_collective_direct_democracy_desc": {
-  "en": "The voters decide directly. A law passes only when a political movement carries it.",
-  "de": "Die Wähler entscheiden direkt. Ein Gesetz wird nur verabschiedet, wenn eine politische Bewegung es trägt."
+  "en": "The voters decide directly. A law without a political movement behind it has no mandate and passes less often.",
+  "de": "Die Wähler entscheiden direkt. Ein Gesetz ohne Protestbewegung dahinter hat kein Mandat und wird seltener verabschiedet."
  },
  "amendment_collective_free_federation": {
   "en": "Free Federation",
   "de": "Freie Föderation"
  },
  "amendment_collective_free_federation_desc": {
-  "en": "Delegates act only on mandates from below. A law passes only when a political movement carries it.",
-  "de": "Delegierte handeln nur auf Mandate von unten. Ein Gesetz wird nur verabschiedet, wenn eine politische Bewegung es trägt."
+  "en": "Delegates act on mandates from below. A law without a political movement behind it passes less often, and one a movement carries wins its supporters over to the federation.",
+  "de": "Delegierte handeln auf Mandate von unten hin. Ein Gesetz ohne Protestbewegung dahinter wird seltener verabschiedet, und eines, das eine Bewegung trägt, gewinnt deren Anhänger für die Föderation."
  },
  "amendment_collective_leadership": {
   "en": "Collective Leadership",
@@ -951,9 +999,21 @@
   "en": "An [concept_amendment] carving out an exception that allows businesses to collect and use personal data for commercial purposes under privacy law.",
   "de": "Ein [concept_amendment], der eine Ausnahme schafft, die es Unternehmen erlaubt, personenbezogene Daten im Rahmen des Datenschutzrechts für kommerzielle Zwecke zu erheben und zu nutzen."
  },
+ "amendment_corporate_security_powers_desc": {
+  "en": "An [concept_amendment] commissioning company guards with police powers in their own mines, mills and company towns. The companies pay for the guards and direct them, strikes included, while the public force polices everywhere else.",
+  "de": "Ein [concept_amendment], der Werkschützer von Unternehmen in ihren eigenen Minen, Fabriken und Werkssiedlungen mit polizeilichen Befugnissen beauftragt. Die Unternehmen bezahlen die Wachleute und führen sie an, auch bei Streiks, während die öffentliche Polizei überall sonst für Ordnung sorgt."
+ },
  "amendment_env_grandfather_clause_desc": {
   "en": "An [concept_amendment] exempting existing industrial works from part of the Ministry of the Environment's standards, softening its pollution and emissions reductions while industry adapts.",
   "de": "Ein [concept_amendment], der bestehende Industriewerke von einem Teil der Standards des Umweltministeriums ausnimmt und dessen Verringerung von Verschmutzung und Emissionen abmildert, während die Industrie sich anpasst."
+ },
+ "amendment_estate_duties": {
+  "en": "Estate Duties",
+  "de": "Nachlassabgaben"
+ },
+ "amendment_estate_duties_desc": {
+  "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
+  "de": "Ein [concept_amendment], der eine progressive Abgabe auf große Vermögen beim Erbgang erhebt. Er bringt keine laufenden Einnahmen; er senkt das Ziel der [concept_inheritance_concentration] um #v 30#!. Nicht zusammen mit dem Grunderbe, das die Abgabe selbst erhebt."
  },
  "amendment_langreform_advisory_panel_desc": {
   "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
@@ -1103,6 +1163,14 @@
   "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
   "de": "Ein [concept_amendment], der die am weitesten verbreitete Minderheitensprache neben der Nationalsprache zur Mitamtssprache erklärt, mit allen staatlichen Dienstleistungen in beiden Sprachen."
  },
+ "amendment_perpetual_trusts": {
+  "en": "Perpetual Dynastic Trusts",
+  "de": "Ewige Dynastiestiftungen"
+ },
+ "amendment_perpetual_trusts_desc": {
+  "en": "An [concept_amendment] letting a family trust run for ever, so a fortune held in one never passes through an estate or pays a duty on it. Raises the target of the [concept_inheritance_concentration] by #v 30#!.",
+  "de": "Ein [concept_amendment], der eine Familienstiftung ewig bestehen lässt, sodass ein darin gehaltenes Vermögen nie durch einen Nachlass geht oder dafür eine Abgabe zahlt. Erhöht das Ziel der [concept_inheritance_concentration] um #v 30#!."
+ },
  "amendment_purist_modifier": {
   "en": "Unamended Bill",
   "de": "Unveränderte Vorlage"
@@ -1130,6 +1198,10 @@
  "amendment_spoils_system_desc": {
   "en": "An [concept_amendment] letting the governing faction fill ordinary administrative posts with its own supporters. Loyalty is rewarded, but partisans rather than trained officials run the offices.",
   "de": "Ein [concept_amendment], der es der regierenden Fraktion erlaubt, gewöhnliche Verwaltungsposten mit eigenen Anhängern zu besetzen. Loyalität wird belohnt, doch Parteigänger statt ausgebildeter Beamter führen die Ämter."
+ },
+ "amendment_undivided_farm_succession_desc": {
+  "en": "An [concept_amendment] letting one heir take the family farm whole and pay the others out. Under Forced Heirship, peasants no longer have fewer children to keep the plot whole, and in farming states the siblings who do not inherit leave the land: migration up, scaled by the state's share of Peasants and Farmers and refreshed at each state's yearly update. Raises the target of the [concept_inheritance_concentration] by #v 10#!.",
+  "de": "Ein [concept_amendment], der es einem Erben erlaubt, den Familienhof ungeteilt zu übernehmen und die anderen auszuzahlen. Unter Noterbrecht haben Bauern nicht mehr weniger Kinder, um das Grundstück ungeteilt zu halten, und in Agrarstaaten verlassen die Geschwister, die nicht erben, das Land: Die Migration steigt, skaliert mit dem Anteil der Bauern und Landwirte im Staat und aktualisiert bei der jährlichen Aktualisierung jedes Staates. Erhöht das Ziel der [concept_inheritance_concentration] um #v 10#!."
  },
  "amendment_whistleblower_shield": {
   "en": "Whistleblower Protection Act",
@@ -1535,6 +1607,18 @@
   "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
   "de": "Spekulation auf Kredit ist in der [concept_middle_strata] zu weit verbreitet. Durch höhere Anforderungen an die Eigenkapitaldeckung von Krediten stellen wir sicher, dass nur solide Vorhaben verwirklicht werden, und schützen so die Wirtschaft."
  },
+ "banking_rescue_programme": {
+  "en": "Rescue Programme",
+  "de": "Rettungsprogramm"
+ },
+ "banking_rescue_programme_desc": {
+  "en": "A foreign government is lending us money on conditions. The markets trust its backing; our voters resent its terms.",
+  "de": "Eine ausländische Regierung leiht uns Geld unter Auflagen. Die Märkte vertrauen ihrer Rückendeckung; unsere Wähler grollen ihren Bedingungen."
+ },
+ "banking_rescue_programme_suspended_desc": {
+  "en": "Our rescue programme was suspended for breaking its conditions, and lenders charge for the broken promise.",
+  "de": "Unser Rettungsprogramm wurde wegen Verstoßes gegen seine Auflagen ausgesetzt, und die Kreditgeber verlangen einen Aufschlag für das gebrochene Versprechen."
+ },
  "banking_reserve_requirements": {
   "en": "Raised Reserve Requirements",
   "de": "Erhöhte Mindestreserveanforderungen"
@@ -1546,6 +1630,26 @@
  "banking_restrict_inflows": {
   "en": "Restrict Speculative Inflows",
   "de": "Spekulative Kapitalzuflüsse beschränken"
+ },
+ "banking_restructuring_deep_default_desc": {
+  "en": "The government made its creditors accept half of what it owed them. Lenders charge heavily for the risk that it will do so again, and its standing abroad has collapsed.",
+  "de": "Die Regierung hat ihren Gläubigern abgenötigt, sich mit der Hälfte ihrer Schulden zu begnügen. Kreditgeber verlangen hohe Aufschläge für das Risiko, dass sie es wieder tut, und ihr Ansehen im Ausland ist eingebrochen."
+ },
+ "banking_restructuring_reprofiled": {
+  "en": "Reprofiled Debt",
+  "de": "Umgeschuldete Staatsschuld"
+ },
+ "banking_restructuring_reprofiled_desc": {
+  "en": "The government has stretched its debts and written part of them off. Lenders charge a little more for the risk that it will do so again.",
+  "de": "Die Regierung hat ihre Schulden gestreckt und einen Teil davon abgeschrieben. Kreditgeber verlangen etwas mehr für das Risiko, dass sie es wieder tut."
+ },
+ "banking_restructuring_shut_out_desc": {
+  "en": "After the government's deep default, banks and firms hold far less cash at home, and the government's credit limit has shrunk with it.",
+  "de": "Nach dem tiefen Zahlungsausfall der Regierung halten Banken und Firmen im Inland weit weniger Bargeld, und die Kreditschwelle der Regierung ist entsprechend geschrumpft."
+ },
+ "banking_restructuring_wary_lenders_desc": {
+  "en": "After the government's haircut, banks and firms hold less cash at home, and the government can borrow less against it.",
+  "de": "Nach dem Schuldenschnitt der Regierung halten Banken und Firmen im Inland weniger Bargeld, und die Regierung kann entsprechend weniger Kredit aufnehmen."
  },
  "banking_sterilize_inflows": {
   "en": "Sterilize Capital Inflows",
@@ -1623,6 +1727,10 @@
   "en": "Speculative Euphoria",
   "de": "Spekulative Euphorie"
  },
+ "bubble_inertia_extreme_coop_desc": {
+  "en": "Federations race to match each other's payouts, and the commitments feed on one another faster than earnings can cover them.",
+  "de": "Föderationen wetteifern darum, die Auszahlungen der anderen zu erreichen, und die Verpflichtungen nähren einander schneller, als Erträge sie decken können."
+ },
  "bubble_inertia_extreme_desc": {
   "en": "Rampant speculation drives a powerful feedback loop — prices rise because prices are rising.",
   "de": "Ungezügelte Spekulation treibt eine starke Rückkopplungsschleife an — die Preise steigen, weil die Preise steigen."
@@ -1631,6 +1739,10 @@
   "en": "Speculative Feedback",
   "de": "Spekulative Rückkopplung"
  },
+ "bubble_inertia_high_coop_desc": {
+  "en": "Councils are committing payouts and projects ahead of earnings, and every commitment invites the next.",
+  "de": "Räte verpflichten sich zu Auszahlungen und Projekten, die über ihre Erträge hinausgehen, und jede Verpflichtung zieht die nächste nach sich."
+ },
  "bubble_inertia_high_desc": {
   "en": "Elevated speculation creates a self-reinforcing cycle of rising prices and investor confidence.",
   "de": "Erhöhte Spekulation erzeugt einen sich selbst verstärkenden Kreislauf aus steigenden Preisen und Anlegervertrauen."
@@ -1638,6 +1750,10 @@
  "bubble_inertia_moderate": {
   "en": "Speculative Inertia",
   "de": "Spekulative Trägheit"
+ },
+ "bubble_inertia_moderate_coop_desc": {
+  "en": "Payouts and projects are being committed against surpluses still to come, which keeps reinvestment climbing.",
+  "de": "Auszahlungen und Projekte werden gegen künftige Überschüsse zugesagt, was die Reinvestitionen weiter steigen lässt."
  },
  "bubble_inertia_moderate_desc": {
   "en": "Rising asset prices attract further speculation, maintaining market momentum.",
@@ -2436,8 +2552,8 @@
   "de": "Kolonialer Kulturwandel ist eine [concept_diplomatic_action], die es einem Land erlaubt, die Kultur und Religion eines kolonialen Klientelstaats zu ändern."
  },
  "colonial_development_investment_expense_modifier_desc": {
-  "en": "Monthly outlay for the Colonial Development Investment program. Scales with national [concept_gdp]; appears as a line item in the budget.",
-  "de": "Monatliche Ausgabe für das Programm Koloniale Entwicklungsinvestition. Skaliert mit dem nationalen [concept_gdp]; erscheint als Posten im Haushalt."
+  "en": "Weekly upkeep of the Colonial Development Investment programme: a share of our colonies' [concept_gdp] for each level it runs at. Appears as a line item in the budget.",
+  "de": "Wöchentlicher Unterhalt des Programms Koloniale Entwicklungsinvestition: ein Anteil am [concept_gdp] unserer Kolonien für jede Stufe, auf der es läuft. Erscheint als Posten im Etat."
  },
  "colonial_development_investment_modifier_desc": {
   "en": "The government is investing in [concept_infrastructure] and [Concept('concept_institution', 'institutions')] in colonial territories, draining bureaucratic resources.",
@@ -2508,8 +2624,8 @@
   "de": "Agentennetzwerk"
  },
  "concept_agent_network_desc": {
-  "en": "Your agents inside a country you have run [concept_covert_operations] against, rated 0 to 100. A network grows while operations run there, decays once they stop, and outlives them; an exposed operation costs it 25. A strong network lowers the [concept_operation_detection] of every operation in that country and gives a new one there a head start. From strength 50 it reports that country's [concept_intelligence_capacity] and technology, and from 75 how many operations it runs against you.",
-  "de": "Ihre Agenten in einem Land, gegen das Sie [concept_covert_operations] durchgeführt haben, bewertet von 0 bis 100. Ein Netzwerk wächst, solange dort Operationen laufen, verfällt, sobald diese enden, und überdauert sie; eine aufgedeckte Operation kostet es 25. Ein starkes Netzwerk senkt das [concept_operation_detection] jeder Operation in diesem Land und verschafft einer neuen dort einen Vorsprung. Ab Stärke 50 meldet es die [concept_intelligence_capacity] und die Technologie jenes Landes, ab 75 auch, wie viele Operationen es gegen Sie führt."
+  "en": "Your agents inside a country you have run [concept_covert_operations] against, rated 0 to 100. A network grows while operations run there, decays once they stop, and outlives them; an exposed operation costs it 25. A strong network lowers the [concept_operation_detection] of every operation in that country and gives a new one there a head start. It also raises the detection risk of that country's operations against you, because your agents inside its service hear of them. From strength 50 it reports that country's [concept_intelligence_capacity] and technology, and from 75 how many operations it runs against you.",
+  "de": "Ihre Agenten in einem Land, gegen das Sie [concept_covert_operations] durchgeführt haben, bewertet von 0 bis 100. Ein Netzwerk wächst, solange dort Operationen laufen, verfällt, sobald diese enden, und überdauert sie; eine aufgedeckte Operation kostet es 25. Ein starkes Netzwerk senkt das [concept_operation_detection] jeder Operation in diesem Land und verschafft einer neuen dort einen Vorsprung. Es erhöht außerdem das Entdeckungsrisiko der Operationen jenes Landes gegen Sie, weil Ihre Agenten in dessen Diensten von ihnen erfahren. Ab Stärke 50 meldet es die [concept_intelligence_capacity] und die Technologie jenes Landes, ab 75 auch, wie viele Operationen es gegen Sie führt."
  },
  "concept_antimatter_facility": {
   "en": "Antimatter Facility",
@@ -2540,8 +2656,8 @@
   "de": "Das Gold, das Ihre Zentralbank als Deckung für ihre Banknoten hält. Es gehört der Bank, nicht der Landeskasse: Die Regierung kann es nicht ausgeben, und nichts, was mit ihm geschieht, zeigt sich in Ihrem Haushalt. Darauf beruht ein Goldstandard."
  },
  "concept_banking_borrowed_gold_desc": {
-  "en": "The part of the [concept_banking_bank_gold] that came in chasing a high rate and is owed, not earned. It grows every month the rate is held high, and it costs interest while it stays.",
-  "de": "Der Teil des [Concept('concept_banking_bank_gold', 'Bankgoldes')], der auf der Jagd nach einem hohen Zins hereingekommen ist und geschuldet, nicht erwirtschaftet ist. Er wächst in jedem Monat, in dem der Zins hoch gehalten wird, und kostet Zinsen, solange er bleibt."
+  "en": "The part of the [concept_banking_bank_gold] that came in chasing a high rate and is owed, not earned. It grows every month the rate is held high, and it is the first gold to leave once your rate is no longer above the world's.",
+  "de": "Der Teil des [Concept('concept_banking_bank_gold', 'Bankgoldes')], der auf der Jagd nach einem hohen Zins hereingekommen ist und geschuldet, nicht erwirtschaftet ist. Er wächst in jedem Monat, in dem der Zins hoch gehalten wird, und ist das erste Gold, das abfließt, sobald Ihr Zins nicht mehr über dem der Welt liegt."
  },
  "concept_banking_contagion": {
   "en": "Banking Contagion",
@@ -2608,8 +2724,8 @@
   "de": "Mandat"
  },
  "concept_banking_mandate_desc": {
-  "en": "The rule a delegated central bank follows when it sets the target each month: Price Stability, Growth, or, on a gold standard, Peg Defence. It does nothing while you hold the dial yourself.",
-  "de": "Die Regel, der eine Zentralbank mit übertragener Steuerung folgt, wenn sie jeden Monat das Ziel festlegt: Preisstabilität, Wachstum oder, beim Goldstandard, Bindungsverteidigung. Sie bewirkt nichts, solange Sie den Regler selbst bedienen."
+  "en": "The rule a delegated or independent central bank follows when it sets the target each month: Inflation Targeting, the Dual Mandate, Growth, or, on a gold standard, Peg Defence. It does nothing while you hold the dial yourself. Under $law_central_bank_independence$ it is an act of law rather than your choice.",
+  "de": "Die Regel, der eine Zentralbank mit übertragener oder unabhängiger Steuerung folgt, wenn sie jeden Monat das Ziel festlegt: Inflationssteuerung, Doppelmandat, Wachstum oder, beim Goldstandard, Bindungsverteidigung. Sie bewirkt nichts, solange Sie den Regler selbst bedienen. Unter $law_central_bank_independence$ ist sie ein Rechtsakt statt Ihrer Wahl."
  },
  "concept_banking_momentum": {
   "en": "Banking Momentum",
@@ -2636,8 +2752,8 @@
   "de": "Wie viel Ihrer Ausgaben Ihre Zentralbank einfach durch Geldschöpfung deckt, statt dass Ihre Regierung sich das Geld leiht. Es ist der älteste Weg, einen Krieg zu bezahlen, und der Grund, warum Kriege in Inflation enden."
  },
  "concept_banking_peg_confidence_desc": {
-  "en": "How far the world believes your currency's parity will hold, from 0 to 100. On a gold standard it falls only when the central bank has almost no gold left to pay with; under a treaty peg it moves on how overvalued your currency is. When it falls far enough, there is a run on the currency.",
-  "de": "In welchem Maß die Welt darauf vertraut, dass die Parität Ihrer Währung hält, von 0 bis 100. Beim Goldstandard sinkt es nur, wenn die Zentralbank kaum noch Gold zum Auszahlen hat; bei einer Vertragsbindung hängt es davon ab, wie überbewertet Ihre Währung ist. Sinkt es weit genug, kommt es zu einem Ansturm auf die Währung."
+  "en": "How far the world believes your currency's parity will hold, from 0 to 100. On a gold standard it falls when the central bank has almost no gold left to pay with, when the currency is overvalued, and in a deep slump the peg is prolonging; under a treaty peg it moves on how overvalued your currency is. When it falls far enough, there is a run on the currency.",
+  "de": "In welchem Maß die Welt darauf vertraut, dass die Parität Ihrer Währung hält, von 0 bis 100. Beim Goldstandard sinkt es, wenn die Zentralbank kaum noch Gold zum Auszahlen hat, wenn die Währung überbewertet ist und in einem tiefen Konjunktureinbruch, den die Bindung verlängert; bei einer Vertragsbindung hängt es davon ab, wie überbewertet Ihre Währung ist. Sinkt es weit genug, kommt es zu einem Ansturm auf die Währung."
  },
  "concept_banking_policy_rate_desc": {
   "en": "The price of short-term credit in your country, and the floor every other borrowing cost is built on. Where there is a central bank to set it, it closes on the [concept_banking_rate_target] a little each month, so changing course takes seasons rather than weeks.",
@@ -2816,8 +2932,8 @@
   "de": "Umstrittenes Denkmal"
  },
  "concept_contested_monument_desc": {
-  "en": "A $building_grand_monument$ that honours something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from the Monuments journal entry.",
-  "de": "Ein $building_grand_monument$, das etwas ehrt, was die Regierung nicht verkörpert: eine Krone, eine Republik, eine Revolution, einen Anführer oder einen Glauben, die gefallen sind, oder das Regime oder den Herrscher eines anderen Landes, wenn der Staat, in dem es steht, den Besitzer wechselt. Es behält seinen Tourismus und seine Wirkung in seinem Staat, gibt aber kein Prestige, keine Legitimität und keine Zustimmung, und die Interessengruppe, die sich an seiner Botschaft gestört hat, grollt ihm jeden Monat, in dem es unentschieden dasteht. Im Journaleintrag Monumente lässt es sich abreißen, neu widmen oder als [concept_heritage_monument] bewahren."
+  "en": "A $building_grand_monument$ that honours something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from its row on the Grand Monuments tab of the Timeline Extended window.",
+  "de": "Ein $building_grand_monument$, das etwas ehrt, was die Regierung nicht verkörpert: eine Krone, eine Republik, eine Revolution, einen Anführer oder einen Glauben, die gefallen sind, oder das Regime oder den Herrscher eines anderen Landes, wenn der Staat, in dem es steht, den Besitzer wechselt. Es behält seinen Tourismus und seine Wirkung in seinem Staat, gibt aber kein Prestige, keine Legitimität und keine Zustimmung, und die Interessengruppe, die sich an seiner Botschaft gestört hat, grollt ihm jeden Monat, in dem es unentschieden dasteht. In seiner Zeile auf dem Reiter „Große Monumente“ im Fenster „Timeline Extended“ lässt es sich abreißen, neu widmen oder als [concept_heritage_monument] bewahren."
  },
  "concept_covert_efficiency": {
   "en": "Efficiency Factor",
@@ -2840,12 +2956,12 @@
   "de": "Verdeckte Operationen"
  },
  "concept_covert_operations_desc": {
-  "en": "[concept_covert_operations] launched against rival nations via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Fourteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (target must have an elected legislature)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash]\\n• #bold Industrial Espionage#! — Boosts your production tech spread and innovation (target must have researched more technologies than you)\\n• #bold Military Espionage#! — Boosts your military tech spread and unit effectiveness\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Programme Sabotage#! — Slows the target's nuclear weapons programme (requires a funded programme and #bold Seasoned#! Tradecraft)\\n• #bold Space Programme Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (war, or a [concept_diplomatic_play] against them)\\nOnly the two sabotage operations need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation. Amicable relations or better block Election Interference, Financial Subversion, Ideological Subversion and both sabotage operations; cordial or better blocks Destabilization. Only Regime Change requires a [concept_rivalry].\\nEach operation occupies a slot and requires funding. Each operation carries a monthly [concept_operation_detection]. Unused slots provide a domestic intelligence bonus.",
-  "de": "[concept_covert_operations], die über [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gegen rivalisierende Nationen gestartet werden. Es stehen vierzehn Arten zur Verfügung:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash]\\n• #bold Industriespionage#! — Steigert die Verbreitung Ihrer Produktionstechnologien und Ihre Innovation (das Ziel muss mehr Technologien erforscht haben als Sie)\\n• #bold Militärspionage#! — Steigert die Verbreitung Ihrer Militärtechnologien und die Einheiteneffektivität\\n• #bold Einflusskampagne#! — Senkt den Einflusshebel-Widerstand des Ziels (erfordert die Führung eines [Concept('concept_power_bloc', 'Machtblocks')]; Ziel außerhalb Ihres Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die Ihrer Ideologie entsprechen (das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert eine [concept_rivalry] und #bold Erfahrenes#! Spionagehandwerk; nicht gegen das eigene Klientelland)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Nuklearwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt Ihre Meilensteine im [concept_space_race] und senkt deren Risiko (das Ziel muss Ihnen voraus sein)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort Ihr Netzwerk schneller auf als jede andere Operation (nicht gegen das eigene Klientelland)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Nuklearsprengköpfe aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur die beiden Sabotageoperationen erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation. Freundschaftliche Beziehungen oder besser blockieren Wahleinmischung, Finanzielle Subversion, Ideologische Subversion und beide Sabotageoperationen; herzliche Beziehungen oder besser blockieren Destabilisierung. Nur Regimewechsel erfordert eine [concept_rivalry].\\nJede Operation belegt einen Slot und erfordert Finanzierung. Jede Operation birgt ein monatliches [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
+  "en": "[concept_covert_operations] launched against rival nations via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Fourteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (requires [GetTechnology('television_broadcasting').GetName]; target must have an elected legislature)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash] (requires [GetTechnology('computer_networks').GetName])\\n• #bold Industrial Espionage#! — Steals production technology (target must have researched a production technology you could research; ends once there is none)\\n• #bold Military Espionage#! — Steals military technology (target must have researched a military technology you could research; ends once there is none)\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [GetTechnology('mass_media').GetName] and [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (requires [GetTechnology('pop_culture').GetName]; target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (requires [GetTechnology('social_media').GetName]; target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires [GetTechnology('satellite_communications').GetName], a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Programme Sabotage#! — Slows the target's nuclear weapons programme (requires a funded programme and #bold Seasoned#! Tradecraft)\\n• #bold Space Programme Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (requires [GetTechnology('cryptography').GetName]; war, or a [concept_diplomatic_play] against them)\\nOnly the two sabotage operations need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation. Amicable relations or better block Election Interference, Financial Subversion, Ideological Subversion and both sabotage operations; cordial or better blocks Destabilization. Only Regime Change requires a [concept_rivalry]. Seven operations need a [concept_technology] first, the ones that can bring down a great power the latest.\\nEach operation occupies a slot and requires funding. Each operation carries a monthly [concept_operation_detection]. Unused slots provide a domestic intelligence bonus.",
+  "de": "[concept_covert_operations], die über [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gegen rivalisierende Nationen gestartet werden. Es stehen vierzehn Arten zur Verfügung:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (erfordert [GetTechnology('television_broadcasting').GetName]; das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash] (erfordert [GetTechnology('computer_networks').GetName])\\n• #bold Industriespionage#! — Stiehlt Produktionstechnologie (das Ziel muss eine Produktionstechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Militärspionage#! — Stiehlt Militärtechnologie (das Ziel muss eine Militärtechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Einflusskampagne#! — Senkt den Einflusshebel-Widerstand des Ziels (erfordert [GetTechnology('mass_media').GetName] und die Führung eines [Concept('concept_power_bloc', 'Machtblocks')]; Ziel außerhalb Ihres Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die Ihrer Ideologie entsprechen (erfordert [GetTechnology('pop_culture').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (erfordert [GetTechnology('social_media').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert [GetTechnology('satellite_communications').GetName], eine [concept_rivalry] und #bold Erfahrenes#! Spionagehandwerk; nicht gegen das eigene Klientelland)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Nuklearwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt Ihre Meilensteine im [concept_space_race] und senkt deren Risiko (das Ziel muss Ihnen voraus sein)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort Ihr Netzwerk schneller auf als jede andere Operation (nicht gegen das eigene Klientelland)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Nuklearsprengköpfe aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (erfordert [GetTechnology('cryptography').GetName]; Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur die beiden Sabotageoperationen erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation. Einvernehmliche Beziehungen oder besser blockieren Wahleinmischung, Finanzielle Subversion, Ideologische Subversion und beide Sabotageoperationen; herzliche Beziehungen oder besser blockieren Destabilisierung. Nur Regimewechsel erfordert eine [concept_rivalry]. Sieben Operationen erfordern zuerst eine [concept_technology], diejenigen, die eine Großmacht zu Fall bringen können, die späteste.\\nJede Operation belegt einen Slot und erfordert Finanzierung. Jede Operation birgt ein monatliches [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
  },
  "concept_covert_warfare_system_desc": {
   "en": "A covert warfare system where nations build [concept_intelligence_capacity] defenses and launch [concept_covert_operations] against rivals. Defense has two layers: general IC (from technologies, [Concept('concept_institution', 'institutions')], [concept_literacy], [Concept('concept_gdp', 'GDP')]) and type-specific defense (Economic, Military, Ideological — from relevant laws). A truce or an Intelligence Sharing Pact with the target blocks every operation; amicable relations or better block five of them, and cordial or better blocks Destabilization. Offensive operations can undermine enemy [concept_legitimacy], destabilize finances, steal technology, weaken [concept_power_bloc] resistance, subvert foreign movements, boost separatists, sabotage [concept_infrastructure], or disrupt military communications. Unused operation slots provide domestic intelligence benefits. The journal entry opens once a country holds more operation slots than every country of its rank gets for free; the first extra slot comes from the Ministry of Intelligence and Security law or the Mainframe Computers technology. Can be toggled via game rules.",
-  "de": "Ein System verdeckter Kriegsführung, in dem Nationen [concept_intelligence_capacity]-Abwehr aufbauen und [concept_covert_operations] gegen Rivalen starten. Die Abwehr hat zwei Schichten: allgemeine Geheimdienstkapazität (aus Technologien, [Concept('concept_institution', 'Institutionen')], [concept_literacy] und [Concept('concept_gdp', 'Bruttoinlandsprodukt')]) sowie typspezifische Abwehr (Wirtschaft, Militär, Ideologie — aus den jeweiligen Gesetzen). Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation; freundschaftliche Beziehungen oder besser blockieren fünf davon, herzliche Beziehungen oder besser blockieren Destabilisierung. Offensive Operationen können die [concept_legitimacy] des Gegners untergraben, dessen Finanzen destabilisieren, Technologie stehlen, den Widerstand eines [concept_power_bloc] schwächen, ausländische Bewegungen unterwandern, Separatisten fördern, die [concept_infrastructure] sabotieren oder die militärische Kommunikation stören. Ungenutzte Operationsslots gewähren Vorteile für die Inlandsaufklärung. Der Journaleintrag öffnet sich, sobald ein Land mehr Operationsslots besitzt, als jedes Land seines Rangs kostenlos erhält; der erste zusätzliche Slot stammt aus dem Gesetz Geheimdienst- und Sicherheitsministerium oder der Technologie Großrechner. Kann über Spielregeln umgeschaltet werden."
+  "de": "Ein System verdeckter Kriegsführung, in dem Nationen [concept_intelligence_capacity]-Abwehr aufbauen und [concept_covert_operations] gegen Rivalen starten. Die Abwehr hat zwei Schichten: allgemeine Geheimdienstkapazität (aus Technologien, [Concept('concept_institution', 'Institutionen')], [concept_literacy] und [Concept('concept_gdp', 'Bruttoinlandsprodukt')]) sowie typspezifische Abwehr (Wirtschaft, Militär, Ideologie — aus den jeweiligen Gesetzen). Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation; einvernehmliche Beziehungen oder besser blockieren fünf davon, herzliche Beziehungen oder besser blockieren Destabilisierung. Offensive Operationen können die [concept_legitimacy] des Gegners untergraben, dessen Finanzen destabilisieren, Technologie stehlen, den Widerstand eines [concept_power_bloc] schwächen, ausländische Bewegungen unterwandern, Separatisten fördern, die [concept_infrastructure] sabotieren oder die militärische Kommunikation stören. Ungenutzte Operationsslots gewähren Vorteile für die Inlandsaufklärung. Der Journaleintrag öffnet sich, sobald ein Land mehr Operationsslots besitzt, als jedes Land seines Rangs kostenlos erhält; der erste zusätzliche Slot stammt aus dem Gesetz Geheimdienst- und Sicherheitsministerium oder der Technologie Großrechner. Kann über Spielregeln umgeschaltet werden."
  },
  "concept_cultural_hegemony_system_desc": {
   "en": "A soft power system where nations compete for global cultural influence. [concept_cultural_pull] determines each country's share of world cultural output. The dominant cultural power gains [concept_migration_pull]. Events can raise a leading cultural power's research speed and [concept_prestige], and let a country under the hegemon's influence gain research speed by opening up to its culture or adopting its education model. Lagging nations lose [concept_legitimacy] to the [concept_foreign_cultural_benchmark]. The journal entry opens once any country has researched Mass Media and we have Romanticism. Can be toggled via game rules.",
@@ -2988,8 +3104,8 @@
   "de": "Finanzierungstarnung"
  },
  "concept_funding_stealth_desc": {
-  "en": "How much your [concept_covert_funding] cuts every operation's [concept_operation_detection], in percentage points before your [concept_covert_efficiency] applies. Levels 0 and 1 give none; level 2 gives #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_2')|0]#!, rising to #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_5')|0]#! at level 5. The Covert Warfare journal entry's Funding section lists every level.",
-  "de": "Wie stark Ihre [concept_covert_funding] das [concept_operation_detection] jeder Operation senkt, in Prozentpunkten, bevor Ihr [concept_covert_efficiency] angewendet wird. Die Stufen 0 und 1 bringen keine Senkung; Stufe 2 bringt #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_2')|0]#!, bis zu #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_5')|0]#! auf Stufe 5. Der Abschnitt Finanzierung im Journaleintrag Verdeckte Kriegsführung listet jede Stufe auf."
+  "en": "How much your [concept_covert_funding] cuts every operation's [concept_operation_detection], in percentage points before your [concept_covert_efficiency] applies. Levels 0 and 1 give none; level 2 gives #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_2')|0]#!, rising to #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_5')|0]#! at level 5. The Funding section on the Covert tab of the Military panel lists every level.",
+  "de": "Wie stark Ihre [concept_covert_funding] das [concept_operation_detection] jeder Operation senkt, in Prozentpunkten, bevor Ihr [concept_covert_efficiency] angewendet wird. Die Stufen 0 und 1 bringen keine Senkung; Stufe 2 bringt #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_2')|0]#!, bis zu #G -[GetPlayer.MakeScope.ScriptValue('covert_funding_detect_reduction_at_5')|0]#! auf Stufe 5. Der Abschnitt Finanzierung auf dem Reiter „Verdeckt“ der Militär-Tafel listet jede Stufe auf."
  },
  "concept_fx_swap_lines_desc": {
   "en": "A standing arrangement between central banks: one stands ready to lend its reserves to the other. In this mod it is a [concept_treaty] [concept_article], the $swap_line$ — the recipient's risk premium falls and its peg is steadied, the provider pays a cost scaled to the two economies' sizes, and in a crisis the line is actually drawn.",
@@ -3043,13 +3159,21 @@
   "en": "The highest tier of fortification, an almost impregnable defensive structure that greatly favors defenders in battle.",
   "de": "Die höchste Stufe der Befestigung, eine nahezu uneinnehmbare Verteidigungsanlage, die Verteidiger im Kampf stark begünstigt."
  },
+ "concept_inheritance_concentration": {
+  "en": "Wealth Concentration",
+  "de": "Vermögenskonzentration"
+ },
+ "concept_inheritance_concentration_desc": {
+  "en": "How much of the nation's wealth sits in great family fortunes, from 0 to 100. Each state has its own score, which drifts toward its own target, closing 3% of the gap each year, so a new law takes about a generation to show. The Inheritance law and its amendments set where the target starts: Primogeniture & Entail 80, Freedom of Testation 60, Customary Inheritance 50, Forced Heirship 25, State as Universal Heir and Possession by Use 0; Estate Duties −30, the Birthright Endowment −20, Perpetual Dynastic Trusts +30 and Undivided Farm Succession +10. Land tenure in farming states, who owns the state's buildings, how unequal its incomes are, taxes on wealth and the economic laws move it from there. Heavy war losses, a lost war that cost it a war goal, a winning revolution of the left and a banking crash lower every state's score at once, and devastation lowers a state's score each year, by up to 10. The national figure is the states' average, weighted by where property is held.\\n\\nThe national figure sets the Aristocrats' and Capitalists' political strength: both gain above 50, and the Aristocrats lose strength below it. Each state's own score acts in that state, refreshed at its yearly update. Above 50 its great houses invest more, radicals gather, fewer people qualify for better jobs, schooling is harder to reach and, in farming states, the young leave the land. Below 50 its Farmers and Shopkeepers invest more.\\n\\nNow #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
+  "de": "Wie viel des Volksvermögens in großen Familienvermögen liegt, von 0 bis 100. Jeder Staat hat einen eigenen Wert, der auf sein eigenes Ziel zudriftet und jedes Jahr 3% der Lücke schließt, sodass ein neues Gesetz etwa eine Generation braucht, bis es sich zeigt. Das Erbrecht und seine Nachträge legen fest, wo das Ziel beginnt: Primogenitur und Fideikommiss 80, Testierfreiheit 60, Gewohnheitsrechtliche Erbfolge 50, Noterbrecht 25, Staat als Universalerbe und Besitz durch Nutzung 0; Nachlassabgaben −30, das Grunderbe −20, Ewige Dynastiestiftungen +30 und Ungeteilte Hofnachfolge +10. Die Bodenbesitzverhältnisse in Agrarstaaten, wem die Gebäude des Staates gehören, wie ungleich seine Einkommen sind, Vermögensteuern und die Wirtschaftsgesetze verschieben es von dort aus. Schwere Kriegsverluste, ein verlorener Krieg, der ein Kriegsziel kostete, eine siegreiche Revolution der Linken und ein Bankencrash senken den Wert jedes Staates auf einmal, und Verwüstung senkt den Wert eines Staates jedes Jahr um bis zu 10. Der nationale Wert ist der Durchschnitt der Staaten, gewichtet danach, wo Eigentum gehalten wird.\\n\\nDer nationale Wert bestimmt die politische Stärke der Aristokraten und Kapitalisten: Beide gewinnen oberhalb von 50, und die Aristokraten verlieren darunter an Stärke. Der eigene Wert jedes Staates wirkt in diesem Staat und wird bei dessen jährlicher Aktualisierung erneuert. Oberhalb von 50 investieren seine großen Häuser mehr, Radikale sammeln sich, weniger Menschen qualifizieren sich für bessere Arbeitsplätze, Bildung ist schwerer zugänglich und in Agrarstaaten verlässt die Jugend das Land. Unterhalb von 50 investieren seine Landwirte und Verkäufer mehr.\\n\\nDerzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, mit Kurs auf #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
+ },
  "concept_intelligence_capacity": {
   "en": "Intelligence Capacity",
   "de": "Geheimdienstkapazität"
  },
  "concept_intelligence_capacity_desc": {
-  "en": "A country's general counterintelligence capability, computed from three components: technology and institutional investment, national [concept_literacy] rate (up to 50 at full literacy), and share of world [Concept('concept_gdp', 'GDP')] (one point per percent, capped at 25), then scaled by percentage modifiers. It has no upper limit. Higher [concept_intelligence_capacity] protects against separatism and [Concept('concept_coup', 'coups')]. In the [concept_covert_warfare_system], IC forms the general defense component — augmented by type-specific defenses (Economic, Military, Ideological) from relevant laws to determine the total defense against each operation type.",
-  "de": "Die allgemeine Spionageabwehrfähigkeit eines Landes, berechnet aus drei Komponenten: Investitionen in Technologie und Institutionen, die nationale [concept_literacy]srate (bis zu 50 bei voller Alphabetisierung) und der Anteil am weltweiten [Concept('concept_gdp', 'Bruttoinlandsprodukt')] (ein Punkt pro Prozent, gedeckelt bei 25), anschließend skaliert durch prozentuale Modifikatoren. Sie hat keine Obergrenze. Höhere [concept_intelligence_capacity] schützt vor Separatismus und [Concept('concept_coup', 'Putschen')]. Im Rahmen der [concept_covert_warfare_system] bildet die Geheimdienstkapazität die allgemeine Abwehrkomponente — ergänzt durch typspezifische Abwehr (Wirtschaft, Militär, Ideologie) aus den jeweiligen Gesetzen, um die Gesamtabwehr gegen jede Operationsart zu bestimmen."
+  "en": "A country's general counterintelligence capability, computed from three components: technology and institutional investment, national [concept_literacy] rate (up to 50 at full literacy), and share of world [Concept('concept_gdp', 'GDP')] (two points per percent, capped at 50), then scaled by percentage modifiers. It has no upper limit. Higher [concept_intelligence_capacity] protects against separatism and [Concept('concept_coup', 'coups')]. In the [concept_covert_warfare_system], IC forms the general defense component — augmented by type-specific defenses (Economic, Military, Ideological) from relevant laws to determine the total defense against each operation type.",
+  "de": "Die allgemeine Spionageabwehrfähigkeit eines Landes, berechnet aus drei Komponenten: Investitionen in Technologie und Institutionen, die nationale [concept_literacy]-Rate (bis zu 50 bei voller Alphabetisierung) und der Anteil am weltweiten [Concept('concept_gdp', 'Bruttoinlandsprodukt')] (zwei Punkte pro Prozent, gedeckelt bei 50), anschließend skaliert durch prozentuale Modifikatoren. Sie hat keine Obergrenze. Höhere [concept_intelligence_capacity] schützt vor Separatismus und [Concept('concept_coup', 'Putschen')]. Im Rahmen der [concept_covert_warfare_system] bildet die Geheimdienstkapazität die allgemeine Abwehrkomponente — ergänzt durch typspezifische Abwehr (Wirtschaft, Militär, Ideologie) aus den jeweiligen Gesetzen, um die Gesamtabwehr gegen jede Operationsart zu bestimmen."
  },
  "concept_internal_resettlement": {
   "en": "Internal Resettlement",
@@ -3084,8 +3208,8 @@
   "de": "Migrationsüberlastung"
  },
  "concept_migration_crowding_desc": {
-  "en": "A density-based reduction in migration pull for overpopulated states. Once a state reaches its crowding threshold, the penalty rises gradually with a quadratic ramp, then switches to linear growth at severe density. Larger or better-planned states can sustain more people before this penalty becomes severe.",
-  "de": "Eine dichteabhängige Verringerung der Migrationsanziehung für überbevölkerte Staaten. Sobald ein Staat seine Überfüllungsschwelle erreicht, steigt der Abzug zunächst allmählich mit einer quadratischen Rampe an und wechselt bei starker Dichte zu linearem Wachstum. Größere oder besser geplante Staaten können mehr Menschen tragen, bevor dieser Abzug gravierend wird."
+  "en": "A density-based reduction in [concept_migration_pull] for overpopulated states. A state's crowding threshold is #v 10,000#! people for each unit of [concept_arable_land], plus #v 1,000#! for each point of [concept_urban_engineering], all multiplied by its $state_migration_crowding_density_mult$. Past the threshold the penalty rises gradually with a quadratic ramp, then grows linearly from ten times the threshold.",
+  "de": "Eine dichteabhängige Verringerung der [concept_migration_pull] für überbevölkerte Staaten. Die Überfüllungsschwelle eines Staates liegt bei #v 10.000#! Menschen für jede Einheit [concept_arable_land] plus #v 1.000#! für jeden Punkt [concept_urban_engineering], alles multipliziert mit seiner $state_migration_crowding_density_mult$. Jenseits der Schwelle steigt der Abzug zunächst allmählich mit einer quadratischen Rampe an und wächst ab dem Zehnfachen der Schwelle linear."
  },
  "concept_ministry_system": {
   "en": "Ministry System",
@@ -3116,8 +3240,8 @@
   "de": "Nukleare Einsatzbereitschaft"
  },
  "concept_nuclear_readiness_desc": {
-  "en": "How quickly a country's nuclear forces can respond: Recessed, with the warheads stored apart from their delivery systems, then Routine, Heightened and High Alert. Higher readiness makes a threat credible and a response prepared, and costs money, wears the crews down and makes incidents more likely. Nothing can be launched from Recessed.",
-  "de": "Wie schnell die Nuklearstreitkräfte eines Landes reagieren können: Eingelagert, wobei die Sprengköpfe getrennt von ihren Trägersystemen gelagert werden, dann Routine, Erhöht und Hohe Alarmbereitschaft. Höhere Bereitschaft macht eine Drohung glaubwürdig und eine Antwort vorbereitet, kostet Geld, zermürbt die Besatzungen und macht Zwischenfälle wahrscheinlicher. Aus dem Zustand Eingelagert kann nichts gestartet werden."
+  "en": "How quickly a country's nuclear forces can respond: Recessed, with the warheads stored apart from their delivery systems, then Routine, Heightened and High Alert. Higher readiness makes a threat credible, a response prepared and the forces harder to catch in a first strike, and costs money, wears the crews down and makes incidents more likely. Nothing can be launched from Recessed.",
+  "de": "Wie schnell die Nuklearstreitkräfte eines Landes reagieren können: Eingelagert, wobei die Sprengköpfe getrennt von ihren Trägersystemen gelagert werden, dann Routine, Erhöht und Hohe Alarmbereitschaft. Höhere Bereitschaft macht eine Drohung glaubwürdig, eine Antwort vorbereitet und die Streitkräfte bei einem Erstschlag schwerer zu überrumpeln, kostet Geld, zermürbt die Besatzungen und macht Zwischenfälle wahrscheinlicher. Aus dem Zustand Eingelagert kann nichts gestartet werden."
  },
  "concept_nuclear_stockpile": {
   "en": "Nuclear Stockpile",
@@ -3152,8 +3276,8 @@
   "de": "Entdeckungsrisiko"
  },
  "concept_operation_detection_desc": {
-  "en": "Each month, active [concept_covert_operations] have a chance of being detected by the target. Base detection chance is 10%, reduced by higher funding levels (up to -19% at level 5) and increased by the [concept_target_defenses]. Your [concept_covert_efficiency] further modifies the final chance. Detection burns the operation and alerts the target nation. What that exposure costs in [concept_infamy] and [concept_relations] depends on how hostile the operation was and how long it had been running — each operation's own description says which tier it falls in. The target can then choose to bolster defenses or retaliate.",
-  "de": "Jeden Monat besteht für aktive [concept_covert_operations] die Chance, vom Ziel entdeckt zu werden. Die Grunderkennungschance liegt bei 10%, wird durch höhere Finanzierungsstufen gesenkt (bis zu -19% bei Stufe 5) und durch die [concept_target_defenses] erhöht. Ihr [concept_covert_efficiency] verändert die endgültige Chance zusätzlich. Eine Entdeckung verbraucht die Operation und alarmiert die Zielnation. Was diese Enttarnung an [concept_infamy] und [concept_relations] kostet, hängt davon ab, wie feindselig die Operation war und wie lange sie schon lief — die Beschreibung jeder Operation nennt die jeweilige Stufe. Das Ziel kann daraufhin die Abwehr verstärken oder Vergeltung üben."
+  "en": "Each month, active [concept_covert_operations] have a chance of being detected by the target. Base detection chance is 10%, reduced by higher funding levels (up to -19% at level 5) and increased by the [concept_target_defenses]. An [Concept('concept_agent_network', 'agent network')] of yours inside the target lowers it; one of the target's inside your country raises it. Your [concept_covert_efficiency] further modifies the final chance. Detection burns the operation and alerts the target nation. What that exposure costs in [concept_infamy] and [concept_relations] depends on how hostile the operation was and how long it had been running — each operation's own description says which tier it falls in. The target can then choose to bolster defenses or retaliate.",
+  "de": "Jeden Monat besteht für aktive [concept_covert_operations] die Chance, vom Ziel entdeckt zu werden. Die Grunderkennungschance liegt bei 10%, wird durch höhere Finanzierungsstufen gesenkt (bis zu -19% bei Stufe 5) und durch die [concept_target_defenses] erhöht. Ein [Concept('concept_agent_network', 'Agentennetzwerk')] von Ihnen im Ziel senkt sie; eines des Ziels in Ihrem Land erhöht sie. Ihr [concept_covert_efficiency] verändert die endgültige Chance zusätzlich. Eine Entdeckung verbraucht die Operation und alarmiert die Zielnation. Was diese Enttarnung an [concept_infamy] und [concept_relations] kostet, hängt davon ab, wie feindselig die Operation war und wie lange sie schon lief — die Beschreibung jeder Operation nennt die jeweilige Stufe. Das Ziel kann daraufhin die Abwehr verstärken oder Vergeltung üben."
  },
  "concept_operation_slots": {
   "en": "Operation Slots",
@@ -3175,6 +3299,38 @@
   "en": "An economic transition toward a society where material abundance eliminates traditional scarcity. Tracked through journal entries tied to automation, AI, and advanced production technologies. Includes Universal Basic Income as an intermediate step toward full post-scarcity.",
   "de": "Ein wirtschaftlicher Übergang hin zu einer Gesellschaft, in der materieller Überfluss die traditionelle Knappheit beseitigt. Wird über Journaleinträge verfolgt, die an Automatisierung, KI und fortgeschrittene Produktionstechnologien geknüpft sind. Umfasst das Bedingungslose Grundeinkommen als Zwischenschritt zur vollständigen Post-Knappheit."
  },
+ "concept_posture_business": {
+  "en": "Business View",
+  "de": "Sicht der Wirtschaft"
+ },
+ "concept_posture_business_desc": {
+  "en": "How the Industrialists judge our nuclear posture: as a business that wants calm. They have no view on doctrine unless their leader leans. A leader who favors Total War over Limited War makes them #v hawkish#!, one who favors Limited War #v restrained#!, and they then judge doctrine as the [concept_posture_militarist] or [concept_posture_restraint] groups do, once our [concept_nuclear_doctrine] has stood for six months. Otherwise nothing in the posture pleases them, and two things cost them at once.\\n\\n#R Dislikes#!: High Alert kept up for three months or more (−1); a nuclear crisis at its Confrontation stage or beyond, on either side (−1).",
+  "de": "Wie die Industriellen unsere nukleare Haltung beurteilen: als Wirtschaft, die Ruhe will. Zur Doktrin haben sie keine Meinung, solange ihr Anführer nicht in eine Richtung neigt. Ein Anführer, der Totalen Krieg dem Begrenzten Krieg vorzieht, macht sie #v falkenhaft#!, einer, der Begrenzten Krieg vorzieht, #v zurückhaltend#!, und sie beurteilen die Doktrin dann so, wie es Gruppen mit der [concept_posture_militarist] oder der [concept_posture_restraint] tun, sobald unsere [concept_nuclear_doctrine] sechs Monate Bestand hat. Sonst gefällt ihnen nichts an der Haltung, und zwei Dinge fallen sofort negativ ins Gewicht.\\n\\n#R Missfällt#!: Hohe Alarmbereitschaft, die drei Monate oder länger anhält (−1); eine Nuklearkrise im Stadium „Konfrontation“ oder darüber hinaus, auf beiden Seiten (−1)."
+ },
+ "concept_posture_militarist": {
+  "en": "Militarist View",
+  "de": "Sicht der Militaristen"
+ },
+ "concept_posture_militarist_desc": {
+  "en": "How an interest group that favors #v Total War#! over #v Limited War#! judges our nuclear posture: as a hawk. A mild view, from a group that approves of Total War rather than strongly approving, moves its approval by at most 1 instead of 2. These count once our [concept_nuclear_doctrine] has stood for six months.\\n\\n#G Likes#!: Nuclear Warfighting (+2) and Nuclear Compellence (+1); High Alert (+1).\\n#R Dislikes#!: No First Use (−2) and Existential Deterrence (−1); Recessed or Routine [concept_nuclear_readiness] (−1).\\n\\nFlexible First Use counts for nothing either way.",
+  "de": "Wie eine Interessengruppe, die #v Totalen Krieg#! dem #v Begrenzten Krieg#! vorzieht, unsere nukleare Haltung beurteilt: als Falke. Eine milde Sicht, von einer Gruppe, die Totalen Krieg nur gutheißt statt ihn stark zu befürworten, verschiebt ihre Zustimmung um höchstens 1 statt 2. Diese Urteile zählen, sobald unsere [concept_nuclear_doctrine] sechs Monate Bestand hat.\\n\\n#G Gefällt#!: Nukleare Kriegsführung (+2) und Nukleare Nötigung (+1); Hohe Alarmbereitschaft (+1).\\n#R Missfällt#!: Kein Erstschlag (−2) und Existenzielle Abschreckung (−1); eingelagerte oder routinemäßige [concept_nuclear_readiness] (−1).\\n\\nFlexibler Erstschlag zählt in keiner Richtung."
+ },
+ "concept_posture_officers": {
+  "en": "Officers' View",
+  "de": "Sicht der Offiziere"
+ },
+ "concept_posture_officers_desc": {
+  "en": "How the Armed Forces judge our nuclear posture: as professional soldiers, who want forces that can fire and dread ones that are worn out. Their leader's lean changes only how they judge doctrine. A leader who favors Total War over Limited War makes them #v hawkish#!, and they judge doctrine as the [concept_posture_militarist] groups do; one who favors Limited War makes them #v restrained#!, as the [concept_posture_restraint] groups do. These count once our [concept_nuclear_doctrine] has stood for six months.\\n\\n#G Likes#!: Heightened [concept_nuclear_readiness] (+1); with no lean, Flexible First Use (+1).\\n#R Dislikes#!: Recessed readiness (−1); Routine readiness while a plausible attacker exists, an armed enemy, rival or hostile country or our crisis opponent (−1); High Alert once crew strain reaches 50 (−1); with no lean, No First Use and Nuclear Warfighting (−1).",
+  "de": "Wie die Streitkräfte unsere nukleare Haltung beurteilen: als Berufssoldaten, die Kräfte wollen, die feuern können, und erschöpfte fürchten. Die Neigung ihres Anführers ändert nur, wie sie die Doktrin beurteilen. Ein Anführer, der Totalen Krieg dem Begrenzten Krieg vorzieht, macht sie #v falkenhaft#!, und sie beurteilen die Doktrin so, wie es Gruppen mit der [concept_posture_militarist] tun; einer, der Begrenzten Krieg vorzieht, macht sie #v zurückhaltend#!, so wie bei Gruppen mit der [concept_posture_restraint]. Diese Urteile zählen, sobald unsere [concept_nuclear_doctrine] sechs Monate Bestand hat.\\n\\n#G Gefällt#!: Erhöhte [concept_nuclear_readiness] (+1); ohne Neigung Flexibler Erstschlag (+1).\\n#R Missfällt#!: Eingelagerte Bereitschaft (−1); routinemäßige Bereitschaft, solange ein plausibler Angreifer existiert, ein bewaffneter Feind, Rivale oder feindseliges Land oder unser Krisengegner (−1); Hohe Alarmbereitschaft, sobald die Belastung der Besatzungen 50 erreicht (−1); ohne Neigung Kein Erstschlag und Nukleare Kriegsführung (−1)."
+ },
+ "concept_posture_restraint": {
+  "en": "Restraint View",
+  "de": "Sicht der Gemäßigten"
+ },
+ "concept_posture_restraint_desc": {
+  "en": "How an interest group that favors #v Limited War#! over #v Total War#! judges our nuclear posture: as a dove. A mild view, from a group that approves of Limited War rather than strongly approving, moves its approval by at most 1 instead of 2. Everything but the arsenal itself counts once our [concept_nuclear_doctrine] has stood for six months.\\n\\n#G Likes#!: No First Use (+2) and Existential Deterrence (+1); Recessed [concept_nuclear_readiness] (+1).\\n#R Dislikes#!: Nuclear Compellence and Nuclear Warfighting (−2) and Flexible First Use (−1); High Alert (−1); Launch on Warning and Automatic Retaliation as [concept_launch_authority] (−1); and the arsenal itself once the [concept_nuclear_taboo] makes it a burden, from a burden of 33% (−1) and 67% (−2).",
+  "de": "Wie eine Interessengruppe, die #v Begrenzten Krieg#! dem #v Totalen Krieg#! vorzieht, unsere nukleare Haltung beurteilt: als Taube. Eine milde Sicht, von einer Gruppe, die Begrenzten Krieg nur gutheißt statt ihn stark zu befürworten, verschiebt ihre Zustimmung um höchstens 1 statt 2. Alles außer dem Arsenal selbst zählt, sobald unsere [concept_nuclear_doctrine] sechs Monate Bestand hat.\\n\\n#G Gefällt#!: Kein Erstschlag (+2) und Existenzielle Abschreckung (+1); eingelagerte [concept_nuclear_readiness] (+1).\\n#R Missfällt#!: Nukleare Nötigung und Nukleare Kriegsführung (−2) und Flexibler Erstschlag (−1); Hohe Alarmbereitschaft (−1); Start bei Vorwarnung und Automatische Vergeltung als [concept_launch_authority] (−1); und das Arsenal selbst, sobald das [concept_nuclear_taboo] es zur Last macht, ab einer Last von 33% (−1) und 67% (−2)."
+ },
  "concept_religious_revival": {
   "en": "Religious Revival",
   "de": "Religiöse Erweckung"
@@ -3187,9 +3343,17 @@
   "en": "A classification grouping religions by their shared theological traditions, such as Abrahamic, Dharmic, or Eastern faiths. Countries with the same [concept_religious_trait] have higher diplomatic acceptance despite following different specific religions.",
   "de": "Eine Klassifikation, die Religionen nach ihren gemeinsamen theologischen Traditionen gruppiert, etwa abrahamitische, dharmische oder östliche Glaubensrichtungen. Länder mit derselben [concept_religious_trait] genießen höhere diplomatische Akzeptanz, auch wenn sie unterschiedlichen Einzelreligionen folgen."
  },
+ "concept_reserve_battalions": {
+  "en": "Reserve Battalions",
+  "de": "Reservebataillone"
+ },
+ "concept_reserve_battalions_desc": {
+  "en": "Reservists trained in a state's barracks under $pm_reserve_cadre$. Each reserve battalion lets the state raise one more conscript battalion. The state gains the conscription rate and the [Concept('concept_conscription_center', 'conscription-center')] room for it, refreshed monthly.",
+  "de": "Reservisten, die in den Kasernen eines Staates unter $pm_reserve_cadre$ ausgebildet werden. Jedes Reservebataillon erlaubt dem Staat, ein weiteres Einberufenen-Bataillon aufzustellen. Der Staat erhält die Einberufungsrate und den Platz im [Concept('concept_conscription_center', 'Einberufungszentrum')] dafür, monatlich aktualisiert."
+ },
  "concept_rules_of_war_system_desc": {
-  "en": "Laws governing the conduct of warfare. Range from Total War (no restrictions) through Traditional Rules of War, War Crimes Forbidden, and Humanitarian Regulations to Limited War (maximum restrictions). Stricter rules reduce wartime atrocities but may limit military options.",
-  "de": "Gesetze, die die Kriegsführung regeln. Sie reichen von Totaler Krieg (keine Beschränkungen) über Traditionelle Kriegsregeln, Kriegsverbrechen verboten und Humanitäre Vorschriften bis hin zu Begrenzter Krieg (maximale Beschränkungen). Strengere Regeln verringern Kriegsgräuel, können aber militärische Optionen einschränken."
+  "en": "Laws governing the conduct of warfare. Each serves a different aim: #v $law_total_war$#! mobilizes the whole nation for victory, #v $law_traditional_rules_of_war$#! keeps a free hand and a steady officer corps, #v $law_war_crimes_forbidden$#! governs occupation so that conquered lands stay calmer, #v $law_humanitarian_regulations$#! makes us a partner other nations trust, and #v $law_limited_war$#! keeps wars small and slow to start. $law_humanitarian_regulations$ forbids strategic nuclear strikes and $law_limited_war$ all nuclear strikes, unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
+  "de": "Gesetze, die die Kriegsführung regeln. Jedes dient einem anderen Ziel: #v $law_total_war$#! mobilisiert die ganze Nation für den Sieg, #v $law_traditional_rules_of_war$#! sichert freie Hand und ein gefestigtes Offizierskorps, #v $law_war_crimes_forbidden$#! regelt die Besatzung, sodass eroberte Gebiete ruhiger bleiben, #v $law_humanitarian_regulations$#! macht uns zu einem Partner, dem andere Nationen vertrauen, und #v $law_limited_war$#! hält Kriege klein und schwer auszulösen. $law_humanitarian_regulations$ verbietet strategische Nuklearschläge und $law_limited_war$ alle Nuklearschläge, es sei denn, wir oder ein von uns geschütztes Land wurden getroffen, oder uns droht in einem Krieg, den wir führen, die Annexion oder Unterwerfung."
  },
  "concept_sol_expectations": {
   "en": "Adaptive SoL Expectations",
@@ -3260,8 +3424,8 @@
   "de": "Die größte Menge eines Guts, die die Strategische Reserve in einer Woche ein- oder auslagern kann. Jedes Gut hat seine eigene Flussobergrenze statt eines Anteils an einem gemeinsamen Pool. Der Knoten legt sie fest, und jede Silostufe erhöht sie."
  },
  "concept_st_res_policy_desc": {
-  "en": "A rule that sets a Strategic Reserve good's weekly rate for you, from the good's national market price against its base price, averaged over several weeks. Manual leaves the rate to you; Buy When Cheap buys below a threshold, Release When Expensive sells above one, and Stabilize Prices does both.",
-  "de": "Eine Regel, die den wöchentlichen Satz eines Guts der Strategischen Reserve für Sie festlegt, anhand des nationalen Marktpreises des Guts im Vergleich zu seinem Basispreis, gemittelt über mehrere Wochen. „Manuell“ überlässt den Satz Ihnen; „Kaufen, wenn günstig“ kauft unter einem Schwellenwert, „Bei hohem Preis freigeben“ verkauft über einem, und „Preise stabilisieren“ tut beides."
+  "en": "A rule that sets a Strategic Reserve good's weekly rate for you, from the good's national market price against its base price, averaged over several weeks. Manual leaves the rate to you; Buy When Cheap buys below a threshold, Release When Expensive sells above one, and Stabilize Prices does both. Stockpile buys at or near base price and sells at war.",
+  "de": "Eine Regel, die den wöchentlichen Satz eines Guts der Strategischen Reserve für Sie festlegt, anhand des nationalen Marktpreises des Guts im Vergleich zu seinem Grundpreis, gemittelt über mehrere Wochen. „Manuell“ überlässt den Satz Ihnen; „Kaufen, wenn günstig“ kauft unter einem Schwellenwert, „Bei hohem Preis freigeben“ verkauft über einem, und „Preise stabilisieren“ tut beides. „Bevorraten“ kauft zum oder nahe dem Grundpreis und verkauft im Krieg."
  },
  "concept_st_res_rate_setting_desc": {
   "en": "Player-configured signed weekly intake rate for this good in the Strategic Reserve. Positive values store (the hub buys from the market); negative values withdraw (the hub sells onto the market). Adjusted via the +/− buttons in steps controlled by the shared Adjustment Step (1, 10, 100, 1000, or 10000). The setting is preserved across weekly ticks until storage room (or stockpile, on withdraw) runs out, at which point it auto-clamps to the remaining amount and then to zero — the hub will not exceed physical capacity.",
@@ -3270,6 +3434,14 @@
  "concept_state_collapse_system_desc": {
   "en": "A [concept_journal_entry] system tracking countries on the verge of total collapse. When a nation's stability deteriorates past critical thresholds due to revolution, debt, military defeat, or other crises, it may experience cascading state failure leading to fragmentation or [concept_regime_change].",
   "de": "Ein [concept_journal_entry]-System, das Länder am Rande des völligen Zusammenbruchs verfolgt. Verschlechtert sich die Stabilität einer Nation durch Revolution, Schulden, militärische Niederlage oder andere Krisen über kritische Schwellen hinaus, kann sie ein kaskadierendes Staatsversagen erleiden, das zu Fragmentierung oder [concept_regime_change] führt."
+ },
+ "concept_subjugation_strength": {
+  "en": "Subjugation Strength",
+  "de": "Unterwerfungsstärke"
+ },
+ "concept_subjugation_strength_desc": {
+  "en": "How far a [concept_power_bloc_leader] stands above a [concept_power_bloc_member]. The $force_become_subject$ action, which makes the member your [concept_subject], needs a Subjugation Strength of at least #v 1.0#! against it.\\n\\nIts base is your [concept_prestige] divided by the member's, then divided by #v 20#!, so without a bonus you need twenty times its prestige. Your bloc's [concept_power_bloc_identity] can add a bonus:\\n• $identity_sovereign_empire$: #v +0.50#! against any member\\n• $identity_religious$: #v +0.40#! if the member shares your [concept_state_religion]\\n• $identity_ideological_union$: #v +0.40#! if it has your $lawgroup_governance_principles$ law\\n• $identity_cultural$: #v +0.40#! if it shares one of your [Concept('concept_primary_cultures', '$concept_primary_cultures$')]\\n• $identity_trade_league$: #v +0.40#! if its [concept_economic_dependence] on you is at least #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0.40#! if your [concept_army] is at least five times the size of its army\\n\\n$identity_diplomatic$ gets no bonus. The $force_become_subject$ tooltip shows your current Subjugation Strength against a member, part by part.",
+  "de": "Wie weit ein [concept_power_bloc_leader] über einem [concept_power_bloc_member] steht. Die Aktion $force_become_subject$, die das Mitglied zu Ihrem [concept_subject] macht, erfordert eine Unterwerfungsstärke von mindestens #v 1,0#! gegen es.\\n\\nIhre Basis ist Ihr [concept_prestige] geteilt durch das des Mitglieds, dann geteilt durch #v 20#!, sodass Sie ohne Bonus das Zwanzigfache seines Prestiges brauchen. Die [concept_power_bloc_identity] Ihres Blocks kann einen Bonus hinzufügen:\\n• $identity_sovereign_empire$: #v +0,50#! gegen jedes Mitglied\\n• $identity_religious$: #v +0,40#!, wenn das Mitglied Ihre [concept_state_religion] teilt\\n• $identity_ideological_union$: #v +0,40#!, wenn es bei $lawgroup_governance_principles$ dasselbe Gesetz hat wie Sie\\n• $identity_cultural$: #v +0,40#!, wenn es eine Ihrer [Concept('concept_primary_cultures', '$concept_primary_cultures$')] teilt\\n• $identity_trade_league$: #v +0,40#!, wenn seine [concept_economic_dependence] von Ihnen mindestens #b $ECONOMIC_DEPENDENCE_LABEL_3$#! beträgt\\n• $identity_military_treaty_organization$: #v +0,40#!, wenn Ihre [concept_army] mindestens fünfmal so groß ist wie seine Armee\\n\\n$identity_diplomatic$ erhält keinen Bonus. Die Kurzinfo von $force_become_subject$ zeigt Ihre aktuelle Unterwerfungsstärke gegen ein Mitglied, Teil für Teil."
  },
  "concept_target_defenses": {
   "en": "Target's Defenses",
@@ -3432,8 +3604,8 @@
   "de": "Das Recht eines Mitglieds, in der [concept_un_general_assembly] zu sprechen und abzustimmen. Sobald die [concept_un_charter] die Charta-Reform I enthält, kann die Versammlung die Vollmachten eines Mitglieds aussetzen, das weder Verbündeter noch Suzerän noch Klientelland des Antragstellers ist, dessen Fallstärke bei 50 oder mehr liegt und das gegen die Bestimmungen der Allgemeinen Erklärung der Menschenrechte verstößt oder sich ihren verbindlichen Beschlüssen widersetzt hat (eine Missachtungsbilanz von 10 oder mehr); ein [concept_un_permanent_member] erst nach der Charta-Reform II. Der Antrag braucht zwei Drittel der stimmberechtigten Mitglieder und kann nicht per Veto gestoppt werden. Ein Mitglied, dessen Vollmachten ausgesetzt sind, behält seine Mitgliedschaft und zahlt seine [Concept('concept_un_dues', 'UN-Beiträge')], doch seine Vertretung ist ausgesetzt wie die eines Klientellandes: Es gibt keine Stimme ab, bringt nichts zur Abstimmung, bezieht keine Vorteile der Mitgliedschaft, führt kein UN-Programm durch und gibt jeden ständigen Sitz endgültig auf. Es verliert 8 Punkte Internationales Ansehen (4, wenn es für die eigene Aussetzung gestimmt hat). Die Aussetzung dauert fünf Jahre oder bis seine Fallstärke unter 30 fällt. Hat das Mitglied die Vereinten Nationen verlassen oder ist seine Fallstärke bis zum Abschluss der Abstimmung unter 30 gefallen, ist der Antrag gegenstandslos, und nichts wird ausgesetzt."
  },
  "concept_un_development_fund_desc": {
-  "en": "An institution of the United Nations, founded by a resolution of the [concept_un_general_assembly] under any [concept_un_charter]. It pays the members furthest below the members' average [concept_gdp_per_capita], and each charter reform strengthens it, with no new vote:\\n• #bold Founding charter:#! it pays out only the major powers' Development Programs contributions, to the members below a tenth of the average.\\n• #bold Charter Reform I:#! 5% of the UN budget (the [concept_un_dues] the paying members pay) as well, to the members below a quarter of the average.\\n• #bold Charter Reform II:#! a quarter of the UN budget as well, to the members below half the average.\\n\\nThe line never falls below the [concept_gdp_per_capita] of the poorest member with a seat in the Assembly that pays its own dues: when no such member is below the share, the line rises to that member's figure, so the Fund always pays at least one member.\\n\\nIts voluntary part is the major powers' contribution to UN development programs (Fund Development Programs, on the journal entry), which opens only once the Fund stands: every member with a seat in the Assembly that makes it and pays its dues pays the Fund's grants with that contribution's expense. Only a member with a seat in the Assembly that pays its own dues receives a grant, and the grants are shared by population. A recipient takes its grant into its [concept_investment_pool], or into its [concept_treasury] when its laws allow no investment pool or it has no banking system yet. The line and the grants are worked out again every month.\\n\\nThe richer members pay most of the dues that fund it and receive nothing back. The emergency lending facility lends from what the Fund and the Standing UN Force leave of the budget.",
-  "de": "Eine Einrichtung der Vereinten Nationen, gegründet durch eine Resolution der [concept_un_general_assembly] unter einer beliebigen [concept_un_charter]. Sie zahlt an die Mitglieder, die am weitesten unter dem durchschnittlichen [concept_gdp_per_capita] der Mitglieder liegen, und jede Charta-Reform stärkt sie, ohne neue Abstimmung:\\n• #bold Gründungscharta:#! Sie zahlt nur die Beiträge der Mittelmächte zu den Entwicklungsprogrammen aus, an die Mitglieder unter einem Zehntel des Durchschnitts.\\n• #bold Charta-Reform I:#! zusätzlich 5% des UN-Haushalts (die [concept_un_dues], die die zahlenden Mitglieder entrichten), an die Mitglieder unter einem Viertel des Durchschnitts.\\n• #bold Charta-Reform II:#! zusätzlich ein Viertel des UN-Haushalts, an die Mitglieder unter der Hälfte des Durchschnitts.\\n\\nDie Schwelle fällt nie unter das [concept_gdp_per_capita] des ärmsten Mitglieds mit einem Sitz in der Versammlung, das seine Beiträge selbst zahlt: Liegt kein solches Mitglied unter dem Anteil, steigt die Schwelle auf den Wert dieses Mitglieds, sodass der Fonds immer an mindestens ein Mitglied zahlt.\\n\\nIhr freiwilliger Teil ist der Beitrag der Mittelmächte zu den Entwicklungsprogrammen der UN („Entwicklungsprogramme finanzieren“ im Journaleintrag), der erst möglich ist, sobald der Fonds besteht: Jedes Mitglied mit einem Sitz in der Versammlung, das ihn leistet und seine Beiträge zahlt, die Zuwendungen des Fonds mit den Kosten dieses Beitrags. Nur ein Mitglied mit einem Sitz in der Versammlung, das seine Beiträge selbst zahlt, erhält eine Zuwendung, und die Zuwendungen werden nach Bevölkerung aufgeteilt. Ein Empfänger führt seine Zuwendung seinem [concept_investment_pool] zu oder seiner [concept_treasury], wenn seine Gesetze keinen Investitionsfonds erlauben oder er noch kein Bankensystem hat. Die Schwelle und die Zuwendungen werden jeden Monat neu berechnet.\\n\\nDie reicheren Mitglieder zahlen den Großteil der Beiträge, mit denen der Fonds finanziert wird, und erhalten nichts zurück. Die Notfall-Kreditfazilität verleiht, was der Fonds und die Ständige UN-Streitmacht vom Haushalt übrig lassen."
+  "en": "An institution of the United Nations, founded by a resolution of the [concept_un_general_assembly] under any [concept_un_charter]. It pays the members furthest below the members' average [concept_gdp_per_capita], and each charter reform strengthens it, with no new vote:\\n• #bold Founding charter:#! it pays out only the members' Development Programs contributions, to the members below a tenth of the average.\\n• #bold Charter Reform I:#! 5% of the UN budget (the [concept_un_dues] the paying members pay) as well, to the members below a quarter of the average.\\n• #bold Charter Reform II:#! a quarter of the UN budget as well, to the members below half the average.\\n\\nThe line never falls below the [concept_gdp_per_capita] of the poorest member with a seat in the Assembly that pays its own dues: when no such member is below the share, the line rises to that member's figure, so the Fund always pays at least one member.\\n\\nIts voluntary part is the members' contributions to UN development programs (Fund Development Programs, on the UN tab of the Diplomacy panel), which open only once the Fund stands. Any member with a seat in the Assembly that pays its dues and draws no grant may give, whatever its rank, at one of five sizes from Token (0.0625% of GDP a year) to Generous (1%), and its contribution pays the Fund's grants. Only a member with a seat in the Assembly that pays its own dues receives a grant, and the grants are shared by population. A recipient takes its grant into its [concept_investment_pool], or into its [concept_treasury] when its laws allow no investment pool or it has no banking system yet. The line and the grants are worked out again every month.\\n\\nThe richer members pay most of the dues that fund it and receive nothing back. The emergency lending facility lends from what the Fund and the Standing UN Force leave of the budget.",
+  "de": "Eine Einrichtung der Vereinten Nationen, gegründet durch eine Resolution der [concept_un_general_assembly] unter einer beliebigen [concept_un_charter]. Sie zahlt an die Mitglieder, die am weitesten unter dem durchschnittlichen [concept_gdp_per_capita] der Mitglieder liegen, und jede Charta-Reform stärkt sie, ohne neue Abstimmung:\\n• #bold Gründungscharta:#! Sie zahlt nur die Beiträge der Mitglieder zu den Entwicklungsprogrammen aus, an die Mitglieder unter einem Zehntel des Durchschnitts.\\n• #bold Charta-Reform I:#! zusätzlich 5% des UN-Haushalts (die [concept_un_dues], die die zahlenden Mitglieder entrichten), an die Mitglieder unter einem Viertel des Durchschnitts.\\n• #bold Charta-Reform II:#! zusätzlich ein Viertel des UN-Haushalts, an die Mitglieder unter der Hälfte des Durchschnitts.\\n\\nDie Schwelle fällt nie unter das [concept_gdp_per_capita] des ärmsten Mitglieds mit einem Sitz in der Versammlung, das seine Beiträge selbst zahlt: Liegt kein solches Mitglied unter dem Anteil, steigt die Schwelle auf den Wert dieses Mitglieds, sodass der Fonds immer an mindestens ein Mitglied zahlt.\\n\\nIhr freiwilliger Teil sind die Beiträge der Mitglieder zu den Entwicklungsprogrammen der UN („Entwicklungsprogramme finanzieren“ auf dem Reiter „UN“ der Diplomatietafel), die erst möglich sind, sobald der Fonds besteht. Jedes Mitglied mit einem Sitz in der Versammlung, das seine Beiträge zahlt und keine Zuwendung bezieht, darf geben, gleich welchen Ranges, in einer von fünf Größen von Symbolisch (0,0625% des BIP pro Jahr) bis Großzügig (1%), und sein Beitrag bezahlt die Zuwendungen des Fonds. Nur ein Mitglied mit einem Sitz in der Versammlung, das seine Beiträge selbst zahlt, erhält eine Zuwendung, und die Zuwendungen werden nach Bevölkerung aufgeteilt. Ein Empfänger führt seine Zuwendung seinem [concept_investment_pool] zu oder seiner [concept_treasury], wenn seine Gesetze keinen Investitionsfonds erlauben oder er noch kein Bankensystem hat. Die Schwelle und die Zuwendungen werden jeden Monat neu berechnet.\\n\\nDie reicheren Mitglieder zahlen den Großteil der Beiträge, mit denen der Fonds finanziert wird, und erhalten nichts zurück. Die Notfall-Kreditfazilität verleiht, was der Fonds und die Ständige UN-Streitmacht vom Haushalt übrig lassen."
  },
  "concept_un_dues": {
   "en": "UN Dues",
@@ -3452,8 +3624,8 @@
   "de": "Wie hart die Entscheidungen der [concept_un_general_assembly] durchgreifen: der Multiplikator auf jede von einer Resolution verhängte Strafe und auf das, was die Durchsetzung von Sanktionen die Durchsetzenden kostet. Er richtet sich nach der UN-Stufe: Marode ×0 (Resolutionen sind nur Empfehlungen), Umstritten ×0,5, Etabliert ×1, Stark ×1,5, Supranational ×2,5."
  },
  "concept_un_food_reserve_desc": {
-  "en": "An institution of the United Nations, founded by a resolution of the [concept_un_general_assembly]. It needs no charter reform.\\n\\n#bold Pledges.#! A member with a seat in the Assembly whose Strategic Reserve can store grain may pledge to it, and withdraw the pledge, from the United Nations journal entry.\\n\\n#bold Draws.#! When a new [concept_un_mission_aid] opens, the Reserve draws on the pledgers holding at least 500 units of grain, other than the mission's host: up to a quarter of each one's grain and at most 2,500 units, 5,000 units in all. Once the pledges could give more than that, each pledger gives the same share of its offer. The grain leaves the pledgers' Strategic Reserves. The mission's state gets #G +0.15#! food security and #G -5%#! mortality for a year, in proportion to the grain that came, and each pledger drawn on gains international standing. A Moribund UN cannot call on it.\\n\\n#bold Hunger.#! While it stands, the UN answers for hunger: the delivery pillar of [concept_un_authority] loses up to 10 points as the share of the members' people living in [concept_famine]-struck states rises to 5%, and gains 3 while that share is below half a percent.",
-  "de": "Eine Einrichtung der Vereinten Nationen, gegründet durch eine Resolution der [concept_un_general_assembly]. Sie braucht keine Charta-Reform.\\n\\n#bold Zusagen.#! Ein Mitglied mit einem Sitz in der Versammlung, dessen Strategische Reserve Getreide lagern kann, darf ihr im Journaleintrag Vereinte Nationen eine Zusage machen und sie zurückziehen.\\n\\n#bold Entnahmen.#! Wenn eine neue [concept_un_mission_aid] beginnt, greift die Reserve auf die Zusagegeber zurück, die mindestens 500 Einheiten Getreide halten, mit Ausnahme des Gastlandes der Mission: bis zu einem Viertel des Getreides jedes Gebers und höchstens 2.500 Einheiten, insgesamt 5.000 Einheiten. Könnten die Zusagen mehr hergeben, steuert jeder Geber denselben Anteil seines Angebots bei. Das Getreide verlässt die Strategischen Reserven der Geber. Der Staat der Mission erhält ein Jahr lang #G +0,15#! Ernährungssicherheit und #G -5%#! Sterblichkeit, im Verhältnis zum eingetroffenen Getreide, und jeder Geber, auf den zurückgegriffen wurde, gewinnt internationales Ansehen. Eine marode UN kann sie nicht in Anspruch nehmen.\\n\\n#bold Hunger.#! Solange sie besteht, steht die UN für den Hunger ein: Die Leistungssäule der [concept_un_authority] verliert bis zu 10 Punkte, wenn der Anteil der Bevölkerung der Mitglieder, die in von [concept_famine] betroffenen Staaten lebt, auf 5% steigt, und gewinnt 3, solange dieser Anteil unter einem halben Prozent liegt."
+  "en": "An institution of the United Nations, founded by a resolution of the [concept_un_general_assembly]. It needs no charter reform.\\n\\n#bold Pledges.#! A member with a seat in the Assembly whose Strategic Reserve can store grain may pledge to it, and withdraw the pledge, from the UN tab of the Diplomacy panel.\\n\\n#bold Draws.#! When a new [concept_un_mission_aid] opens, the Reserve draws on the pledgers holding at least 500 units of grain, other than the mission's host: up to a quarter of each one's grain and at most 2,500 units, 5,000 units in all. Once the pledges could give more than that, each pledger gives the same share of its offer. The grain leaves the pledgers' Strategic Reserves. The mission's state gets #G +0.15#! food security and #G -5%#! mortality for a year, in proportion to the grain that came, and each pledger drawn on gains international standing. A Moribund UN cannot call on it.\\n\\n#bold Hunger.#! While it stands, the UN answers for hunger: the delivery pillar of [concept_un_authority] loses up to 10 points as the share of the members' people living in [concept_famine]-struck states rises to 5%, and gains 3 while that share is below half a percent.",
+  "de": "Eine Einrichtung der Vereinten Nationen, gegründet durch eine Resolution der [concept_un_general_assembly]. Sie braucht keine Charta-Reform.\\n\\n#bold Zusagen.#! Ein Mitglied mit einem Sitz in der Versammlung, dessen Strategische Reserve Getreide lagern kann, darf ihr auf dem Reiter „UN“ der Diplomatietafel eine Zusage machen und sie zurückziehen.\\n\\n#bold Entnahmen.#! Wenn eine neue [concept_un_mission_aid] beginnt, greift die Reserve auf die Zusagegeber zurück, die mindestens 500 Einheiten Getreide halten, mit Ausnahme des Gastlandes der Mission: bis zu einem Viertel des Getreides jedes Gebers und höchstens 2.500 Einheiten, insgesamt 5.000 Einheiten. Könnten die Zusagen mehr hergeben, steuert jeder Geber denselben Anteil seines Angebots bei. Das Getreide verlässt die Strategischen Reserven der Geber. Der Staat der Mission erhält ein Jahr lang #G +0,15#! Nahrungssicherheit und #G -5%#! Sterblichkeit, im Verhältnis zum eingetroffenen Getreide, und jeder Geber, auf den zurückgegriffen wurde, gewinnt internationales Ansehen. Eine marode UN kann sie nicht in Anspruch nehmen.\\n\\n#bold Hunger.#! Solange sie besteht, steht die UN für den Hunger ein: Die Leistungssäule der [concept_un_authority] verliert bis zu 10 Punkte, wenn der Anteil der Bevölkerung der Mitglieder, die in von [concept_famine] betroffenen Staaten lebt, auf 5% steigt, und gewinnt 3, solange dieser Anteil unter einem halben Prozent liegt."
  },
  "concept_un_general_assembly_desc": {
   "en": "The body of all UN members. Every represented member casts one vote on each proposed resolution; a member that lacks diplomatic autonomy keeps its seat, but its representation is suspended ([concept_un_suspended_representation]). Most resolutions pass on a simple majority of the votes cast. Recommendatory resolutions need only the GA. Binding resolutions also require Security Council consent — a [concept_un_veto] from any [concept_un_permanent_member] reduces them to a graduated form.",
@@ -3468,8 +3640,8 @@
   "de": "Eine [concept_un_mission], die einen notleidenden Staat mit Nahrung und Gütern versorgt. Sie wird eröffnet, wenn ein Hilfeersuchen angenommen wird oder wenn ein Mitglied auf eine Hungersnot reagiert, und zwar im bedürftigsten Staat des Antragstellers oder im von der Hungersnot betroffenen Staat. Die Mitglieder, die zusagen oder reagieren, dienen darin als Geber.\\n\\n#bold Wirkung#! (bei Stärke 1): #G +1,5#! Lebensstandard, #G +0,2#! Ernährungssicherheit und #G -5%#! Sterblichkeit in ihrem Staat.\\n\\n#bold Fortschritt#!\\nZeigt, wie weit der Lebensstandard des Staates dem Ziel der Mission nähergekommen ist, wobei gezählt wird, was der Staat aus eigener Kraft zurückgewonnen hat, und nicht, was die Mission selbst beiträgt. Das Ziel ist ein Lebensstandard von 10 oder 1 über dem Ausgangswert des Staates, je nachdem, was höher ist. Der Fortschritt zeigt höchstens 99, bis die Mission abgeschlossen ist.\\n\\n#G Erfüllt#!, sobald mindestens sechs Monate vergangen sind, der Staat keine Hungersnot hat und sein Lebensstandard ohne die Hilfe der Mission das Ziel erreicht hat. Eine Mission kann nicht durch ihren eigenen Modifikator erfolgreich sein und auch nicht in einem Staat, der sie nie gebraucht hat.\\n#R Scheitert#!, wenn das Gastland nach der Ankunft der Mission angegriffen wird. Sie scheitert nicht, wenn ihre Geber abziehen: Eine Hilfsmission, in der niemand dient, läuft mit verminderter Stärke weiter.\\n#v Verfällt#!, wenn ihr Gastland oder Staat nicht mehr besteht.\\n\\nSie hat kein Zeitlimit, sodass eine Hilfsmission so lange dauert, wie der Staat sie braucht. Ein Mitglied bezahlt ein Kontingent, das es aus eigenem Antrieb entsendet, selbst; das Friedenssicherungsprogramm deckt keine Hilfe ab."
  },
  "concept_un_mission_desc": {
-  "en": "A United Nations mission works in one state, where the [concept_un_general_assembly]'s decisions meet the ground. There are four kinds: the [concept_un_mission_peacekeeping], the [concept_un_mission_aid], the [concept_un_mission_stabilisation] and the [concept_un_mission_electoral]. Each has its own way of opening, its own effect on the state and its own test of success; open the one you are reading about to see them.\\n\\n#bold Strength#!\\nA mission's effect on its state is multiplied by its strength: the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues], times 0.75 plus 0.25 for every member serving in it, counted up to three. While the [concept_un_standing_force] stands it counts as one of them in every peacekeeping and stabilisation mission; an electoral mission's paid observers count as one. A Moribund UN's missions do nothing.\\n\\n#bold Progress#!\\nEvery mission shows its progress out of 100 and the months it has been in the field. What moves progress depends on the kind. At 100 the mission is accomplished.\\n\\n#bold Serving#!\\nA state holds one mission at a time. Members that pledge to a resolution, or answer a collapse or a famine, serve in it as contributors. Any [concept_major_power] member may also send a contingent of its own accord from the United Nations journal entry, for a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year (the peacekeeping programme pays for peacekeeping and stabilisation contingents). Bringing one home before the work is done costs standing and the host's regard, and it cannot be sent back. Contributors build intelligence networks in the host faster.\\n\\n#bold How it ends#!\\n#G Accomplished#!: progress reaches 100. The UN's delivery grows, and every member that served gains standing and relations with the host.\\n#R Failed#!: the host is attacked after the mission arrives, or every contributor goes home (peacekeeping and stabilisation only, and not while the [concept_un_standing_force] stands), or the host sends a stabilisation mission away, or an electoral mission's host stops holding elections. The UN's delivery falls.\\n#v Lapsed#!: the mission has nothing left to do, because its host or state is gone, nobody ever joined a force the Assembly voted for, or electoral observers waited five years for an election. Nothing is gained or lost.\\n\\n#bold No time limit#!\\nA mission that is not done goes on for as long as it keeps contributors and its host is not attacked: a member that keeps paying for its contingent can keep a mission in the field for as long as it likes. Time works on the AI instead. The longer a mission has run, the less willing the AI is to send it a contingent; contingents already in the field stay.",
-  "de": "Eine UN-Mission wirkt in einem Staat, dort, wo die Beschlüsse der [concept_un_general_assembly] auf die Wirklichkeit treffen. Es gibt vier Arten: die [concept_un_mission_peacekeeping], die [concept_un_mission_aid], die [concept_un_mission_stabilisation] und die [concept_un_mission_electoral]. Jede hat ihre eigene Art, zu beginnen, ihre eigene Wirkung auf den Staat und ihren eigenen Erfolgstest; öffnen Sie diejenige, über die Sie lesen, um sie zu sehen.\\n\\n#bold Stärke#!\\nDie Wirkung einer Mission auf ihren Staat wird mit ihrer Stärke multipliziert. Die Stärke ist die [concept_un_enforcement], abzüglich bis zur Hälfte davon, wenn Mitglieder [concept_un_dues] zurückhalten, mal 0,75 plus 0,25 für jedes Mitglied, das in ihr dient, höchstens drei gezählt. Solange die [concept_un_standing_force] besteht, zählt sie in jeder Friedens- und Stabilisierungsmission als eines davon; die bezahlten Beobachter einer Wahlbeobachtungsmission zählen als eines. Die Missionen einer maroden UN bewirken nichts.\\n\\n#bold Fortschritt#!\\nJede Mission zeigt ihren Fortschritt von 100 und die Monate, die sie im Einsatz ist. Was den Fortschritt bewegt, hängt von der Art ab. Bei 100 ist die Mission erfüllt.\\n\\n#bold Dienst#!\\nEin Staat hat immer nur eine Mission. Mitglieder, die einer Resolution zusagen oder auf einen Zusammenbruch oder eine Hungersnot reagieren, dienen darin als Beitragende. Jedes Mitglied im Rang einer [concept_major_power] kann zudem aus eigenem Antrieb ein Kontingent entsenden, im Journaleintrag Vereinte Nationen, für ein Viertelprozent seines [Concept('concept_gdp', 'BIP')] pro Jahr (das Friedenssicherungsprogramm bezahlt die Kontingente für Friedens- und Stabilisierungsmissionen). Ein Kontingent vor Abschluss der Arbeit heimzuholen kostet Ansehen und die Wertschätzung des Gastlandes, und es kann nicht zurückgeschickt werden. Beitragende bauen im Gastland schneller Geheimdienstnetzwerke auf.\\n\\n#bold So endet sie#!\\n#G Erfüllt#!: Der Fortschritt erreicht 100. Die Leistung der UN wächst, und jedes Mitglied, das gedient hat, gewinnt Ansehen und Beziehungen zum Gastland.\\n#R Gescheitert#!: Das Gastland wird nach der Ankunft der Mission angegriffen, oder alle Beitragenden ziehen ab (nur bei Friedens- und Stabilisierungsmissionen, und nicht, solange die [concept_un_standing_force] besteht), oder das Gastland schickt eine Stabilisierungsmission weg, oder das Gastland einer Wahlbeobachtungsmission hält keine Wahlen mehr ab. Die Leistung der UN sinkt.\\n#v Verfallen#!: Die Mission hat nichts mehr zu tun, weil ihr Gastland oder Staat nicht mehr besteht, sich nie jemand einer von der Versammlung beschlossenen Streitmacht angeschlossen hat oder Wahlbeobachter fünf Jahre auf eine Wahl gewartet haben. Nichts wird gewonnen oder verloren.\\n\\n#bold Kein Zeitlimit#!\\nEine Mission, die nicht abgeschlossen ist, läuft weiter, solange sie Beitragende behält und ihr Gastland nicht angegriffen wird: Ein Mitglied, das weiter für sein Kontingent zahlt, kann eine Mission so lange im Einsatz halten, wie es will. Stattdessen wirkt die Zeit auf die KI. Je länger eine Mission läuft, desto weniger bereit ist die KI, ihr ein Kontingent zu schicken; bereits im Einsatz befindliche Kontingente bleiben."
+  "en": "A United Nations mission works in one state, where the [concept_un_general_assembly]'s decisions meet the ground. There are four kinds: the [concept_un_mission_peacekeeping], the [concept_un_mission_aid], the [concept_un_mission_stabilisation] and the [concept_un_mission_electoral]. Each has its own way of opening, its own effect on the state and its own test of success; open the one you are reading about to see them.\\n\\n#bold Strength#!\\nA mission's effect on its state is multiplied by its strength: the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues], times 0.75 plus 0.25 for every member serving in it, counted up to three. While the [concept_un_standing_force] stands it counts as one of them in every peacekeeping and stabilisation mission; an electoral mission's paid observers count as one. A Moribund UN's missions do nothing.\\n\\n#bold Progress#!\\nEvery mission shows its progress out of 100 and the months it has been in the field. What moves progress depends on the kind. At 100 the mission is accomplished.\\n\\n#bold Serving#!\\nA state holds one mission at a time. Members that pledge to a resolution, or answer a collapse or a famine, serve in it as contributors. Any [concept_major_power] member may also send a contingent of its own accord from the UN tab of the Diplomacy panel, for a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year (the peacekeeping programme pays for peacekeeping and stabilisation contingents). Bringing one home before the work is done costs standing and the host's regard, and it cannot be sent back. Contributors build intelligence networks in the host faster.\\n\\n#bold How it ends#!\\n#G Accomplished#!: progress reaches 100. The UN's delivery grows, and every member that served gains standing and relations with the host.\\n#R Failed#!: the host is attacked after the mission arrives, or every contributor goes home (peacekeeping and stabilisation only, and not while the [concept_un_standing_force] stands), or the host sends a stabilisation mission away, or an electoral mission's host stops holding elections. The UN's delivery falls.\\n#v Lapsed#!: the mission has nothing left to do, because its host or state is gone, nobody ever joined a force the Assembly voted for, or electoral observers waited five years for an election. Nothing is gained or lost.\\n\\n#bold No time limit#!\\nA mission that is not done goes on for as long as it keeps contributors and its host is not attacked: a member that keeps paying for its contingent can keep a mission in the field for as long as it likes. Time works on the AI instead. The longer a mission has run, the less willing the AI is to send it a contingent; contingents already in the field stay.",
+  "de": "Eine UN-Mission wirkt in einem Staat, dort, wo die Beschlüsse der [concept_un_general_assembly] auf die Wirklichkeit treffen. Es gibt vier Arten: die [concept_un_mission_peacekeeping], die [concept_un_mission_aid], die [concept_un_mission_stabilisation] und die [concept_un_mission_electoral]. Jede hat ihre eigene Art, zu beginnen, ihre eigene Wirkung auf den Staat und ihren eigenen Erfolgstest; öffnen Sie diejenige, über die Sie lesen, um sie zu sehen.\\n\\n#bold Stärke#!\\nDie Wirkung einer Mission auf ihren Staat wird mit ihrer Stärke multipliziert. Die Stärke ist die [concept_un_enforcement], abzüglich bis zur Hälfte davon, wenn Mitglieder [concept_un_dues] zurückhalten, mal 0,75 plus 0,25 für jedes Mitglied, das in ihr dient, höchstens drei gezählt. Solange die [concept_un_standing_force] besteht, zählt sie in jeder Friedens- und Stabilisierungsmission als eines davon; die bezahlten Beobachter einer Wahlbeobachtungsmission zählen als eines. Die Missionen einer maroden UN bewirken nichts.\\n\\n#bold Fortschritt#!\\nJede Mission zeigt ihren Fortschritt von 100 und die Monate, die sie im Einsatz ist. Was den Fortschritt bewegt, hängt von der Art ab. Bei 100 ist die Mission erfüllt.\\n\\n#bold Dienst#!\\nEin Staat hat immer nur eine Mission. Mitglieder, die einer Resolution zusagen oder auf einen Zusammenbruch oder eine Hungersnot reagieren, dienen darin als Beitragende. Jedes Mitglied im Rang einer [concept_major_power] kann zudem aus eigenem Antrieb ein Kontingent entsenden, auf dem Reiter „UN“ der Diplomatietafel, für ein Viertelprozent seines [Concept('concept_gdp', 'BIP')] pro Jahr (das Friedenssicherungsprogramm bezahlt die Kontingente für Friedens- und Stabilisierungsmissionen). Ein Kontingent vor Abschluss der Arbeit heimzuholen kostet Ansehen und die Wertschätzung des Gastlandes, und es kann nicht zurückgeschickt werden. Beitragende bauen im Gastland schneller Geheimdienstnetzwerke auf.\\n\\n#bold So endet sie#!\\n#G Erfüllt#!: Der Fortschritt erreicht 100. Die Leistung der UN wächst, und jedes Mitglied, das gedient hat, gewinnt Ansehen und Beziehungen zum Gastland.\\n#R Gescheitert#!: Das Gastland wird nach der Ankunft der Mission angegriffen, oder alle Beitragenden ziehen ab (nur bei Friedens- und Stabilisierungsmissionen, und nicht, solange die [concept_un_standing_force] besteht), oder das Gastland schickt eine Stabilisierungsmission weg, oder das Gastland einer Wahlbeobachtungsmission hält keine Wahlen mehr ab. Die Leistung der UN sinkt.\\n#v Verfallen#!: Die Mission hat nichts mehr zu tun, weil ihr Gastland oder Staat nicht mehr besteht, sich nie jemand einer von der Versammlung beschlossenen Streitmacht angeschlossen hat oder Wahlbeobachter fünf Jahre auf eine Wahl gewartet haben. Nichts wird gewonnen oder verloren.\\n\\n#bold Kein Zeitlimit#!\\nEine Mission, die nicht abgeschlossen ist, läuft weiter, solange sie Beitragende behält und ihr Gastland nicht angegriffen wird: Ein Mitglied, das weiter für sein Kontingent zahlt, kann eine Mission so lange im Einsatz halten, wie es will. Stattdessen wirkt die Zeit auf die KI. Je länger eine Mission läuft, desto weniger bereit ist die KI, ihr ein Kontingent zu schicken; bereits im Einsatz befindliche Kontingente bleiben."
  },
  "concept_un_mission_electoral_desc": {
   "en": "A [concept_un_mission] that watches an election. It is opened when a member's request for electoral observers is carried, in the requester's capital (or, if the capital already holds another mission, its most populous state without one). The observers are paid from the UN's budget: the mission has no contributors, members cannot send it contingents, and it never lapses for want of them. Its strength is the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues].\\n\\n#bold Effect#! (at strength 1): #G +5#! [concept_legitimacy] and #G +3#! ideological covert defence for the host, which makes Election Interference against it easier to detect; #G -10%#! turmoil effects and #G -10%#! radicals from political movements in its state. While it runs, the cut Election Interference deals to the host's [concept_electoral_confidence] when an election campaign ends is halved.\\n\\n#bold Progress#!\\n50 while the host is in an election campaign, 0 otherwise.\\n\\n#G Accomplished#! when an election campaign in the host ends while the mission is there: UN delivery grows, and the host gains standing.\\n#R Fails#! if the host is attacked after the mission arrives, or stops holding elections (which also costs the host standing).\\n#v Lapses#! after five years without an election, or if its host or state is gone, or if the host leaves the UN.",
@@ -3586,6 +3758,14 @@
  "concept_united_nations_system_desc": {
   "en": "An international organization that can form once certain global conditions are met. Countries can join via treaty article. UN membership provides diplomatic bonuses and access to UN voting topics. The UN also enables cross-system bonuses including space partnerships and joint scientific endeavors like the International Space Station.",
   "de": "Eine internationale Organisation, die sich bilden kann, sobald bestimmte globale Bedingungen erfüllt sind. Länder können über einen Vertragsartikel beitreten. Die UN-Mitgliedschaft bietet diplomatische Boni und Zugang zu UN-Abstimmungsthemen. Die UN ermöglicht zudem systemübergreifende Boni, darunter Weltraumpartnerschaften und gemeinsame wissenschaftliche Unternehmungen wie die Internationale Raumstation."
+ },
+ "concept_urban_engineering": {
+  "en": "Urban Engineering",
+  "de": "Stadttechnik"
+ },
+ "concept_urban_engineering_desc": {
+  "en": "Sewers, steel frames, elevators and city planning let a city grow upward instead of outward. Each point of $concept_urban_engineering$ lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] sets in, however little [concept_arable_land] it has, so a small state can still hold a great city. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.\\n\\n$concept_urban_engineering$ comes from the technologies $urbanization$, $urban_planning$, $modern_sewerage$, $steel_frame_buildings$ and $elevator$.",
+  "de": "Kanalisation, Stahlskelette, Aufzüge und Stadtplanung lassen eine Stadt in die Höhe statt in die Breite wachsen. Jeder Punkt $concept_urban_engineering$ lässt einen [concept_state] #v 1.000#! mehr Menschen aufnehmen, bevor [concept_migration_crowding] einsetzt, wie wenig [concept_arable_land] er auch hat, sodass auch ein kleiner Staat eine große Stadt tragen kann. Die $state_migration_crowding_density_mult$ des Staates vervielfacht diese Menschen ebenso wie seine Fläche.\\n\\n$concept_urban_engineering$ stammt aus den Technologien $urbanization$, $urban_planning$, $modern_sewerage$, $steel_frame_buildings$ und $elevator$."
  },
  "concept_wonder_building": {
   "en": "Wonder Building",
@@ -3899,6 +4079,14 @@
   "en": "Unlocks the Solar System Colonization milestone (stages 1-2: Mars & Asteroids, Jupiter & Venus).",
   "de": "Schaltet den Meilenstein „Besiedlung des Sonnensystems“ frei (Stufen 1-2: Mars & Asteroiden, Jupiter & Venus)."
  },
+ "country_strategic_nuclear_strikes_forbidden_bool_desc": {
+  "en": "We may not order a strategic nuclear strike unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
+  "de": "Wir dürfen keinen strategischen Nuklearschlag befehlen, es sei denn, wir oder ein von uns geschütztes Land wurden getroffen, oder uns droht in einem Krieg, den wir führen, die Annexion oder Unterwerfung."
+ },
+ "country_tactical_nuclear_strikes_forbidden_bool_desc": {
+  "en": "We may not order a tactical nuclear strike unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
+  "de": "Wir dürfen keinen taktischen Nuklearschlag befehlen, es sei denn, wir oder ein von uns geschütztes Land wurden getroffen, oder uns droht in einem Krieg, den wir führen, die Annexion oder Unterwerfung."
+ },
  "country_un_membership_obligation_bool_desc": {
   "en": "This country is treaty-bound to maintain membership in the United Nations.",
   "de": "Dieses Land ist vertraglich verpflichtet, seine Mitgliedschaft in den Vereinten Nationen aufrechtzuerhalten."
@@ -3920,8 +4108,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Operation zur Kommunikationsstörung gestartet."
  },
  "covert_comms_disruption_action_desc": {
-  "en": "Jam and disrupt enemy military command and control systems. Requires an active war with the target, or a [concept_diplomatic_play] against them. Reduces their offensive and defensive capability.$iw_exposure_tier_war_note$",
-  "de": "Stört und blockiert die militärischen Führungs- und Kontrollsysteme des Feindes. Erfordert einen aktiven Krieg mit dem Ziel oder ein [concept_diplomatic_play] gegen es. Verringert dessen Offensiv- und Defensivfähigkeit.$iw_exposure_tier_war_note$"
+  "en": "Jam and disrupt enemy military command and control systems. Requires the [GetTechnology('cryptography').GetName] [concept_technology], and an active war with the target or a [concept_diplomatic_play] against them. Reduces their offensive and defensive capability.$iw_exposure_tier_war_note$",
+  "de": "Stört und blockiert die militärischen Führungs- und Kontrollsysteme des Feindes. Erfordert die [concept_technology] [GetTechnology('cryptography').GetName] sowie einen aktiven Krieg mit dem Ziel oder ein [concept_diplomatic_play] gegen es. Verringert dessen Offensiv- und Defensivfähigkeit.$iw_exposure_tier_war_note$"
  },
  "covert_comms_disruption_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert communications disruption operations against [TARGET_COUNTRY.GetName]",
@@ -3972,8 +4160,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Destabilisierungskampagne gestartet."
  },
  "covert_destabilization_action_desc": {
-  "en": "Covertly fund and arm [Concept('concept_political_movement', 'political movements')] of every stripe in a rival nation: they grow more active and win over more of its [Concept('concept_pop', 'pops')], and its resistance to separatism wears down.$iw_exposure_tier_severe_note$",
-  "de": "Finanziert und bewaffnet verdeckt [Concept('concept_political_movement', 'Protestbewegungen')] jeder Couleur in einer rivalisierenden Nation: Sie werden aktiver und gewinnen mehr von ihren [Concept('concept_pop', 'Pops')], und ihr Widerstand gegen Separatismus schwindet.$iw_exposure_tier_severe_note$"
+  "en": "Covertly fund and arm [Concept('concept_political_movement', 'political movements')] of every stripe in a rival nation: they grow more active and win over more of its [Concept('concept_pop', 'pops')], and its resistance to separatism wears down. Requires the [GetTechnology('social_media').GetName] [concept_technology].$iw_exposure_tier_severe_note$",
+  "de": "Finanziert und bewaffnet verdeckt [Concept('concept_political_movement', 'Protestbewegungen')] jeder Couleur in einer rivalisierenden Nation: Sie werden aktiver und gewinnen mehr von ihren [Concept('concept_pop', 'Pops')], und ihr Widerstand gegen Separatismus schwindet. Erfordert die [concept_technology] [GetTechnology('social_media').GetName].$iw_exposure_tier_severe_note$"
  },
  "covert_destabilization_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches a covert destabilization campaign against [TARGET_COUNTRY.GetName]",
@@ -4024,8 +4212,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Kampagne zur Wahleinmischung gestartet."
  },
  "covert_election_interference_action_desc": {
-  "en": "Launch a covert campaign to undermine the political [concept_legitimacy] of a foreign nation. Reduces their legitimacy.$iw_exposure_tier_moderate_note$",
-  "de": "Startet eine verdeckte Kampagne, um die politische [concept_legitimacy] einer ausländischen Nation zu untergraben. Verringert deren Legitimität.$iw_exposure_tier_moderate_note$"
+  "en": "Launch a covert campaign to undermine the political [concept_legitimacy] of a foreign nation. Reduces their legitimacy. Requires the [GetTechnology('television_broadcasting').GetName] [concept_technology].$iw_exposure_tier_moderate_note$",
+  "de": "Startet eine verdeckte Kampagne, um die politische [concept_legitimacy] einer ausländischen Nation zu untergraben. Verringert deren Legitimität. Erfordert die [concept_technology] [GetTechnology('television_broadcasting').GetName].$iw_exposure_tier_moderate_note$"
  },
  "covert_election_interference_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches a covert election interference campaign against [TARGET_COUNTRY.GetName]",
@@ -4048,8 +4236,8 @@
   "de": "Grundlegende Spionage"
  },
  "covert_espionage_base_desc": {
-  "en": "Our intelligence services are gathering what they can, but the target has no technological advantage to exploit. Only basic innovation gains are possible.",
-  "de": "Unsere Geheimdienste sammeln, was sie können, doch das Ziel hat keinen technologischen Vorsprung, den man ausnutzen könnte. Nur grundlegende Innovationsgewinne sind möglich."
+  "en": "Our intelligence services pass what they learn of foreign research on to our own laboratories.",
+  "de": "Unsere Geheimdienste geben das, was sie über ausländische Forschung erfahren, an unsere eigenen Labore weiter."
  },
  "covert_financial_subversion": {
   "en": "Financial Subversion",
@@ -4064,8 +4252,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Operation zur finanziellen Subversion gestartet."
  },
  "covert_financial_subversion_action_desc": {
-  "en": "Destabilize a foreign nation's economy through covert currency manipulation and market attacks. Increases their financial [concept_bubble_pressure].$iw_exposure_tier_moderate_note$",
-  "de": "Destabilisiert die Wirtschaft einer ausländischen Nation durch verdeckte Währungsmanipulation und Angriffe auf die Märkte. Erhöht deren finanziellen [concept_bubble_pressure].$iw_exposure_tier_moderate_note$"
+  "en": "Destabilize a foreign nation's economy through covert currency manipulation and market attacks. Increases their financial [concept_bubble_pressure]. Requires the [GetTechnology('computer_networks').GetName] [concept_technology].$iw_exposure_tier_moderate_note$",
+  "de": "Destabilisiert die Wirtschaft einer ausländischen Nation durch verdeckte Währungsmanipulation und Angriffe auf die Märkte. Erhöht deren finanziellen [concept_bubble_pressure]. Erfordert die [concept_technology] [GetTechnology('computer_networks').GetName].$iw_exposure_tier_moderate_note$"
  },
  "covert_financial_subversion_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert financial subversion against [TARGET_COUNTRY.GetName]",
@@ -4096,8 +4284,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Kampagne zur ideologischen Subversion gestartet."
  },
  "covert_ideological_subversion_action_desc": {
-  "en": "Covertly support [Concept('concept_political_movement', 'political movements')] aligned with your [concept_government_type] in a foreign nation. Does not require rivalry. Boosts matching movements' radicalism and [concept_pop] attraction.$iw_exposure_tier_severe_note$",
-  "de": "Unterstützt verdeckt [Concept('concept_political_movement', 'Protestbewegungen')] in einer ausländischen Nation, die mit Ihrer [concept_government_type] übereinstimmen. Erfordert keine Rivalität. Steigert den Radikalismus und die [concept_pop]-Anziehungskraft passender Bewegungen.$iw_exposure_tier_severe_note$"
+  "en": "Covertly support [Concept('concept_political_movement', 'political movements')] aligned with your [concept_government_type] in a foreign nation. Does not require rivalry. Boosts matching movements' radicalism and [concept_pop] attraction. Requires the [GetTechnology('pop_culture').GetName] [concept_technology].$iw_exposure_tier_severe_note$",
+  "de": "Unterstützt verdeckt [Concept('concept_political_movement', 'Protestbewegungen')] in einer ausländischen Nation, die mit Ihrer [concept_government_type] übereinstimmen. Erfordert keine Rivalität. Steigert den Radikalismus und die [concept_pop]-Anziehungskraft passender Bewegungen. Erfordert die [concept_technology] [GetTechnology('pop_culture').GetName].$iw_exposure_tier_severe_note$"
  },
  "covert_ideological_subversion_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches a covert ideological subversion campaign within [TARGET_COUNTRY.GetName]",
@@ -4132,16 +4320,16 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Industriespionageoperation gestartet."
  },
  "covert_industrial_espionage_action_desc": {
-  "en": "Steal production secrets and technology from a foreign nation. Requires the target to have more technologies researched than we do.$iw_exposure_tier_mild_note$",
-  "de": "Stiehlt Produktionsgeheimnisse und Technologie von einer ausländischen Nation. Erfordert, dass das Ziel mehr Technologien erforscht hat als wir.$iw_exposure_tier_mild_note$"
+  "en": "Steal production [concept_technology] from a foreign nation. Requires the target to have researched a production [concept_technology] that we could research now, and ends on its own once there is none.$iw_exposure_tier_mild_note$",
+  "de": "Stiehlt Produktions-[concept_technology] von einer ausländischen Nation. Erfordert, dass das Ziel eine Produktions-[concept_technology] erforscht hat, die wir jetzt erforschen könnten, und endet von selbst, sobald es keine mehr gibt.$iw_exposure_tier_mild_note$"
  },
  "covert_industrial_espionage_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAdjectiveNoFlag|U]es Land startet verdeckte Industriespionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
  "covert_industrial_espionage_action_effect_desc_global": {
-  "en": "Steals production secrets, boosting [concept_technology_spread] and innovation",
-  "de": "Stiehlt Produktionsgeheimnisse und steigert die [concept_technology_spread] und die Innovation"
+  "en": "Steals production [concept_technology]",
+  "de": "Stiehlt Produktions-[concept_technology]"
  },
  "covert_industrial_espionage_action_effect_desc_third": {
   "en": "[COUNTRY.GetName] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
@@ -4168,8 +4356,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Einflusskampagne gestartet."
  },
  "covert_influence_campaign_action_desc": {
-  "en": "Bribery, blackmail, and covert media campaigns to weaken a nation's resistance to [concept_power_bloc] pressure. Requires Power Bloc leadership. Reduces target's leverage resistance.$iw_exposure_tier_moderate_note$",
-  "de": "Bestechung, Erpressung und verdeckte Medienkampagnen, um den Widerstand einer Nation gegen den Druck eines [concept_power_bloc] zu schwächen. Erfordert die Führung eines Machtblocks. Verringert den Einflusshebel-Widerstand des Ziels.$iw_exposure_tier_moderate_note$"
+  "en": "Bribery, blackmail, and covert media campaigns to weaken a nation's resistance to [concept_power_bloc] pressure. Requires Power Bloc leadership and the [GetTechnology('mass_media').GetName] [concept_technology]. Reduces target's leverage resistance.$iw_exposure_tier_moderate_note$",
+  "de": "Bestechung, Erpressung und verdeckte Medienkampagnen, um den Widerstand einer Nation gegen den Druck eines [Concept('concept_power_bloc', 'Machtblocks')] zu schwächen. Erfordert die Führung eines Machtblocks und die [concept_technology] [GetTechnology('mass_media').GetName]. Verringert den Einflusshebel-Widerstand des Ziels.$iw_exposure_tier_moderate_note$"
  },
  "covert_influence_campaign_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches a covert influence campaign against [TARGET_COUNTRY.GetName]",
@@ -4236,16 +4424,16 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Militärspionageoperation gestartet."
  },
  "covert_military_espionage_action_desc": {
-  "en": "Gather intelligence on a foreign nation's military capabilities. Boosts your unit effectiveness, and your military [concept_technology_spread] while the target has more technologies researched.$iw_exposure_tier_mild_note$",
-  "de": "Sammelt Informationen über die militärischen Fähigkeiten einer ausländischen Nation. Steigert die Wirksamkeit Ihrer Einheiten und Ihre militärische [concept_technology_spread], solange das Ziel mehr Technologien erforscht hat.$iw_exposure_tier_mild_note$"
+  "en": "Steal military [concept_technology] from a foreign nation. Requires the target to have researched a military [concept_technology] that we could research now, and ends on its own once there is none.$iw_exposure_tier_mild_note$",
+  "de": "Stiehlt Militär-[concept_technology] von einer ausländischen Nation. Erfordert, dass das Ziel eine Militär-[concept_technology] erforscht hat, die wir jetzt erforschen könnten, und endet von selbst, sobald es keine mehr gibt.$iw_exposure_tier_mild_note$"
  },
  "covert_military_espionage_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert military espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAdjectiveNoFlag|U]es Land startet verdeckte Militärspionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
  "covert_military_espionage_action_effect_desc_global": {
-  "en": "Gathers military intelligence, boosting military tech spread and unit effectiveness",
-  "de": "Sammelt militärische Informationen und steigert die Verbreitung militärischer Technologie sowie die Wirksamkeit der Einheiten"
+  "en": "Gathers military intelligence, stealing military [concept_technology]",
+  "de": "Sammelt militärische Informationen und stiehlt Militär-[concept_technology]"
  },
  "covert_military_espionage_action_effect_desc_third": {
   "en": "[COUNTRY.GetName] launches covert military espionage against [TARGET_COUNTRY.GetName]",
@@ -4304,8 +4492,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Regimewechsel-Operation gestartet."
  },
  "covert_regime_change_action_desc": {
-  "en": "Bankroll a rival's disaffected officers and opposition. Erodes the target government's [concept_legitimacy] and its resistance to a coup, and radicalises its [Concept('concept_political_movement', 'political movements')]; once fully operational, any coup already under way there is pushed forward every month. Requires a [concept_rivalry] and an agency of at least #bold Seasoned#! Tradecraft.$iw_exposure_tier_severe_note$",
-  "de": "Finanziert unzufriedene Offiziere und die Opposition eines Rivalen. Untergräbt die [concept_legitimacy] der Zielregierung und ihren Widerstand gegen einen Putsch und radikalisiert ihre [Concept('concept_political_movement', 'Protestbewegungen')]; sobald sie voll einsatzbereit ist, wird ein dort bereits laufender Putsch jeden Monat vorangetrieben. Erfordert eine [concept_rivalry] sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk.$iw_exposure_tier_severe_note$"
+  "en": "Bankroll a rival's disaffected officers and opposition. Erodes the target government's [concept_legitimacy] and its resistance to a coup, and radicalises its [Concept('concept_political_movement', 'political movements')]; once fully operational, any coup already under way there is pushed forward every month. Requires the [GetTechnology('satellite_communications').GetName] [concept_technology], a [concept_rivalry] and an agency of at least #bold Seasoned#! Tradecraft.$iw_exposure_tier_severe_note$",
+  "de": "Finanziert unzufriedene Offiziere und die Opposition eines Rivalen. Untergräbt die [concept_legitimacy] der Zielregierung und ihren Widerstand gegen einen Putsch und radikalisiert ihre [Concept('concept_political_movement', 'Protestbewegungen')]; sobald sie voll einsatzbereit ist, wird ein dort bereits laufender Putsch jeden Monat vorangetrieben. Erfordert die [concept_technology] [GetTechnology('satellite_communications').GetName], eine [concept_rivalry] sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk.$iw_exposure_tier_severe_note$"
  },
  "covert_regime_change_desc": {
   "en": "Foreign money is reaching our officers and our opposition. Our government's [concept_legitimacy] is eroding, and a coup against it is easier to mount: our coup resistance is lower by 1 at the operation's base strength, and by up to [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1] at its strongest.",
@@ -4739,6 +4927,10 @@
   "en": "The push to separate church and state is weakening religious [Concept('concept_political_movement', 'political movements')].",
   "de": "Das Streben nach Trennung von Kirche und Staat schwächt religiöse [Concept('concept_political_movement', 'Protestbewegungen')]."
  },
+ "dp_nuclear_exchange": {
+  "en": "War After a Nuclear Exchange",
+  "de": "Krieg nach einem nuklearen Schlagabtausch"
+ },
  "dp_te_un_mandate_restore_state_desc": {
   "en": "Sets the initiating [concept_war_goal] to recover the [concept_state] the [concept_un_general_assembly] has authorized us to recover. Only available while we hold an unexercised mandate against this [concept_country]. #R The mandate covers this one demand:#! adding any other demand against that country for territory, subjugation, regime change or humiliation to the same [concept_diplomatic_play] voids it, earns the Assembly's condemnation and suspends our standing benefits for ten years. Backing down from the play forfeits it as well.",
   "de": "Setzt das auslösende [concept_war_goal] auf die Rückgewinnung des [concept_state], den uns die [concept_un_general_assembly] zurückzuerobern ermächtigt hat. Nur verfügbar, solange wir ein nicht ausgeübtes Mandat gegen dieses [concept_country] besitzen. #R Das Mandat deckt nur diese eine Forderung ab:#! Fügt man demselben [concept_diplomatic_play] eine weitere Forderung gegen dieses Land nach Territorium, Unterwerfung, Regimewechsel oder Demütigung hinzu, wird es ungültig, zieht die Verurteilung durch die Versammlung nach sich und setzt unsere bestehenden Vorteile für zehn Jahre aus. Auch ein Rückzug aus dem Diplomatiespiel lässt es verfallen."
@@ -4872,8 +5064,8 @@
   "de": "Ein Abkommen, das ein Land, auch ein Marktmitglied, zwingt, nationale Treibhausgas-Reduktionspolitik aufrechtzuerhalten und zusätzliche Beschränkungen für den Ausbau fossiler Brennstoffe zu akzeptieren."
  },
  "enforce_emissions_reduction_effects_desc": {
-  "en": "• Forces the source market leader to enable all major greenhouse gas mitigation policies.\\n• Blocks policy rollback while the treaty is active.\\n• Waives the [concept_authority] cost of the policies it forces, which the source cannot repeal, but angers the industrialists.\\n• Applies additional penalties to fossil fuel and legacy power expansion.\\n• Can be enforced in war or offered as a negotiated concession.",
-  "de": "• Zwingt den Marktführer des Ausgangslandes, alle wichtigen Treibhausgas-Minderungspolitiken zu aktivieren.\\n• Blockiert eine Rücknahme dieser Politik, solange der Vertrag in Kraft ist.\\n• Erlässt die Kosten an [concept_authority] für die von ihm erzwungenen Maßnahmen, die das Ausgangsland nicht widerrufen kann, verärgert aber die Industriellen.\\n• Verhängt zusätzliche Strafen für den Ausbau fossiler Brennstoffe und veralteter Energieerzeugung.\\n• Kann im Krieg erzwungen oder als Verhandlungszugeständnis angeboten werden."
+  "en": "• Forces the source country to enable all major greenhouse gas mitigation policies.\\n• The source must have researched [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] and [GetTechnology('modern_urban_planning').GetName], which those policies need.\\n• Blocks policy rollback while the treaty is active.\\n• Waives the [concept_authority] cost of the policies it forces, which the source cannot repeal, but angers the industrialists.\\n• Applies additional penalties to fossil fuel and legacy power expansion.\\n• Can be enforced in war or offered as a negotiated concession.",
+  "de": "• Zwingt das Ausgangsland, alle wichtigen Treibhausgas-Minderungspolitiken zu aktivieren.\\n• Das Ausgangsland muss [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] und [GetTechnology('modern_urban_planning').GetName] erforscht haben, die diese Politiken benötigen.\\n• Blockiert eine Rücknahme dieser Politik, solange der Vertrag in Kraft ist.\\n• Erlässt die Kosten an [concept_authority] für die von ihm erzwungenen Maßnahmen, die das Ausgangsland nicht widerrufen kann, verärgert aber die Industriellen.\\n• Verhängt zusätzliche Strafen für den Ausbau fossiler Brennstoffe und veralteter Energieerzeugung.\\n• Kann im Krieg erzwungen oder als Verhandlungszugeständnis angeboten werden."
  },
  "enforce_privatization": {
   "en": "Enforce Privatization",
@@ -5274,6 +5466,134 @@
  "french_union": {
   "en": "French Union",
   "de": "Französische Union"
+ },
+ "from_academic_base": {
+  "en": "Intelligentsia Interest Group",
+  "de": "Interessengruppe Intellektuelle"
+ },
+ "from_communist": {
+  "en": "Communist or Vanguardist Leader Ideology",
+  "de": "Kommunistische oder Avantgardistische Anführer-Ideologie"
+ },
+ "from_corporate": {
+  "en": "Corpocrat Leader Ideology",
+  "de": "Korpokratische Anführer-Ideologie"
+ },
+ "from_devout": {
+  "en": "Devout Interest Group",
+  "de": "Interessengruppe Fromme"
+ },
+ "from_environmentalism": {
+  "en": "Environmentalist Leader Ideology",
+  "de": "Umweltschützerische Anführer-Ideologie"
+ },
+ "from_environmentalist": {
+  "en": "Environmentalist Leader Ideology",
+  "de": "Umweltschützerische Anführer-Ideologie"
+ },
+ "from_ethno_nationalism": {
+  "en": "Ethno-Nationalist Leader Ideology",
+  "de": "Ethnonationalistische Anführer-Ideologie"
+ },
+ "from_expertise": {
+  "en": "Intelligentsia Interest Group",
+  "de": "Interessengruppe Intellektuelle"
+ },
+ "from_far_right": {
+  "en": "Fascist, Integralist or Ethno-Nationalist Leader Ideology",
+  "de": "Faschistische, Integralistische oder Ethnonationalistische Anführer-Ideologie"
+ },
+ "from_fascist_distinction": {
+  "en": "Fascist or Integralist Leader Ideology",
+  "de": "Faschistische oder Integralistische Anführer-Ideologie"
+ },
+ "from_feminist": {
+  "en": "Feminist Leader Ideology",
+  "de": "Feministische Anführer-Ideologie"
+ },
+ "from_green_tech": {
+  "en": "Environmentalist Leader Ideology",
+  "de": "Umweltschützerische Anführer-Ideologie"
+ },
+ "from_industrialist_base": {
+  "en": "Industrialists Interest Group",
+  "de": "Interessengruppe Industrielle"
+ },
+ "from_industry_opposition": {
+  "en": "Industrialists Interest Group",
+  "de": "Interessengruppe Industrielle"
+ },
+ "from_intelligentsia": {
+  "en": "Intelligentsia Interest Group",
+  "de": "Interessengruppe Intellektuelle"
+ },
+ "from_landowner_tradition": {
+  "en": "Landowners Interest Group",
+  "de": "Interessengruppe Grundbesitzer"
+ },
+ "from_left_progressive": {
+  "en": "Reformer, Social Democrat or Radical Leader Ideology",
+  "de": "Reformorientierte, Sozialdemokratische oder Radikale Anführer-Ideologie"
+ },
+ "from_liberal_opposition": {
+  "en": "Liberal, Reformer, Humanitarian or Enlightened Royalist Leader Ideology",
+  "de": "Liberale, Reformorientierte, Humanitaristische oder Aufgeklärt-royalistische Anführer-Ideologie"
+ },
+ "from_militarist": {
+  "en": "Jingoist Leader Ideology",
+  "de": "Kriegstreiberische Anführer-Ideologie"
+ },
+ "from_military": {
+  "en": "Armed Forces Interest Group",
+  "de": "Interessengruppe Streitkräfte"
+ },
+ "from_military_nationalists": {
+  "en": "Armed Forces with a Jingoist or Ethno-Nationalist Leader",
+  "de": "Streitkräfte mit einem kriegstreiberischen oder ethnonationalistischen Anführer"
+ },
+ "from_populist_opposition": {
+  "en": "Ethno-Nationalist Leader Ideology",
+  "de": "Ethnonationalistische Anführer-Ideologie"
+ },
+ "from_progressive_values": {
+  "en": "Pacifist, Humanitarian or Enlightened Royalist Leader Ideology",
+  "de": "Pazifistische, Humanitaristische oder Aufgeklärt-royalistische Anführer-Ideologie"
+ },
+ "from_reactionary": {
+  "en": "Reactionary Leader Ideology",
+  "de": "Reaktionäre Anführer-Ideologie"
+ },
+ "from_reformer": {
+  "en": "Reformer or Liberal Leader Ideology",
+  "de": "Reformorientierte oder Liberale Anführer-Ideologie"
+ },
+ "from_religious_skepticism": {
+  "en": "Devout Interest Group",
+  "de": "Interessengruppe Fromme"
+ },
+ "from_rural_base": {
+  "en": "Rural Folk Interest Group",
+  "de": "Interessengruppe Landbewohner"
+ },
+ "from_rural_conservation": {
+  "en": "Rural Folk Interest Group",
+  "de": "Interessengruppe Landbewohner"
+ },
+ "from_rural_skepticism": {
+  "en": "Rural Folk Interest Group",
+  "de": "Interessengruppe Landbewohner"
+ },
+ "from_socialist_opposition": {
+  "en": "Communist, Vanguardist or Social Democrat Leader Ideology",
+  "de": "Kommunistische, Avantgardistische oder Sozialdemokratische Anführer-Ideologie"
+ },
+ "from_traditionalist": {
+  "en": "Paternalistic or Traditionalist Leader Ideology",
+  "de": "Paternalistische oder Traditionalistische Anführer-Ideologie"
+ },
+ "from_transhumanist": {
+  "en": "Optimist Transhumanist Leader Ideology",
+  "de": "Anführer-Ideologie Optimistischer Transhumanist"
  },
  "genetics_ethics_debate_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
@@ -5787,9 +6107,97 @@
   "en": "Industry has been shielded from environmental regulation, at a cost to national [concept_prestige].",
   "de": "Die Industrie wurde vor Umweltauflagen abgeschirmt, auf Kosten des nationalen [concept_prestige]."
  },
+ "inh_cadets_army": {
+  "en": "Cadet Sons in the Officer Corps",
+  "de": "Nachgeborene Söhne im Offizierskorps"
+ },
+ "inh_cadets_church": {
+  "en": "Cadet Sons in Holy Orders",
+  "de": "Nachgeborene Söhne im geistlichen Stand"
+ },
+ "inh_cadets_colonies": {
+  "en": "Cadet Sons in the Colonies",
+  "de": "Nachgeborene Söhne in den Kolonien"
+ },
+ "inh_concentrated_property": {
+  "en": "Concentrated Property",
+  "de": "Konzentriertes Eigentum"
+ },
+ "inh_concentrated_property_desc": {
+  "en": "A few great houses own most of this state's property. They save and invest, and the rest find the ladder short: fewer people qualify for better jobs, schooling is harder to reach and radicals gather. Grows with the state's [concept_inheritance_concentration] above 50, refreshed at its yearly update.",
+  "de": "Einige wenige große Häuser besitzen den Großteil des Eigentums dieses Staates. Sie sparen und investieren, und den übrigen erscheint die Leiter zu kurz: Weniger Menschen qualifizieren sich für bessere Arbeitsplätze, Bildung ist schwerer zugänglich und Radikale sammeln sich. Wächst mit der [concept_inheritance_concentration] des Staates über 50 und wird bei dessen jährlicher Aktualisierung erneuert."
+ },
+ "inh_continuity_of_title_desc": {
+  "en": "Backed-up minds keep their property, so nobody's estate passes on: the [concept_inheritance_concentration] holds where it stands, and the young wait for an inheritance that never comes.",
+  "de": "Per Backup gesicherte Bewusstseine behalten ihr Eigentum, sodass kein Nachlass weitergegeben wird: Die [concept_inheritance_concentration] bleibt, wo sie ist, und die Jungen warten auf ein Erbe, das nie kommt."
+ },
+ "inh_dispersed_property": {
+  "en": "Dispersed Property",
+  "de": "Verstreutes Eigentum"
+ },
+ "inh_dispersed_property_desc": {
+  "en": "This state's property is spread over many small owners, and its Farmers and Shopkeepers do more of the saving. Grows as the state's [concept_inheritance_concentration] falls below 50, refreshed at its yearly update.",
+  "de": "Das Eigentum dieses Staates verteilt sich auf viele kleine Eigentümer, und seine Landwirte und Verkäufer sparen mehr. Wächst, wenn die [concept_inheritance_concentration] des Staates unter 50 fällt, und wird bei dessen jährlicher Aktualisierung erneuert."
+ },
+ "inh_dispersed_wealth": {
+  "en": "Dispersed Wealth",
+  "de": "Verstreutes Vermögen"
+ },
+ "inh_dispersed_wealth_desc": {
+  "en": "Estates are divided as they pass, and few great houses remain to buy influence. Grows as the national [concept_inheritance_concentration] falls below 50 (now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!).",
+  "de": "Nachlässe werden beim Erbgang geteilt, und es bleiben nur wenige große Häuser, die sich Einfluss kaufen könnten. Wächst, wenn die nationale [concept_inheritance_concentration] unter 50 fällt (derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!)."
+ },
+ "inh_dynasty_founded": {
+  "en": "A New Dynasty",
+  "de": "Eine neue Dynastie"
+ },
+ "inh_fewer_children": {
+  "en": "Fewer Heirs",
+  "de": "Weniger Erben"
+ },
+ "inh_forced_heirship_rural_desc": {
+  "en": "Smallholders have fewer children so the farm is not split again, and stay on their plots. Scaled by the state's share of Peasants and Farmers.",
+  "de": "Kleinbauern bekommen weniger Kinder, damit der Hof nicht erneut geteilt wird, und bleiben auf ihren Grundstücken. Skaliert mit dem Anteil der Bauern und Landwirte im Staat."
+ },
+ "inh_foundation_endowed": {
+  "en": "A Great Foundation",
+  "de": "Eine große Stiftung"
+ },
+ "inh_great_fortunes": {
+  "en": "Great Family Fortunes",
+  "de": "Große Familienvermögen"
+ },
+ "inh_great_fortunes_desc": {
+  "en": "Great fortunes pass whole from one generation to the next, and the families who hold them buy influence. Grows with the national [concept_inheritance_concentration] above 50 (now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!).",
+  "de": "Große Vermögen gehen unversehrt von einer Generation auf die nächste über, und die Familien, die sie halten, kaufen sich Einfluss. Wächst mit der nationalen [concept_inheritance_concentration] über 50 (derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!)."
+ },
+ "inh_land_hunger": {
+  "en": "Land Hunger",
+  "de": "Landhunger"
+ },
+ "inh_land_hunger_desc": {
+  "en": "Great estates hold the land, and the young who cannot get a farm of their own leave. Grows with the state's [concept_inheritance_concentration] above 50, scaled by its share of Peasants and Farmers and refreshed at its yearly update.",
+  "de": "Große Güter halten das Land, und die Jungen, die keinen eigenen Hof bekommen, ziehen fort. Wächst mit der [concept_inheritance_concentration] des Staates über 50, skaliert mit dem Anteil der Bauern und Landwirte und erneuert bei der jährlichen Aktualisierung."
+ },
+ "inh_primogeniture_rural": {
+  "en": "Cadet Sons Leave the Land",
+  "de": "Nachgeborene Söhne verlassen das Land"
+ },
+ "inh_primogeniture_rural_desc": {
+  "en": "Families are large, and the younger sons leave to make their own way. Scaled by the state's share of Peasants and Farmers.",
+  "de": "Die Familien sind groß, und die jüngeren Söhne gehen fort, um ihren eigenen Weg zu machen. Skaliert mit dem Anteil der Bauern und Landwirte im Staat."
+ },
+ "inh_probate_litigation": {
+  "en": "Probate in the Courts",
+  "de": "Nachlassverfahren vor Gericht"
+ },
+ "inh_undivided_farm_rural_desc": {
+  "en": "One heir takes the farm and the siblings leave the land. Scaled by the state's share of Peasants and Farmers.",
+  "de": "Ein Erbe übernimmt den Hof, und die Geschwister verlassen das Land. Skaliert mit dem Anteil der Bauern und Landwirte im Staat."
+ },
  "inherit_equal_split": {
-  "en": "Inheritance: Equal Split",
-  "de": "Erbrecht: Gleichmäßige Teilung"
+  "en": "Inheritance: Great Estates Broken Up",
+  "de": "Erbrecht: Große Güter zerschlagen"
  },
  "inherit_primogeniture_preserved": {
   "en": "Inheritance: Primogeniture Preserved",
@@ -6004,8 +6412,8 @@
   "de": "Verdeckte Unterstützung für [Concept('concept_political_movement', 'Protestbewegungen')], die die Politik des ausführenden Landes teilen. Solange sie läuft, werden diese Bewegungen radikaler und gewinnen mehr Unterstützung, und der Widerstand des Ziels gegen Separatismus schwächt sich ab."
  },
  "iw_op_exposed_desc_industrial_espionage": {
-  "en": "Theft of production secrets. The country running it gains innovation and faster spread of production technology; while it runs, its target loses a little [concept_authority] chasing the leak.",
-  "de": "Diebstahl von Produktionsgeheimnissen. Das ausführende Land gewinnt Innovation und eine schnellere Verbreitung der Produktionstechnologie; solange sie läuft, verliert das Ziel bei der Jagd nach dem Leck ein wenig [concept_authority]."
+  "en": "Theft of production secrets. The country running it gains progress toward production technologies its target has researched; while it runs, its target loses a little [concept_authority] chasing the leak.",
+  "de": "Diebstahl von Produktionsgeheimnissen. Das ausführende Land gewinnt Fortschritt bei Produktionstechnologien, die sein Ziel erforscht hat; solange sie läuft, verliert das Ziel bei der Jagd nach dem Leck ein wenig [concept_authority]."
  },
  "iw_op_exposed_desc_influence_campaign": {
   "en": "Bribery, blackmail and covert media aimed at a government's independence. While it runs, its target's resistance to [concept_power_bloc] leverage falls.",
@@ -6016,8 +6424,8 @@
   "de": "Sabotage von Industrie und Verkehr. Solange sie läuft, verlieren die Einheiten des Ziels im Kampf mehr Moral, und sie trifft jeden Monat einen der Staaten des Ziels, was ihn für eine Weile [concept_infrastructure] und [concept_throughput] kostet."
  },
  "iw_op_exposed_desc_military_espionage": {
-  "en": "Intelligence-gathering on a country's armed forces. The country running it fields units that fight better, and spreads military technology faster if its target is ahead; while it runs, the target loses a little [concept_authority] chasing the leak.",
-  "de": "Informationsbeschaffung über die Streitkräfte eines Landes. Das ausführende Land stellt Einheiten, die besser kämpfen, und verbreitet militärische Technologie schneller, wenn sein Ziel voraus ist; solange sie läuft, verliert das Ziel bei der Jagd nach dem Leck ein wenig [concept_authority]."
+  "en": "Intelligence-gathering on a country's armed forces. The country running it gains progress toward military technologies its target has researched; while it runs, the target loses a little [concept_authority] chasing the leak.",
+  "de": "Informationsbeschaffung über die Streitkräfte eines Landes. Das ausführende Land gewinnt Fortschritt bei Militärtechnologien, die sein Ziel erforscht hat; solange sie läuft, verliert das Ziel bei der Jagd nach dem Leck ein wenig [concept_authority]."
  },
  "iw_op_exposed_desc_nuclear_sabotage": {
   "en": "Faulty parts, failed centrifuges and scientists who stop coming to work. While it runs, its target's nuclear weapons programme advances more slowly.",
@@ -6572,8 +6980,8 @@
   "de": "Bevölkerungsdruck"
  },
  "migration_crowding_desc": {
-  "en": "Densely populated states become less attractive to migrants as living space, [concept_infrastructure], and resources become strained. Larger states can support more people before this effect kicks in.",
-  "de": "Dicht besiedelte Staaten werden für Migranten weniger attraktiv, da Wohnraum, [concept_infrastructure] und Ressourcen knapp werden. Größere Staaten können mehr Menschen tragen, bevor dieser Effekt einsetzt."
+  "en": "Densely populated states become less attractive to migrants as living space, [concept_infrastructure], and resources become strained. States with more [concept_arable_land] or [concept_urban_engineering] can support more people before this effect kicks in.",
+  "de": "Dicht besiedelte Staaten werden für Migranten weniger attraktiv, da Wohnraum, [concept_infrastructure] und Ressourcen knapp werden. Staaten mit mehr [concept_arable_land] oder [concept_urban_engineering] können mehr Menschen tragen, bevor dieser Effekt einsetzt."
  },
  "military_disarmament_anger_modifier_desc": {
   "en": "The armed forces are furious about nuclear disarmament obligations.",
@@ -7142,6 +7550,14 @@
  "nd_loose_inspections_desc": {
   "en": "Foreign inspectors count and guard our nuclear warheads, after one of them was traced to us.",
   "de": "Ausländische Inspektoren zählen und bewachen unsere Atomsprengköpfe, nachdem einer von ihnen zu uns zurückverfolgt wurde."
+ },
+ "nd_nfu_reaffirmed": {
+  "en": "No First Use Reaffirmed",
+  "de": "Kein Erstschlag bekräftigt"
+ },
+ "nd_nfu_reaffirmed_desc": {
+  "en": "After a launch nobody in government ordered, we told the world that No First Use still stands, and spent our own standing at home to be believed.",
+  "de": "Nach einem Start, den niemand in der Regierung befohlen hatte, erklärten wir der Welt, dass Kein Erstschlag weiter gilt, und setzten unser eigenes Ansehen im Inland ein, um Glauben zu finden."
  },
  "nd_nuclear_ultimatum_action_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has issued a nuclear ultimatum to [TARGET_COUNTRY.GetName].",
@@ -10179,6 +10595,14 @@
   "en": "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method.",
   "de": "Ist die Spielregel Freie Marktbauwirtschaft aktiv, entstehen Baustellen von selbst überall dort, wo gebaut wird, und wandeln gekauften [concept_construction] in Baupunkte um; niemand errichtet sie. Ist die Regel deaktiviert, ist dies Ihr Bausektor: Die Regierung errichtet, erweitert und verkleinert ihn, und jede Stufe liefert je nach Produktionsmethode Baupunkte."
  },
+ "te_debug_pb_fast_mandates_desc": {
+  "en": "Applied from the power bloc test console so mandates arrive in days.",
+  "de": "Von der Testkonsole für Machtblöcke angewendet, damit Mandate binnen Tagen eintreffen."
+ },
+ "te_debug_pb_principle_slots_desc": {
+  "en": "Applied from the power bloc test console. Stands in for the four technologies that each add a principle slot.",
+  "de": "Von der Testkonsole für Machtblöcke angewendet. Steht stellvertretend für die vier Technologien, die jeweils einen Prinzip-Slot hinzufügen."
+ },
  "te_direct_construction_base_modifier_desc": {
   "en": "With the Free Market Construction game rule off, every country gets this construction on top of what its Construction Sites provide, so a country without any can still build them.",
   "de": "Ist die Spielregel Freie Marktbauwirtschaft deaktiviert, erhält jedes Land diesen Bauwert zusätzlich zu dem, was seine Baustellen liefern, sodass auch ein Land ohne eigene noch bauen kann."
@@ -10219,9 +10643,25 @@
   "en": "Migration-attraction map-mode overlay. The displayed [concept_migration_pull] is being overridden to color the world map by the metric you chose in the Cartographic Survey.",
   "de": "Kartenmodus-Overlay für Migrationsanziehung. Die angezeigte [concept_migration_pull] wird überschrieben, um die Weltkarte nach der in der Kartografischen Vermessung gewählten Kennzahl einzufärben."
  },
+ "te_officer_academies_standing_desc": {
+  "en": "Officers schooled in the national academies form a confident, close-knit caste with a voice in politics. Scales with the share of your regular battalions trained under $pm_officer_academies$.",
+  "de": "In den nationalen Akademien geschulte Offiziere bilden eine selbstbewusste, eng verbundene Kaste mit einer Stimme in der Politik. Skaliert mit dem Anteil Ihrer regulären Bataillone, die unter $pm_officer_academies$ ausgebildet werden."
+ },
  "te_open_map_mode_survey_desc": {
   "en": "Hijack the [concept_migration_pull] map mode to color the world map by an arbitrary metric.\\n\\n#b The game must be paused.#! Pick a metric, then switch to the #b Migration Attraction#! map mode to view it. Re-open this decision to pick #b Clear#! before switching to another metric. The overlay self-cleans within 5 in-game days of unpausing.",
   "de": "Kapert den Kartenmodus [concept_migration_pull], um die Weltkarte nach einer beliebigen Kennzahl einzufärben.\\n\\n#b Das Spiel muss pausiert sein.#! Wählen Sie eine Kennzahl und wechseln Sie dann in den Kartenmodus #b Migrationsanziehung#!, um sie anzuzeigen. Öffnen Sie diese Entscheidung erneut, um #b Löschen#! zu wählen, bevor Sie zu einer anderen Kennzahl wechseln. Das Overlay setzt sich innerhalb von 5 Spieltagen nach dem Fortsetzen von selbst zurück."
+ },
+ "te_political_commissars_indoctrination_desc": {
+  "en": "Party commissars in every unit school the troops, and through them their families, in loyalty to the government. Scales with the share of your regular battalions trained under $pm_political_commissars$.",
+  "de": "Parteikommissare in jeder Einheit schulen die Truppen und durch sie deren Familien in Loyalität zur Regierung. Skaliert mit dem Anteil Ihrer regulären Bataillone, die unter $pm_political_commissars$ ausgebildet werden."
+ },
+ "te_reserve_cadre_capacity_desc": {
+  "en": "Room for the reservists of this state's $pm_reserve_cadre$ barracks: one more [Concept('concept_conscription_center', 'conscription center')] per [Concept('concept_reserve_battalions', 'reserve battalion')].",
+  "de": "Platz für die Reservisten der Kasernen dieses Staates unter $pm_reserve_cadre$: ein weiteres [Concept('concept_conscription_center', 'Einberufungszentrum')] pro [Concept('concept_reserve_battalions', 'Reservebataillon')]."
+ },
+ "te_reserve_cadre_conscription_desc": {
+  "en": "Former servicemen trained by this state's $pm_reserve_cadre$ barracks stand ready for call-up, enough for one conscript battalion per [Concept('concept_reserve_battalions', 'reserve battalion')].",
+  "de": "Ehemalige Soldaten, die in den Kasernen dieses Staates unter $pm_reserve_cadre$ ausgebildet wurden, stehen für die Einberufung bereit, genug für ein Einberufenen-Bataillon pro [Concept('concept_reserve_battalions', 'Reservebataillon')]."
  },
  "tech_metals": {
   "en": "Tech-Critical Metals",
@@ -10476,8 +10916,8 @@
   "de": "Dieses Land führt bei den Vereinten Nationen den Vorstoß für [concept_decolonization_system] an und gewinnt dafür [concept_prestige] unter neu unabhängigen Staaten. Der Einsatz für Selbstbestimmung ist ein zweischneidiges Schwert: Eigene Eroberungen gelten als Heuchelei und erzeugen mehr [concept_infamy]."
  },
  "un_dev_fund_pool_grant_modifier_desc": {
-  "en": "Our share of the [concept_un_development_fund]'s grants, paid into our [concept_investment_pool] every week. The Fund shares the major powers' Development Programs contributions and its share of the UN budget among the members below its line, by population, and works the shares out again each month.",
-  "de": "Unser Anteil an den Zuwendungen des [Concept('concept_un_development_fund', 'Weltentwicklungsfonds')], jede Woche in unseren [concept_investment_pool] eingezahlt. Der Fonds verteilt die Beiträge der Mittelmächte zu den Entwicklungsprogrammen und seinen Anteil am UN-Haushalt nach Bevölkerung auf die Mitglieder unterhalb seiner Schwelle und berechnet die Anteile jeden Monat neu."
+  "en": "Our share of the [concept_un_development_fund]'s grants, paid into our [concept_investment_pool] every week. The Fund shares the members' Development Programs contributions and its share of the UN budget among the members below its line, by population, and works the shares out again each month.",
+  "de": "Unser Anteil an den Zuwendungen des [Concept('concept_un_development_fund', 'Weltentwicklungsfonds')], jede Woche in unseren [concept_investment_pool] eingezahlt. Der Fonds verteilt die Beiträge der Mitglieder zu den Entwicklungsprogrammen und seinen Anteil am UN-Haushalt nach Bevölkerung auf die Mitglieder unterhalb seiner Schwelle und berechnet die Anteile jeden Monat neu."
  },
  "un_dev_fund_treasury_grant_modifier_desc": {
   "en": "Our share of the [concept_un_development_fund]'s grants, paid into our [concept_treasury] every week as income: our laws allow no [concept_investment_pool], or we have no banking system yet. The Fund shares the major powers' Development Programs contributions and its share of the UN budget among the members below its line, by population, and works the shares out again each month.",
@@ -10488,8 +10928,12 @@
   "de": "Laufende finanzielle Kosten für Beiträge zu internationalen UN-Entwicklungsprogrammen. Solange der [concept_un_development_fund] besteht, finanzieren sie dessen Zuwendungen."
  },
  "un_development_contributor_modifier_desc": {
-  "en": "This country contributes to UN development programs, boosting diplomatic reputation and [concept_prestige] at a bureaucratic cost.",
-  "de": "Dieses Land trägt zu UN-Entwicklungsprogrammen bei und steigert damit sein diplomatisches Ansehen und [concept_prestige] zu bürokratischen Kosten."
+  "en": "This country contributes to UN development programs, which speeds the decay of its [concept_infamy] and adds to its [concept_prestige]. The larger the contribution, the larger the effect, but each doubling of the money adds only a quarter of the Substantial size's.",
+  "de": "Dieses Land trägt zu UN-Entwicklungsprogrammen bei, was den Abbau seiner [concept_infamy] beschleunigt und sein [concept_prestige] erhöht. Je größer der Beitrag, desto größer die Wirkung, doch jede Verdopplung des Geldes bringt nur ein Viertel der Wirkung der Größe „Beträchtlich“ hinzu."
+ },
+ "un_development_patron_modifier_desc": {
+  "en": "The members the [concept_un_development_fund] pays remember what our Development Programs contributions have given them. The bonus moves toward the size we give, about two thirds of the way in a year, and fades over a few years once our money stops.",
+  "de": "Die Mitglieder, die der [concept_un_development_fund] bezahlt, erinnern sich daran, was unsere Beiträge zu den Entwicklungsprogrammen ihnen gebracht haben. Der Bonus nähert sich der Größe, die wir geben, binnen eines Jahres um etwa zwei Drittel des Weges an und klingt über einige Jahre ab, sobald unser Geld ausbleibt."
  },
  "un_dissolution_vacuum_modifier_desc": {
   "en": "The United Nations has dissolved. In the scramble that follows, the blocs are the only order left.",
@@ -10636,8 +11080,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] versucht, uns dazu zu bewegen, gegen die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_lobby_against_action_desc": {
-  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote against the resolution in session. Each full month the campaign runs moves the member's lean 3 points against, up to 15; campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
-  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, gegen die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dagegen, bis zu 15; Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
+  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote against the resolution in session. Each full month the campaign runs moves the member's lean 3 points against, up to 15, both raised by our UN lobbying effectiveness with that member (the members the [concept_un_development_fund] pays listen more to its contributors); campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
+  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, gegen die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dagegen, bis zu 15, beides erhöht durch die Wirksamkeit unserer UN-Lobbyarbeit bei diesem Mitglied (die Mitglieder, die der [concept_un_development_fund] bezahlt, hören stärker auf dessen Beitragszahler); Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
  },
  "un_lobby_for_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has stopped lobbying us on the resolution before the [concept_un_general_assembly].",
@@ -10648,8 +11092,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] versucht, uns dazu zu bewegen, für die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_lobby_for_action_desc": {
-  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote in favour of the resolution in session. Each full month the campaign runs moves the member's lean 3 points in favour, up to 15; campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
-  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, für die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dafür, bis zu 15; Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
+  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote in favour of the resolution in session. Each full month the campaign runs moves the member's lean 3 points in favour, up to 15, both raised by our UN lobbying effectiveness with that member (the members the [concept_un_development_fund] pays listen more to its contributors); campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
+  "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, für die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dafür, bis zu 15, beides erhöht durch die Wirksamkeit unserer UN-Lobbyarbeit bei diesem Mitglied (die Mitglieder, die der [concept_un_development_fund] bezahlt, hören stärker auf dessen Beitragszahler); Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
  },
  "un_mandate_war_support_modifier_desc": {
   "en": "This country holds a military mandate from a strong United Nations. A war the world has authorized keeps the nation behind it through losses and defeats.",
@@ -10690,6 +11134,14 @@
  "un_mission_stabilisation_state_modifier_desc": {
   "en": "A [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors.",
   "de": "Eine [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] ist in diesem Staat im Einsatz, um den Zusammenbruch zu beenden. Ihre Stärke richtet sich nach der Durchsetzungskraft der UN, ihrem Budget und ihren Truppenstellern."
+ },
+ "un_narcotics_control_modifier_desc": {
+  "en": "This country is party to the Single Convention on Narcotic Drugs. Plantation quotas reduce Drugs production from Opium Plantations, while licensed medical manufacture raises Pharmaceutical Industries throughput. The terms scale with UN enforcement.",
+  "de": "Dieses Land ist Vertragspartei des Einheits-Übereinkommens über Suchtstoffe. Plantagenquoten verringern die Drogenproduktion aus Opiumplantagen, während lizenzierte medizinische Herstellung den Durchsatz der Pharmazeutischen Industrie erhöht. Die Bedingungen skalieren mit der UN-Durchsetzung."
+ },
+ "un_narcotics_refusal_modifier_desc": {
+  "en": "This country refused to table the Single Convention on Narcotic Drugs and cannot propose it while this penalty lasts.",
+  "de": "Dieses Land hat sich geweigert, das Einheits-Übereinkommen über Suchtstoffe einzubringen, und kann es nicht vorschlagen, solange diese Strafe andauert."
  },
  "un_nonmember_pariah_modifier_desc": {
   "en": "As the UN's authority grows, nations outside the international order face diplomatic isolation, reduced [concept_prestige], and diminished influence.",
@@ -10988,8 +11440,8 @@
   "de": "Dieses Land hat die Zusagen eingehalten, die es bei den Vereinten Nationen gemacht hat, und wird dafür als ernstzunehmender Partner behandelt. Sein diplomatisches Wort trägt weiter, und sein Ansehen erholt sich etwas schneller."
  },
  "un_tariff_retaliation_modifier_desc": {
-  "en": "A rival nation has imposed unilateral tariffs, hurting our trade competitiveness and diplomatic reputation.",
-  "de": "Eine rivalisierende Nation hat einseitige Zölle verhängt, was unsere Handelswettbewerbsfähigkeit und unser diplomatisches Ansehen schädigt."
+  "en": "Another member of the United Nations refused arbitration of its trade dispute with us and imposed unilateral tariffs on our goods, hurting our trade competitiveness and diplomatic reputation.",
+  "de": "Ein anderes Mitglied der Vereinten Nationen hat ein Schiedsverfahren in seinem Handelsstreit mit uns abgelehnt und einseitige Zölle auf unsere Waren verhängt, was unsere Handelswettbewerbsfähigkeit und unseren Diplomatieruf schädigt."
  },
  "un_trade_arbitration_modifier_desc": {
   "en": "This country has accepted international arbitration in a trade dispute, demonstrating commitment to the rules-based order.",
