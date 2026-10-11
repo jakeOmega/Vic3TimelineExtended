@@ -251,6 +251,53 @@ Satara still shrinks in the 1872 save, from emigration, which `predict` doesn't 
 the 19th century little; the fast run's Bengal was extreme because fast mode's 4× population meets a calendar-1870s
 economy.
 
+## The in-game session (owner, 2026-10-11)
+
+A new 1836 game as Britain on Full, with #885 deployed. A revolt took London, so the capital is the Midlands. The
+console's lines are in `debug.log`.
+
+- **P3, the first step (6 January 1838).** M is in force: births −0.3204, deaths −0.4034. The step-to-step scales
+  and the target are 0, as a first step's are. The logged inputs reproduce both terms exactly:
+  `tb − 1 − rep − os × (1 − tb)` gives 0.6766 − 1 + 0.0178 − 0.0459 × 0.3234 = −0.3204 and 0.6175 − 1 − 0.0154 −
+  0.0145 × 0.3825 = −0.4034.
+- **P2, the tooltips.** Births match exactly: Census: Births −32.0% and Cadet Sons Leave the Land +4.6% (the
+  Midlands' one state-level birth line, on top) make −27.4%. A pop's mortality tooltip lists:
+  - Standard of Living (the bare curve);
+  - "+5% from Great Britain", its class's child labour line, absorbed per pop;
+  - Pollution Impact +0%;
+  - Ministry of Health −2%;
+  - "−40% from Midlands", the census's term.
+
+  Britain carries no law or technology birth line in 1838. No error from the census code.
+- **Impact of Institutions (finding, fixed in the follow-up).** The Ministry of Health's line read "A multiplier of
+  0.94": the engine scales an institution's lines by the state's Impact of Institutions (`state_institution_impact_add`:
+  Local Vernacular −0.05, obstinance −1.0 × its share). The census cancelled them at full size, so in a fully
+  obstinate state at Ministry of Health level 5 it would have taken off 15% the engine never applied. The absorbed
+  institution lines now take `te_demog_institution_impact`. The Ministry of War's per-institution country modifier
+  (`country_institution_impact_institution_ministry_of_war_mult`, a mod law and a production method) is not handled:
+  how it combines with the state's is unverified, and it touches only Mandatory Augmentation's line.
+- **P3, the second step (29 January 1839).** The terms move little: births −0.3214, deaths −0.4216, following
+  the bare curve's 3% rise. Births on top `bz` +0.044 match Cadet Sons' +4.6%. Deaths on top `dz` +0.117:
+  - +0.008 is the state-level lines;
+  - about 5% of the bare curve is each pop's own lines (workplace mortality for laborers and machinists, severe
+    starvation for 0.4% of people), which stay at the bare curve's weight. That is about +8% of the census's rate;
+  - about 3% is the base rate moving between yearly steps.
+
+  So P3's "a few per cent" holds for births and for agrarian states, not for an industrial state's deaths.
+- **P6.** Private Health Insurance's mortality line is proportional to each pop's wealth (owner). Absorbing it per
+  pop under Full can be built.
+- **The replay.** Three capitals: the Midlands (2.55M people, children per woman 5.0, infection ×0.38), a poor one
+  (0.79M, 5.9, ×1.39) and one between (2.58M, 5.3, ×0.90). The worst slot error is 0.00% in each, against the 0.1%
+  tolerance.
+- **Option d's benchmark** (the 1887 gate save, 838 states; the rule switched mid-game; one-second timestamps):
+  | Setting | Walk, three passes | Step, three passes |
+  |---|---|---|
+  | Display only (`full=0`) | about 2 s | about 8 s |
+  | Full (`full=1`) | about 3 s | about 8 s |
+
+  The absorbed sums cost at most about 0.3 s a world-year, spread over the year's state pulses. Final review 2's m6
+  (folding the absorbed terms into the pop multipliers) stays deferred.
+
 ## The probes
 
 | Probe | Question | Answer |
@@ -266,16 +313,13 @@ economy.
 
 This list is the canonical checklist; the PR body repeats it.
 
-1. **P2 and P3** on a throwaway save, deployed per CLAUDE.md "Play-testing unmerged work". In the same session, **option d's
-   benchmark on the 1887 gate save under Full and under Disabled**, recorded here: the plan's Risks asks for the walk's
-   cost, and if it grew, the absorbed literacy and starvation terms fold into the pop multipliers' own evaluation (final
-   review 2, m6, deferred).
+1. **Done: P2, P3, P6, the replay and option d's benchmark** (2026-10-11, above).
 2. **Done: the fast-mode gate run** (2026-10-11, above). It passes inside its window, census 1837–1900.
-3. **The replay:** `demographics_harness.py replay` on option a's blocks from three states at different SoL. The fast
-   run logged none.
+3. **Done: the replay** (above).
 4. **The owner's calls on the fast run (2026-10-11):**
    - Europe's flat share: accepted.
    - `--phase2`'s run check now stops at `--to-year`.
    - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
-6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).
+6. **Done: P6** (above). Then absorbing Private Health Insurance's wealth mortality per pop under Full (owner, 2026-10-10: on top for now; P6 says it can be built).
+7. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.

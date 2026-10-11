@@ -92,9 +92,12 @@ def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     return out
 
 
-def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES):
+def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES,
+           institution_impact=1.0):
     """{type: total} that one state reads: its owner's techs and laws and, in an incorporated
-    state, each institution line times the owner's investment level in that institution."""
+    state, each institution line times the owner's investment level in that institution, times the
+    state's Impact of Institutions (1 + state_institution_impact_add, at least 0: Local Vernacular's -0.05,
+    obstinance's -1.0 x its share; the probe session, 2026-10-11)."""
     techs, laws, levels = set(techs), set(laws), institutions or {}
     out = {t: 0.0 for t in types}
     for c in carriers:
@@ -105,9 +108,9 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
         elif c.kind == "law" and c.key in laws:
             out[c.type] += c.value
         elif c.kind == "law_institution" and c.key in laws and incorporated:
-            out[c.type] += c.value * levels.get(c.institution, 0)
+            out[c.type] += c.value * levels.get(c.institution, 0) * institution_impact
         elif c.kind == "institution" and incorporated:
-            out[c.type] += c.value * levels.get(c.key, 0)
+            out[c.type] += c.value * levels.get(c.key, 0) * institution_impact
     return out
 
 

@@ -847,7 +847,8 @@ def absorbed_classes(root):
 def _carrier_adds(o, carriers, top):
     """State scope: add each carrier's value where the engine applies it. A tech's or law's line reaches every
     state the owner holds; a law's institution_modifier line and an institution's own line, one value a level of
-    the institution, incorporated states only (MAX_INSTITUTION_INVESTMENT levels at most)."""
+    the institution, incorporated states only (MAX_INSTITUTION_INVESTMENT levels at most), scaled as the engine
+    scales it by the state's Impact of Institutions (te_demog_institution_impact)."""
     for c in carriers:
         v = lit(c.value)
         if c.kind == "technology":
@@ -858,9 +859,13 @@ def _carrier_adds(o, carriers, top):
             gate = f" owner = {{ has_law = law_type:{c.key} }}" if c.kind == "law_institution" else ""
             o("if = {")
             o(f"limit = {{ is_incorporated = yes{gate} }}")
+            o("add = {")
+            o("value = 0")
             for n in range(1, top + 1):
                 o(f"if = {{ limit = {{ owner = {{ institution_investment_level = {{ institution = {c.institution} "
                   f"value >= {n} }} }} }} add = {v} }}")
+            o("multiply = te_demog_institution_impact")
+            o("}")
             o("}")
 
 

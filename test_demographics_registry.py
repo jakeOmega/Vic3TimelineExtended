@@ -1413,8 +1413,9 @@ class TestAbsorbedScript(unittest.TestCase):
         cls.absorbed = DM.absorbed_carriers()
 
     def _run(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", food=1.0, literacy=0.0,
-             full=True):
-        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food}, laws=laws, techs=techs, levels=levels,
+             full=True, impact=0.0):
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food,
+                            "modifier:state_institution_impact_add": impact}, laws=laws, techs=techs, levels=levels,
                            pop_type=pop_type,
                            triggers={"is_incorporated": incorporated, "is_in_severe_starvation": food < 0.2,
                                      "is_in_mild_starvation": 0.2 <= food < 0.4, "te_demog_effects_run": full})
@@ -1436,6 +1437,25 @@ class TestAbsorbedScript(unittest.TestCase):
         techs = {c.key} if c.kind == "technology" else set()
         levels = {c.institution: level} if c.institution else {}
         return laws, techs, levels
+
+    def test_institution_lines_scale_with_the_states_institution_impact(self):
+        """The engine scales an institution's lines by the state's Impact of Institutions (the probe session,
+        2026-10-11: the Midlands' Ministry of Health read "A multiplier of 0.94", Local Vernacular's -0.05 and its
+        obstinance's -1.0 x 1%). The census cancels them at that size, and at none in a fully obstinate state; a
+        law's or tech's own line is not scaled."""
+        health = next(c for c in self.absorbed if c.key == "law_charitable_health_system")
+        levels = {"institution_health_system": 3}
+        for add in (-0.06, -1.2, 0.1):
+            with self.subTest(add=add):
+                _b, d = self._run(laws={"law_charitable_health_system"}, levels=levels, impact=add)
+                t = DM.totals([health], laws={"law_charitable_health_system"}, institutions=levels,
+                              types={health.type}, institution_impact=max(0.0, 1 + add))
+                self.assertAlmostEqual(d, t["state_mortality_mult"], places=5)
+                self.assertAlmostEqual(d, health.value * 3 * max(0.0, 1 + add), places=5)
+        flat = next(c for c in self.absorbed if c.kind == "law" and c.type == "state_birth_rate_mult")
+        b0, _ = self._run(laws={flat.key})
+        b1, _ = self._run(laws={flat.key}, impact=-0.5)
+        self.assertAlmostEqual(b0, b1)
 
     def test_the_absorbed_set_is_what_the_amendment_names(self):
         kinds = {c.kind for c in self.absorbed}
