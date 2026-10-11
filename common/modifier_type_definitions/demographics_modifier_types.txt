@@ -17,6 +17,14 @@ state_fertility_means_add = {
 	decimals = 0
 	script_only = yes
 }
+# Natural fertility (phase 2 step 4): women's legal standing, on the women's-rights laws. The census
+# multiplies the wealth term by 1 + it (te_demog_tfr_natural), before the means.
+state_natural_fertility_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
 
 # Mortality: stage 1 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
 # Read only by the census (te_demog_mult_*, with modifier: in state scope); the engine never

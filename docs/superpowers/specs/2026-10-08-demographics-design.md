@@ -65,7 +65,8 @@ So age and sex must be **modelled**. The model takes engine readouts as inputs a
     gives, and that law adds workforce and births on top.
 - **Flat population modifiers in many places.** The Pill, second-wave feminism, Protected Class, vaccines, antibiotics
   and Biological Immortality set flat `state_birth_rate_mult`, `state_mortality_mult` and
-  `state_working_adult_ratio_add`. The Natalism Initiative decree gives +50% births for 250 authority, which outweighs
+  `state_working_adult_ratio_add`. (Phase 2 step 4 made the Pill's, vaccines', antibiotics' and Protected Class's
+  birth and mortality lines census terms: §8.4.) The Natalism Initiative decree gives +50% births for 250 authority, which outweighs
   every law in the group.
 - **Where people live.**
   - Migration Crowding: a yearly per-state density penalty, with `state_migration_crowding_density_mult`.
@@ -270,6 +271,9 @@ plausible parameters (cohorts give the same equilibria and sharper transients):
 | Replacement fertility | 2.0–2.2 | 20% | 60–62% | 19–20% | about 0 | |
 | Aged | 1.3 | 12% | 55–56% | 33% | −0.9 to −1.2% | Japan today: 0–14 11%, 65+ 29%, children per woman 1.2 |
 
+Since phase 2 step 4's women's-rights term (§2.3), the model's West in 1990 is itself the aged row: about 1.4 children
+per woman and −1.4% a year (`test_demographics_model`'s aged case).
+
 **The transients carry the gameplay.**
 - Drop fertility from 6 to 2 and the working-age share climbs from 54% to 64% over twenty years, then holds for about
   thirty. That is the **demographic dividend**. Real East Asian peaks reached 70–74%; the band sketch underestimates
@@ -296,6 +300,11 @@ natural fertility the population can close. The *means* term is the technology. 
 means" view of the fertility transition.
 
 - **Wealth**: the retuned SoL curve, applied by the engine.
+- **Women's legal standing** (phase 2 step 4): *natural* fertility, before the means. The wealth term is multiplied by
+  1 + `state_natural_fertility_mult` (floored at 0.2), which the women's-rights laws carry at vanilla's own birth lines
+  re-centred on No Women's Rights (owner call (d), 2026-10-10): Women in the Fields −15%, Women Own Property −5%,
+  Women in the Workplace and Women's Suffrage −10%, Protected Class −15%. It works through who marries and how young,
+  the channel women's legal status moves before contraception.
 - **Education**: desired × (1 − 0.4 × literacy). Literacy is the population-weighted figure from the yearly pop walk.
   Women's schooling is the strongest single predictor of fertility; literacy is the nearest proxy the engine has.
 - **Child survival**: desired × (1 − 0.4 × (life expectancy − 30) ÷ 50), clamped. Parents stop insuring against child
@@ -308,19 +317,26 @@ means" view of the fertility transition.
   spec's stage 2 (0.4 / 0.75 / 0.80 / 0.85 in research order).
   - **Access** multiplies the means: 0.3 + 0.7 × literacy.
   - **Laws and measures** shift it (§8.1) through `state_fertility_means_add`, after literacy. The cap is 0.95.
-- **The fertility factor** = 1 − means × (1 − desired).
+- **The fertility factor** = 1 − means × (1 − desired). Children per woman = wealth × natural × the fertility factor.
 
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
 moves the birth rate by construction.
 
-**Applied as** one births modifier, refreshed yearly from the state pulse: the model's births ÷ the engine's births
-before the modifier − 1. Every other birth modifier stays an input and is read through. That covers vanilla's laws,
-events, starvation, and Forced Heirship's rural cut.
+**Applied as** (phase 2 step 4; `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`) one births
+term per state, refreshed at each census step: the engine gives each pop its curve × max(0, 1 + every term added
+together) (the growth probe, `docs/testing/demographics-growth-probe-results-2026-10-09.md`), so the census's term is
+M = the model's births ÷ the bare curve's − 1 − the births the census absorbs ÷ the bare births, each absorbed term at
+its pop's bare curve. The engine's births then come to the model's plus every term added on top, at the bare curve's
+weight. Added on top: events, severe starvation, decrees, Forced Heirship's rural cut, `low_pop_state`, the
+family-policy laws §8.1 hasn't re-expressed. Absorbed (owner, 2026-10-10: the lines stay on their carriers, and M
+cancels them under Full only): literacy's −0.1 and mild starvation's (per pop), the women's-rights laws' lines (natural
+fertility above), the Pill's, State-Sponsored Family Planning's and the medical techs' (§8.4).
 - **Reading the rest.** A state's `modifier:state_birth_rate_mult` includes the country's modifiers (a test modifier on
   the country showed in every state's read), so the model reads the total at state scope and takes out its own term.
 - **The clamp.** At −0.9 Qing's births fell to about a tenth, as 1 + the total says. At −3 they stopped; they never
   turn negative (Qing lost what its deaths alone would take). Where between −0.9 and −3 they reach zero wasn't
-  measured, presumably at −1. The clamp keeps the total at −0.9 or above, a safe margin.
+  measured, presumably at −1. The clamp keeps the state's total at −0.8 or above (−0.9 less literacy's −0.1); when
+  the terms on top alone are past that, the census's term stays at 0.
 - **The engine's births before the modifier** are taken to be each pop's SoL curve × its size × (1 + the other
   modifiers). Qing's births, worked out on that model, came to 0.44% a month against the curve's 0.475% for low-SoL
   pops: consistent, not proof. The world-wide check across all SoL bands is the harness's first step (§12).
@@ -334,7 +350,7 @@ events, starvation, and Forced Heirship's rural cut.
 | Britain 1836 | 5.5 | about 5 |
 | France 1836 (Family Limitation, §2.6). The sketch leaves out Forced Heirship's birth cut, which the engine applies on top | 4.9 | about 3.8 |
 | Britain 1900 | 3.9 | about 3.5 |
-| The West 1950 (before the Pill) | 3.0 | 2.5 (Europe) to 3.5 (US) |
+| The West 1950 (before the Pill) | 3.0 (2.5 with Women in the Workplace's term, phase 2 step 4) | 1.9–3.1 across nine Western countries (Gapminder; median 2.3) |
 | The West 1990 | 1.4 | about 1.7 |
 | India 1975 | 5.2 | about 5.2 |
 | Niger 2020 | 5.0 | about 6.7. High desired fertility in the Sahel is a cultural term the sketch lacks; calibration decides whether to add one |
@@ -371,10 +387,16 @@ Fields, and close to men's share under Women in the Workplace, Women's Suffrage 
 Safety protects women more as they enter work, and a country that brings women into mines and factories without it
 sees their deaths rise. The other external causes stay mostly men's.
 
-**Applied as** one deaths modifier, refreshed yearly from the state pulse: the model's deaths ÷ the engine's deaths
-before the modifier − 1. The engine's own mortality modifiers (starvation, devastation, pollution, turmoil, vanilla's
-health laws, events) stay as they are and multiply on top. The model only places them by age: starvation and disease
-fall on the young and old, devastation on everyone, pollution on chronic causes. The share of old people therefore
+**Applied as** (phase 2 step 4) one deaths term per state, refreshed at each census step: M = the model's deaths ÷
+the bare curve's − 1 − the deaths the census absorbs ÷ the bare deaths, so the engine's deaths come to the model's plus
+every term added on top, at the bare curve's weight (the growth probe). The engine's own mortality modifiers (severe
+starvation, devastation, pollution, turmoil, workplace mortality, events) stay and add on top; devastation's and
+pollution's are inside the state's read (probe P1). Absorbed, and cancelled by M under Full only: mild starvation (per
+pop), vanilla's health laws' and child labour's lines (but not Private Health Insurance's wealth mortality, which stays
+on top for now: owner, 2026-10-10, pending probe P6), and §8.4's. The census's next step scales its own rates to what the
+engine did, so the ring places the deaths added on top by the model's own age pattern, young and old (owner,
+2026-10-10: one scale on every cause; a per-term split, devastation on everyone and pollution on chronic causes, waits
+until the panel shows an artefact). The share of old people therefore
 drives the death rate, as the owner asked. An aged state with excellent health still has a high crude death rate:
 Japan's is 13 per 1,000 because a third of its people are over 60, not because its health is poor.
 
@@ -861,15 +883,31 @@ pension law, participation stays at 0.5: people work until they can't.
 
 ### 8.4 Flat modifiers that move into the model
 
-These stand in for an age, fertility or survival effect the model now produces. They come off when phase 2 lands, so
-nothing is counted twice:
+These stand in for an age, fertility or survival effect the model now produces. Under Full the census's term M
+cancels them, so nothing is counted twice; they stay on their carriers, so nothing changes outside Full (owner,
+2026-10-10, amending step 4's first build, which took them off). Built in step 4
+(`docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`):
 - the Pill's −10% birth (now a means tier);
-- Pro-Natalist's −0.05 working-adult;
-- the mod's own birth modifiers on its family-policy laws (now desired fertility, the means and measures);
+- State-Sponsored Family Planning's −5% birth (Fertility Control carries it);
 - the Ministry of Consumer Protection's flat −1% mortality (now external causes);
-- the mod's medical techs' flat mortality cuts (now the cause each one acts on).
+- the mod's medical techs' flat mortality and birth lines (vaccines, antibiotics: now the cause each one acts on);
+- the augmentation laws' mortality, carried by flat chronic-treatment lines beside it (Medical Only +0.10, the other
+  three +0.05; chronic treatment's cap 0.85), which reach only as far as health-care access does.
 
-Vanilla's modifiers stay as inputs, as do the mod's modifiers for women's and children's work.
+Still to come:
+- the other family-policy laws' birth lines (Pro-Natalist Subsidies, Population Control Measures, Communal
+  Child-Rearing) are absorbed only once §8.1 gives them census terms (desired fertility, the means and measures);
+- Pro-Natalist's −0.05 working-adult goes with the workforce effects, not step 4.
+
+Vanilla's modifiers stay as inputs, with three exceptions the census absorbs (step 4; their lines stay, and M cancels
+them under Full only):
+- the health laws' mortality, absorbed by access × treatment (Private Health Insurance's wealth mortality stays on top for
+  now: owner, 2026-10-10, pending probe P6);
+- child labour's class lines, absorbed at the census's smaller work term (owner, 2026-10-10: vanilla's are probably
+  far too high);
+- the women's-rights birth lines, absorbed once the census's natural-fertility term (§2.3) carries them.
+
+The mod's modifiers for women's and children's work stay inputs.
 
 The model's own law, technology and institution terms (its cause multipliers, means tiers and Wealth Concentration law
 terms) become registered modifier types the census reads, so each shows on its law or technology: owner, 2026-10-09;
@@ -985,6 +1023,12 @@ states: the one-year cohort step 0.75–1.0 s in total, the pop walk and the bui
 
 **Demographics: Full / Display only / Disabled.**
 
+> **Superseded (owner, 2026-10-10).** The defines aren't retuned (phase 2's step 5 is dropped: it would change every
+> game, and can't ship while the rule defaults to Disabled), so Display only and Disabled apply no births or deaths
+> modifiers and play as the base game does; only Full's census sets births and deaths, through its term M. The rule
+> defaults to Disabled, and its checks are positive (#876): a save from before the rule reads as Disabled. The design
+> below is kept for the record.
+
 The retuned defines can't be switched by a game rule. Without the model's fertility and mortality terms, rich states
 would keep about 3.5 children per woman and grow without limit. So **Disabled** still applies the fertility and
 mortality terms, but against the *equilibrium* structure for the state's rates, taken from the same lookup that seeds
@@ -1012,9 +1056,9 @@ from before the rule keeps the system (Grand Monuments' pattern).
 
 | Phase | Contents | Gate |
 |---|---|---|
-| 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
+| 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines (dropped since: phase 2's step 5), the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full; the retuned defines, step 5, are dropped); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the births and deaths modifiers (the retuned defines dropped, owner, 2026-10-10); workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.
@@ -1063,7 +1107,9 @@ to be sane.
   literacy's −0.1, the Pill's and the family-policy laws' flat lines. The engine's births take them all, so France
   shows about 4.8 while its births run a tenth or more lower. When phase 2 makes the census set births, those modifiers
   multiply on top. The panel should then show what actually happens, the model's figure times the read-through
-  modifiers.
+  modifiers. **Answered in phase 2 step 4:** the panel's children per woman, CBR and CDR are the realized figures (the
+  step scales its rates by what the engine did, × (1 + bz)), and the children-per-woman tooltip lists the births added
+  on top as a term; life expectancy, e65 and infant mortality stay the census's own life table.
 
 ## 14. Engine checks (run 2026-10-08)
 

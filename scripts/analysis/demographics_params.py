@@ -69,7 +69,12 @@ MATERNAL_PER_100K_BIRTHS = 670
 # Age-specific shape over rate ages 15-49 by five-year group, per 100k, summing to
 # 100,000 over the 35 single years (each single year takes its group's value / 5).
 ASFR_SHAPE_BY_GROUP = {15: 6000, 20: 22000, 25: 25000, 30: 21000, 35: 15000, 40: 8500, 45: 2500}
-WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.2, 8      # children per woman at SoL 8 or below
+# Children per woman from wealth alone at SoL 8 or below. 6.0 since 2026-10-10 (owner, phase 2 step 4's gate; was 6.2):
+# the model's children per woman sat above Gapminder's almost everywhere (1837: China 6.09 against 5.5, Japan 5.75
+# against 4.5, Britain 5.50 against 4.8, France 4.45 against 3.6), and the world multiple 1837-1900 at x1.78.
+# At 6.0: x1.66, China +0.12% a year in 1887, every medicine and fertility anchor in band
+# (docs/testing/demographics-phase2-engine-rates-2026-10-10.md, "The multiple").
+WEALTH_TFR_LOW, WEALTH_TFR_LOW_SOL = 6.0, 8
 WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL 35+
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
 SURVIVAL_WEIGHT = 0.4         # desired x (1 - 0.4 x (e0 - 30) / 50), clamped 0..1
@@ -118,7 +123,16 @@ DEMOG_MORTALITY_TYPES = (
 # modifier:, their values on their carriers (demographics_modifiers.py).
 CONTRACEPTION_TYPE = "state_contraception_add"
 MEANS_SHIFT_TYPE = "state_fertility_means_add"
-DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE)
+# Natural fertility (phase 2 step 4, Task 7): women's legal status before modern contraception, through who
+# marries and when. Multiplies the wealth term before the means. Its carriers are the women's-rights laws,
+# re-centred on No Women's Rights so step 2's fit (83% of the 1837 world) is unchanged (owner call (d), 2026-10-10).
+NATURAL_FERTILITY_TYPE = "state_natural_fertility_mult"
+NATURAL_FERTILITY_FLOOR = 0.2
+NATURAL_FERTILITY_BY_LAW = {
+    "law_no_womens_rights": 0.0, "law_women_in_the_fields": -0.15, "law_women_own_property": -0.05,
+    "law_women_in_the_workplace": -0.10, "law_womens_suffrage": -0.10, "law_protected_class": -0.15,
+}
+DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY_TYPE)
 DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
@@ -135,7 +149,10 @@ MEANS_ACCESS_BASE = 0.3
 # country_<cause>_treatment_add, at most its cap. The values of both live on their carriers in
 # the game files (demographics_modifiers.py); calibrated with `demographics_harness.py medicine`.
 BASE_ACCESS = 0.4
-TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.8}
+# chronic 0.85: phase 2 step 4 (augmentation; the modifier-types design note). Headroom: it binds nowhere today, since
+# the most chronic treatment reachable is 0.80 (telemedicine 0.2, personalized_medicine 0.2, modern_pharmaceuticals 0.3,
+# Medical Augmentation Only 0.10), within the old 0.8 (final review m6, batch 3 m3).
+TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}
 # Every other law, technology or institution term is 1 + its types' sum, at least this.
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
@@ -182,6 +199,39 @@ FOOD_SECURITY_STARVATION_THRESHOLD = 0.4
 FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD = 0.2
 STARVATION_EFFECTS_SCALING_FACTOR = 2.5
 STARVATION_BUCKET = 0.05   # mild starvation is read in food-security steps this wide, at each step's middle
+
+# ---- phase 2 step 4: the census sets the engine's births and deaths --------------------------
+# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
+# into one (1 + total) per pop, linear from -0.9 (growth probe) to far above +1.0 (the 12x fast run), floored
+# at 0. Owner, 2026-10-10: the poverty term replaces the curve's starving slope below SoL 4, and deaths added
+# on top fall by the model's age pattern (the step's deaths scale).
+RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above this (-0.9 less literacy's -0.1)
+RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
+ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
+ON_TOP_SCALE_MAX = 4.0
+LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
+STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
+STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
+STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
+# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
+# of the census's term. Every other law, technology or institution line is absorbed: it stays on its carrier, and
+# under Full the census's term M cancels it in each state it reaches (demographics_modifiers.absorbed_carriers,
+# te_demog_absorbed_* in the generated values). The women's-rights laws left this list in Task 8: Task 7's
+# natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
+ENGINE_LINES_ON_TOP = frozenset({
+    # the family-policy laws §8.1 has yet to re-express as census terms
+    "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
+    # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
+    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10)
+    "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
+    "mental_health_awareness", "biological_immortality", "mind_backups",
+})
+# Fields whose lines stay on top wherever they sit: wealth mortality's per-pop scaling ("per Wealth") waits on probe P6,
+# so M doesn't net it out yet. Private Health Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top
+# for now). Nobody holds the law in the owner's 1949 save; had the rich health-law countries held it at their own
+# level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
+# as mild starvation, is proposed.
+ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee

@@ -13,6 +13,7 @@ investment levels:
 
 import json
 import os
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -108,3 +109,103 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
         elif c.kind == "institution" and incorporated:
             out[c.type] += c.value * levels.get(c.key, 0)
     return out
+
+
+def engine_rate_lines(root=ROOT, mod=True):
+    """{(kind, key, block, field): net value} for every `*_mult` line in a law's `modifier` or
+    `institution_modifier`, a technology's or an institution's `modifier`. Vanilla's and (with mod) the
+    mod's are summed as the engine sums an INJECT (scripting_best_practices.md § INJECT); a mod REPLACE
+    drops vanilla's. kind: law, technology, institution. Phase 2 step 4: which birth and mortality lines
+    the census absorbs (they net to zero) and which stay on top (P.ENGINE_LINES_ON_TOP)."""
+    from paradox_file_parser import ParadoxFileParser
+
+    files = {"law": ("laws", "laws"), "technology": ("technologies", "technology/technologies"),
+             "institution": ("institutions", "institutions")}
+    out = {}
+
+    def w(v):
+        """A value without its ("=", ...) wrapper: a tuple from the parser, a list from vanilla_parsed's JSON."""
+        return v[1] if isinstance(v, (list, tuple)) and len(v) == 2 and v[0] == "=" else v
+
+    def each(v):
+        """A block or value that appears once, or each of its copies when the entity repeats it (vanilla's
+        concrete_dockyards has two `modifier` blocks): the engine applies every copy, so they sum."""
+        v = w(v)
+        if isinstance(v, list):
+            return [w(x) for x in v]
+        return [] if v is None else [v]
+
+    def add(kind, key, body):
+        body = w(body)
+        if not isinstance(body, dict):
+            return
+        for block in ("modifier", "institution_modifier"):
+            for lines in each(body.get(block)):
+                for field, value in (lines if isinstance(lines, dict) else {}).items():
+                    if field.endswith("_mult"):
+                        k = (kind, key, block, field)
+                        out[k] = out.get(k, 0.0) + sum(float(x) for x in each(value))
+
+    for kind, (snap, sub) in files.items():
+        vanilla = json.loads((Path(root) / "vanilla_parsed" / "common" / f"{snap}.json").read_text(encoding="utf-8"))
+        for key, body in vanilla.get("data", vanilla).items():
+            add(kind, key, body)
+        if not mod:
+            continue
+        for path in sorted((Path(root) / "common" / sub).glob("*.txt")):
+            parser = ParadoxFileParser()
+            parser.parse_file(str(path), apply_directives=False)
+            for name, body in parser.data.items():
+                directive, _, key = name.rpartition(":")
+                if directive == "REPLACE":
+                    for k in [k for k in out if k[0] == kind and k[1] == key]:
+                        del out[k]
+                add(kind, key, body)
+    return out
+
+
+_ENGINE_RATE_FIELD = re.compile(r"^state_(birth_rate|mortality|mortality_wealth|\w+_mortality)_mult$")
+
+
+def is_engine_rate_field(field):
+    """A field the engine applies to births or deaths: the state's birth or mortality multiplier, a class's
+    mortality or wealth mortality. The census's own script-only types (state_work_mortality_mult and the like)
+    are inputs, not engine lines."""
+    return bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+
+
+def absorbed_carriers(root=ROOT, lines=None):
+    """Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines on laws, technologies
+    and institutions that the census absorbs, as Carriers (`type` is the engine field). Under Full the census's
+    term M cancels each one in the state it reaches (te_demog_absorbed_*, generated); no carrier is edited, so
+    nothing changes outside Full. Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
+    institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
+    institution's own line is institution (per its level, incorporated states), the rest are flat."""
+    lines = engine_rate_lines(root) if lines is None else lines
+    institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    out = []
+    for (kind, key, block, field), value in sorted(lines.items()):
+        if abs(value) < 1e-12 or not is_engine_rate_field(field):
+            continue
+        if key in P.ENGINE_LINES_ON_TOP or field in P.ENGINE_FIELDS_ON_TOP:
+            continue
+        if kind == "law" and block == "institution_modifier":
+            out.append(Carrier("law_institution", key, field, value, institution.get(key)))
+        elif kind == "institution":
+            out.append(Carrier("institution", key, field, value, key))
+        else:
+            out.append(Carrier(kind, key, field, value))
+    return out
+
+
+def engine_line_totals(lines, laws=(), techs=()):
+    """{field: total} of the flat `modifier` lines (engine_rate_lines' keys) a country's laws and techs carry.
+    Per-level law lines are left out: after phase 2 step 4 none of the birth or mortality ones is live
+    (the health laws' are absorbed), and predict says so if one ever is."""
+    laws, techs = set(laws), set(techs)
+    out = {}
+    for (kind, key, block, field), value in lines.items():
+        if block == "modifier" and ((kind == "law" and key in laws) or (kind == "technology" and key in techs)):
+            out[field] = out.get(field, 0.0) + value
+    return {k: v for k, v in out.items() if v}

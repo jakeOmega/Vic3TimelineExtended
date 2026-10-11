@@ -6904,6 +6904,41 @@ te_demog_project = {
 	set_variable = { name = te_dg_pjm17 value = local_var:te_dg_xm17 }
 }
 
+# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0. Under Full only (the
+# refresh reads them nowhere else) the state's absorbed lines (te_demog_absorbed_*, generated values) are read
+# once, the classes' among them, and te_dg_w_rep turns the per-pop sums on.
+te_demog_absorbed_walk_init = {
+	set_local_variable = { name = te_dg_w_ebr value = 0 }
+	set_local_variable = { name = te_dg_w_edr value = 0 }
+	set_local_variable = { name = te_dg_w_rep value = 0 }
+	if = {
+		limit = { te_demog_effects_run = yes }
+		set_local_variable = { name = te_dg_w_rep value = 1 }
+		set_local_variable = { name = te_dg_w_sab value = te_demog_absorbed_births }
+		set_local_variable = { name = te_dg_w_sad value = te_demog_absorbed_deaths }
+		set_local_variable = { name = te_dg_w_ac_farmers value = te_demog_absorbed_farmers_deaths }
+		set_local_variable = { name = te_dg_w_ac_laborers value = te_demog_absorbed_laborers_deaths }
+		set_local_variable = { name = te_dg_w_ac_machinists value = te_demog_absorbed_machinists_deaths }
+		set_local_variable = { name = te_dg_w_ac_peasants value = te_demog_absorbed_peasants_deaths }
+	}
+}
+
+# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed): its bare births and deaths x
+# what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr (te_demog_rates_refresh). Full only.
+te_demog_absorbed_walk_pop = {
+	if = {
+		limit = { local_var:te_dg_w_rep > 0 }
+		set_local_variable = { name = te_dg_p_ab value = { value = local_var:te_dg_w_sab add = te_demog_pop_absorbed_births } }
+		set_local_variable = { name = te_dg_p_ad value = { value = local_var:te_dg_w_sad add = te_demog_pop_absorbed_deaths } }
+		if = { limit = { is_pop_type = farmers } change_local_variable = { name = te_dg_p_ad add = local_var:te_dg_w_ac_farmers } }
+		else_if = { limit = { is_pop_type = laborers } change_local_variable = { name = te_dg_p_ad add = local_var:te_dg_w_ac_laborers } }
+		else_if = { limit = { is_pop_type = machinists } change_local_variable = { name = te_dg_p_ad add = local_var:te_dg_w_ac_machinists } }
+		else_if = { limit = { is_pop_type = peasants } change_local_variable = { name = te_dg_p_ad add = local_var:te_dg_w_ac_peasants } }
+		change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = local_var:te_dg_p_ab } }
+		change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_ad } }
+	}
+}
+
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).
 te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=0 f=[THIS.ScriptValue('te_demog_dbg_f0')|5],[THIS.ScriptValue('te_demog_dbg_f1')|5],[THIS.ScriptValue('te_demog_dbg_f2')|5],[THIS.ScriptValue('te_demog_dbg_f3')|5],[THIS.ScriptValue('te_demog_dbg_f4')|5],[THIS.ScriptValue('te_demog_dbg_f5')|5],[THIS.ScriptValue('te_demog_dbg_f6')|5],[THIS.ScriptValue('te_demog_dbg_f7')|5],[THIS.ScriptValue('te_demog_dbg_f8')|5],[THIS.ScriptValue('te_demog_dbg_f9')|5] m=[THIS.ScriptValue('te_demog_dbg_m0')|5],[THIS.ScriptValue('te_demog_dbg_m1')|5],[THIS.ScriptValue('te_demog_dbg_m2')|5],[THIS.ScriptValue('te_demog_dbg_m3')|5],[THIS.ScriptValue('te_demog_dbg_m4')|5],[THIS.ScriptValue('te_demog_dbg_m5')|5],[THIS.ScriptValue('te_demog_dbg_m6')|5],[THIS.ScriptValue('te_demog_dbg_m7')|5],[THIS.ScriptValue('te_demog_dbg_m8')|5],[THIS.ScriptValue('te_demog_dbg_m9')|5] pool_f=[THIS.ScriptValue('te_demog_dbg_pool_f')|5] pool_m=[THIS.ScriptValue('te_demog_dbg_pool_m')|5] pool_age=[THIS.Var('te_dg_pa').GetValue|5]"

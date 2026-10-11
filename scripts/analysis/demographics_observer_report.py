@@ -3,6 +3,14 @@
 
 Usage: python3 scripts/analysis/demographics_observer_report.py DEBUG_LOG [MORE_LOGS ...]
            [--step 25] [--tag GBR ...] [--top N] [--json] [--closed-borders SAVE [SAVE ...]]
+           [--phase2 [--to-year 1900]]
+
+--phase2 checks phase 2's gate (demographics phase 2 step 4, plan Task 12): the world's people from the
+first census year to --to-year within x1.3-x1.7, no country of 20M or more losing people ten census years
+running with no war year among them by --to-year, and the share of people in states whose census term was clamped
+(flagged above 1%). It exits 1 when the gate fails. From phase 2 step 4 a line's tfr, cbr and cdr are
+the realized figures (the census follows the engine's events), not the model's own: the anchors' TFR
+bands judge what the engine did.
 
 --closed-borders reads the migration law of each country from plain-text saves (debug mode writes
 them) and prints net migration per 1,000 for Closed Borders countries against the rest. Under Closed
@@ -48,7 +56,10 @@ from demographics_harness import _ungroup  # noqa: E402
 PREFIX = "TE_DEMOG_CENSUS: "
 FIELDS = ("tag", "year", "people", "median", "tfr", "e0", "e65", "imr", "cbr", "cdr", "mig", "young",
           "working", "old", "sex_balance", "gini", "wc", "primacy", "crisis", "devastation", "turmoil")
-OPTIONAL = ("mig_raw", "lag")   # fields later lines carry: mig_raw per 1,000 people, signed; lag a count
+# fields later lines carry: mig_raw per 1,000 people, signed; lag a count; from phase 2 step 4, the census's
+# births and deaths terms in force (m_b, m_d) and the step's on-top scales (bz, dz), people-weighted over the
+# country's census states, the share of its people in clamped states, and war (1 at war)
+OPTIONAL = ("mig_raw", "lag", "m_b", "m_d", "bz", "dz", "clamped", "war")
 TEXT_OPTIONAL = ("date",)       # the calendar date, e.g. "January 8, 2069"
 MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
           "November", "December")
@@ -103,6 +114,52 @@ def _parse(text):
         if k in fields:
             out[k] = fields[k]
     return out
+
+
+def phase2_check(records, to_year=1900, big=20e6, run=10):
+    """The calibration plan's in-game gate for phase 2 (plan 2026-10-10 engine rates, Task 12):
+    the world's people from the first census year to `to_year` (within x1.3-x1.7), countries of `big`
+    people or more that lost people `run` census years running with no war year among them, up to `to_year`, and the
+    share of the world's people in clamped states (above 1%, the clamp is holding M back: the results doc
+    names where)."""
+    tags = {}
+    for r in records:
+        tags.setdefault(r["tag"], {})[r["year"]] = r
+    world = {}
+    for series in tags.values():
+        for y, r in series.items():
+            world[y] = world.get(y, 0.0) + r["people"]
+    years = sorted(world)
+    first = years[0] if years else None
+    multiple = world[to_year] / world[first] if first is not None and to_year in world and world[first] else None
+    shrinking = []
+    for tag, series in sorted(tags.items()):
+        ys = [y for y in sorted(series) if y <= to_year]   # fast mode logs far past the gate's window
+        streak = []
+        for a, b in zip(ys, ys[1:]):
+            r0, r1 = series[a], series[b]
+            losing = (b == a + 1 and r1["people"] < r0["people"] and r0["people"] >= big
+                      and not r1.get("war", 0) and not r0.get("war", 0))
+            streak = streak + [b] if losing else []
+            if len(streak) == run:
+                shrinking.append((tag, streak[0], streak[-1]))
+    people = sum(r["people"] for r in records) or 1.0
+    clamped = sum(r["people"] * r.get("clamped", 0.0) for r in records) / people
+    return {"world_multiple": multiple, "world_in_band": multiple is not None and 1.3 <= multiple <= 1.7,
+            "shrinking": shrinking, "clamped_share": clamped}
+
+
+def _print_phase2(check, to_year):
+    m = check["world_multiple"]
+    if m is None:
+        print(f"phase 2 gate: no census in {to_year} (or none at the start): UNDECIDED")
+    else:
+        print(f"phase 2 gate: world {to_year} / first census year x{m:.2f} [x1.3-x1.7] "
+              f"{'PASS' if check['world_in_band'] else 'FAIL'}")
+    for tag, first, last in check["shrinking"]:
+        print(f"  {tag} lost people every year {first}-{last} with no war year: FAIL")
+    flag = "  (above 1%: the clamp is holding the census's term back)" if check["clamped_share"] > 0.01 else ""
+    print(f"  people in clamped states: {check['clamped_share']:.2%}{flag}")
 
 
 def calendar_year(date):
@@ -354,6 +411,10 @@ def main(argv=None):
                         help="plain-text saves: compare Closed Borders countries' migration with the rest")
     parser.add_argument("--tolerance", type=float, default=1.0,
                         help="the Closed Borders mig_raw median's pass band, per 1,000 a year (default 1)")
+    parser.add_argument("--phase2", action="store_true",
+                        help="phase 2's gate: the world's multiple to --to-year, 20M+ countries shrinking ten "
+                             "peacetime years running, the clamped share; exit 1 when it fails")
+    parser.add_argument("--to-year", type=int, default=1900, help="the gate's end year (default 1900)")
     args = parser.parse_args(argv)
     records, unresolved = [], []
     for path in args.logs:
@@ -372,6 +433,11 @@ def main(argv=None):
     if args.closed_borders:
         groups, verdict = closed_borders_check(records, migration_laws(args.closed_borders), args.tolerance)
         _print_closed(groups, verdict, args.tolerance)
+    if args.phase2:
+        check = phase2_check(records, to_year=args.to_year)
+        _print_phase2(check, args.to_year)
+        if not check["world_in_band"] or check["shrinking"]:
+            return 1
     return 0
 
 

@@ -5,7 +5,9 @@ paths within the harness's tolerance". This plan orders the calibration that has
 engine then follows are the census's and sane. Step 1 is built (this PR); the rest are planned here, each its own PR.
 
 Evidence for step 1: `docs/testing/demographics-history-check-2026-10-10.md`. Owner context (2026-10-10): the system
-is unreleased, so the bar for merging is low as long as each step is tested before the next public release; fast mode
+is unreleased, so the bar for merging is low as long as each step is tested before the next public release, and
+nothing changes outside the rule's Full setting (owner, 2026-10-10: step 4 cancels what it absorbs through M, under
+Full only, and edits no engine birth or mortality line). Step 5, the retune of the global defines, is dropped (owner, 2026-10-10). Fast mode
 (#848) is the in-game loop.
 
 ## Targets
@@ -89,7 +91,12 @@ history has them at 4.5 against 7.1.
 - or accept the compressed spread and fit only the world level and the wealth curve's ceiling.
 
 Before the owner's call, the fit can still:
-- raise the wealth curve's ceiling for the poorest (history's high-fertility societies reach 7, the model 6.2);
+- move the wealth curve's ceiling for the poorest (history's high-fertility societies reach 7, the model 6.0). **Owner
+  decision, 2026-10-10 (step 4's gate): lowered from 6.2 to 6.0**, because the model's children per woman sat above
+  Gapminder's almost everywhere (1837: China 6.09 against 5.5, Japan 5.75 against 4.5, Britain 5.50 against 4.8,
+  France 4.45 against 3.6) and the world multiple 1837–1900 at ×1.78. After: ×1.66, China +0.12% a year in 1887 (from
+  +0.23%), every `medicine` and `fertility` anchor in band
+  (`docs/testing/demographics-phase2-engine-rates-2026-10-10.md`, "The multiple");
 - check the education weight against the West's decline after 1870 (Britain 1887 is within 0.3 already).
 
 ## Step 3: the gap the game's inputs can't see (India, the tropics)
@@ -114,6 +121,25 @@ Before the owner's call, the fit can still:
 - **Gate:** India's growth from the census plus the engine's own deaths within about 0.3% a year of history's.
 
 ## Step 4: how the census sets the engine's births and deaths
+
+**Built:** `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` (PR #869), with the owner's rulings
+of 2026-10-10:
+- **(a) What the census absorbs:** standing law and technology lines it models at matching size (the health laws,
+  except Private Health Insurance's wealth mortality, on top for now pending probe P6 (owner, 2026-10-10);
+  §8.4's mod lines, the augmentation laws as flat chronic treatment, the women's-rights birth lines once its
+  natural-fertility term carries them), child labour's class lines at its smaller work term (vanilla's are probably
+  far too high), and mild starvation (amended: the poverty term was fitted without it). Every line stays on its
+  carrier and M cancels it under Full only (amended). Shocks, local conditions, severe starvation and player actions
+  stay on top.
+- **(b) The starving slope below SoL 4:** the poverty term replaces it; `demographics_harness.py predict --slope`
+  reports what it cost.
+- **(c) Deaths added on top fall by the model's age pattern** (one scale on every cause).
+- **(d) Women's rights:** a natural-fertility term at vanilla's lines re-centred on No Women's Rights.
+- **M** is the plan's additive form, M = target ÷ bare − 1 − replaced ÷ bare, replaced being each pop's bare curve ×
+  what the census absorbs for it (its state's lines, its class's, literacy's and mild starvation's), so the terms on
+  top add at the bare curve's weight; the census's next step scales its own rates to what the engine did.
+
+The design notes below are the step's starting point, kept for the record.
 
 - **The engine adds its terms.** A pop's rate is its bare SoL curve × (1 + the sum of its terms), as the growth probe
   measured (#834). So the census's own modifier M adds to that sum, and the pop's events become
@@ -147,11 +173,13 @@ Before the owner's call, the fit can still:
   - whether the engine's starving slope below SoL 4 stays (in K) or the poverty term replaces it;
   - whether starvation's deaths should fall on the young and old (the model's age pattern) or stay flat.
 
-## Step 5: the defines
+## Step 5: the defines (dropped)
 
-With M doing the work, the engine's SoL curves only need to sit near the census's typical rates, so M stays small and
-the engine-side terms keep their weight. Retune `@max_birthrate`, `@min_birthrate` and the mortality curve ends to the
-census's world medians by SoL band (§2.3's table is the starting point).
+**Dropped (owner, 2026-10-10).** The plan was to retune `@max_birthrate`, `@min_birthrate` and the mortality curve ends
+to the census's world medians by SoL band, so M stays small and the engine-side terms keep their weight. But the
+defines change every game, census on or off, and can't ship while the Demographics rule defaults to Disabled. Their only
+job was that weighting: terms on top count at the bare curve's weight, about 1.5 times their vanilla strength against
+realized events in 1836 and weaker late in the game. If that ever matters, it is handled inside M under Full.
 
 ## Step 6: the base schedules after 1900
 

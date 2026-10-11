@@ -207,6 +207,26 @@ class TestTinySave(unittest.TestCase):
         self.assertAlmostEqual(by_id["2"].crowding, 0.004356)
         self.assertEqual(by_id["1"].crowding, 0.0)
 
+    def test_food_security_and_devastation_are_read(self):
+        """Phase 2 step 4 (predict): a pop's food security (its nested block's value; the block's other keys are
+        not fields) and a state's devastation (0-100 in the save)."""
+        text = TINY.replace("\tfood_security={\n\t\ttype=not_a_pop_type\n\t}",
+                            "\tfood_security={\n\t\ttype=not_a_pop_type\n\t\tvalue=0.31\n\t\tstarvation=0\n"
+                            "\t\tstate=moderate\n\t}", 1)
+        text = text.replace("\tcountry=3\n\tincorporation=1\n}", "\tcountry=3\n\tincorporation=1\n\tdevastation=19.5\n}", 1)
+        self.assertIn("value=0.31", text)
+        self.assertIn("devastation=19.5", text)
+        with tempfile.NamedTemporaryFile("w", suffix=".v3", delete=False, encoding="utf-8") as fh:
+            fh.write(text)
+        try:
+            sections = S.read_sections(fh.name)
+        finally:
+            Path(fh.name).unlink()
+        self.assertEqual(sections["pops"]["7"]["food_security"], "0.31")
+        self.assertNotIn("food_security", sections["pops"]["8"])
+        self.assertEqual(sections["pops"]["7"]["type"], "aristocrats")
+        self.assertEqual(sections["states"]["1"]["devastation"], "19.5")
+
     def test_a_states_timed_modifiers_are_pairs_like_a_countrys(self):
         # one shape for both (review M3)
         text = TINY.replace("\tincorporation=0.4\n}",
@@ -277,8 +297,8 @@ class TestWealthTerm(unittest.TestCase):
         self.assertAlmostEqual(c.sol, 18)                       # (28 x 400 + 0 x 200 + 16 x 200) / 800
         by_pop = (M.wealth_tfr(28) * 400 + M.wealth_tfr(0) * 200 + M.wealth_tfr(16) * 200) / 800
         self.assertAlmostEqual(c.wealth_tfr, by_pop)
-        self.assertAlmostEqual(c.wealth_tfr, 5.0)
-        self.assertLess(c.wealth_tfr, M.wealth_tfr(c.sol) - 0.1)   # the curve at the mean, 5.2, is higher
+        self.assertAlmostEqual(c.wealth_tfr, 4.889, places=3)   # WEALTH_TFR_LOW 6.0 (was 5.0 at 6.2)
+        self.assertLess(c.wealth_tfr, M.wealth_tfr(c.sol) - 0.1)   # the curve at the mean, 5.07, is higher
 
     def test_one_pop_is_the_curve_at_its_sol(self):
         c = self.inputs(TINY)

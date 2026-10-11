@@ -243,11 +243,24 @@ Demographics tab in the Population panel, beside the base game's four, and a
 Demographics subtab on the state panel's Population section. The tab is open
 from the first day.
 
-The census changes nothing about your population yet. Births, deaths and the
-workforce still follow the base game's rules, and the tab reports what they
-produce. The Demographics (Experimental) rule has three settings: Full; Display only,
-which for now behaves the same; and Disabled, the default, which removes the
-census and both tabs. Wealth Concentration and its effects on each state (see
+Under the Demographics (Experimental) rule's Full setting, the census sets each
+state's births and deaths from its age structure, children per woman and causes
+of death, described below. While it does, it takes over what the child labor and
+women's rights laws, most of the health laws' effects, the Contraceptive Pill,
+State-Sponsored Family Planning, vaccines and antibiotics and mild starvation do
+to births and deaths: their tooltips still list those lines, but the census
+cancels them and carries their effect in its own terms. The base game's other
+effects on births and deaths still apply on top: Private Health Insurance's
+mortality cut for the wealthy, the late medical technologies, severe starvation,
+devastation, pollution, events, decrees, and the family-policy laws the census
+doesn't model yet. A state's birth
+rate and mortality tooltips show the census's part as Census: Births and Census:
+Deaths. The workforce still follows the base game's rules.
+
+Display only keeps the tabs and changes nothing: births, deaths and the workforce
+follow the base game's rules, and the tab reports what they produce. Disabled,
+the default, also removes the census and both tabs. Wealth Concentration and its
+effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
 ### What the tab shows
@@ -276,8 +289,8 @@ The pyramid has a row for each five years of age, from 0 to 4 at the bottom to 8
 and over at the top, with men on the left and women on the right. A wide base
 means many children; a column that narrows slowly means few births and long
 lives. Hover a row for the numbers. The pale outline behind the bars carries
-your people twenty years forward at this year's birth and death rates, five years
-at a time. It leaves out migration and holds the rates where they are, so it
+your people twenty years forward at the census's own birth and death rates for
+this year, five years at a time. It leaves out migration and holds the rates where they are, so it
 shows where today's course leads, not a forecast. Only your own country gets it.
 
 ### Reading the figures
@@ -285,8 +298,12 @@ shows where today's course leads, not a forecast. Only your own country gets it.
 Each year, the people of every age lose their dead at that age's rate, the
 newborn enter at age 0, and the war dead, people killed by events and migrants
 are taken from or added to the ages they belong to. The war dead are people aged
-18 to 40, nineteen in twenty of them men. Children per woman follows wealth, then
-falls with literacy, child survival and city life. The means to plan a family
+18 to 40, nineteen in twenty of them men. Children per woman follows wealth and
+women's legal standing (where women work the fields, own property, hold jobs or
+vote, they marry later and have fewer children), then falls with literacy, child
+survival and city life. Under Full, the figure shown is what births came to that
+year, so decrees, famine and other effects on births count in it; its tooltip
+lists them as births added on top of the census. The means to plan a family
 grow with literacy and with contraception: Vulcanization, Feminism, the
 Contraceptive Pill and Modern Pharmaceuticals each add some, in any order, and
 State-Sponsored Family Planning adds more, whoever can read. Their tooltips show
@@ -298,7 +315,8 @@ Ministry of Health, in incorporated states only. So a Public Health Insurance
 law does little before antibiotics, and medicine without a health system
 reaches less than half the people. The medical technologies and the health,
 policing, pension and labor laws show what they do to each cause in their
-tooltips.
+tooltips. Life expectancy and infant mortality are the census's own figures,
+before famine, war and disasters.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other

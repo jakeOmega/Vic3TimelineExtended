@@ -2,6 +2,7 @@
 
 import copy
 import io
+import json
 import math
 import re
 import sys
@@ -25,6 +26,97 @@ GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_e
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
 
 
+class TestPredict(unittest.TestCase):
+    D = H.G.read_defines()
+
+    def test_a_fed_state_runs_at_the_census_rates_plus_nothing(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], cbr=40.0, cdr=30.0, d=self.D)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_literacy_is_netted(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.5, 0.8)], cbr=40.0, cdr=30.0, d=self.D)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+
+    def test_terms_on_top_add_at_the_bare_curves_weight(self):
+        # severe starvation (births -0.9, deaths +1.0), devastation 0.2 and a law's -0.1 births, all on top
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], cbr=40.0, cdr=30.0, d=self.D, on_top_b=-0.1, on_top_d=0.2)
+        bare_b = 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12
+        bare_d = 1e6 * H.G.monthly_mortality(9.0, self.D) * 12
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * (1.0 + 0.2), delta=1.0)
+        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 + bare_b * (-0.9 - 0.1)), delta=1.0)
+
+    def test_the_slope_is_reported_not_applied(self):
+        pops = [H.Pop(1e6, 1.0, 0.0, 0.8)]
+        out = H.predict_state(pops, 40.0, 30.0, self.D)
+        slope = 1e6 * (H.G.monthly_mortality(1.0, self.D) - H.G.monthly_mortality(4.0, self.D)) * 12
+        self.assertAlmostEqual(out["slope_deaths"], slope, delta=1.0)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_absorbed_class_lines_are_applied_and_netted(self):
+        """Owner amendment A (2026-10-10): child labour's class line stays live, and M cancels it under Full; predict
+        reports what it would have done on top."""
+        pops = [H.Pop(1e6, 9.0, 0.0, 0.8, on_top_d=0.0, absorbed_d=0.05)]
+        out = H.predict_state(pops, 40.0, 30.0, self.D)
+        self.assertAlmostEqual(out["absorbed_child_labour_deaths"],
+                               1e6 * H.G.monthly_mortality(9.0, self.D) * 12 * 0.05, delta=1.0)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+
+    def test_absorbed_state_lines_are_applied_and_netted(self):
+        """The state's absorbed lines (a health law at level 3, No Women's Rights) are live in the engine and M takes
+        them out: the events are the census's. Each report group gets its own share, at the bare curves."""
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 40.0, 30.0, self.D, absorbed_b=0.05, absorbed_d=-0.15,
+                              groups={"womens_rights": (0.05, 0.0), "health": (0.0, -0.15)})
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+        self.assertAlmostEqual(out["absorbed_womens_rights_births"],
+                               1e6 * H.G.monthly_birthrate(9.0, self.D) * 12 * 0.05, delta=1.0)
+        self.assertAlmostEqual(out["absorbed_health_deaths"],
+                               1e6 * H.G.monthly_mortality(9.0, self.D) * 12 * -0.15, delta=1.0)
+        self.assertEqual(out["absorbed_other_lines_births"], 0.0)
+
+    def test_mild_starvation_is_absorbed_and_severe_stays_on_top(self):
+        """Owner amendment B: mild starvation's terms are netted by M, severe starvation's still apply."""
+        bare_b = 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12
+        bare_d = 1e6 * H.G.monthly_mortality(9.0, self.D) * 12
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.3)], 40.0, 30.0, self.D)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
+        sb, sd = M.starvation_terms(0.3)
+        self.assertAlmostEqual(out["absorbed_mild_births"], bare_b * sb, delta=1.0)
+        self.assertAlmostEqual(out["absorbed_mild_deaths"], bare_d * sd, delta=1.0)
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], 40.0, 30.0, self.D)
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * 1.0, delta=1.0)
+        self.assertEqual(out["absorbed_mild_deaths"], 0.0)
+
+    def test_the_clamp_sees_the_absorbed_lines_in_the_read(self):
+        """The script's 'other' is the state read, which holds the absorbed lines: so does predict's."""
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 2.0, 30.0, self.D, on_top_b=-0.5, absorbed_b=-0.2)
+        self.assertTrue(out["clamped"])
+        self.assertAlmostEqual(out["m_b"], H.P.RATE_TOTAL_MIN + 0.7)
+
+    def test_predict_on_the_slice(self):
+        """The command end to end on the test slice (Britain and Portugal, 1836; the slice has no game_date)."""
+        out = io.StringIO()
+        with redirect_stdout(out):
+            code = H.main(["predict", str(SLICE), "--year", "1836", "--json"])
+        data = json.loads(out.getvalue())
+        world = data["saves"][SLICE.name]["world"]
+        self.assertGreater(world["people"], 0)
+        self.assertGreater(world["child_labour_points"], 0)     # both hold Child Labor Allowed
+        self.assertLess(world["womens_rights_points"], 0)       # Portugal's No Women's Rights (Britain: Own Property)
+        for k in ("health_points", "other_lines_points", "mild_starvation_points"):
+            self.assertIn(k, world)
+        # the slice's pops carry no food security (fed) and their laws no line on top: the engine runs the census
+        self.assertAlmostEqual(world["growth"], world["census_growth"], places=6)
+        self.assertEqual(code, 0 if data["in_band"] and not data["saves"][SLICE.name]["shrinking"] else 1)
+
+    def test_multiple_chains_the_saves_rates(self):
+        # 1% a year from 1837 to 1887, then 0.5% to 1900
+        self.assertAlmostEqual(H.predicted_multiple([(1837, 1.0), (1887, 0.5)], 1900),
+                               math.exp(0.01 * 50 + 0.005 * 13), places=9)
+
+
 class TestHarness(unittest.TestCase):
     def test_sketch_runs(self):
         out = io.StringIO()
@@ -40,6 +132,21 @@ class TestHarness(unittest.TestCase):
         for label, _kw, _targets in H.MEDICINE_SCENARIOS:
             self.assertIn(label, out.getvalue())
         self.assertNotIn(" OUT", out.getvalue())
+
+    def test_augmentation_reaches_only_as_far_as_access(self):
+        """Phase 2 step 4 (owner: it doesn't help you that artificial hearts exist if you don't have access to them):
+        augmentation's chronic treatment acts through health-care access, so with no health system (access at its
+        base) Unrestricted Augmentation gives less than that base's share of what it gives Rich today (access 1).
+        Its old flat -5% mortality reached every state alike."""
+        rows = dict(H.medicine_rows())
+        poor = rows["Unrestricted Augmentation, no health system"]["gap"][0]
+        rich = rows["Unrestricted Augmentation, Rich today"]["gap"][0]
+        self.assertGreater(poor, 0)
+        self.assertLess(poor, H.P.BASE_ACCESS * rich)
+
+    def test_no_womens_rights_leaves_the_reference_alone(self):
+        rows = {r[0]: r[1] for r in H.fertility_rows()}
+        self.assertAlmostEqual(rows["1836 agrarian, No Women's Rights"], rows["1836 agrarian (reference)"], places=9)
 
     def test_fertility_anchors_hold(self):
         out = io.StringIO()

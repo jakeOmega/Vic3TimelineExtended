@@ -140,6 +140,13 @@ class TestCli(unittest.TestCase):
         self.assertIn("World", out)
         self.assertIn("Unresolved", out)
 
+    def test_phase2_gate_exits_1_when_it_fails(self):
+        """LINES hold 1836 only: no 1900 census leaves the multiple undecided, which fails the gate."""
+        code, out = self._run("--phase2")
+        self.assertEqual(code, 1)
+        self.assertIn("phase 2 gate", out)
+        self.assertIn("UNDECIDED", out)
+
     def test_json_report(self):
         code, out = self._run("--json")
         self.assertEqual(code, 0)
@@ -197,7 +204,8 @@ class TestTheScriptsLine(unittest.TestCase):
             records, unresolved = R.read_records([PREFIX + line])
             self.assertEqual(unresolved, [])
             self.assertEqual(len(records), 1)
-            self.assertEqual(set(records[0]), set(R.FIELDS) | {"mig_raw", "lag", "date"})
+            # every optional field the script writes today (phase 2 step 4 added the census's terms and war)
+            self.assertEqual(set(records[0]), set(R.FIELDS) | set(R.OPTIONAL) | {"date"})
             self.assertEqual(records[0]["date"], "January 2, 1840")
             negative = " mig=-" in template or "; mig=-" in template
             self.assertEqual(records[0]["mig"] < 0, negative)
@@ -337,6 +345,57 @@ class TestClosedBorders(unittest.TestCase):
                 self.assertEqual(R.main([str(log), "--closed-borders", str(save)]), 0)
         self.assertIn("UNDECIDED", out.getvalue())
         self.assertNotIn("PASS", out.getvalue())
+
+
+class TestPhase2(unittest.TestCase):
+    def rec(self, tag, year, people, war=0.0, clamped=0.0):
+        return {"tag": tag, "year": year, "people": people, "war": war, "clamped": clamped}
+
+    def test_world_multiple(self):
+        recs = [self.rec("AAA", 1836, 100e6), self.rec("AAA", 1900, 150e6)]
+        out = R.phase2_check(recs)
+        self.assertAlmostEqual(out["world_multiple"], 1.5)
+        self.assertTrue(out["world_in_band"])
+
+    def test_ten_years_of_peacetime_loss_fails(self):
+        recs = [self.rec("BIG", 1836 + i, 30e6 - i * 0.1e6) for i in range(12)]
+        out = R.phase2_check(recs)
+        # twelve censuses, eleven losses: the tenth loss in a row (1837-1846) is reported once
+        self.assertEqual(out["shrinking"], [("BIG", 1837, 1846)])
+
+    def test_a_run_after_the_gate_year_is_not_checked(self):
+        # fast mode logs census years far past the gate's end (owner, 2026-10-11: the run check stops there too)
+        recs = [self.rec("BIG", 1950 + i, 30e6 - i * 0.1e6) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [])
+
+    def test_a_run_counts_only_its_losses_up_to_the_gate_year(self):
+        # losses 1895-1900 (six) inside the window, the rest after it
+        recs = [self.rec("BIG", 1894 + i, 30e6 - i * 0.1e6) for i in range(17)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [])
+        # ending in the gate year still counts
+        recs = [self.rec("BIG", 1889 + i, 30e6 - i * 0.1e6) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs, to_year=1900)["shrinking"], [("BIG", 1890, 1899)])
+
+    def test_a_war_year_breaks_the_run(self):
+        recs = [self.rec("BIG", 1836 + i, 30e6 - i * 0.1e6, war=1.0 if i == 5 else 0.0) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs)["shrinking"], [])
+
+    def test_small_countries_are_not_checked(self):
+        recs = [self.rec("SML", 1836 + i, 10e6 - i * 0.1e6) for i in range(12)]
+        self.assertEqual(R.phase2_check(recs)["shrinking"], [])
+
+    def test_clamped_share_is_weighted_by_people(self):
+        recs = [self.rec("AAA", 1850, 100e6, clamped=0.02), self.rec("BBB", 1850, 300e6, clamped=0.0)]
+        self.assertAlmostEqual(R.phase2_check(recs)["clamped_share"], 0.005)
+
+    def test_the_new_fields_parse_when_present(self):
+        line = ("TE_DEMOG_CENSUS: tag=AAA; year=1850; people=1_0_0; median=20; tfr=5; e0=35; e65=10; imr=150; cbr=40; "
+                "cdr=30; mig=0_0_0; young=0.35; working=0.6; old=0.05; sex_balance=100; gini=0.5; wc=50; primacy=0.2; "
+                "crisis=0; devastation=0; turmoil=0; m_b=-0.120; m_d=-0.300; bz=0.020; dz=0.010; clamped=0; war=1")
+        recs, bad = R.read_records([line])
+        self.assertEqual(bad, [])
+        self.assertEqual((recs[0]["m_b"], recs[0]["dz"], recs[0]["war"]), (-0.12, 0.01, 1.0))
+
 
 if __name__ == "__main__":
     unittest.main()

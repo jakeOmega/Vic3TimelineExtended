@@ -51,11 +51,9 @@ BRITAIN_1900 = scenario(sol=16, literacy=0.75, urban_share=0.6,
                         techs=frozenset({"medical_degrees", "pharmaceuticals", "modern_nursing", "vulcanization",
                                          "feminism"}),
                         laws=frozenset({"law_charitable_health_system"}), institutions={"institution_health_system": 4})
-AGED_TODAY = scenario(sol=38, literacy=0.98, urban_share=0.75, techs=MODERN,
-                      laws=frozenset({"law_public_health_insurance", "law_womens_suffrage", "law_old_age_pension",
-                                      "law_dedicated_police", "law_state_sponsored_family_planning"}),
-                      institutions={"institution_health_system": 6, "institution_workplace_safety": 4,
-                                    "institution_ministry_of_consumer_protection": 3})
+# §2.2's aged row is the West in 1990 itself since Task 7: Women's Suffrage's natural-fertility term takes it to about
+# 1.4 children per woman (the case added State-Sponsored Family Planning only to reach 1.3 before that term).
+AGED_TODAY = WEST_1990
 INDIA_1975 = scenario(sol=9, literacy=0.35, urban_share=0.2,
                       techs=EARLY_MEDICINE | {"modern_vaccines", "contraceptive_pill"},
                       laws=frozenset({"law_charitable_health_system"}))
@@ -73,16 +71,20 @@ class TestFertility(unittest.TestCase):
             (BRITAIN_1836, 5.5, "Britain 1836"),
             (FRANCE_1836, 4.9, "France 1836 (Family Limitation)"),
             (BRITAIN_1900, 3.85, "Britain 1900"),
-            (WEST_1950, 2.8, "the West 1950"),
-            (WEST_1990, 1.6, "the West 1990"),
+            # 2.8 before the women's-rights term; with Women in the Workplace's -0.10 (Task 7) 2.5, nearer the West's
+            # 1950 median of 2.31 (Gapminder: Austria 1.87 ... the Netherlands 3.10)
+            (WEST_1950, 2.5, "the West 1950"),
+            (WEST_1990, 1.4, "the West 1990"),   # 1.6 before Women's Suffrage's natural-fertility term (Task 7)
             (INDIA_1975, 5.3, "India 1975"),
         ]:
             with self.subTest(label):
                 self.assertAlmostEqual(self.tfr(inp), expected, delta=0.3)
 
     def test_wealth_term_endpoints(self):
-        self.assertAlmostEqual(M.wealth_tfr(0), 6.2)
-        self.assertAlmostEqual(M.wealth_tfr(8), 6.2)
+        # 6.0 at SoL 8 and below (owner, 2026-10-10, phase 2 step 4's gate: the model's children per woman sat above
+        # Gapminder's almost everywhere at 6.2, and the world multiple at x1.78)
+        self.assertAlmostEqual(M.wealth_tfr(0), 6.0)
+        self.assertAlmostEqual(M.wealth_tfr(8), 6.0)
         self.assertAlmostEqual(M.wealth_tfr(35), 3.5)
         self.assertAlmostEqual(M.wealth_tfr(60), 3.5)
 
@@ -281,9 +283,10 @@ class TestStructure(unittest.TestCase):
         self.assertTrue(0.008 <= last["growth"] <= 0.02, last["growth"])
 
     def test_aged(self):
-        # §2.2's aged row (about 1.3 children per woman). The West in 1990 alone now gives about 1.6, as
-        # history did (stage 2's fit), so the case adds State-Sponsored Family Planning. At 1.3 the stable
-        # rate is about ln(0.65) / 30 = -1.4% a year; the sketch's -0.9 to -1.2% came from four bands.
+        # §2.2's aged row (about 1.3 children per woman). The West in 1990 gives about 1.4 with Women's Suffrage's
+        # natural-fertility term (phase 2 step 4, Task 7; State-Sponsored Family Planning, which the case added
+        # to reach 1.3 before it, would now take it to 1.2). At 1.3-1.4 the stable rate is about
+        # ln(0.68) / 30 = -1.3% a year; the sketch's -0.9 to -1.2% came from four bands.
         ring, last = M.run_constant(AGED_TODAY, years=300)
         s = M.structure(ring)
         self.assertTrue(0.09 <= s["young"] <= 0.14, s)
@@ -412,6 +415,117 @@ class TestRing(unittest.TestCase):
         gained = {a: (r[1] + r[2]) - (t[1] + t[2]) for r, t in zip(ring.by_age(), twin.by_age()) for a in [r[0]]}
         prime = sum(v for a, v in gained.items() if 18 <= a <= 35)
         self.assertGreater(prime / 20_000, 0.5)
+
+
+class TestRateTerm(unittest.TestCase):
+    """demographics_model.rate_term: the census's births or deaths modifier for one state (phase 2 step 4)."""
+
+    def test_no_other_term_gives_the_model(self):
+        m, clamped = M.rate_term(target=80.0, bare=100.0)
+        self.assertAlmostEqual(m, -0.2)
+        self.assertFalse(clamped)
+        self.assertAlmostEqual(100.0 * (1 + m), 80.0)
+
+    def test_terms_on_top_add_at_the_bare_curves_weight(self):
+        """The engine adds every term (growth probe): with M on, a pop's events are bare x (1 + M + O).
+        The state's then come to the model's plus bare x O."""
+        m, _ = M.rate_term(target=80.0, bare=100.0)
+        on_top = 0.3
+        self.assertAlmostEqual(100.0 * (1 + m + on_top), 80.0 + 100.0 * on_top)
+
+    def test_absorbed_terms_are_netted(self):
+        # literacy's -0.1 x a bare-weighted literacy of 0.4: the absorbed sum is -0.1 x 40 over bare 100
+        m, _ = M.rate_term(target=80.0, bare=100.0, absorbed=P.LITERACY_BIRTH_PENALTY * 40.0)
+        self.assertAlmostEqual(100.0 * (1 + m) + P.LITERACY_BIRTH_PENALTY * 40.0, 80.0)
+
+    def test_the_clamp_keeps_the_state_total_in_the_measured_range(self):
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=0.1)
+        self.assertAlmostEqual(m, P.RATE_TOTAL_MIN - 0.1)
+        self.assertTrue(clamped)
+        m, clamped = M.rate_term(target=600.0, bare=100.0)
+        self.assertEqual(m, P.RATE_TERM_MAX)
+        self.assertTrue(clamped)
+
+    def test_the_clamp_never_pushes_past_the_terms_on_top(self):
+        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
+        not push further down."""
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
+        self.assertEqual(m, 0.0)
+        self.assertTrue(clamped)
+
+    def test_nobody_gets_no_term(self):
+        self.assertEqual(M.rate_term(target=0.0, bare=0.0), (0.0, False))
+
+    def test_the_bounds(self):
+        self.assertEqual(P.RATE_TOTAL_MIN, -0.8)   # -0.9 measured, less literacy's -0.1
+        self.assertEqual(P.RATE_TERM_MAX, 3.0)     # a guard: linearity holds far above (the 12x fast run)
+
+
+class TestOnTopScales(unittest.TestCase):
+    """The census's ring follows the engine: the step scales its rates by how far the engine ran from the target."""
+
+    def test_scale_is_engine_over_target(self):
+        self.assertAlmostEqual(M.on_top_scale(engine=105.0, target=100.0), 0.05)
+        self.assertEqual(M.on_top_scale(engine=50.0, target=0.0), 0.0)
+        self.assertEqual(M.on_top_scale(engine=1.0, target=100.0), P.ON_TOP_SCALE_MIN)
+        self.assertEqual(M.on_top_scale(engine=1000.0, target=100.0), P.ON_TOP_SCALE_MAX)
+
+    def test_scaled_step_gives_back_the_models_own_events(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        plain, scaled = M.seed(inp, 1836, 1e6), M.seed(inp, 1836, 1e6)
+        a = M.step(plain, inp, 1837)
+        b = M.step(scaled, inp, 1837, births_scale=0.1, deaths_scale=0.2)
+        self.assertAlmostEqual(b["births"], a["births"] * 1.1, places=6)
+        self.assertAlmostEqual(b["births_model"], a["births"], places=6)
+        self.assertAlmostEqual(b["deaths_model"], a["deaths"], delta=a["deaths"] * 1e-9)
+        self.assertGreater(b["deaths"], a["deaths"] * 1.19)
+
+    def test_no_scale_is_the_old_step(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        ring = M.seed(inp, 1836, 1e6)
+        out = M.step(ring, inp, 1837)
+        self.assertEqual(out["births_model"], out["births"])
+        self.assertEqual(out["deaths_model"], out["deaths"])
+
+    def test_life_table_and_tfr_stay_the_models(self):
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        a = M.step(M.seed(inp, 1836, 1e6), inp, 1837)
+        b = M.step(M.seed(inp, 1836, 1e6), inp, 1837, births_scale=0.3, deaths_scale=0.5)
+        self.assertEqual((a["e0"], a["tfr"]), (b["e0"], b["tfr"]))
+        self.assertAlmostEqual(b["tfr_shown"], a["tfr"] * 1.3)
+        # infant mortality is the life table's too, as the script's te_dg_imr (set before the scales)
+        self.assertEqual(a["q0_per_1000"], b["q0_per_1000"])
+
+    def test_crude_rates_of_the_stable_population(self):
+        cbr, cdr = M.model_crude_rates(M.Inputs(sol=9.0, literacy=0.2))
+        self.assertTrue(20 < cbr < 60 and 15 < cdr < 50, (cbr, cdr))
+
+    def test_starvation_terms_follow_the_engine(self):
+        self.assertEqual(M.starvation_terms(0.5), (0.0, 0.0))
+        self.assertEqual(M.starvation_terms(0.1), (-0.9, 1.0))
+        b, d = M.starvation_terms(0.3)   # (0.4 - 0.3) x 2.5 = 0.25 of the mild penalty
+        self.assertAlmostEqual(b, -0.7 * 0.25)
+        self.assertAlmostEqual(d, 0.6 * 0.25)
+
+
+class TestNaturalFertility(unittest.TestCase):
+    """The women's-rights term (phase 2 step 4, Task 7): natural fertility before the means."""
+
+    def test_it_scales_children_per_woman_before_the_means(self):
+        base = M.Inputs(sol=9.0, literacy=0.3)
+        lower = M.Inputs(sol=9.0, literacy=0.3, mods={P.NATURAL_FERTILITY_TYPE: -0.1})
+        a, b = M.fertility(base, 35.0), M.fertility(lower, 35.0)
+        self.assertAlmostEqual(b["tfr"], a["tfr"] * 0.9)
+        self.assertAlmostEqual(b["natural"], 0.9)
+        self.assertEqual((a["means"], a["factor"]), (b["means"], b["factor"]))
+
+    def test_it_is_floored(self):
+        inp = M.Inputs(sol=9.0, mods={P.NATURAL_FERTILITY_TYPE: -5.0})
+        self.assertEqual(M.fertility(inp, 35.0)["natural"], P.NATURAL_FERTILITY_FLOOR)
+
+    def test_no_womens_rights_is_the_reference(self):
+        """Re-centred on No Women's Rights, where 83% of the 1837 world sat, so step 2's fit is unchanged."""
+        self.assertEqual(P.NATURAL_FERTILITY_BY_LAW.get("law_no_womens_rights", 0.0), 0.0)
 
 
 class TestGrowthFactor(unittest.TestCase):

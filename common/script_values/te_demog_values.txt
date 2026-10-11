@@ -81,6 +81,61 @@ te_demog_fast_death_term = {
 	value = var:te_dg_fast_fd
 }
 
+# State scope: the census's births and deaths terms in force (phase 2 step 4,
+# te_demog_rate_effects.txt): M while its modifier is on, else 0. Read through has_modifier,
+# so a state that lost its modifier (a change of owner, an old save) but still has te_dg_mb
+# subtracts nothing that isn't there. Only for reads a tick or more after the refresh (the next
+# refresh's prior term, the census line): inside the refresh's own effect has_modifier can't see
+# its add or remove, so fast mode reads the refresh's locals instead.
+te_demog_rate_births_applied = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_census_births_up
+				has_modifier = te_demog_census_births_down
+			}
+		}
+		value = var:te_dg_mb
+	}
+}
+
+te_demog_rate_deaths_applied = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_census_deaths_up
+				has_modifier = te_demog_census_deaths_down
+			}
+		}
+		value = var:te_dg_md
+	}
+}
+
+# The multipliers of the fixed-sign pairs: |M| on the side M is on.
+te_demog_rate_births_up = { value = var:te_dg_mb min = 0 }
+te_demog_rate_births_down = { value = var:te_dg_mb multiply = -1 min = 0 }
+te_demog_rate_deaths_up = { value = var:te_dg_md min = 0 }
+te_demog_rate_deaths_down = { value = var:te_dg_md multiply = -1 min = 0 }
+
+# Fast mode's terms in force, the same way (te_demog_fast_effects.txt).
+te_demog_fast_births_applied = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_fast_births }
+		value = var:te_dg_fast_fb
+	}
+}
+
+te_demog_fast_deaths_applied = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_fast_deaths }
+		value = var:te_dg_fast_fd
+	}
+}
+
 # The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
 te_demog_open_slot = {
 	value = te_demog_year
@@ -129,7 +184,37 @@ te_demog_tfr_urban = {
 	add = 1
 }
 
-# State scope: children per woman = wealth x (1 - means x (1 - desired)) (spec §2.3;
+# Natural fertility, from women's legal standing (state_natural_fertility_mult on the women's-rights laws;
+# phase 2 step 4): 1 + the read, at least the floor. te_demog_prepare stores it as te_dg_natural, which
+# te_demog_tfr and the tooltips read, so a law change shows at the state's next step.
+te_demog_tfr_natural = {
+	value = modifier:state_natural_fertility_mult
+	add = 1
+	min = te_demog_k_natural_fertility_floor
+}
+
+# State scope, for the TFR tooltips: the natural term the census's last step used (te_dg_natural), or the live one
+# for a census state from an older save that hasn't stepped since (final review 2, m7: it read x0.00 until then).
+te_demog_natural_shown = {
+	value = te_demog_tfr_natural
+	if = {
+		limit = { has_variable = te_dg_natural }
+		value = var:te_dg_natural
+	}
+}
+
+# Births added on top of the census (phase 2 step 4): the scale this year's children per woman took from
+# what the engine did over the window (te_dg_bz, te_demog_on_top_scales), 1 when it took none. Only the
+# tooltips read it: te_dg_tfr is the model's figure x this.
+te_demog_tfr_on_top = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_bz }
+		add = var:te_dg_bz
+	}
+}
+
+# State scope: children per woman = wealth x natural x (1 - means x (1 - desired)) (spec §2.3;
 # demographics_model.fertility).
 te_demog_tfr = {
 	value = 1
@@ -138,6 +223,7 @@ te_demog_tfr = {
 	multiply = -1
 	add = 1
 	multiply = var:te_dg_wtfr
+	multiply = var:te_dg_natural
 }
 
 # War scope, on the owner's pulse: the owner's dead in this war so far (probe Q4).

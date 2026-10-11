@@ -15,6 +15,9 @@
 # help, matching the in-fiction reception of "cultural projection".
 # Mod-added laws (lawgroup_right_to_information, lawgroup_LGBTQ_rights) are
 # edited directly further down in this file rather than via INJECT.
+# The rights-of-women INJECTs also carry the demographics census's natural
+# fertility (state_natural_fertility_mult, phase 2 step 4). Vanilla's birth lines
+# stay: under the census's Full setting its own term cancels them (owner, 2026-10-10).
 # ============================================================================
 
 # ---- lawgroup_trade_policy ----
@@ -75,20 +78,25 @@ INJECT:law_closed_borders = {
 }
 
 # ---- lawgroup_rights_of_women ----
+# cultural pull and the census's natural fertility (demographics phase 2 step 4)
 INJECT:law_womens_suffrage = {
 	modifier = {
 		country_cultural_pull_mult = 0.03
+		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_women_in_the_workplace = {
 	modifier = {
 		country_cultural_pull_mult = 0.01
+		state_natural_fertility_mult = -0.1	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
-# law_women_own_property: deliberate neutral (no modifier)
+# law_women_own_property: deliberate neutral (no modifier); its census natural fertility
+# sits in te_demog_law_injections.txt
 INJECT:law_women_in_the_fields = {
 	modifier = {
 		country_cultural_pull_mult = -0.01
+		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 INJECT:law_no_womens_rights = {
@@ -1679,6 +1687,7 @@ law_unrestricted_augmentation = {
 		state_upper_strata_standard_of_living_add = 5
 		state_radicals_from_political_movements_mult = 0.2
 		state_mortality_mult = -0.05
+		state_chronic_treatment_add = 0.05	# the census's chronic treatment (demographics phase 2 step 4)
 		country_sol_expectations_target_add = 2
 		country_tech_research_speed_mult = 0.2
 		country_covert_operation_efficiency_mult = 0.05
@@ -1728,6 +1737,7 @@ law_medical_augmentation_only = {
 
 	modifier = {
 		state_pop_support_movement_transhumanist_mult = 0.1
+		state_chronic_treatment_add = 0.10	# the census's chronic treatment, flat (demographics phase 2 step 4)
 	}
 
 	on_enact = {
@@ -1753,6 +1763,7 @@ law_regulated_augmentation_market = {
 		state_upper_strata_standard_of_living_add = 2
 		country_sol_expectations_target_add = 1
 		state_pop_support_movement_transhumanist_mult = 0.05
+		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (demographics phase 2 step 4)
 	}
 
 	unlocking_laws = {
@@ -1787,6 +1798,7 @@ law_mandatory_augmentation = {
 		building_throughput_add = 0.2
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
+		state_chronic_treatment_add = 0.05	# the census's chronic treatment, flat (owner, 2026-10-10; phase 2 step 4)
 	}
 
 	unlocking_laws = {
@@ -4133,6 +4145,7 @@ law_protected_class = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		state_working_adult_ratio_add = 0.2
 		state_birth_rate_mult = -0.1
+		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 		state_dependent_political_participation_add = 0.5
 	}
 }

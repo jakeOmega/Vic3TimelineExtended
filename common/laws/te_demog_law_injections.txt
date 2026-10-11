@@ -3,7 +3,9 @@
 # Read only by the census (te_demog_mult_*); the engine never applies these types. A law's
 # modifier reaches every state the country owns; the Workplace Safety lines (institution_modifier)
 # are per level of the institution and reach incorporated states only. The health laws' access
-# lines sit inside their existing blocks in modified_health_system.txt.
+# lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
+# natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
+# Property's, which has no other INJECT.
 
 INJECT:law_local_police = {
 	modifier = {
@@ -26,6 +28,12 @@ INJECT:law_militarized_police = {
 INJECT:law_child_labor_allowed = {
 	modifier = {
 		state_work_mortality_mult = 0.1
+	}
+}
+
+INJECT:law_women_own_property = {
+	modifier = {
+		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 
