@@ -1,0 +1,89 @@
+﻿# demographics_engine_line_types.txt
+#
+# Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth
+# and mortality lines on laws, technologies and institutions, carried as script-only types the engine sums but
+# doesn't apply. The mod re-applies both families while the census doesn't set a state's births and deaths
+# (te_demog_lines_refresh); under Full the census models the absorbed family and applies the on-top one at its rate
+# (te_demog_rates_refresh). Each copies its vanilla field's format and ai_value (0, so AI law choices don't move).
+# Not in demographics_modifier_types.txt: a release keeps these (scripts/release/comment_out_census_inputs.py).
+state_demog_absorbed_birth_rate_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_absorbed_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_absorbed_farmers_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_absorbed_laborers_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_absorbed_machinists_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_absorbed_peasants_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_ontop_birth_rate_mult = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_ontop_mortality_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+state_demog_ontop_mortality_wealth_mult = {
+	decimals = 1
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}

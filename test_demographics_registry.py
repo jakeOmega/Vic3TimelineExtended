@@ -997,6 +997,44 @@ class TestCohortScript(unittest.TestCase):
         self.assertIn("te_demog_step_begin = yes", _block(_text(CONSOLE_EFFECTS), "te_debug_demog_replay"))
 
 
+class TestEngineLineTypes(unittest.TestCase):
+    """Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): every engine birth
+    and mortality line on a law, tech or institution is carried on a script-only type, named like the vanilla field it
+    replaces, with vanilla's format and ai_value."""
+
+    TYPES = ROOT / "common" / "modifier_type_definitions" / "demographics_engine_line_types.txt"
+
+    def _vanilla_types(self):
+        import json
+        data = json.loads((ROOT / "vanilla_parsed" / "common" / "modifier_types.json").read_text(encoding="utf-8"))
+        return data.get("data", data)
+
+    def test_each_type_is_script_only_with_vanillas_format(self):
+        blocks = _raw_blocks([self.TYPES])
+        vanilla = self._vanilla_types()
+        self.assertEqual(set(blocks), set(P.ENGINE_LINE_TYPES.values()))
+        for (family, field), name in P.ENGINE_LINE_TYPES.items():
+            self.assertIn(family, ("absorbed", "ontop"))
+            self.assertIn(field, P.ENGINE_LINE_FIELDS)
+            body = blocks[name]
+            self.assertIn("script_only = yes", body, name)
+            for key in ("decimals", "color", "percent"):
+                want = vanilla[field][1][key][1]
+                self.assertRegex(body, rf"\b{key} = {re.escape(str(want))}\b", f"{name}: {key}")
+            self.assertRegex(body, r"ai_value = 0\b", name)
+
+    def test_every_field_has_a_short_name(self):
+        self.assertEqual(set(P.ENGINE_LINE_SHORT), set(P.ENGINE_LINE_FIELDS))
+        self.assertEqual(len(set(P.ENGINE_LINE_SHORT.values())), len(P.ENGINE_LINE_FIELDS))
+
+    def test_names_splice_the_vanilla_fields(self):
+        loc = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
+        for (family, field), name in P.ENGINE_LINE_TYPES.items():
+            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$"', name)
+            # vanilla's descriptions end without a full stop ("How many children are born each year")
+            self.assertIn(f' {name}_desc:0 "${field}_desc$. Under the Demographics rule', loc, name)
+
+
 class TestPollutionLine(unittest.TestCase):
     """predict's Pollution Impact line (owner, 2026-10-11): vanilla's code static modifier plus the mod's INJECT."""
 
