@@ -181,6 +181,11 @@ _GUI_FILES = {
 # `generate_icons.py` produces also names where its entities live
 # (`entity_dir`) and the field holding the icon path (`field`); its icons are
 # written to gfx/interface/icons/<folder>/<key>.dds.
+# The framed diorama of vanilla's building icons, also the Grand Monument pictures'.
+BUILDING_STYLE = ("aerial three-quarter view of {subject}, detailed painted illustration "
+                  "of a miniature diorama, warm golden afternoon light, muted earthy "
+                  "palette, surrounding landscape, the building fills the center of the image")
+
 CATEGORIES = {
     "technology": dict(
         folder="invention_icons", size=256, mode="cutout", fill=0.92,
@@ -205,10 +210,17 @@ CATEGORIES = {
     # Up to 0.5 the repaint adds texture but keeps a flat picture flat; the brushwork shows from 0.625.
     "building": dict(
         folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5, 0.625, 0.75),
-        entity_dir="common/buildings", field="icon",
-        style=("aerial three-quarter view of {subject}, detailed painted illustration "
-               "of a miniature diorama, warm golden afternoon light, muted earthy "
-               "palette, surrounding landscape, the building fills the center of the image")),
+        entity_dir="common/buildings", field="icon", style=BUILDING_STYLE),
+    # Grand Monument pictures (spec 2026-10-11): one per style and form, shown in
+    # the journal entry's monument rows and on the state card through the
+    # gm_picture type, so GUI-hosted (keys are file names, written to
+    # gm_pictures/<key>.dds). Framed like the building icons, whose frame and
+    # neighbours they borrow: there is no vanilla gm_pictures folder.
+    "gm_picture": dict(
+        folder="gm_pictures", size=256, mode="framed", template_folder="building_icons",
+        neighbours="building_icons",
+        gui=("gui/journal_entry_widgets/grand_monuments_widget.gui", "gui/te_state_panel_widgets.gui"),
+        style=BUILDING_STYLE),
     # Ideology icons are read only from `icon =` (Ideology.GetTexture). IG
     # ideologies are gold on a crimson disc; leader (character) ideologies
     # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
@@ -1958,6 +1970,8 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
     },
+    # Grand Monument pictures: Task 9 of the 2026-10-11 plan.
+    "gm_picture": {},
 }
 
 

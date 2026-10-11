@@ -1757,7 +1757,9 @@ class Composer:
     def compose(self, raw: Image.Image, cat: str, spec: dict, backdrop: Image.Image | None = None) -> Image.Image:
         mode = spec["mode"]
         if mode in ("framed", "medallion", "emboss_medallion") and cat not in self._tmpl:
-            self._tmpl[cat] = vanilla_template(spec["folder"], spec["size"])
+            # A category with no vanilla folder of its own (the Grand Monument
+            # pictures) borrows another folder's frame.
+            self._tmpl[cat] = vanilla_template(spec.get("template_folder", spec["folder"]), spec["size"])
         if mode == "plinth" and cat not in self._tmpl:
             self._tmpl[cat] = plinth_template(spec["folder"], spec["size"])
         if mode in ("cutout", "backed", "medallion", "plinth") and cat not in self._target:
