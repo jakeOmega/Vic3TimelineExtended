@@ -98,10 +98,14 @@ list](18-appendix-social-movements.md#civil-rights-event-list).
 While you lack Protection, Affirmative Action and Universal Citizenship (or keep
 Active Persecution or Legal Guardianship), a great power that has one of those
 three and has researched Civil Rights Movement may be asked whether to condemn
-you. If it does, you get International Pressure on Human Rights: reject it (−30
-relations with the critic), promise reform (+20 relations, a small acceptance
-bonus) or counter-accuse (−50 relations and a diplomatic incident). As such a
-great power, you get the same question about others.
+you. Only a great power with a stake in you is asked: one strategically
+adjacent to you, a rival (either way), a member of your power bloc, or your
+overlord or subject. If it condemns you, you get International Pressure on
+Human Rights: reject it (−30 relations with the critic), promise reform (+20
+relations, a small acceptance bonus) or counter-accuse (−50 relations and a
+diplomatic incident). As such a great power, you get the same question (A Stain
+on Their Record) about countries you have a stake in, at most once every two
+years.
 
 ### How the civil rights struggle ends
 

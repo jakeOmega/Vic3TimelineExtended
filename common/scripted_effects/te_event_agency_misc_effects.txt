@@ -47,10 +47,10 @@ te_ea_bailout_answer_refusal = {
 # je_civil_rights on_monthly_pulse (ROOT = the country with the movement).
 # Replaces the direct trigger_event of movement_events_te.4, which picked a
 # random great power in `immediate` and told us it had condemned us. Now a
-# great power that protects its own minorities decides (movement_events_te.17)
-# and .4 reaches us only if it condemns. te_ea_cr_condemned is .4's cooldown
-# (set by .4, ten years) and, set here for 90 days, keeps a second critic from
-# being asked while the first decides.
+# great power that protects its own minorities and has a stake in us decides
+# (movement_events_te.17) and .4 reaches us only if it condemns.
+# te_ea_cr_condemned is .4's cooldown (set by .4, ten years) and, set here for
+# 90 days, keeps a second critic from being asked while the first decides.
 te_ea_cr_invite_condemnation = {
 	if = {
 		limit = {
