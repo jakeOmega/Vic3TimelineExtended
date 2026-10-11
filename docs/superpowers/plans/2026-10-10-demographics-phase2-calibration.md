@@ -6,8 +6,9 @@ engine then follows are the census's and sane. Step 1 is built (this PR); the re
 
 Evidence for step 1: `docs/testing/demographics-history-check-2026-10-10.md`. Owner context (2026-10-10): the system
 is unreleased, so the bar for merging is low as long as each step is tested before the next public release, and
-steps 4 and 5 ship together (owner, 2026-10-10: step 4's absorptions apply under every setting of the rule, and
-Display only and Disabled get their equilibrium rates only in step 5); fast mode (#848) is the in-game loop.
+nothing changes outside the rule's Full setting (owner, 2026-10-10: step 4 cancels what it absorbs through M, under
+Full only, and edits no carrier). Step 5's retune of the global defines would change every game, census on or off, so it
+can't ship while the rule defaults to Disabled: an open question. Fast mode (#848) is the in-game loop.
 
 ## Targets
 
@@ -120,14 +121,17 @@ Before the owner's call, the fit can still:
 of 2026-10-10:
 - **(a) What the census absorbs:** standing law and technology lines it models at matching size (the health laws,
   §8.4's mod lines, the augmentation laws as flat chronic treatment, the women's-rights birth lines once its
-  natural-fertility term carries them), and child labour's class lines at its smaller work term (vanilla's are
-  probably far too high). Shocks, local conditions and player actions stay on top.
+  natural-fertility term carries them), child labour's class lines at its smaller work term (vanilla's are probably
+  far too high), and mild starvation (amended: the poverty term was fitted without it). Every line stays on its
+  carrier and M cancels it under Full only (amended). Shocks, local conditions, severe starvation and player actions
+  stay on top.
 - **(b) The starving slope below SoL 4:** the poverty term replaces it; `demographics_harness.py predict --slope`
   reports what it cost.
 - **(c) Deaths added on top fall by the model's age pattern** (one scale on every cause).
 - **(d) Women's rights:** a natural-fertility term at vanilla's lines re-centred on No Women's Rights.
-- **M** is the plan's additive form, M = target ÷ bare − 1 − the absorbed per-pop terms (literacy) ÷ bare, so the terms
-  on top add at the bare curve's weight; the census's next step scales its own rates to what the engine did.
+- **M** is the plan's additive form, M = target ÷ bare − 1 − replaced ÷ bare, replaced being each pop's bare curve ×
+  what the census absorbs for it (its state's lines, its class's, literacy's and mild starvation's), so the terms on
+  top add at the bare curve's weight; the census's next step scales its own rates to what the engine did.
 
 The design notes below are the step's starting point, kept for the record.
 

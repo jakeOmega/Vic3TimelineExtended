@@ -64,6 +64,9 @@ disagree, this section wins.
   it can't ship while the rule defaults to Disabled.
 - **Retunes are the owner's:** if `predict` on the gate saves leaves ×1.3–×1.7 or shows a 20M+ country shrinking
   after A and B, stop and report the numbers and candidate parameters; don't retune.
+  - **Result (2026-10-10):** ×1.78, the census's own rates (×1.80 alone); no 20M+ country shrinks (China +0.23% in
+    1887). Candidates and their evidence: `docs/testing/demographics-phase2-engine-rates-2026-10-10.md`, "The
+    multiple". Waiting on the owner.
 
 ## Global Constraints
 

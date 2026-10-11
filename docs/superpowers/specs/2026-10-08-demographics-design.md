@@ -325,11 +325,12 @@ moves the birth rate by construction.
 **Applied as** (phase 2 step 4; `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`) one births
 term per state, refreshed at each census step: the engine gives each pop its curve × max(0, 1 + every term added
 together) (the growth probe, `docs/testing/demographics-growth-probe-results-2026-10-09.md`), so the census's term is
-M = the model's births ÷ the bare curve's − 1 − literacy's penalty × the bare births by literacy ÷ the bare births. The
-engine's births then come to the model's plus every term added on top, at the bare curve's weight. Added on top:
-events, starvation, decrees, Forced Heirship's rural cut, `low_pop_state`, the family-policy laws §8.1 hasn't
-re-expressed. Absorbed: literacy's −0.1 (netted in M), the women's-rights laws' lines (natural fertility above), the
-Pill's and State-Sponsored Family Planning's (§8.4).
+M = the model's births ÷ the bare curve's − 1 − the births the census absorbs ÷ the bare births, each absorbed term at
+its pop's bare curve. The engine's births then come to the model's plus every term added on top, at the bare curve's
+weight. Added on top: events, severe starvation, decrees, Forced Heirship's rural cut, `low_pop_state`, the
+family-policy laws §8.1 hasn't re-expressed. Absorbed (owner, 2026-10-10: the lines stay on their carriers, and M
+cancels them under Full only): literacy's −0.1 and mild starvation's (per pop), the women's-rights laws' lines (natural
+fertility above), the Pill's, State-Sponsored Family Planning's and the medical techs' (§8.4).
 - **Reading the rest.** A state's `modifier:state_birth_rate_mult` includes the country's modifiers (a test modifier on
   the country showed in every state's read), so the model reads the total at state scope and takes out its own term.
 - **The clamp.** At −0.9 Qing's births fell to about a tenth, as 1 + the total says. At −3 they stopped; they never
@@ -387,10 +388,11 @@ Safety protects women more as they enter work, and a country that brings women i
 sees their deaths rise. The other external causes stay mostly men's.
 
 **Applied as** (phase 2 step 4) one deaths term per state, refreshed at each census step: M = the model's deaths ÷
-the bare curve's − 1, so the engine's deaths come to the model's plus every term added on top, at the bare curve's
-weight (the growth probe). The engine's own mortality modifiers (starvation, devastation, pollution, turmoil, workplace
-mortality, events) stay and add on top; devastation's and pollution's are inside the state's read (probe P1). Vanilla's
-health laws' and child labour's lines are absorbed (§8.4). The census's next step scales its own rates to what the
+the bare curve's − 1 − the deaths the census absorbs ÷ the bare deaths, so the engine's deaths come to the model's plus
+every term added on top, at the bare curve's weight (the growth probe). The engine's own mortality modifiers (severe
+starvation, devastation, pollution, turmoil, workplace mortality, events) stay and add on top; devastation's and
+pollution's are inside the state's read (probe P1). Absorbed, and cancelled by M under Full only: mild starvation (per
+pop), vanilla's health laws' and child labour's lines, and §8.4's. The census's next step scales its own rates to what the
 engine did, so the ring places the deaths added on top by the model's own age pattern, young and old (owner,
 2026-10-10: one scale on every cause; a per-term split, devastation on everyone and pollution on chronic causes, waits
 until the panel shows an artefact). The share of old people therefore
@@ -880,21 +882,24 @@ pension law, participation stays at 0.5: people work until they can't.
 
 ### 8.4 Flat modifiers that move into the model
 
-These stand in for an age, fertility or survival effect the model now produces. They come off with phase 2, so
-nothing is counted twice. Built in step 4 (`docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`):
+These stand in for an age, fertility or survival effect the model now produces. Under Full the census's term M
+cancels them, so nothing is counted twice; they stay on their carriers, so nothing changes outside Full (owner,
+2026-10-10, amending step 4's first build, which took them off). Built in step 4
+(`docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`):
 - the Pill's −10% birth (now a means tier);
 - State-Sponsored Family Planning's −5% birth (Fertility Control carries it);
 - the Ministry of Consumer Protection's flat −1% mortality (now external causes);
 - the mod's medical techs' flat mortality and birth lines (vaccines, antibiotics: now the cause each one acts on);
-- the augmentation laws' mortality, now flat chronic-treatment lines (Medical Only +0.10, the other three +0.05;
-  chronic treatment's cap 0.85), which reach only as far as health-care access does.
+- the augmentation laws' mortality, carried by flat chronic-treatment lines beside it (Medical Only +0.10, the other
+  three +0.05; chronic treatment's cap 0.85), which reach only as far as health-care access does.
 
 Still to come:
 - the other family-policy laws' birth lines (Pro-Natalist Subsidies, Population Control Measures, Communal
-  Child-Rearing) come off only once §8.1 gives them census terms (desired fertility, the means and measures);
+  Child-Rearing) are absorbed only once §8.1 gives them census terms (desired fertility, the means and measures);
 - Pro-Natalist's −0.05 working-adult goes with the workforce effects, not step 4.
 
-Vanilla's modifiers stay as inputs, with three exceptions the census absorbs by inverse INJECT (step 4):
+Vanilla's modifiers stay as inputs, with three exceptions the census absorbs (step 4; their lines stay, and M cancels
+them under Full only):
 - the health laws' mortality, absorbed by access × treatment;
 - child labour's class lines, absorbed at the census's smaller work term (owner, 2026-10-10: vanilla's are probably
   far too high);
@@ -1045,7 +1050,7 @@ from before the rule keeps the system (Grand Monuments' pattern).
 |---|---|---|
 | 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines, the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **steps 4 and 5 ship together**, since Display only and Disabled lose the absorbed lines until step 5's equilibrium rates); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's removals; Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full, and the retuned defines can't ship while the rule defaults to Disabled, an open question); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the retuned defines with the births and deaths modifiers; workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 Map modes (§10) wait for a per-state source, since the hijack is switched off, and belong to no phase until one works.
