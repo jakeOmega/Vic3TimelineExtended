@@ -208,9 +208,11 @@ LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mo
 STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
 STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
-# Phase 2 step 4 (plan §3 (a)): carriers whose birth or mortality lines stay on top of the census's term.
-# Every other law, technology or institution line nets to zero (Tasks 6 and 8). The women's-rights laws left
-# this list in Task 8: Task 7's natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
+# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
+# of the census's term. Every other law, technology or institution line is absorbed: it stays on its carrier, and
+# under Full the census's term M cancels it in each state it reaches (demographics_modifiers.absorbed_carriers,
+# te_demog_absorbed_* in the generated values). The women's-rights laws left this list in Task 8: Task 7's
+# natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
     # the family-policy laws §8.1 has yet to re-express as census terms
     "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
@@ -219,6 +221,10 @@ ENGINE_LINES_ON_TOP = frozenset({
     "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
     "mental_health_awareness", "biological_immortality", "mind_backups",
 })
+# Fields whose lines stay on top wherever they sit: wealth mortality's scaling "per Wealth" is unknown and the
+# growth probe measured it at about 0 ("Open"), so M can't net it out. Private Health Insurance's -0.002 a level
+# is its main source (ruling, owner amendment A, 2026-10-10; the plan's §3 (a) had it cancelled by INJECT).
+ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
 # Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
 MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee

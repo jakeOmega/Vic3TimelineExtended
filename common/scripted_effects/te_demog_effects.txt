@@ -145,7 +145,6 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_ed value = 0 }
 	set_local_variable = { name = te_dg_w_eb0 value = 0 }
 	set_local_variable = { name = te_dg_w_ed0 value = 0 }
-	set_local_variable = { name = te_dg_w_ebl value = 0 }
 	set_local_variable = { name = te_dg_w_agr value = 0 }
 	set_local_variable = { name = te_dg_w_sold value = 0 }
 	set_local_variable = { name = te_dg_w_bur value = 0 }
@@ -153,6 +152,8 @@ te_demog_walks = {
 	set_local_variable = { name = te_dg_w_fjob value = 0 }
 	set_local_variable = { name = te_dg_w_emp value = 0 }
 	te_demog_gini_band_init = yes
+	# the replaced sums: what the census absorbs, at each pop's bare curves (phase 2 step 4; generated)
+	te_demog_absorbed_walk_init = yes
 	every_scope_pop = {
 		change_local_variable = { name = te_dg_w_pop add = total_size }
 		change_local_variable = { name = te_dg_w_lit add = te_demog_pop_literate }
@@ -164,8 +165,9 @@ te_demog_walks = {
 		set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }
 		change_local_variable = { name = te_dg_w_eb0 add = local_var:te_dg_p_eb }
 		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
-		# bare births by literacy: the absorbed literacy_penalty, which the census's births term nets out
-		change_local_variable = { name = te_dg_w_ebl add = { value = local_var:te_dg_p_eb multiply = literacy_rate } }
+		# the absorbed terms at its bare curves (literacy, mild starvation, its state's and class's absorbed
+		# lines), which the census's terms net out (te_demog_rates_refresh)
+		te_demog_absorbed_walk_pop = yes
 		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
 		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
 		# the Gini's wealth band (spec 4.1; generated)

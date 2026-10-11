@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
 import demographics_model  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 import organize_loc  # noqa: E402
 
@@ -1000,26 +1001,28 @@ class TestRatesScript(unittest.TestCase):
     """te_demog_rates_refresh (te_demog_rate_effects.txt) against demographics_model.rate_term."""
 
     POP = 1_000_000.0
+    # the walk's replaced births: literacy's -0.1 at a bare-weighted literacy of 0.2, and nothing else absorbed
+    EBR = P.LITERACY_BIRTH_PENALTY * 0.2 * 475e6
 
     def _eng(self, full=True, stepped=1.0, cbr=38.0, cdr=31.0, eb0=475.0 * 1_000_000, ed0=430.0 * 1_000_000,
-             ebl=0.2 * 475.0 * 1_000_000, read_b=0.05, read_d=0.04):
+             ebr=EBR, edr=0.0, read_b=0.05, read_d=0.04):
         eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": read_b,
                        "modifier:state_mortality_mult": read_d},
                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
-        eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebl=ebl, te_dg_w_eb=eb0, te_dg_w_ed=ed0)
+        eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=ebr, te_dg_w_edr=edr, te_dg_w_eb=eb0,
+                          te_dg_w_ed=ed0)
         eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
         return eng
 
-    def _want(self, cbr, cdr, eb0, ed0, ebl, other_b, other_d):
-        mb, _ = demographics_model.rate_term(cbr * self.POP * 100 / 12, eb0,
-                                             absorbed=P.LITERACY_BIRTH_PENALTY * ebl, other=other_b)
-        md, _ = demographics_model.rate_term(cdr * self.POP * 100 / 12, ed0, other=other_d)
+    def _want(self, cbr, cdr, eb0, ed0, ebr, other_b, other_d, edr=0.0):
+        mb, _ = demographics_model.rate_term(cbr * self.POP * 100 / 12, eb0, absorbed=ebr, other=other_b)
+        md, _ = demographics_model.rate_term(cdr * self.POP * 100 / 12, ed0, absorbed=edr, other=other_d)
         return mb, md
 
     def test_script_matches_the_model(self):
         eng = self._eng()
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(38.0, 31.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        mb, md = self._want(38.0, 31.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         # births down, deaths down: one modifier of each pair, multiplier |M|
@@ -1027,10 +1030,28 @@ class TestRatesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.modifiers["te_demog_census_deaths_down"], -md, places=5)
         self.assertNotIn("te_demog_census_births_up", eng.modifiers)
 
+    def test_m_nets_the_replaced_terms(self):
+        """Owner amendment A and B (2026-10-10): under Full, M takes out every absorbed line's contribution in the
+        state, the walk's replaced sums (te_dg_w_ebr, te_dg_w_edr: each pop's bare curve x its absorbed terms), so
+        the engine's events are the model's plus the terms on top. A health law at level 3 (-0.15) and mild
+        starvation (+0.11 on a fifth of the deaths) here; the shares replaced are kept for console option n."""
+        ebr = self.EBR - 0.13 * 0.2 * 475e6
+        edr = -0.15 * 430e6 + 0.1125 * 0.2 * 430e6
+        eng = self._eng(ebr=ebr, edr=edr)
+        eng.call("te_demog_rates_refresh")
+        mb, md = self._want(38.0, 31.0, 475e6, 430e6, ebr, 0.05, 0.04, edr=edr)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        plain_b, plain_d = self._want(38.0, 31.0, 475e6, 430e6, 0.0, 0.05, 0.04)
+        self.assertAlmostEqual(mb, plain_b - ebr / 475e6)
+        self.assertAlmostEqual(md, plain_d - edr / 430e6)
+        self.assertAlmostEqual(eng.vars["te_dg_rep_b"], ebr / 475e6, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_rep_d"], edr / 430e6, places=5)
+
     def test_script_clamps_like_the_model(self):
         eng = self._eng(cbr=2.0, cdr=400.0, read_b=-0.5)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(2.0, 400.0, 475e6, 430e6, 0.2 * 475e6, -0.5, 0.04)
+        mb, md = self._want(2.0, 400.0, 475e6, 430e6, self.EBR, -0.5, 0.04)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
@@ -1041,7 +1062,7 @@ class TestRatesScript(unittest.TestCase):
         demographics_model.rate_term's does, and an M of 0 takes neither modifier of the pair."""
         eng = self._eng(cbr=2.0, read_b=-1.2)
         eng.call("te_demog_rates_refresh")
-        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, 0.2 * 475e6, -1.2, 0.04)
+        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, self.EBR, -1.2, 0.04)
         self.assertEqual(mb, 0.0)
         self.assertEqual(eng.vars["te_dg_mb"], 0.0)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
@@ -1054,7 +1075,7 @@ class TestRatesScript(unittest.TestCase):
         eng.modifiers["te_demog_census_births_down"] = 0.3
         eng.vars["te_dg_mb"] = -0.3
         eng.call("te_demog_rates_refresh")
-        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, 0.2 * 475e6, -0.2, 0.04)
+        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, self.EBR, -0.2, 0.04)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         self.assertAlmostEqual(eng.locals["te_dg_rate_prev_b"], -0.3)
 
@@ -1098,7 +1119,7 @@ class TestRatesScript(unittest.TestCase):
         self.assertEqual(eng.modifiers, {})
 
     def test_nobody_gets_no_term(self):
-        eng = self._eng(eb0=0.0, ed0=0.0, ebl=0.0)
+        eng = self._eng(eb0=0.0, ed0=0.0, ebr=0.0)
         eng.call("te_demog_rates_refresh")
         self.assertNotIn("te_dg_mb", eng.vars)
 
@@ -1111,6 +1132,8 @@ class TestRatesScript(unittest.TestCase):
         self.assertNotIn("te_dg_mb", eng.vars)
         self.assertNotIn("te_dg_md", eng.vars)
         self.assertNotIn("te_dg_rate_clamped", eng.vars, "the census line counts clamped states (Task 9)")
+        self.assertNotIn("te_dg_rep_b", eng.vars)
+        self.assertNotIn("te_dg_rep_d", eng.vars)
 
     def test_one_refresh_site(self):
         """Only te_demog_rates_apply adds or removes the census's modifiers, and only the two state-ROOT
@@ -1133,11 +1156,14 @@ class TestRatesScript(unittest.TestCase):
         yearly = _block(_text(EFFECTS), "te_demog_state_yearly")
         self.assertLess(yearly.index("te_demog_state_census = yes"), yearly.index("te_demog_rates_refresh = yes"))
 
-    def test_the_walk_sums_bare_births_by_literacy(self):
+    def test_the_walk_sums_the_replaced_terms(self):
+        """The generated init before the pop loop, the generated per-pop sums after each pop's bare curves."""
         body = _block(_text(EFFECTS), "te_demog_walks")
-        self.assertIn("set_local_variable = { name = te_dg_w_ebl value = 0 }", body)
-        self.assertIn("change_local_variable = { name = te_dg_w_ebl add = { value = local_var:te_dg_p_eb "
-                      "multiply = literacy_rate } }", body)
+        self.assertLess(body.index("te_demog_absorbed_walk_init = yes"), body.index("every_scope_pop = {"))
+        loop = body[body.index("every_scope_pop = {"):]
+        self.assertLess(loop.index("set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }"),
+                        loop.index("te_demog_absorbed_walk_pop = yes"))
+        self.assertNotIn("te_dg_w_ebl", body)
 
     # -- batch 2 review (I1): the deaths half, fast mode, the up side, a change of sign ----------
 
@@ -1146,7 +1172,7 @@ class TestRatesScript(unittest.TestCase):
         prior deaths term comes off the read before the floor is set."""
         eng = self._eng(cdr=2.0, read_d=-1.2)
         eng.call("te_demog_rates_refresh")
-        _, md = self._want(38.0, 2.0, 475e6, 430e6, 0.2 * 475e6, 0.05, -1.2)
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -1.2)
         self.assertEqual(md, 0.0)
         self.assertEqual(eng.vars["te_dg_md"], 0.0)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
@@ -1155,7 +1181,7 @@ class TestRatesScript(unittest.TestCase):
         eng.modifiers["te_demog_census_deaths_down"] = 0.3
         eng.vars["te_dg_md"] = -0.3
         eng.call("te_demog_rates_refresh")
-        _, md = self._want(38.0, 2.0, 475e6, 430e6, 0.2 * 475e6, 0.05, -0.2)
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -0.2)
         self.assertAlmostEqual(md, -0.6)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.locals["te_dg_rate_prev_d"], -0.3)
@@ -1167,7 +1193,7 @@ class TestRatesScript(unittest.TestCase):
         eng.modifiers.update(te_demog_fast_births=3.0, te_demog_fast_deaths=3.0)
         eng.vars.update(te_dg_fast_fb=3.0, te_dg_fast_fd=3.0)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(2.0, 2.0, 475e6, 430e6, 0.2 * 475e6, -0.5, -0.5)
+        mb, md = self._want(2.0, 2.0, 475e6, 430e6, self.EBR, -0.5, -0.5)
         self.assertAlmostEqual(mb, -0.3)
         self.assertAlmostEqual(md, -0.3)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
@@ -1179,7 +1205,7 @@ class TestRatesScript(unittest.TestCase):
         eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_up=0.2)
         eng.vars.update(te_dg_mb=-0.3, te_dg_md=0.2)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(80.0, 31.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        mb, md = self._want(80.0, 31.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
         self.assertTrue(mb > 0 > md, (mb, md))
         self.assertEqual(set(eng.modifiers), {"te_demog_census_births_up", "te_demog_census_deaths_down"})
         self.assertAlmostEqual(eng.modifiers["te_demog_census_births_up"], mb, places=5)
@@ -1188,7 +1214,7 @@ class TestRatesScript(unittest.TestCase):
         eng.modifiers.update(te_demog_census_births_up=0.3, te_demog_census_deaths_down=0.3)
         eng.vars.update(te_dg_mb=0.3, te_dg_md=-0.3)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(38.0, 80.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        mb, md = self._want(38.0, 80.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
         self.assertTrue(mb < 0 < md, (mb, md))
         self.assertEqual(set(eng.modifiers), {"te_demog_census_births_down", "te_demog_census_deaths_up"})
         self.assertAlmostEqual(eng.modifiers["te_demog_census_births_down"], -mb, places=5)
@@ -1204,7 +1230,7 @@ class TestRatesScript(unittest.TestCase):
     def test_the_ceiling_alone_sets_the_flag(self):
         eng = self._eng(cdr=400.0)
         eng.call("te_demog_rates_refresh")
-        mb, _ = self._want(38.0, 400.0, 475e6, 430e6, 0.2 * 475e6, 0.05, 0.04)
+        mb, _ = self._want(38.0, 400.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
         self.assertGreater(mb, P.RATE_TOTAL_MIN - 0.05, "births unclamped")
         self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
@@ -1217,7 +1243,7 @@ class TestRatesScript(unittest.TestCase):
         pop = TestCohortScript.POP
         eb0, ed0 = 475.0 * pop, 400.0 * pop
         walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
-            ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebl", 0.35 * eb0), ("te_dg_w_eb", eb0),
+            ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebr", P.LITERACY_BIRTH_PENALTY * 0.35 * eb0), ("te_dg_w_edr", 0.0), ("te_dg_w_eb", eb0),
             ("te_dg_w_ed", ed0)))
         walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
@@ -1300,6 +1326,134 @@ class TestRatesScript(unittest.TestCase):
             got = dict(re.findall(r"^\s*(\w+) = (\S+)", mods[name], re.M))
             got.pop("icon")
             self.assertEqual(got, {field: value}, name)
+
+
+class _OwnerEngine(_Engine):
+    """_Engine with an owner's laws, techs and institution levels and one pop's type: enough to run the generated
+    absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
+    incorporation and the pop's starvation are trigger fixtures (is_incorporated, is_in_*_starvation)."""
+
+    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, **kwargs):
+        super().__init__(fixtures, **kwargs)
+        self.laws, self.techs, self.levels, self.pop_type = set(laws), set(techs), dict(levels or {}), pop_type
+
+    def _test(self, key, op, arg):
+        if key in ("owner", "state"):
+            return self.holds(arg)
+        if key == "has_law":
+            assert arg.startswith("law_type:"), arg
+            return arg[9:] in self.laws
+        if key == "has_technology_researched":
+            return arg in self.techs
+        if key == "institution_investment_level":
+            level = self.levels.get(_find(arg, "institution"), 0)
+            _, vop, n = next(item for item in arg if item[0] == "value")
+            return {">=": level >= float(n), ">": level > float(n), "=": level == float(n)}[vop]
+        if key == "is_pop_type":
+            return arg == self.pop_type
+        return super()._test(key, op, arg)
+
+
+class TestAbsorbedScript(unittest.TestCase):
+    """Owner amendment A and B (2026-10-10): the generated walk sums carry every line the census absorbs, as the
+    engine applies it, so M cancels it under Full. Each pop adds its bare curves x (the state's absorbed lines + its
+    class's + literacy's -0.1 and mild starvation's, per pop) to te_dg_w_ebr / te_dg_w_edr. Checked against
+    demographics_modifiers.totals over DM.absorbed_carriers, carrier by carrier, so a line the generator drops
+    fails."""
+
+    P_EB, P_ED = 500.0, 400.0
+
+    @classmethod
+    def setUpClass(cls):
+        cls.absorbed = DM.absorbed_carriers()
+
+    def _run(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", food=1.0, literacy=0.0):
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food}, laws=laws, techs=techs, levels=levels,
+                           pop_type=pop_type,
+                           triggers={"is_incorporated": incorporated, "is_in_severe_starvation": food < 0.2,
+                                     "is_in_mild_starvation": 0.2 <= food < 0.4})
+        eng.call("te_demog_absorbed_walk_init")
+        eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED)
+        eng.call("te_demog_absorbed_walk_pop")
+        return eng.locals["te_dg_w_ebr"] / self.P_EB, eng.locals["te_dg_w_edr"] / self.P_ED
+
+    def _want(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", carriers=None):
+        carriers = self.absorbed if carriers is None else carriers
+        t = DM.totals(carriers, techs=techs, laws=laws, institutions=levels or {}, incorporated=incorporated,
+                      types={c.type for c in self.absorbed})
+        return (t.get("state_birth_rate_mult", 0.0),
+                t.get("state_mortality_mult", 0.0) + t.get(f"state_{pop_type}_mortality_mult", 0.0))
+
+    def _held(self, c, level=3):
+        """What holding carrier c takes: its law or tech, and its institution at `level`."""
+        laws = {c.key} if c.kind in ("law", "law_institution") else set()
+        techs = {c.key} if c.kind == "technology" else set()
+        levels = {c.institution: level} if c.institution else {}
+        return laws, techs, levels
+
+    def test_the_absorbed_set_is_what_the_amendment_names(self):
+        kinds = {c.kind for c in self.absorbed}
+        self.assertEqual(kinds, {"law", "law_institution", "technology", "institution"})
+        self.assertTrue({c.type for c in self.absorbed} >= {"state_birth_rate_mult", "state_mortality_mult",
+                                                            "state_laborers_mortality_mult"})
+
+    def test_every_absorbed_line_reaches_the_walk(self):
+        for c in self.absorbed:
+            m = re.fullmatch(r"state_(\w+)_mortality_mult", c.type)
+            pop_type = m.group(1) if m else "clerks"
+            laws, techs, levels = self._held(c)
+            with self.subTest(carrier=c):
+                got = self._run(laws, techs, levels, pop_type=pop_type)
+                want = self._want(laws, techs, levels, pop_type=pop_type)
+                self.assertAlmostEqual(got[0], want[0], places=9)
+                self.assertAlmostEqual(got[1], want[1], places=9)
+                # the carrier's own share is in it: without it the sums differ by its value (x the level of 3)
+                rest = self._want(laws, techs, levels, pop_type=pop_type, carriers=[x for x in self.absorbed if x != c])
+                kind = 0 if c.type == "state_birth_rate_mult" else 1
+                share = c.value * (3 if c.kind in ("law_institution", "institution") else 1)
+                self.assertAlmostEqual(want[kind] - rest[kind], share, places=9)
+
+    def test_a_carrier_not_held_takes_nothing(self):
+        self.assertEqual(self._run(), (0.0, 0.0))
+
+    def test_per_level_lines_reach_incorporated_states_only(self):
+        laws = {c.key for c in self.absorbed if c.kind == "law_institution"}
+        levels = {c.institution: 5 for c in self.absorbed if c.institution}
+        inc = self._run(laws, (), levels)
+        unc = self._run(laws, (), levels, incorporated=False)
+        for got, want in zip(inc, self._want(laws, (), levels)):
+            self.assertAlmostEqual(got, want, places=9)
+        self.assertAlmostEqual(unc[1], 0.0)
+        self.assertLess(inc[1], -0.2)   # Charitable and Public at 5: -0.4 alone
+
+    def test_the_class_lines_reach_their_class_only(self):
+        laws = {"law_child_labor_allowed"}
+        self.assertAlmostEqual(self._run(laws, pop_type="laborers")[1], 0.05)
+        self.assertAlmostEqual(self._run(laws, pop_type="machinists")[1], 0.05)
+        self.assertAlmostEqual(self._run(laws, pop_type="clerks")[1], 0.0)
+        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="machinists")[1], 0.0)
+        self.assertAlmostEqual(self._run({"law_restricted_child_labor"}, pop_type="peasants")[1], 0.02)
+
+    def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
+        """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
+        severe starvation stays on top (owner amendment B)."""
+        b, d = self._run(food=1.0, literacy=0.6)
+        self.assertAlmostEqual(b, P.LITERACY_BIRTH_PENALTY * 0.6)
+        self.assertEqual(d, 0.0)
+        for food, scale in ((0.37, 0.0625), (0.32, 0.1875), (0.27, 0.3125), (0.21, 0.4375)):
+            b, d = self._run(food=food)
+            self.assertAlmostEqual(b, P.STARVATION_MILD["births"] * scale, msg=food)
+            self.assertAlmostEqual(d, P.STARVATION_MILD["deaths"] * scale, msg=food)
+            ref_b, ref_d = demographics_model.starvation_terms(food)
+            self.assertAlmostEqual(b, ref_b, delta=0.7 * 0.0625 * 1.01, msg=food)
+        self.assertEqual(self._run(food=0.1), (0.0, 0.0))
+
+    def test_the_pop_curves_weight_each_term(self):
+        """A state's absorbed lines and a pop's own add once each, at that pop's bare curves."""
+        laws = {"law_child_labor_allowed", "law_women_in_the_fields"}
+        b, d = self._run(laws, pop_type="laborers", food=0.32, literacy=0.5)
+        self.assertAlmostEqual(b, -0.1 + P.LITERACY_BIRTH_PENALTY * 0.5 + P.STARVATION_MILD["births"] * 0.1875)
+        self.assertAlmostEqual(d, 0.05 + P.STARVATION_MILD["deaths"] * 0.1875)
 
 
 class TestNaturalFertilityScript(unittest.TestCase):
@@ -3088,8 +3242,9 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(read)
         self.assertEqual([v for v in read if not v.startswith("te_dg_dbg_")], [], "raw census variables in the line")
         # what re-derives bz and dz from the line: the events the step's scales compared eb and ed against
+        # and the absorbed lines' share M took out (owner amendment A, B): mb = target / bare - 1 - rep_b
         for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
-                           ("ed_target", "te_dg_ed_target")):
+                           ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
@@ -3139,7 +3294,8 @@ class TestFastMode(unittest.TestCase):
 
     def _both(self, eng, eb, eb0, ed, ed0):
         """A clock step's two refreshes, as te_demog_state_clock_step runs them."""
-        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebl=0.0)
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebr=0.0,
+                          te_dg_w_edr=0.0)
         eng.call("te_demog_rates_refresh")
         eng.call("te_demog_fast_refresh_rates")
 
@@ -3164,7 +3320,7 @@ class TestFastMode(unittest.TestCase):
         Hide it from the fast refresh and the term must still come through, from the refresh's locals."""
         eng = self._eng_full()
         eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
-                          te_dg_w_ebl=0.0)
+                          te_dg_w_ebr=0.0, te_dg_w_edr=0.0)
         eng.call("te_demog_rates_refresh")
         self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
         mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]

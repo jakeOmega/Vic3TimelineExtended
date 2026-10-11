@@ -66,9 +66,148 @@ te_demog_pop_wealth_tfr = {
 	}
 }
 
-# The literacy penalty's state_birth_rate_mult (literacy_penalty): te_demog_rates_refresh nets it out of
-# the census's births term (phase 2 step 4).
-te_demog_k_literacy_birth_penalty = { value = -0.1 }
+# Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines the census absorbs
+# (demographics_modifiers.absorbed_carriers). They stay on their laws, technologies and institutions, so
+# nothing changes outside Full; under Full te_demog_rates_refresh takes them out of the census's terms M,
+# through the walk's sums (te_demog_absorbed_walk_init and _pop). State scope: what the state reads.
+te_demog_absorbed_births = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_no_womens_rights } } add = 0.05 }
+	if = { limit = { owner = { has_law = law_type:law_protected_class } } add = -0.1 }
+	if = { limit = { owner = { has_law = law_type:law_state_sponsored_family_planning } } add = -0.05 }
+	if = { limit = { owner = { has_law = law_type:law_women_in_the_fields } } add = -0.1 }
+	if = { limit = { owner = { has_law = law_type:law_women_in_the_workplace } } add = -0.05 }
+	if = { limit = { owner = { has_law = law_type:law_womens_suffrage } } add = -0.05 }
+	if = { limit = { owner = { has_technology_researched = antibiotic_mass_production } } add = 0.05 }
+	if = { limit = { owner = { has_technology_researched = contraceptive_pill } } add = -0.1 }
+	if = { limit = { owner = { has_technology_researched = modern_vaccines } } add = 0.05 }
+}
+te_demog_absorbed_deaths = {
+	value = 0
+	if = {
+		limit = { is_incorporated = yes }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.01 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.01 }
+	}
+	if = {
+		limit = { is_incorporated = yes owner = { has_law = law_type:law_charitable_health_system } }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.03 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.03 }
+	}
+	if = {
+		limit = { is_incorporated = yes owner = { has_law = law_type:law_mandatory_augmentation } }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 1 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 2 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 3 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 4 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 5 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 6 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 7 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 8 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_war value >= 9 } } } add = -0.02 }
+	}
+	if = {
+		limit = { is_incorporated = yes owner = { has_law = law_type:law_medical_augmentation_only } }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.02 }
+	}
+	if = {
+		limit = { is_incorporated = yes owner = { has_law = law_type:law_public_health_insurance } }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 1 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 2 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 3 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 4 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 5 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 6 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 7 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 8 } } } add = -0.05 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_health_system value >= 9 } } } add = -0.05 }
+	}
+	if = {
+		limit = { is_incorporated = yes owner = { has_law = law_type:law_regulated_augmentation_market } }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 1 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 2 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 3 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 4 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 5 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 6 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 7 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 8 } } } add = -0.02 }
+		if = { limit = { owner = { institution_investment_level = { institution = institution_ministry_of_consumer_protection value >= 9 } } } add = -0.02 }
+	}
+	if = { limit = { owner = { has_law = law_type:law_unrestricted_augmentation } } add = -0.05 }
+	if = { limit = { owner = { has_technology_researched = antibiotic_mass_production } } add = -0.05 }
+	if = { limit = { owner = { has_technology_researched = modern_vaccines } } add = -0.05 }
+}
+te_demog_absorbed_farmers_deaths = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } add = 0.05 }
+	if = { limit = { owner = { has_law = law_type:law_restricted_child_labor } } add = 0.02 }
+}
+te_demog_absorbed_laborers_deaths = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } add = 0.05 }
+	if = { limit = { owner = { has_law = law_type:law_restricted_child_labor } } add = 0.02 }
+}
+te_demog_absorbed_machinists_deaths = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } add = 0.05 }
+}
+te_demog_absorbed_peasants_deaths = {
+	value = 0
+	if = { limit = { owner = { has_law = law_type:law_child_labor_allowed } } add = 0.05 }
+	if = { limit = { owner = { has_law = law_type:law_restricted_child_labor } } add = 0.02 }
+}
+# Pop scope: the terms the census absorbs per pop: literacy's (literacy_penalty) and mild starvation's
+# (starvation_penalty). Severe starvation stays on top (owner amendment B).
+te_demog_pop_absorbed_births = {
+	value = literacy_rate
+	multiply = -0.1
+	if = {
+		limit = {
+			is_in_severe_starvation = no
+			is_in_mild_starvation = yes
+		}
+		if = { limit = { food_security >= 0.35 } add = -0.04375 }
+		else_if = { limit = { food_security >= 0.3 } add = -0.13125 }
+		else_if = { limit = { food_security >= 0.25 } add = -0.21875 }
+		else = { add = -0.30625 }
+	}
+}
+te_demog_pop_absorbed_deaths = {
+	value = 0
+	if = {
+		limit = {
+			is_in_severe_starvation = no
+			is_in_mild_starvation = yes
+		}
+		if = { limit = { food_security >= 0.35 } add = 0.0375 }
+		else_if = { limit = { food_security >= 0.3 } add = 0.1125 }
+		else_if = { limit = { food_security >= 0.25 } add = 0.1875 }
+		else = { add = 0.2625 }
+	}
+}
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
 # + -0.1 x its literacy (literacy_penalty) + the starvation penalties, floored at 0.

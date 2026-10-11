@@ -13,6 +13,7 @@ investment levels:
 
 import json
 import os
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -160,6 +161,41 @@ def engine_rate_lines(root=ROOT, mod=True):
                     for k in [k for k in out if k[0] == kind and k[1] == key]:
                         del out[k]
                 add(kind, key, body)
+    return out
+
+
+_ENGINE_RATE_FIELD = re.compile(r"^state_(birth_rate|mortality|mortality_wealth|\w+_mortality)_mult$")
+
+
+def is_engine_rate_field(field):
+    """A field the engine applies to births or deaths: the state's birth or mortality multiplier, a class's
+    mortality or wealth mortality. The census's own script-only types (state_work_mortality_mult and the like)
+    are inputs, not engine lines."""
+    return bool(_ENGINE_RATE_FIELD.match(field)) and field not in P.DEMOG_TYPES
+
+
+def absorbed_carriers(root=ROOT, lines=None):
+    """Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines on laws, technologies
+    and institutions that the census absorbs, as Carriers (`type` is the engine field). Under Full the census's
+    term M cancels each one in the state it reaches (te_demog_absorbed_*, generated); no carrier is edited, so
+    nothing changes outside Full. Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
+    institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
+    institution's own line is institution (per its level, incorporated states), the rest are flat."""
+    lines = engine_rate_lines(root) if lines is None else lines
+    institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    out = []
+    for (kind, key, block, field), value in sorted(lines.items()):
+        if abs(value) < 1e-12 or not is_engine_rate_field(field):
+            continue
+        if key in P.ENGINE_LINES_ON_TOP or field in P.ENGINE_FIELDS_ON_TOP:
+            continue
+        if kind == "law" and block == "institution_modifier":
+            out.append(Carrier("law_institution", key, field, value, institution.get(key)))
+        elif kind == "institution":
+            out.append(Carrier("institution", key, field, value, key))
+        else:
+            out.append(Carrier(kind, key, field, value))
     return out
 
 

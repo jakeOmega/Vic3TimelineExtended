@@ -3,11 +3,9 @@
 # Read only by the census (te_demog_mult_*); the engine never applies these types. A law's
 # modifier reaches every state the country owns; the Workplace Safety lines (institution_modifier)
 # are per level of the institution and reach incorporated states only. The health laws' access
-# lines sit inside their existing blocks in modified_health_system.txt.
-# Phase 2 step 4: the child-labour blocks also carry inverse lines that cancel vanilla's class
-# mortality lines. Those the engine does apply; the census's work term absorbs what they did.
-# The women's-rights laws' natural fertility and the cancels of their birth lines sit in their
-# existing INJECTs in extra_laws.txt (# ---- lawgroup_rights_of_women ----).
+# lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
+# natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
+# Property's, which has no other INJECT.
 
 INJECT:law_local_police = {
 	modifier = {
@@ -30,21 +28,12 @@ INJECT:law_militarized_police = {
 INJECT:law_child_labor_allowed = {
 	modifier = {
 		state_work_mortality_mult = 0.1
-		# vanilla's class lines cancelled: the census's work term absorbs them (owner, 2026-10-10: vanilla's
-		# lines are probably far too high; the census's term, about a twenty-fifth of them, is the intended size)
-		state_laborers_mortality_mult = -0.05
-		state_machinists_mortality_mult = -0.05
-		state_farmers_mortality_mult = -0.05
-		state_peasants_mortality_mult = -0.05
 	}
 }
 
-INJECT:law_restricted_child_labor = {
+INJECT:law_women_own_property = {
 	modifier = {
-		# vanilla's class lines cancelled, as Child Labor Allowed's (demographics phase 2 step 4)
-		state_laborers_mortality_mult = -0.02
-		state_farmers_mortality_mult = -0.02
-		state_peasants_mortality_mult = -0.02
+		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
 	}
 }
 

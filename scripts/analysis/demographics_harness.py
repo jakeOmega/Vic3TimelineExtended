@@ -770,47 +770,68 @@ HEALTH_LAWS = ("law_charitable_health_system", "law_private_health_insurance", "
 
 # ---- predict: the engine's growth once the census sets its rates (phase 2 step 4, plan Task 10) -------------
 Pop = collections.namedtuple("Pop", "size sol literacy food_security on_top_d absorbed_d", defaults=(0.0, 0.0))
-Pop.__doc__ = """One pop for predict: on_top_d is its class's mortality line still on top; absorbed_d vanilla's class
-line the census absorbed (child labour), carried only for the report."""
+Pop.__doc__ = """One pop for predict: on_top_d is its class's mortality line on top; absorbed_d its class's line the
+census absorbs (child labour: live in the engine, cancelled by M under Full)."""
 CHILD_LABOUR_LAWS = ("law_child_labor_allowed", "law_restricted_child_labor")
-# the women's-rights laws whose vanilla birth lines the census absorbed (Task 8); Protected Class's own line was
-# the mod's, so vanilla's lines leave it out
+# the women's-rights laws whose birth lines the census's natural fertility carries (Tasks 7-8; the mod's
+# Protected Class among them)
 WOMENS_RIGHTS_LAWS = ("law_no_womens_rights", "law_women_in_the_fields", "law_women_in_the_workplace",
-                      "law_womens_suffrage")
-RATE_FIELD = re.compile(r"^state_(birth_rate|mortality|mortality_wealth|\w+_mortality)_mult$")
+                      "law_womens_suffrage", "law_protected_class")
+# predict's report groups for the absorbed state lines (owner amendment A, 2026-10-10): each carrier in one
+ABSORBED_GROUPS = (("womens_rights", WOMENS_RIGHTS_LAWS), ("health", HEALTH_LAWS))
+ABSORBED_REPORT = ("child_labour", "womens_rights", "health", "other_lines", "mild")
 
 
-def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, absorbed_b=0.0):
+def absorbed_group(key):
+    return next((g for g, keys in ABSORBED_GROUPS if key in keys), "other_lines")
+
+
+def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, absorbed_b=0.0, absorbed_d=0.0, groups=None):
     """The engine's births and deaths a year in one state once the census sets them (phase 2 step 4, plan §2).
 
-    pops: [Pop]; cbr, cdr: the census's own rates per 1,000 a year; on_top_b, on_top_d: the state-level terms
-    on top (its owner's law and tech lines, devastation's +1.0 x share, inside the read per probe P1). Each pop gets
-    bare x max(0, 1 + M + its terms): literacy's -0.1 (absorbed, netted in M), starvation (on top, from its food
-    security), its class line still on top. Terms on top a save doesn't hold are left out: pollution, turmoil,
-    events, low_pop_state, unemployment, workplace mortality (about +2% of deaths in 1949, growth probe).
-    Reported, not applied: the starving slope below SoL 4 (absorbed: owner, 2026-10-10), vanilla's child-labour
-    class lines (absorbed: owner, 2026-10-10) and, at absorbed_b, vanilla's women's-rights birth lines (absorbed in
-    Task 8, batch 4 review m8), so the gate shows what absorbing them does."""
+    pops: [Pop]; cbr, cdr: the census's own rates per 1,000 a year; on_top_b, on_top_d: the state-level terms on top
+    (the owner's law and tech lines the census leaves on top, devastation's +1.0 x share, inside the read per probe
+    P1); absorbed_b, absorbed_d: the state's absorbed lines (owner amendment A, 2026-10-10: the owner's law, tech and
+    institution lines the census takes over, institution lines x level in incorporated states), split by report
+    group in `groups` ({group: (births, deaths)}). Each pop gets bare x max(0, 1 + M + every term): the absorbed
+    ones (those lines, its class's absorbed line, literacy's -0.1, mild starvation's) are live in the engine and M
+    nets them out; the terms on top (its class's line on top, severe starvation) stay. Terms on top a save doesn't
+    hold are left out: pollution, turmoil, events, low_pop_state, unemployment, workplace mortality (about +2% of
+    deaths in 1949, growth probe), wealth mortality (scaling unknown). The script reads mild starvation in 0.05
+    steps of food security; this takes it exact. Reported: the starving slope below SoL 4 (absorbed: owner,
+    2026-10-10) and each absorbed group's events at the bare curves, what it would have done on top."""
     people = sum(p.size for p in pops)
-    bare_b = sum(p.size * G.monthly_birthrate(p.sol, d) for p in pops) * 12
-    bare_d = sum(p.size * G.monthly_mortality(p.sol, d) for p in pops) * 12
-    lit_b = sum(p.size * G.monthly_birthrate(p.sol, d) * p.literacy for p in pops) * 12
+    bare = [(p, p.size * G.monthly_birthrate(p.sol, d) * 12, p.size * G.monthly_mortality(p.sol, d) * 12)
+            for p in pops]
+    bare_b, bare_d = sum(b for _, b, _ in bare), sum(x for _, _, x in bare)
     slope = sum(p.size * (G.monthly_mortality(p.sol, d) - G.monthly_mortality(max(p.sol, d.equilibrium_sol), d))
                 for p in pops) * 12
-    child = sum(p.size * G.monthly_mortality(p.sol, d) * p.absorbed_d for p in pops) * 12
-    target_b, target_d = cbr / 1000 * people, cdr / 1000 * people
-    m_b, cb = M.rate_term(target_b, bare_b, absorbed=P.LITERACY_BIRTH_PENALTY * lit_b, other=on_top_b)
-    m_d, cd = M.rate_term(target_d, bare_d, other=on_top_d)
-    births = deaths = 0.0
-    for p in pops:
+    terms = []
+    for p, b, x in bare:
         sb, sd = M.starvation_terms(p.food_security)
-        births += p.size * G.monthly_birthrate(p.sol, d) * 12 * max(
-            0.0, 1 + m_b + on_top_b + P.LITERACY_BIRTH_PENALTY * p.literacy + sb)
-        deaths += p.size * G.monthly_mortality(p.sol, d) * 12 * max(0.0, 1 + m_d + on_top_d + p.on_top_d + sd)
-    return {"people": people, "births": births, "deaths": deaths, "target_births": target_b,
-            "target_deaths": target_d, "on_top_births": births - target_b, "on_top_deaths": deaths - target_d,
-            "m_b": m_b, "m_d": m_d, "clamped": cb or cd, "slope_deaths": slope,
-            "absorbed_child_labour_deaths": child, "absorbed_wr_births": bare_b * absorbed_b}
+        severe = p.food_security < P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+        mild_b, mild_d = (0.0, 0.0) if severe else (sb, sd)
+        terms.append((p, b, x, sb - mild_b, sd - mild_d, mild_b, mild_d))
+    rep_b = sum(b * (absorbed_b + P.LITERACY_BIRTH_PENALTY * p.literacy + mb) for p, b, _x, _sb, _sd, mb, _md in terms)
+    rep_d = sum(x * (absorbed_d + p.absorbed_d + md) for p, _b, x, _sb, _sd, _mb, md in terms)
+    target_b, target_d = cbr / 1000 * people, cdr / 1000 * people
+    m_b, cb = M.rate_term(target_b, bare_b, absorbed=rep_b, other=on_top_b + absorbed_b)
+    m_d, cd = M.rate_term(target_d, bare_d, absorbed=rep_d, other=on_top_d + absorbed_d)
+    births = deaths = 0.0
+    for p, b, x, sev_b, sev_d, mb, md in terms:
+        births += b * max(0.0, 1 + m_b + on_top_b + absorbed_b + P.LITERACY_BIRTH_PENALTY * p.literacy + mb + sev_b)
+        deaths += x * max(0.0, 1 + m_d + on_top_d + absorbed_d + p.on_top_d + p.absorbed_d + md + sev_d)
+    out = {"people": people, "births": births, "deaths": deaths, "target_births": target_b,
+           "target_deaths": target_d, "on_top_births": births - target_b, "on_top_deaths": deaths - target_d,
+           "m_b": m_b, "m_d": m_d, "clamped": cb or cd, "slope_deaths": slope,
+           "absorbed_child_labour_births": 0.0,
+           "absorbed_child_labour_deaths": sum(x * p.absorbed_d for p, _b, x, *_ in terms),
+           "absorbed_mild_births": sum(b * mb for _p, b, _x, _sb, _sd, mb, _md in terms),
+           "absorbed_mild_deaths": sum(x * md for _p, _b, x, _sb, _sd, _mb, md in terms)}
+    for g in ABSORBED_REPORT[1:-1]:
+        gb, gd = (groups or {}).get(g, (0.0, 0.0))
+        out[f"absorbed_{g}_births"], out[f"absorbed_{g}_deaths"] = bare_b * gb, bare_d * gd
+    return out
 
 
 def predicted_multiple(points, to_year):
@@ -823,26 +844,32 @@ def predicted_multiple(points, to_year):
     return math.exp(total)
 
 
-PREDICT_SUMS = ("people", "births", "deaths", "target_births", "target_deaths", "slope_deaths",
-                "absorbed_child_labour_deaths", "absorbed_wr_births", "clamped_people")
+PREDICT_SUMS = ("people", "births", "deaths", "target_births", "target_deaths", "slope_deaths", "clamped_people",
+                *(f"absorbed_{g}_{k}" for g in ABSORBED_REPORT for k in ("births", "deaths")))
 
 
 def _predict_figures(t):
-    """A country's or the world's sums as rates: % a year, the terms on top per 1,000, shares."""
+    """A country's or the world's sums as rates: % a year, the terms on top per 1,000, shares. Each absorbed group's
+    points are what absorbing it adds to growth a year, against leaving it on top."""
     n = t["people"] or 1.0
-    return {"people": t["people"],
-            "census_growth": 100 * (t["target_births"] - t["target_deaths"]) / n,
-            "growth": 100 * (t["births"] - t["deaths"]) / n,
-            "on_top_births_per_1000": 1000 * (t["births"] - t["target_births"]) / n,
-            "on_top_deaths_per_1000": 1000 * (t["deaths"] - t["target_deaths"]) / n,
-            "clamped_share": t["clamped_people"] / n,
-            "slope_points": 100 * t["slope_deaths"] / n,
-            "child_labour_points": 100 * t["absorbed_child_labour_deaths"] / n,
-            "womens_rights_points": -100 * t["absorbed_wr_births"] / n}
+    out = {"people": t["people"],
+           "census_growth": 100 * (t["target_births"] - t["target_deaths"]) / n,
+           "growth": 100 * (t["births"] - t["deaths"]) / n,
+           "on_top_births_per_1000": 1000 * (t["births"] - t["target_births"]) / n,
+           "on_top_deaths_per_1000": 1000 * (t["deaths"] - t["target_deaths"]) / n,
+           "clamped_share": t["clamped_people"] / n,
+           "slope_points": 100 * t["slope_deaths"] / n,
+           "mild_births_per_1000": 1000 * t["absorbed_mild_births"] / n,
+           "mild_deaths_per_1000": 1000 * t["absorbed_mild_deaths"] / n}
+    for g in ABSORBED_REPORT:
+        name = "mild_starvation" if g == "mild" else g
+        out[f"{name}_points"] = 100 * (t[f"absorbed_{g}_deaths"] - t[f"absorbed_{g}_births"]) / n
+    return out
 
 
-def predict_save(path, lines, vanilla, carriers, d, census_rates=False, check_modifiers=False):
-    """{tag: sums} and the world's for one save, plus the states --check-modifiers flags."""
+def predict_save(path, lines, absorbed, carriers, d, census_rates=False, check_modifiers=False):
+    """{tag: sums} and the world's for one save, plus the states --check-modifiers flags. lines: the engine's rate
+    lines (DM.engine_rate_lines); absorbed: DM.absorbed_carriers over them."""
     sections = S.read_sections(path)
     states = S.state_inputs(sections)
     countries = S.country_inputs(sections)
@@ -853,31 +880,35 @@ def predict_save(path, lines, vanilla, carriers, d, census_rates=False, check_mo
         _c, st_vars = S.read_variables(path, (), ("te_dg_cbr_model", "te_dg_cdr_model", "te_dg_cbr", "te_dg_cdr",
                                                   "te_dg_mb", "te_dg_md"))
         svars = {sid: rec["vars"] for sid, rec in st_vars.items()}
-    by_tag = {}
-    for tag, c in countries.items():
-        flat = DM.engine_line_totals(lines, c.laws, c.techs)
-        child = DM.engine_line_totals(vanilla, c.laws & set(CHILD_LABOUR_LAWS), ())
-        wr = DM.engine_line_totals(vanilla, c.laws & set(WOMENS_RIGHTS_LAWS), ()).get("state_birth_rate_mult", 0.0)
-        by_tag[tag] = (flat, child, wr)
+    on_top = {k: v for k, v in lines.items() if k[1] in P.ENGINE_LINES_ON_TOP and DM.is_engine_rate_field(k[3])}
+    flat_on_top = {tag: DM.engine_line_totals(on_top, c.laws, c.techs) for tag, c in countries.items()}
+    fields = {c.type for c in absorbed}
+    state_fields = ("state_birth_rate_mult", "state_mortality_mult")
+    by_group = {g: [c for c in absorbed if c.type in state_fields and absorbed_group(c.key) == g]
+                for g in ABSORBED_REPORT[1:-1]}
     pops = {}
     for rec in sections["pops"].values():
         size = S._num(rec.get("workforce")) + S._num(rec.get("dependents"))
         sid = rec.get("location")
-        tag = owner.get(sid)
-        if size <= 0 or tag not in by_tag:
+        if size <= 0 or owner.get(sid) not in countries:
             continue
-        flat, child, _wr = by_tag[tag]
-        key = f"state_{rec.get('type')}_mortality_mult"
-        pops.setdefault(sid, []).append(Pop(size, S._num(rec.get("previous_quality_of_life")),
-                                            S._num(rec.get("num_literate")) / size,
-                                            S._num(rec.get("food_security"), 1.0),
-                                            on_top_d=flat.get(key, 0.0), absorbed_d=child.get(key, 0.0)))
+        pops.setdefault(sid, []).append((rec.get("type"), Pop(size, S._num(rec.get("previous_quality_of_life")),
+                                                               S._num(rec.get("num_literate")) / size,
+                                                               S._num(rec.get("food_security"), 1.0))))
     sums = {}
     for tag, sts in states.items():
-        flat, _child, wr = by_tag[tag]
+        c, flat = countries[tag], flat_on_top[tag]
         for sid, st, inc in sts:
             if sid not in pops:
                 continue
+            held = DM.totals(absorbed, c.techs, c.laws, c.institutions, incorporated=inc, types=fields)
+            groups = {}
+            for g, cs in by_group.items():
+                t = DM.totals(cs, c.techs, c.laws, c.institutions, incorporated=inc, types=state_fields)
+                groups[g] = (t["state_birth_rate_mult"], t["state_mortality_mult"])
+            state_pops = [p._replace(on_top_d=flat.get(f"state_{ptype}_mortality_mult", 0.0),
+                                     absorbed_d=held.get(f"state_{ptype}_mortality_mult", 0.0))
+                          for ptype, p in pops[sid]]
             v = svars.get(sid, {})
             if census_rates and ("te_dg_cbr_model" in v or "te_dg_cbr" in v):
                 cbr = v.get("te_dg_cbr_model", v.get("te_dg_cbr"))
@@ -885,8 +916,10 @@ def predict_save(path, lines, vanilla, carriers, d, census_rates=False, check_mo
             else:
                 cbr, cdr = M.model_crude_rates(inputs_for(st, carriers, incorporated=inc))
             devastation = S._num(sections["states"].get(sid, {}).get("devastation")) / 100
-            out = predict_state(pops[sid], cbr, cdr, d, on_top_b=flat.get("state_birth_rate_mult", 0.0),
-                                on_top_d=flat.get("state_mortality_mult", 0.0) + devastation, absorbed_b=wr)
+            out = predict_state(state_pops, cbr, cdr, d, on_top_b=flat.get("state_birth_rate_mult", 0.0),
+                                on_top_d=flat.get("state_mortality_mult", 0.0) + devastation,
+                                absorbed_b=held.get("state_birth_rate_mult", 0.0),
+                                absorbed_d=held.get("state_mortality_mult", 0.0), groups=groups)
             out["clamped_people"] = out["people"] if out["clamped"] else 0.0
             for t in (tag, None):
                 acc = sums.setdefault(t, dict.fromkeys(PREDICT_SUMS, 0.0))
@@ -905,12 +938,16 @@ def predict_save(path, lines, vanilla, carriers, d, census_rates=False, check_mo
 
 
 def cmd_predict(args):
-    lines, vanilla = DM.engine_rate_lines(), DM.engine_rate_lines(mod=False)
+    lines = DM.engine_rate_lines()
+    absorbed = DM.absorbed_carriers(lines=lines)
+    # the lines left on top that predict can't read: per-level ones on an on-top carrier (wealth mortality, whose
+    # scaling is unknown, is left out by design: P.ENGINE_FIELDS_ON_TOP)
     unread = sorted(k for k, v in lines.items()
-                    if k[2] == "institution_modifier" and abs(v) > 1e-9 and RATE_FIELD.match(k[3])
-                    and k[3] not in P.DEMOG_TYPES)
+                    if k[2] == "institution_modifier" and abs(v) > 1e-9 and DM.is_engine_rate_field(k[3])
+                    and k[1] in P.ENGINE_LINES_ON_TOP and k[3] not in P.ENGINE_FIELDS_ON_TOP)
     for k in unread:
-        print(f"per-level birth or mortality line predict doesn't read: {k} = {lines[k]:+g}", file=sys.stderr)
+        print(f"per-level birth or mortality line on top that predict doesn't read: {k} = {lines[k]:+g}",
+              file=sys.stderr)
     carriers, d = DM.load_carriers(), G.read_defines()
     points, failed, report = [], False, {}
     for path in args.save:
@@ -918,7 +955,7 @@ def cmd_predict(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        sums, flagged = predict_save(path, lines, vanilla, carriers, d, args.census_rates, args.check_modifiers)
+        sums, flagged = predict_save(path, lines, absorbed, carriers, d, args.census_rates, args.check_modifiers)
         world = _predict_figures(sums[None])
         points.append((year, world["growth"]))
         big = {tag: _predict_figures(t) for tag, t in sums.items() if tag is not None and t["people"] >= 20e6}
@@ -931,14 +968,18 @@ def cmd_predict(args):
         print(f"== {Path(path).name} ({year}): world {world['people'] / 1e6:.0f}M  census {world['census_growth']:+.2f}% "
               f"a year, predicted {world['growth']:+.2f}%  on top: births {world['on_top_births_per_1000']:+.2f}, "
               f"deaths {world['on_top_deaths_per_1000']:+.2f} per 1,000  clamped {world['clamped_share']:.1%}")
-        print(f"   absorbing child labour's class lines: {world['child_labour_points']:+.3f} points of world growth "
-              f"a year; absorbing the women's-rights birth lines: {world['womens_rights_points']:+.3f}")
+        print(f"   absorbed, in points of world growth a year against leaving them on top: child labour's class lines "
+              f"{world['child_labour_points']:+.3f}, women's rights' birth lines {world['womens_rights_points']:+.3f}, "
+              f"the health laws {world['health_points']:+.3f}, the other lines {world['other_lines_points']:+.3f}, "
+              f"mild starvation {world['mild_starvation_points']:+.3f} (births {world['mild_births_per_1000']:+.2f}, "
+              f"deaths {world['mild_deaths_per_1000']:+.2f} per 1,000)")
         if args.slope:
             print(f"   the starving slope below SoL 4 (absorbed): {world['slope_points']:.3f} points of world growth")
         for tag, f in sorted(big.items(), key=lambda kv: -kv[1]["people"]):
             extra = f"  slope {f['slope_points']:.3f}" if args.slope else ""
             print(f"{tag:4s} {f['people'] / 1e6:6.1f}M  census {f['census_growth']:+.2f}%  predicted {f['growth']:+.2f}%  "
-                  f"child labour {f['child_labour_points']:+.3f}  women's rights {f['womens_rights_points']:+.3f}"
+                  f"child labour {f['child_labour_points']:+.3f}  women's rights {f['womens_rights_points']:+.3f}  "
+                  f"health {f['health_points']:+.3f}  mild starvation {f['mild_starvation_points']:+.3f}"
                   f"{extra}{'  SHRINKS' if f['growth'] < 0 else ''}")
         for sid, tag, var, m in flagged:
             print(f"   state {sid} ({tag}): {var} = {m:+.4f} but no matching te_demog_census_* modifier (probe P4)")

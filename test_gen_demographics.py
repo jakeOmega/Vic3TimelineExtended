@@ -163,9 +163,20 @@ class TestGenerated(unittest.TestCase):
     def test_phase2_constants_match_the_params(self):
         for name, value in (("on_top_scale_min", P.ON_TOP_SCALE_MIN), ("on_top_scale_max", P.ON_TOP_SCALE_MAX),
                             ("rate_total_min", P.RATE_TOTAL_MIN),
-                            ("rate_term_max", P.RATE_TERM_MAX),
-                            ("literacy_birth_penalty", P.LITERACY_BIRTH_PENALTY)):
+                            ("rate_term_max", P.RATE_TERM_MAX)):
             self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(value)} }}", self.values, name)
+
+    def test_the_absorbed_terms_follow_the_engine(self):
+        """Owner amendment A and B (2026-10-10): literacy's penalty from literacy_penalty, mild starvation's in the
+        engine's steps and severe starvation's left out, and institution lines up to the mod's highest level."""
+        pop_b = self.values.split("te_demog_pop_absorbed_births = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn(f"value = literacy_rate\n\tmultiply = {gen.lit(P.LITERACY_BIRTH_PENALTY)}", pop_b)
+        self.assertIn("is_in_severe_starvation = no", pop_b)
+        self.assertNotIn("-0.9", pop_b)
+        self.assertEqual(gen.max_institution_level(ROOT), 9)   # MAX_INSTITUTION_INVESTMENT, extra_defines.txt
+        deaths = self.values.split("te_demog_absorbed_deaths = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("institution = institution_health_system value >= 9 }", deaths)
+        self.assertNotIn("value >= 10 }", deaths)
 
 
 class TestEngineRateTerms(unittest.TestCase):
