@@ -111,12 +111,13 @@ te_tp_imports_from_current = {
 # ============================================================================
 
 # How many of the state's modifiers the state panel hides. gui/states_panel.gui
-# leaves out of both modifier rows every modifier with the mod's blank icon
-# (gfx/interface/icons/timed_modifier_icons/modifier_system.dds), and fades the
-# condensed view's box when the state carries no other: when its modifier count
-# is not above this. A GUI can tell a modifier only by its icon, so the box needs
-# the hidden ones named here: one term per static modifier with that icon.
-# test_hidden_state_modifiers.py fails when such a modifier has no term.
+# leaves out of both modifier rows, by name, every modifier with the mod's blank
+# icon (gfx/interface/icons/timed_modifier_icons/modifier_system.dds) and every
+# modifier a card of the state panel already shows (the Grand Monument card's
+# gm_local_*), and fades the condensed view's box when the state carries no
+# other: when its modifier count is not above this. A GUI can't count the
+# modifiers it hides, so the box needs them named here: one term per hidden
+# static modifier. test_hidden_state_modifiers.py fails when one has no term.
 # Used by: State.MakeScope.ScriptValue('gui_state_hidden_modifier_count')
 gui_state_hidden_modifier_count = {
 	value = 0
@@ -166,6 +167,60 @@ gui_state_hidden_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = te_demog_census_deaths_down }
+		add = 1
+	}
+	# A Grand Monument's tourism and its dedication's local effect, which the
+	# Grand Monument card shows (te_state_gm_card); they keep their own icon.
+	if = {
+		limit = { has_modifier = gm_local_tourism }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_crown }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_republic }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_revolution }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_leader }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_religious }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_civic }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_war_memorial }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_artistic }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_naturalist }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_scientific }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_industrial }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gm_local_athletic }
 		add = 1
 	}
 }
