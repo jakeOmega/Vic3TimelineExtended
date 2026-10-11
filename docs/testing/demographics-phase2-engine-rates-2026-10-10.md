@@ -10,7 +10,12 @@ amendment) passed the multiple at ×1.66 and failed on China at −0.09% in 1887
 census cancels what it absorbs through M, under Full only, and absorbs mild starvation; #881 took the LGBTQ+ Rights
 laws' birth lines away), put the engine within 0.1 per 1,000 of the census in every save, so the multiple became the
 census's own: ×1.78, a fail, with China at +0.23%. The owner chose the first of two candidates (below, "The
-multiple"). The in-game probes and the fast-mode run are still to do.
+multiple"). The in-game probes are still to do.
+
+**The fast-mode gate run (2026-10-11, below) passes inside the gate's window, census years 1837–1900:** ×1.63, no
+20M+ country shrinking, nothing clamped, Closed Borders at −0.09 per 1,000, every state keeping its census modifiers
+(P4). Europe's share stays flat where it should rise. Past 1900, four Indian countries lose people for 12 to 39
+census years, and the tools' own exit codes fail on them (below). The replay was not run.
 
 **Release precondition (owner, 2026-10-10, amended):** nothing changes outside Full. Step 4 edits no engine birth or mortality line; step 5's
 retune of the global defines is dropped (owner, 2026-10-10).
@@ -135,6 +140,73 @@ saves are compressed binary and couldn't be read.
      access × treatment carries the law. Outside Full it stays vanilla's.
   2. **Probe P6 first** (below), to confirm the per-pop semantics before building.
 
+## The fast-mode gate run (2026-10-11)
+
+- **The run:** a new 1836 game on #869 at f19ee434, Demographics on Full (the first autosave's `game_rules` says so),
+  observed, census log on (option b), fast mode at 4× from day 1, launched 2026-10-10 at 22:47. Every `debug.log` and
+  `error.log` generation and 46 yearly autosaves, 1837 to 1882, are in `/mnt/d/vic3te-data/vic3te-demog-p2-gate-full-2026-10-11/`.
+- **It crashed on 1 January 1882,** just after that day's autosave: an access violation with no symbols (crash folder
+  `victoria3_01260911_014425`). The last lines are vanilla's Red Army leader errors (`00_communism.txt:185`), logged
+  monthly since well before. No census line or census error is near it. The owner is continuing from the 1882 save to
+  see whether it happens again.
+- **The census clock runs four census years to the calendar's one:** census 1900 is calendar November 1851, census
+  2020 is November 1881. So the gate's window is calendar 1837 to 1851. Past it, the census years run ahead of the
+  techs, laws and economy the model reads. No anchor is comparable in fast mode, from census 1900 on: Britain's TFR of
+  4.65 in census 1900 is calendar 1851's Britain.
+
+| Check | Threshold | Result |
+|---|---|---|
+| World 1837–1900, census years | ×1.3–×1.7 | **×1.63, pass:** 930M to 1,516M in the logged countries (a million people or more) |
+| No 20M+ country losing people ten census years running outside wars | none | **Pass to 1900.** Four countries fail past it (below) |
+| Share of people in clamped states | under 1% | 0.00% to 1900, 0.004% to 2020 |
+| Closed Borders `mig_raw` median | within ±1 per 1,000 | **−0.09 (−0.13 weighted by people), pass,** over 6,457 country-years (saves 1840, 1845, 1850, 1852) |
+| P4: census modifiers through a change of owner | none missing | **Pass.** `predict --check-modifiers` finds none missing on the 1866, 1876 and 1882 saves, after the East India Company broke up and several revolutions. In 1882, 983 states carry `te_dg_mb`, and 983 each carry the births and deaths modifiers |
+| The replay exact | exact | **Not run:** the run logged no option a blocks |
+| Europe's share rising to 1900, Asia's falling | the right direction | **Partly.** East Asia 44.1% to 40.0%, Asia as a whole 65.3% to 62.1%, North America 3.1% to 5.5%. Europe stays flat (23.3% to 23.2%); Europe and North America together go from 26.4% to 28.7%, as emigration carried Europe's growth |
+| Errors | none from the census | **None:** 45,869 distinct lines across every generation, 255 outside the two registries, none in a census file |
+
+The regional shares count each save's pops by the continent of their state's strategic region. The continents come from
+vanilla's strategic-region files, one per continent, whose "west and south Asia" puts the Middle East with India. The
+saves are calendar 1837 and 1852.
+
+**What the engine adds on top, by census decade.** The table is weighted by people over the logged countries. `bz` and
+`dz` are the births and deaths the engine adds beyond the census's target, as a share of it. India's countries are
+East India, Bengal, Carnatic, Hindustan, Satara, Patiala and Hyderabad.
+
+| Census year | `m_b` | `m_d` | `bz` | `dz` | India's countries' `dz` |
+|---|---|---|---|---|---|
+| 1840 | −0.296 | −0.367 | +0.004 | −0.017 | −0.251 |
+| 1860 | −0.285 | −0.385 | +0.002 | +0.003 | −0.123 |
+| 1880 | −0.263 | −0.373 | −0.010 | +0.034 | +0.086 |
+| 1900 | −0.269 | −0.387 | −0.016 | +0.053 | +0.113 |
+| 1950 | −0.304 | −0.393 | −0.006 | +0.049 | +0.025 |
+| 2000 | −0.353 | −0.469 | −0.001 | +0.194 | +0.361 |
+| 2020 | −0.405 | −0.445 | −0.001 | +0.238 | +0.641 |
+
+- **Inside the window,** the engine lands within about 5% of the census's deaths and 2% of its births.
+- **Past it, the deaths on top climb to +24% of the target.** They are not severe starvation: under 1% of people starve
+  severely in this run's saves, as in the normal-speed gate saves. Mild starvation, which the census absorbs, reached
+  18% of people in calendar 1857, against 8% at normal speed: in fast mode the people outgrow the farms.
+- **What `dz` follows:** life expectancy (r = +0.49 over 21,831 country-years) and Gini (+0.41). Turmoil barely
+  registers (+0.06).
+- **A likely reading, not proven:** the lines left on top are a share of the engine's bare rate. As the census cuts
+  deaths further (M toward −0.6), the same lines become a larger share of a smaller target.
+
+**The four countries that lose people past 1900** all came out of the East India Company's break-up. `--phase2` exits
+1 on them because its run check doesn't stop at `--to-year`. `predict` exits 1 on the 1866 save for two of them,
+Hindustan (−0.14% a year) and Satara (−0.16%). Its "world multiple 1882–1900 ×1.46" projects calendar 1882 to
+calendar 1900, which is not the gate's multiple.
+
+| Country | Longest losing run (census years) | Calendar | People | What drives it |
+|---|---|---|---|---|
+| Bengal | 1975–1987 (12) | 1870–1873 | 95.2M to 93.1M | Deaths on top: `dz` +0.52 to +0.84, with life expectancy about 44 |
+| Carnatic | 1940–1979 (39) | 1861–1871 | 20.6M to 16.9M | The census's own deaths (life expectancy 32 to 38, `dz` about +0.15), and a residual of −1.6M in 1979, which takes in states changing hands |
+| Hindustan | 1960–1972 (12) | 1866–1869 | 54.7M to 53.3M | The census's own deaths: life expectancy 21 to 26, infant mortality 370 per 1,000, `dz` under +0.08 |
+| Satara | 1980–2002 (22) | 1871–1877 | 22.1M to 19.3M | Emigration (100,000 to 166,000 a year), with deaths at or above births |
+
+These calendar years are the 1860s and 1870s. India's real life expectancy then was in the mid-20s, and its people grew
+only slowly through the famines. Hindustan's and Carnatic's figures sit near that. Bengal's are the ones that look wrong.
+
 ## The probes
 
 | Probe | Question | Answer |
@@ -142,8 +214,8 @@ saves are compressed binary and couldn't be read.
 | P1 | Are devastation's and pollution's mortality lines inside `modifier:state_mortality_mult`? | **Yes, both (owner, in game, 2026-10-10).** Alentejo: "State Region Devastation +11%", Ministry of Health −2%, total +9%, against option m's logged +0.091. Yorkshire: "Pollution Impact +8%", Ministry of Health −14%, total −5%, against −0.046. The mod's +0.05 pollution line adds to vanilla's (owner). The plan's §1 (E14, E15) records it |
 | P2 | Does M cancel what the census absorbs, under Full only? (Amended: the lines stay in the law, tech and institution tooltips by design, the owner's accepted cost) | **To do (owner, in game):** option n on the capital under Full. `rep_b` and `rep_d` are the absorbed share of the bare curves, each plus any mild starvation: with No Women's Rights about +0.05 − 0.1 × literacy; for a Women in the Fields holder (a variant of No Women's Rights) about −0.10 − 0.1 × literacy, and its capital's birth-rate tooltip lists only its own −10%, not No Women's Rights' +5% as well; with Charitable Health System at Ministry of Health level N about −0.03 × N in deaths. The capital's birth and mortality tooltips list the laws' lines beside Census: Births / Deaths. `debug.log` carries no error from `te_demog_absorbed_*` (the generated `institution_investment_level` ladders, `has_technology_researched`, `is_in_mild_starvation` in pop scope). Offline, `TestEngineRateLines` pins every line to main and `TestAbsorbedScript` runs the script against `DM.totals` |
 | P3 | Does the engine hit the target? Is M's fixed point stable? | **To do (owner, in game):** option n on the capital twice. After its second yearly pulse (the first step): `mb`, `md` and `applied_*`. After its third (the second step, the first that measures the engine against a target): `bz`, `dz` and `eb_target`, which are all 0 at the second |
-| P4 | Does a state keep its census modifiers through a change of owner? | **To do:** `predict SAVE --check-modifiers` on a fast-run save taken after a war or a civil war |
-| P5 | Turmoil's scaling (conditional) | Only if the fast run shows a residual tied to turmoil |
+| P4 | Does a state keep its census modifiers through a change of owner? | **Yes (fast-mode run, 2026-10-11).** `predict --check-modifiers` finds no state missing its modifiers on the 1866, 1876 and 1882 saves, after the East India Company broke up and several revolutions |
+| P5 | Turmoil's scaling (conditional) | **Not needed:** in the fast run, turmoil barely tracks the deaths on top (r = +0.06 with `dz`) |
 | P6 | Does Private Health Insurance's `state_mortality_wealth_mult` scale by each pop's own wealth? (Labelled P6 because P5 is turmoil's) | **To do (owner, in game), before building its absorption.** In a debug-mode test game, give a rich country Private Health Insurance with the Ministry of Health at level 5. In one incorporated state, open the mortality breakdown of a rich pop (wealth 40 or more) and of a poor one (about 10): under the description's semantics the line reads about −40% and −10% (wealth × −0.002 × 5). The same value on both means it scales by something else, such as the state's mean wealth or a define |
 
 ## Still to run (owner)
@@ -154,14 +226,12 @@ This list is the canonical checklist; the PR body repeats it.
    benchmark on the 1887 gate save under Full and under Disabled**, recorded here: the plan's Risks asks for the walk's
    cost, and if it grew, the absorbed literacy and starvation terms fold into the pop multipliers' own evaluation (final
    review 2, m6, deferred).
-2. **The fast-mode gate run:** a new 1836 game, observed, census log on (option b), fast mode at 4× (option h) on day
-   1, to census year 1950 or later; every `debug.log` generation archived and yearly autosaves on D:.
-3. **Then:** `demographics_observer_report.py LOGS... --phase2` and `--closed-borders SAVES...`; `demographics_harness.py
-   replay` on option a's blocks from three states at different SoL; `predict --census-rates` on the run's saves, and
-   `--check-modifiers` on one after a war.
-4. **The in-game gate:** the world 1836–1900 within ×1.3–×1.7; no 20M+ country losing people ten census years running
-   outside wars; the replay exact; the Closed Borders `mig_raw` median within ±1 per 1,000; the clamped share under 1%;
-   Europe's share rising to 1900 and Asia's falling.
-5. **For this doc:** the census line's `bz` and `dz` by country and decade, which measure the size of the births and
-   deaths added on top.
+2. **Done: the fast-mode gate run** (2026-10-11, above). It passes inside its window, census 1837–1900.
+3. **The replay:** `demographics_harness.py replay` on option a's blocks from three states at different SoL. The fast
+   run logged none.
+4. **The owner's calls on the fast run:**
+   - Europe's flat share.
+   - Bengal's deaths on top past 1900.
+   - Whether `--phase2`'s run check should stop at `--to-year`.
+5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
 6. **P6**, then the owner's call on absorbing Private Health Insurance's wealth mortality per pop under Full (above).
