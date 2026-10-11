@@ -1938,6 +1938,10 @@ class MovementEndpointTests(unittest.TestCase):
             patch = mock.patch.object(mss, name, value)
             patch.start()
             self.addCleanup(patch.stop)
+        # The handler reads carriers from gen_law_consistency.py under mod_path.
+        patch = mock.patch("ideology_lawgroup_audit.carrier_laws", return_value={"law_carrier"})
+        patch.start()
+        self.addCleanup(patch.stop)
 
     def get(self, path):
         handler = _CapturingHandler(path)
@@ -1951,7 +1955,7 @@ class MovementEndpointTests(unittest.TestCase):
         self.assertEqual(rows["movement_modernizer"]["alternate_ideologies"], ["ideology_modern_2"])
         status, body = self.get("/movements/movement_pacifist")
         self.assertEqual(status, 200)
-        self.assertEqual(body["tech_gate"], ["anti_war_movement", "pacifism"])
+        self.assertEqual(body["tech_gate"], ["anti_war_movement", "doubly_negated", "pacifism"])
         self.assertIn("raw", body)
         self.assertEqual(self.get("/movements/movement_nope")[0], 404)
 
@@ -1961,7 +1965,8 @@ class MovementEndpointTests(unittest.TestCase):
         status, by_law = self.get("/movement-stances?law=law_total_war")
         self.assertEqual(status, 200)
         self.assertEqual(by_group, by_law)
-        self.assertEqual(by_group["unbacked_laws"], ["law_carrier", "law_humane_war"])
+        self.assertEqual(by_group["unbacked_laws"], ["law_humane_war"])
+        self.assertEqual(by_group["carriers"], ["law_carrier"])
 
     def test_comparative_mode(self):
         status, body = self.get(
