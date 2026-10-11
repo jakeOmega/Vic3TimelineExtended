@@ -305,6 +305,17 @@ console's lines are in `debug.log`.
   The absorbed sums cost at most about 0.3 s a world-year, spread over the year's state pulses. Final review 2's m6
   (folding the absorbed terms into the pop multipliers) stays deferred.
 
+## The moved lines (owner, 2026-10-11)
+
+Every birth and mortality line on a law, technology or institution now sits on a script-only type
+(`docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md`).
+- **Without the census** (rule off, Display only, or Full before a state's first step), the lines reach each state as
+  Laws and Institutions.
+- **Under Full,** the census models the absorbed family and applies the on-top family at its rate.
+
+`predict` on the six normal-speed gate saves still gives ×1.64, with no 20M+ country shrinking. Its growth doesn't
+change, because an absorbed line cancelled on both sides before, and no on-top family line is held between 1837 and 1887.
+
 ## The probes
 
 | Probe | Question | Answer |
@@ -329,4 +340,14 @@ This list is the canonical checklist; the PR body repeats it.
    - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
 6. **Done: P6** (above). Then absorbing Private Health Insurance's wealth mortality per pop under Full (owner, 2026-10-10: on top for now; P6 says it can be built).
-7. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.
+7. **The moved lines, in game** (a new game after the build is deployed):
+   - **Disabled:** on day 1 a pop's mortality tooltip in the capital lists Laws and Institutions at the Ministry of
+     Health's value, and laborers' tooltips show child labour's line. A law's tooltip reads as before. Enacting Women in
+     the Workplace changes the birth-rate line that day. A conquered state shows its new owner's lines the day it
+     changes hands.
+   - **Full:** after the capital's first census step, the Laws and Institutions lines are gone. Census: Births and
+     Census: Deaths are present, and option n's `q_b`, `q_d` and `w` are 0 in 1837.
+   - **Private Health Insurance under Full** (debug: enact it, Ministry of Health level 5): Census: Deaths by Wealth on a
+     rich pop's tooltip reads about wealth × −0.005 × the census's share (`tb_d` in option n).
+   - **`debug.log`:** no error from `te_demog_line_*`, `te_demog_events.4` or `te_demog_engine_line_injections.txt`.
+8. **The normal-speed Full run** from 1836 (started 2026-10-11, 13:11; `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`): the calendar gate to 1900, and P3's pollution half from the saves' `te_dg_os_d`.

@@ -6,7 +6,7 @@
 mod re-applies them to each state while the census doesn't set births and deaths, and under Full the census applies
 only the ones it doesn't model.
 
-**Architecture:** 36 lines on 29 carriers (13 of them vanilla's) are moved, in two families:
+**Architecture:** 36 lines on 29 carriers (14 of them on 9 vanilla laws, 22 the mod's) are moved, in two families:
 - `state_demog_absorbed_*`: lines the census models;
 - `state_demog_ontop_*`: lines it doesn't.
 
@@ -123,8 +123,8 @@ the generator `scripts/generators/gen_demographics.py`, unittest with the repo's
 |---|---|---|
 | `common/modifier_type_definitions/demographics_engine_line_types.txt` | create | the 9 script-only types (absorbed: births, deaths, 4 class deaths; on top: births, deaths, wealth deaths) |
 | `localization/english/te_modifiers_l_english.yml` | modify | the types' names and descriptions; the pairs' names |
-| `common/laws/te_demog_engine_line_injections.txt` | create | the 13 vanilla lines: cancel + type (INJECTs on 12 vanilla laws) |
-| `common/laws/extra_laws.txt`, `common/technology/technologies/era_6.txt`, `era_7.txt`, `era_8.txt`, `era_10.txt`, `era_12.txt`, `common/institutions/extra_institutions.txt` | modify | the 23 mod lines: field → type, in place |
+| `common/laws/te_demog_engine_line_injections.txt` | create | the 14 vanilla lines: cancel + type (INJECTs on 9 vanilla laws) |
+| `common/laws/extra_laws.txt`, `common/technology/technologies/era_6.txt`, `era_7.txt`, `era_8.txt`, `era_10.txt`, `era_12.txt`, `common/institutions/extra_institutions.txt` | modify | the 22 mod lines: field → type, in place |
 | `scripts/analysis/demographics_params.py` | modify | `ENGINE_LINE_FIELDS`, `ENGINE_LINE_TYPES`, `WEALTH_LINE_FLOOR` |
 | `scripts/analysis/demographics_modifiers.py` | modify | `engine_lines()` (the moved lines, by family); `absorbed_carriers` and the on-top lists derived from it |
 | `scripts/generators/gen_demographics.py` | modify | write the pairs, their script values and `te_demog_lines_refresh`; drop the state-level absorbed ladders |
