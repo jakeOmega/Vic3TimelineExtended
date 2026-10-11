@@ -80,7 +80,9 @@ te_construction_market_site = {
 		}
 	}
 
-	# Direct games: the market-mode Construction Sector's weighting (below). The
+	# Direct games: weighted by the government queue, since a direct game has no
+	# construction price (the market-mode Construction Sector below reads the
+	# price instead, te_construction_sector_ai_value). The
 	# engine's own construction planning (00_ai.txt MONEY_SPENDING_CONSTRUCTION_*,
 	# GOVERNMENT_BUILDING_STATE_POP_CONSTRUCTION_SECTOR_*) works on the camp,
 	# which in direct games is this building. Market games never build it.
@@ -163,36 +165,10 @@ REPLACE:building_construction_sector = {
 		}
 	}
 
-	# Construction sector should generally be preferred over other equal-priority spending items.
-	# Conditional bumps reflect: a long queue = need more capacity; war / banking stress
-	# = don't pile on more construction debt right now.
+	# A boost for how cheap a level is, rising with the construction good's price
+	# (te_construction_market_ai_values.txt).
 	ai_value = {
-		value = 2500
-		# Queue is long: more construction capacity is the right answer
-		if = {
-			limit = { owner = { construction_queue_num_queued_government_levels > 30 } }
-			add = 2000
-		}
-		# Queue is empty: don't keep stockpiling construction
-		if = {
-			limit = { owner = { construction_queue_num_queued_government_levels < 5 } }
-			add = -1500
-		}
-		# At war: deprioritize construction expansion (focus existing capacity on war effort)
-		if = {
-			limit = { owner = { is_at_war = yes } }
-			add = -500
-		}
-		# Active banking-cycle stress: don't add construction during a financial crunch
-		if = {
-			limit = {
-				owner = {
-					has_variable = bubble_pressure
-					var:bubble_pressure >= 60
-				}
-			}
-			add = -500
-		}
+		value = te_construction_sector_ai_value
 	}
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds"
