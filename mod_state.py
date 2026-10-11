@@ -166,6 +166,15 @@ VANILLA_COMMON_DIRS = {
     "Game Concepts": "game_concepts",
 }
 
+# Entity types whose entities are script values: an INJECT into one appends
+# its steps instead of merging them (ParadoxFileParser.script_values).
+SCRIPT_VALUE_TYPES = frozenset({"Script Values"})
+
+
+def parser_for(entity_type):
+    """A ParadoxFileParser set up for `entity_type`'s INJECT rules."""
+    return ParadoxFileParser(script_values=entity_type in SCRIPT_VALUE_TYPES)
+
 
 class ModState:
     def __init__(self, base_game_dir, mod_dir, diff=False, vanilla_data=None):
@@ -204,8 +213,8 @@ class ModState:
 
     def load_directory_files(self, base_game_dir, mod_dir, diff=False, vanilla_data=None):
         for entity_type, dir_path in base_game_dir.items():
-            self.base_parsers[entity_type] = ParadoxFileParser()
-            self.mod_parsers[entity_type] = ParadoxFileParser()
+            self.base_parsers[entity_type] = parser_for(entity_type)
+            self.mod_parsers[entity_type] = parser_for(entity_type)
             if vanilla_data is not None:
                 data = vanilla_data.get(entity_type) or {}
                 self.base_parsers[entity_type].data = data
@@ -237,8 +246,8 @@ class ModState:
         if not diff and isinstance(mod_dir, dict):
             for entity_type, dir_path in mod_dir.items():
                 if entity_type not in base_game_dir:
-                    self.base_parsers[entity_type] = ParadoxFileParser()
-                    self.mod_parsers[entity_type] = ParadoxFileParser()
+                    self.base_parsers[entity_type] = parser_for(entity_type)
+                    self.mod_parsers[entity_type] = parser_for(entity_type)
                     if os.path.isdir(dir_path):
                         self.load_files_from_directory(
                             entity_type, dir_path, base_game=False
@@ -257,7 +266,7 @@ class ModState:
             f for f in self.parse_failures if f.get("source") != "mod"
         ]
         for entity_type, parser in self.base_parsers.items():
-            fresh = ParadoxFileParser()
+            fresh = parser_for(entity_type)
             fresh.data = copy.deepcopy(parser.data)
             self.mod_parsers[entity_type] = fresh
         if not isinstance(mod_dir, dict):
@@ -267,9 +276,9 @@ class ModState:
                 continue
             if entity_type not in self.mod_parsers:
                 # Mod-only entity type with no vanilla side.
-                self.mod_parsers[entity_type] = ParadoxFileParser()
+                self.mod_parsers[entity_type] = parser_for(entity_type)
                 if entity_type not in self.base_parsers:
-                    self.base_parsers[entity_type] = ParadoxFileParser()
+                    self.base_parsers[entity_type] = parser_for(entity_type)
             self.load_files_from_directory(entity_type, dir_path, base_game=False)
 
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
@@ -280,7 +289,7 @@ class ModState:
                     self.base_parsers[entity_type].parse_file(file_path)
                     self.mod_parsers[entity_type].parse_file(file_path)
                 else:
-                    mod_data = self.parse_mod_file(file_path)
+                    mod_data = self.parse_mod_file(file_path, entity_type)
                     self.mod_parsers[entity_type].merge_data(mod_data)
             except Exception as e:
                 logger.warning(
@@ -293,8 +302,9 @@ class ModState:
                     "source": "vanilla" if base_game else "mod",
                 })
 
-    def parse_mod_file(self, file_path):
-        parser = ParadoxFileParser()
+    def parse_mod_file(self, file_path, entity_type=None):
+        # entity_type picks the INJECT rules for a block the file repeats.
+        parser = parser_for(entity_type)
         parser.parse_file(file_path, apply_directives=False)
         return parser.data
 
