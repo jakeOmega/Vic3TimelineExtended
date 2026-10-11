@@ -450,15 +450,16 @@ movement_events_te.4 = {
 }
 
 # Event 17: Condemn Their Treatment of Minorities? (precursor to 4)
-# To a great power that itself protects minorities (te_ea_cr_can_condemn_root),
-# from the je_civil_rights pulse of a country whose movement is fighting
-# discriminatory law (te_ea_cr_invite_condemnation saves that country as
+# To a great power that itself protects minorities and has a stake in the
+# accused (te_ea_cr_can_condemn_root), from the je_civil_rights pulse of a
+# country whose movement is fighting discriminatory law
+# (te_ea_cr_invite_condemnation saves that country as
 # scope:cr_condemned_country and this one as scope:criticizing_country).
 # Condemning costs relations with the accused and pleases our academics; it
-# sends movement_events_te.4 to the accused, which answers. A critic is asked
-# at most once a quarter, whatever it answers, so a player great power is not
-# handed a stack of these; any one accused is protected for longer by its own
-# te_ea_cr_condemned.
+# sends movement_events_te.4 to the accused, which answers. Whatever it
+# answers, an AI critic is not asked again for a quarter and a player for two
+# years, so a player great power is not handed a stack of these; any one
+# accused is protected for longer by its own te_ea_cr_condemned.
 movement_events_te.17 = {
 	type = country_event
 	placement = root
@@ -483,7 +484,13 @@ movement_events_te.17 = {
 	}
 
 	immediate = {
-		set_variable = { name = te_ea_cr_critic_cd value = yes days = 90 }
+		if = {
+			limit = { is_ai = no }
+			set_variable = { name = te_ea_cr_critic_cd value = yes days = 730 }
+		}
+		else = {
+			set_variable = { name = te_ea_cr_critic_cd value = yes days = 90 }
+		}
 	}
 
 	# Condemn them publicly

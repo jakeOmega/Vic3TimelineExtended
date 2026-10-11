@@ -179,7 +179,7 @@ Design and variables: `common/scripted_effects/civil_rights_effects.txt` § REVO
 - **Not rebuilt:** the IG approval modifiers from `.100`'s `social_*_reaction_effect`, and `.240` A's modifier on the political movement.
 
 ### Random pool (slimmed)
-- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~14% chance per month: 63 of 463). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law is asked first (`.17`), and `.4` follows only if it condemns.
+- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~14% chance per month: 63 of 463). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law and a stake in the accused (`te_ea_cr_has_stake_in_root`: strategic adjacency, a rivalry either way, a shared power bloc, or a subject relation) is asked first (`.17`), and `.4` follows only if it condemns. A critic is not asked again for 90 days if it is an AI, two years if a player.
 
 ### Supporting files
 - `common/scripted_progress_bars/extra_progress_bars.txt` — `civil_rights_support_bar`

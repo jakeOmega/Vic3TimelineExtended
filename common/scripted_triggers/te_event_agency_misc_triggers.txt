@@ -61,16 +61,35 @@ te_ea_cr_condemnable = {
 }
 
 # A candidate critic (country scope; ROOT = the accused): a great power that
-# knows the language of civil rights and protects its own minorities, and has
-# not been asked in the past 90 days (.17 sets te_ea_cr_critic_cd when it
-# fires). World-wide, so kept short: a year let each critic answer only one
-# accused a year, well below .4's old rate.
+# knows the language of civil rights, protects its own minorities and has a
+# stake in the accused (te_ea_cr_has_stake_in_root), and has not been asked
+# lately (.17 sets te_ea_cr_critic_cd when it fires: 90 days for an AI, two
+# years for a player). An AI's is kept short because a year let each critic
+# answer only one accused a year, well below .4's old rate; a player's is long
+# because any great power could be asked about any accused in the world, and
+# a player great power got .17 several times a year.
 te_ea_cr_can_condemn_root = {
 	NOT = { this = root }
 	country_rank >= rank_value:great_power
 	has_technology_researched = civil_rights_movement
 	has_progressive_minority_law = yes
 	NOT = { has_variable = te_ea_cr_critic_cd }
+	te_ea_cr_has_stake_in_root = yes
+}
+
+# A critic's stake in the accused (country scope; ROOT = the accused): it
+# borders or neighbours it by sea (or holds military access or a war goal
+# there), one rivals the other, they share a power bloc, or one is the other's
+# overlord. A great power far from the accused, with no quarrel or tie to it,
+# has no reason to speak up and is not asked.
+te_ea_cr_has_stake_in_root = {
+	OR = {
+		has_strategic_adjacency = root
+		any_rival_country = { this = root }
+		any_rivaling_country = { this = root }
+		is_in_same_power_bloc = root
+		has_subject_relation_with = root
+	}
 }
 
 # ----------------------------------------------------------------------------
