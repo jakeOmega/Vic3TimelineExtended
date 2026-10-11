@@ -128,6 +128,17 @@ te_demog_fast_births_applied = {
 	}
 }
 
+# State scope: the state's Impact of Institutions, which the engine scales each institution's lines by
+# (Local Vernacular and Devolution -0.05, Ubiquitous Translation and the Consciousness Network method
+# +0.10, obstinance -1.0 x its share; the probe session, 2026-10-11, read "A multiplier of
+# 0.94" on the Midlands' Ministry of Health). The absorbed institution lines take it (te_demog_absorbed_*,
+# generated), so the census cancels them at the size the engine applies them.
+te_demog_institution_impact = {
+	value = 1
+	add = modifier:state_institution_impact_add
+	min = 0
+}
+
 te_demog_fast_deaths_applied = {
 	value = 0
 	if = {
