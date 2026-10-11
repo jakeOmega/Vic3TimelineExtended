@@ -40,6 +40,15 @@
 4. **An expired style event** (`.11` has no default option, so the first valid option is taken). A civic-progress building takes its most specific listed heritage, never "Keep to the plain classical style" ahead of it. Task 3 pins the option order.
 5. **Rename** (`gm_rename_sgui` → `.24` → a new form). The picture follows the new form. Task 6 pins the update call in `gm_state_choose_form`.
 
+## Execution Order
+
+The art is the long pole: about 1.5 GPU hours, then the owner's review. It needs only Task 1 and the subjects, so it runs while the script work goes on:
+
+1. Task 1.
+2. Task 9, Steps 3–5: register the 80 subjects, then start the render. Wait for any other FLUX process to exit first (`nvidia-smi`); two never share the 10 GB card. The subjects' keys are spelled out in Task 9's table, so they don't wait for `PICTURES`. Leave Task 9's test out until Task 6 has defined `PICTURES`.
+3. Tasks 2–8 while it renders.
+4. Task 9's test, Steps 6–7 (review and write), then Tasks 10–11.
+
 ---
 
 ### Task 1: Pipeline: framed GUI-hosted category with a borrowed frame
@@ -162,7 +171,7 @@ Retire generic Tower and Memorial, and add seven heritage forms. The defeat comm
 
 **Files:**
 - Modify: `test_grand_monument_registry.py` (`FORMS`, a new `RETIRED_FORMS`, `COMMISSION_SOURCES`, `NameTests`)
-- Modify: `common/scripted_triggers/gm_name_triggers.txt` (`gm_state_form_fits_tower`, delete `gm_state_form_fits_memorial`, seven new `gm_state_form_fits_<form>`, `gm_state_has_form_choice`, `gm_state_com_form_fits`)
+- Modify: `common/scripted_triggers/gm_name_triggers.txt` (`gm_state_form_fits_tower`, delete `gm_state_form_fits_memorial`, seven new `gm_state_form_fits_<form>`, `gm_state_has_form_choice`, `gm_state_com_form_fits`, `gm_state_current_form_fits`)
 - Modify: `common/scripted_effects/gm_commission_effects.txt:802` (`FORM = memorial` → `FORM = hall`)
 - Modify: `events/monument_events.txt` (`monument_events.24`: delete the `memorial` option; add seven options)
 - Modify: `common/customizable_localization/gm_custom_loc.txt` (`gm_form_name`: seven branches before `gm_form_opera_house`'s; keep `memorial`'s)
@@ -218,6 +227,19 @@ Add to `NameTests`:
             self.assertNotIn(f"monument_events.24.{form} ", ev + " ", form)
             self.assertNotIn(f"flag:{form} ", com, form)
 
+    def test_current_form_check_knows_every_form(self):
+        # gm_state_unveil keeps a commission's form only while it fits: a form
+        # missing here reads as not fitting, and the unveiling resets it.
+        cur = squash(block(self.t, "gm_state_current_form_fits"))
+        for form in list(FORMS) + list(BUILDING_FORMS.values()) + ["faith"]:
+            self.assertIn(f"var:gm_form = flag:{form} gm_state_form_fits_{form} = yes", cur, form)
+        for form in RETIRED_FORMS:
+            self.assertNotIn(f"flag:{form} ", cur, form)
+        # No call to a fit trigger that no longer exists.
+        for rel in (NAME_TRIGGERS, NAME_EFFECTS, EVENTS, EFFECTS):
+            for form in RETIRED_FORMS:
+                self.assertNotIn(f"gm_state_form_fits_{form} ", strip_comments(read(rel)), (rel, form))
+
     def test_commission_forms_fit_some_skin(self):
         com = squash(block(self.t, "gm_state_com_form_fits"))
         for s in COMMISSION_SOURCES:
@@ -241,7 +263,24 @@ gm_state_form_fits_tower = {
 }
 ```
 
-Delete the whole `gm_state_form_fits_memorial = { ... }` block, and in `gm_state_com_form_fits` delete the line `AND = { owner = { var:gm_com_form = flag:memorial } gm_state_form_fits_memorial = yes }`.
+Delete the whole `gm_state_form_fits_memorial = { ... }` block. Then remove every reference to it (`git grep -n "form_fits_memorial "` lists them; `memorial_church` is a different form):
+- in `gm_state_com_form_fits`, delete `AND = { owner = { var:gm_com_form = flag:memorial } gm_state_form_fits_memorial = yes }`;
+- in `gm_state_current_form_fits`, delete `AND = { var:gm_form = flag:memorial gm_state_form_fits_memorial = yes }`;
+- the `.24` option is deleted in Step 5.
+
+In `gm_state_current_form_fits`, after the `rock_cut` line, add one line per new form:
+
+```
+		AND = { var:gm_form = flag:menorah gm_state_form_fits_menorah = yes }
+		AND = { var:gm_form = flag:bell_tower gm_state_form_fits_bell_tower = yes }
+		AND = { var:gm_form = flag:rock_hewn_church gm_state_form_fits_rock_hewn_church = yes }
+		AND = { var:gm_form = flag:sun_stone gm_state_form_fits_sun_stone = yes }
+		AND = { var:gm_form = flag:stela gm_state_form_fits_stela = yes }
+		AND = { var:gm_form = flag:sacred_oak gm_state_form_fits_sacred_oak = yes }
+		AND = { var:gm_form = flag:colonnade gm_state_form_fits_colonnade = yes }
+```
+
+`gm_state_com_form_fits` and `gm_state_current_form_fits` keep their `tower` lines: the trigger still exists, for the Gothic style.
 
 After `gm_state_form_fits_rock_cut`, add:
 
@@ -383,6 +422,7 @@ git commit -m "Grand Monuments: generic drops Tower and Memorial; seven heritage
 
 **Interfaces:**
 - Consumes: `gm_state_try_heritage_skin = { H = <heritage> }` (exists), `gm_state_unveil` (exists).
+- Note: `hidden_trigger` is a valid engine key (`docs/engine/effect_trigger_valid_keys.txt`), but this is the mod's first use in an event option's trigger, and vanilla's events have none. The in-game check (Task 11) confirms the axis line stays hidden.
 - Produces: the skin-axis flag `flag:building`; `gm_state_choose_building_skin = { SKIN = <skin> }`; style pairs (building form, `heritage_<h>`) that Task 6's picture table uses.
 
 - [ ] **Step 1: The table and the failing tests**
@@ -1005,8 +1045,10 @@ git commit -m "Grand Monuments: gm_picture_code, set wherever the style or form 
 ```python
     def test_widget_has_every_picture(self):
         gui = read("gui/journal_entry_widgets/grand_monuments_widget.gui")
-        body = squash(block(gui, "type gm_picture = widget"))
-        self.assertIsNotNone(body)
+        # A GUI type header has no `=` before its brace: `type gm_picture = widget {`.
+        raw = raw_block_at(gui, r"(?m)^\ttype gm_picture = widget \{")
+        self.assertIsNotNone(raw)
+        body = squash(strip_comments(raw))
         for code in PICTURES:
             self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), "
                           f"'(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
@@ -1438,13 +1480,13 @@ for a in duplicate_key any_limit loc_render orphaned_event iterator_limit modifi
 
 Expected: OK; ruff clean; no `FAIL` lines.
 
-- [ ] **Step 2: Every changed `.txt`/`.gui` has exactly one BOM.** `for f in $(git diff --name-only origin/main -- '*.txt' '*.gui'); do head -c6 "$f" | xxd | grep -q 'efbb bfef bbbf' && echo "DOUBLE $f"; head -c3 "$f" | xxd | grep -q efbbbf || echo "NO BOM $f"; done` → no output. (`.gui` files that had no BOM before keep none; compare with `git show origin/main:<f> | head -c3`.)
+- [ ] **Step 2: Every changed `.txt`/`.gui` has exactly one BOM.** `for f in $(git diff --name-only origin/main -- '*.txt' '*.gui'); do head -c6 "$f" | xxd | grep -q 'efbb bfef bbbf' && echo "DOUBLE $f"; head -c3 "$f" | xxd -p | grep -q efbbbf || echo "NO BOM $f"; done` → no output. (`.gui` files that had no BOM before keep none; compare with `git show origin/main:<f> | head -c3`.)
 
 - [ ] **Step 3: Push and open the PR** (base `main`)
 
 PR body:
 - a summary per spec section;
-- the in-game checklist from spec §7, plus "the card's labels at 258 px don't elide" and "the greyed `.2` reasons read as law and technology names";
+- the in-game checklist from spec §7, plus "the card's labels at 258 px don't elide", "the greyed `.2` reasons read as law and technology names" and "`.11`'s tooltips show no `gm_skin_axis` line (`hidden_trigger` in an event option, first use)";
 - a "Player guide" line naming `02-timeline.md`;
 - the owner's picks note;
 - the attribution footer.
