@@ -12,6 +12,7 @@ Logs:   mod_state_server.log (rotated each startup, previous kept as .log.1)
 """
 
 import difflib
+import fnmatch
 import hashlib
 import importlib
 import json
@@ -178,6 +179,9 @@ mod_paths = {
     "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
     "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
     "Amendments": os.path.join(_MOD_COMMON, "amendments"),
+    "Interest Group Traits": os.path.join(_MOD_COMMON, "interest_group_traits"),
+    "Harvest Condition Types": os.path.join(_MOD_COMMON, "harvest_condition_types"),
+    "Power Bloc Identities": os.path.join(_MOD_COMMON, "power_bloc_identities"),
     "Events": os.path.join(mod_path, "events"),
     # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
     # listed so the mod can override them in future).
@@ -2773,27 +2777,40 @@ def _scan_mod_mtime() -> float | None:
 # image reuse inside the mod (or between mod and vanilla) is a likely placeholder
 # that was never replaced. Each entry: (entity_type, field_name).
 #
-# Permissive types (events, journal entries, production methods, ideologies,
-# combat units) are deliberately omitted — vanilla shares images across many
-# entities of those types by design. They simply aren't scanned.
+# Principles are clustered per principle group, not per tier: vanilla gives a
+# group one icon and every tier shares it.
+#
+# Permissive types (events, journal entries, production methods, PM groups,
+# static modifiers, messages, ships, diplomatic plays, religions) are
+# deliberately omitted — vanilla shares images across many entities of those
+# types by design. /duplicate-images doesn't scan them; /placeholder-icons
+# checks them for paths that resolve nowhere (_SHARED_BY_DESIGN_ICON_FIELDS).
 _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
-    ("Buildings",       "icon"),
-    ("Goods",           "texture"),
-    ("Decrees",         "texture"),
-    ("Technologies",    "texture"),
-    ("Interest Groups", "texture"),
-    ("Laws",            "icon"),
+    ("Buildings",               "icon"),
+    ("Goods",                   "texture"),
+    ("Decrees",                 "texture"),
+    ("Technologies",            "texture"),
+    ("Interest Groups",         "texture"),
+    ("Laws",                    "icon"),
+    ("Principles",              "icon"),
+    ("Ideologies",              "icon"),
+    ("Mobilization Options",    "texture"),
+    ("Institutions",            "icon"),
+    ("Character Traits",        "texture"),
+    ("Treaty Articles",         "icon"),
+    ("Diplomatic Actions",      "texture"),
+    ("Company Types",           "icon"),
+    ("Interest Group Traits",   "icon"),
+    ("Harvest Condition Types", "icon"),
+    ("Power Bloc Identities",   "icon"),
 ]
 
 # YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
-# slug for ergonomic editing; the in-memory map uses the canonical names.
+# slug for ergonomic editing (`interest_groups`, `treaty_articles`); the
+# in-memory map uses the canonical names.
 _ALLOWLIST_TYPE_SLUGS: dict[str, str] = {
-    "buildings":       "Buildings",
-    "goods":           "Goods",
-    "decrees":         "Decrees",
-    "technologies":    "Technologies",
-    "interest_groups": "Interest Groups",
-    "laws":            "Laws",
+    entity_type.lower().replace(" ", "_"): entity_type
+    for entity_type, _ in _IMAGE_FIELDS_BY_TYPE
 }
 
 _IMAGE_ALLOWLIST_PATH = os.path.join(
@@ -2862,15 +2879,20 @@ def _resolve_image_path(rel_path: str) -> str | None:
     Mod overlay first (so a mod-shipped icon wins over a vanilla one of the
     same name), vanilla fallback. Returns None if neither location has the file.
     """
+    origin = _image_origin(rel_path)
+    return origin[1] if origin else None
+
+
+def _image_origin(rel_path: str) -> tuple[str, str] | None:
+    """("mod" | "vanilla", absolute path) for a Paradox-relative image path,
+    the mod's file first, as the engine overlays it. None when neither has it."""
     if not rel_path:
         return None
-    candidates = (
-        os.path.join(mod_path, rel_path),
-        os.path.join(base_game_path, "game", rel_path),
-    )
-    for c in candidates:
-        if os.path.isfile(c):
-            return c
+    for origin, root in (("mod", mod_path),
+                         ("vanilla", os.path.join(base_game_path, "game"))):
+        candidate = os.path.join(root, rel_path)
+        if os.path.isfile(candidate):
+            return origin, candidate
     return None
 
 
@@ -2897,30 +2919,89 @@ def _image_content_hash(rel_path: str) -> str:
         return f"path:{rel_path}"
 
 
-def _collect_image_uses(entity_type: str, field: str, *,
-                        include_vanilla: bool) -> tuple[dict[str, list[str]], set[str]]:
-    """Return (image_path → [entity_id, …], set_of_mod_only_ids) for one type."""
+def _entity_image(raw, field: str) -> str | None:
+    """An entity's `field` as a path, without the quotes the parser keeps (so
+    it matches the unquoted paths in the YAML allowlist), or None."""
+    data = get_entity_data(raw)
+    if not isinstance(data, dict):
+        return None
+    image = get_field(data, field)
+    if not isinstance(image, str):
+        return None
+    if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
+        image = image[1:-1]
+    return image or None
+
+
+def _principle_group_of() -> dict[str, str]:
+    """principle id → the id of the principle group whose `levels` lists it.
+
+    The mod's groups first, then vanilla's for a tier no mod group lists: a
+    group the mod REPLACEs with renamed tiers (sacred civics' `_mod`
+    variants) leaves the vanilla tiers in no group, still on its icon."""
+    out: dict[str, str] = {}
+    for parsers in (ms.mod_parsers, ms.base_parsers):
+        parser = parsers.get("Principle Groups")
+        for gid, raw in ((parser.data if parser else None) or {}).items():
+            levels = get_field(get_entity_data(raw), "levels")
+            if isinstance(levels, list):
+                for pid in levels:
+                    if isinstance(pid, str):
+                        out.setdefault(pid, gid)
+    return out
+
+
+def _image_entity_uses(entity_type: str, field: str) -> list[dict]:
+    """Every entity of one type that sets `field`, as
+    {"key", "image", "mod_side", "members"}.
+
+    `mod_side` is true when the mod added the entity or changed the field from
+    vanilla's value. Principles collapse to their group: `key` is the group,
+    `members` the tiers on that image, and the group's image counts as
+    mod-side only when a mod-side tier uses it and no vanilla tier of the
+    group does — a tier IV the mod adds on its group's vanilla icon follows
+    vanilla's convention, it isn't a placeholder. For every other type
+    `members` is [key]."""
     if not ms or entity_type not in ms.mod_parsers:
-        return {}, set()
+        return []
     full = ms.mod_parsers[entity_type].data or {}
     base = (ms.base_parsers[entity_type].data
             if entity_type in ms.base_parsers else {}) or {}
-    mod_only_ids = set(full.keys()) - set(base.keys())
-    uses: dict[str, list[str]] = {}
+    group_of = _principle_group_of() if entity_type == "Principles" else {}
+    vanilla_group_images: dict[str, set[str]] = {}
+    if group_of:
+        for pid, raw in base.items():
+            image = _entity_image(raw, field)
+            if image and pid in group_of:
+                vanilla_group_images.setdefault(group_of[pid], set()).add(image)
+
+    records: dict[tuple[str, str], dict] = {}
     for entity_id, raw in full.items():
-        data = get_entity_data(raw)
-        if not isinstance(data, dict):
+        image = _entity_image(raw, field)
+        if not image:
             continue
-        image = get_field(data, field)
-        if not isinstance(image, str) or not image:
-            continue
-        # Strip surrounding quotes preserved by the parser so the path matches
-        # naturally against unquoted entries in the YAML allowlist.
-        if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
-            image = image[1:-1]
-        if image:
-            uses.setdefault(image, []).append(entity_id)
-    return uses, mod_only_ids
+        vanilla_raw = base.get(entity_id)
+        mod_side = vanilla_raw is None or _entity_image(vanilla_raw, field) != image
+        key = group_of.get(entity_id, entity_id)
+        if group_of and image in vanilla_group_images.get(key, ()):
+            mod_side = False
+        rec = records.setdefault((key, image), {
+            "key": key, "image": image, "mod_side": False, "members": []})
+        rec["members"].append(entity_id)
+        rec["mod_side"] = rec["mod_side"] or mod_side
+    return list(records.values())
+
+
+def _collect_image_uses(entity_type: str, field: str) -> tuple[dict[str, list[str]], set[str]]:
+    """Return (image_path → [entity_id, …], set_of_mod_side_ids) for one type.
+    Principles are listed by group (see _image_entity_uses)."""
+    uses: dict[str, list[str]] = {}
+    mod_side: set[str] = set()
+    for rec in _image_entity_uses(entity_type, field):
+        uses.setdefault(rec["image"], []).append(rec["key"])
+        if rec["mod_side"]:
+            mod_side.add(rec["key"])
+    return uses, mod_side
 
 
 def _find_duplicate_images(*, include_vanilla: bool = False,
@@ -2938,7 +3019,7 @@ def _find_duplicate_images(*, include_vanilla: bool = False,
       include_vanilla     — include clusters with no mod-side entities.
       types               — restrict scan to these canonical entity-type names.
       allowlist           — pre-built allowlist dict (else loaded from the YAML).
-      include_allowlisted — emit the `allowlisted` array in the response.
+      include_allowlisted — emit the `allowlisted` array.
       hasher              — callable(rel_path) → hash string. Defaults to
                             `_image_content_hash`. Tests inject a fake hasher
                             so they don't need real .dds files on disk.
@@ -2949,6 +3030,10 @@ def _find_duplicate_images(*, include_vanilla: bool = False,
        "entities":    [sorted entity ids],
        "kind":        "path" | "content",
        "reason":      <only present for allowlisted clusters>}
+
+    `stale_allowlist` lists the allowlist entries of the scanned types that
+    match no cluster, vanilla-only ones included: an entry whose entity list
+    went out of date hides nothing and should be deleted or rewritten.
     """
     if allowlist is None:
         allowlist = _load_image_allowlist()
@@ -2958,40 +3043,41 @@ def _find_duplicate_images(*, include_vanilla: bool = False,
     scanned_types: list[str] = []
     flagged: list[dict] = []
     allowlisted: list[dict] = []
+    matched: set[tuple[str, tuple]] = set()
 
     for entity_type, field in _IMAGE_FIELDS_BY_TYPE:
         if types is not None and entity_type not in types:
             continue
         scanned_types.append(entity_type)
-        path_to_entities, mod_only_ids = _collect_image_uses(
-            entity_type, field, include_vanilla=include_vanilla
-        )
+        path_to_entities, mod_only_ids = _collect_image_uses(entity_type, field)
         # Hash each unique path once.
         path_to_hash = {p: hasher(p) for p in path_to_entities}
 
         # Group entities by content hash.
         hash_to_paths: dict[str, set[str]] = {}
-        hash_to_entities: dict[str, list[str]] = {}
+        hash_to_entities: dict[str, set[str]] = {}
         for path, ents in path_to_entities.items():
             h = path_to_hash[path]
             hash_to_paths.setdefault(h, set()).add(path)
-            hash_to_entities.setdefault(h, []).extend(ents)
+            hash_to_entities.setdefault(h, set()).update(ents)
 
         type_allowlist = allowlist.get(entity_type, {})
         for h, ents in hash_to_entities.items():
             if len(ents) < 2:
                 continue
-            if not include_vanilla and not (set(ents) & mod_only_ids):
-                continue
             paths = hash_to_paths[h]
+            allow_key = (frozenset(paths), frozenset(ents))
+            if allow_key in type_allowlist:
+                matched.add((entity_type, allow_key))
+            if not include_vanilla and not (ents & mod_only_ids):
+                continue
             kind = "content" if len(paths) > 1 else "path"
             cluster = {
                 "entity_type": entity_type,
                 "images": sorted(paths),
-                "entities": sorted(set(ents)),
+                "entities": sorted(ents),
                 "kind": kind,
             }
-            allow_key = (frozenset(paths), frozenset(ents))
             if allow_key in type_allowlist:
                 cluster["reason"] = type_allowlist[allow_key]
                 allowlisted.append(cluster)
@@ -3000,14 +3086,24 @@ def _find_duplicate_images(*, include_vanilla: bool = False,
 
     flagged.sort(key=lambda c: (c["entity_type"], c["images"]))
     allowlisted.sort(key=lambda c: (c["entity_type"], c["images"]))
+    stale = sorted(
+        ({"entity_type": entity_type, "images": sorted(images),
+          "entities": sorted(ents), "reason": reason}
+         for entity_type in scanned_types
+         for (images, ents), reason in allowlist.get(entity_type, {}).items()
+         if (entity_type, (images, ents)) not in matched),
+        key=lambda c: (c["entity_type"], c["images"]),
+    )
 
     report: dict = {
         "summary": {
             "flagged": len(flagged),
             "allowlisted": len(allowlisted),
+            "stale_allowlist": len(stale),
             "scanned_entity_types": scanned_types,
         },
         "flagged": flagged,
+        "stale_allowlist": stale,
     }
     if include_allowlisted:
         report["allowlisted"] = allowlisted
@@ -3019,14 +3115,15 @@ def _render_duplicate_images_text(report: dict, *, include_allowlisted: bool = F
     summary = report.get("summary", {})
     out = [
         f"Duplicate images: {summary.get('flagged', 0)} flagged, "
-        f"{summary.get('allowlisted', 0)} allowlisted",
+        f"{summary.get('allowlisted', 0)} allowlisted, "
+        f"{summary.get('stale_allowlist', 0)} stale allowlist entries",
         f"Scanned types: {', '.join(summary.get('scanned_entity_types', []))}",
         "",
     ]
 
     def _format_cluster(c: dict) -> list[str]:
-        kind_tag = "CONTENT" if c.get("kind") == "content" else "PATH"
-        lines = [f"  [{c['entity_type']}] [{kind_tag}]"]
+        kind_tag = {"content": " [CONTENT]", "path": " [PATH]"}.get(c.get("kind"), "")
+        lines = [f"  [{c['entity_type']}]{kind_tag}"]
         for p in c["images"]:
             lines.append(f"    image: {p}")
         for eid in c["entities"]:
@@ -3040,6 +3137,13 @@ def _render_duplicate_images_text(report: dict, *, include_allowlisted: bool = F
             out.extend(_format_cluster(c))
     else:
         out.append("FLAGGED: none")
+    stale = report.get("stale_allowlist", [])
+    if stale:
+        out.append("")
+        out.append(f"STALE ALLOWLIST ENTRIES ({len(stale)}), matching no cluster:")
+        for c in stale:
+            out.extend(_format_cluster(c))
+            out.append(f"      reason: {c.get('reason') or '(no reason given)'}")
     if include_allowlisted and report.get("allowlisted"):
         out.append("")
         out.append(f"ALLOWLISTED ({len(report['allowlisted'])}):")
@@ -3047,6 +3151,333 @@ def _render_duplicate_images_text(report: dict, *, include_allowlisted: bool = F
             reason = c.get("reason") or "(no reason given)"
             out.extend(_format_cluster(c))
             out.append(f"      reason: {reason}")
+    return "\n".join(out) + "\n"
+
+
+# ---------------------------------------------------------------------------
+# Placeholder-icon classification (/placeholder-icons)
+# ---------------------------------------------------------------------------
+# Image fields of the types (and the `background` fields) where vanilla shares
+# art by design. They are classified only under ?include_shared_by_design=true;
+# a path in one that resolves nowhere is reported as `missing` either way.
+_SHARED_BY_DESIGN_ICON_FIELDS: list[tuple[str, str]] = [
+    ("Battle Conditions",          "icon"),
+    ("Buildings",                  "background"),
+    ("Character Interactions",     "icon"),
+    ("Combat Unit Groups",         "icon"),
+    ("Company Types",              "background"),
+    ("Cultures",                   "seal_and_signature_texture"),
+    ("Diplomatic Plays",           "texture"),
+    ("Events",                     "icon"),
+    ("Game Concepts",              "texture"),
+    ("Harvest Condition Types",    "map_texture"),
+    ("Institutions",               "background_texture"),
+    ("Journal Entries",            "icon"),
+    ("Messages",                   "texture"),
+    ("Mobilization Option Groups", "icon"),
+    ("Modifiers",                  "icon"),
+    ("PM Groups",                  "texture"),
+    ("PMs",                        "texture"),
+    ("Pop Types",                  "texture"),
+    ("Power Bloc Identities",      "background"),
+    ("Principles",                 "background"),
+    ("Religions",                  "icon"),
+    ("Ship Groups",                "icon"),
+    ("Ship Modification Slots",    "icon"),
+    ("Ship Modifications",         "icon"),
+    ("Ship Types",                 "icon"),
+    ("Ship Types",                 "profile_texture"),
+]
+
+# `shared_with` names at most this many sharers (`shared_count` has the total):
+# a vanilla modifier icon has over a thousand.
+_SHARED_WITH_LIMIT = 20
+
+# Report order, most actionable first.
+_PLACEHOLDER_STATUSES = ("missing", "generated_standin", "borrowed_vanilla",
+                         "shared_mod", "unique_mod", "unresolved")
+
+_STANDIN_PATTERNS_PATH = os.path.join(
+    mod_path, "common", "_meta", "generated_standin_icons.yml"
+)
+
+_TOP_LEVEL_OPENER_RE = re.compile(
+    r"^(?:INJECT:|REPLACE:|INJECT_OR_CREATE:|REPLACE_OR_CREATE:)?([\w.\-]+)\s*=\s*\{")
+
+
+def _load_standin_patterns(path: str | None = None) -> list[str]:
+    """The `pattern:` globs of common/_meta/generated_standin_icons.yml, or []."""
+    target = path or _STANDIN_PATTERNS_PATH
+    if not os.path.isfile(target):
+        return []
+    try:
+        import yaml
+        with open(target, "r", encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or []
+    except Exception as e:
+        print(f"WARNING: failed to load stand-in icon patterns {target}: {e}")
+        return []
+    if not isinstance(raw, list):
+        return []
+    return [str(e["pattern"]) for e in raw
+            if isinstance(e, dict) and e.get("pattern")]
+
+
+def _icon_definition_sites(entity_type: str, field: str) -> dict[str, tuple[str, int]]:
+    """entity id → (repo-relative file, line) of the `field = …` line in its
+    mod top-level block, or of the block's opener when no mod block sets the
+    field. When several blocks set it (a definition and an INJECT), the last
+    in load order wins, as it does in game."""
+    directory = mod_paths.get(entity_type)
+    if not directory or not os.path.isdir(directory):
+        return {}
+    field_re = re.compile(rf"^\s*{re.escape(field)}\s*=")
+    field_sites: dict[str, tuple[str, int]] = {}
+    opener_sites: dict[str, tuple[str, int]] = {}
+    for path in iter_script_files(directory):
+        rel = os.path.relpath(path, mod_path)
+        try:
+            with open(path, encoding="utf-8-sig", errors="replace") as f:
+                lines = f.readlines()
+        except OSError:
+            continue
+        depth = 0
+        current = None
+        for lineno, line in enumerate(lines, 1):
+            code = line.split("#", 1)[0]
+            if depth == 0:
+                m = _TOP_LEVEL_OPENER_RE.match(code)
+                if m:
+                    current = m.group(1)
+                    opener_sites.setdefault(current, (rel, lineno))
+            elif depth == 1 and current and field_re.match(code):
+                field_sites[current] = (rel, lineno)
+            depth += code.count("{") - code.count("}")
+            if depth <= 0:
+                depth, current = 0, None
+    return {**opener_sites, **field_sites}
+
+
+def _flagships_on_company_logo() -> set[str]:
+    """Company flagships that show their own company's logo: buildings in
+    `bg_company_buildings` that a company type lists in `building_types`, with
+    the company's `icon` path as their own. That is the convention, so
+    /placeholder-icons leaves them to the company's entry."""
+    buildings = ms.get_data("Buildings") or {}
+    out: set[str] = set()
+    for raw in (ms.get_data("Company Types") or {}).values():
+        logo = _entity_image(raw, "icon")
+        members = get_field(get_entity_data(raw), "building_types")
+        if not logo or not isinstance(members, list):
+            continue
+        for bid in members:
+            braw = buildings.get(bid)
+            if (braw is not None
+                    and get_field(get_entity_data(braw), "building_group") == "bg_company_buildings"
+                    and _entity_image(braw, "icon") == logo):
+                out.add(bid)
+    return out
+
+
+def _find_placeholder_icons(*, types: list[str] | None = None,
+                            statuses: list[str] | None = None,
+                            include_shared_by_design: bool = False,
+                            standin_patterns: list[str] | None = None,
+                            allowlist: dict | None = None,
+                            origin=None, hasher=None,
+                            vanilla_gfx: bool | None = None) -> dict:
+    """Classify every mod-set image across entity types (GET /placeholder-icons).
+
+    A mod-set image is one on an entity the mod added, or one the mod changed
+    from vanilla's value (principles: by group, see _image_entity_uses). Each
+    gets a status:
+      missing           — the path resolves to no file, in the mod or vanilla.
+      generated_standin — matches a glob in common/_meta/generated_standin_icons.yml.
+      borrowed_vanilla  — resolves only to a vanilla file.
+      shared_mod        — a mod file whose bytes another entity's image also has.
+      unique_mod        — a mod file no other entity uses.
+      unresolved        — only without a game install: not in the mod, and
+                          vanilla's gfx can't be checked.
+
+    Sharing is counted across types, over every entity (vanilla's too) of the
+    classified fields, so a law icon on a treaty article shows: `shared_with`
+    names up to _SHARED_WITH_LIMIT of them (same type first, a bare key; another
+    type as `Type:key`), `shared_count` all of them. Mod files are
+    compared by content (`hasher`), vanilla files by path. A company flagship
+    on its own company's logo (_flagships_on_company_logo) is left out, and
+    doesn't make the company's logo count as shared. An entry the
+    /duplicate-images allowlist covers (its entity and path in one entry)
+    carries that entry's reason as `allowlisted`: a reviewed share, not work.
+
+    `types` / `statuses` filter the `entities` list; the summary counts every
+    status of the filtered types. `origin(rel_path)` → ("mod" | "vanilla",
+    abs path) | None and `hasher(rel_path)` default to the filesystem; tests
+    inject fakes. `vanilla_gfx` defaults to whether the game's gfx is present.
+    """
+    if standin_patterns is None:
+        standin_patterns = _load_standin_patterns()
+    if origin is None:
+        origin = _image_origin
+    if hasher is None:
+        hasher = _image_content_hash
+    if vanilla_gfx is None:
+        vanilla_gfx = os.path.isdir(os.path.join(base_game_path, "game", "gfx"))
+    if allowlist is None:
+        allowlist = _load_image_allowlist()
+    reviewed = {(entity_type, key, image): reason
+                for entity_type, entries in allowlist.items()
+                for (images, keys), reason in entries.items()
+                for key in keys for image in images}
+
+    fields = ([(et, f, False) for et, f in _IMAGE_FIELDS_BY_TYPE]
+              + [(et, f, True) for et, f in _SHARED_BY_DESIGN_ICON_FIELDS])
+
+    # Every use of every field, so a share across types (or with a vanilla
+    # entity) is visible whichever type the request filters on.
+    flagships = _flagships_on_company_logo()
+    uses = []
+    for entity_type, field, by_design in fields:
+        for rec in _image_entity_uses(entity_type, field):
+            if entity_type == "Buildings" and field == "icon" and rec["key"] in flagships:
+                continue
+            uses.append((entity_type, field, by_design, rec))
+
+    origin_cache: dict[str, tuple[str, str] | None] = {}
+
+    def _origin(path: str):
+        if path not in origin_cache:
+            origin_cache[path] = origin(path)
+        return origin_cache[path]
+
+    identity_cache: dict[str, str] = {}
+
+    def _identity(path: str) -> str:
+        if path not in identity_cache:
+            found = _origin(path)
+            if found and found[0] == "mod":
+                identity_cache[path] = hasher(path)
+            else:
+                identity_cache[path] = f"path:{path}"
+        return identity_cache[path]
+
+    users: dict[str, set[tuple[str, str]]] = {}
+    for entity_type, _field, by_design, rec in uses:
+        if by_design and not include_shared_by_design:
+            continue
+        users.setdefault(_identity(rec["image"]), set()).add((entity_type, rec["key"]))
+
+    def _status(path: str, by_design: bool) -> str | None:
+        found = _origin(path)
+        if found is None:
+            if not vanilla_gfx:
+                return None if by_design and not include_shared_by_design else "unresolved"
+            return "missing"
+        if by_design and not include_shared_by_design:
+            return None
+        if any(fnmatch.fnmatchcase(path, p) for p in standin_patterns):
+            return "generated_standin"
+        if found[0] == "vanilla":
+            return "borrowed_vanilla"
+        return "shared_mod" if len(users.get(_identity(path), ())) > 1 else "unique_mod"
+
+    summary: dict[str, dict[str, int]] = {}
+    entities: list[dict] = []
+    sites_cache: dict[tuple[str, str], dict] = {}
+    for entity_type, field, by_design, rec in uses:
+        if not rec["mod_side"]:
+            continue
+        if types is not None and entity_type not in types:
+            continue
+        status = _status(rec["image"], by_design)
+        if status is None:
+            continue
+        counts = summary.setdefault(entity_type, {s: 0 for s in _PLACEHOLDER_STATUSES})
+        counts[status] += 1
+        if statuses is not None and status not in statuses:
+            continue
+        me = (entity_type, rec["key"])
+        sharers = sorted(
+            (et != entity_type, key if et == entity_type else f"{et}:{key}")
+            for et, key in users.get(_identity(rec["image"]), ())
+            if (et, key) != me
+        ) if status not in ("missing", "unresolved") else []
+        if (entity_type, field) not in sites_cache:
+            sites_cache[(entity_type, field)] = _icon_definition_sites(entity_type, field)
+        sites = sites_cache[(entity_type, field)]
+        site = next((sites[m] for m in rec["members"] if m in sites), None)
+        entry = {
+            "entity_type": entity_type,
+            "key": rec["key"],
+            "field": field,
+            "path": rec["image"],
+            "status": status,
+            "shared_with": [label for _, label in sharers[:_SHARED_WITH_LIMIT]],
+            "shared_count": len(sharers),
+            "file": site[0] if site else None,
+            "line": site[1] if site else None,
+        }
+        if rec["members"] != [rec["key"]]:
+            entry["members"] = sorted(rec["members"])
+        reason = reviewed.get((entity_type, rec["key"], rec["image"]))
+        if reason and status not in ("missing", "unresolved"):
+            entry["allowlisted"] = reason
+        entities.append(entry)
+
+    order = {s: i for i, s in enumerate(_PLACEHOLDER_STATUSES)}
+    entities.sort(key=lambda e: (order[e["status"]], e["entity_type"], e["key"], e["field"]))
+    for entity_type in summary:
+        summary[entity_type] = {s: n for s, n in summary[entity_type].items()
+                                if n or s != "unresolved"}
+    report: dict = {"summary": dict(sorted(summary.items())), "entities": entities}
+    if not vanilla_gfx:
+        report["warnings"] = [
+            f"no vanilla gfx at {os.path.join(base_game_path, 'game', 'gfx')}: a "
+            "path outside the mod is `unresolved` (borrowed or missing can't be "
+            "told apart) and vanilla files are compared by path only"]
+    return report
+
+
+def _render_placeholder_icons_text(report: dict, *, list_unique: bool = False) -> str:
+    """Render the placeholder-icon report for ?format=text. `unique_mod`
+    entities are counted but listed only when `list_unique` (a ?status= that
+    asks for them): they are the finished state."""
+    totals = {s: 0 for s in _PLACEHOLDER_STATUSES}
+    for counts in report.get("summary", {}).values():
+        for s, n in counts.items():
+            totals[s] += n
+    out = ["Placeholder icons: " + ", ".join(
+        f"{s} {n}" for s, n in totals.items() if n or s != "unresolved")]
+    for w in report.get("warnings", []):
+        out.append(f"WARNING: {w}")
+    out.append("")
+    out.append("By type:")
+    for entity_type, counts in report.get("summary", {}).items():
+        out.append(f"  {entity_type}: " + ", ".join(
+            f"{s} {n}" for s, n in counts.items() if n))
+    by_status: dict[str, list[dict]] = {}
+    for e in report.get("entities", []):
+        by_status.setdefault(e["status"], []).append(e)
+    for status in _PLACEHOLDER_STATUSES:
+        rows = by_status.get(status)
+        if not rows:
+            continue
+        out.append("")
+        if status == "unique_mod" and not list_unique:
+            out.append(f"UNIQUE_MOD ({len(rows)}): not listed; ask with ?status=unique_mod")
+            continue
+        out.append(f"{status.upper()} ({len(rows)}):")
+        for e in rows:
+            where = f"  ({e['file']}:{e['line']})" if e.get("file") else ""
+            field = "" if e["field"] in ("icon", "texture") else f" [{e['field']}]"
+            out.append(f"  [{e['entity_type']}] {e['key']}{field}  {e['path']}{where}")
+            if e.get("members"):
+                out.append(f"      principles: {', '.join(e['members'])}")
+            if e.get("allowlisted"):
+                out.append(f"      allowlisted: {e['allowlisted']}")
+            if e.get("shared_with"):
+                more = e.get("shared_count", 0) - len(e["shared_with"])
+                tail = f" and {more} more" if more > 0 else ""
+                out.append(f"      shared with: {', '.join(e['shared_with'])}{tail}")
     return "\n".join(out) + "\n"
 
 
@@ -5469,6 +5900,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "validate": lambda: self._validate(rest, params),
             # Duplicate-image detector for unique-per-entity image fields
             "duplicate-images": lambda: self._duplicate_images(params),
+            "placeholder-icons": lambda: self._placeholder_icons(params),
             # Generator-ownership map for auto-generated mod files
             "auto-generated": lambda: self._auto_generated(),
             # Game logs (debug.log, error.log, game.log, …)
@@ -5571,6 +6003,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
+                {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
                 {"path": "/logs/<which?>", "desc": "Game logs (debug / error / game). Use ?include_external=true to keep third-party-mod entries."},
                 {"path": "/annotators", "desc": "List of available ?annotate=<name> post-processors."},
@@ -6518,10 +6951,18 @@ class ModStateHandler(BaseHTTPRequestHandler):
         old_ref = (params.get("old_ref") or [""])[0]
         return _migration_loc_drift(old_ref)
 
+    @staticmethod
+    def _multi_param(params, name) -> list[str] | None:
+        """A repeatable, comma-separated query param as a list, or None."""
+        values = []
+        for raw in params.get(name) or []:
+            values.extend(v.strip() for v in raw.split(",") if v.strip())
+        return values or None
+
     def _duplicate_images(self, params):
         """GET /duplicate-images — flag images reused across entities of types
-        where vanilla treats one image per entity (Buildings, Goods, Decrees,
-        Technologies, Interest Groups, Laws).
+        where vanilla treats one image per entity (`_IMAGE_FIELDS_BY_TYPE`;
+        principles by group).
 
         Query params:
           ?include_vanilla=true     — include clusters with no mod-side entities.
@@ -6529,17 +6970,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
           ?type=Buildings           — restrict scan (repeatable, comma-separated).
           ?format=text              — human-readable rendering wrapped in {"text": ...}.
 
-        Allowlist file: common/_meta/duplicate_image_allowlist.yml.
+        Allowlist file: common/_meta/duplicate_image_allowlist.yml. Entries
+        that match no cluster come back in `stale_allowlist`.
         """
         include_vanilla = (params.get("include_vanilla") or ["false"])[0].lower() == "true"
         include_allowlisted = (params.get("include_allowlisted") or ["false"])[0].lower() == "true"
-        types_raw = params.get("type") or []
-        types: list[str] | None = None
-        if types_raw:
-            types = []
-            for t in types_raw:
-                types.extend(s.strip() for s in t.split(",") if s.strip())
-            types = types or None
+        types = self._multi_param(params, "type")
 
         report = _find_duplicate_images(
             include_vanilla=include_vanilla,
@@ -6551,6 +6987,38 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if fmt == "text":
             return {"text": _render_duplicate_images_text(report,
                                                           include_allowlisted=include_allowlisted)}
+        return report
+
+    def _placeholder_icons(self, params):
+        """GET /placeholder-icons — classify every mod-set icon across entity
+        types as missing, generated_standin, borrowed_vanilla, shared_mod or
+        unique_mod (see `_find_placeholder_icons`).
+
+        Query params:
+          ?type=Decrees                   — only these types (repeatable, comma-separated).
+          ?status=borrowed_vanilla        — only these statuses (repeatable, comma-separated).
+          ?include_shared_by_design=true  — also classify the types vanilla shares
+                                            art in (PMs, static modifiers, messages,
+                                            `background` fields, …); without it they
+                                            are checked for `missing` only.
+          ?format=text                    — human-readable rendering wrapped in {"text": ...}.
+
+        Stand-in globs: common/_meta/generated_standin_icons.yml.
+        """
+        statuses = self._multi_param(params, "status")
+        unknown = sorted(set(statuses or ()) - set(_PLACEHOLDER_STATUSES))
+        if unknown:
+            raise BadRequest(f"Unknown status {', '.join(unknown)}; expected one of "
+                             f"{', '.join(_PLACEHOLDER_STATUSES)}")
+        report = _find_placeholder_icons(
+            types=self._multi_param(params, "type"),
+            statuses=statuses,
+            include_shared_by_design=(
+                (params.get("include_shared_by_design") or ["false"])[0].lower() == "true"),
+        )
+        if (params.get("format") or [""])[0] == "text":
+            return {"text": _render_placeholder_icons_text(
+                report, list_unique=bool(statuses and "unique_mod" in statuses))}
         return report
 
     def _modifier_pattern_expand(self, pattern, params):
