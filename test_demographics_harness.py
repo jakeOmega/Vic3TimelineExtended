@@ -64,13 +64,13 @@ class TestPredict(unittest.TestCase):
             seen.append(kw)
             return real(pops, cbr, cdr, d, **kw)
 
-        lines = H.DM.engine_rate_lines()
+        line_carriers = H.DM.line_carriers()
         with tempfile.TemporaryDirectory() as tmp:
             for pollution, path in ((127.5, Path(tmp) / "polluted.v3"), (0.0, Path(tmp) / "clean.v3")):
                 path.write_text(text.replace("pollution=127.5", f"pollution={pollution}"), encoding="utf-8")
                 H.predict_state = spy
                 try:
-                    H.predict_save(str(path), lines, H.DM.absorbed_carriers(lines=lines), H.DM.load_carriers(), self.D)
+                    H.predict_save(str(path), line_carriers, H.DM.load_carriers(), self.D)
                 finally:
                     H.predict_state = real
         polluted, clean = seen
@@ -89,19 +89,19 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(out["slope_deaths"], slope, delta=1.0)
         self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
 
-    def test_absorbed_class_lines_are_applied_and_netted(self):
-        """Owner amendment A (2026-10-10): child labour's class line stays live, and M cancels it under Full; predict
-        reports what it would have done on top."""
+    def test_absorbed_class_lines_are_reported_not_applied(self):
+        """Owner, 2026-10-11 (the engine-lines plan): child labour's class line is script-only, so under Full the engine
+        doesn't apply it; predict reports what it would have done on top."""
         pops = [H.Pop(1e6, 9.0, 0.0, 0.8, on_top_d=0.0, absorbed_d=0.05)]
         out = H.predict_state(pops, 40.0, 30.0, self.D)
         self.assertAlmostEqual(out["absorbed_child_labour_deaths"],
                                1e6 * H.G.monthly_mortality(9.0, self.D) * 12 * 0.05, delta=1.0)
         self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
 
-    def test_absorbed_state_lines_are_applied_and_netted(self):
-        """The state's absorbed lines (a health law at level 3, No Women's Rights) are live in the engine and M takes
-        them out: the events are the census's. Each report group gets its own share, at the bare curves."""
-        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 40.0, 30.0, self.D, absorbed_b=0.05, absorbed_d=-0.15,
+    def test_absorbed_state_lines_are_reported_not_applied(self):
+        """The absorbed family's lines (a health law at level 3, No Women's Rights) don't reach the engine under Full: the
+        events are the census's. Each report group gets its own share, at the bare curves."""
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 40.0, 30.0, self.D,
                               groups={"womens_rights": (0.05, 0.0), "health": (0.0, -0.15)})
         self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
         self.assertAlmostEqual(out["deaths"] / 1e3, 30.0, places=6)
@@ -110,6 +110,21 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(out["absorbed_health_deaths"],
                                1e6 * H.G.monthly_mortality(9.0, self.D) * 12 * -0.15, delta=1.0)
         self.assertEqual(out["absorbed_other_lines_births"], 0.0)
+
+    def test_the_on_top_family_applies_at_the_census_rate(self):
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 40.0, 30.0, self.D, added_b=0.10, added_d=-0.05)
+        self.assertAlmostEqual(out["births"] / 1e3, 40.0 * 1.10, places=6)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0 * 0.95, places=6)
+
+    def test_the_wealth_line_is_floored_and_scaled(self):
+        """Owner, 2026-10-11 (option b): Private Health Insurance's wealth line at the census's rate, at least
+        P.WEALTH_LINE_FLOOR a wealth level, so a wealth-99 pop dies at no less than half the census's rate."""
+        rich = H.Pop(1e6, 30.0, 0.0, 0.8, wealth=99)
+        out = H.predict_state([rich], 40.0, 30.0, self.D, wealth=-0.01)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0 * (1 + 99 * H.P.WEALTH_LINE_FLOOR), places=4)
+        poor = H.Pop(1e6, 30.0, 0.0, 0.8, wealth=10)
+        out = H.predict_state([poor], 40.0, 30.0, self.D, wealth=-0.002)
+        self.assertAlmostEqual(out["deaths"] / 1e3, 30.0 * (1 - 0.002 * 10), places=4)
 
     def test_mild_starvation_is_absorbed_and_severe_stays_on_top(self):
         """Owner amendment B: mild starvation's terms are netted by M, severe starvation's still apply."""
@@ -125,11 +140,12 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * 1.0, delta=1.0)
         self.assertEqual(out["absorbed_mild_deaths"], 0.0)
 
-    def test_the_clamp_sees_the_absorbed_lines_in_the_read(self):
-        """The script's 'other' is the state read, which holds the absorbed lines: so does predict's."""
-        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 2.0, 30.0, self.D, on_top_b=-0.5, absorbed_b=-0.2)
+    def test_the_clamp_sees_the_lines_left_in_the_read(self):
+        """The script's 'other' is the state read without the census's, fast mode's and the moved lines' terms: the
+        engine's state lines left on top, as predict's on_top."""
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 2.0, 30.0, self.D, on_top_b=-0.5)
         self.assertTrue(out["clamped"])
-        self.assertAlmostEqual(out["m_b"], H.P.RATE_TOTAL_MIN + 0.7)
+        self.assertAlmostEqual(out["m_b"], H.P.RATE_TOTAL_MIN + 0.5)
 
     def test_predict_on_the_slice(self):
         """The command end to end on the test slice (Britain and Portugal, 1836; the slice has no game_date)."""
