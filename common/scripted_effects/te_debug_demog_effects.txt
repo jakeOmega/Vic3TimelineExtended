@@ -229,7 +229,24 @@ te_debug_demog_benchmark = {
 		change_local_variable = { name = te_dg_dbg_n add = 1 }
 	}
 	set_variable = { name = te_dg_dbg_states value = local_var:te_dg_dbg_n }
-	debug_log = "TE_DEMOG_BENCH start states=[THIS.Var('te_dg_dbg_states').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	# full=1: the walk sums what the census absorbs (Full); 0 under Display only. The rule can be switched
+	# mid-game, so the same save times both (owner, 2026-10-11).
+	set_variable = { name = te_dg_dbg_full value = 0 }
+	if = {
+		limit = { te_demog_effects_run = yes }
+		set_variable = { name = te_dg_dbg_full value = 1 }
+	}
+	debug_log = "TE_DEMOG_BENCH start states=[THIS.Var('te_dg_dbg_states').GetValue|0] full=[THIS.Var('te_dg_dbg_full').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	remove_variable = te_dg_dbg_full
+	debug_log = "TE_DEMOG_BENCH walk=1 begin"
+	te_debug_demog_bench_walk = yes
+	debug_log = "TE_DEMOG_BENCH walk=1 end"
+	debug_log = "TE_DEMOG_BENCH walk=2 begin"
+	te_debug_demog_bench_walk = yes
+	debug_log = "TE_DEMOG_BENCH walk=2 end"
+	debug_log = "TE_DEMOG_BENCH walk=3 begin"
+	te_debug_demog_bench_walk = yes
+	debug_log = "TE_DEMOG_BENCH walk=3 end"
 	debug_log = "TE_DEMOG_BENCH pass=1 begin"
 	te_debug_demog_bench_pass = yes
 	debug_log = "TE_DEMOG_BENCH pass=1 end"
@@ -247,6 +264,15 @@ te_debug_demog_benchmark = {
 		# the seed leaves te_dg_inflow_years as it was, which the passes' flows may have bumped;
 		# off the states' pulses, so each seeds again at its next one
 		te_demog_seed_off_pulse = yes
+	}
+}
+
+# One walk pass of the benchmark: every state with a census walks its pops and buildings again. The
+# walk only recomputes stored figures from today's pops, so repeating it changes nothing.
+te_debug_demog_bench_walk = {
+	every_state = {
+		limit = { te_demog_has_census = yes }
+		te_demog_walks = yes
 	}
 }
 

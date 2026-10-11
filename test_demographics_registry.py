@@ -3230,7 +3230,21 @@ class TestConsole(unittest.TestCase):
         tail = body[reseed + len('debug_log = "TE_DEMOG_BENCH reseed"'):]
         self.assertRegex(tail, r"^\s*every_state = \{\s*limit = \{ te_demog_has_census = yes \}\s*(#[^\n]*\s*)*"
                                r"te_demog_seed_off_pulse = yes\s*\}\s*$")
-        self.assertEqual(body.count("TE_DEMOG_BENCH"), 8, "start, three begin/end pairs, reseed")
+        self.assertEqual(body.count("TE_DEMOG_BENCH"), 14, "start, three walk and three step begin/end pairs, reseed")
+
+    def test_the_benchmark_times_the_walk_under_its_setting(self):
+        """The walk is where Full adds work (the absorbed sums, phase 2 step 4), so option d times three passes of it
+        before the step's, and its start line says whether the absorbed sums ran (full=1): run it under Display
+        only, switch the rule to Full mid-game, and run it again (owner, 2026-10-11)."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_benchmark")
+        start = re.search(r'debug_log = "TE_DEMOG_BENCH start[^"]*"', body).group(0)
+        self.assertIn("full=[THIS.Var('te_dg_dbg_full').GetValue|0]", start)
+        self.assertIn("te_demog_effects_run = yes", body[:body.index(start)])
+        for n in (1, 2, 3):
+            self.assertLess(body.index(f"TE_DEMOG_BENCH walk={n} begin"), body.index(f"TE_DEMOG_BENCH walk={n} end"))
+            self.assertLess(body.index(f"TE_DEMOG_BENCH walk={n} end"), body.index("TE_DEMOG_BENCH pass=1 begin"))
+        walk = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_bench_walk")
+        self.assertRegex(walk, r"every_state = \{\s*limit = \{ te_demog_has_census = yes \}\s*te_demog_walks = yes\s*\}")
 
     def test_the_census_line_waits_for_a_million_people(self):
         body = _console_blocks()[0]["te_debug_demog_census_line"]
