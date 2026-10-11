@@ -1037,8 +1037,11 @@ class TestEngineLineTypes(unittest.TestCase):
         loc = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
         for (family, field), name in P.ENGINE_LINE_TYPES.items():
             self.assertRegex(loc, rf'\n {name}:0 "\${field}\$"', name)
-            # vanilla's descriptions end without a full stop ("How many children are born each year")
-            self.assertIn(f' {name}_desc:0 "${field}_desc$. Under the Demographics rule', loc, name)
+            # vanilla's descriptions end without a full stop ("How many children are born each year"). A release ships
+            # these types with no Demographics rule (final review m2), so the description names no rule or setting.
+            desc = re.search(rf'\n {name}_desc:0 "(.*)"', loc).group(1)
+            self.assertTrue(desc.startswith(f"${field}_desc$. Where the demographic census sets"), name)
+            self.assertNotRegex(desc, r"\b(rule|Full|setting)\b", name)
 
 
 class TestEngineLinesMoved(unittest.TestCase):
@@ -1188,6 +1191,14 @@ class TestLinesScript(unittest.TestCase):
         eng.call("te_demog_lines_refresh")
         self.assertEqual(eng.removed, ["te_demog_line_deaths_down"])
         self.assertAlmostEqual(eng.modifiers["te_demog_line_deaths_down"], 0.05)
+
+    def test_a_lost_pair_comes_back(self):
+        """Final review m6: a state holding the stored sum without its pair (a save quirk, a state that copied the
+        variable but not the modifier) gets the pair back at the next refresh, not when the sum next changes."""
+        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03})
+        eng.vars["te_dg_ln_deaths"] = -0.03
+        eng.call("te_demog_lines_refresh")
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_deaths_down"], 0.03)
 
     def test_a_sum_back_at_zero_leaves_no_pair(self):
         eng = self._eng({}, held={"births": 0.05})

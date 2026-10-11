@@ -246,10 +246,12 @@ STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor:
 POLLUTION_HEALTH_MORTALITY = 0.55
 POLLUTION_MAX = 255
 # Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
-# of the census's term. Every other law, technology or institution line is absorbed: it stays on its carrier, and
-# under Full the census's term M cancels it in each state it reaches (demographics_modifiers.absorbed_carriers,
-# te_demog_absorbed_* in the generated values). The women's-rights laws left this list in Task 8: Task 7's
-# natural-fertility term (NATURAL_FERTILITY_BY_LAW) carries their effect.
+# of the census's term: their lines sit on the on-top family's script-only types (state_demog_ontop_*), which under
+# Full the census adds at its rate. Every other law, technology or institution line is on the absorbed family's
+# (state_demog_absorbed_*), which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11).
+# Hand-kept, not derived: TestEngineRateLines.test_the_families_match_the_on_top_lists pins it to the carriers'
+# types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
+# (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
     # the family-policy laws §8.1 has yet to re-express as census terms
     "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",

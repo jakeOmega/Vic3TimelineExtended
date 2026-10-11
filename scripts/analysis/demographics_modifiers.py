@@ -118,8 +118,9 @@ def engine_rate_lines(root=ROOT, mod=True):
     """{(kind, key, block, field): net value} for every `*_mult` line in a law's `modifier` or
     `institution_modifier`, a technology's or an institution's `modifier`. Vanilla's and (with mod) the
     mod's are summed as the engine sums an INJECT (scripting_best_practices.md § INJECT); a mod REPLACE
-    drops vanilla's. kind: law, technology, institution. Phase 2 step 4: which birth and mortality lines
-    the census absorbs (they net to zero) and which stay on top (P.ENGINE_LINES_ON_TOP)."""
+    drops vanilla's. kind: law, technology, institution. Since the engine-lines plan (2026-10-11) a moved
+    line's engine field nets to zero here (its INJECT's cancel) and its value is under its script-only type
+    (engine_lines() reads those back)."""
     from paradox_file_parser import ParadoxFileParser
 
     files = {"law": ("laws", "laws"), "technology": ("technologies", "technology/technologies"),
@@ -211,10 +212,10 @@ def line_carriers(root=ROOT):
 
 
 def absorbed_carriers(root=ROOT, lines=None):
-    """Phase 2 step 4 (owner amendment, 2026-10-10): the engine's birth and mortality lines on laws, technologies
-    and institutions that the census absorbs, as Carriers (`type` is the engine field). Under Full the census's
-    term M cancels each one in the state it reaches (te_demog_absorbed_*, generated); no carrier is edited, so
-    nothing changes outside Full. Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    """Phase 2 step 4 (owner amendment, 2026-10-10): any engine birth or mortality line still live on a law,
+    technology or institution that the census would absorb, as Carriers (`type` is the engine field). Since the
+    engine-lines plan (2026-10-11) every such line sits on a script-only type, so this returns [] (the walk nets
+    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
     P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
     institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
     institution's own line is institution (per its level, incorporated states), the rest are flat."""

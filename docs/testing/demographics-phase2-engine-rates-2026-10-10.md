@@ -340,12 +340,18 @@ This list is the canonical checklist; the PR body repeats it.
    - Bengal's deaths on top past 1900: answered and changed (above, "Bengal and the lines on top").
 5. **A normal-speed check of India in the 1860s and 1870s,** where the fast run's census years are past 1900.
 6. **Done: P6** (above). Then absorbing Private Health Insurance's wealth mortality per pop under Full (owner, 2026-10-10: on top for now; P6 says it can be built).
-7. **The moved lines, in game** (a new game after the build is deployed):
+7. **The moved lines, in game** (a new game after the build is deployed; not the normal-speed run's save, whose old
+   census terms come off at its first monthly pulse). Do each "that day" check on the day of the change, before the
+   state's monthly pulse would catch it up; if a line lags a day, the hooks need `trigger_event` with `days = 1`.
    - **Disabled:** on day 1 a pop's mortality tooltip in the capital lists Laws and Institutions at the Ministry of
      Health's value, and laborers' tooltips show child labour's line. A law's tooltip reads as before. Enacting Women in
      the Workplace changes the birth-rate line that day. A conquered state shows its new owner's lines the day it
      changes hands. Researching a technology with a moved line (one of the era 7 to 12 medical ones, by console)
      changes the line that day.
+   - **Disabled, Private Health Insurance enacted:** a rich pop's mortality tooltip shows a Laws and Institutions line
+     for wealth (the first `add_modifier` to carry `state_mortality_wealth_mult`). Note how many Laws and Institutions
+     lines a laborer's mortality tooltip shows (deaths, class, wealth): if the repeated name confuses, the class and
+     wealth pairs get a qualifier.
    - **Full → Disabled mid-game** (owner: rules can change mid-game): within a month every state's Census: Births and
      Census: Deaths are gone and Laws and Institutions is back; no state shows both.
    - **Full:** after the capital's first census step, the Laws and Institutions lines are gone. Census: Births and

@@ -93,13 +93,13 @@ te_demog_on_top_scales = {
 #   M = target / bare - 1 - replaced / bare - on_top x (1 - target / bare) + q x target / bare
 # q: the moved lines' on-top family (the engine-lines plan, 2026-10-11), script-only, which the census adds at its rate.
 # on_top: the state-level lines left on top (the read less the census's and fast mode's terms and
-# the state's absorbed lines, floored at te_demog_k_rate_total_min), so each acts on the census's
+# the moved lines' pairs, floored at te_demog_k_rate_total_min), so each acts on the census's
 # rate (owner, 2026-10-11); a pop's own lines on top stay on its bare curve.
-# replaced: what the census absorbs (owner amendment, 2026-10-10), at each pop's bare curves. The
-# law, technology and institution lines it takes over (te_demog_absorbed_*, generated: health,
-# child labour, women's rights and the rest) stay on their carriers and in the state read, so
-# nothing changes outside Full; here M cancels them. Per pop: literacy's -0.1 and mild
-# starvation's terms. Severe starvation and every other term stay on top.
+# replaced: what the census absorbs per pop (owner amendment, 2026-10-10), at each pop's bare
+# curves: literacy's -0.1 and mild starvation's terms. The laws', technologies' and institutions'
+# lines are script-only (the engine-lines plan), so under Full the engine never applies the absorbed
+# family and nothing needs netting; outside Full their pairs re-apply them. Severe starvation and
+# every other term stay on top.
 # target = the model's rate (te_dg_cbr_model, per 1,000 a year) x today's people, a month x 100,000,
 # the walk's units (te_dg_w_eb0, te_dg_w_ed0). Clamped: the state read without the census's and
 # fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_min, M is never

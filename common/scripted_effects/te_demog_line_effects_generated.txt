@@ -30,6 +30,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_births }
 					NOT = { var:te_dg_ln_births = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_births = 0 }
+						NOT = { has_modifier = te_demog_line_births_up }
+						NOT = { has_modifier = te_demog_line_births_down }
+					}
 				}
 			}
 			te_demog_line_births_remove = yes
@@ -49,6 +55,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_deaths }
 					NOT = { var:te_dg_ln_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_deaths_up }
+						NOT = { has_modifier = te_demog_line_deaths_down }
+					}
 				}
 			}
 			te_demog_line_deaths_remove = yes
@@ -68,6 +80,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_farmers_deaths }
 					NOT = { var:te_dg_ln_farmers_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_farmers_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_farmers_deaths_up }
+						NOT = { has_modifier = te_demog_line_farmers_deaths_down }
+					}
 				}
 			}
 			te_demog_line_farmers_deaths_remove = yes
@@ -87,6 +105,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_laborers_deaths }
 					NOT = { var:te_dg_ln_laborers_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_laborers_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_laborers_deaths_up }
+						NOT = { has_modifier = te_demog_line_laborers_deaths_down }
+					}
 				}
 			}
 			te_demog_line_laborers_deaths_remove = yes
@@ -106,6 +130,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_machinists_deaths }
 					NOT = { var:te_dg_ln_machinists_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_machinists_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_machinists_deaths_up }
+						NOT = { has_modifier = te_demog_line_machinists_deaths_down }
+					}
 				}
 			}
 			te_demog_line_machinists_deaths_remove = yes
@@ -125,6 +155,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_peasants_deaths }
 					NOT = { var:te_dg_ln_peasants_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_peasants_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_peasants_deaths_up }
+						NOT = { has_modifier = te_demog_line_peasants_deaths_down }
+					}
 				}
 			}
 			te_demog_line_peasants_deaths_remove = yes
@@ -144,6 +180,12 @@ te_demog_lines_refresh = {
 				OR = {
 					NOT = { has_variable = te_dg_ln_wealth_deaths }
 					NOT = { var:te_dg_ln_wealth_deaths = local_var:te_dg_ln_new }
+					# a pair lost while its sum stayed (a save quirk, a state that copied the variable): put it back
+					AND = {
+						NOT = { var:te_dg_ln_wealth_deaths = 0 }
+						NOT = { has_modifier = te_demog_line_wealth_deaths_up }
+						NOT = { has_modifier = te_demog_line_wealth_deaths_down }
+					}
 				}
 			}
 			te_demog_line_wealth_deaths_remove = yes

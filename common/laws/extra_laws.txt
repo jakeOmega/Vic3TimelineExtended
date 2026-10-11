@@ -17,7 +17,7 @@
 # edited directly further down in this file rather than via INJECT.
 # The rights-of-women INJECTs also carry the demographics census's natural
 # fertility (state_natural_fertility_mult, phase 2 step 4). Vanilla's birth lines
-# stay: under the census's Full setting its own term cancels them (owner, 2026-10-10).
+# sit on the census's script-only types (te_demog_engine_line_injections.txt).
 # ============================================================================
 
 # ---- lawgroup_trade_policy ----
