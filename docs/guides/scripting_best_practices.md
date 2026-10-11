@@ -1319,7 +1319,7 @@ Every company building needs:
 1. **Building definition** in `common/buildings/company_buildings.txt` (with `potential` gating on `has_company`)
 2. **PM + PMG** in `common/production_methods/unique_pms.txt` and `unique_pm_groups.txt`
 3. **Modifier type definition** for `state_building_<name>_max_level_add` in `common/modifier_type_definitions/mod_entity_modifier_types.txt`
-4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`. A company the mod defines itself (`extra_companies_generic.txt`, `extra_companies_flavored.txt`) takes the same fields in its own definition instead.
+4. **INJECT** on the parent company (in `extra_companies_vanilla_updates.txt`) — adds `building_types`, `extension_building_types`, `prosperity_modifier`. A company the mod defines itself (`extra_companies_generic.txt`, `extra_companies_flavored.txt`) takes the same fields in its own definition instead. A building goes in one list or the other, never both: an industry charter adds an extension to the roster, so one the roster already holds is a dead entry. Airbus listed the aerospace industry in both (`test_company_rosters.py` checks, on merged vanilla + mod data).
 5. **Localization** — five keys per building, all required:
    - `building_<name>` (building name) and `building_<name>_desc` in `te_buildings_l_english.yml`
    - `pm_<name>` and `pmg_<name>` in `te_production_methods_l_english.yml`
