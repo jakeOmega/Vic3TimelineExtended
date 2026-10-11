@@ -377,7 +377,8 @@ or the League of Vienna. An AI country never gives its bloc one of the base
 game's names that fit any country, such as the Grand Coalition or the United
 Front; it picks from these, its bloc identity's names and those tied to its own
 region, culture or government. You can still choose those names for your own
-bloc. A bloc picks a new name whenever its leader changes.
+bloc, but a bloc that passes to an AI leader loses one when it is renamed for
+its new leader.
 
 Joining a bloc gets easier with technology. In the base game a leader needs a
 Leverage Advantage of 200 over a country to invite it, and the same to accept
