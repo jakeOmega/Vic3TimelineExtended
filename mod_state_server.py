@@ -133,6 +133,7 @@ mod_paths = {
     "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
     "PMs": os.path.join(_MOD_COMMON, "production_methods"),
     "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
+    "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
     "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
     "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
     "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
@@ -5413,7 +5414,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "goods": lambda: self._goods(),
             "combat-units": lambda: self._combat_units(),
             "ideologies": lambda: self._ideologies(rest),
+            "movements": lambda: self._movements(rest),
             # Analytical endpoints
+            "movement-stances": lambda: self._movement_stances(rest, params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
@@ -5535,6 +5538,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/goods", "desc": "Goods catalog."},
                 {"path": "/combat-units", "desc": "Combat unit type/group catalog."},
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
+                {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
+                {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
                 {"path": "/treaty-articles/<id?>[/loc-keys]", "desc": "Treaty articles catalog; /<id>/loc-keys returns the article's loc-key family."},
@@ -5999,8 +6004,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             or loc string sets with AddScope; open_issues.md L14). Once tagged,
             an entry's vanilla_bug_ref.kind tells us which mode applies.
             """
-            tag_vanilla_bugs(entries, vb_by_basename, vb_by_source)
-            tag_vanilla_bugs(entries, mn_by_basename, mn_by_source)
+            # mod_root: a `- stack: vanilla only` entry skips stacks with a mod frame (#863).
+            tag_vanilla_bugs(entries, vb_by_basename, vb_by_source, mod_root=mod_path)
+            tag_vanilla_bugs(entries, mn_by_basename, mn_by_source, mod_root=mod_path)
             tag_gui_injected_scopes(entries, gui_injected_scope_names([
                 os.path.join(mod_path, "gui"),
                 os.path.join(mod_path, "localization", "english"),
@@ -7045,6 +7051,72 @@ class ModStateHandler(BaseHTTPRequestHandler):
             {"type": "Ideologies", "id": iid, "name": ms.localize(iid)}
             for iid in ideologies
         ]
+
+    # ---- structured: political movements (#838) ---------------------------
+    def _movements(self, parts):
+        """GET /movements[/<movement_id>]"""
+        import movement_stances
+
+        movements = ms.get_data("Political Movements")
+        if not movements:
+            raise DataNotLoaded("Political Movements")
+        ideologies = ms.get_data("Ideologies") or {}
+        if parts:
+            mid = parts[0]
+            if mid not in movements:
+                raise NotFound(mid)
+            row = movement_stances.movement_summary(mid, movements[mid], ideologies)
+            return {"type": "Political Movements", "id": mid, "name": ms.localize(mid),
+                    **row, "raw": serialize(movements[mid])}
+        return [
+            {"type": "Political Movements", "id": row["name"], "name": ms.localize(row["name"]),
+             **{k: v for k, v in row.items() if k != "name"}}
+            for row in movement_stances.movement_catalog(movements, ideologies)
+        ]
+
+    def _movement_stances(self, parts, params):
+        """GET /movement-stances?lawgroup=<g>|law=<l>[&current=<law>],
+        GET /movement-stances/gaps"""
+        import movement_stances
+        from ideology_lawgroup_audit import carrier_laws, law_groups
+
+        movements = ms.get_data("Political Movements")
+        laws = ms.get_data("Laws")
+        if not movements or not laws:
+            raise DataNotLoaded("Political Movements" if not movements else "Laws")
+        ideologies = ms.get_data("Ideologies") or {}
+        carriers = carrier_laws(mod_path)
+        if parts == ["gaps"]:
+            vanilla_groups = ms.base_parsers.get("Law Groups")
+            return movement_stances.stance_gaps(
+                movements, ideologies, laws, carriers,
+                set(vanilla_groups.data) if vanilla_groups is not None else None,
+            )
+        if parts:
+            raise NotFound("/movement-stances/" + "/".join(parts))
+        lawgroup = (params.get("lawgroup") or [None])[0]
+        law = (params.get("law") or [None])[0]
+        current = (params.get("current") or [None])[0]
+        mode = (params.get("mode") or [None])[0]
+        if mode not in (None, "comparative"):
+            raise BadRequest(f"unknown mode {mode!r}; the only mode is 'comparative'")
+        if mode == "comparative" and not current:
+            raise BadRequest("mode=comparative needs current=<law>")
+        if bool(lawgroup) == bool(law):
+            raise BadRequest("Pass exactly one of lawgroup=<lawgroup_x> or law=<law_x>, "
+                             "or use /movement-stances/gaps")
+        if law:
+            lawgroup = law_groups(laws).get(law)
+            if lawgroup is None:
+                raise NotFound(law)
+        try:
+            out = movement_stances.lawgroup_stances(
+                lawgroup, movements, ideologies, laws, carriers, current)
+        except ValueError as exc:
+            raise BadRequest(str(exc))
+        if out is None:
+            raise NotFound(lawgroup)
+        return out
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
@@ -9199,12 +9271,15 @@ def _collect_registry_warnings() -> list[dict]:
     scripted effect, trigger or script value file the mod calls adds a
     `kind: "helper_anchor_mod_calls"` warning with its `entry`, `anchor`,
     `helper_file`, `mod_uses` and `advice` beside the `{label, detail}` pair.
-    It needs the vanilla game files and is skipped without them
+    And the mod-only anchor check (#873): a vanilla entry anchored on a file
+    only the mod has adds `kind: "mod_only_anchor"` with its `anchors`. Both
+    need the vanilla game files and are skipped without them
     (`_helper_anchor_check_state`)."""
     warnings: list[dict] = []
     try:
         from game_log_reader import (
             helper_anchor_warnings as _helper_anchor_warnings,
+            mod_only_anchor_warnings as _mod_only_anchor_warnings,
             load_vanilla_bug_registry as _load_vbr,
             load_mod_noise_registry as _load_mnr,
         )
@@ -9220,6 +9295,7 @@ def _collect_registry_warnings() -> list[dict]:
         _vanilla_game = vanilla_game_dir()
         warnings += _helper_anchor_warnings(_vbr_refs, mod_path, _vanilla_game, "vanilla_bug_registry")
         warnings += _helper_anchor_warnings(_mnr_refs, mod_path, _vanilla_game, "mod_noise_registry")
+        warnings += _mod_only_anchor_warnings(_vbr_refs, mod_path, _vanilla_game, "vanilla_bug_registry")
     except Exception as _exc:  # noqa: BLE001
         logger.warning(f"known-noise registry warning collection failed: {_exc}")
     return warnings

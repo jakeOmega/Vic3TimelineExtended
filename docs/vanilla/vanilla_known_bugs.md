@@ -10,11 +10,22 @@ Every backticked `.txt` / `.gui` / `.yml` path in an entry, heading or body, bec
 - reviewed: helper anchor, signature cannot match a mod call (<why>)
 ```
 
+Each line of an entry's first code block is a message substring, and the entry tags an error whose message holds any of them (`:NNN` line numbers fold to `:N`). Write message text there, never a bare path: `common/x/y.txt:12`, `y.txt:12` or `Script location: <path>` on its own matches that file at every line, so it tags every error whose stack runs through the file, mod-caused ones included. The STATE_HAWAII entry's path line hid 42 mod lines that way (#873). The heading's path already restricts the file, and the loader warns on a path-only line, and on an entry with no signature at all (`POST /validate/registries`). It also warns (`mod_only_anchor`) on an entry anchored on a file only the mod has, which a backticked mod path in the body does as easily as the heading; a mod file that replays vanilla content (the generated ideologies) takes `- reviewed: mod anchor, <why>`. Message text that names the faulting file, such as `Div/0 near <path>` or `Value of wrong type in '<path>`, is fine; check that the mod doesn't override that file (`05_transfer_money.txt` was the mod's).
+
+When the message is generic and mod script can reach the vanilla file too (an AI strategy, a diplomatic catalyst, a vanilla on_action or scripted trigger the mod calls), put a stack line under the heading. The entry then tags only an error none of whose stack frames is a mod file, that is, a path that exists in the mod (#863):
+
+```
+- stack: vanilla only
+```
+
+It also settles a helper anchor for the mod's script calls, whose errors carry the calling file in their stack; `helper_anchor_mod_calls` still counts a mod `.gui` that reads the helper, since a GUI read leaves no frame. It protects only when no other entry on the same anchor can match the message, since the first match tags the line; the loader warns when one can. Nor can it see a mod cause with no mod frame, such as vanilla code iterating mod content (the ship-transfer entry's mutual articles). Leave it off when the message itself pins vanilla's bug: STATE_HAWAII's `Invalid right side during comparison 's'` is vanilla's typo whatever sets off the AI evaluation, so a UN ballot's stack doesn't make it the mod's.
+
 > **Re-verify pass due (2026-07-03, 1.13.9 migration):** vanilla 1.13.6–1.13.9 modified 24 of the files tracked below (notably `movement_events.txt`, `agitators_events/coup_events.txt`, `treaty_articles/31_ship_transfer.txt`, `journal_entries/07_hokkaido.txt`, `laws/00_distribution_of_power.txt`, `ideologies/01_character_ideologies.txt`, `scripted_effects/00_victoria_ip4_scripted_effects.txt`). Spot-diffs were inconclusive — line numbers have shifted and some flagged regions were rewritten. On the next `log-triage` run against a 1.13.9 session, retire any entry whose error no longer appears rather than trusting the stale line numbers here.
 
 ## Script errors observed
 
 ### `common/ai_strategies/00_default_strategy.txt:5065` — invalid `region` event target
+- stack: vanilla only
 
 ```
 Error: Event target link 'region' returned an invalid object
@@ -31,6 +42,10 @@ Error: Invalid right side during comparison 'this'
 Lines like `c:CHI ?= this` evaluate `this` in scopes where it's not a country. Vanilla bug. **72 occurrences** in observer-mode.
 
 ### `common/journal_entries/04_indian_famines.txt:25`, `common/journal_entries/03_afghanistan.txt:397-414`, `common/journal_entries/00_alaska.txt:137`, `common/company_types/00_companies_asia.txt:353`, `common/company_types/00_companies_mp1.txt:1346`, `common/company_types/00_companies_americas.txt:342`, `common/company_types/00_companies_soi.txt:415` — invalid `region` event target
+
+```
+Event target link 'region' returned an invalid object
+```
 
 Same root cause as the AI strategy bug: `region` event target is invalid in the JE / company-type evaluation scope (typically when iterating across pseudo-states or substates that don't carry a strategic region). **40+ occurrences total across these definitions.**
 
@@ -94,6 +109,7 @@ Error: Event target link 'region_state' returned an unset scope
 The Hokkaido JE's `possible` block reaches `s:STATE_HOKKAIDO.region_state:JAP` without checking whether `c:JAP` exists or owns any part of Hokkaido. When JAP isn't on the map (released, replaced by another tag, or absent in scenario start), the trigger fails. Vanilla bug.
 
 ### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt`, `common/political_movements/02_cultural_movement.txt` — `leader = { ... }` without `has_leader` guard
+- stack: vanilla only
 
 Affected vanilla files (all share the same root cause):
 - `common/journal_entries/00_communism.txt:185`
@@ -119,6 +135,8 @@ Affected vanilla files (all share the same root cause):
 - `common/parties/conservative_party.txt:936, 947`
 - `common/parties/religious_party.txt:357`
 - `events/agitators_events/agitators_election_events.txt:1194, 1200, 5101`
+- `events/soi_events/00_lobbies_events_03.txt:220, 245, 300, 858, 1729, 2507`
+- `events/agitators_events/land_ownership_law_events.txt:1947`
 
 ```
 Error: Could not get leader of interest group
@@ -129,7 +147,7 @@ Error: Invalid right side during comparison 'popularity'
 
 `je_vanguard`, the related communism-event option, most election-event branches, and the cultural-movement leader-recruitment path iterate `any_interest_group = { leader = { ... } }` without first checking `has_leader = yes`. Marginal IGs and IGs in newly-formed or recently-released countries can lack a leader for several months. Vanilla pattern across multiple content systems — affects every country running these JEs/events/movements while an IG is leaderless. The `popularity` comparisons are a character interaction reading the missing leader's popularity.
 
-A country can also stay leaderless for good, which multiplies these lines: about 1,700 an hour from one country in 2026-10-07's France game. Vanilla's Indian-revolution hack (the `00_code_on_actions.txt:5440` entry below) retires the rebels' interest-group leaders and the engine fails to replace them, so the groups keep pointing at deleted characters and never get new ones. Count a country's lines per hour before blaming the scripts above. 2026-10-10: about 200 lines from the conservative and religious parties' scripts (`leader` read for party membership) for one revolt-born country, the Baluchistani Uprising.
+Mod script reaches the same reads, through a vanilla trigger it calls on a leaderless interest group or a diplomatic catalyst it sets off; those stacks carry a mod frame and stay visible (`- stack: vanilla only`, #863). Across the 2026-10-10 and 2026-10-11 observer runs that was 410 lines (UN ballots 170, the nuclear crisis events 170, the nuclear custody events 70), against 3,732 with no mod frame. A country can also stay leaderless for good, which multiplies these lines: about 1,700 an hour from one country in 2026-10-07's France game. Vanilla's Indian-revolution hack (the `00_code_on_actions.txt:5440` entry below) retires the rebels' interest-group leaders and the engine fails to replace them, so the groups keep pointing at deleted characters and never get new ones. Count a country's lines per hour before blaming the scripts above. 2026-10-10: about 200 lines from the conservative and religious parties' scripts (`leader` read for party membership) for one revolt-born country, the Baluchistani Uprising.
 
 ### `common/treaty_articles/18_acquire_monopoly_for_company.txt` — `Event target link 'type' returned an invalid object`
 
@@ -147,14 +165,6 @@ Error: has_strategic_region_interest_tier trigger [ Invalid Country or Strategic
 
 The `conquer_state` AI evaluation block calls `has_strategic_region_interest_tier` in scopes where either the country or strategic region argument doesn't resolve. Same family as `00_on_actions_monthly.txt:145`. Vanilla bug. **6+ occurrences per session.**
 
-### `common/scripted_triggers/wonder_triggers.txt:65` — scope-dependent loc inside any-trigger
-
-```
-state_this_equal: Scope dependent values in localization inside an any trigger; consider using a custom_tooltip
-```
-
-Vanilla wonder trigger uses scope-dependent localization tokens inside an any-trigger context, which the engine warns about every iteration. **2500+ occurrences per session** in observer-mode. Cosmetic warning only.
-
 ### `common/on_actions/00_code_on_actions.txt:7300-7400` — intentional vanilla `debug_log` calls
 
 Plain English messages emitted by intentional vanilla `debug_log = "..."` calls in election / party / revolution on-actions. Substring patterns that catch every variant:
@@ -167,9 +177,54 @@ Coalition Created
 Coalition Disbanded
 Society Created
 Society Disbanded
+Created - 
+Disbanded - 
 ```
 
-Examples seen in the wild: `Election Campaign Started`, `Election Campaign Ended`, `Conservative Party Created`, `Revolutionary Coalition Disbanded`, `Fascist Party Created`, `Patriotic Party Created/Disbanded`, `Faith Party Created`, `Anarchist Society Disbanded`, `Agrarian Party Created/Disbanded`, `Free Trade Party Created/Disbanded`, `Communist Party Created`, `Christian Party Disbanded`, `Clerical Party Created`. These are debug telemetry, not errors. Recognize and skip — they dominate `mod_only=true` triage during election cycles because the categorizer can't distinguish intentional `debug_log` from real errors.
+Vanilla 1.14 also logs every party by name, `[party] Created - [country]` (line 7399) and `[party] Disbanded - [country]` (line 7407), which the last two lines catch. Examples seen in the wild: `Election Campaign Started`, `Election Campaign Ended`, `Conservative Party Created`, `Revolutionary Coalition Disbanded`, `Fascist Party Created`, `Patriotic Party Created/Disbanded`, `Faith Party Created`, `Anarchist Society Disbanded`, `Agrarian Party Created/Disbanded`, `Free Trade Party Created/Disbanded`, `Communist Party Created`, `Christian Party Disbanded`, `Clerical Party Created`. These are debug telemetry, not errors. Recognize and skip — they dominate `mod_only=true` triage during election cycles because the categorizer can't distinguish intentional `debug_log` from real errors.
+
+
+### `common/on_actions/00_code_on_actions.txt:5209, 5565` — `handle_revolutionary_sps` removes an insurrectionary group from government
+- stack: vanilla only
+
+```
+remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
+add_ruling_interest_group effect [ InterestGroup is insurrectionary ]
+```
+
+Under a single-party state the on_action calls `handle_revolutionary_sps`, whose `every_interest_group` (logged at common/scripted_effects/00_victoria_scripted_effects.txt:3558) removes every governing group without a party, including one already in revolt, which the engine refuses; the next block (line 3565) adds every party group not in government, again including one in revolt. 10 lines across the 2026-10-10 and 2026-10-11 runs. `- stack: vanilla only` because the message is generic and mod script removes ruling groups too.
+
+### `common/on_actions/00_code_on_actions.txt:3847, 6727` — on_actions read a scope their caller did not set
+- stack: vanilla only
+
+```
+Event target link 'scope' returned an unset scope
+Undefined event target 'target'
+Undefined event target 'diplomatic_play'
+set_variable effect [ This scope doesn't support variables. Scope: empty ]
+```
+
+`on_country_released_as_company_subject` (line 3847) opens `scope:target` and sets a variable on it, and a Japanese diplomatic-play on_action (line 6727) opens `scope:diplomatic_play`; in some firings the engine sets neither. One or two lines each in the 2026-10-10 and 2026-10-11 runs.
+
+### `common/on_actions/00_code_on_actions.txt:5766` — a won secession reads the rebels' capital after they lost it
+- stack: vanilla only
+
+```
+Event target link 'capital' returned an invalid object
+Event target link 'state_region' returned an invalid object
+save_scope_as effect [ Scoped object is not valid. Type: State Region
+```
+
+The on_action saves `scope:target`'s `capital.state_region` as `former_rebel_capital` (vanilla's comment: the capital's owner is already dead), but a rebel country left with no states has no capital. One line each in a 2026-10 observer run.
+
+### `common/on_actions/00_code_on_actions.txt:7224` — dynamic state names set hub names vanilla has no port name for
+- stack: vanilla only
+
+```
+set_hub_names effect [ Attempting to assign a key that does not have localization to a hub ]
+```
+
+The dynamic state-name effects (common/scripted_effects/00_dynamic_state_names_europe.txt, e.g. Wallonia `set_hub_names = french` at line 4980, Posen `set_hub_names = polish` at 1375) switch every hub of a state to one culture's names. Vanilla's loc has each culture's city, farm, mine and wood names for Wallonia and Posen, plus a port name for one culture only (`HUB_NAME_STATE_WALLONIA_port_german`, `HUB_NAME_STATE_POSEN_port_russian`), though neither state region has a port hub. The log doesn't name the hub, so which key the engine misses is unconfirmed; it logs once per switch. 2 lines across the 2026-10-10 and 2026-10-11 runs.
 
 ### `common/defines/00_defines.txt`, `common/defines/00_ai.txt`, `common/defines/00_graphics.txt` — define macro not specified warnings
 
@@ -178,7 +233,7 @@ defined in 'common/defines/00_
 Maybe a define macro is missing
 ```
 
-Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from `extra_defines.txt` still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from `extra_defines.txt`.)
+Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from extra_defines.txt still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from extra_defines.txt.)
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
 - reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors)
@@ -208,14 +263,15 @@ Error: Event target link 'market' returned an invalid object
 Vanilla railroad-vehicle graphics definition reads `market` in a scope where it's not bound. Surfaces in routine map-rendering ticks. Vanilla bug.
 
 ### `common/scripted_effects/00_victoria_ip4_scripted_effects.txt:449` — bad-state checks on coup IGs
-- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `abandon_revolution` and `remove_ruling_interest_group` errors)
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `abandon_revolution`, `add_ruling_interest_group` and `remove_ruling_interest_group` errors)
 
 ```
 Error: abandon_revolution effect [ InterestGroup's country doesn't have a valid growing revolution ]
 Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
+Error: add_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 ```
 
-Iberia DLC (IP4) coup-resolution scripted effects call `abandon_revolution` / `remove_ruling_interest_group` on IGs whose state doesn't match the effect's preconditions (no growing revolution to abandon, IG already insurrectionary). Vanilla bug — the effects should be guarded but aren't.
+Iberia DLC (IP4) coup-resolution scripted effects call `abandon_revolution` / `remove_ruling_interest_group` on IGs whose state doesn't match the effect's preconditions (no growing revolution to abandon, IG already insurrectionary), and line 462 puts an insurrectionary golpista IG back in government with `add_ruling_interest_group` (from `ip4_coup_events.txt:456`). Vanilla bug — the effects should be guarded but aren't.
 
 ### `common/diplomatic_catalysts/00_diplomatic_catalysts.txt:2334, 2414` — the event catalysts offer the overlord lobbies an appeasement factor they do not list
 
@@ -229,6 +285,7 @@ is a valid appeasement reason for political lobby 'lobby_anti_overlord'
 This entry used to blame vanilla's lines 285 and 292 for `appeasement_relations_decreased` failures, anchored on the lobby effects file (00_lobby_effects.txt) and read as a `factor`/`reason` field mix-up. Those vanilla calls are signed correctly. The failures were five mod event options that passed the factor with the signs reversed (fixed 2026-10-04), and the anchor hid them, because the mod's calls go through the same scripted effect and error.log lists every file in the call stack. Keep this entry anchored on the catalyst and its signature on the lobby type.
 
 ### `common/ideologies/01_character_ideologies.txt:1781`, `:3365`, `:8438`, `:8671` — wrong-scope triggers in character/IG scope
+- reviewed: mod anchor, common/ideologies/modified.txt is apply_ideologies.py's replay of vanilla's ideologies, so these vanilla errors are logged at the mod's copy
 
 ```
 Error: ig_approval trigger [ Wrong scope for trigger: character, expected interest_group ]
@@ -243,17 +300,27 @@ Vanilla character-ideology blocks call IG-scope or country-scope triggers (`ig_a
 
 ```
 capital effect [ Wrong scope for effect: character, expected country ]
-ip4_coup_events.txt:401
 ```
 
 Vanilla IP4 coup-resolution event calls `capital = ...` on a character scope where it expects country scope. Single-line bug. Skip.
 
+
+### `events/iberia_events/ip4_coup_events.txt:716, 722, 728, 734` — coup weights read Home Affairs in a country without it
+
+```
+Event target link 'institution' returned an invalid object
+```
+
+A coup option's AI weight steps up with `owner.institution:institution_home_affairs.investment >= 2` … `>= 5`, unguarded. A country with no Home Affairs institution (no internal-security law that creates it) has nothing for `institution:` to return, so each of the four checks logs once per evaluation. 4 lines across the 2026-10-10 and 2026-10-11 observer runs.
+
 ### `events/movement_events.txt:815`/`:820` — `Undefined event target 'relevant_state'` cascading into wrong-scope effects
 
 ```
-movement_events.txt:815
-movement_events.txt:820
 Undefined event target 'relevant_state'
+Event target link 'scope' returned an unset scope
+add_loyalists_in_state effect [ Wrong scope for effect: none, expected state ]
+add_radicals_in_state effect [ Wrong scope for effect: none, expected state ]
+add_modifier effect [ Wrong scope for effect: none
 ```
 
 Vanilla political-movement event references `event_target:relevant_state` where it's not bound in the immediate scope; cascade emits "unset scope" + `add_loyalists_in_state` / `add_modifier` "Wrong scope for effect: none". Single root cause, three log lines — recognize as one vanilla bug, not three.
@@ -261,9 +328,10 @@ Vanilla political-movement event references `event_target:relevant_state` where 
 ### `events/agitators_events/coup_events.txt:983`/`:984` — `Undefined event target 'legacy_of_democracy_state'` cascading into wrong-scope effects
 
 ```
-coup_events.txt:983
-coup_events.txt:984
 Undefined event target 'legacy_of_democracy_state'
+Event target link 'scope' returned an unset scope
+add_radicals_in_state effect [ Wrong scope for effect: none, expected state ]
+add_modifier effect [ Wrong scope for effect: none
 ```
 
 Same pattern as `movement_events.txt:815`. Vanilla coup-event references an unbound event target; cascades into `add_radicals_in_state` / `add_modifier` "Wrong scope for effect: none". One vanilla bug, three log lines.
@@ -271,7 +339,6 @@ Same pattern as `movement_events.txt:815`. Vanilla coup-event references an unbo
 ### `events/ig_suppression_events.txt:1016` — `Event target link 'scope' returned an invalid object`
 
 ```
-ig_suppression_events.txt:1016
 Event target link 'scope' returned an invalid object
 ```
 
@@ -280,17 +347,19 @@ Vanilla IG-suppression event accesses a saved scope that has been invalidated by
 ### `common/treaty_articles/31_ship_transfer.txt:54` — `Event target link 'scope' returned an invalid object`
 
 ```
-31_ship_transfer.txt:54
+Event target link 'scope' returned an invalid object
 ```
 
 Vanilla ship-transfer treaty article references a scope that's invalidated during certain treaty-evaluation paths. High repeat count under treaty-heavy gameplay. Vanilla bug. Skip.
 
+Not registered, because the mod causes them: in 1.14.5 the same article's `SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE` check (line 58) runs `any_scope_article_option = { NOT = { has_type = alliance } NOT = { has_type = defensive_pact } target_country = scope:source_country }`. It leaves out vanilla's only two mutual articles, but the mod adds four more (`joint_military_exercises` and `intelligence_sharing_pact` in common/treaty_articles/extra_treaty_articles.txt, `cultural_exchange_program`, `nuclear_arms_limitation`), so a treaty holding one logs `Can only get target_country of directed article options. <article> is not directed`, `Event target link 'target_country' returned an unset scope` and `Invalid left side during comparison 'target_country'` (34 lines across the 2026-10-10 and 2026-10-11 observer runs, all from the first two). Until 2026-10-11 the bare `31_ship_transfer.txt:54` signature tagged them as this entry (#873).
+
 ### `events/agitators_events/land_ownership_law_events.txt:945`/`:946` — `Undefined event target 'farmer_wealth_concentration_state_scope'` cascading into wrong-scope effects
 
 ```
-land_ownership_law_events.txt:945
-land_ownership_law_events.txt:946
 Undefined event target 'farmer_wealth_concentration_state_scope'
+Event target link 'scope' returned an unset scope
+add_radicals_in_state effect [ Wrong scope for effect: none, expected state ]
 ```
 
 Same pattern as `movement_events.txt:815` and `coup_events.txt:983`. Vanilla `land_ownership_law_events.7` option `c` references an unbound `scope:farmer_wealth_concentration_state_scope`; cascades into "unset scope" + `add_radicals_in_state` "Wrong scope for effect: none". One vanilla bug, three log lines.
@@ -298,7 +367,6 @@ Same pattern as `movement_events.txt:815` and `coup_events.txt:983`. Vanilla `la
 ### `events/slave_revolts.txt:38` — `Could not get leader of interest group` in revolt-synthesized country
 
 ```
-slave_revolts.txt:38
 Could not get leader of interest group
 Event target link 'leader' returned an unset scope
 ```
@@ -308,7 +376,6 @@ Vanilla slave/peasant-revolt event walks `every_interest_group` and reads `leade
 ### `events/india_events/princely_states.txt:61` — `change_relations` same-country self-loop
 
 ```
-princely_states.txt:61
 change_relations effect [ Trying to change relations between the same country
 ```
 
@@ -317,7 +384,6 @@ Vanilla princely-states event has `change_relations` between two scope refs that
 ### `events/royal_wedding.txt:351` — `remove_character_role` on character without that role
 
 ```
-royal_wedding.txt:351
 remove_character_role effect [ Attempting to remove role that character does not have
 ```
 
@@ -326,10 +392,12 @@ Vanilla royal-wedding event removes a role that the chosen wedding character doe
 ### `events/royal_wedding.txt:112, 205, 206, 210` — unbound option-branch scope
 
 ```
-royal_wedding.txt:112
-royal_wedding.txt:205
-royal_wedding.txt:206
-royal_wedding.txt:210
+Undefined event target 'marriage_country_1'
+Event target link 'scope' returned an unset scope
+Event target link 'ruler' returned an invalid object
+ruler effect [ Wrong scope for effect: none, expected country ]
+change_relations effect [ Wrong scope for effect: none, expected country ]
+Invalid left side during comparison
 ```
 
 Vanilla royal-wedding event references `scope:marriage_country_1` in option-branch triggers before the option that binds it has run. Cascades into "Invalid left side during comparison" on the same line. Cosmetic — the AI score branch evaluates to false and the option's relative weight stays at the base. One vanilla bug, four log lines per event firing.
@@ -337,14 +405,11 @@ Vanilla royal-wedding event references `scope:marriage_country_1` in option-bran
 ### `events/peoples_springtime.txt:693, 1111, 1112, 1124` — multiple revolution/variable errors
 
 ```
-peoples_springtime.txt:693
-peoples_springtime.txt:1111
-peoples_springtime.txt:1112
-peoples_springtime.txt:1124
 abandon_revolution effect [ InterestGroup's country doesn't have a valid growing revolution
 add_ruling_interest_group effect [ InterestGroup is insurrectionary
 remove_ruling_interest_group effect [ InterestGroup is insurrectionary
-Failed to fetch variable for 'springtime_timer_var' due to not being set
+Failed to fetch variable for 'springtime_timer_var'
+has_variable trigger [ This scope doesn't support variables. Scope: empty ]
 Event target link 'var' returned an unset scope
 Invalid left side during comparison 'var'
 ```
@@ -354,7 +419,6 @@ Vanilla 1848-Springtime event chain has multiple flaws: `abandon_revolution` is 
 ### `common/on_actions/00_on_actions_monthly.txt:206` — `retire_character` on already-dead character
 
 ```
-00_on_actions_monthly.txt:206
 retire_character effect [ Character is already dead
 ```
 
@@ -363,20 +427,25 @@ Vanilla character-aging on-action calls `retire_character` without a `is_alive =
 ### `events/japan_events/ep2_shogunate_events.txt:726`, `events/soi_events/00_lobbies_events_03.txt:503`, `events/psychology_events.txt:136`, `events/brazil/pedro_brazil_events.txt:1042` — `ruler = { ... }` without `has_ruler` guard
 
 ```
-ep2_shogunate_events.txt:726
-00_lobbies_events_03.txt:503
-psychology_events.txt:136
-pedro_brazil_events.txt:1042
 Event target link 'ruler' returned an invalid object
 ```
 
 Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence. 2026-10-04: also the council-republic checks in `common/parties/anarchist_party.txt:156` and `common/parties/communist_party.txt:440` (`owner = { ruler = { has_ideology = … } }`), two lines each. 2026-10-05: also the Caudillo event's trigger in `events/brazil/caudillo.txt:201` (`ruler = { interest_group ?= { … } }`), two lines.
 
+
+### `events/soi_events/00_lobbies_events_03.txt:1675` — `scope:relevant_lobby_member` unset in `lobby_events.52`
+
+```
+Undefined event target 'relevant_lobby_member'
+Event target link 'scope' returned an unset scope
+add_modifier effect [ Wrong scope for effect: none
+```
+
+The default option (`lobby_events.52.a`) adds `lobby_member_pol_str_negative` to `scope:relevant_lobby_member`, which the event did not bind in that firing. One line each in the 2026-10-10 run.
+
 ### `common/scripted_effects/00_victoria_ep2_scripted_effects.txt:1177` (called from `common/journal_entries/07_iwakura_mission.txt`) — `var:current_expedition_location_var` unset
 
 ```
-00_victoria_ep2_scripted_effects.txt:1177
-07_iwakura_mission.txt
 Event target link 'var' returned an invalid object
 Could not get country from scope!
 ```
@@ -386,16 +455,29 @@ Vanilla Iwakura-mission scripted effect reads `var:current_expedition_location_v
 ### `events/agitators_events/agitators_law_events.txt:921` — `Undefined event target 'supporting_ig'` cascading into wrong-scope effects
 
 ```
-agitators_law_events.txt:921
 Undefined event target 'supporting_ig'
+Undefined event target 'supporting_ig_leader'
+Event target link 'scope' returned an unset scope
+add_modifier effect [ Wrong scope for effect: none
+has_trait trigger [ Wrong scope for trigger: none, expected character ]
+add_trait effect [ Wrong scope for effect: none, expected character ]
 ```
 
 Same pattern as `movement_events.txt:815`, `coup_events.txt:983`, and `land_ownership_law_events.txt:945`. Vanilla `agitators_law_events.9` option `b` references an unbound `scope:supporting_ig`; cascades into "unset scope" + `add_modifier` "Wrong scope for effect: none". One vanilla bug, three log lines.
 
+
+### `events/agitators_events/agitators_law_events.txt:743, 750` — `scope:neutral_ig` unset when the option runs
+
+```
+Undefined event target 'neutral_ig'
+add_amendment effect [ Invalid sponsor ]
+```
+
+The option adds a modifier to `scope:neutral_ig` (line 743), then attaches an amendment the same group sponsors (line 750), but the event never bound `neutral_ig` in that firing, so the modifier is skipped and the amendment has no sponsor. One line each in the 2026-10-10 run.
+
 ### `events/agitators_events/revolution_events_01.txt:1291` — `Event target link 'home_country' returned an invalid object`
 
 ```
-revolution_events_01.txt:1291
 Event target link 'home_country' returned an invalid object
 ```
 
@@ -404,9 +486,6 @@ Vanilla revolution event reads `home_country` on a scope where it isn't always s
 ### common/scripted_effects/00_government_type_change_effects.txt:19, 20 (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
 
 ```
-00_government_type_change_effects.txt:19
-00_government_type_change_effects.txt:20
-05_council_republics.txt
 Event target link 'get_ruler_for' returned an unset scope
 set_character_as_ruler effect [ Wrong scope for effect: none, expected character ]
 ```
@@ -416,7 +495,6 @@ Vanilla council-republics government-type transition tries to install a ruler vi
 ### `events/iberia_events/ip4_anarchism_events.txt:610` — `Event target link 'civil_war_origin_country' returned an invalid object`
 
 ```
-ip4_anarchism_events.txt:610
 Event target link 'civil_war_origin_country' returned an invalid object
 ```
 
@@ -424,13 +502,20 @@ Vanilla anarchism event reads `civil_war_origin_country` on a scope where the sa
 
 2026-10-04: the same link in `common/journal_entries/03_korea.txt:233`, where `random_country = { limit = { civil_war_origin_country = scope:korea_scope } }` asks it of every country, most of which are not revolts. 189 lines in one tick, one per country.
 
+
+### `events/iberia_events/ip4_anarchism_events.txt:315` — `scope:propaganda_of_the_deed_victim` unset
+
+```
+Undefined event target 'propaganda_of_the_deed_victim'
+Event target link 'scope' returned an unset scope
+kill_character effect [ Wrong scope for effect: none, expected character ]
+```
+
+Option `anarchism_events.2.b` runs `scope:propaganda_of_the_deed_victim = { kill_character = yes }` when the event saved no victim, so the kill falls on an empty scope. One line each in the 2026-10-10 run.
+
 ### `events/iberia_events/regency_events.txt:114-120` — `Undefined event target 'ig_candidate_1'` cascading into wrong-scope effects/triggers
 
 ```
-regency_events.txt:114
-regency_events.txt:115
-regency_events.txt:116
-regency_events.txt:120
 Undefined event target 'ig_candidate_1'
 Event target link 'scope' returned an unset scope
 set_character_as_ruler effect [ Wrong scope for effect: none, expected character ]
@@ -481,26 +566,28 @@ Event target link 'source_country' returned an unset scope
 Invalid left side during comparison 'source_country'
 ```
 
-Vanilla naval-mission logic at `:97` calls `source_country` on a treaty article unconditionally, but `source_country` is only valid on *directed* articles. The error names the mod's mutual article `cultural_exchange_program` (`common/treaty_articles/108_cultural_exchange.txt`) because that's what's in scope when a country with that article active evaluates the mission — but the unsafe assumption is in **vanilla** code (vanilla mutual articles like defensive pacts trip it identically). The mod article correctly uses `kind = mutual`; making it directed would be wrong. Three log lines, one vanilla root cause. Register-and-skip; cannot be fixed mod-side.
+Vanilla naval-mission logic at `:97` calls `source_country` on a treaty article unconditionally, but `source_country` is only valid on *directed* articles. The error names the mod's mutual article `cultural_exchange_program` (common/treaty_articles/108_cultural_exchange.txt) because that's what's in scope when a country with that article active evaluates the mission — but the unsafe assumption is in **vanilla** code (vanilla mutual articles like defensive pacts trip it identically). The mod article correctly uses `kind = mutual`; making it directed would be wrong. Three log lines, one vanilla root cause. Register-and-skip; cannot be fixed mod-side.
 
 ### `common/treaty_articles/14_treaty_port.txt:425` — article `infamy` preview reads an unset `scope:state`
+- stack: vanilla only
 
 ```
-common/treaty_articles/14_treaty_port.txt:425
+Value of wrong type in 'common/treaty_articles/14_treaty_port.txt
 ```
 
 Vanilla's Treaty Port article computes `infamy = { value = 0  scope:state = { add = state_infamy_value } … }` with no guard. While the treaty designer has the article listed but no state picked yet, the engine re-evaluates that block every render frame with `scope:state` unset, so `state_infamy_value` is read in a `none` scope and the value comes back typed `none`. Roughly 7,300 lines in a six-generation rotation (2026-09-20) — the single largest log producer in that session, and it cascades into the `00_infamy_values.txt` entry below. Nothing mod-side triggers it: the mod's `treaty_draft_panel.gui` / `treaty_panel.gui` overrides only add company-input rows. Cosmetic; cannot be fixed mod-side without overriding the whole vanilla article.
 
 ### `common/script_values/00_infamy_values.txt:40, 50, 60, 87, 97, 110, 122, 136, 194` — state-scoped infamy triggers evaluated in `none` scope
+- stack: vanilla only
 
 ```
-Script location: common/script_values/00_infamy_values.txt
 is_incorporated trigger [ Wrong scope for trigger: none, expected state ]
 is_homeland_of_country_cultures trigger [ Wrong scope for trigger: none, expected state ]
 any_scope_culture trigger [ Wrong scope for trigger: none, expected country, state ]
 has_claim_by trigger [ Wrong scope for trigger: none, expected state ]
 is_land_adjacent_to_state trigger [ Invalid target state ]
 has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
+Event target link 'root' returned an invalid object
 ```
 
 Downstream cascade of the `14_treaty_port.txt:425` entry above: `state_infamy_value` is a state-scoped script value, so every state trigger inside it errors once per render frame when the treaty designer evaluates the article without a chosen state. Eight distinct trigger errors per frame, ~7,800 lines in one six-generation rotation (2026-09-20). Same root cause, same verdict — register and skip.
@@ -535,15 +622,13 @@ but the state region is called **`STATE_HAWAIIAN_ISLANDS`** (`map_data/state_reg
 
 Fires per AI state-value evaluation, so the volume is large once it starts: 5,708 lines in a nine-minute window (2026-09-20). Consequence in vanilla and modded games alike is that the `+50` Hawaii weighting never applies; the AI simply doesn't prefer Hawaii the way the script intends.
 
-Not mod-caused and not worth fixing mod-side: this mod's `common/ai_strategies/edited_default_strategy.txt` is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new. Until 2026-10-10 the signature also held this file's path, which the matcher reads with any line number, so the entry tagged every error with the default strategy anywhere in its stack: 42 mod lines from UN ballots in that day's run (`Event target link 'capital' returned an invalid object`, fixed in the mod).
+Not mod-caused and not worth fixing mod-side: this mod's common/ai_strategies/edited_default_strategy.txt is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new. Until 2026-10-10 the signature also held this file's path, which the matcher reads with any line number, so the entry tagged every error with the default strategy anywhere in its stack: 42 mod lines from UN ballots in that day's run (`Event target link 'capital' returned an invalid object`, fixed in the mod).
 
 ### `common/war_goal_types/21_return_state.txt:69, 83` — war-goal `infamy` preview reads `scope:target_country` before it is bound
+- stack: vanilla only
 
 ```
 scope:target_country trigger [ Scoped object of type 'country' is not valid (Country  (4294967295)) ]
-common/war_goal_types/21_return_state.txt
-common/war_goal_types/03_conquer_state.txt
-common/war_goal_types/00_annex_country.txt
 ```
 
 The same shape as the `14_treaty_port.txt:425` entry above, in the war-goal half of the diplomacy UI. Each of these vanilla war goals computes `infamy = { … }` with a `multiply` whose `limit` opens `scope:target_country = { is_subject_of = root … }` unguarded, and the play UI evaluates the block to preview the infamy cost before a target country is bound. `Country (4294967295)` is the engine's invalid handle (`0xFFFFFFFF`). The sibling `scope:target_state = { add = state_infamy_value }` on the line above is the same bug that drives the `00_infamy_values.txt` cascade.
@@ -633,6 +718,7 @@ post_notification effect [ Type mismatch, notification is incompatible with scop
 The entry saves `overlord_scope` inside a search and then posts `struggle_for_sovereignty_message` to it unconditionally. When the search finds no overlord, both lines fail. Once in a session, 2026-10-05.
 
 ### common/scripted_triggers/00_diplomacy_triggers.txt:188 (from `common/script_values/00_infamy_values.txt:185`) — `scope:infamy_target_state.owner` passed as the target
+- stack: vanilla only
 
 ```
 Event target link 'owner' returned an invalid object
@@ -741,9 +827,23 @@ Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `m
 Event target link 'capital' returned an invalid object
 Event target link 'region' returned an invalid object
 Event target link 'market' returned an invalid object
+Scoped object is not valid. Type: State NULL_STATE
+Undefined event target 'capital_scope'
 ```
 
-A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. The vanilla AI strategies read capitals the same way (common/ai_strategies/01_admin_strategies.txt:51, and the default strategy through common/scripted_triggers/00_scripted_triggers.txt:1065), but they are left out on purpose: a mod effect that sets off an AI evaluation, such as a diplomatic catalyst, reaches the same frames with the same message, and an entry here would hide it (the UN ballots, 2026-10-10; #863).
+A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. Two vanilla events read the capital the same way: `events/movement_events.txt:1657` (`capital`, then `add_loyalists_in_state` on `NULL_STATE`) and `events/agitators_events/agitators_law_events.txt:1497` (`capital = { save_scope_as = capital_scope }`, so `scope:capital_scope` at line 1523 is undefined), one or two lines each in the 2026-10-10 and 2026-10-11 runs. The vanilla AI strategies read capitals the same way; the next entry covers them, for stacks with no mod frame only.
+
+### `common/ai_strategies/00_default_strategy.txt` and `common/ai_strategies/01_admin_strategies.txt:51` — the AI reads a stateless country's capital
+- stack: vanilla only
+
+```
+Event target link 'capital' returned an invalid object
+Event target link 'region' returned an invalid object
+Event target link 'market_capital' returned an invalid object
+Event target link 'market' returned an invalid object
+```
+
+The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through common/ai_strategies/02_diplomatic_strategies.txt. `- stack: vanilla only` keeps those visible (#863). Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
 
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
@@ -917,19 +1017,11 @@ These warnings are emitted by the engine when this mod intentionally overrides v
 
 Mod overrides hundreds of vanilla loc keys via the `replace/` directory convention. Files include `timeline_extended_override_l_english.yml` (goods, laws, concepts, modifiers, buildings, ships, companies, …), `headlines_overrides_l_english.yml` (notification text), `LARP_interfaces_l_english.yml` (radicals/loyalists/GDP tooltips), and similar. The engine emits a "Key X defined in multiple files" warning for each. Expected — not actionable. The signature substring matches any path under `localization/english/replace/`.
 
-### `00_code_on_actions.txt:7362`/`:7370` — vanilla intentional party-creation/disband debug_log calls
-
-```
-00_code_on_actions.txt:7362
-00_code_on_actions.txt:7370
-```
-
-Vanilla `00_code_on_actions.txt` contains `debug_log = "<Phrase> Created"` (line 7362) and `debug_log = "<Phrase> Disbanded"` (line 7370) calls that fire on every political party creation/disband. They dominate `debug.log` mod-only triage during election cycles (one entry per party event, deduped to ~10–50 distinct phrases per session). Always skip — these are vanilla-intentional and not fixable from the mod. The signature matches both line numbers via the source file basename + line ref.
-
 ### `gui/companies_panel.gui:1` — vanilla GUI parse warnings
 
 ```
-gui/companies_panel.gui:1
+is outside of all descriptions
+Could not find template ''
 ```
 
 Vanilla `companies_panel.gui` line 1 emits `using '' is outside of all descriptions` and `Could not find template ''` warnings. The line is just a comment header, so this is the engine getting confused by something earlier in load order. Vanilla file, not in mod, not actionable.
@@ -1277,12 +1369,10 @@ Event target link 'religion' returned an invalid object
 Vanilla uses the pattern `religion = scope:X.religion` unguarded — `power_bloc_leverage_gain` (`01_power_bloc_values.txt:56`), the coat-of-arms religion-match template (`coa_templates.txt:141`), and the character "Convert" interaction (`00_character_interactions.txt:297`). When the right-hand scope evaluates to a country lacking a state religion (e.g. revolt-synthesized countries during their creation window), the engine emits `Event target link 'religion' returned an invalid object`. Mod's own treaty article common/treaty_articles/106_religious_mission_rights.txt was hardened with `exists = scope:target_country` / `exists = scope:source_country` guards (2026-05-10), and mod's override common/script_values/modified.txt:52 was hardened with `exists = scope:target.religion` (2026-05-10), so both are no longer in this list. Cosmetic — comparisons that fail simply don't fire their accept-score branch.
 
 ### `common/war_goal_types/00_annex_country.txt:93, :114, :148, :155` — invalid country/strategic-region scope
+- stack: vanilla only
 
 ```
-common/war_goal_types/00_annex_country.txt:93
-common/war_goal_types/00_annex_country.txt:114
-common/war_goal_types/00_annex_country.txt:148
-common/war_goal_types/00_annex_country.txt:155
+Scoped object of type 'country' is not valid
 ```
 
 Parallel to the existing `03_conquer_state.txt:156-185` entry. `00_annex_country.txt` uses `scope:target_country` and `has_strategic_region_interest_tier` triggers without `exists = scope:target_country` guards; when the play-evaluation runs against an unset target (`Country  (4294967295)`), the cascade fires "Scoped object of type 'country' is not valid". Cosmetic — the trigger short-circuits to false.
@@ -1290,11 +1380,8 @@ Parallel to the existing `03_conquer_state.txt:156-185` entry. `00_annex_country
 ### `common/journal_entries/00_east_indies.txt:7`, `:12`, `00_opium_wars.txt:7`, `01_ryukyu_rivalry.txt:16`, `02_acre_dispute.txt:8`, `00_german_unification.txt:12` — `c:XXX` unset-scope cascade
 
 ```
-common/journal_entries/00_east_indies.txt
-common/journal_entries/00_german_unification.txt
-common/journal_entries/00_opium_wars.txt
-common/journal_entries/01_ryukyu_rivalry.txt
-common/journal_entries/02_acre_dispute.txt
+Event target link 'c' returned an unset scope
+Invalid left side during comparison 'c'
 ```
 
 Parallel to the existing `common/on_actions/00_on_actions_yearly.txt:559` entry — vanilla JE definitions reference country tags via `c:XXX` (e.g. `c:GBR`, `c:NDL`, `c:JAP`, `c:CHI`) at the top-level `possible` or `scope` block without `exists = c:XXX` guards. When the referenced country doesn't exist in the world (e.g. has been annexed or never spawned), the engine emits the paired "Event target link 'c' returned an unset scope" + "Invalid left side during comparison 'c'" cascade on the same line. Cosmetic — JE simply doesn't activate.
@@ -1303,7 +1390,6 @@ Parallel to the existing `common/on_actions/00_on_actions_yearly.txt:559` entry 
 
 ```
 Could not get leader of interest group 'Industrialists' in country
-events/secession_situations.txt:418
 ```
 
 Parallel to the existing `events/slave_revolts.txt:38` entry. Vanilla secession event reads the Industrialists IG leader on a freshly-synthesized revolt country before its IGs have been populated with characters. Casts as a `leader returned an unset scope` cascade on the same line. Cosmetic — null leader is handled gracefully downstream.
@@ -1398,19 +1484,22 @@ Engine assertion fired when a formation reposition is requested for a formation 
 - source: `jomini_scriptvalue.cpp:1659`
 
 ```
-common/journal_entries/01_paris_commune.txt:234
+Value of wrong type in 'common/journal_entries/01_paris_commune.txt
 ```
 
 Vanilla JE reads `global_var:paris_commune_progress_var` in its `current_value` before the variable has been initialized by any prior `set_global_variable`. Engine emits "Value of wrong type … Got value of type 'none'". The JE renders with 0 until the variable gets set later in the play. Cosmetic.
 
 ### `jomini_script_system.cpp:247` — `<unknown>:0` untyped-trigger country-not-valid noise
 - source: `jomini_script_system.cpp:247`
+- stack: vanilla only
 
 ```
 untyped trigger [ Scoped object of type 'country' is not valid (Country  (4294967295))
 ```
 
 Engine fires this when an untyped trigger reads a country target that has resolved to `Country (4294967295)` — i.e. a sentinel "not-found" value. Script location is reported as `<unknown>:0`, meaning the offending check sits in compiled engine code (typically AI evaluation against an in-flight diplomatic play whose target hasn't been resolved yet). Cosmetic.
+
+The source anchor is every script error's, so the signature alone also matched the same message at a mod location: 1,787 lines at common/scripted_guis/te_system_tab_sguis.txt:214 (the Global Warming tab's `is_shown`) across the 2026-10-10 and 2026-10-11 observer runs. `- stack: vanilla only` (#863) keeps those visible; the 209 lines with no script frame stay tagged.
 
 ### `jomini_script_system.cpp:247` — `on_start_expanding_building` fired with a null building
 - source: `jomini_script_system.cpp:247`
@@ -1493,15 +1582,6 @@ PdxDataFetchLocalizedData failed for
 ```
 
 Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic.
-
-### `common/diplomatic_actions/28_invite_to_power_bloc.txt:87` — `accept_score` script value reads unset type
-- source: `jomini_scriptvalue.cpp:1659`
-
-```
-common/diplomatic_actions/28_invite_to_power_bloc.txt:87
-```
-
-**Probably the mod's, not vanilla's. Delete this entry once a launch with the fix logs none of it.** `accept_score` (line 87) adds `leverage_threshold_to_invite` at line 104 in country scope, and the mod overrides that value (in its extra_script_values file) with a `power_bloc_leader = { … }` hop, a link that takes only a power bloc. Of vanilla's four reads of the value, this is the only one in country scope and the only one that logs. The engine reports such a wrong-scope read as `'none'` at the outermost script value, here line 87 (`scripting_best_practices.md` § Vanilla Script-Value Overrides). The entry was written on 2026-05-15, twelve days after the override was restored. On 2026-10-05 it was 16,770 debug.log and 16,198 error.log lines in 27 minutes, enough to rotate debug.log every five minutes and lose the startup log. The 2026-10-05 log-triage PR guards the hop by scope. If the line persists after that, it is vanilla after all: rewrite this paragraph and keep the entry.
 
 ### `navy_ai.cpp:3585` — no naval mission type possible for a country
 - source: `navy_ai.cpp:3585`
@@ -1685,7 +1765,7 @@ gfx/interface/icons/alert_icons/repairing.dds not found
 VFSOpen Error: gfx/interface/icons/alert_icons/repairing.dds
 ```
 
-Vanilla's own `gui/texticons.gui` declares a text icon backed by `gfx/interface/icons/alert_icons/repairing.dds` — the missing `repairing.dds` is what the log names — and that file exists in neither the vanilla install nor this mod — the texture was renamed or dropped without updating the texticon. Two lines per launch. This mod does not override `gui/texticons.gui` (its own icon additions live in `gui/zzz_extra_goods_texticons.gui`) and references the path nowhere, so any `$repairing$` text icon simply renders blank in vanilla too.
+Vanilla's own `gui/texticons.gui` declares a text icon backed by `gfx/interface/icons/alert_icons/repairing.dds` — the missing `repairing.dds` is what the log names — and that file exists in neither the vanilla install nor this mod — the texture was renamed or dropped without updating the texticon. Two lines per launch. This mod does not override `gui/texticons.gui` (its own icon additions live in gui/zzz_extra_goods_texticons.gui) and references the path nowhere, so any `$repairing$` text icon simply renders blank in vanilla too.
 
 Source-anchored rather than path-anchored on purpose: the registry's basename index only accepts `.txt` / `.gui` / `.yml` / `.yaml` paths (`_PATH_REF_RE` in `game_log_reader.py`), so a missing-asset entry whose only file reference is a `.dds` can never be tagged by basename. The signature pins it to this one texture, so any other missing texture still surfaces in triage.
 
