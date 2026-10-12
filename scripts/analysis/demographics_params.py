@@ -350,11 +350,15 @@ MALARIA_READS_REGION_LIST = False
 # country carrier of the key is vanilla's ig_trait_famine_reserves (agriculture -0.10). The country's read carries the
 # interest group's power: a powerful group's traits count double (POWERFUL_IG_TRAIT_BONUS), so in 1836 India it reads
 # -0.20, the size the walk measured on farm pops (the spec's "doubled" line). Building-scope lines (working conditions,
-# production methods, company lines, executives' traits) stay on top at the bare curve's weight. The scale is the
-# fallback for spec §6's P1 (the famine_reserves_absorbed self-check): should the walk read a farm pop's line at k x
-# the country's, set it to k.
+# production methods, company lines, executives' traits) stay on top at the bare curve's weight. That the country's read
+# carries the doubling, and reads a building-group key at all, is inferred from the saves until the self-check
+# famine_reserves_absorbed (spec §6's P1) logs OK. Its two fallbacks: should the walk read a farm pop's line at k x the
+# country's, set the scale to k; should the country's read be 0, set COUNTRY_ABSORBED_FROM_FARM, which absorbs the
+# workplace's own read on subsistence farms only. No company owns one, so that read holds only the trait (no
+# building-scope line), but it leaves the trait on top for commercial farms' workers (the other agriculture groups).
 COUNTRY_ABSORBED_GROUPS = ("bg_agriculture",)
 COUNTRY_ABSORBED_SCALE = 1.0
+COUNTRY_ABSORBED_FROM_FARM = False
 # Turmoil (owner, 2026-10-11): accidents and violence x (1 + this x the state's turmoil, a 0-1 share). Vanilla's
 # state_turmoil modifiers carry no mortality; state_mortality_turmoil_mult's carriers (Violent Suppression, Militarized
 # Police, events) stay engine lines on top, which the walk leaves out (scaling unknown, measured about 0).

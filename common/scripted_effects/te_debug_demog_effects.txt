@@ -724,8 +724,10 @@ te_debug_demog_call3_setup = {
 # Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts
 # the step rests on, each read once a game:
 # - famine_reserves_absorbed (P1, te_debug_demog.40): the census absorbs the Landowners' famine reserves at the owner's
-#   read of the key, and the walk reads it at the farm's. A week after the first country with powerful Landowners and
-#   the trait on (a day may come before the engine re-sums its modifiers), one of its subsistence-farm pops logs both.
+#   read of the key, and the walk reads it at the farm's. It arms on the walk's side, which the saves measured: the
+#   first country with powerful Landowners and a subsistence-farm pop in its capital reading the line at its farm. A
+#   week later (a day may come before the engine re-sums its modifiers) one such pop logs both reads; an owner's read
+#   of 0 is a BROKEN line, not a silent check.
 # - working_conditions_read (P2, te_debug_demog.41): a mine outside the capital reads working conditions' laborers line
 #   as 0, so the walk's constant is the only copy.
 # - malaria_trait_read (P3, here): once a country with quinine owns a state the map files give the mild malaria trait,

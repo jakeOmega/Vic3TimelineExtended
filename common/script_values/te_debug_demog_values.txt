@@ -746,8 +746,6 @@ te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
 te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
 
 # ---- Calibration step 3's self-checks (te_debug_demog_step3_selfchecks, te_debug_demog.40 and .41; owner, 2026-10-12) ----
-# THIS = a country: its read of the Landowners' famine reserves key (famine_reserves_absorbed arms only where it isn't 0).
-te_debug_demog_fr_country = { value = modifier:building_group_bg_agriculture_mortality_mult }
 # THIS = a state: its owner's read of the same key (te_debug_demog.40's line).
 te_debug_demog_fr_owner = { value = owner.modifier:building_group_bg_agriculture_mortality_mult }
 # THIS = the state te_debug_demog.40 picked: a subsistence-farm pop's two reads the check stored there, what the census

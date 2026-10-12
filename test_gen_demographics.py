@@ -517,6 +517,17 @@ class TestCalibrationStep3Generated(unittest.TestCase):
         self.assertIn("set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }", store)
         self.assertIn(f"value = modifier:{P.MALARIA_CONTROL_TYPE} min = 0 max = 1", store)
 
+    def test_the_famine_reserves_fallback_reads_the_subsistence_farm(self):
+        """famine_reserves_absorbed's fallback for an owner's read of 0: the farm's own read, on subsistence farms only
+        (no company owns one, so no building-scope line is absorbed with it)."""
+        with unittest.mock.patch.object(P, "COUNTRY_ABSORBED_FROM_FARM", True):
+            values = gen.plan_outputs()[gen.VALUES]
+        body = values.split("\nte_demog_pop_country_absorbed_deaths = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("owner.", body)
+        self.assertIn("limit = { workplace = { is_building_group = bg_subsistence_agriculture } }", body)
+        self.assertIn("add = workplace.modifier:building_group_bg_agriculture_mortality_mult", body)
+        self.assertNotIn("bg_staple_crops", body)
+
     def test_the_fallback_reads_the_list(self):
         with unittest.mock.patch.object(P, "MALARIA_READS_REGION_LIST", True):
             values = gen.plan_outputs()[gen.VALUES]

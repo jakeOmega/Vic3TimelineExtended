@@ -76,10 +76,12 @@ Canada 0.56. Every region's lines on top count ×1.35 to ×1.8 against the censu
   - Every country with Famine Reserves on had powerful Landowners: 48 countries, 160.8M people working farms, in
     1841, and 17 countries, 14.6M, in 1891, at clout 0.29 to 0.88 against the powerful threshold of 0.20. None was
     influential or marginal, so every state in the regression read the trait at ×2.
-  - So the doubling is the trait's own size in these countries. A trait is a country modifier, which the engine
-    scales by the group's power, and a building reads its country's modifier once. The country's own read of the key
-    (`modifier:building_group_bg_agriculture_mortality_mult`) therefore already carries the ×2, and the census absorbs
-    that (§2.1). The once-a-game self-check `famine_reserves_absorbed` confirms it in game (§6, P1).
+  - So the doubling is the trait's own size in these countries (M). A trait is a country modifier, which the engine
+    scales by the group's power, and a building reads its country's modifier once. That the country's own read of the
+    key (`modifier:building_group_bg_agriculture_mortality_mult`) returns the same ×2 size is inferred (I): nothing in
+    the mod has read a `building_group_*` key at country scope before. The census absorbs that read (§2.1), and the
+    once-a-game self-check `famine_reserves_absorbed` settles it in game, arming on the walk's side so a country read
+    of 0 logs BROKEN (§6, P1).
   - Scripts: `step3/ig_clout.py` (each IG's clout and traits from a save), `step3/ig_power_check.py` (the trait's
     countries by clout, with their farm workers); outputs `step3/ig_power_1841.txt`, `step3/ig_power_1891.txt`.
   - The earlier candidate, a building's read seeing a country modifier both directly and through its state, would
@@ -220,9 +222,10 @@ as they are for now.**
   - **The amount: the country's own read of the key** (`owner.modifier:building_group_bg_agriculture_mortality_mult`,
     `te_demog_pop_country_absorbed_deaths`), for a pop employed in an agriculture building (the walk's gate:
     `bg_agriculture`, `bg_staple_crops`, `bg_subsistence_agriculture`). k is 1, not 2: the country's read already
-    carries the group's power (§1(a)), so a powerful group's −0.10 reads −0.20 there, as at the farm. The scale
-    `P.COUNTRY_ABSORBED_SCALE` (1) is the fallback should the self-check `famine_reserves_absorbed` find the two reads
-    apart (§6, P1). The groups are `P.COUNTRY_ABSORBED_GROUPS`.
+    carries the group's power (§1(a)), so a powerful group's −0.10 reads −0.20 there, as at the farm. That read, a
+    `building_group_*` key at country scope, is inferred until the self-check `famine_reserves_absorbed` logs OK
+    (§6, P1). Its fallbacks: the scale `P.COUNTRY_ABSORBED_SCALE` (1) if the two reads differ by a ratio, and
+    `P.COUNTRY_ABSORBED_FROM_FARM` if the country's read is 0 (below). The groups are `P.COUNTRY_ABSORBED_GROUPS`.
   - `owner` is a pop's link to its country (`docs/engine/event_targets_summary.txt`), so the read works in the walk's
     pop scope; the JE-multiplier scope note in CLAUDE.md is about modifier multipliers and doesn't apply.
   - Under Display only and Disabled nothing changes: the walk's absorbed sums run only under Full
@@ -278,6 +281,11 @@ traits and no table.**
 - **Oceania's severe-malaria states** (all ten of its trait regions): Oceania +6.42 → +6.24, its life expectancy
   37.1 → 36.7. Oceania has no band and stays unjudged (under 20% peace most intervals). Southeast Asia moves −0.03
   (+6.64 → +6.61), from Indonesia's three regions: the wrong way, but small.
+- **A known limitation: vanilla's trait isn't a malaria map everywhere.** Seven of Oceania's ten trait regions are
+  east of the malaria line and historically malaria-free (Fiji, Tonga, Tahiti, Kanak, Nauru, East and West
+  Micronesia), and Namaqualand and Hereroland are arid. There the trait is vanilla's colonisation gate. The effect is
+  tiny (Oceania −0.18 per 1,000, unjudged; the two arid regions are thinly peopled), and the owner's rule is no
+  hand-made region tables, so the factor reads the trait as it is.
 - **Not recommended:** latitude, terrain or a hand-made region table. They push SE Asia the wrong way, and the
   regions they would fix (India) are fixed by 2.1.
 
@@ -326,7 +334,10 @@ traits and no table.**
   rows, 1837–1900):
   - the split comes from the 1 January save that closes its step: the pops' own lines are `te_dg_ed` less
     `te_dg_ed_state` and `te_dg_ed_sev`, as shares of `te_dg_ed`, scaled onto the row's deaths;
-  - **call 1:** the net negative own lines (in this run, the trait) leave the deaths; the net positive ones stay;
+  - **call 1:** the net negative own lines (in this run, the trait) leave the deaths; the net positive ones stay.
+    That is an upper bound on the projected rate in a mixed state: positive lines on its other pops hide part of the
+    trait, which the build absorbs whole. India's true figure is a little lower, about +8.1 against +8.34 (the review
+    of #930's estimate), still inside its band;
   - **call 2:** the rest of the deaths less severe starvation's (the census's rate with the state-level lines) are
     scaled by the model's expected deaths at the state's census bands with the factor over without
     (`FitState.deaths`, as `practices-fit` scales them), today's figures at g 0, since the run had no factor;
@@ -429,14 +440,21 @@ the country monthly pulse (`te_debug_demog_step3_selfchecks`), and each excludes
 a false pass.
 
 - **P1, the doubled trait: the self-check `famine_reserves_absorbed`** (`te_debug_demog.40`).
-  - Arms the first month a country's read of the agriculture key isn't 0 while its Landowners are powerful
-    (`te_debug_demog_fr_armed`): there the two reads differ if either misses the doubling.
-  - A week later (a day may come before the engine re-sums a country's modifiers) one of its subsistence-farm pops,
-    whose building no company owns (so no executive's trait is in its read), logs what the census absorbs for it
-    (`te_demog_pop_country_absorbed_deaths`) and what the walk reads at the farm
-    (`te_demog_pop_country_line_walk_read`), and its owner's read. No before-read is needed: the check changes nothing.
-  - OK: equal (both about −0.2). BROKEN: the walk reads `ratio` × the absorbed amount. Fallback:
-    `P.COUNTRY_ABSORBED_SCALE` = the ratio. The trait gone or no farm pop in the week re-arms it.
+  - Arms on the side the saves measured (`te_debug_demog_fr_armed`): the first month a country's Landowners are
+    powerful (`is_powerful`, the engine's own test with its cutoff) and its capital has a subsistence-farm pop whose
+    farm reads the line (`te_demog_pop_country_line_walk_read` below 0). The census's own read is left out of the
+    arming (review of #930): had it armed on that read, a country read of 0 (call 1 silently doing nothing) would
+    have kept the check silent too.
+  - A week later (a day may come before the engine re-sums a country's modifiers) one such pop in the capital, whose
+    building no company owns (so no executive's trait is in its read), logs what the census absorbs for it
+    (`te_demog_pop_country_absorbed_deaths`) and what the walk reads at the farm, and its owner's read. No before-read
+    is needed: the check changes nothing.
+  - OK: equal (both about −0.2). BROKEN with absorbed 0: the country's read of a `building_group_*` key is 0, so under
+    Full call 1 absorbs nothing; fallback `P.COUNTRY_ABSORBED_FROM_FARM`, which absorbs the farm's own read on
+    subsistence farms only (no building-scope line there; commercial farms' workers keep the trait on top). BROKEN
+    otherwise: the walk reads `ratio` × the absorbed amount; fallback `P.COUNTRY_ABSORBED_SCALE` = the ratio. The
+    Landowners losing their power or no such pop in the week re-arms it. No line in a game's first weeks is expected
+    (it arms at the first monthly pulse and logs a week later).
   - The saves already settle it (M, §1(a)); the check confirms it in game. The farm pop's mortality hover, listing
     Famine Reserves once at −20%, is a play-test item.
 - **P2, working conditions: the self-check `working_conditions_read`** (`te_debug_demog.41`).

@@ -1093,8 +1093,9 @@ def country_absorbed_terms(o, root):
     workplace, which also holds the building's own lines (executives' traits): the self-check famine_reserves_absorbed
     compares the two on a subsistence farm, which no company owns."""
     gates = _country_absorbed_gates(root)
+    farm_only = P.COUNTRY_ABSORBED_FROM_FARM   # the self-check's fallback: the farm's own read, subsistence farms only
     for name, reader, scaled, note in (
-            ("te_demog_pop_country_absorbed_deaths", "owner", True,
+            ("te_demog_pop_country_absorbed_deaths", "workplace" if farm_only else "owner", True,
              ("the country-scope lines the census absorbs per pop under",
               "Full (the Landowners' famine reserves): its owner's read of each key where the walk adds that key")),
             ("te_demog_pop_country_line_walk_read", "workplace", False,
@@ -1110,6 +1111,8 @@ def country_absorbed_terms(o, root):
         o("exists = workplace")
         o("}")
         for key, gate in gates:
+            if farm_only and name == "te_demog_pop_country_absorbed_deaths":
+                gate = "is_building_group = bg_subsistence_agriculture"
             o("if = {")
             o(f"limit = {{ workplace = {{ {gate} }} }}")
             o(f"add = {reader}.modifier:{key}")
