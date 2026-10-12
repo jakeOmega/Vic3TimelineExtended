@@ -34,6 +34,27 @@ so small communities stay. The Reform Campaign's first choice ends coercive
 programs in every Authority, while the Petition ends the program only in the
 Authority where it fires.
 
+## Demographic event list
+
+These are the events behind [Demographic events](08-states.md#demographic-events)
+in States and population, under the Demographics (Experimental) rule's Full
+setting. Each fires when the census crosses its threshold, at most once in 25
+years (the Last Generation? once a game). Money costs are a share of your yearly
+gross income; modifiers last ten years unless the table says otherwise.
+
+| Event | When it fires | Choices |
+|---|---|---|
+| The Demographic Dividend | 62% of your people are aged 15 to 64, a tenth more than in 1836 | Schools: more education access, a costlier Ministry of Education. Industry: construction and manufacturing throughput. Savings: cheaper loans and more tax capacity |
+| The Baby Boom | A war lasting two years or more ends, after its dead passed a hundredth of your men of fighting age | Births +15% fading over ten years, with standard of living +1 for the lower strata for five years at 5%. Or births +20% and fewer women at work. Or births +10% and more women at work |
+| The Lost Generation | Your war dead pass a twentieth of your men of fighting age | Of three harms (legitimacy and radicals; lower throughput; poorer widows and fewer births), memorials at 2% spare the first, women in the factories spare the second at the Devout's and Landowners' cost, and widows' pensions at 5% spare the third |
+| The Greying of the Nation | Pensioners reach a fifth of your people; with no pension law, 14% of your people are past the age where old age begins | With Old Age Pension: raise the pension age to 70 (greyed while your pension setting's five-year term runs), cut benefits (income of a fifth of the pension bill, poorer lower strata, Trade Unions angry), raise contributions (income of a seventh, Industrialists and Trade Unions displeased), open the borders (more immigrants, a nativist movement grows), or keep the pension. Without it: open the borders, almshouses (fewer deaths, a costlier Ministry of Health), or leave the old to their families (fewer women at work) |
+| The Youth Bulge | More than a fifth of your people are aged 20 to 29 and a tenth of your workforce has no work | For five years: public works at 5% (fewer radicals, more construction), national service (more conscripts, fewer radicals), emigration (more people leave, less prestige), or nothing (more radicals and turmoil) |
+| Missing Girls | 110 or more boys are born per 100 girls (Birth Limit after Microprocessor) | Ban sex selection (5 fewer boys per 100 girls for twenty years, 25 authority for five), pay for daughters (3 fewer for twenty years, 5%), relax Birth Limit (one child back to two, or end it once its term has run), or call it a private matter (the feminist movement grows) |
+| Bare Branches | 110 or more men per 100 women aged 20 to 59 | Pay women's passage (more immigrants, 2%), call the bachelors up (more conscripts, fewer radicals), more police (less turmoil, 25 authority for five years), or nothing (more radicals) |
+| The Empty Villages | A state where a quarter of the people farm, the median age is 40 or more and the population fell by half a percent or more in a year | Of three harms there (idle fields, closed schools and clinics, the old alone), farm subsidies at 2% spare the first, keeping the services open for 25 authority over five years spares the second, and moving the old into the market town spares the third at the Rural Folk's cost |
+| The Overspill | Your urban pattern is Primate or Dominant and your largest city is at Migration Crowding's ceiling | New towns at 5% (fewer newcomers to the city, which builds faster; your Settlement Authorities switch to Planned Towns where you have Modern Urban Planning), a green belt for twenty years (standard of living +1, crowding sooner, slower construction), or sprawl for twenty years (crowding later, worse infrastructure, more deaths) |
+| The Last Generation? | You research Biological Immortality | For twenty years: birth licenses (families want 30% fewer children, 50 authority), leave children a right, or pay for the next generation at 5% (families want 10% more) |
+
 ## Diplomacy event lists
 
 These lists are behind the event sections of

@@ -464,6 +464,24 @@ money a year. It takes
 Restricted Contraception, Birth Limit's one child and the Crash Campaign only
 when the need is pressing and its legitimacy is high.
 
+### Demographic events
+
+Under the Full setting, ten events mark the moments the census records: the
+Demographic Dividend (the working-age share a tenth above 1836's), the Baby Boom
+(after a long war with heavy losses), the Lost Generation (war dead past a
+twentieth of the men of fighting age), the Greying of the Nation (pensioners at a
+fifth of the people), the Youth Bulge (a fifth of the people in their twenties
+while work is short), Missing Girls (110 boys born per 100 girls under Birth
+Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,
+shrinking farm state), the Overspill (a dominant city crowded to Migration
+Crowding's ceiling) and the Last Generation? (Biological Immortality). Each comes
+at most once in 25 years, and the Last Generation? once a game; at most one of the
+yearly ones arrives on a given 31 December. The Lost Generation and the Empty
+Villages offer only harms: each choice spares one and pays its own cost. Some
+choices use the census's own levers: the pension age, Birth Limit and, for the
+Overspill, your Settlement Authorities' Planned Towns. Every event and choice is
+listed in [Demographic event list](19-appendix-events.md#demographic-event-list).
+
 <!-- screenshot: the Demographics tab with the population pyramid and its twenty-year outline -->
 
 ## Internal resettlement
