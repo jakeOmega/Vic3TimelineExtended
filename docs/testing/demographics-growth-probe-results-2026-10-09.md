@@ -65,7 +65,7 @@ read does **not** hold:
 - The starvation penalties: severe −0.9 (fitted −0.86 in 1949, taken flat); mild −0.7 scaled by
   (0.4 − food security) × 2.5, at most 0.5 (vanilla's comment and defines). **Corrected 2026-10-11:** severe is
   scaled the same way, by the pop's starvation value clamp((0.4 − food security) × 2.5, 0, 1), 0.5 to 1 below food
-  security 0.2. Under 1% of this probe's people starved severely, too few to tell the forms apart. A monthly-save probe
+  security 0.2. This probe couldn't tell the forms apart: its severely starving pops sat at a mean starvation value of 0.97 in 1949 (most at food security 0), where flat and scaled give almost the same number; its fitted −0.86 matches the scaled form's −0.87. A monthly-save probe
   through an in-game famine did (`docs/testing/demographics-phase2-engine-rates-2026-10-10.md`, "The severe term").
 
 The −0.9 step stays linear in 1949 and bends at the floor in 1836, where literate and starving pops reach 0.
