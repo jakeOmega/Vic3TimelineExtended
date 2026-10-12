@@ -1324,7 +1324,7 @@
  state_maternal_treatment_add:0 "Treatment in Childbirth"
  state_maternal_treatment_add_desc:0 "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab."
  state_medical_diffusion_add:0 "Spread of Medicine"
- state_medical_diffusion_add_desc:0 "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and the best the country has that closes at each yearly count. 10% everywhere; communications and medical training add more. Used by the census on the Demographics tab."
+ state_medical_diffusion_add_desc:0 "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications and medical training add more. Used by the census on the Demographics tab."
  state_migration_crowding_density_mult:0 "[concept_migration_crowding] Tolerance"
  state_migration_crowding_density_mult_desc:0 "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation."
  state_min_cultural_acceptance_delta_add:0 "Minimum Local Acceptance"

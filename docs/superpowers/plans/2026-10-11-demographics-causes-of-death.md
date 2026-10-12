@@ -11,9 +11,10 @@ Full setting the section also shows the deaths the game added on top of the cens
   (`cause_factors`), and the generator writes one script value per factor (`te_demog_f_<cause>_<factor>`) and each
   `te_demog_mult_<cause>` as their product. The section's hovers read the same script values, so the display and the
   census can't disagree.
-- **Factors read only what the step stored.** Each seed and step stores the inputs the census used that aren't stored
-  already: the drifted health-care access and treatments, the law and institution type sums, turmoil and crowding.
-  Between steps the hover still multiplies to the row's figure.
+- **Factors read only what the step stored.** Each seed and step stores the inputs the census used: the drifted
+  health-care access and treatments, the law and institution type sums, turmoil and crowding. It also keeps copies of
+  the walk's SoL and literacy (`te_dg_in_sol`, `te_dg_in_lit`), since a walk without a step rewrites those (the review
+  of #916). Between steps the hover still multiplies to the row's figure.
 - **Medicine drifts.** Health-care access and the three treatments move a share of the gap to their targets at each
   census step. The share is `0.1 + modifier:state_medical_diffusion_add`, from six technologies and the Medical
   Outreach decree. Before the numbers are approved, the owner sees how far life expectancy lags its target over 20
@@ -264,8 +265,9 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
 4. The carriers and the decree's name, cost and unlock (tables above). The AI weight follows the shared-mechanics
    rule and needs no question.
 5. The section's place: after the overview, before the pyramid (life expectancy and its causes sit together, rule 5).
-6. Save size: under Full, 16 more variables per census state (9 under Display only), against about 345 now (+5%).
-   That is the nine stored inputs plus Task 6's seven (corrected by the review of Task 6).
+6. Save size: under Full, 18 more variables per census state (11 under Display only), against about 345 now (+5%).
+   That is the eleven stored inputs plus Task 6's seven (corrected by the reviews of Task 6 and #916: SoL and literacy
+   are kept as the step used them).
    The walk adds one severe-starvation test per pop, under Full only.
 7. Execution: native, with a fresh review of Tasks 4–6 (the risky script) and a whole-branch review at the end, as
    the engine-lines plan.
@@ -300,8 +302,8 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
 
 ## Review Focus
 
-1. **An old save, or a census state from before this build.** It has none of the nine stored inputs.
-   - Expected: its next step starts medicine at the targets (no sudden lag) and stores all nine, and until then the
+1. **An old save, or a census state from before this build.** It has none of the eleven stored inputs.
+   - Expected: its next step starts medicine at the targets (no sudden lag) and stores all eleven, and until then the
      section shows "after the next count" with no per-frame "Failed to fetch variable".
    - Pinned by Task 5's `test_an_old_census_starts_at_its_targets` and Task 9's `test_every_read_sits_under_its_gate`.
 2. **The first Full step after a seed or after Display only, and any state outside Full.**
@@ -2808,7 +2810,8 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   1. **Layout.** A new 1836 game under Full: the state subtab shows Causes of Death after the overview, open. No row
      label or value ends in "...". Childbirth's "670 per 100k births" is the longest value.
   2. **Health Care Access.** 40% in an unincorporated colony. More in a Ministry of Health country's incorporated
-     states, with the hover's two lines adding up to the row.
+     states, with the hover's two lines ("Where it is heading:") adding up to the target: the row's figure once
+     medicine has arrived, the right-hand figure while it reads "a → b".
   3. **The hovers multiply to their rows.** Check one: Infection and Hunger's factors multiplied give its ×figure.
   4. **Medicine drifts.** Enact a health law or research Modern Nursing through the console: the Medicine line reads
      "×a → ×b" at once. After the state's next count the row has moved about a tenth to a fifth of the way.

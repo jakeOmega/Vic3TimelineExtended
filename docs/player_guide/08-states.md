@@ -328,14 +328,15 @@ before famine, war and disasters.
 Medicine also takes time to arrive. A new medical technology, health law or
 Ministry of Health level moves a state's medicine part of the way at each yearly
 count: a tenth of the gap at first, and up to two fifths once the Electric
-Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World Wide
-Web and Telemedicine are researched. Under Full, the Medical Outreach decree adds
-a fifth more in one state. Turmoil raises deaths from accidents and violence, by
-half at full turmoil. The subtab's Causes of Death section shows a state's health
-care access and each cause's multiplier; hover a row for what makes it up and
-where medicine is heading. Under Full it also shows the deaths added on top of
-the census's own, in red from a quarter above it, split into effects on the whole
-state and effects on some of its people, such as severe starvation.
+Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World
+Wide Web and Telemedicine are researched. Under Full, the Medical Outreach
+decree closes a further fifth of the gap at each count in one state. Turmoil
+raises deaths from accidents and violence, by half at full turmoil. The subtab's
+Causes of Death section shows a state's health care access and each cause's
+multiplier; hover a row for what makes it up and where medicine is heading.
+Under Full it also shows the deaths added on top of the census's own, in red
+from a quarter above it, split into effects on the whole state and effects on
+some of its people, such as severe starvation.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other

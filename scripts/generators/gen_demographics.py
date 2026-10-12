@@ -650,9 +650,13 @@ def gini_bands(o, pieces):
 
 
 def medicine_effects(o):
-    o("# THIS = a state, at the top of te_demog_prepare (a seed or a step): the census's inputs that aren't stored")
-    o("# already, so te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one.")
+    o("# THIS = a state, in te_demog_prepare before its multipliers (a seed or a step): the census's inputs, so")
+    o("# te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one. The walk's")
+    o("# SoL and literacy too: a walk without a step (a second pulse in a year, the console) rewrites te_dg_sol and")
+    o("# te_dg_lit, never te_dg_m_*.")
     o("te_demog_cause_inputs_store = {")
+    o("set_variable = { name = te_dg_in_sol value = var:te_dg_sol }")
+    o("set_variable = { name = te_dg_in_lit value = var:te_dg_lit }")
     for cause, types in P.MORTALITY_TYPES.items():
         adds = " ".join(f"add = modifier:{t}" for t in types)
         o(f"set_variable = {{ name = te_dg_in_{P.CAUSE_SHORT[cause]} value = {{ value = 0 {adds} }} }}")
@@ -1114,8 +1118,9 @@ def buy_package_costs(root):
 
 
 def _factor_body(o, cause, factor):
-    """One factor's body, reading only what the step stored (te_demog_cause_inputs_store, the drifted medicine, the
-    walk's te_dg_sol and te_dg_lit), in demographics_model.cause_factors' arithmetic."""
+    """One factor's body, reading only what the step stored (te_demog_cause_inputs_store, the drifted medicine; the
+    step's copies of the walk's SoL and literacy, which a walk without a step rewrites), in
+    demographics_model.cause_factors' arithmetic."""
     s = P.CAUSE_SHORT[cause]
     span = P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL
     if factor == "medicine":
@@ -1123,14 +1128,14 @@ def _factor_body(o, cause, factor):
         o(f"subtract = {{ value = var:te_dg_acc multiply = var:te_dg_trt_{s} }}")
     elif factor == "sol":
         at_high = P.SOL_INFECTION_AT_HIGH if cause == "infection" else P.SOL_CHRONIC_AT_HIGH
-        o(f"value = var:te_dg_sol subtract = {P.WEALTH_TFR_LOW_SOL} divide = {span} min = 0 max = 1")
+        o(f"value = var:te_dg_in_sol subtract = {P.WEALTH_TFR_LOW_SOL} divide = {span} min = 0 max = 1")
         o(f"multiply = {lit(at_high - 1)} add = 1")
     elif factor == "poverty":
-        o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_sol "
+        o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_in_sol "
           f"divide = {P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL} min = 0 max = 1")
         o(f"multiply = {lit(P.POVERTY_INFECTION_AT_FLOOR - 1)} add = 1")
     elif factor == "literacy":
-        o(f"value = var:te_dg_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
+        o(f"value = var:te_dg_in_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
     elif factor == "crowding":
         o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)}")
         o(f"max = {lit(P.CROWDING_INFECTION_MAX)} add = 1")

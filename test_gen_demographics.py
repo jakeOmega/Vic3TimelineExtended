@@ -145,7 +145,9 @@ class TestGenerated(unittest.TestCase):
                     self.assertNotIn("modifier:", body)
                     self.assertNotIn("has_modifier", body)
                     self.assertIsNone(re.search(r"(?<![\w:])turmoil\b", body))
-                    self.assertRegex(body, r"var:te_dg_(sol|lit|acc|trt_\w+|in_\w+)\b")
+                    self.assertRegex(body, r"var:te_dg_(acc|trt_\w+|in_\w+)\b")
+                    # the walk's te_dg_sol and te_dg_lit change at a walk without a step; the step's copies don't
+                    self.assertIsNone(re.search(r"var:te_dg_(sol|lit)\b", body))
 
     def test_the_targets_read_the_types(self):
         self.assertIn(f"value = modifier:{P.ACCESS_TYPE}", self._value("te_demog_access_target"))

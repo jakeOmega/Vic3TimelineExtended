@@ -1333,17 +1333,17 @@ te_demog_f_infection_medicine = {
 }
 # State scope: infection's sol factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_sol = {
-	value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
+	value = var:te_dg_in_sol subtract = 8 divide = 27 min = 0 max = 1
 	multiply = -0.4 add = 1
 }
 # State scope: infection's poverty factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_poverty = {
-	value = 9 subtract = var:te_dg_sol divide = 4 min = 0 max = 1
+	value = 9 subtract = var:te_dg_in_sol divide = 4 min = 0 max = 1
 	multiply = 0.75 add = 1
 }
 # State scope: infection's literacy factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_literacy = {
-	value = var:te_dg_lit multiply = -0.3 add = 1
+	value = var:te_dg_in_lit multiply = -0.3 add = 1
 }
 # State scope: infection's crowding factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_crowding = {
@@ -1405,7 +1405,7 @@ te_demog_f_chronic_laws = {
 }
 # State scope: chronic's sol factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_chronic_sol = {
-	value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
+	value = var:te_dg_in_sol subtract = 8 divide = 27 min = 0 max = 1
 	multiply = -0.15 add = 1
 }
 # State scope: the chronic cause's multiplier, the product of its factors (demographics_model.cause_multipliers).

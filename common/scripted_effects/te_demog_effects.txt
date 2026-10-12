@@ -64,8 +64,9 @@
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
 #                       (te_demog_medicine_drift; the Causes of Death plan)
-#   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd  the step's other inputs the
-#                       factors read (te_demog_cause_inputs_store)
+#   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd, te_dg_in_sol, te_dg_in_lit  the
+#                       step's other inputs the factors read (te_demog_cause_inputs_store; the last two the
+#                       walk's te_dg_sol and te_dg_lit as the step used them)
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
 #   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is

@@ -281,7 +281,9 @@ te_demog_access_from_law = {
 	value = modifier:state_health_care_access_add
 }
 
-# How far health-care access is from its target, and 1 while that is more than the snap (the row's "62% → 68%").
+# How far health-care access is from its target, and 1 while that is more than 0.01, the figure's shown step (the row's
+# "62% → 68%" reads at |%0): within it the two sides could round alike (the review of #916). The drift's own snap is
+# 0.005 (te_demog_k_medicine_snap).
 te_demog_access_gap = {
 	value = te_demog_access_target
 	subtract = var:te_dg_acc
@@ -291,15 +293,16 @@ te_demog_access_moving = {
 	if = {
 		limit = {
 			OR = {
-				te_demog_access_gap > te_demog_k_medicine_snap
-				te_demog_access_gap < te_demog_k_medicine_snap_neg
+				te_demog_access_gap > 0.01
+				te_demog_access_gap < -0.01
 			}
 		}
 		value = 1
 	}
 }
 
-# infection's medicine: how far it is from its target, and 1 while that is more than the snap (the hover's "×a → ×b").
+# infection's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
 te_demog_medicine_gap_infection = {
 	value = te_demog_f_infection_medicine_target
 	subtract = te_demog_f_infection_medicine
@@ -309,15 +312,16 @@ te_demog_medicine_moving_infection = {
 	if = {
 		limit = {
 			OR = {
-				te_demog_medicine_gap_infection > te_demog_k_medicine_snap
-				te_demog_medicine_gap_infection < te_demog_k_medicine_snap_neg
+				te_demog_medicine_gap_infection > 0.01
+				te_demog_medicine_gap_infection < -0.01
 			}
 		}
 		value = 1
 	}
 }
 
-# maternal's medicine: how far it is from its target, and 1 while that is more than the snap (the hover's "×a → ×b").
+# maternal's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
 te_demog_medicine_gap_maternal = {
 	value = te_demog_f_maternal_medicine_target
 	subtract = te_demog_f_maternal_medicine
@@ -327,15 +331,16 @@ te_demog_medicine_moving_maternal = {
 	if = {
 		limit = {
 			OR = {
-				te_demog_medicine_gap_maternal > te_demog_k_medicine_snap
-				te_demog_medicine_gap_maternal < te_demog_k_medicine_snap_neg
+				te_demog_medicine_gap_maternal > 0.01
+				te_demog_medicine_gap_maternal < -0.01
 			}
 		}
 		value = 1
 	}
 }
 
-# chronic's medicine: how far it is from its target, and 1 while that is more than the snap (the hover's "×a → ×b").
+# chronic's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
 te_demog_medicine_gap_chronic = {
 	value = te_demog_f_chronic_medicine_target
 	subtract = te_demog_f_chronic_medicine
@@ -345,8 +350,8 @@ te_demog_medicine_moving_chronic = {
 	if = {
 		limit = {
 			OR = {
-				te_demog_medicine_gap_chronic > te_demog_k_medicine_snap
-				te_demog_medicine_gap_chronic < te_demog_k_medicine_snap_neg
+				te_demog_medicine_gap_chronic > 0.01
+				te_demog_medicine_gap_chronic < -0.01
 			}
 		}
 		value = 1

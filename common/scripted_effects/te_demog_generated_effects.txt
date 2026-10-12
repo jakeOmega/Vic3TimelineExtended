@@ -6965,9 +6965,13 @@ te_demog_absorbed_walk_pop = {
 	}
 }
 
-# THIS = a state, at the top of te_demog_prepare (a seed or a step): the census's inputs that aren't stored
-# already, so te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one.
+# THIS = a state, in te_demog_prepare before its multipliers (a seed or a step): the census's inputs, so
+# te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one. The walk's
+# SoL and literacy too: a walk without a step (a second pulse in a year, the console) rewrites te_dg_sol and
+# te_dg_lit, never te_dg_m_*.
 te_demog_cause_inputs_store = {
+	set_variable = { name = te_dg_in_sol value = var:te_dg_sol }
+	set_variable = { name = te_dg_in_lit value = var:te_dg_lit }
 	set_variable = { name = te_dg_in_ext value = { value = 0 add = modifier:state_external_mortality_mult } }
 	set_variable = { name = te_dg_in_work value = { value = 0 add = modifier:state_work_mortality_mult } }
 	set_variable = { name = te_dg_in_chr value = { value = 0 add = modifier:state_chronic_mortality_mult } }

@@ -365,6 +365,7 @@ class _Engine:
         self.fixtures = dict(fixtures)
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
+        self.decrees = set()  # has_decree's decrees in force (the state's)
         self.removed = []     # remove_modifier's names, in order
 
     def _tree(self, table, name, args=()):
@@ -463,6 +464,8 @@ class _Engine:
             return arg in self.vars
         if key == "has_modifier":
             return arg in self.modifiers
+        if key == "has_decree":
+            return arg in self.decrees
         if key == "always":
             return arg == "yes"
         if key in self.trigger_fixtures:
@@ -520,6 +523,7 @@ def _stored(inp):
     or the targets)."""
     med = inp.medicine if inp.medicine is not None else demographics_model.medicine_targets(inp)
     out = {"te_dg_sol": float(inp.sol), "te_dg_lit": float(inp.literacy), "te_dg_acc": med["access"],
+           "te_dg_in_sol": float(inp.sol), "te_dg_in_lit": float(inp.literacy),
            "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding}
     for cause in P.MEDICINE_CAUSES:
         out[f"te_dg_trt_{P.CAUSE_SHORT[cause]}"] = med[cause]
@@ -4840,11 +4844,11 @@ class TestCausesInTheStep(unittest.TestCase):
         self.assertNotEqual(want["access"], demographics_model.medicine_targets(self.INP1)["access"], "a real gap")
 
     GATE_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext", "te_dg_in_work",
-                 "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
+                 "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd", "te_dg_in_sol", "te_dg_in_lit")
 
     def test_an_old_census_starts_at_its_targets(self):
-        """Review Focus 1: a census state from before this build has none of the nine variables
-        te_demog_state_causes_sgui asks for. Its first step starts medicine at the targets and leaves all nine."""
+        """Review Focus 1: a census state from before this build has none of the eleven variables
+        te_demog_state_causes_sgui asks for. Its first step starts medicine at the targets and leaves all eleven."""
         eng = _engine_for(self.INP1, 1837, 250000.0, real_multipliers=True)
         for name in self.GATE_VARS:
             self.assertNotIn(name, eng.vars)
@@ -4897,17 +4901,37 @@ class TestMedicalOutreach(unittest.TestCase):
         self.assertFalse(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
 
     def test_the_ai_weighs_it_by_the_gap(self):
-        # the shared-mechanics rule: the AI issues it where medicine is behind, and never once the state caught up.
-        # has_decree is read as "not issued" (the interpreter doesn't know decrees)
-        body = _block(_text(self.DECREES), "decree_medical_outreach")
-        weight = _find(_parse_script(body.replace("has_decree = decree_medical_outreach", "always = no")), "ai_weight")
+        # the shared-mechanics rule: the AI issues it where medicine is behind, with lower thresholds once issued
+        # (Road Maintenance's pattern), and never once the state caught up; and, as vanilla weighs decrees, by the
+        # state's people (the review of #916, logic M1): x1 at 250,000, from x0.2 to x2
+        weight = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "ai_weight")
         fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
         fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6          # access heading for 1.0
-        for acc, want in ((1.0, 0.0), (0.95, 0.0), (0.85, 100.0), (0.6, 200.0)):
-            eng = _Engine(fixtures)
+        for acc, issued, people, want in ((1.0, False, 250e3, 0.0), (0.95, False, 250e3, 0.0),
+                                          (0.85, False, 250e3, 100.0), (0.6, False, 250e3, 200.0),
+                                          (0.93, True, 250e3, 100.0), (0.75, True, 250e3, 200.0),
+                                          (0.995, True, 250e3, 0.0),
+                                          (0.6, False, 2e6, 400.0), (0.6, False, 10e3, 40.0)):
+            eng = _Engine({**fixtures, "state_population": people})
+            if issued:
+                eng.decrees.add("decree_medical_outreach")
             eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
-            with self.subTest(acc=acc):
-                self.assertEqual(eng._ops(weight, 0.0), want)
+            with self.subTest(acc=acc, issued=issued, people=people):
+                self.assertAlmostEqual(eng._ops(weight, 0.0), want, places=6)
+
+    def test_an_issued_decree_stays_valid(self):
+        """state_trigger: offered where medicine is behind; once issued it stays valid after the state caught up
+        (Pollution Control's pattern)."""
+        trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "state_trigger")
+        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6
+        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (1.0, True, True)):
+            eng = _Engine(fixtures)
+            if issued:
+                eng.decrees.add("decree_medical_outreach")
+            eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+            with self.subTest(acc=acc, issued=issued):
+                self.assertEqual(eng.holds(trig), want)
 
 
 class TestCausesDisplay(unittest.TestCase):
@@ -4963,6 +4987,15 @@ class TestCausesDisplay(unittest.TestCase):
         eng.fixtures.update(_mod_fixtures(inp_t))
         self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_moving_infection")), 1)
         eng.vars["te_dg_trt_inf"] = 0.4
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_moving_infection")), 0)
+        # the review of #916 (panel M3): past the snap but under the shown figures' 0.01, the arrow would read
+        # "62% -> 62%" or "x0.75 -> x0.75": it waits until the rounded figures differ
+        eng.vars["te_dg_acc"] = demographics_model.medicine_targets(inp)["access"] - 0.008
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_access_moving")), 0)
+        eng.vars["te_dg_acc"] = demographics_model.medicine_targets(inp)["access"] - 0.012
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_access_moving")), 1)
+        eng.vars["te_dg_acc"] = demographics_model.medicine_targets(inp)["access"]
+        eng.vars["te_dg_trt_inf"] = 0.4 - 0.008 / eng.vars["te_dg_acc"]
         self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_moving_infection")), 0)
 
     def test_every_key_the_section_names_exists(self):
@@ -5027,6 +5060,24 @@ class TestCausesSection(unittest.TestCase):
         self.assertIn("te_demog_state_full_sgui", row)
         self.assertEqual(self.section.count("te_demog_state_full_sgui"), 1, "only the on-top row is Full-only")
 
+    def test_names_are_spliced(self):
+        """The review of #916 (panel I1): laws, institutions and techs by their loc keys, never typed (the game says
+        "Workers' Protections"; the mod renames the Health System "Ministry of Health")."""
+        for key, names in (("te_demog_st_work_tt", ("$law_regulatory_bodies$", "$law_worker_protections$")),
+                           ("te_demog_st_acc_tt", ("$institution_health_system$",)),
+                           ("te_demog_st_ext_tt", ("$institution_ministry_of_consumer_protection$", "$combustion_engine$"))):
+            for name in names:
+                self.assertIn(name, self.loc[key], key)
+        typed = re.compile(r"Worker Protections|Regulatory Bodies|Ministry of Health|Consumer Protection|Combustion Engine")
+        for key, value in self.loc.items():
+            if key.startswith("te_demog_st_"):
+                self.assertIsNone(typed.search(value), key)
+        concepts = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(ROOT / "localization" / "english" /
+                                                                      "te_concepts_l_english.yml")))
+        self.assertIn("$institution_health_system$", concepts["concept_health_care_access_desc"])
+        # the access hover's two lines sum to where access is heading, not the row (panel M2)
+        self.assertIn("Where it is heading:", self.loc["te_demog_st_acc_tt"])
+
     def test_the_country_tab_keeps_its_todo(self):
         tab = _gui_type(self.gui, "te_demog_tab_sections")
         self.assertRegex(tab, r"### TODO \(#894\): .*Causes of Death")
@@ -5090,11 +5141,28 @@ class TestCauseFactorsScript(unittest.TestCase):
     def test_the_inputs_store_takes_the_steps_reads(self):
         inp = demographics_model.Inputs(sol=12, literacy=0.3, turmoil=1.4, mods=dict(self.CASES[5]))
         eng = _Engine(_mod_fixtures(inp))
+        eng.vars.update(te_dg_sol=12.0, te_dg_lit=0.3)   # the walk's, which the store copies
         eng.call("te_demog_cause_inputs_store")
         want = _stored(inp)
-        for name in ("te_dg_in_ext", "te_dg_in_work", "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd"):
+        for name in ("te_dg_in_ext", "te_dg_in_work", "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd", "te_dg_in_sol",
+                     "te_dg_in_lit"):
             self.assertAlmostEqual(eng.vars[name], want[name], places=9, msg=name)
         self.assertEqual(eng.vars["te_dg_in_turm"], 1.0, "turmoil is a 0-1 share")
+
+    def test_a_walk_between_steps_moves_no_factor(self):
+        """The reviews of #916 (logic M2, panel M4): a walk without a step (a second pulse in a year, the console's
+        benchmark, option c) rewrites te_dg_sol and te_dg_lit while te_dg_m_* stays; the hover's factors read the
+        step's own copies, so they still multiply to the row."""
+        inp = demographics_model.Inputs(sol=6.5, literacy=0.2, mods=dict(self.CASES[2]))
+        eng = self._eng(inp)
+        before = {f: eng.value(eng._tree(eng.values, f"te_demog_f_infection_{f}")) for f in ("sol", "poverty",
+                                                                                               "literacy")}
+        before["chronic_sol"] = eng.value(eng._tree(eng.values, "te_demog_f_chronic_sol"))
+        eng.vars.update(te_dg_sol=30.0, te_dg_lit=0.9)
+        after = {f: eng.value(eng._tree(eng.values, f"te_demog_f_infection_{f}")) for f in ("sol", "poverty",
+                                                                                             "literacy")}
+        after["chronic_sol"] = eng.value(eng._tree(eng.values, "te_demog_f_chronic_sol"))
+        self.assertEqual(after, before)
 
     def test_crowding_needs_both_the_modifier_and_the_stored_multiplier(self):
         # a save from before the stored multiplier (the modifier alone), and a variable outliving its modifier,
@@ -5102,6 +5170,7 @@ class TestCauseFactorsScript(unittest.TestCase):
         for label, modifier, variable in (("both", True, True), ("modifier only", True, False),
                                           ("variable only", False, True)):
             eng = _Engine(_mod_fixtures(demographics_model.Inputs()))
+            eng.vars.update(te_dg_sol=8.0, te_dg_lit=0.0)
             if modifier:
                 eng.modifiers["migration_crowding"] = 1.5
             if variable:
