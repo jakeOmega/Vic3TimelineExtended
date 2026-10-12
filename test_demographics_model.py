@@ -553,10 +553,29 @@ class TestOnTopScales(unittest.TestCase):
 
     def test_starvation_terms_follow_the_engine(self):
         self.assertEqual(M.starvation_terms(0.5), (0.0, 0.0))
-        self.assertEqual(M.starvation_terms(0.1), (-0.9, 1.0))
         b, d = M.starvation_terms(0.3)   # (0.4 - 0.3) x 2.5 = 0.25 of the mild penalty
         self.assertAlmostEqual(b, -0.7 * 0.25)
         self.assertAlmostEqual(d, 0.6 * 0.25)
+
+    def test_severe_starvation_scales_by_the_starvation_value(self):
+        """The famine probe (2026-10-11): the engine applies severe_starvation_penalty x the pop's starvation value,
+        clamp((0.4 - food security) x 2.5, 0, 1), as it does starvation_penalty; not in full. 0.5 at the severe
+        threshold, 1 at food security 0 and below."""
+        for food, sv in ((0.19, 0.525), (0.15, 0.625), (0.1, 0.75), (0.02, 0.95), (0.0, 1.0), (-0.5, 1.0)):
+            with self.subTest(food=food):
+                b, d = M.starvation_terms(food)
+                self.assertAlmostEqual(b, -0.9 * sv)
+                self.assertAlmostEqual(d, 1.0 * sv)
+                self.assertAlmostEqual(M.starvation_value(food), sv)
+        # the mild penalty's own coefficient up to the threshold, severe's from just below it
+        self.assertAlmostEqual(M.starvation_terms(0.2)[1], 0.6 * 0.5)
+        self.assertAlmostEqual(M.starvation_terms(0.19999)[1], 1.0 * 0.500025)
+
+    def test_the_starvation_value_is_clamped(self):
+        self.assertEqual(M.starvation_value(0.4), 0.0)
+        self.assertEqual(M.starvation_value(0.9), 0.0)
+        self.assertEqual(M.starvation_value(-0.1), P.STARVATION_VALUE_MAX)
+        self.assertEqual(P.STARVATION_VALUE_MAX, 1.0)
 
 
 class TestNaturalFertility(unittest.TestCase):

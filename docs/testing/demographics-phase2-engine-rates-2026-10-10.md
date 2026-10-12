@@ -88,6 +88,9 @@ figures as they were):
 - **What stays on top** is now small: severe starvation, devastation and the late-era lines. Where it shows: Austria 1887
   (census +1.23%, predicted +0.45%; 7% of its people in severe starvation) and Russia 1877 (+1.00%, +0.61%; 3.3% in
   severe starvation, and devastation adding 0.6 deaths per 1,000).
+  - **Severe starvation scaled** ("The severe term", below; 2026-10-11). `predict` on the 1887 save with the
+    current code: Austria +0.41% with the penalty flat, **+0.72%** scaled by each pop's starvation value (deaths on
+    top 5.4 → 3.1 per 1,000); the world +0.693% → +0.700% a year. No other country of 20M or more moves by 0.01 points.
 
 **Countries of 20M or more in 1887, as retuned** (% a year, census and predicted): China +0.12, +0.12; British India
 +1.15, +1.15; Russia +0.97, +0.97; the USA +1.49, +1.49; Japan +0.61, +0.61; France +0.50, +0.49; Turkey +1.29,
@@ -222,7 +225,8 @@ agree.
   - a ruthless executive's +10% for some buildings' workers (a workplace line, on top).
 - **How the engine weighed them:** it adds every line to its bare curve, which the census had cut to about 59% there.
   So the +32% came to +54% of the census's deaths, and a severely starving pop died at about three times the
-  census's rate. Poorer states cut further and amplified more: about 2.5× in East Bengal. Across 875 states in 1872,
+  census's rate (taking the penalty flat, as the walk then did; the engine scales it by the pop's starvation value,
+  0.5–1, so less: "The severe term", below). Poorer states cut further and amplified more: about 2.5× in East Bengal. Across 875 states in 1872,
   states with no severe starvation ran 9% above the census, those with 0–2% of people starving severely 51% above,
   and those with 2–10% 64% above.
 
@@ -230,7 +234,8 @@ agree.
 O_s × (1 − target / bare) (plan §2, "Amended 2026-10-11"). A pop's own line stays at its bare curve's weight. The
 owner first agreed to scale severe starvation too, but one state-wide M can't scale a pop's line without moving
 its neighbours' rates: in Punjab it would have cut the deaths of the 70% who were eating. So starving pops still
-die at about three times the census's rate. Taming famines further would be a separate decision: absorbing severe
+die at a multiple of the census's rate (about three times with the flat penalty assumed here; less at the engine's
+scaled one). Taming famines further would be a separate decision: absorbing severe
 starvation per pop at a chosen size, as mild starvation is.
 
 **What `predict` says, now with Pollution Impact read from each save's region pollution** (an approximation, about
@@ -470,11 +475,12 @@ Germany's census CDR of 33.4 in 1900 (39.7 in 1898, 37.3 in 1899) comes from sev
   1899 and 1900; Brandenburg 25–34% (75–87% starving, mild or severe).
 - **Why so many deaths (measured, except where marked).** Severe starvation is a pop's own line, which the census
   leaves at the bare curve's weight (§ Bengal above): with M about −0.55, a severely starving pop dies at about three
-  times the census's target (assuming the walk's +1.0 severe term, which is open: below). Splitting `dz` into last year's M against this year's, the model's own CDR drifting, state lines on top
+  times the census's target (assuming the walk's flat +1.0 severe term; the engine scales it, so 2.2–2.6× at these
+  pops' starvation values of 0.55–0.70: "The severe term", below). Splitting `dz` into last year's M against this year's, the model's own CDR drifting, state lines on top
   and pop lines on top reproduces the stored `dz` exactly on all 52,315 state-steps that store one; the pop term is
   84–105% of Germany's excess in 1898–1900, and `dz` correlates with the severe share at 0.78–0.97. The absolute
-  famine deaths equal the base game's (by design, again assuming the +1.0 term); only their ratio to the census's
-  lower baseline grows.
+  famine deaths equal the base game's (by design); only their ratio to the census's lower baseline grows. The walk's
+  figure for them, with the flat term, ran 1.5–1.7× the engine's (below).
 - **Not merging states.** States 1027–1053 all exist in the 1837 save (1,147 state objects at the start; states made
   later take IDs from 16,777,216). Steps after an owner change and steps after a population jump of over 5% each
   carry 1–2% of the world's excess. Stale M is symmetric noise world-wide (+15.8M against −15.6M).
@@ -488,14 +494,30 @@ fell 1.5M below its own baseline (its actual change was −280k, −174k and +80
 
 1. **The snapshot (measured).** `dz` is measured on the step's day and applied to the whole year that ends there.
    Hannover steps in early February, so its 1898 step booked a mostly pre-famine year as famine.
-2. **The severe term (open).** The walk assumes severe starvation adds +1.0 × the bare curve, a figure never fitted:
-   the growth probe had under 1% of people severely starving. The engine's famine counters come to 0.53–0.67 of the
-   walk's pop-level term (Hannover 29.3k against 43.6k in 1898). Either the engine applies less, or pops move between
-   mild and severe within the year; January snapshots can't tell which.
+2. **The severe term (resolved, 2026-10-11).** The walk assumed severe starvation adds +1.0 × the bare curve, a figure
+   never fitted: the growth probe had under 1% of people severely starving. The engine's famine counters came to
+   0.53–0.67 of the walk's pop-level term (Hannover 29.3k against 43.6k in 1898). Either the engine applies less, or
+   pops move between mild and severe within the year; January snapshots couldn't tell which.
 
-The same gap shows in Hungary in 1898 and China in 1901. The fixes are #894's: probe the engine's severe term with
-monthly saves through a famine year, then set it in `gen_demographics.py`; average each step's on-top share with the
-last step's.
+   **The engine applies less.** A monthly-save probe played this run's 1898.1.1 save on to 1899.8.1 (19 monthly
+   windows; saves, logs and analysis in `/mnt/d/vic3te-data/vic3te-demog-famine-probe-2026-10-11/`, report
+   `analysis/REPORT.md`). The engine applies `severe_starvation_penalty` (+1.0 deaths, −0.9 births) × each pop's
+   starvation value, clamp((0.4 − food security) × 2.5, 0, 1), as it does the mild penalty. The save stores that
+   value per pop as `food_security={ starvation= }`. Three measurements agree:
+   - the famine counter matches the scaled form at 1.007 (flat: 0.650) over 240 clean state-months in 25 states;
+   - its ratio to severe's bare deaths follows the severe pops' starvation value, R = 0.012 + 0.985 × SV;
+   - the population closes month by month under the scaled form: −4.5k unexplained over 225 severe state-months in
+     Germany and Hungary, against +305k flat.
+
+   Severe pops sat at food security 0.08–0.19 (starvation value 0.53–0.79), not 0. Flicker isn't the cause: severe
+   pops stay severe 86% of months, people-weighted. The walk now reads severe starvation in 0.05 steps of food security,
+   as it reads mild (`mod_systems.md`, "Starvation, per pop"). Applied to this run (first order, from 1 January
+   snapshots), that takes 377k, 446k and 391k off Germany's 1898–1900 residuals as run, which brings the two
+   full-famine windows to about the pre-famine baseline (−249k a year against about −250k). The +556k left in 1898
+   is the onset's timing, which the trapezoid addresses.
+
+The same gap shows in Hungary in 1898 and China in 1901. The fixes were #894's: the trapezoid books each window at
+the mean of its two ends' rates (#907), and the monthly-save probe above set the severe term in `gen_demographics.py`.
 
 ## The probes
 
