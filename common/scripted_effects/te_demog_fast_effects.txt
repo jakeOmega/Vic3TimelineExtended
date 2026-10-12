@@ -34,6 +34,13 @@
 #                      (te_demog_fast_refresh_rates)
 #   research, construction  country modifier te_demog_fast_speed (research speed,
 #                      technology spread and construction +1) x (K - 1)
+#
+# The window's events under Full (te_demog_on_top_window, the trapezoid): a clock step averages the
+# on-top part of the walk's snapshot over its N-month window, as a yearly step does over its year.
+# The births and deaths term holds the window's start K times over, so a change in the lines on top
+# since then reaches the snapshot once in K (te_demog_on_top_window_k: 1 while the term is off, as at
+# normal speed). The first switch re-seeds, so its first step has no start share; a later switch
+# between two fast speeds leaves one window at the old K, which the step divides by the new K.
 # ============================================================================
 
 # No scope: the global on_monthly_pulse (te_demog_clock_on_action), while the clock runs.

@@ -150,6 +150,37 @@ te_demog_fast_deaths_applied = {
 	}
 }
 
+# State scope: the state-level lines left on top of the census (pollution, devastation, global warming, a decree, an
+# event): the read less the census's term, fast mode's and the moved lines' pairs, floored as M takes them. The window's
+# end for te_demog_on_top_window; te_demog_rates_refresh takes the same from its own locals (te_dg_rate_os), since
+# its prior term must be read before it sets M. Read before anything in the effect sets M.
+te_demog_on_top_state_births = {
+	value = modifier:state_birth_rate_mult
+	subtract = te_demog_rate_births_applied
+	subtract = te_demog_fast_births_applied
+	subtract = te_demog_line_births_applied
+	min = te_demog_k_rate_total_min
+}
+
+te_demog_on_top_state_deaths = {
+	value = modifier:state_mortality_mult
+	subtract = te_demog_rate_deaths_applied
+	subtract = te_demog_fast_deaths_applied
+	subtract = te_demog_line_deaths_applied
+	min = te_demog_k_rate_total_min
+}
+
+# State scope: K for the window that ends at this step (te_demog_on_top_window): fast mode's K while its term ran over
+# the window, else 1. The term is K - 1 times the state's multiplier at the window's start, so the walk's snapshot
+# holds the start's on-top share K times and a change since then once.
+te_demog_on_top_window_k = {
+	value = 1
+	if = {
+		limit = { has_modifier = te_demog_fast_deaths }
+		value = te_demog_fast_k
+	}
+}
+
 # The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
 te_demog_open_slot = {
 	value = te_demog_year

@@ -1136,6 +1136,7 @@ def constants(o):
         "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
+        "on_top_start_weight": P.ON_TOP_START_WEIGHT,
         "rate_total_min": P.RATE_TOTAL_MIN,
         "rate_term_max": P.RATE_TERM_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
