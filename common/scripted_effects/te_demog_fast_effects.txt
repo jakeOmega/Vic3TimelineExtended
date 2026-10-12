@@ -75,6 +75,8 @@ te_demog_state_clock_step = {
 	te_demog_state_census = yes
 	te_demog_rates_refresh = yes
 	te_demog_fast_refresh_rates = yes
+	# phase 2 step 4: conscription, the youth bulge and sex balance, as on the yearly pulse
+	te_demog_consequences_refresh = yes
 }
 
 # THIS = ROOT = a country, a day after a step of the clock (te_demog_events.3): its census,

@@ -55,7 +55,12 @@
 #   te_dg_bf<b>, te_dg_bm<b>  people in band b (0-4 ... 80-84, 85+)
 #   te_dg_cf<c>, te_dg_cm<c>  people in migrant class c by age 0-148 (0-14,
 #                       15-17, 18-35, 36-59, 60-148): next step's flow shares
-#   te_dg_f1840, te_dg_m1840  women and men aged 18-40: next step's war shares
+#   te_dg_fam, te_dg_faw  the conscription pool (phase 2 step 4; the consequences design §4.1-4.2): men of calendar
+#                       age 20 or more and biological age 39 or less (te_demog_k_pool_from, _to), and the women of
+#                       the same ages, after the step: the conscription term's input and next step's war shares.
+#                       They replaced the 18-40 sums te_dg_f1840 and te_dg_m1840, which a census removes
+#   te_dg_sxb           the sex balance the step's fertility and women's rate read (the ring's before its sweep),
+#                       stored only below te_demog_k_sex_fewer_from (te_demog_sex_births_store); a seed removes it
 #   te_dg_births, te_dg_deaths  this year's, people (0 after a seed)
 #   te_dg_e0, te_dg_e0f, te_dg_e0m, te_dg_e65, te_dg_imr  the life table (IMR per 1,000)
 #   te_dg_tfr, te_dg_means, te_dg_desired, te_dg_natural  fertility (spec §2.3; te_dg_natural is
@@ -92,6 +97,8 @@
 #   te_dg_low_share, te_dg_wbase, te_dg_wf_engine  the walk's, under the cohorts only (te_demog_work_walk_store,
 #                       phase 2 step 1): the lower strata's share of people, the pops' own working-adult ratios
 #                       people-weighted, and the engine's workforce over people
+#   te_dg_mc, te_dg_yb  phase 2 step 4, under Full only (te_demog_consequence_effects.txt): the conscription term and
+#                       the youth bulge's multiplier the state's modifiers carry
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -341,6 +348,8 @@ te_demog_state_yearly = {
 		limit = { NOT = { te_demog_clock_on = yes } }
 		te_demog_state_census = yes
 		te_demog_rates_refresh = yes
+		# phase 2 step 4: conscription, the youth bulge and sex balance (te_demog_consequence_effects.txt)
+		te_demog_consequences_refresh = yes
 	}
 }
 
@@ -566,6 +575,11 @@ te_demog_seed = {
 	# Late Marriage and Birth Spacing: a state with no share takes its siblings' or its eroded start; one held stays
 	# (te_demog_practice_effects.txt). After the medicine, whose access Birth Spacing's erosion reads.
 	te_demog_practices_seed = yes
+	# a seed's fertility and women's rate take no sex-balance term: it builds its own structure (phase 2 step 4)
+	if = {
+		limit = { has_variable = te_dg_sxb }
+		remove_variable = te_dg_sxb
+	}
 	te_demog_prepare = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
@@ -727,7 +741,7 @@ te_demog_seed_slot = {
 }
 
 # Zero the running sums before a sweep (demographics_model.step's births and deaths;
-# the raw total; _refresh_denominators' class and 18-40 sums; the bands 0-4 ...
+# the raw total; _refresh_denominators' class and pool sums; the bands 0-4 ...
 # 80-84 and 85+, demographics_model.structure's rows). Accumulation classes start
 # at ages 15, 18, 36 and 60.
 te_demog_reset_accumulators = {
@@ -739,8 +753,8 @@ te_demog_reset_accumulators = {
 	set_local_variable = { name = te_dg_next_class value = 15 }
 	set_local_variable = { name = te_dg_acc_cf value = 0 }
 	set_local_variable = { name = te_dg_acc_cm value = 0 }
-	set_local_variable = { name = te_dg_acc_f1840 value = 0 }
-	set_local_variable = { name = te_dg_acc_m1840 value = 0 }
+	set_local_variable = { name = te_dg_acc_faw value = 0 }
+	set_local_variable = { name = te_dg_acc_fam value = 0 }
 	set_local_variable = { name = te_dg_raw value = 0 }
 	set_local_variable = { name = te_dg_births value = 0 }
 	set_local_variable = { name = te_dg_deaths value = 0 }
@@ -811,8 +825,10 @@ te_demog_age_boundaries = {
 }
 
 # Slot $S$'s stored people into the running sums: the raw total and the bands at
-# every age; the class and 18-40 sums only to age 148, since the age-149 cohort
+# every age; the class and pool sums only to age 148, since the age-149 cohort
 # folds next year instead of flowing (demographics_model._refresh_denominators).
+# The pool (phase 2 step 4, demographics_model.in_pool) reads step 1's two indexes: the calendar age te_dg_age from
+# te_demog_k_pool_from (legal adulthood) and the biological one te_dg_ab to te_demog_k_pool_to (fitness).
 te_demog_accumulate_slot = {
 	change_local_variable = { name = te_dg_raw add = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ } }
 	change_local_variable = { name = te_dg_acc_bf add = var:te_dg_f$S$ }
@@ -823,11 +839,11 @@ te_demog_accumulate_slot = {
 		change_local_variable = { name = te_dg_acc_cm add = var:te_dg_m$S$ }
 		if = {
 			limit = {
-				local_var:te_dg_age >= 18
-				local_var:te_dg_age <= 40
+				local_var:te_dg_age >= te_demog_k_pool_from
+				local_var:te_dg_ab <= te_demog_k_pool_to
 			}
-			change_local_variable = { name = te_dg_acc_f1840 add = var:te_dg_f$S$ }
-			change_local_variable = { name = te_dg_acc_m1840 add = var:te_dg_m$S$ }
+			change_local_variable = { name = te_dg_acc_faw add = var:te_dg_f$S$ }
+			change_local_variable = { name = te_dg_acc_fam add = var:te_dg_m$S$ }
 		}
 	}
 	# phase 2 step 1: at every age, as the bands
@@ -843,8 +859,14 @@ te_demog_close_accumulators = {
 	change_local_variable = { name = te_dg_raw add = { value = var:te_dg_pf add = var:te_dg_pm } }
 	te_demog_flush_band = yes
 	te_demog_flush_class = yes
-	set_variable = { name = te_dg_f1840 value = local_var:te_dg_acc_f1840 }
-	set_variable = { name = te_dg_m1840 value = local_var:te_dg_acc_m1840 }
+	set_variable = { name = te_dg_faw value = local_var:te_dg_acc_faw }
+	set_variable = { name = te_dg_fam value = local_var:te_dg_acc_fam }
+	# a census from before phase 2 step 4 kept the 18-40 sums instead (te_demog_flows reads them once)
+	if = {
+		limit = { has_variable = te_dg_m1840 }
+		remove_variable = te_dg_m1840
+		remove_variable = te_dg_f1840
+	}
 }
 
 # ---- Phase 2 step 1: who works, the pensioners and health need ---------------------------------------------------
@@ -1014,14 +1036,14 @@ te_demog_work_finish = {
 
 # The ring to the engine's population (demographics_model.step's and seed's
 # scale): the factor applies to the cohorts at the next sweep (lazily) and to the
-# bands, classes and 18-40 sums now.
+# bands, classes and pool sums now.
 te_demog_set_scale = {
 	set_variable = { name = te_dg_raw value = local_var:te_dg_raw }
 	set_local_variable = { name = te_dg_new_scale value = { value = state_population divide = { value = local_var:te_dg_raw min = 1 } } }
 	set_variable = { name = te_dg_scale value = local_var:te_dg_new_scale }
 	te_demog_scale_bands = yes
-	change_variable = { name = te_dg_f1840 multiply = local_var:te_dg_new_scale }
-	change_variable = { name = te_dg_m1840 multiply = local_var:te_dg_new_scale }
+	change_variable = { name = te_dg_faw multiply = local_var:te_dg_new_scale }
+	change_variable = { name = te_dg_fam multiply = local_var:te_dg_new_scale }
 	set_variable = { name = te_dg_people value = state_population }
 	set_variable = { name = te_dg_pop_last value = state_population }
 	set_variable = { name = te_dg_year value = te_demog_year }
@@ -1060,9 +1082,24 @@ te_demog_flows = {
 		set_local_variable = { name = te_dg_war value = var:te_dg_war_in }
 		remove_variable = te_dg_war_in
 	}
+	# from the pool's men and the women of its ages (phase 2 step 4, §4.2), the people the next sweep takes them from;
+	# a census from before step 4 has its 18-40 sums instead, for this one step (the sweep takes the dead at the pool's
+	# ages, so these divide by a few more cohorts than they reach)
+	set_local_variable = { name = te_dg_war_den_m value = 0 }
+	set_local_variable = { name = te_dg_war_den_f value = 0 }
+	if = {
+		limit = { has_variable = te_dg_fam }
+		set_local_variable = { name = te_dg_war_den_m value = var:te_dg_fam }
+		set_local_variable = { name = te_dg_war_den_f value = var:te_dg_faw }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_m1840 }
+		set_local_variable = { name = te_dg_war_den_m value = var:te_dg_m1840 }
+		set_local_variable = { name = te_dg_war_den_f value = var:te_dg_f1840 }
+	}
 	set_local_variable = {
 		name = te_dg_war_fm
-		value = { value = local_var:te_dg_war multiply = te_demog_k_war_male_share divide = { value = var:te_dg_m1840 min = 1 } max = 0.5 }
+		value = { value = local_var:te_dg_war multiply = te_demog_k_war_male_share divide = { value = local_var:te_dg_war_den_m min = 1 } max = 0.5 }
 	}
 	set_local_variable = {
 		name = te_dg_war_ff
@@ -1070,7 +1107,7 @@ te_demog_flows = {
 			value = 1
 			subtract = te_demog_k_war_male_share
 			multiply = local_var:te_dg_war
-			divide = { value = var:te_dg_f1840 min = 1 }
+			divide = { value = local_var:te_dg_war_den_f min = 1 }
 			max = 0.5
 		}
 	}
@@ -1211,7 +1248,7 @@ te_demog_country_monthly = {
 # THIS = a country at its monthly pulse while the census runs (te_demog_country_monthly):
 # the month's rise in war dead (local te_dg_rise) goes to its census states by their share
 # of its soldiers (by people when it has none); each state's next step takes what gathered
-# since its last step out of its men and women aged 18-40.
+# since its last step out of the conscription pool's ages (te_dg_fam, te_dg_faw; phase 2 step 4).
 te_demog_share_war_dead = {
 	set_local_variable = { name = te_dg_sold value = 0 }
 	set_local_variable = { name = te_dg_ppl value = 0 }
@@ -1328,6 +1365,8 @@ te_demog_step_begin = {
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
 	te_demog_practices_step = yes
+	# phase 2 step 4: the ring's sex balance, which the year's fertility and women's rate read (te_dg_sxb)
+	te_demog_sex_births_store = yes
 	te_demog_prepare = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
@@ -1349,6 +1388,10 @@ te_demog_step_run = {
 	set_local_variable = { name = te_dg_acls value = 0 }
 	set_local_variable = { name = te_dg_next_aclass value = 15 }
 	te_demog_enter_class = yes
+	# the war dead's window (phase 2 step 4): the pool's ages by rate age, the calendar one te_dg_r from
+	# te_demog_k_pool_from and the biological one to te_demog_k_pool_to. te_dg_ab is the biological age after the step,
+	# a year on from the rate age until phase 3 (which ages the treated more slowly and replaces this 1)
+	set_local_variable = { name = te_dg_war_ab value = { value = te_demog_k_pool_to add = 1 } }
 	te_demog_sweep = yes
 	te_demog_step_finish = yes
 }
@@ -1440,11 +1483,11 @@ te_demog_age_slot = {
 		name = te_dg_deaths
 		add = { value = local_var:te_dg_f add = local_var:te_dg_m subtract = local_var:te_dg_f2 subtract = local_var:te_dg_m2 }
 	}
-	# war dead: rate ages 18-40, from the counts before deaths
+	# war dead: the pool's ages by rate age (phase 2 step 4, §4.2), from the counts before deaths
 	if = {
 		limit = {
-			local_var:te_dg_r >= 18
-			local_var:te_dg_r <= 40
+			local_var:te_dg_r >= te_demog_k_pool_from
+			local_var:te_dg_ab <= local_var:te_dg_war_ab
 		}
 		change_local_variable = { name = te_dg_f2 subtract = { value = local_var:te_dg_f multiply = local_var:te_dg_war_ff } }
 		change_local_variable = { name = te_dg_m2 subtract = { value = local_var:te_dg_m multiply = local_var:te_dg_war_fm } }
@@ -1804,6 +1847,8 @@ te_demog_country_census = {
 		}
 		# the pyramid's scale, once here instead of in every bar's range each frame
 		set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }
+		# phase 2 step 4: the country's pool and youth-bulge figures for its tab (te_demog_consequence_effects.txt)
+		te_demog_consequences_country = yes
 		# one sample a year of the figures above for the history charts (te_demog_history_effects.txt)
 		if = {
 			limit = { te_history_country_is_tracked = yes }

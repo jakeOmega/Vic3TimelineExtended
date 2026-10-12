@@ -8,7 +8,12 @@ The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on th
 - a digest of every block of the generated census files and #892's three line files, kept byte for byte (comments
   aside) except the life table's added threshold lines;
 - the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
-  three calls of Task 5's gated effects."""
+  three calls of Task 5's gated effects.
+Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4) changes two things here
+on purpose, and nothing else: the war dead's sums, the 18-40 te_dg_f1840 and te_dg_m1840, become the conscription
+pool's (te_dg_faw, te_dg_fam: calendar 20 and over, biological 39 and under), in the cases and in
+te_demog_normalize_bands (STEP4_RENAMED); and its new names (STEP4_NEW_VARS). Its sex-balance terms leave these cases
+alone: their balances (94-100 men per 100 women) are above the threshold."""
 
 import functools
 import hashlib
@@ -34,6 +39,9 @@ GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# Phase 2 step 4: the war dead's 18-40 sums became the pool's (old name: new name); its new state variables
+STEP4_RENAMED = {"te_dg_f1840": "te_dg_faw", "te_dg_m1840": "te_dg_fam"}
+STEP4_NEW_VARS = {"te_dg_faw", "te_dg_fam", "te_dg_sxb", "te_dg_mc", "te_dg_yb"}
 # Task 5's three calls in te_demog_walks; nothing else in the walk may change
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
@@ -117,6 +125,10 @@ def blocks():
         out[key] = {}
         for name, body in _raw_blocks([path]).items():
             drop = (lambda line: bool(LIFE_TABLE_ADDED.search(line))) if name == "te_demog_life_table" else None
+            if name == "te_demog_normalize_bands":
+                # phase 2 step 4's rename, back to the names the golden was recorded with
+                for old, new in STEP4_RENAMED.items():
+                    body = re.sub(rf"\b{new}\b", old, body)
             out[key][name] = hashlib.sha256(_norm(body, drop).encode("utf-8")).hexdigest()
     return out
 
@@ -151,6 +163,11 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for case, rec in self.golden["cases"].items():
             for kind in ("vars", "modifiers"):
                 for name, value in rec[kind].items():
+                    if name in STEP4_RENAMED:
+                        # phase 2 step 4: the pool's sums replaced the 18-40 sums (other ages: other values)
+                        self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is still there")
+                        self.assertIn(STEP4_RENAMED[name], self.now["cases"][case][kind], case)
+                        continue
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
                     now = self.now["cases"][case][kind][name]
                     if isinstance(value, float) and isinstance(now, float):
@@ -164,7 +181,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP4_NEW_VARS, set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
     def test_the_census_term_is_recorded(self):

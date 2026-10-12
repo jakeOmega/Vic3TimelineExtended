@@ -3709,7 +3709,7 @@ te_demog_normalize_slots = {
 	}
 }
 
-# THIS = a state, seed only. The same two steps on the bands, the class sums and the 18-40 sums.
+# THIS = a state, seed only. The same two steps on the bands, the class sums and the pool's sums (phase 2 step 4).
 te_demog_normalize_bands = {
 	change_variable = { name = te_dg_bf0 multiply = local_var:te_dg_norm_e5 }
 	change_variable = { name = te_dg_bf0 divide = 100000 }
@@ -3803,10 +3803,10 @@ te_demog_normalize_bands = {
 	change_variable = { name = te_dg_cf4 divide = 100000 }
 	change_variable = { name = te_dg_cm4 multiply = local_var:te_dg_norm_e5 }
 	change_variable = { name = te_dg_cm4 divide = 100000 }
-	change_variable = { name = te_dg_f1840 multiply = local_var:te_dg_norm_e5 }
-	change_variable = { name = te_dg_f1840 divide = 100000 }
-	change_variable = { name = te_dg_m1840 multiply = local_var:te_dg_norm_e5 }
-	change_variable = { name = te_dg_m1840 divide = 100000 }
+	change_variable = { name = te_dg_faw multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_faw divide = 100000 }
+	change_variable = { name = te_dg_fam multiply = local_var:te_dg_norm_e5 }
+	change_variable = { name = te_dg_fam divide = 100000 }
 }
 
 # THIS = a state. The life table over the age groups in order (demographics_model.life_table),

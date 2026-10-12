@@ -1,0 +1,244 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — conscription, the youth bulge and sex balance (phase 2 step 4)
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4; demographics_model's
+# sex_births, sex_women_add, sex_fewer_men, sex_more_men, conscription_term and youth_bulge are the twins.
+# The constants and band sums are generated (te_demog_k_*, te_demog_youth_share, te_demog_state_men and the country's;
+# gen_demographics.consequence_values); the effects are in te_demog_consequence_effects.txt.
+# ============================================================================
+
+# ---- Sex balance (§4.4): the census's own terms, under Full and Display only ---------------------------------------
+
+# State scope: children per woman's sex-balance term (te_demog_tfr reads it): the balance the step read (te_dg_sxb,
+# stored only where men are short) over te_demog_k_sex_fewer_from, at most 1 and at least te_demog_k_sex_births_floor.
+# 1 at a seed, which stores no balance.
+te_demog_tfr_sex = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_sxb }
+		value = var:te_dg_sxb
+		divide = { value = te_demog_k_sex_fewer_from min = 1 }
+		min = te_demog_k_sex_births_floor
+		max = 1
+	}
+}
+
+# State scope: what the women's rate gains where men are short (te_demog_women_rate adds it): up to
+# te_demog_k_sex_women_rate, full te_demog_k_sex_fewer_span men below the threshold. 0 at a seed.
+te_demog_sex_women_add = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sxb }
+		value = te_demog_k_sex_fewer_from
+		subtract = var:te_dg_sxb
+		divide = { value = te_demog_k_sex_fewer_span min = 1 }
+		min = 0
+		max = 1
+		multiply = te_demog_k_sex_women_rate
+	}
+}
+
+# ---- Sex balance: the state modifiers' multipliers (Full only), and the panel's ------------------------------------
+
+# State or country scope: how far men are short, 0 to 1, from the census's latest balance (te_dg_sex_balance, men per
+# 100 women aged 20-59): 0 at te_demog_k_sex_fewer_from or more, 1 a span below. te_demog_census_fewer_men's multiplier.
+te_demog_sex_fewer_men = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sex_balance }
+		value = te_demog_k_sex_fewer_from
+		subtract = var:te_dg_sex_balance
+		divide = { value = te_demog_k_sex_fewer_span min = 1 }
+		min = 0
+		max = 1
+	}
+}
+
+# State or country scope: how far men are in excess, 0 to 1: 0 at te_demog_k_sex_more_from or fewer, 1 a span above.
+# te_demog_census_more_men's multiplier.
+te_demog_sex_more_men = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sex_balance }
+		value = var:te_dg_sex_balance
+		subtract = te_demog_k_sex_more_from
+		divide = { value = te_demog_k_sex_more_span min = 1 }
+		min = 0
+		max = 1
+	}
+}
+
+# State or country scope: the children-per-woman term the latest balance would give (the panel's hover; the census reads
+# te_demog_tfr_sex, the balance its step began with).
+te_demog_sex_births_shown = {
+	value = 1
+	if = {
+		limit = { has_variable = te_dg_sex_balance }
+		value = var:te_dg_sex_balance
+		divide = { value = te_demog_k_sex_fewer_from min = 1 }
+		min = te_demog_k_sex_births_floor
+		max = 1
+	}
+}
+
+# State or country scope: what the women's rate gains at the latest balance (the panel's hover).
+te_demog_sex_women_shown = {
+	value = te_demog_sex_fewer_men
+	multiply = te_demog_k_sex_women_rate
+}
+
+# ---- Conscription (§4.1) ----------------------------------------------------------------------------------------------
+
+# State scope: the pool (men of calendar age 20 or more and biological age 39 or less, te_dg_fam) over the census's
+# people, 0 before a census under phase 2 step 4.
+te_demog_fam_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_fam
+			has_variable = te_dg_people
+		}
+		value = var:te_dg_fam
+		divide = { value = var:te_dg_people min = 1 }
+	}
+}
+
+# State scope: the pool over the census's men (the panel's figure).
+te_demog_fam_men_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_fam }
+		value = var:te_dg_fam
+		divide = { value = te_demog_state_men min = 1 }
+	}
+}
+
+# State scope: T, the conscription term (demographics_model.conscription_term): the pool's share against the 1836
+# world's, less 1, from te_demog_k_conscription_min (-1: no conscripts) to te_demog_k_conscription_max. Under Full the
+# census applies it (te_dg_mc); under Display only the panel shows what it would be.
+te_demog_conscription_term = {
+	value = te_demog_fam_share
+	divide = { value = te_demog_k_conscription_ref min = 0.001 }
+	subtract = 1
+	min = te_demog_k_conscription_min
+	max = te_demog_k_conscription_max
+}
+
+# Country scope: the same for the country's census states together (te_dg_fam_share, its country census).
+te_demog_country_conscription = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_fam_share }
+		value = var:te_dg_fam_share
+		divide = { value = te_demog_k_conscription_ref min = 0.001 }
+		subtract = 1
+		min = te_demog_k_conscription_min
+		max = te_demog_k_conscription_max
+	}
+}
+
+# State scope: the fixed-sign pair's multipliers (te_demog_census_conscription_up/_down): |te_dg_mc| on its side, else 0.
+te_demog_conscription_up = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_mc
+			var:te_dg_mc > 0
+		}
+		value = var:te_dg_mc
+	}
+}
+te_demog_conscription_down = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_mc
+			var:te_dg_mc < 0
+		}
+		value = var:te_dg_mc
+		multiply = -1
+	}
+}
+
+# ---- The youth bulge (§4.3) -------------------------------------------------------------------------------------------
+
+# State scope: the engine's unemployment rate, 0-1 (vanilla reads it as a value: mon_unemployment_estimate). The
+# self-check unemployment_rate_read tests that scale (docs/testing/demographics-playtest.md).
+te_demog_unemployment = {
+	value = state_unemployment_rate
+	min = 0
+}
+
+# State scope: the youth bulge's multiplier now, y = clamp((the share aged 20-29 - te_demog_k_youth_from) / the span,
+# 0, 1) x clamp(unemployment / te_demog_k_youth_unemployment_full, 0, 1) (demographics_model.youth_bulge).
+te_demog_youth_bulge_now = {
+	value = te_demog_youth_share
+	subtract = te_demog_k_youth_from
+	divide = { value = te_demog_k_youth_span min = 0.001 }
+	min = 0
+	max = 1
+	multiply = {
+		value = te_demog_unemployment
+		divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
+		min = 0
+		max = 1
+	}
+}
+
+# State scope: the youth bulge the panel shows: the one in force under Full (te_dg_yb, set at the yearly census), else
+# what it would be now.
+te_demog_youth_bulge_shown = {
+	value = te_demog_youth_bulge_now
+	if = {
+		limit = { has_variable = te_dg_yb }
+		value = var:te_dg_yb
+	}
+}
+
+# State scope: the youth-bulge share of its full size, either factor alone (the hover's two parts).
+te_demog_youth_share_part = {
+	value = te_demog_youth_share
+	subtract = te_demog_k_youth_from
+	divide = { value = te_demog_k_youth_span min = 0.001 }
+	min = 0
+	max = 1
+}
+te_demog_youth_unemployment_part = {
+	value = te_demog_unemployment
+	divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
+	min = 0
+	max = 1
+}
+
+# ---- The panel (gui/te_demographics_widgets.gui) ----------------------------------------------------------------------
+
+# State scope: 1 + T, the multiplier the conscription term puts on the state's conscription (the Fighting-Age Men row).
+te_demog_conscription_mult = {
+	value = te_demog_conscription_term
+	add = 1
+}
+
+# Country scope: the same for its census states together.
+te_demog_country_conscription_mult = {
+	value = te_demog_country_conscription
+	add = 1
+}
+
+# State or country scope: the two movement fields the sex balance moves, at the latest balance (the hovers).
+te_demog_sex_feminist_shown = {
+	value = te_demog_sex_fewer_men
+	multiply = 0.1
+}
+te_demog_sex_radicals_shown = {
+	value = te_demog_sex_more_men
+	multiply = 0.1
+}
+
+# State scope: the youth bulge's two fields at the strength the panel shows (the Youth row's hover).
+te_demog_youth_radicals_shown = {
+	value = te_demog_youth_bulge_shown
+	multiply = 0.15
+}
+te_demog_youth_turmoil_shown = {
+	value = te_demog_youth_bulge_shown
+	multiply = 0.1
+}

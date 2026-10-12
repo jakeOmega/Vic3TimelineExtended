@@ -48,6 +48,10 @@ PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_eff
 WORKFORCE_LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_workforce_line_effects_generated.txt"
 WORKFORCE_LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_workforce_line_values_generated.txt"
 WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_workforce_line_modifiers_generated.txt"
+# phase 2 step 4: conscription, the youth bulge and sex balance (the consequences design §4)
+CONSEQ_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_consequence_effects.txt"
+CONSEQ_VALUES = ROOT / "common" / "script_values" / "te_demog_consequence_values.txt"
+CONSEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_consequence_modifiers.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -347,10 +351,14 @@ def _raw_blocks(paths):
 
 FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in units of 1e-5
 
-# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them.
+# The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them; and phase
+# 2 step 4's engine read, the state's unemployment (te_demog_unemployment, the youth bulge).
 WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
                  "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
-                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
+                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}, "state_unemployment_rate": 0.0}
+# Phase 2 step 4's once-a-game self-checks, which the census's refresh calls (te_demog_consequences_refresh): they set a
+# global variable, log and fire an event, none of which the interpreter runs. TestConsequenceSelfChecks reads them.
+SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog_conscription_selfcheck_start": ""}
 
 
 class _Engine:
@@ -365,9 +373,11 @@ class _Engine:
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
-                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS])
+                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, CONSEQ_EFFECTS])
+        self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
-        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES])
+        self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
+                                   CONSEQ_VALUES])
         self.triggers = _raw_blocks([TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
@@ -710,8 +720,8 @@ class TestCohortScript(unittest.TestCase):
         for c in range(len(P.MIGRANT_CLASSES)):
             self.close(eng.vars[f"te_dg_cf{c}"], ring.class_f[c], rel=1e-4, what=f"class {c} women")
             self.close(eng.vars[f"te_dg_cm{c}"], ring.class_m[c], rel=1e-4, what=f"class {c} men")
-        self.close(eng.vars["te_dg_f1840"], ring.women_18_40, rel=1e-4, what="women 18-40")
-        self.close(eng.vars["te_dg_m1840"], ring.men_18_40, rel=1e-4, what="men 18-40")
+        self.close(eng.vars["te_dg_faw"], ring.faw, rel=1e-4, what="the pool's women")
+        self.close(eng.vars["te_dg_fam"], ring.fam, rel=1e-4, what="the pool's men")
         rows = ring.by_age()
         for b, ages in enumerate(BANDS):
             self.close(eng.vars[f"te_dg_bf{b}"], sum(f for a, f, _m in rows if a in ages), rel=1e-4, what=f"band {b}")
@@ -815,8 +825,8 @@ class TestCohortScript(unittest.TestCase):
         if stub_flows:
             prof = demographics_model.migrant_profile(inp)
             locals_ = {
-                "te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.women_18_40),
-                "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.men_18_40),
+                "te_dg_war_ff": min(0.5, war_dead * (1 - P.WAR_DEAD_MALE_SHARE) / ring.faw),
+                "te_dg_war_fm": min(0.5, war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam),
                 "te_dg_kill": min(0.9, kills / ring.total),
                 "te_dg_mig_in": max(migration, 0.0),
                 "te_dg_mig_out": max(-migration, 0.0),
@@ -844,7 +854,7 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
         eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=scale,
                         te_dg_year=self.YEAR, te_dg_people=ring.total, te_dg_raw=ring.total / scale,
-                        te_dg_f1840=ring.women_18_40, te_dg_m1840=ring.men_18_40)
+                        te_dg_faw=ring.faw, te_dg_fam=ring.fam)
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
         if flows is not None:
@@ -886,8 +896,8 @@ class TestCohortScript(unittest.TestCase):
         for c in range(len(P.MIGRANT_CLASSES)):
             self.close(eng.vars[f"te_dg_cf{c}"], kept.class_f[c], what=f"class {c} women")
             self.close(eng.vars[f"te_dg_cm{c}"], kept.class_m[c], what=f"class {c} men")
-        self.close(eng.vars["te_dg_f1840"], kept.women_18_40, what="women 18-40")
-        self.close(eng.vars["te_dg_m1840"], kept.men_18_40, what="men 18-40")
+        self.close(eng.vars["te_dg_faw"], kept.faw, what="the pool's women")
+        self.close(eng.vars["te_dg_fam"], kept.fam, what="the pool's men")
         rows = kept.by_age()
         for b, ages in enumerate(BANDS):
             self.close(eng.vars[f"te_dg_bf{b}"], sum(f for a, f, _m in rows if a in ages), what=f"band {b} women")
@@ -2220,23 +2230,27 @@ class TestRatesScript(unittest.TestCase):
                  "no model-rate guards": re.sub(r"has_variable = te_dg_c[bd]r_model\s*", "", body),
                  "no stepped guard": body.replace(stepped, "limit = { always = yes }")}
         self.assertNotEqual(len(set(cases.values())), 1, "the guards' text moved")
+        # M's modifiers only: phase 2 step 4's (te_demog_consequences_refresh) follow every census, a seed's too
+        def m_mods(eng):
+            return {k: v for k, v in eng.modifiers.items()
+                    if k.startswith(("te_demog_census_births", "te_demog_census_deaths", "te_demog_census_wealth"))}
         for label, refresh in cases.items():
             with self.subTest(label):
                 eng = self._pulse(refresh)
                 eng.call("te_demog_state_yearly")            # 1836: no census, a seed
                 self.assertEqual(eng.vars["te_dg_stepped"], 0)
                 self.assertNotIn("te_dg_mb", eng.vars)
-                self.assertEqual(eng.modifiers, {})
+                self.assertEqual(m_mods(eng), {})
                 eng.fixtures["year"] = 1837.0
                 eng.call("te_demog_state_yearly")            # 1837: a step, and M
-                mb, md, mods = eng.vars["te_dg_mb"], eng.vars["te_dg_md"], dict(eng.modifiers)
+                mb, md, mods = eng.vars["te_dg_mb"], eng.vars["te_dg_md"], m_mods(eng)
                 self.assertTrue(mods)
                 eng.fixtures["year"] = 1838.0
                 eng.vars["te_dg_reseed"] = 1.0
                 eng.call("te_demog_state_yearly")            # 1838: a re-seed on the pulse
                 self.assertEqual(eng.vars["te_dg_stepped"], 0)
                 self.assertNotIn("te_dg_cbr_model", eng.vars)
-                self.assertEqual((eng.vars["te_dg_mb"], eng.vars["te_dg_md"], eng.modifiers), (mb, md, mods))
+                self.assertEqual((eng.vars["te_dg_mb"], eng.vars["te_dg_md"], m_mods(eng)), (mb, md, mods))
                 self.assertEqual((eng.locals["te_dg_rate_new_b"], eng.locals["te_dg_rate_new_d"]), (mb, md))
         # with neither, the very first seed's refresh reads a target no step has written
         eng = self._pulse(cases["no model-rate guards"].replace(stepped, "limit = { always = yes }"))

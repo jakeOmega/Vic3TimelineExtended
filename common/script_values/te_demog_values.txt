@@ -228,8 +228,8 @@ te_demog_tfr_on_top = {
 	}
 }
 
-# State scope: children per woman = wealth x natural x the practices x (1 - means x (1 - desired)) (spec §2.3;
-# demographics_model.fertility; the practices, te_demog_practice_effects.txt).
+# State scope: children per woman = wealth x natural x the practices x sex x (1 - means x (1 - desired)) (spec §2.3;
+# demographics_model.fertility; the practices, te_demog_practice_effects.txt; sex, phase 2 step 4's sex balance).
 te_demog_tfr = {
 	value = 1
 	subtract = var:te_dg_desired
@@ -239,6 +239,8 @@ te_demog_tfr = {
 	multiply = var:te_dg_wtfr
 	multiply = var:te_dg_natural
 	multiply = te_demog_pr_terms
+	# phase 2 step 4: fewer marriages where men are few (te_demog_consequence_values.txt; 1 at a seed)
+	multiply = te_demog_tfr_sex
 }
 
 # Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1). State scope.
@@ -274,7 +276,8 @@ te_demog_low_share = {
 	}
 }
 # Women's participation (#894; demographics_model.women_rate_law and women_rate): the women's-work family's sum
-# takes it from the base to the men's rate; the lower strata's women work at least te_demog_k_women_lower.
+# takes it from the base to the men's rate; the lower strata's women work at least te_demog_k_women_lower; a shortage
+# of men adds up to te_demog_k_sex_women_rate (phase 2 step 4).
 te_demog_women_rate_law = {
 	value = modifier:state_demog_womens_work_ratio_add
 	min = 0
@@ -289,6 +292,8 @@ te_demog_women_rate = {
 	subtract = te_demog_women_rate_law
 	multiply = te_demog_low_share
 	add = te_demog_women_rate_law
+	# phase 2 step 4: where men are few more women work (te_demog_consequence_values.txt; 0 at a seed)
+	add = te_demog_sex_women_add
 }
 # The workforce share on the engine's scale: step 2's target, less the pops' own bases (the design §1.8).
 te_demog_wf_target = {

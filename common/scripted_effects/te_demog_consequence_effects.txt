@@ -1,0 +1,150 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — conscription, the youth bulge and sex balance (phase 2 step 4)
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4
+# ============================================================================
+# What the census's pool, its young adults and its sex balance do to the game, under Full only. Four state modifiers
+# (te_demog_consequence_modifiers.txt), one refresh site each (te_demog_consequences_apply), refreshed straight after
+# the census's births and deaths terms at both their sites (te_demog_state_yearly, te_demog_state_clock_step), with
+# ROOT the state, as add_modifier's multiplier needs (scripting_best_practices.md, "add_modifier { multiplier = var:X }
+# Resolves Against ROOT"):
+#   te_demog_census_conscription_up / _down  state_conscription_rate_mult +1 / -1 at |T| (te_dg_mc): the pool's share
+#                                            of people against the 1836 world's, -1 to +0.25 (§4.1)
+#   te_demog_census_youth_bulge              radicals from movements +15%, turmoil effects +10% at y (te_dg_yb): young
+#                                            adults above 18% of the people, with unemployment (§4.3)
+#   te_demog_census_fewer_men                feminist movement support +10% at the fewer-men share (§4.4)
+#   te_demog_census_more_men                 radicals from movements +10% at the more-men share (§4.4)
+# Display only and Disabled clear all four, and te_dg_mc and te_dg_yb, at the state's next pulse, as the births and
+# deaths terms clear (te_demog_rates_clear). The census's own terms, the sex balance's on children per woman and on the
+# women's rate (te_demog_consequence_values.txt), run under Display only too: they move the census's figures, which
+# reach the game only through its births and deaths term under Full. A state whose census is from before this build
+# has no pool (te_dg_fam) until its next count, and takes none of this until then.
+# State variables, Full only: te_dg_mc (T, the conscription term in force), te_dg_yb (y, the youth bulge in force).
+# Country variables, each country census (te_demog_consequences_country), under the cohorts: te_dg_fam_share and
+# te_dg_fam_men (the census states' pool over their people and over their men), te_dg_yb_n (how many have a youth bulge).
+# ============================================================================
+
+# THIS = a state, at the start of its step before te_demog_prepare (te_demog_step_begin): the ring's sex balance, the
+# census's last figure (men per 100 women aged 20-59), which the year's children per woman (te_demog_tfr_sex) and
+# women's rate (te_demog_sex_women_add) read. Stored only where men are short, below te_demog_k_sex_fewer_from, so a
+# state at peace keeps no variable for it; a seed removes it (demographics_model.step's sex_balance).
+te_demog_sex_births_store = {
+	if = {
+		limit = { has_variable = te_dg_sxb }
+		remove_variable = te_dg_sxb
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_sex_balance
+			var:te_dg_sex_balance < te_demog_k_sex_fewer_from
+		}
+		set_variable = { name = te_dg_sxb value = var:te_dg_sex_balance }
+	}
+}
+
+# THIS = ROOT = a state, straight after te_demog_rates_refresh in the effect that ran its walks and census.
+te_demog_consequences_refresh = {
+	# the self-check unemployment_rate_read (te_debug_demog_effects.txt): once a game, where the census runs
+	te_debug_demog_unemployment_selfcheck = yes
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_fam
+			has_variable = te_dg_people
+		}
+		set_variable = { name = te_dg_mc value = te_demog_conscription_term }
+		set_variable = { name = te_dg_yb value = te_demog_youth_bulge_now }
+		# the self-check conscription_term_read: once a game, the first state to take a fresh term, before its add
+		te_debug_demog_conscription_selfcheck_start = yes
+		te_demog_consequences_apply = yes
+	}
+	else = {
+		te_demog_consequences_clear = yes
+	}
+}
+
+# THIS = ROOT = a state: the one refresh site of the four modifiers. Removed and re-applied (the dynamic-modifier
+# scaling pattern, docs/systems/mod_systems.md); one of the conscription pair at most; none at a multiplier of 0.
+te_demog_consequences_apply = {
+	te_demog_consequences_remove = yes
+	if = {
+		limit = { var:te_dg_mc > 0 }
+		add_modifier = { name = te_demog_census_conscription_up multiplier = te_demog_conscription_up }
+	}
+	else_if = {
+		limit = { var:te_dg_mc < 0 }
+		add_modifier = { name = te_demog_census_conscription_down multiplier = te_demog_conscription_down }
+	}
+	if = {
+		limit = { var:te_dg_yb > 0 }
+		add_modifier = { name = te_demog_census_youth_bulge multiplier = var:te_dg_yb }
+	}
+	if = {
+		limit = { te_demog_sex_fewer_men > 0 }
+		add_modifier = { name = te_demog_census_fewer_men multiplier = te_demog_sex_fewer_men }
+	}
+	if = {
+		limit = { te_demog_sex_more_men > 0 }
+		add_modifier = { name = te_demog_census_more_men multiplier = te_demog_sex_more_men }
+	}
+}
+
+te_demog_consequences_remove = {
+	if = {
+		limit = { has_modifier = te_demog_census_conscription_up }
+		remove_modifier = te_demog_census_conscription_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_conscription_down }
+		remove_modifier = te_demog_census_conscription_down
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_youth_bulge }
+		remove_modifier = te_demog_census_youth_bulge
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_fewer_men }
+		remove_modifier = te_demog_census_fewer_men
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_more_men }
+		remove_modifier = te_demog_census_more_men
+	}
+}
+
+# THIS = a state: the four off (Display only, Disabled, a census from before this build), with their variables.
+te_demog_consequences_clear = {
+	te_demog_consequences_remove = yes
+	if = {
+		limit = { has_variable = te_dg_mc }
+		remove_variable = te_dg_mc
+	}
+	if = {
+		limit = { has_variable = te_dg_yb }
+		remove_variable = te_dg_yb
+	}
+}
+
+# THIS = ROOT = a country, in its census after its bands and figures (te_demog_country_census): the pool's share of its
+# census states' people and of their men, for its tab's Fighting-age men row, and how many of them have a youth bulge
+# (in force under Full, what it would be under Display only), for its Youth row. A state from before this build, with no
+# pool yet, is left out of the pool's sums.
+te_demog_consequences_country = {
+	set_local_variable = { name = te_dg_c_fam value = 0 }
+	set_local_variable = { name = te_dg_c_fam_ppl value = 0 }
+	set_local_variable = { name = te_dg_c_yb_n value = 0 }
+	every_scope_state = {
+		limit = { te_demog_has_census = yes }
+		if = {
+			limit = { has_variable = te_dg_fam }
+			change_local_variable = { name = te_dg_c_fam add = var:te_dg_fam }
+			change_local_variable = { name = te_dg_c_fam_ppl add = var:te_dg_people }
+		}
+		if = {
+			limit = { te_demog_youth_bulge_shown > 0 }
+			change_local_variable = { name = te_dg_c_yb_n add = 1 }
+		}
+	}
+	set_variable = { name = te_dg_fam_share value = { value = local_var:te_dg_c_fam divide = { value = local_var:te_dg_c_fam_ppl min = 1 } } }
+	set_variable = { name = te_dg_fam_men value = { value = local_var:te_dg_c_fam divide = { value = te_demog_country_men min = 1 } } }
+	set_variable = { name = te_dg_yb_n value = local_var:te_dg_c_yb_n }
+}

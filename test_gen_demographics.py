@@ -218,11 +218,11 @@ class TestGenerated(unittest.TestCase):
                 self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1)
                 self.assertLess(body.index(f"name = {name} multiply"), body.index(f"name = {name} divide"))
 
-    def test_normalize_bands_covers_bands_classes_and_war_sums(self):
+    def test_normalize_bands_covers_bands_classes_and_pool_sums(self):
         body = self.effects.split("te_demog_normalize_bands = {", 1)[1].split("\n}\n", 1)[0]
         names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in "fm"]
         names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in "fm"]
-        names += ["te_dg_f1840", "te_dg_m1840"]
+        names += ["te_dg_faw", "te_dg_fam"]   # the pool's sums (phase 2 step 4), which replaced the 18-40 sums
         for name in names:
             self.assertEqual(body.count(f"change_variable = {{ name = {name} multiply = local_var:te_dg_norm_e5 }}"), 1, name)
             self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1, name)
