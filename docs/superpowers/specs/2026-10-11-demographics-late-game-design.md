@@ -180,8 +180,11 @@ state's E):
 4. **Joining**: when E rises, cover returns first; past that, the same share of every band's untreated joins with no
    deficit, so d × s_old ÷ s_new.
 5. **Migrants**: emigrants leave with their band's mix. Immigrants are the census's residual and have no known
-   origin, so they join at the destination's mix: care follows where people live. Moves the census does know
-   (Internal Resettlement) carry their origin band's share and deficit.
+   origin, so they join at the destination's mix: care follows where people live. Internal Resettlement's moves are in
+   the residual too: its effects read no census variable today (`resettlement_effects.txt`), and parent §12 leaves
+   them there until phase 3. **Recommended: leave them there.** Within one country the laws are the same and only
+   wealth differs, so the error is small. Carrying the origin's share and deficit would be new phase-3 work, worth
+   adding only if phase 3 builds the parent's resettlement profiles, which need the same hook.
 
 **The pool** (150+) keeps a share and a deficit like its mean age. **A state seeded after era 11** (a new or split
 state) starts each band at s = E and d = (1 − r) × (calendar − 25), the steady state of its current rate.
@@ -599,7 +602,8 @@ them as figures, and the pension setting is hidden outside Full, as the Causes o
   rising; Linked to Longevity → about 6–7%, the pensions of those already retired when immortality came.
 - **Stacks on vanilla's welfare, by recipient** (§9, call 17). Old Age Pension's `state_welfare_payments_add` (+0.1 a
   level) goes to workers paid below a share of the normal wage, not to the old (parent §14 Q6). Its +20% dependents'
-  income a level has no payer: this bill is that payer. Under UBI and Post-Scarcity (welfare payments 0.8 and 4.8 a
+  income a level has no payer: this bill is that payer. That premise rests on the parent's §14 Q6, read from the game
+  files; it is unprobed in game. Under UBI and Post-Scarcity (welfare payments 0.8 and 4.8 a
   level, `extra_laws.txt:313`, `:370`) everyone is paid already, so there is no pension bill (§2.2).
 - **Replaces** the parent §7's bureaucracy-only pension bill, as #894 ruled.
 
@@ -778,10 +782,9 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
    variables; right under era 11, but under immortality with half the state treated it gives 3.3 deaths per 1,000
    against 7.6, and the gap becomes display only); a share and a deficit per slot (up to 250, exact).
 9. **Losing care: bodies keep their age.** The formerly treated age at 1 from where they are; eligibility drifts at the
-   Causes of Death plan's medical-diffusion rate both ways; emigrants leave with their band's mix, the residual's
-   immigrants join at the destination's, and Internal Resettlement's known moves carry their origin's share and
-   deficit (§1.2). *Recommended.* Alternative: the first draft's snap to calendar age (a ban after 50 years of
-   immortality takes deaths from 2.2 to 42.6 per 1,000 in a year).
+   Causes of Death plan's medical-diffusion rate both ways; emigrants leave with their band's mix, and immigrants,
+   Internal Resettlement's included, join at the destination's (§1.2). *Recommended.* Alternative: the first draft's
+   snap to calendar age (a ban after 50 years of immortality takes deaths from 2.2 to 42.6 per 1,000 in a year).
 10. **The workforce ratio's cap: 0.6** on the engine's scale. The trade-off: 0.6 is 2.4 times 1836's 0.25 and 1.4 times
     today's 0.42, so about that much more labour per pop. Jobs that don't grow with it mean unemployment and lower
     wages; jobs that do mean output. Immortality reaches about 0.62 under Linked and 0.73 with no pension, so the cap
@@ -808,8 +811,9 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
     *Fit later*: the harness fits B against the game's revenue in a late-game save before tuning.
 17. **The pension bill stacks on vanilla's welfare by recipient**: Old Age Pension's welfare payments go to low-paid
     workers and stay; this bill pays for the old, whose +20% dependents' income vanilla gives without a payer; UBI and
-    Post-Scarcity pay everyone already and have no pension bill (§5.1). *Recommended.* Alternatives: replace Old Age
-    Pension's welfare payments with the bill; or charge the bill under UBI and Post-Scarcity too.
+    Post-Scarcity pay everyone already and have no pension bill (§5.1). The "no payer" premise rests on the parent's
+    §14 Q6 and is unprobed in game. *Recommended.* Alternatives: replace Old Age Pension's welfare payments with the
+    bill; or charge the bill under UBI and Post-Scarcity too.
 18. **The panel**: Life expectancy shows `100+` past 100; add Old age from (phase 2), Living to 100 and Biological age
     (era 11); a Work and Retirement section that takes the pension setting from Family Policy; a Longevity subsection
     from era 11. *Recommended.*
