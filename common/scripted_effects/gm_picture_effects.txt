@@ -156,3 +156,330 @@ gm_state_picture_building_skin = {
 		set_variable = { name = gm_picture_code value = $CODE$ }
 	}
 }
+
+# Debug (te_debug_monuments.4): the next picture in code order. The refresh puts the real one back.
+gm_debug_next_picture = {
+	if = {
+		limit = { var:gm_picture_code = 1 }
+		set_variable = { name = gm_picture_code value = 10 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 10 }
+		set_variable = { name = gm_picture_code value = 11 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 11 }
+		set_variable = { name = gm_picture_code value = 12 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 12 }
+		set_variable = { name = gm_picture_code value = 13 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 13 }
+		set_variable = { name = gm_picture_code value = 14 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 14 }
+		set_variable = { name = gm_picture_code value = 15 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 15 }
+		set_variable = { name = gm_picture_code value = 16 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 16 }
+		set_variable = { name = gm_picture_code value = 100 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 100 }
+		set_variable = { name = gm_picture_code value = 101 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 101 }
+		set_variable = { name = gm_picture_code value = 102 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 102 }
+		set_variable = { name = gm_picture_code value = 110 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 110 }
+		set_variable = { name = gm_picture_code value = 111 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 111 }
+		set_variable = { name = gm_picture_code value = 112 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 112 }
+		set_variable = { name = gm_picture_code value = 113 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 113 }
+		set_variable = { name = gm_picture_code value = 120 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 120 }
+		set_variable = { name = gm_picture_code value = 121 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 121 }
+		set_variable = { name = gm_picture_code value = 130 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 130 }
+		set_variable = { name = gm_picture_code value = 131 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 131 }
+		set_variable = { name = gm_picture_code value = 140 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 140 }
+		set_variable = { name = gm_picture_code value = 141 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 141 }
+		set_variable = { name = gm_picture_code value = 142 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 142 }
+		set_variable = { name = gm_picture_code value = 150 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 150 }
+		set_variable = { name = gm_picture_code value = 151 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 151 }
+		set_variable = { name = gm_picture_code value = 160 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 160 }
+		set_variable = { name = gm_picture_code value = 161 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 161 }
+		set_variable = { name = gm_picture_code value = 170 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 170 }
+		set_variable = { name = gm_picture_code value = 171 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 171 }
+		set_variable = { name = gm_picture_code value = 172 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 172 }
+		set_variable = { name = gm_picture_code value = 180 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 180 }
+		set_variable = { name = gm_picture_code value = 181 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 181 }
+		set_variable = { name = gm_picture_code value = 182 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 182 }
+		set_variable = { name = gm_picture_code value = 190 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 190 }
+		set_variable = { name = gm_picture_code value = 191 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 191 }
+		set_variable = { name = gm_picture_code value = 200 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 200 }
+		set_variable = { name = gm_picture_code value = 201 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 201 }
+		set_variable = { name = gm_picture_code value = 210 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 210 }
+		set_variable = { name = gm_picture_code value = 211 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 211 }
+		set_variable = { name = gm_picture_code value = 220 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 220 }
+		set_variable = { name = gm_picture_code value = 221 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 221 }
+		set_variable = { name = gm_picture_code value = 230 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 230 }
+		set_variable = { name = gm_picture_code value = 231 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 231 }
+		set_variable = { name = gm_picture_code value = 240 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 240 }
+		set_variable = { name = gm_picture_code value = 241 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 241 }
+		set_variable = { name = gm_picture_code value = 250 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 250 }
+		set_variable = { name = gm_picture_code value = 251 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 251 }
+		set_variable = { name = gm_picture_code value = 300 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 300 }
+		set_variable = { name = gm_picture_code value = 301 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 301 }
+		set_variable = { name = gm_picture_code value = 302 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 302 }
+		set_variable = { name = gm_picture_code value = 303 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 303 }
+		set_variable = { name = gm_picture_code value = 304 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 304 }
+		set_variable = { name = gm_picture_code value = 305 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 305 }
+		set_variable = { name = gm_picture_code value = 306 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 306 }
+		set_variable = { name = gm_picture_code value = 307 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 307 }
+		set_variable = { name = gm_picture_code value = 308 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 308 }
+		set_variable = { name = gm_picture_code value = 309 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 309 }
+		set_variable = { name = gm_picture_code value = 310 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 310 }
+		set_variable = { name = gm_picture_code value = 311 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 311 }
+		set_variable = { name = gm_picture_code value = 312 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 312 }
+		set_variable = { name = gm_picture_code value = 313 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 313 }
+		set_variable = { name = gm_picture_code value = 314 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 314 }
+		set_variable = { name = gm_picture_code value = 315 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 315 }
+		set_variable = { name = gm_picture_code value = 400 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 400 }
+		set_variable = { name = gm_picture_code value = 401 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 401 }
+		set_variable = { name = gm_picture_code value = 402 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 402 }
+		set_variable = { name = gm_picture_code value = 410 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 410 }
+		set_variable = { name = gm_picture_code value = 411 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 411 }
+		set_variable = { name = gm_picture_code value = 412 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 412 }
+		set_variable = { name = gm_picture_code value = 413 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 413 }
+		set_variable = { name = gm_picture_code value = 420 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 420 }
+		set_variable = { name = gm_picture_code value = 421 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 421 }
+		set_variable = { name = gm_picture_code value = 422 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 422 }
+		set_variable = { name = gm_picture_code value = 423 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 423 }
+		set_variable = { name = gm_picture_code value = 424 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 424 }
+		set_variable = { name = gm_picture_code value = 430 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 430 }
+		set_variable = { name = gm_picture_code value = 440 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 440 }
+		set_variable = { name = gm_picture_code value = 441 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 441 }
+		set_variable = { name = gm_picture_code value = 442 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 442 }
+		set_variable = { name = gm_picture_code value = 443 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 443 }
+		set_variable = { name = gm_picture_code value = 444 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 444 }
+		set_variable = { name = gm_picture_code value = 1 }
+	}
+	else = {
+		set_variable = { name = gm_picture_code value = 1 }
+	}
+}

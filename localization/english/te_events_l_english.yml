@@ -5273,6 +5273,12 @@
  te_debug_monuments.3.desc:0 "Re-open one monument's dedication: its records and name go, and the ceremony asks again."
  te_debug_monuments.3.flavor:0 "Console only."
  te_debug_monuments.3.t:0 "Debug: Re-open a Dedication"
+ te_debug_monuments.4.a:0 "Next picture"
+ te_debug_monuments.4.b:0 "Ten pictures on"
+ te_debug_monuments.4.c:0 "Back to the real picture"
+ te_debug_monuments.4.desc:0 "Step the picture of the monument in [SCOPE.sState('gm_dbg_m1').GetName] through every picture code. It shows code [SCOPE.sState('gm_dbg_m1').MakeScope.Var('gm_picture_code').GetValue|0] now."
+ te_debug_monuments.4.flavor:0 "The refresh, or the last option, puts the real picture back."
+ te_debug_monuments.4.t:0 "Debug: Monument Pictures"
 
 #
 # TE_DEBUG_NUCLEAR

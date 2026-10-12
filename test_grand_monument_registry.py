@@ -1524,6 +1524,20 @@ class DebugTests(unittest.TestCase):
         for k in ("t", "desc", "flavor", "a", "b", "c", "d", "e"):
             self.assertIn(f"te_debug_monuments.1.{k}", L)
 
+    def test_picture_sweep(self):
+        nxt = squash(block(read(PICTURE_EFFECTS), "gm_debug_next_picture"))
+        codes = sorted(PICTURES)
+        for a, b in zip(codes, codes[1:] + codes[:1]):
+            self.assertIn(f"var:gm_picture_code = {a} }} set_variable = {{ name = gm_picture_code value = {b} }}", nxt)
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.4 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        ev = squash(raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{"))
+        self.assertIn("gm_debug_next_picture = yes", ev)
+        self.assertIn("gm_state_update_picture = yes", ev)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b", "c"):
+            self.assertIn(f"te_debug_monuments.4.{k}", L)
+
     def test_monthly_log_for_players(self):
         monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
         self.assertIn("limit = { is_ai = no } gm_debug_log = yes", monthly)
@@ -2419,7 +2433,9 @@ class CopiedDedicationTests(unittest.TestCase):
             self.assertIn(f"name = te_debug_monuments.3.{o} ", ev3)
             self.assertIn(f"trigger = {{ exists = scope:gm_dbg_m{n} }} scope:gm_dbg_m{n} = {{ "
                           f"hidden_effect = {{ gm_clear_state = yes }} gm_state_start_ceremony = yes }}", ev3)
-        self.assertNotIn("te_debug_monuments.4", text)
+        # The re-open options are .3's alone (#817); .4 is the picture sweep (2026-10-11).
+        ev4 = raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{")
+        self.assertNotIn("gm_clear_state", squash(strip_comments(ev4 or "")))
         L = loc()
         for k in ("t", "desc", "flavor", "a", "b", "c"):
             self.assertIn(f"te_debug_monuments.3.{k}", L)
