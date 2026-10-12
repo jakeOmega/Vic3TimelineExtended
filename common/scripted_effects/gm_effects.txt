@@ -276,7 +276,9 @@ gm_remove_state_var = {
 
 # State scope. Forget a monument that is gone (demolished, torn down, or about
 # to be rebuilt). gm_local_steps backs the local modifiers' multiplier: zeroed,
-# never removed.
+# never removed. KEEP_LANDMARK = yes (Rededicate only) keeps a landmark's look:
+# its key, skin, form and picture (phase 4 §3.2). Every other caller passes no:
+# Pull Down and demolition end a landmark.
 gm_clear_state = {
 	gm_remove_local_modifiers = yes
 	gm_remove_state_var = { VAR = gm_seen }
@@ -284,7 +286,20 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_honoree }
 	gm_remove_state_var = { VAR = gm_honoree_ig }
 	gm_remove_state_var = { VAR = gm_faith }
-	gm_remove_state_var = { VAR = gm_skin }
+	if = {
+		limit = {
+			NOT = {
+				AND = {
+					always = $KEEP_LANDMARK$
+					gm_state_is_landmark = yes
+				}
+			}
+		}
+		gm_remove_state_var = { VAR = gm_landmark }
+		gm_remove_state_var = { VAR = gm_skin }
+		gm_remove_state_var = { VAR = gm_form }
+		gm_remove_state_var = { VAR = gm_picture_code }
+	}
 	gm_remove_state_var = { VAR = gm_skin_axis }
 	gm_remove_state_var = { VAR = gm_contested }
 	gm_remove_state_var = { VAR = gm_heritage }
@@ -296,8 +311,6 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_ceremony_level }
 	# Its name (v2 §3, gm_name_effects.txt): a rebuilt monument is named again.
 	gm_state_clear_namesake = yes
-	gm_remove_state_var = { VAR = gm_form }
-	gm_remove_state_var = { VAR = gm_picture_code }
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
 	gm_remove_state_var = { VAR = gm_unveil_pending }
@@ -373,7 +386,7 @@ gm_state_monthly = {
 				limit = { gm_state_is_contested = yes }
 				gm_state_record_teardown = yes
 			}
-			gm_clear_state = yes
+			gm_clear_state = { KEEP_LANDMARK = no }
 		}
 		if = {
 			limit = { has_variable = gm_local_steps }
@@ -1025,7 +1038,7 @@ gm_state_tear_down = {
 		remove_list_variable = { name = gm_states target = prev }
 	}
 	remove_building = building_grand_monument
-	gm_clear_state = yes
+	gm_clear_state = { KEEP_LANDMARK = no }
 }
 
 # Rebuilt at half its level (rounded up, at most 200: the ladder's reach) and
@@ -1057,7 +1070,9 @@ gm_state_rededicate = {
 		}
 	}
 	remove_building = building_grand_monument
-	gm_clear_state = yes
+	# A landmark keeps its look and picture; the ceremony and the unveiling
+	# give it a new dedication and a new name (phase 4 §3.3).
+	gm_clear_state = { KEEP_LANDMARK = yes }
 	te_construction_market_build_specified_level = {
 		SPEC_TYPE = building_grand_monument
 		SPEC_LEVEL = var:gm_rebuild_level
@@ -1216,6 +1231,12 @@ gm_ai_decide_contests = {
 							limit = { var:gm_grandeur >= 10 }
 							add = 10
 						}
+						# History mostly kept these (phase 4 §5.3): the
+						# Soviets kept the Alexander Column.
+						if = {
+							limit = { gm_state_is_landmark = yes }
+							multiply = 3
+						}
 					}
 					gm_state_preserve = yes
 				}
@@ -1310,19 +1331,27 @@ gm_state_dedicate_faith = {
 # same skin -- the AI keeps the most specific skin without being asked. Then a
 # national refresh.
 gm_state_offer_skins = {
-	set_variable = { name = gm_skin value = flag:generic }
-	gm_state_offer_skins_$AXIS$ = yes
-	# No skin to choose (the AI, or one skin fits): the unveiling at the next
-	# refresh (the monument_events.20 below), not here. The unveiling reads the
-	# dedication's production method, and this effect has only just activated
-	# it: whether that is visible within the same effect is not established
-	# (gm_state_dedicate's note). Otherwise monument_events.11's option unveils
-	# (gm_state_choose_skin), an event later.
+	# A landmark keeps its own skin and asks nothing (phase 4 §3.2): the
+	# unveiling names it at the refresh, as for a monument with one skin.
 	if = {
-		limit = {
-			NOT = { has_variable = gm_skin_axis }
-		}
+		limit = { gm_state_is_landmark = yes }
 		set_variable = gm_unveil_pending
+	}
+	else = {
+		set_variable = { name = gm_skin value = flag:generic }
+		gm_state_offer_skins_$AXIS$ = yes
+		# No skin to choose (the AI, or one skin fits): the unveiling at the next
+		# refresh (the monument_events.20 below), not here. The unveiling reads the
+		# dedication's production method, and this effect has only just activated
+		# it: whether that is visible within the same effect is not established
+		# (gm_state_dedicate's note). Otherwise monument_events.11's option unveils
+		# (gm_state_choose_skin), an event later.
+		if = {
+			limit = {
+				NOT = { has_variable = gm_skin_axis }
+			}
+			set_variable = gm_unveil_pending
+		}
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }

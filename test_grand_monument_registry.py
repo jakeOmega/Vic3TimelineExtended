@@ -914,7 +914,7 @@ class ContestTests(unittest.TestCase):
         self.assertIn("gm_state_ledger_ig = { WHO = gm_supporter_ig FACTOR = -1 }", record)
         tear = squash(block(self.e, "gm_state_tear_down"))
         for s in ("gm_state_record_teardown = yes", "remove_list_variable = { name = gm_states target = prev }",
-                  "remove_building = building_grand_monument", "gm_clear_state = yes"):
+                  "remove_building = building_grand_monument", "gm_clear_state = { KEEP_LANDMARK = no }"):
             self.assertIn(s, tear)
         rededicate = squash(block(self.e, "gm_state_rededicate"))
         for s in ("set_variable = { name = gm_rebuild_cost value = gm_state_rededicate_cost }",
@@ -924,7 +924,7 @@ class ContestTests(unittest.TestCase):
                   "SPEC_TYPE = building_grand_monument SPEC_LEVEL = var:gm_rebuild_level",
                   "gm_state_start_ceremony = yes"):
             self.assertIn(s, rededicate)
-        self.assertLess(rededicate.find("gm_clear_state = yes"),
+        self.assertLess(rededicate.find("gm_clear_state = { KEEP_LANDMARK = yes }"),
                         rededicate.find("te_construction_market_build_specified_level"))
         self.assertIn("multiply = 500", squash(block(read(VALUES), "gm_state_rededicate_cost")))
         self.assertNotIn("multiply = 5000", squash(block(read(VALUES), "gm_state_rededicate_cost")))
@@ -2199,7 +2199,8 @@ class NameTests(unittest.TestCase):
         self.assertIn("gm_state_com_form_fits = yes", take, "the commission's form only when it fits the skin")
         fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
         # A petition (the city's name) does not overwrite a name already given (owner call, PR body).
-        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } OR = { NOT = { has_variable = gm_namesake } "
+        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } gm_state_has_historical_name = no "
+                      "OR = { NOT = { has_variable = gm_namesake } "
                       "owner = { NOT = { var:gm_com_namesake = flag:city } } } } gm_state_take_commission_name = yes",
                       fulfil)
 
@@ -2451,7 +2452,7 @@ class CopiedDedicationTests(unittest.TestCase):
         for n, o in ((1, "a"), (2, "b"), (3, "c")):
             self.assertIn(f"name = te_debug_monuments.3.{o} ", ev3)
             self.assertIn(f"trigger = {{ exists = scope:gm_dbg_m{n} }} scope:gm_dbg_m{n} = {{ "
-                          f"hidden_effect = {{ gm_clear_state = yes }} gm_state_start_ceremony = yes }}", ev3)
+                          f"hidden_effect = {{ gm_clear_state = {{ KEEP_LANDMARK = no }} }} gm_state_start_ceremony = yes }}", ev3)
         # The re-open options are .3's alone (#817); .4 is the picture sweep (2026-10-11).
         ev4 = raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{")
         self.assertNotIn("gm_clear_state", squash(strip_comments(ev4 or "")))
@@ -2835,6 +2836,75 @@ class LandmarkTests(unittest.TestCase):
         self.assertEqual(L["gm_skin_landmark_la_scala"], "La Scala")
         self.assertEqual(L["gm_landmark_la_scala_evt"], "$gm_skin_landmark_la_scala$")
         self.assertEqual(L["gm_landmark_arc_de_triomphe_evt"], "the $gm_skin_landmark_arc_de_triomphe$")
+
+
+class LandmarkLockTests(unittest.TestCase):
+    """Phase 4 §3.2: one test per writer the lock gates."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(EFFECTS)
+        cls.names = read(NAME_EFFECTS)
+
+    def test_the_style_offer_leaves_a_landmark_alone(self):
+        body = squash(block(self.e, "gm_state_offer_skins"))
+        self.assertTrue(body.startswith("if = { limit = { gm_state_is_landmark = yes } set_variable = gm_unveil_pending } "
+                                        "else = { set_variable = { name = gm_skin value = flag:generic } "
+                                        "gm_state_offer_skins_$AXIS$ = yes"), body)
+        self.assertTrue(body.endswith("owner = { trigger_event = { id = monument_events.20 } }"), body)
+
+    def test_the_unveiling_keeps_its_form(self):
+        unveil = squash(block(self.names, "gm_state_unveil"))
+        self.assertTrue(unveil.startswith("if = { limit = { gm_state_is_landmark = no NOT = { AND = { has_variable = "
+                                          "gm_name_from_com gm_state_current_form_fits = yes } } } "
+                                          "gm_state_set_default_form = yes }"), unveil)
+        offer = squash(block(self.names, "gm_state_offer_name_choice"))
+        self.assertIn("limit = { gm_state_has_form_choice = yes gm_state_is_landmark = no } "
+                      "trigger_event = { id = monument_events.24 }", offer)
+        unnamed = squash(block(self.names, "gm_state_name_if_unnamed"))
+        self.assertIn("limit = { NOT = { has_variable = gm_form } gm_state_is_landmark = no } "
+                      "gm_state_set_default_form = yes", unnamed)
+        # A landmark skin offers no roster form, so no .24 and no commission form.
+        for skins in FORMS.values():
+            self.assertFalse([s for s in skins if s.startswith("landmark_")])
+
+    def test_clear_state_keeps_the_look_only_for_rededicate(self):
+        clear = squash(block(self.e, "gm_clear_state"))
+        look = ("if = { limit = { NOT = { AND = { always = $KEEP_LANDMARK$ gm_state_is_landmark = yes } } } "
+                "gm_remove_state_var = { VAR = gm_landmark } gm_remove_state_var = { VAR = gm_skin } "
+                "gm_remove_state_var = { VAR = gm_form } gm_remove_state_var = { VAR = gm_picture_code } }")
+        self.assertIn(look, clear)
+        for var in ("gm_landmark", "gm_skin", "gm_form", "gm_picture_code"):
+            self.assertEqual(clear.count(f"gm_remove_state_var = {{ VAR = {var} }}"), 1, var)
+        calls = []
+        for rel in [p.relative_to(ROOT).as_posix() for d in ("common", "events")
+                    for p in (ROOT / d).rglob("*.txt")]:
+            text = strip_comments(read(rel))
+            for m in re.finditer(r"(?<![\w$])gm_clear_state\s*=\s*(\{[^{}]*\}|\w+)", text):
+                calls.append((rel, squash(m.group(1))))
+        self.assertGreaterEqual(len(calls), 6)
+        for rel, arg in calls:
+            self.assertIn(arg, ("{ KEEP_LANDMARK = yes }", "{ KEEP_LANDMARK = no }"), rel)
+        self.assertEqual([a for _, a in calls].count("{ KEEP_LANDMARK = yes }"), 1)
+        self.assertIn("gm_clear_state = { KEEP_LANDMARK = yes }", squash(block(self.e, "gm_state_rededicate")))
+
+    def test_renaming_waits_while_the_historical_name_stands(self):
+        sguis = read(SGUIS)
+        for name in ("gm_rename_sgui", "gm_name_start_sgui"):
+            valid = squash(block(block(sguis, name), "is_valid"))
+            self.assertIn("scope:gm_state = { owner = root custom_tooltip = { text = gm_sgui_rename_upheld_tt "
+                          "gm_state_status_fits = yes } custom_tooltip = { text = gm_sgui_landmark_name_tt "
+                          "gm_state_has_historical_name = no }", valid, name)
+        self.assertIn("gm_sgui_landmark_name_tt", loc())
+
+    def test_a_met_commission_keeps_a_historical_name(self):
+        fulfil = squash(block(read(COM_EFFECTS), "gm_com_fulfil"))
+        self.assertIn("NOT = { has_variable = gm_unveiled_for_com } gm_state_has_historical_name = no OR = {", fulfil)
+
+    def test_the_ai_preserves_a_landmark_more_readily(self):
+        ai = squash(block(self.e, "gm_ai_decide_contests"))
+        self.assertIn("10 = { modifier = { if = { limit = { var:gm_grandeur >= 10 } add = 10 } "
+                      "if = { limit = { gm_state_is_landmark = yes } multiply = 3 } } gm_state_preserve = yes }", ai)
 
 if __name__ == "__main__":
     unittest.main()
