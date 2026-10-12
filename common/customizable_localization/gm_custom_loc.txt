@@ -883,6 +883,34 @@ gm_form_name = {
 		localization_key = gm_form_rock_cut
 	}
 	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:menorah }
+		localization_key = gm_form_menorah
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:bell_tower }
+		localization_key = gm_form_bell_tower
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:rock_hewn_church }
+		localization_key = gm_form_rock_hewn_church
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:sun_stone }
+		localization_key = gm_form_sun_stone
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stela }
+		localization_key = gm_form_stela
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:sacred_oak }
+		localization_key = gm_form_sacred_oak
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:colonnade }
+		localization_key = gm_form_colonnade
+	}
+	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
 		localization_key = gm_form_opera_house
 	}

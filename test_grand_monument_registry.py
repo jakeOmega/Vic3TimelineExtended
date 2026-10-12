@@ -1492,7 +1492,7 @@ Source = namedtuple("Source", "key dedication namesake form fixed")
 # "$KEY$": the regime's or the petition's dedication.
 COMMISSION_SOURCES = (
     Source("victory", "war_memorial", "occasion", "arch", False),
-    Source("defeat", "war_memorial", "occasion", "memorial", False),
+    Source("defeat", "war_memorial", "occasion", "hall", False),
     Source("centenary", "civic", "occasion", "column", True),
     Source("ruler_death", "civic", "ruler", "mausoleum", True),
     Source("regime", "$KEY$", "year", "column", False),
@@ -1874,18 +1874,26 @@ class ReviewFixTests(unittest.TestCase):
 FORMS = {
     "column": ("generic", "heritage_latin", "heritage_greek", "heritage_slavonic"),
     "arch": ("generic", "heritage_latin"),
-    "obelisk": ("generic",), "statue": ("generic",), "memorial": ("generic",), "mausoleum": ("generic",),
+    "obelisk": ("generic",), "statue": ("generic",), "mausoleum": ("generic",),
     "gate": ("generic", "heritage_hebrew", "heritage_sanskrit", "heritage_avestan", "heritage_arabic",
              "heritage_chinese"),
     "hall": ("generic", "heritage_avestan", "heritage_arabic", "heritage_chinese", "heritage_norse"),
-    "tower": ("generic", "heritage_gothic"),
+    # Generic dropped the tower (spec 2026-10-11 §2.2); the Gothic skin keeps it.
+    "tower": ("heritage_gothic",),
     "forum": ("heritage_latin",), "pantheon": ("heritage_greek",), "stoa": ("heritage_greek",),
     "court": ("heritage_hebrew",), "pillar": ("heritage_hebrew", "heritage_sanskrit"),
     "stele": ("heritage_geez",), "memorial_church": ("heritage_slavonic",), "pagoda": ("heritage_chinese",),
     "round_tower": ("heritage_irish",), "high_cross": ("heritage_irish",),
     "pyramid": ("heritage_nahuatl", "heritage_mayan"), "rune_stone": ("heritage_norse",),
     "hall_of_fame": ("heritage_gothic",), "hill_shrine": ("heritage_prussian",), "rock_cut": ("heritage_aramaic",),
+    # Added 2026-10-11 (§2.3).
+    "menorah": ("heritage_hebrew",), "bell_tower": ("heritage_slavonic",),
+    "rock_hewn_church": ("heritage_geez",), "sun_stone": ("heritage_nahuatl",), "stela": ("heritage_mayan",),
+    "sacred_oak": ("heritage_prussian",), "colonnade": ("heritage_aramaic",),
 }
+# Forms no skin offers any more. An old monument keeps one, so its noun and its
+# gm_form_name branch stay; its fit trigger and .24 option go.
+RETIRED_FORMS = ("memorial",)
 # skin -> its default form, the first of its row in the plan's table.
 DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek": "pantheon",
                 "heritage_hebrew": "gate", "heritage_sanskrit": "pillar", "heritage_geez": "stele",
@@ -1963,6 +1971,37 @@ class NameTests(unittest.TestCase):
             self.assertIn(f"monument_events.24.{form}", L, form)
         for faith in FAITHS:
             self.assertIn(f"var:gm_skin = flag:faith_{faith} }} localization_key = gm_skin_faith_{faith}", names)
+
+    def test_retired_forms_keep_their_noun_only(self):
+        L = loc()
+        names = squash(block(self.custom, "gm_form_name"))
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.24\s*=\s*\{"))
+        com = squash(block(self.t, "gm_state_com_form_fits"))
+        for form in RETIRED_FORMS:
+            self.assertIn(f"gm_form_{form}", L, form)
+            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = gm_form_{form}", names, form)
+            self.assertIsNone(block(self.t, f"gm_state_form_fits_{form}"), form)
+            self.assertNotIn(f"monument_events.24.{form} ", ev + " ", form)
+            self.assertNotIn(f"flag:{form} ", com, form)
+
+    def test_current_form_check_knows_every_form(self):
+        # gm_state_unveil keeps a commission's form only while it fits: a form
+        # missing here reads as not fitting, and the unveiling resets it.
+        cur = squash(block(self.t, "gm_state_current_form_fits"))
+        for form in list(FORMS) + list(BUILDING_FORMS.values()) + ["faith"]:
+            self.assertIn(f"var:gm_form = flag:{form} gm_state_form_fits_{form} = yes", cur, form)
+        for form in RETIRED_FORMS:
+            self.assertNotIn(f"flag:{form} ", cur, form)
+        # No call to a fit trigger that no longer exists.
+        for rel in (NAME_TRIGGERS, NAME_EFFECTS, EVENTS, EFFECTS):
+            for form in RETIRED_FORMS:
+                self.assertNotIn(f"gm_state_form_fits_{form} ", strip_comments(read(rel)), (rel, form))
+
+    def test_commission_forms_fit_some_skin(self):
+        com = squash(block(self.t, "gm_state_com_form_fits"))
+        for s in COMMISSION_SOURCES:
+            if s.form != "default":
+                self.assertIn(f"var:gm_com_form = flag:{s.form} }} gm_state_form_fits_{s.form} = yes", com, s.key)
 
     def test_every_namesake_has_both_patterns(self):
         L = loc()

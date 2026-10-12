@@ -1860,18 +1860,6 @@ monument_events.24 = {
 	}
 
 	option = {
-		name = monument_events.24.memorial
-		trigger = {
-			gm_state_form_fits_memorial = yes
-			has_variable = gm_form
-			NOT = { var:gm_form = flag:memorial }
-			owner = scope:monument_owner
-		}
-		gm_state_choose_form = { FORM = memorial }
-		hidden_effect = { trigger_event = { id = monument_events.25 } }
-	}
-
-	option = {
 		name = monument_events.24.mausoleum
 		trigger = {
 			gm_state_form_fits_mausoleum = yes
@@ -2060,6 +2048,90 @@ monument_events.24 = {
 			owner = scope:monument_owner
 		}
 		gm_state_choose_form = { FORM = rock_cut }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.menorah
+		trigger = {
+			gm_state_form_fits_menorah = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:menorah }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = menorah }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.bell_tower
+		trigger = {
+			gm_state_form_fits_bell_tower = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:bell_tower }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = bell_tower }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.rock_hewn_church
+		trigger = {
+			gm_state_form_fits_rock_hewn_church = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:rock_hewn_church }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = rock_hewn_church }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.sun_stone
+		trigger = {
+			gm_state_form_fits_sun_stone = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:sun_stone }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = sun_stone }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.stela
+		trigger = {
+			gm_state_form_fits_stela = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:stela }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = stela }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.sacred_oak
+		trigger = {
+			gm_state_form_fits_sacred_oak = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:sacred_oak }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = sacred_oak }
+		hidden_effect = { trigger_event = { id = monument_events.25 } }
+	}
+
+	option = {
+		name = monument_events.24.colonnade
+		trigger = {
+			gm_state_form_fits_colonnade = yes
+			has_variable = gm_form
+			NOT = { var:gm_form = flag:colonnade }
+			owner = scope:monument_owner
+		}
+		gm_state_choose_form = { FORM = colonnade }
 		hidden_effect = { trigger_event = { id = monument_events.25 } }
 	}
 }
