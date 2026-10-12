@@ -76,6 +76,9 @@ class ReleaseCensusInputsTest(unittest.TestCase):
         for path in self.changed:
             for line in path.read_text(encoding="utf-8-sig").split("\n"):
                 self.assertFalse(line.startswith(TAG) and "state_demog_" in line, f"{path}: {line}")
+        mods = self._text("common/static_modifiers/te_inheritance_modifiers.txt")
+        self.assertRegex(mods, r"(?m)^\tstate_demog_absorbed_birth_rate_mult = 0\.1$",
+                         "a release keeps Primogeniture's farm births: the pair re-applies them")
         # the switch: no rule, so te_demog_effects_run reads always = no and te_demog_lines_apply holds everywhere
         triggers = self._text("common/scripted_triggers/te_demog_triggers.txt")
         self.assertIn("te_demog_lines_apply = {", triggers)

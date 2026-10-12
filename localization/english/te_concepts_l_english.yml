@@ -1568,7 +1568,7 @@
  inh_land_hunger:0 "Land Hunger"
  inh_land_hunger_desc:0 "Great estates hold the land, and the young who cannot get a farm of their own leave. Grows with the state's [concept_inheritance_concentration] above 50, scaled by its share of Peasants and Farmers and refreshed at its yearly update."
  inh_primogeniture_rural:0 "Cadet Sons Leave the Land"
- inh_primogeniture_rural_desc:0 "Families are large, and the younger sons leave to make their own way. Scaled by the state's share of Peasants and Farmers."
+ inh_primogeniture_rural_desc:0 "Families are large, and the younger sons leave to make their own way. Scaled by the state's share of Peasants and Farmers. Where the demographic census sets a state's births and deaths, its late marriage takes the place of the larger families."
  inh_probate_litigation:0 "Probate in the Courts"
  inh_undivided_farm_rural_desc:0 "One heir takes the farm and the siblings leave the land. Scaled by the state's share of Peasants and Farmers."
  inherit_equal_split:0 "Inheritance: Great Estates Broken Up"

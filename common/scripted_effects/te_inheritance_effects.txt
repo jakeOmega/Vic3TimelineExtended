@@ -223,6 +223,7 @@ te_inh_refresh_rural_effects = {
 	if = {
 		limit = { has_modifier = inh_primogeniture_rural }
 		remove_modifier = inh_primogeniture_rural
+		set_local_variable = { name = te_inh_pr_was value = 1 }
 	}
 	if = {
 		limit = { has_modifier = inh_undivided_farm_rural }
@@ -255,11 +256,23 @@ te_inh_refresh_rural_effects = {
 		}
 		else_if = {
 			limit = { owner = { has_law = law_type:law_primogeniture } }
+			te_debug_demog_pr_selfcheck_start = yes
 			add_modifier = {
 				name = inh_primogeniture_rural
 				multiplier = var:te_inh_agrarian_share
 			}
 		}
+	}
+	# the moved lines' pair carries Primogeniture's farm births: refresh it now, from a state event, where the
+	# modifier just added or removed is visible (add_modifier isn't, inside this effect)
+	if = {
+		limit = {
+			OR = {
+				has_local_variable = te_inh_pr_was
+				owner ?= { has_law = law_type:law_primogeniture }
+			}
+		}
+		trigger_event = { id = te_demog_events.4 }
 	}
 }
 

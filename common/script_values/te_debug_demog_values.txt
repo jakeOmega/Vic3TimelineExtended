@@ -613,3 +613,32 @@ te_debug_demog_probe_owner_lm = {
 		value = var:te_dg_pr_lm
 	}
 }
+
+# ---- The Primogeniture self-check (te_debug_demog_pr_selfcheck_start, te_debug_demog.5) ----------------------------
+# THIS = the state. What Primogeniture's line added to the absorbed births sum since the day before.
+te_debug_demog_pr_chk_added = {
+	value = modifier:state_demog_absorbed_birth_rate_mult
+	if = {
+		limit = { has_variable = te_inh_pr_chk_before }
+		subtract = var:te_inh_pr_chk_before
+	}
+}
+
+# What it should add: inh_primogeniture_rural's 0.1 at the agrarian share (test_demographics_registry pins the 0.1).
+te_debug_demog_pr_chk_expected = {
+	value = 0.1
+	if = {
+		limit = { has_variable = te_inh_agrarian_share }
+		multiply = var:te_inh_agrarian_share
+	}
+}
+
+# How far apart the two are, as a non-negative number (a sign flip, not `abs = yes`, which the trigger catalog lacks).
+te_debug_demog_pr_chk_gap = {
+	value = te_debug_demog_pr_chk_added
+	subtract = te_debug_demog_pr_chk_expected
+	if = {
+		limit = { te_debug_demog_pr_chk_added < te_debug_demog_pr_chk_expected }
+		multiply = -1
+	}
+}
