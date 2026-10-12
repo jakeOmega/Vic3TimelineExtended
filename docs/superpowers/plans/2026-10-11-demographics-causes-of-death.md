@@ -2302,6 +2302,11 @@ te_demog_state_on_top_sgui = {
 
 The rows read only the state (`State.MakeScope`), never the player (`test_the_state_subtab_gate_needs_no_player`).
 
+Implemented with one change (Task 9, 2026-10-11): the clamp notes are whole endings of the hover
+(`te_demog_st_ontop_end`, `_end_rest`, `_end_floor` and `_end_cap`, picked by nested `SelectLocalization`). That way no
+value starts with `\n`, which `check_gui_lint.py` flags under style rule 8. `te_demog_st_ontop_floor` and `_cap`
+below are gone.
+
 ```
  te_demog_sec_causes:0 "Causes of Death"
  te_demog_st_causes_pending:0 "#lore This state's causes of death appear after its next count.#!"

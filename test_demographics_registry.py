@@ -4975,6 +4975,63 @@ class TestCausesDisplay(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
 
 
+WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
+MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
+
+
+def _gui_type(text, name):
+    start = text.index(f"type {name} = ")
+    depth, i = 0, text.index("{", start)
+    while True:
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+        if depth == 0:
+            return text[start:i]
+
+
+class TestCausesSection(unittest.TestCase):
+    """The Causes of Death section on the state subtab (the plan's Task 9)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _text(WIDGETS)
+        cls.section = _gui_type(cls.gui, "te_state_demog_causes")
+        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(MISC_LOC)))
+
+    def test_it_sits_after_the_overview(self):
+        content = _gui_type(self.gui, "te_state_demog_content")
+        order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
+        self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
+                                 "te_state_demog_wealth", "te_state_demog_how"])
+
+    def test_open_by_default(self):
+        # rule 7: a section that starts open names its flag _closed
+        self.assertIn("te_demog_st_causes_closed", self.section)
+        self.assertNotIn("_open'", self.section)
+
+    def test_every_read_sits_under_its_gate(self):
+        """Review Focus 1: a key that reads the step's inputs is reached only inside the causes gate's container, and
+        one that reads the measured split only through a SelectLocalization on the on-top gate."""
+        inner = self.section.split("te_demog_state_causes_sgui').IsShown", 2)[2]   # past the pending line's Not(...)
+        outer = self.section[: len(self.section) - len(inner)]
+        for key in re.findall(r'(?:text|tooltip) = "(te_demog_st_\w+)"', outer):
+            self.assertIn(key, ("te_demog_sec_causes", "te_demog_st_causes_pending"), key)
+        split = re.compile(r"te_dg_ed_state|te_dg_ed_sev|te_dg_sev_share|te_dg_ed_clamp_d|te_demog_deaths_")
+        for key in ("te_demog_st_ontop_value", "te_demog_st_ontop_tt"):
+            self.assertIsNone(split.search(self.loc[key]), key)
+            self.assertIn("te_demog_state_on_top_sgui", self.loc[key])
+
+    def test_the_on_top_row_is_full_only(self):
+        label = self.section.index('"te_demog_st_ontop"')
+        row = self.section[self.section.rindex("te_demog_figure_row", 0, label):label]
+        self.assertIn("te_demog_state_full_sgui", row)
+        self.assertEqual(self.section.count("te_demog_state_full_sgui"), 1, "only the on-top row is Full-only")
+
+    def test_the_country_tab_keeps_its_todo(self):
+        tab = _gui_type(self.gui, "te_demog_tab_sections")
+        self.assertRegex(tab, r"### TODO \(#894\): .*Causes of Death")
+
+
 class TestCauseFactorsScript(unittest.TestCase):
     """te_demog_f_<cause>_<factor> and te_demog_mult_<cause> (generated) against demographics_model.cause_factors,
     on the step's stored inputs (the Causes of Death plan)."""
