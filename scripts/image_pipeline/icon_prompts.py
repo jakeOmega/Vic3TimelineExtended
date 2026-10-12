@@ -1999,7 +1999,7 @@ ICONS: dict[str, dict[str, dict]] = {
                                  "now": f"{_BI}/building_grand_monument.dds"},
         "heritage_hebrew__court": {"subject": "a great colonnaded courtyard of golden limestone around a fountain, a grand domed hall at its far end", "seed": 1,
                                   "now": f"{_BI}/building_grand_monument.dds"},
-        "heritage_hebrew__pillar": {"subject": "a single tall golden limestone memorial pillar on a stepped base, carved with grapevines and pomegranates", "seed": None,
+        "heritage_hebrew__pillar": {"subject": "a single tall golden limestone memorial pillar on a stepped base, carved with grapevines and pomegranates", "seed": 1,
                                    "now": f"{_BI}/building_grand_monument.dds"},
         "heritage_hebrew__menorah": {"subject": "a giant bronze candelabrum sculpture with exactly seven smooth plain branches, three curving up on each side of a central stem, on a stepped stone plinth in a plaza", "seed": None,
                                     "now": f"{_BI}/building_grand_monument.dds"},
