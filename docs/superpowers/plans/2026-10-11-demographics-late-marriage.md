@@ -3390,7 +3390,13 @@ Stage only the loc files `git status` shows changed.
   `docs/player_guide/06-politics.md` (one sentence).
 - Rebuild: `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf`.
 
-- [ ] **Step 1: The player guide** (match the depth already there: one change in each place)
+**Amended at the build (2026-10-12):** call 4's text waits for Task 9's Plan A or B (the probe). That covers
+mod_systems' "Absorbed by the census" bullet and call 4's line in the new subsection, the Full paragraph's Primogeniture
+item in `08-states.md`, and both edits to `06-politics.md`. It lands with Task 9's Steps 2–6. Until then
+mod_systems' "Not built yet" names call 4. "Reading the figures" says birth spacing is "strongest in Japan and slight
+in China and Korea", since the fit set India's start to 0 and East Asia's to 0.06.
+
+- [x] **Step 1: The player guide** (match the depth already there: one change in each place)
 
 In `08-states.md`, "Reading the figures", replace
 
@@ -3414,13 +3420,13 @@ In `06-politics.md`:
 - in the Who inherits table (line 294), Primogeniture & Entail's "In farming states, birth rate and migration up"
   becomes "In farming states, birth rate (not under the Demographics rule's Full setting) and migration up".
 
-- [ ] **Step 2: The other docs** as listed above. Two of them need care:
+- [x] **Step 2: The other docs** as listed above. Two of them need care:
   - `docs/guides/python_tools.md` is long and LF; edit it with the Edit tool.
   - Check the three CRLF docs aren't touched:
     `grep -c $'\r$' docs/systems/journal_entry_systems.md docs/guides/gui_modding_guide.md docs/vanilla/treaty_articles_reference.md`
     should give the same counts before and after.
 
-- [ ] **Step 3: Run the docs checks**
+- [x] **Step 3: Run the docs checks**
 
 ```bash
 $V scripts/analysis/check_player_guide_style.py --strict
@@ -3430,7 +3436,7 @@ $V scripts/analysis/check_post_load_rosters.py
 ```
 Expected: the lint is clean and `--check` exits 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/systems/mod_systems.md docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md docs/guides/python_tools.md docs/auto_generated_files.md docs/guides/vanilla_patch_runbook.md docs/player_guide/08-states.md docs/player_guide/06-politics.md docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf

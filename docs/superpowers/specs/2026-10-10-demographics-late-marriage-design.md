@@ -245,6 +245,13 @@ Three numbers move together:
   world's from +1.03% to +0.91%. That waits for the joint mortality refit (§2.4); if the refit raises China's life
   expectancy, the share can rise with it.
 
+> **As built (2026-10-12; the plan's D1, D12, D13).** The wealth curve's base has been 6.0 since #869; this section's
+> 6.2 and its fit are older. The plan's fit on the normal-speed run (`docs/testing/demographics-late-marriage-2026-10-12.md`)
+> found no raise that passes the owner's regional growth gate, and at Stop A the owner kept today's mortality. So
+> s = 1.00, Late Marriage's cut is 0.10 and Birth Spacing's 0.20, India's held share is 0 (with no raise there is
+> nothing to cancel), and China's, Korea's and Manchuria's is 0.06, the smallest that brings China's projected
+> peacetime growth inside +3 to +6 per 1,000.
+
 ### 2.3 The fit
 
 **Method.**
@@ -443,6 +450,10 @@ The same generator, read the same way. The share's 1.0 is Tokugawa Japan's restr
   births modifier isn't applied until phase 2.
 - **A state with no share** (new, split, or from an older save) takes the people-weighted mean of its neighbours
   that have one, else its table value. A split state is the same people as its sibling.
+  - **As built (the plan's D5):** the people-weighted mean of the *other states in its state region* that hold one,
+    else its start less what its conditions have already eroded. States seed on their own days, so a neighbour across
+    a border would cascade the Hajnal line; it plays no part. In 1836 nothing has eroded where a practice starts, so a
+    new game seeds the table. A census re-seed keeps the shares.
 - **Revolutions:** the shares are state variables, so they stay (`scripting_best_practices.md` § "What a Civil
   War's Winner Inherits").
 
@@ -604,6 +615,15 @@ harness needs:
      (§2.4). If it raises China's life expectancy, China's Birth Spacing can rise toward history's 5.5.
 
 ### 5.2 The gate
+
+> **The owner's gate (2026-10-11; the plan's D12).** Regional growth is the gate:
+> - each of #904's regions' projected peacetime births less deaths inside history's band;
+> - the world at or below today's less about 1 per 1,000;
+> - China inside +3 to +6;
+> - no country of 20M or more shrinking.
+>
+> The raise is the smallest neat value that passes it, possibly none. The high group's ~7 is reported, not required,
+> and calibration step 3 (a geographic mortality term) follows separately. The list below is this spec's original gate.
 
 On the gate saves (1837, 1887) and the scenarios:
 - **every anchor country within ±0.5 children per woman**, except those named in the results doc with a reason:

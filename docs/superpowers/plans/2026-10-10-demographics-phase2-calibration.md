@@ -55,6 +55,13 @@ Full only, and edits no engine birth or mortality line). Step 5, the retune of t
 
 ## Step 2: fertility against history
 
+**Built (2026-10-12): Late Marriage and Birth Spacing** (spec `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`;
+plan `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`; fit
+`docs/testing/demographics-late-marriage-2026-10-12.md`). No raise of the wealth curve passes the owner's regional
+growth gate, and at Stop A the owner kept today's mortality: s = 1.00, cuts 0.10 and 0.20, Birth Spacing at 1 in
+Japan and 0.06 in China, Korea and Manchuria. India, Africa, the USA and Canada, the Middle East, South America and
+Southeast Asia stay outside their bands: step 3's.
+
 **Tooling (built, the second PR).**
 - `fetch_history_anchors.py` adds Gapminder's children per woman (open-numbers' `ddf--gapminder--fertility_rate`, from
   1800) as the `tfr` measure, and `history` prints it beside the model's.
