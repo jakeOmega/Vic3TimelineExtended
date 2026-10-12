@@ -591,9 +591,10 @@ ENGINE_LINES_ON_TOP = frozenset({
     # comes from desired fertility and the measures
     "law_communal_child_rearing",
     # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
-    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10)
+    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10). Mental Health Awareness, Biological
+    # Immortality and Mind Backups left this list in phase 3 (the late-game design §8.4, call 19): the census carries them
+    # under Full (LATE_EXTERNAL_LINES, LATE_WORK_LINES, the ageing ladder), their flat lines on the absorbed family
     "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
-    "mental_health_awareness", "biological_immortality", "mind_backups",
 })
 # Fields whose lines stay on top wherever they sit: wealth mortality's per-pop scaling ("per Wealth") waits on probe P6,
 # so M doesn't net it out yet. Private Health Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top
@@ -698,3 +699,95 @@ SRB_BASE = 105
 PRENATAL_SEXING_TECH = "microprocessor"
 # Pro-Natalist Policy's own census line (§3.2): desired +5%, beside its births line moved to the absorbed family.
 PRO_NATALIST_LAW = "law_pro_natalist_subsidies"
+
+# ---- Phase 3: the late game ----------------------------------------------------------------------------------------
+# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md (approved by the owner 2026-10-11, every call in its
+# §9). Biological age, who gets life extension, Biological Immortality, fertility under the late eras and their display.
+# Everything here is inert before the first ageing carrier (era 10): a state with no carrier and no treated people
+# runs the census exactly as before (test_demographics_golden.py), and outside Full nothing reaches the engine.
+#
+# The ageing rate r of those in care (§1.2): biological years a calendar year, 1 + state_ageing_rate_add, within 0-1;
+# Biological Immortality's pull (§1.4): each year a treated body above LX_PULL_TO closes this share of its gap to it,
+# state_rejuvenation_add. Both are census-only state types (demographics_modifier_types.txt) on the technologies below
+# (call 3: the ladder 0.9 at era 10, 0.75 at era 11, 0 at era 12; call 4: the pull 3% a year).
+AGEING_RATE_TYPE = "state_ageing_rate_add"
+REJUVENATION_TYPE = "state_rejuvenation_add"
+LATE_TYPES = (AGEING_RATE_TYPE, REJUVENATION_TYPE)
+DEMOG_TYPES = DEMOG_TYPES + LATE_TYPES
+AGEING_RATE_LINES = {"mrna_therapeutics": -0.10, "personalized_medicine": -0.10, "genetic_engineering": -0.05,
+                     "biological_immortality": -0.75}
+REJUVENATION_LINES = {"biological_immortality": 0.03}
+# Who is treated (§1.2-§1.3, call 8): a treated share te_dg_s<j> and their mean deficit te_dg_d<j> (calendar less
+# biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 30), adults only: a cohort
+# reaching LX_JOIN_AGE joins at the state's eligibility E. The pool (150+) keeps its own (te_dg_lx_ps, te_dg_lx_pd).
+LX_JOIN_AGE = 25
+LX_BAND_WIDTH = 5
+LX_BANDS = RING_YEARS // LX_BAND_WIDTH
+LX_PULL_TO = 35
+# Eligibility E drifts toward its target at the medical diffusion rate (DIFFUSION_BASE + state_medical_diffusion_add),
+# both ways, and takes the target within this of it (as medicine does).
+LX_SNAP = 0.005
+# Access by wealth band (§4.2, call 12): the larger of a public route (the drifted health-care access x the health law's
+# cover for longevity care) and a market route (a ramp from 0 at LX_MARKET_RAMP below the threshold W to 1 as far above
+# it). W is one country variable (te_dg_lx_w): LX_MARKET_START when the country's first carrier arrives, falling
+# LX_MARKET_FALL a year x the laws' factor x (1 + LX_MARKET_DIFFUSION x the capital's state_medical_diffusion_add).
+LX_COVER = {"law_public_health_insurance": 1.0, "law_private_health_insurance": 0.0,
+            "law_charitable_health_system": 0.25, "law_no_health_system": 0.0}
+LX_COVER_DEFAULT = 0.0
+LX_BAN_LAW = "law_human_purity"                      # the Devout's law: no longevity care at all
+LX_MANDATORY_LAW = "law_mandatory_augmentation"      # public cover 1, access at least LX_MANDATORY_FLOOR
+LX_MANDATORY_FLOOR = 0.9
+LX_UNRESTRICTED_LAW = "law_unrestricted_augmentation"   # the market threshold starts LX_UNRESTRICTED_OFFSET lower
+LX_UNRESTRICTED_OFFSET = 20
+LX_MARKET_START = 80
+LX_MARKET_FLOOR = -20                                # W stops falling here: everyone is within reach well before
+LX_MARKET_FALL = 1.0
+LX_MARKET_FALL_LAWS = {"law_private_health_insurance": 2.0, "law_regulated_augmentation_market": 1.5}
+LX_MARKET_DIFFUSION = 1.0
+LX_MARKET_RAMP = 10
+# The wealth band's wealth for access (te_dg_gn<k>, GINI_BAND_KNOTS): the middle of its levels.
+LX_BAND_WEALTH = {k: (1.0 if k == 1 else ((GINI_BAND_KNOTS[k - 2] + 1 + (GINI_BAND_KNOTS[k - 1]
+                                                                       if k <= len(GINI_BAND_KNOTS) else GINI_TOP_WEALTH))
+                                         / 2.0))
+                  for k in range(1, GINI_BANDS + 1)}
+# The health bill's third term (§5.2, call 13): + this x the share of people on the public route.
+LX_PUBLIC_HEALTH_WEIGHT = 0.5
+# Living to 100 (§6.1): survivors of the life table at this age; the longevity gap is the treated table's less the
+# untreated's, in points.
+LX_LIVING_TO = 100
+# Old age from shows "none" at or past this (§1.5: under immortality no age has 15 years left; the census's life table
+# stops at 150, so its threshold can't pass 135).
+LX_OLD_AGE_NONE = 130
+# The late-era lines (§8.4, call 19): under Full the census carries them; outside Full their flat lines stay (they sit on
+# the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide); Mind Backups:
+# accidents and violence and work deaths -50% (the backed-up are restored). autonomous_vehicles' -10% (traffic) was
+# §1.4's proposal only, not call 19's: not built.
+LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10, "mind_backups": -0.5}
+LATE_WORK_LINES = {"mind_backups": -0.5}
+# Fertility (§3.1-§3.2, call 5): planned births follow the calendar for their timing and the body for whether it allows
+# them; unplanned births the body. Fecundity by biological age (after Leridon 2004), by five-year group start.
+FECUNDITY = {0: 1.0, 35: 0.9, 40: 0.7, 45: 0.35, 50: 0.0}
+# The planned schedule's shift by the mean age at childbearing (§3.2): the machinery is built, its driver held at 0 (a
+# decision, 2026-10-12): the spec's historical drivers (education, women's work, the means) act on today's states and
+# would move the 1836-today calibration, which this phase keeps; today's shape already has a mean of 30.1 against
+# Europe's ~31. Postponement in years = LX_POSTPONEMENT x the state's treated share (people who expect long lives
+# start families later), 0 now.
+LX_POSTPONEMENT = 0.0
+# Ectogenesis (§3.5): e = State Youth Centers' levels on pm_ectogenesis x LX_ECTO_PER_LEVEL births a year / the state's
+# births, at most LX_ECTO_MAX. That share of planned births carries no maternal death and no fecundity loss, and its
+# parents count as the mean of the cohort's women and men.
+LX_ECTO_PM = "pm_ectogenesis"
+LX_ECTO_BUILDING = "building_state_youth_centers"
+LX_ECTO_TECH = "biotechnology"     # the method's technology: the census counts the buildings only once the owner has it
+LX_ECTO_PER_LEVEL = 1000
+LX_ECTO_MAX = 0.9
+# The gap's politics (§4.4, call 15): built behind this switch, off until a play-test sizes it. Trade Unions and Rural Folk
+# approval down to LX_POLITICS_APPROVAL with the national gap x the lower strata's untreated share; Labor movement support
+# up to LX_POLITICS_LABOR in states where the gap is large. Generated as te_demog_k_lx_politics.
+LONGEVITY_POLITICS = False
+LX_POLITICS_APPROVAL = -3
+LX_POLITICS_LABOR = 0.10
+# The AI's pension pulse (late-game §2.2): a longevity gap (Living to 100, treated less untreated) over PENSION_AI_GAP picks
+# Linked to Common Longevity, as the country's unions would; it goes back to Standard under PENSION_AI_GAP_LOW.
+PENSION_AI_GAP = 0.2
+PENSION_AI_GAP_LOW = 0.1

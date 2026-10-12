@@ -73,6 +73,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))   # gen_demographics_lx (phase 3)
 
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
@@ -2128,11 +2129,14 @@ def render_workforce_line_effects():
 
 
 def plan_outputs(root=ROOT):
+    # phase 3, the late game: its own two generated files (scripts/generators/gen_demographics_lx.py)
+    import gen_demographics_lx as LX
     return {EFFECTS: render_effects(root), VALUES: render_values(root), LINE_MODIFIERS: render_line_modifiers(),
             LINE_VALUES: render_line_values(), LINE_EFFECTS: render_line_effects(),
             WORKFORCE_LINE_MODIFIERS: render_workforce_line_modifiers(),
             WORKFORCE_LINE_VALUES: render_workforce_line_values(),
-            WORKFORCE_LINE_EFFECTS: render_workforce_line_effects()}
+            WORKFORCE_LINE_EFFECTS: render_workforce_line_effects(),
+            **LX.plan_outputs()}
 
 
 def regenerate(root=ROOT, dry_run=False):

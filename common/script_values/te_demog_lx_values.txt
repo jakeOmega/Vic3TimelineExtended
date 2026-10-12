@@ -1,0 +1,122 @@
+﻿# ============================================================================
+# DEMOGRAPHICS PHASE 3 — the late game's values (biological age, who gets life extension)
+# docs/superpowers/specs/2026-10-11-demographics-late-game-design.md; the twin is demographics_model.py's late-game
+# section. The effects are te_demog_lx_effects.txt; the generated ones te_demog_lx_generated_effects.txt and
+# te_demog_lx_generated_values.txt (scripts/generators/gen_demographics_lx.py).
+# ============================================================================
+
+# State scope: r, the biological years a calendar year of those in longevity care (§1.2; demographics_model.ageing_rate).
+te_demog_lx_rate = {
+	value = 1
+	add = modifier:state_ageing_rate_add
+	min = 0
+	max = 1
+}
+
+# State scope: Biological Immortality's pull, the share of a treated body's gap to 35 closed a year (§1.4).
+te_demog_lx_pull = {
+	value = modifier:state_rejuvenation_add
+	min = 0
+	max = 1
+}
+
+# State scope: 1 where longevity care exists for the owner, an ageing carrier or the pull (demographics_model.lx_carrier).
+te_demog_lx_carrier_on = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_demog_lx_rate < 1
+				te_demog_lx_pull > 0
+			}
+		}
+		value = 1
+	}
+}
+
+# State scope, the owner's laws (§4.2): Human Purity bans longevity care; Mandatory Augmentation covers everyone the
+# health system reaches and at least te_demog_k_lx_mandatory_floor; Unrestricted Augmentation lowers the market threshold.
+te_demog_lx_banned = {
+	value = 0
+	if = {
+		limit = { owner = { has_law = law_type:law_human_purity } }
+		value = 1
+	}
+}
+te_demog_lx_mandatory = {
+	value = 0
+	if = {
+		limit = { owner = { has_law = law_type:law_mandatory_augmentation } }
+		value = 1
+	}
+}
+te_demog_lx_unrestricted = {
+	value = 0
+	if = {
+		limit = { owner = { has_law = law_type:law_unrestricted_augmentation } }
+		value = 1
+	}
+}
+
+# State scope: the public route's reach (demographics_model.lx_public): the drifted health-care access x the health law's
+# cover (te_demog_lx_cover, generated), at least the mandatory floor under Mandatory Augmentation.
+te_demog_lx_public = {
+	value = var:te_dg_acc
+	multiply = te_demog_lx_cover
+	if = {
+		limit = { te_demog_lx_mandatory > 0 }
+		value = var:te_dg_acc
+		min = te_demog_k_lx_mandatory_floor
+	}
+}
+
+# State scope: the owner's market threshold (te_dg_lx_w, the country's yearly census; te_demog_k_lx_market_start before
+# its first), less the Unrestricted offset (demographics_model.lx_threshold).
+te_demog_lx_owner_w = {
+	value = te_demog_k_lx_market_start
+	if = {
+		limit = { owner ?= { has_variable = te_dg_lx_w } }
+		value = owner.var:te_dg_lx_w
+	}
+}
+te_demog_lx_threshold = {
+	value = te_demog_lx_owner_w
+	subtract = {
+		value = te_demog_lx_unrestricted
+		multiply = te_demog_k_lx_unrestricted_offset
+	}
+}
+
+# Country scope: the market threshold's fall this year (demographics_model.lx_market_next): te_demog_k_lx_market_fall x the
+# laws' factor x (1 + te_demog_k_lx_market_diffusion x the diffusion technologies' lines).
+te_demog_lx_market_fall = {
+	value = te_demog_lx_market_diffusion
+	multiply = te_demog_k_lx_market_diffusion
+	add = 1
+	multiply = te_demog_lx_market_laws
+	multiply = te_demog_k_lx_market_fall
+}
+
+# State scope: the old-age threshold the untreated have (Linked to Common Longevity follows it, five years below): the
+# untreated's own table in a state with treated people (te_dg_old_age_c), else the state's (te_dg_old_age).
+te_demog_old_age_untreated = {
+	value = var:te_dg_old_age
+	if = {
+		limit = { has_variable = te_dg_old_age_c }
+		value = var:te_dg_old_age_c
+	}
+}
+
+# Country or state scope: the longevity gap (§4.3), Living to 100 for the treated less the untreated, in points of 1; 0
+# before the late game.
+te_demog_lx_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_lx_l100t
+			has_variable = te_dg_lx_l100u
+		}
+		value = var:te_dg_lx_l100t
+		subtract = var:te_dg_lx_l100u
+	}
+}

@@ -453,8 +453,9 @@ te_demog_pension_choose = {
 # te_demog_k_pension_ai_unemployment picks Early. Otherwise it keeps its position, and goes back to Standard only once
 # the reason has clearly gone: from a cheaper one when the bill is under te_demog_k_pension_ai_bill_low of revenue and
 # the debt and default have gone, from Early when unemployment is under te_demog_k_pension_ai_unemployment_low (so it
-# doesn't swing every five years). It changes only when the pick differs and the term allows. A wide longevity gap
-# pushing toward Linked to Common waits for phase 3.
+# doesn't swing every five years). It changes only when the pick differs and the term allows. Phase 3 (late-game §2.2):
+# a wide longevity gap (te_demog_lx_gap over te_demog_k_pension_ai_gap) picks Linked to Common Longevity, as the country's
+# unions would, and it goes back to Standard once the gap is under te_demog_k_pension_ai_gap_low.
 te_demog_pension_ai = {
 	if = {
 		limit = {
@@ -485,6 +486,13 @@ te_demog_pension_ai = {
 		}
 		if = {
 			limit = {
+				te_demog_pension_pos = te_demog_k_pension_pos_linked_common
+				te_demog_lx_gap < te_demog_k_pension_ai_gap_low
+			}
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_standard }
+		}
+		if = {
+			limit = {
 				OR = {
 					te_demog_pension_bill_share > te_demog_k_pension_ai_bill_high
 					scaled_debt > te_demog_k_pension_ai_debt
@@ -493,13 +501,18 @@ te_demog_pension_ai = {
 			}
 			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_raised }
 			if = {
-				limit = { te_demog_pension_link_target > te_demog_k_pension_age_raised }
+				limit = { te_demog_pension_link_target_average > te_demog_k_pension_age_raised }
 				set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_linked_average }
 			}
 		}
 		else_if = {
 			limit = { te_demog_country_unemployment > te_demog_k_pension_ai_unemployment }
 			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_early }
+		}
+		# phase 3: a wide longevity gap, as the country's unions would (late-game §2.2)
+		else_if = {
+			limit = { te_demog_lx_gap > te_demog_k_pension_ai_gap }
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_linked_common }
 		}
 		if = {
 			limit = { NOT = { local_var:te_dg_pa_pick = te_demog_pension_pos } }
@@ -514,6 +527,10 @@ te_demog_pension_ai = {
 			else_if = {
 				limit = { local_var:te_dg_pa_pick = te_demog_k_pension_pos_linked_average }
 				te_demog_pension_choose = { POS = linked_average }
+			}
+			else_if = {
+				limit = { local_var:te_dg_pa_pick = te_demog_k_pension_pos_linked_common }
+				te_demog_pension_choose = { POS = linked_common }
 			}
 			else = {
 				te_demog_pension_choose = { POS = standard }
