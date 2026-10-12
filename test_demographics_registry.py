@@ -118,8 +118,10 @@ class TestWalks(unittest.TestCase):
         body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
         self.assertIn("set_local_variable = { name = te_dg_p_eb value = te_demog_pop_engine_births }", body)
         self.assertIn("set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }", body)
-        self.assertIn("add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult }", body)
-        self.assertIn("add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult }", body)
+        self.assertIn("set_local_variable = { name = te_dg_p_mb value = te_demog_pop_birth_mult }", body)
+        self.assertIn("set_local_variable = { name = te_dg_p_md value = te_demog_pop_death_mult }", body)
+        self.assertIn("add = { value = local_var:te_dg_p_eb multiply = local_var:te_dg_p_mb }", body)
+        self.assertIn("add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_md }", body)
         self.assertNotIn("modifier:state_birth_rate_mult", body)
         self.assertNotIn("modifier:state_mortality_mult", body)
 
@@ -1271,7 +1273,7 @@ class TestRatesScript(unittest.TestCase):
                        "modifier:state_mortality_mult": read_d, **families},
                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
         eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=ebr, te_dg_w_edr=edr, te_dg_w_eb=eb0,
-                          te_dg_w_ed=ed0)
+                          te_dg_w_ed=ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
         eng.vars.update(te_dg_stepped=stepped, te_dg_cbr_model=cbr, te_dg_cdr_model=cdr)
         return eng
 
@@ -1568,7 +1570,7 @@ class TestRatesScript(unittest.TestCase):
         eb0, ed0 = 475.0 * pop, 400.0 * pop
         walk = "\n".join(f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_w_eb0", eb0), ("te_dg_w_ed0", ed0), ("te_dg_w_ebr", P.LITERACY_BIRTH_PENALTY * 0.35 * eb0), ("te_dg_w_edr", 0.0), ("te_dg_w_eb", eb0),
-            ("te_dg_w_ed", ed0)))
+            ("te_dg_w_ed", ed0), ("te_dg_w_eb0m", eb0), ("te_dg_w_ed0m", ed0)))
         walk += "\n" + "\n".join(f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
             ("te_dg_eb", eb0 * 12 / 1e5), ("te_dg_ed", ed0 * 12 / 1e5), ("te_dg_walk_pop", pop)))
         stubs = {"te_demog_walks": walk, "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
@@ -1653,6 +1655,354 @@ class TestRatesScript(unittest.TestCase):
             self.assertEqual(got, {field: value}, name)
 
 
+class _Pop(tuple):
+    """One pop group for TestWindowEvents' engine: bare births and deaths a month x 100,000, the terms the census
+    absorbs for it (literacy's, mild starvation's) and its own terms on top (severe starvation, workplace lines)."""
+    __slots__ = ()
+
+    def __new__(cls, bare_b, bare_d, abs_b=0.0, abs_d=0.0, top_b=0.0, top_d=0.0):
+        return tuple.__new__(cls, (bare_b, bare_d, abs_b, abs_d, top_b, top_d))
+
+
+def _mild(bare_b, bare_d, food=0.21):
+    b, d = demographics_model.starvation_terms(food)
+    return _Pop(bare_b, bare_d, abs_b=b, abs_d=d)
+
+
+def _severe(bare_b, bare_d):
+    return _Pop(bare_b, bare_d, top_b=P.STARVATION_SEVERE["births"], top_d=P.STARVATION_SEVERE["deaths"])
+
+
+class _ClockEngine(_Engine):
+    """_Engine plus what fast mode's switch (te_demog_fast_set) needs, for one state that is also the country:
+    every_state and every_country run their body here (their limit too), set_global_variable sets the global as a
+    fixture, debug_log does nothing."""
+
+    SPECIAL = ("every_state", "every_country", "set_global_variable", "debug_log")
+
+    @classmethod
+    def adopt(cls, eng):
+        new = cls.__new__(cls)
+        new.__dict__.update(eng.__dict__)
+        return new
+
+    def run(self, items):
+        segment = []
+        for item in items:
+            key, _, arg = item
+            if key not in self.SPECIAL:
+                segment.append(item)
+                continue
+            super().run(segment)
+            segment = []
+            if key == "set_global_variable":
+                self.fixtures[f"global_var:{_find(arg, 'name')}"] = self.value(_find(arg, "value"))
+            elif key in ("every_state", "every_country"):
+                limit = [i for i in arg if i[0] == "limit"]
+                if not limit or self.holds(limit[0][2]):
+                    self.run([i for i in arg if i[0] != "limit"])
+        super().run(segment)
+
+
+class TestWindowEvents(unittest.TestCase):
+    """The trapezoid (owner, 2026-10-11; #894; the review of #907). The walk is a snapshot on the step's day and the
+    step books the window that ends that day, so a famine starting in early December was booked for the whole year
+    (Hannover, 1898). Under Full the walk's tail (te_demog_window_events) books the window at the mean of the
+    engine's rate at its two ends: today's, and the rate per head the last step left in force (te_dg_sr_b / _d,
+    stored by te_demog_rates_refresh after it set M, moved by fast mode's term). The residual and the step's scales
+    read the result.
+
+    Each case is checked against an engine built from pops, not against the script's arithmetic: each pop gives
+    bare x max(0, 1 + the state read + its own terms), the read holds the census's term, fast mode's and the moved
+    lines' pairs and the state-level lines, and the window's true events are the mean of the two ends' sums x the
+    window's months."""
+
+    POP = 1_000_000.0
+    CBR, CDR = 38.0, 31.0
+
+    def walk(self, pops, read_b, read_d):
+        """The walk's sums for these pops under these reads (te_demog_walks)."""
+        w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
+                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0)
+        for bare_b, bare_d, abs_b, abs_d, top_b, top_d in pops:
+            mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
+            w["te_dg_w_eb0"] += bare_b
+            w["te_dg_w_ed0"] += bare_d
+            w["te_dg_w_ebr"] += bare_b * abs_b
+            w["te_dg_w_edr"] += bare_d * abs_d
+            w["te_dg_w_eb"] += bare_b * mult_b
+            w["te_dg_w_ed"] += bare_d * mult_d
+            w["te_dg_w_eb0m"] += bare_b if mult_b > 0 else 0.0
+            w["te_dg_w_ed0m"] += bare_d if mult_d > 0 else 0.0
+        return w
+
+    def _engine(self, full=True):
+        families = {f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()}
+        eng = _Engine({"state_population": self.POP, **families},
+                      triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
+        return eng
+
+    def _set_reads(self, eng, os_b, os_d, lines=(0.0, 0.0)):
+        """The state reads as the engine sums them: the terms in force (modifiers) plus the state-level lines."""
+        def applied(kind):
+            return eng.value(eng._tree(eng.values, f"te_demog_rate_{kind}_applied")) + \
+                eng.value(eng._tree(eng.values, f"te_demog_fast_{kind}_applied"))
+        eng.fixtures["modifier:state_birth_rate_mult"] = applied("births") + lines[0] + os_b
+        eng.fixtures["modifier:state_mortality_mult"] = applied("deaths") + lines[1] + os_d
+        return eng.fixtures["modifier:state_birth_rate_mult"], eng.fixtures["modifier:state_mortality_mult"]
+
+    def window(self, start_pops, end_pops, os_start=(0.02, 0.05), os_end=(0.02, 0.05), m_prev=(-0.3, -0.25),
+               months=12, fast_k=None, fast_at_end=None, lines=(0.0, 0.0), full=True):
+        """One window. At its start the state steps: the walk under the last window's terms, then
+        te_demog_rates_refresh (M refitted to the model's rates) and, on fast mode's clock, te_demog_fast_refresh_rates
+        (K = fast_k; None: no clock at that step). At its end the walk runs under the terms the start left in force
+        and ends with te_demog_window_events; fast_at_end puts the clock on at the end (window of `months`) without
+        a step between (a switch of speed). Returns the engine, the window's events (births, deaths) as the script books
+        them, and as the pops' engine gave them: the mean of the two ends' rates x the window's months."""
+        eng = self._engine(full)
+        mb, md = m_prev
+        eng.modifiers.update({"te_demog_census_births_down" if mb < 0 else "te_demog_census_births_up": abs(mb),
+                              "te_demog_census_deaths_down" if md < 0 else "te_demog_census_deaths_up": abs(md)})
+        eng.vars.update(te_dg_mb=mb, te_dg_md=md, te_dg_stepped=1.0, te_dg_cbr_model=self.CBR,
+                        te_dg_cdr_model=self.CDR)
+        if lines != (0.0, 0.0):
+            eng.modifiers.update(te_demog_line_births_down=-lines[0], te_demog_line_deaths_down=-lines[1])
+            eng.vars.update(te_dg_ln_births=lines[0], te_dg_ln_deaths=lines[1])
+        if fast_k is not None:
+            eng.trigger_fixtures["te_demog_clock_on"] = True
+            eng.fixtures["global_var:te_demog_months_per_step"] = 12.0 / fast_k
+            eng.fixtures["global_var:te_demog_window_months"] = 12.0 / fast_k
+        # the window's start: the step
+        read = self._set_reads(eng, *os_start, lines=lines)
+        eng.locals.update(self.walk(start_pops, *read))
+        eng.call("te_demog_rates_refresh")
+        if fast_k is not None:
+            eng.call("te_demog_fast_refresh_rates")
+        # the terms the start left in force; the pops' engine at the start runs under them
+        eng.locals.clear()
+        if fast_at_end is not None:
+            eng.trigger_fixtures["te_demog_clock_on"] = True
+            eng.fixtures["global_var:te_demog_months_per_step"] = float(months)
+            eng.fixtures["global_var:te_demog_window_months"] = float(months)
+        elif fast_k is not None:
+            eng.fixtures["global_var:te_demog_window_months"] = float(months)
+        read_start = self._set_reads(eng, *os_start)
+        true_start = self.walk(start_pops, *read_start)
+        # the window's end: the walk, under the same terms, with today's pops and lines
+        read_end = self._set_reads(eng, *os_end)
+        end = self.walk(end_pops, *read_end)
+        eng.locals.update(end)
+        eng.vars.update(te_dg_eb=end["te_dg_w_eb"] * months / 1e5, te_dg_ed=end["te_dg_w_ed"] * months / 1e5)
+        snap = (eng.vars["te_dg_eb"], eng.vars["te_dg_ed"])
+        eng.call("te_demog_window_events")
+        booked = (eng.vars["te_dg_eb"], eng.vars["te_dg_ed"])
+        true = tuple((true_start[f"te_dg_w_{k}"] + end[f"te_dg_w_{k}"]) / 2 * months / 1e5 for k in ("eb", "ed"))
+        return eng, booked, true, snap
+
+    STEADY = [_Pop(300e6, 260e6), _Pop(175e6, 170e6, abs_b=-0.05)]
+
+    def assert_books(self, booked, true, rel=1e-6):
+        for got, want, kind in zip(booked, true, ("births", "deaths")):
+            self.assertAlmostEqual(got, want, delta=rel * max(abs(want), 1.0), msg=kind)
+
+    def test_mild_starvation_at_the_start_severe_at_the_end(self):
+        """Hannover 1897-98: the unemployed laborers mildly starving when the window began (absorbed: M nets it) and
+        severely on the step's day (on top). The window takes the mean, mild's netted line included."""
+        start = [self.STEADY[0], _mild(175e6, 170e6)]
+        end = [self.STEADY[0], _severe(175e6, 170e6)]
+        eng, booked, true, snap = self.window(start, end)
+        self.assert_books(booked, true)
+        self.assertLess(booked[1], snap[1] - 0.1 * snap[1], "the snapshot's famine year is cut")
+
+    def test_a_famine_ending_in_the_window(self):
+        start = [self.STEADY[0], _severe(175e6, 170e6)]
+        end = [self.STEADY[0], _mild(175e6, 170e6, food=0.37)]
+        _, booked, true, snap = self.window(start, end)
+        self.assert_books(booked, true)
+        self.assertGreater(booked[1], snap[1])
+
+    def test_a_state_line_moving_counts_at_the_engines_weight(self):
+        """Devastation from nothing to +0.3 inside the window: the engine adds it to every pop's bare curve, so the
+        window books half of bare x 0.3, not half of the census's rate x 0.3."""
+        _, booked, true, snap = self.window(self.STEADY, self.STEADY, os_start=(0.0, 0.0), os_end=(-0.1, 0.3))
+        self.assert_books(booked, true)
+        bare_d = sum(p[1] for p in self.STEADY)
+        self.assertAlmostEqual(snap[1] - booked[1], bare_d * 0.3 / 2 * 12 / 1e5, delta=1e-3)
+
+    def test_a_steady_window_keeps_the_snapshot(self):
+        """Nothing moved inside the window: the mean of its ends is the snapshot, whatever M the step set."""
+        for m_prev in ((-0.3, -0.25), (0.4, 0.6)):
+            with self.subTest(m_prev=m_prev):
+                _, booked, true, snap = self.window(self.STEADY, self.STEADY, m_prev=m_prev)
+                self.assert_books(booked, true)
+                self.assert_books(booked, snap)
+
+    def test_the_start_holds_the_steps_m_and_not_the_moved_lines_pairs_it_cleared(self):
+        """The first Full step clears the moved lines' pairs, which were in the walk's read: the window's start runs
+        without them and with the M the refresh set."""
+        _, booked, true, _snap = self.window(self.STEADY, self.STEADY, lines=(-0.02, -0.08))
+        self.assert_books(booked, true)
+
+    def test_fast_mode_books_the_clocks_window(self):
+        """At K = 4 a window is three months, its term (K - 1 x the average) set at the start and held to the end:
+        both ends carry it, so the window is the mean of the two ends x 3 months."""
+        start = [self.STEADY[0], _mild(175e6, 170e6)]
+        end = [self.STEADY[0], _severe(175e6, 170e6)]
+        eng, booked, true, _snap = self.window(start, end, fast_k=4, months=3)
+        self.assertIn("te_demog_fast_deaths", eng.modifiers)
+        self.assert_books(booked, true)
+
+    def test_back_to_fast_mode_inside_a_window_at_normal_speed(self):
+        """Options k, then h: the clock's step at normal speed (K = 1) sets no term, and h puts the clock back at three
+        months a step without one until the next step. The window is three months with no term at either end."""
+        start = [self.STEADY[0], _mild(175e6, 170e6)]
+        end = [self.STEADY[0], _severe(175e6, 170e6)]
+        eng, booked, true, _snap = self.window(start, end, fast_k=1, fast_at_end=True, months=3)
+        self.assertNotIn("te_demog_fast_deaths", eng.modifiers)
+        self.assert_books(booked, true)
+
+    def test_option_k_between_two_clock_steps_falls_back_to_the_snapshot(self):
+        """Option k (te_demog_fast_set at 12 months a step) takes fast mode's term off every state at once, between two
+        clock steps, so the rate the last step stored (with the term, about K times the engine's) no longer runs: it
+        goes, and the next window takes the snapshot, as before the trapezoid. Here k comes straight after a step at
+        K = 4 and the next step is 12 months later: the engine ran without the term all window."""
+        eng, *_ = self.window(self.STEADY, self.STEADY, fast_k=4, months=3)
+        self.assertIn("te_demog_fast_deaths", eng.modifiers)
+        self.assertIn("te_dg_sr_d", eng.vars)
+        clock = _ClockEngine.adopt(eng)
+        switch = re.sub(r'debug_log = "[^"]*"', "", _block(_text(FAST_EFFECTS), "te_demog_fast_set"))
+        clock.run(_parse_script(switch.replace("$MONTHS$", "12")))
+        self.assertEqual(clock.fixtures["global_var:te_demog_months_per_step"], 12.0)
+        self.assertFalse({"te_demog_fast_births", "te_demog_fast_deaths"} & set(clock.modifiers))
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(clock.vars))
+        # twelve months on, the clock's step: the walk under the census's terms alone
+        clock.locals.clear()
+        clock.fixtures["global_var:te_demog_window_months"] = 12.0
+        read = self._set_reads(clock, 0.02, 0.05)
+        end = self.walk(self.STEADY, *read)
+        clock.locals.update(end)
+        clock.vars.update(te_dg_eb=end["te_dg_w_eb"] * 12 / 1e5, te_dg_ed=end["te_dg_w_ed"] * 12 / 1e5)
+        clock.call("te_demog_window_events")
+        true = tuple(end[f"te_dg_w_{k}"] * 12 / 1e5 for k in ("eb", "ed"))   # a steady engine without the term
+        self.assert_books((clock.vars["te_dg_eb"], clock.vars["te_dg_ed"]), true)
+
+    def test_a_refresh_that_sets_no_term_drops_the_start_rate(self):
+        """A step with no births (te_dg_stepped 0) sets no term: the rate stored a window earlier is not this window's
+        start, so it goes and the next window takes the snapshot."""
+        eng = self._engine()
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=0.0, te_dg_cbr_model=self.CBR,
+                        te_dg_cdr_model=self.CDR, te_dg_sr_b=400.0, te_dg_sr_d=300.0)
+        eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_down=0.25)
+        eng.locals.update(self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05)))
+        eng.call("te_demog_rates_refresh")
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(eng.vars))
+        self.assertEqual(eng.vars["te_dg_md"], -0.25, "the terms stay as they were")
+
+    def test_no_start_rate_or_not_full_is_the_snapshot(self):
+        """The first step after a seed, a new state, an old save (no te_dg_sr_*); outside Full."""
+        eng = self._engine()
+        eng.locals.update(self.walk(self.STEADY, 0.0, 0.0))
+        eng.vars.update(te_dg_eb=123.0, te_dg_ed=456.0)
+        eng.call("te_demog_window_events")
+        self.assertEqual((eng.vars["te_dg_eb"], eng.vars["te_dg_ed"]), (123.0, 456.0))
+        eng = self._engine(full=False)
+        eng.locals.update(self.walk(self.STEADY, 0.0, 0.0))
+        eng.vars.update(te_dg_eb=123.0, te_dg_ed=456.0, te_dg_sr_b=1.0, te_dg_sr_d=1.0)
+        eng.call("te_demog_window_events")
+        self.assertEqual((eng.vars["te_dg_eb"], eng.vars["te_dg_ed"]), (123.0, 456.0))
+
+    def test_the_window_never_expects_fewer_than_no_events(self):
+        eng = self._engine()
+        eng.locals.update(self.walk([_Pop(0.0, 0.0)], 0.0, 0.0))
+        eng.vars.update(te_dg_eb=0.0, te_dg_ed=0.0, te_dg_sr_b=-5.0, te_dg_sr_d=-5.0)
+        eng.call("te_demog_window_events")
+        self.assertEqual((eng.vars["te_dg_eb"], eng.vars["te_dg_ed"]), (0.0, 0.0))
+
+    def test_a_seed_or_leaving_full_drops_the_start_rate(self):
+        """A seed starts the census over (te_demog_seed); Display only and Disabled clear the census's terms
+        (te_demog_rates_clear). Either way the next window has no start rate."""
+        eng = _engine_for(TestCohortScript.INP, 1836, TestCohortScript.POP)
+        eng.vars.update(te_dg_sr_b=400.0, te_dg_sr_d=300.0)
+        eng.call("te_demog_seed")
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(eng.vars))
+        eng = self._engine(full=False)
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.25, te_dg_stepped=1.0, te_dg_cbr_model=self.CBR,
+                        te_dg_cdr_model=self.CDR, te_dg_sr_b=400.0, te_dg_sr_d=300.0)
+        eng.locals.update(self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05)))
+        eng.call("te_demog_rates_refresh")
+        self.assertFalse({"te_dg_sr_b", "te_dg_sr_d"} & set(eng.vars))
+
+    def test_the_walk_books_its_window_before_anything_reads_it(self):
+        """Its tail, once, after te_dg_eb and te_dg_ed; the census (te_demog_flows' residual, te_demog_on_top_scales)
+        runs after the walk in both orchestrators. Nothing else calls it: the step and the console's replay read the
+        stored events, never the walk's locals."""
+        body = _block(_text(EFFECTS), "te_demog_walks")
+        self.assertEqual(body.count("te_demog_window_events = yes"), 1)
+        self.assertLess(body.index("name = te_dg_ed"), body.index("te_demog_window_events = yes"))
+        callers = sorted(p.name for p in DEMOG_FILES if "te_demog_window_events = yes" in _text(p))
+        self.assertEqual(callers, ["te_demog_effects.txt"])
+        self.assertNotIn("te_dg_w_", _block(_text(RATE_EFFECTS), "te_demog_on_top_scales"))
+
+    # -- through the state's pulses: the window's start is the last step's -----------------------------------------
+
+    def test_through_the_pulses_a_famine_is_booked_where_it_fell(self):
+        """te_demog_state_yearly under Full, 1836 (a seed) to 1843, the walk stubbed with sums from pops under the read
+        in force (the census's terms plus the state lines), ending with the real te_demog_window_events. A third of the
+        bare curves mildly starving until 1838, severe on the step days of 1839 and 1840, fed again by 1841, and
+        severe on 1842's day alone. Each step's window, its dz and its migration residual follow the pops' engine:
+        the mean of the rate the last step left in force and today's. The first step after the seed has no start
+        rate and books its snapshot."""
+        pop = TestCohortScript.POP
+        steady, other = _Pop(300.0 * pop, 230.0 * pop), (175.0 * pop, 170.0 * pop)
+        plan = ["mild", "mild", "mild", "severe", "severe", "fed", "severe", "fed"]
+        pops_of = {"mild": [steady, _mild(*other)], "severe": [steady, _severe(*other)], "fed": [steady, _Pop(*other)]}
+        pop = TestCohortScript.POP
+        stubs = {"te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "", "te_inh_refresh_wc_state_effects": ""}
+        eng = _engine_for(TestCohortScript.INP, 1836, pop, effects=stubs)
+        eng.trigger_fixtures["te_demog_effects_run"] = True
+        eng.fixtures.update(te_demog_crisis=0.0, te_demog_family_transport=0.0,
+                            **{f"modifier:{name}": 0.0 for name in P.ENGINE_LINE_TYPES.values()})
+        rows, last = [], None
+        for i, state in enumerate(plan):
+            year = 1836 + i
+            eng.fixtures["year"] = float(year)
+            read = self._set_reads(eng, 0.02, 0.05)
+            w = self.walk(pops_of[state], *read)
+            true_start = self.walk(pops_of[last], *read) if last else None
+            eng.effects["te_demog_walks"] = "\n".join(
+                [f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in w.items()]
+                + [f"set_variable = {{ name = {k} value = {v!r} }}" for k, v in (
+                    ("te_dg_eb", w["te_dg_w_eb"] * 12 / 1e5), ("te_dg_ed", w["te_dg_w_ed"] * 12 / 1e5),
+                    ("te_dg_walk_pop", pop), ("te_dg_fjob_share", 0.3))]
+                + ["te_demog_window_events = yes"])
+            eng._trees.clear()
+            had_start = "te_dg_sr_d" in eng.vars
+            pop_last = eng.vars.get("te_dg_pop_last")
+            target = eng.vars.get("te_dg_cdr_model", 0.0) * pop / 1000
+            eng.call("te_demog_state_yearly")
+            rows.append(dict(state=state, had_start=had_start, snap=w["te_dg_w_ed"] * 12 / 1e5,
+                             true=None if true_start is None else (
+                                 (true_start["te_dg_w_eb"] + w["te_dg_w_eb"]) / 2 * 12 / 1e5,
+                                 (true_start["te_dg_w_ed"] + w["te_dg_w_ed"]) / 2 * 12 / 1e5),
+                             eb=eng.vars["te_dg_eb"], ed=eng.vars["te_dg_ed"], dz=eng.vars["te_dg_dz"], target=target,
+                             mig=eng.vars.get("te_dg_mig_raw"), pop_last=pop_last, stepped=eng.vars["te_dg_stepped"]))
+            last = state
+        self.assertEqual([r["stepped"] for r in rows], [0.0] + [1.0] * 7)
+        self.assertFalse(rows[1]["had_start"], "the first step after a seed has no start rate")
+        self.assertEqual(rows[1]["ed"], rows[1]["snap"])
+        for i in range(2, len(plan)):
+            r = rows[i]
+            with self.subTest(year=1836 + i, plan=r["state"]):
+                self.assertTrue(r["had_start"])
+                self.assert_books((r["eb"], r["ed"]), r["true"])
+                self.assertAlmostEqual(r["dz"], demographics_model.on_top_scale(r["ed"], r["target"]), places=4)
+                self.assertAlmostEqual(r["mig"], pop - r["pop_last"] - r["eb"] + r["ed"], delta=1e-2)
+        # onset and end book between the two; a one-off on a step's day is booked half there, half in the next
+        self.assertLess(rows[3]["ed"], rows[3]["snap"])
+        self.assertGreater(rows[5]["ed"], rows[5]["snap"])
+        self.assertAlmostEqual(rows[6]["ed"] - rows[6]["snap"], -(rows[7]["ed"] - rows[7]["snap"]), delta=1.0)
+
+
 class _OwnerEngine(_Engine):
     """_Engine with an owner's laws, techs and institution levels and one pop's type: enough to run the generated
     absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
@@ -1698,7 +2048,7 @@ class TestAbsorbedScript(unittest.TestCase):
                            triggers={"is_incorporated": incorporated, "is_in_severe_starvation": food < 0.2,
                                      "is_in_mild_starvation": 0.2 <= food < 0.4, "te_demog_effects_run": full})
         eng.call("te_demog_absorbed_walk_init")
-        eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED)
+        eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=1.0, te_dg_p_md=1.0)
         eng.call("te_demog_absorbed_walk_pop")
         return eng.locals["te_dg_w_ebr"] / self.P_EB, eng.locals["te_dg_w_edr"] / self.P_ED
 
@@ -1727,6 +2077,27 @@ class TestAbsorbedScript(unittest.TestCase):
         self.assertEqual(self._run(laws, pop_type="laborers", food=0.3, literacy=0.5, full=False), (0.0, 0.0))
         pop = _block(_text(GENERATED_EFFECTS), "te_demog_absorbed_walk_pop")
         self.assertTrue(pop.lstrip().startswith("if = {\n\t\tlimit = { local_var:te_dg_w_rep > 0 }"), pop[:80])
+
+    def test_the_walk_sums_the_bare_curves_the_census_term_reaches(self):
+        """The trapezoid's start rate (te_demog_rates_refresh; the review of #907) moves by the change in M on the bare
+        curves of the pops whose multiplier the engine doesn't floor at 0 (te_dg_w_eb0m, te_dg_w_ed0m): severe
+        starvation's -0.9 floors a pop's births when M is negative, and a change in M doesn't reach it. Full only."""
+        for full, mult_b, mult_d, want in ((True, 0.4, 1.2, (500.0, 400.0)), (True, 0.0, 1.2, (0.0, 400.0)),
+                                           (True, 0.0, 0.0, (0.0, 0.0)), (False, 0.4, 1.2, (0.0, 0.0))):
+            with self.subTest(full=full, mult_b=mult_b, mult_d=mult_d):
+                eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0},
+                                   triggers={"te_demog_effects_run": full, "is_in_severe_starvation": False,
+                                             "is_in_mild_starvation": False})
+                eng.call("te_demog_absorbed_walk_init")
+                eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=mult_b, te_dg_p_md=mult_d)
+                eng.call("te_demog_absorbed_walk_pop")
+                self.assertEqual((eng.locals["te_dg_w_eb0m"], eng.locals["te_dg_w_ed0m"]), want)
+        body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+        loop = body[body.index("every_scope_pop = {"):]
+        self.assertLess(loop.index("set_local_variable = { name = te_dg_p_mb value = te_demog_pop_birth_mult }"),
+                        loop.index("te_demog_absorbed_walk_pop = yes"))
+        self.assertLess(loop.index("set_local_variable = { name = te_dg_p_md value = te_demog_pop_death_mult }"),
+                        loop.index("te_demog_absorbed_walk_pop = yes"))
 
     def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
         """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
@@ -3571,7 +3942,9 @@ class TestConsole(unittest.TestCase):
         for field, var in (("people", "state_population"), ("eb_target", "te_dg_eb_target"),
                            ("ed_target", "te_dg_ed_target"), ("rep_b", "te_dg_rep_b"), ("rep_d", "te_dg_rep_d"),
                            ("tb_b", "te_dg_tb_b"), ("tb_d", "te_dg_tb_d"), ("os_b", "te_dg_os_b"), ("os_d", "te_dg_os_d"),
-                           ("q_b", "te_dg_q_b"), ("q_d", "te_dg_q_d"), ("w", "te_dg_w")):
+                           ("q_b", "te_dg_q_b"), ("q_d", "te_dg_q_d"), ("w", "te_dg_w"),
+                           # the trapezoid's start rate for the next window (te_demog_window_events)
+                           ("sr_b", "te_dg_sr_b"), ("sr_d", "te_dg_sr_d")):
             self.assertIn(f"{field}=[THIS.Var('te_dg_dbg_", line, field)
             self.assertIn(var, body, var)
         self.assertIn("te_demog_cohorts_run = yes", console[console.rindex("option = {", 0, console.index(call)):
@@ -3613,7 +3986,8 @@ class TestFastMode(unittest.TestCase):
 
     def _refresh(self, eng, eb, eb0, ed, ed0):
         # fast mode's refresh alone: the census refresh before it left no census terms (Display only, no M yet)
-        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_rate_prev_b=0.0,
+        eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_eb0m=eb0,
+                          te_dg_w_ed0m=ed0, te_dg_rate_prev_b=0.0,
                           te_dg_rate_prev_d=0.0, te_dg_rate_new_b=0.0, te_dg_rate_new_d=0.0,
                           te_dg_rate_lines_b=0.0, te_dg_rate_lines_d=0.0)
         eng.call("te_demog_fast_refresh_rates")
@@ -3623,7 +3997,7 @@ class TestFastMode(unittest.TestCase):
     def _both(self, eng, eb, eb0, ed, ed0):
         """A clock step's two refreshes, as te_demog_state_clock_step runs them."""
         eng.locals.update(te_dg_w_eb=eb, te_dg_w_eb0=eb0, te_dg_w_ed=ed, te_dg_w_ed0=ed0, te_dg_w_ebr=0.0,
-                          te_dg_w_edr=0.0)
+                          te_dg_w_edr=0.0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
         eng.call("te_demog_rates_refresh")
         eng.call("te_demog_fast_refresh_rates")
 
@@ -3649,7 +4023,7 @@ class TestFastMode(unittest.TestCase):
         Hide it from the fast refresh and the term must still come through, from the refresh's locals."""
         eng = self._eng_full()
         eng.locals.update(te_dg_w_eb=1.05 * 475e3, te_dg_w_eb0=475e3, te_dg_w_ed=0.98 * 430e3, te_dg_w_ed0=430e3,
-                          te_dg_w_ebr=0.0, te_dg_w_edr=0.0)
+                          te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb0m=475e3, te_dg_w_ed0m=430e3)
         eng.call("te_demog_rates_refresh")
         self.assertIn("te_dg_mb", eng.vars)   # the applied branch ran (Full, a step's figures)
         mb, md = eng.vars["te_dg_mb"], eng.vars["te_dg_md"]
@@ -3720,7 +4094,7 @@ class TestFastMode(unittest.TestCase):
                                  "modifier:state_mortality_mult": o_d + md + fd})
             eng.locals.update(te_dg_w_eb=(1 + o_b + a_b + mb + fb) * eb0, te_dg_w_eb0=eb0,
                               te_dg_w_ed=(1 + o_d + a_d + md + fd) * ed0, te_dg_w_ed0=ed0,
-                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0)
+                              te_dg_w_ebr=a_b * eb0, te_dg_w_edr=a_d * ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0)
             eng.call("te_demog_rates_refresh")
             eng.call("te_demog_fast_refresh_rates")
             return eng.vars["te_dg_mb"], eng.vars["te_dg_fast_fb"], eng.vars["te_dg_md"], eng.vars["te_dg_fast_fd"]

@@ -390,6 +390,19 @@ def on_top_scale(engine, target):
     return clamp(engine / target - 1, P.ON_TOP_SCALE_MIN, P.ON_TOP_SCALE_MAX)
 
 
+def window_events(end_rate, start_rate=None):
+    """The engine's expected births or deaths over a step's window (the trapezoid, owner 2026-10-11; #894; the review
+    of #907). The walk's snapshot is the engine's rate on the step's day; the window takes WINDOW_START_WEIGHT x the
+    rate the last step left in force (after it set M, and fast mode its term) and the rest x today's, both in the same
+    units (a rate x the window, or a rate). Each end is the engine's whole rate, so every line that moved inside the
+    window counts at the engine's own weight: the lines on top, the absorbed lines M nets, the bare curves. With no
+    start rate (the first step after a seed, a new state, an old save) it is the snapshot. Never below 0. The script's
+    te_demog_window_events."""
+    if start_rate is None:
+        return end_rate
+    return max(0.0, P.WINDOW_START_WEIGHT * start_rate + (1 - P.WINDOW_START_WEIGHT) * end_rate)
+
+
 def starvation_terms(food_security):
     """(births, deaths) the engine adds for a pop at this food security (vanilla code static modifiers)."""
     if food_security < P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD:

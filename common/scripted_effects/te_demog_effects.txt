@@ -13,7 +13,10 @@
 #                       (what the census's own totals are measured against): each pop's
 #                       curves x its own multipliers, te_demog_pop_birth_mult and
 #                       _death_mult (gen_demographics.py, engine_rate_terms), x the
-#                       step's months (te_demog_step_months: 12, or fast mode's window)
+#                       step's months (te_demog_step_months: 12, or fast mode's window).
+#                       Under Full, the mean of the engine's rate at the window's start
+#                       and today's (the trapezoid, te_demog_window_events in
+#                       te_demog_rate_effects.txt)
 #   te_dg_agr_share     Peasants + Farmers over the state's population, 0-1;
 #                       inheritance's rural modifiers' multiplier (probe-checked,
 #                       London 0.174)
@@ -66,6 +69,8 @@
 #   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz, te_dg_eb_target,
 #   te_dg_ed_target     phase 2 step 4, te_demog_rate_effects.txt: the model's own rates, the
 #                       step's on-top scales and the target they were measured against
+#   te_dg_sr_b, te_dg_sr_d  the engine's rate per head at the start of the window that ends at
+#                       the next step (the trapezoid; te_demog_rate_effects.txt); a seed removes them
 #
 # Flows (Task 9), the people the engine moves and kills (spec §2.5):
 #   te_dg_war_in        state: war dead the owner shared out at its monthly pulses
@@ -165,11 +170,14 @@ te_demog_walks = {
 		set_local_variable = { name = te_dg_p_ed value = te_demog_pop_engine_deaths }
 		change_local_variable = { name = te_dg_w_eb0 add = local_var:te_dg_p_eb }
 		change_local_variable = { name = te_dg_w_ed0 add = local_var:te_dg_p_ed }
+		set_local_variable = { name = te_dg_p_mb value = te_demog_pop_birth_mult }
+		set_local_variable = { name = te_dg_p_md value = te_demog_pop_death_mult }
 		# the absorbed terms at its bare curves (literacy, mild starvation, its state's and class's absorbed
-		# lines), which the census's terms net out (te_demog_rates_refresh)
+		# lines), which the census's terms net out, and the bare curves those terms reach, the pops the engine
+		# doesn't floor at 0 (te_demog_rates_refresh)
 		te_demog_absorbed_walk_pop = yes
-		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_birth_mult } }
-		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_death_mult } }
+		change_local_variable = { name = te_dg_w_eb add = { value = local_var:te_dg_p_eb multiply = local_var:te_dg_p_mb } }
+		change_local_variable = { name = te_dg_w_ed add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_md } }
 		# the Gini's wealth band (spec 4.1; generated)
 		te_demog_gini_band_add = yes
 		if = {
@@ -237,6 +245,8 @@ te_demog_walks = {
 			divide = 100000
 		}
 	}
+	# under Full, the window's events: the mean of the engine's rate at its start and today's (the trapezoid; owner, 2026-10-11)
+	te_demog_window_events = yes
 	set_variable = { name = te_dg_agr_share value = { value = local_var:te_dg_w_agr divide = { value = local_var:te_dg_w_pop min = 1 } max = 1 } }
 	set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }
 	set_variable = { name = te_dg_bureaucrats value = local_var:te_dg_w_bur }
@@ -584,6 +594,15 @@ te_demog_seed = {
 	set_variable = { name = te_dg_dz value = 0 }
 	set_variable = { name = te_dg_eb_target value = 0 }
 	set_variable = { name = te_dg_ed_target value = 0 }
+	# and the window's start rate (te_demog_window_events): the next window has none
+	if = {
+		limit = { has_variable = te_dg_sr_b }
+		remove_variable = te_dg_sr_b
+	}
+	if = {
+		limit = { has_variable = te_dg_sr_d }
+		remove_variable = te_dg_sr_d
+	}
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	te_demog_set_scale = yes
 }
