@@ -706,19 +706,19 @@ Match the depth already there (CLAUDE.md, "Current means accurate, not exhaustiv
 
 ## 13. Owner calls
 
-1. **Post-Scarcity's −0.04 a Social Security level** (`extra_laws.txt:368`). Late-game §2.1 and call 11 move it to the
-   retirement family; late-game §2.2 says it "stays". **Recommendation: keep it on top.** At −0.2 by level 5 it is
-   everyone's leisure, not the old's retirement, which the participation model's after-pension share can't carry.
-   UBI's −0.02 a level moves (its per-level line stands in for pensions, as Old Age Pension's does).
-2. **The enactment events' birth boost for the other family laws.** Events .19, .55 and .79 grant the same +10% when
-   enacting any of the four family laws; the answer removes it for Population Control. **Recommendation: grant it
-   only while enacting Pro-Natalist Policy.** State-Sponsored Family Planning lowers births and Communal Child-Rearing
-   now leaves them alone, so a birth boost from their debates contradicts the law. Every game, like the other fixes.
-3. **The Family & Reproductive Policy group's AI weights** (parent §11.2; the group has none today). **Recommendation:
-   every game**, reading what the engine has (food security, Migration Crowding, population trend), with the census's
-   old share and youth bulge added where the census runs. They are a base-law fix of the same kind as §3.1. The
-   alternative is Full only, which leaves the AI never enacting the group outside Full.
-4. **Work deaths split by the participation model** (§2.5). **Recommendation: yes, in step 2**, so the panel's women at
-   work and the work deaths agree. It moves deaths a little under Full. The alternative keeps the law table.
-5. **Sex balance in step 4** (§4.4), pulled forward from the parent's phase 3 because the answer sizes it with phase 2.
-   **Recommendation: yes.** The alternative leaves it in phase 3 with the event wave.
+1. **Recommendation: keep Post-Scarcity's −0.04 a Social Security level on top** (`extra_laws.txt:368`). Late-game §2.1
+   and call 11 move it to the retirement family; late-game §2.2 says it "stays". At −0.2 by level 5 it is everyone's
+   leisure, not the old's retirement, which the participation model's after-pension share can't carry. UBI's −0.02 a
+   level moves (its per-level line stands in for pensions, as Old Age Pension's does).
+2. **Recommendation: grant the enactment events' birth boost only while enacting Pro-Natalist Policy**, in every game
+   like the other fixes. Events .19, .55 and .79 grant the same +10% when enacting any of the four family laws; the
+   answer removes it for Population Control. State-Sponsored Family Planning lowers births and Communal Child-Rearing
+   now leaves them alone, so a birth boost from their debates contradicts the law.
+3. **Recommendation: the Family & Reproductive Policy group's AI weights apply in every game** (parent §11.2; the group
+   has none today), reading what the engine has (food security, Migration Crowding, population trend), with the
+   census's old share and youth bulge added where the census runs. They are a base-law fix of the same kind as §3.1.
+   The alternative is Full only, which leaves the AI never enacting the group outside Full.
+4. **Recommendation: split work deaths by the participation model, in step 2** (§2.5), so the panel's women at work and
+   the work deaths agree. It moves deaths a little under Full. The alternative keeps the law table.
+5. **Recommendation: sex balance in step 4** (§4.4), pulled forward from the parent's phase 3 because the answer sizes
+   it with phase 2. The alternative leaves it in phase 3 with the event wave.

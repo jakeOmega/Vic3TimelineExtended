@@ -1089,14 +1089,19 @@ te_demog_pension_kind = {
 	}
 }
 # State scope: the owner's pension age, or the Standard position's where it has none yet (a save from before step 1).
+# The owner.var read follows te_tax_est_regrel_keep_now (te_tax_display_values.txt:639), guarded the same way.
 te_demog_pension_age = {
 	value = te_demog_k_pension_age_standard
 	if = {
-		limit = { owner = { has_variable = te_dg_pension_age } }
+		limit = { owner ?= { has_variable = te_dg_pension_age } }
 		value = owner.var:te_dg_pension_age
 	}
 }
 ```
+
+The interpreter replaces `te_demog_pension_age` with a fixture (`_engine_for`, `WORK_DEFAULTS`), and in step 1 it reads
+65 whether the variable is there or not, so the chain read is checked in game: Task 7's `pension_var=` and Task 8's
+item 5.
 
 - [ ] **Step 4: Run the tests and the golden**
 
@@ -2137,6 +2142,7 @@ class TestWorkforceCommand(unittest.TestCase):
         for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
             self.assertIn(f"te_debug_demog_work_{name}", line, name)
         self.assertIn("te_debug_demog_work_wf_target", line)
+        self.assertIn("te_debug_demog_pension_var", line)
 ```
 
 - [ ] **Step 2: Run them to see them fail**
@@ -2208,12 +2214,14 @@ te_debug_demog_work_low_share = { value = -1 if = { limit = { has_variable = te_
 te_debug_demog_work_wbase = { value = -1 if = { limit = { has_variable = te_dg_wbase } value = var:te_dg_wbase } }
 te_debug_demog_work_wf_engine = { value = -1 if = { limit = { has_variable = te_dg_wf_engine } value = var:te_dg_wf_engine } }
 te_debug_demog_work_wf_target = { value = -1 if = { limit = { has_variable = te_dg_at_work } value = te_demog_wf_target } }
+# the owner's own variable, -1 where it holds none: tells a working owner.var read from the Standard fallback
+te_debug_demog_pension_var = { value = -1 if = { limit = { owner ?= { has_variable = te_dg_pension_age } } value = owner.var:te_dg_pension_age } }
 ```
 
 `te_debug_demog_mods_line` gains a second `debug_log`:
 
 ```
-	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 ```
 
 
@@ -2272,8 +2280,9 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
   4. **The figures in 1836.** Option l in Britain's capital: `wa_share` about 0.6–0.7, `at_work` about 0.5,
      `wf_target` about 0.25, `wf_engine` about 0.25, `wbase` about 0.25, `old_age` about 58–62, `need` about 1.0,
      `pensioners` 0, `pension_age` 65.
-  5. **A pension country.** A country with Old Age Pension: `pensioners` above 0; switching its welfare law to UBI
-     removes the country variable that day and `pensioners` reads 0 at the state's next count.
+  5. **A pension country.** A country with Old Age Pension: `pension_var=65` (the owner's variable, read through the
+     `owner.var:` chain) and `pensioners` above 0; a country without one: `pension_var=-1`. Switching the welfare law to
+     UBI makes `pension_var=-1` that day and `pensioners` reads 0 at the state's next count.
   6. **The skew probe** (options f and g; unrun since #828): how fast a working-adult modifier moves a pop's workforce
      share. Step 2 needs it.
   7. **The benchmark** (option d): the step's cost within 25% of `main`'s.
