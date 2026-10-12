@@ -1,6 +1,7 @@
 # Demographics phase 2: what the census feeds — design
 
-> **Status: revised after the owner's answers to its ten calls (2026-10-12; §13), with two new calls open.** It designs phase 2's consequences as one piece in four steps,
+> **Status: revised after the owner's answers to its ten calls (2026-10-12; §13), with three calls open: 9 (reopened),
+> 11 and 12.** It designs phase 2's consequences as one piece in four steps,
 > in the owner's order of 2026-10-12: (1) the late game's interfaces, changing no number; (2) the workforce, pensions
 > and health costs; (3) the Family Policy measures; (4) conscription, the youth bulge and sex balance. It builds on the
 > parent spec (`2026-10-08-demographics-design.md`, cited as "parent §n": §7, §8, §11.2, §12, §13), the approved
@@ -8,7 +9,7 @@
 > It amends the parent's §7 (workforce, pension and health bill, conscription), §8.1 and §8.2 where it says so. Step 1's
 > implementation plan is `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`. No code here.
 > Numbers are targets or bands the harness must meet, each with a starting value; the harness picks the values and the
-> owner reviews the result (owner, 2026-10-12). §13 records the owner's answers and the two calls still open. The
+> owner reviews the result (owner, 2026-10-12). §13 records the owner's answers and the three calls still open. The
 > base-law fixes ship first, as their own small every-game PR (§3.1).
 
 ## Context
@@ -30,7 +31,7 @@
 
 | Question | Answer |
 |---|---|
-| What changes outside Full | Only the base-law fixes, which are balance fixes to the laws, not census mechanics: the Natalism Initiative goes from +50% births at 250 authority to **+15% at 100**; Pro-Natalist Subsidies' dependents' wage flips to **+**; Communal Child-Rearing picks one direction; Population Control Measures' enactment events stop granting a birth boost. Every census mechanic changes nothing outside Full |
+| What changes outside Full | Only the base-law fixes, which are balance fixes to the laws, not census mechanics: the Natalism Initiative goes from +50% births at 250 authority to **+15% at 100**; Pro-Natalist Subsidies' dependents' wage flips to **+**; Communal Child-Rearing's births change (§3.1; its magnitudes are call 9, reopened); Population Control Measures' enactment events stop granting a birth boost. Every census mechanic changes nothing outside Full |
 | Who picks phase 2's numbers | **The harness, within stated targets**; the owner reviews the result, not each number. 1836's workforce near vanilla's 0.25 and today's near 0.42; a full pro-natalist package moves fertility about 0.2–0.4 children (the most extreme package may move it a little more); conscription follows the pool (no floor; the +0.25 ceiling stays); youth bulge and sex-balance effects small |
 | The order | (1) the interfaces, changing no number; (2) workforce, pensions and health costs; (3) the Family Policy measures; (4) conscription and the youth bulge |
 
@@ -112,8 +113,8 @@ For each cohort and sex, workers = people × participation (late-game §2.1):
     participation = start(calendar age) × [below the end of the working ages (calendar) ? 1 : after-pension share]
                     × capacity(biological age) × the sex's rate
 
-Call 3's participation inputs (§1.7) adjust three of these: the sexes' rates in the working ages, the after-pension
-share and capacity, each within 0 to 1.
+Call 3's participation inputs (§1.7) adjust two of these: the sexes' rates in the working ages and capacity, each
+within 0 to 1.
 
 The after-pension share applies only where a pension law ends the working ages (Old Age Pension, UBI,
 Post-Scarcity). With none the working ages have no end, and participation at every age past the start is capacity ×
@@ -202,7 +203,7 @@ Late-game §2.1 and call 11 move the women's-work and retirement lines to script
 (2026-10-12) moves every other line too, as a change in who works rather than a flat add. Step 1 moves them all, and
 under every rule a pair re-applies their old flat values, since no workforce term exists until step 2. Under Full,
 from step 2, the census carries each line's effect instead: women's work through the women's rate, retirement through
-the pension age, the rest through four participation inputs (below).
+the pension age, the rest through three participation inputs (below).
 
 **The two families** (types in their own file, `demographics_workforce_line_types.txt`, which a release keeps as it
 keeps #892's). Each holds a carrier's old flat value, and the pair re-applies their sum outside Full:
@@ -221,10 +222,12 @@ out with the census's other inputs). They act only through the census's model:
 
 | Type | Read as |
 |---|---|
-| `state_male_labor_participation_add` | added to the men's rate in the working ages, at most 1 |
-| `state_labor_participation_add` | added to both sexes' rates in the working ages (women's after their own rate), each at most 1 |
-| `state_retiree_work_add` | added to the after-pension share, 0 to 1 |
-| `state_work_capacity_mult` | capacity × (1 + it), at most 1, at every age |
+| `state_male_labor_participation_add` | added to the men's rate in the working ages, 0 to 1 |
+| `state_labor_participation_add` | added to both sexes' rates in the working ages (women's after their own rate), each 0 to 1 |
+| `state_work_capacity_mult` | capacity × (1 + it), 0 to 1, at every age |
+
+No carrier moves the after-pension share, so there is no type for it yet; step 2's pension positions set the share
+directly.
 
 **The moved lines** (vanilla's by an INJECT that cancels the field and carries the type, #892's pattern; the mod's in
 place):
@@ -252,8 +255,8 @@ base-law PR removes it (§3.1).
 
 **Call 3's inventory: every line that was left on top.** Recommendations, for the owner to review. Sizes are
 realistic changes in who works, starting values for step 2's fit; "at 2020" is the change on the engine's scale for a
-2020 OECD-like structure (65% at 15–64, 18% over 65) at the starting scale of 0.74. The owner's "80% → 58% of men" is
-the form, not a number to hit.
+2020 OECD-like structure (65% at 15–64, 18% over 65) at the starting scale of 0.74. The owner's "80% → 85% of men aged
+18–65" (an increase) is the form, not a number to hit.
 
 | Carrier | How a state reads it | Today (flat) | Participation effect | At 2020 | Why |
 |---|---|---|---|---|---|
@@ -522,14 +525,14 @@ The overview gains **Old age from** (late-game §6.2) and shows the working-age 
 ### 3.1 The base-law fixes (every game)
 
 The owner's answers (2026-10-12): balance fixes to the base laws, applied whatever the rule. **They ship now as their
-own small every-game PR**, built from this table, ahead of step 1; none depends on the census. Calls 1, 6, 8 and 9
-settled the rows the first answer left open.
+own small every-game PR**, built from this table, ahead of step 1; none depends on the census. Calls 1, 6 and 8
+settled the rows the first answer left open; Communal Child-Rearing's magnitudes wait for call 9.
 
 | Fix | Today | After |
 |---|---|---|
 | Natalism Initiative (`extra_decrees.txt:244`) | +50% births, 250 authority | **+15%, 100 authority**. A small push now shows as a cohort later (parent §8.1). Its births line stays an engine field, on top of the census under Full |
 | Pro-Natalist Subsidies' dependents' wage (`extra_laws.txt:2693`) | −10% | **+10%**: family allowances raise dependents' income |
-| Communal Child-Rearing (`:2737`) | births −20% (on-top family), women's work +0.1; its Youth Center method (`pm_communal_child_rearing`, `extra_pms.txt:18539`) births +20% | **the law leaves fertility alone** (its −20% goes); women's work +0.1 stays (the women's-work family from step 1); the method goes to **+10%** (call 9). The method's +20% existed only to cancel the law's −20% (owner); with that gone, +10% leaves the group a small net birth boost through the building, which the owner accepts |
+| Communal Child-Rearing (`:2737`) | births −20% in every state (on-top family), women's work +0.1; its Youth Center method (`pm_communal_child_rearing`, `extra_pms.txt:18539`) births +20%, workforce-scaled. The method's +20% exists to cancel the law's −20% (owner) | **a births penalty in states without a State Youth Center, which the method cancels; magnitudes pending the owner** (call 9: recommended law −10% on the on-top family and method +10%, so a fully covered country is births-neutral; main today −20% / +20%). A State Youth Center has at most one level a state, so coverage is a yes or no per state. Women's work +0.1 stays (the women's-work family from step 1) |
 | The enactment events `extra_law_events.19`, `.55`, `.79` (`extra_law_events.txt:1389`, `:5631`, `:7196`) | an option grants `famrep_birth_rate_boost` (+10% births for `normal_modifier_time`, `law_enactment_modifiers.txt:728`) whichever of the four family laws is being enacted | **the boost only while enacting Pro-Natalist Policy** (call 6); none for Population Control, State-Sponsored Family Planning or Communal Child-Rearing |
 | Post-Scarcity (`extra_laws.txt:344`) | `state_working_adult_ratio_add = -0.04` per Social Security level (`:368`) | **the line goes** (call 1: "We can drop it") |
 
@@ -548,7 +551,9 @@ keep it outside Full:
 - **Population Control Measures:** its −10% births line is absorbed; its force comes from its measures (parent §8.1).
   Under Full the law alone no longer cuts births.
 - **State-Sponsored Family Planning:** the means +0.1, as now.
-- **Communal Child-Rearing:** nothing (§3.1).
+- **Communal Child-Rearing:** its births penalty stays on the on-top family, which the census applies at its rate; the
+  Youth Center method's births are an engine line in the state's read, so it cancels the penalty under Full as outside
+  it (§3.1, call 9).
 - **Traditional Family Structure:** nothing; allows Honours for Large Families.
 
 ### 3.3 Measures: how one works
@@ -638,8 +643,8 @@ the running cost and the remaining term; a measure another law would allow, dimm
 - Harness (`demographics_harness.py measures`, new): the full pro-natalist package's effect on rich low-fertility
   states (1.2–1.8 children) within 0.2–0.4; each single measure's effect; the coercive packages' effect reported; the
   money upkeep's share of revenue.
-- In game: the base-law fixes in a Disabled game (decree +15% at 100, dependents' wage +10%, Communal's tooltip with no
-  birth line, the method +10%, no boost when enacting Population Control); under Full a measure's button, term, notice
+- In game: the base-law fixes in a Disabled game (decree +15% at 100, dependents' wage +10%, Communal's penalty in a
+  state without a Youth Center and none with one, no boost when enacting Population Control); under Full a measure's button, term, notice
   on leaving the law, IG reactions; an AI country with a measure on.
 
 ## 4. Step 4: conscription, the youth bulge and sex balance
@@ -746,8 +751,8 @@ the conversion, as for B).
 ## 7. What changes outside Full
 
 1. **The base-law fixes** (§3.1), every game, in their own PR before step 1: the Natalism Initiative, Pro-Natalist's
-   dependents' wage, name and description, Communal Child-Rearing's direction and its Youth Center method, the
-   enactment events' boost and Post-Scarcity's dropped line.
+   dependents' wage, name and description, Communal Child-Rearing's births penalty and its Youth Center method (call
+   9's magnitudes), the enactment events' boost and Post-Scarcity's dropped line.
 2. **The moved workforce lines** (step 1): the same values on the same pops; one "Laws and Institutions" line in the
    workforce tooltip instead of one per carrier; an institution level's change reaches the pair up to a month later
    (call 2, accepted). The participation inputs (call 3) show on their carriers' tooltips in a development build and
@@ -809,8 +814,8 @@ Match the depth already there (CLAUDE.md, "Current means accurate, not exhaustiv
 ## 12. Dependencies and order
 
 - **The base-law PR lands first** (§3.1): every game, no census code. It removes Post-Scarcity's working-adult line,
-  so step 1's moved-lines table no longer has it, and it takes Communal Child-Rearing's birth line off #892's on-top
-  family.
+  so step 1's moved-lines table no longer has it, and it sets Communal Child-Rearing's births penalty and its Youth
+  Center method to call 9's magnitudes (the penalty stays on #892's on-top family).
 - **Late Marriage and Birth Spacing (#906) lands before step 1.** Step 1 edits the same places: `te_demog_seed`,
   `te_demog_step_begin`, `te_demog_prepare`, the generator, `demographics_params`/`_model`/`_harness`, and
   `_engine_for` in `test_demographics_registry.py`. Step 1's golden test is recorded on the merged tree, so it holds
@@ -832,20 +837,26 @@ Match the depth already there (CLAUDE.md, "Current means accurate, not exhaustiv
 2. **Step 1's two visible changes in every game: accepted** ("yes, that's fine"): one "Laws and Institutions" workforce
    line instead of one per carrier, and an institution level's line up to a month late.
 3. **The lines left on top: neither reading.** "I'd prefer to move them to other effects — criminal justice and
-   ministry of labor increasing labor participation (e.g. 80% of men aged 18-65 -> 58% of men aged 18-65) or similar,
-   and so forth." Each becomes a participation input (§1.7's inventory), re-applied at its old flat value outside Full
+   ministry of labor increasing labor participation (e.g. 80% of men aged 18-65 -> 85% of men aged 18-65) or similar,
+   and so forth." (The first message read "58%"; the owner corrected it the same day: the example is an increase.)
+   The carrier list is confirmed. Each becomes a participation input (§1.7's inventory), re-applied at its old flat value outside Full
    like the two families; under Full the engine's total is the census's target (§1.8).
 4. **The term nets only the define's 0.25** ("That's fine/makes sense"), so the pop types' own bases stay on top.
 5. **Work deaths split by the participation model, in step 2:** yes.
 6. **The enactment events' birth boost only while enacting Pro-Natalist Policy, in every game:** yes.
 7. **The family group's AI weights in every game:** fine.
 8. **The rename to "Pro-Natalist Policy" (key kept), in every game:** yes.
-9. **Communal Child-Rearing's Youth Center method from +20% to +10%:** approved. "That +20% is just to cancel the law's
-   −20%." With the law's −20% gone, +10% leaves the group a small net birth boost through the building.
 10. **Sex balance in step 4:** fine.
+
+Call 1 was confirmed the same day: Post-Scarcity's −0.04 goes in every game.
 
 ### Open
 
+9. **Reopened (owner, 2026-10-12): Communal Child-Rearing carries a births penalty in states without a State Youth
+   Center, which the Youth Center's method cancels; magnitudes pending the owner.** Recommendation: the law −10% births
+   (the on-top family, as today's −20% is) and the method +10%, so a fully covered country is births-neutral. Main
+   today has −20% / +20%; the method's +20% exists to cancel the law's −20% (owner). A State Youth Center has at most
+   one level a state, so coverage is a yes or no per state. Needed before the base-law PR's Communal rows.
 11. **Recommendation: size call 3's participation inputs as realistic changes in who works** (§1.7's inventory), not
     to match the flat lines. Under Full that leaves most of them about a fifth of their old workforce effect (State
     Eugenics far less, Pollution Impact about the same): a Pro-Capital Ministry at level 5 gives +0.024 on the engine's

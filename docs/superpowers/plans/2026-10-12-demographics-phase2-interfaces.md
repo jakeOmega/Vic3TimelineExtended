@@ -19,7 +19,8 @@ number moves in any game.
   biological band (capacity and need), the biological age being the calendar one until phase 3.
 - **The birth line moves into a generated effect** (`te_demog_slot_births`) that is today's line while the planned and
   unplanned schedules are the same object, and a two-term form when they differ (tested, not shipped).
-- **The workforce lines move like #892's**, but in their own generated files with their own refresh and gate, so the
+- **Every workforce line moves like #892's** (the owner's call 3: the ones once left on top too, each with a
+  participation input beside it), but in their own generated files with their own refresh and gate, so the
   census's births and deaths term never takes them off and #892's generated files and tests are untouched.
 
 **Tech Stack:** Paradox script (Victoria 3 1.14.5); Python 3.11/3.12 (`unittest`); `demographics_model.py` as the
@@ -32,6 +33,10 @@ It argues from the approved late-game design (`2026-10-11-demographics-late-game
 
 ## Dependencies and shared edits
 
+- **This plan lands after the base-law PR** (spec §3.1: every game, being built separately from calls 1, 6 and 8,
+  with Communal Child-Rearing's magnitudes from call 9, reopened). It drops Post-Scarcity's working-adult line, which
+  Task 6 would otherwise have to move, and changes Communal Child-Rearing's birth lines and the family laws' loc,
+  which nothing here touches (Communal's women's-work line stays and moves in Task 6).
 - **This plan lands after Late Marriage and Birth Spacing** (#906, branch `feat/demog-late-marriage`, being built in
   `/home/jakef/src/vic3te-demog-lm-build`). Start only once #906 has merged; branch from `main` then. #906 edits:
   - `te_demog_seed` and `te_demog_step_begin` (its `te_demog_practices_seed` / `_step` before `te_demog_prepare`);
@@ -87,8 +92,14 @@ so `value = workforce` and `strata = lower` work in a walk; option f's probe (`t
 `workforce`. A pop's base ratio is a type property, not a read: aristocrats 0.2, slaves 0.5 (vanilla `pop_types`), the
 rest the define's 0.25.
 
-**D7. Post-Scarcity's line** stays on top here (spec §13 call 1, recommended). If the owner moves it, Task 6 gains one
-row in the INJECT table and `WORKFORCE_LINES_ON_TOP` loses `law_post-scarcity`.
+**D7. Post-Scarcity's line is gone before step 1.** The owner dropped it in every game (spec §13 call 1), and the
+base-law PR removes it; Task 6 checks that it has.
+
+**D12. Some of call 3's carriers are no reader's.** `demographics_modifiers` walks laws, technologies and institutions.
+The two amendments, the two IG traits, Woman Soldiers and Pollution Impact are pinned by reading their blocks (Task 6),
+and whether the engine sums a script-only type from each into a state's read is an in-game check (Task 8, item 9). The
+mod already INJECTs an IG trait (`common/interest_group_traits/sol_expectations_vanilla_injections.txt:8`) and Pollution
+Impact (`extra_modifiers.txt:341`).
 
 **D8. The war dead's window stays 18–40.** The spec moves it to the conscription pool in step 4; doing it here would
 move the ring.
@@ -105,16 +116,25 @@ those three lines; Task 5 runs the three effects outside the census and checks t
 **D9. The seed's NRR keeps the one schedule.** `te_demog_life_table`'s NRR sum and the model's `nrr` read `te_dg_asfr`;
 phase 3, which parts the schedules, revisits them.
 
-## Owner decisions (to confirm in the PR)
+## Owner decisions
 
-**Spec §13 calls 1 and 2 must be answered before Task 1 starts.**
-1. Spec §13 call 1 (Post-Scarcity's line on top) decides one row of Task 6 (D7).
-2. Spec §13 call 2: step 1 changes the workforce tooltip's breakdown in every game (one "Laws and Institutions" line
-   for the moved lines instead of one per law, #892's precedent) and lets an institution level's line arrive up to a
-   month late. The values don't change. If the owner declines, Task 6 doesn't ship as written: stop and re-plan.
-3. Calls 3 and 4 (the lines on top, which base the term nets) are step 2's; step 1 stores `te_dg_wbase` and reads the
-   state's total either way.
-4. Execution: subagent-driven, with review stops after Tasks 3, 5 and 6 and a whole-branch review at the end.
+**The owner answered spec §13's ten calls on 2026-10-12**; the ones this plan rests on:
+1. Call 1: Post-Scarcity's line is dropped in every game by the base-law PR, not moved here (D7).
+2. Call 2: step 1's every-game changes are accepted (one "Laws and Institutions" workforce line instead of one per
+   carrier; an institution level's line up to a month late).
+3. Call 3: every line once left on top moves to the replaced family at its old value, with a participation input
+   beside it (spec §1.7's inventory; Task 6).
+4. Call 4: step 2's term nets the define's 0.25; step 1 stores `te_dg_wbase` for the hover.
+
+**Still open** (spec §13):
+- **Call 12, before Task 6:** Rosen's two lines stay flat on top (recommended). If the owner maps them to a
+  participation input instead, Task 6 gains two rows and `P.LIVE_WORKFORCE_LINES` empties.
+- **Call 11, before step 2's fit:** realistic sizes for the participation inputs (recommended). Step 1 ships the
+  starting sizes; step 2's fit may scale them.
+- Call 9 (Communal Child-Rearing's births penalty and Youth Center method, reopened) is the base-law PR's, not this
+  plan's.
+
+Execution: subagent-driven, with review stops after Tasks 3, 5 and 6 and a whole-branch review at the end.
 
 ## Global Constraints
 
@@ -145,7 +165,7 @@ phase 3, which parts the schedules, revisits them.
    `te_dg_old_age`, no country pension variable.
    - Expect: its next step computes every figure from guarded reads, with no read of a missing variable.
    - Pinned by Task 5's `test_a_census_from_before_step_1_steps_cleanly`.
-2. **Under Full, once a state's census term M is in force**, the women's-work and retirement lines still reach it.
+2. **Under Full, once a state's census term M is in force**, the women's-work and replaced lines still reach it.
    - Expect: the workforce pair holds the families' sum; only the births and deaths pairs come off.
    - Pinned by Task 6's `test_the_workforce_pair_survives_the_census_term`.
 3. **The welfare law changes** (Old Age Pension to UBI, or none to Old Age Pension).
@@ -157,8 +177,9 @@ phase 3, which parts the schedules, revisits them.
    - Pinned by Task 1's `TestStepOneChangesNoNumber`, run after every task.
 5. **A release build** (`scripts/release/comment_out_census_inputs.py`): the moved workforce lines must survive it,
    since the pair re-applies them in every game.
-   - Expect: the two new types are not census inputs and the release leaves their lines alone.
-   - Pinned by Task 6's `test_a_release_keeps_the_workforce_lines`.
+   - Expect: the two families are not census inputs and the release leaves their lines alone; the three
+     participation inputs are, and it comments them out.
+   - Pinned by Task 6's `test_a_release_keeps_the_families_and_drops_the_inputs`.
 
 ---
 
@@ -177,7 +198,9 @@ phase 3, which parts the schedules, revisits them.
 | `common/scripted_triggers/te_demog_triggers.txt` | modify | `te_demog_has_pension_law`, `te_demog_workforce_lines_apply` |
 | `common/on_actions/te_demog_on_actions.txt`, `events/te_demog_events.txt` | modify | the pension hook; the workforce refresh beside the lines refresh |
 | `common/modifier_type_definitions/demographics_workforce_line_types.txt` | create | the two families' types |
-| `common/laws/te_demog_engine_line_injections.txt`, `common/laws/extra_laws.txt`, `common/technology/technologies/era_6.txt`, `era_7.txt` | modify | the moved working-adult lines |
+| `common/modifier_type_definitions/demographics_modifier_types.txt` | modify (Task 5) | call 3's three participation inputs |
+| `common/laws/te_demog_engine_line_injections.txt`, `common/laws/extra_laws.txt`, `common/technology/technologies/era_6.txt`, `era_7.txt`, `common/amendments/extra_amendments.txt`, `common/static_modifiers/extra_modifiers.txt` | modify | the moved working-adult lines and their participation inputs |
+| `common/interest_group_traits/te_demog_workforce_injections.txt`, `common/static_modifiers/te_demog_workforce_injections.txt` | create | vanilla's two IG traits and Woman Soldiers, moved |
 | `common/script_values/gui_chart_script_values.txt` | modify | the hidden-modifier count gains the pair |
 | `scripts/analysis/demographics_modifiers.py` | modify | `engine_rate_lines(keep=)`, `engine_workforce_lines`, `workforce_line_carriers` |
 | `scripts/analysis/demographics_harness.py` | modify | `workforce` subcommand (Task 7) |
@@ -267,7 +290,7 @@ RICH = _inp(sol=40, literacy=0.98, urban_share=0.8,
 LINE_SUMS = {"state_demog_absorbed_mortality_mult": -0.03, "state_demog_ontop_mortality_mult": -0.05,
              "state_demog_absorbed_birth_rate_mult": 0.05, "state_demog_ontop_birth_rate_mult": 0.1,
              "state_demog_absorbed_laborers_mortality_mult": 0.05, "state_demog_ontop_mortality_wealth_mult": -0.01,
-             "state_demog_womens_work_ratio_add": 0.25, "state_demog_retirement_ratio_add": -0.03}
+             "state_demog_womens_work_ratio_add": 0.25, "state_demog_replaced_ratio_add": -0.03}
 
 
 def _census(inp, full, on_top):
@@ -426,10 +449,12 @@ Expected: OK. Then `git diff --stat` shows only the two new files.
     `P.HEALTH_NEED_1836`, `P.BIO_BANDS: tuple[int, ...]`, `P.PENSION_AGE: dict[str, int]`, `P.PENSION_LAW`,
     `P.NO_PENSION_AGE_LAWS`, `P.NO_WORKING_AGE_END`, `P.OLD_AGE_REMAINING`, `P.OLD_AGE_FROM`, `P.ASFR_PLANNED_SHAPE`,
     `P.ASFR_UNPLANNED_SHAPE`, `P.POP_BASE_RATIO`, `P.POP_BASE_RATIO_DEFAULT`, `P.WOMENS_WORK_TYPE`,
-    `P.RETIREMENT_TYPE`.
+    `P.REPLACED_TYPE`, `P.MALE_PARTICIPATION_TYPE`, `P.PARTICIPATION_TYPE`, `P.CAPACITY_TYPE`,
+    `P.PARTICIPATION_TYPES`.
   - `M.Inputs.low_share: float = 0.0`, `M.Inputs.pension_age: float | None = None`.
   - `M.band_value(table, age) -> float`, `M.child_work_share(inp) -> float`, `M.start_factor(inp, age) -> float`,
     `M.women_rate_law(inp) -> float`, `M.women_rate(inp) -> float`, `M.pension_kind(inp) -> int` (0, 1, 2),
+    `M.sex_rates(inp) -> (float, float)` (women's, men's), `M.capacity_at(inp, age) -> float`,
     `M.working_ages_end(inp, old_age) -> (float, bool, bool)`, `M.work_figures(ring, inp, old_age) -> dict`
     (`wa_share`, `at_work`, `pensioners`, `need`), `M.wf_target(figures) -> float`,
     `M.old_age_threshold(q) -> float`, `M.old_age(qf, qm) -> float`, `M.asfr_planned(r)`, `M.asfr_unplanned(r)`,
@@ -470,6 +495,18 @@ class TestPhase2Interfaces(unittest.TestCase):
         self.assertAlmostEqual(M.women_rate(lower), 0.8 * P.WOMEN_LOWER + 0.2 * P.WOMEN_BASE)
         self.assertAlmostEqual(M.women_rate(dataclasses.replace(full, low_share=0.8)), P.MEN_RATE,
                                msg="the floor never lowers a law's rate")
+
+    def test_call_3s_inputs_move_the_rates_and_capacity_within_bounds(self):
+        inp = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.03, P.PARTICIPATION_TYPE: 0.01, P.CAPACITY_TYPE: -0.1})
+        rf, rm = M.sex_rates(inp)
+        self.assertAlmostEqual(rm, P.MEN_RATE + 0.04)
+        self.assertAlmostEqual(rf, P.WOMEN_BASE + 0.01)
+        self.assertAlmostEqual(M.capacity_at(inp, 30), 0.9)
+        self.assertAlmostEqual(M.capacity_at(inp, 62), 0.95 * 0.9)
+        big = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.5, P.CAPACITY_TYPE: 0.5})
+        self.assertEqual(M.sex_rates(big)[1], 1.0)
+        self.assertEqual(M.capacity_at(big, 30), 1.0)
+        self.assertAlmostEqual(M.capacity_at(big, 82), 0.45)
 
     def test_the_working_ages_end_by_the_welfare_law(self):
         self.assertEqual(M.working_ages_end(M.Inputs(), 61.0), (999.0, False, False), "no pension: no end (D10)")
@@ -584,7 +621,13 @@ POP_BASE_RATIO = {"aristocrats": 0.2, "slaves": 0.5}
 POP_BASE_RATIO_DEFAULT = 0.25
 # The working-adult lines' two script-only families (Task 6; demographics_workforce_line_types.txt).
 WOMENS_WORK_TYPE = "state_demog_womens_work_ratio_add"
-RETIREMENT_TYPE = "state_demog_retirement_ratio_add"
+REPLACED_TYPE = "state_demog_replaced_ratio_add"   # lines a census term replaces under Full (the design §1.7)
+# Call 3's participation inputs (owner, 2026-10-12; the design §1.7): census-only types, defined in Task 5 and joining
+# DEMOG_TYPES with their carriers in Task 6.
+MALE_PARTICIPATION_TYPE = "state_male_labor_participation_add"   # the men's rate in the working ages
+PARTICIPATION_TYPE = "state_labor_participation_add"             # both sexes' rates in the working ages
+CAPACITY_TYPE = "state_work_capacity_mult"                       # capacity x (1 + it), at every age
+PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYPE)
 ```
 
 - [ ] **Step 4: The model** (`demographics_model.py`)
@@ -668,6 +711,20 @@ def women_rate(inp):
     return (max(w, P.WOMEN_LOWER) - w) * inp.low_share + w
 
 
+def sex_rates(inp):
+    """(women's, men's) rates in the working ages with call 3's participation inputs, each 0 to 1 (te_dg_wk_rf,
+    te_dg_wk_rm in te_demog_work_setup)."""
+    both = inp.mods.get(P.PARTICIPATION_TYPE, 0.0)
+    rf = min(max(women_rate(inp) + both, 0.0), 1.0)
+    rm = min(max(P.MEN_RATE + inp.mods.get(P.MALE_PARTICIPATION_TYPE, 0.0) + both, 0.0), 1.0)
+    return rf, rm
+
+
+def capacity_at(inp, age):
+    """Capacity at a biological age with call 3's input: the table x (1 + it), 0 to 1 (te_demog_enter_bio_band)."""
+    return min(band_value(P.CAPACITY, age) * max(1 + inp.mods.get(P.CAPACITY_TYPE, 0.0), 0.0), 1.0)
+
+
 def pension_kind(inp):
     """1 under Old Age Pension; 2 under UBI or Post-Scarcity (no pension age); else 0 (te_demog_pension_kind)."""
     if P.PENSION_LAW in inp.laws:
@@ -693,7 +750,7 @@ def work_figures(ring, inp, old_age):
     """Phase 2 step 1's figures over ring.by_age() (ages after the step; the pool at 150): te_demog_work_slot and
     te_demog_work_finish. The biological age is the calendar one until phase 3."""
     end, after_on, bill_on = working_ages_end(inp, old_age)
-    rate_f, rate_m = women_rate(inp), P.MEN_RATE
+    rate_f, rate_m = sex_rates(inp)
     total = wa = workers = pens = need = 0.0
     for a, f, m in ring.by_age():
         ab = a                                  # the biological index (phase 3: less the band's deficit)
@@ -709,7 +766,7 @@ def work_figures(ring, inp, old_age):
                 pens += p
         elif start > 0:
             wa += p
-        workers += (f * rate_f + m * rate_m) * start * band_value(P.CAPACITY, ab) * share
+        workers += (f * rate_f + m * rate_m) * start * capacity_at(inp, ab) * share
     return {"wa_share": wa / max(total, 1.0), "at_work": workers / max(wa, 1.0),
             "pensioners": pens / max(total, 1.0), "need": need / max(total, 1.0) / P.HEALTH_NEED_1836}
 
@@ -820,7 +877,8 @@ class TestPhase2Generated(unittest.TestCase):
 
     def test_the_bands_are_the_tables(self):
         for a in P.BIO_BANDS:
-            self.assertIn(f"value = {gen.lit(M.band_value(P.CAPACITY, a))} }}", self.effects)
+            self.assertIn(f"value = {{ value = {gen.lit(M.band_value(P.CAPACITY, a))} multiply = local_var:te_dg_wk_capm "
+                          "max = 1 }", self.effects)
         self.assertRegex(self.effects, r"te_demog_enter_cal_band = \{")
         self.assertRegex(self.effects, r"te_demog_enter_bio_band = \{")
 
@@ -962,7 +1020,9 @@ def work_bands(o):
 
     def bio_leaf(o, i):
         a = bio[i]
-        o(f"set_local_variable = {{ name = te_dg_cap value = {lit(M.band_value(P.CAPACITY, a))} }}")
+        # call 3's capacity input (te_dg_wk_capm, te_demog_work_setup) x the table, at most 1 (demographics_model.capacity_at)
+        o(f"set_local_variable = {{ name = te_dg_cap value = {{ value = {lit(M.band_value(P.CAPACITY, a))} "
+          "multiply = local_var:te_dg_wk_capm max = 1 } }")
         o(f"set_local_variable = {{ name = te_dg_needw value = {lit(M.band_value(P.HEALTH_NEED, a))} }}")
         o(f"set_local_variable = {{ name = te_dg_next_bio value = {bio[i + 1] if i + 1 < len(bio) else 999} }}")
 
@@ -1210,6 +1270,8 @@ Expected: OK.
     `te_demog_work_finish`;
   - the header inventory lists `te_dg_wa_share`, `_at_work`, `_pensioners`, `_need`, `_old_age`, `_low_share`,
     `_wbase`, `_wf_engine`.
+- Modify: `common/modifier_type_definitions/demographics_modifier_types.txt`, `localization/english/te_modifiers_l_english.yml`
+  (call 3's three participation inputs)
 - Modify: `common/script_values/te_demog_values.txt` (`te_demog_women_rate_law`, `te_demog_women_rate`,
   `te_demog_low_share`, `te_demog_tfr_factor`, `te_demog_tfr_planned`, `te_demog_tfr_unplanned`,
   `te_demog_tfr_planned_share`, `te_demog_wf_target`, `te_demog_old_age_average`, `te_demog_old_age_common`)
@@ -1229,7 +1291,8 @@ Every engine that runs `te_demog_prepare` now reads four owner values; most test
 ```python
 # The owner's reads phase 2 step 1's census makes (te_demog_work_setup), for engines that don't give them.
 WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
-                 "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0}
+                 "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
+                 **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
 ```
 
 and in `_Engine.__init__`, `self.fixtures = dict(fixtures)` becomes `self.fixtures = {**WORK_DEFAULTS, **fixtures}`.
@@ -1237,7 +1300,8 @@ and in `_Engine.__init__`, `self.fixtures = dict(fixtures)` becomes `self.fixtur
 `_mod_fixtures` adds the women's-work family:
 
 ```python
-    out[f"modifier:{P.WOMENS_WORK_TYPE}"] = inp.mods.get(P.WOMENS_WORK_TYPE, 0.0)
+    for t in (P.WOMENS_WORK_TYPE, *P.PARTICIPATION_TYPES):
+        out[f"modifier:{t}"] = inp.mods.get(t, 0.0)
 ```
 
 `_engine_for`'s fixtures add the owner's reads, and its `eng.vars.update` the walk's lower strata:
@@ -1263,7 +1327,8 @@ wherever it now reads `self.INP` (default unchanged, so every existing test runs
 
     def _work_inp(self, **kw):
         inp = dataclasses.replace(self.INP, **{**self.WORK, **kw})
-        inp.mods = {**inp.mods, P.WOMENS_WORK_TYPE: 0.15}
+        inp.mods = {**inp.mods, P.WOMENS_WORK_TYPE: 0.15, P.MALE_PARTICIPATION_TYPE: 0.02,
+                    P.PARTICIPATION_TYPE: 0.01, P.CAPACITY_TYPE: -0.05}   # call 3's inputs ride through the figures
         return inp
 
     def _work_figures(self, eng, ring, inp):
@@ -1382,7 +1447,43 @@ class TestWorkWalk(unittest.TestCase):
 Run: `$V -m unittest test_demographics_registry.TestCohortScript test_demographics_registry.TestWorkWalk -v 2>&1 | grep -E '^(Ran |OK|FAILED)|Error'`
 Expected: FAIL (`te_dg_wa_share` missing; `te_demog_work_walk_pop` not found).
 
-- [ ] **Step 4: The values** (`te_demog_values.txt`, after `te_demog_tfr`)
+- [ ] **Step 4: The participation inputs' types** (call 3; `demographics_modifier_types.txt`, at its end, and
+  `te_modifiers_l_english.yml` beside `state_work_mortality_mult`). Their carriers come in Task 6.
+
+```
+# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; the owner's call 3):
+# the census's participation inputs, carried beside the replaced family's flat lines. Census-only: a release comments
+# their lines out.
+state_male_labor_participation_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+}
+state_labor_participation_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+}
+state_work_capacity_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+```
+
+```
+ state_male_labor_participation_add:0 "Men at Work"
+ state_male_labor_participation_add_desc:0 "The share of working-age men who work. Used by the census on the Demographics tab."
+ state_labor_participation_add:0 "People at Work"
+ state_labor_participation_add_desc:0 "The share of working-age women and men who work. Used by the census on the Demographics tab."
+ state_work_capacity_mult:0 "Fitness for Work"
+ state_work_capacity_mult_desc:0 "How fit people are to work at each age, most of all past 60. Used by the census on the Demographics tab."
+```
+
+- [ ] **Step 4b: The values** (`te_demog_values.txt`, after `te_demog_tfr`)
 
 ```
 # Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1). State scope.
@@ -1467,8 +1568,23 @@ New effects (after `te_demog_close_accumulators`):
 # pensioners, the 10-14s' share, the sexes' rates and planned births' share.
 te_demog_work_setup = {
 	set_local_variable = { name = te_dg_child_work value = te_demog_child_work }
-	set_local_variable = { name = te_dg_wk_rm value = te_demog_k_men_rate }
-	set_local_variable = { name = te_dg_wk_rf value = te_demog_women_rate }
+	# the sexes' rates and capacity with call 3's participation inputs, each 0 to 1 (demographics_model.sex_rates,
+	# capacity_at); te_demog_enter_bio_band multiplies its capacity by te_dg_wk_capm
+	set_local_variable = {
+		name = te_dg_wk_rm
+		value = {
+			value = te_demog_k_men_rate
+			add = modifier:state_male_labor_participation_add
+			add = modifier:state_labor_participation_add
+			max = 1
+			min = 0
+		}
+	}
+	set_local_variable = {
+		name = te_dg_wk_rf
+		value = { value = te_demog_women_rate add = modifier:state_labor_participation_add max = 1 min = 0 }
+	}
+	set_local_variable = { name = te_dg_wk_capm value = { value = 1 add = modifier:state_work_capacity_mult min = 0 } }
 	# no pension law: the working ages run to capacity's end, which never comes (D10)
 	set_local_variable = { name = te_dg_wa_end value = 999 }
 	set_local_variable = { name = te_dg_pens_on value = 0 }
@@ -1676,20 +1792,26 @@ Expected: OK.
 
 ---
 
-### Task 6: The workforce lines move to two script-only families (review stop)
+### Task 6: Every workforce line moves to two script-only families, with call 3's participation inputs (review stop)
 
 **Files:**
 - Create: `common/modifier_type_definitions/demographics_workforce_line_types.txt`
-- Modify: `common/laws/te_demog_engine_line_injections.txt` (vanilla's lines: Women in the Fields, Women in the
+- Create: `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's `ig_trait_solidarity`,
+  `ig_trait_bourse_du_travail`; the mod already INJECTs IG traits: `sol_expectations_vanilla_injections.txt:8`)
+- Create: `common/static_modifiers/te_demog_workforce_injections.txt` (vanilla's `modifier_woman_soldiers`)
+- Modify: `common/laws/te_demog_engine_line_injections.txt` (vanilla's laws: Women in the Fields, Women in the
   Workplace and Women's Suffrage inside their existing blocks; new blocks for Women Own Property and Old Age Pension)
-- Modify: `common/laws/extra_laws.txt` (Protected Class `:4146`, State-Sponsored Family Planning `:2718`, Communal
-  Child-Rearing `:2746`, Pro-Natalist Subsidies `:2704`, Universal Basic Income `:311`), `era_6.txt:65`,
-  `era_7.txt:502`, `era_7.txt:527`
-- Modify: `scripts/analysis/demographics_params.py` (the workforce lines' section)
+- Modify: `common/laws/extra_laws.txt` (in place: Protected Class `:4146`, State-Sponsored Family Planning `:2718`,
+  Communal Child-Rearing `:2746`, Pro-Natalist Subsidies `:2704`, Universal Basic Income `:311`, Restorative Justice
+  `:1551`, Rehabilitation-Focused `:1570`, State Eugenics `:3087`, the Pro-Labor and Pro-Capital Ministries of Labour
+  `:3673`, `:3696`), `era_6.txt:65`, `era_7.txt:502`, `era_7.txt:527`
+- Modify: `common/amendments/extra_amendments.txt` (Mandatory Minimums `:270`, Community Service `:317`)
+- Modify: `common/static_modifiers/extra_modifiers.txt:345` (the mod's line on Pollution Impact)
+- Modify: `scripts/analysis/demographics_params.py` (the workforce lines' section; `DEMOG_TYPES` gains the
+  participation types)
 - Modify: `scripts/analysis/demographics_modifiers.py` (`engine_rate_lines(keep=)`, `engine_workforce_lines`,
   `workforce_line_carriers`)
-- Modify: `scripts/generators/gen_demographics.py` (`_workforce_line_fields`, `render_workforce_line_modifiers`,
-  `_values`, `_effects`; `plan_outputs`)
+- Modify: `scripts/generators/gen_demographics.py` (`_workforce_line_fields`, the shared renderers, `plan_outputs`)
 - Create (generated): `te_demog_workforce_line_effects_generated.txt`, `te_demog_workforce_line_values_generated.txt`,
   `te_demog_workforce_line_modifiers_generated.txt`
 - Modify: `common/scripted_triggers/te_demog_triggers.txt` (`te_demog_workforce_lines_apply`),
@@ -1700,30 +1822,39 @@ Expected: OK.
   `TestWorkforceLinesMoved`, `TestWorkforceLinesScript`), `test_demographics_modifiers.py`
 
 **Interfaces:**
+- Consumes: Task 2's `P.WOMENS_WORK_TYPE`, `P.REPLACED_TYPE`, `P.PARTICIPATION_TYPES` and its three names; Task 5's
+  type definitions.
 - Produces: `P.WORKING_ADULT_FIELD`, `P.WORKFORCE_LINE_FIELDS`, `P.WORKFORCE_LINE_SHORT`, `P.WORKFORCE_LINE_TYPES`,
-  `P.WORKFORCE_LINES_ON_TOP`; `DM.engine_workforce_lines(root=ROOT) -> {(kind, key, block, field): (family, value)}`,
+  `P.LIVE_WORKFORCE_LINES`; `DM.engine_workforce_lines(root=ROOT) -> {(kind, key, block, field): (family, value)}`,
   `DM.workforce_line_carriers(root=ROOT) -> [Carrier]`; script `te_demog_workforce_lines_refresh`,
   `te_demog_workforce_lines_clear`, `te_demog_line_working_adults_up`/`_down`, `te_demog_line_working_adults`
-  (the families' sum), `te_demog_line_working_adults_applied`; state variable `te_dg_ln_working_adults`.
+  (both families' sum), `te_demog_line_working_adults_applied`; state variable `te_dg_ln_working_adults`.
+
+**Before you start:** the base-law PR must be on `main` (it drops Post-Scarcity's line, spec §3.1). If
+`git grep -n "state_working_adult_ratio_add" common/laws/extra_laws.txt` still shows `law_post-scarcity`, stop.
 
 - [ ] **Step 1: The parameters** (`demographics_params.py`, after `ENGINE_FIELDS_ON_TOP`)
 
 ```python
-# Phase 2 step 1 (the design §1.7; late-game call 11): the working-adult lines that set women's work and the ones the
-# census's ages replace, on two script-only families (demographics_workforce_line_types.txt), re-applied by their own
-# pair while no workforce term is in force (te_demog_workforce_lines_apply: not Full, or no te_dg_mw, step 2's term).
-# Their own files and parameters, so the births and deaths term never takes them off (D3).
+# Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
+# script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
+# while no workforce term is in force (te_demog_workforce_lines_apply: not Full, or no te_dg_mw, step 2's term). Their
+# own files and parameters, so the births and deaths term never takes them off (D3).
 WORKING_ADULT_FIELD = "state_working_adult_ratio_add"
 WORKFORCE_LINE_FIELDS = (WORKING_ADULT_FIELD,)
 WORKFORCE_LINE_SHORT = {WORKING_ADULT_FIELD: "working_adults"}
 WORKFORCE_LINE_TYPES = {("womens_work", WORKING_ADULT_FIELD): WOMENS_WORK_TYPE,
-                        ("retirement", WORKING_ADULT_FIELD): RETIREMENT_TYPE}
-# Carriers whose working-adult line stays an engine field (the design §1.7, "left on top"; Post-Scarcity per §13 call 1).
-WORKFORCE_LINES_ON_TOP = frozenset({
-    "law_restorative_justice", "law_rehabilitation_focused_criminal_justice", "law_pro_labor_ministry_of_labor",
-    "law_pro_capital_ministry_of_labor", "law_state_eugenics_program", "law_post-scarcity",
+                        ("replaced", WORKING_ADULT_FIELD): REPLACED_TYPE}
+# The only engine working-adult lines left in common/ (file, top-level block): Rosen's androids (call 12), the pairs and
+# the console's probe; the cancels in the injection files are checked against their families' lines by the MOVED tests.
+LIVE_WORKFORCE_LINES = frozenset({
+    ("extra_companies_flavored.txt", "company_rosen_association"),
+    ("unique_pms.txt", "pm_rosen_association_hq"),
 })
 ```
+
+and `DEMOG_TYPES` gains the participation types (their carriers arrive in this task):
+`DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES`.
 
 - [ ] **Step 2: Write the failing tests**
 
@@ -1732,9 +1863,10 @@ paths beside `LINE_EFFECTS`, and add the first two to `_Engine.__init__`'s lists
 
 ```python
 class TestWorkforceLinesMoved(unittest.TestCase):
-    """Phase 2 step 1 (the design §1.7): the women's-work and retirement lines sit on their families' types at their
-    old values; every other working-adult line on a law, technology or institution is listed as on top."""
+    """Phase 2 step 1 (the design §1.7): every working-adult line sits on its family's type at its old value, with call
+    3's participation input beside it; the only live engine lines left are Rosen's."""
 
+    # laws and technologies, read back by DM.engine_workforce_lines
     MOVED = {
         ("law", "law_women_in_the_fields", "modifier"): ("womens_work", 0.3),
         ("law", "law_women_own_property", "modifier"): ("womens_work", 0.05),
@@ -1746,9 +1878,37 @@ class TestWorkforceLinesMoved(unittest.TestCase):
         ("technology", "contraceptive_pill", "modifier"): ("womens_work", 0.05),
         ("technology", "second_wave_feminism", "modifier"): ("womens_work", 0.025),
         ("technology", "personal_appliances", "modifier"): ("womens_work", 0.025),
-        ("law", "law_old_age_pension", "institution_modifier"): ("retirement", -0.01),
-        ("law", "law_universal_basic_income", "institution_modifier"): ("retirement", -0.02),
-        ("law", "law_pro_natalist_subsidies", "modifier"): ("retirement", -0.05),
+        ("law", "law_old_age_pension", "institution_modifier"): ("replaced", -0.01),
+        ("law", "law_universal_basic_income", "institution_modifier"): ("replaced", -0.02),
+        ("law", "law_pro_natalist_subsidies", "modifier"): ("replaced", -0.05),
+        ("law", "law_restorative_justice", "modifier"): ("replaced", 0.025),
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier"): ("replaced", 0.05),
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier"): ("replaced", 0.01),
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier"): ("replaced", 0.02),
+        ("law", "law_state_eugenics_program", "modifier"): ("replaced", 0.05),
+    }
+    # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11)
+    PARTICIPATION = {
+        ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.02,
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.03,
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.005,
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.01,
+        ("law", "law_state_eugenics_program", "modifier", P.CAPACITY_TYPE): 0.1,
+    }
+    # the carriers no reader walks: (file, block) -> the lines its block must hold
+    BLOCKS = {
+        ("common/amendments/extra_amendments.txt", "amendment_community_service"):
+            (f"{P.REPLACED_TYPE} = 0.01", f"{P.MALE_PARTICIPATION_TYPE} = 0.01"),
+        ("common/amendments/extra_amendments.txt", "amendment_mandatory_minimums"):
+            (f"{P.REPLACED_TYPE} = -0.01", f"{P.MALE_PARTICIPATION_TYPE} = -0.01"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_solidarity"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_bourse_du_travail"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+        ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_woman_soldiers"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
+        ("common/static_modifiers/extra_modifiers.txt", "INJECT:state_region_pollution_health"):
+            (f"{P.REPLACED_TYPE} = -0.05", f"{P.CAPACITY_TYPE} = -0.1"),
     }
 
     def test_each_line_sits_on_its_familys_type_at_its_old_value(self):
@@ -1758,17 +1918,47 @@ class TestWorkforceLinesMoved(unittest.TestCase):
             self.assertEqual(got[k][0], family, k)
             self.assertAlmostEqual(got[k][1], value, places=6, msg=k)
 
-    def test_the_only_live_lines_are_on_top(self):
-        live = {k[1] for k, v in DM.engine_rate_lines(keep=lambda f: f == P.WORKING_ADULT_FIELD).items()
-                if abs(v) > 1e-9}
-        self.assertEqual(live, set(P.WORKFORCE_LINES_ON_TOP))
+    def test_each_law_carries_its_participation_input(self):
+        names = set(P.PARTICIPATION_TYPES)
+        got = {k: v for k, v in DM.engine_rate_lines(keep=lambda f: f in names).items() if abs(v) > 1e-9}
+        self.assertEqual(set(got), set(self.PARTICIPATION))
+        for k, value in self.PARTICIPATION.items():
+            self.assertAlmostEqual(got[k], value, places=6, msg=k)
 
-    def test_a_release_keeps_the_workforce_lines(self):
-        """Review Focus 5: the release script comments out only demographics_modifier_types.txt's types."""
+    def test_the_other_carriers_blocks(self):
+        for (rel, block), lines in self.BLOCKS.items():
+            body = re.sub(r"#[^\n]*", "", _block(_text(ROOT / rel), block))
+            for line in lines:
+                self.assertIn(line, body, (block, line))
+            if "INJECT:" not in block:
+                self.assertNotIn("state_working_adult_ratio_add", body, block)
+
+    def test_no_live_line_but_rosens(self):
+        """A working-adult line added anywhere in common/ fails here until it is given a family or listed (the design
+        §1.7: the census treats an unlisted line as the remainder on top, and this keeps the list honest)."""
+        live = set()
+        skip = {"te_demog_engine_line_injections.txt", "te_demog_workforce_injections.txt",
+                "te_demog_workforce_line_modifiers_generated.txt", "te_debug_demog_modifiers.txt",
+                "mod_entity_modifier_types.txt"}
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            if path.name in skip:
+                continue
+            text = re.sub(r"#[^\n]*", "", _text(path))
+            if not re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", text):
+                continue
+            for m in re.finditer(r"^([\w.:-]+) = \{", text, re.M):
+                if re.search(r"\bstate_working_adult_ratio_add\s*=\s*-?\d", _block(text, m.group(1))):
+                    live.add((path.name, m.group(1)))
+        self.assertEqual(live, set(P.LIVE_WORKFORCE_LINES))
+
+    def test_a_release_keeps_the_families_and_drops_the_inputs(self):
+        """Review Focus 5: the release script comments out demographics_modifier_types.txt's types only."""
         census_types = _text(ROOT / "common" / "modifier_type_definitions" / "demographics_modifier_types.txt")
         for t in P.WORKFORCE_LINE_TYPES.values():
             self.assertNotIn(t, census_types)
             self.assertNotIn(t, P.DEMOG_TYPES)
+        for t in P.PARTICIPATION_TYPES:
+            self.assertIn(f"{t} = {{", census_types)
 
     def test_the_types_copy_the_fields_format(self):
         blocks = _raw_blocks([ROOT / "common" / "modifier_type_definitions" /
@@ -1780,10 +1970,10 @@ class TestWorkforceLinesMoved(unittest.TestCase):
 
 
 class TestWorkforceLinesScript(unittest.TestCase):
-    """te_demog_workforce_lines_refresh: the pair at the two families' sum while no workforce term is in force."""
+    """te_demog_workforce_lines_refresh: the pair at both families' sum while no workforce term is in force."""
 
-    def _eng(self, womens=0.25, retire=-0.03, full=False, census_term=False, workforce_term=False):
-        fixtures = {f"modifier:{P.WOMENS_WORK_TYPE}": womens, f"modifier:{P.RETIREMENT_TYPE}": retire}
+    def _eng(self, womens=0.25, replaced=-0.03, full=False, census_term=False, workforce_term=False):
+        fixtures = {f"modifier:{P.WOMENS_WORK_TYPE}": womens, f"modifier:{P.REPLACED_TYPE}": replaced}
         eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
         if census_term:
             eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3, te_dg_q_b=0.0, te_dg_q_d=0.0)
@@ -1813,7 +2003,7 @@ class TestWorkforceLinesScript(unittest.TestCase):
         self.assertNotIn("te_dg_ln_working_adults", eng.vars)
 
     def test_a_negative_sum_takes_the_down_pair(self):
-        eng = self._eng(womens=0.0, retire=-0.05)
+        eng = self._eng(womens=0.0, replaced=-0.05)
         eng.call("te_demog_workforce_lines_refresh")
         self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_down"], 0.05)
 
@@ -1832,7 +2022,9 @@ class TestWorkforceLinesScript(unittest.TestCase):
             self.assertIn(f' {name}:0 "Laws and Institutions"', loc)
 ```
 
-`test_demographics_modifiers.py`:
+`test_demographics_modifiers.py`: in `test_each_type_sits_where_its_design_puts_it`, `allowed` gains
+`P.MALE_PARTICIPATION_TYPE: {"law"}, P.PARTICIPATION_TYPE: {"law_institution"}, P.CAPACITY_TYPE: {"law"}`
+(`test_every_type_has_a_carrier` then holds: each has a law carrier). And:
 
 ```python
 class TestWorkforceReaders(unittest.TestCase):
@@ -1841,12 +2033,12 @@ class TestWorkforceReaders(unittest.TestCase):
         self.assertTrue(lines)
         for (kind, key, block, field), (family, value) in lines.items():
             self.assertEqual(field, P.WORKING_ADULT_FIELD)
-            self.assertIn(family, ("womens_work", "retirement"))
-        self.assertEqual(DM.engine_lines(), DM.engine_lines(), "the births and deaths reader is unchanged")
+            self.assertIn(family, ("womens_work", "replaced"))
 
     def test_carriers_keep_the_engines_scaling(self):
         by_key = {c.key: c for c in DM.workforce_line_carriers()}
         self.assertEqual(by_key["law_old_age_pension"].kind, "law_institution")
+        self.assertEqual(by_key["law_pro_capital_ministry_of_labor"].kind, "law_institution")
         self.assertEqual(by_key["law_womens_suffrage"].kind, "law")
         self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
 ```
@@ -1864,8 +2056,9 @@ Expected: FAIL.
 
 ```python
 def engine_workforce_lines(root=ROOT):
-    """{(kind, key, block, field): (family, value)}: the working-adult lines moved to the women's-work and retirement
-    types (phase 2 step 1), read back from the carriers as engine_lines() reads the births and deaths ones."""
+    """{(kind, key, block, field): (family, value)}: the working-adult lines moved to the women's-work and replaced
+    types (phase 2 step 1), read back from the laws and technologies as engine_lines() reads the births and deaths
+    ones. The amendments, IG traits and static modifiers are no reader's: TestWorkforceLinesMoved reads their blocks."""
     names = set(P.WORKFORCE_LINE_TYPES.values())
     back = {name: fam_field for fam_field, name in P.WORKFORCE_LINE_TYPES.items()}
     out = {}
@@ -1892,6 +2085,9 @@ def workforce_line_carriers(root=ROOT):
     return out
 ```
 
+(`load_carriers`, which reads `P.DEMOG_TYPES` from laws, technologies and institutions, now also finds the
+participation inputs on the laws; the model's scenarios take them through `DM.totals`.)
+
 - [ ] **Step 5: The types and the carriers**
 
 `demographics_workforce_line_types.txt` (UTF-8 with BOM, tabs):
@@ -1900,11 +2096,12 @@ def workforce_line_carriers(root=ROOT):
 # demographics_workforce_line_types.txt
 #
 # Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; late-game call
-# 11): the engine's working-adult lines that set women's work, and those the census's ages replace (retirement), as
-# script-only types the engine sums but doesn't apply. The mod re-applies both while no workforce term is in force
-# (te_demog_workforce_lines_refresh); from step 2, under Full, the participation model reads the women's-work family
-# and the pension age does the retirement family's work. Each copies state_working_adult_ratio_add's format
-# (mod_entity_modifier_types.txt) with ai_value 0, so AI law choices don't move. A release keeps these.
+# 11; the owner's call 3): every engine working-adult line, as script-only types the engine sums but doesn't apply.
+# The mod re-applies both at their old flat values while no workforce term is in force
+# (te_demog_workforce_lines_refresh). From step 2, under Full, the participation model reads the women's-work family,
+# and census terms replace the other (the pension age; call 3's participation inputs). Each copies
+# state_working_adult_ratio_add's format (mod_entity_modifier_types.txt) with ai_value 0, so AI choices don't move. A
+# release keeps these.
 state_demog_womens_work_ratio_add = {
 	decimals = 1
 	color = good
@@ -1914,7 +2111,7 @@ state_demog_womens_work_ratio_add = {
 	}
 	script_only = yes
 }
-state_demog_retirement_ratio_add = {
+state_demog_replaced_ratio_add = {
 	decimals = 1
 	color = good
 	percent = yes
@@ -1925,9 +2122,9 @@ state_demog_retirement_ratio_add = {
 }
 ```
 
-`te_demog_engine_line_injections.txt`: inside the existing `INJECT:law_women_in_the_fields`, `_in_the_workplace` and
-`INJECT:law_womens_suffrage` modifier blocks add the cancel and the type (Fields −0.3 / +0.3, Workplace −0.1 / +0.1,
-Suffrage −0.15 / +0.15), for example:
+`te_demog_engine_line_injections.txt` (vanilla's laws): inside the existing `INJECT:law_women_in_the_fields`,
+`_in_the_workplace` and `INJECT:law_womens_suffrage` modifier blocks add the cancel and the type (Fields −0.3 / +0.3,
+Workplace −0.1 / +0.1, Suffrage −0.15 / +0.15), for example:
 
 ```
 INJECT:law_women_in_the_fields = {
@@ -1952,19 +2149,78 @@ INJECT:law_women_own_property = {
 INJECT:law_old_age_pension = {
 	institution_modifier = {
 		state_working_adult_ratio_add = 0.01
-		state_demog_retirement_ratio_add = -0.01
+		state_demog_replaced_ratio_add = -0.01
 	}
 }
 ```
 
-The file's header comment gains "and, since phase 2 step 1, the working-adult lines' women's-work and retirement
-families". The mod's own carriers change in place, the field's name only:
-- `extra_laws.txt`: Protected Class, State-Sponsored Family Planning and Communal Child-Rearing
-  `state_working_adult_ratio_add` → `state_demog_womens_work_ratio_add`; Pro-Natalist Subsidies and Universal Basic
-  Income → `state_demog_retirement_ratio_add`; each with a trailing comment `# phase 2 step 1: re-applied by
-  te_demog_workforce_lines_refresh`.
-- `era_6.txt` `personal_appliances`, `era_7.txt` `contraceptive_pill` and `second_wave_feminism`:
-  → `state_demog_womens_work_ratio_add`.
+The file's header comment gains "and, since phase 2 step 1, the working-adult lines' women's-work and replaced
+families".
+
+`common/interest_group_traits/te_demog_workforce_injections.txt` (UTF-8 with BOM, tabs):
+
+```
+# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7, the owner's call 3):
+# the Trade Unions' two loyal traits' working-adult line, cancelled and carried on the replaced family at its old value
+# (te_demog_workforce_lines_refresh re-applies it while no workforce term is in force), with its participation input
+# for the census beside it. That the engine sums a script-only type from an IG trait into a state's read is step 1's
+# in-game check.
+INJECT:ig_trait_solidarity = {
+	modifier = {
+		state_working_adult_ratio_add = -0.05
+		state_demog_replaced_ratio_add = 0.05
+		state_labor_participation_add = 0.02	# unions' mutual aid keeps the sick and jobless attached to work
+	}
+}
+INJECT:ig_trait_bourse_du_travail = {
+	modifier = {
+		state_working_adult_ratio_add = -0.05
+		state_demog_replaced_ratio_add = 0.05
+		state_labor_participation_add = 0.02	# labour exchanges place workers
+	}
+}
+```
+
+`common/static_modifiers/te_demog_workforce_injections.txt` (UTF-8 with BOM, tabs):
+
+```
+# Phase 2 step 1 (the design §1.7, the owner's call 3): the Paris Commune's Woman Soldiers (vanilla; applied to the
+# country at x0.5): its working-adult line moves to the women's-work family at its old value. Women at arms go on to
+# work (the owner's example). That the engine scales the type with the modifier's multiplier is step 1's in-game check.
+INJECT:modifier_woman_soldiers = {
+	state_working_adult_ratio_add = -0.05
+	state_demog_womens_work_ratio_add = 0.05
+}
+```
+
+`extra_modifiers.txt`, the mod's own line on Pollution Impact (vanilla's `state_region_pollution_health` has none, so
+nothing is cancelled): `state_working_adult_ratio_add = -0.05` becomes
+
+```
+	state_demog_replaced_ratio_add = -0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+	state_work_capacity_mult = -0.1	# the census's participation input (the design §1.7): ill health keeps people from work
+```
+
+The mod's own laws, technologies and amendments change in place:
+- the women's-work family (the field's name only): Protected Class, State-Sponsored Family Planning, Communal
+  Child-Rearing; `personal_appliances`, `contraceptive_pill`, `second_wave_feminism`;
+- the replaced family (the field's name only): Pro-Natalist Subsidies, Universal Basic Income;
+- the replaced family plus the participation input (§1.7's inventory, starting sizes):
+
+  | Carrier | Replaced line | Participation input |
+  |---|---|---|
+  | `law_restorative_justice` | `state_demog_replaced_ratio_add = 0.025` | `state_male_labor_participation_add = 0.02` |
+  | `law_rehabilitation_focused_criminal_justice` | `= 0.05` | `state_male_labor_participation_add = 0.03` |
+  | `law_pro_labor_ministry_of_labor` (institution_modifier) | `= 0.01` | `state_labor_participation_add = 0.005` |
+  | `law_pro_capital_ministry_of_labor` (institution_modifier) | `= 0.02` | `state_labor_participation_add = 0.01` |
+  | `law_state_eugenics_program` | `= 0.05` | `state_work_capacity_mult = 0.1` |
+  | `amendment_community_service` | `= 0.01` | `state_male_labor_participation_add = 0.01` |
+  | `amendment_mandatory_minimums` | `= -0.01` | `state_male_labor_participation_add = -0.01` |
+
+  each replaced line with the trailing comment `# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh`.
+
+Rosen's two lines (`company_rosen_association`'s prosperity modifier, `pm_rosen_association_hq`) stay engine fields
+(spec §13 call 12): `P.LIVE_WORKFORCE_LINES` lists them.
 
 - [ ] **Step 6: The generator** (`gen_demographics.py`)
 
@@ -1974,13 +2230,13 @@ WORKFORCE_LINE_VALUES = Path("common/script_values/te_demog_workforce_line_value
 WORKFORCE_LINE_EFFECTS = Path("common/scripted_effects/te_demog_workforce_line_effects_generated.txt")
 WORKFORCE_LINE_HEADER = (
     "# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7): the\n"
-    "# working-adult lines' women's-work and retirement families, re-applied by a fixed-sign pair while\n"
+    "# working-adult lines' women's-work and replaced families, re-applied by a fixed-sign pair while\n"
     "# te_demog_workforce_lines_apply holds (not Full, or no te_dg_mw: step 2's term). Their own files, gate and\n"
     "# refresh, so the census's births and deaths term never takes them off. A release keeps them.")
 
 
 def _workforce_line_fields():
-    return [(f, P.WORKFORCE_LINE_SHORT[f], [P.WORKFORCE_LINE_TYPES[(fam, f)] for fam in ("womens_work", "retirement")
+    return [(f, P.WORKFORCE_LINE_SHORT[f], [P.WORKFORCE_LINE_TYPES[(fam, f)] for fam in ("womens_work", "replaced")
                                              if (fam, f) in P.WORKFORCE_LINE_TYPES])
             for f in P.WORKFORCE_LINE_FIELDS]
 ```
@@ -2212,8 +2468,8 @@ Loc: `te_miscellaneous_l_english.yml` (beside `te_demog_line_births_up`):
 ```
  state_demog_womens_work_ratio_add:0 "$state_working_adult_ratio_add$"
  state_demog_womens_work_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it reads this effect as women's work instead."
- state_demog_retirement_ratio_add:0 "$state_working_adult_ratio_add$"
- state_demog_retirement_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, its age structure carries this effect instead: how many are old, when they retire and how many children there are."
+ state_demog_replaced_ratio_add:0 "$state_working_adult_ratio_add$"
+ state_demog_replaced_ratio_add_desc:0 "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it carries this effect its own way instead: through its ages (who is old, when they retire, how many children there are) or through who works."
 ```
 
 Run `python3 organize_loc.py` and keep what it moves.
@@ -2229,9 +2485,10 @@ recorded value unchanged.
 Run: `$V duplicate_key_audit.py --strict && $V loc_coverage_audit.py --strict && $V script_argument_audit.py --strict && python3 organize_loc.py --check && python3 scripts/analysis/check_localization_files.py`
 Expected: exit 0 each.
 
-- [ ] **Step 10: Commit**: "Demographics phase 2 step 1: the women's-work and retirement lines on their own families".
+- [ ] **Step 10: Commit**: "Demographics phase 2 step 1: every workforce line on its own family, with call 3's participation inputs".
 
-- [ ] **Review stop:** a fresh reviewer reads Task 6 against D2, D3, D7 and #892's plan
+- [ ] **Review stop:** a fresh reviewer reads Task 6 against D2, D3, D7, D12, spec §1.7's inventory (every carrier's
+  family, flat value and participation input) and #892's plan
   (`docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md`), and checks that #892's three
   generated files are byte-identical to `main`'s (`git diff main -- common/*/te_demog_line_*_generated.txt` empty).
 
@@ -2263,6 +2520,14 @@ class TestWorkforceCommand(unittest.TestCase):
         self.assertAlmostEqual(farm["target"], 0.25, delta=0.02)
         for r in rows:
             self.assertAlmostEqual(r["target"], P.WORKFORCE_SCALE * r["wa_share"] * r["at_work"], places=9)
+
+    def test_call_3s_laws_add_their_participation_inputs(self):
+        """A Pro-Capital Ministry at level 5 and Rehabilitation add about +0.027 on the engine's scale to the rich row
+        (the design §1.7's inventory, on its stable structure), against +0.15 as flat lines."""
+        rows = {r["name"]: r for r in H.workforce_rows()}
+        gain = rows["Rich, plus call 3's laws"]["target"] - rows["Rich, Protected Class, pension at 65"]["target"]
+        self.assertGreater(gain, 0.015)
+        self.assertLess(gain, 0.04)
 ```
 
 `test_demographics_registry.py` (beside `test_option_l_logs_the_fertility_types`):
@@ -2275,7 +2540,9 @@ class TestWorkforceCommand(unittest.TestCase):
         for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
             self.assertIn(f"te_debug_demog_work_{name}", line, name)
         self.assertIn("te_debug_demog_work_wf_target", line)
-        for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work"):
+        for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
+                     "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
+                     "te_debug_demog_part_mod", "te_debug_demog_cap_mod"):
             self.assertIn(read, line)
 ```
 
@@ -2302,6 +2569,13 @@ WORKFORCE_SCENARIOS = [
         laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
                         "law_public_health_insurance"}),
         institutions={"institution_health_system": 5, "institution_social_security": 5}), 0.4),
+    ("Rich, plus call 3's laws", dict(
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
+        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance", "law_pro_capital_ministry_of_labor",
+                        "law_rehabilitation_focused_criminal_justice"}),
+        institutions={"institution_health_system": 5, "institution_social_security": 5,
+                      "institution_ministry_of_labor": 5}), 0.4),
 ]
 
 
@@ -2350,12 +2624,18 @@ te_debug_demog_work_wf_engine = { value = -1 if = { limit = { has_variable = te_
 te_debug_demog_work_wf_target = { value = -1 if = { limit = { has_variable = te_dg_at_work } value = te_demog_wf_target } }
 # the owner's own variable, -1 where it holds none: tells a working owner.var read from the Standard fallback
 te_debug_demog_pension_var = { value = -1 if = { limit = { owner ?= { has_variable = te_dg_pension_age } } value = owner.var:te_dg_pension_age } }
+# the two families and call 3's three inputs as the state reads them: Task 8's scope checks compare these with the field
+te_debug_demog_womens_mod = { value = modifier:state_demog_womens_work_ratio_add }
+te_debug_demog_replaced_mod = { value = modifier:state_demog_replaced_ratio_add }
+te_debug_demog_part_m_mod = { value = modifier:state_male_labor_participation_add }
+te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
+te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }
 ```
 
 `te_debug_demog_mods_line` gains a second `debug_log`:
 
 ```
-	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 ```
 
 
@@ -2384,7 +2664,8 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
     generated files; `test_demographics_golden.py`.
   - **Variable families:** a row "Phase 2 step 1": state `te_dg_wa_share`, `_at_work`, `_pensioners`, `_need`,
     `_old_age`, `_low_share`, `_wbase`, `_wf_engine`, `te_dg_ln_working_adults`; country `te_dg_pension_age`.
-  - **A subsection "Phase 2 step 1: the interfaces"** after "Causes of Death": the two indexes and where each rule
+  - **A subsection "Phase 2 step 1: the interfaces"** after "Causes of Death" (it also lists call 3's inventory, the
+    carriers no reader walks and Rosen's lines left on top): the two indexes and where each rule
     reads; the pension age; participation, need and the threshold, computed and stored, applied nowhere; planned and
     unplanned births; the workforce lines' families, their own gate and why; the golden test; what changes in a game
     (the breakdown's name, an institution level within a month).
@@ -2426,7 +2707,16 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
      the panel.
   7. **The benchmark** (option d): the step's cost within 25% of `main`'s.
   8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_work_*`, `te_demog_women_rate`,
-     `te_demog_old_age_pass`, `te_demog_slot_births` or `te_demog_workforce_lines_refresh`.
+     `te_demog_old_age_pass`, `te_demog_slot_births` or `te_demog_workforce_lines_refresh`; no load error from the
+     two new INJECT files.
+  9. **Call 3's carriers reach a state** (D12; spec §1.7). Option l's `womens=`, `replaced=`, `part_m=`, `part=` and
+     `cap=` in a capital, against `wa_mod=` on `main` for the same save:
+     - a Criminal Justice amendment (Community Service: `replaced=` up 0.01, `part_m=` up 0.01);
+     - a loyal Trade Unions with Solidarity or the Bourse du Travail (`replaced=` up 0.05, `part=` up 0.02);
+     - the Paris Commune with Woman Soldiers (`womens=` up 0.025, at its ×0.5);
+     - a polluted state (`replaced=` −0.05 × its impact, `cap=` −0.1 × the same);
+     - and that `wa_mod=` (the engine's own field) is unchanged in each. If one fails, that carrier's field goes back
+       on top and the PR lists it.
 
 - [ ] **Step 5: Run the whole suite and the checks**
   - `$V -m unittest discover -s . -p 'test_*.py' > /tmp/suite.txt 2>&1; grep -E '^(Ran |OK|FAILED)' /tmp/suite.txt`;
@@ -2467,3 +2757,7 @@ Expected: OK; the table's 1836 farming row reads a target of about 0.25 and old 
   `te_dg_elig`, `te_dg_cover`, `te_dg_age_rate`, `state_ageing_rate_add`, `state_rejuvenation_add`. Don't use them.
 - **The generated files change in Tasks 3 and 6.** Regenerate after each task and after any merge; never merge them
   by hand.
+- **`test_no_live_line_but_rosens` will need step 2's census pair** (`te_demog_census_workforce_up`/`_down` in
+  `te_demog_modifiers.txt`) in its skip list when step 2 adds it.
+- **Call 3's sizes are starting values** (spec §13 call 11, open): write them as the inventory gives them, and don't
+  tune them here.
