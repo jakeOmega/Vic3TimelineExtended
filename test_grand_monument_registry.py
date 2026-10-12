@@ -1183,14 +1183,19 @@ class SkinTests(unittest.TestCase):
             self.assertLess(names.index(f"heritage_{h}"), names.index("heritage_hebrew"))
         bodies = dict(options)
         for f in FAITHS:
-            self.assertIn(f"var:gm_skin_axis = flag:faith owner = {{ religion = rel:{f} }}", bodies[f"faith_{f}"])
+            self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:faith }} "
+                          f"owner = {{ religion = rel:{f} }} }}", bodies[f"faith_{f}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = faith_{f} }}", bodies[f"faith_{f}"])
         for h in HERITAGES:
             skin = f"faith_{HERITAGE_AS_FAITH[h]}" if h in HERITAGE_AS_FAITH else f"heritage_{h}"
-            self.assertIn(f"var:gm_skin_axis = flag:heritage owner = {{ te_heritage_{h} = yes }}",
-                          bodies[f"heritage_{h}"])
+            self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:heritage }} "
+                          f"owner = {{ te_heritage_{h} = yes }} }}", bodies[f"heritage_{h}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = {skin} }}", bodies[f"heritage_{h}"])
         self.assertNotIn("default_option", squash(strip_comments(self.event)))
+        self.assertNotIn("highlighted_option", bodies["generic"])
+        L = loc()
+        self.assertEqual(L["monument_events.11.t"], "A Style for the Monument")
+        self.assertIn("style", L["gm_skin_choice_tt"])
 
     def test_building_styles(self):
         e = read(EFFECTS)

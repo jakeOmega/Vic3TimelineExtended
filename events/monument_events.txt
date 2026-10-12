@@ -1415,8 +1415,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_catholic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:catholic }
 		}
 		gm_state_choose_skin = { SKIN = faith_catholic }
@@ -1424,8 +1425,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_protestant
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:protestant }
 		}
 		gm_state_choose_skin = { SKIN = faith_protestant }
@@ -1433,8 +1435,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_orthodox
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:orthodox }
 		}
 		gm_state_choose_skin = { SKIN = faith_orthodox }
@@ -1442,8 +1445,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_oriental_orthodox
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:oriental_orthodox }
 		}
 		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
@@ -1451,8 +1455,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_sunni
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:sunni }
 		}
 		gm_state_choose_skin = { SKIN = faith_sunni }
@@ -1460,8 +1465,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_shiite
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:shiite }
 		}
 		gm_state_choose_skin = { SKIN = faith_shiite }
@@ -1469,8 +1475,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_ibadi
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:ibadi }
 		}
 		gm_state_choose_skin = { SKIN = faith_ibadi }
@@ -1478,8 +1485,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_jewish
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:jewish }
 		}
 		gm_state_choose_skin = { SKIN = faith_jewish }
@@ -1487,8 +1495,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_mahayana
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:mahayana }
 		}
 		gm_state_choose_skin = { SKIN = faith_mahayana }
@@ -1496,8 +1505,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_gelugpa
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:gelugpa }
 		}
 		gm_state_choose_skin = { SKIN = faith_gelugpa }
@@ -1505,8 +1515,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_theravada
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:theravada }
 		}
 		gm_state_choose_skin = { SKIN = faith_theravada }
@@ -1514,8 +1525,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_confucian
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:confucian }
 		}
 		gm_state_choose_skin = { SKIN = faith_confucian }
@@ -1523,8 +1535,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_hindu
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:hindu }
 		}
 		gm_state_choose_skin = { SKIN = faith_hindu }
@@ -1532,8 +1545,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_shinto
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:shinto }
 		}
 		gm_state_choose_skin = { SKIN = faith_shinto }
@@ -1541,8 +1555,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_sikh
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:sikh }
 		}
 		gm_state_choose_skin = { SKIN = faith_sikh }
@@ -1550,8 +1565,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.faith_animist
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:faith
+			hidden_trigger = { var:gm_skin_axis = flag:faith }
 			owner = { religion = rel:animist }
 		}
 		gm_state_choose_skin = { SKIN = faith_animist }
@@ -1559,8 +1575,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_latin
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_latin = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_latin }
@@ -1568,8 +1585,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_sanskrit
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_sanskrit = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_sanskrit }
@@ -1577,8 +1595,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_geez
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_geez = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_geez }
@@ -1586,8 +1605,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_slavonic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_slavonic = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_slavonic }
@@ -1595,8 +1615,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_pali
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_pali = yes }
 		}
 		gm_state_choose_skin = { SKIN = faith_theravada }
@@ -1604,8 +1625,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_avestan
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_avestan = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_avestan }
@@ -1613,8 +1635,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_arabic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_arabic = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_arabic }
@@ -1622,8 +1645,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_chinese
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_chinese = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_chinese }
@@ -1631,8 +1655,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_greek
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_greek = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_greek }
@@ -1640,8 +1665,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_irish
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_irish = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_irish }
@@ -1649,8 +1675,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_coptic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_coptic = yes }
 		}
 		gm_state_choose_skin = { SKIN = faith_oriental_orthodox }
@@ -1658,8 +1685,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_nahuatl
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_nahuatl = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_nahuatl }
@@ -1667,8 +1695,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_norse
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_norse = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_norse }
@@ -1676,8 +1705,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_gothic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_gothic = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_gothic }
@@ -1685,8 +1715,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_mayan
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_mayan = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_mayan }
@@ -1694,8 +1725,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_prussian
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_prussian = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_prussian }
@@ -1703,8 +1735,9 @@ monument_events.11 = {
 
 	option = {
 		name = monument_events.11.heritage_aramaic
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_aramaic = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_aramaic }
@@ -1718,8 +1751,9 @@ monument_events.11 = {
 	# a Semitic-language country before it falls through to Hebrew.
 	option = {
 		name = monument_events.11.heritage_hebrew
+		highlighted_option = yes
 		trigger = {
-			var:gm_skin_axis = flag:heritage
+			hidden_trigger = { var:gm_skin_axis = flag:heritage }
 			owner = { te_heritage_hebrew = yes }
 		}
 		gm_state_choose_skin = { SKIN = heritage_hebrew }
