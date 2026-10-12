@@ -116,7 +116,8 @@ fewest failing regional items at each raise:
 | 1.15 | ×2.00, 9, ×1.20 | 7: the same, and China shrinking | the same |
 | 1.20 | ×2.00, 9, ×1.20 | 8: China, Europe, Africa, Japan-Korea-Manchuria, Middle East, Mexico, China and Japan shrinking | the same; 6 scenarios out |
 
-Every region reaches its band at some point, but none reaches it with all the others:
+Every region reaches its band at some raise and point (the USA and Canada only with a raise), but none reaches
+it with all the others:
 - The knobs read standard of living alone, so they move two groups the same way.
   - One group has deaths too low for its SoL: India, Africa, the Middle East, and with any raise Russia, Mexico and
     Eastern Europe.
