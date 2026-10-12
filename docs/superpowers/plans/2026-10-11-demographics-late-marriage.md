@@ -1631,6 +1631,9 @@ def mortality_report(fit_by_year, anchors, s, cut_lm, cut_bs, held=None):
    - Britain's children per woman in the last save against its anchor;
    - each `fertility` scenario's figure and band (`H.fertility_rows(carriers=patched)`).
 
+   The replayed shares stay fixed while the pair varies. The pair also feeds Late Marriage's erosion, but by 1887 that
+   is negligible, and Task 6 Step 8 replays again at the applied values.
+
 Exit 0 unless the anchors can't be read.
 
 ```python
@@ -2888,5 +2891,8 @@ Then the owner's in-game list (Task 12 Step 4).
   calendar, so a fast run's practices erode on 19th-century conditions for longer, as everything else does there.
 - **Revolutions and changes of owner.** The shares are state variables, so they stay ("the winner continues the
   nation"). A new owner's laws reach the target at the next step.
+- **The rural refresh's event.** `trigger_event` without `days` is assumed to run after the current effect, so the
+  lines refresh sees the modifier just added. #892's hooks assume the same. The in-game list's item 3 is the check, and
+  `days = 1` the fix (#894 carries the same note for the hooks).
 - **The release.** A release has no rule, so the census and the practices never run. Primogeniture's line ships on its
   moved-lines type, and the pair re-applies it (Task 9's release test).
