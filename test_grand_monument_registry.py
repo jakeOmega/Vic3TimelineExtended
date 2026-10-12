@@ -2673,7 +2673,7 @@ class PictureTests(unittest.TestCase):
             self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), "
                           f"'(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
                           f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\"", body, code)
-        self.assertEqual(body.count("icon = {"), len(PICTURES))
+        self.assertEqual(body.count("ScriptValue('gm_disp_picture_code')"), len(PICTURES))
 
     def test_every_picture_has_its_art(self):
         import importlib
@@ -2693,6 +2693,30 @@ class PictureTests(unittest.TestCase):
         # had a form keeps its old picture until the refresh.
         body = squash(block(read(EFFECTS), "gm_state_undedicate"))
         self.assertTrue(body.endswith("set_variable = { name = gm_picture_code value = 1 }"), body)
+
+    def test_frame_tier_follows_the_grandeur_steps(self):
+        # Spec §3.5: the frame shows the step the monument's effects have
+        # reached, on the state card's own step list.
+        values = read(VALUES)
+        steps = sorted(int(n) for n in re.findall(r"gm_state_grandeur < (\d+) \} value = \1",
+                                                  squash(block(values, "gm_state_disp_next_step"))))
+        self.assertEqual(steps[:5], [5, 15, 35, 75, 155])
+        expected = "value = 0 " + " ".join(f"if = {{ limit = {{ gm_state_grandeur >= {g} }} value = {i + 1} }}"
+                                          for i, g in enumerate(steps[:5]))
+        self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
+
+    def test_frames_draw_over_the_pictures(self):
+        raw = raw_block_at(read(WIDGET), r"(?m)^\ttype gm_picture = widget \{")
+        body = squash(strip_comments(raw))
+        last_picture = body.rindex("ScriptValue('gm_disp_picture_code')")
+        for tier in range(1, 6):
+            frame = (f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), "
+                     f"'(CFixedPoint){tier}' )]\" size = {{ 100% 100% }} "
+                     f"texture = \"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds\"")
+            self.assertIn(frame, body, tier)
+            self.assertGreater(body.index(frame), last_picture, "a frame draws over every picture")
+            self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds").exists(), tier)
+        self.assertEqual(body.count("icon = {"), len(PICTURES) + 5)
 
     def test_display_value_defaults_to_the_draped_picture(self):
         v = squash(block(read(VALUES), "gm_disp_picture_code"))

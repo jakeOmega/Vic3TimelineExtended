@@ -620,6 +620,32 @@ types grand_monuments_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/icons/gm_pictures/heritage_mayan__stadium.dds"
 		}
+		### Its grandeur frame over it (spec §3.5): none below the first step.
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)1' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_1.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)2' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_2.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)3' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_3.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)4' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_4.dds"
+		}
+		icon = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), '(CFixedPoint)5' )]"
+			size = { 100% 100% }
+			texture = "gfx/interface/icons/gm_pictures/frames/frame_tier_5.dds"
+		}
 	}
 
 	### A monument's status over its picture: a badge at the picture's

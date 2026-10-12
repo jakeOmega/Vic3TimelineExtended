@@ -605,7 +605,10 @@ look. When more than one style fits, an event asks which, and each style's
 option names what makes it fit; the AI keeps the most specific style without
 being asked. The style changes the monument's name and look, not what it does.
 Each monument shows a picture of its style and form in its row of the journal
-entry and on its state's monument card.
+entry and on its state's monument card. The picture's frame marks how many
+grandeur steps the monument has reached: plain below the first, then bronze,
+bronze and silver, silver and gold, gold, and from the fifth step gold set with
+rubies.
 If you have revived the matching language under a state-led language reform,
 the monument's row says its dedication is carved in it.
 
