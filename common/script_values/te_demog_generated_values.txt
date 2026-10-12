@@ -66,6 +66,37 @@ te_demog_pop_wealth_tfr = {
 	}
 }
 
+# Pop scope (calibration step 3, call 1): the country-scope lines the census absorbs per pop under
+# Full (the Landowners' famine reserves): its owner's read of each key where the walk adds that key.
+te_demog_pop_country_absorbed_deaths = {
+	value = 0
+	if = {
+		limit = {
+			is_employed = yes
+			exists = workplace
+		}
+		if = {
+			limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+			add = owner.modifier:building_group_bg_agriculture_mortality_mult
+		}
+	}
+}
+# Pop scope (calibration step 3, call 1): what the walk reads for the same keys at the pop's
+# workplace, which also holds the building's own lines (the self-check famine_reserves_absorbed).
+te_demog_pop_country_line_walk_read = {
+	value = 0
+	if = {
+		limit = {
+			is_employed = yes
+			exists = workplace
+		}
+		if = {
+			limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
+			add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+		}
+	}
+}
+
 # Pop scope: the terms the census absorbs per pop: literacy's (literacy_penalty) and mild starvation's
 # (starvation_penalty). Severe starvation stays on top (owner amendment B). The laws', technologies' and
 # institutions' lines are script-only (owner, 2026-10-11), so the census has none of theirs to net.
@@ -95,6 +126,7 @@ te_demog_pop_absorbed_deaths = {
 		else_if = { limit = { food_security >= 0.25 } add = 0.1875 }
 		else = { add = 0.2625 }
 	}
+	add = te_demog_pop_country_absorbed_deaths
 }
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
@@ -1280,6 +1312,112 @@ te_demog_pop_death_mult = {
 	min = 0
 }
 
+# State scope (calibration step 3): the state's malaria level from its state region's trait in the map files.
+te_demog_malaria_level_listed = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_BAS_CONGO
+				state_region = s:STATE_BOTSWANA
+				state_region = s:STATE_BOUGAINVILLE
+				state_region = s:STATE_CONGO
+				state_region = s:STATE_CONGO_ORIENTALE
+				state_region = s:STATE_EASTERN_NEW_GUINEA
+				state_region = s:STATE_EAST_ANGOLA
+				state_region = s:STATE_EAST_MICRONESIA
+				state_region = s:STATE_EQUATEUR
+				state_region = s:STATE_FIJI
+				state_region = s:STATE_GABON
+				state_region = s:STATE_HEREROLAND
+				state_region = s:STATE_KANAK
+				state_region = s:STATE_KASAI
+				state_region = s:STATE_KATANGA
+				state_region = s:STATE_NAMAQUALAND
+				state_region = s:STATE_NAURU
+				state_region = s:STATE_SOLOMON_ISLANDS
+				state_region = s:STATE_TAHITI
+				state_region = s:STATE_TONGA
+				state_region = s:STATE_UBANGI_SHARI
+				state_region = s:STATE_VANUATU
+				state_region = s:STATE_WESTERN_NEW_GUINEA
+				state_region = s:STATE_WEST_MICRONESIA
+				state_region = s:STATE_ZAMBEZI
+				state_region = s:STATE_ZAMBIA
+			}
+		}
+		add = 2
+	}
+	else_if = {
+		limit = {
+			OR = {
+				state_region = s:STATE_AMHARA
+				state_region = s:STATE_BENIN
+				state_region = s:STATE_BORNU
+				state_region = s:STATE_CELEBES
+				state_region = s:STATE_CHAD
+				state_region = s:STATE_DAHOMEY
+				state_region = s:STATE_EASTERN_MALI
+				state_region = s:STATE_EAST_HAUSALAND
+				state_region = s:STATE_EQUATORIA
+				state_region = s:STATE_GOLD_COAST
+				state_region = s:STATE_GONDER
+				state_region = s:STATE_GUINEA
+				state_region = s:STATE_HAUSALAND
+				state_region = s:STATE_INNER_MAURITANIA
+				state_region = s:STATE_IVORY_COAST
+				state_region = s:STATE_KAZEMBE
+				state_region = s:STATE_KENYA
+				state_region = s:STATE_LIBERIA
+				state_region = s:STATE_LINDI
+				state_region = s:STATE_LOURENCO_MARQUES
+				state_region = s:STATE_MAURITANIA
+				state_region = s:STATE_MOCAMBIQUE
+				state_region = s:STATE_NIGER
+				state_region = s:STATE_NIGERIA
+				state_region = s:STATE_NIGER_DELTA
+				state_region = s:STATE_NORTH_ANGOLA
+				state_region = s:STATE_NORTH_CAMEROON
+				state_region = s:STATE_NORTH_MADAGASCAR
+				state_region = s:STATE_OROMIA
+				state_region = s:STATE_OUTER_HAUSALAND
+				state_region = s:STATE_RIFT_VALLEY
+				state_region = s:STATE_SENEGAL
+				state_region = s:STATE_SIERRA_LEONE
+				state_region = s:STATE_SOMALILAND
+				state_region = s:STATE_SOUTH_ANGOLA
+				state_region = s:STATE_SOUTH_CAMEROON
+				state_region = s:STATE_SOUTH_MADAGASCAR
+				state_region = s:STATE_TANGANYIKA
+				state_region = s:STATE_TIMBUKTU
+				state_region = s:STATE_TOGO
+				state_region = s:STATE_TRANSVAAL
+				state_region = s:STATE_UGANDA
+				state_region = s:STATE_VOLTA
+				state_region = s:STATE_WADDAI
+				state_region = s:STATE_WESTERN_MALI
+				state_region = s:STATE_WINDWARD_COAST
+				state_region = s:STATE_YORUBA_STATES
+				state_region = s:STATE_ZAMBEZIA
+				state_region = s:STATE_ZULULAND
+			}
+		}
+		add = 1
+	}
+}
+# State scope (calibration step 3): the malaria level the step stores (te_dg_in_mal).
+te_demog_malaria_level = {
+	value = 0
+	if = {
+		limit = { has_state_trait = state_trait_severe_malaria }
+		add = 2
+	}
+	else_if = {
+		limit = { has_state_trait = state_trait_malaria }
+		add = 1
+	}
+}
+
 # State scope: where medicine is heading, read live from the census's types (the Causes of Death plan):
 # health-care access (the base plus the health law's lines), each cause's treatment, and the share of the gap
 # a census step closes (demographics_model.medicine_targets, diffusion).
@@ -1350,6 +1488,26 @@ te_demog_f_infection_crowding = {
 	value = var:te_dg_in_crowd multiply = 1
 	max = 0.5 add = 1
 }
+# State scope: infection's malaria factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_malaria = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_in_mal
+			has_variable = te_dg_in_malc
+		}
+		if = {
+			limit = { var:te_dg_in_mal >= 2 }
+			add = 0.13
+		}
+		else_if = {
+			limit = { var:te_dg_in_mal >= 1 }
+			add = 0.08
+		}
+		multiply = { value = 1 subtract = var:te_dg_in_malc }
+	}
+	add = 1
+}
 # State scope: the infection cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_infection = {
 	value = te_demog_f_infection_medicine
@@ -1357,6 +1515,7 @@ te_demog_mult_infection = {
 	multiply = te_demog_f_infection_poverty
 	multiply = te_demog_f_infection_literacy
 	multiply = te_demog_f_infection_crowding
+	multiply = te_demog_f_infection_malaria
 }
 
 # State scope: work's laws factor (demographics_model.cause_factors), on the step's stored inputs.
@@ -1387,10 +1546,15 @@ te_demog_f_maternal_medicine = {
 	value = 1
 	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_mat }
 }
+# State scope: maternal's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_maternal_laws = {
+	value = 1 add = var:te_dg_in_mat min = 0.2
+}
 # State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
 # times the cause's factors (demographics_model.cause_multipliers, group_rates).
 te_demog_mult_maternal = {
 	value = te_demog_f_maternal_medicine
+	multiply = te_demog_f_maternal_laws
 	multiply = 670
 }
 
@@ -1436,7 +1600,8 @@ te_demog_means = {
 		min = 0
 		max = 1
 	}
-	multiply = { value = var:te_dg_lit multiply = 0.7 add = 0.3 }
+	# access: literacy, plus Sex Education's state_means_literacy_add (phase 2 step 3b), at most 1
+	multiply = { value = var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply = 0.7 add = 0.3 }
 	# laws, history, events and measures: Family Limitation and its kin (state_fertility_means_add)
 	add = modifier:state_fertility_means_add
 	max = 0.95
@@ -1797,6 +1962,53 @@ te_demog_pop_base_ratio = {
 	if = { limit = { is_pop_type = aristocrats } value = 0.2 }
 	if = { limit = { is_pop_type = slaves } value = 0.5 }
 }
+
+# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.
+# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'
+# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's
+# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired
+# multiplies by it; the TFR tooltips show it.
+te_demog_tfr_policy = {
+	value = modifier:state_desired_fertility_mult
+	if = {
+		limit = { modifier:state_birth_limit_relief_add > 0 }
+		subtract = {
+			value = te_demog_ms_birth_limit_part
+			multiply = { value = modifier:state_birth_limit_relief_add max = 1 }
+			multiply = te_demog_agr_share
+		}
+	}
+	add = 1
+	min = 0
+}
+# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.
+te_demog_agr_share = {
+	value = 0
+	if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }
+}
+# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).
+te_demog_urban_relief_left = {
+	value = 1 subtract = { value = modifier:state_urban_fertility_relief_add min = 0 max = 1 }
+}
+# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the
+# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on
+# between steps shows when the census's figure takes it. The live value for a census state from before the store.
+te_demog_tfr_policy_shown = {
+	value = te_demog_tfr_policy
+	if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }
+}
+te_demog_urban_left_stored = {
+	value = te_demog_urban_relief_left
+	if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }
+}
+# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.
+te_demog_srb_add = {
+	value = 0
+	if = { limit = { owner = { has_technology_researched = microprocessor } } value = modifier:state_sex_ratio_at_birth_add min = 0 }
+}
+te_demog_k_desired_floor = { value = 0.1 }
+te_demog_k_desired_cap = { value = 1 }
+te_demog_k_srb_base = { value = 105 }
 
 # State scope: each slot as per mille of the state's people, for the replay lines (Task 15).
 # One sequential block each, so the scale and the people are not rounded on their own.

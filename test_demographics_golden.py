@@ -8,7 +8,14 @@ The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on th
 - a digest of every block of the generated census files and #892's three line files, kept byte for byte (comments
   aside) except the life table's added threshold lines;
 - the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
-  three calls of Task 5's gated effects."""
+  three calls of Task 5's gated effects.
+
+Phase 2 step 3b (the census reads the Family Policy measures) changes no number either while no measure is on and the
+family laws are left out (the cases hold none): its new reads are exact identities at 0 (x 1, + 0, the constants), and
+its edits to three existing blocks are named below (STEP3B_ADDED, STEP3B_REWRITE), so each block's old text must still
+come back once they are taken out; te_demog_cause_inputs_store, which calibration step 3 changed too, is held to
+STEP3_DIGESTS' digest with step 3b's line taken out. Its new variables are te_dg_in_mat (the maternal cause's input),
+te_dg_policy and te_dg_urban_left (what the step used, for the tooltips)."""
 
 import functools
 import hashlib
@@ -34,10 +41,28 @@ GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# phase 2 step 3b: the maternal cause's stored family-policy input, and the stored policy term and urban share left
+NEW_VARS |= {"te_dg_in_mat", "te_dg_policy", "te_dg_urban_left"}
+# phase 2 step 3b's lines in existing blocks: the maternal cause's laws factor (te_demog_mult_maternal) and its stored
+# input (te_demog_cause_inputs_store), added; Sex Education's literacy in te_demog_means' access, rewritten back out
+STEP3B_ADDED = re.compile(r"^multiply = te_demog_f_maternal_laws$|^set_variable = \{ name = te_dg_in_mat ")
+STEP3B_REWRITE = (("var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply", "var:te_dg_lit multiply"),)
 # Task 5's three calls in te_demog_walks; nothing else in the walk may change
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
 LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
+# Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md) changes these blocks on
+# purpose: the country-scope absorbed lines join the absorbed deaths, the malaria factor joins infection's product and
+# the store keeps its two inputs. Each is held to its new digest instead (a later change to one still fails), and no
+# golden case has a farm pop, malaria or Malaria Prevention, so every recorded number stays as it was.
+STEP3_DIGESTS = {
+    ("generated_values", "te_demog_pop_absorbed_deaths"):
+        "32dcf53c0aafe6bad0d2e137175dcdacf85ae4d2f0377f74aeb91ca4caa44ef0",
+    ("generated_values", "te_demog_mult_infection"): "34badda0262f2a56d372f2c32520fb1819434b10b4272fdc44e27104f606c6df",
+    ("generated_effects", "te_demog_cause_inputs_store"):
+        "10a1a9f5fad0b5b475884d196e0ad597605b78ce05e48b30849d05431c3fa168",
+}
+STEP3_VARS = {"te_dg_in_mal", "te_dg_in_malc"}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -108,7 +133,9 @@ def _lines(full):
 
 def _norm(body, drop=None):
     lines = [line.strip() for line in body.splitlines() if line.strip()]
-    return "\n".join(line for line in lines if not (drop and drop(line)))
+    for was, now in STEP3B_REWRITE:
+        lines = [line.replace(was, now) for line in lines]
+    return "\n".join(line for line in lines if not (drop and drop(line)) and not STEP3B_ADDED.search(line))
 
 
 def blocks():
@@ -164,7 +191,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS, set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
     def test_the_census_term_is_recorded(self):
@@ -179,7 +206,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
         for key, rec in self.golden["blocks"].items():
             for name, digest in rec.items():
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
-                self.assertEqual(self.now["blocks"][key][name], digest, f"{key}: {name} changed")
+                want = STEP3_DIGESTS.get((key, name), digest)
+                self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
         self.assertEqual(self.now["walk"], self.golden["walk"])

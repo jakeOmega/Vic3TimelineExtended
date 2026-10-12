@@ -718,3 +718,107 @@ te_debug_demog_call3_setup = {
 	trigger_event = { id = te_debug_demog.3 days = 1 }
 	trigger_event = { id = te_debug_demog.3 days = 31 }
 }
+
+# ---- The measures' self-check (phase 2 step 3a; owner process, 2026-10-12) -----------------------------------------
+# The Family Policy measures put the census's script-only state types on a country static modifier
+# (te_demog_measure_modifiers.txt), which assumes a state's modifier: read takes a script-only type from its country's
+# static modifiers. Probe Q5 saw that for engine fields on a country modifier, and option l for types on a law's or
+# technology's modifier; nobody has seen it for a script-only type on a country static modifier. Once a game, the
+# first measure that moves desired family size to switch on (te_demog_ms_start) reads the country's capital before its
+# add (an add isn't visible inside the effect that makes it) and the measures' desired-family-size lines the country
+# holds (te_demog_ms_desired_on); te_debug_demog.10 reads both again a week later and logs the verdict (TE_SELF_CHECK).
+# BROKEN: the measures' census types never reach a state; put them on a state modifier in each of the country's states
+# instead (docs/testing/demographics-playtest.md, Self-checks).
+te_debug_demog_ms_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_ms_selfcheck_done }
+			exists = capital
+			OR = {
+				te_demog_ms_desired_$M$ > 0.01
+				te_demog_ms_desired_$M$ < -0.01
+			}
+		}
+		set_global_variable = { name = te_demog_ms_selfcheck_done value = yes }
+		set_local_variable = { name = te_dg_ms_chk_e0 value = te_demog_ms_desired_on }
+		capital = {
+			set_variable = { name = te_dg_ms_chk_before value = modifier:state_desired_fertility_mult }
+			set_variable = { name = te_dg_ms_chk_e0 value = local_var:te_dg_ms_chk_e0 }
+			set_variable = { name = te_dg_ms_chk_owner value = ROOT }
+			debug_log = "TE_SELF_CHECK START measure_country_types before=[THIS.Var('te_dg_ms_chk_before').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+			trigger_event = { id = te_debug_demog.10 days = 7 }
+		}
+	}
+}
+
+# ---- x: family policy in the census (phase 2 step 3b) -------------------------------------------------------------
+# THIS = ROOT = the player. One TE_DEMOG_FAMILY line for the capital: the six Family Policy types it reads (desired=
+# should be the owner's measures' desired lines, measures=, plus Pro-Natalist Policy's 0.05), the policy term and its
+# Birth Limit part, the agrarian share and the urban relief it reads, the sex ratio's add in force (0 before
+# Microprocessor), and the census's stored policy term (st_policy=, the tooltips' figure) and urban share left, desired, means, children per woman with its planned and unplanned parts,
+# the maternal input and rate, and men per 100 women (each -1 before a census step under this build).
+te_debug_demog_family_reads = {
+	capital = { te_debug_demog_family_line = yes }
+}
+
+te_debug_demog_family_line = {
+	debug_log = "TE_DEMOG_FAMILY desired=[THIS.ScriptValue('te_debug_demog_mod_desired')|3] measures=[THIS.ScriptValue('te_debug_demog_ms_desired_owner')|3] urban_relief=[THIS.ScriptValue('te_debug_demog_mod_urban_relief')|3] means_lit=[THIS.ScriptValue('te_debug_demog_mod_means_lit')|3] maternal=[THIS.ScriptValue('te_debug_demog_mod_maternal')|3] bl_relief=[THIS.ScriptValue('te_debug_demog_mod_bl_relief')|3] srb=[THIS.ScriptValue('te_debug_demog_mod_srb')|1] policy=[THIS.ScriptValue('te_demog_tfr_policy')|3] st_policy=[THIS.ScriptValue('te_debug_demog_fam_policy')|3] st_urban_left=[THIS.ScriptValue('te_debug_demog_fam_urban_left')|3] bl_part=[THIS.ScriptValue('te_demog_ms_birth_limit_part')|2] agr=[THIS.ScriptValue('te_demog_agr_share')|3] urban_left=[THIS.ScriptValue('te_demog_urban_relief_left')|3] srb_add=[THIS.ScriptValue('te_demog_srb_add')|1] means_live=[THIS.ScriptValue('te_debug_demog_means')|3] st_desired=[THIS.ScriptValue('te_debug_demog_fam_desired')|3] st_means=[THIS.ScriptValue('te_debug_demog_fam_means')|3] st_tfr=[THIS.ScriptValue('te_debug_demog_fam_tfr')|3] planned=[THIS.ScriptValue('te_debug_demog_fam_planned')|3] unplanned=[THIS.ScriptValue('te_debug_demog_fam_unplanned')|3] in_mat=[THIS.ScriptValue('te_debug_demog_fam_in_mat')|3] mmr=[THIS.ScriptValue('te_debug_demog_fam_mmr')|0] sex_balance=[THIS.ScriptValue('te_debug_demog_fam_sex_balance')|1] date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/specs/2026-10-12-demographics-calibration-
+# step3-design.md §6) -----------------------------------------------------------------------------------------------------
+# Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts
+# the step rests on, each read once a game:
+# - famine_reserves_absorbed (P1, te_debug_demog.40): the census absorbs the Landowners' famine reserves at the owner's
+#   read of the key, and the walk reads it at the farm's. It arms on the walk's side, which the saves measured: the
+#   first country with powerful Landowners and a subsistence-farm pop in its capital reading the line at its farm. A
+#   week later (a day may come before the engine re-sums its modifiers) one such pop logs both reads; an owner's read
+#   of 0 is a BROKEN line, not a silent check.
+# - working_conditions_read (P2, te_debug_demog.41): a mine outside the capital reads working conditions' laborers line
+#   as 0, so the walk's constant is the only copy.
+# - malaria_trait_read (P3, here): once a country with quinine owns a state the map files give the mild malaria trait,
+#   has_state_trait still reads it there, though quinine has switched the trait's modifier off.
+# Each arms once; .40 and .41 re-arm for a later month when their state or input has gone in the week. Under every rule
+# in a development build (te_debug_demog_selfchecks_run), as the workforce checks: the facts are the engine's.
+# THIS = a country, on its monthly pulse (te_demog_country_monthly_on_action).
+te_debug_demog_step3_selfchecks = {
+	if = {
+		limit = { te_debug_demog_selfchecks_run = yes }
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_fr_done }
+				te_debug_demog_fr_armed = yes
+			}
+			set_global_variable = { name = te_demog_selfcheck_fr_done value = yes }
+			trigger_event = { id = te_debug_demog.40 days = 7 }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_wc_done }
+				any_scope_building = { te_debug_demog_wc_mine = yes }
+			}
+			set_global_variable = { name = te_demog_selfcheck_wc_done value = yes }
+			trigger_event = { id = te_debug_demog.41 days = 7 }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_mal_done }
+				has_technology_researched = quinine
+				any_scope_state = { te_debug_demog_mal_listed_mild = yes }
+			}
+			set_global_variable = { name = te_demog_selfcheck_mal_done value = yes }
+			random_scope_state = {
+				limit = { te_debug_demog_mal_listed_mild = yes }
+				if = {
+					limit = { has_state_trait = state_trait_malaria }
+					debug_log = "TE_SELF_CHECK OK malaria_trait_read state=[THIS.GetState.GetNameNoFormatting] listed=[THIS.ScriptValue('te_demog_malaria_level_listed')|0] trait_read=[THIS.ScriptValue('te_debug_demog_mal_trait_read')|0] level=[THIS.ScriptValue('te_demog_malaria_level')|0] (the owner has quinine) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN malaria_trait_read state=[THIS.GetState.GetNameNoFormatting] listed=[THIS.ScriptValue('te_demog_malaria_level_listed')|0] trait_read=[THIS.ScriptValue('te_debug_demog_mal_trait_read')|0] level=[THIS.ScriptValue('te_demog_malaria_level')|0] (the owner has quinine: has_state_trait stops reading a trait its technology disables, so the malaria factor ends at quinine; set MALARIA_READS_REGION_LIST in demographics_params.py and regenerate, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				debug_log_scopes = yes
+			}
+		}
+	}
+}

@@ -5123,6 +5123,8 @@
  te_debug_demog.1.q:0 "Probe: give a state away and see what the owner-change hook holds"
  te_debug_demog.1.q.tt:0 "Picks one of our states that is alone in its state region and borders another country, stamps it, and gives it to that neighbour. Writes three TE_DEMOG_PROBE_OWNER lines to debug.log: before, from inside the owner-change hook, and a day later. var is 1 where the stamp is still there; year and lm are the census's year and Late Marriage share, or -1. The state really changes hands: use a throwaway game."
  te_debug_demog.1.t:0 "Demographics Test Console"
+ te_debug_demog.1.x:0 "Family policy: log what our capital's census reads"
+ te_debug_demog.1.x.tt:0 "Writes a TE_DEMOG_FAMILY line to debug.log for our capital: the Family Policy readings it takes (desired family size, family housing, family planning knowledge, maternal deaths, the rural exemption, the boys per 100 girls), our measures' desired family size, the family policy term and Birth Limit's part of it, the farm share and the urban pull left, the boys added per 100 girls in force, and the census's stored desired family size, means, children per woman with its planned and unplanned parts, maternal deaths and men per 100 women."
  te_debug_demog.1.z:0 "Close"
 
 #

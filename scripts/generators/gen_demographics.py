@@ -793,6 +793,9 @@ def medicine_effects(o):
     o("set_variable = { name = te_dg_in_crowd value = { value = var:migration_crowding_mult_applied "
       f"multiply = {lit(P.MIGRATION_CROWDING_PULL_PER_MULT)} }} }}")
     o("}")
+    o("# calibration step 3: the state's malaria trait (te_demog_malaria_level) and its control, 0 to 1")
+    o("set_variable = { name = te_dg_in_mal value = te_demog_malaria_level }")
+    o(f"set_variable = {{ name = te_dg_in_malc value = {{ value = modifier:{P.MALARIA_CONTROL_TYPE} min = 0 max = 1 }} }}")
     o("}")
     o("")
     pairs = [("te_dg_acc", "te_demog_access_target")]
@@ -867,6 +870,7 @@ def render_effects(root=ROOT):
     absorbed_walk(o, root)
     medicine_effects(o)
     practice_loops(o)
+    family_policy_effects(o)
     debug_ring(o)
     return o.text()
 
@@ -1050,6 +1054,7 @@ def absorbed_terms(o, root, literacy, mild):
     its terms M under Full through the walk's sums: literacy's term and mild starvation's. The laws', technologies'
     and institutions' birth and mortality lines are script-only since 2026-10-11 (the engine-lines plan), so the engine
     never applies them under Full and there is nothing of theirs to net."""
+    country_absorbed_terms(o, root)
     o("# Pop scope: the terms the census absorbs per pop: literacy's (literacy_penalty) and mild starvation's")
     o("# (starvation_penalty). Severe starvation stays on top (owner amendment B). The laws', technologies' and")
     o("# institutions' lines are script-only (owner, 2026-10-11), so the census has none of theirs to net.")
@@ -1061,7 +1066,62 @@ def absorbed_terms(o, root, literacy, mild):
     o("te_demog_pop_absorbed_deaths = {")
     o("value = 0")
     _mild_starvation(o, "state_mortality_mult", mild)
+    o("add = te_demog_pop_country_absorbed_deaths")
     o("}")
+    o("")
+
+
+def _country_absorbed_gates(root):
+    """[(the building group's mortality key, its workplace gate)] for P.COUNTRY_ABSORBED_GROUPS: the key the walk adds
+    for a pop employed in the group or a descendant (te_demog_pop_death_mult reads every registered group key for
+    every pop type)."""
+    reg, parents = registered_modifier_types(root), building_group_parents(root)
+    out = []
+    for group in P.COUNTRY_ABSORBED_GROUPS:
+        key = f"building_group_{group}_mortality_mult"
+        assert key in reg and group in parents, f"{key}: not a registered type the walk reads"
+        out.append((key, _group_gate(group, parents)))
+    return out
+
+
+def country_absorbed_terms(o, root):
+    """Calibration step 3, call 1 (owner, 2026-10-12; the spec's §2.1): the country-scope lines the census absorbs per
+    pop under Full, the Landowners' famine reserves today. Each pop employed in a P.COUNTRY_ABSORBED_GROUPS group adds
+    its owner's read of the group's mortality key (x P.COUNTRY_ABSORBED_SCALE, the self-check's fallback) to the
+    walk's absorbed sum (te_demog_pop_absorbed_deaths), so M nets it: the line only moves deaths between a state's farm
+    workers and the rest. The owner's read carries the interest group's power (a powerful group's traits count double),
+    the size the walk reads at the workplace. A second value reads what the walk reads for the same keys at the
+    workplace, which also holds the building's own lines (executives' traits): the self-check famine_reserves_absorbed
+    compares the two on a subsistence farm, which no company owns."""
+    gates = _country_absorbed_gates(root)
+    farm_only = P.COUNTRY_ABSORBED_FROM_FARM   # the self-check's fallback: the farm's own read, subsistence farms only
+    for name, reader, scaled, note in (
+            ("te_demog_pop_country_absorbed_deaths", "workplace" if farm_only else "owner", True,
+             ("the country-scope lines the census absorbs per pop under",
+              "Full (the Landowners' famine reserves): its owner's read of each key where the walk adds that key")),
+            ("te_demog_pop_country_line_walk_read", "workplace", False,
+             ("what the walk reads for the same keys at the pop's",
+              "workplace, which also holds the building's own lines (the self-check famine_reserves_absorbed)"))):
+        o(f"# Pop scope (calibration step 3, call 1): {note[0]}")
+        o(f"# {note[1]}.")
+        o(f"{name} = {{")
+        o("value = 0")
+        o("if = {")
+        o("limit = {")
+        o("is_employed = yes")
+        o("exists = workplace")
+        o("}")
+        for key, gate in gates:
+            if farm_only and name == "te_demog_pop_country_absorbed_deaths":
+                gate = "is_building_group = bg_subsistence_agriculture"
+            o("if = {")
+            o(f"limit = {{ workplace = {{ {gate} }} }}")
+            o(f"add = {reader}.modifier:{key}")
+            o("}")
+        o("}")
+        if scaled and P.COUNTRY_ABSORBED_SCALE != 1.0:
+            o(f"multiply = {lit(P.COUNTRY_ABSORBED_SCALE)}")
+        o("}")
     o("")
 
 
@@ -1268,6 +1328,23 @@ def _factor_body(o, cause, factor):
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
         o(f"value = var:te_dg_in_turm multiply = {lit(P.TURMOIL_EXTERNAL_WEIGHT)} add = 1")
+    elif factor == "malaria":
+        # calibration step 3: 1 + the trait's excess x (1 - the control); a step from before it stored neither, so the
+        # factor reads 1 until the state's next step
+        o("value = 0")
+        o("if = {")
+        o("limit = {")
+        o("has_variable = te_dg_in_mal")
+        o("has_variable = te_dg_in_malc")
+        o("}")
+        for i, level in enumerate(sorted(P.MALARIA_INFECTION, reverse=True)):
+            o(f"{'if' if i == 0 else 'else_if'} = {{")
+            o(f"limit = {{ var:te_dg_in_mal >= {level} }}")
+            o(f"add = {lit(P.MALARIA_INFECTION[level])}")
+            o("}")
+        o("multiply = { value = 1 subtract = var:te_dg_in_malc }")
+        o("}")
+        o("add = 1")
     else:
         raise KeyError(factor)
 
@@ -1300,6 +1377,47 @@ def medicine_target_values(o):
         o("value = 1")
         o(f"subtract = {{ value = te_demog_access_target multiply = te_demog_treatment_target_{cause} }}")
         o("}")
+    o("")
+
+
+def malaria_values(o, root):
+    """Calibration step 3, call 2 (owner, 2026-10-12; the spec's §2.2): the state's malaria level, which the step stores
+    as te_dg_in_mal (P.MALARIA_TRAITS: 1 malaria, 2 severe) beside the control P.MALARIA_CONTROL_TYPE (te_dg_in_malc;
+    malaria_prevention's line, not quinine's). The trait is read with has_state_trait, as vanilla reads it beside its own
+    quinine test (cultural_community_values.txt), which only makes sense if the trait outlasts the technology that
+    disables its modifier. The second value reads the same level from the state regions the map files give the traits:
+    the self-check malaria_trait_read's ground truth, and the census's read instead of has_state_trait under
+    P.MALARIA_READS_REGION_LIST (its fallback)."""
+    by_level = {}
+    for region, level in sorted(R.malaria_levels(state_regions=root / "map_data" / "state_regions").items()):
+        by_level.setdefault(level, []).append(region)
+    by_trait = {level: trait for trait, level in P.MALARIA_TRAITS.items()}
+    o("# State scope (calibration step 3): the state's malaria level from its state region's trait in the map files.")
+    o("te_demog_malaria_level_listed = {")
+    o("value = 0")
+    for i, level in enumerate(sorted(by_level, reverse=True)):
+        o(f"{'if' if i == 0 else 'else_if'} = {{")
+        o("limit = {")
+        o("OR = {")
+        for region in by_level[level]:
+            o(f"state_region = s:{region}")
+        o("}")
+        o("}")
+        o(f"add = {level}")
+        o("}")
+    o("}")
+    o("# State scope (calibration step 3): the malaria level the step stores (te_dg_in_mal).")
+    o("te_demog_malaria_level = {")
+    if P.MALARIA_READS_REGION_LIST:
+        o("value = te_demog_malaria_level_listed")
+    else:
+        o("value = 0")
+        for i, level in enumerate(sorted(by_trait, reverse=True)):
+            o(f"{'if' if i == 0 else 'else_if'} = {{")
+            o(f"limit = {{ has_state_trait = {by_trait[level]} }}")
+            o(f"add = {level}")
+            o("}")
+    o("}")
     o("")
 
 
@@ -1341,7 +1459,9 @@ def multipliers(o):
     o("min = 0")
     o("max = 1")
     o("}")
-    o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
+    o(f"# access: literacy, plus Sex Education's {P.MEANS_LITERACY_TYPE} (phase 2 step 3b), at most 1")
+    o(f"multiply = {{ value = var:te_dg_lit add = modifier:{P.MEANS_LITERACY_TYPE} max = 1 "
+      f"multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
     o(f"# laws, history, events and measures: Family Limitation and its kin ({P.MEANS_SHIFT_TYPE})")
     o(f"add = modifier:{P.MEANS_SHIFT_TYPE}")
     o(f"max = {lit(P.MEANS_CAP)}")
@@ -1590,6 +1710,89 @@ def practice_loops(o):
     o("")
 
 
+# ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.5. Sex Education's access sits in
+# te_demog_means (multipliers) and Restricted Contraception's maternal deaths in the maternal cause's "laws" factor
+# (P.CAUSE_FACTORS); the rest is here.
+
+def family_policy_values(o):
+    o("# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.")
+    o("# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'")
+    o("# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's")
+    o("# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired")
+    o("# multiplies by it; the TFR tooltips show it.")
+    o("te_demog_tfr_policy = {")
+    o(f"value = modifier:{P.DESIRED_TYPE}")
+    o("if = {")
+    o(f"limit = {{ modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} > 0 }}")
+    o("subtract = {")
+    o("value = te_demog_ms_birth_limit_part")
+    o(f"multiply = {{ value = modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} max = 1 }}")
+    o("multiply = te_demog_agr_share")
+    o("}")
+    o("}")
+    o("add = 1")
+    o("min = 0")
+    o("}")
+    o("# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.")
+    o("te_demog_agr_share = {")
+    o("value = 0")
+    o("if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }")
+    o("}")
+    o("# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).")
+    o("te_demog_urban_relief_left = {")
+    o(f"value = 1 subtract = {{ value = modifier:{P.URBAN_RELIEF_TYPE} min = 0 max = 1 }}")
+    o("}")
+    o("# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the")
+    o("# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on")
+    o("# between steps shows when the census's figure takes it. The live value for a census state from before the store.")
+    o("te_demog_tfr_policy_shown = {")
+    o("value = te_demog_tfr_policy")
+    o("if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }")
+    o("}")
+    o("te_demog_urban_left_stored = {")
+    o("value = te_demog_urban_relief_left")
+    o("if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }")
+    o("}")
+    o("# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.")
+    o("te_demog_srb_add = {")
+    o("value = 0")
+    o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {P.PRENATAL_SEXING_TECH} }} }} "
+      f"value = modifier:{P.SRB_TYPE} min = 0 }}")
+    o("}")
+    o(f"te_demog_k_desired_floor = {{ value = {lit(P.DESIRED_FLOOR)} }}")
+    o(f"te_demog_k_desired_cap = {{ value = {lit(P.DESIRED_CAP)} }}")
+    o(f"te_demog_k_srb_base = {{ value = {lit(P.SRB_BASE)} }}")
+    o("")
+
+
+def family_policy_effects(o):
+    o("# Phase 2 step 3b: THIS = a state, in te_demog_prepare before te_demog_desired: the family policy term and the urban")
+    o("# share Family Housing leaves, stored with the step's other terms (te_dg_natural's pattern), so te_demog_tfr_urban")
+    o("# and the tooltips read what the step used until the next one.")
+    o("te_demog_family_policy_store = {")
+    o("set_variable = { name = te_dg_policy value = te_demog_tfr_policy }")
+    o("set_variable = { name = te_dg_urban_left value = te_demog_urban_relief_left }")
+    o("}")
+    o("# Phase 2 step 3b (the design §3.4): the newborns' split in the step (demographics_model.newborn_split). THIS = a")
+    o("# state, in te_demog_step_run before the sweep: girls and boys per 100,000 births into locals, the constants")
+    o("# unless prenatal sexing and a positive sex-ratio type move it (100 girls to te_demog_k_srb_base + it boys).")
+    o("te_demog_newborn_split = {")
+    o("set_local_variable = { name = te_dg_nb_f value = te_demog_k_female_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_m value = te_demog_k_male_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_srb value = te_demog_srb_add }")
+    o("if = {")
+    o("limit = { local_var:te_dg_nb_srb > 0 }")
+    o("set_local_variable = {")
+    o("name = te_dg_nb_f")
+    o("value = { value = 10000000 divide = { value = local_var:te_dg_nb_srb add = te_demog_k_srb_base add = 100 min = 100 } }")
+    o("}")
+    o("set_local_variable = { name = te_dg_nb_m value = { value = 100000 subtract = local_var:te_dg_nb_f } }")
+    o("}")
+    o("}")
+    o("")
+
+
 def debug_values(o):
     o("# State scope: each slot as per mille of the state's people, for the replay lines (Task 15).")
     o("# One sequential block each, so the scale and the people are not rounded on their own.")
@@ -1610,11 +1813,13 @@ def render_values(root):
     o("")
     engine_curves(o, G.read_defines(root / "common" / "defines" / "extra_defines.txt"))
     engine_rate_terms(o, root)
+    malaria_values(o, root)
     multipliers(o)
     practices(o)
     land_term(o, root)
     constants(o)
     work_values(o)
+    family_policy_values(o)
     debug_values(o)
     return o.text()
 

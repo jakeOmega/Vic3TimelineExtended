@@ -351,6 +351,10 @@ FIXED_MAX = (2 ** 63 - 1) / 1e5   # the largest value script holds: an i64 in un
 WORK_DEFAULTS = {"te_demog_child_work": P.CHILD_WORK_SHARE_DEFAULT, "te_demog_pension_kind": 0.0,
                  "te_demog_pension_age": float(P.PENSION_AGE["standard"]), f"modifier:{P.WOMENS_WORK_TYPE}": 0.0,
                  **{f"modifier:{t}": 0.0 for t in P.PARTICIPATION_TYPES}}
+# Phase 2 step 3b: the Family Policy types' reads and the two owner reads (the prenatal-sexing technology's gate on the
+# sex ratio at birth, Birth Limit's part of desired fertility), 0 unless a test gives them (_family_fixtures).
+FAMILY_DEFAULTS = {**{f"modifier:{t}": 0.0 for t in P.MEASURE_TYPES}, "te_demog_srb_add": 0.0,
+                   "te_demog_ms_birth_limit_part": 0.0}
 
 
 class _Engine:
@@ -376,10 +380,12 @@ class _Engine:
         # test says (the real trigger reads has_game_rule, which _Engine doesn't know)
         # te_demog_has_pension_law (phase 2 step 1) reads has_law: off unless a test says, so an engine that runs the
         # country's game start or yearly census never evaluates it
+        # a pop's is_employed (calibration step 3's country-scope absorbed lines read its workplace): not employed unless
+        # a test says (_OwnerEngine's workplace)
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
                                  "te_demog_clock_on": False, "te_demog_effects_run": False,
-                                 "te_demog_has_pension_law": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **fixtures}
+                                 "te_demog_has_pension_law": False, "is_employed": False, **(triggers or {})}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -589,7 +595,9 @@ def _stored(inp):
     med = inp.medicine if inp.medicine is not None else demographics_model.medicine_targets(inp)
     out = {"te_dg_sol": float(inp.sol), "te_dg_lit": float(inp.literacy), "te_dg_acc": med["access"],
            "te_dg_in_sol": float(inp.sol), "te_dg_in_lit": float(inp.literacy),
-           "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding}
+           "te_dg_in_turm": min(max(inp.turmoil, 0.0), 1.0), "te_dg_in_crowd": inp.crowding,
+           "te_dg_in_mal": float(inp.malaria),
+           "te_dg_in_malc": min(max(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0), 1.0)}
     for cause in P.MEDICINE_CAUSES:
         out[f"te_dg_trt_{P.CAUSE_SHORT[cause]}"] = med[cause]
     for cause, types in P.MORTALITY_TYPES.items():
@@ -603,6 +611,18 @@ def _mod_fixtures(inp):
     for t in (P.WOMENS_WORK_TYPE, *P.PARTICIPATION_TYPES):
         out[f"modifier:{t}"] = inp.mods.get(t, 0.0)
     out["turmoil"] = inp.turmoil
+    out["te_demog_malaria_level"] = float(inp.malaria)   # has_state_trait, which _Engine can't read (calibration step 3)
+    out.update(_family_fixtures(inp))
+    return out
+
+
+def _family_fixtures(inp):
+    """Phase 2 step 3b's reads from the model's inputs: the Family Policy types, and the owner's reads the interpreter
+    can't make (te_demog_srb_add: the type with prenatal sexing; te_demog_ms_birth_limit_part: Birth Limit's part)."""
+    out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.MEASURE_TYPES}
+    srb = inp.mods.get(P.SRB_TYPE, 0.0)
+    out["te_demog_srb_add"] = max(0.0, srb) if P.PRENATAL_SEXING_TECH in inp.techs else 0.0
+    out["te_demog_ms_birth_limit_part"] = inp.birth_limit
     return out
 
 
@@ -1312,9 +1332,10 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_mandatory_augmentation", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
         ("law", "law_medical_augmentation_only", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
         ("law", "law_no_womens_rights", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
-        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("ontop", -0.1),
+        # phase 2 step 3b (§3.2): the two family laws' lines are absorbed, so under Full M cancels them
+        ("law", "law_population_control_measures", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("law", "law_private_health_insurance", "institution_modifier", "state_mortality_wealth_mult"): ("ontop", -0.002),
-        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_pro_natalist_subsidies", "modifier", "state_birth_rate_mult"): ("absorbed", 0.1),
         ("law", "law_protected_class", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("law", "law_public_health_insurance", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.05),
         ("law", "law_regulated_augmentation_market", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
@@ -2978,13 +2999,22 @@ class _OwnerEngine(_Engine):
     absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
     incorporation and the pop's starvation are trigger fixtures (is_incorporated, is_in_*_starvation)."""
 
-    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, **kwargs):
+    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, workplace=None, **kwargs):
         super().__init__(fixtures, **kwargs)
         self.laws, self.techs, self.levels, self.pop_type = set(laws), set(techs), dict(levels or {}), pop_type
+        self.workplace = workplace   # the pop's workplace's building group; None: not employed (calibration step 3)
 
     def _test(self, key, op, arg):
         if key in ("owner", "state"):
             return self.holds(arg)
+        if key == "is_employed":
+            return (self.workplace is not None) == (arg == "yes")
+        if key == "exists" and arg == "workplace":
+            return self.workplace is not None
+        if key == "workplace":
+            return self.holds(arg)
+        if key == "is_building_group":
+            return arg == self.workplace
         if key == "has_law":
             assert arg.startswith("law_type:"), arg
             return arg[9:] in self.laws
@@ -3094,6 +3124,33 @@ class TestAbsorbedScript(unittest.TestCase):
         self.assertEqual(run(0.3), (0.0, 0.0), "mild starvation")
         self.assertEqual(run(1.0), (0.0, 0.0))
         self.assertEqual(run(0.12, full=False), (0.0, 0.0), "outside Full")
+
+    def test_the_landowners_famine_reserves_are_absorbed_per_farm_pop(self):
+        """Calibration step 3, call 1 (the spec's §2.1): a pop employed in an agriculture building (the group or a
+        descendant, as the walk reads the key) absorbs its owner's read of the agriculture mortality key, the trait at
+        the size its power gives it (a powerful group's -0.1 reads -0.2); a pop elsewhere, or with no workplace,
+        absorbs none of it; outside Full nothing is summed. The walk's own read of the key at the farm is the
+        self-check's other side."""
+        def run(workplace, full=True, owner=-0.2, farm=-0.2):
+            eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0, "total_size": 1000.0,
+                                f"owner.modifier:{key}": owner, f"workplace.modifier:{key}": farm},
+                               pop_type="peasants", workplace=workplace,
+                               triggers={"is_in_severe_starvation": False, "is_in_mild_starvation": False,
+                                         "te_demog_effects_run": full})
+            eng.call("te_demog_absorbed_walk_init")
+            eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=1.0, te_dg_p_md=1.0)
+            eng.call("te_demog_absorbed_walk_pop")
+            return eng.locals["te_dg_w_edr"] / self.P_ED, eng.value("te_demog_pop_country_line_walk_read")
+
+        key = "building_group_bg_agriculture_mortality_mult"
+        self.assertEqual(P.COUNTRY_ABSORBED_GROUPS, ("bg_agriculture",))
+        for group in ("bg_subsistence_agriculture", "bg_agriculture", "bg_staple_crops"):
+            with self.subTest(group=group):
+                self.assertAlmostEqual(run(group)[0], -0.2 * P.COUNTRY_ABSORBED_SCALE)
+                self.assertAlmostEqual(run(group, farm=-0.3)[1], -0.3, msg="the walk's read is the workplace's")
+        self.assertEqual(run("bg_mining"), (0.0, 0.0))
+        self.assertEqual(run(None), (0.0, 0.0))
+        self.assertEqual(run("bg_subsistence_agriculture", full=False)[0], 0.0)
 
     def test_literacy_and_mild_starvation_are_absorbed_per_pop(self):
         """Mild starvation (starvation_penalty x (0.4 - food security) x 2.5, read in 0.05 steps) is absorbed;
@@ -6074,6 +6131,38 @@ class TestCauseFactorsScript(unittest.TestCase):
                      "te_dg_in_lit"):
             self.assertAlmostEqual(eng.vars[name], want[name], places=9, msg=name)
         self.assertEqual(eng.vars["te_dg_in_turm"], 1.0, "turmoil is a 0-1 share")
+
+    def test_the_malaria_factor_matches_the_model(self):
+        """Calibration step 3 (the spec's §2.2): each trait level, with and without Malaria Prevention's control, and a
+        part control; the factor multiplies into infection's multiplier."""
+        for level in (0, 1, 2):
+            for control in (0.0, 0.4, 1.0, 1.5):
+                inp = demographics_model.Inputs(sol=7, literacy=0.1, malaria=level,
+                                                mods={P.MALARIA_CONTROL_TYPE: control})
+                eng = self._eng(inp)
+                want = demographics_model.cause_factors(inp)["infection"]["malaria"]
+                with self.subTest(level=level, control=control):
+                    self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_infection_malaria")), want,
+                                           places=9)
+                    self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_mult_infection")),
+                                           demographics_model.cause_multipliers(inp)["infection"], places=6)
+        self.assertAlmostEqual(demographics_model.cause_factors(demographics_model.Inputs(malaria=2))["infection"]
+                               ["malaria"], 1 + P.MALARIA_INFECTION[2])
+
+    def test_a_step_from_before_step_3_reads_no_malaria(self):
+        """A census whose last step predates calibration step 3 holds no te_dg_in_mal: the factor reads 1 until its next
+        step, so the hover still multiplies to the row."""
+        inp = demographics_model.Inputs(sol=7, literacy=0.1, malaria=2)
+        eng = self._eng(inp)
+        del eng.vars["te_dg_in_mal"], eng.vars["te_dg_in_malc"]
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_infection_malaria")), 1.0)
+
+    def test_the_store_takes_the_malaria_level_and_its_control(self):
+        inp = demographics_model.Inputs(sol=7, literacy=0.1, malaria=1, mods={P.MALARIA_CONTROL_TYPE: 1.5})
+        eng = _Engine(_mod_fixtures(inp))
+        eng.vars.update(te_dg_sol=7.0, te_dg_lit=0.1)
+        eng.call("te_demog_cause_inputs_store")
+        self.assertEqual((eng.vars["te_dg_in_mal"], eng.vars["te_dg_in_malc"]), (1.0, 1.0), "the control is 0 to 1")
 
     def test_a_walk_between_steps_moves_no_factor(self):
         """The reviews of #916 (logic M2, panel M4): a walk without a step (a second pulse in a year, the console's

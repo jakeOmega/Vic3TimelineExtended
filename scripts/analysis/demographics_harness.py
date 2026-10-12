@@ -13,11 +13,14 @@ Usage:
     demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
+    demographics_harness.py measures [--save SAVE]      # phase 2 step 3b: the Family Policy measures against §5's bands
     demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
                                                         # the engine's growth once the census sets its rates
+    demographics_harness.py ontop-fit SAVE... --peacetime ROWS --splits SPLIT... [--g LIST] [--at G]
+                                                        # calibration step 3: absorption, the malaria factor, the gate
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -89,7 +92,8 @@ def inputs_for(c, carriers=None, incorporated=True, practices=None):
     mods = DM.totals(carriers, c.techs, c.laws, c.institutions, incorporated=incorporated)
     return M.Inputs(sol=c.sol, literacy=c.literacy, urban_share=c.urban_share, techs=frozenset(c.techs),
                     laws=frozenset(c.laws), institutions=dict(c.institutions), wealth_tfr=c.wealth_tfr,
-                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}))
+                    mods=mods, means_add=c.means_add, crowding=c.crowding, practices=dict(practices or {}),
+                    malaria=getattr(c, "malaria", 0))
 
 
 def cmd_sketch(_args):
@@ -779,6 +783,222 @@ def cmd_fertility(_args):
     return out
 
 
+# ---- measures: the Family Policy measures in the census (phase 2 step 3b; the design §3.7, §5) ----------------------
+# The measures' census lines come from their country modifiers (demographics_modifiers.measure_lines), the laws' from the
+# carriers, and the money upkeep's share of GDP from te_demog_ms_cost_<measure> (te_demog_measure_values.txt). Rich
+# low-fertility states are the gate's (§3.7: 1.2-1.8 children); the coercive packages are reported, not gated.
+MEASURE_TYPES_ALL = P.DEMOG_TYPES + P.MEASURE_TYPES
+PRONATAL_PACKAGE = ("child_allowance", "family_housing", "honours")   # with Pro-Natalist Policy (§3.4, §5)
+# (measure, the law the single row puts it under, coercive): coercive measures are reported, not held to the single
+# band (§3.4: "the most extreme package ... may move fertility more than 0.4 children, at its political price")
+MEASURE_ROWS = (
+    ("child_allowance", P.PRO_NATALIST_LAW, False), ("family_housing", P.PRO_NATALIST_LAW, False),
+    ("honours", P.PRO_NATALIST_LAW, False), ("parental_leave", "law_state_sponsored_family_planning", False),
+    ("free_contraception", "law_state_sponsored_family_planning", False),
+    ("sex_education", "law_state_sponsored_family_planning", False),
+    ("later_longer_fewer", "law_population_control_measures", False),
+    ("restricted_contraception", P.PRO_NATALIST_LAW, True), ("birth_limit", "law_population_control_measures", True),
+    ("birth_limit_one", "law_population_control_measures", True),
+    ("crash_campaign", "law_population_control_measures", True),
+)
+COERCIVE_PACKAGES = (
+    ("Pro-Natalist: the package with Restricted Contraception", P.PRO_NATALIST_LAW,
+     PRONATAL_PACKAGE + ("restricted_contraception",)),
+    ("Population Control: Free Contraception, Sex Education, Later Longer Fewer, Birth Limit (two)",
+     "law_population_control_measures", ("free_contraception", "sex_education", "later_longer_fewer", "birth_limit")),
+    ("Population Control: the same at one child, with the Crash Campaign", "law_population_control_measures",
+     ("free_contraception", "sex_education", "later_longer_fewer", "birth_limit_one", "crash_campaign")),
+    ("Population Control: Birth Limit (one) with the Rural Exemption", "law_population_control_measures",
+     ("birth_limit_one", "rural_exemption")),
+)
+_RICH_MEANS = MEANS_TECHS | {"contraceptive_pill"}
+# (label, Inputs keywords): rich states at 1.2-1.8 children (the gate), and high-fertility ones for the coercive rows
+MEASURE_RICH_SCENARIOS = [
+    ("West 1990, Women's Suffrage", dict(sol=38, literacy=0.98, urban_share=0.75, techs=MED_1990 | _RICH_MEANS,
+                                         laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 6},
+                                         practices={"lm": 0.45})),
+    ("Rich today, Protected Class", dict(sol=40, literacy=0.99, urban_share=0.8, techs=MED_TODAY | _RICH_MEANS,
+                                         laws={PHI, "law_protected_class"}, institutions={HEALTH: 8},
+                                         practices={"lm": 0.3})),
+    ("Rich today, Protected Class, 60% urban", dict(sol=40, literacy=0.99, urban_share=0.6,
+                                                    techs=MED_TODAY | _RICH_MEANS, laws={PHI, "law_protected_class"},
+                                                    institutions={HEALTH: 8}, practices={"lm": 0.3})),
+    # the band's upper half: the package grows with desired family size, which is higher where fewer live in cities
+    ("West 1990, Women's Suffrage, 50% urban", dict(sol=38, literacy=0.9, urban_share=0.5, techs=MED_1990 | _RICH_MEANS,
+                                                   laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 6},
+                                                   practices={"lm": 0.45})),
+    ("West 1970, Women's Suffrage", dict(sol=30, literacy=0.97, urban_share=0.7, techs=MED_1950 | _RICH_MEANS,
+                                         laws={PHI, "law_womens_suffrage"}, institutions={HEALTH: 5},
+                                         practices={"lm": 0.45})),
+]
+MEASURE_HIGH_SCENARIOS = [
+    ("China 1975 (TFR ~5, the Pill)", dict(sol=9, literacy=0.6, urban_share=0.2, agrarian_share=0.75,
+                                           techs=MED_1950 | _RICH_MEANS | {"microprocessor"}, laws={CHS},
+                                           institutions={HEALTH: 2}, practices={"bs": 0.03})),
+    ("India 1975", dict(sol=9, literacy=0.35, urban_share=0.2, agrarian_share=0.7,
+                        techs=MED_1950 | _RICH_MEANS, laws={CHS}, institutions={HEALTH: 1})),
+]
+PACKAGE_BAND = (0.2, 0.4)      # §5: the full pro-natalist package, children per woman
+SINGLE_MAX = 0.15              # §5: each single measure
+RICH_TFR = (1.2, 1.8)          # §3.7: the states the gate reads
+UPKEEP_BAND = (0.01, 0.03)     # §5: the package's money upkeep, a share of revenue
+# A rich country's tax revenue over its GDP in the game (weekly income x 52 over the GDP channel's latest sample, the
+# investment pool's share of construction, weekly_income slot 7, left out: it pays for private building, not the
+# state). The plain-text saves of 2026-10 (the owner's 1949 French Commune and 1959 monument games), their ten largest
+# economies: 0.10-0.33, median about 0.2 (France 0.21, Germany 0.23, Britain 0.32, the USA 0.07-0.10). Measure a save
+# with --save.
+REVENUE_SHARE_OF_GDP = 0.2
+
+
+def measure_inputs(kw, carriers, lines, laws=(), measures=()):
+    """Inputs for a scenario under `laws` with `measures` on: the carriers' types (the laws' own census lines among
+    them) plus each measure's census lines, and Birth Limit's part of desired fertility."""
+    kw = dict(kw)
+    laws = frozenset(kw.pop("laws", ())) | frozenset(laws)
+    techs = frozenset(kw.pop("techs", ()))
+    institutions = dict(kw.pop("institutions", None) or {})
+    mods = DM.totals(carriers, techs, laws, institutions, types=MEASURE_TYPES_ALL)
+    birth_limit = 0.0
+    for m in measures:
+        for t, v in lines[m].items():
+            if t in MEASURE_TYPES_ALL:
+                mods[t] = mods.get(t, 0.0) + v
+        if m.startswith("birth_limit"):
+            birth_limit = lines[m].get(P.DESIRED_TYPE, 0.0)
+    return M.Inputs(techs=techs, laws=laws, institutions=institutions, mods=mods, birth_limit=birth_limit, **kw)
+
+
+def measure_tfr(inp):
+    return M.fertility(inp, life(inp)["e0"])["tfr"]
+
+
+def money_shares(root=ROOT):
+    """{measure: its money upkeep's share of GDP a year at the reference} from te_demog_ms_cost_<measure>'s first
+    multiply (te_demog_measure_values.txt)."""
+    text = (Path(root) / "common" / "script_values" / "te_demog_measure_values.txt").read_text(encoding="utf-8-sig")
+    return {m.group(1): float(m.group(2))
+            for m in re.finditer(r"^te_demog_ms_cost_(\w+) = \{\s*value = gdp\s*multiply = ([\d.]+)", text, re.M)}
+
+
+def package_upkeep(shares, measures, young, urban, women):
+    """The measures' money upkeep, a share of GDP a year, as te_demog_ms_cost_<measure> computes it: Child Allowance x
+    (the 0-14 share / 0.3), Family Housing x the urban share, Parental Leave x the women's rate."""
+    factor = {"child_allowance": young / 0.3, "family_housing": urban, "parental_leave": women}
+    return sum(shares[m] * factor.get(m, 1.0) for m in measures if m in shares)
+
+
+def budget_shares(path, top=10):
+    """[(tag, GDP, tax revenue / GDP)] for the `top` largest economies of a plain-text save: weekly income less the
+    investment pool's share of construction (slot 7), x 52, over the GDP channel's latest sample."""
+    S.check_plain_text(path)
+    rows, cur, depth, in_gdp, in_cm = [], None, 0, False, False
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            if not in_cm:
+                if line.startswith("country_manager={"):
+                    in_cm, depth = True, 1
+                continue
+            text = line.strip()
+            if depth == 2 and re.match(r"^\d+=\{$", text):
+                cur = {}
+                rows.append(cur)
+            elif cur is not None and depth >= 3:
+                if text.startswith("definition="):
+                    cur["tag"] = text.split("=", 1)[1].strip('"')
+                elif text.startswith("weekly_income={") and "income" not in cur:
+                    cur["income"] = [float(x) for x in text[len("weekly_income={"):].strip(" }").split()]
+                elif depth == 3:
+                    in_gdp = text.startswith("gdp={") or (in_gdp and not re.match(r"^\w+=\{", text))
+                elif in_gdp and text.startswith("index="):
+                    cur["index"] = int(text.split("=", 1)[1])
+                elif in_gdp and text.startswith("values={"):
+                    cur["gdp"] = [float(x) for x in text[len("values={"):].strip(" }").split()]
+            depth += line.count("{") - line.count("}")
+            if depth <= 0:
+                break
+    out = []
+    for c in rows:
+        if not c.get("gdp") or not c.get("income"):
+            continue
+        gdp = c["gdp"][(c.get("index", len(c["gdp"])) - 1) % len(c["gdp"])]
+        tax = sum(c["income"]) - (c["income"][7] if len(c["income"]) > 7 else 0.0)
+        if gdp > 0:
+            out.append((c.get("tag", "?"), gdp, tax * 52 / gdp))
+    return sorted(out, key=lambda r: -r[1])[:top]
+
+
+def measure_rows(carriers=None, lines=None):
+    """{"rich": [...], "high": [...]}: each scenario's base children per woman, the package's effect, each single
+    measure's (against its law alone) and the laws' own; the coercive packages' effects."""
+    carriers = DM.load_carriers(types=MEASURE_TYPES_ALL) if carriers is None else carriers
+    lines = DM.measure_lines() if lines is None else lines
+    out = {"rich": [], "high": []}
+    for group, scenarios in (("rich", MEASURE_RICH_SCENARIOS), ("high", MEASURE_HIGH_SCENARIOS)):
+        for label, kw in scenarios:
+            base_inp = measure_inputs(kw, carriers, lines)
+            base = measure_tfr(base_inp)
+            row = {"label": label, "base": base, "singles": {}, "laws": {}, "packages": {}}
+            for law in (P.PRO_NATALIST_LAW, "law_population_control_measures"):
+                row["laws"][law] = measure_tfr(measure_inputs(kw, carriers, lines, (law,))) - base
+            for m, law, coercive in MEASURE_ROWS:
+                under = measure_tfr(measure_inputs(kw, carriers, lines, (law,)))
+                with_m = measure_tfr(measure_inputs(kw, carriers, lines, (law,), (m,)))
+                row["singles"][m] = (with_m - under, coercive)
+            pkg_inp = measure_inputs(kw, carriers, lines, (P.PRO_NATALIST_LAW,), PRONATAL_PACKAGE)
+            row["package"] = measure_tfr(pkg_inp) - base
+            ring, _last = M.run_constant(pkg_inp, years=300)
+            row["young"] = M.structure(ring)["young"]
+            row["urban"] = kw["urban_share"]
+            for name, law, ms in COERCIVE_PACKAGES:
+                row["packages"][name] = measure_tfr(measure_inputs(kw, carriers, lines, (law,), ms)) - base
+            out[group].append(row)
+    return out
+
+
+def cmd_measures(args):
+    rows = measure_rows()
+    shares = money_shares()
+    revenue = args.revenue_share
+    if args.save:
+        econ = budget_shares(args.save, top=args.top)
+        print(f"Tax revenue / GDP, the {len(econ)} largest economies of {Path(args.save).name}:")
+        for tag, gdp, share in econ:
+            print(f"  {tag:5s} GDP {gdp:14.0f}  revenue/GDP {share:5.3f}")
+        if econ and args.revenue_share is None:
+            revenue = statistics.median(r[2] for r in econ)
+    revenue = REVENUE_SHARE_OF_GDP if revenue is None else revenue
+    out = 0
+    print(f"\nThe full pro-natalist package (Pro-Natalist Policy, {', '.join(PRONATAL_PACKAGE)}): band "
+          f"{PACKAGE_BAND[0]:+g} to {PACKAGE_BAND[1]:+g} in rich states at {RICH_TFR[0]:g}-{RICH_TFR[1]:g} children; "
+          f"each single measure under {SINGLE_MAX:+g}; upkeep {UPKEEP_BAND[0]:.0%}-{UPKEEP_BAND[1]:.0%} of revenue "
+          f"(revenue {revenue:.2f} of GDP)")
+    for group in ("rich", "high"):
+        print("\nRich low-fertility states (the gate):" if group == "rich" else
+              "\nHigh-fertility states (reported):")
+        for r in rows[group]:
+            in_rich = RICH_TFR[0] <= r["base"] <= RICH_TFR[1]
+            flag = ""
+            if group == "rich":
+                ok = in_rich and PACKAGE_BAND[0] <= r["package"] <= PACKAGE_BAND[1]
+                out |= not ok
+                flag = "" if ok else (" OUT" if in_rich else " (base outside 1.2-1.8)")
+            print(f"  {r['label']:44s} base {r['base']:4.2f}  package {r['package']:+.3f}{flag}")
+            print("    laws alone: " + "  ".join(f"{law.replace('law_', '')} {d:+.3f}" for law, d in r["laws"].items()))
+            for m, (d, coercive) in r["singles"].items():
+                bad = group == "rich" and not coercive and d >= SINGLE_MAX
+                out |= bad
+                print(f"    {m:26s} {d:+.3f}{' (coercive, reported)' if coercive else ''}{' OUT' if bad else ''}")
+            for name, d in r["packages"].items():
+                print(f"    {name:84s} {d:+.3f}")
+            if group == "rich":
+                cost = package_upkeep(shares, PRONATAL_PACKAGE, r["young"], r["urban"], 0.0)
+                ok = UPKEEP_BAND[0] <= cost / revenue <= UPKEEP_BAND[1]
+                out |= not ok
+                print(f"    package upkeep: {cost:.3%} of GDP (0-14 share {r['young']:.3f} at the package's stable "
+                      f"structure, urban {r['urban']:.2f}) = {cost / revenue:.2%} of revenue{'' if ok else ' OUT'}")
+    return out
+
+
 
 # ---- history: the model against history's anchors (phase 2 calibration) -----------------------
 # The anchors are a CSV `measure,country,year,value` (scripts/analysis/fetch_history_anchors.py
@@ -926,7 +1146,7 @@ def cmd_history(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS + MALARIA_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
         saved = saved_shares(stored)
         rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
@@ -1033,7 +1253,7 @@ def cmd_practices_fit(args):
         res = DP.evaluate(today, anchors, s, cl, cb, east=east, years=fit_years)
         tfr = " / ".join(f"{v:.2f}" for _y, v in sorted(res["world_tfr"].items()) if v)
         hi = f"{res['high'][0]:.2f}-{res['high'][1]:.2f}" if res["high"] else "-"
-        fails = DP.region_gate(DP.project_regions(rows, today, today, s, cl, cb, east=east))
+        fails = DP.region_gate(DP.project_regions(rows, today, today, s, cl, cb, east=east), widen=R.widening())
         print(f"{s:.2f}  {cl:.2f}   {cb:.2f}   {res['error']:.3f}  {tfr:16s} {res['held']:.2f}  {east:.2f}  "
               f"{china(res):12s}  {hi:10s}  {len(fails)} failing")
     if not args.at:
@@ -1053,7 +1273,7 @@ def cmd_practices_fit(args):
         h = f"{hist:.2f}" if hist is not None else "-"
         print(f"{country:15s} {year}  model {model:.2f}  history {h}{tag}{off}")
     proj = DP.project_regions(rows, today, today, s, cl, cb, held, east)
-    show(proj, DP.region_gate(proj))
+    show(proj, DP.region_gate(proj, widen=R.widening()))
     print(f"Western life expectancy: {DP.mortality_report(today)}; scenarios out of band: "
           f"{scenarios_out(carriers, s, cl, cb)}")
     if args.mortality:
@@ -1066,7 +1286,7 @@ def cmd_practices_fit(args):
                         out = scenarios_out(carriers, s, cl, cb)
                     e_pt = rest[1] if len(rest) > 1 else DP.east_for_china(rows, today, point, s, cl, cb, held)[0]
                     proj = DP.project_regions(rows, today, point, s, cl, cb, held, e_pt)
-                    fails = DP.region_gate(proj)
+                    fails = DP.region_gate(proj, widen=R.widening())
                     e0 = DP.mortality_report(point)
                     cn = china(DP.evaluate(point, anchors, s, cl, cb, held=held, east=e_pt, years=fit_years))
                     print(f"floor {floor:.2f} sol {sol} infection x{scale:.2f}: {len(fails)} failing; East Asia's "
@@ -1083,6 +1303,101 @@ def cmd_practices_fit(args):
                 gb = {y: m for (c, y), (m, _h) in res["countries"].items() if c == "United Kingdom"}
                 print(f"vulcanization {vulc:.2f} feminism {fem:.2f}: Britain {gb}; scenarios out of band "
                       f"{scenarios_out(patched, s, cl, cb)}")
+    return 0
+
+
+# ---- ontop-fit: calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md §3) ----
+
+def _region_e0(fit_by_year, group_of):
+    """{group: people-weighted model life expectancy over every fit save} (group_of: {state id: #904 group})."""
+    acc = {}
+    for states in fit_by_year.values():
+        for st in states:
+            g = group_of.get(st.sid)
+            if g:
+                a = acc.setdefault(g, [0.0, 0.0])
+                a[0], a[1] = a[0] + st.people, a[1] + st.people * st.e0
+    return {g: e / p for g, (p, e) in acc.items() if p}
+
+
+def cmd_ontop_fit(args):
+    import demographics_ontop as O
+    import demographics_practices as DP
+    rows = DP.peacetime_span(json.loads(Path(args.peacetime).read_text(encoding="utf-8"))["rows"])
+    splits = O.read_splits(args.splits, save_year)
+    if not splits:
+        print("no 1 January split among --splits", file=sys.stderr)
+        return 1
+    widen_from = None
+    if args.spread_rows:
+        other = DP.peacetime_span(json.loads(Path(args.spread_rows).read_text(encoding="utf-8"))["rows"])
+        widen_from = O.two_run_spread(rows, other)
+        print("two-run spread (this run against --spread-rows; R.TWO_RUN_SPREAD records it): "
+              + ", ".join(f"{k} {v:.2f}" for k, v in sorted(widen_from.items())))
+    widen = R.widening(widen_from)
+    carriers = DM.load_carriers()
+    shares_by_year = DP.read_shares(args.shares) if args.shares else {}
+    saves = {path: DP.read_save(path) for path in args.save}
+
+    def load(infection):
+        out = {}
+        with DP.patch_params(MALARIA_INFECTION=infection):
+            for path in args.save:
+                year = save_year(path) or args.year
+                states = DP.practice_states(path, carriers, save=saves[path])
+                shares = {**DP.table_shares(states), **DP.saved_shares(states), **shares_by_year.get(year, {})}
+                out[year] = DP.fit_states(path, carriers, shares, save=saves[path])
+        return out
+
+    practice = (1.0, P.PRACTICE_CUT["lm"], P.PRACTICE_CUT["bs"], P.BS_HELD_START, P.BS_EAST_ASIA_START)
+    today = load({1: 0.0, 2: 0.0})   # the run's build had no malaria factor
+    grid = [float(x) for x in args.g.split(",")]
+    by_g = {g: load(O.malaria_infection(g)) for g in grid}
+    before = O.project(rows, splits, today, today, *practice, absorb=False)
+    absorbed = O.project(rows, splits, today, today, *practice)
+    print(f"Late Marriage and Birth Spacing at main's point (s 1.00, cuts {practice[1]:.2f} and {practice[2]:.2f}, "
+          f"India's share {practice[3]:.2f}, East Asia's {practice[4]:.2f}); per 1,000 a year, 1837-1900 peacetime")
+    print("g     severe  Africa  Oceania  SE Asia  World   failing (widened bands)")
+    for g in grid:
+        proj = O.project(rows, splits, today, by_g[g], *practice)
+        fails = DP.region_gate(proj, widen=widen)
+        grp = proj["groups"]
+        print(f"{g:.2f}  {O.malaria_infection(g)[2]:.2f}    {grp.get('Africa', (0, 0))[1]:+6.2f}  "
+              f"{grp.get('Oceania', (0, 0))[1]:+6.2f}   {grp.get('SE Asia', (0, 0))[1]:+6.2f}   "
+              f"{proj['world'][1]:+6.2f}  {len(fails)}")
+    g = float(args.at) if args.at is not None else O.fit_g(rows, splits, today, by_g, practice)
+    if g is None:
+        print("no g on the grid brings Africa inside history's band")
+        return 1
+    point = by_g[g] if g in by_g else load(O.malaria_infection(g))
+    after = O.project(rows, splits, today, point, *practice)
+    group_of = {r[9]: r[1] for r in rows}
+    e0_today, e0_after = _region_e0(today, group_of), _region_e0(point, group_of)
+    print(f"\nthe point: g {g:.2f} (severe {O.malaria_infection(g)[2]:.2f}); before = main (Late Marriage only), "
+          "absorbed = call 1 alone, after = calls 1 and 2")
+    print(f"{'group':26s} {'measured':>8s} {'before':>7s} {'absorbed':>8s} {'after':>7s}  {'history':>9s}  "
+          f"{'widened':>15s}  {'own(-)':>6s} {'own(+)':>6s} {'e0':>11s}")
+    for label, _r, band in R.REPORT_REGIONS:
+        if label not in after["groups"]:
+            continue
+        measured, b = before["groups"][label]
+        a1, a2 = absorbed["groups"][label][1], after["groups"][label][1]
+        w = widen.get(label, 0.0)
+        hist = f"{band[0]:+g} to {band[1]:+g}" if band else "-"
+        wide = f"{band[0] - w:+.2f} to {band[1] + w:+.2f}" if band else "-"
+
+        def mark(x):
+            return "" if not band else (" in" if band[0] - w <= x <= band[1] + w else " OUT")
+
+        parts = after["parts"][label]
+        print(f"{label:26s} {measured:+8.2f} {b:+6.2f}{mark(b):4s} {a1:+7.2f} {a2:+6.2f}{mark(a2):4s} {hist:>9s}  "
+              f"{wide:>15s}  {parts['own_neg']:+6.2f} {parts['own_pos']:+6.2f} "
+              f"{e0_today.get(label, 0):5.1f}->{e0_after.get(label, 0):4.1f}")
+    print(f"{'World':26s} {before['world'][0]:+8.2f} {before['world'][1]:+6.2f}     {absorbed['world'][1]:+7.2f} "
+          f"{after['world'][1]:+6.2f}     at most {before['world'][0] - 1:+.2f}")
+    for name, proj in (("before", before), ("after", after)):
+        fails = DP.region_gate(proj, widen=widen)
+        print(f"GATE {name}: {len(fails)} failing" + "".join(f"\n  GATE {line}" for line in fails))
     return 0
 
 
@@ -1384,6 +1699,9 @@ CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_c
 # Read on their own, not in CENSUS_INPUT_VARS: that check is all or nothing, and a census from before #916's last
 # fix, which holds the nine without these two, would lose its drifted medicine.
 STEP_SOL_VARS = ("te_dg_in_sol", "te_dg_in_lit")
+# Calibration step 3's stored inputs: the malaria level and control the step used (te_demog_cause_inputs_store). Read on
+# their own too: a census from before step 3 holds the nine without them, and had no malaria factor.
+MALARIA_VARS = ("te_dg_in_mal", "te_dg_in_malc")
 # The practices' shares a census state holds (te_demog_practice_effects.txt; Stop B, M2): history and practices-fit start
 # from them where a save has them, under a replay's (--shares) and over the seed.
 PRACTICE_VARS = tuple(f"te_dg_pr_{p}" for p in P.PRACTICES)
@@ -1396,8 +1714,11 @@ def saved_shares(walked):
             if all(f"te_dg_pr_{p}" in got for p in P.PRACTICES)}
 
 
+# The maternal cause's family-policy input (phase 2 step 3b), read where a census stored it: not in CENSUS_INPUT_VARS,
+# whose check is all or nothing, so a census from before it keeps its other inputs.
+OPTIONAL_INPUT_VARS = ("te_dg_in_mat",)
 FIDELITY_VARS = (("te_dg_sol", "te_dg_lit") + STEP_SOL_VARS + tuple(var for _c, var, _s in FIDELITY_CAUSES)
-                 + CENSUS_INPUT_VARS)
+                 + CENSUS_INPUT_VARS + MALARIA_VARS + OPTIONAL_INPUT_VARS)
 
 
 def census_inputs(inp, got):
@@ -1408,11 +1729,21 @@ def census_inputs(inp, got):
     medicine.update({c: got[f"te_dg_trt_{P.CAUSE_SHORT[c]}"] for c in P.MEDICINE_CAUSES})
     mods = dict(inp.mods)
     for cause, types in P.MORTALITY_TYPES.items():
+        stored = f"te_dg_in_{P.CAUSE_SHORT[cause]}"
+        if stored not in got:   # te_dg_in_mat: a census from before phase 2 step 3b
+            continue
         for t in types:
             mods[t] = 0.0
-        mods[types[0]] = got[f"te_dg_in_{P.CAUSE_SHORT[cause]}"]
+        mods[types[0]] = got[stored]
+    # the malaria level and control the step stored; a census from before step 3 stored neither, so the state keeps its
+    # map's level and its owner's control (what the census does from its next step; fidelity_rows takes the level as 0,
+    # what that census did)
+    malaria = inp.malaria
+    if all(v in got for v in MALARIA_VARS):
+        malaria = int(got["te_dg_in_mal"])
+        mods[P.MALARIA_CONTROL_TYPE] = got["te_dg_in_malc"]
     return dataclasses.replace(inp, medicine=medicine, turmoil=got["te_dg_in_turm"], crowding=got["te_dg_in_crowd"],
-                               mods=mods)
+                               mods=mods, malaria=malaria)
 
 
 def fidelity_rows(path, carriers=None, tags=(), counts=None):
@@ -1440,6 +1771,8 @@ def fidelity_rows(path, carriers=None, tags=(), counts=None):
             inp = dataclasses.replace(inputs_for(st, carriers, incorporated=inc),
                                       sol=got.get("te_dg_in_sol", got.get("te_dg_sol", st.sol)),
                                       literacy=got.get("te_dg_in_lit", got.get("te_dg_lit", st.literacy)))
+            if not all(v in got for v in MALARIA_VARS):
+                inp = dataclasses.replace(inp, malaria=0)   # a census from before calibration step 3: no malaria factor
             own = census_inputs(inp, got)
             if counts is not None:
                 counts["stored" if own is not inp else "save"] += 1
@@ -1542,6 +1875,13 @@ def main(argv=None):
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
+    p = sub.add_parser("measures", help="phase 2 step 3b: the Family Policy measures' effect on children per woman and "
+                                        "the package's upkeep against the design's §5 bands")
+    p.add_argument("--save", help="a plain-text save: its largest economies' tax revenue over GDP (median) for the "
+                                  "upkeep's share of revenue")
+    p.add_argument("--top", type=int, default=10, help="with --save: how many of the largest economies (10)")
+    p.add_argument("--revenue-share", type=float, help=f"revenue over GDP (default {REVENUE_SHARE_OF_GDP}, or the save's)")
+    p.set_defaults(fn=cmd_measures)
     sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "
                                      "§1.8)").set_defaults(fn=cmd_workforce)
     p = sub.add_parser("history")
@@ -1573,6 +1913,20 @@ def main(argv=None):
     p.add_argument("--means", action="store_true", help="with --at: the era-3 means pair's grid")
     p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
     p.set_defaults(fn=cmd_practices_fit)
+    p = sub.add_parser("ontop-fit", help="calibration step 3: call 1's absorption, the malaria factor's fit, the gate")
+    p.add_argument("save", nargs="+", help="the run's plain-text saves for the model's figures (practices-fit's)")
+    p.add_argument("--peacetime", required=True, help="#904's state-years: regional-rates/analyze.py --json's file")
+    p.add_argument("--splits", nargs="+", required=True,
+                   help="the run's 1 January saves holding the deaths' split (te_dg_ed, _ed_state, _ed_sev): plain "
+                        "text, or extract_all.py's per-save JSON")
+    p.add_argument("--shares", help="practices-replay's --out file (a state or year it lacks takes its seed)")
+    p.add_argument("--g", default="0,0.02,0.04,0.06,0.08,0.10,0.12,0.14,0.16",
+                   help="the malaria factor's mild excess to try (the severe one at vanilla's ratio)")
+    p.add_argument("--at", help="one g in detail (default: the smallest on the grid that brings Africa inside its band)")
+    p.add_argument("--spread-rows", help="another run's #904 state-years: widen the gate by the two runs' spread "
+                                         "(default: R.TWO_RUN_SPREAD)")
+    p.add_argument("--year", type=int, help="the saves' year, for a save with no game_date (a slice)")
+    p.set_defaults(fn=cmd_ontop_fit)
     p = sub.add_parser("adopters")
     p.add_argument("saves", nargs="+")
     p.set_defaults(fn=cmd_adopters)

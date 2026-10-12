@@ -6,6 +6,7 @@
 # State variables the walk writes, every year, whatever the rule (Tasks 8-11
 # add theirs below as they land):
 #   te_dg_walk_pop      people in the state, as the pops sum
+#   te_dg_walk_pop_prev the last walk's te_dg_walk_pop (the AI's population trend, te_demog_ms_pop_trend)
 #   te_dg_lit           pop-weighted literacy, 0-1
 #   te_dg_sol           pop-weighted standard of living
 #   te_dg_wtfr          mean wealth TFR (children per woman from wealth alone)
@@ -311,6 +312,17 @@ te_demog_walks = {
 	te_demog_state_gini = yes
 }
 
+# THIS = a state, just before its yearly walk (te_demog_state_yearly; fast mode's te_demog_state_clock_step): last
+# walk's people beside the coming one's, for the AI's population trend (te_demog_ms_pop_trend). Every game: the family
+# laws' AI weights read it (phase 2 step 3a, owner call 7). Outside te_demog_walks, whose text phase 2 step 1's golden
+# pins (test_demographics_golden.py).
+te_demog_walk_keep_prev = {
+	if = {
+		limit = { has_variable = te_dg_walk_pop }
+		set_variable = { name = te_dg_walk_pop_prev value = var:te_dg_walk_pop }
+	}
+}
+
 # THIS = a state, on its yearly pulse (a different day per state, spec §11.3).
 # The walks and Wealth Concentration run whatever the rule; the census only
 # when te_demog_cohorts_run. While fast mode's census clock runs (console only),
@@ -326,6 +338,7 @@ te_demog_state_yearly = {
 			limit = { te_demog_census_log_on = yes }
 			te_debug_demog_pulse_line = yes
 		}
+		te_demog_walk_keep_prev = yes
 		te_demog_walks = yes
 	}
 	# Inheritance's rural modifiers and Wealth Concentration read the walk's sums. Under fast mode the
@@ -465,6 +478,8 @@ te_demog_prepare = {
 	set_variable = { name = te_dg_m_work value = te_demog_mult_work }
 	te_demog_life_table = yes
 	set_variable = { name = te_dg_means value = te_demog_means }
+	# phase 2 step 3b: the family policy term and Family Housing's urban share, stored for the tooltips (generated)
+	te_demog_family_policy_store = yes
 	set_variable = { name = te_dg_desired value = te_demog_desired }
 	# women's legal standing, stored with the step's other terms so the tooltips match te_dg_tfr until the next step
 	set_variable = { name = te_dg_natural value = te_demog_tfr_natural }
@@ -1337,6 +1352,8 @@ te_demog_step_begin = {
 # then the year's totals and the scale. Run it straight after te_demog_step_begin, in the
 # same effect (the locals don't outlive it).
 te_demog_step_run = {
+	# the newborns' split, girls and boys per 100,000 births (phase 2 step 3b: the sex ratio at birth; generated)
+	te_demog_newborn_split = yes
 	set_local_variable = { name = te_dg_open value = te_demog_open_slot }
 	set_local_variable = { name = te_dg_s value = var:te_dg_scale }
 	set_local_variable = { name = te_dg_age value = 1 }
@@ -1527,8 +1544,8 @@ te_demog_fold_slot = {
 	}
 	change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
 	change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
-	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
-	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
+	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }
 }
 
 # After the sweep (demographics_model.step's tail): newborns into band 0 and
@@ -1536,8 +1553,8 @@ te_demog_fold_slot = {
 # people this year (the cohorts were scaled to last year's population first).
 te_demog_step_finish = {
 	te_demog_close_accumulators = yes
-	set_local_variable = { name = te_dg_bf_new value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
-	set_local_variable = { name = te_dg_bm_new value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+	set_local_variable = { name = te_dg_bf_new value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
+	set_local_variable = { name = te_dg_bm_new value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }
 	change_variable = { name = te_dg_bf0 add = local_var:te_dg_bf_new }
 	change_variable = { name = te_dg_bm0 add = local_var:te_dg_bm_new }
 	change_variable = { name = te_dg_cf0 add = local_var:te_dg_bf_new }

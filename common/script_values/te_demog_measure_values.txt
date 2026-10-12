@@ -1,0 +1,569 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures: script values (phase 2 step 3a)
+# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.6.
+# All country scope. The panel reads the per-measure values here, never a measure's variable (a GUI read of a
+# variable that doesn't exist logs every frame: gui_modding_guide.md gotchas #14 and #23).
+# ============================================================================
+
+# The date as a year with its months: 1900 in January, 1900.5 in July (te_history_month_index counts months from year
+# 0). A measure's variable holds this at its switching on, so its five years run to the month.
+te_demog_ms_now = {
+	value = te_history_month_index
+	divide = 12
+}
+
+# ---- The term (§3.3) ----------------------------------------------------------------------------------------------
+# te_demog_ms_years_<measure>: the years since it was switched on, -1 while it is off (te_demog_ms_term_run).
+# te_demog_ms_until_<measure>: the year its five-year term ends (the Crash Campaign's, when it ends itself), 0 while
+# it is off (the panel and the greyed button's reason).
+# te_demog_ms_state_<measure>: the panel's code: 0 off, 1 on in its term, 2 on with its term run; the Crash Campaign 3
+# while barred.
+te_demog_ms_years_child_allowance = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_child_allowance }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_child_allowance
+	}
+}
+te_demog_ms_until_child_allowance = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_child_allowance }
+		value = var:te_dg_ms_child_allowance
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_child_allowance = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_child_allowance }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_child_allowance >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_family_housing = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_family_housing }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_family_housing
+	}
+}
+te_demog_ms_until_family_housing = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_family_housing }
+		value = var:te_dg_ms_family_housing
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_family_housing = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_family_housing }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_family_housing >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_honours = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_honours }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_honours
+	}
+}
+te_demog_ms_until_honours = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_honours }
+		value = var:te_dg_ms_honours
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_honours = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_honours }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_honours >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_restricted_contraception = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_restricted_contraception }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_restricted_contraception
+	}
+}
+te_demog_ms_until_restricted_contraception = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_restricted_contraception }
+		value = var:te_dg_ms_restricted_contraception
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_restricted_contraception = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_restricted_contraception }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_restricted_contraception >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_parental_leave = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_parental_leave }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_parental_leave
+	}
+}
+te_demog_ms_until_parental_leave = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_parental_leave }
+		value = var:te_dg_ms_parental_leave
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_parental_leave = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_parental_leave }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_parental_leave >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_free_contraception = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_free_contraception }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_free_contraception
+	}
+}
+te_demog_ms_until_free_contraception = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_free_contraception }
+		value = var:te_dg_ms_free_contraception
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_free_contraception = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_free_contraception }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_free_contraception >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_sex_education = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_sex_education }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_sex_education
+	}
+}
+te_demog_ms_until_sex_education = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_sex_education }
+		value = var:te_dg_ms_sex_education
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_sex_education = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_sex_education }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_sex_education >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_later_longer_fewer = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_later_longer_fewer }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_later_longer_fewer
+	}
+}
+te_demog_ms_until_later_longer_fewer = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_later_longer_fewer }
+		value = var:te_dg_ms_later_longer_fewer
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_later_longer_fewer = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_later_longer_fewer }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_later_longer_fewer >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_birth_limit = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_birth_limit
+	}
+}
+te_demog_ms_until_birth_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit }
+		value = var:te_dg_ms_birth_limit
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_birth_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_birth_limit >= 5 }
+			value = 2
+		}
+	}
+}
+# Birth Limit's setting for the panel: 1 at one child, 0 at two or off.
+te_demog_ms_birth_limit_one_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit_one }
+		value = 1
+	}
+}
+te_demog_ms_years_rural_exemption = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_rural_exemption }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_rural_exemption
+	}
+}
+te_demog_ms_until_rural_exemption = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_rural_exemption }
+		value = var:te_dg_ms_rural_exemption
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_rural_exemption = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_rural_exemption }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_rural_exemption >= 5 }
+			value = 2
+		}
+	}
+}
+te_demog_ms_years_crash_campaign = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_ms_crash_campaign }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_crash_campaign
+	}
+}
+te_demog_ms_until_crash_campaign = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_crash_campaign }
+		value = var:te_dg_ms_crash_campaign
+		add = 5
+		floor = yes
+	}
+}
+te_demog_ms_state_crash_campaign = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_crash_campaign }
+		value = 1
+		if = {
+			limit = { te_demog_ms_years_crash_campaign >= 5 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_demog_ms_crash_campaign_barred = yes }
+		value = 3
+	}
+}
+# The Crash Campaign's bar: the years since it last ended (100 when it never has), and the year the ten-year bar ends.
+te_demog_ms_years_since_crash_campaign = {
+	value = 100
+	if = {
+		limit = { has_variable = te_dg_ms_crash_campaign_end }
+		value = te_demog_ms_now
+		subtract = var:te_dg_ms_crash_campaign_end
+	}
+}
+te_demog_ms_barred_until_crash_campaign = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_ms_crash_campaign_end }
+		value = var:te_dg_ms_crash_campaign_end
+		add = 10
+		floor = yes
+	}
+}
+
+# ---- The money upkeep (§3.4; scripting_best_practices.md, "Expense Scaling with GDP") ---------------------------
+# Each is a _cost modifier's multiplier on country_expenses_add = 1, so it is the weekly cost: gdp is a year's, so a
+# share of GDP a year is divided by 52. Refreshed when the measure goes on and by the country's yearly census
+# (te_demog_ms_yearly). The census's figures exist under Full; without them the factor is the reference.
+# Child Allowance: 0.5% of GDP a year x (the 0-14 share / 0.3).
+te_demog_ms_cost_child_allowance = {
+	value = gdp
+	multiply = 0.005
+	if = {
+		limit = { has_variable = te_dg_young_share }
+		multiply = var:te_dg_young_share
+		divide = 0.3
+	}
+	divide = 52
+	min = 0
+}
+# Family Housing: 0.25% of GDP a year x the urban share (0.5 without the census). Step 3b's fit (§3.4: 0.4%): the full
+# pro-natalist package's upkeep within 1-3% of a rich country's revenue at the top of the gate's band.
+te_demog_ms_cost_family_housing = {
+	value = gdp
+	multiply = 0.0025
+	if = {
+		limit = { has_variable = te_dg_urban_share }
+		multiply = var:te_dg_urban_share
+	}
+	else = {
+		multiply = 0.5
+	}
+	divide = 52
+	min = 0
+}
+# Parental Leave: 0.3% of GDP a year x the share of women at work.
+te_demog_ms_cost_parental_leave = {
+	value = gdp
+	multiply = 0.003
+	multiply = te_demog_ms_women_at_work
+	divide = 52
+	min = 0
+}
+# Free Contraception: 0.1% of GDP a year.
+te_demog_ms_cost_free_contraception = {
+	value = gdp
+	multiply = 0.001
+	divide = 52
+	min = 0
+}
+
+# The share of women at work: phase 2 step 1's women's rate (te_demog_women_rate: the women's-work family's sum, with
+# the lower strata's floor) in the capital, every game. 0 without a capital.
+te_demog_ms_women_at_work = {
+	value = 0
+	if = {
+		limit = { exists = capital }
+		value = capital.te_demog_women_rate
+	}
+}
+
+# ---- Desired family size on each measure (the self-check: te_debug_demog_ms_selfcheck_start) ----------------------
+# Each measure's state_desired_fertility_mult line, 0 when it has none; test_demographics_measures.py pins them to
+# te_demog_measure_modifiers.txt. te_demog_ms_desired_on sums the lines of the measures' modifiers the country holds.
+te_demog_ms_desired_child_allowance = { value = 0.14 }
+te_demog_ms_desired_family_housing = { value = 0 }
+te_demog_ms_desired_honours = { value = 0.05 }
+te_demog_ms_desired_restricted_contraception = { value = 0 }
+te_demog_ms_desired_parental_leave = { value = 0.05 }
+te_demog_ms_desired_free_contraception = { value = 0 }
+te_demog_ms_desired_sex_education = { value = 0 }
+te_demog_ms_desired_later_longer_fewer = { value = -0.1 }
+te_demog_ms_desired_birth_limit = { value = -0.3 }
+te_demog_ms_desired_rural_exemption = { value = 0 }
+te_demog_ms_desired_crash_campaign = { value = -0.2 }
+te_demog_ms_desired_birth_limit_one = { value = -0.45 }
+te_demog_ms_desired_on = {
+	value = 0
+	if = { limit = { has_modifier = te_demog_ms_child_allowance } add = te_demog_ms_desired_child_allowance }
+	if = { limit = { has_modifier = te_demog_ms_honours } add = te_demog_ms_desired_honours }
+	if = { limit = { has_modifier = te_demog_ms_parental_leave } add = te_demog_ms_desired_parental_leave }
+	if = { limit = { has_modifier = te_demog_ms_later_longer_fewer } add = te_demog_ms_desired_later_longer_fewer }
+	if = { limit = { has_modifier = te_demog_ms_birth_limit } add = te_demog_ms_desired_birth_limit }
+	if = { limit = { has_modifier = te_demog_ms_birth_limit_one } add = te_demog_ms_desired_birth_limit_one }
+	if = { limit = { has_modifier = te_demog_ms_crash_campaign } add = te_demog_ms_desired_crash_campaign }
+}
+# State scope (phase 2 step 3b): Birth Limit's part of the state's state_desired_fertility_mult, which the Rural
+# Exemption's relief takes in farming states (the generated te_demog_tfr_policy; demographics_model.Inputs.birth_limit).
+# The engine sums the type over every carrier, so the part comes from the owner's Birth Limit modifier.
+te_demog_ms_birth_limit_part = {
+	value = 0
+	if = {
+		limit = { exists = owner owner = { has_modifier = te_demog_ms_birth_limit } }
+		value = te_demog_ms_desired_birth_limit
+	}
+	else_if = {
+		limit = { exists = owner owner = { has_modifier = te_demog_ms_birth_limit_one } }
+		value = te_demog_ms_desired_birth_limit_one
+	}
+}
+
+# ---- Each measure's upkeep, for the AI pulse's budget (te_demog_ms_ai_spent) -------------------------------------
+# te_demog_ms_authority_<measure>: its country_authority_add, as a cost; te_demog_ms_paid_<measure>: 1 for a money
+# upkeep. test_demographics_measures.py pins both to te_demog_measure_modifiers.txt.
+te_demog_ms_authority_child_allowance = { value = 0 }
+te_demog_ms_authority_family_housing = { value = 0 }
+te_demog_ms_authority_honours = { value = 25 }
+te_demog_ms_authority_restricted_contraception = { value = 50 }
+te_demog_ms_authority_parental_leave = { value = 0 }
+te_demog_ms_authority_free_contraception = { value = 0 }
+te_demog_ms_authority_sex_education = { value = 0 }
+te_demog_ms_authority_later_longer_fewer = { value = 50 }
+te_demog_ms_authority_birth_limit = { value = 100 }
+te_demog_ms_authority_rural_exemption = { value = 0 }
+te_demog_ms_authority_crash_campaign = { value = 100 }
+te_demog_ms_paid_child_allowance = { value = 1 }
+te_demog_ms_paid_family_housing = { value = 1 }
+te_demog_ms_paid_honours = { value = 0 }
+te_demog_ms_paid_restricted_contraception = { value = 0 }
+te_demog_ms_paid_parental_leave = { value = 1 }
+te_demog_ms_paid_free_contraception = { value = 1 }
+te_demog_ms_paid_sex_education = { value = 0 }
+te_demog_ms_paid_later_longer_fewer = { value = 0 }
+te_demog_ms_paid_birth_limit = { value = 0 }
+te_demog_ms_paid_rural_exemption = { value = 0 }
+te_demog_ms_paid_crash_campaign = { value = 0 }
+
+# ---- The AI's figures (§3.6) -----------------------------------------------------------------------------------------
+# The population's change over the last year, as a share: each state's people at its yearly walk against the walk
+# before (te_dg_walk_pop_prev, kept every game), summed over the states that hold both, so a state gained or lost
+# moves neither sum. 0 without a year to compare.
+te_demog_ms_pop_now_sum = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+		}
+		add = var:te_dg_walk_pop
+	}
+}
+te_demog_ms_pop_prev_sum = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+		}
+		add = var:te_dg_walk_pop_prev
+	}
+}
+te_demog_ms_pop_trend = {
+	value = te_demog_ms_pop_now_sum
+	subtract = te_demog_ms_pop_prev_sum
+	divide = { value = te_demog_ms_pop_prev_sum min = 1 }
+}
+
+# Crowding for the AI: the share of the country's people in states Migration Crowding presses at its ceiling or past it
+# (migration_crowding_mult_applied 4.5 or more: ten times the reference density, migration pull -45%). Any crowding at
+# all is too common to mean anything (73% of countries in an 1837 save, 88% in 1902), and 4.5 none before 1902; projected
+# from 1902's densities at twice and three times its people, half a country's people at the ceiling is about 4% and 20%
+# of countries: China, East India, Japan, Egypt, Java (the review of 3a; numbers in the PR).
+te_demog_ms_crowded_share = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = migration_crowding_mult_applied
+			var:migration_crowding_mult_applied >= 4.5
+		}
+		add = state_population
+	}
+	divide = { value = te_demog_ms_population min = 1 }
+}
+te_demog_ms_population = {
+	value = 0
+	every_scope_state = {
+		add = state_population
+	}
+}
+
+# The census's share aged 65 and over (te_dg_old_share), 0 where it doesn't run.
+te_demog_ms_old_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_old_share }
+		value = var:te_dg_old_share
+	}
+}
+
+# The census's share aged 20 to 29 (§4.3's youth bulge), from its five-year bands: the 20-29s over the 0-14s, times
+# the 0-14 share. 0 where the census doesn't run. Every band exists once the country has a census year.
+te_demog_ms_youth_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_census_year
+			has_variable = te_dg_young_share
+		}
+		value = var:te_dg_cbf4
+		add = var:te_dg_cbm4
+		add = var:te_dg_cbf5
+		add = var:te_dg_cbm5
+		multiply = var:te_dg_young_share
+		divide = {
+			value = var:te_dg_cbf0
+			add = var:te_dg_cbm0
+			add = var:te_dg_cbf1
+			add = var:te_dg_cbm1
+			add = var:te_dg_cbf2
+			add = var:te_dg_cbm2
+			min = 1
+		}
+	}
+}
