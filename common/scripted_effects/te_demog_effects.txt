@@ -478,6 +478,8 @@ te_demog_prepare = {
 	set_variable = { name = te_dg_m_work value = te_demog_mult_work }
 	te_demog_life_table = yes
 	set_variable = { name = te_dg_means value = te_demog_means }
+	# phase 2 step 3b: the family policy term and Family Housing's urban share, stored for the tooltips (generated)
+	te_demog_family_policy_store = yes
 	set_variable = { name = te_dg_desired value = te_demog_desired }
 	# women's legal standing, stored with the step's other terms so the tooltips match te_dg_tfr until the next step
 	set_variable = { name = te_dg_natural value = te_demog_tfr_natural }

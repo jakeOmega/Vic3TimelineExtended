@@ -505,6 +505,7 @@ te_debug_demog_mult_maternal = {
 		limit = {
 			has_variable = te_dg_in_turm
 			has_variable = te_dg_acc
+			has_variable = te_dg_in_mat	# phase 2 step 3b: a census from before it has none until its next step
 		}
 		value = te_demog_mult_maternal
 	}
@@ -758,6 +759,8 @@ te_debug_demog_mod_srb = { value = modifier:state_sex_ratio_at_birth_add }
 # capital's desired= read should equal it
 te_debug_demog_ms_desired_owner = { value = 0 if = { limit = { exists = owner } value = owner.te_demog_ms_desired_on } }
 te_debug_demog_fam_desired = { value = -1 if = { limit = { has_variable = te_dg_desired } value = var:te_dg_desired } }
+te_debug_demog_fam_policy = { value = -1 if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy } }
+te_debug_demog_fam_urban_left = { value = -1 if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left } }
 te_debug_demog_fam_means = { value = -1 if = { limit = { has_variable = te_dg_means } value = var:te_dg_means } }
 te_debug_demog_fam_tfr = { value = -1 if = { limit = { has_variable = te_dg_tfr } value = var:te_dg_tfr } }
 te_debug_demog_fam_planned = { value = -1 if = { limit = { has_variable = te_dg_desired } value = te_demog_tfr_planned } }

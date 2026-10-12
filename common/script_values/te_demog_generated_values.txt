@@ -1990,6 +1990,17 @@ te_demog_agr_share = {
 te_demog_urban_relief_left = {
 	value = 1 subtract = { value = modifier:state_urban_fertility_relief_add min = 0 max = 1 }
 }
+# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the
+# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on
+# between steps shows when the census's figure takes it. The live value for a census state from before the store.
+te_demog_tfr_policy_shown = {
+	value = te_demog_tfr_policy
+	if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }
+}
+te_demog_urban_left_stored = {
+	value = te_demog_urban_relief_left
+	if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }
+}
 # The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.
 te_demog_srb_add = {
 	value = 0

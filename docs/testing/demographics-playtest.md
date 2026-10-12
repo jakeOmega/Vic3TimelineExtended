@@ -218,11 +218,12 @@ and a BROKEN there means no measure moves births here either.
    no longer reaches the census's term (option n's `q_b` excludes it). **Disabled or Display only**, same law: the
    state panel's birth rate keeps its Laws and Institutions line with the +10%, as before; under Display only the
    tooltip shows ×1.05 and births don't move.
-2. **Child Allowance on** (Full, Pro-Natalist Policy): option x `desired=0.190`, `measures=0.140`; at the capital's
-   next census "Family policy: ×1.19", children per woman up by roughly a tenth of a child in a rich state, `planned`
-   up and `unplanned` unchanged.
-3. **Family Housing**: `urban_relief=0.500`, `urban_left=0.500`; the tooltip's "Urban life" factor moves halfway to 1
-   at the next census.
+2. **Child Allowance on** (Full, Pro-Natalist Policy): option x `desired=0.190`, `measures=0.140` and `policy=1.190`
+   at once, while `st_policy=1.050` and the tooltip keep the last census's figure; at the capital's next census
+   `st_policy=1.190`, "Family policy: ×1.19", children per woman up by roughly a tenth of a child in a rich state,
+   `planned` up and `unplanned` unchanged.
+3. **Family Housing**: `urban_relief=0.500`, `urban_left=0.500` at once; at the next census `st_urban_left=0.500` and
+   the tooltip's "Urban life" factor moves halfway to 1.
 4. **Sex Education** (Population Control or Family Planning): `means_lit=0.200`; `means_live` rises where literacy is
    under 0.8 and stays where it is above.
 5. **Restricted Contraception**: `maternal=0.250`; after the capital's next step its Causes of Death Childbirth row

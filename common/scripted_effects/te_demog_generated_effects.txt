@@ -7501,6 +7501,13 @@ te_demog_practices_country_store = {
 	te_demog_practice_country_store = { P = bs }
 }
 
+# Phase 2 step 3b: THIS = a state, in te_demog_prepare before te_demog_desired: the family policy term and the urban
+# share Family Housing leaves, stored with the step's other terms (te_dg_natural's pattern), so te_demog_tfr_urban
+# and the tooltips read what the step used until the next one.
+te_demog_family_policy_store = {
+	set_variable = { name = te_dg_policy value = te_demog_tfr_policy }
+	set_variable = { name = te_dg_urban_left value = te_demog_urban_relief_left }
+}
 # Phase 2 step 3b (the design §3.4): the newborns' split in the step (demographics_model.newborn_split). THIS = a
 # state, in te_demog_step_run before the sweep: girls and boys per 100,000 births into locals, the constants
 # unless prenatal sexing and a positive sex-ratio type move it (100 girls to te_demog_k_srb_base + it boys).

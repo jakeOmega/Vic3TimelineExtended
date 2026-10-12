@@ -158,7 +158,8 @@ te_demog_open_slot = {
 
 # State scope: desired fertility as a factor (spec §2.3; demographics_model.fertility):
 # education x child survival x urban life x family policy (phase 2 step 3b: the measures' and Pro-Natalist Policy's
-# te_demog_tfr_policy), within the floor and 1. Reads this year's e0 (te_demog_life_table).
+# te_demog_tfr_policy, read live: te_demog_prepare has just stored it), within the floor and 1. Reads this year's e0
+# (te_demog_life_table).
 te_demog_desired = {
 	value = 1
 	multiply = te_demog_tfr_education
@@ -194,10 +195,11 @@ te_demog_tfr_survival = {
 	add = 1
 }
 
-# Urban life, from the state's urban share, less what Family Housing relieves (phase 2 step 3b):
+# Urban life, from the state's urban share, less what Family Housing relieves (phase 2 step 3b: the share the step
+# stored, te_dg_urban_left, so the tooltip matches te_dg_desired until the next step):
 te_demog_tfr_urban = {
 	value = var:te_dg_urban_share
-	multiply = te_demog_urban_relief_left
+	multiply = te_demog_urban_left_stored
 	multiply = te_demog_k_urban_weight
 	multiply = -1
 	add = 1

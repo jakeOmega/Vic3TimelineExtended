@@ -14,7 +14,8 @@ Phase 2 step 3b (the census reads the Family Policy measures) changes no number 
 family laws are left out (the cases hold none): its new reads are exact identities at 0 (x 1, + 0, the constants), and
 its edits to three existing blocks are named below (STEP3B_ADDED, STEP3B_REWRITE), so each block's old text must still
 come back once they are taken out; te_demog_cause_inputs_store, which calibration step 3 changed too, is held to
-STEP3_DIGESTS' digest with step 3b's line taken out. Its new variable is te_dg_in_mat (the maternal cause's input)."""
+STEP3_DIGESTS' digest with step 3b's line taken out. Its new variables are te_dg_in_mat (the maternal cause's input),
+te_dg_policy and te_dg_urban_left (what the step used, for the tooltips)."""
 
 import functools
 import hashlib
@@ -40,8 +41,8 @@ GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
-# phase 2 step 3b: the maternal cause's stored family-policy input
-NEW_VARS |= {"te_dg_in_mat"}
+# phase 2 step 3b: the maternal cause's stored family-policy input, and the stored policy term and urban share left
+NEW_VARS |= {"te_dg_in_mat", "te_dg_policy", "te_dg_urban_left"}
 # phase 2 step 3b's lines in existing blocks: the maternal cause's laws factor (te_demog_mult_maternal) and its stored
 # input (te_demog_cause_inputs_store), added; Sex Education's literacy in te_demog_means' access, rewritten back out
 STEP3B_ADDED = re.compile(r"^multiply = te_demog_f_maternal_laws$|^set_variable = \{ name = te_dg_in_mat ")

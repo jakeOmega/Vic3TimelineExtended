@@ -407,7 +407,7 @@ after. Under Full, Pro-Natalist Policy itself makes families want a few more
 children, and the law's own boost to births and Population Control Measures' cut
 no longer apply: the measures carry those laws' force. Pro-Natalist Policy with
 Child Allowance, Family Housing and Honours adds about 0.3 children per woman in
-a rich country that has few, for about 0.4% of GDP a year. Restricted
+a rich country that has few, for 0.4–0.5% of GDP a year. Restricted
 Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
 other terms. Parental Leave's women's work counts toward the workforce as the

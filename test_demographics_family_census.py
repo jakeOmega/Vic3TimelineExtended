@@ -120,7 +120,38 @@ class TestDesiredAndUrban(unittest.TestCase):
         for line in ("multiply = te_demog_tfr_policy", "min = te_demog_k_desired_floor",
                      "max = te_demog_k_desired_cap"):
             self.assertIn(line, desired)
-        self.assertIn("multiply = te_demog_urban_relief_left", _block(values, "te_demog_tfr_urban"))
+        self.assertIn("multiply = te_demog_urban_left_stored", _block(values, "te_demog_tfr_urban"))
+
+
+class TestTooltipsShowWhatTheStepUsed(unittest.TestCase):
+    """The children-per-woman tooltips show the policy term and urban life as the step stored them (te_dg_policy,
+    te_dg_urban_left; te_demog_natural_shown's pattern): a measure switched on between steps moves the live reads, not
+    the figures shown beside te_dg_tfr, until the next step."""
+
+    def test_a_measure_between_steps_shows_at_the_next_step(self):
+        inp = dataclasses.replace(R.TestCohortScript.INP, mods={**R.TestCohortScript.INP.mods})
+        eng = _engine_for(inp, 1836, 250000.0)
+        eng.call("te_demog_seed")
+        self.assertEqual(eng.vars["te_dg_policy"], 1.0)
+        self.assertEqual(eng.vars["te_dg_urban_left"], 1.0)
+        shown = {n: eng.value(eng._tree(eng.values, n)) for n in ("te_demog_tfr_policy_shown", "te_demog_tfr_urban")}
+        # Child Allowance and Family Housing go on in June
+        eng.fixtures[f"modifier:{P.DESIRED_TYPE}"] = 0.19
+        eng.fixtures[f"modifier:{P.URBAN_RELIEF_TYPE}"] = 0.5
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr_policy")), 1.19)
+        for name, value in shown.items():
+            self.assertEqual(eng.value(eng._tree(eng.values, name)), value, name)
+        # the next census stores them, and the figure follows
+        eng.call("te_demog_prepare")
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr_policy_shown")), 1.19)
+        want = M.urban_term(dataclasses.replace(inp, mods={**inp.mods, P.URBAN_RELIEF_TYPE: 0.5}))
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_tfr_urban")), want, places=9)
+
+    def test_the_tooltips_read_the_stored_terms(self):
+        loc = _text(ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml")
+        self.assertNotIn("ScriptValue('te_demog_tfr_policy')", loc)
+        self.assertEqual(loc.count("ScriptValue('te_demog_tfr_policy_shown')"), 2)
+        self.assertIn("multiply = te_demog_urban_left_stored", _block(_text(VALUES), "te_demog_tfr_urban"))
 
 
 class TestMeansLiteracy(unittest.TestCase):
