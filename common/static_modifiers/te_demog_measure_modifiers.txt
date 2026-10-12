@@ -1,0 +1,158 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures (phase 2 step 3a)
+# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3-§3.5 (the catalogue's
+# starting values; step 3b's harness fits the sizes within §5's band). Logic: te_demog_measure_effects.txt.
+# ============================================================================
+# One country modifier a measure while it is on: its census types (script-only state types,
+# demographics_modifier_types.txt, which a state's read takes from its country), its interest groups' approval, its
+# authority upkeep (a flat country_authority_add: authority doesn't scale with size) and any other effect. A money
+# upkeep sits on a separate _cost modifier, country_expenses_add = 1, applied with a GDP-scaled weekly multiplier
+# (te_demog_ms_cost_<measure>, refreshed by the country's yearly census: scripting_best_practices.md, "Expense Scaling
+# with GDP"), with the Budget Breakdown's mirror line (its Family Policy row: scripts/generators/gen_budget_breakdown.py).
+# A bureaucracy upkeep is an institution's cost multiplier, so it scales with the country.
+# Birth Limit has one modifier a setting (two children, one child). The interest groups' lines are
+# interest_group_ig_<group>_approval_add on a country modifier, as vanilla's re_media_moderation.
+# A release comments the census types' lines out (comment_out_census_inputs.py, rule 1); every modifier keeps a line
+# of its own, and nothing applies them there (the buttons and the AI pulse sit under te_demog_effects_run).
+# test_demographics_measures.py pins each modifier's lines to the catalogue.
+
+# Child Allowance: Pro-Natalist Policy, Communal Child-Rearing. France's allocations familiales (1932).
+te_demog_ms_child_allowance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_desired_fertility_mult = 0.08
+	interest_group_ig_devout_approval_add = 1
+	interest_group_ig_trade_unions_approval_add = 1
+}
+
+# 0.5% of GDP a year x (the 0-14 share / 0.3): te_demog_ms_cost_child_allowance.
+te_demog_ms_child_allowance_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
+}
+
+# Family Housing: Pro-Natalist Policy, State-Sponsored Family Planning. Half the urban term cancelled.
+te_demog_ms_family_housing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_urban_fertility_relief_add = 0.5
+	interest_group_ig_trade_unions_approval_add = 1
+}
+
+# 0.4% of GDP a year x the urban share: te_demog_ms_cost_family_housing.
+te_demog_ms_family_housing_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
+}
+
+# Honours for Large Families: Traditional Family Structure, Pro-Natalist Policy. The Soviet "Mother Heroine" (1944).
+te_demog_ms_honours = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_desired_fertility_mult = 0.03
+	interest_group_ig_devout_approval_add = 1
+	country_authority_add = -25
+}
+
+# Restricted Contraception: Pro-Natalist Policy. Romania's Decree 770 (1966). The means line is the census's own type
+# (state_fertility_means_add), which it already reads: this measure acts on births now, under Full.
+te_demog_ms_restricted_contraception = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_fertility_means_add = -0.2
+	state_maternal_mortality_mult = 0.25
+	interest_group_ig_devout_approval_add = 2
+	interest_group_ig_intelligentsia_approval_add = -2
+	state_pop_support_movement_feminist_mult = 0.1
+	country_authority_add = -50
+}
+
+# Parental Leave: State-Sponsored Family Planning, Communal Child-Rearing. The Nordic model. Its women's-work line sits on
+# phase 2 step 1's family, which the moved lines' pair re-applies as a working-adult line today (as the women's rights
+# laws' lines) and step 2's participation model reads.
+te_demog_ms_parental_leave = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_desired_fertility_mult = 0.05
+	state_demog_womens_work_ratio_add = 0.02
+	interest_group_ig_trade_unions_approval_add = 1
+	interest_group_ig_industrialists_approval_add = -1
+}
+
+# 0.3% of GDP a year x the women at work share: te_demog_ms_cost_parental_leave.
+te_demog_ms_parental_leave_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
+}
+
+# Free Contraception: State-Sponsored Family Planning, Population Control Measures. The means line is the census's own
+# type, which it already reads: this measure acts on births now, under Full.
+te_demog_ms_free_contraception = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_fertility_means_add = 0.1
+	interest_group_ig_intelligentsia_approval_add = 1
+	interest_group_ig_devout_approval_add = -2
+}
+
+# 0.1% of GDP a year: te_demog_ms_cost_free_contraception.
+te_demog_ms_free_contraception_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_family_add = 1
+}
+
+# Sex Education: State-Sponsored Family Planning, Population Control Measures. Upkeep: the schools' bureaucracy cost.
+te_demog_ms_sex_education = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_means_literacy_add = 0.2
+	interest_group_ig_devout_approval_add = -1
+	country_institution_cost_institution_schools_mult = 0.1
+}
+
+# Later, Longer, Fewer: State-Sponsored Family Planning, Population Control Measures. China's 1971-79 campaign.
+te_demog_ms_later_longer_fewer = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_desired_fertility_mult = -0.1
+	interest_group_ig_devout_approval_add = -1
+	interest_group_ig_rural_folk_approval_add = -1
+	country_authority_add = -50
+}
+
+# Birth Limit, two children: Population Control Measures. China's one-child policy (1980). The sex ratio line counts
+# once prenatal sexing exists (Microprocessor; the census reads it from step 3b).
+te_demog_ms_birth_limit = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_desired_fertility_mult = -0.3
+	state_sex_ratio_at_birth_add = 5
+	interest_group_ig_rural_folk_approval_add = -3
+	interest_group_ig_devout_approval_add = -2
+	country_authority_add = -100
+}
+
+# Birth Limit, one child: the button's second press.
+te_demog_ms_birth_limit_one = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_desired_fertility_mult = -0.45
+	state_sex_ratio_at_birth_add = 10
+	interest_group_ig_rural_folk_approval_add = -3
+	interest_group_ig_devout_approval_add = -2
+	country_authority_add = -100
+}
+
+# Rural Exemption: Population Control Measures, with Birth Limit on. China's "1.5-child" rule (1984). No upkeep.
+te_demog_ms_rural_exemption = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_birth_limit_relief_add = 0.5
+	interest_group_ig_rural_folk_approval_add = 1
+}
+
+# Crash Campaign: Population Control Measures. India's Emergency (1975-77). Five years at most, then barred for ten.
+te_demog_ms_crash_campaign = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_desired_fertility_mult = -0.2
+	country_legitimacy_base_add = -10
+	state_radicals_from_political_movements_mult = 0.25
+	interest_group_ig_rural_folk_approval_add = -3
+	interest_group_ig_devout_approval_add = -3
+	interest_group_ig_intelligentsia_approval_add = -2
+	interest_group_ig_trade_unions_approval_add = -2
+	country_authority_add = -100
+}

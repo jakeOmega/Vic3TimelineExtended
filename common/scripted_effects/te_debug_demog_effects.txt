@@ -719,6 +719,39 @@ te_debug_demog_call3_setup = {
 	trigger_event = { id = te_debug_demog.3 days = 31 }
 }
 
+# ---- The measures' self-check (phase 2 step 3a; owner process, 2026-10-12) -----------------------------------------
+# The Family Policy measures put the census's script-only state types on a country static modifier
+# (te_demog_measure_modifiers.txt), which assumes a state's modifier: read takes a script-only type from its country's
+# static modifiers. Probe Q5 saw that for engine fields on a country modifier, and option l for types on a law's or
+# technology's modifier; nobody has seen it for a script-only type on a country static modifier. Once a game, the
+# first measure that moves desired family size to switch on (te_demog_ms_start) reads the country's capital before its
+# add (an add isn't visible inside the effect that makes it) and the measures' desired-family-size lines the country
+# holds (te_demog_ms_desired_on); te_debug_demog.10 reads both again a week later and logs the verdict (TE_SELF_CHECK).
+# BROKEN: the measures' census types never reach a state; put them on a state modifier in each of the country's states
+# instead (docs/testing/demographics-playtest.md, Self-checks).
+te_debug_demog_ms_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_ms_selfcheck_done }
+			exists = capital
+			OR = {
+				te_demog_ms_desired_$M$ > 0.01
+				te_demog_ms_desired_$M$ < -0.01
+			}
+		}
+		set_global_variable = { name = te_demog_ms_selfcheck_done value = yes }
+		set_local_variable = { name = te_dg_ms_chk_e0 value = te_demog_ms_desired_on }
+		capital = {
+			set_variable = { name = te_dg_ms_chk_before value = modifier:state_desired_fertility_mult }
+			set_variable = { name = te_dg_ms_chk_e0 value = local_var:te_dg_ms_chk_e0 }
+			set_variable = { name = te_dg_ms_chk_owner value = ROOT }
+			debug_log = "TE_SELF_CHECK START measure_country_types before=[THIS.Var('te_dg_ms_chk_before').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+			trigger_event = { id = te_debug_demog.10 days = 7 }
+		}
+	}
+}
+
 # ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/specs/2026-10-12-demographics-calibration-
 # step3-design.md §6) -----------------------------------------------------------------------------------------------------
 # Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts

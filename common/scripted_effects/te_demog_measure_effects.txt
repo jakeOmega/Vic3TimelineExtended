@@ -1,0 +1,442 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures (phase 2 step 3a)
+# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3 (how one works), §3.4 (the
+# catalogue), §3.6 (AI). A measure is a policy choice within a Family & Reproductive Policy law, switched on and off by
+# its button in the Demographics tab's Family Policy section (te_demog_measure_sguis.txt, te_demog_sec_family). Full
+# only: every button and the AI pulse sit under te_demog_effects_run, which a release sets to always = no, so the
+# measures' modifiers (te_demog_measure_modifiers.txt) are never applied without the rule.
+#
+# Country variables (Full only; a revolution's winner inherits them, but not the modifiers):
+#   te_dg_ms_<measure>           the date it was switched on, as a year with its months (te_demog_ms_now); absent: off
+#   te_dg_ms_birth_limit_one     Birth Limit is at one child (absent: two)
+#   te_dg_ms_crash_campaign_end  the date the Crash Campaign last ended: it can't return for ten years
+#
+# The rules (§3.3):
+#   - A measure's five-year term runs from its switching on; until it has run, its button can't switch it off. Birth
+#     Limit's button cycles off, two children, one child, off: the step to one child keeps its term.
+#   - The Crash Campaign switches itself off after five years (te_demog_ms_monthly) and can't return for ten.
+#   - A measure the law in force doesn't allow switches off at once, with a notice, and its term resets
+#     (te_demog_ms_law_check, from on_law_activated). The Rural Exemption needs Birth Limit and ends with it.
+#   - The country's yearly census refreshes each money upkeep at this year's GDP and puts back the modifiers of every
+#     measure whose variable is set and whose law still allows it: a revolution's winner keeps the variables, not the
+#     modifiers (te_demog_ms_keep_all; also at once from te_civil_war_on_won).
+#   - The AI weighs each measure once a year by the conditions any country has (te_demog_ms_ai_choose); is_ai = yes
+#     only decides whom the pulse picks for, and nothing an outcome does reads it.
+# Until step 3b the census reads only the measures' means lines (Free and Restricted Contraception's
+# state_fertility_means_add); the six new types show on their tooltips and act from 3b.
+# ============================================================================
+
+# ---- Putting a measure's modifiers on (Full only; ROOT = the country, against which the cost resolves) ---------------
+# Country: measure $M$'s modifiers on, its cost at today's GDP. The measure's own modifier is added only when it is
+# missing (a revolution's winner has none); the cost is always taken off and put back with a fresh multiplier. A
+# same-name add_modifier stacks, so nothing is added over itself.
+te_demog_ms_apply = {
+	te_demog_ms_apply_$M$ = yes
+}
+
+te_demog_ms_put = {
+	if = {
+		limit = { NOT = { has_modifier = $NAME$ } }
+		add_modifier = { name = $NAME$ }
+	}
+}
+
+te_demog_ms_put_cost = {
+	if = {
+		limit = { has_modifier = $NAME$ }
+		remove_modifier = $NAME$
+	}
+	add_modifier = {
+		name = $NAME$
+		multiplier = $COST$
+	}
+}
+
+te_demog_ms_take = {
+	if = {
+		limit = { has_modifier = $NAME$ }
+		remove_modifier = $NAME$
+	}
+}
+
+te_demog_ms_apply_child_allowance = {
+	te_demog_ms_put = { NAME = te_demog_ms_child_allowance }
+	te_demog_ms_put_cost = { NAME = te_demog_ms_child_allowance_cost COST = te_demog_ms_cost_child_allowance }
+}
+te_demog_ms_apply_family_housing = {
+	te_demog_ms_put = { NAME = te_demog_ms_family_housing }
+	te_demog_ms_put_cost = { NAME = te_demog_ms_family_housing_cost COST = te_demog_ms_cost_family_housing }
+}
+te_demog_ms_apply_honours = {
+	te_demog_ms_put = { NAME = te_demog_ms_honours }
+}
+te_demog_ms_apply_restricted_contraception = {
+	te_demog_ms_put = { NAME = te_demog_ms_restricted_contraception }
+}
+te_demog_ms_apply_parental_leave = {
+	te_demog_ms_put = { NAME = te_demog_ms_parental_leave }
+	te_demog_ms_put_cost = { NAME = te_demog_ms_parental_leave_cost COST = te_demog_ms_cost_parental_leave }
+}
+te_demog_ms_apply_free_contraception = {
+	te_demog_ms_put = { NAME = te_demog_ms_free_contraception }
+	te_demog_ms_put_cost = { NAME = te_demog_ms_free_contraception_cost COST = te_demog_ms_cost_free_contraception }
+}
+te_demog_ms_apply_sex_education = {
+	te_demog_ms_put = { NAME = te_demog_ms_sex_education }
+}
+te_demog_ms_apply_later_longer_fewer = {
+	te_demog_ms_put = { NAME = te_demog_ms_later_longer_fewer }
+}
+# Birth Limit: one modifier a setting, two children or (te_dg_ms_birth_limit_one) one.
+te_demog_ms_apply_birth_limit = {
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit_one }
+		te_demog_ms_take = { NAME = te_demog_ms_birth_limit }
+		te_demog_ms_put = { NAME = te_demog_ms_birth_limit_one }
+	}
+	else = {
+		te_demog_ms_take = { NAME = te_demog_ms_birth_limit_one }
+		te_demog_ms_put = { NAME = te_demog_ms_birth_limit }
+	}
+}
+te_demog_ms_apply_rural_exemption = {
+	te_demog_ms_put = { NAME = te_demog_ms_rural_exemption }
+}
+te_demog_ms_apply_crash_campaign = {
+	te_demog_ms_put = { NAME = te_demog_ms_crash_campaign }
+}
+
+# ---- Switching on and off ---------------------------------------------------------------------------------------
+# Country: switch measure $M$ on: today's date into te_dg_ms_$M$ (its five years run from it) and its modifiers on. The
+# self-check (once a game) reads the capital first: the add isn't visible inside this effect.
+te_demog_ms_start = {
+	te_debug_demog_ms_selfcheck_start = { M = $M$ }
+	set_variable = { name = te_dg_ms_$M$ value = te_demog_ms_now }
+	te_demog_ms_apply = { M = $M$ }
+}
+
+# Country: switch measure $M$ off: its variable goes (the term resets) and its modifiers with it. Birth Limit takes the
+# Rural Exemption along; the Crash Campaign's ten-year bar starts.
+te_demog_ms_end = {
+	remove_variable = te_dg_ms_$M$
+	te_demog_ms_remove_$M$ = yes
+}
+
+te_demog_ms_remove_child_allowance = {
+	te_demog_ms_take = { NAME = te_demog_ms_child_allowance }
+	te_demog_ms_take = { NAME = te_demog_ms_child_allowance_cost }
+}
+te_demog_ms_remove_family_housing = {
+	te_demog_ms_take = { NAME = te_demog_ms_family_housing }
+	te_demog_ms_take = { NAME = te_demog_ms_family_housing_cost }
+}
+te_demog_ms_remove_honours = {
+	te_demog_ms_take = { NAME = te_demog_ms_honours }
+}
+te_demog_ms_remove_restricted_contraception = {
+	te_demog_ms_take = { NAME = te_demog_ms_restricted_contraception }
+}
+te_demog_ms_remove_parental_leave = {
+	te_demog_ms_take = { NAME = te_demog_ms_parental_leave }
+	te_demog_ms_take = { NAME = te_demog_ms_parental_leave_cost }
+}
+te_demog_ms_remove_free_contraception = {
+	te_demog_ms_take = { NAME = te_demog_ms_free_contraception }
+	te_demog_ms_take = { NAME = te_demog_ms_free_contraception_cost }
+}
+te_demog_ms_remove_sex_education = {
+	te_demog_ms_take = { NAME = te_demog_ms_sex_education }
+}
+te_demog_ms_remove_later_longer_fewer = {
+	te_demog_ms_take = { NAME = te_demog_ms_later_longer_fewer }
+}
+te_demog_ms_remove_birth_limit = {
+	te_demog_ms_take = { NAME = te_demog_ms_birth_limit }
+	te_demog_ms_take = { NAME = te_demog_ms_birth_limit_one }
+	if = {
+		limit = { has_variable = te_dg_ms_birth_limit_one }
+		remove_variable = te_dg_ms_birth_limit_one
+	}
+	# the exemption halves a limit that is gone (not te_demog_ms_end: no effect calls itself)
+	if = {
+		limit = { has_variable = te_dg_ms_rural_exemption }
+		remove_variable = te_dg_ms_rural_exemption
+		te_demog_ms_remove_rural_exemption = yes
+	}
+}
+te_demog_ms_remove_rural_exemption = {
+	te_demog_ms_take = { NAME = te_demog_ms_rural_exemption }
+}
+te_demog_ms_remove_crash_campaign = {
+	te_demog_ms_take = { NAME = te_demog_ms_crash_campaign }
+	set_variable = { name = te_dg_ms_crash_campaign_end value = te_demog_ms_now }
+}
+
+# Country: Birth Limit from two children to one. Its term still runs from its switching on.
+te_demog_ms_birth_limit_tighten = {
+	set_variable = { name = te_dg_ms_birth_limit_one value = yes }
+	te_demog_ms_apply = { M = birth_limit }
+}
+
+# Country, ROOT = the player's country (a measure's scripted GUI, te_demog_measure_sguis.txt): one press of the
+# button, which its is_valid allowed. Off: on. On: off.
+te_demog_ms_press = {
+	if = {
+		limit = { NOT = { has_variable = te_dg_ms_$M$ } }
+		te_demog_ms_start = { M = $M$ }
+	}
+	else = {
+		te_demog_ms_end = { M = $M$ }
+	}
+}
+
+# Birth Limit's one button: off, two children, one child, off.
+te_demog_ms_press_birth_limit = {
+	if = {
+		limit = { NOT = { has_variable = te_dg_ms_birth_limit } }
+		te_demog_ms_start = { M = birth_limit }
+	}
+	else_if = {
+		limit = { NOT = { has_variable = te_dg_ms_birth_limit_one } }
+		te_demog_ms_birth_limit_tighten = yes
+	}
+	else = {
+		te_demog_ms_end = { M = birth_limit }
+	}
+}
+
+# ---- Notices -------------------------------------------------------------------------------------------------------
+# Country: post notice $NOTICE$ (common/messages/te_demog_messages.txt). Only the player sees one.
+te_demog_ms_notice = {
+	post_notification = $NOTICE$
+}
+
+# Country: end measure $M$ with its notice: the law in force doesn't allow it.
+te_demog_ms_end_notice = {
+	te_demog_ms_end = { M = $M$ }
+	te_demog_ms_notice = { NOTICE = te_demog_ms_ended_$M$ }
+}
+
+# ---- Leaving the law (§3.3) -----------------------------------------------------------------------------------------
+# Country (te_demog_ms_law_on_action, the activated law's owner), Full only: a measure the law in force doesn't allow
+# switches off at once, with a notice, and its term resets. Birth Limit comes before the Rural Exemption, which it
+# takes along.
+te_demog_ms_law_check = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		te_demog_ms_law_check_one = { M = child_allowance }
+		te_demog_ms_law_check_one = { M = family_housing }
+		te_demog_ms_law_check_one = { M = honours }
+		te_demog_ms_law_check_one = { M = restricted_contraception }
+		te_demog_ms_law_check_one = { M = parental_leave }
+		te_demog_ms_law_check_one = { M = free_contraception }
+		te_demog_ms_law_check_one = { M = sex_education }
+		te_demog_ms_law_check_one = { M = later_longer_fewer }
+		te_demog_ms_law_check_one = { M = birth_limit }
+		te_demog_ms_law_check_one = { M = rural_exemption }
+		te_demog_ms_law_check_one = { M = crash_campaign }
+	}
+}
+
+te_demog_ms_law_check_one = {
+	if = {
+		limit = {
+			has_variable = te_dg_ms_$M$
+			NOT = { te_demog_ms_allowed_$M$ = yes }
+		}
+		te_demog_ms_end_notice = { M = $M$ }
+	}
+}
+
+# ---- Once a year and after a revolution (§3.3) ------------------------------------------------------------------
+# Country, ROOT = the country: each measure that is on keeps its modifiers, its money upkeep at this year's GDP, or
+# switches off with a notice where the law in force doesn't allow it (after a revolution, the winner's law).
+te_demog_ms_keep_all = {
+	te_demog_ms_keep = { M = child_allowance }
+	te_demog_ms_keep = { M = family_housing }
+	te_demog_ms_keep = { M = honours }
+	te_demog_ms_keep = { M = restricted_contraception }
+	te_demog_ms_keep = { M = parental_leave }
+	te_demog_ms_keep = { M = free_contraception }
+	te_demog_ms_keep = { M = sex_education }
+	te_demog_ms_keep = { M = later_longer_fewer }
+	te_demog_ms_keep = { M = birth_limit }
+	te_demog_ms_keep = { M = rural_exemption }
+	te_demog_ms_keep = { M = crash_campaign }
+	# the exemption needs the limit: Birth Limit's end takes it along, and this catches a variable left without one
+	if = {
+		limit = {
+			has_variable = te_dg_ms_rural_exemption
+			NOT = { has_variable = te_dg_ms_birth_limit }
+		}
+		te_demog_ms_end = { M = rural_exemption }
+	}
+}
+
+te_demog_ms_keep = {
+	if = {
+		limit = { has_variable = te_dg_ms_$M$ }
+		if = {
+			limit = { te_demog_ms_allowed_$M$ = yes }
+			te_demog_ms_apply = { M = $M$ }
+		}
+		else = {
+			te_demog_ms_end_notice = { M = $M$ }
+		}
+	}
+}
+
+# Country, ROOT = the country, on 31 December (te_demog_country_yearly, after its census), Full only: the measures
+# kept and costed, then the AI's choices.
+te_demog_ms_yearly = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		te_demog_ms_keep_all = yes
+		te_demog_ms_ai_choose = yes
+	}
+}
+
+# Country, monthly (te_demog_country_monthly), Full only: the Crash Campaign ends itself once its five years have run,
+# to the month, and its ten-year bar starts.
+te_demog_ms_monthly = {
+	if = {
+		limit = {
+			has_variable = te_dg_ms_crash_campaign
+			te_demog_effects_run = yes
+			te_demog_ms_term_run = { M = crash_campaign }
+		}
+		te_demog_ms_end = { M = crash_campaign }
+		te_demog_ms_notice = { NOTICE = te_demog_ms_crash_campaign_over }
+	}
+}
+
+# THIS = ROOT = a civil war's winner (te_civil_war_on_won, which reads var:te_cw_rebels_won and scope:te_cw_loser from
+# te_civil_war_resolve_sides), Full only. A revolution that won continues the nation (owner, 2026-09-26): the winner
+# takes the old government's measures from scope:te_cw_loser explicitly, as inh_repair_after_civil_war does, rather than
+# trusting the engine to have copied the variables by this hook; its own value wins where both hold one. Then the
+# measures are back on at once, where the winner's law allows them, and the rest end with a notice; the yearly census
+# does the same each 31 December. A loyalist winner keeps its own modifiers and needs nothing.
+te_demog_ms_repair_after_civil_war = {
+	if = {
+		limit = { te_demog_effects_run = yes }
+		if = {
+			limit = {
+				has_variable = te_cw_rebels_won
+				var:te_cw_rebels_won = 1
+				exists = scope:te_cw_loser
+			}
+			te_demog_ms_inherit = { NAME = te_dg_ms_child_allowance }
+			te_demog_ms_inherit = { NAME = te_dg_ms_family_housing }
+			te_demog_ms_inherit = { NAME = te_dg_ms_honours }
+			te_demog_ms_inherit = { NAME = te_dg_ms_restricted_contraception }
+			te_demog_ms_inherit = { NAME = te_dg_ms_parental_leave }
+			te_demog_ms_inherit = { NAME = te_dg_ms_free_contraception }
+			te_demog_ms_inherit = { NAME = te_dg_ms_sex_education }
+			te_demog_ms_inherit = { NAME = te_dg_ms_later_longer_fewer }
+			te_demog_ms_inherit = { NAME = te_dg_ms_birth_limit }
+			te_demog_ms_inherit = { NAME = te_dg_ms_rural_exemption }
+			te_demog_ms_inherit = { NAME = te_dg_ms_crash_campaign }
+			te_demog_ms_inherit = { NAME = te_dg_ms_birth_limit_one }
+			te_demog_ms_inherit = { NAME = te_dg_ms_crash_campaign_end }
+		}
+		te_demog_ms_keep_all = yes
+	}
+}
+
+# Country, ROOT = a civil war's winner: the loser's variable $NAME$, where the winner holds none.
+te_demog_ms_inherit = {
+	if = {
+		limit = {
+			NOT = { has_variable = $NAME$ }
+			scope:te_cw_loser ?= { has_variable = $NAME$ }
+		}
+		set_variable = { name = $NAME$ value = scope:te_cw_loser.var:$NAME$ }
+	}
+}
+
+# ---- The AI (§3.6) ---------------------------------------------------------------------------------------------------
+# Country, ROOT = the country, once a year under Full (te_demog_ms_yearly). is_ai = yes decides only whom this pulse
+# picks for; the weights (te_demog_ms_ai_start_<measure> and _keep_, te_demog_measure_triggers.txt) read conditions any
+# country has, and the switching is the buttons' own effects. The term binds it as it binds a player.
+te_demog_ms_ai_choose = {
+	if = {
+		limit = { is_ai = yes }
+		# the pulse's budget: free authority, and no money measure started yet (te_demog_ms_ai_spent)
+		set_local_variable = { name = te_dg_ms_auth value = authority }
+		set_local_variable = { name = te_dg_ms_money value = 0 }
+		# Birth Limit: two children; one when the target is far off; off when the need has gone
+		if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_birth_limit }
+				te_demog_ms_allowed_birth_limit = yes
+				te_demog_ms_ai_start_birth_limit = yes
+			}
+			te_demog_ms_start = { M = birth_limit }
+			te_demog_ms_ai_spent = { M = birth_limit }
+		}
+		else_if = {
+			limit = {
+				has_variable = te_dg_ms_birth_limit
+				NOT = { has_variable = te_dg_ms_birth_limit_one }
+				te_demog_ms_ai_tighten_birth_limit = yes
+			}
+			te_demog_ms_birth_limit_tighten = yes
+		}
+		else_if = {
+			limit = {
+				has_variable = te_dg_ms_birth_limit
+				te_demog_ms_term_run = { M = birth_limit }
+				NOT = { te_demog_ms_ai_keep_birth_limit = yes }
+			}
+			te_demog_ms_end = { M = birth_limit }
+		}
+		te_demog_ms_ai_consider = { M = child_allowance }
+		te_demog_ms_ai_consider = { M = family_housing }
+		te_demog_ms_ai_consider = { M = honours }
+		te_demog_ms_ai_consider = { M = restricted_contraception }
+		te_demog_ms_ai_consider = { M = parental_leave }
+		te_demog_ms_ai_consider = { M = free_contraception }
+		te_demog_ms_ai_consider = { M = sex_education }
+		te_demog_ms_ai_consider = { M = later_longer_fewer }
+		te_demog_ms_ai_consider = { M = rural_exemption }
+		# the Crash Campaign ends itself (te_demog_ms_monthly)
+		if = {
+			limit = {
+				NOT = { has_variable = te_dg_ms_crash_campaign }
+				te_demog_ms_allowed_crash_campaign = yes
+				te_demog_ms_ai_start_crash_campaign = yes
+			}
+			te_demog_ms_start = { M = crash_campaign }
+			te_demog_ms_ai_spent = { M = crash_campaign }
+		}
+	}
+}
+
+# Country: start measure $M$ when the law allows it and the AI wants it, or end it once its term has run and the AI no
+# longer would keep it.
+te_demog_ms_ai_consider = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_dg_ms_$M$ }
+			te_demog_ms_allowed_$M$ = yes
+			te_demog_ms_ai_start_$M$ = yes
+		}
+		te_demog_ms_start = { M = $M$ }
+		te_demog_ms_ai_spent = { M = $M$ }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_ms_$M$
+			te_demog_ms_term_run = { M = $M$ }
+			NOT = { te_demog_ms_ai_keep_$M$ = yes }
+		}
+		te_demog_ms_end = { M = $M$ }
+	}
+}
+
+# Country, in te_demog_ms_ai_choose: measure $M$ started, so its upkeep comes off the pulse's budget (its authority, and
+# a money measure counts against the one a pulse).
+te_demog_ms_ai_spent = {
+	change_local_variable = { name = te_dg_ms_auth subtract = te_demog_ms_authority_$M$ }
+	change_local_variable = { name = te_dg_ms_money add = te_demog_ms_paid_$M$ }
+}
