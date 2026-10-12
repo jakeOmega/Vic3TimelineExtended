@@ -169,3 +169,43 @@ def report(loaded, adjacency, anchors):
                 err["with"].append((new - hist[1]) ** 2)
     rmse = {k: (sum(v) / len(v)) ** 0.5 if v else None for k, v in err.items()}
     return rows, rmse, fl
+
+
+def state_ratios(states, fl):
+    """{state id: children per woman with the practice over today's} for one save: today's carries history's
+    modifier and, under Forced Heirship, the rural cut on top; with, the owner's line and no cut (tfr_rows' two)."""
+    out = {}
+    for s in states:
+        if s.people <= 0:
+            continue
+        qf, qm, _ = M.group_rates(s.inp)
+        e0 = (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2
+        today = M.fertility(s.inp, e0)["tfr"]
+        if "law_equal_inheritance" in s.inp.laws:
+            today *= 1 - 0.15 * s.inp.agrarian_share
+        new = M.fertility(replace(s.inp, means_add=fl.get(s.tag, {}).get("line", 0.0)), e0)["tfr"]
+        out[s.sid] = new / today if today > 0 else 1.0
+    return out
+
+
+def project_regions(rows, loaded, fl):
+    """#904's peacetime births less deaths per 1,000 a year by region and for the world, measured and with the practice
+    ({"groups": {label: (measured, projected)}, "world": (measured, projected)}): each peacetime state-year's births
+    scaled by its state's ratio at the save at or before the one that closes it (demographics_practices.
+    project_regions' rule), deaths as measured. The practice moves births only; a state the saves don't hold keeps its
+    measured births."""
+    years = sorted(y for y, _s in loaded)
+    ratios = {y: state_ratios(states, fl[y]) for y, states in loaded}
+    acc = {}
+    for year, group, peace, _why, b, d, p, _mig, _tag, sid in rows:
+        if not peace or p <= 0:
+            continue
+        y = max([x for x in years if x <= year + 1] or years[:1])
+        r = ratios[y].get(sid, 1.0)
+        for key in (group, "World"):
+            a = acc.setdefault(key, [0.0, 0.0, 0.0])
+            a[0] += b - d
+            a[1] += b * r - d
+            a[2] += p
+    rate = {k: (1000 * a[0] / a[2], 1000 * a[1] / a[2]) for k, a in acc.items()}
+    return {"groups": {k: v for k, v in rate.items() if k != "World"}, "world": rate.get("World", (0.0, 0.0))}

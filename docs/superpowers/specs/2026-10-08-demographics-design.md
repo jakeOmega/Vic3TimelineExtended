@@ -739,7 +739,7 @@ Market Towns (< 20).
 | Child-labour, pension and retirement settings | who among the young and old works | participation weights (§7) |
 | Ectogenesis (the Youth Center PM) | births depend less on how many women of childbearing age there are | weakens the women's-cohort term in states with the PM |
 | Biological Immortality (era 12) | ageing stops | §8.3 |
-| Cultural Hegemony (later phase) | desired fertility drifts a little toward the hegemon's | the "soap-opera effect": Brazil's fertility fell where TV novelas reached (La Ferrara et al., 2012) |
+| Cultural Hegemony (built in phase 3, under Full) | desired fertility drifts a little toward the hegemon's | the "soap-opera effect": Brazil's fertility fell where TV novelas reached (La Ferrara et al., 2012); scaled by the foreign benchmark's gap |
 | Inheritance, land tenure, ownership, taxes, war, devastation, revolution, banking crises | Wealth Concentration | §4.2 |
 | Capital, ports, area, industry, infrastructure, crowding, urban planning | settlement pattern | §5.2 |
 
@@ -1108,6 +1108,12 @@ to be sane.
   birth cut (`inh_forced_heirship_rural`, −15% × the agrarian share) tells the same story, so the two should be
   folded together when this is built. Late Marriage and Birth Spacing, two practices on the same machinery, per
   state: `2026-10-10-demographics-late-marriage-design.md`.
+  **Built in phase 3 (2026-10-12; owner: build it as proposed, national).** Under Full only, so France keeps history's
+  +0.6 outside it. Two choices the proposal left open: the share rises only (toward its target and toward its
+  neighbours'), since a practice once learned isn't unlearned and France's would otherwise leak to its neighbours'
+  zero; and its line erodes with modern contraception, which takes its place in the means. Forced Heirship's rural cut
+  rides the moved lines' absorbed family, as Primogeniture's does. `docs/systems/mod_systems.md` § Demographics, "Phase
+  3"; fit: `docs/testing/demographics-family-limitation-2026-10-12.md`.
 - **What the panel's children per woman shows once phase 2 applies the births (owner's question, 2026-10-10).** The
   census's figure starts from the standard-of-living curve and reads no engine birth modifier: Forced Heirship,
   literacy's −0.1, the Pill's and the family-policy laws' flat lines. The engine's births take them all, so France

@@ -433,6 +433,22 @@ class TestHarness(unittest.TestCase):
         for tag in share:
             self.assertAlmostEqual(out[1838][tag]["share"], share[tag], msg=tag)
 
+    def test_the_regional_projection_moves_births_by_each_states_ratio(self):
+        save = self._save()
+        loaded = [(1836, save)]
+        fl = F.replay(loaded, self.ADJ)
+        ratios = F.state_ratios(save, fl[1836])
+        self.assertAlmostEqual(ratios["3"], 1.0, msg="no line, no cut: unchanged")
+        self.assertNotAlmostEqual(ratios["1"], 1.0, msg="France: the cut folded in")
+        rows = [[1836, "W/N/C/S Europe", True, [], 40.0, 30.0, 1000.0, 0.0, "FRA", "1"],
+                [1836, "W/N/C/S Europe", True, [], 40.0, 30.0, 1000.0, 0.0, "NET", "3"],
+                [1836, "W/N/C/S Europe", False, ["war"], 40.0, 90.0, 1000.0, 0.0, "NET", "3"]]
+        proj = F.project_regions(rows, loaded, fl)
+        measured, projected = proj["groups"]["W/N/C/S Europe"]
+        self.assertAlmostEqual(measured, 1000 * 20 / 2000, msg="a war year is left out")
+        self.assertAlmostEqual(projected, 1000 * (40 * ratios["1"] + 40 - 60) / 2000)
+        self.assertEqual(proj["world"], proj["groups"]["W/N/C/S Europe"])
+
     def test_neighbour_map(self):
         states = self._save()
         self.assertIsNone(DP.neighbour_map(states, None))
