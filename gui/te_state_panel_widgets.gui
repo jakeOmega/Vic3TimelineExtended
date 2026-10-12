@@ -533,10 +533,10 @@ types te_state_panel_widget_types
 	### Rows: 20 icon + 4 + 290 label + 4 + 86 value = 404.
 	type te_state_gm_row = te_state_stat_row {
 		blockoverride "label_size" {
-			size = { 290 22 }
+			size = { 266 22 }
 		}
 		blockoverride "label_max_width" {
-			max_width = 290
+			max_width = 266
 		}
 		blockoverride "value_size" {
 			size = { 86 22 }
@@ -565,32 +565,52 @@ types te_state_panel_widget_types
 				}
 
 				### STATUS — one code each (gotcha #23), as Our Monuments' rows.
-				gm_row_status = {
-					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1')]"
-					tooltip = "gm_je_status_undedicated_tt"
-					blockoverride "status_texture" {
-						texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+				widget = {
+					size = { 120 140 }
+
+					gm_picture = {
+						size = { 120 120 }
+						parentanchor = top|hcenter
 					}
-				}
-				gm_row_status = {
-					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2')]"
-					tooltip = "gm_je_status_upheld_tt"
-					blockoverride "status_texture" {
-						texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
+					gm_row_status = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1')]"
+						tooltip = "gm_je_status_undedicated_tt"
+						blockoverride "status_texture" {
+							texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
+						}
+						blockoverride "status_size" {
+							size = { 120 140 }
+						}
 					}
-				}
-				gm_row_status = {
-					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3')]"
-					tooltip = "gm_je_status_heritage_tt"
-					blockoverride "status_texture" {
-						texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
+					gm_row_status = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2')]"
+						tooltip = "gm_je_status_upheld_tt"
+						blockoverride "status_texture" {
+							texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
+						}
+						blockoverride "status_size" {
+							size = { 120 140 }
+						}
 					}
-				}
-				gm_row_status = {
-					visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4')]"
-					tooltip = "gm_je_status_contested_tt"
-					blockoverride "status_texture" {
-						texture = "gfx/interface/icons/gm_icons/status_contested.dds"
+					gm_row_status = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3')]"
+						tooltip = "gm_je_status_heritage_tt"
+						blockoverride "status_texture" {
+							texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
+						}
+						blockoverride "status_size" {
+							size = { 120 140 }
+						}
+					}
+					gm_row_status = {
+						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4')]"
+						tooltip = "gm_je_status_contested_tt"
+						blockoverride "status_texture" {
+							texture = "gfx/interface/icons/gm_icons/status_contested.dds"
+						}
+						blockoverride "status_size" {
+							size = { 120 140 }
+						}
 					}
 				}
 
@@ -598,7 +618,7 @@ types te_state_panel_widget_types
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 4
-					minimumsize = { 404 -1 }
+					minimumsize = { 380 -1 }
 
 					### NAME — a typed name (v2 §3.5) prints straight from
 					### the state's gm_name, as in the journal entry's row.
@@ -606,8 +626,8 @@ types te_state_panel_widget_types
 						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0')]"
 						autoresize = yes
 						multiline = yes
-						minimumsize = { 374 -1 }
-						maximumsize = { 374 -1 }
+						minimumsize = { 350 -1 }
+						maximumsize = { 350 -1 }
 						align = left|nobaseline
 						using = fontsize_large
 						text = "gm_row_title"
@@ -616,8 +636,8 @@ types te_state_panel_widget_types
 						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1')]"
 						autoresize = yes
 						multiline = yes
-						minimumsize = { 374 -1 }
-						maximumsize = { 374 -1 }
+						minimumsize = { 350 -1 }
+						maximumsize = { 350 -1 }
 						align = left|nobaseline
 						using = fontsize_large
 						text = "gm_row_title_named"
@@ -642,7 +662,7 @@ types te_state_panel_widget_types
 						}
 						te_state_stat_bar = {
 							blockoverride "bar_size" {
-								size = { 380 4 }
+								size = { 356 4 }
 							}
 							blockoverride "bar_value" {
 								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('gm_state_disp_step_pct'))]"
@@ -690,8 +710,8 @@ types te_state_panel_widget_types
 						visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4')]"
 						autoresize = yes
 						multiline = yes
-						minimumsize = { 404 -1 }
-						maximumsize = { 404 -1 }
+						minimumsize = { 380 -1 }
+						maximumsize = { 380 -1 }
 						align = left|nobaseline
 						using = fontsize_medium
 						default_format = "#tooltippable"
@@ -702,8 +722,8 @@ types te_state_panel_widget_types
 					textbox = {
 						autoresize = yes
 						multiline = yes
-						minimumsize = { 404 -1 }
-						maximumsize = { 404 -1 }
+						minimumsize = { 380 -1 }
+						maximumsize = { 380 -1 }
 						align = left|nobaseline
 						using = fontsize_medium
 						text = "gm_row_inscription"

@@ -443,7 +443,10 @@ class IconsTest(unittest.TestCase):
         for path in set(ICONS.values()):
             self.assertIn(f"`{os.path.basename(path)}`", doc, path)
         self.assertIn(f"`{_GM}/`", doc)
-        gui_textures = set(re.findall(r'texture = "([^"]+)"', _strip_comments(_gui())))
+        # The monument pictures (gm_pictures/, spec 2026-10-11) are the registry
+        # test's PictureTests, one per picture code.
+        gui_textures = {tex for tex in re.findall(r'texture = "([^"]+)"', _strip_comments(_gui()))
+                        if "/gm_pictures/" not in tex}
         self.assertEqual(gui_textures, set(ICONS.values()), "a texture in the widget is not in ICONS")
         self.assertNotIn("generic_icons", _strip_comments(_gui()), "a vanilla placeholder is left")
 
@@ -784,24 +787,25 @@ class StateCardTest(unittest.TestCase):
             self.assertIn(key, loc, key)
 
     def test_columns_are_the_cards_width(self):
-        """96 status + 10 + 404 = 510, the tourism card's inner width; each
-        row is 20 icon + 4 + label + 4 + value = 404; the titles stop short of
-        the goto's 25 + 5 at the corner."""
+        """120 picture + 10 + 380 = 510, the tourism card's inner width (the
+        monument's picture shows at 120 on the card, spec 2026-10-11 §3.4);
+        each row is 20 icon + 4 + label + 4 + value = 380, its bar 24 short
+        of that; the titles stop short of the goto's 25 + 5 at the corner."""
         row = _squash(_type_body(self.gui, "te_state_gm_row"))
         label = int(re.search(r'"label_size" \{ size = \{ (\d+) ', row).group(1))
         value = int(re.search(r'"value_size" \{ size = \{ (\d+) ', row).group(1))
-        self.assertEqual(20 + 4 + label + 4 + value, 404)
-        status = int(re.search(r"size = \{ (\d+) ", _type_body(_gui(), "gm_row_status")).group(1))
+        self.assertEqual(20 + 4 + label + 4 + value, 380)
+        picture = int(re.search(r"gm_picture = \{ size = \{ (\d+) ", self.flat).group(1))
         self.assertIn("spacing = 10", self.flat)
-        self.assertEqual(status + 10 + 404, 510)
-        self.assertIn("minimumsize = { 404 -1 }", self.flat)
+        self.assertEqual(picture + 10 + 380, 510)
+        self.assertIn("minimumsize = { 380 -1 }", self.flat)
         self.assertIn("minimumsize = { 530 -1 }", self.flat)
-        self.assertIn('"bar_size" { size = { 380 4 } }', self.flat)
+        self.assertIn('"bar_size" { size = { 356 4 } }', self.flat)
         titles = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \} align = left\|nobaseline "
                                              r"using = fontsize_large", self.flat)]
         self.assertEqual(len(titles), 2)
         for width in titles:
-            self.assertLessEqual(width + 25 + 5, 404)
+            self.assertLessEqual(width + 25 + 5, 380)
 
     def test_values_guard_their_reads(self):
         values = _read(VALUES)
@@ -845,6 +849,20 @@ class StateCardLabelBudgetTest(LabelBudgetTest):
     # The journal entry's own budgets are LabelBudgetTest's.
     test_the_flagged_labels_are_short = test_overview_captions = test_row_status_words = None
     test_choice_buttons = test_policy_buttons = test_naming_buttons = test_hard_times_phrase = None
+
+
+class PictureLayoutTests(unittest.TestCase):
+    """The monument's picture (spec 2026-10-11 §3.4): 96 px in the row, 120 px on the state card."""
+
+    def test_row_and_card_show_the_picture(self):
+        gui = open(GUI, encoding="utf-8-sig").read()
+        row = gui[gui.index("type gm_monument_row"):]
+        row = row[:row.index("\n\ttype ")] if "\n\ttype " in row else row
+        self.assertRegex(row, r"gm_picture = \{\s*size = \{ 96 96 \}")
+        card_src = open(os.path.join(REPO, "gui", "te_state_panel_widgets.gui"), encoding="utf-8-sig").read()
+        card = card_src[card_src.index("type te_state_gm_card"):]
+        self.assertRegex(card, r"gm_picture = \{\s*size = \{ 120 120 \}")
+        self.assertRegex(card, r"minimumsize = \{ 380 -1 \}")
 
 
 if __name__ == "__main__":

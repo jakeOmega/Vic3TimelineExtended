@@ -2520,6 +2520,18 @@ class PictureTests(unittest.TestCase):
                       squash(block(e, "gm_country_refresh")))
         self.assertIn("gm_remove_state_var = { VAR = gm_picture_code }", squash(block(e, "gm_clear_state")))
 
+    def test_widget_has_every_picture(self):
+        gui = read(WIDGET)
+        # A GUI type header has no `=` before its brace: `type gm_picture = widget {`.
+        raw = raw_block_at(gui, r"(?m)^\ttype gm_picture = widget \{")
+        self.assertIsNotNone(raw)
+        body = squash(strip_comments(raw))
+        for code in PICTURES:
+            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), "
+                          f"'(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
+                          f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\"", body, code)
+        self.assertEqual(body.count("icon = {"), len(PICTURES))
+
     def test_display_value_defaults_to_the_draped_picture(self):
         v = squash(block(read(VALUES), "gm_disp_picture_code"))
         self.assertEqual(v, "value = 1 if = { limit = { has_variable = gm_picture_code } value = var:gm_picture_code }")
