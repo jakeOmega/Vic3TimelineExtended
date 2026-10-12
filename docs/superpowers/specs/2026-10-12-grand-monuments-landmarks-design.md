@@ -31,7 +31,7 @@ Phase 4 builds the landmark mechanism. If phase 6 (historical commissions) is bu
 | Before its icon exists | It shows a **stand-in picture**: an existing skin and form pair named in its row |
 | Who gets one | Minor countries too, not only the great powers |
 | Arc de Triomphe | Level 15. It is the largest triumphal arch ever built (only Pyongyang's 1982 copy is larger) and the most famous monument on the list. It is neither the world's grandest structure of 1836 nor its tallest monument |
-| Ancient monuments | Only those that still had political or cultural weight in 1836. Aksum, where Ethiopia's emperors were still crowned, qualifies |
+| Ancient monuments | Those that still had political or cultural weight in 1836 come first. Aksum, where Ethiopia's emperors were still crowned, qualifies. **Revised (owner, 2026-10-12):** one without that weight may still stand as a heritage site; it is lower priority, all else equal, not excluded. (This is "heritage" in the ordinary sense, not the Heritage status: a To the Nation monument is never contested, and the monthly check lifts Heritage from any monument whose dedication fits.) |
 | People and events after 1836 | **No landmark refers to one.** That bars most phase-6 candidates (Appendix B). An exception is an event the game itself scripts: Victoria's accession in 1837 is an event, so a Victoria Memorial would be acceptable |
 | Phase 6 (if built) | No great/major-power gate. **All upside:** declining or missing a historical commission costs nothing, because a small power may not afford one |
 

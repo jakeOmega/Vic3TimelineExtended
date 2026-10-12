@@ -77,8 +77,9 @@ This change does two things:
 **How they pass phase 4's rules.**
 
 - **One per state**, none in a state that already has a landmark. Benin, Kumasi, Huế, Delhi and Hamgyong have one each.
-- **Ancient monuments only with weight in 1836.** The Parthenon (the new kingdom's reason for its capital), the
-  obelisks (gifts of state in the 1830s) and Persepolis (Jamshid's throne) pass.
+- **Ancient monuments with weight in 1836 come first.** The Parthenon (the new kingdom's reason for its capital), the
+  obelisks (gifts of state in the 1830s) and Persepolis (Jamshid's throne) have it. One without it may still stand as a
+  heritage site, lower priority all else equal (owner, 2026-10-12, revising phase 4's rule).
 - **No holy site another faith holds.** The Parthenon's small Ottoman mosque was out of use by 1836 (the garrison left in
   1833), and the Red Fort's Pearl Mosque is the palace's own.
 - **Nothing refers to a person or event after 1836.**
@@ -92,8 +93,8 @@ means Athens, the Red Fort Indian sovereignty. The grievance is the taking, whic
 
 - **The Old Summer Palace** (the bronze zodiac heads), the Beijing observatory and the Forbidden City's treasures: Beijing
   holds the Temple of Heaven, and one monument a state is the rule. Its piece would be the city's case.
-- **Borobudur, Amaravati, Sanchi, Great Zimbabwe, Halicarnassus, Xanthos:** rediscovered or excavated too late to carry
-  weight in 1836 (phase 4's rule for ancient monuments).
+- **Borobudur, Amaravati, Sanchi, Xanthos:** no weight in 1836, which under the revised rule makes them lower priority,
+  not excluded. They are candidates (§1.3). Great Zimbabwe (§1.1) and Halicarnassus (as Bodrum Castle, §1.2) were added.
 - **The Pergamon Altar, the Ishtar Gate, the Nimrud lamassu, Nefertiti:** still buried in 1836.
 - **Magdala:** Tewodros's fortress dates from the 1850s.
 - **Mexico's Sun Stone:** `STATE_MEXICO` is phase 6's Angel of Independence, and Mexico's dispute is a featherwork
@@ -117,8 +118,8 @@ there, with the Throne of Kandy (§2).
 
 - **Great Zimbabwe.** Its piece is "the soapstone birds": Willi Posselt and Cecil Rhodes took them in 1889–1891, and South
   Africa (1981) and Germany (2003) gave them back. The bird is on Zimbabwe's flag. The form is the round tower (the
-  Great Enclosure's conical tower), so a looter takes a quarter. *(design)* It bends phase 4's rule for ancient
-  monuments: in 1836 its weight was local and religious, not political. Drop it if that rule should hold.
+  Great Enclosure's conical tower), so a looter takes a quarter. In 1836 its weight was local and religious, not
+  political: a heritage site, which the revised rule allows.
 - **Royal Palaces of Abomey.** Dahomey is centralized, so this belonged in §1 and was missed. French troops took the
   palaces' thrones and royal statues in 1892, and France gave 26 of them back to Benin in 2021, under a law passed for
   that return. The piece is "the thrones and royal statues".
@@ -168,17 +169,32 @@ Each state has one owner in 1836, so none is exposed to #936.
 
 **Considered and left out.**
 
-- **Still buried or undiscovered in 1836:** the Pergamon Altar (1878), the Nereid Monument (1838), Priam's Treasure
-  (1873), the Mesha Stele (1868), the Siloam inscription (1880), the Sidon sarcophagi (1855, 1887), Nineveh's and
-  Nimrud's reliefs (1840s).
+- **Still buried in 1836:** the Pergamon Altar (1878), Priam's Treasure (1873), the Sidon sarcophagi (1855, 1887),
+  Nineveh's and Nimrud's reliefs (1840s). The Siloam inscription (1880) lay in Hezekiah's tunnel under Jerusalem.
+- **Standing but unknown to Europe in 1836:** the Nereid Monument at Xanthos (1838) and the Mesha Stele at Dhiban
+  (1868). Candidates under the revised rule (§1.3).
 - **Palmyra:** like Great Zimbabwe, its weight in 1836 was legend and travellers' romance (Lady Hester Stanhope, 1813),
-  and its funerary busts left from the 1870s. It could take `STATE_SYRIA` if the rule may bend again.
+  and its funerary busts left from the 1870s. A candidate under the revised rule (§1.3).
 - **Ctesiphon's arch** (Taq Kasra, `STATE_BAGHDAD`): weight in 1836, but nothing was ever carried off.
 - **The Serpent Column and the Obelisk of Theodosius** in Constantinople: they could be 1836 trophies held by the
   Ottomans (from Delphi and Karnak), but nobody claims them, and Greece's and Egypt's AI would start asking.
 - **Italy:** the Vatican (a base-game monument), Michelangelo's David (never taken, and Tuscany has the Uffizi), the
   Last Supper (Milan has La Scala), Raphael's Saint Cecilia (an altarpiece in a church).
 - **Jerusalem, Hebron, Damascus's Umayyad Mosque:** holy sites.
+
+### 1.3 Candidates the revised rule opens (not added)
+
+The owner's revision (2026-10-12): an ancient monument without weight in 1836 can stand as a heritage site, lower
+priority all else equal. These were left out under the old rule. Each needs its owner read from `00_states.txt`
+before it is added.
+
+| Candidate | Where | Loot story | Note |
+|---|---|---|---|
+| Palmyra | `STATE_SYRIA` (EGY) | funerary busts sold to European museums from the 1870s | Aramaic colonnade fits |
+| Xanthos (the Nereid Monument) | Lycia, likely `STATE_KONYA` (TUR) | Fellows shipped the Nereid Monument and the Harpy Tomb to the British Museum, 1842–1844; Turkey asks for them | Aydin already holds Bodrum |
+| Mesha Stele | `STATE_TRANSJORDAN` (EGY) | broken up in 1868 and pieced together in the Louvre; Jordan asks for it | a stele goes whole |
+| Borobudur | `STATE_CENTRAL_JAVA` (the Dutch East Indies' part) | the Dutch gave eight cartloads of its sculpture to Siam's king in 1896 | a Buddhist monument; split state (#936) |
+| Amaravati | the Company's Madras lands | its marbles went to Madras and then the British Museum (1859) | the remains of a Buddhist stupa |
 
 ## 2. The trophies of 1836
 
