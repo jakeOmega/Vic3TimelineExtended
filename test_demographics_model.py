@@ -628,6 +628,81 @@ class TestMigrantProfile(unittest.TestCase):
                 self.assertAlmostEqual(sum(spec["weights"]), 1.0)
 
 
+class TestMigrantBooking(unittest.TestCase):
+    """The residual's booking keeps the structure plausible (2026-10-12; docs/testing/demographics-migrant-booking-
+    2026-10-12.md): a cap on each class and sex with the rest booked flat, and the labour kind's self-correcting split."""
+
+    def setUp(self):
+        self.ring = M.seed(BRITAIN_1836, 1836, 1_000_000)
+        self.prof = M.migrant_profile(BRITAIN_1836)
+
+    def test_below_the_cap_the_profile_books_as_before(self):
+        migration = -0.001 * self.ring.people()
+        rates = M.migrant_rates(self.ring, self.prof, migration)
+        for (c, sex), rate in rates.items():
+            people = (self.ring.class_f if sex == "f" else self.ring.class_m)[c]
+            self.assertAlmostEqual(rate, migration * self.prof[(c, sex)] / people, places=12)
+
+    def test_past_the_cap_each_class_stops_and_the_rest_is_flat(self):
+        for migration, cap in ((-0.1, P.MIGRANT_CAP_OUT), (0.2, P.MIGRANT_CAP_IN)):
+            amount = migration * self.ring.people()
+            rates = M.migrant_rates(self.ring, self.prof, amount)
+            sums = {(c, s): (self.ring.class_f if s == "f" else self.ring.class_m)[c] for c, s in rates}
+            booked = sum(rates[k] * sums[k] for k in rates)
+            self.assertAlmostEqual(booked, amount, delta=1e-6 * abs(amount), msg="every migrant is booked")
+            want = {k: abs(amount) * self.prof[k] for k in rates}
+            flat = sum(w - min(w, cap * sums[k]) for k, w in want.items()) / sum(sums.values())
+            self.assertGreater(flat, 0)
+            for k, rate in rates.items():
+                self.assertAlmostEqual(abs(rate), min(want[k] / sums[k], cap) + flat, places=12, msg=k)
+                self.assertEqual(rate > 0, amount > 0, k)
+            self.assertAlmostEqual(abs(rates[(2, "m")]), cap + flat, msg="young men stop at the cap")
+
+    def test_an_empty_class_books_its_share_flat(self):
+        self.ring.class_m[4] = 0.5
+        rates = M.migrant_rates(self.ring, self.prof, 1000.0)
+        self.assertEqual(rates[(4, "m")], 0.0)
+        others = sum(rates[k] * (self.ring.class_f if k[1] == "f" else self.ring.class_m)[k[0]]
+                     for k in rates if k != (4, "m"))
+        self.assertAlmostEqual(others, 1000.0, places=6)
+
+    def test_labour_split_balances_where_men_are_few_or_many(self):
+        low_start, low_full = P.LABOUR_BALANCE_LOW
+        high_start, high_full = P.LABOUR_BALANCE_HIGH
+        self.assertEqual(M.labour_balance_weight(low_start, -1), 0.0)
+        self.assertEqual(M.labour_balance_weight(low_full, -1), 1.0)
+        self.assertEqual(M.labour_balance_weight(80.0, -1), 1.0)
+        self.assertEqual(M.labour_balance_weight(80.0, 1), 0.0, "arrivals where men are few keep the jobs' split")
+        self.assertAlmostEqual(M.labour_balance_weight((high_start + high_full) / 2, 1), 0.5)
+        self.assertEqual(M.labour_balance_weight(130.0, -1), 0.0)
+        self.assertEqual(M.labour_balance_weight(None, -1), 0.0)
+        self.assertEqual(M.labour_balance_weight(80.0, 0), 0.0)
+        few = M.migrant_profile(BRITAIN_1836, 80.0, -1)
+        women = sum(v for (c, s), v in few.items() if s == "f" and c == 2)
+        men = sum(v for (c, s), v in few.items() if s == "m" and c == 2)
+        self.assertAlmostEqual(women, men, msg="young departures half women where men are few")
+
+    def test_sustained_emigration_leaves_a_plausible_structure(self):
+        """The bug this fixes: 4% of the people leaving every year for 40 years took the young men to nothing (2 men per
+        100 women, Hill Punjab in the 2026-10-12 overnight run); booked now, the state stays near its balance."""
+        inp = M.Inputs(sol=8, literacy=0.1, urban_share=0.05, female_job_share=0.02)
+        ring = M.seed(inp, 1836, 1_000_000)
+        for year in range(1837, 1877):
+            M.step(ring, inp, year, engine_pop=ring.people() * 0.985, migration=-0.04 * ring.people())
+        figures = M.consequence_figures(ring)
+        self.assertGreater(figures["sex_balance"], P.SEX_FEWER_FROM)
+        self.assertGreater(figures["term"], -0.25)
+
+    def test_sustained_immigration_stays_under_the_more_men_threshold(self):
+        inp = M.Inputs(sol=10, literacy=0.2, urban_share=0.1, female_job_share=0.02)
+        ring = M.seed(inp, 1836, 100_000)
+        for year in range(1837, 1877):
+            M.step(ring, inp, year, engine_pop=ring.people() * 1.09, migration=0.07 * ring.people())
+        figures = M.consequence_figures(ring)
+        self.assertLess(figures["sex_balance"], P.SEX_MORE_FROM)
+        self.assertLessEqual(figures["term"], P.CONSCRIPTION_MAX)
+
+
 class TestInequality(unittest.TestCase):
     """§4.1: the grouped Gini over wealth bands, and the panel's figure."""
 

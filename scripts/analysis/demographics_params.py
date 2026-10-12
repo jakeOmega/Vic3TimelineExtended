@@ -632,6 +632,24 @@ FAMILY_RIGHTS_WEIGHT = 0.2        # x women's work share / FULL_FEMALE_WORK_SHAR
 FULL_FEMALE_WORK_SHARE = 0.48     # Protected Class's share: women's rights at their fullest
 CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
 CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, before devastation and turmoil
+# ---- The residual's booking keeps the structure plausible (migrant booking, 2026-10-12) ---------------------------
+# docs/testing/demographics-migrant-booking-2026-10-12.md. The residual is the engine's own migration (its per-state
+# weekly statistics agree with it, in starving states too), and the engine moves whole pops, which have no age or sex:
+# the profile above is the census's overlay. Booked the same way year after year, a state losing 2-7% of its people a
+# year for decades lost nearly all its young men (Hill Punjab 2 men per 100 women by 1870) and frontiers piled them up
+# (Durango 194). Two rules, fitted on a re-walk of the 2026-10-12 overnight run (demographics_harness.py rebook):
+# - The cap: in one step the profile adds to a class and sex at most MIGRANT_CAP_IN of its people, and takes at most
+#   MIGRANT_CAP_OUT; what is left over is booked at one flat rate over every class and sex (whole families moving).
+#   Below the cap the booking is the profile's, as before.
+MIGRANT_CAP_OUT = 0.03
+MIGRANT_CAP_IN = 0.05
+# - The labour kind's sex split corrects itself: departures' women's share moves to LABOUR_BALANCE_SHARE as the state's
+#   men per 100 women aged 20-59 (te_dg_sex_balance, the census's last figure) fall from LABOUR_BALANCE_LOW's first
+#   figure to its second, and arrivals' as they rise through LABOUR_BALANCE_HIGH. With the cap they keep migration
+#   alone from carrying a state past the sex-balance effects' thresholds (SEX_FEWER_FROM 90, SEX_MORE_FROM 110).
+LABOUR_BALANCE_SHARE = 0.5
+LABOUR_BALANCE_LOW = (95.0, 91.0)
+LABOUR_BALANCE_HIGH = (105.0, 115.0)
 
 # ---- Income inequality (§4.1) -----------------------------------------------------
 # Spending per head stands in for income: the buy package cost at the pop's wealth / 100, linear

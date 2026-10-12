@@ -1948,6 +1948,16 @@ te_demog_family_transport = {
 	if = { limit = { owner = { has_technology_researched = combustion_engine } } add = 0.15 }
 }
 
+# The migrant booking (2026-10-12): the cap on each class and sex (te_demog_migrant_rates) and the labour
+# kind's sex split correcting itself (te_demog_labour_balance; demographics_model.labour_balance_weight).
+te_demog_k_migrant_cap_in = { value = 0.05 }
+te_demog_k_migrant_cap_out = { value = 0.03 }
+te_demog_k_labour_balance_share = { value = 0.5 }
+te_demog_k_labour_low_start = { value = 95 }
+te_demog_k_labour_low_full = { value = 91 }
+te_demog_k_labour_high_start = { value = 105 }
+te_demog_k_labour_high_full = { value = 115 }
+
 # State scope (phase 2 step 1): the 10-14s' participation by the owner's childrens'-rights law
 # (demographics_model.child_work_share).
 te_demog_child_work = {
