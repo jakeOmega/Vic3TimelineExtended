@@ -1,0 +1,181 @@
+"""Phase 2 step 1 changes no census number (docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md).
+
+The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on the tree before step 1's first change
+(TE_RECORD_GOLDEN=1), holds:
+- every te_dg_* variable and modifier of five census cases (seed, step and, under Full, the census's own term) and the
+  model's outputs on two scenarios, kept exactly under the interpreter's fixed point (truncate=True); a name the golden
+  lacks must be one of step 1's (NEW_VARS, NEW_MODIFIERS);
+- a digest of every block of the generated census files and #892's three line files, kept byte for byte (comments
+  aside) except the life table's added threshold lines;
+- the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
+  three calls of Task 5's gated effects."""
+
+import functools
+import hashlib
+import json
+import os
+import re
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+
+import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
+import demographics_params as P  # noqa: E402
+from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
+    EFFECTS, GENERATED_EFFECTS, GENERATED_VALUES, LINE_EFFECTS, LINE_MODIFIERS, LINE_VALUES, _block, _Engine,
+    _engine_for, _raw_blocks, _text)
+
+GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
+NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
+            "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
+NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# Task 5's three calls in te_demog_walks; nothing else in the walk may change
+WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
+# Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
+LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
+BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
+               "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
+CARRIERS = DM.load_carriers()
+
+
+def _inp(**kw):
+    inp = M.Inputs(**kw)
+    inp.mods = DM.totals(CARRIERS, inp.techs, inp.laws, inp.institutions)
+    return inp
+
+
+FARM = _inp(sol=8, literacy=0.1, urban_share=0.05,
+            laws=frozenset({"law_no_womens_rights", "law_child_labor_allowed"}))
+RICH = _inp(sol=40, literacy=0.98, urban_share=0.8,
+            techs=frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines",
+                             "antibiotic_mass_production", "contraceptive_pill", "modern_pharmaceuticals",
+                             "vulcanization", "feminism"}),
+            laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                            "law_public_health_insurance"}),
+            institutions={"institution_health_system": 5, "institution_social_security": 5})
+# the moved lines' families as a state reads them; the two workforce types are read only after Task 6
+LINE_SUMS = {"state_demog_absorbed_mortality_mult": -0.03, "state_demog_ontop_mortality_mult": -0.05,
+             "state_demog_absorbed_birth_rate_mult": 0.05, "state_demog_ontop_birth_rate_mult": 0.1,
+             "state_demog_absorbed_laborers_mortality_mult": 0.05, "state_demog_ontop_mortality_wealth_mult": -0.01,
+             "state_demog_womens_work_ratio_add": 0.25, "state_demog_replaced_ratio_add": -0.03}
+
+
+def _census(inp, full, on_top):
+    """te_demog_seed, te_demog_step a year later (no flows) and, under Full, the census's own term
+    (te_demog_rates_refresh), as te_demog_state_yearly runs them. The generated cause multipliers run
+    (real_multipliers); the owner's means and work share stay _engine_for's fixtures (the interpreter can't read laws)."""
+    eng = _engine_for(inp, 1836, 250000.0, engine=functools.partial(_Engine, truncate=True), real_multipliers=True,
+                      effects={"te_demog_flows": "te_demog_no_flows = yes"})
+    eng.call("te_demog_seed")
+    pop = 251000.0
+    eng.fixtures.update(year=1837.0, state_population=pop)
+    eng.trigger_fixtures["te_demog_effects_run"] = full
+    eng.vars.update(te_dg_eb=40.0 * pop / 1000, te_dg_ed=30.0 * pop / 1000, te_dg_fjob_share=0.3)
+    if on_top is not None:
+        eng.vars.update(te_dg_cbr_model=40.0, te_dg_cdr_model=30.0,
+                        te_dg_eb=40.0 * pop / 1000 * (1 + on_top[0]), te_dg_ed=30.0 * pop / 1000 * (1 + on_top[1]))
+    eng.call("te_demog_step")
+    if full:
+        # the walk's sums and the state's reads as TestRatesScript._eng gives them
+        eng.fixtures.update({"modifier:state_birth_rate_mult": 0.05, "modifier:state_mortality_mult": 0.04,
+                             **{f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}})
+        eb0, ed0 = 475.0 * pop, 430.0 * pop
+        eng.locals.update(te_dg_w_eb0=eb0, te_dg_w_ed0=ed0, te_dg_w_ebr=P.LITERACY_BIRTH_PENALTY * 0.2 * eb0,
+                          te_dg_w_edr=0.0, te_dg_w_eb=eb0, te_dg_w_ed=ed0, te_dg_w_eb0m=eb0, te_dg_w_ed0m=ed0,
+                          te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
+        eng.call("te_demog_rates_refresh")
+    return eng
+
+
+def _lines(full):
+    """te_demog_lines_refresh (and, from Task 6, te_demog_workforce_lines_refresh) on a state; under Full with the
+    census's term in force."""
+    names = set(P.ENGINE_LINE_TYPES.values()) | set(LINE_SUMS)
+    eng = _Engine({f"modifier:{n}": LINE_SUMS.get(n, 0.0) for n in names},
+                  triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full}, truncate=True)
+    if full:
+        eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3, te_dg_q_b=0.0, te_dg_q_d=0.0)
+    eng.call("te_demog_lines_refresh")
+    if "te_demog_workforce_lines_refresh" in eng.effects:
+        eng.call("te_demog_workforce_lines_refresh")
+    return eng
+
+
+def _norm(body, drop=None):
+    lines = [line.strip() for line in body.splitlines() if line.strip()]
+    return "\n".join(line for line in lines if not (drop and drop(line)))
+
+
+def blocks():
+    out = {}
+    for key, path in BLOCK_FILES.items():
+        out[key] = {}
+        for name, body in _raw_blocks([path]).items():
+            drop = (lambda line: bool(LIFE_TABLE_ADDED.search(line))) if name == "te_demog_life_table" else None
+            out[key][name] = hashlib.sha256(_norm(body, drop).encode("utf-8")).hexdigest()
+    return out
+
+
+def walk_text():
+    body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_walks"))
+    return _norm(body, lambda line: line in WALK_CALLS)
+
+
+def outputs():
+    engines = {"farm_display_only": _census(FARM, False, None), "farm_full_on_top": _census(FARM, True, (0.1, 0.2)),
+               "rich_full": _census(RICH, True, (0.0, 0.05)), "lines_outside_full": _lines(False),
+               "lines_full": _lines(True)}
+    cases = {name: {"vars": dict(sorted(eng.vars.items())), "modifiers": dict(sorted(eng.modifiers.items()))}
+             for name, eng in engines.items()}
+    for name, inp in (("model_farm", FARM), ("model_rich", RICH)):
+        ring, last = M.run_constant(inp, years=60)
+        cases[name] = {"vars": {k: last[k] for k in ("births", "deaths", "tfr", "e0", "e65", "q0_per_1000")}
+                       | {f"structure_{k}": v for k, v in M.structure(ring).items()}, "modifiers": {}}
+    return {"cases": cases, "blocks": blocks(), "walk": walk_text()}
+
+
+class TestStepOneChangesNoNumber(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.now = outputs()
+        if os.environ.get("TE_RECORD_GOLDEN") == "1":
+            GOLDEN.write_text(json.dumps(cls.now, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        cls.golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
+
+    def test_every_recorded_output_is_unchanged(self):
+        for case, rec in self.golden["cases"].items():
+            for kind in ("vars", "modifiers"):
+                for name, value in rec[kind].items():
+                    self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
+                    self.assertEqual(self.now["cases"][case][kind][name], value, f"{case}: {name}")
+
+    def test_only_step_ones_names_are_new(self):
+        for case, rec in self.golden["cases"].items():
+            now = self.now["cases"][case]
+            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS, set(), case)
+            self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
+
+    def test_the_census_term_is_recorded(self):
+        """The Full cases hold the census's own modifiers, so a change to M would show."""
+        for case in ("farm_full_on_top", "rich_full"):
+            mods = self.golden["cases"][case]["modifiers"]
+            self.assertTrue(any(name.startswith("te_demog_census_") for name in mods), case)
+
+    def test_every_generated_block_is_unchanged(self):
+        """Existing blocks byte for byte (comments aside), the life table less Task 3's threshold lines; new blocks are
+        free. Task 6's refactor of #892's renderers must leave its three files' blocks as they were."""
+        for key, rec in self.golden["blocks"].items():
+            for name, digest in rec.items():
+                self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
+                self.assertEqual(self.now["blocks"][key][name], digest, f"{key}: {name} changed")
+
+    def test_the_walk_changes_only_by_its_three_calls(self):
+        self.assertEqual(self.now["walk"], self.golden["walk"])
+
+
+if __name__ == "__main__":
+    unittest.main()
