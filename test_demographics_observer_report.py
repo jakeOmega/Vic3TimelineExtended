@@ -479,6 +479,21 @@ class TestPhase2Saves(unittest.TestCase):
             # one save alone is no span, even at the gate year's end
             self.assertIsNone(R.world_from_saves(paths[:1], to_year=1836)["end"])
 
+    def test_the_slack_is_one_year(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # a year and a half out is too far; exactly a year out is still near enough
+            far = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1902.7.1", [(900, 0)])])
+            self.assertIsNone(R.world_from_saves(far, to_year=1900)["end"])
+        with tempfile.TemporaryDirectory() as tmp:
+            edge = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1902.1.1", [(900, 0)])])
+            self.assertEqual(R.world_from_saves(edge, to_year=1900)["end"]["date"], "1902.1.1")
+
+    def test_month_and_day_count_in_the_nearest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # 1900.12.1 is a month short of 1901.1.1, 1901.3.1 two months past it
+            paths = self._saves(tmp, [("1837.1.1", [(400, 0)]), ("1900.12.1", [(600, 0)]), ("1901.3.1", [(700, 0)])])
+            self.assertEqual(R.world_from_saves(paths, to_year=1900)["end"]["date"], "1900.12.1")
+
     def _main(self, tmp, *flags, lines=None):
         log = Path(tmp) / "debug.log"
         lines = lines or [census("AAA", 1836, "100_0_0", "5.0", "40.0"), census("AAA", 1900, "190_0_0", "5.0", "40.0")]
@@ -513,7 +528,15 @@ class TestPhase2Saves(unittest.TestCase):
             paths = self._saves(tmp, [("1837.1.1", [(1_000_000, 0)]), ("1880.1.1", [(1_200_000, 0)])])
             code, out = self._main(tmp, "--saves", *map(str, paths))
             self.assertEqual(code, 1)
-            self.assertIn("no save within a year of 1901.1.1 (the earliest is 1837.1.1): UNDECIDED", out)
+            self.assertIn("no save but the first within a year of 1901.1.1 (the earliest is 1837.1.1): UNDECIDED", out)
+
+    def test_cli_refuses_saves_without_phase2(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stderr(io.StringIO()):
+            [path] = self._saves(tmp, [("1837.1.1", [(100, 0)])])
+            log = Path(tmp) / "debug.log"
+            log.write_text(census("AAA", 1836, "100_0_0", "5.0", "40.0") + "\n", encoding="utf-8")
+            with self.assertRaises(SystemExit), redirect_stdout(io.StringIO()):
+                R.main([str(log), "--saves", str(path)])
 
     def test_cli_refuses_a_band_upside_down(self):
         with tempfile.TemporaryDirectory() as tmp, redirect_stderr(io.StringIO()):

@@ -321,8 +321,8 @@ change, because an absorbed line cancelled on both sides before, and no on-top f
 - **The run:** a new 1836 game on main at ec304526 (#885's lines on top at the census's rate, #889's Impact of
   Institutions; before #892's moved lines), Demographics on Full, observed, census log on, fast mode off, from 13:11.
   - It crashed at 13:59, when a script-value hot deploy hit it, and the owner resumed from the 1853 save.
-  - It ran to 1 January 1901.
-  - The archive has 65 yearly autosaves and every log generation, in `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`.
+  - It ran to 1 January 1901; the gate reads to there, though the archive's last autosave is 1 January 1902.
+  - The archive has 66 yearly autosaves and every log generation, in `/mnt/d/vic3te-data/vic3te-demog-p2-normal-2026-10-11/`.
 - **The tools ran from a checkout of that build** (`git worktree add --detach … ec304526`). #892's `predict` would read
   these saves wrongly.
 
@@ -381,7 +381,10 @@ multiples for 1836–1900, interpolated from Maddison's 1820, 1870 and 1913 esti
   - **India:** about +60M.
   - **Africa and the Middle East:** about +20M each.
   - **The Americas:** about +70M. Their migration ("other") is about twice history's, and Mexico's births less deaths
-    (+1.18% a year) is above its history too.
+    (+1.18% a year) is above its history too. Found since: by peacetime rates against history's range, Mexico's births
+    less deaths matches; its excess is migration (below, "Peacetime births less deaths, by region"). These figures
+    are growth against a ×1.6 world; that section's are births less deaths against the middle of history's range, so
+    the two sets differ (India +60M here, +37M there; the Middle East +20M, +11M).
 - **Europe's deaths move the wrong way.** Its CDR rises from 25.9 (1872) to 27.2 (1901), where history's fell from
   about 24 to 19.
   - Germany's 1900 census has CDR 33.4 above CBR 31.2 (history: about 22 and 36).
@@ -405,8 +408,8 @@ beside the run's archive (`session-notes-2026-10-11/germany-famine-analysis/` an
 
 `demographics_observer_report.py --phase2 --saves SAVE…` now judges the world's multiple from every pop in the
 earliest save and the save nearest 1 January after `--to-year`; the census log's figure prints as a second line, not
-judged. The band (`--band`) defaults to ×1.40–×1.65: history as it happened (Maddison 2020: ×1.39 from 1836 to 1900;
-2010's figures gave ×1.45) up to history without its catastrophes (the owner's estimate, about ×1.6–1.65). On this
+judged. The band (`--band`) defaults to ×1.40–×1.65: history as it happened (Maddison 2020: ×1.39 from 1836 to 1900, rounded to
+the floor's ×1.40; 2010's figures gave ×1.45) up to history without its catastrophes (the owner's estimate, about ×1.6–1.65). On this
 run: ×1.77 from the saves (1,031M to 1,822M), ×1.92 from the log. **Fail.**
 
 ### Peacetime births less deaths, by region
@@ -444,8 +447,9 @@ USA, India, China and Russia (not re-checked). Africa's and the Middle East's ar
   the Middle East (+11M).
 - **Too low:** the USA and Canada (CBR 38 against 40–45, CDR 24.5 against 20–22; about −50M before migration),
   Southeast Asia (−14M), South America (−11M) and Great Britain (+8.5 against about +12.5).
-- **Matches:** Eastern Europe, Russia, Mexico's births less deaths. **Western Europe's match is offsetting errors:**
-  France high, Britain low, Germany's famine (below), and no Irish famine.
+- **Matches:** Eastern Europe, Russia, Mexico's births less deaths. **Western Europe is a little high (+11.1 against
+  +8 to +10, about +18M), and its near-match is offsetting errors:** France high, Britain low, Germany's famine
+  (below), and no Irish famine.
 - **Missing catastrophes:** India's famines (the engine recorded 0.54M famine deaths against history's roughly
   15–20M), the Taiping, Ireland's Great Famine, Persia's 1870–72 famine.
 - **Migration** (the engine's, outside the census): about twice history's into the USA, four to five times into South
@@ -463,13 +467,14 @@ Germany's census CDR of 33.4 in 1900 (39.7 in 1898, 37.3 in 1899) comes from sev
   counts 2,915 famine deaths by 1898.1.1, 32,173 by 1899.1.1 and 55,390 by 1900.1.1, and is gone by 1901.1.1.
 - **Who starved (measured).** Unemployed laborers, 30–42% of the people in Germany's industrial states, at food
   security 0, with no social security law. About 40% of Hannover was in severe starvation on 1 January of 1898,
-  1899 and 1900; Brandenburg 75–87%.
-- **Why so many deaths (measured).** Severe starvation is a pop's own line, which the census leaves at the bare
-  curve's weight (§ Bengal above): with M about −0.55, a severely starving pop dies at about three times the census's
-  target. Splitting `dz` into last year's M against this year's, the model's own CDR drifting, state lines on top
+  1899 and 1900; Brandenburg 25–34% (75–87% starving, mild or severe).
+- **Why so many deaths (measured, except where marked).** Severe starvation is a pop's own line, which the census
+  leaves at the bare curve's weight (§ Bengal above): with M about −0.55, a severely starving pop dies at about three
+  times the census's target (assuming the walk's +1.0 severe term, which is open: below). Splitting `dz` into last year's M against this year's, the model's own CDR drifting, state lines on top
   and pop lines on top reproduces the stored `dz` exactly on all 52,315 state-steps that store one; the pop term is
   84–105% of Germany's excess in 1898–1900, and `dz` correlates with the severe share at 0.78–0.97. The absolute
-  famine deaths equal the base game's; only their ratio to the census's lower baseline grows.
+  famine deaths equal the base game's (by design, again assuming the +1.0 term); only their ratio to the census's
+  lower baseline grows.
 - **Not merging states.** States 1027–1053 all exist in the 1837 save (1,147 state objects at the start; states made
   later take IDs from 16,777,216). Steps after an owner change and steps after a population jump of over 5% each
   carry 1–2% of the world's excess. Stale M is symmetric noise world-wide (+15.8M against −15.6M).
@@ -479,7 +484,7 @@ Germany's census CDR of 33.4 in 1900 (39.7 in 1898, 37.3 in 1899) comes from sev
 ### The ring over-records famine deaths
 
 Over 1897–1901 the census's natural change for Germany fell 3.6M below its baseline while the engine's population
-fell 1.5M; the gap reads as immigration (+933k in 1898). Two causes:
+fell 1.5M below its own baseline (its actual change was −280k, −174k and +80k in 1898–1900); the gap reads as immigration (+933k in 1898). Two causes:
 
 1. **The snapshot (measured).** `dz` is measured on the step's day and applied to the whole year that ends there.
    Hannover steps in early February, so its 1898 step booked a mostly pre-famine year as famine.

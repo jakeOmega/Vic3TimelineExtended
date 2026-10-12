@@ -14,8 +14,9 @@ the engine did.
 
 The world's multiple comes from the saves when --saves names plain-text saves (#894): every pop's people
 (workforce and dependents) in the earliest save given, against the save nearest 1 January after --to-year
-(UNDECIDED when none lies within a year of it). Only those two saves are read past their header, so a run's
-whole save folder can be passed. Pass the run's first autosave (1 January after the first census year): the
+(UNDECIDED when no save other than the first lies within a year of it). Only those two saves are read past their
+header, so a run's whole save folder can be passed. Normal-speed runs only: under fast mode the census year runs
+ahead of the calendar, so a save's date and the log's census year don't name the same year. Pass the run's first autosave (1 January after the first census year): the
 census log's figure runs from the first census year's line to --to-year's, both taken on 31 December, so the
 two cover the same years. The log's figure is still printed, as a second line: it sums the logged countries
 of a million people or more, so land that comes under the census as it is colonized joins the total and
@@ -191,7 +192,7 @@ def _print_phase2(check, to_year):
         sw = check["saves_world"]
         start, end = sw["first"], sw.get("end")
         if m is None:
-            print(f"phase 2 gate: no save within a year of {sw['target']} (the earliest is {start['date']}): "
+            print(f"phase 2 gate: no save but the first within a year of {sw['target']} (the earliest is {start['date']}): "
                   "UNDECIDED")
         else:
             print(f"phase 2 gate: world x{m:.2f} from the saves, every state ({start['date']} "
@@ -499,14 +500,17 @@ def main(argv=None):
                              "peacetime years running, the clamped share; exit 1 when it fails")
     parser.add_argument("--to-year", type=int, default=1900, help="the gate's end year (default 1900)")
     parser.add_argument("--saves", type=Path, nargs="+", metavar="SAVE",
-                        help="plain-text saves: --phase2 judges the world's multiple from every state's people in "
-                             "the earliest and the one nearest 1 January after --to-year, not the census log's")
+                        help="plain-text saves (normal-speed runs only): --phase2 judges the world's multiple from every "
+                             "state's people in the earliest and the one nearest 1 January after --to-year, not the "
+                             "census log's")
     parser.add_argument("--band", type=float, nargs=2, metavar=("LO", "HI"), default=WORLD_BAND,
                         help="--phase2's band for the world's multiple (default %(default)s: history as it "
                              "happened to history without its catastrophes, #894)")
     args = parser.parse_args(argv)
     if args.band[0] > args.band[1]:
         parser.error("--band: LO above HI")
+    if args.saves and not args.phase2:
+        parser.error("--saves is read only by --phase2")
     records, unresolved = [], []
     for path in args.logs:
         with path.open(encoding="utf-8-sig", errors="replace") as lines:
