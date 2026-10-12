@@ -20,7 +20,11 @@ bankruptcies cut the institutions the census reads (in that run Britain's census
 step after it cut its health institution from level 4 to 1). The proposed cure is more revenue for every country while
 fast mode runs.
 
-Before choosing a cure, this note checks the reading against the saves.
+Fast mode was never meant to be a normal game. The first fast run (12×,
+`docs/testing/demographics-fast-run-2026-10-09.md`) reached census year 2124 as an 1860 society with every medical
+technology to era 8, fertility still near 5. The aim here is narrower: that the AI's finances, and the institutions the
+census reads through them, don't fail in a fast run for a reason a normal game doesn't share. Before choosing a cure,
+this note checks the reading against the saves.
 
 ## 2. What the saves show
 
@@ -73,7 +77,7 @@ debt by 1880 (64–68% against 53%). **Fast A's collapse comes between 1890 and 
 | Technologies: leader / median country | 100 / 54 | 121 / 72 | 177 / 132 | 219 / 206 | 249 / 248 | 285 / 284 |
 
 - **Per head, the fast world earns more, not less:** about three times the normal run's income in 1880 and five times
-  by 1902–04, and a higher standard of living (10–12 against 7.6–8.0). Its people have not outrun its economy.
+  by 1902–04, and a higher standard of living (10–12 against 7.6–8.0) from 1870 on.
 - **What grows is subsidies, then interest.** In Fast A's 1904 bankrupt countries (129 countries, 3.7 billion people)
   subsidies take 55% of income and interest 42%. Government and military wages and goods take a smaller share of
   income than in the normal run (30% in Fast A's 1904, 50% in the normal run's 1902). Net construction is at most
@@ -95,15 +99,26 @@ debt by 1880 (64–68% against 53%). **Fast A's collapse comes between 1890 and 
 The 2026-10-06 study of the AI-only observer run (normal speed, an earlier build; it isn't written up in the repo)
 found `declared_bankruptcy` on 109 of 230 countries in 1990, 116 of 190 in 2015 and 126 of 179 in 2029. The owner's
 reading of run 1's AI budgets in 2015 was 25–50% subsidies, mostly ports. Fast A's 1904 count is 129 of 243.
-Run 2's technology leaders held 245 techs in 2015; Fast A's median country held 248 in 1890.
+Run 2's technology leaders held 245 techs in 2015; Fast A's median country held 248 in 1890. The two builds are four
+days apart and the mod adds techs often, so the counts match only roughly.
+
+### Where the premise holds
+
+In the mid-century the fast world's people are poorer than the normal run's. Its SoL sits below the normal run's in
+1840 and 1850 (1850: 7.17 and 6.94 against 7.64), and phase 2's gate run found mild starvation on 18% of people in
+calendar 1857 against 8% at normal speed: "in fast mode the people outgrow the farms"
+(`demographics-phase2-engine-rates-2026-10-10.md`). By 1860–1870 the fast runs' SoL is above the normal run's, as K×
+construction and research catch up with K× people. Through all of that the government budgets show no strain: the
+bankrupt shares stay at or about the normal run's. So population does outrun the economy for a time, but the pops feel
+it, not the treasuries, and a revenue boost wouldn't reach them.
 
 ### What this says
 
-The fast run doesn't show population outrunning revenue. It shows the mod's late-game AI insolvency, which a normal
-game reaches between 1990 and 2030, at calendar 1890–1904. Two of fast mode's speed-ups cause that. Research at K×
-brings the late-game buildings, and the late-game subsidy bill that power plants carry, K times sooner. Spread at K×
-brings them to every country at once instead of to the leaders first. Once a country is in debt, interest compounds
-the deficit.
+The fast run's bankruptcies don't come from population outrunning revenue. They come from the mod's late-game AI
+insolvency, which a normal game reaches between 1990 and 2030, at calendar 1890–1904. Two of fast mode's speed-ups cause
+that. Research at K× brings the late-game buildings, and the late-game subsidy bill that power plants carry, K times
+sooner. Spread at K× brings them to every country at once instead of to the leaders first. Once a country is in debt,
+interest compounds the deficit.
 
 Two measurement notes. The normal run's 1870 row (19% of people) is a spike: the count of bankrupt countries didn't
 move. The observer study counted countries, not people, so it isn't directly comparable with the people-weighted
@@ -236,12 +251,14 @@ value.
 
 ## 5. Recommendation
 
-**Don't add a revenue boost to fast mode now.** The saves don't show fast mode's population outrunning the AI's
-economy: per head, the fast world is richer than the normal one at the same calendar year, and through 1880 it is no
-less solvent. What they show is the mod's late-game AI insolvency: power-plant subsidies, then interest. It arrives
-early because research runs at K×, and everywhere at once because spread does. A normal game reaches the same state
-between 1990 and 2030. A boost would hide in fast runs a problem that normal games keep, so fast runs would approximate
-normal games less, not more.
+**Don't add a revenue boost to fast mode now.** This reverses the boost the owner approved in principle on 2026-10-10,
+so the premise's true part comes first: in the mid-century the fast world's people are poorer and hungrier than the
+normal run's (§2, "Where the premise holds"). But that strain is on the pops, not the treasuries. The governments'
+bankrupt shares stay at or about the normal run's through 1880, and per head the fast world's governments earn more. The
+bankruptcies come later, from the mod's late-game AI insolvency: power-plant subsidies, then interest. It arrives early
+because research runs at K×, and everywhere at once because spread does. A normal game reaches the same state between
+1990 and 2030. A boost would hide in fast runs a problem that normal games keep, so fast runs would approximate normal
+games less, not more.
 
 Instead:
 
@@ -259,8 +276,9 @@ living alone and does nothing for solvent countries. Its share, its cap and E2 a
 
 ## 6. Owner calls
 
-1. Accept the reading in §2 (late-game insolvency on the tech clock, not population against revenue), or ask for the
-   people-weighted normal-speed baseline first.
+1. Accept the reading in §2 (late-game insolvency on the tech clock; the mid-century strain falls on pops, which a
+   revenue boost wouldn't reach), or ask for the people-weighted normal-speed baseline first. Either way, the boost
+   approved in principle on 2026-10-10 waits.
 2. Whether to pursue the power-plant subsidy burden as a normal-game balance issue.
 3. Option 4: measure the institution lag, then decide.
 4. If fast runs should be shielded regardless: Option 2, with its share and cap.
