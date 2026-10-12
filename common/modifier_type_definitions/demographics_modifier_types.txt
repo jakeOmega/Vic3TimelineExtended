@@ -105,3 +105,50 @@ state_work_capacity_mult = {
 	decimals = 0
 	script_only = yes
 }
+
+# Family Policy measures (phase 2 step 3a: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# §3.5). Carried by the measures' country modifiers (te_demog_measure_modifiers.txt); a state's read includes its
+# country's modifiers. Step 3b makes the census read them: until then they only show on the measures' tooltips. A
+# release comments their lines out (scripts/release/comment_out_census_inputs.py, rule 1). Read as:
+#   state_desired_fertility_mult      desired x (1 + it), floored at 0.1
+#   state_urban_fertility_relief_add  the urban term 1 - 0.2 x urban share x (1 - it)
+#   state_means_literacy_add          the means' access 0.3 + 0.7 x min(1, literacy + it)
+#   state_maternal_mortality_mult     the maternal cause x (1 + it)
+#   state_birth_limit_relief_add      Birth Limit's part x (1 - it x the agrarian share)
+#   state_sex_ratio_at_birth_add      boys per 100 girls at birth, 105 + it, once prenatal sexing exists
+state_desired_fertility_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_urban_fertility_relief_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_means_literacy_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_maternal_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_birth_limit_relief_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_sex_ratio_at_birth_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+}

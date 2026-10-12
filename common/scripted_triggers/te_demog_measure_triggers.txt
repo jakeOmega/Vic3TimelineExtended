@@ -1,0 +1,263 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the Family Policy measures: triggers (phase 2 step 3a)
+# Spec: docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.4, §3.6.
+# Effects: te_demog_measure_effects.txt; values: te_demog_measure_values.txt.
+# ============================================================================
+
+# ---- Which law allows which measure (§3.4's table) ----------------------------------------------------------------
+# Country. The Rural Exemption also needs Birth Limit on: its button says so (te_demog_ms_rural_exemption_sgui), and
+# Birth Limit takes it along when it ends (te_demog_ms_remove_birth_limit). The panel shows a measure the law in force
+# allows as a row with its button, and one another law allows dimmed (te_demog_sec_family).
+te_demog_ms_allowed_child_allowance = {
+	OR = {
+		has_law = law_type:law_pro_natalist_subsidies
+		has_law = law_type:law_communal_child_rearing
+	}
+}
+te_demog_ms_allowed_family_housing = {
+	OR = {
+		has_law = law_type:law_pro_natalist_subsidies
+		has_law = law_type:law_state_sponsored_family_planning
+	}
+}
+te_demog_ms_allowed_honours = {
+	OR = {
+		has_law = law_type:law_traditional_family_structure
+		has_law = law_type:law_pro_natalist_subsidies
+	}
+}
+te_demog_ms_allowed_restricted_contraception = {
+	has_law = law_type:law_pro_natalist_subsidies
+}
+te_demog_ms_allowed_parental_leave = {
+	OR = {
+		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_communal_child_rearing
+	}
+}
+te_demog_ms_allowed_free_contraception = {
+	OR = {
+		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_population_control_measures
+	}
+}
+te_demog_ms_allowed_sex_education = {
+	OR = {
+		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_population_control_measures
+	}
+}
+te_demog_ms_allowed_later_longer_fewer = {
+	OR = {
+		has_law = law_type:law_state_sponsored_family_planning
+		has_law = law_type:law_population_control_measures
+	}
+}
+te_demog_ms_allowed_birth_limit = {
+	has_law = law_type:law_population_control_measures
+}
+te_demog_ms_allowed_rural_exemption = {
+	has_law = law_type:law_population_control_measures
+}
+te_demog_ms_allowed_crash_campaign = {
+	has_law = law_type:law_population_control_measures
+}
+
+# ---- The term (§3.3) ------------------------------------------------------------------------------------------------
+# Country: measure $M$ has run its five years, so it may be switched off (te_demog_ms_years_<measure> reads -1 while it
+# is off). The Crash Campaign ends itself then (te_demog_ms_monthly).
+te_demog_ms_term_run = {
+	te_demog_ms_years_$M$ >= 5
+}
+
+# Country: the Crash Campaign ended less than ten years ago and can't return yet.
+te_demog_ms_crash_campaign_barred = {
+	has_variable = te_dg_ms_crash_campaign_end
+	te_demog_ms_years_since_crash_campaign < 10
+}
+
+# ---- The AI (§3.6) ----------------------------------------------------------------------------------------------------
+# The laws' weights (every game, owner call 7: ai_enact_weight_modifier in extra_laws.txt) and the measures' yearly
+# pulse (Full, te_demog_ms_ai_choose) read the same conditions, which any country has; is_ai = yes only decides whom
+# the pulse picks for. Where the census runs, its figures add to the walk's.
+
+# Country: the population shrank over the last year by more than a tenth of a percent, by the yearly walk's figures
+# (every game). The deadband keeps a country near zero growth from swinging between the two laws' weights each year.
+te_demog_ms_ai_shrinking = {
+	te_demog_ms_pop_trend < -0.001
+}
+
+# Country: the population shrinks fast, more than half a percent a year.
+te_demog_ms_ai_shrinking_fast = {
+	te_demog_ms_pop_trend < -0.005
+}
+
+# Country: the census counts many old people, 15% or more aged 65 and over (0 where the census doesn't run).
+te_demog_ms_ai_old = {
+	te_demog_ms_old_share >= 0.15
+}
+
+# Country: a quarter or more aged 65 and over.
+te_demog_ms_ai_very_old = {
+	te_demog_ms_old_share >= 0.25
+}
+
+# Country: a youth bulge, more than 18% of the people aged 20 to 29 (the census; §4.3's measure).
+te_demog_ms_ai_youth = {
+	te_demog_ms_youth_share > 0.18
+}
+
+# Country: half its people or more live in states Migration Crowding presses at its ceiling (te_demog_ms_crowded_share).
+te_demog_ms_ai_crowded = {
+	te_demog_ms_crowded_share >= 0.5
+}
+
+# Country: a reason to want more births: the population shrinks or the old are many.
+te_demog_ms_ai_pronatal = {
+	OR = {
+		te_demog_ms_ai_shrinking = yes
+		te_demog_ms_ai_old = yes
+	}
+}
+
+# Country: the pro-natalist target is far off: the population shrinks fast or a quarter are old.
+te_demog_ms_ai_pronatal_far = {
+	OR = {
+		te_demog_ms_ai_shrinking_fast = yes
+		te_demog_ms_ai_very_old = yes
+	}
+}
+
+# Country: a reason to want fewer births: famine, crowding or a youth bulge.
+te_demog_ms_ai_popcontrol = {
+	OR = {
+		has_famine = yes
+		te_demog_ms_ai_crowded = yes
+		te_demog_ms_ai_youth = yes
+	}
+}
+
+# Country: the population-control target is far off: famine with crowding or a youth bulge.
+te_demog_ms_ai_popcontrol_far = {
+	has_famine = yes
+	OR = {
+		te_demog_ms_ai_crowded = yes
+		te_demog_ms_ai_youth = yes
+	}
+}
+
+# Country: the treasury can take on a money upkeep (one a pulse: the pulse's local te_dg_ms_money counts the money
+# measures it started, te_demog_ms_ai_choose), and still carry one.
+te_demog_ms_ai_money_start = {
+	in_default = no
+	scaled_debt < 0.25
+	local_var:te_dg_ms_money < 1
+}
+te_demog_ms_ai_money_keep = {
+	in_default = no
+	scaled_debt < 0.5
+}
+
+# Country: legitimacy high enough for a coercive measure (Restricted Contraception, Birth Limit's one child, the Crash
+# Campaign: §3.6, "only when a target is far off and legitimacy is high").
+te_demog_ms_ai_legitimate = {
+	government_legitimacy >= 75
+}
+
+# Country: whether the AI starts or keeps each measure. Start: the need and its upkeep with a margin (authority: the
+# upkeep plus 25 free, from the pulse's budget, the local te_dg_ms_auth: a modifier added in an effect isn't visible
+# in it, so each start takes its upkeep off the budget, te_demog_ms_ai_spent); keep: the need and the upkeep still met
+# (authority not in deficit). The start triggers read the pulse's locals: only te_demog_ms_ai_choose calls them.
+te_demog_ms_ai_start_child_allowance = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_start = yes
+}
+te_demog_ms_ai_keep_child_allowance = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_keep = yes
+}
+te_demog_ms_ai_start_family_housing = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_start = yes
+}
+te_demog_ms_ai_keep_family_housing = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_keep = yes
+}
+te_demog_ms_ai_start_honours = {
+	te_demog_ms_ai_pronatal = yes
+	local_var:te_dg_ms_auth >= 50
+}
+te_demog_ms_ai_keep_honours = {
+	te_demog_ms_ai_pronatal = yes
+	authority >= 0
+}
+te_demog_ms_ai_start_restricted_contraception = {
+	te_demog_ms_ai_pronatal_far = yes
+	te_demog_ms_ai_legitimate = yes
+	local_var:te_dg_ms_auth >= 75
+}
+te_demog_ms_ai_keep_restricted_contraception = {
+	te_demog_ms_ai_pronatal_far = yes
+	authority >= 0
+}
+te_demog_ms_ai_start_parental_leave = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_start = yes
+}
+te_demog_ms_ai_keep_parental_leave = {
+	te_demog_ms_ai_pronatal = yes
+	te_demog_ms_ai_money_keep = yes
+}
+te_demog_ms_ai_start_free_contraception = {
+	te_demog_ms_ai_popcontrol = yes
+	te_demog_ms_ai_money_start = yes
+}
+te_demog_ms_ai_keep_free_contraception = {
+	te_demog_ms_ai_popcontrol = yes
+	te_demog_ms_ai_money_keep = yes
+}
+te_demog_ms_ai_start_sex_education = {
+	te_demog_ms_ai_popcontrol = yes
+	bureaucracy > 0
+}
+te_demog_ms_ai_keep_sex_education = {
+	te_demog_ms_ai_popcontrol = yes
+	bureaucracy >= 0
+}
+te_demog_ms_ai_start_later_longer_fewer = {
+	te_demog_ms_ai_popcontrol = yes
+	local_var:te_dg_ms_auth >= 75
+}
+te_demog_ms_ai_keep_later_longer_fewer = {
+	te_demog_ms_ai_popcontrol = yes
+	authority >= 0
+}
+te_demog_ms_ai_start_birth_limit = {
+	te_demog_ms_ai_popcontrol = yes
+	local_var:te_dg_ms_auth >= 125
+}
+te_demog_ms_ai_keep_birth_limit = {
+	te_demog_ms_ai_popcontrol = yes
+	authority >= 0
+}
+# the one child: from two, with the target far off and legitimacy high (no further upkeep)
+te_demog_ms_ai_tighten_birth_limit = {
+	te_demog_ms_ai_popcontrol_far = yes
+	te_demog_ms_ai_legitimate = yes
+}
+# the exemption softens the limit: taken while the need isn't pressing
+te_demog_ms_ai_start_rural_exemption = {
+	has_variable = te_dg_ms_birth_limit
+	NOT = { te_demog_ms_ai_popcontrol_far = yes }
+}
+te_demog_ms_ai_keep_rural_exemption = {
+	has_variable = te_dg_ms_birth_limit
+	NOT = { te_demog_ms_ai_popcontrol_far = yes }
+}
+te_demog_ms_ai_start_crash_campaign = {
+	te_demog_ms_ai_popcontrol_far = yes
+	te_demog_ms_ai_legitimate = yes
+	local_var:te_dg_ms_auth >= 125
+	NOT = { te_demog_ms_crash_campaign_barred = yes }
+}

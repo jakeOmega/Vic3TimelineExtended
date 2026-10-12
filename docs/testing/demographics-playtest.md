@@ -27,8 +27,9 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_ig_trait_type` | any rule, development builds only: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02), and the INJECT added to vanilla's trait block (`remainder` about 0) | `read` 0: the type isn't summed; `remainder` about −0.05: the INJECT replaced vanilla's block. Either way the Trade Unions' two loyal traits' lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
+| `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census will never see any measure's types (step 3b reads them); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
 
-No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game.
+No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
 carriers in the player's country. **Woman Soldiers and Pollution Impact** carry their moved working-adult lines as a
 script-only type on a modifier at a multiplier (×0.5, × the region's impact), the fact `primogeniture_scaled` tests:
@@ -130,3 +131,45 @@ are in the table above.
 10. **Pollution Impact, in passing:** in a polluted state of the same game, option l's `cap=` reads −0.1 × the impact
     and `replaced=` −0.05 × the same.
 
+## Family Policy measures (step 3a)
+
+The measures and their panel (`docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §3.3-§3.7).
+Until step 3b the census reads only Free and Restricted Contraception's means lines, so births don't move for the
+others; check the switching, the costs and the politics.
+
+1. **Full, a new game; console the Family & Reproductive Policy law** (or enact it). The Demographics tab's Family
+   Policy section, open after the pyramid: "Law in Force" names the law and shows the law's tooltip; each measure the
+   law allows is a row with its running cost, "Off" and a Start button; the rest sit dimmed under "Under Other Laws",
+   their hover naming the laws that allow them. No label, cost or term cut short ("Honours for Large Families",
+   "Restricted Contraception", "Barred to 1915").
+2. **Start Child Allowance** (Pro-Natalist Policy): the budget shows a new expense line of about 0.5% of GDP a year ×
+   (the 0-14 share ÷ 0.3), weekly; the Devout and Trade Unions gain +1 approval; the term reads "On to <year + 5>";
+   the button reads End, greyed, its tooltip "Its five-year term runs to <year>". Each 31 December the expense
+   follows GDP.
+3. **Honours, Later Longer Fewer, Birth Limit, the Crash Campaign**: authority falls by 25, 50, 100, 100. Sex
+   Education: the Ministry of Education's bureaucracy cost +10%. Restricted Contraception: feminist movement support
+   up, and (option l) the capital's `fmeans` falls by 0.2; Free Contraception raises it by 0.1.
+4. **Birth Limit's button**: Start (two children), Tighten (one child, the modifier swaps at once), then End once five
+   years have run, which also ends the Rural Exemption. The Rural Exemption's Start is greyed "Needs Birth Limit in
+   force" without it.
+5. **The Crash Campaign**: no button ends it; five years to the month after it starts it ends with the "Crash Campaign
+   Over" notice, legitimacy recovers its 10, and the row reads "Barred to <year + 10>" until then.
+6. **Leaving the law**: with measures on, enact another family law (console). Every measure the new law doesn't allow
+   ends at once, each with its "… Ended" notice; under a law that allows it again it starts a new term.
+7. **Display only**: the section shows, one line above the rows says the measures act only under Full, and every
+   button is greyed with that reason.
+8. **An AI country with a measure on** (an observer run of a few decades, Full): a shrinking or ageing AI on
+   Pro-Natalist Policy takes Child Allowance or Honours, at most one money measure a year; one in a famine on
+   Population Control takes Free Contraception, Later Longer Fewer or Birth Limit, never more authority measures
+   than its free authority covers; none ends one before five years. Read the country's `te_dg_ms_*` in a plain-text
+   save.
+9. **A revolution that wins** under Full, the old government holding a measure: at once, the winner has the
+   measure's variable (copied from the loser), modifier and cost, or a notice if its law doesn't allow it.
+10. **Every game (Disabled)**: the family laws' AI weights: an AI country in famine moves toward Population Control
+    Measures; one whose population shrinks by more than 0.1% a year, toward Pro-Natalist Policy. Crowding counts only
+    where half a country's people live in states at Migration Crowding's ceiling (none before about 1900).
+11. **Parental Leave (Full)**: option l's women's-work family (`womens=`) rises by 0.02 in every state, and the pair
+    (`pair=`) follows within a month; its expense follows the capital's women's rate. `debug.log`: no error from
+    `te_demog_measure_*`, `te_demog_messages.txt`, `te_demog_ms_law_on_action` or `te_debug_demog.10` (the
+    self-check's verdict event: an error there would leave a `START` with no verdict, which reads like a capital
+    that changed hands).

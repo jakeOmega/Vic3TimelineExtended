@@ -46,8 +46,9 @@
 #   p    call 3's carriers (phase 2 step 1): Punishment-Focused Criminal Justice if needed with Community Service,
 #        Woman Soldiers at half strength and the Trade Unions pushed past loyal, all for 60 days; the capital's
 #        TE_DEMOG_MODS and TE_DEMOG_WORK lines now, a day and a month later (the hidden te_debug_demog.3)
-# Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7 (phase 2 step 1's
-# workforce self-checks; te_debug_demog_wf_selfchecks). Each writes one TE_SELF_CHECK line a game.
+# Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7, .8 (phase 2 step
+# 1's workforce self-checks; te_debug_demog_wf_selfchecks); under Full, .10 (the Family Policy measures' self-check,
+# measure_country_types; te_debug_demog_ms_selfcheck_start). Each writes one TE_SELF_CHECK line a game.
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -510,5 +511,84 @@ te_debug_demog.8 = {
 			debug_log = "TE_SELF_CHECK BROKEN workforce_lines_net remainder=[THIS.ScriptValue('te_debug_demog_wf_remainder')|3] (not 0: a vanilla carrier's INJECTed cancel stands alone, or Rosen's androids work here; revert that carrier's INJECT, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
+	}
+}
+
+# The measures' self-check's second half (te_debug_demog_ms_selfcheck_start): runs once a game, under Full, a week
+# after the first measure that moves desired family size switched on. added: the capital's read of
+# state_desired_fertility_mult since then; expected: the change in the measures' lines its owner holds
+# (te_demog_ms_desired_on). OK: a script-only state type on a country static modifier reaches the state. BROKEN: it
+# doesn't, so the census will never see the measures' types; put them on a state modifier in each state instead
+# (docs/testing/demographics-playtest.md, Self-checks). No verdict when the state changed hands in the week; a
+# NO_VERDICT line, and the check re-arms, when the expected change is under 0.01 (the measure ended in the week).
+te_debug_demog.10 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_ms_chk_before
+				exists = owner
+				owner = var:te_dg_ms_chk_owner
+			}
+			owner = {
+				set_local_variable = { name = te_dg_ms_chk_e1 value = te_demog_ms_desired_on }
+			}
+			# kept on the state for the line (a debug_log line reads THIS.Var, not a local)
+			set_variable = {
+				name = te_dg_ms_chk_added
+				value = {
+					value = modifier:state_desired_fertility_mult
+					subtract = var:te_dg_ms_chk_before
+				}
+			}
+			set_variable = {
+				name = te_dg_ms_chk_expected
+				value = {
+					value = local_var:te_dg_ms_chk_e1
+					subtract = var:te_dg_ms_chk_e0
+				}
+			}
+			set_local_variable = {
+				name = te_dg_ms_chk_gap
+				value = {
+					value = var:te_dg_ms_chk_added
+					subtract = var:te_dg_ms_chk_expected
+				}
+			}
+			if = {
+				limit = { local_var:te_dg_ms_chk_gap < 0 }
+				change_local_variable = { name = te_dg_ms_chk_gap multiply = -1 }
+			}
+			# the expected change's size: under 0.01 the measure ended within the week (or another made up for it),
+			# so a read of 0 would pass for OK: no verdict, and the check re-arms for the next measure to start
+			set_local_variable = { name = te_dg_ms_chk_size value = var:te_dg_ms_chk_expected }
+			if = {
+				limit = { local_var:te_dg_ms_chk_size < 0 }
+				change_local_variable = { name = te_dg_ms_chk_size multiply = -1 }
+			}
+			if = {
+				limit = { local_var:te_dg_ms_chk_size < 0.01 }
+				debug_log = "TE_SELF_CHECK NO_VERDICT measure_country_types added=[THIS.Var('te_dg_ms_chk_added').GetValue|4] expected=[THIS.Var('te_dg_ms_chk_expected').GetValue|4] (the measure ended within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_global_variable = te_demog_ms_selfcheck_done
+			}
+			else_if = {
+				limit = { local_var:te_dg_ms_chk_gap < 0.002 }
+				debug_log = "TE_SELF_CHECK OK measure_country_types added=[THIS.Var('te_dg_ms_chk_added').GetValue|4] expected=[THIS.Var('te_dg_ms_chk_expected').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN measure_country_types added=[THIS.Var('te_dg_ms_chk_added').GetValue|4] expected=[THIS.Var('te_dg_ms_chk_expected').GetValue|4] (a script-only state type on a country static modifier doesn't reach the state: put the measures' census types on a state modifier in each state) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_ms_chk_added
+			remove_variable = te_dg_ms_chk_expected
+		}
+		if = {
+			limit = { has_variable = te_dg_ms_chk_before }
+			remove_variable = te_dg_ms_chk_before
+			remove_variable = te_dg_ms_chk_e0
+			remove_variable = te_dg_ms_chk_owner
+		}
 	}
 }
