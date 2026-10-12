@@ -48,9 +48,12 @@
 # steps; te_demog_fast_clear_rates then drops the start's rate). So the refresh stores
 #   rate_start = te_dg_w_ed + te_dg_w_ed0m x (M_new - M_prev - the moved lines' pairs it cleared)
 # and fast mode adds te_dg_w_ed0m x (F_new - F_prev). te_dg_w_ed0m is the bare curves of the pops the
-# engine doesn't floor at 0, which alone a change in the read reaches: severe starvation's -0.9 floors a
-# pop's births whenever M is negative, and counting those pops' bare curves too put a famine state's
-# start births about a tenth high. Each end is the engine's whole rate, so every line
+# engine doesn't floor at 0, which alone a change in the read reaches: severe starvation's births (-0.9 x
+# the starvation value, -0.51 to -0.84 in the walk's steps) floor a pop's births when the rest of its
+# total is low (Germany's 1898 famine, M about -0.28 and literacy 0.5: below food security 0.10, 3% of
+# its severe people). Counting floored pops' bare curves too put a famine state's start births about a
+# tenth high, when the walk took severe starvation flat and floored them whenever M was negative.
+# Each end is the engine's whole rate, so every line
 # that moved inside the window counts at the engine's own weight: severe starvation, the mild starvation M
 # nets, a state line (devastation, pollution, an event) on every pop's bare curve, and the bare curves
 # themselves as standard of living moves. The model's rate drifting is not in either end; it stays in dz's

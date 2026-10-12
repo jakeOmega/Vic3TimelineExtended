@@ -62,8 +62,11 @@ read does **not** hold:
 - `literacy_penalty`, −0.1 × the pop's literacy. Fitted at −0.107 in 1836, but −0.19 once SoL is
   controlled, because literacy and SoL correlate +0.5 there; at −0.101 in 1949, −0.107 with SoL, where SoL
   itself fits 0. The 1836 spread was the confound; the engine's value is −0.1.
-- The starvation penalties: severe −0.9 (fitted −0.86 in 1949); mild −0.7 scaled by
-  (0.4 − food security) × 2.5, at most 0.5 (vanilla's comment and defines).
+- The starvation penalties: severe −0.9 (fitted −0.86 in 1949, taken flat); mild −0.7 scaled by
+  (0.4 − food security) × 2.5, at most 0.5 (vanilla's comment and defines). **Corrected 2026-10-11:** severe is
+  scaled the same way, by the pop's starvation value clamp((0.4 − food security) × 2.5, 0, 1), 0.5 to 1 below food
+  security 0.2. This probe couldn't tell the forms apart: its severely starving pops sat at a mean starvation value of 0.97 in 1949 (most at food security 0), where flat and scaled give almost the same number; its fitted −0.86 matches the scaled form's −0.87. A monthly-save probe
+  through an in-game famine did (`docs/testing/demographics-phase2-engine-rates-2026-10-10.md`, "The severe term").
 
 The −0.9 step stays linear in 1949 and bends at the floor in 1836, where literate and starving pops reach 0.
 
@@ -76,7 +79,7 @@ plus terms the state read does not hold, all added inside the one total:
 | `working_conditions` by workplace group and pop type (vanilla's table: 0.02–0.2) | +1.0% |
 | The workplace's `building_group_<group>[_<pop type>]_mortality_mult`, read | +0.7% |
 | The workplace's `building_<pop type>_mortality_mult` (production methods: construction laborers +0.1) | +0.5% |
-| Severe starvation (+1.0), mild starvation (+0.6, scaled) | about +0.1–0.3% |
+| Severe starvation (+1.0), mild starvation (+0.6), each scaled by the starvation value (severe's scaling: 2026-10-11) | about +0.1–0.3% |
 | Non-homeland, turmoil, wealth | about 0 |
 
 Deaths against each candidate (pooled, 945 death windows, steps −0.5 to +1.0, 1949):

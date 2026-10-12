@@ -6922,8 +6922,8 @@ te_demog_absorbed_walk_init = {
 # THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed) and multipliers (te_dg_p_mb,
 # te_dg_p_md): its bare births and deaths x what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr
 # (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its
-# multiplier at 0 (severe starvation's births), which a change in the census's term then doesn't reach (the
-# trapezoid's start rate). Full only.
+# multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a
+# change in the census's term then doesn't reach (the trapezoid's start rate). Full only.
 te_demog_absorbed_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_rep > 0 }
