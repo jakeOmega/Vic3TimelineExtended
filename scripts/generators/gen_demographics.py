@@ -27,6 +27,12 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
                                                 x local_var:te_dg_norm_e5, then / 100000 (two steps keep a
                                                 small state precise); slots, then bands, class sums, 18-40 sums
         te_demog_life_table, te_demog_set_growth_factor
+        te_demog_old_age_pass                   the old-age threshold (phase 2 step 1), at the life table's end
+        te_demog_enter_cal_band, te_demog_enter_bio_band
+                                                the sweep's calendar band (the working-age start) and biological
+                                                band (capacity, health need), phase 2 step 1
+        te_demog_slot_births                    a cohort's births: today's single term while the planned and
+                                                unplanned schedules are one, else two terms (phase 2 step 1)
         te_demog_add_bands_to_root, te_demog_reset_country_bands, te_demog_scale_bands
         te_demog_gini_band_init, _add, _store, _load, _zero, _add_state
                                                 the Gini's 41 wealth bands: the walk's sums (each pop's
@@ -45,7 +51,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         per-pop engine curves and wealth TFR; per-state cause multipliers (reads of the
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
         the land-tenure term; the practices' start ladders, erosions, seeds, targets and terms
-        (te_demog_pr_*, te_demog_marriage_age); te_demog_k_* constants; per-slot debug shares
+        (te_demog_pr_*, te_demog_marriage_age); te_demog_k_* constants; the 10-14s' work share and the pops'
+        base working-adult ratios (te_demog_child_work, te_demog_pop_base_ratio; phase 2 step 1); per-slot debug shares
 """
 
 import argparse
@@ -189,7 +196,10 @@ def enter_group(o):
         _rate(o, "te_dg_qm", [("te_dg_m_inf", P.INFECTION["m"][g]), ("te_dg_m_work_m", P.WORK_BASE[g]),
                               ("te_dg_m_ext", P.EXTERNAL["m"][g]), ("te_dg_m_chr", P.CHRONIC["m"][g])])
         start = P.GROUPS[g][0]
-        o(f"set_local_variable = {{ name = te_dg_asfr value = {lit(M.asfr_shape(start))} }}")
+        o(f"set_local_variable = {{ name = te_dg_asfr value = {lit(M.asfr_planned(start))} }}")
+        if P.ASFR_PLANNED_SHAPE is not P.ASFR_UNPLANNED_SHAPE:
+            # the unplanned schedule (late-game §3.1); its rate age is the calendar one until phase 3's per-slot lookup
+            o(f"set_local_variable = {{ name = te_dg_asfr_un value = {lit(M.asfr_unplanned(start))} }}")
         nxt = P.GROUPS[g + 1][0] if g + 1 < len(P.GROUPS) else 999
         o(f"set_local_variable = {{ name = te_dg_next_group value = {nxt} }}")
 
@@ -281,6 +291,11 @@ def life_table(o):
     for g, (start, width) in enumerate(P.GROUPS):
         o(f"set_local_variable = {{ name = te_dg_g value = {g} }}")
         o("te_demog_enter_group = yes")
+        if start >= P.OLD_AGE_FROM:
+            # survivors and person-years at the group's start, for the old-age threshold (te_demog_old_age_pass)
+            for s in "fm":
+                o(f"set_local_variable = {{ name = te_dg_oal{start}{s} value = local_var:te_dg_l{s} }}")
+                o(f"set_local_variable = {{ name = te_dg_oapy{start}{s} value = local_var:te_dg_py{s} }}")
         if start == 65:
             o("set_local_variable = { name = te_dg_l65f value = local_var:te_dg_lf }")
             o("set_local_variable = { name = te_dg_l65m value = local_var:te_dg_lm }")
@@ -292,6 +307,97 @@ def life_table(o):
         fertile = 15 <= start <= 45
         o(f"te_demog_lt_group = {{ N = {width} FERTILE = {'yes' if fertile else 'no'} }}")
     o("te_demog_lt_finish = yes")
+    o("te_demog_old_age_pass = yes")
+    o("}")
+    o("")
+
+
+def old_age_pass(o):
+    starts = [s for s, _w in P.GROUPS if s >= P.OLD_AGE_FROM]
+    rem = P.OLD_AGE_REMAINING
+    o("# THIS = a state, after te_demog_life_table's forward pass (phase 2 step 1; late-game §1.5): the age with")
+    o(f"# {rem} years of life left (demographics_model.old_age_threshold), women's and men's averaged, into")
+    o("# te_dg_old_age. Remaining life at each group start from OLD_AGE_FROM; linear between starts.")
+    o("te_demog_old_age_pass = {")
+    for s in "fm":
+        for st in starts:
+            o(f"set_local_variable = {{ name = te_dg_oae{st}{s} value = {{ value = local_var:te_dg_py{s} "
+              f"subtract = local_var:te_dg_oapy{st}{s} divide = {{ value = local_var:te_dg_oal{st}{s} "
+              f"min = 0.00001 }} }} }}")
+        prev = None
+        for st in starts:
+            o(f"{'if' if prev is None else 'else_if'} = {{")
+            o(f"limit = {{ local_var:te_dg_oae{st}{s} <= {rem} }}")
+            if prev is None:
+                o(f"set_local_variable = {{ name = te_dg_oa{s} value = {st} }}")
+            else:
+                o(f"set_local_variable = {{ name = te_dg_oa{s} value = {{ value = local_var:te_dg_oae{prev}{s} "
+                  f"subtract = {rem} divide = {{ value = local_var:te_dg_oae{prev}{s} "
+                  f"subtract = local_var:te_dg_oae{st}{s} min = 0.00001 }} multiply = {st - prev} add = {prev} }} }}")
+            o("}")
+            prev = st
+        o("else = {")
+        o(f"set_local_variable = {{ name = te_dg_oa{s} value = {starts[-1]} }}")
+        o("}")
+    o("set_variable = { name = te_dg_old_age value = { value = local_var:te_dg_oaf add = local_var:te_dg_oam "
+      "multiply = 0.5 } }")
+    o("}")
+    o("")
+
+
+def work_bands(o):
+    cal = (0, P.CHILD_WORK_AGE, P.WORKING_AGE)
+    o("# THIS = a state, in the sweep's age order (phase 2 step 1): the calendar band local_var:te_dg_cal sets")
+    o("# te_dg_start, the working-age start's factor (demographics_model.start_factor), and te_dg_next_cal.")
+    o("te_demog_enter_cal_band = {")
+
+    def cal_leaf(o, i):
+        start = {0: "0", 1: "local_var:te_dg_child_work", 2: "1"}[i]
+        o(f"set_local_variable = {{ name = te_dg_start value = {start} }}")
+        o(f"set_local_variable = {{ name = te_dg_next_cal value = {cal[i + 1] if i + 1 < len(cal) else 999} }}")
+
+    tree(o, "te_dg_cal", 0, len(cal) - 1, cal_leaf)
+    o("}")
+    o("")
+    o("# THIS = a state: the biological band local_var:te_dg_bio (P.BIO_BANDS) sets te_dg_cap (capacity), te_dg_needw")
+    o("# (health need) and te_dg_next_bio. Its age is te_dg_ab, the calendar one until phase 3.")
+    o("te_demog_enter_bio_band = {")
+    bio = P.BIO_BANDS
+
+    def bio_leaf(o, i):
+        a = bio[i]
+        # call 3's capacity input (te_dg_wk_capm, te_demog_work_setup) x the table, at most 1
+        # (demographics_model.capacity_at)
+        o(f"set_local_variable = {{ name = te_dg_cap value = {{ value = {lit(M.band_value(P.CAPACITY, a))} "
+          "multiply = local_var:te_dg_wk_capm max = 1 } }")
+        o(f"set_local_variable = {{ name = te_dg_needw value = {lit(M.band_value(P.HEALTH_NEED, a))} }}")
+        o(f"set_local_variable = {{ name = te_dg_next_bio value = {bio[i + 1] if i + 1 < len(bio) else 999} }}")
+
+    tree(o, "te_dg_bio", 0, len(bio) - 1, bio_leaf)
+    o("}")
+    o("")
+
+
+def slot_births(o):
+    o("# THIS = a state, in te_demog_age_slot: births from the cohort's women local_var:te_dg_f")
+    o("# (demographics_model.slot_births). Planned births follow P.ASFR_PLANNED_SHAPE by calendar age and unplanned")
+    o("# P.ASFR_UNPLANNED_SHAPE by biological age (late-game §3.1). While they are one schedule this is one term.")
+    o("te_demog_slot_births = {")
+    o("set_local_variable = {")
+    o("name = te_dg_b")
+    if P.ASFR_PLANNED_SHAPE is P.ASFR_UNPLANNED_SHAPE:
+        o("value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 "
+          "multiply = local_var:te_dg_tfr }")
+    else:
+        o("value = {")
+        o("value = local_var:te_dg_asfr")
+        o("multiply = local_var:te_dg_sh_pl")
+        o("add = { value = local_var:te_dg_asfr_un multiply = local_var:te_dg_sh_un }")
+        o("multiply = local_var:te_dg_f")
+        o("divide = 100000")
+        o("multiply = local_var:te_dg_tfr")
+        o("}")
+    o("}")
     o("}")
     o("")
 
@@ -739,6 +845,9 @@ def render_effects(root=ROOT):
     bands_and_classes(o)
     normalizers(o)
     life_table(o)
+    old_age_pass(o)
+    work_bands(o)
+    slot_births(o)
     growth_factor(o)
     country_bands(o)
     gini_bands(o, gini_income_pieces(root))
@@ -1297,6 +1406,12 @@ def constants(o):
         "deaths_on_top_high": P.DEATHS_ON_TOP_HIGH, "base_access": P.BASE_ACCESS,
         "maternal_base": P.MATERNAL_PER_100K_BIRTHS,
         "practice_rate": P.PRACTICE_RATE,
+        # phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1)
+        "child_work_age": P.CHILD_WORK_AGE, "working_age": P.WORKING_AGE,
+        "after_pension_share": P.AFTER_PENSION_SHARE, "men_rate": P.MEN_RATE, "women_base": P.WOMEN_BASE,
+        "women_lower": P.WOMEN_LOWER, "womens_work_full": P.WOMENS_WORK_FULL,
+        "workforce_scale": P.WORKFORCE_SCALE, "health_need_1836": P.HEALTH_NEED_1836,
+        "need_newborn": M.band_value(P.HEALTH_NEED, 0), "pension_age_standard": P.PENSION_AGE["standard"],
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
@@ -1305,6 +1420,23 @@ def constants(o):
     o("value = 0")
     for tech, v in P.FAMILY_TRANSPORT_TECHS.items():
         o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {tech} }} }} add = {lit(v)} }}")
+    o("}")
+    o("")
+
+
+def work_values(o):
+    o("# State scope (phase 2 step 1): the 10-14s' participation by the owner's childrens'-rights law")
+    o("# (demographics_model.child_work_share).")
+    o("te_demog_child_work = {")
+    o(f"value = {lit(P.CHILD_WORK_SHARE_DEFAULT)}")
+    for law, share in P.CHILD_WORK_SHARE.items():
+        o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {lit(share)} }}")
+    o("}")
+    o("# Pop scope: the pop's own working-adult ratio (vanilla pop_types; the define for the rest).")
+    o("te_demog_pop_base_ratio = {")
+    o(f"value = {lit(P.POP_BASE_RATIO_DEFAULT)}")
+    for pop_type, ratio in P.POP_BASE_RATIO.items():
+        o(f"if = {{ limit = {{ is_pop_type = {pop_type} }} value = {lit(ratio)} }}")
     o("}")
     o("")
 
@@ -1472,6 +1604,7 @@ def render_values(root):
     practices(o)
     land_term(o, root)
     constants(o)
+    work_values(o)
     debug_values(o)
     return o.text()
 

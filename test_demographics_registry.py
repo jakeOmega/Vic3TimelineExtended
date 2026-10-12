@@ -16,10 +16,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
 import demographics_model  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
+import gen_demographics  # noqa: E402
 import organize_loc  # noqa: E402
 
 RULES = ROOT / "common" / "game_rules" / "extra_game_rules.txt"
@@ -5798,3 +5800,33 @@ class TestGiniBands(unittest.TestCase):
 
     def test_the_constants_of_the_old_map_are_gone(self):
         self.assertNotIn("te_demog_k_gini", _text(GENERATED_VALUES))
+
+
+class TestOldAgeScript(unittest.TestCase):
+    """te_demog_old_age_pass against demographics_model.old_age (phase 2 step 1)."""
+
+    def test_seed_stores_the_models_threshold(self):
+        inp = demographics_model.Inputs(sol=14, literacy=0.35, urban_share=0.2,
+                                        techs=frozenset({"medical_degrees"}))
+        eng = _engine_for(inp, 1836, 250000.0)
+        eng.call("te_demog_seed")
+        qf, qm, _ = demographics_model.group_rates(inp)
+        self.assertAlmostEqual(eng.vars["te_dg_old_age"], demographics_model.old_age(qf, qm), delta=0.01)
+
+
+class TestSlotBirthsScript(unittest.TestCase):
+    """te_demog_slot_births against demographics_model.slot_births, with two schedules (not shipped)."""
+
+    def test_two_schedules_in_script_match_the_model(self):
+        other = {15: 10000, 20: 30000, 25: 30000, 30: 20000, 35: 7000, 40: 2500, 45: 500}
+        with unittest.mock.patch.object(P, "ASFR_UNPLANNED_SHAPE", other):
+            text = re.sub(r"#[^\n]*", "", gen_demographics.render_effects())
+            g = P.group_of(27)
+            eng = _Engine({}, effects={n: _block(text, n) for n in ("te_demog_slot_births", "te_demog_enter_group")})
+            eng.locals.update(te_dg_g=float(g), te_dg_f=1000.0, te_dg_tfr=4.0, te_dg_sh_pl=0.25, te_dg_sh_un=0.75,
+                              te_dg_m_inf=1.0, te_dg_m_work_f=1.0, te_dg_m_work_m=1.0, te_dg_m_ext=1.0,
+                              te_dg_m_chr=1.0)
+            eng.call("te_demog_enter_group")
+            eng.call("te_demog_slot_births")
+            want = demographics_model.slot_births(1000.0, 27, 27, 4.0, 0.25)
+        self.assertAlmostEqual(eng.locals["te_dg_b"], want)

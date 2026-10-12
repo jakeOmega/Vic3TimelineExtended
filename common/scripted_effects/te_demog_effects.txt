@@ -1190,11 +1190,8 @@ te_demog_slot = {
 te_demog_age_slot = {
 	set_local_variable = { name = te_dg_f value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_s } }
 	set_local_variable = { name = te_dg_m value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
-	# births from these women (rate ages 15-49 carry a non-zero te_dg_asfr)
-	set_local_variable = {
-		name = te_dg_b
-		value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 multiply = local_var:te_dg_tfr }
-	}
+	# births from these women (rate ages 15-49 carry a non-zero te_dg_asfr); generated: planned and unplanned
+	te_demog_slot_births = yes
 	change_local_variable = { name = te_dg_births add = local_var:te_dg_b }
 	change_local_variable = { name = te_dg_mat add = { value = local_var:te_dg_b multiply = local_var:te_dg_mmr divide = 100000 } }
 	# deaths, and maternal deaths per birth

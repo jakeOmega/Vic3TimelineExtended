@@ -3,6 +3,7 @@
 import re
 import sys
 import unittest
+import unittest.mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -11,6 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import gen_demographics as gen  # noqa: E402
+import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
 from format_paradox_tabs import format_text  # noqa: E402
 
@@ -421,3 +423,45 @@ class TestEngineRateTerms(unittest.TestCase):
         self.assertIn("exists = workplace", laborers)
         self.assertNotIn("state_mortality_turmoil_mult", self.death)   # scaling unknown, measured about 0
         self.assertNotIn("state_mortality_wealth_mult", self.death)
+
+
+class TestPhase2Generated(unittest.TestCase):
+    """Phase 2 step 1 (the interfaces plan, Task 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = gen.render_effects()
+        cls.values = gen.render_values(ROOT)
+
+    def test_the_birth_line_is_todays_while_the_schedules_are_one(self):
+        body = re.search(r"^te_demog_slot_births = \{\n(.*?)^\}", self.effects, re.M | re.S).group(1)
+        self.assertIn("value = { value = local_var:te_dg_f multiply = local_var:te_dg_asfr divide = 100000 "
+                      "multiply = local_var:te_dg_tfr }", body)
+        self.assertNotIn("te_dg_asfr_un", self.effects)
+
+    def test_two_schedules_write_two_terms(self):
+        other = {15: 10000, 20: 30000, 25: 30000, 30: 20000, 35: 7000, 40: 2500, 45: 500}
+        with unittest.mock.patch.object(P, "ASFR_UNPLANNED_SHAPE", other):
+            text = gen.render_effects()
+        self.assertIn("te_dg_asfr_un", text)
+        self.assertIn("multiply = local_var:te_dg_sh_pl", text)
+
+    def test_the_bands_are_the_tables(self):
+        for a in P.BIO_BANDS:
+            self.assertIn(f"value = {{ value = {gen.lit(M.band_value(P.CAPACITY, a))} multiply = local_var:te_dg_wk_capm "
+                          "max = 1 }", self.effects)
+        self.assertRegex(self.effects, r"te_demog_enter_cal_band = \{")
+        self.assertRegex(self.effects, r"te_demog_enter_bio_band = \{")
+
+    def test_the_life_table_ends_with_the_threshold(self):
+        lt = re.search(r"^te_demog_life_table = \{\n(.*?)^\}", self.effects, re.M | re.S).group(1)
+        self.assertTrue(lt.rstrip().endswith("te_demog_old_age_pass = yes"))
+        for start, _w in P.GROUPS:
+            stored = f"name = te_dg_oal{start}f" in lt
+            self.assertEqual(stored, start >= P.OLD_AGE_FROM, start)
+
+    def test_the_constants(self):
+        for name, v in (("men_rate", P.MEN_RATE), ("workforce_scale", P.WORKFORCE_SCALE),
+                        ("pension_age_standard", P.PENSION_AGE["standard"]),
+                        ("health_need_1836", P.HEALTH_NEED_1836)):
+            self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(v)} }}", self.values)
