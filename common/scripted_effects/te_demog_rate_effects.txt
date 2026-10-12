@@ -24,131 +24,79 @@
 #   te_dg_os_b, te_dg_os_d  the state-level lines on top M scaled to the census's rate (option n)
 #   te_dg_rep_b, te_dg_rep_d  the replaced sums over the bare curves: the absorbed lines' share
 #                       that M took out (console option n)
-#   te_dg_ot_b, te_dg_ot_d  the on-top share at the start of the window that ends at the next step
-#                       (the trapezoid, te_demog_on_top_window): the state-level lines on top plus the
-#                       pop-level lines' events over the target M then aimed at; stored by the refresh,
-#                       removed by a seed and outside Full
+#   te_dg_sr_b, te_dg_sr_d  the engine's births and deaths rate per head at the start of the window
+#                       that ends at the next step (the trapezoid, te_demog_window_events), a month x
+#                       100,000: the walk's rate with the terms the step left in force. Stored by the
+#                       refresh, moved by fast mode's term, removed by a seed and outside Full
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
 # bare births and deaths a month x 100,000; te_dg_w_ebr and te_dg_w_edr, the replaced sums: each
 # pop's bare curves x what the census absorbs for it (te_demog_absorbed_walk_pop, generated);
-# te_dg_w_eb and te_dg_w_ed, each pop's bare curves x its own multiplier.
+# te_dg_w_eb and te_dg_w_ed, each pop's bare curves x its own multiplier: the engine's rate.
 # ============================================================================
 
-# ---- The window's events: the trapezoid (owner, 2026-10-11; #894) ----------------------------
-# The walk is a snapshot: its expected births and deaths (te_dg_eb, te_dg_ed) are the rates on the
-# step's day x the window, and the step books the whole window that ends that day. A famine that began
-# in early December was booked for all of Hannover's year to February 1898, and the residual read the
-# deaths that never happened as immigrants (Germany 1898: +933k). Under Full the walk's tail averages
-# the part the engine added on top of the census between the window's start and its end.
-#
-# The split (session-notes-2026-10-11/germany-famine-analysis, decomp.py, which reproduces the stored
-# dz on all 52,315 state-steps of the normal-speed run): with T the window's target (the model's rate
-# M aimed at, at today's people), B the bare curves and Tn this step's model rate,
-#   dz = ED / T - 1 = [ B (M_old - M_new) + (Tn - T) + Tn os + B p ] / T
-# the four terms being "stale" (last window's M against today's), "drift" (the model's own rate
-# moved), the state-level lines on top (os) and the pop-level lines on top (p, a share of bare). Only
-# the last two are what the engine added on top; the first two come from M, which holds all window,
-# and from the model, and stay as the snapshot has them. The on-top share at a moment is
-#   o = os + B p / T   (demographics_model.on_top_share)
-# with the state-level lines measured on the window's target, as at the window's start: decomp.py's
-# Tn os differs by (Tn - T) / T x os, second order, which stays with the drift. The moved lines'
-# on-top family (q) reaches the engine only through M, so it holds all window and stays too. B p is
-# te_demog_on_top_pop_lines, from the walk's own sums. The window's events are then
-#   ED = ED_snapshot + T x (o_start - o_end) x te_demog_k_on_top_start_weight / K
-# (demographics_model.window_events): o_end today's, o_start the share the last step's refresh stored
-# (te_dg_ot_d, against the target this window aims at). Births alike: a famine cuts births too. K is
-# fast mode's while its term ran (te_demog_on_top_window_k): that term holds the start's multiplier
-# K - 1 times, so the snapshot carries the start's share K times and the change since once.
-# No start share (the first step after a seed, a new state, an old save, fast mode's first step,
-# which re-seeds), no target yet, or not Full: the snapshot, as before.
-# The residual (te_demog_flows), the step's scales (te_demog_on_top_scales) and console option n read
-# te_dg_eb / te_dg_ed, so they all take the window's events. The refresh and fast mode read the
-# walk's locals, today's snapshot, as they should: M is fitted to today's lines.
-
-# THIS = a state, with its walk's locals (te_demog_walks, same effect): the pop-level lines on top of the
-# census in the walk, a month x 100,000 (te_dg_ot_rb, te_dg_ot_rd): each pop's events beyond its bare
-# curves x (1 + the state read) and what the census absorbs for it. That is severe starvation, the
-# workplace and working-conditions lines, non-homeland mortality, and what each pop's floor at 0 cuts
-# (decomp.py's B x p). The read is one for all the state's pops, so the walk's own sums give it
-# exactly, with no further sum per pop.
-te_demog_on_top_pop_lines = {
-	set_local_variable = {
-		name = te_dg_ot_rb
-		value = {
-			value = local_var:te_dg_w_eb
-			subtract = local_var:te_dg_w_ebr
-			subtract = {
-				value = modifier:state_birth_rate_mult
-				add = 1
-				multiply = local_var:te_dg_w_eb0
-			}
-		}
-	}
-	set_local_variable = {
-		name = te_dg_ot_rd
-		value = {
-			value = local_var:te_dg_w_ed
-			subtract = local_var:te_dg_w_edr
-			subtract = {
-				value = modifier:state_mortality_mult
-				add = 1
-				multiply = local_var:te_dg_w_ed0
-			}
-		}
-	}
-}
+# ---- The window's events: the trapezoid (owner, 2026-10-11; #894; the review of #907) -------------
+# The walk is a snapshot: its expected births and deaths (te_dg_eb, te_dg_ed) are the engine's rate on the
+# step's day x the window, and the step books the whole window that ends that day. A famine that began in
+# early December was booked for all of Hannover's year to February 1898, and the residual read the deaths
+# that never happened as immigrants (Germany 1898: +933k). Under Full the walk's tail books the window at
+# the mean of the engine's rate at its two ends:
+#   ED = (w x rate_start x people + (1 - w) x te_dg_w_ed) x te_demog_step_months / 100,000
+# with w = te_demog_k_window_start_weight (0.5, the trapezoid; demographics_model.window_events). The
+# rate at the start is the one the last step left in force (te_dg_sr_d, per head): the walk's rate then,
+# with the terms the step changed swapped in. M is refitted only at a step, and fast mode's term is set
+# only at a clock step, so they hold all window and both ends carry them. So the refresh stores
+#   rate_start = te_dg_w_ed + te_dg_w_ed0m x (M_new - M_prev - the moved lines' pairs it cleared)
+# and fast mode adds te_dg_w_ed0m x (F_new - F_prev). te_dg_w_ed0m is the bare curves of the pops the
+# engine doesn't floor at 0, which alone a change in the read reaches: severe starvation's -0.9 floors a
+# pop's births whenever M is negative, and counting those pops' bare curves too put a famine state's
+# start births about a tenth high. Each end is the engine's whole rate, so every line
+# that moved inside the window counts at the engine's own weight: severe starvation, the mild starvation M
+# nets, a state line (devastation, pollution, an event) on every pop's bare curve, and the bare curves
+# themselves as standard of living moves. The model's rate drifting is not in either end; it stays in dz's
+# comparison with the target, as before. Births alike: a famine cuts births too. Both ends cover the same
+# months (te_demog_step_months), so fast mode's window needs nothing more, and a switch of speed between
+# steps is booked at the months it covered.
+# No start rate (the first step after a seed, a new state, an old save, fast mode's first switch, which
+# re-seeds) or not Full: the snapshot, as before. The residual (te_demog_flows), the step's scales
+# (te_demog_on_top_scales) and console option n read te_dg_eb / te_dg_ed, so they all take the window's
+# events. The refresh and fast mode read the walk's locals, today's snapshot, as they should: M and the
+# term are fitted to today's lines.
+# Second order: a pop the change in M moves across the floor (from just above 0 to below it, or back)
+# counts as the walk found it. A second pulse in one year (no step) refits M and stores the start again
+# mid-window, as the refit itself already did.
 
 # THIS = a state, the walk's tail (te_demog_walks), straight after te_dg_eb and te_dg_ed: the window's
-# events, as the header above says. The target is the model's rate x today's people, in the walk's units
-# (te_demog_rates_refresh's): (o_start - os) x target - B p is T x (o_start - o_end) in those units, and
-# x 12 / 100,000 makes it people a year, the units of dz's target. Never below 0.
-te_demog_on_top_window = {
-	te_demog_on_top_pop_lines = yes
+# events, as the header above says. Never below 0.
+te_demog_window_events = {
 	if = {
 		limit = {
 			te_demog_effects_run = yes
-			has_variable = te_dg_cbr_model
-			has_variable = te_dg_cdr_model
-			has_variable = te_dg_ot_b
-			has_variable = te_dg_ot_d
+			has_variable = te_dg_sr_b
+			has_variable = te_dg_sr_d
 		}
 		set_variable = {
 			name = te_dg_eb
 			value = {
-				value = var:te_dg_ot_b
-				subtract = te_demog_on_top_state_births
-				multiply = {
-					value = var:te_dg_cbr_model
-					multiply = state_population
-					multiply = 100
-					divide = 12
-				}
-				subtract = local_var:te_dg_ot_rb
-				multiply = te_demog_k_on_top_start_weight
-				divide = { value = te_demog_on_top_window_k min = 1 }
-				multiply = 12
+				value = var:te_dg_sr_b
+				multiply = state_population
+				subtract = local_var:te_dg_w_eb
+				multiply = te_demog_k_window_start_weight
+				add = local_var:te_dg_w_eb
+				multiply = te_demog_step_months
 				divide = 100000
-				add = var:te_dg_eb
 				min = 0
 			}
 		}
 		set_variable = {
 			name = te_dg_ed
 			value = {
-				value = var:te_dg_ot_d
-				subtract = te_demog_on_top_state_deaths
-				multiply = {
-					value = var:te_dg_cdr_model
-					multiply = state_population
-					multiply = 100
-					divide = 12
-				}
-				subtract = local_var:te_dg_ot_rd
-				multiply = te_demog_k_on_top_start_weight
-				divide = { value = te_demog_on_top_window_k min = 1 }
-				multiply = 12
+				value = var:te_dg_sr_d
+				multiply = state_population
+				subtract = local_var:te_dg_w_ed
+				multiply = te_demog_k_window_start_weight
+				add = local_var:te_dg_w_ed
+				multiply = te_demog_step_months
 				divide = 100000
-				add = var:te_dg_ed
 				min = 0
 			}
 		}
@@ -263,8 +211,6 @@ te_demog_rates_refresh = {
 		}
 		if = {
 			limit = { var:te_dg_stepped > 0 }
-			# the pop-level lines on top, from the walk's sums before anything here moves a modifier (the start share, below)
-			te_demog_on_top_pop_lines = yes
 			set_local_variable = { name = te_dg_rate_clamped value = 0 }
 			# births
 			set_local_variable = {
@@ -406,22 +352,30 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
 			set_variable = { name = te_dg_rep_b value = { value = local_var:te_dg_w_ebr divide = { value = local_var:te_dg_w_eb0 min = 1 } } }
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
-			# the on-top share at the start of the window that begins here (the trapezoid, te_demog_on_top_window):
-			# the state-level lines on top plus the pop-level lines' events over the target M now aims at
+			# the engine's rate per head at the start of the window that begins here (the trapezoid,
+			# te_demog_window_events): the walk's, with this refresh's M for the last one and without the moved
+			# lines' pairs it clears, on the bare curves those reach. Fast mode, next in this effect, moves it by
+			# its own term's change
 			set_variable = {
-				name = te_dg_ot_b
+				name = te_dg_sr_b
 				value = {
-					value = local_var:te_dg_ot_rb
-					divide = { value = var:te_dg_cbr_model multiply = state_population multiply = 100 divide = 12 min = 1 }
-					add = var:te_dg_os_b
+					value = var:te_dg_mb
+					subtract = local_var:te_dg_rate_prev_b
+					subtract = local_var:te_dg_rate_lines_b
+					multiply = local_var:te_dg_w_eb0m
+					add = local_var:te_dg_w_eb
+					divide = { value = state_population min = 1 }
 				}
 			}
 			set_variable = {
-				name = te_dg_ot_d
+				name = te_dg_sr_d
 				value = {
-					value = local_var:te_dg_ot_rd
-					divide = { value = var:te_dg_cdr_model multiply = state_population multiply = 100 divide = 12 min = 1 }
-					add = var:te_dg_os_d
+					value = var:te_dg_md
+					subtract = local_var:te_dg_rate_prev_d
+					subtract = local_var:te_dg_rate_lines_d
+					multiply = local_var:te_dg_w_ed0m
+					add = local_var:te_dg_w_ed
+					divide = { value = state_population min = 1 }
 				}
 			}
 			te_demog_rates_apply = yes
@@ -555,11 +509,11 @@ te_demog_rates_clear = {
 		remove_variable = te_dg_w
 	}
 	if = {
-		limit = { has_variable = te_dg_ot_b }
-		remove_variable = te_dg_ot_b
+		limit = { has_variable = te_dg_sr_b }
+		remove_variable = te_dg_sr_b
 	}
 	if = {
-		limit = { has_variable = te_dg_ot_d }
-		remove_variable = te_dg_ot_d
+		limit = { has_variable = te_dg_sr_d }
+		remove_variable = te_dg_sr_d
 	}
 }

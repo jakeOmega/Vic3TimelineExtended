@@ -529,52 +529,23 @@ class TestOnTopScales(unittest.TestCase):
         # infant mortality is the life table's too, as the script's te_dg_imr (set before the scales)
         self.assertEqual(a["q0_per_1000"], b["q0_per_1000"])
 
-    # -- the trapezoid (owner, 2026-10-11; #894): the window's events average the on-top share at its two ends -----
-
-    def test_the_on_top_share_is_the_state_lines_plus_the_pop_lines_over_the_target(self):
-        """The state-level lines on top act on the census's rate (a share of the target as they stand, floored as M
-        takes them); the pop-level lines' events are a share of the target in the same units."""
-        self.assertAlmostEqual(M.on_top_share(state_lines=0.05, pop_lines=30.0, target=100.0), 0.35)
-        self.assertAlmostEqual(M.on_top_share(state_lines=-1.2, pop_lines=10.0, target=100.0), P.RATE_TOTAL_MIN + 0.1)
+    # -- the trapezoid (owner, 2026-10-11; #894): a window's events average the engine's rate at its two ends --------
 
     def test_the_weight_is_the_trapezoids(self):
-        self.assertEqual(P.ON_TOP_START_WEIGHT, 0.5)
+        self.assertEqual(P.WINDOW_START_WEIGHT, 0.5)
 
-    def test_a_famine_starting_in_the_window_counts_half(self):
-        """Germany 1897-98: the window's last day is a famine's (60% on top), its first day was not. The snapshot books
-        the whole window at the famine's rate; the trapezoid books half of it."""
-        snap = 100.0 * (1 + 0.6)
-        self.assertAlmostEqual(M.window_events(snap, 100.0, end_share=0.6, start_share=0.0), 130.0)
-        self.assertAlmostEqual(M.on_top_scale(M.window_events(snap, 100.0, 0.6, 0.0), 100.0), 0.3)
+    def test_a_window_takes_the_mean_of_its_two_ends(self):
+        """Germany 1897-98: the engine's deaths ran at 100 a month when the window began and at 160 on the step's day
+        (a famine's onset). The window books 130, where the snapshot booked 160."""
+        self.assertAlmostEqual(M.window_events(end_rate=160.0, start_rate=100.0), 130.0)
+        self.assertAlmostEqual(M.window_events(end_rate=100.0, start_rate=160.0), 130.0)
 
-    def test_a_famine_ending_in_the_window_counts_half(self):
-        self.assertAlmostEqual(M.window_events(100.0, 100.0, end_share=0.0, start_share=0.6), 130.0)
-
-    def test_a_one_off_on_the_step_day_lags_into_the_next_window(self):
-        """A one-off the step's walk catches (on top only that day) is booked half in the window it ends and half in
-        the next: the trapezoid lags it, as the owner accepted, where the snapshot booked it whole at once."""
-        first = M.window_events(100.0 * 1.6, 100.0, end_share=0.6, start_share=0.0)
-        second = M.window_events(100.0, 100.0, end_share=0.0, start_share=0.6)
-        self.assertAlmostEqual((first - 100.0, second - 100.0), (30.0, 30.0))
-
-    def test_only_the_on_top_share_is_averaged(self):
-        """The parts of the snapshot that come from M being a window old or the model's rate drifting (here +0.1 of
-        the target) stay whole: only the on-top share's change inside the window is halved."""
-        snap = 100.0 * (1 + 0.1 + 0.6)
-        self.assertAlmostEqual(M.window_events(snap, 100.0, end_share=0.6, start_share=0.2), 150.0)
-
-    def test_no_start_share_is_the_snapshot(self):
-        """The first step after a seed, a new state, an old save: no share stored at the window's start."""
-        self.assertEqual(M.window_events(160.0, 100.0, end_share=0.6, start_share=None), 160.0)
-
-    def test_fast_mode_carries_the_change_once_in_k(self):
-        """Fast mode's term is K - 1 times the state's multiplier at the window's start, so the snapshot holds the
-        start's on-top share K times and a change since then once: a K-th of the change is the window's, and the
-        trapezoid takes half of that off."""
-        self.assertAlmostEqual(M.window_events(160.0, 100.0, end_share=0.6, start_share=0.0, k=4.0), 152.5)
+    def test_no_start_rate_is_the_snapshot(self):
+        """The first step after a seed, a new state, an old save: no rate stored at the window's start."""
+        self.assertEqual(M.window_events(end_rate=160.0, start_rate=None), 160.0)
 
     def test_the_window_never_expects_fewer_than_no_events(self):
-        self.assertEqual(M.window_events(5.0, 100.0, end_share=0.0, start_share=-0.9), 0.0)
+        self.assertEqual(M.window_events(end_rate=0.0, start_rate=-5.0), 0.0)
 
     def test_crude_rates_of_the_stable_population(self):
         cbr, cdr = M.model_crude_rates(M.Inputs(sol=9.0, literacy=0.2))

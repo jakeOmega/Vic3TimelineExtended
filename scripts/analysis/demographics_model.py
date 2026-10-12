@@ -390,29 +390,18 @@ def on_top_scale(engine, target):
     return clamp(engine / target - 1, P.ON_TOP_SCALE_MIN, P.ON_TOP_SCALE_MAX)
 
 
-def on_top_share(state_lines, pop_lines, target):
-    """The share of a target the engine added on top of the census at one moment (the trapezoid, owner 2026-10-11):
-    the state-level lines on top (the read less the census's, fast mode's and the moved lines' terms), which act on the
-    census's rate, floored at RATE_TOTAL_MIN as M takes them; plus the pop-level lines' events (severe starvation, the
-    workplace lines: each pop's events beyond its bare curves x (1 + the state read) and what the census absorbs) over
-    the target, in the same units. The script's te_demog_on_top_window (the window's end) and te_dg_ot_b / _d (its
-    start, stored by te_demog_rates_refresh)."""
-    return max(state_lines, P.RATE_TOTAL_MIN) + pop_lines / target
 
-
-def window_events(snapshot, target, end_share, start_share=None, k=1.0):
-    """The engine's expected births or deaths over a step's window (the trapezoid, owner 2026-10-11; #894). The walk's
-    snapshot is the rates on the step's day x the window; its on-top part (end_share of the target) is replaced by
-    ON_TOP_START_WEIGHT x the share at the window's start plus the rest x the end's. The parts from M being a window old
-    and from the model's rate drifting stay as the snapshot has them. target is the window's (the model's rate M aimed
-    at, at today's people, a year). k is fast mode's K while its term ran: that term holds the start's multiplier K - 1
-    times, so the snapshot carries the start's share K times and the change since then once, and a K-th of the change
-    is the window's. With no start share (the first step after a seed, a new state, an old save) it is the snapshot.
-    Never below 0."""
-    if start_share is None:
-        return snapshot
-    return max(0.0, snapshot + target * (start_share - end_share) * P.ON_TOP_START_WEIGHT / k)
-
+def window_events(end_rate, start_rate=None):
+    """The engine's expected births or deaths over a step's window (the trapezoid, owner 2026-10-11; #894; the review
+    of #907). The walk's snapshot is the engine's rate on the step's day; the window takes WINDOW_START_WEIGHT x the
+    rate the last step left in force (after it set M, and fast mode its term) and the rest x today's, both in the same
+    units (a rate x the window, or a rate). Each end is the engine's whole rate, so every line that moved inside the
+    window counts at the engine's own weight: the lines on top, the absorbed lines M nets, the bare curves. With no
+    start rate (the first step after a seed, a new state, an old save) it is the snapshot. Never below 0. The script's
+    te_demog_window_events."""
+    if start_rate is None:
+        return end_rate
+    return max(0.0, P.WINDOW_START_WEIGHT * start_rate + (1 - P.WINDOW_START_WEIGHT) * end_rate)
 
 def starvation_terms(food_security):
     """(births, deaths) the engine adds for a pop at this food security (vanilla code static modifiers)."""
