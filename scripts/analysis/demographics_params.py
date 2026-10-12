@@ -164,7 +164,7 @@ BS_HELD_START = 0.0
 # Birth Spacing's start for China, Manchuria and Korea (owner, 2026-10-11; plan D13): at least the share that cancels the
 # raise, and above it as far as China's peacetime births less deaths needs to land in history's +3 to +6, which lowers
 # their births toward history's ~5.5 children per woman (spec 2.2's second variant). The fit (2026-10-12): 0. With no
-# raise and the refitted poverty term (below), China's projected rate is +5.8 without it. Membership, not the value,
+# raise, China's projected peacetime births less deaths are +5.9 without it, inside the band. Membership, not the value,
 # says which states take it (demographics_model.bs_held_group).
 BS_EAST_ASIA_START = 0.0
 BS_EAST_ASIA_REGIONS = ("region_north_china", "region_south_china")
@@ -235,20 +235,16 @@ TREATMENT_CAP = {"infection": 0.95, "maternal": 0.99, "chronic": 0.85}
 MORTALITY_MULT_FLOOR = 0.2
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
-# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below. Refitted on
-# 2026-10-12 (below): below SoL 8, to x2.25 at SoL 5.
+# Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below.
 # Most of the 1836 world sits at SoL 6-9, and the high-SoL term above is flat below SoL 8, so without this the
 # census gave China, India and Mexico Britain's life expectancy and the world +1.4% a year against
 # history's 0.4-0.8%. Fitted against Clio Infra's life expectancy and Maddison's population on the gate
 # run's 1837, 1857 and 1887 saves, with each state's crowding term as the save holds it (continuous, below): the
 # strength at which China (SoL 6 by 1887 in that game) grows as Maddison's China did in peacetime, about +0.3-0.4%
 # a year (1820-1840, 1870-1910). x2 would shrink it (docs/testing/demographics-history-check-2026-10-10.md).
-# Refitted with the practices (the late-marriage plan, Task 6, 2026-10-12) against #904's regional peacetime births
-# less deaths: x2.25 at SoL 5, x1 from SoL 8 (was x1.75, x1 from SoL 9), the point of the grid that fails the fewest
-# regional items (docs/testing/demographics-late-marriage-2026-10-12.md).
-POVERTY_INFECTION_SOL = 8          # x1 at and above
+POVERTY_INFECTION_SOL = 9          # x1 at and above
 POVERTY_INFECTION_FLOOR_SOL = 5    # POVERTY_INFECTION_AT_FLOOR at and below
-POVERTY_INFECTION_AT_FLOOR = 2.25
+POVERTY_INFECTION_AT_FLOOR = 1.75
 SOL_CHRONIC_AT_HIGH = 0.85
 LITERACY_INFECTION_WEIGHT = 0.3   # mothers' literacy: infection x (1 - 0.3 x literacy)
 # Crowding (owner, 2026-10-10: a function of how crowded the state is, not a switch): infection rises by the

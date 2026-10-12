@@ -151,15 +151,14 @@ class TestMortality(unittest.TestCase):
         f, m = M.life_table(qf), M.life_table(qm)
         return {k: (f[k] + m[k]) / 2 for k in f}
 
-    def test_poverty_raises_infection_below_sol_8(self):
+    def test_poverty_raises_infection_below_sol_9(self):
         # phase 2 calibration (2026-10-10): x1 at SoL 9 and above, rising to x1.75 at SoL 5 and below (the
-        # strength refitted with the census's continuous crowding term counted); refitted with the practices (the
-        # late-marriage plan, Task 6, 2026-10-12): x1 at SoL 8 and above, x2.25 at SoL 5 and below
-        self.assertEqual(M.poverty_infection(8), 1.0)
+        # strength refitted with the census's continuous crowding term counted)
+        self.assertEqual(M.poverty_infection(9), 1.0)
         self.assertEqual(M.poverty_infection(15), 1.0)
-        self.assertAlmostEqual(M.poverty_infection(7), 1 + 1.25 / 3)
-        self.assertEqual(M.poverty_infection(5), 2.25)
-        self.assertEqual(M.poverty_infection(1), 2.25)
+        self.assertAlmostEqual(M.poverty_infection(7), 1.375)
+        self.assertEqual(M.poverty_infection(5), 1.75)
+        self.assertEqual(M.poverty_infection(1), 1.75)
         # SoL 8 and 4 share the high-SoL term (x1), so the cause multipliers differ by the poverty term alone
         ratio = (M.cause_multipliers(M.Inputs(sol=4))["infection"] / M.cause_multipliers(M.Inputs(sol=8))["infection"])
         self.assertAlmostEqual(ratio, M.poverty_infection(4) / M.poverty_infection(8))

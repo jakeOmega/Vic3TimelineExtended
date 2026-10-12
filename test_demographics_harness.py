@@ -909,8 +909,7 @@ class TestFidelity(unittest.TestCase):
     crowding term did, on 91% of the world's people (2026-10-10)."""
 
     CROWD_MULT = 1.5   # the crowded state's migration_crowding multiplier: a -15% pull, so infection x1.15
-    # the walk's figures, SoL inside the poverty term; the tiny save's pops read SoL 28, literacy 0.5
-    GAME_SOL, GAME_LIT = P.POVERTY_INFECTION_SOL - 1.0, 0.2
+    GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
 
     def setUp(self):
         from test_demographics_save_inputs import TINY
@@ -1002,8 +1001,7 @@ class TestFidelity(unittest.TestCase):
             self.assertAlmostEqual(game / model, 1.0, places=4, msg=cause)
 
     def test_a_save_from_another_build_takes_its_poverty_floor(self):
-        # a save from main (no poverty term) reads as off everywhere below POVERTY_INFECTION_SOL unless fidelity is
-        # told (review I2)
+        # a save from main (no poverty term) reads as off everywhere below SoL 9 unless fidelity is told (review I2)
         path = self.save(True, self.game_infection(poverty_floor=1.0))
         kept = H.P.POVERTY_INFECTION_AT_FLOOR
         for argv, code in ((["fidelity", path], 1), (["fidelity", path, "--poverty-floor", "1"], 0)):
