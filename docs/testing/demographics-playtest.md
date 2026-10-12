@@ -72,3 +72,57 @@ and Pollution Impact's line in `common/static_modifiers/extra_modifiers.txt` to 
    and laws allow", not a raw comparison.
 2. **Full, an observer run of a few decades:** AI countries issue it in states behind and let it lapse; few states
    hold it once caught up.
+
+## Phase 2 step 1: the interfaces
+
+The census computes who works, the pensioners, health need and the old-age threshold, and every working-adult line
+moves to two script-only families re-applied by one "Laws and Institutions" pair. No birth, death or workforce number
+should move in any game. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §1.10;
+plan: `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`, Task 8. The three workforce self-checks
+are in the table above.
+
+1. **Nothing moves (Disabled).** A Women's Suffrage country's state shows the same working-adult ratio as a game on
+   `main` (option l's `wa_mod=`). Its workforce tooltip shows one "Laws and Institutions" line; the law's own tooltip
+   still reads "Workforce Ratio +15%".
+2. **Laws refresh that day (Disabled).** Enact Women's Suffrage by the console: the pair (`ww_mod=` and `pair=`)
+   follows the same day. Raise Old Age Pension's institution level: the line follows within a month.
+3. **Under Full the pair stays.** After a state's first census step (its births and deaths term in force), `ww_mod=`
+   and `pair=` still hold the families' sum and the workforce tooltip still shows the line.
+4. **The figures in 1836 (Display only or Full).** Option l in Britain's capital after its first count: `wa_share`
+   about 0.7, `at_work` about 0.45-0.5, `wf_target` about 0.25, `wbase` about 0.25, `old_age` about 58-62, `need` about
+   1.0, `pensioners` 0, `pension_kind` 0, `child_work` 0.3 (Child Labor Allowed).
+   - **`wf_engine`, step 2's stop rule** (the engine's workforce over people). About 0.25 confirms the census's reading;
+     about 0.20 means the engine's ratio is workforce over dependents (as the define's and the modifier's descriptions
+     read), and step 2 re-derives the scale and its term on that scale before any fit (spec §1.8). Read it in a few
+     states, and in one with many aristocrats or slaves (`wbase` away from 0.25). The `pop_workforce_read` self-check
+     says whether the read works at all.
+5. **A pension country.** A country with Old Age Pension: `pension_var=65` (the owner's variable, read through the
+   `owner.var:` chain) and `pensioners` above 0; a country without one: `pension_var=-1`. Switching the welfare law to
+   UBI makes `pension_var=-1` that day and `pensioners` read 0 at the state's next count.
+6. **The skew probe** (options f and g, unrun since #828): how fast a working-adult modifier moves a pop's workforce
+   share. Step 2's plan is written after this result (spec §2.1): an instant pull needs a ramp, a slow one a lag on the
+   panel.
+7. **The benchmark** (option d): the step's cost within 25% of `main`'s.
+8. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_work_*`, `te_demog_women_rate`,
+   `te_demog_old_age_pass`, `te_demog_slot_births`, `te_demog_workforce_lines_refresh` or `te_debug_demog_wf_*`; no
+   load error from the two new INJECT files (`te_demog_workforce_injections.txt` under `interest_group_traits` and
+   `static_modifiers`) or from `te_debug_demog_triggers.txt`'s define reads.
+9. **Call 3's carriers reach a state (option p).** In a new game under Display only (so the self-checks run too), in
+   a country whose Trade Unions are neither marginalized nor powerful (a marginal group's traits apply at half size, a
+   powerful group's at double), run option p once. Its log gives three pairs of `TE_DEMOG_MODS` / `TE_DEMOG_WORK` lines
+   (before, a day later, a month later), and within about five weeks the `workforce_amendment_type` and
+   `workforce_ig_trait_type` self-checks:
+   - **a day later:** `replaced=` up 0.01 (Community Service) and, once the Trade Unions are loyal, 0.05 more (the
+     trait); `part_m=` up 0.01; `part=` up 0.02 with the trait; `womens=` up 0.025 (Woman Soldiers at ×0.5);
+     `ww_mod=` (the families' sum) up by their total. `pair=` and `wa_mod=` (the engine's own field) haven't moved yet,
+     unless option p enacted the law, which refreshes the pair that day: the month's lag of spec §1.9;
+   - **a month later:** `pair=` equal to `ww_mod=`, and `wa_mod=` up by the old flat lines, as on `main`: +0.01,
+     +0.05 and +0.025;
+   - **the tooltips:** the Trade Unions' trait shows one "Workforce Ratio +5%" line and one "Census: People at Work +2%"
+     line, not a +5% and a −5%; Woman Soldiers in the country's modifiers shows one "Workforce Ratio" line; Community
+     Service shows "Workforce Ratio +1%" and "Census: Men at Work +1%";
+   - **a kind that fails** (its type stays at 0 a month later, or its tooltip shows the cancel): take that row's
+     fallback in the Self-checks table. A failed kind loses its line in every game, so fix it before the release.
+10. **Pollution Impact, in passing:** in a polluted state of the same game, option l's `cap=` reads −0.1 × the impact
+    and `replaced=` −0.05 × the same.
+

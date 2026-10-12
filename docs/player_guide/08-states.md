@@ -30,10 +30,11 @@ tooltip breaks the numbers down.
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
 | Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 
-In every version of the mod, the birth and death effects of laws, technologies
-and institutions appear in the birth rate and mortality tooltips of a state and
-its pops as Laws and Institutions lines, one for each kind of effect rather than
-one for each law. Each law's or technology's own tooltip still lists its effect.
+In every version of the mod, the birth, death and workforce effects of laws,
+technologies and institutions appear in the birth rate, mortality and workforce
+tooltips of a state and its pops as Laws and Institutions lines, one for each
+kind of effect rather than one for each law. Each law's or technology's own
+tooltip still lists its effect.
 
 ## Migration crowding
 
