@@ -2913,6 +2913,11 @@ git commit -m "Demographics: the census seeds and drifts Late Marriage and Birth
 
 ### Task 9: Primogeniture's farm births under Full (call 4)
 
+> **Built 2026-10-12: Plan A, without the probe.** The owner dropped the probe as a gate the same day: the build ships
+> Plan A with a self-check (`te_debug_demog_pr_selfcheck_start`, `te_debug_demog.5`) that logs `TE_SELF_CHECK OK` or
+> `BROKEN` once a game; BROKEN means swap in Plan B. Task 12's in-game list moved to `docs/testing/demographics-playtest.md`
+> and no longer blocks the merge.
+
 **The engine question first (review C2).** Plan A moves Primogeniture's line onto a script-only type on a *state*
 `add_modifier` with a multiplier (the agrarian share). Whether the engine sums that type scaled by the multiplier is
 unverified:
