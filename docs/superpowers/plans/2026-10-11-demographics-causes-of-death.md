@@ -1399,8 +1399,9 @@ Expected: OK. The cohort tests keep their multiplier fixtures; the drift runs at
 
 - [x] **Step 7: Commit**: "Demographics: the census stores its causes' inputs and drifts its medicine".
 
-- [ ] **Review stop:** a fresh reviewer reads Tasks 4–5 (the generated factors and drift, the wiring, the old-save
+- [x] **Review stop:** a fresh reviewer reads Tasks 4–5 (the generated factors and drift, the wiring, the old-save
   path) against this plan before Task 6.
+  **Passed, 2026-10-11:** APPROVE with four minors, all applied (e4d1ac66).
 
 ---
 
@@ -1825,7 +1826,7 @@ Expected: OK, including the trapezoid's own tests.
   `te_dg_acc`, `te_dg_trt_*` (Task 5); `P.MEDICAL_OUTREACH_DIFFUSION` (Task 1).
 - Produces: `decree_medical_outreach`; `te_demog_medicine_behind` (state trigger); the release script's rule 3b.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 class TestMedicalOutreach(unittest.TestCase):
@@ -1928,12 +1929,12 @@ allowed only inside `decree_medical_outreach`'s entry, not as a whole:
 
 A commented line keeps its index (`test_it_only_comments_lines_out`), so `n` matches the original file's.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry.TestMedicalOutreach test_release_census_inputs`
 Expected: FAIL/ERROR.
 
-- [ ] **Step 3: The gap and the trigger**
+- [x] **Step 3: The gap and the trigger**
 
 `te_demog_values.txt`, after `te_demog_crisis`:
 
@@ -1968,7 +1969,7 @@ te_demog_medicine_behind = {
 }
 ```
 
-- [ ] **Step 4: The decree** (`extra_decrees.txt`, after `decree_natalism_initiative`)
+- [x] **Step 4: The decree** (`extra_decrees.txt`, after `decree_natalism_initiative`)
 
 ```
 # Medical Outreach (the Causes of Death plan, owner 2026-10-11): doctors and nurses bring the country's latest medicine
@@ -2044,7 +2045,7 @@ decree_medical_outreach = {
  decree_medical_outreach_desc:0 "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner."
 ```
 
-- [ ] **Step 5: The release script** (`comment_out_census_inputs.py`)
+- [x] **Step 5: The release script** (`comment_out_census_inputs.py`)
 
 Add to the docstring's list: "3b. every decree whose `modifier` block is left with no effect line is commented out
 whole (Medical Outreach: the census is its only reader)." Add:
@@ -2075,7 +2076,7 @@ and in `run`'s entry loop, beside the `static_modifiers` branch:
                     _tag(new, i)
 ```
 
-- [ ] **Step 6: Run the tests, then commit**
+- [x] **Step 6: Run the tests, then commit**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry test_release_census_inputs test_demographics_modifiers`
 Expected: OK. Also run `.venv/bin/python scripts/release/comment_out_census_inputs.py --check | tail -1`: 46 or more
@@ -2624,7 +2625,7 @@ does (the review's I4). `#906` notes `fidelity` won't run on that branch's saves
   carriers, stored=None)` and `H.history_rows(sections, year, anchors, carriers=None, stored=None)`, `stored` being
   `{state id: {variable: value}}` from `S.read_variables`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `TestFidelity.save`, accept extra variables: `def save(self, crowded, m_inf, m_mat=None, extra=())`, appending
 `extra`'s `(name, value)` pairs to the variable block. Then:
@@ -2657,12 +2658,12 @@ In `TestFidelity.save`, accept extra variables: `def save(self, crowded, m_inf, 
 (The tiny save's state carries no health law or treatment tech, so the stored medicine is off its targets and the old
 path would read a mismatch.)
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_harness.TestFidelity`
 Expected: ERROR (`census_inputs` not defined).
 
-- [ ] **Step 3: The harness**
+- [x] **Step 3: The harness**
 
 ```python
 # The step's own inputs (the Causes of Death plan): with them the model runs on what the census used, so a mismatch is
@@ -2692,7 +2693,7 @@ their own inputs and print one line, for example "N states read on the census's 
 spread, turmoil); M from the save's techs and laws". Count also the states whose stored medicine is more than
 `P.MEDICINE_SNAP` from the targets the save's techs and laws give, and print "medicine still spreading in K".
 
-- [ ] **Step 4: `history` through the same inputs**
+- [x] **Step 4: `history` through the same inputs**
 
 Test first, in `TestHarness` beside its `country_figures` test (the same synthetic states):
 
@@ -2732,7 +2733,7 @@ def country_figures(states, carriers, stored=None):
 `stored = {sid: rec["vars"] for sid, rec in walked.items()}`. It prints one line under the world line: "N states on the
 census's own inputs (medicine as it had spread)".
 
-- [ ] **Step 5: Run the harness tests, then commit**
+- [x] **Step 5: Run the harness tests, then commit**
 
 Run: `.venv/bin/python -m unittest test_demographics_harness`
 Expected: OK.
