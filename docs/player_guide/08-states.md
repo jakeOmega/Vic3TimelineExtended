@@ -33,8 +33,9 @@ tooltip breaks the numbers down.
 In every version of the mod, the birth, death and workforce effects of laws,
 technologies and institutions appear in the birth rate, mortality and workforce
 tooltips of a state and its pops as Laws and Institutions lines, one for each
-kind of effect rather than one for each law. Each law's or technology's own
-tooltip still lists its effect.
+kind of effect rather than one for each law. The workforce line also holds the
+workforce effects of amendments, interest groups, Woman Soldiers and pollution.
+Each law's or technology's own tooltip still lists its effect.
 
 ## Migration crowding
 

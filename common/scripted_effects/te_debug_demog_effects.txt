@@ -626,15 +626,25 @@ te_debug_demog_pr_selfcheck_start = {
 # arms once a game, the first month a country holds such a carrier, and a week later (a day may come before the engine
 # re-sums a state's modifiers) its capital logs the census-only participation input that carrier holds beside its
 # moved line, against the line's size (te_debug_demog.6, .7; TE_SELF_CHECK). The moved line is on the same block, so
-# one verdict covers both. Both read participation inputs, which a release comments out, so they arm only where the
-# census runs (Display only or Full): a release would read 0 and log a false BROKEN. A third check reads the walk's
-# te_dg_wf_engine once: a pop's `workforce` read as a value (the plan's D6, which no game has run yet).
+# one verdict covers both. Both read participation inputs, which a release comments out, so they arm wherever those
+# inputs exist: every development build under any rule, Disabled included, since the facts decide what a Disabled game
+# keeps (te_debug_demog_selfchecks_run; a release sets it to always = no and would otherwise log a false BROKEN). A
+# third reads the walk's te_dg_wf_engine once, where the census runs: a pop's `workforce` read as a value (the plan's
+# D6). A fourth, workforce_lines_net (te_debug_demog.8), checks once a game that the capital's working-adult field less
+# the pair is about 0: each vanilla carrier's INJECTed cancel nets out against its own line.
 # THIS = a country, on its monthly pulse (te_demog_country_monthly_on_action), under every rule.
 te_debug_demog_wf_selfchecks = {
 	if = {
 		limit = {
-			te_demog_cohorts_run = yes
+			te_debug_demog_selfchecks_run = yes
 			exists = capital
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_demog_selfcheck_net_done } }
+			set_global_variable = { name = te_demog_selfcheck_net_done value = yes }
+			capital = {
+				trigger_event = { id = te_debug_demog.8 days = 7 }
+			}
 		}
 		if = {
 			limit = {

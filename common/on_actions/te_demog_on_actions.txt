@@ -180,6 +180,9 @@ te_demog_lines_law_on_action = {
 			owner = {
 				every_scope_state = {
 					trigger_event = { id = te_demog_events.4 }
+					# again a day later, in case the engine hasn't re-summed the families on the day (the refresh acts
+					# only where the sum changed)
+					trigger_event = { id = te_demog_events.4 days = 1 }
 				}
 			}
 		}
@@ -203,6 +206,7 @@ te_demog_lines_country_on_action = {
 			limit = { has_game_started = yes }
 			every_scope_state = {
 				trigger_event = { id = te_demog_events.4 }
+				trigger_event = { id = te_demog_events.4 days = 1 }
 			}
 		}
 	}

@@ -707,6 +707,14 @@ te_debug_demog_wf_ig_gap = {
 	}
 }
 
+# THIS = a state: its working-adult field less what the moved lines' pair applies. About 0 wherever every vanilla
+# carrier's INJECTed cancel nets out against its own line; Rosen's flat adds (positive) are the one live line. An INJECT
+# that replaced a vanilla block instead of adding to it leaves the cancel alone: about -0.05 for a Trade Unions trait.
+te_debug_demog_wf_remainder = {
+	value = modifier:state_working_adult_ratio_add
+	subtract = te_demog_line_working_adults_applied
+}
+
 # The walk's engine workforce share (te_dg_wf_engine), -1 where the state has none.
 te_debug_demog_wf_engine_read = {
 	value = -1

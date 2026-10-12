@@ -16,6 +16,13 @@ te_demog_cohorts_run = {
 	}
 }
 
+# The once-a-game self-checks (docs/testing/demographics-playtest.md, "Self-checks") that read census-only inputs:
+# on in every development build whatever the rule, since the inputs are there; a release sets it to always = no
+# (scripts/release/comment_out_census_inputs.py's GATES), where the inputs are commented out and would read 0.
+te_debug_demog_selfchecks_run = {
+	always = yes
+}
+
 # The model's effects (phase 2) apply only under Full.
 te_demog_effects_run = {
 	has_game_rule = demographics_full

@@ -1499,7 +1499,9 @@ class TestLinesScript(unittest.TestCase):
                  "on_game_started_after_lobby": "te_demog_lines_world_on_action"}
         for hook, name in hooks.items():
             self.assertRegex(on_actions, rf"\n{hook} = \{{\s*on_actions = \{{[^}}]*\b{name}\b", hook)
-        dispatch = r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}"
+        # the review of step 1 (Minor 3): again a day later, in case the engine hasn't re-summed the families that day
+        dispatch = (r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*(#[^\n]*\s*)*"
+                    r"trigger_event = \{ id = te_demog_events\.4 days = 1 \}\s*\}")
         # review I1: on_law_activated's ROOT is the law, so its states are the owner's; on_acquired_technology's
         # ROOT is the country. Both wait for the game to start: history's laws and techs are the world hook's.
         law = _block(on_actions, "te_demog_lines_law_on_action")
@@ -1781,7 +1783,14 @@ class TestWorkforceSelfChecks(unittest.TestCase):
         monthly = _block(_text(DEMOG_ON_ACTIONS), "te_demog_country_monthly_on_action")
         self.assertIn("te_debug_demog_wf_selfchecks = yes", monthly)
         start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_selfchecks")
-        self.assertIn("te_demog_cohorts_run = yes", start, "a release comments the inputs out: no false BROKEN")
+        # the review of step 1 (Important 2): every development build under any rule, Disabled included; a release
+        # turns the gate off (it comments the inputs out, which would read 0)
+        self.assertIn("te_debug_demog_selfchecks_run = yes", start, "a release comments the inputs out: no false BROKEN")
+        self.assertNotIn("te_demog_cohorts_run", start.split("te_dg_wf_engine")[0])
+        release = _text(ROOT / "scripts" / "release" / "comment_out_census_inputs.py")
+        self.assertRegex(release, r'GATES = \([^)]*"te_debug_demog_selfchecks_run"')
+        triggers = _block(_text(TRIGGERS), "te_debug_demog_selfchecks_run")
+        self.assertIn("always = yes", triggers)
         for flag, event in (("te_demog_selfcheck_amend_done", "te_debug_demog.6"),
                             ("te_demog_selfcheck_ig_done", "te_debug_demog.7")):
             self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", start)
@@ -1789,7 +1798,15 @@ class TestWorkforceSelfChecks(unittest.TestCase):
             self.assertIn(f"trigger_event = {{ id = {event} days = 7 }}", start)
         self.assertIn("TE_SELF_CHECK OK pop_workforce_read", start)
         self.assertIn("TE_SELF_CHECK BROKEN pop_workforce_read", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.8 days = 7 }", start)
         events = _text(DEBUG_EVENTS)
+        net = _block(events, "te_debug_demog.8")
+        for needle in ("TE_SELF_CHECK OK workforce_lines_net", "TE_SELF_CHECK BROKEN workforce_lines_net",
+                       "te_debug_demog_wf_remainder > -0.01", "te_debug_demog_wf_remainder < 0.01"):
+            self.assertIn(needle, net)
+        # the review of step 1 (Important 1): an INJECT that replaced vanilla's trait block reads 0.02 and leaves the
+        # cancel alone, so .7 also needs the remainder
+        self.assertIn("te_debug_demog_wf_remainder > -0.01", _block(events, "te_debug_demog.7"))
         for event, name, flag in (("te_debug_demog.6", "workforce_amendment_type", "te_demog_selfcheck_amend_done"),
                                   ("te_debug_demog.7", "workforce_ig_trait_type", "te_demog_selfcheck_ig_done")):
             self.assertEqual(len(re.findall(rf"^{re.escape(event)} = \{{", events, re.M)), 1, event)

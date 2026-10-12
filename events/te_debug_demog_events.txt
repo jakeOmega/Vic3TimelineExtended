@@ -473,16 +473,42 @@ te_debug_demog.7 = {
 		if = {
 			limit = { owner = { te_debug_demog_wf_ig_trait_plain = yes } }
 			if = {
-				limit = { te_debug_demog_wf_ig_gap < 0.002 }
-				debug_log = "TE_SELF_CHECK OK workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = {
+					te_debug_demog_wf_ig_gap < 0.002
+					te_debug_demog_wf_remainder > -0.01
+				}
+				debug_log = "TE_SELF_CHECK OK workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] remainder=[THIS.ScriptValue('te_debug_demog_wf_remainder')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] (0: the engine doesn't sum a script-only type from an IG trait; revert the Trade Unions' two trait INJECTs, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN workforce_ig_trait_type read=[THIS.ScriptValue('te_debug_demog_wf_part_read')|3] expected=[THIS.ScriptValue('te_debug_demog_wf_ig_expected')|3] remainder=[THIS.ScriptValue('te_debug_demog_wf_remainder')|3] (read 0: the engine doesn't sum a script-only type from an IG trait; remainder about -0.05: the INJECT replaced vanilla's trait block instead of adding to it; either way revert the Trade Unions' two trait INJECTs, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			debug_log_scopes = yes
 		}
 		else = {
 			remove_global_variable = te_demog_selfcheck_ig_done
 		}
+	}
+}
+
+# .8: workforce_lines_net, once a game in the first country's capital a week after it arms. OK: the capital's
+# working-adult field less the pair is about 0, so each vanilla carrier's INJECTed cancel nets out against its own line
+# (laws, Woman Soldiers, the Trade Unions' traits). BROKEN: an INJECT replaced a vanilla block instead of adding to it, so
+# its cancel stands alone; option l's TE_DEMOG_MODS lines show which carrier (docs/testing/demographics-playtest.md).
+te_debug_demog.8 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				te_debug_demog_wf_remainder > -0.01
+				te_debug_demog_wf_remainder < 0.01
+			}
+			debug_log = "TE_SELF_CHECK OK workforce_lines_net remainder=[THIS.ScriptValue('te_debug_demog_wf_remainder')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN workforce_lines_net remainder=[THIS.ScriptValue('te_debug_demog_wf_remainder')|3] (not 0: a vanilla carrier's INJECTed cancel stands alone, or Rosen's androids work here; revert that carrier's INJECT, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
 	}
 }

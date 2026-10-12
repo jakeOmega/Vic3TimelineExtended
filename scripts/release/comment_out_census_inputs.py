@@ -36,7 +36,7 @@ from pathlib import Path
 TYPES_FILE = Path("common/modifier_type_definitions/demographics_modifier_types.txt")
 TRIGGERS = Path("common/scripted_triggers/te_demog_triggers.txt")
 RULES = Path("common/game_rules/extra_game_rules.txt")
-GATES = ("te_demog_cohorts_run", "te_demog_effects_run")
+GATES = ("te_demog_cohorts_run", "te_demog_effects_run", "te_debug_demog_selfchecks_run")
 RULE = "demographics_rule"
 TAG = "# RELEASE: "
 # common/ directories that only read the types
