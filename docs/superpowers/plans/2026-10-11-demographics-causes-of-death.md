@@ -851,7 +851,7 @@ scenario's "before" holds the Combustion Engine too; see the commit.)
   - `te_demog_medicine_drift_one = { VAR = <variable> TARGET = <script value> }`.
 - The factors read only stored variables: `te_dg_sol`, `te_dg_lit`, `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*`.
 
-- [ ] **Step 1: Write the failing generator tests** (`test_gen_demographics.py`, `TestGenerated`; replace
+- [x] **Step 1: Write the failing generator tests** (`test_gen_demographics.py`, `TestGenerated`; replace
   `test_medicine_reads_access_and_the_causes_treatment`)
 
 ```python
@@ -898,7 +898,7 @@ scenario's "before" holds the Combustion Engine too; see the commit.)
 `test_causes_read_the_types_not_the_owners_techs_or_laws` and `test_every_type_is_read_in_state_scope` keep passing
 (the targets read the types in state scope); keep them.
 
-- [ ] **Step 2: Write the failing script tests** (`test_demographics_registry.py`: replace `TestCauseMultipliersScript`)
+- [x] **Step 2: Write the failing script tests** (`test_demographics_registry.py`: replace `TestCauseMultipliersScript`)
 
 ```python
 def _stored(inp):
@@ -1047,12 +1047,12 @@ class TestMedicineDriftScript(unittest.TestCase):
 
 Put `_stored` and `_mod_fixtures` above `_engine_for` (Task 5 changes `_engine_for` to use `_mod_fixtures`).
 
-- [ ] **Step 3: Run them to see them fail**
+- [x] **Step 3: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_gen_demographics test_demographics_registry.TestCauseFactorsScript test_demographics_registry.TestMedicineDriftScript`
 Expected: FAIL/ERROR (`te_demog_f_infection_medicine` not found).
 
-- [ ] **Step 4: The generator**
+- [x] **Step 4: The generator**
 
 Replace `multipliers(o)`'s per-cause loop (keep the female work share and `te_demog_means` that follow it) with:
 
@@ -1222,13 +1222,13 @@ def medicine_effects(o):
     o("")
 ```
 
-- [ ] **Step 5: Regenerate and run the tests**
+- [x] **Step 5: Regenerate and run the tests**
 
 Run: `.venv/bin/python scripts/generators/gen_demographics.py`, then
 `.venv/bin/python -m unittest test_gen_demographics test_demographics_registry.TestCauseFactorsScript test_demographics_registry.TestMedicineDriftScript`
 Expected: OK. `test_committed_outputs_are_current` passes on the regenerated files.
 
-- [ ] **Step 6: Commit** the generator, both generated files and the tests: "Demographics generator: causes of death as
+- [x] **Step 6: Commit** the generator, both generated files and the tests: "Demographics generator: causes of death as
   stored factors, and the drift of medicine".
 
 ---
@@ -1247,7 +1247,7 @@ Expected: OK. `test_committed_outputs_are_current` passes on the regenerated fil
 - Produces: every seed and step leaves `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*` on the state; `_engine_for(...,
   real_multipliers=False)`.
 
-- [ ] **Step 1: Make `_engine_for` give the step's reads** (`test_demographics_registry.py`)
+- [x] **Step 1: Make `_engine_for` give the step's reads** (`test_demographics_registry.py`)
 
 ```python
 def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=False):
@@ -1283,7 +1283,7 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
 
 `_mod_fixtures` is Task 4's, defined above `_engine_for`.
 
-- [ ] **Step 2: Write the failing tests**
+- [x] **Step 2: Write the failing tests**
 
 ```python
 class TestCausesInTheStep(unittest.TestCase):
@@ -1350,12 +1350,12 @@ class TestCausesInTheStep(unittest.TestCase):
         self.assertLess(prepare.index("te_demog_cause_inputs_store"), first_mult)
 ```
 
-- [ ] **Step 3: Run them to see them fail**
+- [x] **Step 3: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry.TestCausesInTheStep`
 Expected: ERROR (`read of missing variable var:te_dg_acc` in the seed).
 
-- [ ] **Step 4: Wire the entry points** (`te_demog_effects.txt`)
+- [x] **Step 4: Wire the entry points** (`te_demog_effects.txt`)
   - `te_demog_prepare`: `te_demog_cause_inputs_store = yes` just before
     `set_local_variable = { name = te_dg_m_inf value = te_demog_mult_infection }`, with the comment
     `# the inputs the factors read, stored so the Causes of Death section matches this step until the next (generated)`.
@@ -1373,7 +1373,7 @@ Expected: ERROR (`read of missing variable var:te_dg_acc` in the seed).
     #                       factors read (te_demog_cause_inputs_store)
     ```
 
-- [ ] **Step 5: The console's reads**
+- [x] **Step 5: The console's reads**
   - `te_debug_demog_values.txt`: guard each `te_debug_demog_mult_*` (all five) on the step's inputs, −1 without them:
     ```
     te_debug_demog_mult_external = {
@@ -1392,12 +1392,12 @@ Expected: ERROR (`read of missing variable var:te_dg_acc` in the seed).
     `impact=`. Extend `test_option_l_logs_the_fertility_types`' neighbour with
     `self.assertIn(" diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3]", line)`.
 
-- [ ] **Step 6: Run the registry, the model and the harness**
+- [x] **Step 6: Run the registry, the model and the harness**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry test_demographics_model test_demographics_harness`
 Expected: OK. The cohort tests keep their multiplier fixtures; the drift runs at the targets there.
 
-- [ ] **Step 7: Commit**: "Demographics: the census stores its causes' inputs and drifts its medicine".
+- [x] **Step 7: Commit**: "Demographics: the census stores its causes' inputs and drifts its medicine".
 
 - [ ] **Review stop:** a fresh reviewer reads Tasks 4–5 (the generated factors and drift, the wiring, the old-save
   path) against this plan before Task 6.
