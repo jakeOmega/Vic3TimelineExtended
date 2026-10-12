@@ -365,7 +365,6 @@ law_post-scarcity = {
 	institution = institution_social_security
 	institution_modifier = {
 		state_dependent_wage_mult = 0.2
-		state_working_adult_ratio_add = -0.04
 		state_dependent_political_participation_add = 0.02
 		state_welfare_payments_add = 4.8
 	}
@@ -2700,7 +2699,7 @@ law_pro_natalist_subsidies = {
 	modifier = {
 		state_welfare_payments_mult = 0.10
 		state_demog_ontop_birth_rate_mult = 0.10
-		state_dependent_wage_mult = -0.1
+		state_dependent_wage_mult = 0.1	# family allowances raise dependents' income (owner, 2026-10-12)
 		state_working_adult_ratio_add = -0.05
 	}
 }
