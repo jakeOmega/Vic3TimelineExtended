@@ -10,6 +10,7 @@ import dataclasses
 import math
 import sys
 import unittest
+import unittest.mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -893,3 +894,127 @@ class TestPractices(unittest.TestCase):
     def test_marriage_age(self):
         self.assertEqual(M.marriage_age(1.0), 26)
         self.assertEqual(M.marriage_age(0.0), 19)
+
+
+class TestPhase2Interfaces(unittest.TestCase):
+    """Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1): the figures
+    the census stores and applies nowhere yet."""
+
+    FARM = dict(sol=8, literacy=0.1, urban_share=0.05, laws=frozenset({"law_no_womens_rights",
+                                                                        "law_child_labor_allowed"}))
+
+    def test_the_bands_cover_both_tables(self):
+        self.assertEqual(P.BIO_BANDS, tuple(sorted(set(P.CAPACITY) | set(P.HEALTH_NEED))))
+        self.assertEqual(M.band_value(P.CAPACITY, 59), 1.0)
+        self.assertEqual(M.band_value(P.CAPACITY, 64), 0.95)
+        self.assertEqual(M.band_value(P.CAPACITY, 150), 0.1)
+        self.assertEqual(M.band_value(P.HEALTH_NEED, 4), 1.0)
+        self.assertEqual(M.band_value(P.HEALTH_NEED, 14), 0.5)
+
+    def test_the_working_age_start_follows_the_childrens_rights_law(self):
+        for law, share in (("law_child_labor_allowed", 0.3), ("law_restricted_child_labor", 0.1),
+                           ("law_compulsory_primary_school", 0.0)):
+            inp = M.Inputs(laws=frozenset({law}))
+            self.assertEqual([M.start_factor(inp, a) for a in (9, 10, 14, 15)], [0.0, share, share, 1.0], law)
+        self.assertEqual(M.child_work_share(M.Inputs()), P.CHILD_WORK_SHARE_DEFAULT)
+
+    def test_womens_rate_rises_with_the_family_and_the_lower_strata(self):
+        none = M.Inputs()
+        full = M.Inputs(mods={P.WOMENS_WORK_TYPE: P.WOMENS_WORK_FULL})
+        self.assertAlmostEqual(M.women_rate(none), P.WOMEN_BASE)
+        self.assertAlmostEqual(M.women_rate(full), P.MEN_RATE)
+        self.assertAlmostEqual(M.women_rate(M.Inputs(mods={P.WOMENS_WORK_TYPE: 9.0})), P.MEN_RATE, msg="capped")
+        lower = M.Inputs(low_share=0.8)
+        self.assertAlmostEqual(M.women_rate(lower), 0.8 * P.WOMEN_LOWER + 0.2 * P.WOMEN_BASE)
+        self.assertAlmostEqual(M.women_rate(dataclasses.replace(full, low_share=0.8)), P.MEN_RATE,
+                               msg="the floor never lowers a law's rate")
+
+    def test_call_3s_inputs_move_the_rates_and_capacity_within_bounds(self):
+        inp = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.03, P.PARTICIPATION_TYPE: 0.01, P.CAPACITY_TYPE: -0.1})
+        rf, rm = M.sex_rates(inp)
+        self.assertAlmostEqual(rm, P.MEN_RATE + 0.04)
+        self.assertAlmostEqual(rf, P.WOMEN_BASE + 0.01)
+        self.assertAlmostEqual(M.capacity_at(inp, 30), 0.9)
+        self.assertAlmostEqual(M.capacity_at(inp, 62), 0.95 * 0.9)
+        big = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.5, P.CAPACITY_TYPE: 0.5})
+        self.assertEqual(M.sex_rates(big)[1], 1.0)
+        self.assertEqual(M.capacity_at(big, 30), 1.0)
+        self.assertAlmostEqual(M.capacity_at(big, 82), 0.45)
+
+    def test_the_working_ages_end_by_the_welfare_law(self):
+        self.assertEqual(M.working_ages_end(M.Inputs(), 61.0), (999.0, False, False), "no pension: no end (D10)")
+        oap = M.Inputs(laws=frozenset({"law_old_age_pension"}))
+        self.assertEqual(M.working_ages_end(oap, 61.0), (65, True, True))
+        self.assertEqual(M.working_ages_end(dataclasses.replace(oap, pension_age=70.0), 61.0), (70.0, True, True))
+        for law in P.NO_PENSION_AGE_LAWS:
+            self.assertEqual(M.working_ages_end(M.Inputs(laws=frozenset({law})), 61.0), (61.0, True, False), law)
+
+    def test_figures_of_a_hand_built_ring(self):
+        ring = M.Ring(year=1900)
+        for a, f, m in ((5, 100, 100), (12, 50, 50), (30, 200, 200), (66, 40, 30)):
+            k = (1900 - a) % M.N
+            ring.f[k], ring.m[k] = float(f), float(m)
+        ring.pool_f, ring.pool_m = 1.0, 1.0
+        inp = M.Inputs(laws=frozenset({"law_child_labor_allowed", "law_old_age_pension"}), low_share=0.5)
+        rf = M.women_rate(inp)
+        got = M.work_figures(ring, inp, 60.0)
+        total = 200 + 100 + 400 + 70 + 2
+        wa = 100 + 400                                   # 12-year-olds at 0.3, 30-year-olds; 66 is past 65
+        workers = (50 * rf + 50 * 0.92) * 0.3 + (200 * rf + 200 * 0.92) \
+            + (40 * rf + 30 * 0.92) * 0.85 * P.AFTER_PENSION_SHARE + (rf + 0.92) * 0.1 * P.AFTER_PENSION_SHARE
+        need = 200 * 0.5 + 100 * 0.5 + 400 * 0.8 + 70 * 2.4 + 2 * 4.5
+        self.assertAlmostEqual(got["wa_share"], wa / total)
+        self.assertAlmostEqual(got["at_work"], workers / wa)
+        self.assertAlmostEqual(got["pensioners"], 72 / total)
+        self.assertAlmostEqual(got["need"], need / total / P.HEALTH_NEED_1836)
+        self.assertAlmostEqual(M.wf_target(got), P.WORKFORCE_SCALE * workers / total)
+
+    def test_with_no_pension_law_the_pool_is_of_working_age(self):
+        """D10: with no pension law the working ages have no end, so even the pool (150+) is in them, at capacity's
+        last band (te_demog_work_finish's no-pension branch)."""
+        ring = M.Ring(year=1900)
+        k = (1900 - 30) % M.N
+        ring.f[k], ring.m[k] = 200.0, 200.0
+        ring.pool_f, ring.pool_m = 1.0, 1.0
+        inp = M.Inputs(laws=frozenset({"law_child_labor_allowed"}))
+        rf = M.women_rate(inp)
+        got = M.work_figures(ring, inp, 60.0)
+        self.assertAlmostEqual(got["wa_share"], 1.0)
+        self.assertAlmostEqual(got["at_work"], (200 * rf + 200 * 0.92 + (rf + 0.92) * 0.1) / 402)
+        self.assertEqual(got["pensioners"], 0.0)
+
+    def test_the_targets_at_the_starting_values(self):
+        """The spec's §1.8 sketch: 1836 farming about 0.25 on the engine's scale, a rich aged state about 0.40."""
+        farm = scenario(low_share=0.85, **self.FARM)
+        ring, _last = M.run_constant(farm, years=300)
+        qf, qm, _ = M.group_rates(farm)
+        self.assertAlmostEqual(M.wf_target(M.work_figures(ring, farm, M.old_age(qf, qm))), 0.25, delta=0.02)
+        self.assertAlmostEqual(M.old_age(qf, qm), 59.3, delta=1.0)
+
+    def test_the_old_age_threshold_has_fifteen_years_left(self):
+        qf, qm, _ = M.group_rates(scenario(**self.FARM))
+        for q in (qf, qm):
+            age = M.old_age_threshold(q)
+            self.assertGreater(age, 50)
+            self.assertLess(age, 70)
+        flat = [100000.0] * len(P.GROUPS)                 # everyone dies in their first year
+        self.assertEqual(M.old_age_threshold(flat), float(P.OLD_AGE_FROM))
+
+    def test_planned_and_unplanned_sum_to_the_children_per_woman(self):
+        for kw in (self.FARM, dict(sol=35, literacy=0.95, urban_share=0.8,
+                                   techs=frozenset({"vulcanization", "feminism", "contraceptive_pill"}))):
+            fert = M.fertility(scenario(**kw), 60.0)
+            self.assertAlmostEqual(fert["planned"] + fert["unplanned"], fert["tfr"], places=12)
+            self.assertAlmostEqual(fert["unplanned"], fert["tfr"] / fert["factor"] * (1 - fert["means"]), places=12)
+
+    def test_one_schedule_keeps_todays_birth_line(self):
+        self.assertIs(P.ASFR_PLANNED_SHAPE, P.ASFR_UNPLANNED_SHAPE)
+        for r in (14, 15, 27, 49, 50):
+            self.assertEqual(M.slot_births(1234.5, r, r + 3, 4.2, 0.3), 1234.5 * M.asfr_shape(r) / 100000.0 * 4.2)
+
+    def test_two_schedules_split_by_the_planned_share(self):
+        other = {15: 10000, 20: 30000, 25: 30000, 30: 20000, 35: 7000, 40: 2500, 45: 500}
+        with unittest.mock.patch.object(P, "ASFR_UNPLANNED_SHAPE", other):
+            got = M.slot_births(1000.0, 27, 32, 4.0, 0.25)
+        want = (P.ASFR_SHAPE_BY_GROUP[25] / 5 * 0.25 + other[30] / 5 * 0.75) * 1000.0 / 100000.0 * 4.0
+        self.assertAlmostEqual(got, want)

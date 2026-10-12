@@ -146,6 +146,52 @@ DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 TRADITIONAL_MEANS = 0.4
 MEANS_ACCESS_BASE = 0.3
 
+# ---- Phase 2 step 1: the interfaces -----------------------------------------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1. The census computes these figures
+# at every seed and step and applies none of them until step 2, whose harness fits the numbers (owner, 2026-10-12).
+# Participation (late-game §2.1; #894): people x start(calendar age) x [below the end of the working ages ? 1 : the
+# after-pension share] x capacity(biological age) x the sex's rate.
+CHILD_WORK_AGE = 10            # calendar: the 10-14s work at the childrens'-rights law's share (parent §7)
+WORKING_AGE = 15               # calendar: everyone from here
+CHILD_WORK_SHARE = {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1,
+                    "law_compulsory_primary_school": 0.0}
+CHILD_WORK_SHARE_DEFAULT = 0.3  # a country with none of the three (vanilla gives every country one)
+CAPACITY = {0: 1.0, 60: 0.95, 65: 0.85, 70: 0.7, 75: 0.5, 80: 0.3, 85: 0.1}   # by biological band start
+AFTER_PENSION_SHARE = 0.15     # the share of the eligible who keep working, x capacity
+MEN_RATE = 0.92
+WOMEN_BASE = 0.05              # the middle and upper strata's women under No Women's Rights
+WOMEN_LOWER = 0.2              # the lower strata's women under any law (Goldin's U-shape)
+WOMENS_WORK_FULL = 0.30        # the women's-work family's sum at which women work at the men's rate
+WORKFORCE_SCALE = 0.74         # participation to the engine's ratio (the spec's §1.8 sketch: 1836 0.25, rich 0.40)
+# Health need by biological band start (late-game §5.2), and 1836's people-weighted need (the figure's 1.0).
+HEALTH_NEED = {0: 1.0, 5: 0.5, 15: 0.8, 45: 1.4, 65: 2.4, 75: 3.4, 85: 4.5}
+HEALTH_NEED_1836 = 0.95
+BIO_BANDS = tuple(sorted(set(CAPACITY) | set(HEALTH_NEED)))
+# The pension positions' ages (late-game §2.2). Step 1 sets a country's pension age to the Standard one under Old Age
+# Pension; step 2 adds the setting.
+PENSION_AGE = {"early": 60, "standard": 65, "raised": 70}
+PENSION_LAW = "law_old_age_pension"
+NO_PENSION_AGE_LAWS = ("law_universal_basic_income", "law_post-scarcity")  # the threshold ends the working ages
+NO_WORKING_AGE_END = 999       # no pension law: the working ages run to capacity's end, which never comes (D10)
+OLD_AGE_REMAINING = 15         # the old-age threshold: years of life left (Sanderson and Scherbov)
+OLD_AGE_FROM = 40              # its search's first group start
+# Planned and unplanned births (late-game §3.1): one schedule each, the same object until phase 3. While they are,
+# the generator writes the sweep's birth line as today's single term.
+ASFR_PLANNED_SHAPE = ASFR_SHAPE_BY_GROUP
+ASFR_UNPLANNED_SHAPE = ASFR_SHAPE_BY_GROUP
+# The pops' own working-adult ratios (vanilla pop_types; the rest take the define WORKING_ADULT_RATIO_BASE).
+POP_BASE_RATIO = {"aristocrats": 0.2, "slaves": 0.5}
+POP_BASE_RATIO_DEFAULT = 0.25
+# The working-adult lines' two script-only families (Task 6; demographics_workforce_line_types.txt).
+WOMENS_WORK_TYPE = "state_demog_womens_work_ratio_add"
+REPLACED_TYPE = "state_demog_replaced_ratio_add"   # lines a census term replaces under Full (the design §1.7)
+# Call 3's participation inputs (owner, 2026-10-12; the design §1.7): census-only types, defined in Task 5 and joining
+# DEMOG_TYPES with their carriers in Task 6.
+MALE_PARTICIPATION_TYPE = "state_male_labor_participation_add"   # the men's rate in the working ages
+PARTICIPATION_TYPE = "state_labor_participation_add"             # both sexes' rates in the working ages
+CAPACITY_TYPE = "state_work_capacity_mult"                       # capacity x (1 + it), at every age
+PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYPE)
+
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
 # its section 7 calls; Birth Spacing's cut at 0.35); plan docs/superpowers/plans/2026-10-11-demographics-late-marriage.md.
