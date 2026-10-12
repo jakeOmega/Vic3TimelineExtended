@@ -5625,6 +5625,53 @@ class TestModifierTypes(unittest.TestCase):
                         ("means", "te_debug_demog_means")):
             self.assertIn(f" {key}=[THIS.ScriptValue('{sv}')|3]", line)
 
+    def test_option_l_logs_the_work_figures(self):
+        """Phase 2 step 1: option l's second line, TE_DEMOG_WORK, logs the census's new figures and the reads no test
+        runs (the owner's pension variable, the pension kind, the 10-14s' share, the families and inputs)."""
+        line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"),
+                      "te_debug_demog_mods_line")
+        self.assertIn("TE_DEMOG_WORK", line)
+        for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
+            self.assertIn(f"te_debug_demog_work_{name}", line, name)
+        self.assertIn("te_debug_demog_work_wf_target", line)
+        for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
+                     "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
+                     "te_debug_demog_part_mod", "te_debug_demog_cap_mod", "te_demog_line_working_adults_applied"):
+            self.assertIn(read, line)
+        values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
+        for name, var in (("wa_share", "te_dg_wa_share"), ("at_work", "te_dg_at_work"),
+                          ("pensioners", "te_dg_pensioners"), ("need", "te_dg_need"), ("old_age", "te_dg_old_age"),
+                          ("low_share", "te_dg_low_share"), ("wbase", "te_dg_wbase"),
+                          ("wf_engine", "te_dg_wf_engine")):
+            body = _block(values, f"te_debug_demog_work_{name}")
+            self.assertIn(f"has_variable = {var}", body, name)
+            self.assertIn("value = -1", body, name)
+        self.assertIn("owner ?= { has_variable = te_dg_pension_age }", _block(values, "te_debug_demog_pension_var"))
+
+    def test_option_p_sets_up_call_3s_carriers(self):
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_call3_setup = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        setup = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"),
+                       "te_debug_demog_call3_setup")
+        for line in ("activate_law = law_type:law_punishment_focused_criminal_justice",
+                     "type = amendment_community_service",
+                     "add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }",
+                     "add_modifier = { name = te_demog_debug_ig_loyal days = 60 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 1 }",
+                     "trigger_event = { id = te_debug_demog.3 days = 31 }"):
+            self.assertIn(line, setup)
+        self.assertLess(setup.index("te_debug_demog_mods_line = yes"), setup.index("activate_law"),
+                        "the before line comes first")
+        self.assertIn("te_debug_demog_mods_line = yes", _block(console, "te_debug_demog.3"))
+        self.assertIn("interest_group_approval_add = 30", _block(_text(DEBUG_MODIFIERS), "te_demog_debug_ig_loyal"))
+        loc = _text(ROOT / "localization" / "english" / "te_events_l_english.yml")
+        for key in ("te_debug_demog.1.p", "te_debug_demog.1.p.tt"):
+            self.assertRegex(loc, rf"(?m)^ {re.escape(key)}:0 \"", key)
+
     def test_option_l_logs_the_institution_impact(self):
         # the in-game check of #889: the Midlands read "A multiplier of 0.94" on its Ministry of Health, so its line
         # should log impact=0.940 (Local Vernacular's -0.05, obstinance's share)

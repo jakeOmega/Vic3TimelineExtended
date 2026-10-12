@@ -387,6 +387,8 @@ te_debug_demog_modifier_reads = {
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
 	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3] lm=[THIS.ScriptValue('te_debug_demog_pr_lm')|3] bs=[THIS.ScriptValue('te_debug_demog_pr_bs')|3] lm_target=[THIS.ScriptValue('te_debug_demog_pr_target_lm')|3] bs_target=[THIS.ScriptValue('te_debug_demog_pr_target_bs')|3] absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|3]"
+	# phase 2 step 1: the census's work figures, the reads no test runs and the working-adult families (TE_DEMOG_WORK)
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # ---- m: the shock terms (phase 2 step 4, probe P1) ------------------------------
@@ -666,4 +668,37 @@ te_debug_demog_wf_selfchecks = {
 			}
 		}
 	}
+}
+
+# ---- p: call 3's carriers (phase 2 step 1; spec §1.7, plan D12) ------------------------------------------------------
+# THIS = ROOT = the player. The carrier kinds no test can read, set up in one go: Community Service (an amendment, on
+# Punishment-Focused Criminal Justice, its only allowed law), Woman Soldiers at x0.5 for 60 days (a country modifier)
+# and Trade Unions pushed past loyal (its Solidarity or Bourse du Travail trait; halved while the group is marginal,
+# doubled while it is powerful). Logs the capital now, then a day and a month later (te_debug_demog.3). The amendment and
+# the trait also arm the self-checks workforce_amendment_type and workforce_ig_trait_type (te_debug_demog_wf_selfchecks)
+# under Display only or Full. A runtime activate_law can fail with no log line (scripting_best_practices.md): a
+# TE_DEMOG_CALL3 line says so, and then the amendment can't attach.
+te_debug_demog_call3_setup = {
+	capital = { te_debug_demog_mods_line = yes }
+	if = {
+		limit = { NOT = { has_law = law_type:law_punishment_focused_criminal_justice } }
+		activate_law = law_type:law_punishment_focused_criminal_justice
+	}
+	if = {
+		limit = { NOT = { has_law = law_type:law_punishment_focused_criminal_justice } }
+		debug_log = "TE_DEMOG_CALL3 Punishment-Focused Criminal Justice didn't take, so Community Service can't attach: enact it, then run p again date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	active_law:lawgroup_criminal_justice ?= {
+		add_amendment = {
+			type = amendment_community_service
+			sponsor = PREV.ig:ig_intelligentsia
+			cooldown = 60
+		}
+	}
+	add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }
+	ig:ig_trade_unions ?= {
+		add_modifier = { name = te_demog_debug_ig_loyal days = 60 }
+	}
+	trigger_event = { id = te_debug_demog.3 days = 1 }
+	trigger_event = { id = te_debug_demog.3 days = 31 }
 }
