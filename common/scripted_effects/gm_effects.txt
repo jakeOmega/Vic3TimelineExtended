@@ -566,6 +566,8 @@ gm_country_refresh = {
 	# An opportunity completed by this level, dedication or month: before the
 	# totals, so its rewards count in this refresh.
 	gm_com_check_progress = yes
+	# Where Raise It would build, for the panel (usability §1).
+	gm_com_update_build_where = yes
 	gm_compute_totals = yes
 	gm_apply_national_modifiers = yes
 	gm_notify_new_contests = yes
