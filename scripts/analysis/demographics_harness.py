@@ -10,6 +10,7 @@ Usage:
     demographics_harness.py replay DEBUG_LOG            # an in-game step against the model
     demographics_harness.py wc SAVE [--tag GBR] [--top 30]  # Wealth Concentration as the game holds it
     demographics_harness.py medicine                    # mortality anchors with the game files' values
+    demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
@@ -579,6 +580,64 @@ def cmd_medicine(_args):
     return out
 
 
+# ---- lag: how far life expectancy trails its target while medicine spreads (the Causes of Death plan) -------------
+# (label, before, after): a state's inputs before a change and after it, the communication techs of the era included
+# (they set the spread's rate). At year 0 the change has just happened; each year is one census step.
+COMMS_1870 = frozenset({"electric_telegraph"})
+COMMS_1950 = COMMS_1870 | {"radio"}
+COMMS_TODAY = COMMS_1950 | {"intergovernmental_organizations", "world_wide_web"}
+LAG_SCENARIOS = [
+    ("1840s: Charitable Health System, Ministry of Health 1 to 3",
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 1}),
+     dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 3})),
+    ("1870s: Modern Nursing arrives",
+     dict(sol=13, literacy=0.5, techs=MED_1836 | {"pharmaceuticals"} | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=13, literacy=0.5, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3})),
+    ("1900s: Public Health Insurance at 3, before antibiotics",
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={CHS}, institutions={HEALTH: 3}),
+     dict(sol=16, literacy=0.75, techs=MED_1900 | COMMS_1870, laws={PHI}, institutions={HEALTH: 3})),
+    # the motor age on both sides: MED_1950 holds combustion_engine, whose accident line is no medicine and doesn't drift
+    ("1940s: antibiotics and vaccines arrive",
+     dict(sol=22, literacy=0.9, techs=MED_1900 | {"combustion_engine"} | COMMS_1950, laws={PHI}, institutions={HEALTH: 5}),
+     dict(sol=22, literacy=0.9, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("1950s: a colony incorporated into that health system",
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={}),
+     dict(sol=12, literacy=0.4, techs=MED_1950 | COMMS_1950, laws={PHI}, institutions={HEALTH: 5})),
+    ("Today: Telemedicine arrives",
+     dict(sol=40, literacy=0.99, techs=MED_1990 | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8}),
+     dict(sol=40, literacy=0.99, techs=MED_TODAY | COMMS_TODAY, laws={PHI}, institutions={HEALTH: 8})),
+]
+LAG_YEARS = (0, 1, 2, 3, 5, 10, 15, 20)
+
+
+def lag_rows(carriers=None):
+    """[(label, rate, e0 before, e0 at the target, {year: years of e0 behind the target})] for LAG_SCENARIOS: medicine
+    starts at the before-inputs' targets and drifts at the after-inputs' rate (demographics_model.medicine_drift);
+    SoL, literacy and everything else are the after-inputs' from year 0."""
+    carriers = DM.load_carriers() if carriers is None else carriers
+    rows = []
+    for label, before, after in LAG_SCENARIOS:
+        inp0, inp1 = scenario_inputs(carriers, **before), scenario_inputs(carriers, **after)
+        target = life(inp1)["e0"]
+        med, behind = M.medicine_targets(inp0), {}
+        for year in range(max(LAG_YEARS) + 1):
+            if year in LAG_YEARS:
+                behind[year] = target - life(dataclasses.replace(inp1, medicine=med))["e0"]
+            med = M.medicine_drift(med, inp1)
+        rows.append((label, M.diffusion(inp1), life(inp0)["e0"], target, behind))
+    return rows
+
+
+def cmd_lag(_args):
+    print("Years of life expectancy behind the target after a change, at the spread's rate (the share of the gap a "
+          "census step closes):")
+    print(f"{'':56s} rate  e0 before  target  " + "  ".join(f"{y:>4d}y" for y in LAG_YEARS))
+    for label, rate, before, target, behind in lag_rows():
+        print(f"{label:56s} {rate:4.2f}  {before:9.1f}  {target:6.1f}  "
+              + "  ".join(f"{behind[y]:5.2f}" for y in LAG_YEARS))
+    return 0
+
+
 # ---- fertility: children per woman (modifier-types design, stage 2) -----------------------------
 # (label, inputs, (low, high)): §2.3's sketch table and history. The 1836 rows hold no means tech, so
 # only the traditional means and literacy reach them; France's engine cut from Forced Heirship is
@@ -701,17 +760,20 @@ def model_figures(inp):
     return {"e0": e0, "imr": (qf[0] + qm[0]) / 200, "tfr": tfr, "r": r}
 
 
-def country_figures(states, carriers):
+def country_figures(states, carriers, stored=None):
     """A country's model figures as the census builds them: each state's own rates (its SoL, literacy,
-    urban share and incorporation), weighted by its people. The poverty term bends at SoL 9, so the
+    urban share and incorporation; with `stored`, {state id: {variable: value}}, the census's own inputs from the
+    save, so medicine as it had spread), weighted by its people. The poverty term bends at SoL 9, so the
     rates at the country's mean SoL would hide what its poor and rich states do (#855's review)."""
-    figs = [(st.population, model_figures(inputs_for(st, carriers, incorporated=inc))) for _sid, st, inc in states
-            if st.population > 0]
+    stored = stored or {}
+    figs = [(st.population, model_figures(census_inputs(inputs_for(st, carriers, incorporated=inc),
+                                                        stored.get(sid, {}))))
+            for sid, st, inc in states if st.population > 0]
     tot = sum(p for p, _ in figs) or 1
     return {k: sum(p * f[k] for p, f in figs) / tot for k in ("e0", "imr", "tfr", "r")}
 
 
-def history_rows(sections, year, anchors, carriers=None):
+def history_rows(sections, year, anchors, carriers=None, stored=None):
     """[(country, tag, people, model figures, anchors)] for each HISTORY_TAGS country in the save, the
     world line (every country of 1M people or more, weighted by people) and the mapped countries that
     have no anchor of any kind."""
@@ -729,8 +791,8 @@ def history_rows(sections, year, anchors, carriers=None):
                 "imr": nearest(anchors.get("imr", {}).get(country, {}), year, 15),
                 "tfr": nearest(anchors.get("tfr", {}).get(country, {}), year, 5),
                 "growth": growth_around(anchors.get("population", {}).get(country, {}), year)}
-        rows.append((country, tag, people[tag], country_figures(states[tag], carriers), hist))
-    big = [(people[t], country_figures(sts, carriers)) for t, sts in states.items() if people[t] >= 1e6]
+        rows.append((country, tag, people[tag], country_figures(states[tag], carriers, stored), hist))
+    big = [(people[t], country_figures(sts, carriers, stored)) for t, sts in states.items() if people[t] >= 1e6]
     tot = sum(p for p, _ in big) or 1
     world = {k: sum(p * f[k] for p, f in big) / tot for k in ("e0", "imr", "tfr", "r")}
     return rows, world, bare
@@ -750,11 +812,15 @@ def cmd_history(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        rows, world, bare = history_rows(sections, year, anchors, carriers)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS)
+        stored = {sid: rec["vars"] for sid, rec in walked.items()}
+        rows, world, bare = history_rows(sections, year, anchors, carriers, stored)
         for country in bare:
             print(f"{country}: no anchors in {args.anchors}", file=sys.stderr)
         print(f"== {Path(path).name} ({year}): world (countries of 1M or more) e0 {world['e0']:.1f}  "
               f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year")
+        own = sum(1 for v in stored.values() if all(k in v for k in CENSUS_INPUT_VARS))
+        print(f"   {own} states on the census's own inputs (medicine as it had spread)")
         for country, tag, people, got, hist in sorted(rows, key=lambda r: -r[2]):
             e = f"{hist['e0'][1]:.0f} ({hist['e0'][0]})" if hist["e0"] else "-"
             m = f"{hist['imr'][1]:.0f}" if hist["imr"] else "-"
@@ -801,10 +867,12 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, added_b=0.0, ad
     top), never applied: under Full they are script-only and the census models them.
 
     Each pop gets bare x max(0, 1 + M + every term the engine still applies): literacy's -0.1 and mild starvation's,
-    which M nets out, and severe starvation's, which stay. Terms on top a save doesn't hold are left out: turmoil, events,
-    low_pop_state, unemployment, workplace mortality. The script reads mild starvation in 0.05 steps of food security;
-    this takes it exact. Reported: the starving slope below SoL 4 (absorbed: owner, 2026-10-10) and each absorbed group's
-    events at the bare curves."""
+    which M nets out, and severe starvation's, which stay. Both starvation penalties apply x the pop's starvation value
+    (the famine probe, 2026-10-11, for severe). Terms on top a save doesn't hold are left out: turmoil, events,
+    low_pop_state, unemployment, workplace mortality. The script reads both starvation terms in 0.05 steps of food
+    security; this takes each pop's exact starvation value from its food security (demographics_model.starvation_value,
+    which equals the save's food_security={ starvation= }). Reported: the starving slope below SoL 4 (absorbed: owner,
+    2026-10-10) and each absorbed group's events at the bare curves."""
     people = sum(p.size for p in pops)
     bare = [(p, p.size * G.monthly_birthrate(p.sol, d) * 12, p.size * G.monthly_mortality(p.sol, d) * 12)
             for p in pops]
@@ -1053,16 +1121,41 @@ def cmd_adopters(args):
 FIDELITY_CAUSES = (("infection", "te_dg_m_inf", 1.0), ("chronic", "te_dg_m_chr", 1.0),
                    ("external", "te_dg_m_ext", 1.0), ("work", "te_dg_m_work", 1.0),
                    ("maternal", "te_dg_m_mat", P.MATERNAL_PER_100K_BIRTHS))
-FIDELITY_VARS = ("te_dg_sol", "te_dg_lit") + tuple(var for _c, var, _s in FIDELITY_CAUSES)
+# The step's own inputs (the Causes of Death plan): with them the model runs on what the census used, so a mismatch is
+# the script against the model; a census from before them is read from the save's techs, laws and modifiers.
+CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext",
+                     "te_dg_in_work", "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
+FIDELITY_VARS = ("te_dg_sol", "te_dg_lit") + tuple(var for _c, var, _s in FIDELITY_CAUSES) + CENSUS_INPUT_VARS
 
 
-def fidelity_rows(path, carriers=None, tags=()):
+def census_inputs(inp, got):
+    """`inp` with the step's stored inputs, when the save holds them all; `inp` itself otherwise."""
+    if not all(v in got for v in CENSUS_INPUT_VARS):
+        return inp
+    medicine = {"access": got["te_dg_acc"]}
+    medicine.update({c: got[f"te_dg_trt_{P.CAUSE_SHORT[c]}"] for c in P.MEDICINE_CAUSES})
+    mods = dict(inp.mods)
+    for cause, types in P.MORTALITY_TYPES.items():
+        for t in types:
+            mods[t] = 0.0
+        mods[types[0]] = got[f"te_dg_in_{P.CAUSE_SHORT[cause]}"]
+    return dataclasses.replace(inp, medicine=medicine, turmoil=got["te_dg_in_turm"], crowding=got["te_dg_in_crowd"],
+                               mods=mods)
+
+
+def fidelity_rows(path, carriers=None, tags=(), counts=None):
     """[(tag, state id, people, {cause: (census, model)}, (SoL: save, walk), (literacy: save, walk))] for each state
-    the census has walked. The model runs on the walk's own SoL and literacy (te_dg_sol, te_dg_lit) with the save's
-    techs, laws, institutions and crowding, so a cause that differs is a term the harness doesn't read (the crowding
-    term was one, 2026-10-10) or an input that changed after the state's last step (a new tech or law)."""
+    the census has walked. The model runs on the walk's own SoL and literacy (te_dg_sol, te_dg_lit) and, where the save
+    holds them, the step's own stored inputs (census_inputs: the drifted medicine, turmoil, crowding and the plain
+    types' sums); otherwise on the save's techs, laws, institutions and crowding. So a cause that differs is the
+    script against the model, a term the harness doesn't read (the crowding term was one, 2026-10-10) or, for a census
+    from before the stored inputs, an input that changed after the state's last step (a new tech or law).
+    counts, if given, gets {"stored": states read on their own inputs, "save": states read from the save, "spreading":
+    states whose stored medicine is more than P.MEDICINE_SNAP from the targets the save's lines give}."""
     carriers = DM.load_carriers() if carriers is None else carriers
     _countries, walked = S.read_variables(path, (), FIDELITY_VARS)
+    if counts is not None:
+        counts.update(stored=0, save=0, spreading=0)
     rows = []
     for tag, states in S.state_inputs(S.read_sections(path)).items():
         if tags and tag not in tags:
@@ -1073,6 +1166,13 @@ def fidelity_rows(path, carriers=None, tags=()):
                 continue
             inp = dataclasses.replace(inputs_for(st, carriers, incorporated=inc),
                                       sol=got.get("te_dg_sol", st.sol), literacy=got.get("te_dg_lit", st.literacy))
+            own = census_inputs(inp, got)
+            if counts is not None:
+                counts["stored" if own is not inp else "save"] += 1
+                if own is not inp:
+                    targets = M.medicine_targets(inp)
+                    counts["spreading"] += any(abs(own.medicine[k] - targets[k]) > P.MEDICINE_SNAP for k in targets)
+            inp = own
             model = M.cause_multipliers(inp)
             pairs = {cause: (got[var] / scale, model[cause]) for cause, var, scale in FIDELITY_CAUSES if var in got}
             rows.append((tag, sid, st.population, pairs, (st.sol, got.get("te_dg_sol")),
@@ -1095,7 +1195,8 @@ def cmd_fidelity(args):
 
 
 def _fidelity(args):
-    rows = fidelity_rows(args.save, tags=set(args.tag))
+    counts = {}
+    rows = fidelity_rows(args.save, tags=set(args.tag), counts=counts)
     if not rows:
         which = f" in {', '.join(sorted(args.tag))}" if args.tag else ""
         print(f"{args.save}: no state the census has walked{which} (no te_dg_m_inf)", file=sys.stderr)
@@ -1108,6 +1209,8 @@ def _fidelity(args):
           f"(--poverty-floor 1 for one from before the poverty term).")
     print("Crowding is the continuous term (infection + the state's migration penalty); a save from main's x1.15 switch "
           "shows crowded states' infection as off.")
+    print(f"{counts['stored']} states read on the census's stored inputs (medicine as it had spread, turmoil); "
+          f"{counts['save']} from the save's techs and laws; medicine still spreading in {counts['spreading']}.")
     out = 0
     for cause, _var, _scale in FIDELITY_CAUSES:
         ratios = [(g / m if m else math.inf, r) for r in rows for c, (g, m) in r[3].items() if c == cause]
@@ -1162,6 +1265,7 @@ def main(argv=None):
     p.add_argument("--top", type=int, default=30)
     p.set_defaults(fn=cmd_wc)
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
+    sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
     p = sub.add_parser("history")
     p.add_argument("save", nargs="+")

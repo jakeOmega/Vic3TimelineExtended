@@ -269,3 +269,129 @@ te_demog_state_pyramid_max = {
 		min = var:te_dg_bm17
 	}
 }
+
+# ============================================================================
+# Causes of Death (the state subtab; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md). State scope,
+# read under te_demog_state_causes_sgui (the step's inputs exist) or te_demog_state_on_top_sgui (a measured scale
+# under Full). The factors themselves are generated (te_demog_f_<cause>_<factor>, te_demog_generated_values.txt).
+# ============================================================================
+
+# The health law's share of health-care access, read live (the hover's breakdown under the base).
+te_demog_access_from_law = {
+	value = modifier:state_health_care_access_add
+}
+
+# How far health-care access is from its target, and 1 while that is more than 0.01, the figure's shown step (the row's
+# "62% → 68%" reads at |%0): within it the two sides could round alike (the review of #916). The drift's own snap is
+# 0.005 (te_demog_k_medicine_snap).
+te_demog_access_gap = {
+	value = te_demog_access_target
+	subtract = var:te_dg_acc
+}
+te_demog_access_moving = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_demog_access_gap > 0.01
+				te_demog_access_gap < -0.01
+			}
+		}
+		value = 1
+	}
+}
+
+# infection's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
+te_demog_medicine_gap_infection = {
+	value = te_demog_f_infection_medicine_target
+	subtract = te_demog_f_infection_medicine
+}
+te_demog_medicine_moving_infection = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_demog_medicine_gap_infection > 0.01
+				te_demog_medicine_gap_infection < -0.01
+			}
+		}
+		value = 1
+	}
+}
+
+# maternal's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
+te_demog_medicine_gap_maternal = {
+	value = te_demog_f_maternal_medicine_target
+	subtract = te_demog_f_maternal_medicine
+}
+te_demog_medicine_moving_maternal = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_demog_medicine_gap_maternal > 0.01
+				te_demog_medicine_gap_maternal < -0.01
+			}
+		}
+		value = 1
+	}
+}
+
+# chronic's medicine: how far it is from its target, and 1 while that is more than 0.01, the factor's shown step (the
+# hover's "×a → ×b" reads at |2).
+te_demog_medicine_gap_chronic = {
+	value = te_demog_f_chronic_medicine_target
+	subtract = te_demog_f_chronic_medicine
+}
+te_demog_medicine_moving_chronic = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_demog_medicine_gap_chronic > 0.01
+				te_demog_medicine_gap_chronic < -0.01
+			}
+		}
+		value = 1
+	}
+}
+
+# ============================================================================
+# Deaths Added on Top (the Causes of Death section, the state subtab; docs/superpowers/plans/
+# 2026-10-11-demographics-causes-of-death.md, Task 6). State scope, under Full, read under the row's gate (Task 8).
+# ============================================================================
+# 1 + te_dg_dz: how far the engine's deaths over the last step ran from the census's own (te_demog_on_top_scales).
+te_demog_deaths_on_top = {
+	value = var:te_dg_dz
+	add = 1
+}
+# 1 at or above te_demog_k_deaths_on_top_high (the row reads red), else 0: the threshold is script's (gotcha #23).
+te_demog_deaths_on_top_code = {
+	value = 0
+	if = {
+		limit = { te_demog_deaths_on_top >= te_demog_k_deaths_on_top_high }
+		value = 1
+	}
+}
+# Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
+# moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
+# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top except: where dz hit
+# either end of its range; where a division's min = 1 (a person) bites, on a tiny state; where an end's read was below
+# -1 (state-level lines falling inside the window after M was fitted, or the read without M already below the floor),
+# which moves deaths into the other effects and can floor te_dg_ed_state at 0; and after a second walk in a year
+# without a step, which rewrites te_dg_ed and the split but not dz or the target until the next step.
+te_demog_deaths_whole_state = {
+	value = var:te_dg_ed_state
+	divide = { value = var:te_dg_ed_target min = 1 }
+}
+te_demog_deaths_severe = {
+	value = var:te_dg_ed_state
+	add = var:te_dg_ed_sev
+	divide = { value = var:te_dg_ed_state min = 1 }
+}
+te_demog_deaths_other = {
+	value = var:te_dg_ed
+	divide = { value = var:te_dg_ed_state add = var:te_dg_ed_sev min = 1 }
+}

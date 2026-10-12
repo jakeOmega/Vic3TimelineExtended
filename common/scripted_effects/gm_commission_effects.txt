@@ -407,6 +407,9 @@ gm_com_fulfil = {
 			if = {
 				limit = {
 					NOT = { has_variable = gm_unveiled_for_com }
+					# A landmark keeps its historical name; the commission is
+					# still met (phase 4 §3.2).
+					gm_state_has_historical_name = no
 					OR = {
 						NOT = { has_variable = gm_namesake }
 						owner = {
@@ -799,7 +802,7 @@ gm_com_war_victory = {
 gm_com_war_defeat = {
 	if = {
 		limit = { gm_com_can_offer = yes }
-		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = memorial }
+		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = hall }
 		set_variable = { name = gm_com_occasion value = flag:defeat }
 		if = {
 			limit = {

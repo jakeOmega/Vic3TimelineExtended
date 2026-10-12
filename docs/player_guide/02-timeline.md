@@ -460,6 +460,18 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
+Twenty-three monuments already stand when a game begins, among them the Arc de
+Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
+Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
+Jaipur. Most monuments to a crown or a republic stand in countries that still
+honor them; two start contested: the Lion of Saint Mark, the old Venetian
+Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
+Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
+a change of owner or a rededication. It keeps its name too unless it is
+rededicated; then it is named again like any new monument, and the naming event
+can give the historical name back. Rename and Name It are greyed out while it
+carries its historical name. Only pulling it down, or demolishing it, ends it.
+
 ![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
 
 <!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->
@@ -517,7 +529,9 @@ When a level of an undedicated monument finishes, a dedication ceremony asks
 what it honors. A new monument gets the ceremony too: while it is under
 construction its building panel shows what your other monuments honor, and the
 ceremony's answer replaces that. The choice is permanent, and the ceremony's
-tooltips list each dedication's effects. An undedicated monument gives only the
+tooltips list each dedication's effects. The ceremony lists every dedication:
+one you can't raise yet is greyed out, with what it needs. An undedicated
+monument, draped until its unveiling, gives only the
 prestige, tourism and cultural pull above; the ceremony asks again at its next
 level.
 
@@ -590,21 +604,30 @@ itself.
 ### Monument names and forms
 
 A monument to the Crown, the Republic, the Revolution, the Leader or the nation,
-or a War Memorial, can take the form of your primary cultures' classical
+or a War Memorial, can take the style of your primary cultures' classical
 heritage: a forum and triumphal column for a Romance-speaking country, a hall of
 dynasties for a Chinese, Japanese or Korean one, an Aksumite stele for an
 Amharic or Tigrinya one, and so on through the classical languages that language
-reform can revive. A Grand Shrine takes the form of your state religion's great
-building: a basilica, a great mosque, a great temple, a pagoda. When more than
-one form fits, an event asks which; the AI keeps the most specific form without
-being asked. The form changes the monument's name and look, not what it does.
+reform can revive. A Grand Shrine takes the style of your state religion's great
+building: a basilica, a great mosque, a great temple, a pagoda. An opera house,
+gardens, an observatory or a stadium can take a style where your heritage has a
+tradition of its own, such as a Greek open-air theatre, a Persian garden, a
+Jantar Mantar or a Roman amphitheatre; for these the style changes only the
+look. When more than one style fits, an event asks which, and each style's
+option names what makes it fit; the AI keeps the most specific style without
+being asked. The style changes the monument's name and look, not what it does.
+Each monument shows a picture of its style and form in its row of the journal
+entry and on its state's monument card. The picture's frame marks how many
+grandeur steps the monument has reached: plain below the first, then bronze,
+bronze and silver, silver and gold, gold, and from the fifth step gold set with
+rubies.
 If you have revived the matching language under a state-led language reform,
 the monument's row says its dedication is carved in it.
 
 Every dedicated monument has a name, from what it is named for and its form:
 the Lisbon Gate, Victoria's Column, the Arch of 1856. After the style, two events
 ask: The Form It Takes, when the style offers more than one form (a column, an
-arch, a gate, a pagoda), and A Name for the Monument, which names it for its
+arch, a gate, a pagoda, a sun stone), and A Name for the Monument, which names it for its
 city, its state, the ruler, what it honors (the Crown, the Republic, the
 Revolution, the Nation, the Faith or the Fallen), the year, or the occasion a
 commission marks. Each event keeps what was proposed unless you pick another.

@@ -6904,11 +6904,16 @@ te_demog_project = {
 	set_variable = { name = te_dg_pjm17 value = local_var:te_dg_xm17 }
 }
 
-# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0; under Full only (the
-# refresh reads them nowhere else) te_dg_w_rep turns the per-pop sums on.
+# THIS = a state, before its pop walk (te_demog_walks): the replaced sums, the bare curves the census's
+# term reaches and severe starvation's people and deaths start at 0; under Full only (the refresh and the
+# split read them nowhere else) te_dg_w_rep turns the per-pop sums on.
 te_demog_absorbed_walk_init = {
 	set_local_variable = { name = te_dg_w_ebr value = 0 }
 	set_local_variable = { name = te_dg_w_edr value = 0 }
+	set_local_variable = { name = te_dg_w_eb0m value = 0 }
+	set_local_variable = { name = te_dg_w_ed0m value = 0 }
+	set_local_variable = { name = te_dg_w_sev value = 0 }
+	set_local_variable = { name = te_dg_w_sevd value = 0 }
 	set_local_variable = { name = te_dg_w_rep value = 0 }
 	if = {
 		limit = { te_demog_effects_run = yes }
@@ -6916,13 +6921,123 @@ te_demog_absorbed_walk_init = {
 	}
 }
 
-# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed): its bare births and deaths x
-# what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr (te_demog_rates_refresh). Full only.
+# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed) and multipliers (te_dg_p_mb,
+# te_dg_p_md): its bare births and deaths x what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr
+# (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its
+# multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a
+# change in the census's term then doesn't reach (the trapezoid's start rate); and severe starvation's people
+# and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split). Full only.
 te_demog_absorbed_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_rep > 0 }
 		change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }
 		change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }
+		if = {
+			limit = { local_var:te_dg_p_mb > 0 }
+			change_local_variable = { name = te_dg_w_eb0m add = local_var:te_dg_p_eb }
+		}
+		if = {
+			limit = { local_var:te_dg_p_md > 0 }
+			change_local_variable = { name = te_dg_w_ed0m add = local_var:te_dg_p_ed }
+		}
+		# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes
+		# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds
+		if = {
+			limit = { is_in_severe_starvation = yes }
+			change_local_variable = { name = te_dg_w_sev add = total_size }
+			if = {
+				limit = { local_var:te_dg_p_md > 0 }
+				change_local_variable = {
+					name = te_dg_w_sevd
+					add = {
+						value = local_var:te_dg_p_ed
+						multiply = {
+							value = 0
+							if = { limit = { food_security >= 0.15 } add = 0.5625 }
+							else_if = { limit = { food_security >= 0.1 } add = 0.6875 }
+							else_if = { limit = { food_security >= 0.05 } add = 0.8125 }
+							else = { add = 0.9375 }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# THIS = a state, in te_demog_prepare before its multipliers (a seed or a step): the census's inputs, so
+# te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one. The walk's
+# SoL and literacy too: a walk without a step (a second pulse in a year, the console) rewrites te_dg_sol and
+# te_dg_lit, never te_dg_m_*.
+te_demog_cause_inputs_store = {
+	set_variable = { name = te_dg_in_sol value = var:te_dg_sol }
+	set_variable = { name = te_dg_in_lit value = var:te_dg_lit }
+	set_variable = { name = te_dg_in_ext value = { value = 0 add = modifier:state_external_mortality_mult } }
+	set_variable = { name = te_dg_in_work value = { value = 0 add = modifier:state_work_mortality_mult } }
+	set_variable = { name = te_dg_in_chr value = { value = 0 add = modifier:state_chronic_mortality_mult } }
+	# turmoil as the 0-1 share te_demog_crisis reads
+	set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }
+	# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)
+	set_variable = { name = te_dg_in_crowd value = 0 }
+	if = {
+		limit = {
+			has_modifier = migration_crowding
+			has_variable = migration_crowding_mult_applied
+		}
+		set_variable = { name = te_dg_in_crowd value = { value = var:migration_crowding_mult_applied multiply = 0.1 } }
+	}
+}
+
+# THIS = a state: the drifted medicine at its targets (te_demog_seed; te_demog_medicine_drift for a state
+# without it: a census from before the Causes of Death plan).
+te_demog_medicine_at_target = {
+	set_variable = { name = te_dg_acc value = te_demog_access_target }
+	set_variable = { name = te_dg_trt_inf value = te_demog_treatment_target_infection }
+	set_variable = { name = te_dg_trt_mat value = te_demog_treatment_target_maternal }
+	set_variable = { name = te_dg_trt_chr value = te_demog_treatment_target_chronic }
+}
+
+# THIS = a state at the start of its step (te_demog_step_begin): health-care access and each cause's treatment
+# move te_demog_medical_diffusion of the way to today's targets (demographics_model.medicine_drift).
+te_demog_medicine_drift = {
+	if = {
+		limit = {
+			has_variable = te_dg_acc
+			has_variable = te_dg_trt_inf
+			has_variable = te_dg_trt_mat
+			has_variable = te_dg_trt_chr
+		}
+		set_local_variable = { name = te_dg_diff value = te_demog_medical_diffusion }
+		te_demog_medicine_drift_one = { VAR = te_dg_acc TARGET = te_demog_access_target }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_inf TARGET = te_demog_treatment_target_infection }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_mat TARGET = te_demog_treatment_target_maternal }
+		te_demog_medicine_drift_one = { VAR = te_dg_trt_chr TARGET = te_demog_treatment_target_chronic }
+	}
+	else = {
+		te_demog_medicine_at_target = yes
+	}
+}
+
+# One drifted value: (target - value) x the step's share + value; within te_demog_k_medicine_snap of the target,
+# the target. set_variable's inline block, not change_variable (scripting_best_practices.md).
+te_demog_medicine_drift_one = {
+	set_variable = {
+		name = $VAR$
+		value = {
+			value = $TARGET$
+			subtract = var:$VAR$
+			multiply = local_var:te_dg_diff
+			add = var:$VAR$
+		}
+	}
+	# te_dg_med_gap, not te_dg_gap: te_demog_state_census, which calls the step, keeps its own te_dg_gap local
+	set_local_variable = { name = te_dg_med_gap value = { value = $TARGET$ subtract = var:$VAR$ } }
+	if = {
+		limit = {
+			local_var:te_dg_med_gap < te_demog_k_medicine_snap
+			local_var:te_dg_med_gap > te_demog_k_medicine_snap_neg
+		}
+		set_variable = { name = $VAR$ value = $TARGET$ }
 	}
 }
 

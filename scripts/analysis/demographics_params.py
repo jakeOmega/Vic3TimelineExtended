@@ -133,7 +133,10 @@ NATURAL_FERTILITY_BY_LAW = {
     "law_women_in_the_workplace": -0.10, "law_womens_suffrage": -0.10, "law_protected_class": -0.15,
 }
 DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY_TYPE)
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
+# The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
+# census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
+DIFFUSION_TYPE = "state_medical_diffusion_add"
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
 # 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
@@ -179,6 +182,34 @@ MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of
 CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
 CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the floor density (a guess)
 
+# ---- Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md) ----
+# Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
+# factor (te_demog_f_<cause>_<factor>) and each te_demog_mult_<cause> as their product; the state subtab's Causes of
+# Death section reads the same values, so the display and the census can't disagree.
+CAUSE_FACTORS = {
+    "infection": ("medicine", "sol", "poverty", "literacy", "crowding"),
+    "work": ("laws",),
+    "external": ("laws", "turmoil"),
+    "maternal": ("medicine",),
+    "chronic": ("medicine", "laws", "sol"),
+}
+# Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
+CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal": "mat", "chronic": "chr"}
+# Turmoil (owner, 2026-10-11): accidents and violence x (1 + this x the state's turmoil, a 0-1 share). Vanilla's
+# state_turmoil modifiers carry no mortality; state_mortality_turmoil_mult's carriers (Violent Suppression, Militarized
+# Police, events) stay engine lines on top, which the walk leaves out (scaling unknown, measured about 0).
+TURMOIL_EXTERNAL_WEIGHT = 0.5
+# Medicine spreads (owner, 2026-10-11): at each census step health-care access and each cause's treatment move this
+# share of the gap to their targets: DIFFUSION_BASE everywhere, plus DIFFUSION_TYPE (communication and medical-training
+# technologies, the Medical Outreach decree), at most DIFFUSION_MAX. Within MEDICINE_SNAP of its target a value takes
+# the target. A seed, a new state and an old save's state start at their targets. DIFFUSION_TYPE is with the other
+# types, above.
+DIFFUSION_BASE = 0.1
+DIFFUSION_MAX = 1.0
+MEDICINE_SNAP = 0.005
+MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
+DEATHS_ON_TOP_HIGH = 1.25          # 1 + te_dg_dz at or above this reads red on the state subtab
+
 # Women's share of the workforce by women's-rights law, for splitting work deaths (§2.4).
 FEMALE_WORK_SHARE = {
     "law_no_womens_rights": 0.1, "law_women_in_the_fields": 0.25, "law_women_own_property": 0.3,
@@ -190,15 +221,18 @@ FEMALE_WORK_SHARE_DEFAULT = 0.1
 WAR_DEAD_MALE_SHARE = 0.95
 WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
-# The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone):
-# below the first threshold a pop is in mild starvation and starvation_penalty applies scaled by
-# (threshold - food security) x the factor, at most (0.4 - 0.2) x 2.5 = 0.5; below the second,
-# severe_starvation_penalty applies in full. The expected births and deaths that the migration
-# residual is measured against read these (gen_demographics.py, engine_rate_terms).
+# The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone): a pop's
+# starvation value is clamp((the first threshold - food security) x the factor, 0, 1), which the save stores per
+# pop as food_security={ starvation= }. Below the first threshold a pop is in mild starvation and
+# starvation_penalty applies x that value, at most (0.4 - 0.2) x 2.5 = 0.5; below the second,
+# severe_starvation_penalty applies x the same value, 0.5 to 1 (the famine probe, 2026-10-11: not in full; the
+# walk took it flat until then). The expected births and deaths that the migration residual is measured against
+# read these (gen_demographics.py, engine_rate_terms).
 FOOD_SECURITY_STARVATION_THRESHOLD = 0.4
 FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD = 0.2
 STARVATION_EFFECTS_SCALING_FACTOR = 2.5
-STARVATION_BUCKET = 0.05   # mild starvation is read in food-security steps this wide, at each step's middle
+STARVATION_VALUE_MAX = 1.0  # the define's clamp
+STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this wide, at each step's middle
 
 # ---- phase 2 step 4: the census sets the engine's births and deaths --------------------------
 # docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
@@ -209,6 +243,11 @@ RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above th
 RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
 ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
 ON_TOP_SCALE_MAX = 4.0
+# The window's events (owner, 2026-10-11; #894; the review of #907): the walk is a snapshot on the step's day, and the
+# step books the whole window that ends that day. The window is booked at the engine's rate at its start (stored by the
+# last step's refresh) at this weight and today's at the rest: 0.5 is the trapezoid, which halves the misplacement when
+# a famine starts or ends inside the window and lags a one-off by half a window (demographics_model.window_events).
+WINDOW_START_WEIGHT = 0.5
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
 # Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
 # mortality lines on laws, technologies and institutions move to script-only types, one per field and family
@@ -236,8 +275,8 @@ ENGINE_LINE_TYPES = {
 # Private Health Insurance's wealth line under Full (owner, 2026-10-11, option b): at the census's rate, at least this a
 # wealth level, so a wealth-99 pop dies at no less than half the census's rate.
 WEALTH_LINE_FLOOR = -0.005
-STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
-STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
+STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier), x the value
+STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty, x the starvation value (0.5-1)
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
 # Pollution Impact's mortality line (vanilla code static modifier state_region_pollution_health's 0.5 plus the mod's
 # INJECTed 0.05), at full pollution: predict takes it x the region's pollution / POLLUTION_MAX (vanilla define).

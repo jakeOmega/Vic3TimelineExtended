@@ -107,6 +107,7 @@ INJECT:radio = {
 	modifier = {
 		country_intelligence_capacity_add = 2
 		country_cultural_pull_mult = 0.05
+		state_medical_diffusion_add = 0.05	# the census's spread of medicine (te_demog_tech_injections.txt)
 	}
 }
 

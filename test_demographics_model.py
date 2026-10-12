@@ -6,6 +6,8 @@ parameter change that breaks a real-world anchor fails here, before it is genera
 into script.
 """
 
+import dataclasses
+import math
 import sys
 import unittest
 from pathlib import Path
@@ -529,16 +531,53 @@ class TestOnTopScales(unittest.TestCase):
         # infant mortality is the life table's too, as the script's te_dg_imr (set before the scales)
         self.assertEqual(a["q0_per_1000"], b["q0_per_1000"])
 
+    # -- the trapezoid (owner, 2026-10-11; #894): a window's events average the engine's rate at its two ends --------
+
+    def test_the_weight_is_the_trapezoids(self):
+        self.assertEqual(P.WINDOW_START_WEIGHT, 0.5)
+
+    def test_a_window_takes_the_mean_of_its_two_ends(self):
+        """Germany 1897-98: the engine's deaths ran at 100 a month when the window began and at 160 on the step's day
+        (a famine's onset). The window books 130, where the snapshot booked 160."""
+        self.assertAlmostEqual(M.window_events(end_rate=160.0, start_rate=100.0), 130.0)
+        self.assertAlmostEqual(M.window_events(end_rate=100.0, start_rate=160.0), 130.0)
+
+    def test_no_start_rate_is_the_snapshot(self):
+        """The first step after a seed, a new state, an old save: no rate stored at the window's start."""
+        self.assertEqual(M.window_events(end_rate=160.0, start_rate=None), 160.0)
+
+    def test_the_window_never_expects_fewer_than_no_events(self):
+        self.assertEqual(M.window_events(end_rate=0.0, start_rate=-5.0), 0.0)
+
     def test_crude_rates_of_the_stable_population(self):
         cbr, cdr = M.model_crude_rates(M.Inputs(sol=9.0, literacy=0.2))
         self.assertTrue(20 < cbr < 60 and 15 < cdr < 50, (cbr, cdr))
 
     def test_starvation_terms_follow_the_engine(self):
         self.assertEqual(M.starvation_terms(0.5), (0.0, 0.0))
-        self.assertEqual(M.starvation_terms(0.1), (-0.9, 1.0))
         b, d = M.starvation_terms(0.3)   # (0.4 - 0.3) x 2.5 = 0.25 of the mild penalty
         self.assertAlmostEqual(b, -0.7 * 0.25)
         self.assertAlmostEqual(d, 0.6 * 0.25)
+
+    def test_severe_starvation_scales_by_the_starvation_value(self):
+        """The famine probe (2026-10-11): the engine applies severe_starvation_penalty x the pop's starvation value,
+        clamp((0.4 - food security) x 2.5, 0, 1), as it does starvation_penalty; not in full. 0.5 at the severe
+        threshold, 1 at food security 0 and below."""
+        for food, sv in ((0.19, 0.525), (0.15, 0.625), (0.1, 0.75), (0.02, 0.95), (0.0, 1.0), (-0.5, 1.0)):
+            with self.subTest(food=food):
+                b, d = M.starvation_terms(food)
+                self.assertAlmostEqual(b, -0.9 * sv)
+                self.assertAlmostEqual(d, 1.0 * sv)
+                self.assertAlmostEqual(M.starvation_value(food), sv)
+        # the mild penalty's own coefficient up to the threshold, severe's from just below it
+        self.assertAlmostEqual(M.starvation_terms(0.2)[1], 0.6 * 0.5)
+        self.assertAlmostEqual(M.starvation_terms(0.19999)[1], 1.0 * 0.500025)
+
+    def test_the_starvation_value_is_clamped(self):
+        self.assertEqual(M.starvation_value(0.4), 0.0)
+        self.assertEqual(M.starvation_value(0.9), 0.0)
+        self.assertEqual(M.starvation_value(-0.1), P.STARVATION_VALUE_MAX)
+        self.assertEqual(P.STARVATION_VALUE_MAX, 1.0)
 
 
 class TestNaturalFertility(unittest.TestCase):
@@ -622,3 +661,104 @@ class TestInequality(unittest.TestCase):
         self.assertAlmostEqual(M.stand_in_income(63, costs), (3 * costs[65] + 2 * costs[60]) / 500)
         self.assertGreater(M.stand_in_income(61, costs), M.stand_in_income(60, costs), "no cap at 60")
         self.assertEqual(M.stand_in_income(250, costs), costs[200] / 100, "the top level bounds it")
+
+
+class TestCausesOfDeath(unittest.TestCase):
+    """The Causes of Death plan (2026-10-11): each cause's multiplier is the product of P.CAUSE_FACTORS' factors;
+    health-care access and the treatments drift toward their targets at each census step; turmoil raises
+    accidents and violence."""
+
+    MODS = {P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4, P.TREATMENT_TYPE["maternal"]: 0.35,
+            P.TREATMENT_TYPE["chronic"]: 0.1, "state_external_mortality_mult": -0.1,
+            "state_work_mortality_mult": 0.1, "state_chronic_mortality_mult": -0.05}
+
+    def test_factors_multiply_to_each_multiplier(self):
+        for sol, lit, turm, crowd in ((3, 0.1, 0.0, 0.0), (6.5, 0.2, 0.4, 0.05), (20, 0.5, 1.0, 0.6), (40, 1.0, 0.2, 0.0)):
+            inp = M.Inputs(sol=sol, literacy=lit, turmoil=turm, crowding=crowd, mods=dict(self.MODS))
+            factors, mult = M.cause_factors(inp), M.cause_multipliers(inp)
+            self.assertEqual(list(factors), list(P.CAUSE_FACTORS))
+            for cause, fs in factors.items():
+                self.assertEqual(tuple(fs), P.CAUSE_FACTORS[cause])
+                self.assertAlmostEqual(math.prod(fs.values()), mult[cause], places=12, msg=cause)
+
+    def test_turmoil_raises_accidents_and_violence_only(self):
+        calm = M.cause_multipliers(M.Inputs(sol=12, literacy=0.3))
+        unrest = M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, turmoil=1.0))
+        self.assertAlmostEqual(unrest["external"], calm["external"] * (1 + P.TURMOIL_EXTERNAL_WEIGHT))
+        for cause in ("infection", "work", "maternal", "chronic"):
+            self.assertEqual(unrest[cause], calm[cause], cause)
+        # read as a 0-1 share
+        self.assertEqual(M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, turmoil=1.7))["external"],
+                         unrest["external"])
+
+    def test_a_seed_starts_medicine_at_its_targets(self):
+        inp = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        ring = M.seed(inp, 1836, 1e6)
+        self.assertEqual(ring.medicine, M.medicine_targets(inp))
+        self.assertEqual(M.medicine_drift(None, inp), M.medicine_targets(inp))
+
+    def test_a_seed_ignores_drifted_medicine(self):
+        # the script's seed sets medicine at its targets before its rates (te_demog_medicine_at_target, then
+        # te_demog_prepare), so a seed given drifted values (a harness reading a save's te_dg_acc) seeds as the script
+        # does (review of Tasks 4-5, minor 4)
+        inp = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        held = dataclasses.replace(inp, medicine={"access": 0.41, "infection": 0.01, "maternal": 0.0, "chronic": 0.0})
+        a, b = M.seed(inp, 1836, 1e6), M.seed(held, 1836, 1e6)
+        self.assertEqual(b.medicine, M.medicine_targets(inp))
+        self.assertEqual((b.f, b.m, b.scale), (a.f, a.m, a.scale))
+
+    def test_medicine_moves_a_share_of_the_gap_each_step(self):
+        inp0 = M.Inputs(sol=12, literacy=0.3)
+        ring = M.seed(inp0, 1836, 1e6)
+        inp1 = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        M.step(ring, inp1, 1837)
+        r = P.DIFFUSION_BASE
+        self.assertAlmostEqual(ring.medicine["access"], P.BASE_ACCESS + r * 0.3)
+        self.assertAlmostEqual(ring.medicine["infection"], r * 0.4)
+        self.assertAlmostEqual(ring.medicine["maternal"], r * 0.35)
+        # the step's rates use the drifted values, not the targets
+        drifted = M.cause_multipliers(dataclasses.replace(inp1, medicine=ring.medicine))
+        at_target = M.cause_multipliers(inp1)
+        self.assertGreater(drifted["infection"], at_target["infection"])
+
+    def test_diffusion_rises_with_its_type_and_is_capped(self):
+        self.assertAlmostEqual(M.diffusion(M.Inputs()), P.DIFFUSION_BASE)
+        self.assertAlmostEqual(M.diffusion(M.Inputs(mods={P.DIFFUSION_TYPE: 0.3})), P.DIFFUSION_BASE + 0.3)
+        self.assertEqual(M.diffusion(M.Inputs(mods={P.DIFFUSION_TYPE: 5.0})), P.DIFFUSION_MAX)
+
+    def test_a_value_near_its_target_takes_it(self):
+        inp = M.Inputs(mods={P.ACCESS_TYPE: 0.3})
+        target = M.medicine_targets(inp)
+        prev = dict(target, access=target["access"] - 0.004 / (1 - P.DIFFUSION_BASE))
+        self.assertEqual(M.medicine_drift(prev, inp)["access"], target["access"])
+        far = dict(target, access=target["access"] - 0.2)
+        self.assertLess(M.medicine_drift(far, inp)["access"], target["access"])
+
+    def test_constant_inputs_keep_the_calibration(self):
+        # medicine at its targets from the seed on: run_constant (the anchors' equilibria) is what it was
+        inp = M.Inputs(sol=14, literacy=0.4, mods=dict(self.MODS))
+        _ring, last = M.run_constant(inp, years=60)
+        qf, qm, _mmr = M.group_rates(inp)
+        self.assertAlmostEqual(last["e0"], (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2, places=9)
+
+
+class TestOnTopSplit(unittest.TestCase):
+    """demographics_model.on_top_split (the Causes of Death plan, Task 6, re-planned on #907's window): the window's
+    events less the pops' own lines over the same window, each end weighted as window_events weighs the rate."""
+
+    def test_no_start_is_the_snapshot(self):
+        events, state, sev = M.on_top_split((1500.0, 400.0, 300.0))
+        self.assertEqual(events, 1500.0)
+        self.assertAlmostEqual(state, 1100.0)
+        self.assertAlmostEqual(sev, 300.0)
+
+    def test_each_part_is_weighted_as_the_rate(self):
+        w = P.WINDOW_START_WEIGHT
+        events, state, sev = M.on_top_split((1600.0, 600.0, 600.0), start=(1000.0, 100.0, 0.0))
+        self.assertAlmostEqual(events, M.window_events(1600.0, 1000.0))
+        self.assertAlmostEqual(events - state, w * 100.0 + (1 - w) * 600.0)
+        self.assertAlmostEqual(sev, (1 - w) * 600.0, msg="a famine only at the end books (1 - w) of it")
+
+    def test_the_whole_states_part_is_never_below_zero(self):
+        self.assertEqual(M.on_top_split((100.0, 300.0, 0.0))[1], 0.0)
+

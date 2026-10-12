@@ -79,6 +79,7 @@ NRR_STEP = 0.1
 NRR_KNOTS = [round(M.NRR_TABLE_MIN + NRR_STEP * i, 1)
              for i in range(round((M.NRR_TABLE_MAX - M.NRR_TABLE_MIN) / NRR_STEP) + 1)]
 CAUSES = ("infection", "work", "external", "maternal", "chronic")
+assert tuple(P.CAUSE_FACTORS) == CAUSES, "the factor table names the five causes in the census's order"
 
 
 def lit(x):
@@ -648,6 +649,82 @@ def gini_bands(o, pieces):
     o("")
 
 
+def medicine_effects(o):
+    o("# THIS = a state, in te_demog_prepare before its multipliers (a seed or a step): the census's inputs, so")
+    o("# te_demog_f_* (and the state subtab's Causes of Death) read what the step used until the next one. The walk's")
+    o("# SoL and literacy too: a walk without a step (a second pulse in a year, the console) rewrites te_dg_sol and")
+    o("# te_dg_lit, never te_dg_m_*.")
+    o("te_demog_cause_inputs_store = {")
+    o("set_variable = { name = te_dg_in_sol value = var:te_dg_sol }")
+    o("set_variable = { name = te_dg_in_lit value = var:te_dg_lit }")
+    for cause, types in P.MORTALITY_TYPES.items():
+        adds = " ".join(f"add = modifier:{t}" for t in types)
+        o(f"set_variable = {{ name = te_dg_in_{P.CAUSE_SHORT[cause]} value = {{ value = 0 {adds} }} }}")
+    o("# turmoil as the 0-1 share te_demog_crisis reads")
+    o("set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }")
+    o("# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)")
+    o("set_variable = { name = te_dg_in_crowd value = 0 }")
+    o("if = {")
+    o("limit = {")
+    o("has_modifier = migration_crowding")
+    o("has_variable = migration_crowding_mult_applied")
+    o("}")
+    o("set_variable = { name = te_dg_in_crowd value = { value = var:migration_crowding_mult_applied "
+      f"multiply = {lit(P.MIGRATION_CROWDING_PULL_PER_MULT)} }} }}")
+    o("}")
+    o("}")
+    o("")
+    pairs = [("te_dg_acc", "te_demog_access_target")]
+    pairs += [(f"te_dg_trt_{P.CAUSE_SHORT[c]}", f"te_demog_treatment_target_{c}") for c in P.MEDICINE_CAUSES]
+    o("# THIS = a state: the drifted medicine at its targets (te_demog_seed; te_demog_medicine_drift for a state")
+    o("# without it: a census from before the Causes of Death plan).")
+    o("te_demog_medicine_at_target = {")
+    for var, target in pairs:
+        o(f"set_variable = {{ name = {var} value = {target} }}")
+    o("}")
+    o("")
+    o("# THIS = a state at the start of its step (te_demog_step_begin): health-care access and each cause's treatment")
+    o("# move te_demog_medical_diffusion of the way to today's targets (demographics_model.medicine_drift).")
+    o("te_demog_medicine_drift = {")
+    o("if = {")
+    o("limit = {")
+    for var, _target in pairs:
+        o(f"has_variable = {var}")
+    o("}")
+    o("set_local_variable = { name = te_dg_diff value = te_demog_medical_diffusion }")
+    for var, target in pairs:
+        o(f"te_demog_medicine_drift_one = {{ VAR = {var} TARGET = {target} }}")
+    o("}")
+    o("else = {")
+    o("te_demog_medicine_at_target = yes")
+    o("}")
+    o("}")
+    o("")
+    o("# One drifted value: (target - value) x the step's share + value; within te_demog_k_medicine_snap of the target,")
+    o("# the target. set_variable's inline block, not change_variable (scripting_best_practices.md).")
+    o("te_demog_medicine_drift_one = {")
+    o("set_variable = {")
+    o("name = $VAR$")
+    o("value = {")
+    o("value = $TARGET$")
+    o("subtract = var:$VAR$")
+    o("multiply = local_var:te_dg_diff")
+    o("add = var:$VAR$")
+    o("}")
+    o("}")
+    o("# te_dg_med_gap, not te_dg_gap: te_demog_state_census, which calls the step, keeps its own te_dg_gap local")
+    o("set_local_variable = { name = te_dg_med_gap value = { value = $TARGET$ subtract = var:$VAR$ } }")
+    o("if = {")
+    o("limit = {")
+    o("local_var:te_dg_med_gap < te_demog_k_medicine_snap")
+    o("local_var:te_dg_med_gap > te_demog_k_medicine_snap_neg")
+    o("}")
+    o("set_variable = { name = $VAR$ value = $TARGET$ }")
+    o("}")
+    o("}")
+    o("")
+
+
 def render_effects(root=ROOT):
     o = Out()
     o(HEADER.rstrip("\n"))
@@ -664,6 +741,7 @@ def render_effects(root=ROOT):
     band_figures(o)
     projection(o)
     absorbed_walk(o, root)
+    medicine_effects(o)
     debug_ring(o)
     return o.text()
 
@@ -719,6 +797,9 @@ def engine_curves(o, d):
 #   deaths: + its class's state_<type>_mortality_mult, its workplace's building_<type>_ and
 #           building_group_<group>[_<type>]_mortality_mult, working_conditions by workplace
 #           group, the starvation penalties, and non-homeland mortality.
+# Both starvation penalties apply x the pop's starvation value, clamp((0.4 - food security) x 2.5, 0, 1): mild's
+# up to 0.5, severe's 0.5 to 1 (the famine probe, 2026-10-11; the walk took severe flat until then, and its famine
+# deaths ran 1.5-1.7x the engine's). The walk reads both in 0.05 steps of food security.
 # Only registered modifier types are read: modifiers.log lists ~1,100 mortality keys, but an
 # unregistered one cannot be set by anything and reads as 'none' on every pop. A registered one
 # that nothing sets reads 0 (the first launch: no 'Value of wrong type' at the game-start walk).
@@ -790,32 +871,41 @@ def _group_gate(group, parents):
     return "OR = { " + " ".join(f"is_building_group = {g}" for g in groups) + " }"
 
 
-def _starvation_buckets():
-    """[(lower food security, scale)] for mild starvation, top step first; the scale at each step's middle."""
-    hi, lo = P.FOOD_SECURITY_STARVATION_THRESHOLD, P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+def _starvation_buckets(severe=False):
+    """[(lower food security, scale)], top step first, in STARVATION_BUCKET steps of food security: mild starvation's
+    from the starvation threshold down to the severe one, or severe starvation's from there down to 0. The scale is
+    the engine's starvation value at each step's middle (demographics_model.starvation_value, always measured from the
+    starvation threshold), which both penalties take (the famine probe, 2026-10-11): mild's at most
+    STARVATION_MILD_CAP, severe's 0.5 to 1."""
+    hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD if severe else P.FOOD_SECURITY_STARVATION_THRESHOLD
+    lo = 0.0 if severe else P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD
+    cap = P.STARVATION_VALUE_MAX if severe else P.STARVATION_MILD_CAP
     out, top = [], hi
     while top - P.STARVATION_BUCKET >= lo - 1e-9:
         lower = round(top - P.STARVATION_BUCKET, 5)
-        mid = (top + lower) / 2
-        out.append((lower, min((hi - mid) * P.STARVATION_EFFECTS_SCALING_FACTOR,
-                               (hi - lo) * P.STARVATION_EFFECTS_SCALING_FACTOR)))
+        out.append((lower, min(M.starvation_value((top + lower) / 2), cap)))
         top = lower
     return out
 
 
+def _starvation_ladder(o, coefficient, buckets):
+    """The food-security steps as an if / else_if chain, the last step an else: coefficient x each step's scale."""
+    for i, (lower, scale) in enumerate(buckets):
+        if i == len(buckets) - 1:
+            o(f"else = {{ add = {lit(coefficient * scale)} }}")
+        else:
+            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(coefficient * scale)} }}")
+
+
 def _starvation(o, key, mild, severe):
+    """Pop scope: both starvation terms, each penalty x the starvation value read in food-security steps."""
     o("if = {")
     o("limit = { is_in_severe_starvation = yes }")
-    o(f"add = {lit(severe[key])}")
+    _starvation_ladder(o, severe[key], _starvation_buckets(severe=True))
     o("}")
     o("else_if = {")
     o("limit = { is_in_mild_starvation = yes }")
-    buckets = _starvation_buckets()
-    for i, (lower, scale) in enumerate(buckets):
-        if i == len(buckets) - 1:
-            o(f"else = {{ add = {lit(mild[key] * scale)} }}")
-        else:
-            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(mild[key] * scale)} }}")
+    _starvation_ladder(o, mild[key], _starvation_buckets())
     o("}")
 
 
@@ -826,12 +916,7 @@ def _mild_starvation(o, key, mild):
     o("is_in_severe_starvation = no")
     o("is_in_mild_starvation = yes")
     o("}")
-    buckets = _starvation_buckets()
-    for i, (lower, scale) in enumerate(buckets):
-        if i == len(buckets) - 1:
-            o(f"else = {{ add = {lit(mild[key] * scale)} }}")
-        else:
-            o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ food_security >= {lit(lower)} }} add = {lit(mild[key] * scale)} }}")
+    _starvation_ladder(o, mild[key], _starvation_buckets())
     o("}")
 
 
@@ -856,12 +941,19 @@ def absorbed_terms(o, root, literacy, mild):
 
 
 def absorbed_walk(o, root):
-    """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed per pop."""
-    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums start at 0; under Full only (the")
-    o("# refresh reads them nowhere else) te_dg_w_rep turns the per-pop sums on.")
+    """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed per pop;
+    and severe starvation's people and deaths for the Causes of Death section's split (Task 6)."""
+    severe = static_modifier(root, "severe_starvation_penalty")
+    o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums, the bare curves the census's")
+    o("# term reaches and severe starvation's people and deaths start at 0; under Full only (the refresh and the")
+    o("# split read them nowhere else) te_dg_w_rep turns the per-pop sums on.")
     o("te_demog_absorbed_walk_init = {")
     o("set_local_variable = { name = te_dg_w_ebr value = 0 }")
     o("set_local_variable = { name = te_dg_w_edr value = 0 }")
+    o("set_local_variable = { name = te_dg_w_eb0m value = 0 }")
+    o("set_local_variable = { name = te_dg_w_ed0m value = 0 }")
+    o("set_local_variable = { name = te_dg_w_sev value = 0 }")
+    o("set_local_variable = { name = te_dg_w_sevd value = 0 }")
     o("set_local_variable = { name = te_dg_w_rep value = 0 }")
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
@@ -869,13 +961,44 @@ def absorbed_walk(o, root):
     o("}")
     o("}")
     o("")
-    o("# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed): its bare births and deaths x")
-    o("# what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr (te_demog_rates_refresh). Full only.")
+    o("# THIS = a pop in the walk, after its bare curves (te_dg_p_eb, te_dg_p_ed) and multipliers (te_dg_p_mb,")
+    o("# te_dg_p_md): its bare births and deaths x what the census absorbs for it, into te_dg_w_ebr and te_dg_w_edr")
+    o("# (te_demog_rates_refresh); and its bare curves into te_dg_w_eb0m / _ed0m unless the engine floors its")
+    o("# multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a")
+    o("# change in the census's term then doesn't reach (the trapezoid's start rate); and severe starvation's people")
+    o("# and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split). Full only.")
     o("te_demog_absorbed_walk_pop = {")
     o("if = {")
     o("limit = { local_var:te_dg_w_rep > 0 }")
     o("change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }")
     o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_mb > 0 }")
+    o("change_local_variable = { name = te_dg_w_eb0m add = local_var:te_dg_p_eb }")
+    o("}")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_md > 0 }")
+    o("change_local_variable = { name = te_dg_w_ed0m add = local_var:te_dg_p_ed }")
+    o("}")
+    o("# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes")
+    o("# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds")
+    o("if = {")
+    o("limit = { is_in_severe_starvation = yes }")
+    o("change_local_variable = { name = te_dg_w_sev add = total_size }")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_md > 0 }")
+    o("change_local_variable = {")
+    o("name = te_dg_w_sevd")
+    o("add = {")
+    o("value = local_var:te_dg_p_ed")
+    o("multiply = {")
+    o("value = 0")
+    _starvation_ladder(o, severe["state_mortality_mult"], _starvation_buckets(severe=True))
+    o("}")
+    o("}")
+    o("}")
+    o("}")
+    o("}")
     o("}")
     o("}")
     o("")
@@ -910,7 +1033,8 @@ def engine_rate_terms(o, root):
         pairs.setdefault((group, ptype), {"read": False, "table": 0.0})["table"] = value
 
     o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
-    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties, floored at 0.")
+    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties (each x the pop's")
+    o("# starvation value, in 0.05 steps of food security), floored at 0.")
     o("# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).")
     o("te_demog_pop_birth_mult = {")
     o("value = 1")
@@ -923,7 +1047,7 @@ def engine_rate_terms(o, root):
     o("# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult")
     o("# + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions")
     o("# (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)")
-    o("# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
+    o("# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
     o("# left out: their scaling is unknown and the probe measured both at about 0.")
     o("te_demog_pop_death_mult = {")
     o("value = 1")
@@ -993,62 +1117,84 @@ def buy_package_costs(root):
     return out
 
 
+def _factor_body(o, cause, factor):
+    """One factor's body, reading only what the step stored (te_demog_cause_inputs_store, the drifted medicine; the
+    step's copies of the walk's SoL and literacy, which a walk without a step rewrites), in
+    demographics_model.cause_factors' arithmetic."""
+    s = P.CAUSE_SHORT[cause]
+    span = P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL
+    if factor == "medicine":
+        o("value = 1")
+        o(f"subtract = {{ value = var:te_dg_acc multiply = var:te_dg_trt_{s} }}")
+    elif factor == "sol":
+        at_high = P.SOL_INFECTION_AT_HIGH if cause == "infection" else P.SOL_CHRONIC_AT_HIGH
+        o(f"value = var:te_dg_in_sol subtract = {P.WEALTH_TFR_LOW_SOL} divide = {span} min = 0 max = 1")
+        o(f"multiply = {lit(at_high - 1)} add = 1")
+    elif factor == "poverty":
+        o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_in_sol "
+          f"divide = {P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL} min = 0 max = 1")
+        o(f"multiply = {lit(P.POVERTY_INFECTION_AT_FLOOR - 1)} add = 1")
+    elif factor == "literacy":
+        o(f"value = var:te_dg_in_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
+    elif factor == "crowding":
+        o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)}")
+        o(f"max = {lit(P.CROWDING_INFECTION_MAX)} add = 1")
+    elif factor == "laws":
+        o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
+    elif factor == "turmoil":
+        o(f"value = var:te_dg_in_turm multiply = {lit(P.TURMOIL_EXTERNAL_WEIGHT)} add = 1")
+    else:
+        raise KeyError(factor)
+
+
+def medicine_target_values(o):
+    o("# State scope: where medicine is heading, read live from the census's types (the Causes of Death plan):")
+    o("# health-care access (the base plus the health law's lines), each cause's treatment, and the share of the gap")
+    o("# a census step closes (demographics_model.medicine_targets, diffusion).")
+    o("te_demog_access_target = {")
+    o(f"value = modifier:{P.ACCESS_TYPE}")
+    o(f"add = {lit(P.BASE_ACCESS)}")
+    o("min = 0")
+    o("max = 1")
+    o("}")
+    for cause in P.MEDICINE_CAUSES:
+        o(f"te_demog_treatment_target_{cause} = {{")
+        o(f"value = modifier:{P.TREATMENT_TYPE[cause]}")
+        o("min = 0")
+        o(f"max = {lit(P.TREATMENT_CAP[cause])}")
+        o("}")
+    o("te_demog_medical_diffusion = {")
+    o(f"value = modifier:{P.DIFFUSION_TYPE}")
+    o(f"add = {lit(P.DIFFUSION_BASE)}")
+    o("min = 0")
+    o(f"max = {lit(P.DIFFUSION_MAX)}")
+    o("}")
+    for cause in P.MEDICINE_CAUSES:
+        o(f"# State scope: {cause}'s medicine at its targets (the section's arrow).")
+        o(f"te_demog_f_{cause}_medicine_target = {{")
+        o("value = 1")
+        o(f"subtract = {{ value = te_demog_access_target multiply = te_demog_treatment_target_{cause} }}")
+        o("}")
+    o("")
+
+
 def multipliers(o):
-    for cause in CAUSES:
+    medicine_target_values(o)
+    for cause, factors in P.CAUSE_FACTORS.items():
+        for factor in factors:
+            o(f"# State scope: {cause}'s {factor} factor (demographics_model.cause_factors), on the step's stored inputs.")
+            o(f"te_demog_f_{cause}_{factor} = {{")
+            _factor_body(o, cause, factor)
+            o("}")
         if cause == "maternal":
             o("# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate")
-            o("# times the cause's multiplier (demographics_model.cause_multipliers, group_rates).")
+            o("# times the cause's factors (demographics_model.cause_multipliers, group_rates).")
         else:
-            o(f"# State scope: the {cause} cause's multiplier (demographics_model.cause_multipliers).")
+            o(f"# State scope: the {cause} cause's multiplier, the product of its factors (demographics_model.cause_multipliers).")
         o(f"te_demog_mult_{cause} = {{")
-        o("value = 1")
-        if cause in P.MEDICINE_CAUSES:
-            o("# medicine: 1 - access x treatment (demographics modifier types, Decision 1)")
-            o("subtract = {")
-            o(f"value = modifier:{P.ACCESS_TYPE}")
-            o(f"add = {lit(P.BASE_ACCESS)}")
-            o("min = 0")
-            o("max = 1")
-            o(f"multiply = {{ value = modifier:{P.TREATMENT_TYPE[cause]} min = 0 "
-              f"max = {lit(P.TREATMENT_CAP[cause])} }}")
-            o("}")
-        if cause in P.MORTALITY_TYPES:
-            adds = " ".join(f"add = modifier:{t}" for t in P.MORTALITY_TYPES[cause])
-            o(f"multiply = {{ value = 1 {adds} min = {lit(P.MORTALITY_MULT_FLOOR)} }}")
-        if cause == "infection":
-            o("multiply = {")
-            o(f"value = var:te_dg_sol subtract = {P.WEALTH_TFR_LOW_SOL} "
-              f"divide = {P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL} min = 0 max = 1")
-            o(f"multiply = {lit(P.SOL_INFECTION_AT_HIGH - 1)} add = 1")
-            o("}")
-            o(f"# poverty: x1 at SoL {P.POVERTY_INFECTION_SOL} and above, x{lit(P.POVERTY_INFECTION_AT_FLOOR)} at "
-              f"SoL {P.POVERTY_INFECTION_FLOOR_SOL} and below (demographics_model.poverty_infection)")
-            o("multiply = {")
-            o(f"value = {P.POVERTY_INFECTION_SOL} subtract = var:te_dg_sol "
-              f"divide = {P.POVERTY_INFECTION_SOL - P.POVERTY_INFECTION_FLOOR_SOL} min = 0 max = 1")
-            o(f"multiply = {lit(P.POVERTY_INFECTION_AT_FLOOR - 1)} add = 1")
-            o("}")
-            o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1 }}")
-            o(f"# crowding: + its migration penalty, at most +{lit(P.CROWDING_INFECTION_MAX)} "
-              "(demographics_model.cause_multipliers), from the")
-            o("# multiplier the crowding refresh applied (te_update_migration_crowding_modifier), as the save holds it")
-            o("if = {")
-            o("limit = {")
-            o("has_modifier = migration_crowding")
-            o("has_variable = migration_crowding_mult_applied")
-            o("}")
-            o("multiply = {")
-            o("value = var:migration_crowding_mult_applied "
-              f"multiply = {lit(P.MIGRATION_CROWDING_PULL_PER_MULT * P.CROWDING_INFECTION_PER_PULL)}")
-            o(f"max = {lit(P.CROWDING_INFECTION_MAX)} add = 1")
-            o("}")
-            o("}")
-        if cause == "chronic":
-            o("multiply = {")
-            o(f"value = var:te_dg_sol subtract = {P.WEALTH_TFR_LOW_SOL} "
-              f"divide = {P.WEALTH_TFR_HIGH_SOL - P.WEALTH_TFR_LOW_SOL} min = 0 max = 1")
-            o(f"multiply = {lit(P.SOL_CHRONIC_AT_HIGH - 1)} add = 1")
-            o("}")
+        o(f"value = te_demog_f_{cause}_{factors[0]}")
+        for factor in factors[1:]:
+            o(f"multiply = te_demog_f_{cause}_{factor}")
         if cause == "maternal":
             o(f"multiply = {P.MATERNAL_PER_100K_BIRTHS}")
         o("}")
@@ -1136,10 +1282,14 @@ def constants(o):
         "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
+        "window_start_weight": P.WINDOW_START_WEIGHT,
         "rate_total_min": P.RATE_TOTAL_MIN,
         "rate_term_max": P.RATE_TERM_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,
+        "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
+        "deaths_on_top_high": P.DEATHS_ON_TOP_HIGH, "base_access": P.BASE_ACCESS,
+        "maternal_base": P.MATERNAL_PER_100K_BIRTHS,
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")

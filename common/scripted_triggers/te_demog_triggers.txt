@@ -93,3 +93,9 @@ te_demog_lines_apply = {
 		NOT = { has_variable = te_dg_mb }
 	}
 }
+
+# THIS = a state: its medicine is still spreading, more than the snap behind its targets in all (te_demog_medicine_gap),
+# so Medical Outreach would do something. False for a state without the census's medicine.
+te_demog_medicine_behind = {
+	te_demog_medicine_gap > te_demog_k_medicine_snap
+}

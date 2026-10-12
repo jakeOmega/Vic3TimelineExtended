@@ -34,6 +34,14 @@
 #                      (te_demog_fast_refresh_rates)
 #   research, construction  country modifier te_demog_fast_speed (research speed,
 #                      technology spread and construction +1) x (K - 1)
+#
+# The window's events under Full (te_demog_window_events, the trapezoid): a clock step books its
+# N-month window at the mean of the engine's rate at its start and on the step's day, as a yearly step
+# does its year. The term is set at a clock step, where the start's rate (stored by
+# te_demog_rates_refresh) moves by its change below, so both ends carry the same one, and the walk's
+# months (te_demog_step_months) are the window's at both ends, whatever the speed was. Option k
+# (normal speed) takes the term off at once, between two steps: te_demog_fast_clear_rates then drops
+# the start's rate, and that window takes the snapshot.
 # ============================================================================
 
 # No scope: the global on_monthly_pulse (te_demog_clock_on_action), while the clock runs.
@@ -134,6 +142,48 @@ te_demog_fast_refresh_rates = {
 				multiply = te_demog_fast_k_minus_1
 			}
 		}
+		# the window that begins here runs with the new term: the engine's rate at its start (te_dg_sr_b/_d,
+		# te_demog_rates_refresh, this effect; the trapezoid) moves by the change
+		if = {
+			limit = { has_variable = te_dg_sr_b }
+			change_variable = {
+				name = te_dg_sr_b
+				add = {
+					value = var:te_dg_fast_fb
+					subtract = local_var:te_dg_fast_prev_b
+					multiply = local_var:te_dg_w_eb0m
+					divide = { value = state_population min = 1 }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_d }
+			change_variable = {
+				name = te_dg_sr_d
+				add = {
+					value = var:te_dg_fast_fd
+					subtract = local_var:te_dg_fast_prev_d
+					multiply = local_var:te_dg_w_ed0m
+					divide = { value = state_population min = 1 }
+				}
+			}
+		}
+		# and the pops' own lines in it (te_dg_sp_d, the Causes of Death section's split) by the change on the pops the
+		# engine floors at 0, which the term doesn't reach
+		if = {
+			limit = { has_variable = te_dg_sp_d }
+			set_variable = {
+				name = te_dg_sp_d
+				value = {
+					value = var:te_dg_fast_fd
+					subtract = local_var:te_dg_fast_prev_d
+					multiply = { value = local_var:te_dg_w_ed0 subtract = local_var:te_dg_w_ed0m }
+					divide = { value = state_population min = 1 }
+					multiply = -1
+					add = var:te_dg_sp_d
+				}
+			}
+		}
 		# removed and re-applied, the mod's refresh pattern (docs/systems/mod_systems.md, the
 		# dynamic-modifier scaling pattern)
 		if = {
@@ -153,8 +203,35 @@ te_demog_fast_refresh_rates = {
 }
 
 # THIS = a state: the fast rate modifiers and their stored terms off (normal speed). The terms
-# go too, or the next refresh would take a stale term off the walk's average.
+# go too, or the next refresh would take a stale term off the walk's average. While the term is on,
+# the census's start rate goes as well (te_dg_sr_b/_d, the trapezoid): the last step stored it with
+# the term, about K times what the engine runs once it is off. Option k takes the term off between
+# two steps, so that window falls back to the snapshot, as it did before the trapezoid.
 te_demog_fast_clear_rates = {
+	if = {
+		limit = {
+			OR = {
+				has_modifier = te_demog_fast_births
+				has_modifier = te_demog_fast_deaths
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_b }
+			remove_variable = te_dg_sr_b
+		}
+		if = {
+			limit = { has_variable = te_dg_sr_d }
+			remove_variable = te_dg_sr_d
+		}
+		if = {
+			limit = { has_variable = te_dg_sp_d }
+			remove_variable = te_dg_sp_d
+		}
+		if = {
+			limit = { has_variable = te_dg_ss_d }
+			remove_variable = te_dg_ss_d
+		}
+	}
 	if = {
 		limit = { has_modifier = te_demog_fast_births }
 		remove_modifier = te_demog_fast_births

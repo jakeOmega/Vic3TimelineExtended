@@ -289,6 +289,121 @@ gm_skin_name = {
 	type = state
 	random_valid = no
 
+	# A landmark's own name first (phase 4 §4), so La Scala prints "La Scala",
+	# not its building's "Grand Opera House".
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arc_de_triomphe }
+		localization_key = gm_skin_landmark_arc_de_triomphe
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_alexander_column }
+		localization_key = gm_skin_landmark_alexander_column
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_brandenburg_gate }
+		localization_key = gm_skin_landmark_brandenburg_gate
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument_baltimore }
+		localization_key = gm_skin_landmark_washington_monument_baltimore
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_la_scala }
+		localization_key = gm_skin_landmark_la_scala
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_teatro_di_san_carlo }
+		localization_key = gm_skin_landmark_teatro_di_san_carlo
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jantar_mantar }
+		localization_key = gm_skin_landmark_jantar_mantar
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_shalimar_gardens }
+		localization_key = gm_skin_landmark_shalimar_gardens
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jardim_botanico }
+		localization_key = gm_skin_landmark_jardim_botanico
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_stelae_of_aksum }
+		localization_key = gm_skin_landmark_stelae_of_aksum
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_liberty_column }
+		localization_key = gm_skin_landmark_liberty_column
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_monument }
+		localization_key = gm_skin_landmark_lion_monument
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temple_of_heaven }
+		localization_key = gm_skin_landmark_temple_of_heaven
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_topkapi_palace }
+		localization_key = gm_skin_landmark_topkapi_palace
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_golestan_palace }
+		localization_key = gm_skin_landmark_golestan_palace
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_basilica_of_superga }
+		localization_key = gm_skin_landmark_basilica_of_superga
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_tomb_of_william_the_silent }
+		localization_key = gm_skin_landmark_tomb_of_william_the_silent
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_cenotaph_of_maximilian }
+		localization_key = gm_skin_landmark_cenotaph_of_maximilian
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arco_de_santa_maria }
+		localization_key = gm_skin_landmark_arco_de_santa_maria
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_statue_of_louis_xiv }
+		localization_key = gm_skin_landmark_statue_of_louis_xiv
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_of_saint_mark }
+		localization_key = gm_skin_landmark_lion_of_saint_mark
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_sans_souci_palace }
+		localization_key = gm_skin_landmark_sans_souci_palace
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_nikko_toshogu }
+		localization_key = gm_skin_landmark_nikko_toshogu
+	}
+	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:gardens }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:observatory }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:exhibition_hall }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stadium }
+		localization_key = pm_monument_athletic
+	}
 	text = {
 		trigger = { has_variable = gm_skin var:gm_skin = flag:faith_catholic }
 		localization_key = gm_skin_faith_catholic
@@ -419,6 +534,213 @@ gm_skin_name = {
 	}
 	text = {
 		localization_key = gm_skin_generic
+	}
+}
+
+# A landmark's name in running text (gm_name_landmark_evt): with its article,
+# "the Arc de Triomphe" but "La Scala". Each key splices the name,
+# gm_skin_landmark_<key>, so the name is spelt once.
+gm_landmark_name_evt = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arc_de_triomphe }
+		localization_key = gm_landmark_arc_de_triomphe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_alexander_column }
+		localization_key = gm_landmark_alexander_column_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_brandenburg_gate }
+		localization_key = gm_landmark_brandenburg_gate_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument_baltimore }
+		localization_key = gm_landmark_washington_monument_baltimore_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_la_scala }
+		localization_key = gm_landmark_la_scala_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_teatro_di_san_carlo }
+		localization_key = gm_landmark_teatro_di_san_carlo_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jantar_mantar }
+		localization_key = gm_landmark_jantar_mantar_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_shalimar_gardens }
+		localization_key = gm_landmark_shalimar_gardens_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jardim_botanico }
+		localization_key = gm_landmark_jardim_botanico_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_stelae_of_aksum }
+		localization_key = gm_landmark_stelae_of_aksum_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_liberty_column }
+		localization_key = gm_landmark_liberty_column_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_monument }
+		localization_key = gm_landmark_lion_monument_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_temple_of_heaven }
+		localization_key = gm_landmark_temple_of_heaven_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_topkapi_palace }
+		localization_key = gm_landmark_topkapi_palace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_golestan_palace }
+		localization_key = gm_landmark_golestan_palace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_basilica_of_superga }
+		localization_key = gm_landmark_basilica_of_superga_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_tomb_of_william_the_silent }
+		localization_key = gm_landmark_tomb_of_william_the_silent_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_cenotaph_of_maximilian }
+		localization_key = gm_landmark_cenotaph_of_maximilian_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arco_de_santa_maria }
+		localization_key = gm_landmark_arco_de_santa_maria_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_statue_of_louis_xiv }
+		localization_key = gm_landmark_statue_of_louis_xiv_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_of_saint_mark }
+		localization_key = gm_landmark_lion_of_saint_mark_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_sans_souci_palace }
+		localization_key = gm_landmark_sans_souci_palace_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_nikko_toshogu }
+		localization_key = gm_landmark_nikko_toshogu_evt
+	}
+	text = {
+		localization_key = gm_landmark_name_evt_none
+	}
+}
+
+# One line of a landmark's history: the "Historical monument" line's tooltip,
+# in the journal entry's row and on the state card.
+gm_landmark_desc = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:arc_de_triomphe }
+		localization_key = gm_landmark_arc_de_triomphe_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:alexander_column }
+		localization_key = gm_landmark_alexander_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:brandenburg_gate }
+		localization_key = gm_landmark_brandenburg_gate_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:washington_monument_baltimore }
+		localization_key = gm_landmark_washington_monument_baltimore_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:la_scala }
+		localization_key = gm_landmark_la_scala_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:teatro_di_san_carlo }
+		localization_key = gm_landmark_teatro_di_san_carlo_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:jantar_mantar }
+		localization_key = gm_landmark_jantar_mantar_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:shalimar_gardens }
+		localization_key = gm_landmark_shalimar_gardens_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:jardim_botanico }
+		localization_key = gm_landmark_jardim_botanico_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:stelae_of_aksum }
+		localization_key = gm_landmark_stelae_of_aksum_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:liberty_column }
+		localization_key = gm_landmark_liberty_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:lion_monument }
+		localization_key = gm_landmark_lion_monument_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:temple_of_heaven }
+		localization_key = gm_landmark_temple_of_heaven_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:topkapi_palace }
+		localization_key = gm_landmark_topkapi_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:golestan_palace }
+		localization_key = gm_landmark_golestan_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:basilica_of_superga }
+		localization_key = gm_landmark_basilica_of_superga_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:tomb_of_william_the_silent }
+		localization_key = gm_landmark_tomb_of_william_the_silent_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:cenotaph_of_maximilian }
+		localization_key = gm_landmark_cenotaph_of_maximilian_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:arco_de_santa_maria }
+		localization_key = gm_landmark_arco_de_santa_maria_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:statue_of_louis_xiv }
+		localization_key = gm_landmark_statue_of_louis_xiv_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:lion_of_saint_mark }
+		localization_key = gm_landmark_lion_of_saint_mark_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:sans_souci_palace }
+		localization_key = gm_landmark_sans_souci_palace_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:nikko_toshogu }
+		localization_key = gm_landmark_nikko_toshogu_desc
+	}
+	text = {
+		localization_key = gm_landmark_desc_none
 	}
 }
 
@@ -883,6 +1205,34 @@ gm_form_name = {
 		localization_key = gm_form_rock_cut
 	}
 	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:menorah }
+		localization_key = gm_form_menorah
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:bell_tower }
+		localization_key = gm_form_bell_tower
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:rock_hewn_church }
+		localization_key = gm_form_rock_hewn_church
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:sun_stone }
+		localization_key = gm_form_sun_stone
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:stela }
+		localization_key = gm_form_stela
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:sacred_oak }
+		localization_key = gm_form_sacred_oak
+	}
+	text = {
+		trigger = { has_variable = gm_form var:gm_form = flag:colonnade }
+		localization_key = gm_form_colonnade
+	}
+	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
 		localization_key = gm_form_opera_house
 	}
@@ -1014,6 +1364,11 @@ gm_monument_name_row = {
 		}
 		localization_key = gm_name_space_moon_landing_row
 	}
+	# A landmark's historical name (phase 4 §4): the skin's, never a year.
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
+		localization_key = gm_name_landmark_row
+	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {
 		trigger = { has_variable = gm_namesake has_variable = gm_name_year }
@@ -1100,6 +1455,11 @@ gm_monument_name_evt = {
 			var:gm_name_occasion = flag:space_moon_landing
 		}
 		localization_key = gm_name_space_moon_landing_evt
+	}
+	# A landmark's historical name (phase 4 §4): the skin's, never a year.
+	text = {
+		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
+		localization_key = gm_name_landmark_evt
 	}
 	# The year: its own namesake, and the fallback of the ruler and victory names.
 	text = {

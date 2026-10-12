@@ -98,7 +98,8 @@ te_demog_pop_absorbed_deaths = {
 }
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
-# + -0.1 x its literacy (literacy_penalty) + the starvation penalties, floored at 0.
+# + -0.1 x its literacy (literacy_penalty) + the starvation penalties (each x the pop's
+# starvation value, in 0.05 steps of food security), floored at 0.
 # x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).
 te_demog_pop_birth_mult = {
 	value = 1
@@ -106,7 +107,10 @@ te_demog_pop_birth_mult = {
 	add = { value = literacy_rate multiply = -0.1 }
 	if = {
 		limit = { is_in_severe_starvation = yes }
-		add = -0.9
+		if = { limit = { food_security >= 0.15 } add = -0.50625 }
+		else_if = { limit = { food_security >= 0.1 } add = -0.61875 }
+		else_if = { limit = { food_security >= 0.05 } add = -0.73125 }
+		else = { add = -0.84375 }
 	}
 	else_if = {
 		limit = { is_in_mild_starvation = yes }
@@ -121,7 +125,7 @@ te_demog_pop_birth_mult = {
 # Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult
 # + its class's, its workplace's and its workplace's groups' mortality modifiers + working_conditions
 # (the building-group reads do not carry it: the probe's buildings read 0 where the table gave 0.1)
-# + the starvation penalties + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
+# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
 # left out: their scaling is unknown and the probe measured both at about 0.
 te_demog_pop_death_mult = {
 	value = 1
@@ -1257,7 +1261,10 @@ te_demog_pop_death_mult = {
 	}
 	if = {
 		limit = { is_in_severe_starvation = yes }
-		add = 1
+		if = { limit = { food_security >= 0.15 } add = 0.5625 }
+		else_if = { limit = { food_security >= 0.1 } add = 0.6875 }
+		else_if = { limit = { food_security >= 0.05 } add = 0.8125 }
+		else = { add = 0.9375 }
 	}
 	else_if = {
 		limit = { is_in_mild_starvation = yes }
@@ -1273,84 +1280,139 @@ te_demog_pop_death_mult = {
 	min = 0
 }
 
-# State scope: the infection cause's multiplier (demographics_model.cause_multipliers).
+# State scope: where medicine is heading, read live from the census's types (the Causes of Death plan):
+# health-care access (the base plus the health law's lines), each cause's treatment, and the share of the gap
+# a census step closes (demographics_model.medicine_targets, diffusion).
+te_demog_access_target = {
+	value = modifier:state_health_care_access_add
+	add = 0.4
+	min = 0
+	max = 1
+}
+te_demog_treatment_target_infection = {
+	value = modifier:state_infection_treatment_add
+	min = 0
+	max = 0.95
+}
+te_demog_treatment_target_maternal = {
+	value = modifier:state_maternal_treatment_add
+	min = 0
+	max = 0.99
+}
+te_demog_treatment_target_chronic = {
+	value = modifier:state_chronic_treatment_add
+	min = 0
+	max = 0.85
+}
+te_demog_medical_diffusion = {
+	value = modifier:state_medical_diffusion_add
+	add = 0.1
+	min = 0
+	max = 1
+}
+# State scope: infection's medicine at its targets (the section's arrow).
+te_demog_f_infection_medicine_target = {
+	value = 1
+	subtract = { value = te_demog_access_target multiply = te_demog_treatment_target_infection }
+}
+# State scope: maternal's medicine at its targets (the section's arrow).
+te_demog_f_maternal_medicine_target = {
+	value = 1
+	subtract = { value = te_demog_access_target multiply = te_demog_treatment_target_maternal }
+}
+# State scope: chronic's medicine at its targets (the section's arrow).
+te_demog_f_chronic_medicine_target = {
+	value = 1
+	subtract = { value = te_demog_access_target multiply = te_demog_treatment_target_chronic }
+}
+
+# State scope: infection's medicine factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_medicine = {
+	value = 1
+	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_inf }
+}
+# State scope: infection's sol factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_sol = {
+	value = var:te_dg_in_sol subtract = 8 divide = 27 min = 0 max = 1
+	multiply = -0.4 add = 1
+}
+# State scope: infection's poverty factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_poverty = {
+	value = 9 subtract = var:te_dg_in_sol divide = 4 min = 0 max = 1
+	multiply = 0.75 add = 1
+}
+# State scope: infection's literacy factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_literacy = {
+	value = var:te_dg_in_lit multiply = -0.3 add = 1
+}
+# State scope: infection's crowding factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_infection_crowding = {
+	value = var:te_dg_in_crowd multiply = 1
+	max = 0.5 add = 1
+}
+# State scope: the infection cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_infection = {
-	value = 1
-	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
-	subtract = {
-		value = modifier:state_health_care_access_add
-		add = 0.4
-		min = 0
-		max = 1
-		multiply = { value = modifier:state_infection_treatment_add min = 0 max = 0.95 }
-	}
-	multiply = {
-		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
-		multiply = -0.4 add = 1
-	}
-	# poverty: x1 at SoL 9 and above, x1.75 at SoL 5 and below (demographics_model.poverty_infection)
-	multiply = {
-		value = 9 subtract = var:te_dg_sol divide = 4 min = 0 max = 1
-		multiply = 0.75 add = 1
-	}
-	multiply = { value = var:te_dg_lit multiply = -0.3 add = 1 }
-	# crowding: + its migration penalty, at most +0.5 (demographics_model.cause_multipliers), from the
-	# multiplier the crowding refresh applied (te_update_migration_crowding_modifier), as the save holds it
-	if = {
-		limit = {
-			has_modifier = migration_crowding
-			has_variable = migration_crowding_mult_applied
-		}
-		multiply = {
-			value = var:migration_crowding_mult_applied multiply = 0.1
-			max = 0.5 add = 1
-		}
-	}
+	value = te_demog_f_infection_medicine
+	multiply = te_demog_f_infection_sol
+	multiply = te_demog_f_infection_poverty
+	multiply = te_demog_f_infection_literacy
+	multiply = te_demog_f_infection_crowding
 }
 
-# State scope: the work cause's multiplier (demographics_model.cause_multipliers).
+# State scope: work's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_work_laws = {
+	value = 1 add = var:te_dg_in_work min = 0.2
+}
+# State scope: the work cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_work = {
-	value = 1
-	multiply = { value = 1 add = modifier:state_work_mortality_mult min = 0.2 }
+	value = te_demog_f_work_laws
 }
 
-# State scope: the external cause's multiplier (demographics_model.cause_multipliers).
+# State scope: external's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_external_laws = {
+	value = 1 add = var:te_dg_in_ext min = 0.2
+}
+# State scope: external's turmoil factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_external_turmoil = {
+	value = var:te_dg_in_turm multiply = 0.5 add = 1
+}
+# State scope: the external cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
 te_demog_mult_external = {
-	value = 1
-	multiply = { value = 1 add = modifier:state_external_mortality_mult min = 0.2 }
+	value = te_demog_f_external_laws
+	multiply = te_demog_f_external_turmoil
 }
 
-# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
-# times the cause's multiplier (demographics_model.cause_multipliers, group_rates).
-te_demog_mult_maternal = {
+# State scope: maternal's medicine factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_maternal_medicine = {
 	value = 1
-	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
-	subtract = {
-		value = modifier:state_health_care_access_add
-		add = 0.4
-		min = 0
-		max = 1
-		multiply = { value = modifier:state_maternal_treatment_add min = 0 max = 0.99 }
-	}
+	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_mat }
+}
+# State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
+# times the cause's factors (demographics_model.cause_multipliers, group_rates).
+te_demog_mult_maternal = {
+	value = te_demog_f_maternal_medicine
 	multiply = 670
 }
 
-# State scope: the chronic cause's multiplier (demographics_model.cause_multipliers).
-te_demog_mult_chronic = {
+# State scope: chronic's medicine factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_chronic_medicine = {
 	value = 1
-	# medicine: 1 - access x treatment (demographics modifier types, Decision 1)
-	subtract = {
-		value = modifier:state_health_care_access_add
-		add = 0.4
-		min = 0
-		max = 1
-		multiply = { value = modifier:state_chronic_treatment_add min = 0 max = 0.85 }
-	}
-	multiply = { value = 1 add = modifier:state_chronic_mortality_mult min = 0.2 }
-	multiply = {
-		value = var:te_dg_sol subtract = 8 divide = 27 min = 0 max = 1
-		multiply = -0.15 add = 1
-	}
+	subtract = { value = var:te_dg_acc multiply = var:te_dg_trt_chr }
+}
+# State scope: chronic's laws factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_chronic_laws = {
+	value = 1 add = var:te_dg_in_chr min = 0.2
+}
+# State scope: chronic's sol factor (demographics_model.cause_factors), on the step's stored inputs.
+te_demog_f_chronic_sol = {
+	value = var:te_dg_in_sol subtract = 8 divide = 27 min = 0 max = 1
+	multiply = -0.15 add = 1
+}
+# State scope: the chronic cause's multiplier, the product of its factors (demographics_model.cause_multipliers).
+te_demog_mult_chronic = {
+	value = te_demog_f_chronic_medicine
+	multiply = te_demog_f_chronic_laws
+	multiply = te_demog_f_chronic_sol
 }
 
 # State scope: women's share of the workforce by the owner's women's-rights law.
@@ -1414,10 +1476,16 @@ te_demog_k_chain_cap = { value = 0.2 }
 te_demog_k_crisis_at_war = { value = 0.3 }
 te_demog_k_on_top_scale_min = { value = -0.9 }
 te_demog_k_on_top_scale_max = { value = 4 }
+te_demog_k_window_start_weight = { value = 0.5 }
 te_demog_k_rate_total_min = { value = -0.8 }
 te_demog_k_rate_term_max = { value = 3 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
 te_demog_k_wealth_line_floor = { value = -0.005 }
+te_demog_k_medicine_snap = { value = 0.005 }
+te_demog_k_medicine_snap_neg = { value = -0.005 }
+te_demog_k_deaths_on_top_high = { value = 1.25 }
+te_demog_k_base_access = { value = 0.4 }
+te_demog_k_maternal_base = { value = 670 }
 # State scope: the family share's transport term (owner technology).
 te_demog_family_transport = {
 	value = 0

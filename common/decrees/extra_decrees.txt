@@ -258,6 +258,79 @@ decree_natalism_initiative = {
 	}
 }
 
+# Medical Outreach (the Causes of Death plan, owner 2026-10-11): doctors and nurses bring the country's latest medicine
+# to one state, so its health-care access and treatments close the gap faster (the census's spread of medicine,
+# +MEDICAL_OUTREACH_DIFFUSION in demographics_params.py). The census is its only reader, so it exists only under the
+# Demographics rule's Full setting: vanilla 00_decree.txt, "country_trigger ... determines if the Decree is
+# permitted/shown in interface". Offered where the state's medicine is behind; an issued decree stays valid (Pollution
+# Control's pattern). The AI weighs it by the gap and the state's people. A release comments it out whole
+# (scripts/release/comment_out_census_inputs.py). The texture is a placeholder (vanilla Emergency Relief's); the final
+# art: a doctor's bag over a map pin.
+decree_medical_outreach = {
+	texture = "gfx/interface/icons/decree/decree_emergency_relief.dds"
+	modifier = {
+		state_medical_diffusion_add = 0.2
+	}
+
+	unlocking_technologies = {
+		medical_degrees
+	}
+
+	cost = 100
+
+	country_trigger = {
+		te_demog_effects_run = yes
+	}
+
+	state_trigger = {
+		OR = {
+			te_demog_medicine_behind = yes
+			has_decree = decree_medical_outreach
+		}
+	}
+
+	# The AI uses it where the player would (the shared-mechanics rule): by how far the state's medicine is behind,
+	# with lower thresholds once issued, and not at all once it has caught up (vanilla Road Maintenance's pattern)
+	ai_weight = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					te_demog_medicine_gap > 0.1
+					AND = {
+						has_decree = decree_medical_outreach
+						te_demog_medicine_gap > 0.05
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				OR = {
+					te_demog_medicine_gap > 0.3
+					AND = {
+						has_decree = decree_medical_outreach
+						te_demog_medicine_gap > 0.2
+					}
+				}
+			}
+			add = 100
+		}
+		# as vanilla weighs decrees, by the state's people: x1 at 250,000, from x0.2 to x2 (the review of #916)
+		multiply = {
+			value = state_population
+			divide = 250000
+			min = 0.2
+			max = 2
+		}
+		if = {
+			limit = { te_demog_medicine_behind = no }
+			multiply = 0
+		}
+	}
+}
+
 decree_tax_breaks = {
 	texture = "gfx/interface/icons/decree/decree_tax_breaks.dds"
 	modifier = {
