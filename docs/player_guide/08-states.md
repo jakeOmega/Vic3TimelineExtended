@@ -340,12 +340,19 @@ Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World
 Wide Web and Telemedicine are researched. Under Full, the Medical Outreach
 decree closes a further fifth of the gap at each count in one state, and it
 ends once the state has caught up. Turmoil raises deaths from accidents and
-violence, by half at full turmoil. The subtab's
+violence, by half at full turmoil. Where the map marks a state with malaria
+(most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
+from infection run higher, more so with severe malaria, until Malaria
+Prevention; Quinine protected colonists, not the people who lived there, so it
+changes nothing here. The subtab's
 Causes of Death section shows a state's health care access and each cause's
 multiplier; hover a row for what makes it up and where medicine is heading.
 Under Full it also shows the deaths added on top of the census's own, in red
 from a quarter above it, split into effects on the whole state and effects on
-some of its people, such as severe starvation.
+some of its people, such as severe starvation. The Landowners' Famine Reserves
+is the exception: under Full the census sets the farm workers' saved lives
+against the rest of the state, so it moves deaths within a state without
+lowering them.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other

@@ -50,6 +50,55 @@ REPORT_REGIONS = (
     ("Mexico, C America", ("region_central_america",), (10, 13)),
     ("Oceania", ("region_oceania",), None),
 )
+# Calibration step 3, owner call 3 (2026-10-12): the gate widens each band by half the measured two-run spread on each
+# side, at least WIDEN_FLOOR. The spread is each group's peacetime births less deaths, 1837-1900, in the two normal-speed
+# Full runs from 1836 (ec304526, 2026-10-11, and 4002821a, the overnight run of 2026-10-12), per 1,000 a year, as
+# `demographics_harness.py ontop-fit --spread-rows` measures it from their #904 state-years. Oceania stays unjudged.
+TWO_RUN_SPREAD = {
+    "China": 1.14, "India": 1.15, "W/N/C/S Europe": 0.08, "Africa": 0.27, "USA, Canada": 1.10,
+    "E Europe, Balkans": 0.30, "Japan, Korea, Manchuria": 0.18, "Russia, Siberia": 0.18, "Middle East, C Asia": 0.13,
+    "South America": 0.35, "SE Asia": 1.93, "Mexico, C America": 1.84, "Oceania": 4.22,
+}
+WIDEN_FLOOR = 0.5
+
+
+def widening(spread=None, floor=WIDEN_FLOOR):
+    """{group: how far the gate widens its band on each side}: half the two-run spread, at least `floor`."""
+    spread = TWO_RUN_SPREAD if spread is None else spread
+    return {label: max(floor, s / 2) for label, s in spread.items()}
+
+
+_STATE_BLOCK = re.compile(r"^(STATE_[A-Z0-9_]+)\s*=\s*\{", re.M)
+_TRAITS = re.compile(r"\btraits\s*=\s*\{([^{}]*)\}")
+
+
+def state_region_traits(state_regions=STATE_REGIONS):
+    """{state region: [its traits]} from the map files (map_data/state_regions, the mod's copy of every file, which the
+    game reads in place of the base game's), seas left out."""
+    out = {}
+    for path in sorted(Path(state_regions).glob("*.txt")):
+        if path.name == "99_seas.txt":
+            continue
+        text = path.read_text(encoding="utf-8-sig")
+        heads = list(_STATE_BLOCK.finditer(text))
+        for i, m in enumerate(heads):
+            body = text[m.end():heads[i + 1].start() if i + 1 < len(heads) else len(text)]
+            traits = _TRAITS.search(body)
+            out[m.group(1)] = re.findall(r'"([^"]+)"', traits.group(1)) if traits else []
+    return out
+
+
+def malaria_levels(levels=None, state_regions=STATE_REGIONS):
+    """{state region: its malaria level} for the state regions with one of vanilla's malaria traits (calibration step 3,
+    demographics_params.MALARIA_TRAITS: 1 malaria, 2 severe; the higher if a region had both)."""
+    import demographics_params as P
+    levels = P.MALARIA_TRAITS if levels is None else levels
+    out = {}
+    for region, traits in state_region_traits(state_regions).items():
+        level = max((levels[t] for t in traits if t in levels), default=0)
+        if level:
+            out[region] = level
+    return out
 
 
 def parse(text):

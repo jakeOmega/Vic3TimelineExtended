@@ -1331,6 +1331,8 @@
  state_infrastructure_from_transportation_consumption_add_desc:0 "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there"
  state_labor_participation_add:0 "Census: People at Work"
  state_labor_participation_add_desc:0 "The share of working-age women and men who work. Used by the census on the Demographics tab."
+ state_malaria_control_add:0 "Malaria Control"
+ state_malaria_control_add_desc:0 "How far malaria's toll on the people who live with it has been brought under control. In a state with malaria, deaths from infection rise by a share that this takes away: all of it at 100%. Used by the census on the Demographics tab."
  state_male_labor_participation_add:0 "Census: Men at Work"
  state_male_labor_participation_add_desc:0 "The share of working-age men who work. Used by the census on the Demographics tab."
  state_maternal_mortality_mult:0 "Maternal Deaths"
