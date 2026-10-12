@@ -159,7 +159,7 @@ te_demog_wave_war_dead_share = {
 		}
 		value = var:te_dg_wv_war_dead
 		multiply = te_demog_wave_k_war_men
-		divide = var:te_dg_wv_war_men
+		divide = { value = var:te_dg_wv_war_men min = 1 }
 	}
 }
 
@@ -185,7 +185,7 @@ te_demog_wave_pop_change = {
 		}
 		value = var:te_dg_walk_pop
 		subtract = var:te_dg_walk_pop_prev
-		divide = var:te_dg_walk_pop_prev
+		divide = { value = var:te_dg_walk_pop_prev min = 1 }
 	}
 }
 

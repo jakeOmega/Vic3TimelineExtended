@@ -5,6 +5,8 @@
 # frameworks' tiers (normal_modifier_time five years, long_modifier_time ten, very_long_modifier_time twenty).
 # Interest groups' lines are an action's reception (vanilla's 5/10/20 for changing a law), so they sit on the option's
 # own modifier for its duration rather than on the ±5 laws' scale.
+# Women's work sits on phase 2 step 1's women's-work family (state_demog_womens_work_ratio_add), as Parental Leave's,
+# never on the engine's working-adult field (test_demographics_registry's TestWorkforceLinesMoved).
 # Two lines set a census type (state_sex_ratio_at_birth_add, state_desired_fertility_mult: script-only, read by the
 # census at each state's step): a release comments them out (scripts/release/comment_out_census_inputs.py, rule 1), so
 # each such modifier keeps a line of its own. The events never fire there (te_demog_wave_runs reads Full).
@@ -51,20 +53,21 @@ te_demog_wave_boom_homes = {
 	interest_group_ig_trade_unions_approval_add = 3
 }
 
-# The women sent home from the wartime factories (decaying, ten years).
+# The women sent home from the wartime factories (decaying, ten years). Women's work is phase 2 step 1's family
+# (state_demog_womens_work_ratio_add, as Parental Leave's): under Full the census's participation reads it as women's
+# rate, and the moved lines' pair would re-apply it as a working-adult line where the census doesn't set the workforce.
 te_demog_wave_boom_women_home = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_working_adult_ratio_add = -0.02
+	state_demog_womens_work_ratio_add = -0.02
 	state_pop_support_movement_feminist_mult = 0.1
 	interest_group_ig_devout_approval_add = 3
 	interest_group_ig_industrialists_approval_add = -2
 }
 
-# The women kept at the lathes (decaying, ten years). A flat working-adult line stands for women's work, which the
-# census leaves on top (design rule 3).
+# The women kept at the lathes (decaying, ten years), on the same family.
 te_demog_wave_boom_women_work = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	state_working_adult_ratio_add = 0.02
+	state_demog_womens_work_ratio_add = 0.02
 	interest_group_ig_industrialists_approval_add = 3
 	interest_group_ig_devout_approval_add = -3
 }
@@ -151,7 +154,7 @@ te_demog_wave_almshouses = {
 # With no pension law: the old live with their children, and their daughters stay home to care for them (ten years).
 te_demog_wave_family_care = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	state_working_adult_ratio_add = -0.01
+	state_demog_womens_work_ratio_add = -0.01
 	interest_group_ig_devout_approval_add = 2
 }
 

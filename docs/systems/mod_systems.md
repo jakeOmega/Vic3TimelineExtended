@@ -1645,7 +1645,11 @@ December 1837). Each threshold is a constant in `te_demog_wave_values.txt` pinne
 - **Census types on event modifiers:** Missing Girls' ban and payments carry `state_sex_ratio_at_birth_add`, The Last
   Generation?'s licences and payments `state_desired_fertility_mult`, on timed country modifiers; each keeps a line of its
   own for a release, which comments the types out. The self-check `wave_timed_country_type` reads the capital a week after
-  the first of them (`docs/testing/demographics-playtest.md`, Self-checks).
+  the first of them (`docs/testing/demographics-playtest.md`, Self-checks). Women's work (the Baby Boom's women sent
+  home or kept at work, the Greying's family care) is on phase 2 step 1's women's-work family
+  (`state_demog_womens_work_ratio_add`, as Parental Leave's), never the engine's working-adult field
+  (`TestWorkforceLinesMoved`): under Full the participation model reads it as women's rate. It rides the same timed
+  country modifiers, so the self-check's verdict covers it too.
 - **Revolutions:** the winner keeps the holds and the tracker (variables), not the event modifiers, as for any event.
 - **The fit** (`demographics_harness.py events`): no threshold crossed in the 1836 reference structures; a fast
   transition opens the Dividend in year 27 and the Youth Bulge in year 32 at 20% unemployment, a slow one neither; the
