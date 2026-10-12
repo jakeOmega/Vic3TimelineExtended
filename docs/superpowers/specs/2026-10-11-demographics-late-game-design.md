@@ -32,6 +32,7 @@ extension come to the rich earlier, how is all this displayed, etc."
 
 | Carrier | What it does now | File |
 |---|---|---|
+| `mrna_therapeutics` (era 10) | a Ministry of Health level; the Biologics and mRNA production method. Nothing slows ageing yet | `era_10.txt:127` |
 | `telemedicine` (era 10) | chronic treatment +0.2 | `era_10.txt:315` |
 | `mental_health_awareness` (era 10) | deaths −5%, added on top of the census | `era_10.txt:362` |
 | `personalized_medicine` (era 11) | chronic treatment +0.2. Nothing slows ageing yet | `era_11.txt:373` |
@@ -61,6 +62,7 @@ both sexes' mean. "Ageing 0.75" means the treated age three-quarters of a year e
 |---|---|---|---|---|
 | Britain 1836 | 39.8 | 12.5 | about 0 | 63 / 60 |
 | Rich today | 77.5 | 21.7 | 9% | 77 / 73 |
+| … and ageing 0.9 (era 10) | 82.2 | 26.8 | 23% | 84 / 81 |
 | Era 11 medicine and Medical Augmentation (chronic ×0.16) | 88.1 | 31.7 | 35% | 92 / 86 |
 | … and ageing 0.75 | 103 | 49 | 67% | 117 / 110 |
 | … and ageing 0.5 | 130 (122 to 150) | 79 | 78% | 165 / 156 |
@@ -81,7 +83,8 @@ work under modern women's participation and §2.1's capacity table, with a pensi
 |---|---|---|---|---|---|---|
 | No change | 0.75 / 0.56 | 17.9 | 31% | 48 | 1.71 | 0.45 / 0.55 |
 | Era 11 medicine, no slowing | 0.88 / 0.68 | 14.6 | 42% | 56 | 2.11 | 0.38 / 0.49 |
-| Ageing 0.75 | 0.93 / 0.79 | 11.1 | 50% | 54 | 1.94 | 0.35 / 0.55 |
+| Era 10, ageing 0.9 | 0.77 / 0.61 | 16.6 | 36% | 48 | 1.68 | 0.43 / 0.57 |
+| Era 10 (0.9) for 20 years, then era 11 (0.75) | 0.84 / 0.75 | 8.9 | 48% | 53 | 1.88 | 0.36 / 0.55 |
 | Ageing 0.5 | 0.97 / 0.90 | 8.6 | 56% | 50 | 1.69 | 0.33 / 0.61 |
 | Immortality, pulled 3% a year toward 35 | 1.10 / 1.19 | 2.4 | 67% | 31 | 0.79 | 0.29 / 0.77 |
 
@@ -109,6 +112,11 @@ Three things fall out, and the rest of the draft is built on them:
 | Calendar/biological toggle on the pyramid from era 11; ring to about 150 from 1836 | parent Decisions |
 | Measures are GUI buttons, national for now | parent Decisions |
 | One-year cohorts at about 26 MB of an 1836 plain-text save | #894 |
+| Both linked pension variants are offered; the setting lives on the Demographics tab as buttons, under Old Age Pension only | owner, 2026-10-11 (§2.2) |
+| A small ageing step at era 10: rate 0.9 | owner, 2026-10-11 (§1.2) |
+| The workforce ratio is uncapped; watch it in the harness and an observer run | owner, 2026-10-11 (§2.1) |
+| Conscription's age-structure term falls as far as the pool does, to −1; the +0.25 ceiling stays for now | owner, 2026-10-11 (§2.5) |
+| Vanilla Old Age Pension's +20% dependents' income has no treasury cost | owner, 2026-10-11 (§5.1) |
 
 ## 0. The architecture: two clocks, one sweep
 
@@ -152,8 +160,8 @@ law and family formation are social, so they get the social clock.
   (Gruenberg 1977) against Fries's "compression" (1980), and the sketch's health need rises.
 - **Life extension** slows the clock itself, so death, frailty, menopause and need all move together. Nothing in the
   game does it yet. Real evidence stops at animals: rapamycin started late extended mice's lives by about 9–14%
-  (Harrison et al. 2009, *Nature*); no intervention has slowed human ageing. Everything from era 11 here is
-  speculation, placed so that era 11 is a step and era 12 the leap.
+  (Harrison et al. 2009, *Nature*); no intervention has slowed human ageing. Everything from era 10's step here is
+  speculation, placed so that era 10 is a small step, era 11 a larger one and era 12 the leap.
 
 ### 1.2 Biological age: who is treated, and how fast they age
 
@@ -187,21 +195,23 @@ state's E):
    wealth differs, so the error is small. Carrying the origin's share and deficit would be new phase-3 work, worth
    adding only if phase 3 builds the parent's resettlement profiles, which need the same hook.
 
-**The pool** (150+) keeps a share and a deficit like its mean age. **A state seeded after era 11** (a new or split
-state) starts each band at s = E and d = (1 − r) × (calendar − 25), the steady state of its current rate.
+**The pool** (150+) keeps a share and a deficit like its mean age. **A state seeded once ageing is slowed** (a new or
+split state) starts each band at s = E and d = (1 − r) × (calendar − 25), the steady state of its current rate.
 
 **Carriers (proposal; speculation):**
 
 | Carrier | Era | `state_ageing_rate_add` | Why |
 |---|---|---|---|
-| `personalized_medicine` | 11 | −0.15 | geroprotective drugs (the rapamycin class) |
-| `genetic_engineering` | 11 | −0.10 | gene therapies against the hallmarks of ageing |
+| `mrna_therapeutics` | 10 | −0.10 | biologics such as senolytics, which clear senescent cells (first human trial: Justice et al. 2019, *EBioMedicine*), and mRNA-delivered therapies; of the mod's two era-10 medical technologies, the one that acts on the body (`telemedicine` is how care reaches it) |
+| `personalized_medicine` | 11 | −0.10 | geroprotective drugs (the rapamycin class), dosed to the person |
+| `genetic_engineering` | 11 | −0.05 | gene therapies against the hallmarks of ageing |
 | `biological_immortality` | 12 | −0.75 (r = 0) and `state_rejuvenation_add` +0.03 | ageing stops; the body winds back |
 
-Era 11 together gives r = 0.75: a treated person's steady-state life expectancy is about 103, near the optimistic end
-of extrapolations (best-practice life expectancy has risen about three months a year since 1840, Oeppen and Vaupel
-2002, *Science*; against that, Olshansky et al. 2024, *Nature Aging*, argue radical extension this century is
-implausible). The parent proposed about half a year a year at era 11 (r = 0.5); that gives 130 and an old-age
+The ladder (owner, 2026-10-11) is r = 0.9 at era 10, 0.75 at era 11, then 0. At 0.9 a treated person's steady-state
+life expectancy is about 82, against 77.5 untreated with the same medicine (sketch). At 0.75 it is about 103, near the
+optimistic end of extrapolations (best-practice life expectancy has risen about three months a year since 1840, Oeppen
+and Vaupel 2002, *Science*; against that, Olshansky et al. 2024, *Nature Aging*, argue radical extension this century
+is implausible). The parent proposed about half a year a year at era 11 (r = 0.5); that gives 130 and an old-age
 threshold past the ring (§9, call 3).
 
 ### 1.3 How the ring carries it
@@ -239,7 +249,7 @@ formerly treated and untreated apart) against the rules, year 50, era 11's rates
 - The ban row is the rule above: bodies keep their age. The first draft put the formerly treated back at their
   calendar age at once.
 
-**Storage** (each from era 11 only, in states with someone treated):
+**Storage** (each from era 10's step only, in states with someone treated):
 
 | Option | Variables a state | Fit | Save, full late game |
 |---|---|---|---|
@@ -277,7 +287,8 @@ five cohorts sit within ±2 years of each other, which the table's runs include.
 
 - **"Old" as a number**: the age at which a state's people have 15 years of life left on average, Sanderson and
   Scherbov's prospective old-age threshold (2005, *Nature*; 2010, *Science*).
-- **Its values** (sketch, women / men): 63 / 60 in 1836, 66 / 63 in 1950, 77 / 73 today, 92 / 86 with era 11
+- **Its values** (sketch, women / men): 63 / 60 in 1836, 66 / 63 in 1950, 77 / 73 today, 84 / 81 with era 10's 0.9,
+  92 / 86 with era 11
   medicine, 117 / 110 with ageing at 0.75. Under immortality there is none: no age has only 15 years left.
 - **How**: from the census's own life table, a reverse pass over its 31 groups at each step, with the death rates at
   each age blended by the ring's own treated share at that age (§1.2's s); women and men averaged. A period figure,
@@ -338,7 +349,9 @@ the participation model's, and those lines set it.
 
 **The engine's scale.** Under immortality the sketch's workforce reaches 0.66 of all people with Linked to Average
 Longevity, 0.39 with Linked to Common and 0.77 with no pension (§2.3), against today's 0.45: about 0.62, 0.36 and 0.73
-on the engine's scale, against vanilla's 0.25 in 1836 and about 0.42 today. A cap is an owner call (§9, call 10).
+on the engine's scale, against vanilla's 0.25 in 1836 and about 0.42 today. **No cap** (owner, 2026-10-11): the
+harness and an observer run watch the engine-scale figures (about 0.62 under Linked to Average, 0.73 with no pension),
+and a cap comes only if they show a problem (§9, call 10).
 
 ### 2.2 The pension age
 
@@ -357,7 +370,8 @@ bears the cost):
 
 - **Both linked positions** are at least 65 and move at most a year a year. The floor brings back a fixed age on
   purpose: it makes linking a reform that only raises the age (§9, call 6). Before anyone is treated they give the
-  same age: 65 (the floor) in 1836 and 1950, 70 today, about 84 with era 11 medicine. They part once some of a state
+  same age: 65 (the floor) in 1836 and 1950, 70 today, about 84 with era 11 medicine (about 78 at era 10's 0.9 with
+  everyone treated, about 108 at era 11's 0.75). They part once some of a state
   is treated.
 - **Existing pensioners keep their pensions.** The age moves at most a year a year and every cohort ages a year a
   year, so no one already over it falls below it.
@@ -370,9 +384,17 @@ bears the cost):
   Expectancy by Income*, 2015, as summarised). Once life extension reaches the rich first, that choice is the late
   game's pension question, so the player gets both answers.
 - **The minimum term** stays five years for every position (parent §8.2).
-- **AI weights** (shared mechanics, the same for every country, never `is_ai`): the bill's share of GDP and a weak
-  treasury push toward Raised and Linked to Average; a wide longevity gap (§4.3) pushes toward Linked to Common, as
-  the country's unions would; a youth-bulge or unemployment problem pushes toward Early.
+- **Where it lives** (owner, 2026-10-11: the panel, not a law or a journal entry): five buttons in the Work and
+  Retirement section of the Demographics tab (Population panel → Demographics), beside the pension age (style guide
+  rule 6). They show only under Old Age Pension. A button that can't be pressed is greyed with its reason in the
+  tooltip: the five-year term still running, with the year it ends. Under Display only the setting changes nothing,
+  so the buttons are greyed with that reason ("Pension settings act only under the Full Demographics rule") rather
+  than hidden: Display only shows what Full would do, and no button looks live. Under Disabled the tab is gone, which
+  is fine, since every effect is Full's.
+- **AI weights** (shared mechanics, the same for every country, never `is_ai`), applied by the AI's yearly country
+  pulse: the bill's share of GDP and a weak treasury push toward Raised and Linked to Average; a wide longevity gap
+  (§4.3) pushes toward Linked to Common, as the country's unions would; a youth-bulge or unemployment problem pushes
+  toward Early. The five-year term binds the AI as it binds the player.
 - **UBI and Post-Scarcity**, the welfare group's later laws (`extra_laws.txt:285`, `:344`), replace Old Age Pension.
   Under them there is no pension age: the old are paid as everyone is, there is no separate pension bill, and the
   working ages end at capacity, with the after-pension share applied from the old-age threshold (§1.5's figure) as a
@@ -415,23 +437,30 @@ Conscription could read either clock (owner, 2026-10-11). Parent §7 sets `state
 20–39 against the 1836 reference, capped at ±0.25. The war dead (parent §2.5) come from men aged 18–40 by rate age, 95%
 of them men.
 
+**The decrease is not capped** (owner, 2026-10-11): the term falls as far as the pool does, but not below −1, so the
+engine's multiplier never goes negative. The +0.25 ceiling stays for now; the owner spoke only to the decrease. **This
+changes phase 2**: aged rich countries no longer sit at a flat −25%, they get the pool's own shortfall. Today's rich
+structure in the sketch is −0.25 (its pool happens to be at the old floor); an older one goes below it: −0.30 after 60
+years of era 10's 0.9, and −0.43 by calendar age on the era 10 to era 11 ladder.
+
 - **Proposal: both clocks.** The pool is men of calendar age 20 or more (legal adulthood) and biological age 39 or less
   (fitness). The war dead come from the same pool, whichever rule is chosen, so the dead are those who could be sent.
   Before life extension this is today's 20–39.
 - **What it does** (sketch: everyone treated, 60 years from today's structure; the 1836 reference is 14.0% of people,
   28.6% of men):
 
-| Case | Share of men in the pool: calendar 20–39 | Both clocks | Parent §7's term, uncapped: calendar | Both clocks |
+| Case | Share of men in the pool: calendar 20–39 | Both clocks | Parent §7's term (from −1 up): calendar | Both clocks |
 |---|---|---|---|---|
 | Today's structure | 21.7% | 21.7% | −0.25 | −0.25 |
-| Era 11 (ageing 0.75), 30 / 60 years | 17.7% / 15.9% | 22.4% / 20.1% | −0.39 / −0.46 | −0.23 / −0.31 |
+| Era 10 (ageing 0.9), 30 / 60 years | 21.0% / 20.4% | 23.2% / 22.5% | −0.28 / −0.30 | −0.20 / −0.23 |
+| Era 10 for 20 years, then era 11 (0.75), 30 / 60 years | 19.5% / 16.6% | 23.7% / 21.1% | −0.33 / −0.43 | −0.18 / −0.28 |
 | Immortality (3% pull), 30 / 60 years | 15.0% / 10.8% | 48.8% / 74.4% | −0.49 / −0.64 | +0.66 / +1.48 |
 
-- **Under immortality nearly every adult man qualifies** under both clocks, and the term would sit at the +0.25 cap:
-  the cap, not the pool, sets the late-game figure. By calendar alone an ageing society sits at the −0.25 cap from
-  today on, and the treated old are exempt however fit.
+- **Under immortality nearly every adult man qualifies** under both clocks, and the term (+1.48 uncapped) sits at the
+  +0.25 ceiling: the ceiling, not the pool, sets the late-game figure. By calendar alone the pool shrinks with the
+  young cohorts and the term falls to −0.64, and the treated old are exempt however fit.
 - **A player choice, later**: "service by age" against "service by fitness", with the Armed Forces favouring fitness
-  (the owner thinks the group is usually too weak). Worth adding only if a play-test shows the cap binding often
+  (the owner thinks the group is usually too weak). Worth adding only if a play-test shows the ceiling binding often
   (§9, call 21).
 
 ## 3. Children: how many and when
@@ -687,7 +716,7 @@ everyone young.
 | **Old age from** (the age with 15 years left; Sanderson and Scherbov 2005, *Nature*, and 2010, *Science*) | none | **yes**: says what "old" means now, and drives the linked pension positions |
 | Deaths per 1,000 | 2.2 | already shown (realized); in the late game it is the honest figure |
 | Healthy lifespan (years to biological 65) | unbounded | no: undefined under immortality |
-| **Mean biological age** | 29 against a calendar mean in the hundreds | **yes**, from era 11 |
+| **Mean biological age** | 29 against a calendar mean in the hundreds | **yes**, from the first ageing carrier (era 10) |
 
 ### 6.2 The rows
 
@@ -698,15 +727,15 @@ the census states.
 |---|---|---|---|---|
 | Life expectancy | Overview; state figures | always | `77`, then `100+` once the census's figure passes 100 | at birth and 65, women and men, the five causes (as built) |
 | Old age from | Overview; state figures | phase 2 | `75`, or `none` | 15 years left; women and men; the untreated's figure beside the state's; the linked pension positions sit five years below the one they follow |
-| Living to 100 | Overview; state figures | from era 11, or once 1% | `35%` | treated and untreated; women and men |
-| Biological age | Overview; state figures | from era 11 | `38 (calendar 61)` | mean ages; the ageing rate; the pull; the treated share |
+| Living to 100 | Overview; state figures | from era 10's step, or once 1% | `35%` | treated and untreated; women and men |
+| Biological age | Overview; state figures | from era 10's step | `38 (calendar 61)` | mean ages; the ageing rate; the pull; the treated share |
 | Workforce | Work and Retirement (new, open) | phase 2 | `62% × 71% = 44%` | working-age share by its bounds; at work by sex and class mix; workers past the pension age |
-| Pension age | Work and Retirement | Old Age Pension | `84 (Linked to Common)` | the setting's five buttons sit beside it (rule 6), each with its trade-off, interest-group reactions and minimum term on hover; the threshold the position follows |
+| Pension age | Work and Retirement | Old Age Pension | `84 (Linked to Common)` | the setting's five buttons sit beside it (rule 6), each with its trade-off, interest-group reactions and minimum term on hover, greyed with the reason while the term runs or outside Full; the threshold the position follows |
 | Pensioners | Work and Retirement | Old Age Pension | `18%` | |
 | Pension bill | Work and Retirement | Old Age Pension | `£1.2M a week (6% of GDP)` | pensioners × B |
 | Health need | Work and Retirement | phase 2 | `×1.8 of 1836` | by age band; medical technology; longevity care |
-| Longevity care | Longevity (shown from era 11, rule 7) | era 11 | `42% of people` | by strata; the market threshold ("within reach from wealth 45"); the laws |
-| Longevity gap | Longevity | era 11 | `32 points` | living to 100, treated and untreated; the approval and movement effects it drives |
+| Longevity care | Longevity (shown from era 10's step, rule 7) | era 10's step | `42% of people` | by strata; the market threshold ("within reach from wealth 45"); the laws |
+| Longevity gap | Longevity | era 10's step | `32 points` | living to 100, treated and untreated; the approval and movement effects it drives |
 | Mean age at childbirth | Overview, children per woman's hover | phase 3 | `31` | planned and unplanned; births lost to postponement |
 
 - **Children per woman** stays the conventional figure over calendar 15–49; its hover adds births to women over 50
@@ -718,14 +747,14 @@ the census states.
   pyramid grows a column, the parent's "late game's striking image"; the top bar reads 150+.
 - **State subtab**: the same rows for the state; the Causes of Death section's chronic row gains "Biological age −N
   years" on hover.
-- **History** adds Living to 100 from era 11 (optional).
+- **History** adds Living to 100 from era 10's step (optional).
 
 ## 7. Cost
 
 | Item | Variables a state | When | Save (887 states, 60–85 bytes each) |
 |---|---|---|---|
 | Phase 2 figures: working-age share, share at work, pensioners, health need, old-age threshold, the workforce term | 6 | always | about 0.4 MB |
-| Phase 3: E, r, c and the pull; a treated share and a deficit per band (up to 50) and the pool's two; Living to 100 treated and untreated; mean biological age; access by strata (3); mean age at childbirth | up to 62 | era 11, states with someone treated | about 3.9 MB |
+| Phase 3: E, r, c and the pull; a treated share and a deficit per band (up to 50) and the pool's two; Living to 100 treated and untreated; mean biological age; access by strata (3); mean age at childbirth | up to 62 | from era 10's step, states with someone treated | about 3.9 MB |
 | … with one deficit per band instead | up to 37 | | about 2.3 MB |
 | … with a share and a deficit per slot instead | up to 262 | | about 16 MB |
 | §13's children-so-far (not recommended) | 30–150 more | | 2–9 MB |
@@ -756,10 +785,11 @@ bands. Owner check 5 (the benchmark in a late-game save) is the gate; per-band s
 7. **Names reserved**: `te_dg_d<j>` (deficits), `te_dg_s<j>` (treated shares), `te_dg_elig`, `te_dg_cover`,
    `te_dg_age_rate`, `state_ageing_rate_add`, `state_rejuvenation_add`.
 8. **The workforce target is a total** (§2.1): phase 2's term nets the pops' base ratios and the lines left on top,
-   and the women's-work and retirement lines move to script-only types the participation model reads.
+   and the women's-work and retirement lines move to script-only types the participation model reads. No cap.
+9. **Conscription's term falls as far as the pool does**, to −1 (§2.5): parent §7's −0.25 floor goes.
 
 Items 1–7 change no number phase 2 would otherwise produce. Item 8 decides how phase 2's own workforce term counts
-the lines already there.
+the lines already there; item 9 changes parent §7's conscription figure for aged countries.
 
 ### 8.2 Phase 3
 
@@ -802,22 +832,25 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
 2. **Phase 2 builds the interfaces in §8.1** (two indexes, a pension-age variable, participation and need tables,
    planned and unplanned births, the workforce target as a total), changing no number it would otherwise produce.
    *Recommended.*
-3. **Era 11's ageing rate: 0.75** (personalized medicine −0.15, genetic engineering −0.10; treated life expectancy about
-   103). *Recommended.* Alternative: the parent's 0.5 (about 130, and an old-age threshold past the ring).
+3. **The ageing ladder: 0.9 at era 10, 0.75 at era 11, 0 at era 12.** *Decided (owner, 2026-10-11)* for era 10's step
+   (0.9, the owner's value); carried by `mrna_therapeutics` −0.10, then `personalized_medicine` −0.10 and
+   `genetic_engineering` −0.05. Treated life expectancy about 82 at 0.9 and 103 at 0.75. Era 11's 0.75 stays the
+   recommendation; the parent's 0.5 (about 130) is the alternative.
 4. **Immortality's pull toward 35: 3% a year** (deaths per 1,000 from 8 to about 3.6 in ten years). *Recommended.*
    Alternative: 10% (2.4 in ten years).
 5. **Fertility under immortality: planned by calendar, unplanned by biology**, no new variables; growth ×1.23–1.30 in
    50 years at 1.6 children with everyone treated (§3.3). *Recommended.* Alternatives: §13's children-so-far count
    (×1.34, 30–150 more variables), or biological age with no bound (×1.86 and rising).
 6. **The pension setting: five positions**, Early 60, Standard 65, Raised 70, Linked to Average Longevity and Linked
-   to Common Longevity (both five years below the old-age threshold they follow, at least 65, at most a year a year,
-   70 today; five-year minimum term for all). Interest groups, proposals: Early, Trade Unions +2 and Industrialists −1;
-   Raised, Trade Unions −2, Rural Folk −1 and Industrialists +1; Average, Trade Unions and Rural Folk −1 and
-   Industrialists +1; Common, Trade Unions and Rural Folk +1 and Industrialists −1. AI weights by the bill's share of
-   GDP, the treasury and the longevity gap, the same for every country. The linked floor of 65 brings back a fixed
-   age on purpose: it makes linking a reform that only raises the age. *Recommended*, floor included. Alternatives: no
-   floor (about 56–60 before 1950); every position linked (loses the 20th century's squeeze); calendar positions only
-   (an immortal society can't escape its bill).
+   to Common Longevity (both linked ones five years below the old-age threshold they follow, at most a year a year, 70
+   today), each with a five-year minimum term. They are buttons in the Demographics tab's Work and Retirement section,
+   shown only under Old Age Pension and greyed with the reason while the term runs or outside Full; the AI picks on
+   its yearly pulse by the bill's share of GDP, the treasury and the longevity gap, the same for every country.
+   *Decided (owner, 2026-10-11)*, all of the above. Still open, *recommended as proposed*: the linked floor of 65
+   (it brings back a fixed age on purpose, so linking only raises the age; without it, about 56–60 before 1950) and
+   the interest-group reactions (Early: Trade Unions +2, Industrialists −1; Raised: Trade Unions −2, Rural Folk −1,
+   Industrialists +1; Average: Trade Unions and Rural Folk −1, Industrialists +1; Common: Trade Unions and Rural Folk
+   +1, Industrialists −1).
 7. **Both linked variants are offered** (owner, 2026-10-11). Linked to Average Longevity follows the state's blended
    table: the cheapest under immortality (16% pensioners and about 6% of GDP after 60 years, everyone treated), but
    the untreated, who still age, may never reach it, the real regressive effect of indexing. Linked to Common
@@ -832,11 +865,10 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
    Causes of Death plan's medical-diffusion rate both ways; emigrants leave with their band's mix, and immigrants,
    Internal Resettlement's included, join at the destination's (§1.2). *Recommended.* Alternative: the first draft's
    snap to calendar age (a ban after 50 years of immortality takes deaths from 2.2 to 42.6 per 1,000 in a year).
-10. **The workforce ratio's cap: 0.6** on the engine's scale. The trade-off: 0.6 is 2.4 times 1836's 0.25 and 1.4 times
-    today's 0.42, so about that much more labour per pop. Jobs that don't grow with it mean unemployment and lower
-    wages; jobs that do mean output. Immortality reaches about 0.62 under Linked to Average and 0.73 with no pension, so
-    the cap binds only there. *Recommended*, since vanilla never passes 0.5 and the engine is untested beyond.
-    Alternative: no cap.
+10. **The workforce ratio is uncapped.** *Decided (owner, 2026-10-11).* The harness and an observer run watch the
+    engine-scale figures: about 0.62 under Linked to Average, 0.36 under Linked to Common and 0.73 with no pension
+    under immortality, against 0.25 in 1836 and 0.42 today. More labour per pop means unemployment and lower wages
+    where jobs don't grow with it, output where they do. A cap comes only if those runs show a problem.
 11. **The workforce target is a total**: the census's term nets the pops' base ratios and the lines left on top; the
     women's-work lines (the women's-rights laws, the Pill, second-wave feminism, personal appliances, two family-policy
     laws) and the retirement lines (Old Age Pension, UBI, Post-Scarcity, Pro-Natalist) move to script-only types the
@@ -862,18 +894,20 @@ Calls 5, 13 and 14 depend on calls 1 and 12. Call 15 waits for a play-test; call
     confirmation (2026-10-11). *Recommended.* Alternatives: replace Old Age Pension's welfare payments with the
     bill; or charge the bill under UBI and Post-Scarcity too.
 18. **The panel**: Life expectancy shows `100+` past 100; add Old age from (phase 2), Living to 100 and Biological age
-    (era 11); a Work and Retirement section that takes the pension setting from Family Policy; a Longevity subsection
-    from era 11. *Recommended.*
+    (from era 10's step); a Work and Retirement section that takes the pension setting from Family Policy; a Longevity
+    subsection from era 10's step. *Recommended*; the setting's home is decided (call 6).
 19. **The late-era lines** move into the census under Full (§8.4): immortality as the ageing rate, Mental Health
     Awareness as external −10%, Mind Backups as external and work −50%; ectogenesis's births stay on top.
     *Recommended.*
 20. **The adult external and work schedules get a 2000–2020 band in the harness** before phase 3, since under
     immortality they are the whole death rate (men's median age at death 203 against women's 594 in the sketch).
     *Recommended.*
-21. **Conscription reads both clocks** (owner's question, 2026-10-11): the pool is men of calendar age 20 or more and
-    biological age 39 or less, and the war dead come from the same pool, whichever rule is chosen (§2.5). Under
-    immortality 74% of men qualify after 60 years, and parent §7's term (+1.48 uncapped) sits at its +0.25 cap.
-    *Recommended.* Alternatives: calendar only (the treated old are exempt and the pool shrinks with the young cohorts,
-    to 11% of men after 60 years of immortality: the term sits at the −0.25 cap); biological only (no legal floor:
-    rejected); a player choice, "service by age" or "service by fitness", with the Armed Forces favouring fitness,
-    added only if a play-test shows the cap binding often.
+21. **Conscription.** *Decided (owner, 2026-10-11)*: the decrease is not capped; the term falls as far as the pool
+    does, down to −1, and the +0.25 ceiling stays for now. This changes phase 2 (§2.5): aged countries get the pool's
+    own shortfall instead of a flat −25% (today's rich structure −0.25; −0.43 by calendar age after the era 10 to 11
+    ladder). *Recommended*, still open: the pool reads both clocks, men of calendar age 20 or more and biological age
+    39 or less, and the war dead come from the same pool, whichever rule is chosen. Under immortality 74% of men
+    qualify after 60 years, and the term (+1.48) sits at the +0.25 ceiling. Alternatives: calendar only (the treated
+    old are exempt and the pool shrinks to 11% of men after 60 years of immortality, a term of −0.64); biological only
+    (no legal floor: rejected); a player choice, "service by age" or "service by fitness", with the Armed Forces
+    favouring fitness, added only if a play-test shows the ceiling binding often.
