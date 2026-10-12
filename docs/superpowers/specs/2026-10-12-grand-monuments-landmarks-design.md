@@ -1,7 +1,7 @@
 # Grand Monuments v2 phase 4: landmarks standing in 1836 — design
 
 **Date:** 2026-10-12
-**Status:** approved in conversation (2026-10-11 and 12); this document is for review
+**Status:** approved in conversation (2026-10-11 and 12), and as a whole by the owner on 2026-10-12
 **Builds on:** `2026-10-05-grand-monuments-v2-design.md` (§4, §10; "v2" below), `2026-09-27-grand-monument-rework-design.md`
 (§1.1 named landmarks; "v1"), and the pictures spec, *Grand Monument pictures, forms and styles* (2026-10-11, written
 in another session and not yet merged).
@@ -33,7 +33,7 @@ Phase 4 builds the landmark mechanism. If phase 6 (historical commissions) is bu
 | People and events after 1836 | **No landmark refers to one.** That bars most phase-6 candidates (Appendix B). An exception is an event the game itself scripts: Victoria's accession in 1837 is an event, so a Victoria Memorial would be acceptable |
 | Phase 6 (if built) | No great/major-power gate. **All upside:** declining or missing a historical commission costs nothing, because a small power may not afford one |
 
-Two calls made in writing this spec, for review:
+Two calls made in writing this spec, approved by the owner on 2026-10-12:
 
 1. **Rename and Name It are greyed out while a landmark carries its historical name** ("A landmark keeps its
    historical name"), so the Arc de Triomphe can't become "the Paris Arch". Once a rededication has renamed it, both
@@ -384,11 +384,12 @@ From the conversation of 2026-10-11:
 - no great/major-power gate;
 - declining or missing one costs nothing.
 
-**Proposed, not yet decided:** each is offered once per game, to whoever holds the state, for 40 years. **From when:**
+**Decided (owner, 2026-10-12):** each is offered once per game, to whoever holds the state, for 40 years, **from the
+year its construction began**:
 
-- **The year construction began** (proposed). A commission then takes the player about as long as history took: 5 to
+- **The year construction began** (chosen). A commission then takes the player about as long as history took: 5 to
   10 years for 5 or 10 levels. The monument stands about when the real one did.
-- **The year it was completed** (v2 §7's choice for most). The monument then stands 5 to 10 years after the real one:
+- **The year it was completed** (v2 §7's choice for most; not chosen). The monument then stands 5 to 10 years after the real one:
   Walhalla around 1850 instead of 1842.
 
 **Candidates that pass the rules** (state, dedication, skin · form, target). O'Connell Tower is borderline: O'Connell
