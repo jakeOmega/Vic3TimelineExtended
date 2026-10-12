@@ -1165,6 +1165,8 @@ gm_state_undedicate = {
 			production_method = pm_monument_undedicated
 		}
 	}
+	# Draped at once: gm_state_update_picture would read back the PM just activated.
+	set_variable = { name = gm_picture_code value = 1 }
 }
 
 # State scope, from gm_country_refresh and monument_events.1. A monument on a

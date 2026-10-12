@@ -2412,7 +2412,8 @@ class CopiedDedicationTests(unittest.TestCase):
         self.assertEqual(squash(block(self.e, "gm_state_undedicate")),
                          "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } } } "
                          "activate_production_method = { building_type = building_grand_monument "
-                         "production_method = pm_monument_undedicated } }")
+                         "production_method = pm_monument_undedicated } } "
+                         "set_variable = { name = gm_picture_code value = 1 }")
         self.assertTrue(squash(block(self.e, "gm_state_dedicate")).startswith(
             "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } } } "
             "activate_production_method = { building_type = building_grand_monument "
@@ -2562,6 +2563,13 @@ class PictureTests(unittest.TestCase):
             self.assertEqual(entry["now"], "gfx/interface/icons/building_icons/building_grand_monument.dds", key)
             if isinstance(entry.get("seed"), int):
                 self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/{key}.dds").exists(), key)
+
+    def test_undedicating_drapes_it_at_once(self):
+        # Not gm_state_update_picture: it would read back the PM this effect
+        # has just activated (Task 6 review). Without this, a monument that
+        # had a form keeps its old picture until the refresh.
+        body = squash(block(read(EFFECTS), "gm_state_undedicate"))
+        self.assertTrue(body.endswith("set_variable = { name = gm_picture_code value = 1 }"), body)
 
     def test_display_value_defaults_to_the_draped_picture(self):
         v = squash(block(read(VALUES), "gm_disp_picture_code"))
