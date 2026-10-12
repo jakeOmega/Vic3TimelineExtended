@@ -1488,7 +1488,7 @@ git commit -m "Demographics harness: the practices' drift replay"
   - `DP.east_for_china(rows, today, point, s, cut_lm, cut_bs, held=None, top=0.9) -> (east, China's projected rate)`;
   - `DP.region_gate(projection, world_margin=1.0, big=2e7) -> [str]`;
   - `DP.patch_params(infection_scale=1.0, **values)` (a context manager);
-  - `DP.mortality_report(fit_by_year, years=None) -> {country: e0}` (the three Western countries in the first year);
+  - `DP.mortality_report(fit_by_year) -> {country: e0}` (the three Western countries in the first year);
   - `H.PRACTICE_SCENARIOS` (the scenarios with their shares, and two new ones).
 
 **What the gate protects (review C1).** The spec's gate held children per woman to the anchors, and growth only as a
@@ -1529,7 +1529,7 @@ The fit takes the smallest neat raise s for which a neat mortality point passes.
   - The fit reports China's children per woman at e, flagged below about 5.
   - `--at` can set h and e by hand.
 
-- [ ] **Step 1: Write the failing tests** (append to `test_demographics_practices.py`)
+- [x] **Step 1: Write the failing tests** (append to `test_demographics_practices.py`)
 
 ```python
 def _fit(country, base, lm=0.0, bs=0.0, held=None, people=1e7, e0=35.0, tag="TST", sid="1", deaths=300.0):
@@ -1653,12 +1653,12 @@ In `test_demographics_harness.py`:
         self.assertAlmostEqual(rows["1836 agrarian, No Women's Rights"], rows["1836 agrarian (reference)"], places=9)
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_practices.TestFit test_demographics_practices.TestProjection`
 Expected: FAIL (`DP.FitState` missing).
 
-- [ ] **Step 3: Write the fit and the projection** (append to `demographics_practices.py`; add `import contextlib` and
+- [x] **Step 3: Write the fit and the projection** (append to `demographics_practices.py`; add `import contextlib` and
   `import math`)
 
 ```python
@@ -1896,12 +1896,14 @@ def mortality_report(fit_by_year):
     return {c: e / p for c, (p, e) in acc.items() if p}
 ```
 
-`practice_states` (Task 3) must carry each state's census bands: `read_save` reads `BAND_VARS = tuple(f"te_dg_b{x}{b}"
+`practice_states` walks a parsed save's pops once (`_state_inputs`, cached by the parse: no grid point changes the
+walk; `test_a_parsed_save_walks_its_pops_once`), so the 60-point mortality grid re-runs only the model. It must carry
+each state's census bands: `read_save` reads `BAND_VARS = tuple(f"te_dg_b{x}{b}"
 for x in "fm" for b in range(P.BANDS))` beside `te_dg_fjob_share`, and `PracticeState` gains
 `bands: tuple = ()`, filled with `tuple((v.get(f"te_dg_bf{b}", 0.0), v.get(f"te_dg_bm{b}", 0.0)) for b in
 range(P.BANDS))`. Task 3's code already has it.
 
-- [ ] **Step 4: The scenarios with their shares** (`demographics_harness.py`, after `FERTILITY_SCENARIOS`)
+- [x] **Step 4: The scenarios with their shares** (`demographics_harness.py`, after `FERTILITY_SCENARIOS`)
 
 `fertility_rows` takes `scenarios=None` and iterates `scenarios or FERTILITY_SCENARIOS`. Then:
 
@@ -1934,7 +1936,7 @@ PRACTICE_SCENARIOS = [(label, dict(kw, practices=_SCENARIO_PRACTICES[label]), _S
 scenarios' inputs are starting proposals; check them against the medicine scenarios' inputs for the same decades
 (`MED_1950`, `MED_1990`) when you write them.
 
-- [ ] **Step 5: The subcommand** (`demographics_harness.py`)
+- [x] **Step 5: The subcommand** (`demographics_harness.py`)
 
 `practices-fit SAVE... --anchors CSV --peacetime ROWS [--shares FILE] [--s 1.00,1.05,1.10,1.15,1.20]
 [--lm 0.20,0.25,0.30,0.35,0.40] [--bs 0.25,0.30,0.35,0.40,0.45] [--fit-years 1837,1887] [--at S,LM,BS[,HELD[,EAST]]]
@@ -2061,12 +2063,12 @@ Notes:
 - The mortality grid has 60 points. Each re-runs the model over every state of eight saves from the cached parse, so it
   takes tens of minutes, not hours.
 
-- [ ] **Step 6: Run the tests**
+- [x] **Step 6: Run the tests**
 
 Run: `$V -m unittest test_demographics_practices test_demographics_harness`
 Expected: `OK`.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add scripts/analysis/demographics_practices.py scripts/analysis/demographics_harness.py test_demographics_practices.py test_demographics_harness.py

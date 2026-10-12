@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from dataclasses import replace
 from pathlib import Path
 
@@ -39,6 +40,17 @@ class TestInputs(unittest.TestCase):
         finally:
             Path(fh.name).unlink()
 
+
+    def test_a_parsed_save_walks_its_pops_once(self):
+        """practices-fit re-runs the model at every grid point from the cached parse (Task 5): the pops' walk
+        (S.state_inputs), which no grid point changes, runs once a parsed save."""
+        save = ({"states": {}}, {})
+        with mock.patch.object(DP.S, "state_inputs", return_value={}) as walk:
+            DP.practice_states("x.v3", [], regions={}, save=save)
+            DP.practice_states("x.v3", [], regions={}, save=save)
+            self.assertEqual(walk.call_count, 1)
+            DP.practice_states("x.v3", [], regions={}, save=({"states": {}}, {}))
+            self.assertEqual(walk.call_count, 2, "another parse is walked again")
 
 class TestReplay(unittest.TestCase):
     """The drift replay (spec 5.1 item 5): both shares stepped a year at a time through a run's saves."""
@@ -90,3 +102,110 @@ class TestReplay(unittest.TestCase):
                                             literacy=1.0))
         bad = DP.replay([(1837, [west, japan]), (1838, [west, eroded]), (1887, [west, eroded])])
         self.assertTrue(any("East Asia" in line for line in DP.replay_gate(bad)))
+
+
+def _fit(country, base, lm=0.0, bs=0.0, held=None, people=1e7, e0=35.0, tag="TST", sid="1", deaths=300.0):
+    return DP.FitState(sid, country, tag, people, True, base, 0.4, e0, deaths, lm, bs, held)
+
+
+class TestFit(unittest.TestCase):
+    ANCHORS = {"tfr": {"Sweden": {1837: 4.4}, "Iran": {1837: 7.0}, "China": {1837: 5.5}}}
+
+    def test_a_point_scales_the_curve_and_applies_the_cuts(self):
+        states = {1837: [_fit("Sweden", 5.5, lm=1.0), _fit("Iran", 6.0)]}
+        got = DP.evaluate(states, self.ANCHORS, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(got["countries"][("Sweden", 1837)][0], 5.5 * 1.15 * 0.7, places=9)
+        self.assertAlmostEqual(got["countries"][("Iran", 1837)][0], 6.0 * 1.15, places=9)
+        want = ((5.5 * 1.15 * 0.7 - 4.4) ** 2 + 0.5 * (6.0 * 1.15 - 7.0) ** 2) / 1.5
+        self.assertAlmostEqual(got["error"], want ** 0.5, places=9)
+
+    def test_the_held_share_cancels_the_raise(self):
+        china = _fit("China", 6.0, bs=P.BS_EAST_ASIA_START, held="east_asia")
+        india = _fit("India", 6.0, bs=P.BS_HELD_START, held="india", sid="2", tag="BIC")
+        got = DP.evaluate({1837: [china, india]}, self.ANCHORS, s=1.2, cut_lm=0.3, cut_bs=0.4)
+        self.assertAlmostEqual(got["held"], (1 - 1 / 1.2) / 0.4, places=9)
+        self.assertAlmostEqual(got["east"], got["held"], places=9, msg="East Asia defaults to the cancel share")
+        self.assertAlmostEqual(got["countries"][("China", 1837)][0], 6.0, places=9)
+        # owner, 2026-10-11 (D13): East Asia's share may sit above it; India's stays
+        above = DP.evaluate({1837: [china, india]}, self.ANCHORS, s=1.2, cut_lm=0.3, cut_bs=0.4, east=0.6)
+        self.assertAlmostEqual(above["countries"][("China", 1837)][0], 6.0 * 1.2 * (1 - 0.4 * 0.6), places=9)
+        self.assertAlmostEqual(above["countries"][("India", 1837)][0], 6.0, places=9)
+
+    def test_the_table_finds_each_raises_best_cuts(self):
+        states = {1837: [_fit("Sweden", 5.5, lm=1.0), _fit("Iran", 6.0)]}
+        rows = DP.fit_table(states, self.ANCHORS, [1.15], [0.2, 0.3, 0.4], [0.35])
+        self.assertEqual(len(rows), 1)
+        s, cut_lm, _cut_bs, _res = rows[0]
+        # Sweden's 4.4 at 5.5 x 1.15 wants 1 - cut = 0.696: 0.3 is the grid's nearest
+        self.assertEqual((s, cut_lm), (1.15, 0.3))
+
+    def test_patch_params_restores(self):
+        before = (P.POVERTY_INFECTION_AT_FLOOR, P.INFECTION["f"][0], dict(P.PRACTICE_CUT))
+        with DP.patch_params(infection_scale=1.2, POVERTY_INFECTION_AT_FLOOR=2.0, PRACTICE_CUT={"lm": 0.2, "bs": 0.3}):
+            self.assertEqual(P.POVERTY_INFECTION_AT_FLOOR, 2.0)
+            self.assertAlmostEqual(P.INFECTION["f"][0], before[1] * 1.2)
+            self.assertEqual(P.PRACTICE_CUT, {"lm": 0.2, "bs": 0.3})
+        self.assertEqual((P.POVERTY_INFECTION_AT_FLOOR, P.INFECTION["f"][0], P.PRACTICE_CUT), before)
+
+    def test_band_deaths(self):
+        q = [1000.0] * len(P.GROUPS)
+        bands = [(100.0, 50.0)] * P.BANDS
+        self.assertAlmostEqual(DP.band_deaths(q, q, bands), P.BANDS * 150.0 * 1000 / 100000)
+
+
+class TestProjection(unittest.TestCase):
+    """Review C1: #904's peacetime births less deaths, projected to a point of the fit, and the regional gate."""
+
+    ROWS = [
+        # step year, group, peace, reasons, births, deaths, people, migration, tag, state id
+        [1836, "China", True, [], 42.5, 36.0, 1000.0, 0.0, "CHI", "1"],
+        [1836, "Middle East, C Asia", True, [], 41.5, 32.7, 1000.0, 0.0, "PER", "2"],
+        [1836, "Middle East, C Asia", False, ["war"], 90.0, 10.0, 1000.0, 0.0, "PER", "2"],   # not peacetime
+        [1836, "W/N/C/S Europe", True, [], 37.9, 26.8, 1000.0, 0.0, "GBR", "3"],
+    ]
+
+    def states(self, deaths=300.0):
+        return {1837: [_fit("China", 6.0, bs=P.BS_EAST_ASIA_START, held="east_asia", sid="1", tag="CHI",
+                            deaths=deaths),
+                       _fit("Iran", 6.0, sid="2", tag="PER", deaths=deaths),
+                       _fit("United Kingdom", 5.5, lm=1.0, sid="3", tag="GBR", deaths=deaths)]}
+
+    def test_today_is_the_measured_rate(self):
+        today = self.states()
+        proj = DP.project_regions(self.ROWS, today, today, s=1.0, cut_lm=0.0, cut_bs=0.35)
+        self.assertAlmostEqual(proj["groups"]["China"][1], 6.5, places=9)
+        self.assertAlmostEqual(proj["groups"]["Middle East, C Asia"][0], 8.8, places=9, msg="war rows left out")
+        self.assertAlmostEqual(proj["world"][0], (6.5 + 8.8 + 11.1) / 3, places=9)
+
+    def test_births_take_the_points_children_per_woman_and_deaths_its_mortality(self):
+        today = self.states()
+        point = self.states(deaths=330.0)                     # the mortality knobs raised deaths 10% everywhere
+        proj = DP.project_regions(self.ROWS, today, point, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(proj["groups"]["China"][1], 42.5 * 1.0 - 36.0 * 1.1, places=6, msg="held")
+        self.assertAlmostEqual(proj["groups"]["Middle East, C Asia"][1], 41.5 * 1.15 - 32.7 * 1.1, places=6)
+        self.assertAlmostEqual(proj["groups"]["W/N/C/S Europe"][1], 37.9 * 1.15 * 0.7 - 26.8 * 1.1, places=6)
+
+    def test_east_asias_share_brings_china_into_its_band(self):
+        """Owner, 2026-10-11 (D13): the smallest share on a 0.01 grid, at least the cancel share, at which China's projected
+        peacetime births less deaths is at most +6. Here +6.5 at the cancel share; 42.5 x 1.15 x (1 - 0.35 e) - 36 <= 6
+        needs e >= 0.402, so 0.41."""
+        today = self.states()
+        e, rate = DP.east_for_china(self.ROWS, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(e, 0.41, places=9)
+        self.assertLessEqual(rate, 6.0)
+        # already in band at the cancel share: the cancel share (rounded up to the grid)
+        low = [[1836, "China", True, [], 40.0, 36.0, 1000.0, 0.0, "CHI", "1"]]
+        e, rate = DP.east_for_china(low, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(e, 0.38, places=9)
+
+    def test_the_gate(self):
+        today = self.states()
+        proj = DP.project_regions(self.ROWS, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        fails = DP.region_gate(proj)
+        self.assertTrue(any(line.startswith("China:") for line in fails), "+6.5 is above China's +3 to +6")
+        self.assertTrue(any(line.startswith("Middle East, C Asia:") for line in fails))
+        self.assertTrue(any(line.startswith("World:") for line in fails))
+        quiet = {"groups": {"China": (6.5, 5.0)}, "world": (8.8, 7.0), "tags": {"CHI": (4e8, 6.5, 5.0)}}
+        self.assertEqual(DP.region_gate(quiet), [])
+        shrinking = dict(quiet, tags={"CHI": (4e8, 6.5, -0.1)})
+        self.assertEqual(len(DP.region_gate(shrinking)), 1)

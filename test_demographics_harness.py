@@ -212,6 +212,16 @@ class TestHarness(unittest.TestCase):
             self.assertIn(label, out.getvalue())
         self.assertNotIn(" OUT", out.getvalue())
 
+    def test_the_practice_scenarios(self):
+        """Spec 5.1 item 4's shares on every fertility scenario, and review I3's two: the 20th century where Birth
+        Spacing has eroded and the raise is all that's left."""
+        labels = [label for label, _kw, _band in H.PRACTICE_SCENARIOS]
+        self.assertEqual(len(labels), len(H.FERTILITY_SCENARIOS) + 2)
+        self.assertIn("East Asia 1990", labels)
+        self.assertIn("Latin America 1970", labels)
+        rows = dict((r[0], r[1]) for r in H.fertility_rows(scenarios=H.PRACTICE_SCENARIOS))
+        self.assertAlmostEqual(rows["1836 agrarian, No Women's Rights"], rows["1836 agrarian (reference)"], places=9)
+
     def test_fertility_rows_match_the_models_steady_state(self):
         # the command's shortcut (fertility at the scenario's own e0) is what a constant run settles on
         label, kw, _band = H.FERTILITY_SCENARIOS[1]
