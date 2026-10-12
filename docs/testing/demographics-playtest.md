@@ -26,11 +26,15 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … workforce_amendment_type` | any rule, development builds only (a release comments the inputs out and turns the check off): once a game, a week after a country first holds Community Service or Mandatory Minimums on its criminal-justice law | the engine sums a script-only type from an amendment into a state's read (`read` = `expected`) | `read` = `laws_only`: the two amendments' moved working-adult lines are lost in every game | revert both amendments' blocks (`common/amendments/extra_amendments.txt`) to `state_working_adult_ratio_add` at their old values, list them in `P.LIVE_WORKFORCE_LINES` and take them out of `TestWorkforceLinesMoved.BLOCKS` (phase 2 step 1 plan, D12) |
 | `TE_SELF_CHECK … workforce_ig_trait_type` | any rule, development builds only: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02), and the INJECT added to vanilla's trait block (`remainder` about 0) | `read` 0: the type isn't summed; `remainder` about −0.05: the INJECT replaced vanilla's block. Either way the Trade Unions' two loyal traits' lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
+| `TE_SELF_CHECK … famine_reserves_absorbed` | any rule, development builds only: once a game, a week after the first country whose Landowners are powerful and whose capital has a subsistence-farm pop reading Famine Reserves at its farm (1836 India: the first monthly pulse), on one such pop (`te_debug_demog.40`). No line in a game's first weeks isn't BROKEN: it arms at the first monthly pulse and logs a week later | what the census absorbs for the pop (its owner's read of the agriculture mortality key) equals what the walk reads at its farm (`absorbed` = `walk`, both about −0.2: the trait's −0.1 doubled by the group's power) | `absorbed` 0: a `building_group_*` key reads 0 at country scope, so under Full the census absorbs nothing of the trait and India's deaths stay off. `walk` = `ratio` × `absorbed`, the ratio 2 or 0.5: the group's power reaches one read and not the other | absorbed 0: set `COUNTRY_ABSORBED_FROM_FARM = True` in `demographics_params.py` and regenerate (`gen_demographics.py`): the census absorbs the farm's own read on subsistence farms only, which holds no building-scope line, and commercial farms' workers keep the trait on top. A ratio: set `COUNTRY_ABSORBED_SCALE` to it and regenerate. Either way refit (the spec's §3) |
+| `TE_SELF_CHECK … working_conditions_read` | any rule, development builds only: once a game, a week after the first country with a mine outside its capital (`te_debug_demog.41`) | a mine outside the capital reads working conditions' laborers line as about 0, as the capital did in the 2026-10-09 growth probe: the walk's constant is its only copy | `read` about 0.1: the building's read carries the table, which the walk also adds as a constant, so the walk counts working conditions twice (the spec's 2.4× regression) | drop the constants from `te_demog_pop_death_mult` (`gen_demographics.py`, `engine_rate_terms`), regenerate, and redo the spec's §2.1 choice for building-scope lines |
+| `TE_SELF_CHECK … malaria_trait_read` | any rule, development builds only: once a game, the first month a country with Quinine owns a state the map files give the mild malaria trait | `has_state_trait` still reads the trait there (`trait_read=1`, `level=1`), though Quinine has switched the trait's modifier off: the malaria factor lasts until Malaria Prevention, as built | `trait_read=0`: the trait test stops at Quinine, so the census's malaria factor ends with it in every game | set `MALARIA_READS_REGION_LIST = True` in `demographics_params.py` and regenerate: the census reads the level from the state regions the map files give the traits (`te_demog_malaria_level_listed`) |
 | `TE_SELF_CHECK … pop_workforce_read` | Display only or Full: once a game, at the first country monthly pulse after a capital's walk | a pop's `workforce` reads as a value in the walk (`wf_engine` about 0.2-0.3) | `wf_engine` 0: the walk can't read the engine's workforce | nothing in step 1 uses it; step 2's stop rule (spec §1.8) needs another read of the engine's workforce before its fit |
+| `TE_SELF_CHECK … measure_country_types` | once a game, under Full: `START` when the first measure that moves desired family size goes on in any country (Child Allowance, Honours, Parental Leave, Later Longer Fewer, Birth Limit, the Crash Campaign; the AI's included), the verdict a week later from the capital (`te_debug_demog.10`) | the capital's read of the script-only `state_desired_fertility_mult` rose by the measures' lines its owner gained (`added` ≈ `expected`): a script-only state type on a country static modifier reaches the states | `added` reads 0: the census will never see any measure's types (step 3b reads them); `NO_VERDICT` (the measure ended within the week) re-arms the check | put each measure's census types on a state modifier in each of the country's states, applied and removed with the country modifier and re-applied by the yearly state pulse (inheritance's rural modifiers' pattern), and keep the interest groups and upkeep on the country |
 | `TE_SELF_CHECK … workforce_ratio_scale` | Display only or Full: once a game, at the first capital census step before any workforce term (a 1836 game: its first year) | the walk's `wf_engine` is nearer `per_people` (the set ratio as workforce over people: about 0.25 in 1836) than `per_dependents` (the same as workforce over dependents: about 0.20). The spec §1.8's stop rule, as built | `wf_engine` near `per_dependents`: the engine's ratio is workforce over dependents | re-derive `WORKFORCE_SCALE` and W on that scale (spec §1.8) and refit with `demographics_harness.py workforce SAVE`. Offline the 1836 save already reads over people: 82% of the world's people hold exactly 0.250 (§ Phase 2 step 2) |
 | `TE_SELF_CHECK … workforce_follows_target` | Full: once a game, at a capital's census once its workforce term has run five census years and moved more than 0.02 since it landed | the walk's `engine` figure is within 0.02 of `set`, the ratio the census set over the past year (its pops' bases plus the state's working-adult read); `census_target` and `w_target` say how far the ramp still has to go | `engine` lags `set` by more than 0.02: the engine's pull toward a pop's ratio is slower than the ramp, so the ramp adds nothing | set `WF_RAMP_STEP` large (the term lands at once, and the engine's own pull is the lag) and keep the panel's engine figure beside the target; no line at all after many years means no capital's term moved 0.02 (option r shows the capital's) |
 
-No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game.
+No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
 carriers in the player's country. **Woman Soldiers and Pollution Impact** carry their moved working-adult lines as a
 script-only type on a modifier at a multiplier (×0.5, × the region's impact), the fact `primogeniture_scaled` tests:
@@ -131,6 +135,77 @@ are in the table above.
      fallback in the Self-checks table. A failed kind loses its line in every game, so fix it before the release.
 10. **Pollution Impact, in passing:** in a polluted state of the same game, option l's `cap=` reads −0.1 × the impact
     and `replaced=` −0.05 × the same.
+
+## Calibration step 3: the regional mortality gap
+
+Spec: `docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md` (owner calls 1–3, 2026-10-12). Under
+Full the census absorbs the Landowners' Famine Reserves per farm pop, and infection gains a malaria factor. The three
+self-checks are in the table above (`famine_reserves_absorbed`, `working_conditions_read`, `malaria_trait_read`).
+
+1. **Nothing moves outside Full.** Disabled, a new game as the East India Company: a subsistence-farm pop's mortality
+   breakdown shows Famine Reserves (−20% while the Landowners are powerful), and a state's births and deaths are as on
+   `main`. Display only: the same, and the Demographics subtab's figures show the malaria factor (below).
+2. **Full, the East India Company's states.** After a state's first census step, option n's `rep_d` reads about the
+   trait's share of the state's deaths (East Bengal: about −0.2 × its farm workers' share of the bare curve, about −0.19
+   in 1841) and `md` rises by as much. The Causes of Death section's "other effects on some of its people" falls from
+   about ×0.7 to about ×1.0 (the trait now moves deaths between farm workers and the rest, not out of the state).
+3. **Full, a West African state with malaria** (the Gold Coast, which the map files give the trait): the Causes of
+   Death section's Infection and Hunger hover lists "Malaria: ×1.08 (until Malaria Prevention)", and the row's
+   multiplier is the product of the factors shown. A state without malaria shows no Malaria line. A Pacific state
+   with severe malaria (New Guinea) shows ×1.13.
+4. **Malaria Prevention** (by the console, or late in a game): the tech's tooltip shows
+   "Malaria Control +100%". At the state's next census step the Malaria line goes (×1.00 reads as no line). Quinine
+   changes nothing.
+5. **An old save** made under Full before this build: each state's Infection and Hunger hover shows no Malaria line
+   until its next yearly pulse.
+6. **`debug.log`:** no "Failed to fetch variable" or script errors from `te_demog_malaria_level`,
+   `te_demog_pop_country_absorbed_deaths`, `te_demog_f_infection_malaria` or `te_debug_demog.40`/`.41`; no unknown
+   `has_state_trait` or `state_region = s:` lookups.
+7. **The observer run** (Full, 1836–1901, normal speed): India's peacetime births less deaths near +8 to +9 per 1,000
+   (the spec's §3 projects it), Africa's inside +3 to +8, and every other region where the spec's table puts it.
+
+## Family Policy measures (step 3a)
+
+The measures and their panel (`docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §3.3-§3.7).
+Until step 3b the census reads only Free and Restricted Contraception's means lines, so births don't move for the
+others; check the switching, the costs and the politics.
+
+1. **Full, a new game; console the Family & Reproductive Policy law** (or enact it). The Demographics tab's Family
+   Policy section, open after the pyramid: "Law in Force" names the law and shows the law's tooltip; each measure the
+   law allows is a row with its running cost, "Off" and a Start button; the rest sit dimmed under "Under Other Laws",
+   their hover naming the laws that allow them. No label, cost or term cut short ("Honours for Large Families",
+   "Restricted Contraception", "Barred to 1915").
+2. **Start Child Allowance** (Pro-Natalist Policy): the budget shows a new expense line of about 0.5% of GDP a year ×
+   (the 0-14 share ÷ 0.3), weekly; the Devout and Trade Unions gain +1 approval; the term reads "On to <year + 5>";
+   the button reads End, greyed, its tooltip "Its five-year term runs to <year>". Each 31 December the expense
+   follows GDP.
+3. **Honours, Later Longer Fewer, Birth Limit, the Crash Campaign**: authority falls by 25, 50, 100, 100. Sex
+   Education: the Ministry of Education's bureaucracy cost +10%. Restricted Contraception: feminist movement support
+   up, and (option l) the capital's `fmeans` falls by 0.2; Free Contraception raises it by 0.1.
+4. **Birth Limit's button**: Start (two children), Tighten (one child, the modifier swaps at once), then End once five
+   years have run, which also ends the Rural Exemption. The Rural Exemption's Start is greyed "Needs Birth Limit in
+   force" without it.
+5. **The Crash Campaign**: no button ends it; five years to the month after it starts it ends with the "Crash Campaign
+   Over" notice, legitimacy recovers its 10, and the row reads "Barred to <year + 10>" until then.
+6. **Leaving the law**: with measures on, enact another family law (console). Every measure the new law doesn't allow
+   ends at once, each with its "… Ended" notice; under a law that allows it again it starts a new term.
+7. **Display only**: the section shows, one line above the rows says the measures act only under Full, and every
+   button is greyed with that reason.
+8. **An AI country with a measure on** (an observer run of a few decades, Full): a shrinking or ageing AI on
+   Pro-Natalist Policy takes Child Allowance or Honours, at most one money measure a year; one in a famine on
+   Population Control takes Free Contraception, Later Longer Fewer or Birth Limit, never more authority measures
+   than its free authority covers; none ends one before five years. Read the country's `te_dg_ms_*` in a plain-text
+   save.
+9. **A revolution that wins** under Full, the old government holding a measure: at once, the winner has the
+   measure's variable (copied from the loser), modifier and cost, or a notice if its law doesn't allow it.
+10. **Every game (Disabled)**: the family laws' AI weights: an AI country in famine moves toward Population Control
+    Measures; one whose population shrinks by more than 0.1% a year, toward Pro-Natalist Policy. Crowding counts only
+    where half a country's people live in states at Migration Crowding's ceiling (none before about 1900).
+11. **Parental Leave (Full)**: option l's women's-work family (`womens=`) rises by 0.02 in every state, and the pair
+    (`pair=`) follows within a month; its expense follows the capital's women's rate. `debug.log`: no error from
+    `te_demog_measure_*`, `te_demog_messages.txt`, `te_demog_ms_law_on_action` or `te_debug_demog.10` (the
+    self-check's verdict event: an error there would leave a `START` with no verdict, which reads like a capital
+    that changed hands).
 
 ## Phase 2 step 2: the workforce, pensions and health costs
 

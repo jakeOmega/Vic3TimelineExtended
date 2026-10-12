@@ -45,6 +45,7 @@ class Inputs:
     impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
     low_share: float = 0.0               # the lower strata's share of people (te_dg_low_share, from the walk)
     pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
+    malaria: int = 0                     # the state region's malaria trait level (P.MALARIA_TRAITS; calibration step 3)
     # phase 2 step 2 (§2.5): under Full, women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last
     # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
     work_female_share: float | None = None
@@ -129,6 +130,9 @@ def cause_factors(inp):
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
             return 1 + P.TURMOIL_EXTERNAL_WEIGHT * clamp(inp.turmoil, 0.0, 1.0)
+        if factor == "malaria":
+            control = clamp(inp.mods.get(P.MALARIA_CONTROL_TYPE, 0.0), 0.0, 1.0)
+            return 1 + P.MALARIA_INFECTION.get(inp.malaria, 0.0) * (1 - control)
         raise KeyError(factor)
     return {cause: {f: one(f, cause) for f in factors} for cause, factors in P.CAUSE_FACTORS.items()}
 

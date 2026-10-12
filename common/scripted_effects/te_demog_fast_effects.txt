@@ -71,6 +71,7 @@ te_demog_state_clock_step = {
 		limit = { te_demog_census_log_on = yes }
 		te_debug_demog_pulse_line = yes
 	}
+	te_demog_walk_keep_prev = yes
 	te_demog_walks = yes
 	te_demog_state_census = yes
 	te_demog_rates_refresh = yes

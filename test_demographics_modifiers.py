@@ -76,9 +76,17 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    # call 3's participation inputs (phase 2 step 1): the criminal-justice laws and State Eugenics'
                    # flat lines, the Ministries of Labour per level
                    P.MALE_PARTICIPATION_TYPE: {"law"}, P.PARTICIPATION_TYPE: {"law_institution"},
-                   P.CAPACITY_TYPE: {"law"}}
+                   P.CAPACITY_TYPE: {"law"},
+                   # calibration step 3: Malaria Prevention's control
+                   P.MALARIA_CONTROL_TYPE: {"technology"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
+
+    def test_malaria_prevention_alone_controls_malaria(self):
+        """Calibration step 3 (the spec's §2.2): the malaria factor ends with Malaria Prevention, not quinine (it protected
+        colonists, not the people who lived there), and nothing else carries the control."""
+        carried = {c.key: c.value for c in self.carriers if c.type == P.MALARIA_CONTROL_TYPE}
+        self.assertEqual(carried, {"malaria_prevention": 1.0})
 
     def test_medicine_spreads_from_a_tenth_to_two_fifths(self):
         """The Causes of Death plan: communication and medical-training techs carry the spread of medicine, +0.05 each,
