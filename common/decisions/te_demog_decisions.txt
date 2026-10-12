@@ -21,7 +21,8 @@
 #
 # ai_chance: te_demog_pc_ai_wants, the same conditions for every country (no is_ai): a Primate pattern at half strength
 # or more in a country of eight census states or more whose largest city is under Migration Crowding, out of default,
-# with the money in the treasury and authority to spare.
+# with the money in the treasury and authority to spare. The weight is the siblings' 100 (the Strategic Reserve and the
+# space missions): ai_chance weighs a decision against the others possible, so the rule alone decides.
 # ============================================================================
 te_decision_plan_new_capital = {
 	is_shown = {
@@ -70,7 +71,7 @@ te_decision_plan_new_capital = {
 		value = 0
 		if = {
 			limit = { te_demog_pc_ai_wants = yes }
-			add = 1
+			add = 100
 		}
 	}
 }
