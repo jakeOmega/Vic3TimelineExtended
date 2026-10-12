@@ -277,6 +277,32 @@ class TestGenerated(unittest.TestCase):
         self.assertNotIn(f"modifier:{P.ACCESS_TYPE}", erosion_bs)
         self.assertIn(f"te_demog_k_practice_rate = {{ value = {gen.lit(P.PRACTICE_RATE)} }}", self.values)
 
+    @staticmethod
+    def _owner_block_holds(target, conditions):
+        """(inside, outside): whether every condition sits in the limit's owner = { } block, and whether any appears
+        outside it. Brace matching, so a nested OR stays inside."""
+        limit = target[target.index("limit = {"):]
+        start = limit.index("owner = {")
+        depth, i = 0, start
+        while True:
+            depth += {"{": 1, "}": -1}.get(limit[i], 0)
+            i += 1
+            if depth == 0 and limit[i - 1] == "}":
+                break
+        inner, outer = limit[start:i], target.replace(limit[start:i], "")
+        return all(c in inner for c in conditions), any(c in outer for c in conditions)
+
+    def test_late_marriages_inheritance_reads_the_owner(self):
+        """Stop B, M1: te_inh_has_undivided_farms reads a country link (active_law:lawgroup_inheritance), so both of
+        the inheritance conditions must sit inside te_demog_pr_target_lm's owner = { } block. _OwnerEngine reads owner
+        and state alike, so only this static check catches a slip."""
+        conditions = ("has_law = law_type:law_primogeniture", "te_inh_has_undivided_farms = yes")
+        target = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertEqual(self._owner_block_holds(target, conditions), (True, False))
+        slipped = ("limit = {\n\tOR = {\n\t\towner = { has_law = law_type:law_primogeniture }\n"
+                   "\t\tte_inh_has_undivided_farms = yes\n\t}\n}")
+        self.assertNotEqual(self._owner_block_holds(slipped, conditions), (True, False), "the check catches a slip")
+
     def test_the_start_ladders_give_every_state_its_start(self):
         """Each ladder, read in order as the engine reads it (a later if wins), gives every land state region the
         start demographics_model.practice_start gives it, with the entries that change nothing left out."""

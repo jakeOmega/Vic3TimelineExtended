@@ -454,8 +454,11 @@ The same generator, read the same way. The share's 1.0 is Tokugawa Japan's restr
     else its start less what its conditions have already eroded. States seed on their own days, so a neighbour across
     a border would cascade the Hajnal line; it plays no part. In 1836 nothing has eroded where a practice starts, so a
     new game seeds the table. A census re-seed keeps the shares.
-- **Revolutions:** the shares are state variables, so they stay (`scripting_best_practices.md` § "What a Civil
-  War's Winner Inherits").
+- **Revolutions and changes of owner** (as built; the plan's Stop B, I1): a change of owner moves the people to a
+  new state object, which carries none of the old one's variables. The shares survive through the siblings (another
+  piece of the region still holding them) or the region's copy, which every step writes on the state region. Only a
+  region with neither seeds at its eroded start. The census's ring and medicine still re-seed on a whole-region
+  transfer (`scripting_best_practices.md` § "What a Civil War's Winner Inherits").
 
 ## 4. Drift and spread
 

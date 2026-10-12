@@ -10,7 +10,7 @@ history anchors (Task 5). The subcommands are demographics_harness.py's: practic
 import contextlib
 import json
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 import demographics_harness as H
 import demographics_model as M
@@ -29,6 +29,7 @@ class PracticeState:
     incorporated: bool
     inp: M.Inputs          # the model's inputs with no practice set; the shares come from a replay or the table
     bands: tuple = ()      # its census's people by five-year band, ((women, men), ...), 85+ last; empty with no census
+    stored: dict = field(default_factory=dict)   # the save's own shares (te_dg_pr_*), {} unless it holds every one
 
 
 # the census's bands a save holds per state (te_dg_bf<b>, te_dg_bm<b>): the fit's expected deaths (Task 5)
@@ -39,7 +40,8 @@ def read_save(path):
     """(sections, {state id: {"vars": ...}}) of a plain-text save: the parse (265 MB a save in the normal-speed run),
     which the fit caches by path and re-uses at every grid point."""
     sections = S.read_sections(path)
-    _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS, *H.CENSUS_INPUT_VARS))
+    _countries, svars = S.read_variables(path, (), ("te_dg_fjob_share", *BAND_VARS, *H.CENSUS_INPUT_VARS,
+                                                    *H.PRACTICE_VARS))
     return sections, svars
 
 
@@ -58,7 +60,8 @@ def _state_inputs(sections):
 def practice_states(path, carriers, regions=None, save=None):
     """[PracticeState] for every state of a plain-text save that has people (save: read_save's result, if cached).
     The model's inputs are the census's stored ones where the save holds them all (H.census_inputs, as `history`
-    reads them since #916), else the save's techs, laws and modifiers. The women's job share is the walk's
+    reads them since #916), else the save's techs, laws and modifiers. `stored` holds the save's own shares
+    (te_dg_pr_*) where it has them all. The women's job share is the walk's
     te_dg_fjob_share where the save holds it (a game with the census running), else 0; Undivided Farm Succession
     isn't read from saves, so only Primogeniture counts as impartible here (the script reads both)."""
     regions = R.strategic_region_of() if regions is None else regions
@@ -73,8 +76,14 @@ def practice_states(path, carriers, regions=None, save=None):
                           impartible=bool(set(P.IMPARTIBLE_LAWS) & st.laws))
             bands = tuple((v.get(f"te_dg_bf{b}", 0.0), v.get(f"te_dg_bm{b}", 0.0)) for b in range(P.BANDS))
             sr = state_region.get(sid, "")
-            out.append(PracticeState(sid, tag, sr, regions.get(sr, ""), st.population, inc, inp, bands))
+            stored = H.saved_shares({sid: v}).get(sid, {})
+            out.append(PracticeState(sid, tag, sr, regions.get(sr, ""), st.population, inc, inp, bands, stored))
     return out
+
+
+def saved_shares(states):
+    """{sid: {practice: share}}: the shares the save itself holds (Stop B, M2), for the states that hold them all."""
+    return {s.sid: dict(s.stored) for s in states if s.stored}
 
 
 def table_shares(states):
@@ -93,10 +102,11 @@ def read_shares(path):
 
 # ---- the drift replay (spec 5.1 item 5) ---------------------------------------------------------------------
 
-def _seed(shares, states):
+def _seed(shares, states, region):
     """te_demog_practice_seed: a state with no share takes its siblings' people-weighted mean (the states in its state
-    region that hold one), else its start less what its conditions have eroded. Siblings share a start, so in a new
-    game the order doesn't matter (the plan's D5)."""
+    region that hold one); else its region's copy (`region`, {state region: {practice: share}}, which te_demog_practice
+    _step writes: a whole region that changed hands, Stop B's I1); else its start less what its conditions have
+    eroded. Siblings share a start, so in a new game the order doesn't matter (the plan's D5)."""
     by_region = {}
     for s in states:
         by_region.setdefault(s.state_region, []).append(s)
@@ -104,32 +114,38 @@ def _seed(shares, states):
         if s.sid in shares:
             continue
         sibs = [x for x in by_region[s.state_region] if x.sid in shares]
+        copy = region.get(s.state_region, {})
         shares[s.sid] = {p: M.practice_seed(p, s.inp, M.practice_start(p, s.state_region, s.strategic_region),
-                                            [(x.people, shares[x.sid][p]) for x in sibs]) for p in P.PRACTICES}
+                                            [(x.people, shares[x.sid][p]) for x in sibs], copy.get(p))
+                         for p in P.PRACTICES}
 
 
-def _step(shares, states):
-    """te_demog_practice_step for every state: a year's drift toward its target at these conditions."""
+def _step(shares, states, region):
+    """te_demog_practice_step for every state: a year's drift toward its target at these conditions, then the shares
+    copied to its state region (the last state of a region to step wins, as in game)."""
     for s in states:
         for p in P.PRACTICES:
             start = M.practice_start(p, s.state_region, s.strategic_region)
             shares[s.sid][p] = M.practice_drift(shares[s.sid][p], M.practice_target(p, s.inp, start))
+        region[s.state_region] = dict(shares[s.sid])
 
 
 def replay(loaded):
     """{year: {sid: record}} for each save in `loaded` ([(year, [PracticeState])], sorted): every state seeds at the
     first save that holds it, then the census steps once a year, each year with the conditions of the latest save at
-    or before it (so the years between two saves take the earlier one's, and a save's own year takes its own). A
-    record holds the shares, their targets at that save's conditions, the state's people and its regions."""
-    shares, out, prev = {}, {}, None
+    or before it (so the years between two saves take the earlier one's, and a save's own year takes its own). Each
+    step writes its region's copy, which a new ID with no sibling holding a share seeds from, as in game (a region that
+    changed hands between two sampled saves). A record holds the shares, their targets at that save's conditions, the
+    state's people and its regions."""
+    shares, region, out, prev = {}, {}, {}, None
     for year, states in loaded:
         if prev is not None:
             prev_year, prev_states = prev
             for _ in range(year - prev_year - 1):
-                _step(shares, prev_states)
-        _seed(shares, states)
+                _step(shares, prev_states, region)
+        _seed(shares, states, region)
         if prev is not None:
-            _step(shares, states)
+            _step(shares, states, region)
         out[year] = {}
         for s in states:
             rec = {p: shares[s.sid][p] for p in P.PRACTICES}
@@ -392,13 +408,13 @@ def region_gate(proj, world_margin=1.0, big=2e7):
             lo, hi = band
             got = proj["groups"][label][1]
             if not lo <= got <= hi:
-                fails.append(f"{label}: {got:+.1f} per 1,000 (history {lo:+g} to {hi:+g})")
+                fails.append(f"{label}: {got:+.2f} per 1,000 (history {lo:+g} to {hi:+g})")
     measured, projected = proj["world"]
     if projected > measured - world_margin:
-        fails.append(f"World: {projected:+.1f} per 1,000 (at most {measured - world_margin:+.1f})")
+        fails.append(f"World: {projected:+.2f} per 1,000 (at most {measured - world_margin:+.2f})")
     for tag, (people, _measured, got) in sorted(proj["tags"].items()):
         if people >= big and got < 0:
-            fails.append(f"{tag}: {got:+.1f} per 1,000 with {people / 1e6:.0f}M people")
+            fails.append(f"{tag}: {got:+.2f} per 1,000 with {people / 1e6:.0f}M people")
     return fails
 
 

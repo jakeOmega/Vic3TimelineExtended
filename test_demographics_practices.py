@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
 import demographics_practices as DP  # noqa: E402
+import demographics_save_inputs as S  # noqa: E402
 
 
 def _state(sid, state_region, strategic_region, people=1000.0, tag="TST", incorporated=True, **inp):
@@ -22,6 +23,22 @@ def _state(sid, state_region, strategic_region, people=1000.0, tag="TST", incorp
 
 
 class TestInputs(unittest.TestCase):
+    def test_a_saves_own_shares_are_read(self):
+        """Stop B, M2: a save from a build with the practices holds each census state's te_dg_pr_*; the harness reads
+        them (practice_states' `stored`, saved_shares), and the fit and history start from them, not the table."""
+        c = S.CountryInputs("TST")
+        c.population, c.sol_x_size, c.wealth_tfr_x_size = 1000.0, 8000.0, M.wealth_tfr(8.0) * 1000.0
+        c.workforce, c.literate = 500.0, 100.0
+        sections = {"states": {"1": {"region": '"STATE_POSEN"'}, "2": {"region": '"STATE_POSEN"'}}}
+        svars = {"1": {"vars": {"te_dg_pr_lm": 0.55, "te_dg_pr_bs": 0.0}}, "2": {"vars": {"te_dg_pr_lm": 0.5}}}
+        with mock.patch.object(DP.S, "state_inputs", return_value={"TST": [("1", c, True), ("2", c, True)]}):
+            states = DP.practice_states("x.v3", [], regions={"STATE_POSEN": "region_eastern_europe"},
+                                        save=(sections, svars))
+        self.assertEqual({s.sid: s.stored for s in states}, {"1": {"lm": 0.55, "bs": 0.0}, "2": {}},
+                         "a state holding only some of the shares holds none")
+        self.assertEqual(DP.saved_shares(states), {"1": {"lm": 0.55, "bs": 0.0}})
+        self.assertIn("te_dg_pr_lm", DP.H.PRACTICE_VARS)
+
     def test_table_shares_are_each_states_start(self):
         states = [_state("1", "STATE_POSEN", "region_eastern_europe"), _state("2", "STATE_KANTO", "region_northeast_asia"),
                   _state("3", "STATE_UNKNOWN", "")]
@@ -72,6 +89,45 @@ class TestReplay(unittest.TestCase):
         # the split seeds from its sibling's drifted share, then takes one step at its own conditions (no contraception)
         self.assertAlmostEqual(split, sibling, delta=0.05)
         self.assertLess(split, 0.8, "not the 1836 table")
+
+    def test_a_whole_region_changing_hands_takes_the_regions_copy(self):
+        """Stop B, I1 (owner, 2026-10-12): each step writes the shares to the state region (te_dg_pr_<P>_r). A whole
+        region changing hands reappears under a new ID with no sibling; its seed takes the region's copy, not the eroded
+        start, in the game and in the replay alike."""
+        old = _state("1", "STATE_POSEN", "region_eastern_europe", people=3000.0, mods={P.CONTRACEPTION_TYPE: 1.0},
+                     literacy=1.0)
+        new = _state("2", "STATE_POSEN", "region_eastern_europe", people=3100.0)
+        got = DP.replay([(1877, [old]), (1887, [new])])
+        carried = got[1877]["1"]["lm"]
+        for _ in range(9):                                     # 1878-1886 at 1877's conditions
+            carried = M.practice_drift(carried, M.practice_target("lm", old.inp, 0.8))
+        want = M.practice_drift(carried, M.practice_target("lm", new.inp, 0.8))   # then 1887's step
+        self.assertAlmostEqual(got[1887]["2"]["lm"], want, places=9)
+        self.assertLess(got[1887]["2"]["lm"], 0.5, "not re-seeded at the table's 0.8")
+
+    def test_the_regions_copy_is_the_last_stepped_states(self):
+        """In a split region each step overwrites the copy, so it holds the last state to step (in the replay, the
+        save's last state of the region), not a mean: a fallback, not a census of the region."""
+        a = _state("1", "STATE_POSEN", "region_eastern_europe", people=3000.0, mods={P.CONTRACEPTION_TYPE: 1.0},
+                   literacy=1.0)
+        b = _state("3", "STATE_POSEN", "region_eastern_europe", people=1000.0)
+        new = _state("2", "STATE_POSEN", "region_eastern_europe", people=4000.0)
+        got = DP.replay([(1876, [a, b]), (1877, [a, b]), (1878, [new])])
+        self.assertAlmostEqual(got[1878]["2"]["lm"], M.practice_drift(got[1877]["3"]["lm"],
+                                                                      M.practice_target("lm", new.inp, 0.8)), places=9)
+
+    def test_a_sibling_wins_over_the_regions_copy(self):
+        """The region's copy is a fallback: a split state with a sibling holding shares takes the sibling's."""
+        first = _state("1", "STATE_POSEN", "region_eastern_europe", people=3000.0, mods={P.CONTRACEPTION_TYPE: 1.0},
+                       literacy=1.0)
+        other = _state("3", "STATE_POSEN", "region_eastern_europe", people=1000.0)
+        # 1877: both hold shares; the copy is whichever stepped last. 1878: "1" is gone, "2" is new beside "3"
+        new = _state("2", "STATE_POSEN", "region_eastern_europe", people=3000.0)
+        got = DP.replay([(1876, [first, other]), (1877, [first, other]), (1878, [other, new])])
+        # "2" seeds at its sibling's 1877 share, then takes 1878's step at its own conditions
+        self.assertAlmostEqual(got[1878]["2"]["lm"], M.practice_drift(got[1877]["3"]["lm"],
+                                                                      M.practice_target("lm", new.inp, 0.8)), places=9)
+        self.assertNotAlmostEqual(got[1877]["3"]["lm"], got[1877]["1"]["lm"], places=3, msg="the copy would differ")
 
     def test_a_state_seeded_late_with_no_sibling_starts_eroded(self):
         """Review I2: a state that first appears in a late save, with no sibling holding a share, seeds at its start
@@ -207,6 +263,14 @@ class TestProjection(unittest.TestCase):
         low = [[1836, "China", True, [], 40.0, 36.0, 1000.0, 0.0, "CHI", "1"]]
         e, rate = DP.east_for_china(low, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
         self.assertAlmostEqual(e, 0.38, places=9)
+
+    def test_the_gate_prints_two_decimals(self):
+        """Stop B, M4: at one decimal a miss by 0.01 printed as the band's own edge (+8.0 against +8 to +10)."""
+        proj = {"groups": {"W/N/C/S Europe": (11.07, 7.99)}, "world": (8.75, 7.83), "tags": {"JAP": (5.4e7, 8.4, -0.04)}}
+        fails = DP.region_gate(proj)
+        self.assertIn("W/N/C/S Europe: +7.99 per 1,000 (history +8 to +10)", fails)
+        self.assertIn("World: +7.83 per 1,000 (at most +7.75)", fails)
+        self.assertIn("JAP: -0.04 per 1,000 with 54M people", fails)
 
     def test_the_span_is_904s_table(self):
         """#904's table covers the steps of 1837-1900 (its analyze.py's intervals, 1837 to 1901); its rows also hold

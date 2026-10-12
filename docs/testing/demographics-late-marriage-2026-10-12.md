@@ -93,12 +93,30 @@ line prints.
 | 1897 | 0.96 | 1.00 | 0.37 / 0.06 |
 | 1901 | 0.93 | 0.99 | 0.37 / 0.06 |
 
-The largest moves by 1901 are each state's own conditions (phase 2 has no spread):
-- Istria, 0.50 → 0.16 (target 0.26);
-- the German and Bohemian industrial states, 1.00 → 0.82–0.87, toward targets of 0.42–0.58: era-3 contraception
-  reached them in the 1880s.
+The largest moves by 1901 are the German and Bohemian industrial states, 1.00 → 0.82–0.87, toward targets of 0.42–0.58:
+era-3 contraception reached them in the 1880s.
 
-The West holds 0.8 or more through 1887, and East Asia holds its start.
+**Corrected at Stop B (I1): Istria.** The first replay listed Istria, 0.50 → 0.16, as the largest move, put down to its
+own conditions. Drift alone can't take a share below its target (0.26), so it couldn't be. The replay re-seeded Istria
+from the table each time its state changed ID between the saves it samples, ten years apart.
+
+**How the shares survive a change of owner (built at Stop B, 2026-10-12).** A change of owner moves the people to a
+new state object, which carries none of the old one's variables.
+- In this run Istria went through four objects in 20 years, piece by piece. Uruguay's whole state went to a
+  revolution's winner in 1887.
+- The shares survive in one of two ways:
+  - **the siblings:** another piece of the state region still holds them at the new state's first census;
+  - **the region's copy:** every step writes the shares on the state region (`te_dg_pr_<P>_r`, the last state to step),
+    and the seed reads it when no sibling holds a share. That covers a whole region taken at once.
+- Only a region with neither seeds at its start less what its conditions have eroded. In a new game, before any step
+  has written a copy, that is the table.
+- The replay mirrors this, carrying each region's copy across the sampled saves. Istria reads 0.54 in 1877 and 0.53 in
+  1901, drifting toward its falling target.
+- The fit doesn't move: the country table and the regional projection are identical to 0.01.
+
+The census's ring and #916's medicine still re-seed on a whole-region transfer, as before. A state object with no
+census seeds its ring at the stable structure of its own rates and its medicine at its targets. Task 12's in-game list
+(item 5b) checks that the new state takes the region's copy.
 
 ## The fit: the cuts at each raise
 
@@ -173,7 +191,8 @@ Both columns at s 1.00 and cuts 0.10 and 0.20, East Asia's share at each point's
 - The fallback failed four. It passed Africa and the Japan group by hairs, and took Japan's life expectancy from 27.7
   to 23.4 in 1887 (history 37 in 1885).
 - `practices-fit --s 1.00 --lm 0.10 --bs 0.20 --at 1.00,0.10,0.20,0.00,0.06` on the decided values reproduces the
-  decided column to 0.1.
+  decided column to 0.01. Since Stop B (M4) its gate lines print two decimals: `+7.99 (history +8 to +10)`, not
+  `+8.0`.
 
 ## Children per woman at the decided point
 

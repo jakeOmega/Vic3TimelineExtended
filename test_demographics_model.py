@@ -880,6 +880,16 @@ class TestPractices(unittest.TestCase):
         self.assertEqual(M.practice_seed("lm", drivers, 0.0, []), 0.0,
                          "the drivers stay out of the seed: Japan's Late Marriage starts at 0 (call 3)")
 
+    def test_a_seed_with_no_sibling_takes_its_regions_copy(self):
+        """Stop B, I1 (owner, 2026-10-12): a whole state region changing hands makes a new state object with no sibling;
+        its seed takes the region's copy of the shares (te_dg_pr_<P>_r, written at each step), before the eroded
+        start. A sibling holding a share still comes first."""
+        late = M.Inputs(literacy=1.0, mods={P.CONTRACEPTION_TYPE: 1.0})
+        self.assertEqual(M.practice_seed("lm", late, 1.0, [], region=0.85), 0.85, "the region's copy, not 0.3")
+        self.assertAlmostEqual(M.practice_seed("lm", late, 1.0, [(100.0, 0.6)], region=0.85), 0.6, msg="sibling first")
+        self.assertAlmostEqual(M.practice_seed("lm", late, 1.0, [], region=None), 0.3, msg="nothing: the eroded start")
+        self.assertEqual(M.practice_seed("lm", late, 1.0, [], region=0.0), 0.0, "a copy of 0 is a copy")
+
     def test_marriage_age(self):
         self.assertEqual(M.marriage_age(1.0), 26)
         self.assertEqual(M.marriage_age(0.0), 19)

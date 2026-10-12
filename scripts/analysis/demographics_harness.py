@@ -806,13 +806,13 @@ def country_figures(states, carriers, stored=None, shares=None, incorporated_onl
 
 
 def history_rows(sections, year, anchors, carriers=None, stored=None, shares=None, incorporated_only=False,
-                 practices=True):
+                 practices=True, saved=None):
     """[(country, tag, people, model figures, anchors)] for each HISTORY_TAGS country in the save, the
     world line (every country of 1M people or more, weighted by people) and the mapped countries that
     have no anchor of any kind. The practices (the late-marriage plan, Task 3): every state takes its seed, as the
     census gives it with no sibling holding a share (its start less what its conditions have eroded), and `shares`
-    ({state id: {practice: share}}, a replay's year) overrides the states it holds; practices=False is the model
-    without them. incorporated_only: each country's figure from its incorporated states (the world line keeps every
+    ({state id: {practice: share}}, a replay's year) overrides the states it holds, over `saved` (the save's own
+    te_dg_pr_*, saved_shares; Stop B, M2), which overrides the seed; practices=False is the model without them. incorporated_only: each country's figure from its incorporated states (the world line keeps every
     state)."""
     carriers = DM.load_carriers() if carriers is None else carriers
     states = S.state_inputs(sections)
@@ -827,7 +827,8 @@ def history_rows(sections, year, anchors, carriers=None, stored=None, shares=Non
             return {p: M.practice_seed(p, inp, M.practice_start(p, reg, regions.get(reg, "")), [])
                     for p in P.PRACTICES}
 
-        shares = {**{sid: seed(sid, st, inc) for sts in states.values() for sid, st, inc in sts}, **(shares or {})}
+        shares = {**{sid: seed(sid, st, inc) for sts in states.values() for sid, st, inc in sts}, **(saved or {}),
+                  **(shares or {})}
     people = {tag: sum(st.population for _sid, st, _inc in sts) for tag, sts in states.items()}
     rows, bare = [], []
     for country, tags in HISTORY_TAGS.items():
@@ -868,16 +869,19 @@ def cmd_history(args):
         if year is None:
             print(f"{path}: no game_date in its meta_data; give the year with --year", file=sys.stderr)
             return 1
-        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS)
+        _countries, walked = S.read_variables(path, (), CENSUS_INPUT_VARS + PRACTICE_VARS)
         stored = {sid: rec["vars"] for sid, rec in walked.items()}
+        saved = saved_shares(stored)
         rows, world, bare = history_rows(sections, year, anchors, carriers, stored, shares=shares_by_year.get(year),
-                                         incorporated_only=args.incorporated_only, practices=not args.no_practices)
+                                         incorporated_only=args.incorporated_only, practices=not args.no_practices,
+                                         saved=saved)
         for country in bare:
             print(f"{country}: no anchors in {args.anchors}", file=sys.stderr)
         print(f"== {Path(path).name} ({year}): world (countries of 1M or more) e0 {world['e0']:.1f}  "
               f"children per woman {world['tfr']:.2f}  growth {world['r']:+.2f}% a year{only}")
         own = sum(1 for v in stored.values() if all(k in v for k in CENSUS_INPUT_VARS))
-        print(f"   {own} states on the census's own inputs (medicine as it had spread)")
+        print(f"   {own} states on the census's own inputs (medicine as it had spread); {len(saved)} with its own "
+              "practice shares")
         for country, tag, people, got, hist in sorted(rows, key=lambda r: -r[2]):
             e = f"{hist['e0'][1]:.0f} ({hist['e0'][0]})" if hist["e0"] else "-"
             m = f"{hist['imr'][1]:.0f}" if hist["imr"] else "-"
@@ -932,8 +936,9 @@ def cmd_practices_fit(args):
         out = {}
         for path in args.save:
             year = save_year(path) or args.year
-            table = DP.table_shares(DP.practice_states(path, carriers, save=saves[path]))
-            shares = {**table, **shares_by_year.get(year, {})}   # a state the replay lacks takes its start
+            states = DP.practice_states(path, carriers, save=saves[path])
+            # the seed, under the save's own shares (Stop B, M2), under the replay's: a state the replay lacks takes its own
+            shares = {**DP.table_shares(states), **DP.saved_shares(states), **shares_by_year.get(year, {})}
             out[year] = DP.fit_states(path, carriers, shares, save=saves[path])
         return out
 
@@ -1322,6 +1327,18 @@ CENSUS_INPUT_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_c
 # Read on their own, not in CENSUS_INPUT_VARS: that check is all or nothing, and a census from before #916's last
 # fix, which holds the nine without these two, would lose its drifted medicine.
 STEP_SOL_VARS = ("te_dg_in_sol", "te_dg_in_lit")
+# The practices' shares a census state holds (te_demog_practice_effects.txt; Stop B, M2): history and practices-fit start
+# from them where a save has them, under a replay's (--shares) and over the seed.
+PRACTICE_VARS = tuple(f"te_dg_pr_{p}" for p in P.PRACTICES)
+
+
+def saved_shares(walked):
+    """{state id: {practice: share}} for the states whose variables ({state id: {variable: value}}) hold every
+    practice's share."""
+    return {sid: {p: got[f"te_dg_pr_{p}"] for p in P.PRACTICES} for sid, got in walked.items()
+            if all(f"te_dg_pr_{p}" in got for p in P.PRACTICES)}
+
+
 FIDELITY_VARS = (("te_dg_sol", "te_dg_lit") + STEP_SOL_VARS + tuple(var for _c, var, _s in FIDELITY_CAUSES)
                  + CENSUS_INPUT_VARS)
 

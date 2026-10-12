@@ -61,7 +61,8 @@
 #   te_dg_tfr, te_dg_means, te_dg_desired, te_dg_natural  fertility (spec §2.3; te_dg_natural is
 #                       women's legal standing, phase 2 step 4)
 #   te_dg_pr_lm, te_dg_pr_bs  the practices' shares, Late Marriage and Birth Spacing, 0-1 (te_demog_practice_effects.txt;
-#                       a country's: its states' people-weighted mean)
+#                       a country's: its states' people-weighted mean; the state region's te_dg_pr_lm_r and
+#                       te_dg_pr_bs_r: the last stepped state's, the seed's fallback after a change of owner)
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
 #   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments

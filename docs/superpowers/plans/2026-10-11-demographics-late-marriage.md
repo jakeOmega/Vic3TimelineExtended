@@ -2773,6 +2773,13 @@ And in `TestCountry` (its `setUpClass` builds the three seeded states the test r
             self.assertAlmostEqual(eng.vars[f"te_dg_pr_{p}"], want, places=6, msg=p)
 ```
 
+**Amended at Stop B (2026-10-12), the region's copy:** each step also writes the shares to the state region
+(`te_dg_pr_<P>_r`), and the seed reads it after the siblings and before the eroded start. A whole state region taken
+at once keeps its shares that way. `_Engine` gains `region_vars` and a `state_region = { … }` scope.
+- Tests: `test_a_whole_region_changing_hands_takes_the_regions_copy`, `test_a_sibling_wins_over_the_regions_copy`
+  and `test_the_step_writes_the_regions_copy`.
+- `demographics_model.practice_seed(…, region=)` and the replay mirror it.
+
 **Amended at the build (2026-10-12):** `test_the_targets_match_the_model` sets `te_dg_acc` at the model's target, since
 Birth Spacing's erosion reads the access medicine has reached (Task 7's amendment). A new test,
 `test_birth_spacing_erodes_with_the_access_medicine_has_reached`, checks the script's erosion against the model's at
@@ -3489,6 +3496,17 @@ results doc, each with its figure:
 - reported, not judged: the children-per-woman error over the anchor countries (the spec's 0.5) and each country more
   than 0.5 off, the world's children per woman against today's, and the high-fertility group against history's ~7.
 
+**The game's own shares against the model's (Stop B, M2; build it here).** The harness reads a save's `te_dg_pr_*`
+(`practice_states`' `stored`, `saved_shares`, `history`, `practices-fit`). The check that steps them is still to
+build: a `practices-check SAVE_A SAVE_B` on two yearly plain-text saves from a game on this branch.
+- For each state holding shares in both saves that stepped once between them (`te_dg_stepped`, `te_dg_year`), predict
+  B's share as `M.practice_drift(A's share, target)`.
+- Take the target at the inputs the step used: the walk's `te_dg_lit`, `te_dg_agr_share` and `te_dg_fjob_share`,
+  the stored `te_dg_acc`, and B's owner laws and techs.
+- Compare with B's share. The tolerance is a few × 1e-5 (five-decimal storage; the drift stalls once 0.025 × the gap
+  is under 1e-5), and a law or tech changed between the step and the save excuses a state.
+- Run it on the first two yearly saves of the in-game list's Full game (Step 4).
+
 - [ ] **Step 3: Stop C (fresh whole-branch review).** A fresh reviewer on the most capable model reads the whole branch
   against the spec and this plan. Fix what it finds, re-run Step 1, and commit.
 
@@ -3516,6 +3534,9 @@ results doc, each with its figure:
      and option n's `q_b` at 0.
   5. **A split state.** Release or annex part of a state region (debug). At its next census, the new state's option l
      shows its sibling's `lm` and `bs`, not the table's.
+  5b. **A whole state region changing hands** (Stop B, I1). Give a whole state region to another country by debug, or
+     let a revolution win. At the new state's first census option l shows the region's copy: the old state's last
+     `lm` and `bs`, not its start less what its conditions have eroded. Its ring and medicine re-seed, as before.
   6. **An old save.** Load a Full save made before this build. Before each state's next yearly pulse its tooltip shows
      ×1.00 for both practices; after it, its seed: the table less what its conditions have eroded (a late save's Japan
      well below ×0.65's spacing).
@@ -3577,11 +3598,25 @@ Then the owner's in-game list (Task 12 Step 4). Its item 3 blocks the merge.
     missing.
   - Per country census: two sums.
   - No new pop or building walk, no neighbour walk.
-  - Saves gain two variables a state (about 0.1 MB).
+  - Saves gain two variables a state (about 0.1 MB) and two a state region (the copy).
 - **Fast mode.** The practices step once a clock year, with the census. Literacy, laws and contraception keep the
   calendar, so a fast run's practices erode on 19th-century conditions for longer, as everything else does there.
-- **Revolutions and changes of owner.** The shares are state variables, so they stay ("the winner continues the
-  nation"). A new owner's laws reach the target at the next step.
+- **Revolutions and changes of owner** (corrected at Stop B, I1; the region copy built at the owner's word,
+  2026-10-12). A change of owner moves the people to a new state object, which carries none of the old one's variables
+  (the normal-speed run's saves: Istria through four objects in 20 years, Uruguay's whole state to a revolution's
+  winner in 1887).
+  - **The shares survive through the siblings or the region's copy.** The seed takes the shares of another piece of
+    the state region that still holds them (a region taken piece by piece). Failing that, it takes the copy every step
+    writes on the state region (`te_dg_pr_<P>_r`, the last state to step; a state region holds variables,
+    scripting_best_practices.md, "Region-Level Data"). That covers a whole region taken at once, typically by a
+    revolution's winner. Only a region with neither falls back to its start less what its conditions have eroded, and
+    in a new game that is the table.
+  - **The census's ring and #916's medicine still re-seed** on a whole-region transfer, as before. A state object with
+    no census is seeded (`te_demog_state_census` → `te_demog_seed`): its ring at the stable structure of its own rates,
+    and its medicine at its targets (`te_demog_medicine_at_target`).
+  - No `on_state_owner_change` hook: the new state object has nothing of the old one's to copy, and the region's copy
+    works whatever the hook's timing.
+  - A new owner's laws reach the target at the next step.
 - **The engine scaling a script-only type on a state modifier** (review C2) is unverified: Task 9's probe decides Plan
   A or B, and Task 12's item 3 blocks the merge.
 - **The rural refresh's event (Plan A).** `trigger_event` without `days` is assumed to run after the current effect, so

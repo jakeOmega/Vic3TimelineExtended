@@ -374,6 +374,9 @@ class _Engine:
         # state_population (state_region = { every_scope_state = { … } }, the practices' seed)
         self.place = (None, None)
         self.siblings = []
+        # the state region's own variables (state_region = { set_variable / has_variable / var: }): the practices'
+        # copy of the shares, te_dg_pr_<P>_r (Stop B, I1)
+        self.region_vars = {}
 
     def _tree(self, table, name, args=()):
         key = (id(table), name, args)
@@ -479,6 +482,12 @@ class _Engine:
             return arg == f"sr:{self.place[1]}"
         if key == "state_region" and isinstance(arg, str):
             return arg == f"s:{self.place[0]}"
+        if key == "state_region":
+            saved, self.vars = self.vars, self.region_vars
+            try:
+                return self.holds(arg)
+            finally:
+                self.vars = saved
         if key in self.trigger_fixtures:
             return self.trigger_fixtures[key] == (arg == "yes")
         if key in self.triggers:
@@ -519,6 +528,14 @@ class _Engine:
             elif key == "while":
                 for _ in range(int(self.value(_find(arg, "count")))):
                     self.run([i for i in arg if i[0] != "count"])
+            elif key == "state_region" and isinstance(arg, list) and arg[0][0] != "every_scope_state":
+                # state_region = { … }: the region's own variables (the practices' copy of the shares); locals are
+                # the effect's, so they cross the scope change
+                saved, self.vars = self.vars, self.region_vars
+                try:
+                    self.run(arg)
+                finally:
+                    self.vars = saved
             elif key == "state_region" and isinstance(arg, list):
                 # state_region = { every_scope_state = { limit = { … } … } }: the other states in its state region,
                 # each a dict of its variables with its own state_population (te_demog_practice_seed)
@@ -2797,11 +2814,40 @@ class TestPracticesScript(unittest.TestCase):
                 self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pr_erosion_bs")),
                                        demographics_model.practice_erosion("bs", inp), places=9)
 
-    def _seeded(self, place, siblings=(), targets=None, erosion=None):
+    def _seeded(self, place, siblings=(), targets=None, erosion=None, region=None):
         eng = _engine_for(self.INP, 1836, 250000.0, place=place, targets=targets, erosion=erosion)
         eng.siblings = [dict(s) for s in siblings]
+        eng.region_vars = dict(region or {})
         eng.call("te_demog_seed")
         return eng
+
+    def test_a_whole_region_changing_hands_takes_the_regions_copy(self):
+        """Stop B, I1 (owner, 2026-10-12): a change of owner makes a new state object, which carries none of the old
+        one's variables. With no sibling left in the region (a revolution's winner holding the whole state), the seed
+        takes the region's copy of the shares (te_dg_pr_<P>_r, written at each step), not the eroded start."""
+        eng = self._seeded(("STATE_RIGA", "region_eastern_europe"), erosion={"lm": 0.5},
+                           region={"te_dg_pr_lm_r": 0.85, "te_dg_pr_bs_r": 0.3})
+        self.assertEqual((eng.vars["te_dg_pr_lm"], eng.vars["te_dg_pr_bs"]), (0.85, 0.3))
+        for p in P.PRACTICES:
+            self.assertAlmostEqual(eng.vars[f"te_dg_pr_{p}"],
+                                   demographics_model.practice_seed(p, self.INP, 0.0, [],
+                                                                    region=eng.region_vars[f"te_dg_pr_{p}_r"]))
+
+    def test_a_sibling_wins_over_the_regions_copy(self):
+        eng = self._seeded(("STATE_POSEN", "region_eastern_europe"),
+                           siblings=[{"te_dg_pr_lm": 0.5, "te_dg_pr_bs": 0.1, "state_population": 300000.0}],
+                           region={"te_dg_pr_lm_r": 0.85, "te_dg_pr_bs_r": 0.3})
+        self.assertEqual((eng.vars["te_dg_pr_lm"], eng.vars["te_dg_pr_bs"]), (0.5, 0.1))
+
+    def test_the_step_writes_the_regions_copy(self):
+        """Each step copies the state's shares to its state region; in a split region the last state to step wins,
+        which is fine for a fallback."""
+        eng = self._seeded(("STATE_KANTO", "region_northeast_asia"), targets={"lm": 0.12, "bs": 0.7})
+        self.assertEqual(eng.region_vars, {}, "a seed writes no copy: a new game's regions hold none")
+        eng.call("te_demog_practices_step")
+        self.assertEqual(eng.region_vars, {f"te_dg_pr_{p}_r": eng.vars[f"te_dg_pr_{p}"] for p in P.PRACTICES})
+        body = re.sub(r"#[^\n]*", "", _block(_text(PRACTICE_EFFECTS), "te_demog_practice_seed"))
+        self.assertLess(body.index("every_scope_state"), body.index("te_dg_pr_$P$_r"), "siblings first, then the copy")
 
     def test_a_state_with_no_sibling_seeds_at_its_eroded_start(self):
         """Review I2 and Review Focus 1: with no sibling holding a share, the start less what the state's conditions

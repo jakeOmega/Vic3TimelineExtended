@@ -263,6 +263,21 @@ class TestHarness(unittest.TestCase):
         whole = H.model_figures(H.inputs_for(state(9.0, 2000.0), carriers))
         self.assertGreater(abs(got["e0"] - whole["e0"]), 0.5, "the mean SoL would hide the bend")
 
+    @unittest.skipUnless(SLICE.exists(), "fixture written in Task 3")
+    def test_history_reads_a_saves_own_shares_under_a_replays(self):
+        """Stop B, M2: each state's shares are its seed, then the save's own (te_dg_pr_*, `saved`), then a replay's
+        (`shares`, the --shares file), each overriding the one before."""
+        sections = S.read_sections(SLICE)
+        gbr = [sid for sid, _st, _inc in S.state_inputs(sections)["GBR"]]
+        def tfr(**kw):
+            rows, _world, _bare = H.history_rows(sections, 1836, {}, **kw)
+            return next(r[3]["tfr"] for r in rows if r[1] == "GBR")
+        seeded = tfr()
+        saved = tfr(saved={sid: {"lm": 1.0, "bs": 0.0} for sid in gbr})
+        self.assertAlmostEqual(saved, seeded * (1 - P.PRACTICE_CUT["lm"]), places=6)
+        self.assertAlmostEqual(tfr(saved={sid: {"lm": 1.0, "bs": 0.0} for sid in gbr},
+                                   shares={sid: {"lm": 0.0, "bs": 0.0} for sid in gbr}), seeded, places=6)
+
     def test_history_takes_each_states_practices(self):
         """The late-marriage plan, Task 3: a state's shares multiply its children per woman, and a country's figure
         can leave its colonies out (spec 5.1 item 3: Denmark's West African states)."""

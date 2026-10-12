@@ -281,17 +281,21 @@ def practice_drift(share, target):
     return clamp(share + P.PRACTICE_RATE * (target - share), 0.0, 1.0)
 
 
-def practice_seed(practice, inp, start, siblings=()):
+def practice_seed(practice, inp, start, siblings=(), region=None):
     """A state with no share (§3.4; the plan's D5): the people-weighted mean of the other states in its state region
-    that hold one, else its start less what its conditions have already eroded, start x (1 - erosion) (te_demog_pr_seed
-    _<P>). In 1836 nothing has eroded anywhere a practice starts (no contraception before era 3; no health law in Japan,
-    China, Korea or India), so a new game seeds the table. An old save or a rule switched on mid-game seeds near where
-    the drift would have taken it, not at the 1836 custom (review I2). The drivers stay out, so Japan's Late Marriage
-    starts at 0 (call 3). siblings: [(people, share)]."""
+    that hold one; else the region's copy of the share (te_dg_pr_<P>_r, written at each step: a whole state region that
+    changed hands, Stop B's I1); else its start less what its conditions have already eroded, start x (1 - erosion)
+    (te_demog_pr_seed_<P>). In 1836 nothing has eroded anywhere a practice starts (no contraception before era 3; no
+    health law in Japan, China, Korea or India) and no region holds a copy, so a new game seeds the table. An old save
+    or a rule switched on mid-game seeds near where the drift would have taken it, not at the 1836 custom (review I2).
+    The drivers stay out, so Japan's Late Marriage starts at 0 (call 3). siblings: [(people, share)]; region: the
+    region's copy, or None."""
     held = [(p, s) for p, s in siblings if p > 0]
     people = sum(p for p, _s in held)
     if people > 0:
         return sum(p * s for p, s in held) / people
+    if region is not None:
+        return region
     return start * (1 - practice_erosion(practice, inp))
 
 

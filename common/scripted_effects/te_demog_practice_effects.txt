@@ -10,12 +10,16 @@
 # they are the census's inputs, and they reach the engine only through the census's term M, under Full.
 #
 # State variable:   te_dg_pr_$P$   the share, 0-1
+# Region variable:  te_dg_pr_$P$_r the last stepped state's share, on its state region: the seed's fallback when a
+#                                  whole state region changed hands (a new state object carries none of the old
+#                                  one's variables; Stop B, I1)
 # Country variable: te_dg_pr_$P$   its census states' people-weighted mean (te_demog_country_census)
 # ============================================================================
 
 # THIS = a state whose census is being seeded or stepped. A state with no share takes the people-weighted mean of the
-# other states in its state region that hold one (a split state is the same people as its sibling), else its start less
-# what its conditions have eroded (te_demog_pr_seed_$P$). In 1836 nothing has eroded where a practice starts, so a new
+# other states in its state region that hold one (a split state is the same people as its sibling); else its region's
+# copy (te_dg_pr_$P$_r: a whole state region that changed hands, whose new state object carries none of the old one's
+# variables); else its start less what its conditions have eroded (te_demog_pr_seed_$P$). In 1836 nothing has eroded where a practice starts, so a new
 # game seeds the table whatever order the states' pulses come in; an old save or a rule switched on mid-game seeds near
 # where the drift would have taken it. A neighbour across a border plays no part. A share already held stays: a census
 # re-seed re-counts the people, it doesn't change their customs.
@@ -34,6 +38,15 @@ te_demog_practice_seed = {
 		if = {
 			limit = { local_var:te_dg_pr_np > 0 }
 			set_variable = { name = te_dg_pr_$P$ value = { value = local_var:te_dg_pr_ns divide = { value = local_var:te_dg_pr_np min = 1 } } }
+		}
+		else_if = {
+			limit = {
+				state_region = { has_variable = te_dg_pr_$P$_r }
+			}
+			state_region = {
+				set_local_variable = { name = te_dg_pr_rv value = var:te_dg_pr_$P$_r }
+			}
+			set_variable = { name = te_dg_pr_$P$ value = local_var:te_dg_pr_rv }
 		}
 		else = {
 			set_variable = { name = te_dg_pr_$P$ value = te_demog_pr_seed_$P$ }
@@ -58,6 +71,11 @@ te_demog_practice_step = {
 			min = 0
 			max = 1
 		}
+	}
+	# the region's copy, for a state that later takes the whole region over (the seed's fallback)
+	set_local_variable = { name = te_dg_pr_rv value = var:te_dg_pr_$P$ }
+	state_region = {
+		set_variable = { name = te_dg_pr_$P$_r value = local_var:te_dg_pr_rv }
 	}
 }
 

@@ -514,6 +514,8 @@ te_debug_demog_rate_copy = {
 # THIS = the capital: log its absorbed births sum, add te_debug_demog_scaled_probe (+0.1 on the type) at multiplier
 # 0.62, and log the sum again a day later (te_debug_demog.2), when the engine has summed it. after - before reads
 # 0.062 if the engine scales the type by the multiplier, 0.1 if it doesn't, 0 if it doesn't sum it at all.
+# The multiplier is a literal on purpose: option o runs from a country event, so ROOT is the country and a var:
+# multiplier would resolve against it (scripting_best_practices.md, add_modifier's multiplier resolves against ROOT).
 te_debug_demog_probe_start = {
 	debug_log = "TE_DEMOG_PROBE before absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|5] date=[TimeKeeper.GetCurrentDate.GetString]"
 	debug_log_scopes = yes
