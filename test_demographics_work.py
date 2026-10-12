@@ -1,0 +1,513 @@
+"""Demographics phase 2 step 2: the workforce, pensions and health costs
+(docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2).
+
+The script (te_demog_work_effects.txt, te_demog_work_values.txt and the hooks in te_demog_effects.txt) run by the
+census's interpreter (test_demographics_registry._Engine) against demographics_model's twins: the workforce term W with
+its ramp, guard and one refresh site; the pension setting's ages, term, interest groups and AI; the two bills; the work
+deaths' split by the census's own workers; and the wiring, the panel's gates and the self-checks' text."""
+
+import random
+import re
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+
+import demographics_model as M  # noqa: E402
+import demographics_params as P  # noqa: E402
+from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
+    CONSOLE_EFFECTS, DEBUG_EVENTS, DEMOG_MODIFIERS, EFFECTS, FAST_EFFECTS, TRIGGERS, WORK_EFFECTS, WORK_VALUES,
+    _block, _CountryEngine, _Engine, _engine_for, _gui_type, _raw_blocks, _text)
+
+DEBUG_VALUES = ROOT / "common" / "script_values" / "te_debug_demog_values.txt"
+SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
+GUI = ROOT / "gui" / "te_demographics_widgets.gui"
+FIELD = f"modifier:{P.WORKING_ADULT_FIELD}"
+
+
+def _state(full=True, wa=0.7, at=0.5, stepped=1.0, read=0.0, w=None, pair=None, wbase=0.25, families=(0.0, 0.0)):
+    """A census state after a step: the step 1 figures, its working-adult read, W in force (w) or the moved lines' pair
+    (pair, with the families that sum to it)."""
+    fixtures = {FIELD: read, f"modifier:{P.WOMENS_WORK_TYPE}": families[0], f"modifier:{P.REPLACED_TYPE}": families[1]}
+    eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
+    eng.vars.update(te_dg_year=1840.0, te_dg_stepped=stepped, te_dg_wa_share=wa, te_dg_at_work=at, te_dg_wbase=wbase)
+    if w is not None:
+        eng.vars["te_dg_mw"] = w
+        if w > 0:
+            eng.modifiers["te_demog_census_workforce_up"] = w
+        elif w < 0:
+            eng.modifiers["te_demog_census_workforce_down"] = -w
+    if pair is not None:
+        eng.vars["te_dg_ln_working_adults"] = pair
+        eng.modifiers["te_demog_line_working_adults_up" if pair > 0 else "te_demog_line_working_adults_down"] = abs(pair)
+    return eng
+
+
+def _target(wa, at):
+    return P.WORKFORCE_SCALE * wa * at - P.WORKING_ADULT_BASE
+
+
+class TestWorkforceTerm(unittest.TestCase):
+    """§2.1: W = te_demog_wf_target - 0.25 on a fixed-sign pair, from the moved lines' pair, a ramp a census step, the
+    0.05 guard, no cap; one refresh site."""
+
+    def test_it_lands_from_the_pair_it_replaces(self):
+        """Women in the Fields' +0.30: W starts there and steps toward its target, so the state's workforce doesn't
+        jump; the pair comes off; the lines on top (Rosen's +0.03 here) are what the read holds beyond the pair."""
+        eng = _state(wa=0.75, at=0.75, read=0.33, pair=0.30, families=(0.30, 0.0))
+        eng.call("te_demog_workforce_refresh")
+        want = M.workforce_term(_target(0.75, 0.75), 0.30, 0.03)
+        self.assertAlmostEqual(want, 0.30 - P.WF_RAMP_STEP)
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_workforce_up"], want, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.03, places=5)
+        self.assertNotIn("te_demog_line_working_adults_up", eng.modifiers)
+        self.assertNotIn("te_dg_ln_working_adults", eng.vars)
+
+    def test_it_ramps_from_the_term_in_force(self):
+        eng = _state(wa=0.65, at=0.95, read=0.10, w=0.10)
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], 0.10 + P.WF_RAMP_STEP, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.0, places=5, msg="W isn't on top of itself")
+
+    def test_a_state_that_lost_its_modifier_ramps_from_its_variable(self):
+        """A revolution's winner keeps te_dg_mw but not the modifier: the read holds nothing of W, so the remainder
+        doesn't subtract it, and W goes on from the variable."""
+        eng = _state(wa=0.65, at=0.95, read=0.0, w=0.10)
+        eng.modifiers.clear()
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], 0.10 + P.WF_RAMP_STEP, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.0, places=5)
+        self.assertIn("te_demog_census_workforce_up", eng.modifiers)
+
+    def test_it_matches_the_model(self):
+        rng = random.Random(902)
+        for _ in range(40):
+            wa, at = rng.uniform(0.4, 0.8), rng.uniform(0.3, 1.1)
+            w, extra = rng.uniform(-0.2, 0.3), rng.uniform(-0.3, 0.1)
+            eng = _state(wa=wa, at=at, read=w + extra, w=w if w else None)
+            eng.call("te_demog_workforce_refresh")
+            want = M.workforce_term(_target(wa, at), w, extra)
+            self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4, msg=(wa, at, w, extra))
+            side = "up" if want > 0 else "down"
+            self.assertAlmostEqual(eng.modifiers[f"te_demog_census_workforce_{side}"], abs(want), places=4)
+            self.assertEqual(len([m for m in eng.modifiers if m.startswith("te_demog_census_workforce_")]), 1)
+
+    def test_the_guard_raises_w_past_a_negative_line_on_top(self):
+        """The lowest base (0.2) + W + the lines on top stays at 0.05: a -0.2 line on top holds W at +0.05."""
+        eng = _state(wa=0.3, at=0.3, read=-0.2 + 0.06, w=0.06)
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN + 0.2, places=5)
+
+    def test_a_seed_leaves_w_as_it_is(self):
+        eng = _state(stepped=0.0, read=0.12, w=0.12)
+        eng.call("te_demog_workforce_refresh")
+        self.assertEqual(eng.vars["te_dg_mw"], 0.12)
+        self.assertEqual(eng.modifiers, {"te_demog_census_workforce_up": 0.12})
+
+    def test_a_first_seed_lands_nothing_and_keeps_the_pair(self):
+        eng = _state(stepped=0.0, read=0.3, pair=0.3, families=(0.3, 0.0))
+        eng.call("te_demog_workforce_refresh")
+        self.assertNotIn("te_dg_mw", eng.vars)
+        self.assertEqual(eng.modifiers, {"te_demog_line_working_adults_up": 0.3})
+
+    def test_outside_full_w_goes_and_the_pair_returns_that_day(self):
+        eng = _state(full=False, read=0.12, w=0.12, families=(0.25, -0.03))
+        eng.call("te_demog_workforce_refresh")
+        self.assertNotIn("te_dg_mw", eng.vars)
+        self.assertNotIn("te_dg_wf_rem", eng.vars)
+        self.assertEqual(set(eng.modifiers), {"te_demog_line_working_adults_up"})
+        self.assertAlmostEqual(eng.modifiers["te_demog_line_working_adults_up"], 0.22)
+
+    def test_outside_full_with_no_term_it_changes_nothing(self):
+        eng = _state(full=False, read=0.22, pair=0.22, families=(0.25, -0.03))
+        eng.call("te_demog_workforce_refresh")
+        self.assertEqual(eng.modifiers, {"te_demog_line_working_adults_up": 0.22})
+
+    def test_one_refresh_site_beside_the_census_terms(self):
+        """§2.1: refreshed by the census's yearly step from the state pulse (ROOT the state) and fast mode's clock step,
+        beside te_demog_rates_refresh; the pair is added only in te_demog_workforce_apply."""
+        for path, effect in ((EFFECTS, "te_demog_state_yearly"), (FAST_EFFECTS, "te_demog_state_clock_step")):
+            body = _block(_text(path), effect)
+            self.assertIn("te_demog_workforce_refresh = yes", body, effect)
+            self.assertLess(body.index("te_demog_rates_refresh = yes"), body.index("te_demog_workforce_refresh = yes"))
+        adds = []
+        for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").glob("*.txt")):
+            for name in ("te_demog_census_workforce_up", "te_demog_census_workforce_down"):
+                if re.search(rf"add_modifier = {{ name = {name}\b", _text(path)):
+                    adds.append((path.name, name))
+        self.assertEqual(sorted(adds), [("te_demog_work_effects.txt", "te_demog_census_workforce_down"),
+                                        ("te_demog_work_effects.txt", "te_demog_census_workforce_up")])
+        self.assertIn("te_demog_census_workforce_up", _block(_text(WORK_EFFECTS), "te_demog_workforce_apply"))
+
+    def test_the_pair_is_a_workforce_field_and_hidden(self):
+        mods = _text(DEMOG_MODIFIERS)
+        self.assertIn(f"{P.WORKING_ADULT_FIELD} = 1", _block(mods, "te_demog_census_workforce_up"))
+        self.assertIn(f"{P.WORKING_ADULT_FIELD} = -1", _block(mods, "te_demog_census_workforce_down"))
+        hidden = _block(_text(ROOT / "common" / "script_values" / "gui_chart_script_values.txt"),
+                        "gui_state_hidden_modifier_count")
+        panel = _text(ROOT / "gui" / "states_panel.gui")
+        for name in ("te_demog_census_workforce_up", "te_demog_census_workforce_down"):
+            self.assertIn(f"has_modifier = {name}", hidden)
+            self.assertEqual(panel.count(f"Localize('{name}')"), 2, name)
+
+    def test_the_remainder_check_takes_w_off_too(self):
+        """Step 1's workforce_lines_net and workforce_ig_trait_type read the field less the pair: under Full W stands
+        on the same field, so the remainder subtracts it as well."""
+        body = _block(_text(DEBUG_VALUES), "te_debug_demog_wf_remainder")
+        self.assertIn("subtract = te_demog_census_workforce_applied", body)
+
+
+class TestWorkDeathSplit(unittest.TestCase):
+    """§2.5: under Full the census's own count of women among the workers at 15-64 at the last count splits work
+    deaths; outside Full, and before a count, the law table does. The flows keep the law's share."""
+
+    FARM = dict(sol=8, literacy=0.1, urban_share=0.05, laws=frozenset({"law_no_womens_rights",
+                                                                        "law_child_labor_allowed"}))
+
+    def _step(self, full):
+        inp = M.Inputs(low_share=0.85, **self.FARM)
+        eng = _engine_for(inp, 1836, 250000.0, effects={"te_demog_flows": "te_demog_no_flows = yes"})
+        eng.trigger_fixtures["te_demog_effects_run"] = full
+        eng.call("te_demog_seed")
+        return inp, eng
+
+    def test_the_seed_stores_the_models_share(self):
+        inp, eng = self._step(full=False)
+        ring = M.seed(inp, 1836, 250000.0)
+        qf, qm, _ = M.group_rates(inp)
+        want = M.work_figures(ring, inp, M.old_age(qf, qm))
+        self.assertAlmostEqual(eng.vars["te_dg_fws_wk"], want["fws_work"], places=3)
+        self.assertAlmostEqual(eng.vars["te_dg_wk_past"], want["past"], places=4)
+
+    def test_under_full_the_step_splits_by_it(self):
+        inp, eng = self._step(full=True)
+        share = eng.vars["te_dg_fws_wk"]
+        eng.fixtures.update(year=1837.0, state_population=251000.0)
+        eng.call("te_demog_step_begin")
+        work = eng.vars["te_dg_m_work"]
+        self.assertAlmostEqual(eng.locals["te_dg_m_work_f"], work * 2 * share, places=4)
+        self.assertAlmostEqual(eng.locals["te_dg_m_work_m"], work * 2 * (1 - share), places=4)
+        self.assertNotAlmostEqual(share, M.female_work_share(inp), places=2)
+        self.assertAlmostEqual(eng.locals["te_dg_fws"], M.female_work_share(inp), msg="the flows keep the law's")
+
+    def test_outside_full_the_law_table_splits(self):
+        inp, eng = self._step(full=False)
+        eng.fixtures.update(year=1837.0, state_population=251000.0)
+        eng.call("te_demog_step_begin")
+        self.assertAlmostEqual(eng.locals["te_dg_m_work_f"],
+                               eng.vars["te_dg_m_work"] * 2 * M.female_work_share(inp), places=4)
+
+    def test_the_model_twin(self):
+        inp = M.Inputs(laws=frozenset({"law_protected_class"}), work_female_share=0.42)
+        mult = M.cause_multipliers(inp)
+        f, m = M.work_split(inp, mult["work"])
+        self.assertAlmostEqual(f, mult["work"] * 2 * 0.42)
+        self.assertAlmostEqual(m, mult["work"] * 2 * 0.58)
+
+
+class TestPensionSetting(unittest.TestCase):
+    """§2.2: five positions; the fixed ages at once, the linked ones at least 65 and a year a year; a five-year term;
+    the interest groups while in force; leaving Old Age Pension clears it; Full only."""
+
+    def _country(self, full=True, oap=True, **vars_):
+        eng = _Engine({"year": 1950.0}, triggers={"te_demog_effects_run": full, "te_demog_has_pension_law": oap})
+        eng.vars.update(vars_)
+        return eng
+
+    def _choose(self, eng, pos):
+        eng.run([("te_demog_pension_choose", "=", [("POS", "=", pos)])])
+
+    def test_fixed_positions_take_their_ages_at_once(self):
+        for pos in ("early", "standard", "raised"):
+            eng = self._country(te_dg_pension_age=65.0)
+            self._choose(eng, pos)
+            self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE[pos], pos)
+            self.assertEqual(eng.vars["te_dg_pension_pos"], P.PENSION_POSITION_ID[pos])
+            self.assertEqual(eng.vars["te_dg_pension_since"], 1950.0)
+
+    def test_linked_positions_start_at_least_at_65_and_move_a_year_a_year(self):
+        eng = self._country(te_dg_pension_age=60.0, te_dg_old_age=77.0)
+        self._choose(eng, "linked_average")
+        self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_LINK_FLOOR, "leaving Early raises it at once")
+        for year, age in ((1951, 66.0), (1952, 67.0)):
+            eng.fixtures["year"] = float(year)
+            eng.call("te_demog_pension_age_refresh")
+            eng.call("te_demog_pension_link_drift")
+            self.assertEqual(eng.vars["te_dg_pension_age"], age)
+        self.assertEqual(eng.vars["te_dg_pension_age"],
+                         M.pension_position_age("linked_average", 66.0, 77.0))
+        eng.vars["te_dg_old_age"] = 68.5
+        eng.call("te_demog_pension_link_drift")
+        self.assertEqual(eng.vars["te_dg_pension_age"], 66.0, "down a year, toward 63.5 floored at 65")
+
+    def test_a_laws_activation_never_moves_a_linked_age(self):
+        """The law hook calls te_demog_pension_age_refresh (any law of the owner's): only the yearly drift moves it."""
+        eng = self._country(te_dg_pension_age=68.0, te_dg_old_age=80.0,
+                            te_dg_pension_pos=float(P.PENSION_POSITION_ID["linked_common"]), te_dg_pension_since=1940.0)
+        eng.call("te_demog_pension_age_refresh")
+        self.assertEqual(eng.vars["te_dg_pension_age"], 68.0)
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_pension_age_refresh = yes"), yearly.index("te_demog_pension_link_drift = yes"))
+        self.assertNotIn("te_demog_pension_link_drift", _text(ROOT / "common" / "on_actions" / "te_demog_on_actions.txt"))
+
+    def test_the_term(self):
+        eng = self._country()
+        self.assertTrue(eng.holds([("te_demog_pension_can_change", "=", "yes")]), "none chosen yet")
+        self._choose(eng, "raised")
+        for year, ok in ((1950, False), (1954, False), (1955, True)):
+            eng.fixtures["year"] = float(year)
+            self.assertEqual(eng.holds([("te_demog_pension_can_change", "=", "yes")]), ok, year)
+        eng.fixtures["year"] = 1952.0
+        self.assertEqual(eng.value("te_demog_pension_term_end"), 1955.0)
+        self.assertEqual(eng.value("te_demog_pension_term_left"), 3.0)
+
+    def test_the_interest_groups_while_in_force(self):
+        mods = _text(DEMOG_MODIFIERS)
+        for pos, ig in P.PENSION_IG_APPROVAL.items():
+            body = _block(mods, f"te_demog_pension_pos_{pos}")
+            got = {m.group(1): int(m.group(2)) for m in
+                   re.finditer(r"interest_group_(ig_\w+)_approval_add = (-?\d+)", body)}
+            self.assertEqual(got, ig, pos)
+            eng = self._country()
+            self._choose(eng, pos)
+            self.assertEqual(set(eng.modifiers), {f"te_demog_pension_pos_{pos}"})
+        eng = self._country()
+        self._choose(eng, "standard")
+        self.assertEqual(eng.modifiers, {}, "Standard has none")
+
+    def test_a_revolutions_winner_has_its_modifier_back_at_the_refresh(self):
+        eng = self._country(te_dg_pension_pos=float(P.PENSION_POSITION_ID["early"]), te_dg_pension_since=1940.0)
+        eng.call("te_demog_pension_age_refresh")
+        self.assertEqual(eng.modifiers, {"te_demog_pension_pos_early": 1.0})
+        self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["early"])
+
+    def test_leaving_old_age_pension_clears_the_setting(self):
+        eng = self._country(oap=False, te_dg_pension_age=70.0, te_dg_pension_since=1948.0,
+                            te_dg_pension_pos=float(P.PENSION_POSITION_ID["raised"]))
+        eng.modifiers["te_demog_pension_pos_raised"] = 1.0
+        eng.call("te_demog_pension_age_refresh")
+        for var in ("te_dg_pension_age", "te_dg_pension_pos", "te_dg_pension_since"):
+            self.assertNotIn(var, eng.vars)
+        self.assertEqual(eng.modifiers, {})
+        eng.trigger_fixtures["te_demog_has_pension_law"] = True
+        eng.call("te_demog_pension_age_refresh")
+        self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["standard"], "a return starts at Standard")
+        self.assertTrue(eng.holds([("te_demog_pension_can_change", "=", "yes")]), "with no term running")
+
+    def test_outside_full_standard_and_nothing_else(self):
+        eng = self._country(full=False, te_dg_pension_pos=float(P.PENSION_POSITION_ID["early"]),
+                            te_dg_pension_since=1948.0)
+        eng.call("te_demog_pension_age_refresh")
+        self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["standard"])
+        self.assertNotIn("te_dg_pension_pos", eng.vars)
+        self.assertEqual(eng.modifiers, {})
+
+
+class TestPensionAi(unittest.TestCase):
+    """§2.2, §9: the AI's yearly pulse by shared weights; is_ai only decides whom it acts for; the term binds it."""
+
+    def _ai(self, share=0.1, debt=0.0, default=False, unemployment=0.02, old_age=74.0, ai=True, **vars_):
+        fixtures = {"year": 1990.0, "te_demog_pension_bill_share": share, "scaled_debt": debt,
+                    "te_demog_country_unemployment": unemployment}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": True, "te_demog_has_pension_law": True, "is_ai": ai,
+                                          "in_default": default})
+        eng.vars.update(te_dg_old_age=old_age, te_dg_pension_age=65.0, **vars_)
+        eng.call("te_demog_pension_ai")
+        return eng
+
+    def test_a_heavy_bill_or_debt_picks_the_cheaper_positions(self):
+        """Linked to Average where its age passes Raised's (80 - 5 = 75), else Raised (74 - 5 = 69)."""
+        self.assertEqual(self._ai(share=0.35, old_age=80.0).vars["te_dg_pension_pos"],
+                         P.PENSION_POSITION_ID["linked_average"])
+        self.assertEqual(self._ai(share=0.35, old_age=74.0).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["raised"])
+        self.assertEqual(self._ai(debt=0.5, old_age=74.0).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["raised"])
+        self.assertEqual(self._ai(default=True).vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["raised"])
+
+    def test_unemployment_picks_early(self):
+        eng = self._ai(unemployment=0.15)
+        self.assertEqual(eng.vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["early"])
+        self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["early"])
+
+    def test_otherwise_it_stays_at_standard_and_starts_no_term(self):
+        eng = self._ai()
+        self.assertNotIn("te_dg_pension_pos", eng.vars)
+        self.assertNotIn("te_dg_pension_since", eng.vars)
+
+    def test_the_term_binds_it_and_a_player_is_never_moved(self):
+        eng = self._ai(share=0.35, te_dg_pension_pos=float(P.PENSION_POSITION_ID["early"]), te_dg_pension_since=1988.0)
+        self.assertEqual(eng.vars["te_dg_pension_pos"], P.PENSION_POSITION_ID["early"])
+        self.assertNotIn("te_dg_pension_pos", self._ai(share=0.35, ai=False).vars)
+
+    def test_it_runs_after_the_census_on_the_yearly_pulse(self):
+        yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
+        self.assertLess(yearly.index("te_demog_country_census = yes"), yearly.index("te_demog_pension_ai = yes"))
+        body = _block(_text(WORK_EFFECTS), "te_demog_pension_ai")
+        self.assertEqual(body.count("is_ai"), 1, "is_ai only decides whom it acts for")
+
+
+class TestBills(unittest.TestCase):
+    """§2.3 (money) and §2.4 (bureaucracy), refreshed by the country's census, Full only."""
+
+    def _country(self, full=True, oap=True, pensioners=0.2, need=1.4, level=5, gdp=52_000_000.0, techs=0.1):
+        fixtures = {"gdp": gdp, '"institution_investment_level(institution_social_security)"': float(level),
+                    "te_demog_health_tech_term": techs, "income": 300_000.0}
+        eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_has_pension_law": oap})
+        eng.vars.update(te_dg_pensioners=pensioners, te_dg_need=need)
+        eng.call("te_demog_bills_refresh")
+        return eng
+
+    def test_the_pension_bill(self):
+        eng = self._country()
+        want = 52_000_000.0 / 52 * 0.2 * P.PENSION_B_PER_LEVEL * 5
+        self.assertAlmostEqual(eng.vars["te_dg_pension_bill"], want, delta=1.0)
+        self.assertAlmostEqual(eng.modifiers["te_demog_pension_bill"], want, delta=1.0)
+        self.assertAlmostEqual(52 * want / 52_000_000.0, M.pension_bill_gdp_share(0.2, 5), places=6)
+        self.assertAlmostEqual(eng.value("te_demog_pension_bill_share"), want / 300_000.0, places=4)
+
+    def test_no_pension_bill_without_the_law_or_outside_full(self):
+        for kw in (dict(oap=False), dict(full=False), dict(level=0)):
+            eng = self._country(**kw)
+            self.assertNotIn("te_dg_pension_bill", eng.vars, kw)
+            self.assertNotIn("te_demog_pension_bill", eng.modifiers, kw)
+
+    def test_the_health_bill_by_need_and_technology(self):
+        for need, techs in ((1.4, 0.1), (1.0, 0.0), (0.9, 0.0), (4.0, 0.15)):
+            eng = self._country(need=need, techs=techs)
+            want = min(P.HEALTH_NEED_WEIGHT * (need - 1), P.HEALTH_NEED_CAP) + techs
+            self.assertAlmostEqual(eng.vars["te_dg_health_term"], want, places=5)
+            side = {1: "te_demog_health_bill_up", -1: "te_demog_health_bill_down"}
+            mods = {k: v for k, v in eng.modifiers.items() if k.startswith("te_demog_health_bill_")}
+            if abs(want) < 1e-9:
+                self.assertEqual(mods, {})
+            else:
+                self.assertEqual(set(mods), {side[1 if want > 0 else -1]})
+                self.assertAlmostEqual(sum(mods.values()), abs(want), places=5)
+        self.assertAlmostEqual(M.health_term(1.4, frozenset({"modern_pharmaceuticals", "telemedicine"})),
+                               P.HEALTH_NEED_WEIGHT * 0.4 + 2 * P.HEALTH_TECH_STEP)
+
+    def test_outside_full_both_go(self):
+        eng = self._country()
+        eng.trigger_fixtures["te_demog_effects_run"] = False
+        eng.call("te_demog_bills_refresh")
+        self.assertEqual(eng.modifiers, {})
+        self.assertNotIn("te_dg_health_term", eng.vars)
+
+    def test_the_modifiers(self):
+        mods = _text(DEMOG_MODIFIERS)
+        self.assertIn("country_expenses_add = 1", _block(mods, "te_demog_pension_bill"))
+        self.assertIn("country_institution_cost_institution_health_system_mult = 1",
+                      _block(mods, "te_demog_health_bill_up"))
+        self.assertIn("country_institution_cost_institution_health_system_mult = -1",
+                      _block(mods, "te_demog_health_bill_down"))
+        values = _text(WORK_VALUES)
+        week = _block(values, "te_demog_pension_bill_week")
+        self.assertIn("value = gdp", week)
+        self.assertIn("divide = 52", week, "gdp is yearly, the expense weekly")
+
+    def test_the_census_refreshes_them_with_the_country_figures(self):
+        census = _block(_text(EFFECTS), "te_demog_country_census")
+        for call in ("te_demog_work_country_init = yes", "te_demog_work_country_add = yes",
+                     "te_demog_work_country_store = yes"):
+            self.assertEqual(census.count(call), 1, call)
+        self.assertIn("te_demog_bills_refresh = yes", _block(_text(WORK_EFFECTS), "te_demog_work_country_store"))
+
+
+class TestCountryFigures(unittest.TestCase):
+    """The tab's figures, people-weighted over the census states (te_demog_work_country_*)."""
+
+    def test_people_weighted(self):
+        states = [dict(te_dg_year=1900.0, te_dg_people=2_000_000.0, te_dg_wa_share=0.7, te_dg_at_work=0.5,
+                       te_dg_pensioners=0.1, te_dg_need=1.2, te_dg_old_age=65.0, te_dg_wk_past=0.02,
+                       te_dg_wf_engine=0.26),
+                  dict(te_dg_year=1900.0, te_dg_people=1_000_000.0, te_dg_wa_share=0.6, te_dg_at_work=0.8,
+                       te_dg_pensioners=0.2, te_dg_need=1.5, te_dg_old_age=70.0, te_dg_wk_past=0.04,
+                       te_dg_wf_engine=0.3),
+                  dict(te_dg_year=1900.0, te_dg_people=5_000_000.0)]     # an old save's: no figures yet
+        body = (_raw_blocks([WORK_EFFECTS])["te_demog_work_country_init"]
+                + "\nevery_scope_state = { set_local_variable = { name = te_dg_c_s_pm value = { value = var:te_dg_people"
+                " divide = 1000000 } } te_demog_work_country_add = yes }\n"
+                + _raw_blocks([WORK_EFFECTS])["te_demog_work_country_store"])
+        eng = _CountryEngine(states=states, fixtures={}, effects={"te_demog_bills_refresh": "", "te_test": body})
+        eng.call("te_test")
+        self.assertAlmostEqual(eng.vars["te_dg_wa_share"], (0.7 * 2 + 0.6) / 3, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_at_work"], (0.7 * 0.5 * 2 + 0.6 * 0.8) / (0.7 * 2 + 0.6), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_pensioners"], (0.1 * 2 + 0.2) / 3, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_need"], (1.2 * 2 + 1.5) / 3, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_old_age"], (65 * 2 + 70) / 3, places=4)
+        self.assertAlmostEqual(eng.vars["te_dg_wk_past"], (0.02 * 2 + 0.04) / 3, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_wf_engine"], (0.26 * 2 + 0.3) / 3, places=5)
+
+
+class TestWorkTermSelfChecks(unittest.TestCase):
+    """The two engine facts §2.1 and §1.8 rest on, each a once-a-game TE_SELF_CHECK line (owner, 2026-10-12)."""
+
+    def test_both_checks_log_both_verdicts_once_a_game(self):
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_checks")
+        for name, flag in (("workforce_ratio_scale", "te_demog_selfcheck_wf_scale_done"),
+                           ("workforce_follows_target", "te_demog_selfcheck_wft_done")):
+            self.assertIn(f"TE_SELF_CHECK OK {name}", body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {name}", body)
+            self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", body)
+            self.assertIn(f"set_global_variable = {{ name = {flag} value = yes }}", body)
+
+    def test_degenerate_inputs_are_excluded(self):
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_checks")
+        scale, follows = body.split("workforce_follows_target", 1)[0], body
+        for needle in ("NOT = { has_variable = te_dg_mw }", "var:te_dg_wf_engine > 0.01", "is_capital = yes"):
+            self.assertIn(needle, scale)
+        for needle in ("te_debug_demog_wft_years >= 5", "te_debug_demog_wft_moved > te_debug_demog_wft_tolerance"):
+            self.assertIn(needle, follows)
+        values = _text(DEBUG_VALUES)
+        self.assertIn("value = 0.02", _block(values, "te_debug_demog_wft_tolerance"))
+        self.assertIn("divide = { value = te_demog_wf_set add = 1", _block(values, "te_debug_demog_wf_per_dependents"))
+
+    def test_they_read_before_the_refresh_moves_anything(self):
+        body = _block(_text(WORK_EFFECTS), "te_demog_workforce_refresh")
+        self.assertLess(body.index("te_debug_demog_wf_term_checks = yes"), body.index("set_variable"))
+        self.assertIn("te_debug_demog_wf_term_landing = yes", body)
+
+    def test_the_console_options(self):
+        events = _text(DEBUG_EVENTS)
+        console = _block(events, "te_debug_demog.1")
+        for option, effect in (("te_debug_demog.1.r", "te_debug_demog_wf_lines"),
+                               ("te_debug_demog.1.s", "te_debug_demog_pension_term_end")):
+            self.assertIn(f"name = {option}", console)
+            self.assertIn(f"{effect} = yes", console)
+
+
+class TestPanelGates(unittest.TestCase):
+    """The Work and Retirement section reads country and state figures only under the gates that say they exist."""
+
+    def test_the_pension_buttons(self):
+        sguis = _text(SGUIS)
+        for pos in P.PENSION_POSITIONS:
+            body = _block(sguis, f"te_demog_pension_{pos}_sgui")
+            self.assertIn("te_demog_has_pension_law = yes", body, pos)
+            self.assertIn("te_demog_effects_run = yes", body, pos)
+            self.assertIn("te_demog_pension_can_change = yes", body, pos)
+            self.assertIn(f"te_demog_pension_choose = {{ POS = {pos} }}", body, pos)
+        gui = _text(GUI)
+        for pos in P.PENSION_POSITIONS:
+            self.assertIn(f"GetScriptedGui('te_demog_pension_{pos}_sgui')", gui)
+
+    def test_the_sections_exist_on_both_tabs(self):
+        """The country tab's section carries the buttons; the state subtab's none (§10)."""
+        gui = _text(GUI)
+        self.assertIn("te_demog_sec_work = {}", _gui_type(gui, "te_demog_tab_sections"))
+        self.assertIn("te_state_demog_work = {}", _gui_type(gui, "te_state_demog_content"))
+        self.assertIn("te_demog_pension_button", _gui_type(gui, "te_demog_sec_work"))
+        self.assertNotIn("te_demog_pension_button", _gui_type(gui, "te_state_demog_work"))
+        self.assertNotIn("GetPlayer", _gui_type(gui, "te_state_demog_work"), "the state's section reads the state")
+
+    def test_the_rows_use_the_fixed_cells(self):
+        """Rule 8: the section's rows use te_demog_figure_row's fixed cells."""
+        gui = _text(GUI)
+        for name in ("te_demog_sec_work", "te_state_demog_work"):
+            self.assertIn("te_demog_figure_row", _gui_type(gui, name), name)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -46,8 +46,13 @@
 #   p    call 3's carriers (phase 2 step 1): Punishment-Focused Criminal Justice if needed with Community Service,
 #        Woman Soldiers at half strength and the Trade Unions pushed past loyal, all for 60 days; the capital's
 #        TE_DEMOG_MODS and TE_DEMOG_WORK lines now, a day and a month later (the hidden te_debug_demog.3)
+#   r    the workforce term and the pension setting (phase 2 step 2): the capital's TE_DEMOG_WF line (W, its target,
+#        the lines on top, the game's own figure, the work deaths' split) and the country's TE_DEMOG_PENSION line
+#   s    the pension setting's five-year term ends now (phase 2 step 2), so another position can be chosen at once
 # Hidden, fired by script in every game: te_debug_demog.5 (the Primogeniture self-check) and .6, .7 (phase 2 step 1's
-# workforce self-checks; te_debug_demog_wf_selfchecks). Each writes one TE_SELF_CHECK line a game.
+# workforce self-checks; te_debug_demog_wf_selfchecks). Each writes one TE_SELF_CHECK line a game. Phase 2 step 2's
+# two (workforce_ratio_scale, workforce_follows_target) need no event: te_debug_demog_wf_term_checks writes them at a
+# capital's census, before its workforce refresh.
 #
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
@@ -345,6 +350,40 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 				limit = { has_variable = te_dg_dbg_click }
 				remove_variable = te_dg_dbg_click
 				te_debug_demog_call3_setup = yes
+			}
+		}
+	}
+
+	# ---- r: the workforce term and the pension setting (phase 2 step 2) -------------------------------------
+	option = {
+		name = te_debug_demog.1.r
+		trigger = {
+			exists = capital
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.r.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_wf_lines = yes
+			}
+		}
+	}
+
+	# ---- s: the pension term ends now (phase 2 step 2) ------------------------------------------------------
+	option = {
+		name = te_debug_demog.1.s
+		trigger = {
+			has_variable = te_dg_pension_since
+		}
+		custom_tooltip = {
+			text = te_debug_demog.1.s.tt
+			set_variable = te_dg_dbg_click
+			if = {
+				limit = { has_variable = te_dg_dbg_click }
+				remove_variable = te_dg_dbg_click
+				te_debug_demog_pension_term_end = yes
 			}
 		}
 	}

@@ -5122,6 +5122,10 @@
  te_debug_demog.1.p.tt:0 "Enacts Punishment-Focused Criminal Justice if needed and attaches Community Service, adds Woman Soldiers at half strength for 60 days and makes the Trade Unions loyal for 60 days. Writes TE_DEMOG_MODS and TE_DEMOG_WORK lines for our capital now, a day later and a month later: womens and replaced are the two families, ww_mod their sum, pair the pair in force, part_m, part and cap the census's inputs, and wa_mod the engine's own field."
  te_debug_demog.1.q:0 "Probe: give a state away and see what the owner-change hook holds"
  te_debug_demog.1.q.tt:0 "Picks one of our states that is alone in its state region and borders another country, stamps it, and gives it to that neighbour. Writes three TE_DEMOG_PROBE_OWNER lines to debug.log: before, from inside the owner-change hook, and a day later. var is 1 where the stamp is still there; year and lm are the census's year and Late Marriage share, or -1. The state really changes hands: use a throwaway game."
+ te_debug_demog.1.r:0 "The workforce term and the pension setting: log them"
+ te_debug_demog.1.r.tt:0 "Writes a TE_DEMOG_WF line for our capital (the census's workforce term, its target, the lines on top, the game's own figure and the work deaths' split) and a TE_DEMOG_PENSION line for us (the position, the age, the term, the bill and its share of revenue, the health bill)."
+ te_debug_demog.1.s:0 "End the pension setting's five-year term now"
+ te_debug_demog.1.s.tt:0 "Removes the year our pension setting was chosen, so another can be chosen at once. A play-test tool: the setting itself stays. Writes a TE_DEMOG_PENSION line."
  te_debug_demog.1.t:0 "Demographics Test Console"
  te_debug_demog.1.z:0 "Close"
 

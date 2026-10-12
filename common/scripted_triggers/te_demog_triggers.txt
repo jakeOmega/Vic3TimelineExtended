@@ -120,3 +120,19 @@ te_demog_workforce_lines_apply = {
 te_demog_medicine_behind = {
 	te_demog_medicine_gap > te_demog_k_medicine_snap
 }
+
+# ---- Phase 2 step 2: the pension setting (te_demog_work_effects.txt) -------------------------------------------
+
+# THIS = a country: its position follows an old-age threshold (Linked to Average or to Common Longevity).
+te_demog_pension_is_linked = {
+	has_variable = te_dg_pension_pos
+	OR = {
+		var:te_dg_pension_pos = te_demog_k_pension_pos_linked_average
+		var:te_dg_pension_pos = te_demog_k_pension_pos_linked_common
+	}
+}
+
+# THIS = a country: no five-year term runs (none chosen yet, or chosen te_demog_k_pension_term_years or more ago).
+te_demog_pension_can_change = {
+	te_demog_pension_term_left <= 0
+}

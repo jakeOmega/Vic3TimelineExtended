@@ -1798,6 +1798,40 @@ te_demog_pop_base_ratio = {
 	if = { limit = { is_pop_type = slaves } value = 0.5 }
 }
 
+# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
+# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
+te_demog_k_working_adult_base = { value = 0.25 }
+te_demog_k_wf_ramp_step = { value = 0.01 }
+te_demog_k_wf_ramp_step_neg = { value = -0.01 }
+te_demog_k_wf_pop_floor = { value = -0.15 }
+te_demog_k_pension_age_early = { value = 60 }
+te_demog_k_pension_age_raised = { value = 70 }
+te_demog_k_pension_link_offset = { value = 5 }
+te_demog_k_pension_link_floor = { value = 65 }
+te_demog_k_pension_link_step = { value = 1 }
+te_demog_k_pension_link_step_neg = { value = -1 }
+te_demog_k_pension_term_years = { value = 5 }
+te_demog_k_pension_b_per_level = { value = 0.06 }
+te_demog_k_health_need_weight = { value = 0.8 }
+te_demog_k_health_need_cap = { value = 1 }
+te_demog_k_work_split_first = { value = 15 }
+te_demog_k_work_split_last = { value = 64 }
+te_demog_k_pension_ai_bill_high = { value = 0.3 }
+te_demog_k_pension_ai_debt = { value = 0.25 }
+te_demog_k_pension_ai_unemployment = { value = 0.1 }
+te_demog_k_pension_pos_early = { value = 1 }
+te_demog_k_pension_pos_standard = { value = 2 }
+te_demog_k_pension_pos_raised = { value = 3 }
+te_demog_k_pension_pos_linked_average = { value = 4 }
+te_demog_k_pension_pos_linked_common = { value = 5 }
+# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).
+te_demog_health_tech_term = {
+	value = 0
+	if = { limit = { has_technology_researched = modern_pharmaceuticals } add = 0.05 }
+	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
+	if = { limit = { has_technology_researched = personalized_medicine } add = 0.05 }
+}
+
 # State scope: each slot as per mille of the state's people, for the replay lines (Task 15).
 # One sequential block each, so the scale and the people are not rounded on their own.
 te_demog_dbg_f0 = { value = 0 if = { limit = { has_variable = te_dg_f0 } value = var:te_dg_f0 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }

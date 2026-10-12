@@ -1,0 +1,448 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — phase 2 step 2: the workforce, pensions and health costs
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 (late-game §2.1, §2.2, §5)
+# ============================================================================
+# Everything here acts under Full only (te_demog_effects_run). Display only shows the figures, and its pension buttons
+# are greyed with the reason; under Display only and Disabled every term here clears at the state's next census step or
+# the country's next census, as the births and deaths term M does. demographics_model.py is the twin.
+#
+# State variables (Full, census states):
+#   te_dg_mw            W, the workforce term in force (signed), behind te_demog_census_workforce_up/_down
+#   te_dg_wf_rem        the working-adult lines on top at the last refresh: the state's read less W and the moved
+#                       lines' pair (Rosen's androids, a line added later with no family, the console's probe)
+#   te_dg_wft_y0, te_dg_wft_w0  on a capital, until workforce_follows_target has run: the census year W landed and W
+#                       then (te_debug_demog_wf_term_checks)
+# Country variables:
+#   te_dg_pension_pos   the pension position under Old Age Pension (te_demog_k_pension_pos_*; absent = Standard), set
+#                       by its buttons (te_demog_sguis.txt) and the AI's pulse, under Full only
+#   te_dg_pension_since the calendar year the position was chosen; another may be chosen from since + 5
+#   te_dg_wa_share, te_dg_at_work, te_dg_pensioners, te_dg_need, te_dg_old_age, te_dg_wk_past, te_dg_wf_engine
+#                       the census states' figures, people-weighted (te_demog_work_country_store), for the tab and the
+#                       bills; under the cohorts (Full and Display only)
+#   te_dg_pension_bill  the pension bill in force, a week (Full and Old Age Pension)
+#   te_dg_health_term   the health bill's multiplier in force, signed (Full)
+# A revolution's winner keeps the variables but not the modifiers (CLAUDE.md, "the winner continues the nation"): the
+# position's interest-group modifier comes back at the next yearly refresh, the bills at the next census and W at the
+# state's next census step.
+# ============================================================================
+
+# ---- The workforce term W (§2.1) --------------------------------------------------------------------------------
+
+# THIS = ROOT = a state, straight after te_demog_rates_refresh in the effect that ran its census (its yearly pulse, or a
+# step of fast mode's clock), so the pair's multipliers resolve against the state. The one refresh site of
+# te_demog_census_workforce_* (te_demog_workforce_apply). Under Full, after a census step (as M, a seed leaves W as it
+# is: te_dg_stepped 0):
+#   target = te_demog_wf_term_target (the census's target less the define's 0.25)
+#   W      = from + clamp(target - from, -step, step), at least te_demog_k_wf_pop_floor - the lines on top
+# from: W in force, or when W first lands the moved lines' pair it replaces (so the state's workforce never jumps);
+# step: te_demog_k_wf_ramp_step a census step (demographics_params.WF_RAMP_STEP says why); the floor keeps the lowest
+# pop base (aristocrats' 0.2) + W + the lines on top at 0.05 (no cap above: late-game call 10). The lines on top are
+# the state's read less W and the pair, read before anything here touches them. When W lands the moved lines' pair
+# comes off (te_demog_workforce_lines_apply no longer holds). Outside Full, or under Full in a state with no census, W
+# goes and the pair returns that day.
+te_demog_workforce_refresh = {
+	set_local_variable = { name = te_dg_wf_applied value = te_demog_census_workforce_applied }
+	set_local_variable = { name = te_dg_wf_pair value = te_demog_line_working_adults_applied }
+	# the self-checks read the walk against what was set over the past year, before this refresh moves it
+	te_debug_demog_wf_term_checks = yes
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_has_census = yes
+			has_variable = te_dg_stepped
+			has_variable = te_dg_wa_share
+			has_variable = te_dg_at_work
+		}
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			set_local_variable = {
+				name = te_dg_wf_rem
+				value = {
+					value = modifier:state_working_adult_ratio_add
+					subtract = local_var:te_dg_wf_applied
+					subtract = local_var:te_dg_wf_pair
+				}
+			}
+			set_local_variable = { name = te_dg_wf_from value = local_var:te_dg_wf_pair }
+			if = {
+				limit = { has_variable = te_dg_mw }
+				set_local_variable = { name = te_dg_wf_from value = var:te_dg_mw }
+			}
+			else = {
+				te_debug_demog_wf_term_landing = yes
+			}
+			set_variable = {
+				name = te_dg_mw
+				value = {
+					value = te_demog_wf_term_target
+					subtract = local_var:te_dg_wf_from
+					min = te_demog_k_wf_ramp_step_neg
+					max = te_demog_k_wf_ramp_step
+					add = local_var:te_dg_wf_from
+					min = { value = te_demog_k_wf_pop_floor subtract = local_var:te_dg_wf_rem }
+				}
+			}
+			set_variable = { name = te_dg_wf_rem value = local_var:te_dg_wf_rem }
+			te_demog_workforce_lines_clear = yes
+			te_demog_workforce_apply = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_mw }
+		te_demog_workforce_clear = yes
+		# the moved lines' pair back the same day (te_demog_workforce_lines_apply holds again)
+		te_demog_workforce_lines_refresh = yes
+	}
+	else = {
+		te_demog_workforce_clear = yes
+	}
+}
+
+# THIS = ROOT = a state: W's pair at |te_dg_mw|, one side at most. Removed and re-applied (docs/systems/mod_systems.md,
+# the dynamic-modifier scaling pattern).
+te_demog_workforce_apply = {
+	te_demog_workforce_remove = yes
+	if = {
+		limit = { var:te_dg_mw > 0 }
+		add_modifier = { name = te_demog_census_workforce_up multiplier = te_demog_census_workforce_up_mult }
+	}
+	else_if = {
+		limit = { var:te_dg_mw < 0 }
+		add_modifier = { name = te_demog_census_workforce_down multiplier = te_demog_census_workforce_down_mult }
+	}
+}
+
+te_demog_workforce_remove = {
+	if = {
+		limit = { has_modifier = te_demog_census_workforce_up }
+		remove_modifier = te_demog_census_workforce_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_workforce_down }
+		remove_modifier = te_demog_census_workforce_down
+	}
+}
+
+# THIS = a state: W off (Display only, Disabled, a state without figures), with its variables.
+te_demog_workforce_clear = {
+	te_demog_workforce_remove = yes
+	if = {
+		limit = { has_variable = te_dg_mw }
+		remove_variable = te_dg_mw
+	}
+	if = {
+		limit = { has_variable = te_dg_wf_rem }
+		remove_variable = te_dg_wf_rem
+	}
+}
+
+# ---- The country's figures (the tab, the bills, the linked pension positions) ----------------------------------
+
+# THIS = a country, before te_demog_country_census's state loop: the people-weighted sums' locals (weights in
+# millions of people, te_dg_c_s_pm, as the country's e0).
+te_demog_work_country_init = {
+	set_local_variable = { name = te_dg_c_wk_pm value = 0 }
+	set_local_variable = { name = te_dg_c_wa_w value = 0 }
+	set_local_variable = { name = te_dg_c_wkr_w value = 0 }
+	set_local_variable = { name = te_dg_c_pens_w value = 0 }
+	set_local_variable = { name = te_dg_c_need_w value = 0 }
+	set_local_variable = { name = te_dg_c_old_w value = 0 }
+	set_local_variable = { name = te_dg_c_past_w value = 0 }
+	set_local_variable = { name = te_dg_c_wfe_pm value = 0 }
+	set_local_variable = { name = te_dg_c_wfe_w value = 0 }
+}
+
+# THIS = a census state inside te_demog_country_census's loop, after its weight te_dg_c_s_pm: a state from before step
+# 1's figures (an old save's, until its next count) adds nothing; nor does one before its first walk under this build
+# to the engine's figure.
+te_demog_work_country_add = {
+	if = {
+		limit = {
+			has_variable = te_dg_wa_share
+			has_variable = te_dg_at_work
+			has_variable = te_dg_pensioners
+			has_variable = te_dg_need
+			has_variable = te_dg_old_age
+		}
+		change_local_variable = { name = te_dg_c_wk_pm add = local_var:te_dg_c_s_pm }
+		change_local_variable = { name = te_dg_c_wa_w add = { value = var:te_dg_wa_share multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = {
+			name = te_dg_c_wkr_w
+			add = { value = var:te_dg_wa_share multiply = var:te_dg_at_work multiply = local_var:te_dg_c_s_pm }
+		}
+		change_local_variable = { name = te_dg_c_pens_w add = { value = var:te_dg_pensioners multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_need_w add = { value = var:te_dg_need multiply = local_var:te_dg_c_s_pm } }
+		change_local_variable = { name = te_dg_c_old_w add = { value = var:te_dg_old_age multiply = local_var:te_dg_c_s_pm } }
+		if = {
+			limit = { has_variable = te_dg_wk_past }
+			change_local_variable = { name = te_dg_c_past_w add = { value = var:te_dg_wk_past multiply = local_var:te_dg_c_s_pm } }
+		}
+	}
+	if = {
+		limit = { has_variable = te_dg_wf_engine }
+		change_local_variable = { name = te_dg_c_wfe_pm add = local_var:te_dg_c_s_pm }
+		change_local_variable = { name = te_dg_c_wfe_w add = { value = var:te_dg_wf_engine multiply = local_var:te_dg_c_s_pm } }
+	}
+}
+
+# THIS = ROOT = a country, at the end of te_demog_country_census (its yearly census, the game start's, fast mode's): the
+# figures, then the bills. A country whose states all predate step 1's figures keeps last year's, or none.
+te_demog_work_country_store = {
+	if = {
+		limit = { local_var:te_dg_c_wk_pm > 0 }
+		set_variable = { name = te_dg_wa_share value = { value = local_var:te_dg_c_wa_w divide = { value = local_var:te_dg_c_wk_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_at_work value = { value = local_var:te_dg_c_wkr_w divide = { value = local_var:te_dg_c_wa_w min = 0.00001 } } }
+		set_variable = { name = te_dg_pensioners value = { value = local_var:te_dg_c_pens_w divide = { value = local_var:te_dg_c_wk_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_need value = { value = local_var:te_dg_c_need_w divide = { value = local_var:te_dg_c_wk_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_old_age value = { value = local_var:te_dg_c_old_w divide = { value = local_var:te_dg_c_wk_pm min = 0.00001 } } }
+		set_variable = { name = te_dg_wk_past value = { value = local_var:te_dg_c_past_w divide = { value = local_var:te_dg_c_wk_pm min = 0.00001 } } }
+	}
+	if = {
+		limit = { local_var:te_dg_c_wfe_pm > 0 }
+		set_variable = { name = te_dg_wf_engine value = { value = local_var:te_dg_c_wfe_w divide = { value = local_var:te_dg_c_wfe_pm min = 0.00001 } } }
+	}
+	te_demog_bills_refresh = yes
+}
+
+# ---- The bills (§2.3, §2.4) -------------------------------------------------------------------------------------
+
+# THIS = ROOT = a country (te_demog_work_country_store): the pension bill under Full and Old Age Pension, with
+# pensioners counted and Social Security above 0; the health bill under Full. Otherwise each goes, with its variable.
+# No bill under UBI or Post-Scarcity (no pension age; the old are paid as everyone is). The one refresh site of
+# te_demog_pension_bill and te_demog_health_bill_* (te_demog_bills_apply).
+te_demog_bills_refresh = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_has_pension_law = yes
+			has_variable = te_dg_pensioners
+			te_demog_pension_bill_week > 0
+		}
+		set_variable = { name = te_dg_pension_bill value = te_demog_pension_bill_week }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_pension_bill }
+		remove_variable = te_dg_pension_bill
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_need
+		}
+		set_variable = { name = te_dg_health_term value = te_demog_health_term_now }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_health_term }
+		remove_variable = te_dg_health_term
+	}
+	te_demog_bills_apply = yes
+}
+
+te_demog_bills_apply = {
+	if = {
+		limit = { has_modifier = te_demog_pension_bill }
+		remove_modifier = te_demog_pension_bill
+	}
+	if = {
+		limit = { has_modifier = te_demog_health_bill_up }
+		remove_modifier = te_demog_health_bill_up
+	}
+	if = {
+		limit = { has_modifier = te_demog_health_bill_down }
+		remove_modifier = te_demog_health_bill_down
+	}
+	if = {
+		limit = { has_variable = te_dg_pension_bill }
+		add_modifier = { name = te_demog_pension_bill multiplier = te_demog_pension_bill_mult }
+	}
+	if = {
+		limit = { has_variable = te_dg_health_term }
+		if = {
+			limit = { var:te_dg_health_term > 0 }
+			add_modifier = { name = te_demog_health_bill_up multiplier = te_demog_health_bill_up_mult }
+		}
+		else_if = {
+			limit = { var:te_dg_health_term < 0 }
+			add_modifier = { name = te_demog_health_bill_down multiplier = te_demog_health_bill_down_mult }
+		}
+	}
+}
+
+# ---- The pension setting (§2.2) ---------------------------------------------------------------------------------
+
+# THIS = a country, from te_demog_pension_age_refresh under Old Age Pension: the age its position gives. The fixed
+# positions' ages at once; a linked one keeps its age (at least the floor, so leaving Early raises it at once) and
+# moves at most a year a year at the yearly census (te_demog_pension_link_drift). Outside Full, or with no position
+# chosen, Standard's.
+te_demog_pension_age_from_position = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_pension_pos
+		}
+		if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_early }
+			set_variable = { name = te_dg_pension_age value = te_demog_k_pension_age_early }
+		}
+		else_if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_raised }
+			set_variable = { name = te_dg_pension_age value = te_demog_k_pension_age_raised }
+		}
+		else_if = {
+			limit = { te_demog_pension_is_linked = yes }
+			if = {
+				limit = { has_variable = te_dg_pension_age }
+				set_variable = { name = te_dg_pension_age value = { value = var:te_dg_pension_age min = te_demog_k_pension_link_floor } }
+			}
+			else = {
+				set_variable = { name = te_dg_pension_age value = te_demog_k_pension_link_floor }
+			}
+		}
+		else = {
+			set_variable = { name = te_dg_pension_age value = te_demog_k_pension_age_standard }
+		}
+	}
+	else = {
+		set_variable = { name = te_dg_pension_age value = te_demog_k_pension_age_standard }
+	}
+}
+
+# THIS = a country, on its yearly pulse after te_demog_pension_age_refresh: a linked position's age a year toward five
+# years below the country's old-age threshold, at least 65 (late-game §2.2).
+te_demog_pension_link_drift = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_has_pension_law = yes
+			te_demog_pension_is_linked = yes
+			has_variable = te_dg_pension_age
+		}
+		change_variable = { name = te_dg_pension_age add = te_demog_pension_link_step }
+	}
+}
+
+# THIS = a country: the position's interest-group modifier, the one refresh site of te_demog_pension_pos_*. Re-applied
+# at every refresh, so a revolution's winner, which keeps the variable but not the modifier, has it back within a year.
+te_demog_pension_ig_refresh = {
+	te_demog_pension_ig_remove = yes
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			te_demog_has_pension_law = yes
+			has_variable = te_dg_pension_pos
+		}
+		if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_early }
+			add_modifier = { name = te_demog_pension_pos_early }
+		}
+		else_if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_raised }
+			add_modifier = { name = te_demog_pension_pos_raised }
+		}
+		else_if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_linked_average }
+			add_modifier = { name = te_demog_pension_pos_linked_average }
+		}
+		else_if = {
+			limit = { var:te_dg_pension_pos = te_demog_k_pension_pos_linked_common }
+			add_modifier = { name = te_demog_pension_pos_linked_common }
+		}
+	}
+}
+
+te_demog_pension_ig_remove = {
+	if = {
+		limit = { has_modifier = te_demog_pension_pos_early }
+		remove_modifier = te_demog_pension_pos_early
+	}
+	if = {
+		limit = { has_modifier = te_demog_pension_pos_raised }
+		remove_modifier = te_demog_pension_pos_raised
+	}
+	if = {
+		limit = { has_modifier = te_demog_pension_pos_linked_average }
+		remove_modifier = te_demog_pension_pos_linked_average
+	}
+	if = {
+		limit = { has_modifier = te_demog_pension_pos_linked_common }
+		remove_modifier = te_demog_pension_pos_linked_common
+	}
+}
+
+# THIS = a country leaving Old Age Pension (or outside Full): the setting goes, so a later return starts at Standard
+# with no term running.
+te_demog_pension_setting_clear = {
+	te_demog_pension_ig_remove = yes
+	if = {
+		limit = { has_variable = te_dg_pension_pos }
+		remove_variable = te_dg_pension_pos
+	}
+	if = {
+		limit = { has_variable = te_dg_pension_since }
+		remove_variable = te_dg_pension_since
+	}
+}
+
+# THIS = a country, from a button (te_demog_sguis.txt) or the AI's pulse: position $POS$ (te_demog_k_pension_pos_*)
+# from today, for at least te_demog_k_pension_term_years. The age follows at once (a linked one from at least 65); the
+# bill and the workforce at the next census.
+te_demog_pension_choose = {
+	set_variable = { name = te_dg_pension_pos value = te_demog_k_pension_pos_$POS$ }
+	set_variable = { name = te_dg_pension_since value = { value = 0 add = year } }
+	te_demog_pension_age_from_position = yes
+	te_demog_pension_ig_refresh = yes
+}
+
+# THIS = a country, at the end of its yearly pulse: the AI's choice (§2.2, §9), the same weights for every country;
+# is_ai = yes only decides whom the pulse acts for, as Grand Monuments' policy pulse does (gm_policy_ai_choose). A bill
+# over te_demog_k_pension_ai_bill_high of revenue, or debt over te_demog_k_pension_ai_debt of its ceiling (or a default),
+# picks the cheaper positions: Linked to Average where its age passes Raised's, else Raised. Unemployment over
+# te_demog_k_pension_ai_unemployment picks Early. Otherwise Standard. It changes only when the pick differs and the
+# term allows. A wide longevity gap pushing toward Linked to Common waits for phase 3.
+te_demog_pension_ai = {
+	if = {
+		limit = {
+			is_ai = yes
+			te_demog_effects_run = yes
+			te_demog_has_pension_law = yes
+			te_demog_pension_can_change = yes
+		}
+		set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_standard }
+		if = {
+			limit = {
+				OR = {
+					te_demog_pension_bill_share > te_demog_k_pension_ai_bill_high
+					scaled_debt > te_demog_k_pension_ai_debt
+					in_default = yes
+				}
+			}
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_raised }
+			if = {
+				limit = { te_demog_pension_link_target > te_demog_k_pension_age_raised }
+				set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_linked_average }
+			}
+		}
+		else_if = {
+			limit = { te_demog_country_unemployment > te_demog_k_pension_ai_unemployment }
+			set_local_variable = { name = te_dg_pa_pick value = te_demog_k_pension_pos_early }
+		}
+		if = {
+			limit = { NOT = { local_var:te_dg_pa_pick = te_demog_pension_pos } }
+			if = {
+				limit = { local_var:te_dg_pa_pick = te_demog_k_pension_pos_early }
+				te_demog_pension_choose = { POS = early }
+			}
+			else_if = {
+				limit = { local_var:te_dg_pa_pick = te_demog_k_pension_pos_raised }
+				te_demog_pension_choose = { POS = raised }
+			}
+			else_if = {
+				limit = { local_var:te_dg_pa_pick = te_demog_k_pension_pos_linked_average }
+				te_demog_pension_choose = { POS = linked_average }
+			}
+			else = {
+				te_demog_pension_choose = { POS = standard }
+			}
+		}
+	}
+}
