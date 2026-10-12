@@ -2931,7 +2931,7 @@ only if the probe reads the scaled value; otherwise Plan B, the fallback. Either
   `te_demog_events.4`, `te_demog_lines_apply`.
 - Produces: the console's option o and `TE_DEMOG_PROBE` lines; `te_debug_demog_line_absorbed_b`.
 
-- [ ] **Step 1: The probe** (console option o)
+- [x] **Step 1: The probe** (console option o)
 
 The test, in `TestConsole`, beside option m's:
 

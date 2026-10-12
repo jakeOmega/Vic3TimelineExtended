@@ -5117,6 +5117,7 @@
  te_currency_peg_pegger_not_command_tt:0 "The pegging country is not a command economy"
  te_currency_peg_regime_fits_tt:0 "The pegging country controls a compatible currency, is not dollarised or a command economy, and is outside a currency board or common currency. Commodity money and gold-standard currencies require a commodity-money or convertible gold-standard anchor."
  te_currency_peg_target_rank_tt:0 "The anchor is a [concept_great_power] or [concept_major_power], or owns the pegging country's [concept_market] — and the pegging country is not already in a common currency or on a currency board"
+ te_debug_demog_scaled_probe:0 "Test: Engine Scaling Probe"
  te_debug_pb_bloc_name:0 "Test Bloc"
  te_debug_pb_fast_mandates:0 "Test: Fast Mandates"
  te_debug_pb_principle_slots:0 "Test: Principle Slots"

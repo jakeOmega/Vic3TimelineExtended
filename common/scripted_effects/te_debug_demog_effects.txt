@@ -29,6 +29,8 @@
 #   TE_DEMOG_RATES:     option n (probe P3): the capital's census terms, the terms in
 #                       force, its last step's on-top scales and the reads, and the split of
 #                       its window's deaths (the Causes of Death section)
+#   TE_DEMOG_PROBE      option o (the late-marriage plan, Task 9): the capital's absorbed
+#                       births sum before a scaled script-only probe and a day after
 #
 # A debug_log line reads only variables and script values of THIS (locals don't reach
 # it, nor do saved scopes), so the numbers a line needs are copied into te_dg_dbg_*
@@ -504,4 +506,15 @@ te_debug_demog_rate_copy = {
 		limit = { has_variable = $FROM$ }
 		set_variable = { name = $TO$ value = var:$FROM$ }
 	}
+}
+
+# ---- o: the engine-scaling probe (the late-marriage plan, Task 9) ----------------------------
+# THIS = the capital: log its absorbed births sum, add te_debug_demog_scaled_probe (+0.1 on the type) at multiplier
+# 0.62, and log the sum again a day later (te_debug_demog.2), when the engine has summed it. after - before reads
+# 0.062 if the engine scales the type by the multiplier, 0.1 if it doesn't, 0 if it doesn't sum it at all.
+te_debug_demog_probe_start = {
+	debug_log = "TE_DEMOG_PROBE before absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|5] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log_scopes = yes
+	add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }
+	trigger_event = { id = te_debug_demog.2 days = 1 }
 }

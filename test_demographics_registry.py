@@ -4616,6 +4616,30 @@ class TestConsole(unittest.TestCase):
                                                               console.index(call)])
 
 
+    def test_option_o_probes_a_scaled_script_only_type_on_a_state(self):
+        """The late-marriage plan, Task 9 (review C2): Primogeniture's farm births would ride a script-only type on a
+        state modifier with a multiplier; the probe adds one at 0.62 and logs the state's sum before and a day after."""
+        console = _text(DEBUG_EVENTS)
+        call = "te_debug_demog_probe_start = yes"
+        self.assertEqual(console.count(call), 1)
+        guard = console[console.rindex("limit = { has_variable = te_dg_dbg_click }", 0, console.index(call)):
+                        console.index(call)]
+        self.assertIn("remove_variable = te_dg_dbg_click", guard)
+        self.assertRegex(_block(_text(DEBUG_MODIFIERS), "te_debug_demog_scaled_probe"),
+                         r"state_demog_absorbed_birth_rate_mult = 0\.1\b")
+        start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_start")
+        self.assertIn("add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 1 }", start)
+        after = _block(console, "te_debug_demog.2")
+        self.assertIn("remove_modifier = te_debug_demog_scaled_probe", after)
+        values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
+        self.assertIn("value = modifier:state_demog_absorbed_birth_rate_mult",
+                      _block(values, "te_debug_demog_line_absorbed_b"))
+        # its name and description (loc_coverage_audit; organize_loc files the _desc in te_concepts)
+        loc = _text(MISC_LOC) + _text(ROOT / "localization" / "english" / "te_concepts_l_english.yml")
+        for key in ("te_debug_demog_scaled_probe", "te_debug_demog_scaled_probe_desc"):
+            self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
+
 FAST_EVENTS = ROOT / "events" / "te_demog_events.txt"
 DEBUG_EVENTS = ROOT / "events" / "te_debug_demog_events.txt"
 DEBUG_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_debug_demog_modifiers.txt"

@@ -540,3 +540,10 @@ te_debug_demog_mult_work = {
 		value = te_demog_mult_work
 	}
 }
+
+# ---- o: the engine-scaling probe (the late-marriage plan, Task 9) ----------------------------
+# THIS = a state: the absorbed family's births sum the engine holds for it (#892's script-only type), which option o
+# reads before and after its scaled probe; option l logs it too.
+te_debug_demog_line_absorbed_b = {
+	value = modifier:state_demog_absorbed_birth_rate_mult
+}
