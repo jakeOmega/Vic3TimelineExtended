@@ -718,6 +718,21 @@ types te_state_panel_widget_types
 						}
 					}
 
+					### COUNTS toward the owner's open opportunity (opportunities
+					### usability §4).
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 380 -1 }
+						maximumsize = { 380 -1 }
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						tooltip = "gm_row_com_counts_tt"
+						text = "gm_row_com_counts"
+					}
+
 					### CONTESTED — the reason on hover; the choices are the
 					### journal entry's.
 					textbox = {
@@ -742,6 +757,11 @@ types te_state_panel_widget_types
 						using = fontsize_medium
 						text = "gm_row_inscription"
 					}
+
+					### CARRY IT OFF — while our armies hold the state, or it
+					### is our own unincorporated state and we did not raise
+					### the monument (gui/gm_trophy_widgets.gui).
+					gm_tr_take_button = {}
 				}
 			}
 

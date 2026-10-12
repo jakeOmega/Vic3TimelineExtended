@@ -1,0 +1,399 @@
+"""Grand Monument trophies (phase 5): the share each form gives up, the
+trophy's name, the monthly pass, the totals, the ways home and the panels,
+pinned against the registry's tables.
+
+Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+Adding a form to FORMS (test_grand_monument_registry.py) fails here until it
+has a share in TROPHY_SHARES, its branch in the share triggers and, for a
+piece or token, its part name. Adding a landmark fails until the trophy's
+landmark name has its branch.
+
+Run: python3 -m unittest test_grand_monument_trophies -v
+"""
+import re
+import unittest
+
+from test_grand_monument_registry import (
+    BUILDING_FORMS, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, RETIRED_FORMS, block, loc, raw_block_at, read,
+    squash, strip_comments,
+)
+
+TR_EFFECTS = "common/scripted_effects/gm_trophy_effects.txt"
+TR_TRIGGERS = "common/scripted_triggers/gm_trophy_triggers.txt"
+TR_VALUES = "common/script_values/gm_trophy_values.txt"
+TR_SGUIS = "common/scripted_guis/gm_trophy_sguis.txt"
+TR_ON_ACTIONS = "common/on_actions/gm_trophy_on_actions.txt"
+TR_CUSTOM_LOC = "common/customizable_localization/gm_trophy_custom_loc.txt"
+TR_EVENTS = "events/monument_trophy_events.txt"
+TR_GUI = "gui/gm_trophy_widgets.gui"
+ARTICLE_RETURN = "common/treaty_articles/118_return_cultural_property.txt"
+ARTICLE_SURRENDER = "common/treaty_articles/119_surrender_monument.txt"
+EFFECTS = "common/scripted_effects/gm_effects.txt"
+TRIGGERS = "common/scripted_triggers/monument_triggers.txt"
+VALUES = "common/script_values/gm_values.txt"
+MODIFIERS = "common/static_modifiers/gm_modifiers.txt"
+JE = "common/journal_entries/je_grand_monuments.txt"
+WIDGET = "gui/journal_entry_widgets/grand_monuments_widget.gui"
+STATE_WIDGETS = "gui/te_state_panel_widgets.gui"
+STATES_PANEL = "gui/states_panel.gui"
+DEBUG_EVENTS = "events/te_debug_monuments_events.txt"
+MESSAGES = "common/messages/extra_messages.txt"
+
+# What a taking carries off, by form (spec §1): every form a monument can
+# have, once. "object" goes whole, "piece" a quarter, "token" a tenth.
+TROPHY_SHARES = {
+    "object": ("column", "obelisk", "statue", "stele", "pillar", "high_cross", "rune_stone", "menorah",
+               "sun_stone", "stela"),
+    "piece": ("arch", "gate", "tower", "bell_tower", "round_tower", "rock_cut"),
+    "token": ("hall", "hall_of_fame", "pantheon", "forum", "stoa", "court", "colonnade", "mausoleum", "pyramid",
+              "pagoda", "memorial_church", "rock_hewn_church", "hill_shrine", "sacred_oak", "memorial",
+              "opera_house", "gardens", "observatory", "exhibition_hall", "stadium"),
+}
+SHARE_VALUES = {"object": 1, "piece": 0.25, "token": 0.1}
+# The occasion patterns of NAMESAKES, plus the namesakes with one pattern.
+NAME_PATTERNS = [p for patterns in NAMESAKES.values() for p in patterns]
+IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners", "petty_bourgeoisie",
+       "rural_folk", "trade_unions")
+
+
+def all_forms():
+    return set(FORMS) | set(RETIRED_FORMS) | set(BUILDING_FORMS.values())
+
+
+def custom_loc_branches(name):
+    """(flag, localization_key) for each text branch of a container target."""
+    body = block(read(TR_CUSTOM_LOC), name)
+    assert body is not None, name
+    return re.findall(r"flag:(\w+) \}\s*localization_key = (\w+)", body)
+
+
+class ShareTests(unittest.TestCase):
+    def test_every_form_has_one_share(self):
+        listed = [f for forms in TROPHY_SHARES.values() for f in forms]
+        self.assertEqual(len(listed), len(set(listed)), "a form in two shares")
+        self.assertEqual(set(listed), all_forms())
+
+    def test_the_share_triggers_match_the_table(self):
+        t = read(TR_TRIGGERS)
+        for kind in ("object", "piece"):
+            body = block(t, f"gm_state_tr_form_is_{kind}")
+            self.assertEqual(set(re.findall(r"var:gm_form = flag:(\w+)", body)), set(TROPHY_SHARES[kind]), kind)
+
+    def test_the_share_value(self):
+        body = squash(block(read(TR_VALUES), "gm_state_tr_share"))
+        self.assertTrue(body.startswith(f"value = {SHARE_VALUES['token']}"), body)
+        self.assertIn(f"limit = {{ gm_state_tr_form_is_piece = yes }} value = {SHARE_VALUES['piece']}", body)
+        self.assertIn(f"limit = {{ gm_state_tr_form_is_object = yes }} value = {SHARE_VALUES['object']}", body)
+        # The object's branch comes last: it wins.
+        self.assertLess(body.find("gm_state_tr_form_is_piece"), body.find("gm_state_tr_form_is_object"))
+
+    def test_levels_and_value(self):
+        v = read(TR_VALUES)
+        self.assertEqual(squash(block(v, "gm_state_tr_levels")),
+                         "value = gm_state_grandeur multiply = gm_state_tr_share ceiling = yes min = 1 "
+                         "max = gm_state_grandeur")
+        self.assertEqual(squash(block(v, "gm_state_tr_value")),
+                         "value = gm_state_tr_levels divide = 2 ceiling = yes")
+
+    def test_never_a_shrine_and_never_twice_in_ten_years(self):
+        takeable = squash(block(read(TR_TRIGGERS), "gm_state_tr_takeable"))
+        for line in ("gm_system_enabled = yes", "gm_state_is_dedicated = yes", "gm_state_kind_faith = no",
+                     "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_ceremony_pending }",
+                     "NOT = { has_variable = gm_carried_off }", "NOT = { has_variable = gm_tr_cooldown }"):
+            self.assertIn(line, takeable)
+        piece = squash(block(read(TR_EFFECTS), "gm_state_tr_remove_piece"))
+        self.assertIn("set_variable = { name = gm_tr_cooldown days = 3650 }", piece)
+
+
+class RouteTests(unittest.TestCase):
+    def test_occupation_reads_the_provinces(self):
+        body = squash(block(read(TR_TRIGGERS), "gm_state_tr_occupied_by"))
+        self.assertIn("owner = { has_war_with = $WHO$ }", body)
+        self.assertIn("any_province = { percent >= 0.5 controller = $WHO$ }", body)
+        self.assertIn("NOT = { AND = { owner = { has_variable = te_cw_role } $WHO$ = { has_variable = te_cw_role } } }",
+                      body, "never between the two sides of a civil war")
+
+    def test_own_state_only_unincorporated_and_not_ours(self):
+        body = squash(block(read(TR_TRIGGERS), "gm_state_tr_own_takeable_by"))
+        self.assertEqual(body, "owner = $WHO$ is_incorporated = no has_variable = gm_built_by "
+                               "gm_state_built_by_owner = no")
+
+    def test_the_builder_is_recorded_and_forgotten(self):
+        e = read(EFFECTS)
+        self.assertIn("gm_state_record_builder = yes", squash(block(e, "gm_state_first_sight")))
+        self.assertIn("gm_state_record_builder = yes", squash(block(e, "gm_state_dedicate")))
+        clear = squash(block(e, "gm_clear_state"))
+        for var in ("gm_built_by", "gm_carried_off", "gm_tr_cooldown", "gm_tr_offered_to"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear, var)
+        # The opportunity's gift and a taken piece keep every record.
+        self.assertNotIn("gm_clear_state", squash(block(read(TR_EFFECTS), "gm_state_tr_remove_piece")))
+
+    def test_a_monument_carried_off_is_not_torn_down(self):
+        monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
+        self.assertIn("NOT = { has_variable = gm_carried_off } } gm_state_record_teardown = yes", monthly)
+        self.assertTrue(monthly.split(" } else = {", 1)[0].endswith("gm_state_tr_monthly = yes"),
+                        "the trophy part runs last in the monument's branch: a taking removes the building")
+
+    def test_the_former_owner_is_stamped(self):
+        self.assertIn("gm_state_tr_changed_hands = yes", squash(block(read(EFFECTS), "gm_state_changed_hands")))
+        monthly = squash(block(read(TR_EFFECTS), "gm_state_tr_monthly"))
+        self.assertTrue(monthly.startswith("set_variable = { name = gm_holder value = owner }"))
+
+
+class TakingTests(unittest.TestCase):
+    """No taking runs where a tooltip walks the effect (spec §4, as the gift)."""
+
+    def test_clicks_options_and_treaties_only_order(self):
+        sguis = strip_comments(read(TR_SGUIS))
+        for name in ("gm_tr_take_sgui", "gm_tr_take_site_sgui", "gm_tr_return_sgui"):
+            effect = squash(block(block(sguis, name), "effect"))
+            for doer in ("gm_state_tr_take ", "gm_tr_take_from_site", "gm_tr_return_home", "create_container"):
+                self.assertNotIn(doer, effect, name)
+        ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.1\s*=\s*\{"))
+        self.assertIn("gm_state_tr_choose_take = { WHO = root ROUTE = occupation }", ev)
+        choose = squash(block(read(TR_EFFECTS), "gm_state_tr_choose_take"))
+        self.assertEqual(choose, "custom_tooltip = { text = gm_tr_take_$ROUTE$_tt "
+                                 "gm_state_tr_order_take = { WHO = $WHO$ ROUTE = $ROUTE$ } }")
+        for path, call in ((ARTICLE_SURRENDER, "gm_state_tr_order_take = { WHO = scope:gm_tr_treaty_taker ROUTE = treaty }"),
+                           (ARTICLE_RETURN, "trigger_event = { id = monument_trophy_events.13 }")):
+            force = squash(block(read(path), "on_entry_into_force"))
+            self.assertTrue(force.startswith("scope:article_options = { if = { limit = { exists = "), path)
+            self.assertIn(call, force, path)
+
+    def test_the_hidden_events_do_the_work(self):
+        events = strip_comments(read(TR_EVENTS))
+        for n, doer in ((10, "gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = occupation }"),
+                        (11, "gm_tr_take_from_site = { WHO = root }"),
+                        (12, "gm_tr_return_home = { RELATIONS = yes }"),
+                        (13, "gm_tr_return_all_from = yes")):
+            ev = squash(raw_block_at(events, rf"(?m)^monument_trophy_events\.{n}\s*=\s*\{{"))
+            self.assertIn("hidden = yes", ev, n)
+            self.assertIn(doer, ev, n)
+            self.assertIn("gm_tr_finish = yes", ev, n)
+
+    def test_the_offer_defaults_to_leaving_it(self):
+        ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.1\s*=\s*\{"))
+        leave = ev.split("name = monument_trophy_events.1.b", 1)[1]
+        self.assertIn("default_option = yes", leave)
+
+    def test_the_trophy_takes_its_records(self):
+        make = squash(block(read(TR_EFFECTS), "gm_state_tr_make_trophy"))
+        for state_var, tr_var in (("gm_skin", "gm_tr_skin"), ("gm_form", "gm_tr_form"),
+                                  ("gm_landmark", "gm_tr_landmark"), ("gm_namesake", "gm_tr_namesake"),
+                                  ("gm_name_year", "gm_tr_name_year"), ("gm_name_char", "gm_tr_name_char"),
+                                  ("gm_name_occasion", "gm_tr_name_occasion"),
+                                  ("gm_name_enemy_cap", "gm_tr_name_enemy_cap"), ("gm_name", "gm_tr_name"),
+                                  ("gm_honoree", "gm_tr_honoree"), ("gm_honoree_ig", "gm_tr_honoree_ig")):
+            self.assertIn(f"gm_tr_copy_from_state = {{ FROM = {state_var} TO = {tr_var} }}", make, state_var)
+            receive = squash(block(read(TR_EFFECTS), "gm_state_tr_receive"))
+            self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {tr_var} TO = {state_var} }}", receive, tr_var)
+        record = squash(block(read(TR_EFFECTS), "gm_tr_record_dedication"))
+        for d in DEDICATIONS:
+            self.assertIn(f"gm_tr_record_dedication_one = {{ KEY = {d.key} }}", record, d.key)
+
+    def test_a_trophy_comes_home_whole_and_never_as_a_copy(self):
+        receive = squash(block(read(TR_EFFECTS), "gm_state_tr_receive"))
+        self.assertIn("add = scope:gm_tr_moving.var:gm_tr_levels max = 200", receive)
+        self.assertIn("gm_tr_copy_to_state = { FROM = gm_tr_dedication TO = gm_restore_pm }", receive)
+        for line in ("set_variable = gm_seen", "set_variable = { name = gm_ceremony_level value = var:gm_rebuild_level }",
+                     "set_variable = { name = gm_built_by value = owner }",
+                     "set_variable = { name = gm_rebuilding days = 1 }"):
+            self.assertIn(line, receive)
+
+
+class ConsequenceTests(unittest.TestCase):
+    def test_the_numbers(self):
+        v = read(TR_VALUES)
+        self.assertEqual(squash(block(v, "gm_tr_infamy")),
+                         "value = var:gm_tr_tmp_levels divide = 5 add = 2 max = 8 if = { limit = { "
+                         "has_global_variable = un_agency_unesco } multiply = 2 }")
+        for name, value in (("gm_tr_relations_taken", "-30"), ("gm_tr_relations_returned", "40"),
+                            ("gm_tr_war_support", "10"), ("gm_tr_ai_own_chance", "1"),
+                            ("gm_tr_ai_return_chance", "2")):
+            self.assertRegex(strip_comments(v), rf"(?m)^{name} = {value}$", name)
+        own = squash(block(read(TR_EFFECTS), "gm_state_tr_consequences_own"))
+        self.assertTrue(own.startswith("add_radicals_in_state = { value = 0.1 }"))
+        war = squash(block(read(TR_EFFECTS), "gm_state_tr_consequences_occupation"))
+        for line in ("change_infamy = gm_tr_infamy",
+                     "change_relations = { country = scope:gm_tr_victim value = gm_tr_relations_taken }",
+                     "add_war_war_support = { target = scope:gm_tr_victim value = gm_tr_war_support }"):
+            self.assertIn(line, war)
+
+    def test_the_homecoming(self):
+        body = block(read(MODIFIERS), "gm_boon_homecoming")
+        fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body) if k != "icon"]
+        self.assertEqual(fields, ["country_legitimacy_base_add"])
+        self.assertIn("country_legitimacy_base_add = 5", body)
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        self.assertIn("set_variable = { name = gm_boon_homecoming value = gm_boon_months }", home)
+        e = read(EFFECTS)
+        self.assertIn("gm_tr_add_national = yes", squash(block(e, "gm_apply_national_modifiers")))
+        self.assertIn("gm_tr_remove_national = yes", squash(block(e, "gm_remove_national_modifiers")))
+        self.assertIn("gm_tr_country_monthly = yes", squash(block(e, "gm_country_monthly")))
+        self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_country_monthly")), "gm_tick_boon = { SRC = homecoming }")
+        L = loc()
+        for key in ("gm_boon_homecoming", "gm_boon_homecoming_desc", "gm_boon_homecoming_effect"):
+            self.assertIn(key, L)
+        self.assertTrue(L["gm_boon_homecoming_effect"].startswith("#G +5#!"))
+
+    def test_the_ai_follows_law_stances(self):
+        minded = squash(block(read(TR_TRIGGERS), "gm_tr_ig_looting_minded"))
+        self.assertIn("is_in_government = yes", minded)
+        for law in ("law_total_war", "law_ethnostate", "law_national_supremacy"):
+            self.assertIn(f"law_stance = {{ law = law_type:{law} value > neutral }}", minded, law)
+        base = squash(block(read(TR_VALUES), "gm_tr_ai_loot_base"))
+        self.assertIn("every_interest_group = { limit = { gm_tr_ig_looting_minded = yes } add = { value = ig_clout "
+                      "multiply = 10 } }", base)
+        self.assertIn("limit = { is_country_type = unrecognized } add = 5", base)
+        for name in ("gm_tr_ai_loot_chance", "gm_tr_ai_loot_chance_trophy"):
+            body = squash(block(read(TR_VALUES), name))
+            self.assertIn("scope:gm_tr_taker = { add = gm_tr_ai_loot_base }", body, name)
+            self.assertIn("limit = { has_global_variable = un_agency_unesco } multiply = 0.25", body, name)
+
+
+class PassTests(unittest.TestCase):
+    def test_wired_to_the_global_pulse(self):
+        oa = squash(strip_comments(read(TR_ON_ACTIONS)))
+        self.assertIn("on_monthly_pulse = { on_actions = { gm_trophy_monthly_on_action } }", oa)
+        self.assertIn("effect = { gm_trophy_monthly = yes }", oa)
+        self.assertTrue(squash(block(read(TR_EFFECTS), "gm_trophy_monthly")).endswith("gm_trophy_pass = yes"))
+
+    def test_the_pass_clears_before_it_lists(self):
+        body = squash(block(read(TR_EFFECTS), "gm_trophy_pass"))
+        self.assertLess(body.find("clear_variable_list = gm_trophies_held"), body.find("gm_tr_list_one = yes"))
+        self.assertLess(body.find("clear_variable_list = gm_trophies_here"), body.find("gm_tr_list_one = yes"))
+        listed = squash(block(read(TR_EFFECTS), "gm_tr_list_one"))
+        for line in ("add_to_variable_list = { name = gm_trophies_here", "add_to_variable_list = { name = gm_trophies_held",
+                     "add_to_variable_list = { name = gm_trophies_abroad",
+                     "change_variable = { name = gm_tr_held_grandeur add = scope:gm_tr_listing.var:gm_tr_grandeur }"):
+            self.assertIn(line, listed)
+
+    def test_a_return_leaves_no_dead_reference(self):
+        home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
+        self.assertLess(home.find("remove_list_global_variable = { name = gm_trophies"), home.find("destroy_container = yes"))
+        self.assertTrue(home.rstrip(" }").endswith("destroy_container = yes"))
+
+
+class TotalsTests(unittest.TestCase):
+    def test_standing_and_the_armed_forces(self):
+        self.assertTrue(squash(block(read(VALUES), "gm_sum_standing")).endswith("add = gm_tr_disp_held_grandeur"))
+        self.assertIn("change_variable = { name = gm_ig_net_$IG$ add = gm_tr_ig_share_$IG$ }",
+                      squash(block(read(EFFECTS), "gm_compute_ig")))
+        v = strip_comments(read(TR_VALUES))
+        for ig in IGS:
+            if ig == "armed_forces":
+                self.assertEqual(squash(block(v, f"gm_tr_ig_share_{ig}")), "value = gm_tr_disp_held_grandeur")
+            else:
+                self.assertRegex(v, rf"(?m)^gm_tr_ig_share_{ig} = 0$", ig)
+
+    def test_the_entry_stays_for_trophies(self):
+        je = squash(strip_comments(read(JE)))
+        self.assertEqual(je.count("gm_tr_country_has_any = yes"), 2, "is_shown_when_inactive and possible")
+        self.assertIn("gm_tr_country_idle = yes", squash(block(read(TRIGGERS), "gm_ledgers_idle")))
+        self.assertIn("gm_tr_country_has_any = yes", squash(block(read(TRIGGERS), "gm_entry_unlocked")))
+        refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
+        self.assertEqual(refresh.count("gm_tr_country_has_any = yes"), 2, "gm_active and add_journal_entry")
+
+
+class NameTests(unittest.TestCase):
+    def test_every_form_has_its_noun(self):
+        branches = dict(custom_loc_branches("gm_tr_form_name"))
+        self.assertEqual(set(branches), all_forms())
+        L = loc()
+        for form, key in branches.items():
+            self.assertEqual(key, f"gm_form_{form}")
+            self.assertIn(key, L)
+
+    def test_every_piece_and_token_has_its_part(self):
+        branches = custom_loc_branches("gm_tr_part_name")
+        self.assertEqual(branches[0], ("brandenburg_gate", "gm_tr_part_quadriga"), "the Quadriga first")
+        forms = {flag for flag, _ in branches[1:]}
+        self.assertEqual(forms, set(TROPHY_SHARES["piece"]) | set(TROPHY_SHARES["token"]))
+        L = loc()
+        for _, key in branches:
+            self.assertIn(key, L)
+
+    def test_every_landmark_keeps_its_name(self):
+        branches = custom_loc_branches("gm_tr_landmark_name")
+        self.assertEqual([flag for flag, _ in branches], [lm.key for lm in LANDMARKS])
+        for flag, key in branches:
+            self.assertEqual(key, f"gm_skin_landmark_{flag}")
+
+    def test_every_name_pattern_has_its_trophy_pattern(self):
+        body = block(read(TR_CUSTOM_LOC), "gm_trophy_name")
+        keys = re.findall(r"localization_key = (\w+)", body)
+        L = loc()
+        for pattern in NAME_PATTERNS:
+            self.assertIn(f"gm_tr_name_{pattern}", keys, pattern)
+        for key in keys:
+            self.assertIn(key, L, key)
+            self.assertNotIn("State.", L[key].replace("GetState.", ""), f"{key} reads a State context")
+
+    def test_dedication_and_honours_names(self):
+        self.assertEqual({f for f, _ in custom_loc_branches("gm_tr_dedication_name")}, {d.key for d in DEDICATIONS})
+        for d, key in custom_loc_branches("gm_tr_dedication_name"):
+            self.assertEqual(key, f"pm_monument_{d}")
+
+
+class PanelTests(unittest.TestCase):
+    def test_mounted(self):
+        status = squash(strip_comments(raw_block_at(read(WIDGET),
+                                                    r"(?m)^\ttype te_gm_status_sections = flowcontainer \{")))
+        self.assertTrue(status.endswith("te_gm_sec_monuments = {} te_gm_sec_trophies = {} te_gm_sec_abroad = {}"),
+                        status[-200:])
+        self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(WIDGET),
+                                                                    r"(?m)^\ttype gm_monument_row = flowcontainer \{")))
+        self.assertIn("gm_tr_take_button = {}", squash(raw_block_at(read(STATE_WIDGETS),
+                                                                    r"(?m)^\ttype te_state_gm_card = flowcontainer \{")))
+        self.assertIn("te_state_gm_card = {} te_state_gm_trophy_card = {}", squash(strip_comments(read(STATES_PANEL))))
+
+    def test_flags_say_their_default(self):
+        gui = strip_comments(read(TR_GUI))
+        flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", gui))
+        self.assertEqual(flags, {"gm_trophies_closed", "gm_abroad_closed"})
+        for f in flags:
+            negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", gui))
+            bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", gui)) - negated
+            self.assertEqual((bare, negated), (1, 2), f)
+
+    def test_rows_read_no_journal_entry(self):
+        """Gotcha #24: a datamodel row renders its tooltips without JournalEntry."""
+        gui = read(TR_GUI)
+        L = loc()
+        for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site", "gm_tr_take_button"):
+            body = raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")
+            self.assertNotIn("JournalEntry", body, row)
+            for key in re.findall(r'(?:text|tooltip) = "(\w+)"', body):
+                self.assertNotIn("JournalEntry", L.get(key, ""), (row, key))
+
+    def test_every_gui_loc_key_exists(self):
+        L = loc()
+        for key in re.findall(r'(?:text|tooltip) = "(\w+)"', strip_comments(read(TR_GUI))):
+            self.assertIn(key, L, key)
+
+    def test_every_tooltip_and_notice_key_exists(self):
+        L = loc()
+        keys = set(re.findall(r"text = (gm_tr_\w+)", read(TR_SGUIS) + read(TR_TRIGGERS)))
+        keys |= {f"gm_tr_take_{route}_tt" for route in ("occupation", "own")}
+        for key in sorted(keys):
+            self.assertIn(key, L, key)
+        for notice in re.findall(r"post_notification = (\w+)", read(TR_EFFECTS)):
+            self.assertIsNotNone(block(read(MESSAGES), notice), notice)
+            for suffix in ("name", "desc"):
+                self.assertIn(f"notification_{notice}_{suffix}", L, notice)
+        for article in ("return_cultural_property", "surrender_monument"):
+            for suffix in ("", "_desc", "_effects_desc", "_article_short_desc"):
+                self.assertIn(f"{article}{suffix}", L, article + suffix)
+
+
+class DebugTests(unittest.TestCase):
+    def test_the_debug_event(self):
+        ev = squash(raw_block_at(strip_comments(read(DEBUG_EVENTS)), r"(?m)^te_debug_monuments\.6\s*=\s*\{"))
+        for call in ("gm_state_tr_take = { WHO = root ROUTE = occupation }", "gm_state_tr_take = { WHO = root ROUTE = own }",
+                     "gm_tr_return_home = { RELATIONS = yes }", "gm_trophy_monthly = yes", "gm_tr_debug_log = yes"):
+            self.assertIn(call, ev)
+        self.assertIn("gm_tr_debug_log = yes", squash(block(read(EFFECTS), "gm_debug_log")))
+
+
+if __name__ == "__main__":
+    unittest.main()

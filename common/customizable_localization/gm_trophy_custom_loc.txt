@@ -1,0 +1,567 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — trophies: customizable localization
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §1.
+# A trophy keeps the name of the monument it came from: the state's name family
+# (gm_monument_name_row, gm_custom_loc.txt) read from the trophy's own records
+# (gm_tr_*, gm_trophy_effects.txt). Customizable-localization targets inherit
+# their caller's context, so these serve ScriptContainer rows only. The form,
+# piece and landmark branches are pinned to the registry's tables by
+# test_grand_monument_trophies.py.
+
+# The monument's name. First valid wins: a typed name, the namesake, else its
+# form and the state it came from.
+gm_trophy_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_name }
+		localization_key = gm_tr_name_custom
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:landmark has_variable = gm_tr_landmark }
+		localization_key = gm_tr_name_landmark
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:city exists = var:gm_tr_origin }
+		localization_key = gm_tr_name_city
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:state exists = var:gm_tr_origin }
+		localization_key = gm_tr_name_state
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:ruler has_variable = gm_tr_name_char exists = var:gm_tr_name_char }
+		localization_key = gm_tr_name_ruler
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:honours }
+		localization_key = gm_tr_name_honours
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:victory has_variable = gm_tr_name_enemy_cap exists = var:gm_tr_name_enemy_cap }
+		localization_key = gm_tr_name_victory
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:defeat }
+		localization_key = gm_tr_name_defeat
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:centenary }
+		localization_key = gm_tr_name_centenary
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:space_orbital }
+		localization_key = gm_tr_name_space_orbital
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:space_moon_landing }
+		localization_key = gm_tr_name_space_moon_landing
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:space_moon_base }
+		localization_key = gm_tr_name_space_moon_base
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:space_mars_landing }
+		localization_key = gm_tr_name_space_mars_landing
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake var:gm_tr_namesake = flag:occasion has_variable = gm_tr_name_occasion var:gm_tr_name_occasion = flag:space_interstellar_probe }
+		localization_key = gm_tr_name_space_interstellar_probe
+	}
+	text = {
+		trigger = { has_variable = gm_tr_namesake has_variable = gm_tr_name_year }
+		localization_key = gm_tr_name_year
+	}
+	# A landmark that lost its historical name keeps its look: name it by that.
+	text = {
+		trigger = { has_variable = gm_tr_landmark }
+		localization_key = gm_tr_name_landmark
+	}
+	text = {
+		trigger = { exists = var:gm_tr_origin }
+		localization_key = gm_tr_name_from
+	}
+	text = {
+		localization_key = gm_tr_name_form_only
+	}
+}
+
+# The row's title: the name, and what of it was taken when it was not the whole.
+gm_trophy_title = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_share var:gm_tr_share = flag:whole }
+		localization_key = gm_tr_title_whole
+	}
+	text = {
+		localization_key = gm_tr_title_part
+	}
+}
+
+# The trophy's form, as the monument's (gm_form_name).
+gm_tr_form_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
+		localization_key = gm_form_arch
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:bell_tower }
+		localization_key = gm_form_bell_tower
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:colonnade }
+		localization_key = gm_form_colonnade
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:column }
+		localization_key = gm_form_column
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:court }
+		localization_key = gm_form_court
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:forum }
+		localization_key = gm_form_forum
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:gate }
+		localization_key = gm_form_gate
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hall }
+		localization_key = gm_form_hall
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hall_of_fame }
+		localization_key = gm_form_hall_of_fame
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:high_cross }
+		localization_key = gm_form_high_cross
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hill_shrine }
+		localization_key = gm_form_hill_shrine
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:mausoleum }
+		localization_key = gm_form_mausoleum
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial_church }
+		localization_key = gm_form_memorial_church
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:menorah }
+		localization_key = gm_form_menorah
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:obelisk }
+		localization_key = gm_form_obelisk
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pagoda }
+		localization_key = gm_form_pagoda
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pantheon }
+		localization_key = gm_form_pantheon
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pillar }
+		localization_key = gm_form_pillar
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pyramid }
+		localization_key = gm_form_pyramid
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:rock_cut }
+		localization_key = gm_form_rock_cut
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:rock_hewn_church }
+		localization_key = gm_form_rock_hewn_church
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:round_tower }
+		localization_key = gm_form_round_tower
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:rune_stone }
+		localization_key = gm_form_rune_stone
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:sacred_oak }
+		localization_key = gm_form_sacred_oak
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:statue }
+		localization_key = gm_form_statue
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stela }
+		localization_key = gm_form_stela
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stele }
+		localization_key = gm_form_stele
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stoa }
+		localization_key = gm_form_stoa
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:sun_stone }
+		localization_key = gm_form_sun_stone
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:tower }
+		localization_key = gm_form_tower
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial }
+		localization_key = gm_form_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:opera_house }
+		localization_key = gm_form_opera_house
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:gardens }
+		localization_key = gm_form_gardens
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:observatory }
+		localization_key = gm_form_observatory
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:exhibition_hall }
+		localization_key = gm_form_exhibition_hall
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stadium }
+		localization_key = gm_form_stadium
+	}
+	text = {
+		localization_key = gm_form_monument
+	}
+}
+
+# What of a piece or token was carried off, by form; the Brandenburg Gate's is
+# the Quadriga (spec §1).
+gm_tr_part_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:brandenburg_gate }
+		localization_key = gm_tr_part_quadriga
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:arch }
+		localization_key = gm_tr_part_reliefs
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:bell_tower }
+		localization_key = gm_tr_part_bells
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:colonnade }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:court }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:forum }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:gate }
+		localization_key = gm_tr_part_crowning_group
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hall }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hall_of_fame }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:hill_shrine }
+		localization_key = gm_tr_part_carvings
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:mausoleum }
+		localization_key = gm_tr_part_grave_goods
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial_church }
+		localization_key = gm_tr_part_icons
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pagoda }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pantheon }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:pyramid }
+		localization_key = gm_tr_part_sculptures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:rock_cut }
+		localization_key = gm_tr_part_reliefs
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:rock_hewn_church }
+		localization_key = gm_tr_part_icons
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:round_tower }
+		localization_key = gm_tr_part_bells
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:sacred_oak }
+		localization_key = gm_tr_part_carvings
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stoa }
+		localization_key = gm_tr_part_treasures
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:tower }
+		localization_key = gm_tr_part_bells
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial }
+		localization_key = gm_tr_part_plaques
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:opera_house }
+		localization_key = gm_tr_part_scores
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:gardens }
+		localization_key = gm_tr_part_specimens
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:observatory }
+		localization_key = gm_tr_part_instruments
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:exhibition_hall }
+		localization_key = gm_tr_part_exhibits
+	}
+	text = {
+		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:stadium }
+		localization_key = gm_tr_part_statues
+	}
+	text = {
+		localization_key = gm_tr_part_treasures
+	}
+}
+
+# A landmark's historical name (gm_skin_name's landmark branches).
+gm_tr_landmark_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arc_de_triomphe }
+		localization_key = gm_skin_landmark_arc_de_triomphe
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:alexander_column }
+		localization_key = gm_skin_landmark_alexander_column
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:brandenburg_gate }
+		localization_key = gm_skin_landmark_brandenburg_gate
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:washington_monument_baltimore }
+		localization_key = gm_skin_landmark_washington_monument_baltimore
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:la_scala }
+		localization_key = gm_skin_landmark_la_scala
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:teatro_di_san_carlo }
+		localization_key = gm_skin_landmark_teatro_di_san_carlo
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:jantar_mantar }
+		localization_key = gm_skin_landmark_jantar_mantar
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:shalimar_gardens }
+		localization_key = gm_skin_landmark_shalimar_gardens
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:jardim_botanico }
+		localization_key = gm_skin_landmark_jardim_botanico
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:stelae_of_aksum }
+		localization_key = gm_skin_landmark_stelae_of_aksum
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:liberty_column }
+		localization_key = gm_skin_landmark_liberty_column
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:lion_monument }
+		localization_key = gm_skin_landmark_lion_monument
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:temple_of_heaven }
+		localization_key = gm_skin_landmark_temple_of_heaven
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:topkapi_palace }
+		localization_key = gm_skin_landmark_topkapi_palace
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:golestan_palace }
+		localization_key = gm_skin_landmark_golestan_palace
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:basilica_of_superga }
+		localization_key = gm_skin_landmark_basilica_of_superga
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:tomb_of_william_the_silent }
+		localization_key = gm_skin_landmark_tomb_of_william_the_silent
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:cenotaph_of_maximilian }
+		localization_key = gm_skin_landmark_cenotaph_of_maximilian
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:arco_de_santa_maria }
+		localization_key = gm_skin_landmark_arco_de_santa_maria
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:statue_of_louis_xiv }
+		localization_key = gm_skin_landmark_statue_of_louis_xiv
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:lion_of_saint_mark }
+		localization_key = gm_skin_landmark_lion_of_saint_mark
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:sans_souci_palace }
+		localization_key = gm_skin_landmark_sans_souci_palace
+	}
+	text = {
+		trigger = { has_variable = gm_tr_landmark var:gm_tr_landmark = flag:nikko_toshogu }
+		localization_key = gm_skin_landmark_nikko_toshogu
+	}
+	text = {
+		localization_key = gm_form_monument
+	}
+}
+
+# What an honours name honours, by dedication (gm_honours_name).
+gm_tr_honours_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:crown }
+		localization_key = gm_honours_crown
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:republic }
+		localization_key = gm_honours_republic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:revolution }
+		localization_key = gm_honours_revolution
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:religious }
+		localization_key = gm_honours_religious
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:war_memorial }
+		localization_key = gm_honours_war_memorial
+	}
+	text = {
+		localization_key = gm_honours_civic
+	}
+}
+
+# Its dedication's name (gm_dedication_name).
+gm_tr_dedication_name = {
+	type = container
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:crown }
+		localization_key = pm_monument_crown
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:republic }
+		localization_key = pm_monument_republic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:revolution }
+		localization_key = pm_monument_revolution
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:leader }
+		localization_key = pm_monument_leader
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:religious }
+		localization_key = pm_monument_religious
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:civic }
+		localization_key = pm_monument_civic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:war_memorial }
+		localization_key = pm_monument_war_memorial
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:artistic }
+		localization_key = pm_monument_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:naturalist }
+		localization_key = pm_monument_naturalist
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:scientific }
+		localization_key = pm_monument_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:industrial }
+		localization_key = pm_monument_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:athletic }
+		localization_key = pm_monument_athletic
+	}
+	text = {
+		localization_key = pm_monument_undedicated
+	}
+}

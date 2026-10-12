@@ -478,10 +478,11 @@ carries its historical name. Only pulling it down, or demolishing it, ends it.
 
 ### The Monuments journal entry
 
-The Monuments journal entry appears when you own a Grand Monument or an interest
-group has asked you for one (a [commission](#monument-commissions)). After your
-last monument is gone, it stays until the fading approval and legitimacy it
-shows have run out.
+The Monuments journal entry appears when you own a Grand Monument, an
+[opportunity](#monument-opportunities) is open or on offer, or you hold a
+[trophy](#monument-trophies) or one taken from your lands stands abroad. After
+your last monument is gone, it stays until the fading approval and legitimacy it
+shows, and any boon it carries, have run out.
 
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
@@ -493,7 +494,9 @@ shows a Grand Monument card under the tourism card: the monument's status, name
 and dedication, its grandeur with a bar toward its next step, and the Tourism
 Industry throughput and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
-the Timeline Extended window, where the buttons are.
+the Timeline Extended window, where the buttons are. While you can carry the
+monument off as a trophy, the card has a Carry It Off button, and a state where
+trophies stand shows a Trophies on Display card under it.
 
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
@@ -510,10 +513,12 @@ These sections follow:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Commission | Open | Only while a commission is open: who asked for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, and Ask for More Time. |
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship), and what remains from a met commission (A Promise Kept). The four monument policy buttons are at the foot. |
-| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, commissions, names and the monument policy. |
+| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
+| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
+| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. |
+| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
+| Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names, the monument policy and trophies. |
 
 Every monument, whatever it honors, gives:
 
@@ -556,50 +561,77 @@ still fits. Each interest group's approval counts the grandeur of the monuments
 it approves of, minus those it objects to, and moves by 1 per step either way.
 No number of monuments can buy a group outright: each group has one total.
 
-### Monument commissions
+### Monument opportunities
 
-In a great or major power, interest groups ask for monuments. A **commission**
-is one such request: 5 grandeur of one dedication within 60 months, or 120 in a
-major power. It arrives
-as an event, A Monument Is Asked For, which you accept or turn down (an offer
-left unanswered is turned down), and while it is open it has its own section on
-the Grand Monuments tab. Only one commission is open or on offer
-at a time; a moment that comes while one is open passes without one.
+Moments in your country's history bring **opportunities** to raise a
+monument, whatever your rank. Each comes as an event, An Opportunity,
+titled for the moment that brought it, and names the interest group that wants
+it, the dedication, where it stands and what completing it gives. Seize the
+Opportunity opens it; Seize It and Start Building opens it and queues its five
+levels at once, as government construction, in the state its tooltip names; Let
+It Pass closes it. Passing costs nothing, and an offer left unanswered is seized.
+Only one opportunity is open or on offer at a time; a moment that comes while
+one is open passes without one.
 
-| Moment | Who asks | For | Where |
-|---|---|---|---|
-| You end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere |
-| You end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere |
-| The 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital |
-| The death of a ruler who reigned 15 years or more | The late ruler's group | A mausoleum To the Nation, named for them | The capital |
-| A new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere |
-| You are the first into orbit or the first onto the Moon | Intelligentsia | An obelisk To the Nation | The capital |
-| About once a decade: a group in government with under 5 grandeur of a dedication it approves of | That group | That dedication | Anywhere |
+While it is open it has its own section on the Grand Monuments tab: where it
+counts, the grandeur added, the months left and what completing it gives. Raise
+It queues the levels still missing in the state its tooltip names, at 1,000
+construction each; it is grayed while any of your Grand Monuments is under
+construction, so a second press can't queue them twice. Levels count only once
+they are finished, and the section says so while any are being built. Let It
+Pass closes the opportunity. A monument that counts toward it is marked Counts
+toward the opportunity in its row under Our Monuments and on its state card. A
+year before time runs out, a notice reminds you.
 
-A commission for the capital can be met anywhere when the capital already holds
-a monument of another dedication. Countries that won independence before 1836
-count their founding from that year, from the United States (1776) to Belgium
-and Ecuador (1830); a country formed or released in play is founded the year it
-appears. Other countries of 1836 have no founding year and no centenary.
+| Moment | Who asks | For | Where | Boon for ten years |
+|---|---|---|---|---|
+| A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader under Autocracy or a Single-Party State, named for the new ruler; under any other government, such as a democratic republic electing its president, none | Anywhere | +10% authority |
+| A New Order: a new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere | +25% loyalists from high legitimacy |
+| Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence |
+| Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige |
+| Defeat: you end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere | −25% radicals from low legitimacy |
+| A Centenary: the 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government | A column To the Nation | The capital | +25% assimilation |
+| A Reign Remembered: a ruler who reigned 15 years or more dies | The late ruler's group | A mausoleum To the Nation, named for them | The capital | +5 legitimacy |
+| A space race first: First into Orbit, First on the Moon, First Lunar Colony, First on Mars or First Interstellar Probe | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation |
+| A New Faith: your state religion changes | Devout | A Grand Shrine | Anywhere | +25% conversion |
+| Romanticism researched | Intelligentsia | A Grand Opera House | Anywhere | +10% Arts Academy throughput |
+| Empiricism researched | Intelligentsia | A Grand Observatory | Anywhere | +10% technology spread |
+| Marketing Research researched | Industrialists | A Great Exhibition Hall | Anywhere | +5% Manufacturing Industries throughput |
+| Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
+| The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-Grandeur you add to fitting monuments of the dedication counts, whether you
-raise an old monument or build a new one, and a commission for the capital
-counts only the capital's monument. A monument that becomes contested stops
-counting. While a commission is open, the dedication ceremony says so.
+An opportunity asks for 5 grandeur of its dedication within 60 months in a
+great power, 120 in a major power and 180 in any other. Grandeur you add to fitting monuments of the dedication
+counts, whether you raise an old monument or build a new one, and an
+opportunity for the capital counts only the capital's monument. One for the
+capital can be met anywhere when the capital already holds a monument of
+another dedication. A monument that becomes contested stops counting. When a new
+monument's dedication ceremony could answer the open opportunity, its first
+choice is "As the opportunity asks", with its dedication, and that
+is what the ceremony picks if you let it pass.
+
+Each moment that comes once comes once a game: the first time you are a great
+power, the space firsts, each technology. What you already have when a game
+starts brings nothing, so a great power of 1836 and a country that already
+knows Empiricism get no opportunity for them. When a long-reigning ruler dies,
+A Reign Remembered comes at once and the successor's A New Reign passes.
+Countries that won independence before 1836 count their founding from that
+year, from the United States (1776) to Belgium and Ecuador (1830); a country
+formed or released in play is founded the year it appears. Other countries of
+1836 have no founding year and no centenary.
 
 | Outcome | What follows |
 |---|---|
-| Met | The group that asked approves, about +2 at first and fading over several years, and A Promise Kept gives +5 legitimacy, fading by 3% a month. The monument that completed it takes the commission's name. |
-| Met after Ask for More Time | Ask for More Time adds 36 months, once, and halves the reward: about +1 approval and +2.5 legitimacy. |
-| Turned down | The group resents the refusal: about −1 approval, fading. |
-| Missed | Time runs out, and the group resents the broken promise more than a refusal: about −2 approval, fading. Turn down what you can't build. |
-| Lapsed | No effect. A commission lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
+| Completed | An event, An Opportunity Seized, names the monument and the boon. The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Let it pass, or time runs out | Nothing. The next moment can bring another. |
+| Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
-No group petitions for five years after a commission closes; wars, centenaries,
-deaths, new regimes and space firsts still bring theirs. The AI gets the same
-offers. It accepts unless it is at war, in hard times, has more than a year of
-government construction queued or is in debt, and then queues the five levels
-itself.
+A second boon of the same kind restarts its ten years. The rebuilt monument
+reaches level 200 at most, so a monument already that tall gets no extra levels.
+
+The AI gets the same offers. It seizes one unless it is below a major power, at
+war, in hard times, has more than a year of government construction queued or
+is in debt, and then queues the five levels itself.
 
 ### Monument names and forms
 
@@ -629,11 +661,11 @@ the Lisbon Gate, Victoria's Column, the Arch of 1856. After the style, two event
 ask: The Form It Takes, when the style offers more than one form (a column, an
 arch, a gate, a pagoda, a sun stone), and A Name for the Monument, which names it for its
 city, its state, the ruler, what it honors (the Crown, the Republic, the
-Revolution, the Nation, the Faith or the Fallen), the year, or the occasion a
-commission marks. Each event keeps what was proposed unless you pick another.
+Revolution, the Nation, the Faith or the Fallen), the year, or the occasion an
+opportunity marks. Each event keeps what was proposed unless you pick another.
 An opera house, gardens, an observatory, an exhibition hall or a stadium takes
 its own building's form, and a Grand Shrine of your faith takes its building's
-name. The AI names its monuments for their city, or as their commission asks.
+name. The AI names its monuments for their city, or as their opportunity asks.
 
 From an upheld monument's row, Rename asks both again at no cost, and Name It
 opens the game's rename box so you can type a name of your own. Confirming the
@@ -692,6 +724,64 @@ war the winner inherits the monuments the loser raised, and they are contested
 only if its laws no longer fit them. Demolishing a contested monument from its
 building panel counts as pulling it down.
 
+### Monument trophies
+
+A country can carry off a Grand Monument, or part of one, as a **trophy**, in
+three ways:
+
+- In a war, from a state where your armies hold half the provinces or more. The
+  state view's Grand Monument card has a Carry It Off button while you hold it,
+  and an event asks the first time your armies hold such a state.
+- From your own unincorporated state, if you did not raise the monument: a
+  recent conquest or a colony. The button is on the card and on the monument's
+  row under Our Monuments. Once you incorporate the state, the monument stays.
+- By treaty, with the Surrender a Monument article, which a war can enforce (see
+  [treaty articles by purpose](09-diplomacy.md#treaty-articles-by-purpose)).
+
+What goes depends on the monument's form. A Grand Shrine is never taken, and a
+monument that loses a piece is spared for ten years.
+
+| Form | What is carried off |
+|---|---|
+| Column, obelisk, statue, stele, pillar, high cross, rune stone, menorah, sun stone or stela | The whole monument |
+| Arch, gate, tower, bell tower, round tower or rock-cut monument | A quarter of its levels, at least one. The monument is rebuilt smaller, keeping its name and dedication. |
+| Any other form: halls, a pantheon, forum, mausoleum, pyramid, pagoda or church, and the five civic-progress buildings | A tenth of its levels, at least one |
+
+A trophy stands in its taker's capital. It counts for half the levels carried
+off, rounded up, in the standing grandeur that gives prestige and cultural pull,
+and the Armed Forces approve of it. Whoever holds that capital's state holds the
+trophy, so conquering the state takes its trophies too. A trophy keeps its
+monument's name, and a piece is named for what was taken, such as the Brandenburg
+Gate's Quadriga.
+
+| Taken | You pay | The other side |
+|---|---|---|
+| In a war | 2 infamy, plus 1 for every 5 levels, at most 8; doubled once the UN's Cultural Heritage Program (UNESCO) is in force. Relations −30. | +10 war support in the war |
+| From your own unincorporated state | A tenth of the state's people turn radical. Relations −30 with the country you took the state from, if it still exists. | |
+| By treaty | Relations −30 | |
+
+Your trophies have their own Trophies section on the Grand Monuments tab. A
+trophy taken from your lands shows under Held Abroad, with its holder. To get
+one back:
+
+| Way home | How |
+|---|---|
+| Return It | Its holder's button on the trophy's row. Relations between the two rise by 40. |
+| Bring It Home | The same button, when the holder owns the state it came from, as after conquering the state where it stands. |
+| Occupation | Occupy the state where it stands in a war. Its Trophies on Display card in the state view has a button for each trophy, and one taken from your lands goes straight home. |
+| Return Cultural Property | A treaty article: the holder returns every trophy taken from your lands. A war can enforce it. |
+
+A trophy that comes home is rebuilt where it was taken from, with all the levels
+carried off. A monument standing there takes the levels; otherwise the monument
+is rebuilt with its name, style and dedication. Its owner gains The Homecoming,
++5 legitimacy for ten years, shown in the Trophies section.
+
+The AI carries off monuments in the states it occupies, more often when its
+governing interest groups favor Total War, Ethnostate or National Supremacy,
+when it is unrecognized, or for a monument of 10 levels or more, and much less
+once UNESCO is in force. It brings home every trophy it can, and now and then
+returns one to an ally or a power bloc partner.
+
 ### Vanity backlash
 
 Finishing a monument level while the country is in default, in famine or in
@@ -708,7 +798,7 @@ benefits, usually for two interest groups, and the only cost is money. A
 contested or heritage monument holds no anniversaries, and none come while your
 monument policy is Mothballed.
 
-The AI raises most of its monuments through commissions. Without one, it raises
+The AI raises most of its monuments through opportunities. Without one, it raises
 them mainly as a great or major power, in a state with a
 Tourism Industry, or when its legitimacy is low, and never while at war or in
 hard times. It decides its contested monuments within a few months: small ones

@@ -115,10 +115,10 @@ gm_hard_times_sgui = {
 	}
 }
 
-# ---- Commissions (v2 §2.3) ----------------------------------------------------
-# Ask for More Time, once: +36 months, the reward halved. Scope-free: the
-# Commission section reads the country only.
-gm_com_extend_sgui = {
+# ---- Opportunities (opportunities spec §2) --------------------------------------
+# Let It Pass: closes the open opportunity, at no cost, so the next moment can
+# bring one. Scope-free: the Opportunity section reads the country only.
+gm_com_let_pass_sgui = {
 	scope = country
 
 	is_shown = {
@@ -127,16 +127,41 @@ gm_com_extend_sgui = {
 
 	is_valid = {
 		has_variable = gm_com_open
-		custom_tooltip = {
-			text = gm_com_extend_once_tt
-			NOT = { has_variable = gm_com_extended }
-		}
 	}
 
 	effect = {
 		custom_tooltip = {
-			text = gm_com_extend_effect_tt
-			gm_com_extend = yes
+			text = gm_com_let_pass_effect_tt
+			gm_com_decline = yes
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# Raise It (usability §1): the missing levels queued as government construction
+# where gm_com_pick_build_state puts them, through monument_events.27 (the
+# button's tooltip walks this effect without writing, and the queue sets a
+# variable and reads it back). Greyed while one of our monuments is under
+# construction, so a second press can't queue the same levels twice.
+gm_com_raise_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = gm_com_open
+	}
+
+	is_valid = {
+		gm_com_can_raise = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = gm_com_raise_effect_tt
+			set_variable = { name = gm_com_raise_pending value = yes days = 7 }
+			trigger_event = { id = monument_events.27 }
 		}
 	}
 

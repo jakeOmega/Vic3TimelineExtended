@@ -122,6 +122,11 @@ halves exactly up to level 400 and caps above it, as now. If observer runs show 
 
 ## 2. Commissions (phase 2)
 
+**Reworked (2026-10-12)** by `2026-10-12-grand-monument-opportunities-design.md`: commissions became opportunities,
+with no cost for letting one pass or running out, every one from a moment the player sees (no petition roll), and
+completion paying a free rebuild five levels taller, the approval below and a ten-year boon instead of the promise
+ledger. §2.1's record, §2.3's progress rule and §2.6's AI stand.
+
 ### 2.1 What a commission is
 
 A request from an interest group to raise a monument. One record per country, held in country variables:
@@ -491,6 +496,11 @@ no effect). A country variable, `gm_policy` (flag), so a civil war's winner keep
 - **Display:** the policy's name and factors on a line under the overview; the buttons in National Effects.
 
 ## 6. Trophies (phase 5)
+
+**Superseded (2026-10-12)** by `2026-10-12-grand-monument-trophies-design.md`: occupation is the main route, a
+country's own unincorporated states replace the 60-month window, the share depends on the form (Appendix A of the
+landmarks spec), a trophy counts for half abroad and goes home whole, and two treaty articles carry the war goal and
+the return. The UN topic is a follow-up.
 
 ### 6.1 Which monuments
 

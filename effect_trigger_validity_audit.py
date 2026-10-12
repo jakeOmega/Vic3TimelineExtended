@@ -311,6 +311,7 @@ _CURATED_VALID: frozenset[str] = frozenset({
     "trade_center",  # market -> trade-center-state scope change
     "modulo",   # script-value math operator (modulo = N)
     "round_to", # script-value math operator (round_to = N)
+    "controller",  # province/state -> country scope link (event_targets.log); vanilla script never uses it (trophies' occupation read)
 })
 # Mod dirs whose top-level names are *callable* anywhere: scripted effects and
 # triggers are invoked as `name = yes` / `name = { ARG = v }`, on-actions are

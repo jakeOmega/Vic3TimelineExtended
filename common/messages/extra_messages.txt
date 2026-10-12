@@ -2201,12 +2201,14 @@ gm_vanity_backlash_notice = {
 	color = bad
 }
 
-# Grand Monuments: a commission closes (docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2.3)
-gm_com_fulfilled_notice = {
+# Grand Monuments: an opportunity's notices (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md)
+# A year left on an open opportunity not yet met (opportunities usability §5).
+# Its completion is an event (monument_events.28), not a notice.
+gm_com_reminder_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/buildings.dds"
 	notification_type = toast
-	color = good
+	color = neutral
 }
 
 gm_com_missed_notice = {
@@ -2220,6 +2222,42 @@ gm_com_lapsed_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/buildings.dds"
 	notification_type = toast
+	color = neutral
+}
+
+# Grand Monuments: trophies (docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §6)
+gm_tr_taken_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = neutral
+}
+
+gm_tr_lost_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = toast
+	color = bad
+}
+
+gm_tr_homecoming_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = good
+}
+
+gm_tr_home_reach_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
+	color = good
+}
+
+gm_tr_site_reach_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
 	color = neutral
 }
 

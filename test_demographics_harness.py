@@ -904,9 +904,10 @@ class TestWealthConcentrationReader(unittest.TestCase):
 
 
 class TestFidelity(unittest.TestCase):
-    """`fidelity SAVE`: the model's cause multipliers on the census's own SoL and literacy (te_dg_sol, te_dg_lit)
-    against the ones the census stored (te_dg_m_*). A term the harness can't read shows as a mismatch: the
-    crowding term did, on 91% of the world's people (2026-10-10)."""
+    """`fidelity SAVE`: the model's cause multipliers on the census's own SoL and literacy (the step's te_dg_in_sol
+    and te_dg_in_lit, or the walk's te_dg_sol and te_dg_lit for a census from before them) against the ones the
+    census stored (te_dg_m_*). A term the harness can't read shows as a mismatch: the crowding term did, on 91% of
+    the world's people (2026-10-10)."""
 
     CROWD_MULT = 1.5   # the crowded state's migration_crowding multiplier: a -15% pull, so infection x1.15
     GAME_SOL, GAME_LIT = 8.0, 0.2   # the walk's figures; the tiny save's pops read SoL 28, literacy 0.5
@@ -980,6 +981,52 @@ class TestFidelity(unittest.TestCase):
         got = {"te_dg_sol": 8.0, "te_dg_lit": 0.2}
         inp = M.Inputs(sol=8.0, literacy=0.2)
         self.assertIs(H.census_inputs(inp, got), inp)
+
+    STEP_SOL, STEP_LIT = 12.0, 0.6   # the step's stored SoL and literacy, where a later walk moved the walk's
+
+    def step_infection(self, sol, literacy):
+        """The census's infection multiplier for the uncrowded state 1 at this SoL and literacy, on the save's
+        techs and laws."""
+        st = S.state_inputs(S.read_sections(self.save(False, 1.0)))["TST"][0][1]
+        inp = H.inputs_for(st, DM.load_carriers())
+        return M.cause_multipliers(M.Inputs(sol=sol, literacy=literacy, institutions=inp.institutions,
+                                            mods=inp.mods))["infection"]
+
+    def test_a_walk_without_a_step_is_not_a_mismatch(self):
+        """#916: the step stores the SoL and literacy it used (te_dg_in_sol, te_dg_in_lit), and a walk without a step
+        (a second pulse in a year, the console) rewrites te_dg_sol and te_dg_lit but never te_dg_m_*. fidelity runs
+        the model on the stored pair, without needing all of CENSUS_INPUT_VARS (a census from before #916's last fix
+        holds the other stored inputs but not these two, which came last)."""
+        stored = (("te_dg_in_sol", self.STEP_SOL), ("te_dg_in_lit", self.STEP_LIT))
+        m_inf = self.step_infection(self.STEP_SOL, self.STEP_LIT)
+        self.assertNotAlmostEqual(m_inf / self.step_infection(self.GAME_SOL, self.GAME_LIT), 1.0, places=2,
+                                  msg="the walk's figures must give another multiplier, or the test proves nothing")
+        counts = {}
+        (_tag, _sid, _people, pairs, sol, lit), = H.fidelity_rows(self.save(False, m_inf, extra=stored),
+                                                                    DM.load_carriers(), counts=counts)
+        game, model = pairs["infection"]
+        self.assertAlmostEqual(game / model, 1.0, places=4)
+        self.assertEqual(counts["stored"], 0, "read from the save: the stored SoL needs no other stored input")
+        self.assertEqual((sol[1], lit[1]), (self.GAME_SOL, self.GAME_LIT), "the save's pops still beside the walk's")
+
+    def test_the_stored_sol_and_literacy_with_the_steps_other_inputs(self):
+        # a census from #916 on: the nine stored inputs and the stored SoL and literacy together
+        inp = M.Inputs(sol=self.STEP_SOL, literacy=self.STEP_LIT, turmoil=0.5,
+                       medicine={"access": 0.45, "infection": 0.2, "maternal": 0.3, "chronic": 0.0})
+        mult = M.cause_multipliers(inp)
+        extra = self.STORED + (("te_dg_in_sol", self.STEP_SOL), ("te_dg_in_lit", self.STEP_LIT))
+        path = self.save(False, mult["infection"], mult["maternal"] * H.P.MATERNAL_PER_100K_BIRTHS, extra=extra)
+        (_tag, _sid, _people, pairs, _sol, _lit), = H.fidelity_rows(path, DM.load_carriers())
+        for cause in ("infection", "maternal"):
+            game, model = pairs[cause]
+            self.assertAlmostEqual(game / model, 1.0, places=4, msg=cause)
+
+    def test_a_census_without_the_stored_sol_reads_the_walk(self):
+        # a census from before #916: no te_dg_in_sol or te_dg_in_lit, so the walk's te_dg_sol and te_dg_lit
+        m_inf = self.step_infection(self.GAME_SOL, self.GAME_LIT)
+        (_tag, _sid, _people, pairs, _sol, _lit), = H.fidelity_rows(self.save(False, m_inf), DM.load_carriers())
+        game, model = pairs["infection"]
+        self.assertAlmostEqual(game / model, 1.0, places=4)
 
     def test_fidelity_counts_the_states_on_their_own_inputs(self):
         # the summary's lines: states read on the step's inputs, and those whose medicine is still spreading (the

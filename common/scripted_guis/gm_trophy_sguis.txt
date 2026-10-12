@@ -1,0 +1,139 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — trophies: scripted GUIs
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §6.
+# gui/gm_trophy_widgets.gui (the journal entry's Trophies and Held Abroad, the
+# state card's Trophies on Display) and the monument rows and card
+# (grand_monuments_widget.gui, te_state_panel_widgets.gui). ROOT is the
+# player's country. A monument's state travels as gm_state (gm_sguis.txt's
+# shape), a trophy as gm_tr (the covert rows' container scope). Each effect
+# only orders the work, and a hidden event does it
+# (gm_trophy_effects.txt): a tooltip walks the effect every frame.
+
+# Carry It Off: a monument in a state we occupy, or in our own unincorporated
+# state if we did not raise it.
+gm_tr_take_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			gm_state_tr_can_take = { WHO = root }
+		}
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			gm_state_tr_can_take_tt = { WHO = root }
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			if = {
+				limit = { gm_state_tr_occupied_by = { WHO = root } }
+				gm_state_tr_choose_take = { WHO = root ROUTE = occupation }
+			}
+			else = {
+				gm_state_tr_choose_take = { WHO = root ROUTE = own }
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# Carry It Off (or Bring It Home): a trophy on display in a state we occupy.
+gm_tr_take_site_sgui = {
+	scope = country
+	saved_scopes = { gm_tr }
+
+	is_shown = {
+		exists = scope:gm_tr
+		scope:gm_tr = {
+			gm_tr_site_occupied_by = { WHO = root }
+		}
+	}
+
+	is_valid = {
+		exists = scope:gm_tr
+		scope:gm_tr = {
+			custom_tooltip = {
+				text = gm_tr_sgui_site_tt
+				gm_tr_site_occupied_by = { WHO = root }
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_tr = {
+			if = {
+				limit = { gm_tr_claimed_by = { WHO = root } }
+				custom_tooltip = {
+					text = gm_tr_take_site_home_tt
+					gm_tr_order_take_site = { WHO = root }
+				}
+			}
+			else = {
+				custom_tooltip = {
+					text = gm_tr_take_site_tt
+					gm_tr_order_take_site = { WHO = root }
+				}
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# Return It, or Bring It Home when we own its origin: a trophy we hold.
+gm_tr_return_sgui = {
+	scope = country
+	saved_scopes = { gm_tr }
+
+	is_shown = {
+		exists = scope:gm_tr
+		scope:gm_tr = {
+			gm_tr_held_by = { WHO = root }
+		}
+	}
+
+	is_valid = {
+		exists = scope:gm_tr
+		scope:gm_tr = {
+			gm_tr_held_by = { WHO = root }
+			custom_tooltip = {
+				text = gm_tr_sgui_origin_tt
+				var:gm_tr_origin ?= { exists = owner }
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_tr = {
+			if = {
+				limit = { gm_tr_claimed_by = { WHO = root } }
+				custom_tooltip = {
+					text = gm_tr_bring_home_tt
+					gm_tr_order_return = { WHO = root }
+				}
+			}
+			else = {
+				custom_tooltip = {
+					text = gm_tr_return_tt
+					gm_tr_order_return = { WHO = root }
+				}
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

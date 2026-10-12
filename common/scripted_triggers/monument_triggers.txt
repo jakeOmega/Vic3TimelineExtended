@@ -56,6 +56,7 @@ gm_entry_unlocked = {
 			any_scope_state = { has_building = building_grand_monument }
 			has_variable = gm_com_open
 			has_variable = gm_com_offered
+			gm_tr_country_has_any = yes
 		}
 	}
 }
@@ -165,7 +166,7 @@ gm_state_is_landmark = {
 	has_variable = gm_landmark
 }
 
-# Its historical name stands: Rename, Name It and a met commission leave it
+# Its historical name stands: Rename, Name It and a completed opportunity leave it
 # alone. A rededication names it again (gm_state_unveil), and the namesake
 # choice can give the historical name back (monument_events.25).
 gm_state_has_historical_name = {
@@ -431,8 +432,9 @@ gm_ledger_idle = {
 	}
 }
 
-# Country scope. Nothing left fading: with no monument either, the journal
-# entry goes (plan decision 3).
+# Country scope. Nothing left fading, and no opportunity boon running
+# (gm_commission_triggers.txt): with no monument either, the journal entry
+# goes (plan decision 3).
 gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_teardown_ledger }
 	gm_ledger_idle = { VAR = gm_vanity_ledger }
@@ -444,7 +446,9 @@ gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
 	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
-	gm_ledger_idle = { VAR = gm_promise_ledger }
+	gm_boons_idle = yes
+	# No trophy held or abroad, no Homecoming (gm_trophy_triggers.txt).
+	gm_tr_country_idle = yes
 }
 
 # ======================================================================

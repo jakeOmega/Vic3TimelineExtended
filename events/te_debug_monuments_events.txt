@@ -84,13 +84,15 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 }
 
 # ============================================================================
-# COMMISSIONS (v2 §2) — console test event: `event te_debug_monuments.2`
+# OPPORTUNITIES — console test event: `event te_debug_monuments.2`
 # ============================================================================
-# Each offer option forgets any commission first, writes the record as its
-# source would (through the source's own effect where it can) and opens the
-# offer (monument_events.21). The last options close the open commission each
-# way and print it.
-te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event te_debug_monuments.2`); never fired by script on purpose
+# Each offer option forgets any opportunity first, writes the record as its
+# moment would (through the moment's own effect where it can) and opens the
+# offer (monument_events.21), past the rank and the once-per-game marks. The
+# last options close the open opportunity each way and print it. "Complete it
+# now" runs the gift (monument_events.26) and the boon as a real completion.
+# Docs: docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md.
+te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event te_debug_monuments.2`); never fired by script on purpose
 	type = country_event
 	placement = ROOT
 
@@ -146,7 +148,7 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		}
 	}
 
-	# A new regime: forget last month's, so this month's reads as new.
+	# A new order: forget last month's regime, so this month's reads as new.
 	option = {
 		name = te_debug_monuments.2.e
 		gm_com_clear = yes
@@ -165,17 +167,49 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		gm_com_send_offer = yes
 	}
 
-	# A petition, past the monthly roll and the cooldown.
+	# A new reign, for the ruler we have (To the Crown or To the Leader, if
+	# the government can raise either).
 	option = {
 		name = te_debug_monuments.2.g
 		gm_com_clear = yes
-		gm_remove_state_var = { VAR = gm_com_cooldown }
-		gm_com_offer_petition = yes
+		if = {
+			limit = { exists = ruler }
+			ruler = { save_scope_as = gm_com_tracked_ruler }
+			gm_com_try_reign = yes
+		}
 	}
 
-	# Meet the open commission now.
+	# Among the Great Powers, whatever our rank.
 	option = {
 		name = te_debug_monuments.2.h
+		gm_com_clear = yes
+		gm_com_begin = { SOURCE = great_power DEDICATION = civic NAMESAKE = honours FORM = column }
+		gm_com_ig_for_the_nation = yes
+		gm_com_fix_to_capital = yes
+		gm_com_send_offer = yes
+	}
+
+	# A new faith, as if the state religion had just changed.
+	option = {
+		name = te_debug_monuments.2.i
+		gm_com_clear = yes
+		gm_com_begin = { SOURCE = faith DEDICATION = religious NAMESAKE = honours FORM = default }
+		set_variable = { name = gm_com_ig value = flag:devout }
+		gm_com_send_offer = yes
+	}
+
+	# A technology's: Romanticism's Grand Opera House.
+	option = {
+		name = te_debug_monuments.2.j
+		gm_com_clear = yes
+		gm_com_begin = { SOURCE = tech_artistic DEDICATION = artistic NAMESAKE = city FORM = default }
+		set_variable = { name = gm_com_ig value = flag:intelligentsia }
+		gm_com_send_offer = yes
+	}
+
+	# Complete the open opportunity now: the gift, the approval and the boon.
+	option = {
+		name = te_debug_monuments.2.k
 		if = {
 			limit = { has_variable = gm_com_open }
 			gm_com_fulfil = yes
@@ -183,9 +217,9 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		}
 	}
 
-	# Miss it: the clock runs out this month.
+	# Run it out: the clock ends this month.
 	option = {
-		name = te_debug_monuments.2.i
+		name = te_debug_monuments.2.l
 		if = {
 			limit = { has_variable = gm_com_open }
 			set_variable = { name = gm_com_months_left value = 1 }
@@ -196,7 +230,7 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 
 	# Lapse it.
 	option = {
-		name = te_debug_monuments.2.j
+		name = te_debug_monuments.2.m
 		if = {
 			limit = { has_variable = gm_com_open }
 			gm_com_lapse = yes
@@ -204,9 +238,9 @@ te_debug_monuments.2 = { # REVIEWED 2026-10-05: console-only test event (`event 
 		}
 	}
 
-	# Print the commission.
+	# Print the opportunity.
 	option = {
-		name = te_debug_monuments.2.k
+		name = te_debug_monuments.2.n
 		gm_debug_log = yes
 	}
 }
@@ -369,5 +403,117 @@ te_debug_monuments.5 = { # REVIEWED 2026-10-11: console-only test event (`event 
 		name = te_debug_monuments.5.b
 		default_option = yes
 		gm_debug_log_landmarks = yes
+	}
+}
+
+# ============================================================================
+# TROPHIES — console test event: `event te_debug_monuments.6`
+# ============================================================================
+# Docs: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §9.
+# Option a carries off the tallest monument in the world that is not ours, as
+# if our armies held its state (no war or province test); option b our own
+# tallest, as if from an unincorporated state (no incorporation or builder
+# test); c returns every trophy we hold; d runs the monthly pass now and logs
+# our trophies on TE_MONUMENTS: lines.
+te_debug_monuments.6 = { # REVIEWED 2026-10-12: console-only test event (`event te_debug_monuments.6`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_world_fair" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_monuments.6.t
+	desc = te_debug_monuments.6.desc
+	flavor = te_debug_monuments.6.flavor
+
+	# Each option does its work behind a click-only marker
+	# (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects"):
+	# a taking or a return reads back what it writes, which the tooltip's walk
+	# would log every frame.
+	option = {
+		name = te_debug_monuments.6.a
+		custom_tooltip = {
+			text = te_debug_monuments.6.a.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_state = {
+					limit = {
+						gm_state_tr_takeable = yes
+						NOT = { owner = root }
+					}
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = occupation }
+				}
+				gm_tr_finish = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.b
+		custom_tooltip = {
+			text = te_debug_monuments.6.b.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				ordered_scope_state = {
+					limit = { gm_state_tr_takeable = yes }
+					order_by = gm_state_grandeur
+					position = 0
+					check_range_bounds = no
+					gm_state_tr_take = { WHO = root ROUTE = own }
+				}
+				gm_tr_finish = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.c
+		custom_tooltip = {
+			text = te_debug_monuments.6.c.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = {
+					has_variable = gm_tr_debug_click
+					has_global_variable_list = gm_trophies
+				}
+				every_in_global_list = {
+					variable = gm_trophies
+					limit = { gm_tr_held_by = { WHO = root } }
+					add_to_temporary_list = gm_tr_debug_returning
+				}
+				every_in_list = {
+					list = gm_tr_debug_returning
+					gm_tr_return_home = { RELATIONS = yes }
+				}
+				gm_tr_finish = yes
+			}
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monuments.6.d
+		default_option = yes
+		custom_tooltip = {
+			text = te_debug_monuments.6.d.tt
+			set_variable = gm_tr_debug_click
+			if = {
+				limit = { has_variable = gm_tr_debug_click }
+				remove_variable = gm_tr_debug_click
+				gm_trophy_monthly = yes
+				gm_tr_debug_log = yes
+			}
+		}
 	}
 }

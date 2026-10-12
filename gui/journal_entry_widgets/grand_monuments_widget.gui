@@ -8,11 +8,13 @@
 ###     Hard Times while a finished level would cause vanity backlash (§5).
 ###   widget_je_gm_status     custom_widget_container_2
 ###     (The entry has no status description: its counts were the overview's.)
-###     Commission (open), only while one is open (v2 §2.7): who asked, the
-###     monument asked for, a progress bar, the months left and Ask for More
-###     Time.
+###     Opportunity (open), only while one is open (opportunities spec §2):
+###     the moment, who asks for what, where, a progress bar, the months left,
+###     a line while levels are under construction, what completing it gives,
+###     and Raise It beside Let It Pass.
 ###     National Effects (open): a bar per stepped total, then interest group
-###     approval, the fading ledgers and the monument policy's four buttons
+###     approval, the fading ledgers, the opportunity boons in force (with
+###     their months left) and the monument policy's four buttons
 ###     (v2 §5; the overview's last line names the policy in force). Our
 ###     Monuments (open): one row per
 ###     monument, from the country's gm_states list (rebuilt by every
@@ -1033,6 +1035,13 @@ types grand_monuments_widget_types
 				gm_row_line = {
 					text = "gm_row_detail"
 				}
+				# It counts toward the open opportunity (usability §4).
+				gm_row_line = {
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]"
+					default_format = "#tooltippable"
+					tooltip = "gm_row_com_counts_tt"
+					text = "gm_row_com_counts"
+				}
 				gm_row_line = {
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
 					default_format = "#tooltippable"
@@ -1096,6 +1105,10 @@ types grand_monuments_widget_types
 				blockoverride "choice_text" { text = "gm_button_preserve" }
 			}
 		}
+
+		# Carry It Off (trophies spec §2.2): a monument we did not raise, in a
+		# state we have not incorporated (gui/gm_trophy_widgets.gui).
+		gm_tr_take_button = {}
 	}
 
 	### ======================================================================
@@ -1236,10 +1249,12 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### Commission (open), shown only while one is open (v2 §2.7): who asked for
-	### what, the monument it will be, a bar of the grandeur added against the
-	### target, the months left and Ask for More Time (once). Country reads
-	### only: the commission is the country's record.
+	### Opportunity (open), shown only while one is open (opportunities spec §2):
+	### the moment that brought it, who asks for what, the monument it will be,
+	### a bar of the grandeur added against the target, the months left, what
+	### completing it gives, and Let It Pass. Country reads only: the
+	### opportunity is the country's record. Its type and flag keep v2's
+	### "commission" names.
 	type te_gm_sec_commission = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1268,11 +1283,20 @@ types grand_monuments_widget_types
 
 			gm_text = {
 				default_format = "#tooltippable"
+				tooltip = "gm_je_com_occasion_tt"
+				text = "gm_je_com_occasion"
+			}
+			gm_text = {
+				default_format = "#tooltippable"
 				tooltip = "gm_je_com_ask_tt"
 				text = "gm_je_com_ask"
 			}
 			gm_text = {
 				text = "gm_je_com_named"
+			}
+			# Where it counts, in plain sight (usability §4).
+			gm_text = {
+				text = "gm_je_com_where_line"
 			}
 			gm_step_row = {
 				tooltip = "gm_je_com_progress_tt"
@@ -1295,25 +1319,35 @@ types grand_monuments_widget_types
 					text = "gm_je_com_val_months"
 				}
 			}
+			# Levels queued count only once finished: say so while any are
+			# being built, so the bar's standstill reads right (usability §4).
+			gm_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_building'), '(CFixedPoint)1' )]"
+				text = "gm_je_com_building"
+			}
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_com_reward_tt"
+				text = "gm_je_com_reward"
+			}
 
-			button = {
-				using = default_button_action
-				size = { 220 26 }
+			# Raise It (usability §1) beside Let It Pass, two to a row as the
+			# policy buttons are (gm_policy_button: 2 x 230 + 8).
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
 				parentanchor = hcenter
-				margin_top = 4
-				datacontext = "[GetScriptedGui('gm_com_extend_sgui')]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "gm_button_com_extend_tooltip"
+				margin_top = 2
 
-				textbox = {
-					parentanchor = center
-					align = center|nobaseline
-					autoresize = yes
-					max_width = 210
-					elide = right
-					using = fontsize_small
-					text = "gm_button_com_extend"
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_com_raise_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_com_raise_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_com_raise" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_com_let_pass_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_com_let_pass_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_com_let_pass" }
 				}
 			}
 		}
@@ -1560,9 +1594,9 @@ types grand_monuments_widget_types
 				}
 			}
 
-			# ---- Fading legitimacy: the teardown, vanity and promise ledgers (§4.3, §5, v2 §2.4) ----
+			# ---- Fading legitimacy: the teardown and vanity ledgers (§4.3, §5) ----
 			gm_subheader = {
-				visible = "[Or( Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' ) )]"
+				visible = "[Or( NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity'), '(CFixedPoint)0' ) )]"
 				blockoverride "subheader_text" {
 					text = "gm_je_sub_fading"
 				}
@@ -1587,14 +1621,151 @@ types grand_monuments_widget_types
 					text = "gm_je_val_vanity"
 				}
 			}
+			# ---- Opportunities seized (opportunities spec §3.2): each boon in force, its months left ----
+			gm_subheader = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_any'), '(CFixedPoint)1' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_sub_boons"
+				}
+			}
 			gm_value_row = {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise'), '(CFixedPoint)0' )]"
-				tooltip = "gm_je_tt_promise"
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_reign'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_reign"
 				blockoverride "row_label" {
-					text = "gm_je_lbl_promise"
+					text = "gm_je_lbl_boon_reign"
 				}
 				blockoverride "row_value" {
-					text = "gm_je_val_promise"
+					text = "gm_je_val_boon_reign"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_regime'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_regime"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_regime"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_regime"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_great_power'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_great_power"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_great_power"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_great_power"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_victory'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_victory"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_victory"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_victory"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_defeat'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_defeat"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_defeat"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_defeat"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_centenary'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_centenary"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_centenary"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_centenary"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_ruler_death'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_ruler_death"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_ruler_death"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_ruler_death"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_space'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_space"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_space"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_space"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_faith'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_faith"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_faith"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_faith"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_tech_artistic'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_tech_artistic"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_tech_artistic"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_tech_artistic"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_tech_scientific'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_tech_scientific"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_tech_scientific"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_tech_scientific"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_tech_industrial'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_tech_industrial"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_tech_industrial"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_tech_industrial"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_tech_athletic'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_tech_athletic"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_tech_athletic"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_tech_athletic"
+				}
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_tech_naturalist'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_tech_naturalist"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_tech_naturalist"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_tech_naturalist"
 				}
 			}
 
@@ -1779,6 +1950,17 @@ types grand_monuments_widget_types
 			gm_note = {
 				text = "gm_je_how_policy"
 			}
+			gm_subheader = {
+				blockoverride "subheader_text" {
+					text = "gm_je_how_sub_trophies"
+				}
+			}
+			gm_note = {
+				text = "gm_je_how_trophies"
+			}
+			gm_note = {
+				text = "gm_je_how_trophies_home"
+			}
 		}
 	}
 
@@ -1797,6 +1979,9 @@ types grand_monuments_widget_types
 		te_gm_sec_commission = {}
 		te_gm_sec_national = {}
 		te_gm_sec_monuments = {}
+		# Trophies (gui/gm_trophy_widgets.gui): ours, and ours held abroad.
+		te_gm_sec_trophies = {}
+		te_gm_sec_abroad = {}
 	}
 
 	### How it all works, collapsed.
