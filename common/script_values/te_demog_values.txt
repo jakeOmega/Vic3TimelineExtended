@@ -262,6 +262,25 @@ te_demog_crisis = {
 	max = 1
 }
 
+# State scope: how far the census's drifted medicine is behind where it is heading, summed over health-care access and
+# the three treatments (only the shortfalls); 0 for a state without the census's medicine (the Causes of Death plan).
+# Medical Outreach's state_trigger reads it through te_demog_medicine_behind.
+te_demog_medicine_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_acc
+			has_variable = te_dg_trt_inf
+			has_variable = te_dg_trt_mat
+			has_variable = te_dg_trt_chr
+		}
+		add = { value = te_demog_access_target subtract = var:te_dg_acc min = 0 }
+		add = { value = te_demog_treatment_target_infection subtract = var:te_dg_trt_inf min = 0 }
+		add = { value = te_demog_treatment_target_maternal subtract = var:te_dg_trt_mat min = 0 }
+		add = { value = te_demog_treatment_target_chronic subtract = var:te_dg_trt_chr min = 0 }
+	}
+}
+
 # State scope: the global city-size rank (1 = the biggest city, recomputed monthly into
 # state_city_size_rank by city_rank_on_action) negated, so that ordered_scope_state, which takes
 # the highest first, lists a country's biggest cities first (te_demog_country_census).

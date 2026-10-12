@@ -15,6 +15,8 @@
  decree_encourage_emigration_desc:0 "Promote emigration to reduce population pressure through media campaigns and incentives."
  decree_greenest_grass_campaign:0 "Greenest Grass Campaign"
  decree_greenest_grass_campaign_desc:0 "A highly effective campaign to encourage migration to a region."
+ decree_medical_outreach:0 "Medical Outreach"
+ decree_medical_outreach_desc:0 "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner."
  decree_migration_invalid_tooltip:0 "In a [concept_power_bloc] allowing forced migration."
  decree_natalism_initiative:0 "Natalism Initiative"
  decree_natalism_initiative_desc:0 "Natalism Initiative allows the government to encourage citizens to have more children."

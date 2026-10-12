@@ -169,7 +169,8 @@ class TestWalks(unittest.TestCase):
 
 
 def _parse_script(text):
-    """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list."""
+    """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list. A bare item in a
+    list block (a decree's `unlocking_technologies = { medical_degrees }`) is (item, "", "")."""
     text = re.sub(r"#[^\n]*", "", text)
     tokens = re.findall(r"[{}]|[<>]=?|=|[^\s{}=<>]+", text)
     pos = 0
@@ -178,6 +179,10 @@ def _parse_script(text):
         nonlocal pos
         items = []
         while pos < len(tokens) and tokens[pos] != "}":
+            if pos + 1 >= len(tokens) or tokens[pos + 1] not in ("=", "<", ">", "<=", ">="):
+                items.append((tokens[pos], "", ""))
+                pos += 1
+                continue
             key, op = tokens[pos], tokens[pos + 1]
             pos += 2
             if tokens[pos] == "{":
@@ -4424,6 +4429,47 @@ class TestCausesInTheStep(unittest.TestCase):
         first_mult = next(i for i, (k, _, v) in enumerate(_parse_script(effects["te_demog_prepare"]))
                           if k == "set_local_variable" and _find(v, "name") == "te_dg_m_inf")
         self.assertLess(prepare.index("te_demog_cause_inputs_store"), first_mult)
+
+
+class TestMedicalOutreach(unittest.TestCase):
+    """The Causes of Death plan: a decree that speeds the spread of medicine in one state, under Full only."""
+
+    DECREES = ROOT / "common" / "decrees" / "extra_decrees.txt"
+
+    def test_the_decree_carries_the_spread_of_medicine(self):
+        body = _block(_text(self.DECREES), "decree_medical_outreach")
+        modifier = _parse_script(body)
+        lines = _find(modifier, "modifier")
+        self.assertEqual([(k, float(v)) for k, _, v in lines], [(P.DIFFUSION_TYPE, P.MEDICAL_OUTREACH_DIFFUSION)])
+        self.assertEqual(_find(modifier, "cost"), "100")
+
+    def test_it_exists_only_under_full(self):
+        # vanilla 00_decree.txt: country_trigger decides whether a decree is shown; the rule's wrapper, never the rule
+        trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "country_trigger")
+        self.assertEqual(trig, [("te_demog_effects_run", "=", "yes")])
+
+    def test_it_is_offered_where_medicine_is_behind(self):
+        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.3
+        eng = _Engine(fixtures)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_medicine_gap")), 0.0, "no census medicine yet")
+        eng.vars.update(te_dg_acc=0.4, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+        self.assertTrue(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
+        eng.vars["te_dg_acc"] = 0.7
+        self.assertFalse(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
+
+    def test_the_ai_weighs_it_by_the_gap(self):
+        # the shared-mechanics rule: the AI issues it where medicine is behind, and never once the state caught up.
+        # has_decree is read as "not issued" (the interpreter doesn't know decrees)
+        body = _block(_text(self.DECREES), "decree_medical_outreach")
+        weight = _find(_parse_script(body.replace("has_decree = decree_medical_outreach", "always = no")), "ai_weight")
+        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6          # access heading for 1.0
+        for acc, want in ((1.0, 0.0), (0.95, 0.0), (0.85, 100.0), (0.6, 200.0)):
+            eng = _Engine(fixtures)
+            eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+            with self.subTest(acc=acc):
+                self.assertEqual(eng._ops(weight, 0.0), want)
 
 
 class TestCauseFactorsScript(unittest.TestCase):
