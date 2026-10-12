@@ -6,6 +6,8 @@ parameter change that breaks a real-world anchor fails here, before it is genera
 into script.
 """
 
+import dataclasses
+import math
 import sys
 import unittest
 from pathlib import Path
@@ -622,3 +624,72 @@ class TestInequality(unittest.TestCase):
         self.assertAlmostEqual(M.stand_in_income(63, costs), (3 * costs[65] + 2 * costs[60]) / 500)
         self.assertGreater(M.stand_in_income(61, costs), M.stand_in_income(60, costs), "no cap at 60")
         self.assertEqual(M.stand_in_income(250, costs), costs[200] / 100, "the top level bounds it")
+
+
+class TestCausesOfDeath(unittest.TestCase):
+    """The Causes of Death plan (2026-10-11): each cause's multiplier is the product of P.CAUSE_FACTORS' factors;
+    health-care access and the treatments drift toward their targets at each census step; turmoil raises
+    accidents and violence."""
+
+    MODS = {P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4, P.TREATMENT_TYPE["maternal"]: 0.35,
+            P.TREATMENT_TYPE["chronic"]: 0.1, "state_external_mortality_mult": -0.1,
+            "state_work_mortality_mult": 0.1, "state_chronic_mortality_mult": -0.05}
+
+    def test_factors_multiply_to_each_multiplier(self):
+        for sol, lit, turm, crowd in ((3, 0.1, 0.0, 0.0), (6.5, 0.2, 0.4, 0.05), (20, 0.5, 1.0, 0.6), (40, 1.0, 0.2, 0.0)):
+            inp = M.Inputs(sol=sol, literacy=lit, turmoil=turm, crowding=crowd, mods=dict(self.MODS))
+            factors, mult = M.cause_factors(inp), M.cause_multipliers(inp)
+            self.assertEqual(list(factors), list(P.CAUSE_FACTORS))
+            for cause, fs in factors.items():
+                self.assertEqual(tuple(fs), P.CAUSE_FACTORS[cause])
+                self.assertAlmostEqual(math.prod(fs.values()), mult[cause], places=12, msg=cause)
+
+    def test_turmoil_raises_accidents_and_violence_only(self):
+        calm = M.cause_multipliers(M.Inputs(sol=12, literacy=0.3))
+        unrest = M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, turmoil=1.0))
+        self.assertAlmostEqual(unrest["external"], calm["external"] * (1 + P.TURMOIL_EXTERNAL_WEIGHT))
+        for cause in ("infection", "work", "maternal", "chronic"):
+            self.assertEqual(unrest[cause], calm[cause], cause)
+        # read as a 0-1 share
+        self.assertEqual(M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, turmoil=1.7))["external"],
+                         unrest["external"])
+
+    def test_a_seed_starts_medicine_at_its_targets(self):
+        inp = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        ring = M.seed(inp, 1836, 1e6)
+        self.assertEqual(ring.medicine, M.medicine_targets(inp))
+        self.assertEqual(M.medicine_drift(None, inp), M.medicine_targets(inp))
+
+    def test_medicine_moves_a_share_of_the_gap_each_step(self):
+        inp0 = M.Inputs(sol=12, literacy=0.3)
+        ring = M.seed(inp0, 1836, 1e6)
+        inp1 = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        M.step(ring, inp1, 1837)
+        r = P.DIFFUSION_BASE
+        self.assertAlmostEqual(ring.medicine["access"], P.BASE_ACCESS + r * 0.3)
+        self.assertAlmostEqual(ring.medicine["infection"], r * 0.4)
+        self.assertAlmostEqual(ring.medicine["maternal"], r * 0.35)
+        # the step's rates use the drifted values, not the targets
+        drifted = M.cause_multipliers(dataclasses.replace(inp1, medicine=ring.medicine))
+        at_target = M.cause_multipliers(inp1)
+        self.assertGreater(drifted["infection"], at_target["infection"])
+
+    def test_diffusion_rises_with_its_type_and_is_capped(self):
+        self.assertAlmostEqual(M.diffusion(M.Inputs()), P.DIFFUSION_BASE)
+        self.assertAlmostEqual(M.diffusion(M.Inputs(mods={P.DIFFUSION_TYPE: 0.3})), P.DIFFUSION_BASE + 0.3)
+        self.assertEqual(M.diffusion(M.Inputs(mods={P.DIFFUSION_TYPE: 5.0})), P.DIFFUSION_MAX)
+
+    def test_a_value_near_its_target_takes_it(self):
+        inp = M.Inputs(mods={P.ACCESS_TYPE: 0.3})
+        target = M.medicine_targets(inp)
+        prev = dict(target, access=target["access"] - 0.004 / (1 - P.DIFFUSION_BASE))
+        self.assertEqual(M.medicine_drift(prev, inp)["access"], target["access"])
+        far = dict(target, access=target["access"] - 0.2)
+        self.assertLess(M.medicine_drift(far, inp)["access"], target["access"])
+
+    def test_constant_inputs_keep_the_calibration(self):
+        # medicine at its targets from the seed on: run_constant (the anchors' equilibria) is what it was
+        inp = M.Inputs(sol=14, literacy=0.4, mods=dict(self.MODS))
+        _ring, last = M.run_constant(inp, years=60)
+        qf, qm, _mmr = M.group_rates(inp)
+        self.assertAlmostEqual(last["e0"], (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2, places=9)
