@@ -499,7 +499,7 @@ contraceptive_pill = {
 	modifier = {
 		state_contraception_add = 0.05	# the census's means (demographics modifier types, stage 2)
 		state_dependent_wage_mult = 0.35
-		state_working_adult_ratio_add = 0.05
+		state_demog_womens_work_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_pop_qualifications_mult = 0.05
 		state_tax_capacity_mult = 0.05
 		state_demog_absorbed_birth_rate_mult = -0.10
@@ -524,7 +524,7 @@ second_wave_feminism = {
 
 	modifier = {
 		state_dependent_wage_mult = 0.15
-		state_working_adult_ratio_add = 0.025
+		state_demog_womens_work_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_pop_qualifications_mult = 0.05
 		state_tax_capacity_mult = 0.05
 		state_demog_ontop_birth_rate_mult = -0.025

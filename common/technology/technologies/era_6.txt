@@ -62,7 +62,7 @@ personal_appliances = {
 	category = production
 
 	modifier = {
-		state_working_adult_ratio_add = 0.025
+		state_demog_womens_work_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	}
 
 	unlocking_technologies = {

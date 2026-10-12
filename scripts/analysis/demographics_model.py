@@ -43,6 +43,8 @@ class Inputs:
     practices: dict = field(default_factory=dict)   # {practice: share 0-1}: lm Late Marriage, bs Birth Spacing
     agrarian_share: float = 0.0          # Peasants and Farmers over the state's people (the walk's te_dg_agr_share)
     impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
+    low_share: float = 0.0               # the lower strata's share of people (te_dg_low_share, from the walk)
+    pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
 
 
 def clamp(x, lo, hi):
@@ -224,8 +226,14 @@ def fertility(inp, e0):
     tfr = wealth * natural * factor
     for term in practices.values():
         tfr *= term
-    return {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
-            "survival": survival, "urban": urban, "means": mn, "factor": factor, **practices}
+    out = {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
+           "survival": survival, "urban": urban, "means": mn, "factor": factor, **practices}
+    # planned and unplanned births (late-game §3.1): the families who choose their number, and the births the means
+    # don't reach. Computed from the result's own tfr and factor, so every term multiplying the factor (wealth,
+    # natural, #906's practices) scales both parts alike.
+    out["planned"] = out["tfr"] / out["factor"] * out["means"] * desired
+    out["unplanned"] = out["tfr"] / out["factor"] * (1 - out["means"])
+    return out
 
 
 # ---- Late Marriage and Birth Spacing (the late-marriage spec §3-§4; te_demog_practice_effects.txt) --------------
@@ -309,6 +317,159 @@ def asfr_shape(rate_age):
     if rate_age < 15 or rate_age > 49:
         return 0.0
     return P.ASFR_SHAPE_BY_GROUP[rate_age - rate_age % 5] / 5.0
+
+
+# ---- Phase 2 step 1: the interfaces (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1) -
+
+def asfr_planned(rate_age):
+    """Planned births' share at a calendar rate age, per 100k (P.ASFR_PLANNED_SHAPE)."""
+    if rate_age < 15 or rate_age > 49:
+        return 0.0
+    return P.ASFR_PLANNED_SHAPE[rate_age - rate_age % 5] / 5.0
+
+
+def asfr_unplanned(rate_age):
+    """Unplanned births' share at a biological rate age, per 100k (P.ASFR_UNPLANNED_SHAPE)."""
+    if rate_age < 15 or rate_age > 49:
+        return 0.0
+    return P.ASFR_UNPLANNED_SHAPE[rate_age - rate_age % 5] / 5.0
+
+
+def slot_births(f, r, rb, tfr, planned_share):
+    """One cohort's births (te_demog_slot_births). While the two schedules are the same object, today's line exactly;
+    otherwise planned by the calendar rate age r and unplanned by the biological rate age rb."""
+    if P.ASFR_PLANNED_SHAPE is P.ASFR_UNPLANNED_SHAPE:
+        return f * asfr_shape(r) / 100000.0 * tfr
+    mix = asfr_planned(r) * planned_share + asfr_unplanned(rb) * (1 - planned_share)
+    return mix * f / 100000.0 * tfr
+
+
+def band_value(table, age):
+    """A {first age: value} table's value at an age (P.CAPACITY, P.HEALTH_NEED)."""
+    return table[max(k for k in table if k <= age)]
+
+
+def child_work_share(inp):
+    """The 10-14s' participation by the childrens'-rights law (te_demog_child_work)."""
+    for law, share in P.CHILD_WORK_SHARE.items():
+        if law in inp.laws:
+            return share
+    return P.CHILD_WORK_SHARE_DEFAULT
+
+
+def start_factor(inp, age):
+    """The working-age start by calendar age (te_demog_enter_cal_band)."""
+    if age < P.CHILD_WORK_AGE:
+        return 0.0
+    if age < P.WORKING_AGE:
+        return child_work_share(inp)
+    return 1.0
+
+
+def women_rate_law(inp):
+    """Women's participation by the women's-work family (#894): WOMEN_BASE up to MEN_RATE as its sum reaches
+    WOMENS_WORK_FULL (te_demog_women_rate_law)."""
+    s = min(max(inp.mods.get(P.WOMENS_WORK_TYPE, 0.0), 0.0) / P.WOMENS_WORK_FULL, 1.0)
+    return s * (P.MEN_RATE - P.WOMEN_BASE) + P.WOMEN_BASE
+
+
+def women_rate(inp):
+    """The state's women's rate: its lower strata's women work at least WOMEN_LOWER (te_demog_women_rate)."""
+    w = women_rate_law(inp)
+    return (max(w, P.WOMEN_LOWER) - w) * inp.low_share + w
+
+
+def sex_rates(inp):
+    """(women's, men's) rates in the working ages with call 3's participation inputs, each 0 to 1 (te_dg_wk_rf,
+    te_dg_wk_rm in te_demog_work_setup)."""
+    both = inp.mods.get(P.PARTICIPATION_TYPE, 0.0)
+    rf = min(max(women_rate(inp) + both, 0.0), 1.0)
+    rm = min(max(P.MEN_RATE + inp.mods.get(P.MALE_PARTICIPATION_TYPE, 0.0) + both, 0.0), 1.0)
+    return rf, rm
+
+
+def capacity_at(inp, age):
+    """Capacity at a biological age with call 3's input: the table x (1 + it), 0 to 1 (te_demog_enter_bio_band)."""
+    return min(band_value(P.CAPACITY, age) * max(1 + inp.mods.get(P.CAPACITY_TYPE, 0.0), 0.0), 1.0)
+
+
+def pension_kind(inp):
+    """1 under Old Age Pension; 2 under UBI or Post-Scarcity (no pension age); else 0 (te_demog_pension_kind)."""
+    if P.PENSION_LAW in inp.laws:
+        return 1
+    if any(law in inp.laws for law in P.NO_PENSION_AGE_LAWS):
+        return 2
+    return 0
+
+
+def working_ages_end(inp, old_age):
+    """(the end of the working ages, whether the after-pension share applies past it, whether those past it are
+    pensioners): te_demog_work_setup. With no pension law the working ages run to capacity's end (late-game §2.1), which
+    never comes: NO_WORKING_AGE_END."""
+    kind = pension_kind(inp)
+    if kind == 1:
+        return (P.PENSION_AGE["standard"] if inp.pension_age is None else inp.pension_age), True, True
+    if kind == 2:
+        return old_age, True, False
+    return float(P.NO_WORKING_AGE_END), False, False
+
+
+def work_figures(ring, inp, old_age):
+    """Phase 2 step 1's figures over ring.by_age() (ages after the step; the pool at 150): te_demog_work_slot and
+    te_demog_work_finish. The biological age is the calendar one until phase 3."""
+    end, after_on, bill_on = working_ages_end(inp, old_age)
+    rate_f, rate_m = sex_rates(inp)
+    total = wa = workers = pens = need = 0.0
+    for a, f, m in ring.by_age():
+        ab = a                                  # the biological index (phase 3: less the band's deficit)
+        p = f + m
+        total += p
+        need += p * band_value(P.HEALTH_NEED, ab)
+        start = start_factor(inp, a)
+        share = 1.0
+        if a >= end:
+            if after_on:
+                share = P.AFTER_PENSION_SHARE
+            if bill_on:
+                pens += p
+        elif start > 0:
+            wa += p
+        workers += (f * rate_f + m * rate_m) * start * capacity_at(inp, ab) * share
+    return {"wa_share": wa / max(total, 1.0), "at_work": workers / max(wa, 1.0),
+            "pensioners": pens / max(total, 1.0), "need": need / max(total, 1.0) / P.HEALTH_NEED_1836}
+
+
+def wf_target(figures):
+    """The workforce share on the engine's scale (te_demog_wf_target; step 2's target less the pops' bases)."""
+    return P.WORKFORCE_SCALE * figures["wa_share"] * figures["at_work"]
+
+
+def old_age_threshold(q):
+    """The age with OLD_AGE_REMAINING years of life left (late-game §1.5) from one sex's group rates: remaining life at
+    each group start from OLD_AGE_FROM, linear between starts. Radix 100,000, as te_demog_old_age_pass."""
+    l, py, at = 100000.0, 0.0, []
+    for g, (start, n) in enumerate(P.GROUPS):
+        if start >= P.OLD_AGE_FROM:
+            at.append((start, l, py))
+        qq = q[g] / 100000.0
+        pn = (1.0 - qq) ** n
+        py += l * n if qq == 0 else l * (1 - qq / 2) * (1 - pn) / qq
+        l *= pn
+    prev = None
+    for start, l_s, py_s in at:
+        e = (py - py_s) / max(l_s, 0.00001)
+        if e <= P.OLD_AGE_REMAINING:
+            if prev is None:
+                return float(start)
+            s0, e0 = prev
+            return (e0 - P.OLD_AGE_REMAINING) / max(e0 - e, 0.00001) * (start - s0) + s0
+        prev = (start, e)
+    return float(at[-1][0])
+
+
+def old_age(qf, qm):
+    """The state's old-age threshold: women's and men's averaged (te_dg_old_age)."""
+    return (old_age_threshold(qf) + old_age_threshold(qm)) * 0.5
 
 
 def migrant_profile(inp):
@@ -616,6 +777,12 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         lt_f, lt_m = life_table(qf), life_table(qm)
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = {"tfr": tfr}
+    # planned births' share of the year's children per woman (te_dg_sh_pl): the birth line's two-term form reads it
+    if rates is None:
+        planned_share = fert["planned"] / fert["tfr"] if fert["tfr"] else 1.0
+    else:
+        assert P.ASFR_PLANNED_SHAPE is P.ASFR_UNPLANNED_SHAPE, "a replay logs one schedule"
+        planned_share = 1.0
     tfr_model = tfr
     q0_model = (qf[0] + qm[0]) / 200.0   # the life table's infant mortality, before the scales
     tfr = tfr * (1 + births_scale)
@@ -649,7 +816,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             continue
         r = a - 1
         g = P.group_of(r)
-        b = f * asfr_shape(r) / 100000.0 * tfr
+        b = slot_births(f, r, r, tfr, planned_share)
         births += b
         maternal += b * mmr / 100000.0
         f2 = f * (1 - qf[g] / 100000.0) - b * mmr / 100000.0

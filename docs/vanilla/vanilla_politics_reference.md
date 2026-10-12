@@ -272,7 +272,7 @@ Every IG has **three traits**: one negative (Unhappy/Angry tiers), one first-pos
 The activation rules:
 
 - **Powerful IG**: trait magnitudes are doubled, positive AND negative. A powerful happy IG's positive trait amplifies its benefit; a powerful angry IG's negative trait similarly amplifies its drag. This is the largest *single* modifier amplifier the politics layer offers.
-- **Marginalized IG**: traits **do not activate at all**. Marginalizing a problematic IG genuinely shuts off its mechanical contribution.
+- **Marginalized IG**: trait magnitudes are **reduced**, not switched off (`MARGINAL_IG_TRAIT_PENALTY` in `NPolitics`: an IG whose clout would make it marginal has its trait modifiers cut by that share). Marginalizing a problematic IG weakens its mechanical contribution. Read 2026-10-12 from the defines (`POWERFUL_IG_TRAIT_BONUS`, `MARGINAL_IG_TRAIT_PENALTY`); an earlier version of this line said marginal traits don't activate.
 - **In-government but sub-marginalization-clout**: traits activate at half magnitude (the safety-net case from § 5.2).
 
 Country-flavor traits (Brazilian *Coronelismo*, Austrian *Wiener Walzer*, Punjab *Khalsa*, French *Élan Vital*, German *Biedermänner*, Russian *Velvet Book / Obshchina*, etc.) replace the generic trait at the corresponding tier — see the long flavor table in the wiki source for the catalog.

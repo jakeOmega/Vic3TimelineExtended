@@ -287,4 +287,12 @@ gui_state_hidden_modifier_count = {
 		limit = { has_modifier = te_demog_line_wealth_deaths_up }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_demog_line_working_adults_down }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_line_working_adults_up }
+		add = 1
+	}
 }

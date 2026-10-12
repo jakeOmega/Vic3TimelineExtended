@@ -308,7 +308,7 @@ law_universal_basic_income = {
 	institution = institution_social_security
 	institution_modifier = {
 		state_dependent_wage_mult = 0.2
-		state_working_adult_ratio_add = -0.02
+		state_demog_replaced_ratio_add = -0.02	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_dependent_political_participation_add = 0.02
 		state_welfare_payments_add = 0.8
 	}
@@ -1547,7 +1547,8 @@ law_restorative_justice = {
 		country_institution_police_max_investment_add = -1
 		country_institution_cost_institution_police_mult = 0.25
 		state_loyalists_from_political_movements_mult = 0.1
-		state_working_adult_ratio_add = 0.025
+		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
 	}
 }
 
@@ -1566,7 +1567,8 @@ law_rehabilitation_focused_criminal_justice = {
 		country_institution_police_max_investment_add = -2
 		country_institution_cost_institution_police_mult = 0.5
 		state_loyalists_from_political_movements_mult = 0.2
-		state_working_adult_ratio_add = 0.05
+		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
 	}
 }
 
@@ -2700,7 +2702,7 @@ law_pro_natalist_subsidies = {
 		state_welfare_payments_mult = 0.10
 		state_demog_ontop_birth_rate_mult = 0.10
 		state_dependent_wage_mult = 0.1	# family allowances raise dependents' income (owner, 2026-10-12)
-		state_working_adult_ratio_add = -0.05
+		state_demog_replaced_ratio_add = -0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	}
 
 	# AI (Demographics phase 2 step 3a, §3.6; every game, owner call 7): when the population shrinks, by the yearly
@@ -2733,7 +2735,7 @@ law_state_sponsored_family_planning = {
 	modifier = {
 		state_fertility_means_add = 0.1	# the census's means (demographics modifier types, stage 2)
 		state_demog_absorbed_birth_rate_mult = -0.05
-		state_working_adult_ratio_add = 0.05
+		state_demog_womens_work_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_education_access_add = 0.05
 	}
 }
@@ -2785,7 +2787,7 @@ law_communal_child_rearing = {
 	# (owner, 2026-10-12: fair for so radical a law). The law's description names the offset.
 	modifier = {
 		state_demog_ontop_birth_rate_mult = -0.2
-		state_working_adult_ratio_add = 0.1
+		state_demog_womens_work_ratio_add = 0.1	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 	}
 }
@@ -3126,7 +3128,8 @@ law_state_eugenics_program = {
 
 	modifier = {
 		country_authority_add = 150
-		state_working_adult_ratio_add = 0.05
+		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+		state_work_capacity_mult = 0.1	# the census's participation input (phase 2 step 1; the design §1.7): the law's claim to a fitter people, as fitness for work late in life
 		state_demog_ontop_birth_rate_mult = 0.1
 	}
 }
@@ -3712,7 +3715,8 @@ law_pro_labor_ministry_of_labor = {
 
 	institution = institution_ministry_of_labor
 	institution_modifier = {
-		state_working_adult_ratio_add = 0.01
+		state_demog_replaced_ratio_add = 0.01	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+		state_labor_participation_add = 0.005	# the census's participation input (phase 2 step 1; the design §1.7): placement and training bring the marginal into work
 		building_company_worker_dividends_add = 0.01
 		state_political_strength_from_wealth_mult = -0.05
 	}
@@ -3735,7 +3739,8 @@ law_pro_capital_ministry_of_labor = {
 
 	institution = institution_ministry_of_labor
 	institution_modifier = {
-		state_working_adult_ratio_add = 0.02
+		state_demog_replaced_ratio_add = 0.02	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
+		state_labor_participation_add = 0.01	# the census's participation input (phase 2 step 1; the design §1.7): workfare and thin protections push more people into work
 		state_political_strength_from_wealth_mult = 0.05
 		state_radicals_from_political_movements_mult = 0.05
 		building_minimum_wage_mult = -0.05
@@ -4185,7 +4190,7 @@ law_protected_class = {
 
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.1
-		state_working_adult_ratio_add = 0.2
+		state_demog_womens_work_ratio_add = 0.2	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_demog_absorbed_birth_rate_mult = -0.1
 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
 		state_dependent_political_participation_add = 0.5

@@ -642,3 +642,105 @@ te_debug_demog_pr_chk_gap = {
 		multiply = -1
 	}
 }
+
+# ---- Call 3's carrier-kind self-checks (te_debug_demog_wf_selfchecks, te_debug_demog.6 and .7; phase 2 step 1) -------
+# THIS = the state (its owner's capital). The men's participation input as the state reads it: the criminal-justice
+# laws' lines and the two amendments' (it has no other carrier: TestWorkforceLinesMoved).
+te_debug_demog_wf_part_m_read = {
+	value = modifier:state_male_labor_participation_add
+}
+
+# What the laws alone put there: Restorative Justice 0.02, Rehabilitation 0.03 (test_demographics_registry pins the
+# sizes against the carriers). A state that doesn't sum an amendment's script-only type reads this.
+te_debug_demog_wf_amend_laws_only = {
+	value = 0
+	if = {
+		limit = { owner = { has_law = law_type:law_restorative_justice } }
+		add = 0.02
+	}
+	if = {
+		limit = { owner = { has_law = law_type:law_rehabilitation_focused_criminal_justice } }
+		add = 0.03
+	}
+}
+
+# What it should read: the laws' and the amendment's, Community Service +0.01, Mandatory Minimums -0.01.
+te_debug_demog_wf_amend_expected = {
+	value = te_debug_demog_wf_amend_laws_only
+	if = {
+		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_community_service } } }
+		add = 0.01
+	}
+	if = {
+		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_mandatory_minimums } } }
+		add = -0.01
+	}
+}
+
+# How far apart the read and the expected are, non-negative (a sign flip, as te_debug_demog_pr_chk_gap).
+te_debug_demog_wf_amend_gap = {
+	value = te_debug_demog_wf_part_m_read
+	subtract = te_debug_demog_wf_amend_expected
+	if = {
+		limit = { te_debug_demog_wf_part_m_read < te_debug_demog_wf_amend_expected }
+		multiply = -1
+	}
+}
+
+# Both sexes' input as the state reads it: the Trade Unions' loyal trait's (the Ministries of Labour carry it too; the
+# check arms only without them, te_debug_demog_wf_ig_trait_plain).
+te_debug_demog_wf_part_read = {
+	value = modifier:state_labor_participation_add
+}
+
+# What the trait should put there at its plain size (common/interest_group_traits/te_demog_workforce_injections.txt).
+te_debug_demog_wf_ig_expected = {
+	value = 0.02
+}
+
+te_debug_demog_wf_ig_gap = {
+	value = te_debug_demog_wf_part_read
+	subtract = te_debug_demog_wf_ig_expected
+	if = {
+		limit = { te_debug_demog_wf_part_read < te_debug_demog_wf_ig_expected }
+		multiply = -1
+	}
+}
+
+# THIS = a state: its working-adult field less what the moved lines' pair applies. About 0 wherever every vanilla
+# carrier's INJECTed cancel nets out against its own line; Rosen's flat adds (positive) are the one live line. An INJECT
+# that replaced a vanilla block instead of adding to it leaves the cancel alone: about -0.05 for a Trade Unions trait.
+te_debug_demog_wf_remainder = {
+	value = modifier:state_working_adult_ratio_add
+	subtract = te_demog_line_working_adults_applied
+}
+
+# The walk's engine workforce share (te_dg_wf_engine), -1 where the state has none.
+te_debug_demog_wf_engine_read = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_wf_engine }
+		value = var:te_dg_wf_engine
+	}
+}
+
+# ---- Option l's TE_DEMOG_WORK line (phase 2 step 1) -------------------------------------------------------------
+# THIS = the state: the census's figures, -1 where the state holds none (no census under this build yet).
+te_debug_demog_work_wa_share = { value = -1 if = { limit = { has_variable = te_dg_wa_share } value = var:te_dg_wa_share } }
+te_debug_demog_work_at_work = { value = -1 if = { limit = { has_variable = te_dg_at_work } value = var:te_dg_at_work } }
+te_debug_demog_work_pensioners = { value = -1 if = { limit = { has_variable = te_dg_pensioners } value = var:te_dg_pensioners } }
+te_debug_demog_work_need = { value = -1 if = { limit = { has_variable = te_dg_need } value = var:te_dg_need } }
+te_debug_demog_work_old_age = { value = -1 if = { limit = { has_variable = te_dg_old_age } value = var:te_dg_old_age } }
+te_debug_demog_work_low_share = { value = -1 if = { limit = { has_variable = te_dg_low_share } value = var:te_dg_low_share } }
+te_debug_demog_work_wbase = { value = -1 if = { limit = { has_variable = te_dg_wbase } value = var:te_dg_wbase } }
+te_debug_demog_work_wf_engine = { value = -1 if = { limit = { has_variable = te_dg_wf_engine } value = var:te_dg_wf_engine } }
+te_debug_demog_work_wf_target = { value = -1 if = { limit = { has_variable = te_dg_at_work } value = te_demog_wf_target } }
+# the owner's own variable, -1 where it holds none: tells a working owner.var read from the Standard fallback
+te_debug_demog_pension_var = { value = -1 if = { limit = { owner ?= { has_variable = te_dg_pension_age } } value = owner.var:te_dg_pension_age } }
+# the two families and call 3's three inputs as the state reads them: the playtest's scope checks compare these with
+# the field
+te_debug_demog_womens_mod = { value = modifier:state_demog_womens_work_ratio_add }
+te_debug_demog_replaced_mod = { value = modifier:state_demog_replaced_ratio_add }
+te_debug_demog_part_m_mod = { value = modifier:state_male_labor_participation_add }
+te_debug_demog_part_mod = { value = modifier:state_labor_participation_add }
+te_debug_demog_cap_mod = { value = modifier:state_work_capacity_mult }

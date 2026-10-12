@@ -557,9 +557,17 @@ class TestAI(unittest.TestCase):
             self.assertNotIn("is_ai", weight)
 
     def test_the_walk_keeps_last_years_people(self):
-        body = _block(_text(ROOT / "common" / "scripted_effects" / "te_demog_effects.txt"), "te_demog_walks")
-        prev = body.index("name = te_dg_walk_pop_prev value = var:te_dg_walk_pop")
-        self.assertLess(prev, body.index("name = te_dg_walk_pop value = local_var:te_dg_w_pop"))
+        """Every game, before the yearly walk overwrites te_dg_walk_pop, and outside te_demog_walks (phase 2 step 1's
+        golden pins its text)."""
+        effects = _text(ROOT / "common" / "scripted_effects" / "te_demog_effects.txt")
+        self.assertIn("set_variable = { name = te_dg_walk_pop_prev value = var:te_dg_walk_pop }",
+                      _block(effects, "te_demog_walk_keep_prev"))
+        self.assertNotIn("te_dg_walk_pop_prev", _block(effects, "te_demog_walks"))
+        for body in (_block(effects, "te_demog_state_yearly"),
+                     _block(_text(ROOT / "common" / "scripted_effects" / "te_demog_fast_effects.txt"),
+                            "te_demog_state_clock_step")):
+            self.assertLess(body.index("te_demog_walk_keep_prev = yes"), body.index("te_demog_walks = yes"))
+        self.assertNotIn("te_demog_effects_run", _block(effects, "te_demog_state_yearly").split("te_demog_walks")[0])
         values = _text(MS_VALUES)
         for name in ("te_demog_ms_pop_now_sum", "te_demog_ms_pop_prev_sum"):
             self.assertIn("has_variable = te_dg_walk_pop_prev", _block(values, name))
