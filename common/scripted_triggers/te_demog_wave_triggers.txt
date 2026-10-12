@@ -1,0 +1,130 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the event wave (phase 3): when each event is due
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §9. Thresholds and figures:
+# te_demog_wave_values.txt; the dispatcher that reads these: te_demog_wave_effects.txt.
+# ============================================================================
+
+# Country: the wave runs here: Full (census mechanics change nothing outside it; a release reads always = no), and a
+# census taken from steps, not seeds (an 1836 game's first stepped census is the one of 31 December 1837).
+te_demog_wave_runs = {
+	te_demog_effects_run = yes
+	has_variable = te_dg_census_year
+	has_variable = te_dg_stepped
+	var:te_dg_stepped > 0
+}
+
+# Country: event $EV$ hasn't fired within a generation (te_dg_wv_$EV$, a 25-year timed variable; permanent for The
+# Last Generation?).
+te_demog_wave_free = {
+	NOT = { has_variable = te_dg_wv_$EV$ }
+}
+
+# ---- The conditions, one per event (THIS = a country) -------------------------------------------------------------
+# The Demographic Dividend: the working-age share 10% above the 1836 reference's.
+te_demog_wave_cond_dividend = {
+	te_demog_wave_working_share >= te_demog_wave_k_dividend_bar
+}
+
+# The Greying of the Nation: pensioners (or, with no pension law, the people past the old-age threshold) past the bar.
+te_demog_wave_cond_greying = {
+	te_demog_wave_greying_share >= te_demog_wave_greying_bar
+}
+
+# The Youth Bulge: young adults many and work short (the census's 20-29 share, te_demog_ms_youth_share; phase 2 step 4).
+te_demog_wave_cond_youth = {
+	te_demog_ms_youth_share > te_demog_wave_k_youth_share
+	te_demog_wave_unemployment >= te_demog_wave_k_youth_unemployment
+}
+
+# Missing Girls: the capital's sex ratio at birth (phase 2 step 3b: Birth Limit after Microprocessor) at 110 or more.
+te_demog_wave_cond_girls = {
+	te_demog_wave_srb >= te_demog_wave_k_girls_srb
+}
+
+# Bare Branches: the census's men per 100 women aged 20-59 at 110 or more (phase 2 step 4's stored sex balance; §9's
+# "men aged 20-39" is read through it).
+te_demog_wave_cond_branches = {
+	has_variable = te_dg_sex_balance
+	var:te_dg_sex_balance >= te_demog_wave_k_branches
+}
+
+# The Empty Villages: any of its states is a farm state that is old and shrinking.
+te_demog_wave_cond_villages = {
+	any_scope_state = {
+		te_demog_wave_village_state = yes
+	}
+}
+
+# State: a farm state, older than a rich country is today, that lost people over the last year.
+te_demog_wave_village_state = {
+	te_demog_has_census = yes
+	te_demog_wave_farm_share >= te_demog_wave_k_villages_farm
+	has_variable = te_dg_median
+	var:te_dg_median >= te_demog_wave_k_villages_median
+	te_demog_wave_pop_change <= te_demog_wave_k_villages_shrink
+}
+
+# The Overspill: a Primate or Dominant urban pattern whose largest city (the census state with the most urban people) is
+# at Migration Crowding's ceiling: the dispatcher reads the city in its walk and sets the local te_dg_wv_city_crowded, so
+# this is only for te_demog_wave_yearly. The spec's "Metropolis-pattern state" is the per-state metropolitan share (§5.2),
+# which isn't built yet; the national pattern and the city's crowding stand in.
+te_demog_wave_cond_overspill = {
+	has_variable = te_dg_urban_label
+	var:te_dg_urban_label <= 1
+	local_var:te_dg_wv_city_crowded = 1
+}
+
+# State: at Migration Crowding's ceiling or past it.
+te_demog_wave_crowded_city = {
+	has_variable = migration_crowding_mult_applied
+	var:migration_crowding_mult_applied >= te_demog_wave_k_crowding
+}
+
+# The Last Generation?: Biological Immortality is researched.
+te_demog_wave_cond_immortal = {
+	has_technology_researched = biological_immortality
+}
+
+# The Lost Generation: the war dead since the war period began passed a twentieth of the men of fighting age.
+te_demog_wave_cond_lost = {
+	te_demog_wave_war_dead_share >= te_demog_wave_k_lost_share
+}
+
+# The Baby Boom, as a war period ends: it ran two years or more and its dead passed a hundredth of the men of fighting
+# age (mass mobilisation).
+te_demog_wave_cond_boom = {
+	te_demog_wave_war_years >= te_demog_wave_k_boom_years
+	te_demog_wave_war_dead_share >= te_demog_wave_k_boom_dead
+}
+
+# ---- Option gates (THIS = a country) ------------------------------------------------------------------------------
+# A pension position can be chosen now: Old Age Pension, no five-year term running (te_demog_pension_can_change).
+te_demog_wave_pension_free = {
+	te_demog_has_pension_law = yes
+	te_demog_pension_can_change = yes
+}
+
+# The pension position is already the raised one or linked to longevity, so raising it has nothing to give.
+te_demog_wave_pension_raised = {
+	has_variable = te_dg_pension_pos
+	OR = {
+		var:te_dg_pension_pos = te_demog_k_pension_pos_raised
+		var:te_dg_pension_pos = te_demog_k_pension_pos_linked_average
+		var:te_dg_pension_pos = te_demog_k_pension_pos_linked_common
+	}
+}
+
+# The census charges a pension bill now (Full, Old Age Pension, Social Security above 0).
+te_demog_wave_has_pension_bill = {
+	has_variable = te_dg_pension_bill
+	var:te_dg_pension_bill > 0
+}
+
+# The country runs Settlement Authorities that could switch to Planned Towns (the rule on, Modern Urban Planning).
+te_demog_wave_can_plan_towns = {
+	resettlement_system_enabled = yes
+	has_technology_researched = modern_urban_planning
+	any_scope_state = {
+		has_building = building_resettlement_colony
+	}
+}

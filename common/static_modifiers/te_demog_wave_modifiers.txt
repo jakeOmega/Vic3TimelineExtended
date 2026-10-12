@@ -1,0 +1,334 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the event wave (phase 3): the options' modifiers
+# Events: events/te_demog_wave_events.txt (docs/superpowers/specs/2026-10-08-demographics-design.md §9). Every one is
+# granted in its option, so the option's tooltip shows it. Durations are set where they are added: the event
+# frameworks' tiers (normal_modifier_time five years, long_modifier_time ten, very_long_modifier_time twenty).
+# Interest groups' lines are an action's reception (vanilla's 5/10/20 for changing a law), so they sit on the option's
+# own modifier for its duration rather than on the ±5 laws' scale.
+# Two lines set a census type (state_sex_ratio_at_birth_add, state_desired_fertility_mult: script-only, read by the
+# census at each state's step): a release comments them out (scripts/release/comment_out_census_inputs.py, rule 1), so
+# each such modifier keeps a line of its own. The events never fire there (te_demog_wave_runs reads Full).
+# Money: one-offs are add_treasury payments (te_demog_wave_cost_*); the Greying's two running reforms are weekly income
+# (country_tax_income_add = 1 at a share of the pension bill) mirrored in the Budget Breakdown under Pension Reform
+# (scripts/generators/gen_budget_breakdown.py).
+# ============================================================================
+
+# ---- The Demographic Dividend (te_demog_wave.1): good news, three ways to spend it, ten years each -----------------
+te_demog_wave_dividend_schools = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_education_access_add = 0.05
+	country_institution_cost_institution_schools_mult = 0.1
+	interest_group_ig_intelligentsia_approval_add = 2
+}
+
+te_demog_wave_dividend_industry = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_construction_mult = 0.05
+	building_group_bg_manufacturing_throughput_add = 0.03
+	interest_group_ig_industrialists_approval_add = 2
+}
+
+te_demog_wave_dividend_savings = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_loan_interest_rate_mult = -0.15
+	state_tax_capacity_mult = 0.1
+	interest_group_ig_petty_bourgeoisie_approval_add = 2
+}
+
+# ---- The Baby Boom (te_demog_wave.2) ----------------------------------------------------------------------------
+# §9: births +15% for ten years, decaying; applied at multiplier 1 (homes), 1.33333 (+20%, women home) or 0.66667 (+10%,
+# women at work). Under Full the census adds it at its own rate, as any line on the whole state (mod_systems.md §
+# Demographics, "Added on top"), and the newborns enter its ring, so the cohort echoes a generation later.
+te_demog_wave_baby_boom = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_birth_rate_mult = 0.15
+}
+
+# Homes fit for heroes: five years, not decaying (standard of living is a whole number: a decaying +1 does nothing).
+te_demog_wave_boom_homes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_lower_strata_standard_of_living_add = 1
+	interest_group_ig_trade_unions_approval_add = 3
+}
+
+# The women sent home from the wartime factories (decaying, ten years).
+te_demog_wave_boom_women_home = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_working_adult_ratio_add = -0.02
+	state_pop_support_movement_feminist_mult = 0.1
+	interest_group_ig_devout_approval_add = 3
+	interest_group_ig_industrialists_approval_add = -2
+}
+
+# The women kept at the lathes (decaying, ten years). A flat working-adult line stands for women's work, which the
+# census leaves on top (design rule 3).
+te_demog_wave_boom_women_work = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_working_adult_ratio_add = 0.02
+	interest_group_ig_industrialists_approval_add = 3
+	interest_group_ig_devout_approval_add = -3
+}
+
+# ---- The Lost Generation (te_demog_wave.3): a harm menu ---------------------------------------------------------
+# Three harms, each option spares one and pays its own cost (the catastrophe events' shape). No positive field.
+te_demog_wave_lost_mourning = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_legitimacy_base_add = -5
+	state_radicals_from_political_movements_mult = 0.1
+}
+
+te_demog_wave_lost_workbenches = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_throughput_add = -0.03
+}
+
+# Five years, not decaying (a decaying -1 standard of living does nothing).
+te_demog_wave_lost_widows = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_lower_strata_standard_of_living_add = -1
+	state_birth_rate_mult = -0.05
+}
+
+te_demog_wave_lost_women_work = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_ig_devout_approval_add = -3
+	interest_group_ig_landowners_approval_add = -2
+}
+
+# ---- The Greying of the Nation (te_demog_wave.4) ---------------------------------------------------------------
+# Cut benefits: pensioners poorer, ten years, not decaying; the savings on te_demog_wave_pension_cut_income.
+te_demog_wave_pension_cut = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_lower_strata_standard_of_living_add = -1
+	interest_group_ig_trade_unions_approval_add = -5
+	interest_group_ig_rural_folk_approval_add = -2
+}
+
+# Applied with multiplier = a fifth of the weekly pension bill (te_demog_wave_pension_cut_flow).
+te_demog_wave_pension_cut_income = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tax_income_add = 1
+	country_te_budget_income_pension_reform_add = 1
+}
+
+# Raise contributions: employers and workers pay more, ten years; the income on te_demog_wave_contributions_income.
+te_demog_wave_contributions = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	interest_group_ig_industrialists_approval_add = -3
+	interest_group_ig_trade_unions_approval_add = -2
+}
+
+# Applied with multiplier = a seventh of the weekly pension bill (te_demog_wave_contributions_flow).
+te_demog_wave_contributions_income = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tax_income_add = 1
+	country_te_budget_income_pension_reform_add = 1
+}
+
+# Open the borders: workers from abroad for the empty places (ten years, decaying), and a nativist reaction.
+te_demog_wave_open_borders = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_mass_migration_attraction_mult = 0.25
+	state_migration_pull_mult = 0.1
+	state_pop_support_movement_cultural_majority_mult = 0.1
+	interest_group_ig_industrialists_approval_add = 2
+}
+
+# Keep the promise: the pension stands as it is (five years, decaying).
+te_demog_wave_pension_kept = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ig_trade_unions_approval_add = 2
+}
+
+# With no pension law: almshouses and hospices for the old, run by the health system (ten years): fewer deaths, a dearer
+# Ministry of Health. Under Full the census applies the mortality line at its own rate.
+te_demog_wave_almshouses = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_mortality_mult = -0.03
+	country_institution_cost_institution_health_system_mult = 0.1
+}
+
+# With no pension law: the old live with their children, and their daughters stay home to care for them (ten years).
+te_demog_wave_family_care = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_working_adult_ratio_add = -0.01
+	interest_group_ig_devout_approval_add = 2
+}
+
+# ---- The Youth Bulge (te_demog_wave.5): five years each ---------------------------------------------------------
+te_demog_wave_youth_works = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_radicals_from_political_movements_mult = -0.1
+	state_construction_mult = 0.05
+	interest_group_ig_trade_unions_approval_add = 3
+}
+
+te_demog_wave_youth_service = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	state_conscription_rate_mult = 0.2
+	state_radicals_from_political_movements_mult = -0.1
+	interest_group_ig_armed_forces_approval_add = 3
+	interest_group_ig_intelligentsia_approval_add = -2
+}
+
+te_demog_wave_youth_emigration = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_quota_mult = 0.25
+	state_radicals_from_political_movements_mult = -0.05
+	country_prestige_mult = -0.05
+}
+
+# Left to themselves: the youth bulge's own effects at full (phase 2 step 4's sizes; decaying).
+te_demog_wave_youth_idle = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_radicals_from_political_movements_mult = 0.15
+	state_turmoil_effects_mult = 0.1
+}
+
+# ---- Missing Girls (te_demog_wave.6) ------------------------------------------------------------------------------
+# The ban on prenatal sex selection: five fewer boys per 100 girls for twenty years, the census's own type (phase 2 step
+# 3b: the newborn split reads it at each state's step, floored at the natural ratio).
+te_demog_wave_srb_ban = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_sex_ratio_at_birth_add = -5
+	interest_group_ig_intelligentsia_approval_add = 1
+}
+
+# Its enforcement: inspectors in the clinics for five years.
+te_demog_wave_srb_ban_enforcement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -25
+}
+
+# Payments to families who raise daughters: three fewer boys per 100 girls for twenty years.
+te_demog_wave_srb_daughters = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_sex_ratio_at_birth_add = -3
+	interest_group_ig_rural_folk_approval_add = 1
+}
+
+# Looking away (ten years, decaying).
+te_demog_wave_srb_ignored = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_pop_support_movement_feminist_mult = 0.1
+	interest_group_ig_intelligentsia_approval_add = -2
+}
+
+# ---- Bare Branches (te_demog_wave.7) ----------------------------------------------------------------------------
+te_demog_wave_branches_brides = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_migration_pull_mult = 0.1
+	interest_group_ig_devout_approval_add = 2
+}
+
+te_demog_wave_branches_service = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	state_conscription_rate_mult = 0.15
+	state_radicals_from_political_movements_mult = -0.05
+	interest_group_ig_armed_forces_approval_add = 3
+	interest_group_ig_intelligentsia_approval_add = -2
+}
+
+te_demog_wave_branches_police = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_turmoil_effects_mult = -0.1
+	country_authority_add = -25
+	interest_group_ig_intelligentsia_approval_add = -2
+}
+
+# The more-men effect the census holds back (phase 2 step 4: radicals +10% at 150 men per 100 women), ten years,
+# decaying.
+te_demog_wave_branches_idle = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_radicals_from_political_movements_mult = 0.1
+}
+
+# ---- The Empty Villages (te_demog_wave.8): a harm menu, on the village state ------------------------------------
+# Three harms (state modifiers, ten years, decaying); each option spares one and pays its own cost. No positive field.
+te_demog_wave_villages_fields = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.1
+}
+
+te_demog_wave_villages_services = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_infrastructure_mult = -0.1
+	state_education_access_add = -0.05
+}
+
+te_demog_wave_villages_alone = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	state_mortality_mult = 0.05
+}
+
+# Keeping the school and the clinic open: five years of authority (a country modifier).
+te_demog_wave_villages_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_add = -25
+}
+
+# The old moved into the market town: the countryside resents it (a country modifier, five years, decaying).
+te_demog_wave_villages_moved = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_ig_rural_folk_approval_add = -3
+}
+
+# ---- The Overspill (te_demog_wave.9): on the largest city --------------------------------------------------------
+# New towns draw the newcomers away from the city (ten years, decaying).
+te_demog_wave_overspill_new_towns = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_migration_pull_mult = -0.15
+	state_construction_mult = 0.05
+}
+
+# A green belt: a better city to live in, which fills sooner and builds slower (twenty years, not decaying).
+te_demog_wave_overspill_green_belt = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_standard_of_living_add = 1
+	state_migration_crowding_density_mult = -0.1
+	state_construction_mult = -0.1
+}
+
+te_demog_wave_overspill_green_belt_politics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ig_landowners_approval_add = 2
+	interest_group_ig_trade_unions_approval_add = -2
+}
+
+# Sprawl: the city takes everyone, on worse terms (twenty years, not decaying).
+te_demog_wave_overspill_sprawl = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_migration_crowding_density_mult = 0.2
+	state_infrastructure_mult = -0.1
+	state_mortality_mult = 0.05
+}
+
+te_demog_wave_overspill_sprawl_politics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ig_industrialists_approval_add = 2
+}
+
+# ---- The Last Generation? (te_demog_wave.10): twenty years each --------------------------------------------------
+# Birth licences: a child for each death. Desired family size -30% (the census's type), the licensing bureaucracy's
+# authority, and the churches and universities against it.
+te_demog_wave_immortal_licences = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_desired_fertility_mult = -0.3
+	country_authority_add = -50
+	interest_group_ig_devout_approval_add = -3
+	interest_group_ig_intelligentsia_approval_add = -2
+}
+
+# Children remain a right: no limit, the churches and the countryside content.
+te_demog_wave_immortal_right = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ig_devout_approval_add = 2
+	interest_group_ig_rural_folk_approval_add = 2
+}
+
+# Paying for the next generation: desired family size +10% (the census's type).
+te_demog_wave_immortal_heirs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_desired_fertility_mult = 0.1
+	interest_group_ig_trade_unions_approval_add = 2
+}

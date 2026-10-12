@@ -55,6 +55,7 @@ SOURCES = {
         "reserve": ("Strategic Reserve Sales", ("st_res_sell_profit_modifier",)),
         "war_tax": ("War Profit Tax", ("war_profit_tax_modifier",)),
         "tax_code": ("Spectrum Auctions", ("te_tax_spectrum_auction_proceeds",)),
+        "pension_reform": ("Pension Reform", ("te_demog_wave_pension_cut_income", "te_demog_wave_contributions_income")),
     },
 }
 

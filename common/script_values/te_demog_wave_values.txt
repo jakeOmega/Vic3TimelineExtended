@@ -1,0 +1,334 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the event wave (phase 3): figures and thresholds
+# Spec: docs/superpowers/specs/2026-10-08-demographics-design.md §9 (the candidates and their triggers). Events:
+# events/te_demog_wave_events.txt; triggers: te_demog_wave_triggers.txt; the dispatcher: te_demog_wave_effects.txt.
+# Every figure here is the census's, stored at its yearly count (Full and Display only); the events fire under Full
+# only. The thresholds are pinned to scripts/analysis/demographics_wave.py (test_demographics_wave.py), which fits and
+# reports them against the model and the plain-text saves (`demographics_harness.py events`).
+# ============================================================================
+
+# ---- Thresholds ---------------------------------------------------------------------------------------------------
+# The Demographic Dividend: the working-age share (15-64, te_dg_working_share) 10% above the reference structure's,
+# the 1836 agrarian stable population's 0.566 (design rule 5: effects are deviations from the 1836 equilibrium).
+te_demog_wave_k_dividend_ref = { value = 0.566 }
+te_demog_wave_k_dividend_bar = { value = 0.623 }
+# The Greying of the Nation (§9 "65+ passes 20%", read through the pension age or the old-age threshold, late-game
+# §2.2): under Old Age Pension the pensioners, the people past the pension age, at a fifth of the people; without one,
+# the people past the old-age threshold (the age with fifteen years left) at the share they hold when 65+ passes a
+# fifth in a fast transition's ageing (demographics_wave.greying_old_bar: 0.144, so 0.14).
+te_demog_wave_k_greying_pensioners = { value = 0.2 }
+te_demog_wave_k_greying_old = { value = 0.14 }
+# The Youth Bulge: more than a fifth of the people aged 20-29 while a tenth of the workforce has no work (half of the
+# youth bulge's full unemployment, phase 2 step 4).
+te_demog_wave_k_youth_share = { value = 0.2 }
+te_demog_wave_k_youth_unemployment = { value = 0.1 }
+# Missing Girls: 110 boys born per 100 girls or more (the natural 105 plus Birth Limit's 5; one child's 10 gives 115).
+te_demog_wave_k_girls_srb = { value = 110 }
+# Bare Branches: 110 men per 100 women aged 20-59 or more (te_dg_sex_balance, the census's stored figure).
+te_demog_wave_k_branches = { value = 110 }
+# The Empty Villages: a farm state (a quarter or more of its people Peasants or Farmers) older than a rich country is
+# today (median age 40 or more) that lost half a percent of its people or more over the last year.
+te_demog_wave_k_villages_farm = { value = 0.25 }
+te_demog_wave_k_villages_median = { value = 40 }
+te_demog_wave_k_villages_shrink = { value = -0.005 }
+# The Overspill: the largest city at Migration Crowding's ceiling (the multiplier 4.5 at ten times the reference
+# density, migration pull -45%: te_demog_ms_crowded_share's line).
+te_demog_wave_k_crowding = { value = 4.5 }
+# The Lost Generation: the war dead since a war began, nineteen in twenty of them men, at a twentieth of the men of
+# fighting age when it began (the conscription pool, te_dg_fam: calendar 20 or more, biological 39 or less).
+te_demog_wave_k_lost_share = { value = 0.05 }
+te_demog_wave_k_war_men = { value = 0.95 }
+# The Baby Boom: a war of two years or more that killed a hundredth of the men of fighting age (mass mobilisation) ends.
+te_demog_wave_k_boom_years = { value = 2 }
+te_demog_wave_k_boom_dead = { value = 0.01 }
+
+# ---- Country figures (THIS = a country) ---------------------------------------------------------------------------
+# The working-age share, 15-64 (0 with no census).
+te_demog_wave_working_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_working_share }
+		value = var:te_dg_working_share
+	}
+}
+
+# The share of the people past the old-age threshold (te_dg_old_age, the people-weighted age with fifteen years of life
+# left; never under 40, OLD_AGE_FROM): each five-year band from 40-44 counts the part of it past the threshold, people
+# spread evenly through the band, and 85 and over counts as 85-89 (demographics_wave.old_past_share is the twin).
+te_demog_wave_old_past_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_cbm0
+			has_variable = te_dg_old_age
+		}
+		add = { value = var:te_dg_cbf8 add = var:te_dg_cbm8 multiply = { value = 45 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf9 add = var:te_dg_cbm9 multiply = { value = 50 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf10 add = var:te_dg_cbm10 multiply = { value = 55 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf11 add = var:te_dg_cbm11 multiply = { value = 60 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf12 add = var:te_dg_cbm12 multiply = { value = 65 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf13 add = var:te_dg_cbm13 multiply = { value = 70 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf14 add = var:te_dg_cbm14 multiply = { value = 75 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf15 add = var:te_dg_cbm15 multiply = { value = 80 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf16 add = var:te_dg_cbm16 multiply = { value = 85 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		add = { value = var:te_dg_cbf17 add = var:te_dg_cbm17 multiply = { value = 90 subtract = var:te_dg_old_age divide = 5 min = 0 max = 1 } }
+		divide = { value = te_demog_country_people min = 1 }
+	}
+}
+
+# The Greying's figure: the pensioners' share under Old Age Pension, otherwise the share past the old-age threshold.
+te_demog_wave_greying_share = {
+	value = te_demog_wave_old_past_share
+	if = {
+		limit = {
+			te_demog_has_pension_law = yes
+			has_variable = te_dg_pensioners
+		}
+		value = var:te_dg_pensioners
+	}
+}
+
+# Its threshold, by the same switch.
+te_demog_wave_greying_bar = {
+	value = te_demog_wave_k_greying_old
+	if = {
+		limit = {
+			te_demog_has_pension_law = yes
+			has_variable = te_dg_pensioners
+		}
+		value = te_demog_wave_k_greying_pensioners
+	}
+}
+
+# Unemployment over the country's states, by people, through the census's state read (te_demog_unemployment), so the
+# self-check unemployment_rate_read's fallback (a percentage: divide by 100 there) reaches this too.
+te_demog_wave_unemployment = {
+	value = 0
+	every_scope_state = {
+		add = {
+			value = te_demog_unemployment
+			multiply = state_population
+		}
+	}
+	divide = { value = total_population min = 1 }
+}
+
+# Boys born per 100 girls in the capital's census (the natural 105 plus the sex ratio's add in force, which needs
+# Microprocessor: te_demog_srb_add). Family Policy's lines are on country modifiers, so every state reads the same.
+te_demog_wave_srb = {
+	value = te_demog_k_srb_base
+	every_scope_state = {
+		limit = {
+			is_capital = yes
+			te_demog_has_census = yes
+		}
+		add = te_demog_srb_add
+	}
+}
+
+# The men of fighting age in the census states (the conscription pool, te_dg_fam), people.
+te_demog_wave_fam_men = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			has_variable = te_dg_fam
+		}
+		add = var:te_dg_fam
+	}
+}
+
+# The war period the monthly tracker follows (te_demog_wave_war_monthly): its years so far, and its dead (men) over the
+# men of fighting age when it began. 0 with no period, or before the pool was counted.
+te_demog_wave_war_years = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wv_war_from }
+		value = te_demog_ms_now
+		subtract = var:te_dg_wv_war_from
+	}
+}
+
+te_demog_wave_war_dead_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_wv_war_dead
+			has_variable = te_dg_wv_war_men
+			var:te_dg_wv_war_men > 0
+		}
+		value = var:te_dg_wv_war_dead
+		multiply = te_demog_wave_k_war_men
+		divide = var:te_dg_wv_war_men
+	}
+}
+
+# ---- State figures (THIS = a state) -------------------------------------------------------------------------------
+# The census's urban people (people not at a rural workplace), for the largest city.
+te_demog_wave_urban_people = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_urban }
+		value = var:te_dg_urban
+	}
+}
+
+# The population's change over the last year, as a share: the yearly walk against the one before (both kept in every
+# game). 0 without a year to compare.
+te_demog_wave_pop_change = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+			var:te_dg_walk_pop_prev > 0
+		}
+		value = var:te_dg_walk_pop
+		subtract = var:te_dg_walk_pop_prev
+		divide = var:te_dg_walk_pop_prev
+	}
+}
+
+# How empty a village state is, for the event's pick: its median age, plus a year for each point of the people it lost.
+te_demog_wave_village_score = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_median }
+		value = var:te_dg_median
+		subtract = {
+			value = te_demog_wave_pop_change
+			multiply = 100
+		}
+	}
+}
+
+# The state's farm share (Peasants and Farmers), for the event's fallback pick on the console.
+te_demog_wave_farm_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_agr_share }
+		value = var:te_dg_agr_share
+	}
+}
+
+# ---- Costs (THIS = a country) -------------------------------------------------------------------------------------
+# One-off payments, a share of the yearly gross income (the resettlement events' and Grand Monuments' convention; the
+# budget's weekly lines don't list them).
+te_demog_wave_cost_small = {
+	value = yearly_gross_income
+	multiply = -0.02
+}
+te_demog_wave_cost_medium = {
+	value = yearly_gross_income
+	multiply = -0.05
+}
+te_demog_wave_cost_large = {
+	value = yearly_gross_income
+	multiply = -0.1
+}
+
+# The Greying's two pension reforms: weekly income at a share of the census's pension bill in force (te_dg_pension_bill,
+# weekly), fixed when the reform is chosen. Cut benefits: a fifth of the bill; raise contributions: a seventh.
+te_demog_wave_pension_cut_flow = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pension_bill }
+		value = var:te_dg_pension_bill
+		multiply = 0.2
+	}
+}
+te_demog_wave_contributions_flow = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_pension_bill }
+		value = var:te_dg_pension_bill
+		divide = 7
+	}
+}
+
+# ---- The self-check wave_timed_country_type (te_debug_demog_wave_selfcheck_start, te_debug_demog.81) ----------------
+# Country: the Family Policy measures' own sex-ratio lines on it (Birth Limit +5, at one child +10:
+# te_demog_measure_modifiers.txt; test_demographics_wave.py pins them), so a measure switched inside the check's week
+# moves the expected change with it.
+te_demog_wave_chk_measure_lines_srb = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_ms_birth_limit }
+		add = 5
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_birth_limit_one }
+		add = 10
+	}
+}
+
+# State (the capital, in te_debug_demog.81): the change it should show, the option's line plus the owner's measures'
+# change since the start, by the check's code.
+te_demog_wave_chk_expected = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_wv_chk_line
+			exists = owner
+		}
+		value = var:te_dg_wv_chk_line
+		subtract = var:te_dg_wv_chk_m0
+		if = {
+			limit = { var:te_dg_wv_chk_code = 2 }
+			add = owner.te_demog_ms_desired_on
+		}
+		else = {
+			add = owner.te_demog_wave_chk_measure_lines_srb
+		}
+	}
+}
+
+# State: the change it showed, by the check's code.
+te_demog_wave_chk_added = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wv_chk_before }
+		value = modifier:state_sex_ratio_at_birth_add
+		if = {
+			limit = { var:te_dg_wv_chk_code = 2 }
+			value = modifier:state_desired_fertility_mult
+		}
+		subtract = var:te_dg_wv_chk_before
+	}
+}
+
+# ---- Figures the events' descriptions show ------------------------------------------------------------------------
+# Country: the old-age threshold (te_dg_old_age), men per 100 women aged 20-59, the largest city's share of the urban
+# people.
+te_demog_wave_old_age = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_old_age }
+		value = var:te_dg_old_age
+	}
+}
+
+te_demog_wave_sex_balance = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sex_balance }
+		value = var:te_dg_sex_balance
+	}
+}
+
+te_demog_wave_primacy = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_primacy }
+		value = var:te_dg_primacy
+	}
+}
+
+# State: the census's median age.
+te_demog_wave_median = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_median }
+		value = var:te_dg_median
+	}
+}
