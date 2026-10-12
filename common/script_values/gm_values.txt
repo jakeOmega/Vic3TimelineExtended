@@ -71,7 +71,6 @@ gm_step_legitimacy = 2
 gm_step_ig = 1
 gm_step_teardown = 3
 gm_step_vanity = -1
-gm_step_promise = 1
 gm_step_tourism = 0.25
 gm_step_culture = 1
 
@@ -880,16 +879,6 @@ gm_display_vanity = {
 	}
 }
 
-# A Promise Kept (v2 §2.4): the promise ledger, linear.
-gm_display_promise = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_promise_ledger }
-		value = var:gm_promise_ledger
-		multiply = gm_step_promise
-	}
-}
-
 # ---- Journal entry overview and bars (display only, country scope) -------------
 # Read by gui/journal_entry_widgets/grand_monuments_widget.gui every frame the
 # entry is open; nothing in script reads them. Every var: read is guarded (a
@@ -1045,10 +1034,8 @@ gm_disp_national_any = {
 					has_variable = gm_vanity_ledger
 					NOT = { var:gm_vanity_ledger = 0 }
 				}
-				AND = {
-					has_variable = gm_promise_ledger
-					NOT = { var:gm_promise_ledger = 0 }
-				}
+				# An opportunity's boon (gm_boons_idle, gm_commission_triggers.txt).
+				gm_boons_idle = no
 				AND = {
 					has_variable = gm_s_ig_armed_forces
 					NOT = { var:gm_s_ig_armed_forces = 0 }

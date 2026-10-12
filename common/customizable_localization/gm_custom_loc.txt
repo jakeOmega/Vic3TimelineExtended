@@ -1364,6 +1364,30 @@ gm_monument_name_row = {
 		}
 		localization_key = gm_name_space_moon_landing_row
 	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_base
+		}
+		localization_key = gm_name_space_moon_base_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_name_space_mars_landing_row
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_name_space_interstellar_probe_row
+	}
 	# A landmark's historical name (phase 4 §4): the skin's, never a year.
 	text = {
 		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
@@ -1456,6 +1480,30 @@ gm_monument_name_evt = {
 		}
 		localization_key = gm_name_space_moon_landing_evt
 	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_moon_base
+		}
+		localization_key = gm_name_space_moon_base_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_name_space_mars_landing_evt
+	}
+	text = {
+		trigger = {
+			gm_state_namesake_is = { NAMESAKE = occasion }
+			has_variable = gm_name_occasion
+			var:gm_name_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_name_space_interstellar_probe_evt
+	}
 	# A landmark's historical name (phase 4 §4): the skin's, never a year.
 	text = {
 		trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
@@ -1472,8 +1520,9 @@ gm_monument_name_evt = {
 }
 
 # ============================================================================
-# Commissions (v2 §2): country scope, plain-text targets (the JE's Commission
-# section and the offer event read them through the country)
+# Opportunities (opportunities spec, v2 §2's commissions reworked): country
+# scope, plain-text targets (the JE's Opportunity section and the offer event
+# read them through the country)
 # ============================================================================
 gm_com_ig_name = {
 	type = country
@@ -1599,6 +1648,14 @@ gm_com_form_phrase = {
 		localization_key = gm_com_form_mausoleum
 	}
 	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:statue }
+		localization_key = gm_com_form_statue
+	}
+	text = {
+		trigger = { has_variable = gm_com_form var:gm_com_form = flag:hall }
+		localization_key = gm_com_form_hall
+	}
+	text = {
 		localization_key = gm_com_form_default
 	}
 }
@@ -1654,8 +1711,48 @@ gm_com_namesake_phrase = {
 		localization_key = gm_com_named_space_moon_landing
 	}
 	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_base
+		}
+		localization_key = gm_com_named_space_moon_base
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_com_named_space_mars_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:occasion
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_com_named_space_interstellar_probe
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_namesake
+			var:gm_com_namesake = flag:ruler
+			has_variable = gm_com_source
+			var:gm_com_source = flag:reign
+		}
+		localization_key = gm_com_named_new_ruler
+	}
+	text = {
 		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:ruler }
 		localization_key = gm_com_named_ruler
+	}
+	text = {
+		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:honours }
+		localization_key = gm_com_named_honours
 	}
 	text = {
 		trigger = { has_variable = gm_com_namesake var:gm_com_namesake = flag:year }
@@ -1667,6 +1764,247 @@ gm_com_namesake_phrase = {
 	}
 	text = {
 		localization_key = gm_com_named_city
+	}
+}
+
+# The moment that brought the opportunity: the offer's title and the JE's
+# Opportunity section. A technology's is the technology's own name. A save's
+# petition, from before the rework, reads "A Petition".
+gm_com_occasion_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:reign }
+		localization_key = gm_com_occasion_reign
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:regime }
+		localization_key = gm_com_occasion_regime
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:great_power }
+		localization_key = gm_com_occasion_great_power
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:victory }
+		localization_key = gm_com_occasion_victory
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:defeat }
+		localization_key = gm_com_occasion_defeat
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:centenary }
+		localization_key = gm_com_occasion_centenary
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:ruler_death }
+		localization_key = gm_com_occasion_ruler_death
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_orbital
+		}
+		localization_key = gm_com_occasion_space_orbital
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_landing
+		}
+		localization_key = gm_com_occasion_space_moon_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_moon_base
+		}
+		localization_key = gm_com_occasion_space_moon_base
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_mars_landing
+		}
+		localization_key = gm_com_occasion_space_mars_landing
+	}
+	text = {
+		trigger = {
+			has_variable = gm_com_source
+			var:gm_com_source = flag:space
+			has_variable = gm_com_occasion
+			var:gm_com_occasion = flag:space_interstellar_probe
+		}
+		localization_key = gm_com_occasion_space_interstellar_probe
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
+		localization_key = gm_com_occasion_faith
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_artistic }
+		localization_key = romanticism
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_scientific }
+		localization_key = empiricism
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_industrial }
+		localization_key = marketing_research
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_athletic }
+		localization_key = television_broadcasting
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
+		localization_key = environmental_movement
+	}
+	text = {
+		localization_key = gm_com_occasion_petition
+	}
+}
+
+# The boon completing the open opportunity brings (opportunities spec §3.2):
+# its name, the modifier's own, and what it does. None for a save's petition.
+gm_com_boon_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:reign }
+		localization_key = gm_boon_reign
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:regime }
+		localization_key = gm_boon_regime
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:great_power }
+		localization_key = gm_boon_great_power
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:victory }
+		localization_key = gm_boon_victory
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:defeat }
+		localization_key = gm_boon_defeat
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:centenary }
+		localization_key = gm_boon_centenary
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:ruler_death }
+		localization_key = gm_boon_ruler_death
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:space }
+		localization_key = gm_boon_space
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
+		localization_key = gm_boon_faith
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_artistic }
+		localization_key = gm_boon_tech_artistic
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_scientific }
+		localization_key = gm_boon_tech_scientific
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_industrial }
+		localization_key = gm_boon_tech_industrial
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_athletic }
+		localization_key = gm_boon_tech_athletic
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
+		localization_key = gm_boon_tech_naturalist
+	}
+	text = {
+		localization_key = gm_boon_none
+	}
+}
+
+gm_com_boon_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:reign }
+		localization_key = gm_boon_reign_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:regime }
+		localization_key = gm_boon_regime_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:great_power }
+		localization_key = gm_boon_great_power_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:victory }
+		localization_key = gm_boon_victory_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:defeat }
+		localization_key = gm_boon_defeat_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:centenary }
+		localization_key = gm_boon_centenary_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:ruler_death }
+		localization_key = gm_boon_ruler_death_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:space }
+		localization_key = gm_boon_space_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:faith }
+		localization_key = gm_boon_faith_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_artistic }
+		localization_key = gm_boon_tech_artistic_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_scientific }
+		localization_key = gm_boon_tech_scientific_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_industrial }
+		localization_key = gm_boon_tech_industrial_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_athletic }
+		localization_key = gm_boon_tech_athletic_effect
+	}
+	text = {
+		trigger = { has_variable = gm_com_source var:gm_com_source = flag:tech_naturalist }
+		localization_key = gm_boon_tech_naturalist_effect
+	}
+	text = {
+		localization_key = gm_boon_none_effect
 	}
 }
 
@@ -1729,8 +2067,8 @@ gm_policy_effects = {
 	}
 }
 
-# The commission's time in words for the offer (gm_com_time_months): five years
-# for a great power, ten for a major power.
+# The opportunity's time in words for the offer (gm_com_time_months): five
+# years for a great power, ten for a major power, fifteen for any other.
 gm_com_time_words = {
 	type = country
 	random_valid = no
@@ -1740,6 +2078,10 @@ gm_com_time_words = {
 		localization_key = gm_com_time_5_years
 	}
 	text = {
+		trigger = { country_rank >= rank_value:major_power }
 		localization_key = gm_com_time_10_years
+	}
+	text = {
+		localization_key = gm_com_time_15_years
 	}
 }

@@ -122,6 +122,11 @@ halves exactly up to level 400 and caps above it, as now. If observer runs show 
 
 ## 2. Commissions (phase 2)
 
+**Reworked (2026-10-12)** by `2026-10-12-grand-monument-opportunities-design.md`: commissions became opportunities,
+with no cost for letting one pass or running out, every one from a moment the player sees (no petition roll), and
+completion paying a free rebuild five levels taller, the approval below and a ten-year boon instead of the promise
+ledger. §2.1's record, §2.3's progress rule and §2.6's AI stand.
+
 ### 2.1 What a commission is
 
 A request from an interest group to raise a monument. One record per country, held in country variables:

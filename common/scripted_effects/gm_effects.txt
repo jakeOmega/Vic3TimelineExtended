@@ -326,6 +326,9 @@ gm_clear_state = {
 	gm_remove_state_var = { VAR = gm_unveil_pending }
 	gm_remove_state_var = { VAR = gm_name_choice_open }
 	gm_remove_state_var = { VAR = gm_being_named }
+	# An opportunity's gift (gm_commission_effects.txt).
+	gm_remove_state_var = { VAR = gm_gift }
+	gm_remove_state_var = { VAR = gm_restore_pm }
 	set_variable = { name = gm_local_steps value = 0 }
 	set_variable = { name = gm_local_tourism_steps value = 0 }
 }
@@ -336,6 +339,8 @@ gm_clear_state = {
 # the curve over this monument's own level.
 gm_state_monthly = {
 	gm_remove_local_modifiers = yes
+	# A gifted monument's dedication back (opportunities spec §3.1).
+	gm_state_restore_dedication = yes
 	if = {
 		limit = { has_building = building_grand_monument }
 		# Last known level, read if the building disappears before the next pulse.
@@ -449,7 +454,6 @@ gm_init_ledgers = {
 	gm_init_ledger = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_init_ledger = { VAR = gm_ig_ledger_rural_folk }
 	gm_init_ledger = { VAR = gm_ig_ledger_trade_unions }
-	gm_init_ledger = { VAR = gm_promise_ledger }
 }
 
 # Country scope. Zero every ledger (never remove: they back multipliers).
@@ -466,7 +470,6 @@ gm_zero_ledgers = {
 	set_variable = { name = gm_ig_ledger_petty_bourgeoisie value = 0 }
 	set_variable = { name = gm_ig_ledger_rural_folk value = 0 }
 	set_variable = { name = gm_ig_ledger_trade_unions value = 0 }
-	set_variable = { name = gm_promise_ledger value = 0 }
 }
 
 gm_decay = {
@@ -492,7 +495,6 @@ gm_decay_ledgers = {
 	gm_decay = { VAR = gm_ig_ledger_petty_bourgeoisie RATE = 0.97 }
 	gm_decay = { VAR = gm_ig_ledger_rural_folk RATE = 0.97 }
 	gm_decay = { VAR = gm_ig_ledger_trade_unions RATE = 0.97 }
-	gm_decay = { VAR = gm_promise_ledger RATE = 0.97 }
 }
 
 # ---- The national refresh (§2.4) ---------------------------------------------
@@ -530,6 +532,8 @@ gm_country_refresh = {
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
+		# A gifted monument's dedication back first (opportunities spec §3.1).
+		gm_state_restore_dedication = yes
 		set_variable = { name = gm_grandeur value = gm_state_grandeur }
 		# A new monument copies its siblings' dedication: the ceremony
 		# replaces it.
@@ -544,7 +548,13 @@ gm_country_refresh = {
 			gm_state_unveil = yes
 		}
 		gm_state_name_if_unnamed = yes
-		gm_state_update_picture = yes
+		# Not while a gifted monument's method may still read as another's.
+		if = {
+			limit = {
+				NOT = { has_variable = gm_restore_pm }
+			}
+			gm_state_update_picture = yes
+		}
 		# A ceremony a finished level's hook missed.
 		gm_state_offer_missed_ceremony = yes
 		owner = {
@@ -553,7 +563,7 @@ gm_country_refresh = {
 	}
 	gm_set_opposition_ig = yes
 	gm_check_contests = yes
-	# A commission met by this level, dedication or month (v2 §2.3): before the
+	# An opportunity completed by this level, dedication or month: before the
 	# totals, so its rewards count in this refresh.
 	gm_com_check_progress = yes
 	gm_compute_totals = yes
@@ -566,8 +576,10 @@ gm_country_refresh = {
 gm_country_monthly = {
 	gm_init_ledgers = yes
 	gm_decay_ledgers = yes
-	# The open commission's month (v2 §2.3): met, lapsed, missed or extended
-	# before the refresh, which then counts its rewards.
+	# A month off every opportunity boon (gm_commission_effects.txt).
+	gm_tick_boons = yes
+	# The open opportunity's month: completed, lapsed or run out before the
+	# refresh, which then counts its rewards.
 	gm_com_check_progress = yes
 	gm_com_monthly = yes
 	gm_country_refresh = yes
@@ -737,7 +749,7 @@ gm_apply_national_modifiers = {
 		gm_add_national = { NAME = gm_national_industrial VAR = gm_s_industrial }
 		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
 		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
-		gm_add_national = { NAME = gm_national_promise VAR = gm_promise_ledger }
+		gm_add_boons = yes
 		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
 		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
 		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
@@ -761,7 +773,9 @@ gm_remove_national_modifiers = {
 	remove_modifier = gm_national_industrial
 	remove_modifier = gm_national_teardown
 	remove_modifier = gm_national_vanity
+	# v2's commission reward: nothing adds it now, but a save may carry it.
 	remove_modifier = gm_national_promise
+	gm_remove_boons = yes
 	remove_modifier = gm_ig_approval_armed_forces
 	remove_modifier = gm_ig_approval_devout
 	remove_modifier = gm_ig_approval_industrialists
@@ -810,6 +824,9 @@ gm_check_contests = {
 				# A copy the ceremony is replacing has no records yet, and
 				# would read as not fitting.
 				NOT = { has_variable = gm_ceremony_pending }
+				# A gifted monument whose rebuilt method may still be the
+				# engine's copy of another dedication (opportunities spec §3.1).
+				NOT = { has_variable = gm_restore_pm }
 			}
 			if = {
 				limit = {
@@ -1143,6 +1160,9 @@ gm_state_start_ceremony = {
 	if = {
 		limit = {
 			NOT = { has_variable = gm_ceremony_pending }
+			# A gifted monument is dedicated: a method that reads as
+			# Undedicated is the rebuild's, until it is put back.
+			NOT = { has_variable = gm_restore_pm }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
 		set_variable = { name = gm_ceremony_level value = gm_state_grandeur }
@@ -1499,5 +1519,5 @@ gm_debug_log = {
 	debug_log = "TE_MONUMENTS: standing grandeur [SCOPE.ScriptValue('gm_display_g_standing')|0], prestige +[SCOPE.ScriptValue('gm_display_prestige')|1]; regime grandeur [SCOPE.ScriptValue('gm_display_g_regime')|0], legitimacy +[SCOPE.ScriptValue('gm_display_legitimacy')|1]; cultural pull +[SCOPE.ScriptValue('gm_display_culture')|1]"
 	debug_log = "TE_MONUMENTS: teardown legitimacy +[SCOPE.ScriptValue('gm_display_teardown')|1], vanity legitimacy [SCOPE.ScriptValue('gm_display_vanity')|1]"
 	debug_log = "TE_MONUMENTS: IG approval AF [SCOPE.ScriptValue('gm_display_ig_armed_forces')|1] DV [SCOPE.ScriptValue('gm_display_ig_devout')|1] IN [SCOPE.ScriptValue('gm_display_ig_industrialists')|1] IT [SCOPE.ScriptValue('gm_display_ig_intelligentsia')|1] LO [SCOPE.ScriptValue('gm_display_ig_landowners')|1] PB [SCOPE.ScriptValue('gm_display_ig_petty_bourgeoisie')|1] RF [SCOPE.ScriptValue('gm_display_ig_rural_folk')|1] TU [SCOPE.ScriptValue('gm_display_ig_trade_unions')|1]"
-	debug_log = "TE_MONUMENTS: commission open [SCOPE.ScriptValue('gm_disp_com_open')|0], grandeur added [SCOPE.ScriptValue('gm_disp_com_progress')|0] of [SCOPE.ScriptValue('gm_disp_com_target')|0], months left [SCOPE.ScriptValue('gm_disp_com_months')|0], extended [SCOPE.ScriptValue('gm_disp_com_extended')|0], fixed state [SCOPE.ScriptValue('gm_disp_com_fixed')|0]; promise legitimacy +[SCOPE.ScriptValue('gm_display_promise')|1]"
+	debug_log = "TE_MONUMENTS: opportunity open [SCOPE.ScriptValue('gm_disp_com_open')|0], grandeur added [SCOPE.ScriptValue('gm_disp_com_progress')|0] of [SCOPE.ScriptValue('gm_disp_com_target')|0], months left [SCOPE.ScriptValue('gm_disp_com_months')|0], fixed state [SCOPE.ScriptValue('gm_disp_com_fixed')|0]; boons running [SCOPE.ScriptValue('gm_disp_boon_any')|0]"
 }

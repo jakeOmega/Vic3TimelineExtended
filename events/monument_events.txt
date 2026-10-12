@@ -14,8 +14,11 @@
 # Events 16-17  - a fallen order's monuments: the contested notice, then one
 #                 event per monument (§4.5).
 # Event 20      - refresh (hidden plumbing).
-# Event 21      - a commission offered (v2 §2.3), from gm_com_send_offer.
+# Event 21      - an opportunity offered (opportunities spec §2), from
+#                 gm_com_send_offer.
 # Events 24-25  - the monument's form and namesake (v2 §3.3), players only.
+# Event 26      - an opportunity's gift: its monument rebuilt taller (hidden,
+#                 opportunities spec §3.1).
 # ============================================================================
 
 # Event 1: a level finished (hidden plumbing). ROOT is the BUILDING, so
@@ -35,6 +38,9 @@ monument_events.1 = {
 			state = {
 				if = {
 					limit = { gm_system_enabled = yes }
+					# A gifted monument's dedication back (opportunities spec
+					# §3.1), before anything reads it.
+					gm_state_restore_dedication = yes
 					# Minor 3: skip backlash for a Rededicate rebuild's own
 					# on_building_built (gm_state_rededicate sets gm_rebuilding
 					# for one day around the rebuild); the tooltip never
@@ -54,8 +60,8 @@ monument_events.1 = {
 						limit = { gm_state_is_dedicated = no }
 						gm_state_start_ceremony = yes
 					}
-					# The monument a commission met by this level names
-					# (v2 §2.3).
+					# The monument an opportunity completed by this level names
+					# (opportunities spec §3).
 					owner = { set_variable = { name = gm_com_last_state value = prev } }
 					owner = { trigger_event = { id = monument_events.20 } }
 				}
@@ -86,9 +92,9 @@ monument_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = monument_events.2.t
-	# While a commission is open, the description names it (v2 §2.3): the
-	# options' order is fixed, so this line and the AI weight on the
-	# commission's dedication stand in for listing it first.
+	# While an opportunity is open, the description names it: the options'
+	# order is fixed, so this line and the AI weight on the opportunity's
+	# dedication stand in for listing it first.
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -159,9 +165,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = crown } }
 				add = 100
@@ -192,9 +198,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = republic } }
 				add = 100
@@ -225,9 +231,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = revolution } }
 				add = 100
@@ -258,9 +264,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 5
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = leader } }
 				add = 100
@@ -293,9 +299,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = religious } }
 				add = 100
@@ -334,9 +340,9 @@ monument_events.2 = {
 		name = monument_events.2.m
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = civic } }
 				add = 100
@@ -357,9 +363,9 @@ monument_events.2 = {
 		name = monument_events.2.e
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = war_memorial } }
 				add = 100
@@ -390,9 +396,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = artistic } }
 				add = 100
@@ -417,9 +423,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = naturalist } }
 				add = 100
@@ -451,9 +457,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = scientific } }
 				add = 100
@@ -481,9 +487,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = industrial } }
 				add = 100
@@ -508,9 +514,9 @@ monument_events.2 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 3
-			# The open commission's dedication (v2 §2.6): certain for a monument
-			# that can answer it (its state, if it names one), every other
-			# choice nothing.
+			# The open opportunity's dedication (v2 §2.6): certain for a
+			# monument that can answer it (its state, if it names one), every
+			# other choice nothing.
 			modifier = {
 				trigger = { gm_state_ceremony_for_commission = { KEY = athletic } }
 				add = 100
@@ -1012,16 +1018,16 @@ monument_events.20 = {
 }
 
 # ============================================================================
-# Event 21: a commission offered (v2 §2.3)
+# Event 21: an opportunity offered (opportunities spec §2)
 # ============================================================================
 # From gm_com_send_offer, which has written the record (gm_commission_effects.txt).
-# The same offer for players and the AI: the AI accepts when not at war, not in
-# hard times, with under a year of government construction queued and no debt
+# Titled for the moment that brings it (gm_com_occasion_name). The same offer
+# for players and the AI: the AI seizes it when not at war, not in hard times,
+# with under a year of government construction queued and no debt
 # (gm_com_ai_declines), and then queues the levels itself (gm_com_ai_queue).
-# Decline is the default: a commission missed costs more than one refused (a
-# broken promise against an honest no), so an offer left unanswered is turned
-# down. Each option's tooltip names its costs and rewards:
-# the ledgers render nothing by themselves (silent_variable_audit).
+# Seize is the default: letting it pass costs nothing, and neither does an open
+# one that runs out. Each option's tooltip names what follows; the record
+# renders nothing by itself (silent_variable_audit).
 monument_events.21 = {
 	type = country_event
 	placement = root
@@ -1037,6 +1043,20 @@ monument_events.21 = {
 		video = "unspecific_military_parade"
 	}
 	event_image = {
+		trigger = {
+			has_variable = gm_com_source
+			OR = {
+				var:gm_com_source = flag:tech_artistic
+				var:gm_com_source = flag:tech_scientific
+				var:gm_com_source = flag:tech_industrial
+				var:gm_com_source = flag:tech_athletic
+				var:gm_com_source = flag:tech_naturalist
+				var:gm_com_source = flag:space
+			}
+		}
+		video = "unspecific_world_fair"
+	}
+	event_image = {
 		video = "unspecific_ruler_speaking_to_people"
 	}
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -1045,6 +1065,41 @@ monument_events.21 = {
 	title = monument_events.21.t
 	desc = {
 		first_valid = {
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:reign
+					var:gm_com_dedication = flag:crown
+					exists = scope:gm_com_honoree
+				}
+				desc = monument_events.21.d_reign
+			}
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:reign
+					exists = scope:gm_com_honoree
+				}
+				desc = monument_events.21.d_reign_leader
+			}
+			# The new ruler no longer resolves: a text without the name.
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:reign }
+				desc = monument_events.21.d_reign_unnamed
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:regime }
+				desc = monument_events.21.d_regime
+			}
+			triggered_desc = {
+				trigger = {
+					var:gm_com_source = flag:great_power
+					has_variable = gm_com_state
+				}
+				desc = monument_events.21.d_great_power
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:great_power }
+				desc = monument_events.21.d_great_power_anywhere
+			}
 			triggered_desc = {
 				trigger = { var:gm_com_source = flag:victory }
 				desc = monument_events.21.d_victory
@@ -1085,10 +1140,6 @@ monument_events.21 = {
 				desc = monument_events.21.d_ruler_death_unnamed
 			}
 			triggered_desc = {
-				trigger = { var:gm_com_source = flag:regime }
-				desc = monument_events.21.d_regime
-			}
-			triggered_desc = {
 				trigger = {
 					var:gm_com_source = flag:space
 					has_variable = gm_com_state
@@ -1100,7 +1151,32 @@ monument_events.21 = {
 				desc = monument_events.21.d_space_anywhere
 			}
 			triggered_desc = {
-				desc = monument_events.21.d_petition
+				trigger = { var:gm_com_source = flag:faith }
+				desc = monument_events.21.d_faith
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:tech_artistic }
+				desc = monument_events.21.d_tech_artistic
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:tech_scientific }
+				desc = monument_events.21.d_tech_scientific
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:tech_industrial }
+				desc = monument_events.21.d_tech_industrial
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:tech_athletic }
+				desc = monument_events.21.d_tech_athletic
+			}
+			triggered_desc = {
+				trigger = { var:gm_com_source = flag:tech_naturalist }
+				desc = monument_events.21.d_tech_naturalist
+			}
+			# A save's v2 petition, offered before the rework.
+			triggered_desc = {
+				desc = monument_events.21.d_other
 			}
 		}
 	}
@@ -1119,6 +1195,7 @@ monument_events.21 = {
 
 	option = {
 		name = monument_events.21.a
+		default_option = yes
 		custom_tooltip = {
 			text = gm_com_accept_tt
 			gm_com_accept = yes
@@ -1134,12 +1211,31 @@ monument_events.21 = {
 
 	option = {
 		name = monument_events.21.b
-		default_option = yes
 		custom_tooltip = {
 			text = gm_com_decline_tt
 			gm_com_decline = yes
 		}
 		ai_chance = { base = 1 }
+	}
+}
+
+# ============================================================================
+# Event 26: an opportunity's gift (opportunities spec §3.1)
+# ============================================================================
+# Hidden plumbing. ROOT is the state of the monument that completed an
+# opportunity (gm_com_fulfil marked it gm_gift): rebuilt taller here, not in
+# the fulfilment, which runs inside the refresh that tooltips walk.
+monument_events.26 = {
+	type = state_event
+	hidden = yes
+
+	trigger = {
+		gm_system_enabled = yes
+		has_variable = gm_gift
+	}
+
+	immediate = {
+		gm_state_gift_grandeur = yes
 	}
 }
 
@@ -2410,6 +2506,30 @@ monument_events.25 = {
 				var:gm_name_occasion = flag:space_moon_landing
 			}
 			text = monument_events.25.keep_space_moon_landing
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_moon_base
+			}
+			text = monument_events.25.keep_space_moon_base
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_mars_landing
+			}
+			text = monument_events.25.keep_space_mars_landing
+		}
+		name = {
+			trigger = {
+				gm_state_namesake_is = { NAMESAKE = occasion }
+				has_variable = gm_name_occasion
+				var:gm_name_occasion = flag:space_interstellar_probe
+			}
+			text = monument_events.25.keep_space_interstellar_probe
 		}
 		name = {
 			trigger = { gm_state_namesake_is = { NAMESAKE = landmark } }
