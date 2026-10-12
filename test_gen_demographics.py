@@ -106,12 +106,23 @@ class TestGenerated(unittest.TestCase):
         self.assertLess(body.index("multiply = { value = var:te_dg_lit"), body.index(f"modifier:{P.MEANS_SHIFT_TYPE}"))
 
     def test_causes_read_the_types_not_the_owners_techs_or_laws(self):
-        for cause in gen.CAUSES:
-            body = self._cause(cause)
-            self.assertNotIn("has_technology_researched", body, cause)
-            self.assertNotIn("has_law", body, cause)
-            self.assertNotIn("institution = institution_health_system", body, cause)
-            self.assertNotIn("institution = institution_workplace_safety", body, cause)
+        # every body the causes' figures come from: each factor, the medicine targets and the spread's rate (values),
+        # and te_demog_cause_inputs_store (effects), which reads the plain types for the factors (review of Tasks 4-5)
+        names = [f"te_demog_f_{cause}_{f}" for cause, factors in P.CAUSE_FACTORS.items() for f in factors]
+        names += [f"te_demog_f_{cause}_medicine_target" for cause in P.MEDICINE_CAUSES]
+        names += ["te_demog_access_target", "te_demog_medical_diffusion"]
+        names += [f"te_demog_treatment_target_{cause}" for cause in P.MEDICINE_CAUSES]
+        bodies = {name: self._value(name) for name in names}
+        bodies["te_demog_cause_inputs_store"] = self.effects.split("te_demog_cause_inputs_store = {", 1)[1].split(
+            "\n}\n", 1)[0]
+        bodies.update({f"te_demog_mult_{cause}": self._cause(cause) for cause in gen.CAUSES})
+        for name, body in bodies.items():
+            with self.subTest(name):
+                self.assertNotIn("has_technology_researched", body)
+                self.assertNotIn("has_law", body)
+                self.assertNotIn("institution = institution_health_system", body)
+                self.assertNotIn("institution = institution_workplace_safety", body)
+                self.assertNotIn("owner", body)
 
     def _value(self, name):
         return self.values.split(f"\n{name} = {{", 1)[1].split("\n}\n", 1)[0]

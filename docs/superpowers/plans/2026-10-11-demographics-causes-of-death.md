@@ -2803,6 +2803,10 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   - `python_tools.md`: the harness list's `fidelity` and `history` lines gain "run the model on the census's stored
     inputs (the drifted medicine, turmoil) when the save holds them", and a new line for `lag` ("years of life
     expectancy behind the target while medicine spreads, the drift numbers' evidence").
+  - `python_tools.md`, the console's row (review of Tasks 4–5, minor 1): option **l**'s five cause multipliers are the
+    last step's figures, not live ones (−1 before a census's first step), so after a console law or tech change they
+    disagree with the type reads on the same line until the next step; the line also logs `diff=`, the spread's rate.
+    Option **a** advances the drift one extra step per run (beside its note on a second run in one year).
   - The 2026-10-10 plan's §2: one bullet, "Amended 2026-10-11 (3): the Causes of Death plan
     (`docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md`) adds turmoil to the external cause and
     drifts medicine; both reach M, under Full only."

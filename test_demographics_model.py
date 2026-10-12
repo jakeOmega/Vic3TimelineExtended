@@ -660,6 +660,16 @@ class TestCausesOfDeath(unittest.TestCase):
         self.assertEqual(ring.medicine, M.medicine_targets(inp))
         self.assertEqual(M.medicine_drift(None, inp), M.medicine_targets(inp))
 
+    def test_a_seed_ignores_drifted_medicine(self):
+        # the script's seed sets medicine at its targets before its rates (te_demog_medicine_at_target, then
+        # te_demog_prepare), so a seed given drifted values (a harness reading a save's te_dg_acc) seeds as the script
+        # does (review of Tasks 4-5, minor 4)
+        inp = M.Inputs(sol=12, literacy=0.3, mods=dict(self.MODS))
+        held = dataclasses.replace(inp, medicine={"access": 0.41, "infection": 0.01, "maternal": 0.0, "chronic": 0.0})
+        a, b = M.seed(inp, 1836, 1e6), M.seed(held, 1836, 1e6)
+        self.assertEqual(b.medicine, M.medicine_targets(inp))
+        self.assertEqual((b.f, b.m, b.scale), (a.f, a.m, a.scale))
+
     def test_medicine_moves_a_share_of_the_gap_each_step(self):
         inp0 = M.Inputs(sol=12, literacy=0.3)
         ring = M.seed(inp0, 1836, 1e6)

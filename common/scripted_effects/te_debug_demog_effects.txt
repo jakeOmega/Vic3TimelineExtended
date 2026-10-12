@@ -21,7 +21,8 @@
 #                       tally, and each state's dead still to be taken
 #   TE_DEMOG_SKEW       options f and g: the capital's pops' workforce and dependents
 #   TE_DEMOG_MODS       option l: the census's modifier types as the capital and an
-#                       unincorporated state read them
+#                       unincorporated state read them (live), and the cause multipliers
+#                       as the last step left them (-1 before a census's first step)
 #   TE_DEMOG_SHOCK:     option m (probe P1): every devastated or polluted state's
 #                       mortality and birth reads, devastation, turmoil and pollution,
 #                       each line followed by the state's scope
@@ -46,7 +47,8 @@
 # year first, so the census reads as a state about to step does. Run twice in one
 # year, the second step ages this year's newborns as if they were 150 (both here and
 # in the model, so the replay still matches): use a save you can throw away, or
-# re-seed afterwards (option c).
+# re-seed afterwards (option c). Each run also drifts the census's medicine one more step
+# (te_demog_medicine_drift in te_demog_step_begin), a year's spread on top of the yearly one.
 te_debug_demog_replay = {
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes

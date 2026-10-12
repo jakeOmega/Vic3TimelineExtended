@@ -358,8 +358,10 @@ def seed(inp, year, engine_pop):
     """A ring at the stable structure of the state's own rates (§2.6, rule 5).
 
     The women's survivorship includes maternal deaths, so the seed is the step's own
-    equilibrium; nrr and life_table leave them out (a documented approximation).
+    equilibrium; nrr and life_table leave them out (a documented approximation). Medicine starts at its targets,
+    as the script's seed sets it (te_demog_medicine_at_target before te_demog_prepare), whatever inp.medicine holds.
     """
+    inp = replace(inp, medicine=None)
     qf, qm, mmr = group_rates(inp)
     e0 = life_table(qf)["e0"] * 0.5 + life_table(qm)["e0"] * 0.5
     tfr = fertility(inp, e0)["tfr"]

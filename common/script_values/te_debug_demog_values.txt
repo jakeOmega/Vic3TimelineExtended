@@ -484,7 +484,9 @@ te_debug_demog_mod_chr = {
 	value = modifier:state_chronic_mortality_mult
 }
 # The census's multipliers read the step's stored inputs (the Causes of Death plan): -1 for a state without them
-# (no census yet, or a census from before the plan until its next step).
+# (no census yet, or a census from before the plan until its next step). So option l's mult_ fields are the last
+# step's figures, not live ones: after a console law or tech change they disagree with the type reads on the same
+# line until the state's next step.
 te_debug_demog_mult_infection = {
 	value = -1
 	if = {

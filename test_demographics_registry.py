@@ -4002,6 +4002,26 @@ class TestCausesInTheStep(unittest.TestCase):
         e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
         self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
 
+    def stepped(self, effects=None):
+        """A state seeded on INP0's inputs in 1836, then one whole te_demog_step on INP1's (TestTrend's setup)."""
+        eng = _engine_for(self.INP0, 1836, 250000.0, effects=effects, real_multipliers=True)
+        eng.call("te_demog_seed")
+        eng.fixtures.update(te_demog_crisis=0.0, te_demog_family_transport=0.0, **_mod_fixtures(self.INP1))
+        eng.vars.update(te_dg_eb=0.0, te_dg_ed=0.0, te_dg_fjob_share=0.3)
+        eng.fixtures["year"] = 1837.0
+        eng.vars["te_dg_pop_last"] = eng.vars["te_dg_people"]
+        eng.call("te_demog_step")
+        return eng
+
+    def test_one_step_drifts_once(self):
+        # the whole step, not its halves: a second drift anywhere in te_demog_step would move medicine twice a year
+        # (review of Tasks 4-5, minor 3)
+        eng = self.stepped()
+        want = demographics_model.medicine_drift(demographics_model.medicine_targets(self.INP0), self.INP1)
+        for key, var in (("access", "te_dg_acc"), ("infection", "te_dg_trt_inf"), ("maternal", "te_dg_trt_mat")):
+            self.assertAlmostEqual(eng.vars[var], want[key], places=9, msg=key)
+        self.assertNotEqual(want["access"], demographics_model.medicine_targets(self.INP1)["access"], "a real gap")
+
     GATE_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext", "te_dg_in_work",
                  "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
 
