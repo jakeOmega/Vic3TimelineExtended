@@ -163,10 +163,11 @@ PRACTICE_CUT = {"lm": 0.10, "bs": 0.20}
 BS_HELD_START = 0.0
 # Birth Spacing's start for China, Manchuria and Korea (owner, 2026-10-11; plan D13): at least the share that cancels the
 # raise, and above it as far as China's peacetime births less deaths needs to land in history's +3 to +6, which lowers
-# their births toward history's ~5.5 children per woman (spec 2.2's second variant). The fit (2026-10-12): 0. With no
-# raise, China's projected peacetime births less deaths are +5.9 without it, inside the band. Membership, not the value,
-# says which states take it (demographics_model.bs_held_group).
-BS_EAST_ASIA_START = 0.0
+# their births toward history's ~5.5 children per woman (spec 2.2's second variant). The fit with today's mortality
+# (2026-10-12, the owner's option 2 at Stop A): 0.06, the smallest share on the 0.01 grid that brings China's projected
+# peacetime births less deaths inside +3 to +6 (+5.9; +6.5 with none). Membership, not the value, says which states
+# take it (demographics_model.bs_held_group).
+BS_EAST_ASIA_START = 0.06
 BS_EAST_ASIA_REGIONS = ("region_north_china", "region_south_china")
 BS_INDIA_REGIONS = ("region_north_india", "region_south_india")
 _OCCITANIA = ("STATE_PROVENCE", "STATE_GUYENNE", "STATE_LANGUEDOC", "STATE_AQUITAINE", "STATE_RHONE", "STATE_SAVOY",
