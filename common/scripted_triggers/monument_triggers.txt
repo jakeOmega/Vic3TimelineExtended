@@ -109,6 +109,8 @@ gm_country_hard_times = {
 #   gm_contested      months it has stood contested (§4)
 #   gm_heritage       preserved as heritage (§4.3)
 #   gm_base_ig / gm_supporter_ig   IG flags recorded at contest (§4.1)
+#   gm_landmark       flag: a monument standing in 1836, its key (phase 4,
+#                     gm_landmark_effects.txt); locks its skin and form
 # A missing record reads as "does not fit", never as "fits".
 
 gm_state_has_pm = {
@@ -130,6 +132,23 @@ gm_state_has_copied_dedication = {
 	NOT = { has_variable = gm_seen }
 	NOT = { has_variable = gm_ceremony_level }
 	NOT = { has_variable = gm_ceremony_pending }
+}
+
+# ---- Landmarks (phase 4, spec 2026-10-12 §3.2) ----------------------------------
+# A landmark keeps its skin and form, and so its picture, while it stands:
+# through contest, heritage, Rededicate, conquest and civil war. Pull Down or
+# demolition ends it (gm_clear_state).
+gm_state_is_landmark = {
+	has_variable = gm_landmark
+}
+
+# Its historical name stands: Rename, Name It and a met commission leave it
+# alone. A rededication names it again (gm_state_unveil), and the namesake
+# choice can give the historical name back (monument_events.25).
+gm_state_has_historical_name = {
+	gm_state_is_landmark = yes
+	gm_state_namesake_is = { NAMESAKE = landmark }
+	NOT = { has_variable = gm_name }
 }
 
 gm_state_kind_regime = {

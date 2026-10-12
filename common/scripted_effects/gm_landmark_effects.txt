@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — the landmarks standing in 1836 (phase 4)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monuments-landmarks-design.md.
+# A landmark is an ordinary Grand Monument with five records on its state:
+#   gm_landmark        flag: its key. Locks the skin and form (gm_state_is_landmark,
+#                      monument_triggers.txt) while the monument stands
+#   gm_skin            flag:landmark_<key>, its own skin: its name and its picture
+#   gm_form            its one form, from the roster
+#   gm_namesake        flag:landmark: the name prints the skin's (gm_name_landmark_row)
+#   gm_ceremony_level  its level, so it never reads as the engine's copy
+# The first refresh (monument_events.20) writes the rest: gm_seen, and for a
+# bound dedication gm_raised_by (gm_state_first_sight). It has its dedication's
+# usual effects and nothing more, and takes no inscription.
+#
+# test_grand_monument_registry.py's LANDMARKS is the table: one call per row,
+# in its order, which is also the picture codes' (1,000,000 + the row number,
+# gm_state_picture_landmarks).
+
+# No root scope: once per game, from on_game_started_after_lobby
+# (gm_landmarks_on_game_started_after_lobby), when the game rules are final.
+gm_seed_landmarks = {
+	gm_seed_landmark = { KEY = arc_de_triomphe STATE = STATE_ILE_DE_FRANCE TAG = FRA DEDICATION = war_memorial FORM = arch LEVEL = 15 }
+	gm_seed_landmark = { KEY = alexander_column STATE = STATE_INGRIA TAG = RUS DEDICATION = crown FORM = column LEVEL = 10 }
+	gm_seed_landmark = { KEY = brandenburg_gate STATE = STATE_BRANDENBURG TAG = PRU DEDICATION = civic FORM = gate LEVEL = 10 }
+	gm_seed_landmark = { KEY = washington_monument_baltimore STATE = STATE_MARYLAND TAG = USA DEDICATION = republic FORM = column LEVEL = 5 }
+	gm_seed_landmark = { KEY = la_scala STATE = STATE_LOMBARDY TAG = AUS DEDICATION = artistic FORM = opera_house LEVEL = 10 }
+	gm_seed_landmark = { KEY = teatro_di_san_carlo STATE = STATE_CAMPANIA TAG = SIC DEDICATION = artistic FORM = opera_house LEVEL = 5 }
+	gm_seed_landmark = { KEY = jantar_mantar STATE = STATE_RAJPUTANA TAG = JAI DEDICATION = scientific FORM = observatory LEVEL = 5 }
+	gm_seed_landmark = { KEY = shalimar_gardens STATE = STATE_PUNJAB TAG = PAN DEDICATION = naturalist FORM = gardens LEVEL = 5 }
+	gm_seed_landmark = { KEY = jardim_botanico STATE = STATE_RIO_DE_JANEIRO TAG = BRZ DEDICATION = naturalist FORM = gardens LEVEL = 5 }
+	gm_seed_landmark = { KEY = stelae_of_aksum STATE = STATE_GONDER TAG = TGR DEDICATION = civic FORM = stele LEVEL = 5 }
+	gm_seed_landmark = { KEY = liberty_column STATE = STATE_ZEALAND TAG = DEN DEDICATION = civic FORM = obelisk LEVEL = 5 }
+	gm_seed_landmark = { KEY = lion_monument STATE = STATE_EAST_SWITZERLAND TAG = SWI DEDICATION = war_memorial FORM = statue LEVEL = 5 }
+}
+
+# The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
+# proves wrong, or a Grand Monument already standing there (create_building
+# would keep the larger level), places nothing and says so in debug.log.
+gm_seed_landmark = {
+	if = {
+		limit = {
+			s:$STATE$.region_state:$TAG$ ?= {
+				NOT = { has_building = building_grand_monument }
+			}
+		}
+		s:$STATE$.region_state:$TAG$ = {
+			create_building = {
+				building = building_grand_monument
+				level = $LEVEL$
+				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+			}
+			# Rededicate's guard: if create_building fires on_building_built,
+			# monument_events.1 charges no vanity for a level nobody built.
+			set_variable = { name = gm_rebuilding days = 1 }
+			set_variable = { name = gm_landmark value = flag:$KEY$ }
+			set_variable = { name = gm_skin value = flag:landmark_$KEY$ }
+			set_variable = { name = gm_form value = flag:$FORM$ }
+			set_variable = { name = gm_namesake value = flag:landmark }
+			set_variable = { name = gm_ceremony_level value = $LEVEL$ }
+			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: level $LEVEL$, pm_monument_$DEDICATION$, form $FORM$"
+			# The refresh records it (gm_state_first_sight), opens the
+			# journal entry and sets its picture.
+			owner = { trigger_event = { id = monument_events.20 } }
+		}
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or a Grand Monument already stands there"
+	}
+}

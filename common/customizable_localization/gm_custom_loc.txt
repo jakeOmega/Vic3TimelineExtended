@@ -289,6 +289,56 @@ gm_skin_name = {
 	type = state
 	random_valid = no
 
+	# A landmark's own name first (phase 4 §4), so La Scala prints "La Scala",
+	# not its building's "Grand Opera House".
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arc_de_triomphe }
+		localization_key = gm_skin_landmark_arc_de_triomphe
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_alexander_column }
+		localization_key = gm_skin_landmark_alexander_column
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_brandenburg_gate }
+		localization_key = gm_skin_landmark_brandenburg_gate
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument_baltimore }
+		localization_key = gm_skin_landmark_washington_monument_baltimore
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_la_scala }
+		localization_key = gm_skin_landmark_la_scala
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_teatro_di_san_carlo }
+		localization_key = gm_skin_landmark_teatro_di_san_carlo
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jantar_mantar }
+		localization_key = gm_skin_landmark_jantar_mantar
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_shalimar_gardens }
+		localization_key = gm_skin_landmark_shalimar_gardens
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jardim_botanico }
+		localization_key = gm_skin_landmark_jardim_botanico
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_stelae_of_aksum }
+		localization_key = gm_skin_landmark_stelae_of_aksum
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_liberty_column }
+		localization_key = gm_skin_landmark_liberty_column
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_monument }
+		localization_key = gm_skin_landmark_lion_monument
+	}
 	# A civic-progress building keeps its building's name in any style (spec 2026-10-11 §2.4).
 	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:opera_house }
@@ -440,6 +490,125 @@ gm_skin_name = {
 	}
 	text = {
 		localization_key = gm_skin_generic
+	}
+}
+
+# A landmark's name in running text (gm_name_landmark_evt): with its article,
+# "the Arc de Triomphe" but "La Scala". Each key splices the name,
+# gm_skin_landmark_<key>, so the name is spelt once.
+gm_landmark_name_evt = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_arc_de_triomphe }
+		localization_key = gm_landmark_arc_de_triomphe_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_alexander_column }
+		localization_key = gm_landmark_alexander_column_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_brandenburg_gate }
+		localization_key = gm_landmark_brandenburg_gate_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_washington_monument_baltimore }
+		localization_key = gm_landmark_washington_monument_baltimore_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_la_scala }
+		localization_key = gm_landmark_la_scala_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_teatro_di_san_carlo }
+		localization_key = gm_landmark_teatro_di_san_carlo_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jantar_mantar }
+		localization_key = gm_landmark_jantar_mantar_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_shalimar_gardens }
+		localization_key = gm_landmark_shalimar_gardens_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_jardim_botanico }
+		localization_key = gm_landmark_jardim_botanico_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_stelae_of_aksum }
+		localization_key = gm_landmark_stelae_of_aksum_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_liberty_column }
+		localization_key = gm_landmark_liberty_column_evt
+	}
+	text = {
+		trigger = { has_variable = gm_skin var:gm_skin = flag:landmark_lion_monument }
+		localization_key = gm_landmark_lion_monument_evt
+	}
+	text = {
+		localization_key = gm_landmark_name_evt_none
+	}
+}
+
+# One line of a landmark's history: the "Historical monument" line's tooltip,
+# in the journal entry's row and on the state card.
+gm_landmark_desc = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:arc_de_triomphe }
+		localization_key = gm_landmark_arc_de_triomphe_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:alexander_column }
+		localization_key = gm_landmark_alexander_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:brandenburg_gate }
+		localization_key = gm_landmark_brandenburg_gate_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:washington_monument_baltimore }
+		localization_key = gm_landmark_washington_monument_baltimore_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:la_scala }
+		localization_key = gm_landmark_la_scala_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:teatro_di_san_carlo }
+		localization_key = gm_landmark_teatro_di_san_carlo_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:jantar_mantar }
+		localization_key = gm_landmark_jantar_mantar_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:shalimar_gardens }
+		localization_key = gm_landmark_shalimar_gardens_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:jardim_botanico }
+		localization_key = gm_landmark_jardim_botanico_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:stelae_of_aksum }
+		localization_key = gm_landmark_stelae_of_aksum_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:liberty_column }
+		localization_key = gm_landmark_liberty_column_desc
+	}
+	text = {
+		trigger = { has_variable = gm_landmark var:gm_landmark = flag:lion_monument }
+		localization_key = gm_landmark_lion_monument_desc
+	}
+	text = {
+		localization_key = gm_landmark_desc_none
 	}
 }
 

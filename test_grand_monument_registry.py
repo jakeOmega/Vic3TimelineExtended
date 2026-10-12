@@ -1070,11 +1070,30 @@ CEREMONY_GATE = {"crown": "monument_government_is_crowned = yes",
 INSCRIPTION_FAITHS = {"catholic": "latin", "jewish": "hebrew", "hindu": "sanskrit", "theravada": "pali",
                       "oriental_orthodox": "coptic", "sunni": "arabic", "shiite": "arabic", "ibadi": "arabic",
                       "orthodox": "slavonic"}
-# Named landmarks (spec §1.1, phase 2): (key, the dedications it can take). Each
-# is a skin flag `landmark_<key>`, an option `monument_events.11.landmark_<key>`
-# placed before the faith options (a landmark is the most specific form), whose
-# trigger names its state, and the loc `gm_skin_landmark_<key>`. Empty in phase 1.
-LANDMARKS = ()
+# The landmarks standing in 1836 (phase 4 spec 2026-10-12 §2), in picture-code
+# order: code 1,000,000 + the row number. Each is its own skin
+# (`landmark_<key>`) with one form, placed once by gm_seed_landmarks. The owner
+# is the country holding the state's part in the 1836 history (game files,
+# 2026-10-11: Jaipur is Dhundhar's, JAI). The stand-in is the (skin, form) pair
+# whose picture it shows until its own is drawn. Adding a row is the checklist:
+# the failures name every site.
+Landmark = namedtuple("Landmark", "key state tag dedication form standin level")
+LANDMARKS = (
+    Landmark("arc_de_triomphe", "STATE_ILE_DE_FRANCE", "FRA", "war_memorial", "arch", ("generic", "arch"), 15),
+    Landmark("alexander_column", "STATE_INGRIA", "RUS", "crown", "column", ("generic", "column"), 10),
+    Landmark("brandenburg_gate", "STATE_BRANDENBURG", "PRU", "civic", "gate", ("generic", "gate"), 10),
+    Landmark("washington_monument_baltimore", "STATE_MARYLAND", "USA", "republic", "column", ("generic", "column"), 5),
+    Landmark("la_scala", "STATE_LOMBARDY", "AUS", "artistic", "opera_house", ("generic", "opera_house"), 10),
+    Landmark("teatro_di_san_carlo", "STATE_CAMPANIA", "SIC", "artistic", "opera_house", ("generic", "opera_house"), 5),
+    Landmark("jantar_mantar", "STATE_RAJPUTANA", "JAI", "scientific", "observatory",
+             ("heritage_sanskrit", "observatory"), 5),
+    Landmark("shalimar_gardens", "STATE_PUNJAB", "PAN", "naturalist", "gardens", ("heritage_avestan", "gardens"), 5),
+    Landmark("jardim_botanico", "STATE_RIO_DE_JANEIRO", "BRZ", "naturalist", "gardens", ("generic", "gardens"), 5),
+    Landmark("stelae_of_aksum", "STATE_GONDER", "TGR", "civic", "stele", ("heritage_geez", "stele"), 5),
+    Landmark("liberty_column", "STATE_ZEALAND", "DEN", "civic", "obelisk", ("generic", "obelisk"), 5),
+    Landmark("lion_monument", "STATE_EAST_SWITZERLAND", "SWI", "war_memorial", "statue", ("generic", "statue"), 5),
+)
+LANDMARK_CODE_BASE = 1_000_000
 
 
 def ceremony_options():
@@ -1186,7 +1205,7 @@ class SkinTests(unittest.TestCase):
         # group-level Hebrew match for a Semitic-language country.
         heritages_in_option_order = tuple(h for h in HERITAGES if h != "hebrew") + ("hebrew",)
         building = [f"building_{k}_{h}" for k, hs in BUILDING_SKINS.items() for h in hs]
-        expected = ([f"landmark_{k}" for k, _ in LANDMARKS] + [f"faith_{f}" for f in FAITHS]
+        expected = ([f"faith_{f}" for f in FAITHS]
                     + [f"heritage_{h}" for h in heritages_in_option_order] + building + ["generic"])
         self.assertEqual(names, expected)
         self.assertLess(names.index("heritage_hebrew"), names.index("generic"))
@@ -1246,7 +1265,8 @@ class SkinTests(unittest.TestCase):
 
     def test_a_building_keeps_its_name_in_any_style(self):
         names = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
-        first = names.split("text = {")[1:6]
+        # After the landmarks' branches (phase 4 §4), which come first of all.
+        first = names.split("text = {")[1 + len(LANDMARKS):6 + len(LANDMARKS)]
         for (key, form), branch in zip(BUILDING_FORMS.items(), first):
             self.assertIn(f"var:gm_form = flag:{form} }} localization_key = pm_monument_{key}", branch)
 
@@ -1267,15 +1287,10 @@ class SkinTests(unittest.TestCase):
                 self.assertIn(f"var:gm_skin = flag:{skin} }} localization_key = gm_skin_{skin}", names)
         self.assertTrue(names.endswith("text = { localization_key = gm_skin_generic }"))
 
-    def test_landmarks_phase_2_hook(self):
-        L = loc()
-        names = [n for n, _ in self._options()]
-        names_block = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
-        for key, _dedications in LANDMARKS:
-            self.assertIn(f"landmark_{key}", names)
-            self.assertLess(names.index(f"landmark_{key}"), names.index(f"faith_{FAITHS[0]}"))
-            self.assertIn(f"gm_skin_landmark_{key}", L)
-            self.assertIn(f"flag:landmark_{key} }} localization_key = gm_skin_landmark_{key}", names_block)
+    def test_no_landmark_in_the_style_choice(self):
+        # Phase 4 §1: a landmark is placed, never chosen; its skin is locked.
+        self.assertFalse([n for n, _ in self._options() if n.startswith("landmark_")])
+        self.assertNotIn("landmark_", squash(strip_comments(self.event)))
 
     def test_inscription(self):
         body = squash(block(read(CUSTOM_LOC), "gm_inscription"))
@@ -2721,6 +2736,105 @@ class PictureTests(unittest.TestCase):
     def test_display_value_defaults_to_the_draped_picture(self):
         v = squash(block(read(VALUES), "gm_disp_picture_code"))
         self.assertEqual(v, "value = 1 if = { limit = { has_variable = gm_picture_code } value = var:gm_picture_code }")
+
+
+# ==== Phase 4: the landmarks standing in 1836 (spec 2026-10-12) ==========================
+LANDMARK_EFFECTS = "common/scripted_effects/gm_landmark_effects.txt"
+
+
+def landmark_seed_call(lm):
+    return (f"gm_seed_landmark = {{ KEY = {lm.key} STATE = {lm.state} TAG = {lm.tag} "
+            f"DEDICATION = {lm.dedication} FORM = {lm.form} LEVEL = {lm.level} }}")
+
+
+def vanilla_monuments():
+    import json
+    data = json.loads((ROOT / "vanilla_parsed/common/buildings.json").read_text(encoding="utf-8"))
+    return {name for name, (_op, body) in data.items() if body.get("building_group") == ["=", "bg_monuments"]}
+
+
+class LandmarkTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(LANDMARK_EFFECTS)
+
+    def test_the_table(self):
+        keys = [lm.key for lm in LANDMARKS]
+        self.assertEqual(len(keys), len(set(keys)))
+        states = [lm.state for lm in LANDMARKS]
+        self.assertEqual(len(states), len(set(states)), "one landmark per state (§2)")
+        for lm in LANDMARKS:
+            self.assertIn(lm.dedication, BY_KEY, lm.key)
+            self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values(), lm.key)
+            if lm.form in BUILDING_FORMS.values():
+                self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
+            self.assertGreaterEqual(lm.level, 5, lm.key)
+
+    def test_no_duplicate_of_a_base_game_monument_or_a_wonder(self):
+        taken = vanilla_monuments()
+        self.assertGreater(len(taken), 20, "the snapshot's bg_monuments")
+        wonders = set(re.findall(r"(?m)^(building_wonder_\w+)\s*=", "\n".join(
+            p.read_text(encoding="utf-8-sig") for p in (ROOT / "common/buildings").glob("*.txt"))))
+        self.assertGreater(len(wonders), 20)
+        for lm in LANDMARKS:
+            self.assertNotIn(f"building_{lm.key}", taken, lm.key)
+            self.assertNotIn(f"building_wonder_{lm.key}", wonders, lm.key)
+
+    def test_seeded_once_after_the_lobby(self):
+        on = read(ON_ACTIONS)
+        self.assertIn("on_game_started_after_lobby = { on_actions = { gm_landmarks_on_game_started_after_lobby } }",
+                      squash(strip_comments(on)))
+        body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
+        self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
+                               "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
+                               "gm_seed_landmarks = yes } }")
+
+    def test_a_call_per_row(self):
+        raw = (ROOT / LANDMARK_EFFECTS).read_bytes()
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), "one BOM")
+        self.assertFalse(raw.startswith(b"\xef\xbb\xbf" * 2), "one BOM, not two")
+        body = squash(block(self.e, "gm_seed_landmarks"))
+        self.assertEqual(re.findall(r"gm_seed_landmark = \{[^{}]*\}", body), [landmark_seed_call(lm) for lm in LANDMARKS])
+
+    def test_the_seed_writes_the_five_records(self):
+        body = squash(block(self.e, "gm_seed_landmark"))
+        self.assertIn("limit = { s:$STATE$.region_state:$TAG$ ?= { NOT = { has_building = building_grand_monument } } }",
+                      body, "an owner that proves wrong, or a monument already there, places nothing")
+        self.assertIn("create_building = { building = building_grand_monument level = $LEVEL$ "
+                      "activate_production_methods = { pm_monument_$DEDICATION$ } }", body)
+        for record in ("name = gm_landmark value = flag:$KEY$", "name = gm_skin value = flag:landmark_$KEY$",
+                       "name = gm_form value = flag:$FORM$", "name = gm_namesake value = flag:landmark",
+                       "name = gm_ceremony_level value = $LEVEL$"):
+            self.assertIn(f"set_variable = {{ {record} }}", body, record)
+        self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", body, "no vanity for its own level")
+        self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", body)
+        self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
+
+    def test_the_lock_triggers(self):
+        t = read(TRIGGERS)
+        self.assertEqual(squash(block(t, "gm_state_is_landmark")), "has_variable = gm_landmark")
+        self.assertEqual(squash(block(t, "gm_state_has_historical_name")),
+                         "gm_state_is_landmark = yes gm_state_namesake_is = { NAMESAKE = landmark } "
+                         "NOT = { has_variable = gm_name }")
+
+    def test_its_name_and_history(self):
+        L = loc()
+        custom = read(CUSTOM_LOC)
+        names = squash(block(custom, "gm_skin_name")).split("text = {")[1:]
+        desc = squash(block(custom, "gm_landmark_desc"))
+        evt = squash(block(custom, "gm_landmark_name_evt"))
+        for i, lm in enumerate(LANDMARKS):
+            self.assertIn(f"has_variable = gm_skin var:gm_skin = flag:landmark_{lm.key} }} "
+                          f"localization_key = gm_skin_landmark_{lm.key}", names[i], lm.key)
+            self.assertIn(f"gm_skin_landmark_{lm.key}", L)
+            self.assertIn(f"has_variable = gm_landmark var:gm_landmark = flag:{lm.key} }} "
+                          f"localization_key = gm_landmark_{lm.key}_desc", desc, lm.key)
+            self.assertTrue(L[f"gm_landmark_{lm.key}_desc"].endswith("."), lm.key)
+            self.assertIn(f"var:gm_skin = flag:landmark_{lm.key} }} localization_key = gm_landmark_{lm.key}_evt", evt)
+            self.assertIn(f"$gm_skin_landmark_{lm.key}$", L[f"gm_landmark_{lm.key}_evt"], "spliced, never spelt")
+        self.assertEqual(L["gm_skin_landmark_la_scala"], "La Scala")
+        self.assertEqual(L["gm_landmark_la_scala_evt"], "$gm_skin_landmark_la_scala$")
+        self.assertEqual(L["gm_landmark_arc_de_triomphe_evt"], "the $gm_skin_landmark_arc_de_triomphe$")
 
 if __name__ == "__main__":
     unittest.main()
