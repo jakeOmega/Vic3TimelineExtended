@@ -7408,6 +7408,7 @@ te_demog_cause_inputs_store = {
 	set_variable = { name = te_dg_in_ext value = { value = 0 add = modifier:state_external_mortality_mult } }
 	set_variable = { name = te_dg_in_work value = { value = 0 add = modifier:state_work_mortality_mult } }
 	set_variable = { name = te_dg_in_chr value = { value = 0 add = modifier:state_chronic_mortality_mult } }
+	set_variable = { name = te_dg_in_mat value = { value = 0 add = modifier:state_maternal_mortality_mult } }
 	# turmoil as the 0-1 share te_demog_crisis reads
 	set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }
 	# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)
@@ -7495,6 +7496,23 @@ te_demog_practices_country_add = {
 te_demog_practices_country_store = {
 	te_demog_practice_country_store = { P = lm }
 	te_demog_practice_country_store = { P = bs }
+}
+
+# Phase 2 step 3b (the design §3.4): the newborns' split in the step (demographics_model.newborn_split). THIS = a
+# state, in te_demog_step_run before the sweep: girls and boys per 100,000 births into locals, the constants
+# unless prenatal sexing and a positive sex-ratio type move it (100 girls to te_demog_k_srb_base + it boys).
+te_demog_newborn_split = {
+	set_local_variable = { name = te_dg_nb_f value = te_demog_k_female_births_per_100k }
+	set_local_variable = { name = te_dg_nb_m value = te_demog_k_male_births_per_100k }
+	set_local_variable = { name = te_dg_nb_srb value = te_demog_srb_add }
+	if = {
+		limit = { local_var:te_dg_nb_srb > 0 }
+		set_local_variable = {
+			name = te_dg_nb_f
+			value = { value = 10000000 divide = { value = local_var:te_dg_nb_srb add = te_demog_k_srb_base add = 100 min = 100 } }
+		}
+		set_local_variable = { name = te_dg_nb_m value = { value = 100000 subtract = local_var:te_dg_nb_f } }
+	}
 }
 
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).

@@ -1350,6 +1350,8 @@ te_demog_step_begin = {
 # then the year's totals and the scale. Run it straight after te_demog_step_begin, in the
 # same effect (the locals don't outlive it).
 te_demog_step_run = {
+	# the newborns' split, girls and boys per 100,000 births (phase 2 step 3b: the sex ratio at birth; generated)
+	te_demog_newborn_split = yes
 	set_local_variable = { name = te_dg_open value = te_demog_open_slot }
 	set_local_variable = { name = te_dg_s value = var:te_dg_scale }
 	set_local_variable = { name = te_dg_age value = 1 }
@@ -1540,8 +1542,8 @@ te_demog_fold_slot = {
 	}
 	change_variable = { name = te_dg_pf multiply = { value = local_var:te_dg_qf divide = 100000 multiply = -1 add = 1 } }
 	change_variable = { name = te_dg_pm multiply = { value = local_var:te_dg_qm divide = 100000 multiply = -1 add = 1 } }
-	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
-	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+	set_variable = { name = te_dg_f$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
+	set_variable = { name = te_dg_m$S$ value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }
 }
 
 # After the sweep (demographics_model.step's tail): newborns into band 0 and
@@ -1549,8 +1551,8 @@ te_demog_fold_slot = {
 # people this year (the cohorts were scaled to last year's population first).
 te_demog_step_finish = {
 	te_demog_close_accumulators = yes
-	set_local_variable = { name = te_dg_bf_new value = { value = local_var:te_dg_births multiply = te_demog_k_female_births_per_100k divide = 100000 } }
-	set_local_variable = { name = te_dg_bm_new value = { value = local_var:te_dg_births multiply = te_demog_k_male_births_per_100k divide = 100000 } }
+	set_local_variable = { name = te_dg_bf_new value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_f divide = 100000 } }
+	set_local_variable = { name = te_dg_bm_new value = { value = local_var:te_dg_births multiply = local_var:te_dg_nb_m divide = 100000 } }
 	change_variable = { name = te_dg_bf0 add = local_var:te_dg_bf_new }
 	change_variable = { name = te_dg_bm0 add = local_var:te_dg_bm_new }
 	change_variable = { name = te_dg_cf0 add = local_var:te_dg_bf_new }

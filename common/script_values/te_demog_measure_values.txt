@@ -416,9 +416,9 @@ te_demog_ms_women_at_work = {
 # ---- Desired family size on each measure (the self-check: te_debug_demog_ms_selfcheck_start) ----------------------
 # Each measure's state_desired_fertility_mult line, 0 when it has none; test_demographics_measures.py pins them to
 # te_demog_measure_modifiers.txt. te_demog_ms_desired_on sums the lines of the measures' modifiers the country holds.
-te_demog_ms_desired_child_allowance = { value = 0.08 }
+te_demog_ms_desired_child_allowance = { value = 0.14 }
 te_demog_ms_desired_family_housing = { value = 0 }
-te_demog_ms_desired_honours = { value = 0.03 }
+te_demog_ms_desired_honours = { value = 0.05 }
 te_demog_ms_desired_restricted_contraception = { value = 0 }
 te_demog_ms_desired_parental_leave = { value = 0.05 }
 te_demog_ms_desired_free_contraception = { value = 0 }
@@ -437,6 +437,20 @@ te_demog_ms_desired_on = {
 	if = { limit = { has_modifier = te_demog_ms_birth_limit } add = te_demog_ms_desired_birth_limit }
 	if = { limit = { has_modifier = te_demog_ms_birth_limit_one } add = te_demog_ms_desired_birth_limit_one }
 	if = { limit = { has_modifier = te_demog_ms_crash_campaign } add = te_demog_ms_desired_crash_campaign }
+}
+# State scope (phase 2 step 3b): Birth Limit's part of the state's state_desired_fertility_mult, which the Rural
+# Exemption's relief takes in farming states (the generated te_demog_tfr_policy; demographics_model.Inputs.birth_limit).
+# The engine sums the type over every carrier, so the part comes from the owner's Birth Limit modifier.
+te_demog_ms_birth_limit_part = {
+	value = 0
+	if = {
+		limit = { exists = owner owner = { has_modifier = te_demog_ms_birth_limit } }
+		value = te_demog_ms_desired_birth_limit
+	}
+	else_if = {
+		limit = { exists = owner owner = { has_modifier = te_demog_ms_birth_limit_one } }
+		value = te_demog_ms_desired_birth_limit_one
+	}
 }
 
 # ---- Each measure's upkeep, for the AI pulse's budget (te_demog_ms_ai_spent) -------------------------------------

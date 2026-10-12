@@ -45,6 +45,8 @@ class Inputs:
     impartible: bool = False             # the owner holds Primogeniture or Undivided Farm Succession
     low_share: float = 0.0               # the lower strata's share of people (te_dg_low_share, from the walk)
     pension_age: float | None = None     # the owner's pension age under Old Age Pension; None = the Standard position
+    birth_limit: float = 0.0             # Birth Limit's part of P.DESIRED_TYPE (its modifier's line: 0, -0.3 or -0.45;
+                                         # the script's te_demog_ms_birth_limit_part), which the Rural Exemption relieves
 
 
 def clamp(x, lo, hi):
@@ -204,9 +206,39 @@ def life_table(q):
 def means(inp):
     """The share of the gap to desired fertility a population can close (§2.3; stage 2's types)."""
     tier = clamp(P.TRADITIONAL_MEANS + inp.mods.get(P.CONTRACEPTION_TYPE, 0.0), 0.0, 1.0)
-    access = P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * inp.literacy
+    # Sex Education (phase 2 step 3b): access as if literacy were the type higher, at most full
+    literacy = min(1.0, inp.literacy + inp.mods.get(P.MEANS_LITERACY_TYPE, 0.0))
+    access = P.MEANS_ACCESS_BASE + (1 - P.MEANS_ACCESS_BASE) * literacy
     shift = inp.mods.get(P.MEANS_SHIFT_TYPE, 0.0) + inp.means_add
     return clamp(tier * access + shift, 0.0, P.MEANS_CAP)
+
+
+def policy_term(inp):
+    """Family policy's factor on desired fertility (phase 2 step 3b, spec §3.5; te_demog_tfr_policy): 1 + the desired
+    type, with Birth Limit's part relieved by the relief type x the state's agrarian share (the Rural Exemption), at
+    least 0. Birth Limit's part is negative, so the relief raises the term."""
+    d = inp.mods.get(P.DESIRED_TYPE, 0.0)
+    relief = inp.mods.get(P.BIRTH_LIMIT_RELIEF_TYPE, 0.0)
+    if relief > 0:
+        d -= inp.birth_limit * min(relief, 1.0) * inp.agrarian_share
+    return max(0.0, 1 + d)
+
+
+def urban_term(inp):
+    """City life's pull on desired fertility, 1 - URBAN_WEIGHT x urban x (1 - the relief type within 0-1): Family
+    Housing (phase 2 step 3b; te_demog_tfr_urban)."""
+    relief = clamp(inp.mods.get(P.URBAN_RELIEF_TYPE, 0.0), 0.0, 1.0)
+    return 1 - P.URBAN_WEIGHT * (inp.urban_share * (1 - relief))
+
+
+def newborn_split(inp):
+    """(girls, boys) per 100,000 births in the step (phase 2 step 3b, spec §3.4; te_demog_newborn_split): the
+    constants, or, once prenatal sexing exists and the sex-ratio type is positive, 100 girls to SRB_BASE + it boys."""
+    t = inp.mods.get(P.SRB_TYPE, 0.0)
+    if t <= 0 or P.PRENATAL_SEXING_TECH not in inp.techs:
+        return float(P.FEMALE_BIRTH_PER_100K), float(P.MALE_BIRTH_PER_100K)
+    girls = 100000.0 * 100 / (100 + P.SRB_BASE + t)
+    return girls, 100000.0 - girls
 
 
 def fertility(inp, e0):
@@ -218,8 +250,10 @@ def fertility(inp, e0):
     natural = max(P.NATURAL_FERTILITY_FLOOR, 1 + inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0))
     education = 1 - P.EDUCATION_WEIGHT * inp.literacy
     survival = 1 - P.SURVIVAL_WEIGHT * clamp((e0 - 30) / 50, 0.0, 1.0)
-    urban = 1 - P.URBAN_WEIGHT * inp.urban_share
-    desired = education * survival * urban
+    urban = urban_term(inp)
+    # family policy (phase 2 step 3b): the measures' and Pro-Natalist Policy's desired type, floored and capped
+    policy = policy_term(inp)
+    desired = clamp(education * survival * urban * policy, P.DESIRED_FLOOR, P.DESIRED_CAP)
     mn = means(inp)
     factor = 1 - mn * (1 - desired)
     practices = {p: 1 - cut * inp.practices.get(p, 0.0) for p, cut in P.PRACTICE_CUT.items()}
@@ -227,7 +261,8 @@ def fertility(inp, e0):
     for term in practices.values():
         tfr *= term
     out = {"tfr": tfr, "wealth": wealth, "natural": natural, "education": education,
-           "survival": survival, "urban": urban, "means": mn, "factor": factor, **practices}
+           "survival": survival, "urban": urban, "policy": policy, "desired": desired, "means": mn, "factor": factor,
+           **practices}
     # planned and unplanned births (late-game §3.1): the families who choose their number, and the births the means
     # don't reach. Computed from the result's own tfr and factor, so every term multiplying the factor (wealth,
     # natural, #906's practices) scales both parts alike.
@@ -844,8 +879,10 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
     ring.pool_f *= 1 - pq_f
     ring.pool_m *= 1 - pq_m
-    ring.f[open_k] = births * P.FEMALE_BIRTH_PER_100K / 100000.0
-    ring.m[open_k] = births * P.MALE_BIRTH_PER_100K / 100000.0
+    # the newborns' split: the constants, or the sex ratio at birth with prenatal sexing (phase 2 step 3b)
+    girls, boys = newborn_split(inp)
+    ring.f[open_k] = births * girls / 100000.0
+    ring.m[open_k] = births * boys / 100000.0
     ring.year = year
     raw = sum(ring.f) + sum(ring.m) + ring.pool_f + ring.pool_m
     ring.scale = (engine_pop / raw) if (engine_pop is not None and raw > 0) else 1.0

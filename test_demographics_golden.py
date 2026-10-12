@@ -8,7 +8,12 @@ The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on th
 - a digest of every block of the generated census files and #892's three line files, kept byte for byte (comments
   aside) except the life table's added threshold lines;
 - the yearly walk's text, which runs in every game and which the interpreter can't iterate over pops: kept but for the
-  three calls of Task 5's gated effects."""
+  three calls of Task 5's gated effects.
+
+Phase 2 step 3b (the census reads the Family Policy measures) changes no number either while no measure is on and the
+family laws are left out (the cases hold none): its new reads are exact identities at 0 (x 1, + 0, the constants), and
+its edits to three existing blocks are named below (STEP3B_ADDED, STEP3B_REWRITE), so each block's old text must still
+come back once they are taken out. Its new variable is te_dg_in_mat (the maternal cause's input)."""
 
 import functools
 import hashlib
@@ -34,6 +39,12 @@ GOLDEN = ROOT / "test_fixtures" / "demographics" / "phase2_step1_golden.json"
 NEW_VARS = {"te_dg_wa_share", "te_dg_at_work", "te_dg_pensioners", "te_dg_need", "te_dg_old_age",
             "te_dg_low_share", "te_dg_wbase", "te_dg_wf_engine", "te_dg_ln_working_adults"}
 NEW_MODIFIERS = {"te_demog_line_working_adults_up", "te_demog_line_working_adults_down"}
+# phase 2 step 3b: the maternal cause's stored family-policy input
+NEW_VARS |= {"te_dg_in_mat"}
+# phase 2 step 3b's lines in existing blocks: the maternal cause's laws factor (te_demog_mult_maternal) and its stored
+# input (te_demog_cause_inputs_store), added; Sex Education's literacy in te_demog_means' access, rewritten back out
+STEP3B_ADDED = re.compile(r"^multiply = te_demog_f_maternal_laws$|^set_variable = \{ name = te_dg_in_mat ")
+STEP3B_REWRITE = (("var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply", "var:te_dg_lit multiply"),)
 # Task 5's three calls in te_demog_walks; nothing else in the walk may change
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
@@ -108,7 +119,9 @@ def _lines(full):
 
 def _norm(body, drop=None):
     lines = [line.strip() for line in body.splitlines() if line.strip()]
-    return "\n".join(line for line in lines if not (drop and drop(line)))
+    for was, now in STEP3B_REWRITE:
+        lines = [line.replace(was, now) for line in lines]
+    return "\n".join(line for line in lines if not (drop and drop(line)) and not STEP3B_ADDED.search(line))
 
 
 def blocks():
