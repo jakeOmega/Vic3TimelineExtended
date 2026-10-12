@@ -90,6 +90,11 @@ history has them at 4.5 against 7.1.
   spreads (§13's proposal);
 - or accept the compressed spread and fit only the world level and the wealth curve's ceiling.
 
+**Decided (owner, 2026-10-10 and 2026-10-11):** two practices, Late Marriage and Birth Spacing, combined as a product
+(spec `docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md`, #862; all nine of its calls approved
+2026-10-11, Birth Spacing's cut at 0.35). Plan: `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`,
+which also refits step 1's mortality with them (the spec's call 8).
+
 Before the owner's call, the fit can still:
 - move the wealth curve's ceiling for the poorest (history's high-fertility societies reach 7, the model 6.0). **Owner
   decision, 2026-10-10 (step 4's gate): lowered from 6.2 to 6.0**, because the model's children per woman sat above

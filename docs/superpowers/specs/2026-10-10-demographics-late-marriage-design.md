@@ -1,6 +1,10 @@
 # Demographics: late marriage and birth spacing — design
 
-> **Status: design draft, 2026-10-10, second round.** It answers the owner call in step 2 of the phase 2 calibration
+> **Status: approved (owner, 2026-10-11).** All nine calls in §7 are approved as recommended, with one change: Birth
+> Spacing's cut starts at 0.35, not 0.34. The harness refits every value jointly (§5.1) and rounds the results to neat
+> figures. Plan: `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`.
+>
+> **Design draft, 2026-10-10, second round.** It answers the owner call in step 2 of the phase 2 calibration
 > plan (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`, on PR #857): the census's children
 > per woman run 4.3–6.1 where history's run 3.2–7.1. The cause is how marriage and childbearing were organised, and
 > the game has no input for it. The first round chose between a strict late-marriage share and a broad one. The owner
@@ -672,6 +676,10 @@ The candidates, in existing groups:
 
 Decided (owner, 2026-10-10): two practices, combined as a product (§2.1).
 
+**Approved (owner, 2026-10-11): all nine calls below, as recommended,** with one change to call 4: Birth Spacing's cut
+starts at **0.35** (not 0.34), for neatness. The harness refits all the values jointly anyway (§5.1), and its results
+are rounded to neat figures. Call 6 stands as written: contraception erodes Late Marriage.
+
 1. **The names:** "Late Marriage" and "Birth Spacing". "Marital Restraint" and "Customary Restraint" are the
    alternatives for the second; "Birth Spacing" is plain, describes what it does, and doesn't echo Family
    Limitation. Recommended as proposed.
@@ -682,8 +690,8 @@ Decided (owner, 2026-10-10): two practices, combined as a product (§2.1).
    - Recommended as proposed, with both flagged.
 3. **Japan in Birth Spacing at 1.0 and Late Marriage at 0** (§1.3). Starting it in both changes nothing measurable,
    and the evidence is restraint within marriage. Recommended.
-4. **The size:** wealth curve ×1.15, Late Marriage cut 0.30, Birth Spacing cut 0.34 (§2.3). The high-fertility
-   group reaches about 7 at an error of 0.49 (today 0.89).
+4. **The size:** wealth curve ×1.15, Late Marriage cut 0.30, Birth Spacing cut 0.34 (§2.3; approved at **0.35**,
+   owner, 2026-10-11). The high-fertility group reaches about 7 at an error of 0.49 (today 0.89).
    - The harness refits the values jointly (§5.1).
    - Drop `inh_primogeniture_rural`'s +10% birth line, which contradicts Late Marriage (§4.5).
    - Recommended.
