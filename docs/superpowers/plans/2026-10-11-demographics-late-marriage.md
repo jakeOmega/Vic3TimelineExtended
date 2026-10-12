@@ -238,13 +238,13 @@ So the start tables carry two held values: `BS_EAST_ASIA_START` (China's strateg
 state regions) and `BS_HELD_START` (India's). `M.bs_held_group` says which by membership, not by value, since both
 start at 0.37.
 
-## Owner questions (none blocks Tasks 1–5)
+## Owner questions (all answered by the owner, 2026-10-11)
 
-1. **Women's rights twice** (D2). Keep both the natural term and Late Marriage's women's-work driver, or drop the
-   driver? Proposed: keep both, since the overlap is at most about 4.5% of births and both were approved.
-2. **The shares under Display only** (D4). Proposed: they run with the census, so Display only shows the same children
-   per woman as Full.
-3. **The spread** (D6). Proposed: phase 3, as the spec has it.
+1. **Women's rights twice** (D2). **Answered: keep both**, the natural term (women's standing inside marriage) and Late
+   Marriage's women's-work driver (jobs delaying marriage). The overlap is at most about 4.5% of births.
+2. **The shares under Display only** (D4). **Answered: they run under Display only too**, with the census, so Display
+   only shows the same children per woman as Full.
+3. **The spread** (D6). **Answered: it waits for phase 3**, as the spec has it.
 
 ## Global Constraints
 
@@ -2302,7 +2302,13 @@ git commit -m "Demographics: the practices' fit on the normal-speed run's saves;
 
 Add `te_demog_tech_injections.txt` to the `git add` if Step 6 changed it.
 
-- [ ] **Stop A (owner).** Post the results doc's chosen point, regional table and gate to the owner, with Owner
+- [x] **Stop A (owner). Decided 2026-10-12: option 2.** The owner kept the fit's fertility (s 1.00, cuts 0.10 and 0.20,
+  India's held share 0, East Asia's 0.06 by D13's rule at today's mortality) with step 1's mortality unchanged; the
+  fallback's poverty refit (×2.25 from SoL 8) was not taken. The gate fails (India, Africa, the USA and Canada, the
+  Middle East, South America, Southeast Asia; Europe and the world by rounding), and those regions are calibration
+  step 3's. Owner questions 1–3 were answered on 2026-10-11 (above). The original instruction follows.
+
+  Post the results doc's chosen point, regional table and gate to the owner, with Owner
   questions 1–3. Continue to Task 7 on the owner's word.
   - If Step 5 found no passing point, the post names the regions left for calibration step 3 (a separate step after
     this work) and any other failure.
@@ -3531,7 +3537,7 @@ git commit -m "Demographics: Late Marriage and Birth Spacing, the offline gate a
 
 | Stop | After | Who | What |
 |---|---|---|---|
-| A | Task 6 | the owner | The chosen point (the smallest raise the regional gate passes), the regional table and the gate, with Owner questions 1–3. No script before the owner's word |
+| A | Task 6 | the owner | The chosen point (the smallest raise the regional gate passes), the regional table and the gate, with Owner questions 1–3. No script before the owner's word. **Decided 2026-10-12: option 2, the fit's fertility at today's mortality** |
 | The probe | Task 9 Step 1 | the owner, in a throwaway game | Option o's two lines: Plan A or Plan B |
 | B | Task 9 | a fresh reviewer (most capable model) | Tasks 7–9: the risky script (seed, step, Primogeniture's line), per Review Focus 1–4 |
 | C | Task 12 Step 3 | a fresh reviewer (most capable model) | The whole branch against the spec and this plan |
