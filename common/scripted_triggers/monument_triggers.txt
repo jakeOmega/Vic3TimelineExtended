@@ -389,8 +389,9 @@ gm_ledger_idle = {
 	}
 }
 
-# Country scope. Nothing left fading: with no monument either, the journal
-# entry goes (plan decision 3).
+# Country scope. Nothing left fading, and no opportunity boon running
+# (gm_commission_triggers.txt): with no monument either, the journal entry
+# goes (plan decision 3).
 gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_teardown_ledger }
 	gm_ledger_idle = { VAR = gm_vanity_ledger }
@@ -402,7 +403,7 @@ gm_ledgers_idle = {
 	gm_ledger_idle = { VAR = gm_ig_ledger_petty_bourgeoisie }
 	gm_ledger_idle = { VAR = gm_ig_ledger_rural_folk }
 	gm_ledger_idle = { VAR = gm_ig_ledger_trade_unions }
-	gm_ledger_idle = { VAR = gm_promise_ledger }
+	gm_boons_idle = yes
 }
 
 # ======================================================================

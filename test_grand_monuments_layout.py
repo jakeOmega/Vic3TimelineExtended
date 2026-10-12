@@ -13,6 +13,7 @@ GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "grand_monuments_widget
 JE = os.path.join(REPO, "common", "journal_entries", "je_grand_monuments.txt")
 VALUES = os.path.join(REPO, "common", "script_values", "gm_values.txt")
 COM_VALUES = os.path.join(REPO, "common", "script_values", "gm_commission_values.txt")
+COM_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "gm_commission_triggers.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "gm_sguis.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "gm_effects.txt")
 LOC = os.path.join(REPO, "localization", "english", "te_miscellaneous_l_english.yml")
@@ -33,8 +34,13 @@ HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_national", "gm_je_how_coun
             "gm_je_how_counts_other", "gm_je_how_contested", "gm_je_how_choices",
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
             "gm_je_how_names", "gm_je_how_policy"]
-# The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5; v2 §2.4).
-FADING = ("teardown", "vanity", "promise")
+# The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5).
+FADING = ("teardown", "vanity")
+# The opportunity boons under National Effects' Opportunities Seized
+# (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md §3.2):
+# one row each, shown while its months run.
+BOONS = ("reign", "regime", "great_power", "victory", "defeat", "centenary", "ruler_death", "space", "faith",
+         "tech_artistic", "tech_scientific", "tech_industrial", "tech_athletic", "tech_naturalist")
 # Dedications with a national effect of their own: shown only while in force.
 SPECIFIC = ("leader", "religious", "war_memorial", "artistic", "scientific", "industrial")
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners",
@@ -269,6 +275,13 @@ class StateGatedTest(unittest.TestCase):
         self.assertTrue(fading)
         for ledger in FADING:
             self.assertIn(f"ScriptValue('gm_display_{ledger}')", fading.group(1))
+        self.assertIn("gm_subheader = { visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+                      ".ScriptValue('gm_disp_boon_any'), '(CFixedPoint)1' )]\" blockoverride \"subheader_text\" "
+                      "{ text = \"gm_je_sub_boons\" }", nat)
+        for boon in BOONS:
+            self.assertIn(f"gm_value_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+                          f".ScriptValue('gm_disp_boon_{boon}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_boon_{boon}\"",
+                          nat, boon)
 
     def test_sections_never_start_empty(self):
         gui = _gui()
@@ -373,6 +386,12 @@ class NationalEmptyStateTest(unittest.TestCase):
             self.assertIn(f"AND = {{ has_variable = {var} NOT = {{ var:{var} = 0 }} }}", anyv, display)
         for var in re.findall(r"has_variable = (\w+)", _block(values, "gm_disp_ig_any")):
             self.assertIn(f"has_variable = {var} ", anyv, var)
+        # The boon rows: gm_disp_boon_any is gm_boons_idle's negation, and the
+        # empty state counts it.
+        self.assertIn("gm_boons_idle = no", anyv)
+        idle = _squash(_block(_read(COM_TRIGGERS), "gm_boons_idle"))
+        for boon in BOONS:
+            self.assertIn(f"NOT = {{ has_variable = gm_boon_{boon} }}", idle, boon)
 
 
 class ConceptsTest(unittest.TestCase):
@@ -636,7 +655,7 @@ class LabelBudgetTest(unittest.TestCase):
             self._fits(val, value, LONGEST_VALUE)
         label, value = _cells(_type_body(self.gui, "gm_value_row"))
         rows = re.findall(r'gm_value_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
-        self.assertEqual(len(rows), len(IGS) + len(FADING))
+        self.assertEqual(len(rows), len(IGS) + len(FADING) + len(BOONS))
         for lbl, val in rows:
             self._fits(lbl, label)
             self._fits(val, value, LONGEST_VALUE)

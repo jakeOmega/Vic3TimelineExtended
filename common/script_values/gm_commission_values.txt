@@ -1,12 +1,13 @@
 ﻿# ============================================================================
-# GRAND MONUMENTS — commissions: script values (v2 §2)
+# GRAND MONUMENTS — opportunities: script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-05-grand-monuments-v2-design.md §2.
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md
+# (v2's commissions, reworked; the script keeps their gm_com_* names).
 # Country scope throughout. Every var: read is guarded: the widget renders these
-# for countries that have never had a commission.
+# for countries that have never had an opportunity.
 
-# ---- Progress (§2.3) ------------------------------------------------------------
-# The grandeur of the monuments that count toward the open commission today
+# ---- Progress (spec §2) ---------------------------------------------------------
+# The grandeur of the monuments that count toward the open opportunity today
 # (gm_state_com_counts): fitting, of its dedication, in its state if it has one.
 gm_com_fit_grandeur = {
 	value = 0
@@ -35,10 +36,10 @@ gm_com_progress = {
 	}
 }
 
-# ---- Time (§2.3) -------------------------------------------------------------------
-# The months a commission runs, fixed on acceptance: 60 for a great power, 120
+# ---- Time (spec §2) ----------------------------------------------------------------
+# The months an opportunity runs, fixed on seizing: 60 for a great power, 120
 # for a major power (owner, 2026-10-05: about half the construction for the same
-# five levels). A rank won or lost later does not change a running commission.
+# five levels). A rank won or lost later does not change a running one.
 gm_com_time_months = {
 	value = 120
 	if = {
@@ -47,7 +48,7 @@ gm_com_time_months = {
 	}
 }
 
-# ---- Journal entry displays (grand_monuments_widget.gui, Commission) -------------
+# ---- Journal entry displays (grand_monuments_widget.gui, Opportunity) ------------
 gm_disp_com_open = {
 	value = 0
 	if = {
@@ -95,16 +96,7 @@ gm_disp_com_months = {
 	}
 }
 
-# 1 once Ask for More Time has been used.
-gm_disp_com_extended = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_com_extended }
-		value = 1
-	}
-}
-
-# 1 while the commission names a state.
+# 1 while the opportunity names a state.
 gm_disp_com_fixed = {
 	value = 0
 	if = {
@@ -113,21 +105,142 @@ gm_disp_com_fixed = {
 	}
 }
 
-# ---- What fulfilment pays (§2.4), for the tooltips -------------------------------
-# The petitioner's ledger moves by this much grandeur; the promise ledger by
-# gm_com_reward_promise legitimacy. Halved after Ask for More Time.
-gm_com_reward_ig = {
-	value = 15
+# ---- What completing one gives (spec §3), for the effects and the tooltips ----------
+# The monument that completed it is rebuilt this many levels taller (the
+# monument's gift, gm_state_gift_grandeur), at most to level 200.
+gm_com_gift = 5
+
+# The asking group's ledger rises by this much grandeur (gm_com_fulfil): about
+# +2 approval, fading.
+gm_com_reward_ig = 15
+
+# A boon runs this many months (gm_com_grant_boon).
+gm_boon_months = 120
+
+# The same in years, for the tooltips.
+gm_disp_boon_years = {
+	value = gm_boon_months
+	divide = 12
+}
+
+# ---- The boons (spec §3.2): months left, 0 when none runs ---------------------------
+gm_disp_boon_reign = {
+	value = 0
 	if = {
-		limit = { has_variable = gm_com_extended }
-		value = 8
+		limit = { has_variable = gm_boon_reign }
+		value = var:gm_boon_reign
 	}
 }
 
-gm_com_reward_promise = {
-	value = 5
+gm_disp_boon_regime = {
+	value = 0
 	if = {
-		limit = { has_variable = gm_com_extended }
-		value = 2.5
+		limit = { has_variable = gm_boon_regime }
+		value = var:gm_boon_regime
+	}
+}
+
+gm_disp_boon_great_power = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_great_power }
+		value = var:gm_boon_great_power
+	}
+}
+
+gm_disp_boon_victory = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_victory }
+		value = var:gm_boon_victory
+	}
+}
+
+gm_disp_boon_defeat = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_defeat }
+		value = var:gm_boon_defeat
+	}
+}
+
+gm_disp_boon_centenary = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_centenary }
+		value = var:gm_boon_centenary
+	}
+}
+
+gm_disp_boon_ruler_death = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_ruler_death }
+		value = var:gm_boon_ruler_death
+	}
+}
+
+gm_disp_boon_space = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_space }
+		value = var:gm_boon_space
+	}
+}
+
+gm_disp_boon_faith = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_faith }
+		value = var:gm_boon_faith
+	}
+}
+
+gm_disp_boon_tech_artistic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_tech_artistic }
+		value = var:gm_boon_tech_artistic
+	}
+}
+
+gm_disp_boon_tech_scientific = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_tech_scientific }
+		value = var:gm_boon_tech_scientific
+	}
+}
+
+gm_disp_boon_tech_industrial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_tech_industrial }
+		value = var:gm_boon_tech_industrial
+	}
+}
+
+gm_disp_boon_tech_athletic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_tech_athletic }
+		value = var:gm_boon_tech_athletic
+	}
+}
+
+gm_disp_boon_tech_naturalist = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_boon_tech_naturalist }
+		value = var:gm_boon_tech_naturalist
+	}
+}
+
+# 1 while any boon runs: the Opportunities Seized heading.
+gm_disp_boon_any = {
+	value = 1
+	if = {
+		limit = { gm_boons_idle = yes }
+		value = 0
 	}
 }

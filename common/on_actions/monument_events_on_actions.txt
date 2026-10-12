@@ -278,11 +278,13 @@ gm_state_owner_change_on_action = {
 }
 
 # ============================================================================
-# Commissions (v2 §2): the world pass and the moments it cannot poll
+# Opportunities (docs/superpowers/specs/2026-10-12-grand-monument-
+# opportunities-design.md): the world pass and the moments it cannot poll
 # ============================================================================
-# Every country, every month: the moment trackers and the petition roll
-# (gm_com_world_monthly, gm_commission_effects.txt). Cheap: a few reads a
-# country, and the petition's counts only on a 1-in-120 roll.
+# Every country, every month: the moment trackers (gm_com_world_monthly,
+# gm_commission_effects.txt): a new order, a new reign, a great power, a new
+# faith, the space firsts, the centenary, the technologies. Cheap: a few reads
+# a country.
 gm_com_world_on_action = {
 	trigger = {
 		gm_system_enabled = yes
@@ -297,7 +299,7 @@ gm_com_world_on_action = {
 # scope:enemy_country = the other side's leader, scope:benefitted_from_wargoal /
 # scope:victim_of_wargoal = set if a war goal of this country's was enforced, or
 # one against it (1.14.5 00_code_on_actions.txt; vanilla moved recently_won_war
-# here). Victory and Defeat are for war leaders after a year of war (v2 §2.2).
+# here). Victory and Defeat are for war leaders after a year of war.
 on_won_war = {
 	on_actions = {
 		gm_won_war_on_action
@@ -349,7 +351,9 @@ gm_lost_war_on_action = {
 }
 
 # ROOT = the character who died. A ruler who reigned 15 years or more
-# (gm_ruler_months, kept by the world pass) is offered a mausoleum.
+# (gm_ruler_months, kept by the world pass) brings A Reign Remembered: a
+# mausoleum. At once, so it takes the slot ahead of the new reign the world
+# pass sees later in the month.
 on_character_death = {
 	on_actions = {
 		gm_character_death_on_action

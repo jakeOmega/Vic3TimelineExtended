@@ -115,10 +115,10 @@ gm_hard_times_sgui = {
 	}
 }
 
-# ---- Commissions (v2 §2.3) ----------------------------------------------------
-# Ask for More Time, once: +36 months, the reward halved. Scope-free: the
-# Commission section reads the country only.
-gm_com_extend_sgui = {
+# ---- Opportunities (opportunities spec §2) --------------------------------------
+# Let It Pass: closes the open opportunity, at no cost, so the next moment can
+# bring one. Scope-free: the Opportunity section reads the country only.
+gm_com_let_pass_sgui = {
 	scope = country
 
 	is_shown = {
@@ -127,16 +127,12 @@ gm_com_extend_sgui = {
 
 	is_valid = {
 		has_variable = gm_com_open
-		custom_tooltip = {
-			text = gm_com_extend_once_tt
-			NOT = { has_variable = gm_com_extended }
-		}
 	}
 
 	effect = {
 		custom_tooltip = {
-			text = gm_com_extend_effect_tt
-			gm_com_extend = yes
+			text = gm_com_let_pass_effect_tt
+			gm_com_decline = yes
 		}
 	}
 

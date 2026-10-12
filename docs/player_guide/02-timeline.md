@@ -466,10 +466,10 @@ effects as one tall one; local effects count each monument on its own.
 
 ### The Monuments journal entry
 
-The Monuments journal entry appears when you own a Grand Monument or an interest
-group has asked you for one (a [commission](#monument-commissions)). After your
-last monument is gone, it stays until the fading approval and legitimacy it
-shows have run out.
+The Monuments journal entry appears when you own a Grand Monument or an
+[opportunity](#monument-opportunities) is open or on offer. After your last
+monument is gone, it stays until the fading approval and legitimacy it shows,
+and any boon it carries, have run out.
 
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
@@ -498,10 +498,10 @@ These sections follow:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Commission | Open | Only while a commission is open: who asked for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, and Ask for More Time. |
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship), and what remains from a met commission (A Promise Kept). The four monument policy buttons are at the foot. |
+| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, and Let It Pass. |
+| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left. The four monument policy buttons are at the foot. |
 | Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, commissions, names and the monument policy. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, names and the monument policy. |
 
 Every monument, whatever it honors, gives:
 
@@ -544,50 +544,65 @@ still fits. Each interest group's approval counts the grandeur of the monuments
 it approves of, minus those it objects to, and moves by 1 per step either way.
 No number of monuments can buy a group outright: each group has one total.
 
-### Monument commissions
+### Monument opportunities
 
-In a great or major power, interest groups ask for monuments. A **commission**
-is one such request: 5 grandeur of one dedication within 60 months, or 120 in a
-major power. It arrives
-as an event, A Monument Is Asked For, which you accept or turn down (an offer
-left unanswered is turned down), and while it is open it has its own section on
-the Grand Monuments tab. Only one commission is open or on offer
-at a time; a moment that comes while one is open passes without one.
+In a great or major power, moments in your country's history bring
+**opportunities** to raise a monument. Each comes as an event, An Opportunity,
+titled for the moment that brought it, and names the interest group that wants
+it, the dedication, where it stands and what completing it gives. Seize the
+Opportunity opens it; Let It Pass closes it. Neither choice costs anything, and
+an offer left unanswered is seized. While it is open it has its own section on
+the Grand Monuments tab, with a Let It Pass button of its own. Only one
+opportunity is open or on offer at a time; a moment that comes while one is
+open passes without one.
 
-| Moment | Who asks | For | Where |
-|---|---|---|---|
-| You end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere |
-| You end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere |
-| The 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital |
-| The death of a ruler who reigned 15 years or more | The late ruler's group | A mausoleum To the Nation, named for them | The capital |
-| A new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere |
-| You are the first into orbit or the first onto the Moon | Intelligentsia | An obelisk To the Nation | The capital |
-| About once a decade: a group in government with under 5 grandeur of a dedication it approves of | That group | That dedication | Anywhere |
+| Moment | Who asks | For | Where | Boon for ten years |
+|---|---|---|---|---|
+| A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader when your government can raise one, named for the new ruler | Anywhere | +10% authority |
+| A New Order: a new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere | +25% loyalists from high legitimacy |
+| Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence |
+| Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige |
+| Defeat: you end such a war with a war goal enforced against you | Armed Forces, or the strongest group outside the government if they are in it | A War Memorial to the fallen | Anywhere | −25% radicals from low legitimacy |
+| A Centenary: the 100th or 200th year since your founding | Petty Bourgeoisie, or the strongest group in government | A column To the Nation | The capital | +25% assimilation |
+| A Reign Remembered: a ruler who reigned 15 years or more dies | The late ruler's group | A mausoleum To the Nation, named for them | The capital | +5 legitimacy |
+| First into Orbit, First on the Moon | Intelligentsia | An obelisk To the Nation | The capital | +10% innovation |
+| A New Faith: your state religion changes | Devout | A Grand Shrine | Anywhere | +25% conversion |
+| Romanticism researched | Intelligentsia | A Grand Opera House | Anywhere | +10% Arts Academy throughput |
+| Empiricism researched | Intelligentsia | A Grand Observatory | Anywhere | +10% technology spread |
+| Marketing Research researched | Industrialists | A Great Exhibition Hall | Anywhere | +5% Manufacturing Industries throughput |
+| Television Broadcasting researched | Trade Unions | A Grand Stadium | Anywhere | −5% mortality |
+| The Environmental Movement researched | Rural Folk | Botanical Gardens | Anywhere | +25% pollution health effects reduction |
 
-A commission for the capital can be met anywhere when the capital already holds
-a monument of another dedication. Countries that won independence before 1836
-count their founding from that year, from the United States (1776) to Belgium
-and Ecuador (1830); a country formed or released in play is founded the year it
-appears. Other countries of 1836 have no founding year and no centenary.
+An opportunity asks for 5 grandeur of its dedication within 60 months, or 120
+in a major power. Grandeur you add to fitting monuments of the dedication
+counts, whether you raise an old monument or build a new one, and an
+opportunity for the capital counts only the capital's monument. One for the
+capital can be met anywhere when the capital already holds a monument of
+another dedication. A monument that becomes contested stops counting. While an
+opportunity is open, the dedication ceremony says so.
 
-Grandeur you add to fitting monuments of the dedication counts, whether you
-raise an old monument or build a new one, and a commission for the capital
-counts only the capital's monument. A monument that becomes contested stops
-counting. While a commission is open, the dedication ceremony says so.
+Each moment that comes once comes once a game: the first time you are a great
+power, the space firsts, each technology. What you already have when a game
+starts brings nothing, so a great power of 1836 and a country that already
+knows Empiricism get no opportunity for them. When a long-reigning ruler dies,
+A Reign Remembered comes at once and the successor's A New Reign passes.
+Countries that won independence before 1836 count their founding from that
+year, from the United States (1776) to Belgium and Ecuador (1830); a country
+formed or released in play is founded the year it appears. Other countries of
+1836 have no founding year and no centenary.
 
 | Outcome | What follows |
 |---|---|
-| Met | The group that asked approves, about +2 at first and fading over several years, and A Promise Kept gives +5 legitimacy, fading by 3% a month. The monument that completed it takes the commission's name. |
-| Met after Ask for More Time | Ask for More Time adds 36 months, once, and halves the reward: about +1 approval and +2.5 legitimacy. |
-| Turned down | The group resents the refusal: about −1 approval, fading. |
-| Missed | Time runs out, and the group resents the broken promise more than a refusal: about −2 approval, fading. Turn down what you can't build. |
-| Lapsed | No effect. A commission lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
+| Completed | The monument that completed it is rebuilt 5 levels taller at no cost, keeping its dedication, name and style. The group that asked approves, about +2 at first and fading over several years. The moment's boon runs for ten years, under Opportunities Seized in National Effects. The monument takes the opportunity's name. |
+| Let it pass, or time runs out | Nothing. The next moment can bring another. |
+| Lapsed | Nothing. An opportunity lapses when its state is lost or its dedication can no longer be raised, as when a crown falls. |
 
-No group petitions for five years after a commission closes; wars, centenaries,
-deaths, new regimes and space firsts still bring theirs. The AI gets the same
-offers. It accepts unless it is at war, in hard times, has more than a year of
-government construction queued or is in debt, and then queues the five levels
-itself.
+A second boon of the same kind restarts its ten years. The rebuilt monument
+reaches level 200 at most, so a monument already that tall gets no extra levels.
+
+The AI gets the same offers. It seizes one unless it is at war, in hard times,
+has more than a year of government construction queued or is in debt, and then
+queues the five levels itself.
 
 ### Monument names and forms
 
@@ -617,11 +632,11 @@ the Lisbon Gate, Victoria's Column, the Arch of 1856. After the style, two event
 ask: The Form It Takes, when the style offers more than one form (a column, an
 arch, a gate, a pagoda, a sun stone), and A Name for the Monument, which names it for its
 city, its state, the ruler, what it honors (the Crown, the Republic, the
-Revolution, the Nation, the Faith or the Fallen), the year, or the occasion a
-commission marks. Each event keeps what was proposed unless you pick another.
+Revolution, the Nation, the Faith or the Fallen), the year, or the occasion an
+opportunity marks. Each event keeps what was proposed unless you pick another.
 An opera house, gardens, an observatory, an exhibition hall or a stadium takes
 its own building's form, and a Grand Shrine of your faith takes its building's
-name. The AI names its monuments for their city, or as their commission asks.
+name. The AI names its monuments for their city, or as their opportunity asks.
 
 From an upheld monument's row, Rename asks both again at no cost, and Name It
 opens the game's rename box so you can type a name of your own. Confirming the
@@ -696,7 +711,7 @@ benefits, usually for two interest groups, and the only cost is money. A
 contested or heritage monument holds no anniversaries, and none come while your
 monument policy is Mothballed.
 
-The AI raises most of its monuments through commissions. Without one, it raises
+The AI raises most of its monuments through opportunities. Without one, it raises
 them mainly as a great or major power, in a state with a
 Tourism Industry, or when its legitimacy is low, and never while at war or in
 hard times. It decides its contested monuments within a few months: small ones

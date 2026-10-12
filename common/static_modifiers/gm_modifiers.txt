@@ -61,12 +61,86 @@ gm_national_vanity = {
 	country_legitimacy_base_add = -1
 }
 
-# A commission met (v2 §2.4): the multiplier is the promise ledger itself,
-# LINEAR (only one commission is ever open, so nothing stacks). Fulfilled +5,
-# after an extension +2.5; fades by 3% a month.
+# v2's commission reward, retired with the opportunities (2026-10-12): nothing
+# adds it. Kept, with its remove_modifier in gm_remove_national_modifiers, so a
+# save that carries it on the journal entry sheds it on the first refresh.
 gm_national_promise = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_legitimacy_base_add = 1
+}
+
+# ---- Opportunity boons (opportunities spec §3.2): on je:je_grand_monuments ----
+# One per moment, flat, while the country's gm_boon_<source> counts its 120
+# months down (gm_add_boons, gm_commission_effects.txt). test_grand_monument_
+# registry.py's BOONS pins each field and value to its loc.
+gm_boon_reign = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_authority_mult = 0.1
+}
+
+gm_boon_regime = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_loyalists_from_legitimacy_mult = 0.25
+}
+
+gm_boon_great_power = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_influence_mult = 0.1
+}
+
+gm_boon_victory = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.1
+}
+
+gm_boon_defeat = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_radicals_from_legitimacy_mult = -0.25
+}
+
+gm_boon_centenary = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_assimilation_mult = 0.25
+}
+
+gm_boon_ruler_death = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+gm_boon_space = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_weekly_innovation_mult = 0.1
+}
+
+gm_boon_faith = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_conversion_mult = 0.25
+}
+
+gm_boon_tech_artistic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_art_academy_throughput_add = 0.1
+}
+
+gm_boon_tech_scientific = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_tech_spread_mult = 0.1
+}
+
+gm_boon_tech_industrial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	building_group_bg_manufacturing_throughput_add = 0.05
+}
+
+gm_boon_tech_athletic = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_mortality_mult = -0.05
+}
+
+gm_boon_tech_naturalist = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_pollution_reduction_health_mult = 0.25
 }
 
 # ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
