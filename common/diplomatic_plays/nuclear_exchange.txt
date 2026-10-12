@@ -2,7 +2,7 @@
 # Humiliation is the existing, non-territorial default war goal.
 dp_nuclear_exchange = {
 	war_goal = humiliation
-	texture = "gfx/interface/icons/war_goals/humiliation.dds"
+	texture = "gfx/interface/icons/war_goals/dp_nuclear_exchange.dds"
 	selectable_in_lens = { always = no }
 	possible = { }
 	ai_acceptance_max = 100
