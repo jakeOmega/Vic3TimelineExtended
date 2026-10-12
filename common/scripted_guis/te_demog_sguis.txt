@@ -10,11 +10,12 @@
 # is valid once te_dg_census_year exists, and every figure, band, list and
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
-# or does anything). The first eight are country scope, rooted at the player's
+# or does anything), but for phase 2 step 2's five pension buttons at the end,
+# the only ones the player presses. The first eight are country scope, rooted at the player's
 # country; the six at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14; the last three its
 # Causes of Death section, docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md):
-# GuiScope.SetRoot( State.MakeScope ).End.
+# GuiScope.SetRoot( State.MakeScope ).End. Phase 2 step 4's five come last, three country and two state.
 # ============================================================================
 
 # Wealth Concentration's national figures: written together by
@@ -178,7 +179,8 @@ te_demog_state_stepped_sgui = {
 }
 
 # The state's last seed or step stored the Causes of Death inputs (te_demog_cause_inputs_store, the drifted
-# medicine). A census from before the Causes of Death plan has none until its next step: the section says so.
+# medicine). A census from before the Causes of Death plan has none until its next step: the section says so. So has
+# one from before phase 2 step 3b, which added the maternal cause's family-policy input (te_dg_in_mat).
 te_demog_state_causes_sgui = {
 	scope = state
 	is_shown = {
@@ -189,6 +191,7 @@ te_demog_state_causes_sgui = {
 		has_variable = te_dg_in_ext
 		has_variable = te_dg_in_work
 		has_variable = te_dg_in_chr
+		has_variable = te_dg_in_mat
 		has_variable = te_dg_in_turm
 		has_variable = te_dg_in_crowd
 		has_variable = te_dg_in_sol
@@ -224,6 +227,293 @@ te_demog_state_on_top_sgui = {
 		has_variable = te_dg_sev_share
 		has_variable = te_dg_ed_clamp_d
 	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ----------------------------------------------------------------------------
+# Phase 2 step 2: the Work and Retirement section (te_demog_sec_work, te_state_demog_work) and the overview's working
+# age and old age from. docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6.
+# ----------------------------------------------------------------------------
+
+# The country's work figures: written together by te_demog_work_country_store once a census state holds step 1's
+# figures and step 2's workers past the end (a census from before this build waits a count).
+te_demog_work_ready_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_wa_share
+		has_variable = te_dg_at_work
+		has_variable = te_dg_pensioners
+		has_variable = te_dg_need
+		has_variable = te_dg_old_age
+		has_variable = te_dg_wk_past
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The game's own workforce over people, the walk's, people-weighted (te_dg_wf_engine): the hover sets it beside the
+# census's figure.
+te_demog_work_engine_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_wf_engine }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Old Age Pension, with its age set (te_demog_pension_age_refresh): the pension rows and the buttons.
+te_demog_pension_law_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_has_pension_law = yes
+		has_variable = te_dg_pension_age
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The rule's Full setting, on the country: the bills' rows and the line above the buttons.
+te_demog_work_full_sgui = {
+	scope = country
+	is_shown = { te_demog_effects_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A pension bill in force (te_demog_bills_refresh: Full and Old Age Pension, with pensioners and Social Security).
+te_demog_pension_bill_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_pension_bill }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The health bill's term in force (te_demog_bills_refresh: Full).
+te_demog_health_bill_sgui = {
+	scope = country
+	is_shown = { has_variable = te_dg_health_term }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A five-year term runs: the line above the buttons gives the year it ends (said once, gui_style_guide.md rule 6).
+te_demog_pension_term_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_pension_since
+		NOT = { te_demog_pension_can_change = yes }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The five pension positions (§2.2), one button each beside the pension age, shown under Old Age Pension. A button that
+# can't be pressed is greyed with its reason (rule 6): outside Full, the position already in force, the five-year term
+# still running. The AI chooses through te_demog_pension_ai, never these.
+te_demog_pension_early_sgui = {
+	scope = country
+	is_shown = { te_demog_has_pension_law = yes }
+	is_valid = {
+		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_early } }
+		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_demog_pension_early_effect_tt
+			te_demog_pension_choose = { POS = early }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+te_demog_pension_standard_sgui = {
+	scope = country
+	is_shown = { te_demog_has_pension_law = yes }
+	is_valid = {
+		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_standard } }
+		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_demog_pension_standard_effect_tt
+			te_demog_pension_choose = { POS = standard }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+te_demog_pension_raised_sgui = {
+	scope = country
+	is_shown = { te_demog_has_pension_law = yes }
+	is_valid = {
+		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_raised } }
+		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_demog_pension_raised_effect_tt
+			te_demog_pension_choose = { POS = raised }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+te_demog_pension_linked_average_sgui = {
+	scope = country
+	is_shown = { te_demog_has_pension_law = yes }
+	is_valid = {
+		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_linked_average } }
+		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_demog_pension_linked_average_effect_tt
+			te_demog_pension_choose = { POS = linked_average }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+te_demog_pension_linked_common_sgui = {
+	scope = country
+	is_shown = { te_demog_has_pension_law = yes }
+	is_valid = {
+		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_linked_common } }
+		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
+	}
+	effect = {
+		custom_tooltip = {
+			text = te_demog_pension_linked_common_effect_tt
+			te_demog_pension_choose = { POS = linked_common }
+		}
+	}
+	ai_is_valid = { always = no }
+}
+
+# State scope: the state's work figures (te_demog_work_finish and _step2), written at every count under the cohorts; a
+# census from before this build lacks te_dg_wk_past until its next count.
+te_demog_state_work_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_wa_share
+		has_variable = te_dg_at_work
+		has_variable = te_dg_pensioners
+		has_variable = te_dg_need
+		has_variable = te_dg_old_age
+		has_variable = te_dg_wk_past
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# State scope: the owner pays an old-age pension, its age set (the state's pension rows).
+te_demog_state_pension_sgui = {
+	scope = state
+	is_shown = {
+		owner ?= {
+			te_demog_has_pension_law = yes
+			has_variable = te_dg_pension_age
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# State scope: the walk read the game's own workforce and the pops' bases (te_demog_work_walk_store).
+te_demog_state_wf_engine_sgui = {
+	scope = state
+	is_shown = {
+		has_variable = te_dg_wf_engine
+		has_variable = te_dg_wbase
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# State scope: the census's workforce term in force (Full, after its first step): the hover's term lines.
+te_demog_state_wf_term_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_mw
+		has_variable = te_dg_wf_rem
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ----------------------------------------------------------------------------
+# Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4.5): conscription,
+# the youth bulge and sex balance. Country scope first, rooted at the player's country, then state scope.
+# ----------------------------------------------------------------------------
+
+# The country's pool figures (te_dg_fam_share, te_dg_fam_men: te_demog_consequences_country, each country census
+# under this build). A country whose last census came before it shows the row's pending text.
+te_demog_pool_ready_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_fam_share
+		has_variable = te_dg_fam_men
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# At least one of the country's census states had a youth bulge at its last country census (te_dg_yb_n): the
+# overview's Youth row shows only then (the design §4.5).
+te_demog_youth_ready_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_yb_n
+		var:te_dg_yb_n > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The rule's Full setting, for a country's hover that says what the census does rather than would do.
+te_demog_full_sgui = {
+	scope = country
+	is_shown = { te_demog_effects_run = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's pool (te_dg_fam): written at its census under this build. A census from before it shows the Fighting-Age
+# Men row's pending text until its next count.
+te_demog_state_pool_sgui = {
+	scope = state
+	is_shown = { has_variable = te_dg_fam }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state has a youth bulge (te_demog_youth_bulge_shown above 0: the one in force under Full, what it would be now
+# under Display only). The subtab's Youth row shows only then.
+te_demog_state_youth_sgui = {
+	scope = state
+	is_shown = { te_demog_youth_bulge_shown > 0 }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

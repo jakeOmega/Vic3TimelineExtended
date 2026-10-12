@@ -22,8 +22,8 @@
 #     modifiers (te_demog_ms_keep_all; also at once from te_civil_war_on_won).
 #   - The AI weighs each measure once a year by the conditions any country has (te_demog_ms_ai_choose); is_ai = yes
 #     only decides whom the pulse picks for, and nothing an outcome does reads it.
-# Until step 3b the census reads only the measures' means lines (Free and Restricted Contraception's
-# state_fertility_means_add); the six new types show on their tooltips and act from 3b.
+# The census reads the measures' types at each state's step (phase 2 step 3b: te_demog_tfr_policy and kin, the
+# generated values; demographics_model.policy_term).
 # ============================================================================
 
 # ---- Putting a measure's modifiers on (Full only; ROOT = the country, against which the cost resolves) ---------------

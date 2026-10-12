@@ -5,8 +5,14 @@
 ### holds one instance of te_demog_tab_sections in its fifth tab (te_demog);
 ### every section is a type here (gui_style_guide.md rule 9), so the state
 ### panel's Demographics subtab (Task 14) composes the same pieces. In order:
-###   te_demog_overview         always shown: the census year and eight figures,
-###                             each "Label: value" with a trend arrow
+###   te_demog_overview         always shown: the census year and nine figures,
+###                             each "Label: value", most with a trend arrow
+###   te_demog_sec_work         open: Work and Retirement (phase 2 step 2): the
+###                             workforce, the pension age and its five buttons,
+###                             the pensioners, the pension bill, health need
+###                             (phase 2 step 4 adds its Fighting-Age Men row,
+###                             te_demog_fam_row); the overview gains Youth while
+###                             a state has a youth bulge
 ###   te_demog_sec_pyramid      open: 18 five-year bands, men left, women right,
 ###                             with the outline twenty years ahead
 ###   te_demog_sec_family       open: the Family & Reproductive Policy law and
@@ -781,26 +787,24 @@ types te_demographics_widgets
 					}
 				}
 			}
+			# phase 2 step 2 (the design §2.6): the working-age share in place of the dependency ratio, which its hover
+			# keeps, and old age from; both from the census's work figures (te_demog_work_ready_sgui), pending until a count makes them
 			te_demog_figure_row = {
-				tooltip = "te_demog_ov_dependency_tt"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 				blockoverride "row_label" {
-					text = "te_demog_ov_dependency"
+					text = "te_demog_ov_working_age"
 				}
 				blockoverride "row_value" {
-					text = "te_demog_ov_dependency_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_working_age_value', 'te_demog_ov_pending' )]"
 				}
-				blockoverride "row_trend" {
-					te_demog_trend_good_down = {
-						blockoverride "trend_up" {
-							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)1' )]"
-						}
-						blockoverride "trend_down" {
-							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)-1' )]"
-						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)0' )]"
-						}
-					}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_old_age_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_old_age"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_old_age_value', 'te_demog_ov_pending' )]"
 				}
 			}
 			te_demog_figure_row = {
@@ -823,6 +827,17 @@ types te_demographics_widgets
 							visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
 						}
 					}
+				}
+			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while any of our census states has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_youth_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_youth_value"
 				}
 			}
 			te_demog_figure_row = {
@@ -865,6 +880,32 @@ types te_demographics_widgets
 					}
 				}
 			}
+		}
+	}
+
+	### Fighting-Age Men (phase 2 step 4; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### §4.5): the pool, men aged 20 to 39, as a share of the men, and the conscription multiplier it gives, with the
+	### pool and the term on hover (held back for now: the hover says "not applied yet"). The last row of step 2's Work
+	### and Retirement section, te_demog_sec_work and te_state_demog_work. A census from before step 4 shows the pending
+	### text until its next count. Fits the figure row's cells:
+	### "Fighting-Age Men" is 16 characters, about 150 units; "100% (×1.25)" 12, about 115.
+	type te_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_ov_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_value', 'te_demog_ov_pending' )]"
+		}
+	}
+
+	type te_state_demog_fam_row = te_demog_figure_row {
+		tooltip = "te_demog_st_fam_tt"
+		blockoverride "row_label" {
+			text = "te_demog_fam"
+		}
+		blockoverride "row_value" {
+			text = "[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_value', 'te_demog_st_next' )]"
 		}
 	}
 
@@ -2721,6 +2762,183 @@ types te_demographics_widgets
 		}
 	}
 
+	### Work and Retirement (phase 2 step 2; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+	### §2.6, late-game §6.2): open by default (rule 1), flag te_demog_work_closed. The workforce as the working-age
+	### share times the share at work; under Old Age Pension the pension age with its five buttons beside it (rule 6),
+	### the pensioners and, under Full, the pension bill; health need. Every figure sits under te_demog_work_ready_sgui
+	### (a census from before this build waits a count), the pension rows under te_demog_pension_law_sgui, the bill
+	### under te_demog_pension_bill_sgui. What greys every button is said once above them (rule 6): outside Full, or a
+	### five-year term running; each button's tooltip still names its own failing condition. Values fit the 200-unit
+	### cell: "84 (Linked to Average)" is the longest, 22 characters, about 190 in the medium font.
+	type te_demog_sec_work = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_work"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_work_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_work_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_work_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_work_closed'))]"
+
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_wk_pending"
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_demog_work_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_wk_workforce_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_workforce"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_wk_workforce_value"
+					}
+				}
+
+				flowcontainer = {
+					visible = "[GetScriptedGui('te_demog_pension_law_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 3
+
+					te_demog_figure_row = {
+						tooltip = "te_demog_wk_pension_age_tt"
+						blockoverride "row_label" {
+							text = "te_demog_wk_pension_age"
+						}
+						blockoverride "row_value" {
+							text = "te_demog_wk_pension_age_value"
+						}
+					}
+					te_demog_text = {
+						visible = "[Not( GetScriptedGui('te_demog_work_full_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+						default_format = "#grey"
+						text = "te_demog_wk_buttons_full_only"
+					}
+					te_demog_text = {
+						visible = "[And( GetScriptedGui('te_demog_work_full_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_demog_pension_term_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+						default_format = "#grey"
+						text = "te_demog_wk_buttons_term"
+					}
+					flowcontainer = {
+						direction = horizontal
+						parentanchor = hcenter
+						spacing = 6
+
+						te_demog_pension_button = {
+							blockoverride "pension_context" { datacontext = "[GetScriptedGui('te_demog_pension_early_sgui')]" }
+							blockoverride "pension_tooltip" { tooltip = "te_demog_pension_early_tt" }
+							blockoverride "pension_text" { text = "te_demog_pension_early_button" }
+						}
+						te_demog_pension_button = {
+							blockoverride "pension_context" { datacontext = "[GetScriptedGui('te_demog_pension_standard_sgui')]" }
+							blockoverride "pension_tooltip" { tooltip = "te_demog_pension_standard_tt" }
+							blockoverride "pension_text" { text = "te_demog_pension_standard_button" }
+						}
+						te_demog_pension_button = {
+							blockoverride "pension_context" { datacontext = "[GetScriptedGui('te_demog_pension_raised_sgui')]" }
+							blockoverride "pension_tooltip" { tooltip = "te_demog_pension_raised_tt" }
+							blockoverride "pension_text" { text = "te_demog_pension_raised_button" }
+						}
+					}
+					flowcontainer = {
+						direction = horizontal
+						parentanchor = hcenter
+						spacing = 6
+
+						te_demog_pension_button = {
+							blockoverride "pension_context" { datacontext = "[GetScriptedGui('te_demog_pension_linked_average_sgui')]" }
+							blockoverride "pension_tooltip" { tooltip = "te_demog_pension_linked_average_tt" }
+							blockoverride "pension_text" { text = "te_demog_pension_linked_average_button" }
+						}
+						te_demog_pension_button = {
+							blockoverride "pension_context" { datacontext = "[GetScriptedGui('te_demog_pension_linked_common_sgui')]" }
+							blockoverride "pension_tooltip" { tooltip = "te_demog_pension_linked_common_tt" }
+							blockoverride "pension_text" { text = "te_demog_pension_linked_common_button" }
+						}
+					}
+					te_demog_figure_row = {
+						tooltip = "te_demog_wk_pensioners_tt"
+						blockoverride "row_label" {
+							text = "te_demog_wk_pensioners"
+						}
+						blockoverride "row_value" {
+							text = "te_demog_wk_pensioners_value"
+						}
+					}
+					te_demog_figure_row = {
+						visible = "[GetScriptedGui('te_demog_pension_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "te_demog_wk_bill_tt"
+						blockoverride "row_label" {
+							text = "te_demog_wk_bill"
+						}
+						blockoverride "row_value" {
+							text = "te_demog_wk_bill_value"
+						}
+					}
+				}
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_wk_need_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_need"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_wk_need_value"
+					}
+				}
+				### phase 2 step 4 (the consequences design §4.5)
+				te_demog_fam_row = {}
+			}
+		}
+	}
+
+	### One of the five pension positions (late-game §2.2), beside the pension age: three to a row, then two, each 156
+	### wide (3 x 156 + 2 x 6 = 480). The position in force is greyed (its scripted GUI is invalid for it), as are all
+	### five outside Full and while the five-year term runs. Labels fit the 146-unit text in the small font: "Linked:
+	### Average" is the longest, 15 characters, about 120.
+	type te_demog_pension_button = button {
+		using = default_button_action
+		size = { 156 24 }
+
+		block "pension_context" {}
+
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		block "pension_tooltip" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 146
+			elide = right
+			using = fontsize_small
+			block "pension_text" {}
+		}
+	}
+
 	### ======================================================================
 	### THE TAB
 	### ======================================================================
@@ -2755,6 +2973,7 @@ types te_demographics_widgets
 			spacing = 10
 
 			te_demog_overview = {}
+			te_demog_sec_work = {}
 			### TODO (#894): the country's Causes of Death, people-weighted over its census states (te_dg_c_*_w
 			### in te_demog_country_census already weights the cause multipliers), once the state subtab's
 			### te_state_demog_causes has been seen in game (owner, 2026-10-11). It goes here, after the overview.
@@ -2787,12 +3006,13 @@ types te_demographics_widgets
 	### cells need the Population panel's PopsOverviewPanel context.
 	###
 	### Sections: te_state_demog_overview (the figures), te_state_demog_causes
-	### (Causes of Death), te_state_demog_pyramid, te_state_demog_wealth (the Gini,
-	### Wealth Concentration and its target) and te_state_demog_how (collapsed).
-	### Four flags of this subtab's own, so collapsing the Population panel's
-	### sections leaves these alone: te_demog_st_causes_closed,
-	### te_demog_st_pyr_closed and te_demog_st_wealth_closed (open by default)
-	### and te_demog_st_how_open (collapsed by default).
+	### (Causes of Death), te_state_demog_work (Work and Retirement, phase 2 step 2),
+	### te_state_demog_pyramid, te_state_demog_wealth (the Gini, Wealth
+	### Concentration and its target) and te_state_demog_how (collapsed). Five
+	### flags of this subtab's own, so collapsing the Population panel's sections
+	### leaves these alone: te_demog_st_causes_closed, te_demog_st_work_closed,
+	### te_demog_st_pyr_closed and te_demog_st_wealth_closed (open by default) and
+	### te_demog_st_how_open (collapsed by default).
 
 	### The state's figures. The Gini and Wealth Concentration are in the Wealth
 	### section; net migration and the births and deaths in the hovers need a
@@ -2874,26 +3094,24 @@ types te_demographics_widgets
 					}
 				}
 			}
+			# phase 2 step 2 (the design §2.6): the working-age share in place of the dependency ratio, which its hover
+			# keeps, and old age from; both from the census's work figures (te_demog_state_work_sgui), pending until a count makes them
 			te_demog_figure_row = {
-				tooltip = "te_demog_st_dependency_tt"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_working_age_tt', 'te_demog_ov_working_age_pending_tt' )]"
 				blockoverride "row_label" {
-					text = "te_demog_ov_dependency"
+					text = "te_demog_ov_working_age"
 				}
 				blockoverride "row_value" {
-					text = "te_demog_st_dependency_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_working_age_value', 'te_demog_ov_pending' )]"
 				}
-				blockoverride "row_trend" {
-					te_demog_trend_good_down = {
-						blockoverride "trend_up" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)1' )]"
-						}
-						blockoverride "trend_down" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)-1' )]"
-						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)0' )]"
-						}
-					}
+			}
+			te_demog_figure_row = {
+				tooltip = "te_demog_st_old_age_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_old_age"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_old_age_value', 'te_demog_ov_pending' )]"
 				}
 			}
 			te_demog_figure_row = {
@@ -2916,6 +3134,17 @@ types te_demographics_widgets
 							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
 						}
 					}
+				}
+			}
+			### Phase 2 step 4 (the consequences design §4.5): shown while the state has a youth bulge
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_state_youth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_youth_tt"
+				blockoverride "row_label" {
+					text = "te_demog_youth"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_youth_value"
 				}
 			}
 			te_demog_figure_row = {
@@ -3047,6 +3276,89 @@ types te_demographics_widgets
 						text = "te_demog_st_ontop_value"
 					}
 				}
+			}
+		}
+	}
+
+	### The state's Work and Retirement (phase 2 step 2; the design §2.6, §10): the same rows as the country's, without
+	### the buttons (the setting is the owner's) or the bill (a country's), each under a state gate: the figures
+	### (te_demog_state_work_sgui), the owner's pension (te_demog_state_pension_sgui). Open by default, flag
+	### te_demog_st_work_closed. Under Full the workforce's hover adds the census's term (te_demog_state_wf_term_sgui).
+	type te_state_demog_work = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_work"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_work_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_work_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_work_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_work_closed'))]"
+
+			te_demog_text = {
+				visible = "[Not( GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+				text = "te_demog_st_wk_pending"
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_demog_state_work_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 3
+
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_wk_workforce_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_workforce"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_wk_workforce_value"
+					}
+				}
+				te_demog_figure_row = {
+					visible = "[GetScriptedGui('te_demog_state_pension_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+					tooltip = "te_demog_st_wk_pension_age_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_pension_age"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_wk_pension_age_value"
+					}
+				}
+				te_demog_figure_row = {
+					visible = "[GetScriptedGui('te_demog_state_pension_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+					tooltip = "te_demog_st_wk_pensioners_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_pensioners"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_wk_pensioners_value"
+					}
+				}
+				te_demog_figure_row = {
+					tooltip = "te_demog_st_wk_need_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wk_need"
+					}
+					blockoverride "row_value" {
+						text = "te_demog_st_wk_need_value"
+					}
+				}
+				### phase 2 step 4 (the consequences design §4.5)
+				te_state_demog_fam_row = {}
 			}
 		}
 	}
@@ -3793,6 +4105,7 @@ types te_demographics_widgets
 
 			te_state_demog_overview = {}
 			te_state_demog_causes = {}
+			te_state_demog_work = {}
 			te_state_demog_pyramid = {}
 			te_state_demog_wealth = {}
 		}

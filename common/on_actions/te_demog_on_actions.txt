@@ -181,6 +181,8 @@ te_demog_lines_on_action = {
 	effect = {
 		te_demog_lines_refresh = yes
 		te_demog_workforce_lines_refresh = yes
+		# phase 2 step 2: a lost workforce term's modifier back within a month
+		te_demog_workforce_heal = yes
 	}
 }
 

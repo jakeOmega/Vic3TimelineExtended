@@ -25,7 +25,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_normalize_slots, te_demog_normalize_bands
                                                 the seed's raw ring (radix 100,000) to people: each value
                                                 x local_var:te_dg_norm_e5, then / 100000 (two steps keep a
-                                                small state precise); slots, then bands, class sums, 18-40 sums
+                                                small state precise); slots, then bands, class sums, the pool's
+                                                sums (phase 2 step 4)
         te_demog_life_table, te_demog_set_growth_factor
         te_demog_old_age_pass                   the old-age threshold (phase 2 step 1), at the life table's end
         te_demog_enter_cal_band, te_demog_enter_bio_band
@@ -52,7 +53,8 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
         the land-tenure term; the practices' start ladders, erosions, seeds, targets and terms
         (te_demog_pr_*, te_demog_marriage_age); te_demog_k_* constants; the 10-14s' work share and the pops'
-        base working-adult ratios (te_demog_child_work, te_demog_pop_base_ratio; phase 2 step 1); per-slot debug shares
+        base working-adult ratios (te_demog_child_work, te_demog_pop_base_ratio; phase 2 step 1); phase 2 step 4's
+        constants and band sums (consequence_values); per-slot debug shares
     common/static_modifiers/te_demog_line_modifiers_generated.txt, common/script_values/te_demog_line_values_generated.txt,
     common/scripted_effects/te_demog_line_effects_generated.txt
         the moved birth and mortality lines' pairs and their refresh (te_demog_lines_refresh; the engine-lines plan)
@@ -277,11 +279,11 @@ def normalizers(o):
             o("}")
     o("}")
     o("")
-    o("# THIS = a state, seed only. The same two steps on the bands, the class sums and the 18-40 sums.")
+    o("# THIS = a state, seed only. The same two steps on the bands, the class sums and the pool's sums (phase 2 step 4).")
     o("te_demog_normalize_bands = {")
     names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in ("f", "m")]
     names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in ("f", "m")]
-    names += ["te_dg_f1840", "te_dg_m1840"]
+    names += POOL_SUMS
     for name in names:
         for step in two_step:
             o(step.format(v=name))
@@ -870,6 +872,7 @@ def render_effects(root=ROOT):
     absorbed_walk(o, root)
     medicine_effects(o)
     practice_loops(o)
+    family_policy_effects(o)
     debug_ring(o)
     return o.text()
 
@@ -1458,7 +1461,9 @@ def multipliers(o):
     o("min = 0")
     o("max = 1")
     o("}")
-    o(f"multiply = {{ value = var:te_dg_lit multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
+    o(f"# access: literacy, plus Sex Education's {P.MEANS_LITERACY_TYPE} (phase 2 step 3b), at most 1")
+    o(f"multiply = {{ value = var:te_dg_lit add = modifier:{P.MEANS_LITERACY_TYPE} max = 1 "
+      f"multiply = {lit(1 - P.MEANS_ACCESS_BASE)} add = {lit(P.MEANS_ACCESS_BASE)} }}")
     o(f"# laws, history, events and measures: Family Limitation and its kin ({P.MEANS_SHIFT_TYPE})")
     o(f"add = modifier:{P.MEANS_SHIFT_TYPE}")
     o(f"max = {lit(P.MEANS_CAP)}")
@@ -1551,6 +1556,75 @@ def constants(o):
     o("")
 
 
+# Phase 2 step 4 (the consequences design §4): the pool's sums, women's then men's (they replaced the 18-40 sums,
+# te_dg_f1840 and te_dg_m1840, in te_demog_normalize_bands' order).
+POOL_SUMS = ["te_dg_faw", "te_dg_fam"]
+
+
+def youth_bands():
+    """The five-year bands that make up P.YOUTH_AGES (20-29: bands 4 and 5)."""
+    lo, hi = P.YOUTH_AGES
+    assert lo % P.BAND_WIDTH == 0 and (hi + 1) % P.BAND_WIDTH == 0, "the youth ages must be whole bands"
+    return list(range(lo // P.BAND_WIDTH, (hi + 1) // P.BAND_WIDTH))
+
+
+def consequence_values(o):
+    """Phase 2 step 4's constants and band sums (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-
+    design.md §4), in a block of their own so step 2's and step 3's additions to the generator stay apart. The hand-
+    written values that read them are in te_demog_consequence_values.txt."""
+    o("# Phase 2 step 4: conscription, the youth bulge and sex balance (demographics_params.py).")
+    k = {
+        "pool_from": P.POOL_FROM, "pool_to": P.POOL_TO,
+        "conscription_ref": P.CONSCRIPTION_REF, "conscription_min": P.CONSCRIPTION_MIN,
+        "conscription_max": P.CONSCRIPTION_MAX,
+        "youth_from": P.YOUTH_FROM, "youth_span": P.YOUTH_SPAN, "youth_unemployment_full": P.YOUTH_UNEMPLOYMENT_FULL,
+        "sex_fewer_from": P.SEX_FEWER_FROM, "sex_fewer_span": P.SEX_FEWER_FROM - P.SEX_FEWER_FULL,
+        "sex_births_floor": P.SEX_BIRTHS_FLOOR, "sex_women_rate": P.SEX_WOMEN_RATE,
+        "sex_more_from": P.SEX_MORE_FROM, "sex_more_span": P.SEX_MORE_FULL - P.SEX_MORE_FROM,
+        # 1 applies each effect, 0 holds it back (P.CONSCRIPTION_EFFECTS, YOUTH_BULGE_EFFECTS, SEX_BALANCE_EFFECTS)
+        "conscription_effects": 1 if P.CONSCRIPTION_EFFECTS else 0, "conscription_cut": P.CONSCRIPTION_CUT,
+        "youth_effects": 1 if P.YOUTH_BULGE_EFFECTS else 0, "youth_cut": P.YOUTH_CUT,
+        "sex_effects": 1 if P.SEX_BALANCE_EFFECTS else 0,
+    }
+    for name, value in k.items():
+        o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
+    bands = youth_bands()
+    lo, hi = P.YOUTH_AGES
+    for scope, prefix, people in (("state", "te_dg_b", "{ value = var:te_dg_people min = 1 }"),
+                                  ("country", "te_dg_cb", "{ value = te_demog_country_people min = 1 }")):
+        name = "te_demog_youth_share" if scope == "state" else "te_demog_country_youth_share"
+        o(f"# {scope.capitalize()} scope: the share of people aged {lo}-{hi} (bands {', '.join(map(str, bands))}), 0 "
+          "before a census.")
+        o(f"{name} = {{")
+        o("value = 0")
+        o(f"if = {{ limit = {{ has_variable = {prefix}f{bands[0]} }}")
+        o(f"value = var:{prefix}f{bands[0]}")
+        for b in bands:
+            for sex in ("f", "m"):
+                if (b, sex) != (bands[0], "f"):
+                    o(f"add = var:{prefix}{sex}{b}")
+        o(f"divide = {people}")
+        o("}")
+        o("}")
+    # the census's men by scope, and the country's people (a state has te_dg_people): the bands' sums
+    for scope, prefix, whats in (("state", "te_dg_b", (("men", ("m",)),)),
+                                 ("country", "te_dg_cb", (("men", ("m",)), ("people", ("f", "m"))))):
+        o(f"# {scope.capitalize()} scope: the census's {' and '.join(w for w, _ in whats)} (its bands' sum), 0 before a "
+          "census.")
+        for what, sexes in whats:
+            o(f"te_demog_{scope}_{what} = {{")
+            o("value = 0")
+            o(f"if = {{ limit = {{ has_variable = {prefix}m0 }}")
+            first = True
+            for b in range(P.BANDS):
+                for sex in sexes:
+                    o(f"{'value' if first else 'add'} = var:{prefix}{sex}{b}")
+                    first = False
+            o("}")
+            o("}")
+    o("")
+
+
 def work_values(o):
     o("# State scope (phase 2 step 1): the 10-14s' participation by the owner's childrens'-rights law")
     o("# (demographics_model.child_work_share).")
@@ -1564,6 +1638,41 @@ def work_values(o):
     o(f"value = {lit(P.POP_BASE_RATIO_DEFAULT)}")
     for pop_type, ratio in P.POP_BASE_RATIO.items():
         o(f"if = {{ limit = {{ is_pop_type = {pop_type} }} value = {lit(ratio)} }}")
+    o("}")
+    o("")
+
+
+def work_step2_values(o):
+    """Phase 2 step 2's constants and generated values (te_demog_work_effects.txt, te_demog_work_values.txt): the
+    workforce term, the pension setting and the two bills. Kept apart from the other steps' blocks."""
+    o("# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the")
+    o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
+    k = {
+        "working_adult_base": P.WORKING_ADULT_BASE,
+        "wf_ramp_step": P.WF_RAMP_STEP, "wf_ramp_step_neg": -P.WF_RAMP_STEP,
+        # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
+        # least this
+        "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,
+        "pension_age_early": P.PENSION_AGE["early"], "pension_age_raised": P.PENSION_AGE["raised"],
+        "pension_link_offset": P.PENSION_LINK_OFFSET, "pension_link_floor": P.PENSION_LINK_FLOOR,
+        "pension_link_step": P.PENSION_LINK_STEP, "pension_link_step_neg": -P.PENSION_LINK_STEP,
+        "pension_term_years": P.PENSION_TERM_YEARS,
+        "pension_b_per_level": P.PENSION_B_PER_LEVEL,
+        "health_need_weight": P.HEALTH_NEED_WEIGHT, "health_need_cap": P.HEALTH_NEED_CAP,
+        "work_split_first": P.WORK_SPLIT_AGES[0], "work_split_last": P.WORK_SPLIT_AGES[1],
+        "pension_ai_bill_high": P.PENSION_AI_BILL_HIGH, "pension_ai_bill_low": P.PENSION_AI_BILL_LOW,
+        "pension_ai_debt": P.PENSION_AI_DEBT,
+        "pension_ai_unemployment": P.PENSION_AI_UNEMPLOYMENT,
+        "pension_ai_unemployment_low": P.PENSION_AI_UNEMPLOYMENT_LOW,
+        **{f"pension_pos_{pos}": i for pos, i in P.PENSION_POSITION_ID.items()},
+    }
+    for name, value in k.items():
+        o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
+    o("# Country scope: the health bill's chronic-treatment technologies (demographics_model.health_term).")
+    o("te_demog_health_tech_term = {")
+    o("value = 0")
+    for tech in P.HEALTH_TECHS:
+        o(f"if = {{ limit = {{ has_technology_researched = {tech} }} add = {lit(P.HEALTH_TECH_STEP)} }}")
     o("}")
     o("")
 
@@ -1707,6 +1816,89 @@ def practice_loops(o):
     o("")
 
 
+# ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.5. Sex Education's access sits in
+# te_demog_means (multipliers) and Restricted Contraception's maternal deaths in the maternal cause's "laws" factor
+# (P.CAUSE_FACTORS); the rest is here.
+
+def family_policy_values(o):
+    o("# Phase 2 step 3b (the design §3.5): family policy in the census. State scope.")
+    o("# Family policy's factor on desired fertility (demographics_model.policy_term): 1 + the desired type (the measures'")
+    o("# and Pro-Natalist Policy's lines), Birth Limit's part relieved by the Rural Exemption's type x the state's")
+    o("# agrarian share (Birth Limit's part is negative: the relief raises the factor), at least 0. te_demog_desired")
+    o("# multiplies by it; the TFR tooltips show it.")
+    o("te_demog_tfr_policy = {")
+    o(f"value = modifier:{P.DESIRED_TYPE}")
+    o("if = {")
+    o(f"limit = {{ modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} > 0 }}")
+    o("subtract = {")
+    o("value = te_demog_ms_birth_limit_part")
+    o(f"multiply = {{ value = modifier:{P.BIRTH_LIMIT_RELIEF_TYPE} max = 1 }}")
+    o("multiply = te_demog_agr_share")
+    o("}")
+    o("}")
+    o("add = 1")
+    o("min = 0")
+    o("}")
+    o("# The walk's agrarian share (Peasants and Farmers over people), 0 before a walk.")
+    o("te_demog_agr_share = {")
+    o("value = 0")
+    o("if = { limit = { has_variable = te_dg_agr_share } value = var:te_dg_agr_share }")
+    o("}")
+    o("# City life's relief (Family Housing): the urban share it leaves, 1 - the type within 0-1 (te_demog_tfr_urban).")
+    o("te_demog_urban_relief_left = {")
+    o(f"value = 1 subtract = {{ value = modifier:{P.URBAN_RELIEF_TYPE} min = 0 max = 1 }}")
+    o("}")
+    o("# What the step used (te_demog_family_policy_store, in te_demog_prepare), for the children-per-woman tooltips: the")
+    o("# stored policy term and the urban share Family Housing leaves, as te_demog_natural_shown, so a measure switched on")
+    o("# between steps shows when the census's figure takes it. The live value for a census state from before the store.")
+    o("te_demog_tfr_policy_shown = {")
+    o("value = te_demog_tfr_policy")
+    o("if = { limit = { has_variable = te_dg_policy } value = var:te_dg_policy }")
+    o("}")
+    o("te_demog_urban_left_stored = {")
+    o("value = te_demog_urban_relief_left")
+    o("if = { limit = { has_variable = te_dg_urban_left } value = var:te_dg_urban_left }")
+    o("}")
+    o("# The sex ratio at birth's add (demographics_model.newborn_split): the type once prenatal sexing exists, else 0.")
+    o("te_demog_srb_add = {")
+    o("value = 0")
+    o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {P.PRENATAL_SEXING_TECH} }} }} "
+      f"value = modifier:{P.SRB_TYPE} min = 0 }}")
+    o("}")
+    o(f"te_demog_k_desired_floor = {{ value = {lit(P.DESIRED_FLOOR)} }}")
+    o(f"te_demog_k_desired_cap = {{ value = {lit(P.DESIRED_CAP)} }}")
+    o(f"te_demog_k_srb_base = {{ value = {lit(P.SRB_BASE)} }}")
+    o("")
+
+
+def family_policy_effects(o):
+    o("# Phase 2 step 3b: THIS = a state, in te_demog_prepare before te_demog_desired: the family policy term and the urban")
+    o("# share Family Housing leaves, stored with the step's other terms (te_dg_natural's pattern), so te_demog_tfr_urban")
+    o("# and the tooltips read what the step used until the next one.")
+    o("te_demog_family_policy_store = {")
+    o("set_variable = { name = te_dg_policy value = te_demog_tfr_policy }")
+    o("set_variable = { name = te_dg_urban_left value = te_demog_urban_relief_left }")
+    o("}")
+    o("# Phase 2 step 3b (the design §3.4): the newborns' split in the step (demographics_model.newborn_split). THIS = a")
+    o("# state, in te_demog_step_run before the sweep: girls and boys per 100,000 births into locals, the constants")
+    o("# unless prenatal sexing and a positive sex-ratio type move it (100 girls to te_demog_k_srb_base + it boys).")
+    o("te_demog_newborn_split = {")
+    o("set_local_variable = { name = te_dg_nb_f value = te_demog_k_female_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_m value = te_demog_k_male_births_per_100k }")
+    o("set_local_variable = { name = te_dg_nb_srb value = te_demog_srb_add }")
+    o("if = {")
+    o("limit = { local_var:te_dg_nb_srb > 0 }")
+    o("set_local_variable = {")
+    o("name = te_dg_nb_f")
+    o("value = { value = 10000000 divide = { value = local_var:te_dg_nb_srb add = te_demog_k_srb_base add = 100 min = 100 } }")
+    o("}")
+    o("set_local_variable = { name = te_dg_nb_m value = { value = 100000 subtract = local_var:te_dg_nb_f } }")
+    o("}")
+    o("}")
+    o("")
+
+
 def debug_values(o):
     o("# State scope: each slot as per mille of the state's people, for the replay lines (Task 15).")
     o("# One sequential block each, so the scale and the people are not rounded on their own.")
@@ -1733,6 +1925,9 @@ def render_values(root):
     land_term(o, root)
     constants(o)
     work_values(o)
+    family_policy_values(o)
+    work_step2_values(o)
+    consequence_values(o)
     debug_values(o)
     return o.text()
 

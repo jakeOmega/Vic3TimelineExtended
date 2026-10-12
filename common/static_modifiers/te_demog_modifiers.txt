@@ -40,3 +40,57 @@ te_demog_census_wealth_down = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_mortality_wealth_mult = -1
 }
+
+# Phase 2 step 2 (te_demog_work_effects.txt; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# §2): under Full only.
+# The workforce term W on the state: one of the pair at a time, multiplier |W|, the bookkeeping icon (hidden from the
+# state panel's rows like the births and deaths pairs; it shows by name in the workforce breakdown).
+te_demog_census_workforce_up = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_working_adult_ratio_add = 1
+}
+te_demog_census_workforce_down = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_working_adult_ratio_add = -1
+}
+# The pension bill (§2.3): a weekly expense, multiplier GDP / 52 x the pensioners' share x B (te_dg_pension_bill).
+# Its mirror puts it under Old-Age Pensions in the Budget panel's Breakdown tab (gen_budget_breakdown.SOURCES).
+te_demog_pension_bill = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_pensions_add = 1
+}
+# The health bill (§2.4): the health system's institution cost, by the census's health need and the chronic-treatment
+# technologies; a country younger than 1836's world pays a little less (the down side).
+te_demog_health_bill_up = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_institution_cost_institution_health_system_mult = 1
+}
+te_demog_health_bill_down = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_institution_cost_institution_health_system_mult = -1
+}
+# The pension positions' interest-group reactions while in force (§2.2; late-game §2.2's table). Standard has none.
+te_demog_pension_pos_early = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	interest_group_ig_trade_unions_approval_add = 2
+	interest_group_ig_industrialists_approval_add = -1
+}
+te_demog_pension_pos_raised = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	interest_group_ig_trade_unions_approval_add = -2
+	interest_group_ig_rural_folk_approval_add = -1
+	interest_group_ig_industrialists_approval_add = 1
+}
+te_demog_pension_pos_linked_average = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	interest_group_ig_trade_unions_approval_add = -1
+	interest_group_ig_rural_folk_approval_add = -1
+	interest_group_ig_industrialists_approval_add = 1
+}
+te_demog_pension_pos_linked_common = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	interest_group_ig_trade_unions_approval_add = 1
+	interest_group_ig_rural_folk_approval_add = 1
+	interest_group_ig_industrialists_approval_add = -1
+}

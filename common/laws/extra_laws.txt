@@ -2700,7 +2700,8 @@ law_pro_natalist_subsidies = {
 
 	modifier = {
 		state_welfare_payments_mult = 0.10
-		state_demog_ontop_birth_rate_mult = 0.10
+		state_demog_absorbed_birth_rate_mult = 0.10	# phase 2 step 3b: the census's own terms under Full (§3.2)
+		state_desired_fertility_mult = 0.05	# the census's desired family size (phase 2 step 3b, §3.2)
 		state_dependent_wage_mult = 0.1	# family allowances raise dependents' income (owner, 2026-10-12)
 		state_demog_replaced_ratio_add = -0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	}
@@ -2748,7 +2749,7 @@ law_population_control_measures = {
 	unlocking_technologies = { mass_surveillance }
 
 	modifier = {
-		state_demog_ontop_birth_rate_mult = -0.1
+		state_demog_absorbed_birth_rate_mult = -0.1	# phase 2 step 3b: under Full its force is its measures' (§3.2)
 		country_authority_add = 150
 		state_radicals_and_loyalists_from_sol_change_mult = 1.0
 	}

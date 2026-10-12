@@ -112,6 +112,7 @@ MORTALITY_TYPES = {
     "external": ("state_external_mortality_mult",),
     "work": ("state_work_mortality_mult",),
     "chronic": ("state_chronic_mortality_mult",),
+    "maternal": ("state_maternal_mortality_mult",),   # phase 2 step 3b: Restricted Contraception (MEASURE_TYPES)
 }
 DEMOG_MORTALITY_TYPES = (
     ACCESS_TYPE, *TREATMENT_TYPE.values(),
@@ -156,16 +157,16 @@ WORKING_AGE = 15               # calendar: everyone from here
 CHILD_WORK_SHARE = {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1,
                     "law_compulsory_primary_school": 0.0}
 CHILD_WORK_SHARE_DEFAULT = 0.3  # a country with none of the three (vanilla gives every country one)
-CAPACITY = {0: 1.0, 60: 0.95, 65: 0.85, 70: 0.7, 75: 0.5, 80: 0.3, 85: 0.1}   # by biological band start
-AFTER_PENSION_SHARE = 0.15     # the share of the eligible who keep working, x capacity
+CAPACITY = {0: 1.0, 60: 1.0, 65: 0.95, 70: 0.85, 75: 0.7, 80: 0.5, 85: 0.2}   # by biological band start
+AFTER_PENSION_SHARE = 0.3      # the share of the eligible who keep working, x capacity
 MEN_RATE = 0.92
 WOMEN_BASE = 0.05              # the middle and upper strata's women under No Women's Rights
 WOMEN_LOWER = 0.2              # the lower strata's women under any law (Goldin's U-shape)
-WOMENS_WORK_FULL = 0.30        # the women's-work family's sum at which women work at the men's rate
-WORKFORCE_SCALE = 0.74         # participation to the engine's ratio (the spec's §1.8 sketch: 1836 0.25, rich 0.40)
+WOMENS_WORK_FULL = 0.35        # the women's-work family's sum at which women work at the men's rate
+WORKFORCE_SCALE = 0.7          # participation to the engine's ratio (step 2's fit: 1836 0.25, rich today 0.42)
 # Health need by biological band start (late-game §5.2), and 1836's people-weighted need (the figure's 1.0).
 HEALTH_NEED = {0: 1.0, 5: 0.5, 15: 0.8, 45: 1.4, 65: 2.4, 75: 3.4, 85: 4.5}
-HEALTH_NEED_1836 = 0.95
+HEALTH_NEED_1836 = 0.952      # step 2's fit: the 1836 save's world need, people-weighted (harness `workforce`)
 BIO_BANDS = tuple(sorted(set(CAPACITY) | set(HEALTH_NEED)))
 # The pension positions' ages (late-game §2.2). Step 1 sets a country's pension age to the Standard one under Old Age
 # Pension; step 2 adds the setting.
@@ -198,6 +199,135 @@ PARTICIPATION_TYPES = (MALE_PARTICIPATION_TYPE, PARTICIPATION_TYPE, CAPACITY_TYP
 MALARIA_CONTROL_TYPE = "state_malaria_control_add"
 DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,) + PARTICIPATION_TYPES
                + (MALARIA_CONTROL_TYPE,))
+
+# ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
+# Full only (te_demog_work_effects.txt). The harness fits the numbers (demographics_harness.py workforce, pensions).
+# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It moves toward
+# that target by at most WF_RAMP_STEP a census step: the engine's own pull toward a pop's ratio has not been measured
+# in game (the mod's WORKING_ADULT_RATIO_SKEW_MAXIMUM, extra_defines.txt, suggests it is instant; the saves suggest it
+# is slow: docs/testing/demographics-playtest.md, § Phase 2 step 2), and a pension change should reach the workforce as the
+# cohorts it frees or holds pass the age, over a few years, not in a week. At 0.01 a change of one position in a rich
+# state (Standard to Raised +0.020 on the engine's scale, Early to Standard +0.023: harness `workforce`) shows fully in
+# two to three census years, Early to Raised in about five; Women in the Fields' first landing (+0.30 of lines against a
+# target near +0.15) takes about fifteen. W starts at the moved lines' pair it replaces, so a state's workforce never
+# jumps when the census takes over. The self-check workforce_follows_target reads whether the engine keeps up.
+WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
+WF_RAMP_STEP = 0.01
+WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
+POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
+# The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
+# The linked positions follow the country's people-weighted old-age threshold less PENSION_LINK_OFFSET, at least
+# PENSION_LINK_FLOOR, moving at most PENSION_LINK_STEP a year. Every position holds for PENSION_TERM_YEARS.
+PENSION_POSITIONS = ("early", "standard", "raised", "linked_average", "linked_common")
+PENSION_POSITION_ID = {p: i + 1 for i, p in enumerate(PENSION_POSITIONS)}   # te_dg_pension_pos
+PENSION_LINKED = ("linked_average", "linked_common")
+PENSION_LINK_OFFSET = 5
+PENSION_LINK_FLOOR = 65
+PENSION_LINK_STEP = 1
+PENSION_TERM_YEARS = 5
+# Approval while in force (a country static modifier per position; late-game §2.2's table). Standard has none.
+PENSION_IG_APPROVAL = {
+    "early": {"ig_trade_unions": 2, "ig_industrialists": -1},
+    "raised": {"ig_trade_unions": -2, "ig_rural_folk": -1, "ig_industrialists": 1},
+    "linked_average": {"ig_trade_unions": -1, "ig_rural_folk": -1, "ig_industrialists": 1},
+    "linked_common": {"ig_trade_unions": 1, "ig_rural_folk": 1, "ig_industrialists": -1},
+}
+# The pension bill (§2.3, money): a weekly expense of GDP / 52 x the pensioners' share x B, B = PENSION_B_PER_LEVEL x
+# the Social Security level. Fitted against revenue (late-game call 16): the bill 15-30% of a rich country's revenue at
+# Standard with 18-22% pensioners.
+PENSION_B_PER_LEVEL = 0.06      # step 2's fit (0.08 proposed): the 1953 save's revenue over GDP (harness `pensions`)
+PENSION_BILL_BAND = (0.15, 0.30)
+# The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
+# HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.
+# Below 1836's need the term is negative (a young country's system costs a little less), on a fixed-sign pair.
+HEALTH_NEED_WEIGHT = 0.8      # step 2's fit (0.5 proposed): rich today +0.35 to +0.5 with its technologies
+HEALTH_NEED_CAP = 1.0
+HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine")
+HEALTH_TECH_STEP = 0.05
+# Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
+# WORK_SPLIT_AGES (first, last), from the last count; the law table (FEMALE_WORK_SHARE) before one.
+WORK_SPLIT_AGES = (15, 64)
+# The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
+# bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
+# positions (Linked to Average where its age passes Raised's, else Raised); unemployment over PENSION_AI_UNEMPLOYMENT
+# (people-weighted over its states) toward Early. A wide longevity gap toward Linked to Common waits for phase 3. It goes
+# back to Standard only once the reason has clearly gone (hysteresis, the review of 2026-10-12): from a cheaper position
+# when the bill is under PENSION_AI_BILL_LOW of revenue and the debt and default have gone, from Early when unemployment
+# is under PENSION_AI_UNEMPLOYMENT_LOW.
+PENSION_AI_BILL_HIGH = 0.3
+PENSION_AI_BILL_LOW = 0.2
+PENSION_AI_DEBT = 0.25
+PENSION_AI_UNEMPLOYMENT = 0.1
+PENSION_AI_UNEMPLOYMENT_LOW = 0.05
+
+# ---- Phase 2 step 4: conscription, the youth bulge and sex balance ----------------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4 and §5. The figures are the census's
+# (Full and Display only); the four state modifiers act under Full only. `demographics_harness.py consequences` checks
+# every band against the model's structures and the saves given.
+# The pool (late-game call 21): men of calendar age POOL_FROM or more and biological age POOL_TO or less, summed in the
+# sweep through step 1's two indexes; before phase 3, men aged 20-39. The war dead come from the same ages (§4.2), their
+# women's share from the women of those ages.
+POOL_FROM = 20                 # calendar: legal adulthood
+POOL_TO = 39                   # biological: fitness
+# Conscription T = clamp(the pool / people / CONSCRIPTION_REF - 1, CONSCRIPTION_MIN, CONSCRIPTION_MAX) on
+# state_conscription_rate_mult (§4.1). The reference is the 1836 save's world, people-weighted: 0.1389 in the census's
+# own seeded bands (the overnight Full run's 1836.2.1 save) and 0.1390 in the model's 1836 agrarian stable structure
+# (starting value 0.14). No floor but -1 (call 21); parent §7's -0.25 floor is gone.
+CONSCRIPTION_REF = 0.139
+CONSCRIPTION_MIN = -1.0
+CONSCRIPTION_MAX = 0.25
+# Held back (controller's decision, 2026-10-12, after the review of step 4), with the youth bulge and the sex balance:
+# T reads the same men the census's migrant booking distorts (SEX_BALANCE_EFFECTS, below). In the overnight Full run's
+# 1848 save 32 states sat at T -0.5 or below (2-37 men per 100 women) and 134 (15%) at the +0.25 ceiling (115-145);
+# 29.5-34.6% of people lived in states past +-0.05 in 1848-1904. The census computes and stores T (te_dg_mc, Full) and
+# the panel shows it, but no pair is applied until the follow-up on the migrant booking turns all three on together.
+# The generator writes it as te_demog_k_conscription_effects; `demographics_harness.py consequences --effects`.
+CONSCRIPTION_EFFECTS = False
+# When it applies, no pair below this |T| (the review's Minor 2: a term that small isn't worth a modifier line).
+CONSCRIPTION_CUT = 0.01
+# The youth bulge (§4.3): y = clamp((the share aged 20-29 - YOUTH_FROM) / YOUTH_SPAN, 0, 1) x clamp(unemployment /
+# YOUTH_UNEMPLOYMENT_FULL, 0, 1), on one state modifier at multiplier y. The census's 1836 share is 0.159 in every
+# state (the spec's sketch said about 0.17); a sharp transition's peak in the model is 0.20-0.23. Kept at the spec's
+# starting values: they meet the bands.
+YOUTH_AGES = (20, 29)          # calendar (life stage)
+YOUTH_FROM = 0.18
+YOUTH_SPAN = 0.06
+YOUTH_UNEMPLOYMENT_FULL = 0.2
+YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
+YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
+# Held back with conscription (above): 73% of the 1898 save's bulge states sit outside 90-110 men per 100 women, so the
+# bulges are mostly the migrant booking's young men. The census computes and stores y (te_dg_yb, Full) and the panel
+# shows it; no modifier applies until the follow-up. Written as te_demog_k_youth_effects.
+YOUTH_BULGE_EFFECTS = False
+YOUTH_CUT = 0.02               # when it applies, no modifier below this y
+# Sex balance (§4.4, call 10), on te_dg_sex_balance (men per 100 women aged 20-59). The census's adults run 91.5-98 men
+# per 100 women in every 1836 state (male deaths from work, accidents and violence), so an effect measured from 100
+# would fall on every state in peace: the fewer-men effects start below SEX_FEWER_FROM instead, just under 1836's lowest
+# state. Children per woman x the balance / SEX_FEWER_FROM, at most 1 and at least SEX_BIRTHS_FLOOR (fewer marriages):
+# the spec's square-root rule from 100 gave -9% at the Soviet Union's 82 of 1959; from 90 a straight ratio keeps that
+# anchor (-8.9%) where the square root would give -4.6%. The floor is parent §3's "capped". The women's rate gains up to
+# SEX_WOMEN_RATE and feminist movement support up to SEX_FEMINIST, both full at SEX_FEWER_FULL. More men than women:
+# radicals from movements up to SEX_RADICALS, from SEX_MORE_FROM to full at SEX_MORE_FULL (Bare Branches).
+# Held back (controller's decision, 2026-10-12), as conscription and the youth bulge are (above), and for the same cause:
+# the census computes, stores and shows the sex balance, but none of its
+# effects apply: not the births term, the women's-rate addition, feminist support or the radicals line. The census
+# books every unexplained residual as migrants by its profile, labour migrants 90% aged 18-35 and mostly men, which
+# hollows out the men of famine-hit states: in the overnight Full run's 1848-1904 saves 37-41% of states sat at one effect
+# or the other against the design's "under 2% in peace" (Hyderabad 50 men per 100 women in 1898, the Central Provinces
+# 28). A follow-up PR on the residual's migrant booking comes first; then all three switches go to True together. The
+# generator writes it as te_demog_k_sex_effects; `demographics_harness.py consequences --effects` judges the band as if it
+# were on. Children per woman's breakdown then gains a "Few men to marry" line (te_demog_tfr_sex), left out meanwhile.
+SEX_BALANCE_EFFECTS = False
+SEX_FEWER_FROM = 90.0
+SEX_FEWER_FULL = 80.0
+SEX_BIRTHS_FLOOR = 0.8
+SEX_WOMEN_RATE = 0.1
+SEX_FEMINIST = 0.10            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
+SEX_MORE_FROM = 110.0
+SEX_MORE_FULL = 150.0
+SEX_RADICALS = 0.10            # state_radicals_from_political_movements_mult at full
+
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11, all nine of
@@ -319,7 +449,7 @@ CAUSE_FACTORS = {
     "infection": ("medicine", "sol", "poverty", "literacy", "crowding", "malaria"),
     "work": ("laws",),
     "external": ("laws", "turmoil"),
-    "maternal": ("medicine",),
+    "maternal": ("medicine", "laws"),   # laws: phase 2 step 3b's state_maternal_mortality_mult
     "chronic": ("medicine", "laws", "sol"),
 }
 # Short names of the state variables (te_dg_m_<short>, te_dg_trt_<short>, te_dg_in_<short>).
@@ -382,8 +512,8 @@ FEMALE_WORK_SHARE = {
 FEMALE_WORK_SHARE_DEFAULT = 0.1
 
 # ---- War dead and migrants (§2.5) -------------------------------------------------
+# The war dead come from the conscription pool's ages (phase 2 step 4, below: POOL_FROM, POOL_TO), 95% of them men.
 WAR_DEAD_MALE_SHARE = 0.95
-WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
 # The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone): a pop's
 # starvation value is clamp((the first threshold - food security) x the factor, 0, 1), which the save stores per
@@ -456,8 +586,10 @@ POLLUTION_MAX = 255
 # types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
 # (NATURAL_FERTILITY_BY_LAW) carries their effect.
 ENGINE_LINES_ON_TOP = frozenset({
-    # the family-policy laws §8.1 has yet to re-express as census terms
-    "law_pro_natalist_subsidies", "law_population_control_measures", "law_communal_child_rearing",
+    # Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2 §3.2, call 9). Pro-Natalist
+    # Policy's and Population Control Measures' births lines are absorbed since phase 2 step 3b: their force under Full
+    # comes from desired fertility and the measures
+    "law_communal_child_rearing",
     # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
     # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10)
     "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
@@ -542,3 +674,27 @@ GINI_SHOWN_EQUALITY = 0.7
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5
 BANDS = 18          # 0-4 ... 80-84, then 85+
+
+# ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
+# (demographics_modifier_types.txt), carried by the measures' country modifiers (te_demog_measure_modifiers.txt) and,
+# for desired fertility, Pro-Natalist Policy. Not in DEMOG_TYPES: apart from that law's line they sit on static
+# modifiers, which load_carriers doesn't walk (demographics_modifiers.measure_lines reads them).
+DESIRED_TYPE = "state_desired_fertility_mult"               # desired x (1 + it), at least DESIRED_FLOOR
+URBAN_RELIEF_TYPE = "state_urban_fertility_relief_add"      # the urban term 1 - 0.2 x urban x (1 - it), it within 0-1
+MEANS_LITERACY_TYPE = "state_means_literacy_add"            # the means' access as if literacy were this much higher
+MATERNAL_TYPE = MORTALITY_TYPES["maternal"][0]              # the maternal cause x (1 + it): a "laws" factor (above)
+BIRTH_LIMIT_RELIEF_TYPE = "state_birth_limit_relief_add"    # Birth Limit's part x (1 - it x the agrarian share)
+SRB_TYPE = "state_sex_ratio_at_birth_add"                   # boys per 100 girls SRB_BASE + it, with prenatal sexing
+MEASURE_TYPES = (DESIRED_TYPE, URBAN_RELIEF_TYPE, MEANS_LITERACY_TYPE, MATERNAL_TYPE, BIRTH_LIMIT_RELIEF_TYPE,
+                 SRB_TYPE)
+# Desired fertility with the policy term is floored here (spec §3.5) and held at 1 at most: families can't plan more
+# children than nature gives them (a decision, step 3b; without a measure desired is at most 1 anyway).
+DESIRED_FLOOR = 0.1
+DESIRED_CAP = 1.0
+# The sex ratio at birth (§3.4): the constants above are 105 boys per 100 girls; with prenatal sexing (no technology of
+# its own; the spec's proposal, Microprocessor, era 8) a positive SRB_TYPE moves the newborns' split in the step only.
+SRB_BASE = 105
+PRENATAL_SEXING_TECH = "microprocessor"
+# Pro-Natalist Policy's own census line (§3.2): desired +5%, beside its births line moved to the absorbed family.
+PRO_NATALIST_LAW = "law_pro_natalist_subsidies"

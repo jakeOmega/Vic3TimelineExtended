@@ -8,7 +8,14 @@
 > It amends the parent's §7 (workforce, pension and health bill, conscription), §8.1 and §8.2 where it says so. Step 1's
 > implementation plan is `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`; **step 1 is built**
 > (branch `feat/demog-p2-interfaces`, 2026-10-12; its in-game items and self-checks are in
-> `docs/testing/demographics-playtest.md`, § Phase 2 step 1, and none gates the merge). No code here.
+> `docs/testing/demographics-playtest.md`, § Phase 2 step 1, and none gates the merge). **Step 2 is built** (branch
+> `feat/demog-p2-workforce-pensions`, 2026-10-12, from this spec with no separate plan, per the owner's process of that
+> day: the skew speed and the stop rule rest on self-checks, not gates; its fitted values, decisions and in-game list are
+> in `docs/systems/mod_systems.md` § Demographics and the playtest doc's § Phase 2 step 2). **Step 4 is built** (branch `feat/demog-p2-conscription-youth`, 2026-10-12, from this
+> spec with no plan document; its decisions where the spec left room are in `docs/systems/mod_systems.md` § Phase 2 step
+> 4 and its in-game items in the play-test file). Its three effects (conscription §4.1, the youth bulge §4.3, sex balance
+> §4.4) are built but held back behind switches until a follow-up fixes the census's migrant booking, which distorts the
+> men they read; the figures and the war dead's window (§4.2) ship. No code here.
 > Numbers are targets or bands the harness must meet, each with a starting value; the harness picks the values and the
 > owner reviews the result (owner, 2026-10-12). §13 records the owner's answers. The
 > base-law fixes ship first, as their own small every-game PR (§3.1).
