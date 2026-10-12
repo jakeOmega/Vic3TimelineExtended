@@ -619,7 +619,7 @@ git commit -m "Demographics: the strategic-region snapshot for the practices' st
 
 Nothing changes in any figure yet: every `Inputs` has no practice until a caller sets one, and the raise waits for Task 6.
 
-- [ ] **Step 1: Write the failing tests** (append to `test_demographics_model.py`)
+- [x] **Step 1: Write the failing tests** (append to `test_demographics_model.py`)
 
 ```python
 class TestPractices(unittest.TestCase):
@@ -727,13 +727,13 @@ class TestPractices(unittest.TestCase):
         self.assertEqual(M.marriage_age(0.0), 19)
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `$V -m unittest test_demographics_model.TestPractices`
 Expected: FAIL, `AttributeError: module 'demographics_params' has no attribute 'PRACTICE_CUT'` (and `practices` an
 unexpected keyword for `Inputs`).
 
-- [ ] **Step 3: The parameters** (insert after `DEMOG_TYPES = …` and `MEANS_ACCESS_BASE = 0.3`, before "Cause multipliers
+- [x] **Step 3: The parameters** (insert after `DEMOG_TYPES = …` and `MEANS_ACCESS_BASE = 0.3`, before "Cause multipliers
   from state inputs")
 
 ```python
@@ -810,7 +810,7 @@ MARRIAGE_AGE_AT_ZERO, MARRIAGE_AGE_SPAN = 19, 7
 `FULL_FEMALE_WORK_SHARE` is defined further down the file; `LM_WOMENS_WORK` doesn't read it at import, so the order is
 fine.
 
-- [ ] **Step 4: The model** (`demographics_model.py`)
+- [x] **Step 4: The model** (`demographics_model.py`)
 
 Add to `Inputs`, after `medicine` (its last field since #916; every caller builds `Inputs` by keyword):
 
@@ -917,7 +917,7 @@ def marriage_age(share):
     return P.MARRIAGE_AGE_AT_ZERO + P.MARRIAGE_AGE_SPAN * share
 ```
 
-- [ ] **Step 5: Run the model's tests and the suites that call `fertility`**
+- [x] **Step 5: Run the model's tests and the suites that call `fertility`**
 
 Run:
 ```bash
@@ -925,7 +925,7 @@ $V -m unittest test_demographics_model test_demographics_harness test_demographi
 ```
 Expected: `OK`. No `Inputs` sets a practice yet, so every existing figure is unchanged.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add scripts/analysis/demographics_params.py scripts/analysis/demographics_model.py test_demographics_model.py
