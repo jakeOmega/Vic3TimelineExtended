@@ -157,6 +157,24 @@ This is the pattern the row's four status icons already use, and each widget rea
 
 **Contested and heritage monuments** keep their picture; the badge tells their status.
 
+### 3.5 Grandeur frames (owner, 2026-10-11)
+
+The picture's frame shows the monument's grandeur step, the same steps its effects use (the first at 5 grandeur, each further one twice as large):
+
+| Step | Grandeur (level) | Frame |
+|---|---|---|
+| 0 | 1–4 | plain (the picture's own frame) |
+| 1 | 5–14 | bronze |
+| 2 | 15–34 | bronze, with a silver inner line |
+| 3 | 35–74 | silver, with a gold inner line |
+| 4 | 75–154 | gold |
+| 5+ | 155+ | gold, with four gem studs |
+
+- **Every monument shows its tier**, undedicated ones included, since the frame is about grandeur, not the dedication.
+- **What the frames are.** Five overlays, `gm_pictures/frames/frame_tier_<1-5>.dds`, drawn over the picture inside the `gm_picture` type, so the row and the card both get them.
+- **How they are made.** A generator recolours the frame band the pictures were composed with: vanilla's building-icon frame, widened by a few pixels so the metal still reads at 96 px. Each tier covers the baked frame exactly.
+- **What drives them.** `gm_disp_frame_tier` reads the live level against the step thresholds of `gm_state_disp_next_step`, the state card's own list.
+
 ## 4. Events
 
 ### 4.1 The ceremony (`monument_events.2`)

@@ -1463,6 +1463,20 @@ git commit -m "Grand Monuments: pictures, styles and the greyed ceremony in the 
 
 ---
 
+### Task 12: Grandeur frames (spec §3.5, added 2026-10-11)
+
+**Files:**
+- Create: `scripts/image_pipeline/gen_gm_grandeur_frames.py`. It lifts the frame band from `vanilla_template("building_icons", 256)` as `compose_framed` does, widens it, and gradient-maps its luminance to each tier's metal; tier 5 also draws four gem studs. `--sheet <png>` previews the frames over sample pictures at 256 and 96 px; `--write` writes `gfx/interface/icons/gm_pictures/frames/frame_tier_<1-5>.dds` through `icon_dds.write_dds`. It needs the game install.
+- Modify: `common/script_values/gm_values.txt`: add `gm_disp_frame_tier`, 0–5 from `gm_state_grandeur` at 5, 15, 35, 75 and 155.
+- Modify: `gui/journal_entry_widgets/grand_monuments_widget.gui`: after the 80 picture icons in `gm_picture`, add five frame icons, each `visible` on its tier, at `size = { 100% 100% }`.
+- Modify: `test_grand_monument_registry.py` (`PictureTests`), the player guide's "Monument names and forms" (one sentence), and `docs/systems/mod_systems.md`.
+
+**Tests (written first):**
+- `gm_disp_frame_tier`'s thresholds equal the first five values in `gm_state_disp_next_step`'s list.
+- The type holds one frame icon per tier 1–5, each after every picture icon, so it draws on top.
+- Each frame DDS exists.
+- RED before the change, GREEN after.
+
 ### Task 11: Verify and open the PR
 
 - [ ] **Step 1: The suite and every CI check**
