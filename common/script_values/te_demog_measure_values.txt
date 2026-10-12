@@ -403,16 +403,14 @@ te_demog_ms_cost_free_contraception = {
 	min = 0
 }
 
-# The share of women at work, by the women's-rights law: women's share of the workforce (te_demog_female_work_share's
-# table, s) as their rate beside men's, 0.92 x s / (1 - s). A stand-in until phase 2 step 1's participation model (the
-# women's rate) is on main; step 3b reads that instead.
+# The share of women at work: phase 2 step 1's women's rate (te_demog_women_rate: the women's-work family's sum, with
+# the lower strata's floor) in the capital, every game. 0 without a capital.
 te_demog_ms_women_at_work = {
-	value = 0.1
-	if = { limit = { has_law = law_type:law_women_in_the_fields } value = 0.31 }
-	if = { limit = { has_law = law_type:law_women_own_property } value = 0.39 }
-	if = { limit = { has_law = law_type:law_women_in_the_workplace } value = 0.75 }
-	if = { limit = { has_law = law_type:law_womens_suffrage } value = 0.82 }
-	if = { limit = { has_law = law_type:law_protected_class } value = 0.85 }
+	value = 0
+	if = {
+		limit = { exists = capital }
+		value = capital.te_demog_women_rate
+	}
 }
 
 # ---- Desired family size on each measure (the self-check: te_debug_demog_ms_selfcheck_start) ----------------------
@@ -440,6 +438,32 @@ te_demog_ms_desired_on = {
 	if = { limit = { has_modifier = te_demog_ms_birth_limit_one } add = te_demog_ms_desired_birth_limit_one }
 	if = { limit = { has_modifier = te_demog_ms_crash_campaign } add = te_demog_ms_desired_crash_campaign }
 }
+
+# ---- Each measure's upkeep, for the AI pulse's budget (te_demog_ms_ai_spent) -------------------------------------
+# te_demog_ms_authority_<measure>: its country_authority_add, as a cost; te_demog_ms_paid_<measure>: 1 for a money
+# upkeep. test_demographics_measures.py pins both to te_demog_measure_modifiers.txt.
+te_demog_ms_authority_child_allowance = { value = 0 }
+te_demog_ms_authority_family_housing = { value = 0 }
+te_demog_ms_authority_honours = { value = 25 }
+te_demog_ms_authority_restricted_contraception = { value = 50 }
+te_demog_ms_authority_parental_leave = { value = 0 }
+te_demog_ms_authority_free_contraception = { value = 0 }
+te_demog_ms_authority_sex_education = { value = 0 }
+te_demog_ms_authority_later_longer_fewer = { value = 50 }
+te_demog_ms_authority_birth_limit = { value = 100 }
+te_demog_ms_authority_rural_exemption = { value = 0 }
+te_demog_ms_authority_crash_campaign = { value = 100 }
+te_demog_ms_paid_child_allowance = { value = 1 }
+te_demog_ms_paid_family_housing = { value = 1 }
+te_demog_ms_paid_honours = { value = 0 }
+te_demog_ms_paid_restricted_contraception = { value = 0 }
+te_demog_ms_paid_parental_leave = { value = 1 }
+te_demog_ms_paid_free_contraception = { value = 1 }
+te_demog_ms_paid_sex_education = { value = 0 }
+te_demog_ms_paid_later_longer_fewer = { value = 0 }
+te_demog_ms_paid_birth_limit = { value = 0 }
+te_demog_ms_paid_rural_exemption = { value = 0 }
+te_demog_ms_paid_crash_campaign = { value = 0 }
 
 # ---- The AI's figures (§3.6) -----------------------------------------------------------------------------------------
 # The population's change over the last year, as a share: each state's people at its yearly walk against the walk
@@ -469,6 +493,29 @@ te_demog_ms_pop_trend = {
 	value = te_demog_ms_pop_now_sum
 	subtract = te_demog_ms_pop_prev_sum
 	divide = { value = te_demog_ms_pop_prev_sum min = 1 }
+}
+
+# Crowding for the AI: the share of the country's people in states Migration Crowding presses at its ceiling or past it
+# (migration_crowding_mult_applied 4.5 or more: ten times the reference density, migration pull -45%). Any crowding at
+# all is too common to mean anything (73% of countries in an 1837 save, 88% in 1902), and 4.5 none before 1902; projected
+# from 1902's densities at twice and three times its people, half a country's people at the ceiling is about 4% and 20%
+# of countries: China, British India, Japan, Egypt, Java (the review of 3a; numbers in the PR).
+te_demog_ms_crowded_share = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = migration_crowding_mult_applied
+			var:migration_crowding_mult_applied >= 4.5
+		}
+		add = state_population
+	}
+	divide = { value = te_demog_ms_population min = 1 }
+}
+te_demog_ms_population = {
+	value = 0
+	every_scope_state = {
+		add = state_population
+	}
 }
 
 # The census's share aged 65 and over (te_dg_old_share), 0 where it doesn't run.

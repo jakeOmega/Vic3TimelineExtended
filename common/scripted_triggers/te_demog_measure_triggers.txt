@@ -81,9 +81,10 @@ te_demog_ms_crash_campaign_barred = {
 # pulse (Full, te_demog_ms_ai_choose) read the same conditions, which any country has; is_ai = yes only decides whom
 # the pulse picks for. Where the census runs, its figures add to the walk's.
 
-# Country: the population shrank over the last year, by the yearly walk's figures (every game).
+# Country: the population shrank over the last year by more than a tenth of a percent, by the yearly walk's figures
+# (every game). The deadband keeps a country near zero growth from swinging between the two laws' weights each year.
 te_demog_ms_ai_shrinking = {
-	te_demog_ms_pop_trend < 0
+	te_demog_ms_pop_trend < -0.001
 }
 
 # Country: the population shrinks fast, more than half a percent a year.
@@ -106,11 +107,9 @@ te_demog_ms_ai_youth = {
 	te_demog_ms_youth_share > 0.18
 }
 
-# Country: Migration Crowding presses on one of its states.
+# Country: half its people or more live in states Migration Crowding presses at its ceiling (te_demog_ms_crowded_share).
 te_demog_ms_ai_crowded = {
-	any_scope_state = {
-		has_modifier = migration_crowding
-	}
+	te_demog_ms_crowded_share >= 0.5
 }
 
 # Country: a reason to want more births: the population shrinks or the old are many.
@@ -147,10 +146,12 @@ te_demog_ms_ai_popcontrol_far = {
 	}
 }
 
-# Country: the treasury can take on a money upkeep, and still carry one.
+# Country: the treasury can take on a money upkeep (one a pulse: the pulse's local te_dg_ms_money counts the money
+# measures it started, te_demog_ms_ai_choose), and still carry one.
 te_demog_ms_ai_money_start = {
 	in_default = no
 	scaled_debt < 0.25
+	local_var:te_dg_ms_money < 1
 }
 te_demog_ms_ai_money_keep = {
 	in_default = no
@@ -164,8 +165,9 @@ te_demog_ms_ai_legitimate = {
 }
 
 # Country: whether the AI starts or keeps each measure. Start: the need and its upkeep with a margin (authority: the
-# upkeep plus 25 free); keep: the need and the upkeep still met (authority not in deficit). Birth Limit's one child,
-# the Rural Exemption and the Crash Campaign: te_demog_ms_ai_choose.
+# upkeep plus 25 free, from the pulse's budget, the local te_dg_ms_auth: a modifier added in an effect isn't visible
+# in it, so each start takes its upkeep off the budget, te_demog_ms_ai_spent); keep: the need and the upkeep still met
+# (authority not in deficit). The start triggers read the pulse's locals: only te_demog_ms_ai_choose calls them.
 te_demog_ms_ai_start_child_allowance = {
 	te_demog_ms_ai_pronatal = yes
 	te_demog_ms_ai_money_start = yes
@@ -184,7 +186,7 @@ te_demog_ms_ai_keep_family_housing = {
 }
 te_demog_ms_ai_start_honours = {
 	te_demog_ms_ai_pronatal = yes
-	authority >= 50
+	local_var:te_dg_ms_auth >= 50
 }
 te_demog_ms_ai_keep_honours = {
 	te_demog_ms_ai_pronatal = yes
@@ -193,7 +195,7 @@ te_demog_ms_ai_keep_honours = {
 te_demog_ms_ai_start_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
 	te_demog_ms_ai_legitimate = yes
-	authority >= 75
+	local_var:te_dg_ms_auth >= 75
 }
 te_demog_ms_ai_keep_restricted_contraception = {
 	te_demog_ms_ai_pronatal_far = yes
@@ -225,7 +227,7 @@ te_demog_ms_ai_keep_sex_education = {
 }
 te_demog_ms_ai_start_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
-	authority >= 75
+	local_var:te_dg_ms_auth >= 75
 }
 te_demog_ms_ai_keep_later_longer_fewer = {
 	te_demog_ms_ai_popcontrol = yes
@@ -233,7 +235,7 @@ te_demog_ms_ai_keep_later_longer_fewer = {
 }
 te_demog_ms_ai_start_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
-	authority >= 125
+	local_var:te_dg_ms_auth >= 125
 }
 te_demog_ms_ai_keep_birth_limit = {
 	te_demog_ms_ai_popcontrol = yes
@@ -256,6 +258,6 @@ te_demog_ms_ai_keep_rural_exemption = {
 te_demog_ms_ai_start_crash_campaign = {
 	te_demog_ms_ai_popcontrol_far = yes
 	te_demog_ms_ai_legitimate = yes
-	authority >= 125
+	local_var:te_dg_ms_auth >= 125
 	NOT = { te_demog_ms_crash_campaign_barred = yes }
 }

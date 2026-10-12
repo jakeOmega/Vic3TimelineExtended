@@ -519,7 +519,8 @@ te_debug_demog.8 = {
 # state_desired_fertility_mult since then; expected: the change in the measures' lines its owner holds
 # (te_demog_ms_desired_on). OK: a script-only state type on a country static modifier reaches the state. BROKEN: it
 # doesn't, so the census will never see the measures' types; put them on a state modifier in each state instead
-# (docs/testing/demographics-playtest.md, Self-checks). No verdict when the state changed hands in the week.
+# (docs/testing/demographics-playtest.md, Self-checks). No verdict when the state changed hands in the week; a
+# NO_VERDICT line, and the check re-arms, when the expected change is under 0.01 (the measure ended in the week).
 te_debug_demog.10 = {
 	type = state_event
 	hidden = yes
@@ -560,7 +561,19 @@ te_debug_demog.10 = {
 				limit = { local_var:te_dg_ms_chk_gap < 0 }
 				change_local_variable = { name = te_dg_ms_chk_gap multiply = -1 }
 			}
+			# the expected change's size: under 0.01 the measure ended within the week (or another made up for it),
+			# so a read of 0 would pass for OK: no verdict, and the check re-arms for the next measure to start
+			set_local_variable = { name = te_dg_ms_chk_size value = var:te_dg_ms_chk_expected }
 			if = {
+				limit = { local_var:te_dg_ms_chk_size < 0 }
+				change_local_variable = { name = te_dg_ms_chk_size multiply = -1 }
+			}
+			if = {
+				limit = { local_var:te_dg_ms_chk_size < 0.01 }
+				debug_log = "TE_SELF_CHECK NO_VERDICT measure_country_types added=[THIS.Var('te_dg_ms_chk_added').GetValue|4] expected=[THIS.Var('te_dg_ms_chk_expected').GetValue|4] (the measure ended within the week; the check re-arms) date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_global_variable = te_demog_ms_selfcheck_done
+			}
+			else_if = {
 				limit = { local_var:te_dg_ms_chk_gap < 0.002 }
 				debug_log = "TE_SELF_CHECK OK measure_country_types added=[THIS.Var('te_dg_ms_chk_added').GetValue|4] expected=[THIS.Var('te_dg_ms_chk_expected').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}

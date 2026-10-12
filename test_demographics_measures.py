@@ -34,7 +34,7 @@ PN, FP, PC, COMMUNAL, TRADITIONAL = ("law_pro_natalist_subsidies", "law_state_sp
 FAMILY_LAWS = (TRADITIONAL, PN, FP, PC, COMMUNAL)
 
 # §3.4's catalogue: the laws that allow each measure, and its modifier's lines (census types, interest groups, upkeep
-# and other effects). Parental Leave's women's-work line waits for step 3b (phase 2 step 1's family).
+# and other effects). Parental Leave's women's-work line is on phase 2 step 1's family.
 CATALOGUE = {
     "child_allowance": ({PN, COMMUNAL}, {
         "state_desired_fertility_mult": 0.08,
@@ -49,8 +49,8 @@ CATALOGUE = {
         "interest_group_ig_devout_approval_add": 2, "interest_group_ig_intelligentsia_approval_add": -2,
         "state_pop_support_movement_feminist_mult": 0.1, "country_authority_add": -50}),
     "parental_leave": ({FP, COMMUNAL}, {
-        "state_desired_fertility_mult": 0.05, "interest_group_ig_trade_unions_approval_add": 1,
-        "interest_group_ig_industrialists_approval_add": -1}),
+        "state_desired_fertility_mult": 0.05, "state_demog_womens_work_ratio_add": 0.02,
+        "interest_group_ig_trade_unions_approval_add": 1, "interest_group_ig_industrialists_approval_add": -1}),
     "free_contraception": ({FP, PC}, {
         "state_fertility_means_add": 0.1, "interest_group_ig_intelligentsia_approval_add": 1,
         "interest_group_ig_devout_approval_add": -2}),
@@ -98,13 +98,15 @@ class _MeasureEngine(_Engine):
     add_modifier stacks), set_variable = yes, and the notices and the self-check recorded instead of run."""
 
     def __init__(self, law=PN, year=1900, month=0, full=True, fixtures=None, triggers=None):
-        super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0, **(fixtures or {})},
+        super().__init__({"te_history_month_index": _date(year, month), "gdp": 52_000_000.0,
+                          "capital.te_demog_women_rate": 0.5, **(fixtures or {})},
                          triggers={"te_demog_effects_run": full, "is_ai": False, **(triggers or {})})
         self.effects.update(_raw_blocks([MS_EFFECTS]))
         self.values.update(_raw_blocks([MS_VALUES]))
         self.triggers.update(_raw_blocks([MS_TRIGGERS]))
         self.law = law
         self.notices, self.selfchecks = [], []
+        self.exists = {"capital"}
 
     def at(self, year, month=0):
         self.fixtures["te_history_month_index"] = _date(year, month)
@@ -116,6 +118,8 @@ class _MeasureEngine(_Engine):
     def _test(self, key, op, arg):
         if key == "has_law":
             return arg == f"law_type:{self.law}"
+        if key == "exists":
+            return arg in self.exists
         if key == "trigger_if":
             rest = [i for i in arg if i[0] != "limit"]
             return not self.holds(_find(arg, "limit")) or self.holds(rest)
@@ -189,10 +193,14 @@ class TestCatalogue(unittest.TestCase):
         self.assertEqual(_lines(self.mods["te_demog_ms_birth_limit_one"]),
                          {k: float(v) for k, v in BIRTH_LIMIT_ONE.items()})
 
-    def test_parental_leave_waits_for_step_3b_for_womens_work(self):
-        self.assertNotIn("state_demog_womens_work_ratio_add", self.mods["te_demog_ms_parental_leave"])
-        self.assertRegex(_block(_text(MS_MODIFIERS), "te_demog_ms_parental_leave"),
-                         r"#.*state_demog_womens_work_ratio_add.*step 3b")
+    def test_parental_leave_works_through_step_ones_family(self):
+        """Its women's-work line sits on step 1's family (re-applied by the moved lines' pair, read by step 2's
+        participation model), and its upkeep reads step 1's women's rate in the capital, not a stand-in."""
+        family = _text(ROOT / "common" / "modifier_type_definitions" / "demographics_workforce_line_types.txt")
+        self.assertIn("state_demog_womens_work_ratio_add = {", family)
+        body = _block(_text(MS_VALUES), "te_demog_ms_women_at_work")
+        self.assertIn("value = capital.te_demog_women_rate", body)
+        self.assertNotIn("has_law", body)
 
     def test_money_upkeep_sits_on_its_own_cost_modifier(self):
         """scripting_best_practices.md, "Expense Scaling with GDP": country_expenses_add = 1, the multiplier the
@@ -378,6 +386,16 @@ class TestTerm(unittest.TestCase):
         self.assertEqual(eng.measure_mods(), {})
         self.assertNotIn("te_dg_ms_rural_exemption", eng.vars)
 
+    def test_the_crash_campaigns_row_reads_on_until_the_pulse_ends_it(self):
+        """Between its five years running out and the country's monthly pulse its code is 2: still on."""
+        loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
+        for key, want in (("te_demog_ms_crash_campaign_term", "te_demog_ms_crash_campaign_term_ends"),
+                          ("te_demog_ms_crash_campaign_btn", "te_demog_ms_btn_end")):
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            self.assertRegex(line, rf"'\(CFixedPoint\)2' \), '{want}'", key)
+        eng = _MeasureEngine(law=PC, year=1975).press("crash_campaign").at(1980, 1)
+        self.assertEqual(eng.sv("te_demog_ms_state_crash_campaign"), 2)
+
     def test_the_crash_campaign_runs_five_years_then_is_barred_for_ten(self):
         eng = _MeasureEngine(law=PC, year=1975, month=6).press("crash_campaign")
         self.assertFalse(eng.sgui_valid("crash_campaign"), "no press ends it")
@@ -459,11 +477,21 @@ class TestRevolution(unittest.TestCase):
         self.assertAlmostEqual(eng.modifiers["te_demog_ms_child_allowance_cost"], 2 * before, places=4)
 
     def test_the_repair_runs_at_the_civil_war(self):
+        """The house pattern (inh_repair_after_civil_war): a revolutionary winner copies the loser's variables from
+        scope:te_cw_loser explicitly, keeping its own where both hold one, then puts the modifiers back."""
         hooks = _text(ROOT / "common" / "on_actions" / "te_civil_war_on_actions.txt")
-        self.assertIn("te_demog_ms_repair_after_civil_war = yes", _block(hooks, "te_civil_war_on_won"))
+        won = _block(hooks, "te_civil_war_on_won")
+        self.assertLess(won.index("te_civil_war_resolve_sides = yes"), won.index("te_demog_ms_repair_after_civil_war = yes"))
+        self.assertLess(won.index("te_demog_ms_repair_after_civil_war = yes"), won.index("te_civil_war_clear = yes"))
         body = _block(_text(MS_EFFECTS), "te_demog_ms_repair_after_civil_war")
         self.assertIn("te_demog_effects_run = yes", body)
-        self.assertIn("te_demog_ms_keep_all = yes", body)
+        self.assertIn("var:te_cw_rebels_won = 1", body)
+        for name in [f"te_dg_ms_{k}" for k in CATALOGUE] + ["te_dg_ms_birth_limit_one", "te_dg_ms_crash_campaign_end"]:
+            self.assertIn(f"te_demog_ms_inherit = {{ NAME = {name} }}", body)
+        self.assertLess(body.index("te_demog_ms_inherit"), body.index("te_demog_ms_keep_all = yes"))
+        inherit = re.sub(r"#[^\n]*", "", _block(_text(MS_EFFECTS), "te_demog_ms_inherit"))
+        self.assertIn("NOT = { has_variable = $NAME$ }", inherit)
+        self.assertIn("value = scope:te_cw_loser.var:$NAME$", inherit)
 
 
 class TestUpkeep(unittest.TestCase):
@@ -476,8 +504,10 @@ class TestUpkeep(unittest.TestCase):
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_child_allowance"), gdp * 0.005 * 0.5 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.004 * 0.8 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_free_contraception"), gdp * 0.001 / 52, places=2)
-        eng.law = "law_protected_class"
-        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.85 / 52, places=2)
+        eng.fixtures["capital.te_demog_women_rate"] = 0.6
+        self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.6 / 52, places=2)
+        eng.exists.clear()
+        self.assertEqual(eng.sv("te_demog_ms_cost_parental_leave"), 0)
 
     def test_the_cost_modifier_takes_the_cost(self):
         eng = _MeasureEngine(law=FP, fixtures={"gdp": 52_000_000.0}).press("free_contraception")
@@ -514,13 +544,48 @@ class TestAI(unittest.TestCase):
         self.assertEqual(eng.measure_mods(), {})
 
     def test_a_shrinking_country_takes_the_pro_natalist_measures(self):
+        # one money measure a pulse: Child Allowance this year, Family Housing the next
         eng = self._eng(PN, te_demog_ms_pop_trend=-0.002).do("te_demog_ms_yearly")
         self.assertEqual(set(eng.measure_mods()), {
-            "te_demog_ms_child_allowance", "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing",
-            "te_demog_ms_family_housing_cost", "te_demog_ms_honours"})
+            "te_demog_ms_child_allowance", "te_demog_ms_child_allowance_cost", "te_demog_ms_honours"})
+        eng.at(1901).do("te_demog_ms_yearly")
+        self.assertIn("te_demog_ms_family_housing_cost", eng.modifiers)
+        # near zero growth is not shrinking (the deadband): no pro-natal need
+        eng = self._eng(PN, te_demog_ms_pop_trend=-0.0005).do("te_demog_ms_yearly")
+        self.assertEqual(eng.measure_mods(), {})
         # far off and legitimate: Restricted Contraception too
         eng = self._eng(PN, te_demog_ms_pop_trend=-0.01, government_legitimacy=80.0).do("te_demog_ms_yearly")
         self.assertIn("te_demog_ms_restricted_contraception", eng.modifiers)
+
+    def test_the_pulse_spends_its_authority_once(self):
+        """A modifier added in the pulse isn't visible to it, so the start triggers read a local budget: a famine AI
+        with 130 free authority starts Birth Limit (100) and nothing else that costs authority."""
+        eng = self._eng(PC, year=1980, authority=130.0, government_legitimacy=80.0)
+        eng.trigger_fixtures.update(has_famine=True, te_demog_ms_ai_crowded=True)
+        eng.do("te_demog_ms_yearly")
+        self.assertIn("te_demog_ms_birth_limit", eng.modifiers)
+        self.assertNotIn("te_demog_ms_later_longer_fewer", eng.modifiers)
+        self.assertNotIn("te_demog_ms_crash_campaign", eng.modifiers)
+        spent = sum(-v for k, (_, lines) in CATALOGUE.items() if f"te_demog_ms_{k}" in eng.modifiers
+                    for f, v in lines.items() if f == "country_authority_add")
+        self.assertLessEqual(spent, 130)
+
+    def test_the_upkeep_constants_match_the_modifiers(self):
+        eng = _MeasureEngine()
+        for key, (_, lines) in CATALOGUE.items():
+            self.assertEqual(eng.sv(f"te_demog_ms_authority_{key}"), -lines.get("country_authority_add", 0), key)
+            self.assertEqual(eng.sv(f"te_demog_ms_paid_{key}"), 1 if key in MONEY else 0, key)
+
+    def test_crowding_means_half_the_people_at_the_ceiling(self):
+        trigger = _block(_text(MS_TRIGGERS), "te_demog_ms_ai_crowded")
+        self.assertIn("te_demog_ms_crowded_share >= 0.5", trigger)
+        self.assertNotIn("has_modifier = migration_crowding", trigger)
+        share = _block(_text(MS_VALUES), "te_demog_ms_crowded_share")
+        self.assertIn("var:migration_crowding_mult_applied >= 4.5", share)
+        eng = _MeasureEngine(fixtures={"te_demog_ms_crowded_share": 0.4})
+        self.assertFalse(eng.holds_trigger("te_demog_ms_ai_crowded"))
+        eng.fixtures["te_demog_ms_crowded_share"] = 0.6
+        self.assertTrue(eng.holds_trigger("te_demog_ms_ai_crowded"))
 
     def test_debt_and_authority_hold_it_back(self):
         eng = self._eng(PN, te_demog_ms_pop_trend=-0.002, scaled_debt=0.4, authority=10.0).do("te_demog_ms_yearly")
@@ -591,6 +656,17 @@ class TestWiring(unittest.TestCase):
         # the buttons' is_valid starts with the wrapper (TestButtons); the AI pulse runs only from te_demog_ms_yearly
         callers = [m.group(0) for m in re.finditer(r"te_demog_ms_ai_choose = yes", effects)]
         self.assertEqual(len(callers), 1)
+
+
+class TestSelfCheck(unittest.TestCase):
+    def test_no_verdict_when_nothing_was_expected(self):
+        """A measure ended within the week leaves an expected change near 0, where a read of 0 would pass for OK."""
+        event = _block(_text(ROOT / "events" / "te_debug_demog_events.txt"), "te_debug_demog.10")
+        self.assertIn("local_var:te_dg_ms_chk_size < 0.01", event)
+        size = event.index("local_var:te_dg_ms_chk_size < 0.01")
+        self.assertLess(size, event.index("TE_SELF_CHECK NO_VERDICT measure_country_types"))
+        self.assertLess(event.index("TE_SELF_CHECK NO_VERDICT"), event.index("TE_SELF_CHECK OK measure_country_types"))
+        self.assertIn("remove_global_variable = te_demog_ms_selfcheck_done", event)
 
 
 class TestRelease(unittest.TestCase):

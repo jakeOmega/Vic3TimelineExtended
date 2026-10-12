@@ -65,11 +65,13 @@ te_demog_ms_restricted_contraception = {
 	country_authority_add = -50
 }
 
-# Parental Leave: State-Sponsored Family Planning, Communal Child-Rearing. The Nordic model.
+# Parental Leave: State-Sponsored Family Planning, Communal Child-Rearing. The Nordic model. Its women's-work line sits on
+# phase 2 step 1's family, which the moved lines' pair re-applies as a working-adult line today (as the women's rights
+# laws' lines) and step 2's participation model reads.
 te_demog_ms_parental_leave = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_desired_fertility_mult = 0.05
-	# women's work +0.02 (state_demog_womens_work_ratio_add, phase 2 step 1's family) comes with step 3b
+	state_demog_womens_work_ratio_add = 0.02
 	interest_group_ig_trade_unions_approval_add = 1
 	interest_group_ig_industrialists_approval_add = -1
 }

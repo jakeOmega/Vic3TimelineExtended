@@ -310,13 +310,47 @@ te_demog_ms_monthly = {
 	}
 }
 
-# THIS = ROOT = a civil war's winner (te_civil_war_on_won), Full only: the measures it holds the variables of are back
-# on at once, where its law allows them, rather than at the next 31 December. If the engine copies the loser's
-# variables only after this hook, the yearly census does it.
+# THIS = ROOT = a civil war's winner (te_civil_war_on_won, which reads var:te_cw_rebels_won and scope:te_cw_loser from
+# te_civil_war_resolve_sides), Full only. A revolution that won continues the nation (owner, 2026-09-26): the winner
+# takes the old government's measures from scope:te_cw_loser explicitly, as inh_repair_after_civil_war does, rather than
+# trusting the engine to have copied the variables by this hook; its own value wins where both hold one. Then the
+# measures are back on at once, where the winner's law allows them, and the rest end with a notice; the yearly census
+# does the same each 31 December. A loyalist winner keeps its own modifiers and needs nothing.
 te_demog_ms_repair_after_civil_war = {
 	if = {
 		limit = { te_demog_effects_run = yes }
+		if = {
+			limit = {
+				has_variable = te_cw_rebels_won
+				var:te_cw_rebels_won = 1
+				exists = scope:te_cw_loser
+			}
+			te_demog_ms_inherit = { NAME = te_dg_ms_child_allowance }
+			te_demog_ms_inherit = { NAME = te_dg_ms_family_housing }
+			te_demog_ms_inherit = { NAME = te_dg_ms_honours }
+			te_demog_ms_inherit = { NAME = te_dg_ms_restricted_contraception }
+			te_demog_ms_inherit = { NAME = te_dg_ms_parental_leave }
+			te_demog_ms_inherit = { NAME = te_dg_ms_free_contraception }
+			te_demog_ms_inherit = { NAME = te_dg_ms_sex_education }
+			te_demog_ms_inherit = { NAME = te_dg_ms_later_longer_fewer }
+			te_demog_ms_inherit = { NAME = te_dg_ms_birth_limit }
+			te_demog_ms_inherit = { NAME = te_dg_ms_rural_exemption }
+			te_demog_ms_inherit = { NAME = te_dg_ms_crash_campaign }
+			te_demog_ms_inherit = { NAME = te_dg_ms_birth_limit_one }
+			te_demog_ms_inherit = { NAME = te_dg_ms_crash_campaign_end }
+		}
 		te_demog_ms_keep_all = yes
+	}
+}
+
+# Country, ROOT = a civil war's winner: the loser's variable $NAME$, where the winner holds none.
+te_demog_ms_inherit = {
+	if = {
+		limit = {
+			NOT = { has_variable = $NAME$ }
+			scope:te_cw_loser ?= { has_variable = $NAME$ }
+		}
+		set_variable = { name = $NAME$ value = scope:te_cw_loser.var:$NAME$ }
 	}
 }
 
@@ -327,6 +361,9 @@ te_demog_ms_repair_after_civil_war = {
 te_demog_ms_ai_choose = {
 	if = {
 		limit = { is_ai = yes }
+		# the pulse's budget: free authority, and no money measure started yet (te_demog_ms_ai_spent)
+		set_local_variable = { name = te_dg_ms_auth value = authority }
+		set_local_variable = { name = te_dg_ms_money value = 0 }
 		# Birth Limit: two children; one when the target is far off; off when the need has gone
 		if = {
 			limit = {
@@ -335,6 +372,7 @@ te_demog_ms_ai_choose = {
 				te_demog_ms_ai_start_birth_limit = yes
 			}
 			te_demog_ms_start = { M = birth_limit }
+			te_demog_ms_ai_spent = { M = birth_limit }
 		}
 		else_if = {
 			limit = {
@@ -369,6 +407,7 @@ te_demog_ms_ai_choose = {
 				te_demog_ms_ai_start_crash_campaign = yes
 			}
 			te_demog_ms_start = { M = crash_campaign }
+			te_demog_ms_ai_spent = { M = crash_campaign }
 		}
 	}
 }
@@ -383,6 +422,7 @@ te_demog_ms_ai_consider = {
 			te_demog_ms_ai_start_$M$ = yes
 		}
 		te_demog_ms_start = { M = $M$ }
+		te_demog_ms_ai_spent = { M = $M$ }
 	}
 	else_if = {
 		limit = {
@@ -392,4 +432,11 @@ te_demog_ms_ai_consider = {
 		}
 		te_demog_ms_end = { M = $M$ }
 	}
+}
+
+# Country, in te_demog_ms_ai_choose: measure $M$ started, so its upkeep comes off the pulse's budget (its authority, and
+# a money measure counts against the one a pulse).
+te_demog_ms_ai_spent = {
+	change_local_variable = { name = te_dg_ms_auth subtract = te_demog_ms_authority_$M$ }
+	change_local_variable = { name = te_dg_ms_money add = te_demog_ms_paid_$M$ }
 }

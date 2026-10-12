@@ -384,7 +384,7 @@ five years and can't return for ten.
 | Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning | Offsets half of city life's pull toward smaller families | 0.4% of GDP a year, by the share of people in cities |
 | Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy | Families want a few more children | 25 authority |
 | Restricted Contraception | Pro-Natalist Policy | Families have less means to plan their children; more mothers die; the feminist movement gains support | 50 authority |
-| Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children | 0.3% of GDP a year, by the share of women at work |
+| Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
 | Free Contraception | State-Sponsored Family Planning, Population Control Measures | Families have more means to plan their children | 0.1% of GDP a year |
 | Sex Education | State-Sponsored Family Planning, Population Control Measures | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
 | Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 50 authority |
@@ -393,13 +393,16 @@ five years and can't return for ten.
 | Crash Campaign | Population Control Measures | Families want fewer children still; legitimacy −10 and more radicals from movements | 100 authority |
 
 In this build the census reads only Free Contraception's and Restricted
-Contraception's effect on the means to plan a family. The other measures cost
-their upkeep and move the interest groups, and their effect on births comes in a
-later build.
+Contraception's effect on the means to plan a family, and Parental Leave's
+women's work counts toward the workforce as the women's rights laws' does. The
+other measures cost their upkeep and move the interest groups, and their effect
+on births comes in a later build.
 
 The AI starts the measures that raise births when its population shrinks or
-many of its people are old, and the ones that lower births in a famine, with
-crowded states or a youth bulge, as its treasury and authority allow. It takes
+many of its people are old, and the ones that lower births in a famine, when
+half its people live in states crowded to Migration Crowding's ceiling, or with
+a youth bulge, as its treasury and authority allow, at most one measure paid in
+money a year. It takes
 Restricted Contraception, Birth Limit's one child and the Crash Campaign only
 when the need is pressing and its legitimacy is high.
 
