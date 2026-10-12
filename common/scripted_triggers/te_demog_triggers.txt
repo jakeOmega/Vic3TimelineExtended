@@ -16,6 +16,13 @@ te_demog_cohorts_run = {
 	}
 }
 
+# The once-a-game self-checks (docs/testing/demographics-playtest.md, "Self-checks") that read census-only inputs:
+# on in every development build whatever the rule, since the inputs are there; a release sets it to always = no
+# (scripts/release/comment_out_census_inputs.py's GATES), where the inputs are commented out and would read 0.
+te_debug_demog_selfchecks_run = {
+	always = yes
+}
+
 # The model's effects (phase 2) apply only under Full.
 te_demog_effects_run = {
 	has_game_rule = demographics_full
@@ -27,6 +34,11 @@ te_demog_effects_run = {
 # (te_demog_fast_effects.txt). Once started, the clock never stops.
 te_demog_clock_on = {
 	has_global_variable = te_demog_clock
+}
+
+# THIS = a country: it pays an old-age pension (phase 2 step 1). UBI and Post-Scarcity replace it and have no pension age.
+te_demog_has_pension_law = {
+	has_law = law_type:law_old_age_pension
 }
 
 # State scope: the state has a census (a seeded ring).
@@ -91,6 +103,15 @@ te_demog_lines_apply = {
 	OR = {
 		NOT = { te_demog_effects_run = yes }
 		NOT = { has_variable = te_dg_mb }
+	}
+}
+
+# THIS = a state: the working-adult lines' pair applies (phase 2 step 1) unless the census sets this state's
+# workforce: Full, and step 2's term in force (te_dg_mw). In step 1 nothing sets te_dg_mw, so it always applies.
+te_demog_workforce_lines_apply = {
+	OR = {
+		NOT = { te_demog_effects_run = yes }
+		NOT = { has_variable = te_dg_mw }
 	}
 }
 

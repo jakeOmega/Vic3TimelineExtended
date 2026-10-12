@@ -13,6 +13,7 @@ Usage:
     demographics_harness.py lag                         # years of e0 behind the target while medicine spreads
     demographics_harness.py adopters SAVE [SAVE ...]    # health-law adopters against peers at their SoL
     demographics_harness.py fertility                   # children per woman with the game files' values
+    demographics_harness.py workforce                   # phase 2 step 1: participation, need, the old-age threshold
     demographics_harness.py history SAVE... --anchors CSV  # the model against history's e0, IMR and growth
     demographics_harness.py fidelity SAVE [--tag GBR]   # the model against the census's own stored multipliers
     demographics_harness.py predict SAVE... [--census-rates] [--slope] [--to-year 1900] [--check-modifiers] [--json]
@@ -637,6 +638,62 @@ def cmd_lag(_args):
     for label, rate, before, target, behind in lag_rows():
         print(f"{label:56s} {rate:4.2f}  {before:9.1f}  {target:6.1f}  "
               + "  ".join(f"{behind[y]:5.2f}" for y in LAG_YEARS))
+    return 0
+
+
+# ---- workforce: phase 2 step 1's participation figures -------------------------------------------------------
+# The participation figures at the starting values, on the census's own stable structures (the design §1.8's sketch,
+# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md). (name, Inputs keywords, the lower
+# strata's share.) No amendment or IG trait is in these rows: DM.load_carriers walks laws, technologies and
+# institutions only (step 2's late-save fit reads those from the save).
+_RICH_TECHS = frozenset({"medical_degrees", "modern_nursing", "antibiotics", "modern_vaccines",
+                         "antibiotic_mass_production", "contraceptive_pill", "modern_pharmaceuticals",
+                         "vulcanization", "feminism", "second_wave_feminism", "personal_appliances"})
+WORKFORCE_SCENARIOS = [
+    ("1836 farming", dict(sol=8, literacy=0.1, urban_share=0.05,
+                          laws=frozenset({"law_no_womens_rights", "law_child_labor_allowed"})), 0.85),
+    ("1836 Women in the Fields", dict(sol=8, literacy=0.1, urban_share=0.05,
+                                      laws=frozenset({"law_women_in_the_fields", "law_child_labor_allowed"})), 0.85),
+    ("Rich, Protected Class, pension at 65", dict(
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
+        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance"}),
+        institutions={"institution_health_system": 5, "institution_social_security": 5}), 0.4),
+    ("Rich, plus call 3's laws", dict(
+        sol=40, literacy=0.98, urban_share=0.8, techs=_RICH_TECHS,
+        laws=frozenset({"law_protected_class", "law_compulsory_primary_school", "law_old_age_pension",
+                        "law_public_health_insurance", "law_pro_capital_ministry_of_labor",
+                        "law_rehabilitation_focused_criminal_justice"}),
+        institutions={"institution_health_system": 5, "institution_social_security": 5,
+                      "institution_ministry_of_labor": 5}), 0.4),
+]
+
+
+def workforce_rows():
+    """[{name, tfr, women, wa_share, at_work, pensioners, need, target, old_age}] for WORKFORCE_SCENARIOS: each
+    scenario's stable structure (300 years at constant inputs), its old-age threshold and its figures."""
+    carriers, lines = DM.load_carriers(), DM.workforce_line_carriers()
+    rows = []
+    for name, kw, low in WORKFORCE_SCENARIOS:
+        inp = M.Inputs(low_share=low, **kw)
+        inp.mods = {**DM.totals(carriers, inp.techs, inp.laws, inp.institutions),
+                    **DM.totals(lines, inp.techs, inp.laws, inp.institutions,
+                                types=tuple(P.WORKFORCE_LINE_TYPES.values()))}
+        ring, last = M.run_constant(inp, years=300)
+        qf, qm, _ = M.group_rates(inp)
+        old = M.old_age(qf, qm)
+        fig = M.work_figures(ring, inp, old)
+        rows.append({"name": name, "tfr": last["tfr"], "women": M.women_rate(inp), **fig,
+                     "target": M.wf_target(fig), "old_age": old})
+    return rows
+
+
+def cmd_workforce(_args):
+    print(f"{'scenario':40s} {'tfr':>5s} {'women':>6s} {'wa':>6s} {'at work':>8s} {'target':>7s} "
+          f"{'pens':>6s} {'need':>6s} {'old age':>8s}")
+    for r in workforce_rows():
+        print(f"{r['name']:40s} {r['tfr']:5.2f} {r['women']:6.2f} {r['wa_share']:6.3f} {r['at_work']:8.3f} "
+              f"{r['target']:7.3f} {r['pensioners']:6.3f} {r['need']:6.3f} {r['old_age']:8.1f}")
     return 0
 
 
@@ -1485,6 +1542,8 @@ def main(argv=None):
     sub.add_parser("medicine").set_defaults(fn=cmd_medicine)
     sub.add_parser("lag").set_defaults(fn=cmd_lag)
     sub.add_parser("fertility").set_defaults(fn=cmd_fertility)
+    sub.add_parser("workforce", help="phase 2 step 1: the participation figures at the starting values (the design "
+                                     "§1.8)").set_defaults(fn=cmd_workforce)
     p = sub.add_parser("history")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")

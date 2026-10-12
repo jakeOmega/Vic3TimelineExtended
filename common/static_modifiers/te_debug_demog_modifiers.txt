@@ -38,3 +38,10 @@ te_debug_demog_scaled_probe = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_demog_absorbed_birth_rate_mult = 0.1
 }
+
+# Option p (phase 2 step 1): Trade Unions' approval pushed past loyal for sixty days, so its loyal trait (Solidarity
+# or the Bourse du Travail) comes on.
+te_demog_debug_ig_loyal = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 30
+}

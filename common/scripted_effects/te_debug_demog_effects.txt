@@ -387,6 +387,8 @@ te_debug_demog_modifier_reads = {
 # THIS = a state: its TE_DEMOG_MODS line.
 te_debug_demog_mods_line = {
 	debug_log = "TE_DEMOG_MODS capital=[THIS.ScriptValue('te_debug_demog_is_capital')|0] incorporated=[THIS.ScriptValue('te_debug_demog_incorporated')|0] health=[THIS.ScriptValue('te_debug_demog_level_health')|0] workplace_safety=[THIS.ScriptValue('te_debug_demog_level_workplace')|0] consumer_protection=[THIS.ScriptValue('te_debug_demog_level_consumer')|0] access=[THIS.ScriptValue('te_debug_demog_mod_access')|3] treat_inf=[THIS.ScriptValue('te_debug_demog_mod_treat_inf')|3] treat_mat=[THIS.ScriptValue('te_debug_demog_mod_treat_mat')|3] treat_chr=[THIS.ScriptValue('te_debug_demog_mod_treat_chr')|3] ext=[THIS.ScriptValue('te_debug_demog_mod_ext')|3] work=[THIS.ScriptValue('te_debug_demog_mod_work')|3] chr=[THIS.ScriptValue('te_debug_demog_mod_chr')|3] mult_inf=[THIS.ScriptValue('te_debug_demog_mult_infection')|4] mult_mat=[THIS.ScriptValue('te_debug_demog_mult_maternal')|2] mult_chr=[THIS.ScriptValue('te_debug_demog_mult_chronic')|4] mult_ext=[THIS.ScriptValue('te_debug_demog_mult_external')|4] mult_work=[THIS.ScriptValue('te_debug_demog_mult_work')|4] contra=[THIS.ScriptValue('te_debug_demog_mod_contra')|3] fmeans=[THIS.ScriptValue('te_debug_demog_mod_fmeans')|3] means=[THIS.ScriptValue('te_debug_demog_means')|3] date=[TimeKeeper.GetCurrentDate.GetString] impact=[THIS.ScriptValue('te_demog_institution_impact')|3] diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3] lm=[THIS.ScriptValue('te_debug_demog_pr_lm')|3] bs=[THIS.ScriptValue('te_debug_demog_pr_bs')|3] lm_target=[THIS.ScriptValue('te_debug_demog_pr_target_lm')|3] bs_target=[THIS.ScriptValue('te_debug_demog_pr_target_bs')|3] absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|3]"
+	# phase 2 step 1: the census's work figures, the reads no test runs and the working-adult families (TE_DEMOG_WORK)
+	debug_log = "TE_DEMOG_WORK wa_share=[THIS.ScriptValue('te_debug_demog_work_wa_share')|3] at_work=[THIS.ScriptValue('te_debug_demog_work_at_work')|3] wf_target=[THIS.ScriptValue('te_debug_demog_work_wf_target')|3] wf_engine=[THIS.ScriptValue('te_debug_demog_work_wf_engine')|3] wbase=[THIS.ScriptValue('te_debug_demog_work_wbase')|3] low_share=[THIS.ScriptValue('te_debug_demog_work_low_share')|3] pensioners=[THIS.ScriptValue('te_debug_demog_work_pensioners')|3] need=[THIS.ScriptValue('te_debug_demog_work_need')|3] old_age=[THIS.ScriptValue('te_debug_demog_work_old_age')|1] pension_age=[THIS.ScriptValue('te_demog_pension_age')|0] pension_var=[THIS.ScriptValue('te_debug_demog_pension_var')|0] pension_kind=[THIS.ScriptValue('te_demog_pension_kind')|0] child_work=[THIS.ScriptValue('te_demog_child_work')|2] ww_mod=[THIS.ScriptValue('te_demog_line_working_adults')|3] pair=[THIS.ScriptValue('te_demog_line_working_adults_applied')|3] wa_mod=[THIS.ScriptValue('te_debug_demog_working_ratio_mod')|3] womens=[THIS.ScriptValue('te_debug_demog_womens_mod')|3] replaced=[THIS.ScriptValue('te_debug_demog_replaced_mod')|3] part_m=[THIS.ScriptValue('te_debug_demog_part_m_mod')|3] part=[THIS.ScriptValue('te_debug_demog_part_mod')|3] cap=[THIS.ScriptValue('te_debug_demog_cap_mod')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # ---- m: the shock terms (phase 2 step 4, probe P1) ------------------------------
@@ -615,4 +617,104 @@ te_debug_demog_pr_selfcheck_start = {
 		set_variable = { name = te_inh_pr_chk_before value = modifier:state_demog_absorbed_birth_rate_mult }
 		trigger_event = { id = te_debug_demog.5 days = 7 }
 	}
+}
+
+# ---- Call 3's carrier kinds and the walk's workforce read: once-a-game self-checks (phase 2 step 1; owner, 2026-10-12)
+# Instead of an in-game gate before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Two of call 3's
+# carrier kinds are unverified: whether the engine sums a script-only type from an amendment, and from an IG trait,
+# into a state's read (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7). Each check
+# arms once a game, the first month a country holds such a carrier, and a week later (a day may come before the engine
+# re-sums a state's modifiers) its capital logs the census-only participation input that carrier holds beside its
+# moved line, against the line's size (te_debug_demog.6, .7; TE_SELF_CHECK). The moved line is on the same block, so
+# one verdict covers both. Both read participation inputs, which a release comments out, so they arm wherever those
+# inputs exist: every development build under any rule, Disabled included, since the facts decide what a Disabled game
+# keeps (te_debug_demog_selfchecks_run; a release sets it to always = no and would otherwise log a false BROKEN). A
+# third reads the walk's te_dg_wf_engine once, where the census runs: a pop's `workforce` read as a value (the plan's
+# D6). A fourth, workforce_lines_net (te_debug_demog.8), checks once a game that the capital's working-adult field less
+# the pair is about 0: each vanilla carrier's INJECTed cancel nets out against its own line.
+# THIS = a country, on its monthly pulse (te_demog_country_monthly_on_action), under every rule.
+te_debug_demog_wf_selfchecks = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			exists = capital
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_demog_selfcheck_net_done } }
+			set_global_variable = { name = te_demog_selfcheck_net_done value = yes }
+			capital = {
+				trigger_event = { id = te_debug_demog.8 days = 7 }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_amend_done }
+				te_debug_demog_wf_amendment_held = yes
+			}
+			set_global_variable = { name = te_demog_selfcheck_amend_done value = yes }
+			capital = {
+				trigger_event = { id = te_debug_demog.6 days = 7 }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_ig_done }
+				te_debug_demog_wf_ig_trait_plain = yes
+			}
+			set_global_variable = { name = te_demog_selfcheck_ig_done value = yes }
+			capital = {
+				trigger_event = { id = te_debug_demog.7 days = 7 }
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_wf_read_done }
+				capital = { has_variable = te_dg_wf_engine }
+			}
+			set_global_variable = { name = te_demog_selfcheck_wf_read_done value = yes }
+			capital = {
+				if = {
+					limit = { var:te_dg_wf_engine > 0.01 }
+					debug_log = "TE_SELF_CHECK OK pop_workforce_read wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN pop_workforce_read wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] (0: a pop's workforce doesn't read as a value in the walk; find another read before step 2's stop rule, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				debug_log_scopes = yes
+			}
+		}
+	}
+}
+
+# ---- p: call 3's carriers (phase 2 step 1; spec §1.7, plan D12) ------------------------------------------------------
+# THIS = ROOT = the player. The carrier kinds no test can read, set up in one go: Community Service (an amendment, on
+# Punishment-Focused Criminal Justice, its only allowed law), Woman Soldiers at x0.5 for 60 days (a country modifier)
+# and Trade Unions pushed past loyal (its Solidarity or Bourse du Travail trait; halved while the group is marginal,
+# doubled while it is powerful). Logs the capital now, then a day and a month later (te_debug_demog.3). The amendment and
+# the trait also arm the self-checks workforce_amendment_type and workforce_ig_trait_type (te_debug_demog_wf_selfchecks)
+# under Display only or Full. A runtime activate_law can fail with no log line (scripting_best_practices.md): a
+# TE_DEMOG_CALL3 line says so, and then the amendment can't attach.
+te_debug_demog_call3_setup = {
+	capital = { te_debug_demog_mods_line = yes }
+	if = {
+		limit = { NOT = { has_law = law_type:law_punishment_focused_criminal_justice } }
+		activate_law = law_type:law_punishment_focused_criminal_justice
+	}
+	if = {
+		limit = { NOT = { has_law = law_type:law_punishment_focused_criminal_justice } }
+		debug_log = "TE_DEMOG_CALL3 Punishment-Focused Criminal Justice didn't take, so Community Service can't attach: enact it, then run p again date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	active_law:lawgroup_criminal_justice ?= {
+		add_amendment = {
+			type = amendment_community_service
+			sponsor = PREV.ig:ig_intelligentsia
+			cooldown = 60
+		}
+	}
+	add_modifier = { name = modifier_woman_soldiers multiplier = 0.5 days = 60 }
+	ig:ig_trade_unions ?= {
+		add_modifier = { name = te_demog_debug_ig_loyal days = 60 }
+	}
+	trigger_event = { id = te_debug_demog.3 days = 1 }
+	trigger_event = { id = te_debug_demog.3 days = 31 }
 }

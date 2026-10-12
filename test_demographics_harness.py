@@ -1137,3 +1137,33 @@ class TestLag(unittest.TestCase):
             self.assertEqual(H.main(["lag"]), 0)
         for label, _b, _a in H.LAG_SCENARIOS:
             self.assertIn(label, out.getvalue())
+
+
+class TestWorkforceCommand(unittest.TestCase):
+    """Phase 2 step 1: the participation figures at the starting values (the design §1.8's sketch)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = H.workforce_rows()
+
+    def test_rows_cover_the_scenarios_and_the_1836_target(self):
+        self.assertEqual([r["name"] for r in self.rows], [s[0] for s in H.WORKFORCE_SCENARIOS])
+        farm = self.rows[0]
+        self.assertAlmostEqual(farm["target"], 0.25, delta=0.02)
+        for r in self.rows:
+            self.assertAlmostEqual(r["target"], P.WORKFORCE_SCALE * r["wa_share"] * r["at_work"], places=9)
+
+    def test_call_3s_laws_add_their_participation_inputs(self):
+        """A Pro-Capital Ministry at level 5 and Rehabilitation add about +0.027 on the engine's scale to the rich row
+        (the design §1.7's inventory, on its stable structure), against +0.15 as flat lines."""
+        rows = {r["name"]: r for r in self.rows}
+        gain = rows["Rich, plus call 3's laws"]["target"] - rows["Rich, Protected Class, pension at 65"]["target"]
+        self.assertGreater(gain, 0.015)
+        self.assertLess(gain, 0.04)
+
+    def test_the_command_prints_a_row_per_scenario(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(H.main(["workforce"]), 0)
+        for name, _kw, _low in H.WORKFORCE_SCENARIOS:
+            self.assertIn(name, out.getvalue())
