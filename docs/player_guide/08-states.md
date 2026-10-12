@@ -285,8 +285,8 @@ them, and some break the figure down for your capital.
 | History | Median age, children per woman and life expectancy by year, over 5, 20 or 100 years. |
 | How Demographics Works | A collapsed section that explains the method. |
 
-The subtab shows one state's overview, pyramid and wealth, for any state you
-open. The first count of a state comes from the age structure its own birth and
+The subtab shows one state's overview, causes of death, pyramid and wealth, for
+any state you open. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
@@ -324,6 +324,18 @@ reaches less than half the people. The medical technologies and the health,
 policing, pension and labor laws show what they do to each cause in their
 tooltips. Life expectancy and infant mortality are the census's own figures,
 before famine, war and disasters.
+
+Medicine also takes time to arrive. A new medical technology, health law or
+Ministry of Health level moves a state's medicine part of the way at each yearly
+count: a tenth of the gap at first, and up to two fifths once the Electric
+Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World Wide
+Web and Telemedicine are researched. Under Full, the Medical Outreach decree adds
+a fifth more in one state. Turmoil raises deaths from accidents and violence, by
+half at full turmoil. The subtab's Causes of Death section shows a state's health
+care access and each cause's multiplier; hover a row for what makes it up and
+where medicine is heading. Under Full it also shows the deaths added on top of
+the census's own, in red from a quarter above it, split into effects on the whole
+state and effects on some of its people, such as severe starvation.
 
 An arrow beside a figure shows whether it rose or fell since the last census.
 Life expectancy rising is green and a rising dependency ratio is orange; the other

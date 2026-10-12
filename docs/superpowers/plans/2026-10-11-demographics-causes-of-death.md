@@ -1788,7 +1788,8 @@ Expected: OK, #907's and #913's own tests included.
 
 - [x] **Step 8: Commit**: "Demographics: split the deaths added on top at both ends of the window".
 
-- [ ] **Review stop:** a fresh reviewer reads the re-plan and Task 6 against #907 and #913 before Tasks 8–9.
+- [x] **Review stop:** a fresh reviewer reads the re-plan and Task 6 against #907 and #913 before Tasks 8–9.
+  **Passed, 2026-10-11:** APPROVE WITH FIXES, the five minors applied (f37e73b0).
 
 ---
 
@@ -2087,7 +2088,7 @@ Commit: "Demographics: the Medical Outreach decree (Full only), and releases wit
   - loc keys `te_demog_sec_causes`, `te_demog_st_causes_pending`, and `te_demog_st_<row>`, `_value`, `_tt` for rows
     `acc`, `inf`, `ext`, `chr`, `work`, `mat`, `ontop`, with their parts.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
@@ -2148,12 +2149,12 @@ class TestCausesDisplay(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry.TestCausesDisplay`
 Expected: ERROR.
 
-- [ ] **Step 3: The display values** (`te_demog_display_values.txt`, a new section at the end)
+- [x] **Step 3: The display values** (`te_demog_display_values.txt`, a new section at the end)
 
 ```
 # ============================================================================
@@ -2245,7 +2246,7 @@ te_demog_deaths_other = {
 }
 ```
 
-- [ ] **Step 4: The gates** (`te_demog_sguis.txt`, after `te_demog_state_stepped_sgui`; update the header's count)
+- [x] **Step 4: The gates** (`te_demog_sguis.txt`, after `te_demog_state_stepped_sgui`; update the header's count)
 
 ```
 # The state's last seed or step stored the Causes of Death inputs (te_demog_cause_inputs_store, the drifted
@@ -2298,7 +2299,7 @@ te_demog_state_on_top_sgui = {
 }
 ```
 
-- [ ] **Step 5: The section's loc** (`te_miscellaneous_l_english.yml`, beside the other `te_demog_st_*`)
+- [x] **Step 5: The section's loc** (`te_miscellaneous_l_english.yml`, beside the other `te_demog_st_*`)
 
 The rows read only the state (`State.MakeScope`), never the player (`test_the_state_subtab_gate_needs_no_player`).
 
@@ -2358,7 +2359,7 @@ Also:
 - `te_demog_how_mortality`: append
   `" Medicine reaches a state over years: health care access and each treatment close a share of the gap at each count, a tenth at first and more as communications and medical training improve. Turmoil raises deaths from accidents and violence."`
 
-- [ ] **Step 6: Run the tests and the loc checks**
+- [x] **Step 6: Run the tests and the loc checks**
 
 Run:
 - `.venv/bin/python -m unittest test_demographics_registry`;
@@ -2368,7 +2369,7 @@ Run:
 
 Expected: OK, and nothing flagged for the new keys.
 
-- [ ] **Step 7: Commit** everything organize_loc rewrote with the rest: "Demographics: what the Causes of Death section
+- [x] **Step 7: Commit** everything organize_loc rewrote with the rest: "Demographics: what the Causes of Death section
   reads".
 
 ---
@@ -2384,7 +2385,7 @@ Expected: OK, and nothing flagged for the new keys.
 - Consumes: Task 8's loc keys and gates.
 - Produces: `te_state_demog_causes`; the collapse flag `te_demog_st_causes_closed`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
@@ -2444,12 +2445,12 @@ class TestCausesSection(unittest.TestCase):
         self.assertRegex(tab, r"### TODO \(#894\): .*Causes of Death")
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_registry.TestCausesSection`
 Expected: ERROR (`te_state_demog_causes` not found).
 
-- [ ] **Step 3: The section** (before `type te_state_demog_pyramid`)
+- [x] **Step 3: The section** (before `type te_state_demog_pyramid`)
 
 ```
 	### Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md):
@@ -2569,7 +2570,7 @@ Expected: ERROR (`te_state_demog_causes` not found).
 `te_state_demog_pyramid = {}`. Add `te_state_demog_causes` to the subtab comment's "Sections:" list and the file
 header's list, and `te_demog_st_causes_closed` to the flags sentence ("Four flags of this subtab's own").
 
-- [ ] **Step 4: The country tab's TODO** (`te_demog_tab_sections`, between `te_demog_overview = {}` and
+- [x] **Step 4: The country tab's TODO** (`te_demog_tab_sections`, between `te_demog_overview = {}` and
   `te_demog_sec_pyramid = {}`)
 
 ```
@@ -2578,7 +2579,7 @@ header's list, and `te_demog_st_causes_closed` to the flags sentence ("Four flag
 			### te_state_demog_causes has been seen in game (owner, 2026-10-11). It goes here, after the overview.
 ```
 
-- [ ] **Step 5: Run the tests and the GUI checks**
+- [x] **Step 5: Run the tests and the GUI checks**
 
 Run:
 - `.venv/bin/python -m unittest test_demographics_registry`;
@@ -2589,9 +2590,9 @@ Run:
 Expected: OK; no lint error. A warning on markup no mod `.gui` used before must not appear: every element here is
 already in the file.
 
-- [ ] **Step 6: Commit**: "Demographics: the Causes of Death section on the state subtab".
+- [x] **Step 6: Commit**: "Demographics: the Causes of Death section on the state subtab".
 
-- [ ] **Owner in-game check** (before Task 11's docs; see Task 11 Step 4 for the list). Merge `origin/main`, read
+- [ ] **Owner in-game check** (not done in this run: the PR body carries the list) (before Task 11's docs; see Task 11 Step 4 for the list). Merge `origin/main`, read
   the deploy dry run alone, then deploy from the full checkout, per CLAUDE.md "Play-testing unmerged work".
 
 ---
@@ -2741,7 +2742,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
 - Modify: `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md` §2 (one "Amended 2026-10-11 (3)"
   bullet pointing here)
 
-- [ ] **Step 1: mod_systems.md.** In § Demographics:
+- [x] **Step 1: mod_systems.md.** In § Demographics:
   - **Files table:** the new script values, effects, sguis, the decree, the type's carriers, the GUI type.
   - **Variable families:** add a row "Causes of Death (2026-10-11)": `te_dg_acc`, `te_dg_trt_*`, `te_dg_in_*`; under
     Full `te_dg_ed_state`, `te_dg_ed_sev`, `te_dg_sev_share`, `te_dg_sp_d`, `te_dg_ss_d`, `te_dg_rate_clamp_d`,
@@ -2760,7 +2761,8 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
     - that under Display only the drift and turmoil move the shown figures but not the game;
     - that under fast mode the whole state's part also carries K − 1 times a famine's share (the fast term sits in the
       read);
-    - the #894 note that the walk's severe term (+1.0), never fitted, moves the figure;
+    - the #894 note that the walk's severe term (+1.0), never fitted, moves the figure (resolved by #913 before this
+      landed: mod_systems says severe starvation scales by the starvation value);
     - the approved lag table from Task 3;
     - the release's handling of the decree;
     - the decree's placeholder icon (`gui_style_guide.md` rule 10). The texture is vanilla's
@@ -2770,7 +2772,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   - **`gen_demographics.py`'s bullet:** "the cause multipliers are products of one script value per factor
     (`P.CAUSE_FACTORS`), on the step's stored inputs".
 
-- [ ] **Step 2: The player guide.** Match the depth already there (CLAUDE.md "Keep the player guide current").
+- [x] **Step 2: The player guide.** Match the depth already there (CLAUDE.md "Keep the player guide current").
   - `08-states.md`, "What the tab shows": "The subtab shows one state's overview, pyramid and wealth" becomes "The
     subtab shows one state's overview, causes of death, pyramid and wealth".
   - `08-states.md`, "Reading the figures", after "...reaches less than half the people.":
@@ -2790,7 +2792,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   - Run `python3 scripts/analysis/check_player_guide_style.py --strict`, rebuild with
     `.venv/bin/python scripts/build_player_guide.py`, and check `scripts/build_player_guide.py --check`.
 
-- [ ] **Step 3: python_tools.md and the phase 2 plan.**
+- [x] **Step 3: python_tools.md and the phase 2 plan.**
   - `python_tools.md`: the harness list's `fidelity` and `history` lines gain "run the model on the census's stored
     inputs (the drifted medicine, turmoil) when the save holds them", and a new line for `lag` ("years of life
     expectancy behind the target while medicine spreads, the drift numbers' evidence").
@@ -2802,7 +2804,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
     (`docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md`) adds turmoil to the external cause and
     drifts medicine; both reach M, under Full only."
 
-- [ ] **Step 4: The in-game checklist** (for the owner; the PR body carries it, and `mod_systems.md` keeps 11–13):
+- [x] **Step 4: The in-game checklist** (for the owner; the PR body carries it, and `mod_systems.md` keeps 11–13):
   1. **Layout.** A new 1836 game under Full: the state subtab shows Causes of Death after the overview, open. No row
      label or value ends in "...". Childbirth's "670 per 100k births" is the longest value.
   2. **Health Care Access.** 40% in an unincorporated colony. More in a Ministry of Health country's incorporated
@@ -2827,7 +2829,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   10. **`debug.log`:** no "Failed to fetch variable" or errors from `te_demog_f_*`, `te_dg_acc`, `te_dg_in_*` or the
      decree.
 
-- [ ] **Step 5: Run the whole suite and the checks:**
+- [x] **Step 5: Run the whole suite and the checks:**
   - `.venv/bin/python -m unittest discover -s . -p 'test_*.py'` (read the summary with `grep -E '^(Ran |OK|FAILED)'`);
   - `.venv/bin/ruff check .`;
   - `python3 scripts/format_paradox_tabs.py --check` on the changed `.txt`/`.gui`;
@@ -2837,7 +2839,7 @@ Commit: "Demographics harness: fidelity and history read the step's own inputs".
   - the CI audits (`.github/workflows/ci.yml`'s list);
   - the PEP 701 grep on the changed `.py` files.
 
-- [ ] **Step 6: Commit**: "Demographics: docs, guide and checklist for Causes of Death".
+- [x] **Step 6: Commit**: "Demographics: docs, guide and checklist for Causes of Death".
 
 ---
 
