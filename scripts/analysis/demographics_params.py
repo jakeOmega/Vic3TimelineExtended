@@ -221,15 +221,18 @@ FEMALE_WORK_SHARE_DEFAULT = 0.1
 WAR_DEAD_MALE_SHARE = 0.95
 WAR_DEAD_AGES = (18, 40)
 RESIDUAL_NOISE_SHARE = 0.003   # a residual under 0.3% of the population is model error
-# The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone):
-# below the first threshold a pop is in mild starvation and starvation_penalty applies scaled by
-# (threshold - food security) x the factor, at most (0.4 - 0.2) x 2.5 = 0.5; below the second,
-# severe_starvation_penalty applies in full. The expected births and deaths that the migration
-# residual is measured against read these (gen_demographics.py, engine_rate_terms).
+# The engine's starvation scaling (vanilla 00_defines.txt, 1.14.5; the mod leaves these alone): a pop's
+# starvation value is clamp((the first threshold - food security) x the factor, 0, 1), which the save stores per
+# pop as food_security={ starvation= }. Below the first threshold a pop is in mild starvation and
+# starvation_penalty applies x that value, at most (0.4 - 0.2) x 2.5 = 0.5; below the second,
+# severe_starvation_penalty applies x the same value, 0.5 to 1 (the famine probe, 2026-10-11: not in full; the
+# walk took it flat until then). The expected births and deaths that the migration residual is measured against
+# read these (gen_demographics.py, engine_rate_terms).
 FOOD_SECURITY_STARVATION_THRESHOLD = 0.4
 FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD = 0.2
 STARVATION_EFFECTS_SCALING_FACTOR = 2.5
-STARVATION_BUCKET = 0.05   # mild starvation is read in food-security steps this wide, at each step's middle
+STARVATION_VALUE_MAX = 1.0  # the define's clamp
+STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this wide, at each step's middle
 
 # ---- phase 2 step 4: the census sets the engine's births and deaths --------------------------
 # docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2. The engine adds every term
@@ -272,8 +275,8 @@ ENGINE_LINE_TYPES = {
 # Private Health Insurance's wealth line under Full (owner, 2026-10-11, option b): at the census's rate, at least this a
 # wealth level, so a wealth-99 pop dies at no less than half the census's rate.
 WEALTH_LINE_FLOOR = -0.005
-STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier)
-STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty
+STARVATION_MILD = {"births": -0.7, "deaths": 0.6}     # starvation_penalty (vanilla code static modifier), x the value
+STARVATION_SEVERE = {"births": -0.9, "deaths": 1.0}   # severe_starvation_penalty, x the starvation value (0.5-1)
 STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor: vanilla's comment
 # Pollution Impact's mortality line (vanilla code static modifier state_region_pollution_health's 0.5 plus the mod's
 # INJECTed 0.05), at full pollution: predict takes it x the region's pollution / POLLUTION_MAX (vanilla define).

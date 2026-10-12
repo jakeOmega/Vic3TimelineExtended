@@ -454,13 +454,25 @@ def window_events(end_rate, start_rate=None):
     return max(0.0, P.WINDOW_START_WEIGHT * start_rate + (1 - P.WINDOW_START_WEIGHT) * end_rate)
 
 
+def starvation_value(food_security):
+    """The engine's starvation value for a pop at this food security: clamp((FOOD_SECURITY_STARVATION_THRESHOLD - food
+    security) x STARVATION_EFFECTS_SCALING_FACTOR, 0, STARVATION_VALUE_MAX) (vanilla 00_defines.txt's comment). The
+    save stores it per pop as food_security={ starvation= } (the famine probe, 2026-10-11: equal on every starving
+    pop, to 5e-06)."""
+    return clamp((P.FOOD_SECURITY_STARVATION_THRESHOLD - food_security) * P.STARVATION_EFFECTS_SCALING_FACTOR,
+                 0.0, P.STARVATION_VALUE_MAX)
+
+
 def starvation_terms(food_security):
-    """(births, deaths) the engine adds for a pop at this food security (vanilla code static modifiers)."""
+    """(births, deaths) the engine adds for a pop at this food security (vanilla code static modifiers): each penalty x
+    the pop's starvation value, severe_starvation_penalty's below the severe threshold (0.5 to 1) and
+    starvation_penalty's above it (at most STARVATION_MILD_CAP). The famine probe (2026-10-11) measured the severe
+    one scaled, not in full. Exact; the script reads both in STARVATION_BUCKET steps of food security."""
+    s = starvation_value(food_security)
     if food_security < P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD:
-        return P.STARVATION_SEVERE["births"], P.STARVATION_SEVERE["deaths"]
+        return P.STARVATION_SEVERE["births"] * s, P.STARVATION_SEVERE["deaths"] * s
     if food_security < P.FOOD_SECURITY_STARVATION_THRESHOLD:
-        s = min((P.FOOD_SECURITY_STARVATION_THRESHOLD - food_security) * P.STARVATION_EFFECTS_SCALING_FACTOR,
-                P.STARVATION_MILD_CAP)
+        s = min(s, P.STARVATION_MILD_CAP)
         return P.STARVATION_MILD["births"] * s, P.STARVATION_MILD["deaths"] * s
     return 0.0, 0.0
 

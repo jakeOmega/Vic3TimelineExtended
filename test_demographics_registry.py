@@ -1703,8 +1703,11 @@ def _mild(bare_b, bare_d, food=0.21):
     return _Pop(bare_b, bare_d, abs_b=b, abs_d=d)
 
 
-def _severe(bare_b, bare_d):
-    return _Pop(bare_b, bare_d, top_b=P.STARVATION_SEVERE["births"], top_d=P.STARVATION_SEVERE["deaths"])
+def _severe(bare_b, bare_d, food=0.13):
+    """Severely starving: severe_starvation_penalty x the starvation value, on top (the famine probe, 2026-10-11).
+    Food security 0.13 is Germany's severe pops in early 1898 (starvation value 0.68)."""
+    b, d = demographics_model.starvation_terms(food)
+    return _Pop(bare_b, bare_d, top_b=b, top_d=d)
 
 
 class _ClockEngine(_Engine):
@@ -1846,7 +1849,12 @@ class TestWindowEvents(unittest.TestCase):
         end = [self.STEADY[0], _severe(175e6, 170e6)]
         eng, booked, true, snap = self.window(start, end)
         self.assert_books(booked, true)
-        self.assertLess(booked[1], snap[1] - 0.1 * snap[1], "the snapshot's famine year is cut")
+        # the snapshot's famine year is cut by half the famine pop's line change (mild's absorbed +0.285 at food
+        # security 0.21 to severe's +0.675 at 0.13, both x the starvation value) on its bare curve
+        _b, bare_d, _ab, mild_d, _tb, _td = start[1]
+        severe_d = end[1][5]
+        self.assertGreater(severe_d, mild_d)
+        self.assertAlmostEqual(snap[1] - booked[1], bare_d * (severe_d - mild_d) / 2 * 12 / 1e5, delta=1e-3)
 
     def test_a_famine_ending_in_the_window(self):
         start = [self.STEADY[0], _severe(175e6, 170e6)]
@@ -2115,7 +2123,8 @@ class TestAbsorbedScript(unittest.TestCase):
     def test_the_walk_sums_the_bare_curves_the_census_term_reaches(self):
         """The trapezoid's start rate (te_demog_rates_refresh; the review of #907) moves by the change in M on the bare
         curves of the pops whose multiplier the engine doesn't floor at 0 (te_dg_w_eb0m, te_dg_w_ed0m): severe
-        starvation's -0.9 floors a pop's births when M is negative, and a change in M doesn't reach it. Full only."""
+        starvation's births (-0.9 x the starvation value) can floor a pop's births when M is low, and a change in M
+        doesn't reach it. Full only."""
         for full, mult_b, mult_d, want in ((True, 0.4, 1.2, (500.0, 400.0)), (True, 0.0, 1.2, (0.0, 400.0)),
                                            (True, 0.0, 0.0, (0.0, 0.0)), (False, 0.4, 1.2, (0.0, 0.0))):
             with self.subTest(full=full, mult_b=mult_b, mult_d=mult_d):
@@ -2159,6 +2168,67 @@ class TestAbsorbedScript(unittest.TestCase):
         eng.call("te_demog_absorbed_walk_init")
         for gone in ("te_dg_w_sab", "te_dg_w_sad", "te_dg_w_ac_laborers"):
             self.assertNotIn(gone, eng.locals)
+
+class TestPopMultiplierScript(unittest.TestCase):
+    """te_demog_pop_birth_mult / _death_mult, the walk's per-pop engine multipliers, run by the interpreter: their
+    starvation terms against the model's (demographics_model.starvation_terms, exact). The famine probe (2026-10-11):
+    the engine applies both penalties x the pop's starvation value, clamp((0.4 - food security) x 2.5, 0, 1); the
+    script reads it in 0.05 steps of food security, at each step's middle."""
+
+    # (lowest food security of the step, the starvation value at its middle), top step first: the probe's table
+    SEVERE_STEPS = ((0.15, 0.5625), (0.1, 0.6875), (0.05, 0.8125), (None, 0.9375))
+    MILD_STEPS = ((0.35, 0.0625), (0.3, 0.1875), (0.25, 0.3125), (None, 0.4375))
+
+    def _term(self, name, food, read=0.0, literacy=0.0):
+        """The multiplier less 1, the state read and literacy's term: the starvation term, floored as the engine's."""
+        text = _block(_text(GENERATED_VALUES), name)
+        reads = dict.fromkeys(re.findall(r"(?:state|workplace)\.modifier:\w+", text), 0.0)
+        field = "state_birth_rate_mult" if name == "te_demog_pop_birth_mult" else "state_mortality_mult"
+        reads[f"state.modifier:{field}"] = read
+        lo, hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD, P.FOOD_SECURITY_STARVATION_THRESHOLD
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, **reads}, pop_type="laborers",
+                           triggers={"is_in_severe_starvation": food < lo, "is_in_mild_starvation": lo <= food < hi,
+                                     "is_employed": False, "is_homeland_of_country_cultures": True})
+        lit = P.LITERACY_BIRTH_PENALTY * literacy if field == "state_birth_rate_mult" else 0.0
+        return eng.value(eng._tree(eng.values, name)) - 1 - read - lit
+
+    @staticmethod
+    def _step(food, steps):
+        return next(s for lower, s in steps if lower is None or food >= lower)
+
+    def test_severe_starvation_is_scaled_not_flat(self):
+        for food in (0.199, 0.15, 0.149, 0.12, 0.1, 0.07, 0.05, 0.03, 0.0):
+            with self.subTest(food=food):
+                scale = self._step(food, self.SEVERE_STEPS)
+                b = self._term("te_demog_pop_birth_mult", food)
+                d = self._term("te_demog_pop_death_mult", food)
+                self.assertAlmostEqual(b, P.STARVATION_SEVERE["births"] * scale, places=6)
+                self.assertAlmostEqual(d, P.STARVATION_SEVERE["deaths"] * scale, places=6)
+                ref_b, ref_d = demographics_model.starvation_terms(food)
+                self.assertAlmostEqual(b, ref_b, delta=0.9 * P.STARVATION_BUCKET * 2.5 / 2 + 1e-9)
+                self.assertAlmostEqual(d, ref_d, delta=1.0 * P.STARVATION_BUCKET * 2.5 / 2 + 1e-9)
+                self.assertLessEqual(scale, P.STARVATION_VALUE_MAX)
+
+    def test_mild_starvation_is_unchanged(self):
+        for food in (0.37, 0.32, 0.27, 0.21, 0.2):
+            with self.subTest(food=food):
+                scale = self._step(food, self.MILD_STEPS)
+                self.assertAlmostEqual(self._term("te_demog_pop_birth_mult", food),
+                                       P.STARVATION_MILD["births"] * scale, places=6)
+                self.assertAlmostEqual(self._term("te_demog_pop_death_mult", food),
+                                       P.STARVATION_MILD["deaths"] * scale, places=6)
+        self.assertEqual(self._term("te_demog_pop_death_mult", 0.6), 0.0)
+
+    def test_a_severe_pops_births_floor_only_when_the_rest_runs_low(self):
+        """Germany's famine (the probe): births read about -0.28 and literacy 0.5, so a severe pop at food security
+        0.10 or more keeps a birth multiplier above 0 (1 - 0.28 - 0.05 - 0.61875 at worst: 97% of Germany's severe
+        people); one below 0.10 is floored. The flat -0.9 floored them all, which kept them out of te_dg_w_eb0m."""
+        for food, term in ((0.17, -0.50625), (0.12, -0.61875)):
+            self.assertAlmostEqual(self._term("te_demog_pop_birth_mult", food, read=-0.28, literacy=0.5), term, places=6)
+        for food in (0.07, 0.02):
+            b = self._term("te_demog_pop_birth_mult", food, read=-0.28, literacy=0.5)
+            self.assertAlmostEqual(b, -(1 - 0.28 - 0.05), places=6)   # floored: the multiplier is 0
+
 
 class TestNaturalFertilityScript(unittest.TestCase):
     """te_demog_tfr with the natural-fertility read, against demographics_model.fertility."""

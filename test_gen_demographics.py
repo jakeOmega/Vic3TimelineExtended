@@ -248,7 +248,7 @@ class TestEngineRateTerms(unittest.TestCase):
         self.assertEqual(literacy, -0.1)   # the mod's REPLACE:literacy_penalty, as vanilla's
         self.assertIn(f"add = {{ value = literacy_rate multiply = {gen.lit(literacy)} }}", self.birth)
         self.assertIn("add = state.modifier:state_birth_rate_mult", self.birth)
-        self.assertRegex(self.birth, r"is_in_severe_starvation = yes \}\s*add = -0\.9")
+        self.assertIn("is_in_severe_starvation = yes }", self.birth)
         self.assertNotIn("malnourishment", self.birth)   # the mod's own static modifier; nothing applies it
 
     def test_each_multiplier_is_floored_per_pop(self):
@@ -263,6 +263,24 @@ class TestEngineRateTerms(unittest.TestCase):
         mild = gen.static_modifier(ROOT, "starvation_penalty")
         self.assertIn(f"food_security >= 0.35 }} add = {gen.lit(mild['state_mortality_mult'] * 0.0625)} }}", self.death)
 
+    def test_severe_starvation_scales_with_food_security(self):
+        """The famine probe (2026-10-11): the engine applies severe_starvation_penalty x the pop's starvation value,
+        clamp((0.4 - food security) x 2.5, 0, 1), as it does the mild penalty, not in full. The walk reads it in 0.05
+        steps from the severe threshold down to 0, at each step's middle (the probe's table)."""
+        buckets = gen._starvation_buckets(severe=True)
+        self.assertEqual([round(lo, 2) for lo, _ in buckets], [0.15, 0.1, 0.05, 0.0])
+        self.assertEqual([round(s, 4) for _, s in buckets], [0.5625, 0.6875, 0.8125, 0.9375])
+        self.assertTrue(all(0 < s <= P.STARVATION_VALUE_MAX for _, s in buckets))
+        severe = gen.static_modifier(ROOT, "severe_starvation_penalty")
+        self.assertEqual(severe, {"state_birth_rate_mult": P.STARVATION_SEVERE["births"],
+                                  "state_mortality_mult": P.STARVATION_SEVERE["deaths"]})
+        for body, want in ((self.birth, ["-0.50625", "-0.61875", "-0.73125", "-0.84375"]),
+                           (self.death, ["0.5625", "0.6875", "0.8125", "0.9375"])):
+            branch = body.split("limit = { is_in_severe_starvation = yes }", 1)[1].split("is_in_mild_starvation", 1)[0]
+            self.assertEqual(re.findall(r"food_security >= ([0-9.]+)", branch), ["0.15", "0.1", "0.05"])
+            self.assertEqual(re.findall(r"add = (-?[0-9.]+)", branch), want)
+            self.assertIn(f"else = {{ add = {want[-1]} }}", branch)
+            self.assertNotRegex(branch, r"add = -?(0\.9|1)\s")   # never flat
     def test_working_conditions_reach_the_mods_construction_sector(self):
         """REPLACE:bg_construction re-parents construction under heavy industry, so its laborers take heavy
         industry's working_conditions (0.1) as well as their own group's reads."""

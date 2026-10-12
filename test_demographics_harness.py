@@ -40,13 +40,15 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(out["births"] / 1e3, 40.0, places=6)
 
     def test_terms_on_top(self):
-        """Severe starvation (births -0.9, deaths +1.0) is a pop's own line, at the bare curve's weight; devastation's
-        0.2 and a law's -0.1 births are state-level, and act on the census's rate (owner, 2026-10-11)."""
+        """Severe starvation (births -0.9, deaths +1.0, x the pop's starvation value: 0.75 at food security 0.1, the
+        famine probe) is a pop's own line, at the bare curve's weight; devastation's 0.2 and a law's -0.1 births are
+        state-level, and act on the census's rate (owner, 2026-10-11)."""
         out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], cbr=40.0, cdr=30.0, d=self.D, on_top_b=-0.1, on_top_d=0.2)
         bare_b = 1e6 * H.G.monthly_birthrate(9.0, self.D) * 12
         bare_d = 1e6 * H.G.monthly_mortality(9.0, self.D) * 12
-        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 * 1.2 + bare_d * 1.0, delta=1.0)
-        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 * 0.9 - bare_b * 0.9), delta=1.0)
+        sv = (0.4 - 0.1) * 2.5
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 * 1.2 + bare_d * 1.0 * sv, delta=1.0)
+        self.assertAlmostEqual(out["births"], max(0.0, 40.0 * 1e3 * 0.9 - bare_b * 0.9 * sv), delta=1.0)
 
     def test_pollution_mortality(self):
         """Pollution Impact's mortality line at a region's pollution: half the maximum gives half the line."""
@@ -138,7 +140,7 @@ class TestPredict(unittest.TestCase):
         self.assertAlmostEqual(out["absorbed_mild_births"], bare_b * sb, delta=1.0)
         self.assertAlmostEqual(out["absorbed_mild_deaths"], bare_d * sd, delta=1.0)
         out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.1)], 40.0, 30.0, self.D)
-        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * 1.0, delta=1.0)
+        self.assertAlmostEqual(out["deaths"], 30.0 * 1e3 + bare_d * 1.0 * 0.75, delta=1.0)   # x its starvation value
         self.assertEqual(out["absorbed_mild_deaths"], 0.0)
 
     def test_the_clamp_sees_the_lines_left_in_the_read(self):
