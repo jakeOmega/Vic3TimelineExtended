@@ -88,7 +88,7 @@ A landmark is **never offered in the style choice** (`monument_events.11`). Phas
 phase 6's commissions, if built, would set them on fulfilment. v1's hook (a `.11` option per landmark, gated on its
 state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 
-## 2. The twelve landmarks
+## 2. The landmarks
 
 | # | Key | Name | State | Owner | Dedication | Form | Stand-in picture | Level | Raised |
 |---|---|---|---|---|---|---|---|---|---|
@@ -106,6 +106,32 @@ state) and the test `test_landmarks_phase_2_hook` are replaced by §7's checks.
 | 12 | `lion_monument` | Lion Monument | `STATE_EAST_SWITZERLAND` | SWI | War Memorial | Statue | Generic · Statue | 5 | 1821 |
 
 Picture codes are 1,000,001 to 1,000,012, in this order.
+
+**Added in implementation (owner, 2026-10-11): monuments a revolution contests.** Of the twelve, only the Alexander
+Column and the Washington Monument can be contested. The owner asked for more in the countries players most often take
+through a political revolution. To the Leader can't serve: it fits only while its honoree rules, so a landmark to a
+dead ruler would be contested from the start. These eleven take codes 1,000,013 to 1,000,023:
+
+| # | Key | Name | State | Owner | Dedication | Form | Stand-in picture | Level | Raised |
+|---|---|---|---|---|---|---|---|---|---|
+| 13 | `temple_of_heaven` | Temple of Heaven | `STATE_BEIJING` | CHI | To the Crown | Hall | Chinese · Hall | 10 | 1420 |
+| 14 | `topkapi_palace` | Topkapı Palace | `STATE_EASTERN_THRACE` | TUR | To the Crown | Gate | Arabic · Gate | 10 | 1478 |
+| 15 | `golestan_palace` | Golestan Palace | `STATE_IRAKAJEMI` (Tehran) | PER | To the Crown | Hall | Avestan · Hall | 5 | 1806 |
+| 16 | `basilica_of_superga` | Basilica of Superga | `STATE_PIEDMONT` | SAR | To the Crown | Mausoleum | Generic · Mausoleum | 5 | 1731 |
+| 17 | `tomb_of_william_the_silent` | Tomb of William the Silent | `STATE_HOLLAND` | NET | To the Crown | Mausoleum | Generic · Mausoleum | 5 | 1622 |
+| 18 | `cenotaph_of_maximilian` | Cenotaph of Maximilian I | `STATE_TYROL` | AUS | To the Crown | Mausoleum | Generic · Mausoleum | 5 | 1584 |
+| 19 | `arco_de_santa_maria` | Arco de Santa María | `STATE_OLD_CASTILE` | SPA | To the Crown | Gate | Generic · Gate | 5 | 1553 |
+| 20 | `statue_of_louis_xiv` | Statue of Louis XIV (Lyon) | `STATE_RHONE` | FRA | To the Crown | Statue | Generic · Statue | 5 | 1825 |
+| 21 | `lion_of_saint_mark` | Lion of Saint Mark | `STATE_VENETIA` | AUS | To the Republic | Column | Generic · Column | 5 | 12th century |
+| 22 | `sans_souci_palace` | Sans-Souci Palace | `STATE_HAITI` | HAI | To the Crown | Hall | Generic · Hall | 5 | 1813 |
+| 23 | `nikko_toshogu` | Nikkō Tōshō-gū | `STATE_KANTO` | JAP | To the Crown | Gate | Chinese · Gate | 5 | 1636 |
+
+- The Lion of Saint Mark (a republic's monument in a monarchy) and Sans-Souci (a king's palace in a republic) are
+  contested from the first refresh.
+- Japan's stays fitting through the Meiji Restoration, which keeps a crown; a republic or conquest contests it.
+- Left out: the Vendôme Column (Paris holds the Arc), Prussia's royal monuments (Brandenburg holds the Gate, which stays
+  To the Nation), the UK's (London, Edinburgh, Dublin and Calcutta are phase 6's; King William III in Dublin is a live
+  sectarian symbol), Belgium (its royal monuments come later) and Egypt (Cairo is the Muhammad Ali Mosque's).
 
 **Baltimore's Washington Monument** is named so (owner, 2026-10-11): players read "the Washington Monument" as the
 D.C. obelisk, which Appendix B's commission would also be called.

@@ -138,6 +138,17 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = stelae_of_aksum CODE = 1000010 }
 	gm_state_picture_landmark = { KEY = liberty_column CODE = 1000011 }
 	gm_state_picture_landmark = { KEY = lion_monument CODE = 1000012 }
+	gm_state_picture_landmark = { KEY = temple_of_heaven CODE = 170 }
+	gm_state_picture_landmark = { KEY = topkapi_palace CODE = 161 }
+	gm_state_picture_landmark = { KEY = golestan_palace CODE = 151 }
+	gm_state_picture_landmark = { KEY = basilica_of_superga CODE = 16 }
+	gm_state_picture_landmark = { KEY = tomb_of_william_the_silent CODE = 16 }
+	gm_state_picture_landmark = { KEY = cenotaph_of_maximilian CODE = 16 }
+	gm_state_picture_landmark = { KEY = arco_de_santa_maria CODE = 14 }
+	gm_state_picture_landmark = { KEY = statue_of_louis_xiv CODE = 13 }
+	gm_state_picture_landmark = { KEY = lion_of_saint_mark CODE = 10 }
+	gm_state_picture_landmark = { KEY = sans_souci_palace CODE = 15 }
+	gm_state_picture_landmark = { KEY = nikko_toshogu CODE = 171 }
 }
 
 gm_state_picture_landmark = {

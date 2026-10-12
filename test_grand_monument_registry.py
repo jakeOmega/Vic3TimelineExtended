@@ -1098,6 +1098,21 @@ LANDMARKS = (
     Landmark("stelae_of_aksum", "STATE_GONDER", "TGR", "civic", "stele", ("heritage_geez", "stele"), 5),
     Landmark("liberty_column", "STATE_ZEALAND", "DEN", "civic", "obelisk", ("generic", "obelisk"), 5),
     Landmark("lion_monument", "STATE_EAST_SWITZERLAND", "SWI", "war_memorial", "statue", ("generic", "statue"), 5),
+    # Added 2026-10-11 (owner): monuments a political revolution contests, in the
+    # countries players most often take through one. All To the Crown but the
+    # Lion of Saint Mark; it and Sans-Souci are contested from the first refresh
+    # (a republic's monument in a monarchy, a king's in a republic).
+    Landmark("temple_of_heaven", "STATE_BEIJING", "CHI", "crown", "hall", ("heritage_chinese", "hall"), 10),
+    Landmark("topkapi_palace", "STATE_EASTERN_THRACE", "TUR", "crown", "gate", ("heritage_arabic", "gate"), 10),
+    Landmark("golestan_palace", "STATE_IRAKAJEMI", "PER", "crown", "hall", ("heritage_avestan", "hall"), 5),
+    Landmark("basilica_of_superga", "STATE_PIEDMONT", "SAR", "crown", "mausoleum", ("generic", "mausoleum"), 5),
+    Landmark("tomb_of_william_the_silent", "STATE_HOLLAND", "NET", "crown", "mausoleum", ("generic", "mausoleum"), 5),
+    Landmark("cenotaph_of_maximilian", "STATE_TYROL", "AUS", "crown", "mausoleum", ("generic", "mausoleum"), 5),
+    Landmark("arco_de_santa_maria", "STATE_OLD_CASTILE", "SPA", "crown", "gate", ("generic", "gate"), 5),
+    Landmark("statue_of_louis_xiv", "STATE_RHONE", "FRA", "crown", "statue", ("generic", "statue"), 5),
+    Landmark("lion_of_saint_mark", "STATE_VENETIA", "AUS", "republic", "column", ("generic", "column"), 5),
+    Landmark("sans_souci_palace", "STATE_HAITI", "HAI", "crown", "hall", ("generic", "hall"), 5),
+    Landmark("nikko_toshogu", "STATE_KANTO", "JAP", "crown", "gate", ("heritage_chinese", "gate"), 5),
 )
 LANDMARK_CODE_BASE = 1_000_000
 
