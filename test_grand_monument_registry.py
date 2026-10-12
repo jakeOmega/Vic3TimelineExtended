@@ -1094,7 +1094,7 @@ def wrapper_call(d):
         return "gm_state_dedicate_leader = yes"
     if d.kind == "faith":
         return "gm_state_dedicate_faith = yes"
-    axis = "heritage" if d.key in HERITAGE_SKINNED else "none"
+    axis = "heritage" if d.key in HERITAGE_SKINNED else f"building_{d.key}"
     return f"gm_state_dedicate_timeless = {{ KEY = {d.key} AXIS = {axis} }}"
 
 
@@ -1109,6 +1109,17 @@ class CeremonyTests(unittest.TestCase):
                 self.assertIn(CEREMONY_GATE[d.key], body, d.key)
             if d.key in TECH_GATES:
                 self.assertIn(f"has_technology_researched = {TECH_GATES[d.key]}", body, d.key)
+
+    def test_unavailable_dedications_show_greyed(self):
+        options = ceremony_options()
+        gated = 0
+        for d in DEDICATIONS:
+            body = squash(strip_comments(options[CEREMONY_OPTION[d.key]]))
+            if "trigger = {" in body.split("ai_chance")[0]:
+                gated += 1
+                self.assertIn("show_as_unavailable = { always = yes }", body, d.key)
+        self.assertEqual(gated, 10, "the ten gated dedications (spec 2026-10-11 §4.1)")
+        self.assertNotIn("show_as_unavailable", squash(options["a"]), "leaving it undedicated is always open")
 
     def test_leave_undedicated_clears_the_pending_flag(self):
         body = ceremony_options()["a"]
@@ -1174,22 +1185,70 @@ class SkinTests(unittest.TestCase):
         # expired event (no default_option) takes one of those over the
         # group-level Hebrew match for a Semitic-language country.
         heritages_in_option_order = tuple(h for h in HERITAGES if h != "hebrew") + ("hebrew",)
+        building = [f"building_{k}_{h}" for k, hs in BUILDING_SKINS.items() for h in hs]
         expected = ([f"landmark_{k}" for k, _ in LANDMARKS] + [f"faith_{f}" for f in FAITHS]
-                    + [f"heritage_{h}" for h in heritages_in_option_order] + ["generic"])
+                    + [f"heritage_{h}" for h in heritages_in_option_order] + building + ["generic"])
         self.assertEqual(names, expected)
         self.assertLess(names.index("heritage_hebrew"), names.index("generic"))
         for h in ("arabic", "geez", "aramaic"):
             self.assertLess(names.index(f"heritage_{h}"), names.index("heritage_hebrew"))
         bodies = dict(options)
         for f in FAITHS:
-            self.assertIn(f"var:gm_skin_axis = flag:faith owner = {{ religion = rel:{f} }}", bodies[f"faith_{f}"])
+            self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:faith }} "
+                          f"owner = {{ religion = rel:{f} }} }}", bodies[f"faith_{f}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = faith_{f} }}", bodies[f"faith_{f}"])
         for h in HERITAGES:
             skin = f"faith_{HERITAGE_AS_FAITH[h]}" if h in HERITAGE_AS_FAITH else f"heritage_{h}"
-            self.assertIn(f"var:gm_skin_axis = flag:heritage owner = {{ te_heritage_{h} = yes }}",
-                          bodies[f"heritage_{h}"])
+            self.assertIn(f"highlighted_option = yes trigger = {{ hidden_trigger = {{ var:gm_skin_axis = flag:heritage }} "
+                          f"owner = {{ te_heritage_{h} = yes }} }}", bodies[f"heritage_{h}"])
             self.assertIn(f"gm_state_choose_skin = {{ SKIN = {skin} }}", bodies[f"heritage_{h}"])
         self.assertNotIn("default_option", squash(strip_comments(self.event)))
+        self.assertNotIn("highlighted_option", bodies["generic"])
+        L = loc()
+        self.assertEqual(L["monument_events.11.t"], "A Style for the Monument")
+        self.assertIn("style", L["gm_skin_choice_tt"])
+
+    def test_building_styles(self):
+        e = read(EFFECTS)
+        bodies = dict(self._options())
+        L = loc()
+        for key, heritages in BUILDING_SKINS.items():
+            self.assertEqual(list(heritages), [h for h in HERITAGES if h in heritages], key)
+            offer = squash(block(e, f"gm_state_offer_skins_building_{key}"))
+            if not heritages:
+                # The Exhibition Hall offers no style: its axis is none in effect.
+                self.assertEqual(offer, "gm_state_offer_skins_none = yes", key)
+                continue
+            self.assertEqual(offer, f"gm_state_offer_building_skins = {{ KEY = {key} }}")
+            default = squash(block(e, f"gm_state_default_building_skin_{key}"))
+            # Reverse partition order: a later try wins, so the most specific is last.
+            self.assertEqual(default, " ".join(f"gm_state_try_heritage_skin = {{ H = {h} }}"
+                                               for h in reversed(heritages)), key)
+            for h in heritages:
+                body = bodies[f"building_{key}_{h}"]
+                self.assertIn("highlighted_option = yes", body)
+                # The axis names the building: no production-method read-back
+                # (Task 3 review), so the option can't vanish if the engine
+                # hasn't applied the dedication's PM yet.
+                self.assertIn(f"hidden_trigger = {{ var:gm_skin_axis = flag:building_{key} }} "
+                              f"owner = {{ te_heritage_{h} = yes }}", body)
+                self.assertNotIn("gm_state_has_pm", body)
+                self.assertIn(f"gm_state_choose_building_skin = {{ SKIN = heritage_{h} }}", body)
+                self.assertIn(f"monument_events.11.building_{key}_{h}", L)
+        shared = squash(block(e, "gm_state_offer_building_skins"))
+        self.assertIn("gm_state_default_building_skin_$KEY$ = yes", shared)
+        self.assertIn("set_variable = { name = gm_skin_axis value = flag:building_$KEY$ } "
+                      "trigger_event = { id = monument_events.11 }", shared)
+        choose = squash(block(e, "gm_state_choose_building_skin"))
+        self.assertIn("text = gm_skin_choice_building_tt", choose)
+        self.assertIn("gm_state_unveil = yes", choose)
+        self.assertIn("gm_skin_choice_building_tt", L)
+
+    def test_a_building_keeps_its_name_in_any_style(self):
+        names = squash(block(read(CUSTOM_LOC), "gm_skin_name"))
+        first = names.split("text = {")[1:6]
+        for (key, form), branch in zip(BUILDING_FORMS.items(), first):
+            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = pm_monument_{key}", branch)
 
     def test_skins_read_only_own_identity(self):
         body = strip_comments(self.event)
@@ -1468,6 +1527,20 @@ class DebugTests(unittest.TestCase):
         for k in ("t", "desc", "flavor", "a", "b", "c", "d", "e"):
             self.assertIn(f"te_debug_monuments.1.{k}", L)
 
+    def test_picture_sweep(self):
+        nxt = squash(block(read(PICTURE_EFFECTS), "gm_debug_next_picture"))
+        codes = sorted(PICTURES)
+        for a, b in zip(codes, codes[1:] + codes[:1]):
+            self.assertIn(f"var:gm_picture_code = {a} }} set_variable = {{ name = gm_picture_code value = {b} }}", nxt)
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_monuments\.4 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        ev = squash(raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{"))
+        self.assertIn("gm_debug_next_picture = yes", ev)
+        self.assertIn("gm_state_update_picture = yes", ev)
+        L = loc()
+        for k in ("t", "desc", "flavor", "a", "b", "c"):
+            self.assertIn(f"te_debug_monuments.4.{k}", L)
+
     def test_monthly_log_for_players(self):
         monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
         self.assertIn("limit = { is_ai = no } gm_debug_log = yes", monthly)
@@ -1492,7 +1565,7 @@ Source = namedtuple("Source", "key dedication namesake form fixed")
 # "$KEY$": the regime's or the petition's dedication.
 COMMISSION_SOURCES = (
     Source("victory", "war_memorial", "occasion", "arch", False),
-    Source("defeat", "war_memorial", "occasion", "memorial", False),
+    Source("defeat", "war_memorial", "occasion", "hall", False),
     Source("centenary", "civic", "occasion", "column", True),
     Source("ruler_death", "civic", "ruler", "mausoleum", True),
     Source("regime", "$KEY$", "year", "column", False),
@@ -1874,18 +1947,26 @@ class ReviewFixTests(unittest.TestCase):
 FORMS = {
     "column": ("generic", "heritage_latin", "heritage_greek", "heritage_slavonic"),
     "arch": ("generic", "heritage_latin"),
-    "obelisk": ("generic",), "statue": ("generic",), "memorial": ("generic",), "mausoleum": ("generic",),
+    "obelisk": ("generic",), "statue": ("generic",), "mausoleum": ("generic",),
     "gate": ("generic", "heritage_hebrew", "heritage_sanskrit", "heritage_avestan", "heritage_arabic",
              "heritage_chinese"),
     "hall": ("generic", "heritage_avestan", "heritage_arabic", "heritage_chinese", "heritage_norse"),
-    "tower": ("generic", "heritage_gothic"),
+    # Generic dropped the tower (spec 2026-10-11 §2.2); the Gothic skin keeps it.
+    "tower": ("heritage_gothic",),
     "forum": ("heritage_latin",), "pantheon": ("heritage_greek",), "stoa": ("heritage_greek",),
     "court": ("heritage_hebrew",), "pillar": ("heritage_hebrew", "heritage_sanskrit"),
     "stele": ("heritage_geez",), "memorial_church": ("heritage_slavonic",), "pagoda": ("heritage_chinese",),
     "round_tower": ("heritage_irish",), "high_cross": ("heritage_irish",),
     "pyramid": ("heritage_nahuatl", "heritage_mayan"), "rune_stone": ("heritage_norse",),
     "hall_of_fame": ("heritage_gothic",), "hill_shrine": ("heritage_prussian",), "rock_cut": ("heritage_aramaic",),
+    # Added 2026-10-11 (§2.3).
+    "menorah": ("heritage_hebrew",), "bell_tower": ("heritage_slavonic",),
+    "rock_hewn_church": ("heritage_geez",), "sun_stone": ("heritage_nahuatl",), "stela": ("heritage_mayan",),
+    "sacred_oak": ("heritage_prussian",), "colonnade": ("heritage_aramaic",),
 }
+# Forms no skin offers any more. An old monument keeps one, so its noun and its
+# gm_form_name branch stay; its fit trigger and .24 option go.
+RETIRED_FORMS = ("memorial",)
 # skin -> its default form, the first of its row in the plan's table.
 DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek": "pantheon",
                 "heritage_hebrew": "gate", "heritage_sanskrit": "pillar", "heritage_geez": "stele",
@@ -1895,6 +1976,16 @@ DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek
                 "heritage_prussian": "hill_shrine", "heritage_aramaic": "rock_cut"}
 BUILDING_FORMS = {"artistic": "opera_house", "naturalist": "gardens", "scientific": "observatory",
                   "industrial": "exhibition_hall", "athletic": "stadium"}
+# The heritage styles each civic-progress building offers beyond generic (spec
+# 2026-10-11 §2.4), in the revival partition's order (HERITAGES): the first is
+# the most specific, so it is the AI's pick and comes first in .11.
+BUILDING_SKINS = {
+    "artistic": ("chinese", "greek"),
+    "naturalist": ("avestan", "arabic", "chinese"),
+    "scientific": ("sanskrit", "avestan", "chinese", "mayan"),
+    "industrial": (),
+    "athletic": ("latin", "greek", "nahuatl", "mayan"),
+}
 # namesake -> its pattern keys (gm_name_<pattern>_row / _evt).
 NAMESAKES = {"city": ("city",), "state": ("state",), "ruler": ("ruler",), "honours": ("honours",),
              "year": ("year",),
@@ -1963,6 +2054,37 @@ class NameTests(unittest.TestCase):
             self.assertIn(f"monument_events.24.{form}", L, form)
         for faith in FAITHS:
             self.assertIn(f"var:gm_skin = flag:faith_{faith} }} localization_key = gm_skin_faith_{faith}", names)
+
+    def test_retired_forms_keep_their_noun_only(self):
+        L = loc()
+        names = squash(block(self.custom, "gm_form_name"))
+        ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.24\s*=\s*\{"))
+        com = squash(block(self.t, "gm_state_com_form_fits"))
+        for form in RETIRED_FORMS:
+            self.assertIn(f"gm_form_{form}", L, form)
+            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = gm_form_{form}", names, form)
+            self.assertIsNone(block(self.t, f"gm_state_form_fits_{form}"), form)
+            self.assertNotIn(f"monument_events.24.{form} ", ev + " ", form)
+            self.assertNotIn(f"flag:{form} ", com, form)
+
+    def test_current_form_check_knows_every_form(self):
+        # gm_state_unveil keeps a commission's form only while it fits: a form
+        # missing here reads as not fitting, and the unveiling resets it.
+        cur = squash(block(self.t, "gm_state_current_form_fits"))
+        for form in list(FORMS) + list(BUILDING_FORMS.values()) + ["faith"]:
+            self.assertIn(f"var:gm_form = flag:{form} gm_state_form_fits_{form} = yes", cur, form)
+        for form in RETIRED_FORMS:
+            self.assertNotIn(f"flag:{form} ", cur, form)
+        # No call to a fit trigger that no longer exists.
+        for rel in (NAME_TRIGGERS, NAME_EFFECTS, EVENTS, EFFECTS):
+            for form in RETIRED_FORMS:
+                self.assertNotIn(f"gm_state_form_fits_{form} ", strip_comments(read(rel)), (rel, form))
+
+    def test_commission_forms_fit_some_skin(self):
+        com = squash(block(self.t, "gm_state_com_form_fits"))
+        for s in COMMISSION_SOURCES:
+            if s.form != "default":
+                self.assertIn(f"var:gm_com_form = flag:{s.form} }} gm_state_form_fits_{s.form} = yes", com, s.key)
 
     def test_every_namesake_has_both_patterns(self):
         L = loc()
@@ -2290,7 +2412,8 @@ class CopiedDedicationTests(unittest.TestCase):
         self.assertEqual(squash(block(self.e, "gm_state_undedicate")),
                          "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_undedicated } } } "
                          "activate_production_method = { building_type = building_grand_monument "
-                         "production_method = pm_monument_undedicated } }")
+                         "production_method = pm_monument_undedicated } } "
+                         "set_variable = { name = gm_picture_code value = 1 }")
         self.assertTrue(squash(block(self.e, "gm_state_dedicate")).startswith(
             "if = { limit = { NOT = { gm_state_has_pm = { PM = pm_monument_$KEY$ } } } "
             "activate_production_method = { building_type = building_grand_monument "
@@ -2314,11 +2437,290 @@ class CopiedDedicationTests(unittest.TestCase):
             self.assertIn(f"name = te_debug_monuments.3.{o} ", ev3)
             self.assertIn(f"trigger = {{ exists = scope:gm_dbg_m{n} }} scope:gm_dbg_m{n} = {{ "
                           f"hidden_effect = {{ gm_clear_state = yes }} gm_state_start_ceremony = yes }}", ev3)
-        self.assertNotIn("te_debug_monuments.4", text)
+        # The re-open options are .3's alone (#817); .4 is the picture sweep (2026-10-11).
+        ev4 = raw_block_at(text, r"(?m)^te_debug_monuments\.4\s*=\s*\{")
+        self.assertNotIn("gm_clear_state", squash(strip_comments(ev4 or "")))
         L = loc()
         for k in ("t", "desc", "flavor", "a", "b", "c"):
             self.assertIn(f"te_debug_monuments.3.{k}", L)
         self.assertNotIn("te_debug_monuments.3.d", L)
+
+
+# ==== Pictures (spec 2026-10-11 §3) =====================================================
+PICTURE_EFFECTS = "common/scripted_effects/gm_picture_effects.txt"
+
+
+def _reachable_pictures():
+    """Every (skin, form, civic-progress dedication or None) a monument can
+    reach, from the form and style tables: PICTURES must hold exactly these."""
+    out = {("undedicated", None, None)}
+    for form, skins in FORMS.items():
+        for skin in skins:
+            out.add((skin, form, None))
+    for f in FAITHS:
+        out.add((f"faith_{f}", "faith", None))
+    for key, form in BUILDING_FORMS.items():
+        out.add(("generic", form, key))
+        for h in BUILDING_SKINS[key]:
+            out.add((f"heritage_{h}", form, key))
+    return out
+
+
+# code -> (skin, form, civic-progress dedication or None). Written out and
+# append-only (spec §3.2): a code never moves or is reused, so a new form or
+# style takes the code after the highest in its block (generic 10-99; heritage
+# 100 + 10 x its HERITAGE_SKINS index; faith 300-399; buildings 400 + 10 x its
+# BUILDING_FORMS index). A retired pair keeps its entry, widget and helper
+# line, and its code goes in RETIRED_PICTURES.
+PICTURES = {
+    1: ("undedicated", None, None),
+    10: ("generic", "column", None),
+    11: ("generic", "arch", None),
+    12: ("generic", "obelisk", None),
+    13: ("generic", "statue", None),
+    14: ("generic", "gate", None),
+    15: ("generic", "hall", None),
+    16: ("generic", "mausoleum", None),
+    100: ("heritage_latin", "column", None),
+    101: ("heritage_latin", "arch", None),
+    102: ("heritage_latin", "forum", None),
+    110: ("heritage_hebrew", "gate", None),
+    111: ("heritage_hebrew", "court", None),
+    112: ("heritage_hebrew", "pillar", None),
+    113: ("heritage_hebrew", "menorah", None),
+    120: ("heritage_sanskrit", "pillar", None),
+    121: ("heritage_sanskrit", "gate", None),
+    130: ("heritage_geez", "stele", None),
+    131: ("heritage_geez", "rock_hewn_church", None),
+    140: ("heritage_slavonic", "memorial_church", None),
+    141: ("heritage_slavonic", "column", None),
+    142: ("heritage_slavonic", "bell_tower", None),
+    150: ("heritage_avestan", "gate", None),
+    151: ("heritage_avestan", "hall", None),
+    160: ("heritage_arabic", "hall", None),
+    161: ("heritage_arabic", "gate", None),
+    170: ("heritage_chinese", "hall", None),
+    171: ("heritage_chinese", "gate", None),
+    172: ("heritage_chinese", "pagoda", None),
+    180: ("heritage_greek", "pantheon", None),
+    181: ("heritage_greek", "column", None),
+    182: ("heritage_greek", "stoa", None),
+    190: ("heritage_irish", "round_tower", None),
+    191: ("heritage_irish", "high_cross", None),
+    200: ("heritage_nahuatl", "pyramid", None),
+    201: ("heritage_nahuatl", "sun_stone", None),
+    210: ("heritage_norse", "rune_stone", None),
+    211: ("heritage_norse", "hall", None),
+    220: ("heritage_gothic", "hall_of_fame", None),
+    221: ("heritage_gothic", "tower", None),
+    230: ("heritage_mayan", "pyramid", None),
+    231: ("heritage_mayan", "stela", None),
+    240: ("heritage_prussian", "hill_shrine", None),
+    241: ("heritage_prussian", "sacred_oak", None),
+    250: ("heritage_aramaic", "rock_cut", None),
+    251: ("heritage_aramaic", "colonnade", None),
+    300: ("faith_catholic", "faith", None),
+    301: ("faith_protestant", "faith", None),
+    302: ("faith_orthodox", "faith", None),
+    303: ("faith_oriental_orthodox", "faith", None),
+    304: ("faith_sunni", "faith", None),
+    305: ("faith_shiite", "faith", None),
+    306: ("faith_ibadi", "faith", None),
+    307: ("faith_jewish", "faith", None),
+    308: ("faith_mahayana", "faith", None),
+    309: ("faith_gelugpa", "faith", None),
+    310: ("faith_theravada", "faith", None),
+    311: ("faith_confucian", "faith", None),
+    312: ("faith_hindu", "faith", None),
+    313: ("faith_shinto", "faith", None),
+    314: ("faith_sikh", "faith", None),
+    315: ("faith_animist", "faith", None),
+    400: ("generic", "opera_house", "artistic"),
+    401: ("heritage_chinese", "opera_house", "artistic"),
+    402: ("heritage_greek", "opera_house", "artistic"),
+    410: ("generic", "gardens", "naturalist"),
+    411: ("heritage_avestan", "gardens", "naturalist"),
+    412: ("heritage_arabic", "gardens", "naturalist"),
+    413: ("heritage_chinese", "gardens", "naturalist"),
+    420: ("generic", "observatory", "scientific"),
+    421: ("heritage_sanskrit", "observatory", "scientific"),
+    422: ("heritage_avestan", "observatory", "scientific"),
+    423: ("heritage_chinese", "observatory", "scientific"),
+    424: ("heritage_mayan", "observatory", "scientific"),
+    430: ("generic", "exhibition_hall", "industrial"),
+    440: ("generic", "stadium", "athletic"),
+    441: ("heritage_latin", "stadium", "athletic"),
+    442: ("heritage_greek", "stadium", "athletic"),
+    443: ("heritage_nahuatl", "stadium", "athletic"),
+    444: ("heritage_mayan", "stadium", "athletic"),
+}
+# Codes of pairs no monument can reach any more (a retired form or style).
+RETIRED_PICTURES = set()
+
+
+def _frozen_problems(pictures, retired, reachable):
+    """What breaks append-only: a retired code that isn't in the table, a live
+    pair missing or extra, or a pair under two codes."""
+    problems = [f"retired code {c} is not in PICTURES" for c in sorted(retired - set(pictures))]
+    live = {c: v for c, v in pictures.items() if c not in retired}
+    if set(live.values()) != reachable:
+        problems.append(f"live pictures differ from the reachable pairs: missing "
+                        f"{sorted(map(str, reachable - set(live.values())))}, extra "
+                        f"{sorted(map(str, set(live.values()) - reachable))}")
+    if len(set(pictures.values())) != len(pictures):
+        problems.append("a pair has two codes")
+    return problems
+
+
+def picture_key(code):
+    skin, form, _ = PICTURES[code]
+    return "undedicated" if skin == "undedicated" else f"{skin}__{form}"
+
+
+class PictureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.e = read(PICTURE_EFFECTS)
+        cls.body = squash(block(cls.e, "gm_state_update_picture"))
+
+    def test_the_table(self):
+        self.assertEqual(len(PICTURES), 80)
+        # Every reachable pair has a picture.
+        pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
+        for form, skins in FORMS.items():
+            for skin in skins:
+                self.assertIn((skin, form), pairs, (skin, form))
+        # Fixed codes that must never move (append-only).
+        self.assertEqual(picture_key(10), "generic__column")
+        self.assertEqual(picture_key(102), "heritage_latin__forum")
+        self.assertEqual(picture_key(300), "faith_catholic__faith")
+        self.assertEqual(picture_key(444), "heritage_mayan__stadium")
+
+    def test_a_retired_pair_keeps_its_code(self):
+        # Spec §3.2: retiring a pair (Obelisk may merge into Column) keeps its
+        # code, listed in RETIRED_PICTURES, so a save that stored it never
+        # shows a blank (final review).
+        reachable = _reachable_pictures() - {("generic", "obelisk", None)}
+        self.assertEqual(_frozen_problems(PICTURES, {12}, reachable), [])
+        self.assertTrue(_frozen_problems(PICTURES, set(), reachable), "an unlisted extra code is a problem")
+        self.assertTrue(_frozen_problems(PICTURES, {999}, _reachable_pictures()), "a retired code must exist")
+
+    def test_codes_are_frozen(self):
+        # Append-only (spec §3.2): the table is written out, not computed from
+        # the forms and styles, so inserting a style mid-list can't renumber
+        # pictures a save has stored (Task 6 review).
+        self.assertRegex(read("test_grand_monument_registry.py"), r"(?m)^PICTURES = \{\n    1: ")
+        self.assertEqual(_frozen_problems(PICTURES, RETIRED_PICTURES, _reachable_pictures()), [])
+        heritage_block = {f"heritage_{h}": b for b, h in enumerate(HERITAGE_SKINS)}
+        building_block = {k: b for b, k in enumerate(BUILDING_FORMS)}
+        for code, (skin, form, key) in PICTURES.items():
+            if key is not None:
+                self.assertEqual((code - 400) // 10, building_block[key], code)
+            elif form == "faith":
+                self.assertTrue(300 <= code < 400, code)
+            elif skin == "generic":
+                self.assertTrue(10 <= code < 100, code)
+            elif skin != "undedicated":
+                self.assertEqual((code - 100) // 10, heritage_block[skin], code)
+
+    def test_helper_sets_every_code_in_order(self):
+        b = self.body
+        self.assertTrue(b.startswith("set_variable = { name = gm_picture_code value = 1 }"))
+        skins_start = b.index("gm_state_picture_skin =")
+        pairs_start = b.index("gm_state_picture_pair =")
+        buildings_start = b.index("gm_state_picture_building =")
+        self.assertLess(skins_start, pairs_start, "skin defaults first: an unknown pair falls back to them")
+        self.assertLess(pairs_start, buildings_start, "a building's lines last: its form outranks its skin")
+        # The whole call list, in order: a duplicate with a wrong code, or a
+        # building's generic line after its styles, would win in game.
+        expected = []
+        for skin, default in DEFAULT_FORM.items():
+            code = next(c for c, (s, f, k) in PICTURES.items() if s == skin and f == default and k is None)
+            expected.append(f"gm_state_picture_skin = {{ SKIN = {skin} GENERIC = "
+                            f"{'yes' if skin == 'generic' else 'no'} CODE = {code} }}")
+        codes = sorted(PICTURES)
+        expected += [f"gm_state_picture_skin = {{ SKIN = {PICTURES[c][0]} GENERIC = no CODE = {c} }}"
+                     for c in codes if PICTURES[c][1] == "faith"]
+        expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
+                     f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
+                     for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"]
+        for c in codes:
+            skin, form, key = PICTURES[c]
+            if key is not None and skin == "generic":
+                expected.append(f"gm_state_picture_building = {{ FORM = {form} CODE = {c} }}")
+            elif key is not None:
+                expected.append(f"gm_state_picture_building_skin = {{ FORM = {form} SKIN = {skin} CODE = {c} }}")
+        self.assertEqual(re.findall(r"gm_state_picture_\w+ = \{[^{}]*\}", b), expected)
+
+    def test_called_wherever_skin_or_form_changes(self):
+        names = read(NAME_EFFECTS)
+        for effect in ("gm_state_set_default_form", "gm_state_take_commission_name", "gm_state_unveil"):
+            self.assertTrue(squash(block(names, effect)).endswith("gm_state_update_picture = yes"), effect)
+        self.assertIn("set_variable = { name = gm_form value = flag:$FORM$ } gm_state_update_picture = yes",
+                      squash(block(names, "gm_state_choose_form")))
+        e = read(EFFECTS)
+        self.assertIn("gm_state_name_if_unnamed = yes gm_state_update_picture = yes",
+                      squash(block(e, "gm_country_refresh")))
+        self.assertIn("gm_remove_state_var = { VAR = gm_picture_code }", squash(block(e, "gm_clear_state")))
+
+    def test_widget_has_every_picture(self):
+        gui = read(WIDGET)
+        # A GUI type header has no `=` before its brace: `type gm_picture = widget {`.
+        raw = raw_block_at(gui, r"(?m)^\ttype gm_picture = widget \{")
+        self.assertIsNotNone(raw)
+        body = squash(strip_comments(raw))
+        for code in PICTURES:
+            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), "
+                          f"'(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
+                          f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\"", body, code)
+        self.assertEqual(body.count("ScriptValue('gm_disp_picture_code')"), len(PICTURES))
+
+    def test_every_picture_has_its_art(self):
+        import importlib
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts" / "image_pipeline"))
+        ip = importlib.import_module("icon_prompts")
+        entries = ip.ICONS["gm_picture"]
+        self.assertEqual(set(entries), {picture_key(c) for c in PICTURES})
+        for key, entry in entries.items():
+            self.assertEqual(entry["now"], "gfx/interface/icons/building_icons/building_grand_monument.dds", key)
+            if isinstance(entry.get("seed"), int):
+                self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/{key}.dds").exists(), key)
+
+    def test_undedicating_drapes_it_at_once(self):
+        # Not gm_state_update_picture: it would read back the PM this effect
+        # has just activated (Task 6 review). Without this, a monument that
+        # had a form keeps its old picture until the refresh.
+        body = squash(block(read(EFFECTS), "gm_state_undedicate"))
+        self.assertTrue(body.endswith("set_variable = { name = gm_picture_code value = 1 }"), body)
+
+    def test_frame_tier_follows_the_grandeur_steps(self):
+        # Spec §3.5: the frame shows the step the monument's effects have
+        # reached, on the state card's own step list.
+        values = read(VALUES)
+        steps = sorted(int(n) for n in re.findall(r"gm_state_grandeur < (\d+) \} value = \1",
+                                                  squash(block(values, "gm_state_disp_next_step"))))
+        self.assertEqual(steps[:5], [5, 15, 35, 75, 155])
+        expected = "value = 0 " + " ".join(f"if = {{ limit = {{ gm_state_grandeur >= {g} }} value = {i + 1} }}"
+                                          for i, g in enumerate(steps[:5]))
+        self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
+
+    def test_frames_draw_over_the_pictures(self):
+        raw = raw_block_at(read(WIDGET), r"(?m)^\ttype gm_picture = widget \{")
+        body = squash(strip_comments(raw))
+        last_picture = body.rindex("ScriptValue('gm_disp_picture_code')")
+        for tier in range(1, 6):
+            frame = (f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), "
+                     f"'(CFixedPoint){tier}' )]\" size = {{ 100% 100% }} "
+                     f"texture = \"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds\"")
+            self.assertIn(frame, body, tier)
+            self.assertGreater(body.index(frame), last_picture, "a frame draws over every picture")
+            self.assertTrue((ROOT / f"gfx/interface/icons/gm_pictures/frames/frame_tier_{tier}.dds").exists(), tier)
+        self.assertEqual(body.count("icon = {"), len(PICTURES) + 5)
+
+    def test_display_value_defaults_to_the_draped_picture(self):
+        v = squash(block(read(VALUES), "gm_disp_picture_code"))
+        self.assertEqual(v, "value = 1 if = { limit = { has_variable = gm_picture_code } value = var:gm_picture_code }")
 
 if __name__ == "__main__":
     unittest.main()

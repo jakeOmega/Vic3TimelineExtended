@@ -799,7 +799,7 @@ gm_com_war_victory = {
 gm_com_war_defeat = {
 	if = {
 		limit = { gm_com_can_offer = yes }
-		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = memorial }
+		gm_com_begin = { SOURCE = defeat DEDICATION = war_memorial NAMESAKE = occasion FORM = hall }
 		set_variable = { name = gm_com_occasion value = flag:defeat }
 		if = {
 			limit = {
