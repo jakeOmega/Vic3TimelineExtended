@@ -2905,6 +2905,15 @@
  monument_events.9.t:0 "The Halls Are Full"
 
 #
+# MONUMENT_TROPHY_EVENTS
+#
+ monument_trophy_events.1.a:0 "Carry it off"
+ monument_trophy_events.1.b:0 "Leave it standing"
+ monument_trophy_events.1.d:0 "Our armies hold [SCOPE.sState('monument_state').GetName], where [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] stands, raised by [SCOPE.sCountry('monument_owner').GetName]. The officers ask whether it should be crated and shipped home as a trophy: #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_grandeur')|0]#! levels."
+ monument_trophy_events.1.f:0 "“The French took the Quadriga from Berlin in 1806,” the colonel says. “Paris cheered it for eight years.”\n\n“And Berlin cheered it home for a century,” says the diplomat."
+ monument_trophy_events.1.t:0 "Within Our Reach"
+
+#
 # MOVEMENT_EVENTS_TE
 #
  movement_events_te.1.a:0 "Let them march in peace"
@@ -5303,6 +5312,13 @@
  te_debug_monuments.5.desc:0 "Place every landmark standing in 1836 whose state has no Grand Monument and whose 1836 owner still holds it, for a save started before they existed. Each is logged as TE_MONUMENTS: placed or not placed."
  te_debug_monuments.5.flavor:0 "Logging writes each landmark's level, status, picture code and dedication to debug.log."
  te_debug_monuments.5.t:0 "Debug: Landmarks"
+ te_debug_monuments.6.a:0 "Carry off the tallest monument that is not ours"
+ te_debug_monuments.6.b:0 "Carry off our own tallest monument"
+ te_debug_monuments.6.c:0 "Return every trophy we hold"
+ te_debug_monuments.6.d:0 "Run the monthly pass and log our trophies"
+ te_debug_monuments.6.desc:0 "Carry off a monument as a trophy without a war, from another country or from our own states; return every trophy we hold; or run the monthly trophy pass now."
+ te_debug_monuments.6.flavor:0 "Logging writes our trophies held and abroad, what they count for and the Homecoming's months to debug.log."
+ te_debug_monuments.6.t:0 "Debug: Trophies"
 
 #
 # TE_DEBUG_NUCLEAR

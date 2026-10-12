@@ -1,0 +1,202 @@
+﻿# ============================================================================
+# GRAND MONUMENTS — trophies: scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+# A trophy is a script container (gm_trophy_effects.txt). The holder is the
+# owner of its site (var:gm_tr_site), the claimant the owner of its origin
+# (var:gm_tr_origin): both are read live.
+
+# ---- What a taking carries off (spec §1) ----------------------------------------
+# State scope. By the monument's form: an object goes whole, a piece of a
+# structure a quarter, a token a tenth (gm_state_tr_share). A monument with no
+# form recorded counts as a token. test_grand_monument_trophies.py pins the
+# lists to TROPHY_SHARES.
+gm_state_tr_form_is_object = {
+	has_variable = gm_form
+	OR = {
+		var:gm_form = flag:column
+		var:gm_form = flag:obelisk
+		var:gm_form = flag:statue
+		var:gm_form = flag:stele
+		var:gm_form = flag:pillar
+		var:gm_form = flag:high_cross
+		var:gm_form = flag:rune_stone
+		var:gm_form = flag:menorah
+		var:gm_form = flag:sun_stone
+		var:gm_form = flag:stela
+	}
+}
+
+gm_state_tr_form_is_piece = {
+	has_variable = gm_form
+	OR = {
+		var:gm_form = flag:arch
+		var:gm_form = flag:gate
+		var:gm_form = flag:tower
+		var:gm_form = flag:bell_tower
+		var:gm_form = flag:round_tower
+		var:gm_form = flag:rock_cut
+	}
+}
+
+# State scope. A monument that can be carried off at all: dedicated, not a
+# Grand Shrine (v1: a conquered shrine becomes heritage), not while its
+# dedication is being put back or a ceremony is asking, not already gone, and
+# not within ten years of losing a piece (gm_tr_cooldown).
+gm_state_tr_takeable = {
+	gm_system_enabled = yes
+	gm_state_is_dedicated = yes
+	gm_state_kind_faith = no
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_gift }
+	NOT = { has_variable = gm_carried_off }
+	NOT = { has_variable = gm_tr_cooldown }
+}
+
+# State scope. $WHO$ (a country) is at war with the state's owner, is not its
+# civil-war twin (both sides of a civil war carry te_cw_role) and controls half
+# or more of the state's provinces: the base game's rule for war-goal control
+# since 1.13.9. Read from the provinces: what a state's own controller link
+# returns under partial occupation is unread (spec, engine facts).
+gm_state_tr_occupied_by = {
+	NOT = { owner = $WHO$ }
+	owner = { has_war_with = $WHO$ }
+	NOT = {
+		AND = {
+			owner = { has_variable = te_cw_role }
+			$WHO$ = { has_variable = te_cw_role }
+		}
+	}
+	any_province = {
+		percent >= 0.5
+		controller = $WHO$
+	}
+}
+
+# State scope. The country that first saw this monument dedicated still owns
+# it (gm_built_by). Unknown reads as "not ours to take".
+gm_state_built_by_owner = {
+	has_variable = gm_built_by
+	var:gm_built_by ?= { save_temporary_scope_as = gm_tmp_builder }
+	owner = scope:gm_tmp_builder
+}
+
+# State scope. $WHO$ may carry it off from its own state: one it has not
+# incorporated (a recent conquest restarts incorporation), holding a monument
+# it did not raise (spec §2.2).
+gm_state_tr_own_takeable_by = {
+	owner = $WHO$
+	is_incorporated = no
+	has_variable = gm_built_by
+	gm_state_built_by_owner = no
+}
+
+# State scope. Either route (spec §2.1, §2.2).
+gm_state_tr_can_take = {
+	gm_state_tr_takeable = yes
+	OR = {
+		gm_state_tr_occupied_by = { WHO = $WHO$ }
+		gm_state_tr_own_takeable_by = { WHO = $WHO$ }
+	}
+}
+
+# State scope, the scripted GUI's check: the same, each part with its reason.
+gm_state_tr_can_take_tt = {
+	custom_tooltip = {
+		text = gm_tr_sgui_takeable_tt
+		gm_state_tr_takeable = yes
+	}
+	custom_tooltip = {
+		text = gm_tr_sgui_route_tt
+		OR = {
+			gm_state_tr_occupied_by = { WHO = $WHO$ }
+			gm_state_tr_own_takeable_by = { WHO = $WHO$ }
+		}
+	}
+}
+
+# ---- A trophy (container scope) -----------------------------------------------
+# Its site's owner is $WHO$.
+gm_tr_held_by = {
+	var:gm_tr_site ?= { owner = $WHO$ }
+}
+
+# Its origin's owner is $WHO$.
+gm_tr_claimed_by = {
+	var:gm_tr_origin ?= { owner = $WHO$ }
+}
+
+# Its holder owns its origin: it can come home without a treaty.
+gm_tr_holder_owns_origin = {
+	var:gm_tr_site ?= { owner = { save_temporary_scope_as = gm_tmp_tr_holder } }
+	gm_tr_claimed_by = { WHO = scope:gm_tmp_tr_holder }
+}
+
+# $WHO$ occupies the state where it stands (spec §2.1).
+gm_tr_site_occupied_by = {
+	gm_system_enabled = yes
+	var:gm_tr_site ?= { gm_state_tr_occupied_by = { WHO = $WHO$ } }
+}
+
+# ---- Countries ----------------------------------------------------------------------
+# Country scope. Holds a trophy, or has one held abroad (the monthly pass,
+# gm_trophy_monthly): the journal entry stays for either.
+gm_tr_country_has_any = {
+	OR = {
+		AND = {
+			has_variable = gm_tr_held_count
+			var:gm_tr_held_count > 0
+		}
+		AND = {
+			has_variable = gm_tr_abroad_count
+			var:gm_tr_abroad_count > 0
+		}
+	}
+}
+
+# Country scope. Nothing of trophies left to show or to fade: no trophy held or
+# abroad, and no Homecoming running. Part of gm_ledgers_idle.
+gm_tr_country_idle = {
+	gm_tr_country_has_any = no
+	NOT = { has_variable = gm_boon_homecoming }
+}
+
+# Interest group scope. A group in government that approves of Total War or
+# of the narrowest citizenship laws: a government that loots (spec §7).
+gm_tr_ig_looting_minded = {
+	is_in_government = yes
+	OR = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > neutral
+		}
+		law_stance = {
+			law = law_type:law_ethnostate
+			value > neutral
+		}
+		law_stance = {
+			law = law_type:law_national_supremacy
+			value > neutral
+		}
+	}
+}
+
+# Country scope. The AI returns a trophy to $WHO$, an ally or a power bloc
+# partner (spec §7).
+gm_tr_ai_returns_to = {
+	OR = {
+		has_treaty_alliance_with = { TARGET = $WHO$ }
+		is_in_same_power_bloc = $WHO$
+	}
+}
+
+# Country scope. Holds a trophy whose origin $CLAIMANT$ owns (the monthly
+# pass's list): what Return Cultural Property would send home.
+gm_tr_country_holds_from = {
+	has_variable_list = gm_trophies_held
+	any_in_list = {
+		variable = gm_trophies_held
+		gm_tr_claimed_by = { WHO = $CLAIMANT$ }
+	}
+}

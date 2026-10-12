@@ -497,6 +497,11 @@ no effect). A country variable, `gm_policy` (flag), so a civil war's winner keep
 
 ## 6. Trophies (phase 5)
 
+**Superseded (2026-10-12)** by `2026-10-12-grand-monument-trophies-design.md`: occupation is the main route, a
+country's own unincorporated states replace the 60-month window, the share depends on the form (Appendix A of the
+landmarks spec), a trophy counts for half abroad and goes home whole, and two treaty articles carry the war goal and
+the return. The UN topic is a follow-up.
+
 ### 6.1 Which monuments
 
 Portable ones: **To the Crown, the Republic, the Revolution, the Leader, the Nation and the War Memorial** (columns,

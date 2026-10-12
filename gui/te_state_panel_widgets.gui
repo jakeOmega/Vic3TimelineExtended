@@ -742,6 +742,11 @@ types te_state_panel_widget_types
 						using = fontsize_medium
 						text = "gm_row_inscription"
 					}
+
+					### CARRY IT OFF — while our armies hold the state, or it
+					### is our own unincorporated state and we did not raise
+					### the monument (gui/gm_trophy_widgets.gui).
+					gm_tr_take_button = {}
 				}
 			}
 

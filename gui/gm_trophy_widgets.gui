@@ -1,0 +1,374 @@
+﻿### Grand Monument trophies (docs/superpowers/specs/2026-10-12-grand-monument-
+### trophies-design.md §6). Types only, composed elsewhere:
+###   te_gm_sec_trophies, te_gm_sec_abroad   the journal entry's Trophies and
+###     Held Abroad sections, in te_gm_status_sections
+###     (journal_entry_widgets/grand_monuments_widget.gui) after Our Monuments
+###   gm_tr_take_button                      Carry It Off, under a monument's
+###     row there and on its state card (te_state_panel_widgets.gui)
+###   te_state_gm_trophy_card                the state view's Trophies on
+###     Display card (states_panel.gui), under the monument card
+### A trophy is a script container (gm_trophy_effects.txt): its rows come from
+### the country's gm_trophies_held / gm_trophies_abroad and the state's
+### gm_trophies_here lists, rebuilt by the monthly pass, each item under
+### datacontext = "[Scope.GetScriptContainer]". It names itself through the
+### container custom localization in gm_trophy_custom_loc.txt.
+###
+### EDITING RULES (as grand_monuments_widget.gui's)
+### * Numbers come from ScriptValue reads: the country's gm_tr_disp_* and the
+###   container's gm_tr_disp_* (gm_trophy_values.txt), every one guarded.
+### * Buttons pass the row's state as gm_state or its trophy as gm_tr, and are
+###   shown by their scripted GUI's is_shown (gm_trophy_sguis.txt).
+### * The collapse flags say their default: *_closed sections are open until
+###   closed (test_grand_monuments_layout.py).
+
+types gm_trophy_widget_types
+{
+	### A line of a trophy row, beside its icon (48 + 8 + 424 = 480).
+	type gm_tr_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 424 -1 }
+		maximumsize = { 424 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+	}
+
+	### A trophy row's or card's button: its scripted GUI and label from the
+	### instance, its trophy as gm_tr.
+	type gm_tr_button = button {
+		using = default_button_action
+		size = { 200 26 }
+		parentanchor = hcenter
+		margin_top = 2
+
+		block "tr_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = fontsize_small
+			block "tr_button_text" {}
+		}
+	}
+
+	### Carry It Off, for the row's or card's monument: shown while the player
+	### could take it (occupied in a war, or our own unincorporated state
+	### holding a monument we did not raise).
+	type gm_tr_take_button = button {
+		using = default_button_action
+		size = { 200 26 }
+		parentanchor = hcenter
+		margin_top = 4
+		datacontext = "[GetScriptedGui('gm_tr_take_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		tooltip = "gm_button_tr_take_tooltip"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = fontsize_small
+			text = "gm_button_tr_take"
+		}
+	}
+
+	### The icon of a trophy row: a trophy has no picture of its own (a piece
+	### is not its monument).
+	type gm_tr_icon = widget {
+		size = { 48 48 }
+
+		icon = {
+			size = { 48 48 }
+			parentanchor = top|hcenter
+			texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+		}
+	}
+
+	### A trophy we hold: its name, what it was and where from, what it counts
+	### for, who claims it, and Return It (or Bring It Home, when its origin is
+	### ours).
+	type gm_tr_row_held = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+
+			gm_tr_icon = {}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				gm_tr_line = {
+					using = fontsize_large
+					text = "gm_tr_row_title"
+				}
+				gm_tr_line = {
+					text = "gm_tr_row_detail"
+				}
+				gm_tr_line = {
+					default_format = "#tooltippable"
+					tooltip = "gm_tr_row_value_tt"
+					text = "gm_tr_row_value"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_home_owned'), '(CFixedPoint)0' )]"
+					text = "gm_tr_row_claimant"
+				}
+				gm_tr_line = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_home_owned'), '(CFixedPoint)1' )]"
+					text = "gm_tr_row_home"
+				}
+			}
+		}
+
+		gm_tr_button = {
+			blockoverride "tr_button" {
+				datacontext = "[GetScriptedGui('gm_tr_return_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				tooltip = "gm_button_tr_return_tooltip"
+			}
+			blockoverride "tr_button_text" {
+				text = "gm_button_tr_return"
+			}
+		}
+	}
+
+	### A trophy taken from our lands: its name, its holder and where it
+	### stands, the ways home on hover.
+	type gm_tr_row_abroad = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 8
+
+		gm_tr_icon = {}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+
+			gm_tr_line = {
+				using = fontsize_large
+				text = "gm_tr_row_title"
+			}
+			gm_tr_line = {
+				text = "gm_tr_row_detail"
+			}
+			gm_tr_line = {
+				default_format = "#tooltippable"
+				tooltip = "gm_tr_row_held_by_tt"
+				text = "gm_tr_row_held_by"
+			}
+		}
+	}
+
+	### A trophy on display in a state, on its card: its name and where it
+	### came from, and Carry It Off (Bring It Home when its origin is ours)
+	### while our armies hold the state.
+	type gm_tr_row_site = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+
+			gm_tr_icon = {}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				gm_tr_line = {
+					using = fontsize_large
+					text = "gm_tr_row_title"
+				}
+				gm_tr_line = {
+					text = "gm_tr_row_detail"
+				}
+			}
+		}
+
+		gm_tr_button = {
+			blockoverride "tr_button" {
+				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				tooltip = "gm_button_tr_take_site_tooltip"
+			}
+			blockoverride "tr_button_text" {
+				text = "gm_button_tr_take_site"
+			}
+		}
+	}
+
+	### Trophies (open): what ours count for, the Homecoming while it runs,
+	### and a row per trophy. Shown while we hold one or the Homecoming runs.
+	type te_gm_sec_trophies = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_trophies_shown'), '(CFixedPoint)1' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_trophies_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_trophies_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_trophies_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_trophies_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_trophies_closed'))]"
+			spacing = 2
+
+			gm_text = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_held_count'), '(CFixedPoint)0' )]"
+				default_format = "#tooltippable"
+				tooltip = "gm_je_tr_summary_tt"
+				text = "gm_je_tr_summary"
+			}
+			gm_value_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_boon_homecoming'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_boon_homecoming"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_boon_homecoming"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_boon_homecoming"
+				}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				margin_top = 4
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_trophies_held')]"
+
+				item = {
+					gm_tr_row_held = { datacontext = "[Scope.GetScriptContainer]" }
+				}
+			}
+		}
+	}
+
+	### Held Abroad (open): a row per trophy taken from our lands. Shown while
+	### there is one.
+	type te_gm_sec_abroad = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_abroad_count'), '(CFixedPoint)0' )]"
+
+		gm_section_header = {
+			blockoverride "left_text" {
+				text = "gm_je_abroad_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gm_abroad_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gm_abroad_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gm_abroad_closed'))]"
+			}
+		}
+
+		gm_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gm_abroad_closed'))]"
+			spacing = 2
+
+			gm_text = {
+				default_format = "#tooltippable"
+				tooltip = "gm_je_abroad_ways_tt"
+				text = "gm_je_abroad_summary"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+				margin_top = 4
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_trophies_abroad')]"
+
+				item = {
+					gm_tr_row_abroad = { datacontext = "[Scope.GetScriptContainer]" }
+				}
+			}
+		}
+	}
+
+	### The state view's Trophies on Display card, under the monument card,
+	### while trophies stand in this state (gm_state_tr_disp_here).
+	type te_state_gm_trophy_card = flowcontainer {
+		visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_tr_disp_here'), '(CFixedPoint)0')]"
+		direction = vertical
+		parentanchor = hcenter
+		margin_top = 10
+
+		container = {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin = { 10 8 }
+				spacing = 6
+				minimumsize = { 530 -1 }
+
+				background = {
+					using = entry_bg_simple
+				}
+
+				textbox = {
+					autoresize = yes
+					maximumsize = { 510 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#tooltippable"
+					tooltip = "gm_state_tr_header_tt"
+					text = "gm_state_tr_header"
+				}
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 8
+					datamodel = "[State.MakeScope.GetList('gm_trophies_here')]"
+
+					item = {
+						gm_tr_row_site = { datacontext = "[Scope.GetScriptContainer]" }
+					}
+				}
+			}
+		}
+	}
+}

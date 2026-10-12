@@ -2223,6 +2223,42 @@ gm_com_lapsed_notice = {
 	color = neutral
 }
 
+# Grand Monuments: trophies (docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §6)
+gm_tr_taken_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = neutral
+}
+
+gm_tr_lost_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = toast
+	color = bad
+}
+
+gm_tr_homecoming_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = toast
+	color = good
+}
+
+gm_tr_home_reach_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
+	color = good
+}
+
+gm_tr_site_reach_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # Banking: the Emergency Liquidity Program closed itself once the cycle had held
 # at stable or above for twelve months, refunding 1% of GDP (to the country,
 # human only; banking_cycle_eliq_wind_down).

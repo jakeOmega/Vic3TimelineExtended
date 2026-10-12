@@ -984,7 +984,9 @@ class ContestTests(unittest.TestCase):
 
     def test_demolished_contested_counts_as_torn_down(self):
         body = squash(block(self.e, "gm_state_monthly"))
-        self.assertIn("limit = { gm_state_is_contested = yes } gm_state_record_teardown = yes", body)
+        # Not one carried off as a trophy (trophies spec §1).
+        self.assertIn("limit = { gm_state_is_contested = yes NOT = { has_variable = gm_carried_off } } "
+                      "gm_state_record_teardown = yes", body)
 
     def test_ai_and_notice(self):
         monthly = squash(block(self.e, "gm_country_monthly"))
@@ -1058,10 +1060,11 @@ class ContestTests(unittest.TestCase):
 
     def test_gm_active_set_on_refresh_when_monument_seen(self):
         body = squash(block(self.e, "gm_country_refresh"))
-        # A monument, or an open commission (v2 §2.7), keeps the pulse running.
+        # A monument, an open commission (v2 §2.7) or a trophy held or abroad
+        # (trophies spec §6) keeps the pulse running.
         self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
-                                        "{ has_building = building_grand_monument } has_variable = gm_com_open } } "
-                                        "set_variable = gm_active }"), body[:200])
+                                        "{ has_building = building_grand_monument } has_variable = gm_com_open "
+                                        "gm_tr_country_has_any = yes } } set_variable = gm_active }"), body[:200])
 
 
 # ---- Task 7: the ceremony, skins, the inscription ------------------------------------
@@ -3361,8 +3364,8 @@ class LandmarkReviewFixTests(unittest.TestCase):
         # the state reads as the landmark (§8.6).
         monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
         self.assertIn("else = { if = { limit = { OR = { has_variable = gm_seen gm_state_is_landmark = yes } } "
-                      "if = { limit = { gm_state_is_contested = yes } gm_state_record_teardown = yes } "
-                      "gm_clear_state = { KEEP_LANDMARK = no } }", monthly)
+                      "if = { limit = { gm_state_is_contested = yes NOT = { has_variable = gm_carried_off } } "
+                      "gm_state_record_teardown = yes } gm_clear_state = { KEEP_LANDMARK = no } }", monthly)
 
     def test_the_seed_writes_its_records_before_the_building(self):
         # I3: if create_building fires on_building_built at once, monument_events.1

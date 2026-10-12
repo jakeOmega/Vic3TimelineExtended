@@ -143,6 +143,13 @@ gm_boon_tech_naturalist = {
 	state_pollution_reduction_health_mult = 0.25
 }
 
+# A trophy brought home (trophies spec §3, gm_trophy_effects.txt): ten years,
+# counted down by gm_tick_boon as the opportunities' boons are.
+gm_boon_homecoming = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 5
+}
+
 # ---- IG approval (§2.4): one per IG, signed multiplier -----------------------
 gm_ig_approval_armed_forces = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
