@@ -1951,6 +1951,9 @@ te_demog_country_census = {
 		else = {
 			set_variable = { name = te_dg_urban_label value = 3 }
 		}
+		# phase 3: the largest city and the pattern's strength, which the states' pulses apply under Full
+		# (te_demog_place_effects.txt)
+		te_demog_up_country = yes
 		te_demog_country_lists = yes
 		set_variable = { name = te_dg_census_year value = te_demog_year }
 		set_local_variable = { name = te_dg_born value = local_var:te_dg_c_births }

@@ -48,6 +48,10 @@ PRACTICE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_practice_eff
 WORKFORCE_LINE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_workforce_line_effects_generated.txt"
 WORKFORCE_LINE_VALUES = ROOT / "common" / "script_values" / "te_demog_workforce_line_values_generated.txt"
 WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_workforce_line_modifiers_generated.txt"
+# phase 3's urban pattern and Planned Capital (te_demog_up_country runs inside the country census)
+PLACE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_place_effects.txt"
+PLACE_VALUES = ROOT / "common" / "script_values" / "te_demog_place_values.txt"
+PLACE_TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_demog_place_triggers.txt"
 # phase 2 step 2: the workforce term, the pension setting and the bills
 WORK_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_work_effects.txt"
 WORK_VALUES = ROOT / "common" / "script_values" / "te_demog_work_values.txt"
@@ -400,15 +404,16 @@ class _Engine:
     def __init__(self, fixtures, triggers=None, effects=None, truncate=False):
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
-                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS])
+                                    PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
+                                    PLACE_EFFECTS])
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
-                                   WORK_VALUES, CONSEQ_VALUES])
-        self.triggers = _raw_blocks([TRIGGERS])
+                                   WORK_VALUES, CONSEQ_VALUES, PLACE_VALUES])
+        self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
         # so is fast mode's census clock (te_demog_clock_on), whose globals a test gives as fixtures
@@ -569,7 +574,9 @@ class _Engine:
             chain = None
             if key in ("set_local_variable", "set_variable"):
                 store = self.locals if key == "set_local_variable" else self.vars
-                store[_find(arg, "name")] = self._q(self.value(_find(arg, "value")))
+                got = self.value(_find(arg, "value"))
+                # a scope (_CountryEngine's scope:X is the state's dict: te_dg_primate_state) is stored as it is
+                store[_find(arg, "name")] = got if isinstance(got, dict) else self._q(got)
             elif key in ("change_local_variable", "change_variable"):
                 store = self.locals if key == "change_local_variable" else self.vars
                 name = _find(arg, "name")
@@ -3656,6 +3663,8 @@ class _CountryEngine(_Engine):
     def number(self, tok):
         if tok.startswith("scope:"):
             return self.scopes[tok[6:]]
+        if tok in ("root", "ROOT"):
+            return self.root_vars   # the country, as a value (te_dg_primate_of = root)
         if tok.startswith("owner."):
             saved, self.vars = self.vars, self.root_vars
             try:

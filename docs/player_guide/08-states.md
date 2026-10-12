@@ -328,7 +328,7 @@ them, and some break the figure down for your capital.
 | Population pyramid | People by five-year age band, with an outline twenty years ahead. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your 40 largest states, with people, median age, children per woman, men per 100 women, Gini and Wealth Concentration. |
 | History | Median age, children per woman and life expectancy by year, over 5, 20 or 100 years. |
 | How Demographics Works | A collapsed section that explains the method. |
@@ -404,10 +404,47 @@ a full year twice, so in a new 1836 game the first ones come with the census at
 the end of 1838. Births and deaths per 1,000 people appear from the first full
 year.
 
+### The urban pattern and a planned capital
+
 The urban pattern counts each state as one city and its urban people as everyone
 who does not work a farm, plantation, ranch, mine or other rural workplace. The
 pattern is Primate when the largest city holds 40% or more of all urban people,
 Dominant from 25%, Balanced from 10% and Dispersed below that.
+
+Under the Full setting a Dominant or Primate pattern has effects; Balanced and
+Dispersed are the baseline. Your largest city gets Primate City, with more Urban
+Center throughput and migration attraction. Every other state gets Provincial
+Neglect, with less migration attraction and higher penalties from turmoil. Both
+grow with the largest city's share of urban people, from nothing at 25% to their
+full size at 60%: Urban Center throughput +10% and migration attraction +15% for
+the city, migration attraction −10% and turmoil penalties +10% for the rest. A
+country of fewer than three states gets neither. Each state takes the new figure
+at its yearly count, and the Urban Pattern tooltip names your largest city and
+shows the current figures. Under Display only it says what Full would do.
+
+The decision Plan a New Capital, also under Full, moves your seat of government
+away from your largest city. It appears once you research Modern Sewerage and
+can be taken with Steel-Frame Buildings, a Dominant or Primate pattern, 100
+authority to spare, at peace and outside any diplomatic play, when you have not
+moved your capital recently, and once in 50 years. It offers up to three sites:
+your largest incorporated states that are a homeland of one of your primary
+cultures, hold at least 1% of your people, and are neither the capital nor the
+largest city. The capital moves at once.
+
+| You pay | You get |
+|---|---|
+| 3% of a year's GDP, at once | The capital in the chosen state |
+| 100 authority for five years (Building the New Capital) | Planned Capital on the new capital for 20 years: migration attraction +25%, state construction efficiency +20%, infrastructure +10 and Government Structures throughput +10% |
+
+Planned Capital ends if the capital moves away again. Not now spends nothing,
+and the decision stays open; it is also what happens if you let the choice
+lapse. A site you lose, or a war that starts, while the choice is open takes
+that site off the list. A planned capital draws migrants and building to a
+region your largest city leaves behind, so over the years it can lower that
+city's share and with it Provincial Neglect. The AI plans one only with a
+Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Migration Crowding's ceiling (ten times the reference density), and the money
+in its treasury.
 
 ### Family policy measures
 

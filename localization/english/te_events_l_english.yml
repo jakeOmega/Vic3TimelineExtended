@@ -5450,6 +5450,21 @@
  te_debug_un.1.z:0 "Close"
 
 #
+# TE_DEMOG_CAPITAL
+#
+ te_demog_capital.1.a:0 "Build it in [SCOPE.sState('te_pc_site_1').GetName]"
+ te_demog_capital.1.a.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_1').GetName]#! at once"
+ te_demog_capital.1.b:0 "Build it in [SCOPE.sState('te_pc_site_2').GetName]"
+ te_demog_capital.1.b.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_2').GetName]#! at once"
+ te_demog_capital.1.c:0 "Build it in [SCOPE.sState('te_pc_site_3').GetName]"
+ te_demog_capital.1.c.tt:0 "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_3').GetName]#! at once"
+ te_demog_capital.1.d:0 "The planners have laid out the sites where a new capital could rise. Wherever we build it, the ministries, the courts and the parliament will follow, and with them the clerks, the builders and the merchants who serve them. Our great city keeps its trade and its crowds, but not the seat of power."
+ te_demog_capital.1.e:0 "Not now"
+ te_demog_capital.1.e.tt:0 "Nothing is spent, and the decision stays open"
+ te_demog_capital.1.f:0 "#lore A capital built from nothing says that the country is larger than its first city.#!"
+ te_demog_capital.1.t:0 "Siting the New Capital"
+
+#
 # TE_INFLATION
 #
  te_inflation.1.a:0 "Call in every note. We begin again."
