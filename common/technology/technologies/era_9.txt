@@ -99,6 +99,8 @@ world_wide_web = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 1
 		country_www_pb_principles_bool = yes
 		country_intelligence_capacity_add = 2
+		# the census's spread of medicine (the Causes of Death plan)
+		state_medical_diffusion_add = 0.05
 	}
 
 	ai_weight = {

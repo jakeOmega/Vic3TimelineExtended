@@ -133,7 +133,10 @@ NATURAL_FERTILITY_BY_LAW = {
     "law_women_in_the_workplace": -0.10, "law_womens_suffrage": -0.10, "law_protected_class": -0.15,
 }
 DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY_TYPE)
-DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES
+# The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
+# census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
+DIFFUSION_TYPE = "state_medical_diffusion_add"
+DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within
 # 0..MEANS_CAP. Traditional methods everyone has; the techs' lines add to them (the Pill without
@@ -199,8 +202,8 @@ TURMOIL_EXTERNAL_WEIGHT = 0.5
 # Medicine spreads (owner, 2026-10-11): at each census step health-care access and each cause's treatment move this
 # share of the gap to their targets: DIFFUSION_BASE everywhere, plus DIFFUSION_TYPE (communication and medical-training
 # technologies, the Medical Outreach decree), at most DIFFUSION_MAX. Within MEDICINE_SNAP of its target a value takes
-# the target. A seed, a new state and an old save's state start at their targets.
-DIFFUSION_TYPE = "state_medical_diffusion_add"
+# the target. A seed, a new state and an old save's state start at their targets. DIFFUSION_TYPE is with the other
+# types, above.
 DIFFUSION_BASE = 0.1
 DIFFUSION_MAX = 1.0
 MEDICINE_SNAP = 0.005

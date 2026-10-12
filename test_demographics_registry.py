@@ -3890,6 +3890,20 @@ class TestModifierTypes(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \"", name)
             self.assertNotIn(name, engine, name)
 
+    def test_the_spread_of_medicine_is_registered_named_and_new(self):
+        text, loc = _text(TYPES_FILE), _text(MODIFIERS_LOC)
+        engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        body = _block(text, P.DIFFUSION_TYPE)
+        for line in ("script_only = yes", "percent = yes", "color = good"):
+            self.assertIn(line, body)
+        self.assertRegex(loc, rf"(?m)^ {P.DIFFUSION_TYPE}:0 \"")
+        self.assertRegex(loc, rf"(?m)^ {P.DIFFUSION_TYPE}_desc:0 \"")
+        self.assertNotIn(P.DIFFUSION_TYPE, engine)
+
+    def test_health_care_access_is_a_concept(self):
+        self.assertIn("concept_health_care_access = {}",
+                      _text(ROOT / "common" / "game_concepts" / "extra_concepts.txt"))
+
     def test_the_old_country_means_type_is_gone(self):
         # Review Focus 5: the rename leaves no reader, carrier, loc key or param behind
         old = "country_fertility_means_add"
