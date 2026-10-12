@@ -326,7 +326,7 @@ death term (+1.0 × bare) was never fitted and may be about 0.6. Fixing it will 
   - Functions: `M.medicine_targets(inp) -> dict`, `M.diffusion(inp) -> float`, `M.medicine_drift(prev, inp) -> dict`,
     `M.cause_factors(inp) -> {cause: {factor: float}}`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 class TestCausesOfDeath(unittest.TestCase):
@@ -400,12 +400,12 @@ class TestCausesOfDeath(unittest.TestCase):
 
 Add `import dataclasses` and `import math` at the top of `test_demographics_model.py` if missing.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_model.TestCausesOfDeath`
 Expected: ERROR, `module 'demographics_params' has no attribute 'CAUSE_FACTORS'`.
 
-- [ ] **Step 3: Add the parameters** (after `CROWDING_INFECTION_MAX`)
+- [x] **Step 3: Add the parameters** (after `CROWDING_INFECTION_MAX`)
 
 ```python
 # ---- Causes of Death (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md) ----
@@ -440,7 +440,7 @@ DEATHS_ON_TOP_HIGH = 1.25          # 1 + te_dg_dz at or above this reads red on 
 Change `DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES` to
 `DEMOG_TYPES = DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)`.
 
-- [ ] **Step 4: The model**
+- [x] **Step 4: The model**
 
 In `demographics_model.py`: import `replace` from `dataclasses`. Add to `Inputs` (last, with defaults):
 
@@ -534,13 +534,13 @@ In `step`, as the first lines of the `if rates is None:` branch:
 
 Update `step`'s docstring: "medicine drifts before the rates (te_demog_medicine_drift before te_demog_prepare)".
 
-- [ ] **Step 5: Run the model's tests**
+- [x] **Step 5: Run the model's tests**
 
 Run: `.venv/bin/python -m unittest test_demographics_model test_demographics_harness`
 Expected: OK. The harness's anchors (`medicine`, `fertility`, `sketch`) run on equilibria, where medicine is at its
 targets, so none moves.
 
-- [ ] **Step 6: Commit**: "Demographics model: causes of death as factor products, medicine that drifts, turmoil".
+- [x] **Step 6: Commit**: "Demographics model: causes of death as factor products, medicine that drifts, turmoil".
 
 ---
 
@@ -559,7 +559,7 @@ targets, so none moves.
 - Produces: the type on six carriers, read by `DM.load_carriers()` (it reads `P.DEMOG_TYPES`);
   `concept_health_care_access`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 In `test_demographics_modifiers.py`, `TestCarriersInTheGameFiles`: add `P.DIFFUSION_TYPE: {"technology"}` to
 `test_each_type_sits_where_its_design_puts_it`'s `allowed`. (The decree carries the type too, but `load_carriers`
@@ -591,12 +591,12 @@ In `test_demographics_registry.py`, `TestModifierTypes`:
         self.assertNotIn(P.DIFFUSION_TYPE, engine)
 ```
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_modifiers test_demographics_registry.TestModifierTypes`
 Expected: FAIL (no carriers; `te_demog_medical_diffusion` type not found).
 
-- [ ] **Step 3: The type** (end of `demographics_modifier_types.txt`)
+- [x] **Step 3: The type** (end of `demographics_modifier_types.txt`)
 
 ```
 # Medicine spreads (the Causes of Death plan, owner 2026-10-11): the share of the gap between a state's health-care
@@ -611,7 +611,7 @@ state_medical_diffusion_add = {
 }
 ```
 
-- [ ] **Step 4: The carriers**
+- [x] **Step 4: The carriers**
 
 `te_demog_tech_injections.txt`: add `state_medical_diffusion_add = 0.05` inside `INJECT:modern_nursing`'s `modifier`,
 and after it:
@@ -633,7 +633,7 @@ INJECT:electric_telegraph = {
 chronic treatment): `state_medical_diffusion_add = 0.05`, with a one-line comment
 `# the census's spread of medicine (the Causes of Death plan)` above it.
 
-- [ ] **Step 5: The names, and the concept they use**
+- [x] **Step 5: The names, and the concept they use**
 
 `te_modifiers_l_english.yml`, beside `state_health_care_access_add`:
 
@@ -660,7 +660,7 @@ Add to `TestModifierTypes`:
                       _text(ROOT / "common" / "game_concepts" / "extra_concepts.txt"))
 ```
 
-- [ ] **Step 6: Run the tests, then commit**: "Demographics: the spread of medicine, on six technologies".
+- [x] **Step 6: Run the tests, then commit**: "Demographics: the spread of medicine, on six technologies".
 
 Run: `.venv/bin/python -m unittest test_demographics_modifiers test_demographics_registry.TestModifierTypes`, then
 `python3 organize_loc.py` and `python3 organize_loc.py --check`.
@@ -684,7 +684,7 @@ full treatment gap is about 10 years of e0 at SoL 15, and at 0.1 about 59% of it
 - Produces: `H.LAG_SCENARIOS`, `H.LAG_YEARS`, `H.lag_rows(carriers=None) -> [(label, rate, e0_before, e0_target,
   {year: years behind})]`, `demographics_harness.py lag`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 class TestLag(unittest.TestCase):
@@ -721,12 +721,12 @@ class TestLag(unittest.TestCase):
 
 Add `import dataclasses` to `test_demographics_harness.py`'s imports.
 
-- [ ] **Step 2: Run them to see them fail**
+- [x] **Step 2: Run them to see them fail**
 
 Run: `.venv/bin/python -m unittest test_demographics_harness.TestLag`
 Expected: ERROR (`lag_rows` not defined).
 
-- [ ] **Step 3: The harness** (after `cmd_medicine`)
+- [x] **Step 3: The harness** (after `cmd_medicine`)
 
 ```python
 # ---- lag: how far life expectancy trails its target while medicine spreads (the Causes of Death plan) -------------
@@ -789,13 +789,15 @@ def cmd_lag(_args):
 Register it: `sub.add_parser("lag").set_defaults(fn=cmd_lag)` beside `medicine`, and add the line to the module
 docstring's command list.
 
-- [ ] **Step 4: Run the tests, then run `lag` and post its table on the PR**
+- [x] **Step 4: Run the tests, then run `lag` and post its table on the PR**
 
 Run: `.venv/bin/python -m unittest test_demographics_harness.TestLag`, then
 `.venv/bin/python scripts/analysis/demographics_harness.py lag`.
 Expected: OK; the table prints. Post it on the PR as a comment headed "Lag curve for the drift numbers".
+(Done 2026-10-11: the table went to the owner through the controller, not as a comment on #905. The 1940s
+scenario's "before" holds the Combustion Engine too; see the commit.)
 
-- [ ] **Step 5: Commit**: "Demographics harness: the lag curve of spreading medicine".
+- [x] **Step 5: Commit**: "Demographics harness: the lag curve of spreading medicine".
 
 - [ ] **Owner stop:** the owner approves or changes `DIFFUSION_BASE`, the carriers' +0.05 and the decree's +0.2 from
   the table. Apply any change in `demographics_params.py` (and on the carriers), rerun `lag`, and record the
