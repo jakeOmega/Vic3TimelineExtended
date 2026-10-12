@@ -45,7 +45,8 @@ tables, its §2.4 growth table and §5.2's "today" figures (5.96 / 5.74 children
 all computed on 6.2, on the old gate run's saves, without the natural-fertility term (also #869).
 - **Starting values:** s = 1.15 on today's curve (`WEALTH_TFR_LOW` 6.0 → 6.9, `WEALTH_TFR_HIGH` 3.5 → 4.0), cuts 0.30
   and 0.35. The held share is 0.37: (1 − 1/1.15) ÷ 0.35, the spec's rule at the approved cut (its 0.38 was the same rule
-  at 0.34). At these, China and India hold where `main` puts them: 1.15 × (1 − 0.35 × 0.37) = 1.001.
+  at 0.34). At these, China and India hold where `main` puts them: 1.15 × (1 − 0.35 × 0.37) = 1.001. India stays there;
+  China, Korea and Manchuria may go above it (D13).
 - The early-marrying group then reaches about 6.6–6.7, not the spec's 6.7–7.0. The spec's reach on today's curve takes
   s ≈ 1.19 (1.15 × 6.2 ÷ 6.0), and a held share near 0.46 to keep China and India where they are.
 - These are starting values only. The owner's ruling (D12) makes the raise the smallest neat value the regional growth
@@ -181,7 +182,7 @@ proposals:
 - Its "# Iberia" group includes **Cape Verde**, an African archipelago, which stays at 0. The **Canary Islands** take
   the rest of Iberia's 0.6.
 - `region_north_china` includes Mongolia's four state regions and `region_south_china` includes Formosa. They take
-  the held share by strategic region, as §3.3's table says.
+  East Asia's share by strategic region, as §3.3's table says (D13).
 - Japan is the ten state regions Hokkaido to Kyushu: Hokkaido, Tohoku, Kanto, Hokushinetsu, Tokai, Kyoto, Kansai,
   Chugoku, Shikoku and Kyushu (Ryukyu excepted).
 
@@ -215,6 +216,20 @@ worse than today's:
     geographic term could fix.
   - Those regions are step 3's.
 - Task 5 builds the projection, the gate and the selection; Task 6 runs them.
+
+**D13. China's Birth Spacing may sit above the cancel share (owner, 2026-10-11).** Spec §2.2 held China and India at the
+share that only cancels the raise, and put "China at history's 5.5" (a share near 0.63 at the spec's fit) off until a
+mortality refit. The owner allows that variant for China, Korea and Manchuria now:
+- their Birth Spacing share may sit above the cancel share, so Birth Spacing lowers their births toward history's ~5.5
+  children per woman;
+- the fit chooses it as the smallest share on a 0.01 grid at which China's projected peacetime births less deaths
+  lands in its +3 to +6 band (`east_for_china`, Task 5), never below the cancel share;
+- the results doc reports China's children per woman at it, and flags it below about 5;
+- **India stays as planned**, at the cancel share: its excess is early mortality, calibration step 3's.
+
+So the start tables carry two held values: `BS_EAST_ASIA_START` (China's strategic regions, Manchuria's and Korea's
+state regions) and `BS_HELD_START` (India's). `M.bs_held_group` says which by membership, not by value, since both
+start at 0.37.
 
 ## Owner questions (none blocks Tasks 1–5)
 
@@ -267,7 +282,8 @@ worse than today's:
   values before Task 8 puts the practices in the script.
 - **The gate is regional growth** (owner, 2026-10-11; D12). The raise is the smallest neat value it passes, possibly
   none. Children per woman is fitted, and the high group's level is reported only. Calibration step 3 is a separate
-  step after this work.
+  step after this work. China's, Korea's and Manchuria's Birth Spacing may sit above the cancel share to bring China into
+  its band; India's stays at it (D13).
 
 ## Review Focus
 
@@ -581,13 +597,15 @@ git commit -m "Demographics: the strategic-region snapshot for the practices' st
 - Test: `test_demographics_model.py` (new class `TestPractices`; add `import dataclasses` at the top)
 
 **Interfaces:**
-- Produces (params): `PRACTICES = ("lm", "bs")`, `PRACTICE_CUT`, `BS_HELD_START`, `PRACTICE_START_REGION`,
+- Produces (params): `PRACTICES = ("lm", "bs")`, `PRACTICE_CUT`, `BS_HELD_START` (India), `BS_EAST_ASIA_START`,
+  `BS_EAST_ASIA_REGIONS`, `BS_EAST_ASIA_STATES`, `BS_INDIA_REGIONS`, `PRACTICE_START_REGION`,
   `PRACTICE_START_STATE`, `PRACTICE_RATE`, `PRACTICE_EROSION_CONTRACEPTION`, `PRACTICE_EROSION_FROM`,
   `PRACTICE_EROSION_SPAN`, `PRACTICE_EROSION_ACCESS`, `PRACTICE_ACCESS_SPAN`, `LM_INHERITANCE`, `LM_WOMENS_WORK`,
   `IMPARTIBLE_LAWS`, `MARRIAGE_AGE_AT_ZERO`, `MARRIAGE_AGE_SPAN`.
 - Produces (model): `Inputs.practices: dict` (`{"lm": share, "bs": share}`), `Inputs.agrarian_share: float`,
   `Inputs.impartible: bool`. `fertility()` gains the keys `"lm"` and `"bs"` (the terms). `practice_start(practice,
-  state_region, strategic_region) -> float`; `contraception_beyond(inp) -> float`; `practice_erosion(practice, inp) ->
+  state_region, strategic_region) -> float`; `bs_held_group(state_region, strategic_region) -> "east_asia" | "india" |
+  None`; `contraception_beyond(inp) -> float`; `practice_erosion(practice, inp) ->
   float`; `practice_target(practice, inp, start) -> float`; `practice_drift(share, target) -> float`;
   `practice_seed(practice, inp, start, siblings) -> float` (siblings `[(people, share)]`); `marriage_age(share) ->
   float`.
@@ -630,12 +648,21 @@ class TestPractices(unittest.TestCase):
                 ("lm", "STATE_KANTO", "region_northeast_asia", 0.0),
                 ("bs", "STATE_KANTO", "region_northeast_asia", 1.0),
                 ("bs", "STATE_RYUKYU_ISLANDS", "region_northeast_asia", 0.0),
-                ("bs", "STATE_SEOUL", "region_northeast_asia", P.BS_HELD_START),
-                ("bs", "STATE_JIANGSU", "region_north_china", P.BS_HELD_START),
+                ("bs", "STATE_SEOUL", "region_northeast_asia", P.BS_EAST_ASIA_START),
+                ("bs", "STATE_JIANGSU", "region_north_china", P.BS_EAST_ASIA_START),
                 ("bs", "STATE_BOMBAY", "region_south_india", P.BS_HELD_START),
                 ("bs", "STATE_HOME_COUNTIES", "region_western_europe", 0.0)):
             with self.subTest(practice=practice, state=state):
                 self.assertEqual(M.practice_start(practice, state, region), want)
+
+    def test_the_held_groups(self):
+        """Owner, 2026-10-11 (plan D13): China, Manchuria and Korea take one Birth Spacing share, India another."""
+        for state, region, want in (("STATE_JIANGSU", "region_north_china", "east_asia"),
+                                    ("STATE_SEOUL", "region_northeast_asia", "east_asia"),
+                                    ("STATE_BOMBAY", "region_south_india", "india"),
+                                    ("STATE_KANTO", "region_northeast_asia", None),
+                                    ("STATE_MOSCOW", "region_russia", None)):
+            self.assertEqual(M.bs_held_group(state, region), want, state)
 
     def test_the_start_tables_name_only_real_places(self):
         import demographics_regions as R
@@ -711,10 +738,17 @@ unexpected keyword for `Inputs`).
 # key the script (te_dg_pr_<P>, te_demog_pr_*_<P>); phase 3 adds Family Limitation to the same machinery.
 PRACTICES = ("lm", "bs")
 PRACTICE_CUT = {"lm": 0.30, "bs": 0.35}
-# Birth Spacing's start for China, Manchuria, Korea and India: the share that cancels the wealth curve's raise,
-# (1 - 1/s) / cut (spec 2.2, "held, not history"): 0.37 at s 1.15 and the approved cut of 0.35 (the spec's 0.38 is the
-# same rule at its 0.34). Task 6 sets it from the fitted s and cut.
+# Birth Spacing's start for India: the share that cancels the wealth curve's raise, (1 - 1/s) / cut (spec 2.2, "held,
+# not history"): 0.37 at s 1.15 and the approved cut of 0.35 (the spec's 0.38 is the same rule at its 0.34). India's
+# excess is early mortality, calibration step 3's (owner, 2026-10-11). Task 6 sets it from the fitted s and cut.
 BS_HELD_START = 0.37
+# Birth Spacing's start for China, Manchuria and Korea (owner, 2026-10-11; plan D13): at least the share that cancels the
+# raise, and above it as far as China's peacetime births less deaths needs to land in history's +3 to +6, which lowers
+# their births toward history's ~5.5 children per woman (spec 2.2's second variant). Starts at the cancel share; Task 6
+# sets it. Membership, not the value, says which states take it (demographics_model.bs_held_group).
+BS_EAST_ASIA_START = 0.37
+BS_EAST_ASIA_REGIONS = ("region_north_china", "region_south_china")
+BS_INDIA_REGIONS = ("region_north_india", "region_south_india")
 _OCCITANIA = ("STATE_PROVENCE", "STATE_GUYENNE", "STATE_LANGUEDOC", "STATE_AQUITAINE", "STATE_RHONE", "STATE_SAVOY",
               "STATE_AUVERGNE_LIMOUSIN")
 _NW_IBERIA = ("STATE_GALICIA", "STATE_ASTURIAS", "STATE_BASQUE_COUNTRY", "STATE_LEON", "STATE_OLD_CASTILE",
@@ -731,20 +765,19 @@ _THE_GRADIENT = ("STATE_MAZOVIA", "STATE_LESSER_POLAND", "STATE_WEST_GALICIA", "
                  "STATE_CROATIA", "STATE_TRANSDANUBIA", "STATE_SLOVAKIA")
 _JAPAN = ("STATE_HOKKAIDO", "STATE_TOHOKU", "STATE_KANTO", "STATE_HOKUSHINETSU", "STATE_TOKAI", "STATE_KYOTO",
           "STATE_KANSAI", "STATE_CHUGOKU", "STATE_SHIKOKU", "STATE_KYUSHU")
-_MANCHURIA_KOREA = ("STATE_SOUTHERN_MANCHURIA", "STATE_NORTHERN_MANCHURIA", "STATE_SHENGJING", "STATE_SEOUL",
-                    "STATE_BUSAN", "STATE_SARIWON", "STATE_PYONGYANG", "STATE_YANGHO")
+BS_EAST_ASIA_STATES = ("STATE_SOUTHERN_MANCHURIA", "STATE_NORTHERN_MANCHURIA", "STATE_SHENGJING", "STATE_SEOUL",
+                       "STATE_BUSAN", "STATE_SARIWON", "STATE_PYONGYANG", "STATE_YANGHO")   # Manchuria and Korea
 # Start shares (spec 3.2, 3.3): by strategic region, then by state region, which wins. Geography, not culture. Malta and
 # Corsica take Italy's (the vanilla file's Italy group); Cape Verde, an African archipelago, stays at 0 (plan D10).
 PRACTICE_START_REGION = {
     "lm": {"region_western_europe": 1.0, "region_northern_europe": 1.0, "region_central_europe": 1.0},
-    "bs": {r: BS_HELD_START for r in ("region_north_china", "region_south_china", "region_north_india",
-                                      "region_south_india")},
+    "bs": {**dict.fromkeys(BS_EAST_ASIA_REGIONS, BS_EAST_ASIA_START), **dict.fromkeys(BS_INDIA_REGIONS, BS_HELD_START)},
 }
 PRACTICE_START_STATE = {
     "lm": {**dict.fromkeys(("STATE_KOLA", "STATE_EAST_KARELIA"), 0.2), **dict.fromkeys(_OCCITANIA, 1.0),
            **dict.fromkeys(_NW_IBERIA, 0.9), **dict.fromkeys(_IBERIA, 0.6), **dict.fromkeys(_ITALY, 0.5),
            **dict.fromkeys(_WEST_OF_THE_LINE, 0.8), **dict.fromkeys(_THE_GRADIENT, 0.4)},
-    "bs": {**dict.fromkeys(_JAPAN, 1.0), **dict.fromkeys(_MANCHURIA_KOREA, BS_HELD_START)},
+    "bs": {**dict.fromkeys(_JAPAN, 1.0), **dict.fromkeys(BS_EAST_ASIA_STATES, BS_EAST_ASIA_START)},
 }
 # The yearly drift (spec 4.2, 4.3): share += PRACTICE_RATE x (target - share), a generation's half-life. The neighbour
 # spread is phase 3's (plan D6). target = start x (1 - erosion), plus Late Marriage's drivers, within 0-1.
@@ -816,6 +849,16 @@ def practice_start(practice, state_region, strategic_region):
     if state_region in by_state:
         return by_state[state_region]
     return P.PRACTICE_START_REGION[practice].get(strategic_region, 0.0)
+
+
+def bs_held_group(state_region, strategic_region):
+    """Which held Birth Spacing share a state takes (the plan's D13): "east_asia" (China, Manchuria, Korea), "india", or
+    None (Japan's full share, or none)."""
+    if strategic_region in P.BS_EAST_ASIA_REGIONS or state_region in P.BS_EAST_ASIA_STATES:
+        return "east_asia"
+    if strategic_region in P.BS_INDIA_REGIONS:
+        return "india"
+    return None
 
 
 def contraception_beyond(inp):
@@ -1313,9 +1356,8 @@ def replay(loaded):
 
 WEST = frozenset({"region_western_europe", "region_northern_europe", "region_central_europe"})
 EAST_ASIA_BS = (("Japan", lambda r: P.PRACTICE_START_STATE["bs"].get(r["state_region"]) == 1.0),
-                ("China, Manchuria, Korea", lambda r: M.practice_start("bs", r["state_region"], r["strategic_region"])
-                 == P.BS_HELD_START and r["strategic_region"] in ("region_north_china", "region_south_china",
-                                                                  "region_northeast_asia")))
+                ("China, Manchuria, Korea", lambda r: M.bs_held_group(r["state_region"], r["strategic_region"])
+                 == "east_asia"))
 
 
 def _mean(records, key, keep):
@@ -1418,14 +1460,17 @@ git commit -m "Demographics harness: the practices' drift replay"
   - Task 3's `practice_states`, `read_save`, `PracticeState.bands`, `read_shares`;
   - `H.HISTORY_TAGS`, `H.read_anchors`, `H.nearest`, `H.medicine_rows`.
 - Produces:
-  - `DP.FitState(sid, country, tag, people, incorporated, base_tfr, nrr_per_tfr, e0, deaths, lm, bs, held)`;
+  - `DP.FitState(sid, country, tag, people, incorporated, base_tfr, nrr_per_tfr, e0, deaths, lm, bs, held)`, `held`
+    being `M.bs_held_group`'s answer;
   - `DP.fit_states(path, carriers, shares, save=None) -> [FitState]`;
-  - `DP.tfr_at(state, s, cut_lm, cut_bs, held) -> float`;
+  - `DP.tfr_at(state, s, cut_lm, cut_bs, held, east) -> float`;
   - `DP.band_deaths(qf, qm, bands) -> float`;
-  - `DP.evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, years=None) -> dict` with keys `error`,
-    `world_tfr`, `countries`, `high`, `held`;
+  - `DP.cancel_share(s, cut_bs) -> float`;
+  - `DP.evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, east=None, years=None) -> dict` with keys
+    `error`, `world_tfr`, `countries`, `high`, `held`, `east`;
   - `DP.fit_table(fit_by_year, anchors, s_grid, lm_grid, bs_grid, years=None) -> [(s, cut_lm, cut_bs, result)]`;
-  - `DP.project_regions(rows, today, point, s, cut_lm, cut_bs, held=None) -> {"groups", "world", "tags"}`;
+  - `DP.project_regions(rows, today, point, s, cut_lm, cut_bs, held=None, east=None) -> {"groups", "world", "tags"}`;
+  - `DP.east_for_china(rows, today, point, s, cut_lm, cut_bs, held=None, top=0.9) -> (east, China's projected rate)`;
   - `DP.region_gate(projection, world_margin=1.0, big=2e7) -> [str]`;
   - `DP.patch_params(infection_scale=1.0, **values)` (a context manager);
   - `DP.mortality_report(fit_by_year, years=None) -> {country: e0}` (the three Western countries in the first year);
@@ -1460,14 +1505,19 @@ The fit takes the smallest neat raise s for which a neat mortality point passes.
 - Gapminder's flat guesses (China, Iran, Turkey, Mexico, Peru, Korea) carry half weight (spec §5.2).
 - The USA and Chile in 1887 are dropped as fertility transitions (spec §2.3). The Netherlands is no longer dropped: the
   incorporated filter now leaves out the colonies that put it there.
-- Every state whose Birth Spacing start is `BS_HELD_START` takes the held share h = (1 − 1/s) ÷ cut_bs, scaled by its
-  replayed share ÷ its start. That holds China and India (spec §2.2), with Manchuria and Korea at the same value as
-  geography (§3.3). `--at` can set h by hand, for spec §2.2's "China at history's 5.5" variant.
+- Two held Birth Spacing shares, each scaling its states' replayed share ÷ their start (`M.bs_held_group`):
+  - **India** takes h = (1 − 1/s) ÷ cut_bs, the share that cancels the raise (spec §2.2), and the cuts are fitted with
+    China at that share too.
+  - **China, Manchuria and Korea** take e, at least h (owner, 2026-10-11; D13). At each point `east_for_china` picks the
+    smallest e on a 0.01 grid at which China's projected peacetime births less deaths is at most +6. That lowers their
+    births toward history's ~5.5 children per woman.
+  - The fit reports China's children per woman at e, flagged below about 5.
+  - `--at` can set h and e by hand.
 
 - [ ] **Step 1: Write the failing tests** (append to `test_demographics_practices.py`)
 
 ```python
-def _fit(country, base, lm=0.0, bs=0.0, held=False, people=1e7, e0=35.0, tag="TST", sid="1", deaths=300.0):
+def _fit(country, base, lm=0.0, bs=0.0, held=None, people=1e7, e0=35.0, tag="TST", sid="1", deaths=300.0):
     return DP.FitState(sid, country, tag, people, True, base, 0.4, e0, deaths, lm, bs, held)
 
 
@@ -1483,10 +1533,16 @@ class TestFit(unittest.TestCase):
         self.assertAlmostEqual(got["error"], want ** 0.5, places=9)
 
     def test_the_held_share_cancels_the_raise(self):
-        china = _fit("China", 6.0, bs=P.BS_HELD_START, held=True)
-        got = DP.evaluate({1837: [china]}, self.ANCHORS, s=1.2, cut_lm=0.3, cut_bs=0.4)
+        china = _fit("China", 6.0, bs=P.BS_EAST_ASIA_START, held="east_asia")
+        india = _fit("India", 6.0, bs=P.BS_HELD_START, held="india", sid="2", tag="BIC")
+        got = DP.evaluate({1837: [china, india]}, self.ANCHORS, s=1.2, cut_lm=0.3, cut_bs=0.4)
         self.assertAlmostEqual(got["held"], (1 - 1 / 1.2) / 0.4, places=9)
+        self.assertAlmostEqual(got["east"], got["held"], places=9, msg="East Asia defaults to the cancel share")
         self.assertAlmostEqual(got["countries"][("China", 1837)][0], 6.0, places=9)
+        # owner, 2026-10-11 (D13): East Asia's share may sit above it; India's stays
+        above = DP.evaluate({1837: [china, india]}, self.ANCHORS, s=1.2, cut_lm=0.3, cut_bs=0.4, east=0.6)
+        self.assertAlmostEqual(above["countries"][("China", 1837)][0], 6.0 * 1.2 * (1 - 0.4 * 0.6), places=9)
+        self.assertAlmostEqual(above["countries"][("India", 1837)][0], 6.0, places=9)
 
     def test_the_table_finds_each_raises_best_cuts(self):
         states = {1837: [_fit("Sweden", 5.5, lm=1.0), _fit("Iran", 6.0)]}
@@ -1522,7 +1578,8 @@ class TestProjection(unittest.TestCase):
     ]
 
     def states(self, deaths=300.0):
-        return {1837: [_fit("China", 6.0, bs=P.BS_HELD_START, held=True, sid="1", tag="CHI", deaths=deaths),
+        return {1837: [_fit("China", 6.0, bs=P.BS_EAST_ASIA_START, held="east_asia", sid="1", tag="CHI",
+                            deaths=deaths),
                        _fit("Iran", 6.0, sid="2", tag="PER", deaths=deaths),
                        _fit("United Kingdom", 5.5, lm=1.0, sid="3", tag="GBR", deaths=deaths)]}
 
@@ -1540,6 +1597,19 @@ class TestProjection(unittest.TestCase):
         self.assertAlmostEqual(proj["groups"]["China"][1], 42.5 * 1.0 - 36.0 * 1.1, places=6, msg="held")
         self.assertAlmostEqual(proj["groups"]["Middle East, C Asia"][1], 41.5 * 1.15 - 32.7 * 1.1, places=6)
         self.assertAlmostEqual(proj["groups"]["W/N/C/S Europe"][1], 37.9 * 1.15 * 0.7 - 26.8 * 1.1, places=6)
+
+    def test_east_asias_share_brings_china_into_its_band(self):
+        """Owner, 2026-10-11 (D13): the smallest share on a 0.01 grid, at least the cancel share, at which China's projected
+        peacetime births less deaths is at most +6. Here +6.5 at the cancel share; 42.5 x 1.15 x (1 - 0.35 e) - 36 <= 6
+        needs e >= 0.402, so 0.41."""
+        today = self.states()
+        e, rate = DP.east_for_china(self.ROWS, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(e, 0.41, places=9)
+        self.assertLessEqual(rate, 6.0)
+        # already in band at the cancel share: the cancel share (rounded up to the grid)
+        low = [[1836, "China", True, [], 40.0, 36.0, 1000.0, 0.0, "CHI", "1"]]
+        e, rate = DP.east_for_china(low, today, today, s=1.15, cut_lm=0.3, cut_bs=0.35)
+        self.assertAlmostEqual(e, 0.38, places=9)
 
     def test_the_gate(self):
         today = self.states()
@@ -1573,7 +1643,8 @@ In `test_demographics_harness.py`:
 Run: `$V -m unittest test_demographics_practices.TestFit test_demographics_practices.TestProjection`
 Expected: FAIL (`DP.FitState` missing).
 
-- [ ] **Step 3: Write the fit and the projection** (append to `demographics_practices.py`; add `import contextlib`)
+- [ ] **Step 3: Write the fit and the projection** (append to `demographics_practices.py`; add `import contextlib` and
+  `import math`)
 
 ```python
 # ---- the fit (spec 2.3, 5.1 item 6) and the regional projection (review C1) ---------------------------------
@@ -1596,7 +1667,7 @@ class FitState:
     deaths: float | None   # expected deaths a year at its census bands (None: the save holds no census here)
     lm: float
     bs: float
-    held: bool             # its Birth Spacing start is BS_HELD_START (China, Manchuria, Korea, India)
+    held: str | None       # its held Birth Spacing share: "east_asia" (China, Manchuria, Korea), "india", or None
 
 
 def band_deaths(qf, qm, bands):
@@ -1632,25 +1703,36 @@ def fit_states(path, carriers, shares, save=None):
         e0 = (M.life_table(qf)["e0"] + M.life_table(qm)["e0"]) / 2
         base = M.fertility(s.inp, e0)["tfr"]
         sh = shares.get(s.sid, {})
-        held = M.practice_start("bs", s.state_region, s.strategic_region) == P.BS_HELD_START
+        held = M.bs_held_group(s.state_region, s.strategic_region)
         deaths = band_deaths(qf, qm, s.bands) if any(w or m for w, m in s.bands) else None
         out.append(FitState(s.sid, chosen.get(s.tag, ""), s.tag, s.people, s.incorporated, base, M.nrr(1.0, qf), e0,
                             deaths, sh.get("lm", 0.0), sh.get("bs", 0.0), held))
     return out
 
 
-def tfr_at(st, s, cut_lm, cut_bs, held):
-    """A state's children per woman at one point: the curve x s, its shares' terms, the held share for held states."""
-    bs = st.bs * held / P.BS_HELD_START if st.held else st.bs
+def tfr_at(st, s, cut_lm, cut_bs, held, east):
+    """A state's children per woman at one point: the curve x s, its shares' terms, India's held share (held) or East
+    Asia's (east) in place of its start, each scaling its replayed share."""
+    bs = st.bs
+    if st.held == "india":
+        bs = st.bs * held / P.BS_HELD_START
+    elif st.held == "east_asia":
+        bs = st.bs * east / P.BS_EAST_ASIA_START
     return s * st.base_tfr * (1 - cut_lm * st.lm) * (1 - cut_bs * bs)
 
 
-def evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, years=None):
+def cancel_share(s, cut_bs):
+    """The Birth Spacing share that cancels the raise s (spec 2.2): (1 - 1/s) / cut_bs; 0 with no cut."""
+    return (1 - 1 / s) / cut_bs if cut_bs else 0.0
+
+
+def evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, east=None, years=None):
     """One grid point over {year: [FitState]}: the error over the anchor countries in `years` (default every year), the
     world's children per woman (states of tags with 1M people or more), each anchor country's (model, history), and
-    the high group's range in the first year (reported, not judged). held: the held Birth Spacing share; default
-    (1 - 1/s) / cut_bs (spec 2.2)."""
-    h = ((1 - 1 / s) / cut_bs if cut_bs else 0.0) if held is None else held
+    the high group's range in the first year (reported, not judged). held: India's Birth Spacing share, default the
+    cancel share (spec 2.2); east: China's, Manchuria's and Korea's, default the same (D13)."""
+    h = cancel_share(s, cut_bs) if held is None else held
+    e = h if east is None else east
     countries, sq, weights, world_tfr = {}, 0.0, 0.0, {}
     for year, states in sorted(fit_by_year.items()):
         tag_people = {}
@@ -1658,7 +1740,7 @@ def evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, years=None):
             tag_people[st.tag] = tag_people.get(st.tag, 0.0) + st.people
         acc, wp, wt = {}, 0.0, 0.0
         for st in states:
-            tfr = tfr_at(st, s, cut_lm, cut_bs, h)
+            tfr = tfr_at(st, s, cut_lm, cut_bs, h, e)
             if tag_people[st.tag] >= 1e6:
                 wp, wt = wp + st.people, wt + st.people * tfr
             if st.country and st.incorporated:
@@ -1674,7 +1756,7 @@ def evaluate(fit_by_year, anchors, s, cut_lm, cut_bs, held=None, years=None):
     first = min(fit_by_year)
     high = [countries[(c, first)][0] for c in HIGH_GROUP if (c, first) in countries]
     return {"error": (sq / weights) ** 0.5 if weights else None, "world_tfr": world_tfr, "countries": countries,
-            "high": (min(high), max(high)) if high else None, "held": h}
+            "high": (min(high), max(high)) if high else None, "held": h, "east": e}
 
 
 def fit_table(fit_by_year, anchors, s_grid, lm_grid, bs_grid, years=None):
@@ -1692,7 +1774,7 @@ def fit_table(fit_by_year, anchors, s_grid, lm_grid, bs_grid, years=None):
     return rows
 
 
-def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None):
+def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None, east=None):
     """#904's peacetime births less deaths, projected to one point of the fit (review C1).
 
     rows: #904's state-years ([step year, group, peace, reasons, births, deaths, people, migration, tag, state id],
@@ -1702,8 +1784,9 @@ def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None):
     over today's (no practice, s = 1), deaths x the point's expected deaths at the state's census bands over today's. A
     state the fit saves don't hold keeps its measured rates. Returns, per 1,000 a year, {"groups": {label: (measured,
     projected)}, "world": (measured, projected), "tags": {tag: (people, measured, projected)}}; a tag's people are its
-    largest year's peacetime people."""
-    h = ((1 - 1 / s) / cut_bs if cut_bs else 0.0) if held is None else held
+    largest year's peacetime people. held, east: the two held Birth Spacing shares, as evaluate takes them."""
+    h = cancel_share(s, cut_bs) if held is None else held
+    e = h if east is None else east
     years = sorted(today)
     by_today = {y: {st.sid: st for st in today[y]} for y in years}
     by_point = {y: {st.sid: st for st in point[y]} for y in years}
@@ -1715,7 +1798,7 @@ def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None):
         t, q = by_today[y].get(sid), by_point[y].get(sid)
         br = dr = 1.0
         if t and q:
-            br = tfr_at(q, s, cut_lm, cut_bs, h) / t.base_tfr if t.base_tfr else 1.0
+            br = tfr_at(q, s, cut_lm, cut_bs, h, e) / t.base_tfr if t.base_tfr else 1.0
             dr = q.deaths / t.deaths if t.deaths and q.deaths else 1.0
         for key in (group, "World", "tag:" + tag):
             a = acc.setdefault(key, [0.0, 0.0, 0.0])
@@ -1733,6 +1816,20 @@ def project_regions(rows, today, point, s, cut_lm, cut_bs, held=None):
     return {"groups": {k: rate(a) for k, a in acc.items() if k != "World" and not k.startswith("tag:")},
             "world": rate(acc["World"]) if "World" in acc else (0.0, 0.0),
             "tags": {k[4:]: (size[k[4:]], *rate(a)) for k, a in acc.items() if k.startswith("tag:")}}
+
+
+def east_for_china(rows, today, point, s, cut_lm, cut_bs, held=None, top=0.9):
+    """Owner, 2026-10-11 (D13): East Asia's Birth Spacing share at this point, the smallest on a 0.01 grid from the cancel
+    share up to `top` at which China's projected peacetime births less deaths is at most the top of its band (+6), and
+    China's rate there. Never below the cancel share: if China is below +3 even there, it fails the gate on mortality."""
+    hi = dict((label, band) for label, _r, band in R.REPORT_REGIONS)["China"][1]
+    h = cancel_share(s, cut_bs) if held is None else held
+    e = math.ceil(h * 100 - 1e-9) / 100
+    while True:
+        rate = project_regions(rows, today, point, s, cut_lm, cut_bs, held, e)["groups"].get("China", (0.0, 0.0))[1]
+        if rate <= hi or e >= top:
+            return e, rate
+        e = round(e + 0.01, 2)
 
 
 def region_gate(proj, world_margin=1.0, big=2e7):
@@ -1825,7 +1922,7 @@ scenarios' inputs are starting proposals; check them against the medicine scenar
 - [ ] **Step 5: The subcommand** (`demographics_harness.py`)
 
 `practices-fit SAVE... --anchors CSV --peacetime ROWS [--shares FILE] [--s 1.00,1.05,1.10,1.15,1.20]
-[--lm 0.20,0.25,0.30,0.35,0.40] [--bs 0.25,0.30,0.35,0.40,0.45] [--fit-years 1837,1887] [--at S,LM,BS[,HELD]]
+[--lm 0.20,0.25,0.30,0.35,0.40] [--bs 0.25,0.30,0.35,0.40,0.45] [--fit-years 1837,1887] [--at S,LM,BS[,HELD[,EAST]]]
 [--mortality] [--means] [--year Y]`.
 
 `ROWS` is #904's state-years (`analyze.py --json`; Task 6 Step 2 writes it). The saves are the run's eight (Task 6
@@ -1877,18 +1974,28 @@ def cmd_practices_fit(args):
     today = load(carriers)
     grid = ([float(x) for x in args.s.split(",")], [float(x) for x in args.lm.split(",")],
             [float(x) for x in args.bs.split(",")])
-    print("s     cut_lm cut_bs error  world tfr        held  high group  gate (no mortality change)")
+    def china(res):
+        """China's children per woman in the fit years, flagged below about 5 (owner, 2026-10-11; D13)."""
+        got = {y: m for (c, y), (m, _h) in res["countries"].items() if c == "China" and y in fit_years}
+        return " / ".join(f"{v:.2f}{' LOW' if v < 5.0 else ''}" for _y, v in sorted(got.items()))
+
+    print("s     cut_lm cut_bs error  world tfr        india east  China tfr     high group  gate (today's mortality)")
     for s, cl, cb, res in DP.fit_table(today, anchors, *grid, years=fit_years):
+        east, _rate = DP.east_for_china(rows, today, today, s, cl, cb)
+        res = DP.evaluate(today, anchors, s, cl, cb, east=east, years=fit_years)
         tfr = " / ".join(f"{v:.2f}" for _y, v in sorted(res["world_tfr"].items()) if v)
         hi = f"{res['high'][0]:.2f}-{res['high'][1]:.2f}" if res["high"] else "-"
-        fails = DP.region_gate(DP.project_regions(rows, today, today, s, cl, cb))
-        print(f"{s:.2f}  {cl:.2f}   {cb:.2f}   {res['error']:.3f}  {tfr:16s} {res['held']:.2f}  {hi:10s}  "
-              f"{len(fails)} failing")
+        fails = DP.region_gate(DP.project_regions(rows, today, today, s, cl, cb, east=east))
+        print(f"{s:.2f}  {cl:.2f}   {cb:.2f}   {res['error']:.3f}  {tfr:16s} {res['held']:.2f}  {east:.2f}  "
+              f"{china(res):12s}  {hi:10s}  {len(fails)} failing")
     if not args.at:
         return 0
-    s, cl, cb, *held = (float(x) for x in args.at.split(","))
-    held = held[0] if held else None
-    res = DP.evaluate(today, anchors, s, cl, cb, held=held, years=fit_years)
+    s, cl, cb, *rest = (float(x) for x in args.at.split(","))
+    held = rest[0] if rest else None
+    east = rest[1] if len(rest) > 1 else DP.east_for_china(rows, today, today, s, cl, cb, held)[0]
+    res = DP.evaluate(today, anchors, s, cl, cb, held=held, east=east, years=fit_years)
+    print(f"held shares: India {res['held']:.2f}, China, Manchuria and Korea {east:.2f}; China's children per woman "
+          f"{china(res)}")
     for (country, year), (model, hist) in sorted(res["countries"].items()):
         if year not in fit_years:
             continue
@@ -1897,7 +2004,7 @@ def cmd_practices_fit(args):
         off = " OFF" if hist is not None and abs(model - hist) > 0.5 else ""
         h = f"{hist:.2f}" if hist is not None else "-"
         print(f"{country:15s} {year}  model {model:.2f}  history {h}{tag}{off}")
-    proj = DP.project_regions(rows, today, today, s, cl, cb, held)
+    proj = DP.project_regions(rows, today, today, s, cl, cb, held, east)
     show(proj, DP.region_gate(proj))
     print(f"Western life expectancy: {DP.mortality_report(today)}; scenarios out of band: "
           f"{scenarios_out(carriers, s, cl, cb)}")
@@ -1909,11 +2016,13 @@ def cmd_practices_fit(args):
                                          POVERTY_INFECTION_SOL=sol):
                         point = load(carriers)
                         out = scenarios_out(carriers, s, cl, cb)
-                    proj = DP.project_regions(rows, today, point, s, cl, cb, held)
+                    e_pt = rest[1] if len(rest) > 1 else DP.east_for_china(rows, today, point, s, cl, cb, held)[0]
+                    proj = DP.project_regions(rows, today, point, s, cl, cb, held, e_pt)
                     fails = DP.region_gate(proj)
                     e0 = DP.mortality_report(point)
-                    print(f"floor {floor:.2f} sol {sol} infection x{scale:.2f}: {len(fails)} failing; Western e0 "
-                          f"{e0}; scenarios out of band {out}")
+                    cn = china(DP.evaluate(point, anchors, s, cl, cb, held=held, east=e_pt, years=fit_years))
+                    print(f"floor {floor:.2f} sol {sol} infection x{scale:.2f}: {len(fails)} failing; East Asia's "
+                          f"share {e_pt:.2f}, China {cn}; Western e0 {e0}; scenarios out of band {out}")
                     show(proj, fails)
     if args.means:
         for vulc in (0.10, 0.15, 0.20, 0.25, 0.30):
@@ -1922,7 +2031,7 @@ def cmd_practices_fit(args):
                            and c.type == P.CONTRACEPTION_TYPE else
                            dataclasses.replace(c, value=fem) if c.key == "feminism"
                            and c.type == P.CONTRACEPTION_TYPE else c for c in carriers]
-                res = DP.evaluate(load(patched), anchors, s, cl, cb, held=held, years=fit_years)
+                res = DP.evaluate(load(patched), anchors, s, cl, cb, held=held, east=east, years=fit_years)
                 gb = {y: m for (c, y), (m, _h) in res["countries"].items() if c == "United Kingdom"}
                 print(f"vulcanization {vulc:.2f} feminism {fem:.2f}: Britain {gb}; scenarios out of band "
                       f"{scenarios_out(patched, s, cl, cb)}")
@@ -1963,7 +2072,7 @@ values, and the script gets the practices only in Task 8, so a game in between w
 **Files:**
 - Create: `docs/testing/demographics-late-marriage-<date>.md`
 - Modify: `scripts/analysis/demographics_params.py`. The fitted values:
-  - `WEALTH_TFR_LOW`, `WEALTH_TFR_HIGH`, `PRACTICE_CUT`, `BS_HELD_START`;
+  - `WEALTH_TFR_LOW`, `WEALTH_TFR_HIGH`, `PRACTICE_CUT`, `BS_HELD_START`, `BS_EAST_ASIA_START`;
   - if the mortality point moves them, `POVERTY_INFECTION_AT_FLOOR`, `POVERTY_INFECTION_SOL` and the `INFECTION`
     breakpoints.
 - Modify, only if the means fit moves them: `common/technology/technologies/te_demog_tech_injections.txt`
@@ -2033,13 +2142,17 @@ $V scripts/analysis/demographics_harness.py practices-fit $SAVES --anchors $A --
 Each row is a raise s, with:
 - the cuts that fit children per woman best, already on the 0.05 grid;
 - the error;
-- the held share, rounded to 0.01 when applied (`--at`'s fourth value);
+- India's held share (the cancel share), rounded to 0.01 when applied (`--at`'s fourth value);
+- East Asia's share (D13): the smallest on the 0.01 grid, from the cancel share up, that brings China's peacetime
+  births less deaths to +6 or less. `--at` picks it again at every mortality point unless given as a fifth value;
+- China's children per woman at it, marked `LOW` below about 5;
 - the high group's range, reported only;
 - how many gate items fail with today's mortality.
 
 - [ ] **Step 5: Mortality and the means pair, from the smallest raise up** (call 8)
 
-For each s in ascending order, at that row's cuts and rounded held share:
+For each s in ascending order, at that row's cuts and India's rounded held share (East Asia's share is chosen at each
+point):
 
 ```bash
 $V scripts/analysis/demographics_harness.py practices-fit $SAVES --anchors $A --peacetime $ROWS --shares /tmp/claude-1000/lm-replay.json \
@@ -2091,7 +2204,8 @@ In `demographics_params.py`:
 - `WEALTH_TFR_LOW` = 6.0 × s and `WEALTH_TFR_HIGH` = round(3.5 × s, 2). Keep the comment's history line and add:
   "× s (the late-marriage plan's fit, <date>; spec 2.2), the smallest raise the regional gate passes".
 - `PRACTICE_CUT`.
-- `BS_HELD_START` = the held share used at the chosen point.
+- `BS_HELD_START` = India's held share used at the chosen point (the cancel share, rounded to 0.01);
+- `BS_EAST_ASIA_START` = East Asia's share chosen at that point (D13), on the 0.01 grid.
 - If the mortality point moved: `POVERTY_INFECTION_AT_FLOOR`, `POVERTY_INFECTION_SOL`, and each `INFECTION` breakpoint
   × the scale, rounded to the nearest 10.
 
@@ -2150,8 +2264,10 @@ Its sections:
 - **The regional table** at the chosen point: measured, projected and history's band for each of #904's groups and the
   world. This answers #894's "Births less deaths outside Europe" for the census's side.
 - **Mortality and the means pair:** the chosen point, its Western life expectancies, and the scenarios.
-- **China at history's 5.5:** the held share it would need at the chosen point, and the regional table with it
-  (`--at S,LM,BS,HELD` at that share; spec §2.2's second variant), so the owner can weigh it.
+- **China, Manchuria and Korea (D13):**
+  - East Asia's chosen share against the cancel share;
+  - China's children per woman at it in 1837 and 1887, against history's ~5.5, said plainly if below about 5;
+  - Korea's, which has no data-based anchor.
 - **The gate**, item by item, each pass or fail with its figure.
 
 - [ ] **Step 10: Commit**
