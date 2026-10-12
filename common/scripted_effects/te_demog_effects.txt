@@ -56,6 +56,10 @@
 #                       women's legal standing, phase 2 step 4)
 #   te_dg_m_inf, te_dg_m_ext, te_dg_m_chr, te_dg_m_work  the cause multipliers;
 #                       te_dg_m_mat maternal deaths per 100,000 births
+#   te_dg_acc, te_dg_trt_inf, te_dg_trt_mat, te_dg_trt_chr  the drifted health-care access and treatments
+#                       (te_demog_medicine_drift; the Causes of Death plan)
+#   te_dg_in_ext, te_dg_in_work, te_dg_in_chr, te_dg_in_turm, te_dg_in_crowd  the step's other inputs the
+#                       factors read (te_demog_cause_inputs_store)
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share,
 #   te_dg_dependency, te_dg_sex_balance, te_dg_cbr, te_dg_cdr, te_dg_w1549
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
@@ -409,6 +413,8 @@ te_demog_prepare = {
 			set_variable = { name = te_dg_prev_e0 value = var:te_dg_e0 }
 		}
 	}
+	# the inputs the factors read, stored so the Causes of Death section matches this step until the next (generated)
+	te_demog_cause_inputs_store = yes
 	set_local_variable = { name = te_dg_m_inf value = te_demog_mult_infection }
 	set_local_variable = { name = te_dg_m_ext value = te_demog_mult_external }
 	set_local_variable = { name = te_dg_m_chr value = te_demog_mult_chronic }
@@ -518,6 +524,8 @@ te_demog_seed = {
 		limit = { has_variable = te_dg_reseed }
 		remove_variable = te_dg_reseed
 	}
+	# a seed starts medicine at its targets (the Causes of Death plan)
+	te_demog_medicine_at_target = yes
 	te_demog_prepare = yes
 	# demographics_model.nrr: the life table's sum is radix 100,000 x births per 100,000
 	set_local_variable = {
@@ -1045,10 +1053,13 @@ te_demog_step = {
 	te_demog_step_run = yes
 }
 
-# The step's first half: the year's rates into locals (te_demog_prepare), then the flows,
-# which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
-# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4).
+# The step's first half: medicine's share of the gap (te_demog_medicine_drift, the Causes of Death
+# plan), the year's rates into locals (te_demog_prepare), then the flows, which take and remove
+# te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates scaled to what the engine did
+# over the window (te_demog_on_top_scales, phase 2 step 4).
 te_demog_step_begin = {
+	# medicine moves its share of the gap, then the year's rates use it
+	te_demog_medicine_drift = yes
 	te_demog_prepare = yes
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes

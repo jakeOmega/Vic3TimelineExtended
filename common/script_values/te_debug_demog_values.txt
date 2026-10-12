@@ -483,29 +483,58 @@ te_debug_demog_mod_work = {
 te_debug_demog_mod_chr = {
 	value = modifier:state_chronic_mortality_mult
 }
+# The census's multipliers read the step's stored inputs (the Causes of Death plan): -1 for a state without them
+# (no census yet, or a census from before the plan until its next step).
 te_debug_demog_mult_infection = {
 	value = -1
 	if = {
 		limit = {
 			has_variable = te_dg_sol
 			has_variable = te_dg_lit
+			has_variable = te_dg_in_turm
+			has_variable = te_dg_acc
 		}
 		value = te_demog_mult_infection
 	}
 }
 te_debug_demog_mult_maternal = {
-	value = te_demog_mult_maternal
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_in_turm
+			has_variable = te_dg_acc
+		}
+		value = te_demog_mult_maternal
+	}
 }
 te_debug_demog_mult_chronic = {
 	value = -1
 	if = {
-		limit = { has_variable = te_dg_sol }
+		limit = {
+			has_variable = te_dg_sol
+			has_variable = te_dg_in_turm
+			has_variable = te_dg_acc
+		}
 		value = te_demog_mult_chronic
 	}
 }
 te_debug_demog_mult_external = {
-	value = te_demog_mult_external
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_in_turm
+			has_variable = te_dg_acc
+		}
+		value = te_demog_mult_external
+	}
 }
 te_debug_demog_mult_work = {
-	value = te_demog_mult_work
+	value = -1
+	if = {
+		limit = {
+			has_variable = te_dg_in_turm
+			has_variable = te_dg_acc
+		}
+		value = te_demog_mult_work
+	}
 }

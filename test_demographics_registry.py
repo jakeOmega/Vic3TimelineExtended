@@ -528,25 +528,34 @@ def _mod_fixtures(inp):
     return out
 
 
-def _engine_for(inp, year, pop, effects=None, engine=None):
+def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=False):
     """A state with the census on, the walk's sums set from `inp`, and the owner's multipliers
-    (script values that read the owner's techs and laws) taken from the model."""
+    (script values that read the owner's techs and laws) taken from the model. The step's own reads (the census's
+    types and turmoil) are fixtures too, for te_demog_cause_inputs_store and the drift; real_multipliers runs the
+    generated te_demog_mult_* on them instead of taking the model's."""
     mult = demographics_model.cause_multipliers(inp)
     fixtures = {
         "year": float(year),
         "state_population": float(pop),
-        "te_demog_mult_infection": mult["infection"],
-        "te_demog_mult_external": mult["external"],
-        "te_demog_mult_chronic": mult["chronic"],
-        "te_demog_mult_work": mult["work"],
-        "te_demog_mult_maternal": mult["maternal"] * P.MATERNAL_PER_100K_BIRTHS,
         "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
         f"modifier:{P.NATURAL_FERTILITY_TYPE}": inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0),
+        **_mod_fixtures(inp),
     }
+    if not real_multipliers:
+        fixtures.update({
+            "te_demog_mult_infection": mult["infection"],
+            "te_demog_mult_external": mult["external"],
+            "te_demog_mult_chronic": mult["chronic"],
+            "te_demog_mult_work": mult["work"],
+            "te_demog_mult_maternal": mult["maternal"] * P.MATERNAL_PER_100K_BIRTHS,
+        })
     eng = (engine or _Engine)(fixtures, triggers={"te_demog_cohorts_run": True}, effects=effects)
     eng.vars.update(te_dg_lit=inp.literacy, te_dg_urban_share=inp.urban_share,
-                    te_dg_wtfr=demographics_model.wealth_tfr(inp.sol))
+                    te_dg_wtfr=demographics_model.wealth_tfr(inp.sol), te_dg_sol=float(inp.sol))
+    if inp.crowding:
+        eng.modifiers["migration_crowding"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
+        eng.vars["migration_crowding_mult_applied"] = inp.crowding / P.MIGRATION_CROWDING_PULL_PER_MULT
     return eng
 
 
@@ -3948,6 +3957,8 @@ class TestModifierTypes(unittest.TestCase):
         # should log impact=0.940 (Local Vernacular's -0.05, obstinance's share)
         line = _block(_text(ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"), "te_debug_demog_mods_line")
         self.assertIn(" impact=[THIS.ScriptValue('te_demog_institution_impact')|3]", line)
+        # the spread of medicine's rate (the Causes of Death plan)
+        self.assertIn(" diff=[THIS.ScriptValue('te_demog_medical_diffusion')|3]", line)
 
     def test_seven_state_types(self):
         # one type per term, read in state scope; a tech's or law's line reaches the state because
@@ -3955,6 +3966,70 @@ class TestModifierTypes(unittest.TestCase):
         self.assertEqual(len(set(P.DEMOG_MORTALITY_TYPES)), 7)
         for name in P.DEMOG_MORTALITY_TYPES:
             self.assertTrue(name.startswith("state_"), name)
+
+
+class TestCausesInTheStep(unittest.TestCase):
+    """The Causes of Death plan: a seed starts medicine at its targets, a step drifts it before the year's rates, and
+    both store the inputs the factors read."""
+
+    INP0 = TestCohortScript.INP
+    INP1 = dataclasses.replace(TestCohortScript.INP, turmoil=0.4, mods={
+        P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4, P.TREATMENT_TYPE["maternal"]: 0.35,
+        "state_external_mortality_mult": -0.1, P.DIFFUSION_TYPE: 0.15})
+
+    def test_a_seed_starts_at_its_targets_and_stores_its_inputs(self):
+        eng = _engine_for(self.INP1, 1836, 250000.0, real_multipliers=True)
+        eng.call("te_demog_seed")
+        targets = demographics_model.medicine_targets(self.INP1)
+        self.assertAlmostEqual(eng.vars["te_dg_acc"], targets["access"], places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_in_turm"], 0.4, places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_m_inf"], demographics_model.cause_multipliers(self.INP1)["infection"],
+                               places=9)
+
+    def test_the_step_drifts_medicine_before_its_rates(self):
+        eng = _engine_for(self.INP0, 1836, 250000.0, real_multipliers=True)
+        eng.call("te_demog_seed")
+        eng.fixtures.update(_mod_fixtures(self.INP1))
+        eng.call("te_demog_medicine_drift")
+        eng.call("te_demog_prepare")
+        med = demographics_model.medicine_drift(demographics_model.medicine_targets(self.INP0), self.INP1)
+        drifted = dataclasses.replace(self.INP1, medicine=med)
+        want = demographics_model.cause_multipliers(drifted)
+        for cause, var in (("infection", "te_dg_m_inf"), ("external", "te_dg_m_ext"), ("chronic", "te_dg_m_chr")):
+            self.assertAlmostEqual(eng.vars[var], want[cause], places=9, msg=cause)
+        self.assertAlmostEqual(eng.vars["te_dg_m_mat"], want["maternal"] * P.MATERNAL_PER_100K_BIRTHS, places=6)
+        qf, qm, _ = demographics_model.group_rates(drifted)
+        e0 = (demographics_model.life_table(qf)["e0"] + demographics_model.life_table(qm)["e0"]) / 2
+        self.assertAlmostEqual(eng.vars["te_dg_e0"], e0, places=6)
+
+    GATE_VARS = ("te_dg_acc", "te_dg_trt_inf", "te_dg_trt_mat", "te_dg_trt_chr", "te_dg_in_ext", "te_dg_in_work",
+                 "te_dg_in_chr", "te_dg_in_turm", "te_dg_in_crowd")
+
+    def test_an_old_census_starts_at_its_targets(self):
+        """Review Focus 1: a census state from before this build has none of the nine variables
+        te_demog_state_causes_sgui asks for. Its first step starts medicine at the targets and leaves all nine."""
+        eng = _engine_for(self.INP1, 1837, 250000.0, real_multipliers=True)
+        for name in self.GATE_VARS:
+            self.assertNotIn(name, eng.vars)
+        eng.call("te_demog_medicine_drift")
+        eng.call("te_demog_prepare")
+        for name in self.GATE_VARS:
+            self.assertIn(name, eng.vars, name)
+        targets = demographics_model.medicine_targets(self.INP1)
+        self.assertAlmostEqual(eng.vars["te_dg_acc"], targets["access"], places=9)
+        self.assertAlmostEqual(eng.vars["te_dg_trt_inf"], targets["infection"], places=9)
+
+    def test_the_entry_points_run_in_order(self):
+        effects = _raw_blocks([EFFECTS])
+        begin = [k for k, _, _ in _parse_script(effects["te_demog_step_begin"])]
+        # relative order only: #906 puts te_demog_practices_step before te_demog_prepare as well
+        self.assertLess(begin.index("te_demog_medicine_drift"), begin.index("te_demog_prepare"))
+        seed = [k for k, _, _ in _parse_script(effects["te_demog_seed"])]
+        self.assertLess(seed.index("te_demog_medicine_at_target"), seed.index("te_demog_prepare"))
+        prepare = [k for k, _, _ in _parse_script(effects["te_demog_prepare"])]
+        first_mult = next(i for i, (k, _, v) in enumerate(_parse_script(effects["te_demog_prepare"]))
+                          if k == "set_local_variable" and _find(v, "name") == "te_dg_m_inf")
+        self.assertLess(prepare.index("te_demog_cause_inputs_store"), first_mult)
 
 
 class TestCauseFactorsScript(unittest.TestCase):
